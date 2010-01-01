@@ -642,6 +642,12 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
+		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="copy_bulk_operation_mapping_file">
+			<property name="parent.base.dir" value="${basedir}" />
+			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+			<property name="war.dir" value="catissuecore"/>
+			<property name="jboss.server.url" value="${jboss.server.url}" />
+		</ant>
 		<copy todir="${jboss.server.url}/deploy" overwrite="true">
 			<fileset dir="${temp.dir}">
 				<include name="catissuecore.war" />
@@ -754,6 +760,7 @@
 		<antcall target="configure_war" />
 		<antcall target="adopter_configuration" />
 	</target>
+	
 	<target name="db_configuration" description="for database configuration">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -773,15 +780,56 @@
 					<antcall target="mssqlserver_config" />
 				</then>
 			</elseif>
-		</if>
+		</if>				
 	</target>
-	<target name="app_configuration" description="configure titli.properties">
+
+	<target name="app_configuration" description="configure titli.properties">		
 		<!-- configure titli.properties -->
 		 <antcall target="configure_titli" >
 		 	<param name="tempPath" value="${temp.dir}/catissuecore/WEB-INF/classes"/>
 			<param name="mysqlDriver" value="org.gjt.mm.mysql.Driver"/>
-		</antcall>
+		</antcall>		 	
    </target>
+	
+	<!--Start of Integrating the Bulk Operation Module  -->
+	<target name="integrate_bulk_operation" description="Start of Integrating the Bulk Operation Module">
+		
+		<echo>Integrating the  Bulk Operation Module</echo>
+		<antcall target="unzip_bulkoperation_installable" />
+		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="bulkoperation_integrate_app">
+			<property name="parent.base.dir" value="${base.dir}" />
+			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+			<property name="war.dir" value="catissuecore"/>
+			<property name="database.type" value="${database.type}" />
+			<property name="oracle.dialect.string" value="${oracle.dialect.string}" />
+			<property name="mysql.dialect.string" value="${mysql.dialect.string}" />
+		</ant>
+		
+	</target>		
+	
+	<target name="unzip_bulkoperation_installable" depends="bulkoperation_check_prerequisite" description="unzip the bulk operation zip">
+		<unzip src="bulkoperator.zip" dest="${temp.dir}/bulkoperation" overwrite="true" />
+	</target>
+
+	<target name="bulkoperation_check_prerequisite" description="Check bulkoperation.zip file exists or not in base directory">
+		<!--
+			Check bulkoperation.zip file exists or not in base
+			directory.
+		-->
+		<available file="${base.dir}/bulkoperation.zip" property="file.exists" value="false" />
+		<if>
+			<not>
+				<isset property="file.exists" />
+			</not>
+			<then>
+				<echo
+					message="bulkoperation.zip file not found. It should be in base directory to deploy Bulk Operation."
+					level="error" />
+			</then>
+		</if>
+	</target>
+	<!--End of Integrating the Bulk Operation Module  -->
+
 	<!--Start of Integrating the Advance Query Module  -->
 	<target name="integrate_advanced_query" description="Start of Integrating the Advance Query Module">
 		<echo>Integrating the  Advance Query Module</echo>
@@ -811,6 +859,7 @@
 			<antcall target="pre_initialization" />
 			<antcall target="db_configuration" />
 			<antcall target="integrate_advanced_query"/>
+			<antcall target="integrate_bulk_operation"/>		
 			<antcall target="app_configuration"/>
 			<!-- <antcall target="generate.cacore.for.xmi" />  -->
 			<antcall target="de_integrate_app" />
@@ -1138,6 +1187,7 @@
 			<replacefilter token="@@app-properties-file@@" value="${jboss.server.url}/catissuecore-properties/caTissueCore_Properties.xml" />
 			<replacefilter token="@@app-dynamicuixml-file@@" value="${jboss.server.url}/catissuecore-properties/dynamicUI.xml" />
 			<replacefilter token="@@auth-properties-file@@" value="${jboss.server.url}/catissuecore-properties/AuthenticationDomain.xml" />
+			<replacefilter token="@@bulk-operation-properties-file@@" value="${jboss.server.url}/catissuecore-properties/bulkOperation.properties" />
 		</replace>
 
 

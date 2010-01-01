@@ -68,6 +68,7 @@
 		gov.nih.nci.security.configFile=@@app-security-file@@
 		app.propertiesFile=@@app-properties-file@@
 		app.domainAuthFilePath=@@auth-properties-file@@
+		bulkoperator.appservice.class=@@bulk-operation-properties-file@@
     </attribute>
 
   </mbean>

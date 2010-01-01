@@ -126,7 +126,7 @@
 		<!-- shipping tracking merge ends -->
 		
 		<!-- bulk Operations-->
-		<mapping resource="edu/wustl/catissuecore/hbm/JobDetails.hbm.xml"/>
+		<mapping resource="edu/wustl/bulkoperator/hbm/JobDetails.hbm.xml"/>
     </session-factory>
 
 </hibernate-configuration>

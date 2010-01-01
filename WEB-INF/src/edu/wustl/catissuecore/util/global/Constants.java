@@ -995,7 +995,7 @@ public class Constants
 			"37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50",
 			"51", "52", "53", "54", "55", "56", "57", "58", "59"};
 
-	public static final String BULK_OPEARTION_LIST = "bulkOperationList";
+	public static final String BULK_OPERATION_LIST = "bulkOperationList";
 
 	public static final String UNIT_GM = "gm";
 	public static final String UNIT_ML = "ml";
