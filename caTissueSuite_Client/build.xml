@@ -61,8 +61,8 @@
 	<!-- =================================================================== -->
 	<property name="test.classes.dir" value="${base.dir}/classes" />
 		<target name="compile_junit_TestCases">
-			<delete dir="${test.classes.dir}" />
-			<mkdir dir="${test.classes.dir}" />	
+			<delete dir="${test.classes.dir}"/>
+			<mkdir dir="${test.classes.dir}" />
 	        <javac destdir="${test.classes.dir}" includes="**/*.java" includeAntRuntime="false">
 	            <src path="${test.src.dir}"/>
 	            <classpath>
@@ -71,6 +71,11 @@
 	        	  </fileset>
 	            </classpath>
 	        </javac>
+			<copy todir="${test.classes.dir}">
+				<fileset dir="${base.dir}">
+					<include name="ApplicationResources.properties" />
+				</fileset>
+			</copy>
 		</target>
 
 	<target name="runJunitTestCases" depends="compile_junit_TestCases">
