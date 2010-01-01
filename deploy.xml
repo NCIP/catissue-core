@@ -4231,6 +4231,36 @@ Thanking You,
 				</fileset>
 			</classpath>
 		</java>
+	</target>	
+	
+	<property name="operationName" value="" />
+	<property name="csvFile" value="" />
+	<property name="templateFile" value="" />
+	<property name="url" value="" />
+	<property name="applicationUserName" value="" />
+	<property name="applicationUserPassword" value="" />
+	<property name="keyStoreLocation" value="" />
+	
+	<target name="runBulkOperation" depends="unjar_bulk" description="this target runs the bulk operation module through API client.">
+		<echo message="Starting to run Bulk Operation... " />
+		<java classname="edu.wustl.bulkoperator.client.BulkOperationCommand"
+				fork="true" maxmemory="1024m">
+			<arg value="${operationName}" />
+			<arg value="${csvFile}" />
+			<arg value="${templateFile}" />
+			<arg value="${url}" />
+			<arg value="${applicationUserName}" />
+			<arg value="${applicationUserPassword}" />
+			<arg value="${keyStoreLocation}" />
+			<classpath>
+				<fileset dir="./caTissueSuite_Client/lib/">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</java>
 	</target>
 
 	<target name="insertPaths">
