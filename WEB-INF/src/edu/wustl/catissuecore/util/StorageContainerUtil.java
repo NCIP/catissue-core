@@ -5,12 +5,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.servlet.http.HttpServletRequest;
+
+import edu.wustl.catissuecore.actionForm.ISpecimenType;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
+import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
@@ -19,6 +24,7 @@ import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.ContainerPosition;
+import edu.wustl.catissuecore.domain.ISpecimenTypeDomain;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -2048,7 +2054,12 @@ public final class StorageContainerUtil
 			return false;
 		}
 	}
-	
+	/**
+	 * @param containerId Container Identifier
+	 * @param containerName Container Name
+	 * @return Boolean is Full
+	 * @throws ApplicationException ApplicationException
+	 */
 	public static boolean isContainerFull(String containerId, String containerName)
 		throws ApplicationException
 	{
@@ -2064,9 +2075,16 @@ public final class StorageContainerUtil
 		{
 			return false;
 		}
-	
+
 	}
-	
+	/**
+	 * @param dao DAO Object
+	 * @param storageContainerId Container identifier
+	 * @param dimOne Position  one
+	 * @param dimTwo Position  two
+	 * @return Boolean
+	 * @throws DAOException DAOException
+	 */
 	public static boolean canReduceDimension(DAO dao, Long storageContainerId, Integer dimOne,
 		Integer dimTwo) throws DAOException
 	{
@@ -2079,7 +2097,14 @@ public final class StorageContainerUtil
 		}
 		return false;
 	}
-	
+	/**
+	 * @param dao DAO Object
+	 * @param storageContainerId Container identifier
+	 * @param dimOne Position  one
+	 * @param dimTwo Position  two
+	 * @return Boolean
+	 * @throws DAOException DAOException
+	 */
 	private static boolean isContainerAssignedWithinDimensions(DAO dao, Long storageContainerId,
 		Integer dimOne, Integer dimTwo) throws DAOException
 	{
@@ -2099,7 +2124,14 @@ public final class StorageContainerUtil
 		}
 		return false;
 	}
-	
+	/**
+	 * @param dao DAO Object
+	 * @param storageContainerId Container identifier
+	 * @param dimOne Position  one
+	 * @param dimTwo Position  two
+	 * @return Boolean
+	 * @throws DAOException DAOException
+	 */
 	private static boolean isSpecimenAssignedWithinDimensions(DAO dao, Long storageContainerId,
 		Integer dimOne, Integer dimTwo) throws DAOException
 	{
@@ -2118,5 +2150,403 @@ public final class StorageContainerUtil
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * @param contId container Id
+	 * @param pos1 position 1
+	 * @param pos2 position 2
+	 * @param multipleSpecimen true/false
+	 * @return List of objects
+	 */
+	public static List<Object> setparameterList(
+	String contId, String pos1, String pos2, boolean multipleSpecimen)
+	{
+		List<Object> parameterList = new LinkedList<Object>();
+		parameterList.add(contId);
+		parameterList.add(pos1);
+		parameterList.add(pos2);
+		parameterList.add(multipleSpecimen);
+		return parameterList;
+	}
+	 /**
+	 * This method will populate Specimen Type collection.
+	 * @param specimenClassTypeCollection Specimen Class Type Collection
+	 * @param specimenTypeCollection Specimen Type Collection
+	 * @param form StorageType/StorageContainer form
+	 */
+	public static void populateSpType(final Collection specimenClassTypeCollection,
+			final Collection specimenTypeCollection, ISpecimenType form)
+	{
+		try
+		{
+			List<String> tissurList= AppUtility.getAllTissueSpType();
+			List<String> cellList= AppUtility.getAllCellType();
+			List<String> fluidList= AppUtility.getAllFluidSpType();
+			List<String> molList= AppUtility.getAllMolecularType();
+
+			String[] holdsTissueSpType = new String[tissurList.size()];
+			String[] holdsCellSpType = new String[cellList.size()];
+			String[] holdsFluidSpType = new String[fluidList.size()];
+			String[] holdsMolSpType = new String[molList.size()];
+			int tissueCount = 0;
+			int fluidCount = 0;
+			int cellCount = 0;
+			int molCount = 0;
+			final Iterator<String> it = specimenTypeCollection.iterator();
+			while (it.hasNext())
+			{
+				final String specimenType = (String) it.next();
+				if(Constants.NOT_SPECIFIED.equals(specimenType))
+				{
+					final Iterator<String> itera = specimenClassTypeCollection.iterator();
+					while (itera.hasNext())
+					{
+						final String specimenClass = (String) itera.next();
+						if(Constants.TISSUE.equals(specimenClass))
+						{
+							holdsTissueSpType[tissueCount] = specimenType;
+							tissueCount++;
+						}
+						else if(Constants.FLUID.equals(specimenClass))
+						{
+							holdsFluidSpType[fluidCount] = specimenType;
+							fluidCount++;
+						}
+						else if(Constants.CELL.equals(specimenClass))
+						{
+							holdsCellSpType[cellCount] = specimenType;
+							cellCount++;
+						}
+						else if(Constants.MOLECULAR.equals(specimenClass))
+						{
+							holdsMolSpType[molCount] = specimenType;
+							molCount++;
+						}
+					}
+				}
+				else if(tissurList.contains(specimenType))
+				{
+					holdsTissueSpType[tissueCount] = specimenType;
+					tissueCount++;
+				}
+				else if(cellList.contains(specimenType))
+				{
+					holdsCellSpType[cellCount] = specimenType;
+					cellCount++;
+				}
+				else if(fluidList.contains(specimenType))
+				{
+					holdsFluidSpType[fluidCount] = specimenType;
+					fluidCount++;
+				}
+				else if(molList.contains(specimenType))
+				{
+					holdsMolSpType[molCount] = specimenType;
+					molCount++;
+				}
+			}
+			if(tissueCount==0)
+			{
+				holdsTissueSpType = null;
+			}
+			if(cellCount==0)
+			{
+				holdsCellSpType=null;
+			}
+			if(fluidCount==0)
+			{
+				holdsFluidSpType=null;
+			}
+			if (molCount==0)
+			{
+				holdsMolSpType = null;
+			}
+			form.setHoldsTissueSpType(holdsTissueSpType);
+			form.setHoldsCellSpType(holdsCellSpType);
+			form.setHoldsFluidSpType(holdsFluidSpType);
+			form.setHoldsMolSpType(holdsMolSpType);
+			form.setSpecimenOrArrayType("Specimen");
+		}
+		catch (ApplicationException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Set Specimen Type List.
+	 * @param request HttpServletRequest
+	 * @param spType ISpecimenType
+	 */
+	public static void setSpTypeList(HttpServletRequest request,
+			final ISpecimenType spType)
+	{
+		List<NameValueBean> tissueList = setTissueList(spType);
+		List<NameValueBean> cellList = setCellList(spType);
+		List<NameValueBean> fluidList = setFluidList(spType);
+		List<NameValueBean> molList = setMolList(spType);
+		request.setAttribute(Constants.TISSUE_SPECIMEN, tissueList);
+		request.setAttribute(Constants.CELL_SPECIMEN, cellList);
+		request.setAttribute(Constants.FLUID_SPECIMEN, fluidList);
+		request.setAttribute(Constants.MOLECULAR_SPECIMEN, molList);
+	}
+	/**
+	 * @param spType ISpecimenType
+	 * @return Molecular list
+	 */
+	private static List<NameValueBean> setMolList(final ISpecimenType spType)
+	{
+		List<NameValueBean> molList = new ArrayList<NameValueBean>();
+		if(spType.getHoldsMolSpType()!=null)
+		{
+			final String[] molType = spType.getHoldsMolSpType();
+			for (final String element : molType)
+			{
+				if(element!=null && !element.equals(""))
+				{
+					molList.add(new NameValueBean(element,element));
+				}
+			}
+		}
+		return molList;
+	}
+	/**
+	 * @param spType ISpecimenType
+	 * @return FluidList
+	 */
+	private static List<NameValueBean> setFluidList(final ISpecimenType spType)
+	{
+		List<NameValueBean> fluidList = new ArrayList<NameValueBean>();
+		if(spType.getHoldsFluidSpType()!=null)
+		{
+			final String[] fluidType = spType.getHoldsFluidSpType();
+			for (final String element : fluidType)
+			{
+				if(element!=null && !element.equals(""))
+				{
+					fluidList.add(new NameValueBean(element,element));
+				}
+			}
+		}
+		return fluidList;
+	}
+	/**
+	 * @param spType ISpecimenType
+	 * @return CellList
+	 */
+	private static List<NameValueBean> setCellList(final ISpecimenType spType)
+	{
+		List<NameValueBean> cellList = new ArrayList<NameValueBean>();
+		if(spType.getHoldsCellSpType()!=null)
+		{
+			final String[] cellType = spType.getHoldsCellSpType();
+			for (final String element : cellType)
+			{
+				if(element!=null && !element.equals(""))
+				{
+					cellList.add(new NameValueBean(element,element));
+				}
+			}
+		}
+		return cellList;
+	}
+	/**
+	 * @param spType ISpecimenType
+	 * @return TissueList
+	 */
+	private static List<NameValueBean> setTissueList(final ISpecimenType spType)
+	{
+		List<NameValueBean> tissueList = new ArrayList<NameValueBean>();
+		if(spType.getHoldsTissueSpType()!=null)
+		{
+			final String[] tissueType = spType.getHoldsTissueSpType();
+			for (final String element : tissueType)
+			{
+				if(element!=null && !element.equals(""))
+				{
+					tissueList.add(new NameValueBean(element,element));
+				}
+			}
+		}
+		return tissueList;
+	}
+
+	/**
+	 * @param spForm Storage Type Form
+	 * @param spDomain ISpecimenTypeDomain
+	 * @throws ApplicationException ApplicationException
+	 */
+	public static void setSpTypeColl(final ISpecimenType spForm, final ISpecimenTypeDomain spDomain)
+	throws ApplicationException
+	{
+		final String[] tissueSpeTypeArr = spForm.getHoldsTissueSpType();
+		final String[] cellSpTypeArr = spForm.getHoldsCellSpType();
+		final String[] fluidSpeTypeArr = spForm.getHoldsFluidSpType();
+		final String[] molSpTypeArr = spForm.getHoldsMolSpType();
+		Collection<String> spType = new HashSet<String>();
+		Collection<String> spClassCollection = spDomain.getHoldsSpecimenClassCollection();
+		setTissueSp(tissueSpeTypeArr, spDomain, spType, spClassCollection);
+		setCellSp(cellSpTypeArr, spDomain, spType, spClassCollection);
+		setFluidSp(fluidSpeTypeArr, spDomain, spType, spClassCollection);
+		setMolSp(molSpTypeArr, spDomain, spType, spClassCollection);
+		setAllSpType(spForm, spDomain, spType);
+		spDomain.setHoldsSpecimenTypeCollection(spType);
+		spDomain.setHoldsSpecimenClassCollection(spClassCollection);
+	}
+
+	/**
+	 * @param molSpTypeArr molSpTypeArr
+	 * @param spDomain ISpecimenTypeDomain
+	 */
+	private static void setMolSp(final String[] molSpTypeArr,
+			ISpecimenTypeDomain spDomain, Collection<String> molType,
+			Collection<String> spClassCollection)
+	{
+		if (molSpTypeArr != null)
+		{
+			for (final String element : molSpTypeArr)
+			{
+				logger.debug("type Id :" + element);
+				molType.add(element);
+			}
+			spClassCollection.add(Constants.MOLECULAR);
+		}
+	}
+	/**
+	 * @param fluidSpeTypeArr fluidSpeTypeArr
+	 * @param spDomain ISpecimenTypeDomain
+	 */
+	private static void setFluidSp(final String[] fluidSpeTypeArr,
+			ISpecimenTypeDomain spDomain, Collection<String> fluidSpType,
+			Collection<String> spClassCollection)
+	{
+		if (fluidSpeTypeArr != null)
+		{
+			for (final String element : fluidSpeTypeArr)
+			{
+				logger.debug("type Id :" + element);
+				fluidSpType.add(element);
+			}
+			spClassCollection.add(Constants.FLUID);
+		}
+	}
+	/**
+	 * @param cellSpTypeArr cellSpTypeArr
+	 * @param spDomain ISpecimenTypeDomain
+	 */
+	private static void setCellSp(final String[] cellSpTypeArr,
+			ISpecimenTypeDomain spDomain, Collection<String> cellType,
+			Collection<String> spClassCollection)
+	{
+		if (cellSpTypeArr != null)
+		{
+			for (final String element : cellSpTypeArr)
+			{
+				logger.debug("type Id :" + element);
+				cellType.add(element);
+			}
+			spClassCollection.add(Constants.CELL);
+		}
+	}
+	/**
+	 * @param tissueSpeTypeArr tissueSpeTypeArr
+	 * @param spDomain ISpecimenTypeDomain
+	 */
+	private static void setTissueSp(final String[] tissueSpeTypeArr,
+			ISpecimenTypeDomain spDomain, Collection<String> tissueSpType,
+			Collection<String> spClassCollection)
+	{
+		if (tissueSpeTypeArr != null)
+		{
+			for (final String element : tissueSpeTypeArr)
+			{
+				logger.debug("type Id :" + element);
+				tissueSpType.add(element);
+			}
+			spClassCollection.add(Constants.TISSUE);
+		}
+	}
+	/**
+	 * @param spDomain ISpecimenTypeDomain
+	 * @param spForm ISpecimenType
+	 * @throws ApplicationException ApplicationException
+	 */
+	private static void setAllSpType(final ISpecimenType spForm, 
+			final ISpecimenTypeDomain spDomain, Collection<String> spType)
+			throws ApplicationException
+	{
+		final String[] tissueSpeTypeArr = spForm.getHoldsTissueSpType();
+		final String[] cellSpTypeArr = spForm.getHoldsCellSpType();
+		final String[] fluidSpeTypeArr = spForm.getHoldsFluidSpType();
+		final String[] molSpTypeArr = spForm.getHoldsMolSpType();
+		Iterator<String> classItr= spDomain.getHoldsSpecimenClassCollection().iterator();
+		while(classItr.hasNext())
+		{
+			String className = classItr.next();
+			setAllTissueSp(tissueSpeTypeArr, className, spType);
+			setAllCellSp(cellSpTypeArr, className, spType);
+			setAllFluidSp(fluidSpeTypeArr, className, spType);
+			setAllMolSp(molSpTypeArr, className, spType);
+		}
+	}
+	/**
+	 * @param molSpTypeArr molSpTypeArr
+	 * @param className Tissue, Cell, Fluid and Molecular
+	 * @param spDomain ISpecimenTypeDomain
+	 * @throws ApplicationException ApplicationException
+	 */
+	private static void setAllMolSp(final String[] molSpTypeArr,
+			String className, Collection<String> spType)
+			throws ApplicationException
+	{
+		if(Constants.MOLECULAR.equals(className) && molSpTypeArr==null)
+		{
+			spType.addAll(AppUtility.getAllMolecularType());
+		}
+	}
+	/**
+	 * @param fluidSpeTypeArr fluidSpeTypeArr
+	 * @param className Tissue, Cell, Fluid and Molecular
+	 * @param spDomain ISpecimenTypeDomain
+	 * @throws ApplicationException ApplicationException
+	 */
+	private static void setAllFluidSp(final String[] fluidSpeTypeArr,
+			String className, Collection<String> spType)
+			throws ApplicationException
+	{
+		if(Constants.FLUID.equals(className) && fluidSpeTypeArr==null)
+		{
+			spType.addAll(AppUtility.getAllFluidSpType());
+		}
+	}
+	/**
+	 * @param cellSpTypeArr cellSpTypeArr
+	 * @param className Tissue, Cell, Fluid and Molecular
+	 * @param spDomain ISpecimenTypeDomain
+	 * @throws ApplicationException ApplicationException
+	 */
+	private static void setAllCellSp(final String[] cellSpTypeArr,
+			String className, Collection<String> spType)
+			throws ApplicationException
+	{
+		if(Constants.CELL.equals(className)&& cellSpTypeArr==null)
+		{
+			spType.addAll(AppUtility.getAllCellType());
+		}
+	}
+	/**
+	 * @param tissueSpeTypeArr tissueSpeTypeArr
+	 * @param className Tissue, Cell, Fluid and Molecular
+	 * @param spDomain ISpecimenTypeDomain
+	 * @throws ApplicationException ApplicationException
+	 */
+	private static void setAllTissueSp(final String[] tissueSpeTypeArr,
+			String className, Collection<String> spType)
+			throws ApplicationException
+	{
+		if(Constants.TISSUE.equals(className) && tissueSpeTypeArr==null)
+		{
+			spType.addAll(AppUtility.getAllTissueSpType());
+		}
 	}
 }

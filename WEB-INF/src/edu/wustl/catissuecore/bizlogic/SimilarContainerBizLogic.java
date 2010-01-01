@@ -144,10 +144,10 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 							.getBizLogicFactory();
 					final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 							.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-					// check for all validations on the storage container.
-					storageContainerBizLogic.checkContainer(dao,
-							parentContainer.getId().toString(), posOne, posTwo, sessionDataBean,
-							false, null);
+					storageContainerBizLogic.checkContainer
+					(dao,StorageContainerUtil.setparameterList
+					(parentContainer.getId().toString(), posOne, posTwo, false),
+					sessionDataBean,null);
 					ContainerPosition cntPos = cont.getLocatedAtPosition();
 					if (cntPos == null)
 					{

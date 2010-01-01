@@ -707,11 +707,6 @@
 	</definition>
 	
 	<!-- BioSpecimen tab pages definitions end -->
-
-	<!-- Search tab pages definitions start -->
-	
-	<definition name=".catissuecore.queryResultsTreeViewDef" path="/pages/content/search/TreeView.jsp">
-	</definition>
 	
 	<!--Added By Pallavi Mistry -->	
 	<!--TreeNode view for DHTMLX tree grid view of storage container-->

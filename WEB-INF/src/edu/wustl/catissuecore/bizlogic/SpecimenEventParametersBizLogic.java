@@ -206,11 +206,13 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 							(StorageContainerBizLogic) factory
 								.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
-						// --- check for all validations on the storage container.
-						storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId()
-								.toString(), transferEventParameters.getToPositionDimensionOne()
-								.toString(), transferEventParameters.getToPositionDimensionTwo()
-								.toString(), sessionDataBean, false, null);
+						final String contId= storageContainerObj.getId().toString();
+						final String posOne= transferEventParameters
+						.getToPositionDimensionOne().toString();
+						final String posTwo= transferEventParameters
+						.getToPositionDimensionTwo().toString();
+						storageContainerBizLogic.checkContainer(dao,StorageContainerUtil.setparameterList
+						(contId, posOne, posTwo, false),sessionDataBean,null);
 						final SpecimenCollectionGroup scg = (SpecimenCollectionGroup) this
 								.retrieveAttribute(dao, Specimen.class, specimen.getId(),
 										"specimenCollectionGroup");

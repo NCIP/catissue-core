@@ -12,12 +12,16 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.util.SearchUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
@@ -27,13 +31,13 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass table="CATISSUE_STORAGE_TYPE"
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
-public class StorageType extends ContainerType
+public class StorageType extends ContainerType implements ISpecimenTypeDomain
 {
 
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(StorageType.class);
+	private static final Logger logger = Logger.getCommonLogger(StorageType.class);
 	/**
 	 * Serial Version ID.
 	 */
@@ -42,26 +46,26 @@ public class StorageType extends ContainerType
 	/**
 	 * defaultTempratureInCentigrade.
 	 */
-	protected Double defaultTempratureInCentigrade;
+	private Double defaultTempratureInCentigrade;
 
 	/**
 	 * holdsStorageTypeCollection.
 	 */
-	protected Collection<StorageType> holdsStorageTypeCollection = new HashSet<StorageType>();
+	private Collection<StorageType> holdsStorageTypeCollection = new HashSet<StorageType>();
 
 	/**
 	 * HashSet holding SpecimenClassCollection.
 	 */
-	protected Collection<String> holdsSpecimenClassCollection = new HashSet<String>();
+	private Collection<String> holdsSpecimenClassCollection = new HashSet<String>();
 	/**
 	 * HashSet holding SpecimenClassCollection.
 	 */
-	protected Collection<String> holdsSpecimenTypeCollection = new HashSet<String>();
+	private Collection<String> holdsSpecimenTypeCollection = new HashSet<String>();
 
 	/**
 	 * HashSet holding SpecimenArrayTypeCollection.
 	 */
-	protected Collection<SpecimenArrayType> holdsSpecimenArrayTypeCollection = new HashSet<SpecimenArrayType>();
+	private Collection<SpecimenArrayType> holdsSpecimenArrayTypeCollection = new HashSet<SpecimenArrayType>();
 
 	/**
 	 * Default Constructor.
@@ -82,7 +86,7 @@ public class StorageType extends ContainerType
 
 	/**
 	 * Holds SpecimenType Collection.
-	 * @param holdsSpecimenTypeCollection
+	 * @param holdsSpecimenTypeCollection Specimen Type collection
 	 */
 	public void setHoldsSpecimenTypeCollection(Collection<String> holdsSpecimenTypeCollection)
 	{
@@ -177,116 +181,47 @@ public class StorageType extends ContainerType
 	/**
 	 * @param holdsSpecimenArrayTypeCollection The holdsSpecimenArrayTypeCollection to set.
 	 */
-	public void setHoldsSpecimenArrayTypeCollection(Collection<SpecimenArrayType> holdsSpecimenArrayTypeCollection)
+	public void setHoldsSpecimenArrayTypeCollection(Collection<SpecimenArrayType>
+	holdsSpecimenArrayTypeCollection)
 	{
 		this.holdsSpecimenArrayTypeCollection = holdsSpecimenArrayTypeCollection;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.domain.ContainerType#
-	 * setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
-	 */
 	/**
 	 * Set all values.
 	 * @throws AssignDataException AssignDataException.
 	 * @param abstractForm of IValueObject type.
 	 * @throws AssignDataException : AssignDataException
 	 */
-	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
 			final StorageTypeForm storageTypeForm = (StorageTypeForm) abstractForm;
-
 			this.id = Long.valueOf(storageTypeForm.getId());
 			this.name = storageTypeForm.getType().trim();
-
-			if (storageTypeForm.getDefaultTemperature() != null
-					&& storageTypeForm.getDefaultTemperature().trim().length() > 0)
-			{
-				this.defaultTempratureInCentigrade = new Double(storageTypeForm
-						.getDefaultTemperature());
-			}
-
+			setTemp(storageTypeForm);
 			this.oneDimensionLabel = storageTypeForm.getOneDimensionLabel();
 			this.twoDimensionLabel = storageTypeForm.getTwoDimensionLabel();
-
 			if (SearchUtil.isNullobject(this.capacity))
 			{
 				this.capacity = new Capacity();
 			}
-
 			this.capacity.setOneDimensionCapacity(Integer.valueOf(storageTypeForm
 					.getOneDimensionCapacity()));
 			this.capacity.setTwoDimensionCapacity(Integer.valueOf(storageTypeForm
 					.getTwoDimensionCapacity()));
-
-			//holdsStorageTypeCollection.clear();
 			this.holdsStorageTypeCollection = new HashSet<StorageType>();
 			final long[] storageTypeArr = storageTypeForm.getHoldsStorageTypeIds();
-			if (storageTypeArr != null)
-			{
-				for (final long element : storageTypeArr)
-				{
-					logger.debug("type Id :" + element);
-					if (element != -1)
-					{
-						final StorageType storageType = new StorageType();
-						storageType.setId(Long.valueOf(element));
-						this.holdsStorageTypeCollection.add(storageType);
-					}
-				}
-			}
-
-			//holdsSpecimenClassCollection.clear();
+			setStorageTypeColl(storageTypeArr);
 			this.holdsSpecimenClassCollection = new HashSet<String>();
-			if (storageTypeForm.getSpecimenOrArrayType().equals("Specimen"))
-			{
-				final String[] specimenClassTypeArr = storageTypeForm.getHoldsSpecimenClassTypes();
-				if (specimenClassTypeArr != null)
-				{
-
-					for (final String element : specimenClassTypeArr)
-					{
-						logger.debug("type Id :" + element);
-						if (element.equals("-1"))
-						{
-							this.holdsSpecimenClassCollection.addAll(AppUtility
-									.getSpecimenClassTypes());
-							break;
-						}
-						else
-						{
-							this.holdsSpecimenClassCollection.add(element);
-						}
-					}
-				}
-			}
-			
-			//holdsSpecimenClassCollection.clear();
+			setSpClassColl(storageTypeForm);
 			this.holdsSpecimenTypeCollection = new HashSet<String>();
 			if (storageTypeForm.getSpecimenOrArrayType().equals("Specimen"))
 			{
-				final String[] specimenTypeArr = storageTypeForm.getHoldsSpecimenType();
-				if (specimenTypeArr != null)
-				{
-					for (final String element : specimenTypeArr)
-					{
-						logger.debug("type Id :" + element);
-						if (element.equals("-1"))
-						{
-							this.holdsSpecimenTypeCollection.addAll(AppUtility.getAllSpecimenTissueType());
-							break;
-						}
-						else
-						{
-							this.holdsSpecimenTypeCollection.add(element);
-						}
-					}
-				}
+				StorageContainerUtil.setSpTypeColl(storageTypeForm, this);
+				//setSpTypeColl(storageTypeForm);
 			}
-			//			holdsSpArrayTypeCollection.clear();
 			this.holdsSpecimenArrayTypeCollection = new HashSet<SpecimenArrayType>();
 			this.populateHoldsSpecimenArrayTypeCollection(storageTypeForm);
 			this.activityStatus = "Active";
@@ -297,6 +232,219 @@ public class StorageType extends ContainerType
 			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "Specimen.java :");
+		}
+	}
+	/**
+	 * @param storageTypeArr storageTypeArr
+	 */
+	private void setStorageTypeColl(final long[] storageTypeArr)
+	{
+		if (storageTypeArr != null)
+		{
+			for (final long element : storageTypeArr)
+			{
+				logger.debug("type Id :" + element);
+				if (element != -1)
+				{
+					final StorageType storageType = new StorageType();
+					storageType.setId(Long.valueOf(element));
+					this.holdsStorageTypeCollection.add(storageType);
+				}
+			}
+		}
+	}
+	/**
+	 * Set Temperature.
+	 * @param storageTypeForm Storage Type Form Object
+	 */
+	private void setTemp(final StorageTypeForm storageTypeForm)
+	{
+		if (storageTypeForm.getDefaultTemperature() != null
+				&& storageTypeForm.getDefaultTemperature().trim().length() > 0)
+		{
+			this.defaultTempratureInCentigrade = new Double(storageTypeForm
+					.getDefaultTemperature());
+		}
+	}
+	/**
+	 * @param storageTypeForm Storage Type Form
+	 * @throws ApplicationException ApplicationException
+	 */
+	private void setSpTypeColl(final StorageTypeForm storageTypeForm) throws ApplicationException
+	{
+			final String[] tissueSpeTypeArr = storageTypeForm.getHoldsTissueSpType();
+			final String[] cellSpTypeArr = storageTypeForm.getHoldsCellSpType();
+			final String[] fluidSpeTypeArr = storageTypeForm.getHoldsFluidSpType();
+			final String[] molSpTypeArr = storageTypeForm.getHoldsMolSpType();
+			setTissueSp(tissueSpeTypeArr);
+			setCellSp(cellSpTypeArr);
+			setFluidSp(fluidSpeTypeArr);
+			setMolSp(molSpTypeArr);
+			setAllSpType(tissueSpeTypeArr, cellSpTypeArr, fluidSpeTypeArr, molSpTypeArr);
+	}
+	/**
+	 * @param tissueSpeTypeArr tissueSpeTypeArr
+	 * @param cellSpTypeArr cellSpTypeArr
+	 * @param fluidSpeTypeArr fluidSpeTypeArr
+	 * @param molSpTypeArr molSpTypeArr
+	 * @throws ApplicationException ApplicationException
+	 */
+	private void setAllSpType(final String[] tissueSpeTypeArr, final String[] cellSpTypeArr,
+			final String[] fluidSpeTypeArr, final String[] molSpTypeArr)
+			throws ApplicationException
+	{
+		Iterator<String> classItr= holdsSpecimenClassCollection.iterator();
+		while(classItr.hasNext())
+		{
+			String className = classItr.next();
+			setAllTissueSp(tissueSpeTypeArr, className);
+			setAllCellSp(cellSpTypeArr, className);
+			setAllFluidSp(fluidSpeTypeArr, className);
+			setAllMolSp(molSpTypeArr, className);
+		}
+	}
+	/**
+	 * @param molSpTypeArr molSpTypeArr
+	 * @param className Tissue, Cell, Fluid and Molecular
+	 * @throws ApplicationException ApplicationException
+	 */
+	private void setAllMolSp(final String[] molSpTypeArr, String className)
+			throws ApplicationException
+	{
+		if(Constants.MOLECULAR.equals(className) && molSpTypeArr==null)
+		{
+			this.holdsSpecimenTypeCollection.addAll
+			(AppUtility.getAllMolecularType());
+		}
+	}
+	/**
+	 * @param fluidSpeTypeArr fluidSpeTypeArr
+	 * @param className Tissue, Cell, Fluid and Molecular
+	 * @throws ApplicationException ApplicationException
+	 */
+	private void setAllFluidSp(final String[] fluidSpeTypeArr, String className)
+			throws ApplicationException
+	{
+		if(Constants.FLUID.equals(className) && fluidSpeTypeArr==null)
+		{
+			this.holdsSpecimenTypeCollection.addAll
+			(AppUtility.getAllFluidSpType());
+		}
+	}
+	/**
+	 * @param cellSpTypeArr cellSpTypeArr
+	 * @param className Tissue, Cell, Fluid and Molecular
+	 * @throws ApplicationException ApplicationException
+	 */
+	private void setAllCellSp(final String[] cellSpTypeArr, String className)
+			throws ApplicationException
+	{
+		if(Constants.CELL.equals(className)&& cellSpTypeArr==null)
+		{
+			this.holdsSpecimenTypeCollection.addAll
+			(AppUtility.getAllCellType());
+		}
+	}
+	/**
+	 * @param tissueSpeTypeArr tissueSpeTypeArr
+	 * @param className Tissue, Cell, Fluid and Molecular
+	 * @throws ApplicationException ApplicationException
+	 */
+	private void setAllTissueSp(final String[] tissueSpeTypeArr, String className)
+			throws ApplicationException
+	{
+		if(Constants.TISSUE.equals(className) && tissueSpeTypeArr==null)
+		{
+			this.holdsSpecimenTypeCollection.addAll
+			(AppUtility.getAllTissueSpType());
+		}
+	}
+	/**
+	 * @param molSpTypeArr molSpTypeArr
+	 */
+	private void setMolSp(final String[] molSpTypeArr)
+	{
+		if (molSpTypeArr != null)
+		{
+			for (final String element : molSpTypeArr)
+			{
+				logger.debug("type Id :" + element);
+				this.holdsSpecimenTypeCollection.add(element);
+			}
+			this.holdsSpecimenClassCollection.add(Constants.MOLECULAR);
+		}
+	}
+	/**
+	 * @param fluidSpeTypeArr fluidSpeTypeArr
+	 */
+	private void setFluidSp(final String[] fluidSpeTypeArr)
+	{
+		if (fluidSpeTypeArr != null)
+		{
+			for (final String element : fluidSpeTypeArr)
+			{
+				logger.debug("type Id :" + element);
+				this.holdsSpecimenTypeCollection.add(element);
+			}
+			this.holdsSpecimenClassCollection.add(Constants.FLUID);
+		}
+	}
+	/**
+	 * @param cellSpTypeArr cellSpTypeArr
+	 */
+	private void setCellSp(final String[] cellSpTypeArr)
+	{
+		if (cellSpTypeArr != null)
+		{
+			for (final String element : cellSpTypeArr)
+			{
+				logger.debug("type Id :" + element);
+				this.holdsSpecimenTypeCollection.add(element);
+			}
+			this.holdsSpecimenClassCollection.add(Constants.CELL);
+		}
+	}
+	/**
+	 * @param tissueSpeTypeArr tissueSpeTypeArr
+	 */
+	private void setTissueSp(final String[] tissueSpeTypeArr)
+	{
+		if (tissueSpeTypeArr != null)
+		{
+			for (final String element : tissueSpeTypeArr)
+			{
+				logger.debug("type Id :" + element);
+				this.holdsSpecimenTypeCollection.add(element);
+			}
+			this.holdsSpecimenClassCollection.add(Constants.TISSUE);
+		}
+	}
+	/**
+	 * @param storageTypeForm Storage Type Form
+	 */
+	private void setSpClassColl(final StorageTypeForm storageTypeForm)
+	{
+		if (storageTypeForm.getSpecimenOrArrayType().equals("Specimen"))
+		{
+			final String[] specimenClassTypeArr = storageTypeForm.getHoldsSpecimenClassTypes();
+			if (specimenClassTypeArr != null)
+			{
+
+				for (final String element : specimenClassTypeArr)
+				{
+					logger.debug("type Id :" + element);
+					if (element.equals("-1"))
+					{
+						this.holdsSpecimenClassCollection.addAll(AppUtility
+								.getSpecimenClassTypes());
+						break;
+					}
+					else
+					{
+						this.holdsSpecimenClassCollection.add(element);
+					}
+				}
+			}
 		}
 	}
 

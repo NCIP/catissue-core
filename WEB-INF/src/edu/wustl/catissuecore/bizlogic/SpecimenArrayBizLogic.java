@@ -171,16 +171,14 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 				final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 						.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-				// check for all validations on the storage container.
-				// if(specimenArray.getLocatedAtPosition() != null)
-				// {
-				storageContainerBizLogic.checkContainer(dao, specimenArray.getLocatedAtPosition()
-						.getParentContainer().getId().toString(), specimenArray
-						.getLocatedAtPosition().getPositionDimensionOne().toString(), specimenArray
-						.getLocatedAtPosition().getPositionDimensionTwo().toString(),
-						sessionDataBean, false, null);
-				// }
-
+				final String contId= specimenArray.getLocatedAtPosition()
+				.getParentContainer().getId().toString();
+				final String posOne= specimenArray
+				.getLocatedAtPosition().getPositionDimensionOne().toString();
+				final String posTwo= specimenArray
+				.getLocatedAtPosition().getPositionDimensionTwo().toString();
+				storageContainerBizLogic.checkContainer(dao,StorageContainerUtil.setparameterList
+				(contId, posOne, posTwo, false),sessionDataBean,null);
 			}
 			this.doUpdateSpecimenArrayContents(specimenArray, oldSpecimenArray, dao,
 					sessionDataBean, false);
@@ -522,11 +520,13 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 					.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-			// --- check for all validations on the storage container.
-			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(),
-					specimenArray.getLocatedAtPosition().getPositionDimensionOne().toString(),
-					specimenArray.getLocatedAtPosition().getPositionDimensionTwo().toString(),
-					sessionDataBean, false, null);
+			final String contId= storageContainerObj.getId().toString();
+			final String posOne= specimenArray
+			.getLocatedAtPosition().getPositionDimensionOne().toString();
+			final String posTwo= specimenArray
+			.getLocatedAtPosition().getPositionDimensionTwo().toString();
+			storageContainerBizLogic.checkContainer(dao,StorageContainerUtil.setparameterList
+			(contId, posOne, posTwo, false),sessionDataBean,null);
 			specimenArray.getLocatedAtPosition().setParentContainer(storageContainerObj);
 		}
 	}

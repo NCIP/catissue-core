@@ -13,11 +13,17 @@ import edu.wustl.common.util.global.Status;
  */
 public class StorageContainerBean implements Serializable
 {
-
+	/**
+	 * SerialVersion UID.
+	 */
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 * StorageType Identifier.
+	 */
 	private long typeId = -1;
-
+	/**
+	 * Activity Status of StorageType.
+	 */
 	private String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
 	/**
 	 * An name which refers to the type of the storage.
@@ -73,8 +79,8 @@ public class StorageContainerBean implements Serializable
 	 */
 	private String startNumber = "";
 
-	/** newly added by vaishali on 20th June 4.04 pm
-	 * 
+	/**
+	 * Container Name.
 	 */
 	private String containerName = "";
 	/**
@@ -97,30 +103,32 @@ public class StorageContainerBean implements Serializable
 	private int checkedButton = 1;
 
 	/**
-	 * Radio button to choose dropdown or map to select storage container.
+	 * Radio button to choose drop down or map to select storage container.
 	 */
 	private int stContSelection = 1;
 	/**
-	 * Storage container name selected from map
+	 * Storage container name selected from map.
 	 */
 	private String selectedContainerName;
 	/**
-	 * Storage pos1 selected from map
+	 * Storage pos1 selected from map.
 	 */
 	private String pos1;
 	/**
-	 * Storage pos2 selected from map
+	 * Storage pos2 selected from map.
 	 */
 	private String pos2;
 	/**
-	 * Storage Id selected from map
+	 * Storage Id selected from map.
 	 */
 	private String containerId;
 	/**
-	 * Storage contianer parent type
+	 * Storage container parent type.
 	 */
 	private String parentContainerSelected;
-
+	/**
+	 * Identifier.
+	 */
 	private long id;
 
 	/**
@@ -134,7 +142,7 @@ public class StorageContainerBean implements Serializable
 	}
 
 	/**
-	 * Returns the activity status
+	 * Returns the activity status.
 	 * @return the activityStatus.
 	 * @see #setActivityStatus(String)
 	 */
@@ -418,12 +426,16 @@ public class StorageContainerBean implements Serializable
 	{
 		this.twoDimensionLabel = twoDimensionLabel;
 	}
-
+	/**
+	 * @param id Identifier
+	 */
 	public void setId(long id)
 	{
 		this.id = id;
 	}
-
+	/**
+	 * @return ID
+	 */
 	public long getID()
 	{
 		return this.id;
@@ -432,64 +444,122 @@ public class StorageContainerBean implements Serializable
 	/**
 	 * Tells whether this container is full or not.
 	 */
-
 	private String isFull = "False";
 
 	/**
-	 * Map to handle values of all the CollectionProtocol Events
-	 */
-	//protected Map values = new HashMap();
-	/** 
-	 * Positon for dimension 1
+	 * Positon for dimension 1.
 	 */
 	private int positionDimensionOne;
 
 	/**
-	 * Position for dimension 2
+	 * Position for dimension 2.
 	 */
 	private int positionDimensionTwo;
 
 	/**
-	 * site name for particular parent container
+	 * site name for particular parent container.
 	 */
 	private String siteForParentContainer;
 	/**
-	 * collectionIds contains Ids of collection Protocols that this container can hold
+	 * collectionIds contains Ids of collection Protocols that this container can hold.
 	 */
-	protected long[] collectionIds = new long[]{-1};
+	private long[] collectionIds = new long[]{-1};
 
 	/**
-	 * holdStorageTypeIds contains Ids of Storage Types that this container can hold
+	 * holdStorageTypeIds contains Ids of Storage Types that this container can hold.
 	 */
-	protected long[] holdsStorageTypeIds;
+	private long[] holdsStorageTypeIds;
 
+	/**
+	 * Holds SpecimenArrTypeIds.
+	 */
 	private long[] holdsSpecimenArrTypeIds;
 	/**
-	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold
+	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold.
 	 */
-	protected String[] holdsSpecimenClassTypes;
+	private String[] holdsSpecimenClassTypes;
+
 	/**
-	 * holdSpecimenTypeIds contains Ids of Specimen Types that this container can hold
+	 * List of Specimen Types that Storage Type can hold.
 	 */
-	protected String[] holdsSpecimenTypes;
+	private String[] holdsTissueSpType;
+	/**
+	 * List of Specimen Types that Storage Type can hold.
+	 */
+	private String[] holdsFluidSpType;
+	/**
+	 * List of Specimen Types that Storage Type can hold.
+	 */
+	private String[] holdsCellSpType;
+	/**
+	 * List of Specimen Types that Storage Type can hold.
+	 */
+	private String[] holdsMolSpType;
 
-	
-	public String[] getHoldsSpecimenTypes()
+	/**
+	 * @return holdsTissueSpType.
+	 */
+	public String[] getHoldsTissueSpType()
 	{
-		return holdsSpecimenTypes;
+		return holdsTissueSpType;
 	}
-
-	
-	public void setHoldsSpecimenTypes(String[] holdsSpecimenTypes)
+	/**
+	 * @param holdsTissueSpType  holdsTissueSpType
+	 */
+	public void setHoldsTissueSpType(String[] holdsTissueSpType)
 	{
-		this.holdsSpecimenTypes = holdsSpecimenTypes;
+		this.holdsTissueSpType = holdsTissueSpType;
+	}
+	/**
+	 * @return holdsFluidSpType
+	 */
+	public String[] getHoldsFluidSpType()
+	{
+		return holdsFluidSpType;
+	}
+	/**
+	 * @param holdsFluidSpType holdsFluidSpType
+	 */
+	public void setHoldsFluidSpType(String[] holdsFluidSpType)
+	{
+		this.holdsFluidSpType = holdsFluidSpType;
+	}
+	/**
+	 * @return holdsCellSpType
+	 */
+	public String[] getHoldsCellSpType()
+	{
+		return holdsCellSpType;
+	}
+	/**
+	 * @param holdsCellSpType holdsCellSpType
+	 */
+	public void setHoldsCellSpType(String[] holdsCellSpType)
+	{
+		this.holdsCellSpType = holdsCellSpType;
+	}
+	/**
+	 * @return holdsMolSpType
+	 */
+	public String[] getHoldsMolSpType()
+	{
+		return holdsMolSpType;
+	}
+	/**
+	 * @param holdsMolSpType holdsMolSpType
+	 */
+	public void setHoldsMolSpType(String[] holdsMolSpType)
+	{
+		this.holdsMolSpType = holdsMolSpType;
 	}
 
 	/**
 	 * A map that contains distinguished fields (container name,barcode,parent location) per container.
 	 */
 	private Map similarContainersMap = new HashMap();
-
+	/**
+	 * Specimen/ArrayType.
+	 */
 	private String specimenOrArrayType;
 
 	/**
@@ -581,7 +651,7 @@ public class StorageContainerBean implements Serializable
 	}
 
 	/**
-	 * getting Specimen class Type Ids that this container can hold 
+	 * getting Specimen class Type Ids that this container can hold.
 	 * @return specimenClassType Id's array
 	 */
 	public String[] getHoldsSpecimenClassTypes()
@@ -590,7 +660,7 @@ public class StorageContainerBean implements Serializable
 	}
 
 	/**
-	 * setitng the SpecimenClassType Id array
+	 * setitng the SpecimenClassType Id array.
 	 * @param holdsSpecimenClassTypes - array of SpecimenClassType Id's to set
 	 */
 	public void setHoldsSpecimenClassTypes(String[] holdsSpecimenClassTypes)
@@ -631,7 +701,7 @@ public class StorageContainerBean implements Serializable
 	}
 
 	/**
-	 * getitng StorageType Id's that this container can hold
+	 * getitng StorageType Id's that this container can hold.
 	 * @return StorageType Id' array
 	 */
 	public long[] getHoldsStorageTypeIds()
@@ -640,7 +710,7 @@ public class StorageContainerBean implements Serializable
 	}
 
 	/**
-	 * setting the StorageType Id array
+	 * setting the StorageType Id array.
 	 * @param holdsStorageTypeIds - array of StorageType id's to set
 	 */
 	public void setHoldsStorageTypeIds(long[] holdsStorageTypeIds)
@@ -649,7 +719,7 @@ public class StorageContainerBean implements Serializable
 	}
 
 	/**
-	 * getitng collection Ids that this container can hold
+	 * getitng collection Ids that this container can hold.
 	 * @return collection Id's array
 	 */
 	public long[] getCollectionIds()
@@ -658,7 +728,7 @@ public class StorageContainerBean implements Serializable
 	}
 
 	/**
-	 * setitng the Collection Id array
+	 * setitng the Collection Id array.
 	 * @param collectionIds - array of collection Ids to set
 	 */
 	public void setCollectionIds(long[] collectionIds)
@@ -693,7 +763,6 @@ public class StorageContainerBean implements Serializable
 	 */
 	public Map getSimilarContainersMap()
 	{
-		//System.out.println("AliquotForm : getAliquotMap "+similarContainersMap);
 		return this.similarContainersMap;
 	}
 
@@ -704,7 +773,6 @@ public class StorageContainerBean implements Serializable
 	 */
 	public void setSimilarContainersMap(Map similarContainersMap)
 	{
-		//System.out.println("AliquotForm : setAliquotMap "+similarContainersMap);
 		this.similarContainersMap = similarContainersMap;
 	}
 
@@ -715,12 +783,11 @@ public class StorageContainerBean implements Serializable
 	 */
 	public void setSimilarContainerMapValue(String key, Object value)
 	{
-		//System.out.println("simCont: setValue -> "+key+" "+value);
 		this.similarContainersMap.put(key, value);
 	}
 
 	/**
-	 * Gets the Container Name
+	 * Gets the Container Name.
 	 * @return container Name
 	 */
 	public String getContainerName()
@@ -729,7 +796,7 @@ public class StorageContainerBean implements Serializable
 	}
 
 	/**
-	 * sets the name of the container
+	 * sets the name of the container.
 	 * @param containerName container Name to set
 	 */
 	public void setContainerName(String containerName)
@@ -792,7 +859,6 @@ public class StorageContainerBean implements Serializable
 	 */
 	public Object getSimilarContainerMapValue(String key)
 	{
-		//System.out.println("simCont: getValue <- "+key+" "+similarContainersMap.get(key));
 		return this.similarContainersMap.get(key);
 	}
 

@@ -12,7 +12,6 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,11 +22,11 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
@@ -37,13 +36,16 @@ import edu.wustl.common.util.logger.Logger;
  * This Class is used to encapsulate all the request parameters passed from StorageType.jsp page.
  * @author aniruddha_phadnis
  * */
-public class StorageTypeForm extends AbstractActionForm
+public class StorageTypeForm extends AbstractActionForm implements ISpecimenType
 {
 
 	/**
 	 * logger Logger - Generic logger.
 	 */
 	private static Logger logger = Logger.getCommonLogger(StorageTypeForm.class);
+	/**
+	 * SerialVersionUID.
+	 */
 	private static final long serialVersionUID = 1234567890L;
 	/**
 	 * A string containing the type of the storage.
@@ -76,38 +78,97 @@ public class StorageTypeForm extends AbstractActionForm
 	private String twoDimensionLabel = null;
 
 	/**
-	 * List of storage types Ids  that Storage Type can hold
+	 * List of storage types Ids  that Storage Type can hold.
 	 */
 	private long[] holdsStorageTypeIds;
 
 	/**
-	 * List of Specimen Types that Storage Type can hold
+	 * List of Specimen Types that Storage Type can hold.
 	 */
 	private String[] holdsSpecimenClassTypes;
-	
 	/**
-	 * List of Specimen Types that Storage Type can hold
+	 * List of Tissue Specimen Types that Storage Type can hold.
 	 */
-	private String[] holdsSpecimenType;
-
-	
-	public String[] getHoldsSpecimenType()
+	private String[] holdsTissueSpType;
+	/**
+	 * List of Fluid Specimen Types that Storage Type can hold.
+	 */
+	private String[] holdsFluidSpType;
+	/**
+	 * List of Cell Specimen Types that Storage Type can hold.
+	 */
+	private String[] holdsCellSpType;
+	/**
+	 * List of Molecular Specimen Types that Storage Type can hold.
+	 */
+	private String[] holdsMolSpType;
+	/**
+	 * @return holdsTissueSpType
+	 */
+	public String[] getHoldsTissueSpType()
 	{
-		return holdsSpecimenType;
+		return holdsTissueSpType;
 	}
-
-	
-	public void setHoldsSpecimenType(String[] holdsSpecimenType)
+	/**
+	 * @param holdsTissueSpType Tissue Specimen Types
+	 */
+	public void setHoldsTissueSpType(String[] holdsTissueSpType)
 	{
-		this.holdsSpecimenType = holdsSpecimenType;
+		this.holdsTissueSpType = holdsTissueSpType;
 	}
-
+	/**
+	 * @return Tissue Specimen Types
+	 */
+	public String[] getHoldsFluidSpType()
+	{
+		return holdsFluidSpType;
+	}
+	/**
+	 * @param holdsFluidSpType Fluid Specimen Types
+	 */
+	public void setHoldsFluidSpType(String[] holdsFluidSpType)
+	{
+		this.holdsFluidSpType = holdsFluidSpType;
+	}
+	/**
+	 * @return holdsCellSpType
+	 */
+	public String[] getHoldsCellSpType()
+	{
+		return holdsCellSpType;
+	}
+	/**
+	 * @param holdsCellSpType Cell Specimen Types
+	 */
+	public void setHoldsCellSpType(String[] holdsCellSpType)
+	{
+		this.holdsCellSpType = holdsCellSpType;
+	}
+	/**
+	 * @return holdsMolSpType
+	 */
+	public String[] getHoldsMolSpType()
+	{
+		return holdsMolSpType;
+	}
+	/**
+	 * @param holdsMolSpType Molecular Specimen Types
+	 */
+	public void setHoldsMolSpType(String[] holdsMolSpType)
+	{
+		this.holdsMolSpType = holdsMolSpType;
+	}
+	/**
+	 * Array of SpecimenArray Id's.
+	 */
 	private long[] holdsSpecimenArrTypeIds;
-
+	/**
+	 * String to check Specimen or SpecimenArray type.
+	 */
 	private String specimenOrArrayType;
 
 	/**
-	 * No argument constructor for StorageTypeForm class 
+	 * No argument constructor for StorageTypeForm class.
 	 */
 	public StorageTypeForm()
 	{
@@ -116,7 +177,7 @@ public class StorageTypeForm extends AbstractActionForm
 
 	/**
 	 * This function Copies the data from an storage type object to a StorageTypeForm object.
-	 * @param abstractDomain A StorageType object containing the information about storage type of the container.  
+	 * @param abstractDomain StorageType domain Object
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -132,14 +193,11 @@ public class StorageTypeForm extends AbstractActionForm
 		this.twoDimensionCapacity = storageType.getCapacity().getTwoDimensionCapacity().intValue();
 		this.oneDimensionLabel = storageType.getOneDimensionLabel();
 		this.twoDimensionLabel = storageType.getTwoDimensionLabel();
-		//      Populating the storage type-id array
 		final Collection storageTypeCollection = storageType.getHoldsStorageTypeCollection();
-
 		if (storageTypeCollection != null)
 		{
 			this.holdsStorageTypeIds = new long[storageTypeCollection.size()];
 			int i = 0;
-
 			final Iterator it = storageTypeCollection.iterator();
 			while (it.hasNext())
 			{
@@ -148,7 +206,35 @@ public class StorageTypeForm extends AbstractActionForm
 				i++;
 			}
 		}
-		//      Populating the specimen class type-id array
+		final Collection spClassTypeCollection = setSpClass(storageType);
+		final Collection spTypeCollection = storageType.getHoldsSpecimenTypeCollection();
+		if(spTypeCollection!=null)
+		{
+			StorageContainerUtil.populateSpType(spClassTypeCollection, spTypeCollection, this);
+		}
+		final Collection specimenArrayTypeCollection = storageType
+				.getHoldsSpecimenArrayTypeCollection();
+		if (specimenArrayTypeCollection != null)
+		{
+			this.holdsSpecimenArrTypeIds = new long[specimenArrayTypeCollection.size()];
+			int i = 0;
+			final Iterator it = specimenArrayTypeCollection.iterator();
+			while (it.hasNext())
+			{
+				final SpecimenArrayType holdSpArrayType = (SpecimenArrayType) it.next();
+				this.holdsSpecimenArrTypeIds[i] = holdSpArrayType.getId().longValue();
+				i++;
+				this.specimenOrArrayType = "SpecimenArray";
+			}
+		}
+	}
+
+	/**
+	 * @param storageType StorageType
+	 * @return specimenClassTypeCollection
+	 */
+	private Collection setSpClass(final StorageType storageType)
+	{
 		final Collection specimenClassTypeCollection = storageType
 				.getHoldsSpecimenClassCollection();
 
@@ -174,61 +260,10 @@ public class StorageTypeForm extends AbstractActionForm
 					this.specimenOrArrayType = "Specimen";
 
 				}
+				setHoldsSpecimenClassTypes(holdsSpecimenClassTypes);
 			}
 		}
-		final Collection specimenTypeCollection = storageType.getHoldsSpecimenTypeCollection();
-		final Collection<String> holdSpTypeColl = new HashSet<String>();
-		if(specimenTypeCollection!=null)
-		{
-			try
-			{
-				holdSpTypeColl.addAll(AppUtility.getAllSpecimenTissueType());
-				if (specimenTypeCollection.size() == holdSpTypeColl.size())
-				{
-					this.holdsSpecimenType = new String[1];
-					this.holdsSpecimenType[0] = "-1";
-					this.specimenOrArrayType = "Specimen";
-				}
-				else
-				{
-					this.holdsSpecimenType = new String[specimenTypeCollection.size()];
-					int i = 0;
-
-					final Iterator it = specimenTypeCollection.iterator();
-					while (it.hasNext())
-					{
-						final String specimenType = (String) it.next();
-						this.holdsSpecimenType[i] = specimenType;
-						i++;
-						this.specimenOrArrayType = "Specimen";
-
-					}
-				}
-			}
-			catch (ApplicationException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		//      Populating the specimen array type-id array
-		final Collection specimenArrayTypeCollection = storageType
-				.getHoldsSpecimenArrayTypeCollection();
-
-		if (specimenArrayTypeCollection != null)
-		{
-			this.holdsSpecimenArrTypeIds = new long[specimenArrayTypeCollection.size()];
-			int i = 0;
-
-			final Iterator it = specimenArrayTypeCollection.iterator();
-			while (it.hasNext())
-			{
-				final SpecimenArrayType holdSpArrayType = (SpecimenArrayType) it.next();
-				this.holdsSpecimenArrTypeIds[i] = holdSpArrayType.getId().longValue();
-				i++;
-				this.specimenOrArrayType = "SpecimenArray";
-			}
-		}
-		logger.info("in form bean:----------------" + this.specimenOrArrayType);
+		return specimenClassTypeCollection;
 	}
 
 	/**
@@ -262,7 +297,7 @@ public class StorageTypeForm extends AbstractActionForm
 	}
 
 	/**
-	 * Sets the default temperature of the storage container
+	 * Sets the default temperature of the storage container.
 	 * @param defaultTemperature the default temperature of the storage container to be set.
 	 * @see #getDefaultTemperature()
 	 */
@@ -422,22 +457,17 @@ public class StorageTypeForm extends AbstractActionForm
 
 	/**
 	 * Resets the values of all the fields.
-	 * Is called by the overridden reset method defined in ActionForm.  
+	 * Is called by the overridden reset method defined in ActionForm.
 	 * */
 	@Override
 	protected void reset()
 	{
-		/*this.oneDimensionLabel = null;
-		this.twoDimensionLabel = null;
-		this.type = null;
-		this.defaultTemperature = null;*/
-
 	}
 
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
-	 * @param mapping Actionmapping instance
+	 * @param mapping Action mapping instance
 	 * @param request HttpServletRequest instance
 	 */
 	@Override
@@ -512,8 +542,6 @@ public class StorageTypeForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.labelRequired",
 						ApplicationProperties.getValue("storageType.twoDimensionLabel")));
 			}
-			// code as per bug id 233 
-			// checking for double value if present
 			if (!Validator.isEmpty(this.defaultTemperature)
 					&& !validator.isDouble(this.defaultTemperature, false))
 			{

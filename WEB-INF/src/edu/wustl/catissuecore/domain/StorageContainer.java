@@ -12,15 +12,18 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.util.SearchUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.CommonUtilities;
@@ -31,7 +34,7 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass table="CATISSUE_STORAGE_CONTAINER"
  * @hibernate.joined-subclass-key column="IDENTIFIER"
  */
-public class StorageContainer extends Container implements IActivityStatus
+public class StorageContainer extends Container implements IActivityStatus, ISpecimenTypeDomain
 {
 
 	/**
@@ -46,41 +49,41 @@ public class StorageContainer extends Container implements IActivityStatus
 	/**
 	 * specimenPositionCollection.
 	 */
-	protected Collection<SpecimenPosition> specimenPositionCollection;
+	private Collection<SpecimenPosition> specimenPositionCollection;
 
 	/**
 	 * tempratureInCentigrade.
 	 */
-	protected Double tempratureInCentigrade;
+	private Double tempratureInCentigrade;
 
 	/**
 	 * storageType.
 	 */
-	protected StorageType storageType;
+	private StorageType storageType;
 
 	/**
 	 * site.
 	 */
-	protected Site site;
+	private Site site;
 
 	/**
 	 * HashSet containing collectionProtocol.
 	 */
-	protected Collection<CollectionProtocol> collectionProtocolCollection = new HashSet<CollectionProtocol>();
+	private Collection<CollectionProtocol> collectionProtocolCollection = new HashSet<CollectionProtocol>();
 
 	/**
 	 * HashSet containing StorageType.
 	 */
-	protected Collection<StorageType> holdsStorageTypeCollection = new HashSet<StorageType>();
+	private Collection<StorageType> holdsStorageTypeCollection = new HashSet<StorageType>();
 
 	/**
 	 * HashSet containing String.
 	 */
-	protected Collection<String> holdsSpecimenClassCollection = new HashSet<String>();
+	private Collection<String> holdsSpecimenClassCollection = new HashSet<String>();
 	/**
 	 * HashSet containing String.
 	 */
-	protected Collection<String> holdsSpecimenTypeCollection = new HashSet<String>();
+	private Collection<String> holdsSpecimenTypeCollection = new HashSet<String>();
 
 	/**
 	 * @return holdsSpecimenTypeCollection
@@ -102,29 +105,28 @@ public class StorageContainer extends Container implements IActivityStatus
 	/**
 	 * HashSet containing String.
 	 */
-	protected Collection holdsSpecimenArrayTypeCollection = new HashSet();
+	private Collection holdsSpecimenArrayTypeCollection = new HashSet();
 
 	/**
 	 * startNo of containers.
 	 */
-	protected transient Integer startNo;
+	private transient Integer startNo;
 
 	/**
 	 * Number of containers.
 	 */
-	protected transient Integer noOfContainers;
+	private transient Integer noOfContainers;
 
 	/**
 	 * Map of similarContainerMap.
 	 */
-	protected transient Map similarContainerMap;
+	private transient Map similarContainerMap;
 
 	/**
 	 * Boolean isParentChanged.
 	 */
-	protected transient boolean isParentChanged = false;
+	private transient boolean isParentChanged = false;
 
-	// -------- To check for changed position in the same container.
 	/**
 	 * positionChanged.
 	 */
@@ -147,8 +149,6 @@ public class StorageContainer extends Container implements IActivityStatus
 		super();
 		this.setId(oldContainer.getId());
 		this.setActivityStatus(oldContainer.getActivityStatus());
-		//this.setParent(oldContainer.getLocatedAtPosition().getParentContainer());
-		//this.setNumber(oldContainer.getNumber());
 		this.setName(oldContainer.getName());
 		this.setBarcode(oldContainer.barcode);
 		if (oldContainer.getLocatedAtPosition() != null)
@@ -166,11 +166,6 @@ public class StorageContainer extends Container implements IActivityStatus
 			this.locatedAtPosition.occupiedContainer = this;
 		}
 		this.setFull(oldContainer.getFull());
-		//if ((this.locatedAtPosition != null) && (this.locatedAtPosition.
-		//parentContainer != null) && (this.locatedAtPosition.parentContainer.getChildren() != null))
-		//{
-		//	this.locatedAtPosition.parentContainer.getChildren().add(this);
-		//}
 		this.setSite(oldContainer.getSite());
 		this.capacity = new Capacity(oldContainer.getCapacity());
 
@@ -419,8 +414,6 @@ public class StorageContainer extends Container implements IActivityStatus
 	 * information about the StorageType.
 	 * @throws AssignDataException : AssignDataException
 	 */
-	//reverted back to version 16733 to solve bug 11546
-	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
@@ -432,7 +425,6 @@ public class StorageContainer extends Container implements IActivityStatus
 			{
 				this.tempratureInCentigrade = new Double(form.getDefaultTemperature());
 			}
-			
 			if (form.getBarcode() != null && form.getBarcode().equals(""))
 			{
 				this.barcode = null;
@@ -442,26 +434,19 @@ public class StorageContainer extends Container implements IActivityStatus
 				this.barcode = form.getBarcode();
 			}
 			this.full = new Boolean(form.getIsFull());
-			Logger.out
-					.debug("SC Domain : " + this.full + " :-: form.getIsFull() : " + form.getIsFull());
 			this.activityStatus = form.getActivityStatus();
 			this.noOfContainers = new Integer(form.getNoOfContainers());
-	
 			this.storageType = new StorageType();
 			this.storageType.setId(new Long(form.getTypeId()));
 			this.storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 			this.storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
 			this.storageType.setName(form.getTypeName());
-			// Change for API Search   --- Ashwin 04/10/2006
 			if (SearchUtil.isNullobject(this.capacity))
 			{
 				this.capacity = new Capacity();
 			}
-	
 			this.capacity.setOneDimensionCapacity(new Integer(form.getOneDimensionCapacity()));
 			this.capacity.setTwoDimensionCapacity(new Integer(form.getTwoDimensionCapacity()));
-	
-			//in case of edit
 			if (!form.isAddOperation())
 			{
 				//Previously Container was in a site
@@ -578,21 +563,16 @@ public class StorageContainer extends Container implements IActivityStatus
 			else
 			{
 				this.locatedAtPosition = null;
-	
 				this.site = new Site();
 				this.site.setId(new Long(form.getSiteId()));
 				this.site.setName(form.getSiteName());
-	
 			}
-	
-			//		collectionProtocolCollection.clear();
 			this.collectionProtocolCollection = new HashSet();
 			final long[] collectionProtocolArr = form.getCollectionIds();
 			if (collectionProtocolArr != null)
 			{
 				for (final long element : collectionProtocolArr)
 				{
-					Logger.out.debug("Collection prtocoo Id :" + element);
 					if (element != -1)
 					{
 						final CollectionProtocol collectionProtocol = new CollectionProtocol();
@@ -601,7 +581,6 @@ public class StorageContainer extends Container implements IActivityStatus
 					}
 				}
 			}
-			//		holdsStorageTypeCollection.clear();
 			this.holdsStorageTypeCollection = new HashSet();
 			final long[] storageTypeArr = form.getHoldsStorageTypeIds();
 			if (storageTypeArr != null)
@@ -617,53 +596,8 @@ public class StorageContainer extends Container implements IActivityStatus
 					}
 				}
 			}
-	
-			//		holdsSpecimenClassCollection.clear();
-			this.holdsSpecimenClassCollection = new HashSet();
-			if (form.getSpecimenOrArrayType().equals("Specimen"))
-			{
-				final String[] specimenClassArr = form.getHoldsSpecimenClassTypes();
-				if (specimenClassArr != null)
-				{
-					for (final String element : specimenClassArr)
-					{
-						logger.debug("type Id :" + element);
-						if (element.equals("-1"))
-						{
-							this.holdsSpecimenClassCollection
-									.addAll(AppUtility.getSpecimenClassTypes());
-							break;
-						}
-						else
-						{
-							this.holdsSpecimenClassCollection.add(element);
-						}
-					}
-				}
-			}
-	//		holdsSpecimenTypeClassCollection.clear();
-			this.holdsSpecimenTypeCollection = new HashSet<String>();
-			if (form.getSpecimenOrArrayType().equals("Specimen"))
-			{
-				final String[] specimenClassArr = form.getHoldsSpecimenTypes();
-				if (specimenClassArr != null)
-				{
-					for (final String element : specimenClassArr)
-					{
-						logger.debug("class Id :" + element);
-						if (element.equals("-1"))
-						{
-							this.holdsSpecimenTypeCollection
-									.addAll(AppUtility.getAllSpecimenTissueType());
-							break;
-						}
-						else
-						{
-							this.holdsSpecimenTypeCollection.add(element);
-						}
-					}
-				}
-			}
+			setClassColl(form);
+			setSpTypeColl(form);
 			//		holdsSpArrayTypeCollection.clear();
 			this.holdsSpecimenArrayTypeCollection = new HashSet();
 			if (form.getSpecimenOrArrayType().equals("SpecimenArray"))
@@ -697,6 +631,46 @@ public class StorageContainer extends Container implements IActivityStatus
 			throw new AssignDataException(errorKey, null, "StorageContainer.java :");
 		}
 
+	}
+	/**
+	 * @param form StorageContainerForm
+	 * @throws ApplicationException ApplicationException
+	 */
+	private void setSpTypeColl(final StorageContainerForm form) throws ApplicationException
+	{
+		this.holdsSpecimenTypeCollection = new HashSet<String>();
+		if (form.getSpecimenOrArrayType().equals("Specimen"))
+		{
+			StorageContainerUtil.setSpTypeColl(form, this);
+		}
+	}
+	/**
+	 * @param form StorageContainerForm
+	 */
+	private void setClassColl(final StorageContainerForm form)
+	{
+		this.holdsSpecimenClassCollection = new HashSet();
+		if (form.getSpecimenOrArrayType().equals("Specimen"))
+		{
+			final String[] specimenClassArr = form.getHoldsSpecimenClassTypes();
+			if (specimenClassArr != null)
+			{
+				for (final String element : specimenClassArr)
+				{
+					logger.debug("type Id :" + element);
+					if (element.equals("-1"))
+					{
+						this.holdsSpecimenClassCollection
+								.addAll(AppUtility.getSpecimenClassTypes());
+						break;
+					}
+					else
+					{
+						this.holdsSpecimenClassCollection.add(element);
+					}
+				}
+			}
+		}
 	}
 
 	/**

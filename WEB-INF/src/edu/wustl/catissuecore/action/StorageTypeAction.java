@@ -13,6 +13,8 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,10 +28,12 @@ import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
@@ -59,7 +63,6 @@ public class StorageTypeAction extends SecureAction
 	 * @throws Exception : obj of Exception
 	 * @return ActionForward : ActionForward
 	 */
-	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -88,8 +91,6 @@ public class StorageTypeAction extends SecureAction
 		request.setAttribute("holds_List_2", Constants.HOLDS_LIST2);
 		request.setAttribute("holds_List_3", Constants.HOLDS_LIST3);
 		request.setAttribute("holds_List_4", Constants.HOLDS_LIST4);
-
-		// Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label
 		int dimTwoCapacity = 0;
 		if (storageTypeForm != null)
 		{
@@ -116,63 +117,73 @@ public class StorageTypeAction extends SecureAction
 
 		request.setAttribute("submit", Constants.STORAGE_TYPE_FORWARD_TO_LIST[0][0]);
 		request.setAttribute("addContainer", Constants.STORAGE_TYPE_FORWARD_TO_LIST[1][0]);
-
-		// Mandar : 18-Apr-06 : bugid: 644 : - Dimension 2 capacity label end
-
 		this.logger.info("SpecimenArray/specimen:" + storageTypeForm.getSpecimenOrArrayType());
 		if (storageTypeForm.getSpecimenOrArrayType() == null)
 		{
 			storageTypeForm.setSpecimenOrArrayType("Specimen");
 		}
-		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final StorageTypeBizLogic bizLogic = (StorageTypeBizLogic) factory
-				.getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
-		// Gets the value of the operation parameter.
-
-		// Sets the operation attribute to be used in the Add/Edit Institute
-		// Page.
-		// Gets the Storage Type List and sets it in request
-		final List list1 = bizLogic.retrieve(StorageType.class.getName());
-		final List storageTypeList = AppUtility.getStorageTypeList(list1, true);
-		// Collections.sort(storageTypeList);
-		request.setAttribute(Constants.HOLDS_LIST1, storageTypeList);
-
-		// get the Specimen class and type from the cde
-		final List specimenClassTypeList = AppUtility.getSpecimenClassTypeListWithAny();
-		request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
-
-		// Gets the Specimen array Type List and sets it in request
-		final List list2 = bizLogic.retrieve(SpecimenArrayType.class.getName());
-		final List spArrayTypeList = AppUtility.getSpecimenArrayTypeList(list2);
-		request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
-		request.setAttribute(Constants.HOLDS_LIST4, AppUtility.getAllSpecimenType());
-		// Gets the Specimen array Type List and sets it in request //Fluid, Tissue, Molecular, Cell
-		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, AppUtility.getSpecimenTypeMap());
-
-		// Bug #4297
-		// if(operation.equals(Constants.ADD))
-		// {
-		// // new model storageTypeForm.setHoldsSpecimenClassTypeIds(new
-		// long[]{1});
-		// //storageTypeForm.setHoldsStorageTypeIds(new long[]{1});
-		// if(storageTypeForm.getOneDimensionCapacity() == 0 &&
-		// storageTypeForm.getTwoDimensionCapacity() == 0)
-		// {
-		// storageTypeForm.setOneDimensionCapacity(0);
-		// storageTypeForm.setTwoDimensionCapacity(0);
-		// }
-		// }
-		// ------------- add new
-
+		setRequestParameters(request, storageTypeForm, operation);
 		final AbstractActionForm aForm = (AbstractActionForm) form;
 		if (reqPath != null && aForm != null)
 		{
 			aForm.setRedirectTo(reqPath);
 		}
-
-		this.logger.debug("StorageTypeAction redirect :---------- " + reqPath);
-
 		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
+	}
+	/**
+	 * @param request HttpServletRequest
+	 * @param storageTypeForm storageTypeForm
+	 * @param operation operation
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void setRequestParameters(HttpServletRequest request,
+			final StorageTypeForm storageTypeForm, final String operation) throws BizLogicException
+	{
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final StorageTypeBizLogic bizLogic = (StorageTypeBizLogic) factory
+				.getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
+		setSpecimenClass(storageTypeForm, operation, bizLogic);
+		final List list1 = bizLogic.retrieve(StorageType.class.getName());
+		final List storageTypeList = AppUtility.getStorageTypeList(list1, true);
+		request.setAttribute(Constants.HOLDS_LIST1, storageTypeList);
+		final List specimenClassTypeList = AppUtility.getSpecimenClassTypeListWithAny();
+		request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
+		final List list2 = bizLogic.retrieve(SpecimenArrayType.class.getName());
+		final List spArrayTypeList = AppUtility.getSpecimenArrayTypeList(list2);
+		request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
+		StorageContainerUtil.setSpTypeList(request, storageTypeForm);
+		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, AppUtility.getSpecimenTypeMap());
+	}
+	/**
+	 * This method will set Specimen class in storage type form.
+	 * @param storageTypeForm StorageType Form
+	 * @param operation Operation Add/Edit
+	 * @param bizLogic StorageType BizLogic
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void setSpecimenClass(final StorageTypeForm storageTypeForm, final String operation,
+			final StorageTypeBizLogic bizLogic) throws BizLogicException
+	{
+		if (operation.equals(Constants.EDIT))
+		{
+			final StorageType storageType = (StorageType)bizLogic.
+			retrieve(StorageType.class.getName(), storageTypeForm.getId());
+			final Collection specimenClassTypeCollection = storageType
+			.getHoldsSpecimenClassCollection();
+			if (specimenClassTypeCollection != null)
+			{
+				String [] holdsSpecimenClassTypes = new String[specimenClassTypeCollection.size()];
+				int i = 0;
+				final Iterator it = specimenClassTypeCollection.iterator();
+				while (it.hasNext())
+				{
+					final String specimenClass = (String) it.next();
+					holdsSpecimenClassTypes[i] = specimenClass;
+					i++;
+				}
+				storageTypeForm.setHoldsSpecimenClassTypes(holdsSpecimenClassTypes);
+			}
+		}
 	}
 
 }

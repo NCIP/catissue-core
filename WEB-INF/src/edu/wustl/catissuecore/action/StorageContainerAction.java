@@ -235,7 +235,7 @@ public class StorageContainerAction extends SecureAction
 			{
 				this.onTypeChange(storageContainerForm, operation, request);
 			}
-
+			StorageContainerUtil.setSpTypeList(request, storageContainerForm);
 			if (request.getAttribute(Constants.SUBMITTED_FOR) != null)
 			{
 				final long[] collectionIds = this.parentContChange(request);
@@ -493,12 +493,15 @@ public class StorageContainerAction extends SecureAction
 						storageContainerForm
 								.setHoldsSpecimenClassTypes(defHoldsSpecimenClassTypeList);
 					}
+					
 					final String[] defHoldsSpecimenTypeList = storageTypebizLogic.
 					getDefaultHoldsSpecimenTypeList(type);
-					if (defHoldsSpecimenTypeList != null)
+					
+					final Collection specimenTypeCollection = type.getHoldsSpecimenTypeCollection();
+					if(specimenTypeCollection!=null)
 					{
-						storageContainerForm
-								.setHoldsSpecimenTypes(defHoldsSpecimenTypeList);
+						StorageContainerUtil.populateSpType(type.getHoldsSpecimenClassCollection(), specimenTypeCollection,
+								storageContainerForm);
 					}
 					final long[] defHoldsSpecimenArrayTypeList = storageTypebizLogic
 							.getDefaultHoldSpecimenArrayTypeList(type);
@@ -675,26 +678,7 @@ public class StorageContainerAction extends SecureAction
 		}
 
 	}
-
-	/*
-	 * private void onSiteOrParentContChange(HttpServletRequest
-	 * request,HttpServletResponse response, StorageContainerForm
-	 * storageContainerForm) throws DAOException, IOException { if
-	 * (!Constants.SITE
-	 * .equals(storageContainerForm.getParentContainerSelected())) { String[]
-	 * startingPoints = new String[]{"-1", "-1", "-1"}; if
-	 * (request.getParameter("parentContainerId") != null) { startingPoints[0] =
-	 * request.getParameter("parentContainerId"); } if
-	 * (request.getParameter("positionDimensionOne") != null) {
-	 * startingPoints[1] = request.getParameter("positionDimensionOne"); } if
-	 * (request.getParameter("positionDimensionTwo") != null) {
-	 * startingPoints[2] = request.getParameter("positionDimensionTwo"); }
-	 * Vector initialValues = new Vector(); initialValues.add(startingPoints);
-	 * request.setAttribute("initValues", initialValues); } long[] collectionIds
-	 * = parentContChange(request);
-	 * storageContainerForm.setCollectionIds(collectionIds);
-	 * sendCollectionIds(collectionIds,response);; }
-	 */
+	
 	/**
 	 * @param request
 	 *            : request
@@ -722,16 +706,6 @@ public class StorageContainerAction extends SecureAction
 		return new long[]{-1};
 	}
 
-	/*
-	 * private void sendCollectionIds(long[] collectionIds, HttpServletResponse
-	 * response) throws IOException { PrintWriter out = response.getWriter();
-	 * response.setContentType("text/html"); String collectionIdStr = ""; for
-	 * (int i = 0; i < collectionIds.length - 1; i++) { long id =
-	 * collectionIds[i]; collectionIdStr = collectionIdStr + new
-	 * Long(id).toString() + "|"; } long id = collectionIds[collectionIds.length
-	 * - 1]; collectionIdStr = collectionIdStr + new Long(id).toString();
-	 * out.write(collectionIdStr); }
-	 */
 	/**
 	 * @param storageContainerForm
 	 *            : storageContainerForm
@@ -764,14 +738,15 @@ public class StorageContainerAction extends SecureAction
 				.setPositionDimensionTwo(storageContainerBean.getPositionDimensionTwo());
 		storageContainerForm.setContainerId(storageContainerBean.getContainerId());
 		storageContainerForm.setContainerName(storageContainerBean.getContainerName());
-		// storageContainerForm.setCheckedButton(storageContainerBean.
-		// getCheckedButton());
+	
 		storageContainerForm.setHoldsSpecimenArrTypeIds(storageContainerBean
 				.getHoldsSpecimenArrTypeIds());
 		storageContainerForm.setHoldsSpecimenClassTypes(storageContainerBean
 				.getHoldsSpecimenClassTypes());
-		storageContainerForm.setHoldsSpecimenTypes(storageContainerBean
-				.getHoldsSpecimenTypes());
+		storageContainerForm.setHoldsTissueSpType(storageContainerBean.getHoldsTissueSpType());
+		storageContainerForm.setHoldsFluidSpType(storageContainerBean.getHoldsFluidSpType());
+		storageContainerForm.setHoldsCellSpType(storageContainerBean.getHoldsCellSpType());
+		storageContainerForm.setHoldsMolSpType(storageContainerBean.getHoldsMolSpType());
 		storageContainerForm.setHoldsStorageTypeIds(storageContainerBean.getHoldsStorageTypeIds());
 		storageContainerForm
 				.setOneDimensionCapacity(storageContainerBean.getOneDimensionCapacity());

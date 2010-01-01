@@ -2073,12 +2073,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 				final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 						.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-				storageContainerBizLogic.checkContainer(dao,
-						storageContainerObj.getId().toString(), specimen.getSpecimenPosition()
-								.getPositionDimensionOne().toString(), specimen
-								.getSpecimenPosition().getPositionDimensionTwo().toString(),
-						sessionDataBean, partOfMultipleSpecimen, specimen);
-				// specimen.setStorageContainer(storageContainerObj);
+				
+				final String contId= storageContainerObj.getId().toString();
+				final String posOne= specimen.getSpecimenPosition()
+				.getPositionDimensionOne().toString();
+				final String posTwo=specimen
+				.getSpecimenPosition().getPositionDimensionTwo().toString();
+				storageContainerBizLogic.checkContainer(dao,StorageContainerUtil.setparameterList
+				(contId, posOne, posTwo, partOfMultipleSpecimen),sessionDataBean,specimen);
 			}
 		}
 		catch (final ApplicationException exp)

@@ -286,7 +286,7 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 		String[] holdsSpType = null;
 		final Collection<String> spTypeColl = type.getHoldsSpecimenTypeCollection();
 		final Collection<String> holdSpTypeColl = new HashSet<String>();
-		holdSpTypeColl.addAll(AppUtility.getAllSpecimenTissueType());
+		holdSpTypeColl.addAll(AppUtility.getAllSpType());
 		if (spTypeColl != null)
 		{
 			if (spTypeColl.size() == holdSpTypeColl.size())

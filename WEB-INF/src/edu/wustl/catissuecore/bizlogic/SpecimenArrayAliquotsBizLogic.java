@@ -178,20 +178,13 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 
 					final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 							.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-
 					// check for all validations on the storage container.
-					storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2,
-							sessionDataBean, false, null);
+					storageContainerBizLogic.checkContainer(dao,StorageContainerUtil.setparameterList
+					(containerId, posDim1, posDim2, false),
+					sessionDataBean,null);
 
 					final String sourceObjectName = StorageContainer.class.getName();
 					final String[] selectColumnName = {"name"};
-					// String[] whereColumnName = {"id"};
-					// //"storageContainer."+edu
-					// .wustl.common.util.global.Constants.SYSTEM_IDENTIFIER
-					// String[] whereColumnCondition = {"="};
-					// Object[] whereColumnValue = {new Long(containerId)};
-					// String joinCondition = null;
-
 					final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 					queryWhereClause.addCondition(new EqualClause("id", Long.valueOf(containerId)));
 
@@ -203,12 +196,10 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 						storageContainerObj.setName((String) list.get(0));
 						aliquotMap.put(storageContainerNameKey, list.get(0));
 					}
-					// }
 				}
 				else
 				{
 					aliquotSpecimenArray.setLocatedAtPosition(null);
-					// aliquotSpecimenArray.setStorageContainer(null);
 				}
 
 				// Setting the attributes - storage positions, available,

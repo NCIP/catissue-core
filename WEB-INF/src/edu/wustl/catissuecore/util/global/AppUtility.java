@@ -118,6 +118,7 @@ import edu.wustl.query.beans.QueryResultObjectDataBean;
 import edu.wustl.query.bizlogic.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.query.executor.AbstractQueryExecutor;
 import edu.wustl.security.exception.SMException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
 import edu.wustl.security.privilege.PrivilegeCache;
@@ -201,11 +202,12 @@ public class AppUtility
 
 	}
 
-	public static Map getSpecimenTypeMap()
+	public static Map<String, List<NameValueBean>> getSpecimenTypeMap()
 	{
 		final Set setPV = getSpecimenClassCDE();
 		final Iterator itr = setPV.iterator();
-		final Map subTypeMap = new HashMap();
+		final Map<String, List<NameValueBean>> subTypeMap = 
+			new HashMap<String, List<NameValueBean>>();
 		while (itr.hasNext())
 		{
 			final List<NameValueBean> innerList = new ArrayList<NameValueBean>();
@@ -227,10 +229,10 @@ public class AppUtility
 		return subTypeMap;
 	}
 
-	public static List getSpecimenTypes(String specimenClass)
+	public static List<NameValueBean> getSpecimenTypes(String specimenClass)
 	{
-		final Map specimenTypeMap = getSpecimenTypeMap();
-		final List typeList = (List) specimenTypeMap.get(specimenClass);
+		final Map<String, List<NameValueBean>> specimenTypeMap = getSpecimenTypeMap();
+		final List<NameValueBean> typeList = (List<NameValueBean>) specimenTypeMap.get(specimenClass);
 		return typeList;
 	}
 
@@ -3618,9 +3620,53 @@ public class AppUtility
 	 * @return List of SpecimenType
 	 * @throws ApplicationException
 	 */
-	public static List getAllSpecimenTissueType() throws ApplicationException
+	public static List<String> getAllSpType() throws ApplicationException
 	{
 		String sql = "select value from catissue_permissible_value where parent_identifier in (1,2,3,4)";
+		final List resultList = executeSQLQuery(sql);
+		return getListOfString(resultList);
+	}
+	/**
+	 * This method will return all the specimen type under specimen class.
+	 * @return List of SpecimenType
+	 * @throws ApplicationException
+	 */
+	public static List<String> getAllTissueSpType() throws ApplicationException
+	{
+		String sql = "select value from catissue_permissible_value where parent_identifier =4";
+		final List resultList = executeSQLQuery(sql);
+		return getListOfString(resultList);
+	}
+	/**
+	 * This method will return all the specimen type under specimen class.
+	 * @return List of SpecimenType
+	 * @throws ApplicationException
+	 */
+	public static List<String> getAllFluidSpType() throws ApplicationException
+	{
+		String sql = "select value from catissue_permissible_value where parent_identifier =3";
+		final List resultList = executeSQLQuery(sql);
+		return getListOfString(resultList);
+	}
+	/**
+	 * This method will return all the specimen type under specimen class.
+	 * @return List of SpecimenType
+	 * @throws ApplicationException
+	 */
+	public static List<String> getAllMolecularType() throws ApplicationException
+	{
+		String sql = "select value from catissue_permissible_value where parent_identifier =1";
+		final List resultList = executeSQLQuery(sql);
+		return getListOfString(resultList);
+	}
+	/**
+	 * This method will return all the specimen type under specimen class.
+	 * @return List of SpecimenType
+	 * @throws ApplicationException
+	 */
+	public static List<String> getAllCellType() throws ApplicationException
+	{
+		String sql = "select value from catissue_permissible_value where parent_identifier =2";
 		final List resultList = executeSQLQuery(sql);
 		return getListOfString(resultList);
 	}
@@ -3654,8 +3700,6 @@ public class AppUtility
 		int newInt = (int) (valueToBeTruncateOff * p);
 	  	return newInt/p;
 	  }
-
-
 
     /**
      *
@@ -3717,4 +3761,6 @@ public class AppUtility
         }
         return password;
     }
+    
+   
 }

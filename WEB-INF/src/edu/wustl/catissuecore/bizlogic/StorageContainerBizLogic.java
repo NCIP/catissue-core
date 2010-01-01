@@ -73,7 +73,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	protected void insert(Object obj, final DAO dao, final SessionDataBean sessionDataBean)
+	protected void insert(final Object obj, final DAO dao, final SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
 		try
@@ -83,7 +83,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			final SiteBizLogic sBiz = new SiteBizLogic();
 			final StorageTypeBizLogic stBiz = new StorageTypeBizLogic();
 			int posOneCapacity = 1, posTwoCapacity = 1;
-			int posDimOne = Constants.STORAGE_CONTAINER_FIRST_ROW, posDimTwo 
+			int posDimOne = Constants.STORAGE_CONTAINER_FIRST_ROW, posDimTwo
 			= Constants.STORAGE_CONTAINER_FIRST_COLUMN;
 			boolean[][] fullStatus = null;
 			final int noOfContainers = container.getNoOfContainers().intValue();
@@ -103,36 +103,22 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 							parentContainer.getId());
 					if ((noOfContainers + children.size()) > totalCapacity)
 					{
-						throw this.getBizLogicException(null, "errors.storageContainer.overflow",
-								"");
+						throw this.getBizLogicException(null,
+						"errors.storageContainer.overflow","");
 					}
 					else
 					{
-						if (false == StorageContainerUtil.validatePosition(parentContainer, container))
-						{
-							throw this.getBizLogicException(null,
-									"errors.storageContainer.dimensionOverflow", "");
-						}
-						this.checkContainer(dao, container.getLocatedAtPosition()
-								.getParentContainer().getId().toString(), container
-								.getLocatedAtPosition().getPositionDimensionOne().toString(),
-								container.getLocatedAtPosition().getPositionDimensionTwo()
-										.toString(), sessionDataBean, false, null);
-						final boolean parentContValidToUSe = StorageContainerUtil.isParentContainerValidToUSe(
-								container, parentContainer);
-						if (!parentContValidToUSe)
-						{
-							throw this.getBizLogicException(null, "parent.container.not.valid", "");
-						}
+						validateParentContainer(dao, sessionDataBean,
+						container, parentContainer);
 						final ContainerPosition cntPos = container.getLocatedAtPosition();
 						cntPos.setParentContainer(parentContainer);
 						container.setSite(parentContainer.getSite());
-						posOneCapacity = parentContainer.getCapacity().getOneDimensionCapacity()
-								.intValue();
-						posTwoCapacity = parentContainer.getCapacity().getTwoDimensionCapacity()
-								.intValue();
-						fullStatus = StorageContainerUtil.getStorageContainerFullStatus(dao, parentContainer,
-								children);
+						posOneCapacity = parentContainer.getCapacity().
+						getOneDimensionCapacity().intValue();
+						posTwoCapacity = parentContainer.getCapacity().
+						getTwoDimensionCapacity().intValue();
+						fullStatus = StorageContainerUtil.
+						getStorageContainerFullStatus(dao, parentContainer,children);
 						posDimOne = cntPos.getPositionDimensionOne().intValue();
 						posDimTwo = cntPos.getPositionDimensionTwo().intValue();
 						container.setLocatedAtPosition(cntPos);
@@ -150,59 +136,15 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			stBiz.loadStorageType(dao, container);
 			for (int i = 0; i < noOfContainers; i++)
 			{
-				final StorageContainer cont = new StorageContainer(container);
-				if (cont.getLocatedAtPosition() != null
-						&& cont.getLocatedAtPosition().getParentContainer() != null)
-				{
-					final ContainerPosition cntPos = cont.getLocatedAtPosition();
-					cntPos.setPositionDimensionOne(Integer.valueOf(posDimOne));
-					cntPos.setPositionDimensionTwo(Integer.valueOf(posDimTwo));
-					cntPos.setOccupiedContainer(cont);
-					cont.setLocatedAtPosition(cntPos);
-				}
+				final StorageContainer cont = setContainerPos(container, posDimOne, posDimTwo);
 				logger.debug("Collection protocol size:"
 						+ container.getCollectionProtocolCollection().size());
-				if (edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl)
-				{
-					LabelGenerator storagecontLblGenerator;
-					try
-					{
-						storagecontLblGenerator = LabelGeneratorFactory
-								.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);
-						storagecontLblGenerator.setLabel(cont);
-						container.setName(cont.getName());
-					}
-					catch (final NameGeneratorException e)
-					{
-						logger.error(e.getMessage(), e);
-						e.printStackTrace() ;
-						throw this.getBizLogicException(e, "name.generator.exp", "");
-					}
-				}
-				if (edu.wustl.catissuecore.util.global.Variables.isStorageContainerBarcodeGeneratorAvl)
-				{
-					try
-					{
-						BarcodeGeneratorFactory
-						.getInstance(Constants.STORAGECONTAINER_BARCODE_GENERATOR_PROPERTY_NAME);
-					}
-					catch (final NameGeneratorException e)
-					{
-						logger.error(e.getMessage(), e);
-						e.printStackTrace();
-						throw this.getBizLogicException(e, "name.generator.exp", "");
-					}
-				}
-				dao.insert(cont.getCapacity());
-				if (cont.getFull() == null)
-				{
-					cont.setFull(false);
-				}
+				setLabelAndBarcode(dao, container, cont);
 				dao.insert(cont);
 				container.setId(cont.getId());
 				container.setCapacity(cont.getCapacity());
 				if (container.getLocatedAtPosition() != null
-						&& container.getLocatedAtPosition().getParentContainer() != null)
+					&& container.getLocatedAtPosition().getParentContainer() != null)
 				{
 					do
 					{
@@ -223,9 +165,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 						{
 							posDimTwo = posDimTwo + 1;
 						}
-
-						logger.debug("positionDimensionTwo: " + posDimTwo);
-						logger.debug("positionDimensionOne: " + posDimOne);
 					}
 					while (fullStatus[posDimOne][posDimTwo] != false);
 				}
@@ -244,6 +183,123 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
+	}
+	
+	/**
+	 * @param dao DAO Object
+	 * @param sessionDataBean SessionDataBean object
+	 * @param container Container Object
+	 * @param parentContainer parent Container Object
+	 * @throws BizLogicException BizLogicException Exception
+	 */
+	private void validateParentContainer(final DAO dao, final SessionDataBean sessionDataBean,
+			final StorageContainer container, final StorageContainer parentContainer)
+			throws BizLogicException
+	{
+		if (!StorageContainerUtil.validatePosition(parentContainer, container))
+		{
+			throw this.getBizLogicException(null,
+					"errors.storageContainer.dimensionOverflow", "");
+		}
+		final String contId=container.getLocatedAtPosition().
+		getParentContainer().getId().toString(); 
+		final String pos1=container.getLocatedAtPosition()
+		.getPositionDimensionOne().toString();
+		final String pos2=container.getLocatedAtPosition()
+		.getPositionDimensionTwo().toString();
+		this.checkContainer(dao,StorageContainerUtil.setparameterList(contId, pos1, pos2, false),
+		sessionDataBean,null);
+		final boolean parentContValid = StorageContainerUtil.isParentContainerValidToUSe(
+				container, parentContainer);
+		if (!parentContValid)
+		{
+			throw this.getBizLogicException(null, "parent.container.not.valid", "");
+		}
+	}
+	/**
+	 * @param dao DAO Object
+	 * @param container  New Container Object
+	 * @param cont New Container Object
+	 * @throws BizLogicException BizLogicException Exception
+	 * @throws DAOException DAOException Exception
+	 */
+	private void setLabelAndBarcode(final DAO dao, final StorageContainer container,
+			final StorageContainer cont) throws BizLogicException, DAOException
+	{
+		setLabel(container, cont);
+		setBarcode();
+		dao.insert(cont.getCapacity());
+		if (cont.getFull() == null)
+		{
+			cont.setFull(false);
+		}
+	}
+	/**
+	 * Set Barcode
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void setBarcode() throws BizLogicException
+	{
+		if (edu.wustl.catissuecore.util.global.Variables.isStorageContainerBarcodeGeneratorAvl)
+		{
+			try
+			{
+				BarcodeGeneratorFactory
+				.getInstance(Constants.STORAGECONTAINER_BARCODE_GENERATOR_PROPERTY_NAME);
+			}
+			catch (final NameGeneratorException e)
+			{
+				logger.error(e.getMessage(), e);
+				throw this.getBizLogicException(e, "name.generator.exp", "");
+			}
+		}
+	}
+	/**
+	 * @param container  New Container Object
+	 * @param cont New Container Object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void setLabel(final StorageContainer container, final StorageContainer cont)
+			throws BizLogicException
+	{
+		if (edu.wustl.catissuecore.util.global.Variables.isStorageContainerLabelGeneratorAvl)
+		{
+			LabelGenerator scLblGenerator;
+			try
+			{
+				scLblGenerator = LabelGeneratorFactory
+						.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);
+				scLblGenerator.setLabel(cont);
+				container.setName(cont.getName());
+			}
+			catch (final NameGeneratorException e)
+			{
+				logger.error(e.getMessage(), e);
+				e.printStackTrace() ;
+				throw this.getBizLogicException(e, "name.generator.exp", "");
+			}
+		}
+	}
+	/**
+	 * @param container StorageContainer Object
+	 * @param posDimOne position dim one 
+	 * @param posDimTwo position dim two
+	 * @return StorageContainer
+	 */
+	private StorageContainer setContainerPos(final StorageContainer container,
+			final int posDimOne, final int posDimTwo)
+	{
+		final StorageContainer cont = new StorageContainer(container);
+		if (cont.getLocatedAtPosition() != null
+				&& cont.getLocatedAtPosition().getParentContainer() != null)
+		{
+			final ContainerPosition cntPos = cont.getLocatedAtPosition();
+			cntPos.setPositionDimensionOne(Integer.valueOf(posDimOne));
+			cntPos.setPositionDimensionTwo(Integer.valueOf(posDimTwo));
+			cntPos.setOccupiedContainer(cont);
+			cont.setLocatedAtPosition(cntPos);
+		}
+		return cont;
 	}
 	/**
 	 * @param obj - AbstractDomainObject.
@@ -288,204 +344,37 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	protected void update(final DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
-			throws BizLogicException
+	protected void update(final DAO dao, final Object obj, final Object oldObj, 
+			final SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		try
 		{
 			final StorageContainer container = (StorageContainer) obj;
 			final StorageContainer oldContainer = (StorageContainer) oldObj;
-			final SiteBizLogic sBiz = new SiteBizLogic();
-			StorageContainer persistentOldContainerForChange = null;
 			final Object object = dao.retrieveById(StorageContainer.class.getName(), oldContainer
 					.getId());
-			persistentOldContainerForChange = (StorageContainer) object;
-			if (container.getLocatedAtPosition() != null)
-			{
-				final StorageContainer parentStorageContainer = (StorageContainer) dao
-						.retrieveById(StorageContainer.class.getName(), container
-								.getLocatedAtPosition().getParentContainer().getId());
-				container.getLocatedAtPosition().setParentContainer(parentStorageContainer);
-			}
-			logger.debug("container.isParentChanged() : " + container.isParentChanged());
-			if (container.isParentChanged())
-			{
-				if (container.getLocatedAtPosition() != null
-						&& container.getLocatedAtPosition().getParentContainer() != null)
-				{
-					if (StorageContainerUtil.isUnderSubContainer(container, container.getLocatedAtPosition()
-							.getParentContainer().getId(), dao))
-					{
-						throw this.getBizLogicException(null,
-								"errors.container.under.subcontainer", "");
-					}
-					logger.debug("Loading ParentContainer: "
-							+ container.getLocatedAtPosition().getParentContainer().getId());
-					if (false == StorageContainerUtil.validatePosition(dao, container))
-					{
-						throw this.getBizLogicException(null,
-								"errors.storageContainer.dimensionOverflow", "");
-					}
-					final boolean canUse = StorageContainerUtil.isContainerAvailableForPositions(dao, container);
-					logger.debug("canUse : " + canUse);
-					if (!canUse)
-					{
-						throw this.getBizLogicException(null, "errors.storageContainer.inUse", "");
-					}
-					this.checkStatus(dao, container.getLocatedAtPosition().getParentContainer(),
-							"Parent Container");
-					final Site site = new SiteBizLogic().getSite(dao, container.getLocatedAtPosition()
-							.getParentContainer().getId());
-					this.checkStatus(dao, site, "Parent Container Site");
-					container.setSite(site);
-				}
-			}
-			else
-			{
-				if (container.isPositionChanged())
-				{
-					final String sourceObjectName = StorageContainer.class.getName();
-					final String[] selectColumnName = {"id", "capacity.oneDimensionCapacity",
-							"capacity.twoDimensionCapacity"};
-					final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-					queryWhereClause.addCondition(new EqualClause("id", container
-							.getLocatedAtPosition().getParentContainer().getId()));
-					final List list = dao.retrieve(sourceObjectName, selectColumnName,
-							queryWhereClause);
-					if (!list.isEmpty())
-					{
-						final Object[] obj1 = (Object[]) list.get(0);
-						logger.debug("**************PC obj::::::: --------------- " + obj1);
-						logger.debug((Long) obj1[0]);
-						logger.debug((Integer) obj1[1]);
-						logger.debug((Integer) obj1[2]);
-
-						final Integer pcCapacityOne = (Integer) obj1[1];
-						final Integer pcCapacityTwo = (Integer) obj1[2];
-
-						if (!StorageContainerUtil.validatePosition(pcCapacityOne.intValue(), pcCapacityTwo
-								.intValue(), container))
-						{
-							throw this.getBizLogicException(null,
-									"errors.storageContainer.dimensionOverflow", "");
-						}
-					}
-					/**
-					 * Only if parentContainerID, positionOne or positionTwo is
-					 * changed check for availability of position
-					 */
-					if (oldContainer.getLocatedAtPosition() != null
-							&& oldContainer.getLocatedAtPosition().getPositionDimensionOne() != null
-							&& oldContainer.getLocatedAtPosition().getPositionDimensionOne()
-									.intValue() != container.getLocatedAtPosition()
-									.getPositionDimensionOne().intValue()
-							|| oldContainer.getLocatedAtPosition().getPositionDimensionTwo()
-									.intValue() != container.getLocatedAtPosition()
-									.getPositionDimensionTwo().intValue())
-					{
-						final boolean canUse = StorageContainerUtil
-								.isContainerAvailableForPositions(dao, container);
-						logger.debug("canUse : " + canUse);
-						if (!canUse)
-						{
-
-							throw this.getBizLogicException(null, "errors.storageContainer.inUse",
-									"");
-						}
-					}
-
-				}
-			}
-			boolean flag = true;
-			if (container.getLocatedAtPosition() != null
-					&& container.getLocatedAtPosition().getParentContainer() != null
-					&& oldContainer.getLocatedAtPosition() != null
-					&& container.getLocatedAtPosition().getParentContainer().getId().longValue() == oldContainer
-							.getLocatedAtPosition().getParentContainer().getId().longValue()
-					&& container.getLocatedAtPosition().getPositionDimensionOne().longValue() == oldContainer
-							.getLocatedAtPosition().getPositionDimensionOne().longValue()
-					&& container.getLocatedAtPosition().getPositionDimensionTwo().longValue() == oldContainer
-							.getLocatedAtPosition().getPositionDimensionTwo().longValue())
-			{
-				flag = false;
-			}
-
-			if (flag)
-			{
-				if (container.getLocatedAtPosition() != null
-						&& container.getLocatedAtPosition().getParentContainer() != null)
-				{
-					this.checkContainer(dao, container.getLocatedAtPosition().getParentContainer()
-							.getId().toString(), container.getLocatedAtPosition()
-							.getPositionDimensionOne().toString(), container.getLocatedAtPosition()
-							.getPositionDimensionTwo().toString(), sessionDataBean, false, null);
-				}
-
-			}
-			final Integer oldContainerDimOne = oldContainer.getCapacity().getOneDimensionCapacity();
-			final Integer oldContainerDimTwo = oldContainer.getCapacity().getTwoDimensionCapacity();
-			final Integer newContainerDimOne = container.getCapacity().getOneDimensionCapacity();
-			final Integer newContainerDimTwo = container.getCapacity().getTwoDimensionCapacity();
-			if (oldContainerDimOne.intValue() > newContainerDimOne.intValue()
-					|| oldContainerDimTwo.intValue() > newContainerDimTwo.intValue())
-			{
-				final boolean canReduceDimension = StorageContainerUtil.canReduceDimension(dao, oldContainer
-						.getId(), newContainerDimOne, newContainerDimTwo);
-				if (!canReduceDimension)
-				{
-					throw this.getBizLogicException(null, "errors.storageContainer.cannotReduce",
-							"");
-				}
-			}
-			if (container.getId() != null)
-			{
-				new SiteBizLogic().checkClosedSite(dao, container.getId(), "Container site");
-			}
-			sBiz.setSiteForSubContainers(container, container.getSite(), dao);
-			final boolean restrictionsCanChange = StorageContainerUtil.isContainerEmpty(dao, container);
-			logger.info("--------------container Available :" + restrictionsCanChange);
-			if (!restrictionsCanChange)
-			{
-				final boolean restrictionsChanged = StorageContainerUtil.checkForRestrictionsChanged(container,
-						oldContainer);
-				logger.info("---------------restriction changed -:" + restrictionsChanged);
-				if (restrictionsChanged)
-				{
-
-					throw this.getBizLogicException(null,
-							"errros.storageContainer.restrictionCannotChanged", "");
-				}
-			}
+			StorageContainer oldContForChange = (StorageContainer) object;
+			validateContainer(dao, sessionDataBean, container, oldContainer);
 			final Collection<SpecimenPosition> specimenPosColl = this
 					.getSpecimenPositionCollForContainer(dao, container.getId());
 			container.setSpecimenPositionCollection(specimenPosColl);
-			this.setValuesinPersistentObject(persistentOldContainerForChange, container, dao);
-			dao.update(persistentOldContainerForChange,oldContainer);
-			dao.update(persistentOldContainerForChange.getCapacity(),oldContainer.getCapacity());
-			logger.debug("container.getActivityStatus() " + container.getActivityStatus());
+			this.setValuesinPersistentObject(oldContForChange, container, dao);
+			dao.update(oldContForChange,oldContainer);
+			dao.update(oldContForChange.getCapacity(),oldContainer.getCapacity());
 			if (container.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
 				final Long[] containerIDArr = {container.getId()};
 				if (StorageContainerUtil.isContainerAvailableForDisabled(dao, containerIDArr))
 				{
 					final List disabledConts = new ArrayList();
-					final List<StorageContainer> disabledContainerList = new ArrayList<StorageContainer>();
-					disabledContainerList.add(persistentOldContainerForChange);
-					this.addEntriesInDisabledMap(persistentOldContainerForChange, disabledConts);
-					this.setDisableToSubContainer(persistentOldContainerForChange, disabledConts,
-							dao, disabledContainerList);
-					persistentOldContainerForChange.getOccupiedPositions().clear();
-					logger.debug("container.getActivityStatus() "
-							+ container.getActivityStatus());
-					this.disableSubStorageContainer(dao, sessionDataBean, disabledContainerList);
-					final ContainerPosition prevPosition = persistentOldContainerForChange
-							.getLocatedAtPosition();
-					persistentOldContainerForChange.setLocatedAtPosition(null);
-					dao.update(persistentOldContainerForChange,oldContainer);
-					if (prevPosition != null)
-					{
-						dao.delete(prevPosition);
-					}
+					final List<StorageContainer> disabledContList = new ArrayList<StorageContainer>();
+					disabledContList.add(oldContForChange);
+					this.addEntriesInDisabledMap(oldContForChange, disabledConts);
+					this.setDisableToSubContainer(oldContForChange, disabledConts,
+							dao, disabledContList);
+					oldContForChange.getOccupiedPositions().clear();
+					this.disableSubStorageContainer(dao, sessionDataBean, disabledContList);
+					updateConPOs(dao, oldContainer, oldContForChange);
 				}
 				else
 				{
@@ -503,13 +392,318 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	
 	}
 	/**
+	 * @param dao DAO object
+	 * @param sessionDataBean SessionDataBean object
+	 * @param container New Container
+	 * @param oldContainer Old container
+	 * @throws DAOException DAOException Exception
+	 * @throws BizLogicException BizLogicException Exception
+	 */
+	private void validateContainer(final DAO dao, final SessionDataBean sessionDataBean,
+			final StorageContainer container, final StorageContainer oldContainer)
+			throws DAOException, BizLogicException
+	{
+		checkContainer(dao, container, oldContainer);
+		checkContainerPos(dao, sessionDataBean, container, oldContainer);
+		checkCapacity(dao, container, oldContainer);
+		checkSite(dao, container);
+		checkRestriction(dao, container, oldContainer);
+	}
+	/**
+	 * @param dao DAO object
+	 * @param oldContainer oldContainer Object
+	 * @param oldCont Persistent container
+	 * @throws DAOException DAOException
+	 */
+	private void updateConPOs(final DAO dao, final StorageContainer oldContainer,
+			final StorageContainer oldCont) throws DAOException
+	{
+		final ContainerPosition prevPosition = oldCont
+				.getLocatedAtPosition();
+		oldCont.setLocatedAtPosition(null);
+		dao.update(oldCont,oldContainer);
+		if (prevPosition != null)
+		{
+			dao.delete(prevPosition);
+		}
+	}
+	/**
+	 * @param dao DAO object
+	 * @param container container Object
+	 * @param oldContainer oldContainer Object
+	 * @throws DAOException DAOException
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void checkContainer(final DAO dao, final StorageContainer container,
+			final StorageContainer oldContainer) throws DAOException, BizLogicException
+	{
+		if (container.getLocatedAtPosition() != null)
+		{
+			final StorageContainer parentStorageContainer = (StorageContainer) dao
+					.retrieveById(StorageContainer.class.getName(), container
+							.getLocatedAtPosition().getParentContainer().getId());
+			container.getLocatedAtPosition().setParentContainer(parentStorageContainer);
+		}
+		logger.debug("container.isParentChanged() : " + container.isParentChanged());
+		if (container.isParentChanged())
+		{
+			checkParent(dao, container);
+		}
+		else
+		{
+			checkPosChanged(dao, container, oldContainer);
+		}
+	}
+	/**
+	 * @param dao DAO object
+	 * @param container StorageContainer object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void checkSite(final DAO dao, final StorageContainer container)
+			throws BizLogicException
+	{
+		final SiteBizLogic site= new SiteBizLogic();
+		if (container.getId() != null)
+		{
+			site.checkClosedSite(dao, container.getId(), "Container site");
+		}
+		site.setSiteForSubContainers(container, container.getSite(), dao);
+	}
+	/**
+	 * @param dao DAO object
+	 * @param container StorageContainer Object
+	 * @param oldContainer Old StorageContainer Object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void checkRestriction(final DAO dao, final StorageContainer container,
+			final StorageContainer oldContainer) throws BizLogicException
+	{
+		final boolean restCanChange = StorageContainerUtil.isContainerEmpty(dao, container);
+		if (!restCanChange)
+		{
+			final boolean restChanged = StorageContainerUtil.checkForRestrictionsChanged(container,
+					oldContainer);
+			if (restChanged)
+			{
+				throw this.getBizLogicException(null,
+						"errros.storageContainer.restrictionCannotChanged", "");
+			}
+		}
+	}
+
+	/**
+	 * @param dao DAO object
+	 * @param container StorageContainer Object
+	 * @param oldContainer Old StorageContainer Object
+	 * @throws BizLogicException BizLogicException
+	 * @throws DAOException DAOException
+	 */
+	private void checkCapacity(final DAO dao, final StorageContainer container,
+			final StorageContainer oldContainer) throws DAOException, BizLogicException
+	{
+		final Integer oldContainerDimOne = oldContainer.getCapacity().getOneDimensionCapacity();
+		final Integer oldContainerDimTwo = oldContainer.getCapacity().getTwoDimensionCapacity();
+		final Integer newContainerDimOne = container.getCapacity().getOneDimensionCapacity();
+		final Integer newContainerDimTwo = container.getCapacity().getTwoDimensionCapacity();
+		if (oldContainerDimOne.intValue() > newContainerDimOne.intValue()
+				|| oldContainerDimTwo.intValue() > newContainerDimTwo.intValue())
+		{
+			final boolean canReduceDimension = StorageContainerUtil.canReduceDimension(dao, oldContainer
+					.getId(), newContainerDimOne, newContainerDimTwo);
+			if (!canReduceDimension)
+			{
+				throw this.getBizLogicException(null, "errors.storageContainer.cannotReduce",
+						"");
+			}
+		}
+	}
+	/**
+	 * @param dao DAO object
+	 * @param container StorageContainer Object
+	 * @param sessionDataBean SessionDataBean object
+	 * @param oldContainer Old StorageContainer Object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void checkContainerPos(final DAO dao, final SessionDataBean sessionDataBean,
+			final StorageContainer container, final StorageContainer oldContainer)
+			throws BizLogicException
+	{
+		boolean flag = true;
+		if (container.getLocatedAtPosition() != null
+				&& container.getLocatedAtPosition().getParentContainer() != null
+				&& oldContainer.getLocatedAtPosition() != null)
+		{
+			flag = compareOldNewObjPos(container, oldContainer);
+		}
+		checkPos(dao, sessionDataBean, container, flag);
+	}
+	/**
+	 * @param container StorageContainer Object
+	 * @param oldContainer Old StorageContainer Object
+	 * @return boolean
+	 */
+	private boolean compareOldNewObjPos(final StorageContainer container,
+			final StorageContainer oldContainer)
+	{
+		boolean flag = true;
+		if(container.getLocatedAtPosition().getParentContainer().getId().longValue() == oldContainer
+					.getLocatedAtPosition().getParentContainer().getId().longValue()
+			&& container.getLocatedAtPosition().getPositionDimensionOne().longValue() == oldContainer
+					.getLocatedAtPosition().getPositionDimensionOne().longValue()
+			&& container.getLocatedAtPosition().getPositionDimensionTwo().longValue() == oldContainer
+					.getLocatedAtPosition().getPositionDimensionTwo().longValue())
+			{
+				flag = false;
+			}
+		return flag;
+	}
+	/**
+	 * @param dao DAO Object
+	 * @param sessionDataBean SessionDataBean Object 
+	 * @param container StorageContainer object
+	 * @param flag Boolean flag to check position
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void checkPos(final DAO dao, final SessionDataBean sessionDataBean,
+			final StorageContainer container, final boolean flag) throws BizLogicException
+	{
+		if (flag && container.getLocatedAtPosition() != null
+				&& container.getLocatedAtPosition().getParentContainer() != null)
+		{
+			final String contId=container.getLocatedAtPosition().
+			getParentContainer().getId().toString(); 
+			final String pos1=container.getLocatedAtPosition()
+			.getPositionDimensionOne().toString();
+			final String pos2=container.getLocatedAtPosition()
+			.getPositionDimensionTwo().toString();
+			this.checkContainer(dao,StorageContainerUtil.setparameterList(contId, pos1, pos2, false),
+			sessionDataBean,null);
+		}
+	}
+	/**
+	 * @param dao DAO object
+	 * @param container StorageContainer Object
+	 * @param oldContainer Old StorageContainer Object
+	 * @throws BizLogicException BizLogicException
+	 * @throws DAOException DAOException
+	 */
+	private void checkPosChanged(final DAO dao, final StorageContainer container,
+			final StorageContainer oldContainer) throws DAOException, BizLogicException
+	{
+		if (container.isPositionChanged())
+		{
+			comparePos(dao, container, oldContainer);
+		}
+	}
+	/**
+	 * @param dao DAO object
+	 * @param container StorageContainer Object
+	 * @param oldContainer Old StorageContainer Object
+	 * @throws BizLogicException BizLogicException
+	 * @throws DAOException DAOException
+	 */
+	private void comparePos(final DAO dao, final StorageContainer container,
+			final StorageContainer oldContainer) throws DAOException, BizLogicException
+	{
+		checkDimentionOverflow(dao, container);
+		if (oldContainer.getLocatedAtPosition() != null
+				&& oldContainer.getLocatedAtPosition().getPositionDimensionOne() != null
+				&& oldContainer.getLocatedAtPosition().getPositionDimensionOne()
+						.intValue() != container.getLocatedAtPosition()
+						.getPositionDimensionOne().intValue()
+				|| oldContainer.getLocatedAtPosition().getPositionDimensionTwo()
+						.intValue() != container.getLocatedAtPosition()
+						.getPositionDimensionTwo().intValue())
+		{
+			caUseCont(dao, container);
+		}
+	}
+	/**
+	 * @param dao DAO object
+	 * @param container StorageContainer Object
+	 * @throws BizLogicException BizLogicException
+	 * @throws DAOException DAOException
+	 */
+	private void checkDimentionOverflow(final DAO dao, final StorageContainer container)
+			throws DAOException, BizLogicException
+	{
+		final String sourceObjectName = StorageContainer.class.getName();
+		final String[] selectColumnName = {"id", "capacity.oneDimensionCapacity",
+				"capacity.twoDimensionCapacity"};
+		final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+		queryWhereClause.addCondition(new EqualClause("id", container
+				.getLocatedAtPosition().getParentContainer().getId()));
+		final List list = dao.retrieve(sourceObjectName, selectColumnName,
+				queryWhereClause);
+		if (!list.isEmpty())
+		{
+			final Object[] obj1 = (Object[]) list.get(0);
+			final Integer pcCapacityOne = (Integer) obj1[1];
+			final Integer pcCapacityTwo = (Integer) obj1[2];
+			if (!StorageContainerUtil.validatePosition(pcCapacityOne.intValue(), pcCapacityTwo
+					.intValue(), container))
+			{
+				throw this.getBizLogicException(null,
+						"errors.storageContainer.dimensionOverflow", "");
+			}
+		}
+	}
+	/**
+	 * @param dao DAO object
+	 * @param container StorageContainer Object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void checkParent(final DAO dao, final StorageContainer container)
+			throws BizLogicException
+	{
+		if (container.getLocatedAtPosition() != null
+				&& container.getLocatedAtPosition().getParentContainer() != null)
+		{
+			if (StorageContainerUtil.isUnderSubContainer(container, container.getLocatedAtPosition()
+					.getParentContainer().getId(), dao))
+			{
+				throw this.getBizLogicException(null,
+						"errors.container.under.subcontainer", "");
+			}
+			logger.debug("Loading ParentContainer: "
+					+ container.getLocatedAtPosition().getParentContainer().getId());
+			if (!StorageContainerUtil.validatePosition(dao, container))
+			{
+				throw this.getBizLogicException(null,
+						"errors.storageContainer.dimensionOverflow", "");
+			}
+			caUseCont(dao, container);
+			this.checkStatus(dao, container.getLocatedAtPosition().getParentContainer(),
+					"Parent Container");
+			final Site site = new SiteBizLogic().getSite(dao, container.getLocatedAtPosition()
+					.getParentContainer().getId());
+			this.checkStatus(dao, site, "Parent Container Site");
+			container.setSite(site);
+		}
+	}
+	/**
+	 * @param dao DAO object
+	 * @param container StorageContainer Object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void caUseCont(final DAO dao, final StorageContainer container)
+			throws BizLogicException
+	{
+		final boolean canUse = StorageContainerUtil.isContainerAvailableForPositions(dao, container);
+		logger.debug("canUse : " + canUse);
+		if (!canUse)
+		{
+			throw this.getBizLogicException(null, "errors.storageContainer.inUse", "");
+		}
+	}
+	/**
 	 * @param persistentobject - StorageContainer persistent object.
 	 * @param newObject - StorageContainer newObject
 	 * @param dao - DAO object
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	private void setValuesinPersistentObject(StorageContainer persistentobject,
-			StorageContainer newObject, DAO dao) throws BizLogicException
+			final StorageContainer newObject, final DAO dao) throws BizLogicException
 	{
 		try
 		{
@@ -531,6 +725,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 					.getHoldsSpecimenClassCollection());
 			persistentobject.setHoldsStorageTypeCollection(newObject
 					.getHoldsStorageTypeCollection());
+			persistentobject.setHoldsSpecimenTypeCollection(
+					newObject.getHoldsSpecimenTypeCollection());
 			persistentobject.setName(newObject.getName());
 			persistentobject.setNoOfContainers(newObject.getNoOfContainers());
 			persistentobject.setParentChanged(newObject.isParentChanged());
@@ -579,10 +775,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 	/**
-	* @param children
-	* @param dao
-	* @param containerId
-	* @throws DAOException
+	* @param children Children Collection
+	* @param dao DAO object
+	* @param containerId container identifier
+	* @throws ApplicationException ApplicationException
 	*/
 	private void setChildren(Collection children, DAO dao, Long containerId)
 			throws ApplicationException
@@ -593,12 +789,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 	/**
-	 * @param dao
-	 * @param containerId
-	 * @return
-	 * @throws DAOException
-	 * @throws ClassNotFoundException 
-	 */
+	* @param children Children Collection
+	* @param dao DAO object
+	* @param containerId container identifier
+	* @throws ApplicationException ApplicationException
+	* @return childrenColl
+	*/
 	public Collection getChildren(DAO dao, Long containerId) throws ApplicationException
 	{
 		final String hql = "select cntPos.occupiedContainer from ContainerPosition cntPos, StorageContainer container where cntPos.occupiedContainer.id=container.id and cntPos.parentContainer.id ="
@@ -631,48 +827,24 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	}
 	/**
 	 * @param dao - DAO object.
-	 * @param storageContainerID - String
-	 * @param positionOne - String
-	 * @param positionTwo -String 
 	 * @param sessionDataBean - SessionDataBean object
-	 * @param multipleSpecimen - boolean 
+ 	 * @param parameterList Parameter list includes SC Id, pos1, pos2 and boolean multiplespecimen  
 	 * @param specimen -Specimen object
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	public void checkContainer(DAO dao, String storageContainerID, String positionOne,
-			String positionTwo, SessionDataBean sessionDataBean, boolean multipleSpecimen,
-			Specimen specimen) throws BizLogicException
+	public void checkContainer(DAO dao, final List<Object> parameterList,
+			SessionDataBean sessionDataBean,Specimen specimen)
+			throws BizLogicException
 	{
+		final String scID = (String)parameterList.get(0);
+		final String posOne = (String)parameterList.get(1);
+		final String posTwo = (String)parameterList.get(2);
 		try
 		{
-			final String sourceObjectName = StorageContainer.class.getName();
-			final String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER,
-					"capacity.oneDimensionCapacity", "capacity.twoDimensionCapacity", "name"};
-			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-			queryWhereClause.addCondition(new EqualClause(Constants.SYSTEM_IDENTIFIER, Long
-					.valueOf(storageContainerID)));
-			final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			final List list = reteriveSCObject(dao, scID);
 			if (!list.isEmpty())
 			{
-				final Object[] obj = (Object[]) list.get(0);
-				logger.debug("**********SC found for given ID ****obj::::::: --------------- "
-						+ obj);
-				logger.debug((Long) obj[0]);
-				logger.debug((Integer) obj[1]);
-				logger.debug((Integer) obj[2]);
-				logger.debug((String) obj[3]);
-
-				final StorageContainer pc = new StorageContainer();
-				pc.setId((Long) obj[0]);
-				pc.setName((String) obj[3]);
-				final Capacity cntPos = new Capacity();
-				if (obj[1] != null && obj[2] != null)
-				{
-					cntPos.setOneDimensionCapacity((Integer) obj[1]);
-					cntPos.setTwoDimensionCapacity((Integer) obj[2]);
-					pc.setCapacity(cntPos);
-				}
-				// check if user has privilege to use the container
+				final StorageContainer pc = populateSCObject(list);
 				final boolean hasAccess = StorageContainerUtil.validateContainerAccess(dao, pc, sessionDataBean);
 				logger.debug("hasAccess..............." + hasAccess);
 				if (!hasAccess)
@@ -681,28 +853,11 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 				}
 				this.checkStatus(dao, pc, "Storage Container");
 				new SiteBizLogic().checkClosedSite(dao, pc.getId(), "Container Site");
-				final boolean isValidPosition = StorageContainerUtil.validatePosition(pc, positionOne, positionTwo);
+				final boolean isValidPosition = StorageContainerUtil.validatePosition(pc, posOne, posTwo);
 				logger.debug("isValidPosition : " + isValidPosition);
-				boolean canUsePosition = false;
-				if (isValidPosition) // if position is valid
+				if (isValidPosition)
 				{
-					canUsePosition = StorageContainerUtil.isPositionAvailable(dao, pc, positionOne, positionTwo,
-							specimen);
-					logger.debug("canUsePosition : " + canUsePosition);
-					if (!canUsePosition)
-					{
-						if (multipleSpecimen)
-						{
-
-							throw this.getBizLogicException(null,
-									"errors.storageContainer.Multiple.inUse", "");
-						}
-						else
-						{
-							throw this.getBizLogicException(null, "errors.storageContainer.inUse",
-									"");
-						}
-					}
+					canUsePosition(dao, specimen,parameterList, pc);
 				}
 				else
 				{
@@ -724,11 +879,79 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 	/**
+	 * @param dao DAO object
+	 * @param specimen Specimen Object
+	 * @param parameterList Parameter List includes SC identifier, pos1, pos2
+	 * @param stcont StorageContainer object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void canUsePosition(DAO dao, Specimen specimen,final List<Object> parameterList,
+			final StorageContainer stcont) throws BizLogicException
+	{
+		final String posOne = (String)parameterList.get(1);
+		final String posTwo = (String)parameterList.get(2);
+		final boolean multipleSpecimen = (Boolean)parameterList.get(3);
+		
+	    final boolean canUsePosition = StorageContainerUtil.isPositionAvailable(dao, stcont, posOne, posTwo,
+				specimen);
+		logger.debug("canUsePosition : " + canUsePosition);
+		if (!canUsePosition)
+		{
+			if (multipleSpecimen)
+			{
+
+				throw this.getBizLogicException(null,
+						"errors.storageContainer.Multiple.inUse", "");
+			}
+			else
+			{
+				throw this.getBizLogicException(null, "errors.storageContainer.inUse",
+						"");
+			}
+		}
+	}
+	/**
+	 * @param dao DAO object
+	 * @param storageContainerID StorageContainer Id
+	 * @return List of Storage Container object
+	 * @throws DAOException DAOException
+	 */
+	private List reteriveSCObject(DAO dao, String storageContainerID) throws DAOException
+	{
+		final String sourceObjectName = StorageContainer.class.getName();
+		final String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER,
+				"capacity.oneDimensionCapacity", "capacity.twoDimensionCapacity", "name"};
+		final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+		queryWhereClause.addCondition(new EqualClause(Constants.SYSTEM_IDENTIFIER, Long
+				.valueOf(storageContainerID)));
+		return dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+	}
+	/**
+	 * @param list List of SC object
+	 * @return StorageContainer
+	 */
+	private StorageContainer populateSCObject(final List list)
+	{
+		final Object[] obj = (Object[]) list.get(0);
+		final StorageContainer stCont = new StorageContainer();
+		stCont.setId((Long) obj[0]);
+		stCont.setName((String) obj[3]);
+		final Capacity cntPos = new Capacity();
+		if (obj[1] != null && obj[2] != null)
+		{
+			cntPos.setOneDimensionCapacity((Integer) obj[1]);
+			cntPos.setTwoDimensionCapacity((Integer) obj[2]);
+			stCont.setCapacity(cntPos);
+		}
+		return stCont;
+	}
+	/**
 	 * Overriding the parent class's method to validate the enumerated attribute
 	 * values.
 	 * @param obj Domain Object
 	 * @param dao DAO object
 	 * @param operation Add/Edit
+	 * @return boolean
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
 	{
@@ -747,142 +970,11 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			 * were setting in setAllValues() method of domainObject.
 			 */
 			ApiSearchUtil.setContainerDefault(container);
-			String message = "";
 			final Validator validator = new Validator();
-			if (container.getStorageType() == null)
-			{
-				message = ApplicationProperties.getValue("storageContainer.type");
-				throw this.getBizLogicException(null, "errors.item.required", message);
-			}
-			if (container.getNoOfContainers() == null)
-			{
-				container.setNoOfContainers(Integer.valueOf(1));
-			}
-			if (Validator.isEmpty(container.getNoOfContainers().toString()))
-			{
-				message = ApplicationProperties.getValue("storageContainer.noOfContainers");
-				throw this.getBizLogicException(null, "errors.item.required", message);
-			}
-			if (!validator.isNumeric(container.getNoOfContainers().toString(), 1))
-			{
-				message = ApplicationProperties.getValue("storageContainer.noOfContainers");
-				throw this.getBizLogicException(null, "errors.item.format", message);
-			}
-			if (container.getLocatedAtPosition() != null
-					&& container.getLocatedAtPosition().getParentContainer() == null)
-			{
-				if (container.getSite() == null || container.getSite().getId() == null
-						|| container.getSite().getId() <= 0)
-				{
-					message = ApplicationProperties.getValue("storageContainer.site");
-					throw this.getBizLogicException(null, "errors.item.invalid", message);
-				}
-			}
-			if (container.getTempratureInCentigrade() != null
-					&& !Validator.isEmpty(container.getTempratureInCentigrade().toString())
-					&& (!validator
-							.isDouble(container.getTempratureInCentigrade().toString(), false)))
-			{
-				message = ApplicationProperties.getValue("storageContainer.temperature");
-				throw this.getBizLogicException(null, "errors.item.format", message);
-			}
-			if (container.getLocatedAtPosition() != null
-					&& container.getLocatedAtPosition().getParentContainer() != null)
-			{
-				if (container.getLocatedAtPosition().getParentContainer().getId() == null)
-				{
-					final String sourceObjectName = StorageContainer.class.getName();
-					final String[] selectColumnName = {"id"};
-					final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-					queryWhereClause.addCondition(new EqualClause("name", container
-							.getLocatedAtPosition().getParentContainer().getName()));
-					final List list = dao.retrieve(sourceObjectName, selectColumnName,
-							queryWhereClause);
-					if (!list.isEmpty())
-					{
-						container.getLocatedAtPosition().getParentContainer().setId(
-								(Long) list.get(0));
-					}
-					else
-					{
-						final String message1 = ApplicationProperties
-								.getValue("specimen.storageContainer");
-						throw this.getBizLogicException(null, "errors.invalid", message1);
-					}
-				}
-				final Integer xPos = container.getLocatedAtPosition().getPositionDimensionOne();
-				final Integer yPos = container.getLocatedAtPosition().getPositionDimensionTwo();
-				/**
-				 * Following code is added to set the x and y dimension in case only
-				 * storage container is given and x and y positions are not given
-				 */
-				if (xPos == null || yPos == null)
-				{
-					final Container cont = container.getLocatedAtPosition().getParentContainer();
-					final Position position = StorageContainerUtil.getFirstAvailablePositionInContainer(cont, dao);
-					if (position != null)
-					{
-						final ContainerPosition cntPos = container.getLocatedAtPosition();
-						cntPos.setPositionDimensionOne(position.getXPos());
-						cntPos.setPositionDimensionTwo(position.getYPos());
-						cntPos.setOccupiedContainer(container);
-					}
-					else
-					{
-						throw this.getBizLogicException(null, "storage.specified.full", "");
-					}
-				}
-				if (container.getLocatedAtPosition() != null
-						&& container.getLocatedAtPosition().getPositionDimensionOne() != null
-						&& Validator.isEmpty(String.valueOf(container.getLocatedAtPosition()
-								.getPositionDimensionOne())))
-				{
-					message = ApplicationProperties.getValue("storageContainer.oneDimension");
-					throw this.getBizLogicException(null, "errors.item.required", message);
-				}
-				else
-				{
-					if (container.getLocatedAtPosition() != null
-							&& container.getLocatedAtPosition().getPositionDimensionOne() != null
-							&& !validator.isNumeric(String.valueOf(container.getLocatedAtPosition()
-									.getPositionDimensionOne())))
-					{
-						message = ApplicationProperties.getValue("storageContainer.oneDimension");
-						throw this.getBizLogicException(null, "errors.item.format", message);
-					}
-				}
-				if (container.getLocatedAtPosition() != null
-						&& container.getLocatedAtPosition().getPositionDimensionTwo() != null
-						&& !Validator.isEmpty(String.valueOf(container.getLocatedAtPosition()
-								.getPositionDimensionTwo()))
-						&& (!validator.isNumeric(String.valueOf(container.getLocatedAtPosition()
-								.getPositionDimensionTwo()))))
-				{
-					message = ApplicationProperties.getValue("storageContainer.twoDimension");
-					throw this.getBizLogicException(null, "errors.item.format", message);
-
-				}
-			}
-			if (operation.equals(Constants.ADD))
-			{
-				if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(container.getActivityStatus()))
-				{
-					throw this.getBizLogicException(null, "activityStatus.active.errMsg", "");
-				}
-				if (container.getFull().booleanValue())
-				{
-					throw this.getBizLogicException(null,
-							"storageContainer.isContainerFull.errMsg", "");
-				}
-			}
-			else
-			{
-				if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, container
-						.getActivityStatus()))
-				{
-					throw this.getBizLogicException(null, "activityStatus.errMsg", "");
-				}
-			}
+			validateContainer(container, validator);
+			validateStTypeAndTemp(container, validator);
+			validatePosition(dao, container, validator);
+			validateStatus(operation, container);
 			return true;
 		}
 		catch (final DAOException daoExp)
@@ -893,6 +985,252 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
+	}
+	/**
+	 * @param operation Operation
+	 * @param container Storage Container
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void validateStatus(String operation, final StorageContainer container)
+			throws BizLogicException
+	{
+		if (operation.equals(Constants.ADD))
+		{
+			if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(container.getActivityStatus()))
+			{
+				throw this.getBizLogicException(null, "activityStatus.active.errMsg", "");
+			}
+			if (container.getFull().booleanValue())
+			{
+				throw this.getBizLogicException(null,
+						"storageContainer.isContainerFull.errMsg", "");
+			}
+		}
+		else
+		{
+			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, container
+					.getActivityStatus()))
+			{
+				throw this.getBizLogicException(null, "activityStatus.errMsg", "");
+			}
+		}
+	}
+	/**
+	 * @param container Storage Container object
+	 * @param validator Validator Object 
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void validateStTypeAndTemp(final StorageContainer container, final Validator validator)
+			throws BizLogicException
+	{
+		String message;
+		if (container.getStorageType() == null)
+		{
+			message = ApplicationProperties.getValue("storageContainer.type");
+			throw this.getBizLogicException(null, "errors.item.required", message);
+		}
+		if (container.getTempratureInCentigrade() != null
+				&& !Validator.isEmpty(container.getTempratureInCentigrade().toString())
+				&& (!validator
+						.isDouble(container.getTempratureInCentigrade().toString(), false)))
+		{
+			message = ApplicationProperties.getValue("storageContainer.temperature");
+			throw this.getBizLogicException(null, "errors.item.format", message);
+		}
+	}
+	/**
+	 * @param dao DAo object
+	 * @param container Storage Container object
+	 * @param validator Validator Object
+	 * @throws DAOException DAOException
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void validatePosition(DAO dao, final StorageContainer container,
+			final Validator validator) throws DAOException, BizLogicException
+	{
+		if (container.getLocatedAtPosition() != null
+				&& container.getLocatedAtPosition().getParentContainer() != null)
+		{
+			if (container.getLocatedAtPosition().getParentContainer().getId() == null)
+			{
+				validateContPos(dao, container);
+			}
+			validateForContFull(dao, container);
+			validateDimOne(container, validator);
+			validateDimTwo(container, validator);
+		}
+	}
+	/**
+	 * @param container Storage Container object
+	 * @param validator Validator Object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void validateDimOne(final StorageContainer container, final Validator validator)
+			throws BizLogicException
+	{
+		String message;
+		if (container.getLocatedAtPosition() != null
+				&& container.getLocatedAtPosition().getPositionDimensionOne() != null
+				&& Validator.isEmpty(String.valueOf(container.getLocatedAtPosition()
+						.getPositionDimensionOne())))
+		{
+			message = ApplicationProperties.getValue("storageContainer.oneDimension");
+			throw this.getBizLogicException(null, "errors.item.required", message);
+		}
+		else
+		{
+			validateIsNumeric(container, validator);
+		}
+	}
+	/**
+	 * @param container Storage Container object
+	 * @param validator Validator Object
+	 * @throws BizLogicException BizLogicException
+	 */
+	 private void validateIsNumeric(final StorageContainer container, final Validator validator)
+			throws BizLogicException
+	{
+		String message;
+		if (container.getLocatedAtPosition() != null
+				&& container.getLocatedAtPosition().getPositionDimensionOne() != null
+				&& !validator.isNumeric(String.valueOf(container.getLocatedAtPosition()
+						.getPositionDimensionOne())))
+		{
+			message = ApplicationProperties.getValue("storageContainer.oneDimension");
+			throw this.getBizLogicException(null, "errors.item.format", message);
+		}
+	}
+	/**
+	 * @param container Storage Container object
+	 * @param validator Validator Object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void validateDimTwo(final StorageContainer container, final Validator validator)
+			throws BizLogicException
+	{
+		String message;
+		if (container.getLocatedAtPosition() != null
+				&& container.getLocatedAtPosition().getPositionDimensionTwo() != null
+				&& !Validator.isEmpty(String.valueOf(container.getLocatedAtPosition()
+						.getPositionDimensionTwo()))
+				&& (!validator.isNumeric(String.valueOf(container.getLocatedAtPosition()
+						.getPositionDimensionTwo()))))
+		{
+			message = ApplicationProperties.getValue("storageContainer.twoDimension");
+			throw this.getBizLogicException(null, "errors.item.format", message);
+
+		}
+	}
+	/**
+	 * @param dao DAO Object
+	 * @param container StorageContainer object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void validateForContFull(DAO dao, final StorageContainer container)
+			throws BizLogicException
+	{
+		final Integer xPos = container.getLocatedAtPosition().getPositionDimensionOne();
+		final Integer yPos = container.getLocatedAtPosition().getPositionDimensionTwo();
+		/**
+		 * Following code is added to set the x and y dimension in case only
+		 * storage container is given and x and y positions are not given
+		 */
+		if (xPos == null || yPos == null)
+		{
+			final Container cont = container.getLocatedAtPosition().getParentContainer();
+			final Position position = StorageContainerUtil.getFirstAvailablePositionInContainer(cont, dao);
+			if (position != null)
+			{
+				final ContainerPosition cntPos = container.getLocatedAtPosition();
+				cntPos.setPositionDimensionOne(position.getXPos());
+				cntPos.setPositionDimensionTwo(position.getYPos());
+				cntPos.setOccupiedContainer(container);
+			}
+			else
+			{
+				throw this.getBizLogicException(null, "storage.specified.full", "");
+			}
+		}
+	}
+	/**
+	 * @param dao DAo object
+	 * @param container Storage Container object
+	 * @throws DAOException DAOException
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void validateContPos(DAO dao, final StorageContainer container) throws DAOException,
+			BizLogicException
+	{
+		final String sourceObjectName = StorageContainer.class.getName();
+		final String[] selectColumnName = {"id"};
+		final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+		queryWhereClause.addCondition(new EqualClause("name", container
+				.getLocatedAtPosition().getParentContainer().getName()));
+		final List list = dao.retrieve(sourceObjectName, selectColumnName,
+				queryWhereClause);
+		if (!list.isEmpty())
+		{
+			container.getLocatedAtPosition().getParentContainer().setId(
+					(Long) list.get(0));
+		}
+		else
+		{
+			final String message1 = ApplicationProperties
+					.getValue("specimen.storageContainer");
+			throw this.getBizLogicException(null, "errors.invalid", message1);
+		}
+	}
+	/**
+	 * @param container Storage Container object
+	 * @param validator Validator Object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void validateContainer(final StorageContainer container, final Validator validator)
+			throws BizLogicException
+	{
+		String message;
+		if (container.getNoOfContainers() == null)
+		{
+			container.setNoOfContainers(Integer.valueOf(1));
+		}
+		if (Validator.isEmpty(container.getNoOfContainers().toString()))
+		{
+			message = ApplicationProperties.getValue("storageContainer.noOfContainers");
+			throw this.getBizLogicException(null, "errors.item.required", message);
+		}
+		if (!validator.isNumeric(container.getNoOfContainers().toString(), 1))
+		{
+			message = ApplicationProperties.getValue("storageContainer.noOfContainers");
+			throw this.getBizLogicException(null, "errors.item.format", message);
+		}
+		validateContParent(container);
+	}
+	/**
+	 * @param container StorageContainer object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void validateContParent(final StorageContainer container) throws BizLogicException
+	{
+		String message;
+		if (container.getLocatedAtPosition() != null
+				&& container.getLocatedAtPosition().getParentContainer() == null)
+		{
+			validateContSite(container);
+		}
+	}
+	/**
+	 * @param container StorageContainer object
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void validateContSite(final StorageContainer container) throws BizLogicException
+	{
+		String message;
+		if (container.getSite() == null || container.getSite().getId() == null
+				|| container.getSite().getId() <= 0)
+		{
+			message = ApplicationProperties.getValue("storageContainer.site");
+			throw this.getBizLogicException(null, "errors.item.invalid", message);
+		}
 	}
 	
 	/**
@@ -974,32 +1312,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		if (domainObject instanceof StorageContainer)
 		{
 			final StorageContainer storageContainer = (StorageContainer) domainObject;
-			Site site = null;
-			if (storageContainer.getLocatedAtPosition() != null
-					&& storageContainer.getLocatedAtPosition().getParentContainer() != null)
-			{
-				try
-				{
-					final Object object = dao.retrieveById(StorageContainer.class.getName(),
-							storageContainer.getLocatedAtPosition().getParentContainer().getId());
-					if (object != null)
-					{
-						final StorageContainer parentContainer = (StorageContainer) object;
-						site = parentContainer.getSite();
-					}
-				}
-				catch (final DAOException e)
-				{
-					logger.error(e.getMessage(), e);
-					e.printStackTrace();
-					throw this
-					.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-				}
-			}
-			else
-			{
-				site = storageContainer.getSite();
-			}
+			Site site = getSite(dao, storageContainer);
 			if (site != null)
 			{
 				final StringBuffer sb = new StringBuffer();
@@ -1008,6 +1321,38 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 		return objId;
+	}
+	
+	private Site getSite(DAO dao, final StorageContainer storageContainer)
+			throws BizLogicException
+	{
+		Site site = null;
+		if (storageContainer.getLocatedAtPosition() != null
+				&& storageContainer.getLocatedAtPosition().getParentContainer() != null)
+		{
+			try
+			{
+				final Object object = dao.retrieveById(StorageContainer.class.getName(),
+						storageContainer.getLocatedAtPosition().getParentContainer().getId());
+				if (object != null)
+				{
+					final StorageContainer parentContainer = (StorageContainer) object;
+					site = parentContainer.getSite();
+				}
+			}
+			catch (final DAOException e)
+			{
+				logger.error(e.getMessage(), e);
+				e.printStackTrace();
+				throw this
+				.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+			}
+		}
+		else
+		{
+			site = storageContainer.getSite();
+		}
+		return site;
 	}
 
 	/**
@@ -1051,7 +1396,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 				final StorageContainer container = disabledContainerList.get(i);
 				dao.update(container);
 			}
-			//this.auditDisabledObjects(dao, "CATISSUE_CONTAINER", containerIdList);
 		}
 		catch (final DAOException daoExp)
 		{

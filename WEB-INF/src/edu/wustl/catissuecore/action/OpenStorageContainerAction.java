@@ -76,8 +76,12 @@ public class OpenStorageContainerAction extends BaseAction
 					.getHoldsSpecimenArrTypeIds());
 			storageContainerBean.setHoldsSpecimenClassTypes(storageContainerForm
 					.getHoldsSpecimenClassTypes());
-			storageContainerBean.setHoldsSpecimenTypes(storageContainerForm
-					.getHoldsSpecimenTypes());
+			
+			storageContainerBean.setHoldsTissueSpType(storageContainerForm.getHoldsTissueSpType());
+			storageContainerBean.setHoldsFluidSpType(storageContainerForm.getHoldsFluidSpType());
+			storageContainerBean.setHoldsCellSpType(storageContainerForm.getHoldsCellSpType());
+			storageContainerBean.setHoldsMolSpType(storageContainerForm.getHoldsMolSpType());
+			
 			storageContainerBean.setHoldsStorageTypeIds(storageContainerForm
 					.getHoldsStorageTypeIds());
 			storageContainerBean.setTypeId(storageContainerForm.getTypeId());
