@@ -139,19 +139,25 @@ public class SpecimenAutoStorageContainer {
 	protected void setSpecimenStorageDetails(LinkedList<GenericSpecimen> specimenDataBeanList, 
 			String className, SessionDataBean bean, Long cpId ,DAO dao) throws ApplicationException
 	{
-			Map containerMap;
 			try {
 				StorageContainerForSpecimenBizLogic bizLogic =
 					new StorageContainerForSpecimenBizLogic();
-				GenericSpecimen specimenDataBean = 
-					(GenericSpecimen)specimenDataBeanList.get(0);
-				containerMap = bizLogic.getAllocatedContainerMapForSpecimen(
-				AppUtility.setparameterList(cpId.longValue(),className,0,
-				specimenDataBean.getType()), bean, dao);
-				populateStorageLocations(specimenDataBeanList,
-						cpId.longValue(), containerMap, bean, className);
-
-			} catch (ApplicationException exception) 
+				Iterator<GenericSpecimen> itr = specimenDataBeanList.iterator();
+				while(itr.hasNext())
+				{
+					Map containerMap = null;
+					GenericSpecimen specimenDataBean = 
+						(GenericSpecimen)itr.next();
+					containerMap = bizLogic.getAllocatedContainerMapForSpecimen(
+					AppUtility.setparameterList(cpId.longValue(),className,0,
+					specimenDataBean.getType()), bean, dao);
+					LinkedList<GenericSpecimen> genSpList = new LinkedList<GenericSpecimen>();
+					genSpList.add(specimenDataBean);
+					populateStorageLocations(genSpList,
+							cpId.longValue(), containerMap, bean, className);
+				}
+			}
+			catch (ApplicationException exception) 
 			{
 				this.logger.error(exception.getMessage(), exception);
 				exception.printStackTrace();

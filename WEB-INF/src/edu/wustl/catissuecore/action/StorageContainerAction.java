@@ -16,6 +16,7 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -362,11 +363,10 @@ public class StorageContainerAction extends SecureAction
 		final List list3 = bizLogic.retrieve(SpecimenArrayType.class.getName());
 		final List spArrayTypeList = AppUtility.getSpecimenArrayTypeList(list3);
 		request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
-
+		setSpecimenClass(storageContainerForm, bizLogic);
 		final List list2 = bizLogic.retrieve(StorageType.class.getName());
 		final List storageTypeListWithAny = AppUtility.getStorageTypeList(list2, true);
 		request.setAttribute(Constants.HOLDS_LIST1, storageTypeListWithAny);
-		request.setAttribute(Constants.HOLDS_LIST4, AppUtility.getAllSpecimenType());
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, AppUtility.getSpecimenTypeMap());
 
 		if (Constants.ADD.equals(request.getAttribute(Constants.OPERATION)))
@@ -409,6 +409,37 @@ public class StorageContainerAction extends SecureAction
 				final Map<Long, String> cpTitleMap = new HashMap<Long, String>();
 				request.setAttribute(Constants.PROTOCOL_LIST, cpList);
 				request.setAttribute(Constants.CP_ID_TITLE_MAP, cpTitleMap);
+			}
+		}
+	}
+	/**
+	 * This method will set Specimen class in storage type form.
+	 * @param storageTypeForm StorageType Form
+	 * @param operation Operation Add/Edit
+	 * @param bizLogic StorageType BizLogic
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void setSpecimenClass(final StorageContainerForm sceForm,
+			final StorageContainerBizLogic bizLogic) throws BizLogicException
+	{
+		if(sceForm.getId()>0)
+		{
+			final StorageContainer storagecont = (StorageContainer)bizLogic.
+			retrieve(StorageContainer.class.getName(), sceForm.getId());
+			final Collection specimenClassTypeCollection = storagecont
+			.getHoldsSpecimenClassCollection();
+			if (specimenClassTypeCollection != null)
+			{
+				String [] holdsSpecimenClassTypes = new String[specimenClassTypeCollection.size()];
+				int i = 0;
+				final Iterator it = specimenClassTypeCollection.iterator();
+				while (it.hasNext())
+				{
+					final String specimenClass = (String) it.next();
+					holdsSpecimenClassTypes[i] = specimenClass;
+					i++;
+				}
+				sceForm.setHoldsSpecimenClassTypes(holdsSpecimenClassTypes);
 			}
 		}
 	}
