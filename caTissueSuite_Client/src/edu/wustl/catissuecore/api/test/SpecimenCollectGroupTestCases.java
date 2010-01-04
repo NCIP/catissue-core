@@ -1069,25 +1069,4 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 	}	*/
 
 
-	public void testUpdateSpecimenCollectionGroupWithWrongCPELabel()
-	{
-    	SpecimenCollectionGroup cachedSCG = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-    	try {
-    		CollectionProtocolEvent event = new CollectionProtocolEvent();
-    		event.setCollectionPointLabel("XYZ");
-    		cachedSCG.setCollectionProtocolEvent(event);
-    		 SpecimenCollectionGroup scg = (SpecimenCollectionGroup)appService.updateObject(cachedSCG);
-    		 assertFalse("SCG updated with wrong CPE Label", true);
-          }
-          catch (Exception e) {
-        	Logger.out.error(e.getMessage(),e);
-        	System.out
-					.println("SpecimenCollectGroupTestCases.testUpdateSpecimenCollectionGroupWithWrongCPELabel()"+e.getMessage());
-	 		e.printStackTrace();
-	 		 assertTrue("EXception occured", true);
-
-          }
-	}
-
-
 }
