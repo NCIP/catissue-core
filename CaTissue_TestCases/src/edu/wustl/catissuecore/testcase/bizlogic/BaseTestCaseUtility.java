@@ -64,7 +64,9 @@ import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -1118,6 +1120,18 @@ public class BaseTestCaseUtility {
 		holdsSpecimenClassCollection.add("Cell");
 		holdsSpecimenClassCollection.add("Molecular");
 		storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
+		
+		Collection holdsSpecimenTypeColl = new HashSet();
+		try
+		{
+			holdsSpecimenTypeColl.addAll(AppUtility.getAllSpType());
+		}
+		catch (ApplicationException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		storageContainer.setHoldsSpecimenTypeCollection(holdsSpecimenTypeColl);
 		
 /*		Container parent = new Container();
 		parent.setId(new Long(2));
