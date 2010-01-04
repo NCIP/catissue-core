@@ -881,7 +881,12 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		storageContainerForm.setTypeId(storageType.getId());
 		logger.info("----StorageTypeId : " + storageType.getId());
 		storageContainerForm.setTypeName(storageType.getName());
-
+		String[] holdsSpecimenClassTypes = new String[4];
+		holdsSpecimenClassTypes[0] = "Tissue";
+		holdsSpecimenClassTypes[1] = "Cell";
+		holdsSpecimenClassTypes[2] = "Fluid";
+		holdsSpecimenClassTypes[3] = "Molecular";
+		storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassTypes);
 		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
 
 		storageContainerForm.setSiteId(site.getId());
@@ -891,15 +896,6 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		storageContainerForm.setOneDimensionLabel("row");
 		storageContainerForm.setTwoDimensionLabel("row");
 		storageContainerForm.setDefaultTemperature("29");
-		/*addRequestParameter("holdsSpecimenClassTypes", "Cell");
-		addRequestParameter("specimenOrArrayType", "SpecimenArray");*/
-
-//		String[] holdsSpecimenClassCollection = new String[4];
-//		holdsSpecimenClassCollection[0]="Fluid";
-//		holdsSpecimenClassCollection[1]="Tissue";
-//		holdsSpecimenClassCollection[2]="Molecular";
-//		holdsSpecimenClassCollection[3]="Cell";
-
 		SpecimenArrayType arrayType=(SpecimenArrayType)TestCaseUtility.getObjectMap().get("SpecimenTissueArrayType");
 		long[] arrayIds={arrayType.getId()};
 //			storageTypeForm.setHoldsSpecimenArrTypeIds(arrayIds);
