@@ -936,6 +936,15 @@ public class BaseTestCaseUtility {
 		holdsSpecimenClassCollection.add("Molecular");
 		holdsSpecimenClassCollection.add("Cell");
 		storageTypeObj.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
+		Collection holdsSpecimenTypeColl = new HashSet();
+		String st[] = new String[]{"RNA, poly-A enriched","RNA, nuclear","Not Specified","protein","cDNA","RNA","DNA","RNA, cytoplasmic","Total Nucleic Acid","Whole Genome Amplified DNA","Frozen Cell Pellet","Fixed Cell Block","Frozen Cell Block","Not Specified","Cryopreserved Cells","Slide","Whole Bone Marrow","Saliva","Plasma","Body Cavity Fluid","Milk","Pericardial Fluid","Lavage","Whole Blood","Vitreous Fluid","Gastric Fluid","Not Specified","Bone Marrow Plasma","Urine","Serum","Amniotic Fluid","Cerebrospinal Fluid","Bile","Synovial Fluid","Sweat","Feces","Sputum","Fixed Tissue","Fixed Tissue Block","Frozen Tissue Block","Fixed Tissue Slide","Frozen Tissue Slide","Fresh Tissue","Microdissected","Frozen Tissue","Not Specified"};
+		for(int iCount= 0 ; iCount<46; iCount++)
+		{
+			holdsSpecimenTypeColl.add(st[iCount]);
+		}
+		storageTypeObj.setHoldsSpecimenTypeCollection(holdsSpecimenTypeColl);
+		
+		storageTypeObj.setHoldsSpecimenTypeCollection(holdsSpecimenTypeColl);
 		return storageTypeObj;
 	}
 	public static StorageType initTissueStorageType()
@@ -1120,17 +1129,13 @@ public class BaseTestCaseUtility {
 		holdsSpecimenClassCollection.add("Molecular");
 		storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
 		Collection holdsSpecimenTypeColl = new HashSet();
-		try
+		String st[] = new String[]{"RNA, poly-A enriched","RNA, nuclear","Not Specified","protein","cDNA","RNA","DNA","RNA, cytoplasmic","Total Nucleic Acid","Whole Genome Amplified DNA","Frozen Cell Pellet","Fixed Cell Block","Frozen Cell Block","Not Specified","Cryopreserved Cells","Slide","Whole Bone Marrow","Saliva","Plasma","Body Cavity Fluid","Milk","Pericardial Fluid","Lavage","Whole Blood","Vitreous Fluid","Gastric Fluid","Not Specified","Bone Marrow Plasma","Urine","Serum","Amniotic Fluid","Cerebrospinal Fluid","Bile","Synovial Fluid","Sweat","Feces","Sputum","Fixed Tissue","Fixed Tissue Block","Frozen Tissue Block","Fixed Tissue Slide","Frozen Tissue Slide","Fresh Tissue","Microdissected","Frozen Tissue","Not Specified"};
+		for(int iCount= 0 ; iCount<46; iCount++)
 		{
-			holdsSpecimenTypeColl.addAll(AppUtility.getAllSpType());
-		}
-		catch (ApplicationException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			holdsSpecimenTypeColl.add(st[iCount]);
 		}
 		storageContainer.setHoldsSpecimenTypeCollection(holdsSpecimenTypeColl);
-		
+
 /*		Container parent = new Container();
 		parent.setId(new Long(2));
 		storageContainer.setParent(parent);    
