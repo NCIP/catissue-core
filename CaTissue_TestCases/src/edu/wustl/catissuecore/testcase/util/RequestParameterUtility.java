@@ -75,6 +75,12 @@ public class RequestParameterUtility
 		storageTypeForm.setDefaultTemperature(temp);
 		storageTypeForm.setActivityStatus(activityStatus);
 		storageTypeForm.setOperation("add");
+		String[] holdsSpecimenClassTypes = new String[4];
+		holdsSpecimenClassTypes[0] = "Tissue";
+		holdsSpecimenClassTypes[1] = "Cell";
+		holdsSpecimenClassTypes[2] = "Fluid";
+		holdsSpecimenClassTypes[3] = "Molecular";
+		storageTypeForm.setHoldsSpecimenClassTypes(holdsSpecimenClassTypes);
 		return storageTypeForm;
 	}
 	
