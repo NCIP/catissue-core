@@ -52,6 +52,12 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
 		StorageContainerForm storageContainerForm = new StorageContainerForm();
+		String[] holdsSpecimenClassTypes = new String[4];
+		holdsSpecimenClassTypes[0] = "Tissue";
+		holdsSpecimenClassTypes[1] = "Cell";
+		holdsSpecimenClassTypes[2] = "Fluid";
+		holdsSpecimenClassTypes[3] = "Molecular";
+		storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassTypes);
 		storageContainerForm.setTypeId(storageType.getId());
 		logger.info("----StorageTypeId : " + storageType.getId());
 		storageContainerForm.setTypeName(storageType.getName());
