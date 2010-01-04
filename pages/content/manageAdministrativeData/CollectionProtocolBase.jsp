@@ -48,6 +48,7 @@
 			}
 		}
 	    formId.action=action;
+
 	    formId.submit();
 	}
 
@@ -69,6 +70,28 @@
 			}
 			var action="SubmitCollectionProtocol.do?operation=${requestScope.operation}";
 			formId.target = '_top';
+		}
+
+		if(window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'] != null && window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['pageOf'] != null)
+		{
+			var pageOf=window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['pageOf'].value;
+			if(pageOf == 'pageOfAssignPrivilegePage')
+			{
+				formId.target = '_top';
+			}
+		}
+
+		if(window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'] != null && window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['operation'] != null)
+		{
+			if(pageOf=window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['pageOf'] == null)
+			{
+
+				var operation=window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['operation'].value;
+				if(operation == 'edit')
+				{
+					formId.target = '_top';
+				}
+			}
 		}
 
 		formId.action=action;

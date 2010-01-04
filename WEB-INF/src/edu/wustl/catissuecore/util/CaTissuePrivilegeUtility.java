@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package edu.wustl.catissuecore.util;
@@ -32,19 +32,18 @@ import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
-import gov.nih.nci.security.exceptions.CSException;
 
 /**
  * A AppUtility class to do higher level, caTissue-specific processing of
  * privileges
- * 
+ *
  * @author juberahamad_patel
- * 
+ *
  */
 
 public final class CaTissuePrivilegeUtility {
 
-	private static Logger logger = Logger.getCommonLogger(CaTissuePrivilegeUtility.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(CaTissuePrivilegeUtility.class);
 	/*
 	 * create singleton Object
 	 */
@@ -67,7 +66,7 @@ public final class CaTissuePrivilegeUtility {
 	/**
 	 * get privileges for all CPs for the user associated with the given
 	 * privilege cache
-	 * 
+	 *
 	 * @param privilegeCache
 	 * @return list of SiteUserRolePrivilegeBean where each
 	 *         SiteUserRolePrivilegeBean represents privileges on a CP
@@ -103,18 +102,18 @@ public final class CaTissuePrivilegeUtility {
 		}
 		catch (DAOException e)
 		{
-			CaTissuePrivilegeUtility.logger.error(e.getMessage(), e);
+			CaTissuePrivilegeUtility.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		finally
 		{
-			try 
+			try
 			{
 				dao.closeSession();
 			}
 			catch (DAOException e)
 			{
-				CaTissuePrivilegeUtility.logger.error(e.getMessage(), e);
+				CaTissuePrivilegeUtility.LOGGER.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -123,7 +122,7 @@ public final class CaTissuePrivilegeUtility {
 
 	}
 
-	
+
 	/**
 	 * method sets Site privileges
 	 * @param map
@@ -135,26 +134,26 @@ public final class CaTissuePrivilegeUtility {
 	private static void setSitePrivileges(
 			Map<String, SiteUserRolePrivilegeBean> map, DAO dao,
 			User user, Entry<String, List<NameValueBean>> entry)
-			throws DAOException 
+			throws DAOException
 	{
 		SiteUserRolePrivilegeBean bean = new SiteUserRolePrivilegeBean();
 
 		java.util.Scanner scanner = new java.util.Scanner(entry.getKey()
 				.substring(entry.getKey().lastIndexOf("_") + 1));
 
-		Long id = null;
+		Long cpId = null;
 
 		if (scanner.hasNextLong()) {
-			id = Long.valueOf((scanner.nextLong()));
+			cpId = Long.valueOf(scanner.nextLong());
 
-			CollectionProtocol cp = (CollectionProtocol) dao.retrieveById(
-					CollectionProtocol.class.getName(), id);
+			CollectionProtocol cpObj = (CollectionProtocol) dao.retrieveById(
+					CollectionProtocol.class.getName(), cpId);
 
 			List<Site> siteList = new ArrayList<Site>();
 
-			updateSiteList(user, cp, siteList);
+			updateSiteList(user, cpObj, siteList);
 
-			bean.setCollectionProtocol(cp);
+			bean.setCollectionProtocol(cpObj);
 			bean.setUser(user);
 			// bean.setSiteList(new ArrayList<Site>(cp.getSiteCollection()));
 			bean.setSiteList(siteList);
@@ -169,25 +168,25 @@ public final class CaTissuePrivilegeUtility {
 
 			List<NameValueBean> privList = bean.getPrivileges();
 			updateBean(bean, privList);
-			map.put("CP_" + cp.getId(), bean);
+			map.put("CP_" + cpObj.getId(), bean);
 		}
 	}
 
 	/**
 	 * method updates siteList for setting site Privileges
-	 * 
+	 *
 	 * @param user
-	 * @param cp
+	 * @param cpObj
 	 * @param siteList
 	 */
-	private static void updateSiteList(User user, CollectionProtocol cp,
+	private static void updateSiteList(User user, CollectionProtocol cpObj,
 			List<Site> siteList) {
 		Set<Long> siteIds = new HashSet<Long>();
 		for (Site site : user.getSiteCollection()) {
 			siteIds.add(site.getId());
 		}
 
-		for (Site site : cp.getSiteCollection()) {
+		for (Site site : cpObj.getSiteCollection()) {
 			if (siteIds.contains(site.getId())) {
 				siteList.add(site);
 			}
@@ -200,7 +199,7 @@ public final class CaTissuePrivilegeUtility {
 	 * @param privList
 	 */
 	private static void updateBean(SiteUserRolePrivilegeBean bean,
-			List<NameValueBean> privList) 
+			List<NameValueBean> privList)
 	{
 		if (!privList.isEmpty()) {
 			NameValueBean nmv1 = privList.get(0);
@@ -213,14 +212,14 @@ public final class CaTissuePrivilegeUtility {
 	/**
 	 * get privileges for all Sites for the User associated with the given
 	 * privilege cache
-	 * 
+	 *
 	 * @param privilegeCache
 	 * @return list of SiteUserRolePrivilegeBean where each
 	 *         SiteUserRolePrivilegeBean represents privileges on a Site
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	public static Map<String, SiteUserRolePrivilegeBean> getSitePrivileges(
-			PrivilegeCache privilegeCache) throws ApplicationException 
+			PrivilegeCache privilegeCache) throws ApplicationException
 	{
 		Map<String, SiteUserRolePrivilegeBean> map = new HashMap<String, SiteUserRolePrivilegeBean>();
 
@@ -248,17 +247,17 @@ public final class CaTissuePrivilegeUtility {
 					java.util.Scanner scanner = new java.util.Scanner(entry
 							.getKey().substring(
 									entry.getKey().lastIndexOf("_") + 1));
-					Long id = null;
+					Long siteId = null;
 					if (scanner.hasNextLong()) {
-						id = Long.valueOf(entry.getKey().substring(
+						siteId = Long.valueOf(entry.getKey().substring(
 								entry.getKey().lastIndexOf("_") + 1));
 						Site site = null;
-						site = (Site) dao.retrieveById(Site.class.getName(), id);
+						site = (Site) dao.retrieveById(Site.class.getName(), siteId);
 						List<Site> siteList = new ArrayList<Site>();
 						siteList.add(site);
 						bean.setSiteList(siteList);
 						bean.setUser(user);
-						updateCPStatus(privilegeCache, entry, bean, id);
+						updateCPStatus(privilegeCache, entry, bean, siteId);
 						map.put("" + site.getId(), bean);
 					}
 				}
@@ -269,17 +268,17 @@ public final class CaTissuePrivilegeUtility {
 		return map;
 	}
 
-	
+
 	/**
 	 * method updates CP status.
 	 * @param privilegeCache
 	 * @param entry
 	 * @param bean
-	 * @param id
+	 * @param siteId
 	 */
 	private static void updateCPStatus(PrivilegeCache privilegeCache,
 			Entry<String, List<NameValueBean>> entry,
-			SiteUserRolePrivilegeBean bean, Long id) 
+			SiteUserRolePrivilegeBean bean, Long siteId)
 	{
 		NameValueBean nmv = new NameValueBean();
 		nmv.setName("Custom role");
@@ -289,7 +288,7 @@ public final class CaTissuePrivilegeUtility {
 
 		// Added by Ravindra to handle bean for EDIT mode
 		bean.setRowEdited(false);
-		String PEName = Constants.getCurrentAndFuturePGAndPEName(id);
+		String PEName = Constants.getCurrentAndFuturePGAndPEName(siteId);
 		if (privilegeCache.hasPrivilege(PEName)) {
 			bean.setAllCPChecked(true);
 		}
@@ -298,10 +297,10 @@ public final class CaTissuePrivilegeUtility {
 	/**
 	 * get the privileges on all Sites and CPs for the user associated with the
 	 * given privilege cache
-	 * 
+	 *
 	 * @param privilegeCache
 	 * @return
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 * @throws DAOException
 	 */
 	public static Map<String, SiteUserRolePrivilegeBean> getAllPrivileges(
@@ -314,7 +313,7 @@ public final class CaTissuePrivilegeUtility {
 		}
 		catch (DAOException e)
 		{
-			CaTissuePrivilegeUtility.logger.error(e.getMessage(),e);
+			CaTissuePrivilegeUtility.LOGGER.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
 
@@ -324,12 +323,11 @@ public final class CaTissuePrivilegeUtility {
 
 	/**
 	 * get a map of the privileges all the users have on a given CP.
-	 * 
+	 *
 	 * @param id
 	 *            of the CP
 	 * @return a map of login name and list of name value beans representing
 	 *         privilege name and privilege id
-	 * @throws CSException
 	 */
 	public static Map<String, SiteUserRolePrivilegeBean> getPrivilegesOnCP(
 			Long id) {
@@ -351,7 +349,7 @@ public final class CaTissuePrivilegeUtility {
 			hibernateDao.openSession(null);
 			cp = (CollectionProtocol) hibernateDao.retrieveById(
 					CollectionProtocol.class.getName(), id);
-			
+
 			getValidUserIds(cp, validUserIds);
 			validUserIds.remove(cp.getPrincipalInvestigator().getId());
 
@@ -359,7 +357,7 @@ public final class CaTissuePrivilegeUtility {
 			Collection<Site> siteCollection = cp.getSiteCollection();
 			Set<Long> validSiteIds = new HashSet<Long>();
 
-			
+
 			getValidSiteIds(siteCollection, validSiteIds);
 			Set<Long> siteIdSetSpecific = new HashSet<Long>();
 
@@ -405,8 +403,8 @@ public final class CaTissuePrivilegeUtility {
 						if (siteSet == null || siteSet.isEmpty()) {
 							continue;
 						}
-
-						hibernateDao.openSession(null);
+//For fixing bug #15397
+//						hibernateDao.openSession(null);
 						for (Long siteId : siteSet) {
 							Site site = (Site) hibernateDao.retrieveById(Site.class
 									.getName(), siteId);
@@ -440,19 +438,19 @@ public final class CaTissuePrivilegeUtility {
 		}
 		catch (Exception e)
 		{
-			CaTissuePrivilegeUtility.logger.error(e.getMessage(), e);
+			CaTissuePrivilegeUtility.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 			// return null;
-		} 
+		}
 		finally
 		{
-			try 
+			try
 			{
 				hibernateDao.closeSession();
 			}
-			catch (DAOException e) 
+			catch (DAOException e)
 			{
-				CaTissuePrivilegeUtility.logger.error(e.getMessage(), e);
+				CaTissuePrivilegeUtility.LOGGER.error(e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -461,18 +459,18 @@ public final class CaTissuePrivilegeUtility {
 	}
 
 	/**
-	 * update privilegeOnCPMap by site and siteUserRolePrivileges 
+	 * update privilegeOnCPMap by site and siteUserRolePrivileges
 	 * @param privilegeOnCPMap
 	 * @param siteCollection
 	 * @param siteIdSetSpecific
 	 */
 	private static void updatePrivilegeMap(
 			Map<String, SiteUserRolePrivilegeBean> privilegeOnCPMap,
-			Collection<Site> siteCollection, Set<Long> siteIdSetSpecific) 
+			Collection<Site> siteCollection, Set<Long> siteIdSetSpecific)
 	{
-		if (siteCollection != null && !siteCollection.isEmpty()) 
+		if (siteCollection != null && !siteCollection.isEmpty())
 		{
-			for (Site site : siteCollection) 
+			for (Site site : siteCollection)
 			{
 				if (!siteIdSetSpecific.contains(site.getId()))
 				{
@@ -519,14 +517,13 @@ public final class CaTissuePrivilegeUtility {
 
 	/**
 	 * get a map of the privileges all the users have on a given CP.
-	 * 
+	 *
 	 * @param rowIdBeanMap
-	 * 
+	 *
 	 * @param id
 	 *            of the CP
 	 * @return a map of login name and list of name value beans representing
 	 *         privilege name and privilege id
-	 * @throws CSException
 	 */
 	public static Map<String, SiteUserRolePrivilegeBean> getAllCurrentAndFuturePrivilegeUsersOnSite(
 			Long siteId, Long cpId,
@@ -558,12 +555,12 @@ public final class CaTissuePrivilegeUtility {
 				Set<String> users = PrivilegeManager.getInstance()
 						.getAccesibleUsers(objectId, privilegeName);
 
-				for (String userName : users) 
+				for (String userName : users)
 				{
 					User user = AppUtility.getUser(userName);
 
 					// User is NULL for InActive / Closed users
-					if (user == null) 
+					if (user == null)
 					{
 						continue;
 					}
@@ -614,19 +611,19 @@ public final class CaTissuePrivilegeUtility {
 		}
 		catch (Exception e)
 		{
-			CaTissuePrivilegeUtility.logger.error(e.getMessage(),e);
+			CaTissuePrivilegeUtility.LOGGER.error(e.getMessage(),e);
 			e.printStackTrace();
 			return null;
-		} 
-		finally 
+		}
+		finally
 		{
-			try 
+			try
 			{
 				hibernateDao.closeSession();
-			} 
-			catch (DAOException e) 
+			}
+			catch (DAOException e)
 			{
-				CaTissuePrivilegeUtility.logger.error(e.getMessage(),e);
+				CaTissuePrivilegeUtility.LOGGER.error(e.getMessage(),e);
 				e.printStackTrace();
 
 			}
