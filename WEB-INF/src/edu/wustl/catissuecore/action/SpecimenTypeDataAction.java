@@ -44,7 +44,6 @@ public class SpecimenTypeDataAction extends BaseAction
 			throws JSONException, IOException
 	{
 		final String limit = request.getParameter("limit");
-		final String query = request.getParameter("query");
 		final String start = request.getParameter("start");
 		final String method = request.getParameter("method");
 		final Integer limitFetch = Integer.parseInt(limit);
@@ -59,12 +58,9 @@ public class SpecimenTypeDataAction extends BaseAction
 		for (int iCount = startFetch; iCount < total && iCount < specimenTypeList.size(); iCount++)
 		{
 			final JSONObject jsonObject = new JSONObject();
-			if (query == null || query.length() == 0)
-			{
-				jsonObject.put("id", specimenTypeList.get(iCount).getValue());
-				jsonObject.put("field", specimenTypeList.get(iCount).getName());
-				jsonArray.put(jsonObject);
-			}
+			jsonObject.put("id", specimenTypeList.get(iCount).getValue());
+			jsonObject.put("field", specimenTypeList.get(iCount).getName());
+			jsonArray.put(jsonObject);
 		}
 		mainJsonObject.put("row", jsonArray);
 		response.flushBuffer();
