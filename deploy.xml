@@ -816,7 +816,7 @@
 			Check bulkoperation.zip file exists or not in base
 			directory.
 		-->
-		<available file="${base.dir}/bulkoperation.zip" property="file.exists" value="false" />
+		<available file="${base.dir}/bulkoperator.zip" property="file.exists" value="false" />
 		<if>
 			<not>
 				<isset property="file.exists" />
@@ -826,8 +826,12 @@
 					message="bulkoperation.zip file not found. It should be in base directory to deploy Bulk Operation."
 					level="error" />
 			</then>
+			<else>
+			   <echo message="Bulk Operation is ready to use."/>
+			</else>
 		</if>
 	</target>
+
 	<!--End of Integrating the Bulk Operation Module  -->
 
 	<!--Start of Integrating the Advance Query Module  -->
