@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.util.global.CommonServiceLocator;
 
 
 /**
@@ -45,6 +47,7 @@ public class SpecimenTypeDataAction extends BaseAction
 	{
 		final String limit = request.getParameter("limit");
 		final String start = request.getParameter("start");
+		final String query = request.getParameter("query");
 		final String method = request.getParameter("method");
 		final Integer limitFetch = Integer.parseInt(limit);
 		final Integer startFetch = Integer.parseInt(start);
@@ -57,10 +60,16 @@ public class SpecimenTypeDataAction extends BaseAction
 		mainJsonObject.put("totalCount", specimenTypeList.size());
 		for (int iCount = startFetch; iCount < total && iCount < specimenTypeList.size(); iCount++)
 		{
-			final JSONObject jsonObject = new JSONObject();
-			jsonObject.put("id", specimenTypeList.get(iCount).getValue());
-			jsonObject.put("field", specimenTypeList.get(iCount).getName());
-			jsonArray.put(jsonObject);
+			Locale locale = CommonServiceLocator.getInstance().getDefaultLocale();
+			if (query == null
+					|| specimenTypeList.get(iCount).getName().toLowerCase(locale).contains(
+							query.toLowerCase(locale)) || query.length() == 0)
+			{
+				final JSONObject jsonObject = new JSONObject();
+				jsonObject.put("id", specimenTypeList.get(iCount).getValue());
+				jsonObject.put("field", specimenTypeList.get(iCount).getName());
+				jsonArray.put(jsonObject);
+			}
 		}
 		mainJsonObject.put("row", jsonArray);
 		response.flushBuffer();
