@@ -2073,7 +2073,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 				final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 						.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-				
+
 				final String contId= storageContainerObj.getId().toString();
 				final String posOne= specimen.getSpecimenPosition()
 				.getPositionDimensionOne().toString();
@@ -2696,7 +2696,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 			throw this.getBizLogicException(null, "errors.item.selected", ApplicationProperties.getValue("disposaleventparameters.activityStatus"));
 		}
-		SpecimenUtil.validateSpecimenStatus(specimen, dao);
+
+		if(specimen.getId() != null)
+		{
+			SpecimenUtil.validateSpecimenStatus(specimen.getId(), dao);
+		}
 
 		return true;
 	}
