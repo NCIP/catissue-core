@@ -72,8 +72,9 @@ public class SecurityManager extends edu.wustl.security.manager.SecurityManager
 			if (this.isIdpEnabled())
 			{
 				final IdPManager idp = IdPManager.getInstance();
-				idp.addUserToQueue(CommonServiceLocator.getInstance().getAppName(), user);
-			}
+				//idp.addUserToQueue(CommonServiceLocator.getInstance().getAppName(), user);
+				idp.addUserToQueue(SecurityManagerPropertiesLocator.getInstance()
+						.getApplicationCtxName(), user);			}
 		}
 		catch (final CSException exception)
 		{
