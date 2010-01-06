@@ -1489,23 +1489,20 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(null, "errors.item.required", message);
 			}
 
-			/*if (group.getCollectionProtocolRegistration().getCollectionProtocol() == null
-				|| group.getCollectionProtocolRegistration().getCollectionProtocol().
-				getId() == null)
+			if (group.getCollectionProtocolRegistration().getId() == null)
 			{
-				message = ApplicationProperties
-						.getValue("errors.specimenCollectionGroup.collectionprotocol");
-				throw this.getBizLogicException(null, "errors.invalid", message);
+				if(group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier() == null)
+				{
+					message = ApplicationProperties
+						.getValue("errors.specimenCollectionGroup.collectionprotocolregistration.ppid");
+						throw this.getBizLogicException(null, "errors.item.required", message);
+				}
+				List cprList = retrieve(
+						group.getCollectionProtocolRegistration().getClass().getName(),
+						"protocolParticipantIdentifier", group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
+				CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)cprList.get(0);
+				group.setCollectionProtocolRegistration(collectionProtocolRegistration);
 			}
-
-			if ((group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier()
-			 	== null && (group.getCollectionProtocolRegistration().getParticipant()
-			 	== null || group.getCollectionProtocolRegistration().getParticipant()
-			 	.getId() == null)))
-			{
-				throw this.getBizLogicException(null,
-						"errors.collectionprotocolregistration.atleast", message);
-			}*/
 
 			if (group.getSpecimenCollectionSite() == null
 					|| group.getSpecimenCollectionSite().getId() == null
@@ -1514,37 +1511,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				message = ApplicationProperties.getValue("specimenCollectionGroup.site");
 				throw this.getBizLogicException(null, "errors.item.invalid", message);
 			}
-
-			// Check what user has selected Participant Name / Participant
-			// Number
-
-			// if participant name field is checked.
-			//if(group.getCollectionProtocolRegistration().getParticipant().getId
-			// ()
-			// == -1)
-			// {
-			// message =
-			// ApplicationProperties.getValue(
-			// "specimenCollectionGroup.protocoltitle");
-			// throw new
-			//DAOException(ApplicationProperties.getValue("errors.item.required"
-			// ,message));
-			// String message =
-			// ApplicationProperties.getValue(
-			// "specimenCollectionGroup.collectedByParticipant");
-			// throw new DAOException("errors.item.selected", new
-			// String[]{message});
-			// }
-
-			//if(!validator.isValidOption(group.getCollectionProtocolRegistration
-			// ().getProtocolParticipantIdentifier()))
-			// {
-			// String message =
-			// ApplicationProperties.getValue(
-			// "specimenCollectionGroup.collectedByProtocolParticipantNumber");
-			// throw new DAOException("errors.item.selected", new
-			// String[]{message});
-			// }
 
 			if (validator.isEmpty(group.getName()))
 			{
@@ -1593,37 +1559,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			{
 				throw this.getBizLogicException(null, "spg.clinicalDiagnosis.errMsg", "");
 			}
-			/*
-			 * String[] whereColumnName ={"cde.publicId"}; //
-			 * "storageContainer."
-			 * +edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER
-			 * String[] whereColumnCondition = {"=" }; Object[] whereColumnValue
-			 * ={"Clinical_Diagnosis_PID"}; String joinCondition = null;
-			 */
-			/*final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-			queryWhereClause
-					.addCondition(new EqualClause("cde.publicId", "Clinical_Diagnosis_PID"));
-
-			Iterator<Object> iterator;
-
-			iterator = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause)
-					.iterator();
-			final List clinicalDiagnosisList = new ArrayList();
-			while (iterator.hasNext())
-			{
-				final String clinicaDiagnosisvalue = (String) iterator.next();
-				clinicalDiagnosisList.add(new NameValueBean(clinicaDiagnosisvalue,
-						clinicaDiagnosisvalue));
-
-			}*/
-
-			// List clinicalDiagnosisList =
-			// CDEManager.getCDEManager().getPermissibleValueList
-			// (Constants.CDE_NAME_CLINICAL_DIAGNOSIS, null);
-			/*if (!Validator.isEnumeratedValue(clinicalDiagnosisList, group.getClinicalDiagnosis()))
-			{
-				throw this.getBizLogicException(null, "spg.clinicalDiagnosis.errMsg", "");
-			}*/
 
 			// NameValueBean undefinedVal = new
 			// NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);

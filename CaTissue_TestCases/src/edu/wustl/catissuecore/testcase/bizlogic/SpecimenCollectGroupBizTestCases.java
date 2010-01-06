@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import edu.wustl.catissuecore.api.test.BaseTestCaseUtility;
+import edu.wustl.catissuecore.api.test.TestCaseUtility;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -48,6 +50,35 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 			e.printStackTrace();
 			fail("Failed to add Domain Object");
 		}
+	}
+	
+	
+		
+	public void testAddSpecimenCollectionGroupWithPPID()
+	{
+		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+		System.out.println("Before Creating SCG");
+	    CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) TestCaseUtility.getObjectMap(CollectionProtocolRegistration.class);
+	    System.out.println("cpr.getProtocolParticipantIdentifier() !!!"+cpr.getProtocolParticipantIdentifier());
+	    scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(cpr);
+	    try
+		{
+	    	 cpr.setId(null);
+	    	 Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
+	 	     scg.setSpecimenCollectionSite(site);
+	 	     scg.setName("SCG1"+UniqueKeyGeneratorUtil.getUniqueKey());		    
+	 	     scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
+	 	     scg = (SpecimenCollectionGroup)appService.createObject(scg);
+	    	 System.out.println("After Creating SCG with PPID!!!!!! "+scg.getId());
+	    	 assertTrue("Add SpecimenCollectionGroupWithPPID having CPR id as null.", true);    
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error Creating SCG with PPID!!!!!!");
+			e.printStackTrace();
+			fail("Failed to add SpecimenCollectionGroupWithPPID having CPR id as null.");
+		}
+
 	}
 	
 	private void updateSCG(SpecimenCollectionGroup sprObj, Participant participant)
