@@ -574,13 +574,11 @@ function validate(action,formField)
 function onRadioButtonClickOfSpecimen(element)
 {
 	var specimenClass = document.getElementById("holdsSpecimenClassTypeIds");
-	var specimenType = document.getElementById("holdsSpecimenTypes");
 	var specimenArray = document.getElementById("holdsSpecimenArrTypeIds");
 
 	if(element == "Specimen")
 	{
 		specimenClass.disabled = false;
-		specimenType.disabled = false;
 		specimenArray.disabled = true;
 		var len = specimenArray.length;
 		for (var i = 0; i < len; i++)
@@ -592,7 +590,6 @@ function onRadioButtonClickOfSpecimen(element)
 	if(element == "SpecimenArray")
 	{
 		specimenClass.disabled = true;
-		specimenType.disabled = true;
 		specimenArray.disabled = false;
 		var len = specimenClass.length;
 		for (var i = 0; i < len; i++)
