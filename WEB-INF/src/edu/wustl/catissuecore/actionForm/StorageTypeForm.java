@@ -479,7 +479,7 @@ public class StorageTypeForm extends AbstractActionForm implements ISpecimenType
 		try
 		{
 			this.setRedirectValue(validator);
-			if(this.specimenOrArrayType.equals("Specimen") && this.holdsSpecimenClassTypes==null)
+			if("Specimen".equals(this.specimenOrArrayType) && this.holdsSpecimenClassTypes==null)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.specimenClass")));

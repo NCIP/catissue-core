@@ -1064,7 +1064,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		try
 		{
 			logger.info("No of containers---------in validate::" + this.noOfContainers);
-			if(this.specimenOrArrayType.equals("Specimen") && this.holdsSpecimenClassTypes==null)
+			if("Specimen".equals(this.specimenOrArrayType) && this.holdsSpecimenClassTypes==null)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.specimenClass")));
