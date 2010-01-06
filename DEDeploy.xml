@@ -673,7 +673,7 @@
 				</fileset>
 			</classpath>
 			<transaction src="${oracle.dbupgrade.sql.dir.DE}/reset_record_entry_seq.sql" />
-			<transaction>commit;</transaction>
+			<transaction>commit</transaction>
 		</sql>
 	</target>
 
