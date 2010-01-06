@@ -12,7 +12,6 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
