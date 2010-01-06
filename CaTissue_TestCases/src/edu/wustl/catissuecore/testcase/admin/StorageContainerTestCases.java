@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
+import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.Site;
@@ -15,7 +16,9 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
+import edu.wustl.catissuecore.testcase.util.RequestParameterUtility;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
+import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
@@ -28,22 +31,6 @@ import edu.wustl.common.exception.BizLogicException;
 public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 {
 
-	/**
-	 * Test Storage Container Add.
-	 */
-//	@Test
-//	public void testSetUtility()
-//	{
-//		StorageType storageType = new StorageType();
-//		storageType.setName("TissueStorageType_1257421218783");
-//		storageType.setId(6L);
-//		TestCaseUtility.setNameObjectMap("StorageType", storageType);
-//
-//		Site s = new Site();
-//		s.setId(1L);
-//		TestCaseUtility.setNameObjectMap("Site", s);
-//	}
-	//ShowFramedPageAction.java, StorageContainerTreeAction, TreeDataBizlogic.java and OpenStorageContainerAction
 	/**
 	 * Test Storage Container Add.
 	 */
@@ -108,6 +95,76 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	    storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection1);
 
 	    TestCaseUtility.setNameObjectMap("StorageContainer",storageContainer);
+	}
+	/**
+	 * Test Storage Container Add.
+	 */
+	@Test
+	public void testAddRestrictedStorageContainer()
+	{
+		StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeFormWithTypeRestriction(this,
+				"Rest_Type_" + UniqueKeyGeneratorUtil.getUniqueKey(),3,3,"row","col","10","Active");
+		storageTypeForm.setSpecimenOrArrayType("Specimen");
+		setRequestPathInfo("/StorageTypeAdd");
+		setActionForm(storageTypeForm);
+		actionPerform();
+		
+		verifyForward("success");
+		verifyNoActionErrors();
+		verifyActionMessages(new String[]{"object.add.successOnly"});
+		StorageTypeForm form = (StorageTypeForm) getActionForm();
+		StorageType storageType = new StorageType();
+
+		storageType.setName(form.getType());
+		storageType.setId(form.getId());
+		storageType.setOneDimensionLabel(form.getOneDimensionLabel());
+		storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
+		storageType.setDefaultTempratureInCentigrade(Double.parseDouble(form
+				.getDefaultTemperature()));
+
+		Capacity capacity = new Capacity();
+		capacity.setOneDimensionCapacity(form.getOneDimensionCapacity());
+		capacity.setTwoDimensionCapacity(form.getTwoDimensionCapacity());
+		storageType.setCapacity(capacity);
+		
+		StorageContainerForm storageContainerForm = new StorageContainerForm();
+		storageContainerForm.setTypeId(storageType.getId());
+		logger.info("----StorageTypeId : " + storageType.getId());
+		storageContainerForm.setTypeName(storageType.getName());
+		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
+		storageContainerForm.setSiteId(site.getId());
+		storageContainerForm.setNoOfContainers(1);
+		storageContainerForm.setOneDimensionCapacity(25);
+		storageContainerForm.setTwoDimensionCapacity(25);
+		storageContainerForm.setOneDimensionLabel("row");
+		storageContainerForm.setTwoDimensionLabel("row");
+		storageContainerForm.setDefaultTemperature("29");
+	
+		String[] holdsSpecimenClassCollection = new String[4];
+		holdsSpecimenClassCollection[0]="Fluid";
+		holdsSpecimenClassCollection[1]="Tissue";
+		holdsSpecimenClassCollection[2]="Molecular";
+		holdsSpecimenClassCollection[3]="Cell";
+		storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
+		String[] tissue = {"Fixed Tissue"," Fresh Tissue"};
+		String[] cell = {"Milk", "Whole Blood"};
+		String[] fluid = {"Frozen Cell Pellet", "Slide"};
+		String[] molecular = {"RNA", "DNA"};
+		storageContainerForm.setHoldsTissueSpType(tissue);
+		storageContainerForm.setHoldsCellSpType(cell);
+		storageContainerForm.setHoldsFluidSpType(fluid);
+		storageContainerForm.setHoldsMolSpType(molecular);
+
+		storageContainerForm.setSpecimenOrArrayType("Specimen");
+		
+		storageContainerForm.setActivityStatus("Active");
+		storageContainerForm.setIsFull("False");
+		storageContainerForm.setOperation("add");
+		setRequestPathInfo("/StorageContainerAdd");
+		setActionForm(storageContainerForm);
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
 	}
 	//bug 11546
 	/**

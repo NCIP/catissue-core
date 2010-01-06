@@ -39,7 +39,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	{
 		StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeForm(this,
 				"srType_" + UniqueKeyGeneratorUtil.getUniqueKey(),3,3,"row","col","22","Active");
-		storageTypeForm.setSpecimenOrArrayType("");
+		storageTypeForm.setSpecimenOrArrayType("Specimen");
 		setRequestPathInfo("/StorageTypeAdd");
 		setActionForm(storageTypeForm);
 		actionPerform();
@@ -65,7 +65,23 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 
 		TestCaseUtility.setNameObjectMap("StorageType", storageType);
 	}
+	/**
+	 * Test Storage Type Add.
+	 */
+	@Test
+	public void testAddRestrictedStorageType()
+	{
+		StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeFormWithTypeRestriction(this,
+				"Rest_Type_" + UniqueKeyGeneratorUtil.getUniqueKey(),3,3,"row","col","10","Active");
+		storageTypeForm.setSpecimenOrArrayType("Specimen");
+		setRequestPathInfo("/StorageTypeAdd");
+		setActionForm(storageTypeForm);
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		verifyActionMessages(new String[]{"object.add.successOnly"});
 
+	}
 	/**
 	 * Test Storage Type Add with same name (1x1 capacity).
 	 */

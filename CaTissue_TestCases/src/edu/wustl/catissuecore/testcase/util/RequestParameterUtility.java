@@ -84,6 +84,35 @@ public class RequestParameterUtility
 		return storageTypeForm;
 	}
 	
+	public static StorageTypeForm createStorageTypeFormWithTypeRestriction(MockStrutsTestCase testcase, String typeName
+			,int oneCapacity,int twoCapacity,String oneLabel,String twoLabel,String temp,String activityStatus)
+	{
+		StorageTypeForm storageTypeForm = new StorageTypeForm();
+		storageTypeForm.setType(typeName);
+		storageTypeForm.setOneDimensionCapacity(oneCapacity);
+		storageTypeForm.setTwoDimensionCapacity(twoCapacity);
+		storageTypeForm.setOneDimensionLabel(oneLabel);
+		storageTypeForm.setTwoDimensionLabel(twoLabel);
+		storageTypeForm.setDefaultTemperature(temp);
+		storageTypeForm.setActivityStatus(activityStatus);
+		storageTypeForm.setOperation("add");
+		String[] holdsSpecimenClassTypes = new String[4];
+		holdsSpecimenClassTypes[0] = "Tissue";
+		holdsSpecimenClassTypes[1] = "Cell";
+		holdsSpecimenClassTypes[2] = "Fluid";
+		holdsSpecimenClassTypes[3] = "Molecular";
+		storageTypeForm.setHoldsSpecimenClassTypes(holdsSpecimenClassTypes);
+		String[] tissue = {"Fixed Tissue","Fresh Tissue"};
+		String[] cell = {"Milk"};
+		String[] fluid = {"Frozen Cell Pellet", "Slide"};
+		String[] molecular = {"RNA", "DNA"};
+		storageTypeForm.setHoldsTissueSpType(tissue);
+		storageTypeForm.setHoldsCellSpType(cell);
+		storageTypeForm.setHoldsFluidSpType(fluid);
+		storageTypeForm.setHoldsMolSpType(molecular);
+		return storageTypeForm;
+	}
+	
 
 	
 	/**
