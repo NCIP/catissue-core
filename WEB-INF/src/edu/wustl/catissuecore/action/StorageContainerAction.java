@@ -499,13 +499,7 @@ public class StorageContainerAction extends SecureAction
 				{
 					storageContainerForm.setSpecimenOrArrayType("SpecimenArray");
 				}
-
-				// type_name=type.getType();
-
 				this.logger.debug("Type Name:" + storageContainerForm.getTypeName());
-
-				// If operation is add opeartion then set the holds list
-				// according to storage type selected.
 				if (operation != null && operation.equals(Constants.ADD))
 				{
 					final StorageTypeBizLogic storageTypebizLogic = (StorageTypeBizLogic) factory
@@ -524,12 +518,8 @@ public class StorageContainerAction extends SecureAction
 						storageContainerForm
 								.setHoldsSpecimenClassTypes(defHoldsSpecimenClassTypeList);
 					}
-					
-					final String[] defHoldsSpecimenTypeList = storageTypebizLogic.
-					getDefaultHoldsSpecimenTypeList(type);
-					
 					final Collection specimenTypeCollection = type.getHoldsSpecimenTypeCollection();
-					if(specimenTypeCollection!=null)
+					if(specimenTypeCollection!=null && !specimenTypeCollection.isEmpty())
 					{
 						StorageContainerUtil.populateSpType(type.getHoldsSpecimenClassCollection(), specimenTypeCollection,
 								storageContainerForm);
