@@ -68,21 +68,26 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 	{
 		// Containers allowing Only this CP, Only this Specimen Class and only this Specimen Type
 		final String query0 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
+		// Containers only this CP restriction and just this Specimen Class and any specimen type
+		final String query1 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ);
 		// Containers allowing Only this CP but other Specimen Classes and SpecimenType also
-		final String query1 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_NONUNQ,IS_SPTYPE_NONUNQ);
-		// Containers no CP restriction and just this Specimen Class and Specimen Type
-		final String query2 = this.createSCQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
-		// Containers no CP restriction and just this Specimen Class and any specimen type
-		final String query3 = this.createSCQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ);
+		final String query2 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_NONUNQ,IS_SPTYPE_NONUNQ);
 		// Containers allowing Other CPs also but just this Specimen Class and Specimen Type
-		final String query4 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
+		final String query3 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
+		// Containers allowing any CP just this Specimen Class and any specimen type
+		final String query4 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ);
 		// Containers allowing Others CPs also, other Specimen Classes and Specimen Type too
 		final String query5 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_NONUNQ,IS_SPTYPE_NONUNQ);
-		//Containers allowing any CP, other Specimen Classes and Specimen Type too
-		final String query6 = this.createSCQuery(parameterList, null, IS_SPCLASS_NONUNQ, IS_SPTYPE_NONUNQ);
+		// Containers no CP restriction and just this Specimen Class and Specimen Type
+		final String query6 = this.createSCQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
+		// Containers no CP restriction and just this Specimen Class and any specimen type
+		final String query7 = this.createSCQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ);
+		//Containers with no CP restrictions, other Specimen Classes and Specimen Type too
+		final String query8 = this.createSCQuery(parameterList, null, IS_SPCLASS_NONUNQ, IS_SPTYPE_NONUNQ);
 		//Containers allowing any CP,any Specimen Class and any Specimen Type
-		final String query7 = this.createSCQuery(parameterList,	null, null, null);
-		return new String[]{query0, query1, query2, query3, query4, query5, query6,query7};
+		final String query9 = this.createSCQuery(parameterList,	null, null, null);
+		
+		return new String[]{query0, query1, query2, query3, query4, query5, query6, query7, query8, query9};
 	}
 
 	/**
@@ -160,7 +165,7 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 			scQuery.append(" ) ");
 			scQuery.append(" AND ");
 		}
-		scQuery.append("  L.ACTIVITY_STATUS = 'Active' and D.ACTIVITY_STATUS='Active' and D.CONT_FULL=0 "); //Added cont_full condition by Preeti
+		scQuery.append("  L.ACTIVITY_STATUS = 'Active' AND D.ACTIVITY_STATUS='Active' AND D.CONT_FULL=0 "); //Added cont_full condition by Preeti
 		scQuery.append(") VIEW1  ");
 		scQuery.append(" GROUP BY IDENTIFIER, VIEW1.NAME, ");
 		scQuery.append(" VIEW1.ONE_DIMENSION_CAPACITY, ");
