@@ -21,14 +21,16 @@
 			<antcall target="IdPSettings"/>
 			<antcall target="db_configuration" />
 			<antcall target="integrate_advanced_query"/>
+			<antcall target="integrate_bulk_operation"/>
 		    <antcall target="app_configuration"/>
 			<antcall target="de_integrate_app" />
 			<antcall target="build_war" />
 			<antcall target="jboss_configuration" />
+
 			<antcall target="send_mail" />
 			<delete dir="${temp.dir}" />
 		</target>
-	
+
 		  <target name="mysql_csm_config_with_idp" >
 	    	<copy file="${base.dir}/idp_catissuecore-ds.xml" tofile="${temp.dir}/catissuecore-ds.xml" overwrite="true"/>
 			<copy file="${base.dir}/idp_login-config.xml" tofile="${temp.dir}/login-config.xml" overwrite="true"/>
@@ -36,35 +38,35 @@
 			<copy file="${base.dir}/idp_catissuecore.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/catissuecore.hibernate.cfg.xml" overwrite="true"/>
 			<replace dir="${temp.dir}" propertyfile="idpInstall.properties">
 					<include name="catissuecore-ds.xml" />
-					<include name="login-config.xml" />				
+					<include name="login-config.xml" />
 				<replacefilter token="@@CSMdatabaseurl@@" value="jdbc:mysql://${csm.database.host}:${csm.database.port}:${csm.database.name}"/>
 				<replacefilter token="@@CSMusername@@" value="${csm.database.username}"/>
 				<replacefilter token="@@CSMpasword@@" value="${csm.database.password}"/>
 				</replace>
-		</target>	
-	
+		</target>
+
 		<target name="oracle_csm_config_with_idp">
 			<copy file="${base.dir}/idp/idp_catissuecore-ds.xml" tofile="${temp.dir}/catissuecore-ds.xml" overwrite="true"/>
 			<copy file="${base.dir}/idp/idp_login-config.xml" tofile="${temp.dir}/login-config.xml" overwrite="true"/>
 			<copy file="${base.dir}/idp/idp_upt.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/upt.hibernate.cfg.xml" overwrite="true"/>
 			<copy file="${base.dir}/idp/idp_catissuecore.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/catissuecore.hibernate.cfg.xml" overwrite="true"/>
-			<replace dir="${temp.dir}" propertyfile="idpInstall.properties"> 
+			<replace dir="${temp.dir}" propertyfile="idpInstall.properties">
 						<include name="catissuecore-ds.xml" />
-						<include name="login-config.xml" />				
+						<include name="login-config.xml" />
 					<replacefilter token="@@CSMdatabaseurl@@" value="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}"/>
 					<replacefilter token="@@CSMusername@@" value="${csm.database.username}"/>
 					<replacefilter token="@@CSMpasword@@" value="${csm.database.password}"/>
 			</replace>
-		</target> 
-	
+		</target>
+
 		<target name="deploy_all_with_idp">
 			<antcall target="deploy_app_with_idp" />
 			<antcall target="deploy_db" />
 			<antcall target="server_security" />
 		</target>
-	
+
 	<!-- IDP settings -->
-		
+
 	<target name="IdPSettings">
 		<copy file="${base.dir}/catissuecore-properties/IdPConfigure.xml" tofile="${temp.dir}/catissuecore-properties/IdPConfigure.xml" overwrite="true"/>
 		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="idpInstall.properties">
@@ -76,7 +78,7 @@
 			<replacefilter token="@@clinportal.database.username@@" value="${clinportal.database.username}" />
 			<replacefilter token="@@clinportal.database.password@@" value="${clinportal.database.password}" />
 			<replacefilter token="@@clinportal.database.port@@" value="${clinportal.database.port}" />
-			
+
 
 			<replacefilter token="@@catissuecore.database.type@@" value="${database.type}" />
 			<replacefilter token="@@catissuecore.database.name@@"  value="${database.name}" />
@@ -84,25 +86,25 @@
 			<replacefilter token="@@catissuecore.database.username@@" value="${database.username}" />
 			<replacefilter token="@@catissuecore.database.password@@" value="${database.password}" />
 			<replacefilter token="@@catissuecore.database.port@@" value="${database.port}" />
-	
-	
+
+
 			<replacefilter token="@@csm.database.type@@" value="${csm.database.type}" />
 			<replacefilter token="@@csm.database.name@@"  value="${csm.database.name}" />
 			<replacefilter token="@@csm.database.host@@" value="${csm.database.host}" />
 			<replacefilter token="@@csm.database.username@@" value="${csm.database.username}" />
 			<replacefilter token="@@csm.database.password@@" value="${csm.database.password}" />
 			<replacefilter token="@@csm.database.port@@" value="${csm.database.port}" />
-			
+
 	</replace>
 	<if>
-		<equals arg1="oracle" arg2="${clinportal.database.type}" />	
+		<equals arg1="oracle" arg2="${clinportal.database.type}" />
 		<then>
 			<replace dir="${temp.dir}/catissuecore-properties" propertyfile="idpInstall.properties">
 			<include name="IdPConfigure.xml" />
 					<replacefilter token="@@clinportal.database.driverURL@@" value="${oracle.driver.string}" />
 					<replacefilter token="@@csm.database.driverURL@@" value="${oracle.driver.string}" />
 				<replacefilter token="@@catissuecore.database.driverURL@@" value="${oracle.driver.string}" />
-			</replace>	
+			</replace>
 		</then>
 	<elseif >
 		<equals arg1="mysql" arg2="${clinportal.database.type}" />
@@ -115,9 +117,9 @@
 		</replace>
 		</then>
 	</elseif>
-	</if>	
+	</if>
 	</target>
-	
+
 	<target name="upgrade_idp_db_to_support_wustlkey">
 			<echo message="Creating table in IDP database..." />
 				<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}" userid="${csm.database.username}" password="${csm.database.password}" onerror="continue" rdbms="oracle">
@@ -130,7 +132,7 @@
 					</classpath>
 				</sql>
 		</target>
-	
+
 	<!-- IDP settings ends-->
 </project>
-	
+
