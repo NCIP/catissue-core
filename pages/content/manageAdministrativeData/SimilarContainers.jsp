@@ -260,12 +260,9 @@
 		{
 			var specimenClass = document.getElementById("holdsSpecimenClassTypeIds");
 			var specimenArray = document.getElementById("holdsSpecimenArrTypeIds");
-			var specimenType = document.getElementById("holdsSpecimenTypes");
-	
 			if(element == "Specimen")
 			{
 				specimenClass.disabled = false;		
-				specimenType.disabled = false;
 				specimenArray.disabled = true;
 				var len = specimenArray.length;
 				for (var i = 0; i < len; i++) 
@@ -277,7 +274,6 @@
 			if(element == "SpecimenArray")
 			{
 				specimenClass.disabled = true;
-				specimenType.disabled = true;
 				specimenArray.disabled = false;
 				var len = specimenClass.length;
 				for (var i = 0; i < len; i++) 
