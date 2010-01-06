@@ -762,7 +762,7 @@
 		<antcall target="configure_war" />
 		<antcall target="adopter_configuration" />
 	</target>
-	
+
 	<target name="db_configuration" description="for database configuration">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -782,20 +782,20 @@
 					<antcall target="mssqlserver_config" />
 				</then>
 			</elseif>
-		</if>				
+		</if>
 	</target>
 
-	<target name="app_configuration" description="configure titli.properties">		
+	<target name="app_configuration" description="configure titli.properties">
 		<!-- configure titli.properties -->
 		 <antcall target="configure_titli" >
 		 	<param name="tempPath" value="${temp.dir}/catissuecore/WEB-INF/classes"/>
 			<param name="mysqlDriver" value="org.gjt.mm.mysql.Driver"/>
-		</antcall>		 	
+		</antcall>
    </target>
-	
+
 	<!--Start of Integrating the Bulk Operation Module  -->
 	<target name="integrate_bulk_operation" description="Start of Integrating the Bulk Operation Module">
-		
+
 		<echo>Integrating the  Bulk Operation Module</echo>
 		<antcall target="unzip_bulkoperation_installable" />
 		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="bulkoperation_integrate_app">
@@ -806,9 +806,9 @@
 			<property name="oracle.dialect.string" value="${oracle.dialect.string}" />
 			<property name="mysql.dialect.string" value="${mysql.dialect.string}" />
 		</ant>
-		
-	</target>		
-	
+
+	</target>
+
 	<target name="unzip_bulkoperation_installable" depends="bulkoperation_check_prerequisite" description="unzip the bulk operation zip">
 		<unzip src="bulkoperator.zip" dest="${temp.dir}/bulkoperation" overwrite="true" />
 	</target>
@@ -865,7 +865,7 @@
 			<antcall target="pre_initialization" />
 			<antcall target="db_configuration" />
 			<antcall target="integrate_advanced_query"/>
-			<antcall target="integrate_bulk_operation"/>		
+			<antcall target="integrate_bulk_operation"/>
 			<antcall target="app_configuration"/>
 			<!-- <antcall target="generate.cacore.for.xmi" />  -->
 			<antcall target="de_integrate_app" />
@@ -903,7 +903,7 @@
 		<delete dir="${export.dir}" />
 		<mkdir dir="${export.dir}" />
 
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" overwrite="true" />
+		<!-- <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" overwrite="true" /> -->
 		<mkdir dir="${cacaore.deployables}" />
 
 		<ant antfile="DEDeploy.xml" dir="." target="generate.cacore.for.imported.xmis">
@@ -913,9 +913,8 @@
 			<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
 		</ant>
 
-		<antcall target="build.catissuecore.war" />
-
 		<delete file="${base.dir}/log4j.properties" />
+		<delete dir="${tempcacore.dir}" />
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - -
@@ -1289,7 +1288,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-		
+
 		<antcall target="unzip_bulkoperation_installable" />
 		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
 			<property name="database.driver" value="${mysql.driver.string}" />
@@ -1416,7 +1415,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-		
+
 		<antcall target="unzip_bulkoperation_installable" />
 		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
 			<property name="database.driver" value="${oracle.driver.string}" />
@@ -1893,7 +1892,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-		
+
 		<antcall target="unzip_bulkoperation_installable" />
 		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
 			<property name="database.driver" value="${mysql.driver.string}" />
@@ -1904,7 +1903,7 @@
 			<property name="database.password" value="${database.password}" />
 			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
 		</ant>
-		
+
 	</target>
 
 	<!-- Upgrading from Suite1.1 p2 to p4 - Oracle -->
@@ -2827,12 +2826,6 @@ Thanking You,
 			</classpath>
 		</java>
 
-	<!--	<delete includeemptydirs="true">
-			<fileset dir="${temp.dir}/catissuecore">
-				<include name="**/*" />
-			</fileset>
-		</delete>  -->
-
 		<if><equals arg1="yes" arg2="${generateCacore}" />
 			<then>
 				<delete dir="${tempcacore.dir}" />
@@ -2848,13 +2841,11 @@ Thanking You,
 					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
 				</ant>
 
-				<antcall target="integrate_advanced_query"/>
-				<antcall target="de_integrate_app"/>
-				<antcall target="build.catissuecore.war" />
-				<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/catissuecore.war" overwrite="true" />
 				<delete file="${base.dir}/log4j.properties" />
 			</then>
 		</if>
+		<delete dir="${export.dir}" />
+		<delete dir="${tempcacore.dir}" />
 	</target>
 
 
@@ -4237,8 +4228,8 @@ Thanking You,
 				</fileset>
 			</classpath>
 		</java>
-	</target>	
-	
+	</target>
+
 	<property name="operationName" value="" />
 	<property name="csvFile" value="" />
 	<property name="templateFile" value="" />
@@ -4246,7 +4237,7 @@ Thanking You,
 	<property name="applicationUserName" value="" />
 	<property name="applicationUserPassword" value="" />
 	<property name="keyStoreLocation" value="" />
-	
+
 	<target name="runBulkOperation" depends="unjar_bulk" description="this target runs the bulk operation module through API client.">
 		<echo message="Starting to run Bulk Operation... " />
 		<java classname="edu.wustl.bulkoperator.client.BulkOperationCommand"
