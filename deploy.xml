@@ -676,6 +676,8 @@
 		        <include name="jboss-common-client.jar" />
 		   </fileset>
 		</copy>
+		<echo>Integrating the  Bulk Operation Module </echo>
+		<antcall target="unzip_bulkoperation_installable" />
 		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="copy_bulk_operation_mapping_file">
 			<property name="parent.base.dir" value="${basedir}" />
 			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
