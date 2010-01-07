@@ -154,10 +154,9 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			final SpecimenArray oldSpecimenArray = (SpecimenArray) oldObj;
 
 			boolean flag = true;
-			if (specimenArray.getLocatedAtPosition().getParentContainer().getId().longValue() == oldSpecimenArray
+			if (oldSpecimenArray.getLocatedAtPosition() != null && specimenArray.getLocatedAtPosition().getParentContainer().getId().longValue() == oldSpecimenArray
 					.getLocatedAtPosition().getParentContainer().getId().longValue()
 					// && specimenArray.getLocatedAtPosition() != null
-					&& oldSpecimenArray.getLocatedAtPosition() != null
 					&& specimenArray.getLocatedAtPosition().getPositionDimensionOne().longValue() == oldSpecimenArray
 							.getLocatedAtPosition().getPositionDimensionOne().longValue()
 					&& specimenArray.getLocatedAtPosition().getPositionDimensionTwo().longValue() == oldSpecimenArray
@@ -528,6 +527,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			storageContainerBizLogic.checkContainer(dao,StorageContainerUtil.setparameterList
 			(contId, posOne, posTwo, false),sessionDataBean,null);
 			specimenArray.getLocatedAtPosition().setParentContainer(storageContainerObj);
+			specimenArray.getLocatedAtPosition().setOccupiedContainer( specimenArray );//bug 15137
 		}
 	}
 
@@ -834,12 +834,15 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			 * validator.isEmpty(specimenArray
 			 * .getStorageContainer().getName())))
 			 */
-			if ((!validator.isNumeric(String.valueOf(specimenArray.getLocatedAtPosition()
-					.getParentContainer().getId()), 1) && Validator.isEmpty(specimenArray
-					.getLocatedAtPosition().getParentContainer().getName())))
+			if(specimenArray.getLocatedAtPosition()!=null && specimenArray.getLocatedAtPosition().getParentContainer()!=null)
 			{
-				message = ApplicationProperties.getValue("array.positionInStorageContainer");
-				throw this.getBizLogicException(null, "errors.item.format", message);
+				if ((!validator.isNumeric(String.valueOf(specimenArray.getLocatedAtPosition()
+						.getParentContainer().getId()), 1) && Validator.isEmpty(specimenArray
+								.getLocatedAtPosition().getParentContainer().getName())))
+				{
+					message = ApplicationProperties.getValue("array.positionInStorageContainer");
+					throw this.getBizLogicException(null, "errors.item.format", message);
+				}
 			}
 
 			if (specimenArray.getLocatedAtPosition() != null
