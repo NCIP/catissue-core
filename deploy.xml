@@ -4199,19 +4199,12 @@ Thanking You,
 		</fileset>
 	</path>
 
-	<property name="bulk.bin.dir" value="${basedir}/BulkOperations/bin" />
-	<target name="unjar_bulk" description="this target unjars the bulkoperator jar file.">
-		<delete dir="${bulk.bin.dir}" />
-		<mkdir dir="${bulk.bin.dir}" />
-		<unjar src="./caTissueSuite_Client/lib/bulkoperator.jar" dest="${bulk.bin.dir}/" />
-	</target>
-
 	<property name="operationName" value="" />
 	<property name="dropdownName" value="" />
 	<property name="csvFile" value="" />
 	<property name="xmlFile" value="" />
 
-	<target name="add_bulk_operation_template" depends="unjar_bulk" description="this target adds the bulk operation XML and CSV template in the database.">
+	<target name="add_bulk_operation_template" description="this target adds the bulk operation XML and CSV template in the database.">
 		<echo message="Starting to load Bulk Operator Template.........." />
 		<java classname="edu.wustl.bulkoperator.ImportBulkOperationTemplate"
 				fork="true" maxmemory="1024m">
@@ -4238,7 +4231,7 @@ Thanking You,
 	<property name="applicationUserPassword" value="" />
 	<property name="keyStoreLocation" value="" />
 
-	<target name="runBulkOperation" depends="unjar_bulk" description="this target runs the bulk operation module through API client.">
+	<target name="runBulkOperation" description="this target runs the bulk operation module through API client.">
 		<echo message="Starting to run Bulk Operation... " />
 		<java classname="edu.wustl.bulkoperator.client.BulkOperationCommand"
 				fork="true" maxmemory="1024m">
