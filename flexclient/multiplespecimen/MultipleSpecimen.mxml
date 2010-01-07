@@ -39,7 +39,12 @@
 		public var mspParameter:MSPParameter = new MSPParameter();	
 		[Bindable]
 		public var specimenColl:ArrayCollection = new ArrayCollection();
-	
+
+		[Bindable]
+		public var actualParentType:String = "";
+		[Bindable]
+		public var actualParentName:String = "";
+
 		public var specimenDataBean:SpecimenData = new SpecimenData();
 		private var copyFromIndex:int = -1;
 		private var attributeList:ArrayCollection = null;
@@ -66,6 +71,10 @@
 			model.filteredCollection = specimenColl;
 			mspParameter = MSPParameterReader.processParam(Application.application.parameters);
 			specimenColl = new ArrayCollection();
+
+			actualParentType=mspParameter.parentType;
+			actualParentName=mspParameter.parentName;
+
 			myRemoteObject.initFlexInterfaceForMultipleSp(mspParameter.mode,mspParameter.parentType,mspParameter.parentName);
 
 		}
@@ -513,43 +522,77 @@
 	   				mspParameter.parentType = MSPParameter.PARENT_TYPE_PARAM_VAL_SP;
 	   				refreshParentLabel(spData);
 	   				if(A[i] != null)
-                    { 
-                       A[i].changeSpParentName();
-                    }           	
-	   				
+                    {
+                    	if(actualParentType == "New_Specimen")
+                    	{
+                       		A[i].changeSpParentName();
+                       	}
+                       	else
+                       	{
+                       		A[i].diableSpParentName();
+                       	}
+                    }
+
 	   			}
 	   			else
 	   			{
-	   				spData.parentType = Constants.NEW_SPECIMEN;	
+	   				spData.parentType = Constants.NEW_SPECIMEN;
 	   				mspParameter.parentType = MSPParameter.PARENT_TYPE_PARAM_VAL_SCG;
 	   				refreshSCGLabel(spData);
 	   				if(A[i] != null && mspParameter.parentName != "")
-                    { 
-                         A[i].changeSCGName(); //mspParameter.parentName=="" means specimens ar getting added through specimen - multiple
+                    {
+                    	if(actualParentType == "Derived_Specimen")
+                    	{
+                         	A[i].changeSCGName(); //mspParameter.parentName=="" means specimens ar getting added through specimen - multiple
+                         }
+                         else
+                         {
+                         	A[i].disableSCGName();
+                         }
                     }
-                     
+
 
 	   			}
 	   			if(A[i] != null)
 		   			A[i].specimenParentChanges(mspParameter.parentType);
-		   	//	model.filteredCollection.refresh();	
-		   		spLabelPane.specimenParentChanges(mspParameter.parentType);	
-  			}		
+		   	//	model.filteredCollection.refresh();
+		   		spLabelPane.specimenParentChanges(mspParameter.parentType);
+  			}
 
    		}
    		private function refreshParentLabel(spData:SpecimenData):void
    		{
-   			 spData.parentName = "";
-	   		 spData.isParentEnabled = true;   				 
+   			if(actualParentType == "Derived_Specimen")
+   			{
+   				 spData.parentName = actualParentName;//mspParameter.parentName;
+		   	     if(mspParameter.parentName != "")
+		   	     {
+		   		   spData.isParentEnabled = false;
+		   		 }
+   			}
+   			else
+   			{
+	   			 spData.parentName = "";
+		   		 spData.isParentEnabled = true;
+	   		}
 	   	}
-	   	
+
 	   	private function refreshSCGLabel(spData:SpecimenData):void
    		{
-   		     spData.parentName = mspParameter.parentName;
-	   	     if(mspParameter.parentName != "")
-	   	     {
-	   		   spData.isParentEnabled = false;
-	   		 }    		
+   			if(actualParentType == "New_Specimen")
+   			{
+   				 spData.parentName = actualParentName;//mspParameter.parentName;
+		   	     if(mspParameter.parentName != "")
+		   	     {
+		   		   	spData.isParentEnabled = false;
+		   		 }
+   			}
+   			else
+   			{
+   					spData.parentName = "";
+		   		 	spData.isParentEnabled = true;
+   			}
+
    		}
    		public function setPagination():void
 		{
