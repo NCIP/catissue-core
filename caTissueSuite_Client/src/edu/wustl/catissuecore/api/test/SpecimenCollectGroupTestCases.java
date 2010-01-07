@@ -10,7 +10,6 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
@@ -20,9 +19,7 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
