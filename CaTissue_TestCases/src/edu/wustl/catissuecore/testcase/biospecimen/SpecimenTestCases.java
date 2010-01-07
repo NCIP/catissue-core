@@ -1,35 +1,33 @@
 package edu.wustl.catissuecore.testcase.biospecimen;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
 import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
-import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
-import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
+import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
-import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
+import edu.wustl.catissuecore.testcase.util.RequestParameterUtility;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 /**
  * This class contains test cases for Specimen add and checks for label and barcode after its storage position is changed
  * @author Himanshu Aseeja
@@ -115,7 +113,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 
     	TestCaseUtility.setNameObjectMap("Specimen",specimen);
    	}
-
+	
 	/**
 	 * Test aliquot add
 	 * AliquotAction + CreateAliquotAction
@@ -503,9 +501,6 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			actionPerform();
 //			verifyForward("success");
 			verifyNoActionErrors();
-
-
-
 	 }
 
 	 /**
@@ -538,6 +533,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			newSpecForm.setAvailable(true);
 			newSpecForm.setAvailableQuantity("5");
 			newSpecForm.setCollectionStatus("Collected") ;
+			
 
 
 			Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
@@ -644,6 +640,292 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	    	specimen.setSpecimenCharacteristics(specimenCharacteristics);
 
 	    	TestCaseUtility.setNameObjectMap("TissueSpecimen",specimen);
+	   	}
+		
+		
+		/**
+		 * Test Specimen Add in Storage Container with restriction.
+		 */
+		@Test
+		public void testSpecimenAddInRestrictedCont()
+		{
+			//Adding Storage Type
+			
+			StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeFormWithTypeRestriction(this,
+					"Rest_Type_" + UniqueKeyGeneratorUtil.getUniqueKey(),3,3,"row","col","10","Active");
+			String[] holdsSpecimenClassTypes = new String[1];
+			holdsSpecimenClassTypes[0] = "Fluid";
+			storageTypeForm.setHoldsSpecimenClassTypes(holdsSpecimenClassTypes);
+			String[] fluid = {"Bile"};
+			storageTypeForm.setHoldsTissueSpType(null);
+			storageTypeForm.setHoldsCellSpType(null);
+			storageTypeForm.setHoldsFluidSpType(fluid);
+			storageTypeForm.setHoldsMolSpType(null);
+			storageTypeForm.setSpecimenOrArrayType("Specimen");
+			setRequestPathInfo("/StorageTypeAdd");
+			setActionForm(storageTypeForm);
+			actionPerform();
+			
+			verifyForward("success");
+			verifyNoActionErrors();
+			verifyActionMessages(new String[]{"object.add.successOnly"});
+			StorageTypeForm form = (StorageTypeForm) getActionForm();
+			StorageType storageType = new StorageType();
+
+			storageType.setName(form.getType());
+			storageType.setId(form.getId());
+			storageType.setOneDimensionLabel(form.getOneDimensionLabel());
+			storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
+			storageType.setDefaultTempratureInCentigrade(Double.parseDouble(form
+					.getDefaultTemperature()));
+
+			Capacity capacity = new Capacity();
+			capacity.setOneDimensionCapacity(form.getOneDimensionCapacity());
+			capacity.setTwoDimensionCapacity(form.getTwoDimensionCapacity());
+			storageType.setCapacity(capacity);
+			//Adding Storage Container
+			StorageContainerForm storageContainerForm = new StorageContainerForm();
+			storageContainerForm.setTypeId(storageType.getId());
+			logger.info("----StorageTypeId : " + storageType.getId());
+			storageContainerForm.setTypeName(storageType.getName());
+			Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
+			storageContainerForm.setSiteId(site.getId());
+			storageContainerForm.setNoOfContainers(1);
+			storageContainerForm.setOneDimensionCapacity(25);
+			storageContainerForm.setTwoDimensionCapacity(25);
+			storageContainerForm.setOneDimensionLabel("row");
+			storageContainerForm.setTwoDimensionLabel("row");
+			storageContainerForm.setDefaultTemperature("29");
+		
+			String[] holdsSpecimenClassCollection = new String[1];
+			holdsSpecimenClassCollection[0]="Fluid";
+			storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
+			storageContainerForm.setHoldsTissueSpType(null);
+			storageContainerForm.setHoldsCellSpType(null);
+			storageContainerForm.setHoldsFluidSpType(fluid);
+			storageContainerForm.setHoldsMolSpType(null);
+
+			storageContainerForm.setSpecimenOrArrayType("Specimen");
+			
+			storageContainerForm.setActivityStatus("Active");
+			storageContainerForm.setIsFull("False");
+			storageContainerForm.setOperation("add");
+			setRequestPathInfo("/StorageContainerAdd");
+			setActionForm(storageContainerForm);
+			actionPerform();
+			verifyForward("success");
+			verifyNoActionErrors();
+			StorageContainerForm scform=(StorageContainerForm) getActionForm();
+			
+			//Adding New Fluid Specimen
+			NewSpecimenForm newSpecForm = new NewSpecimenForm() ;
+			setRequestPathInfo("/NewSpecimenAdd");
+			newSpecForm.setLabel("label_" + UniqueKeyGeneratorUtil.getUniqueKey());
+			newSpecForm.setBarcode("barcode_" + UniqueKeyGeneratorUtil.getUniqueKey());
+
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
+			newSpecForm.setSpecimenCollectionGroupId(""+specimenCollectionGroup.getId()) ;
+			newSpecForm.setSpecimenCollectionGroupName(specimenCollectionGroup.getName()) ;
+
+			newSpecForm.setParentPresent(false);
+			newSpecForm.setTissueSide("Not Specified") ;
+			newSpecForm.setTissueSite("Not Specified");
+			newSpecForm.setPathologicalStatus("Not Specified");
+
+			Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("Biohazard");
+			newSpecForm.setBiohazardName(biohazard.getName());
+			newSpecForm.setBiohazardType(biohazard.getType());
+			newSpecForm.setStContSelection(3);
+			newSpecForm.setPos1("1");
+			newSpecForm.setPos2("1");
+			System.out.println(scform.getId()+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+			DefaultBizLogic bizlogic = new DefaultBizLogic();
+			StorageContainer sc = null;
+			try
+			{
+				sc= (StorageContainer)bizlogic.
+				retrieve("edu.wustl.catissuecore.domain.StorageContainer",scform.getId());
+			}
+			catch (BizLogicException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(sc.getName()+">>>>>>>>>>>>>>");
+			newSpecForm.setSelectedContainerName(sc.getName());
+			newSpecForm.setClassName("Fluid");
+			newSpecForm.setType("Bile");
+			newSpecForm.setQuantity("10") ;
+			newSpecForm.setAvailable(true);
+			newSpecForm.setAvailableQuantity("10");
+			newSpecForm.setCollectionStatus("Collected") ;
+			
+			Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
+			CollectionProtocolEventBean event = (CollectionProtocolEventBean) collectionProtocolEventMap.get("E1");
+
+			newSpecForm.setCollectionEventId(event.getId()) ;
+
+			newSpecForm.setCollectionEventSpecimenId(0L);
+			newSpecForm.setCollectionEventdateOfEvent("01-28-2009");
+			newSpecForm.setCollectionEventTimeInHours("11") ;
+			newSpecForm.setCollectionEventTimeInMinutes("2") ;
+			newSpecForm.setCollectionEventUserId(1L) ;
+			newSpecForm.setCollectionEventCollectionProcedure("Use CP Defaults");
+			newSpecForm.setCollectionEventContainer("Use CP Defaults") ;
+
+			newSpecForm.setReceivedEventId(event.getId());
+			newSpecForm.setReceivedEventDateOfEvent("01-28-2009");
+			newSpecForm.setReceivedEventTimeInHours("11") ;
+			newSpecForm.setReceivedEventTimeInMinutes("2") ;
+			newSpecForm.setReceivedEventUserId(1L) ;
+			newSpecForm.setReceivedEventReceivedQuality("Acceptable");
+
+			newSpecForm.setOperation("add");
+			newSpecForm.setPageOf("pageOfNewSpecimen");
+			setActionForm(newSpecForm);
+			actionPerform();
+			verifyForward("success");
+			newSpecForm=(NewSpecimenForm)getActionForm();
+			//Retrieving specimen object for edit
+			System.out.println("----specimen ID : " + newSpecForm.getId());
+	   	}
+		/**
+		 * Test Specimen Add negative test case
+		 */
+		@Test
+		public void testSpecimenAddInWrongContainer()
+		{
+			StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeFormWithTypeRestriction(this,
+					"Rest_Type_" + UniqueKeyGeneratorUtil.getUniqueKey(),3,3,"row","col","10","Active");
+			String[] holdsSpecimenClassTypes = new String[1];
+			holdsSpecimenClassTypes[0] = "Fluid";
+			storageTypeForm.setHoldsSpecimenClassTypes(holdsSpecimenClassTypes);
+			String[] fluid = {"Bile"};
+			storageTypeForm.setHoldsTissueSpType(null);
+			storageTypeForm.setHoldsCellSpType(null);
+			storageTypeForm.setHoldsFluidSpType(fluid);
+			storageTypeForm.setHoldsMolSpType(null);
+			storageTypeForm.setSpecimenOrArrayType("Specimen");
+			setRequestPathInfo("/StorageTypeAdd");
+			setActionForm(storageTypeForm);
+			actionPerform();
+			
+			verifyForward("success");
+			verifyNoActionErrors();
+			verifyActionMessages(new String[]{"object.add.successOnly"});
+			StorageTypeForm form = (StorageTypeForm) getActionForm();
+			StorageType storageType = new StorageType();
+
+			storageType.setName(form.getType());
+			storageType.setId(form.getId());
+			storageType.setOneDimensionLabel(form.getOneDimensionLabel());
+			storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
+			storageType.setDefaultTempratureInCentigrade(Double.parseDouble(form
+					.getDefaultTemperature()));
+
+			Capacity capacity = new Capacity();
+			capacity.setOneDimensionCapacity(form.getOneDimensionCapacity());
+			capacity.setTwoDimensionCapacity(form.getTwoDimensionCapacity());
+			storageType.setCapacity(capacity);
+			//Adding Storage Container
+			StorageContainerForm storageContainerForm = new StorageContainerForm();
+			storageContainerForm.setTypeId(storageType.getId());
+			logger.info("----StorageTypeId : " + storageType.getId());
+			storageContainerForm.setTypeName(storageType.getName());
+			Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
+			storageContainerForm.setSiteId(site.getId());
+			storageContainerForm.setNoOfContainers(1);
+			storageContainerForm.setOneDimensionCapacity(25);
+			storageContainerForm.setTwoDimensionCapacity(25);
+			storageContainerForm.setOneDimensionLabel("row");
+			storageContainerForm.setTwoDimensionLabel("row");
+			storageContainerForm.setDefaultTemperature("29");
+		
+			String[] holdsSpecimenClassCollection = new String[1];
+			holdsSpecimenClassCollection[0]="Fluid";
+			storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
+			storageContainerForm.setHoldsTissueSpType(null);
+			storageContainerForm.setHoldsCellSpType(null);
+			storageContainerForm.setHoldsFluidSpType(fluid);
+			storageContainerForm.setHoldsMolSpType(null);
+			storageContainerForm.setSpecimenOrArrayType("Specimen");
+			storageContainerForm.setActivityStatus("Active");
+			storageContainerForm.setIsFull("False");
+			storageContainerForm.setOperation("add");
+			setRequestPathInfo("/StorageContainerAdd");
+			setActionForm(storageContainerForm);
+			actionPerform();
+			verifyForward("success");
+			verifyNoActionErrors();
+			StorageContainerForm scform=(StorageContainerForm) getActionForm();
+			
+			//Adding New Fluid Specimen
+			NewSpecimenForm newSpecForm = new NewSpecimenForm() ;
+			setRequestPathInfo("/NewSpecimenAdd");
+			newSpecForm.setLabel("label_" + UniqueKeyGeneratorUtil.getUniqueKey());
+			newSpecForm.setBarcode("barcode_" + UniqueKeyGeneratorUtil.getUniqueKey());
+
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
+			newSpecForm.setSpecimenCollectionGroupId(""+specimenCollectionGroup.getId()) ;
+			newSpecForm.setSpecimenCollectionGroupName(specimenCollectionGroup.getName()) ;
+
+			newSpecForm.setParentPresent(false);
+			newSpecForm.setTissueSide("Not Specified") ;
+			newSpecForm.setTissueSite("Not Specified");
+			newSpecForm.setPathologicalStatus("Not Specified");
+
+			Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("Biohazard");
+			newSpecForm.setBiohazardName(biohazard.getName());
+			newSpecForm.setBiohazardType(biohazard.getType());
+			newSpecForm.setStContSelection(3);
+			newSpecForm.setPos1("1");
+			newSpecForm.setPos2("1");
+			DefaultBizLogic bizlogic = new DefaultBizLogic();
+			StorageContainer sc = null;
+			try
+			{
+				sc= (StorageContainer)bizlogic.
+				retrieve("edu.wustl.catissuecore.domain.StorageContainer",scform.getId());
+			}
+			catch (BizLogicException e)
+			{
+				e.printStackTrace();
+			}
+			System.out.println(sc.getName()+">>>>>>>>>>>>>>");
+			newSpecForm.setSelectedContainerName(sc.getName());
+			newSpecForm.setClassName("Tissue");
+			newSpecForm.setType("Fixed Tissue");
+			newSpecForm.setQuantity("10") ;
+			newSpecForm.setAvailable(true);
+			newSpecForm.setAvailableQuantity("10");
+			newSpecForm.setCollectionStatus("Collected");
+			
+			Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
+			CollectionProtocolEventBean event = (CollectionProtocolEventBean) collectionProtocolEventMap.get("E1");
+
+			newSpecForm.setCollectionEventId(event.getId()) ;
+
+			newSpecForm.setCollectionEventSpecimenId(0L);
+			newSpecForm.setCollectionEventdateOfEvent("01-28-2009");
+			newSpecForm.setCollectionEventTimeInHours("11") ;
+			newSpecForm.setCollectionEventTimeInMinutes("2") ;
+			newSpecForm.setCollectionEventUserId(1L) ;
+			newSpecForm.setCollectionEventCollectionProcedure("Use CP Defaults");
+			newSpecForm.setCollectionEventContainer("Use CP Defaults") ;
+
+			newSpecForm.setReceivedEventId(event.getId());
+			newSpecForm.setReceivedEventDateOfEvent("01-28-2009");
+			newSpecForm.setReceivedEventTimeInHours("11") ;
+			newSpecForm.setReceivedEventTimeInMinutes("2") ;
+			newSpecForm.setReceivedEventUserId(1L) ;
+			newSpecForm.setReceivedEventReceivedQuality("Acceptable");
+
+			newSpecForm.setOperation("add");
+			newSpecForm.setPageOf("pageOfNewSpecimen");
+			setActionForm(newSpecForm);
+			actionPerform();
+			verifyForward("failure");
+	
 	   	}
 
 }
