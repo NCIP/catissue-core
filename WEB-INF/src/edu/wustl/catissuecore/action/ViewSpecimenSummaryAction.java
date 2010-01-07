@@ -804,7 +804,54 @@ public class ViewSpecimenSummaryAction extends Action
 			return;
 		}
 		final Map collectionProtocolEventMap = (Map) session
-				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+		.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+
+		final CollectionProtocolEventBean eventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
+		.get(eventId); // get nullpointer sometimes
+		final LinkedHashMap specimenMap = (LinkedHashMap) eventBean.getSpecimenRequirementbeanMap();
+
+		final Iterator specItr = specimenMap.values().iterator();
+		while (specItr.hasNext())
+		{
+			final GenericSpecimen pSpecimen = (GenericSpecimen) specItr.next();
+			//bug 15395 
+			if (pSpecimen.getCheckedSpecimen() == false)
+			{
+				this.checkOrUnCheckChildSpecimens(pSpecimen,false);
+			}
+			else
+			{
+				this.checkOrUnCheckChildSpecimens(pSpecimen,true);
+			}
+		}
+	}
+	/**
+	 * Used to check and uncheck the child specimens according to parent
+	 * @param pSpecimen - GenericSpecimen
+	 * @param isCheck - check or uncheck the child specimen
+	 */
+	private void checkOrUnCheckChildSpecimens(GenericSpecimen pSpecimen,boolean isCheck)
+	{
+		if (pSpecimen.getAliquotSpecimenCollection() != null)
+		{
+			final Iterator aliqItr = pSpecimen.getAliquotSpecimenCollection().values().iterator();
+			while (aliqItr.hasNext())
+			{
+				final GenericSpecimen aliqSpecimen = (GenericSpecimen) aliqItr.next();
+				aliqSpecimen.setCheckedSpecimen(isCheck);
+				this.checkOrUnCheckChildSpecimens(aliqSpecimen,isCheck);
+			}
+		}
+		if (pSpecimen.getDeriveSpecimenCollection() != null)
+		{
+			final Iterator derItr = pSpecimen.getDeriveSpecimenCollection().values().iterator();
+			while (derItr.hasNext())
+			{
+				final GenericSpecimen derSpecimen = (GenericSpecimen) derItr.next();
+				derSpecimen.setCheckedSpecimen(isCheck);
+				this.checkOrUnCheckChildSpecimens(derSpecimen,isCheck);
+			}
+		}
 	}
 
 	/**
