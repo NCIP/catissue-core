@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import edu.wustl.catissuecore.actionForm.shippingtracking.BaseShipmentForm;
@@ -44,7 +45,7 @@ public class ShippingTrackingUtility
 		container.setCapacity(capacity);
 		container.getHoldsSpecimenArrayTypeCollection();
 		container.setName(Constants.IN_TRANSIT_CONTAINER_NAME_PREFIX + shipmentForm.getLabel());
-		container.setSpecimenPositionCollection(new HashSet<SpecimenPosition>());
+		container.setSpecimenPositionCollection(new LinkedHashSet<SpecimenPosition>());
 		return container;
 	}
 
@@ -72,7 +73,7 @@ public class ShippingTrackingUtility
 		capacity.setTwoDimensionCapacity(1);
 		container.setCapacity(capacity);
 		container.setName(containerName);
-		container.setSpecimenPositionCollection(new HashSet<SpecimenPosition>());
+		container.setSpecimenPositionCollection(new LinkedHashSet<SpecimenPosition>());
 		return container;
 	}
 

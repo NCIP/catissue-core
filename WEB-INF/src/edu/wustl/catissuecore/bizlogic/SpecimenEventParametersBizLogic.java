@@ -514,7 +514,9 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			//This is the event number corresponding to the current container.
 			//This number is required to get the next location in the container that should be available
 			Integer eventNumber = null;
-
+			//Bug 15392
+			Integer pos1 = null;
+			Integer pos2 = null;
 			for (int i = 0; i < events.size(); i++)
 			{
 				specimenEventParameters = (SpecimenEventParameters) events.get(i);
@@ -522,6 +524,14 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				if (specimenEventParameters instanceof TransferEventParameters)
 				{
 					final TransferEventParameters trEvent = (TransferEventParameters) specimenEventParameters;
+					//Bug 15392
+					pos1 = trEvent.getToPositionDimensionOne();
+					pos2 = trEvent.getToPositionDimensionTwo();
+					if(((pos1 == null || pos2 == null) && i!=0))
+					{
+						pos1 = ((TransferEventParameters)(events.get(i-1))).getToPositionDimensionOne();
+						pos2 = ((TransferEventParameters)(events.get(i-1))).getToPositionDimensionTwo();
+					}
 					eventNumber = (Integer) containerEventNumberMap.get(trEvent
 							.getToStorageContainer().getName());
 					if (eventNumber == null)
@@ -542,9 +552,19 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						eventNumber++;
 					}
 				}
-
-				if (!this.validateSingleEvent(specimenEventParameters, dao, operation, eventNumber
-						.intValue()))
+				boolean isValidEvent = true;
+				//bug 15258 and 15260
+				if (specimenEventParameters instanceof TransferEventParameters)
+				{
+					isValidEvent = this.validateSingleTransferEvent(specimenEventParameters, dao, operation, eventNumber
+							.intValue(),pos1,pos2);
+				}
+				else
+				{
+					isValidEvent = this.validateSingleEvent(specimenEventParameters, dao, operation, eventNumber
+							.intValue());
+				}
+				if(!isValidEvent)
 				{
 					return false;
 				}
@@ -553,6 +573,123 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		else
 		{
 			return this.validateSingleEvent(obj, dao, operation, 0);
+		}
+		return true;
+	}
+	/**
+	 * validates transfer event
+	 * @param obj - obj
+	 * @param dao - dao
+	 * @param operation - operation
+	 * @param numberOfEvent - numberOfEvent
+	 * @param pos1 - pos1
+	 * @param pos2 - pos2
+	 * @return boolean
+	 * @throws BizLogicException - BizLogicException
+	 */
+	//Bug 15392
+	private boolean validateSingleTransferEvent(Object obj, DAO dao, String operation, int numberOfEvent,Integer pos1,Integer pos2)
+	throws BizLogicException
+	{
+		final SpecimenEventParameters eventParameter = (SpecimenEventParameters) obj;
+		final TransferEventParameters parameter = (TransferEventParameters) eventParameter;
+		final Specimen specimen = this.getSpecimenObject(dao, parameter);
+		Long fromContainerId = null;
+		Integer fromPos1 =  null;
+		Integer fromPos2 =  null;
+		if (specimen.getSpecimenPosition() != null)
+		{
+			fromContainerId = specimen.getSpecimenPosition().getStorageContainer().getId();
+			fromPos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
+			fromPos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
+		}
+
+		if ((fromContainerId == null && parameter.getFromStorageContainer() != null)
+				|| (fromContainerId != null && parameter.getFromStorageContainer() == null))
+		{
+			throw this.getBizLogicException(null, "spec.moved.diff.loc", specimen
+					.getLabel());
+		}
+		else if ((fromContainerId != null && parameter.getFromStorageContainer() != null)
+				&& !((fromContainerId.equals(parameter.getFromStorageContainer().getId())
+						&& fromPos1.equals(parameter.getFromPositionDimensionOne()) && fromPos2
+						.equals(parameter.getFromPositionDimensionTwo()))))
+		{
+
+			throw this.getBizLogicException(null, "spec.moved.diff.loc", specimen
+					.getLabel());
+		}
+		if (parameter.getToStorageContainer() != null
+				&& parameter.getToStorageContainer().getName() != null)
+		{
+
+			final StorageContainer storageContainerObj = parameter.getToStorageContainer();
+			final List list = this.retrieveStorageContainers(dao, parameter);
+
+			if (!list.isEmpty())
+			{
+				storageContainerObj.setId((Long) list.get(0));
+				parameter.setToStorageContainer(storageContainerObj);
+			}
+			else
+			{
+				//bug 15083
+				final String message = ApplicationProperties
+				.getValue("transfereventparameters.storageContainer.name");
+				throw this.getBizLogicException(null, "errors.invalid", message+": " + specimen.getLabel());						
+			}
+
+			Integer xPos = parameter.getToPositionDimensionOne();
+			Integer yPos = parameter.getToPositionDimensionTwo();
+
+			/**
+			 *  Following code is added to set the x and y dimension in case only storage container is given 
+			 *  and x and y positions are not given 
+			 */
+			if (yPos == null || xPos == null)
+			{
+				String storageValue = null;
+				Position position;
+				try
+				{
+					position = StorageContainerUtil
+					.getFirstAvailablePositionsInContainer(storageContainerObj,
+							this.storageContainerIds, dao,pos1,pos2);
+					storageValue =
+						StorageContainerUtil.getStorageValueKey
+						(storageContainerObj.getName(), null,position.getXPos(),
+								position.getYPos());
+					storageContainerIds.add(storageValue);
+				}
+				catch (ApplicationException e)
+				{
+					e.printStackTrace();
+					throw new
+					BizLogicException(e.getErrorKey(),e,e.getMsgValues());
+				}
+				if (position != null)
+				{
+					parameter.setToPositionDimensionOne(position.getXPos());
+					parameter.setToPositionDimensionTwo(position.getYPos());
+				}
+				else
+				{
+					throw this.getBizLogicException(null, "storage.specified.full", "");
+				}
+				xPos = parameter.getToPositionDimensionOne();
+				yPos = parameter.getToPositionDimensionTwo();
+			}
+			if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
+			{
+
+				throw this.getBizLogicException(null, "errors.item.format",
+						ApplicationProperties
+						.getValue("transfereventparameters.toposition"));
+			}
+		}
+		if (Constants.EDIT.equals(operation))
+		{
+			//validateTransferEventParameters(eventParameter);
 		}
 		return true;
 	}
@@ -696,113 +833,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				}
 				break;
 
-			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID :
-				final TransferEventParameters parameter = (TransferEventParameters) eventParameter;
-				final Specimen specimen = this.getSpecimenObject(dao, parameter);
-				//				Long fromContainerId = (Long) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition");
-				//				Integer pos1 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPosition.positionDimensionOne");
-				//				Integer pos2 = (Integer) dao.retrieveAttribute(Specimen.class.getName(),parameter.getSpecimen().getId(),"specimenPositionpositionDimensionTwo");
-				Long fromContainerId = null;
-				Integer pos1 = null;
-				Integer pos2 = null;
-				if (specimen.getSpecimenPosition() != null)
-				{
-					fromContainerId = specimen.getSpecimenPosition().getStorageContainer().getId();
-					pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
-					pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
-				}
-
-				if ((fromContainerId == null && parameter.getFromStorageContainer() != null)
-						|| (fromContainerId != null && parameter.getFromStorageContainer() == null))
-				{
-					throw this.getBizLogicException(null, "spec.moved.diff.loc", specimen
-							.getLabel());
-				}
-				else if ((fromContainerId != null && parameter.getFromStorageContainer() != null)
-						&& !((fromContainerId.equals(parameter.getFromStorageContainer().getId())
-								&& pos1.equals(parameter.getFromPositionDimensionOne()) && pos2
-								.equals(parameter.getFromPositionDimensionTwo()))))
-				{
-
-					throw this.getBizLogicException(null, "spec.moved.diff.loc", specimen
-							.getLabel());
-				}
-				if (parameter.getToStorageContainer() != null
-						&& parameter.getToStorageContainer().getName() != null)
-				{
-
-					final StorageContainer storageContainerObj = parameter.getToStorageContainer();
-					final List list = this.retrieveStorageContainers(dao, parameter);
-
-					if (list.isEmpty())
-					{
-						final String message = ApplicationProperties
-								.getValue("transfereventparameters.toposition");
-						throw this.getBizLogicException(null, "errors.invalid", message
-								+ " for specimen: " + specimen.getLabel());
-
-					}
-					else
-					{
-						storageContainerObj.setId((Long) list.get(0));
-						parameter.setToStorageContainer(storageContainerObj);
-					}
-
-					Integer xPos = parameter.getToPositionDimensionOne();
-					Integer yPos = parameter.getToPositionDimensionTwo();
-
-					/**
-					 *  Following code is added to set the x and y dimension in case only storage container is given
-					 *  and x and y positions are not given
-					 */
-					if (yPos == null || xPos == null)
-					{
-						String storageValue = null;
-						Position position;
-						try
-						{
-							position = StorageContainerUtil.getFirstAvailablePositionsInContainer(
-									storageContainerObj, this.storageContainerIds, dao);
-							storageValue = StorageContainerUtil.getStorageValueKey(
-									storageContainerObj.getName(), null, position.getXPos(),
-									position.getYPos());
-							storageContainerIds.add(storageValue);
-						}
-						catch (ApplicationException e)
-						{
-							LOGGER.debug(e.getMessage());
-							throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
-						}
-						if (position == null)
-						{
-							throw this.getBizLogicException(null, "storage.specified.full", "");
-						}
-						else
-						{
-							parameter.setToPositionDimensionOne(position.getXPos());
-							parameter.setToPositionDimensionTwo(position.getYPos());
-
-						}
-						xPos = parameter.getToPositionDimensionOne();
-						yPos = parameter.getToPositionDimensionTwo();
-					}
-					if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
-					{
-
-						throw this.getBizLogicException(null, "errors.item.format",
-								ApplicationProperties
-										.getValue("transfereventparameters.toposition"));
-					}
-				}
-				//				if (Constants.EDIT.equals(operation))
-				//				{
-				//					//validateTransferEventParameters(eventParameter);
-				//				}
-				break;
-			//Case added for disposal event for bug #15185
-			case Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID :
-				validateDisposalEvent(dao, eventParameter);
-				break;
+			
+				
 		}
 		return true;
 	}

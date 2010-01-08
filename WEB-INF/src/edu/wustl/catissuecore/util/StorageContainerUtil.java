@@ -128,12 +128,22 @@ public final class StorageContainerUtil
 		}
 		return map;
 	}
-
+   /**
+    * 
+    * @param storageContainer - StorageContainer
+    * @param allocatedPositions - allocatedPositions
+    * @param dao - DAO object
+    * @param pos1 - position one
+    * @param pos2 - position two
+    * @return Position object 
+    * @throws ApplicationException - ApplicationException
+    */
+   //Bug 15392
 	public static Position getFirstAvailablePositionsInContainer(StorageContainer storageContainer,
-			HashSet<String> allocatedPositions, DAO dao) throws ApplicationException
+			HashSet<String> allocatedPositions, DAO dao,Integer pos1,Integer pos2) throws ApplicationException
 	{
 		final Position position = getFirstAvailablePositionInContainer(storageContainer,
-				dao, allocatedPositions);
+				dao, allocatedPositions,pos1,pos2);
 		if (position == null)
 		{
 			throw AppUtility.getApplicationException(null, "storage.full", "");
@@ -141,17 +151,22 @@ public final class StorageContainerUtil
 		return position;
 	}
 	/**
-	 * @param containerId
-	 * @param aliquotCount
-	 * @param positionDimensionOne
-	 * @param positionDimensionTwo
-	 * @param dao
+	 * 
+	 * @param containerId - containerId
+	 * @param aliquotCount - aliquotCount
+	 * @param positionDimensionOne -  Dimension X
+	 * @param positionDimensionTwo - Dimension Y
+	 * @param dao - DAO object
+	 * @param pos1 - position one
+	 * @param pos2 - position two
 	 * @return Map
+	 * @throws BizLogicException - BizLogicException
 	 */
+	//Bug 15392
 	public static Map<NameValueBean, List<NameValueBean>> getAvailablePositionMapForContainer(String containerId, int aliquotCount,
-			Integer positionDimensionOne, Integer positionDimensionTwo, DAO dao)
+			Integer positionDimensionOne, Integer positionDimensionTwo, DAO dao,Integer pos1,Integer pos2)
 			throws BizLogicException
-	{
+			{
 		final Map<NameValueBean, List<NameValueBean>> map = new TreeMap<NameValueBean, List<NameValueBean>>();
 		int count = 0;
 		final int dimX = positionDimensionOne + 1;
@@ -162,24 +177,37 @@ public final class StorageContainerUtil
 
 		for (int x = 1; x < availablePosistions.length; x++)
 		{
-
-			final List<NameValueBean> list = new ArrayList<NameValueBean>();
-
-			for (int y = 1; y < availablePosistions[x].length; y++)
+			if(x >= pos1)
 			{
-				if (availablePosistions[x][y])
+				final List<NameValueBean> list = new ArrayList<NameValueBean>();
+                if(pos2 == (availablePosistions[x].length-1))                	
+                {
+                	pos2 = 0;
+                	continue;                	
+                }
+				for (int y = 1; y < availablePosistions[x].length; y++)
 				{
-					list.add(new NameValueBean(new Integer(y), new Integer(y)));
-					count++;
+					if(x == pos1)//bug 15412
+					{
+						if(y <= pos2)
+						{
+						  continue;
+						}
+					}
+					if (availablePosistions[x][y])
+					{
+						list.add(new NameValueBean(new Integer(y), new Integer(y)));
+						count++;
+					}													
+				}
+				if (!list.isEmpty())
+				{
+					final Integer xObj = new Integer(x);
+					final NameValueBean nvb = new NameValueBean(xObj, xObj);
+					map.put(nvb, list);
 				}
 			}
 
-			if (!list.isEmpty())
-			{
-				final Integer xObj = new Integer(x);
-				final NameValueBean nvb = new NameValueBean(xObj, xObj);
-				map.put(nvb, list);
-			}
 		}
 		if (count < aliquotCount)
 		{
@@ -192,11 +220,14 @@ public final class StorageContainerUtil
 	 * @param container Container object
 	 * @param dao DAO object
 	 * @param allocatedPositions Set of allocatedPositions
+	 * @param pos1 - position one
+	 * @param pos2 - position two
 	 * @return Positions
 	 * @throws BizLogicException BizLogicException
 	 */
+	//bug 15260
 	private static Position getFirstAvailablePositionInContainer(Container container, DAO dao,
-			HashSet<String> allocatedPositions) throws BizLogicException
+			HashSet<String> allocatedPositions,Integer pos1,Integer pos2) throws BizLogicException
 	{
 		Position position = null;
 		try
@@ -205,9 +236,14 @@ public final class StorageContainerUtil
 			Integer yPos;
 			String containerValue = null;
 			final Capacity capacity = getContainerCapacity(container, dao);
+			if(pos1 == null && pos2 == null)
+			{
+				pos1 = 0;
+				pos2 = 0;
+			}
 			final Map positionMap = getAvailablePositionMapForContainer(String
 					.valueOf(container.getId()), 0, capacity.getOneDimensionCapacity(), capacity
-					.getTwoDimensionCapacity(), dao);
+					.getTwoDimensionCapacity(), dao,pos1,pos2);
 			if (positionMap != null)
 			{
 				final Iterator containerPosIterator = positionMap.keySet().iterator();
@@ -243,10 +279,12 @@ public final class StorageContainerUtil
 							position.setYPos(yPos);
 							break;
 						}
+
 					}
 				}
-			}
-		}
+
+			}		
+	    }
 		catch (final DAOException daoEx)
 		{
 			logger.error(daoEx.getMessage(),daoEx);
@@ -326,6 +364,61 @@ public final class StorageContainerUtil
 			}
 		}
 	}
+	
+	/**
+	 * @param containerId
+	 * @param aliquotCount
+	 * @param positionDimensionOne
+	 * @param positionDimensionTwo
+	 * @param dao
+	 * @return Map
+	 */
+	 //added from p4
+	public static Map getAvailablePositionMapForContainer(String containerId, int aliquotCount,
+			Integer positionDimensionOne, Integer positionDimensionTwo, DAO dao)
+			throws BizLogicException
+	{
+		final Map map = new TreeMap();
+		int count = 0;
+		// Logger.out.debug("dimX:"+positionDimensionOne+":dimY:"+positionDimensionTwo);
+		// if (!container.isFull().booleanValue())
+		// {
+		final int dimX = positionDimensionOne + 1;
+		final int dimY = positionDimensionTwo + 1;
+
+		final boolean[][] availablePosistions = getAvailablePositionsForContainer(containerId,
+				dimX, dimY, dao);
+
+		for (int x = 1; x < availablePosistions.length; x++)
+		{
+
+			final List list = new ArrayList();
+
+			for (int y = 1; y < availablePosistions[x].length; y++)
+			{
+				if (availablePosistions[x][y])
+				{
+					list.add(new NameValueBean(new Integer(y), new Integer(y)));
+					count++;
+				}
+			}
+
+			if (!list.isEmpty())
+			{
+				final Integer xObj = new Integer(x);
+				final NameValueBean nvb = new NameValueBean(xObj, xObj);
+				map.put(nvb, list);
+			}
+		}
+		// }
+		// Logger.out.info("Map :"+map);
+		if (count < aliquotCount)
+		{
+			return new TreeMap();
+		}
+		return map;
+	}
+
 	/**
 	 * This function returns the first available position in a container which can be allocated. 
 	 * If container is full, returns null
@@ -795,7 +888,7 @@ public final class StorageContainerUtil
 		final String containerID = (String) aliquotMap.get(containerIDKey);
 		final Container container = new Container();
 		container.setId(Long.valueOf(containerID));
-		final Position position = getFirstAvailablePositionInContainer(container, dao,allocatedPositions);
+		final Position position = getFirstAvailablePositionInContainer(container, dao,allocatedPositions,null,null);
 		String containerValue = null;
 		if (position != null)
 		{
@@ -816,7 +909,10 @@ public final class StorageContainerUtil
 	}
 
 	/**
-	 * @return
+	 * 
+	 * @param pos1 - position one
+	 * @param pos2 - position two
+	 * @return - boolean
 	 */
 	public static boolean checkPos1AndPos2(String pos1, String pos2)
 	{

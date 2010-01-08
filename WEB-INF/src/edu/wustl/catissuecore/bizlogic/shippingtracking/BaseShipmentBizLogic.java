@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -1567,7 +1568,7 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 				specimenPosition.setStorageContainer( container );
 				spPosObjCollection.add( specimenPosition );
 			}
-			container.setSpecimenPositionCollection( new HashSet < SpecimenPosition >() );
+			container.setSpecimenPositionCollection( new LinkedHashSet < SpecimenPosition >() );
 			container.getSpecimenPositionCollection().addAll( spPosObjCollection );
 		}
 	}

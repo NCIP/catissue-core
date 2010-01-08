@@ -121,6 +121,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * storageContainerIds.
 	 */
 	private HashSet<String> storageContainerIds = new HashSet<String>();
+	private String storagePositions = new String();
 	/**
 	 * cpbased.
 	 */
@@ -133,6 +134,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException
 	{
 		this.storageContainerIds = new HashSet<String>();
+		storagePositions = "";
 	}
 
 	/**
@@ -153,9 +155,28 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			final Specimen specimen = (Specimen) obj;
 			this.setParent(dao, specimen);
-			this.populateDomainObjectToInsert(dao, sessionDataBean, specimen);
+			//bug 15392 start
+			Integer pos1 = null;
+			Integer pos2 = null;
+			if(!storagePositions.trim().equals(""))
+			{
+				String positionStr = storagePositions;
+				String positions[] = positionStr.split(",");
+				pos1 = Integer.valueOf(positions[0]);
+				pos2 = Integer.valueOf(positions[1]);
+			}
+			this.populateDomainObjectToInsert(dao, sessionDataBean, specimen,pos1,pos2);
 			specimen.doRoundOff();
 			dao.insert(specimen);
+			if(specimen.getSpecimenPosition()!=null)
+			{
+				StringBuffer posBuffer =  new StringBuffer();
+				posBuffer.append(specimen.getSpecimenPosition().getPositionDimensionOne());
+				posBuffer.append(',');
+				posBuffer.append(specimen.getSpecimenPosition().getPositionDimensionTwo());
+				storagePositions = posBuffer.toString();
+			}
+			//Bug 15392 end
 		}
 		catch (final ApplicationException exp)
 		{
@@ -384,9 +405,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @throws DAOException : DAOException
 	 *             User Not Authorized Exception
 	 * @throws SMException : SMException
+       Bug 15392
 	 */
 	private void populateDomainObjectToInsert(DAO dao, SessionDataBean sessionDataBean,
-			Specimen specimen) throws BizLogicException, DAOException, SMException
+			Specimen specimen,Integer pos1,Integer pos2) throws BizLogicException, DAOException, SMException
 	{
 		this.setSpecimenCreatedOnDate(specimen);
 		this.setSpecimenParent(specimen, dao);
@@ -398,11 +420,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					Constants.DERIVED_SPECIMEN_DISPOSAL_REASON);
 		}
 		// allocatePositionForSpecimen(specimen);
-		this.setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
+		this.setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true,pos1,pos2);
 		this.setSpecimenAttributes(dao, specimen, sessionDataBean);
 		this.generateLabel(specimen);
 		this.generateBarCode(specimen);
-		this.insertChildSpecimens(specimen, dao, sessionDataBean);
+		this.insertChildSpecimens(specimen, dao, sessionDataBean,pos1,pos2);
 	}
 
 	/**
@@ -711,17 +733,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @throws SMException
 	 *             Security related exception
 	 * @throws DAOException : DAOException
+       Bug 15392
 	 */
-	private void insertChildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean)
+	private void insertChildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean,Integer pos1,Integer pos2)
 			throws BizLogicException, DAOException, SMException
 	{
 		final Collection<AbstractSpecimen> childSpecimenCollection = specimen
 				.getChildSpecimenCollection();
-		final Iterator<AbstractSpecimen> iterator = childSpecimenCollection.iterator();
-		while (iterator.hasNext())
+		if(childSpecimenCollection != null)
 		{
-			final Specimen childSpecimen = (Specimen) iterator.next();
-			this.populateDomainObjectToInsert(dao, sessionDataBean, childSpecimen);
+			final Iterator<AbstractSpecimen> iterator = childSpecimenCollection.iterator();
+			while (iterator.hasNext())
+			{
+				final Specimen childSpecimen = (Specimen) iterator.next();
+				this.populateDomainObjectToInsert(dao, sessionDataBean, childSpecimen,pos1,pos2);
+			}
 		}
 	}
 
@@ -1471,7 +1497,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				this.storageContainerIds.clear();
 				this.allocatePositionForSpecimen(specimen);
-				this.setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true);
+				this.setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true,null,null);//bug 15260
 				persistentSpecimen.setSpecimenPosition(specimen.getSpecimenPosition());
 			}
 			// Set Specimen Domain Object
@@ -1993,8 +2019,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @param partOfMultipleSpecimen
 	 *            boolean true or false
 	 */
+	// Bug 15392
 	private void setStorageLocationToNewSpecimen(DAO dao, Specimen specimen,
-			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen)
+			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen,Integer specPos1,Integer specPos2)
 			throws BizLogicException
 	{
 		try
@@ -2039,7 +2066,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				{
 					final Position position = StorageContainerUtil
 							.getFirstAvailablePositionsInContainer(storageContainerObj,
-									this.storageContainerIds, dao);
+									this.storageContainerIds, dao,specPos1,specPos2);//janhavi
 
 					specPos = new SpecimenPosition();
 					specPos.setPositionDimensionOne(position.getXPos());
@@ -2259,23 +2286,41 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @param dao : dao
 	 * @param sessionDataBean : sessionDataBean
 	 * @param partOfMultipleSpecimen : partOfMultipleSpecimen
+	 * @param pos1 position one
+	 * @param pos1 position two
 	 * @throws BizLogicException : BizLogicException
 	 */
+	 //Bug 15392
 	private void setSpecimenStorageRecursively(Specimen newSpecimen, DAO dao,
-			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen)
+			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen,Integer pos1,Integer pos2)
 			throws BizLogicException
 	{
-		this.setStorageLocationToNewSpecimen(dao, newSpecimen, sessionDataBean, true);
+		this.setStorageLocationToNewSpecimen(dao, newSpecimen, sessionDataBean, true,pos1,pos2);
 		if (newSpecimen.getChildSpecimenCollection() != null)
 		{
 			final Collection<AbstractSpecimen> specimenCollection = newSpecimen
 					.getChildSpecimenCollection();
-			final Iterator<AbstractSpecimen> iterator = specimenCollection.iterator();
-			while (iterator.hasNext())
+			AbstractSpecimen array[] = new AbstractSpecimen[specimenCollection.size()];
+			specimenCollection.toArray(array);
+			//final Iterator<AbstractSpecimen> iterator = specimenCollection.iterator();
+			//while (iterator.hasNext())
+			
+			for(int i=0;i<array.length;i++)
 			{
-				final Specimen specimen = (Specimen) iterator.next();
+				final Specimen specimen = (Specimen) array[i];
 				specimen.setSpecimenCollectionGroup(newSpecimen.getSpecimenCollectionGroup());
-				this.setSpecimenStorageRecursively(specimen, dao, sessionDataBean, true);
+				if(specimen.getSpecimenPosition()!=null)//if specimen is virtual position will be null.
+				{
+				  pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
+				  pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
+				}
+				if(((pos1 == null || pos2 == null) && i!=0))
+				{
+					pos1 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionOne();
+					pos2 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionTwo();
+				}
+				this.setSpecimenStorageRecursively(specimen, dao, sessionDataBean, true,pos1,pos2);
+				
 			}
 		}
 
@@ -3169,8 +3214,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			 * it is not given If storage position is given it validates the
 			 * storage position
 			 **/
-			StorageContainerUtil.validateStorageLocationForSpecimen(specimen, dao,
-					this.storageContainerIds);
+			 //Bug 15392
+			/*StorageContainerUtil.validateStorageLocationForSpecimen(specimen, dao,
+					this.storageContainerIds);*/
 		}
 		catch (final ApplicationException exp)
 		{
@@ -3667,11 +3713,39 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				this.allocateSpecimenPostionsRecursively(newSpecimen);
 
 			}
-			iterator = newSpecimenCollection.iterator();
-			while (iterator.hasNext())
+			//iterator = newSpecimenCollection.iterator();
+			//Bug 15392 start
+			AbstractSpecimen array[] = new AbstractSpecimen[newSpecimenCollection.size()];
+			newSpecimenCollection.toArray(array);
+			//final Iterator<AbstractSpecimen> iterator = specimenCollection.iterator();
+			//while (iterator.hasNext())
+			Integer position1 = null;
+			Integer position2 = null;
+			//while (iterator.hasNext())
+			for(int i=0;i<array.length;i++)
 			{
-				final Specimen newSpecimen = (Specimen) iterator.next();
-				this.setSpecimenStorageRecursively(newSpecimen, dao, sessionDataBean, true);
+				final Specimen newSpecimen = (Specimen) array[i];	
+				if(newSpecimen.getSpecimenPosition()!=null)
+				{
+				   position1 = newSpecimen.getSpecimenPosition().getPositionDimensionOne();
+				   position2 = newSpecimen.getSpecimenPosition().getPositionDimensionTwo();
+				}
+			//	final Specimen newSpecimen = (Specimen) iterator.next();
+				if(((position1 == null || position2 == null) && i!=0))
+				{
+				    //bug 15448
+					if(((Specimen) array[i-1]).getSpecimenPosition() != null) 
+					{
+						position1 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionOne();
+						position2 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionTwo();	
+					}
+				}
+				if(position1 != null && position2 != null) 
+				{
+					this.setSpecimenStorageRecursively(newSpecimen, dao, sessionDataBean, true,
+							position1,position2);
+				}
+				//bug 15260 end
 			}
 
 			iterator = newSpecimenCollection.iterator();
@@ -4925,6 +4999,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return aliquotChildCount;
 	}
+	
+	/**
+	 * 
+	 * @param dao - dao
+	 * @param cpId - cp Id 
+	 * @param specimen - specimen
+	 * @return cp Id
+	 * @throws DAOException - DAOException
+	 */
 
 	public Long getCPId(DAO dao, Long cpId, AbstractSpecimen specimen) throws DAOException
 	{

@@ -185,7 +185,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		{
 			this.logger.error( "DAO related problem" + " occurred" + ex.getMessage(), ex );
 			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),ex,"Problem occured in update : ShipmentReceivingBizLogic");
-			throw this.getBizLogicException( ex, ex.getErrorKeyName(), ex.getMsgValues() );//janu
+			throw this.getBizLogicException( ex, ex.getErrorKeyName(), ex.getMsgValues() );
 		}
 		final boolean mailStatus = this.sendNotification( shipment, sessionDataBean );
 		if (!mailStatus)
@@ -325,21 +325,37 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 		final Collection < SpecimenPosition > spPosCollection = storageContainer
 				.getSpecimenPositionCollection();
 		final HashSet < String > storageContainerIds = new HashSet < String >();
-		for (final SpecimenPosition specimenPosition : spPosCollection)
+		//Bug 15392 start
+		SpecimenPosition positionArr[] = new SpecimenPosition[spPosCollection.size()];
+		spPosCollection.toArray(positionArr);
+		Integer pos1 = null;
+		Integer pos2 = null;
+		for(int i=0;i<positionArr.length;i++)
 		{
 			SpecimenPosition retrievedSpPos = null;
 			Specimen specimen = null;
 			final List < SpecimenPosition > spPosList = dao.retrieve( SpecimenPosition.class
 					.getName(), edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER,
-					specimenPosition.getId() );
+					positionArr[i].getId() );
 			if (spPosList != null && spPosList.size() == 1)
 			{
 				retrievedSpPos = spPosList.get( 0 );
 				specimen = retrievedSpPos.getSpecimen();
+				if(positionArr[i]!=null)//if specimen is virtual position will be null.
+				{
+				  pos1 = (positionArr[i]).getPositionDimensionOne();
+				  pos2 = (positionArr[i]).getPositionDimensionTwo();
+				}
+				if(((pos1 == 0 || pos2 == 0) && i!=0))
+				{
+					pos1 = (positionArr[i-1]).getPositionDimensionOne();
+					pos2 = (positionArr[i-1]).getPositionDimensionTwo();
+				}
 				//Bug 14263
-				this.setSpecimenPositionContents( dao, specimen, specimenPosition,
-						storageContainerIds );
-				this.setSpecimenActivityStatus( specimen, specimenPosition );
+				this.setSpecimenPositionContents( dao, specimen, positionArr[i],
+						storageContainerIds,pos1,pos2);
+				//Bug 15392 end
+				this.setSpecimenActivityStatus( specimen, positionArr[i] );
 			}
 			if (specimen != null && specimen.getActivityStatus() != null)
 			{
@@ -398,7 +414,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 	 * @throws BizLogicException - BizLogicException
 	 */
 	private void setSpecimenPositionContents(DAO dao, Specimen specimen,
-			SpecimenPosition specimenPosition, HashSet< String > storageContainerIds)
+			SpecimenPosition specimenPosition, HashSet< String > storageContainerIds,Integer pos1,Integer pos2)
 			throws BizLogicException
 	{
 		try
@@ -450,7 +466,9 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 				{
 					final Position position = StorageContainerUtil
 							.getFirstAvailablePositionsInContainer( container, storageContainerIds,
-									dao );
+									dao,pos1,pos2 );
+					specimenPosition.setPositionDimensionOne( position.getXPos() );
+					specimenPosition.setPositionDimensionTwo( position.getYPos() );
 					this.setPositionDataToSpecimen( position.getXPos(), position.getYPos(),
 							container, specimen );
 					this.addStorageValues( specimen, storageContainerIds );
