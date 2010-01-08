@@ -43,4 +43,8 @@ public interface ISpecimenType
 	 * @param specimenOrArrayType Setting specimenOrArrayType
 	 */
 	void setSpecimenOrArrayType(String specimenOrArrayType);
+	/**
+	 * Operation Add/Edit
+	 */
+	String getOperation();
 }
