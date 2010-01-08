@@ -815,13 +815,16 @@ public class ViewSpecimenSummaryAction extends Action
 		{
 			final GenericSpecimen pSpecimen = (GenericSpecimen) specItr.next();
 			//bug 15395 
-			if (pSpecimen.getCheckedSpecimen() == false)
+			if(!pSpecimen.getReadOnly())
 			{
-				this.checkOrUnCheckChildSpecimens(pSpecimen,false);
-			}
-			else
-			{
-				this.checkOrUnCheckChildSpecimens(pSpecimen,true);
+				if (pSpecimen.getCheckedSpecimen() == false)
+				{
+					this.checkOrUnCheckChildSpecimens(pSpecimen,false);
+				}
+				else
+				{
+					this.checkOrUnCheckChildSpecimens(pSpecimen,true);
+				}
 			}
 		}
 	}
