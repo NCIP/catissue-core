@@ -556,12 +556,12 @@
 
 		<copy file="allTokens.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
-		<copy file="idpInstall.properties" todir="${zip.dir}" overwrite="true" />
+		<copy file="washuInstall.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="Show_Hide_Forms.csv" todir="${zip.dir}" overwrite="true" />
 		<copy file="Show_Hide_Forms.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="build-properties.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
-		<copy file="idp_deploy.xml" todir="${zip.dir}" overwrite="true" />
+		<copy file="washu_deploy.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="DEDeploy.xml" todir="${zip.dir}" overwrite="true" />
 		<!--copy file="log4j.xml" todir="${zip.dir}" overwrite="true" /> -->

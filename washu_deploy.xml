@@ -3,7 +3,7 @@
 
 <project name="caTissue Suite v1.1P2.IDP">
 	<import file="deploy.xml"/>
-	<property file="./idpInstall.properties"/>
+	<property file="./washuInstall.properties"/>
 		<target name="deploy_app_with_idp">
 		    <antcall target="pre_initialization" />
 			<if>
@@ -23,10 +23,10 @@
 			<antcall target="integrate_advanced_query"/>
 			<antcall target="integrate_bulk_operation"/>
 		    <antcall target="app_configuration"/>
+			<antcall target="generate.cacore.for.xmi" />
 			<antcall target="de_integrate_app" />
 			<antcall target="build_war" />
 			<antcall target="jboss_configuration" />
-
 			<antcall target="send_mail" />
 			<delete dir="${temp.dir}" />
 		</target>
@@ -36,7 +36,7 @@
 			<copy file="${base.dir}/idp_login-config.xml" tofile="${temp.dir}/login-config.xml" overwrite="true"/>
 			<copy file="${base.dir}/idp_upt.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/upt.hibernate.cfg.xml" overwrite="true"/>
 			<copy file="${base.dir}/idp_catissuecore.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/catissuecore.hibernate.cfg.xml" overwrite="true"/>
-			<replace dir="${temp.dir}" propertyfile="idpInstall.properties">
+			<replace dir="${temp.dir}" propertyfile="washuInstall.properties">
 					<include name="catissuecore-ds.xml" />
 					<include name="login-config.xml" />
 				<replacefilter token="@@CSMdatabaseurl@@" value="jdbc:mysql://${csm.database.host}:${csm.database.port}:${csm.database.name}"/>
@@ -50,7 +50,7 @@
 			<copy file="${base.dir}/idp/idp_login-config.xml" tofile="${temp.dir}/login-config.xml" overwrite="true"/>
 			<copy file="${base.dir}/idp/idp_upt.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/upt.hibernate.cfg.xml" overwrite="true"/>
 			<copy file="${base.dir}/idp/idp_catissuecore.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/catissuecore.hibernate.cfg.xml" overwrite="true"/>
-			<replace dir="${temp.dir}" propertyfile="idpInstall.properties">
+			<replace dir="${temp.dir}" propertyfile="washuInstall.properties">
 						<include name="catissuecore-ds.xml" />
 						<include name="login-config.xml" />
 					<replacefilter token="@@CSMdatabaseurl@@" value="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}"/>
@@ -60,16 +60,80 @@
 		</target>
 
 		<target name="deploy_all_with_idp">
+			<antcall target="assert" />
+			<antcall target="deploy_db_washu" />
 			<antcall target="deploy_app_with_idp" />
-			<antcall target="deploy_db" />
 			<antcall target="server_security" />
 		</target>
+
+	<target name="upgrade_all_with_idp">
+		<antcall target="assert" />
+		<antcall target="upgrade_db_washu" />
+		<antcall target="deploy_app_with_idp" />
+	</target>
+
+	<target name="deploy_db_washu">
+		<antcall target="deploy_db" />
+		<antcall target="upgrade_DB_for_cacore" />
+	</target>
+
+	<target name="upgrade_db_washu">
+		<antcall target="upgrade_db" />
+		<antcall target="upgrade_dump_cacore" />
+	</target>
+
+	<target name="upgrade_DB_for_cacore">
+		<echo message="Upgrading DB for cacore generation..." />
+		<if>
+			<equals arg1="oracle" arg2="${database.type}" />
+			<then>
+				<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+					<transaction src="${dbupgrade.sql.dir}/Common/caModelUpgradeForCacore.sql" />
+					<transaction>commit;</transaction>
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+				</sql>
+			</then>
+		<elseif >
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+					<transaction src="${dbupgrade.sql.dir}/Common/caModelUpgradeForCacore.sql" />
+					<transaction>commit;</transaction>
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+				</sql>
+			</then>
+		</elseif>
+		</if>
+
+	</target>
+
+	<target name="upgrade_dump_cacore">
+		<echo message="Upgrading DB for cacore generation..." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/Common/caModelUpgradeForCacore.sql" />
+			<transaction src="${dbupgrade.sql.dir}/Oracle/caModelUpgradeForCacore_upgradedb.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
 
 	<!-- IDP settings -->
 
 	<target name="IdPSettings">
 		<copy file="${base.dir}/catissuecore-properties/IdPConfigure.xml" tofile="${temp.dir}/catissuecore-properties/IdPConfigure.xml" overwrite="true"/>
-		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="idpInstall.properties">
+		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="washuInstall.properties">
 			<include name="IdPConfigure.xml" />
 
 			<replacefilter token="@@clinportal.database.type@@" value="${clinportal.database.type}" />
@@ -99,7 +163,7 @@
 	<if>
 		<equals arg1="oracle" arg2="${clinportal.database.type}" />
 		<then>
-			<replace dir="${temp.dir}/catissuecore-properties" propertyfile="idpInstall.properties">
+			<replace dir="${temp.dir}/catissuecore-properties" propertyfile="washuInstall.properties">
 			<include name="IdPConfigure.xml" />
 					<replacefilter token="@@clinportal.database.driverURL@@" value="${oracle.driver.string}" />
 					<replacefilter token="@@csm.database.driverURL@@" value="${oracle.driver.string}" />
@@ -109,7 +173,7 @@
 	<elseif >
 		<equals arg1="mysql" arg2="${clinportal.database.type}" />
 		<then>
-			<replace dir="${temp.dir}/catissuecore-properties" propertyfile="idpInstall.properties">
+			<replace dir="${temp.dir}/catissuecore-properties" propertyfile="washuInstall.properties">
 				<include name="IdPConfigure.xml" />
 				<replacefilter token="@@clinportal.database.driverURL@@" value="${mysql.driver.string}" />
 				<replacefilter token="@@csm.database.driverURL@@" value="${mysql.driver.string}" />

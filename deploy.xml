@@ -311,7 +311,7 @@
 		<antcall target="configure_log4j" />
 
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
-		
+
 		<antcall target="configure_contactus" />
 		<copy file="${base.dir}/caTIES_conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true" />
 		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
@@ -686,8 +686,8 @@
 
 	<!--Target call for both fresh deployment and database creation-->
 	<target name="deploy_all" description="Target call for both fresh deployment and database creation">
-		<antcall target="deploy_db" />
 		<antcall target="deploy_app" />
+		<antcall target="deploy_db" />
 		<antcall target="server_security" />
 
 		<!-- Configure the IIS properties, if configure.IIS.properties is 'true'. -->
@@ -862,7 +862,6 @@
 			<antcall target="integrate_advanced_query"/>
 			<antcall target="integrate_bulk_operation"/>
 			<antcall target="app_configuration"/>
-			<!-- <antcall target="generate.cacore.for.xmi" />  -->
 			<antcall target="de_integrate_app" />
 			<antcall target="build_war" />
 			<antcall target="jboss_configuration" />
