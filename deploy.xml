@@ -305,12 +305,13 @@
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
 		<unwar src="${base.dir}/caTissuePrintWebService.war" dest="${temp.dir}/caTissuePrintWebService" />
 		<unjar src="${temp.dir}/catissuecore/WEB-INF/lib/DynamicExtensions.jar" dest="${temp.dir}/dynamicExtensionsjar" />
-		<antcall target="configure_log4j" />
-
-		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
 		<copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/catissuecore-properties" />
 		</copy>
+		<antcall target="configure_log4j" />
+
+		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
+		
 		<antcall target="configure_contactus" />
 		<copy file="${base.dir}/caTIES_conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true" />
 		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
