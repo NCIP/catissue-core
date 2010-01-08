@@ -1,13 +1,20 @@
 package edu.wustl.catissuecore.testcase.bizlogic;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.Test;
+
+import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.bizlogic.TestCaseUtility;
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -156,59 +163,173 @@ public class StorageTypeBizTestCases extends CaTissueSuiteBaseTest {
 			 }
 		}
 		
-		/*public void testNullDomainObjectInInsert()
+		/**
+		 * Test Storage Type add with NULL object.
+		 * Negative Test Case.
+		 */
+		@Test
+		public void testStorageTypeBizLogicAddWithNullObject()
 		{
-			domainObject = new StorageType(); 
-			testNullDomainObjectInInsert(domainObject);
-		}*/
-		
-//		public void testNullSessionDataBeanInInsert_StorageType()
-//		{
-//			domainObject = new StorageType();
-//			testNullSessionDataBeanInInsert(domainObject);
-//		}
-//			
-//		public void testWrongDaoTypeInInsert_StorageType()
-//		{
-//			domainObject = new StorageType();
-//			testWrongDaoTypeInInsert(domainObject);
-//		}
-//		public void testNullSessionDataBeanInUpdate_StorageType()
-//		{
-//			domainObject = new StorageType();
-//			testNullSessionDataBeanInUpdate(domainObject);
-//		}
-//		
-//		public void testNullOldDomainObjectInUpdate_StorageType()
-//		{
-//			domainObject = new StorageType();
-//			testNullOldDomainObjectInUpdate(domainObject);
-//		}
-//		
-//			
-//		/*public void testNullCurrentDomainObjectInUpdate()
-//		{
-//			domainObject = new StorageType();
-//			testNullCurrentDomainObjectInUpdate(domainObject);
-//		}*/
-//		
-//		public void testEmptyCurrentDomainObjectInUpdate_StorageType()
-//		{
-//			domainObject = new StorageType();
-//			AbstractDomainObject initialisedDomainObject = BaseTestCaseUtility.initDistributionProtocol();
-//			testEmptyCurrentDomainObjectInUpdate(domainObject, initialisedDomainObject);
-//		}
-//		
-//		public void testEmptyOldDomainObjectInUpdate_StorageType()
-//		{
-//			domainObject = new StorageType();
-//			AbstractDomainObject initialisedDomainObject = BaseTestCaseUtility.initDistributionProtocol();
-//			testEmptyOldDomainObjectInUpdate(domainObject,initialisedDomainObject);
-//		}
-//		
-//		public void testNullDomainObjectInRetrieve_StorageType()
-//		{
-//			domainObject = new StorageType();
-//			testNullCurrentDomainObjectInRetrieve(domainObject);
-//		}
+			StorageTypeBizLogic bizLogic = new StorageTypeBizLogic() ;
+			try
+			{
+				bizLogic.insert(null,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+				assertFalse("StorageType Object is NULL while inserting " +
+						"through BizLogic",true);
+			}
+			catch (BizLogicException e)
+			{
+				logger.info("Exception in StorageType :" + e.getMessage());
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		/**
+		 * Test Storage Type add with NULL specimen class.
+		 * Negative Test Case.
+		 */
+		@Test
+		public void testStorageTypeBizLogicAddWithNullHoldsSpeciemnClass()
+		{
+			StorageType sType = BaseTestCaseUtility.initStorageType();
+			sType.setHoldsSpecimenClassCollection(null) ;
+			StorageTypeBizLogic bizLogic = new StorageTypeBizLogic() ;
+
+			try
+			{
+				bizLogic.insert(sType,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+				assertTrue("StorageType Specimen Class is NULL while inserting " +
+						"through BizLogic",true);
+			}
+			catch (BizLogicException e)
+			{
+				logger.info("Exception in StorageType :" + e.getMessage());
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				fail(e.getCustomizedMsg());
+			}
+		}
+		/**
+		 * Test Storage Type add with NULL dimension.
+		 * Negative Test Case.
+		 */
+		@Test
+		public void testStorageTypeBizLogicAddWithNullDimension()
+		{
+			StorageType sType = BaseTestCaseUtility.initStorageType();
+			sType.setOneDimensionLabel(null);
+			sType.setTwoDimensionLabel(null);
+			StorageTypeBizLogic bizLogic = new StorageTypeBizLogic() ;
+
+			try
+			{
+				bizLogic.insert(sType,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+				assertFalse("StorageType Dimension is NULL while inserting " +
+						"through BizLogic",true);
+			}
+			catch (BizLogicException e)
+			{
+				logger.info("Exception in StorageType :" + e.getMessage());
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		/**
+		 * Test Storage Type add with empty type.
+		 * Negative Test Case.
+		 */
+		@Test
+		public void testStorageTypeBizLogicAddWithEmptyType()
+		{
+			StorageTypeBizLogic bizLogic = new StorageTypeBizLogic() ;
+			StorageType sType = BaseTestCaseUtility.initStorageType();
+			sType.setName("") ;
+			try
+			{
+				bizLogic.insert(sType,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+				assertFalse("StorageType Name is Empty while inserting " +
+						"through BizLogic",true);
+			}
+			catch (BizLogicException e)
+			{
+				logger.info("Exception in StorageType :" + e.getMessage());
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		/**
+		 * Test Storage Type add with empty one dimension capacity.
+		 * Negative Test Case.
+		 */
+		@Test
+		public void testStorageTypeBizLogicAddWithEmptyOneDimensionCapacity()
+		{
+			StorageTypeBizLogic bizLogic = new StorageTypeBizLogic() ;
+			StorageType sType = BaseTestCaseUtility.initStorageType();
+			Capacity cap = new Capacity() ;
+			cap.setOneDimensionCapacity(Integer.valueOf(0)) ;
+			cap.setTwoDimensionCapacity(Integer.valueOf(2)) ;
+			sType.setCapacity(cap);
+			try
+			{
+				bizLogic.insert(sType,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+				assertFalse("StorageType Name is Empty while inserting " +
+						"through BizLogic",true);
+			}
+			catch (BizLogicException e)
+			{
+				logger.info("Exception in StorageType :" + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		/**
+		 * Test Storage Type add with empty Two dimension capacity.
+		 * Negative Test Case.
+		 */
+		@Test
+		public void testStorageTypeBizLogicAddWithEmptyTwoDimensionCapacity()
+		{
+			StorageTypeBizLogic bizLogic = new StorageTypeBizLogic() ;
+			StorageType sType = BaseTestCaseUtility.initStorageType();
+			Capacity cap = new Capacity() ;
+			cap.setOneDimensionCapacity(Integer.valueOf(1)) ;
+			cap.setTwoDimensionCapacity(Integer.valueOf(0)) ;
+			sType.setCapacity(cap);
+			try
+			{
+				bizLogic.insert(sType,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+				assertFalse("StorageType Name is Empty while inserting " +
+						"through BizLogic",true);
+			}
+			catch (BizLogicException e)
+			{
+				logger.info("Exception in StorageType :" + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		/**
+		 * Test Storage Type add with empty one dimension label.
+		 * Negative Test Case.
+		 */
+		@Test
+		public void testStorageTypeBizLogicAddWithEmptyTwoDimensionLabel()
+		{
+//			//TODO
+//			fail("Need to write test case");
+
+			StorageTypeBizLogic bizLogic = new StorageTypeBizLogic() ;
+			StorageType sType = BaseTestCaseUtility.initStorageType();
+			sType.setTwoDimensionLabel("") ;
+			try
+			{
+				bizLogic.insert(sType,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
+				assertFalse("StorageType Name is Empty while inserting " +
+						"through BizLogic",true);
+			}
+			catch (BizLogicException e)
+			{
+				logger.info("Exception in StorageType :" + e.getMessage());
+				e.printStackTrace();
+			}
+		}
 }

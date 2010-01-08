@@ -292,7 +292,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 
 			Logger.out.info(" searching domain object again");
 			 query = "from edu.wustl.catissuecore.domain.CollectionProtocol as collectionProtocol where "
-				+ "collectionProtocol.consentsWaived= '"+false+"'";
+				+ "collectionProtocol.consentsWaived=0";
 			 resultList = appService.search(query);
 			//resultList = appService.search(CollectionProtocol.class, collectionProtocol);
 			int consentsWaivedCPListSize = resultList.size();
@@ -306,7 +306,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			fail(" failed to search all Collection Protocols ");
+			fail(e.getMessage());
 		}
 	}
     

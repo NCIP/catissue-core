@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.testcase.login;
 import org.junit.Test;
 
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 
 
 public class LogoutTestcase extends CaTissueSuiteBaseTest
@@ -17,6 +18,7 @@ public class LogoutTestcase extends CaTissueSuiteBaseTest
 		setRequestPathInfo("/Logout") ;
 		actionPerform();		
 		verifyForward("success");
+		CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN = null;
 	}
 	
 

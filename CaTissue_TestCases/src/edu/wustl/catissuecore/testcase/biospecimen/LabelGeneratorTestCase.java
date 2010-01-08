@@ -245,7 +245,8 @@ public class LabelGeneratorTestCase extends CaTissueSuiteBaseTest
 		addRequestParameter("pageOf", "pageOfSpecimenCollectionGroupCPQuery");
 		scgForm.setName("scg name"+ UniqueKeyGeneratorUtil.getUniqueKey());
 		scgForm.setId(scg.getId()) ;
-		scgForm.setSiteId(3L);                      
+		Site site = (Site)TestCaseUtility.getNameObjectMap("Site");
+		scgForm.setSiteId(site.getId());                      
 		scgForm.setOperation("edit");
 		scgForm.setClinicalDiagnosis(scg.getClinicalDiagnosis());
 		scgForm.setPageOf("pageOfSpecimenCollectionGroupCPQuery");

@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
@@ -487,7 +488,8 @@ public class ConsentsTestCase extends CaTissueSuiteBaseTest
 		addRequestParameter("pageOf", "pageOfSpecimenCollectionGroupCPQuery");
 		scgForm.setName(scg.getName());
 		scgForm.setId(scg.getId()) ;
-		scgForm.setSiteId(3L);                      
+		Site site = (Site)TestCaseUtility.getNameObjectMap("Site") ;
+		scgForm.setSiteId(site.getId());                      
 		scgForm.setOperation("edit");
 		scgForm.setClinicalDiagnosis(scg.getClinicalDiagnosis());
 		scgForm.setPageOf("pageOfSpecimenCollectionGroupCPQuery");

@@ -209,8 +209,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSiteAddWithEmptyName()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		RequestParameterUtility.setAddSiteParams(this);
 		addRequestParameter("name", "") ;
 		addRequestParameter("type","Laboratory");
@@ -228,8 +226,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSiteAddWithEmptyType()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		RequestParameterUtility.setAddSiteParams(this);
 		addRequestParameter("type","");
 		setRequestPathInfo("/SiteAdd");
@@ -246,8 +242,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSiteAddWithEmptyCoordinator()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		RequestParameterUtility.setAddSiteParams(this);
 		addRequestParameter("coordinatorId","");
 		setRequestPathInfo("/SiteAdd");
@@ -264,8 +258,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSiteAddWithEmptyEmailAddress()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		RequestParameterUtility.setAddSiteParams(this);
 		addRequestParameter("emailAddress","");
 		setRequestPathInfo("/SiteAdd");
@@ -302,7 +294,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSiteBizLogicAddWithNullObject()
 	{
-		//TODO
 		SiteBizLogic siteBizLogic = new SiteBizLogic() ;
 		try
 		{
@@ -323,8 +314,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSiteBizLogicAddWithNullName()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		User coordinator = new User() ;
 		UserBizLogic bizLogic = new UserBizLogic();
 		try
@@ -334,7 +323,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		catch (BizLogicException e1)
 		{
 			logger.error("Exception in SiteTestCase :" + e1.getMessage());
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -355,7 +343,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		catch (BizLogicException e)
 		{
 			logger.error("Exception in SiteTestCase :" + e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -366,8 +353,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSiteBizLogicAddWithNullType()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		User coordinator = new User() ;
 		User user1 = new User();
 		UserBizLogic bizLogic = new UserBizLogic();
@@ -378,7 +363,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (BizLogicException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -394,13 +378,11 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		try
 		{
 			siteBizLogic.insert(site, CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN) ;
-			TestCaseUtility.setNameObjectMap("Site", site) ;
-			//assertFalse("Site Object Type Is NULL while inserting through SiteBizLogic", true);
+			assertFalse("Site Object Type Is NULL while inserting through SiteBizLogic", true);
 		}
 		catch (BizLogicException e)
 		{
 			logger.error("Exception in SiteTestCase :" + e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -411,8 +393,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSiteBizLogicAddWithNullCoordinator()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		Address address = new Address() ;
 		address.setStreet("Sinhgad Road");
 		address.setCity("Pune") ;
@@ -438,7 +418,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		catch (BizLogicException e)
 		{
 			logger.error("Exception in SiteTestCase :" + e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -449,8 +428,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSiteBizLogicAddWithNullAddress()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		Site site = new Site() ;
 		User coordinator = new User() ;
 		UserBizLogic bizLogic = new UserBizLogic();
@@ -461,7 +438,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (BizLogicException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		site.setName("ShriSite_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
@@ -479,7 +455,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		catch (BizLogicException e)
 		{
 			logger.error("Exception in SiteTestCase :" + e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -490,8 +465,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSiteBizLogicAddWithNullEmailAddress()
 	{
-//		//TODO
-//		fail("Need to write test case");
 		User coordinator = new User() ;
 		UserBizLogic bizLogic = new UserBizLogic();
 		try
@@ -501,7 +474,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (BizLogicException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -522,7 +494,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		catch (BizLogicException e)
 		{
 			logger.error("Exception in SiteTestCase :" + e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -593,9 +564,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSiteEdit()
 	{
-//		//TODO
-//		fail("Need to write test case");
-		
 		Site site = (Site)TestCaseUtility.getNameObjectMap("LaboratorySite") ;
 		setRequestPathInfo("/SiteSearch") ;
 		addRequestParameter("id", ""+site.getId()) ;
@@ -632,9 +600,6 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	@Test
 	public void testSiteEditEmptySiteParams()
 	{
-//		//TODO
-//		fail("Need to write test case");
-		
 		Site site = (Site)TestCaseUtility.getNameObjectMap("LaboratorySite") ;
 		setRequestPathInfo("/SiteSearch") ;
 		addRequestParameter("id", ""+site.getId()) ;
@@ -663,57 +628,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		
 		assertTrue("Cannot Edit Site Object with Empty Parameters",true);
 	}
-	/**
-	 * Test Site Add multiple and check whether sites are added or not. 
-	 */
-	@Test
-	public void testMultipleSiteSearch()
-	{
-		for(int i=0;i<6;i++)
-		{
-			testAddRepositorySite();
-		}
-		setRequestPathInfo("/SimpleSearch");
-		SimpleQueryInterfaceForm simpleForm = new SimpleQueryInterfaceForm() ;
-		simpleForm.setAliasName("Site") ;
-		simpleForm.setPageOf("pageOfSite");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_table", "Site");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_DataElement_field", "Site.NAME.varchar");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_Operator_operator", "Starts With");
-		simpleForm.setValue("SimpleConditionsNode:1_Condition_value", "Site_");
-		setActionForm(simpleForm) ;
-		actionPerform();
-		DefaultBizLogic bizLogic = new DefaultBizLogic(); 
-		List siteList = null;
-		try 
-		{
-//			siteList = bizLogic.retrieve(Site.class.getName(), new String[]{"name"}, new String[]{"name"}, new String[]{"like"}, new String[]{"Site_%"}, null);
-			QueryWhereClause queryWhereClause = new QueryWhereClause(Site.class.getName());
-			queryWhereClause.addCondition(new LikeClause("name","Site_"));
-			siteList = bizLogic.retrieve(Site.class.getName(),  new String[]{"name"}, queryWhereClause);
-		}
-		catch (BizLogicException e) 
-		{
-			e.printStackTrace();
-			System.out.println("SiteTestCases.testSiteEdit(): "+e.getMessage());
-			fail(e.getMessage());
-		}
-		catch (DAOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if(siteList.size() >= 6)
-		{
-		    verifyForward("success");
-		    verifyNoActionErrors();
-		}
-		else
-		{
-			fail("Site count should be greater than six.");			
-		}
-		
-	}
+
 	/**
 	 * Test Site Edit with Closed Status.
 	 * Negative Test Case.
@@ -729,26 +644,39 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (BizLogicException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		Site site = (Site) TestCaseUtility.getNameObjectMap("Site") ;
-		site.setActivityStatus("Closed");
+		Site site = new Site() ;
+		site.setName("Site_TO_Close"+UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		site.setType("Laboratory");
+		site.setEmailAddress("admin@admin.com");
 		site.setCoordinator(coordinator);
 		site.setAddress(coordinator.getAddress()) ;
+		site.setActivityStatus("Active");
 		
+		site.setActivityStatus("Active");
+		site.setCoordinator(coordinator);
+		site.setAddress(coordinator.getAddress()) ;
+		site.getAddress().setState("Alaska");
+		site.getAddress().setCity("Sri Ganga Nagar");
+		site.getAddress().setStreet("xyz");
+		site.getAddress().setCountry("India");
+		site.getAddress().setZipCode("111111");
+		site.getAddress().setPhoneNumber("9011083118");		
 		SiteBizLogic siteBizLogic = new SiteBizLogic() ;
 		try
 		{
+			siteBizLogic.insert(site) ;
+			site.setActivityStatus("Closed");
 			siteBizLogic.update(site) ;
-			//assertFalse("Site Object Status Closed Is NULL while inserting through SiteBizLogic", true);
+			assertTrue("Site Object Status Closed successfully", true);
 		}
 		catch (BizLogicException e)
 		{
 			logger.error("Exception in SiteTestCase :" + e.getMessage());
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 	}
 }

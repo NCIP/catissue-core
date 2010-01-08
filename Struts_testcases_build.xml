@@ -101,7 +101,6 @@
     	    	    </replace>	
     	      </then>
     	 </if>
-    	<copy file="${log4jproperties.file.path}" todir="./catissuecore-properties" overwrite="true"/>
     </target>
     
     	<!-- =================================================================== -->
@@ -236,9 +235,9 @@
 							
 				<classpath>
 					
+					<pathelement path= "${cat.test.classes.dir}" />
 					<pathelement path= "${target.dir}" /> 
 					<pathelement path="${cat.test.src.dir}" />
-					<pathelement path= "${cat.test.classes.dir}" />
 					<pathelement path= "${cat.test.conf.dir}" />
 					
 					<fileset dir="${cat.test.lib.dir}">
