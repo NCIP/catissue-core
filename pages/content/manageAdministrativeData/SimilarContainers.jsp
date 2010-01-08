@@ -48,26 +48,25 @@
 		int rowCounter=	(int)form.getNoOfContainers();
 %>
 <head>
-<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
+	<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
+	<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+	<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
+	<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
+	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script>var imgsrc="catissuecore/images/de/";</script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/prototype.js"></script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/scr.js"></script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/combobox.js"></script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/ext-base.js"></script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/ext-all.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/jss/ext-base.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/jss/ext-all.js"></script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/combos.js"></script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/ajax.js"></script>
-	<link rel="stylesheet" type="text/css" href="/catissuecore/stylesheets/de/ext-all.css" />
-	<link rel="stylesheet" type="text/css" href="/catissuecore/css/ext-all.css" />
-	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
-	<script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
-	<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
-	<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
-	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-	<script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
-	
+
+	<link href="css/catissue_suite.css" type="text/css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
+	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+
+
 	<script>
 		Ext.onReady(function(){var myUrl= 'SpecimenTypeDataAction.do?method=Tissue';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'CB_tissue',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'tissue'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
 	</script>
@@ -688,7 +687,7 @@
 						%>
 					
 				<%=ScriptGenerator.getJSForOutermostDataTable()%>
-				<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+			
 	  
 			  <%
 				form = simForm;
