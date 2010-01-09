@@ -4224,6 +4224,7 @@ Thanking You,
 	<property name="applicationUserName" value="" />
 	<property name="applicationUserPassword" value="" />
 	<property name="keyStoreLocation" value="" />
+	<property name="bulkArtifactsLocation" value="" />
 
 	<target name="runBulkOperation" description="this target runs the bulk operation module through API client.">
 		<echo message="Starting to run Bulk Operation... " />
@@ -4236,6 +4237,7 @@ Thanking You,
 			<arg value="${applicationUserName}" />
 			<arg value="${applicationUserPassword}" />
 			<arg value="${keyStoreLocation}" />
+			<arg value="${bulkArtifactsLocation}" />
 			<classpath>
 				<fileset dir="./caTissueSuite_Client/lib/">
 					<include name="*.jar" />
