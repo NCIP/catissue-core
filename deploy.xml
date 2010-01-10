@@ -4232,10 +4232,10 @@ Thanking You,
 				fork="true" maxmemory="1024m">
 			<arg value="${operationName}" />
 			<arg value="${csvFile}" />
-			<arg value="${templateFile}" />
 			<arg value="${url}" />
 			<arg value="${applicationUserName}" />
 			<arg value="${applicationUserPassword}" />
+			<arg value="${templateFile}"/>
 			<arg value="${keyStoreLocation}" />
 			<arg value="${bulkArtifactsLocation}" />
 			<classpath>
