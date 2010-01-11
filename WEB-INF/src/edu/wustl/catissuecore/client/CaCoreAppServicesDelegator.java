@@ -67,22 +67,21 @@ import edu.wustl.security.exception.SMException;
 import edu.wustl.security.manager.ISecurityManager;
 import edu.wustl.security.manager.SecurityManagerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class contains the basic methods that are required for HTTP APIs.
  * It just passes on the request at proper place.
+ *
  * @author aniruddha_phadnis
  */
 public class CaCoreAppServicesDelegator
 {
 
-	/** logger.
-	 * Looger
-	 */
+	/** logger. Looger */
 	private transient final Logger logger = Logger
 			.getCommonLogger(CaCoreAppServicesDelegator.class);
-	/**
-	 * Static classList which has PHI attributes.
-	 */
+
+	/** Static classList which has PHI attributes. */
 	private static List<Class> classList = new ArrayList<Class>();
 	static
 	{
@@ -99,9 +98,12 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Passes User credentials to CaTissueHTTPClient to connect User with caTISSUE Core Application.
+	 *
 	 * @param userName userName of the User to connect to caTISSUE Core Application
 	 * @param password password of the User to connect to caTISSUE Core Application
+	 *
 	 * @return the sessionID of user if he/she has successfullyy logged in else null
+	 *
 	 * @throws Exception exception
 	 */
 	public Boolean delegateLogin(String userName, String password) throws Exception
@@ -120,7 +122,9 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Disconnects User from caTISSUE Core Application.
+	 *
 	 * @param sessionKey sessionKey
+	 *
 	 * @return returns the status of logout to caTISSUE Core Application
 	 */
 	public boolean delegateLogout(String sessionKey)
@@ -130,10 +134,13 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Passes caCore Like domain object to  caTissue Core biz logic to perform Add operation.
+	 *
 	 * @param domainObject the caCore Like object to add using HTTP API
 	 * @param userName user name
+	 *
 	 * @return returns the Added caCore Like
 	 * object/Exception object if exception occurs performing Add operation
+	 *
 	 * @throws Exception exception
 	 */
 	public Object delegateAdd(String userName, Object domainObject) throws Exception
@@ -156,10 +163,13 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Passes caCore Like domain object to caTissue Core biz logic to perform Edit operation.
+	 *
 	 * @param domainObject the caCore Like object to edit using HTTP API
 	 * @param userName  user name
+	 *
 	 * @return returns the Edited caCore Like object/Exception
 	 * object if exception occurs performing Edit operation
+	 *
 	 * @throws Exception exception
 	 */
 	public Object delegateEdit(String userName, Object domainObject) throws Exception
@@ -207,9 +217,12 @@ public class CaCoreAppServicesDelegator
 	/**
 	 * Method is modified to allow to delete object of ReportLoaderQueue.
 	 * Returns Exception object as Delete operation is not supported by CaTissue Core Application.
+	 *
 	 * @param domainObject the caCore Like object to delete using HTTP API
 	 * @param userName user name
+	 *
 	 * @return returns Exception object as Delete operation is not supported by CaTissue Core Application.
+	 *
 	 * @throws Exception exception
 	 */
 	public Object delegateDelete(String userName, Object domainObject) throws Exception
@@ -228,9 +241,13 @@ public class CaCoreAppServicesDelegator
 	}
 
 	/**
+	 * Delegate get objects.
+	 *
 	 * @param userName user name.
 	 * @param domainObject domain object
+	 *
 	 * @return list of objects
+	 *
 	 * @throws Exception exception
 	 */
 	public List delegateGetObjects(String userName, Object domainObject) throws Exception
@@ -254,8 +271,11 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Check if user if super admin user.
+	 *
 	 * @param userName userName
+	 *
 	 * @return isUserisAdmin boolean
+	 *
 	 * @throws Exception exception
 	 */
 	private boolean checkIfUserIsAdmin(String userName) throws Exception
@@ -283,9 +303,12 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * check for Maximum records and delegate call to disable and filter.
+	 *
 	 * @param userName userName
 	 * @param list list
+	 *
 	 * @return filteredObjectList filtered Object
+	 *
 	 * @throws Exception exception
 	 */
 	public List delegateSearchFilter(String userName, List list) throws Exception
@@ -304,10 +327,13 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Method to filter out AbstractDomain objects of which activityStatus is disabled.
+	 *
 	 * @param list list
 	 * @param userName username
 	 * @param isUserisAdmin is admin user
+	 *
 	 * @return filteredObjects filtered objects
+	 *
 	 * @throws Exception exception
 	 */
 	private List filterDisabledObjects(List list, String userName, boolean isUserisAdmin)
@@ -379,9 +405,12 @@ public class CaCoreAppServicesDelegator
 	 * Filters the list of objects returned by the search depending
 	 * on the privilege of the user on the objects.
 	 * Also sets the identified data to null if the user doesn'r has privilege to see the identified data.
+	 *
 	 * @param userName The name of the user whose privilege are to be checked.
 	 * @param objectList The list of the objects which are to be filtered.
+	 *
 	 * @return The filtered list of objects according to the privilege of the user.
+	 *
 	 * @throws Exception exception
 	 */
 	private List filterObjects(String userName, List objectList) throws Exception
@@ -509,10 +538,12 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Remove identified data from object.
+	 *
 	 * @param abstractDomainObject abstract domain object
 	 * @param objectName object name
 	 * @param identifier id
 	 * @param sessionDataBean session data bean
+	 *
 	 * @throws BizLogicException exception
 	 */
 	private void removeIdentifiedDataFromObject(Object abstractDomainObject, String objectName,
@@ -568,6 +599,7 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Removes the identified data from Participant object.
+	 *
 	 * @param object The Particpant object.
 	 */
 	private void removeParticipantIdentifiedData(Object object)
@@ -605,9 +637,10 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Removes the identified data from SpecimenCollectionGroup object.
+	 *
 	 * @param object The SpecimenCollectionGroup object.
-	 * @throws DAOException
-	 */
+	 *
+	 * @throws DAOException 	 */
 	private void removeSpecimenCollectionGroupIdentifiedData(Object object)
 	{
 		final SpecimenCollectionGroup specimenCollGrp = (SpecimenCollectionGroup) object;
@@ -633,9 +666,10 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Removes the identified data from Specimen object.
+	 *
 	 * @param object The Specimen object.
-	 * @throws DAOException
-	 */
+	 *
+	 * @throws DAOException 	 */
 	private void removeSpecimenIdentifiedData(Object object)
 	{
 		final Specimen specimen = (Specimen) object;
@@ -659,9 +693,10 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Removes the identified data from CollectionProtocolRegistration object.
+	 *
 	 * @param object The CollectionProtocolRegistration object.
-	 * @throws DAOException
-	 */
+	 *
+	 * @throws DAOException 	 */
 	private void removeCollectionProtocolRegistrationIdentifiedData(Object object)
 	{
 		final CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) object;
@@ -673,10 +708,11 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Returns the field object from the class object and field name passed.
+	 *
 	 * @param object domain object
 	 * @param fieldName field name
-	 * @return childObject domain object
 	 *
+	 * @return childObject domain object
 	 */
 	private Object getFieldObject(Object object, String fieldName)
 	{
@@ -709,8 +745,11 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Get Biz Logic based on domai object class name.
+	 *
 	 * @param domainObjectName name of domain object
+	 *
 	 * @return bizLogic biz logic
+	 *
 	 * @throws BizLogicException exception
 	 */
 	private IBizLogic getBizLogic(String domainObjectName) throws BizLogicException
@@ -722,8 +761,11 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Get seesion data bean.
+	 *
 	 * @param userName user name
+	 *
 	 * @return session data bean
+	 *
 	 * @throws Exception exception
 	 */
 	private SessionDataBean getSessionDataBean(String userName) throws Exception
@@ -759,8 +801,10 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * check whether the object is null or not.
+	 *
 	 * @param domainObject domain object.
 	 * @param messageToken  message token
+	 *
 	 * @throws Exception exception
 	 */
 	private void checkNullObject(Object domainObject, String messageToken) throws Exception
@@ -774,9 +818,12 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Find out the matching participant list based on the participant object provided.
+	 *
 	 * @param userName user name
 	 * @param domainObject domain object
+	 *
 	 * @return filteredMatchingObjects matching participant list
+	 *
 	 * @throws Exception exception
 	 */
 	public List delegateGetParticipantMatchingObects(String userName, Object domainObject)
@@ -809,9 +856,12 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Method to get next Specimen Collection Group Number.
+	 *
 	 * @param userName user name
 	 * @param obj object
+	 *
 	 * @return label label
+	 *
 	 * @throws Exception exception
 	 */
 	public String delegateGetSpecimenCollectionGroupLabel(String userName, Object obj)
@@ -830,9 +880,12 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Method to get default value for given key using default value manager.
+	 *
 	 * @param userName username
 	 * @param obj object
+	 *
 	 * @return String string
+	 *
 	 * @throws Exception exception
 	 */
 	public String delegateGetDefaultValue(String userName, Object obj) throws Exception
@@ -841,9 +894,10 @@ public class CaCoreAppServicesDelegator
 	}
 
 	/**
-	* Removes the identified data from identified Report object.
-	* @param object object of IdentifiedSurgicalPathologyReport
-	*/
+	 * Removes the identified data from identified Report object.
+	 *
+	 * @param object object of IdentifiedSurgicalPathologyReport
+	 */
 	private void removeIdentifiedReportIdentifiedData(Object object)
 	{
 		final IdentifiedSurgicalPathologyReport identiPathologyReport = (IdentifiedSurgicalPathologyReport) object;
@@ -859,6 +913,7 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Removes the identified data from de-identified Report object.
+	 *
 	 * @param object object of DeIdentifiedSurgicalPathologyReport
 	 */
 	private void removeDeIdentifiedReportIdentifiedData(Object object)
@@ -872,6 +927,7 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Removes the identified data from SpecimenEvent parameters object.
+	 *
 	 * @param object object of child classes of SpecimenEventParameters
 	 */
 	private void removeSpecimenEventParameters(Object object)
@@ -882,6 +938,7 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Removes the identified data from PMI object.
+	 *
 	 * @param object PMI Object
 	 */
 	private void removePMIIdentifiedData(Object object)
@@ -892,9 +949,10 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Removes the identified data from SpecimenArrayContent object.
+	 *
 	 * @param object SpecimenArrayContent object to filter
-	 * @throws DAOException
-	 */
+	 *
+	 * @throws DAOException 	 */
 	private void removeSpecimenArrayContentIdentifiedData(Object object)
 	{
 		final SpecimenArrayContent specimenArrayContent = (SpecimenArrayContent) object;
@@ -906,8 +964,11 @@ public class CaCoreAppServicesDelegator
 	}
 
 	/**
+	 * Audit api query.
+	 *
 	 * @param queryObject Query object to audit
 	 * @param userName User Name
+	 *
 	 * @throws Exception Exception
 	 */
 	public void auditAPIQuery(String queryObject, String userName) throws Exception
@@ -916,10 +977,13 @@ public class CaCoreAppServicesDelegator
 		this.insertQuery(queryObject, sessionDataBean);
 	}
 
-	/***
+	/**
+	 * *
 	 * Copy paste from Query Bizlogic class to insert API query Log.
+	 *
 	 * @param sqlQuery sqlQuery
 	 * @param sessionData sessiondata
+	 *
 	 * @throws Exception exception
 	 */
 	private void insertQuery(String sqlQuery, SessionDataBean sessionData) throws Exception
@@ -1070,10 +1134,13 @@ public class CaCoreAppServicesDelegator
 	/**
 	 * Iterate over the object array.
 	 * Crate the target object and set appropriate attributes value
+	 *
 	 * @param targetClassName target class
 	 * @param fields fields name
 	 * @param rows records
+	 *
 	 * @return returnList return list
+	 *
 	 * @throws Exception exception
 	 */
 	public List createTargetObjectList(String targetClassName, List<Field> fields, List rows)
@@ -1165,6 +1232,7 @@ public class CaCoreAppServicesDelegator
 
 	/**
 	 * Get Max records allowed per query from caTissueCore_properties.xml.
+	 *
 	 * @return Integer
 	 */
 	public Integer getAllowedMaxRecordsPerQuery()
@@ -1174,12 +1242,15 @@ public class CaCoreAppServicesDelegator
 	}
 
 	/**
-	 * register participant   
-	 * @param domainObject
-	 * @param cpid
-	 * @param userName
-	 * @return
-	 * @throws Exception
+	 * register participant.
+	 *
+	 * @param domainObject the domain object
+	 * @param cpid the cpid
+	 * @param userName the user name
+	 *
+	 * @return the object
+	 *
+	 * @throws Exception the exception
 	 */
 	public Object delegateRegisterParticipant(Object domainObject, Long cpid, String userName)
 			throws Exception
@@ -1200,4 +1271,39 @@ public class CaCoreAppServicesDelegator
 		return domainObject;
 	}
 
+
+	/**
+	 * Delegate get ca tissue local participant matching obects.
+	 *
+	 * @param userName the user name
+	 * @param domainObject the domain object
+	 *
+	 * @return the list
+	 *
+	 * @throws Exception the exception
+	 */
+	public List delegateGetCaTissueLocalParticipantMatchingObects(String userName, Object domainObject) throws Exception{
+		List matchingObjects = new ArrayList();
+		this.checkNullObject(domainObject, "Domain Object");
+		final String className = domainObject.getClass().getName();
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final ParticipantBizLogic bizLogic = (ParticipantBizLogic) factory.getBizLogic(className);
+		// not null check for Id
+		//checkNullObject(abstractDomainObject.getId(),"Identifier");
+		final LookupLogic participantLookupLogicForSPR = (LookupLogic) CommonUtilities
+				.getObject(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
+		matchingObjects = bizLogic.getListOfMatchingParticipants((Participant) domainObject,
+				participantLookupLogicForSPR);
+		/*bug 7561*/
+		List filteredMatchingObjects = null;
+		if (matchingObjects != null)
+		{
+			filteredMatchingObjects = this.delegateSearchFilter(userName, matchingObjects);
+		}
+		else
+		{
+			filteredMatchingObjects = new ArrayList();
+		}
+		return filteredMatchingObjects;
+	}
 }
