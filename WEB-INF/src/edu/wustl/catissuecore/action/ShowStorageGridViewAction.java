@@ -14,6 +14,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -65,7 +66,7 @@ public class ShowStorageGridViewAction extends BaseAction
 	 * logger.
 	 */
 
-	private transient final Logger logger = Logger.getCommonLogger(ShowStorageGridViewAction.class);
+	private transient static final Logger logger = Logger.getCommonLogger(ShowStorageGridViewAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -96,41 +97,12 @@ public class ShowStorageGridViewAction extends BaseAction
 			}
 		}
 		request.setAttribute("storageContainerIdentifier", id);
-
 		String contentOfContainer = null;
-		// To get privilegeCache through
-		// Singleton instance of PrivilegeManager, requires User LoginName
-		// PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
-		/*
-		 * PrivilegeCache privilegeCache = privilegeManager
-		 * .getPrivilegeCache(getUserLoginName(request));
-		 */
-
-		// Aarti: Check whether user has use permission on the storage container
-		// or not
-		// if(!SecurityManager.getInstance(this.getClass()).isAuthorized(
-		// getUserLoginName(request)
-		// ,StorageContainer.class.getName()+"_"+id,Permissions.USE))
-		// Call to SecurityManager.isAuthorized bypassed &
-		// instead, call redirected to privilegeCache.hasPrivilege
-		// Commented by Ravindra and vishvesh because this is not how it will
-		// work in MSR
-		//if(!privilegeCache.hasPrivilege(StorageContainer.class.getName()+"_"+id
-		// ,Permissions.USE))
-		// {
-		// ActionErrors errors = new ActionErrors();
-		// ActionError error = new ActionError("access.use.object.denied");
-		// errors.add(ActionErrors.GLOBAL_ERROR,error);
-		// saveErrors(request,errors);
-		// return mapping.findForward(Constants.FAILURE);
-		// }
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		if (pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
 		{
 			target = Constants.PAGE_OF_STORAGE_CONTAINER;
 		}
-
-		// Sri: Added to get the position of the storage container map
 		final String position = request.getParameter(Constants.STORAGE_CONTAINER_POSITION);
 		if ((null != position) && ("" != position))
 		{
@@ -145,9 +117,8 @@ public class ShowStorageGridViewAction extends BaseAction
 			}
 			catch (final Exception ex)
 			{
-				this.logger.error(ex.getMessage(), ex);
+				logger.error(ex.getMessage(), ex);
 				ex.printStackTrace() ;
-				// Will not select anything
 				positionOne = null;
 				positionTwo = null;
 			}
@@ -160,14 +131,12 @@ public class ShowStorageGridViewAction extends BaseAction
 				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
 		final Object containerObject = bizLogic.retrieve(StorageContainer.class.getName(),
-				new Long(id));
+				Long.valueOf(id));
 		StorageContainerGridObject storageContainerGridObject = null;
 		int[][] fullStatus = null;
 		int[][] childContainerIds = null;
 		String[][] childContainerType = null;
 		String[][] childContainerName = null;
-		// Object a = request.getAttribute("tree");
-
 		if (containerObject != null)
 		{
 			storageContainerGridObject = new StorageContainerGridObject();
@@ -181,18 +150,9 @@ public class ShowStorageGridViewAction extends BaseAction
 
 			final StorageType storageType = (StorageType) bizLogic.retrieveAttribute(
 					StorageContainer.class.getName(), storageContainer.getId(), "storageType");// storageContainer
-			// .
-			// getStorageType
-			// (
-			// )
-			// ;
 			request.setAttribute("storageTypeName", storageType.getName());
-			// Object tree = request.getAttribute("tree");
-
-			// Mandar : Labels for Dimensions
 			String oneDimLabel = storageType.getOneDimensionLabel();
 			String twoDimLabel = storageType.getTwoDimensionLabel();
-
 			if (oneDimLabel == null)
 			{
 				oneDimLabel = " ";
@@ -201,19 +161,15 @@ public class ShowStorageGridViewAction extends BaseAction
 			{
 				twoDimLabel = " ";
 			}
-
 			request.setAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL, oneDimLabel);
 			request.setAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL, twoDimLabel);
-
 			storageContainerGridObject.setId(storageContainer.getId().longValue());
 			storageContainerGridObject.setType(storageType.getName());
 			storageContainerGridObject.setName(storageContainer.getName());
-
 			final Integer oneDimensionCapacity = storageContainer.getCapacity()
 					.getOneDimensionCapacity();
 			final Integer twoDimensionCapacity = storageContainer.getCapacity()
 					.getTwoDimensionCapacity();
-
 			childContainerIds = new int[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
 					.intValue() + 1];
 			storageContainerGridObject.setOneDimensionCapacity(oneDimensionCapacity);
@@ -254,10 +210,7 @@ public class ShowStorageGridViewAction extends BaseAction
 					}
 				}
 			}
-
 			final IBizLogic specimenBizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-
-			// Showing Specimens in the Container map.
 			String sourceObjectName = Specimen.class.getName();
 			final String[] selectColumnName = {"id", "specimenPosition.positionDimensionOne",
 					"specimenPosition.positionDimensionTwo", "label"};
@@ -289,10 +242,8 @@ public class ShowStorageGridViewAction extends BaseAction
 					childContainerType[positionDimensionOne.intValue()][positionDimensionTwo
 							.intValue()] = Constants.SPECIMEN_LABEL_CONTAINER_MAP + specimenLable;
 					contentOfContainer = Constants.ALIAS_SPECIMEN;
-
 				}
 			}
-
 			// Showing Specimen Arrays in the Container map.
 			sourceObjectName = SpecimenArray.class.getName();
 
@@ -300,7 +251,6 @@ public class ShowStorageGridViewAction extends BaseAction
 			selectColumnName[2] = "locatedAtPosition.positionDimensionTwo";
 			selectColumnName[3] = "name";
 			whereColumnName[0] = "locatedAtPosition.parentContainer.id";
-
 			list = specimenBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
 					whereColumnCondition, whereColumnValue, joinCondition);
 
@@ -338,7 +288,7 @@ public class ShowStorageGridViewAction extends BaseAction
 			final int startNumber = StorageContainerUtil.getNextContainerNumber(Long.parseLong(id), Long
 					.parseLong(storageContainerType), false);
 			request.setAttribute(Constants.STORAGE_CONTAINER_TYPE, storageContainerType);
-			request.setAttribute(Constants.START_NUMBER, new Integer(startNumber));
+			request.setAttribute(Constants.START_NUMBER, Integer.valueOf(startNumber));
 		}
 
 		request.setAttribute(Constants.PAGE_OF, pageOf);
@@ -354,12 +304,22 @@ public class ShowStorageGridViewAction extends BaseAction
 		request.setAttribute(Constants.MAP_COLLECTION_PROTOCOL_LIST, collectionProtocolList);
 
 		// Mandar : 29aug06 : to set specimenclass
-		final List specimenClassList = AppUtility.getSpecimenClassList(id);
-		request.setAttribute(Constants.MAP_SPECIMEN_CLASS_LIST, specimenClassList);
-
-		final List specimenTypeList = AppUtility.getSpecimenTypeList(id);
+		List<String> spClassList = new ArrayList<String>();
+		final List<String> specimenTypeClassList = AppUtility.getClassAndTypeList(id);
+		final List<String> specimenTypeList = new ArrayList<String>();
+		Iterator<String> itr = specimenTypeClassList.iterator();
+		while(itr.hasNext())
+		{
+			String className = (String)itr.next();
+			String type = (String)itr.next();
+			if(!spClassList.contains(className))
+			{
+				spClassList.add(className);
+			}
+			specimenTypeList.add(type);
+		}
+		request.setAttribute(Constants.MAP_SPECIMEN_CLASS_LIST, spClassList);
 		request.setAttribute(Constants.MAP_SPECIMEN_TYPE_LIST, specimenTypeList);
-
 		return mapping.findForward(target);
 	}
 
