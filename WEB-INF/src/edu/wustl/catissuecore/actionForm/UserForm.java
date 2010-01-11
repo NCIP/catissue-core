@@ -902,7 +902,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	private void validateWashUEmailAddress(final ActionErrors errors)
 	{
-		if(!"".equals(wustlKey))
+		if(wustlKey!=null && !"".equals(wustlKey))
 		{
 		  if(!emailAddress.endsWith(edu.wustl.wustlkey.util.global.Constants.WUSTL_EDU)
 		  && !emailAddress.endsWith(edu.wustl.wustlkey.util.global.Constants.WUSTL_EDU_CAPS))
