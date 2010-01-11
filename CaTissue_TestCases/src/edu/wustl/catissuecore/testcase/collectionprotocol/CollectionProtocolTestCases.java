@@ -1,32 +1,16 @@
 package edu.wustl.catissuecore.testcase.collectionprotocol;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
-import edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm;
-import edu.wustl.catissuecore.actionForm.ProtocolEventDetailsForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
-import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
 /**
@@ -38,7 +22,7 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Collection Protocol Add.
 	 */
-	@Test
+	
 	public void testCollectionProtocolAdd()
 	{
 		/*Collection Protocol Details*/
@@ -185,7 +169,7 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		TestCaseUtility.setNameObjectMap("CollectionProtocol",collectionProtocol);
 	}
 
-	@Test
+	
 	public void testAddAnotherCollectionProtocol()
 	{
 		/*Collection Protocol Details*/
@@ -331,7 +315,7 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		TestCaseUtility.setNameObjectMap("CollectionProtocolEventMap2",innerLoopValues);
 		TestCaseUtility.setNameObjectMap("CollectionProtocol2",collectionProtocol);
 	}
-	@Test
+	
 	public void testClickOnClinicalDiagnosis()
 	{
 		try {
@@ -353,7 +337,7 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Collection Protocol Edit.
 	 */
-//	@Test
+//	
 //	public void testCollectionProtocolEdit()
 //	{
 //		/*Simple Search Action*/

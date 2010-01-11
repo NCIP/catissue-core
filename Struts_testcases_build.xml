@@ -2,7 +2,7 @@
 <!--Ant Script to setup configuration files for test cases-->
 
 <project name="caTissue JUnit Test cases" default="run_junit_nightlyBuild" >
-<import file="build.xml"/>	
+<import file="deploy.xml"/>	
      <taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
 			<pathelement location="./lib/ant-contrib.jar" />
@@ -10,15 +10,13 @@
 	</taskdef>
 
 	     <property file="./caTissueInstall.properties"/>
+	    <property name="mysql.dialect.string" value="org.hibernate.dialect.MySQLDialect"> </property>
+    	<property name="oracle.dialect.string" value="org.hibernate.dialect.Oracle9Dialect"></property>
+    	<property name="mysql.driver.string" value="com.mysql.jdbc.Driver"> </property>
+    	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver"></property>
+
 	     <property name="catissue.test" value="${base.dir}/CaTissue_TestCases" />
-         <property name="database.username.string"  value="root"> </property>
-         <property name="database.url.string" value="jdbc:mysql://localhost:3306/catissuesuite"> </property>
-         <property name="database.password.string" value="himanshu"> </property>
-         <property name="mysql.dialect.string" value="org.hibernate.dialect.MySQLDialect"> </property>
-	     <property name="oracle.dialect.string" value="org.hibernate.dialect.Oracle9Dialect"></property>
-         <property name="mysql.driver.string" value="com.mysql.jdbc.Driver"> </property>
-	     <property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver"></property>
-         <property name="hibernate-cfg.path.string" value="${catissue.test}\catissuecore.hibernate.cfg.xml"></property>
+         <property name="hibernate-cfg.path.string" value="${catissue.test}/catissuecore.hibernate.cfg.xml"></property>
          <property name="ApplicationSecurityConfig.file.path" value="./catissuecore-properties/ApplicationSecurityConfig.xml"></property>
          <property name="hibernate-cfg.file.path" value="./catissuecore-properties/catissuecore.hibernate.cfg.xml"></property>
 	     <property name="login-conf.file.path" value="./CaTissue_TestCases/login.conf"></property>
@@ -26,8 +24,11 @@
 	     <property name="oracle.url.string" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"></property>
 		<property name="mysql.dao.prop.filename" value="MySQLDAOProperties.xml" />
 		<property name="oracle.dao.prop.filename" value="OracleDAOProperties.xml" />     
-		<property name="log4jproperties.file.path" value="./log4j.properties"></property>
          
+	<property name="catissue.temp.dir" value="${temp.dir}/catissuecore" />
+	<property name="catissue.classes.dir" value="${temp.dir}/catissuecore/WEB-INF/classes" />
+	<property name="catissue.lib.dir" value="${temp.dir}/catissuecore/WEB-INF/lib" />
+	
          <!-- struts test case related properties -->
 		<property name="cat.test.conf.dir" value="${catissue.test}/conf" />
 		<property name="cat.test.classes.dir" value="${catissue.test}/classes" />
@@ -44,8 +45,43 @@
 				<include name="**/*.jar" />
 			</fileset>
 		</path>
+		<path id="testcases.classpath">
+			<pathelement path= "${cat.test.classes.dir}" />
+			<pathelement path= "${catissue.classes.dir}" /> 
+			<pathelement path="${cat.test.src.dir}" />
+			<pathelement path= "${cat.test.conf.dir}" />
+			
+			<fileset dir="${cat.test.lib.dir}">
+				<exclude name="catissuecore.jar"/>
+			   <include name="**/*.jar"/>
+			</fileset>
+			<fileset dir="${catissue.lib.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+			
+			<fileset dir="${lib.dir}">
+				<include name="*.jar" />
+			</fileset>
+		
+			<fileset dir="${catissue.temp.dir}/WEB-INF/">
+				<include name="**/*.properties"/>
+				<include name="**/*.xml" />
+				<include name="**/*.tld" />
+			</fileset>
+		</path>
 
     <target name="init_junit_testcases">
+    	
+    	<available type="dir" file="${temp.dir}/catissuecore" property="file.exists"/>
+    			<if>
+    				<not>
+    					<equals arg1="true" arg2="${file.exists}" />
+    				</not>
+    				<then>
+    					<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />					
+    				</then>
+    			</if>
+    	<echo message="${file.exists}" />
         <copy file="${ApplicationSecurityConfig.file.path}" todir="${catissue.test}" overwrite="true"/>
         <replace dir="${catissue.test}">
         	<include name="ApplicationSecurityConfig.xml" />
@@ -101,128 +137,116 @@
     	    	    </replace>	
     	      </then>
     	 </if>
+    	<antcall target="replacecfgfiles" />
+    	<antcall target="replace_app_dao_prop_file" />
     </target>
-    
+
+    	<!-- This target replaces databases properties properties in hibernate cfg file
+    				based on database configuration in catissueInstall.properties file.-->
+    		<target name="replacecfgfiles">
+    			<copy file="${catissue.classes.dir}/hibernate.cfg.xml" todir="${cat.test.classes.dir}" overwrite="true" />
+    		    <copy file="${catissue.classes.dir}/DynamicExtensionsHibernate.cfg.xml" todir="${cat.test.classes.dir}" overwrite="true" />
+    	        <copy file="${catissue.test}/hibernate.properties" todir="${cat.test.conf.dir}" overwrite="true" />
+
+    			<replace dir="${cat.test.classes.dir}">
+    				<include name="*.cfg.xml" />		
+    				<replacefilter token="org.hibernate.dialect.MySQLDialect" value="@@DIALECT@@" />
+    			</replace>
+    			
+    			<if>
+    				<equals arg1="mysql" arg2="${database.type}" />
+    				<then>
+    					<replace dir="${cat.test.classes.dir}">
+    						<include name="*.cfg.xml" />
+    						<include name="*.properties" />
+    						<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+    						<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+    						
+    			</replace>
+    					<replace dir="${cat.test.conf.dir}">
+    						<include name="*.properties" />
+    							<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+    							<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+    							<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+    							<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+    							<replacefilter token="@@URL@@" value="${mysql.url.string}" />
+    						</replace>
+    				</then>
+    				<elseif>
+    					<equals arg1="oracle" arg2="${database.type}" />
+    					<then>
+    						<replace dir="${cat.test.classes.dir}">
+    							<include name="*.cfg.xml" />
+    							<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+    							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />						
+    						</replace>
+    						<replace dir="${cat.test.conf.dir}">
+    							<include name="*.properties" />
+    							<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+    								<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+    								<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+    								<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+    								<replacefilter token="@@URL@@" value="${oracle.url.string}" />
+    							</replace>
+    					</then>
+    				</elseif>
+    			</if>
+    		</target>
+    		
+    		<!-- This target replaces proper application dao properties file in ApplicationDAOProperties.xml
+    				based on database configuration in catissueInstall.properties file.-->
+    		<target name="replace_app_dao_prop_file">
+    			<copy file="${catissue.classes.dir}/ApplicationDAOProperties.xml" todir="${cat.test.classes.dir}" overwrite="true" />
+    			<if>
+    				<equals arg1="mysql" arg2="${database.type}" />
+    				<then>
+    					<replace file="${cat.test.classes.dir}/ApplicationDAOProperties.xml">
+    						<replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}" />
+    					</replace>
+    				</then>
+    				<elseif>
+    					<equals arg1="oracle" arg2="${database.type}" />
+    					<then>
+    						<replace file="${cat.test.classes.dir}/ApplicationDAOProperties.xml">
+    							<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
+    						</replace>
+    					</then>
+    				</elseif>
+    			</if>
+    		</target>
+
+	
+	
     	<!-- =================================================================== -->
 	<!-- Junit StrutsTestCases for Nightly Build  -->
 	<!-- =================================================================== -->
 	
 	
-	<target name="compile_junit_testcases" depends="init_junit_testcases,compile">
+	<target name="compile_junit_testcases" depends="init_junit_testcases">
 		 
 		<echo>Compiling the test classes : </echo>
 		<delete dir="${cat.test.classes.dir}" />
 		<mkdir dir="${cat.test.classes.dir}" /> 
-		 <antcall target="replacecfgfiles" />
-		<antcall target="replace_app_dao_prop_file" />
+		
 			
-	    <javac destdir="${cat.test.classes.dir}" includes="**/*.java" includeAntRuntime="false">
+	    <javac destdir="${cat.test.classes.dir}" includes="**/*.java" includeAntRuntime="false" target="1.5">
 	            <src path="${cat.test.src.dir}"/>
-	    	  
-	          <classpath>
-						<pathelement path= "${target.dir}" /> 
-						<pathelement path="${cat.test.src.dir}" />
-						<pathelement path= "${cat.test.classes.dir}" />
-	          			<pathelement path= "${cat.test.conf.dir}" />
-	          	
-						<fileset dir="${cat.test.lib.dir}">
-							<exclude name="catissuecore.jar"/>
-						    <include name="**/*.jar"/>
-					   	</fileset>
-						
-						<fileset dir="${lib.dir}">
-							<include name="**/*.jar"/>
-						</fileset>
-						
-					</classpath>
-
+	            	<classpath refid="testcases.classpath" />
 					<classpath refid="cobertura.classpath" />
 	    </javac>
 	</target>
 	
-	<!-- This target replaces databases properties properties in hibernate cfg file
-			based on database configuration in catissueInstall.properties file.-->
-	<target name="replacecfgfiles">
-		<copy file="${base.dir}/WEB-INF/src/hibernate.cfg.xml" todir="${cat.test.classes.dir}" overwrite="true" />
-	    <copy file="${base.dir}/WEB-INF/src/DynamicExtensionsHibernate.cfg.xml" todir="${cat.test.classes.dir}" overwrite="true" />
-        <copy file="${catissue.test}/hibernate.properties" todir="${cat.test.conf.dir}" overwrite="true" />
-
-		<replace dir="${cat.test.classes.dir}">
-			<include name="*.cfg.xml" />		
-			<replacefilter token="org.hibernate.dialect.MySQLDialect" value="@@DIALECT@@" />
-		</replace>
-		
-		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<replace dir="${cat.test.classes.dir}">
-					<include name="*.cfg.xml" />
-					<include name="*.properties" />
-					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
-					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-					
-		</replace>
-				<replace dir="${cat.test.conf.dir}">
-					<include name="*.properties" />
-						<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
-						<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-						<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-						<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
-						<replacefilter token="@@URL@@" value="${mysql.url.string}" />
-					</replace>
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<replace dir="${cat.test.classes.dir}">
-						<include name="*.cfg.xml" />
-						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
-						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />						
-					</replace>
-					<replace dir="${cat.test.conf.dir}">
-						<include name="*.properties" />
-						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
-							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
-							<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-							<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
-							<replacefilter token="@@URL@@" value="${oracle.url.string}" />
-						</replace>
-				</then>
-			</elseif>
-		</if>
-	</target>
 	
-	<!-- This target replaces proper application dao properties file in ApplicationDAOProperties.xml
-			based on database configuration in catissueInstall.properties file.-->
-	<target name="replace_app_dao_prop_file">
-		<copy file="${base.dir}/WEB-INF/src/ApplicationDAOProperties.xml" todir="${cat.test.classes.dir}" overwrite="true" />
-		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<replace file="${cat.test.classes.dir}/ApplicationDAOProperties.xml">
-					<replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}" />
-				</replace>
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<replace file="${cat.test.classes.dir}/ApplicationDAOProperties.xml">
-						<replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}" />
-					</replace>
-				</then>
-			</elseif>
-		</if>
-	</target>
-
 	<target name="run_junit_testcases" depends="compile_junit_testcases">
 	        <mkdir dir="${base.dir}/Nightly_Build_Struts_Report" />
 			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/Html_reports" />
 			
 			
-			<junit printsummary="yes" fork="yes" haltonfailure="no">
+			<junit printsummary="yes" fork="yes" haltonfailure="no" showoutput="true" includeantruntime="no">
 				
 				<jvmarg value="-Xms128m"/>
-				<jvmarg value="-Xmx1024m"/>       
+				<jvmarg value="-Xmx1024m"/> 
+				<jvmarg value="-debug"/>
 				<sysproperty key="net.sourceforge.cobertura.datafile" file="${cat.cobertura.dir}/strutscoverage.ser" />
 				<sysproperty key="app.home" value="."/>
 	
@@ -232,33 +256,31 @@
 				-->	
 						
 				<classpath location="${cat.instrumented.dir}" />
-							
 				<classpath>
-					
 					<pathelement path= "${cat.test.classes.dir}" />
-					<pathelement path= "${target.dir}" /> 
-					<pathelement path="${cat.test.src.dir}" />
-					<pathelement path= "${cat.test.conf.dir}" />
-					
-					<fileset dir="${cat.test.lib.dir}">
-						<exclude name="catissuecore.jar"/>
-					    <include name="**/*.jar"/>
-				   	</fileset>
-					
-					<fileset dir="${lib.dir}">
-						<include name="**/*.jar"/>
-					</fileset>
-										
-					
-					<fileset dir="${base.dir}/WEB-INF/">
-						<include name="**/*.properties"/>
-						<include name="**/*.xml" />
-						<include name="**/*.tld" />
-					</fileset>
-					
+								<pathelement path= "${catissue.classes.dir}" /> 
+								<pathelement path="${cat.test.src.dir}" />
+								<pathelement path= "${cat.test.conf.dir}" />
+								
+								<fileset dir="${cat.test.lib.dir}">
+									<exclude name="catissuecore.jar"/>
+								   <include name="**/*.jar"/>
+								</fileset>
+								<fileset dir="${catissue.lib.dir}">
+									<include name="**/*.jar"/>
+								</fileset>
+								
+								<fileset dir="${lib.dir}">
+									<include name="mysql-connector-java-5.0.8-bin.jar" />
+									<include name="ojdbc14.jar" />
+								</fileset>
+							
+								<fileset dir="${catissue.temp.dir}/WEB-INF/">
+									<include name="**/*.properties"/>
+									<include name="**/*.xml" />
+									<include name="**/*.tld" />
+								</fileset>
 				</classpath>
-
-				<classpath refid="cobertura.classpath" />
 
 				<formatter type="xml"/> 
 			

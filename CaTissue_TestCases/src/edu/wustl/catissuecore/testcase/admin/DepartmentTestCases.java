@@ -2,12 +2,8 @@ package edu.wustl.catissuecore.testcase.admin;
 
 import java.util.List;
 
-import org.junit.Test;
-
-import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
 import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.catissuecore.bizlogic.DepartmentBizLogic;
-import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
@@ -28,7 +24,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Department Add.
 	 */
-	@Test
+	
 	public void testDepartmentAdd()
 	{
 		DepartmentForm departmentForm  = new DepartmentForm ();
@@ -52,7 +48,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	 * Test Department Add With existing Name.
 	 * Negative test Case..
 	 */
-	@Test
+	
 	public void testDepartmentAddWithSameName()
 	{
 		Department dept = (Department) TestCaseUtility.getNameObjectMap("Department");
@@ -74,7 +70,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	 * Test Department Add With Blank Name.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDepartmentAddWithNullName()
 	{
 		DepartmentForm departmentForm  = new DepartmentForm ();
@@ -94,7 +90,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Department Search.
 	 */
-	@Test
+	
 	public void testDepartmentSearch()
 	{
 
@@ -152,7 +148,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Department Edit.
 	 */
-	@Test
+	
 	public void testDepartmentEdit()
 	{
 		Department department = (Department) TestCaseUtility.getNameObjectMap("Department");
@@ -189,7 +185,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	 * Test Department Search With wrong Identifier.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDepartmentSearchOnWrongSearchValue()
 	{
 		/*Simple Search Action*/
@@ -216,7 +212,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	 * Test Department Add With NULL Object.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDepartmentBizLogicAddWithNullObject()
 	{
 //		//TODO
@@ -239,7 +235,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	 * Test Department Add with NULL Department name.
 	 * Negative test Case.
 	 */
-	@Test
+	
 	public void testDepartmentBizLogicAddWithNullName()
 	{
 //		//TODO
@@ -263,7 +259,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	 * Test Department search with valid Department.
 	 * name using Department BizLogic.
 	 */
-	@Test
+	
 	public void testDepartmentSearchWithGivenDepartmentName()
 	{
 		try
@@ -285,7 +281,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Department Group Add.
 	 */
-	@Test
+	
 	public void testDepartmentAddByPopUp()
 	{
 		

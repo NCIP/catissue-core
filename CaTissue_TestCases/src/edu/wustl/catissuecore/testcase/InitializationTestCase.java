@@ -7,14 +7,14 @@ import javax.naming.InitialContext;
 import javax.naming.Reference;
 import javax.sql.DataSource;
 
+import oracle.jdbc.pool.OracleDataSource;
+
 import org.jboss.naming.NamingContextFactory;
 import org.jboss.tm.TransactionManagerService;
 import org.jboss.tm.TxManager;
 import org.jnp.server.NamingBeanImpl;
-import org.junit.Test;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-import oracle.jdbc.pool.OracleDataSource;
 
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.DataSourceFinder;
@@ -102,6 +102,7 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 
 			// create data source and bind to JNDI
 			DataSource caTissueDS = getDataSource();
+			
 			DataSource dynamicExtnDS = getDataSource();
 			initialContext.createSubcontext(CaTissueSuiteTestUtil.CATISSUE_DATASOURCE_JNDI_NAME);
 			initialContext.createSubcontext(CaTissueSuiteTestUtil.DE_DATASOURCE_JNDI_NAME);
@@ -127,7 +128,6 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 	 * Call CaTissueCoreServletCOntextLiatners method
 	 *
 	 */
-	@Test
 	public void testApplicationInitialization()
 	{
 			try
@@ -188,6 +188,7 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 			catch(Exception ex)
 			{
 				Logger.out.error("ApplicationInitializeTestCase.initTestData()"+ex);
+				ex.printStackTrace();
 				fail("Application Initiilization failed "+ex.getMessage());
 			}
 	}

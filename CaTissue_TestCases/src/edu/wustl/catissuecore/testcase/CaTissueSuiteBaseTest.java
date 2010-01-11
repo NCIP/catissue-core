@@ -1,7 +1,5 @@
 package edu.wustl.catissuecore.testcase;
 
-import org.junit.Before;
-
 import servletunit.HttpServletRequestSimulator;
 import servletunit.struts.MockStrutsTestCase;
 import edu.wustl.catissuecore.testcase.bizlogic.CaTissueApplicationService;
@@ -21,7 +19,6 @@ public class CaTissueSuiteBaseTest extends MockStrutsTestCase
 	 * @throws Exception
 	 */
 	@Override
-	@Before
 	protected void setUp() throws Exception
 	{
 		super.setUp();

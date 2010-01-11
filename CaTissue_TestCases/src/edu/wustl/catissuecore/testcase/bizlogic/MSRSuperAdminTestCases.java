@@ -8,7 +8,6 @@ import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.common.beans.SessionDataBean;
 /**
  * 
  * @author vipin_bansal

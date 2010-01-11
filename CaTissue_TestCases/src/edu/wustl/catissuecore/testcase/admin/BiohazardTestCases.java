@@ -2,8 +2,6 @@ package edu.wustl.catissuecore.testcase.admin;
 
 import java.util.List;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.BiohazardForm;
 import edu.wustl.catissuecore.bizlogic.BiohazardBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -24,7 +22,6 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test BioHazard Add Infectious BioHazard.
 	 */
-	@Test
 	public void testAddBioHazard()
 	{
 		BiohazardForm bioForm = new BiohazardForm();
@@ -51,7 +48,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	/**
 	 *  Test BioHazard Add Carcinogen BioHazard.
 	 */
-	@Test
+	
 	public void testAddCarcinogenBioHazard()
 	{
 		BiohazardForm bioForm = new BiohazardForm();
@@ -78,7 +75,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test BioHazard Add Mutagen BioHazard.
 	 */
-	@Test
+	
 	public void testAddMutagenBioHazard()
 	{
 		BiohazardForm bioForm = new BiohazardForm();
@@ -105,7 +102,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test BioHazard Add Not Specified BioHazard.
 	 */
-	@Test
+	
 	public void testAddNotSpecifiedBioHazard()
 	{
 		BiohazardForm bioForm = new BiohazardForm();
@@ -128,7 +125,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 		//add Biohazard object to objectMap
 		TestCaseUtility.setNameObjectMap("NotSpecifiedBiohazard",biohazard);
 	}
-	@Test
+	
 	/**
 	 * Test BioHazard Add RadioActive BioHazard.
 	 */
@@ -154,7 +151,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 		//add Biohazard object to objectMap
 		TestCaseUtility.setNameObjectMap("RadioactiveBiohazard",biohazard);
 	}
-	@Test
+	
 	/**
 	 * Test BioHazard Add Toxic BioHazard.
 	 */
@@ -183,7 +180,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test BioHazard Search.
 	 */
-	@Test
+	
 	public void testBioHazardSearch()
 	{
 		/*Simple Search Action*/
@@ -228,7 +225,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	 * Test BioHazard Add without specifying mandatory Parameters as name and type.
 	 * Negative test case.
 	 */
-	@Test
+	
 	public void testAddBioHazardAddWithoutMandatoryParams()
 	{
 		BiohazardForm bioForm = new BiohazardForm();
@@ -247,7 +244,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test BioHazard Edit.
 	 */
-	@Test
+	
 	public void testBioHazardEdit()
 	{
 		Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("ToxicBiohazard") ;
@@ -279,7 +276,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	 * Test BioHazard Edit without specifying mandatory Parameters as name and type.
 	 * Negative test case.
 	 */
-	@Test
+	
 	public void testEditBioHazardEditWithoutMandatoryParams()
 	{
 		Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("ToxicBiohazard") ;
@@ -304,7 +301,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test BioHazard Add with Invalid BioHazard type.
 	 */
-	@Test
+	
 	public void testBiohazardAddWithInvalidType()
 	{
 		BiohazardForm bioForm = new BiohazardForm();
@@ -323,7 +320,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	 * Test BioHazard Add with NULL BioHazard object.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testBioHazardBizLogicAddWithNullObject()
 	{
 		BiohazardBizLogic bizLogic = new BiohazardBizLogic();
@@ -342,7 +339,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	 * Test BioHazard Add with NULL BioHazard name.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testBiohazardBizLogicAddWithNullName()
 	{
 		Biohazard biohazard = new Biohazard() ;
@@ -364,7 +361,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	 * Test BioHazard Add with NULL BioHazard type.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testBiohazardBizLogicAddWithNullType()
 	{
 		Biohazard biohazard = new Biohazard() ;
@@ -386,7 +383,7 @@ public class BiohazardTestCases extends CaTissueSuiteBaseTest
 	 * Test BioHazard Add with Invalid BioHazard type.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testBiohazardBizLogicAddWithInvalidType()
 	{
 		Biohazard biohazard = new Biohazard() ;

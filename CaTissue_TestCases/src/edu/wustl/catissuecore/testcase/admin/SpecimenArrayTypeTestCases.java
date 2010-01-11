@@ -2,9 +2,6 @@ package edu.wustl.catissuecore.testcase.admin;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
-
-import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayTypeBizLogic;
@@ -14,7 +11,6 @@ import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 
@@ -27,7 +23,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Array Type Add.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeAdd()
 	{
 		SpecimenArrayTypeForm specForm = new SpecimenArrayTypeForm();
@@ -64,7 +60,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Array Type Search.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeSearch()
 	{
 		SpecimenArrayType arrayType = (SpecimenArrayType) TestCaseUtility.getNameObjectMap("SpecimenArrayType");
@@ -91,7 +87,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Array Type Edit.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeEdit()
 	{
 //		//TODO
@@ -130,7 +126,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add with same name.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeAddWithSameName()
 	{
 //		//TODO
@@ -155,7 +151,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Array Type Add Tissue Specimen Class.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeAddTissueClass()
 	{
 //		//TODO
@@ -190,7 +186,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Array Type Add Fluid Specimen Class.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeAddFluidClass()
 	{
 //		//TODO
@@ -224,7 +220,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Array Type Add Molecular Specimen Class.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeAddMolecularClass()
 	{
 //		//TODO
@@ -258,7 +254,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Array Type Add Cell Specimen Class.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeAddCellClass()
 	{
 //		//TODO
@@ -294,7 +290,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 		
 		TestCaseUtility.setNameObjectMap("SpecimenCellArrayType",arrayType);
 	}
-	@Test
+	
 	/**
 	 * Test Specimen Array Type Add Tissue Specimen Class without activity status.
 	 * Negative Test Case.
@@ -322,7 +318,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type with empty name.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeAddWithEmptyTypeName()
 	{
 //		//TODO
@@ -344,7 +340,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add with Empty Specimen Class.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeAddWithEmptySpecimenClass()
 	{
 //		//TODO
@@ -366,7 +362,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add with Invalid Specimen Type.
 	 * Negative Test Case. 
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeAddWithinvalidSpecimenType()
 	{
 //		//TODO
@@ -388,7 +384,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add with Empty One Dimension.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeAddWithEmptyOneDimension()
 	{
 //		//TODO
@@ -410,7 +406,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add with Empty Specimen Class and Type.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeEditWithEmptySpecimenClassAndType()
 	{
 //		//TODO
@@ -441,7 +437,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add with NULL Specimen array object.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeBizLogicAddWithNullObject()
 	{
 //		//TODO
@@ -465,7 +461,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add with NULL Specimen Array name.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeBizLogicAddWithNullSpecimenArrayName()
 	{
 //		//TODO
@@ -492,7 +488,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add with NULL Specimen Class.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeBizLogicAddWithNullSpecimenClass()
 	{
 //		//TODO
@@ -519,7 +515,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add with NULL Specimen Type.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeBizLogicAddWithNullSpecimenType()
 	{
 //		//TODO
@@ -547,7 +543,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add with NULL dimension.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeBizLogicAddWithNullDimension()
 	{
 //		//TODO
@@ -574,7 +570,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Array Type Edit with decrease Capacity.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeEditDecreaseCapacity()
 	{
 //		//TODO
@@ -606,7 +602,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Array Type Edit with increased Capacity.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeEditIncreaseCapacity()
 	{
 //		//TODO
@@ -641,7 +637,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Array Type Edit Specimen Class.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeEditSpecimenClassAfterArrayCreation()
 	{
 //		//TODO
@@ -673,7 +669,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Array Type Edit dimensions.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeEditDimensionAfterArrayCreation()
 	{
 //		//TODO
@@ -707,7 +703,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add with Empty Specimen Class.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeBizLogicAddWithEmptySpecimenClass()
 	{
 //		//TODO
@@ -734,7 +730,7 @@ public class SpecimenArrayTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add with Invalid Specimen Type.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSpecimenArrayTypeBizLogicAddWithInvalidSpecimenType()
 	{
 //		//TODO

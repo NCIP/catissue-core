@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.testcase.bizlogic;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 

@@ -1,6 +1,4 @@
 package edu.wustl.catissuecore.testcase.login;
-import org.junit.Test;
-
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.common.beans.SessionDataBean;
@@ -15,7 +13,7 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	 * Negative Test Case.
 	 * Test Login with empty Login name.
 	 */
-	@Test
+	
 	public void testLoginWithEmptyLoginName()
 	{
 		setRequestPathInfo("/Login") ;
@@ -34,7 +32,7 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	 * Negative Test Case.
 	 * Test Login with empty Password.
 	 */
-	@Test
+	
 	public void testLoginWithEmptyLoginPassword()
 	{
 		setRequestPathInfo("/Login") ;
@@ -52,7 +50,7 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	 * Negative Test Case.
 	 * Test Login with Invalid Format of Login and Password.
 	 */
-	@Test
+	
 	public void testLoginWithInvalidFormatLogin()
 	{
 		setRequestPathInfo("/Login") ;
@@ -72,7 +70,7 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	 * Test Login with Invalid Login name and password.
 	 * bug 10997
 	 */
-	@Test
+	
 	public void testInvalidLogin()
 	{
 		/**
@@ -93,7 +91,7 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	/**
 	 * Test Login with Valid Login name and Password.
 	 */
-	@Test
+	
 	public void testSuccessfulLogin()
 	{
 		setRequestPathInfo("/Login") ;

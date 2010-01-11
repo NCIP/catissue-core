@@ -1,5 +1,8 @@
 package edu.wustl.catissuecore.testcase.bizlogic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
@@ -8,9 +11,6 @@ import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import gov.nih.nci.system.comm.client.ClientSession;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 

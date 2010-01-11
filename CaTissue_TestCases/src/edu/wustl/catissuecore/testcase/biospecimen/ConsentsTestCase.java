@@ -9,8 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.actionForm.ConsentResponseForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
@@ -38,7 +36,7 @@ public class ConsentsTestCase extends CaTissueSuiteBaseTest
 	/**
 	 * Test Collection Protocol Add.
 	 */
-	@Test
+	
 	public void testCollectionProtocolWithConsentTierAdd()
 	{
 		/*Collection Protocol Details*/

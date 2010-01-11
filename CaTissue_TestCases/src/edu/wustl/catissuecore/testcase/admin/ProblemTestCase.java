@@ -1,14 +1,12 @@
 package edu.wustl.catissuecore.testcase.admin;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 
 
 public class ProblemTestCase extends CaTissueSuiteBaseTest
 {
 
-	@Test
+	
 	public void testClickOnProblemDetail()
 	{
 		setRequestPathInfo("/AdminReportProblem");
@@ -19,7 +17,7 @@ public class ProblemTestCase extends CaTissueSuiteBaseTest
 
 	}
 	
-	@Test
+	
 	public void testClickOnrediRedirectProblem()
 	{
 		setRequestPathInfo("/RedirectToProblem");
@@ -29,7 +27,7 @@ public class ProblemTestCase extends CaTissueSuiteBaseTest
 
 	}
 	
-	@Test
+	
 	public void testClickOnRedirectToHelp()
 	{
 		setRequestPathInfo("/RedirectToHelp");

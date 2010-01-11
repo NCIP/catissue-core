@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
@@ -39,7 +37,7 @@ public class CollectionProtocolCloseActivityStatus extends CaTissueSuiteBaseTest
 	 * Test Collection Protocol Add.
 	 * @method : testAddCollectionProtocol()
 	 */
-	@Test
+	
 	public void testAddCollectionProtocol()
 	{
 		/*Collection Protocol Details*/
@@ -140,7 +138,7 @@ public class CollectionProtocolCloseActivityStatus extends CaTissueSuiteBaseTest
 	 * Test Participant Add.
 	 * @method : testParticipantAdd()
 	 */
-	@Test
+	
 	public void testParticipantAdd()
 	{
 		//Participant add and registration
@@ -201,7 +199,7 @@ public class CollectionProtocolCloseActivityStatus extends CaTissueSuiteBaseTest
 	 * @method : testSpecimenEdit()
 	 * @throws BizLogicException
 	 */
-	@Test
+	
 	public void testSpecimenEdit() throws BizLogicException
 	{
 
@@ -225,7 +223,7 @@ public class CollectionProtocolCloseActivityStatus extends CaTissueSuiteBaseTest
 	 * Test CollectionProtocol Edit. Collection protocol activity status is closed in this case.
 	 * @method : testCollectionProtocolEdit()
 	 */
-	@Test
+	
 	public void testCollectionProtocolEdit()
 	{
 
@@ -250,7 +248,7 @@ public class CollectionProtocolCloseActivityStatus extends CaTissueSuiteBaseTest
 	 * @method :testSpecimenEditWhenCpclosedAndParentSpecimenIsCollected()
 	 * @throws BizLogicException
 	 */
-	@Test
+	
 	public void testSpecimenEditWhenCpclosedAndParentSpecimenIsCollected() throws BizLogicException
 	{
 
@@ -274,7 +272,7 @@ public class CollectionProtocolCloseActivityStatus extends CaTissueSuiteBaseTest
 	 * @throws BizLogicException
 	 */
 
-	@Test
+	
 	public void testSpecimenEditWhenCpclosedAndParentSpecimenIsNotCollected()
 			throws BizLogicException
 	{

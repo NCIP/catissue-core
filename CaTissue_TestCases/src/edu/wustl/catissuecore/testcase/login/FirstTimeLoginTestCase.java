@@ -1,7 +1,5 @@
 package edu.wustl.catissuecore.testcase.login;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -12,7 +10,7 @@ public class FirstTimeLoginTestCase extends CaTissueSuiteBaseTest
 	/**
 	 * Test First Time Login.
 	 */
-	@Test
+	
 	public void testFirstTimeLogin()
 	{
 		setRequestPathInfo("/Login");

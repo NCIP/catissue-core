@@ -20,42 +20,38 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
-import edu.wustl.common.test.BaseTestCase;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.system.applicationservice.ApplicationService;
-import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
-import gov.nih.nci.system.comm.client.ClientSession;
 
-public class CsmSupervisorTestCases extends BaseTestCase {
-	static ApplicationService appService = null;
-	ClientSession cs = null;
-	
-	public void setUp(){
-		
-		//Logger.configure("");
-		appService = ApplicationServiceProvider.getApplicationService();
-		cs = ClientSession.getInstance();
-		try
-		{ 
-			cs.startSession("supervisor@admin.com", "Test123");
-			System.out.println("Inside CaTissue supervisor setup ");
-		} 	
-					
-		catch (Exception ex) 
-		{ 
-			System.out.println(ex.getMessage()); 
-			ex.printStackTrace();
-			fail();
-			System.exit(1);
-		}		
-	}
-	
-	
-	public void tearDown(){
-		System.out.println("Inside CaTissue supervisor teardown");
-		cs.terminateSession();
-	}
+public class CsmSupervisorTestCases extends CaTissueBaseTestCase {
+//	static ApplicationService appService = null;
+//	ClientSession cs = null;
+//	
+//	public void setUp(){
+//		
+//		//Logger.configure("");
+//		appService = ApplicationServiceProvider.getApplicationService();
+//		cs = ClientSession.getInstance();
+//		try
+//		{ 
+//			cs.startSession("supervisor@admin.com", "Test123");
+//			System.out.println("Inside CaTissue supervisor setup ");
+//		} 	
+//					
+//		catch (Exception ex) 
+//		{ 
+//			System.out.println(ex.getMessage()); 
+//			ex.printStackTrace();
+//			fail();
+//			System.exit(1);
+//		}		
+//	}
+//	
+//	
+//	public void tearDown(){
+//		System.out.println("Inside CaTissue supervisor teardown");
+//		cs.terminateSession();
+//	}
 	
 	public void testUseStorageContainerOfSiteWithAllowUsePrivilegeForSupervisor()
 		{

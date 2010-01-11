@@ -6,7 +6,6 @@ import java.util.HashSet;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ContainerPosition;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
@@ -17,14 +16,10 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
-import edu.wustl.common.test.BaseTestCase;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.system.applicationservice.ApplicationService;
-import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
-import gov.nih.nci.system.comm.client.ClientSession;
 
-public class CsmTechnicianTestCases extends BaseTestCase{
-	 static ApplicationService appService = null;
+public class CsmTechnicianTestCases extends CaTissueBaseTestCase{
+/*	 static ApplicationService appService = null;
 	  ClientSession cs = null;
 	  public void setUp(){
 		// Logger.configure("");
@@ -48,7 +43,7 @@ public class CsmTechnicianTestCases extends BaseTestCase{
 		  System.out.println("Inside Csm supervisor teardown method");
 		  cs.terminateSession();
 	  }
-	  
+*/	  
 	  public void testUseStorageContainerWithAllowUsePrevilegeForTechnician(){
 			try {
 			   // CollectionProtocol cp= (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);

@@ -5,7 +5,6 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
 
 

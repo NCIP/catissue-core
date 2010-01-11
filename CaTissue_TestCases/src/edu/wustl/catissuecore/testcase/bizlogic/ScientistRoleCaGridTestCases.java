@@ -2,7 +2,6 @@ package edu.wustl.catissuecore.testcase.bizlogic;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -11,7 +10,6 @@ import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
-import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.Participant;

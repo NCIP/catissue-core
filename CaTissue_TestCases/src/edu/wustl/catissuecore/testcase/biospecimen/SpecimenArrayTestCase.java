@@ -2,8 +2,6 @@ package edu.wustl.catissuecore.testcase.biospecimen;
 
 import java.util.Map;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -18,7 +16,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 public class SpecimenArrayTestCase extends CaTissueSuiteBaseTest
 {
-	@Test
+	
 	public void testSpecimenArrayAdd()
 	{
 
@@ -509,7 +507,7 @@ public class SpecimenArrayTestCase extends CaTissueSuiteBaseTest
 
 	}
 
-	@Test
+	
 	public void testSpecimenArrayEdit()
 	{
 		SpecimenArray specimenArray=(SpecimenArray)TestCaseUtility.getObjectMap().get("SpecimenArrayObject");

@@ -1,6 +1,5 @@
 package edu.wustl.catissuecore.testcase.bizlogic;
 
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import junit.framework.TestSuite;
 
 public class CsmTestSuite {

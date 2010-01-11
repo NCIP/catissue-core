@@ -2,8 +2,6 @@ package edu.wustl.catissuecore.testcase.admin;
 
 import java.util.List;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
@@ -17,10 +15,6 @@ import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.dao.QueryWhereClause;
-import edu.wustl.dao.condition.LikeClause;
-import edu.wustl.dao.exception.DAOException;
-import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 
 /**
  * This class contains test cases for Site add/edit
@@ -32,7 +26,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Site Add.
 	 */
-	@Test
+	
 	public void testAddRepositorySite()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
@@ -58,7 +52,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
     /**
 	 * Test Site Add Collection site.
 	 */
-	@Test
+	
 	public void testAddCollectionSite()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
@@ -82,7 +76,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Site Add Laboratory site.
 	 */
-	@Test
+	
 	public void testAddLaboratorySite()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
@@ -121,7 +115,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	/**
 	 *  Test Site Add Not Specified site.
 	 */
-	@Test
+	
 	public void testAddNotSpecifiedSite()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
@@ -162,7 +156,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add without specifying mandatory Parameters.
 	 * Negative test case.
 	 */
-	@Test
+	
 	public void testSiteAddWithoutMandatoryParams()
 	{
 		SiteForm siteForm = new SiteForm();
@@ -188,7 +182,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add with duplicate name.
 	 * Negative test case.
 	 */
-	@Test
+	
 	public void testSiteAddWithSameName()
 	{
 		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
@@ -206,7 +200,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add with empty site name. 
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSiteAddWithEmptyName()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
@@ -223,7 +217,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add with empty site type.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSiteAddWithEmptyType()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
@@ -239,7 +233,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add with empty site coordinator.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSiteAddWithEmptyCoordinator()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
@@ -255,7 +249,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add with empty Email address.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSiteAddWithEmptyEmailAddress()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
@@ -271,7 +265,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add with invalid email and coordinator.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSiteAddWithInvalidEmailAndCoordinator()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
@@ -291,7 +285,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * This test case is generating a.
 	 * NULL Pointer Exception.
 	 */
-	@Test
+	
 	public void testSiteBizLogicAddWithNullObject()
 	{
 		SiteBizLogic siteBizLogic = new SiteBizLogic() ;
@@ -311,7 +305,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add with NULL name.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSiteBizLogicAddWithNullName()
 	{
 		User coordinator = new User() ;
@@ -350,7 +344,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add with NULL site type.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSiteBizLogicAddWithNullType()
 	{
 		User coordinator = new User() ;
@@ -390,7 +384,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add with NULL site Coordinator.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSiteBizLogicAddWithNullCoordinator()
 	{
 		Address address = new Address() ;
@@ -425,7 +419,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add with NULL site Address.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSiteBizLogicAddWithNullAddress()
 	{
 		Site site = new Site() ;
@@ -462,7 +456,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Add with NULL email Address.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSiteBizLogicAddWithNullEmailAddress()
 	{
 		User coordinator = new User() ;
@@ -500,7 +494,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Site Search.
 	 */
-	@Test
+	
 	public void testSiteSearch()
 	{
 		setRequestPathInfo("/SimpleSearch");
@@ -561,7 +555,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Site Edit. 
 	 */
-	@Test
+	
 	public void testSiteEdit()
 	{
 		Site site = (Site)TestCaseUtility.getNameObjectMap("LaboratorySite") ;
@@ -597,7 +591,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Edit without specifying mandatory Parameters.
 	 * Negative test case.
 	 */
-	@Test
+	
 	public void testSiteEditEmptySiteParams()
 	{
 		Site site = (Site)TestCaseUtility.getNameObjectMap("LaboratorySite") ;
@@ -633,7 +627,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 	 * Test Site Edit with Closed Status.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testSiteWithCloseStatus()
 	{
 		User coordinator = new User() ;

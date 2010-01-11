@@ -3,12 +3,8 @@ package edu.wustl.catissuecore.testcase.admin;
 
 import java.util.List;
 
-import org.junit.Test;
-
-import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.bizlogic.InstitutionBizLogic;
-import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
@@ -31,7 +27,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Institution Add.
 	 */
-	@Test
+	
 	public void testInstitutionAdd()
 	{
 		InstitutionForm institutionForm = new InstitutionForm();
@@ -57,7 +53,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 	 * Test Institution Add With existing Name.
 	 * Negative test Case.
 	 */
-	@Test
+	
 	public void testInstitutionAddWithSameName()
 	{
 		Institution inst = (Institution) TestCaseUtility.getNameObjectMap("Institution");
@@ -79,7 +75,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 	 * Test Institution Add With Blank Name.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testInstitutionAddWithNullName()
 	{
 		InstitutionForm institutionForm = new InstitutionForm();
@@ -101,7 +97,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 	 * Test Institution Add With null object.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testInstitutionBizLogicAddWithNullObject()
 	{
 		try
@@ -121,7 +117,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 	 * Test Institution Add With NULL Name.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testInstitutionBizLogicAddWithNullName()
 	{
 		try
@@ -145,7 +141,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Institution Search.
 	 */
-	@Test
+	
 	public void testInstitutionSearch()
 	{
 
@@ -205,7 +201,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Institution Edit.
 	 */
-	@Test
+	
 	public void testInstitutionEdit()
 	{
 		Institution institution = (Institution) TestCaseUtility.getNameObjectMap("Institution");
@@ -242,7 +238,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 	 * Test Institution Search With wrong Identifier.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testInstitutionSearchOnWrongSearchString()
 	{
 		/*Simple Search Action*/
@@ -267,7 +263,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Institution Search With valid name using Institution BizLogic.
 	 */
-	@Test
+	
 	public void testInstitutionBizLogicSearchWithGivenInstitutionName()
 	{
 		try
@@ -286,7 +282,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 	
-	@Test
+	
 	public void testInstitutionBizLogicgetObjectIdMethod()
 	{
 		InstitutionBizLogic institutionBizLogic = new InstitutionBizLogic();
@@ -297,7 +293,7 @@ public class InstitutionTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Institution Add.
 	 */
-	@Test
+	
 	public void testInstitutionAddByPopUp()
 	{
 		setRequestPathInfo("/Institution");

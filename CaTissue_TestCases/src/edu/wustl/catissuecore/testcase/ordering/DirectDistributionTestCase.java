@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.RequestDetailsForm;
@@ -25,7 +23,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 public class DirectDistributionTestCase extends CaTissueSuiteBaseTest
 {
 
-	@Test
+	
 	public void testAddSpecimenAutoForDistribution()
 	{
 		NewSpecimenForm newSpecForm = new NewSpecimenForm() ;
@@ -113,7 +111,7 @@ public class DirectDistributionTestCase extends CaTissueSuiteBaseTest
 	 * Test Department Add.
 	 */
 	
-	@Test
+	
 	public void testDirectDistribution()
 	{
 		List<String> specimenIds = new ArrayList<String>();

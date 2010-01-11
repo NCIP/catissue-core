@@ -249,7 +249,7 @@ public class ExcelTestCaseUtility extends CaTissueSuiteBaseTest {
 	public  void createUser() throws Exception {
 		try {
 			User user = BaseTestCaseUtility.initUser();
-			user.setLoginName("test_struts_user@test.com");
+			user.setLoginName("test_struts_user.com");
 			user.setPageOf(Constants.PAGE_OF_USER_ADMIN);
 		    user = (User) appService.createObject(user);
 			Logger.out.info("User added successfully");

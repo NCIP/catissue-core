@@ -3,8 +3,6 @@ package edu.wustl.catissuecore.testcase.biospecimen;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.CellSpecimenReviewParametersForm;
 import edu.wustl.catissuecore.actionForm.CheckInCheckOutEventParametersForm;
 import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
@@ -18,7 +16,6 @@ import edu.wustl.catissuecore.actionForm.ProcedureEventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpunEventParametersForm;
 import edu.wustl.catissuecore.actionForm.ThawEventParametersForm;
 import edu.wustl.catissuecore.actionForm.TissueSpecimenReviewEventParametersForm;
-import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
 import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -32,10 +29,8 @@ import edu.wustl.catissuecore.domain.ProcedureEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpunEventParameters;
-import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.ThawEventParameters;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -46,7 +41,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
   	/**
 	 * Test CellSpecimenReviewParametersEvent Add.
 	 */
-	@Test
+	
 	public void testAddCellSpecimenReviewParametersEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -91,7 +86,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test CheckinCheckoutEvent Add.
 	 */
-	@Test
+	
 	public void testAddCheckinCheckoutEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -122,7 +117,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test CollectionEvent Add.
 	 */
-	@Test
+	
 	public void testCollectionEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -155,7 +150,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test EmbeddedEvent Add.
 	 */
-	@Test
+	
 	public void testEmbeddedEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -186,7 +181,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test FixedEvent Add.
 	 */
-	@Test
+	
 	public void testFixedEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -219,7 +214,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test FluidspecimenReviewEvent Add.
 	 */
-	@Test
+	
 	public void testFluidspecimenReviewEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -261,7 +256,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test FrozenEvent Add.
 	 */
-	@Test
+	
 	public void testFrozenEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -292,7 +287,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test FluidspecimenReviewEvent Add.
 	 */
-	@Test
+	
 	public void testMolecularspecimenReviewEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -347,7 +342,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test ProcedureEvent Add.
 	 */
-	@Test
+	
 	public void testProcedureEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -360,7 +355,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		verifyForward("pageOfProcedureEventParameters");
 		ProcedureEventParametersForm procedureForm = (ProcedureEventParametersForm) getActionForm();
 		addRequestParameter("specimenId",specimen.getId().toString());
-		procedureForm.setUrl( "test@test.com" );
+		procedureForm.setUrl( "test.com" );
 		procedureForm.setName( "Procedure" );
 		procedureForm.setForwardTo( "success" );
 		procedureForm.setSpecimenId( specimen.getId() );
@@ -379,7 +374,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test SpunEvent Add.
 	 */
-	@Test
+	
 	public void testSpunEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -423,7 +418,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test ThawEvent Add.
 	 */
-	@Test
+	
 	public void testThawEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -453,7 +448,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test FrozenEvent Add.
 	 */
-	@Test
+	
 	public void testTissuespecimenReviewEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -507,7 +502,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	 * Test TransferEvent Add.
 	 * not working now
 	 */
-	/*@Test
+	/*
 	public void testTransferEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -549,7 +544,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test CollectionEvent Add.
 	 */
-	@Test
+	
 	public void testDisposalEvent()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");

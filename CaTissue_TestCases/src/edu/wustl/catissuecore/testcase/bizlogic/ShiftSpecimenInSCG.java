@@ -32,7 +32,6 @@ import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.AssignDataException;
 import gov.nih.nci.common.util.HQLCriteria;
 

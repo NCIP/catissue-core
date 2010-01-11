@@ -1,8 +1,6 @@
 package edu.wustl.catissuecore.testcase.biospecimen;
 
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -17,8 +15,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;

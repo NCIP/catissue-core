@@ -7,8 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
@@ -29,7 +27,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Participant Add.
 	 */
-	@Test
+	
 	public void testParticipantAdd()
 	{
 		/*Participant add and registration*/
@@ -107,7 +105,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Participant Edit.
 	 */
-	@Test
+	
 	public void testParticipantSearch()
 	{
 		/*Simple Search Action*/
@@ -160,7 +158,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	 * Test Participant Add with empty parameters.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testParticpantEdit()
 	{
 		Participant participant = (Participant) TestCaseUtility.getNameObjectMap("Participant");
@@ -195,7 +193,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	 * Test Participant Add with empty parameters.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testParticpantAddWithEmptyParameters()
 	{
 		ParticipantForm partForm = new ParticipantForm() ;
@@ -251,7 +249,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	 * Test Participant Add with same name.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testParticipantAddWithSameName()
 	{
 		Participant participant = (Participant) TestCaseUtility.getNameObjectMap("Participant");
@@ -306,7 +304,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	 * Test Participant Add with invalid SSN.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testParticipantAddWithInvalidSSN()
 	{
 		//Participant add and registration
@@ -331,7 +329,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	 * Test Participant Add with invalid BirthDate.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testParticipantAddWithInvalidBirthDate()
 	{
 		//Participant add and registration
@@ -354,7 +352,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	 * Test Participant Add with invalid Gender.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testParticipantAddWithInvalidGender()
 	{
 		
@@ -383,7 +381,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	 * Test Participant Add with invalid Ethnicity.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testParticipantAddWithInvalidEthnicity()
 	{
 		//Participant add and registration
@@ -407,7 +405,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	 * Test disabled Participant
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testRegisterParticicpantAndDisable()
 	{
 		Participant participant = (Participant) TestCaseUtility.getNameObjectMap("Participant");
@@ -433,7 +431,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Participant with PMI
 	 */
-	@Test
+	
 	public void testRegisterParticpantWithPMI()
 	{
 		//Participant add and registration

@@ -5,18 +5,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
-import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
-import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.RequestParameterUtility;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
@@ -34,7 +30,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Type Add.
 	 */
-	@Test
+	
 	public void testStorageTypeAdd()
 	{
 		StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeForm(this,
@@ -68,7 +64,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Type Add.
 	 */
-	@Test
+	
 	public void testAddRestrictedStorageType()
 	{
 		StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeFormWithTypeRestriction(this,
@@ -86,7 +82,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Storage Type Add with same name (1x1 capacity).
 	 */
 	//RB S
-	@Test
+	
 	public void testStorageTypeAddWithSameName()
 	{
 		StorageType storageType1 = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
@@ -103,7 +99,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Type Add with with only Tissue Specimen restriction.
 	 */
-	@Test
+	
 	public void testStorageTypeAddTissueSpecimenClass()
 	{
 		StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeForm(this,
@@ -138,7 +134,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage type Add with only Molecular Specimen restriction.
 	 */
-	@Test
+	
 	public void testStorageTypeAddMolecularSpecimenClass()
 	{
 
@@ -174,7 +170,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage type Add with only Fluid Specimen restriction.
 	 */
-	@Test
+	
 	public void testStorageTypeAddFluidSpecimenClass()
 	{
 
@@ -210,7 +206,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage type Add with only Cell Specimen restriction.
 	 */
-	@Test
+	
 	public void testStorageTypeAddCellSpecimenClass()
 	{
 
@@ -246,7 +242,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage type Add with only All Specimen restriction.
 	 */
-	@Test
+	
 	public void testStorageTypeAddAllSpecimenClass()
 	{
 
@@ -283,7 +279,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Storage type Add without activity status.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testAddStorageTypeWithoutActivityStatus()
 	{
 
@@ -300,7 +296,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Storage type Add with empty parameters.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testStorageTypeAddWithEmptyParameters()
 	{
 		StorageType storageType1 = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
@@ -321,7 +317,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Storage type Add with invalid data.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testStorageTypeAddWithInvalidData()
 	{
 		StorageType storageType1 = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
@@ -340,7 +336,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Storage type Add with Box storage Type.
 	 * Create Storage type hierarchy as Freezer(2X2) holds box (10x10)
 	 */
-	@Test
+	
 	public void testAddBoxStorageTypeAdd()
 	{
 		// Adding Box of 10*10
@@ -379,7 +375,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Storage type Add with Freezer storage Type.
 	 * Create Storage type hierarchy as Freezer(2X2) holds box (10x10)
 	 */
-	@Test
+	
 	public void testAddFreezerStorageType()
 	{
 		// Adding Box of 2*2 Freezer which holds Box of 10*10.
@@ -420,7 +416,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Type Search.
 	 */
-	@Test
+	
 	public void testStorageTypeSearch()
 	{
 		/*Simple Search Action*/
@@ -476,7 +472,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Type Edit.
 	 */
-	@Test
+	
 	public void testFreezerStorageTypeEdit()
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("Freezer_StorageType");
@@ -524,7 +520,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Type edit with increased capacity.
 	 */
-	@Test
+	
 	public void testFreezerStorageTypeEditIncreseCapacity()
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("Freezer_2_2_StorageType");
@@ -575,7 +571,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Type edit with decreased capacity.
 	 */
-	@Test
+	
 	public void testBoxStorageTypeEditDecreaseCapacity()
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("Box_StorageType");
@@ -717,7 +713,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	 * Adding an invalid specimen class.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testStorageTypeAddWithNoSpecimenClass()
 	{
 //		//TODO
@@ -738,7 +734,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Storage Type add with empty one dimension.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testStorageTypeAddWithEmptyOneDimension()
 	{
 //		//TODO
@@ -758,7 +754,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	 * Test Storage Type add with invalid holds storage type.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testStorageTypeAddWithInvalidHoldsStorageType()
 	{
 //		//TODO
@@ -776,7 +772,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Type Add with with Specimen Array Type restriction.
 	 */
-	@Test
+	
 	public void testStorageTypeAddSpecimenArrayType()
 	{
 		StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeForm(this,

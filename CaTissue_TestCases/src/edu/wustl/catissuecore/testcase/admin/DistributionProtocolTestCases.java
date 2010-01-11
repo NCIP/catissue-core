@@ -4,8 +4,6 @@ package edu.wustl.catissuecore.testcase.admin;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.catissuecore.bizlogic.DistributionProtocolBizLogic;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
@@ -15,7 +13,6 @@ import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
@@ -29,7 +26,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Distribution Protocol Add.
 	 */
-	@Test
+	
 	public void testDistributionProtocolAdd()
 	{
 		DistributionProtocolForm distProtocolForm = new DistributionProtocolForm();
@@ -71,7 +68,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Distribution Protocol Search.
 	 */
-	@Test
+	
 	public void testDistributionProtocolSearch()
 	{
 		/*Simple Search Action*/
@@ -124,7 +121,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Distribution Protocol Edit.
 	 */
-	@Test
+	
 	public void testDistributionProtocolEdit()
 	{
 //		//TODO 
@@ -166,7 +163,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 * Test Distribution Protocol Add with Empty Title.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDistributionProtocolAddWithEmptyTitle()
 	{
 //		//TODO
@@ -188,7 +185,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 * Test Distribution Protocol Add with empty short title.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDistributionProtocolAddWithEmptyShortTitle()
 	{
 //		//TODO
@@ -209,7 +206,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 * Test Distribution Protocol Add with invalid PI.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDistributionProtocolAddWithInvalidPI()
 	{
 //		//TODO
@@ -230,7 +227,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 * Test Distribution Protocol Add with Invalid Specimen Class.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDistributionProtocolBizLogicAddWithInvalidSpecimenClass()
 	{
 //		//TODO
@@ -271,7 +268,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 * Test Distribution Protocol Add with Invalid Specimen Type.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDistributionProtocolBizLogicAddWithInvalidSpecimenType()
 	{
 //		//TODO
@@ -312,7 +309,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 * Test Distribution Protocol Add with Invalid Tissue Site.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDistributionProtocolBizLogicAddWithInvalidTissueSite()
 	{
 //		//TODO
@@ -353,7 +350,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 *  Test Distribution Protocol Add with Invalid Pathological status.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDistributionProtocolBizLogicAddWithInvalidPathStatus()
 	{
 //		//TODO
@@ -395,7 +392,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 * Test Distribution Protocol Add with Invalid options
 	 * Negative Test Case. 
 	 */
-	@Test
+	
 	public void testDistributionProtocolWithInvalidOptionSelected()
 	{
 		DistributionProtocolForm distProtocolForm = new DistributionProtocolForm();
@@ -422,7 +419,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 * Negative Test Case.
 	 * This test case generating an NULL Pointer Exception.
 	 */
-	@Test
+	
 	public void testDistributionProtocolBizLogicAddWithNullObject()
 	{
 		DistributionProtocolBizLogic bizLogic = new DistributionProtocolBizLogic();
@@ -438,7 +435,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 			e.printStackTrace();
 		}
 	}
-	@Test
+	
 	/**
 	 * Test Distribution Protocol Add with NULL PI.
 	 * Negative Test Case.
@@ -470,7 +467,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 * Test Distribution Protocol Add with NULL DP title.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDistributionProtoclBizLogicAddWithNullTitle()
 	{
 //		//TODO
@@ -500,7 +497,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 * Test Distribution Protocol Add with NULL DP short title.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDistributionProtoclBizLogicAddWithNullShortTitle()
 	{
 //		//TODO
@@ -530,7 +527,7 @@ public class DistributionProtocolTestCases extends CaTissueSuiteBaseTest
 	 * Test Distribution Protocol update with status disabled.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testDistributionProtoclBizLogicUpdateWithStatusDisabled()
 	{
 		try

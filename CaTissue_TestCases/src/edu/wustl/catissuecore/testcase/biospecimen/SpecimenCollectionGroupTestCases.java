@@ -1,9 +1,6 @@
 package edu.wustl.catissuecore.testcase.biospecimen;
 
-import java.util.List;
 import java.util.Map;
-
-import org.junit.Test;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
@@ -15,9 +12,6 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 /**
  * This class contains test cases for Specimen Collection Group add/edit
  * @author Himanshu Aseeja
@@ -27,7 +21,7 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Collection Group Add.
 	 */
-	@Test
+	
 	public void testSpecimenCollectionGroupAdd()
 	{
 		SpecimenCollectionGroupForm speCollForm = new SpecimenCollectionGroupForm();
@@ -107,7 +101,7 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Collection Group Add.
 	 */
-	@Test
+	
 	public void testSpecimenCollectionGroupAddWithWrongCPEventId()
 	{
 		SpecimenCollectionGroupForm speCollForm = new SpecimenCollectionGroupForm();
@@ -169,7 +163,7 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Collection Group Edit.
 	 */
-	@Test
+	
     public void testEditSCGAndGotoAnticipatorySpecimen()
 
     {

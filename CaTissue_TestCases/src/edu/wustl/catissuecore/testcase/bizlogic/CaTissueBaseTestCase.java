@@ -5,10 +5,6 @@ package edu.wustl.catissuecore.testcase.bizlogic;
 
 
 import edu.wustl.common.test.BaseTestCase;
-import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.system.applicationservice.ApplicationService;
-import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
-import gov.nih.nci.system.comm.client.ClientSession;
 
 /**
  * @author ganesh_naikwade

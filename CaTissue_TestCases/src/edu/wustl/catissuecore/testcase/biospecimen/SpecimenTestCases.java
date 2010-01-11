@@ -2,8 +2,6 @@ package edu.wustl.catissuecore.testcase.biospecimen;
 
 import java.util.Map;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
@@ -37,7 +35,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Add.
 	 */
-	@Test
+	
 	public void testSpecimenAdd()
 	{
 		NewSpecimenForm newSpecForm = new NewSpecimenForm() ;
@@ -118,7 +116,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	 * Test aliquot add
 	 * AliquotAction + CreateAliquotAction
 	 */
-	@Test
+	
 	public void testAliquotAdd()
 	{
 		setRequestPathInfo("/Aliquots");
@@ -157,7 +155,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	 * Bug Id : 11480
 	 * @author Himanshu Aseeja
 	 */
-	@Test
+	
 	public void testLabelandBarcodeonStoragePositionChange()
 	{
        	Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -184,7 +182,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	 * Test Specimen Edit.
 	 */
 	//bug 11174
-	@Test
+	
 	public void testSpecimenEdit()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -270,7 +268,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test disabled Participant
 	 */
-	@Test
+	
 	public void testParticicpantAndDisableCollectedSpecimens()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -299,7 +297,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Add to my List.
 	 */
-//	@Test
+//	
 //	//bug 11829
 //	public void testSpecimenAddToMyList()
 //	{
@@ -374,7 +372,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 //
 //
 //	}
-//	@Test
+//	
 //	public void testSupervisorLogin()
 //	  {
 //		   	addRequestParameter("loginName","super@super.com");
@@ -390,7 +388,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 //	        verifyNoActionErrors();
 //	  }
 	//bug 11659
-/*	@Test
+/*	
 	public void testSpecimenEditBySupervisor()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -506,7 +504,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	 /**
 		 * Test Specimen Add.
 		 */
-		@Test
+		
 		public void testTissueSpecimenAdd()
 		{
 			NewSpecimenForm newSpecForm = new NewSpecimenForm() ;
@@ -646,7 +644,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		/**
 		 * Test Specimen Add in Storage Container with restriction.
 		 */
-		@Test
+		
 		public void testSpecimenAddInRestrictedCont()
 		{
 			//Adding Storage Type
@@ -792,7 +790,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		/**
 		 * Test Specimen Add negative test case
 		 */
-		@Test
+		
 		public void testSpecimenAddInWrongContainer()
 		{
 			StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeFormWithTypeRestriction(this,

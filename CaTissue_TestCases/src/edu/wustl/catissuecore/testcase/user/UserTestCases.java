@@ -1,7 +1,5 @@
 package edu.wustl.catissuecore.testcase.user;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
@@ -14,7 +12,7 @@ import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 
 public class UserTestCases extends CaTissueSuiteBaseTest
 {
-	@Test
+	
 	public void testSupervisorAdd()
 	{
 		//RequestParameterUtility.setAddUserParams(this);

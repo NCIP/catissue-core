@@ -4,7 +4,6 @@ import java.util.List;
 
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;

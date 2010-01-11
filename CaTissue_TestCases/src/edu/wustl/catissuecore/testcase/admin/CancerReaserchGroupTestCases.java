@@ -2,13 +2,9 @@ package edu.wustl.catissuecore.testcase.admin;
 
 import java.util.List;
 
-import org.junit.Test;
-
 import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
 import edu.wustl.catissuecore.bizlogic.CancerResearchBizLogic;
-import edu.wustl.catissuecore.bizlogic.DepartmentBizLogic;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
-import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
@@ -28,7 +24,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Cancer Research Group Add.
 	 */
-	@Test
+	
 	public void testCancerResearchGroupAdd()
 	{
 		CancerResearchGroupForm cancerResearchGroupForm = new CancerResearchGroupForm();
@@ -51,7 +47,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	 * Test CancerResearchGroup Add With existing Name.
 	 * Negative test Case.
 	 */
-	@Test
+	
 	public void testCancerResearchGroupAddWithSameName()
 	{
 		CancerResearchGroup cancerResearchGroup = (CancerResearchGroup) TestCaseUtility.getNameObjectMap("CancerResearchGroup");
@@ -72,7 +68,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	 * Test CancerResearchGroup Add With Blank Name.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testCancerResearchGroupAddWithNullName()
 	{
 		CancerResearchGroupForm cancerResearchGroupForm = new CancerResearchGroupForm();
@@ -92,7 +88,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Cancer Research Group Search.
 	 */
-	@Test
+	
 	public void testCancerResearchGroupSearch()
 	{
 		/*Simple Search Action*/
@@ -146,7 +142,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Cancer Research Group Edit.
 	 */
-	@Test
+	
 	public void testCancerResearchGroupEdit()
 	{
 		CancerResearchGroup cancerResearchGroup = (CancerResearchGroup) TestCaseUtility.getNameObjectMap("CancerResearchGroup");
@@ -183,7 +179,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	 * Test CancerResearchGroup Search on Wrong Search Value.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testCancerResearchGroupSearchOnWrongSearchValue()
 	{
 		/*Simple Search Action*/
@@ -208,7 +204,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	 * Test Cancer Research Group Add with NULL object.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testCRGBizLogicAddWithNullObject()
 	{
 //		//TODO
@@ -231,7 +227,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	 * Test Cancer Research Group Add with NULL name.
 	 * Negative Test Case.
 	 */
-	@Test
+	
 	public void testCRGBizLogicAddWithNullName()
 	{
 //		//TODO
@@ -256,7 +252,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	 * Test Cancer Research Group search.
 	 * with given name using CRG BizLogic.
 	 */
-	@Test
+	
 	public void testCRGSearchWithGivenCRGName()
 	{
 		try
@@ -279,7 +275,7 @@ public class CancerReaserchGroupTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Cancer Research Group Add.
 	 */
-	@Test
+	
 	public void testCancerResearchGroupAddByPopUp()
 	{
 		

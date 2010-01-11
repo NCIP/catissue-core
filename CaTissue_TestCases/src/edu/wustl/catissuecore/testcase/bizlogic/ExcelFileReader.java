@@ -5,16 +5,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Arrays;
+import java.util.Date;
 
-import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook; //import edu.wustl.catissuecore.domain.*;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 /**
  * Class to read data from Microsoft Excel Sheet
