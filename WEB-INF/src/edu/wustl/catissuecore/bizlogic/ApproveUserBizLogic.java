@@ -84,7 +84,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 		{
 			userDTO = (UserDTO) obj;
 			user = userDTO.getUser();
-			oldUser = ((UserDTO)oldObj).getUser();
+			oldUser = (User) oldObj;
 		}
 		else
 		{
