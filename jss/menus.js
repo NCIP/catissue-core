@@ -365,11 +365,6 @@ Ext.onReady(function(){
                 text: 'Shipping And Tracking',
 				tooltip:'Shipping And Tracking Dashboard',
 				href : 'ShowDashboardAction.do'
-            },
-            {
-                text: 'Bulk Operations',
-				tooltip:'Bulk Operations',
-                href:'BulkOperation.do?pageOf=pageOfBulkOperation'
             }
         ]
     });
@@ -400,7 +395,7 @@ Ext.onReady(function(){
             }
         ]
     });
-
+    
 	//For Help Tab
 
 	var helpMenu = new Ext.menu.Menu({
@@ -443,7 +438,10 @@ Ext.onReady(function(){
        		text: 'Search',
             menu: menu_search  // assign menu by instance
         },
-			
+		{
+			 text: 'Bulk Operations',link:'BulkOperation.do?pageOf=pageOfBulkOperation',
+			 handler: handleMenu,tooltip:'Bulk Operations'
+		},			
 		{	text:'Help',
 			menu: helpMenu
 		}
@@ -461,6 +459,5 @@ Ext.onReady(function(){
 	{
 	document.location.href = item.link;
 	}
-	
     
 });
