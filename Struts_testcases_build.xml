@@ -71,7 +71,9 @@
 		</path>
 
     <target name="init_junit_testcases">
-    	
+		<delete dir="${cat.test.classes.dir}" />
+		<mkdir dir="${cat.test.classes.dir}" /> 
+		
     	<available type="dir" file="${temp.dir}/catissuecore" property="file.exists"/>
     			<if>
     				<not>
@@ -225,9 +227,6 @@
 	<target name="compile_junit_testcases" depends="init_junit_testcases">
 		 
 		<echo>Compiling the test classes : </echo>
-		<delete dir="${cat.test.classes.dir}" />
-		<mkdir dir="${cat.test.classes.dir}" /> 
-		
 			
 	    <javac destdir="${cat.test.classes.dir}" includes="**/*.java" includeAntRuntime="false" target="1.5">
 	            <src path="${cat.test.src.dir}"/>
@@ -242,7 +241,7 @@
 			<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/Html_reports" />
 			
 			
-			<junit printsummary="yes" fork="yes" haltonfailure="no" showoutput="true" includeantruntime="no">
+			<junit printsummary="yes" fork="yes" haltonfailure="no" >
 				
 				<jvmarg value="-Xms128m"/>
 				<jvmarg value="-Xmx1024m"/> 
@@ -268,18 +267,14 @@
 								</fileset>
 								<fileset dir="${catissue.lib.dir}">
 									<include name="**/*.jar"/>
+									<exclude name="ant.jar"/>
 								</fileset>
 								
 								<fileset dir="${lib.dir}">
 									<include name="mysql-connector-java-5.0.8-bin.jar" />
 									<include name="ojdbc14.jar" />
 								</fileset>
-							
-								<fileset dir="${catissue.temp.dir}/WEB-INF/">
-									<include name="**/*.properties"/>
-									<include name="**/*.xml" />
-									<include name="**/*.tld" />
-								</fileset>
+							<pathelement path="${catissue.temp.dir}/WEB-INF"/>
 				</classpath>
 
 				<formatter type="xml"/> 
