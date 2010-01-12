@@ -3511,6 +3511,21 @@ public class AppUtility
 	 * @return List of collectionProtocol title.
 	 * @throws ApplicationException
 	 */
+	public static List getClassAndTypeList(String id) throws ApplicationException
+	{
+		final String sql = "SELECT PV1.value Class, SP.SPECIMEN_TYPE FROM catissue_permissible_value PV,catissue_permissible_value PV1," +
+				"CATISSUE_STOR_CONT_SPEC_TYPE SP WHERE PV.parent_identifier = PV1.identifier and " +
+				"PV1.value in ('Molecular','Cell','Fluid','Tissue') and " +
+				"pv.value = sp.specimen_type and SP.STORAGE_CONTAINER_ID = " + id;
+		return getResult(sql);
+	}
+	/**
+	 * @param id
+	 *            Identifier of the StorageContainer related to which the
+	 *            collectionProtocol titles are to be retrieved.
+	 * @return List of collectionProtocol title.
+	 * @throws ApplicationException
+	 */
 	public static List getSpecimenTypeList(String id) throws ApplicationException
 	{
 		final String sql = " SELECT SP.SPECIMEN_TYPE FROM CATISSUE_STOR_CONT_SPEC_TYPE SP "
