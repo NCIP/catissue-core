@@ -54,13 +54,13 @@
 	<property name="mysql.dao.prop.filename" value="MySQLDAOProperties.xml" />
 	<property name="oracle.dao.prop.filename" value="OracleDAOProperties.xml" />
 
-	<property file="idpInstall.properties" />
+	<property file="washuInstall.properties" />
 	<var name="databaseurl" value="" />
 	<import file="DEDeploy.xml" />
 
 	<property name="tempcacore.dir" value="${base.dir}/temp_deaudit_related_files" />
 	<property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
-	<property name="cacaore.deployables" value="./cacore_deployable" />
+	<property name="cacaore.deployables" value="${cacore.deployable.location}" />
 
 	<!--import file="dbunitbuild.xml"/>
 	<target name="dbunit_testcases">
@@ -898,13 +898,15 @@
 		<mkdir dir="${export.dir}" />
 
 		<!-- <unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" overwrite="true" /> -->
-		<mkdir dir="${cacaore.deployables}" />
+		<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
+
+		<!-- <mkdir dir="${cacaore.deployables}" />  -->
 
 		<ant antfile="DEDeploy.xml" dir="." target="generate.cacore.for.imported.xmis">
-			 <property name="hook.entity.value" value="none" />
-			<property name="de.zip.location" value="${basedir}/" />
+			<property name="de.zip.location" value="${temp.dir}/dynamicextensions" />
 			<property name="entityGroup.jar.location" value="${temp.dir}/catissuecore/WEB-INF/lib" />
 			<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
+			<property name="import.xmi" value="False" />
 		</ant>
 
 		<delete file="${base.dir}/log4j.properties" />
@@ -956,7 +958,7 @@
 	<!-- Integrating DynamicExtensions application with catissue -->
 	<target name="de_integrate_app" depends="de_check_prerequisite" if="file.exists" description="Integrating DynamicExtensions application with catissue">
 		<echo message="Integrating DynamicExtensions app ...." />
-		<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
+		<!--<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />-->
 		<unjar src="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir}/dynamicextensions/WEB-INF/classes" />
 		<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernateWeb.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
 
@@ -2800,6 +2802,12 @@ Thanking You,
 			<replacefilter token="${token.database.password}" value="${database.password}" />
 		</replace>
 
+		<delete dir="${tempcacore.dir}" />
+		<mkdir dir="${tempcacore.dir}" />
+
+		<delete dir="${export.dir}" />
+		<mkdir dir="${export.dir}" />
+
 		<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true" maxmemory="1024m">
 			<arg value="${filename}" />
 			<arg value="${mainContainerList}" />
@@ -2807,6 +2815,7 @@ Thanking You,
 			<arg value="${hookentity}" />
 			<arg value="${addQueryPaths}" />
 			<arg value="${condition}" />
+			<arg value="${generate.cacore}" />
 
 			<classpath>
 				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
@@ -2820,23 +2829,35 @@ Thanking You,
 			</classpath>
 		</java>
 
-		<if><equals arg1="yes" arg2="${generateCacore}" />
+		<if>
+			<equals arg1="${generate.cacore}" arg2="False" casesensitive="false" />
 			<then>
-				<delete dir="${tempcacore.dir}" />
-				<mkdir dir="${tempcacore.dir}" />
-				<delete dir="${export.dir}" />
-				<mkdir dir="${export.dir}" />
+				<echo message=" " />
+				<echo message="------------------------------------------" />
+				<echo message="Skipping cacore generation for ${filename} entity group " />
+				<echo message="------------------------------------------" />
+				<echo message=" " />
+			</then>
+			<else>
+				<echo message=" " />
+				<echo message="------------------------------------------" />
+				<echo message="Generating cacore for ${filename} entity group " />
+				<echo message="------------------------------------------" />
+				<echo message=" " />
+
+				<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
+
 				<ant antfile="DEDeploy.xml" dir="." target="setupClassExecutionEnvironment" />
+
 				<ant antfile="DEDeploy.xml" dir="." target="export.xmi.and.generate.cacore">
-					<property name="xmi.name" value="${filename}"/>
-					<property name="hook.entity.value" value="none" />
-					<property name="de.zip.location" value="${basedir}/" />
-					<property name="entityGroup.jar.location" value="${temp.dir}/catissuecore/WEB-INF/lib" />
+					<property name="xmi.name" value="${filename}" />
 					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
+					<property name="de.zip.location" value="${temp.dir}/dynamicextensions" />
+					<property name="import.xmi" value="True" />
 				</ant>
 
 				<delete file="${base.dir}/log4j.properties" />
-			</then>
+			</else>
 		</if>
 		<delete dir="${export.dir}" />
 		<delete dir="${tempcacore.dir}" />
