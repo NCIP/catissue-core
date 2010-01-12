@@ -59,8 +59,7 @@
 			</fileset>
 			
 			<fileset dir="${lib.dir}">
-				<include name="mysql-connector-java-5.0.8-bin.jar" />
-				<include name="ojdbc14.jar" />
+				<include name="**/*.jar"/>
 			</fileset>
 		<pathelement path="${catissue.temp.dir}/WEB-INF"/>
 		</path>

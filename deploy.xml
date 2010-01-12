@@ -355,7 +355,7 @@
 
 	<!--Modify Configuration For MySQL-->
 	<target name="mysql_config" description="Modify Configuration For MySQL">
-		<echo message="Modifying caTISSUECore MySQL specific Configuration File..." />
+		<echo message="Modifying caTissue Suite MySQL specific Configuration File..." />
 
 		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties">
 			<include name="upt.hibernate.cfg.xml" />
@@ -402,7 +402,7 @@
 
 	<!--Modify Configuration For Oracle-->
 	<target name="oracle_config" description="Modify Configuration For Oracle">
-		<echo message="Modifying caTISSUECore Oracle specific Configuration File..." />
+		<echo message="Modifying caTissue Suite Oracle specific Configuration File..." />
 		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties">
 			<include name="upt.hibernate.cfg.xml" />
 			<include name="catissuecore.hibernate.cfg.xml" />
@@ -610,7 +610,7 @@
 	</target>
 
 	<target name="copy_files" description="copy Configuration Files to JBOSS Directory">
-		<echo message="Copying caTISSUECore Application Components..." />
+		<echo message="Copying caTissue Suite Application Components..." />
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
 			<replacefilter token="@@ADMIN-EMAILADDRESS@@" value="${email.administrative.emailAddress}" />
 			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
@@ -2633,7 +2633,7 @@ Thanking You,
 					Encoded Password ${first.admin.encodedPassword}
 			</echo>
 
-		<echo message="Modifying caTISSUECore SQL file for user information..."/>
+		<echo message="Modifying caTissue Suite SQL file for user information..."/>
 			<copy file="${oracle.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
 
 			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
@@ -2673,7 +2673,7 @@ Thanking You,
 					Encoded Password ${first.admin.encodedPassword}
 			</echo>
 
-		<echo message="Modifying caTISSUECore SQL file for user information..."/>
+		<echo message="Modifying caTissue Suite SQL file for user information..."/>
 		<copy file="${mysql.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
 
 			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
@@ -3505,7 +3505,7 @@ Thanking You,
 			Encoded Password ${first.admin.encodedPassword}
 		</echo>
 
-		<echo message="Modifying caTISSUECore SQL file for user information..."/>
+		<echo message="Modifying caTissue Suite SQL file for user information..."/>
 		<copy file="${mssqlserver.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
 
 		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
@@ -3532,7 +3532,7 @@ Thanking You,
 
 	<!--Modify Configuration For MsSqlServer-->
 	<target name="mssqlserver_config" description="Modify Configuration For MsSqlServer">
-			<echo message="Modifying caTISSUECore MsSqlServer specific Configuration File..." />
+			<echo message="Modifying caTissue Suite MsSqlServer specific Configuration File..." />
 			<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties">
 				<include name="upt.hibernate.cfg.xml" />
 				<include name="catissuecore.hibernate.cfg.xml" />
