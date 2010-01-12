@@ -30,7 +30,6 @@
 	<property name="catissue.lib.dir" value="${temp.dir}/catissuecore/WEB-INF/lib" />
 	
          <!-- struts test case related properties -->
-		<property name="cat.test.conf.dir" value="${catissue.test}/conf" />
 		<property name="cat.test.classes.dir" value="${catissue.test}/classes" />
 		<property name="cat.test.src.dir" value="${catissue.test}/src"/>
 		<property name="cat.test.lib.dir" value="${catissue.test}/lib"/>
@@ -46,10 +45,9 @@
 			</fileset>
 		</path>
 		<path id="testcases.classpath">
-			<pathelement path= "${cat.test.classes.dir}" />
-			<pathelement path= "${catissue.classes.dir}" /> 
+			<pathelement path= "${cat.test.classes.dir}/" />
+			<pathelement path= "${catissue.classes.dir}/" /> 
 			<pathelement path="${cat.test.src.dir}" />
-			<pathelement path= "${cat.test.conf.dir}" />
 			
 			<fileset dir="${cat.test.lib.dir}">
 				<exclude name="catissuecore.jar"/>
@@ -57,17 +55,14 @@
 			</fileset>
 			<fileset dir="${catissue.lib.dir}">
 				<include name="**/*.jar"/>
+				<exclude name="ant.jar"/>
 			</fileset>
 			
 			<fileset dir="${lib.dir}">
-				<include name="*.jar" />
+				<include name="mysql-connector-java-5.0.8-bin.jar" />
+				<include name="ojdbc14.jar" />
 			</fileset>
-		
-			<fileset dir="${catissue.temp.dir}/WEB-INF/">
-				<include name="**/*.properties"/>
-				<include name="**/*.xml" />
-				<include name="**/*.tld" />
-			</fileset>
+		<pathelement path="${catissue.temp.dir}/WEB-INF"/>
 		</path>
 
     <target name="init_junit_testcases">
@@ -148,8 +143,8 @@
     		<target name="replacecfgfiles">
     			<copy file="${catissue.classes.dir}/hibernate.cfg.xml" todir="${cat.test.classes.dir}" overwrite="true" />
     		    <copy file="${catissue.classes.dir}/DynamicExtensionsHibernate.cfg.xml" todir="${cat.test.classes.dir}" overwrite="true" />
-    	        <copy file="${catissue.test}/hibernate.properties" todir="${cat.test.conf.dir}" overwrite="true" />
-
+    	        <copy file="${catissue.test}/hibernate.properties" todir="${cat.test.classes.dir}" overwrite="true" />
+    			
     			<replace dir="${cat.test.classes.dir}">
     				<include name="*.cfg.xml" />		
     				<replacefilter token="org.hibernate.dialect.MySQLDialect" value="@@DIALECT@@" />
@@ -163,16 +158,11 @@
     						<include name="*.properties" />
     						<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
     						<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+							<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+							<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+							<replacefilter token="@@URL@@" value="${mysql.url.string}" />
     						
     			</replace>
-    					<replace dir="${cat.test.conf.dir}">
-    						<include name="*.properties" />
-    							<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
-    							<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-    							<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-    							<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
-    							<replacefilter token="@@URL@@" value="${mysql.url.string}" />
-    						</replace>
     				</then>
     				<elseif>
     					<equals arg1="oracle" arg2="${database.type}" />
@@ -180,16 +170,11 @@
     						<replace dir="${cat.test.classes.dir}">
     							<include name="*.cfg.xml" />
     							<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
-    							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />						
+    							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+								<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+								<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+								<replacefilter token="@@URL@@" value="${oracle.url.string}" />
     						</replace>
-    						<replace dir="${cat.test.conf.dir}">
-    							<include name="*.properties" />
-    							<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
-    								<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
-    								<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-    								<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
-    								<replacefilter token="@@URL@@" value="${oracle.url.string}" />
-    							</replace>
     					</then>
     				</elseif>
     			</if>
@@ -255,27 +240,8 @@
 				-->	
 						
 				<classpath location="${cat.instrumented.dir}" />
-				<classpath>
-					<pathelement path= "${cat.test.classes.dir}" />
-								<pathelement path= "${catissue.classes.dir}" /> 
-								<pathelement path="${cat.test.src.dir}" />
-								<pathelement path= "${cat.test.conf.dir}" />
-								
-								<fileset dir="${cat.test.lib.dir}">
-									<exclude name="catissuecore.jar"/>
-								   <include name="**/*.jar"/>
-								</fileset>
-								<fileset dir="${catissue.lib.dir}">
-									<include name="**/*.jar"/>
-									<exclude name="ant.jar"/>
-								</fileset>
-								
-								<fileset dir="${lib.dir}">
-									<include name="mysql-connector-java-5.0.8-bin.jar" />
-									<include name="ojdbc14.jar" />
-								</fileset>
-							<pathelement path="${catissue.temp.dir}/WEB-INF"/>
-				</classpath>
+				<classpath refid="testcases.classpath" />
+				<classpath refid="cobertura.classpath" />
 
 				<formatter type="xml"/> 
 			
