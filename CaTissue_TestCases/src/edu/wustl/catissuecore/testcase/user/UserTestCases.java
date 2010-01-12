@@ -13,12 +13,10 @@ import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 public class UserTestCases extends CaTissueSuiteBaseTest
 {
 	
+	
 	public void testSupervisorAdd()
 	{
-		//RequestParameterUtility.setAddUserParams(this);
-		addRequestParameter("pageOf", "pageOfUserAdmin");
-		/*addRequestParameter("emailAddress", "super@super.com");
-		addRequestParameter("ConfirmEmailAddress", "super@super.com");*/
+		addRequestParameter("pageOf", "pageOfUserAdmin");		
 		UserForm form = new UserForm();
         form.setFirstName("user_first_name_" + UniqueKeyGeneratorUtil.getUniqueKey());
         form.setLastName("user_last_name_" + UniqueKeyGeneratorUtil.getUniqueKey());
@@ -32,22 +30,23 @@ public class UserTestCases extends CaTissueSuiteBaseTest
         form.setCancerResearchGroupId(((CancerResearchGroup)TestCaseUtility.getNameObjectMap("CancerResearchGroup")).getId());
         form.setOperation("add");
         form.setRole("2");
-        form.setEmailAddress("super@super.com");
-        form.setConfirmEmailAddress("super@super.com");
+        form.setEmailAddress("super"+UniqueKeyGeneratorUtil.getUniqueKey()+"@super.com");
+        form.setConfirmEmailAddress(form.getEmailAddress());
         Site site = (Site)TestCaseUtility.getNameObjectMap("Site");
         String siteIds[] = new String[1];
         siteIds[0] = site.getId().toString();
         form.setSiteIds(siteIds);
-        getRequest().setAttribute("userForm", form);
+        form.setWustlKey("");
+		addRequestParameter("operation", "add");
+		addRequestParameter("dirtyVar", "true");
+		addRequestParameter("menuSelected", "1");
 		setRequestPathInfo("/UserAdd");
+        setActionForm(form);
 		actionPerform();
 		verifyForward("success");
-		verifyNoActionErrors();
-				
-		//UserForm form=(UserForm) getActionForm();
+		verifyNoActionErrors();				
 		
-		User supervisor = new User();
-		
+		User supervisor = new User();		
 		supervisor.setId(form.getId());
 		supervisor.setLastName(form.getLastName());
 		supervisor.setFirstName(form.getFirstName());
@@ -57,5 +56,4 @@ public class UserTestCases extends CaTissueSuiteBaseTest
 		TestCaseUtility.setNameObjectMap("Supervisor",supervisor);
 		
 	}
-
 }
