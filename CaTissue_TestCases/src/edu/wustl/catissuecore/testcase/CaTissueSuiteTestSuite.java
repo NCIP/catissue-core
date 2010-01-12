@@ -40,6 +40,7 @@ import edu.wustl.catissuecore.testcase.login.FirstTimeLoginTestCase;
 import edu.wustl.catissuecore.testcase.login.LoginTestCase;
 import edu.wustl.catissuecore.testcase.login.LogoutTestcase;
 import edu.wustl.catissuecore.testcase.ordering.DirectDistributionTestCase;
+import edu.wustl.catissuecore.testcase.user.UserTestCases;
 
 /**
  * Test suite
@@ -85,6 +86,7 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(DepartmentTestCases.class);
 		strutsSuite.addTestSuite(CancerReaserchGroupTestCases.class);
 		strutsSuite.addTestSuite(SiteTestCases.class);
+	    strutsSuite.addTestSuite(UserTestCases.class);
 		strutsSuite.addTestSuite(BiohazardTestCases.class);
 		//strutsSuite.addTestSuite(BulkOperationTestCases.class);
 		strutsSuite.addTestSuite(DistributionProtocolTestCases.class);
