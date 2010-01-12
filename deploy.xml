@@ -1232,8 +1232,8 @@
 		<antcall target="st_deploy_db" />
 		<antcall target="upgrade_metadata_for_constraintproperties"/>
 		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" />
-		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />
-		<antcall target="upgrade_db_from_DE_1.3.1_to_DE_1.4.0" />
+		<!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
+		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" />
 		<antcall target="upgrade_de_integration_restructure_metadata"/>
 
 		<antcall target="update_metadata_for_tagged_values">
@@ -1806,8 +1806,8 @@
 	<target name="upgrade_db_from_p4_to_p5" description="Target for Database Upgrade from caTissue p4 to p5">
 		<echo message="Upgrading Database v1.1p4 to v1.1p5" />
 		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0"/>
-		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />
-		<antcall target="upgrade_db_from_DE_1.3.1_to_DE_1.4.0"/>
+		<!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
+		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0"/>
 	    <if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>

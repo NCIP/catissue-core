@@ -168,6 +168,44 @@
 		<antcall target="upgrade_calculated_attributes" />
 	</target>
 
+	<target name="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" description="upgrade db from DE v1.3.0 to v1.4.0">
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+			<classpath>
+				<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
+			<then>
+				<antcall target="upgrade_db_mysql_from_DE_1.3.0_to_DE_1.3.1" />
+				<antcall target="upgrade_db_mysql_from_DE_1.3.1_to_DE_1.4.0" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<antcall target="upgrade_db_oracle_from_DE_1.3.0_to_DE_1.3.1" />
+					<antcall target="upgrade_db_oracle_from_DE_1.3.1_to_DE_1.4.0" />
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="db2" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<antcall target="upgrade_db_db2_from_DE_1.3.0_to_DE_1.3.1" />
+					<antcall target="upgrade_db_db2_from_DE_1.3.1_to_DE_1.4.0" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+		<antcall target="upgrade_calculated_attributes" />
+		<antcall target="upgrade_calculated_attributes_metadata" />
+	</target>
+
 	<target name="upgrade_db_from_DE_1.3.1_to_DE_1.4.0" description="upgrade db from DE v1.3.1 to v1.4.0">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
