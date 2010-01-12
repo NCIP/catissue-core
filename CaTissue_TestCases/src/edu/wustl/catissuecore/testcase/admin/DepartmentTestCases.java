@@ -177,7 +177,7 @@ public class DepartmentTestCases extends CaTissueSuiteBaseTest
 		verifyForward("success");
 		verifyActionMessages(new String[]{"object.edit.successOnly"});
 		department.setName(form.getName());
-		TestCaseUtility.setNameObjectMap("Institution", department);
+		TestCaseUtility.setNameObjectMap("Department", department); 
 
 	}
 	
