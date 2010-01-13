@@ -164,7 +164,6 @@ public class ConceptCoder
           catch (Exception ex)
           {
         	  this.logger.error("Error in removeIllegalXmlCharacters method"+ex.getMessage(),ex);
-        	  ex.printStackTrace();
           }
           return result+"\n\n";
     }
@@ -221,7 +220,6 @@ public class ConceptCoder
 		{
 			this.logger.error("Error occured while updating deidentified" +
 					" pathology report"+ex.getMessage(),ex);
-			ex.printStackTrace();
 			throw ex;
 		}
 	}
@@ -267,7 +265,6 @@ public class ConceptCoder
 			this.logger.error("Error in disassembleTiesResponse()");
 			this.logger.error("Error in parsing TIES response. Not in XML format"
 					+ ex.getMessage(),ex);
-			ex.printStackTrace();
 			throw new Exception("Error in parsing TIES response. Not in XML format");
 		}
 		catch (final Exception ex)
@@ -276,7 +273,6 @@ public class ConceptCoder
 			this.logger.error("Failed to parse the pay load XML." + ex.getMessage(),ex);
 			this.gateXML = "";
 			this.chirpsXML = "";
-			ex.printStackTrace();
 			throw new Exception("Failed to parse the pay load XML");
 		}
 	}
@@ -392,7 +388,6 @@ public class ConceptCoder
 		}
 		catch (final Exception ex)
 		{
-			ex.printStackTrace();
 			this.logger.error("Exception in deserialize" + ex.getMessage(),ex);
 			throw ex;
 		}
