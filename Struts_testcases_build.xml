@@ -295,7 +295,7 @@
 						-->
 						<ignore regex="org.apache.log4j.*" />
 
-						<fileset dir="${target.dir}">
+						<fileset dir="${catissue.classes.dir}">
 							<!--
 								Instrument all the application classes, but
 								don't instrument the test classes.
@@ -334,7 +334,15 @@
 		</target>
 	
 	<target name="run_testcases_with_coveragereport">
-	
+		<available type="dir" file="${temp.dir}/catissuecore" property="file.exists"/>
+		    			<if>
+		    				<not>
+		    					<equals arg1="true" arg2="${file.exists}" />
+		    				</not>
+		    				<then>
+		    					<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />					
+		    				</then>
+		    			</if>
 		<antcall target="instrument_junit_testcases"/>
 		<antcall target="run_junit_nightlyBuild"/>
 		<antcall target="code_coverage_report"/>
