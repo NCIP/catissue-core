@@ -28,7 +28,7 @@
 	<property name="catissue.temp.dir" value="${temp.dir}/catissuecore" />
 	<property name="catissue.classes.dir" value="${temp.dir}/catissuecore/WEB-INF/classes" />
 	<property name="catissue.lib.dir" value="${temp.dir}/catissuecore/WEB-INF/lib" />
-	
+	<property name="log.dir" value="${base.dir}/@@jbosshome@@" />
          <!-- struts test case related properties -->
 		<property name="cat.test.classes.dir" value="${catissue.test}/classes" />
 		<property name="cat.test.src.dir" value="${catissue.test}/src"/>
@@ -65,7 +65,8 @@
 		</path>
 
     <target name="init_junit_testcases">
-		<delete dir="${cat.test.classes.dir}" />
+    	<delete dir="${log.dir}" />
+    	<delete dir="${cat.test.classes.dir}" />
 		<mkdir dir="${cat.test.classes.dir}" /> 
 		
     	<available type="dir" file="${temp.dir}/catissuecore" property="file.exists"/>
