@@ -2926,46 +2926,45 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void validateSpecimenCharacterstics(Specimen specimen) throws BizLogicException
 	{
-		final SpecimenCharacteristics characters = specimen.getSpecimenCharacteristics();
+		SpecimenCharacteristics characters = specimen.getSpecimenCharacteristics();
 
 		if (characters == null)
 		{
-			throw this.getBizLogicException(null, "specimen.characteristics.errMsg", "");
-
+			characters = new SpecimenCharacteristics();
+			specimen.setSpecimenCharacteristics(characters);
+			//throw this.getBizLogicException(null, "specimen.characteristics.errMsg", "");
 		}
-		else
-		{
-			if (specimen.getSpecimenCollectionGroup() != null)
-			{
-				final List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_TISSUE_SITE, null);
-				if (!Validator.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
-				{
-					if (specimen.getParentSpecimen() == null)
-					{
-						throw this.getBizLogicException(null, "protocol.tissueSite.errMsg", "");
-					}
-				}
-				final List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_TISSUE_SIDE, null);
 
-				if (!Validator.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
+		if (specimen.getSpecimenCollectionGroup() != null)
+		{
+			final List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
+					Constants.CDE_NAME_TISSUE_SITE, null);
+			if (!Validator.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
+			{
+				if (specimen.getParentSpecimen() == null)
 				{
-					if (specimen.getParentSpecimen() == null)
-					{
-						throw this.getBizLogicException(null, "specimen.tissueSide.errMsg", "");
-					}
+					throw this.getBizLogicException(null, "protocol.tissueSite.errMsg", "");
 				}
-				final List pathologicalStatusList = CDEManager.getCDEManager()
-						.getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
-				if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen
-						.getPathologicalStatus()))
+			}
+			final List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(
+					Constants.CDE_NAME_TISSUE_SIDE, null);
+
+			if (!Validator.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
+			{
+				if (specimen.getParentSpecimen() == null)
 				{
-					if (specimen.getParentSpecimen() == null)
-					{
-						throw this
-								.getBizLogicException(null, "protocol.pathologyStatus.errMsg", "");
-					}
+					throw this.getBizLogicException(null, "specimen.tissueSide.errMsg", "");
+				}
+			}
+			final List pathologicalStatusList = CDEManager.getCDEManager()
+					.getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
+			if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen
+					.getPathologicalStatus()))
+			{
+				if (specimen.getParentSpecimen() == null)
+				{
+					throw this
+							.getBizLogicException(null, "protocol.pathologyStatus.errMsg", "");
 				}
 			}
 		}
