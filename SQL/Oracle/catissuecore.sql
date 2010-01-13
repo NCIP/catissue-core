@@ -633,8 +633,8 @@ CREATE TABLE catissue_data_audit_event_log (
 CREATE TABLE catissue_audit_event_details (
                                 IDENTIFIER number(19,0) not null ,
                                 ELEMENT_NAME varchar(150),
-                                PREVIOUS_VALUE varchar(4000),
-                                CURRENT_VALUE varchar(4000),
+                                PREVIOUS_VALUE CLOB,
+                                CURRENT_VALUE CLOB,
                                 AUDIT_EVENT_LOG_ID number(19,0) ,
                                 PRIMARY KEY  (IDENTIFIER),
                                 CONSTRAINT FK5C07745D34FFD77F FOREIGN KEY (AUDIT_EVENT_LOG_ID) REFERENCES catissue_audit_event_log (IDENTIFIER)

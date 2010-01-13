@@ -85,7 +85,19 @@ ALTER TABLE CATISSUE_AUDIT_EVENT_LOG DROP COLUMN OBJECT_IDENTIFIER ;
 ALTER TABLE CATISSUE_AUDIT_EVENT_LOG DROP COLUMN OBJECT_NAME ;
 ALTER TABLE CATISSUE_AUDIT_EVENT_LOG DROP COLUMN EVENT_TYPE ;
 
-ALTER TABLE catissue_audit_event_details MODIFY CURRENT_VALUE varchar(4000) default NULL;
-ALTER TABLE catissue_audit_event_details MODIFY PREVIOUS_VALUE varchar(4000) default NULL;
+/**
+ * For converting the CURRENT_VALUE,PREVIOUS_VALUE columns from Varchar to CLOB
+ */
+ALTER TABLE catissue_audit_event_details ADD NEW_CURRENT_VALUE CLOB default NULL;
+ALTER TABLE catissue_audit_event_details ADD NEW_PREVIOUS_VALUE CLOB default NULL;
+
+UPDATE catissue_audit_event_details set NEW_CURRENT_VALUE=CURRENT_VALUE;
+UPDATE catissue_audit_event_details set NEW_PREVIOUS_VALUE=PREVIOUS_VALUE;
+
+ALTER TABLE catissue_audit_event_details DROP COLUMN CURRENT_VALUE ;
+ALTER TABLE catissue_audit_event_details DROP COLUMN PREVIOUS_VALUE ;
+
+ALTER TABLE catissue_audit_event_details RENAME COLUMN NEW_CURRENT_VALUE to CURRENT_VALUE;
+ALTER TABLE catissue_audit_event_details RENAME COLUMN NEW_PREVIOUS_VALUE to PREVIOUS_VALUE;
 
 commit;
