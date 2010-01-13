@@ -1842,7 +1842,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1957,7 +1956,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 							parameters.getUser().getLoginName()));
 					final List list = dao
 							.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-					if(!list.isEmpty())
+					if(list.isEmpty())
+					{
+						throw this.getBizLogicException(null, "user.not.exists",
+								parameters.getUser().getLoginName());
+					}
+					else
 					{
 						Long userIdentifier = (Long)list.get(0);
 						parameters.getUser().setId(userIdentifier);
@@ -1966,9 +1970,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				catch (final DAOException daoExp)
 				{
 					this.logger.error(daoExp.getMessage(), daoExp);
-					daoExp.printStackTrace();
-					throw this.getBizLogicException(null, "user.not.exists",
-							parameters.getUser().getLoginName());
+					throw this.getBizLogicException(daoExp,
+							daoExp.getErrorKeyName(), daoExp.getMsgValues());
 				}
 			}
 		}
