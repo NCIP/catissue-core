@@ -38,7 +38,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * logger instance of the class.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(AliquotBizLogic.class);
+	private static final Logger logger = Logger.getCommonLogger(AliquotBizLogic.class);
 	/**
 	 * Insert.
 	 * @param obj Object.
@@ -60,7 +60,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 				final String specimenClass = AppUtility.getSpecimenClassName(
 						aliquot.getSpecimen());
 				Specimen specimen = AppUtility.getSpecimenObjectOnClassName(specimenClass);
-				populateAliquotObject(specimen, aliquot);
+				populateAliquotObject(specimen, aliquot, i);
 				boolean flag = newSpecimenBizLogic.validate(specimen, dao, Constants.ADD);
 				if (flag)
 				{
@@ -71,7 +71,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.error(exp.getMessage(), exp);
+			logger.error(exp.getMessage(), exp);
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
@@ -80,8 +80,9 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 	 * Populate Aliquot Object.
 	 * @param specimen Specimen.
 	 * @param aliquot Aliquot.
+	 * @param aliqoutCounter int.
 	 */
-	private void populateAliquotObject(Specimen specimen, Aliquot aliquot)
+	private void populateAliquotObject(Specimen specimen, Aliquot aliquot, int aliqoutCounter)
 	{
 		Specimen parentSpecimen = aliquot.getSpecimen();
 		specimen.setLineage(Constants.ALIQUOT);
@@ -108,18 +109,53 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			newSpecimenEventColl.add(eventParameters);
 		}
 		specimen.setSpecimenEventCollection(newSpecimenEventColl);
-		if (aliquot.getAliquotsInSameContainer()
-				&& aliquot.getSpecimen().getSpecimenPosition() != null)
+		processAliquotInSameContainer(specimen, aliquot, aliqoutCounter);
+	}
+
+	/**
+	 * Process Aliquot In Same Container.
+	 * @param specimen Specimen.
+	 * @param aliquot Aliquot.
+	 * @param aliqoutCounter int.
+	 */
+	private void processAliquotInSameContainer(Specimen specimen, Aliquot aliquot,
+			int aliqoutCounter)
+	{
+		if (aliquot.getAliquotsInSameContainer())
 		{
-			StorageContainer storageContainer = aliquot.getSpecimen().getSpecimenPosition()
-					.getStorageContainer();
-			SpecimenPosition specimenPosition = new SpecimenPosition();
-			specimenPosition.setStorageContainer(storageContainer);
-			specimen.setSpecimenPosition(specimenPosition);
+			if(aliquot.getSpecimen().getSpecimenPosition() == null)
+			{
+				specimen.setSpecimenPosition(null);
+			}
+			else
+			{
+				StorageContainer storageContainer = aliquot.getSpecimen().getSpecimenPosition()
+				.getStorageContainer();
+				SpecimenPosition specimenPosition = new SpecimenPosition();
+				if(aliqoutCounter == 0)
+				{
+					specimenPosition.setPositionDimensionOne(
+							aliquot.getSpecimenPosition().getPositionDimensionOne());
+					specimenPosition.setPositionDimensionTwo(
+							aliquot.getSpecimenPosition().getPositionDimensionTwo());
+				}
+				specimenPosition.setStorageContainer(storageContainer);
+				specimen.setSpecimenPosition(specimenPosition);
+			}
 		}
 		else
 		{
-			specimen.setSpecimenPosition(aliquot.getSpecimenPosition());
+			StorageContainer storageContainer = aliquot.getSpecimenPosition().getStorageContainer();
+			SpecimenPosition specimenPosition = new SpecimenPosition();
+			if(aliqoutCounter == 0)
+			{
+				specimenPosition.setPositionDimensionOne(
+						aliquot.getSpecimenPosition().getPositionDimensionOne());
+				specimenPosition.setPositionDimensionTwo(
+						aliquot.getSpecimenPosition().getPositionDimensionTwo());
+			}
+			specimenPosition.setStorageContainer(storageContainer);
+			specimen.setSpecimenPosition(specimenPosition);
 		}
 	}
 	/**
@@ -164,7 +200,28 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			if (!aliquot.getAliquotsInSameContainer())
+			if (aliquot.getAliquotsInSameContainer())
+			{
+				String parentSpecimenContName = "";
+				String parentSpecimenCsvContName = "";
+				if(aliquot.getSpecimen().getSpecimenPosition() != null)
+				{
+					parentSpecimenContName = aliquot.getSpecimen().getSpecimenPosition().
+								getStorageContainer().getName();
+				}
+				if(aliquot.getSpecimenPosition() != null)
+				{
+					parentSpecimenCsvContName = aliquot.getSpecimenPosition().
+								getStorageContainer().getName();
+				}
+				if(!parentSpecimenContName.equals(parentSpecimenCsvContName))
+				{
+					final String message = ApplicationProperties
+						.getValue("error.aliquot.container.mismatch");
+					throw this.getBizLogicException(null, "errors.invalid", message);
+				}
+			}
+			else
 			{
 				SpecimenPosition specimenPosition = aliquot.getSpecimenPosition();
 				if (specimenPosition != null)
@@ -181,7 +238,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
+			logger.error(daoExp.getMessage(), daoExp);
 			throw this
 				.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -222,18 +279,17 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 					.addCondition(new EqualClause("name", storageContainerName));
 			final List list = dao.retrieve(sourceObjectName, selectColumnName,
 					queryWhereClause);
-
-			if (!list.isEmpty())
+			if (list.isEmpty())
+			{
+				final String message = ApplicationProperties
+					.getValue("specimen.storageContainer");
+				throw this.getBizLogicException(null, "errors.invalid", message);
+			}
+			else
 			{
 				storageContainerObj.setId((Long) list.get(0));
 				specimenPosition.setStorageContainer(storageContainerObj);
 				aliquot.setSpecimenPosition(specimenPosition);
-			}
-			else
-			{
-				final String message = ApplicationProperties
-						.getValue("specimen.storageContainer");
-				throw this.getBizLogicException(null, "errors.invalid", message);
 			}
 		}
 	}
@@ -333,7 +389,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
+			logger.error(daoExp.getMessage(), daoExp);
 			final String message = ApplicationProperties.getValue("aliquots.noOfAliquots");
 			throw this.getBizLogicException(daoExp, "errors.item.format", message);
 		}
