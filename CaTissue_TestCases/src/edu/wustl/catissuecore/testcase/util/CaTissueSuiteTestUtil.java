@@ -1,5 +1,10 @@
 package edu.wustl.catissuecore.testcase.util;
 
+import java.lang.reflect.Field;
+
+import javax.servlet.http.HttpSession;
+
+import edu.wustl.catissuecore.flex.FlexInterface;
 import edu.wustl.common.beans.SessionDataBean;
 /**
  * Utility class.
@@ -38,4 +43,24 @@ public class CaTissueSuiteTestUtil
 	
 	public static final String FREEZER_STORAGETYPE="FREEZER_STORAGETYPE";
 	public static final String BOX_STORAGETYPE="BOX_STORAGETYPE";
+	
+	public static FlexInterface flexInterface;
+	
+	public static FlexInterface getFlexInterface(HttpSession session) throws Exception
+	{
+		if(flexInterface==null)
+		{
+			flexInterface = new FlexInterface();		
+		}
+		if(USER_SESSION_DATA_BEAN!=null)
+		{
+			Field sessionField = FlexInterface.class.getDeclaredField("session");
+			sessionField.setAccessible(true);
+			
+			sessionField.set(flexInterface, session);
+			flexInterface.setSessionInitializationFalse();
+		}
+		return flexInterface;
+	}
+	
 }

@@ -408,19 +408,56 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 	
 	public void testRegisterParticicpantAndDisable()
 	{
-		Participant participant = (Participant) TestCaseUtility.getNameObjectMap("Participant");
+		/*Participant add and registration*/
 		ParticipantForm partForm = new ParticipantForm() ;
-		partForm.setFirstName(participant.getFirstName()) ;
-		partForm.setLastName(participant.getLastName()) ;
-		partForm.setGender( participant.getGender() );
-		partForm.setId( participant.getId() );
-		partForm.setRaceTypes( new String[] {"Asian"} );
-		partForm.setOnSubmit( "/QueryManageBioSpecimen.do" );		
-		participant.setCollectionProtocolRegistrationCollection(participant.getCollectionProtocolRegistrationCollection());
-		partForm.setActivityStatus( "Disabled" );
-		partForm.setOperation("edit") ;
-		setRequestPathInfo("/ParticipantEdit");
+		partForm.setFirstName("participant_first_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		partForm.setLastName("participant_last_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		partForm.setGender("Male Gender") ;
+		partForm.setVitalStatus("Alive") ;
+		partForm.setGenotype("Klinefelter's Syndrome");
+		partForm.setBirthDate("01-12-1985");
+		partForm.setEthnicity("Hispanic or Latino");
+		partForm.setRaceTypes(new String[] {"Asian"});
+		partForm.setOperation("add") ;
+
+		CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getNameObjectMap("CollectionProtocol");
+		
+		Map<String,String> collProtRegVal = new LinkedHashMap<String,String>();
+		
+		collProtRegVal.put("CollectionProtocolRegistration:" +
+				"1_CollectionProtocol_shortTitle",collectionProtocol.getShortTitle()) ;
+		
+		collProtRegVal.put("CollectionProtocol" +
+				"Registration:1_registrationDate", "01-01-2008") ;
+		
+		collProtRegVal.put("CollectionProtocol" +
+				"Registration:1_activityStatus", collectionProtocol.getActivityStatus()) ;
+		
+		collProtRegVal.put("CollectionProtocol" +
+				"Registration:1_isConsentAvailable", "None Defined") ;
+		
+		collProtRegVal.put("CollectionProtocol" +
+				"Registration:1_CollectionProtocol_id", ""+collectionProtocol.getId()) ;
+		
+		collProtRegVal.put("CollectionProtocol" +
+				"Registration:1_CollectionProtocol_Title", collectionProtocol.getTitle()) ;
+		
+		collProtRegVal.put("CollectionProtocol" +
+				"Registration:1_protocolParticipantIdentifier", ""+UniqueKeyGeneratorUtil.getUniqueKey()) ;
+		
+		partForm.setCollectionProtocolRegistrationValues(collProtRegVal) ;
+		
+		setRequestPathInfo("/ParticipantAdd");
 		setActionForm(partForm);
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+		
+		ParticipantForm form=(ParticipantForm) getActionForm();
+		form.setActivityStatus( "Disabled" );
+		form.setOperation("edit") ;
+		setRequestPathInfo("/ParticipantEdit");
+		setActionForm(form);
 		actionPerform();
 		verifyNoActionErrors();
 		setRequestPathInfo(getActualForward());
