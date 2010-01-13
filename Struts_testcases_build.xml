@@ -168,6 +168,7 @@
     					<then>
     						<replace dir="${cat.test.classes.dir}">
     							<include name="*.cfg.xml" />
+    							<include name="*.properties" />
     							<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
     							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
 								<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
