@@ -801,7 +801,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					Constants.CDE_VITAL_STATUS, null);
 			if (!Validator.isEnumeratedOrNullValue(vitalStatusList, participant.getVitalStatus()))
 			{
-				throw this.getBizLogicException(null, "participant.gender.errMsg", "");
+				throw this.getBizLogicException(null, "participant.vitalstatus.errMsg", "");
 			}
 		}
 
