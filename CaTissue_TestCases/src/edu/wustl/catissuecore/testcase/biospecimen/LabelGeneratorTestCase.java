@@ -102,7 +102,7 @@ public class LabelGeneratorTestCase extends CaTissueSuiteBaseTest
 		collProtRegVal.put("CollectionProtocol" + "Registration:1_registrationDate", "01-01-2008");
 
 		collProtRegVal.put("CollectionProtocol" + "Registration:1_activityStatus",
-				collectionProtocol.getActivityStatus());
+				"Active");
 
 		collProtRegVal.put("CollectionProtocol" + "Registration:1_isConsentAvailable",
 				"None Defined");

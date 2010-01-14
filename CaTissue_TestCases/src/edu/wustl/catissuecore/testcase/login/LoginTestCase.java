@@ -94,9 +94,12 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	
 	public void testSuccessfulLogin()
 	{
+		
 		setRequestPathInfo("/Login") ;
 		addRequestParameter("loginName", "admin@admin.com");
 		addRequestParameter("password", "Test123");
+		logger.info("Sachin in login");
+		System.out.println("Sachin in login");
 		actionPerform();
 		//verifyForward("/Home.do");
 		verifyForward("pageOfNonWashU");

@@ -1105,12 +1105,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(e, "name.generator.exp", "");
 			}
 		}
-		else if(Validator.isEmpty(specimen.getLabel()))
-		{
-			final String message = ApplicationProperties
-					.getValue("specimen.label");
-			throw this.getBizLogicException(null, "errors.item.required", message);
-		}
 	}
 
 	/**

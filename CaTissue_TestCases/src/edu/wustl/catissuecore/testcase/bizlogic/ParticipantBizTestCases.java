@@ -54,6 +54,24 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		 }
 	}
 	
+	public void testDisableParticipant()
+	{
+		try{
+			Participant participant= BaseTestCaseUtility.initParticipantWithCPR();			
+			System.out.println(participant);
+			participant = (Participant) appService.createObject(participant); 
+			participant.setActivityStatus("Disabled");
+			participant = (Participant)appService.updateObject(participant);
+			assertTrue("Object added successfully", true);
+		 }
+		 catch(Exception e){
+			 System.out
+					.println("ParticipantTestCases.testAddParticipantWithCPR()"+e.getMessage());
+			 e.printStackTrace();
+			 assertFalse("could not add object", true);
+		 }
+	}
+	
 	public void testUpdateCPAssociatedCPRWithDeleteCollectionProtocolEvent()
 	{
 	    try 

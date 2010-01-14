@@ -295,13 +295,14 @@
 						-->
 						<ignore regex="org.apache.log4j.*" />
 
-						<fileset dir="${catissue.classes.dir}">
+
+						<fileset dir="${catissue.classes.dir}/edu/wustl/catissuecore">
 							<!--
 								Instrument all the application classes, but
 								don't instrument the test classes.
 							-->
 							<include name="**/*.class" />
-							
+							<include name="**/querysuite/*.class" />
 						</fileset>
 					</cobertura-instrument>
 			</target>

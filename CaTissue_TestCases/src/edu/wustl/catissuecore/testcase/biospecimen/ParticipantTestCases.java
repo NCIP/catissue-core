@@ -7,11 +7,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import servletunit.HttpServletRequestSimulator;
+
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -401,70 +404,7 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 		String errormsg[] = new String[]{"errors.item"};
 		verifyActionErrors(errormsg);
 	}
-	/**
-	 * Test disabled Participant
-	 * Negative Test Case.
-	 */
 	
-	public void testRegisterParticicpantAndDisable()
-	{
-		/*Participant add and registration*/
-		ParticipantForm partForm = new ParticipantForm() ;
-		partForm.setFirstName("participant_first_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
-		partForm.setLastName("participant_last_name_" + UniqueKeyGeneratorUtil.getUniqueKey()) ;
-		partForm.setGender("Male Gender") ;
-		partForm.setVitalStatus("Alive") ;
-		partForm.setGenotype("Klinefelter's Syndrome");
-		partForm.setBirthDate("01-12-1985");
-		partForm.setEthnicity("Hispanic or Latino");
-		partForm.setRaceTypes(new String[] {"Asian"});
-		partForm.setOperation("add") ;
-
-		CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getNameObjectMap("CollectionProtocol");
-		
-		Map<String,String> collProtRegVal = new LinkedHashMap<String,String>();
-		
-		collProtRegVal.put("CollectionProtocolRegistration:" +
-				"1_CollectionProtocol_shortTitle",collectionProtocol.getShortTitle()) ;
-		
-		collProtRegVal.put("CollectionProtocol" +
-				"Registration:1_registrationDate", "01-01-2008") ;
-		
-		collProtRegVal.put("CollectionProtocol" +
-				"Registration:1_activityStatus", collectionProtocol.getActivityStatus()) ;
-		
-		collProtRegVal.put("CollectionProtocol" +
-				"Registration:1_isConsentAvailable", "None Defined") ;
-		
-		collProtRegVal.put("CollectionProtocol" +
-				"Registration:1_CollectionProtocol_id", ""+collectionProtocol.getId()) ;
-		
-		collProtRegVal.put("CollectionProtocol" +
-				"Registration:1_CollectionProtocol_Title", collectionProtocol.getTitle()) ;
-		
-		collProtRegVal.put("CollectionProtocol" +
-				"Registration:1_protocolParticipantIdentifier", ""+UniqueKeyGeneratorUtil.getUniqueKey()) ;
-		
-		partForm.setCollectionProtocolRegistrationValues(collProtRegVal) ;
-		
-		setRequestPathInfo("/ParticipantAdd");
-		setActionForm(partForm);
-		actionPerform();
-		verifyForward("success");
-		verifyNoActionErrors();
-		
-		ParticipantForm form=(ParticipantForm) getActionForm();
-		form.setActivityStatus( "Disabled" );
-		form.setOperation("edit") ;
-		setRequestPathInfo("/ParticipantEdit");
-		setActionForm(form);
-		actionPerform();
-		verifyNoActionErrors();
-		setRequestPathInfo(getActualForward());
-		actionPerform();
-		verifyForward("success");
-		verifyNoActionErrors();		
-	}
 	/**
 	 * Test Participant with PMI
 	 */
@@ -490,6 +430,9 @@ public class ParticipantTestCases extends CaTissueSuiteBaseTest
 		partForm.setOperation("add");
 		setRequestPathInfo("/ParticipantAdd");
 		setActionForm(partForm);
+		setConfigFile("/WEB-INF/struts-config.xml");
+		HttpServletRequestSimulator req = (HttpServletRequestSimulator)getRequest();
+		req.setRequestURL(CaTissueSuiteTestUtil.CONTEXT_URL);
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();		
