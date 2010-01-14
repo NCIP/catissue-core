@@ -190,13 +190,14 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-
 			this.validate(obj, oldObj, dao, Constants.EDIT);
 			final OrderDetails orderImplObj = (OrderDetails) HibernateMetaData
 					.getProxyObjectImpl(oldObj);
 			final OrderDetails orderNew = this
 					.updateObject(orderImplObj, obj, dao, sessionDataBean);
-			dao.update(orderNew,oldObj);
+			orderNew.setOrderItemCollection(orderNew.getOrderItemCollection());
+			orderImplObj.setOrderItemCollection(orderNew.getOrderItemCollection());
+			dao.update(orderNew,orderImplObj);
 			this.disposeSpecimen(orderNew, sessionDataBean, dao);
 			// Sending Email only if atleast one order item is updated.
 			if (numberItemsUpdated > 0 && orderNew.getMailNotification())
