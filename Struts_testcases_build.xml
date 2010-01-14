@@ -302,7 +302,7 @@
 								don't instrument the test classes.
 							-->
 							<include name="**/*.class" />
-							<include name="**/querysuite/*.class" />
+							<exclude name="**/querysuite/**" />
 						</fileset>
 					</cobertura-instrument>
 			</target>
