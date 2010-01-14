@@ -20,7 +20,6 @@ PUBLIC
 		<form-bean name="viewSurgicalPathologyReportForm" type="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"/>
 		<form-bean name="consentForm" type="edu.wustl.catissuecore.actionForm.ConsentResponseForm"/>
         <form-bean name="userForm" type="edu.wustl.catissuecore.actionForm.UserForm"/>
-        <form-bean name="bulkOperationForm" type="edu.wustl.catissuecore.actionForm.BulkOperationForm"/>
 		<form-bean name="reportedProblemForm" type="edu.wustl.catissuecore.actionForm.ReportedProblemForm"/>
 		<form-bean name="domainObjectListForm" type="edu.wustl.catissuecore.actionForm.DomainObjectListForm"/>		
 		<form-bean name="departmentForm" type="edu.wustl.catissuecore.actionForm.DepartmentForm"/>
@@ -1474,58 +1473,6 @@ PUBLIC
 			<forward name="pageOfChangePassword" path=".catissuecore.changePasswordDef" />
 			<forward name="failure" path=".catissuecore.changePasswordDef" />
 			<forward name="access_denied" path="/Home.do" />
-		</action>
-
-
-		<action path="/BulkLogin" type="edu.wustl.catissuecore.action.LoginAction"
-		   name="loginForm"
-		   validate="false"
-		   scope="request">
-		   <forward name="pageOfNonWashU" path="/BulkHandler.do?fromAction=login"/>
-		   <forward name="failure" path="/BulkHandler.do?fromAction=login"/>
-	    </action>
-		
-		<action path="/BulkHandler" type="edu.wustl.catissuecore.action.bulkOperations.BulkHandler"
-			name=""
-		    scope="request">
-		    <forward name="success" path="/FileUpload.do?pageOf=bulkHandler"/>
-		</action>
-		
-		<action path="/BulkOperation" type="edu.wustl.catissuecore.action.BulkOperationAction"
-		   name="bulkOperationForm" validate="false" scope="request">
-		   <forward name="pageOfBulkOperation" path=".catissuecore.bulkOperationDef" />
-	   </action>
-
-		<action path="/FileUpload" type="edu.wustl.catissuecore.action.FileUploadAction"
-			name="bulkOperationForm" scope="request" validate="true">
-		     <forward name="success" path="/BulkOperation.do"/>
-		     <forward name="bulkHandler" path="/BulkHandler.do?fromAction=fileUpload"/>
-		</action>
-
-	   	<action path="/DownloadCSV" type="edu.wustl.catissuecore.action.BulkOperationAction"
-		   name="bulkOperationForm" validate="false" scope="request">
-		   <forward name="pageOfBulkOperation" path=".catissuecore.bulkOperationDef" />
-	   </action>
-	   
-	   <!--To show the dashboard-->
-		<action path="/JobDashboard" type="edu.wustl.catissuecore.action.ShowJobDashboardAction"
-		   name="bulkOperationForm" validate="false" scope="request">
-		   <forward name="success" path="/pages/content/manageBioSpecimen/bulkOperations/JobGridDashboard.jsp" />
-	   </action>
-	   
-	   
-	   <action path="/JobGridAjax" type="edu.wustl.catissuecore.action.JobGridAjaxAction"
-		   name="" validate="false" scope="request">
-	   </action>
-
-		<!--For downloading the log file-->
-		<action path="/DocumentDownload"
-			type="edu.wustl.catissuecore.action.DownloadJobReportFileAction"
-			validate="false"
-			input="/pages/blank.jsp"
-			scope="request">
-			<forward name="success" path="/pages/blank.jsp" />
-			<forward name="failure" path="/pages/blank.jsp" />
 		</action>
 
 		<action path="/UpdatePassword"
