@@ -145,16 +145,6 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 						applicationHome+"/CaTissue_TestCases/test_login.conf");
 				System.setProperty("app.domainAuthFilePath",applicationHome+"/catissuecore-properties/AuthenticationDomain.xml");
 				//Files added for BulkOperationTestCases
-				System.setProperty("bulk.operation.add.csv.file1",
-						applicationHome+"/CaTissue_TestCases/createMolecularSpecimenEvent.csv");
-				System.setProperty("bulk.operation.add.xml.file1",
-						applicationHome+"/CaTissue_TestCases/createMolecularSpecimenEvent.xml");
-				System.setProperty("bulk.operation.add.csv.file2",
-						applicationHome+"/CaTissue_TestCases/editSpecimen.csv");
-				System.setProperty("bulk.operation.add.xml.file2",
-						applicationHome+"/CaTissue_TestCases/editSpecimen.xml");
-				System.setProperty("bulk.operation.add.xml.file3",
-						applicationHome+"/CaTissue_TestCases/createDerivative.xml");
 				if (!initComplete)
 				{
 					initComplete = true;
