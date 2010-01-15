@@ -104,6 +104,7 @@ public class LoginAction extends Action
 				loginName = userStatus;
 			}
 			final String forwardTo = authenticateUser(request, loginForm, userStatus);
+			logger.info("forwardTo: "+forwardTo);
 			if (Constants.SUCCESS.equals(forwardTo))
 			{
                 ActionForward fwd=validateUser(mapping, request, loginForm, loginName);
