@@ -784,7 +784,7 @@ public final class StorageContainerUtil
 				 * then 1st specimen occupies 1st position and counter increments and becomes 2.
 				 * Which is equal to aliquot count thus the 2nd specimen didn't get any position. 
 				 */
-				if (counter == Integer.parseInt(noOfAliquots))
+				if (counter -1  == Integer.parseInt(noOfAliquots))
 				{
 					i = containerId.length;
 				}
@@ -802,14 +802,15 @@ public final class StorageContainerUtil
 			for (int j = 0; j < xDim.length; j++)
 			{
 				final List yDimList = (List) xDimMap.get(xDim[j]);
+		//  bug commeneted as it was looking for container having positions for all aliquots in one row only 
 				//bug 15085
-				if(!(yDimList.size()>=Integer.parseInt(noOfAliquots)))
-				{
-					continue;
-				}
+//				if(!(yDimList.size()>=Integer.parseInt(noOfAliquots)))
+//				{
+//					continue;
+//				}
 				for (int k = 0; k < yDimList.size(); k++)
 				{
-					if (counter <= Integer.parseInt(noOfAliquots))
+					if (counter - 1 <= Integer.parseInt(noOfAliquots))
 					{
 						final String containerKey = objectKey + counter + "_StorageContainer_id";
 						final String pos1Key = objectKey + counter + "_positionDimensionOne";
