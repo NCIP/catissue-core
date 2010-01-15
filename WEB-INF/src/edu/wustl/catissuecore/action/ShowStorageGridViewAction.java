@@ -311,7 +311,11 @@ public class ShowStorageGridViewAction extends BaseAction
 		while(itr.hasNext())
 		{
 			String className = (String)itr.next();
-			String type = (String)itr.next();
+			String type="None";
+			if(!"None".equals(className))
+			{
+				type = (String)itr.next();
+			}
 			if(!spClassList.contains(className))
 			{
 				spClassList.add(className);
