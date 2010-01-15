@@ -1,12 +1,14 @@
 package edu.wustl.catissuecore.testcase.bizlogic;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -20,9 +22,13 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -1969,4 +1975,111 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			assertFalse("failed to update Object", true);
 		}
 	}
+	 /**
+	  * Test consecutive storage positions of aliquots
+	  */
+	 public void testStoragePositionsOfAliquots()
+		{
+			try
+			{
+				Collection<AbstractDomainObject> specimens = new LinkedHashSet<AbstractDomainObject>();
+				TissueSpecimen specimenObj = (TissueSpecimen)BaseTestCaseUtility.initTissueSpecimen();
+				StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
+				StorageType storageType = BaseTestCaseUtility.initTissueStorageType();
+				try
+				{
+					storageType = (StorageType) appService.createObject(storageType);
+				}
+				catch (Exception e)
+				{
+					assertFalse("Failed to create StorageType", true);
+				}
+				storageContainer.setStorageType( storageType );
+				try
+				{
+					storageContainer = (StorageContainer)appService.createObject(storageContainer);
+				}
+				catch (Exception e)
+				{
+					assertFalse("Failed to create StorageType", true);
+				}
+
+				specimenObj.setCollectionStatus( "Collected" );
+				SpecimenPosition specimenPosition = new SpecimenPosition();
+				specimenPosition.setStorageContainer( storageContainer );
+				specimenPosition.setPositionDimensionOne(1);
+				specimenPosition.setPositionDimensionTwo(1);
+				specimenObj.setSpecimenPosition( specimenPosition );
+
+				SpecimenCollectionGroup scg = BaseTestCaseUtility.initSpecimenCollectionGroup();
+				scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
+				try
+				{
+					scg = (SpecimenCollectionGroup) appService.createObject(scg);
+				}
+				catch (Exception e)
+				{
+					assertFalse("Failed to create scg", true);
+				}
+				System.out.println("scg "+scg.getId());
+				specimenObj.setSpecimenCollectionGroup( scg );
+				specimens.add( specimenObj );
+				TissueSpecimen childSpecimen1 = (TissueSpecimen)BaseTestCaseUtility.initTissueSpecimen();
+				childSpecimen1.setParentSpecimen(specimenObj);
+				childSpecimen1.setLabel("child1_"+ UniqueKeyGeneratorUtil.getUniqueKey());
+				childSpecimen1.setBarcode( "child1_barcode_"+ UniqueKeyGeneratorUtil.getUniqueKey());
+				childSpecimen1.setLineage("Aliquot");
+				childSpecimen1.setCollectionStatus( "Collected" );
+				SpecimenPosition specimenPosition1 = new SpecimenPosition();
+				specimenPosition1.setStorageContainer( storageContainer );
+				specimenPosition1.setPositionDimensionOne( 2 );
+				specimenPosition1.setPositionDimensionTwo( 1 );
+				childSpecimen1.setSpecimenPosition( specimenPosition1 );
+				childSpecimen1.setSpecimenCollectionGroup(scg);//bug 12073 and 12074
+				specimens.add( childSpecimen1 );
+				System.out.println("Befor creating child1 Tissue Specimen");
+				
+				TissueSpecimen childSpecimen2 = (TissueSpecimen)BaseTestCaseUtility.initTissueSpecimen();
+				childSpecimen2.setParentSpecimen(specimenObj);
+				childSpecimen2.setLabel("child2_"+ UniqueKeyGeneratorUtil.getUniqueKey());
+				childSpecimen2.setBarcode( "child2_barcode_"+ UniqueKeyGeneratorUtil.getUniqueKey());
+				childSpecimen2.setLineage("Aliquot");
+				childSpecimen2.setCollectionStatus( "Collected" );
+				SpecimenPosition specimenPosition2 = new SpecimenPosition();
+				specimenPosition2.setStorageContainer( storageContainer );
+				childSpecimen2.setSpecimenPosition( specimenPosition2 );
+				childSpecimen2.setSpecimenCollectionGroup(scg);//bug 12073 and 12074
+				specimens.add( childSpecimen2 );
+				System.out.println("Befor creating child 2 Tissue Specimen");
+				try
+				{
+					SessionDataBean sessionDataBean = CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN;
+					new NewSpecimenBizLogic().insert( specimens, sessionDataBean,true );
+				}
+				catch (Exception e)
+				{
+					assertFalse("Failed to create specimens", true);
+				}
+				System.out.println("Parent label" + specimenObj.getLabel());
+				System.out.println("Child Specimen label " + childSpecimen1.getLabel());
+				System.out.println("Child Specimen label " + childSpecimen2.getLabel());
+				Integer pos1 = childSpecimen2.getSpecimenPosition().getPositionDimensionOne();
+				Integer pos2 = childSpecimen2.getSpecimenPosition().getPositionDimensionTwo();
+				System.out.println("child Specimen1 positions " + childSpecimen1.getSpecimenPosition().getPositionDimensionOne() +" "+childSpecimen1.getSpecimenPosition().getPositionDimensionTwo());
+				System.out.println("child Specimen2 positions " + pos1 +" "+pos2);
+				if(pos1 == 2 && pos2 == 2)
+				{
+					assertTrue(" Child specimen 2 is successfully added ----> Position :: " + childSpecimen2.getSpecimenPosition().getPositionDimensionOne() +" "+
+							childSpecimen2.getSpecimenPosition().getPositionDimensionTwo(), true);
+				}				
+				
+			}
+			catch(Exception e)
+			{
+				System.out.println("testStoragePositionsOfAliquots()");
+				Logger.out.error(e.getMessage(),e);
+	           	e.printStackTrace();	           	
+			}
+		}
+
 }
