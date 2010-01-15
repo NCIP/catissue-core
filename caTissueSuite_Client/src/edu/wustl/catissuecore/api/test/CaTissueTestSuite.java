@@ -63,7 +63,7 @@ public class CaTissueTestSuite
 		suite.addTestSuite(ScientistRoleCaGridTestCases.class);
 		suite.addTestSuite(AdminRoleCaGridTestCases.class);
 		suite.addTestSuite(ParticipantEmpiTestCase.class);
-
+		suite.addTestSuite(BulkOperationTestCases.class);
 	/*	suite.addTestSuite(SupervisorRoleTestCases.class);
 		suite.addTestSuite(TechnicianRoleTestCases.class);	
 		suite.addTestSuite(ScientistRoleTestCases.class);*/

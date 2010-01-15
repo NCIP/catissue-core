@@ -21,6 +21,11 @@ public class CaTissueBaseTestCase extends BaseTestCase{
 	 */
 
 	static ApplicationService appService = null;
+	static final String loginName = "admin@admin.com";
+	static final String password = "Test123";
+	static final String jbossURL = "http://localhost:8080/catissuecore";
+	static final String keyStorePath = "G:/jboss-4.2.2.GA/server/default/conf/chap8.keystore";
+
 	public CaTissueBaseTestCase(){
 		super();
 	}
@@ -30,12 +35,12 @@ public class CaTissueBaseTestCase extends BaseTestCase{
 	public void setUp(){
 		
 		//Logger.configure("");
-		System.setProperty("javax.net.ssl.trustStore", "D:/Main/pcatissue/jboss-4.2.2.GA/server/default/conf/jbosskey.keystore");
+		System.setProperty("javax.net.ssl.trustStore", keyStorePath);
 		appService = ApplicationServiceProvider.getApplicationService();
 		ClientSession cs = ClientSession.getInstance();
 		try
 		{ 
-			cs.startSession("admin@admin.com", "Test123");
+			cs.startSession(loginName, password);
 		} 	
 					
 		catch (Exception ex) 

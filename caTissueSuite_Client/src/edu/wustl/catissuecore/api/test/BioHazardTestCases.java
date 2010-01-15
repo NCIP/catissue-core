@@ -1,10 +1,6 @@
 package edu.wustl.catissuecore.api.test;
 
-import java.util.Iterator;
-import java.util.List;
-
 import edu.wustl.catissuecore.domain.Biohazard;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 
