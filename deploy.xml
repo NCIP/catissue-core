@@ -808,6 +808,33 @@
 	<target name="unzip_bulkoperation_installable" depends="bulkoperation_check_prerequisite" description="unzip the bulk operation zip">
 		<unzip src="bulkoperator.zip" dest="${temp.dir}/bulkoperation" overwrite="true" />
 	</target>
+	
+	<target name="integrate_bulk_operation_mysql" >
+		<antcall target="unzip_bulkoperation_installable" />
+		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
+			<property name="database.driver" value="${mysql.driver.string}" />
+			<property name="database.type" value="${database.type}" />
+			<property name="parent.base.dir" value="${basedir}/lib" />
+			<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+			<property name="database.username" value="${database.username}" />
+			<property name="database.password" value="${database.password}" />
+			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+		</ant>
+	</target>
+	
+	<target name="integrate_bulk_operation_oracle" >
+		<antcall target="unzip_bulkoperation_installable" />
+		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
+			<property name="database.driver" value="${oracle.driver.string}" />
+			<property name="database.type" value="${database.type}" />
+			<property name="parent.base.dir" value="${basedir}/lib" />
+			<property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+			<property name="database.username" value="${database.username}" />
+			<property name="database.password" value="${database.password}" />
+			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+			<property name="rdbms" value="oracle" />
+		</ant>
+	</target>
 
 	<target name="bulkoperation_check_prerequisite" description="Check bulkoperation.zip file exists or not in base directory">
 		<!--
@@ -1286,16 +1313,7 @@
 			</classpath>
 		</sql>
 
-		<antcall target="unzip_bulkoperation_installable" />
-		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
-			<property name="database.driver" value="${mysql.driver.string}" />
-			<property name="database.type" value="${database.type}" />
-			<property name="parent.base.dir" value="${basedir}/lib" />
-			<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-			<property name="database.username" value="${database.username}" />
-			<property name="database.password" value="${database.password}" />
-			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
-		</ant>
+		<antcall target="integrate_bulk_operation_mysql" />
 
 		<antcall target="unzip_aq_installable" />
 		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
@@ -1413,17 +1431,7 @@
 			</classpath>
 		</sql>
 
-		<antcall target="unzip_bulkoperation_installable" />
-		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
-			<property name="database.driver" value="${oracle.driver.string}" />
-			<property name="database.type" value="${database.type}" />
-			<property name="parent.base.dir" value="${basedir}/lib" />
-			<property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-			<property name="database.username" value="${database.username}" />
-			<property name="database.password" value="${database.password}" />
-			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
-			<property name="rdbms" value="oracle" />
-		</ant>
+		<antcall target="integrate_bulk_operation_oracle"/>
 
 		<antcall target="unzip_aq_installable" />
 		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
@@ -1890,16 +1898,7 @@
 			</classpath>
 		</sql>
 
-		<antcall target="unzip_bulkoperation_installable" />
-		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
-			<property name="database.driver" value="${mysql.driver.string}" />
-			<property name="database.type" value="${database.type}" />
-			<property name="parent.base.dir" value="${basedir}/lib" />
-			<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-			<property name="database.username" value="${database.username}" />
-			<property name="database.password" value="${database.password}" />
-			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
-		</ant>
+		<antcall target="integrate_bulk_operation_mysql" />
 
 	</target>
 
@@ -1936,17 +1935,8 @@
 				</fileset>
 			</classpath>
 		</sql>
-		<antcall target="unzip_bulkoperation_installable" />
-		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
-			<property name="database.driver" value="${oracle.driver.string}" />
-			<property name="database.type" value="${database.type}" />
-			<property name="parent.base.dir" value="${basedir}/lib" />
-			<property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-			<property name="database.username" value="${database.username}" />
-			<property name="database.password" value="${database.password}" />
-			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
-			<property name="rdbms" value="oracle" />
-		</ant>
+
+		<antcall target="integrate_bulk_operation_oracle" />
    </target>
 
 
