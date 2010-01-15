@@ -398,53 +398,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			final Metaphone metaPhoneObj = new Metaphone();
 			final String lNameMetaPhone = metaPhoneObj.metaphone(participant.getLastName());
 			participant.setMetaPhoneCode(lNameMetaPhone);
-
 			dao.update(participant,oldParticipant);
-
-
-			final Collection oldParticipantMedicalIdentifierCollection = (Collection) oldParticipant
-					.getParticipantMedicalIdentifierCollection();
-			final Collection participantMedicalIdentifierCollection = participant
-					.getParticipantMedicalIdentifierCollection();
-			final Iterator it = participantMedicalIdentifierCollection.iterator();
-
-			//Updating the medical identifiers of the participant
-			while (it.hasNext())
-			{
-				final ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it
-						.next();
-
-				/**
-				 * Start: Change for API Search   --- Jitendra 06/10/2006
-				 * In Case of Api Search, previoulsy it was failing
-				 * since there was default class level initialization
-				 * on domain object. For example in User object,
-				 * it was initialized as protected String lastName="";
-				 * So we removed default class level initialization
-				 * on domain object and are initializing in method
-				 * setAllValues() of domain object. But in case
-				 * of Api Search, default values will not get set
-				 * since setAllValues() method of domainObject
-				 * will not get called. To avoid null
-				 * pointer exception,we are setting
-				 * the default values same as we
-				 * were setting in setAllValues() method
-				 * of domainObject.
-				 */
-				ApiSearchUtil.setParticipantMedicalIdentifierDefault(pmIdentifier);
-				//End:-  Change for API Search
-
-				pmIdentifier.setParticipant(participant);
-				if (pmIdentifier.getId() != null)
-				{
-					dao.update(pmIdentifier);
-				}
-				else if (pmIdentifier.getId() == null || pmIdentifier.getId().equals(""))
-				{
-					dao.insert(pmIdentifier);
-				}
-
-			}
 
 			//Updating the Collection Protocol Registration of the participant
 			//(Abhishek Mehta)
