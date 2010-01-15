@@ -40,7 +40,6 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -66,7 +65,6 @@ import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
-import edu.wustl.dao.exception.AuditException;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
@@ -111,9 +109,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			final String lNameMetaPhone = metaPhoneObj.metaphone(participant.getLastName());
 			participant.setMetaPhoneCode(lNameMetaPhone);
 
-			dao.insert(participant);
-
-			Collection<ParticipantMedicalIdentifier> pmiCollection = participant
+				Collection<ParticipantMedicalIdentifier> pmiCollection = participant
 					.getParticipantMedicalIdentifierCollection();
 
 			if (pmiCollection == null)
@@ -137,9 +133,9 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				final ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) iterator
 						.next();
 				pmIdentifier.setParticipant(participant);
-				dao.insert(pmIdentifier);
 			}
 
+			dao.insert(participant);
 			//Inserting collection Protocol Registration info in the database after setting the participant associated.
 			//Abhishek Mehta
 			final Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant

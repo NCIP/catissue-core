@@ -169,7 +169,7 @@
             table="CATISSUE_PART_MEDICAL_ID"
             fetch="join" lazy="false"
             inverse="true"
-            cascade="none"
+            cascade="save-update,all-delete-orphan"
             sort="unsorted"
         >
 
