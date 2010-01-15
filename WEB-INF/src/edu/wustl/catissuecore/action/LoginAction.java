@@ -359,11 +359,15 @@ public class LoginAction extends Action
 		{
 			adminUser = true;
 		}
+		
 		final SessionDataBean sessionData = setSessionDataBean(validUser, ipAddress, adminUser);
+		logger.info("creating session data bean "+sessionData);
+		
 		LoginAction.logger.debug("CSM USer ID ....................... : " + validUser.getCsmUserId());
 		session.setAttribute(Constants.SESSION_DATA, sessionData);
 		session.setAttribute(Constants.USER_ROLE, validUser.getRoleId());
 		final String result = passExpCheck(loginForm, validUser);
+		logger.info("Setting securoty parameters");
 		setSecurityParamsInSessionData(validUser, sessionData);
 		final String validRole = getForwardToPageOnLogin(validUser.getCsmUserId().longValue());
 		if (validRole != null && validRole.contains(Constants.PAGE_OF_SCIENTIST))
@@ -372,6 +376,7 @@ public class LoginAction extends Action
 			session.setAttribute(Constants.SESSION_DATA, null);
 			return mapping.findForward(Constants.FAILURE);
 		}
+		logger.info("Result: "+result);
 		if (!result.equals(Constants.SUCCESS))
 		{
 			handleCustomMessage(request, result);
@@ -387,6 +392,7 @@ public class LoginAction extends Action
 			forwardToPage = WUSTLKeyUtility.migrate(request, loginForm.getLoginName(),
 					edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
 		}
+		logger.info("forwardToPage: "+forwardToPage);
 		return mapping.findForward(forwardToPage);
 	}
 	/**
