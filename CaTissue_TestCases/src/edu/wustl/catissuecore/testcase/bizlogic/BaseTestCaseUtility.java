@@ -375,7 +375,7 @@ public class BaseTestCaseUtility {
 	public static SpecimenCollectionGroup initSpecimenCollectionGroup()
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
-		specimenCollectionGroup.setCollectionStatus("Completed");
+		specimenCollectionGroup.setCollectionStatus("Complete");
 		Site site = (Site)TestCaseUtility.getObjectMap(Site.class);
 		//Site site = new Site();
 		//site.setId(new Long(1));
@@ -1081,10 +1081,13 @@ public class BaseTestCaseUtility {
 		StorageContainer storageContainer = new StorageContainer();
 		storageContainer.setName("sc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
-		StorageType storageType =(StorageType)TestCaseUtility.getObjectMap(StorageType.class); 
-		//StorageType storageType = new StorageType();
-		//storageType.setId(new Long(3));
-		storageContainer.setStorageType(storageType);
+		if(TestCaseUtility.getObjectMap(StorageType.class)!=null)
+		{
+			StorageType storageType =(StorageType)TestCaseUtility.getObjectMap(StorageType.class); 
+			//StorageType storageType = new StorageType();
+			//storageType.setId(new Long(3));
+			storageContainer.setStorageType(storageType);
+		}
 		
 		Site site = (Site)TestCaseUtility.getObjectMap(Site.class); 
 		//Site site = new Site();
@@ -1565,11 +1568,11 @@ public class BaseTestCaseUtility {
 		System.out.println("Inside tissuespecimen");
 		TissueSpecimen ts= new TissueSpecimen();
 		ts.setSpecimenClass("Tissue");
-		ts.setLabel("TissueSpecimen"+UniqueKeyGeneratorUtil.getUniqueKey());
+		ts.setLabel("TissueSpecimen_"+UniqueKeyGeneratorUtil.getUniqueKey());
 		ts.setActivityStatus("Active");
 		ts.setCollectionStatus("Pending");
 		System.out.println("Inside Type");
-		ts.setBarcode("Barcode"+UniqueKeyGeneratorUtil.getUniqueKey());
+		ts.setBarcode("Barcode_"+UniqueKeyGeneratorUtil.getUniqueKey());
 		ts.setSpecimenType("Fixed Tissue Block");
 		ts.setPathologicalStatus("Malignant");
 		
