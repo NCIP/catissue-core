@@ -102,7 +102,7 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 		actionPerform();
 		//verifyForward("/Home.do");
 		logger.info("Login: "+getActualForward());
-		//verifyForward("pageOfNonWashU");
+		verifyForward("pageOfNonWashU");
 
 		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		assertEquals("user name should be equal to logged in username","admin@admin.com",bean.getUserName());
