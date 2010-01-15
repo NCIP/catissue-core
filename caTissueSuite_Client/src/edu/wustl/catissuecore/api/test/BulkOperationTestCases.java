@@ -15,7 +15,7 @@ public class BulkOperationTestCases extends CaTissueBaseTestCase
 	/**
 	 * Test Bulk Operation With API Without XML Template.
 	 */
-	public void testBulkOperationWithDefaultArtifactLocation()
+	public void testBulkOperationWithOutDefaultArtifactLocation()
 	{
 		try
 		{
