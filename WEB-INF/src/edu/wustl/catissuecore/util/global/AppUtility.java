@@ -3515,8 +3515,10 @@ public class AppUtility
 	{
 		final String sql = "SELECT PV1.value Class, SP.SPECIMEN_TYPE FROM catissue_permissible_value PV,catissue_permissible_value PV1," +
 				"CATISSUE_STOR_CONT_SPEC_TYPE SP WHERE PV.parent_identifier = PV1.identifier and " +
-				"PV1.value in ('Molecular','Cell','Fluid','Tissue') and " +
-				"pv.value = sp.specimen_type and SP.STORAGE_CONTAINER_ID = " + id;
+				"PV1.value in (select specimen_class from catissue_stor_cont_spec_class where storage_container_id="+id+") and " +
+				"pv.value = sp.specimen_type and SP.STORAGE_CONTAINER_ID ="+id+
+				" order by Class";
+				
 		return getResult(sql);
 	}
 	/**

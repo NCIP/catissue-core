@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.actionForm.ISpecimenType;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
-import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
@@ -2506,8 +2505,8 @@ public final class StorageContainerUtil
 		setFluidSp(fluidSpeTypeArr, spType, spClassCollection);
 		setMolSp(molSpTypeArr, spType, spClassCollection);
 		spTypeList.add(tissueSpeTypeArr);
-		spTypeList.add(fluidSpeTypeArr);
 		spTypeList.add(cellSpTypeArr);
+		spTypeList.add(fluidSpeTypeArr);
 		spTypeList.add(molSpTypeArr);
 		if(Constants.ADD.equals(spForm.getOperation()))
 		{
