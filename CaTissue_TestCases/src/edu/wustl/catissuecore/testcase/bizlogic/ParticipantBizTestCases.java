@@ -61,6 +61,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 			System.out.println(participant);
 			participant = (Participant) appService.createObject(participant); 
 			participant.setActivityStatus("Disabled");
+			participant.setParticipantMedicalIdentifierCollection(null);
 			participant = (Participant)appService.updateObject(participant);
 			assertTrue("Object added successfully", true);
 		 }
