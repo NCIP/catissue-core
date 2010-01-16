@@ -388,11 +388,9 @@ function setEditableChkbox(checkAllPages)
 				if((mygrid.hdrLabels[j])==partMRNConst)
 				{
 					var cellMrn = mygrid.cells(i,j);
-					
 					var str1 = "Tip(\""+cellMrn.getValue()+"\",WIDTH,300)";
 					var str="<span onmouseover='"+str1+"'>"+cellMrn.getValue()+"</span>";
-						
-					cellMrn.setValue(str);
+					cellMrn.setValue(cellMrn.getValue());
 				}
 			}
 		}

@@ -43,6 +43,7 @@ import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.participant.actionForm.IParticipantForm;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
@@ -56,7 +57,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author gautam_shetty
  */
 
-public class ParticipantForm extends AbstractActionForm implements Serializable
+public class ParticipantForm extends AbstractActionForm implements Serializable, IParticipantForm
 {
 
 	/**
@@ -1243,11 +1244,41 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 		this.isBarcodeEditable = isBarcodeEditable;
 	}
 
-	@Override
+	/**
+	 * AddNewObjectIdentifier
+	 */
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException("Un-Implemented method");
+	}
+	/**
+	 * Get EMPI Id
+	 */
+	public String getEmpiId()
+	{
+		throw new UnsupportedOperationException("Un-Implemented method");
+	}
+	/**
+	 * Get EMPI Status
+	 */
+	public String getEmpiIdStatus()
+	{
+		throw new UnsupportedOperationException("Un-Implemented method");
+	}
+	/**
+	 * Set EMPI ID
+	 * @param empiID EMPI ID
+	 */
+	public void setEmpiId(String empiID)
+	{
+		throw new UnsupportedOperationException("Un-Implemented method");
+	}
+	/**
+	 * @param empiStatus EMPI Status
+	 */
+	public void setEmpiIdStatus(String empiStatus)
+	{
+		throw new UnsupportedOperationException("Un-Implemented method");
 	}
 
 }

@@ -21,13 +21,15 @@ import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.participant.domain.ISite;
 import edu.wustl.common.util.logger.Logger;
 
 /**
  * A physical location associated with biospecimen collection, storage, processing, or utilization.
  * @hibernate.class table="CATISSUE_SITE"
  */
-public class Site extends AbstractDomainObject implements java.io.Serializable, IActivityStatus
+public class Site extends AbstractDomainObject implements java.io.Serializable, 
+					IActivityStatus, ISite
 {
 
 	/**
@@ -404,5 +406,19 @@ public class Site extends AbstractDomainObject implements java.io.Serializable, 
 	public void setAssignedSiteUserCollection(Collection<User> userCollection)
 	{
 		this.assignedSiteUserCollection = userCollection;
+	}
+	/**
+	 * Get Facility Id
+	 */
+	public String getFacilityId()
+	{
+		throw new UnsupportedOperationException("Un-Implemented method");
+	}
+	/**
+	 * @param facilityId set facility Id
+	 */
+	public void setFacilityId(String facilityId)
+	{
+		throw new UnsupportedOperationException("Un-Implemented method");
 	}
 }

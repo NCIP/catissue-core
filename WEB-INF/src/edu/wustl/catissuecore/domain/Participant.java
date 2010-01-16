@@ -35,6 +35,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.participant.domain.IParticipant;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
@@ -49,13 +50,13 @@ import edu.wustl.common.util.logger.Logger;
 public class Participant extends AbstractDomainObject
 		implements
 			java.io.Serializable,
-			IActivityStatus
+			IActivityStatus,IParticipant
 {
 
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(Participant.class);
+	private static final Logger logger = Logger.getCommonLogger(Participant.class);
 
 	/**
 	 * Serial Version ID.
@@ -97,11 +98,6 @@ public class Participant extends AbstractDomainObject
 	 */
 	protected String sexGenotype;
 
-	//	/**
-	//     * Participant's racial origination.
-	//     */
-	//	protected String race;
-
 	/**
 	 * Participant's race origination.
 	 */
@@ -135,22 +131,29 @@ public class Participant extends AbstractDomainObject
 	/**
 	 * A collection of medical record identification number that refers to a Participant.
 	 * */
-	protected Collection participantMedicalIdentifierCollection = new LinkedHashSet();// = new HashSet();
+	protected Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = 
+					new LinkedHashSet<ParticipantMedicalIdentifier>();
 
 	/**
 	 * A collection of registration of a Participant to a Collection Protocol.
 	 */
-	protected Collection collectionProtocolRegistrationCollection = new HashSet();
+	protected Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = 
+				new HashSet<CollectionProtocolRegistration>();
 
 	/**
 	 * A collection of record entry objects for a participant
 	 */
 	protected Collection<ParticipantRecordEntry> participantRecordEntryCollection = new HashSet<ParticipantRecordEntry>();
-
+	/**
+	 * metaPhone Code
+	 */
 	protected String metaPhoneCode;
 
-	protected String empiId = null;
-
+	/**
+	 * empiId : EMPI id of the participant.
+	 */
+	protected String empiId = "";
+	
 	public String getMetaPhoneCode()
 	{
 		return this.metaPhoneCode;
@@ -184,7 +187,7 @@ public class Participant extends AbstractDomainObject
 	 * Copy Constructor.
 	 * @param participant Participant object
 	 */
-	public Participant(Participant participant)
+	public Participant(final Participant participant)
 	{
 		super();
 		this.id = Long.valueOf(participant.getId().longValue());
@@ -564,7 +567,7 @@ public class Participant extends AbstractDomainObject
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
 	 * @see setCollectionProtocolRegistrationCollection(Collection)
 	 */
-	public Collection getCollectionProtocolRegistrationCollection()
+	public Collection<CollectionProtocolRegistration> getCollectionProtocolRegistrationCollection()
 	{
 		return this.collectionProtocolRegistrationCollection;
 	}
@@ -796,7 +799,7 @@ public class Participant extends AbstractDomainObject
 					if (witnessId > 0)
 					{
 						final User consentWitness = new User();
-						consentWitness.setId(new Long(witnessId));
+						consentWitness.setId(Long.valueOf(witnessId));
 						collectionProtocolRegistration.setConsentWitness(consentWitness);
 					}
 
@@ -885,9 +888,24 @@ public class Participant extends AbstractDomainObject
 	 * Returns message label to display on success add or edit.
 	 * @return String.
 	 */
-	@Override
 	public String getMessageLabel()
 	{
 		return AppUtility.getlLabel(this.lastName, this.firstName);
 	}
+	/**
+	 * Get getEmpiIdStatus
+	 */
+	public String getEmpiIdStatus()
+	{
+		throw new UnsupportedOperationException("Un-Implemented method");
+	}
+	/**
+	 * set EmpiId Status
+	 * @param empiIdStatus EMPI Status
+	 */
+	public void setEmpiIdStatus(String empiIdStatus)
+	{
+		throw new UnsupportedOperationException("Un-Implemented method");
+	}
+
 }

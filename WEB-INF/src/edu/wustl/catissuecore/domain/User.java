@@ -28,6 +28,7 @@ import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.participant.domain.IUser;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.SMException;
@@ -40,7 +41,8 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
  * processing, or utilization.
  * @hibernate.class table="CATISSUE_USER"
  */
-public class User extends AbstractDomainObject implements Serializable, IActivityStatus
+public class User extends AbstractDomainObject implements Serializable, 
+									IActivityStatus, IUser
 {
 
 	/**
@@ -881,5 +883,20 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 	public void setWustlKey(String wustlKey)
 	{
 		this.wustlKey = wustlKey;
+	}
+	/**
+	 * Get Admin User
+	 */
+	public Boolean getAdminuser()
+	{
+		throw new UnsupportedOperationException("Un-Implemented method");
+	}
+	/**
+	 * SetAdmin User
+	 * @param arg0 If user is Administrator, True/False
+	 */
+	public void setAdminuser(Boolean arg0)
+	{
+		throw new UnsupportedOperationException("Un-Implemented method");
 	}
 }

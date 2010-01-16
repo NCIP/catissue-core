@@ -13,6 +13,7 @@ import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.participant.domain.IParticipantMedicalIdentifier;
 
 /**
  * A medical record identification number that refers to a Participant.
@@ -20,7 +21,7 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public class ParticipantMedicalIdentifier extends AbstractDomainObject
 		implements
-			java.io.Serializable
+			java.io.Serializable, IParticipantMedicalIdentifier<Participant, Site>
 {
 
 	/**

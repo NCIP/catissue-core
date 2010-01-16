@@ -128,7 +128,7 @@
 	</property>
 	<property>
 		<name>ParticipantLookupAlgo</name>
-		<value>edu.wustl.catissuecore.bizlogic.ParticipantLookupLogic</value>
+		<value>edu.wustl.common.participant.bizlogic.ParticipantLookupLogic</value>
 	</property>
 	<property>
 		<name>SSNExact</name>
@@ -212,6 +212,17 @@
 		<name>cutoffPoints</name>
 		<value>20</value>
 	</property>
+	
+	<property>
+		<name>empi.MaxNoOfPatients</name>
+		<value>100</value>
+	</property>
+	
+	<property>
+		<name>empi.threshold</name>
+		<value>20</value>
+	</property>
+	
 	
 	 <!-- Constants for LookUp algo end -->
 	 <!-- start-->

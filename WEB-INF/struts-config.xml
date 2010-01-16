@@ -1215,7 +1215,7 @@ PUBLIC
 		</action>
 
 		<action path="/ParticipantLookup"
-			type="edu.wustl.catissuecore.action.ParticipantLookupAction"
+			type="edu.wustl.common.participant.action.ParticipantLookupAction"
 			name="participantForm"
 			validate="true"
 			input="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12"
@@ -4788,7 +4788,7 @@ PUBLIC
 	</action>
 
 	<action path="/CPQueryParticipantLookup"
-		type="edu.wustl.catissuecore.action.ParticipantLookupAction"
+		type="edu.wustl.common.participant.action.ParticipantLookupAction"
 		name="participantForm"
 		validate="true"
 		input="/QueryParticipant.do?operation=add&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12"

@@ -4,11 +4,12 @@ package edu.wustl.catissuecore.domain;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.participant.domain.IRace;
 
 /**
   * @author sagar_baldwa
  */
-public class Race extends AbstractDomainObject implements java.io.Serializable
+public class Race extends AbstractDomainObject implements java.io.Serializable, IRace<Participant>
 {
 
 	/**
