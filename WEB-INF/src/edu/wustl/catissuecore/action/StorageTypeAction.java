@@ -90,7 +90,6 @@ public class StorageTypeAction extends SecureAction
 		request.setAttribute("holds_List_1", Constants.HOLDS_LIST1);
 		request.setAttribute("holds_List_2", Constants.HOLDS_LIST2);
 		request.setAttribute("holds_List_3", Constants.HOLDS_LIST3);
-		request.setAttribute("holds_List_4", Constants.HOLDS_LIST4);
 		int dimTwoCapacity = 0;
 		if (storageTypeForm != null)
 		{
