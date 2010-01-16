@@ -407,7 +407,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		checkContainerPos(dao, sessionDataBean, container, oldContainer);
 		checkCapacity(dao, container, oldContainer);
 		checkSite(dao, container);
-		checkRestriction(dao, container, oldContainer);
 	}
 	/**
 	 * @param dao DAO object
@@ -469,28 +468,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		}
 		site.setSiteForSubContainers(container, container.getSite(), dao);
 	}
-	/**
-	 * @param dao DAO object
-	 * @param container StorageContainer Object
-	 * @param oldContainer Old StorageContainer Object
-	 * @throws BizLogicException BizLogicException
-	 */
-	private void checkRestriction(final DAO dao, final StorageContainer container,
-			final StorageContainer oldContainer) throws BizLogicException
-	{
-		final boolean restCanChange = StorageContainerUtil.isContainerEmpty(dao, container);
-		if (!restCanChange)
-		{
-			final boolean restChanged = StorageContainerUtil.checkForRestrictionsChanged(container,
-					oldContainer);
-			if (restChanged)
-			{
-				throw this.getBizLogicException(null,
-						"errros.storageContainer.restrictionCannotChanged", "");
-			}
-		}
-	}
-
 	/**
 	 * @param dao DAO object
 	 * @param container StorageContainer Object
