@@ -257,28 +257,6 @@ public class AppUtility
 
 		return null;
 	}
-	
-	public static Specimen getSpecimenObjectOnClassName(String specimenClassName)
-	{
-		Specimen specimen = null;
-		if (Constants.CELL.equalsIgnoreCase(specimenClassName))
-		{
-			specimen = new CellSpecimen();
-		}
-		else if (Constants.MOLECULAR.equalsIgnoreCase(specimenClassName))
-		{
-			specimen = new MolecularSpecimen();
-		}
-		else if (Constants.FLUID.equalsIgnoreCase(specimenClassName))
-		{
-			specimen = new FluidSpecimen();
-		}
-		else if (Constants.TISSUE.equalsIgnoreCase(specimenClassName))
-		{
-			specimen = new TissueSpecimen();
-		}
-		return specimen;
-	}
 
 	public static int getEventParametersFormId(SpecimenEventParameters eventParameter)
 	{

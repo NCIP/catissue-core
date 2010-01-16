@@ -2,6 +2,8 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -33,7 +35,7 @@ public class Aliquot extends AbstractDomainObject implements Serializable
 	/**
 	 * specimenPosition.
 	 */
-	private SpecimenPosition specimenPosition;
+	private Collection<SpecimenPosition> specimenPositionCollection = new LinkedHashSet<SpecimenPosition>();
 	/**
 	 * aliquotsInSameContainer.
 	 */
@@ -87,6 +89,22 @@ public class Aliquot extends AbstractDomainObject implements Serializable
 		this.aliquotsInSameContainer = aliquotsInSameContainer;
 	}
 	/**
+	 * Get Specimen Position Collection.
+	 * @return Collection of SpecimenPosition.
+	 */
+	public Collection<SpecimenPosition> getSpecimenPositionCollection()
+	{
+		return specimenPositionCollection;
+	}
+	/**
+	 * Set Specimen Position Collection.
+	 * @param specimenPositionCollection Collection of SpecimenPosition.
+	 */
+	public void setSpecimenPositionCollection(Collection<SpecimenPosition> specimenPositionCollection)
+	{
+		this.specimenPositionCollection = specimenPositionCollection;
+	}
+	/**
 	 * Get Specimen.
 	 * @return Specimen Specimen.
 	 */
@@ -101,22 +119,6 @@ public class Aliquot extends AbstractDomainObject implements Serializable
 	public void setSpecimen(Specimen specimen)
 	{
 		this.specimen = specimen;
-	}
-	/**
-	 * Get Specimen Position.
-	 * @return SpecimenPosition SpecimenPosition.
-	 */
-	public SpecimenPosition getSpecimenPosition()
-	{
-		return specimenPosition;
-	}
-	/**
-	 * Set Specimen Position.
-	 * @param specimenPosition SpecimenPosition.
-	 */
-	public void setSpecimenPosition(SpecimenPosition specimenPosition)
-	{
-		this.specimenPosition = specimenPosition;
 	}
 	/**
 	 * Get Id.

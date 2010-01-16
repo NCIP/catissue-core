@@ -2732,6 +2732,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		this.validateFields(specimen, dao, operation, partOfMulipleSpecimen);
 		this.validateEnumeratedData(specimen, operation, validator);
 		this.validateSpecimenCharacterstics(specimen);
+		validateLabelForSingleSpecimen(specimen);
 		if (operation.equals(Constants.ADD))
 		{
 			this.validateDerivedSpecimens(specimen, dao, operation);
@@ -2751,6 +2752,23 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 
 		return true;
+	}
+
+	/**
+	 * Validate Label For Single Specimen.
+	 * @param specimen Specimen.
+	 * @throws BizLogicException BizLogicException.
+	 */
+	private void validateLabelForSingleSpecimen(Specimen specimen) throws BizLogicException
+	{
+		if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+		{
+			if ((specimen.getLabel() == null || specimen.getLabel().equals(""))
+					&& specimen.getCollectionStatus().equalsIgnoreCase("Collected"))
+			{
+				throw this.getBizLogicException(null, "label.mandatory", "");
+			}
+		}
 	}
 
 
