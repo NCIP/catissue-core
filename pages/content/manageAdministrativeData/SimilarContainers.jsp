@@ -438,7 +438,6 @@
                       <td width="17%" align="left" valign="top" class="black_ar"><label for="defaultTemperature"><bean:message key="storageContainer.temperature"/></label></td>
 					 <td width="38%"align="left" class="grey_ar"><html:text styleClass="black_ar" style="text-align:right" maxlength="50"  size="15" styleId="defaultTemperature" property="defaultTemperature" /><span class="black_ar">&nbsp;<sup>0</sup>C</span></td>
 				  </tr>
-				  <tr><td>&nbsp;</td></tr>
 				   <tr>
                        <td align="center" valign="top" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="4" /></td>
 					   <td align="left" valign="top" class="black_ar" onmouseover="Tip(' <%=label1%>')">
@@ -480,14 +479,12 @@
 				  <tr>
                       <td colspan="6" class="bottomtd"></td>
                   </tr>
-				  <tr><td>&nbsp;</td></tr>
 	               <tr>
                     <td align="center" class="black_ar">&nbsp;</td>
                     <td align="left" valign="top" class="black_ar"><bean:message key="storageContainer.collectionProtocolTitle"/></td>
 					<td align="left" class="grey_ar"><html:select property="collectionIds" styleClass="formFieldSizedSC" styleId="collectionIds" size="4"	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" multiple="true" >	<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/></html:select>&nbsp;</td>
 					<td align="center" class="black_ar" colspan="3">&nbsp;</td>
 				  </tr>
-				  <tr><td>&nbsp;</td></tr>
 				   <tr>
                     <td align="center" class="black_ar">&nbsp;</td>
                     <td align="left" valign="top" class="black_ar"><bean:message key="storageContainer.holds"/></td>
@@ -534,8 +531,7 @@
 				 </table></td>
 				
                               </tr>
-				  <tr><td>&nbsp;</td></tr>
-		
+				
 		<tr onclick="javascript:showHide('sp_type')">
           <td width="96%" colspan="5" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="storageType.holdsSpecimenClass"/></span></td>
           <td width="4%" align="right" class="tr_bg_blue1">
