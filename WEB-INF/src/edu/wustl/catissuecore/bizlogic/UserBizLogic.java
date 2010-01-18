@@ -1605,8 +1605,11 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		final long dayDiff = validator.getDateDiff(lastUpdateDate, new Date());
 		final int expireDaysCount = Integer.parseInt(XMLPropertyHandler
 				.getValue("password.expire_after_n_days"));
+		this.logger.info("expireDaysCount" +expireDaysCount);
+		this.logger.info("dayDiff" +dayDiff);
 		if (dayDiff > expireDaysCount)
 		{
+			this.logger.info("returning error change password expire");
 			return "errors.changePassword.expire";
 		}
 		return Constants.SUCCESS;
