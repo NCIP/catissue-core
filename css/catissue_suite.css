@@ -11,7 +11,7 @@ body {
 	border-top:1px solid #87bbe4;
 	border-left:1px solid #87bbe4;
 	border-right:1px solid #87bbe4;
-}	
+}
 
 .whitetable_bg {
 	background-color:#FFFFFF;
@@ -82,7 +82,16 @@ body {
 	color: #171717;
 	vertical-align:middle;
 	margin:0px;
-	
+
+}
+
+bulk_black_ar{
+	font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;
+	width:31;
 }
 
 .black_ar_t {
@@ -155,7 +164,7 @@ body {
 	background-color:#f6f6f6;
 	font-family:Verdana;
 	font-size:11px;
-}	
+}
 
 /*End table css*/
 
@@ -199,19 +208,19 @@ A.white:link {
 	font-size: 10px;
 	font-weight: bold;
 }
-A.white:active {color: #FFFFFF; 
+A.white:active {color: #FFFFFF;
 	font-family: verdana;
 	font-size: 10px;
 	font-weight: bold;
 	text-decoration: none;
 }
-A.white:visited {color: #FFFFFF; 
+A.white:visited {color: #FFFFFF;
 	font-family: verdana;
 	font-size: 10px;
 	font-weight: bold;
 	Text-Decoration: none;
 }
-A.white:hover {color: #d4e6f9; 
+A.white:hover {color: #d4e6f9;
 	font-family: verdana;
 	font-size: 10px;
 	font-weight: bold;
@@ -347,11 +356,11 @@ A.viewhelp:hover{
 	border-left:1px solid #61a1e3;
 	border-right:1px solid #61a1e3;
 	border-bottom:1px solid #61a1e3;
-	
+
 }
 .tablepadding {
-            padding-left:10px; 
-            padding-right:10px; 
+            padding-left:10px;
+            padding-right:10px;
             padding-bottom:10px;
             background-color:#bfdcf3;
 }
@@ -496,13 +505,13 @@ padding-top:10px;
 	background-color:#f6f6f6;
 	border:1px solid #eeeeee;
 
-}	
-.dividerline{ 
+}
+.dividerline{
     border-top:1px solid #ebebeb;
 }
 .formFieldSized12{ /* for the autocomplete tag */
 	font-family:verdana;
-	border:1px solid #6E81A6; 
+	border:1px solid #6E81A6;
   font-size:11px;
 }
 
@@ -535,32 +544,32 @@ div.autocomplete {
 	}
 	.formFieldSized19{ /* for the autocomplete tag */
 	font-family:verdana;
-	border:1px solid #6E81A6; 
+	border:1px solid #6E81A6;
 	  font-size:11px;
 	width:19em;
 	}
 
 	.formFieldSizedTime{ /* for the form elements themselves and with a constant width (on elements) */
 	font-family:verdana;
-	 border:1px solid #6E81A6; 
+	 border:1px solid #6E81A6;
 	  font-size:11px;
 	  width:5em;
 	  vertical-align:middle;
 	  }
 .formFieldSizedText{ /* for the autocomplete tag */
 	font-family:verdana;
-	border:1px solid #6E81A6; 
+	border:1px solid #6E81A6;
   font-size:11px;
 	width:12em;
 }
-.addRow_s{ 
+.addRow_s{
 	width:14em;
 	font-family: verdana;
 	font-size: 11px;
 	color: #000000;
-	
+
 }
-.formFieldSized8{ 
+.formFieldSized8{
 	font-family:verdana;
 	font-size:11px;
 	width:8em;
@@ -574,9 +583,9 @@ div.autocomplete {
 	background-color:#f6f6f6;
 }
 
-.grid_hover 
-{  
-  background-color:#bfdcf3;	
+.grid_hover
+{
+  background-color:#bfdcf3;
   font-size:20px;
 }
 
@@ -592,50 +601,50 @@ color: #000000;
 	font-family:Verdana;
 	font-size:11px;
 }
-.formFieldSizedSC{ 
+.formFieldSizedSC{
   	font-family: verdana;
 	font-size: 11px;
 	color: #000000;
 	width:15em;
 	}
-.formFieldSizedSCG{ 
+.formFieldSizedSCG{
   	font-family: verdana;
 	font-size: 11px;
 	color: #171717;
 	vertical-align:middle;
 	margin:0px;
 	width:15em;
-	
+
 	}
-.formFieldSizedAutoSCG{ 
+.formFieldSizedAutoSCG{
   	font-family: verdana;
 	font-size: 11px;
 	color: #171717;
 	vertical-align:middle;
 	margin:0px;
 	width:13.5em;
-	
+
 	}
-	.formFieldSizedAutoSCGTime{ 
+	.formFieldSizedAutoSCGTime{
   	font-family: verdana;
 	font-size: 11px;
 	color: #171717;
 	vertical-align:middle;
 	margin:0px;
 	width:4.5em;
-	
+
 	}
-	
+
 .tableborder{
     border:1px solid #ebecec; border-collapse:collapse;
-	
+
 }
 .tableborder td{
     border:1px solid #ebecec; border-collapse:collapse;
 	padding-left:10px;
 }
 
-.pre 
+.pre
 {
 	white-space: pre; /* CSS2 */
 	white-space: -moz-pre-wrap; /* Mozilla */
