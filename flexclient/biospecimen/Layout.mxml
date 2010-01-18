@@ -97,7 +97,7 @@
                  private var pendingArmCPIcon:Class;
 
     [Bindable]
-  	       private var title:String = "Specimen Details for";
+  	       private var title:String = "Specimen Details";
   			// Store the specified node id to show as selected
 			private var nodeIdToSelect:String;
 			// Store the inode id of previously selected node
@@ -477,7 +477,7 @@
     	    selectedParticipantIndex = spComboSelectedIndex;
 
 		   // title  = title +" "+selectedParticipant.name;
-		     spDetailsLabel.text = title+"  "+selectedParticipant.name;
+		     spDetailsLabel.text = title;//+"  "+selectedParticipant.name;
 
 		   //Here we can get data for specimen tree details
 
