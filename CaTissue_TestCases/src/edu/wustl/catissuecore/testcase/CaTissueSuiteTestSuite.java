@@ -89,7 +89,6 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(DepartmentTestCases.class);
 		strutsSuite.addTestSuite(CancerReaserchGroupTestCases.class);
 		strutsSuite.addTestSuite(SiteTestCases.class);
-	    strutsSuite.addTestSuite(UserTestCases.class);
 		strutsSuite.addTestSuite(BiohazardTestCases.class);
 		strutsSuite.addTestSuite(DistributionProtocolTestCases.class);
 		strutsSuite.addTestSuite(SpecimenArrayTypeTestCases.class);
