@@ -38,20 +38,20 @@ public class NightlyBuildReportGenerator
 	private static Document document = null;
 	public static String TOTAL_NO_OF_FAILURES ="0";
 	public static String TOTAL_NO_OF_TESTS ="0";
-	public static String JUNIT_TEST_MYSQL_FRESH_FILE = "";
-	public static String JUNIT_TEST_MYSQL_UPGRADE_FILE = ""; 
-	public static String JUNIT_TEST_ORACLE_FRESH_FILE = "";
-	public static String JUNIT_TEST_ORACLE_UPGRADE_FILE = "";
-	public static String JMETER_TEST_MYSQL_FRESH_FILE = "";
-	public static String JMETER_TEST_MYSQL_UPGRADE_FILE = ""; 
-	public static String JMETER_TEST_ORACLE_FRESH_FILE = "";
-	public static String JMETER_TEST_ORACLE_UPGRADE_FILE = "";
-	public static String JMETER_TEST_FILE = "";
+	public static String JUNIT_API_MYSQL_FRESH_FILE = "";
+	public static String JUNIT_API_MYSQL_UPGRADE_FILE = ""; 
+	public static String JUNIT_API_ORACLE_FRESH_FILE = "";
+	public static String JUNIT_API_ORACLE_UPGRADE_FILE = "";
+	public static String JUNIT_STRUTS_MYSQL_FRESH_FILE = "";
+	public static String JUNIT_STRUTS_MYSQL_UPGRADE_FILE = ""; 
+	public static String JUNIT_STRUTS_ORACLE_FRESH_FILE = "";
+	public static String JUNIT_STRUTS_ORACLE_UPGRADE_FILE = "";
+	//public static String JMETER_TEST_FILE = "";
 	public static String MAIL_SETTING_PROPERTY_FILE ="";
 	public static String KEY_EMAIL_MESSAGE = "email.message";
 	public static String DATABASE_ORACLE = "Oracle";
 	public static String DATABASE_MYSQL = "MySQL";
-	public static String TestResult="./XmlReport/TestResult.txt" ;
+	public static String TestResult="./XmlReport/TestResult.csv" ;
 	public static String date="";
 	static StringBuffer nightlyBuildReport=null;
 	public static boolean FileExist=true;
@@ -62,38 +62,43 @@ public class NightlyBuildReportGenerator
 		if (args.length>0)
 		{
 			
-			JUNIT_TEST_MYSQL_FRESH_FILE=args[0];
-			JUNIT_TEST_MYSQL_UPGRADE_FILE=args[1];
-			JUNIT_TEST_ORACLE_FRESH_FILE=args[2];
-			JUNIT_TEST_ORACLE_UPGRADE_FILE=args[3];
-			JMETER_TEST_MYSQL_FRESH_FILE=args[4];
-			JMETER_TEST_MYSQL_UPGRADE_FILE=args[5];
-			JMETER_TEST_ORACLE_FRESH_FILE=args[6];
-			JMETER_TEST_ORACLE_UPGRADE_FILE=args[7];
+			JUNIT_API_MYSQL_FRESH_FILE=args[0];
+			JUNIT_API_MYSQL_UPGRADE_FILE=args[1];
+			JUNIT_API_ORACLE_FRESH_FILE=args[2];
+			JUNIT_API_ORACLE_UPGRADE_FILE=args[3];
+			JUNIT_STRUTS_MYSQL_FRESH_FILE=args[4];
+			JUNIT_STRUTS_MYSQL_UPGRADE_FILE=args[5];
+			JUNIT_STRUTS_ORACLE_FRESH_FILE=args[6];
+			JUNIT_STRUTS_ORACLE_UPGRADE_FILE=args[7];
 					
 		}
-		nightlyBuildReport = new StringBuffer("");
-				
+		nightlyBuildReport = new StringBuffer();
+		String operatingSystem = System.getProperty("os.name");		
 		FileOutputStream  fileOutputStream = new FileOutputStream(TestResult);
+		String header = "Type,Scenario,Total,Pass,Fail,Last Run Date,Comment\n";
+		fileOutputStream.write(header.getBytes());
 		fileOutputStream.flush();
+
+		NightlyBuildReportGenerator.init(JUNIT_STRUTS_MYSQL_FRESH_FILE);
+		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream,"Struts test cases,"+operatingSystem+" MySQL Fresh");
+		NightlyBuildReportGenerator.init(JUNIT_API_MYSQL_FRESH_FILE);
+		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream,"API test cases,"+operatingSystem+" MySQL Fresh");
+
+		NightlyBuildReportGenerator.init(JUNIT_STRUTS_MYSQL_UPGRADE_FILE);
+		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream,"Struts test cases,"+operatingSystem+" MySQL Upgrade");
+		NightlyBuildReportGenerator.init(JUNIT_API_MYSQL_UPGRADE_FILE);
+		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream,"API test cases,"+operatingSystem+" MySQL Upgrade");
+
+		NightlyBuildReportGenerator.init(JUNIT_STRUTS_ORACLE_FRESH_FILE);
+		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream,"Struts test cases,"+operatingSystem+" Oracle Fresh");
+		NightlyBuildReportGenerator.init(JUNIT_API_ORACLE_FRESH_FILE);
+		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream,"API test cases,"+operatingSystem+" Oracle Fresh");
+
+		NightlyBuildReportGenerator.init(JUNIT_STRUTS_ORACLE_UPGRADE_FILE);
+		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream,"Struts test cases,"+operatingSystem+" Oracle Upgrade");
+		NightlyBuildReportGenerator.init(JUNIT_API_ORACLE_UPGRADE_FILE);
+		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream,"API test cases,"+operatingSystem+" Oracle Upgrade");
 		
-		NightlyBuildReportGenerator.init(JUNIT_TEST_MYSQL_FRESH_FILE);
-		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream);
-		NightlyBuildReportGenerator.init(JUNIT_TEST_MYSQL_UPGRADE_FILE);
-		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream);
-		NightlyBuildReportGenerator.init(JUNIT_TEST_ORACLE_FRESH_FILE);
-		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream);
-		NightlyBuildReportGenerator.init(JUNIT_TEST_ORACLE_UPGRADE_FILE);
-		NightlyBuildReportGenerator.getJUnitTestResults(fileOutputStream);
-		
-		NightlyBuildReportGenerator.init(JMETER_TEST_MYSQL_FRESH_FILE);
-		NightlyBuildReportGenerator.getJMeterTestResults(fileOutputStream);
-		NightlyBuildReportGenerator.init(JMETER_TEST_MYSQL_UPGRADE_FILE);
-		NightlyBuildReportGenerator.getJMeterTestResults(fileOutputStream);
-		NightlyBuildReportGenerator.init(JMETER_TEST_ORACLE_FRESH_FILE);
-		NightlyBuildReportGenerator.getJMeterTestResults(fileOutputStream);
-		NightlyBuildReportGenerator.init(JMETER_TEST_ORACLE_UPGRADE_FILE);
-		NightlyBuildReportGenerator.getJMeterTestResults(fileOutputStream);
 				
 	}
 
@@ -105,7 +110,6 @@ public class NightlyBuildReportGenerator
 		{
 			DocumentBuilder dbuilder = dbfactory.newDocumentBuilder();// throws
 			// ParserConfigurationException
-			
 			if (path != null)
 			{
 				document = dbuilder.parse(path);
@@ -113,24 +117,20 @@ public class NightlyBuildReportGenerator
 				Date d=new Date(fin.lastModified());
 				java.text.SimpleDateFormat format= new java.text.SimpleDateFormat("MM/dd/yyyy");
 				date=format.format(d);
-				// throws SAXException,IOException,IllegalArgumentException(if path is null
 			}
 		}
 		catch (SAXException e)
 		{
-			//NightlyBuildReportGenerator.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 			throw e;
 		}
 		catch (IOException e)
 		{
-			//NightlyBuildReportGenerator.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 			FileExist=false;
 		}
 		catch (ParserConfigurationException e)
 		{
-			//NightlyBuildReportGenerator.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -144,7 +144,7 @@ public class NightlyBuildReportGenerator
 	 * </p>
 	 */
 
-	public static void getJUnitTestResults(FileOutputStream fileOutputStream)throws IOException
+	public static void getJUnitTestResults(FileOutputStream fileOutputStream,String testCaseType)throws IOException
 	{
 		if(FileExist)
 		{
@@ -234,126 +234,15 @@ public class NightlyBuildReportGenerator
 		System.out.println("TotalFailures"+TotalFailures);
 		// Add pass fail result to Result file 
 		TOTAL_NO_OF_PASS=Integer.parseInt(TOTAL_NO_OF_TESTS) - TotalFailures;
-		String name="JUnitTest"+",";
+		String name=testCaseType+",";
 		name=name+TOTAL_NO_OF_TESTS+","+TOTAL_NO_OF_PASS+","+TotalFailures+","+date+","+"-"+"\r\n";
 		fileOutputStream.write(name.getBytes());
 		}
 		else // If XML file does not exists
 		{
-			String name="JUnitTest"+","+"-"+","+"-"+","+"-"+","+"-"+","+"XML Report File does not exists"+"\r\n";
+			String name=testCaseType+","+"-"+","+"-"+","+"-"+","+"-"+","+"XML Report File does not exists"+"\r\n";
 			fileOutputStream.write(name.getBytes());
 		}
 		
 	}
-	
-	public static void getJMeterTestResults(FileOutputStream fileOutputStream)throws IOException
-	{
-		if(FileExist)
-		{
-		int TOTAL_NO_OF_PASS=0;
-		// it gives the rootNode of the xml file
-		Element root = document.getDocumentElement();
-		int totalNoOfTest=0;
-		int totalNoOfFailures=0,totalNoOfPasses=0;
-				
-		List listOfFailedTestCases = new ArrayList();
-		NodeList children = root.getChildNodes();
-		for (int i = 0; i < children.getLength(); i++)
-		{
-			Node child = children.item(i);
-					
-			
-			if(child.getNodeName().equals("httpSample"))//iterate total tests "httpSample" tag specifies the test
-			{
-				NamedNodeMap attributeMap =child.getAttributes();
-				
-				//to retrieve the total no of failures and count of test cases.
-				if(attributeMap!=null)
-				{
-					for(int l=0;l<attributeMap.getLength();l++)
-					{
-						Node attributeNode =attributeMap.item(l);
-						if(attributeNode.getNodeName().equals("s"))//this is to retrieve the name of the test case which is failed.
-						{
-							if(attributeNode.getNodeValue().equals("true"))
-								totalNoOfPasses++;
-							if(attributeNode.getNodeValue().equals("false"))
-								totalNoOfFailures++;
-							
-						}
-															
-									
-					}
-				}	
-				
-				totalNoOfTest++;
-				NodeList subChildNodes = child.getChildNodes();
-				/*for (int j = 0; j < subChildNodes.getLength(); j++)
-				{
-					Node subchildNode = subChildNodes.item(j);
-					if(subchildNode.getNodeName().equals("assertionResult"))
-					{
-						NodeList subChildChildNodes = subchildNode.getChildNodes();
-						for(int k=0;k<subChildChildNodes.getLength();k++)
-						{
-							Node subChildChildNode = subChildChildNodes.item(k);
-							if(subChildChildNode.getNodeName().equals("failure"))//Test failed if the value of failure tag is true.
-							{
-								
-								if(subChildChildNode.getFirstChild().getNodeValue().equals("true"))
-								{
-									totalNoOfFailures++;
-									NamedNodeMap attributeMap =child.getAttributes();
-									
-									//to retrieve the total no of failures and count of test cases.
-									if(attributeMap!=null)
-									{
-										for(int l=0;l<attributeMap.getLength();l++)
-										{
-											Node attributeNode =attributeMap.item(l);
-											if(attributeNode.getNodeName().equals("lb"))//this is to retrieve the name of the test case which is failed.
-											{
-												listOfFailedTestCases.add(totalNoOfFailures+"."+attributeNode.getNodeValue());
-												
-											}
-																				
-														
-										}
-									}	
-									
-								}	
-							}// end of the failure
-							
-							
-						}
-					}
-					
-				}	*/
-				
-			}
-		}
-		
-		
-		nightlyBuildReport.append("\n\n\tFailed Jmeter Tests :  "+totalNoOfFailures+"/"+totalNoOfTest);
-		System.out.println("----------------------------------------------------\n\nFailed Jmeter Tests !!!!!!! ->     "+totalNoOfFailures+"/"+totalNoOfTest);
-		
-	
-			
-			// Add pass fail result to Result file 
-			System.out.println("Total No of Pass->"+totalNoOfPasses);
-			System.out.println("Total No of Failure->"+totalNoOfFailures);
-			TOTAL_NO_OF_PASS = totalNoOfTest - totalNoOfFailures;
-			String name="JMeterTest"+",";
-			name=name+totalNoOfTest+","+totalNoOfPasses+","+totalNoOfFailures+","+date+","+"-"+"\r\n";
-			fileOutputStream.write(name.getBytes());
-		}
-		else // If XML file does not exists
-		{
-			String name="JMeterTest"+","+"-"+","+"-"+","+"-"+","+"-"+","+"XML Report File does not exists"+"\r\n";
-			fileOutputStream.write(name.getBytes());
-		}
-			
-	}
-	
-		
 }
