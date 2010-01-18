@@ -771,76 +771,31 @@
 		</junitreport>
 	</target>
 
-<!-- =================================================================== -->
-<!-- JMeter TestCases for Nightly Build  -->
-<!-- =================================================================== -->
-		<property name="Jmeter-Tests" value="${base.dir}/Jmeter-Tests"/>
-		<property name="testplan" value="CaTissueJMeterTests"/>
-		<property name="jtl" value="JTL"/>
-
-		<mkdir dir="${base.dir}/${Jmeter-Tests}/${jtl}"/>
-
-			<taskdef name="jmeter"
-				classpath="${lib.dir}/ant-jmeter.jar"
-			    classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask"/>
-
-		<target name="JMeterTests" depends="runJmeterTests,JmeterReport"/>
-		<target name="runJmeterTests">
-			<delete file="${Jmeter-Tests}/Mysql_CaTissueJMeterTests.html"/>
-			<delete file="${Jmeter-Tests}/Oracle_CaTissueJMeterTests.html"/>
-			<delete file="${Jmeter-Tests}/${testplan}.html"/>
-		 	<delete file="${Jmeter-Tests}/${jtl}/${testplan}.jtl"/>
-			<jmeter
-			    jmeterhome="${jmeter.home.dir}"
-				testplan ="${Jmeter-Tests}/${testplan}.jmx"
-			    resultlog="${Jmeter-Tests}/${jtl}/${testplan}.jtl">
-
-				<!-- Force suitable defaults -->
-				<property name="jmeter.save.saveservice.output_format" value="xml"/>
-				<property name="jmeter.save.saveservice.assertion_results" value="all"/>
-				<property name="jmeter.save.saveservice.bytesx" value="true"/>
-				<property name="file_format.testlog" value="${format}"/>
-				<property name="jmeter.save.saveservice.response_data.on_error" value="${funcMode}"/>
-			</jmeter>
-		</target>
-
-		<target name="JmeterReport">
-			<xslt
-				force="true"
-			    in="${Jmeter-Tests}/${jtl}/${testplan}.jtl"
-			    out="${Jmeter-Tests}/${testplan}.html"
-			    style="${Jmeter-Tests}/jmeter-results-detail-report_21.xsl">
-				<param name="showData" expression="${show-data}"/>
-			</xslt>
-		</target>
-
 	<!--  <property name="reportgenerator.input.jmeterfile" value="D:/Nightly_Build/XmlReport/CaTissueJMeterTests.jtl" />
 		  <property name="reportgenerator.input.junitfile" value="D:/Nightly_Build/XmlReport/TESTS-TestSuites.xml" />
 		  <property name="reportgenerator.output.file" value="D:/Nightly_Build/script/mail_setting.properties" />
 	-->
-	      <property name="reportgenerator.input.junit_mysql_fresh_file" value="${base.dir}/XmlReport/JUnitReports/mysql_fresh_report.xml" />
-	      <property name="reportgenerator.input.junit_mysql_upgrade_file" value="${base.dir}/XmlReport/JUnitReports/mysql_upgrade_report.xml" />
-		  <property name="reportgenerator.input.junit_oracle_fresh_file" value="${base.dir}/XmlReport/JUnitReports/oracle_fresh_report.xml" />
-		  <property name="reportgenerator.input.junit_oracle_upgrade_file" value="${base.dir}/XmlReport/JUnitReports/oracle_upgrade_report.xml" />
+		<property name="reportgenerator.input.junit_api_mysql_fresh_file" value="${base.dir}/XmlReport/JUnitReports/mysql_fresh_report.xml" />
+		<property name="reportgenerator.input.junit_api_mysql_upgrade_file" value="${base.dir}/XmlReport/JUnitReports/mysql_upgrade_report.xml" />
+		<property name="reportgenerator.input.junit_api_oracle_fresh_file" value="${base.dir}/XmlReport/JUnitReports/oracle_fresh_report.xml" />
+		<property name="reportgenerator.input.junit_api_oracle_upgrade_file" value="${base.dir}/XmlReport/JUnitReports/oracle_upgrade_report.xml" />
+		
+		<property name="reportgenerator.input.junit_struts_mysql_fresh_file" value="${base.dir}/XmlReport/JUnitReports/mysql_fresh_struts_report.xml" />
+		<property name="reportgenerator.input.junit_struts_mysql_upgrade_file" value="${base.dir}/XmlReport/JUnitReports/mysql_upgrade_struts_report.xml" />
+		<property name="reportgenerator.input.junit_struts_oracle_fresh_file" value="${base.dir}/XmlReport/JUnitReports/oracle_fresh_struts_report.xml" />
+		<property name="reportgenerator.input.junit_struts_oracle_upgrade_file" value="${base.dir}/XmlReport/JUnitReports/oracle_upgrade_struts_report.xml" />
 
-		  <property name="reportgenerator.input.jmeter_mysql_fresh_file" value="${base.dir}/XmlReport/JMeterReports/Mysql_Fresh_CaTissueJMeterTests.jtl" />
-		  <property name="reportgenerator.input.jmeter_mysql_upgrade_file" value="${base.dir}/XmlReport/JMeterReports/Mysql_Upgrade_CaTissueJMeterTests.jtl" />
-		  <property name="reportgenerator.input.jmeter_oracle_fresh_file" value="${base.dir}/XmlReport/JMeterReports/Oracle_Fresh_CaTissueJMeterTests.jtl" />
-		  <property name="reportgenerator.input.jmeter_oracle_upgrade_file" value="${base.dir}/XmlReport/JMeterReports/Oracle_Upgrade_CaTissueJMeterTests.jtl" />
 
 		<target name="GenerateNightlyBuildReport" depends="compile">
 			<java classname="NightlyBuildReportGenerator" fork="true">
-			    <arg value="${reportgenerator.input.junit_mysql_fresh_file}" />
-			    <arg value="${reportgenerator.input.junit_mysql_upgrade_file}" />
-				<arg value="${reportgenerator.input.junit_oracle_fresh_file}" />
-				<arg value="${reportgenerator.input.junit_oracle_upgrade_file}" />
-				<arg value="${reportgenerator.input.jmeter_mysql_fresh_file}" />
-				<arg value="${reportgenerator.input.jmeter_mysql_upgrade_file}" />
-				<arg value="${reportgenerator.input.jmeter_oracle_fresh_file}" />
-				<arg value="${reportgenerator.input.jmeter_oracle_upgrade_file}" />
-				<!--<arg value="${reportgenerator.input.jmeterfile}" />
-				<arg value="${reportgenerator.input.junitfile}" />
-				<arg value="${reportgenerator.output.file}" />-->
+			    <arg value="${reportgenerator.input.junit_api_mysql_fresh_file}" />
+			    <arg value="${reportgenerator.input.junit_api_mysql_upgrade_file}" />
+				<arg value="${reportgenerator.input.junit_api_oracle_fresh_file}" />
+				<arg value="${reportgenerator.input.junit_api_oracle_upgrade_file}" />
+				<arg value="${reportgenerator.input.junit_struts_mysql_fresh_file}" />
+				<arg value="${reportgenerator.input.junit_struts_mysql_upgrade_file}" />
+				<arg value="${reportgenerator.input.junit_struts_oracle_fresh_file}" />
+				<arg value="${reportgenerator.input.junit_struts_oracle_upgrade_file}" />
 				<classpath>
 					<pathelement location="./WEB-INF/classes"/>
 				</classpath>
@@ -1028,15 +983,49 @@
 				<exclude name="**/java.policy.applet*" />
 			</fileset>
 		</jar>
-
+		<delete>
+			<fileset dir="${base.dir}/caTissueSuite_Client/lib">
+				<include name="commonpackage*.jar"/>
+				<include name="washu-commons*.jar"/>
+				<include name="DAO*.jar"/>
+				<include name="SimpleQuery*.jar"/>
+				<include name="securityManager*.jar"/>
+				<include name="AdvanceQuery*.jar"/>
+				<include name="bulkoperator.jar"/>
+			</fileset>
+			<fileset dir="${base.dir}/CaTissueSuite_caGrid_Service/lib">
+				<include name="commonpackage*.jar"/>
+				<include name="washu-commons*.jar"/>
+				<include name="DAO*.jar"/>
+				<include name="SimpleQuery*.jar"/>
+				<include name="securityManager*.jar"/>
+				<include name="AdvanceQuery*.jar"/>
+			</fileset>
+			<fileset dir="${base.dir}/catissue_de_integration_client/lib">
+				<include name="commonpackage*.jar"/>
+				<include name="washu-commons*.jar"/>
+				<include name="DAO*.jar"/>
+				<include name="SimpleQuery*.jar"/>
+				<include name="securityManager*.jar"/>
+				<include name="AdvanceQuery*.jar"/>
+			</fileset>
+			<fileset dir="${base.dir}/private_public_migrator/lib">
+				<include name="commonpackage*.jar"/>
+				<include name="washu-commons*.jar"/>
+				<include name="DAO*.jar"/>
+				<include name="SimpleQuery*.jar"/>
+				<include name="securityManager*.jar"/>
+				<include name="AdvanceQuery*.jar"/>
+			</fileset>
+		</delete>
 		<copy todir="${base.dir}/caTissueSuite_Client/lib" overwrite="true">
             <fileset dir="${lib.dir}">
-               	<include name="commonpackage.jar"/>
-            	<include name="washu-commons.jar"/>
-            	<include name="AdvanceQuery.jar"/>
-            	<include name="DAO.jar"/>
-            	<include name="SimpleQuery.jar"/>
-            	<include name="securityManager.jar"/>
+            	<include name="commonpackage*.jar"/>
+            	<include name="washu-commons*.jar"/>
+            	<include name="DAO*.jar"/>
+            	<include name="SimpleQuery*.jar"/>
+            	<include name="securityManager*.jar"/>
+            	<include name="AdvanceQuery*.jar"/>
             	<include name="bulkoperator.jar"/>
             </fileset>
 			<fileset dir="${temp.dir}">
@@ -1046,12 +1035,12 @@
 
 		<copy todir="${base.dir}/CaTissueSuite_caGrid_Service/lib" overwrite="true">
 	            <fileset dir="${lib.dir}">
-	            	<include name="commonpackage.jar"/>
-	            	<include name="washu-commons.jar"/>
-	            	<include name="AdvanceQuery.jar"/>
-	            	<include name="DAO.jar"/>
-	            	<include name="SimpleQuery.jar"/>
-	            	<include name="securityManager.jar"/>
+	            	<include name="commonpackage*.jar"/>
+					<include name="washu-commons*.jar"/>
+					<include name="DAO*.jar"/>
+					<include name="SimpleQuery*.jar"/>
+					<include name="securityManager*.jar"/>
+	            	<include name="AdvanceQuery*.jar"/>
 	            </fileset>
 				<fileset dir="${temp.dir}">
 		            	<include name="catissuecore.jar"/>
@@ -1060,12 +1049,12 @@
 
 		<copy todir="${base.dir}/catissue_de_integration_client/lib" overwrite="true">
             <fileset dir="${lib.dir}">
-            	<include name="commonpackage.jar"/>
-            	<include name="washu-commons.jar"/>
-            	<include name="AdvanceQuery.jar"/>
-            	<include name="DAO.jar"/>
-            	<include name="SimpleQuery.jar"/>
-            	<include name="securityManager.jar"/>
+            	<include name="commonpackage*.jar"/>
+				<include name="washu-commons*.jar"/>
+				<include name="DAO*.jar"/>
+				<include name="SimpleQuery*.jar"/>
+				<include name="securityManager*.jar"/>
+            	<include name="AdvanceQuery*.jar"/>
             </fileset>
 			 <fileset dir="${temp.dir}">
 	            	<include name="catissuecore.jar"/>
@@ -1077,12 +1066,12 @@
             	<include name="catissuecore.jar"/>
             </fileset>
 			<fileset dir="${lib.dir}">
-				<include name="commonpackage.jar"/>
-				<include name="washu-commons.jar"/>
-				<include name="AdvanceQuery.jar"/>
-				<include name="DAO.jar"/>
-				<include name="SimpleQuery.jar"/>
-				<include name="securityManager.jar"/>
+				<include name="commonpackage*.jar"/>
+				<include name="washu-commons*.jar"/>
+				<include name="DAO*.jar"/>
+				<include name="SimpleQuery*.jar"/>
+				<include name="securityManager*.jar"/>
+				<include name="AdvanceQuery*.jar"/>
             </fileset>
         </copy>
 
