@@ -42,6 +42,7 @@ import edu.wustl.catissuecore.testcase.login.FirstTimeLoginTestCase;
 import edu.wustl.catissuecore.testcase.login.LoginTestCase;
 import edu.wustl.catissuecore.testcase.login.LogoutTestcase;
 import edu.wustl.catissuecore.testcase.ordering.DirectDistributionTestCase;
+import edu.wustl.catissuecore.testcase.user.ScientistTestCases;
 import edu.wustl.catissuecore.testcase.user.UserTestCases;
 
 /**
@@ -123,6 +124,10 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(StorageContainerBizTestCases.class);
 		strutsSuite.addTestSuite(SpecimenEventBizTestCases.class);
 		strutsSuite.addTestSuite(StorageContainerRestrictionsBizTestCases.class);
+		
+		strutsSuite.addTestSuite(UserTestCases.class);
+		strutsSuite.addTestSuite(ScientistTestCases.class);
+		
 		strutsSuite.addTestSuite(LogoutTestcase.class);
 		return strutsSuite;
 	}
