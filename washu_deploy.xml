@@ -4,61 +4,56 @@
 <project name="caTissue Suite v1.1P2.IDP">
 	<import file="deploy.xml"/>
 	<property file="./washuInstall.properties"/>
-		<target name="deploy_app_with_idp">
-		    <antcall target="pre_initialization" />
-			<if>
-				<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-					<antcall target="mysql_csm_config_with_idp"/>
-			</then>
-			<elseif>
-					<equals arg1="oracle" arg2="${database.type}" />
-			<then>
-					<antcall target="oracle_csm_config_with_idp"/>
-			</then>
-			</elseif>
-			</if>
-			<antcall target="IdPSettings"/>
-			<antcall target="db_configuration" />
-			<antcall target="integrate_advanced_query"/>
-			<antcall target="integrate_bulk_operation"/>
-		    <antcall target="app_configuration"/>
-			<antcall target="generate.cacore.for.xmi" />
-			<antcall target="de_integrate_app" />
-			<antcall target="build_war" />
-			<antcall target="jboss_configuration" />
-			<antcall target="send_mail" />
-			<delete dir="${temp.dir}" />
-		</target>
+	
+	<target name="deploy_app_with_idp" depends="deploy_app">
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+		<then>
+				<antcall target="mysql_csm_config_with_idp"/>
+		</then>
+		<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+		<then>
+				<antcall target="oracle_csm_config_with_idp"/>
+		</then>
+		</elseif>
+		</if>
+		<antcall target="IdPSettings"/>	
+		<antcall target="jboss_configuration" />
+	</target>
+	
 
-		  <target name="mysql_csm_config_with_idp" >
-	    	<copy file="${base.dir}/idp_catissuecore-ds.xml" tofile="${temp.dir}/catissuecore-ds.xml" overwrite="true"/>
-			<copy file="${base.dir}/idp_login-config.xml" tofile="${temp.dir}/login-config.xml" overwrite="true"/>
-			<copy file="${base.dir}/idp_upt.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/upt.hibernate.cfg.xml" overwrite="true"/>
-			<copy file="${base.dir}/idp_catissuecore.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/catissuecore.hibernate.cfg.xml" overwrite="true"/>
-			<replace dir="${temp.dir}" propertyfile="washuInstall.properties">
+	 <target name="mysql_csm_config_with_idp" >
+	  	<copy file="${base.dir}/idp/idp_catissuecore-ds.xml" tofile="${temp.dir}/catissuecore-ds.xml" overwrite="true"/>
+		<copy file="${base.dir}/idp/idp_login-config.xml" tofile="${temp.dir}/login-config.xml" overwrite="true"/>
+		<copy file="${base.dir}/idp/idp_upt.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/upt.hibernate.cfg.xml" overwrite="true"/>
+		<copy file="${base.dir}/idp/idp_catissuecore.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/catissuecore.hibernate.cfg.xml" overwrite="true"/>
+		<replace dir="${temp.dir}" propertyfile="washuInstall.properties">
+			<include name="catissuecore-ds.xml" />
+			<include name="login-config.xml" />
+			<replacefilter token="@@CSMdatabaseurl@@" value="jdbc:mysql://${csm.database.host}:${csm.database.port}:${csm.database.name}"/>
+			<replacefilter token="@@CSMusername@@" value="${csm.database.username}"/>
+			<replacefilter token="@@CSMpasword@@" value="${csm.database.password}"/>
+		</replace>
+	 	<antcall target="mysql_config" />
+	</target>
+
+	<target name="oracle_csm_config_with_idp">
+		<copy file="${base.dir}/idp/idp_catissuecore-ds.xml" tofile="${temp.dir}/catissuecore-ds.xml" overwrite="true"/>
+		<copy file="${base.dir}/idp/idp_login-config.xml" tofile="${temp.dir}/login-config.xml" overwrite="true"/>
+		<copy file="${base.dir}/idp/idp_upt.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/upt.hibernate.cfg.xml" overwrite="true"/>
+		<copy file="${base.dir}/idp/idp_catissuecore.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/catissuecore.hibernate.cfg.xml" overwrite="true"/>
+		<replace dir="${temp.dir}" propertyfile="washuInstall.properties">
 					<include name="catissuecore-ds.xml" />
 					<include name="login-config.xml" />
-				<replacefilter token="@@CSMdatabaseurl@@" value="jdbc:mysql://${csm.database.host}:${csm.database.port}:${csm.database.name}"/>
+				<replacefilter token="@@CSMdatabaseurl@@" value="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}"/>
 				<replacefilter token="@@CSMusername@@" value="${csm.database.username}"/>
 				<replacefilter token="@@CSMpasword@@" value="${csm.database.password}"/>
-				</replace>
-		</target>
-
-		<target name="oracle_csm_config_with_idp">
-			<copy file="${base.dir}/idp/idp_catissuecore-ds.xml" tofile="${temp.dir}/catissuecore-ds.xml" overwrite="true"/>
-			<copy file="${base.dir}/idp/idp_login-config.xml" tofile="${temp.dir}/login-config.xml" overwrite="true"/>
-			<copy file="${base.dir}/idp/idp_upt.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/upt.hibernate.cfg.xml" overwrite="true"/>
-			<copy file="${base.dir}/idp/idp_catissuecore.hibernate.cfg.xml" tofile="${temp.dir}/catissuecore-properties/catissuecore.hibernate.cfg.xml" overwrite="true"/>
-			<replace dir="${temp.dir}" propertyfile="washuInstall.properties">
-						<include name="catissuecore-ds.xml" />
-						<include name="login-config.xml" />
-					<replacefilter token="@@CSMdatabaseurl@@" value="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}"/>
-					<replacefilter token="@@CSMusername@@" value="${csm.database.username}"/>
-					<replacefilter token="@@CSMpasword@@" value="${csm.database.password}"/>
-			</replace>
-		</target>
-
+		</replace>
+		<antcall target="oracle_config" />
+	</target>
+	
+	
 		<target name="deploy_all_with_idp">
 			<antcall target="assert" />
 			<antcall target="deploy_db_washu" />
