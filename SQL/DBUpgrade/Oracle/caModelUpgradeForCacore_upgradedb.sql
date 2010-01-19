@@ -7,7 +7,7 @@ update dyextn_role set name = 'geneticInformation' where identifier=1463;
 update DYEXTN_ABSTRACT_METADATA set name = 'PatientInformation' where identifier=3609;
 
 --BrainMicroscopy_3rdMarch updates ---- Oracle production dump
-update DYEXTN_TAGGED_VALUE set t_value='NPmodel3March' where abstract_metadata_id=4367;
+update DYEXTN_TAGGED_VALUE set t_value='NPmodel3March' where identifier=1465;
 
 --BrainMicroscopy updates
 update DYEXTN_ABSTRACT_METADATA set name='abaa' where name='aBAA';
