@@ -47,5 +47,9 @@ public class ClinPortalIntegrationConstants
     }
     public static final String URLFEATURE="/UrlFeature.do?";
     public static final Object DELIMITER = "&";
+    public static final String CSM_USER_ID="csmUserId";
+    public static final String RECENT_VISIT_DATE = "recentVisitDate";
+    public static final String PREV_VISIT_DATE = "prevVisitDate";
+
 }
 
