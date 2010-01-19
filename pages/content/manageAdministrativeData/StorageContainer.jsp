@@ -8,8 +8,8 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
-<%@ page import="java.util.*"%>
-<%@ page import="java.io.*"%>
+<%@ page import="java.util.Map"%>
+<%@ page import="java.util.List"%>
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="edu.wustl.common.util.global.Status" %>
@@ -17,16 +17,12 @@
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="/WEB-INF/multiSelectUsingCombo.tld" prefix="mCombo" %>
 <%
-		//StorageContainerForm form = (StorageContainerForm)request.getAttribute("storageContainerForm");
 		String strCheckStatusForCont = "checkActivityStatus(this,'" + Constants.CONTAINER_DELETE_MAPPING + "')";
 		String pageOf = request.getParameter(Constants.PAGE_OF);
         String operation = (String) request.getAttribute(Constants.OPERATION);
-		//String containerNumber=(String)request.getAttribute("ContainerNumber");
         String formName;
         String printAction ="printStorageContainer";
-		//List siteForParent = (List)request.getAttribute("siteForParentList");
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 		String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
         boolean readOnlyValue;
@@ -53,8 +49,6 @@
 		if(obj != null && obj instanceof StorageContainerForm)
 		{
 			form = (StorageContainerForm)obj;
-			//map = form.getValues();
-
 			label1 = form.getOneDimensionLabel();
 			label2 = form.getTwoDimensionLabel();
 
@@ -100,36 +94,13 @@
 %>
 
 <head>
-	<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 	<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-	<script>var imgsrc="catissuecore/images/de/";</script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/prototype.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/scr.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/combobox.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/ext-base.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/ext-all.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/combos.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/ajax.js"></script>
+	<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 	<link href="css/catissue_suite.css" type="text/css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
 	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-
-
-	
-	<script>
-		Ext.onReady(function(){var myUrl= 'SpecimenTypeDataAction.do?method=Tissue';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'CB_tissue',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'tissue'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
-	</script>
-
-	<script>Ext.onReady(function(){var myUrl= 'SpecimenTypeDataAction.do?method=Fluid';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'CB_fluid',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'fluid'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});</script>
-
-	<script>Ext.onReady(function(){var myUrl= 'SpecimenTypeDataAction.do?method=Cell';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'CB_cell',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'cell'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});</script>
-
-	<script>Ext.onReady(function(){var myUrl= 'SpecimenTypeDataAction.do?method=Molecular';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'CB_molecular',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'molecular'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});</script>
-
-
 <style>
 	.hidden
 	{
@@ -349,8 +320,6 @@
 
          onChangeGetCPs(data);
 		}
-
-
 
 		function onParentContainerChange(element)
 		{
@@ -1175,88 +1144,12 @@ function addNewTypeAction(action)
 		</tr>
 		<tr>
 			<td colspan="2" valign="top" class="showhide1"><div id="sp_type" style="display:block">
-				<table width="90%" border="0" cellpadding="2" cellspacing="0">
-					 <tr>
-						<td width="1%" align="left" class="tabletd1">&nbsp;</td>
-						<td class="tabletd1">
-							<label for="holdsTissueSpType">
-								<bean:message key="specimenclass.tissue" />
-							</label>
-						</td>	
-						<div id="tissueDIV">
-						<td width="35%" class="tabletd1">
-							<mCombo:multiSelectUsingCombo identifier="tissue" styleClass="tabletd1" 
-								addNewActionStyleClass="tabletd1" size="20"
-								addButtonOnClick="moveOptions('tissue','holdsTissueSpType', 'add')" 
-								removeButtonOnClick="moveOptions('holdsTissueSpType','tissue', 'edit')" 
-								selectIdentifier="holdsTissueSpType" 
-								collection="<%=(List) request.getAttribute(Constants.TISSUE_SPECIMEN)%>" numRows="5"/>
-						</td>
-						</div>
-					</tr>
-					
-					<tr>
-						<td width="1%" align="left" class="tabletd1">&nbsp;</td>
-						<td class="tabletd1">
-							<label for="holdsFluidSpType">
-								<bean:message key="specimenclass.fluid" />
-							</label>
-						</td>	
-						<td width="35%" class="tabletd1">
-							<mCombo:multiSelectUsingCombo identifier="fluid" styleClass="tabletd1" 
-								addNewActionStyleClass="tabletd1" size="20"
-								addButtonOnClick="moveOptions('fluid','holdsFluidSpType', 'add')" 
-								removeButtonOnClick="moveOptions('holdsFluidSpType','fluid', 'edit')" 
-								selectIdentifier="holdsFluidSpType" 
-								collection="<%=(List) request.getAttribute(Constants.FLUID_SPECIMEN)%>" numRows="5"/>
-						</td>
-					</tr>
-					<tr>
-						<td width="1%" align="left" class="tabletd1">&nbsp;</td>
-						<td class="tabletd1">
-							<label for="holdsCellSpType">
-								<bean:message key="specimenclass.cell" />
-							</label>
-						</td>	
-						<td width="35%" class="tabletd1">
-							<mCombo:multiSelectUsingCombo identifier="cell" styleClass="tabletd1" 
-								addNewActionStyleClass="tabletd1" size="20"
-								addButtonOnClick="moveOptions('cell','holdsCellSpType', 'add')" 
-								removeButtonOnClick="moveOptions('holdsCellSpType','cell', 'edit')" 
-								selectIdentifier="holdsCellSpType" 
-								collection="<%=(List) request.getAttribute(Constants.CELL_SPECIMEN)%>" numRows="5"/>
-						</td>
-					</tr>
-					<tr>
-						<td width="1%" align="left" class="tabletd1">&nbsp;</td>
-						<td class="tabletd1">
-							<label for="holdsMolSpType">
-								<bean:message key="specimenclass.molecular" />
-							</label>
-						</td>	
-						<td width="35%" class="tabletd1">
-							<mCombo:multiSelectUsingCombo identifier="molecular" styleClass="tabletd1" 
-								addNewActionStyleClass="tabletd1" size="20"
-								addButtonOnClick="moveOptions('molecular','holdsMolSpType', 'add')" 
-								removeButtonOnClick="moveOptions('holdsMolSpType','molecular', 'edit')" 
-								selectIdentifier="holdsMolSpType" 
-								collection="<%=(List)request.getAttribute(Constants.MOLECULAR_SPECIMEN)%>" numRows="5"/>
-						</td>
-					</tr>
-					</table>
-						</td>
-							</tr>
+				<jsp:include page="/pages/content/manageAdministrativeData/multiSelect.jsp"/>
+			</td>
+		</tr>
 
-
-
-	
-
-
-
-
-
-                    <tr>
-                     <td>
+		 <tr>
+             <td>
 					  <table>
 						
 					    <tr>
