@@ -923,7 +923,59 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			setActionForm(newSpecForm);
 			actionPerform();
 			verifyForward("failure");
-	
 	   	}
+		/**
+		 * This test case will update the Specimen Class of "StorageContainer". 
+		 */
+		public void testUpdateStorageContainerWithSpecimenClass()
+		{
+			StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
+			StorageContainerForm storageContainerForm = null;
+			logger.info("----StorageConatiner ID : " + storageContainer.getId());
+			addRequestParameter("pageOf", "pageOfStorageContainer");
+			addRequestParameter("operation", "search");
+			addRequestParameter("id", storageContainer.getId().toString());
+			setRequestPathInfo("/SearchObject") ;
+			actionPerform();
+			verifyForward("pageOfStorageContainer");
+			verifyNoActionErrors();
+			System.out.println(getActualForward());
+			setRequestPathInfo(getActualForward());
+			actionPerform();
+			verifyNoActionErrors();
+			System.out.println(getActualForward());
+			setRequestPathInfo(getActualForward());
+			addRequestParameter("pageOf", "pageOfStorageContainer");
+			addRequestParameter("operation", "edit");
+			actionPerform();
+			verifyNoActionErrors();
+
+			storageContainerForm=(StorageContainerForm) getActionForm();
+			String[] holdsSpecimenClassCollection = new String[2];
+			holdsSpecimenClassCollection[0]="Fluid";
+			holdsSpecimenClassCollection[1]="Tissue";
+			storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
+			storageContainerForm.setHoldsCellSpType(null);
+			storageContainerForm.setHoldsMolSpType(null);
+			storageContainerForm.setOperation("edit");
+			setActionForm(storageContainerForm);
+			setRequestPathInfo("/StorageContainerEdit");
+			setActionForm(storageContainerForm);
+			actionPerform();
+			verifyForward("success");
+			verifyNoActionErrors();
+			verifyActionMessages(new String[]{"object.edit.successOnly"});
+			logger.info("#############Storage Container Updated Successfully##########");
+			try
+			{
+				storageContainer.setAllValues(storageContainerForm);
+			}
+			catch (AssignDataException e)
+			{
+				logger.debug(e.getMessage(),e);
+				fail("failed to assign values");
+			}
+			TestCaseUtility.setNameObjectMap("storageContainer", storageContainer);
+		}
 
 }
