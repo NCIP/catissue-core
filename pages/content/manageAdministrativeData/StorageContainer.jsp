@@ -100,10 +100,10 @@
 %>
 
 <head>
+	<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 	<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-	<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 	<script>var imgsrc="catissuecore/images/de/";</script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/prototype.js"></script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/scr.js"></script>
@@ -197,6 +197,8 @@
 			}
 
 		}
+		
+		
 
 	/*	function onRadioButtonClick(element)
 		{
@@ -747,8 +749,6 @@ function addNewTypeAction(action)
 	</script>
 </head>
 <body onload="javascript:showHide('sp_type')">
-
-
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <body >
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
