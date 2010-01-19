@@ -677,14 +677,15 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			participant.setFirstName("fisrtname"+UniqueKeyGeneratorUtil.getUniqueKey());
 			participant.setLastName("lastName"+UniqueKeyGeneratorUtil.getUniqueKey());
 			participant.setActivityStatus("Active");
-			
-			participant.setParticipantMedicalIdentifierCollection(new HashSet());
 			participant=(Participant)appService.createObject(participant);
+			
+			System.out.println("participant without PMI created !!! "+participant.getId());
 			
 			Participant participant2=new Participant();
 			participant2.setId(participant.getId());
 			participant2=(Participant)appService.search(Participant.class, participant2).iterator().next();
 			
+			System.out.println("participant2 without PMI searched !!! "+participant2.getId());
 			Collection participantMedicalIdentifierCollection = new HashSet();
 			ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
 			Site site =(Site)  TestCaseUtility.getObjectMap(Site.class);
@@ -694,14 +695,17 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			String mrn="mrn"+UniqueKeyGeneratorUtil.getUniqueKey();
 			pmi.setMedicalRecordNumber(mrn);
 			pmi.setParticipant(participant2);
-			pmi.setParticipant(participant2);
 			participantMedicalIdentifierCollection.add(pmi);
 			participant2.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);	
 			participant2=(Participant) appService.updateObject(participant2);
 			
+			System.out.println("participant2 with PMI updated !!! "+participant2.getId());
+			
 			Participant participant3=new Participant();
 			participant3.setId(participant.getId());
 			participant3=(Participant)appService.search(Participant.class, participant3).iterator().next();
+			
+			System.out.println("participant3 with PMI searched !!! "+participant3.getId());
 			
 			Collection pmiCollection=participant3.getParticipantMedicalIdentifierCollection();
 			if(!pmiCollection.isEmpty())
@@ -716,7 +720,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 					{
 						if(pmIdentifier.getMedicalRecordNumber().equals(mrn)&&pmIdentifier.getSite().getId().equals(site.getId()))
 						{
-								
+							System.out.println("participant3 PMI's !!! "+pmIdentifier.getId());
 							System.out.println("Succecfully updated");
 							assertTrue("Participant wiht medical identifier updated successfully ", true);
 									
@@ -724,12 +728,12 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 					}
 				}
 			}
-		
+			System.out.println("participant3 with PMI searched  successs !!! "+participant3.getId());
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			assertFalse("Can not update ", true);
+			assertFalse("Can not update PMI testcase!!! ", true);
 			
 		}
 		
