@@ -57,11 +57,13 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		System.out.println("Before Creating SCG");
 	    CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) TestCaseUtility.getObjectMap(CollectionProtocolRegistration.class);
-	    System.out.println("cpr.getProtocolParticipantIdentifier() !!!"+cpr.getProtocolParticipantIdentifier());
-	    scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(cpr);
+	    CollectionProtocolRegistration newCPR = new CollectionProtocolRegistration();
+	    newCPR.setProtocolParticipantIdentifier(cpr.getProtocolParticipantIdentifier());
+	    newCPR.setCollectionProtocol(cpr.getCollectionProtocol());
+	    System.out.println("cpr.getProtocolParticipantIdentifier() !!!"+newCPR.getProtocolParticipantIdentifier());
+	    scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(newCPR);
 	    try
 		{
-	    	 cpr.setId(null);
 	    	 Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
 	 	     scg.setSpecimenCollectionSite(site);
 	 	     scg.setName("SCG1"+UniqueKeyGeneratorUtil.getUniqueKey());		    
@@ -84,12 +86,17 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		System.out.println("Before Creating SCG testAddSpecimenCollectionGroupWithEventPointLabel");
 	    CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) TestCaseUtility.getObjectMap(CollectionProtocolRegistration.class);
+
 	    scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(cpr);
 	    System.out.println("scg.getCollectionProtocolEvent().getId() !!!"+scg.getCollectionProtocolEvent().getId());
 	    try
 		{
 	    	 CollectionProtocolEvent colProtEvent = scg.getCollectionProtocolEvent();
-	    	 colProtEvent.setId(null);
+	    	 
+	    	 CollectionProtocolEvent newColProtEvent = new CollectionProtocolEvent();
+	    	 newColProtEvent.setCollectionPointLabel(colProtEvent.getCollectionPointLabel());
+	    	 scg.setCollectionProtocolEvent(newColProtEvent);
+
 	    	 Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
 	 	     scg.setSpecimenCollectionSite(site);
 	 	     scg.setName("SCG1"+UniqueKeyGeneratorUtil.getUniqueKey());		    
@@ -318,9 +325,9 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		    scg = (SpecimenCollectionGroup)appService.createObject(scg);
 		    Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
 		    scg.setSpecimenCollectionSite(site);
-		    CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
-		    Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
-		    scg.getCollectionProtocolRegistration().setParticipant(participant);
+//		    CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
+//		    Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
+		  //  scg.getCollectionProtocolRegistration().setParticipant(participant);
 		    scg.setActivityStatus("Closed");
 		    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
 		    assertTrue("Should throw Exception", true);
@@ -347,7 +354,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		    scg.setSpecimenCollectionSite(site);
 		    CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
 		    Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
-		    scg.getCollectionProtocolRegistration().setParticipant(participant);
+		    //scg.getCollectionProtocolRegistration().setParticipant(participant);
 		    scg.setActivityStatus("Disabled");
 		    scg = (SpecimenCollectionGroup)appService.updateObject(scg);
 		    assertTrue("SCG contains specimen so should fail", true);

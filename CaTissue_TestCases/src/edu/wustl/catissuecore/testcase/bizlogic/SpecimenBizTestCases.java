@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -554,13 +555,27 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			assertFalse("Failed to create collection protocol", true);
 		}
 		System.out.println("CP:" + cp.getTitle());
-		TestCaseUtility.setObjectMap(cp, CollectionProtocol.class);
+		//TestCaseUtility.setObjectMap(cp, CollectionProtocol.class);
 
 		SpecimenCollectionGroup scg = (SpecimenCollectionGroup) createSCGWithConsents(cp);
-		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) TestCaseUtility
-				.getObjectMap(CollectionProtocolRegistration.class);
+		CollectionProtocolRegistration collectionProtocolRegistration = scg.getCollectionProtocolRegistration();
+			
 		Collection consStatusCol = scg.getConsentTierStatusCollection();
-		Collection consResponseCol = collectionProtocolRegistration.getConsentTierResponseCollection();
+		Collection consResponseCol = null;
+		try
+		{
+			consResponseCol = AppUtility.executeQuery("Select elements(cpr.consentTierResponseCollection) from CollectionProtocolRegistration cpr where cpr.id="+collectionProtocolRegistration.getId());
+			
+		}
+		catch (Exception e)
+		{
+			Logger.out.error(e.getMessage(), e);
+			System.out.println("SpecimenTestCases.testVerifyConsentResponseAndConsentStatusAtSCG() 1" + e.getMessage());
+			e.printStackTrace();
+			assertFalse(e.getMessage(), true);
+		}
+		
+		
 
 		Iterator consResItr = consResponseCol.iterator();
 		Iterator consStatusItr = consStatusCol.iterator();
@@ -627,7 +642,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			assertFalse("Failed to create collection protocol", true);
 		}
 		System.out.println("CP:" + cp.getTitle());
-		TestCaseUtility.setObjectMap(cp, CollectionProtocol.class);
+		//TestCaseUtility.setObjectMap(cp, CollectionProtocol.class);
 
 		SpecimenCollectionGroup scg = (SpecimenCollectionGroup) createSCGWithConsents(cp);
 
@@ -675,10 +690,20 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 
 		Collection consStatusCol = newSCG.getConsentTierStatusCollection();
-		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) TestCaseUtility
-				.getObjectMap(CollectionProtocolRegistration.class);
-		Collection consResponseCol = collectionProtocolRegistration.getConsentTierResponseCollection();
-
+		CollectionProtocolRegistration collectionProtocolRegistration = newSCG.getCollectionProtocolRegistration();
+		Collection consResponseCol = null;
+		try
+		{
+			consResponseCol = AppUtility.executeQuery("Select elements(cpr.consentTierResponseCollection) from CollectionProtocolRegistration cpr where cpr.id="+collectionProtocolRegistration.getId());
+			
+		}
+		catch (Exception e)
+		{
+			Logger.out.error(e.getMessage(), e);
+			System.out.println("SpecimenTestCases.testVerifyConsentResponseAndConsentStatusAtSCG() 1" + e.getMessage());
+			e.printStackTrace();
+			assertFalse(e.getMessage(), true);
+		}
 		Iterator consResItr = consResponseCol.iterator();
 		Iterator consStatusItr = consStatusCol.iterator();
 
@@ -792,7 +817,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			e.printStackTrace();
 			assertFalse("Failed to register participant", true);
 		}
-		TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
+		//TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
 
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(collectionProtocolRegistration);
@@ -828,7 +853,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		try
 		{
 			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
-			collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
+			//collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
 			Logger.out.info("updating domain object------->" + collectionProtocol);
 			Collection ConCollection = collectionProtocol.getConsentTierCollection();
 			ConsentTier c4 = new ConsentTier();
@@ -1165,7 +1190,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	public void testVerifyConsentResponseChangeWithSpecimenChange()
 	{
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-		cp.setShortTitle("cp_SpecimenChange_final");
+		cp.setShortTitle("cp_SpecimenChange_final"+UniqueKeyGeneratorUtil.getUniqueKey());
 		try
 		{
 			cp = (CollectionProtocol) appService.createObject(cp);
@@ -1248,7 +1273,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	public void testVerifyConsentResponseChangeWithCPRChange()
 	{
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-		cp.setShortTitle("cp_CPRChange");
+		cp.setShortTitle("cp_CPRChange"+UniqueKeyGeneratorUtil.getUniqueKey());
 		try
 		{
 			cp = (CollectionProtocol) appService.createObject(cp);
@@ -1318,7 +1343,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			e.printStackTrace();
 			assertFalse("Failed to register participant", true);
 		}
-		TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
+	//	TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
 
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(collectionProtocolRegistration);
@@ -1384,7 +1409,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	public void testVerifyConsentResponseChangeWithSCGChangeApplyAll()
 	{
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-		cp.setShortTitle("cp_SCGChangeApplyAll");
+		cp.setShortTitle("cp_SCGChangeApplyAll"+UniqueKeyGeneratorUtil.getUniqueKey());
 		try
 		{
 			cp = (CollectionProtocol) appService.createObject(cp);
@@ -1473,7 +1498,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	{
 		SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-		cp.setShortTitle("cp_ConflictOption");
+		cp.setShortTitle("cp_ConflictOption"+UniqueKeyGeneratorUtil.getUniqueKey());
 		try
 		{
 			cp = (CollectionProtocol) appService.createObject(cp);
@@ -1606,7 +1631,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	public void testVerifyConsentsWithdrawnWithDiscardOption()
 	{
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-		cp.setShortTitle("cp_DiscardOption");
+		cp.setShortTitle("cp_DiscardOption"+UniqueKeyGeneratorUtil.getUniqueKey());
 		try
 		{
 			cp = (CollectionProtocol) appService.createObject(cp);
@@ -1744,7 +1769,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	public void testVerifyConsentsWithdrawnWithDiscardOptionAtSCG()
 	{
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-		cp.setShortTitle("cp_DiscardOptionAtSCG");
+		cp.setShortTitle("cp_DiscardOptionAtSCG"+UniqueKeyGeneratorUtil.getUniqueKey());
 		try
 		{
 			cp = (CollectionProtocol) appService.createObject(cp);
@@ -1992,7 +2017,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 				}
 				catch (Exception e)
 				{
-					assertFalse("Failed to create StorageType", true);
+					assertFalse(e.getMessage(), true);
 				}
 				storageContainer.setStorageType( storageType );
 				try
@@ -2001,7 +2026,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 				}
 				catch (Exception e)
 				{
-					assertFalse("Failed to create StorageType", true);
+					assertFalse(e.getMessage(), true);
 				}
 
 				specimenObj.setCollectionStatus( "Collected" );
@@ -2019,7 +2044,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 				}
 				catch (Exception e)
 				{
-					assertFalse("Failed to create scg", true);
+					assertFalse(e.getMessage(), true);
 				}
 				System.out.println("scg "+scg.getId());
 				specimenObj.setSpecimenCollectionGroup( scg );

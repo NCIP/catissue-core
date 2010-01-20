@@ -231,7 +231,6 @@
 				
 				<jvmarg value="-Xms128m"/>
 				<jvmarg value="-Xmx1024m"/> 
-				<jvmarg value="-debug"/>
 				<sysproperty key="net.sourceforge.cobertura.datafile" file="${cat.cobertura.dir}/strutscoverage.ser" />
 				<sysproperty key="app.home" value="."/>
 	
