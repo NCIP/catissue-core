@@ -150,7 +150,10 @@ public class StorageTypeAction extends SecureAction
 		final List list2 = bizLogic.retrieve(SpecimenArrayType.class.getName());
 		final List spArrayTypeList = AppUtility.getSpecimenArrayTypeList(list2);
 		request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
-		StorageContainerUtil.setSpTypeList(request, storageTypeForm);
+		if("Specimen".equals(storageTypeForm.getSpecimenOrArrayType()))
+		{
+			StorageContainerUtil.setSpTypeList(request, storageTypeForm);
+		}
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, AppUtility.getSpecimenTypeMap());
 	}
 	/**

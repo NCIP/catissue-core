@@ -236,7 +236,10 @@ public class StorageContainerAction extends SecureAction
 			{
 				this.onTypeChange(storageContainerForm, operation, request);
 			}
-			StorageContainerUtil.setSpTypeList(request, storageContainerForm);
+			if("Specimen".equals(storageContainerForm.getSpecimenOrArrayType()))
+			{
+				StorageContainerUtil.setSpTypeList(request, storageContainerForm);
+			}
 			if (request.getAttribute(Constants.SUBMITTED_FOR) != null)
 			{
 				final long[] collectionIds = this.parentContChange(request);
