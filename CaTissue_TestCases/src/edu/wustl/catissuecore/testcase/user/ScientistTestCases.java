@@ -28,7 +28,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test Institution Add.
 	 */
-	public void testInstitutionAdd()
+	public void testInstitutionAddWithScientistUser()
 	{
 		InstitutionForm institutionForm = new InstitutionForm();
 		institutionForm.setName("Inst_"+UniqueKeyGeneratorUtil.getUniqueKey());
@@ -46,7 +46,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	 * Test Department Add.
 	 */
 	
-	public void testDepartmentAdd()
+	public void testDepartmentAddWithScientistUser()
 	{
 		DepartmentForm departmentForm  = new DepartmentForm ();
 		departmentForm.setName("Dept_"+UniqueKeyGeneratorUtil.getUniqueKey());
@@ -64,7 +64,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	 * Test Site Add.
 	 */
 	
-	public void testAddRepositorySite()
+	public void testAddRepositorySiteWithScientistUser()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
 		addRequestParameter("type","Repository");
@@ -78,7 +78,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test BioHazard Add Infectious BioHazard.
 	 */
-	public void testAddBioHazard()
+	public void testAddBioHazardWithScientistUser()
 	{
 		BiohazardForm bioForm = new BiohazardForm();
 		bioForm.setName("Biohazard_" + UniqueKeyGeneratorUtil.getUniqueKey());
@@ -97,7 +97,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	 * Test Cancer Research Group Add.
 	 */
 	
-	public void testCancerResearchGroupAdd()
+	public void testCancerResearchGroupAddWithScientistUser()
 	{
 		CancerResearchGroupForm cancerResearchGroupForm = new CancerResearchGroupForm();
 		cancerResearchGroupForm.setName("CRG_"+UniqueKeyGeneratorUtil.getUniqueKey());
@@ -114,7 +114,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	 * Test Distribution Protocol Add.
 	 */
 	
-	public void testDistributionProtocolAdd()
+	public void testDistributionProtocolAddWithScientistUser()
 	{
 		DistributionProtocolForm distProtocolForm = new DistributionProtocolForm();
 		distProtocolForm.setTitle("dp_"+UniqueKeyGeneratorUtil.getUniqueKey());
@@ -134,7 +134,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	 * Test Specimen Array Type Add.
 	 */
 	
-	public void testSpecimenArrayTypeAdd()
+	public void testSpecimenArrayTypeAddWithScientistUser()
 	{
 		SpecimenArrayTypeForm specForm = new SpecimenArrayTypeForm();
 		specForm.setName("array_"+UniqueKeyGeneratorUtil.getUniqueKey());
@@ -155,7 +155,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	 * Test Storage Type Add.
 	 */
 	
-	public void testStorageTypeAdd()
+	public void testStorageTypeAddWithScientistUser()
 	{
 		StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeForm(this,
 				"srType_" + UniqueKeyGeneratorUtil.getUniqueKey(),3,3,"row","col","22","Active");
@@ -172,7 +172,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	 * Test Storage Container Add.
 	 */
 	
-	public void testStorageContainerAdd()
+	public void testStorageContainerAddWithScientistUser()
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap( "StorageType" );
 		StorageContainerForm storageContainerForm = new StorageContainerForm();
@@ -222,7 +222,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	 * Test Collection Protocol Add.
 	 */
 	
-	public void testCollectionProtocolAdd()
+	public void testCollectionProtocolAddWithScientistUser()
 	{
 		/*Collection Protocol Details*/
 		CollectionProtocolForm collForm = new CollectionProtocolForm();
@@ -318,7 +318,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	 * Test Participant Add.
 	 */
 	
-	public void testParticipantAdd()
+	public void testParticipantAddWithScientistUser()
 	{
 		/*Participant add and registration*/
 		ParticipantForm partForm = new ParticipantForm() ;
