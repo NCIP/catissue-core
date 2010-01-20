@@ -50,6 +50,9 @@ public class ClinPortalIntegrationConstants
     public static final String CSM_USER_ID="csmUserId";
     public static final String RECENT_VISIT_DATE = "recentVisitDate";
     public static final String PREV_VISIT_DATE = "prevVisitDate";
+    public static final String RECENT_SCG_DATE = "recentScgDate";
+    public static final String PREV_SCG_DATE = "prevScgDate";
+
 
 }
 

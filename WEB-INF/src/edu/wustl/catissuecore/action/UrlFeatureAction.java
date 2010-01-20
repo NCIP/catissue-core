@@ -10,11 +10,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.LoginForm;
-import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.ClinPortalIntegrationConstants;
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * This class allow us to make DE forms data entry using hardCoded URL
@@ -46,8 +43,9 @@ public class UrlFeatureAction extends Action
         String callBackURL=request.getParameter(ClinPortalIntegrationConstants.CALLBACK_URL);
         //request.getSession().setAttribute(ClinPortalIntegrationConstants.CALLBACK_URL, callBackURL);
         String visitId=request.getParameter(ClinPortalIntegrationConstants.EVENTENTRYID);
-        request.setAttribute(ClinPortalIntegrationConstants.EVENTENTRYID,visitId);
-        String loginName=request.getParameter(ClinPortalIntegrationConstants.LOGINNAME);
+        request.getSession().setAttribute(ClinPortalIntegrationConstants.EVENTENTRYID,visitId);
+        String csmUserId=request.getParameter(ClinPortalIntegrationConstants.CSM_USER_ID);
+        String loginName=AppUtility.getCsmUserName(csmUserId);
         String password = AppUtility.getPassord(loginName);
         loginForm.setPassword(password);
         loginForm.setLoginName(loginName);

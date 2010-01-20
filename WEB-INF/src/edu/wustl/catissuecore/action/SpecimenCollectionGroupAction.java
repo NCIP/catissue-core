@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.Globals;
+import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -173,7 +174,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			// Id of Selected Participant or Protocol Participant Identifier
 			String selectedParticipantOrPPIdentifierId = null;
 			// Radio button for Protocol Participant Identifier or Participant
-			String radioButtonSelectedForType = null;
+			String typeRadioButton = null;
 			String selectedCPId = String.valueOf(specimenCollectionGroupForm
 					.getCollectionProtocolId());
 			if (selectedCPId
@@ -187,12 +188,12 @@ public class SpecimenCollectionGroupAction extends SecureAction
 							Constants.COLLECTION_PROTOCOL_ID).toString();
 					selectedParticipantOrPPIdentifierId = forwardToHashMap.get(
 							Constants.PARTICIPANT_ID).toString();
-					radioButtonSelectedForType = Constants.PARTICIPANT_ID;
+					typeRadioButton = Constants.PARTICIPANT_ID;
 					if (selectedParticipantOrPPIdentifierId.equals("0"))
 					{
 						selectedParticipantOrPPIdentifierId = forwardToHashMap.get(
 								Constants.PARTICIPANT_PROTOCOL_ID).toString();
-						radioButtonSelectedForType = Constants.PARTICIPANT_PROTOCOL_ID;
+						typeRadioButton = Constants.PARTICIPANT_PROTOCOL_ID;
 					}
 				}
 			}
@@ -205,13 +206,13 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				{
 					selectedParticipantOrPPIdentifierId = Long.toString(specimenCollectionGroupForm
 							.getParticipantId());
-					radioButtonSelectedForType = Constants.PARTICIPANT_ID;
+					typeRadioButton = Constants.PARTICIPANT_ID;
 				}
 				else
 				{
 					selectedParticipantOrPPIdentifierId = specimenCollectionGroupForm
 							.getProtocolParticipantIdentifier();
-					radioButtonSelectedForType = Constants.PARTICIPANT_PROTOCOL_ID;
+					typeRadioButton = Constants.PARTICIPANT_PROTOCOL_ID;
 				}
 			}
 			CollectionProtocolRegistration collectionProtocolRegistration = null;
@@ -221,7 +222,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				// Get CollectionprotocolRegistration Object
 				collectionProtocolRegistration = this.getcollectionProtocolRegistrationObj(
 						selectedParticipantOrPPIdentifierId, selectedCPId,
-						radioButtonSelectedForType, dao);
+						typeRadioButton, dao);
 			}
 			else if (specimenCollectionGroupForm.getId() != 0)
 			{
@@ -871,7 +872,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		    final String isClinPortalServiceEnabled = XMLPropertyHandler.getValue(ClinPortalIntegrationConstants.CLINPORTAL_SERVICE_ENABLED);
 		    if(isClinPortalServiceEnabled.equals(Constants.TRUE))
 		    {
+		        long strt=System.currentTimeMillis();
 		        formClinportalURL(request,specimenCollectionGroupForm,sessionData.getUserName());
+		        long end=System.currentTimeMillis();
+		        System.out.println("time:::::::::::::::::::"+(end-strt));
 		    }
 
 		}
@@ -893,7 +897,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
     {
         final SessionDataBean sessionData = (SessionDataBean) request.getSession()
         .getAttribute(Constants.SESSION_DATA);
-        final StringBuilder url = new StringBuilder();
+        StringBuilder url = new StringBuilder();
         try
         {
             final Long scgID = specimenCollectionGroupForm.getId();
@@ -904,23 +908,28 @@ public class SpecimenCollectionGroupAction extends SecureAction
             final Map<String, Long> map = clinPortalAPIService.getClinPortalURLIds(sessionData.getUserName(),
                     specimenCollectionGroupForm.getCollectionProtocolId(),
                     specimenCollectionGroupForm.getParticipantId(),
-                    specimenCollectionGroupForm.getCollectionProtocolEventId());
-            clinportalUrl = ClinPortalIntegrationConstants
-                    .CLINPORTAL_URL_CONTEXT(clinportalUrl);
+                    specimenCollectionGroupForm.getCollectionProtocolEventId(),specimenCollectionGroupForm.getId());
+            clinportalUrl = ClinPortalIntegrationConstants.CLINPORTAL_URL_CONTEXT(clinportalUrl);
             url.append(clinportalUrl);
-            String visitId =(String) request.getAttribute(ClinPortalIntegrationConstants.EVENTENTRYID);
+            String visitId =(String) request.getSession().getAttribute(ClinPortalIntegrationConstants.EVENTENTRYID);
+            final Long csId = map.get(ClinPortalIntegrationConstants.CLINICAL_STUDY_ID);
             if(visitId==null)
             {
                 /**
                  * get corresponding visit id to scgId if present
                  * else get near to visit Id of scgIdf
                  */
-                visitId=map.get(ClinPortalIntegrationConstants.EVENTENTRYID).toString();
+                if(map.get(ClinPortalIntegrationConstants.EVENTENTRYID)!=null){
+                    visitId=map.get(ClinPortalIntegrationConstants.EVENTENTRYID).toString();}
+                else
+                {
+                    //Set error message.....
+                    setErrorMessage(request);
+                }
             }
             if (visitId != null && scgID != null && !visitId.equals("0") && scgID >0)
             {
-                clinPortalAPIService.associateVisitAndScg(sessionData.getUserName(),visitId, String
-                        .valueOf(scgID));
+                request.getSession().removeAttribute(ClinPortalIntegrationConstants.EVENTENTRYID);
                 url.append(ClinPortalIntegrationConstants.EVENTENTRYID).append(
                         ClinPortalIntegrationConstants.EQUALS).append(
                         String.valueOf(visitId));
@@ -930,31 +939,46 @@ public class SpecimenCollectionGroupAction extends SecureAction
                 /*
                  * get  CS id from CP id , get CSE id from CPE id, get PId and user login name
                  */
-                final Long csId = map
-                        .get(ClinPortalIntegrationConstants.CLINICAL_STUDY_ID);
                 final Long cseId = map.get(ClinPortalIntegrationConstants.EVENT_ID);
-                final Long pId = map
-                        .get(ClinPortalIntegrationConstants.CP_PARTICIPANT_ID);
+                final Long pId = map.get(ClinPortalIntegrationConstants.CP_PARTICIPANT_ID);
 
                 url.append(ClinPortalIntegrationConstants.CP_PARTICIPANT_ID)
                         .append(Constants.EQUALS).append(pId);
                 url.append(ClinPortalCaTissueIntegrationUtil.formReqParameter(
-                        ClinPortalIntegrationConstants.CLINICAL_STUDY_ID,
-                        String.valueOf(csId)));
+                        ClinPortalIntegrationConstants.CLINICAL_STUDY_ID,String.valueOf(csId)));
                 url.append(ClinPortalCaTissueIntegrationUtil.formReqParameter(
-                        ClinPortalIntegrationConstants.EVENT_ID, String
-                                .valueOf(cseId)));
-
+                        ClinPortalIntegrationConstants.EVENT_ID, String.valueOf(cseId)));
             }
-            url.append(ClinPortalCaTissueIntegrationUtil.formReqParameter(ClinPortalIntegrationConstants.LOGINNAME, loginName));
+            url.append(ClinPortalCaTissueIntegrationUtil.formReqParameter(ClinPortalIntegrationConstants.SCGID,Utility.toString(scgID)));
+            url.append(ClinPortalCaTissueIntegrationUtil.formReqParameter(ClinPortalIntegrationConstants.CSM_USER_ID, sessionData.getCsmUserId()));
             url.append(ClinPortalCaTissueIntegrationUtil.formReqParameter("&method", ClinPortalIntegrationConstants.LOGIN));
+            if(csId==null || csId<=0)
+            {
+                url=new StringBuilder();
+            }
         }
         catch (Exception e)
         {
             logger.out.error(e.getMessage());
         }
-        request.setAttribute(ClinPortalIntegrationConstants.CALLBACK_URL, url
-                .toString());
+        request.setAttribute(ClinPortalIntegrationConstants.CALLBACK_URL, url.toString());
+
+    }
+
+    /**
+     *
+     * @param request
+     */
+    private void setErrorMessage(final HttpServletRequest request)
+    {
+        ActionErrors actionErrors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+        if (actionErrors == null)
+        {
+            actionErrors = new ActionErrors();
+        }
+        final ActionError actionError = new ActionError("errors.item","No Visit");
+        actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
+        saveErrors(request, actionErrors);
 
     }
 

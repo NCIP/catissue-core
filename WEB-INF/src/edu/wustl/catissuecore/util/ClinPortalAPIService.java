@@ -8,29 +8,42 @@ import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.system.comm.client.ClientSession;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 
 
 public class ClinPortalAPIService
 {
     private ApplicationService appService = null;
-    private ClientSession cs = null;
-    private String clinPortalServerUrl = XMLPropertyHandler.getValue(ClinPortalIntegrationConstants.CLINPORTAL_SERVICE_URL);
-    private String keyPath = XMLPropertyHandler.getValue(ClinPortalIntegrationConstants.KEYSTORE_FILE_PATH);
+    private ClientSession clientSession = null;
+    private final String CPServerUrl = XMLPropertyHandler.getValue(ClinPortalIntegrationConstants.CLINPORTAL_SERVICE_URL);
+    private final String keyPath = XMLPropertyHandler.getValue(ClinPortalIntegrationConstants.KEYSTORE_FILE_PATH);
 
     /**
      * Method to initialize the CaCoreAPIService
      * @throws Exception
      */
-    public void initialize(String loginName, String password) throws Exception
+    public void initialize(final String loginName,final String password) throws Exception
     {
         try
         {
             System.setProperty("javax.net.ssl.trustStore", keyPath);
-            appService = ApplicationServiceProvider.getRemoteInstance(clinPortalServerUrl);
-            cs = ClientSession.getInstance();
-            cs.startSession(loginName, password);
+            final HostnameVerifier hostVerifier = new HostnameVerifier()
+            {
+                public boolean verify(final String urlHostName,final SSLSession session)
+                {
+                    return true;
+                }
+            };
+            HttpsURLConnection.setDefaultHostnameVerifier(hostVerifier);
+            appService = ApplicationServiceProvider.getRemoteInstance(CPServerUrl);
+            clientSession = ClientSession.getInstance();
+            clientSession.startSession(loginName, password);
         }
         catch (Exception ex)
         {
@@ -40,17 +53,26 @@ public class ClinPortalAPIService
         }
     }
 
-
-    public Map<String,Long>  getClinPortalURLIds(String loginName,Long cpId, Long participantId,Long cpeId) throws Exception
+    /**
+     *
+     * @param loginName
+     * @param cpId
+     * @param participantId
+     * @param cpeId
+     * @param scgId
+     * @return
+     * @throws Exception
+     */
+    public Map<String,Long> getClinPortalURLIds(final String loginName,final Long cpId,final  Long participantId,final Long cpeId,final Long scgId) throws Exception
     {
         Map<String,Long> map = new HashMap<String,Long>();
         map.put(ClinPortalIntegrationConstants.COLLECTION_PROTOCOL_ID,cpId );
         map.put(ClinPortalIntegrationConstants.PARTICIPANT_ID,participantId);
         map.put(ClinPortalIntegrationConstants.COLL_PROTOCOL_EVENT_ID, cpeId);
-
+        map.put(ClinPortalIntegrationConstants.SCGID,scgId);
         try
         {
-            String pwd=ClinPortalCaTissueIntegrationUtil.getPassword(loginName);
+            final String pwd=ClinPortalCaTissueIntegrationUtil.getPassword(loginName);
             initialize(loginName, pwd);
             map=(Map)appService.getClinportalUrlIds(map);
             terminateSession();
@@ -64,28 +86,38 @@ public class ClinPortalAPIService
      }
 
     /**
+     *
+     * @param loginName
      * @param visitId
-     * @param scgId
+     * @param cseId
+     * @return
+     * @throws Exception
      */
-    public void associateVisitAndScg(String loginName,String visitId,String scgId) throws Exception
+    public Map<String, Date> getVisitRelatedEncounteredDate(final String loginName,final Long visitId,final Long cpeId,final Long cpId,final  Long participantId) throws Exception
     {
+        final Map<String,Long> map = new HashMap<String,Long>();
+        Map<String, Date> dateMap=null;
         try
         {
+            map.put(ClinPortalIntegrationConstants.COLL_PROTOCOL_EVENT_ID, cpeId);
+            map.put(ClinPortalIntegrationConstants.EVENTENTRYID,visitId);
+            map.put(ClinPortalIntegrationConstants.COLLECTION_PROTOCOL_ID,cpId );
+            map.put(ClinPortalIntegrationConstants.PARTICIPANT_ID,participantId);
             final String pwd=ClinPortalCaTissueIntegrationUtil.getPassword(loginName);
             initialize(loginName, pwd);
-            appService.associateVisitAndScg( visitId, scgId);
+            dateMap=(Map) appService.getVisitRelatedEncounteredDate( map);
             terminateSession();
         }
         catch (ApplicationException e)
         {
-            Logger.out.error("Error in associateVisitAndScg CaCoreAPIService " + e);
+            Logger.out.error("Error in getVisitRelatedEncounteredDate method from CaCoreAPIService " + e);
             throw e;
         }
+        return dateMap;
     }
 
-    private void terminateSession() throws Exception
+    private void terminateSession()
     {
-        cs.terminateSession();
-
+        clientSession.terminateSession();
     }
 }

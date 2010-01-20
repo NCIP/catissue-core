@@ -206,7 +206,7 @@ public class AppUtility
 	{
 		final Set setPV = getSpecimenClassCDE();
 		final Iterator itr = setPV.iterator();
-		final Map<String, List<NameValueBean>> subTypeMap = 
+		final Map<String, List<NameValueBean>> subTypeMap =
 			new HashMap<String, List<NameValueBean>>();
 		while (itr.hasNext())
 		{
@@ -692,7 +692,6 @@ public class AppUtility
 		// + AppUtility.getYear(dt, pt));
 		final ArrayList<String> attributeValuesInProperOrder = getAttributeValuesInProperOrder(
 				"date", "13-02-2006", "12-02-2006");
-		System.out.println(attributeValuesInProperOrder);
 	}
 
 	/**
@@ -1293,7 +1292,7 @@ public class AppUtility
 
 	public static Long getLastAvailableValue(String sql) throws ApplicationException
 	{
-		Long noOfRecords = new Long("0");
+		Long noOfRecords = Long.valueOf("0");
 		List list = null;
 		List records = null;
 		try
@@ -1307,7 +1306,7 @@ public class AppUtility
 				{
 					if (!((String) records.get(0)).equals(""))
 					{
-						noOfRecords = new Long((String) records.get(0));
+						noOfRecords = Long.valueOf((String) records.get(0));
 					}
 				}
 			}
@@ -3075,7 +3074,6 @@ public class AppUtility
 	public static boolean isNumeric(String sText)
 	{
 		final String validChars = "0123456789.E";
-		System.out.println(validChars);
 		boolean isNumber = true;
 		Character charTemp;
 
@@ -3180,7 +3178,6 @@ public class AppUtility
 		{
 			dao = openJDBCSession();
 			List resultList = new ArrayList();
-			System.out.println("");
 			final String sql = createSql(identifier, parentId);
 			resultList = dao.executeQuery(sql);
 
@@ -3437,7 +3434,7 @@ public class AppUtility
 	    classList.add(Constants.FLUID);
 	    classList.add(Constants.CELL);
 	    classList.add(Constants.MOLECULAR);
-	    
+
 	    Iterator<String> classItr = classList.iterator();
 	    while(classItr.hasNext())
 	    {
@@ -3496,7 +3493,7 @@ public class AppUtility
 				"PV1.value in (select specimen_class from catissue_stor_cont_spec_class where storage_container_id="+id+") and " +
 				"pv.value = sp.specimen_type and SP.STORAGE_CONTAINER_ID ="+id+
 				" order by Class";
-				
+
 		return getResult(sql);
 	}
 	/**
@@ -3678,7 +3675,7 @@ public class AppUtility
 	  	double tmp = Math.round(valueToBeRoundOff);
 	  	return tmp/p;
 	  }
-	
+
 	/**
 	 * @param valueToBeRoundOff
 	 * @param precision
@@ -3756,6 +3753,39 @@ public class AppUtility
         }
         return password;
     }
-    
-   
+
+    /**
+     * returns csmUserName from csm db based on csmUserId
+     * @param csmUserId
+     * @throws BizLogicException
+     */
+    public static String getCsmUserName(String csmUserId) throws BizLogicException
+    {
+        String csmUserName = null;
+        try
+        {
+             StringBuffer loginNameHQL = new StringBuffer(60);
+            loginNameHQL.append("select user.loginName from ");
+            loginNameHQL.append(User.class.getName());
+            loginNameHQL.append(" as user where user.csmUserId=");
+            loginNameHQL.append(csmUserId);
+
+            List  loginNameList = executeQuery(loginNameHQL.toString());
+            if (loginNameList != null && !loginNameList.isEmpty())
+            {
+                csmUserName = loginNameList.get(0).toString();
+            }
+        }
+        catch (ApplicationException e)
+        {
+            logger.debug(e.getMessage(), e);
+            throw new BizLogicException(ErrorKey
+                    .getErrorKey("biz.update.error"), e,
+                    "Error in database operation");
+        }
+        return csmUserName;
+    }
+
+
+
 }

@@ -51,6 +51,8 @@ import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.ClinPortalAPIService;
+import edu.wustl.catissuecore.util.ClinPortalCaTissueIntegrationUtil;
 import edu.wustl.catissuecore.util.CollectionProtocolEventComparator;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
@@ -58,6 +60,7 @@ import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.ClinPortalIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -3112,4 +3115,65 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean, this
 				.getReadDeniedPrivilegeName());
 	}
+
+    /**
+    *
+    * @param loginName
+    * @param collectionProtocolId
+    * @param participantId
+    * @param collectionEventId
+    * @param visitNum
+    * @param visitId
+    * @return
+    * @throws BizLogicException
+    */
+   public String getRecentSCG(String loginName, Long collectionProtocolId,
+           Long participantId, Long collectionEventId, String visitNum,
+           Long visitId) throws BizLogicException
+   {
+       ClinPortalAPIService apiService = new ClinPortalAPIService();
+       ClinPortalCaTissueIntegrationUtil util = new ClinPortalCaTissueIntegrationUtil();
+       String scgId = null;
+       try
+       {
+           Map<String, Date> map = apiService.getVisitRelatedEncounteredDate(
+                   loginName, visitId, collectionEventId,collectionProtocolId,participantId);
+           Date visitPrevDate = map.get(ClinPortalIntegrationConstants.PREV_VISIT_DATE);
+           Date visitCurrDate = map.get(ClinPortalIntegrationConstants.RECENT_VISIT_DATE);
+           QueryWhereClause queryClause = new QueryWhereClause(CollectionProtocolRegistration.class.getName());
+           queryClause.addCondition(new EqualClause("participant.id", participantId)).andOpr();
+           queryClause.addCondition(new EqualClause("collectionProtocol.id",collectionProtocolId));
+           String[] colName = {"id"};
+           List cpr = retrieve(CollectionProtocolRegistration.class.getName(),colName, queryClause);
+           int dateIndex = 0;
+           int index = 0;
+           int visitNumber = Integer.parseInt(visitNum);
+           if (cpr != null && !cpr.isEmpty())
+           {
+               Long cprId = Long.valueOf(cpr.get(0).toString());
+               Map<String, Date> completedSCG = new HashMap<String, Date>();
+               Map<String, Date> anticipatedSCG = new HashMap<String, Date>();
+               util.getScg(collectionEventId, cprId, completedSCG, anticipatedSCG);
+               if (anticipatedSCG.size() > 0)
+               {
+                   scgId = util.getClosestDate(anticipatedSCG, visitCurrDate,visitPrevDate);
+               }
+               else
+               {
+                   scgId = util.getClosestDate(completedSCG, visitCurrDate,visitPrevDate);
+               }
+           }
+       }
+       catch (DAOException e)
+       {
+           throw new BizLogicException(e);
+       }
+       catch (Exception e1)
+       {
+           throw new BizLogicException(null,e1,e1.getMessage());
+       }
+       return scgId;
+   }
+
+
 }
