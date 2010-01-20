@@ -303,6 +303,10 @@
 							-->
 							<include name="**/*.class" />
 							<exclude name="**/querysuite/**" />
+							<exclude name="**/applet/**" />
+							<exclude name="**/tag/**" />
+							<exclude name="**/tree/**" />
+							<exclude name="**/test/**" />
 						</fileset>
 					</cobertura-instrument>
 			</target>

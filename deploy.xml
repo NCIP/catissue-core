@@ -891,7 +891,7 @@
 			<antcall target="integrate_advanced_query"/>
 			<antcall target="integrate_bulk_operation"/>
 			<antcall target="app_configuration"/>
-			<antcall target="generate.cacore.for.xmi" />
+			<!--<antcall target="generate.cacore.for.xmi" />-->
 			<antcall target="de_integrate_app" />
 			<antcall target="build_war" />
 			<antcall target="jboss_configuration" />
