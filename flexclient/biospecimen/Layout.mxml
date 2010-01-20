@@ -106,6 +106,11 @@
 			private var previouslySelectedParticipantId:String;
 			private var previouslySelectedParticipantBean:NameValueBean;
 
+			public var collectionProtocolId:String;
+			public var participantId:String;
+			public var scgId:String;
+			public var collectionEventId:String;
+
               public var selectedNode:Object = new Object;
 
               public var parentNode :Object = new Object;
@@ -120,9 +125,20 @@
     		public function initApp():void
 		    {
 		    	 ExternalInterface.addCallback("myFlexMethod",refreshTree);
-	 			 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
-				 ExternalInterface.addCallback("editParticipant",editParticipant);
-				 ExternalInterface.addCallback("disableParticipant",disableParticipant);
+	 		 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
+			 ExternalInterface.addCallback("editParticipant",editParticipant);
+			 ExternalInterface.addCallback("disableParticipant",disableParticipant);
+
+			 collectionProtocolId = Application.application.parameters.collectionProtocolId;
+			 participantId = Application.application.parameters.participantId;
+			 scgId = Application.application.parameters.scgId;
+			 collectionEventId = Application.application.parameters.collectionEventId;
+			 //Alert.show("collectionProtocolId "+collectionProtocolId+" participantId "+participantId+" scgId "+scgId+" collectionEventId "+collectionEventId);
+
+			 if(collectionProtocolId != null && collectionProtocolId != "null" && collectionProtocolId != "" && participantId != null && participantId != "null" && participantId != "")
+			 {
+				remoteObjForURLFeature.getCpList();
+			 }
 		    }
 
     /**
@@ -304,6 +320,7 @@
   	{
 		 remoteObj.channelSet= Utility.getChannelSet();
 		 remoteObj1.channelSet = Utility.getChannelSet();
+ 		 remoteObjForURLFeature.channelSet = Utility.getChannelSet();
 
   	}
   	private function preInit() : void
@@ -341,6 +358,191 @@
        	Sp.inputArea.text="";
 	 	spDetailsLabel.text = "";   
      }
+
+
+     
+
+	/*
+  	   Collection protocol Event Handler Method
+  	*/
+  	public function collProtEventHandler(event:ResultEvent):void
+  	{
+  		var bean : NameValueBean = new NameValueBean();
+		cpCollection = event.result as ArrayCollection;
+
+		var collProtocolName : String = null;
+
+		for(var iter:Number=0; iter<cpCollection.length; iter++)
+	 	{
+	 		var tempbean:NameValueBean  = this.cpCollection[iter] as NameValueBean;
+			if(tempbean.value==collectionProtocolId)
+			{
+				collProtocolName = tempbean.name;
+				break;
+			}
+		}
+		
+		if(collProtocolName == null)
+		{
+			Alert.show("Please enter valid Collection Protocol identifier.");
+
+		}
+		else
+		{
+			var selectedCp : NameValueBean = new NameValueBean();
+			selectedCp.value = collectionProtocolId;
+			selectedCp.name = collProtocolName;
+			cpCombo = selectedCp;
+
+			Cp.inputArea.text = selectedCp.name;
+
+			var cpId :String = selectedCp.value;
+			if(cpId == "-1")
+			{
+				Alert.show("Please Check Valid Inputs For URL");
+			}
+			else
+			{
+				remoteObjForURLFeature.getParticipantsList(selectedCp.value, selectedCp.name);
+			}
+
+			specimenTree.dataProvider = null;
+			spDetailsLabel.text = title;
+			var url : URLRequest = new URLRequest("javascript: clearFrame()");
+			navigateToURL(url,"_self");
+
+		}
+  	}
+
+	/*
+  	   Collection protocol Event Handler Method
+  	*/
+  	public function partHandler(pevent:ResultEvent):void
+  	{
+		var bean : NameValueBean = new NameValueBean();
+		pCollection = pevent.result as ArrayCollection;
+		var participantName : String = null;
+
+		for(var iter:Number=0; iter<pCollection.length; iter++)
+	 	{
+	 		var tempbean:NameValueBean  = this.pCollection[iter] as NameValueBean;
+			if(tempbean.value == participantId)
+			{
+				participantName = tempbean.name;
+				break;
+			}
+		}
+		
+		if(participantName == null)
+		{
+			Alert.show("No participant with given identifier exists for this Collection Protocol.");
+
+		}
+		else
+		{
+			var selectedP : NameValueBean = new NameValueBean();
+			selectedP.value = participantId;
+			selectedP.name = participantName;
+			spCombo = selectedP;
+			Sp.inputArea.text = selectedP.name;
+
+
+	 		var selectedParticipantId :String = selectedP.value;
+
+			previouslySelectedParticipantId = null;
+			previouslySelectedParticipantBean=null;
+			previouslySelectednodeId=null;
+
+	  		var selectedCp : NameValueBean = new NameValueBean();
+	  	  	selectedCp =  cpCombo as NameValueBean;
+		        var selectedCpId :String = selectedCp.value;
+    	                selectedParticipantIndex = spComboSelectedIndex;
+
+			spDetailsLabel.text = title+"  "+selectedP.name;
+
+    			var str:String = remoteObjForURLFeature.getTreeData(selectedCpId,selectedParticipantId);
+		}
+	}
+
+	/*
+  	   Collection protocol Event Handler Method
+  	*/
+  	public function spTreeHandler(spTreeEvent:ResultEvent):void
+  	{
+		var str:String = spTreeEvent.result as String;
+	        xmlString = new XML(str);
+	        treeData =  new XMLListCollection(xmlString.node);
+	        specimenTree.dataProvider = treeData;
+
+		specimenTree.validateNow();
+		for(var j:Number=0; j<treeData.length; j++)
+   		{
+       			var xmlNode:XML = treeData.getItemAt(j) as XML;
+       			setIcons(xmlNode);
+
+		}
+		if(scgId!=null && scgId != "" && scgId != "null")
+		{
+			var nodeId:String = "SpecimenCollectionGroup_"+scgId;
+			nodeIdToSelect = nodeId;
+			
+			selectTreeNode();
+
+			CursorManager.setBusyCursor();
+			loadSCGNodeInfo();
+			CursorManager.removeBusyCursor();
+		}
+		else if(collectionProtocolId!=null && collectionProtocolId!="null" && collectionProtocolId!="")
+		{
+			var url : URLRequest = new URLRequest("javascript: openSCGInAddMode('"+ collectionProtocolId + "','"+ participantId +"','"+ collectionEventId +"')");
+				navigateToURL(url,"_self");
+		}
+
+	}
+
+	 /*
+           This method is invoked on click of specimen tree node
+	 */
+	 private function loadSCGNodeInfo():void
+	 {
+		if(specimenTree.selectedItem != null)
+		{
+			var type:String = specimenTree.selectedItem.@type;
+
+			if(type.match("Phase") || type.match("Arm") || type.match("Cycle"))
+			{
+				chkForCollectionProtocolType(type);
+			}
+			else
+			{
+				//Retrieving the selected node id
+				var id : String = specimenTree.selectedItem.@id;
+				previouslySelectednodeId=id;
+				//Selected CP and selected participants
+				var selectedParticipant:NameValueBean= new NameValueBean();
+				selectedParticipant = spCombo as NameValueBean
+				var selectedParticipantId :String = selectedParticipant.value;
+				var selectedCp : NameValueBean = new NameValueBean();
+				selectedCp =  cpCombo as NameValueBean;
+				var selectedCpId :String = selectedCp.value;
+				//display name of selected tree node
+				var displayName : String = specimenTree.selectedItem.@name;
+				if(type.match("SpecimenCollectionGroup"))
+					displayName = displayName+"@"+specimenTree.selectedItem.@evtDate;
+
+				//invoking java script method
+				var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
+				navigateToURL(url,"_self");
+
+			}
+		}
+	}
+
+
+
+
+
+
   	
 
    	/*
@@ -936,6 +1138,13 @@
 	<mx:RemoteObject id="remoteObj1" destination="cdeService" showBusyCursor="true">
 		<mx:method name="getParticipantsList" result="tempHandler(event)"/>
 	</mx:RemoteObject>
+
+	<mx:RemoteObject id="remoteObjForURLFeature" destination="cdeService" showBusyCursor="true" >
+		<mx:method name="getParticipantsList" result="partHandler(event)"/>
+		<mx:method name="getTreeData" result="spTreeHandler(event)"/>
+		<mx:method name="getCpList" result="collProtEventHandler(event)"/>
+	</mx:RemoteObject>
+
 
      <mx:Box direction="vertical" borderThickness="10" borderSides="#000000" borderStyle="solid" paddingTop="0" paddingRight="0" paddingLeft="0" paddingBottom="0" height="100%" width="100%">
       	<mx:VBox backgroundAlpha="0.1" height="5%" backgroundColor="#FFFFFF" width="100%"  >
