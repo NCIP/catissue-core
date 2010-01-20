@@ -66,6 +66,7 @@
 
     <target name="init_junit_testcases">
     	<delete dir="${log.dir}" />
+    	<delete dir="./Nightly_Build_Struts_Report" />
     	<delete dir="${cat.test.classes.dir}" />
 		<mkdir dir="${cat.test.classes.dir}" /> 
 		
