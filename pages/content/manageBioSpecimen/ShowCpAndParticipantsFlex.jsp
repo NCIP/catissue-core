@@ -11,6 +11,11 @@
    String cpId = null;
    String access = null;
    access = (String)session.getAttribute("Access");
+
+   String collectionProtocolId  = request.getParameter("URLCollectionProtocolId");
+   String pId = request.getParameter("URLParticipantId");
+   String scgId = request.getParameter("URLScgId");
+   String collectionEventId = request.getParameter("URLCollectionEventId");
 %>
 
 <html>
@@ -42,7 +47,10 @@
 		return jsReady;
 	}
 
-
+	function openSCGInAddMode(cpId, pId, cpEventId)
+	{
+		window.parent.frames[1].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupAdd&operation=add&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+pId+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.QUERY_RESULTS_COLLECTION_PROTOCOL_EVENT_ID%>="+cpEventId;
+	}
 
 	function pageInit(nodeId)
 	{
@@ -179,7 +187,7 @@
 	function clearFrame()
     {
         window.parent.frames[1].location = "blankScreenAction.do";
-    }	
+    }
  </script>
 
 </head>
@@ -190,6 +198,7 @@
 		<param name=quality value=high>
 		<param name="swliveconnect" value="true">
 		<param name="wmode" value="transparent" />
+		<param name='flashVars' value='collectionProtocolId=<%=collectionProtocolId%>&participantId=<%=pId%>&scgId=<%=scgId%>&collectionEventId=<%=collectionEventId%>'/>
 		<embed src="flexclient/biospecimen/Layout.swf" quality="high" bgcolor="#ffffff"
 			width="100%" height="100%" id="Layout" name="Layout" align="middle"
 			play="true"
@@ -198,7 +207,8 @@
 			wmode="transparent"
 			allowScriptAccess="sameDomain"
 			type="application/x-shockwave-flash"
-			pluginspage="http://www.adobe.com/go/getflashplayer">
+			pluginspage="http://www.adobe.com/go/getflashplayer"
+			flashvars='collectionProtocolId=<%=collectionProtocolId%>&participantId=<%=pId%>&scgId=<%=scgId%>&collectionEventId=<%=collectionEventId%>'>
 		</embed>
 
    </object>

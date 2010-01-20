@@ -7,23 +7,27 @@
       {
           mac = true;
       }
-	
+
+	String URLCollectionProtocolId  = request.getParameter("URLCollectionProtocolId");
+	String URLParticipantId = request.getParameter("URLParticipantId");
+	String URLScgId = request.getParameter("URLId");
+	String URLCollectionEventId = request.getParameter("URLCollectionEventId");
 	String frame1Ysize = "99.9%";
 	String frame2Ysize = "99.9%";
 	String frame3Ysize = "99.9%";
-	
+
 	String cpAndParticipantViewFrameHeight="50%";
 	if(access != null && access.equals("Denied"))
 	{
 		cpAndParticipantViewFrameHeight="15%";
 	}
-	
+
 	if(mac)
 	{
 		frame1Ysize = "180";
 		frame2Ysize = "180";
 		frame3Ysize = "520";
-	 
+
 
 		if(access != null && access.equals("Denied"))
 		{
@@ -35,14 +39,14 @@
 	{
 		frame3Ysize = "650";
 	}
-	
+
 %>
 <script type="text/javascript">
 </script>
 
 <script>
 //Set the alope for the IFrame
-if ( document.getElementById && !(document.all) ) 
+if ( document.getElementById && !(document.all) )
 {
 	var slope=10;
 }
@@ -68,9 +72,9 @@ else
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <body>
 <script>
-function changeMenuStyle(obj, new_style) { 
+function changeMenuStyle(obj, new_style) {
 if (objclick != obj)
-  obj.className = new_style; 
+  obj.className = new_style;
 }
 
 function showCursor(){
@@ -86,12 +90,12 @@ function hideCursor(){
 		<TR>
 			<TD width="27%" valign="top" height="100%" id='sideMenuTd' style="display: block; height: 100%;">
 		<div id="SearchLeftPart" style=" width:100%;height:100%; overflow:none;">
-				<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>" scrolling="no" frameborder="0" width="100%" height="<%= frame3Ysize %>">
+				<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>&URLCollectionProtocolId=<%=URLCollectionProtocolId%>&URLParticipantId=<%=URLParticipantId%>&URLScgId=<%=URLScgId%>&URLCollectionEventId=<%=URLCollectionEventId%>" scrolling="no" frameborder="0" width="100%" height="<%= frame3Ysize %>">
 						Your Browser doesn't support IFrames.
 				</iframe>
 		</div>
 			</td>
-			<TD id=menucontainer width="2" class="subMenuPrimaryTitle" valign="middle" align="center" onmouseover="changeMenuStyle(this,'subMenuSecondaryTitleOver'),showCursor()" 
+			<TD id=menucontainer width="2" class="subMenuPrimaryTitle" valign="middle" align="center" onmouseover="changeMenuStyle(this,'subMenuSecondaryTitleOver'),showCursor()"
 						onmouseout="changeMenuStyle(this,'subMenuPrimaryTitle'),hideCursor()"
 						onclick="toggleSplitterStatus()">
 						<SPAN id="splitter"><img src="images/leftPane_collapseButton.gif" /></SPAN>
