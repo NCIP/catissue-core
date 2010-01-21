@@ -116,7 +116,10 @@ public class FlexInterface
 	public SpecimenBean initFlexInterfaceForMultipleSp(String mode, String parentType,
 			String parentName) throws DAOException
 	{
-		this.session = flex.messaging.FlexContext.getHttpRequest().getSession();
+		if(isToInitializeSession)
+		{
+			this.session = flex.messaging.FlexContext.getHttpRequest().getSession();
+		}	
 		final SessionDataBean sdb = (SessionDataBean) this.session
 				.getAttribute(Constants.SESSION_DATA);
 		final SpecimenBean spBean = new SpecimenBean();
@@ -491,7 +494,10 @@ public class FlexInterface
 	 */
 	public String editSpecimen(List<SpecimenBean> spBeanList)
 	{
-		this.session = flex.messaging.FlexContext.getHttpRequest().getSession();
+		if(isToInitializeSession)
+		{
+			this.session = flex.messaging.FlexContext.getHttpRequest().getSession();
+		}	
 		final LinkedHashMap specimenMap = (LinkedHashMap) this.session
 				.getAttribute(edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LIST_SESSION_MAP);
 		final Iterator itr = specimenMap.values().iterator();

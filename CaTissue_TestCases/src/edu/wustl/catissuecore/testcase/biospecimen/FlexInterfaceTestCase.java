@@ -1,19 +1,34 @@
 package edu.wustl.catissuecore.testcase.biospecimen;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.flex.EventParamtersBean;
 import edu.wustl.catissuecore.flex.FlexInterface;
+import edu.wustl.catissuecore.flex.SpecimenBean;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.bizlogic.BaseTestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
+import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.Utility;
 
 
 
@@ -398,6 +413,127 @@ public class FlexInterfaceTestCase extends CaTissueSuiteBaseTest
 			logger.error(e.getMessage(), e);
 			fail(e.getMessage());
 		}
+	}
+	public void testInitFlexInterfaceForMultipleSp()
+	{
+		try
+		{
+			FlexInterface flexInterface = CaTissueSuiteTestUtil.getFlexInterface(getSession());
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
+			SpecimenBean specimenBean  = flexInterface.initFlexInterfaceForMultipleSp("add","New_Specimen",scg.getName());
+			if(specimenBean==null)
+			{
+				assertFalse("specimenBean should not be empty",true);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			fail(e.getMessage());
+		}
+	}
+	public void testWriteSpecimen()
+	{
+		try
+		{
+			FlexInterface flexInterface = CaTissueSuiteTestUtil.getFlexInterface(getSession());
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
+			SpecimenBean ts = initTissueSpecimen();
+			ts.parentType = Constants.NEW_SPECIMEN_TYPE;
+			ts.parentName = scg.getName();
+			
+			SpecimenBean child1 = initTissueSpecimen();
+			child1.parentType = Constants.DERIVED_SPECIMEN_TYPE;
+			
+			SpecimenBean child2 = initTissueSpecimen();
+			child2.parentType = Constants.DERIVED_SPECIMEN_TYPE;
+			
+			ts.derivedColl = new ArrayList<SpecimenBean>();
+			ts.derivedColl.add(child1);
+			ts.derivedColl.add(child2);
+			List<SpecimenBean> l = new ArrayList<SpecimenBean>();
+			l.add(ts);
+			
+			String message = flexInterface.writeSpecimen(l);
+			if(!message.equalsIgnoreCase("SUCCESS"))
+			{
+				fail(message+": couldn't add specimen");
+			}
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			fail(e.getMessage());
+		}
+	}
+	
+	public static SpecimenBean initTissueSpecimen()
+	{
+		System.out.println("Inside tissuespecimen");
+		SpecimenBean ts= new SpecimenBean();
+		ts.specimenClass = "Tissue";
+		ts.specimenLabel = "TissueSpecimen_"+UniqueKeyGeneratorUtil.getUniqueKey();
+		ts.storage = "Auto";
+		ts.lineage = "New";//("Pending");
+		ts.specimenBarcode = "Barcode_"+UniqueKeyGeneratorUtil.getUniqueKey();
+		ts.specimenType = "Fixed Tissue Block";
+		ts.pathologicalStatus = "Malignant";
+
+		ts.tissueSide = "Left";
+		ts.tissueSite = "Placenta";
+
+		Double quantity = new Double(10.0);
+		ts.quantity = quantity;
+		
+		EventParamtersBean collectionEventParameters = new EventParamtersBean();
+
+		collectionEventParameters.comment = "";
+		
+		collectionEventParameters.userName = "admin@admin,com";		
+
+		try
+		{
+			collectionEventParameters.eventdDate = (Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+			collectionEventParameters.eventHour = "11";
+			collectionEventParameters.eventMinute = "10";
+					
+		}
+		catch (ParseException e1)
+		{
+			System.out.println("exception in APIDemo");
+			e1.printStackTrace();
+		}
+		
+		collectionEventParameters.container = "No Additive Vacutainer";
+		collectionEventParameters.collectionProcedure = "Needle Core Biopsy";
+		
+		
+		EventParamtersBean receivedEventParameters = new EventParamtersBean();
+		receivedEventParameters.userName = "admin@admin,com";		
+		try
+		{
+			System.out.println("--- Start ---- 10");
+			receivedEventParameters.eventdDate = (Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+			receivedEventParameters.eventHour = "11";
+			receivedEventParameters.eventMinute = "10";
+		}
+		catch (ParseException e)
+		{
+			System.out.println("APIDemo");
+			e.printStackTrace();
+		}
+		
+		receivedEventParameters.receivedQuality = "Acceptable";
+		receivedEventParameters.comment = "fdfd";
+		ts.collectionEvent = collectionEventParameters;
+		ts.receivedEvent = receivedEventParameters;
+				
+		return ts;
 	}
 
 }
