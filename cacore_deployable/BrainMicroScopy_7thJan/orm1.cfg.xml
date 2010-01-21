@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+    <mapping resource="NPmodel/Microscopy.hbm.xml" />
+    <mapping resource="NPmodel/impl/MicroscopyImpl.hbm.xml" />
+    <mapping resource="NPmodel/FinalDiagnosis.hbm.xml" />
+    <mapping resource="NPmodel/impl/FinalDiagnosisImpl.hbm.xml" />
+    <mapping resource="NPmodel/OtherStain.hbm.xml" />
+    <mapping resource="NPmodel/impl/OtherStainImpl.hbm.xml" />
+    <mapping resource="NPmodel/BrainArea.hbm.xml" />
+    <mapping resource="NPmodel/impl/BrainAreaImpl.hbm.xml" />
+    <mapping resource="NPmodel/Additionalinformation.hbm.xml" />
+    <mapping resource="NPmodel/impl/AdditionalinformationImpl.hbm.xml" />
+    <mapping resource="NPmodel/SCGRecordEntry.hbm.xml" />
+    <mapping resource="NPmodel/impl/SCGRecordEntryImpl.hbm.xml" />
+  </session-factory>
+</hibernate-configuration>
+
