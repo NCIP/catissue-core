@@ -110,12 +110,12 @@ public class NightlyBuildReportGenerator
 		 * MySQL FRESH SCENARIO
 		 */
 		reportDir = os +JUNIT_STRUTS_MYSQL_FRESH_REPORT + "/Html_reports/index.html\">";
-		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("Struts test cases",anchorStart+reportDir+operatingSystem+" MySQL Fresh"+anchorend);
+		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("MySQL Fresh",anchorStart+reportDir+operatingSystem+" Struts test cases"+anchorend);
 		l.add(scenarion);
 		
 		reportDir = os +JUNIT_API_MYSQL_FRESH_REPORT + "/Html_reports/index.html\">";
 		NightlyBuildReportGenerator.init(JUNIT_API_MYSQL_FRESH_FILE);
-		scenarion  = NightlyBuildReportGenerator.getJUnitTestResults("API test cases",anchorStart+reportDir+operatingSystem+" MySQL Fresh"+anchorend);
+		scenarion  = NightlyBuildReportGenerator.getJUnitTestResults("MySQL Fres",anchorStart+reportDir+operatingSystem+" API test cases"+anchorend);
 		l.add(scenarion);
 		
 		/**
@@ -123,12 +123,12 @@ public class NightlyBuildReportGenerator
 		 */
 		reportDir = os +JUNIT_STRUTS_MYSQL_UPGRADE_REPORT + "/Html_reports/index.html\">";
 		NightlyBuildReportGenerator.init(JUNIT_STRUTS_MYSQL_UPGRADE_FILE);
-		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("Struts test cases",anchorStart+reportDir+operatingSystem+" MySQL Upgrade"+anchorend);
+		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("MySQL Upgrade",anchorStart+reportDir+operatingSystem+" Struts test cases"+anchorend);
 		l.add(scenarion);
 		
 		reportDir = os +JUNIT_API_MYSQL_UPGRADE_REPORT + "/Html_reports/index.html\">";
 		NightlyBuildReportGenerator.init(JUNIT_API_MYSQL_UPGRADE_FILE);
-		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("API test cases",anchorStart+reportDir+operatingSystem+" MySQL Upgrade"+anchorend);
+		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("MySQL Upgrade",anchorStart+reportDir+operatingSystem+" API test cases"+anchorend);
 		l.add(scenarion);
 
 		/**
@@ -136,12 +136,12 @@ public class NightlyBuildReportGenerator
 		 */
 		reportDir = os +JUNIT_STRUTS_ORACLE_FRESH_REPORT + "/Html_reports/index.html\">";
 		NightlyBuildReportGenerator.init(JUNIT_STRUTS_ORACLE_FRESH_FILE);
-		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("Struts test cases",anchorStart+reportDir+operatingSystem+" Oracle Fresh"+anchorend);
+		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("Oracle Fresh",anchorStart+reportDir+operatingSystem+" Struts test cases"+anchorend);
 		l.add(scenarion);
 		
 		reportDir = os +JUNIT_API_ORACLE_FRESH_REPORT + "/Html_reports/index.html\">";
 		NightlyBuildReportGenerator.init(JUNIT_API_ORACLE_FRESH_FILE);
-		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("API test cases",anchorStart+reportDir+operatingSystem+" Oracle Fresh"+anchorend);
+		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("Oracle Fresh",anchorStart+reportDir+operatingSystem+" API test cases"+anchorend);
 		l.add(scenarion);
 
 		/**
@@ -149,12 +149,12 @@ public class NightlyBuildReportGenerator
 		 */
 		reportDir = os +JUNIT_STRUTS_ORACLE_UPGRADE_REPORT + "/Html_reports/index.html\">";
 		NightlyBuildReportGenerator.init(JUNIT_STRUTS_ORACLE_UPGRADE_FILE);
-		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("Struts test cases",anchorStart+reportDir+operatingSystem+" Oracle Upgrade"+anchorend);
+		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("Oracle Upgrade",anchorStart+reportDir+operatingSystem+" Struts test cases"+anchorend);
 		l.add(scenarion);
 		
 		reportDir = os +JUNIT_API_ORACLE_UPGRADE_REPORT + "/Html_reports/index.html\">";
 		NightlyBuildReportGenerator.init(JUNIT_API_ORACLE_UPGRADE_FILE);
-		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("API test cases",anchorStart+reportDir+operatingSystem+" Oracle Upgrade"+anchorend);
+		scenarion = NightlyBuildReportGenerator.getJUnitTestResults("Oracle Upgrade",anchorStart+reportDir+operatingSystem+" API test cases"+anchorend);
 		l.add(scenarion);
 		StringBuffer buf = new StringBuffer();
 		
@@ -232,11 +232,11 @@ public class NightlyBuildReportGenerator
 	 * </p>
 	 */
 
-	public static String[] getJUnitTestResults(String testCaseType,String testScenario)throws IOException
+	public static String[] getJUnitTestResults(String testScenario,String testCaseType)throws IOException
 	{
 		String columns[] = new String[7];
-		columns[0] = testCaseType;
-		columns[1] = testScenario;
+		columns[0] = testScenario;
+		columns[1] = testCaseType;
 		if(FileExist)
 		{
 			int TOTAL_NO_OF_PASS=0;
