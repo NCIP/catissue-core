@@ -702,8 +702,8 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 			participant.setLastName("lastName"+UniqueKeyGeneratorUtil.getUniqueKey());
 			participant.setActivityStatus("Active");
 			
-			Collection participantMedicalIdentifierCollection1 = new HashSet();
-			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection1);
+//			Collection participantMedicalIdentifierCollection1 = new HashSet();
+//			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection1);
 			participant=(Participant)appService.createObject(participant);
 			
 			System.out.println("participant without PMI created !!! "+participant.getId());
