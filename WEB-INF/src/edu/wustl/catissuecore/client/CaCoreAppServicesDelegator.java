@@ -1284,7 +1284,9 @@ public class CaCoreAppServicesDelegator
 	 *
 	 * @throws Exception the exception
 	 */
-	public List delegateGetCaTissueLocalParticipantMatchingObects(String userName, Object domainObject) throws Exception{
+	public List delegateGetCaTissueLocalParticipantMatchingObects(String userName,
+			Object domainObject, Long cpId) throws Exception
+	{
 		List matchingObjects = new ArrayList();
 		this.checkNullObject(domainObject, "Domain Object");
 		final String className = domainObject.getClass().getName();
@@ -1292,10 +1294,10 @@ public class CaCoreAppServicesDelegator
 		final ParticipantBizLogic bizLogic = (ParticipantBizLogic) factory.getBizLogic(className);
 		// not null check for Id
 		//checkNullObject(abstractDomainObject.getId(),"Identifier");
-		final LookupLogic participantLookupLogicForSPR = (LookupLogic) CommonUtilities
+		final LookupLogic participantLookupLogic = (LookupLogic) CommonUtilities
 				.getObject(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
 		matchingObjects = bizLogic.getListOfMatchingParticipants((Participant) domainObject,
-				participantLookupLogicForSPR);
+				participantLookupLogic);
 		/*bug 7561*/
 		List filteredMatchingObjects = null;
 		if (matchingObjects != null)
@@ -1306,7 +1308,75 @@ public class CaCoreAppServicesDelegator
 		{
 			filteredMatchingObjects = new ArrayList();
 		}
+
+		if (cpId != null)
+		{
+			filteredMatchingObjects=processListForMatchWithinCP(filteredMatchingObjects, cpId);
+		}
 		return filteredMatchingObjects;
+	}
+
+	public List processListForMatchWithinCP(List<DefaultLookupResult> matchPartpantLst, Long cpId)
+			throws ApplicationException
+	{
+		List idList = this.getPartcipantIdsList(cpId);
+		matchPartpantLst = filerMatchedList(matchPartpantLst, idList);
+		return matchPartpantLst;
+	}
+
+	public List<DefaultLookupResult> filerMatchedList(List<DefaultLookupResult> matchPartpantLst,
+			List idList)
+	{
+
+		List<DefaultLookupResult> matchPartpantLstFiltred = new ArrayList<DefaultLookupResult>();
+		Iterator<DefaultLookupResult> itr = matchPartpantLst.iterator();
+
+		if (!idList.isEmpty() && idList.get(0) != null && String.valueOf(idList.get(0)) != "")
+		{
+			List participantIdList = (List) idList;
+			while (itr.hasNext())
+			{
+				DefaultLookupResult result = (DefaultLookupResult) itr.next();
+				Participant participant = (Participant) result.getObject();
+				if ((participantIdList).contains(String.valueOf(participant.getId().longValue())))
+				{
+					matchPartpantLstFiltred.add(result);
+				}
+			}
+		}
+		return matchPartpantLstFiltred;
+	}
+
+	public static List getPartcipantIdsList(Long id) throws ApplicationException
+	{
+		List idListArray = null;
+		List<String> idList = new ArrayList<String>();
+		JDBCDAO jdbcDAO = null;
+		String query = null;
+		try
+		{
+			query = "SELECT PARTICIPANT_ID FROM CATISSUE_COLL_PROT_REG WHERE COLLECTION_PROTOCOL_ID='"
+					+ id + "'";
+			jdbcDAO = AppUtility.openJDBCSession();
+			idListArray = jdbcDAO.executeQuery(query);
+			if (!idListArray.isEmpty() && idListArray.get(0) != "")
+			{
+				for (Iterator<List> itr = idListArray.iterator(); itr.hasNext();)
+				{
+					idList.add(String.valueOf(((List) itr.next()).get(0)));
+				}
+			}
+		}
+		catch (DAOException exp)
+		{
+			// TODO Auto-generated catch block
+			throw new DAOException(exp.getErrorKey(), exp, exp.getMsgValues());
+		}
+		finally
+		{
+			jdbcDAO.closeSession();
+		}
+		return idList;
 	}
 
 
