@@ -785,8 +785,8 @@
 		<property name="reportgenerator.input.junit_struts_oracle_fresh_file" value="${base.dir}/XmlReport/JUnitReports/oracle_fresh_struts_report.xml" />
 		<property name="reportgenerator.input.junit_struts_oracle_upgrade_file" value="${base.dir}/XmlReport/JUnitReports/oracle_upgrade_struts_report.xml" />
 
-
 		<target name="GenerateNightlyBuildReport" depends="compile">
+			<copy file="./TestResult.htm" todir="${base.dir}/XmlReport"/>
 			<java classname="NightlyBuildReportGenerator" fork="true">
 			    <arg value="${reportgenerator.input.junit_api_mysql_fresh_file}" />
 			    <arg value="${reportgenerator.input.junit_api_mysql_upgrade_file}" />
@@ -801,7 +801,6 @@
 				</classpath>
 
 			</java>
-
 		</target>
 
   <!-- =================================================================== -->
