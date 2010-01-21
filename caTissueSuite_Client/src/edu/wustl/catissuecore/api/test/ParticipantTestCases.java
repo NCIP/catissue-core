@@ -139,6 +139,26 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 		
 	}
 	
+
+	public void testCaTissueLocalParticipantMatchingObects(){
+		List<?> resultList = null;
+		Participant  participant=new Participant();
+		try {
+			resultList=appService.getCaTissueLocalParticipantMatchingObects(participant,null);
+			System.out.println("caTissue Local DB Matched Participant List"+ resultList);
+			for(int i=0;i<resultList.size();i++)
+			{
+				System.out.println(resultList.get(i));
+			}
+			assertTrue("Local Matched participant list is retrieved using API", true);
+
+		}catch(Exception e)
+		{
+			System.out.println("testCaTissueLocalParticipantMatchingObects"+ e.getMessage());
+			e.printStackTrace();
+			assertFalse("Not able to retrieve local db matched participant list using API", true);
+		}
+	}
 	
 	public void testUpdateParticipant()
 	{
