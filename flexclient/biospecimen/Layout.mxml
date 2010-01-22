@@ -458,7 +458,7 @@
 		        var selectedCpId :String = selectedCp.value;
     	                selectedParticipantIndex = spComboSelectedIndex;
 
-			spDetailsLabel.text = title+"  "+selectedP.name;
+			spDetailsLabel.text = title;//+"  "+selectedP.name;
 
     			var str:String = remoteObjForURLFeature.getTreeData(selectedCpId,selectedParticipantId);
 		}
@@ -645,7 +645,7 @@
 				if(isRefresTree)
 				{
 					previouslySelectedParticipantBean=bean;
-					spDetailsLabel.text = title+"  "+previouslySelectedParticipantBean.name;
+					spDetailsLabel.text = title;//+"  "+previouslySelectedParticipantBean.name;
 					// nodeIdToSelect is obtainer from editParticipant() fucntion
 					refreshTree(nodeIdToSelect);
 					Sp.inputArea.text = previouslySelectedParticipantBean.name;
@@ -718,7 +718,7 @@
     	    selectedParticipantIndex = spComboSelectedIndex;
 
 		   // title  = title +" "+selectedParticipant.name;
-		     spDetailsLabel.text = title+"  "+selectedParticipant.name;
+		     spDetailsLabel.text = title;//+"  "+selectedParticipant.name;
 
 		   //Here we can get data for specimen tree details
 
