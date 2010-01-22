@@ -405,6 +405,7 @@
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.Race"
 		relationShipType="main" roleName="">
+		<attribute name="id" dataType="Long" />
 		<attribute name="raceName" dataType="String" />
 	</AuditableClass>
 
