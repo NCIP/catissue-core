@@ -80,6 +80,7 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
@@ -1548,32 +1549,30 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			// Condition for medical Record Number.
 
 			// TO DO FOR 6756
-			final String sourceObjectName = PermissibleValueImpl.class.getName();
-			final String[] selectColumnName = {"value"};
-			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-			queryWhereClause
-					.addCondition(new EqualClause("cde.publicId", "Clinical_Diagnosis_PID"))
-					.andOpr().addCondition(new EqualClause("value", group.getClinicalDiagnosis()));
-
-			Iterator<Object> iterator;
-			iterator = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause)
-					.iterator();
+			/**
+			 * bug 15684 start
+			 * Used executeQuery() method as Clinical diagnosis with apostrophe in name is giving error 
+			 * while creating query.
+			 */
+			StringBuffer sqlBuff = new StringBuffer();
+			sqlBuff.append( "SELECT PermissibleValueImpl.value FROM "+PermissibleValueImpl.class.getName()+" PermissibleValueImpl" );
+			sqlBuff.append( " WHERE  PermissibleValueImpl.cde.publicId = ? AND PermissibleValueImpl.value = ?");
+			List<Object> columnValuesList = new ArrayList<Object>();
+            columnValuesList.add( "Clinical_Diagnosis_PID" );
+            columnValuesList.add( group.getClinicalDiagnosis() );
+            List list = ((HibernateDAO)dao).executeQuery( sqlBuff.toString(), null, null, columnValuesList );
+            //bug 15684 end
+			Iterator iterator = list.iterator();
 			if (!iterator.hasNext())
 			{
 				throw this.getBizLogicException(null, "spg.clinicalDiagnosis.errMsg", "");
 			}
-
-			// NameValueBean undefinedVal = new
-			// NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
 			final List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_CLINICAL_STATUS, null);
 			if (!Validator.isEnumeratedValue(clinicalStatusList, group.getClinicalStatus()))
 			{
-
-				throw this.getBizLogicException(null, "collectionProtocol.clinicalStatus.errMsg",
-						"");
+				throw this.getBizLogicException(null, "collectionProtocol.clinicalStatus.errMsg","");
 			}
-
 			if (operation.equals(Constants.ADD))
 			{
 				if (!Status.ACTIVITY_STATUS_ACTIVE.toString().equals(group.getActivityStatus()))
@@ -1655,12 +1654,13 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
+		
 		/*
 		* catch (ApplicationException e){ logger.debug(e.getMessage(), e);
 		* throw getBizLogicException(null, e.getErrorKeyName(), ""); }
 		*/
 	}
-
+	
 	/**
 	 * Validate cp event.
 	 *
@@ -2411,7 +2411,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 			if (parentSpecimenId == null)
 			{
-				parentSpecimenId = new Long(0);
+				parentSpecimenId = Long.valueOf(0);
 			}
 
 			List<Specimen> listOfSpecimens = specimenChildrenMap.get(parentSpecimenId);
@@ -2551,12 +2551,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		Integer offset = null;
 		if (this.offsetForCPOrEvent != null)
 		{
-			offset = new Integer(this.offsetForCPOrEvent.intValue() + offsetToAdd.intValue());
+			offset = Integer.valueOf(this.offsetForCPOrEvent.intValue() + offsetToAdd.intValue());
 			this.offsetForCPOrEvent = offset;
 		}
 		else
 		{
-			offset = new Integer(offsetToAdd.intValue());
+			offset = Integer.valueOf(offsetToAdd.intValue());
 			this.offsetForCPOrEvent = offset;
 		}
 	}
