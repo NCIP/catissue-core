@@ -3,22 +3,20 @@
 
 <hibernate-configuration>
   <session-factory>
-    <mapping resource="pathology_specimen/SpecimenNottinghamHistologicScore.hbm.xml" />
-    <mapping resource="pathology_specimen/impl/SpecimenNottinghamHistologicScoreImpl.hbm.xml" />
-    <mapping resource="pathology_specimen/SpecimenHistologicGrade.hbm.xml" />
-    <mapping resource="pathology_specimen/impl/SpecimenHistologicGradeImpl.hbm.xml" />
-    <mapping resource="pathology_specimen/SpecimenInvasion.hbm.xml" />
-    <mapping resource="pathology_specimen/impl/SpecimenInvasionImpl.hbm.xml" />
-    <mapping resource="pathology_specimen/SpecimenHistologicVariantType.hbm.xml" />
-    <mapping resource="pathology_specimen/impl/SpecimenHistologicVariantTypeImpl.hbm.xml" />
-    <mapping resource="pathology_specimen/SpecimenHistologicType.hbm.xml" />
-    <mapping resource="pathology_specimen/impl/SpecimenHistologicTypeImpl.hbm.xml" />
-    <mapping resource="pathology_specimen/SpecimenBaseSolidTissuePathologyAnnotation.hbm.xml" />
-    <mapping resource="pathology_specimen/impl/SpecimenBaseSolidTissuePathologyAnnotationImpl.hbm.xml" />
     <mapping resource="pathology_specimen/SpecimenDetails1.hbm.xml" />
     <mapping resource="pathology_specimen/impl/SpecimenDetails1Impl.hbm.xml" />
-    <mapping resource="pathology_specimen/AdditionalPathologicFinding.hbm.xml" />
-    <mapping resource="pathology_specimen/impl/AdditionalPathologicFindingImpl.hbm.xml" />
+    <mapping resource="pathology_specimen/SpecimenBaseSolidTissuePathologyAnnotation.hbm.xml" />
+    <mapping resource="pathology_specimen/impl/SpecimenBaseSolidTissuePathologyAnnotationImpl.hbm.xml" />
+    <mapping resource="pathology_specimen/SpecimenHistologicType.hbm.xml" />
+    <mapping resource="pathology_specimen/impl/SpecimenHistologicTypeImpl.hbm.xml" />
+    <mapping resource="pathology_specimen/SpecimenHistologicVariantType.hbm.xml" />
+    <mapping resource="pathology_specimen/impl/SpecimenHistologicVariantTypeImpl.hbm.xml" />
+    <mapping resource="pathology_specimen/SpecimenInvasion.hbm.xml" />
+    <mapping resource="pathology_specimen/impl/SpecimenInvasionImpl.hbm.xml" />
+    <mapping resource="pathology_specimen/SpecimenHistologicGrade.hbm.xml" />
+    <mapping resource="pathology_specimen/impl/SpecimenHistologicGradeImpl.hbm.xml" />
+    <mapping resource="pathology_specimen/SpecimenNottinghamHistologicScore.hbm.xml" />
+    <mapping resource="pathology_specimen/impl/SpecimenNottinghamHistologicScoreImpl.hbm.xml" />
     <mapping resource="pathology_specimen/SpecimenGleasonScore.hbm.xml" />
     <mapping resource="pathology_specimen/impl/SpecimenGleasonScoreImpl.hbm.xml" />
     <mapping resource="pathology_specimen/SpecimenAdditionalFinding.hbm.xml" />
@@ -29,6 +27,18 @@
     <mapping resource="pathology_specimen/impl/ProstateSpecimenGleasonScoreImpl.hbm.xml" />
     <mapping resource="pathology_specimen/BreastSpecimenNottinghamHistologicScore.hbm.xml" />
     <mapping resource="pathology_specimen/impl/BreastSpecimenNottinghamHistologicScoreImpl.hbm.xml" />
+    <mapping resource="pathology_specimen/AssayKit.hbm.xml" />
+    <mapping resource="pathology_specimen/impl/AssayKitImpl.hbm.xml" />
+    <mapping resource="pathology_specimen/Assay.hbm.xml" />
+    <mapping resource="pathology_specimen/impl/AssayImpl.hbm.xml" />
+    <mapping resource="pathology_specimen/SpecimenAnnotation.hbm.xml" />
+    <mapping resource="pathology_specimen/impl/SpecimenAnnotationImpl.hbm.xml" />
+    <mapping resource="pathology_specimen/SpecimenLabAnnotation.hbm.xml" />
+    <mapping resource="pathology_specimen/impl/SpecimenLabAnnotationImpl.hbm.xml" />
+    <mapping resource="pathology_specimen/Biomarker.hbm.xml" />
+    <mapping resource="pathology_specimen/impl/BiomarkerImpl.hbm.xml" />
+    <mapping resource="pathology_specimen/AdditionalPathologicFinding.hbm.xml" />
+    <mapping resource="pathology_specimen/impl/AdditionalPathologicFindingImpl.hbm.xml" />
     <mapping resource="pathology_specimen/SpecimenRecordEntry.hbm.xml" />
     <mapping resource="pathology_specimen/impl/SpecimenRecordEntryImpl.hbm.xml" />
   </session-factory>
