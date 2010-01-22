@@ -124,7 +124,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 	     System.out
 				.println("ScientistRoleTestCases.testCaGridQueryParticipantWithScientistLogin()"+e.getMessage());
 		 e.printStackTrace();
-		 assertFalse("Test failed. to search Particpant", true);
+		 assertFalse(e.getMessage(), true);
 	 }
   }
   /**
@@ -155,7 +155,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 			 System.out
 				.println("ScientistRoleTestCases.testSearchPMIWithScientistLogin():"+e.getMessage());	
 			 e.printStackTrace();
-			 assertFalse("Test failed. to search PMI", true);
+			 assertFalse(e.getMessage(), true);
 		 }
   }
   /**
@@ -189,7 +189,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 					.println("ScientistRoleTestCases.testSearchProtocolRegistrationWithScientistLogin() "+e.getMessage());
 		     Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
-			 assertFalse("Test failed. to search SpecimenCollectionGroup", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	  }
   /**
@@ -243,7 +243,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 					.println("ScientistRoleTestCases.testSearchSpecimenCollectionGroupWithScientistLogin() "+e.getMessage());
 		     Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
-			 assertFalse("Test failed. to search SpecimenCollectionGroup", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	  }
 	  /**
@@ -267,7 +267,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 						.println("ScientistRoleTestCases.testSearchTissueSpecimenWithScientistLogin() "+e.getMessage());
 			     Logger.out.error(e.getMessage(),e);
 				 e.printStackTrace();
-				 assertFalse("Test failed. to search TissueSpecimen", true);
+				 assertFalse(e.getMessage(), true);
 			 }
 		}
 		/**
@@ -291,7 +291,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 						.println("ScientistRoleTestCases.testSearchMolecularSpecimenWithScientistLogin() "+e.getMessage());
 			     Logger.out.error(e.getMessage(),e);
 				 e.printStackTrace();
-				 assertFalse("Test failed. to search MolecularSpecimen", true);
+				 assertFalse(e.getMessage(), true);
 			 }
 		}
 	  /**
@@ -315,7 +315,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 						.println("ScientistRoleTestCases.testSearchCellSpecimenWithScientistLogin() "+e.getMessage());
 			     Logger.out.error(e.getMessage(),e);
 				 e.printStackTrace();
-				 assertFalse("Test failed. to search CellSpecimen", true);
+				 assertFalse(e.getMessage(), true);
 			 }
 		}
 	  /**
@@ -339,7 +339,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 						.println("ScientistRoleTestCases.testSearchFluidSpecimenWithScientistLogin() "+e.getMessage());
 			     Logger.out.error(e.getMessage(),e);
 				 e.printStackTrace();
-				 assertFalse("Test failed. to search FluidSpecimen", true);
+				 assertFalse(e.getMessage(), true);
 			 }
 		}
 	
@@ -373,7 +373,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 				 System.out
 						.println("ScientistRoleTestCases.testSpecimenArrayContentWithScientistLogin()"+e.getMessage());
 				 e.printStackTrace();
-				 assertFalse("Test failed. to search SpecimenArrayContent", true);
+				 assertFalse(e.getMessage(), true);
 			 }
 			
 		}
@@ -406,7 +406,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 				System.out
 						.println("ScientistRoleTestCases.testSearchReceivedEventParameters()"+e.getMessage());
 				e.printStackTrace();
-				assertFalse("Test failed. to search SpecimenArrayContent", true);
+				assertFalse(e.getMessage(), true);
 			}
 		}
 		/**
@@ -437,7 +437,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 				System.out
 						.println("ScientistRoleTestCases.testSearchReceivedEventParameters()"+e.getMessage());
 				e.printStackTrace();
-				assertFalse("Test failed. to search CollectionEventParameters", true);
+				assertFalse(e.getMessage(), true);
 			}
 		}
 		/**
@@ -468,7 +468,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 				System.out
 						.println("ScientistRoleTestCases.testsearchMoleEventparam()"+e.getMessage());
 				e.printStackTrace();
-				assertFalse("could not add object", true);
+				assertFalse(e.getMessage(), true);
 			}
 		}
 		
@@ -501,7 +501,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 				 System.out
 						.println("ScientistRoleTestCases.testSearchDeidentifiedSurgicalPathologyReport()"+e.getMessage());
 				 e.printStackTrace();
-				 assertFalse("Test failed. to search deIfiedSurgicalPathologyReport", true);
+				 assertFalse(e.getMessage(), true);
 			 }
 		}
 		/**
@@ -534,7 +534,7 @@ public class ScientistRoleCaGridTestCases extends CaTissueBaseTestCase
 				System.out
 						.println("ScientistRoleTestCases.testSearchIdentifiedSurgicalPathologyReport()"+e.getMessage());
 				 e.printStackTrace();
-				 assertFalse("Test failed. to search IdentifiedSurgicalPathologyReport", true);
+				 assertFalse(e.getMessage(), true);
 			 }
 		}
 		/**

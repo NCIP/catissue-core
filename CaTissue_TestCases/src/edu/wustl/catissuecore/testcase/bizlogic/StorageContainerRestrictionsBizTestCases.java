@@ -69,7 +69,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	
@@ -151,7 +151,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Failed to create collection protocol", true);
+	           	assertFalse(e.getMessage(), true);
 			}
 			System.out.println("CP:"+cp.getTitle());
 			StorageType ST = BaseTestCaseUtility.initStorageType();			
@@ -161,7 +161,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Failed to create storage type", true);
+	           	assertFalse(e.getMessage(), true);
 			}
 			
 			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
@@ -176,7 +176,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Failed to create storage container", true);
+	           	assertFalse(e.getMessage(), true);
 			}
 			TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
 			System.out.println("Storage Container"+storageContainer.getName()+" successfully created");
@@ -199,7 +199,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			}catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
-				assertFalse("Failed to create Tissue specimen", true);
+				assertFalse(e.getMessage(), true);
 			}
 			
 	}
@@ -216,7 +216,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Failed to create collection protocol", true);
+	           	assertFalse(e.getMessage(), true);
 			}
 			TestCaseUtility.setObjectMap(cp, CollectionProtocol.class);
 			System.out.println("CP:"+cp.getTitle());
@@ -254,7 +254,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to create participant", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		System.out.println("Participant:"+participant.getFirstName());
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -272,7 +272,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		catch (ParseException e)
 		{			
 			e.printStackTrace();
-			assertFalse("Failed to registration date", true);
+			assertFalse(e.getMessage(), true);
 		}
 		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
 		User user = (User)TestCaseUtility.getObjectMap(User.class);
@@ -312,7 +312,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
@@ -328,7 +328,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse(e.getMessage(), true);
 		}		
 		return scg;		
 	}
@@ -360,7 +360,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			box = (StorageType) appService.createObject(box);
 		}
 		catch(Exception e){
-			assertFalse("",true);
+			assertFalse(e.getMessage(),true);
 		}
 		
 		rack = new StorageType();
@@ -381,7 +381,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			rack = (StorageType) appService.createObject(rack);
 		}
 		catch(Exception e){
-			assertFalse("",true);
+			assertFalse(e.getMessage(),true);
 		}
 		
 		
@@ -403,7 +403,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			freezer = (StorageType) appService.createObject(freezer);
 		}
 		catch(Exception e){
-			assertFalse("",true);
+			assertFalse(e.getMessage(),true);
 		}
 		
 	}
@@ -429,7 +429,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			freezerContainer = (StorageContainer) appService.createObject(freezerContainer);
 		}
 		catch(Exception e){
-			assertFalse("",true);
+			assertFalse(e.getMessage(),true);
 		}
 		
 		
@@ -453,7 +453,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			rackContainer = (StorageContainer) appService.createObject(rackContainer);
 		}
 		catch(Exception e){
-			assertFalse("",true);
+			assertFalse(e.getMessage(),true);
 		}
 		
 
@@ -472,7 +472,7 @@ public class StorageContainerRestrictionsBizTestCases extends CaTissueSuiteBaseT
 			assertTrue("created box SC",true);
 		}
 		catch(Exception e){
-			assertFalse("Should not allow",true);
+			assertFalse(e.getMessage(),true);
 		}
 		
 	}

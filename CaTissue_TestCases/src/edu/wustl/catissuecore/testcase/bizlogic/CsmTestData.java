@@ -55,7 +55,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 			}
 			catch(Exception e){
 		       	e.printStackTrace();
-	            assertFalse("Failed to create collection protocol", true);
+	            assertFalse(e.getMessage(), true);
 			}
 			TestCaseUtility.setNameObjectMap("ParticipantUnderCPWithAllowUsePriv", participant);
 			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -109,7 +109,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Failed to register participant", true);
+	           	assertFalse(e.getMessage(), true);
 			}	
 			TestCaseUtility.setNameObjectMap("CPRUnderCPWithAllowUsePriv",collectionProtocolRegistration);
 			
@@ -132,7 +132,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Failed to register participant", true);
+	           	assertFalse(e.getMessage(), true);
 			}
 			
 			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=new IdentifiedSurgicalPathologyReport();
@@ -175,7 +175,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Failed to register participant", true);
+	           	assertFalse(e.getMessage(), true);
 			}
 			TestCaseUtility.setObjectMap(identifiedSurgicalPathologyReport, IdentifiedSurgicalPathologyReport.class);
 					
@@ -199,7 +199,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 		}	catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}  
 
@@ -224,7 +224,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 		}
 		catch(Exception e){
 	       	e.printStackTrace();
-            assertFalse("Failed to create collection protocol", true);
+            assertFalse(e.getMessage(), true);
 		}
 		TestCaseUtility.setNameObjectMap("ParticipantUnderCPWithDisallowUsePriv", participant);
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -260,7 +260,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse(e.getMessage(), true);
 		}	
 		TestCaseUtility.setNameObjectMap("CPRUnderCPWithDisallowReadPriv",collectionProtocolRegistration);
 		
@@ -283,7 +283,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		
 		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=new IdentifiedSurgicalPathologyReport();
@@ -326,7 +326,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		TestCaseUtility.setObjectMap(identifiedSurgicalPathologyReport, IdentifiedSurgicalPathologyReport.class);
 		
@@ -337,7 +337,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 	{
 		Logger.out.error(e.getMessage(),e);
 		e.printStackTrace();
-		assertFalse("Failed to create Domain Object", true);
+		assertFalse(e.getMessage(), true);
 	}
 }
 	
@@ -362,7 +362,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 				}
 				catch(Exception e){
 			       	e.printStackTrace();
-		            assertFalse("Failed to create collection protocol", true);
+		            assertFalse(e.getMessage(), true);
 				}
 				TestCaseUtility.setNameObjectMap("ParticipantWithScientistAsPI", participant);
 				CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -415,7 +415,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 				catch(Exception e){
 					Logger.out.error(e.getMessage(),e);
 		           	e.printStackTrace();
-		           	assertFalse("Failed to register participant", true);
+		           	assertFalse(e.getMessage(), true);
 				}	
 				TestCaseUtility.setNameObjectMap("CPRWithScientistAsPI",collectionProtocolRegistration);
 				
@@ -438,7 +438,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 				catch(Exception e){
 					Logger.out.error(e.getMessage(),e);
 		           	e.printStackTrace();
-		           	assertFalse("Failed to register participant", true);
+		           	assertFalse(e.getMessage(), true);
 				}
 				
 				IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = new IdentifiedSurgicalPathologyReport();
@@ -481,7 +481,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 				catch(Exception e){
 					Logger.out.error(e.getMessage(),e);
 		           	e.printStackTrace();
-		           	assertFalse("Failed to register participant", true);
+		           	assertFalse(e.getMessage(), true);
 				}
 				TestCaseUtility.setObjectMap(identifiedSurgicalPathologyReport, IdentifiedSurgicalPathologyReport.class);
 						
@@ -507,7 +507,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 			{
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
-				assertFalse("Failed to create Domain Object", true);
+				assertFalse(e.getMessage(), true);
 			}
 			
 		}  
@@ -525,7 +525,7 @@ public class CsmTestData extends CaTissueSuiteBaseTest{
 			catch(Exception e){
 				Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Failed to register participant", true);
+	           	assertFalse(e.getMessage(), true);
 			}
 		}  
 			

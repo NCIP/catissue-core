@@ -85,7 +85,7 @@ public class CsmSupervisorTestCases extends CaTissueBaseTestCase {
 				System.out.println(e);
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
-				assertFalse("Failed to create Domain Object", true);
+				assertFalse(e.getMessage(), true);
 			}
 		}  
 	 
@@ -198,7 +198,7 @@ public class CsmSupervisorTestCases extends CaTissueBaseTestCase {
 			{
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
-				assertFalse("Failed to create Specimen Array", true);
+				assertFalse(e.getMessage(), true);
 			}
 		} 
 
@@ -211,7 +211,7 @@ public class CsmSupervisorTestCases extends CaTissueBaseTestCase {
 				catch(Exception e){
 					Logger.out.error(e.getMessage(),e);
 		           	e.printStackTrace();
-		           	assertFalse("Failed to create collection protocol", true);
+		           	assertFalse(e.getMessage(), true);
 				}
 				TestCaseUtility.setObjectMap(participant, Participant.class);
 				System.out.println("Participant:"+participant.getFirstName());
@@ -258,7 +258,7 @@ public class CsmSupervisorTestCases extends CaTissueBaseTestCase {
 				catch(Exception e){
 					Logger.out.error(e.getMessage(),e);
 		           	e.printStackTrace();
-		           	assertFalse("Failed to register participant", true);
+		           	assertFalse(e.getMessage(), true);
 				}
 				System.out.println("CPR::"+collectionProtocolRegistration);
 				TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
@@ -278,7 +278,7 @@ public class CsmSupervisorTestCases extends CaTissueBaseTestCase {
 				catch(Exception e){
 					Logger.out.error(e.getMessage(),e);
 		           	e.printStackTrace();
-		           	assertFalse("Failed to register participant", true);
+		           	assertFalse(e.getMessage(), true);
 				}
 				return scg;				
 		  }

@@ -21,7 +21,7 @@ public class DistributionTestCases extends CaTissueSuiteBaseTest{
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	

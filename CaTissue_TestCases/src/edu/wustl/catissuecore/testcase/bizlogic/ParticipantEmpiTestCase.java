@@ -33,7 +33,7 @@ public class ParticipantEmpiTestCase  extends CaTissueSuiteBaseTest
             System.out.println("ParticipantTestCases.testCreateParticipantWithEMPI()"
                             + e.getMessage());
             e.printStackTrace();
-            assertFalse("could not add object", true);
+            assertFalse(e.getMessage(), true);
         }
     }
     

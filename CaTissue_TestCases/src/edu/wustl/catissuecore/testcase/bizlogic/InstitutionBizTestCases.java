@@ -23,7 +23,7 @@ public class InstitutionBizTestCases extends CaTissueSuiteBaseTest{
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	
@@ -42,7 +42,7 @@ public class InstitutionBizTestCases extends CaTissueSuiteBaseTest{
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 
@@ -96,7 +96,7 @@ public class InstitutionBizTestCases extends CaTissueSuiteBaseTest{
           catch (Exception e) {
            	Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Does not find Domain Object", true);
+           	assertFalse(e.getMessage(), true);
 	 		
           }
 	}

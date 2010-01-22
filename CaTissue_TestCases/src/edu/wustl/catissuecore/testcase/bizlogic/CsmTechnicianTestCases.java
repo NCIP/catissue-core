@@ -73,7 +73,7 @@ public class CsmTechnicianTestCases extends CaTissueBaseTestCase{
 				System.out.println(e);
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
-				assertFalse("Failed to create Domain Object", true);
+				assertFalse(e.getMessage(), true);
 			}
 			
 		}
@@ -167,7 +167,7 @@ public class CsmTechnicianTestCases extends CaTissueBaseTestCase{
 			{
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
-				assertFalse("Failed to create Specimen Array", true);
+				assertFalse(e.getMessage(), true);
 			}
 		}
 

@@ -59,7 +59,7 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
 		{
 			System.out.println("MSRBaseTestCase.createNewSite() : "+ e.getMessage());
 			e.printStackTrace();
-			assertFalse("could not create site", true);
+			assertFalse(e.getMessage(), true);
 		}
 		
 		return site;
@@ -80,7 +80,7 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
 		{
 			System.out.println("MSRBaseTestCase.createNewSiteAdmin() : "+ e.getMessage());
 			e.printStackTrace();
-			assertFalse("could not create site admin", true);
+			assertFalse(e.getMessage(), true);
 		}
 		
 		return user;
@@ -98,7 +98,7 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
         {
             System.out.println("MSRBaseTestCase.createNewSiteSupervisor() : "+ e.getMessage());
             e.printStackTrace();
-            assertFalse("could not create site admin", true);
+            assertFalse(e.getMessage(), true);
         }
         
         return user;
@@ -116,7 +116,7 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
         {
             System.out.println("MSRBaseTestCase.createNewSiteTechnician() : "+ e.getMessage());
             e.printStackTrace();
-            assertFalse("could not create site admin", true);
+            assertFalse(e.getMessage(), true);
         }
         
         return user;
@@ -134,7 +134,7 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
         {
             System.out.println("MSRBaseTestCase.createNewScientist() : "+ e.getMessage());
             e.printStackTrace();
-            assertFalse("could not create site admin", true);
+            assertFalse(e.getMessage(), true);
         }
         
         return user;
@@ -164,7 +164,7 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
         {
             System.out.println("MSRBaseTestCase.createNewSiteAdmin() : "+ e.getMessage());
             e.printStackTrace();
-            assertFalse("could not create site admin", true);
+            assertFalse(e.getMessage(), true);
         }
         
         return user;

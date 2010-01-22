@@ -157,7 +157,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testTransferPositionOFSpecimen()");
 			e.printStackTrace();
-			assertFalse("Container is already Full:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -276,7 +276,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertDisposeSpecimenEvent()");
 			e.printStackTrace();
-			assertFalse("Disposed Specimen Event failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -334,7 +334,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertDisposeSpecimenEvent()");
 			e.printStackTrace();
-			assertFalse("Disposed Specimen Event failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -361,7 +361,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdateDisposeSpecimenEvent()");
 			e.printStackTrace();
-			assertFalse("Disposed event Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -407,7 +407,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertCellSpecimenReviewEvent()");
 			e.printStackTrace();
-			assertFalse("Cell Specimen Review Parameters event Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 
 		}
 	}
@@ -436,7 +436,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdateCellSpecimenReviewParameters()");
 			e.printStackTrace();
-			assertFalse("Cell Specimen Review Parameters event Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -481,7 +481,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertCheckInCheckOutEvent()");
 			e.printStackTrace();
-			assertFalse("CheckInCheckOutEventevent Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 
 		}
 	}
@@ -584,7 +584,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdateCollectionEvent()");
 			e.printStackTrace();
-			assertFalse("CollectionEventParameters Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -629,7 +629,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertEmbeddedEvent()");
 			e.printStackTrace();
-			assertFalse("EmbeddedEventParameters Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 
 		}
 	}
@@ -657,7 +657,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdateEmbeddedEvent()");
 			e.printStackTrace();
-			assertFalse("Embedded Event Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -702,7 +702,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertFixedEvent()");
 			e.printStackTrace();
-			assertFalse("FixedEventParameters Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 
 		}
 	}
@@ -730,7 +730,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdateFixedEvent()");
 			e.printStackTrace();
-			assertFalse("Fixed Event Parameters Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -777,7 +777,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertFluidSpecimenReview()");
 			e.printStackTrace();
-			assertFalse("fluidSpecimenReviewEventParameters Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 
 		}
 	}
@@ -826,7 +826,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdateFluidSpecimenReviewEventParameters()");
 			e.printStackTrace();
-			assertFalse("FluidSpecimenReviewEventParameters Failed to update " + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -873,7 +873,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertFrozenSpecimenReviewEvent()");
 			e.printStackTrace();
-			assertFalse("frozenEventParameters Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 
 		}
 	}
@@ -921,7 +921,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdateFrozenSpecimenReviewEventParameters()");
 			e.printStackTrace();
-			assertFalse("Frozen Specimen Review Event Failed to update " + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -968,7 +968,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertSpunSpecimenEvent()");
 			e.printStackTrace();
-			assertFalse("spunSpecimenEventParameters Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 
 		}
 	}
@@ -1016,7 +1016,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdatetestInsertSpunSpecimenEvent()");
 			e.printStackTrace();
-			assertFalse("SpunSpecimenEventParameters Failed to update " + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -1062,7 +1062,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertThawSpecimenEvent()");
 			e.printStackTrace();
-			assertFalse("ThawSpecimenEventParameters Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 
 		}
 	}
@@ -1110,7 +1110,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdateThawSpecimenEvent()");
 			e.printStackTrace();
-			assertFalse("ThawSpecimenEventParameters Failed to update " + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -1157,7 +1157,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertTissueSpecimenReviewEvent()");
 			e.printStackTrace();
-			assertFalse("TissueSpecimenReviewEventParameters Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -1204,7 +1204,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdateTissueSpecimenReviewEvent()");
 			e.printStackTrace();
-			assertFalse("TissueSpecimenReviewEventParameters Failed to update " + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -1251,7 +1251,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertReceivedSpecimenEvent()");
 			e.printStackTrace();
-			assertFalse("ReceivedEventParameters Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 
 		}
 	}
@@ -1300,7 +1300,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdateReceivedSpecimenEvent()");
 			e.printStackTrace();
-			assertFalse("ReceivedEventParameters Failed to update " + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -1348,7 +1348,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertProcedureSpecimenEvent()");
 			e.printStackTrace();
-			assertFalse("ProcedureEventParameters Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 
 		}
 	}
@@ -1396,7 +1396,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdateProcedureSpecimenEvent()");
 			e.printStackTrace();
-			assertFalse("ProcedureEventParameters Failed to update " + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -1443,7 +1443,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testInsertMolecularSpecimenReviewEvent()");
 			e.printStackTrace();
-			assertFalse("MolecularSpecimenReview Failed:" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 
 		}
 	}
@@ -1492,7 +1492,7 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenEventTestCases.testUpdateMolecularSpecimenReviewEvent()");
 			e.printStackTrace();
-			assertFalse("MolecularSpecimenReviewParameters Failed to update " + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 }

@@ -40,7 +40,7 @@ public class UserBizTestCases extends CaTissueSuiteBaseTest {
 		 catch(Exception e){
 			 System.out.println("UserTestCases.testAddUser()"+ e.getMessage());
 			 e.printStackTrace();
-			 assertFalse("Could not add a User into System", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	 }
 	
@@ -99,7 +99,7 @@ public class UserBizTestCases extends CaTissueSuiteBaseTest {
 		}
 		 catch(Exception e){
 			 e.printStackTrace();
-			 assertFalse("Could not add User with a Scientist Role", true);
+			 assertFalse(e.getMessage(), true);
 		 }		 
 	 }
 	*/
@@ -158,7 +158,7 @@ public class UserBizTestCases extends CaTissueSuiteBaseTest {
 			
 		}catch(Exception e){
 				 e.printStackTrace();
-				 assertFalse("User not added with a Role of Technician", true);
+				 assertFalse(e.getMessage(), true);
 		 }			
 	 } 
 	*/

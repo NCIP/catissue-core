@@ -41,7 +41,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch(Exception e)
 		{
-			assertFalse("Specimen Collection Group Not Updated", true);
+			assertFalse(e.getMessage(), true);
 			Logger.out.error(e.getMessage(),e);
 			System.out
 					.println("SpecimenCollectGroupTestCases.testUpdateSpecimenCollectionGroupWithConsents()"+e.getMessage());
@@ -188,7 +188,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
         	System.out
 					.println("SpecimenCollectGroupTestCases.testSearchSpecimenCollectionGroup()"+e.getMessage());
 	 		e.printStackTrace();
-	 		assertFalse("Couldnot found Specimen", true);  
+	 		assertFalse(e.getMessage(), true);  
           }
 
     }
@@ -207,7 +207,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
         	System.out
 					.println("SpecimenCollectGroupTestCases.testUpdateSpecimenCollectionGroupWithBarcode()"+e.getMessage());
 	 		e.printStackTrace();
-	 		assertFalse("Couldnot found Specimen", true);  
+	 		assertFalse(e.getMessage(), true);  
           }
 	}
 	public void testUpdateSCGWithCaseSensitiveBarcode()
@@ -257,7 +257,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
         	System.out
 					.println("SpecimenCollectGroupTestCases.testSearchScgWithBarcode()"+e.getMessage());
 	 		e.printStackTrace();
-	 		assertFalse("Could not found SCG", true);  
+	 		assertFalse(e.getMessage(), true);  
           }
 
 		
@@ -338,7 +338,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 			System.out
 					.println("SpecimenCollectGroupTestCases.testUpdateSCGWithClosedActivityStatus()"+e.getMessage());
 			e.printStackTrace();			
-			assertFalse("While adding SCG Activity status should be Active"+e.getMessage() , true);
+			assertFalse(e.getMessage() , true);
 		 }
     	
 	}
@@ -365,7 +365,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.error(e.getMessage(),e);
 			System.out.println(e);
 			e.printStackTrace();
-			assertFalse("Should not throw Exception", true);
+			assertFalse(e.getMessage(), true);
 			 
 		 }
     	
@@ -412,7 +412,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 			System.out
 					.println("SpecimenCollectGroupTestCases.testAddSCGWithNameAndEvents() 1"+e.getMessage());
            	e.printStackTrace();
-           	assertFalse("Failed to create collection protocol", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		System.out.println("CP:"+cp.getTitle());
 		Participant participant = BaseTestCaseUtility.initParticipant();
@@ -424,7 +424,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 			System.out
 					.println("SpecimenCollectGroupTestCases.testAddSCGWithNameAndEvents() 2"+e.getMessage());
            	e.printStackTrace();
-           	assertFalse("Failed to create collection protocol", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		System.out.println("Participant:"+participant.getFirstName());
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -470,7 +470,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		
 		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
@@ -561,7 +561,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 			System.out
 					.println("SpecimenCollectGroupTestCases.testAddSCGWithNameAndEvents()"+e.getMessage());
 			e.printStackTrace();
-			assertFalse("SCG Name and Other parameters are not retained", true);
+			assertFalse(e.getMessage(), true);
 		}
 		
 		

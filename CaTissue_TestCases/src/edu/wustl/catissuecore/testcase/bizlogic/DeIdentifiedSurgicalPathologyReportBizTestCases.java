@@ -26,7 +26,7 @@ public class DeIdentifiedSurgicalPathologyReportBizTestCases extends CaTissueSui
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	
@@ -44,7 +44,7 @@ public class DeIdentifiedSurgicalPathologyReportBizTestCases extends CaTissueSui
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 }

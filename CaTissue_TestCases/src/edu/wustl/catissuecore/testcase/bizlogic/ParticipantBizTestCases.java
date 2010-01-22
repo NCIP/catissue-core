@@ -50,7 +50,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 			 System.out
 					.println("ParticipantTestCases.testAddParticipantWithCPR()"+e.getMessage());
 			 e.printStackTrace();
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	
@@ -69,7 +69,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 			 System.out
 					.println("ParticipantTestCases.testAddParticipantWithCPR()"+e.getMessage());
 			 e.printStackTrace();
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	
@@ -156,7 +156,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		{
 			System.out.println("testMatchingParticipant"+ e.getMessage());
 			e.printStackTrace();
-			assertFalse("Not able to retrieve matching participant list using API", true);
+			assertFalse(e.getMessage(), true);
 		}
 		
 	}
@@ -178,7 +178,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 	       	Logger.out.error(e.getMessage(),e);
 	       	System.out.println("ParticipantTestCases.testUpdateParticipant()"+e.getMessage());
 	 		e.printStackTrace();
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 	
@@ -207,7 +207,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 	       	System.out
 					.println("ParticipantTestCases.testUpdateCPRWithBarcode()"+e.getMessage());
 	 		e.printStackTrace();
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 	
@@ -236,7 +236,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 	       	System.out
 					.println("ParticipantTestCases.testUpdateCPRWithCaseSensitiveBarcode()"+e.getMessage());
 	 		e.printStackTrace();
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	    
 	    Participant participant2 =  BaseTestCaseUtility.initParticipantWithCPR();
@@ -259,7 +259,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 	       	System.out
 					.println("ParticipantTestCases.testUpdateCPRWithCaseSensitiveBarcode()"+e.getMessage());
 	 		e.printStackTrace();
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 	
@@ -330,7 +330,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 			Logger.out.error(e.getMessage(),e);
 	 		System.out.println("ParticipantTestCases.testCollectedSCGAndNoOfChildSpecimens() "+e.getMessage());
 			e.printStackTrace();
-	 		assertFalse("Error occured in executing test case", true);
+	 		assertFalse(e.getMessage(), true);
 		}
 	}
 	
@@ -452,7 +452,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		 	 e.printStackTrace();
 		 	 System.out
 					.println("ParticipantTestCases.testAddParticipantRegistrationWithUniquePMI()"+e.getMessage());
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	
@@ -543,7 +543,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		 }
 		 	catch(Exception e){
 			 e.printStackTrace();			 
-			 assertFalse("Unable to create participant", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
 
@@ -597,7 +597,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		 catch(Exception e)
 		 {
 		 	 e.printStackTrace();
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	
@@ -610,7 +610,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		 }
 		 	catch(Exception e){
 			 e.printStackTrace();			 
-			 assertFalse("Unable to create participant", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
 
@@ -688,7 +688,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
-			assertFalse("Can not update ", true);
+			assertFalse(e.getMessage(), true);
 		}
 		
 	}
@@ -774,7 +774,7 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			assertFalse("Can not update PMI testcase!!! ", true);
+			assertFalse(e.getMessage(), true);
 			
 		}
 		

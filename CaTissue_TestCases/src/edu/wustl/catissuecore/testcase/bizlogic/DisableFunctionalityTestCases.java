@@ -215,7 +215,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
      }catch(Exception e){
 		 Logger.out.error(e.getMessage(),e);
 		 e.printStackTrace();
-		 assertFalse("Failed to disable storage Container", true);
+		 assertFalse(e.getMessage(), true);
 	}
     }
 	
@@ -523,7 +523,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
 		
@@ -536,7 +536,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to create site", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		scg.setSpecimenCollectionSite(site);
 		scg.setName("New SCG"+UniqueKeyGeneratorUtil.getUniqueKey());		    
@@ -548,7 +548,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to create SCG", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		
 		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -563,7 +563,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to create specimen", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		
 		
@@ -590,7 +590,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to create collection protocol", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		System.out.println("Participant:"+participant.getFirstName());
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -636,7 +636,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
 		
@@ -653,7 +653,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		return scg;				
 }

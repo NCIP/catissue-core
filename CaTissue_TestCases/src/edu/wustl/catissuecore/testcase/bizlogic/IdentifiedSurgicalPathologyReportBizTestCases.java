@@ -26,7 +26,7 @@ public class IdentifiedSurgicalPathologyReportBizTestCases extends CaTissueSuite
 			 e.printStackTrace();
 			 System.out
 					.println("IdentifiedSurgicalPathologyReportTestCases.testAddIdentifiedSurgicalPathologyReport()"+e.getMessage());
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	
@@ -46,7 +46,7 @@ public class IdentifiedSurgicalPathologyReportBizTestCases extends CaTissueSuite
 	       	System.out
 					.println("IdentifiedSurgicalPathologyReportTestCases.testUpdateIdentifiedSurgicalPathologyReport()"+e.getMessage());
 	 		e.printStackTrace();
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 }

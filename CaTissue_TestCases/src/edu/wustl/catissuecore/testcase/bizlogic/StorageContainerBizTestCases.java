@@ -70,7 +70,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 		 catch(Exception e){
 			 e.printStackTrace();
 			 System.out.println("Can not create Container as container with same name already exist");
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 			
 		 }
 	}
@@ -177,7 +177,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 			 System.out
 					.println("StorageContainerTestCases.testAddParentStorageContainer()");
 			 System.out.println(e.getMessage());
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	/**
@@ -221,7 +221,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 			 System.out
 					.println("StorageContainerTestCases.testAddChildStorageContainer()");
 			 System.out.println(e.getMessage());
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	/**
@@ -313,7 +313,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
           catch (Exception e) {
            	Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Does not find Domain Object", true);
+           	assertFalse(e.getMessage(), true);
 	 		
           }
 	}
@@ -350,7 +350,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 	 		e.printStackTrace();
 	 		System.out
 					.println("StorageContainerTestCases.testUpdateStorageContainer()"+e.getMessage() );
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 	
@@ -388,7 +388,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 		 		e.printStackTrace();
 		 		System.out
 						.println("StorageContainerTestCases.testUpdateStorageContainer()"+e.getMessage() );
-		 		assertFalse("failed to update Object", true);
+		 		assertFalse(e.getMessage(), true);
 		    }
 		     
 			StorageContainer storageContainer = new StorageContainer();
@@ -410,7 +410,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 	          catch (Exception e) {
 	           	Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Does not find Domain Object", true);
+	           	assertFalse(e.getMessage(), true);
 		 		
 	          }
 		}
@@ -433,7 +433,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 	 		e.printStackTrace();
 	 		System.out
 					.println("StorageContainerTestCases.testUpdateStorageContainer()"+e.getMessage() );
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 	
@@ -461,7 +461,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 	 		e.printStackTrace();
 	 		System.out
 					.println("StorageContainerTestCases.testUpdateStorageContainerWithParentChanged()"+e.getMessage());
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 	
@@ -481,7 +481,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 			 e.printStackTrace();
 			 System.out
 					.println("StorageContainerTestCases.testUpdateStorageContainerToClosedActivityStatus()"+e.getMessage());
-			 assertFalse("Could notclose Storage Container", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	
@@ -501,7 +501,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 			 System.out
 					.println("StorageContainerTestCases.testUpdateStorageContainerToDisabledActivityStatus()"+e.getMessage());
 			 e.printStackTrace();
-			 assertFalse("Could not disable Storage Container", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	
@@ -515,7 +515,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 		}catch(Exception e){
 			Logger.out.error(e.getMessage(),e);	
 			e.printStackTrace();	
-			assertFalse("Failed to create site ", true);
+			assertFalse(e.getMessage(), true);
 		}
 		
 		site.setActivityStatus("Closed");
@@ -525,7 +525,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 		 }catch(Exception e){
 			Logger.out.error(e.getMessage(),e);	
 			e.printStackTrace();	
-			assertFalse("Failed to close the site ", true);
+			assertFalse(e.getMessage(), true);
 		 }
 		
 		StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer(); 
@@ -545,7 +545,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 	}catch(Exception e){
 		Logger.out.error(e.getMessage(),e);	
 		e.printStackTrace();	
-		assertFalse("Test Failed", true);
+		assertFalse(e.getMessage(), true);
 	}
   }	
 	public void testAddTissueSpecimenInStorageContainerWithClosedSite()
@@ -557,7 +557,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
-			 assertFalse("Failed to create site", true);
+			 assertFalse(e.getMessage(), true);
 		}		
 		
 			
@@ -568,7 +568,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to create collection protocol", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
 		storageContainer.setSite(site);
@@ -580,7 +580,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 		}catch(Exception e){
 			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
-			 assertFalse("Failed create Storage Container", true);
+			 assertFalse(e.getMessage(), true);
 		}
 		
 		Participant participant = BaseTestCaseUtility.initParticipant();
@@ -591,7 +591,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to create participant", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		System.out.println("Participant:"+participant.getFirstName());
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -609,7 +609,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 		catch (ParseException e)
 		{			
 			e.printStackTrace();
-			assertFalse("Failed to add registration date", true);
+			assertFalse(e.getMessage(), true);
 		}
 		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
 		User user = (User)TestCaseUtility.getObjectMap(User.class);
@@ -639,7 +639,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to register participant", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
@@ -656,7 +656,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
-           	assertFalse("Failed to create SCG", true);
+           	assertFalse(e.getMessage(), true);
 		}
 		
 		site.setActivityStatus("Closed");
@@ -667,7 +667,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 		catch(Exception e){
 			Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
-			 assertFalse("Could not update site", true);
+			 assertFalse(e.getMessage(), true);
 		}
 		
 		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -886,7 +886,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 					System.out.println(e);
 					Logger.out.error(e.getMessage(),e);
 					e.printStackTrace();
-					assertFalse("Failed to create Domain Object", true);
+					assertFalse(e.getMessage(), true);
 				}
 				
 		}
@@ -973,7 +973,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 						System.out.println(e);
 						Logger.out.error(e.getMessage(),e);
 						e.printStackTrace();
-						assertFalse("Failed to update Anticipated  Specimen Object", true);
+						assertFalse(e.getMessage(), true);
 					}
 					
 			}
@@ -1066,7 +1066,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 							.println("SpecimenTestCases.testSpecimenLocatedAtPosition()");
 					System.out.println(e.getMessage());
 					e.printStackTrace();
-					assertFalse("Could not find Specimen Object", true);
+					assertFalse(e.getMessage(), true);
 				}
 		}
 		/**
@@ -1099,7 +1099,7 @@ public class StorageContainerBizTestCases extends CaTissueSuiteBaseTest{
 							.println("SpecimenTestCases.testSearchOccupiedSpecimenPositions()");
 					System.out.println(e.getMessage());
 					e.printStackTrace();
-					assertFalse("Could not find Specimen position ", true);
+					assertFalse(e.getMessage(), true);
 				}
 		}
 		/**

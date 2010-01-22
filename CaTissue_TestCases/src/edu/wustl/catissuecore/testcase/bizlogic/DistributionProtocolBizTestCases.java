@@ -28,7 +28,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
-			 assertFalse("could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	
@@ -51,7 +51,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	          catch (Exception e) {
 	           	Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	       	 assertFalse("could not add object", true);
+	       	 assertFalse(e.getMessage(), true);
 		 		
 	          }
 	}
@@ -78,7 +78,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	          catch (Exception e) {
 	           	Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
-	           	assertFalse("Does not find Distribution protocol Object",true);
+	           	assertFalse("e.getMessage(),true);
 		 		
 	          }
 	}*/
@@ -98,7 +98,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 	
@@ -319,7 +319,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
-	 		assertFalse("Failed to close Distribution Protocol object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 	
@@ -339,7 +339,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
-	 		assertFalse("Failed to disable Distribution Protocol object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 	
@@ -357,7 +357,7 @@ public class DistributionProtocolBizTestCases extends CaTissueSuiteBaseTest{
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
-	 		assertFalse("Failed to create Distribution Protocol object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 }

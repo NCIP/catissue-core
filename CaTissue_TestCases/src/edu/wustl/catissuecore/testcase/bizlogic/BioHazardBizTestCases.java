@@ -22,7 +22,7 @@ public class BioHazardBizTestCases extends CaTissueSuiteBaseTest {
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
-			 assertFalse("Could not add object", true);
+			 assertFalse(e.getMessage(), true);
 		 }
 	}
 	
@@ -67,7 +67,7 @@ public class BioHazardBizTestCases extends CaTissueSuiteBaseTest {
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
-	 		assertFalse("failed to update Object", true);
+	 		assertFalse(e.getMessage(), true);
 	    }
 	}
 	

@@ -80,7 +80,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.error("testUpdateCollectionStatusOfSpecimen" + e.getMessage(), e);
 			System.out.println("SpecimenTestCases.testUpdateCollectionStatusOfSpecimen():" + e.getMessage());
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse(e.getMessage(),true);
 		}
 	}
 
@@ -252,7 +252,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println(e);
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -281,7 +281,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println(e);
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -311,7 +311,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println(e);
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -335,7 +335,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.error("testUpdateCollectionStatusOfSpecimen" + e.getMessage(), e);
 			System.out.println("SpecimenTestCases.testUpdateCollectionStatusOfSpecimen():" + e.getMessage());
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 	}
@@ -360,7 +360,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.error("testUpdateCollectionStatusOfSpecimen" + e.getMessage(), e);
 			System.out.println("SpecimenTestCases.testUpdateCollectionStatusOfSpecimen():" + e.getMessage());
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse(e.getMessage(), true);
 		}
 		TissueSpecimen specimen = (TissueSpecimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
 		specimen.setBarcode("SPECIMEN WITH BARCODE" + uniqueKey);
@@ -376,7 +376,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.error("testUpdateCollectionStatusOfSpecimen" + e.getMessage(), e);
 			System.out.println("SpecimenTestCases.testUpdateCollectionStatusOfSpecimen():" + e.getMessage());
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -403,7 +403,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Couldnot found Specimen", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -433,7 +433,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Couldnot found Specimen", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 	}
@@ -467,7 +467,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println("SpecimenTestCases.testSearchSpecimen()" + e.getMessage());
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Couldnot found Specimen", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 	}
@@ -500,7 +500,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println("SpecimenTestCases.testUpdateTissueSpecimen():" + e.getMessage());
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -532,7 +532,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println("SpecimenTestCases.testUpdateMolecularSpecimen(): " + e.getMessage());
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -552,7 +552,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.error(e.getMessage(), e);
 			System.out.println("SpecimenTestCases.testVerifyConsentResponseAndConsentStatusAtSCG() 1" + e.getMessage());
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		System.out.println("CP:" + cp.getTitle());
 		//TestCaseUtility.setObjectMap(cp, CollectionProtocol.class);
@@ -619,7 +619,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.error(e.getMessage(), e);
 			System.out.println("SpecimenTestCases.testVerifyConsentResponseAndConsentStatusAtSCG()" + e.getMessage());
 			e.printStackTrace();
-			assertFalse("Failed to create", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -639,7 +639,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.error(e.getMessage(), e);
 			System.out.println("SpecimenTestCases.testVerifyConsentResopnseAndConsentStatusForUpadatedCP()" + e.getMessage());
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		System.out.println("CP:" + cp.getTitle());
 		//TestCaseUtility.setObjectMap(cp, CollectionProtocol.class);
@@ -663,7 +663,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.error(e.getMessage(), e);
 			System.out.println("SpecimenTestCases.testVerifyConsentResopnseAndConsentStatusForUpadatedCP()" + e.getMessage());
 			e.printStackTrace();
-			assertFalse("Failed to create", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		CollectionProtocol updatedCP = (CollectionProtocol) updateCP(cp);
@@ -686,7 +686,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		Collection consStatusCol = newSCG.getConsentTierStatusCollection();
@@ -749,7 +749,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		System.out.println("Participant:" + participant.getFirstName());
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -815,7 +815,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to register participant", true);
+			assertFalse(e.getMessage(), true);
 		}
 		//TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
 
@@ -837,7 +837,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to register participant", true);
+			assertFalse(e.getMessage(), true);
 		}
 		return scg;
 	}
@@ -891,7 +891,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.error(e.getMessage(), e);
 			System.out.println("SpecimenTestCases.testVerifyConsentsWithdrawnWithReturnOption()" + e.getMessage());
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		System.out.println("CP:" + cp.getTitle());
 		Participant participant = BaseTestCaseUtility.initParticipant();
@@ -905,7 +905,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Logger.out.error(e.getMessage(), e);
 			System.out.println("SpecimenTestCases.testVerifyConsentsWithdrawnWithReturnOption() 2" + e.getMessage());
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		System.out.println("Participant:" + participant.getFirstName());
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -952,7 +952,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to register participant", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
@@ -972,7 +972,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to rcreate SCG", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		TissueSpecimen ts = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -987,7 +987,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (Exception e)
 		{
-			assertFalse("Failed to create specimen", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		Collection consentTierCollection1 = cp.getConsentTierCollection();
@@ -1025,7 +1025,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to update SCG", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 	}
@@ -1045,7 +1045,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		System.out.println("CP:" + cp.getTitle());
 		Participant participant = BaseTestCaseUtility.initParticipant();
@@ -1058,7 +1058,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		System.out.println("Participant:" + participant.getFirstName());
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -1105,7 +1105,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to register participant", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
@@ -1125,7 +1125,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to rcreate SCG", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		TissueSpecimen ts = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -1140,7 +1140,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (Exception e)
 		{
-			assertFalse("Failed to create specimen", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		Collection consentTierCollection1 = cp.getConsentTierCollection();
@@ -1178,7 +1178,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to update SCG", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 	}
@@ -1199,7 +1199,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		SpecimenCollectionGroup scg = createSCGWithConsents(cp);
 		System.out.println("created scg with 3 consents having yes response");
@@ -1214,7 +1214,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (Exception e)
 		{
-			assertFalse("Failed to create specimen parent", true);
+			assertFalse(e.getMessage(), true);
 		}
 		TissueSpecimen childSpecimen1 = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 		childSpecimen1.setParentSpecimen(ts);
@@ -1230,7 +1230,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (Exception e)
 		{
-			assertFalse("Failed to create specimen child1", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		Collection consentTierStatusCollection = ts.getConsentTierStatusCollection();
@@ -1260,7 +1260,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("SpecimenTestCases.testVerifyConsentResponseChangeWithSpecimenChange()");
 			e.printStackTrace();
-			assertFalse("Failed to update TissueSpecimen after changing consents " + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 
 	}
@@ -1282,7 +1282,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		Participant participant = BaseTestCaseUtility.initParticipant();
@@ -1295,7 +1295,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		System.out.println("Participant:" + participant.getFirstName());
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -1341,7 +1341,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to register participant", true);
+			assertFalse(e.getMessage(), true);
 		}
 	//	TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
 
@@ -1360,7 +1360,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to register participant", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		TissueSpecimen ts = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -1376,7 +1376,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		catch (Exception e)
 		{
 			System.out.println("TestingTestcases.testVerifyConsentResponseChangeWithCPRChange()");
-			assertFalse("Failed to create specimen parent", true);
+			assertFalse(e.getMessage(), true);
 		}
 		Collection consentResponse = collectionProtocolRegistration.getConsentTierResponseCollection();
 		Iterator it = consentResponse.iterator();
@@ -1396,7 +1396,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println("TestingTestcases.testVerifyConsentResponseChangeWithCPRChange()");
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to update CollectionProtocolRegistration", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 	}
@@ -1418,7 +1418,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		SpecimenCollectionGroup scg = createSCGWithConsents(cp);
 		TissueSpecimen ts = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -1432,7 +1432,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (Exception e)
 		{
-			assertFalse("Failed to create specimen parent", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		TissueSpecimen childSpecimen1 = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -1448,7 +1448,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (Exception e)
 		{
-			assertFalse("Failed to create specimen child1", true);
+			assertFalse(e.getMessage(), true);
 		}
 		//change scg responsees
 		Collection newConStatusCol = new LinkedHashSet();
@@ -1481,7 +1481,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println("TestingTestcases.testVerifyConsentResponseChangeWithSCGChangeApplyAll()");
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to update SCG", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 	}
@@ -1507,7 +1507,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		SpecimenCollectionGroup scg = createSCGWithConsents(cp);
 		TissueSpecimen ts = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -1521,7 +1521,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (Exception e)
 		{
-			assertFalse("Failed to create specimen parent", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		TissueSpecimen childSpecimen1 = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -1540,7 +1540,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (Exception e)
 		{
-			assertFalse("Failed to create specimen child1", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		TissueSpecimen childSpecimen2 = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -1558,7 +1558,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (Exception e)
 		{
-			assertFalse("Failed to create specimen child2", true);
+			assertFalse(e.getMessage(), true);
 		}
 		Collection consentTierResponseCollectionChild2 = new HashSet();
 		Collection consentTierCollectionChild2 = cp.getConsentTierCollection();
@@ -1586,7 +1586,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (Exception e)
 		{
-			assertFalse("Failed to update specimen childSpecimen2" + e.getMessage(), true);
+			assertFalse(e.getMessage(), true);
 		}
 		System.out.println("after child update");
 		//change scg responsees
@@ -1619,7 +1619,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println("TestingTestcases.testVerifyConsentResponseChangeWithConflictOption() after scg update");
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to update SCG", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 	}
@@ -1640,7 +1640,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		System.out.println("CP:" + cp.getTitle());
 		Participant participant = BaseTestCaseUtility.initParticipant();
@@ -1652,7 +1652,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		System.out.println("Participant:" + participant.getFirstName());
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
@@ -1696,7 +1696,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to register participant", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
@@ -1716,7 +1716,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create SCG", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		TissueSpecimen ts = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -1730,7 +1730,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (Exception e)
 		{
-			assertFalse("Failed to create specimen", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		Collection consentTierCollection1 = collectionProtocolRegistration.getConsentTierResponseCollection();
@@ -1757,7 +1757,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println("TestingTestcases.testVerifyConsentsWithdrawnWithDiscardOption()");
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to update CollectionProtocolRegistration", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 	}
@@ -1778,7 +1778,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create collection protocol", true);
+			assertFalse(e.getMessage(), true);
 		}
 		System.out.println("CP:" + cp.getTitle());
 		SpecimenCollectionGroup scg = createSCGWithConsents(cp);
@@ -1794,7 +1794,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		}
 		catch (Exception e)
 		{
-			assertFalse("Failed to create specimen", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 		Collection newConStatusCol = new HashSet();
@@ -1828,7 +1828,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println("TestingTestcases.testVerifyConsentsWithdrawnWithDiscardOptionAtSCG()");
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to update SCG", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -1865,7 +1865,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			}
 			catch (Exception e)
 			{
-				assertFalse("Failed to create specimen child1", true);
+				assertFalse(e.getMessage(), true);
 			}
 
 			TissueSpecimen childSpecimen2 = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
@@ -1881,7 +1881,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			}
 			catch (Exception e)
 			{
-				assertFalse("Failed to create specimen child1", true);
+				assertFalse(e.getMessage(), true);
 			}
 
 			System.out.println("Parent label" + specimenObj.getLabel());
@@ -1898,7 +1898,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println(e);
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("Failed to create Domain Object", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -1930,7 +1930,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		catch (Exception e)
 		{
 			System.out.println(e.getMessage());
-			assertFalse("Failed to create specimen child1", true);
+			assertFalse(e.getMessage(), true);
 		}
 
 	}
@@ -1957,7 +1957,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		catch (Exception e)
 		{
 			System.out.println(e.getMessage());
-			assertFalse("Failed to update activity status from active to closed of specimen", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 
@@ -1985,7 +1985,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		catch (Exception e)
 		{
 			System.out.println(e.getMessage());
-			assertFalse("Failed to update activity status from closed to active of specimen", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 	
@@ -1997,7 +1997,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		} catch (Exception e) {
 			Logger.out.error(e.getMessage(), e);
 			e.printStackTrace();
-			assertFalse("failed to update Object", true);
+			assertFalse(e.getMessage(), true);
 		}
 	}
 	 /**
@@ -2083,7 +2083,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 				}
 				catch (Exception e)
 				{
-					assertFalse("Failed to create specimens", true);
+					assertFalse(e.getMessage(), true);
 				}
 				System.out.println("Parent label" + specimenObj.getLabel());
 				System.out.println("Child Specimen label " + childSpecimen1.getLabel());
