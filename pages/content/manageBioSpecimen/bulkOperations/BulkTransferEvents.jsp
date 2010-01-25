@@ -5,6 +5,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.BulkEventOperationsForm"%>
 <%@ page import="java.util.*"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
@@ -15,7 +16,7 @@
 
 <% 
     List speList = (List)request.getAttribute(Constants.SPECIMEN_ID_LIST);
-
+    BulkEventOperationsForm bulkEventOperationsForm =(BulkEventOperationsForm) request.getAttribute("bulkEventOperationsForm");
 	int count= speList.size();
 
 %>
@@ -104,7 +105,8 @@ String specimenList = "specimenId("+specimenId+")"; String specimenToVirLocField
 <!-- To Container Field starts -->
 
 <%
-String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName="+selContainerId+"&amp;pos1="+pos1Id+"&amp;pos2="+pos2Id+"&amp;containerId="+selContainerId;		
+String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName="+selContainerId+"&amp;pos1="+pos1Id+"&amp;pos2="+pos2Id+"&amp;containerId="+selContainerId+"&amp;"+
+Constants.CAN_HOLD_SPECIMEN_CLASS+"="+bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CLASS")+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" +bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CPID");		
 String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"','transferEvents','"+selContainerId+"')";	%> 
 
 <td class="black_ar" width="30%"> <logic:equal name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" > 
