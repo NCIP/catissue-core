@@ -1058,6 +1058,7 @@
 		<!--<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />-->
 		<unjar src="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir}/dynamicextensions/WEB-INF/classes" />
 		<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernateWeb.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
+		<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
 
 		<!-- Inject db specific information to configuration files -->
 		<if>
@@ -1094,6 +1095,7 @@
 	    		<include name="**/hbm/**/*.*"/>
 				<include name="DynamicExtensionsErrorsMessages.properties"/>
 	    		<include name="DynamicExtensionsFileFormats.properties"/>
+				<include name="DynamicExtensionsAuditMetadata.xml" />
 				<include name="DynamicExtensionsApplicationResources.properties" />
 				<include name="uicontrols-captions.properties" />
 				<include name="displaytype-classname-mapping.properties" />
