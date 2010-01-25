@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -34,6 +33,7 @@ import edu.wustl.catissuecore.printservicemodule.SpecimenLabelPrinterImpl;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -51,7 +51,7 @@ import gov.nih.nci.security.authorization.domainobjects.User;
  *
  * @author falguni_sachde
  */
-public class PrintAction extends Action
+public class PrintAction extends XSSSupportedAction
 {
 	/**
 	 * logger.
@@ -76,7 +76,7 @@ public class PrintAction extends Action
 	 *  @throws     BizLogicException BizLogicException
 	 * @return value for ActionForward object
 	 */
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException,BizLogicException
 	{

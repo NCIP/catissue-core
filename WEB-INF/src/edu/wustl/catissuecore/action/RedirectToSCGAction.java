@@ -4,7 +4,6 @@ package edu.wustl.catissuecore.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -12,6 +11,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.dao.DAO;
@@ -22,7 +22,7 @@ import edu.wustl.dao.daofactory.IDAOFactory;
  * @author renuka_bajpai
  *
  */
-public class RedirectToSCGAction extends Action
+public class RedirectToSCGAction extends XSSSupportedAction
 {
 
 	/**
@@ -40,7 +40,7 @@ public class RedirectToSCGAction extends Action
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 

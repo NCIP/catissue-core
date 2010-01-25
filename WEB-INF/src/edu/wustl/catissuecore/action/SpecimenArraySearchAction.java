@@ -68,14 +68,13 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 	 */
 
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServerException
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
 		try
 		{
-			final ActionForward forward = super.execute(mapping, form, request, response);
+			final ActionForward forward = super.executeXSS(mapping, form, request, response);
 			final SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
 			final List specimenTypeList = new ArrayList();
 

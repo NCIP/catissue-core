@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -28,6 +27,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.SpecimenTreeBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 
@@ -36,7 +36,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
  *
  * @author gautam_shetty
  */
-public class ShowFramedPageAction extends Action
+public class ShowFramedPageAction extends XSSSupportedAction
 {
 
 	/**
@@ -55,7 +55,7 @@ public class ShowFramedPageAction extends Action
 	 *             object
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// Sets the pageOf attribute (for Add,Edit or Query Interface)

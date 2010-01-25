@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -36,6 +35,7 @@ import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
@@ -48,7 +48,7 @@ import edu.wustl.dao.exception.DAOException;
  * @author renuka_bajpai
  *
  */
-public class ViewSpecimenSummaryAction extends Action
+public class ViewSpecimenSummaryAction extends XSSSupportedAction
 {
 
 	/**
@@ -72,7 +72,7 @@ public class ViewSpecimenSummaryAction extends Action
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 

@@ -20,7 +20,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -28,6 +27,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ForgotPasswordForm;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -40,7 +40,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * @author gautam_shetty
  */
-public class ForgotPasswordSearchAction extends Action
+public class ForgotPasswordSearchAction extends XSSSupportedAction
 {
 
 	/**
@@ -66,7 +66,7 @@ public class ForgotPasswordSearchAction extends Action
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{

@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -35,6 +34,7 @@ import titli.model.fetch.TitliFetchException;
 import titli.model.util.TitliResultGroup;
 import edu.wustl.catissuecore.actionForm.TitliSearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.PagenatedResultData;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -59,7 +59,7 @@ import edu.wustl.simplequery.query.Table;
  *
  * @author Juber Patel
  */
-public class TitliFetchAction extends Action
+public class TitliFetchAction extends XSSSupportedAction
 {
 
 	/**
@@ -99,7 +99,7 @@ public class TitliFetchAction extends Action
 	 * @return action forward
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		// set the request and session attributes required by DataView.jsp and

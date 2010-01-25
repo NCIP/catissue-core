@@ -41,9 +41,8 @@ public class AddCRGAction extends CommonAddEditAction
 	 * @return ActionForward
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final String crgName = request.getParameter(Constants.CRG_NAME);
 		final CancerResearchBizLogic bizlogic = new CancerResearchBizLogic();
@@ -54,7 +53,7 @@ public class AddCRGAction extends CommonAddEditAction
 		crgForm.setOperation(Constants.ADD);
 		crgForm.setName(crgName);
 
-		final ActionForward forward = super.execute(mapping, crgForm, request, response);
+		final ActionForward forward = super.executeXSS(mapping, crgForm, request, response);
 
 		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{

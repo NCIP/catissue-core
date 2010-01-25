@@ -61,7 +61,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		ActionForward forward = null;
@@ -130,7 +130,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 			participantForm.setConsentResponseBeanCollection(consentResponseBeanCollectionOld);
 			participantForm.setConsentResponseHashTable(consentResponseHashTableOld);
 
-			forward = super.execute(mapping, participantForm, request, response);
+			forward = super.executeXSS(mapping, participantForm, request, response);
 
 			if (!forward.getName().equals("failure"))
 			{

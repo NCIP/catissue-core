@@ -43,8 +43,8 @@ public class ProcessShipmentReceivedAction extends CommonAddEditAction
 	 * @return forward mapping.
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)throws Exception
 	{
 		final CommonEdtAction commonEditAction = new CommonEdtAction();
 		ActionForward forward = mapping.findForward(Constants.FAILURE);
@@ -58,7 +58,7 @@ public class ProcessShipmentReceivedAction extends CommonAddEditAction
 			//bug 11543
 			try
 			{
-				forward = commonEditAction.execute(mapping, form, request, response);
+				forward = commonEditAction.executeXSS(mapping, form, request, response);
 			}
 			catch (final ApplicationException e)
 			{

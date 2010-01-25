@@ -52,9 +52,8 @@ public class SpecimenArrayAddEditAction extends CommonAddEditAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
 		final Map arrayContentMap = (Map) request.getSession().getAttribute(
@@ -91,6 +90,6 @@ public class SpecimenArrayAddEditAction extends CommonAddEditAction
 				exception.printStackTrace();
 			}
 		}
-		return super.execute(mapping, form, request, response);
+		return super.executeXSS(mapping, form, request, response);
 	}
 }

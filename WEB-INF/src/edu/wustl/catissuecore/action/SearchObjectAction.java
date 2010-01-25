@@ -10,12 +10,12 @@ package edu.wustl.catissuecore.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -24,7 +24,7 @@ import edu.wustl.common.util.logger.Logger;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class SearchObjectAction extends Action
+public class SearchObjectAction extends XSSSupportedAction
 {
 
 	/**
@@ -42,7 +42,7 @@ public class SearchObjectAction extends Action
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final Long identifier = Long.valueOf(request.getParameter(Constants.SYSTEM_IDENTIFIER));

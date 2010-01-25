@@ -5649,9 +5649,14 @@ PUBLIC
 			<forward name="login" path="/Login.do?pageOf=SCG" />
 		</action>
 
-
 	   <action path="/AjaxAction" type="edu.wustl.catissuecore.action.CaTissueAjaxAction"
 			scope="request" parameter="method">
+		</action>
+
+		<!-- For XSS violation -->
+		<action path="/XssViolation"
+			type="org.apache.struts.actions.ForwardAction"
+			parameter="/pages/content/common/XssViolationMessage.jsp" >
 		</action>
 
 	</action-mappings>

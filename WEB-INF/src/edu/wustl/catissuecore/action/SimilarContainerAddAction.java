@@ -49,14 +49,13 @@ public class SimilarContainerAddAction extends CommonAddEditAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final StorageContainerForm storageContainerForm = (StorageContainerForm) form;
 		this.logger.info("Map in similarContainerAction:"
 				+ storageContainerForm.getSimilarContainersMap());
-		final ActionForward forward = super.execute(mapping, form, request, response);
+		final ActionForward forward = super.executeXSS(mapping, form, request, response);
 		this.logger.info("forward in similar container add action:" + forward.getName());
 
 		final List list = new ArrayList();

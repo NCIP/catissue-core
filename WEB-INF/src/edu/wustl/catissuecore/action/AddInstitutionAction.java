@@ -42,9 +42,8 @@ public class AddInstitutionAction extends CommonAddEditAction
 	 * @return ActionForward
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final String institutionName = request.getParameter(Constants.INSTITUTION_NAME);
 		final InstitutionBizLogic bizlogic = new InstitutionBizLogic();
@@ -55,7 +54,7 @@ public class AddInstitutionAction extends CommonAddEditAction
 		institutionForm.setOperation(Constants.ADD);
 		institutionForm.setName(institutionName);
 
-		final ActionForward forward = super.execute(mapping, institutionForm, request, response);
+		final ActionForward forward = super.executeXSS(mapping, institutionForm, request, response);
 
 		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{

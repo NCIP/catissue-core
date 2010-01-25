@@ -355,6 +355,29 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
         <taglib-location>/WEB-INF/lib/flex-bootstrap-jsp.jar</taglib-location>
     </taglib>
 
+
+
+	<filter>
+		<filter-name>StingerFilter</filter-name>
+		<filter-class>org.owasp.stinger.StingerFilter</filter-class>
+		<init-param>
+			<param-name>config</param-name>
+			<param-value>stinger.xml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>error-page</param-name>
+			<param-value>/pages/XssViolation.jsp</param-value>
+		</init-param>
+		<init-param>
+			<param-name>reload</param-name>
+			<param-value>false</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>StingerFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	
     <!-- for WebSphere deployment, please uncomment -->
     <!--
     <resource-ref>

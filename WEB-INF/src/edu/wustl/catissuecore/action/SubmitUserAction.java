@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -22,6 +21,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.UserDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.AddNewSessionDataBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -52,7 +52,7 @@ import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 /**
  * @author renuka_bajpai
  */
-public class SubmitUserAction extends Action
+public class SubmitUserAction extends XSSSupportedAction
 {
 
 	/**
@@ -92,7 +92,7 @@ public class SubmitUserAction extends Action
 	 */
 
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws AssignDataException
 	{
 		try

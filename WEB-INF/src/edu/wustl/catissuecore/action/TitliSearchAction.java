@@ -7,7 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -20,6 +19,7 @@ import titli.model.Titli;
 import titli.model.TitliException;
 import titli.model.util.TitliTableMapper;
 import edu.wustl.catissuecore.actionForm.TitliSearchForm;
+import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.global.TitliSearchConstants;
 import edu.wustl.common.util.logger.Logger;
@@ -29,7 +29,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * @author Juber Patel
  */
-public class TitliSearchAction extends Action
+public class TitliSearchAction extends XSSSupportedAction
 {
 
 	/**
@@ -49,7 +49,7 @@ public class TitliSearchAction extends Action
 	 * @return action forward
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
 

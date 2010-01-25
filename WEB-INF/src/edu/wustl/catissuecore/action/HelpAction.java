@@ -10,12 +10,12 @@ package edu.wustl.catissuecore.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.XSSSupportedAction;
 
 /**
  * @author gautam_shetty
@@ -23,7 +23,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class HelpAction extends Action
+public class HelpAction extends XSSSupportedAction
 {
 
 	/**
@@ -42,7 +42,7 @@ public class HelpAction extends Action
 	 */
 
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// TODO Auto-generated method stub

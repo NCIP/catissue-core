@@ -16,19 +16,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.util.global.CommonServiceLocator;
 
 /**
  * This class initializes the fields in the ForgotPassword webpage.
  * @author gautam_shetty
  */
-public class ForgotPasswordAction extends Action
+public class ForgotPasswordAction extends XSSSupportedAction
 {
 
 	/**
@@ -43,7 +43,7 @@ public class ForgotPasswordAction extends Action
 	 * @return value for ActionForward object
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{

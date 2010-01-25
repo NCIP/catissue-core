@@ -56,7 +56,7 @@ public class DistributionSubmitAction extends CommonAddEditAction
 	 * @throws ServletException : ServletException
 	 */
 	@Override
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{
@@ -72,6 +72,14 @@ public class DistributionSubmitAction extends CommonAddEditAction
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
 			this.saveErrors(request, errors);
 			return mapping.findForward(Constants.FAILURE);
+		} catch (Exception e) {
+			this.logger.error(e.getMessage(), e);
+			final ActionErrors errors = new ActionErrors();
+			final ActionError error = new ActionError(e.getMessage());
+			errors.add(ActionErrors.GLOBAL_ERROR, error);
+			this.saveErrors(request, errors);
+			return mapping.findForward(Constants.FAILURE);
+			
 		}
 	}
 
@@ -85,13 +93,10 @@ public class DistributionSubmitAction extends CommonAddEditAction
 	 * @param response
 	 *            object of HttpServletResponse
 	 * @return value for ActionForward object
-	 * @throws IOException : IOException
-	 * @throws ServletException : ServletException
-	 * @throws ApplicationException : ApplicationException
+	 * @throws Exception 
 	 */
 	private ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException, ApplicationException
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
 		final DistributionForm dform = (DistributionForm) form;

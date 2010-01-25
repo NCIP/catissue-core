@@ -14,7 +14,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -25,6 +24,7 @@ import edu.wustl.catissuecore.bean.SummaryPartDetails;
 import edu.wustl.catissuecore.bean.SummarySpDetails;
 import edu.wustl.catissuecore.bizlogic.SummaryBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
@@ -34,7 +34,7 @@ import edu.wustl.common.util.logger.Logger;
  * This class instantiates the QueryBizLogic class and retrieves data
  * from database and populates the SummaryForm
  */
-public class SummaryAction extends Action
+public class SummaryAction extends XSSSupportedAction
 {
 
 	/**
@@ -59,7 +59,7 @@ public class SummaryAction extends Action
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		SummaryForm summaryForm = null;
