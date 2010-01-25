@@ -6,6 +6,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.actionForm.BulkEventOperationsForm;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.exception.ApplicationException;
 
 /**
  * @author renuka_bajpai
@@ -18,10 +22,11 @@ public class BulkTransferEventsAction extends BulkOperationAction
 	 * @param specimenRow : specimenRow
 	 * @param specimenId : specimenId
 	 * @param request : request
+	 * @throws ApplicationException 
 	 */
 	@Override
 	protected void fillFormData(BulkEventOperationsForm eventParametersForm, List specimenRow,
-			String specimenId, HttpServletRequest request)
+			String specimenId, HttpServletRequest request) throws ApplicationException
 	{
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_CLASS", specimenRow.get(2)
 				.toString());
@@ -43,6 +48,8 @@ public class BulkTransferEventsAction extends BulkOperationAction
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_FROMLOCPOS1", specimenRow.get(4)
 				.toString());
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_FROMLOCPOS2", specimenRow.get(5)
+				.toString());
+		eventParametersForm.setFieldValue("ID_" + specimenId + "_CPID", specimenRow.get(7)
 				.toString());
 		//bug 14417
 		/**

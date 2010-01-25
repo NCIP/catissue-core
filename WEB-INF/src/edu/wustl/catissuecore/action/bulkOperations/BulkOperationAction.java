@@ -21,9 +21,11 @@ import edu.wustl.catissuecore.bizlogic.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenEventParametersBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -78,8 +80,7 @@ public abstract class BulkOperationAction extends SecureAction
 				CommonServiceLocator.getInstance().getDatePattern()));
 		eventParametersForm.setTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
 		eventParametersForm.setTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
-
-		setOrderedSpId(specimenIds, eventParametersForm);
+      	setOrderedSpId(specimenIds, eventParametersForm);
 
 		// Set event specific request params
 		this.setEventSpecificRequestParameters(eventParametersForm, request, specimenIds);
@@ -167,12 +168,33 @@ public abstract class BulkOperationAction extends SecureAction
 			{
 				specimenRow = (List) specimenDataList.get(i);
 				specimenId = specimenRow.get(0).toString();
+				//bug 15681
+				Long cpId = this.getCpIdFromSpecimenId( specimenId );
+				specimenRow.add( cpId );
 				/**
 				 * Implemented in BulkTransferEventsAction.java
 				 */
 				this.fillFormData(eventParametersForm, specimenRow, specimenId, request);
 			}
 		}
+	}
+	/**
+	 * Retrieves CP id from specimen id
+	 * @param specimenId - specimen Id
+	 * @return CP id
+	 * @throws ApplicationException - ApplicationException
+	 */
+	private Long getCpIdFromSpecimenId(String specimenId) throws ApplicationException
+	{
+		final String colProtHql = "select scg.collectionProtocolRegistration.collectionProtocol.id"
+			+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,"
+			+ " edu.wustl.catissuecore.domain.Specimen as spec "
+			+ " where spec.specimenCollectionGroup.id=scg.id and spec.id="
+			+ Long.valueOf( specimenId ).longValue();
+		List collectionProtocolIdList;
+		collectionProtocolIdList = AppUtility.executeQuery(colProtHql);
+		final Long collectionProtocolId = (Long) collectionProtocolIdList.get(0);
+		return collectionProtocolId;	
 	}
 
 	/**
@@ -203,8 +225,9 @@ public abstract class BulkOperationAction extends SecureAction
 	 * @param specimenRow : specimenRow
 	 * @param specimenId : specimenId
 	 * @param request : request
+	 * @throws ApplicationException 
 	 */
 	protected abstract void fillFormData(BulkEventOperationsForm eventParametersForm,
-			List specimenRow, String specimenId, HttpServletRequest request);
+			List specimenRow, String specimenId, HttpServletRequest request) throws ApplicationException;
 
 }
