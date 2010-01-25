@@ -4269,12 +4269,6 @@ Thanking You,
 		<delete dir="${temp.dir}" />
     </target>
 
-	<path id="cp">
-		<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
-			<include name="**/*.jar"/>
-		</fileset>
-	</path>
-
 	<property name="operationName" value="" />
 	<property name="dropdownName" value="" />
 	<property name="csvFile" value="" />
@@ -4291,6 +4285,7 @@ Thanking You,
 			<classpath>
 				<fileset dir="./caTissueSuite_Client/lib/">
 					<include name="*.jar" />
+					<exclude name="AdvanceQuery1.2.jar" />
 				</fileset>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
