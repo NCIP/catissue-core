@@ -672,14 +672,12 @@
 		        <include name="jboss-common-client.jar" />
 		   </fileset>
 		</copy>
-		<echo>Integrating the  Bulk Operation Module </echo>
-		<antcall target="unzip_bulkoperation_installable" />
-		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="copy_bulk_operation_mapping_file">
-			<property name="parent.base.dir" value="${basedir}" />
-			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
-			<property name="war.dir" value="catissuecore"/>
-			<property name="jboss.server.url" value="${jboss.server.url}" />
-		</ant>
+		<!--Copying mapping.xml and bulkOperation.properties file-->
+		<copy todir="${basedir}/catissuecore-properties" overwrite="true">
+			<fileset dir="${basedir}">
+				<include name="bulkOperation.properties" />
+			</fileset>
+		</copy>
 	</target>
 	<target name="deploy_ca_model_war" description="deploy the ca_model_war">
 		<antcall target="CopyCAModelWars"/>
@@ -791,26 +789,12 @@
    </target>
 
 	<!--Start of Integrating the Bulk Operation Module  -->
-	<target name="integrate_bulk_operation" description="Start of Integrating the Bulk Operation Module">
-
-		<echo>Integrating the  Bulk Operation Module</echo>
-		<antcall target="unzip_bulkoperation_installable" />
-		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="bulkoperation_integrate_app">
-			<property name="parent.base.dir" value="${base.dir}" />
-			<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
-			<property name="war.dir" value="catissuecore"/>
-			<property name="database.type" value="${database.type}" />
-			<property name="oracle.dialect.string" value="${oracle.dialect.string}" />
-			<property name="mysql.dialect.string" value="${mysql.dialect.string}" />
-		</ant>
-
-	</target>
 
 	<target name="unzip_bulkoperation_installable" depends="bulkoperation_check_prerequisite" description="unzip the bulk operation zip">
 		<unzip src="bulkoperator.zip" dest="${temp.dir}/bulkoperation" overwrite="true" />
 	</target>
 
-	<target name="integrate_bulk_operation_mysql" >
+	<target name="integrate_bulk_operation_mysql" description="Executes the Bulk Operation Mysql commands.">
 		<antcall target="unzip_bulkoperation_installable" />
 		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
 			<property name="database.driver" value="${mysql.driver.string}" />
@@ -823,7 +807,7 @@
 		</ant>
 	</target>
 
-	<target name="integrate_bulk_operation_oracle" >
+	<target name="integrate_bulk_operation_oracle" description="Executes the Bulk Operation Oracle commands.">
 		<antcall target="unzip_bulkoperation_installable" />
 		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
 			<property name="database.driver" value="${oracle.driver.string}" />
@@ -889,7 +873,6 @@
 			<antcall target="pre_initialization" />
 			<antcall target="db_configuration" />
 			<antcall target="integrate_advanced_query"/>
-			<antcall target="integrate_bulk_operation"/>
 			<antcall target="app_configuration"/>
 			<antcall target="generate.cacore.for.xmi" />
 			<antcall target="de_integrate_app" />

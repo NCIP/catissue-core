@@ -273,10 +273,58 @@
 	<!-- build catissuecore war file which is common to above both targets -->
 	<target name="common_build_war" depends ="Default_Label_BarCode_Generator,PrintService_Module,create_war">
 	</target>
+	
+	<!--Start of Integrating the Bulk Operation Module  -->
+	<target name="integrate_bulk_operation" description="Start of Integrating the Bulk Operation Module">
+		
+		<echo>Integrating the  Bulk Operation Module</echo>
+		<antcall target="unzip_bulkoperation_installable" />
+		<ant dir="${base.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="bulkoperation_integrate_app">
+			<property name="deploy.temp.dir" value="${basedir}"/>
+			<property name="bulkoperation.base.dir" value="${basedir}/bulkoperation" />			
+		</ant>
+		<!--Copying bulkOperation.properties file-->
+		<copy todir="${basedir}/catissuecore-properties" overwrite="true">
+			<fileset dir="${basedir}">
+				<include name="bulkOperation.properties" />
+			</fileset>
+		</copy>
+		<delete dir="${basedir}/bulkoperation" />
+
+	</target>
+
+	<target name="unzip_bulkoperation_installable" depends="bulkoperation_check_prerequisite" description="unzip the bulk operation zip">
+		<unzip src="bulkoperator.zip" dest="${basedir}/bulkoperation" overwrite="true" />
+	</target>
+	
+	<target name="bulkoperation_check_prerequisite" description="Check bulkoperation.zip file exists or not in base directory">
+		<!--
+			Check bulkoperation.zip file exists or not in base
+			directory.
+		-->
+		<available file="${base.dir}/bulkoperator.zip" property="file.exists" value="false" />
+		<if>
+			<not>
+				<isset property="file.exists" />
+			</not>
+			<then>
+				<echo
+					message="bulkoperation.zip file not found. It should be in base directory to deploy Bulk Operation."
+					level="error" />
+			</then>
+			<else>
+			   <echo message="Bulk Operation is ready to use."/>
+			</else>
+		</if>
+	</target>
+
+	<!--End of Integrating the Bulk Operation Module  -->
 
 	<target name="create_war">
 		<delete file="catissuecore.war" />
-
+		
+		<antcall target="integrate_bulk_operation" />
+		
 		<copy todir="WEB-INF/lib" overwrite="true">
 			<fileset dir="${base.dir}"  >
 				<include name="Default_label_barcode_gen.jar" />
