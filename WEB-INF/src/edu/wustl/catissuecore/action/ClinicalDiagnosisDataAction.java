@@ -19,12 +19,24 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.dao.exception.DAOException;
 
+/**
+ *
+ * @author
+ * @version
+ */
 public class ClinicalDiagnosisDataAction extends BaseAction
 {
 
 	@Override
+	/**
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -39,7 +51,7 @@ public class ClinicalDiagnosisDataAction extends BaseAction
 
 		Integer total = limitFetch + startFetch;
 
-		List clinicalDiagnosis = getClinicalDiagnosisValues(request, query);
+		List clinicalDiagnosis = getClinicalDiagnosisValues(query);
 
 		List<NameValueBean> clinicalDiagnosisBean = new ArrayList<NameValueBean>();
 		populateQuerySpecificNameValueBeansList(clinicalDiagnosisBean, clinicalDiagnosis, query);
@@ -71,16 +83,13 @@ public class ClinicalDiagnosisDataAction extends BaseAction
 
 	/**
 	 * returns the user list present in the system
-	 * @param request
-	 * @param operation
-	 * @throws BizLogicException 
-	 * @throws DAOException
+	 * @param query
+	 * @throws BizLogicException
 	 */
-	private List getClinicalDiagnosisValues(HttpServletRequest request, String query) throws BizLogicException 
+	private List getClinicalDiagnosisValues(String query) throws BizLogicException
 	{
 		ComboDataBizLogic comboDataBizObj = new ComboDataBizLogic();
-		List clinicalDiagnosisValues = comboDataBizObj.getClinicalDiagnosisList(query,false);
-		return clinicalDiagnosisValues;
+		return comboDataBizObj.getClinicalDiagnosisList(query,false);
 	}
 
 	/**
