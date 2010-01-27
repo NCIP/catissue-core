@@ -476,6 +476,37 @@
 		</java>
 	</target>
 
+	<property name="categoryXmlFileDir" value="E:/wash-u/clinportal/test/inputXML" />
+	<property name="categoryCsvFileDir" value="E:/wash-u/clinportal/test/outputCSV" />
+	<property name="categoryFileDir" value="${categoryCsvFileDir}" />
+	<property name="categorySchemaFile" value="./${de.temp.dir}/conf/category_schema.xsd" />
+	<!-- =================================
+          target: create_category_from_xml
+         ================================= -->
+	<target name="create_category_from_xml" description="Creates category from XML">
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
+		<copy file="./${de.temp.dir}/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
+		<mkdir dir="./log" />
+		<replace file="./log4j.properties">
+			<replacefilter token="@@jbosshome@@" value="." />
+		</replace>
+		<echo message="Creating Categories" />
+		<java classname="edu.common.dynamicextensions.category.XMLToCSVConverter" fork="true" maxmemory="1024M">
+			<arg value="${categoryXmlFileDir}" />
+			<arg value="${categoryCsvFileDir}" />
+			<arg value="${categorySchemaFile}" />
+			<classpath>
+				<fileset dir="${de.temp.dir}">
+					<include name="*.jar" />
+					<exclude name="uml-1.3.jar" />
+				</fileset>
+			</classpath>
+		</java>
+		<antcall target="create_category">
+		</antcall>
+	</target>
 
 	<!-- Target used to create the Category -->
 	<property name="categoryFormNamesFile" value=" " />
@@ -484,7 +515,7 @@
 	<target name="create_category" description="Target used to create the Category">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="categoryCreator.zip" dest="${de.temp.dir}" overwrite="true" />
+		<unzip src="clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
 		<copy file="./${de.temp.dir}/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
 		<mkdir dir="./log" />
 		<replace file="./log4j.properties">
@@ -504,7 +535,6 @@
 				</fileset>
 			</classpath>
 		</java>
-
 	</target>
 
 	<!--This target executes create_all_categories command for all the  category-forms file specified within csv file-->
@@ -530,31 +560,30 @@
 	<!--end of  target create_all_categories -->
 	<property name="permissibleValuesFile" value=" " />
 	<target name="import_permissible_values" description="Import permissible values">
-		<antcall target="setupClassExecutionEnvironment" />
 
-		<mkdir dir="${base.dir}/tempPVDir"/>
-		<copy file="${permissibleValuesFile}" todir="${base.dir}/tempPVDir"/>
-
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
+		<copy file="./${de.temp.dir}/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
+		<mkdir dir="./log" />
+		<replace file="./log4j.properties">
+			<replacefilter token="@@jbosshome@@" value="." />
+		</replace>
+		<echo message="Importing Permissible Values" />
 		<java classname="edu.common.dynamicextensions.util.parser.DynamicallyImportPermissibleValues" fork="true" maxmemory="1024M">
 			<arg value="${permissibleValuesFile}" />
-			<arg value="${base.dir}/tempPVDir"/>
+			<arg value="${pv.dir}" />
 			<arg value="${Application.url}" />
 			<classpath>
-				<pathelement location="${temp.dir.DE}" />
-				<fileset dir="${lib.dir.DE}">
+				<fileset dir="${de.temp.dir}">
 					<include name="*.jar" />
 					<exclude name="uml-1.3.jar" />
-				</fileset>
-				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
 				</fileset>
 			</classpath>
 		</java>
 
 		<delete dir="${base.dir}/tempPVDir" />
 		<delete file="${base.dir}/ImportPVDir.zip" />
-		<delete dir="${de.temp.dir}" />
 
 	</target>
 
@@ -862,6 +891,62 @@
 		</sql>
 	</target>
 
+	<!-- =================================
+	      Audit related targets start
+         ================================= -->
+	<target name="merge.audit.xml" description="merges the metadata file generated for the
+		imported model with main audit metadata file">
+		<java classname="edu.common.dynamicextensions.util.global.XMLUtil" fork="true" maxmemory="1024M">
+			<arg value="${cacore.deployable.dir}/${entity.name}/auditablemetadata.xml" />
+			<arg value="${de.zip.location}/conf/DynamicExtensionsAuditMetadata.xml" />
+			<arg value="${de.zip.location}/conf/auditablemetadataMerged.xml" />
+			<classpath>
+				<pathelement location="${base.dir}/classes/" />
+				<fileset dir="${de.zip.location}/lib/server">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${de.zip.location}/binaries/DynamicExtensionsInterface">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+		<move file="${de.zip.location}/conf/auditablemetadataMerged.xml" tofile="${de.zip.location}/conf/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
+	</target>
+
+	<target name="generate.xml.for.audit" description="generate the audit metadata xml">
+		<property file="${export.dir}/Package.properties" />
+		<propertyregex property="package.name" input="${de.package.name}" regexp="/" replace="." defaultValue="${de.package.name}" />
+
+		<copy todir="${base.dir}/classes/" overwrite="true">
+			<fileset dir="${entity.jar.location}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+
+		<java classname="edu.wustl.common.audit.util.AuditXMLGenerator" fork="true" maxmemory="1024M">
+			<arg value="${package.name}" />
+			<arg value="${cacore.deployable.dir}/${entity.name}/auditablemetadata.xml" />
+			<arg value="true" />
+			<classpath>
+				<pathelement location="${base.dir}/classes/" />
+				<fileset dir="${de.zip.location}/lib/server">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${de.zip.location}/binaries/DynamicExtensionsInterface">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+		<echo message="Audit metadata xml generate for entity group
+		${entity.name} at :${cacore.deployable.dir}/${entity.name}/auditablemetadata.xml" />
+		<delete dir="${base.dir}/classes">
+		</delete>
+	</target>
+	<!-- =================================
+	     Audit related targets end
+         ================================= -->
+
 
 	<!-- =================================
           target: import.xmi.to.generate.cacore
@@ -971,7 +1056,7 @@
 		<property name="version.number" value="1.1" />
 
 		<if>
-			<equals arg1="${import.xmi}" arg2="True" casesensitive="false"/>
+			<equals arg1="${import.xmi}" arg2="True" casesensitive="false" />
 			<then>
 				<echo message=" " />
 				<echo message="-----------------------------------------" />
@@ -1000,7 +1085,7 @@
 				<antcall target="generate.cacore" />
 			</then>
 			<elseif>
-				<equals  arg1="${import.xmi}" arg2="False" casesensitive="false"/>
+				<equals arg1="${import.xmi}" arg2="False" casesensitive="false" />
 				<then>
 					<available file="${cacore.deployable.dir}/${entitygroupname}/" property="cacore.present" />
 
@@ -1009,6 +1094,7 @@
 
 					<echo message="${ORM1CfgFile}" />
 					<echo message="${DEWebCfgFile}" />
+					<antcall target="merge.audit.xml" />
 					<if>
 						<equals arg1="${cacore.present}" arg2="true" />
 						<then>
@@ -1145,8 +1231,8 @@
 				<mkdir dir="${cacore.deployable.dir}/${entitygroupname}" />
 
 				<antcall target="build_artifacts" />
-
-				<copy todir="${cacore.deployable.dir}/${entitygroupname}/" file="${caCOREHibernateCfgFile}" overwrite="true"/>
+				<antcall target="generate.xml.for.audit" />
+				<copy todir="${cacore.deployable.dir}/${entitygroupname}/" file="${caCOREHibernateCfgFile}" overwrite="true" />
 				<copy todir="${cacore.deployable.dir}/${entitygroupname}/" file="${entity.jar.location}/${entitygroupname}.jar" />
 				<delete>
 					<fileset dir="${cacore.dir}">
