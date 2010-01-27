@@ -590,11 +590,10 @@
 		<copy file="printservice_module.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="printservice_client.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="${base.dir}/WEB-INF/lib/PrintCatissueCore_Client.jar" todir="${zip.dir}" overwrite="true" />
-		<copy file="dynamicextensions.zip" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissuePrintWebService.war" todir="${zip.dir}" overwrite="true" />
 		<!--<copy file="shippingtracking.zip" todir="${zip.dir}" overwrite="true" />-->
 		<copy file="dynamicextensions.zip" todir="${zip.dir}" overwrite="true" />
-		<copy file="categoryCreator.zip" todir="${zip.dir}" overwrite="true" />
+		<copy file="clientFormCreator.zip" todir="${zip.dir}" overwrite="true" />
 		<copy file="AdvanceQuery_Installable.zip" todir="${zip.dir}" overwrite="true" />
 		<copy file="bulkoperator.zip" todir="${zip.dir}" overwrite="true" />
 		<copy file="bulkOperation.properties" todir="${zip.dir}" overwrite="true" />
@@ -626,6 +625,10 @@
 
 		<copy todir="${zip.dir}/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/catissuecore-properties" />
+		</copy>
+
+		<copy todir="${zip.dir}/cacore_deployable" overwrite="true">
+			<fileset dir="${base.dir}/cacore_deployable" />
 		</copy>
 
 		<!--copy file="dbunitbuild.xml" todir="${zip.dir}" overwrite="true" />
