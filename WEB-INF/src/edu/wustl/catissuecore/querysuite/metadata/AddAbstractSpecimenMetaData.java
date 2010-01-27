@@ -52,10 +52,10 @@ public class AddAbstractSpecimenMetaData extends BaseMetadata
 		addAssociations.addAssociation(entityName, targetEntityName,
 				"abstractSpecimen_SpecimenEventParameters", "CONTAINTMENT",
 				"specimenEventCollection", true, "abstractSpecimen", "SPECIMEN_ID", null, 2, 1,
-				"BI_DIRECTIONAL");
+				"BI_DIRECTIONAL", false);
 		addAssociations.addAssociation(targetEntityName, entityName,
 				"SpecimenEventParameters_abstractSpecimen", "ASSOCIATION", "abstractSpecimen",
-				false, "", "SPECIMEN_ID", null, 2, 1, "BI_DIRECTIONAL");
+				false, "", "SPECIMEN_ID", null, 2, 1, "BI_DIRECTIONAL", false);
 	}
 
 	/**

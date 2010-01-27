@@ -1312,7 +1312,7 @@
 
 		<!-- shippingtracking db -->
 		<antcall target="st_deploy_db" />
-		<antcall target="upgrade_metadata_for_constraintproperties"/>
+		<!-- <antcall target="upgrade_metadata_for_constraintproperties"/>  -->
 		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" />
 		<!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
 		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" />
@@ -1394,6 +1394,8 @@
 				</fileset>
 			</classpath>
 		</sql>
+
+		<antcall target="upgrade_metadata_for_constraintproperties"/>
 		<antcall target="update_metadata_for_model_changes">
 			 <param name="isUpgrade" value="false"/>
 		</antcall>
@@ -1532,6 +1534,7 @@
 			</classpath>
 		</sql>
 
+		<antcall target="upgrade_metadata_for_constraintproperties"/>
 		<antcall target="update_metadata_for_model_changes" >
 			 <param name="isUpgrade" value="false"/>
 		</antcall>

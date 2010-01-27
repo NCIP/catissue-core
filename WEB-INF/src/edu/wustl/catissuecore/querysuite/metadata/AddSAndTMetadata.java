@@ -49,35 +49,35 @@ public class AddSAndTMetadata extends BaseMetadata
 		addAssociations.addAssociation(entityName, targetEntityName, "CATISSUE_BASE_SHIPMENT",
 				"ASSOCIATION", "senderContactPerson", true,
 				"edu.wustl.catissuecore.domain.shippingtracking.BaseShipment", null,
-				"SENDER_USER_ID", 1, 1, "SRC_DESTINATION");
+				"SENDER_USER_ID", 1, 1, "SRC_DESTINATION", false);
 
 		entityName = "edu.wustl.catissuecore.domain.shippingtracking.BaseShipment";
 		targetEntityName = "edu.wustl.catissuecore.domain.User";
 		addAssociations.addAssociation(entityName, targetEntityName, "CATISSUE_BASE_SHIPMENT",
 				"ASSOCIATION", "receiverContactPerson", true,
 				"edu.wustl.catissuecore.domain.shippingtracking.BaseShipment", null,
-				"RECEIVER_USER_ID", 1, 1, "SRC_DESTINATION");
+				"RECEIVER_USER_ID", 1, 1, "SRC_DESTINATION", false);
 
 		entityName = "edu.wustl.catissuecore.domain.shippingtracking.BaseShipment";
 		targetEntityName = "edu.wustl.catissuecore.domain.Site";
 		addAssociations.addAssociation(entityName, targetEntityName, "CATISSUE_BASE_SHIPMENT",
 				"ASSOCIATION", "senderSite", true,
 				"edu.wustl.catissuecore.domain.shippingtracking.BaseShipment", null,
-				"SENDER_SITE_ID", 1, 1, "SRC_DESTINATION");
+				"SENDER_SITE_ID", 1, 1, "SRC_DESTINATION", false);
 
 		entityName = "edu.wustl.catissuecore.domain.shippingtracking.BaseShipment";
 		targetEntityName = "edu.wustl.catissuecore.domain.Site";
 		addAssociations.addAssociation(entityName, targetEntityName, "CATISSUE_BASE_SHIPMENT",
 				"ASSOCIATION", "receiverSite", true,
 				"edu.wustl.catissuecore.domain.shippingtracking.BaseShipment", null,
-				"RECEIVER_SITE_ID", 1, 1, "SRC_DESTINATION");
+				"RECEIVER_SITE_ID", 1, 1, "SRC_DESTINATION", false);
 
 		entityName = "edu.wustl.catissuecore.domain.shippingtracking.BaseShipment";
 		targetEntityName = "edu.wustl.catissuecore.domain.StorageContainer";
 		addAssociations.addAssociation(entityName, targetEntityName,
 				"CATISSUE_SHIPMENT_CONTAINR_REL", "ASSOCIATION", "containerCollection", true,
 				"edu.wustl.catissuecore.domain.shippingtracking.BaseShipment", "CONTAINER_ID",
-				"BASE_SHIPMENT_ID", 2, 0, "SRC_DESTINATION");
+				"BASE_SHIPMENT_ID", 2, 0, "SRC_DESTINATION", false);
 	}
 
 	/**

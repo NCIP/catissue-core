@@ -96,7 +96,7 @@ public class UpdateMetadata
 			}
 			else
 			{
-				deleteMeatadata();
+				//deleteMeatadata();
 				final List<String> updateSQL = updateSQLForDistributionProtocol();
 				UpdateMetadataUtil.executeSQLs(updateSQL, connection.createStatement(), false);
 				addMetadata();

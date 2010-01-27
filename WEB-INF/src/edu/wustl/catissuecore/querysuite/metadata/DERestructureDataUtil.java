@@ -105,12 +105,11 @@ public class DERestructureDataUtil
 			final String tableName = details[0];
 			final String foreignKey = details[1];
 			final List<Long> containerIDs = staticEntityContainerIdMap.get(staticEntityId);
-			logger.info("Record Entry entity ID------------------"
-					+ recordEntryEntityMap.get(staticEntityId));
-			logger.info("Record Entry Containers------------------" + containerIDs);
+			logger.info("Record Entry entity ID : " + recordEntryEntityMap.get(staticEntityId));
+			logger.info("Record Entry Containers : " + containerIDs);
 			for (Long contId : containerIDs)
 			{
-				logger.info("containerId : " + contId);
+				logger.info("Updating data for containerId : " + contId);
 				Long abstractFormContextId = getAbstractFormContextId(contId);
 				Long categoryEntityId = entityManager.isCategory(contId);
 
@@ -133,7 +132,7 @@ public class DERestructureDataUtil
 				if (parentEntityId != null && parentEntityId != 0)
 				{
 					parentDeTableName = getDETableName(parentEntityId);
-					logger.info("parentDeTableName : " + parentDeTableName);
+					logger.debug("parentDeTableName : " + parentDeTableName);
 					parentEntityForeignKeyName = getforeignKeyName(recordEntryEntityMap
 							.get(staticEntityId), parentEntityId);
 				}
@@ -159,7 +158,7 @@ public class DERestructureDataUtil
 
 					try
 					{
-						logger.info("deTableName:" + deTableName + " -- deRecordId:" + deRecordId
+						logger.debug("deTableName:" + deTableName + " -- deRecordId:" + deRecordId
 								+ " -- staticEntityRecordId:" + staticEntityRecordId
 								+ " -- recordEntryId:" + recordEntryId);
 
@@ -223,6 +222,9 @@ public class DERestructureDataUtil
 		{
 			deTableName = resultSet.getString(1);
 		}
+
+		resultSet.close();
+		statement.close();
 		return deTableName;
 	}
 
@@ -247,7 +249,7 @@ public class DERestructureDataUtil
 	private static Long getParentEntityId(Long entityId) throws SQLException
 
 	{
-		logger.info("Getting parent entity");
+		logger.debug("Getting parent entity");
 		Long parentEntityId = null;
 		String sql = "select parent_entity_id from dyextn_entity where identifier=" + entityId;
 		Statement statement = connection.createStatement();
@@ -256,7 +258,9 @@ public class DERestructureDataUtil
 		{
 			parentEntityId = resultSet.getLong(1);
 		}
-		logger.info("parentEntityId : " + parentEntityId);
+		logger.debug("parentEntityId : " + parentEntityId);
+		resultSet.close();
+		statement.close();
 		return parentEntityId;
 	}
 
@@ -428,7 +432,7 @@ public class DERestructureDataUtil
 	{
 		String sql = "select identifier from dyextn_abstract_form_context where CONTAINER_ID="
 				+ containerId;
-		logger.info(" SQL : " + sql);
+		logger.debug(" SQL : " + sql);
 		Statement statement1 = connection.createStatement();
 		ResultSet resultSet1 = statement1.executeQuery(sql);
 		Long abstractFormContextId = null;

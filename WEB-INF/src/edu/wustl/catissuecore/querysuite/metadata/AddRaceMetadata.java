@@ -52,10 +52,10 @@ public class AddRaceMetadata extends BaseMetadata
 		final AddAssociations addAssociations = new AddAssociations(this.connection);
 		addAssociations.addAssociation(entityName, targetEntityName, "participant_race",
 				"CONTAINTMENT", "raceCollection", true, "participant", "PARTICIPANT_ID", null, 2,
-				1, "BI_DIRECTIONAL");
+				1, "BI_DIRECTIONAL", false);
 		addAssociations.addAssociation(targetEntityName, entityName, "race_participant",
 				"ASSOCIATION", "participant", false, "", "PARTICIPANT_ID", null, 2, 1,
-				"BI_DIRECTIONAL");
+				"BI_DIRECTIONAL", false);
 	}
 
 	/**

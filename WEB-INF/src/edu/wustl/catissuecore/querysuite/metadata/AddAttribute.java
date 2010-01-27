@@ -16,19 +16,21 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * AddAttribute.
+ * @author pooja
+ * @version
  *
  */
 public class AddAttribute extends BaseMetadata
 {
+	public final static String QUANTITY = "quantity";
+	public final static String UNSIGNED_CONSENT = "unsignedConsentDocumentURL";
+	public final static String SIGNED_CONSENT = "signedConsentDocumentURL";
+	public final static String CONSENT_DATE = "consentSignatureDate";
 
 	/**
 	 * Connection instance.
 	 */
 	private Connection connection = null;
-	/**
-	 * Statement instance.
-	 */
-	private Statement stmt = null;
 
 	/**
 	 * add Attribute.
@@ -37,7 +39,6 @@ public class AddAttribute extends BaseMetadata
 	 */
 	public void addAttribute() throws SQLException, IOException
 	{
-		Statement stmt = this.connection.createStatement();
 		final Set<String> keySet = this.entityNameAttributeNameMap.keySet();
 		final Iterator<String> iterator = keySet.iterator();
 		while (iterator.hasNext())
@@ -46,40 +47,15 @@ public class AddAttribute extends BaseMetadata
 			final List<String> attributes = this.entityNameAttributeNameMap.get(entityName);
 			for (final String attr : attributes)
 			{
-				stmt = this.connection.createStatement();
-				String sql = "select max(identifier) from dyextn_abstract_metadata";
-				ResultSet resultSet = stmt.executeQuery(sql);
-				int nextIdOfAbstractMetadata = 0;
-				if (resultSet.next())
-				{
-					final int maxId = resultSet.getInt(1);
-					nextIdOfAbstractMetadata = maxId + 1;
-				}
+				Long nextIdOfAbstractMetadata = getNextId("dyextn_abstract_metadata", "identifier");
+				Long nextIdAttrTypeInfo = getNextId("dyextn_attribute_type_info", "identifier");
+				Long nextIdDatabaseproperties = getNextId("dyextn_database_properties",
+						"identifier");
 
-				int nextIdAttrTypeInfo = 0;
-				sql = "select max(identifier) from dyextn_attribute_type_info";
-				resultSet = stmt.executeQuery(sql);
-				if (resultSet.next())
-				{
-					final int maxId = resultSet.getInt(1);
-					nextIdAttrTypeInfo = maxId + 1;
-				}
-
-				int nextIdDatabaseproperties = 0;
-				sql = "select max(identifier) from dyextn_database_properties";
-				resultSet = stmt.executeQuery(sql);
-				if (resultSet.next())
-				{
-					final int maxId = resultSet.getInt(1);
-					nextIdDatabaseproperties = maxId + 1;
-				}
-				resultSet.close();
-				stmt.close();
-				sql = "INSERT INTO dyextn_abstract_metadata "
-						+ "(IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED,"
-						+ "NAME,PUBLIC_ID)"	+ " values("
-						+ nextIdOfAbstractMetadata + ",NULL,NULL,NULL,'"
-						+ attr + "',null)";
+				String sql = "INSERT INTO dyextn_abstract_metadata "
+						+ "(IDENTIFIER,CREATED_DATE,DESCRIPTION,LAST_UPDATED," + "NAME,PUBLIC_ID)"
+						+ " values(" + nextIdOfAbstractMetadata + ",NULL,NULL,NULL,'" + attr
+						+ "',null)";
 				if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
 				{
 					sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,
@@ -95,88 +71,132 @@ public class AddAttribute extends BaseMetadata
 				sql = "INSERT INTO dyextn_attribute values (" + nextIdOfAbstractMetadata + ","
 						+ entityId + ")";
 				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
-				final String primaryKey = this.attributePrimarkeyMap.get(attr);
-				sql = "insert into dyextn_primitive_attribute "
-						+ "(IDENTIFIER,IS_IDENTIFIED,IS_PRIMARY_KEY,"
-						+ "IS_NULLABLE)" + " values (" + nextIdOfAbstractMetadata
-						+ ",NULL," + primaryKey + ",1)";
-				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 
-				if("1".equals(primaryKey))
-				{
-					sql = "insert into DYEXTN_ENTIY_COMPOSITE_KEY_REL " +
-							"(ENTITY_ID,ATTRIBUTE_ID,INSERTION_ORDER) " +
-							" values (" + entityId + "," + nextIdOfAbstractMetadata +  ",0)";
-					UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
-				}
-
-				sql = "insert into dyextn_attribute_type_info"
-						+ " (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values ("
-						+ nextIdAttrTypeInfo + "," + nextIdOfAbstractMetadata + ")";
-				if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
-				{
-					sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,
-							"dyextn_attribute_type_info");
-				}
-				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
-
-				final String dataType = this
-						.getDataTypeOfAttribute(attr, this.attributeDatatypeMap);
-
-				if (!dataType.equalsIgnoreCase("String") && !dataType.equalsIgnoreCase("date"))
-				{
-					sql = "insert into dyextn_numeric_type_info"
-							+ " (IDENTIFIER,MEASUREMENT_UNITS,DECIMAL_PLACES,"
-							+ "NO_DIGITS)" + " values (" +
-							nextIdAttrTypeInfo + ",NULL,0,NULL)";
-					UpdateMetadataUtil.executeInsertSQL(sql,
-							this.connection.createStatement());
-				}
-
-				if (dataType.equalsIgnoreCase("string"))
-				{
-					sql = "insert into dyextn_string_type_info (IDENTIFIER) values ("
-							+ nextIdAttrTypeInfo + ")";
-				}
-				else if (dataType.equalsIgnoreCase("double"))
-				{
-					sql = "insert into dyextn_double_type_info (IDENTIFIER) values ("
-							+ nextIdAttrTypeInfo + ")";
-				}
-				else if (dataType.equalsIgnoreCase("int"))
-				{
-					sql = "insert into dyextn_integer_type_info (IDENTIFIER) values ("
-							+ nextIdAttrTypeInfo + ")";
-				}
-				else if (dataType.equalsIgnoreCase("long"))
-				{
-					sql = "insert into dyextn_long_type_info (IDENTIFIER) values ("
-							+ nextIdAttrTypeInfo + ")";
-				}
-				else if (dataType.equalsIgnoreCase("date"))
-				{
-					sql = "insert into dyextn_date_type_info (IDENTIFIER,FORMAT) values ("
-							+ nextIdAttrTypeInfo + ",'MM-dd-yyyy')";
-				}
-				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
-
-				final String columnName = this.getColumnNameOfAttribue(attr,
-						this.attributeColumnNameMap);
-				sql = "insert into dyextn_database_properties (IDENTIFIER,NAME) values ("
-						+ nextIdDatabaseproperties + ",'" + columnName + "')";
-				if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
-				{
-					sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,
-							"dyextn_database_properties");
-				}
-				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
-
-				sql = "insert into dyextn_column_properties"
-						+ " (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values ("
-						+ nextIdDatabaseproperties + "," + nextIdOfAbstractMetadata + ")";
-				UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
+				insertAttributeData(attr, nextIdOfAbstractMetadata, nextIdAttrTypeInfo, entityId);
+				insertAttributeType(attr, nextIdAttrTypeInfo);
+				insertDbProp(attr, nextIdOfAbstractMetadata, nextIdDatabaseproperties);
 			}
 		}
+	}
+
+	private void insertAttributeData(String attr, Long nextIdMetadata, Long nextIdAttrType,
+			int entityId) throws SQLException, IOException
+	{
+		String sql;
+		String primaryKey = attributePrimarkeyMap.get(attr);
+		sql = "insert into dyextn_primitive_attribute (IDENTIFIER,IS_IDENTIFIED,IS_PRIMARY_KEY,IS_NULLABLE)"
+				+ " values (" + nextIdMetadata + ",NULL," + primaryKey + ",1)";
+
+		UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
+		if ("1".equals(primaryKey))
+		{
+			sql = "insert into DYEXTN_ENTIY_COMPOSITE_KEY_REL "
+					+ "(ENTITY_ID,ATTRIBUTE_ID,INSERTION_ORDER) " + " values (" + entityId + ","
+					+ nextIdMetadata + ",0)";
+			UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
+		}
+
+		sql = "insert into dyextn_attribute_type_info (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values ("
+				+ nextIdAttrType + "," + nextIdMetadata + ")";
+
+		if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+		{
+			sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,
+					"dyextn_attribute_type_info");
+		}
+
+		UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
+	}
+
+	private void insertAttributeType(String attr, Long nextIdAttrType) throws SQLException,
+			IOException
+	{
+		String dataType = getDataTypeOfAttribute(attr, attributeDatatypeMap);
+		dataType = dataType.trim();
+		String sql = null;
+		//In case of long,integer & double , the entry should be made in two tables
+		if (dataType.equalsIgnoreCase("long") || dataType.equalsIgnoreCase("int")
+				|| dataType.equalsIgnoreCase("double"))
+		{
+			sql = "insert into dyextn_numeric_type_info (IDENTIFIER,MEASUREMENT_UNITS,DECIMAL_PLACES,NO_DIGITS) values ("
+					+ nextIdAttrType + ",NULL,0,NULL)";
+			UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
+		}
+		if (dataType.equalsIgnoreCase("string"))
+		{
+			sql = "insert into dyextn_string_type_info (IDENTIFIER) values (" + nextIdAttrType
+					+ ")";
+		}
+		else if (dataType.equalsIgnoreCase("date"))
+		{
+			sql = "insert into dyextn_date_type_info (IDENTIFIER,FORMAT) values (" + nextIdAttrType
+					+ ",'MM-dd-yyyy')";
+		}
+		else if (dataType.equalsIgnoreCase("boolean"))
+		{
+			sql = "insert into dyextn_boolean_type_info (IDENTIFIER) values (" + nextIdAttrType
+					+ ")";
+		}
+		else
+		{
+			sql = insertNumericType(nextIdAttrType, dataType);
+		}
+		UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
+	}
+
+	private String insertNumericType(Long nextIdAttrType, String dataType)
+	{
+		String sql = null;
+		if (dataType.equalsIgnoreCase("double"))
+		{
+			sql = "insert into dyextn_double_type_info (IDENTIFIER) values (" + nextIdAttrType
+					+ ")";
+		}
+		else if (dataType.equalsIgnoreCase("int"))
+		{
+			sql = "insert into dyextn_integer_type_info (IDENTIFIER) values (" + nextIdAttrType
+					+ ")";
+		}
+		else if (dataType.equalsIgnoreCase("long"))
+		{
+			sql = "insert into dyextn_long_type_info (IDENTIFIER) values (" + nextIdAttrType + ")";
+		}
+		return sql;
+	}
+
+	private void insertDbProp(String attr, Long nextIdMetadata, Long nextIdDbProp)
+			throws SQLException, IOException
+	{
+		String sql;
+		String columnName = getColumnNameOfAttribute(attr, this.attributeColumnNameMap);
+		sql = "insert into dyextn_database_properties (IDENTIFIER,NAME) values (" + nextIdDbProp
+				+ ",'" + columnName + "')";
+		if (Constants.MSSQLSERVER_DATABASE.equalsIgnoreCase(UpdateMetadata.DATABASE_TYPE))
+		{
+			sql = UpdateMetadataUtil.getIndentityInsertStmtForMsSqlServer(sql,
+					"dyextn_database_properties");
+		}
+
+		UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
+		sql = "insert into dyextn_column_properties (IDENTIFIER,PRIMITIVE_ATTRIBUTE_ID) values ("
+				+ nextIdDbProp + "," + nextIdMetadata + ")";
+		UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
+	}
+
+	private Long getNextId(String tablename, String column) throws SQLException
+	{
+		final Statement stmt = this.connection.createStatement();
+		String sql = "select max(" + column + ") from " + tablename;
+		ResultSet resultSet = stmt.executeQuery(sql);
+		long nextId = 0;
+		if (resultSet.next())
+		{
+			long maxId = resultSet.getLong(1);
+			nextId = maxId + 1;
+		}
+		resultSet.close();
+		stmt.close();
+		return nextId;
 	}
 
 	/**
@@ -185,8 +205,7 @@ public class AddAttribute extends BaseMetadata
 	 * @param attributeColumnNameMap attribute Column Name Map
 	 * @return Column Name
 	 */
-	private String getColumnNameOfAttribue(String attr,
-			Map<String, String> attributeColumnNameMap)
+	private String getColumnNameOfAttribute(String attr, Map<String, String> attributeColumnNameMap)
 	{
 		return attributeColumnNameMap.get(attr);
 	}
@@ -208,20 +227,20 @@ public class AddAttribute extends BaseMetadata
 	private void populateEntityAttributeMap()
 	{
 		List<String> attributes = new ArrayList<String>();
-		attributes.add("quantity");
+		attributes.add(QUANTITY);
 		this.entityNameAttributeNameMap.put(
 				"edu.wustl.catissuecore.domain.DistributionSpecimenRequirement", attributes);
 		this.entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.DistributedItem",
 				attributes);
 
 		attributes = new ArrayList<String>();
-		attributes.add("unsignedConsentDocumentURL");
+		attributes.add(UNSIGNED_CONSENT);
 		this.entityNameAttributeNameMap.put("edu.wustl.catissuecore.domain.CollectionProtocol",
 				attributes);
 
 		attributes = new ArrayList<String>();
-		attributes.add("signedConsentDocumentURL");
-		attributes.add("consentSignatureDate");
+		attributes.add(SIGNED_CONSENT);
+		attributes.add(CONSENT_DATE);
 		//attributes.add("barcode");
 		this.entityNameAttributeNameMap.put(
 				"edu.wustl.catissuecore.domain.CollectionProtocolRegistration", attributes);
@@ -236,10 +255,10 @@ public class AddAttribute extends BaseMetadata
 	 */
 	private void populateAttributeColumnNameMap()
 	{
-		this.attributeColumnNameMap.put("quantity", "QUANTITY");
-		this.attributeColumnNameMap.put("unsignedConsentDocumentURL", "UNSIGNED_CONSENT_DOC_URL");
-		this.attributeColumnNameMap.put("signedConsentDocumentURL", "CONSENT_DOC_URL");
-		this.attributeColumnNameMap.put("consentSignatureDate", "CONSENT_SIGN_DATE");
+		this.attributeColumnNameMap.put(QUANTITY, "QUANTITY");
+		this.attributeColumnNameMap.put(UNSIGNED_CONSENT, "UNSIGNED_CONSENT_DOC_URL");
+		this.attributeColumnNameMap.put(SIGNED_CONSENT, "CONSENT_DOC_URL");
+		this.attributeColumnNameMap.put(CONSENT_DATE, "CONSENT_SIGN_DATE");
 		//		attributeColumnNameMap.put("barcode", "BARCODE");
 	}
 
@@ -248,10 +267,10 @@ public class AddAttribute extends BaseMetadata
 	 */
 	private void populateAttributeDatatypeMap()
 	{
-		this.attributeDatatypeMap.put("quantity", "double");
-		this.attributeDatatypeMap.put("unsignedConsentDocumentURL", "string");
-		this.attributeDatatypeMap.put("signedConsentDocumentURL", "string");
-		this.attributeDatatypeMap.put("consentSignatureDate", "date");
+		this.attributeDatatypeMap.put(QUANTITY, "double");
+		this.attributeDatatypeMap.put(UNSIGNED_CONSENT, "string");
+		this.attributeDatatypeMap.put(SIGNED_CONSENT, "string");
+		this.attributeDatatypeMap.put(CONSENT_DATE, "date");
 		//	attributeDatatypeMap.put("barcode", "string");
 	}
 
@@ -260,10 +279,10 @@ public class AddAttribute extends BaseMetadata
 	 */
 	private void populateAttributePrimaryKeyMap()
 	{
-		this.attributePrimarkeyMap.put("quantity", "0");
-		this.attributePrimarkeyMap.put("unsignedConsentDocumentURL", "0");
-		this.attributePrimarkeyMap.put("signedConsentDocumentURL", "0");
-		this.attributePrimarkeyMap.put("consentSignatureDate", "0");
+		this.attributePrimarkeyMap.put(QUANTITY, "0");
+		this.attributePrimarkeyMap.put(UNSIGNED_CONSENT, "0");
+		this.attributePrimarkeyMap.put(SIGNED_CONSENT, "0");
+		this.attributePrimarkeyMap.put(CONSENT_DATE, "0");
 		//	attributePrimarkeyMap.put("barcode", "0");
 	}
 
@@ -288,7 +307,6 @@ public class AddAttribute extends BaseMetadata
 	{
 		super();
 		this.connection = connection;
-		this.stmt = connection.createStatement();
 		this.populateEntityList();
 		this.populateEntityAttributeMap();
 		this.populateAttributeColumnNameMap();
@@ -307,10 +325,8 @@ public class AddAttribute extends BaseMetadata
 	 */
 	public AddAttribute(Connection connection,
 			Map<String, List<String>> entityNameAttributeNameMap,
-			Map<String, String> attributeColumnNameMap,
-			Map<String, String> attributeDatatypeMap,
-			Map<String, String> attributePrimarkeyMap,
-			List<String> entityList)
+			Map<String, String> attributeColumnNameMap, Map<String, String> attributeDatatypeMap,
+			Map<String, String> attributePrimarkeyMap, List<String> entityList)
 	{
 		super();
 		this.connection = connection;
