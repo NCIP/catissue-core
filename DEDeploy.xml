@@ -862,63 +862,6 @@
 		</sql>
 	</target>
 
-	<!-- =================================
-	      Audit related targets start
-         ================================= -->
-	<target name="merge.audit.xml" description="merges the metadata file generated for the
-		imported model with main audit metadata file">
-		<java classname="edu.common.dynamicextensions.util.global.XMLUtil" fork="true" maxmemory="1024M">
-			<arg value="${cacore.deployable.dir}/${entity.name}/auditablemetadata.xml" />
-			<arg value="${de.zip.location}/conf/DynamicExtensionsAuditMetadata.xml" />
-			<arg value="${de.zip.location}/conf/auditablemetadataMerged.xml" />
-			<classpath>
-				<pathelement location="${base.dir}/classes/" />
-				<fileset dir="${de.zip.location}/lib/server">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${de.zip.location}/binaries/DynamicExtensionsInterface">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</java>
-		<move file="${de.zip.location}/conf/auditablemetadataMerged.xml" tofile="${de.zip.location}/conf/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
-	</target>
-
-	<target name="generate.xml.for.audit" description="generate the audit metadata xml">
-		<property file="${export.dir}/Package.properties" />
-		<propertyregex property="package.name" input="${de.package.name}" regexp="/" replace="." defaultValue="${de.package.name}" />
-
-		<copy todir="${base.dir}/classes/" overwrite="true">
-			<fileset dir="${entity.jar.location}">
-				<include name="**/*" />
-			</fileset>
-		</copy>
-
-
-		<java classname="edu.wustl.common.audit.util.AuditXMLGenerator" fork="true" maxmemory="1024M">
-			<arg value="${package.name}" />
-			<arg value="${cacore.deployable.dir}/${entity.name}/auditablemetadata.xml" />
-			<arg value="true" />
-			<classpath>
-				<pathelement location="${base.dir}/classes/" />
-				<fileset dir="${de.zip.location}/lib/server">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${de.zip.location}/binaries/DynamicExtensionsInterface">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</java>
-		<echo message="Audit metadata xml generate for entity group
-		${entity.name} at :${cacore.deployable.dir}/${entity.name}/auditablemetadata.xml" />
-		<delete dir="${base.dir}/classes">
-		</delete>
-		<antcall target="merge.audit.xml" />
-	</target>
-	<!-- =================================
-	     Audit related targets end
-         ================================= -->
-
 
 	<!-- =================================
           target: import.xmi.to.generate.cacore
@@ -1202,8 +1145,8 @@
 				<mkdir dir="${cacore.deployable.dir}/${entitygroupname}" />
 
 				<antcall target="build_artifacts" />
-				<antcall target="generate.xml.for.audit" />
-				<copy todir="${cacore.deployable.dir}/${entitygroupname}/" file="${caCOREHibernateCfgFile}" overwrite="true" />
+
+				<copy todir="${cacore.deployable.dir}/${entitygroupname}/" file="${caCOREHibernateCfgFile}" overwrite="true"/>
 				<copy todir="${cacore.deployable.dir}/${entitygroupname}/" file="${entity.jar.location}/${entitygroupname}.jar" />
 				<delete>
 					<fileset dir="${cacore.dir}">
