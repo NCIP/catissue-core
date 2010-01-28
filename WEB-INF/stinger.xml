@@ -44,6 +44,8 @@ the Stinger project lead at eric.sheridan@owasp.org
 	<exclude-set>
 		<exclude>.*.html</exclude>
 		<exclude>.*.gif</exclude>
+		<exclude>/catissuecore/LoadDynamicExtentionsDataEntryPage.do</exclude>
+		<exclude>/catissuecore/LoadAnnotationDataEntryPage.do</exclude>
 		<exclude>/catissuecore/BulkOperation.do</exclude>
 		<exclude>/catissuecore/BulkHandler.do</exclude>
 		<exclude>/catissuecore/FileUpload.do</exclude>
