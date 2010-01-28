@@ -7,7 +7,7 @@
  * </p>
  * Copyright: Copyright (c) year Company: Washington University, School of
  * Medicine, St. Louis.
- * 
+ *
  * @author Aniruddha Phadnis
  * @version 1.00 Created on Aug 23, 2005
  */
@@ -48,12 +48,13 @@ import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.locator.CSMGroupLocator;
 
 /**
  * DistributionHDAO is used to add distribution information into the database
  * using Hibernate.
- * 
+ *
  * @author aniruddha_phadnis
  */
 /**
@@ -121,12 +122,14 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		// String queryStr =
 		// "select array.distribution_id from catissue_specimen_array array where array.identifier ="
 		// + specimenArrayId;
-		final String queryStr = "select item.distribution_id from catissue_distributed_item item where item.specimen_array_id ="
-				+ specimenArrayId;
+		final String queryStr = "select item.distribution_id from catissue_distributed_item item where item.specimen_array_id = ?";
+		ColumnValueBean columnValueBean= new ColumnValueBean( specimenArrayId);
+		List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+		columnValueBeanList.add(columnValueBean);
 		try
 		{
 			dao = this.openJDBCSession();
-			list = dao.executeQuery(queryStr);
+			list = dao.executeQuery(queryStr,null,columnValueBeanList);
 			if (list != null && !list.isEmpty())
 			{
 				distributed = true;
@@ -144,7 +147,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param obj - AbstractDomainObject. 
+	 * @param obj - AbstractDomainObject.
 	 * @return set of Distribution objects
 	 */
 	private Set getProtectionObjects(AbstractDomainObject obj)
@@ -161,7 +164,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * @param obj - AbstractDomainObject object.
-	 * @return dynamic groups array. 
+	 * @return dynamic groups array.
 	 * @throws BizLogicException throws BizLogicException.
 	 */
 	private String[] getDynamicGroups(AbstractDomainObject obj) throws BizLogicException
@@ -272,9 +275,9 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 					{
 						final Object specimenObjPrev = dao.retrieveById(Specimen.class.getName(),
 								item.getSpecimen().getId());
-					
+
 					}
-					
+
 				}
 				item.setDistribution(distribution);
 
@@ -298,7 +301,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * @param specimen - Specimen object.
-	 * @param quantity - double 
+	 * @param quantity - double
 	 * @return boolean value
 	 */
 	private boolean checkAndSetAvailableQty(Specimen specimen, double quantity)
@@ -676,10 +679,10 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 
 	// Mandar : 04-Apr-06 : bug id:1545 : - Check for removed specimens
 	/**
-	 * @param newDistributedItemCollection - Collection. 
+	 * @param newDistributedItemCollection - Collection.
 	 * @param oldDistributedItemCollection - Collection
 	 * @param dao - DAO object
-	 * @param sessionDataBean 
+	 * @param sessionDataBean
 	 * @throws BizLogicException
 	 */
 	private void updateRemovedSpecimens(Collection newDistributedItemCollection,
@@ -884,7 +887,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Created the list of Specimen Array details
-	 * 
+	 *
 	 * @param distribution
 	 * @param arrayEntries
 	 */
@@ -926,7 +929,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Get the data for distribution
-	 * 
+	 *
 	 * @param dist
 	 * @return
 	 * @throws Exception

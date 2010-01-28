@@ -2307,7 +2307,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			specimenCollection.toArray(array);
 			//final Iterator<AbstractSpecimen> iterator = specimenCollection.iterator();
 			//while (iterator.hasNext())
-			
+
 			for(int i=0;i<array.length;i++)
 			{
 				final Specimen specimen = (Specimen) array[i];
@@ -2323,7 +2323,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					pos2 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionTwo();
 				}
 				this.setSpecimenStorageRecursively(specimen, dao, sessionDataBean, true,pos1,pos2);
-				
+
 			}
 		}
 
@@ -3744,7 +3744,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			//while (iterator.hasNext())
 			for(int i=0;i<array.length;i++)
 			{
-				final Specimen newSpecimen = (Specimen) array[i];	
+				final Specimen newSpecimen = (Specimen) array[i];
 				if(newSpecimen.getSpecimenPosition()!=null)
 				{
 				   position1 = newSpecimen.getSpecimenPosition().getPositionDimensionOne();
@@ -3754,13 +3754,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				if(((position1 == null || position2 == null) && i!=0))
 				{
 				    //bug 15448
-					if(((Specimen) array[i-1]).getSpecimenPosition() != null) 
+					if(((Specimen) array[i-1]).getSpecimenPosition() != null)
 					{
 						position1 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionOne();
-						position2 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionTwo();	
+						position2 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionTwo();
 					}
 				}
-				if(position1 != null && position2 != null) 
+				if(position1 != null && position2 != null)
 				{
 					this.setSpecimenStorageRecursively(newSpecimen, dao, sessionDataBean, true,
 							position1,position2);
@@ -5019,11 +5019,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return aliquotChildCount;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param dao - dao
-	 * @param cpId - cp Id 
+	 * @param cpId - cp Id
 	 * @param specimen - specimen
 	 * @return cp Id
 	 * @throws DAOException - DAOException

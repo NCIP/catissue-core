@@ -1551,7 +1551,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			// TO DO FOR 6756
 			/**
 			 * bug 15684 start
-			 * Used executeQuery() method as Clinical diagnosis with apostrophe in name is giving error 
+			 * Used executeQuery() method as Clinical diagnosis with apostrophe in name is giving error
 			 * while creating query.
 			 */
 			StringBuffer sqlBuff = new StringBuffer();
@@ -1654,13 +1654,13 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		
+
 		/*
 		* catch (ApplicationException e){ logger.debug(e.getMessage(), e);
 		* throw getBizLogicException(null, e.getErrorKeyName(), ""); }
 		*/
 	}
-	
+
 	/**
 	 * Validate cp event.
 	 *

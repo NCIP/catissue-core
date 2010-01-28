@@ -16,6 +16,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 
 public class SummaryBizLogic extends CatissueDefaultBizLogic
 {
@@ -75,7 +76,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 					.put("MoleculeQuantity", this.getSpecimenTypeQuantity(Constants.MOLECULE));
 			summaryDataMap.put("FluidQuantity", this.getSpecimenTypeQuantity(Constants.FLUID));
 
-			//20Jan09 : --------- New Data 
+			//20Jan09 : --------- New Data
 			summaryDataMap.put(Constants.SP_PATHSTAT, this.getPathStatsWiseCount());
 			summaryDataMap.put(Constants.SP_TSITE, this.getTSiteWiseCount());
 			summaryDataMap.put(Constants.P_BYCD, this.getPbyCD());
@@ -123,13 +124,16 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	{
 		String pValDNme = "0";
 		final String sql = "select count(*) from CATISSUE_SPECIMEN specimen join catissue_abstract_specimen absspec "
-				+ " on specimen.identifier=absspec.identifier where absspec.SPECIMEN_CLASS = '"
-				+ specimanType
-				+ "' and specimen.COLLECTION_STATUS = 'Collected' and specimen"
+				+ " on specimen.identifier=absspec.identifier where absspec.SPECIMEN_CLASS = ?"
+
+				+ " and specimen.COLLECTION_STATUS = 'Collected' and specimen"
 				+ DISABLED;
+		ColumnValueBean columnValueBean = new ColumnValueBean(specimanType);
+		List<ColumnValueBean> columnValueBeansList= new ArrayList<ColumnValueBean>();
+		columnValueBeansList.add(columnValueBean);
 		try
 		{
-			final List list = jdbcDAO.executeQuery(sql);
+			final List list = jdbcDAO.executeQuery(sql,null,columnValueBeansList);
 
 			if (!list.isEmpty())
 			{
@@ -181,10 +185,14 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 		String pValDNme = "0";
 		final String sql = "select sum(AVAILABLE_QUANTITY) from CATISSUE_SPECIMEN specimen join"
 				+ " catissue_abstract_specimen absspec on specimen.identifier=absspec.identifier"
-				+ " where absspec.SPECIMEN_CLASS='" + specimanType + "' and specimen" + DISABLED;
+				+ " where absspec.SPECIMEN_CLASS=? and specimen" + DISABLED;
+
+		ColumnValueBean columnValueBean = new ColumnValueBean(specimanType);
+		List<ColumnValueBean> columnValueBeansList = new ArrayList<ColumnValueBean>();
+		columnValueBeansList.add(columnValueBean);
 		try
 		{
-			final List list = jdbcDAO.executeQuery(sql);
+			final List list = jdbcDAO.executeQuery(sql,null,columnValueBeansList);
 
 			if (!list.isEmpty())
 			{
@@ -285,7 +293,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 		return this.getCount(sql);
 	}
 
-	/** 
+	/**
 	 * @return List of user data.
 	 * @throws DAOException throws DAOException
 	 * @throws ClassNotFoundException throws ClassNotFoundException
@@ -432,7 +440,7 @@ public class SummaryBizLogic extends CatissueDefaultBizLogic
 	 * This method will be called to get list of name value pairs.
 	 * @param sql
 	 * @return NameValueBeans
-	 * @throws BizLogicException 
+	 * @throws BizLogicException
 	 */
 	private List<NameValueBean> getNameValuePairs(final String sql) throws BizLogicException
 	{

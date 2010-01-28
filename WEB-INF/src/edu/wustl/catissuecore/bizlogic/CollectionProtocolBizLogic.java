@@ -60,6 +60,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
@@ -83,7 +84,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * Saves the CollectionProtocol object in the database.
 	 * @param obj The CollectionProtocol object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws BizLogicException 
+	 * @throws BizLogicException
 	 * @throws HibernateException Exception thrown during hibernate operations.
 	 */
 	@Override
@@ -166,12 +167,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 	/**
 	 * This function used to insert collection protocol events and specimens.
-	 * for the collectionProtocol object. 
+	 * for the collectionProtocol object.
 	 * @param dao used to insert events and specimens into database.
 	 * @param sessionDataBean Contains session information
 	 * @param collectionProtocol collection protocol for which events & specimens
 	 * to be added
-	 * 
+	 *
 	 * @throws BizLogicException If fails to insert events or its specimens
 	 * @throws UserNotAuthorizedException If user is not authorized or session information
 	 * is incorrect.
@@ -231,7 +232,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @param bizLogic used to call business logic of Specimen.
 	 * @param dao Data access object to insert Specimen Collection groups
 	 * and specimens.
-	 * @param collectionRequirementGroup 
+	 * @param collectionRequirementGroup
 	 * @param sessionDataBean object containing session information which
 	 * is required for authorization.
 	 * @throws BizLogicException
@@ -266,7 +267,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	/**
 	 * This function adds specimen object to its parent's childrenCollection
 	 * if not already added.
-	 * 
+	 *
 	 * @param SpecimenRequirement The object to be added to it's parent childrenCollection
 	 */
 	private void addToParentSpecimen(SpecimenRequirement SpecimenRequirement)
@@ -301,7 +302,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 
 		super.postInsert(obj, dao, sessionDataBean);
-		// Commented by Geeta for removing teh CP 
+		// Commented by Geeta for removing teh CP
 		//ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
 		//participantRegistrationCacheManager.addNewCP(collectionProtocol.getId(), collectionProtocol.getTitle(), collectionProtocol.getShortTitle());
 
@@ -311,7 +312,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
-	 * @throws BizLogicException 
+	 * @throws BizLogicException
 	 */
 	@Override
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
@@ -501,7 +502,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
-	
+
 	/**
 	 * @param dao DAO object.
 	 * @param oldConsentTierCollection old Consent tier collection
@@ -707,7 +708,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 							collectionProtocolEvent);
 				}
 				else
-				{					
+				{
 					oldCollectionProtocolEvent = (CollectionProtocolEvent) this
 							.getCorrespondingOldObject(oldCPEventCollection,
 									collectionProtocolEvent.getId());
@@ -730,14 +731,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 
 		}
-		
+
 	}
 
 	/**
 	 * This method check for Event to delete or not
 	 * @param dao DAO Object
 	 * @param reqSpBiz Object of requirement Sp Bizlogic
-	 * @param cpEventCollection CP Event Collection 
+	 * @param cpEventCollection CP Event Collection
 	 * @param oldCpEventCollection Old Cp Event Collection
 	 * @throws BizLogicException Database related exception
 	 */
@@ -760,7 +761,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 
 	/**
-	 * This method will delete the event and the req spe under that event 
+	 * This method will delete the event and the req spe under that event
 	 * @param dao DAO object
 	 * @param oldCpEvent Persistent CP Event
 	 * @param reqSpBiz Requirement Specimen biz logic object
@@ -797,7 +798,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 
 	/**
-	 * 
+	 *
 	 * @param dao DAO object
 	 * @param sessionDataBean Session details
 	 * @param collectionProtocolEvent CPE Object
@@ -820,7 +821,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-		
+
 	}
 
 	//This method sets the Principal Investigator.
@@ -1004,14 +1005,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		/**
 		 * Start: Change for API Search   --- Jitendra 06/10/2006
 		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization
-		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * on domain object. For example in User object, it was initialized as protected String lastName="";
 		 * So we removed default class level initialization on domain object and are initializing in method
-		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set
 		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
 		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 		 */
 		ApiSearchUtil.setSpecimenProtocolDefault(protocol);
-		//End:-  Change for API Search 
+		//End:-  Change for API Search
 
 		//Added by Ashish
 		final Validator validator = new Validator();
@@ -1036,8 +1037,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		//		if (validator.isEmpty(protocol.getIrbIdentifier()))
 		//		{
 		//		message = ApplicationProperties.getValue("collectionprotocol.irbid");
-		//		throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
-		//		}		
+		//		throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));
+		//		}
 
 		if (protocol.getStartDate() != null)
 		{
@@ -1220,11 +1221,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		final JDBCDAO jdbcDao = this.openJDBCSession();
 
-		final String queryStr = "select title from catissue_specimen_protocol where title = '"
-				+ protocol.getTitle() + "'";
+		final String queryStr = "select title from catissue_specimen_protocol where title = ?";
+		ColumnValueBean columnValueBean = new ColumnValueBean(protocol.getTitle());
+		List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+		columnValueBeanList.add(columnValueBean);
 		try
 		{
-			final List<String> titleList = jdbcDao.executeQuery(queryStr);
+
+			final List<String> titleList = jdbcDao.executeQuery(queryStr,null,columnValueBeanList);
 			if (!titleList.isEmpty())
 			{
 				logger.debug("Collection Protocol with the same Title already exists");
@@ -1258,7 +1262,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		else
 		{
 		}
-		// Commented by Geeta for removing teh CP 
+		// Commented by Geeta for removing teh CP
 		/*
 			ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
 			participantRegistrationCacheManager.updateCPTitle(collectionProtocol.getId(),collectionProtocol.getTitle());
@@ -1326,20 +1330,20 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 	}
 
-	
+
 	/**
 	 * this function retrieves collection protocol and all nested child objects and
 	 * populates bean objects.
 	 * @param id id of CP
 	 * @return list with collection protocol object and hashmap of collection protocol events
-	 * @throws BizLogicException 
+	 * @throws BizLogicException
 	 */
 	/**
 	 * this function retrieves collection protocol and all nested child objects and
 	 * populates bean objects.
 	 * @param id id of CP
 	 * @return list with collection protocol object and hashmap of collection protocol events
-	 * @throws BizLogicException 
+	 * @throws BizLogicException
 	 * TO DO: Move to CollectionProtocolUtil
 	 */
 	public List retrieveCP(Long id) throws BizLogicException
@@ -1475,7 +1479,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 	/**
 	 * populate the CP with associations which otherwise will be loaded lazily
-	 * 
+	 *
 	 * @param collectionProtocol
 	 */
 	private void loadCP(CollectionProtocol collectionProtocol)
@@ -1589,8 +1593,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * Over-ridden for the case of Site Admin user should be able to create
 	 * Collection Protocol for Site to which he belongs
 	 * (non-Javadoc)
-	 * @throws UserNotAuthorizedException 
-	 * @throws BizLogicException 
+	 * @throws UserNotAuthorizedException
+	 * @throws BizLogicException
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
 	@Override
@@ -1698,7 +1702,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		return Permissions.READ_DENIED;
 	}
-	
+
 	/**
 	 * @param id
 	 *            Identifier of the StorageContainer related to which the

@@ -17,6 +17,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 
 
 public class TreeDataBizLogic extends DefaultBizLogic
@@ -32,7 +33,7 @@ public class TreeDataBizLogic extends DefaultBizLogic
 	 * node under the site node.
 	 * @param userId - user id
 	 * @return List of sites with dummy container
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	public List<StorageContainerTreeNode> getSiteWithDummyContainer(Long userId) throws ApplicationException
 	{
@@ -40,7 +41,7 @@ public class TreeDataBizLogic extends DefaultBizLogic
 				+ " site join CATISSUE_STORAGE_CONTAINER sc ON sc.site_id = site.identifier join "
 				+ "CATISSUE_CONTAINER con ON con.identifier = sc.identifier WHERE con.ACTIVITY_STATUS!='Disabled' "
 				+ "GROUP BY site.IDENTIFIER, site.NAME" + " order by upper(site.NAME)";
-		final List<StorageContainerTreeNode> nodeList = 
+		final List<StorageContainerTreeNode> nodeList =
 			new LinkedList<StorageContainerTreeNode>();
 		try
 		{
@@ -79,7 +80,7 @@ public class TreeDataBizLogic extends DefaultBizLogic
 		}
 		return nodeList;
 	}
-	
+
 	/**
 	 * @param identifier
 	 *            Identifier of the container or site node.
@@ -88,7 +89,7 @@ public class TreeDataBizLogic extends DefaultBizLogic
 	 * @param parentId
 	 *            parent identifier of the selected node
 	 * @return conNodeList This List contains all the containers
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 * @Description This method will retrieve all the containers under the
 	 *              selected node
 	 */
@@ -107,8 +108,11 @@ public class TreeDataBizLogic extends DefaultBizLogic
 			}
 			else
 			{
-				final String sql = this.createSql(identifier, parentId);
-				resultList = dao.executeQuery(sql);
+				final String sql = this.createSql();
+				ColumnValueBean columnValueBean = new ColumnValueBean(identifier);
+				List<ColumnValueBean> columnValueBeansList = new ArrayList<ColumnValueBean>();
+				columnValueBeansList.add(columnValueBean);
+				resultList = dao.executeQuery(sql,null,columnValueBeansList);
 			}
 			String containerName = null;
 			Long nodeIdentifier;
@@ -158,7 +162,7 @@ public class TreeDataBizLogic extends DefaultBizLogic
 		}
 		return conNodeList;
 	}
-	
+
 	/**
 	 * @param identifier
 	 *            Identifier of the container or site node
@@ -167,15 +171,14 @@ public class TreeDataBizLogic extends DefaultBizLogic
 	 * @return String SQL This method with return the sql depending on the node
 	 *         clicked (i.e parent Node or child node)
 	 */
-	private String createSql(Long identifier, String parentId)
+	private String createSql()
 	{
 		final String sql = "SELECT cn.IDENTIFIER, cn.name, cn.activity_status, pos.PARENT_CONTAINER_ID,COUNT(sc3.IDENTIFIER) "
 				+ "FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc ON sc.IDENTIFIER=cn.IDENTIFIER "
 				+ "left outer join catissue_container_position pos on pos.CONTAINER_ID=cn.IDENTIFIER left outer join "
 				+ "catissue_container_position con_pos on con_pos.PARENT_CONTAINER_ID=cn.IDENTIFIER left outer join "
 				+ "CATISSUE_STORAGE_CONTAINER sc3 on con_pos.CONTAINER_ID=sc3.IDENTIFIER "
-				+ "WHERE pos.PARENT_CONTAINER_ID= "
-				+ identifier
+				+ "WHERE pos.PARENT_CONTAINER_ID= ?"
 				+ " AND cn.ACTIVITY_STATUS!='Disabled' GROUP BY cn.IDENTIFIER, cn.NAME, cn.activity_status, pos.PARENT_CONTAINER_ID"
 				+ " ORDER BY cn.IDENTIFIER ";
 
@@ -201,10 +204,13 @@ public class TreeDataBizLogic extends DefaultBizLogic
 		final String query = "SELECT cn.IDENTIFIER,cn.NAME,cn.ACTIVITY_STATUS FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc "
 				+ "ON sc.IDENTIFIER=cn.IDENTIFIER join CATISSUE_SITE site "
 				+ "ON sc.site_id = site.identifier WHERE "
-				+ "cn.ACTIVITY_STATUS!='Disabled' AND site_id=" + identifier;
+				+ "cn.ACTIVITY_STATUS!='Disabled' AND site_id= ?";
+		ColumnValueBean columnValueBean = new ColumnValueBean(identifier);
+		List<ColumnValueBean> columnValueBeansList = new ArrayList<ColumnValueBean>();
+		columnValueBeansList.add(columnValueBean);
 		try
 		{
-			storageContainerList = dao.executeQuery(query);
+			storageContainerList = dao.executeQuery(query,null,columnValueBeansList);
 			final Iterator iterator = storageContainerList.iterator();
 			while (iterator.hasNext())
 			{
@@ -217,8 +223,13 @@ public class TreeDataBizLogic extends DefaultBizLogic
 			 */
 			final String childQuery = "SELECT pos.CONTAINER_ID FROM CATISSUE_CONTAINER_POSITION pos "
 					+ "join CATISSUE_STORAGE_CONTAINER sc ON pos.CONTAINER_ID=sc.IDENTIFIER "
-					+ "WHERE sc.site_id=" + identifier;
-			childContainerList = dao.executeQuery(childQuery);
+					+ "WHERE sc.site_id=?";
+
+			ColumnValueBean valueBean = new ColumnValueBean(identifier);
+			List<ColumnValueBean> valueBeansList = new ArrayList<ColumnValueBean>();
+			valueBeansList.add(valueBean);
+
+			childContainerList = dao.executeQuery(childQuery,null,valueBeansList);
 			final Iterator iterator1 = childContainerList.iterator();
 			while (iterator1.hasNext())
 			{
@@ -226,8 +237,8 @@ public class TreeDataBizLogic extends DefaultBizLogic
 				childContainerIds.add(Long.valueOf((String) rowListPos.get(0)));
 			}
 			final Set parentIds = resultSCMap.keySet();
-			//removed all child containers 
-			//this will return set of all parent(1st level) containers 
+			//removed all child containers
+			//this will return set of all parent(1st level) containers
 			parentIds.removeAll(childContainerIds);
 
 			final StringBuffer parentContainerIdsBuffer = new StringBuffer();
@@ -262,13 +273,13 @@ public class TreeDataBizLogic extends DefaultBizLogic
 			 * 2. container name
 			 * 3. site id
 			 * 4. child count
-			 *  
+			 *
 			 */
 			while (parentContainerIterator.hasNext())
 			{
 				final Long id = (Long) parentContainerIterator.next();//parent container id
 				final List strorageContainerList = resultSCMap.get(id);
-				strorageContainerList.add(identifier.toString());//site id			
+				strorageContainerList.add(identifier.toString());//site id
 				if (childCountMap.containsKey(id))
 				{
 					strorageContainerList.add(childCountMap.get(id).toString()); //child count
