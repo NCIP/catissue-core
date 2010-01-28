@@ -114,6 +114,7 @@ import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.query.beans.QueryResultObjectDataBean;
 import edu.wustl.query.bizlogic.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.query.executor.AbstractQueryExecutor;
@@ -1286,6 +1287,21 @@ public class AppUtility
 	{
 		final JDBCDAO jdbcDAO = openJDBCSession();
 		final List list = jdbcDAO.executeQuery(sql);
+		closeJDBCSession(jdbcDAO);
+		return list;
+	}
+
+	/**
+	 * Executes sql Query and returns the results.
+	 * @param sql sql query String
+	 * @param valueBeanList list of column value beans
+	 * @return results list
+	 * @throws ApplicationException instance of ApplicationException
+	 */
+	public static List executeSQLQuery(String sql, List<ColumnValueBean> valueBeanList) throws ApplicationException
+	{
+		final JDBCDAO jdbcDAO = openJDBCSession();
+		final List list = jdbcDAO.executeQuery(sql,null , valueBeanList);
 		closeJDBCSession(jdbcDAO);
 		return list;
 	}
@@ -3313,12 +3329,15 @@ public class AppUtility
 				+ " FROM CATISSUE_PERMISSIBLE_VALUE CA ,CATISSUE_PERMISSIBLE_VALUE CA1"
 				+ " WHERE CA1.IDENTIFIER   = CA.IDENTIFIER"
 				+ " AND CA.PARENT_IDENTIFIER   = CA1.PARENT_IDENTIFIER"
-				+ " AND CA1.PARENT_IDENTIFIER ='" + identifier + "'"
+				+ " AND CA1.PARENT_IDENTIFIER =? "
 				+ " GROUP BY CA1.PARENT_IDENTIFIER";
 
+		ColumnValueBean columnValueBean = new ColumnValueBean(identifier);
+		List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+		columnValueBeanList.add(columnValueBean);
 		try
 		{
-			final List resList = dao.executeQuery(sql);
+			final List resList = dao.executeQuery(sql,null,columnValueBeanList);
 			if (!(resList.isEmpty()))
 			{
 				final Iterator iterator = resList.iterator();
@@ -3476,8 +3495,11 @@ public class AppUtility
 	public static List getSpecimenClassList(String id) throws ApplicationException
 	{
 		final String sql = " SELECT SP.SPECIMEN_CLASS CLASS FROM CATISSUE_STOR_CONT_SPEC_CLASS SP "
-				+ "WHERE SP.STORAGE_CONTAINER_ID = " + id;
-		return getResult(sql);
+				+ "WHERE SP.STORAGE_CONTAINER_ID = ?";
+		ColumnValueBean valueBean = new ColumnValueBean(id);
+		List<ColumnValueBean> valueBeansList = new ArrayList<ColumnValueBean>();
+		valueBeansList.add(valueBean);
+		return getResult(sql,valueBeansList);
 	}
 	/**
 	 * @param id
@@ -3490,11 +3512,13 @@ public class AppUtility
 	{
 		final String sql = "SELECT PV1.value Class, SP.SPECIMEN_TYPE FROM catissue_permissible_value PV,catissue_permissible_value PV1," +
 				"CATISSUE_STOR_CONT_SPEC_TYPE SP WHERE PV.parent_identifier = PV1.identifier and " +
-				"PV1.value in (select specimen_class from catissue_stor_cont_spec_class where storage_container_id="+id+") and " +
-				"pv.value = sp.specimen_type and SP.STORAGE_CONTAINER_ID ="+id+
-				" order by Class";
-
-		return getResult(sql);
+				"PV1.value in (select specimen_class from catissue_stor_cont_spec_class where storage_container_id=? ) and " +
+				"pv.value = sp.specimen_type and SP.STORAGE_CONTAINER_ID =? order by Class";
+		ColumnValueBean valueBean = new ColumnValueBean(id);
+		List<ColumnValueBean> valueBeansList = new ArrayList<ColumnValueBean>();
+		valueBeansList.add(valueBean);
+		valueBeansList.add(valueBean);
+		return getResult(sql,valueBeansList);
 	}
 	/**
 	 * @param id
@@ -3506,20 +3530,26 @@ public class AppUtility
 	public static List getSpecimenTypeList(String id) throws ApplicationException
 	{
 		final String sql = " SELECT SP.SPECIMEN_TYPE FROM CATISSUE_STOR_CONT_SPEC_TYPE SP "
-				+ "WHERE SP.STORAGE_CONTAINER_ID = " + id;
-		return getResult(sql);
+				+ "WHERE SP.STORAGE_CONTAINER_ID = ?";
+		ColumnValueBean bean = new ColumnValueBean(id);
+		List<ColumnValueBean> valueBeanList = new ArrayList<ColumnValueBean>();
+		valueBeanList.add(bean);
+		return getResult(sql,valueBeanList);
 	}
 	/**
 	 *
 	 * @param sql SQL query.
+	 * @param valueBeanList
 	 * @return List
 	 * @throws ApplicationException ApplicationException
 	 */
-	private static List getResult(final String sql) throws ApplicationException
+	private static List getResult(final String sql, List<ColumnValueBean> valueBeanList) throws ApplicationException
 	{
-		final List resultList = executeSQLQuery(sql);
+		final List resultList = executeSQLQuery(sql,valueBeanList);
 		return getListOfString(resultList);
 	}
+
+
 	/**
 	 * @param resultList getListOfString
 	 * @return List resultlist

@@ -48,6 +48,7 @@ import edu.wustl.dao.condition.INClause;
 import edu.wustl.dao.condition.NullClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 
 public final class StorageContainerUtil
 {
@@ -128,13 +129,13 @@ public final class StorageContainerUtil
 		return map;
 	}
    /**
-    * 
+    *
     * @param storageContainer - StorageContainer
     * @param allocatedPositions - allocatedPositions
     * @param dao - DAO object
     * @param pos1 - position one
     * @param pos2 - position two
-    * @return Position object 
+    * @return Position object
     * @throws ApplicationException - ApplicationException
     */
    //Bug 15392
@@ -150,7 +151,7 @@ public final class StorageContainerUtil
 		return position;
 	}
 	/**
-	 * 
+	 *
 	 * @param containerId - containerId
 	 * @param aliquotCount - aliquotCount
 	 * @param positionDimensionOne -  Dimension X
@@ -179,10 +180,10 @@ public final class StorageContainerUtil
 			if(x >= pos1)
 			{
 				final List<NameValueBean> list = new ArrayList<NameValueBean>();
-                if(pos2 == (availablePosistions[x].length-1))                	
+                if(pos2 == (availablePosistions[x].length-1))
                 {
                 	pos2 = 0;
-                	continue;                	
+                	continue;
                 }
 				for (int y = 1; y < availablePosistions[x].length; y++)
 				{
@@ -197,7 +198,7 @@ public final class StorageContainerUtil
 					{
 						list.add(new NameValueBean(new Integer(y), new Integer(y)));
 						count++;
-					}													
+					}
 				}
 				if (!list.isEmpty())
 				{
@@ -282,7 +283,7 @@ public final class StorageContainerUtil
 					}
 				}
 
-			}		
+			}
 	    }
 		catch (final DAOException daoEx)
 		{
@@ -363,7 +364,7 @@ public final class StorageContainerUtil
 			}
 		}
 	}
-	
+
 	/**
 	 * @param containerId
 	 * @param aliquotCount
@@ -419,7 +420,7 @@ public final class StorageContainerUtil
 	}
 
 	/**
-	 * This function returns the first available position in a container which can be allocated. 
+	 * This function returns the first available position in a container which can be allocated.
 	 * If container is full, returns null
 	 * @param container : Container for which available position is to be searched
 	 * @return Position
@@ -466,7 +467,7 @@ public final class StorageContainerUtil
 		}
 		return position;
 	}
-	
+
 	private static Capacity getContainerCapacity(Container container, DAO dao) throws DAOException
 	{
 		Capacity scCapacity = container.getCapacity();
@@ -490,10 +491,10 @@ public final class StorageContainerUtil
 	}
 
 	/**
-	 *  This method gives first valid storage position to a specimen if it is not given. 
+	 *  This method gives first valid storage position to a specimen if it is not given.
 	 *  If storage position is given it validates the storage position
 	 * @param specimen
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	public static void validateStorageLocationForSpecimen(Specimen specimen, DAO dao,
 			HashSet<String> allocatedPositions) throws ApplicationException
@@ -512,8 +513,8 @@ public final class StorageContainerUtil
 				yPos = specimen.getSpecimenPosition().getPositionDimensionTwo();
 			}
 			/**
-			 *  Following code is added to set the x and y dimension in case only storage container is given 
-			 *  and x and y positions are not given 
+			 *  Following code is added to set the x and y dimension in case only storage container is given
+			 *  and x and y positions are not given
 			 */
 
 			if (xPos == null || yPos == null)
@@ -591,7 +592,7 @@ public final class StorageContainerUtil
 	* @param positionsToBeAllocatedList
 	* @param usedPositionsList
 	* @param iCount
-	* @throws ApplicationException 
+	* @throws ApplicationException
 	*/
 	public static void prepareContainerMap(DAO dao, Map similarContainerMap,
 			String containerPrefixKey, List positionsToBeAllocatedList, List usedPositionsList,
@@ -782,7 +783,7 @@ public final class StorageContainerUtil
 				 * changed condition from <= to == as:
 				 * If the first container contains only 1 free position and aliquot count is 2,
 				 * then 1st specimen occupies 1st position and counter increments and becomes 2.
-				 * Which is equal to aliquot count thus the 2nd specimen didn't get any position. 
+				 * Which is equal to aliquot count thus the 2nd specimen didn't get any position.
 				 */
 				if (counter -1  == Integer.parseInt(noOfAliquots))
 				{
@@ -802,7 +803,7 @@ public final class StorageContainerUtil
 			for (int j = 0; j < xDim.length; j++)
 			{
 				final List yDimList = (List) xDimMap.get(xDim[j]);
-		//  bug commeneted as it was looking for container having positions for all aliquots in one row only 
+		//  bug commeneted as it was looking for container having positions for all aliquots in one row only
 				//bug 15085
 //				if(!(yDimList.size()>=Integer.parseInt(noOfAliquots)))
 //				{
@@ -820,7 +821,7 @@ public final class StorageContainerUtil
 						aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
 						aliquotMap.put(pos2Key, ((NameValueBean) yDimList.get(k)).getValue());
                         counter++;
-                        
+
 					}
 					else
 					{
@@ -873,7 +874,7 @@ public final class StorageContainerUtil
 	 * @param object
 	 * @param aliquotMap
 	 * @param usedPositionsList
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	public static void allocatePositionToSingleContainerOrSpecimen(Object object, Map aliquotMap,
 			HashSet<String> allocatedPositions, String spKey, String scId, DAO dao) throws ApplicationException
@@ -909,7 +910,7 @@ public final class StorageContainerUtil
 	}
 
 	/**
-	 * 
+	 *
 	 * @param pos1 - position one
 	 * @param pos2 - position two
 	 * @return - boolean
@@ -957,7 +958,7 @@ public final class StorageContainerUtil
 		}
 		return flag;
 	}
-	
+
 	/**
 	 * Description: This method is used to create storage location key value.
 	 * Used while updating or inserting Specimen
@@ -992,7 +993,7 @@ public final class StorageContainerUtil
 	}
 
 	/**
-	 * 
+	 *
 	 * @param containerMap - containerMap
 	 * @param containerId - containerId
 	 * @param xPos - xPos
@@ -1024,7 +1025,7 @@ public final class StorageContainerUtil
 							relevanceCnt = containerName.getRelevanceCounter();
 							break;
 						}
-					}					
+					}
 					NameValueBean nvBean = new NameValueBean(parentContainerName,Long.valueOf( containerId ),relevanceCnt);
 					Map positionMap = (Map) containerMap.get(nvBean);
 					if (positionMap == null)
@@ -1039,7 +1040,7 @@ public final class StorageContainerUtil
 					list.add(0,new NameValueBean(yPos, yPos));
 					positionMap.put(new NameValueBean(xPos, xPos), list);
 					containerMap.put(new NameValueBean(parentContainerName, Long.valueOf( containerId ),relevanceCnt), positionMap);
-				
+
 				}
 			}
 			catch (final DAOException e)
@@ -1050,7 +1051,7 @@ public final class StorageContainerUtil
 			}
 		}
 	}
-	
+
 	/**
 	 * Checking for available position.
 	 * @param jdbcDao JDBCDAO object
@@ -1108,7 +1109,7 @@ public final class StorageContainerUtil
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Checking specimen.
 	 * @param jdbcDao JDBCDAO object
@@ -1117,7 +1118,7 @@ public final class StorageContainerUtil
 	 * @param pos1 position dim 1
 	 * @param pos2 position dim 2
 	 * @return Boolean
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	private static boolean isSpecimenAssigned(JDBCDAO jdbcDao, String containerId, String containerName,
 			String pos1, String pos2) throws ApplicationException
@@ -1142,7 +1143,7 @@ public final class StorageContainerUtil
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get count of container's free location.
 	 * @param jdbcDAO JDBCDAO object
@@ -1165,15 +1166,18 @@ public final class StorageContainerUtil
 		query
 				.append(" from catissue_container  cont join catissue_capacity  capacity on cont.capacity_id=capacity.identifier,");
 		query
-				.append(" (select count(*)  specLocations from catissue_specimen_position sp where container_id = "
-						+ containerId + ") view1,");
+				.append(" (select count(*)  specLocations from catissue_specimen_position sp where container_id = ? ) view1,");
 		query
-				.append(" (select count(*)  contLocns from catissue_container_position cp where cp.parent_container_id="
-						+ containerId + ") view2 ");
-		query.append(" where cont.identifier = " + containerId);
+				.append(" (select count(*)  contLocns from catissue_container_position cp where cp.parent_container_id=? ) view2 ");
+		query.append(" where cont.identifier = ?");
+		ColumnValueBean columnValueBean = new ColumnValueBean(containerId);
+		List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+		columnValueBeanList.add(columnValueBean);
+		columnValueBeanList.add(columnValueBean);
+		columnValueBeanList.add(columnValueBean);
 		try
 		{
-			final List results = jdbcDAO.executeQuery(query.toString());
+			final List results = jdbcDAO.executeQuery(query.toString(),null, columnValueBeanList);
 			final Object result = getResultSetData(results, 0, 0);
 			if ((result != null) && (result instanceof String))
 			{
@@ -1199,7 +1203,7 @@ public final class StorageContainerUtil
 		return freeLocations;
 	}
 	/**
-	 * 
+	 *
 	 * @param jdbcDAO jdbcDAO Object
 	 * @param containerName Container name
 	 * @return String container Identifier
@@ -1209,12 +1213,15 @@ public final class StorageContainerUtil
 	{
 		final StringBuilder query = new StringBuilder();
 		query.append("select identifier from catissue_container cont ");
-		query.append("where cont.name='" + containerName + "'");
+		query.append("where cont.name=?");
+		ColumnValueBean columnValueBean = new ColumnValueBean(containerName);
+		List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+		columnValueBeanList.add(columnValueBean);
 		if (jdbcDAO != null)
 		{
 			try
 			{
-				final List results = jdbcDAO.executeQuery(query.toString());
+				final List results = jdbcDAO.executeQuery(query.toString(),null,columnValueBeanList);
 				final Object result = getResultSetData(results, 0, 0);
 				if ((result != null) && (result instanceof String))
 				{
@@ -1249,10 +1256,10 @@ public final class StorageContainerUtil
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param siteidSet - siteidSet.
-	 * @param siteId - siteId 
+	 * @param siteId - siteId
 	 * @return boolean value
 	 */
 	public static boolean hasPrivilegeonSite(Set<Long> siteidSet, Long siteId)
@@ -1267,8 +1274,8 @@ public final class StorageContainerUtil
 		}
 		return hasPrivilege;
 	}
-	
-	
+
+
 	/**
 	 * @param storageContainer - StorageContainer object.
 	 * @param parentContainerID - StorageContainer
@@ -1310,10 +1317,10 @@ public final class StorageContainerUtil
 
 		return false;
 	}
-	
+
 	/**
 	 * @return Long value next container number.
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	public static long getNextContainerNumber() throws ApplicationException
 	{
@@ -1531,7 +1538,7 @@ public final class StorageContainerUtil
 	/**
 	 * @param dao - DAO object.
 	 * @param parentContainer - StorageContainer object
-	 * @param children - children 
+	 * @param children - children
 	 * @return boolean array
 	 * @throws BizLogicException throws BizLogicException
 	 */
@@ -1717,7 +1724,7 @@ public final class StorageContainerUtil
 	/**
 	 * this function checks weather parent of the container is valid or not
 	 * according to restriction provided for the containers.
-	 * 
+	 *
 	 * @param container -
 	 *            Container
 	 * @param parent -
@@ -1915,7 +1922,7 @@ public final class StorageContainerUtil
 		return isContainerAvailableForDisabled(dao, edu.wustl.common.util.Utility
 				.toLongArray(containerList));
 	}
-	
+
 	/**
 	 * @param dao -DAO object.
 	 * @param current - StorageContainer object
@@ -2011,10 +2018,10 @@ public final class StorageContainerUtil
 			return false;
 		}
 	}
-	
+
 	/**
 	 * @param storageContainer - StorageContainer object.
-	 * @param posOne - String 
+	 * @param posOne - String
 	 * @param posTwo - String
 	 * @return boolean value based on position validation
 	 */
@@ -2211,7 +2218,7 @@ public final class StorageContainerUtil
 		contQuery.append(" and (cp.positionDimensionOne>");
 		contQuery.append(dimOne);
 		contQuery.append(" or cp.positionDimensionTwo>");
-		contQuery.append(dimOne);
+		contQuery.append(dimTwo);
 		contQuery.append(")");
 		final List contList = dao.executeQuery(contQuery.toString());
 		if ((contList != null) && (contList.size() > 0))

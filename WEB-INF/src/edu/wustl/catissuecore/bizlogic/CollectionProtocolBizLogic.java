@@ -1713,9 +1713,13 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	public static List getCollectionProtocolList(String id) throws ApplicationException
 	{
 		final String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_SPECIMEN_PROTOCOL SP, CATISSUE_ST_CONT_COLL_PROT_REL SC "
-				+ " WHERE SP.IDENTIFIER = SC.COLLECTION_PROTOCOL_ID AND SC.STORAGE_CONTAINER_ID = "
-				+ id;
-		final List resultList = AppUtility.executeSQLQuery(sql);
+				+ " WHERE SP.IDENTIFIER = SC.COLLECTION_PROTOCOL_ID AND SC.STORAGE_CONTAINER_ID = ? ";
+
+		ColumnValueBean columnValueBean = new ColumnValueBean(id);
+		List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+		columnValueBeanList.add(columnValueBean);
+
+		final List resultList = AppUtility.executeSQLQuery(sql,columnValueBeanList);
 		final Iterator iterator = resultList.iterator();
 		final List returnList = new ArrayList();
 		while (iterator.hasNext())
