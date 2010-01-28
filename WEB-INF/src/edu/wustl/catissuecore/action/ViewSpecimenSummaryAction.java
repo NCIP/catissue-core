@@ -148,7 +148,8 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			if (summaryForm.getSpecimenList() != null)
 			{
 				this.updateSessionBean(summaryForm, session);
-				this.verifyCollectedStatus(summaryForm, session);
+				//commented to fix bug 15702
+				//this.verifyCollectedStatus(summaryForm, session);
 				this.verifyPrintStatus(summaryForm, session);// janhavi
 			}
 
@@ -794,7 +795,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	 *            : summaryForm
 	 * @param session
 	 *            : session
-	 */
+	 *//*
 	private void verifyCollectedStatus(ViewSpecimenSummaryForm summaryForm, HttpSession session)
 	{
 		final String eventId = summaryForm.getEventId();
@@ -827,12 +828,12 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 				}
 			}
 		}
-	}
+	}*/
 	/**
 	 * Used to check and uncheck the child specimens according to parent
 	 * @param pSpecimen - GenericSpecimen
 	 * @param isCheck - check or uncheck the child specimen
-	 */
+	 *//*
 	private void checkOrUnCheckChildSpecimens(GenericSpecimen pSpecimen,boolean isCheck)
 	{
 		if (pSpecimen.getAliquotSpecimenCollection() != null)
@@ -856,7 +857,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			}
 		}
 	}
-
+*/
 	/**
 	 * @param summaryForm
 	 *            : summaryForm

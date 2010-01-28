@@ -938,7 +938,9 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			else if (columnCounter == 7)
 			{
 				stringBuffer.append(TD_1HLF + 3 + TD_2HLF);//bug 11169
-				if (this.isParentList
+				this.functionCall = "";
+				//commented to fix bug 15702
+				/*if (this.isParentList
 						&& this.specimenSummaryForm.getSelectedSpecimenId().equals(
 								specimen.getUniqueIdentifier()))
 				{
@@ -947,7 +949,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 				else
 				{
 					this.functionCall = "";
-				}
+				}*/
 				this.createCollectedComponent(stringBuffer, nameValue, isTextRow);
 				//addRemainingSpecimenElements(sb,elementNamePrefix,specimen, isTextRow);
 			}
