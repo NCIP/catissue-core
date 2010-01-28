@@ -59,6 +59,17 @@
 			relationShipType="containment"
 			roleName="capacity" >
 		</containmentAssociationCollection>
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.StorageType"
+			relationShipType="association"
+			roleName="holdsStorageTypeCollection" >
+		</referenceAssociationCollection>
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenArrayType"
+			relationShipType="association"
+			roleName="holdsSpecimenArrayTypeCollection">
+		</referenceAssociationCollection>
+		
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.SpecimenArrayType"
@@ -106,6 +117,18 @@
 			relationShipType="containment"
 			roleName="capacity" >
 		</containmentAssociationCollection>
+		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.StorageType"
+			relationShipType="association"
+			roleName="holdsStorageTypeCollection">
+		</referenceAssociationCollection>
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenArrayType"
+			relationShipType="association"
+			roleName="holdsSpecimenArrayTypeCollection">
+		</referenceAssociationCollection>
+		
 	</AuditableClass>
 	
 	<AuditableClass className="edu.wustl.catissuecore.domain.SpecimenArray"
@@ -205,7 +228,6 @@
 		<attribute name="enrollment" dataType="Integer" />
 		<attribute name="descriptionURL" dataType="String" />
 		<attribute name="sequenceNumber" dataType="Integer" />
-		<attribute name="studyCalendarEventPoint" dataType="Double" />
 		<attribute name="aliquotInSameContainer" dataType="Boolean" />
 		<!-- <attribute name="consentsWaived" dataType="Boolean" /> -->
 		<attribute name="type" dataType="String" />
@@ -225,6 +247,12 @@
 			relationShipType="containment"
 			roleName="collectionProtocolEventCollection">
 		</containmentAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.ConsentTier"
+			relationShipType="containment"
+			roleName="consentTierCollection">
+		</containmentAssociationCollection>
+		
 	</AuditableClass>
 
 
@@ -363,11 +391,11 @@
 			relationShipType="association"
 			roleName="collectionProtocol">
 		</referenceAssociationCollection>
-		<referenceAssociationCollection
+		<containmentAssociationCollection
 			className="edu.wustl.catissuecore.domain.ConsentTierResponse"
-			relationShipType="association"
+			relationShipType="containment"
 			roleName="consentTierResponseCollection">
-		</referenceAssociationCollection>
+		</containmentAssociationCollection>
 	</AuditableClass>
 	
 	<AuditableClass className="edu.wustl.catissuecore.domain.Participant"
@@ -434,11 +462,11 @@
 		<attribute name="encounterTimestamp" dataType="Date" />
 		<attribute name="clinicalDiagnosis" dataType="String" />
 		<attribute name="clinicalStatus" dataType="String" />
-		<referenceAssociationCollection
+		<containmentAssociationCollection
 			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
 			relationShipType="association"
 			roleName="consentTierStatusCollection">
-		</referenceAssociationCollection>
+		</containmentAssociationCollection>
 		<containmentAssociationCollection
 			className="edu.wustl.catissuecore.domain.SpecimenEventParameters"
 			relationShipType="collection"
@@ -492,6 +520,12 @@
 			relationShipType="containment"
 			roleName="externalIdentifierCollection">
 		</containmentAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
+			relationShipType="containment"
+			roleName="consentTierStatusCollection">
+		</containmentAssociationCollection>
+		
 	
 	</AuditableClass>
 	
@@ -536,6 +570,13 @@
 			relationShipType="containment"
 			roleName="externalIdentifierCollection">
 		</containmentAssociationCollection>
+		
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
+			relationShipType="containment"
+			roleName="consentTierStatusCollection">
+		</containmentAssociationCollection>
+		
 		</AuditableClass>
 
 
@@ -581,6 +622,12 @@
 			roleName="externalIdentifierCollection">
 		</containmentAssociationCollection>
 		
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
+			relationShipType="containment"
+			roleName="consentTierStatusCollection">
+		</containmentAssociationCollection>
+		
 	</AuditableClass>
 	<AuditableClass className="edu.wustl.catissuecore.domain.FluidSpecimen"
 		relationShipType="main" roleName="">
@@ -622,6 +669,12 @@
 			className="edu.wustl.catissuecore.domain.ExternalIdentifier"
 			relationShipType="containment"
 			roleName="externalIdentifierCollection">
+		</containmentAssociationCollection>
+		
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
+			relationShipType="containment"
+			roleName="consentTierStatusCollection">
 		</containmentAssociationCollection>
 		
 	</AuditableClass>
@@ -667,6 +720,12 @@
 			roleName="externalIdentifierCollection">
 		</containmentAssociationCollection>
 	
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
+			relationShipType="containment"
+			roleName="consentTierStatusCollection">
+		</containmentAssociationCollection>
+	
 	</AuditableClass>
 	
 	
@@ -675,8 +734,11 @@
 		<attribute name="id" dataType="Long" />
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
-		
-		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.FixedEventParameters" relationShipType="main" roleName="">
@@ -685,7 +747,11 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="fixationType" dataType="String" />
 		<attribute name="durationInMinutes" dataType="Integer" />
-		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 		
 	</AuditableClass>
 
@@ -694,7 +760,11 @@
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
 		<attribute name="method" dataType="String" />
-		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 		
 	</AuditableClass>
 
@@ -703,7 +773,11 @@
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
 		<attribute name="storageStatus" dataType="String" />
-		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 		
 	</AuditableClass>
 
@@ -714,7 +788,11 @@
 		<attribute name="url" dataType="String" />
 		<attribute name="name" dataType="String" />
 		
-	
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.SpunEventParameters" relationShipType="main" roleName="">
@@ -723,7 +801,11 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="gravityForce" dataType="Double" />
 		<attribute name="durationInMinutes" dataType="Integer" />
-		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 		
 	</AuditableClass>
 
@@ -734,7 +816,11 @@
 		<attribute name="fromPositionDimensionOne" dataType="Integer" />
 		<attribute name="fromPositionDimensionTwo" dataType="Integer" />
 		<attribute name="toPositionDimensionTwo" dataType="Integer" />
-		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.CollectionEventParameters" relationShipType="main" roleName="">
@@ -743,7 +829,11 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="collectionProcedure" dataType="String" />
 		<attribute name="container" dataType="String" />
-	
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.ReceivedEventParameters" relationShipType="main" roleName="">
@@ -751,7 +841,11 @@
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
 		<attribute name="receivedQuality" dataType="String" />
-		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 	
 	</AuditableClass>
 
@@ -760,7 +854,11 @@
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
 		<attribute name="embeddingMedium" dataType="String" />
-	
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 	
 	</AuditableClass>
 
@@ -768,14 +866,22 @@
 		<attribute name="id" dataType="Long" />
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
-
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.ReviewEventParameters" relationShipType="main" roleName="">
 		<attribute name="id" dataType="Long" />
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
-
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.CellSpecimenReviewParameters" relationShipType="main" roleName="">
@@ -784,7 +890,11 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="neoplasticCellularityPercentage" dataType="Double" />
 		<attribute name="viableCellPercentage" dataType="Double" />
-		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 
 	</AuditableClass>
 
@@ -797,7 +907,11 @@
 		<attribute name="lymphocyticPercentage" dataType="Double" />
 		<attribute name="totalCellularityPercentage" dataType="Double" />
 		<attribute name="histologicalQuality" dataType="String" />
-	
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 	
 	</AuditableClass>
 
@@ -806,7 +920,11 @@
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
 		<attribute name="cellCount" dataType="Double" />
-		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 
 	</AuditableClass>
 
@@ -821,7 +939,11 @@
 		<attribute name="gelImageURL" dataType="String" />
 		<attribute name="qualityIndex" dataType="String" />
 		<attribute name="laneNumber" dataType="String" />
-
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.DisposalEventParameters" relationShipType="main" roleName="">
@@ -830,7 +952,11 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="reason" dataType="String" />
 	
-	
+	 	<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
 	</AuditableClass>
 
    <AuditableClass className="edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter" relationShipType="main" roleName="">
@@ -839,6 +965,11 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="quarantineStatus" dataType="Boolean" />
 		<attribute name="status" dataType="String" />
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association"
+			roleName="user">
+		</referenceAssociationCollection>
   </AuditableClass>
 	
    <AuditableClass className="edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter" relationShipType="main" roleName="">
@@ -871,6 +1002,12 @@
 			relationShipType="containment"
 			roleName="orderItemCollection">
 		</containmentAssociationCollection>
+		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.DistributionProtocol"
+			relationShipType="association"
+			roleName="distributionProtocol">
+		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.OrderItem" relationShipType="main" roleName="">
@@ -950,6 +1087,36 @@
 			className="edu.wustl.catissuecore.domain.SpecimenOrderItem" 
 			relationShipType="association"
 			roleName="specimenOrderItemCollection" >
+		</referenceAssociationCollection>
+	</AuditableClass>
+	
+	<AuditableClass className="edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem" relationShipType="main" roleName="">
+		<attribute name="id" dataType="Long" />
+		<attribute name="description" dataType="String" />
+		<attribute name="requestedQuantity" dataType="Double" />
+		<attribute name="status" dataType="String" />
+		<attribute name="orderDetails" dataType="edu.wustl.catissuecore.domain.OrderDetails" />
+		<attribute name="specimenType" dataType="String" />
+		<attribute name="specimenClass" dataType="String" />	
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen" 
+			relationShipType="association"
+			roleName="parentSpecimen" >
+		</referenceAssociationCollection>
+	</AuditableClass>
+	
+	<AuditableClass className="edu.wustl.catissuecore.domain.PathologicalCaseOrderItem" relationShipType="main" roleName="">
+		<attribute name="id" dataType="Long" />
+		<attribute name="description" dataType="String" />
+		<attribute name="requestedQuantity" dataType="Double" />
+		<attribute name="status" dataType="String" />
+		<attribute name="orderDetails" dataType="edu.wustl.catissuecore.domain.OrderDetails" />
+		<attribute name="specimenType" dataType="String" />
+		<attribute name="specimenClass" dataType="String" />	
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup" 
+			relationShipType="association"
+			roleName="specimenCollectionGroup" >
 		</referenceAssociationCollection>
 	</AuditableClass>
 	
@@ -1107,20 +1274,24 @@
 	
 	<AuditableClass className="edu.wustl.catissuecore.domain.shippingtracking.BaseShipment"
 		relationShipType="main" roleName="">
-		<attribute name="id" dataType="Long" />
-		<attribute name="label" dataType="String" />
-		<attribute name="senderComments" dataType="String" />
-		<attribute name="receiverComments" dataType="String" />
-		<attribute name="createdDate" dataType="Date" />
-		<attribute name="sendDate" dataType="Date" />
-		<attribute name="senderSite" dataType="Site" />
-		<attribute name="receiverSite" dataType="Site" />
-		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.StorageContainer"
-			relationShipType="containment"
-			roleName="containerCollection" >
-		</containmentAssociationCollection>
 		
+		<attribute name="id" dataType="Long" />
+        <attribute name="label" dataType="String" />
+        <attribute name="senderComments" dataType="String" />
+        <attribute name="receiverComments" dataType="String" />
+        <attribute name="createdDate" dataType="Date" />
+        <attribute name="sendDate" dataType="Date" />
+        <attribute name="senderSite" dataType="Site" />
+        <attribute name="receiverSite" dataType="Site" />
+        <referenceAssociationCollection className="edu.wustl.catissuecore.domain.StorageContainer"
+            relationShipType="association"
+            roleName="containerCollection" >
+        </referenceAssociationCollection>
+        <referenceAssociationCollection
+            className="edu.wustl.catissuecore.domain.User"
+            relationShipType="association"
+            roleName="senderContactPerson" >
+        </referenceAssociationCollection>
 	</AuditableClass>
 	
 	<AuditableClass className="edu.wustl.catissuecore.domain.shippingtracking.Shipment"
@@ -1175,12 +1346,19 @@
 	<AuditableClass className="edu.wustl.catissuecore.domain.Distribution"
 	  relationShipType="main" roleName="" >
 	
-	 <attribute name="id" dataType="Long" />
+	 	<attribute name="id" dataType="Long" />
 		<attribute name="toSite" dataType="Site" />
 		<attribute name="distributionProtocol" dataType="DistributionProtocol" />
 		<attribute name="activityStatus" dataType="String" />
 		<attribute name="distributedBy" dataType="User" />
 		<attribute name="timestamp" dataType="Date" />
+		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.DistributedItem"
+			relationShipType="association"
+			roleName="distributedItemCollection">
+		</referenceAssociationCollection>
+		
 	</AuditableClass>
 	
 	<AuditableClass className="edu.wustl.bulkoperator.jobmanager.JobDetails"
