@@ -4285,10 +4285,10 @@ Thanking You,
 
 	<property name="operationName" value="" />
 	<property name="csvFile" value="" />
-	<property name="templateFile" value="" />
 	<property name="url" value="" />
 	<property name="applicationUserName" value="" />
 	<property name="applicationUserPassword" value="" />
+	<property name="templateFile" value="" />
 	<property name="keyStoreLocation" value="" />
 	<property name="bulkArtifactsLocation" value="" />
 

@@ -1056,9 +1056,24 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		if (protocol.getPrincipalInvestigator().getId() == -1)
 		{
-			//message = ApplicationProperties.getValue("collectionprotocol.specimenstatus");
-
 			throw this.getBizLogicException(null, "errors.item.required", "Principal Investigator");
+		}
+		try
+		{
+			final Object principalInvestigatorObj = dao.retrieveById(User.class.getName(),
+					protocol.getPrincipalInvestigator().getId());
+			if (principalInvestigatorObj == null)
+			{
+				throw this.getBizLogicException(null, "errors.item.notExists",
+						"Principal Investigator");
+			}
+		}
+		catch (final DAOException daoExp)
+		{
+			CollectionProtocolBizLogic.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace() ;
+			throw this.getBizLogicException(null, "errors.item.notExists",
+							"Principal Investigator");
 		}
 
 		final Collection protocolCoordinatorCollection = protocol.getCoordinatorCollection();

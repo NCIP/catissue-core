@@ -6,6 +6,7 @@ import java.util.List;
 import edu.wustl.bulkoperator.appservice.MigrationAppService;
 import edu.wustl.bulkoperator.util.BulkOperationException;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.common.exception.ApplicationException;
 
 public class CaTissueAppServiceImpl extends MigrationAppService
 {
@@ -60,10 +61,14 @@ public class CaTissueAppServiceImpl extends MigrationAppService
 		{
 			Object returnedObject = appService.delegateAdd(userName, domainObject);
 			return returnedObject;
-		}
-		catch (Exception appExp)
+		}		
+		catch (ApplicationException appExp)
 		{
-			throw new Exception(appExp.getMessage(), appExp);
+			throw appExp;
+		}
+		catch (Exception exp)
+		{
+			throw exp;
 		}
 	}
 
@@ -96,9 +101,13 @@ public class CaTissueAppServiceImpl extends MigrationAppService
 			Object returnedObject = appService.delegateEdit(userName, domainObject);
 			return returnedObject;
 		}
-		catch (Exception appExp)
+		catch (ApplicationException appExp)
 		{
-			throw new Exception(appExp.getMessage(), appExp);
+			throw appExp;
+		}
+		catch (Exception exp)
+		{
+			throw exp;
 		}
 	}
 }
