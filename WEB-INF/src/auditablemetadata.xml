@@ -462,11 +462,11 @@
 		<attribute name="encounterTimestamp" dataType="Date" />
 		<attribute name="clinicalDiagnosis" dataType="String" />
 		<attribute name="clinicalStatus" dataType="String" />
-		<containmentAssociationCollection
+		<referenceAssociationCollection
 			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
 			relationShipType="association"
 			roleName="consentTierStatusCollection">
-		</containmentAssociationCollection>
+		</referenceAssociationCollection>
 		<containmentAssociationCollection
 			className="edu.wustl.catissuecore.domain.SpecimenEventParameters"
 			relationShipType="collection"
@@ -520,11 +520,6 @@
 			relationShipType="containment"
 			roleName="externalIdentifierCollection">
 		</containmentAssociationCollection>
-		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
-			relationShipType="containment"
-			roleName="consentTierStatusCollection">
-		</containmentAssociationCollection>
 		
 	
 	</AuditableClass>
@@ -571,11 +566,6 @@
 			roleName="externalIdentifierCollection">
 		</containmentAssociationCollection>
 		
-		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
-			relationShipType="containment"
-			roleName="consentTierStatusCollection">
-		</containmentAssociationCollection>
 		
 		</AuditableClass>
 
@@ -622,12 +612,7 @@
 			roleName="externalIdentifierCollection">
 		</containmentAssociationCollection>
 		
-		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
-			relationShipType="containment"
-			roleName="consentTierStatusCollection">
-		</containmentAssociationCollection>
-		
+				
 	</AuditableClass>
 	<AuditableClass className="edu.wustl.catissuecore.domain.FluidSpecimen"
 		relationShipType="main" roleName="">
@@ -671,12 +656,7 @@
 			roleName="externalIdentifierCollection">
 		</containmentAssociationCollection>
 		
-		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
-			relationShipType="containment"
-			roleName="consentTierStatusCollection">
-		</containmentAssociationCollection>
-		
+			
 	</AuditableClass>
 	<AuditableClass className="edu.wustl.catissuecore.domain.CellSpecimen"
 		relationShipType="main" roleName="">
@@ -719,13 +699,6 @@
 			relationShipType="containment"
 			roleName="externalIdentifierCollection">
 		</containmentAssociationCollection>
-	
-		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.ConsentTierStatus"
-			relationShipType="containment"
-			roleName="consentTierStatusCollection">
-		</containmentAssociationCollection>
-	
 	</AuditableClass>
 	
 	
