@@ -1094,7 +1094,6 @@
 
 					<echo message="${ORM1CfgFile}" />
 					<echo message="${DEWebCfgFile}" />
-					<antcall target="merge.audit.xml" />
 					<if>
 						<equals arg1="${cacore.present}" arg2="true" />
 						<then>
@@ -1114,6 +1113,7 @@
 								<param name="hookentity" value="${hook.entity.value}" />
 							</antcall>
 							<antcall target="generate.cacore" />
+							<antcall target="merge.audit.xml" />
 						</else>
 					</if>
 					<java classname="edu.wustl.metadata.util.CacoreDEMetadataAppender" fork="true" maxmemory="1024M">
@@ -1131,6 +1131,7 @@
 							</fileset>
 						</classpath>
 					</java>
+					<antcall target="merge.audit.xml"/>
 
 					<copy todir="${entityGroup.jar.location}/" file="${cacore.deployable.dir}/${entitygroupname}/${entitygroupname}.jar" overwrite="true" />
 					<echo message="${ORM1CfgFile}" />
