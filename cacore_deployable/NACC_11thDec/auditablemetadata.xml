@@ -1,0 +1,353 @@
+<?xml version='1.0' encoding='utf-8'?>
+<AuditableMetaData>
+<AuditableClass className="Neuropathology.Deprecated_Annotations" relationShipType="main" roleName="">
+	<attribute name="ParticipantRecordEntry" dataType="Neuropathology.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_FamilyHistoryInformation" relationShipType="main" roleName="">
+	<attribute name="PatientInformation" dataType="Neuropathology.Deprecated_PatientInformation" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="specifyDisorder" dataType="java.lang.String" />
+	<attribute name="familyHistoryInformationRelevantToNeuropathologicDiagnosis" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_FrontotemporalDegenerativePathology" relationShipType="main" roleName="">
+	<attribute name="PathologyInformation" dataType="Neuropathology.Deprecated_Pathology" />
+	<attribute name="pickDisease" dataType="java.lang.String" />
+	<attribute name="progressiveSupranuclearPalsy" dataType="java.lang.String" />
+	<attribute name="frontotemporalDementiaAndParkinsonismWithTauPositiveOrArgyrophilicInclusions" dataType="java.lang.String" />
+	<attribute name="corticobasalDegeneration" dataType="java.lang.String" />
+	<attribute name="tauopathy" dataType="java.lang.String" />
+	<attribute name="ftdWithUbiquitinPositiveTauNegativeInclusions" dataType="java.lang.String" />
+	<attribute name="ftdWithNoDistinctiveHistopathologyTaNegativeUbiquitinNegativeAndNoArgyrophilicInclusions" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="ftdpresent" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_GeneticInformation" relationShipType="main" roleName="">
+	<attribute name="patientInformation" dataType="Neuropathology.Deprecated_PatientInformation" />
+	<attribute name="GeneticVariantsOrPolymorphismsInformation" dataType="Neuropathology.Deprecated_GeneticVariantsOrPolymorphisms" />
+		<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_GeneticOrChromosomalAbnormalities" relationShipType="main" roleName="">
+	<attribute name="Geneticinformation" dataType="Neuropathology.Deprecated_GeneticInformation" />
+	<attribute name="geneticOrChromosomalAbnormalities" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_GeneticVariantsOrPolymorphisms" relationShipType="main" roleName="">
+	<attribute name="prnpCodon129" dataType="java.lang.String" />
+	<attribute name="geneticInformation" dataType="Neuropathology.Deprecated_GeneticInformation" />
+	<attribute name="apolipoproteinE" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="tauHaplotype" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_LewyBodyPathology" relationShipType="main" roleName="">
+	<attribute name="PathologyInformation" dataType="Neuropathology.Deprecated_Pathology" />
+	<attribute name="likelihoodThatDlbClinicalSyndromeDueToDlbPathology" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="pathologyIsConsistentWithLewyBodiesFor" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_NeurofibrillaryPathology" relationShipType="main" roleName="">
+	<attribute name="PathologyInformation" dataType="Neuropathology.Deprecated_Pathology" />
+	<attribute name="braakAndBraakNeurofibrillaryStage" dataType="java.lang.String" />
+	<attribute name="neuriticPlaques" dataType="java.lang.String" />
+	<attribute name="diffusePlaques" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_NeuropathologicalCriteria" relationShipType="main" roleName="">
+	<attribute name="khachaturianOrADRDANneuropathologicalCriteriaUsed" dataType="java.lang.String" />
+	<attribute name="Pathologyinformation" dataType="Neuropathology.Deprecated_Pathology" />
+	<attribute name="ceradNeuropathologicalCriteriaUsed" dataType="java.lang.String" />
+	<attribute name="reaganOrNIAInstituteNeuropathologicalCriteriaUsed" dataType="java.lang.String" />
+	<attribute name="otherOrUnspecifiedNeuropathologicalCriteriaUsed" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_OtherMajorPathologicDisorders" relationShipType="main" roleName="">
+	<attribute name="PathologyInformation" dataType="Neuropathology.Deprecated_Pathology" />
+	<attribute name="specifyDisorders" dataType="java.lang.String" />
+	<attribute name="otherMajorPathologicDisordersPresent" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_Pathology" relationShipType="main" roleName="">
+						<attribute name="PatientInformation" dataType="Neuropathology.Deprecated_PatientInformation" />
+	<attribute name="grossOrMicroscopicPathologyPresent" dataType="java.lang.String" />
+			<attribute name="id" dataType="java.lang.Long" />
+	</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_PatientInformation" relationShipType="main" roleName="">
+	<attribute name="PostMortemInformation" dataType="Neuropathology.Deprecated_PostMortemInformation" />
+		<attribute name="ageAtDeath" dataType="java.lang.Integer" />
+			<attribute name="neuropathID" dataType="java.lang.String" />
+	<attribute name="dateFormCompleted" dataType="java.util.Date" />
+	<attribute name="ParticipantRecordEntry" dataType="Neuropathology.ParticipantRecordEntry" />
+	<attribute name="GeneticInformation" dataType="Neuropathology.Deprecated_GeneticInformation" />
+	<attribute name="patientID" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_PostMortemInformation" relationShipType="main" roleName="">
+	<attribute name="isBankedPostmortemCerebrospinalFluidAccessible" dataType="java.lang.String" />
+	<attribute name="isBankedFrozenBrainTissueAccessible" dataType="java.lang.String" />
+	<attribute name="areParaffinEmbeddedBlocksOfBrainTissueAccessible" dataType="java.lang.String" />
+	<attribute name="PatientInformation" dataType="Neuropathology.Deprecated_PatientInformation" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="isFormalinFixedBrainTissueAccessible" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_PrimaryAndContributingPathologicDiagnoses" relationShipType="main" roleName="">
+	<attribute name="h1PrionAssociatedDisease" dataType="java.lang.String" />
+	<attribute name="ifOtherIsI1Specify" dataType="java.lang.String" />
+	<attribute name="b1AdPathologyPresentButInsufficientForAdDiagnosis" dataType="java.lang.String" />
+	<attribute name="g1HippocampalSclerosis" dataType="java.lang.String" />
+	<attribute name="d1LewyBodyDiseaseWithOrWthoutAd" dataType="java.lang.String" />
+	<attribute name="ifOtherIsJ1Specify" dataType="java.lang.String" />
+	<attribute name="ifOtherIsK1Specify" dataType="java.lang.String" />
+	<attribute name="j1Other" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="c1AlzheimersDisease" dataType="java.lang.String" />
+	<attribute name="k1Other" dataType="java.lang.String" />
+	<attribute name="a1NormalBrain" dataType="java.lang.String" />
+	<attribute name="pathology" dataType="Neuropathology.Deprecated_Pathology" />
+	<attribute name="f1Ftld" dataType="java.lang.String" />
+	<attribute name="e1VascularDisease" dataType="java.lang.String" />
+	<attribute name="i1Other" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_PrionRelatedPathology" relationShipType="main" roleName="">
+	<attribute name="PathologyInformation" dataType="Neuropathology.Deprecated_Pathology" />
+	<attribute name="otherPrionDiseasesPresent" dataType="java.lang.String" />
+	<attribute name="cjdOrVariantCJdPresent" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_StudyInformation" relationShipType="main" roleName="">
+	<attribute name="centerID" dataType="java.lang.String" />
+	<attribute name="Annotations" dataType="Neuropathology.Deprecated_PatientInformation" />
+	<attribute name="NeuroPathologist" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.Deprecated_VascularPathology" relationShipType="main" roleName="">
+	<attribute name="singleOrMultipleLacunesPresent" dataType="java.lang.String" />
+	<attribute name="singleOrMultipleLargeArteryCerebralInfarctsPresent" dataType="java.lang.String" />
+	<attribute name="singleOrMultipleCorticalMicroinfarctsPresent" dataType="java.lang.String" />
+	<attribute name="corticalLaminarNecrosisPresent" dataType="java.lang.String" />
+	<attribute name="PatientInformation" dataType="Neuropathology.Deprecated_Pathology" />
+	<attribute name="amyloidAngiopathyPresent" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="arteriosclerosisPresent" dataType="java.lang.String" />
+	<attribute name="medialTemporalLobeSclerosisPresent" dataType="java.lang.String" />
+	<attribute name="isVascularHemorrhagicOrIschemicPathologyPresent" dataType="java.lang.String" />
+	<attribute name="singleOrMultipleHemorrhagesPresent" dataType="java.lang.String" />
+	<attribute name="otherPathologyRelatedToIschemicOrVascularDiseasePresent" dataType="java.lang.String" />
+	<attribute name="subcorticalArterioscleroticLeukoencephalopathyPresent" dataType="java.lang.String" />
+	<attribute name="anotherTypeOfAngiopathyPresent" dataType="java.lang.String" />
+	<attribute name="atheroscleroticVascularPathologyPresent" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_AnnotationsImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_FamilyHistoryInformationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_FrontotemporalDegenerativePathologyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_GeneticInformationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_GeneticOrChromosomalAbnormalitiesImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_GeneticVariantsOrPolymorphismsImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_LewyBodyPathologyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_NeurofibrillaryPathologyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_NeuropathologicalCriteriaImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_OtherMajorPathologicDisordersImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_PathologyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_PatientInformationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_PostMortemInformationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_PrimaryAndContributingPathologicDiagnosesImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_PrionRelatedPathologyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_StudyInformationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.Deprecated_VascularPathologyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.impl.ParticipantRecordEntryImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ParticipantRecordEntry" relationShipType="main" roleName="">
+			<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_Annotations" relationShipType="main" roleName="">
+	<attribute name="ParticipantRecordEntry" dataType="Neuropathology.ws.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_AnnotationsImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_FamilyHistoryInformation" relationShipType="main" roleName="">
+	<attribute name="PatientInformation" dataType="Neuropathology.ws.Deprecated_PatientInformation" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="specifyDisorder" dataType="java.lang.String" />
+	<attribute name="familyHistoryInformationRelevantToNeuropathologicDiagnosis" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_FamilyHistoryInformationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_FrontotemporalDegenerativePathology" relationShipType="main" roleName="">
+	<attribute name="PathologyInformation" dataType="Neuropathology.ws.Deprecated_Pathology" />
+	<attribute name="pickDisease" dataType="java.lang.String" />
+	<attribute name="progressiveSupranuclearPalsy" dataType="java.lang.String" />
+	<attribute name="frontotemporalDementiaAndParkinsonismWithTauPositiveOrArgyrophilicInclusions" dataType="java.lang.String" />
+	<attribute name="corticobasalDegeneration" dataType="java.lang.String" />
+	<attribute name="tauopathy" dataType="java.lang.String" />
+	<attribute name="ftdWithUbiquitinPositiveTauNegativeInclusions" dataType="java.lang.String" />
+	<attribute name="ftdWithNoDistinctiveHistopathologyTaNegativeUbiquitinNegativeAndNoArgyrophilicInclusions" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="ftdpresent" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_FrontotemporalDegenerativePathologyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_GeneticInformation" relationShipType="main" roleName="">
+	<attribute name="patientInformation" dataType="Neuropathology.ws.Deprecated_PatientInformation" />
+	<attribute name="GeneticVariantsOrPolymorphismsInformation" dataType="Neuropathology.ws.Deprecated_GeneticVariantsOrPolymorphisms" />
+		<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_GeneticInformationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_GeneticOrChromosomalAbnormalities" relationShipType="main" roleName="">
+	<attribute name="Geneticinformation" dataType="Neuropathology.ws.Deprecated_GeneticInformation" />
+	<attribute name="geneticOrChromosomalAbnormalities" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_GeneticOrChromosomalAbnormalitiesImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_GeneticVariantsOrPolymorphisms" relationShipType="main" roleName="">
+	<attribute name="prnpCodon129" dataType="java.lang.String" />
+	<attribute name="geneticInformation" dataType="Neuropathology.ws.Deprecated_GeneticInformation" />
+	<attribute name="apolipoproteinE" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="tauHaplotype" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_GeneticVariantsOrPolymorphismsImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_LewyBodyPathology" relationShipType="main" roleName="">
+	<attribute name="PathologyInformation" dataType="Neuropathology.ws.Deprecated_Pathology" />
+	<attribute name="likelihoodThatDlbClinicalSyndromeDueToDlbPathology" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="pathologyIsConsistentWithLewyBodiesFor" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_LewyBodyPathologyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_NeurofibrillaryPathology" relationShipType="main" roleName="">
+	<attribute name="PathologyInformation" dataType="Neuropathology.ws.Deprecated_Pathology" />
+	<attribute name="braakAndBraakNeurofibrillaryStage" dataType="java.lang.String" />
+	<attribute name="neuriticPlaques" dataType="java.lang.String" />
+	<attribute name="diffusePlaques" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_NeurofibrillaryPathologyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_NeuropathologicalCriteria" relationShipType="main" roleName="">
+	<attribute name="khachaturianOrADRDANneuropathologicalCriteriaUsed" dataType="java.lang.String" />
+	<attribute name="Pathologyinformation" dataType="Neuropathology.ws.Deprecated_Pathology" />
+	<attribute name="ceradNeuropathologicalCriteriaUsed" dataType="java.lang.String" />
+	<attribute name="reaganOrNIAInstituteNeuropathologicalCriteriaUsed" dataType="java.lang.String" />
+	<attribute name="otherOrUnspecifiedNeuropathologicalCriteriaUsed" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_NeuropathologicalCriteriaImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_OtherMajorPathologicDisorders" relationShipType="main" roleName="">
+	<attribute name="PathologyInformation" dataType="Neuropathology.ws.Deprecated_Pathology" />
+	<attribute name="specifyDisorders" dataType="java.lang.String" />
+	<attribute name="otherMajorPathologicDisordersPresent" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_OtherMajorPathologicDisordersImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_Pathology" relationShipType="main" roleName="">
+						<attribute name="PatientInformation" dataType="Neuropathology.ws.Deprecated_PatientInformation" />
+	<attribute name="grossOrMicroscopicPathologyPresent" dataType="java.lang.String" />
+			<attribute name="id" dataType="java.lang.Long" />
+	</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_PathologyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_PatientInformation" relationShipType="main" roleName="">
+	<attribute name="PostMortemInformation" dataType="Neuropathology.ws.Deprecated_PostMortemInformation" />
+		<attribute name="ageAtDeath" dataType="java.lang.Integer" />
+			<attribute name="neuropathID" dataType="java.lang.String" />
+	<attribute name="dateFormCompleted" dataType="java.util.Date" />
+	<attribute name="ParticipantRecordEntry" dataType="Neuropathology.ws.ParticipantRecordEntry" />
+	<attribute name="GeneticInformation" dataType="Neuropathology.ws.Deprecated_GeneticInformation" />
+	<attribute name="patientID" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_PatientInformationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_PostMortemInformation" relationShipType="main" roleName="">
+	<attribute name="isBankedPostmortemCerebrospinalFluidAccessible" dataType="java.lang.String" />
+	<attribute name="isBankedFrozenBrainTissueAccessible" dataType="java.lang.String" />
+	<attribute name="areParaffinEmbeddedBlocksOfBrainTissueAccessible" dataType="java.lang.String" />
+	<attribute name="PatientInformation" dataType="Neuropathology.ws.Deprecated_PatientInformation" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="isFormalinFixedBrainTissueAccessible" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_PostMortemInformationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_PrimaryAndContributingPathologicDiagnoses" relationShipType="main" roleName="">
+	<attribute name="h1PrionAssociatedDisease" dataType="java.lang.String" />
+	<attribute name="ifOtherIsI1Specify" dataType="java.lang.String" />
+	<attribute name="b1AdPathologyPresentButInsufficientForAdDiagnosis" dataType="java.lang.String" />
+	<attribute name="g1HippocampalSclerosis" dataType="java.lang.String" />
+	<attribute name="d1LewyBodyDiseaseWithOrWthoutAd" dataType="java.lang.String" />
+	<attribute name="ifOtherIsJ1Specify" dataType="java.lang.String" />
+	<attribute name="ifOtherIsK1Specify" dataType="java.lang.String" />
+	<attribute name="j1Other" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="c1AlzheimersDisease" dataType="java.lang.String" />
+	<attribute name="k1Other" dataType="java.lang.String" />
+	<attribute name="a1NormalBrain" dataType="java.lang.String" />
+	<attribute name="pathology" dataType="Neuropathology.ws.Deprecated_Pathology" />
+	<attribute name="f1Ftld" dataType="java.lang.String" />
+	<attribute name="e1VascularDisease" dataType="java.lang.String" />
+	<attribute name="i1Other" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_PrimaryAndContributingPathologicDiagnosesImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_PrionRelatedPathology" relationShipType="main" roleName="">
+	<attribute name="PathologyInformation" dataType="Neuropathology.ws.Deprecated_Pathology" />
+	<attribute name="otherPrionDiseasesPresent" dataType="java.lang.String" />
+	<attribute name="cjdOrVariantCJdPresent" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_PrionRelatedPathologyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_StudyInformation" relationShipType="main" roleName="">
+	<attribute name="centerID" dataType="java.lang.String" />
+	<attribute name="Annotations" dataType="Neuropathology.ws.Deprecated_PatientInformation" />
+	<attribute name="NeuroPathologist" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_StudyInformationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_VascularPathology" relationShipType="main" roleName="">
+	<attribute name="singleOrMultipleLacunesPresent" dataType="java.lang.String" />
+	<attribute name="singleOrMultipleLargeArteryCerebralInfarctsPresent" dataType="java.lang.String" />
+	<attribute name="singleOrMultipleCorticalMicroinfarctsPresent" dataType="java.lang.String" />
+	<attribute name="corticalLaminarNecrosisPresent" dataType="java.lang.String" />
+	<attribute name="PatientInformation" dataType="Neuropathology.ws.Deprecated_Pathology" />
+	<attribute name="amyloidAngiopathyPresent" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="arteriosclerosisPresent" dataType="java.lang.String" />
+	<attribute name="medialTemporalLobeSclerosisPresent" dataType="java.lang.String" />
+	<attribute name="isVascularHemorrhagicOrIschemicPathologyPresent" dataType="java.lang.String" />
+	<attribute name="singleOrMultipleHemorrhagesPresent" dataType="java.lang.String" />
+	<attribute name="otherPathologyRelatedToIschemicOrVascularDiseasePresent" dataType="java.lang.String" />
+	<attribute name="subcorticalArterioscleroticLeukoencephalopathyPresent" dataType="java.lang.String" />
+	<attribute name="anotherTypeOfAngiopathyPresent" dataType="java.lang.String" />
+	<attribute name="atheroscleroticVascularPathologyPresent" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.Deprecated_VascularPathologyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.ParticipantRecordEntry" relationShipType="main" roleName="">
+			<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="Neuropathology.ws.ParticipantRecordEntryImpl" relationShipType="main" roleName="">
+</AuditableClass>
+</AuditableMetaData>

@@ -1,0 +1,351 @@
+<?xml version='1.0' encoding='utf-8'?>
+<AuditableMetaData>
+<AuditableClass className="clinical_annotation.AlcoholHealthAnnotation" relationShipType="main" roleName="">
+	<attribute name="drinksPerWeek" dataType="java.lang.Long" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ChemoRXAnnotation" relationShipType="main" roleName="">
+	<attribute name="deprecatedAnnotation2" dataType="clinical_annotation.DeprecatedAnnotation2" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.Chemotherapy" relationShipType="main" roleName="">
+	<attribute name="TreatmentOrder" dataType="clinical_annotation.TreatmentOrder" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.DeprecatedAnnotation1" relationShipType="main" roleName="">
+	<attribute name="ageAtDiagnosis" dataType="java.lang.Integer" />
+	<attribute name="otherClinicalDiagnosis" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="clinicalDiagnosis" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.DeprecatedAnnotation2" relationShipType="main" roleName="">
+			<attribute name="cycle" dataType="java.lang.Integer" />
+	<attribute name="treatmentRegimen" dataType="clinical_annotation.TreatmentRegimen" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.DistantRecurrenceHealthExaminationAnnotation" relationShipType="main" roleName="">
+	<attribute name="tissueSite" dataType="java.lang.String" />
+	<attribute name="otherTissueSite" dataType="java.lang.String" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.Duration" relationShipType="main" roleName="">
+	<attribute name="TreatmentAnnotation" dataType="clinical_annotation.TreatmentAnnotation" />
+	<attribute name="startDate" dataType="java.util.Date" />
+	<attribute name="durationInDays" dataType="java.lang.Long" />
+	<attribute name="endDate" dataType="java.util.Date" />
+	<attribute name="EnvironmentalExposuresHealthAnnotation" dataType="clinical_annotation.EnvironmentalExposuresHealthAnnotation" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.EnvironmentalExposuresHealthAnnotation" relationShipType="main" roleName="">
+	<attribute name="agent" dataType="java.lang.String" />
+	<attribute name="otherAgent" dataType="java.lang.String" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+		<attribute name="yearsAgentFree" dataType="java.lang.Double" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.FamilyHistoryAnnotation" relationShipType="main" roleName="">
+		<attribute name="otherRelation" dataType="java.lang.String" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="relation" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.GeneralHealthDiagnosis" relationShipType="main" roleName="">
+	<attribute name="FamilyHistoryAnnotation" dataType="clinical_annotation.FamilyHistoryAnnotation" />
+	<attribute name="ageAtDiagnosis" dataType="java.lang.Long" />
+	<attribute name="otherClinicalDiagnosis" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="clinicalDiagnosis" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.HealthExaminationAnnotation" relationShipType="main" roleName="">
+	<attribute name="nameOfProcedure" dataType="java.lang.String" />
+	<attribute name="otherProcedure" dataType="java.lang.String" />
+	<attribute name="dateOfExamination" dataType="java.util.Date" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.AlcoholHealthAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.ChemoRXAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.ChemotherapyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.DeprecatedAnnotation1Impl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.DeprecatedAnnotation2Impl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.DistantRecurrenceHealthExaminationAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.DurationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.EnvironmentalExposuresHealthAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.FamilyHistoryAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.GeneralHealthDiagnosisImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.HealthExaminationAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.LabAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.LocalRecurrenceHealthExaminationAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.NewDiagnosisHealthAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.NoEvidentDiseaseHealthAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.ParticipantRecordEntryImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.RadRXAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.RadRXAnnotationSetImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.RecurrenceHealthExaminationAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.SmokingHealthAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.TreatmentAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.TreatmentOrderImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.impl.TreatmentRegimenImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.LabAnnotation" relationShipType="main" roleName="">
+	<attribute name="otherLabTestName" dataType="java.lang.String" />
+	<attribute name="result" dataType="java.lang.String" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="testDate" dataType="java.util.Date" />
+	<attribute name="resultUnits" dataType="java.lang.String" />
+	<attribute name="labTestName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.LocalRecurrenceHealthExaminationAnnotation" relationShipType="main" roleName="">
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.NewDiagnosisHealthAnnotation" relationShipType="main" roleName="">
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.NoEvidentDiseaseHealthAnnotation" relationShipType="main" roleName="">
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ParticipantRecordEntry" relationShipType="main" roleName="">
+							<attribute name="id" dataType="java.lang.Long" />
+									</AuditableClass>
+<AuditableClass className="clinical_annotation.RadRXAnnotation" relationShipType="main" roleName="">
+	<attribute name="deprecatedAnnotation2" dataType="clinical_annotation.DeprecatedAnnotation2" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.RadRXAnnotationSet" relationShipType="main" roleName="">
+	<attribute name="TreatmentOrder" dataType="clinical_annotation.TreatmentOrder" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.RecurrenceHealthExaminationAnnotation" relationShipType="main" roleName="">
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="otherClinicalDiagnosis" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="clinicalDiagnosis" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.SmokingHealthAnnotation" relationShipType="main" roleName="">
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="packsPerDay" dataType="java.lang.Long" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.TreatmentAnnotation" relationShipType="main" roleName="">
+	<attribute name="agent" dataType="java.lang.String" />
+	<attribute name="otherAgent" dataType="java.lang.String" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="dose" dataType="java.lang.Double" />
+		<attribute name="doseUnits" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.TreatmentOrder" relationShipType="main" roleName="">
+		<attribute name="TreatmentRegimen" dataType="clinical_annotation.TreatmentRegimen" />
+		<attribute name="cycle" dataType="java.lang.Long" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.TreatmentRegimen" relationShipType="main" roleName="">
+			<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ParticipantRecordEntry" />
+	<attribute name="treatmentRegimen" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.AlcoholHealthAnnotation" relationShipType="main" roleName="">
+	<attribute name="drinksPerWeek" dataType="java.lang.Long" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.AlcoholHealthAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.ChemoRXAnnotation" relationShipType="main" roleName="">
+	<attribute name="deprecatedAnnotation2" dataType="clinical_annotation.ws.DeprecatedAnnotation2" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.ChemoRXAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.Chemotherapy" relationShipType="main" roleName="">
+	<attribute name="TreatmentOrder" dataType="clinical_annotation.ws.TreatmentOrder" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.ChemotherapyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.DeprecatedAnnotation1" relationShipType="main" roleName="">
+	<attribute name="ageAtDiagnosis" dataType="java.lang.Integer" />
+	<attribute name="otherClinicalDiagnosis" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="clinicalDiagnosis" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.DeprecatedAnnotation1Impl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.DeprecatedAnnotation2" relationShipType="main" roleName="">
+			<attribute name="cycle" dataType="java.lang.Integer" />
+	<attribute name="treatmentRegimen" dataType="clinical_annotation.ws.TreatmentRegimen" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.DeprecatedAnnotation2Impl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.DistantRecurrenceHealthExaminationAnnotation" relationShipType="main" roleName="">
+	<attribute name="tissueSite" dataType="java.lang.String" />
+	<attribute name="otherTissueSite" dataType="java.lang.String" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.DistantRecurrenceHealthExaminationAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.Duration" relationShipType="main" roleName="">
+	<attribute name="TreatmentAnnotation" dataType="clinical_annotation.ws.TreatmentAnnotation" />
+	<attribute name="startDate" dataType="java.util.Date" />
+	<attribute name="durationInDays" dataType="java.lang.Long" />
+	<attribute name="endDate" dataType="java.util.Date" />
+	<attribute name="EnvironmentalExposuresHealthAnnotation" dataType="clinical_annotation.ws.EnvironmentalExposuresHealthAnnotation" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.DurationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.EnvironmentalExposuresHealthAnnotation" relationShipType="main" roleName="">
+	<attribute name="agent" dataType="java.lang.String" />
+	<attribute name="otherAgent" dataType="java.lang.String" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+		<attribute name="yearsAgentFree" dataType="java.lang.Double" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.EnvironmentalExposuresHealthAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.FamilyHistoryAnnotation" relationShipType="main" roleName="">
+		<attribute name="otherRelation" dataType="java.lang.String" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="relation" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.FamilyHistoryAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.GeneralHealthDiagnosis" relationShipType="main" roleName="">
+	<attribute name="FamilyHistoryAnnotation" dataType="clinical_annotation.ws.FamilyHistoryAnnotation" />
+	<attribute name="ageAtDiagnosis" dataType="java.lang.Long" />
+	<attribute name="otherClinicalDiagnosis" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="clinicalDiagnosis" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.GeneralHealthDiagnosisImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.HealthExaminationAnnotation" relationShipType="main" roleName="">
+	<attribute name="nameOfProcedure" dataType="java.lang.String" />
+	<attribute name="otherProcedure" dataType="java.lang.String" />
+	<attribute name="dateOfExamination" dataType="java.util.Date" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.HealthExaminationAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.LabAnnotation" relationShipType="main" roleName="">
+	<attribute name="otherLabTestName" dataType="java.lang.String" />
+	<attribute name="result" dataType="java.lang.String" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="testDate" dataType="java.util.Date" />
+	<attribute name="resultUnits" dataType="java.lang.String" />
+	<attribute name="labTestName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.LabAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.LocalRecurrenceHealthExaminationAnnotation" relationShipType="main" roleName="">
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.LocalRecurrenceHealthExaminationAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.NewDiagnosisHealthAnnotation" relationShipType="main" roleName="">
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.NewDiagnosisHealthAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.NoEvidentDiseaseHealthAnnotation" relationShipType="main" roleName="">
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.NoEvidentDiseaseHealthAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.ParticipantRecordEntry" relationShipType="main" roleName="">
+							<attribute name="id" dataType="java.lang.Long" />
+									</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.ParticipantRecordEntryImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.RadRXAnnotation" relationShipType="main" roleName="">
+	<attribute name="deprecatedAnnotation2" dataType="clinical_annotation.ws.DeprecatedAnnotation2" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.RadRXAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.RadRXAnnotationSet" relationShipType="main" roleName="">
+	<attribute name="TreatmentOrder" dataType="clinical_annotation.ws.TreatmentOrder" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.RadRXAnnotationSetImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.RecurrenceHealthExaminationAnnotation" relationShipType="main" roleName="">
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="otherClinicalDiagnosis" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="clinicalDiagnosis" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.RecurrenceHealthExaminationAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.SmokingHealthAnnotation" relationShipType="main" roleName="">
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="packsPerDay" dataType="java.lang.Long" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.SmokingHealthAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.TreatmentAnnotation" relationShipType="main" roleName="">
+	<attribute name="agent" dataType="java.lang.String" />
+	<attribute name="otherAgent" dataType="java.lang.String" />
+	<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="dose" dataType="java.lang.Double" />
+		<attribute name="doseUnits" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.TreatmentAnnotationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.TreatmentOrder" relationShipType="main" roleName="">
+		<attribute name="TreatmentRegimen" dataType="clinical_annotation.ws.TreatmentRegimen" />
+		<attribute name="cycle" dataType="java.lang.Long" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.TreatmentOrderImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.TreatmentRegimen" relationShipType="main" roleName="">
+			<attribute name="ParticipantRecordEntry" dataType="clinical_annotation.ws.ParticipantRecordEntry" />
+	<attribute name="treatmentRegimen" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="clinical_annotation.ws.TreatmentRegimenImpl" relationShipType="main" roleName="">
+</AuditableClass>
+</AuditableMetaData>

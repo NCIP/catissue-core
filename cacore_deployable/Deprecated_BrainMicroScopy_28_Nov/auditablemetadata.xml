@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='utf-8'?>
+<AuditableMetaData>
+<AuditableClass className="NPmodel.Deprecated_Additionalinformation" relationShipType="main" roleName="">
+	<attribute name="pituitaryWeight" dataType="java.lang.Float" />
+	<attribute name="causeOfDeathSpecifyOther" dataType="java.lang.String" />
+	<attribute name="BrainArea" dataType="NPmodel.Deprecated_BrainArea" />
+	<attribute name="causeOfDeath" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="brainWeight" dataType="java.lang.Float" />
+	<attribute name="pmi" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="NPmodel.Deprecated_BrainArea" relationShipType="main" roleName="">
+	<attribute name="arteriosclerosis" dataType="java.lang.String" />
+		<attribute name="silverBielNP" dataType="java.lang.String" />
+	<attribute name="tdpGlialCytoplasmicInclusions" dataType="java.lang.String" />
+		<attribute name="abcp" dataType="java.lang.String" />
+	<attribute name="tauNFT" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="abaa" dataType="java.lang.String" />
+	<attribute name="Microscopy" dataType="NPmodel.Deprecated_Microscopy" />
+	<attribute name="tdpNeuronalIntranuclearInclusions" dataType="java.lang.String" />
+	<attribute name="tauGlial" dataType="java.lang.String" />
+		<attribute name="specifyPituitaryAbnormality" dataType="java.lang.String" />
+	<attribute name="ubqNI" dataType="java.lang.String" />
+	<attribute name="neuronGliosis" dataType="java.lang.String" />
+	<attribute name="abdp" dataType="java.lang.String" />
+	<attribute name="tauNP" dataType="java.lang.String" />
+	<attribute name="tdpNeuronalCytoplasmicInclusions" dataType="java.lang.String" />
+	<attribute name="pituitaryStatus" dataType="java.lang.String" />
+	<attribute name="alphaSynLewyGlialCytoplasmic" dataType="java.lang.String" />
+	<attribute name="alphaSynLewyBodies" dataType="java.lang.String" />
+	<attribute name="tdpDystrophicNeuritis" dataType="java.lang.String" />
+	<attribute name="ubqGrains" dataType="java.lang.String" />
+	<attribute name="silverBielNFT" dataType="java.lang.String" />
+	<attribute name="additionalArea" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="NPmodel.Deprecated_FinalDiagnosis" relationShipType="main" roleName="">
+	<attribute name="khachaturianCriteria" dataType="java.lang.String" />
+	<attribute name="braakTangleStage" dataType="java.lang.String" />
+	<attribute name="finalDiagnosis4" dataType="java.lang.String" />
+	<attribute name="finalDiagnosis3" dataType="java.lang.String" />
+	<attribute name="BrainArea" dataType="NPmodel.Deprecated_BrainArea" />
+	<attribute name="braakLewyBodyStage" dataType="java.lang.String" />
+	<attribute name="braakAmyloidStage" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="ceradCriteria" dataType="java.lang.String" />
+	<attribute name="niaReaganCriteria" dataType="java.lang.String" />
+	<attribute name="finalDiagnosis1" dataType="java.lang.String" />
+	<attribute name="finalDiagnosis5" dataType="java.lang.String" />
+	<attribute name="dlbCriteria" dataType="java.lang.String" />
+	<attribute name="agdStage" dataType="java.lang.String" />
+	<attribute name="finalDiagnosis2" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="NPmodel.Deprecated_Microscopy" relationShipType="main" roleName="">
+	<attribute name="reviewer" dataType="java.lang.String" />
+	<attribute name="ParticipantRecordEntry" dataType="NPmodel.ParticipantRecordEntry" />
+		<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="dateOfReview" dataType="java.util.Date" />
+</AuditableClass>
+<AuditableClass className="NPmodel.Deprecated_OtherStain" relationShipType="main" roleName="">
+	<attribute name="observation" dataType="java.lang.String" />
+	<attribute name="otherStainScore" dataType="java.lang.String" />
+	<attribute name="BrainArea" dataType="NPmodel.Deprecated_BrainArea" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="otherStainName" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="NPmodel.impl.Deprecated_AdditionalinformationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="NPmodel.impl.Deprecated_BrainAreaImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="NPmodel.impl.Deprecated_FinalDiagnosisImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="NPmodel.impl.Deprecated_MicroscopyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="NPmodel.impl.Deprecated_OtherStainImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="NPmodel.impl.ParticipantRecordEntryImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="NPmodel.ParticipantRecordEntry" relationShipType="main" roleName="">
+		<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="NPmodel.ws.Deprecated_Additionalinformation" relationShipType="main" roleName="">
+	<attribute name="pituitaryWeight" dataType="java.lang.Float" />
+	<attribute name="causeOfDeathSpecifyOther" dataType="java.lang.String" />
+	<attribute name="BrainArea" dataType="NPmodel.ws.Deprecated_BrainArea" />
+	<attribute name="causeOfDeath" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="brainWeight" dataType="java.lang.Float" />
+	<attribute name="pmi" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="NPmodel.ws.Deprecated_AdditionalinformationImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="NPmodel.ws.Deprecated_BrainArea" relationShipType="main" roleName="">
+	<attribute name="arteriosclerosis" dataType="java.lang.String" />
+		<attribute name="silverBielNP" dataType="java.lang.String" />
+	<attribute name="tdpGlialCytoplasmicInclusions" dataType="java.lang.String" />
+		<attribute name="abcp" dataType="java.lang.String" />
+	<attribute name="tauNFT" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="abaa" dataType="java.lang.String" />
+	<attribute name="Microscopy" dataType="NPmodel.ws.Deprecated_Microscopy" />
+	<attribute name="tdpNeuronalIntranuclearInclusions" dataType="java.lang.String" />
+	<attribute name="tauGlial" dataType="java.lang.String" />
+		<attribute name="specifyPituitaryAbnormality" dataType="java.lang.String" />
+	<attribute name="ubqNI" dataType="java.lang.String" />
+	<attribute name="neuronGliosis" dataType="java.lang.String" />
+	<attribute name="abdp" dataType="java.lang.String" />
+	<attribute name="tauNP" dataType="java.lang.String" />
+	<attribute name="tdpNeuronalCytoplasmicInclusions" dataType="java.lang.String" />
+	<attribute name="pituitaryStatus" dataType="java.lang.String" />
+	<attribute name="alphaSynLewyGlialCytoplasmic" dataType="java.lang.String" />
+	<attribute name="alphaSynLewyBodies" dataType="java.lang.String" />
+	<attribute name="tdpDystrophicNeuritis" dataType="java.lang.String" />
+	<attribute name="ubqGrains" dataType="java.lang.String" />
+	<attribute name="silverBielNFT" dataType="java.lang.String" />
+	<attribute name="additionalArea" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="NPmodel.ws.Deprecated_BrainAreaImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="NPmodel.ws.Deprecated_FinalDiagnosis" relationShipType="main" roleName="">
+	<attribute name="khachaturianCriteria" dataType="java.lang.String" />
+	<attribute name="braakTangleStage" dataType="java.lang.String" />
+	<attribute name="finalDiagnosis4" dataType="java.lang.String" />
+	<attribute name="finalDiagnosis3" dataType="java.lang.String" />
+	<attribute name="BrainArea" dataType="NPmodel.ws.Deprecated_BrainArea" />
+	<attribute name="braakLewyBodyStage" dataType="java.lang.String" />
+	<attribute name="braakAmyloidStage" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="ceradCriteria" dataType="java.lang.String" />
+	<attribute name="niaReaganCriteria" dataType="java.lang.String" />
+	<attribute name="finalDiagnosis1" dataType="java.lang.String" />
+	<attribute name="finalDiagnosis5" dataType="java.lang.String" />
+	<attribute name="dlbCriteria" dataType="java.lang.String" />
+	<attribute name="agdStage" dataType="java.lang.String" />
+	<attribute name="finalDiagnosis2" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="NPmodel.ws.Deprecated_FinalDiagnosisImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="NPmodel.ws.Deprecated_Microscopy" relationShipType="main" roleName="">
+	<attribute name="reviewer" dataType="java.lang.String" />
+	<attribute name="ParticipantRecordEntry" dataType="NPmodel.ws.ParticipantRecordEntry" />
+		<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="dateOfReview" dataType="java.util.Date" />
+</AuditableClass>
+<AuditableClass className="NPmodel.ws.Deprecated_MicroscopyImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="NPmodel.ws.Deprecated_OtherStain" relationShipType="main" roleName="">
+	<attribute name="observation" dataType="java.lang.String" />
+	<attribute name="otherStainScore" dataType="java.lang.String" />
+	<attribute name="BrainArea" dataType="NPmodel.ws.Deprecated_BrainArea" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="otherStainName" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="NPmodel.ws.Deprecated_OtherStainImpl" relationShipType="main" roleName="">
+</AuditableClass>
+<AuditableClass className="NPmodel.ws.ParticipantRecordEntry" relationShipType="main" roleName="">
+		<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="NPmodel.ws.ParticipantRecordEntryImpl" relationShipType="main" roleName="">
+</AuditableClass>
+</AuditableMetaData>
