@@ -2319,8 +2319,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				if(((pos1 == null || pos2 == null) && i!=0))
 				{
-					pos1 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionOne();
-					pos2 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionTwo();
+					if(((Specimen) array[i-1]).getSpecimenPosition() != null) 
+					{
+						pos1 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionOne();
+						pos2 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionTwo();
+					}
 				}
 				this.setSpecimenStorageRecursively(specimen, dao, sessionDataBean, true,pos1,pos2);
 
@@ -3760,11 +3763,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						position2 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionTwo();
 					}
 				}
-				if(position1 != null && position2 != null)
-				{
-					this.setSpecimenStorageRecursively(newSpecimen, dao, sessionDataBean, true,
+				this.setSpecimenStorageRecursively(newSpecimen, dao, sessionDataBean, true,
 							position1,position2);
-				}
 				//bug 15260 end
 			}
 
