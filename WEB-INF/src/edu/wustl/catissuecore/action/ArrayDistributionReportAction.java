@@ -52,9 +52,9 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	 *            object of HttpServletRequest
 	 * @param response
 	 *            object of HttpServletResponse
+	 * @return ActionForward : ActionForward
 	 * @throws Exception
 	 *             generic exception
-	 * @return ActionForward : ActionForward
 	 */
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
@@ -71,7 +71,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			distriId = configForm.getDistributionId();
 		}
 
-		// retireve the distribution id from forward to hasmap
+		// retrieve the distribution id from forward to map
 		final Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
 		if (forwardToHashMap != null && forwardToHashMap.get("distributionId") != null)
 		{
@@ -87,12 +87,12 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 
 		/*
 		 * Retrieve from request parameter if it null. This request parameter is
-		 * set in Distribution page incase the Report buttonis clicked from
+		 * set in Distribution page in case the Report button is clicked from
 		 * Distribution Edit page
 		 */
 		if (distriId == null)
 		{
-			distriId = new Long(request.getParameter(Constants.SYSTEM_IDENTIFIER));
+			distriId = Long.valueOf(request.getParameter(Constants.SYSTEM_IDENTIFIER));
 		}
 
 		// Set it in configuration form if it is not null
@@ -106,8 +106,8 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 
 		// Retrieve the distributed items data
 		final DistributionReportForm distributionReportForm = this.getDistributionReportForm(dist);
-		distributionReportForm.setDistributionType(new Integer(
-				Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE));
+		distributionReportForm.setDistributionType(Integer
+				.valueOf(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE));
 		// SessionDataBean sessionData = getSessionData(request);
 		final String action = configForm.getNextAction();
 
@@ -118,7 +118,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		 * getColumnNames(selectedColumns);
 		 */
 
-		final String selectedColumns[] = this.getSelectedColumns(action, configForm, true);
+		final String[] selectedColumns = this.getSelectedColumns(action, configForm, true);
 		final String[] columnNames = this.getColumnNames(selectedColumns);
 
 		final String[] specimenColumns = Constants.SPECIMEN_IN_ARRAY_SELECTED_COLUMNS;
@@ -136,7 +136,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		request.setAttribute(Constants.SPECIMEN_COLUMN_NAMES_LIST, specimenColumnNames);
 
 		this.setSelectedMenuRequestAttribute(request);
-		return (mapping.findForward("Success"));
+		return mapping.findForward("Success");
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		// Specimen Ids which are getting distributed.
 		// String[] specimenArrayIds = new
 		// String[specimenArrayCollection.size()];
-		int i = 0;
+		//int i = 0;
 		final Iterator itr = specimenArrayCollection.iterator();
 
 		while (itr.hasNext())
@@ -168,7 +168,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			final List tempList = new ArrayList();
 			tempList.add(array.getId().toString());
 			tempList.add(CommonUtilities.toString(array.getBarcode()));
-			i++;
+			//i++;
 			final List tempList1 = new ArrayList();
 			tempList1.add(tempList);
 			listOfData.add(tempList1);
@@ -179,17 +179,12 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	/**
 	 * @param array
 	 *            : array
-	 * @param specimenColumns
-	 *            : specimenColumns
-	 * @param sessionData
-	 *            : sessionData
 	 * @param arrayEntry
 	 *            : arrayEntry
 	 * @throws BizLogicException
 	 *             : BizLogicException
 	 */
-	private void getSpecimenDetails(SpecimenArray array, String[] specimenColumns,
-			SessionDataBean sessionData, ArrayDistributionReportEntry arrayEntry)
+	private void getSpecimenDetails(SpecimenArray array, ArrayDistributionReportEntry arrayEntry)
 			throws BizLogicException
 	{
 		final List specimensDetails = new ArrayList();
@@ -209,7 +204,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			gridInfo.add(i, temp);
 		}
 		/**
-		 * Name : Virender Reviewer: Prafull Retriving collection of Specimen
+		 * Name : Virender Reviewer: Prafull Retrieving collection of Specimen
 		 * Type. Replaced array.getSpecimenArrayContentCollection().iterator();
 		 */
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -224,21 +219,20 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		{
 			final SpecimenArrayContent arrayContent = (SpecimenArrayContent) itr.next();
 			/**
-			 * Name : Virender Reviewer: Prafull Retriving specimenObject
+			 * Name : Virender Reviewer: Prafull Retrieving specimenObject
 			 * replaced arrayContent.getSpecimen()
 			 */
-			Specimen specimen = null;
-			specimen = (Specimen) bizLogic.retrieveAttribute(SpecimenArrayContent.class.getName(),
-					arrayContent.getId(), "specimen");
+			Specimen specimen = (Specimen) bizLogic.retrieveAttribute(SpecimenArrayContent.class
+					.getName(), arrayContent.getId(), "specimen");
 			final List specimenDetails = new ArrayList();
 
 			if (arrayContent.getPositionDimensionOne() != null
 					&& arrayContent.getPositionDimensionTwo() != null)
 			{
 				final int postionOneInArray = arrayContent.getPositionDimensionOne().intValue();
-				final int postionTwoInArray = arrayContent.getPositionDimensionTwo().intValue();
 				if (postionOneInArray > 0)
 				{
+					final int postionTwoInArray = arrayContent.getPositionDimensionTwo().intValue();
 					((List) gridInfo.get(postionOneInArray - 1)).set(postionTwoInArray - 1,
 							specimen.getLabel());
 				}
@@ -262,23 +256,18 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	/**
 	 * @param array
 	 *            : array
-	 * @param selectedColumns
-	 *            : selectedColumns
-	 * @param sessionData
-	 *            : sessionData
 	 * @return List : List
 	 * @throws Exception
 	 *             : Exception
 	 */
-	private List getArrayDetails(SpecimenArray array, String[] selectedColumns,
-			SessionDataBean sessionData) throws Exception
+	private List getArrayDetails(SpecimenArray array) throws Exception
 	{
 		final List arrayDetails = new ArrayList();
 		arrayDetails.add(array.getName());
 		arrayDetails.add(CommonUtilities.toString(array.getBarcode()));
 		/**
-		 * Name : Virender Reviewer: Prafull Retriving collection of Distributed
-		 * Items. array.getSpecimenArrayType().getname()
+		 * Name : Virender Reviewer: Prafull Retrieving collection of Distributed
+		 * Items. array.getSpecimenArrayType().getName()
 		 * array.getSpecimenArrayType().getSpecimenClass()
 		 * array.getSpecimenArrayType().getSpecimenTypeCollection()
 		 */
@@ -298,7 +287,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		arrayDetails.add(CommonUtilities.toString(array.getCapacity().getTwoDimensionCapacity()));
 		arrayDetails.add(CommonUtilities.toString(specimenArrayType.getSpecimenClass()));
 		/**
-		 * Name : Virender Reviewer: Prafull Retriving collection of Specimen
+		 * Name : Virender Reviewer: Prafull Retrieving collection of Specimen
 		 * Type. specimenArrayType.getSpecimenTypeCollection();
 		 */
 		final Collection specimenTypeCollection = (Collection) bizLogic.retrieveAttribute(
@@ -334,8 +323,8 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		{
 			final SpecimenArray array = (SpecimenArray) itr.next();
 			final ArrayDistributionReportEntry arrayEntry = new ArrayDistributionReportEntry();
-			arrayEntry.setArrayInfo(this.getArrayDetails(array, arrayColumns, sessionData));
-			this.getSpecimenDetails(array, specimenColumns, sessionData, arrayEntry);
+			arrayEntry.setArrayInfo(this.getArrayDetails(array));
+			this.getSpecimenDetails(array, arrayEntry);
 
 			arrayEntries.add(arrayEntry);
 		}
@@ -367,7 +356,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		{
 			final SpecimenArray array = (SpecimenArray) itr.next();
 			final List arrayEntry = new ArrayList();
-			arrayEntry.add(this.getArrayDetails(array, arrayColumns, sessionData));
+			arrayEntry.add(this.getArrayDetails(array));
 
 			arrayEntries.add(arrayEntry);
 		}
@@ -400,7 +389,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			final List list = bizLogic.retrieve(DistributedItem.class.getName(), selectColumnName,
 					whereColumnName, whereColumnCond, whereColumnValue,
 					Constants.AND_JOIN_CONDITION);
-			if (list != null && list.size() > 0)
+			if (list != null && !list.isEmpty())
 			{
 				final Iterator listItr = list.iterator();
 				while (listItr.hasNext())

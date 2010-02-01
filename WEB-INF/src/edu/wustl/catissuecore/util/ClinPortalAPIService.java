@@ -16,16 +16,24 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 
-
+/**
+ *
+ * @author shital_lawhale
+ * @version
+ */
 public class ClinPortalAPIService
 {
     private ApplicationService appService = null;
     private ClientSession clientSession = null;
-    private final String CPServerUrl = XMLPropertyHandler.getValue(ClinPortalIntegrationConstants.CLINPORTAL_SERVICE_URL);
-    private final String keyPath = XMLPropertyHandler.getValue(ClinPortalIntegrationConstants.KEYSTORE_FILE_PATH);
+	private final String CPServerUrl = XMLPropertyHandler
+			.getValue(ClinPortalIntegrationConstants.CLINPORTAL_SERVICE_URL);
+	private final String keyPath = XMLPropertyHandler
+			.getValue(ClinPortalIntegrationConstants.KEYSTORE_FILE_PATH);
 
     /**
      * Method to initialize the CaCoreAPIService
+     * @param loginName
+     * @param password
      * @throws Exception
      */
     public void initialize(final String loginName,final String password) throws Exception
@@ -63,8 +71,9 @@ public class ClinPortalAPIService
      * @return
      * @throws Exception
      */
-    public Map<String,Long> getClinPortalURLIds(final String loginName,final Long cpId,final  Long participantId,final Long cpeId,final Long scgId) throws Exception
-    {
+	public Map<String, Long> getClinPortalURLIds(final String loginName, final Long cpId,
+			final Long participantId, final Long cpeId, final Long scgId) throws Exception
+	{
         Map<String,Long> map = new HashMap<String,Long>();
         map.put(ClinPortalIntegrationConstants.COLLECTION_PROTOCOL_ID,cpId );
         map.put(ClinPortalIntegrationConstants.PARTICIPANT_ID,participantId);
@@ -89,12 +98,16 @@ public class ClinPortalAPIService
      *
      * @param loginName
      * @param visitId
-     * @param cseId
+     * @param cpeId
+     * @param cpId
+     * @param participantId
      * @return
      * @throws Exception
      */
-    public Map<String, Date> getVisitRelatedEncounteredDate(final String loginName,final Long visitId,final Long cpeId,final Long cpId,final  Long participantId) throws Exception
-    {
+	public Map<String, Date> getVisitRelatedEncounteredDate(final String loginName,
+			final Long visitId, final Long cpeId, final Long cpId, final Long participantId)
+			throws Exception
+	{
         final Map<String,Long> map = new HashMap<String,Long>();
         Map<String, Date> dateMap=null;
         try
@@ -108,11 +121,13 @@ public class ClinPortalAPIService
             dateMap=(Map) appService.getVisitRelatedEncounteredDate( map);
             terminateSession();
         }
-        catch (ApplicationException e)
-        {
-            Logger.out.error("Error in getVisitRelatedEncounteredDate method from CaCoreAPIService " + e);
-            throw e;
-        }
+		catch (ApplicationException e)
+		{
+			Logger.out
+					.error("Error in getVisitRelatedEncounteredDate method from CaCoreAPIService "
+							+ e);
+			throw e;
+		}
         return dateMap;
     }
 
