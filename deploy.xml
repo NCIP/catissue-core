@@ -1,7 +1,7 @@
 <?xml version ="1.0"?>
 <!--Ant Script for create Build for caTissue Suite-->
 
-<project name="caTissue Suite v1.1P5. Installation" default="deploy_app">
+<project name="caTissue Suite v1.1.p5 Installation" default="deploy_app">
 
 	<!--define require dir and Properties -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -1343,7 +1343,7 @@
 
 	<!--MySQL Database Creation -->
 	<target name="deploy_db_mysql" description="MySQL Database Creation">
-		<echo message="Initializing MySQL Database for caTissue Suite v1.1P4. Application..." />
+		<echo message="Initializing MySQL Database for caTissue Suite v1.1.p5. Application..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
 			<transaction src="${mysql.sql.dir}/catissuecore.sql" />
 		<!--	<transaction src="${dbupgrade.sql.dir}/MySql/DEIntegrationRestructure.sql" />  -->
@@ -1464,7 +1464,7 @@
 
 
 	<target name="deploy_db_oracle" description="Oracle Database Creation">
-		<echo message="Initializing Oracle Database for caTissue Suite v1.1P4. Application..." />
+		<echo message="Initializing Oracle Database for caTissue Suite v1.1.p5. Application..." />
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
 			<transaction src="${oracle.sql.dir}/catissuecore.sql" />
 			<transaction src="${dbupgrade.sql.dir}/Oracle/DEIntegrationRestructure.sql" />
@@ -1802,8 +1802,8 @@
 	<!--</target> -->
 	<!-- Removing unnecessary PE -->
 
-	<target name="upgrade_db" description="Upgrading Database v1.1 to v1.1p5">
-		<echo message="Upgrading Database v1.1p4 to v1.1p5" />
+	<target name="upgrade_db" description="Upgrading Database v1.1.p4 to v1.1.p5">
+		<echo message="Upgrading Database v1.1.p4 to v1.1.p5" />
 		<antcall target="upgrade_db_from_p4_to_p5"/>
 	</target>
 
@@ -2605,7 +2605,7 @@
 		<echo message="jboss.container.secure property is set to: ${jboss.container.secure} protocol set to: ${protocol}" />
 		<echo message="Sending mail to: ${email.administrative.emailAddress}" />
 		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}" />
-		<mail mailhost="${email.mailServer}" subject="caTissueSuite v1.1 Successfully Deployed" encoding="plain" failonerror="false">
+		<mail mailhost="${email.mailServer}" subject="caTissueSuite v1.1.p5 Successfully Deployed" encoding="plain" failonerror="false">
 			<from address="${email.sendEmailFrom.emailAddress}" />
 			<to address="${email.administrative.emailAddress}" />
 			<message>
@@ -2616,7 +2616,7 @@ the following location: ${jboss.home.dir}
 
 	To complete the deployment, you have to now perform the post installation
 steps described in section "Post Installation Configuration" in the deployment
-guide (caTissueSuite v1.1 Deployment Guide.doc).
+guide (caTissueSuite v1.1.p5 Deployment Guide.doc).
 
 	Once you have completed deployment, you should be able to login with the following
 details:
