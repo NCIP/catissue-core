@@ -26,7 +26,8 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 
 /**
- * This class associates Collection Protocol with the Corresponding entities mention in XML file.
+ * This class associates Collection Protocol with the Corresponding entities
+ * mentioned in XML file.
  * @author suhas_khot
  *
  */
@@ -52,8 +53,8 @@ public final class AssociatesCps
 
 	}
 
-	/*
-	 * returns single object
+	/**
+	 * @return returns single object
 	 */
 	public static AssociatesCps getInstance()
 	{
@@ -94,21 +95,14 @@ public final class AssociatesCps
 
 		entityIdsVsContId = AppUtility.getAllContainers();
 
-		String appName = CommonServiceLocator.getInstance().getAppName();
-		HibernateDAO hibernateDao = (HibernateDAO) DAOConfigFactory.getInstance().getDAOFactory(
-				appName).getDAO();
-		hibernateDao.openSession(null);
-		//dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, hibernateDao);
-
 		Map<Long, List<Long>> mergedCpIdMap = mergeEntityAndFormIdForCP(cpIdsVsEntityIds,
 				cpIdsVsFormIds);
 
 		for (Long cpId : mergedCpIdMap.keySet())
 		{
-			associateEntitiesToCps(cpId, mergedCpIdMap.get(cpId), cpIdsVsoverride, hibernateDao);
+			associateEntitiesToCps(cpId, mergedCpIdMap.get(cpId), cpIdsVsoverride);
 		}
 
-		hibernateDao.closeSession();
 		logger.info("DONE----------------------");
 	}
 
@@ -144,28 +138,78 @@ public final class AssociatesCps
 	/**
 	 * this method dissAssociate Entities per cpId.
 	 * @param cpIdsVsoverride
-	 * @param cp
+	 * @param collectionProtocol
 	 * @param sfcSet
 	 * @param hibernateDao
 	 * @throws DAOException
 	 */
 	private static void dissAssociateEntitiesFormsPerCpId(Map<Long, String> cpIdsVsoverride,
-			CollectionProtocol cp, Collection<StudyFormContext> sfcSet, HibernateDAO hibernateDao)
-			throws DAOException
+			CollectionProtocol collectionProtocol, Collection<StudyFormContext> sfcSet,
+			HibernateDAO hibernateDao) throws DAOException
 	{
-		if (cpIdsVsoverride.keySet().contains(cp.getId())
-				&& Constants.OVERRIDE_TRUE.equalsIgnoreCase(cpIdsVsoverride.get(cp.getId())))
+		if (collectionProtocol == null)
 		{
-			if (!sfcSet.isEmpty())
+			// ALL CPs
+			if (cpIdsVsoverride.keySet().contains(Long.valueOf(0))
+					&& Constants.OVERRIDE_TRUE.equalsIgnoreCase(cpIdsVsoverride
+							.get(Long.valueOf(0))))
 			{
-				for (StudyFormContext sfc : sfcSet)
+				logger.info("Dissassociate Entities for ALL CPs ----");
+				for (Long containerId : entityIdsVsContId.values())
 				{
-					Collection<CollectionProtocol> coll = sfc.getCollectionProtocolCollection();
-					coll.remove(cp);
-					sfc.setCollectionProtocolCollection(coll);
-					hibernateDao.update(sfc);
+					if (containerId != null)
+					{
+						List<StudyFormContext> formContextList = hibernateDao.retrieve(
+								StudyFormContext.class.getName(), Constants.CONTAINERID,
+								containerId);
+
+						if (formContextList == null || formContextList.isEmpty())
+						{
+							logger.info("Creating new form context for container : -----"
+									+ containerId);
+							StudyFormContext studyFormContext = new StudyFormContext();
+							studyFormContext.setContainerId(containerId);
+							studyFormContext.setHideForm(true);
+							hibernateDao.insert(studyFormContext);
+						}
+						else
+						{
+							logger.info("Got form context for container : -----" + containerId);
+							StudyFormContext studyFormContext = formContextList.get(0);
+							Collection cpColl = studyFormContext.getCollectionProtocolCollection();
+							cpColl.clear();
+							studyFormContext.setCollectionProtocolCollection(cpColl);
+							studyFormContext.setHideForm(true);
+							hibernateDao.update(studyFormContext);
+						}
+
+					}
 				}
-				sfcSet.clear();
+			}
+		}
+		else
+		{
+			if (cpIdsVsoverride.keySet().contains(collectionProtocol.getId())
+					&& Constants.OVERRIDE_TRUE.equalsIgnoreCase(cpIdsVsoverride
+							.get(collectionProtocol.getId())))
+			{
+				logger.info("Dissassociate Entities for CP id : " + collectionProtocol.getId());
+				if (!sfcSet.isEmpty())
+				{
+					// remove the CP from all StudyFormContext objects
+					for (StudyFormContext sfc : sfcSet)
+					{
+						Collection<CollectionProtocol> coll = sfc.getCollectionProtocolCollection();
+						coll.remove(collectionProtocol);
+						sfc.setCollectionProtocolCollection(coll);
+						if (coll.isEmpty())
+						{
+							sfc.setHideForm(true);
+						}
+						hibernateDao.update(sfc);
+					}
+					sfcSet.clear();
+				}
 			}
 		}
 	}
@@ -186,65 +230,117 @@ public final class AssociatesCps
 	 * @param cpId stores Id of Collection Protocol
 	 * @param entityIds entityIds collection
 	 * @param cpIdsVsoverride
-	 * @param hibernateDao
 	 * @throws DAOException
 	 */
 	private static void associateEntitiesToCps(Long cpId, List<Long> entityIds,
-			Map<Long, String> cpIdsVsoverride, HibernateDAO hibernateDao) throws DAOException
+			Map<Long, String> cpIdsVsoverride) throws DAOException
 	{
-		List<CollectionProtocol> cpList = hibernateDao.retrieve(CollectionProtocol.class.getName(),
-				Constants.ID, cpId);
-		CollectionProtocol cp = cpList.get(0);
-		Collection<StudyFormContext> sfcSet = cp.getStudyFormContextCollection();
-
-		dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, cp, sfcSet, hibernateDao);
-
-		for (Long entityId : entityIds)
+		String appName = CommonServiceLocator.getInstance().getAppName();
+		HibernateDAO hibernateDao = (HibernateDAO) DAOConfigFactory.getInstance().getDAOFactory(
+				appName).getDAO();
+		if (cpId == 0)
 		{
-			Long containerId = getContainerId(entityId);
-			if (containerId != null)
+			hibernateDao.openSession(null);
+			dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, null, null, hibernateDao);
+			hibernateDao.commit();
+			hibernateDao.closeSession();
+			hibernateDao.openSession(null);
+
+			for (Long entityId : entityIds)
 			{
-				List<StudyFormContext> formContextList = hibernateDao.retrieve(
-						StudyFormContext.class.getName(), Constants.CONTAINERID, containerId);
-
-				logger.info("Associating Container : " + containerId + " with CP : " + cpId);
-
-				if (formContextList != null && !formContextList.isEmpty())
+				Long containerId = getContainerId(entityId);
+				if (containerId != null)
 				{
-					logger.info("Got form context for container : -----" + containerId);
-					StudyFormContext studyFormContext = formContextList.get(0);
-					updateStudyFormContext(cp, studyFormContext, containerId);
-					sfcSet.add(studyFormContext);
-					hibernateDao.update(studyFormContext);
-				}
-				else
-				{
-					logger.info("Creating new form context for container : -----" + containerId);
-					StudyFormContext studyFormContext = new StudyFormContext();
-					updateStudyFormContext(cp, studyFormContext, containerId);
-					sfcSet.add(studyFormContext);
-					hibernateDao.insert(studyFormContext);
+					List<StudyFormContext> formContextList = hibernateDao.retrieve(
+							StudyFormContext.class.getName(), Constants.CONTAINERID, containerId);
+
+					if (formContextList == null || formContextList.isEmpty())
+					{
+						logger
+								.info("Creating new form context for container : -----"
+										+ containerId);
+						StudyFormContext studyFormContext = new StudyFormContext();
+						updateStudyFormContext(null, studyFormContext, containerId);
+						hibernateDao.insert(studyFormContext);
+					}
+					else
+					{
+						logger.info("Got form context for container : -----" + containerId);
+						StudyFormContext studyFormContext = formContextList.get(0);
+						updateStudyFormContext(null, studyFormContext, containerId);
+						hibernateDao.update(studyFormContext);
+					}
+
 				}
 			}
+			hibernateDao.commit();
+			hibernateDao.closeSession();
 		}
+		else
+		{
+			hibernateDao.openSession(null);
+			List<CollectionProtocol> cpList = hibernateDao.retrieve(CollectionProtocol.class
+					.getName(), Constants.ID, cpId);
+			CollectionProtocol cp = cpList.get(0);
+			Collection<StudyFormContext> sfcSet = cp.getStudyFormContextCollection();
 
-		hibernateDao.commit();
+			dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, cp, sfcSet, hibernateDao);
 
+			hibernateDao.commit();
+			hibernateDao.closeSession();
+			hibernateDao.openSession(null);
+
+			for (Long entityId : entityIds)
+			{
+				Long containerId = getContainerId(entityId);
+				if (containerId != null)
+				{
+					List<StudyFormContext> formContextList = hibernateDao.retrieve(
+							StudyFormContext.class.getName(), Constants.CONTAINERID, containerId);
+
+					logger.info("Associating Container : " + containerId + " with CP : " + cpId);
+
+					if (formContextList == null || formContextList.isEmpty())
+					{
+						logger
+								.info("Creating new form context for container : -----"
+										+ containerId);
+						StudyFormContext studyFormContext = new StudyFormContext();
+						updateStudyFormContext(cp, studyFormContext, containerId);
+						sfcSet.add(studyFormContext);
+						hibernateDao.insert(studyFormContext);
+					}
+					else
+					{
+						logger.info("Got form context for container : -----" + containerId);
+						StudyFormContext studyFormContext = formContextList.get(0);
+						updateStudyFormContext(cp, studyFormContext, containerId);
+						sfcSet.add(studyFormContext);
+						hibernateDao.update(studyFormContext);
+					}
+				}
+			}
+			hibernateDao.commit();
+			hibernateDao.closeSession();
+		}
 	}
 
 	/**
 	 *
-	 * @param cp
+	 * @param collectionProtocol
 	 * @param studyFormContext
 	 * @param containerId
 	 */
-	private static void updateStudyFormContext(CollectionProtocol cp,
+	private static void updateStudyFormContext(CollectionProtocol collectionProtocol,
 			StudyFormContext studyFormContext, Long containerId)
 	{
-		Collection cpColl = studyFormContext.getCollectionProtocolCollection();
-		cpColl.add(cp);
+		if (collectionProtocol != null)
+		{
+			Collection cpColl = studyFormContext.getCollectionProtocolCollection();
+			cpColl.add(collectionProtocol);
+			studyFormContext.setCollectionProtocolCollection(cpColl);
+		}
 
-		studyFormContext.setCollectionProtocolCollection(cpColl);
 		studyFormContext.setHideForm(false);
 		studyFormContext.setContainerId(containerId);
 	}
