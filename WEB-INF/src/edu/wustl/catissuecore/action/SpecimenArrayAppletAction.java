@@ -105,8 +105,7 @@ public class SpecimenArrayAppletAction extends BaseAppletAction
 	 * @return ActionForward : ActionForward
 	 * @throws Exception : Exception
 	 */
-	@Override
-	protected ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form,
+	public ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		if (methodName.trim().length() > 0)

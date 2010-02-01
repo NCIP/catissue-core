@@ -9,7 +9,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -17,7 +19,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.UserNotAuthenticatedException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -26,7 +29,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * @author Rahul Ner.
  */
-public abstract class BaseAppletAction extends SecureAction
+public abstract class BaseAppletAction extends Action
 {
 
 	/**
@@ -80,7 +83,6 @@ public abstract class BaseAppletAction extends SecureAction
 	 * @param response
 	 *            object of HttpServletResponse
 	 */
-	@Override
 	protected void preExecute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response)
 	{
@@ -137,8 +139,7 @@ public abstract class BaseAppletAction extends SecureAction
 	 *             generic exception
 	 * @return ActionForward : ActionForward
 	 */
-	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// ---- Code from execute
@@ -151,6 +152,20 @@ public abstract class BaseAppletAction extends SecureAction
 		// }
 		// ---- Code from execute
 
+		//long startTime = System.currentTimeMillis();
+		preExecute(mapping, form, request, response);
+		Object sessionData = request.getSession().getAttribute(Constants.TEMP_SESSION_DATA);
+		Object accessObj = request.getParameter(Constants.ACCESS);
+		if (!(sessionData != null && accessObj != null) && getSessionData(request) == null)
+		{
+				//Forward to the Login
+				throw new UserNotAuthenticatedException();
+		}
+		setAttributeFromParameter(request, Constants.OPERATION);
+		setAttributeFromParameter(request, Constants.MENU_SELECTED);
+		checkAddNewOperation(request);
+		
+		
 		// -- code for handling method calls
 		final String methodName = request.getParameter(Constants.METHOD_NAME);
 		if (methodName != null)
@@ -161,6 +176,28 @@ public abstract class BaseAppletAction extends SecureAction
 	}
 
 	/**
+	 * @param request HttpServletRequest
+	 * @param paramName String -parameter name
+	 */
+	protected void setAttributeFromParameter(HttpServletRequest request, String paramName)
+	{
+		String paramValue = request.getParameter(paramName);
+		if (paramValue != null)
+		{
+			request.setAttribute(paramName, paramValue);
+		}
+	}
+
+	/**
+	 * get data from the current session.
+	 * @param request HttpServletRequest
+	 * @return SessionDataBean from session
+	 */
+	protected SessionDataBean getSessionData(HttpServletRequest request)
+	{
+		return (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+	}
+	/**
 	 * @param methodName : methodName
 	 * @param mapping : mapping
 	 * @param form : form
@@ -169,8 +206,7 @@ public abstract class BaseAppletAction extends SecureAction
 	 * @return ActionForward : ActionForward
 	 * @throws Exception : Exception
 	 */
-	@Override
-	protected abstract ActionForward invokeMethod(String methodName, ActionMapping mapping,
+	public abstract ActionForward invokeMethod(String methodName, ActionMapping mapping,
 			ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception;
 
@@ -181,7 +217,6 @@ public abstract class BaseAppletAction extends SecureAction
 	 * @param className : className
 	 * @return Method : Method
 	 */
-	@Override
 	protected Method getMethod(String name, Class className)
 	{
 		// argument types
@@ -210,4 +245,70 @@ public abstract class BaseAppletAction extends SecureAction
 		return null;
 	}
 
+	/**
+	 * This function checks call to the action and sets/removes required attributes
+	 *  if AddNew or ForwardTo activity is executing.
+	 * @param request - HTTPServletRequest calling the action
+	 */
+	protected void checkAddNewOperation(HttpServletRequest request)
+	{
+		String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
+
+		String submittedForParam = (String) request.getParameter(Constants.SUBMITTED_FOR);
+
+		if ((Constants.SUBMITTED_FOR_ADD_NEW.equals(submittedFor)))
+		{
+			request.setAttribute(Constants.SUBMITTED_FOR, Constants.SUBMITTED_FOR_ADD_NEW);
+		}
+		else if (Constants.SUBMITTED_FOR_ADD_NEW.equals(submittedForParam))
+		{
+			addNewOperation(request, submittedFor);
+		}
+		else if (Constants.SUBMITTED_FOR_FORWARD_TO.equals(submittedFor))
+		{
+			request.setAttribute(Constants.SUBMITTED_FOR, Constants.SUBMITTED_FOR_FORWARD_TO);
+			removeFormBeanStack(request);
+		}
+		//if AddNew loop is over
+		else if (Constants.SUBMITTED_FOR_DEFAULT.equals(submittedFor))
+		{
+			request.setAttribute(Constants.SUBMITTED_FOR, Constants.SUBMITTED_FOR_DEFAULT);
+			removeFormBeanStack(request);
+		}
+		//if AddNew or ForwardTo loop is broken...
+		else
+		{
+			removeFormBeanStack(request);
+		}
+	}
+	
+	/**
+	 * sets required attributes.
+	 * @param request HTTPServletRequest calling the action
+	 * @param submittedFor submitted For.
+	 */
+	private void addNewOperation(HttpServletRequest request, String submittedFor)
+	{
+		if (Constants.SUBMITTED_FOR_DEFAULT.equals(submittedFor))
+		{
+			request.setAttribute(Constants.SUBMITTED_FOR, Constants.SUBMITTED_FOR_DEFAULT);
+		}
+		else
+		{
+			request.setAttribute(Constants.SUBMITTED_FOR, Constants.SUBMITTED_FOR_ADD_NEW);
+		}
+	}
+	
+	/**
+	 * remove data from current session.
+	 * @param request HttpServletRequest
+	 */
+	private void removeFormBeanStack(HttpServletRequest request)
+	{
+		HttpSession session = request.getSession();
+		if ((session.getAttribute(Constants.FORM_BEAN_STACK)) != null)
+		{
+			session.removeAttribute(Constants.FORM_BEAN_STACK);
+		}
+	}
 }

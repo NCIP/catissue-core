@@ -49,6 +49,15 @@ the Stinger project lead at eric.sheridan@owasp.org
 		<exclude>/catissuecore/BulkOperation.do</exclude>
 		<exclude>/catissuecore/BulkHandler.do</exclude>
 		<exclude>/catissuecore/FileUpload.do</exclude>
+		<exclude>/catissuecore/SpecimenArray.do*</exclude>
+		<exclude>/catissuecore/SpecimenArrayAppletAction.do*</exclude>
+		<exclude>/catissuecore/SpecimenArrayAdd.do*</exclude>
+		<exclude>/catissuecore/SpecimenArrayEdit.do*</exclude>
+		<exclude>/catissuecore/BaseAppletAction*</exclude>
+		<exclude>/catissuecore/SpecimenArray.do/..//SpecimenArrayAppletAction.do</exclude>
+		<exclude>/catissuecore/SpecimenArray.do/..//SpecimenArrayAppletAction.do*</exclude>
+		<exclude>/catissuecore/SpecimenArrayAdd.do/..//SpecimenArrayAppletAction.do</exclude>
+		<exclude>/catissuecore/SpecimenArrayEdit.do/..//SpecimenArrayAppletAction.do</exclude>
 		<exclude>.*.jss</exclude>
 		<exclude>.*.css</exclude>
 	</exclude-set>
