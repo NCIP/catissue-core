@@ -832,9 +832,10 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					throw this.getBizLogicException(null, "events.histologicalQuality.errMsg", "");
 				}
 				break;
-
-			
-				
+				//Case added for disposal event for bug #15185
+			case Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID :
+					validateDisposalEvent(dao, eventParameter);
+					break;
 		}
 		return true;
 	}
