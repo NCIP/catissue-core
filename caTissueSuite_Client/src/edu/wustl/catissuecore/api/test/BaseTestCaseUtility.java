@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.domain.Address;
+import edu.wustl.catissuecore.domain.Aliquot;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Capacity;
@@ -1902,8 +1903,20 @@ public class BaseTestCaseUtility {
 
 		return cellSpecimen;
 }
-	
-	
+	/**
+	 * Create a aliquot domain object.
+	 * @return
+	 */
+	public static Aliquot initAliquot()
+	{
+		Aliquot aliquot = new Aliquot();
+		aliquot.setCount(2);
+		aliquot.setQuantityPerAliquot(1.0);
+		aliquot.setAliquotsInSameContainer(Boolean.TRUE);
+		aliquot.setSpecimenPositionCollection(new LinkedHashSet());
+		
+		return aliquot; 
+	}
 	
 	public static SpecimenArrayType initSpecimenSpecimenArrayType()
 	{

@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+
+import edu.wustl.catissuecore.domain.Aliquot;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -19,6 +21,8 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -1995,6 +1999,49 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			assertFalse("Failed to update activity status from closed to active of specimen", true);
 		}
 	}
+	
+	/**
+	 * Test Create Aliquots using Aliquot biz logic.
+	 */
+	public void testCreateAliquots()
+	 {
+		 Logger.out.info("creating aliquot: testCreateAliquots ------->");
+		 try
+		 {
+			 TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			 SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+			 System.out.println("SpecimenTestCases.testCreateAliquots(): " + scg);
+			 specimenObj.setSpecimenCollectionGroup(scg);
+			 Logger.out.info("Inserting domain object------->" + specimenObj);
+			 System.out.println("Before Creating Tissue Specimen");
+			 specimenObj.setCollectionStatus("Collected");
+			 specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
+			 
+			 Aliquot aliquot = BaseTestCaseUtility.initAliquot();
+			 
+			 aliquot.setSpecimen(specimenObj);
+			 //Set container name to aliquot.
+			 StorageContainer strCont = (StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
+			 StorageContainer container = new StorageContainer();
+			 container.setName(strCont.getName());
+			 SpecimenPosition position = new SpecimenPosition();
+			 position.setStorageContainer(container);
+			 Collection<SpecimenPosition> specimenPositionColl = new LinkedHashSet<SpecimenPosition>();
+			 specimenPositionColl.add(position);
+			 aliquot.setSpecimenPositionCollection(specimenPositionColl);
+			 System.out.println("Before Creating ALiquot");
+			 
+			 appService.createObject(aliquot);
+			 System.out.println("After Creating ALiquot");
+			 System.out.println("Success: Creating ALiquot : testCreateAliquots");
+			 
+		 }
+		 catch (Exception exp)
+		 {
+			 System.out.println("Error: Creating ALiquot : testCreateAliquots");
+			 exp.printStackTrace();
+		 }
+	 }
 
 	 public void testEditSiteUserCPAssociation() {
 		Logger.out.info("updating domain object site ------->");
