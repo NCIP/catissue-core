@@ -152,7 +152,6 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 * collectionStatus.
 	 */
 	protected String collectionStatus;
-
 	/**
 	 * offset.
 	 */
@@ -173,6 +172,30 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 	 */
 	protected boolean isCPBasedSpecimenEntryChecked = true;
 
+	/**
+	 * isToInsertAnticipatorySpecimens added for new migration tool.
+	 */
+	protected Boolean isToInsertAnticipatorySpecimens = true;
+	/**
+	 * Get IsToInsertAnticipatorySpecimens value.
+	 * @return the isToInsertAnticipatorySpecimens
+	 */
+	public Boolean getIsToInsertAnticipatorySpecimens()
+	{
+		return isToInsertAnticipatorySpecimens;
+	}
+	/**
+	 * Set IsToInsertAnticipatorySpecimens value.
+	 * @param isToInsertAnticipatorySpecimens the isToInsertAnticipatorySpecimens to set
+	 */
+	public void setIsToInsertAnticipatorySpecimens(
+			Boolean isToInsertAnticipatorySpecimens)
+	{
+		this.isToInsertAnticipatorySpecimens = isToInsertAnticipatorySpecimens;
+	}
+	/**
+	 * Scg Record Entry Collection.
+	 */
 	protected Collection<SCGRecordEntry> scgRecordEntryCollection = new HashSet<SCGRecordEntry>();
 
 	/**

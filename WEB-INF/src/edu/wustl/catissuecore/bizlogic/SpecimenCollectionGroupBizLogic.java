@@ -205,7 +205,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			this.checkSCGEvents(specimenCollectionGroup.getSpecimenEventParametersCollection(),
 					sessionDataBean);
 			dao.insert(specimenCollectionGroup);
-			if (specimenCollection != null && !reportLoaderFlag)
+			if (specimenCollection != null && !reportLoaderFlag &&
+					specimenCollectionGroup.getIsToInsertAnticipatorySpecimens())
 			{
 				new NewSpecimenBizLogic().insertMultiple(specimenCollection, (DAO) dao,
 						sessionDataBean);

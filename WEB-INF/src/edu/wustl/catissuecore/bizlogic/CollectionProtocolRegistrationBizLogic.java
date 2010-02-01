@@ -794,7 +794,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			
 			if (armFound == false)
 			{
-				if (reportLoaderFlag == false)
+				if (reportLoaderFlag == false &&
+						collectionProtocolRegistration.getIsToInsertAnticipatorySCGs())
 				{
 					this.createSCG(collectionProtocolRegistration, dao, sessionDataBean);
 					this.chkForChildCP(collectionProtocolRegistration, dao, sessionDataBean);

@@ -377,25 +377,28 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		boolean isCPDuplicate = false;
 		final Collection<CollectionProtocolRegistration> newCPRColl =
 			new LinkedHashSet<CollectionProtocolRegistration>();
-		final Iterator<CollectionProtocolRegistration> crpItr = 
-		cprColl.iterator();
-		while (crpItr.hasNext())
+		if(newCPRColl != null)
 		{
-			final CollectionProtocolRegistration collProtReg =
-				(CollectionProtocolRegistration) crpItr.next();
-			if (collProtReg.getCollectionProtocol() != null
-					&& !collProtReg.equals(""))
+			final Iterator<CollectionProtocolRegistration> crpItr = 
+			cprColl.iterator();
+			while (crpItr.hasNext())
 			{
-				final long collectionProtocolId = collProtReg
-						.getCollectionProtocol().getId().longValue();
-				if (this.isCollectionProtocolExist(newCPRColl,
-						collectionProtocolId))
+				final CollectionProtocolRegistration collProtReg =
+					(CollectionProtocolRegistration) crpItr.next();
+				if (collProtReg.getCollectionProtocol() != null
+						&& !collProtReg.equals(""))
 				{
-					isCPDuplicate = true;
-				}
-				else
-				{
-					newCPRColl.add(collProtReg);
+					final long collectionProtocolId = collProtReg
+							.getCollectionProtocol().getId().longValue();
+					if (this.isCollectionProtocolExist(newCPRColl,
+							collectionProtocolId))
+					{
+						isCPDuplicate = true;
+					}
+					else
+					{
+						newCPRColl.add(collProtReg);
+					}
 				}
 			}
 		}
@@ -968,7 +971,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			final Participant participant = (Participant) domainObject;
 			final Collection<CollectionProtocolRegistration> cprCollection = participant
 					.getCollectionProtocolRegistrationCollection();
-			if (cprCollection.isEmpty())
+			if (cprCollection != null && cprCollection.isEmpty())
 			{
 				return objectId;
 			}

@@ -126,6 +126,27 @@ public class CollectionProtocolRegistration extends AbstractDomainObject
 	 * barcode attribute added for Suite 1.1.
 	 */
 	protected String barcode;
+	/**
+	 * isToInsertAnticipatorySCGs Added for the new migration for
+	 * not creating the anticipated SCG's.
+	 */
+	protected Boolean isToInsertAnticipatorySCGs = true;
+	/**
+	 * Get IsToInsertAnticipatorySCGs value.
+	 * @return the isToInsertAnticipatorySCGs
+	 */
+	public Boolean getIsToInsertAnticipatorySCGs()
+	{
+		return isToInsertAnticipatorySCGs;
+	}
+	/**
+	 * Set IsToInsertAnticipatorySCGs value.
+	 * @param isToInsertAnticipatorySCGs the isToInsertAnticipatorySCGs to set
+	 */
+	public void setIsToInsertAnticipatorySCGs(Boolean isToInsertAnticipatorySCGs)
+	{
+		this.isToInsertAnticipatorySCGs = isToInsertAnticipatorySCGs;
+	}
 
 	/**
 	 * @return the consentSignatureDate
