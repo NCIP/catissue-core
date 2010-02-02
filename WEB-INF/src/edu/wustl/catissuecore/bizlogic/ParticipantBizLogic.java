@@ -292,6 +292,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		{
 			final Participant participant = (Participant) obj;
 			final Participant oldParticipant = (Participant) oldObj;
+			setPMI(participant);
 			final CommonParticipantBizlogic comBizLogic = new CommonParticipantBizlogic();
 			comBizLogic.modifyParticipantObject(dao, sessionDataBean, participant, oldParticipant);
 			updateCPR(dao, sessionDataBean, participant, oldParticipant);
@@ -306,6 +307,24 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			logger.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+	}
+	/**
+	 * This method is for Setting PMI.
+	 * @param participant Participant Object
+	 */
+	private void setPMI(final Participant participant)
+	{
+		final Collection<ParticipantMedicalIdentifier> pmiColl =
+		participant.getParticipantMedicalIdentifierCollection();
+		final Iterator<ParticipantMedicalIdentifier> it =
+		pmiColl.iterator();
+		while (it.hasNext())
+		{
+			final ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it
+			.next();
+			ApiSearchUtil.setParticipantMedicalIdentifierDefault(pmIdentifier);
+			pmIdentifier.setParticipant(participant);
 		}
 	}
 	/**
