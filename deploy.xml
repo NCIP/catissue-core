@@ -4307,9 +4307,14 @@ Thanking You,
 			<classpath>
 				<fileset dir="./caTissueSuite_Client/lib/">
 					<include name="*.jar" />
+					<exclude name="AdvanceQuery*.jar" />
 				</fileset>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
+					<exclude name="AdvanceQuery*.jar" />
+				</fileset>
+				<fileset dir="./caTissueSuite_Client/">
+						<include name="*.properties" />
 				</fileset>
 			</classpath>
 		</java>
