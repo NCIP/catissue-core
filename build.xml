@@ -604,7 +604,7 @@
 		<copy file="allTokens.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="washuInstall.properties" todir="${zip.dir}" overwrite="true" />
-		<copy file="Show_Hide_Forms.csv" todir="${zip.dir}" overwrite="true" />
+		<copy file="Show_Hide_Forms.CSV" todir="${zip.dir}" overwrite="true" />
 		<copy file="Show_Hide_Forms.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="build-properties.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
