@@ -113,6 +113,24 @@ public class DeleteEntity
 		sql = "delete from dyextn_entity where identifier = " + this.entityToDelete.getId();
 		deleteSQL.add(sql);
 
+		sql = "select identifier from dyextn_constraint_properties where ABSTRACT_ENTITY_ID="
+			+ this.entityToDelete.getId();
+
+		Long constraintId = getConstraintKeyId(sql);
+		sql = "delete from dyextn_column_properties where cnstr_key_prop_id in "
+				+ "(select identifier from dyextn_constraintkey_prop where "
+				+ "src_constraint_key_id=" + constraintId + " or tgt_constraint_key_id="
+				+ constraintId + ")";
+		deleteSQL.add(sql);
+
+		sql = "delete from dyextn_constraintkey_prop where src_constraint_key_id=" + constraintId
+				+ " or tgt_constraint_key_id=" + constraintId;
+		deleteSQL.add(sql);
+
+		sql = "delete from dyextn_constraint_properties where ABSTRACT_ENTITY_ID="
+				+ this.entityToDelete.getId();
+		deleteSQL.add(sql);
+
 		sql = "delete from dyextn_abstract_entity where id = " + this.entityToDelete.getId();
 		deleteSQL.add(sql);
 
@@ -121,6 +139,19 @@ public class DeleteEntity
 		deleteSQL.add(sql);
 
 		return deleteSQL;
+	}
+
+	private Long getConstraintKeyId(String sql) throws SQLException
+	{
+		Long identifier = null;
+		stmt = this.connection.createStatement();
+		final ResultSet rs = stmt.executeQuery(sql);
+		if (rs.next())
+		{
+			identifier = rs.getLong(1);
+		}
+
+		return identifier;
 	}
 
 	/**

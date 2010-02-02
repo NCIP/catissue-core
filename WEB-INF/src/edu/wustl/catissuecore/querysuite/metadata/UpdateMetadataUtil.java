@@ -218,6 +218,20 @@ public class UpdateMetadataUtil
 				+ attribute.getId();
 		deleteSQL.add(sql);
 
+		sql = "delete from dyextn_column_properties where PRIMITIVE_ATTRIBUTE_ID = " + attribute.getId();
+		deleteSQL.add(sql);
+
+		sql = "delete from dyextn_column_properties where cnstr_key_prop_id in "
+				+ "(select identifier from dyextn_constraintkey_prop where PRIMARY_ATTRIBUTE_ID="
+				+ attribute.getId() + ")";
+		deleteSQL.add(sql);
+
+		sql = "delete from dyextn_constraintkey_prop where PRIMARY_ATTRIBUTE_ID=" + attribute.getId();
+		deleteSQL.add(sql);
+
+		sql = "delete from dyextn_entiy_composite_key_rel where ATTRIBUTE_ID=" + attribute.getId();
+		deleteSQL.add(sql);
+
 		sql = "delete from dyextn_primitive_attribute where identifier = " + attribute.getId();
 		deleteSQL.add(sql);
 
@@ -273,8 +287,8 @@ public class UpdateMetadataUtil
 	}
 
 	/**
-	 * Method that appends setting identity insert ON & OFF statements which facilitates inserting 
-	 * values into a column which is declared as identity in MsSqlServer 
+	 * Method that appends setting identity insert ON & OFF statements which facilitates inserting
+	 * values into a column which is declared as identity in MsSqlServer
 	 * @param sql
 	 * @param tableName
 	 * @return

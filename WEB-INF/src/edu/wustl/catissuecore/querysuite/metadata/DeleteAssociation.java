@@ -196,6 +196,17 @@ public class DeleteAssociation
 					if (rs1.next())
 					{
 						final Long constraintId = rs1.getLong(1);
+
+						sql = "delete from dyextn_column_properties where cnstr_key_prop_id in "
+								+ "(select identifier from dyextn_constraintkey_prop where "
+								+ "src_constraint_key_id=" + constraintId
+								+ " or tgt_constraint_key_id=" + constraintId + ")";
+						deleteSQL.add(sql);
+
+						sql = "delete from dyextn_constraintkey_prop where src_constraint_key_id="
+								+ constraintId + " or tgt_constraint_key_id=" + constraintId;
+						deleteSQL.add(sql);
+
 						sql = "delete from dyextn_constraint_properties" + " where identifier = "
 								+ constraintId;
 						deleteSQL.add(sql);

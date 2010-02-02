@@ -96,7 +96,7 @@ public class UpdateMetadata
 			}
 			else
 			{
-				//deleteMeatadata();
+				deleteMetadata();
 				final List<String> updateSQL = updateSQLForDistributionProtocol();
 				UpdateMetadataUtil.executeSQLs(updateSQL, connection.createStatement(), false);
 				addMetadata();
@@ -340,7 +340,7 @@ public class UpdateMetadata
 	 * @throws IOException IO Exception
 	 * @throws SQLException SQL Exception
 	 */
-	private static void deleteMeatadata() throws IOException, SQLException
+	private static void deleteMetadata() throws IOException, SQLException
 	{
 		/**  delete path statements  start **/
 		final DeleteAssociation deleteAssociation = new DeleteAssociation(connection);
