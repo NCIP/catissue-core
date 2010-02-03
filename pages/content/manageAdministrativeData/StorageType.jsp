@@ -129,10 +129,7 @@
 		var specimenArray = document.getElementById("holdsSpecimenArrTypeIds");
 		if(element == "Specimen")
 		{
-			if('${requestScope.operation}' == 'add')
-			{
-				specimenClass.disabled = false;
-			}
+			specimenClass.disabled = false;
 			specimenArray.disabled = true;
 			var len = specimenArray.length;
 			for (var i = 0; i < len; i++) 
@@ -271,7 +268,7 @@
 													</html:select>
                         </td>
 						<td align="left" valign="top" class="tabletd1">
-							<logic:equal name="storageTypeForm" property="operation" value="add">
+							
 								<logic:equal name="storageTypeForm" property="specimenOrArrayType" value="Specimen">
 									<html:select property="holdsSpecimenClassTypes" styleClass="formFieldSized12" styleId="holdSpecimenClassTypeIds" size="5" multiple="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 									<html:options collection='${requestScope.holds_List_2}' labelProperty="name" property="value"/>
@@ -282,21 +279,6 @@
 											<html:options collection='${requestScope.holds_List_2}' labelProperty="name" property="value"/>
 										</html:select>
 								</logic:equal>
-								</logic:equal>
-								<logic:equal name="storageTypeForm" property="operation" value="edit">
-								<html:hidden property="holdsSpecimenClassTypes" />
-								<logic:equal name="storageTypeForm" property="specimenOrArrayType" value="Specimen">
-									<html:select property="holdsSpecimenClassTypes" styleClass="formFieldSized12" styleId="holdSpecimenClassTypeIds" size="5" multiple="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true">
-									<html:options collection='${requestScope.holds_List_2}' labelProperty="name" property="value"/>
-									</html:select>
-								</logic:equal>
-								<logic:equal name="storageTypeForm" property="specimenOrArrayType" value="SpecimenArray">
-										<html:select property="holdsSpecimenClassTypes" styleClass="formFieldSized12" styleId="holdSpecimenClassTypeIds" size="5" multiple="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true">
-											<html:options collection='${requestScope.holds_List_2}' labelProperty="name" property="value"/>
-										</html:select>
-								</logic:equal>
-							</logic:equal>
-
 						</td>
                         <td align="left" valign="top" class="tabletd1"><logic:equal name="storageTypeForm" property="specimenOrArrayType" value="SpecimenArray">
 													<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldSized12" styleId="holdsSpecimenArrTypeIds" size="5" multiple="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">

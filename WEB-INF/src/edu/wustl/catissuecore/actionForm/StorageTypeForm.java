@@ -206,12 +206,7 @@ public class StorageTypeForm extends AbstractActionForm implements ISpecimenType
 				i++;
 			}
 		}
-		final Collection spClassTypeCollection = setSpClass(storageType);
-		final Collection spTypeCollection = storageType.getHoldsSpecimenTypeCollection();
-		if(spTypeCollection!=null)
-		{
-			StorageContainerUtil.populateSpType(spClassTypeCollection, spTypeCollection, this);
-		}
+		setSpClass(storageType);
 		final Collection specimenArrayTypeCollection = storageType
 				.getHoldsSpecimenArrayTypeCollection();
 		if (specimenArrayTypeCollection != null)
@@ -233,9 +228,9 @@ public class StorageTypeForm extends AbstractActionForm implements ISpecimenType
 	 * @param storageType StorageType
 	 * @return specimenClassTypeCollection
 	 */
-	private Collection setSpClass(final StorageType storageType)
+	private Collection<String> setSpClass(final StorageType storageType)
 	{
-		final Collection specimenClassTypeCollection = storageType
+		final Collection<String> specimenClassTypeCollection = storageType
 				.getHoldsSpecimenClassCollection();
 
 		if (specimenClassTypeCollection != null)
@@ -251,7 +246,7 @@ public class StorageTypeForm extends AbstractActionForm implements ISpecimenType
 				this.holdsSpecimenClassTypes = new String[specimenClassTypeCollection.size()];
 				int i = 0;
 
-				final Iterator it = specimenClassTypeCollection.iterator();
+				final Iterator<String> it = specimenClassTypeCollection.iterator();
 				while (it.hasNext())
 				{
 					final String specimenClass = (String) it.next();

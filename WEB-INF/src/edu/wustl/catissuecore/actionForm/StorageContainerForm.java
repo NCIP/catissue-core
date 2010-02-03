@@ -423,8 +423,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		}
 
 		//Populating the specimen class type-id array
-		final Collection specimenClassCollection = container.getHoldsSpecimenClassCollection();
-
+		final Collection<String> specimenClassCollection = container.getHoldsSpecimenClassCollection();
 		if (specimenClassCollection != null)
 		{
 			if (specimenClassCollection.size() == AppUtility.getSpecimenClassTypes().size())
@@ -447,12 +446,6 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 					this.specimenOrArrayType = "Specimen";
 				}
 			}
-		}
-		//Populating the specimen type type-id array
-		final Collection specimenTypeCollection = container.getHoldsSpecimenTypeCollection();
-		if(specimenTypeCollection!=null)
-		{
-			StorageContainerUtil.populateSpType(specimenClassCollection, specimenTypeCollection, this);
 		}
 		final Collection specimenArrayTypeCollection = container
 				.getHoldsSpecimenArrayTypeCollection();

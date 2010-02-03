@@ -270,8 +270,7 @@ public class StorageType extends ContainerType implements ISpecimenTypeDomain
 	 */
 	private void setSpClassColl(final StorageTypeForm storageTypeForm)
 	{
-		if (storageTypeForm.getSpecimenOrArrayType().equals("Specimen")
-			&& Constants.ADD.equals(storageTypeForm.getOperation()))
+		if (storageTypeForm.getSpecimenOrArrayType().equals("Specimen"))
 		{
 			final String[] specimenClassTypeArr = storageTypeForm.getHoldsSpecimenClassTypes();
 			if (specimenClassTypeArr != null)

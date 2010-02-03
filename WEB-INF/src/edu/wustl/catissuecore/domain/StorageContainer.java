@@ -649,8 +649,7 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 	private void setClassColl(final StorageContainerForm form)
 	{
 		this.holdsSpecimenClassCollection = new HashSet();
-		if (form.getSpecimenOrArrayType().equals("Specimen") 
-			&& Constants.ADD.equals(form.getOperation()))
+		if (form.getSpecimenOrArrayType().equals("Specimen"))
 		{
 			final String[] specimenClassArr = form.getHoldsSpecimenClassTypes();
 			if (specimenClassArr != null)

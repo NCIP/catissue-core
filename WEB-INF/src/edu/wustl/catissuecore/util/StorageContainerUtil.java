@@ -2489,25 +2489,6 @@ public final class StorageContainerUtil
 		String[] molSpTypeArr = spForm.getHoldsMolSpType();
 		Collection<String> spType = new HashSet<String>();
 		Collection<String> spClassCollection = spDomain.getHoldsSpecimenClassCollection();
-		if(Constants.EDIT.equals(spForm.getOperation()))
-		{
-			if(tissueSpeTypeArr ==null)
-			{
-				spClassCollection.remove(Constants.TISSUE);
-			}
-			if(fluidSpeTypeArr == null)
-			{
-				spClassCollection.remove(Constants.FLUID);
-			}
-			if(cellSpTypeArr == null)
-			{
-				spClassCollection.remove(Constants.CELL);
-			}
-			if(molSpTypeArr == null)
-			{
-				spClassCollection.remove(Constants.MOLECULAR);
-			}
-		}
 		setTissueSp(tissueSpeTypeArr, spType, spClassCollection);
 		setCellSp(cellSpTypeArr, spType, spClassCollection);
 		setFluidSp(fluidSpeTypeArr, spType, spClassCollection);
@@ -2516,10 +2497,7 @@ public final class StorageContainerUtil
 		spTypeList.add(cellSpTypeArr);
 		spTypeList.add(fluidSpeTypeArr);
 		spTypeList.add(molSpTypeArr);
-		if(Constants.ADD.equals(spForm.getOperation()))
-		{
-			setAllSpType(spClassCollection, spType, spTypeList);
-		}
+		setAllSpType(spClassCollection, spType, spTypeList);
 		spDomain.setHoldsSpecimenTypeCollection(spType);
 		spDomain.setHoldsSpecimenClassCollection(spClassCollection);
 	}

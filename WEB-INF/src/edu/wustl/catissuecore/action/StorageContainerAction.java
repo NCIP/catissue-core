@@ -425,17 +425,19 @@ public class StorageContainerAction extends SecureAction
 	private void setSpecimenClass(final StorageContainerForm sceForm,
 			final StorageContainerBizLogic bizLogic) throws BizLogicException
 	{
-		if(sceForm.getId()>0)
+		if(sceForm.getId()>0 && 
+			"Specimen".equals(sceForm.getSpecimenOrArrayType()))
 		{
 			final StorageContainer storagecont = (StorageContainer)bizLogic.
 			retrieve(StorageContainer.class.getName(), sceForm.getId());
-			final Collection specimenClassTypeCollection = storagecont
+			final Collection<String> spClassTypeCollection = storagecont
 			.getHoldsSpecimenClassCollection();
-			if (specimenClassTypeCollection != null)
+			final Collection<String> spTypeCollection = storagecont.getHoldsSpecimenTypeCollection();
+			if (spClassTypeCollection != null && !spClassTypeCollection.isEmpty())
 			{
-				String [] holdsSpecimenClassTypes = new String[specimenClassTypeCollection.size()];
+				String [] holdsSpecimenClassTypes = new String[spClassTypeCollection.size()];
 				int i = 0;
-				final Iterator it = specimenClassTypeCollection.iterator();
+				final Iterator it = spClassTypeCollection.iterator();
 				while (it.hasNext())
 				{
 					final String specimenClass = (String) it.next();
@@ -443,6 +445,10 @@ public class StorageContainerAction extends SecureAction
 					i++;
 				}
 				sceForm.setHoldsSpecimenClassTypes(holdsSpecimenClassTypes);
+			}
+			if(spTypeCollection!=null && !spTypeCollection.isEmpty())
+			{
+				StorageContainerUtil.populateSpType(spClassTypeCollection, spTypeCollection, sceForm);
 			}
 		}
 	}

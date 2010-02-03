@@ -547,10 +547,7 @@ function onRadioButtonClickOfSpecimen(element)
 
 	if(element == "Specimen")
 	{
-		if(operation=="add")
-		{
-			specimenClass.disabled = false;
-		}
+		specimenClass.disabled = false;
 		specimenArray.disabled = true;
 		var len = specimenArray.length;
 		for (var i = 0; i < len; i++)
@@ -1089,23 +1086,12 @@ function addNewTypeAction(action)
 							<tr>
                                 <td width="26%" align="left" class="tabletd1"><html:select property="holdsStorageTypeIds" styleClass="formFieldSizedSC" styleId="holdsStorageTypeIds" size="5" multiple="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"><html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/></html:select></td>
 						<td width="26%" align="left" class="tabletd1">
-							<logic:equal name="storageContainerForm" property="operation" value="add">
 								<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="Specimen">
 								<html:select property="holdsSpecimenClassTypes" styleClass="formFieldSizedSC" styleId="holdsSpecimenClassTypeIds"
 								size="5" multiple="true" onchange="selectType(this)" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"><html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/></html:select>
 								</logic:equal>
 								<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="SpecimenArray"><html:select property="holdsSpecimenClassTypes" styleClass="formFieldSizedSC" styleId="holdsSpecimenClassTypeIds" size="5" multiple="true"  onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true"><html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/></html:select>
 								</logic:equal>
-							</logic:equal>
-							<logic:equal name="storageContainerForm" property="operation" value="edit">
-								<html:hidden property="holdsSpecimenClassTypes" />
-								<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="Specimen">
-								<html:select property="holdsSpecimenClassTypes" styleClass="formFieldSizedSC" styleId="holdsSpecimenClassTypeIds"
-								size="5" multiple="true" onchange="selectType(this)" onmouseover="showTip(this.id)" disabled="true" onmouseout="hideTip(this.id)"><html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/></html:select>
-								</logic:equal>
-								<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="SpecimenArray"><html:select property="holdsSpecimenClassTypes" styleClass="formFieldSizedSC" styleId="holdsSpecimenClassTypeIds" size="5" multiple="true"  onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true"><html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/></html:select>
-								</logic:equal>
-							</logic:equal>
 						</td>
 						<td width="26%" align="left" class="tabletd1">
 							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="SpecimenArray">
