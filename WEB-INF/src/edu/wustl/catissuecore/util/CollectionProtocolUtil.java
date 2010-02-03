@@ -182,7 +182,7 @@ public class CollectionProtocolUtil
 	private static String[] getClinicalDiagnosis(CollectionProtocol collectionProtocol)
 	{
 		String[] clinicalDiagnosisArr = null; 
-		Collection<ClinicalDiagnosis> clinicDiagnosisCollection = collectionProtocol.getClinicalDiagnosisSet();
+		Collection<ClinicalDiagnosis> clinicDiagnosisCollection = collectionProtocol.getClinicalDiagnosisCollection();
 		if(clinicDiagnosisCollection != null)
 		{
 			clinicalDiagnosisArr = new String[clinicDiagnosisCollection.size()];
@@ -892,7 +892,7 @@ public class CollectionProtocolUtil
 					clinicalDiagnosis.add(clinicalDiagnosisObj);
 				}
 			}
-			collectionProtocol.setClinicalDiagnosisSet(clinicalDiagnosis);
+			collectionProtocol.setClinicalDiagnosisCollection(clinicalDiagnosis);
 		}
 	}
 	

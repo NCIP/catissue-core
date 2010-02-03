@@ -140,7 +140,7 @@
 
 
 		<set
-            name="clinicalDiagnosisSet"
+            name="clinicalDiagnosisCollection"
             table="CATISSUE_CLINICAL_DIAGNOSIS"
             fetch="join" lazy="false"
             inverse="false"

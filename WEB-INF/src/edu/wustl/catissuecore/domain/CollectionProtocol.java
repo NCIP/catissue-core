@@ -361,12 +361,9 @@ public class CollectionProtocol extends SpecimenProtocol
 			this.coordinatorCollection.clear();
 			this.siteCollection.clear();
 			this.collectionProtocolEventCollection.clear();
-			this.clinicalDiagnosisSet.clear();
+			this.clinicalDiagnosisCollection.clear();
 
 			/**For Clinical Diagnosis Subset **/
-			/*String[] clinicalDiagnosisArr = cpForm.getProtocolCoordinatorIds();
-			this.setClinicalDiagnosisSet(new LinkedHashSet<String>((Arrays.asList(clinicalDiagnosisArr))));*/
-
 			final String[] clinicalDiagnosisArr = cpForm.getProtocolCoordinatorIds();
 			if (clinicalDiagnosisArr != null)
 			{
@@ -377,7 +374,7 @@ public class CollectionProtocol extends SpecimenProtocol
 						final ClinicalDiagnosis clinicalDiagnosisObj = new ClinicalDiagnosis();
 						clinicalDiagnosisObj.setClinicalDiagnosis(clinicalDiagnosis);
 						clinicalDiagnosisObj.setCollectionProtocol(this);
-						this.clinicalDiagnosisSet.add(clinicalDiagnosisObj);
+						this.clinicalDiagnosisCollection.add(clinicalDiagnosisObj);
 					}
 				}
 			}
@@ -760,23 +757,23 @@ public class CollectionProtocol extends SpecimenProtocol
 	{
 		this.siteCollection = siteCollection;
 	}
-	protected Collection<ClinicalDiagnosis> clinicalDiagnosisSet = new LinkedHashSet<ClinicalDiagnosis>();
+	protected Collection<ClinicalDiagnosis> clinicalDiagnosisCollection = new LinkedHashSet<ClinicalDiagnosis>();
 	/**
 	 * Fetch the clinical diagnosis set.
-	 * @return clinicalDiagnosisSet.
+	 * @return clinicalDiagnosisCollection.
 	 */
-	public Collection<ClinicalDiagnosis> getClinicalDiagnosisSet()
+	public Collection<ClinicalDiagnosis> getClinicalDiagnosisCollection()
 	{
-		return clinicalDiagnosisSet;
+		return clinicalDiagnosisCollection;
 	}
 
 	/**
 	 * Set the clinical diagnosis set.
-	 * @param clinicalDiagnosisSet clinicalDiagnosisSet
+	 * @param clinicalDiagnosisCollection clinicalDiagnosisCollection
 	 */
-	public void setClinicalDiagnosisSet(Collection<ClinicalDiagnosis> clinicalDiagnosisSet)
+	public void setClinicalDiagnosisCollection(Collection<ClinicalDiagnosis> clinicalDiagnosisCollection)
 	{
-		this.clinicalDiagnosisSet = clinicalDiagnosisSet;
+		this.clinicalDiagnosisCollection = clinicalDiagnosisCollection;
 	}
 
 }
