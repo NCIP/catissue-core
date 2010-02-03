@@ -9,6 +9,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
+import edu.wustl.catissuecore.domain.ClinicalDiagnosis;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -167,6 +168,51 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 	    	fail("Failed to update object");
 	    }
 	}
+	
+	public void testUpdateCollectionProtocolWithclinicalDiagnosisCollection()
+	{
+	    try 
+		{
+	    	SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
+	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
+	    	Logger.out.info("updating domain object------->"+collectionProtocol);
+	    	BaseTestCaseUtility.updateCollectionProtocol(collectionProtocol);
+	    	
+
+	    	Collection<ClinicalDiagnosis> clinicalDiagnosisCollection = new LinkedHashSet<ClinicalDiagnosis>();
+	    	ClinicalDiagnosis clinicalDiagnosisObj = new ClinicalDiagnosis();
+			clinicalDiagnosisObj.setClinicalDiagnosis("Abdominal fibromatosis (disorder)");
+			clinicalDiagnosisObj.setCollectionProtocol(collectionProtocol);
+			clinicalDiagnosisCollection.add(clinicalDiagnosisObj);
+	    	collectionProtocol.setClinicalDiagnosisCollection(clinicalDiagnosisCollection);
+	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
+	    	
+	    	clinicalDiagnosisCollection = updatedCollectionProtocol.getClinicalDiagnosisCollection();
+	    	Iterator itr = clinicalDiagnosisCollection.iterator();
+	    	if(itr.hasNext())
+	    	{
+	    		System.out.println("-testUpdateCollectionProtocolWithclinicalDiagnosisCollection-"+((ClinicalDiagnosis)itr.next()).getClinicalDiagnosis());
+	    		//System.out.println("after");
+		    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
+		    	assertTrue("testUpdateCollectionProtocolWithclinicalDiagnosisCollection successfully added !!", true);
+	    		
+	    	}
+	    	else
+	    	{
+	    		System.out.println("-testUpdateCollectionProtocolWithclinicalDiagnosisCollection-   FAILED!!!!");
+	    		assertFalse("Domain object showing no clinical diagnosis collection",false );
+	    	}
+	    	
+	    } 
+	    catch (Exception e)
+	    {
+	    	Logger.out.error(e.getMessage(),e);
+	    	e.printStackTrace();
+	    	//assertFalse("Failed to update object",true);
+	    	fail("Failed to update object -testUpdateCollectionProtocolWithclinicalDiagnosisCollection-   FAILED!!!!");
+	    }
+	}
+	
 	
 	public void testUpdateCollectionProtocolDeleteCollectionProtocolEvent()
 	{
