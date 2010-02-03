@@ -707,11 +707,6 @@
 		<attribute name="id" dataType="Long" />
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.FixedEventParameters" relationShipType="main" roleName="">
@@ -720,12 +715,7 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="fixationType" dataType="String" />
 		<attribute name="durationInMinutes" dataType="Integer" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
-		
+
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.FrozenEventParameters" relationShipType="main" roleName="">
@@ -733,12 +723,7 @@
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
 		<attribute name="method" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
-		
+
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter" relationShipType="main" roleName="">
@@ -746,12 +731,7 @@
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
 		<attribute name="storageStatus" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
-		
+	
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.ProcedureEventParameters" relationShipType="main" roleName="">
@@ -760,12 +740,6 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="url" dataType="String" />
 		<attribute name="name" dataType="String" />
-		
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.SpunEventParameters" relationShipType="main" roleName="">
@@ -774,11 +748,6 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="gravityForce" dataType="Double" />
 		<attribute name="durationInMinutes" dataType="Integer" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
 		
 	</AuditableClass>
 
@@ -789,11 +758,6 @@
 		<attribute name="fromPositionDimensionOne" dataType="Integer" />
 		<attribute name="fromPositionDimensionTwo" dataType="Integer" />
 		<attribute name="toPositionDimensionTwo" dataType="Integer" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.CollectionEventParameters" relationShipType="main" roleName="">
@@ -802,11 +766,6 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="collectionProcedure" dataType="String" />
 		<attribute name="container" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.ReceivedEventParameters" relationShipType="main" roleName="">
@@ -814,11 +773,6 @@
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
 		<attribute name="receivedQuality" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
 	
 	</AuditableClass>
 
@@ -827,11 +781,6 @@
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
 		<attribute name="embeddingMedium" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
 	
 	</AuditableClass>
 
@@ -839,22 +788,12 @@
 		<attribute name="id" dataType="Long" />
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.ReviewEventParameters" relationShipType="main" roleName="">
 		<attribute name="id" dataType="Long" />
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.CellSpecimenReviewParameters" relationShipType="main" roleName="">
@@ -863,12 +802,6 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="neoplasticCellularityPercentage" dataType="Double" />
 		<attribute name="viableCellPercentage" dataType="Double" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
-
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters" relationShipType="main" roleName="">
@@ -880,12 +813,7 @@
 		<attribute name="lymphocyticPercentage" dataType="Double" />
 		<attribute name="totalCellularityPercentage" dataType="Double" />
 		<attribute name="histologicalQuality" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
-	
+
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters" relationShipType="main" roleName="">
@@ -893,12 +821,6 @@
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
 		<attribute name="cellCount" dataType="Double" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
-
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters" relationShipType="main" roleName="">
@@ -912,11 +834,6 @@
 		<attribute name="gelImageURL" dataType="String" />
 		<attribute name="qualityIndex" dataType="String" />
 		<attribute name="laneNumber" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.DisposalEventParameters" relationShipType="main" roleName="">
@@ -924,12 +841,6 @@
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="comment" dataType="String" />
 		<attribute name="reason" dataType="String" />
-	
-	 	<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
 	</AuditableClass>
 
    <AuditableClass className="edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter" relationShipType="main" roleName="">
@@ -938,12 +849,7 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="quarantineStatus" dataType="Boolean" />
 		<attribute name="status" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
-  </AuditableClass>
+ </AuditableClass>
 	
    <AuditableClass className="edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter" relationShipType="main" roleName="">
 		<attribute name="id" dataType="Long" />
@@ -951,11 +857,6 @@
 		<attribute name="comment" dataType="String" />
 		<attribute name="reviewerRole" dataType="String" />
 		<attribute name="status" dataType="String" />
-		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association"
-			roleName="user">
-		</referenceAssociationCollection>
 		<referenceAssociationCollection
 			className="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport"
 			relationShipType="association"
