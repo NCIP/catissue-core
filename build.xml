@@ -273,15 +273,15 @@
 	<!-- build catissuecore war file which is common to above both targets -->
 	<target name="common_build_war" depends ="Default_Label_BarCode_Generator,PrintService_Module,create_war">
 	</target>
-	
+
 	<!--Start of Integrating the Bulk Operation Module  -->
 	<target name="integrate_bulk_operation" description="Start of Integrating the Bulk Operation Module">
-		
+
 		<echo>Integrating the  Bulk Operation Module</echo>
 		<antcall target="unzip_bulkoperation_installable" />
 		<ant dir="${base.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="bulkoperation_integrate_app">
 			<property name="deploy.temp.dir" value="${basedir}"/>
-			<property name="bulkoperation.base.dir" value="${basedir}/bulkoperation" />			
+			<property name="bulkoperation.base.dir" value="${basedir}/bulkoperation" />
 		</ant>
 		<!--Copying bulkOperation.properties file-->
 		<copy todir="${basedir}/catissuecore-properties" overwrite="true">
@@ -296,7 +296,7 @@
 	<target name="unzip_bulkoperation_installable" depends="bulkoperation_check_prerequisite" description="unzip the bulk operation zip">
 		<unzip src="bulkoperator.zip" dest="${basedir}/bulkoperation" overwrite="true" />
 	</target>
-	
+
 	<target name="bulkoperation_check_prerequisite" description="Check bulkoperation.zip file exists or not in base directory">
 		<!--
 			Check bulkoperation.zip file exists or not in base
@@ -322,9 +322,9 @@
 
 	<target name="create_war">
 		<delete file="catissuecore.war" />
-		
+
 		<antcall target="integrate_bulk_operation" />
-		
+
 		<copy todir="WEB-INF/lib" overwrite="true">
 			<fileset dir="${base.dir}"  >
 				<include name="Default_label_barcode_gen.jar" />
@@ -604,7 +604,7 @@
 		<copy file="allTokens.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="washuInstall.properties" todir="${zip.dir}" overwrite="true" />
-		<copy file="Show_Hide_Forms.CSV" todir="${zip.dir}" overwrite="true" />
+		<copy file="Show_Hide_Forms.csv" todir="${zip.dir}" overwrite="true" />
 		<copy file="Show_Hide_Forms.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="build-properties.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
@@ -830,7 +830,7 @@
 		<property name="reportgenerator.input.junit_api_mysql_upgrade_file" value="${base.dir}/XmlReport/JUnitReports/mysql_upgrade_report.xml" />
 		<property name="reportgenerator.input.junit_api_oracle_fresh_file" value="${base.dir}/XmlReport/JUnitReports/oracle_fresh_report.xml" />
 		<property name="reportgenerator.input.junit_api_oracle_upgrade_file" value="${base.dir}/XmlReport/JUnitReports/oracle_upgrade_report.xml" />
-		
+
 		<property name="reportgenerator.input.junit_struts_mysql_fresh_file" value="${base.dir}/XmlReport/JUnitReports/mysql_fresh_struts_report.xml" />
 		<property name="reportgenerator.input.junit_struts_mysql_upgrade_file" value="${base.dir}/XmlReport/JUnitReports/mysql_upgrade_struts_report.xml" />
 		<property name="reportgenerator.input.junit_struts_oracle_fresh_file" value="${base.dir}/XmlReport/JUnitReports/oracle_fresh_struts_report.xml" />
