@@ -2730,7 +2730,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		this.validateSpecimenData(specimen, validator);
 		this.validateStorageContainer(specimen, dao);
 		this.validateSpecimenEvent(specimen, validator);
-		this.validateBioHazard(specimen, validator);
+		this.validateBioHazard(specimen, validator, dao);
 		this.validateExternalIdentifier(specimen, validator);
 		this.validateFields(specimen, dao, operation, partOfMulipleSpecimen);
 		this.validateEnumeratedData(specimen, operation, validator);
@@ -3150,7 +3150,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException
 	 *             Database related exception
 	 */
-	private void validateBioHazard(Specimen specimen, Validator validator) throws BizLogicException
+	private void validateBioHazard(Specimen specimen, Validator validator, DAO dao) throws BizLogicException
 	{
 		final Collection<Biohazard> bioHazardCollection = specimen.getBiohazardCollection();
 		Biohazard biohazard = null;
@@ -3168,9 +3168,28 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				if (biohazard.getId() == null)
 				{
-					final String message = ApplicationProperties.getValue("newSpecimen.msg");
-					throw this.getBizLogicException(null, "errors.newSpecimen.biohazard.missing",
-							message);
+					try
+					{
+						//added for bug #15860
+						final String sourceObjectName = Biohazard.class.getName();
+						final String[] selectColumnName = {"id"};
+						final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+						queryWhereClause.addCondition(new EqualClause("name", biohazard.getName())).andOpr();
+						queryWhereClause.addCondition(new EqualClause("type", biohazard.getType()));
+						final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+						if(list.isEmpty())
+						{
+							final String message = ApplicationProperties.getValue("specimen.biohazards");
+							throw this.getBizLogicException(null, "errors.invalid",
+								message + ": Name - " + biohazard.getName() + " : Type -" + biohazard.getType());
+						}
+					}
+					catch (DAOException daoExp)
+					{
+						logger.error(daoExp.getMessage(), daoExp);
+						throw new BizLogicException(daoExp.getErrorKey(), daoExp, daoExp
+								.getMsgValues());
+					}					
 				}
 			}
 		}
