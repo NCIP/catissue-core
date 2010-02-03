@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.testcase.biospecimen.SpecimenArrayTestCase;
 import edu.wustl.catissuecore.testcase.biospecimen.SpecimenCollectionGroupTestCases;
 import edu.wustl.catissuecore.testcase.biospecimen.SpecimenEventsTestcases;
 import edu.wustl.catissuecore.testcase.biospecimen.SpecimenTestCases;
+import edu.wustl.catissuecore.testcase.bizlogic.AliquotBizTestCase;
 import edu.wustl.catissuecore.testcase.bizlogic.BioHazardBizTestCases;
 import edu.wustl.catissuecore.testcase.bizlogic.CancerResearchGrpBizTestCases;
 import edu.wustl.catissuecore.testcase.bizlogic.CollectionProtocolBizTestCases;
@@ -124,12 +125,13 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(SpecimenBizTestCases.class);
 		strutsSuite.addTestSuite(StorageTypeBizTestCases.class);
 		strutsSuite.addTestSuite(StorageContainerBizTestCases.class);
+		strutsSuite.addTestSuite(AliquotBizTestCase.class);		
 		strutsSuite.addTestSuite(SpecimenEventBizTestCases.class);
 		strutsSuite.addTestSuite(StorageContainerRestrictionsBizTestCases.class);
 		
 		strutsSuite.addTestSuite(UserTestCases.class);
 		strutsSuite.addTestSuite(SupervisorTestCases.class);
-		strutsSuite.addTestSuite(ScientistTestCases.class);		
+		strutsSuite.addTestSuite(ScientistTestCases.class);
 		
 		strutsSuite.addTestSuite(LogoutTestcase.class);
 		return strutsSuite;

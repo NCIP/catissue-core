@@ -1,12 +1,14 @@
 package edu.wustl.catissuecore.testcase.bizlogic;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -20,6 +22,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
@@ -780,22 +783,38 @@ public class ParticipantBizTestCases extends CaTissueSuiteBaseTest {
 		
 	}
 	
-/*	public void testInvalidParticipantActivityStatus()
+	public void testGetParticipantById()
 	{
-		try{
-			Participant participant = BaseTestCaseUtility.initParticipant();		
-			participant.setActivityStatus("Invalid");
-			System.out.println(participant);
-			participant = (Participant) appService.createObject(participant); 
-			assertFalse("Test Failed.Invalid Activity status should thorw Exception", true);
-		 }
-		 catch(Exception e){
-			 Logger.out.error(e.getMessage(),e);
-			 e.printStackTrace();
-			 assertTrue("Name is required", true);
-		 }
+		try
+		{
+			ParticipantBizLogic participantBizLogic = new ParticipantBizLogic();
+			Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
+			participantBizLogic.getParticipantById(participant.getId());
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			assertFalse(e.getMessage(), true);
+		}
+		
 	}
-
-*/		
-	
+	public void testGetColumnList()
+	{
+		try
+		{
+			ParticipantBizLogic participantBizLogic = new ParticipantBizLogic();
+			Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
+			List<String> colList = new ArrayList<String>();
+			colList.add(Constants.PARTICIPANT_MEDICAL_RECORD_NO);
+			List mrnList = participantBizLogic.getColumnList(colList,new StringBuffer());
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			assertFalse(e.getMessage(), true);
+		}
+		
+	}
 }
