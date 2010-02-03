@@ -176,7 +176,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		final Aliquot aliquot = (Aliquot) obj;
 		if (aliquot == null)
 		{
-			final String message = ApplicationProperties.getValue("app.aliquot");
+			final String message = ApplicationProperties.getValue("app.aliquots");
 			throw this.getBizLogicException(null, "domain.object.null.err.msg", message);
 		}
 		if (aliquot.getCount() <= 0)
