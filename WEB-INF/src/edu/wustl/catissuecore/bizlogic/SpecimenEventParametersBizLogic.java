@@ -146,14 +146,13 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			{
 				this.checkStatus(dao, specimen, Constants.SPECIMEN);
 			}
-
+			
 			if (specimen != null)
 			{
 				specimenEventParametersObject.setSpecimen(specimen);
 				if (specimenEventParametersObject instanceof TransferEventParameters)
 				{
 					final TransferEventParameters transferEventParameters = (TransferEventParameters) specimenEventParametersObject;
-
 					StorageContainer storageContainerObj = new StorageContainer();
 
 					List stNamelist = null;
@@ -593,7 +592,12 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	{
 		final SpecimenEventParameters eventParameter = (SpecimenEventParameters) obj;
 		final TransferEventParameters parameter = (TransferEventParameters) eventParameter;
-		final Specimen specimen = this.getSpecimenObject(dao, parameter);
+
+		Specimen specimen;
+		try
+		{
+			specimen = (Specimen)this.retrieveSpecimenLabelName(dao, eventParameter);
+		//this.getSpecimenObject(dao, parameter);
 		Long fromContainerId = null;
 		Integer fromPos1 =  null;
 		Integer fromPos2 =  null;
@@ -636,15 +640,15 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				//bug 15083
 				final String message = ApplicationProperties
 				.getValue("transfereventparameters.storageContainer.name");
-				throw this.getBizLogicException(null, "errors.invalid", message+": " + specimen.getLabel());						
+				throw this.getBizLogicException(null, "errors.invalid", message+": " + specimen.getLabel());
 			}
 
 			Integer xPos = parameter.getToPositionDimensionOne();
 			Integer yPos = parameter.getToPositionDimensionTwo();
 
 			/**
-			 *  Following code is added to set the x and y dimension in case only storage container is given 
-			 *  and x and y positions are not given 
+			 *  Following code is added to set the x and y dimension in case only storage container is given
+			 *  and x and y positions are not given
 			 */
 			if (yPos == null || xPos == null)
 			{
@@ -690,6 +694,14 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		if (Constants.EDIT.equals(operation))
 		{
 			//validateTransferEventParameters(eventParameter);
+		}
+		}
+		catch (DAOException exp)
+		{
+
+			LOGGER.error(exp.getMessage(),exp);
+			throw new
+			BizLogicException(exp.getErrorKey(),exp,exp.getMsgValues());
 		}
 		return true;
 	}
@@ -836,6 +848,14 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			case Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID :
 					validateDisposalEvent(dao, eventParameter);
 					break;
+				//case added for transfer event validation
+			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID:
+				Integer pos1= null;
+				Integer pos2=null;
+				TransferEventParameters trEvent = (TransferEventParameters)eventParameter;
+				pos1 = trEvent.getToPositionDimensionOne();
+				pos2 = trEvent.getToPositionDimensionTwo();
+					validateSingleTransferEvent(obj, dao, operation, numberOfEvent, pos1, pos2);
 		}
 		return true;
 	}

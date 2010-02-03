@@ -35,7 +35,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Add.
 	 */
-	
+
 	public void testSpecimenAdd()
 	{
 		NewSpecimenForm newSpecForm = new NewSpecimenForm() ;
@@ -111,12 +111,12 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 
     	TestCaseUtility.setNameObjectMap("Specimen",specimen);
    	}
-	
+
 	/**
 	 * Test aliquot add
 	 * AliquotAction + CreateAliquotAction
 	 */
-	
+
 	public void testAliquotAdd()
 	{
 		setRequestPathInfo("/Aliquots");
@@ -155,7 +155,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	 * Bug Id : 11480
 	 * @author Himanshu Aseeja
 	 */
-	
+
 	public void testLabelandBarcodeonStoragePositionChange()
 	{
        	Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -177,12 +177,13 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
         NewSpecimenForm form= (NewSpecimenForm) getActionForm();
         assertEquals(form.getLabel(),"1234" );
         assertEquals(form.getBarcode(),"1234");
+
   	}
 	/**
 	 * Test Specimen Edit.
 	 */
 	//bug 11174
-	
+
 	public void testSpecimenEdit()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -268,7 +269,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test disabled Participant
 	 */
-	
+
 	public void testParticicpantAndDisableCollectedSpecimens()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -297,7 +298,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Add to my List.
 	 */
-//	
+//
 //	//bug 11829
 //	public void testSpecimenAddToMyList()
 //	{
@@ -372,7 +373,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 //
 //
 //	}
-//	
+//
 //	public void testSupervisorLogin()
 //	  {
 //		   	addRequestParameter("loginName","super@super.com");
@@ -388,7 +389,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 //	        verifyNoActionErrors();
 //	  }
 	//bug 11659
-/*	
+/*
 	public void testSpecimenEditBySupervisor()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -504,7 +505,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	 /**
 		 * Test Specimen Add.
 		 */
-		
+
 		public void testTissueSpecimenAdd()
 		{
 			NewSpecimenForm newSpecForm = new NewSpecimenForm() ;
@@ -531,7 +532,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			newSpecForm.setAvailable(true);
 			newSpecForm.setAvailableQuantity("5");
 			newSpecForm.setCollectionStatus("Collected") ;
-			
+
 
 
 			Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
@@ -639,16 +640,16 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 
 	    	TestCaseUtility.setNameObjectMap("TissueSpecimen",specimen);
 	   	}
-		
-		
+
+
 		/**
 		 * Test Specimen Add in Storage Container with restriction.
 		 */
-		
+
 		public void testSpecimenAddInRestrictedCont()
 		{
 			//Adding Storage Type
-			
+
 			StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeFormWithTypeRestriction(this,
 					"Rest_Type_" + UniqueKeyGeneratorUtil.getUniqueKey(),3,3,"row","col","10","Active");
 			String[] holdsSpecimenClassTypes = new String[1];
@@ -663,7 +664,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			setRequestPathInfo("/StorageTypeAdd");
 			setActionForm(storageTypeForm);
 			actionPerform();
-			
+
 			verifyForward("success");
 			verifyNoActionErrors();
 			verifyActionMessages(new String[]{"object.add.successOnly"});
@@ -694,7 +695,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			storageContainerForm.setOneDimensionLabel("row");
 			storageContainerForm.setTwoDimensionLabel("row");
 			storageContainerForm.setDefaultTemperature("29");
-		
+
 			String[] holdsSpecimenClassCollection = new String[1];
 			holdsSpecimenClassCollection[0]="Fluid";
 			storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
@@ -704,7 +705,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			storageContainerForm.setHoldsMolSpType(null);
 
 			storageContainerForm.setSpecimenOrArrayType("Specimen");
-			
+
 			storageContainerForm.setActivityStatus("Active");
 			storageContainerForm.setIsFull("False");
 			storageContainerForm.setOperation("add");
@@ -714,7 +715,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			verifyForward("success");
 			verifyNoActionErrors();
 			StorageContainerForm scform=(StorageContainerForm) getActionForm();
-			
+
 			//Adding New Fluid Specimen
 			NewSpecimenForm newSpecForm = new NewSpecimenForm() ;
 			setRequestPathInfo("/NewSpecimenAdd");
@@ -757,7 +758,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			newSpecForm.setAvailable(true);
 			newSpecForm.setAvailableQuantity("10");
 			newSpecForm.setCollectionStatus("Collected") ;
-			
+
 			Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
 			CollectionProtocolEventBean event = (CollectionProtocolEventBean) collectionProtocolEventMap.get("E1");
 
@@ -790,7 +791,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		/**
 		 * Test Specimen Add negative test case
 		 */
-		
+
 		public void testSpecimenAddInWrongContainer()
 		{
 			StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeFormWithTypeRestriction(this,
@@ -807,7 +808,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			setRequestPathInfo("/StorageTypeAdd");
 			setActionForm(storageTypeForm);
 			actionPerform();
-			
+
 			verifyForward("success");
 			verifyNoActionErrors();
 			verifyActionMessages(new String[]{"object.add.successOnly"});
@@ -838,7 +839,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			storageContainerForm.setOneDimensionLabel("row");
 			storageContainerForm.setTwoDimensionLabel("row");
 			storageContainerForm.setDefaultTemperature("29");
-		
+
 			String[] holdsSpecimenClassCollection = new String[1];
 			holdsSpecimenClassCollection[0]="Fluid";
 			storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
@@ -856,7 +857,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			verifyForward("success");
 			verifyNoActionErrors();
 			StorageContainerForm scform=(StorageContainerForm) getActionForm();
-			
+
 			//Adding New Fluid Specimen
 			NewSpecimenForm newSpecForm = new NewSpecimenForm() ;
 			setRequestPathInfo("/NewSpecimenAdd");
@@ -897,7 +898,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			newSpecForm.setAvailable(true);
 			newSpecForm.setAvailableQuantity("10");
 			newSpecForm.setCollectionStatus("Collected");
-			
+
 			Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
 			CollectionProtocolEventBean event = (CollectionProtocolEventBean) collectionProtocolEventMap.get("E1");
 
@@ -925,7 +926,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			verifyForward("failure");
 	   	}
 		/**
-		 * This test case will update the Specimen Class of "StorageContainer". 
+		 * This test case will update the Specimen Class of "StorageContainer".
 		 */
 		public void testUpdateStorageContainerWithSpecimenClass()
 		{
@@ -977,5 +978,157 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			}
 			TestCaseUtility.setNameObjectMap("storageContainer", storageContainer);
 		}
+
+		public void testSpecimenAddForTransferEvent()
+		{
+			NewSpecimenForm newSpecForm = new NewSpecimenForm() ;
+			setRequestPathInfo("/NewSpecimenAdd");
+			newSpecForm.setLabel("label_" + UniqueKeyGeneratorUtil.getUniqueKey());
+			newSpecForm.setBarcode("barcode_" + UniqueKeyGeneratorUtil.getUniqueKey());
+
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
+			newSpecForm.setSpecimenCollectionGroupId(""+specimenCollectionGroup.getId()) ;
+			newSpecForm.setSpecimenCollectionGroupName(specimenCollectionGroup.getName()) ;
+
+			newSpecForm.setParentPresent(false);
+			newSpecForm.setTissueSide("Not Specified") ;
+			newSpecForm.setTissueSite("Not Specified");
+			newSpecForm.setPathologicalStatus("Not Specified");
+
+			Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("Biohazard");
+			newSpecForm.setBiohazardName(biohazard.getName());
+			newSpecForm.setBiohazardType(biohazard.getType());
+
+			newSpecForm.setClassName("Fluid");
+			newSpecForm.setType("Bile");
+			newSpecForm.setQuantity("10") ;
+			newSpecForm.setAvailable(true);
+			newSpecForm.setAvailableQuantity("5");
+			newSpecForm.setCollectionStatus("Pending") ;
+
+
+			Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
+			CollectionProtocolEventBean event = (CollectionProtocolEventBean) collectionProtocolEventMap.get("E1");
+
+			newSpecForm.setCollectionEventId(event.getId()) ;
+
+			newSpecForm.setCollectionEventSpecimenId(0L);
+			newSpecForm.setCollectionEventdateOfEvent("01-28-2009");
+			newSpecForm.setCollectionEventTimeInHours("11") ;
+			newSpecForm.setCollectionEventTimeInMinutes("2") ;
+			newSpecForm.setCollectionEventUserId(1L) ;
+			newSpecForm.setCollectionEventCollectionProcedure("Use CP Defaults");
+			newSpecForm.setCollectionEventContainer("Use CP Defaults") ;
+
+			newSpecForm.setReceivedEventId(event.getId());
+			newSpecForm.setReceivedEventDateOfEvent("01-28-2009");
+			newSpecForm.setReceivedEventTimeInHours("11") ;
+			newSpecForm.setReceivedEventTimeInMinutes("2") ;
+			newSpecForm.setReceivedEventUserId(1L) ;
+			newSpecForm.setReceivedEventReceivedQuality("Acceptable");
+
+			newSpecForm.setOperation("add");
+			newSpecForm.setPageOf("pageOfNewSpecimen");
+			setActionForm(newSpecForm);
+			actionPerform();
+			verifyForward("success");
+
+			NewSpecimenForm form= (NewSpecimenForm) getActionForm();
+			Specimen specimen = new Specimen();
+			specimen.setId(form.getId());
+			specimen.setSpecimenClass( form.getClassName() );
+			specimen.setSpecimenType( form.getType() );
+			specimen.setActivityStatus(form.getActivityStatus());
+			specimen.setAvailableQuantity(Double.parseDouble(form.getAvailableQuantity()));
+			specimen.setLabel(form.getLabel());
+			specimen.setBarcode(form.getBarcode());
+	    	specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+	    	specimen.setCollectionStatus(form.getCollectionStatus());
+	    	specimen.setPathologicalStatus(form.getPathologicalStatus());
+	    	specimen.setInitialQuantity(Double.parseDouble(form.getQuantity()));
+	    	SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+	    	specimenCharacteristics.setTissueSide(form.getTissueSide());
+	    	specimenCharacteristics.setTissueSite(form.getTissueSite());
+
+	    	specimen.setSpecimenCharacteristics(specimenCharacteristics);
+
+	    	TestCaseUtility.setNameObjectMap("SpecimenForTranferEvent",specimen);
+	   	}
+
+		public void testSpecimenAddForTranfer()
+		{
+			NewSpecimenForm newSpecForm = new NewSpecimenForm() ;
+			setRequestPathInfo("/NewSpecimenAdd");
+			newSpecForm.setLabel("label_" + UniqueKeyGeneratorUtil.getUniqueKey());
+			newSpecForm.setBarcode("barcode_" + UniqueKeyGeneratorUtil.getUniqueKey());
+
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
+			newSpecForm.setSpecimenCollectionGroupId(""+specimenCollectionGroup.getId()) ;
+			newSpecForm.setSpecimenCollectionGroupName(specimenCollectionGroup.getName()) ;
+
+			newSpecForm.setParentPresent(false);
+			newSpecForm.setTissueSide("Not Specified") ;
+			newSpecForm.setTissueSite("Not Specified");
+			newSpecForm.setPathologicalStatus("Not Specified");
+
+			Biohazard biohazard = (Biohazard) TestCaseUtility.getNameObjectMap("Biohazard");
+			newSpecForm.setBiohazardName(biohazard.getName());
+			newSpecForm.setBiohazardType(biohazard.getType());
+
+			newSpecForm.setClassName("Fluid");
+			newSpecForm.setType("Bile");
+			newSpecForm.setQuantity("10") ;
+			newSpecForm.setAvailable(true);
+			newSpecForm.setAvailableQuantity("5");
+			newSpecForm.setCollectionStatus("Pending") ;
+
+
+			Map collectionProtocolEventMap =  (Map) TestCaseUtility.getNameObjectMap("CollectionProtocolEventMap");
+			CollectionProtocolEventBean event = (CollectionProtocolEventBean) collectionProtocolEventMap.get("E1");
+
+			newSpecForm.setCollectionEventId(event.getId()) ;
+
+			newSpecForm.setCollectionEventSpecimenId(0L);
+			newSpecForm.setCollectionEventdateOfEvent("01-28-2009");
+			newSpecForm.setCollectionEventTimeInHours("11") ;
+			newSpecForm.setCollectionEventTimeInMinutes("2") ;
+			newSpecForm.setCollectionEventUserId(1L) ;
+			newSpecForm.setCollectionEventCollectionProcedure("Use CP Defaults");
+			newSpecForm.setCollectionEventContainer("Use CP Defaults") ;
+
+			newSpecForm.setReceivedEventId(event.getId());
+			newSpecForm.setReceivedEventDateOfEvent("01-28-2009");
+			newSpecForm.setReceivedEventTimeInHours("11") ;
+			newSpecForm.setReceivedEventTimeInMinutes("2") ;
+			newSpecForm.setReceivedEventUserId(1L) ;
+			newSpecForm.setReceivedEventReceivedQuality("Acceptable");
+
+			newSpecForm.setOperation("add");
+			newSpecForm.setPageOf("pageOfNewSpecimen");
+			setActionForm(newSpecForm);
+			actionPerform();
+			verifyForward("success");
+
+			NewSpecimenForm form= (NewSpecimenForm) getActionForm();
+			Specimen specimen = new Specimen();
+			specimen.setId(form.getId());
+			specimen.setSpecimenClass( form.getClassName() );
+			specimen.setSpecimenType( form.getType() );
+			specimen.setActivityStatus(form.getActivityStatus());
+			specimen.setAvailableQuantity(Double.parseDouble(form.getAvailableQuantity()));
+			specimen.setLabel(form.getLabel());
+			specimen.setBarcode(form.getBarcode());
+	    	specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+	    	specimen.setCollectionStatus(form.getCollectionStatus());
+	    	specimen.setPathologicalStatus(form.getPathologicalStatus());
+	    	specimen.setInitialQuantity(Double.parseDouble(form.getQuantity()));
+	    	SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+	    	specimenCharacteristics.setTissueSide(form.getTissueSide());
+	    	specimenCharacteristics.setTissueSite(form.getTissueSite());
+
+	    	specimen.setSpecimenCharacteristics(specimenCharacteristics);
+
+	    	TestCaseUtility.setNameObjectMap("SpecimenForTranfer",specimen);
+	   	}
 
 }
