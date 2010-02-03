@@ -184,7 +184,7 @@ public class ClinPortalCaTissueIntegrationUtil
         while (dateIterator.hasNext())
         {
             receivedSCGDate = (Date) dateIterator.next();
-            if (receivedSCGDate != null)
+            if (receivedSCGDate != null && visitCurrDate != null)
             {
                 diff2 = visitCurrDate.getTime() - receivedSCGDate.getTime();
                 diff2=getPosititveValue(diff2);
