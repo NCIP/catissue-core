@@ -112,43 +112,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
     	TestCaseUtility.setNameObjectMap("Specimen",specimen);
    	}
 
-	/**
-	 * Test aliquot add
-	 * AliquotAction + CreateAliquotAction
-	 */
 
-	public void testAliquotAdd()
-	{
-		setRequestPathInfo("/Aliquots");
-		actionPerform();
-		//verifyNoActionErrors();
-		AliquotForm aliquotForm = new AliquotForm();
-		Specimen parent = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
-		aliquotForm.setSpecimenLabel( parent.getLabel() );
-		aliquotForm.setClassName( parent.getSpecimenClass() );
-		aliquotForm.setType( parent.getSpecimenType() );
-		aliquotForm.setNoOfAliquots( "1" );
-		aliquotForm.setQuantityPerAliquot( "1" );
-		aliquotForm.setSpecimenID( parent.getId().toString() );
-		aliquotForm.setNextForwardTo( "" );
-		aliquotForm.setSpCollectionGroupId( parent.getSpecimenCollectionGroup().getId() );
-		setActionForm(aliquotForm);
-		setRequestPathInfo("/CreateAliquots");
-		actionPerform();
-		setRequestPathInfo("/AliquotAdd");
-		AliquotForm form = (AliquotForm) getActionForm();
-		form.setAvailableQuantity( "1" );
-		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
-		Map aliquotMap = form.getAliquotMap();
-		aliquotMap.put( "radio_1", "2" );
-		aliquotMap.put( "Specimen:1_quantity", "1" );
-		aliquotMap.put( "Specimen:1_StorageContainer_id", ""+storageContainer.getId() );
-		aliquotMap.put( "Specimen:1_positionDimensionOne", "2" );
-		aliquotMap.put( "Specimen:1_positionDimensionTwo", "1" );
-		setActionForm(form);
-		actionPerform();
-		//verifyNoActionErrors();
-	}
 
 	/**
 	 * Test Specimen Label and Barcode after storage position changes(when page refreshes).
@@ -265,6 +229,164 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 
 
 
+	}
+
+
+	/**
+	 * Test aliquot add
+	 * AliquotAction + CreateAliquotAction
+	 */
+
+	public void testAliquotAdd()
+	{
+		setRequestPathInfo("/Aliquots");
+		actionPerform();
+		//verifyNoActionErrors();
+		AliquotForm aliquotForm = new AliquotForm();
+		Specimen parent = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
+		aliquotForm.setSpecimenLabel( parent.getLabel() );
+		aliquotForm.setClassName( parent.getSpecimenClass() );
+		aliquotForm.setType( parent.getSpecimenType() );
+		aliquotForm.setNoOfAliquots( "1" );
+		aliquotForm.setQuantityPerAliquot( "1" );
+		aliquotForm.setSpecimenID( parent.getId().toString() );
+		aliquotForm.setNextForwardTo( "" );
+		aliquotForm.setButtonClicked("submit");
+		addRequestParameter("pageOf", "pageOfCreateAliquot");
+		addRequestParameter("operation", "add");
+		aliquotForm.setSpCollectionGroupId( parent.getSpecimenCollectionGroup().getId() );
+		setActionForm(aliquotForm);
+		setRequestPathInfo("/CreateAliquots");
+		actionPerform();
+		setRequestPathInfo("/AliquotAdd");
+		AliquotForm form = (AliquotForm) getActionForm();
+		form.setAvailableQuantity( "100" );
+
+
+		form.setNextForwardTo("success");
+		form.setForwardTo("printAliquot");
+		form.setSubmittedFor("ForwardTo");
+		form.setButtonClicked("create");
+		addRequestParameter("pageOf", "pageOfCreateAliquot");
+		addRequestParameter("operation", "add");
+		addRequestParameter("menuSelected", "15");
+		addRequestParameter("buttonClicked", "create");
+
+		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
+		Map aliquotMap = form.getAliquotMap();
+		aliquotMap.put( "radio_1", "2" );
+		aliquotMap.put( "Specimen:1_quantity", "1" );
+		aliquotMap.put( "Specimen:1_StorageContainer_id", ""+storageContainer.getId() );
+		aliquotMap.put( "Specimen:1_positionDimensionOne", "22" );
+		aliquotMap.put( "Specimen:1_positionDimensionTwo", "1" );
+
+		form.setAliquotMap(aliquotMap);
+		setActionForm(form);
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+
+	public void testAliquot()
+	{
+		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
+		NewSpecimenForm specimenForm = null;
+		//Retrieving specimen object for edit
+		logger.info("----specimen ID : " + specimen.getId());
+		addRequestParameter("pageOf", "pageOfNewSpecimen");
+		addRequestParameter("operation", "search");
+		addRequestParameter("id", specimen.getId().toString());
+		setRequestPathInfo("/SearchObject") ;
+		actionPerform();
+		verifyForward("pageOfNewSpecimen");
+		verifyNoActionErrors();
+
+		System.out.println(getActualForward());
+		setRequestPathInfo(getActualForward());
+		addRequestParameter("pageOf", "pageOfNewSpecimen");
+		actionPerform();
+		verifyNoActionErrors();
+
+		System.out.println(getActualForward());
+		setRequestPathInfo(getActualForward());
+		addRequestParameter("pageOf", "pageOfNewSpecimen");
+		addRequestParameter("operation", "edit");
+		addRequestParameter("menuSelected", "15");
+		addRequestParameter("showConsents", "yes");
+		addRequestParameter("tableId4", "disable");
+		actionPerform();
+		verifyNoActionErrors();
+
+		specimenForm=(NewSpecimenForm) getActionForm();
+		specimenForm.setNoOfAliquots("2");
+		specimenForm.setQuantityPerAliquot("1");
+		specimenForm.setOperation("edit");
+		specimenForm.setCheckedButton(true);
+		specimenForm.setForwardTo("pageOfCreateAliquot");
+		addRequestParameter("CPQuery", "CPQuery");
+		setActionForm(specimenForm);
+		setRequestPathInfo("/CPQueryNewSpecimenEdit");
+		actionPerform();
+		verifyNoActionErrors();
+		System.out.println(getActualForward());
+		setRequestPathInfo(getActualForward());
+		addRequestParameter("CPQuery", "CPQuery");
+		addRequestParameter("pageOf", "pageOfCreateAliquot");
+		addRequestParameter("operation", "add");
+		addRequestParameter("menuSelected", "15");
+		addRequestParameter("buttonClicked", "submit");
+		//addRequestParameter("parentSpecimenId", "-1");
+		AliquotForm form = new AliquotForm();
+		form.setNoOfAliquots("2");
+		form.setSpecimenID(""+specimenForm.getId());
+		form.setSpecimenLabel(specimenForm.getLabel());
+		setActionForm(form);
+		actionPerform();
+
+		form = (AliquotForm) getActionForm();
+
+//		Map aliquotMap = form.getAliquotMap();
+//		aliquotMap.put( "radio_1", "1" );
+//		aliquotMap.put( "radio_2", "1" );
+
+		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
+		Map aliquotMap = form.getAliquotMap();
+		aliquotMap.put( "radio_1", "2" );
+		aliquotMap.put( "Specimen:1_quantity", "1" );
+		aliquotMap.put( "Specimen:1_StorageContainer_id", ""+storageContainer.getId() );
+		aliquotMap.put( "Specimen:1_positionDimensionOne", "22" );
+		aliquotMap.put( "Specimen:1_positionDimensionTwo", "22" );
+
+		aliquotMap.put( "radio_2", "2" );
+		aliquotMap.put( "Specimen:2_quantity", "1" );
+		aliquotMap.put( "Specimen:2_StorageContainer_id", ""+storageContainer.getId() );
+		aliquotMap.put( "Specimen:2_positionDimensionOne", "24" );
+		aliquotMap.put( "Specimen:2_positionDimensionTwo", "24" );
+
+
+		form.setNextForwardTo("success");
+		form.setForwardTo("CPQueryPrintAliquot");
+		form.setSubmittedFor("ForwardTo");
+		form.setButtonClicked("create");
+		form.setSpecimenID(""+specimenForm.getId());
+		form.setSpecimenLabel(specimenForm.getLabel());
+		form.setNoOfAliquots("2");
+		form.setAliqoutInSameContainer(true);
+		addRequestParameter("parentSpecimenId", ""+specimenForm.getId());
+		addRequestParameter("pageOf", "pageOfCreateAliquot");
+		addRequestParameter("operation", "add");
+		addRequestParameter("menuSelected", "15");
+		addRequestParameter("buttonClicked", "create");
+		addRequestParameter("CPQuery", "CPQuery");
+		setRequestPathInfo("/CPQueryCreateAliquots");
+		setActionForm(form);
+		actionPerform();
+		System.out.println(getActualForward());
+		verifyNoActionErrors();
+
+//		setRequestPathInfo(getActualForward());
+//		actionPerform();
+//		verifyNoActionErrors();
 	}
 	/**
 	 * Test disabled Participant
