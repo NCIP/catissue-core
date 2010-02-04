@@ -143,6 +143,153 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
         assertEquals(form.getBarcode(),"1234");
 
   	}
+	
+	
+	
+	// derived specimen printing.
+	 public void testCreateDerivativeAndPrint()
+	 {
+
+			Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
+			NewSpecimenForm specimenForm = null;
+			//Retrieving Storage container object for edit
+			logger.info("----StorageConatiner ID : " + specimen.getId());
+			addRequestParameter("pageOf", "pageOfNewSpecimen");
+			addRequestParameter("operation", "search");
+			addRequestParameter("id", specimen.getId().toString());
+			setRequestPathInfo("/SearchObject") ;
+			actionPerform();
+			verifyForward("pageOfNewSpecimen");
+			verifyNoActionErrors();
+
+			System.out.println(getActualForward());
+			setRequestPathInfo(getActualForward());
+			addRequestParameter("pageOf", "pageOfNewSpecimen");
+			actionPerform();
+			verifyNoActionErrors();
+
+			System.out.println(getActualForward());
+			setRequestPathInfo(getActualForward());
+			addRequestParameter("pageOf", "pageOfNewSpecimen");
+			addRequestParameter("operation", "edit");
+			addRequestParameter("menuSelected", "15");
+			addRequestParameter("showConsents", "yes");
+			addRequestParameter("tableId4", "disable");
+			actionPerform();
+			verifyNoActionErrors();
+			//Setting the derivative to true
+			specimenForm=(NewSpecimenForm) getActionForm();
+			specimenForm.setDerivedClicked(true);
+			specimenForm.setNumberOfSpecimens("1");
+			specimenForm.setForwardTo("createNew");
+			//specimenForm.setOperation("edit");
+			setActionForm(specimenForm);
+			setRequestPathInfo("/NewSpecimenEdit");
+			actionPerform();
+			verifyForward("createNew");
+			verifyNoActionErrors();
+
+			System.out.println(getActualForward());
+			setRequestPathInfo(getActualForward());
+
+			addRequestParameter("pageOf", "" );
+			addRequestParameter("operation", "add" );
+			addRequestParameter("menuSelected", "15" );
+			addRequestParameter("virtualLocated", "true" );
+		
+
+			actionPerform();
+
+			verifyNoActionErrors();
+
+//			specimenForm=(NewSpecimenForm) getActionForm();
+			CreateSpecimenForm form= (CreateSpecimenForm)getActionForm();
+			setActionForm(form);
+			setRequestPathInfo("/AddSpecimen");
+			addRequestParameter("isQuickEvent", "true" );
+			
+			
+
+			actionPerform();
+//			verifyForward("success");
+			verifyNoActionErrors();
+			
+			CreateSpecimenForm derivedSpecForm= (CreateSpecimenForm)getActionForm();
+			addRequestParameter("nextForwardTo","success");
+			derivedSpecForm.setForwardTo("CPQueryPrintDeriveSpecimen");
+			derivedSpecForm.setPrintCheckbox("true");
+			derivedSpecForm.setParentSpecimenLabel(specimen.getLabel());
+			derivedSpecForm.setParentSpecimenBarcode(specimen.getBarcode());
+			derivedSpecForm.setOperation("add");
+			setActionForm(derivedSpecForm);
+			
+			setRequestPathInfo("/CPQueryCreateSpecimenAdd");
+			actionPerform();
+			System.out.println("forward 1:"+getActualForward());
+			setRequestPathInfo(getActualForward());
+			actionPerform();
+			System.out.println("forward 2:"+getActualForward());
+			verifyForward("success");
+			
+	 }
+
+	
+	
+	
+	
+	/**
+	 * specimen edit printing.
+	 */
+	//bug 11174
+	
+	public void testEditSpecimenAndPrint()
+	{
+		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
+		NewSpecimenForm specimenForm = null;
+		//Retrieving specimen object for edit
+		logger.info("----specimen ID : " + specimen.getId());
+		addRequestParameter("pageOf", "pageOfNewSpecimen");
+		addRequestParameter("operation", "search");
+		addRequestParameter("id", specimen.getId().toString());
+		setRequestPathInfo("/SearchObject") ;
+		actionPerform();
+		verifyForward("pageOfNewSpecimen");
+		verifyNoActionErrors();
+
+		System.out.println(getActualForward());
+		setRequestPathInfo(getActualForward());
+		addRequestParameter("pageOf", "pageOfNewSpecimen");
+		actionPerform();
+		verifyNoActionErrors();
+
+		System.out.println(getActualForward());
+		setRequestPathInfo(getActualForward());
+		addRequestParameter("pageOf", "pageOfNewSpecimen");
+		addRequestParameter("operation", "edit");
+		addRequestParameter("menuSelected", "15");
+		addRequestParameter("showConsents", "yes");
+		addRequestParameter("tableId4", "disable");
+		addRequestParameter("nextForwardTo","success");
+		actionPerform();
+		verifyNoActionErrors();
+
+		specimenForm=(NewSpecimenForm) getActionForm();
+		
+		specimenForm.setOperation("edit");
+		specimenForm.setPrintCheckbox("true");
+		
+		specimenForm.setForwardTo("CPQueryPrintSpecimenEdit");
+		
+		setActionForm(specimenForm);
+		setRequestPathInfo("/CPQueryNewSpecimenEdit");
+		actionPerform();
+		System.out.println("sadasd:"+getActualForward());
+		setRequestPathInfo(getActualForward());
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+	}
+	
 	/**
 	 * Test Specimen Edit.
 	 */
