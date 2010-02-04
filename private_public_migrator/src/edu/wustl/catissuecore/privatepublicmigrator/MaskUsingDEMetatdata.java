@@ -124,21 +124,31 @@ public class MaskUsingDEMetatdata
 
 			// Disable constraints on audit tables.
 			this.disableAuditTables(session);
-
-			sqlString = "truncate table catissue_audit_event_details";
+			
+			sqlString = "truncate table catissue_bulk_operation";
 			this.executeQuery(sqlString, session);
-
+			
+			sqlString = "truncate table job_details";
+			this.executeQuery(sqlString, session);
+			
+			sqlString = "truncate table catissue_data_audit_event_log";
+			this.executeQuery(sqlString, session);
+			
 			sqlString = "truncate table catissue_audit_event_query_log";
 			this.executeQuery(sqlString, session);
-
+			
+			sqlString = "truncate table catissue_audit_event_details";
+			this.executeQuery(sqlString, session);
+			
 			sqlString = "truncate table catissue_audit_event_log";
 			this.executeQuery(sqlString, session);
-
+			
 			sqlString = "update catissue_audit_event set USER_ID=null";
 			this.executeQuery(sqlString, session);
+			
 			sqlString = "truncate table catissue_audit_event";
 			this.executeQuery(sqlString, session);
-
+			
 			// Enable constraints on audit tables.
 			this.enableAuditTables(session);
 
