@@ -57,6 +57,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
+import edu.wustl.common.participant.utility.ParticipantManagerUtility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
@@ -1294,29 +1295,18 @@ public class CaCoreAppServicesDelegator
 		this.checkNullObject(domainObject, "Domain Object");
 		final String className = domainObject.getClass().getName();
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final ParticipantBizLogic bizLogic = (ParticipantBizLogic) factory.getBizLogic(className);
-		// not null check for Id
-		//checkNullObject(abstractDomainObject.getId(),"Identifier");
-		final LookupLogic participantLookupLogic = (LookupLogic) CommonUtilities
-				.getObject(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
-		matchingObjects = bizLogic.getListOfMatchingParticipants((Participant) domainObject,
-				participantLookupLogic);
-		/*bug 7561*/
-		List filteredMatchingObjects = null;
-		if (matchingObjects != null)
-		{
-			filteredMatchingObjects = this.delegateSearchFilter(userName, matchingObjects);
-		}
-		else
-		{
-			filteredMatchingObjects = new ArrayList();
-		}
+
+		ParticipantBizLogic bizLogic = (ParticipantBizLogic) factory.getBizLogic(className);
+
+
+		matchingObjects = ParticipantManagerUtility.getListOfMatchingParticipants(
+				(Participant) domainObject, getSessionDataBean(userName), null, null);
 
 		if (cpId != null)
 		{
-			filteredMatchingObjects=processListForMatchWithinCP(filteredMatchingObjects, cpId);
+			matchingObjects=processListForMatchWithinCP(matchingObjects, cpId);
 		}
-		return filteredMatchingObjects;
+		return matchingObjects;
 	}
 
 	public List processListForMatchWithinCP(List<DefaultLookupResult> matchPartpantLst, Long cpId)
