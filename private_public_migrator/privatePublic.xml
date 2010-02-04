@@ -223,6 +223,10 @@
 		<copy file="./conf/DynamicExtensionsHibernate.cfg.xml" todir="${classes.dir}" overwrite="true" />
 		<copy file="./conf/MySQLDAOProperties.xml" todir="${classes.dir}" overwrite="true" />
 		<copy file="./conf/OracleDAOProperties.xml" todir="${classes.dir}" overwrite="true" />
+		
+		<copy file="./conf/OracleDataSourceDAOProperties.xml" todir="${classes.dir}" overwrite="true" />
+		<copy file="./conf/ApplicationResources.properties" todir="${classes.dir}" overwrite="true" />
+		<copy file="./conf/DynamicExtensionDAO.properties" todir="${classes.dir}" overwrite="true" />
 		<if>
 			<equals arg1="${databaseType}" arg2="mysql"/>
 			<then>
