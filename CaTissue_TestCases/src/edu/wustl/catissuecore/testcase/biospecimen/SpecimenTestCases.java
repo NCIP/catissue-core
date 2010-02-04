@@ -388,6 +388,46 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 //		actionPerform();
 //		verifyNoActionErrors();
 	}
+
+
+	public void testForConainerChangeOnAliquotPage()
+	{
+		setRequestPathInfo("/Aliquots");
+		actionPerform();
+		//verifyNoActionErrors();
+		AliquotForm aliquotForm = new AliquotForm();
+		Specimen parent = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
+		aliquotForm.setSpecimenLabel( parent.getLabel() );
+		aliquotForm.setClassName( parent.getSpecimenClass() );
+		aliquotForm.setType( parent.getSpecimenType() );
+		aliquotForm.setNoOfAliquots( "1" );
+		aliquotForm.setQuantityPerAliquot( "1" );
+		aliquotForm.setSpecimenID( parent.getId().toString() );
+		aliquotForm.setNextForwardTo( "" );
+		aliquotForm.setButtonClicked("submit");
+		addRequestParameter("pageOf", "pageOfCreateAliquot");
+		addRequestParameter("operation", "add");
+		aliquotForm.setSpCollectionGroupId( parent.getSpecimenCollectionGroup().getId() );
+		setActionForm(aliquotForm);
+		setRequestPathInfo("/CreateAliquots");
+		actionPerform();
+		setRequestPathInfo("/CPQueryCreateAliquots");
+		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
+		addRequestParameter("rowNo", "1");
+		addRequestParameter("requestType", "ajax");
+		addRequestParameter("containerName", storageContainer.getName());
+		addRequestParameter("noOfAliquots", "1");
+		addRequestParameter("pageOf", "pageOfCreateAliquot");
+		addRequestParameter("operation", "add");
+		addRequestParameter("menuSelected", "15");
+		addRequestParameter("method", "executeContainerChange");
+		addRequestParameter("CPQuery", "true");
+		addRequestParameter("parentSpecimenId", parent.getId().toString());
+		setActionForm(aliquotForm);
+		actionPerform();
+
+		verifyNoActionErrors();
+	}
 	/**
 	 * Test disabled Participant
 	 */
