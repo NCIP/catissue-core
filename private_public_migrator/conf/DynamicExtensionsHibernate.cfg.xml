@@ -6,14 +6,6 @@
 <hibernate-configuration>
 	
     <session-factory>
-    	<property name="show_sql">false</property>
-  <!-- 	   	
-    	<property name="connection.datasource">java:/catissuecore</property>
-    	<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
-    	<property name="transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>
-    	<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
-	-->  
-	
 		<property name="show_sql">false</property>
     	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>	
     	<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
@@ -39,14 +31,13 @@
         <property name="hibernate.query.substitutions">true 1,false 0</property>
 -->     
  
-        <property name="hibernate.c3p0.max_size">2</property>
+ 		<property name="hibernate.c3p0.max_size">4</property>
 		<property name="hibernate.c3p0.min_size">2</property>
 		<property name="hibernate.c3p0.timeout">5000</property>
 		<property name="hibernate.c3p0.max_statements">100</property>
 		<property name="hibernate.c3p0.idle_test_period">3000</property>
 		<property name="hibernate.c3p0.acquire_increment">2</property>
 		<property name="hibernate.c3p0.validate">false</property>
- 
   
 <!-- My sql settings end -->   
 
@@ -61,7 +52,7 @@
 
         <!-- List of all Mapping files -->
         
- 		<mapping resource="edu/common/dynamicextensions/hbm/AbstractMetadata.hbm.xml"/>
+ 		 <mapping resource="edu/common/dynamicextensions/hbm/AbstractMetadata.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/AttributeTypeInformation.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/PermissibleValue.hbm.xml"/>
 
@@ -88,11 +79,6 @@
         <mapping resource="edu/common/dynamicextensions/hbm/validationrules/Rule.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/validationrules/RuleParameter.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/EntityManagerHQL.hbm.xml"/>
-
-        <mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMap.hbm.xml"/>
-        <mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMapCondition.hbm.xml"/>
-        <mapping resource="edu/common/dynamicextensions/hbm/integration/FormContext.hbm.xml"/>
-        <mapping resource="edu/common/dynamicextensions/hbm/integration/EntityMapRecord.hbm.xml"/>
 
         <mapping resource="edu/common/dynamicextensions/hbm/IdGenerator.hbm.xml"/>
         <mapping resource="edu/common/dynamicextensions/hbm/Path.hbm.xml"/>
