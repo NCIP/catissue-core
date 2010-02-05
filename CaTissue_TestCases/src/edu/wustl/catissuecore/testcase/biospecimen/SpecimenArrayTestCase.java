@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.testcase.biospecimen;
 
 import java.util.Map;
 
+import edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -16,7 +17,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 public class SpecimenArrayTestCase extends CaTissueSuiteBaseTest
 {
-	
+
 	public void testSpecimenArrayAdd()
 	{
 
@@ -112,6 +113,7 @@ public class SpecimenArrayTestCase extends CaTissueSuiteBaseTest
 
 		SpecimenArray specimenArray=new SpecimenArray();
 		specimenArray.setId(arrayForm.getId());
+		specimenArray.setName(arrayForm.getName());
 
 		try
 		{
@@ -127,7 +129,67 @@ public class SpecimenArrayTestCase extends CaTissueSuiteBaseTest
 		logger.info("----specimenArray Added successfully");
 	}
 
+	public void testSpecimenArrayaliquot()
+	{
+		SpecimenArray SpecimenArray = (SpecimenArray) TestCaseUtility.getNameObjectMap("SpecimenArrayObject");
+		setRequestPathInfo("/SpecimenArrayAliquots");
+		addRequestParameter("pageOf", "pageOfSpecimenArrayAliquot");
+		actionPerform();
+		verifyForward("pageOfSpecimenArrayAliquot");
+		verifyNoActionErrors();
 
+		SpecimenArrayAliquotForm specimenArrayAliquotForm = (SpecimenArrayAliquotForm)getActionForm();
+		specimenArrayAliquotForm.setParentSpecimenArrayLabel(SpecimenArray.getName());
+		specimenArrayAliquotForm.setAliquotCount("1");
+
+
+		addRequestParameter("pageOf", "pageOfSpecimenArrayCreateAliquot");
+		addRequestParameter("buttonClicked", "submit");
+		addRequestParameter("menuSelected", "20");
+		setActionForm(specimenArrayAliquotForm);
+		setRequestPathInfo("/SpecimenArrayCreateAliquots");
+
+		actionPerform();
+		verifyForward("pageOfSpecimenArrayCreateAliquot");
+		verifyNoActionErrors();
+
+		specimenArrayAliquotForm = (SpecimenArrayAliquotForm)getActionForm();
+		StorageContainer container=(StorageContainer)TestCaseUtility.getObjectMap().get("SpecimenarrayStorageContainer");
+
+		Map aliquotMap = specimenArrayAliquotForm.getSpecimenArrayAliquotMap();
+		aliquotMap.put( "radio_1", "1" );
+//		aliquotMap.put( "SpecimenArray:1_label", specimenArrayAliquotForm.get );
+		aliquotMap.put( "Specimen:1_quantity", "1" );
+		aliquotMap.put( "SpecimenArray:1_StorageContainer_id", ""+container.getId());
+		aliquotMap.put( "SpecimenArray:1_positionDimensionOne", "22" );
+		aliquotMap.put( "SpecimenArray:1_positionDimensionTwo", "22" );
+
+		specimenArrayAliquotForm.setSpecimenArrayAliquotMap(aliquotMap);
+		specimenArrayAliquotForm.setSubmittedFor("ForwardTo");
+
+		addRequestParameter("pageOf", "pageOfSpecimenArrayCreateAliquot");
+		addRequestParameter("buttonClicked", "create");
+		addRequestParameter("menuSelected", "20");
+		addRequestParameter("operation", "add");
+		setActionForm(specimenArrayAliquotForm);
+		setRequestPathInfo("/SpecimenArrayCreateAliquots");
+
+		actionPerform();
+		verifyForward("commonAddEdit");
+
+		verifyNoActionErrors();
+
+		System.out.println(getActualForward());
+		setRequestPathInfo(getActualForward());
+		addRequestParameter("pageOf", "pageOfSpecimenArrayAliquotSummary");
+		addRequestParameter("operation", "add");
+		addRequestParameter("buttonClicked", "none");
+		addRequestParameter("menuSelected", "20");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
+
+	}
 
 	public void testSpecimenArrayAddWithoutSpecimen()
 	{
@@ -507,7 +569,7 @@ public class SpecimenArrayTestCase extends CaTissueSuiteBaseTest
 
 	}
 
-	
+
 	public void testSpecimenArrayEdit()
 	{
 		SpecimenArray specimenArray=(SpecimenArray)TestCaseUtility.getObjectMap().get("SpecimenArrayObject");

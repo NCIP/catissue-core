@@ -22,7 +22,7 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Collection Protocol Add.
 	 */
-	
+
 	public void testCollectionProtocolAdd()
 	{
 		/*Collection Protocol Details*/
@@ -169,7 +169,7 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		TestCaseUtility.setNameObjectMap("CollectionProtocol",collectionProtocol);
 	}
 
-	
+
 	public void testAddAnotherCollectionProtocol()
 	{
 		/*Collection Protocol Details*/
@@ -315,7 +315,7 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		TestCaseUtility.setNameObjectMap("CollectionProtocolEventMap2",innerLoopValues);
 		TestCaseUtility.setNameObjectMap("CollectionProtocol2",collectionProtocol);
 	}
-	
+
 	public void testClickOnClinicalDiagnosis()
 	{
 		try {
@@ -335,9 +335,24 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 	}
 
 	/**
+	 * Test case for testing the CollectionProtocolAction.java class
+	 */
+	public void testCollectionProtocalAction()
+	{
+		setRequestPathInfo("/CollectionProtocol");
+		addRequestParameter("pageOf", "pageOfCollectionProtocol");
+		addRequestParameter("operation", "add");
+		addRequestParameter("menuSelected", "9");
+		actionPerform();
+
+		verifyNoActionErrors();
+		verifyForward("pageOfCollectionProtocol");
+	}
+
+	/**
 	 * Test Collection Protocol Edit.
 	 */
-//	
+//
 //	public void testCollectionProtocolEdit()
 //	{
 //		/*Simple Search Action*/

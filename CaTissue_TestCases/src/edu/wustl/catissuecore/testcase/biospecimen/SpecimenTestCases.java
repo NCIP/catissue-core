@@ -9,6 +9,7 @@ import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
+import edu.wustl.catissuecore.domain.Aliquot;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -143,9 +144,9 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
         assertEquals(form.getBarcode(),"1234");
 
   	}
-	
-	
-	
+
+
+
 	// derived specimen printing.
 	 public void testCreateDerivativeAndPrint()
 	 {
@@ -196,7 +197,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			addRequestParameter("operation", "add" );
 			addRequestParameter("menuSelected", "15" );
 			addRequestParameter("virtualLocated", "true" );
-		
+
 
 			actionPerform();
 
@@ -207,13 +208,13 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			setActionForm(form);
 			setRequestPathInfo("/AddSpecimen");
 			addRequestParameter("isQuickEvent", "true" );
-			
-			
+
+
 
 			actionPerform();
 //			verifyForward("success");
 			verifyNoActionErrors();
-			
+
 			CreateSpecimenForm derivedSpecForm= (CreateSpecimenForm)getActionForm();
 			addRequestParameter("nextForwardTo","success");
 			derivedSpecForm.setForwardTo("CPQueryPrintDeriveSpecimen");
@@ -222,7 +223,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			derivedSpecForm.setParentSpecimenBarcode(specimen.getBarcode());
 			derivedSpecForm.setOperation("add");
 			setActionForm(derivedSpecForm);
-			
+
 			setRequestPathInfo("/CPQueryCreateSpecimenAdd");
 			actionPerform();
 			System.out.println("forward 1:"+getActualForward());
@@ -230,18 +231,18 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			actionPerform();
 			System.out.println("forward 2:"+getActualForward());
 			verifyForward("success");
-			
+
 	 }
 
-	
-	
-	
-	
+
+
+
+
 	/**
 	 * specimen edit printing.
 	 */
 	//bug 11174
-	
+
 	public void testEditSpecimenAndPrint()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
@@ -274,12 +275,12 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		verifyNoActionErrors();
 
 		specimenForm=(NewSpecimenForm) getActionForm();
-		
+
 		specimenForm.setOperation("edit");
 		specimenForm.setPrintCheckbox("true");
-		
+
 		specimenForm.setForwardTo("CPQueryPrintSpecimenEdit");
-		
+
 		setActionForm(specimenForm);
 		setRequestPathInfo("/CPQueryNewSpecimenEdit");
 		actionPerform();
@@ -289,7 +290,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		verifyForward("success");
 		verifyNoActionErrors();
 	}
-	
+
 	/**
 	 * Test Specimen Edit.
 	 */
@@ -379,6 +380,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	}
 
 
+
 	/**
 	 * Test aliquot add
 	 * AliquotAction + CreateAliquotAction
@@ -432,6 +434,12 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
+
+		AliquotForm aliqForm = (AliquotForm) getActionForm();
+//		aliqForm.getSpecimenList().get(0);
+		Specimen aliquot = new Specimen();
+		aliquot.setId(aliqForm.getSpecimenList().get(0).getId());
+		TestCaseUtility.setNameObjectMap("Aliquot",aliquot);
 	}
 
 	public void testAliquot()
@@ -574,6 +582,54 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 
 		verifyNoActionErrors();
+	}
+
+	public void testRetrieveAliquot()
+	{
+		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Aliquot");
+		NewSpecimenForm specimenForm = null;
+		//Retrieving specimen object for edit
+		logger.info("----specimen ID : " + specimen.getId());
+		addRequestParameter("pageOf", "pageOfNewSpecimen");
+		addRequestParameter("operation", "search");
+		addRequestParameter("id", specimen.getId().toString());
+		setRequestPathInfo("/SearchObject") ;
+		actionPerform();
+		verifyForward("pageOfNewSpecimen");
+		verifyNoActionErrors();
+
+		System.out.println(getActualForward());
+		setRequestPathInfo(getActualForward());
+		addRequestParameter("pageOf", "pageOfNewSpecimen");
+		actionPerform();
+		verifyNoActionErrors();
+
+		System.out.println(getActualForward());
+		setRequestPathInfo(getActualForward());
+		addRequestParameter("pageOf", "pageOfNewSpecimen");
+		addRequestParameter("operation", "edit");
+		addRequestParameter("menuSelected", "15");
+		addRequestParameter("showConsents", "yes");
+		addRequestParameter("tableId4", "disable");
+		actionPerform();
+		verifyForward("pageOfNewSpecimen");
+		verifyNoActionErrors();
+		System.out.println(getActualForward());
+
+		specimenForm=(NewSpecimenForm) getActionForm();
+		assertEquals(specimenForm.getLineage(),"Aliquot");
+
+	}
+
+	public void testForCreateAliquotSpecimenAction()
+	{
+		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Aliquot");
+		setRequestPathInfo("/createAliquotSpecimen");
+		addRequestParameter("specimenId", specimen.getId().toString());
+		actionPerform();
+
+		verifyNoActionErrors();
+		verifyForward("aliquotSpecimen");
 	}
 	/**
 	 * Test disabled Participant
