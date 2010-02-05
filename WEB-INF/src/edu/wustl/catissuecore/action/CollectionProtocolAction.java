@@ -60,7 +60,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(CollectionProtocolAction.class);
+	private static transient final Logger LOGGER = Logger.getCommonLogger(CollectionProtocolAction.class);
 	// This will keep track of no of consents for a particular participant
 	/**
 	 * consentCounter.
@@ -91,7 +91,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 
 		final String tabSel = request.getParameter("tabSel");
 		request.setAttribute("tabSel", tabSel);
-		List<NameValueBean> clinicalDiagnosis = new ArrayList<NameValueBean>();
+		final List<NameValueBean> clinicalDiagnosis = new ArrayList<NameValueBean>();
 		request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES, clinicalDiagnosis);
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
@@ -110,20 +110,20 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		// Gets the value of the operation attribute.
 
 		final HttpSession newSession = request.getSession();
-		final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) newSession
+		final CollectionProtocolBean cpBean = (CollectionProtocolBean) newSession
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 
-		if (operation == null && collectionProtocolBean != null
-				&& collectionProtocolBean.getOperation().equals("update"))
+		if (operation == null && cpBean != null
+				&& cpBean.getOperation().equals("update"))
 		{
 			operation = Constants.EDIT;
 		}
-		else if (operation == null && collectionProtocolBean == null)
+		else if (operation == null && cpBean == null)
 		{
 			operation = Constants.ADD;
 		}
 
-		if (invokeFunction != null && collectionProtocolBean != null)
+		if (invokeFunction != null && cpBean != null)
 		{
 			this.initCollectionProtocolPage(request, form, pageOf, mapping);
 		}
@@ -133,7 +133,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			this.initCleanSession(request);
 		}
 
-		this.logger.debug("operation in coll prot action" + operation);
+		this.LOGGER.debug("operation in coll prot action" + operation);
 		// Sets the operation attribute to be used in the Edit/View Collection
 		// Protocol Page in Advance Search Object View.
 
@@ -192,7 +192,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 				Constants.CDE_NAME_CLINICAL_STATUS, null);
 		request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
 
-		this.logger.debug("page of in collectionProtocol action:" + pageOf);
+		this.LOGGER.debug("page of in collectionProtocol action:" + pageOf);
 		request.setAttribute("pageOf", pageOf);
 
 		final List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
@@ -259,18 +259,18 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		{
 			flagforPageView = true;
 		}
-		final Integer collectionProtocolYear = new Integer(CommonUtilities
+		final Integer collectionProtocolYear = Integer.valueOf(CommonUtilities
 				.getYear(currentCollectionProtocolDate));
-		final Integer collectionProtocolMonth = new Integer(CommonUtilities
+		final Integer collectionProtocolMonth = Integer.valueOf(CommonUtilities
 				.getMonth(currentCollectionProtocolDate));
-		final Integer collectionProtocolDay = new Integer(CommonUtilities
+		final Integer collectionProtocolDay = Integer.valueOf(CommonUtilities
 				.getDay(currentCollectionProtocolDate));
 
-		final Integer collectionProtocolEndDateYear = new Integer(CommonUtilities
+		final Integer collectionProtocolEndDateYear =Integer.valueOf(CommonUtilities
 				.getYear(collectionProtocolEndDate));
-		final Integer collectionProtocolEndDateMonth = new Integer(CommonUtilities
+		final Integer collectionProtocolEndDateMonth = Integer.valueOf(CommonUtilities
 				.getMonth(collectionProtocolEndDate));
-		final Integer collectionProtocolEndDateDay = new Integer(CommonUtilities
+		final Integer collectionProtocolEndDateDay = Integer.valueOf(CommonUtilities
 				.getDay(collectionProtocolEndDate));
 
 		request.setAttribute("collectionProtocolYear", collectionProtocolYear);
@@ -280,9 +280,9 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		request.setAttribute("collectionProtocolEndDateYear", collectionProtocolEndDateYear);
 		request.setAttribute("collectionProtocolEndDateDay", collectionProtocolEndDateDay);
 		request.setAttribute("collectionProtocolEndDateMonth", collectionProtocolEndDateMonth);
-		if (collectionProtocolBean != null)
+		if (cpBean != null)
 		{
-			request.setAttribute("isParticipantReg", collectionProtocolBean.isParticiapantReg());
+			request.setAttribute("isParticipantReg", cpBean.isParticiapantReg());
 		}
 
 		int noOfConsents = 1;
@@ -319,7 +319,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		request.setAttribute("predefinedConsentsList", predefinedConsentsList);
 		request.setAttribute("title", title);
 		request.setAttribute("userListforJSP", Constants.USERLIST);
-		CollectionProtocolUtil.updateClinicalDiagnosis(request, collectionProtocolBean);
+		CollectionProtocolUtil.updateClinicalDiagnosis(request, cpBean);
 		return mapping.findForward(pageOf);
 	}
 
@@ -332,14 +332,14 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	 * @throws BizLogicException
 	 *             : BizLogicException
 	 */
-	private CollectionProtocol getCPObj(String cp_id) throws BizLogicException
+	private CollectionProtocol getCPObj(final String cp_id) throws BizLogicException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic) factory
 				.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 
 		final Object object = collectionProtocolBizLogic.retrieve(CollectionProtocol.class
-				.getName(), new Long(cp_id));
+				.getName(), Long.valueOf(cp_id));
 		final CollectionProtocol collectionProtocolObject = (CollectionProtocol) object;
 		return collectionProtocolObject;
 	}
@@ -425,7 +425,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setParentCollectionProtocolId(collectionProtocolBean
 				.getParentCollectionProtocolId());
 
-		return (mapping.findForward(pageOf));
+		return mapping.findForward(pageOf);
 	}
 
 	/**
