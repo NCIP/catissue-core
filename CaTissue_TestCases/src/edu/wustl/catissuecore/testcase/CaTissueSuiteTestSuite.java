@@ -23,7 +23,7 @@ import edu.wustl.catissuecore.testcase.biospecimen.SpecimenEventsTestcases;
 import edu.wustl.catissuecore.testcase.biospecimen.SpecimenTestCases;
 import edu.wustl.catissuecore.testcase.bizlogic.AliquotBizTestCase;
 import edu.wustl.catissuecore.testcase.bizlogic.BioHazardBizTestCases;
-import edu.wustl.catissuecore.testcase.bizlogic.BulkTransferTestCases;
+import edu.wustl.catissuecore.testcase.biospecimen.BulkTransferTestCases;
 import edu.wustl.catissuecore.testcase.bizlogic.CancerResearchGrpBizTestCases;
 import edu.wustl.catissuecore.testcase.bizlogic.CollectionProtocolBizTestCases;
 import edu.wustl.catissuecore.testcase.bizlogic.DeIdentifiedSurgicalPathologyReportBizTestCases;

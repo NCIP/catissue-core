@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.testcase.bizlogic;
+package edu.wustl.catissuecore.testcase.biospecimen;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -14,6 +14,8 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.testcase.bizlogic.TestCaseUtility;
+import edu.wustl.catissuecore.testcase.bizlogic.BaseTestCaseUtility;
 
 
 public class BulkTransferTestCases extends CaTissueSuiteBaseTest
