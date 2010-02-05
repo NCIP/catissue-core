@@ -129,6 +129,12 @@
 			roleName="holdsSpecimenArrayTypeCollection">
 		</referenceAssociationCollection>
 		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.CollectionProtocol"
+			relationShipType="association"
+			roleName="collectionProtocolCollection">
+		</referenceAssociationCollection>
+		
 	</AuditableClass>
 	
 	<AuditableClass className="edu.wustl.catissuecore.domain.SpecimenArray"
@@ -501,7 +507,7 @@
 			roleName="specimenCharacteristics">
 		</containmentAssociationCollection>
 		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.SpecimenEventParameter"
+			className="edu.wustl.catissuecore.domain.SpecimenEventParameters"
 			relationShipType="containment"
 			roleName="specimenEventCollection">
 		</containmentAssociationCollection>
@@ -546,7 +552,7 @@
 			roleName="specimenCharacteristics">
 		</containmentAssociationCollection>
 		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.SpecimenEventParameter"
+			className="edu.wustl.catissuecore.domain.SpecimenEventParameters"
 			relationShipType="containment"
 			roleName="specimenEventCollection">
 		</containmentAssociationCollection>
@@ -592,7 +598,7 @@
 			roleName="specimenCharacteristics">
 		</containmentAssociationCollection>
 		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.SpecimenEventParameter"
+			className="edu.wustl.catissuecore.domain.SpecimenEventParameters"
 			relationShipType="containment"
 			roleName="specimenEventCollection">
 		</containmentAssociationCollection>
@@ -636,7 +642,7 @@
 			roleName="specimenCharacteristics">
 		</containmentAssociationCollection>
 		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.SpecimenEventParameter"
+			className="edu.wustl.catissuecore.domain.SpecimenEventParameters"
 			relationShipType="containment"
 			roleName="specimenEventCollection">
 		</containmentAssociationCollection>
@@ -680,7 +686,7 @@
 			roleName="specimenCharacteristics">
 		</containmentAssociationCollection>
 		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.SpecimenEventParameter"
+			className="edu.wustl.catissuecore.domain.SpecimenEventParameters"
 			relationShipType="containment"
 			roleName="specimenEventCollection">
 		</containmentAssociationCollection>
