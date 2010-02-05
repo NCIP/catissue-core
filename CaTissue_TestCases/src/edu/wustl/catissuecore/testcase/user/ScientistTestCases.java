@@ -957,348 +957,344 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				}
 			}
 			
-			/**
-			  * Search all participant and check if PHI data is visible
-			  */ 
-			  public void testQueryParticipantWithScientistLogin()
-			  {
-				try
-				{
-					StringBuffer hql = new StringBuffer();
-					String targetClassName = Participant.class.getName(); 
-					hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
-					List result = appService.query(hql.toString());
-					List parList = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
-					System.out.println("Size : "+parList.size());
-					for(int i=0;i<parList.size();i++)
-					{
-						Participant retutnParticpant = (Participant)parList.get(i);
-						if(retutnParticpant.getFirstName()!=null||retutnParticpant.getLastName()!=null||
-								retutnParticpant.getMiddleName()!=null||retutnParticpant.getBirthDate()!=null||
-								retutnParticpant.getSocialSecurityNumber()!=null)
-						{
-							fail("Participant PHI data is visible to scientist");
-						}
-						Collection<ParticipantMedicalIdentifier> pmiCollection 
-							= retutnParticpant.getParticipantMedicalIdentifierCollection();
-						if(pmiCollection!=null)
-						{
-							for (Iterator<ParticipantMedicalIdentifier> iterator = pmiCollection.iterator();iterator.hasNext();)
-						    {
-						        ParticipantMedicalIdentifier participantMedId = (ParticipantMedicalIdentifier) iterator.next();
-						        if(participantMedId.getMedicalRecordNumber()!=null)
-						        {
-						        	fail("Participant PHI data is visible to scientist");
-						        }
-						    }
-						}	
-						
-					    Collection<CollectionProtocolRegistration> cprCollection 
-					    				= retutnParticpant.getCollectionProtocolRegistrationCollection();
-					    if(cprCollection!=null)
-					    {
-						    for (Iterator<CollectionProtocolRegistration> iterator=cprCollection.iterator();iterator.hasNext();)
-						    {
-						        CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) iterator.next();
-						        if(cpr.getRegistrationDate()!=null || cpr.getConsentSignatureDate()!=null ||
-						        		cpr.getSignedConsentDocumentURL()!=null)
-						        {
-						        	fail("Participant PHI data is visible to scientist");
-						        }
-						    }
-					    }    
-					}
-				 }
-				 catch(Exception e){
-					 
-				     System.out
-							.println("ScientistRoleTestCases.testQueryParticipantWithScientistLogin()"+e.getMessage());
-					 e.printStackTrace();
-					 assertFalse(e.getMessage(), true);
-				 }
-			  }
-			 
-			  /**
-			   * Search all PMI and check if PHI data is visible
-			   */
-			  public void testQueryPMIWithScientistLogin()
-			  {
-				  try
-				  {
-					  	StringBuffer hql = new StringBuffer();
-					  	String targetClassName = ParticipantMedicalIdentifier.class.getName(); 
-						hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
-
-						List result = appService.query(hql.toString());
-
-						List pmiList = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
-						for(int i=0;i<pmiList.size();i++)
-						{
-							 ParticipantMedicalIdentifier participantMedId = (ParticipantMedicalIdentifier) pmiList.get(i);
-						     if(participantMedId.getMedicalRecordNumber()!=null)
-						     {
-						        	fail("ParticipantMedicalIdentifier PHI data is visible to scientist");
-						     }
-						}
-					 }
-					 catch(Exception e)
-					 {
-						 System.out
-							.println("ScientistRoleTestCases.testSearchPMIWithScientistLogin():"+e.getMessage());	
-						 e.printStackTrace();
-						 assertFalse(e.getMessage(), true);
-					 }
-			  }
-			  /**
-				  * Search all CPR and check if PHI data is visible
-				  *
-				  */ 
-				  public void testQueryProtocolRegistrationWithScientistLogin()
-				  {
-					try
-					{
-						StringBuffer hql = new StringBuffer();
-					  	String targetClassName = CollectionProtocolRegistration.class.getName(); 
-						hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
-
-						List result = appService.query(hql.toString());
-						List cprList = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
-
-						System.out.println("Size : "+cprList.size());
-						for(int i=0;i<cprList.size();i++)
-						{
-							CollectionProtocolRegistration returnedReg = (CollectionProtocolRegistration)cprList.get(i);
-							if(returnedReg.getRegistrationDate()!=null||returnedReg.getSignedConsentDocumentURL()!=null||
-									returnedReg.getConsentSignatureDate()!=null)
-							{
-								fail("CollectionProtocolRegistration PHI data is visible to scientist");
-							}
-						}
-					 }
-					 catch(Exception e){
-						 System.out
-								.println("ScientistRoleTestCases.testSearchProtocolRegistrationWithScientistLogin() "+e.getMessage());
-					     Logger.out.error(e.getMessage(),e);
-						 e.printStackTrace();
-						 assertFalse(e.getMessage(), true);
-					 }
-				  }
-			  /**
-				  * Search all SCG and check if PHI data is visible
-				  *
-				  */ 
-				  public void testQuerySpecimenCollectionGroupWithScientistLogin()
-				  {
-					try{
-						StringBuffer hql = new StringBuffer();
-					  	String targetClassName = SpecimenCollectionGroup.class.getName(); 
-						hql.append("select from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
-
-						List result = appService.query(hql.toString());
-
-						List scgList = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
-
-						System.out.println("Size : "+scgList.size());
-						for(int i=0;i<scgList.size();i++)
-						{
-							SpecimenCollectionGroup returnedSCG = (SpecimenCollectionGroup)scgList.get(i);
-							if(returnedSCG.getSurgicalPathologyNumber()!=null)
-							{
-								fail("SpecimenCollectionGroup PHI data is visible to scientist");
-							}
-							CollectionProtocolRegistration returnedReg = returnedSCG.getCollectionProtocolRegistration();
-							if(returnedReg!=null)
-							{
-								if(returnedReg.getRegistrationDate()!=null||returnedReg.getSignedConsentDocumentURL()!=null||
-										returnedReg.getConsentSignatureDate()!=null)
-								{
-									fail("SpecimenCollectionGroup PHI data is visible to scientist");
-								}
-							}	
-							Collection<SpecimenEventParameters> spEvent = returnedSCG.getSpecimenEventParametersCollection();
-							if(spEvent!=null)
-							{
-							    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
-							    while(eveItr.hasNext())
-							    {
-							    	SpecimenEventParameters spEventParam = (SpecimenEventParameters)eveItr.next();
-							    	if(spEventParam.getTimestamp()!=null)
-							    	{
-							    		fail("SpecimenCollectionGroup PHI data is visible to scientist");
-							    	}
-							    }
-							}   
-						}
-					 }
-					 catch(Exception e){
-						 System.out
-								.println("ScientistRoleTestCases.testSearchSpecimenCollectionGroupWithScientistLogin() "+e.getMessage());
-					     Logger.out.error(e.getMessage(),e);
-						 e.printStackTrace();
-						 assertFalse(e.getMessage(), true);
-					 }
-				  }
-				  /**
-				   * Test search Tissue specimen and check for PHI data
-				   */
-				  public void testQueryTissueSpecimenWithScientistLogin()
-				  {
-						try
-						{
-							StringBuffer hql = new StringBuffer();
-						  	String targetClassName = TissueSpecimen.class.getName(); 
-							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
-							List result = appService.query(hql.toString());
-			
-							List<Specimen> spCollection = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
-
-							validateSpecimenData(targetClassName,spCollection);
-						 }
-						 catch(Exception e)
-						 {
-							 System.out
-									.println("ScientistRoleTestCases.testSearchTissueSpecimenWithScientistLogin() "+e.getMessage());
-						     Logger.out.error(e.getMessage(),e);
-							 e.printStackTrace();
-							 assertFalse(e.getMessage(), true);
-						 }
-					}
-				  
-					/**
-					 * Test search SpecimenArrayContent and test for PHI data
-					 */
-					public void testQuerySpecimenArrayContentWithScientistLogin()
-					{
-						try
-						{
-							StringBuffer hql = new StringBuffer();
-						  	String targetClassName = SpecimenArrayContent.class.getName(); 
-							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
-							List result = appService.query(hql.toString());
-							
-							List sacCollection = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
-							System.out.println("Total SpecimenArrayContent Count:"+sacCollection.size());
-							Iterator itr = sacCollection.iterator();
-							while(itr.hasNext())
-							{
-								SpecimenArrayContent spe = (SpecimenArrayContent)itr.next();
-								if(spe.getSpecimen().getCreatedOn()!=null)
-								{
-									fail("SpecimenArrayContent ->Specimen PHI data is visible to scientist");
-								}
-							}
-						}
-						 catch(Exception e)
-						 {
-							 System.out
-									.println("ScientistRoleTestCases.testSpecimenArrayContentWithScientistLogin()"+e.getMessage());
-							 e.printStackTrace();
-							 assertFalse(e.getMessage(), true);
-						 }
-						
-					}
-					
-					/**
-					 * Test search for ReceivedEventParameters and test for PHI data
-					 */
-					public void testQueryReceivedEventParameters()
-					{
-						try
-						{
-							StringBuffer hql = new StringBuffer();
-						  	String targetClassName = ReceivedEventParameters.class.getName(); 
-							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
-							List result = appService.query(hql.toString());
-
-							List recColl = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
-							Iterator itr = recColl.iterator();
-							while(itr.hasNext())
-							{
-								ReceivedEventParameters rec = (ReceivedEventParameters)itr.next();
-								if(rec.getTimestamp()!=null)
-								{
-									fail("ReceivedEventParameters PHI data is visible to scientist");
-								}
-							}
-						} 
-						catch(Exception e)
-						{
-							System.out
-									.println("ScientistRoleTestCases.testSearchReceivedEventParameters()"+e.getMessage());
-							e.printStackTrace();
-							assertFalse(e.getMessage(), true);
-						}
-					}
-
-					/**
-					 * Test search for DeidentifiedSurgicalPathologyReport and test for PHI data
-					 */
-					public void testQueryDeidentifiedSurgicalPathologyReport()
-					{
-						try
-						{
-							StringBuffer hql = new StringBuffer();
-						  	String targetClassName = DeidentifiedSurgicalPathologyReport.class.getName(); 
-							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
-							List result = appService.query(hql.toString());
-
-							List spCollection = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
-							Iterator itr = spCollection.iterator();
-							while(itr.hasNext())
-							{
-								DeidentifiedSurgicalPathologyReport deid = (DeidentifiedSurgicalPathologyReport)itr.next();
-								if(deid.getCollectionDateTime()!=null || deid.getId()!=null
-										|| deid.getActivityStatus()!=null||deid.getIsFlagForReview()!=null)
-								{
-									fail("DeIdentifiedSurgicalPathologyReport PHI data is visible to scientist");
-								}
-							}
-						 }
-						 catch(Exception e)
-						 {
-							 System.out
-									.println("ScientistRoleTestCases.testSearchDeidentifiedSurgicalPathologyReport()"+e.getMessage());
-							 e.printStackTrace();
-							 assertFalse(e.getMessage(), true);
-						 }
-					}
-					/**
-					 * Test search for IdentifiedSurgicalPathologyReport and test for PHI data
-					 */
-					public void testQueryIdentifiedSurgicalPathologyReport()
-					{
-						try
-						{
-							StringBuffer hql = new StringBuffer();
-						  	String targetClassName = IdentifiedSurgicalPathologyReport.class.getName(); 
-							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
-							List result = appService.query(hql.toString());
-
-							List spCollection = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
-							Iterator itr = spCollection.iterator();
-							while(itr.hasNext())
-							{
-								IdentifiedSurgicalPathologyReport ispr = (IdentifiedSurgicalPathologyReport)itr.next();
-								System.out.println("IdentifiedSurgicalPathologyReport : "+ ispr);
-								if(ispr.getCollectionDateTime()!=null || ispr.getTextContent()!= null||
-										ispr.getId()!=null || ispr.getActivityStatus()!=null)
-								{
-									fail("IdentifiedSurgicalPathologyReport PHI data is visible to scientist");
-								}
-							}
-						 }
-						 catch(Exception e)
-						 {
-							System.out
-									.println("ScientistRoleTestCases.testSearchIdentifiedSurgicalPathologyReport()"+e.getMessage());
-							 e.printStackTrace();
-							 assertFalse(e.getMessage(), true);
-						 }
-					}
-
-			
-
-		 
-			
-			
+//			/**
+//			  * Search all participant and check if PHI data is visible
+//			  */ 
+//			  public void testQueryParticipantWithScientistLogin()
+//			  {
+//				try
+//				{
+//					StringBuffer hql = new StringBuffer();
+//					String targetClassName = Participant.class.getName(); 
+//					hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
+//					List result = appService.query(hql.toString());
+//					List parList = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
+//					System.out.println("Size : "+parList.size());
+//					for(int i=0;i<parList.size();i++)
+//					{
+//						Participant retutnParticpant = (Participant)parList.get(i);
+//						if(retutnParticpant.getFirstName()!=null||retutnParticpant.getLastName()!=null||
+//								retutnParticpant.getMiddleName()!=null||retutnParticpant.getBirthDate()!=null||
+//								retutnParticpant.getSocialSecurityNumber()!=null)
+//						{
+//							fail("Participant PHI data is visible to scientist");
+//						}
+//						Collection<ParticipantMedicalIdentifier> pmiCollection 
+//							= retutnParticpant.getParticipantMedicalIdentifierCollection();
+//						if(pmiCollection!=null)
+//						{
+//							for (Iterator<ParticipantMedicalIdentifier> iterator = pmiCollection.iterator();iterator.hasNext();)
+//						    {
+//						        ParticipantMedicalIdentifier participantMedId = (ParticipantMedicalIdentifier) iterator.next();
+//						        if(participantMedId.getMedicalRecordNumber()!=null)
+//						        {
+//						        	fail("Participant PHI data is visible to scientist");
+//						        }
+//						    }
+//						}	
+//						
+//					    Collection<CollectionProtocolRegistration> cprCollection 
+//					    				= retutnParticpant.getCollectionProtocolRegistrationCollection();
+//					    if(cprCollection!=null)
+//					    {
+//						    for (Iterator<CollectionProtocolRegistration> iterator=cprCollection.iterator();iterator.hasNext();)
+//						    {
+//						        CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) iterator.next();
+//						        if(cpr.getRegistrationDate()!=null || cpr.getConsentSignatureDate()!=null ||
+//						        		cpr.getSignedConsentDocumentURL()!=null)
+//						        {
+//						        	fail("Participant PHI data is visible to scientist");
+//						        }
+//						    }
+//					    }    
+//					}
+//				 }
+//				 catch(Exception e){
+//					 
+//				     System.out
+//							.println("ScientistRoleTestCases.testQueryParticipantWithScientistLogin()"+e.getMessage());
+//					 e.printStackTrace();
+//					 assertFalse(e.getMessage(), true);
+//				 }
+//			  }
+//			 
+//			  /**
+//			   * Search all PMI and check if PHI data is visible
+//			   */
+//			  public void testQueryPMIWithScientistLogin()
+//			  {
+//				  try
+//				  {
+//					  	StringBuffer hql = new StringBuffer();
+//					  	String targetClassName = ParticipantMedicalIdentifier.class.getName(); 
+//						hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
+//
+//						List result = appService.query(hql.toString());
+//
+//						List pmiList = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
+//						for(int i=0;i<pmiList.size();i++)
+//						{
+//							 ParticipantMedicalIdentifier participantMedId = (ParticipantMedicalIdentifier) pmiList.get(i);
+//						     if(participantMedId.getMedicalRecordNumber()!=null)
+//						     {
+//						        	fail("ParticipantMedicalIdentifier PHI data is visible to scientist");
+//						     }
+//						}
+//					 }
+//					 catch(Exception e)
+//					 {
+//						 System.out
+//							.println("ScientistRoleTestCases.testSearchPMIWithScientistLogin():"+e.getMessage());	
+//						 e.printStackTrace();
+//						 assertFalse(e.getMessage(), true);
+//					 }
+//			  }
+//			  /**
+//				  * Search all CPR and check if PHI data is visible
+//				  *
+//				  */ 
+//				  public void testQueryProtocolRegistrationWithScientistLogin()
+//				  {
+//					try
+//					{
+//						StringBuffer hql = new StringBuffer();
+//					  	String targetClassName = CollectionProtocolRegistration.class.getName(); 
+//						hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
+//
+//						List result = appService.query(hql.toString());
+//						List cprList = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
+//
+//						System.out.println("Size : "+cprList.size());
+//						for(int i=0;i<cprList.size();i++)
+//						{
+//							CollectionProtocolRegistration returnedReg = (CollectionProtocolRegistration)cprList.get(i);
+//							if(returnedReg.getRegistrationDate()!=null||returnedReg.getSignedConsentDocumentURL()!=null||
+//									returnedReg.getConsentSignatureDate()!=null)
+//							{
+//								fail("CollectionProtocolRegistration PHI data is visible to scientist");
+//							}
+//						}
+//					 }
+//					 catch(Exception e){
+//						 System.out
+//								.println("ScientistRoleTestCases.testSearchProtocolRegistrationWithScientistLogin() "+e.getMessage());
+//					     Logger.out.error(e.getMessage(),e);
+//						 e.printStackTrace();
+//						 assertFalse(e.getMessage(), true);
+//					 }
+//				  }
+//			  /**
+//				  * Search all SCG and check if PHI data is visible
+//				  *
+//				  */ 
+//				  public void testQuerySpecimenCollectionGroupWithScientistLogin()
+//				  {
+//					try{
+//						StringBuffer hql = new StringBuffer();
+//					  	String targetClassName = SpecimenCollectionGroup.class.getName(); 
+//						hql.append("select from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
+//
+//						List result = appService.query(hql.toString());
+//
+//						List scgList = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
+//
+//						System.out.println("Size : "+scgList.size());
+//						for(int i=0;i<scgList.size();i++)
+//						{
+//							SpecimenCollectionGroup returnedSCG = (SpecimenCollectionGroup)scgList.get(i);
+//							if(returnedSCG.getSurgicalPathologyNumber()!=null)
+//							{
+//								fail("SpecimenCollectionGroup PHI data is visible to scientist");
+//							}
+//							CollectionProtocolRegistration returnedReg = returnedSCG.getCollectionProtocolRegistration();
+//							if(returnedReg!=null)
+//							{
+//								if(returnedReg.getRegistrationDate()!=null||returnedReg.getSignedConsentDocumentURL()!=null||
+//										returnedReg.getConsentSignatureDate()!=null)
+//								{
+//									fail("SpecimenCollectionGroup PHI data is visible to scientist");
+//								}
+//							}	
+//							Collection<SpecimenEventParameters> spEvent = returnedSCG.getSpecimenEventParametersCollection();
+//							if(spEvent!=null)
+//							{
+//							    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
+//							    while(eveItr.hasNext())
+//							    {
+//							    	SpecimenEventParameters spEventParam = (SpecimenEventParameters)eveItr.next();
+//							    	if(spEventParam.getTimestamp()!=null)
+//							    	{
+//							    		fail("SpecimenCollectionGroup PHI data is visible to scientist");
+//							    	}
+//							    }
+//							}   
+//						}
+//					 }
+//					 catch(Exception e){
+//						 System.out
+//								.println("ScientistRoleTestCases.testSearchSpecimenCollectionGroupWithScientistLogin() "+e.getMessage());
+//					     Logger.out.error(e.getMessage(),e);
+//						 e.printStackTrace();
+//						 assertFalse(e.getMessage(), true);
+//					 }
+//				  }
+//				  /**
+//				   * Test search Tissue specimen and check for PHI data
+//				   */
+//				  public void testQueryTissueSpecimenWithScientistLogin()
+//				  {
+//						try
+//						{
+//							StringBuffer hql = new StringBuffer();
+//						  	String targetClassName = TissueSpecimen.class.getName(); 
+//							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
+//							List result = appService.query(hql.toString());
+//			
+//							List<Specimen> spCollection = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
+//
+//							validateSpecimenData(targetClassName,spCollection);
+//						 }
+//						 catch(Exception e)
+//						 {
+//							 System.out
+//									.println("ScientistRoleTestCases.testSearchTissueSpecimenWithScientistLogin() "+e.getMessage());
+//						     Logger.out.error(e.getMessage(),e);
+//							 e.printStackTrace();
+//							 assertFalse(e.getMessage(), true);
+//						 }
+//					}
+//				  
+//					/**
+//					 * Test search SpecimenArrayContent and test for PHI data
+//					 */
+//					public void testQuerySpecimenArrayContentWithScientistLogin()
+//					{
+//						try
+//						{
+//							StringBuffer hql = new StringBuffer();
+//						  	String targetClassName = SpecimenArrayContent.class.getName(); 
+//							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
+//							List result = appService.query(hql.toString());
+//							
+//							List sacCollection = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
+//							System.out.println("Total SpecimenArrayContent Count:"+sacCollection.size());
+//							Iterator itr = sacCollection.iterator();
+//							while(itr.hasNext())
+//							{
+//								SpecimenArrayContent spe = (SpecimenArrayContent)itr.next();
+//								if(spe.getSpecimen().getCreatedOn()!=null)
+//								{
+//									fail("SpecimenArrayContent ->Specimen PHI data is visible to scientist");
+//								}
+//							}
+//						}
+//						 catch(Exception e)
+//						 {
+//							 System.out
+//									.println("ScientistRoleTestCases.testSpecimenArrayContentWithScientistLogin()"+e.getMessage());
+//							 e.printStackTrace();
+//							 assertFalse(e.getMessage(), true);
+//						 }
+//						
+//					}
+//					
+//					/**
+//					 * Test search for ReceivedEventParameters and test for PHI data
+//					 */
+//					public void testQueryReceivedEventParameters()
+//					{
+//						try
+//						{
+//							StringBuffer hql = new StringBuffer();
+//						  	String targetClassName = ReceivedEventParameters.class.getName(); 
+//							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
+//							List result = appService.query(hql.toString());
+//
+//							List recColl = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
+//							Iterator itr = recColl.iterator();
+//							while(itr.hasNext())
+//							{
+//								ReceivedEventParameters rec = (ReceivedEventParameters)itr.next();
+//								if(rec.getTimestamp()!=null)
+//								{
+//									fail("ReceivedEventParameters PHI data is visible to scientist");
+//								}
+//							}
+//						} 
+//						catch(Exception e)
+//						{
+//							System.out
+//									.println("ScientistRoleTestCases.testSearchReceivedEventParameters()"+e.getMessage());
+//							e.printStackTrace();
+//							assertFalse(e.getMessage(), true);
+//						}
+//					}
+//
+//					/**
+//					 * Test search for DeidentifiedSurgicalPathologyReport and test for PHI data
+//					 */
+//					public void testQueryDeidentifiedSurgicalPathologyReport()
+//					{
+//						try
+//						{
+//							StringBuffer hql = new StringBuffer();
+//						  	String targetClassName = DeidentifiedSurgicalPathologyReport.class.getName(); 
+//							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
+//							List result = appService.query(hql.toString());
+//
+//							List spCollection = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
+//							Iterator itr = spCollection.iterator();
+//							while(itr.hasNext())
+//							{
+//								DeidentifiedSurgicalPathologyReport deid = (DeidentifiedSurgicalPathologyReport)itr.next();
+//								if(deid.getCollectionDateTime()!=null || deid.getId()!=null
+//										|| deid.getActivityStatus()!=null||deid.getIsFlagForReview()!=null)
+//								{
+//									fail("DeIdentifiedSurgicalPathologyReport PHI data is visible to scientist");
+//								}
+//							}
+//						 }
+//						 catch(Exception e)
+//						 {
+//							 System.out
+//									.println("ScientistRoleTestCases.testSearchDeidentifiedSurgicalPathologyReport()"+e.getMessage());
+//							 e.printStackTrace();
+//							 assertFalse(e.getMessage(), true);
+//						 }
+//					}
+//					/**
+//					 * Test search for IdentifiedSurgicalPathologyReport and test for PHI data
+//					 */
+//					public void testQueryIdentifiedSurgicalPathologyReport()
+//					{
+//						try
+//						{
+//							StringBuffer hql = new StringBuffer();
+//						  	String targetClassName = IdentifiedSurgicalPathologyReport.class.getName(); 
+//							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
+//							List result = appService.query(hql.toString());
+//
+//							List spCollection = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
+//							Iterator itr = spCollection.iterator();
+//							while(itr.hasNext())
+//							{
+//								IdentifiedSurgicalPathologyReport ispr = (IdentifiedSurgicalPathologyReport)itr.next();
+//								System.out.println("IdentifiedSurgicalPathologyReport : "+ ispr);
+//								if(ispr.getCollectionDateTime()!=null || ispr.getTextContent()!= null||
+//										ispr.getId()!=null || ispr.getActivityStatus()!=null)
+//								{
+//									fail("IdentifiedSurgicalPathologyReport PHI data is visible to scientist");
+//								}
+//							}
+//						 }
+//						 catch(Exception e)
+//						 {
+//							System.out
+//									.println("ScientistRoleTestCases.testSearchIdentifiedSurgicalPathologyReport()"+e.getMessage());
+//							 e.printStackTrace();
+//							 assertFalse(e.getMessage(), true);
+//						 }
+//					}
+//
+//
 }
