@@ -1171,16 +1171,57 @@
 	<AuditableClass className="edu.wustl.catissuecore.domain.shippingtracking.Shipment"
 		relationShipType="main" roleName="">
 		<attribute name="barcode" dataType="String" />
+		<attribute name="id" dataType="Long" />
+        <attribute name="label" dataType="String" />
+        <attribute name="senderComments" dataType="String" />
+        <attribute name="receiverComments" dataType="String" />
+        <attribute name="createdDate" dataType="Date" />
+        <attribute name="sendDate" dataType="Date" />
+        <attribute name="senderSite" dataType="Site" />
+        <attribute name="receiverSite" dataType="Site" />
 		<attribute name="ShipmentRequest" dataType="edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest" />
+		
+		<referenceAssociationCollection className="edu.wustl.catissuecore.domain.StorageContainer"
+            relationShipType="association"
+            roleName="containerCollection" >
+        </referenceAssociationCollection>
+        <referenceAssociationCollection
+            className="edu.wustl.catissuecore.domain.User"
+            relationShipType="association"
+            roleName="senderContactPerson" >
+        </referenceAssociationCollection>
+		
+		
+		
 	</AuditableClass>
 	
 	<AuditableClass className="edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest"
 		relationShipType="main" roleName="">
+		
+		<attribute name="id" dataType="Long" />
+        <attribute name="label" dataType="String" />
+        <attribute name="senderComments" dataType="String" />
+        <attribute name="receiverComments" dataType="String" />
+        <attribute name="createdDate" dataType="Date" />
+        <attribute name="sendDate" dataType="Date" />
+        <attribute name="senderSite" dataType="Site" />
+        <attribute name="receiverSite" dataType="Site" />
+		
 		<referenceAssociationCollection
 			className="edu.wustl.catissuecore.domain.Specimen"
 			relationShipType="association"
 			roleName="specimenCollection" >
 		</referenceAssociationCollection>
+		
+		 <referenceAssociationCollection className="edu.wustl.catissuecore.domain.StorageContainer"
+            relationShipType="association"
+            roleName="containerCollection" >
+        </referenceAssociationCollection>
+        <referenceAssociationCollection
+            className="edu.wustl.catissuecore.domain.User"
+            relationShipType="association"
+            roleName="senderContactPerson" >
+        </referenceAssociationCollection>
 	</AuditableClass>
 	
 	<AuditableClass className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
