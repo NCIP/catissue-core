@@ -50,11 +50,20 @@ public class CaTissueApplicationService
 	}
 
 //	@Override
-//	public List query(DetachedCriteria arg0, String arg1) throws ApplicationException
-//	{
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	public List query(String hql) throws Exception
+	{
+		List resultList = null;
+		resultList = AppUtility.executeQuery(hql);
+		return resultList;
+	}
+	public List delegateSearchFilter(String userName, List list) throws Exception
+	{
+		return new CaCoreAppServicesDelegator().delegateSearchFilter(userName, list);
+	}
+	public void auditAPIQuery(String queryObject, String userName) throws Exception
+	{
+		new CaCoreAppServicesDelegator().auditAPIQuery(queryObject, userName);
+	}
 //
 //	@Override
 //	public List query(HQLCriteria arg0, String arg1) throws ApplicationException

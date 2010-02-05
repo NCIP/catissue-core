@@ -19,6 +19,7 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.DataSourceFinder;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.catissuecore.util.listener.CatissueCoreServletContextListener;
 import edu.wustl.common.audit.AuditManager;
@@ -173,6 +174,7 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 					ErrorKey.init("~");
 					AuditManager.init();
 					init.initCatissueParams();
+					DefaultValueManager.validateAndInitDefaultValueMap();
 				}
 			}
 			catch(Exception ex)

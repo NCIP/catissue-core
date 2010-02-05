@@ -13,6 +13,7 @@ import edu.wustl.catissuecore.testcase.admin.SpecimenArrayTypeTestCases;
 import edu.wustl.catissuecore.testcase.admin.StorageContainerTestCases;
 import edu.wustl.catissuecore.testcase.admin.StorageTypeTestCases;
 import edu.wustl.catissuecore.testcase.biospecimen.AddToMyListTestCases;
+import edu.wustl.catissuecore.testcase.biospecimen.CaCoreAppServiceDelegatorTestCase;
 import edu.wustl.catissuecore.testcase.biospecimen.ConsentsTestCase;
 import edu.wustl.catissuecore.testcase.biospecimen.FlexInterfaceTestCase;
 import edu.wustl.catissuecore.testcase.biospecimen.LabelGeneratorTestCase;
@@ -46,8 +47,8 @@ import edu.wustl.catissuecore.testcase.login.LoginTestCase;
 import edu.wustl.catissuecore.testcase.login.LogoutTestcase;
 import edu.wustl.catissuecore.testcase.ordering.DirectDistributionTestCase;
 import edu.wustl.catissuecore.testcase.user.ScientistTestCases;
+import edu.wustl.catissuecore.testcase.user.SupervisorTestCases;
 import edu.wustl.catissuecore.testcase.user.UserTestCases;
-import edu.wustl.catissuecore.testcase.user.SupervisorTestCases;;
 
 /**
  * Test suite
@@ -131,6 +132,7 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(SpecimenEventBizTestCases.class);
 		strutsSuite.addTestSuite(StorageContainerRestrictionsBizTestCases.class);
 		
+		strutsSuite.addTestSuite(CaCoreAppServiceDelegatorTestCase.class);
 		strutsSuite.addTestSuite(UserTestCases.class);
 		strutsSuite.addTestSuite(SupervisorTestCases.class);
 		strutsSuite.addTestSuite(ScientistTestCases.class);
