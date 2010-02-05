@@ -6,19 +6,16 @@
 package edu.wustl.catissuecore.util.listener;
 
 import java.io.File;
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.naming.InitialContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.sql.DataSource;
 
 import net.sf.ehcache.CacheException;
 import titli.model.util.TitliResultGroup;
-import edu.wustl.cab2b.server.path.PathFinder;
+import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.domain.Address;
@@ -195,11 +192,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 					.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
 			cacheManager.addObjectToCache(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID,
 					scgRecEtyId);
-			final InitialContext ctx = new InitialContext();
-			final DataSource dataSource = (DataSource) ctx.lookup(JNDI_NAME);
-			final Connection conn = dataSource.getConnection();
-			PathFinder.getInstance(conn);
-			conn.close();
+			EntityCache.getInstance();
 			logger.debug("Entity Cache is initialised");
 		}
 		catch (final Exception e)
