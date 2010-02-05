@@ -10,7 +10,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CPSearchForm;
-import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.util.ClinPortalCaTissueIntegrationUtil;
 import edu.wustl.catissuecore.util.global.ClinPortalIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -44,7 +43,7 @@ public class SCGAction extends BaseAction
             {
                 visitId=(String)request.getSession().getAttribute(ClinPortalIntegrationConstants.EVENTENTRYID);
             }
-            scgId= new SpecimenCollectionGroupBizLogic().getRecentSCG(sessionData.getUserName(), Utility.toLong(cpId), Utility.toLong(participantId), Utility.toLong(collectionEventId),visitNum, Utility.toLong(visitId));
+            scgId= new ClinPortalCaTissueIntegrationUtil().getRecentSCG(sessionData.getUserName(), Utility.toLong(cpId), Utility.toLong(participantId), Utility.toLong(collectionEventId),visitNum, Utility.toLong(visitId));
             if(scgId!=null)
             {
                 scgOperation=ClinPortalIntegrationConstants.EDIT;

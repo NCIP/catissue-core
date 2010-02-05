@@ -71,14 +71,22 @@ public class ClinPortalAPIService
      * @return
      * @throws Exception
      */
-	public Map<String, Long> getClinPortalURLIds(final String loginName, final Long cpId,
-			final Long participantId, final Long cpeId, final Long scgId) throws Exception
-	{
-        Map<String,Long> map = new HashMap<String,Long>();
+    public Map getClinPortalURLIds(final String loginName,final Long cpId,final  Long participantId,final Long cpeId,final Long scgId) throws Exception
+    {
+        Map map = new HashMap();
+
         map.put(ClinPortalIntegrationConstants.COLLECTION_PROTOCOL_ID,cpId );
         map.put(ClinPortalIntegrationConstants.PARTICIPANT_ID,participantId);
         map.put(ClinPortalIntegrationConstants.COLL_PROTOCOL_EVENT_ID, cpeId);
         map.put(ClinPortalIntegrationConstants.SCGID,scgId);
+
+        Date currDate=null;
+        Date prevDate=null;
+        if(scgId!=null)
+        {
+              Map scgDateMap = new ClinPortalCaTissueIntegrationUtil().getSCGRelatedEncounteredDate(cpId, participantId,cpeId,scgId,currDate, prevDate);
+              map.putAll(scgDateMap);
+        }
         try
         {
             final String pwd=ClinPortalCaTissueIntegrationUtil.getPassword(loginName);
@@ -104,12 +112,10 @@ public class ClinPortalAPIService
      * @return
      * @throws Exception
      */
-	public Map<String, Date> getVisitRelatedEncounteredDate(final String loginName,
-			final Long visitId, final Long cpeId, final Long cpId, final Long participantId)
-			throws Exception
-	{
-        final Map<String,Long> map = new HashMap<String,Long>();
-        Map<String, Date> dateMap=null;
+    public Map<String, Date> getVisitRelatedEncounteredDate(final String loginName,final Long visitId,final Long cpeId,final Long cpId,final  Long participantId) throws Exception
+    {
+        final Map<String,Long>  map = new HashMap<String,Long>();
+        Map<String,Date>  dateMap=null;
         try
         {
             map.put(ClinPortalIntegrationConstants.COLL_PROTOCOL_EVENT_ID, cpeId);
