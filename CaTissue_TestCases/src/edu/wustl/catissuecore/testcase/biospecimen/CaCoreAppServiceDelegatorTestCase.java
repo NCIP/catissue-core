@@ -154,9 +154,7 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 				p.setFirstName("participant_first_name_"+UniqueKeyGeneratorUtil.getUniqueKey());
 				p.setLastName("participant_last_name_"+UniqueKeyGeneratorUtil.getUniqueKey());
 				p.setActivityStatus("Active");
-				//CollectionProtocol cp = (CollectionProtocol)TestCaseUtility.getNameObjectMap("CollectionProtocol");
-				CollectionProtocol cp = new CollectionProtocol();
-				cp.setId(116L);
+				CollectionProtocol cp = (CollectionProtocol)TestCaseUtility.getNameObjectMap("CollectionProtocol");
 				Participant updatedP = (Participant)new CaCoreAppServicesDelegator().delegateRegisterParticipant(p, cp.getId(), CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName());
 //				CollectionProtocol cp1 =  (CollectionProtocol)edu.wustl.catissuecore.testcase.bizlogic.TestCaseUtility.getObjectMap(CollectionProtocol.class);
 //				new CaCoreAppServicesDelegator().delegateRegisterParticipant(p, cp1.getId(), CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName());
@@ -177,9 +175,8 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 				p.setFirstName("participant_first_name");
 				p.setLastName("participant_last_name");
 				p.setActivityStatus("Active");
-				//CollectionProtocol cp = (CollectionProtocol)TestCaseUtility.getNameObjectMap("CollectionProtocol");
-				CollectionProtocol cp = new CollectionProtocol();
-				cp.setId(116L);
+				CollectionProtocol cp = (CollectionProtocol)TestCaseUtility.getNameObjectMap("CollectionProtocol");
+
 				List list = new CaCoreAppServicesDelegator().
 					delegateGetCaTissueLocalParticipantMatchingObects(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),p, cp.getId());
 				System.out.println("Matching participant list size:"+list.size());
