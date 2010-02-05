@@ -3723,6 +3723,7 @@ Thanking You,
 		</replace>
 		<java classname="edu.wustl.catissuecore.util.AssociatesCps" fork="true" maxmemory="512m">
 			<arg value="${cpsEntitiesXMLFile}"/>
+			<jvmarg value="-server"/>
 			<classpath>
 				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
 				<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
