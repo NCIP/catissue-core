@@ -1050,6 +1050,7 @@
 				<include name="SimpleQuery*.jar"/>
 				<include name="securityManager*.jar"/>
 				<include name="AdvanceQuery*.jar"/>
+				<include name="ParticipantManager*.jar"/>
 			</fileset>
 			<fileset dir="${base.dir}/catissue_de_integration_client/lib">
 				<include name="commonpackage*.jar"/>
@@ -1091,6 +1092,7 @@
 					<include name="SimpleQuery*.jar"/>
 					<include name="securityManager*.jar"/>
 	            	<include name="AdvanceQuery*.jar"/>
+	            	<include name="ParticipantManager*.jar"/>
 	            </fileset>
 				<fileset dir="${temp.dir}">
 		            	<include name="catissuecore.jar"/>
