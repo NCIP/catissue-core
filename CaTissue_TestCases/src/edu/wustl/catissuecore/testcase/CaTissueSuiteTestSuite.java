@@ -103,7 +103,6 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(ParticipantTestCases.class);
 		strutsSuite.addTestSuite(SpecimenCollectionGroupTestCases.class);
 		strutsSuite.addTestSuite(SpecimenTestCases.class);
-		strutsSuite.addTestSuite(AddToMyListTestCases.class);
 	    strutsSuite.addTestSuite(FlexInterfaceTestCase.class);
 		strutsSuite.addTestSuite(SpecimenEventsTestcases.class);
 		strutsSuite.addTestSuite(ConsentsTestCase.class);
@@ -132,6 +131,7 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(SpecimenEventBizTestCases.class);
 		strutsSuite.addTestSuite(StorageContainerRestrictionsBizTestCases.class);
 		
+		strutsSuite.addTestSuite(AddToMyListTestCases.class);
 		strutsSuite.addTestSuite(CaCoreAppServiceDelegatorTestCase.class);
 		strutsSuite.addTestSuite(UserTestCases.class);
 		strutsSuite.addTestSuite(SupervisorTestCases.class);
