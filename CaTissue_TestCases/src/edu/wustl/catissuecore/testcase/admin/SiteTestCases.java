@@ -175,7 +175,7 @@ public class SiteTestCases extends CaTissueSuiteBaseTest
 		//verify action errors
 		String errorNames[] = new String[]{"errors.item.required",
 				"errors.item.required","errors.item.required"
-				,"errors.item.required","errors.item.required","errors.item.required"};
+				,"errors.item.required","errors.item.required"};
 		verifyActionErrors(errorNames);	
 	}
 	/**
