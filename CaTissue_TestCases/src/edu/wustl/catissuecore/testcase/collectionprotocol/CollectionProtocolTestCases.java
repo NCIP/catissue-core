@@ -167,6 +167,13 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 
 		TestCaseUtility.setNameObjectMap("CollectionProtocolEventMap",innerLoopValues);
 		TestCaseUtility.setNameObjectMap("CollectionProtocol",collectionProtocol);
+
+		//Call to "ShowCollectionProtocol" action to show the CP tree view
+		setRequestPathInfo("/ShowCollectionProtocol");
+		addRequestParameter("operation", "edit");
+		actionPerform();
+		verifyForward("success");
+		verifyNoActionErrors();
 	}
 
 

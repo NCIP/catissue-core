@@ -21,7 +21,7 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Collection Group Add.
 	 */
-	
+
 	public void testSpecimenCollectionGroupAdd()
 	{
 		SpecimenCollectionGroupForm speCollForm = new SpecimenCollectionGroupForm();
@@ -101,7 +101,7 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Collection Group Add.
 	 */
-	
+
 	public void testSpecimenCollectionGroupAddWithWrongCPEventId()
 	{
 		SpecimenCollectionGroupForm speCollForm = new SpecimenCollectionGroupForm();
@@ -160,10 +160,23 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 		String errormsg[] = new String[]{"errors.item"};
 		verifyActionErrors(errormsg);
 	}
+
+	//test ajax request to get all events associated with the selected scg
+	public void testGetEventsForSelectedScg()
+	{
+		SpecimenCollectionGroup collectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
+		setRequestPathInfo("/GetEventsFromScg");
+		addRequestParameter("scgId", collectionGroup.getId().toString());
+		actionPerform();
+		verifyNoActionErrors();
+		/**
+		 * Code to verify the response of Ajax request.
+		 */
+	}
 	/**
 	 * Test Specimen Collection Group Edit.
 	 */
-	
+
     public void testEditSCGAndGotoAnticipatorySpecimen()
 
     {
