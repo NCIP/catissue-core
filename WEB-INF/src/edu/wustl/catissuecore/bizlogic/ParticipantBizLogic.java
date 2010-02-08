@@ -396,7 +396,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		boolean isCPDuplicate = false;
 		final Collection<CollectionProtocolRegistration> newCPRColl =
 			new LinkedHashSet<CollectionProtocolRegistration>();
-		if(newCPRColl != null)
+		if(cprColl != null)
 		{
 			final Iterator<CollectionProtocolRegistration> crpItr = 
 			cprColl.iterator();
