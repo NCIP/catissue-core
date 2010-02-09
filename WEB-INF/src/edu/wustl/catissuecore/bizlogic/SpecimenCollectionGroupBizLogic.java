@@ -2907,10 +2907,13 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				final String activityStatus = (String) valArr[1];
 				final CollectionProtocolRegistration registration = new CollectionProtocolRegistration();
 				registration.setId((Long) valArr[2]);
-				final CollectionProtocol collectionProtocol = new CollectionProtocol();
+				CollectionProtocol collectionProtocol = new CollectionProtocol();
 				collectionProtocol.setId((Long) valArr[3]);
 				collectionProtocol.setActivityStatus((String) valArr[4]);
-
+				//For bug #15994
+				String CpShortTitle;
+				CpShortTitle = retrieveCpShortTitle(valArr[3]);
+				collectionProtocol.setShortTitle(CpShortTitle);
 				final Collection consentTierStatusCollection = (Collection) this.retrieveAttribute(
 						dao, SpecimenCollectionGroup.class, identifier,
 						"elements(consentTierStatusCollection)");
@@ -2949,6 +2952,33 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			absScg.setId(scg.getId());
 		}
 		return absScg;
+	}
+
+	/**
+	 * @param valArr
+	 * @param collectionProtocol
+	 * @throws BizLogicException
+	 */
+	private String retrieveCpShortTitle(final Object cpId)
+			throws BizLogicException
+	{
+		String hql = "select cp.shortTitle from edu.wustl.catissuecore.domain.CollectionProtocol cp where cp.id="+cpId;
+		String shortTitle= "";
+		try
+		{
+
+			List cpList = AppUtility.executeQuery(hql);
+			if(cpList!=null && !cpList.isEmpty())
+			{
+				shortTitle = cpList.get(0).toString() ;
+			}
+		}
+		catch(ApplicationException exp)
+		{
+			this.LOGGER.error(exp.getMessage(),exp) ;
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+		}
+		return shortTitle;
 	}
 
 	//bug 13776 end
