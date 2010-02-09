@@ -121,6 +121,33 @@
 		<value>@@MAILSERVER-EMAILADDRESS@@</value>
 	</property>
 	
+	
+	<!--  Properties needed for Common Package Error Email  -->
+	<property>
+		<name>use.email.commonpackage.config</name>
+		<value>@@use.email.commonpackage.config@@</value>
+	</property>
+
+	<property>
+		<name>email.sendEmailTo.emailAddress</name>
+		<value>@@email.sendEmailTo.emailAddress@@</value>
+	</property>
+
+	<property>
+		<name>email.admin.support.emailAddress</name>
+		<value>@@email.admin.support.emailAddress@@</value>
+	</property>
+
+	<property>
+		<name>email.sendEmailFrom.name</name>
+		<value>@@email.sendEmailFrom.name@@</value>
+	</property>
+
+	<property>
+		<name>email.exception.subject</name>
+		<value>@@email.exception.subject@@</value>
+	</property>
+	
 	 <!-- Constants for LookUp algo start -->
 	<property>
 		<name>lookup.cutoff</name>
