@@ -3183,6 +3183,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 							throw this.getBizLogicException(null, "errors.invalid",
 								message + ": Name - " + biohazard.getName() + " : Type -" + biohazard.getType());
 						}
+						else
+						{
+							biohazard.setId((Long)list.get(0));
+						}
 					}
 					catch (DAOException daoExp)
 					{
