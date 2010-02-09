@@ -146,7 +146,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			{
 				this.checkStatus(dao, specimen, Constants.SPECIMEN);
 			}
-			
+
 			if (specimen != null)
 			{
 				specimenEventParametersObject.setSpecimen(specimen);
@@ -690,6 +690,11 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						ApplicationProperties
 						.getValue("transfereventparameters.toposition"));
 			}
+		}
+		else if(parameter.getToStorageContainer() == null || ("").equals(parameter.getToStorageContainer()))
+		{
+			throw this.getBizLogicException(null, "errors.item.format",ApplicationProperties
+					.getValue("transfereventparameters.toposition"));
 		}
 		if (Constants.EDIT.equals(operation))
 		{
