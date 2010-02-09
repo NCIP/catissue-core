@@ -511,7 +511,7 @@
 
 
 			 <copy file="catissuecore.war" todir="${jboss.server.url}/deploy" />
-			 <copy file="dynamicExtensions.war" todir="${jboss.server.url}/deploy" />
+			<!-- <copy file="dynamicExtensions.war" todir="${jboss.server.url}/deploy" /> -->
 			 <copy file="caTissuePrintWebService.war" todir="${jboss.server.url}/deploy" />
 			 <sleep seconds="2" />
 	</target>
@@ -697,12 +697,12 @@
 			<fileset dir="${base.dir}/DE_conf" />
 		</copy>
 		<!-- DE conf files end -->
-		<!-- Copying DEIntegration.war-->
-		<copy file="deintegration.war" todir="${zip.dir}" overwrite="true" />
-		<!-- Copying CA model wars-->
+		<!-- Copying DEIntegration.war
+		<copy file="deintegration.war" todir="${zip.dir}" overwrite="true" /> -->
+		<!-- Copying CA model wars
 		<copy file="CA.war" todir="${zip.dir}" overwrite="true" />
 		<copy file="pathologySpecimen.war" todir="${zip.dir}" overwrite="true" />
-		<copy file="pathologySCG.war" todir="${zip.dir}" overwrite="true" />
+		<copy file="pathologySCG.war" todir="${zip.dir}" overwrite="true" /> -->
 		<!-- Copying private public migrator directory -->
 		<copy todir="${zip.dir}/private_public_migrator" overwrite="true">
 			<fileset dir="${base.dir}/private_public_migrator" />
