@@ -181,7 +181,11 @@ public class ClinPortalCaTissueIntegrationUtil
         final Iterator<Date> dateIterator = scgMap.values().iterator();
         long diff1 = 0;
         long diff2 = 0;
-        String scgId = keyList.get(0);
+        String scgId = null;
+        if(size>0)
+        {
+            scgId=keyList.get(0);
+        }
         Date receivedSCGDate = null;
         while (dateIterator.hasNext())
         {
@@ -397,4 +401,20 @@ public class ClinPortalCaTissueIntegrationUtil
      return scgId;
  }
 
+ /**
+  *
+  * @param map
+  * @return
+  */
+ public static boolean validateClinPortalMap(Map<String, Long> map)
+ {
+     boolean result= false;
+     final Long csId = map.get(ClinPortalIntegrationConstants.CLINICAL_STUDY_ID);
+     final Long cseId = map.get(ClinPortalIntegrationConstants.EVENT_ID);
+     final Long pId = map.get(ClinPortalIntegrationConstants.CP_PARTICIPANT_ID);
+     if(csId!=null && cseId!=null && pId!=null)
+         result=true;
+
+     return result;
+ }
 }

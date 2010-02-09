@@ -909,6 +909,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
                     specimenCollectionGroupForm.getCollectionProtocolId(),
                     specimenCollectionGroupForm.getParticipantId(),
                     specimenCollectionGroupForm.getCollectionProtocolEventId(),specimenCollectionGroupForm.getId());
+            if(ClinPortalCaTissueIntegrationUtil.validateClinPortalMap(map)){
             clinportalUrl = ClinPortalIntegrationConstants.CLINPORTAL_URL_CONTEXT(clinportalUrl);
             url.append(clinportalUrl);
             String visitId =(String) request.getSession().getAttribute(ClinPortalIntegrationConstants.EVENTENTRYID);
@@ -955,7 +956,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
             if(csId==null || csId<=0)
             {
                 url=new StringBuilder();
-            }
+            }}
         }
         catch (Exception e)
         {
