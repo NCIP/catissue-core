@@ -307,6 +307,7 @@
 							<exclude name="**/tag/**" />
 							<exclude name="**/tree/**" />
 							<exclude name="**/test/**" />
+							<exclude name="**/testcase/**" />
 							<exclude name="**/annotations/xmi/**" />
 						</fileset>
 					</cobertura-instrument>
