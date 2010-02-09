@@ -155,6 +155,20 @@ public class CreateAliquotAction extends BaseAction
 	{
 		if (aliquotForm.getPrintCheckbox() != null)
 		{
+			SpecimenCollectionGroup scg = null;
+			String hql = "from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.id="+aliquotForm.getSpCollectionGroupId();
+			List scgList = AppUtility.executeQuery(hql);
+			if(scgList!=null && !scgList.isEmpty())
+			{
+				scg = (SpecimenCollectionGroup)scgList.get(0) ;
+			}
+			Iterator<AbstractDomainObject> itr = specimenList.iterator();
+			while(itr.hasNext())
+			{
+				Specimen specimen = (Specimen)itr.next();
+				specimen.setSpecimenCollectionGroup(scg);
+			}
+
 			request.setAttribute(Constants.LIST_SPECIMEN, specimenList);
 			final PrintAction printActionObj = new PrintAction();
 			final SessionDataBean objBean = (SessionDataBean) request.getSession().getAttribute(
@@ -536,13 +550,13 @@ public class CreateAliquotAction extends BaseAction
 			}
 		}
 	}
-	
+
 	private void updateParentSpecimen(Specimen parentSpecimen, Double quantity) throws Exception
 	{
 		DAO dao = AppUtility.openDAOSession(null);
 		Object pSpec =  dao.retrieveById(AbstractSpecimen.class.getName(),  parentSpecimen.getId());
 		((Specimen)pSpec).setAvailableQuantity(quantity);
-		dao.update(pSpec); 
+		dao.update(pSpec);
 		dao.commit();
 		dao.closeSession();
 	}
