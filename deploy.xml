@@ -622,6 +622,12 @@
 			<replacefilter token="@@integrationEnabled@@" value="${clinportal.integrationEnabled}" />
 			<replacefilter token="@@ClinPortalURL@@" value="${clinportal.url}" />
 
+			<replacefilter token="@@use.email.commonpackage.config@@" value="${use.email.commonpackage.config}" />
+			<replacefilter token="@@email.sendEmailTo.emailAddress@@" value="${email.sendEmailTo.emailAddress}" />
+			<replacefilter token="@@email.admin.support.emailAddress@@" value="${email.admin.support.emailAddress}" />
+			<replacefilter token="@@email.sendEmailFrom.name@@" value="${email.sendEmailFrom.name}" />
+			<replacefilter token="@@email.exception.subject@@" value="${email.exception.subject}" />
+
 
 		<!-- added by Geeta .For eMPI integration -->
 			<replacefilter token="@@empiDBURL@@" value="jdbc:db2://${empi.database.host}:${empi.database.port}/${empi.database.name}" />
