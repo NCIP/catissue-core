@@ -220,18 +220,20 @@
 			<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
 			<then>
 				<antcall target="upgrade_db_mysql_from_DE_1.3.1_to_DE_1.4.0" />
-
+				<antcall target="update_pvs_for_stinger_mysql" />
 			</then>
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
 				<then>
 					<antcall target="upgrade_db_oracle_from_DE_1.3.1_to_DE_1.4.0" />
+					<antcall target="update_pvs_for_stinger_oracle" />
 				</then>
 			</elseif>
 			<elseif>
 				<equals arg1="db2" arg2="${database.type}" casesensitive="false" />
 				<then>
 					<antcall target="upgrade_db_db2_from_DE_1.3.1_to_DE_1.4.0" />
+					<antcall target="update_pvs_for_stinger_db2" />
 
 				</then>
 			</elseif>
@@ -333,7 +335,7 @@
 
 	<target name="execute_file_db_db2" description="execute the DynamicExtensions sql script for db2">
 		<echo message="upgrading the DB For DynamicExtensions" />
-		<sql driver="${db2.driver.string.DE}" url="jdbc:db2//${database.host}:${database.port}/${database.name}:currentSchema=${database.schema};" userid="${database.username}" password="${database.password}" onerror="continue">
+		<sql driver="${db2.driver.string.DE}" url="jdbc:db2://${database.host}:${database.port}/${database.name}:currentSchema=${database.schema};" userid="${database.username}" password="${database.password}" onerror="continue">
 			<transaction src="${sql.file.name}" />
 			<transaction>commit;</transaction>
 			<classpath>
@@ -408,7 +410,7 @@
 						<include name="*.cfg.xml" />
 						<replacefilter token="@@DIALECT@@" value="${db2.dialect.string.DE}" />
 						<replacefilter token="@@DRIVER@@" value="${db2.driver.string.DE}" />
-						<replacefilter token="@@URL@@" value="jdbc:db2//${database.host}:${database.port}/${database.name}:currentSchema=${database.schema};" />
+						<replacefilter token="@@URL@@" value="jdbc:db2://${database.host}:${database.port}/${database.name}:currentSchema=${database.schema};" />
 					</replace>
 					<replace dir="${temp.dir.DE}">
 						<include name="ApplicationDAOProperties.xml" />
@@ -476,9 +478,8 @@
 		</java>
 	</target>
 
-	<property name="categoryXmlFileDir" value="E:/wash-u/clinportal/test/inputXML" />
-	<property name="categoryCsvFileDir" value="E:/wash-u/clinportal/test/outputCSV" />
-	<property name="categoryFileDir" value="${categoryCsvFileDir}" />
+	<property name="Category.XmlFile.Dir" value=" " />
+	<property name="Category.Csv.FileDir" value=" " />
 	<property name="categorySchemaFile" value="./${de.temp.dir}/conf/category_schema.xsd" />
 	<!-- =================================
           target: create_category_from_xml
@@ -493,9 +494,9 @@
 			<replacefilter token="@@jbosshome@@" value="." />
 		</replace>
 		<echo message="Creating Categories" />
-		<java classname="edu.common.dynamicextensions.category.XMLToCSVConverter" fork="true" maxmemory="1024M">
-			<arg value="${categoryXmlFileDir}" />
-			<arg value="${categoryCsvFileDir}" />
+		<java classname="edu.common.dynamicextensions.category.XMLToCSV" fork="true" maxmemory="1024M">
+			<arg value="${Category.XmlFile.Dir}" />
+			<arg value="${Category.Csv.FileDir}" />
 			<arg value="${categorySchemaFile}" />
 			<classpath>
 				<fileset dir="${de.temp.dir}">
@@ -511,7 +512,7 @@
 	<!-- Target used to create the Category -->
 	<property name="categoryFormNamesFile" value=" " />
 	<property name="isPersistMetadataOnly" value=" " />
-	<property name="categoryFileDir" value=" " />
+	<property name="categoryFileDir" value="${Category.Csv.FileDir}" />
 	<target name="create_category" description="Target used to create the Category">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
@@ -755,7 +756,71 @@
 			<transaction>commit</transaction>
 		</sql>
 	</target>
+	<target name="update_pvs_for_stinger" description="updates the pvs for suspecious charaters in stinger ">
+		<delete dir="${de.temp.dir}" failonerror="no" />
+				<mkdir dir="${de.temp.dir}" />
+				<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
+				</unzip>
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+			<classpath>
+				<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
+			<then>
+				<antcall target="update_pvs_for_stinger_mysql" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<antcall target="update_pvs_for_stinger_oracle" />
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="db2" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<antcall target="update_pvs_for_stinger_db2" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+	</target>
 
+	<target name="update_pvs_for_stinger_oracle" description="update pvs for oracle">
+		<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+			<classpath>
+				<fileset dir="${lib.dir.DE}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<transaction src="${oracle.dbupgrade.sql.dir.DE}/updatePermissibleValues.sql" />
+		</sql>
+	</target>
+
+	<target name="update_pvs_for_stinger_mysql" description="update pvs for mysql">
+		<sql driver="${mysql.driver.string.DE}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="#" >
+			<classpath>
+				<fileset dir="${lib.dir.DE}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<transaction src="${mysql.dbupgrade.sql.dir.DE}/updatePermissibleValues.sql" />
+		</sql>
+	</target>
+
+	<target name="update_pvs_for_stinger_db2" description="update pvs for DB2">
+		<sql driver="${db2.driver.string.DE}" url="jdbc:db2://${database.host}:${database.port}/${database.name}:currentSchema=${database.schema};" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="#">
+			<classpath>
+				<fileset dir="${lib.dir.DE}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<transaction src="${db2.dbupgrade.sql.dir.DE}/updatePermissibleValues.sql" />
+		</sql>
+	</target>
 	<target name="reset_DE_sequences" description="reset DE sequences">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
@@ -881,7 +946,7 @@
 		</sql>-->
 	</target>
 	<target name="reset_DE_sequences_db2" description="reset DE sequences for db2">
-		<sql driver="${db2.driver.string.DE}" url="jdbc:db2//${database.host}:${database.port}/${database.name}:currentSchema=${database.schema};" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="#">
+		<sql driver="${db2.driver.string.DE}" url="jdbc:db2://${database.host}:${database.port}/${database.name}:currentSchema=${database.schema};" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="#">
 			<classpath>
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
@@ -1131,7 +1196,7 @@
 							</fileset>
 						</classpath>
 					</java>
-					<antcall target="merge.audit.xml"/>
+					<antcall target="merge.audit.xml" />
 
 					<copy todir="${entityGroup.jar.location}/" file="${cacore.deployable.dir}/${entitygroupname}/${entitygroupname}.jar" overwrite="true" />
 					<echo message="${ORM1CfgFile}" />
