@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.domain.LoginDetails;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -35,6 +36,8 @@ import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.domauthmgr.AuthenticationManagerFactory;
 import edu.wustl.domauthmgr.authdomain.AuthenticationManager;
 import edu.wustl.domauthmgr.authdomain.util.AuthenticationException;
@@ -171,41 +174,95 @@ public class LoginAction extends XSSSupportedAction
 			String userStatus) throws IOException, InitializationException,
 			ParserConfigurationException, SAXException, AuthenticationException,
 			NamingException, ApplicationException
-			{
-		String forwardTo = Constants.SUCCESS;
-		AuthenticationManager authManager = null;
-		AuthenticationManagerFactory factory = null;
-		final String absolutePath = System.getProperty("app.domainAuthFilePath");
-		final String authType = authenticationType(userStatus);
-		boolean loginOK = false;
-		if (edu.wustl.wustlkey.util.global.Constants.MIGRATED_TO_WUSTLKEY.equals(userStatus))
+	{
+		try
 		{
-			handleError(request, "app.migrateduser");
-			forwardTo = Constants.FAILURE;
-		}
-		else
-		{
-			factory = AuthenticationManagerFactory.getAuthenticationManagerFactory();
-			authManager = factory.getAuthenticationManager(authType, absolutePath);
-			loginOK = authManager.authenticate(loginForm.getLoginName(), loginForm.getPassword());
-			if (loginOK)
+			String forwardTo = Constants.SUCCESS;
+			AuthenticationManager authManager = null;
+			AuthenticationManagerFactory factory = null;
+			final String absolutePath = System.getProperty("app.domainAuthFilePath");
+			final String authType = authenticationType(userStatus);
+			boolean loginOK = false;
+			if (edu.wustl.wustlkey.util.global.Constants.MIGRATED_TO_WUSTLKEY.equals(userStatus))
 			{
-				if (edu.wustl.wustlkey.util.global.Constants.NEW_WASHU_USER.equals(userStatus))
-				{
-					forwardTo = checkForNewUser(request, loginForm, authManager);
-				}
+				handleError(request, "app.migrateduser");
+				forwardTo = Constants.FAILURE;
 			}
 			else
 			{
-				LoginAction.logger.info("User " + loginForm.getLoginName()
-						+ " Invalid user. Sending back to the login Page");
-				handleError(request, "errors.incorrectLoginIDPassword");
-				forwardTo = Constants.FAILURE;
-			}
-		}
-		return forwardTo;
-			}
+				factory = AuthenticationManagerFactory.getAuthenticationManagerFactory();
+				authManager = factory.getAuthenticationManager(authType, absolutePath);
+				loginOK = authManager.authenticate(loginForm.getLoginName(), loginForm.getPassword());
+				if (loginOK)
+				{
+					if (edu.wustl.wustlkey.util.global.Constants.NEW_WASHU_USER.equals(userStatus))
+					{
+						forwardTo = checkForNewUser(request, loginForm, authManager);
+					}
+				}
+				else
+				{
+					LoginAction.logger.info("User " + loginForm.getLoginName()
+							+ " Invalid user. Sending back to the login Page");
+					handleError(request, "errors.incorrectLoginIDPassword");
+					forwardTo = Constants.FAILURE;
+				}
 
+			}
+			auditLogin(loginOK,loginForm.getLoginName(),request);
+
+			return forwardTo;
+		}
+		catch(SMException securityException)
+		{
+			auditLogin(false,loginForm.getLoginName(),request);
+			throw securityException;
+			
+		}
+	}
+
+	/**
+	 * @param loginOK successful or failed.
+	 * @param loginName user login name.
+	 * @param request http request
+	 * @throws ApplicationException exception.
+	 */
+	private void auditLogin(boolean loginOK, String loginName,HttpServletRequest request) throws ApplicationException
+	{
+		
+		HibernateDAO dao = (HibernateDAO)DAOConfigFactory.getInstance().getDAOFactory
+		(CommonServiceLocator.getInstance().getAppName()).getDAO();
+		
+		try
+		{
+			Long userId = null;
+			Long csmUserId = null;
+			dao.openSession(null);
+			
+			final String userIdhql  = "select user.id, user.csmUserId from edu.wustl.catissuecore.domain.User user where "
+				+ "user.activityStatus= " + "'" + Status.ACTIVITY_STATUS_ACTIVE.toString()
+				+ "' and user.loginName =" + "'" + loginName + "'";
+		
+			List UserIds = dao.executeQuery(userIdhql);
+			if (UserIds != null && !UserIds.isEmpty())
+			{
+				Object[] obj = (Object[])UserIds.get(0);
+				userId  = (Long)obj[0];
+				csmUserId = (Long)obj[1];
+			}
+			
+			LoginDetails loginDetails = new LoginDetails(userId,
+					csmUserId,request.getRemoteAddr());
+			
+			((HibernateDAO)dao).auditLoginEvents(loginOK,loginDetails);
+			dao.commit();
+		}
+		finally
+		{
+			dao.closeSession();
+		}
+	}
+	
 	/**
 	 * This method will check if user got administrator approval.
 	 * @param request HttpServletRequest

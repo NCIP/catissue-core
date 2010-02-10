@@ -748,6 +748,18 @@ create table CATISSUE_SPECIMEN_TYPE (
  */
 
 
+drop table if exists CATISSUE_LOGIN_AUDIT_EVENT_LOG;
+CREATE TABLE CATISSUE_LOGIN_AUDIT_EVENT_LOG
+(
+	IDENTIFIER bigint NOT NULL auto_increment,
+	LOGIN_TIMESTAMP DATETIME,
+	USER_LOGIN_ID BIGINT,
+	LOGIN_SOURCE_ID BIGINT,
+	LOGIN_IP_ADDRESS VARCHAR(20),
+	IS_LOGIN_SUCCESSFUL bit,
+	PRIMARY KEY (`IDENTIFIER`)
+) ;
+
 drop table if exists catissue_audit_event;
 CREATE TABLE `catissue_audit_event` (
                         `IDENTIFIER` bigint(20) NOT NULL auto_increment,

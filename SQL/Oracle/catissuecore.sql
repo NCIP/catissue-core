@@ -598,6 +598,19 @@ create table CATISSUE_SPECIMEN_TYPE (
  * Audit Sql
  */
 
+
+ CREATE TABLE CATISSUE_LOGIN_AUDIT_EVENT_LOG
+(
+	IDENTIFIER number(19,0) not null ,
+	LOGIN_TIMESTAMP date,
+	USER_LOGIN_ID number(19,0),
+	LOGIN_SOURCE_ID number(19,0),
+	LOGIN_IP_ADDRESS varchar2(200),
+	IS_LOGIN_SUCCESSFUL number(1,0),
+	PRIMARY KEY (IDENTIFIER)
+) ;
+
+
 CREATE TABLE catissue_audit_event (
                         IDENTIFIER number(19,0) not null ,
                         IP_ADDRESS varchar(20),
