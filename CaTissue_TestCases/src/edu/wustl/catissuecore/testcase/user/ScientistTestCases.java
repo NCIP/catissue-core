@@ -55,6 +55,11 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	
 	public void testFirstTimeScientistLogin()
 	{
+		setRequestPathInfo("/Logout") ;
+		actionPerform();		
+		verifyForward("success");
+		CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN = null;
+		
 		setRequestPathInfo("/Login");
 		User user = (User)TestCaseUtility.getNameObjectMap( "Scientist" );
 		addRequestParameter("loginName", user.getEmailAddress());

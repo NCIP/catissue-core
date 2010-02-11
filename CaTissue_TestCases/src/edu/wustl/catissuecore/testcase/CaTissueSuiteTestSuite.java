@@ -49,6 +49,7 @@ import edu.wustl.catissuecore.testcase.login.LogoutTestcase;
 import edu.wustl.catissuecore.testcase.ordering.DirectDistributionTestCase;
 import edu.wustl.catissuecore.testcase.user.ScientistTestCases;
 import edu.wustl.catissuecore.testcase.user.SupervisorTestCases;
+import edu.wustl.catissuecore.testcase.user.TechnicianTestcases;
 import edu.wustl.catissuecore.testcase.user.UserTestCases;
 
 /**
@@ -88,7 +89,7 @@ public class CaTissueSuiteTestSuite
 //		daoSuite.addTestSuite(HibernateTestCaseForCatissue.class);
 
 		strutsSuite.addTestSuite(InitializationTestCase.class);
-		strutsSuite.addTestSuite(FirstTimeLoginTestCase.class);
+		//strutsSuite.addTestSuite(FirstTimeLoginTestCase.class);
 	    strutsSuite.addTestSuite(LoginTestCase.class);
 		strutsSuite.addTestSuite(MenuTestCases.class);
 		strutsSuite.addTestSuite(InstitutionTestCases.class);
@@ -135,9 +136,10 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(AddToMyListTestCases.class);
 		strutsSuite.addTestSuite(CaCoreAppServiceDelegatorTestCase.class);
 		strutsSuite.addTestSuite(UserTestCases.class);
-		strutsSuite.addTestSuite(SupervisorTestCases.class);
+		strutsSuite.addTestSuite(SupervisorTestCases.class);		
 		strutsSuite.addTestSuite(ScientistTestCases.class);
 		strutsSuite.addTestSuite(AnnotationTestCases.class);
+		strutsSuite.addTestSuite(TechnicianTestcases.class);
 
 		strutsSuite.addTestSuite(LogoutTestcase.class);
 		return strutsSuite;
