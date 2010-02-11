@@ -43,6 +43,7 @@ import edu.wustl.catissuecore.testcase.bizlogic.StorageContainerRestrictionsBizT
 import edu.wustl.catissuecore.testcase.bizlogic.StorageTypeBizTestCases;
 import edu.wustl.catissuecore.testcase.bizlogic.UserBizTestCases;
 import edu.wustl.catissuecore.testcase.collectionprotocol.CollectionProtocolTestCases;
+import edu.wustl.catissuecore.testcase.login.FirstTimeLoginTestCase;
 import edu.wustl.catissuecore.testcase.login.LoginTestCase;
 import edu.wustl.catissuecore.testcase.login.LogoutTestcase;
 import edu.wustl.catissuecore.testcase.login.UserSignUpTestCase;
@@ -89,7 +90,7 @@ public class CaTissueSuiteTestSuite
 //		daoSuite.addTestSuite(HibernateTestCaseForCatissue.class);
 
 		strutsSuite.addTestSuite(InitializationTestCase.class);
-		//strutsSuite.addTestSuite(FirstTimeLoginTestCase.class);
+		strutsSuite.addTestSuite(FirstTimeLoginTestCase.class);
 	    strutsSuite.addTestSuite(LoginTestCase.class);
 		strutsSuite.addTestSuite(MenuTestCases.class);
 		strutsSuite.addTestSuite(InstitutionTestCases.class);
