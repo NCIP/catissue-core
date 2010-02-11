@@ -1862,4 +1862,44 @@ public class BaseTestCaseUtility {
 		
 		return aliquot; 
 	}
+	public static SpecimenCollectionGroup getSCGFromParticipant(Long participantId,CaTissueApplicationService appService)
+	{
+		CollectionProtocolRegistration cpr = null;
+		SpecimenCollectionGroup scg = null;
+		try 
+		{
+			String query = "from edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr where "
+				+ "cpr.participant.id= "+participantId;			
+			List resultList = appService.search(query);
+
+			if (resultList != null && resultList.size() > 0) 
+			{
+				cpr = (CollectionProtocolRegistration) resultList.get(0);
+				System.out.println("cpr "+cpr.getId());
+			}					
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Exception in CollectionProtocolRegistration : getSCGFromParticipant()");
+			e.printStackTrace();
+		}
+		try 
+		{
+			String query = "from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where "
+				+ "scg.collectionProtocolRegistration.id= "+cpr.getId();			
+			List resultList = appService.search(query);
+
+			if (resultList != null && resultList.size() > 0) 
+			{
+				scg = (SpecimenCollectionGroup) resultList.get(0);
+				System.out.println("scg "+scg.getId());
+			}					
+		} 
+		catch (Exception e) 
+		{
+			System.out.println("Exception in SpecimenCollectionGroup : getSCGFromParticipant()");
+			e.printStackTrace();
+		}
+		return scg;
+	}
 }
