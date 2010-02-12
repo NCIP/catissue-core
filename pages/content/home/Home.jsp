@@ -83,7 +83,7 @@ function wustlkey()
 							<!-- Mandar : 8Jan09 PSPL Info -->
 							<tr>
 							<td>
-								<a href="http://www.persistentsys.com/CompetencyCenters/LifeSciences/caTissueSupportCenter/tabid/181/Default.aspx" class="view" target="_blank"><span class="wh_ar_b"></span>
+								<a href="http://www.persistentsys.com/newpspl/catissue-lsd.shtml" class="view" target="_blank"><span class="wh_ar_b"></span>
 								<bean:message key="pspl.catissue.support" />
 								</a>
 							</td>
