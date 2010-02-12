@@ -184,7 +184,7 @@ function participantRegRow(subdivtag)
 		if (go==true)
 		{
 			var actionForward = document.forms[0].action;
-			actionForward = actionForward + "&disableParticipant=true";
+			actionForward = actionForward + "?disableParticipant=true";
 			document.forms[0].action = actionForward;
 			document.forms[0].submit();
 		}
