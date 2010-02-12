@@ -464,7 +464,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				+ ", edu.wustl.catissuecore.domain.Specimen as s" + " where cpr.id = " + cprId
 				+ " and " + " cpr.id = scg.collectionProtocolRegistration.id and"
 				+ " scg.id = s.specimenCollectionGroup.id and " + " s.activityStatus = '"
-				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "'";
+				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "' " +
+						"and s.collectionStatus = '"+Constants.COLLECTION_STATUS_COLLECTED+"'";
 
 		final List scgList = (List) this.executeHqlQuery(dao, hql);
 		if ((scgList != null) && (scgList).size() > 0)
