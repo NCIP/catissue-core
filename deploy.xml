@@ -1326,6 +1326,7 @@
 
 		<antcall target="update_metadata_for_tagged_values"/>
 		<antcall target="upgrade_DB_for_cacore"/>
+		<antcall target="insertCuratedPathForRecordEntry"/>
 	<!--	<antcall target="create_category">
 			<param name="categoryDefinitionFilePath" value="${dbupgrade.sql.dir}/Common/CAModelCSVs/smoking.csv"/>
 		</antcall>
@@ -1871,8 +1872,9 @@
 		</target>
 
 	<target name="upgrade_all_from_p4_to_p5" description="Target for Application and Database Upgrade from caTissue p4 to p5">
-			<antcall target="upgrade_app"/>
-			<antcall target="upgrade_db_from_p4_to_p5"/>
+		<antcall target="assert"/>
+		<antcall target="upgrade_db_from_p4_to_p5"/>
+		<antcall target="upgrade_app"/>
 	</target>
 
 	<target name="upgrade_db_from_p4_to_p5" description="Target for Database Upgrade from caTissue p4 to p5">
@@ -1898,6 +1900,7 @@
 		<antcall target="upgrade_de_integration_restructure_metadata"/>
 		<antcall target="upgrade_de_integration_restructure_data"/>
 		<antcall target="upgrade_dump_cacore" />
+		<antcall target="insertCuratedPathForRecordEntry" />
 	</target>
 
 
@@ -2168,6 +2171,24 @@
 	</target>
 
 	<!-- Start : DE Integration Restructure for p5 -->
+
+	<target name="insertCuratedPathForRecordEntry">
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<antcall target="replacecfgfiles"/>
+		<copy file="${base.dir}/catissuecore-properties/log4j.properties" todir="${base.dir}" overwrite="true"/>
+		<java classname="edu.wustl.catissuecore.querysuite.metadata.AddCuratedPathsForRecordEntry" fork="true" maxmemory="1024M" failonerror="false">
+			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
+			<classpath refid="temp.classpath" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+		<delete dir="${temp.dir}" />
+		<delete file="${base.dir}/log4j.properties" />
+	</target>
+
 	<target name="upgrade_de_integration_restructure_metadata" description="Start : DE Integration Restructure for p5 ">
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 		<if>
