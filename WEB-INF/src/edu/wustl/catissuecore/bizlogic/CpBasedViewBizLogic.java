@@ -246,7 +246,7 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 			hql.append(cpId);
 			hql.append(" and cpr.activityStatus != '");
 			hql.append(Status.ACTIVITY_STATUS_DISABLED.toString());
-			hql.append(" ' and ");
+			hql.append("' and ");
 			hql.append(" cpr.participant.activityStatus != '");
 			hql
 					.append(Status.ACTIVITY_STATUS_DISABLED.toString()
