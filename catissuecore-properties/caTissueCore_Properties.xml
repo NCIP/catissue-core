@@ -10,32 +10,32 @@
 		<name>app.name</name>
 		<value>catissuecore</value>
 	</property>
-	
+
 	<property>
 		<name>cde.load.by.publicid</name>
 		<value>FALSE</value>
 	</property>
-	
+
 	<property>
 		<name>casdr.server</name>
 		<value>http://cabio.nci.nih.gov/cacore30/server/HTTPServer</value>
 	</property>
-	
+
 	<property>
 		<name>max.server.connect.attempts</name>
 		<value>3</value>
 	</property>
-	
+
 	<property>
 		<name>max.cde.download.attempts</name>
 		<value>3</value>
 	</property>
-	
+
 	<property>
 		<name>session.expiry.warning.advanceTime</name>
 		<value>2</value>
-	</property>	
-	
+	</property>
+
 	<property>
     	<name>isToCheckCSMPermission</name>
 		<value>true</value>
@@ -45,37 +45,37 @@
 		<name>institution.logo.tooltip</name>
 		<value>Sitemen cencer center</value>
 	</property>
-	
+
 	<property>
 		<name>institution.url</name>
 		<value>http://bioinformatics.wustl.edu</value>
 	</property>
-	
+
 	<property>
 		<name>use.proxy.server</name>
 		<value>false</value>
 	</property>
-	
+
 	<property>
 		<name>proxy.host</name>
 		<value></value>
 	</property>
-	
+
 	<property>
 		<name>proxy.port</name>
 		<value></value>
 	</property>
-	
+
 	<property>
 		<name>proxy.username</name>
 		<value></value>
 	</property>
-	
+
 	<property>
 		<name>proxy.password</name>
 		<value></value>
 	</property>
-	
+
 	<property>
 		<name>app.disclaimer.file</name>
 		<value>Disclaimer.txt</value>
@@ -95,33 +95,33 @@
 		<name>app.accessibility.file</name>
 		<value>Accessibility.txt</value>
 	</property>
-	
+
 	<property>
 		<name>CaTiesPublicServerName</name>
 		<value>http://ps0348:8080/caties/server/HTTPServer</value>
 	</property>
-	
+
 	<property>
 		<name>CaTiesPrivateServerName</name>
 		<value>http://ps0348:8080/caties_pri/server/HTTPServer</value>
 	</property>
-	
+
 	<property>
 		<name>email.administrative.emailAddress</name>
 		<value>@@ADMIN-EMAILADDRESS@@</value>
 	</property>
-	
+
 	<property>
 		<name>email.sendEmailFrom.emailAddress</name>
 		<value>@@SENDEMAILFROM-EMAILADDRESS@@</value>
 	</property>
-	
+
 	<property>
 		<name>email.mailServer</name>
 		<value>@@MAILSERVER-EMAILADDRESS@@</value>
 	</property>
-	
-	
+
+
 	<!--  Properties needed for Common Package Error Email  -->
 	<property>
 		<name>use.email.commonpackage.config</name>
@@ -147,7 +147,7 @@
 		<name>email.exception.subject</name>
 		<value>@@email.exception.subject@@</value>
 	</property>
-	
+
 	 <!-- Constants for LookUp algo start -->
 	<property>
 		<name>lookup.cutoff</name>
@@ -229,28 +229,28 @@
 		<name>MatchCharactersForLastName</name>
 		<value>5</value>
 	</property>
-	
+
 	<property>
 		<name>maxNoOfParticipantToReturn</name>
 		<value>100</value>
 	</property>
-	
+
 	<property>
 		<name>cutoffPoints</name>
 		<value>20</value>
 	</property>
-	
+
 	<property>
 		<name>empi.MaxNoOfPatients</name>
 		<value>100</value>
 	</property>
-	
+
 	<property>
 		<name>empi.threshold</name>
 		<value>20</value>
 	</property>
-	
-	
+
+
 	 <!-- Constants for LookUp algo end -->
 	 <!-- start-->
 	 <property>
@@ -314,24 +314,24 @@
 		<value>0</value>
 	</property>
 	 <!-- end -->
-	 
+
 	  <!-- Constants for Password validations start -->
-		
+
 	<property>
 		<name>password.expire_after_n_days</name>
 		<value>60</value>
 	</property>
-	
+
 	<property>
 		<name>password.not_same_as_last_n</name>
 		<value>6</value>
 	</property>
-	
+
 	<property>
 		<name>minimumPasswordLength</name>
 		<value>6</value>
 	</property>
-		
+
 	<property>
 		<name>daysCount</name>
 		<value>0</value>
@@ -358,17 +358,17 @@
 		<name>resultView.maximumTreeNodeLimitForChildNode</name>
 		<value>20</value>
 	</property>
-	
+
 <!-- Constants for specifing columns per page in MultipleSpecimen -->
 
 <!-- Constant for limiting number of storage containers shown in dropdowns on UI , should be set to appropriate value
-    eg. If containers are big  ( say 100*100) this value should be small so that it will take less time for populating dropdowns  
- -->	
+    eg. If containers are big  ( say 100*100) this value should be small so that it will take less time for populating dropdowns
+ -->
 	<property>
 		<name>containers_max_limit</name>
 		<value>5</value>
 	</property>
-<!-- Constant for limiting number of storage containers shown in dropdowns on UI-->		
+<!-- Constant for limiting number of storage containers shown in dropdowns on UI-->
 
 <!-- Constants for setting default values for enumerated dropdowns-->
 
@@ -376,155 +376,155 @@
 		<name>defaultTissueSite</name>
 		<value>Not Specified</value>
 	</property>
-	
+
 	<property>
 		<name>defaultClinicalStatus</name>
 		<value>Not Specified</value>
 	</property>
-	
+
 	<property>
 		<name>defaultGender</name>
 		<value>Unspecified</value>
 	</property>
-	
+
 	<property>
 		<name>defaultGenotype</name>
 		<value>Unknown</value>
 	</property>
-	
+
 	<property>
 		<name>defaultSpecimen</name>
 		<value></value>
 	</property>
-	
+
 	<property>
 		<name>defaultTissueSide</name>
 		<value>Not Specified</value>
 	</property>
-	
+
 	<property>
 		<name>defaultPathologicalStatus</name>
 		<value>Not Specified</value>
 	</property>
-	
+
 	<property>
 		<name>defaultReceivedQuality</name>
 		<value>Acceptable</value>
 	</property>
-	
+
 	<property>
 		<name>defaultFixationType</name>
 		<value>Not Specified</value>
 	</property>
-	
+
 	<property>
 		<name>defaultCollectionProcedure</name>
 		<value>Not Specified</value>
 	</property>
-	
+
 	<property>
 		<name>defaultContainer</name>
 		<value>Not Specified</value>
 	</property>
-	
+
 	<property>
 		<name>defaultMethod</name>
 		<value>Not Specified</value>
 	</property>
-	
+
 	<property>
 		<name>defaultEmbeddingMedium</name>
 		<value>Not Specified</value>
 	</property>
-	
+
 	<property>
 		<name>defaultBiohazard</name>
 		<value></value>
 	</property>
-	
+
 	<property>
 		<name>defaultSiteType</name>
 		<value></value>
 	</property>
-	
+
 	<property>
 		<name>defaultSpecimenType</name>
 		<value></value>
 	</property>
-	
+
 	<property>
 		<name>defaultEthnicity</name>
 		<value>Unknown</value>
 	</property>
-	
+
 	<property>
 		<name>defaultRace</name>
 		<value>Unknown</value>
 	</property>
-	
+
 	<property>
 		<name>defaultClinicalDiagnosis</name>
 		<value>Not Specified</value>
 	</property>
-	
+
 	<property>
 		<name>defaultStates</name>
 		<value></value>
 	</property>
-	
+
 	<property>
 		<name>defaultCountry</name>
 		<value>United States</value>
 	</property>
-	
+
 	<property>
 		<name>defaultHistologicalQuality</name>
 		<value>Not Specified</value>
 	</property>
-	
+
 	<property>
 		<name>defaultVitalStatus</name>
 		<value>Unknown</value>
 	</property>
-	
+
 	<!-- property for DynamicUI xml file -->
 	<property>
 		<name>xmlfile.dynamicUI</name>
 		<value>dynamicUI.xml</value>
 	</property>
-	
+
 	<!-- property for Crating Multiple temporary tables for multi-user -->
 	<property>
 		<name>multiuser</name>
 		<value>true</value>
 	</property>
-	
+
 	<!--  property for the help page links/icons -->
 	<property>
 		<name>userguide.link</name>
 		<value>caTissue_Suite_User_Manual_v11p5.doc</value>
 	</property>
-	
+
 	<property>
 		<name>technicalguide.link</name>
 		<value>caTissueSuite_Technical_Guide_V11p5.doc</value>
 	</property>
-	
+
 	<property>
 		<name>trainingguide.link</name>
 		<value>http://cabigtrainingdocs.nci.nih.gov/caTissue/index.html</value>
 	</property>
-	
+
 	<property>
 		<name>umlmodel.link</name>
 		<value>caTissueSuiteV11_UML.zip</value>
 	</property>
-	
+
 	<property>
 		<name>knowledgecenter.link</name>
 		<value>https://cabig-kc.nci.nih.gov/Biospecimen/KC/index.php/Main_Page</value>
 	</property>
-	
+
 	<property>
 		<name>knowledgecenterforum.link</name>
 		<value>https://cabig-kc.nci.nih.gov/Biospecimen/forums/</value>
@@ -534,37 +534,37 @@
 		<name>isStateRequired</name>
 		<value>true</value>
 	</property>
-	
+
 	<property>
 		<name>isCPTitleChange</name>
 		<value>flase</value>
 	</property>
-	
+
 	<property>
 		<name>isRemoveSSN</name>
 		<value>false</value>
 	</property>
-	
+
 	<property>
 		<name>isRemoveSexGenotype</name>
 		<value>false</value>
 	</property>
-	
+
 	<property>
 		<name>isRemoveRace</name>
 		<value>false</value>
 	</property>
-	
+
 	<property>
 		<name>isRemoveEthnicity</name>
 		<value>false</value>
 	</property>
-	
+
 	<property>
 		<name>dateFormat</name>
 		<value>MM-dd-yyyy</value>
 	</property>
-	
+
 	<property>
 		<name>isLastNameNull</name>
 		<value>true</value>
@@ -582,14 +582,14 @@
 		<name>barcode.isEditable</name>
 		<value>true</value>
 	</property>
-	
-	<!-- For DFCI use /pages/shippingtracking/PrintShipmentHeaderImg.jsp  -->	
+
+	<!-- For DFCI use /pages/shippingtracking/PrintShipmentHeaderImg.jsp  -->
 	<property>
 		<name>packingSlipHeaderJsp</name>
 		<value></value>
 	</property>
-	
-	<!-- For DFCI use /pages/shippingtracking/PrintSummaryStaticText.jsp  -->	
+
+	<!-- For DFCI use /pages/shippingtracking/PrintSummaryStaticText.jsp  -->
 	<property>
 		<name>packingSlipFooterJsp</name>
 		<value></value>
@@ -611,34 +611,34 @@
 		<name>maxRecordsPercaCOREQueryAllowed</name>
 		<value>10000</value>
 	</property>
-	
+
 	<!--  Added by Geeta for EMPI integration -->
 	<property>
 		<name>empi.DBURL</name>
 		<value>@@empiDBURL@@</value>
 	</property>
-	
+
 	<property>
 		<name>empi.DBDriverName</name>
 		<value>@@empiDBDriverName@@</value>
 	</property>
-	
+
 	<property>
 		<name>empi.DBUserName</name>
 		<value>@@empiDBUserName@@</value>
 	</property>
-	
+
 	<property>
 		<name>empi.DBUserPassword</name>
 		<value>@@empiDBUserPassword@@</value>
 	</property>
-	
+
 	<property>
 		<name>empi.DBSchema</name>
 		<value>@@empiDBSchema@@</value>
 	</property>
 
-<!--ClinPortal-caTissue Integration-->	
+<!--ClinPortal-caTissue Integration-->
 	<property>
 		<name>clinportal.integrationEnabled</name>
 		<value>@@integrationEnabled@@</value>
@@ -660,5 +660,8 @@
 		<value>@@ClinPortalURL@@/http/remoteService</value>
 	</property>
 
-	
+	<property>
+		<name>tablespace</name>
+		<value></value>
+	</property>
 </properties>
