@@ -36,7 +36,7 @@ insert into CATISSUE_CP_STUDYFORMCONTEXT(STUDY_FORM_CONTEXT_ID,COLLECTION_PROTOC
 (select afc.identifier, cond.STATIC_RECORD_ID from dyextn_abstract_form_context afc,
 DYEXTN_ENTITY_MAP_CONDNS cond, DYEXTN_ENTITY_MAP em, DYEXTN_FORM_CONTEXT fc
 where afc.hide_form=0 and afc.container_id=em.container_id
-and cond.FORM_CONTEXT_ID = fc.identifier and fc.ENTITY_MAP_ID = em.identifier);
+and cond.FORM_CONTEXT_ID = fc.identifier and fc.ENTITY_MAP_ID = em.identifier and cond.STATIC_RECORD_ID>0);
 
 -- Change Participant associations to ParticipantRecordEntry
 update dyextn_attribute da set da.entiy_id = (select identifier from dyextn_abstract_metadata where name like 'edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry')
