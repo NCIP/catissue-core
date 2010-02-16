@@ -283,6 +283,7 @@ function wustlkey()
 	if(Boolean.parseBoolean(XMLPropertyHandler.getValue(Constants.IDP_ENABLED)))
 	{
 %>
+		<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 			<tr>
 				<td>
 					&nbsp;
@@ -318,6 +319,7 @@ function wustlkey()
 					&nbsp;
 				</td>
 			</tr>
+		</logic:empty>
 <%
 	}
 %>
