@@ -28,7 +28,7 @@
 					</label>
 				</td>	
 				<div id="tissueDIV">
-				<td width="35%" class="tabletd1">
+				<td width="40%" class="tabletd1">
 					<mCombo:multiSelectUsingCombo identifier="tissue" styleClass="tabletd1" 
 						addNewActionStyleClass="tabletd1" size="20"
 						addButtonOnClick="moveOptions('tissue','holdsTissueSpType', 'add')" 
@@ -46,7 +46,7 @@
 						<bean:message key="specimenclass.fluid" />
 					</label>
 				</td>	
-				<td width="35%" class="tabletd1">
+				<td width="40%" class="tabletd1">
 					<mCombo:multiSelectUsingCombo identifier="fluid" styleClass="tabletd1" 
 						addNewActionStyleClass="tabletd1" size="20"
 						addButtonOnClick="moveOptions('fluid','holdsFluidSpType', 'add')" 
@@ -62,7 +62,7 @@
 						<bean:message key="specimenclass.cell" />
 					</label>
 				</td>	
-				<td width="35%" class="tabletd1">
+				<td width="40%" class="tabletd1">
 					<mCombo:multiSelectUsingCombo identifier="cell" styleClass="tabletd1" 
 						addNewActionStyleClass="tabletd1" size="20"
 						addButtonOnClick="moveOptions('cell','holdsCellSpType', 'add')" 
@@ -78,7 +78,7 @@
 						<bean:message key="specimenclass.molecular" />
 					</label>
 				</td>	
-				<td width="35%" class="tabletd1">
+				<td width="40%" class="tabletd1">
 					<mCombo:multiSelectUsingCombo identifier="molecular" styleClass="tabletd1" 
 						addNewActionStyleClass="tabletd1" size="20"
 						addButtonOnClick="moveOptions('molecular','holdsMolSpType', 'add')" 
