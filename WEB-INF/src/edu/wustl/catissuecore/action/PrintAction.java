@@ -304,7 +304,8 @@ public class PrintAction extends XSSSupportedAction
 				dao.openSession(null);
 				List < AbstractDomainObject > specimenList = this.getSpecimenList
 				(dao,gridSspecimenIds );
-				SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
+				//SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
+				final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
 				printStauts = labelPrinter.printLabel(specimenList, strIpAddress,
 						objUser, printerType,
 						printerLocation, Constants.PRINT_SPECIMEN_FROM_LISTVIEW);
@@ -341,11 +342,12 @@ public class PrintAction extends XSSSupportedAction
 				 /*printStauts = labelPrinter.printLabel(specimenList, strIpAddress,
 						objUser, printerType, printerLocation);*/
 				//bug 14974
-				SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
+				//SpecimenLabelPrinterImpl labelPrinter = new SpecimenLabelPrinterImpl();
+				final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
 				printStauts = labelPrinter.printLabel(specimenList, strIpAddress,
 						objUser, printerType,
 						printerLocation, Constants.PRINT_SPECIMEN_DISTRIBUTION_REPORT);
-						
+
 
 				nextforwardTo = Constants.SUCCESS;
 				}

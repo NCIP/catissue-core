@@ -36,4 +36,8 @@ public interface LabelPrinter
 	 */
 	boolean printLabel(List<AbstractDomainObject> domainObject, String ipAddress, User userObj,
 			String printerType, String printerLoc);
+
+   boolean printLabel(List<AbstractDomainObject> abstractDomainObjectList,String ipAddress,
+		   User userObj, String printerType,String printerLocation, String printSpecimanlabel);
+
 }

@@ -79,6 +79,23 @@ public class SpecimenCollectionGroupLabelPrinterImpl implements LabelPrinter
 	}
 
 	/**
+	 * This method prints label.
+	 * @param abstractDomainObject abstract Domain Object list.
+	 * @param ipAddress IP Address
+	 * @param userObj user Object
+	 * @param printerType printer Type
+	 * @param printerLocation printer Location
+	 * @param printSpecimanlabel specifies the page from request is coming	 
+	 * @return true or false status.
+	 */
+	public boolean printLabel(List<AbstractDomainObject> abstractDomainObjectList,
+			String ipAddress, User userObj, String printerType,
+			String printerLocation, String printSpecimanlabel)
+	{
+		return false;
+	}
+
+	/**
 	 * @param abstractDomainObject Specimen Collection group
 	 * @param printerType printer Type
 	 * @param printerLocation printer Location
