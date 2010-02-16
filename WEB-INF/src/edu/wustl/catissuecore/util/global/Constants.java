@@ -1000,7 +1000,7 @@ public class Constants
 	public static final String UNIT_GM = "gm";
 	public static final String UNIT_ML = "ml";
 	public static final String UNIT_CC = "cell count";
-	public static final String UNIT_MG = "µg";
+	public static final String UNIT_MG = "\u00B5"+"g";
 	public static final String UNIT_CN = "count";
 	public static final String UNIT_CL = "cells";
 
