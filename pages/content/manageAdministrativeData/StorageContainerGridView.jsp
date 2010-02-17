@@ -257,34 +257,126 @@ function refresh_tree(nodeId)
                   </tr>
 				  <tr>
 				    <td>
-						 <table  border="0" cellspacing="0" cellpadding="0" width="100%"> 
-						   <tr>
-							<td width="150">
-								<table  border="0" cellspacing="2"  cellpadding="3" width="100%"> 
-									<tr>
-											<td width="150" class="tabletd1">Specimen Type</td>
-									</tr>
-								</table>
-							</td>
-							 <td>
+							
+					 <table  border="0" cellspacing="0" cellpadding="0">
+						 <tr>
+							<td>
 								<table  border="0" cellspacing="2"  cellpadding="3"> 
 									<tr>
-<%	
-			for(int colcnt=0;colcnt<specimenTypeList.size();colcnt++)
-			{
-				String data =(String) specimenTypeList.get(colcnt );
+											<td width="140" class="tabletd1">Specimen Type</td>
+												<%	
+													for(int colcnt=0;colcnt<specimenTypeList.size();colcnt++)
+													{
+														String data =(String) specimenTypeList.get(colcnt );
+														
+												%>
+														<td  class="tabletd1" ><%=data %></td>
+												<%
+														if(colcnt >=10)
+														{
+															break;
+														}
+													}
+												%>
+								    </tr>
+								</table>
+							 </td>
+						</tr>
 				
-%>
-								<td  class="tabletd1" ><%=data %></td>
-<%
-			}
-%>
+						<tr>
+							<td>
+								<table  border="0" cellspacing="2"  cellpadding="3"> 
+									<tr>
+										<%	
+													for(int colcnt=11;colcnt<specimenTypeList.size();colcnt++)
+													{
+														String data =(String) specimenTypeList.get(colcnt );
+														
+										%>
+														<td  class="tabletd1" ><%=data %></td>
+										<%
+														if(colcnt >=20)
+														{
+															break;
+														}			
+													}
+										%>
+								  </tr>
+								</table>
+							</td>
+					   </tr>
+					   <tr>
+						   <td>
+								<table  border="0" cellspacing="2"  cellpadding="3"> 
+									<tr>
+											<%	
+														for(int colcnt=21;colcnt<specimenTypeList.size();colcnt++)
+														{
+															String data =(String) specimenTypeList.get(colcnt );
+											%>
+															<td  class="tabletd1" ><%=data %></td>
+											<%
+															if(colcnt >=30)
+															{
+																break;
+															}			
+														}
+											%>
+					
 								</tr>
 								</table>
 							</td>
-							</tr>
-						</table>
-						</td>
+						</tr>
+						<tr>
+						   <td>
+								<table  border="0" cellspacing="2"  cellpadding="3"> 
+									<tr>
+										<%	
+													for(int colcnt=31;colcnt<specimenTypeList.size();colcnt++)
+													{
+														String data =(String) specimenTypeList.get(colcnt );
+										%>
+														<td  class="tabletd1" ><%=data %></td>
+										<%
+														if(colcnt >=40)
+														{
+															break;
+														}			
+													}
+										%>
+					
+								</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+						   <td>
+								<table  border="0" cellspacing="2"  cellpadding="3"> 
+									<tr>
+										<%	
+													for(int colcnt=41;colcnt<specimenTypeList.size();colcnt++)
+													{
+														String data =(String) specimenTypeList.get(colcnt );
+														
+										%>
+														<td  class="tabletd1" ><%=data %></td>
+										<%
+														if(colcnt >=50)
+														{
+															break;
+														}			
+													}
+										%>
+					
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</tr>
+				</tr>
+			</table>
+						  
+					</td>
                   </tr>
                 </table></td>
               </tr>
