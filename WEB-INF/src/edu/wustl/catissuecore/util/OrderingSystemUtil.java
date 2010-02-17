@@ -38,6 +38,7 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.dao.util.HibernateMetaData;
 
 public final class OrderingSystemUtil
@@ -244,7 +245,12 @@ public final class OrderingSystemUtil
 			final List subChildNodesList = getAllSpecimen((Specimen) childSpec.next());
 			for (int i = 0; i < subChildNodesList.size(); i++)
 			{
-				allSpecimenList.add(subChildNodesList.get(i));
+				//Order only collected specimens.
+				Specimen specimenInner = (Specimen)subChildNodesList.get(i);
+				if(!Status.ACTIVITY_STATUS_PENDING.toString().equals(specimenInner.getCollectionStatus()))
+				{
+					allSpecimenList.add(subChildNodesList.get(i));
+				}
 			}
 		}
 		return allSpecimenList;
