@@ -15,6 +15,7 @@ import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
 import titli.model.util.TitliResultGroup;
+import edu.wustl.bulkoperator.util.BulkOperationUtility;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
@@ -93,6 +94,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			this.initCatissueParams();
 			logApplnInfo();
 			DefaultValueManager.validateAndInitDefaultValueMap();
+			BulkOperationUtility.changeBulkOperationStatusToFailed();
 			logger.info("Initialization complete");
 		}
 		catch (final Exception e)
@@ -336,6 +338,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	{
 		try
 		{
+			BulkOperationUtility.changeBulkOperationStatusToFailed();
 			final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
 					.getInstance();
 			catissueCoreCacheManager.shutdown();
@@ -345,6 +348,11 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			CatissueCoreServletContextListener.logger.error("Exception occured while shutting " +
 					"instance of CatissueCoreCacheManager"
 					+e.getMessage(),e);
+		}
+		catch (final DAOException e)
+		{
+			CatissueCoreServletContextListener.logger.error("Exception occured while updating " +
+					"the Bulk Operation job status." + e.getMessage(), e);
 		}
 	}
 	/**
