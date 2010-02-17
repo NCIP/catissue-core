@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.privatepublicmigrator;
 
 import java.io.File;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.Random;
@@ -107,13 +106,8 @@ public class MaskUsingDEMetatdata
 					}
 				}
 			}
-
-			// sql String to update ParticipantMedicalIdentifier table
-			String sqlString = "truncate table CATISSUE_PART_MEDICAL_ID";
-			this.executeQuery(sqlString, session);
-
 			// sql String to delete  ReportQueue table
-			sqlString = "truncate table CATISSUE_REPORT_QUEUE";
+			String sqlString = "truncate table CATISSUE_REPORT_QUEUE";
 			this.executeQuery(sqlString, session);
 
 			// sql String to delete ReportQueue table
@@ -208,7 +202,11 @@ public class MaskUsingDEMetatdata
 	 */
 	private void maskString(String columnName, String tableName, Session session) throws Exception
 	{
-		final String sqlString = "update " + tableName + " set " + columnName + "=null";
+		String sqlString = "update " + tableName + " set " + columnName + "=null";
+		if (tableName.equals("CATISSUE_PART_MEDICAL_ID"))
+		{
+			sqlString = "truncate table CATISSUE_PART_MEDICAL_ID";
+		}
 		this.executeQuery(sqlString, session);
 	}
 
@@ -338,6 +336,13 @@ public class MaskUsingDEMetatdata
 
 		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT DISABLE CONSTRAINT FKACAF697A2206F20F";
 		this.executeQuery(sqlString, session);
+		
+		sqlString = "ALTER TABLE catissue_data_audit_event_log DISABLE CONSTRAINT FK5C07745DC62F96A411";
+		this.executeQuery(sqlString, session);
+		
+		sqlString = "ALTER TABLE catissue_data_audit_event_log DISABLE CONSTRAINT FK5C07745DC62F96A412";
+		this.executeQuery(sqlString, session);
+		
 	}
 
 	/**
@@ -357,6 +362,12 @@ public class MaskUsingDEMetatdata
 		this.executeQuery(sqlString, session);
 
 		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT ENABLE CONSTRAINT FKACAF697A2206F20F";
+		this.executeQuery(sqlString, session);
+		
+		sqlString = "ALTER TABLE catissue_data_audit_event_log ENABLE CONSTRAINT FK5C07745DC62F96A411";
+		this.executeQuery(sqlString, session);
+		
+		sqlString = "ALTER TABLE catissue_data_audit_event_log ENABLE CONSTRAINT FK5C07745DC62F96A412";
 		this.executeQuery(sqlString, session);
 	}
 
@@ -379,6 +390,9 @@ public class MaskUsingDEMetatdata
 
 		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT NOCHECK CONSTRAINT ALL";
 		this.executeQuery(sqlString, session);
+		
+		sqlString = "ALTER TABLE catissue_data_audit_event_log NOCHECK CONSTRAINT ALL";
+		this.executeQuery(sqlString, session);
 	}
 
 	/**
@@ -399,6 +413,9 @@ public class MaskUsingDEMetatdata
 		this.executeQuery(sqlString, session);
 
 		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT CHECK CONSTRAINT ALL";
+		this.executeQuery(sqlString, session);
+		
+		sqlString = "ALTER TABLE catissue_data_audit_event_log CHECK CONSTRAINT ALL";
 		this.executeQuery(sqlString, session);
 	}
 
