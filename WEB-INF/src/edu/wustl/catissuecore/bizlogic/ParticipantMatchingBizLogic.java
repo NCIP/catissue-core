@@ -54,12 +54,12 @@ public class ParticipantMatchingBizLogic extends CatissueDefaultBizLogic
 						.getParticipantMedicalIdentifierCollection());
 			}
 			if (userParticipant.getSocialSecurityNumber() != null
-					&& userParticipant.getSocialSecurityNumber() != "")
+					&& !userParticipant.getSocialSecurityNumber().equals(""))
 			{
 				this.getParticipantsForSSN(dao, mapOfParticipants, userParticipant
 						.getSocialSecurityNumber());
 			}
-			if (userParticipant.getLastName() != null && userParticipant.getLastName() != "")
+			if (userParticipant.getLastName() != null && !userParticipant.getLastName().equals(""))
 			{
 				this.getParticipantsForLName(dao, mapOfParticipants, userParticipant.getLastName());
 				final String metaPhoneCode = metaPhoneObj.metaphone(userParticipant.getLastName());
