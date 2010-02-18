@@ -32,7 +32,7 @@
 	type="text/javascript"></script>
 
 <%
-	
+
 List annoList=(List) request.getAttribute("annotationListFromXML");
 
 	%>
@@ -54,7 +54,7 @@ var xmlData = [<%int i;%><%for (i=0;i<(annoList.size()-1);i++){%>
 <%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=row.get(j)%>,<%}%><%=row.get(j)%><%="\""%>
 ];
 	<% } %>
-		
+
 </script>
 
 
@@ -69,14 +69,14 @@ var indexIds = [<%int i;%><%for (i=0;i<(annotationsList.size());i++){%>
 	NameValueBean annotationBean = (NameValueBean)annotationsList.get(i);
 %>
 	<%="\""%><%=annotationBean.getValue()%><%="\""%>,
-	
+
 <% } %> ];
 
 </script>
 
 
-<script>	
-	
+<script>
+
 	function displayAnnotationGrid()
 	{
 		dannotationsGrid = new dhtmlXGridObject('displayAnnotationsGrid');
@@ -84,6 +84,7 @@ var indexIds = [<%int i;%><%for (i=0;i<(annotationsList.size());i++){%>
 		dannotationsGrid.setHeader("Group,Form,Completed Forms,Action");
 		dannotationsGrid.setInitWidthsP("*,*,17,20");
 		dannotationsGrid.enableAlterCss("even","uneven");
+		dannotationsGrid.enableAutoHeigth(true,"370");
 		dannotationsGrid.setSkin("light");
 		dannotationsGrid.enableRowsHover(true,'grid_hover');
 		dannotationsGrid.setColAlign("left,left,left,left");
@@ -98,10 +99,10 @@ var indexIds = [<%int i;%><%for (i=0;i<(annotationsList.size());i++){%>
 		 for(var row=0;row<xmlData.length;row=row+1)
 			{
 				var annotationId=indexIds[row];
-				var data = xmlData[row];		        
+				var data = xmlData[row];
 				dannotationsGrid.addRow(annotationId,data,row+1);
 			}
-		
+
 		<% } %>
 	}
 
