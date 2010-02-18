@@ -32,6 +32,7 @@
 		<user-name>@@CSMusername@@</user-name>
 		<password>@@CSMpasword@@</password>
 		<driver-class>@@databasedriver@@</driver-class>
+		<check-valid-connection-sql>select count(*) from csm_user</check-valid-connection-sql>		
 	</local-tx-datasource>
 	
 </datasources>
