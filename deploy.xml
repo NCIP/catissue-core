@@ -652,6 +652,9 @@
 				<include name="caTissuePrintWebService.war" />
 			</fileset>
 		</copy>
+
+		<copy file="performance.properties" todir="${jboss.home.dir}/server/default/conf" overwrite="true"/>
+
 		<replace dir="${jboss.server.url}/catissuecore-properties">
 			<include name="ApplicationSecurityConfig.xml" />
 			<replacefilter token="@@hibernate-config-file@@" value="${jboss.server.url}/catissuecore-properties/catissuecore.hibernate.cfg.xml" />
