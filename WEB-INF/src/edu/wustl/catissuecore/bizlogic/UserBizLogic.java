@@ -147,8 +147,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			final String generatedPassword = PasswordManager.generatePassword();
 
 			// If the page is of signup user don't create the csm user.
-			if (user.getPageOf().equals(Constants.PAGE_OF_SIGNUP) == false
-					|| user.getPageOf() == null)
+			if (user.getPageOf() == null || user.getPageOf().equals(
+						Constants.PAGE_OF_SIGNUP) == false)
 			{
 				csmUser.setLoginName(user.getLoginName());
 				csmUser.setLastName(user.getLastName());
