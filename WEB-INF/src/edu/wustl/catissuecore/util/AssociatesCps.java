@@ -144,10 +144,9 @@ public final class AssociatesCps
 	 * @throws DAOException
 	 */
 	private static void dissAssociateEntitiesFormsPerCpId(Map<Long, String> cpIdsVsoverride,
-			CollectionProtocol collectionProtocol, Collection<StudyFormContext> sfcSet,
-			HibernateDAO hibernateDao) throws DAOException
+			Long collectionProtocolId, HibernateDAO hibernateDao) throws DAOException
 	{
-		if (collectionProtocol == null)
+		if (collectionProtocolId == null)
 		{
 			// ALL CPs
 			if (cpIdsVsoverride.keySet().contains(Long.valueOf(0))
@@ -189,11 +188,16 @@ public final class AssociatesCps
 		}
 		else
 		{
-			if (cpIdsVsoverride.keySet().contains(collectionProtocol.getId())
+			List<CollectionProtocol> cpList = hibernateDao.retrieve(CollectionProtocol.class
+					.getName(), Constants.ID, collectionProtocolId);
+			CollectionProtocol collectionProtocol = cpList.get(0);
+			Collection<StudyFormContext> sfcSet = collectionProtocol.getStudyFormContextCollection();
+
+			if (cpIdsVsoverride.keySet().contains(collectionProtocolId)
 					&& Constants.OVERRIDE_TRUE.equalsIgnoreCase(cpIdsVsoverride
-							.get(collectionProtocol.getId())))
+							.get(collectionProtocolId)))
 			{
-				logger.info("Dissassociate Entities for CP id : " + collectionProtocol.getId());
+				logger.info("Dissassociate Entities for CP id : " + collectionProtocolId);
 				if (!sfcSet.isEmpty())
 				{
 					// remove the CP from all StudyFormContext objects
@@ -241,7 +245,7 @@ public final class AssociatesCps
 		if (cpId == 0)
 		{
 			hibernateDao.openSession(null);
-			dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, null, null, hibernateDao);
+			dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, null, hibernateDao);
 			hibernateDao.commit();
 			hibernateDao.closeSession();
 			hibernateDao.openSession(null);
@@ -279,16 +283,15 @@ public final class AssociatesCps
 		else
 		{
 			hibernateDao.openSession(null);
+			dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, cpId, hibernateDao);
+			hibernateDao.commit();
+			hibernateDao.closeSession();
+			hibernateDao.openSession(null);
+
 			List<CollectionProtocol> cpList = hibernateDao.retrieve(CollectionProtocol.class
 					.getName(), Constants.ID, cpId);
 			CollectionProtocol cp = cpList.get(0);
 			Collection<StudyFormContext> sfcSet = cp.getStudyFormContextCollection();
-
-			dissAssociateEntitiesFormsPerCpId(cpIdsVsoverride, cp, sfcSet, hibernateDao);
-
-			hibernateDao.commit();
-			hibernateDao.closeSession();
-			hibernateDao.openSession(null);
 
 			for (Long entityId : entityIds)
 			{
