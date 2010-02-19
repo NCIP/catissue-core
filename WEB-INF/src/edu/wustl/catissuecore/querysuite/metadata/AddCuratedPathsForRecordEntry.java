@@ -6,12 +6,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.common.dynamicextensions.xmi.UpdateCSRToEntityPath;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.NameValueBean;
@@ -19,6 +17,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class adds curated path between the Participant, Specimen, SCG and the DE forms.
@@ -36,13 +35,13 @@ public class AddCuratedPathsForRecordEntry
 	private static final Logger LOGGER = Logger
 			.getCommonLogger(AddCuratedPathsForRecordEntry.class);
 
-	private static List<AssociationInterface> partAssociationList = null;
-	private static List<AssociationInterface> specAssociationList = null;
-	private static List<AssociationInterface> scgAssociationList = null;
-
 	private static Long participantREEntityId = null;
 	private static Long specimenREEntityId = null;
 	private static Long scgREEntityId = null;
+	private static Long participantEntityId = null;
+	private static Long specimenEntityId = null;
+	private static Long scgEntityId = null;
+	private static EntityManagerInterface entityManager = null;
 
 	/**
 	 * @param args
@@ -51,7 +50,7 @@ public class AddCuratedPathsForRecordEntry
 	 * @throws ApplicationException
 	 */
 	public static void main(String[] args) throws DynamicExtensionsSystemException,
-			DynamicExtensionsApplicationException, NumberFormatException, ApplicationException
+			DynamicExtensionsApplicationException, ApplicationException
 	{
 		AddCuratedPathsForRecordEntry addPaths = new AddCuratedPathsForRecordEntry();
 		addPaths.init();
@@ -68,9 +67,12 @@ public class AddCuratedPathsForRecordEntry
 	private void addCuratedPath() throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, ApplicationException
 	{
-		EntityManagerInterface entityManager = EntityManager.getInstance();
 		Collection<NameValueBean> entityGrpLst = entityManager.getAllEntityGroupBeans();
 		Iterator<NameValueBean> iterator = entityGrpLst.iterator();
+
+		JDBCDAO jdbcDao = AppUtility.openJDBCSession();
+
+		Integer maxId = getMaxPathId(jdbcDao);
 
 		while (iterator.hasNext())
 		{
@@ -85,33 +87,149 @@ public class AddCuratedPathsForRecordEntry
 			LOGGER.info("entityGroupId : " + entityGroupId);
 			List<Long> newEntitiesIds = this.getAllEntitiesForEntityGroup(entityGroupId);
 			LOGGER.info("newEntitiesIds : " + newEntitiesIds);
-			String hookEntity = this.getHookEntity(entityGroupId);
-			addCuratedPathForHookEntity(hookEntity, newEntitiesIds);
+			String hookEntity = this.getHookEntity(entityGroupId, jdbcDao);
+			Long hookEntityId = getHookEntityId(hookEntity);
+			// Participant/Specimen/SCG entity ID
+			Long assoEntityId = getAssociatedEntityId(hookEntityId);
+
+			String intPath = getIntermediatePath(assoEntityId, hookEntityId, jdbcDao);
+			LOGGER.info("intPath : " + intPath);
+			for (Long entityId : newEntitiesIds)
+			{
+				LOGGER.info("Checking intermediate path for entity : " + entityId);
+				String oldIntPath = getIntermediatePath(assoEntityId, entityId, jdbcDao);
+				LOGGER.info("oldIntPath : " + oldIntPath);
+				updateOldPath(assoEntityId, oldIntPath, intPath, jdbcDao);
+
+				maxId = maxId + 1;
+				addPathForHookEntityAndDE(hookEntityId, entityId, oldIntPath, maxId, jdbcDao);
+			}
+			jdbcDao.commit();
+		}
+
+		AppUtility.closeDAOSession(jdbcDao);
+	}
+
+	/**
+	 *
+	 * @param jdbcDao
+	 * @return
+	 * @throws DAOException
+	 */
+	private Integer getMaxPathId(JDBCDAO jdbcDao) throws DAOException
+	{
+		String sql = "select max(PATH_ID) from path";
+		List list = jdbcDao.executeQuery(sql);
+		List objs = (List) list.get(0);
+		return Integer.valueOf(objs.get(0).toString());
+	}
+
+	/**
+	 *
+	 * @param hookEntityId
+	 * @return
+	 */
+	private Long getAssociatedEntityId(Long hookEntityId)
+	{
+		Long assoEntityId = null;
+
+		if (participantREEntityId.equals(hookEntityId))
+		{
+			assoEntityId = participantEntityId;
+		}
+		else if (specimenREEntityId.equals(hookEntityId))
+		{
+			assoEntityId = specimenEntityId;
+		}
+		else if (scgREEntityId.equals(hookEntityId))
+		{
+			assoEntityId = scgEntityId;
+		}
+		return assoEntityId;
+	}
+
+	/**
+	 * Method to update curated paths which existed between old hook entities (Participant,
+	 * Specimen, SCG) and DE forms
+	 * @param firstEntityId
+	 * @param oldIntPath
+	 * @param newIntPath
+	 * @param jdbcDao
+	 * @throws DAOException
+	 */
+	private void updateOldPath(Long firstEntityId, String oldIntPath, String newIntPath,
+			JDBCDAO jdbcDao) throws DAOException
+	{
+		String sql = "select path_id,intermediate_path from path where first_entity_id="
+				+ firstEntityId + " and intermediate_path like '" + oldIntPath + "%'";
+
+		List list = jdbcDao.executeQuery(sql);
+		if (list != null && !list.isEmpty())
+		{
+			for (Object obj : list)
+			{
+				List objs = (List) obj;
+				if (objs != null && !objs.isEmpty())
+				{
+					String pathId = objs.get(0).toString();
+					String intermediatePath = objs.get(1).toString();
+					if (intermediatePath != null)
+					{
+						LOGGER.info("Got intermediatePath : " + intermediatePath + "  pathId : "
+								+ pathId);
+						String newPath = newIntPath + "_" + intermediatePath;
+						sql = "update path set intermediate_path='" + newPath + "' where path_id="
+								+ pathId;
+
+						jdbcDao.executeUpdate(sql);
+					}
+				}
+			}
 		}
 	}
 
 	/**
 	 *
-	 * @param hookEntity
-	 * @param newEntitiesIds
+	 * @param hookEntityName
+	 * @return
 	 */
-	private void addCuratedPathForHookEntity(String hookEntity, List<Long> newEntitiesIds)
+	private Long getHookEntityId(String hookEntityName)
 	{
-		if (AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY.equals(hookEntity))
+		Long hookEntityId = null;
+
+		if (AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY.equals(hookEntityName))
 		{
-			UpdateCSRToEntityPath.addCuratedPathsFromToAllEntities(partAssociationList,
-					newEntitiesIds);
+			hookEntityId = participantREEntityId;
 		}
-		else if (AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY.equals(hookEntity))
+		else if (AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY.equals(hookEntityName))
 		{
-			UpdateCSRToEntityPath.addCuratedPathsFromToAllEntities(specAssociationList,
-					newEntitiesIds);
+			hookEntityId = specimenREEntityId;
 		}
-		else if (AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY.equals(hookEntity))
+		else if (AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY.equals(hookEntityName))
 		{
-			UpdateCSRToEntityPath.addCuratedPathsFromToAllEntities(scgAssociationList,
-					newEntitiesIds);
+			hookEntityId = scgREEntityId;
 		}
+
+		return hookEntityId;
+	}
+
+	/**
+	 * Add curated path
+	 * @param firstEntityId
+	 * @param lastEntityId
+	 * @param intermediatePath
+	 * @param maxId
+	 * @param jdbcDao
+	 * @throws DAOException
+	 */
+	private void addPathForHookEntityAndDE(Long firstEntityId, Long lastEntityId,
+			String intermediatePath, Integer maxId, JDBCDAO jdbcDao) throws DAOException
+	{
+		String sql = "insert into path (PATH_ID,FIRST_ENTITY_ID,INTERMEDIATE_PATH,LAST_ENTITY_ID)"
+				+ " values (" + maxId + "," + firstEntityId + ",'" + intermediatePath + "',"
+				+ lastEntityId + ")";
+
+		jdbcDao.executeUpdate(sql);
 	}
 
 	/**
@@ -124,7 +242,6 @@ public class AddCuratedPathsForRecordEntry
 	private List<Long> getAllEntitiesForEntityGroup(Long entityGroupId)
 			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
-		EntityManagerInterface entityManager = EntityManager.getInstance();
 		List<Long> newEntitiesIds = new ArrayList<Long>();
 
 		// Get main containers
@@ -144,104 +261,42 @@ public class AddCuratedPathsForRecordEntry
 	}
 
 	/**
-	 * Fetch the association lists and the entity IDs
+	 * Fetch the entity IDs
 	 * @throws DynamicExtensionsSystemException
 	 * @throws DynamicExtensionsApplicationException
 	 */
 	private void init() throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException
 	{
-		EntityManagerInterface entityManager = EntityManager.getInstance();
-		long staticEntityId = entityManager
+		entityManager = EntityManager.getInstance();
+		participantEntityId = entityManager
 				.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
 		participantREEntityId = entityManager
 				.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
 
 		LOGGER.info("participantREEntityId : " + participantREEntityId);
 
-		partAssociationList = this.getAssociationListForCurratedPath(staticEntityId,
-				participantREEntityId);
-
-		staticEntityId = entityManager.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+		specimenEntityId = entityManager.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
 		specimenREEntityId = entityManager
 				.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
 		LOGGER.info("specimenREEntityId : " + specimenREEntityId);
 
-		specAssociationList = this.getAssociationListForCurratedPath(staticEntityId,
-				specimenREEntityId);
-
-		staticEntityId = entityManager
+		scgEntityId = entityManager
 				.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
 		scgREEntityId = entityManager.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
 
 		LOGGER.info("scgREEntityId : " + scgREEntityId);
-		scgAssociationList = this.getAssociationListForCurratedPath(staticEntityId, scgREEntityId);
-	}
-
-	/**
-	 * Method returns the association between static entity and hook entity
-	 * @param srcEntityId
-	 * @param tgtEntityId
-	 * @param targetRoleName
-	 * @return
-	 * @throws DynamicExtensionsSystemException
-	 * @throws DynamicExtensionsApplicationException
-	 */
-	private AssociationInterface getAssociationByTargetRole(Long srcEntityId, Long tgtEntityId,
-			String targetRoleName) throws DynamicExtensionsSystemException,
-			DynamicExtensionsApplicationException
-	{
-		AssociationInterface deAsssociation = null;
-		EntityManagerInterface entityManager = EntityManager.getInstance();
-		Collection<AssociationInterface> associations = entityManager.getAssociations(srcEntityId,
-				tgtEntityId);
-
-		for (AssociationInterface association : associations)
-		{
-			if (association.getTargetRole().getName().equalsIgnoreCase(targetRoleName))
-			{
-				deAsssociation = association;
-				break;
-			}
-		}
-		return deAsssociation;
-	}
-
-	/**
-	 * Return the association list
-	 * @param staticEntityId
-	 * @param hookEntityId
-	 * @return
-	 * @throws DynamicExtensionsSystemException
-	 * @throws DynamicExtensionsApplicationException
-	 */
-	private List<AssociationInterface> getAssociationListForCurratedPath(Long staticEntityId,
-			Long hookEntityId) throws DynamicExtensionsSystemException,
-			DynamicExtensionsApplicationException
-	{
-		AssociationInterface recordEntryAssociation = getAssociationByTargetRole(staticEntityId,
-				hookEntityId, "recordEntryCollection");
-		if (recordEntryAssociation == null)
-		{
-			throw new DynamicExtensionsApplicationException(
-					"Associations For Currated Path Not Found");
-		}
-
-		List<AssociationInterface> associationList = new ArrayList<AssociationInterface>();
-		associationList.add(recordEntryAssociation);
-		return associationList;
 	}
 
 	/**
 	 * Get hook entity for Entity Group
 	 * @param entityGroupId
+	 * @param jdbcDao
 	 * @return
 	 * @throws ApplicationException
 	 */
-	private String getHookEntity(Long entityGroupId) throws ApplicationException
+	private String getHookEntity(Long entityGroupId, JDBCDAO jdbcDao) throws ApplicationException
 	{
-		JDBCDAO jdbcDao = AppUtility.openJDBCSession();
-
 		String sql = "select distinct meta.name from DYEXTN_ASSOCIATION asso,DYEXTN_ENTITY de, "
 				+ "DYEXTN_ATTRIBUTE attr, DYEXTN_ABSTRACT_METADATA meta where "
 				+ " asso.IDENTIFIER=attr.IDENTIFIER and de.IDENTIFIER=asso.TARGET_ENTITY_ID "
@@ -254,9 +309,28 @@ public class AddCuratedPathsForRecordEntry
 		String hookEntity = objs.get(0).toString();
 
 		LOGGER.info("hookEntity : " + hookEntity);
-		AppUtility.closeDAOSession(jdbcDao);
-
 		return hookEntity;
+	}
+
+	/**
+	 *
+	 * @param firstEntityId
+	 * @param lastEntityId
+	 * @param jdbcDao
+	 * @return
+	 * @throws ApplicationException
+	 */
+	private String getIntermediatePath(Long firstEntityId, Long lastEntityId, JDBCDAO jdbcDao)
+			throws ApplicationException
+	{
+		String sql = "select intermediate_path from path where first_entity_id=" + firstEntityId
+				+ " and last_entity_id=" + lastEntityId;
+
+		List list = jdbcDao.executeQuery(sql);
+		List objs = (List) list.get(0);
+		String intermediatePath = objs.get(0).toString();
+
+		return intermediatePath;
 	}
 
 }

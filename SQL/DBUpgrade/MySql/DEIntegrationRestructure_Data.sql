@@ -53,23 +53,6 @@ update dyextn_attribute da set da.entiy_id = (select identifier from dyextn_abst
 where da.identifier in (select identifier from dyextn_association where target_entity_id in (select ABSTRACT_ENTITY_ID from DYEXTN_CONTAINER where IDENTIFIER
 in (select container_id from dyextn_entity_map where static_entity_id=4))) and da.entiy_id=4;
 
--- Add path between DE table-ParticipantRecordEntry and remove path DE table-Participant
-update path set first_entity_id=(select identifier from dyextn_abstract_metadata where
-name like 'edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry') where first_entity_id=844 and last_entity_id in
-(select ABSTRACT_ENTITY_ID from DYEXTN_CONTAINER
-where IDENTIFIER in (select container_id from dyextn_entity_map where static_entity_id=844));
-
--- Add path between DE table-SCGRecordEntry and remove path DE table-SCG
-update path set first_entity_id=(select identifier from dyextn_abstract_metadata where
-name like 'edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry') where first_entity_id=379 and last_entity_id in
-(select ABSTRACT_ENTITY_ID from DYEXTN_CONTAINER
-where IDENTIFIER in (select container_id from dyextn_entity_map where static_entity_id=379));
-
--- Add path between DE table-SpecimenRecordEntry and remove path DE table-Specimen
-update path set first_entity_id=(select identifier from dyextn_abstract_metadata where
-name like 'edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry') where first_entity_id=4 and last_entity_id in
-(select ABSTRACT_ENTITY_ID from DYEXTN_CONTAINER
-where IDENTIFIER in (select container_id from dyextn_entity_map where static_entity_id=4));
 
 
 --drop table dyextn_entity_map_record
