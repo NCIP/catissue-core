@@ -390,6 +390,10 @@ public class NewSpecimenAction extends SecureAction
 
 				final Specimen specimen = bizLogic.getSpecimen(specimenID, specimenDetails,
 						sessionData, dao);
+				if(specimen != null && specimen.getIsAvailable() != null)
+				{
+					specimenForm.setAvailable(specimen.getIsAvailable());
+				}
 				// Added by Falguni=To set Specimen label in Form.
 				/*
 				 * Bug id = 11480Resolved by : Himanshu Aseeja

@@ -1291,7 +1291,7 @@ INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'Specim
 
 
 #---------------------Ordering System Permissions----Ashish 4/1/06
-insert into csm_role(ROLE_ID,ROLE_NAME,ROLE_DESCRIPTION,APPLICATION_ID) values (12,'CREATE_ONLY','Create only role',1);
+INSERT INTO `CSM_ROLE` (`ROLE_ID`,`ROLE_NAME`,`ROLE_DESCRIPTION`,`APPLICATION_ID`,`ACTIVE_FLAG`,`UPDATE_DATE`) VALUES (12,'CREATE_ONLY','Create only role',1,0,'2005-01-01');
 insert into csm_role_privilege(ROLE_PRIVILEGE_ID,ROLE_ID,PRIVILEGE_ID) values (30,12,1);
 
 insert into csm_protection_group(PROTECTION_GROUP_ID,PROTECTION_GROUP_NAME,APPLICATION_ID) values (44,'SCIENTIST_PROTECTION_GROUP',1);

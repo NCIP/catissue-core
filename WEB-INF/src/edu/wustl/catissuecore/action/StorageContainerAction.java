@@ -99,8 +99,7 @@ public class StorageContainerAction extends SecureAction
 			final String isPageFromStorageType = (String) session
 					.getAttribute("isPageFromStorageType");
 			final String isContainerChanged = request.getParameter("isContainerChanged");
-			if (storageContainerForm.getSpecimenOrArrayType() == null)
-			{
+			if (storageContainerForm.getSpecimenOrArrayType() == null || "".equals(storageContainerForm.getSpecimenOrArrayType()))			{
 				storageContainerForm.setSpecimenOrArrayType("Specimen");
 			}
 			request.setAttribute(Constants.MENU_SELECTED, "7");

@@ -415,6 +415,7 @@
 						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 						{
 							actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
+							forwardToValue = "CPQueryPrintSpecimenAdd";
 						}%>
 
 						if(temp == "orderDetails")
