@@ -14,6 +14,7 @@ import edu.wustl.catissuecore.testcase.admin.StorageContainerTestCases;
 import edu.wustl.catissuecore.testcase.admin.StorageTypeTestCases;
 import edu.wustl.catissuecore.testcase.annotations.AnnotationTestCases;
 import edu.wustl.catissuecore.testcase.biospecimen.AddToMyListTestCases;
+import edu.wustl.catissuecore.testcase.biospecimen.BulkDisposalTestCases;
 import edu.wustl.catissuecore.testcase.biospecimen.BulkTransferTestCases;
 import edu.wustl.catissuecore.testcase.biospecimen.CaCoreAppServiceDelegatorTestCase;
 import edu.wustl.catissuecore.testcase.biospecimen.ConsentsTestCase;
@@ -132,6 +133,7 @@ public class CaTissueSuiteTestSuite
 		strutsSuite.addTestSuite(StorageContainerBizTestCases.class);
 		strutsSuite.addTestSuite(AliquotBizTestCase.class);
 		strutsSuite.addTestSuite(BulkTransferTestCases.class);
+		strutsSuite.addTestSuite(BulkDisposalTestCases.class);
 		strutsSuite.addTestSuite(SpecimenEventBizTestCases.class);
 		strutsSuite.addTestSuite(StorageContainerRestrictionsBizTestCases.class);
 
