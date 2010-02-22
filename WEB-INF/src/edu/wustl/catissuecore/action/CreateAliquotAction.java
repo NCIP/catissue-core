@@ -84,9 +84,9 @@ public class CreateAliquotAction extends BaseAction
 		final AliquotForm aliquotForm = (AliquotForm) form;
 		boolean insertAliquotSpecimen = true;
 		Collection<AbstractDomainObject> specimenCollection = null;
-		List<AbstractDomainObject> specimenList = null;
-		final String fromPrintAction = request.getParameter(Constants.FROM_PRINT_ACTION);
-		final SessionDataBean sessionDataBean = this.getSessionData(request);
+		//List<AbstractDomainObject> specimenList = null;
+		//final String fromPrintAction = request.getParameter(Constants.FROM_PRINT_ACTION);
+		//final SessionDataBean sessionDataBean = this.getSessionData(request);
 		// Create SpecimenCollectionGroup Object
 		final SpecimenCollectionGroup scg = this.createSCG(aliquotForm);
 		// Create ParentSpecimen Object
@@ -107,11 +107,12 @@ public class CreateAliquotAction extends BaseAction
 			return mapping.findForward(Constants.FAILURE);
 		}
 
+		final SessionDataBean sessionDataBean = this.getSessionData(request);
 		// Insert Specimen Map
 		insertAliquotSpecimen = this.insertAliquotSpecimen(request, sessionDataBean,
 				specimenCollection);
 		// Convert Specimen HashSet to List
-		specimenList = new LinkedList<AbstractDomainObject>();
+		List<AbstractDomainObject> specimenList = new LinkedList<AbstractDomainObject>();
 		specimenList.addAll(specimenCollection);
 		if(insertAliquotSpecimen)
 		{
@@ -127,6 +128,7 @@ public class CreateAliquotAction extends BaseAction
 			Double.parseDouble(aliquotForm.getAvailableQuantity()));
 			aliquotForm.setSpecimenList(specimenList);
 		}
+		final String fromPrintAction = request.getParameter(Constants.FROM_PRINT_ACTION);
 		// mapping.findforward
 		return this.getFindForward(mapping, request, aliquotForm, fromPrintAction,
 				insertAliquotSpecimen, specimenList);
@@ -227,9 +229,10 @@ public class CreateAliquotAction extends BaseAction
 		catch (final BizLogicException e)
 		{
 			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
+			e.printStackTrace();
 			final ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e.getCustomizedMsg()));
+			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e
+					.getCustomizedMsg()));
 			this.saveErrors(request, actionErrors);
 			this.saveToken(request);
 			return false;
@@ -237,10 +240,10 @@ public class CreateAliquotAction extends BaseAction
 		catch (final DAOException e)
 		{
 			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
+			e.printStackTrace();
 			final ActionErrors actionErrors = new ActionErrors();
-			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e.getCustomizedMsg()
-					));
+			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e
+					.getCustomizedMsg()));
 			this.saveErrors(request, actionErrors);
 			this.saveToken(request);
 			return false;
@@ -258,7 +261,7 @@ public class CreateAliquotAction extends BaseAction
 			final ActionErrors actionErrors = new ActionErrors();
 
 			final String className = Utility.getActualClassName(Specimen.class.getName());
-			final String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore((e)
+			final String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(e
 					.getPrivilegeName());
 			String baseObject = "";
 			if (excp.getBaseObject() != null && excp.getBaseObject().trim().length() != 0)
@@ -322,7 +325,7 @@ public class CreateAliquotAction extends BaseAction
 	{
 		final Specimen parentSpecimen = (Specimen) new SpecimenObjectFactory()
 				.getDomainObject(aliquotForm.getClassName());
-		parentSpecimen.setId(new Long(aliquotForm.getSpecimenID()));
+		parentSpecimen.setId(Long.valueOf(aliquotForm.getSpecimenID()));
 		String label = aliquotForm.getSpecimenLabel();
 		if (label != null && label.equals(""))
 		{
@@ -341,7 +344,7 @@ public class CreateAliquotAction extends BaseAction
 	private SpecimenCollectionGroup createSCG(AliquotForm aliquotForm)
 	{
 		final SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
-		scg.setId(new Long(aliquotForm.getSpCollectionGroupId()));
+		scg.setId(Long.valueOf(aliquotForm.getSpCollectionGroupId()));
 		return scg;
 	}
 
@@ -360,22 +363,22 @@ public class CreateAliquotAction extends BaseAction
 		final boolean disposeParentSpecimen = aliquotForm.getDisposeParentSpecimen();
 		final Map aliquotMap = aliquotForm.getAliquotMap();
 		final String specimenKey = "Specimen:";
-		final Integer noOfAliquots = new Integer(aliquotForm.getNoOfAliquots());
+		final Integer noOfAliquots = Integer.valueOf(aliquotForm.getNoOfAliquots());
 		for (int i = 1; i <= noOfAliquots.intValue(); i++)
 		{
-			final Specimen aliquotSpecimen = AppUtility.getSpecimen(parentSpecimen);
-			final StorageContainer sc = new StorageContainer();
+			//final Specimen aliquotSpecimen = AppUtility.getSpecimen(parentSpecimen);
+			//final StorageContainer sc = new StorageContainer();
 			final String fromMapsuffixKey = "_fromMap";
 			// boolean booleanfromMap = false;
 
-			String quantityKey = null;
+			//String quantityKey = null;
 			String containerIdKey = null;
 			String containerNameKey = null;
 			String posDim1Key = null;
 			String posDim2Key = null;
 			final String radioButton = (String) aliquotMap.get("radio_" + i);
 			// if radio button =2 else conatiner selected from Combo box
-			quantityKey = specimenKey + i + "_quantity";
+			String quantityKey = specimenKey + i + "_quantity";
 			if (radioButton != null && radioButton.equals("2"))
 			{
 				containerIdKey = specimenKey + i + "_StorageContainer_id";
@@ -400,7 +403,7 @@ public class CreateAliquotAction extends BaseAction
 			}
 			else if (containerId != null)
 			{
-				storageContainerId = new Long(containerId);
+				storageContainerId = Long.valueOf(containerId);
 			}
 			final String containername = (String) aliquotMap.get(containerNameKey);
 			final String posDim1 = (String) aliquotMap.get(posDim1Key);
@@ -408,54 +411,48 @@ public class CreateAliquotAction extends BaseAction
 
 			/**
 			 * validate the the container name,id,pos1 and pos2 is not empty
-			 * dependeing on Auto,virtual,manula selection
+			 * depending on Auto,virtual,manual selection
 			 */
 			if (radioButton != null)
 			{
-				if (radioButton.equals("2"))
+				if ("2".equals(radioButton) && Validator.isEmpty(containerId))
 				{
-					if (Validator.isEmpty(containerId))
-					{
-						throw AppUtility.getApplicationException(null, "errors.item.format",
-								ApplicationProperties.getValue("specimen.storageContainer"));
-					}
+					throw AppUtility.getApplicationException(null, "errors.item.format",
+							ApplicationProperties.getValue("specimen.storageContainer"));
 				}
-				if (radioButton.equals("3"))
+				if ("3".equals(radioButton) && Validator.isEmpty(containername))
 				{
-					if (Validator.isEmpty(containername))
-					{
-						throw AppUtility.getApplicationException(null, "errors.item.format",
-								ApplicationProperties.getValue("specimen" + ".storageContainer"));
-					}
+					throw AppUtility.getApplicationException(null, "errors.item.format",
+							ApplicationProperties.getValue("specimen" + ".storageContainer"));
 				}
 				// bug 11479 S bug
-				if (radioButton.equals("2"))
+				if ("2".equals(radioButton)
+						&& (Validator.isEmpty(posDim1) || Validator.isEmpty(posDim2)))
 
 				{
-					if (Validator.isEmpty(posDim1) || Validator.isEmpty(posDim2))
-					{
-						throw AppUtility.getApplicationException(null, "errors.item.format",
-								ApplicationProperties.getValue("specimen"
-										+ ".positionInStorageContainer"));
-					}
+					throw AppUtility.getApplicationException(null, "errors.item.format",
+							ApplicationProperties.getValue("specimen"
+									+ ".positionInStorageContainer"));
 				}
 			}
+			final Specimen aliquotSpecimen = AppUtility.getSpecimen(parentSpecimen);
 			aliquotSpecimen.setSpecimenClass(aliquotForm.getClassName());
 			aliquotSpecimen.setSpecimenType(aliquotForm.getType());
 			aliquotSpecimen.setPathologicalStatus(aliquotForm.getPathologicalStatus());
 			aliquotSpecimen.setInitialQuantity(new Double(quantity));
 			aliquotSpecimen.setAvailableQuantity(new Double(quantity));
 
+			final StorageContainer sc = new StorageContainer();
 			// bug 11479
 			if ((containerId != null || containername != null) && posDim1 != null
 					&& posDim2 != null)
 			{
 				final SpecimenPosition specPos = new SpecimenPosition();
 
-				if (!posDim1.equals("") && !posDim2.equals(""))
+				if (!"".equals(posDim1) && !"".equals(posDim2))
 				{
-					specPos.setPositionDimensionOne(new Integer(posDim1));
-					specPos.setPositionDimensionTwo(new Integer(posDim2));
+					specPos.setPositionDimensionOne(Integer.valueOf(posDim1));
+					specPos.setPositionDimensionTwo(Integer.valueOf(posDim2));
 					sc.setId(storageContainerId);
 				}
 				sc.setName(containername);
@@ -494,7 +491,7 @@ public class CreateAliquotAction extends BaseAction
 			{
 				this.logger.error("Invalid Date Parser Exception: " + e.getMessage(), e);
 				// System.out.println("Invalid Date Parser Exception ");
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			aliquotSpecimen.setCreatedOn(myDate);
 			aliquotSpecimen.setParentSpecimen(parentSpecimen);
@@ -520,7 +517,7 @@ public class CreateAliquotAction extends BaseAction
 	}
 
 	/**
-	 * This function calculates the avialble qty of parent after creating
+	 * This function calculates the available quantity of parent after creating
 	 * aliquots.
 	 * @param specimenList : specimenList
 	 * @param aliquotForm : aliquotForm
@@ -529,7 +526,7 @@ public class CreateAliquotAction extends BaseAction
 	{
 		Double totalAliquotQty = 0.0;
 
-		if (specimenList != null && specimenList.size() > 0)
+		if (specimenList != null && !specimenList.isEmpty())
 		{
 			final Iterator itr = specimenList.iterator();
 			while (itr.hasNext())
