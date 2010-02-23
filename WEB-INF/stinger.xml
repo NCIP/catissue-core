@@ -90,7 +90,7 @@ the Stinger project lead at eric.sheridan@owasp.org
 		</regex>
 		<regex>
 			<name>safetext</name>
-			<pattern>^[a-zA-Z0-9\s,.~+\-\[\]!@#\$%\^&amp;\*\(\)_./?'\";:{}=]*$</pattern>
+			<pattern>^[a-zA-Z0-9\s,\u00B5.~+\-\[\]!@#\$%\^&amp;\*\(\)_./?'\";:{}=]*$</pattern>
 			<description>
 				Copied from Common Package REGEX_XSS_VULNERABLE_KEYWORDS
 			</description>
@@ -99,7 +99,7 @@ the Stinger project lead at eric.sheridan@owasp.org
 		<!--  Added for saving param query-->
 		<regex>
 			<name>querysafetext</name>
-			<pattern>^[a-zA-Z0-9\s.\-\^&amp;\*\(\)_./?'\";]*$</pattern>
+			<pattern>^[a-zA-Z0-9\s.\-\^&amp;\*\(\)_./?'\";]*\u00B5$</pattern>
 			<description>
 				Copied from Common Package REGEX_XSS_VULNERABLE_KEYWORDS
 			</description>
