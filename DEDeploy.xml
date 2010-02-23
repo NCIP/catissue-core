@@ -478,9 +478,9 @@
 		</java>
 	</target>
 
-	<property name="Category.XmlFile.Dir" value=" " />
-	<property name="Category.Csv.FileDir" value=" " />
-	<property name="categorySchemaFile" value="./${de.temp.dir}/conf/category_schema.xsd" />
+	<property name="categoryXmlFile" value=" " />
+	<property name="categoryCsvFileDir" value="temp_csv" />
+	<property name="categorySchemaFile" value="./${de.temp.dir}/category_schema.xsd" />
 	<!-- =================================
           target: create_category_from_xml
          ================================= -->
@@ -494,9 +494,10 @@
 			<replacefilter token="@@jbosshome@@" value="." />
 		</replace>
 		<echo message="Creating Categories" />
+		<mkdir dir="${categoryCsvFileDir}" />
 		<java classname="edu.common.dynamicextensions.category.XMLToCSV" fork="true" maxmemory="1024M">
-			<arg value="${Category.XmlFile.Dir}" />
-			<arg value="${Category.Csv.FileDir}" />
+			<arg value="${categoryXmlFile}" />
+			<arg value="${categoryCsvFileDir}" />
 			<arg value="${categorySchemaFile}" />
 			<classpath>
 				<fileset dir="${de.temp.dir}">
@@ -505,14 +506,14 @@
 				</fileset>
 			</classpath>
 		</java>
-		<antcall target="create_category">
-		</antcall>
+		<antcall target="create_category" />
+		<delete dir="${categoryCsvFileDir}"/>
 	</target>
 
 	<!-- Target used to create the Category -->
 	<property name="categoryFormNamesFile" value=" " />
 	<property name="isPersistMetadataOnly" value=" " />
-	<property name="categoryFileDir" value="${Category.Csv.FileDir}" />
+	<property name="categoryFileDir" value="${categoryCsvFileDir}" />
 	<target name="create_category" description="Target used to create the Category">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
