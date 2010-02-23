@@ -19,7 +19,7 @@
 	<script>Ext.onReady(function(){var myUrl= 'SpecimenTypeDataAction.do?method=Molecular';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'CB_molecular',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'molecular'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});</script>
 
 
-	<table width="90%" border="0" cellpadding="2" cellspacing="0">
+	<table width="100%" border="0" cellpadding="2" cellspacing="0">
 			 <tr>
 				<td width="1%" align="left" class="tabletd1">&nbsp;</td>
 				<td class="tabletd1">
@@ -27,8 +27,7 @@
 						<bean:message key="specimenclass.tissue" />
 					</label>
 				</td>	
-				<div id="tissueDIV">
-				<td width="40%" class="tabletd1">
+				<td width="50%" class="tabletd1">
 					<mCombo:multiSelectUsingCombo identifier="tissue" styleClass="tabletd1" 
 						addNewActionStyleClass="tabletd1" size="20"
 						addButtonOnClick="moveOptions('tissue','holdsTissueSpType', 'add')" 
@@ -36,7 +35,6 @@
 						selectIdentifier="holdsTissueSpType" 
 						collection="<%=(List) request.getAttribute(Constants.TISSUE_SPECIMEN)%>" numRows="5"/>
 				</td>
-				</div>
 			</tr>
 			
 			<tr>
@@ -46,7 +44,7 @@
 						<bean:message key="specimenclass.fluid" />
 					</label>
 				</td>	
-				<td width="40%" class="tabletd1">
+				<td width="50%" class="tabletd1">
 					<mCombo:multiSelectUsingCombo identifier="fluid" styleClass="tabletd1" 
 						addNewActionStyleClass="tabletd1" size="20"
 						addButtonOnClick="moveOptions('fluid','holdsFluidSpType', 'add')" 
@@ -62,7 +60,7 @@
 						<bean:message key="specimenclass.cell" />
 					</label>
 				</td>	
-				<td width="40%" class="tabletd1">
+				<td width="50%" class="tabletd1">
 					<mCombo:multiSelectUsingCombo identifier="cell" styleClass="tabletd1" 
 						addNewActionStyleClass="tabletd1" size="20"
 						addButtonOnClick="moveOptions('cell','holdsCellSpType', 'add')" 
@@ -78,7 +76,7 @@
 						<bean:message key="specimenclass.molecular" />
 					</label>
 				</td>	
-				<td width="40%" class="tabletd1">
+				<td width="50%" class="tabletd1">
 					<mCombo:multiSelectUsingCombo identifier="molecular" styleClass="tabletd1" 
 						addNewActionStyleClass="tabletd1" size="20"
 						addButtonOnClick="moveOptions('molecular','holdsMolSpType', 'add')" 
