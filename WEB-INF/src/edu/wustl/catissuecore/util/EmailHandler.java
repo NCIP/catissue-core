@@ -21,6 +21,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.EmailDetails;
 import edu.wustl.common.util.global.SendEmail;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
@@ -329,23 +330,27 @@ public class EmailHandler
         /*SendEmail email = new SendEmail();
         boolean emailStatus = email.sendmail(userEmailAddress, adminEmailAddress, 
                 							 null, sendFromEmailAddress, mailServer, subject, body);*/
-        EmailDetails emailDetails= new EmailDetails();
-        emailDetails.setToAddress(new String[]{userEmailAddress});
-        emailDetails.setCcAddress(new String[]{adminEmailAddress});
-        emailDetails.setSubject(subject);
-        emailDetails.setBody(body);        
-        SendEmail email;
-        boolean emailStatus;
-		try
-		{
-			email = new SendEmail(mailServer,sendFromEmailAddress);
-			emailStatus=email.sendMail(emailDetails);
-		}
-		catch (MessagingException messExcp)
-		{
-			emailStatus=false;
-			this.logger.error(messExcp.getMessage(),messExcp);
-		}
+        boolean emailStatus = false;
+        if(!Validator.isEmpty(sendFromEmailAddress) && !Validator.isEmpty(mailServer))
+        {
+        	EmailDetails emailDetails= new EmailDetails();
+        	emailDetails.setToAddress(new String[]{userEmailAddress});
+            emailDetails.setCcAddress(new String[]{adminEmailAddress});
+        	emailDetails.setSubject(subject);
+        	emailDetails.setBody(body);        
+        	SendEmail email;
+        	
+        	try
+        	{
+        		email = new SendEmail(mailServer,sendFromEmailAddress);
+        		emailStatus=email.sendMail(emailDetails);
+        	}
+        	catch (MessagingException messExcp)
+        	{
+        		emailStatus=false;
+        		this.logger.error(messExcp.getMessage(),messExcp);
+        	}
+        }
         return emailStatus;
     }
     
