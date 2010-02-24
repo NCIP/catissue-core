@@ -243,8 +243,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 						.getFromPositionDimensionOne().intValue();
 				this.fromPositionDimensionTwo = transferEventParametersObject
 						.getFromPositionDimensionTwo().intValue();
-				this.fromPosition = transferEventParametersObject.getFromStorageContainer()
-						.getStorageType().getName()
+				this.fromPosition = transferEventParametersObject.getFromStorageContainer().getName()
 						+ " : "
 						+ this.fromStorageContainerId
 						+ " Pos("
