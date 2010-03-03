@@ -401,7 +401,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 						.getId().toString());
 			}
 		}
-		else if (Validator.isEmpty(specimen.getLabel()))
+		else if (!Validator.isEmpty(specimen.getLabel()))
 		{
 			List specimenList = dao
 					.retrieve(Specimen.class.getName(), "label", specimen.getLabel());
@@ -411,7 +411,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			}
 			specimen = (Specimen) specimenList.get(0);
 		}
-		else if (Validator.isEmpty(specimen.getBarcode()))
+		else if (!Validator.isEmpty(specimen.getBarcode()))
 		{
 			List specimenList = dao.retrieve(Specimen.class.getName(), "barcode", specimen
 					.getBarcode());
