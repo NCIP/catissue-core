@@ -2584,6 +2584,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				final Specimen specimen = (Specimen) obj;
 				List collStatusList = null;
+				//Added for bug #16319
+				if(specimen.getSpecimenCollectionGroup() == null)
+				{
+					specimen.setSpecimenCollectionGroup(new SpecimenCollectionGroup());
+				}
 				final Long scgId = specimen.getSpecimenCollectionGroup().getId();
 				final CollectionProtocol cp = new CollectionProtocol();
 
