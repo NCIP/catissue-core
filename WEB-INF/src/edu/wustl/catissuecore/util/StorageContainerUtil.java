@@ -324,8 +324,7 @@ public final class StorageContainerUtil
 			final QueryWhereClause queryWhereClause = new QueryWhereClause(SpecimenPosition.class
 					.getName());
 			queryWhereClause.addCondition(new EqualClause("storageContainer.id", containerId));
-			final List list = dao.retrieve(SpecimenPosition.class.getName(), selectColumnName,
-					queryWhereClause);
+			final List list = dao.executeQuery("select positionDimensionOne,positionDimensionTwo from "+SpecimenPosition.class.getName()+" where storageContainer.id="+containerId);
 			setPositions(positions, list);
 			final QueryWhereClause queryWhereClause2 = new QueryWhereClause(ContainerPosition.class
 					.getName());

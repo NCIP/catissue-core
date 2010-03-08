@@ -27,8 +27,12 @@ create table CATISSUE_STOR_TYPE_SPEC_TYPE
 alter table CATISSUE_STOR_TYPE_SPEC_TYPE add constraint FK_STORAGE_TYPE_ID foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE;
 
 CREATE INDEX INDX_STOR_TYPE_SPEC ON catissue_stor_type_spec_type(STORAGE_TYPE_ID);
+CREATE INDEX INDX_STOR_TYPE_SPEC_TYPE ON catissue_stor_type_spec_type (SPECIMEN_TYPE);
 
 CREATE INDEX INDX_STOR_CONT_SPEC ON catissue_stor_cont_spec_type (STORAGE_CONTAINER_ID);
+
+
+CREATE INDEX INDX_STOR_CONT_SPEC_TYPE ON catissue_stor_cont_spec_type (SPECIMEN_TYPE);
 
 /**
  * Populate catissue_stor_type_spec_type
