@@ -133,7 +133,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			checkStatusAndGetUserId(specimenEventParametersObject, dao);
 			//			Ashish - 6/6/07 - performance improvement
 			Object specimenObject = null;
-			specimenObject = retrieveSpecimenLabelName(dao, specimenEventParametersObject);
+			specimenObject = specimenEventParametersObject.getSpecimen();//retrieveSpecimenLabelName(dao, specimenEventParametersObject);
 
 			final Specimen specimen = (Specimen) specimenObject;
 			// check for closed Specimen
@@ -234,7 +234,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 							.getToPositionDimensionOne());
 					specimenPosition.setPositionDimensionTwo(transferEventParameters
 							.getToPositionDimensionTwo());
-					dao.update(specimen);
+					dao.update(specimen,null);
 					transferEventParameters.setToStorageContainer(storageContainerObj);
 				}
 				if (specimenEventParametersObject instanceof DisposalEventParameters)
@@ -327,31 +327,32 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	private void checkStatusAndGetUserId(SpecimenEventParameters specimenEventParameter, DAO dao)
 			throws DAOException, BizLogicException
 	{
-		Object object = null;
+		List list = null;
 		if (specimenEventParameter.getUser().getId() != null)
 		{
-			object = dao.retrieveById(User.class.getName(), specimenEventParameter.getUser()
+			list = dao.executeQuery("select id,activityStatus from edu.wustl.catissuecore.domain.User where id="+specimenEventParameter.getUser()
 					.getId());
+			
+			
 		}
 		else if (specimenEventParameter.getUser().getLoginName() != null
 				|| specimenEventParameter.getUser().getLoginName().length() > 0)
 		{
 			String column = "loginName";
-			List list = null;
-			list = dao.retrieve(User.class.getName(), column, specimenEventParameter.getUser()
+			list = dao.executeQuery("select id,activityStatus from edu.wustl.catissuecore.domain.User where loginName="+specimenEventParameter.getUser()
 					.getLoginName());
-			if (!list.isEmpty())
-			{
-				object = list.get(0);
-			}
 		}
-		if (object != null)
+		if(list!=null&&!list.isEmpty())
 		{
-			final User user = (User) object;
+			Object[] object = (Object[])list.get(0);
+			final User user = new User();
+			user.setId((Long)object[0]);
+			user.setActivityStatus((String)object[1]);
 			// check for closed User
 			this.checkStatus(dao, user, "User");
 			specimenEventParameter.setUser(user);
 		}
+
 	}
 
 	/**
@@ -597,6 +598,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			specimen = (Specimen)this.retrieveSpecimenLabelName(dao, eventParameter);
+			eventParameter.setSpecimen(specimen);
 		//this.getSpecimenObject(dao, parameter);
 		Long fromContainerId = null;
 		Integer fromPos1 =  null;
