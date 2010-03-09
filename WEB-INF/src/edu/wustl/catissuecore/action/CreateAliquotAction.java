@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -534,14 +535,19 @@ public class CreateAliquotAction extends BaseAction
 				final Specimen specimen = (Specimen) itr.next();
 				if (specimen.getInitialQuantity() != null)
 				{
-					totalAliquotQty = totalAliquotQty + specimen.getInitialQuantity();
+					Double intQuantity = specimen.getInitialQuantity().doubleValue();
+					final DecimalFormat dFormat = new DecimalFormat("#.000");
+					totalAliquotQty = totalAliquotQty + intQuantity;
+					totalAliquotQty = Double.parseDouble(dFormat.format(totalAliquotQty));
 				}
 
 			}
 			if (aliquotForm.getInitialAvailableQuantity() != null)
 			{
-				final Double availableQuantity = Double.parseDouble(aliquotForm
-						.getInitialAvailableQuantity())
+				Double intQuantity = Double.valueOf(aliquotForm
+						.getInitialAvailableQuantity());
+				final DecimalFormat dFormat = new DecimalFormat("#.000");
+				final Double availableQuantity = Double.parseDouble(dFormat.format(intQuantity))
 						- totalAliquotQty;
 				aliquotForm.setAvailableQuantity(availableQuantity.toString());
 			}
