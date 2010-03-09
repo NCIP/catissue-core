@@ -13,7 +13,14 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
 <%@ page language="java" isELIgnored="false"%>
-<% ViewSpecimenSummaryForm form = (ViewSpecimenSummaryForm)request.getAttribute("viewSpecimenSummaryForm");  %>
+<% ViewSpecimenSummaryForm form = (ViewSpecimenSummaryForm)request.getAttribute("viewSpecimenSummaryForm");
+String clinicalDataEntryURL = null;
+if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
+{
+	clinicalDataEntryURL = request.getParameter("clinicalDataEntryURL");
+}
+%>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -23,6 +30,28 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/antiSpecAjax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
+<script src="jss/ajax.js" type="text/javascript"></script>
+
+<script language="JavaScript">
+var clinDataEntryURL = "<%=clinicalDataEntryURL%>";
+if(clinDataEntryURL != null && clinDataEntryURL != "" && clinDataEntryURL != "null")
+{
+	logout();
+	window.top.location=clinDataEntryURL;
+}
+
+function logout()
+{
+	var request = newXMLHTTPReq();
+	request.onreadystatechange = getReadyStateHandler(request,"",true);
+	//send data to ActionServlet
+	//Open connection to servlet
+	request.open("POST","AjaxAction.do?method=logout",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	var dataToSend = "";
+	request.send(dataToSend);
+}
+</script>
 
 <script language="JavaScript" type="text/javascript">
  var isPrintChecked = false;
@@ -95,12 +124,12 @@ function updateField(type,i,isDis,valueToSet)
 				}
 				else	// for virtual
 				{
-					for(i=1;i<cnt;i++)	
+					for(i=1;i<cnt;i++)
 					{
 						elemId = type+"["+i+"]"+".storageContainerForSpecimen";
 						document.getElementById(elemId).selectedIndex = ele0.selectedIndex;
 						updateField(type,i,true,"");
-						
+
 					}
 
 				}
@@ -120,13 +149,13 @@ function updateField(type,i,isDis,valueToSet)
 		{
 			frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&"+
 				"selectedContainerName=" + selectedContainerName +
-				"&pos1=" + positionDimensionOne + 
+				"&pos1=" + positionDimensionOne +
 				"&pos2=" + positionDimensionTwo +
 				"&containerId=" +containerId +
 				"&${requestScope.CAN_HOLD_SPECIMEN_CLASS}="+specimenClassName +
 				"&${requestScope.CAN_HOLD_SPECIMEN_TYPE}="+spType +
 				"&${requestScope.CAN_HOLD_COLLECTION_PROTOCOL}=" + cpId;
-			
+
 			var storageContainer = document.getElementById(selectedContainerName).value;
 			frameUrl+="&storageContainerName="+storageContainer;
 
@@ -136,7 +165,7 @@ function updateField(type,i,isDis,valueToSet)
 		//bug 11169 start
 		function ChangeCheckBoxStatus(type,chkInstance)
 		{
-             onCheckBoxClick(type,chkInstance,'checkedSpecimen');			
+             onCheckBoxClick(type,chkInstance,'checkedSpecimen');
 		}
 		function ChangePrintCheckBoxStatus(type,chkInstance)
 		{
@@ -162,16 +191,16 @@ function updateField(type,i,isDis,valueToSet)
 						if(type == "specimen" && element.onclick)
 						{
 							if(document.all)
-								element.fireEvent("onclick"); 
+								element.fireEvent("onclick");
 							else
-								element.onclick(); 
+								element.onclick();
 						}
 					}
 					ctr++;
 				}
 			}while(chkCount>0);
 		}
-		
+
 	function UpdateCheckBoxStatus()
 	{
 		var checkedSpecimen = '].checkedSpecimen';
@@ -194,8 +223,8 @@ function updateField(type,i,isDis,valueToSet)
 			} while (chkCount > 0);
 		}
 
-		
-	if (document.forms[0].chkAllDerived != null) 
+
+	if (document.forms[0].chkAllDerived != null)
 	{
 			ctr = 0;
 			var derivedType = "derived[";
@@ -213,7 +242,7 @@ function updateField(type,i,isDis,valueToSet)
 					ctr++;
 				}
 			} while (chkCount > 0);
-		}	
+		}
 	}
 	function checkPrintStatusOfAllSpecimens() {
 		checkPrintStatus('specimen');
@@ -251,7 +280,7 @@ function pageSubmit() {
            {
 	         isSCGSubmit = request.getAttribute( Constants.IS_SCG_SUBMIT ).toString();
 	       }
-		%> 
+		%>
 		var url;
 		<%if(isSCGSubmit!=null)
 		{%>
@@ -262,7 +291,7 @@ function pageSubmit() {
 		  url = 'GenericSpecimenSummary.do?save=SCGSpecimens';
 		 <% }
 		 %>
-		//bug 12656 
+		//bug 12656
 		<% if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN_WITHOUT_MENU))
 		{
 		  if(isSCGSubmit!=null)
@@ -274,10 +303,10 @@ function pageSubmit() {
 		  url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=pageOfMultipleSpWithoutMenu';
 		 <% }
 		 }%>
-		
-			
+
+
 <%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {
-			
+
 			 if(isSCGSubmit!=null)
 			  {%>
   url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>';
@@ -331,7 +360,7 @@ function scForSpecimen(element,spid)
 	var cName = document.getElementById(className).value;
 	var spType = prefix+".type";
 	var type = document.getElementById(spType).value;
-	
+
 	//alert(prefix+" : " + cpid + " : " + cName);
 	if(element.value == "Auto")
 	{
@@ -413,7 +442,7 @@ function updateSCDetails(msg)
 	var t3 = document.getElementById(scPos2);
 	var t4 = document.getElementById(scontid);
 
-	//alert(msg); 
+	//alert(msg);
 	var data = msg.split("#");
 	t1.value=data[0];
 	t2.value=data[2];
@@ -484,7 +513,7 @@ String lbl = "Apply first to all";
 						valign="middle" align="center"><logic:equal
 						name="viewSpecimenSummaryForm" property="showCheckBoxes"
 						value="true">
-						<input type="checkbox" name="chkAllSpecimen" 
+						<input type="checkbox" name="chkAllSpecimen"
 							onclick="ChangeCheckBoxStatus('specimen',this)" />
 					</logic:equal></td>
 					<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%"
@@ -574,7 +603,7 @@ String lbl = "Apply first to all";
 							align="center" valign="middle"><logic:equal
 							name="viewSpecimenSummaryForm" property="showCheckBoxes"
 							value="true">
-							<input type="checkbox" name="chkAllDerived" 
+							<input type="checkbox" name="chkAllDerived"
 								onclick="ChangeCheckBoxStatus('derived',this)" />
 						</logic:equal></td>
 						<td nowrap class="tr_anti_hdrbg_blue_small" scope="col" width="2%"
@@ -602,7 +631,7 @@ String lbl = "Apply first to all";
 
 		 <logic:notEmpty name="viewSpecimenSummaryForm" property="aliquotList">
          <TR>
-		 <TD align="left" valign="middle" class="tr_anti_hdrbg_blue" width="100%" colspan=3> 
+		 <TD align="left" valign="middle" class="tr_anti_hdrbg_blue" width="100%" colspan=3>
 		 <TABLE width="100%" border="0">
 		  <TR>
 		  <TD colspan="1" rowspan="2" align="left" class="tr_anti_hdrbg_blue" width="${requestScope.fCol}%">
@@ -661,7 +690,7 @@ String lbl = "Apply first to all";
 						dataListType="Aliquot" columnListName="columnListName"
 						isReadOnly="false" displayColumnListName="subSpecdispColumnsList" />
 				</td>
-			  </tr>					
+			  </tr>
 			 </table>
 		   </TD>
          </TR>

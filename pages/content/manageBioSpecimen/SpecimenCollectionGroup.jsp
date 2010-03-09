@@ -167,10 +167,30 @@
 
 	function makeClinPortalUrl()
 	{
+		var submitButton = document.getElementById("submitOnly");
+		submitButton.disabled = false;
+
+		document.getElementById('isClinicalDataEntry').value="true";
 		var scgId=document.getElementById("id").value;
 		var url='<%=clinportalUrl%>'+"&scgId="+scgId;
-		logout();
-		window.top.location=url;
+		document.getElementById('clinicalDataEntryURL').value=url;
+
+		if (window.ActiveXObject)
+		{
+			submitButton.click();
+		}
+		else
+		{
+			submitButton.enable();
+			if(submitButton.enable())
+			{
+				submitButton.click();
+			}
+			else
+			{
+				makeClinPortalUrl();
+			}
+		}
 	}
 
 	function logout()
@@ -748,6 +768,8 @@ function editSCG()
 	%>
 
 	<html:hidden property="nextForwardTo" />
+	<input type="hidden" id="clinicalDataEntryURL" name="clinicalDataEntryURL" value=""/>
+	<input type="hidden" id="isClinicalDataEntry" name="isClinicalDataEntry" value="false"/>
 </html:form>
 <script language="JavaScript" type="text/javascript">
 showPriterTypeLocation();
