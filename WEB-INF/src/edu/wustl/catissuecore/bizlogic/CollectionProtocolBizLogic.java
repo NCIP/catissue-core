@@ -1682,27 +1682,36 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	}
 
 	/**
-	 * @param dao.
-	 * @param cpId
-	 * @return
-	 * @throws DAOException
+	 * Get Related Sites.
+	 * @param dao DAO
+	 * @param cpId Long
+	 * @return Collection of Site
+	 * @throws DAOException DAOException
+	 * @throws BizLogicException BizLogicException
 	 */
-	public Collection<Site> getRelatedSites(DAO dao, Long cpId) throws DAOException
+	public Collection<Site> getRelatedSites(DAO dao, Long cpId)
+	throws BizLogicException, DAOException
 	{
-		CollectionProtocol cp = null;
 		Collection<Site> siteCollection = null;
 		if (cpId == null || cpId == 0)
 		{
 			return null;
 		}
-		cp = (CollectionProtocol) dao.retrieveById(CollectionProtocol.class.getName(), cpId);
-
-		if (cp == null)
+		//Query changed for bug #16295
+		String query = "select cp.siteCollection.id " +
+				" from edu.wustl.catissuecore.domain.CollectionProtocol cp " +
+				" where cp.id = " + cpId;
+		List<Long> list = this.executeQuery(query);
+		if (list != null && !list.isEmpty())
 		{
-			return null;
+			siteCollection = new HashSet<Site>();
+			for (final Long siteId : list)
+			{
+				final Site site = new Site();
+				site.setId(siteId);
+				siteCollection.add(site);
+			}
 		}
-		siteCollection = cp.getSiteCollection();
-
 		return siteCollection;
 	}
 
