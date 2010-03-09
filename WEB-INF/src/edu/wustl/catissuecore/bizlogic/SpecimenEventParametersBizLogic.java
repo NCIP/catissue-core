@@ -133,7 +133,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			checkStatusAndGetUserId(specimenEventParametersObject, dao);
 			//			Ashish - 6/6/07 - performance improvement
 			Object specimenObject = null;
-			specimenObject = specimenEventParametersObject.getSpecimen();//retrieveSpecimenLabelName(dao, specimenEventParametersObject);
+			specimenObject = retrieveSpecimenLabelName(dao, specimenEventParametersObject);
 
 			final Specimen specimen = (Specimen) specimenObject;
 			// check for closed Specimen
@@ -598,7 +598,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			specimen = (Specimen)this.retrieveSpecimenLabelName(dao, eventParameter);
-			eventParameter.setSpecimen(specimen);
 		//this.getSpecimenObject(dao, parameter);
 		Long fromContainerId = null;
 		Integer fromPos1 =  null;
