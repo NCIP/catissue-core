@@ -331,11 +331,10 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 		StringBuffer adminQuery = new StringBuffer(); 
 		if (!isAdmin)
 		{
-			adminQuery.append(" C.SITE_ID IN (SELECT M.SITE_ID FROM  ");
+			adminQuery.append(" AND C.SITE_ID IN (SELECT M.SITE_ID FROM  ");
 			adminQuery.append(" CATISSUE_SITE_USERS M WHERE M.USER_ID = ");
 			adminQuery.append(userId);
 			adminQuery.append(" ) ");
-			adminQuery.append(" AND ");
 		}
 		scQuery.append("SELECT identifier,name,one_dimension_capacity,two_dimension_capacity,available_slots FROM " +
 				"(SELECT  storage_container_id,count(*) AS lord FROM catissue_stor_cont_spec_type GROUP BY storage_container_id " +
