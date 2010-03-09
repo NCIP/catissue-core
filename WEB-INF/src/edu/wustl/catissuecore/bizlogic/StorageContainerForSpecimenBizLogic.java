@@ -79,11 +79,11 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 		// Containers allowing Others CPs also, other Specimen Classes and Specimen Type too
 		final String query5 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_NONUNQ,IS_SPTYPE_NONUNQ);
 		// Containers no CP restriction and just this Specimen Class and Specimen Type
-		final String query6 = this.createSCQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
+		final String query6 = this.getNoCPRestrictionQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
 		// Containers no CP restriction and just this Specimen Class and any specimen type
-		final String query7 = this.createSCQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ);
+		final String query7 = this.getNoCPRestrictionQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ);
 		//Containers with no CP restrictions, other Specimen Classes and Specimen Type too
-		final String query8 = this.createSCQuery(parameterList, null, IS_SPCLASS_NONUNQ, IS_SPTYPE_NONUNQ);
+		final String query8 = this.getNoCPRestrictionQuery(parameterList, null, IS_SPCLASS_NONUNQ, IS_SPTYPE_NONUNQ);
 		//Containers allowing any CP,any Specimen Class and any Specimen Type
 		final String query9 = this.createSCQuery(parameterList,	null, null, null);
 		
@@ -303,4 +303,67 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 		}
 		return scCPType;
 	}
+	/**
+	 * 
+	 */
+	private String getNoCPRestrictionQuery(final List<Object> parameterList,
+			final Boolean isCPUnique, final Boolean isSPClassUnique,final Boolean isSPTypeUnique)
+	{
+
+		final long cpId = (Long)parameterList.get(0);
+		final String spClass = (String)parameterList.get(1);
+		final int aliquotCount = (Integer)parameterList.get(2);
+		final String spType = (String)parameterList.get(3);
+		final SessionDataBean sessionData = (SessionDataBean)parameterList.get(4);
+		final Long userId = sessionData.getUserId();
+		final boolean isAdmin = sessionData.isAdmin();
+		final StringBuilder scQuery = new StringBuilder();
+		String spClassCount = "=";
+		String spTypeCount = "=";
+		if(!isSPClassUnique)
+		{
+			spClassCount=">";
+		}
+		if(!isSPTypeUnique)
+		{
+			spTypeCount=">";
+		}
+		StringBuffer adminQuery = new StringBuffer(); 
+		if (!isAdmin)
+		{
+			adminQuery.append(" C.SITE_ID IN (SELECT M.SITE_ID FROM  ");
+			adminQuery.append(" CATISSUE_SITE_USERS M WHERE M.USER_ID = ");
+			adminQuery.append(userId);
+			adminQuery.append(" ) ");
+			adminQuery.append(" AND ");
+		}
+		scQuery.append("SELECT identifier,name,one_dimension_capacity,two_dimension_capacity,available_slots FROM " +
+				"(SELECT  storage_container_id,count(*) AS lord FROM catissue_stor_cont_spec_type GROUP BY storage_container_id " +
+				"HAVING count(*) "+spTypeCount+" 1) cscspt, " +
+				"(SELECT storage_container_id, count(*) den FROM catissue_stor_cont_spec_class cscpc GROUP BY storage_container_id " +
+				"HAVING count(*) "+spClassCount+" 1) cscpc, " +
+				"(SELECT d.identifier, d.NAME, f.one_dimension_capacity, f.two_dimension_capacity, (f.one_dimension_capacity * f.two_dimension_capacity) capacity, count(*) cnt," +
+				"((f.one_dimension_capacity * f.two_dimension_capacity)-count(*)) available_slots FROM catissue_capacity f JOIN " +
+				"catissue_container d ON f.identifier = d.capacity_id " +
+				"LEFT OUTER JOIN catissue_specimen_position k ON d.identifier = k.container_id " +
+				"JOIN catissue_storage_container c ON d.identifier = c.identifier " +
+				"JOIN catissue_site l ON c.site_id = l.identifier " +
+				"JOIN catissue_stor_cont_spec_class b ON b.storage_container_id = c.identifier " +
+				"JOIN catissue_stor_cont_spec_type spt ON spt.storage_container_id = c.identifier WHERE d.identifier NOT IN " +
+				"(SELECT t2.storage_container_id FROM catissue_st_cont_coll_prot_rel t2) " +
+				"AND b.specimen_class = '" +spClass+"'" +
+				"AND spt.specimen_type = '" +spType+"'" + adminQuery.toString() +
+				"AND l.activity_status = 'Active' " +
+				"AND d.activity_status = 'Active' AND d.cont_full = 0 " +
+				"GROUP BY d.identifier, d.NAME, f.one_dimension_capacity," +
+				"f.two_dimension_capacity,(f.one_dimension_capacity * f.two_dimension_capacity)) view1 " +
+				"WHERE  cscspt.storage_container_id = view1.identifier AND cscpc.storage_container_id = view1.identifier");
+
+		
+		logger.debug(String.format("%s:%s:%s", this.getClass().getSimpleName(),
+				"createSCQuery() query ", scQuery));
+		return scQuery.toString();
+	
+	}
+	
 }
