@@ -1914,16 +1914,35 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		{
 			dao = this.openDAOSession(null);
 
-			final User user = (User) dao.retrieveById(User.class.getName(), userId);
-			if (!user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
+			String query = "select user.csmUserId " +
+			" from edu.wustl.catissuecore.domain.User user " +
+			" where user.id = " + userId;
+			
+			List<Long> userList = this.executeQuery(query);
+			boolean isAdminUser = false;
+			if(!userList.isEmpty())
 			{
-				final Collection<Site> siteCollection = user.getSiteCollection();
+				Long csmUserId = userList.get(0);
+				final Role role = SecurityManagerFactory.getSecurityManager().getUserRole(csmUserId);
+				if (role != null && role.getId() != null && Constants.ADMIN_USER.equalsIgnoreCase(role.getId().toString()))
+				{
+					isAdminUser = true;
+				}
+			}
+			if(!isAdminUser)
+			{
+				query = "select user.siteCollection.id " +
+				" from edu.wustl.catissuecore.domain.User user " +
+				" where user.id = " + userId;
+				List<Long> list = this.executeQuery(query);
+
 				idSet = new HashSet<Long>();
 
-				for (final Site site : siteCollection)
+				for (final Long siteId : list)
 				{
-					idSet.add(site.getId());
+					idSet.add(siteId);
 				}
+				
 			}
 		}
 		catch (final ApplicationException e1)
@@ -1939,7 +1958,6 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 		return idSet;
 	}
-
 	/**
 	 * Custom method for Add User Case
 	 * @param dao DAO object
