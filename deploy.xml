@@ -2005,9 +2005,21 @@
 				</fileset>
 			</classpath>
 		</sql>
-
+		<antcall target="checkIndexCreation" />
 		<antcall target="integrate_bulk_operation_oracle" />
    </target>
+	<target name="checkIndexCreation" description="This target checks index, if it alredy exists" >
+			<echo message="Upgrade audit changes." />
+				<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" delimiter="/" delimitertype="row" keepformat="yes" >
+						<transaction src="${dbupgrade.sql.dir}/Oracle/checkIndexCreation.sql" />
+					    <transaction>commit;</transaction>
+						<classpath>
+							<fileset dir="${lib.dir}">
+								<include name="*.jar" />
+							</fileset>
+						</classpath>
+				</sql>
+	 </target>
 
 
    <target name="audit_upgrade_oracle_from_v1.1p4_to_v1.1p5" description="this target ugrades the audit feature from v1.1.P4 to v1.1.P5" >
