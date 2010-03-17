@@ -732,13 +732,14 @@ public class AliquotAction extends SecureAction
 						if (aliquotForm.isAliqoutInSameContainer())
 						{
 							containerMap = scBiz.getAllocatedContainerMapForSpecimen(AppUtility
-									.setparameterList(cpId, spClass, Integer.parseInt(aliquotCt),
-											spType), sessionData, dao);
+									.setparameterList(aliquotForm.getColProtId(), aliquotForm.getClassName(),
+									Integer.parseInt(aliquotForm.getNoOfAliquots()),aliquotForm.getType()), sessionData, dao);
 						}
 						else
 						{
 							containerMap = scBiz.getAllocatedContainerMapForSpecimen(AppUtility
-									.setparameterList(cpId, spClass, 0, spType), sessionData, dao);
+									.setparameterList(aliquotForm.getColProtId(), aliquotForm.getClassName(),
+							0, aliquotForm.getType()), sessionData, dao);
 						}
 						pageOf = this.checkForSufficientAvailablePositions(request, containerMap,
 								aliquotCount);

@@ -180,7 +180,7 @@ function onContainerChange(action)
 
 		var aliquotCount=document.getElementById('noOfAliquots').value;
 
-			for ( var index = rowNo; index <= aliquotCount; index++)
+			for ( var index = new Number(rowNo); index <= aliquotCount; index++)
 			{
 				updateContainerName(rowList,index);
 

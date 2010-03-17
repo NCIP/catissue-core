@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Aliquot;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -54,6 +55,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		{
 			final Aliquot aliquot = (Aliquot) obj;
 			int aliquotCount = aliquot.getCount();
+			double parentSpecimenAvailQty = aliquot.getSpecimen().getAvailableQuantity().doubleValue();
 			Collection<SpecimenPosition> specimenPosColl = aliquot.getSpecimenPositionCollection();
 			List<SpecimenPosition> specimenPosList = null;
 			if (specimenPosColl != null)
@@ -71,13 +73,52 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 					newSpecimenBizLogic.insert(specimen, dao, sessionDataBean);
 				}
 			}
-			dao.commit();
+			Double totalAliquotQty = calculateAvailableQuantityForParent(aliquot, parentSpecimenAvailQty);
+			updateParentSpecimen(aliquot.getSpecimen(), totalAliquotQty, dao);
 		}
 		catch (final ApplicationException exp)
 		{
 			logger.error(exp.getMessage(), exp);
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
+	}
+
+	/**
+	 * This function calculates the available quantity of parent after creating
+	 * aliquots.
+	 * @param specimenList : specimenList
+	 * @param aliquotForm : aliquotForm
+	 */
+	private Double calculateAvailableQuantityForParent(Aliquot aliquot, Double parentSpecimenAvailQty)
+	{
+		Double totalAliquotQty = 0.0;
+		final DecimalFormat dFormat = new DecimalFormat("#.000");
+		totalAliquotQty = parentSpecimenAvailQty - (aliquot.getQuantityPerAliquot() * aliquot.getCount());
+		totalAliquotQty = Double.parseDouble(dFormat.format(totalAliquotQty));
+		return totalAliquotQty;
+	}
+	/**
+	 * Update Parent Specimen.
+	 * @param parentSpecimen Specimen
+	 * @param totalAliquotQty Double
+	 * @param dao DAO
+	 * @throws ApplicationException ApplicationException
+	 */
+	private void updateParentSpecimen(Specimen parentSpecimen, Double totalAliquotQty,
+			DAO dao) throws ApplicationException
+	{
+		if(totalAliquotQty < 0L)
+		{
+			final String quantityString = ApplicationProperties
+				.getValue("specimen.availableQuantity");
+			throw this.getBizLogicException(null, "errors.availablequantity",
+					quantityString); 
+		}
+		Object pSpec =  dao.retrieveById(AbstractSpecimen.class.getName(),
+				parentSpecimen.getId());
+		((Specimen)pSpec).setAvailableQuantity(totalAliquotQty);
+		dao.update(pSpec);
+		dao.commit();
 	}
 
 	/**

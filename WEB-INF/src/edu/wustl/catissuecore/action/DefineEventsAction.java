@@ -76,7 +76,11 @@ public class DefineEventsAction extends BaseAction
 			CollectionProtocolBean cpBean)
 	{
 		cpBean.setPrincipalInvestigatorId(cpForm.getPrincipalInvestigatorId());
-		cpBean.setCoordinatorIds(cpForm.getCoordinatorIds());
+		long[] coordinatorsId = (long[])cpForm.getCoordinatorIds();
+		if(coordinatorsId[0] != 0)
+		{
+		  cpBean.setCoordinatorIds(cpForm.getCoordinatorIds());
+		}
 		/**For Clinical Diagnosis Subset  **/
 		cpBean.setClinicalDiagnosis(cpForm.getProtocolCoordinatorIds());
 		cpBean.setTitle(cpForm.getTitle());
