@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -139,23 +140,37 @@ public class SpecimenAutoStorageContainer {
 	protected void setSpecimenStorageDetails(LinkedList<GenericSpecimen> specimenDataBeanList, 
 			String className, SessionDataBean bean, Long cpId ,DAO dao) throws ApplicationException
 	{
-			try {
+		try
+		{
 				StorageContainerForSpecimenBizLogic bizLogic =
 					new StorageContainerForSpecimenBizLogic();
 				Iterator<GenericSpecimen> itr = specimenDataBeanList.iterator();
+				Map<String, LinkedList<GenericSpecimen>> spTypeMap =
+					new HashMap<String, LinkedList<GenericSpecimen>>();
+				String specimenType = null;
 				while(itr.hasNext())
 				{
-					Map containerMap = null;
 					GenericSpecimen specimenDataBean = 
 						(GenericSpecimen)itr.next();
-					containerMap = bizLogic.getAllocatedContainerMapForSpecimen(
-					AppUtility.setparameterList(cpId.longValue(),className,0,
-					specimenDataBean.getType()), bean, dao);
-					LinkedList<GenericSpecimen> genSpList = new LinkedList<GenericSpecimen>();
-					genSpList.add(specimenDataBean);
-					populateStorageLocations(genSpList,
-							cpId.longValue(), containerMap, bean, className);
+					specimenType = specimenDataBean.getType();
+					if(!spTypeMap.keySet().contains(specimenType))
+					{
+						spTypeMap.put(specimenType,new LinkedList<GenericSpecimen>());
+					}
+					spTypeMap.get(specimenType).add(specimenDataBean);
 				}
+				Iterator<String> spTIterator = spTypeMap.keySet().iterator();
+				Map containerMap = null;
+				while(spTIterator.hasNext())
+				{
+					specimenType = spTIterator.next(); 	
+					containerMap = bizLogic.getAllocatedContainerMapForSpecimen(
+						AppUtility.setparameterList(cpId.longValue(),className,0,
+						specimenType), bean, dao);
+					populateStorageLocations(spTypeMap.get(specimenType),
+						cpId.longValue(), containerMap, bean, className);
+				}
+				spTypeMap.clear();
 			}
 			catch (ApplicationException exception) 
 			{
