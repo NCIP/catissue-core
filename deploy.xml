@@ -2321,7 +2321,7 @@
 	</target>
 
 	<target name="upgrade_de_integration_restructure_data_mysql" description="upgrade DE integrationrestructure data for mysql">
-		<java classname="edu.wustl.catissuecore.querysuite.metadata.DERestructureDataUtil" fork="true" failonerror="true">
+		<java classname="edu.wustl.catissuecore.querysuite.metadata.DERestructureDataUtil" fork="true" failonerror="true" maxmemory="512m">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
 			<classpath refid="temp.classpath" />
 			<classpath>
@@ -2340,7 +2340,7 @@
 	</target>
 
 	<target name="upgrade_de_integration_restructure_data_oracle" description="upgrade DE integration restructure data for oracle">
-		<java classname="edu.wustl.catissuecore.querysuite.metadata.DERestructureDataUtil" fork="true" failonerror="true">
+		<java classname="edu.wustl.catissuecore.querysuite.metadata.DERestructureDataUtil" fork="true" failonerror="true" maxmemory="512m">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
 			<classpath refid="temp.classpath" />
 			<classpath>
