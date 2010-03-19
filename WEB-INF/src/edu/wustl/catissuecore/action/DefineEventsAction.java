@@ -77,7 +77,7 @@ public class DefineEventsAction extends BaseAction
 	{
 		cpBean.setPrincipalInvestigatorId(cpForm.getPrincipalInvestigatorId());
 		long[] coordinatorsId = (long[])cpForm.getCoordinatorIds();
-		if(coordinatorsId[0] != 0)
+		if(coordinatorsId != null && coordinatorsId[0] != 0)
 		{
 		  cpBean.setCoordinatorIds(cpForm.getCoordinatorIds());
 		}
