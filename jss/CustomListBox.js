@@ -133,8 +133,12 @@ function onCustomListBoxChangeInAliquot(element,action)
 			//alert(containerName);
 	   	document.forms[0].submittedFor.value = "ForwardTo";
 		var noOfAliquots=document.getElementById('noOfAliquots').value;
+		var colProtId=document.getElementById('colProtId').value;
+		var className=document.getElementById('className').value;
+		var type=document.getElementById('type').value;
+		var aliqoutInSameContainer = document.getElementById('aliquotchk').value;
 		//alert(rowNo);
-		document.forms[0].action = action+"&rowNo="+rowNo+"&requestType=ajax&containerName="+containerName+"&noOfAliquots="+noOfAliquots;
+		document.forms[0].action = action+"&rowNo="+rowNo+"&requestType=ajax&containerName="+containerName+"&noOfAliquots="+noOfAliquots+"&className="+className+"&type="+type+"&colProtId="+colProtId+"&aliqoutInSameContainer="+aliqoutInSameContainer;
 		onContainerChange(document.forms[0].action);
 	   // document.forms[0].submit();
 
@@ -204,7 +208,7 @@ function onContainerChange(action)
 
 		var containerControl=document.getElementById("customListBox_"+index+"_1");
 		updateControlValue(rowList,index,containerControl);
-
+		onCustomListBoxChange(containerControl);
 		updateDimensionTwo(rowList,index);
 
 	}

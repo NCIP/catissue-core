@@ -409,7 +409,7 @@
 				</label>
 				</td>
 				<td class="noneditable">-${aliquotForm.className}
-				<html:hidden property="className" />
+				<html:hidden styleId="className" property="className" />
 				</td>
 				<td class="noneditable">
 				<label for="subType">
@@ -418,7 +418,7 @@
 				</td>
 				<td class="noneditable">
 					-${aliquotForm.type}
-					<html:hidden property="type" />
+					<html:hidden styleId="type" property="type" />
 				</td>
 				</tr>
 			<tr>
@@ -680,7 +680,7 @@ ${aliquotBean.jsScript}
 </table>
 
 <html:hidden property="specimenID"/>
-<html:hidden property="colProtId"/>
+<html:hidden styleId="colProtId" property="colProtId"/>
 <html:hidden property="spCollectionGroupId"/>
 <html:hidden property="nextForwardTo" />
 <html:hidden property="forwardTo" />
