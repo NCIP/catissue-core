@@ -2100,6 +2100,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				{
 					this.storageContainerIds.add(storageValue);
 				}
+				else
+				{
+					throw AppUtility.getApplicationException(null,
+							"errors.storageContainer.Multiple.inUse", "StorageContainerUtil.java");
+				}
 				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 				final StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) factory
 						.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
