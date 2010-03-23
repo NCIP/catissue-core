@@ -1497,6 +1497,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				this.storageContainerIds.clear();
 				this.allocatePositionForSpecimen(specimen);
+				this.storageContainerIds.clear();
 				this.setStorageLocationToNewSpecimen(dao, specimen, sessionDataBean, true,null,null);//bug 15260
 				persistentSpecimen.setSpecimenPosition(specimen.getSpecimenPosition());
 			}
@@ -2303,6 +2304,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen,Integer pos1,Integer pos2)
 			throws BizLogicException
 	{
+		this.storageContainerIds.clear();
 		this.setStorageLocationToNewSpecimen(dao, newSpecimen, sessionDataBean, true,pos1,pos2);
 		if (newSpecimen.getChildSpecimenCollection() != null)
 		{
