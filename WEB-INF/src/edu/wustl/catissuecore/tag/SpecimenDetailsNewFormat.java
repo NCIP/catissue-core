@@ -595,8 +595,18 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			int size)
 	{
 		//		 sb.append("<td class=\"black_ar_md\" >"); 
-		stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
-				+ "\" class=\"" + styleClass + "\" size=\"" + size + "\">");
+		/*stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
+				+ "\" class=\"" + styleClass + "\" size=\"" + size + "\">");*/
+		if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl &&
+			(nameValue[0].contains("parentName")))
+		{
+			stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
+  				+ "\" class=\"" + styleClass + "\" size=\"" + size + "disabled=\"disabled\""+"\">");
+		} 
+		else
+			stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
+  				+ "\" class=\"" + styleClass + "\" size=\"" + size + "\">");
+			
 		//		 if(nameValue.length == 3)
 		//		 {
 		//			 sb.append("<BR><SPAN nowrap>"+nameValue[2]+"</SPAN>");
