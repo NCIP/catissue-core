@@ -40,7 +40,6 @@ public class DEIntegration extends edu.common.dynamicextensions.DEIntegration.DE
 	 * @throws BizLogicException
 	 * @throws DAOException
 	 */
-	@Override
 	public void associateRecords(Long containerId, Long staticEntityRecId, Long dynaEntityRecId,
 			Long hookEntityId) throws DynamicExtensionsApplicationException,
 			DynamicExtensionsSystemException, BizLogicException, DAOException

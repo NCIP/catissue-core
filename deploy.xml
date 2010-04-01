@@ -1325,6 +1325,7 @@
 		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" />
 		<!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
 		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" />
+		<antcall target="upgrade_db_from_DE_1.4.0_to_DE_1.4.2"/>
 		<antcall target="upgrade_de_integration_restructure_metadata"/>
 
 		<antcall target="update_metadata_for_tagged_values"/>
@@ -1900,6 +1901,7 @@
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
 		</if>
+		<antcall target="upgrade_db_from_DE_1.4.0_to_DE_1.4.2"/>
 		<antcall target="upgrade_de_integration_restructure_metadata"/>
 		<antcall target="upgrade_de_integration_restructure_data"/>
 		<antcall target="upgrade_dump_cacore" />
