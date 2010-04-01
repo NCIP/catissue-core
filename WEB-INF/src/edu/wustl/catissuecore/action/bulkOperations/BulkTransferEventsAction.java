@@ -6,10 +6,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.actionForm.BulkEventOperationsForm;
-import edu.wustl.catissuecore.util.CollectionProtocolUtil;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.util.global.Validator;
 
 /**
  * @author renuka_bajpai
@@ -22,7 +20,7 @@ public class BulkTransferEventsAction extends BulkOperationAction
 	 * @param specimenRow : specimenRow
 	 * @param specimenId : specimenId
 	 * @param request : request
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	@Override
 	protected void fillFormData(BulkEventOperationsForm eventParametersForm, List specimenRow,
@@ -49,7 +47,21 @@ public class BulkTransferEventsAction extends BulkOperationAction
 				.toString());
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_FROMLOCPOS2", specimenRow.get(5)
 				.toString());
-		eventParametersForm.setFieldValue("ID_" + specimenId + "_CPID", specimenRow.get(7)
+		eventParametersForm.setFieldValue("ID_" + specimenId + "_CPID", specimenRow.get(9)
+				.toString());
+		if(Validator.isEmpty(specimenRow.get(10).toString()))
+		{
+			eventParametersForm.setFieldValue("ID_" + specimenId + "_PPI", "N/A");
+		}
+		else
+		{
+			eventParametersForm.setFieldValue("ID_" + specimenId + "_PPI", specimenRow.get(10)
+					.toString());
+		}
+
+		eventParametersForm.setFieldValue("ID_" + specimenId + "_SPECTYPE", specimenRow.get(7)
+				.toString());
+		eventParametersForm.setFieldValue("ID_" + specimenId + "_QUANTITY", specimenRow.get(8)
 				.toString());
 		//bug 14417
 		/**

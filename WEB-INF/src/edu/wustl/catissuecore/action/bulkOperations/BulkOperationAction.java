@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.action.bulkOperations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
@@ -30,6 +31,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 
 /**
  * @author renuka_bajpai
@@ -169,8 +171,11 @@ public abstract class BulkOperationAction extends SecureAction
 				specimenRow = (List) specimenDataList.get(i);
 				specimenId = specimenRow.get(0).toString();
 				//bug 15681
-				Long cpId = this.getCpIdFromSpecimenId( specimenId );
+				List cpIdAndPPI = this.getCpIdAndPPIFromSpecimenId( specimenId );
+				Object[] obj = (Object[])cpIdAndPPI.get(0);
+				Long cpId = (Long)obj[0];
 				specimenRow.add( cpId );
+				specimenRow.add(obj[1].toString());
 				/**
 				 * Implemented in BulkTransferEventsAction.java
 				 */
@@ -184,17 +189,21 @@ public abstract class BulkOperationAction extends SecureAction
 	 * @return CP id
 	 * @throws ApplicationException - ApplicationException
 	 */
-	private Long getCpIdFromSpecimenId(String specimenId) throws ApplicationException
+	private List getCpIdAndPPIFromSpecimenId(String specimenId) throws ApplicationException
 	{
-		final String colProtHql = "select scg.collectionProtocolRegistration.collectionProtocol.id"
+		List<ColumnValueBean> beanList = new ArrayList<ColumnValueBean>();
+		beanList.add(new ColumnValueBean(Long.parseLong(specimenId)));
+
+		final String colProtHql = "select scg.collectionProtocolRegistration.collectionProtocol.id,"
+		+ "scg.collectionProtocolRegistration.protocolParticipantIdentifier "
 			+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,"
 			+ " edu.wustl.catissuecore.domain.Specimen as spec "
-			+ " where spec.specimenCollectionGroup.id=scg.id and spec.id="
-			+ Long.valueOf( specimenId ).longValue();
+			+ " where spec.specimenCollectionGroup.id=scg.id and spec.id="+Long.parseLong(specimenId);
+
 		List collectionProtocolIdList;
 		collectionProtocolIdList = AppUtility.executeQuery(colProtHql);
-		final Long collectionProtocolId = (Long) collectionProtocolIdList.get(0);
-		return collectionProtocolId;	
+
+		return collectionProtocolIdList;
 	}
 
 	/**
@@ -225,7 +234,7 @@ public abstract class BulkOperationAction extends SecureAction
 	 * @param specimenRow : specimenRow
 	 * @param specimenId : specimenId
 	 * @param request : request
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	protected abstract void fillFormData(BulkEventOperationsForm eventParametersForm,
 			List specimenRow, String specimenId, HttpServletRequest request) throws ApplicationException;

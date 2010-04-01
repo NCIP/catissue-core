@@ -332,8 +332,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		{
 			list = dao.executeQuery("select id,activityStatus from edu.wustl.catissuecore.domain.User where id="+specimenEventParameter.getUser()
 					.getId());
-			
-			
+
+
 		}
 		else if (specimenEventParameter.getUser().getLoginName() != null
 				|| specimenEventParameter.getUser().getLoginName().length() > 0)
@@ -1119,13 +1119,14 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException
 	{
 
-		final String sql = "Select specimen.IDENTIFIER, specimen.LABEL, abstractSpecimen.SPECIMEN_CLASS, Container.NAME ,"
-				+ " abstractposition.POSITION_DIMENSION_ONE, abstractposition.POSITION_DIMENSION_TWO, Container.IDENTIFIER "
-				+ " from catissue_specimen specimen left join catissue_abstract_specimen abstractSpecimen on (abstractSpecimen.identifier=specimen.identifier )  "
-				+ "left join catissue_specimen_position specimenPosition on (specimen.identifier = specimenPosition.specimen_id) "
-				+ " left join catissue_container Container on (specimenPosition.Container_id=Container.IDENTIFIER) "
-				+ " left join catissue_abstract_position  abstractposition  on (abstractposition.Identifier=specimenPosition.IDENTIFIER )"
-				+ " where specimen.IDENTIFIER in ";
+		final String sql = "Select specimen.IDENTIFIER, specimen.LABEL,abstractSpecimen.SPECIMEN_CLASS, Container.NAME ,"
+			+ " abstractposition.POSITION_DIMENSION_ONE, abstractposition.POSITION_DIMENSION_TWO, Container.IDENTIFIER,"
+			+ " abstractSpecimen.SPECIMEN_TYPE,specimen.AVAILABLE_QUANTITY "
+			+ " from catissue_specimen specimen left join catissue_abstract_specimen abstractSpecimen on (abstractSpecimen.identifier=specimen.identifier )  "
+			+ " left join catissue_specimen_position specimenPosition on (specimen.identifier = specimenPosition.specimen_id) "
+			+ " left join catissue_container Container on (specimenPosition.Container_id=Container.IDENTIFIER) "
+			+ " left join catissue_abstract_position  abstractposition  on (abstractposition.Identifier=specimenPosition.IDENTIFIER )"
+			+ " where specimen.IDENTIFIER in ";
 		return this.getSpecimenDataForBulkOperations(specimenIds, sessionDataBean, sql);
 	}
 

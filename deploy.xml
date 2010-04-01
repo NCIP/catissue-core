@@ -1812,9 +1812,9 @@
 	<!--</target> -->
 	<!-- Removing unnecessary PE -->
 
-	<target name="upgrade_db" description="Upgrading Database v1.1.p4 to v1.1.p5">
-		<echo message="Upgrading Database v1.1.p4 to v1.1.p5" />
-		<antcall target="upgrade_db_from_p4_to_p5"/>
+	<target name="upgrade_db" description="Upgrading Database v1.1.p5 to v1.1.p5.1">
+		<echo message="Upgrading Database v1.1.p5 to v1.1.p5.1" />
+		<antcall target="upgrade_db_from_p5_to_p5.1"/>
 	</target>
 
 	<target name="upgrade_db_from_v1.1_to_p4" description="Target for Application and Database Upgrade from caTissue v1.1 to p4">
@@ -4375,4 +4375,39 @@ Thanking You,
 			</ant>
 			<delete dir="${temp.dir}" />
 		</target>
+
+	<target name="upgrade_db_from_p5_to_p5.1" description="Target for Database Upgrade from caTissue p5 to p5.1">
+					<echo message="Upgrading Database v1.1p5 to v1.1p5.1" />
+				    <if>
+						<equals arg1="mysql" arg2="${database.type}" />
+						<then>
+						</then>
+						<elseif>
+							<equals arg1="oracle" arg2="${database.type}" />
+							<then>
+							</then>
+						</elseif>
+						<else>
+							<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+						</else>
+					</if>
+					<antcall target="upgrade_AQ_db_from_1.2_to_1.3"/>
+				</target>
+
+			<target name="upgrade_AQ_db_from_1.2_to_1.3" description="upgrade_AQ_db_from_1.2_to_1.3">
+					<antcall target="unzip_aq_installable" />
+						<copy todir="${temp.dir}/AdvanceQuery/lib" overwrite="true">
+							<fileset dir="${base.dir}/lib">
+								<include name="ojdbc14.jar" />
+							</fileset>
+						</copy>
+					<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="aq_upgrade_db_from_1.2_to_1.3">
+						<property name="database.type" value="${database.type}" />
+						<property name="database.host" value="${database.host}" />
+						<property name="database.port" value="${database.port}" />
+						<property name="database.name" value="${database.name}" />
+						<property name="database.username" value="${database.username}" />
+						<property name="database.password" value="${database.password}" />
+					</ant>
+				</target>
 </project>
