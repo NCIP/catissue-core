@@ -1537,6 +1537,11 @@ public class NewSpecimenAction extends SecureAction
 		{
 			final QueryWhereClause queryWhereClause = new QueryWhereClause(
 					SpecimenCollectionGroup.class.getName());
+			 if(scgName.contains("'"))
+	            { 
+	             System.out.println("scgName "+scgName);	
+				 scgName = scgName.replace("'", "''");
+	           }
 			queryWhereClause.addCondition(new EqualClause("name", scgName));
 
 			spCollGroupList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
