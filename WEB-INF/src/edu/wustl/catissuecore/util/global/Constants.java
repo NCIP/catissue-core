@@ -238,7 +238,7 @@ public class Constants
 	public static final String VIEW_ALL_RECORDS = "viewAllRecords";
 	public static final String VIEW_LIMITED_RECORDS = "viewLimitedRecords";
 	public static final String SAVE_QUERY_ACTION = "SaveQueryAction.do";
-	public static final String RETRIEVE_QUERY_ACTION = "RetrieveQueryAction.do";
+	public static final String RETRIEVE_QUERY_ACTION = "ShowQueryDashboardAction.do";
 	public static final String FETCH_AND_EXECUTE_QUERY_ACTION = "ExecuteQueryAction.do";
 	public static final String TREE_NODE_LIMIT_EXCEEDED_RECORDS = "treeNodeLimitExceededRecords";
 	public static final String MAXIMUM_TREE_NODE_LIMIT = "resultView.maximumTreeNodeLimit";
@@ -265,10 +265,10 @@ public class Constants
 	public static final String OVERRIDE_FALSE = "false";
 	/**
 	 * Name: Abhishek Mehta
-	 * Reviewer Name : Deepti 
+	 * Reviewer Name : Deepti
 	 * Bug ID: 5661
 	 * Patch ID: 5661_1
-	 * See also: 1-4 
+	 * See also: 1-4
 	 * Description : Constants added for Query Module
 	 */
 
@@ -444,7 +444,7 @@ public class Constants
 	public static final String CLINICAL_DIAGNOSIS_LIST = "clinicalDiagnosisList";
 	public static final String HISTOLOGICAL_QUALITY_LIST = "histologicalQualityList";
 
-	//For Specimen Event Parameters.	
+	//For Specimen Event Parameters.
 	public static final String REQUEST_TO_ORDER = "requestToOrder";
 	public static final String ADD_TO_ORDER_LIST = "addToOrderList";
 	public static final String REQUESTED_FOR_BIOSPECIMENS = "RequestedBioSpecimens";
@@ -598,7 +598,7 @@ public class Constants
 	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_ADD_ACTION = "TissueSpecimenReviewEventParametersAdd.do";
 	public static final String TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_EDIT_ACTION = "TissueSpecimenReviewEventParametersEdit.do";
 
-	//	Constants required in DisposalEventParameters.jsp Page	
+	//	Constants required in DisposalEventParameters.jsp Page
 	public static final String DISPOSAL_EVENT_PARAMETERS_SEARCH_ACTION = "DisposalEventParametersSearch.do";
 	public static final String DISPOSAL_EVENT_PARAMETERS_ADD_ACTION = "DisposalEventParametersAdd.do";
 	public static final String DISPOSAL_EVENT_PARAMETERS_EDIT_ACTION = "DisposalEventParametersEdit.do";
@@ -841,7 +841,7 @@ public class Constants
 	//public static final String APPROVE_USER_REJECT_STATUS = "Reject";
 	//public static final String APPROVE_USER_PENDING_STATUS = "Pending";
 
-	//Approve User Constants		
+	//Approve User Constants
 	public static final int ZERO = 0;
 	public static final int ONE = 1;
 	public static final int START_PAGE = 1;
@@ -1098,9 +1098,9 @@ public class Constants
 
 	//Mandar 25-Apr-06 : bug 1414 : Tissue units as per type
 	// tissue types with unit= count
-	public static final String FROZEN_TISSUE_BLOCK = "Frozen Tissue Block"; // PREVIOUS FROZEN BLOCK 
-	public static final String FROZEN_TISSUE_SLIDE = "Frozen Tissue Slide"; // SLIDE	 
-	public static final String FIXED_TISSUE_BLOCK = "Fixed Tissue Block"; // PARAFFIN BLOCK	 
+	public static final String FROZEN_TISSUE_BLOCK = "Frozen Tissue Block"; // PREVIOUS FROZEN BLOCK
+	public static final String FROZEN_TISSUE_SLIDE = "Frozen Tissue Slide"; // SLIDE
+	public static final String FIXED_TISSUE_BLOCK = "Fixed Tissue Block"; // PARAFFIN BLOCK
 	public static final String NOT_SPECIFIED = "Not Specified";
 
 	public static final String WITHDRAWN = "Withdrawn";
@@ -1181,7 +1181,7 @@ public class Constants
 
 	public static final String SEARCH_RESULT = "SearchResult.csv";
 
-	//	Mandar : LightYellow and Green colors for CollectionProtocol SpecimenRequirements. Bug id: 587 
+	//	Mandar : LightYellow and Green colors for CollectionProtocol SpecimenRequirements. Bug id: 587
 	//	public static final String ODD_COLOR = "#FEFB85";
 	//	public static final String EVEN_COLOR = "#A7FEAB";
 	//	Light and dark shades of GREY.
@@ -1398,7 +1398,7 @@ public class Constants
 	public static final String SURGICAL_PATHOLOGY_REPORT = "Surgical Pathology Report";
 	public static final String CLINICAL_ANNOTATIONS = "Clinical Annotations";
 
-	//Constants for Specimen Collection Group name- new field 
+	//Constants for Specimen Collection Group name- new field
 	public static final String RESET_NAME = "resetName";
 
 	// Labels for Storage Containers
@@ -1411,7 +1411,7 @@ public class Constants
 	public static final String DERIVED_SPECIMEN = "Derived";
 	public static final String ALIQUOT = "Aliquot";
 
-	//Constant for length of messageBody in Reported problem page  
+	//Constant for length of messageBody in Reported problem page
 	public static final int MESSAGE_LENGTH = 500;
 	public static final String NEXT_NUMBER = "nextNumber";
 
@@ -1423,7 +1423,7 @@ public class Constants
 	//	    }
 	//	    return "PI_COLLECTION_PROTOCOL_"+identifier;
 	//	}
-	//	
+	//
 	//	public static final String getCollectionProtocolCoordinatorGroupName(Long identifier)
 	//	{
 	//	    if(identifier == null)
@@ -1432,7 +1432,7 @@ public class Constants
 	//	    }
 	//	    return "COORDINATORS_COLLECTION_PROTOCOL_"+identifier;
 	//	}
-	//	
+	//
 	//	public static final String getDistributionProtocolPIGroupName(Long identifier)
 	//	{
 	//	    if(identifier == null)
@@ -1441,7 +1441,7 @@ public class Constants
 	//	    }
 	//	    return "PI_DISTRIBUTION_PROTOCOL_"+identifier;
 	//	}
-	//	
+	//
 	//	public static final String getCollectionProtocolPGName(Long identifier)
 	//	{
 	//	    if(identifier == null)
@@ -1450,7 +1450,7 @@ public class Constants
 	//	    }
 	//	    return "COLLECTION_PROTOCOL_"+identifier;
 	//	}
-	//	
+	//
 	//	public static final String getDistributionProtocolPGName(Long identifier)
 	//	{
 	//	    if(identifier == null)
@@ -1541,7 +1541,7 @@ public class Constants
 	public static final String ARRAY_SPEC_NOT_COMPATIBLE_EXCEPTION_MESSAGE = "Please add compatible specimens to specimen array (belong to same specimen class & specimen types of Array)";
 	public static final String ARRAY_MOLECULAR_QUAN_EXCEPTION_MESSAGE = "Please enter quantity for Molecular Specimen ---->";
 	*//**
-		 * Specify the SPECIMEN_ARRAY_LIST as key for specimen array type list 
+		 * Specify the SPECIMEN_ARRAY_LIST as key for specimen array type list
 		 */
 	public static final String SPECIMEN_ARRAY_TYPE_LIST = "specimenArrayList";
 	public static final String SPECIMEN_ARRAY_CLASSNAME = "edu.wustl.catissuecore.domain.SpecimenArray";
@@ -1575,7 +1575,7 @@ public class Constants
 	public static final String ENDS_WITH = "Ends With";
 	public static final String NOT_BETWEEN = "Not Between";
 
-	// Used in array action 
+	// Used in array action
 	public static final String ARRAY_TYPE_ANY_VALUE = "2";
 	public static final String ARRAY_TYPE_ANY_NAME = "Any";
 	// end
@@ -1645,17 +1645,17 @@ public class Constants
 	 * Name: Prafull
 	 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
 	 * object of class QuerySessionData will be saved session, which will contain the required information for query execution while navigating through query result pages.
-	 * Changes resultper page options, removed 5000 from the array & added 500 as another option. 
+	 * Changes resultper page options, removed 5000 from the array & added 500 as another option.
 	 */
 	public static final int[] RESULT_PERPAGE_OPTIONS = {10, 50, 100, 500, 1000};
 
 	/**
-	 * Specify the SPECIMEN_MAP_KEY field ) used in multiple specimen applet action.  
+	 * Specify the SPECIMEN_MAP_KEY field ) used in multiple specimen applet action.
 	 */
 	public static final String SPECIMEN_MAP_KEY = "Specimen_derived_map_key";
 
 	/**
-	 * Specify the SPECIMEN_MAP_KEY field ) used in multiple specimen applet action.  
+	 * Specify the SPECIMEN_MAP_KEY field ) used in multiple specimen applet action.
 	 */
 	public static final String CONTAINER_MAP_KEY = "container_map_key";
 
@@ -1781,7 +1781,7 @@ public class Constants
 	 */
 	public static final String FUTURE_SCG = "future";
 
-	// Patch ID: SimpleSearchEdit_5 
+	// Patch ID: SimpleSearchEdit_5
 	// AliasName constants, used in Edit in Simple Search feature.
 	public static final String SPREADSHEET_COLUMN_LIST = "spreadsheetColumnList";
 	public static final String ALIAS_COLLECTION_PROTOCOL = "CollectionProtocol";
@@ -1945,7 +1945,7 @@ public class Constants
 	public static final String ACTION_ORDER_BIOSPECIMENARRAY = "OrderBiospecimenArray.do";
 	public static final String ACTION_ORDER_PATHOLOGYCASE = "OrderPathologyCase.do";
 
-	//Specimen Label generation realted constants 
+	//Specimen Label generation realted constants
 	public static final String PARENT_SPECIMEN_ID_KEY = "parentSpecimenID";
 	public static final String PARENT_SPECIMEN_LABEL_KEY = "parentSpecimenLabel";
 	public static final String SCG_NAME_KEY = "SCGName";
@@ -2060,7 +2060,7 @@ public class Constants
 	public static final String CLICKED_NODE = "clickedNode";
 	/*
 	 * Conflict resolver constants
-	 * 
+	 *
 	 */
 
 	public static final String[] CONFLICT_LIST_HEADER = {"Participant name", "ID",
@@ -2216,7 +2216,7 @@ public class Constants
 	public static final String ID_COLUMN_ID = "ID_COLUMN_ID";
 	public static final String SQL = "SQL";
 	/**
-	 * 
+	 *
 	 */
 	public static final String SCGFORM = "SCGFORM";
 	public static final String SPECIMENFORM = "SpecimenForm";
@@ -2239,7 +2239,7 @@ public class Constants
 	public static final String CATEGORY = "Category";
 
 	/**
-	 * 
+	 *
 	 * Constant required for Specimen Array Delete Action
 	 */
 	public static final String DELETE_SPECIMEN_ARRAY = "DeleteSpecimenArray.do";
@@ -2269,7 +2269,7 @@ public class Constants
 	public static final String CHILD_STATUS = "Child_Status";
 	public static final String CHILD_DATE = "Child_Date";
 	public static final String CHILD_OFFSET = "Child_Offset";
-	// COnstants required for Collection Protocol Tree 
+	// COnstants required for Collection Protocol Tree
 	public static final String ROOTNODE_FOR_CPTREE = "rootnode";
 	public static final String OBJECTNAME_FOR_CP = "cpName";
 
@@ -2558,7 +2558,7 @@ public class Constants
 	public static final String TABLE_ALIAS_NAME = "aliasName";
 	public static final String VIEW_TYPE = "viewType";
 
-	//have to ask deepti 
+	//have to ask deepti
 	public static final String IS_SIMPLE_SEARCH = "isSimpleSearch";
 	public static final String SEARCH_OBJECT_ACTION = "/SearchObject.do";
 	public static final String ADMINISTRATOR = "Administrator";

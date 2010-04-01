@@ -1,6 +1,6 @@
 /*
  * Ext JS Library 2.1
- * 
+ *
  */
 
 Ext.onReady(function(){
@@ -14,7 +14,7 @@ Ext.onReady(function(){
 		this.el.dom.qtip = this.tooltip;
 		}
 	};
-	
+
 	// end Here
 
 
@@ -30,7 +30,7 @@ Ext.onReady(function(){
 			{
                 text: 'Change Password',
 				tooltip:'Change Password',
-			    href :'ChangePassword.do?operation=edit&pageOf=pageOfChangePassword'                      
+			    href :'ChangePassword.do?operation=edit&pageOf=pageOfChangePassword'
             }
         ]
     });
@@ -42,17 +42,17 @@ Ext.onReady(function(){
 			{
                 text: 'Saved Queries',
 				tooltip:'Saved Queries',
-			    href : 'RetrieveQueryAction.do'                       
+			    href : 'ShowQueryDashboardAction.do'
             },
 			{
                 text: 'Simple',
 				tooltip:'Simple Search',
-			    href : 'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface'                       
+			    href : 'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface'
             },
 			{
                 text: 'Advanced',
 				tooltip:'Advanced Search',
-			    href : 'QueryWizard.do?'                       
+			    href : 'QueryWizard.do?'
             },
             {
                 text: 'My List View',
@@ -81,22 +81,22 @@ Ext.onReady(function(){
 			{
 				text: 'UML Model',
 				href:'#',
-				handler: getUmlModelLink, 
+				handler: getUmlModelLink,
 				tooltip:'UML Model'
-			}           
+			}
         ]
     });
-	
+
     var tb = new Ext.Toolbar();
     tb.render('toolbarLoggedIn');
-        
+
 	tb.add(new Ext.Toolbar.MenuButton({text: 'Home',link:'Home.do',handler: handleMenu,menu: menuHome}),
-	        
+
 		{
        		text: 'Search',
             menu: menu_search  // assign menu by instance
         },
-			
+
 		{	text:'Help',
 			menu: helpMenu
 		}
@@ -114,6 +114,6 @@ Ext.onReady(function(){
 	{
 	document.location.href = item.link;
 	}
-	
-    
+
+
 });

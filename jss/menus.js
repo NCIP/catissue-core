@@ -1,6 +1,6 @@
 /*
  * Ext JS Library 2.1
- * 
+ *
  */
 
 Ext.onReady(function(){
@@ -14,7 +14,7 @@ Ext.onReady(function(){
 		this.el.dom.qtip = this.tooltip;
 		}
 	};
-	
+
 	// end Here
 
 
@@ -30,7 +30,7 @@ Ext.onReady(function(){
 			{
                 text: 'Change Password',
 				tooltip:'Change Password',
-			    href :'ChangePassword.do?operation=edit&pageOf=pageOfChangePassword'                      
+			    href :'ChangePassword.do?operation=edit&pageOf=pageOfChangePassword'
             }
         ]
     });
@@ -50,10 +50,10 @@ Ext.onReady(function(){
 							href:'User.do?operation=add&pageOf=pageOfUserAdmin'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfUserAdmin&aliasName=User'
                         }, {
                             text: 'Approve New Users',
-                            href:'ApproveUserShow.do?pageNum=1' 
+                            href:'ApproveUserShow.do?pageNum=1'
 	                       }
                     ]
                 }
@@ -70,8 +70,8 @@ Ext.onReady(function(){
 							href:'Institution.do?operation=add&pageOf=pageOfInstitution'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution' 
-                        } 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfInstitution&aliasName=Institution'
+                        }
                     ]
                 }
             },
@@ -87,8 +87,8 @@ Ext.onReady(function(){
 							href:'Department.do?operation=add&pageOf=pageOfDepartment'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfDepartment&aliasName=Department' 
-                        } 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfDepartment&aliasName=Department'
+                        }
                     ]
                 }
             },
@@ -104,12 +104,12 @@ Ext.onReady(function(){
 							href:'CancerResearchGroup.do?operation=add&pageOf=pageOfCancerResearchGroup'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfCancerResearchGroup&aliasName=CancerResearchGroup' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfCancerResearchGroup&aliasName=CancerResearchGroup'
                         }
                     ]
                 }
             },
-             
+
 			  {
                 text: 'Site',
 				tooltip:'Add Site',
@@ -122,7 +122,7 @@ Ext.onReady(function(){
                             href:'Site.do?operation=add&pageOf=pageOfSite'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfSite&aliasName=Site' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfSite&aliasName=Site'
                         }
                     ]
                 }
@@ -139,7 +139,7 @@ Ext.onReady(function(){
                              href:'StorageType.do?operation=add&pageOf=pageOfStorageType'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfStorageType&aliasName=StorageType' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfStorageType&aliasName=StorageType'
                         }
                     ]
                 }
@@ -176,7 +176,7 @@ Ext.onReady(function(){
                             href:'SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfSpecimenArrayType&aliasName=SpecimenArrayType' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfSpecimenArrayType&aliasName=SpecimenArrayType'
                         }
                     ]
                 }
@@ -193,7 +193,7 @@ Ext.onReady(function(){
                             href:'Biohazard.do?operation=add&pageOf=pageOfBioHazard'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=Biohazard' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfBioHazard&aliasName=Biohazard'
                         }
                     ]
                 }
@@ -211,7 +211,7 @@ Ext.onReady(function(){
                             href:'OpenCollectionProtocol.do?pageOf=pageOfmainCP&operation=add'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfCollectionProtocol&aliasName=CollectionProtocol'
                         }
                     ]
                 }
@@ -228,7 +228,7 @@ Ext.onReady(function(){
                             href:'DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol'
                         }, {
                             text: 'Edit',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfDistributionProtocol&aliasName=DistributionProtocol' 
+                            href:'SimpleQueryInterface.do?pageOf=pageOfDistributionProtocol&aliasName=DistributionProtocol'
                         }
                     ]
                 }
@@ -335,7 +335,7 @@ Ext.onReady(function(){
                         }
                     ]
                 }
-            }, 
+            },
 			  {
                 text: 'Distribution',
 				tooltip:'Specimen Report',
@@ -376,17 +376,17 @@ Ext.onReady(function(){
 			{
                 text: 'Saved Queries',
 				tooltip:'Saved Queries',
-			    href : 'RetrieveQueryAction.do'                       
+			    href : 'ShowQueryDashboardAction.do'
             },
 			{
                 text: 'Simple',
 				tooltip:'Simple Search',
-			    href : 'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface'                       
+			    href : 'SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface'
             },
 			{
                 text: 'Advanced',
 				tooltip:'Advanced Search',
-			    href : 'QueryWizard.do?'                       
+			    href : 'QueryWizard.do?'
             },
             {
                 text: 'My List View',
@@ -395,7 +395,7 @@ Ext.onReady(function(){
             }
         ]
     });
-    
+
 	//For Help Tab
 
 	var helpMenu = new Ext.menu.Menu({
@@ -415,21 +415,21 @@ Ext.onReady(function(){
 			{
 				text: 'UML Model',
 				href:'#',
-				handler: getUmlModelLink, 
+				handler: getUmlModelLink,
 				tooltip:'UML Model'
-			}           
+			}
         ]
     });
-	
+
     var tb = new Ext.Toolbar();
     tb.render('toolbarLoggedIn');
-        
+
 	tb.add(new Ext.Toolbar.MenuButton({text: 'Home',link:'Home.do',handler: handleMenu,menu: menuHome}),
-	        
+
 		{
-            text:'Administrative Data',	
+            text:'Administrative Data',
             menu: menu  // assign menu by instance
-        }, 
+        },
         {
             text:'Biospecimen Data',
             menu: menu_bio  // assign menu by instance
@@ -441,7 +441,7 @@ Ext.onReady(function(){
 		{
 			 text: 'Bulk Operations',link:'BulkOperation.do?pageOf=pageOfBulkOperation',
 			 handler: handleMenu,tooltip:'Bulk Operations'
-		},			
+		},
 		{	text:'Help',
 			menu: helpMenu
 		}
@@ -459,5 +459,5 @@ Ext.onReady(function(){
 	{
 	document.location.href = item.link;
 	}
-    
+
 });

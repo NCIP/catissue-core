@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <!--
  Kapil: For splitter UI. A dummy parameter added to the URL to have forcefully execution of the JSP, otherwise browser uses
- page from cache. This is required to do since becuase of chache splitter was not working correctly. 
+ page from cache. This is required to do since becuase of chache splitter was not working correctly.
  This is added to main menu pages.
 -->
 	<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
@@ -24,7 +24,7 @@
               </td>
               <!-- link 2 ends -->
 			 <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
-			  
+
               <!-- link 3 begins -->
               <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageBioSpecimen.do?dummy=dummy'">
                 <html:link styleClass="mainMenuLink" page="/ManageBioSpecimen.do?dummy=dummy">
@@ -35,7 +35,7 @@
               <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 		      <!-- link 4 begins -->
               <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()">
-                <html:link styleClass="mainMenuLink" page="/RetrieveQueryAction.do">
+                <html:link styleClass="mainMenuLink" page="/ShowQueryDashboardAction.do">
                 	<bean:message key="app.search" />
                 </html:link>
               </td>
@@ -48,7 +48,7 @@
                 </html:link>
               </td>
               <!-- link 2 ends -->
-			  <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>	
+			  <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
   		      <!-- link 5 begins -->
               <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" >
                 <html:link styleClass="mainMenuLink" target="_NEW"
@@ -57,15 +57,15 @@
                 </html:link>
               </td>
               <!-- link 5 ends -->
-              
+
               <!--
-              <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>	
+              <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  <td height="20" class="mainMenuItem mainMenuLink" >
 			  <script src="<%=request.getContextPath()%>/jss/titli.js"></script>
               <input style = "font-size:0.9em" value = "TiTLi Search" onclick = "this.value = ''" onblur = "if(this.value=='') {this.value = 'TiTLi Search';}" type ="text" name = "searchString" id = "searchString" onkeypress="return titliOnEnter(event, this, document.getElementById('go'))" />
-				<a class = "mainMenuLink"  id="go" href ="TitliInitialiseSearch.do" onclick = "this.href= this.href + '?searchString='+document.getElementById('searchString').value">Go</a>	
+				<a class = "mainMenuLink"  id="go" href ="TitliInitialiseSearch.do" onclick = "this.href= this.href + '?searchString='+document.getElementById('searchString').value">Go</a>
               </td> -->
-            
+
               <td>
               	<img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" />
               </td>
