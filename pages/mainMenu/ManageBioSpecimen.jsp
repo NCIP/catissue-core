@@ -35,7 +35,7 @@
               <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 		      <!-- link 4 begins -->
               <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()">
-                <html:link styleClass="mainMenuLink" page="/ShowQueryDashboardAction.do">
+                <html:link styleClass="mainMenuLink" page="/RetrieveQueryAction.do">
                 	<bean:message key="app.search" />
                 </html:link>
               </td>

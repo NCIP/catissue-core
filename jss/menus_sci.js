@@ -42,7 +42,7 @@ Ext.onReady(function(){
 			{
                 text: 'Saved Queries',
 				tooltip:'Saved Queries',
-			    href : 'ShowQueryDashboardAction.do'
+			    href : 'RetrieveQueryAction.do'
             },
 			{
                 text: 'Simple',

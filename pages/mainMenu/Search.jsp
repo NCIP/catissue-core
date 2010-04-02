@@ -36,7 +36,7 @@
 
 		      <!-- link 4 begins -->
 		      <td height="20" class="mainMenuItemSelected">
-                <html:link styleClass="mainMenuLink" page="/ShowQueryDashboardAction.do">
+                <html:link styleClass="mainMenuLink" page="/RetrieveQueryAction.do">
                 	<bean:message key="app.search" />
                 </html:link>
               </td>

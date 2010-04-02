@@ -238,7 +238,7 @@ public class Constants
 	public static final String VIEW_ALL_RECORDS = "viewAllRecords";
 	public static final String VIEW_LIMITED_RECORDS = "viewLimitedRecords";
 	public static final String SAVE_QUERY_ACTION = "SaveQueryAction.do";
-	public static final String RETRIEVE_QUERY_ACTION = "ShowQueryDashboardAction.do";
+	public static final String RETRIEVE_QUERY_ACTION = "RetrieveQueryAction.do";
 	public static final String FETCH_AND_EXECUTE_QUERY_ACTION = "ExecuteQueryAction.do";
 	public static final String TREE_NODE_LIMIT_EXCEEDED_RECORDS = "treeNodeLimitExceededRecords";
 	public static final String MAXIMUM_TREE_NODE_LIMIT = "resultView.maximumTreeNodeLimit";
