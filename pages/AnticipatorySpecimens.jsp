@@ -36,8 +36,21 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 var clinDataEntryURL = "<%=clinicalDataEntryURL%>";
 if(clinDataEntryURL != null && clinDataEntryURL != "" && clinDataEntryURL != "null")
 {
-	logout();
-	window.top.location=clinDataEntryURL;
+	var clinportalPath = clinDataEntryURL.split("?");
+	var clinportalPath1 = clinportalPath[0];
+	var clinportalPath2 = clinportalPath[1];
+
+	var request = newXMLHTTPReq();
+	request.onreadystatechange = getReadyStateHandler(request,openClinportalPage,true);
+	//send data to ActionServlet
+	//Open connection to servlet
+	request.open("POST","AjaxAction.do?method=encryptData",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	var dataToSend = clinportalPath2;
+	request.send(dataToSend);
+
+	//logout();
+	//window.top.location=clinDataEntryURL;
 }
 
 function logout()
@@ -50,6 +63,16 @@ function logout()
 	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 	var dataToSend = "";
 	request.send(dataToSend);
+}
+
+function openClinportalPage(dataString)
+{
+	var clinportalUrl=clinDataEntryURL;
+    var clinportalUrlPath = clinportalUrl.split("?");
+	var clinportalUrlPath1 = clinportalUrlPath[0];
+
+	logout();
+	window.top.location=clinportalUrlPath1 + "?method=login&path=" + dataString;
 }
 </script>
 
@@ -107,7 +130,7 @@ function updateField(type,i,isDis,valueToSet)
 //			if(object.checked )
 			{
 				var cnt = getCountByType(type);
-				
+
 				var elemId = type+"[0]"+".storageContainerForSpecimen";
 				var ele0 = document.getElementById(elemId);
 				if(ele0.selectedIndex > 0)	// not virtual
