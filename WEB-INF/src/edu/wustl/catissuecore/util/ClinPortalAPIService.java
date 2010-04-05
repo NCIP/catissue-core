@@ -27,8 +27,6 @@ public class ClinPortalAPIService
     private ClientSession clientSession = null;
 	private final String CPServerUrl = XMLPropertyHandler
 			.getValue(ClinPortalIntegrationConstants.CLINPORTAL_SERVICE_URL);
-	private final String keyPath = XMLPropertyHandler
-			.getValue(ClinPortalIntegrationConstants.KEYSTORE_FILE_PATH);
 
     /**
      * Method to initialize the CaCoreAPIService
