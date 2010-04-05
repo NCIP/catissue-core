@@ -2853,6 +2853,12 @@ Thanking You,
 		<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
 		<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
 
+		<unjar src="${temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${temp.dir}/dynamicextensions/WEB-INF/classes" />
+		<echo message="Concatenating the Application Resource Properties file" />
+		<concat destfile="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties" append="true">
+			<fileset file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties" />
+		</concat>
+		<copy file="${temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<!--<echo>Configuring logger ...</echo>
 		<antcall target="configure_log4j" />-->
 		<if>
@@ -2900,7 +2906,7 @@ Thanking You,
 		<delete dir="${export.dir}" />
 		<mkdir dir="${export.dir}" />
 
-		<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true" maxmemory="1024m">
+		<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true" maxmemory="1024m" failonerror="true">
 			<arg value="${filename}" />
 			<arg value="${mainContainerList}" />
 			<arg value="${package}" />
