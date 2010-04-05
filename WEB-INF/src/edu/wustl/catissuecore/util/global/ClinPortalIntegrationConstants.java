@@ -52,7 +52,8 @@ public class ClinPortalIntegrationConstants
     public static final String PREV_VISIT_DATE = "prevVisitDate";
     public static final String RECENT_SCG_DATE = "recentScgDate";
     public static final String PREV_SCG_DATE = "prevScgDate";
-
+    public static final String IS_COMING_FROM_CLINPORTAL = "isComingFromClinPortal";
+    public static final Object DOUBLE_QUOTE = "";
 
 }
 

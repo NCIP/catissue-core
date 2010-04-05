@@ -101,12 +101,24 @@ public class LoginAction extends XSSSupportedAction
 			LoginAction.logger.info("Inside Login Action, Just before validation");
 			final LoginForm loginForm = (LoginForm) form;
 			String loginName = loginForm.getLoginName();
-			final String userStatus = getUserStatus(loginName);
-			if (!edu.wustl.wustlkey.util.global.Constants.CSM.equals(userStatus))
+
+//			final String forwardTo = authenticateUser(request, loginForm, userStatus);
+			String forwardTo = null;
+			if(request.getParameter(ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL)!=null
+					&& !(ClinPortalIntegrationConstants.DOUBLE_QUOTE.equals(request.getParameter(ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL)))
+					&& Boolean.valueOf(request.getParameter(ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL)))
 			{
-				loginName = userStatus;
+				forwardTo = Constants.SUCCESS;
 			}
-			final String forwardTo = authenticateUser(request, loginForm, userStatus);
+			else
+			{
+				final String userStatus = getUserStatus(loginName);
+				if (!edu.wustl.wustlkey.util.global.Constants.CSM.equals(userStatus))
+				{
+					loginName = userStatus;
+				}
+				forwardTo = authenticateUser(request, loginForm, userStatus);
+			}
 			logger.info("forwardTo: "+forwardTo);
 			if (Constants.SUCCESS.equals(forwardTo))
 			{
@@ -217,7 +229,7 @@ public class LoginAction extends XSSSupportedAction
 		{
 			auditLogin(false,loginForm.getLoginName(),request);
 			throw securityException;
-			
+
 		}
 	}
 
@@ -229,20 +241,20 @@ public class LoginAction extends XSSSupportedAction
 	 */
 	private void auditLogin(boolean loginOK, String loginName,HttpServletRequest request) throws ApplicationException
 	{
-		
+
 		HibernateDAO dao = (HibernateDAO)DAOConfigFactory.getInstance().getDAOFactory
 		(CommonServiceLocator.getInstance().getAppName()).getDAO();
-		
+
 		try
 		{
 			Long userId = null;
 			Long csmUserId = null;
 			dao.openSession(null);
-			
+
 			final String userIdhql  = "select user.id, user.csmUserId from edu.wustl.catissuecore.domain.User user where "
 				+ "user.activityStatus= " + "'" + Status.ACTIVITY_STATUS_ACTIVE.toString()
 				+ "' and user.loginName =" + "'" + loginName + "'";
-		
+
 			List UserIds = dao.executeQuery(userIdhql);
 			if (UserIds != null && !UserIds.isEmpty())
 			{
@@ -250,10 +262,10 @@ public class LoginAction extends XSSSupportedAction
 				userId  = (Long)obj[0];
 				csmUserId = (Long)obj[1];
 			}
-			
+
 			LoginDetails loginDetails = new LoginDetails(userId,
 					csmUserId,request.getRemoteAddr());
-			
+
 			((HibernateDAO)dao).auditLoginEvents(loginOK,loginDetails);
 			dao.commit();
 		}
@@ -262,7 +274,7 @@ public class LoginAction extends XSSSupportedAction
 			dao.closeSession();
 		}
 	}
-	
+
 	/**
 	 * This method will check if user got administrator approval.
 	 * @param request HttpServletRequest
@@ -416,10 +428,10 @@ public class LoginAction extends XSSSupportedAction
 		{
 			adminUser = true;
 		}
-		
+
 		final SessionDataBean sessionData = setSessionDataBean(validUser, ipAddress, adminUser);
 		logger.info("creating session data bean "+sessionData);
-		
+
 		LoginAction.logger.debug("CSM USer ID ....................... : " + validUser.getCsmUserId());
 		session.setAttribute(Constants.SESSION_DATA, sessionData);
 		session.setAttribute(Constants.USER_ROLE, validUser.getRoleId());

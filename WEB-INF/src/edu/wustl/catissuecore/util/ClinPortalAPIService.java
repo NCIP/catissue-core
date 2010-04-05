@@ -40,7 +40,7 @@ public class ClinPortalAPIService
     {
         try
         {
-            System.setProperty("javax.net.ssl.trustStore", keyPath);
+//            System.setProperty("javax.net.ssl.trustStore", keyPath);
             final HostnameVerifier hostVerifier = new HostnameVerifier()
             {
                 public boolean verify(final String urlHostName,final SSLSession session)

@@ -74,7 +74,8 @@ public class UrlFeatureAction extends XSSSupportedAction
 			//Forward to the Login
 			actionForward = mapping.findForward(ClinPortalIntegrationConstants.LOGIN);
 		}
-		String path = actionForward.getPath();//+"&participantId="+pId;
+//		String path = actionForward.getPath();//+"&participantId="+pId;
+		String path = actionForward.getPath()+ ClinPortalIntegrationConstants.DELIMETER + ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL+"=true";
 		ActionForward newActionForward = new ActionForward();
 		newActionForward.setName(actionForward.getName());
 		newActionForward.setRedirect(false);
