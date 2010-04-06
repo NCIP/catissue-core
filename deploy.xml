@@ -618,7 +618,6 @@
 			<replacefilter token="@@IDP-ENABLED@@" value="${idp.enabled}" />
 			<replacefilter token="@@SESSION-TIME-OUT@@" value="${session.timeout}" />
 			<replacefilter token="@@APP-ADDITIONAL-INFO@@" value="${app.additional.info}" />
-			<replacefilter token="@@ClinPortalKeyStorePath@@" value="${clinportal.keyStorePath}" />
 			<replacefilter token="@@integrationEnabled@@" value="${clinportal.integrationEnabled}" />
 			<replacefilter token="@@ClinPortalURL@@" value="${clinportal.url}" />
 
