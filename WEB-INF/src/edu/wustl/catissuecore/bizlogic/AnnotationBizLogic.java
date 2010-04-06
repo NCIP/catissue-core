@@ -14,13 +14,23 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.common.dynamicextensions.domain.integration.AbstractRecordEntry;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.deintegration.DEIntegration;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StudyFormContext;
+import edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry;
+import edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry;
+import edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.DAO;
@@ -54,14 +64,14 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	 */
 	public AnnotationBizLogic()
 	{
-		//setAppName(DynamicExtensionDAO.getInstance().getAppName());
+		super();
 	}
 
 	/**
 	 * @param staticEntityId staticEntityId.
 	 * @return List of all dynamic entities Objects from a given static entity
 	 * eg: returns all dynamic entity objects from a Participant,Specimen etc
-	 * @throws DynamicExtensionsSystemException
+	 * @throws DynamicExtensionsSystemException DynamicExtensionsSystemException
 	 */
 	public List getListOfDynamicEntities(long staticEntityId) throws DynamicExtensionsSystemException
 	{
@@ -180,7 +190,12 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		return dynEntitiesIdList;
 	}
 
-
+	/**
+	 * Get Study Form Context.
+	 * @param containerId Long
+	 * @throws BizLogicException BizLogicException
+	 * @return StudyFormContext
+	 */
 	public StudyFormContext getStudyFormContext(Long containerId) throws BizLogicException
 	{
 		List<StudyFormContext> sfcList = this.retrieve(StudyFormContext.class.getName(),
@@ -196,13 +211,15 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * this method returns DynamicRecord From association id
-	 * @param recEntryId
-	 * @return
-	 * @throws DynamicExtensionsApplicationException
-	 * @throws DynamicExtensionsSystemException
-	 * @throws SQLException
-	 * @throws DAOException
+	 * this method returns DynamicRecord From association id.
+	 * @param recEntryId Long
+	 * @param containerId Long
+	 * @param recEntryEntityId Long
+	 * @return Collection
+	 * @throws DynamicExtensionsSystemException DynamicExtensionsSystemException
+	 * @throws DynamicExtensionsApplicationException DynamicExtensionsApplicationException
+	 * @throws SQLException SQLException
+	 * @throws DAOException DAOException
 	 */
 	public Collection getDynamicRecordIdFromStaticId(Long recEntryId, Long containerId,
 			Long recEntryEntityId) throws DynamicExtensionsSystemException,
@@ -257,6 +274,128 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 
 		return recordEntryId;
 	}*/
+	/**
+	 * Create Record Entry.
+	 * @param staticEntityName String
+	 * @param selectedStaticEntityRecordId String
+	 * @return AbstractRecordEntry
+	 */
+	public AbstractRecordEntry createRecordEntry(String staticEntityName,
+			String selectedStaticEntityRecordId)
+	{
+		AbstractRecordEntry abstractRecordEntry = null;
+		if (staticEntityName.equals(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY))
+		{
+			abstractRecordEntry = new ParticipantRecordEntry();
+			Participant participant = new Participant();
+			participant.setId(Long.valueOf(selectedStaticEntityRecordId));
+			((ParticipantRecordEntry)abstractRecordEntry).setParticipant(participant);
 
-
+		}
+		else if (staticEntityName.equals(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY))
+		{
+			abstractRecordEntry = new SpecimenRecordEntry();
+			Specimen specimen = new Specimen();
+			specimen.setId(Long.valueOf(selectedStaticEntityRecordId));
+			((SpecimenRecordEntry)abstractRecordEntry).setSpecimen(specimen);
+		}
+		else if (staticEntityName.equals(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY))
+		{
+			abstractRecordEntry = new SCGRecordEntry();
+			SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+			scg.setId(Long.valueOf(selectedStaticEntityRecordId));
+			((SCGRecordEntry)abstractRecordEntry).setSpecimenCollectionGroup(scg);
+		}
+		return abstractRecordEntry;
+	}
+	/**
+	 * Get Study Form Context.
+	 * @param dynEntContainerId String
+	 * @return StudyFormContext
+	 * @throws BizLogicException BizLogicException
+	 * @throws NumberFormatException NumberFormatException
+	 */
+	public StudyFormContext getStudyFormContext(String dynEntContainerId)
+	throws BizLogicException, NumberFormatException
+	{
+		StudyFormContext studyFormContext = this.getStudyFormContext(Long
+				.valueOf(dynEntContainerId));
+		if (studyFormContext == null)
+		{
+			studyFormContext = new StudyFormContext();
+			studyFormContext.setHideForm(false);
+			studyFormContext.setContainerId(Long.valueOf(dynEntContainerId));
+			this.insert(studyFormContext);
+		}
+		return studyFormContext;
+	}
+	/**
+	 * Insert Abstract Record Entry.
+	 * @param recordEntry AbstractRecordEntry
+	 * @return AbstractRecordEntry
+	 * @throws BizLogicException BizLogicException
+	 */
+	public AbstractRecordEntry insertAbstractRecordEntry(AbstractRecordEntry recordEntry)
+		throws BizLogicException
+	{
+		this.insert(recordEntry);
+		return recordEntry;
+	}
+	/**
+	 * Get Recory Entry Type Name From Static Object.
+	 * @param staticObject Object
+	 * @return String
+	 * @throws ApplicationException ApplicationException
+	 */
+	public String getRecoryEntryTypeNameFromStaticObject(Object staticObject)
+	throws ApplicationException
+	{
+		String recordEntryType = null;
+		if(staticObject instanceof Participant)
+		{
+			recordEntryType = AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY;
+		}
+		else if(staticObject instanceof SpecimenCollectionGroup)
+		{
+			recordEntryType = AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY;
+		}
+		else if(staticObject instanceof Specimen)
+		{
+			recordEntryType = AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY;
+		}
+		else
+		{
+			ErrorKey errorkey = ErrorKey.getErrorKey("errors.item.invalid");
+			throw new ApplicationException(errorkey, null, "CaTissue Hook Entity");
+		}
+		return recordEntryType;
+	}
+	/**
+	 * Get Static Type Object.
+	 * @param staticObject Object
+	 * @return String
+	 * @throws ApplicationException ApplicationException
+	 */
+	public String getStaticTypeObject(Object staticObject) throws ApplicationException
+	{
+		String staticObjectType = null;
+		if(staticObject instanceof Participant)
+		{
+			staticObjectType = AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID;
+		}
+		else if(staticObject instanceof SpecimenCollectionGroup)
+		{
+			staticObjectType = AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID;
+		}
+		else if(staticObject instanceof Specimen)
+		{
+			staticObjectType = AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID;
+		}
+		else
+		{
+			ErrorKey errorkey = ErrorKey.getErrorKey("errors.item.invalid");
+			throw new ApplicationException(errorkey, null, "CaTissue Hook Entity");
+		}
+		return staticObjectType;
+	}
 }
