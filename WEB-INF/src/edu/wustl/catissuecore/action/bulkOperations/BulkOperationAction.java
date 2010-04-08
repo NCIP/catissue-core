@@ -31,6 +31,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 
 /**
@@ -175,7 +176,14 @@ public abstract class BulkOperationAction extends SecureAction
 				Object[] obj = (Object[])cpIdAndPPI.get(0);
 				Long cpId = (Long)obj[0];
 				specimenRow.add( cpId );
-				specimenRow.add(obj[1].toString());
+				if(obj[1] != null && !Validator.isEmpty(obj[1].toString()))
+				{
+					specimenRow.add(obj[1].toString());
+				}
+				else
+				{
+					specimenRow.add("N/A");
+				}
 				/**
 				 * Implemented in BulkTransferEventsAction.java
 				 */

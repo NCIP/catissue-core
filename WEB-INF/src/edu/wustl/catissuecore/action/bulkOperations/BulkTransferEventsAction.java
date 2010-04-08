@@ -49,15 +49,9 @@ public class BulkTransferEventsAction extends BulkOperationAction
 				.toString());
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_CPID", specimenRow.get(9)
 				.toString());
-		if(Validator.isEmpty(specimenRow.get(10).toString()))
-		{
-			eventParametersForm.setFieldValue("ID_" + specimenId + "_PPI", "N/A");
-		}
-		else
-		{
-			eventParametersForm.setFieldValue("ID_" + specimenId + "_PPI", specimenRow.get(10)
-					.toString());
-		}
+
+		eventParametersForm.setFieldValue("ID_" + specimenId + "_PPI", specimenRow.get(10)
+				.toString());
 
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_SPECTYPE", specimenRow.get(7)
 				.toString());

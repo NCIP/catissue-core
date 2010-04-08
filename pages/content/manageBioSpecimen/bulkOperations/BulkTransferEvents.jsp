@@ -58,11 +58,11 @@ function virtualLocationSelChanged(specimenId) { if(document.getElementById("Vir
 <table width="100%" border="0" cellspacing="0" cellpadding="2">
 <tr>
 
-  <td width="10%" class="tableheading"><strong><bean:message key="specimenPPI"/></strong></td>
-  <td width="10%" class="tableheading"><strong><bean:message key="specimenLabel"/></strong></td>
-  <td width="10%" class="tableheading"><strong><bean:message key="specimenType"/></strong></td>
-  <td width="10%" class="tableheading"><strong><bean:message key="specimenQuantity"/></strong></td>
-  <td width="12%" class="tableheading"><strong><bean:message key="specimenfromLocation"/></strong></td>
+  <td width="20%" class="tableheading"><strong><bean:message key="specimenPPI"/></strong></td>
+  <td width="20%" class="tableheading"><strong><bean:message key="specimenLabel"/></strong></td>
+  <td width="15%" class="tableheading"><strong><bean:message key="specimenType"/></strong></td>
+  <td width="15%" class="tableheading"><strong><bean:message key="specimenQuantity"/></strong></td>
+  <td width="15%" class="tableheading"><strong><bean:message key="specimenfromLocation"/></strong></td>
 
   <td width="15%" class="tableheading" nowrap><strong><bean:message key="specimenDestContainer"/></strong></td>
 
@@ -106,13 +106,47 @@ String specimenList = "specimenId("+specimenId+")"; String specimenToVirLocField
 
  <tr>
 <html:hidden property="orderedString" />
-<html:hidden property="<%=specimenFromLocIDField%>" /> <html:hidden property="<%=specimenFromLocPos1Field%>" /> <html:hidden property="<%=specimenFromLocPos2Field%>" /> <html:hidden property="<%=specimenList%>" /> <html:hidden property="<%=specimenFromLocField%>" />
+<html:hidden property="<%=specimenFromLocIDField%>" />
+<html:hidden property="<%=specimenFromLocPos1Field%>" />
+<html:hidden property="<%=specimenFromLocPos2Field%>" />
+<html:hidden property="<%=specimenList%>" />
+<html:hidden property="<%=specimenFromLocField%>" />
 
-<td class="black_ar" width="12%"> <label for="type"> <bean:write name="bulkEventOperationsForm" property="<%=specimenPPIField%>" /> </label> </td>
-<td class="black_ar" width="12%"> <label for="type"> <bean:write name="bulkEventOperationsForm" property="<%=specimenLabelField%>" /> </label> </td>
-<td class="black_ar" width="12%"> <label for="type"> <bean:write name="bulkEventOperationsForm" property="<%=specimenTypeField%>" /> </label> </td>
-<td class="black_ar" width="10%"> <label for="type"> <bean:write name="bulkEventOperationsForm" property="<%=specimenQuantityField%>" /> </label> </td>
-<td class="black_ar" width="15%"> <label for="type"> <bean:write name="bulkEventOperationsForm" property="<%=specimenFromLocField%>" /> </label> <!--html:text styleId="<%=containerId%>" property="<%=specimenFromLocField%>" readonly="true" /--> </td>
+<td >
+<div id="specimenPPIField"
+	style="word-wrap: break-word;width:100;
+	font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;">
+	<label for="type"> <bean:write name="bulkEventOperationsForm" property="<%=specimenPPIField%>" /> </label>
+</div>	
+</td>
+
+<td> 
+<div id="specimenLabelField"
+	style="word-wrap: break-word;width:200;
+	font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;">
+	<label for="type"> <bean:write name="bulkEventOperationsForm" property="<%=specimenLabelField%>" /> </label>
+</div>	
+</td>
+
+<td class="black_ar" >
+	<label for="type"> <bean:write name="bulkEventOperationsForm" property="<%=specimenTypeField%>" /> </label>
+</td>
+
+<td class="black_ar" >
+	<label for="type"> <bean:write name="bulkEventOperationsForm" property="<%=specimenQuantityField%>" /> </label>
+</td>
+
+<td class="black_ar" >
+	<label for="type"> <bean:write name="bulkEventOperationsForm" property="<%=specimenFromLocField%>" /> </label> <!--html:text styleId="<%=containerId%>" property="<%=specimenFromLocField%>" readonly="true" /-->
+</td>
 
 
 <!-- To Container Field starts -->
@@ -122,7 +156,7 @@ String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=
 Constants.CAN_HOLD_SPECIMEN_CLASS+"="+bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CLASS")+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" +bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CPID");
 String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"','transferEvents','"+selContainerId+"')";	%>
 
-<td class="black_ar" width="30%" colspan="2"> <logic:equal name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" >
+<td class="black_ar"  colspan="2"> <logic:equal name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" >
 <html:text styleId="<%=selContainerId%>" styleClass="black_ar" size="25" property="<%=specimenToSCLabelField%>" disabled="true" /></logic:equal>
 
 
