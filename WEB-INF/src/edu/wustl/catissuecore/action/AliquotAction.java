@@ -1671,7 +1671,7 @@ public class AliquotAction extends SecureAction
 		final List aliquotBeanList = new ArrayList();
 		final String sClass = (form.getClassName() == null ? "" : form.getClassName());
 		final String scp = (form.getSpCollectionGroupId() == 0 ? "" : ""
-				+ form.getSpCollectionGroupId());
+				+ form.getColProtId());
 
 		for (int i = 1; i <= counter; i++)
 		{
