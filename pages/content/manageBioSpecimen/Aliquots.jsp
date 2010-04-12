@@ -516,7 +516,7 @@
 		  <table width="100%" border="0" cellspacing="0" cellpadding="3">
 			<tr class="tableheading">
                 <td width="2%" align="left" class="black_ar_b" ><bean:message key="reportedProblem.serialNumber" /></td>
-		<logic:equal name="isSpecimenLabelGeneratorAvl" value="false">
+		<logic:equal name="aliquotForm" property="generateLabel" value="false">
 				<td width="12%" align="left" nowrap="nowrap" class="black_ar_b" ><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0"/>&nbsp;<bean:message key="specimen.label"/></td>
 		</logic:equal>
 		<logic:equal name="isSpecimenBarcodeGeneratorAvl" value="false">
@@ -544,7 +544,7 @@ ${aliquotBean.jsScript}
 	<tr>
 		<td align="left" class="black_ar" >${counter+1}.
 	    </td>
-		<logic:equal name="isSpecimenLabelGeneratorAvl" value="false">
+		<logic:equal name="aliquotForm" property="generateLabel" value="false">
 		   <td >
 				<html:text styleClass="black_ar"  maxlength="50"  size="17" styleId="${aliquotBean.labelKey}" property="${aliquotBean.labelKey}" disabled="false" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 			</td>
@@ -684,6 +684,7 @@ ${aliquotBean.jsScript}
 <html:hidden property="spCollectionGroupId"/>
 <html:hidden property="nextForwardTo" />
 <html:hidden property="forwardTo" />
+<html:hidden property="generateLabel" />
 </html:form>
 </body>
 <script language="JavaScript" type="text/javascript">

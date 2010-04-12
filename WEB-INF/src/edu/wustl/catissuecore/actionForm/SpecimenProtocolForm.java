@@ -39,7 +39,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -2955751730317671805L;
 	/**
@@ -61,6 +61,51 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	protected String endDate;
 
 	protected String enrollment;
+
+	protected boolean generateLabel = false;
+
+	protected boolean defaultLabelGen = false;
+
+
+	public boolean isDefaultLabelGen()
+	{
+		return defaultLabelGen;
+	}
+
+
+
+
+	public void setDefaultLabelGen(boolean defaultLabelGen)
+	{
+		this.defaultLabelGen = defaultLabelGen;
+	}
+
+	protected String specimenLabelFormat;
+
+
+	public String getSpecimenLabelFormat()
+	{
+		return specimenLabelFormat;
+	}
+
+
+
+	public void setSpecimenLabelFormat(String labelFormat)
+	{
+		this.specimenLabelFormat = labelFormat;
+	}
+
+
+	public boolean isGenerateLabel()
+	{
+		return generateLabel;
+	}
+
+
+	public void setGenerateLabel(boolean generateLabel)
+	{
+		this.generateLabel = generateLabel;
+	}
 
 	/**
 	 * Patch Id : Collection_Event_Protocol_Order_8 (Changed from HashMap to LinkedHashMap)
@@ -86,7 +131,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 
 	/**
 	 * Returns the object to which this map maps the specified key.
-	 * 
+	 *
 	 * @param key
 	 *            the required key.
 	 * @return the object to which this map maps the specified key.
@@ -268,7 +313,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	/**
 	 * Copies the data from an AbstractDomain object to a CollectionProtocolForm
 	 * object.
-	 * 
+	 *
 	 * @param abstractDomain
 	 *            An AbstractDomain object.
 	 */
@@ -288,6 +333,8 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 			this.principalInvestigatorId = -1;
 		}
 
+		this.generateLabel=protocol.getGenerateLabel();
+		this.specimenLabelFormat=protocol.getSpecimenLabelFormat();
 		this.title = CommonUtilities.toString(protocol.getTitle());
 		this.shortTitle = CommonUtilities.toString(protocol.getShortTitle());
 		this.startDate = CommonUtilities.parseDateToString(protocol.getStartDate(),
@@ -372,7 +419,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 							ApplicationProperties.getValue("collectionprotocol.startdate")));
 				}
 
-				//  --- end date        		
+				//  --- end date
 				if (!Validator.isEmpty(this.endDate))
 				{
 					//  date validation according to bug id  722 and 730 and 939
@@ -385,7 +432,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 					}
 				}
 
-				// code added as per bug id 235 
+				// code added as per bug id 235
 				// code to validate startdate less than end date
 				// check the start date less than end date
 				if (validator.checkDate(this.startDate) && validator.checkDate(this.endDate))
@@ -396,6 +443,17 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 								"specimenprotocol.invaliddate", ApplicationProperties
 										.getValue("specimenprotocol.invaliddate")));
 					}
+				}
+				if(this.generateLabel && validator.isEmpty(this.specimenLabelFormat))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"collectionProtocol.labelformat", ApplicationProperties
+							.getValue("collectionProtocol.labelformat")));
+					//"Label Format is mandatory for custom label generation"
+				}
+				else if(this.defaultLabelGen)
+				{
+					this.generateLabel = this.defaultLabelGen;
 				}
 				if (!Validator.isEmpty(this.enrollment))
 				{
@@ -424,7 +482,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	}
 
 	/**
-	 * 
+	 *
 	 * @param key Atring Array of Key
 	 * @param requirement Specimen Requirement
 	 */

@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
+import edu.wustl.catissuecore.namegenerator.LabelGenException;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
@@ -184,7 +185,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
-	
+
 	/**
 	 * @param dao DAO Object
 	 * @param sessionDataBean SessionDataBean object
@@ -202,7 +203,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 					"errors.storageContainer.dimensionOverflow", "");
 		}
 		final String contId=container.getLocatedAtPosition().
-		getParentContainer().getId().toString(); 
+		getParentContainer().getId().toString();
 		final String pos1=container.getLocatedAtPosition()
 		.getPositionDimensionOne().toString();
 		final String pos2=container.getLocatedAtPosition()
@@ -269,7 +270,14 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			{
 				scLblGenerator = LabelGeneratorFactory
 						.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);
-				scLblGenerator.setLabel(cont);
+				try
+				{
+					scLblGenerator.setLabel(cont);
+				}
+				catch (LabelGenException e)
+				{
+					logger.error(e.getMessage(), e);
+				}
 				container.setName(cont.getName());
 			}
 			catch (final NameGeneratorException e)
@@ -282,7 +290,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	}
 	/**
 	 * @param container StorageContainer Object
-	 * @param posDimOne position dim one 
+	 * @param posDimOne position dim one
 	 * @param posDimTwo position dim two
 	 * @return StorageContainer
 	 */
@@ -337,14 +345,14 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Updates the persistent object in the database.
-	 * @param dao DAO object 
+	 * @param dao DAO object
 	 * @param obj
 	 *            The object to be updated.
 	 * @param sessionDataBean
 	 *            The session in which the object is saved.
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	protected void update(final DAO dao, final Object obj, final Object oldObj, 
+	protected void update(final DAO dao, final Object obj, final Object oldObj,
 			final SessionDataBean sessionDataBean) throws BizLogicException
 	{
 		try
@@ -389,7 +397,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-	
+
 	}
 	/**
 	 * @param dao DAO object
@@ -536,7 +544,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	}
 	/**
 	 * @param dao DAO Object
-	 * @param sessionDataBean SessionDataBean Object 
+	 * @param sessionDataBean SessionDataBean Object
 	 * @param container StorageContainer object
 	 * @param flag Boolean flag to check position
 	 * @throws BizLogicException BizLogicException
@@ -548,7 +556,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 				&& container.getLocatedAtPosition().getParentContainer() != null)
 		{
 			final String contId=container.getLocatedAtPosition().
-			getParentContainer().getId().toString(); 
+			getParentContainer().getId().toString();
 			final String pos1=container.getLocatedAtPosition()
 			.getPositionDimensionOne().toString();
 			final String pos2=container.getLocatedAtPosition()
@@ -786,7 +794,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	 * @param currentObj Transient object
 	 * @param oldObj Persistent object
 	 * @param sessionDataBean SessionDataBean object
-	 *  
+	 *
 	 */
 	public void postUpdate(DAO dao, Object currentObj, Object oldObj,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -805,7 +813,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * @param dao - DAO object.
 	 * @param sessionDataBean - SessionDataBean object
- 	 * @param parameterList Parameter list includes SC Id, pos1, pos2 and boolean multiplespecimen  
+ 	 * @param parameterList Parameter list includes SC Id, pos1, pos2 and boolean multiplespecimen
 	 * @param specimen -Specimen object
 	 * @throws BizLogicException throws BizLogicException
 	 */
@@ -868,7 +876,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		final String posOne = (String)parameterList.get(1);
 		final String posTwo = (String)parameterList.get(2);
 		final boolean multipleSpecimen = (Boolean)parameterList.get(3);
-		
+
 	    final boolean canUsePosition = StorageContainerUtil.isPositionAvailable(dao, stcont, posOne, posTwo,
 				specimen);
 		logger.debug("canUsePosition : " + canUsePosition);
@@ -994,7 +1002,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	}
 	/**
 	 * @param container Storage Container object
-	 * @param validator Validator Object 
+	 * @param validator Validator Object
 	 * @throws BizLogicException BizLogicException
 	 */
 	private void validateStTypeAndTemp(final StorageContainer container, final Validator validator)
@@ -1209,7 +1217,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(null, "errors.item.invalid", message);
 		}
 	}
-	
+
 	/**
 	 * @return list of storage containers
 	 * @throws BizLogicException throws BizLogicException
@@ -1221,7 +1229,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		final String valueField = Constants.SYSTEM_IDENTIFIER;
 		return this.getList(sourceObjectName, displayNameFields, valueField, true);
 	}
-	
+
 	/**
 	 * To get the ids of the CollectionProtocol that the given StorageContainer
 	 * can hold.
@@ -1248,10 +1256,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		}
 		return cpList;
 	}
-	
+
 	/**
 	 * @param dao - DAO object.
-	 * @param containerId - Long 
+	 * @param containerId - Long
 	 * @return  collection of SpecimenPosition
 	 * @throws BizLogicException throws BizLogicException
 	 */
@@ -1299,7 +1307,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		}
 		return objId;
 	}
-	
+
 	private Site getSite(DAO dao, final StorageContainer storageContainer)
 			throws BizLogicException
 	{
@@ -1345,7 +1353,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * @param dao - DAO object.
 	 * @param sessionDataBean - SessionDataBean object
-	 * @param disabledContainerList - list of StorageContainers 
+	 * @param disabledContainerList - list of StorageContainers
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	private void disableSubStorageContainer(DAO dao, SessionDataBean sessionDataBean,

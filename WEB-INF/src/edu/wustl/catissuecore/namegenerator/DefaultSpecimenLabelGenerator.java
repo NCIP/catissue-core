@@ -123,7 +123,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 * Setting label.
 	 * @param obj Specimen object
 	 */
-	public synchronized void setLabel(Object obj)
+	public synchronized void setLabel(Object obj) throws LabelGenException
 	{
 
 		final Specimen objSpecimen = (Specimen) obj;
@@ -131,6 +131,11 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		if (objSpecimen.getLabel() != null)
 		{
 			return;
+		}
+
+		if(objSpecimen.getCollectionStatus() == null || !Constants.COLLECTION_STATUS_COLLECTED.equals(objSpecimen.getCollectionStatus()))
+		{
+			throw new LabelGenException("Specimen status is not "+Constants.COLLECTION_STATUS_COLLECTED);
 		}
 
 		if (objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
@@ -164,7 +169,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 * Setting Label.
 	 * @param objSpecimenList Specimen object list
 	 */
-	public synchronized void setLabel(List objSpecimenList)
+	public synchronized void setLabel(List objSpecimenList) throws LabelGenException
 	{
 
 		final List<Specimen> specimenList = objSpecimenList;
@@ -181,7 +186,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 * @param obj Specimen obj
 	 * @return label
 	 */
-	public String getLabel(Object obj)
+	public String getLabel(Object obj) throws LabelGenException
 	{
 		final Specimen objSpecimen = (Specimen) obj;
 		this.setLabel(objSpecimen);

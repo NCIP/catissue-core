@@ -41,7 +41,7 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	private String tissueSide;
 
 	/**
-	 * Histopathological character of the specimen 
+	 * Histopathological character of the specimen
 	 * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
 	 */
 	private String pathologicalStatus;
@@ -91,12 +91,12 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	private String quantityPerAliquot;
 
 	/**
-	 * Collection of aliquot specimens derived from this specimen. 
+	 * Collection of aliquot specimens derived from this specimen.
 	 */
 	protected Map<String, GenericSpecimen> aliquotSpecimenCollection = new LinkedHashMap<String, GenericSpecimen>();
 
 	/**
-	 * Collection of derive specimens derived from this specimen. 
+	 * Collection of derive specimens derived from this specimen.
 	 */
 	protected Map<String, GenericSpecimen> deriveSpecimenCollection = new LinkedHashMap<String, GenericSpecimen>();
 
@@ -134,6 +134,19 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 	private boolean showBarcode = true;
 	private boolean showLabel = true;
+
+	private boolean generateLabel = false;
+
+	public boolean isGenerateLabel()
+	{
+		return generateLabel;
+	}
+
+
+	public void setGenerateLabel(boolean generateLabel)
+	{
+		this.generateLabel = generateLabel;
+	}
 
 	public GenericSpecimen getFormSpecimenVo()
 	{

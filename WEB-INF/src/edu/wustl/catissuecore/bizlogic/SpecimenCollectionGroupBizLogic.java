@@ -47,6 +47,7 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
+import edu.wustl.catissuecore.namegenerator.LabelGenException;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
@@ -81,6 +82,7 @@ import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
@@ -372,6 +374,10 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			this.LOGGER.error(nameGeneratorException.getMessage(), nameGeneratorException);
 			throw this.getBizLogicException(nameGeneratorException, "name.generator.exp", "");
 		}
+		catch (LabelGenException e)
+		{
+			this.LOGGER.error(e.getMessage(), e);
+			}
 	}
 
 	/**
@@ -2880,8 +2886,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		final String sourceObjectName = SpecimenCollectionGroup.class.getName();
 		final String[] selectColumnName = {"id", "activityStatus",
 				"collectionProtocolRegistration.id",
+				"collectionProtocolRegistration.protocolParticipantIdentifier",
 				"collectionProtocolRegistration.collectionProtocol.id",
-				"collectionProtocolRegistration.collectionProtocol.activityStatus"};
+				"collectionProtocolRegistration.collectionProtocol.activityStatus",
+				"collectionProtocolRegistration.collectionProtocol.specimenLabelFormat",
+				"collectionProtocolRegistration.collectionProtocol.generateLabel"};
 		final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 		return list;
 	}
@@ -2901,19 +2910,32 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		if (dataList.size() != 0)
 		{
 			final Object[] valArr = (Object[]) dataList.get(0);
-			if (valArr != null && valArr.length == 5)
+			if (valArr != null && valArr.length == 8)
 			{
 				final Long identifier = (Long) valArr[0];
 				final String activityStatus = (String) valArr[1];
 				final CollectionProtocolRegistration registration = new CollectionProtocolRegistration();
 				registration.setId((Long) valArr[2]);
+				if(valArr[3] != null)
+				{
+					registration.setProtocolParticipantIdentifier(valArr[3].toString());
+				}
 				CollectionProtocol collectionProtocol = new CollectionProtocol();
-				collectionProtocol.setId((Long) valArr[3]);
-				collectionProtocol.setActivityStatus((String) valArr[4]);
+				collectionProtocol.setId((Long) valArr[4]);
+				collectionProtocol.setActivityStatus((String) valArr[5]);
+				if(valArr[6] != null)
+				{
+					collectionProtocol.setSpecimenLabelFormat(valArr[6].toString());
+				}
+				if(valArr[7] != null)
+				{
+					collectionProtocol.setGenerateLabel(Boolean.valueOf(valArr[7].toString()));
+				}
 				//For bug #15994
 				String CpShortTitle;
-				CpShortTitle = retrieveCpShortTitle(valArr[3]);
+				CpShortTitle = retrieveCpShortTitle(valArr[4]);
 				collectionProtocol.setShortTitle(CpShortTitle);
+				ColumnValueBean columnValueBean = new ColumnValueBean(identifier);
 				final Collection consentTierStatusCollection = (Collection) this.retrieveAttribute(
 						dao, SpecimenCollectionGroup.class, identifier,
 						"elements(consentTierStatusCollection)");

@@ -178,6 +178,8 @@ create table CATISSUE_SPECIMEN_PROTOCOL (
    ENROLLMENT integer,
    DESCRIPTION_URL varchar(255),
    ACTIVITY_STATUS varchar(50),
+   GENERATE_LABEL number(1,0),
+   LABEL_FORMAT varchar(255),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_FLUID_SPE_EVENT_PARAM (

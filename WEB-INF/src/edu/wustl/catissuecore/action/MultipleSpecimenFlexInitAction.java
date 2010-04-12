@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,8 +11,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.CommonServiceLocator;
 
 //import edu.wustl.common.action.SecureAction;
@@ -113,7 +116,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		request.setAttribute("PARENT_NAME", parentName);
 		request.setAttribute("SP_COUNT", numberOfSpecimens);
 		request.setAttribute("SHOW_PARENT_SELECTION", showParentSelection);
-		request.setAttribute("SHOW_LABEL", showLabel);
+//		request.setAttribute("SHOW_LABEL", showLabel);
 		request.setAttribute("SHOW_BARCODE", showBarcode);
 		request.setAttribute("DATE_FORMAT", dateFormat.toUpperCase());
 
@@ -138,7 +141,21 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 				{
 					specimenCollectionGroupName = (String) obj;
 				}
+				String generateLabel = Boolean.toString(false);
+				String hql = "select scg.collectionProtocolRegistration.collectionProtocol.generateLabel" +
+				" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where scg.name='"+specimenCollectionGroupName+"'";
+				try
+				{
+					List list = AppUtility.executeQuery(hql);
+					generateLabel = Boolean.toString(!(Boolean)list.get(0));
+				}
+				catch (ApplicationException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
+				request.setAttribute("SHOW_LABEL", generateLabel);
 				return specimenCollectionGroupName;
 			}
 			else if (Constants.DERIVED_SPECIMEN_TYPE.equals(parentType))
@@ -157,6 +174,12 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 								.toString();
 					}
 				}
+				String generateLabel = Boolean.toString(false);
+				if(forwardToHashMap.get("generateLabel") != null)
+				{
+					generateLabel= Boolean.toString(!(Boolean)forwardToHashMap.get("generateLabel"));
+				}
+				request.setAttribute("SHOW_LABEL", generateLabel);
 
 				return parentSpecimenLabel;
 			}

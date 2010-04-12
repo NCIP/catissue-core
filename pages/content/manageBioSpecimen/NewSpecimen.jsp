@@ -1090,6 +1090,7 @@
 						    	{ %>
 								<html:hidden property="forwardTo" value=""/>
 							  <%} %>
+							  <html:hidden property="generateLabel"/>
 								<html:hidden property="virtuallyLocated"/>
 								<html:hidden property="containerId" styleId="containerId"/>
 								<html:hidden property="withdrawlButtonStatus"/>
@@ -1230,9 +1231,11 @@
 						  </td>
 				</logic:equal>
 						</tr>
-				<%  if( operation.equals(Constants.EDIT) || (!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl))
+				<% // if( operation.equals(Constants.EDIT) || (!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl))
+				if( (form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT)) || (!form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT) && !form.isGenerateLabel()) || (!form.isGenerateLabel() && !Variables.isSpecimenBarcodeGeneratorAvl))
 									{
 				%>
+
 						<tr>
 							<td align="center" class="black_ar">
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
@@ -1290,7 +1293,7 @@
 						</tr>
 
 				<%}
-							else  if((!Variables.isSpecimenLabelGeneratorAvl && Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
+							else  if((!form.isGenerateLabel() && Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
 				{
 				%>
 						<tr>
@@ -1313,7 +1316,7 @@
 							</td>
 						</tr>
 				<%
-						 }else if((Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
+						 }else if((form.isGenerateLabel() && !Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
 						{
 
 				%>

@@ -326,6 +326,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	protected void setChildren(Specimen specimen, GenericSpecimen parentSpecimenVO,
 			SpecimenAutoStorageContainer autoStorageContainer) throws DAOException
 	{
+
 		final Collection<AbstractSpecimen> specimenChildren = specimen.getChildSpecimenCollection();
 		final List<AbstractSpecimen> specimenChildrenCollection = new LinkedList<AbstractSpecimen>(
 				specimenChildren);
@@ -390,6 +391,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			}
 		}
 
+		parentSpecimenVO.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
 		parentSpecimenVO.setAliquotSpecimenCollection(aliquotMap);
 		parentSpecimenVO.setDeriveSpecimenCollection(derivedMap);
 	}
@@ -487,6 +489,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		// Constants.ALIQUOT));
 		// specimenDataBean.setDeriveSpecimenCollection(getChildren(specimen,
 		// Constants.ALIQUOT));
+		specimenDataBean.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
 		return specimenDataBean;
 	}
 

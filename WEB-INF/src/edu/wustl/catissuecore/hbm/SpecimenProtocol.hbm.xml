@@ -107,6 +107,23 @@
         />
 
         <property
+            name="generateLabel"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="GENERATE_LABEL"
+        />
+
+        <property
+            name="specimenLabelFormat"
+            type="string"
+            update="true"
+            insert="true"
+            column="LABEL_FORMAT"
+            length="255"
+        />
+
+        <property
             name="activityStatus"
             type="string"
             update="true"

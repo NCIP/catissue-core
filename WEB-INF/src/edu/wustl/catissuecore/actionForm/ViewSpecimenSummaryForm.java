@@ -60,6 +60,19 @@ public class ViewSpecimenSummaryForm extends ActionForm
 	private String printerType;
 	private String printerLocation;
 
+	private boolean generateLabel;
+
+	public boolean isGenerateLabel()
+	{
+		return generateLabel;
+	}
+
+
+	public void setGenerateLabel(boolean generateLabel)
+	{
+		this.generateLabel = generateLabel;
+	}
+
 	private boolean multipleSpEditMode = false;
 
 	private Set specimenPrintList = null;//janhavi

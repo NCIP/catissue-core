@@ -21,7 +21,7 @@
 <meta http-equiv="Content-Language" content="en-us">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <script src="jss/queryModule.js"></script>
-<script type="text/javascript" src="jss/ajax.js"></script> 
+<script type="text/javascript" src="jss/ajax.js"></script>
 <script language="JavaScript" >
 		//Set last refresh time
 		if(window.parent!=null)
@@ -30,7 +30,7 @@
 			{
 				window.parent.lastRefreshTime = new Date().getTime();
 			}
-		}	
+		}
 </script>
 <script language="JavaScript">
 function callSubmitSpecimen()
@@ -44,7 +44,7 @@ function callSubmitSpecimen()
 	%>
 	document.forms[0].action = "<%=formAction2%>";
 	document.forms[0].submit();
-	
+
 }
 
 function callUpdateSpecimen()
@@ -58,7 +58,7 @@ function callUpdateSpecimen()
 	%>
 	document.forms[0].action = "<%=formAction1%>";
 	document.forms[0].submit();
-	
+
 }
 if(navigator.userAgent.indexOf('Mac')>=0)
 {
@@ -80,13 +80,13 @@ if(navigator.userAgent.indexOf('Mac')>=0)
       if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
       {
 %>
-			<td id="td1" height=700>											
+			<td id="td1" height=700>
 				<div id="multiplespeId" style="overflow:auto;height:700;width:100%">
 
 <%
       }else{
 %>
-			<td id="td1" height=100%>											
+			<td id="td1" height=100%>
 				<div id="multiplespeId" style="overflow:auto;height:100%;width:100%">
 <%
 }
@@ -96,7 +96,7 @@ if(navigator.userAgent.indexOf('Mac')>=0)
 						codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
 						<param name="movie" value="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>&SHOW_LABEL=<%=SHOW_LABEL%>&SHOW_BARCODE=<%=SHOW_BARCODE%>&DATE_FORMAT=<%=DATE_FORMAT%>"/>
 						<param name="quality" value="high" />
-						<param name="wmode" value="transparent" />						
+						<param name="wmode" value="transparent" />
 						<param name="bgcolor" value="#869ca7" />
 						<param name="allowScriptAccess" value="sameDomain"/>
 							<embed src="flexclient/multiplespecimen/MultipleSpecimen.swf?MODE=<%=MODE%>&PARENT_TYPE=<%=PARENT_TYPE%>&PARENT_NAME=<%=PARENT_NAME%>&SP_COUNT=<%=SP_COUNT%>&SHOW_PARENT_SELECTION=<%=SHOW_PARENT_SELECTION%>&SHOW_LABEL=<%=SHOW_LABEL%>&SHOW_BARCODE=<%=SHOW_BARCODE%>&DATE_FORMAT=<%=DATE_FORMAT%>" quality="high" bgcolor="#869ca7"
@@ -121,4 +121,4 @@ if(navigator.userAgent.indexOf('Mac')>=0)
 		</tr>
 	</table>
 </body>
-</html> 
+</html>
