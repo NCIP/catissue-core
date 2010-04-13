@@ -112,7 +112,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			final String quantityString = ApplicationProperties
 				.getValue("specimen.availableQuantity");
 			throw this.getBizLogicException(null, "errors.availablequantity",
-					quantityString); 
+					quantityString);
 		}
 		Object pSpec =  dao.retrieveById(AbstractSpecimen.class.getName(),
 				parentSpecimen.getId());
@@ -146,13 +146,13 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			specimen.setAvailableQuantity(aliquot.getQuantityPerAliquot());
 			specimen.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
 			specimen.setIsAvailable(Boolean.TRUE);
-			if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
-			{
+//			if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+//			{
 				long totalAliquotCount = newSpecimenBizLogic.getTotalNoOfAliquotSpecimen(
 						parentSpecimen.getId(), dao);
 				totalAliquotCount = totalAliquotCount + aliqoutCounter + 1;
 				specimen.setLabel(parentSpecimen.getLabel() + "_" + totalAliquotCount);
-			}
+//			}
 			processAliquotInSameContainer(specimen, aliquot, aliqoutCounter, specimenPosList);
 		}
 		catch (BizLogicException bizExp)
@@ -180,10 +180,10 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			{
 				SpecimenPosition newSpecimenPosition = new SpecimenPosition();
 				SpecimenPosition specimenPosition = specimenPosList.get(0);
-				
+
 				newSpecimenPosition.setPositionDimensionOne(specimenPosition.getPositionDimensionOne());
 				newSpecimenPosition.setPositionDimensionTwo(specimenPosition.getPositionDimensionTwo());
-				
+
 				StorageContainer container = specimenPosition.getStorageContainer();
 				newSpecimenPosition.setStorageContainer(container);
 				specimen.setSpecimenPosition(newSpecimenPosition);
@@ -246,7 +246,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			if (aliquot.getAliquotsInSameContainer())
-			{	
+			{
 				if (aliquot.getSpecimenPositionCollection() != null
 						&& !aliquot.getSpecimenPositionCollection().isEmpty()
 						&& aliquot.getSpecimenPositionCollection().size() > 1)

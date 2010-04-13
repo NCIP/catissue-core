@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package edu.wustl.catissuecore.bean;
@@ -16,7 +16,7 @@ public final class GenericSpecimenVO implements GenericSpecimen
 {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -4892794446362429521L;
 	private LinkedHashMap<String, GenericSpecimen> aliquotSpecimenCollection = null;
@@ -47,6 +47,19 @@ public final class GenericSpecimenVO implements GenericSpecimen
 
 	private boolean showBarcode = true;
 	private boolean showLabel = true;
+
+	private boolean generateLabel = false;
+
+	public boolean isGenerateLabel()
+	{
+		return generateLabel;
+	}
+
+
+	public void setGenerateLabel(boolean generateLabel)
+	{
+		this.generateLabel = generateLabel;
+	}
 
 	public GenericSpecimen getFormSpecimenVo()
 	{

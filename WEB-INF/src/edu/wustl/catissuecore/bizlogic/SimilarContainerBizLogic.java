@@ -22,6 +22,7 @@ import java.util.Set;
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.namegenerator.LabelGenException;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
@@ -185,7 +186,14 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 					LabelGenerator storagecontLblGenerator;
 					storagecontLblGenerator = LabelGeneratorFactory
 							.getInstance(Constants.STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME);
-					storagecontLblGenerator.setLabel(cont);
+					try
+					{
+						storagecontLblGenerator.setLabel(cont);
+					}
+					catch (LabelGenException e)
+					{
+						this.logger.error(e.getMessage(), e);
+					}
 
 				}
 

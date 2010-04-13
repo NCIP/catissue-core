@@ -1,8 +1,11 @@
 
 package edu.wustl.catissuecore.util;
 
+import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -128,5 +131,32 @@ public final class SpecimenUtil
 			throw new BizLogicException(errorKey, null, "");
 		}
 		return specimenId;
+	}
+
+	/**
+	 * @param objSpecimen
+	 * @return
+	 */
+	public static String getCollectionYear(Specimen objSpecimen)
+	{
+		String valToReplace="";
+		int  yearOfcoll = Calendar.getInstance().get(Calendar.YEAR);
+//		valToReplace = objSpecimen.getc
+		Iterator specEveItr = objSpecimen.getSpecimenEventCollection().iterator();
+		while(specEveItr.hasNext())
+		{
+			Object specEveParam = specEveItr.next();
+			if (specEveParam instanceof CollectionEventParameters)
+			{
+				CollectionEventParameters collEveParam = (CollectionEventParameters) specEveParam;
+				//				Date date =
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(collEveParam.getTimestamp());
+				yearOfcoll = cal.get(Calendar.YEAR);
+
+			}
+		}
+		valToReplace = yearOfcoll+"";
+		return valToReplace;
 	}
 }

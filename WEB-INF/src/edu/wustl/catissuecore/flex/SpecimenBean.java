@@ -16,7 +16,7 @@ public class SpecimenBean implements Externalizable
 {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 

@@ -29,7 +29,7 @@
 <script language="JavaScript" type="text/javascript" src="jss/createSpecimen.js"></script>
 
 <script language="JavaScript" >
- 
+
 		//Set last refresh time
 		if(window.parent!=null)
 		{
@@ -37,21 +37,21 @@
 			{
 				window.parent.lastRefreshTime = new Date().getTime();
 			}
-		}		
-		
+		}
+
 		function isLabelBarcodeOrClassChange()
-		{	
+		{
 					var parentLabelElement = document.getElementById("parentSpecimenLabel");
 					var parentBarcodeElement = document.getElementById("parentSpecimenBarcode");
 					var classNameElement = document.getElementById("className");
-					
+
 					if((parentLabelElement.value != "-1" || parentBarcodeElement.value != "-1") && classNameElement.value != "-1")
 					{
 						var action = "${requestScope.actionToCall2}";
-						var temp = "${requestScope.frdTo}";		
+						var temp = "${requestScope.frdTo}";
 						document.forms[0].action = action + "&isLabelBarcodeOrClassChange=true"+"&forwardTo="+temp;
 						document.forms[0].submit();
-					}	
+					}
 		}
 
 	  	function onClassOrLabelOrBarcodeChange(multipleSpecimen,element)
@@ -62,16 +62,16 @@
 			}
 		    var radioArray = document.getElementsByName("radioButton");
 		 	var flag = "0";
- 			if (radioArray[0].checked) 
+ 			if (radioArray[0].checked)
 			{
-			  if(document.getElementById("parentSpecimenLabel").value!= "") 
+			  if(document.getElementById("parentSpecimenLabel").value!= "")
 			  {
 				   flag = "1";
 			  }
-			} 
-		     else 
+			}
+		     else
 		     {
-				if (document.getElementById("parentSpecimenBarcode").value != "") 
+				if (document.getElementById("parentSpecimenBarcode").value != "")
 				{
 	     	    	 flag = "1";
 				}
@@ -81,14 +81,14 @@
 			{
 				document.forms[0].action = "${requestScope.actionToCall1}";
 				document.forms[0].submit();
-			}	
+			}
 			else
 			{
 				alert("Please enter Parent Label/Barcode and Specimen Class");
 				element.checked=true;
 			}
 		}
-		
+
 		function deleteExternalIdentifiers()
 		{
 			${requestScope.deleteChecked}
@@ -103,8 +103,8 @@
 				confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
 			}
 			else
-			{	
-				var temp = "${requestScope.frdTo}";	
+			{
+				var temp = "${requestScope.frdTo}";
 				if(temp == "orderDetails")
 				{
 					setSubmitted('ForwardTo','${requestScope.printAction}','orderDetails');
@@ -112,25 +112,25 @@
 			     else
 			    {
 				   setSubmitted('ForwardTo','${requestScope.printAction}','newSpecimenEdit');
-			     }  
+			     }
 				confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
 			}
 		}
-		
+
 		function onAddToCart()
 		{
 			confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
 			var printFlag = document.getElementById("printCheckbox");
 			if(printFlag.checked)
 		    {
-				setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartAndPrint','pageOfNewSpecimen');           							
-		    }	
+				setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartAndPrint','pageOfNewSpecimen');
+		    }
             else
             {
                // setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartForwardtoDerive','success');
             	setSubmittedFor("ForwardTo","addSpecimenToCart");
             }
-			
+
 		}
 
 		</script>
@@ -182,9 +182,9 @@
 								var url = "NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&rowSelected=" + rowSelected +"&specimenAttributeKey="+document.getElementById("specimenAttributeKey").value;
 								document.forms[0].action = url;
 								document.forms[0].submit();
-								} 				
+								}
 								var useDefaultRowClickHandler =2;
-								var useFunction = "derivedSpecimenGrid";	
+								var useFunction = "derivedSpecimenGrid";
 								var gridFor="derivedSpecimen";
 								</script>
 								<%@ include file="/pages/content/search/GridPage.jsp" %>
@@ -229,7 +229,7 @@
 							<td width="4%" class="td_tab_bg">
 								<img src="images/spacer.gif" alt="spacer" width="50" height="1">
 							</td>
-							
+
 							<logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY%>">
 							<td valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen"><img src="images/uIEnhancementImages/tab_edit_user.jpg"  border="0"alt="Edit" width="59" height="22" /></html:link></td>
 							<td valign="bottom"><img src="images/uIEnhancementImages/tab_derive.gif" alt="Derive" width="56" height="22" border="0" /></td>
@@ -250,6 +250,7 @@
 						<html:hidden property="forwardTo" value="${requestScope.frdTo}"/>
 						<html:hidden property="multipleSpecimen" value="${requestScope.multipleSpecimen}"/>
 						<html:hidden property="containerId" styleId="containerId"/>
+						<html:hidden property="generateLabel" />
 						<html:hidden property="nextForwardTo" />
 
 						<html:hidden property="positionInStorageContainer" />
@@ -288,11 +289,11 @@
 														<span class="black_ar">
 															<bean:message key="specimen.label"/>&nbsp;
 															<logic:equal name="createSpecimenForm" property="radioButton" value="1">
-															<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenLabel" 
+															<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenLabel"
 															property="parentSpecimenLabel" disabled="false" />
 															</logic:equal>
 															<logic:equal name="createSpecimenForm" property="radioButton" value="2">
-															<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenLabel" 
+															<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenLabel"
 															property="parentSpecimenLabel" disabled="true" />
 															</logic:equal>
 															&nbsp;&nbsp;
@@ -301,20 +302,20 @@
 													<td align="left" valign="middle" nowrap="nowrap">
 														<html:radio styleClass="" styleId="checkedButton" property="radioButton" value="2" 		onclick="onRadioButtonClick(this)">
 														</html:radio>
-														<span class="black_ar">	
+														<span class="black_ar">
 														<bean:message key="storageContainer.barcode"/>&nbsp;
 														<logic:equal name="createSpecimenForm" property="radioButton" value="1">
 														<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenBarcode"
 														property="parentSpecimenBarcode" disabled="true" />
 														</logic:equal>
 														<logic:equal name="createSpecimenForm" property="radioButton" value="2">
-														<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenBarcode" 
+														<html:text styleClass="black_ar"  maxlength="50"  size="20" styleId="parentSpecimenBarcode"
 														property="parentSpecimenBarcode" disabled="false" />
 														</logic:equal>
 														</span>
 													</td>
 												</tr>
-											</table>              
+											</table>
 										</td>
 									</tr>
 									<tr>
@@ -345,12 +346,12 @@
 											optionsList = "${requestScope.specimenTypeMap}"
 											initialValue=""
 											onChange="onSubTypeChangeUnit('className',this,'unitSpan')"
-											readOnly="false" 
+											readOnly="false"
 											dependsOn="${createSpecimenForm.className}"  />
 										</td>
 									</tr>
 									<tr>
-									<logic:equal name="isSpecimenLabelGeneratorAvl" value="false">
+									<logic:equal name="createSpecimenForm" property="generateLabel" value="false">
 										<td align="center" class="black_ar">
 										<logic:notEqual name="oper" value="${requestScope.view}">
 											<span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
@@ -387,7 +388,7 @@
 												<bean:message key="specimen.concentrationUnit"/>
 											</logic:equal>	<!-- if(unitSpecimen.equals(Constants.UNIT_MG)) -->
 											<logic:notEqual name="unitSpecimen" value="${requestScope.UNIT_MG}">
-												<html:text styleClass="black_ar" size="10" maxlength="10"  styleId="concentration" 
+												<html:text styleClass="black_ar" size="10" maxlength="10"  styleId="concentration"
 												property="concentration" readonly="${requestScope.readOnlyForAll}" style="text-align:right" disabled="false"/>
 												<bean:message key="specimen.concentrationUnit"/>
 											</logic:notEqual>
@@ -400,7 +401,7 @@
 											<span class="black_ar"><bean:message key="specimen.quantity"/></span>
 										</td>
 										<td align="left">
-											<html:text styleClass="black_ar" size="8" maxlength="10"  styleId="quantity" property="quantity" 
+											<html:text styleClass="black_ar" size="8" maxlength="10"  styleId="quantity" property="quantity"
 											readonly="${requestScope.readOnlyForAll}" style="text-align:right"/>
 											<span id="unitSpan" class="black_ar">${requestScope.unitSpecimen}</span>
 											<html:hidden property="unit"/>
@@ -445,18 +446,18 @@
 															styleId="stContSelection" size="0"	onmouseover="showTip(this.id)"
 															onmouseout="hideTip(this.id)" onchange= "isLabelBarcodeOrClassChange()">
 																<html:options collection="storageList"
-																labelProperty="name" property="value" />				
+																labelProperty="name" property="value" />
 															</html:select>&nbsp;&nbsp;
 									<!-- MD Added 	logic:equal -->
 													</td>
 													<logic:equal name="storagePosition" value="Auto">
-														<ncombo:nlevelcombo dataMap="${requestScope.dataMap}" 
-														attributeNames="${requestScope.attrNames}" 
-														initialValues="${requestScope.initValues}"  
-														styleClass = "black_ar" 
-														tdStyleClass = "black_ar" 
-														labelNames="${requestScope.labelNames}" 
-														rowNumber="1" 
+														<ncombo:nlevelcombo dataMap="${requestScope.dataMap}"
+														attributeNames="${requestScope.attrNames}"
+														initialValues="${requestScope.initValues}"
+														styleClass = "black_ar"
+														tdStyleClass = "black_ar"
+														labelNames="${requestScope.labelNames}"
+														rowNumber="1"
 														onChange = "onCustomListBoxChange(this)"
 														formLabelStyle="nComboGroup"
 														tdStyleClassArray="${requestScope.tdStyleClassArray}"
@@ -466,9 +467,9 @@
 													<td class="groupElements">
 														<html:text styleClass="black_ar"  size="13" onmouseover="showTip(this.id)" styleId="selectedContainerName"
 														property="selectedContainerName" />
-														<html:text styleClass="black_ar"  size="3" styleId="pos1" 
+														<html:text styleClass="black_ar"  size="3" styleId="pos1"
 														property="pos1" />
-														<html:text styleClass="black_ar"  size="3" styleId="pos2" 
+														<html:text styleClass="black_ar"  size="3" styleId="pos2"
 														property="pos2" />
 														<html:button styleClass="black_ar" property="containerMap"					onclick="${requestScope.buttonOnClicked}" >
 														<bean:message key="buttons.map"/>
@@ -477,7 +478,7 @@
 													</logic:equal>
 												</tr>
 											</table>
-											</logic:equal>								
+											</logic:equal>
 										</td>
 									</tr>
 									</logic:notEqual>	<%-- if(!multipleSpecimen.equals("1")) case 2 --%>
@@ -491,7 +492,7 @@
 									<tr>
 										<td align="center" class="black_ar">&nbsp;</td>
 										<td align="left" valign="top" class="black_ar_t"><bean:message key="specimen.comments"/></td>
-										<td colspan="4" align="left"><html:textarea styleClass="black_ar" cols="67" rows="4" styleId="comments" property="comments" 
+										<td colspan="4" align="left"><html:textarea styleClass="black_ar" cols="67" rows="4" styleId="comments" property="comments"
 										readonly="${requestScope.readOnlyForAll}"/></td>
 									</tr>
 								</table>
@@ -510,7 +511,7 @@
 								<div id="add_ei" style="display:none">
 								<table width="100%" border="0" cellspacing="0" cellpadding="3">
 									<tr class="tableheading">
-										<td width="8%" align="left" class="black_ar_b"> 
+										<td width="8%" align="left" class="black_ar_b">
 											<bean:message key="app.select"/>
 										</td>
 										<td width="25%" align="left" class="black_ar_b">
@@ -525,7 +526,7 @@
 										<logic:iterate id="xi" name="exIdList">
 										<tr>
 											<td align="left" class="black_ar">
-												<input type=checkbox name="${xi.check}" id="${xi.check}" ${xi.exCondition} onClick="enableButton(document.forms[0].deleteExId,document.forms[0].exIdCounter,'chk_ex_')"> 
+												<input type=checkbox name="${xi.check}" id="${xi.check}" ${xi.exCondition} onClick="enableButton(document.forms[0].deleteExId,document.forms[0].exIdCounter,'chk_ex_')">
 											</td>
 											<html:hidden property="${xi.exIdentifier}" />
 											<td class="black_ar">
@@ -566,7 +567,7 @@
 						</tr>
 						<tr>
 						<logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 3 -->
-							<logic:notEqual name="pageOf" value="${requestScope.query}">	
+							<logic:notEqual name="pageOf" value="${requestScope.query}">
 								<td colspan="3" valign="middle">
 									<table width="100%" border="0" cellspacing="0" cellpadding="0">
 										<tr>
@@ -608,15 +609,15 @@
 								<table>
 								 <tr>
 								  <td  nowrap  width="20%" colspan="1">
-								   <logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.QUERY%>">	
+								   <logic:notEqual name="<%=Constants.PAGE_OF%>" value="<%=Constants.QUERY%>">
 								 		<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">
 										<span class="black_ar">
 											<bean:message key="print.checkboxLabel"/>
 										</span>
 										</html:checkbox>
-									</logic:notEqual>								
+									</logic:notEqual>
                                  </td>
-								
+
 	<!--  Added for displaying  printer type and location -->
 							    <td colspan="2">
 					   			   <%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
@@ -624,9 +625,9 @@
 							    </tr>
 								</table>
         					   </td>
-							</tr>	
-			<!--  End : Displaying   printer type and location -->		
-								 
+							</tr>
+			<!--  End : Displaying   printer type and location -->
+
 						<tr>
 							<td colspan="3" class="bottomtd"></td>
 						</tr>
@@ -655,7 +656,7 @@
 							<td>&nbsp;</td>
 						</tr>
 					</table>
-					</logic:empty> <%-- if(request.getAttribute("showDerivedPage")==null) --%> 
+					</logic:empty> <%-- if(request.getAttribute("showDerivedPage")==null) --%>
 				</td>
 			</tr>
 		</table>

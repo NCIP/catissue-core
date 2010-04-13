@@ -28,4 +28,7 @@ public interface SpecimenDetailsInfo
 
 	boolean isMultipleSpEditMode();
 
+	boolean isGenerateLabel();
+
+	void setGenerateLabel(boolean generateLabel);
 }

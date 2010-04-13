@@ -345,7 +345,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		bizLogic.disableRelatedObjectsForParticipant(dao, participantIDArr);
 	}
 	/**
-	 * Update CollectionProtocolRegistration 
+	 * Update CollectionProtocolRegistration
 	 * @param dao DAO Object
 	 * @param sessionDataBean SessionDataBean Object
 	 * @param participant Participant Object
@@ -398,7 +398,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			new LinkedHashSet<CollectionProtocolRegistration>();
 		if(cprColl != null)
 		{
-			final Iterator<CollectionProtocolRegistration> crpItr = 
+			final Iterator<CollectionProtocolRegistration> crpItr =
 			cprColl.iterator();
 			while (crpItr.hasNext())
 			{
@@ -433,7 +433,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			long collectinProtocolId)
 	{
 		boolean isCollectionProtocolExist = false;
-		final Iterator<CollectionProtocolRegistration> itrCPR = 
+		final Iterator<CollectionProtocolRegistration> itrCPR =
 			cprColl.iterator();
 		while (itrCPR.hasNext())
 		{
@@ -527,7 +527,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		{
 			throw getBizLogicException(null, exp.getMsgValues(), exp.getCustomizedMsg());
 		}
-		final Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = 
+		final Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection =
 			validateCPR(dao, participant,validator);
 		final boolean isDuplicateCollectionProtocol = this
 				.isDuplicateCollectionProtocol(collectionProtocolRegistrationCollection);
@@ -564,11 +564,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					= participant.getCollectionProtocolRegistrationCollection();
 		if (cprColl != null	&& !cprColl.isEmpty())
 		{
-			final Iterator<CollectionProtocolRegistration> cprItr = 
+			final Iterator<CollectionProtocolRegistration> cprItr =
 				cprColl.iterator();
 			while (cprItr.hasNext())
 			{
-				final CollectionProtocolRegistration cpr = 
+				final CollectionProtocolRegistration cpr =
 					(CollectionProtocolRegistration) cprItr.next();
 				checkCPAndCPR(dao, validator, cpr);
 				getActivityStatus(dao, cpr);
@@ -1218,7 +1218,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Refresh Titli index.
 	 * @param operation Add/Edit
-	 * @param obj Participant object 
+	 * @param obj Participant object
 	 */
 	public void refreshTitliSearchIndexSingle(String operation, Object obj)
 	{

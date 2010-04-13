@@ -92,6 +92,56 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	protected String activityStatus;
 
 	/**
+	 * for setting label generation property to on or off.
+	 */
+	protected Boolean generateLabel;
+
+	/**
+	 * Label format for specimens associated with this CP.
+	 */
+	protected String specimenLabelFormat;
+
+
+	/**
+	 * Return the label format
+	 * @return the label format
+	 */
+	public String getSpecimenLabelFormat()
+	{
+		return specimenLabelFormat;
+	}
+
+
+
+	/**
+	 * Set the label format
+	 * @param labelFormat
+	 */
+	public void setSpecimenLabelFormat(String labelFormat)
+	{
+		this.specimenLabelFormat = labelFormat;
+	}
+
+
+	/**
+	 * Returns true if label generation is set to on or vice versa.
+	 * @return true if label generation is set to on or vice versa.
+	 */
+	public Boolean getGenerateLabel()
+	{
+		return generateLabel;
+	}
+
+
+	/**
+	 * @param generateLabel
+	 */
+	public void setGenerateLabel(Boolean generateLabel)
+	{
+		this.generateLabel = generateLabel;
+	}
+
+	/**
 	 * Default Constructor.
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
 	 */
@@ -310,7 +360,8 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 			this.title = spForm.getTitle();
 			this.shortTitle = spForm.getShortTitle();
 			this.irbIdentifier = spForm.getIrbID();
-
+			this.generateLabel=spForm.isGenerateLabel();
+			this.specimenLabelFormat= spForm.getSpecimenLabelFormat();
 			this.startDate = CommonUtilities.parseDate(spForm.getStartDate(), CommonUtilities
 					.datePattern(spForm.getStartDate()));
 			this.endDate = CommonUtilities.parseDate(spForm.getEndDate(), CommonUtilities
