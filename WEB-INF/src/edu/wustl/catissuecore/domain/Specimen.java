@@ -519,14 +519,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 				{
 					this.initialQuantity = new Double(0);
 				}
-				if(Validator.isEmpty(((SpecimenForm) abstractForm).getLabel()))
-				{
-					this.label = null;
-				}
-				else
-				{
-					this.label = ((SpecimenForm) abstractForm).getLabel();
-				}
+				this.label = ((SpecimenForm) abstractForm).getLabel();
 
 				if (abstractForm.isAddOperation())
 				{
@@ -1508,7 +1501,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		}
 		this.setSpecimenEventCollection(specimenEventCollection);
 	}
-
+	
 	/**
 	 * Do the round off for the required attributes (if any)
 	 */

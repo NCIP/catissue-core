@@ -30,29 +30,6 @@ public class CollectionProtocolBean implements Serializable
 	 * principalInvestigatorId.
 	 */
 	private long principalInvestigatorId;
-
-	private boolean generateLabel;
-
-	private boolean defaultLabelGen;
-
-	public boolean isDefaultLabelGen()
-	{
-		return defaultLabelGen;
-	}
-
-
-
-
-	public void setDefaultLabelGen(boolean defaultLabelGen)
-	{
-		this.defaultLabelGen = defaultLabelGen;
-	}
-
-	private String labelFormat;
-
-
-
-
 	/**
 	 * irbID.
 	 */
@@ -94,30 +71,6 @@ public class CollectionProtocolBean implements Serializable
 	 * clinicalDiagnosis values.
 	 */
 	private String[] clinicalDiagnosis;
-
-	public String getLabelFormat()
-	{
-		return labelFormat;
-	}
-
-
-
-	public void setLabelFormat(String labelFormat)
-	{
-		this.labelFormat = labelFormat;
-	}
-
-
-	public boolean isGenerateLabel()
-	{
-		return generateLabel;
-	}
-
-
-	public void setGenerateLabel(boolean generateLabel)
-	{
-		this.generateLabel = generateLabel;
-	}
 
 	/**
 	 * This will return the clinicalDiagnosis values.

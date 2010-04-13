@@ -742,7 +742,6 @@ String lbl = "Apply first to all";
 				<td><html:submit value="Save Specimens" /></td>
 			</tr>
 		</logic:equal>
-		<html:hidden property="generateLabel" />
 		<html:hidden property="targetSuccess" />
 		<html:hidden property="submitAction" />
 		<html:hidden property="showCheckBoxes" />

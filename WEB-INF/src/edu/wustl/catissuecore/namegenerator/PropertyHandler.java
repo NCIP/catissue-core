@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.CommonServiceLocator;
 
 /**
@@ -21,7 +20,6 @@ public final class PropertyHandler
 	 */
 	private static Properties nameGeneratorProperties = null;
 
-	private static Properties labelTokenProperties = null;
 	/**
 	 * private constructor.
 	 */
@@ -60,25 +58,6 @@ public final class PropertyHandler
 			init("LabelGenerator.Properties");
 		}
 		return (String) nameGeneratorProperties.get(propertyName);
-
-	}
-
-	public static void initLableTokenProperties(String path) throws Exception
-	{
-		final String absolutePath = CommonServiceLocator.getInstance().getPropDirPath()
-		+ File.separator + path;
-		final InputStream inpurStream = new FileInputStream(new File(absolutePath));
-		labelTokenProperties = new Properties();
-		labelTokenProperties.load(inpurStream);
-	}
-
-	public static String getTokenValue(String propertyName) throws Exception
-	{
-		if (labelTokenProperties == null)
-		{
-			initLableTokenProperties(Constants.LABEL_TOKEN_PROP_FILE_NAME);
-		}
-		return (String) labelTokenProperties.get(propertyName);
 
 	}
 }

@@ -1,6 +1,6 @@
 /**
  * <p>Title: CreateSpecimenForm Class>
- * <p>Description:  CreateSpecimenForm Class is used to encapsulate all the request parameters passed
+ * <p>Description:  CreateSpecimenForm Class is used to encapsulate all the request parameters passed 
  * from Create Specimen webpage. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -24,7 +24,7 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * CreateSpecimenForm Class is used to encapsulate all the request parameters passed
+ * CreateSpecimenForm Class is used to encapsulate all the request parameters passed 
  * from Create Specimen webpage.
  * @author aniruddha_phadnis
  */
@@ -125,7 +125,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 
 	/**
 	 * This function Copies the data from an site object to a SiteForm object.
-	 * @param abstractDomain An object containing the information about site.
+	 * @param abstractDomain An object containing the information about site.  
 	 */
 	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
@@ -172,13 +172,13 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable, IPrin
 						}
 					}
 				}
-//				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
-//				if(!this.generateLabel && Validator.isEmpty(this.label) && this.label.trim().equals(""))
-//				{
-//					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-//							ApplicationProperties.getValue("specimen.label")));
-//
-//				}
+				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
+						&& Validator.isEmpty(this.label) && this.label.trim().equals(""))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+							ApplicationProperties.getValue("specimen.label")));
+
+				}
 			}
 		}
 		catch (final Exception excp)

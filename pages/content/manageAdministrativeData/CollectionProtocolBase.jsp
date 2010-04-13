@@ -31,15 +31,6 @@
 
 	function openEventPage()
 	{
-		var labelFormat = window.frames['SpecimenRequirementView'].document.getElementById('specimenLabelFormat').value;
-
-
-		/**var radionButton = window.frames['SpecimenRequirementView'].document.getElementById('generateLabelCheck3').checked;
-		if(radionButton && (labelFormat == '' || labelFormat == null))
-		{
-			document.getElementById('labelFormatErrDiv').style.display="block";
-			return;
-		}-->*/
 		selectAllClinicalDiagnosis();
 		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
 		if(formId!=null)
@@ -162,13 +153,6 @@
 				User can not edit existing Events and Specimen Requirements
 			</span>
 		</logic:equal>
-				<!--<div id="labelFormatErrDiv" style="display:none">
-
-					<span class="messagetexterror">
-				Label Format is mandatory for custom label generation
-					</span>
-
-				</div>-->
 				<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 		  </td>
         </tr>

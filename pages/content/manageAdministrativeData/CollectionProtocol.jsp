@@ -9,7 +9,6 @@
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"%>
 <head>
 <SCRIPT LANGUAGE="JavaScript">
 	var search1='`';
@@ -46,8 +45,6 @@
 
 <%
 	String selectText = "--Select--";
-	//CollectionProtocolForm newformName = (CollectionProtocolForm)request.getAttribute("formName");
-	//System.out.println("formName   &&****#$#$#$#$$##$#$   :  "+ newformName.isGenerateLabel());
 %>
 
 
@@ -69,39 +66,10 @@ function defineEvents()
 }
 
 function updateCPTree()
-{
+{	
   window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
 }
 
-function hideTreeChecked(radioButton)
-{//alert('hell');
-
-//alert(document.getElementById('generateLabelCheck2').checked);
-	if(radioButton.value == 1)
-	{
-		document.getElementById('generateLabel').value=false;
-		document.getElementById('defaultLabelGen').value=false;
-		document.getElementById('specimenLabelFormat').value="";
-		document.getElementById('specimenLabelFormat').disabled=true;
-	}
-	if(radioButton.value == 2)
-	{
-		document.getElementById('generateLabel').value=false;
-		document.getElementById('defaultLabelGen').value=true;
-		document.getElementById('specimenLabelFormat').value="";
-		document.getElementById('specimenLabelFormat').disabled=true;
-	}
-	if(radioButton.value == 3)
-	{
-		document.getElementById('defaultLabelGen').value=false;
-		document.getElementById('generateLabel').value=true;
-		document.getElementById('specimenLabelFormat').disabled=false;
-	}
-
-
-
-
-}
 </script>
 
 <style>
@@ -115,7 +83,7 @@ function hideTreeChecked(radioButton)
 	}
 </style>
 </head>
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <LINK href="css/calanderComponent.css" type="text/css" rel="stylesheet">
 <html:form action='${requestScope.formName}' styleId="CollectionProtocolForm">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -141,16 +109,12 @@ function hideTreeChecked(radioButton)
 						<html:hidden property="onSubmit"/>
 						<html:hidden property="id" />
 					    <html:hidden property="redirectTo"/>
-	<html:hidden property="generateLabel" styleId="generateLabel"/>
-	<html:hidden property="defaultLabelGen" styleId="defaultLabelGen"/>
+						
 						<html:hidden property="sequenceNumber" />
 						<html:hidden property="type" />
 						<html:hidden property="studyCalendarEventPoint" />
 						<html:hidden property="parentCollectionProtocolId" />
 
-					<script>
-						//alert(document.getElementById('generateLabel').value);
-					</script>
                       <tr>
                         <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
                         <td width="22%" align="left" class="black_ar"><bean:message key="collectionprotocol.principalinvestigator" /> </td>
@@ -165,8 +129,8 @@ function hideTreeChecked(radioButton)
                         <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0"/></td>
                         <td align="left" class="black_ar"><bean:message key="collectionprotocol.protocoltitle" /> </td>
 
-						<!--  Added by geeta -->
-						<%
+						<!--  Added by geeta --> 
+						<% 
 						if(Variables.isCPTitleChange){
 						%>
 							<td align="left"> <html:textarea styleClass="black_ar" cols="28" rows="3" styleId="title" property="title" readonly='${requestScope.readOnlyValue}' /></td>
@@ -189,7 +153,7 @@ function hideTreeChecked(radioButton)
                       <tr>
                         <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
                         <td align="left" class="black_ar"><label for="startDate"><bean:message key="collectionprotocol.startdate" /> </label></td>
-                        <td align="left" valign="top"><ncombo:DateTimeComponent name="startDate"
+                        <td align="left" valign="top"><ncombo:DateTimeComponent name="startDate" 
 							  id="startDate"
 							  formName="collectionProtocolForm"
 							  month= '${requestScope.collectionProtocolMonth}'
@@ -222,7 +186,7 @@ function hideTreeChecked(radioButton)
 							<td align="center" class="black_ar">&nbsp;</td>
 							<td align="left" class="black_ar">
 								<bean:message key="site.activityStatus" />
-							</td>
+							</td> 
 							<td align="left" class="black_ar">
 								<autocomplete:AutoCompleteTag
 								property="activityStatus"
@@ -235,100 +199,38 @@ function hideTreeChecked(radioButton)
 					</logic:equal>
 
 						<tr>
-
+			
 					 	  <td align="center" class="black_ar">&nbsp;</td>
 
 						  <td align="left" class="black_ar">
 					  		<bean:message key="specimenCollectionGroup.clinicalDiagnosis" />
 					   	  </td>
-
-						  <td align="left" class="black_ar">
+					   	  
+						  <td align="left" class="black_ar"> 
 					    	 <mCombo:multiSelectUsingCombo
 								identifier="coord"
-								size="20"
+								size="20"  
 								styleClass="black_ar_new"
-								addNewActionStyleClass="black_ar_new"
-								addButtonOnClick="moveOptions('coord','protocolCoordinatorIds', 'add')"
+								addNewActionStyleClass="black_ar_new"  
+								addButtonOnClick="moveOptions('coord','protocolCoordinatorIds', 'add')" 
 								removeButtonOnClick="moveOptions('protocolCoordinatorIds','coord', 'edit')"
 								selectIdentifier="protocolCoordinatorIds"
 								collection="<%=(List)request.getAttribute("selectedCoordinators")%>"
 								numRows="4" />
 					   	  </td>
-
+						
 						</tr>
-<!------------------------------------------------------------------------>
-						<tr>
-							<td align="center" class="black_ar">&nbsp;</td>
-							<td align="left" class="black_ar"><label>Generate Labels?</label></td>
-							<td>
-							<input type="radio" value="1" id="generateLabelCheck1" name="generateLabelCheck" onclick="hideTreeChecked(this)" checked="true"/>
-						<span class="black_ar" valign="top">
-						No</span>&nbsp;&nbsp;
-						<input type="radio" value="2" id="generateLabelCheck2" name="generateLabelCheck" onclick="hideTreeChecked(this)"/>
-						 <span class="black_ar" valign="top">Default</span>
-						 &nbsp;&nbsp;
-						 <input type="radio" value="3" id="generateLabelCheck3" name="generateLabelCheck" onclick="hideTreeChecked(this)"/>
-						 <span class="black_ar" valign="top">Custom</span>&nbsp;&nbsp;
-						<logic:equal name="collectionProtocolForm" property="generateLabel" value="true">
-						<html:text styleClass="black_ar" maxlength="50"  size="30" styleId="specimenLabelFormat" property="specimenLabelFormat" />
-						</logic:equal>
-						<logic:equal name="collectionProtocolForm" property="generateLabel" value="false">
-						<html:text styleClass="black_ar" maxlength="50"  size="30" styleId="specimenLabelFormat" property="specimenLabelFormat" disabled="true" />
-						</logic:equal>
-							</td>
-						</tr>
-						<script>
-								var hideTreeVal=document.getElementById('generateLabel').value;
-								var defaultLabelGen = document.getElementById('defaultLabelGen').value;
-								var labelVal=document.getElementById('specimenLabelFormat').value;
-								//alert("ddd   "+hideTreeVal);
-								//alert("${requestScope.generateLabel}");
 
-										if(hideTreeVal == 'true' && labelVal != null && labelVal != "")
-										{
-											document.getElementById('generateLabelCheck3').checked=true;
-										}
-										else if(hideTreeVal == 'true' && defaultLabelGen == 'false' && (labelVal == null || labelVal == ""))
-										{
-											document.getElementById('generateLabelCheck3').checked=true;
-											document.getElementById('specimenLabelFormat').disabled=false;
-										}
-										else if(defaultLabelGen == 'true' && (labelVal == null || labelVal == ""))
-										{
-											document.getElementById('generateLabelCheck2').checked=true;
-											document.getElementById('specimenLabelFormat').disabled=true;
-										}
-							</script>
-							<tr height="8">
-						<td colspan="3"/>
-					  </tr>
-						<tr>
-							<td align="center" class="black_ar">&nbsp;</td>
-							<td align="left" class="black_ar" colspan="2"><label>Store all aliquot(s) in same container?</label>&nbsp;&nbsp;&nbsp;&nbsp;
-							<html:radio property="aliqoutInSameContainer" styleId="aliqoutInSameContainer" value="true"/>&nbsp;<bean:message key="consent.consentwaivedyes" />&nbsp;&nbsp;<html:radio property="aliqoutInSameContainer" styleId="aliqoutInSameContainer" value="false"/>&nbsp;<label for="consentWaived"><bean:message key="consent.consentwaivedno" /></label>
-							</td>
-
-						</tr>
-<!------------------------------------------------------------------------->
-
-					  <tr height="10">
-						<td colspan="3"/>
-					  </tr>
 					 </table>
 
-
-
+					  
+					  <table cellpadding="0" cellspacing="0" border="0" width = "100%" id="submittable">
+                      <tr>
+                        <td class="black_ar"><label><html:checkbox property="aliqoutInSameContainer"><bean:message key="aliquots.storeAllAliquotes" /></html:checkbox></label><br><br></td>
+                      </tr>
+                      </table>
 					<%@ include file="/pages/content/ConsentTracking/DefineConsent.jsp" %>
                 </td>
               </tr>
             </table>
 			</html:form>
-
-<script>
-function onCheckboxButtonClick(radioButton)
-{
-	var generateLabel  = document.getElementById("generateLabel");
-			var specimenLabelFormat = document.getElementById("specimenLabelFormat");
-}
-
-</script>

@@ -1,5 +1,5 @@
 /**
- *
+ * 
  */
 
 package edu.wustl.catissuecore.tag;
@@ -22,11 +22,10 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDetailsInfo;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This tag will accept the list of specimens and display them in
+ * This tag will accept the list of specimens and display them in 
  * editable or readonly mode.
  * It accepts following attributes:
  * 	columnHeaderListName
@@ -36,7 +35,7 @@ import edu.wustl.common.util.logger.Logger;
  * 	columnListName
  * 	isReadOnly
  * 	displayColumnListName
- *
+ * 
  * @author mandar_deshmukh
  *
  */
@@ -87,7 +86,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	private String displayColumnListName = "";
 	private String columnHeaderListName = "";
 	private String dataListName = "";
-	private String isReadOnly = ""; // ------- as decided
+	private String isReadOnly = ""; // ------- as decided 
 	private String formName = "";
 	private String dataListType = "";
 	private String columnListName = "";
@@ -110,38 +109,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	private transient int cWd = 10;
 	SpecimenDetailsInfo specimenSummaryForm = null;
 
-	private boolean generateLabel;
-
-	private String displayName;
-
-	private String parentName;
 	//	--------------- Attribute Section end ------------
-
-
-
-	public String getDisplayName()
-	{
-		return displayName;
-	}
-
-
-
-	public void setDisplayName(String displayName)
-	{
-		this.displayName = displayName;
-	}
-
-
-	public boolean isGenerateLabel()
-	{
-		return generateLabel;
-	}
-
-
-	public void setGenerateLabel(boolean generateLabel)
-	{
-		this.generateLabel = generateLabel;
-	}
 
 	// ------------------Getter - Setter Section start ---------
 	public String getColumnHeaderListName()
@@ -218,14 +186,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 
 	/**
 	 * A call back function, which gets executed by JSP runtime when opening tag for this
-	 * custom tag is encountered.
+	 * custom tag is encountered. 
 	 */
 	public int doStartTag() throws JspException
 	{
 		try
 		{
-
-
 			final JspWriter out = this.pageContext.getOut();
 
 			out.print("");
@@ -286,7 +252,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	}
 
 	/* method to validate the given values for the attributes.
-	 * Returns true if all required attributes are in proper valid format. Otherwise returns false.
+	 * Returns true if all required attributes are in proper valid format. Otherwise returns false. 
 	 */
 	private boolean validateTagAttributes()
 	{
@@ -384,13 +350,6 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		{
 			this.columnList = new ArrayList();
 			this.setFixedColumnsList(this.columnList);
-		}
-		final List specimenList = this.getDataList();
-		if(specimenList != null && !specimenList.isEmpty())
-		{
-			final GenericSpecimen specimen = (GenericSpecimen) specimenList.get(0);
-			this.generateLabel=specimen.isGenerateLabel();
-			this.specimenSummaryForm.setGenerateLabel(generateLabel);
 		}
 	}
 
@@ -525,8 +484,6 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		for (int counter = 0; counter < specimenList.size(); counter++)
 		{
 			final GenericSpecimen specimen = (GenericSpecimen) specimenList.get(counter);
-			displayName = specimen.getDisplayName();
-			parentName = specimen.getParentName();
 			if (Constants.TRUE.equalsIgnoreCase(this.isReadOnly) || specimen.getReadOnly())
 			{
 				//				 addReadOnlyRow(sb, counter, specimen);
@@ -543,7 +500,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			stringBuffer.append("</TABLE>");
 		}
 
-		//String output =sb.toString();
+		//String output =sb.toString();				
 		return stringBuffer.toString();
 	}
 
@@ -557,9 +514,9 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			final String elementNamePrefix = this.elementPrefixPart1 + counter + "].";
 			if (counter == 0)
 			{
-				this.createHeaderRow1(stringBuffer, TR_GRAY, specimen); // row1 containing headers for first half (editable fields)
+				this.createHeaderRow1(stringBuffer, TR_GRAY, specimen); // row1 containing headers for first half (editable fields) 
 			}
-			this.createFieldRow(stringBuffer, counter, specimen, elementNamePrefix, isTextRow); // row2 containing actual editable fields (first half)
+			this.createFieldRow(stringBuffer, counter, specimen, elementNamePrefix, isTextRow); // row2 containing actual editable fields (first half) 
 		}
 		else
 		{
@@ -576,7 +533,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			stringBuffer.append(TD_OPEN);
 			stringBuffer.append("<TABLE border=0 width='100%'>");
 			this.createHeaderRow1(stringBuffer, TR_OPEN, specimen); // row1 containing headers for first half (editable fields)
-			this.createFieldRow(stringBuffer, counter, specimen, elementNamePrefix, isTextRow); // row2 containing actual editable fields (first half)
+			this.createFieldRow(stringBuffer, counter, specimen, elementNamePrefix, isTextRow); // row2 containing actual editable fields (first half) 
 			this.createHeaderRow2(stringBuffer); // row3 containing headers for second half (text fields)
 			this.createTextFieldRow(stringBuffer, counter, specimen, elementNamePrefix); // row containing text data (second half)
 
@@ -637,39 +594,24 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			String[] nameValue, String styleClass,
 			int size)
 	{
-		//		 sb.append("<td class=\"black_ar_md\" >");
+		//		 sb.append("<td class=\"black_ar_md\" >"); 
 		/*stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
 				+ "\" class=\"" + styleClass + "\" size=\"" + size + "\">");*/
-//		if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
-		if (!this.generateLabel && (nameValue[0].contains("parentName")) )
+		if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl &&
+			(nameValue[0].contains("parentName")))
 		{
 			stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
   				+ "\" class=\"" + styleClass + "\" size=\"" + size + "disabled=\"disabled\""+"\">");
-		}
+		} 
 		else
-		{
-			if(this.generateLabel && Validator.isEmpty(this.displayName) && nameValue[0].contains("displayName"))
-			{
-			}
-			else if(this.generateLabel && !Validator.isEmpty(this.displayName) && nameValue[0].contains("displayName") && nameValue[1].equals("AutoGenerated"))
-			{
-
-			}
-			else if(this.generateLabel && Validator.isEmpty(this.parentName) && nameValue[0].contains("parentName"))
-			{
-
-			}
-			else if(this.generateLabel && nameValue[0].contains("parentName") && !Validator.isEmpty(nameValue[1]) && nameValue[1].equals("AutoGenerated"))
-			{
-
-			}
-			else
-			{
-				stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
-				+ "\" class=\"" + styleClass + "\" size=\"" + size + "\">");
-			}
-		}
-
+			stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
+  				+ "\" class=\"" + styleClass + "\" size=\"" + size + "\">");
+			
+		//		 if(nameValue.length == 3)
+		//		 {
+		//			 sb.append("<BR><SPAN nowrap>"+nameValue[2]+"</SPAN>");
+		//		 }
+		//	 sb.append(TD_CLOSE);
 	}
 
 	private void createHeaderRow1(StringBuffer stringBuffer,
@@ -694,7 +636,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			}
 			if ((((String) this.columnHeaderList.get(cnt)).trim().length() > 0))
 			{
-				// to be displayed only in case of aliquots.	||
+				// to be displayed only in case of aliquots.	|| 		
 				if ((cnt == 3 && !this.dataListType.equalsIgnoreCase(this.dataListTypes[1]))
 						|| (cnt == 5 && !this.dataListType.equalsIgnoreCase(this.dataListTypes[2]))) // to be displayed only in case of derived.
 				{
@@ -739,38 +681,10 @@ public class SpecimenDetailsNewFormat extends TagSupport
 					}
 					else
 					{
-						if(Validator.isEmpty(this.displayName) && this.generateLabel && this.columnHeaderList
-								.get(cnt).equals("specimen.label"))
-						{
-							stringBuffer.append(TD_1HLF + this.cWd + TD_2HLF);
-						}
-						else if(!Validator.isEmpty(this.displayName) && this.displayName.equals("AutoGenerated") && this.generateLabel && this.columnHeaderList
-								.get(cnt).equals("specimen.label"))
-						{
-							stringBuffer.append(TD_1HLF + this.cWd + TD_2HLF);
-						}
-						else if(cnt == 0 && !Validator.isEmpty(this.parentName) && this.parentName.equals("AutoGenerated") && this.generateLabel && this.columnHeaderList
-								.get(cnt).equals("anticipatorySpecimen.Parent"))
-						{
-							stringBuffer.append(TD_1HLF + this.cWd + TD_2HLF);
-						}
-						else if(cnt == 0 && this.parentName != null && this.parentName.equals("") && this.generateLabel && this.columnHeaderList
-								.get(cnt).equals("anticipatorySpecimen.Parent"))
-						{
-							stringBuffer.append(TD_1HLF + this.cWd + TD_2HLF);
-						}
-						else if(cnt == 0 && Validator.isEmpty(this.parentName) && this.generateLabel && this.columnHeaderList
-								.get(cnt).equals("anticipatorySpecimen.Parent"))
-						{
-							stringBuffer.append(TD_1HLF + this.cWd + TD_2HLF);
-						}
-						else
-						{
 						stringBuffer.append(TD_1HLF + this.cWd + TD_2HLF);
 						stringBuffer.append("<SPAN class=black_ar_b>"
 								+ ApplicationProperties.getValue((String) this.columnHeaderList
 										.get(cnt)) + "</SPAN>");
-						}
 					}
 					//bug 11169 end
 				}
@@ -962,7 +876,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 
 			final String[] nameValue = this
 					.get1EleDetAt(columnCounter, specimen, elementNamePrefix);
-			// to be displayed only in case of aliquots.	||
+			// to be displayed only in case of aliquots.	|| 		
 			if ((columnCounter == 3 && !this.dataListType.equalsIgnoreCase(this.dataListTypes[1]))
 					|| (columnCounter == 5 && !this.dataListType
 							.equalsIgnoreCase(this.dataListTypes[2]))) // to be displayed only in case of derived.

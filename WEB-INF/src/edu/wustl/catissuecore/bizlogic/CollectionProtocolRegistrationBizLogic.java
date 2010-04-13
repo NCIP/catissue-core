@@ -30,7 +30,6 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
-import edu.wustl.catissuecore.namegenerator.LabelGenException;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
@@ -792,7 +791,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 
 			dao.insert(collectionProtocolRegistration);
-
+			
 			if (armFound == false)
 			{
 				if (reportLoaderFlag == false &&
@@ -984,7 +983,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			throws BizLogicException
 	{
 		super.postInsert(obj, dao, sessionDataBean);
-		// Commented by Geeta for removing the CP
+		// Commented by Geeta for removing the CP 
 		//ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
 		//participantRegCacheManager.registerParticipant(collectionProtocolRegistration.getCollectionProtocol().getId(), collectionProtocolRegistration.getParticipant().getId(), collectionProtocolRegistration.getProtocolParticipantIdentifier());
 	}
@@ -1194,7 +1193,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		catch (final DAOException daoExp)
 		{
 			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+			daoExp.printStackTrace();	
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1234,7 +1233,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 
 			SpecimenCollectionGroup oldSpecimenCollectionGroup = getOldSpecimenCollectionGroup
 			(specimenCollectionGroup.getId(),oldCollectionProtocolRegistration.getSpecimenCollectionGroupCollection());
-
+			
 			final Collection<Specimen> specimenCollection = specimenCollectionGroup
 					.getSpecimenCollection();
 			if (specimenCollection != null && !specimenCollection.isEmpty())
@@ -1264,10 +1263,10 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			Collection<SpecimenCollectionGroup>specimenCollectionGroupCollection)
 	{
 		SpecimenCollectionGroup oldSpecimenCollectionGroup = null;
-
-
+		
+		
 		Iterator<SpecimenCollectionGroup> itr = specimenCollectionGroupCollection.iterator();
-
+		
 		while(itr.hasNext())
 		{
 			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)itr.next();
@@ -1278,9 +1277,9 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 		}
 		return oldSpecimenCollectionGroup;
-
+		
 	}
-
+	
 	/**
 	 * This method will be called to get old specimen.
 	 * @param specimenId Specimen Id.
@@ -1291,10 +1290,10 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			Collection<Specimen>specimenCollection)
 	{
 		Specimen oldSpecimen = null;
-
-
+		
+		
 		Iterator<Specimen> itr = specimenCollection.iterator();
-
+		
 		while(itr.hasNext())
 		{
 			Specimen specimen = (Specimen)itr.next();
@@ -1305,10 +1304,10 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 		}
 		return oldSpecimen;
-
+		
 	}
-
-
+	
+	
 	/**
 	 * post Update.
 	 * @param dao
@@ -1342,7 +1341,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			newProtocolParticipantId = "";
 		}
 
-		// Commented by Geeta for removing teh CP
+		// Commented by Geeta for removing teh CP 
 		/*
 			if (oldCPId.longValue() != newCPId.longValue() || oldParticipantId.longValue() != newParticipantId.longValue()
 					|| !oldProtocolParticipantId.equals(newProtocolParticipantId))
@@ -1412,7 +1411,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	/**
 	 * Add a dummy participant when participant is registed to a protocol using
 	 * participant protocol id.
-	 * @throws AuditException
+	 * @throws AuditException 
 	 */
 	private Participant addDummyParticipant(DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException, DAOException, AuditException
@@ -2026,7 +2025,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 						if (cp.getSequenceNumber().intValue() > sequenceNumber.intValue())
 						{
 							CollectionProtocolRegistration cpr;
-
+							
 							cpr = this.getCPRbyCollectionProtocolIDAndParticipantID(dao,
 									cp.getId(), collectionProtocolRegistration.getParticipant()
 											.getId());
@@ -2182,7 +2181,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	//		/*Collection specimenCollectionGroupCollection = (Collection) dao.retrieveAttribute(CollectionProtocolRegistration.class.getName(),
 	//				collectionProtocolRegistration.getId(), Constants.COLUMN_NAME_SCG_COLL);*/
 	//		Collection specimenCollectionGroupCollection = collectionProtocolRegistration.getSpecimenCollectionGroupCollection();
-	//
+	//		
 	//		if (!specimenCollectionGroupCollection.isEmpty())
 	//		{
 	//			Iterator specimenCollectionGroupIterator = specimenCollectionGroupCollection.iterator();
@@ -2287,10 +2286,6 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				this.logger.error(e.getMessage(), e);
 				e.printStackTrace();
 				throw this.getBizLogicException(e, "name.generator.exp", "");
-			}
-			catch (LabelGenException e)
-			{
-				this.logger.error(e.getMessage(), e);
 			}
 		}
 		else

@@ -4,7 +4,6 @@ package edu.wustl.catissuecore.namegenerator;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -46,16 +45,7 @@ public final class LabelGeneratorFactory
 		{
 			if (labelgeneratorMap.get(generatorType) == null)
 			{
-				String className = PropertyHandler.getValue(generatorType);
-				if(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME.equals(generatorType))
-				{
-					className="edu.wustl.catissuecore.namegenerator.DefaultSpecimenLabelGenerator";
-				}
-				if(Constants.CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME.equals(generatorType))
-				{
-					className="edu.wustl.catissuecore.namegenerator.CustomSpecimenLabelGenerator";
-				}
-
+				final String className = PropertyHandler.getValue(generatorType);
 				if (className != null && !"".equals(className))
 				{
 					labelgeneratorMap.put(generatorType, Class.forName(className).newInstance());
@@ -90,10 +80,5 @@ public final class LabelGeneratorFactory
 			LabelGeneratorFactory.LOGGER.error(ex.getMessage(), ex);
 			throw new NameGeneratorException(ex.getMessage(), ex);
 		}
-	}
-
-	public void init()
-	{
-
 	}
 }

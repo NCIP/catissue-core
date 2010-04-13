@@ -85,7 +85,7 @@ public final class LabelAndBarcodeGeneratorInitializer
 				.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
 		if (specimenGeneratorInstance != null)
 		{
-			//Variables.isSpecimenLabelGeneratorAvl = true;
+			Variables.isSpecimenLabelGeneratorAvl = true;
 		}
 		ppiLabelGeneratorInstance = LabelGeneratorFactory
 				.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);

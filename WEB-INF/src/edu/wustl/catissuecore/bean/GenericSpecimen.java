@@ -123,9 +123,6 @@ public interface GenericSpecimen extends Serializable
 
 	public void setShowBarcode(boolean showBarcode);
 
-	public boolean isGenerateLabel();
-
-	public void setGenerateLabel(boolean generateLabel);
 	/*
 		public String getUniqueIdentifier();
 		public String getDisplayName();
@@ -137,9 +134,9 @@ public interface GenericSpecimen extends Serializable
 		public String getStorageContainerForSpecimen();
 		public String getQuantity();
 		public String getConcentration();
-
+		
 		public String getParentName();
-
+		
 		public LinkedHashMap<String, GenericSpecimen> getAliquotSpecimenCollection();
 		public LinkedHashMap<String, GenericSpecimen> getDeriveSpecimenCollection();
 	*/

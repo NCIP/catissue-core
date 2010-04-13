@@ -238,7 +238,6 @@ public class NewSpecimenAction extends SecureAction
 			// Lazy - specimenCollectionGroup.getCollectionProtocolRegistration()
 			final CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroup
 					.getCollectionProtocolRegistration();
-			specimenForm.setGenerateLabel(collectionProtocolRegistration.getCollectionProtocol().getGenerateLabel());
 			if (collectionProtocolRegistration == null
 					|| collectionProtocolRegistration.getSignedConsentDocumentURL() == null)
 			{
@@ -754,7 +753,7 @@ public class NewSpecimenAction extends SecureAction
 							{
 								specimenForm.setVirtuallyLocated(false);
 							}
-
+							
 							containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(AppUtility.
 								setparameterList(cpId,spClass,0,spType), sessionData, dao);
 							logger.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
@@ -1386,7 +1385,6 @@ public class NewSpecimenAction extends SecureAction
 			NewSpecimenForm specimenForm)
 	{
 		final Calendar calender = Calendar.getInstance();
-
 		final Collection scgEventColl = specimenCollectionGroup
 				.getSpecimenEventParametersCollection();
 		if (scgEventColl != null && !scgEventColl.isEmpty())
@@ -1540,8 +1538,8 @@ public class NewSpecimenAction extends SecureAction
 			final QueryWhereClause queryWhereClause = new QueryWhereClause(
 					SpecimenCollectionGroup.class.getName());
 			 if(scgName.contains("'"))
-	            {
-	             System.out.println("scgName "+scgName);
+	            { 
+	             System.out.println("scgName "+scgName);	
 				 scgName = scgName.replace("'", "''");
 	           }
 			queryWhereClause.addCondition(new EqualClause("name", scgName));

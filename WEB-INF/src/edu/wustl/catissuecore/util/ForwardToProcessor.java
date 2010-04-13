@@ -82,10 +82,6 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			{
 				forwardToHashMap.put("specimenCollectionGroupName", specimen.getSpecimenCollectionGroup().getGroupName().toString());
 			}
-			if(!forwardToHashMap.containsKey("generateLabel") && specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration() != null)
-			{
-				forwardToHashMap.put("generateLabel", specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
-			}
 			//end of fix for bug no.7439
 			//Derive New from This Specimen
 			if (actionForm.getForwardTo().equals("createNew") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("PrintSpecimenEdit") || actionForm.getForwardTo().equals("addSpecimenToCartForwardtoDerive") || actionForm.getForwardTo().equals("addSpecimenToCartPrintAndForward"))
@@ -134,7 +130,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			{
 				forwardToHashMap.put("specimenLabel", specimen.getLabel());
 			}
-
+			
 			//Aniruddha:17/07/06 :: Added for aliquot result page
 			if (Constants.ALIQUOT.equals(((Specimen) domainObject).getLineage()) && actionForm.getOperation().equals(Constants.ADD))
 			{
@@ -157,7 +153,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 		//Checking weather any of order item is distributed. If order item distributed then forward to distribition report page
 		else if (domainObject instanceof OrderDetails)
 		{
-
+			
 			int specimenDistributedCnt = 0;
 			int specimenArrayDistributedCnt = 0;
 			OrderDetails order = (OrderDetails) domainObject;

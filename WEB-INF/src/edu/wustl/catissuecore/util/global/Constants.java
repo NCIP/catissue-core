@@ -2117,13 +2117,6 @@ public class Constants
 	public static final String NEW_SPECIMEN_TYPE = "New_Specimen";
 	public static final String DERIVED_SPECIMEN_TYPE = "Derived_Specimen";
 
-	public static final String SPECIMEN_TYPE_NAME = "NAME";
-	public static final String SPECIMEN_TYPE_ABBRIVIATION = "ABBRIVIATION";
-	public static final String DEFAULT_TYPE_NAME = "DEFAULT_NAME";
-	public static final String ABBREVIATION_XAML_FILE_NAME = "Abbreviations.xml";
-	public static final String LABEL_TOKEN_PROP_FILE_NAME="LabelTokens.Properties";
-
-	public static final String CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME = "customSpecimenLabelGeneratorClass";
 	public static final String SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME = "specimenLabelGeneratorClass";
 	public static final String SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME = "specimenBarcodeGeneratorClass";
 	public static final String STORAGECONTAINER_LABEL_GENERATOR_PROPERTY_NAME = "storageContainerLabelGeneratorClass";

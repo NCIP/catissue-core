@@ -15,18 +15,18 @@ public interface LabelGenerator
 	 * Set Label for given Object.
 	 * @param object Object for which label will be generated
 	 */
-	void setLabel(Object object) throws LabelGenException;
+	void setLabel(Object object);
 
 	/**
 	 * Set Label for given Object.
 	 * @param object Object for which label will be generated
 	 */
-	void setLabel(List object) throws LabelGenException;
+	void setLabel(List object);
 
 	/**
 	 * Returns Label for given Object.
 	 * @param object -Object for which label will be returned
 	 * @return label- Label of object
 	 */
-	String getLabel(Object object) throws LabelGenException;
+	String getLabel(Object object);
 }

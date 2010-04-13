@@ -48,7 +48,6 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.query.generator.ColumnValueBean;
 
 /**
  * This class initializes the fields in the CollectionProtocol Add/Edit webpage.
@@ -144,9 +143,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		{
 			final CollectionProtocol collectionProtocol = this.getCPObj(cp_id);
 			// Resolved lazy --- collectionProtocol.getConsentTierCollection();
-			ColumnValueBean columnValueBean = new ColumnValueBean(collectionProtocol.getId());
 			final Collection consentTierCollection = (Collection) bizLogic.retrieveAttribute(
-					CollectionProtocol.class,collectionProtocol.getId(),
+					CollectionProtocol.class.getName(), collectionProtocol.getId(),
 					"elements(consentTierCollection)");
 			final Map tempMap = this.prepareConsentMap(consentTierCollection);
 			collectionProtocolForm.setConsentValues(tempMap);
@@ -413,8 +411,6 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setEndDate(collectionProtocolBean.getEndDate());
 		collectionProtocolForm.setAliqoutInSameContainer(collectionProtocolBean
 				.isAliqoutInSameContainer());
-		collectionProtocolForm.setGenerateLabel(collectionProtocolBean.isGenerateLabel());
-		collectionProtocolForm.setSpecimenLabelFormat(collectionProtocolBean.getLabelFormat());
 		// For Consent Tab
 		collectionProtocolForm
 				.setConsentTierCounter(collectionProtocolBean.getConsentTierCounter());

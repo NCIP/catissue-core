@@ -27,12 +27,12 @@ function updateCPTree()
 }
 </script>
 
-<script language="JavaScript">
-	var errorMessForRole='${requestScope.errorMessageForRole}';
-	var errorMessForSite='${requestScope.errorMessageForSite}';
-	var errorMessForUser='${requestScope.errorMessageForUser}';
-	var errorMessForCP='${requestScope.errorMessageForCP}';
-	var errorMessForPriv='${requestScope.errorMessageForPrivilege}';
+<script language="JavaScript">  
+	var errorMessForRole='${requestScope.errorMessageForRole}';	
+	var errorMessForSite='${requestScope.errorMessageForSite}';	
+	var errorMessForUser='${requestScope.errorMessageForUser}';	
+	var errorMessForCP='${requestScope.errorMessageForCP}';	
+	var errorMessForPriv='${requestScope.errorMessageForPrivilege}';	
 </script>
 <%
 	//Object obj=  request.getAttribute(Constants.ACTIONLIST);
@@ -59,8 +59,6 @@ function updateCPTree()
 		<html:hidden property="title" />
 		<html:hidden property="principalInvestigatorId" />
     	<html:hidden property="irbID" />
-    	<html:hidden property="generateLabel" />
-    	<html:hidden property="specimenLabelFormat" />
 		<html:hidden property="descriptionURL" />
 		<html:hidden property="enrollment" />
 		<html:hidden property="endDate" />
@@ -336,7 +334,7 @@ function updateCPTree()
 										<%
 										} else {
 										%>
-
+									
 									<tr id="<%=arr[4]%>">
 										<%
 										}
@@ -354,7 +352,7 @@ function updateCPTree()
 										%><span><%=arr[1]%></span></td>
 
 										<td width="22%" class="black_ar"><span><%=arr[0]%></span></td>
-
+										
 										<td width="40%" class="black_ar"
 											onmouseover="Tip('<%=arr[3]%>',WIDTH,200)">
 										<%

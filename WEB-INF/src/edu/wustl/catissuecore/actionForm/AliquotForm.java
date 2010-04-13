@@ -1,6 +1,6 @@
 /**
  * <p>Title: AliquotForm Class>
- * <p>Description:  This Class is used to encapsulate all the request parameters passed
+ * <p>Description:  This Class is used to encapsulate all the request parameters passed 
  * from Aliquot.jsp page. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -41,10 +41,10 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	/**
 	 * Logger instance.
 	 */
-	private final transient Logger logger =
+	private final transient Logger logger = 
 			Logger.getCommonLogger(AliquotForm.class);
 	/**
-	 *
+	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -172,7 +172,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	/**
 	 * Patch ID: 3835_1_8
 	 * See also: 1_1 to 1_5
-	 * Description : Added createdOn in formbean
+	 * Description : Added createdOn in formbean 
 	 */
 
 	private String createdDate;
@@ -192,18 +192,6 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 
 	private List<AbstractDomainObject> specimenList = new LinkedList<AbstractDomainObject>();
 
-	private boolean generateLabel;
-
-	public boolean isGenerateLabel()
-	{
-		return generateLabel;
-	}
-
-
-	public void setGenerateLabel(boolean generateLabel)
-	{
-		this.generateLabel = generateLabel;
-	}
 	public String getNextForwardTo()
 	{
 		return this.nextForwardTo;
@@ -512,7 +500,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 			/**
 			  * Patch ID: 3835_1_9
 			  * See also: 1_1 to 1_5
-			  * Description : Validated createdOn date field from form bean
+			  * Description : Validated createdOn date field from form bean 
 			  */
 			if (!Validator.isEmpty(this.createdDate))
 			{
@@ -568,8 +556,8 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 								ApplicationProperties.getValue("specimen.quantity")));
 					}
 				}
-//				else if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
-				else if(this.generateLabel && key.endsWith("_label"))
+				else if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
+						&& key.endsWith("_label"))
 				{
 					//by Falguni
 					final String value = (String) this.aliquotMap.get(key);
@@ -639,7 +627,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	}
 
 	/**
-	 * Returns the barcode of the parent specimen.
+	 * Returns the barcode of the parent specimen. 
 	 * @return String the barcode of the parent specimen.
 	 * @see #setBarcode(String)
 	 */
@@ -659,7 +647,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	}
 
 	/**
-	 * Returns the value of selected radio button.
+	 * Returns the value of selected radio button. 
 	 * @return String the value of selected radio button.
 	 * @see #setCheckedButton(String)
 	 */
@@ -669,7 +657,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	}
 
 	/**
-	 * Returns the value of selected radio button.
+	 * Returns the value of selected radio button. 
 	 * @param checkedButton The value of selected radio button.
 	 * @see #getCheckedButton()
 	 */
@@ -742,7 +730,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 		this.disposeParentSpecimen = disposeParentSpecimen;
 	}
 
-	/**
+	/**   
 	  * Patch ID: 3835_1_10
 	  * See also: 1_1 to 1_5
 	  * Description : Getter , setter methods for createdOn date

@@ -154,7 +154,7 @@ public class SpecimenForm extends AbstractActionForm
 	/**
 	 * Identify whether coming from multiple specimen or simple specimen page.
 	 * if "1" then from multipleSpecimen
-	 * else from other page
+	 * else from other page   
 	 */
 	protected String multipleSpecimen = "0";
 
@@ -179,29 +179,16 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	private String containerId;
 
-	protected boolean generateLabel;
-
-	public boolean isGenerateLabel()
-	{
-		return generateLabel;
-	}
-
-
-	public void setGenerateLabel(boolean generateLabel)
-	{
-		this.generateLabel = generateLabel;
-	}
-
 	/**
 	 * Patch ID: 3835_1_29
 	 * See also: 1_1 to 1_5
-	 * Description : Added createdDate in form for domain object's createdOn field
+	 * Description : Added createdDate in form for domain object's createdOn field 
 	 */
 
 	private String createdDate;
 
 	/**
-	 * Returns the concentration.
+	 * Returns the concentration. 
 	 * @return String the concentration.
 	 * @see #setConcentration(String)
 	 */
@@ -264,7 +251,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the map of external identifiers.
+	 * Returns the map of external identifiers. 
 	 * @return Map the map of external identifiers.
 	 * @see #setExternalIdentifier(Map)
 	 */
@@ -274,7 +261,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the comments.
+	 * Returns the comments. 
 	 * @return String the comments.
 	 * @see #setComments(String)
 	 */
@@ -294,7 +281,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the position dimension one.
+	 * Returns the position dimension one. 
 	 * @return String the position dimension one.
 	 * @see #setPositionDimensionOne(String)
 	 */
@@ -314,7 +301,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the position dimension two.
+	 * Returns the position dimension two. 
 	 * @return String the position dimension two.
 	 * @see #setPositionDimensionTwo(String)
 	 */
@@ -334,7 +321,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the barcode of this specimen.
+	 * Returns the barcode of this specimen. 
 	 * @return String the barcode of this specimen.
 	 * @see #setBarcode(String)
 	 */
@@ -354,7 +341,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the quantity.
+	 * Returns the quantity. 
 	 * @return String the quantity.
 	 * @see #setQuantity(String)
 	 */
@@ -374,7 +361,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the available quantity.
+	 * Returns the available quantity. 
 	 * @return String the available quantity.
 	 * @see #setAvailableQuantity(String)
 	 */
@@ -398,7 +385,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the unit of this specimen.
+	 * Returns the unit of this specimen. 
 	 * @return String the unit of this specimen.
 	 * @see #setUnit(String)
 	 */
@@ -418,7 +405,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the storage container of this specimen.
+	 * Returns the storage container of this specimen. 
 	 * @return String the storage container of this specimen.
 	 * @see #setStorageContainer(String)
 	 */
@@ -438,7 +425,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the subtype of this specimen.
+	 * Returns the subtype of this specimen. 
 	 * @return String the subtype of this specimen.
 	 * @see #setType(String)
 	 */
@@ -458,7 +445,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the className of this specimen.
+	 * Returns the className of this specimen. 
 	 * @return String the className of this specimen.
 	 * @see #setClassName(String)
 	 */
@@ -553,7 +540,7 @@ public class SpecimenForm extends AbstractActionForm
 
 	/**
 	 * This function Copies the data from an Specimen object to a SpecimenForm object.
-	 * @param abstractDomain An object containing the information about site.
+	 * @param abstractDomain An object containing the information about site.  
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -563,7 +550,7 @@ public class SpecimenForm extends AbstractActionForm
 		this.concentration = "";
 		this.comments = specimen.getComment();
 		this.setActivityStatus(specimen.getActivityStatus());
-		this.generateLabel=specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel();
+
 		/**
 		 * Patch ID: 3835_1_30
 		 * See also: 1_1 to 1_5
@@ -706,9 +693,9 @@ public class SpecimenForm extends AbstractActionForm
 
 			//			long intQuantity = (long) specimen.getQuantity().getValue().doubleValue();
 			//			long intAvailableQuantity = (long) specimen.getAvailableQuantity().getValue().doubleValue();
-			//
-			//			this.quantity = new Long(intQuantity).toString();
-			//			this.availableQuantity = new Long(intAvailableQuantity).toString();
+			//			
+			//			this.quantity = new Long(intQuantity).toString();			
+			//			this.availableQuantity = new Long(intAvailableQuantity).toString();	
 
 			//			this.quantity = new BigDecimal(specimen.getQuantity().getValue().toString()).toPlainString();
 			//			this.availableQuantity = new BigDecimal(specimen.getQuantity().getValue().toString()).toPlainString();
@@ -771,7 +758,7 @@ public class SpecimenForm extends AbstractActionForm
 				/**
 				     * Patch ID: 3835_1_31
 				     * See also: 1_1 to 1_5
-				     * Description : Validated the createdOn date field.
+				     * Description : Validated the createdOn date field. 
 				     */
 				if (!Validator.isEmpty(this.createdDate))
 				{
@@ -787,8 +774,8 @@ public class SpecimenForm extends AbstractActionForm
 				}
 
 				//Changed by falguni
-//				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
-				if(!this.generateLabel && Validator.isEmpty(this.label))
+				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
+						&& Validator.isEmpty(this.label))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.label")));
@@ -964,12 +951,12 @@ public class SpecimenForm extends AbstractActionForm
 					//											"errors.item.format", ApplicationProperties
 					//													.getValue("specimen.positionInStorageContainer")));
 					//								}
-					//
+					//		
 					//							}
 					//						}
 					//						else if(stContSelection==3)
 					//						{
-					//
+					//							
 					//						}
 					//					}
 				}
@@ -1027,7 +1014,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the counter that holds no. of external identifier rows.
+	 * Returns the counter that holds no. of external identifier rows. 
 	 * @return The counter that holds no. of external identifier rows.
 	 * @see #setExIdCounter(int)
 	 */
@@ -1047,7 +1034,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the position in storage container.
+	 * Returns the position in storage container. 
 	 * @return The position in storage container.
 	 * @see #setPositionInStorageContainer(String)
 	 */
@@ -1067,7 +1054,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns True/False, whether the quatity is available or not.
+	 * Returns True/False, whether the quatity is available or not. 
 	 * @return True/False, whether the quatity is available or not.
 	 * @see #setAvailable(boolean)
 	 */
@@ -1087,7 +1074,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the parent container id.
+	 * Returns the parent container id. 
 	 * @return The parent container id.
 	 * @see #setParentContainerId(String)
 	 */
@@ -1247,7 +1234,7 @@ public class SpecimenForm extends AbstractActionForm
 		this.pos1 = pos1;
 	}
 
-	/**
+	/** 
 	 * @param isBarcodeEditable Setter method for isBarcodeEditable
 	 */
 	public void setIsBarcodeEditable(String isBarcodeEditable)

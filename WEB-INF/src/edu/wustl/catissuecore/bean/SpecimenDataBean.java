@@ -15,7 +15,7 @@ public class SpecimenDataBean implements GenericSpecimen
 {
 
 	/**
-	 *
+	 * 
 	 */
 	private static final long serialVersionUID = -593612220432189911L;
 	public String uniqueId;
@@ -48,7 +48,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	protected String comment;
 
 	/**
-	 * Parent specimen from which this specimen is derived.
+	 * Parent specimen from which this specimen is derived. 
 	 */
 	protected Specimen parentSpecimen;
 
@@ -58,7 +58,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	protected Collection<Biohazard> biohazardCollection = new HashSet<Biohazard>();
 
 	/**
-	 * Collection of Specimen Event Parameters associated with this specimen.
+	 * Collection of Specimen Event Parameters associated with this specimen. 
 	 */
 	protected Collection<SpecimenEventParameters> specimenEventCollection = new HashSet<SpecimenEventParameters>();
 
@@ -108,19 +108,6 @@ public class SpecimenDataBean implements GenericSpecimen
 	private boolean showLabel = true;
 
 	private boolean readOnly = false;
-
-	private boolean generateLabel = false;
-
-	public boolean isGenerateLabel()
-	{
-		return generateLabel;
-	}
-
-
-	public void setGenerateLabel(boolean generateLabel)
-	{
-		this.generateLabel = generateLabel;
-	}
 
 	public GenericSpecimen getFormSpecimenVo()
 	{
