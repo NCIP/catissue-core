@@ -1324,7 +1324,6 @@
 		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" />
 		<!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
 		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" />
-		<antcall target="upgrade_db_from_DE_1.4.0_to_DE_1.4.2"/>
 		<antcall target="upgrade_de_integration_restructure_metadata"/>
 
 		<antcall target="update_metadata_for_tagged_values"/>
@@ -1815,7 +1814,6 @@
 	<target name="upgrade_db" description="Upgrading Database v1.1.p5 to v1.1.p5.1">
 		<echo message="Upgrading Database v1.1.p5 to v1.1.p5.1" />
 		<antcall target="upgrade_db_from_p5_to_p5.1"/>
-		<antcall target="upgrade_db_from_DE_1.4.0_to_DE_1.4.2"/>
 	</target>
 
 	<target name="upgrade_db_from_v1.1_to_p4" description="Target for Application and Database Upgrade from caTissue v1.1 to p4">
