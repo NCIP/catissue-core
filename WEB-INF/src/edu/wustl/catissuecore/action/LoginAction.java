@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
@@ -102,11 +103,15 @@ public class LoginAction extends XSSSupportedAction
 			final LoginForm loginForm = (LoginForm) form;
 			String loginName = loginForm.getLoginName();
 
-//			final String forwardTo = authenticateUser(request, loginForm, userStatus);
+			//			final String forwardTo = authenticateUser(request, loginForm, userStatus);
 			String forwardTo = null;
-			if(request.getParameter(ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL)!=null
-					&& !(ClinPortalIntegrationConstants.DOUBLE_QUOTE.equals(request.getParameter(ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL)))
-					&& Boolean.valueOf(request.getParameter(ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL)))
+			if (request.getParameter(ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL) != null
+					&& !(ClinPortalIntegrationConstants.DOUBLE_QUOTE
+							.equals(request
+									.getParameter(ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL)))
+					&& Boolean
+							.valueOf(request
+									.getParameter(ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL)))
 			{
 				forwardTo = Constants.SUCCESS;
 			}
@@ -119,19 +124,19 @@ public class LoginAction extends XSSSupportedAction
 				}
 				forwardTo = authenticateUser(request, loginForm, userStatus);
 			}
-			logger.info("forwardTo: "+forwardTo);
+			logger.info("forwardTo: " + forwardTo);
 			if (Constants.SUCCESS.equals(forwardTo))
 			{
-                ActionForward fwd=validateUser(mapping, request, loginForm, loginName);
-                String pageOf=request.getParameter(Constants.PAGE_OF);
-                if(pageOf!= null && pageOf.equals(ClinPortalIntegrationConstants.SCG))
-                {
-                    return mapping.findForward(Constants.SCG);
-                }
-                else
-                {
-                    return fwd;
-                }
+				ActionForward fwd = validateUser(mapping, request, loginForm, loginName);
+				String pageOf = request.getParameter(Constants.PAGE_OF);
+				if (pageOf != null && pageOf.equals(ClinPortalIntegrationConstants.SCG))
+				{
+					return mapping.findForward(Constants.SCG);
+				}
+				else
+				{
+					return fwd;
+				}
 			}
 			else
 			{
@@ -184,8 +189,8 @@ public class LoginAction extends XSSSupportedAction
 	 */
 	private String authenticateUser(HttpServletRequest request, LoginForm loginForm,
 			String userStatus) throws IOException, InitializationException,
-			ParserConfigurationException, SAXException, AuthenticationException,
-			NamingException, ApplicationException
+			ParserConfigurationException, SAXException, AuthenticationException, NamingException,
+			ApplicationException
 	{
 		try
 		{
@@ -204,7 +209,8 @@ public class LoginAction extends XSSSupportedAction
 			{
 				factory = AuthenticationManagerFactory.getAuthenticationManagerFactory();
 				authManager = factory.getAuthenticationManager(authType, absolutePath);
-				loginOK = authManager.authenticate(loginForm.getLoginName(), loginForm.getPassword());
+				loginOK = authManager.authenticate(loginForm.getLoginName(), loginForm
+						.getPassword());
 				if (loginOK)
 				{
 					if (edu.wustl.wustlkey.util.global.Constants.NEW_WASHU_USER.equals(userStatus))
@@ -221,13 +227,13 @@ public class LoginAction extends XSSSupportedAction
 				}
 
 			}
-			auditLogin(loginOK,loginForm.getLoginName(),request);
+			auditLogin(loginOK, loginForm.getLoginName(), request);
 
 			return forwardTo;
 		}
-		catch(SMException securityException)
+		catch (SMException securityException)
 		{
-			auditLogin(false,loginForm.getLoginName(),request);
+			auditLogin(false, loginForm.getLoginName(), request);
 			throw securityException;
 
 		}
@@ -239,11 +245,12 @@ public class LoginAction extends XSSSupportedAction
 	 * @param request http request
 	 * @throws ApplicationException exception.
 	 */
-	private void auditLogin(boolean loginOK, String loginName,HttpServletRequest request) throws ApplicationException
+	private void auditLogin(boolean loginOK, String loginName, HttpServletRequest request)
+			throws ApplicationException
 	{
 
-		HibernateDAO dao = (HibernateDAO)DAOConfigFactory.getInstance().getDAOFactory
-		(CommonServiceLocator.getInstance().getAppName()).getDAO();
+		HibernateDAO dao = (HibernateDAO) DAOConfigFactory.getInstance().getDAOFactory(
+				CommonServiceLocator.getInstance().getAppName()).getDAO();
 
 		try
 		{
@@ -251,22 +258,23 @@ public class LoginAction extends XSSSupportedAction
 			Long csmUserId = null;
 			dao.openSession(null);
 
-			final String userIdhql  = "select user.id, user.csmUserId from edu.wustl.catissuecore.domain.User user where "
-				+ "user.activityStatus= " + "'" + Status.ACTIVITY_STATUS_ACTIVE.toString()
-				+ "' and user.loginName =" + "'" + loginName + "'";
+			final String userIdhql = "select user.id, user.csmUserId from edu.wustl.catissuecore.domain.User user where "
+					+ "user.activityStatus= "
+					+ "'"
+					+ Status.ACTIVITY_STATUS_ACTIVE.toString()
+					+ "' and user.loginName =" + "'" + loginName + "'";
 
 			List UserIds = dao.executeQuery(userIdhql);
 			if (UserIds != null && !UserIds.isEmpty())
 			{
-				Object[] obj = (Object[])UserIds.get(0);
-				userId  = (Long)obj[0];
-				csmUserId = (Long)obj[1];
+				Object[] obj = (Object[]) UserIds.get(0);
+				userId = (Long) obj[0];
+				csmUserId = (Long) obj[1];
 			}
 
-			LoginDetails loginDetails = new LoginDetails(userId,
-					csmUserId,request.getRemoteAddr());
+			LoginDetails loginDetails = new LoginDetails(userId, csmUserId, request.getRemoteAddr());
 
-			((HibernateDAO)dao).auditLoginEvents(loginOK,loginDetails);
+			((HibernateDAO) dao).auditLoginEvents(loginOK, loginDetails);
 			dao.commit();
 		}
 		finally
@@ -291,8 +299,7 @@ public class LoginAction extends XSSSupportedAction
 		final List<List<String>> resultList = executeSQL(loginForm);
 		if (null == resultList)
 		{
-			forwardTo = setSignUpPageAttributes(request,
-					loginForm, authManager);
+			forwardTo = setSignUpPageAttributes(request, loginForm, authManager);
 		}
 		else
 		{
@@ -313,9 +320,9 @@ public class LoginAction extends XSSSupportedAction
 	private List<List<String>> executeSQL(LoginForm loginForm) throws ApplicationException
 	{
 		final String queryStr = "SELECT LOGIN_NAME FROM CATISSUE_USER WHERE WUSTLKEY = " + "'"
-		+ loginForm.getLoginName() + "'";
+				+ loginForm.getLoginName() + "'";
 		final String applicationName = CommonServiceLocator.getInstance().getAppName();
-		return WUSTLKeyUtility.executeQueryUsingDataSource(queryStr, false,applicationName);
+		return WUSTLKeyUtility.executeQueryUsingDataSource(queryStr, false, applicationName);
 	}
 
 	/**
@@ -329,16 +336,14 @@ public class LoginAction extends XSSSupportedAction
 	private String setSignUpPageAttributes(HttpServletRequest request, LoginForm loginForm,
 			AuthenticationManager authManager) throws NamingException
 	{
-		final Map<String, String> userAttrs =
-			authManager.getUserAttributes(loginForm.getLoginName());
+		final Map<String, String> userAttrs = authManager.getUserAttributes(loginForm
+				.getLoginName());
 		final String firstName = userAttrs.get(Constants.FIRSTNAME);
 		final String lastName = userAttrs.get(Constants.LASTNAME);
-		request.setAttribute(edu.wustl.wustlkey.util.global.Constants.WUSTLKEY,
-				loginForm.getLoginName());
-		request.setAttribute(edu.wustl.wustlkey.util.global.Constants.FIRST_NAME,
-				firstName);
-		request.setAttribute(edu.wustl.wustlkey.util.global.Constants.LAST_NAME,
-				lastName);
+		request.setAttribute(edu.wustl.wustlkey.util.global.Constants.WUSTLKEY, loginForm
+				.getLoginName());
+		request.setAttribute(edu.wustl.wustlkey.util.global.Constants.FIRST_NAME, firstName);
+		request.setAttribute(edu.wustl.wustlkey.util.global.Constants.LAST_NAME, lastName);
 		return edu.wustl.wustlkey.util.global.Constants.WASHU;
 	}
 
@@ -387,7 +392,7 @@ public class LoginAction extends XSSSupportedAction
 	 */
 	private ActionForward validateUser(ActionMapping mapping, HttpServletRequest request,
 			LoginForm loginForm, String loginName) throws ApplicationException
-			{
+	{
 
 		final User validUser = getUser(loginName);
 		if (validUser != null)
@@ -396,11 +401,12 @@ public class LoginAction extends XSSSupportedAction
 		}
 		else
 		{
-			LoginAction.logger.debug("User " + loginName + " Invalid user. Sending back to the login Page");
+			LoginAction.logger.debug("User " + loginName
+					+ " Invalid user. Sending back to the login Page");
 			handleError(request, "errors.incorrectLoginIDPassword");
 			return mapping.findForward(Constants.FAILURE);
 		}
-			}
+	}
 
 	/**
 	 * This method will create object of privilege cache for logged in user and create SessionDataBean object.
@@ -418,7 +424,7 @@ public class LoginAction extends XSSSupportedAction
 	 */
 	private ActionForward performAdminChecks(ActionMapping mapping, HttpServletRequest request,
 			LoginForm loginForm, final User validUser) throws ApplicationException
-			{
+	{
 		PrivilegeManager.getInstance().getPrivilegeCache(validUser.getLoginName());
 		LoginAction.logger.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 		final HttpSession session = request.getSession(true);
@@ -430,12 +436,23 @@ public class LoginAction extends XSSSupportedAction
 		}
 
 		final SessionDataBean sessionData = setSessionDataBean(validUser, ipAddress, adminUser);
-		logger.info("creating session data bean "+sessionData);
+		logger.info("creating session data bean " + sessionData);
 
-		LoginAction.logger.debug("CSM USer ID ....................... : " + validUser.getCsmUserId());
+		LoginAction.logger.debug("CSM USer ID ....................... : "
+				+ validUser.getCsmUserId());
 		session.setAttribute(Constants.SESSION_DATA, sessionData);
 		session.setAttribute(Constants.USER_ROLE, validUser.getRoleId());
-		final String result = passExpCheck(loginForm, validUser);
+
+		String result = Constants.SUCCESS;
+		// do not check for first time login and login expiry for wustl key user and migrated washu users
+		if (!(edu.wustl.wustlkey.util.global.Constants.WUSTLKEY.equals(WUSTLKeyUtility
+				.getUserFrom(loginForm.getLoginName())))
+				&& !edu.wustl.wustlkey.util.global.Constants.MIGRATED_TO_WUSTLKEY
+						.equals(WUSTLKeyUtility.checkForMigratedUser(loginForm.getLoginName(),
+								edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME)))
+		{
+			result = passExpCheck(loginForm, validUser);
+		}
 		logger.info("Setting securoty parameters");
 		setSecurityParamsInSessionData(validUser, sessionData);
 		final String validRole = getForwardToPageOnLogin(validUser.getCsmUserId().longValue());
@@ -445,7 +462,7 @@ public class LoginAction extends XSSSupportedAction
 			session.setAttribute(Constants.SESSION_DATA, null);
 			return mapping.findForward(Constants.FAILURE);
 		}
-		logger.info("Result: "+result);
+		logger.info("Result: " + result);
 		if (!result.equals(Constants.SUCCESS))
 		{
 			handleCustomMessage(request, result);
@@ -455,15 +472,15 @@ public class LoginAction extends XSSSupportedAction
 			return mapping.findForward(Constants.ACCESS_DENIED);
 		}
 		String forwardToPage = edu.wustl.wustlkey.util.global.Constants.PAGE_NON_WASHU;
-		if(Boolean.parseBoolean(XMLPropertyHandler
-				.getValue(Constants.IDP_ENABLED)))
+		if (Boolean.parseBoolean(XMLPropertyHandler.getValue(Constants.IDP_ENABLED)))
 		{
 			forwardToPage = WUSTLKeyUtility.migrate(request, loginForm.getLoginName(),
 					edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
 		}
-		logger.info("forwardToPage: "+forwardToPage);
+		logger.info("forwardToPage: " + forwardToPage);
 		return mapping.findForward(forwardToPage);
 	}
+
 	/**
 	 * This method will check the expiry of the password.
 	 * @param loginForm LoginForm
@@ -473,48 +490,11 @@ public class LoginAction extends XSSSupportedAction
 	 */
 	private String passExpCheck(LoginForm loginForm, final User validUser) throws BizLogicException
 	{
-		String result = Constants.SUCCESS;
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final UserBizLogic userBizLogic = (UserBizLogic) factory
-		.getBizLogic(Constants.USER_FORM_ID);
-		if(Boolean.parseBoolean(XMLPropertyHandler
-				.getValue(Constants.IDP_ENABLED)))
-		{
-			result = wustlLogicForPass(loginForm, validUser, userBizLogic);
-		}
-		else
-		{
-			result = userBizLogic.checkFirstLoginAndExpiry(validUser);
-		}
-		return result;
-	}
-	/**
-	 * WustlKey logic for password checking.
-	 * @param loginForm LoginForm
-	 * @param validUser user object
-	 * @param result result String
-	 * @param userBizLogic user Bizlogic object
-	 * @return result
-	 */
-	private String wustlLogicForPass(LoginForm loginForm, final User validUser,
-			final UserBizLogic userBizLogic)
-	{
-		String result = Constants.SUCCESS;
-		if (edu.wustl.wustlkey.util.global.Constants.NON_WASHU.equals(WUSTLKeyUtility
-				.getUserFrom(loginForm.getLoginName())))
-		{
-			result = userBizLogic.checkFirstLoginAndExpiry(validUser);
-		}
-		else if (edu.wustl.wustlkey.util.global.Constants.WASHU.equals(WUSTLKeyUtility
-				.getUserFrom(loginForm.getLoginName())))
-		{
-			final boolean firstTimeLogin = userBizLogic.getFirstLogin(validUser);
-			if (firstTimeLogin)
-			{
-				result="errors.changePassword.changeFirstLogin";
-			}
-		}
-		return result;
+				.getBizLogic(Constants.USER_FORM_ID);
+		// check for first time login and login expiry for both washu and non-washu users
+		return userBizLogic.checkFirstLoginAndExpiry(validUser);
 	}
 
 	/**
@@ -549,7 +529,7 @@ public class LoginAction extends XSSSupportedAction
 	 * @throws SMException : SMException
 	 */
 	private void setSecurityParamsInSessionData(User validUser, SessionDataBean sessionData)
-	throws SMException
+			throws SMException
 	{
 		final String userRole = SecurityManagerFactory.getSecurityManager().getRoleName(
 				validUser.getCsmUserId());
@@ -635,8 +615,8 @@ public class LoginAction extends XSSSupportedAction
 	{
 		User validUser = null;
 		final String getActiveUser = "from edu.wustl.catissuecore.domain.User user where "
-			+ "user.activityStatus= " + "'" + Status.ACTIVITY_STATUS_ACTIVE.toString()
-			+ "' and user.loginName =" + "'" + loginName + "'";
+				+ "user.activityStatus= " + "'" + Status.ACTIVITY_STATUS_ACTIVE.toString()
+				+ "' and user.loginName =" + "'" + loginName + "'";
 		final DefaultBizLogic bizlogic = new DefaultBizLogic();
 		final List<User> users = bizlogic.executeQuery(getActiveUser);
 		if (users != null && !users.isEmpty())
