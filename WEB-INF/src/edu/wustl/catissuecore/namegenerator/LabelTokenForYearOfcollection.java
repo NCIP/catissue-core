@@ -23,7 +23,7 @@ public class LabelTokenForYearOfcollection implements LabelTokens
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelTokens#getTokenValue(java.lang.Object, java.lang.String)
 	 */
-	public String getTokenValue(Object object, String token)
+	public String getTokenValue(Object object, String token, Long currVal)
 	{
 		Specimen objSpecimen = (Specimen) object;
 		String valToReplace = SpecimenUtil.getCollectionYear(objSpecimen);

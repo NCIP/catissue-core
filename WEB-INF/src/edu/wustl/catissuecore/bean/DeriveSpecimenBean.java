@@ -105,6 +105,43 @@ public class DeriveSpecimenBean implements Serializable
 	 * Collection of derive specimens derived from this specimen.
 	 */
 	private Collection<GenericSpecimen>  deriveSpecimenCollection;
+
+	private boolean genLabel;
+
+	private String labelFormat;
+
+	private String labelGenType;
+
+	public String getLabelGenType()
+	{
+		return labelGenType;
+	}
+
+
+	public void setLabelGenType(String labelGenType)
+	{
+		this.labelGenType = labelGenType;
+	}
+
+	public boolean isGenLabel()
+	{
+		return genLabel;
+	}
+
+	public void setGenLabel(boolean genLabel)
+	{
+		this.genLabel = genLabel;
+	}
+
+	public String getLabelFormat()
+	{
+		return labelFormat;
+	}
+
+	public void setLabelFormat(String labelFormat)
+	{
+		this.labelFormat = labelFormat;
+	}
 	/**
 	 * Get SpecimenClass.
 	 * @return String

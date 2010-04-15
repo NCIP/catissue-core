@@ -34,6 +34,19 @@ public class SpecimenRequirement extends AbstractSpecimen
 	 */
 	private String labelFormat;
 
+	private Boolean genLabel;
+
+	public Boolean getGenLabel()
+	{
+		return genLabel;
+	}
+
+
+	public void setGenLabel(Boolean generateLabel)
+	{
+		this.genLabel = generateLabel;
+	}
+
 	/**
 	 * Get CollectionProtocolEvent.
 	 * @return CollectionProtocolEvent.

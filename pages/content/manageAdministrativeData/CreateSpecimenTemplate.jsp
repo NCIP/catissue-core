@@ -23,6 +23,7 @@
 
 <%
 List storageContainerList	= (List)request.getAttribute("storageContainerList");
+List labelGenTypeList	= (List)request.getAttribute("labelGenTypeList");
 Object obj = request.getAttribute("createSpecimenTemplateForm");
 String mapKey = (String)request.getAttribute("key");
 String nodeKey = (String)request.getAttribute("mapkey");
@@ -396,7 +397,7 @@ if(form != null)
 		sname="";
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_quantity)";
 
-		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' maxlength='10' size='12' class='black_ar' id='" + objname + "'>"
+		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' maxlength='10' size='5' class='black_ar' id='" + objname + "'>"
 		sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 
 		spreqqty.innerHTML="" + sname;
@@ -407,11 +408,42 @@ if(form != null)
 		sname="";
 		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_concentration)";
 
-		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' size='12'  maxlength='10' class='black_ar' id='" + objname + "'>"
+		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' size='5'  maxlength='10' class='black_ar' id='" + objname + "'>"
 		sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 
 		spreqqty.innerHTML="" + sname;
 
+		//Label Generation Type
+		var spreqqty=x.insertCell(6)
+		spreqqty.className="black_ar";
+		sname="";
+		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelGenType)";
+
+		sname= "<select name='" + objname + "' size='1' class='formFieldSized8' id='" + objname + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
+
+		<%
+			for(int i=0;i<labelGenTypeList.size();i++)
+		{
+			String labelGenTypeName = "" + ((NameValueBean)labelGenTypeList.get(i)).getName();
+			String labelGenTypeValue = "" + ((NameValueBean)labelGenTypeList.get(i)).getValue();
+		%>
+			sname = sname + "<option value='<%=labelGenTypeValue%>'><%=labelGenTypeName%></option>";
+		<%}%>
+
+		sname = sname + "</select>"
+
+		spreqqty.innerHTML="" + sname;
+
+		//Label Format
+		var spreqqty=x.insertCell(7)
+		spreqqty.className="black_ar";
+		sname="";
+		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelFormat)";
+
+		sname="<input type='text' name='" + objname + "' style='text-align:right' size='10'  maxlength='10' class='black_ar' id='" + objname + "'>"
+		sname = sname + "&nbsp;"
+
+		spreqqty.innerHTML="" + sname;
 
 	}
 	window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>&operation=${requestScope.operation}";

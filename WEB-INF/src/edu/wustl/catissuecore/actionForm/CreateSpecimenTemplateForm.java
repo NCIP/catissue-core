@@ -62,7 +62,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	private String tissueSide;
 
 	/**
-	 * Histopathological character of the specimen 
+	 * Histopathological character of the specimen
 	 * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
 	 */
 	private String pathologicalStatus;
@@ -103,12 +103,12 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	private String quantityPerAliquot;
 
 	/**
-	 * Collection of aliquot specimens derived from this specimen. 
+	 * Collection of aliquot specimens derived from this specimen.
 	 */
 	protected Collection aliquotSpecimenCollection;
 
 	/**
-	 * Collection of derive specimens derived from this specimen. 
+	 * Collection of derive specimens derived from this specimen.
 	 */
 	protected Collection deriveSpecimenCollection;
 
@@ -118,7 +118,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	private String collectionUserName = null;
 
 	/**
-	 * 
+	 *
 	 * @return collectionUserName
 	 */
 	public String getCollectionUserName()
@@ -127,7 +127,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	}
 
 	/**
-	 * 
+	 *
 	 * @param collectionUserName collectionUserName
 	 */
 	public void setCollectionUserName(String collectionUserName)
@@ -141,7 +141,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	private String receivedUserName = null;
 
 	/**
-	 * 
+	 *
 	 * @return receivedUserName
 	 */
 	public String getReceivedUserName()
@@ -150,7 +150,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	}
 
 	/**
-	 * 
+	 *
 	 * @param receivedUserName receivedUserName
 	 */
 	public void setReceivedUserName(String receivedUserName)
@@ -905,6 +905,28 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 			key = "DeriveSpecimenBean:" + iCount + "_storageLocation";
 			final String storageLocation = (String) this.deriveSpecimenValues.get(key);
 			deriveSpecimenMap.put(key, storageLocation);
+
+			key = "DeriveSpecimenBean:" + iCount + "_labelGenType";
+			final String labelGenType = (String) this.deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, labelGenType);
+			if(labelGenType != null && labelGenType.equals("1"))
+			{
+				this.genLabel = Boolean.FALSE;
+			}
+			else if(labelGenType.equals("2") || labelGenType.equals("3"))
+			{
+				this.genLabel = Boolean.TRUE;
+			}
+			this.setDeriveSpecimenValue("DeriveSpecimenBean:" + iCount + "_genLabel", Boolean.toString(this.genLabel));
+
+			key = "DeriveSpecimenBean:" + iCount + "_labelFormat";
+			final String labelFormat = (String) this.deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, labelFormat);
+
+			key = "DeriveSpecimenBean:" + iCount + "_genLabel";
+			final String genLabel = (String) this.deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, genLabel);
+
 		}
 		return deriveSpecimenMap;
 	}
@@ -924,6 +946,32 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	{
 		// TODO Auto-generated method stub
 
+	}
+
+	private String labelGenType;
+
+	public String getLabelGenType()
+	{
+		return labelGenType;
+	}
+
+
+	public void setLabelGenType(String labelGenType)
+	{
+		this.labelGenType = labelGenType;
+	}
+
+	private boolean genLabel = false;
+
+	public boolean isGenLabel()
+	{
+		return genLabel;
+	}
+
+
+	public void setGenLabel(boolean genLabel)
+	{
+		this.genLabel = genLabel;
 	}
 
 	/**
@@ -947,4 +995,44 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 		this.labelFormat = labelFormat;
 	}
 
+	private boolean genLabelForAliquot;
+
+	public boolean isGenLabelForAliquot()
+	{
+		return genLabelForAliquot;
+	}
+
+
+	public void setGenLabelForAliquot(boolean genLabelForAliquot)
+	{
+		this.genLabelForAliquot = genLabelForAliquot;
+	}
+
+
+	public String getLabelFormatForAliquot()
+	{
+		return labelFormatForAliquot;
+	}
+
+
+	public void setLabelFormatForAliquot(String labelFormatForAliquot)
+	{
+		this.labelFormatForAliquot = labelFormatForAliquot;
+	}
+
+	private String labelFormatForAliquot;
+
+	private String labelGenTypeForAliquot;
+
+
+	public String getLabelGenTypeForAliquot()
+	{
+		return labelGenTypeForAliquot;
+	}
+
+
+	public void setLabelGenTypeForAliquot(String labelGenTypeForAliquot)
+	{
+		this.labelGenTypeForAliquot = labelGenTypeForAliquot;
+	}
 }

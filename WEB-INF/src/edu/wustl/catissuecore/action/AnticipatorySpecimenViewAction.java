@@ -391,7 +391,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			}
 		}
 
-		parentSpecimenVO.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
+
+//		parentSpecimenVO.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
 		parentSpecimenVO.setAliquotSpecimenCollection(aliquotMap);
 		parentSpecimenVO.setDeriveSpecimenCollection(derivedMap);
 	}
@@ -489,7 +490,14 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		// Constants.ALIQUOT));
 		// specimenDataBean.setDeriveSpecimenCollection(getChildren(specimen,
 		// Constants.ALIQUOT));
-		specimenDataBean.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
+		if(specimen.getSpecimenRequirement() != null)
+		{
+			specimenDataBean.setGenerateLabel(specimen.getSpecimenRequirement().getGenLabel());
+		}
+		else
+		{
+			specimenDataBean.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
+		}
 		return specimenDataBean;
 	}
 

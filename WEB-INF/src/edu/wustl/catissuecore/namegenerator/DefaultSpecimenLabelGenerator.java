@@ -7,8 +7,10 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 
@@ -191,5 +193,16 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		final Specimen objSpecimen = (Specimen) obj;
 		this.setLabel(objSpecimen);
 		return objSpecimen.getLabel();
+	}
+
+	public void setLabel(Collection<AbstractDomainObject> object) throws LabelGenException
+	{
+		Iterator<AbstractDomainObject> iterator = object.iterator();
+			SpecimenCollectionGroup scg = null;
+			while (iterator.hasNext())
+			{
+				final Specimen newSpecimen = (Specimen) iterator.next();
+				this.setLabel(newSpecimen);
+			}
 	}
 }

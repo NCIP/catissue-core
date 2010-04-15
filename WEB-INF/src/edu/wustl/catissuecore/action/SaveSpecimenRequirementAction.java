@@ -173,6 +173,17 @@ public class SaveSpecimenRequirementAction extends BaseAction
 
 		// Aliquot
 		specimenRequirementBean.setNoOfAliquots(createSpecimenTemplateForm.getNoOfAliquots());
+		specimenRequirementBean.setLabelFormat(createSpecimenTemplateForm.getLabelFormat());
+		specimenRequirementBean.setLabelGenType(createSpecimenTemplateForm.getLabelGenType());
+		if(createSpecimenTemplateForm.getLabelGenType() != null && createSpecimenTemplateForm.getLabelGenType().equals("0"))
+		{
+			createSpecimenTemplateForm.setGenLabel(false);
+		}
+		else
+		{
+			createSpecimenTemplateForm.setGenLabel(true);
+		}
+		specimenRequirementBean.setGenerateLabel(createSpecimenTemplateForm.isGenLabel());
 		specimenRequirementBean.setQuantityPerAliquot(createSpecimenTemplateForm
 				.getQuantityPerAliquot());
 		specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm
@@ -274,6 +285,19 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setStorageContainerForAliquotSpecimem(null);
 		specimenRequirementBean.setStorageContainerForSpecimen(createSpecimenTemplateForm
 				.getStorageLocationForAliquotSpecimen());
+
+
+		specimenRequirementBean.setLabelFormat(createSpecimenTemplateForm.getLabelFormatForAliquot());
+		specimenRequirementBean.setLabelGenType(createSpecimenTemplateForm.getLabelGenTypeForAliquot());
+		if(createSpecimenTemplateForm.getLabelGenTypeForAliquot() != null && createSpecimenTemplateForm.getLabelGenTypeForAliquot().equals("1"))
+		{
+			createSpecimenTemplateForm.setGenLabelForAliquot(false);
+		}
+		else
+		{
+			createSpecimenTemplateForm.setGenLabelForAliquot(true);
+		}
+		specimenRequirementBean.setGenerateLabel(createSpecimenTemplateForm.isGenLabelForAliquot());
 		specimenRequirementBean.setDeriveSpecimen(null);
 		specimenRequirementBean.setNoOfDeriveSpecimen(0);
 		return quantityPerAliquot;
@@ -318,6 +342,11 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			// Derive
 			specimenRequirementBean.setDeriveSpecimen(null);
 			specimenRequirementBean.setNoOfDeriveSpecimen(0);
+
+			specimenRequirementBean.setGenerateLabel(deriveSpecimenBean.isGenLabel());
+			specimenRequirementBean.setLabelFormat(deriveSpecimenBean.getLabelFormat());
+			specimenRequirementBean.setLabelGenType(deriveSpecimenBean.getLabelGenType());
+
 			deriveSpecimenMap.put(specimenRequirementBean.getUniqueIdentifier(),
 					specimenRequirementBean);
 			deriveSpecimenCount = deriveSpecimenCount + 1;

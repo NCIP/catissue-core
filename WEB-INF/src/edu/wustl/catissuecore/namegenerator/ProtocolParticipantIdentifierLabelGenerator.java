@@ -1,10 +1,12 @@
 
 package edu.wustl.catissuecore.namegenerator;
 
+import java.util.Collection;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
  * This class which contains the default implementation for Protocol
@@ -47,5 +49,11 @@ public class ProtocolParticipantIdentifierLabelGenerator implements LabelGenerat
 	public void setLabel(List object)
 	{
 		// TODO Auto-generated method stub
+	}
+
+	public void setLabel(Collection<AbstractDomainObject> object) throws LabelGenException
+	{
+		// TODO Auto-generated method stub
+
 	}
 }

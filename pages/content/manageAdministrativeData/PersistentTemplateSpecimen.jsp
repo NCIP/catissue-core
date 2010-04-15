@@ -2,7 +2,7 @@
 		<td class="cp_tabtable">
 			<br>
 				<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
-					<html:hidden property="labelFormat" />	
+					<html:hidden property="labelFormat" />
 					<tr>
                       <td colspan="3" align="left">
 						 <table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -25,14 +25,14 @@
 										specimenTypeList.add(new NameValueBean(form.getType(),form.getType()));
 									}
 									pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-									String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')"; 
+									String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')";
 									String readOnlyForAliquot = "false";
 									String readOnlyForSpecimen = "false";
-									if(Constants.ALIQUOT.equals(form.getLineage())&&operation.equals(Constants.EDIT)) 
+									if(Constants.ALIQUOT.equals(form.getLineage())&&operation.equals(Constants.EDIT))
 									{
 										  readOnlyForAliquot = "true";
 									}
-									if(!Constants.DERIVED_SPECIMEN.equals(form.getLineage())&&operation.equals(Constants.EDIT)) 
+									if(!Constants.DERIVED_SPECIMEN.equals(form.getLineage())&&operation.equals(Constants.EDIT))
 									{
 										  readOnlyForSpecimen = "true";
 									}
@@ -55,7 +55,7 @@
 										/>
 									</td>
 								</logic:notEqual>
-								
+
                                 <td width="1%" align="center"><span class="blue_ar_b">
 									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
 							    <td width="15%" align="left"><label for="type" class="black_ar"><bean:message key="specimen.subType"/></label></td>
@@ -106,10 +106,10 @@
 				%>
 									<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
 										<img src="images/uIEnhancementImages/ic_cl_diag.gif" border="0" width="16" height="16" title='Tissue Site Selector' alt="Clinical Diagnosis"></a></span></td>
-								</logic:notEqual>                                 
+								</logic:notEqual>
 									<td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
-								       
-								
+
+
 						   <td align="left" class="black_ar"><bean:message key="specimen.tissueSide"/></td>
                         		<logic:equal name="isPersistent" value="true">
 									 <td width="28%" align="left" class="black_ar">
@@ -130,7 +130,7 @@
 								</td>
 								</logic:notEqual>
                               </tr>
-								
+
                               <tr>
                                 <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
                                 <td align="left" class="black_ar"><bean:message key="specimen.pathologicalStatus"/> </td>
@@ -189,7 +189,7 @@
                                 <td align="center" class="black_ar">&nbsp;</td>
 
                                 <td align="left" class="black_ar"><bean:message key="specimen.concentration"/></td>
-                               
+
 							    <logic:equal name="isPersistent" value="true">
 									 <td width="28%" align="left" class="black_ar">
 										<label>
@@ -204,7 +204,7 @@
 										concentrationDisabled = false;
 									%>
      									<html:text styleClass="black_ar" maxlength="10"  size="10"	styleId="concentration" property="concentration"  readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>" style="text-align:right"/>
-										
+
 								</logic:notEqual>
 								&nbsp;<bean:message key="specimen.concentrationUnit" />
 								</td>
@@ -213,7 +213,7 @@
 									<html:hidden property="collectionEventId" />
 									<html:hidden property="collectionEventSpecimenId" />
                                 <td align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
-								<td align="left" class="black_ar"><bean:message key="specimen.collectedevents.username"/></td>                       
+								<td align="left" class="black_ar"><bean:message key="specimen.collectedevents.username"/></td>
 							     <logic:equal name="isPersistent" value="true">
 									 <td width="28%" align="left" class="black_ar">
 										<label>
@@ -222,7 +222,7 @@
 									</td>
 								</logic:equal>
   							   <logic:notEqual name="isPersistent" value="true">
-                                <td align="left" class="black_ar"> 
+                                <td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="collectionEventUserId"
 									  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
 									  initialValue="<%=new Long(form.getCollectionEventUserId())%>"
@@ -318,12 +318,30 @@
 								</td>
   							   </logic:notEqual>
                                 <td align="center" class="black_ar">&nbsp;</td>
-                                <td align="left" class="black_ar"><label></label></td>
-                                <td align="left">&nbsp;</td>
+                                <td align="left" class="black_ar"><label>Generate Label</label></td>
+                                <td  class="black_ar">
+								<logic:equal name="isPersistent" value="true">
+								<span align="left">${requestScope.labelGenType}</span>
+								&nbsp;&nbsp;&nbsp;&nbsp;<span align="right" class="black_ar" >
+
+
+								<html:text property="labelFormat" styleId="labelFormat" readonly="true" size="6"/></span>
+								</logic:equal>
+								<logic:notEqual name="isPersistent" value="true">
+									<html:select property="labelGenType"
+									styleClass="formFieldSized8"
+									styleId="labelGenType" size="1"
+									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+										<html:options collection= "labelGenTypeList" labelProperty="name" property="value"/>
+									</html:select>
+									&nbsp;&nbsp;&nbsp;&nbsp;<span align="right" class="black_ar" >
+									<html:text property="labelFormat" styleId="labelFormat" size="6"/></span>
+								</logic:notEqual>
+								</td>
                               </tr>
                             </table>
                             <br>
-                        
+
 					</td>
                    </tr>
                    <tr onclick="javascript:showHide('derive_specimen')">
@@ -342,14 +360,18 @@
 							<div id="derive_specimen" style="display:none" >
 								<table width="100%" border="0" cellspacing="0" cellpadding="4">
 									<tr>
-                              <td width="6%" class="tableheading"><span class="black_ar_b">
+                              <td width="5%" class="tableheading"><span class="black_ar_b">
                                 <label for="delete" align="center"><bean:message key="addMore.delete" /></label>
                               </span></td>
                               <td width="15%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> </span><bean:message key="collectionprotocol.specimenclass" /> </span></td>
-                              <td width="23%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="collectionprotocol.specimetype" /> </span></td>
+                              <td width="15%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="collectionprotocol.specimetype" /> </span></td>
                               <td width="20%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.storagelocation"/></span></td>
-                              <td width="21%" class="tableheading"><span class="black_ar_b"><bean:message key="collectionprotocol.quantity" /></span></td>
-                              <td width="15%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.concentration"/></span></td>
+                              <td width="10%" class="tableheading"><span class="black_ar_b"><bean:message key="collectionprotocol.quantity" /></span></td>
+                              <td width="10%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.concentration"/></span></td>
+
+							  <td width="15%" class="tableheading"><span class="black_ar_b"><span class="">Label Generation</span></td>
+
+							  <td width="10%" class="tableheading"><span class="black_ar_b">Label format</span></td>
                             </tr>
 						  <script> document.forms[0].noOfDeriveSpecimen.value = <%=noOfDeriveSpecimen%> </script>
 
@@ -375,13 +397,17 @@
 					String chk = "checkBox_" + rowno;
 					String changeClass = "changeUnit('"+specimenClass+"','"+unit+"','"+concentration+"','"+specimenType+"')";
 					String changeType = "onSubTypeChangeUnitforCP('"+specimenClass+"','" + unit+ "')";
+
+					String labelType = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelGenType)";
+
+					String labelFormat = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelFormat)";
 			%>
 <tr>
 
-										
-				    
+
+
 					<html:hidden property="<%=id%>" />
-				               
+
 			<%
 					String idKeyValue = (String)form.getDeriveSpecimenValue(idKey);
 					String className = (String)form.getDeriveSpecimenValue(classKey);
@@ -413,7 +439,7 @@
 						}
 					}
 				%>
-								
+
 								<logic:equal name="isPersistentValue" value="true">
 								<td class="black_ar">
 									<label>
@@ -428,9 +454,9 @@
 		                            </label>
 								</td>
   							   </logic:notEqual>
-                              
-							   
-							   
+
+
+
 							   <logic:equal name="isPersistentValue" value="true">
 								<td class="black_ar">
 									<label>
@@ -441,7 +467,7 @@
   							    <logic:notEqual name="isPersistentValue" value="true">
 								<td class="black_ar" >
 									<html:select property= "<%=specimenClass%>"
-									styleClass="formFieldSized8" 
+									styleClass="formFieldSized8"
 									styleId="<%=specimenClass%>" size="1"
 									onchange="<%=changeClass%>"
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -460,18 +486,18 @@
   							    <logic:notEqual name="isPersistentValue" value="true">
 
 	                                <td class="black_ar" >
-									<html:select property="<%=specimenType%>" 
-									styleClass="addRow_s" 
+									<html:select property="<%=specimenType%>"
+									styleClass="addRow_s"
 									styleId="<%=specimenType%>"  size="1"
 									onchange="<%=changeType%>"
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 										<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 									</html:select>
 								</td>
-								
+
 								</logic:notEqual>
-                                
-								
+
+
 								<logic:equal name="isPersistentValue" value="true">
 								<td class="black_ar">
 									<label>
@@ -482,8 +508,8 @@
   							    <logic:notEqual name="isPersistentValue" value="true">
 
 									<td class="black_ar" >
-										<html:select property="<%=storageLocation%>" 
-										styleClass="formFieldSized8" 
+										<html:select property="<%=storageLocation%>"
+										styleClass="formFieldSized8"
 										styleId="<%=storageLocation%>" size="1"
 										onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 											<html:options collection= "storageContainerList" labelProperty="name" property="value"/>
@@ -492,11 +518,11 @@
 								</logic:notEqual>
                                 <td class="black_ar">
 			<%
-						
+
 					String qtyValue = (String)form.getDeriveSpecimenValue(quantityvalue);
 					String concValue = (String)form.getDeriveSpecimenValue(MolecularConc);
 					String strHiddenUnitValue = "" + changeUnit(className,typeclassValue);
-					if(qtyValue == null || qtyValue.equals("")) 
+					if(qtyValue == null || qtyValue.equals(""))
 					{
 						qtyValue="0";
 					}
@@ -510,18 +536,18 @@
 											<%=qtyValue%>
 			                            </label>
 									</logic:equal>
-									
+
 									 <logic:notEqual name="isPersistentValue" value="true">
-										<html:text styleClass="black_ar" size="10"  maxlength="10" 
-										styleId="<%=quantity%>" property="<%=quantity%>" 
+										<html:text styleClass="black_ar" size="10"  maxlength="10"
+										styleId="<%=quantity%>" property="<%=quantity%>"
 										value="<%=qtyValue%>" style="text-align:right"/>
 									</logic:notEqual>
 									<span id="<%=unit%>">
 										<%=strHiddenUnitValue%>
 									</span>
-									 
+
 								</td>
-								
+
 								<logic:equal name="isPersistentValue" value="true">
 									<td class="black_ar">
 										<label>
@@ -530,28 +556,28 @@
 								</logic:equal>
   							    <logic:notEqual name="isPersistentValue" value="true">
 									<td class="black_ar">
-										<html:text styleClass="black_ar" size="10"  maxlength="10" 
-											styleId="<%=concentration%>" property="<%=concentration%>" 
+										<html:text styleClass="black_ar" size="10"  maxlength="10"
+											styleId="<%=concentration%>" property="<%=concentration%>"
 											disabled="<%=concReadOnly%>" value="<%=concValue%>" style="text-align:right"/>
-									
+
 								</logic:notEqual>
 								&nbsp;<bean:message key="specimen.concentrationUnit" />
 
 								</td>
                               </tr>
-			
-                              
+
+
 			<%
 				}
 			%>
 							</tbody>
 							<%
-							String deleteSpecimenRequirements = "deleteChecked('DeriveSpecimenBean','CreateSpecimenTemplate.do?operation="+operation+"&pageOf=delete',document.forms[0].noOfDeriveSpecimen,'checkBox_',false)"; 
+							String deleteSpecimenRequirements = "deleteChecked('DeriveSpecimenBean','CreateSpecimenTemplate.do?operation="+operation+"&pageOf=delete',document.forms[0].noOfDeriveSpecimen,'checkBox_',false)";
 			%>
 							<tr>
                                 <td colspan="6">
 									<html:button property="addSpecimenReq" styleClass="black_ar" value="Add More" onclick="insRow('DeriveSpecimenBean')"/>
-			
+
 									<html:button property="deleteSpecimenReq" styleClass="black_ar" onclick="<%=deleteSpecimenRequirements %>" ><bean:message key="buttons.delete"/>
 									</html:button>
 								</td>
@@ -576,20 +602,33 @@
 						<div id="aliquot" style="display:none" >
 							<table width="100%" border="0" cellspacing="0" cellpadding="4">
 								<tr>
-		                           <td width="27%" class="black_ar" >										
-									   		<bean:message key="aliquots.noOfAliquots"/>
+									<td width="15%" class="black_ar" >
+									<bean:message key="aliquots.noOfAliquots"/>
+									</td>
+									<td width="15%" class="black_ar">
+									<bean:message key="aliquots.qtyPerAliquot"/>
+									</td>
+									<td width="30%" class="black_ar">
+									<bean:message key="cpbasedentry.storagelocation"/>
+									</td>
+									<td width="20%" align="right" class="black_ar" >Lable Generation</td>
+									<td width="20%" align="right" class="black_ar" >Label Format</td>
+								</tr>
+								<tr>
+		                           <td width="10%" class="black_ar" >
+
 										 &nbsp;
 										 <html:text styleClass="black_ar" styleId="noOfAliquots" size="10" property="noOfAliquots" style="text-align:right" maxlength="50" />
 									</td>
-		                            <td width="33%" class="black_ar">
+		                            <td width="10%" class="black_ar">
 										<label for="qtyPerAliquot">
-									   		<bean:message key="aliquots.qtyPerAliquot"/>
+
 										 </label>&nbsp;
 										 <html:text styleClass="black_ar" styleId="quantityPerAliquot" size="10" property="quantityPerAliquot" style="text-align:right" maxlength="50" />
 									</td>
 		                            <td width="40%" class="black_ar">
 										<label for="storageLocation">
-											<bean:message key="cpbasedentry.storagelocation"/>
+
 										</label>&nbsp;
 										<autocomplete:AutoCompleteTag property="storageLocationForAliquotSpecimen"
 											    optionsList = "<%=request.getAttribute("storageContainerList")%>"
@@ -598,6 +637,21 @@
 												size="20"
 												/>
 									</td>
+
+									<td width="20%" align="right" class="black_ar" >
+									<html:select property="labelGenTypeForAliquot"
+									styleClass="formFieldSized8"
+									styleId="genLabelForAliquot" size="1"
+									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+										<html:options collection= "labelGenTypeList" labelProperty="name" property="value"/>
+									</html:select>
+								</td>
+
+								 <td width="20%" align="right" class="black_ar">
+									<html:text styleClass="black_ar" size="10"  maxlength="10"
+										styleId="labelFormatForAliquot" property="labelFormatForAliquot"
+										style="text-align:right"/>
+								</td>
 								</tr>
                           </table>
 						</div>
@@ -626,7 +680,7 @@
 									</logic:notEqual>
 								</logic:notEqual>
 							</td>
-			
+
                     </tr>
              </table>
 		</td>

@@ -172,6 +172,14 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		storageContainerList.add(new NameValueBean("Auto", "Auto"));
 		storageContainerList.add(new NameValueBean("Manual", "Manual"));
 
+		List labelGenTypeList = new ArrayList();
+		labelGenTypeList.add(new NameValueBean("Off", "0"));
+		labelGenTypeList.add(new NameValueBean("CP Default", "1"));
+		labelGenTypeList.add(new NameValueBean("Custom", "2"));
+
+		request.setAttribute("labelGenType", ((NameValueBean)labelGenTypeList.get(Integer.valueOf(createSpecimenTemplateForm.getLabelGenType()))).getName());
+		request.setAttribute("labelGenTypeList", labelGenTypeList);
+
 		// setting the procedure
 		final List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
@@ -421,6 +429,9 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		}
 		createSpecimenTemplateForm.setDeriveSpecimenValues(deriveSpecimenLinkedHashMap);
 		createSpecimenTemplateForm.setLabelFormat(specimenRequirementBean.getLabelFormat());
+
+		createSpecimenTemplateForm.setGenLabel(specimenRequirementBean.isGenerateLabel());
+		createSpecimenTemplateForm.setLabelGenType(specimenRequirementBean.getLabelGenType());
 
 	}
 

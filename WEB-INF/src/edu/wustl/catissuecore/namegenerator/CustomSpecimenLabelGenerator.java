@@ -2,12 +2,18 @@ package edu.wustl.catissuecore.namegenerator;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.util.SpecimenUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -23,6 +29,19 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 
 	/** The logger. */
 	private static Logger logger = Logger.getCommonLogger(CustomSpecimenLabelGenerator.class);
+
+	private Long currentValue;
+
+	public Long getCurrentValue()
+	{
+		return currentValue;
+	}
+
+
+	public void setCurrentValue(Long currentValue)
+	{
+		this.currentValue = currentValue;
+	}
 
 	/**
 	 * Instantiates a new custom specimen label generator.
@@ -49,11 +68,11 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 		final Specimen objSpecimen = (Specimen) obj;
 		if(objSpecimen.getCollectionStatus() == null || !Constants.COLLECTION_STATUS_COLLECTED.equals(objSpecimen.getCollectionStatus()))
 		{
-			throw new LabelGenException("Specimen status is not "+Constants.COLLECTION_STATUS_COLLECTED);
+			return ;//throw new LabelGenException("Specimen status is not "+Constants.COLLECTION_STATUS_COLLECTED);
 		}
 		if (objSpecimen.getLabel() != null)
 		{
-			throw new LabelGenException("Label already assigned");
+			return;//throw new LabelGenException("Label already assigned");
 		}
 			final Specimen parentSpecimen = (Specimen) objSpecimen.getParentSpecimen();
 			if (isAliquot(objSpecimen))
@@ -61,29 +80,45 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 
 				StringBuffer buffer = new StringBuffer();
 				String labelFormat=objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+				if(labelFormat == null)
+					labelFormat = "";
 				StringTokenizer st = new StringTokenizer(labelFormat.toString(), "%");
 				while (st.hasMoreTokens())
 				{
 					String token=st.nextToken();
-			         try
-					{
+//					if(token.equals("ID"))
+//					{
+//						currentLabel= currentLabel+1;
+//						buffer.append(currentLabel);
+//						//objSpecimen.setLabel(buffer.toString()+"_"+currentLabel);
+//					}
+//					else
+//					{
+				         try
+						{
 
-			        	 String mylable = TokenFactory.getInstance(token).getTokenValue(objSpecimen, token);
-			        	 if(mylable == null)
-			        	 {
-			        		 mylable = "";
-			        	 }
-						buffer.append(mylable);
+				        	 String mylable = TokenFactory.getInstance(token).getTokenValue(objSpecimen, token, currentValue);
+				        	 if(mylable == null)
+				        	 {
+				        		 mylable = "";
+				        	 }
+							buffer.append(mylable);
 
+						}
+				         catch (final Exception ex)
+				 		{
+				        	logger.error(ex.getMessage());
+				 		}
 					}
-			         catch (final Exception ex)
-			 		{
-			        	logger.error(ex.getMessage());
-			 		}
-			    }
-
-				currentLabel= currentLabel+1;
-					objSpecimen.setLabel(buffer.toString()+"_"+currentLabel);
+//			    }
+//				if(!labelFormat.contains("ID"))
+//				{
+//					currentLabel= currentLabel+1;
+//					objSpecimen.setLabel(buffer.toString()+"_"+currentLabel);
+//				}
+				objSpecimen.setLabel(buffer.toString());
+				//currentLabel= currentLabel+1;
+					//objSpecimen.setLabel(buffer.toString()+"_"+currentLabel);
 			}
 			else
 			{
@@ -112,6 +147,10 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 	 */
 	private boolean isAliquot(final Specimen objSpecimen)
 	{
+		if(objSpecimen.getLineage() == null)
+		{
+			objSpecimen.setLineage(Constants.NEW_SPECIMEN);
+		}
 		return objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN) ||objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN);
 	}
 
@@ -129,5 +168,80 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 	{
 		this.currentLabel = this.currentLabel + 1;
 		specimenObject.setLabel(this.currentLabel.toString());
+	}
+
+	public synchronized void setLabel(Collection<AbstractDomainObject> object) throws LabelGenException
+	{
+		Iterator<AbstractDomainObject> iterator = object.iterator();
+
+			SpecimenCollectionGroup scg = null;
+			while (iterator.hasNext())
+			{
+				final Specimen newSpecimen = (Specimen) iterator.next();
+					if(currentValue == null || currentValue == 0)
+					{
+						currentValue = getSpecimenCountforPPI(newSpecimen);
+//						if(newSpecimen.getSpecimenCollectionGroup() == null || newSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration() == null)
+//						{
+//
+//						}
+					}
+					else
+					{
+						currentValue = currentValue+1;
+					}
+					this.setLabel(newSpecimen);
+			}
+	}
+
+	private Long getSpecimenCountforPPI(Specimen  specimen)
+	{
+		Long count=0l;
+//		String ppi=specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
+		Long cprId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getId();
+		String yearOfColl = SpecimenUtil.getCollectionYear(specimen);
+			String hql= "select count(specimen) from edu.wustl.catissuecore.domain.Specimen as specimen"
+				+" where specimen.specimenCollectionGroup.collectionProtocolRegistration.id ="+ cprId
+				+" and (specimen.lineage='New' or specimen.lineage='Derived') and specimen.collectionStatus = 'Collected'";
+		List<Object[]> list=null;
+		try
+		{
+			list=AppUtility.executeQuery(hql);
+			if(list!=null)
+			{
+				Object object = list.get(0);
+				count=Long.valueOf(object.toString());
+			}
+		}
+		catch(ApplicationException exp)
+		{
+			logger.error(exp.getMessage());
+		}
+		return count;
+	}
+
+	private List getSCGData(Specimen spec)
+	{
+		String hql = "select scg.collectionProtocolRegistration.collectionProtocol.generateLabel," +
+		" scg.collectionProtocolRegistration.protocolParticipantIdentifier, " +
+		"scg.id "  +
+		"from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where scg.id ="+ spec.getSpecimenCollectionGroup().getId();
+
+		List list = null;
+		try
+		{
+			list = AppUtility.executeQuery(hql);
+
+			Object[] obje = (Object[])list.get(0);
+			boolean generateLabel = (Boolean)obje[0];
+			String PPI= obje[1].toString();
+			Long scgId = Long.valueOf(obje[2].toString());
+		}
+		catch (ApplicationException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
 	}
 }

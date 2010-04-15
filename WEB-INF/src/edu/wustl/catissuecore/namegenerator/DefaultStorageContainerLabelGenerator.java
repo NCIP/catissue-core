@@ -1,10 +1,12 @@
 
 package edu.wustl.catissuecore.namegenerator;
 
+import java.util.Collection;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 
 /**
@@ -92,5 +94,11 @@ public class DefaultStorageContainerLabelGenerator implements LabelGenerator
 		final StorageContainer objStorageContainer = (StorageContainer) obj;
 		this.setLabel(objStorageContainer);
 		return objStorageContainer.getName();
+	}
+
+	public void setLabel(Collection<AbstractDomainObject> object) throws LabelGenException
+	{
+		// TODO Auto-generated method stub
+
 	}
 }

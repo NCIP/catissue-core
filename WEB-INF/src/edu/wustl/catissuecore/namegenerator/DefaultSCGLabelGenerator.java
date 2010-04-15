@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.namegenerator;
 
+import java.util.Collection;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -8,6 +9,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 /**
  * This  class contains the default implementation for SpecimenCollectionGroup Label generation.
@@ -99,5 +101,11 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 		final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 		this.setLabel(specimenCollectionGroup);
 		return specimenCollectionGroup.getName();
+	}
+
+	public void setLabel(Collection<AbstractDomainObject> object) throws LabelGenException
+	{
+		// TODO Auto-generated method stub
+
 	}
 }

@@ -137,6 +137,21 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 	private boolean generateLabel = false;
 
+	private String labelGenType;
+
+	public String getLabelGenType()
+	{
+		return labelGenType;
+	}
+
+
+
+	public void setLabelGenType(String labelGenType)
+	{
+		this.labelGenType = labelGenType;
+	}
+
+
 	public boolean isGenerateLabel()
 	{
 		return generateLabel;

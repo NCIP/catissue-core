@@ -51,7 +51,6 @@ public class TokenFactory
 			{
 				String className = PropertyHandler.getTokenValue(tokenKey);
 
-
 				if (className == null || "".equals(className))
 				{
 					labelToken = new DefaultLabelTokens();

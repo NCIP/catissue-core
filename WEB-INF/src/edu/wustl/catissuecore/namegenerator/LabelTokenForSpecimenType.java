@@ -20,7 +20,7 @@ public class LabelTokenForSpecimenType implements LabelTokens
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelTokens#getTokenValue(java.lang.Object, java.lang.String)
 	 */
-	public String getTokenValue(Object object, String token)
+	public String getTokenValue(Object object, String token, Long currVal)
 	{
 		String valToReplace="";
 		Specimen objSpecimen = (Specimen) object;

@@ -389,8 +389,8 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		if(specimenList != null && !specimenList.isEmpty())
 		{
 			final GenericSpecimen specimen = (GenericSpecimen) specimenList.get(0);
-			this.generateLabel=specimen.isGenerateLabel();
-			this.specimenSummaryForm.setGenerateLabel(generateLabel);
+//			this.generateLabel=specimen.isGenerateLabel();
+//			this.specimenSummaryForm.setGenerateLabel(generateLabel);
 		}
 	}
 
@@ -527,6 +527,8 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			final GenericSpecimen specimen = (GenericSpecimen) specimenList.get(counter);
 			displayName = specimen.getDisplayName();
 			parentName = specimen.getParentName();
+			this.generateLabel=specimen.isGenerateLabel();
+			this.specimenSummaryForm.setGenerateLabel(generateLabel);
 			if (Constants.TRUE.equalsIgnoreCase(this.isReadOnly) || specimen.getReadOnly())
 			{
 				//				 addReadOnlyRow(sb, counter, specimen);

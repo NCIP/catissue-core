@@ -74,6 +74,7 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
@@ -3965,7 +3966,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				//bug 15260 end
 			}
 
+			generateLabel(newSpecimenCollection);
 			iterator = newSpecimenCollection.iterator();
+
 			while (iterator.hasNext())
 			{
 				final Specimen newSpecimen = (Specimen) iterator.next();
@@ -5312,32 +5315,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		return false;
 	}
 
-	public Long getSpecimenCountforPPI(Specimen  specimen) throws BizLogicException
-	{
-		Long count=0l;
-		String ppi=specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
-		Long cprId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getId();
-		String yearOfColl = SpecimenUtil.getCollectionYear(specimen);
-			String hql= "select count(specimen) from edu.wustl.catissuecore.domain.Specimen as specimen"
-				+" where specimen.specimenCollectionGroup.collectionProtocolRegistration.id ="+ cprId
-				+" and (specimen.lineage='New' or specimen.lineage='Derived') and specimen.collectionStatus = 'Collected'";
-		List<Object[]> list=null;
-		try
-		{
-			list=AppUtility.executeQuery(hql);
-			if(list!=null)
-			{
-				Object object = list.get(0);
-				count=Long.valueOf(object.toString());
-			}
-		}
-		catch(ApplicationException exp)
-		{
-			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 
-		}
-		return count;
-	}
 
 	public Long getSpecimenCountForCP(String ppi) throws BizLogicException
 	{
@@ -5362,5 +5340,58 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 		}
 		return count;
+	}
+
+	/**
+	 * This method insert collection of objects.
+	 * @param objCollection Collection of objects to be inserted
+	 * @param sessionDataBean  session specific data
+	 * @param dao object
+	 * @throws BizLogicException Generic BizLogic Exception
+	 */
+	public void insertMultiple(Collection<AbstractDomainObject> objCollection, DAO dao,
+			SessionDataBean sessionDataBean) throws BizLogicException
+	{
+		//  Authorization to ADD multiple objects (e.g. Aliquots) checked here
+		for (AbstractDomainObject obj : objCollection)
+		{
+			if (isAuthorized(dao, obj, sessionDataBean))
+			{
+				validate(obj, dao, Constants.ADD);
+			}
+			else
+			{
+				ErrorKey errorKey = ErrorKey.getErrorKey("access.execute.action.denied");
+				throw new BizLogicException(errorKey, null,	"");
+			}
+		}
+		generateLabel(objCollection);
+		for (AbstractDomainObject obj : objCollection)
+		{
+			insert(obj, dao, sessionDataBean);
+		}
+	}
+
+	private void generateLabel(Collection<AbstractDomainObject> objCollection) throws BizLogicException
+	{
+
+		try
+		{
+			final LabelGenerator spLblGenerator;
+					spLblGenerator = LabelGeneratorFactory
+					.getInstance(Constants.CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
+				spLblGenerator.setLabel(objCollection);
+		}
+		catch (final NameGeneratorException e)
+		{
+			this.logger.error(e.getMessage(), e);
+			e.printStackTrace();
+			throw this.getBizLogicException(e, "name.generator.exp", "");
+		}
+		catch (LabelGenException e)
+		{
+			this.logger.error(e.getMessage(), e);
+		}
+
 	}
 }

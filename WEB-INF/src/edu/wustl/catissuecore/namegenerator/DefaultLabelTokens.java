@@ -11,7 +11,7 @@ public class DefaultLabelTokens implements LabelTokens
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelTokens#getTokenValue(java.lang.Object, java.lang.String)
 	 */
-	public String getTokenValue(Object object, String token)
+	public String getTokenValue(Object object, String token, Long currVal)
 	{
 		// TODO Auto-generated method stub
 		return token;
