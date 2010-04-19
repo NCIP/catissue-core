@@ -21,7 +21,7 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
 public class ExcelTestCaseUtility extends CaTissueBaseTestCase {
-	private static String shortTitle = "test_cp_for_edit"; 
+	private static String shortTitle = "test_cp_for_edit";
 
 	public static void createCP() throws Exception {
 		System.out
@@ -294,7 +294,7 @@ public class ExcelTestCaseUtility extends CaTissueBaseTestCase {
 	/*
 	 * public static void debounDataMigration() throws Exception { //
 	 * CollectionProtocolTestcase // .java
-	 * 
+	 *
 	 * try { System.out
 	 * .println("---------IN ExcelTestCaseUtility.debounDataMigration-----------"
 	 * ); System.out.println("user.dir  " + System.getProperty("user.dir"));
@@ -315,11 +315,10 @@ public class ExcelTestCaseUtility extends CaTissueBaseTestCase {
 			System.out
 					.println("---------IN ExcelTestCaseUtility.addAnticipatedSCGInParticipant-----------");
 			System.out.println("user.dir  " + System.getProperty("user.dir"));
-			String excelFilePath = System.getProperty("user.dir")
-					+ "/excelFiles/AntiScgForPart.xls";
-			ExcelFileReader EX_CP = new ExcelFileReader();
-			String allexcel[][] = EX_CP.setInfo(excelFilePath);
-			new AddAnticipatedSCGInParticipant().addSCGs(allexcel);
+			String csvFilePath = System.getProperty("user.dir")
+					+ "/excelFiles/AntiScgForPart.csv";
+
+			new AddAnticipatedSCGInParticipant().readCSV(csvFilePath);
 			System.out
 					.println("---------END ExcelTestCaseUtility.addAnticipatedSCGInParticipant-----------");
 		} catch (Exception e) {
@@ -328,11 +327,11 @@ public class ExcelTestCaseUtility extends CaTissueBaseTestCase {
 			e.printStackTrace();
 			throw e;
 		}
-		
+
 	}
-	
-	
-//		
+
+
+//
 //	public static void registerPart() throws Exception { // CollectionProtocolTestcase
 //
 //		//createCP();
@@ -357,14 +356,14 @@ public class ExcelTestCaseUtility extends CaTissueBaseTestCase {
 //			throw e;
 //		}
 //	}
-//	
+//
 //	public static void createStorageContainer()
 //	{
 //		try{
 //			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
 //			storageContainer.setName("test_contaner");
 //			System.out.println(storageContainer);
-//			
+//
 //			Collection holdsStorageTypeCollection = new HashSet();
 //			StorageType sttype = new StorageType();
 //			sttype.setId(3L);
@@ -374,15 +373,15 @@ public class ExcelTestCaseUtility extends CaTissueBaseTestCase {
 //			Site site = new Site();
 //			site.setId(2L);
 //			storageContainer.setSite(site);
-//			
-//			CollectionProtocol collectionProtocol = new CollectionProtocol(); 
+//
+//			CollectionProtocol collectionProtocol = new CollectionProtocol();
 //			collectionProtocol.setId(3L);
 //			Collection collectionProtocolCollection = new HashSet();
 //			collectionProtocolCollection.add(collectionProtocol);
 //			storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-//			
-//			
-//			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+//
+//
+//			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 //			System.out.println("container name "+ storageContainer.getName());
 //			System.out.println("Object created successfully");
 //			assertTrue("Object added successfully", true);
@@ -413,7 +412,7 @@ public class ExcelTestCaseUtility extends CaTissueBaseTestCase {
 //			throw e;
 //		}
 //	}
-//	
-//	
-	
+//
+//
+
 }
