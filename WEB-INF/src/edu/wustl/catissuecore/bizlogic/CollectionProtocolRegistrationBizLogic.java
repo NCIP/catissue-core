@@ -107,6 +107,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		offset = 0;
 		armFound = false;
 		final CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
+		final CollectionProtocol objCollectionProtocol = collectionProtocolRegistration.getCollectionProtocol();
+		final String ppi = collectionProtocolRegistration.getProtocolParticipantIdentifier();
 		try
 		{
 			// check for closed Collection Protocol
@@ -114,7 +116,13 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					"Collection Protocol");
 			// Check for closed Participant
 			this.checkStatus(dao, collectionProtocolRegistration.getParticipant(), "Participant");
-			this.checkUniqueConstraint(dao, collectionProtocolRegistration, null);
+			boolean isUnique = this.checkUniqueConstraint(dao, objCollectionProtocol.getId(), ppi);
+			if(!isUnique)
+			{
+				final ErrorKey errorKey = ErrorKey.getErrorKey("Err.ConstraintViolation");
+				throw new BizLogicException(errorKey, null,
+						"Collection Protocol Registration:COLLECTION_PROTOCOL_ID,PROTOCOL_PARTICIPANT_ID");
+			}
 			Participant participant = null;
 			if (collectionProtocolRegistration.getParticipant().getId() != null)
 			{
@@ -1005,6 +1013,9 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		{
 			final CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 			final CollectionProtocolRegistration oldCollectionProtocolRegistration = (CollectionProtocolRegistration) oldObj;
+			final CollectionProtocol objCollectionProtocol = collectionProtocolRegistration.getCollectionProtocol();
+			final String ppi = collectionProtocolRegistration.getProtocolParticipantIdentifier();
+			final String oldPPI = oldCollectionProtocolRegistration.getProtocolParticipantIdentifier();
 			CollectionProtocolRegistration persistentCPR = null;
 			final Object object = dao.retrieveById(CollectionProtocolRegistration.class.getName(),
 					oldCollectionProtocolRegistration.getId());
@@ -1089,8 +1100,17 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				}
 			}
 
-			this.checkUniqueConstraint(dao, collectionProtocolRegistration,
-					oldCollectionProtocolRegistration);
+			boolean isUnique = true;
+			if(!ppi.equals(oldPPI))
+			{
+				isUnique = this.checkUniqueConstraint(dao, objCollectionProtocol.getId(),ppi);
+			}
+			if(!isUnique)
+			{
+				final ErrorKey errorKey = ErrorKey.getErrorKey("Err.ConstraintViolation");
+				throw new BizLogicException(errorKey, null,
+						"Collection Protocol Registration:COLLECTION_PROTOCOL_ID,PROTOCOL_PARTICIPANT_ID");
+			}
 
 			// Mandar 22-Jan-07 To disable consents accordingly in SCG and
 			// Specimen(s) start
@@ -1661,152 +1681,48 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		return true;
 	}
 
-	public void checkUniqueConstraint(DAO dao,
-			CollectionProtocolRegistration collectionProtocolRegistration,
-			CollectionProtocolRegistration oldcollectionProtocolRegistration)
-			throws BizLogicException
+	/**
+	 * Method to check if the unique constraint for PPI and CPid is
+	 * violated or not.
+	 * @param dao
+	 * @param cpId
+	 * @param ppi
+	 * @return
+	 * @throws BizLogicException
+	 */
+	public boolean checkUniqueConstraint(DAO dao, long cpId, String ppi) throws BizLogicException
 	{
-		final CollectionProtocol objCollectionProtocol = collectionProtocolRegistration
-				.getCollectionProtocol();
-		final String sourceObjectName = collectionProtocolRegistration.getClass().getName();
-		String[] selectColumns = null;
-		final String errMsg = "";
-		// check for update opeartion and old values equals to new values
-		int count = 0;
-
-		/**
-		 * Name : kalpana thakur Reviewer Name : Vaishali Bug ID: 4926
-		 * Description: Combination of collection protocol id and protocol
-		 * participant id should be unique.
-		 */
-
+		boolean isUnique = true;
+		if(ppi == null || (ppi != null && "".equals(ppi)))
+		{
+			return isUnique;
+		}
+		final String query = "select count(*) from edu.wustl.catissuecore.domain.CollectionProtocolRegistration where "
+			+ "protocolParticipantIdentifier = '"+ppi+"' and collectionProtocol.id = "+cpId;
 		try
 		{
-
-			if (!(collectionProtocolRegistration.getProtocolParticipantIdentifier() == null)
-					&& !(collectionProtocolRegistration.getProtocolParticipantIdentifier()
-							.equals("")))
-			{ // build
-				// query
-				// for
-				// collectionProtocol_id
-				// AND
-				// protocol_participant_id
-
-				selectColumns = new String[]{"collectionProtocol.id",
-						"protocolParticipantIdentifier"};
-				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-				queryWhereClause.addCondition(
-						new EqualClause("collectionProtocol.id", objCollectionProtocol.getId()))
-						.andOpr().addCondition(
-								new EqualClause("protocolParticipantIdentifier",
-										collectionProtocolRegistration
-												.getProtocolParticipantIdentifier()));
-				final List l = dao.retrieve(sourceObjectName, selectColumns, queryWhereClause);
-
-				if (l.size() > 0)
-				{
-
-					if (oldcollectionProtocolRegistration == null
-							|| !(collectionProtocolRegistration.getProtocolParticipantIdentifier()
-									.equals(oldcollectionProtocolRegistration
-											.getProtocolParticipantIdentifier())))
-					{
-						/*// if list is not empty the Constraint Violation occurs
-						logger.debug("Unique Constraint Violated: " + l.get(0));
-						errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);*/
-						this.logger.debug("Unique Constraint Violated: " + errMsg);
-						final ErrorKey errorKey = ErrorKey.getErrorKey("Err.ConstraintViolation");
-						throw new BizLogicException(errorKey, null,
-								"Collection Protocol Registration:COLLECTION_PROTOCOL_ID,PROTOCOL_PARTICIPANT_ID");
-					}
-					else
-					{
-						this.logger.debug("Unique Constraint Passed");
-					}
-				}
-				else
-				{
-					this.logger.debug("Unique Constraint Passed");
-				}
-
-			}
-
-			if (oldcollectionProtocolRegistration != null)
+			final List list = dao.executeQuery(query);
+			int count = 0;
+			if (!list.isEmpty())
 			{
-				if (collectionProtocolRegistration.getParticipant() != null
-						&& oldcollectionProtocolRegistration.getParticipant() != null)
+				count = ((Integer) list.get(0)).intValue();
+				if(count > 0)
 				{
-					if (collectionProtocolRegistration.getParticipant().getId().equals(
-							oldcollectionProtocolRegistration.getParticipant().getId()))
-					{
-						count++;
-					}
-					if (collectionProtocolRegistration.getCollectionProtocol().getId().equals(
-							oldcollectionProtocolRegistration.getCollectionProtocol().getId()))
-					{
-						count++;
-					}
-				}
-				else if (collectionProtocolRegistration.getProtocolParticipantIdentifier() != null
-						&& oldcollectionProtocolRegistration.getProtocolParticipantIdentifier() != null)
-				{
-					if (collectionProtocolRegistration.getProtocolParticipantIdentifier().equals(
-							oldcollectionProtocolRegistration.getProtocolParticipantIdentifier()))
-					{
-						count++;
-					}
-					if (collectionProtocolRegistration.getCollectionProtocol().getId().equals(
-							oldcollectionProtocolRegistration.getCollectionProtocol().getId()))
-					{
-						count++;
-					}
-				}
-				// if count=0 return i.e. old values equals new values
-				if (count == 2)
-				{
-					return;
+					logger.debug("Unique Constraint Violated: ");
+					isUnique = false;
 				}
 			}
-			if (collectionProtocolRegistration.getParticipant() != null)
+			else
 			{
-				// build query for collectionProtocol_id AND participant_id
-				final Participant objParticipant = collectionProtocolRegistration.getParticipant();
-				selectColumns = new String[]{"collectionProtocol.id", "participant.id"};
-				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-				queryWhereClause.addCondition(
-						new EqualClause("collectionProtocol.id", objCollectionProtocol.getId()))
-						.andOpr().addCondition(
-								new EqualClause("participant.id", objParticipant.getId()));
-
-				final List l = dao.retrieve(sourceObjectName, selectColumns, queryWhereClause);
-				if (l.size() > 0)
-				{
-					/*	// if list is not empty the Constraint Violation occurs
-					logger.debug("Unique Constraint Violated: " + l.get(0));
-					errMsg = new DefaultExceptionFormatter().getErrorMessage(
-					"Err.ConstraintViolation", arguments);*/
-					this.logger.debug("Unique Constraint Violated: " + errMsg);
-					final ErrorKey errorKey = ErrorKey.getErrorKey("Err.ConstraintViolation");
-					throw new BizLogicException(errorKey, null,
-							"Collection Protocol Registration : "
-									+ "COLLECTION_PROTOCOL_ID,PARTICIPANT_ID");
-				}
-				else
-				{
-					this.logger.debug("Unique Constraint Passed");
-				}
+				logger.debug("Unique Constraint Passed");
 			}
 
-		}
-		catch (final DAOException daoExp)
-		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+		} catch (DAOException daoExp) {
+			logger.debug(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
-
+		return isUnique;
 	}
 
 	/**
