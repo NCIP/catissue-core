@@ -1151,23 +1151,26 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			try
 			{
 				List list = AppUtility.executeQuery(hql);
-				Object[] obje = (Object[])list.get(0);
-				generateLabel = (Boolean)obje[3];
-				String PPI= obje[0].toString();
-				String labelFormat = null;
-				if(obje[2] != null)
-				labelFormat = obje[2].toString();
-				Long cpId = Long.valueOf(obje[1].toString());
-				//SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
-				CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
-				CollectionProtocol cp = new CollectionProtocol();
-				cp.setId(cpId);
-				cp.setGenerateLabel(generateLabel);
-				cp.setSpecimenLabelFormat(labelFormat);
-				cpr.setCollectionProtocol(cp);
-				cpr.setProtocolParticipantIdentifier(PPI);
-				//specimen.setSpecimenCollectionGroup(scg);
-				specimen.getSpecimenCollectionGroup().setCollectionProtocolRegistration(cpr);
+				if(list!=null && !list.isEmpty())
+				{
+					Object[] obje = (Object[])list.get(0);
+					generateLabel = (Boolean)obje[3];
+					String PPI= obje[0].toString();
+					String labelFormat = null;
+					if(obje[2] != null)
+					labelFormat = obje[2].toString();
+					Long cpId = Long.valueOf(obje[1].toString());
+					//SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+					CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+					CollectionProtocol cp = new CollectionProtocol();
+					cp.setId(cpId);
+					cp.setGenerateLabel(generateLabel);
+					cp.setSpecimenLabelFormat(labelFormat);
+					cpr.setCollectionProtocol(cp);
+					cpr.setProtocolParticipantIdentifier(PPI);
+					//specimen.setSpecimenCollectionGroup(scg);
+					specimen.getSpecimenCollectionGroup().setCollectionProtocolRegistration(cpr);
+				}
 			}
 			catch (ApplicationException e)
 			{
@@ -2928,7 +2931,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			try
 			{
 				list=AppUtility.executeQuery(hql);
-				if(list!=null)
+				if(list!=null && !list.isEmpty())
 				{
 					Object object = list.get(0);
 

@@ -325,7 +325,7 @@
 								&nbsp;&nbsp;&nbsp;&nbsp;<span align="right" class="black_ar" >
 
 
-								<html:text property="labelFormat" styleId="labelFormat" readonly="true" size="6"/></span>
+								<html:text property="labelFormat" maxlength="100" styleId="labelFormat" readonly="true" size="6"/></span>
 								</logic:equal>
 								<logic:notEqual name="isPersistent" value="true">
 									<html:select property="labelGenType"
@@ -338,10 +338,10 @@
 									&nbsp;&nbsp;&nbsp;&nbsp;<span align="right" class="black_ar" >
 
 									<logic:equal name="createSpecimenTemplateForm" property="labelGenType" value="2">
-								<html:text styleClass="black_ar" property="labelFormat" styleId="labelFormat"  size="6"/>
+								<html:text styleClass="black_ar" maxlength="100" property="labelFormat" styleId="labelFormat"  size="6"/>
 								</logic:equal>
 								<logic:notEqual name="createSpecimenTemplateForm" property="labelGenType" value="2">
-								<html:text styleClass="black_ar" property="labelFormat" styleId="labelFormat" disabled="true" size="6"/>
+								<html:text styleClass="black_ar" maxlength="100" property="labelFormat" styleId="labelFormat" disabled="true" size="6"/>
 								</logic:notEqual>
 
 									</span>
@@ -617,10 +617,10 @@
 
 
 								<logic:equal name="createSpecimenTemplateForm" property="<%=labelType%>" value="2">
-								<html:text styleClass="black_ar" property="<%=labelFormat%>" styleId="<%=labelFormat%>"  size="8"/>
+								<html:text styleClass="black_ar" maxlength="100" property="<%=labelFormat%>" styleId="<%=labelFormat%>"  size="8"/>
 								</logic:equal>
 								<logic:notEqual name="createSpecimenTemplateForm" property="<%=labelType%>" value="2">
-								<html:text styleClass="black_ar" property="<%=labelFormat%>" styleId="<%=labelFormat%>" disabled="true" size="8"/>
+								<html:text styleClass="black_ar" maxlength="100" property="<%=labelFormat%>" styleId="<%=labelFormat%>" disabled="true" size="8"/>
 								</logic:notEqual>
 
 								</logic:notEqual>
@@ -713,10 +713,10 @@
 								 <td align="left" class="black_ar">
 
 								 <logic:equal name="createSpecimenTemplateForm" property="labelGenTypeForAliquot" value="2">
-								<html:text styleClass="black_ar" property="labelFormatForAliquot" styleId="labelFormatForAliquot"  size="10"/>
+								<html:text styleClass="black_ar" maxlength="100" property="labelFormatForAliquot" styleId="labelFormatForAliquot"  size="10"/>
 								</logic:equal>
 								<logic:notEqual name="createSpecimenTemplateForm" property="labelGenTypeForAliquot" value="2">
-								<html:text styleClass="black_ar" property="labelFormatForAliquot" styleId="labelFormatForAliquot" disabled="true" size="10"/>
+								<html:text styleClass="black_ar" maxlength="100" property="labelFormatForAliquot" styleId="labelFormatForAliquot" disabled="true" size="10"/>
 								</logic:notEqual>
 
 								</td>
