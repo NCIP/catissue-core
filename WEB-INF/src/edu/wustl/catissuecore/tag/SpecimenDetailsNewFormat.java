@@ -528,7 +528,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			displayName = specimen.getDisplayName();
 			parentName = specimen.getParentName();
 			this.generateLabel=specimen.isGenerateLabel();
-			this.specimenSummaryForm.setGenerateLabel(generateLabel);
+//			this.specimenSummaryForm.setGenerateLabel(generateLabel);
 			if (Constants.TRUE.equalsIgnoreCase(this.isReadOnly) || specimen.getReadOnly())
 			{
 				//				 addReadOnlyRow(sb, counter, specimen);

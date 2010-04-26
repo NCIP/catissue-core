@@ -362,7 +362,7 @@ if(form != null)
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_specimenType)";
 		var functionName = "onSubTypeChangeUnitforCP('" + specimenClassName + "',this,'" + objunit + "')" ;
 
-		sname= "<select name='" + objname + "' size='1' class='addRow_s' id='" + objname + "' onChange=" + functionName + " onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
+		sname= "<select name='" + objname + "' size='1' class='addRow_s_new' id='" + objname + "' onChange=" + functionName + " onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 
 		sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";
 
@@ -397,7 +397,7 @@ if(form != null)
 		sname="";
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_quantity)";
 
-		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' maxlength='10' size='5' class='black_ar' id='" + objname + "'>"
+		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' maxlength='10' size='3' class='black_ar' id='" + objname + "'>"
 		sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 
 		spreqqty.innerHTML="" + sname;
@@ -408,7 +408,7 @@ if(form != null)
 		sname="";
 		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_concentration)";
 
-		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' size='5'  maxlength='10' class='black_ar' id='" + objname + "'>"
+		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' size='3'  maxlength='10' class='black_ar' id='" + objname + "'>"
 		sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 
 		spreqqty.innerHTML="" + sname;
@@ -419,7 +419,8 @@ if(form != null)
 		sname="";
 		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelGenType)";
 
-		sname= "<select name='" + objname + "' size='1' class='formFieldSized8' id='" + objname + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
+		var labelFormatName= "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelFormat)";
+		sname= "<select name='" + objname + "' size='1' class='formFieldSized8' id='" + objname + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id) onchange=labelGenTypechanged(this,'"+labelFormatName+"')>";
 
 		<%
 			for(int i=0;i<labelGenTypeList.size();i++)
@@ -440,7 +441,7 @@ if(form != null)
 		sname="";
 		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelFormat)";
 
-		sname="<input type='text' name='" + objname + "' style='text-align:right' size='10'  maxlength='10' class='black_ar' id='" + objname + "'>"
+		sname="<input type='text' name='" + objname + "' size='8'  maxlength='100' class='black_ar' id='" + objname + "' disabled='true'>"
 		sname = sname + "&nbsp;"
 
 		spreqqty.innerHTML="" + sname;
@@ -475,5 +476,37 @@ if(form != null)
 	</table>
 </html:form>
 </body>
+<script>
+function labelGenTypechanged(selectBox,labelFormatId)
+{
+	if(selectBox.value == 2)
+	{
 
+		document.getElementById(labelFormatId).value="";
+		document.getElementById(labelFormatId).disabled=false;
+	}
+	else
+	{
+		document.getElementById(labelFormatId).value="";
+		document.getElementById(labelFormatId).disabled=true;
+	}
+
+}
+function labelGenTypechangedWithId(typechangeId,labelFormatId)
+{
+	var value= document.getElementById(typechangeId).value;
+
+	if(value == 2)
+	{
+
+		document.getElementById(labelFormatId).value="";
+		document.getElementById(labelFormatId).disabled=false;
+	}
+	else
+	{
+		document.getElementById(labelFormatId).value="";
+		document.getElementById(labelFormatId).disabled=true;
+	}
+}
+</script>
 

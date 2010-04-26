@@ -177,7 +177,14 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		labelGenTypeList.add(new NameValueBean("CP Default", "1"));
 		labelGenTypeList.add(new NameValueBean("Custom", "2"));
 
-		request.setAttribute("labelGenType", ((NameValueBean)labelGenTypeList.get(Integer.valueOf(createSpecimenTemplateForm.getLabelGenType()))).getName());
+		if(createSpecimenTemplateForm.getLabelGenType() == null)
+		{
+			request.setAttribute("labelGenType",labelGenTypeList.get(0));
+		}
+		else
+		{
+			request.setAttribute("labelGenType", ((NameValueBean)labelGenTypeList.get(Integer.valueOf(createSpecimenTemplateForm.getLabelGenType()))).getName());
+		}
 		request.setAttribute("labelGenTypeList", labelGenTypeList);
 
 		// setting the procedure
@@ -380,6 +387,13 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		createSpecimenTemplateForm.setAliquotSpecimenCollection(null);
 		createSpecimenTemplateForm.setDeriveSpecimenCollection(null);
 		createSpecimenTemplateForm.setDeriveSpecimenValues(null);
+
+		createSpecimenTemplateForm.setLabelFormat(null);
+		createSpecimenTemplateForm.setLabelFormatForAliquot(null);
+		createSpecimenTemplateForm.setLabelGenType("0");
+		createSpecimenTemplateForm.setLabelGenTypeForAliquot("0");
+		createSpecimenTemplateForm.setGenLabel(false);
+		createSpecimenTemplateForm.setGenLabelForAliquot(false);
 	}
 
 	/**

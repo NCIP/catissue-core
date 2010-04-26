@@ -74,7 +74,6 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
@@ -1091,39 +1090,41 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		 */
 //		if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 
-		boolean generateLabel= false;
-		generateLabel = isGenerateLabel(specimen);
-//		if(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel())
-		if(generateLabel)
+//		boolean generateLabel= false;
+//		generateLabel = isGenerateLabel(specimen);
+////		if(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel())
+//		if(generateLabel)
+//		{
+
+		if(specimen.getCollectionStatus() != null && specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED))
 		{
 			try
 			{
-				if (specimen.getLabel() == null || "".equals(specimen.getLabel()))
-				{
+//				if (specimen.getLabel() == null || "".equals(specimen.getLabel()))
+//				{
 					final LabelGenerator spLblGenerator;
-					if(Validator.isEmpty(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat()))
-					{
-						spLblGenerator = LabelGeneratorFactory
-						.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-
-					}
-					else
-					{
+//					if(Validator.isEmpty(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat()))
+//					{
+//						spLblGenerator = LabelGeneratorFactory
+//						.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
+//
+//					}
+//					else
+//					{
 						spLblGenerator = LabelGeneratorFactory
 						.getInstance(Constants.CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-					}
+//					}
 					spLblGenerator.setLabel(specimen);
-				}
+//				}
 			}
 			catch (final NameGeneratorException e)
 			{
 				this.logger.error(e.getMessage(), e);
-				e.printStackTrace();
 				throw this.getBizLogicException(e, "name.generator.exp", "");
 			}
 			catch (LabelGenException e)
 			{
-				this.logger.error(e.getMessage(), e);
+				this.logger.info(e);
 			}
 		}
 	}
@@ -2740,10 +2741,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 							"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id ="+ temp.getId();
 					List list = AppUtility.executeQuery(hql);
 					boolean generateLabel = (Boolean)list.get(0);
-					if(!generateLabel)
-					{
-						this.validateLable(obj);
-					}
+//					if(!generateLabel)
+//					{
+						this.validateLable(obj,generateLabel);
+//					}
 
 				}
 				if (operation.equals(Constants.ADD))
@@ -2772,34 +2773,86 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * @param obj : obj
+	 * @param generateLabel
 	 * @throws BizLogicException  : BizLogicException
 	 */
-	private void validateLable(Object obj) throws BizLogicException
+	private void validateLable(Object obj, boolean isLabelOnForCP) throws BizLogicException
 	{
 		final Iterator specimenIterator = ((LinkedHashSet) obj).iterator();
 		while (specimenIterator.hasNext())
 		{
 			final Specimen temp = (Specimen) specimenIterator.next();
-			if ((temp.getLabel() == null || temp.getLabel().equals(""))
-					&& temp.getCollectionStatus().equalsIgnoreCase("Collected"))
+
+			if(!isLabelOnforSpecimen(temp,isLabelOnForCP))
 			{
-				throw this.getBizLogicException(null, "label.mandatory", "");
-			}
-			final Collection aliquotsCollection = temp.getChildSpecimenCollection();
-			if (aliquotsCollection != null)
-			{
-				final Iterator aliquotItert = aliquotsCollection.iterator();
-				while (aliquotItert.hasNext())
+				if (Validator.isEmpty(temp.getLabel()) && temp.getCollectionStatus().equalsIgnoreCase("Collected"))
 				{
-					final Specimen tempAliquot = (Specimen) aliquotItert.next();
-					if ((tempAliquot.getLabel() == null || tempAliquot.getLabel().equals(""))
-							&& tempAliquot.getCollectionStatus().equalsIgnoreCase("Collected"))
+					throw this.getBizLogicException(null, "label.mandatory", "");
+				}
+				final Collection aliquotsCollection = temp.getChildSpecimenCollection();
+				if (aliquotsCollection != null)
+				{
+					final Iterator aliquotItert = aliquotsCollection.iterator();
+					while (aliquotItert.hasNext())
 					{
-						throw this.getBizLogicException(null, "label.mandatory", "");
+						final Specimen tempAliquot = (Specimen) aliquotItert.next();
+						if(!isLabelOnforSpecimen(tempAliquot,isLabelOnForCP))
+						{
+							if (Validator.isEmpty(tempAliquot.getLabel()) && tempAliquot.getCollectionStatus().equalsIgnoreCase("Collected"))
+							{
+								throw this.getBizLogicException(null, "label.mandatory", "");
+							}
+						}
 					}
 				}
 			}
 		}
+	}
+
+
+	private boolean isLabelOnforSpecimen(final Specimen objSpecimen, boolean isLabelOnForCP) throws BizLogicException
+	{
+		boolean isLabelOnForSpecimen = false;
+		try
+		{
+		if(objSpecimen.getSpecimenRequirement() == null && objSpecimen.getId() != null)
+		{
+			String hql = "select specimen.specimenRequirement from edu.wustl.catissuecore.domain.Specimen as specimen"
+				+" where specimen.id="+ objSpecimen.getId();
+
+			List<Object[]> list=null;
+
+				list=AppUtility.executeQuery(hql);
+				if(list!=null)
+				{
+					Object object = list.get(0);
+					objSpecimen.setSpecimenRequirement((SpecimenRequirement)object);
+				}
+			}
+
+					if(objSpecimen.getSpecimenRequirement() != null)
+					{
+						if(objSpecimen.getSpecimenRequirement().getGenLabel() && !Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
+						{
+							isLabelOnForSpecimen = objSpecimen.getSpecimenRequirement().getGenLabel();
+						}
+						else if(objSpecimen.getSpecimenRequirement().getGenLabel() && Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
+						{
+							isLabelOnForSpecimen = isLabelOnForCP;
+						}
+					}
+					else
+					{
+						isLabelOnForSpecimen = isLabelOnForCP;
+					}
+
+
+			}
+			catch(ApplicationException exp)
+			{
+				throw this.getBizLogicException(exp, exp.getErrorKeyAsString(), exp.getMessage());
+			}
+		return isLabelOnForSpecimen;
 	}
 
 	/**
@@ -2866,6 +2919,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 		boolean generateLabel = false;
 
+		if(specimen.getSpecimenRequirement() == null && specimen.getId() != null)
+		{
+			String hql = "select specimen.specimenRequirement from edu.wustl.catissuecore.domain.Specimen as specimen"
+				+" where specimen.id="+ specimen.getId();
+
+			List<Object[]> list=null;
+			try
+			{
+				list=AppUtility.executeQuery(hql);
+				if(list!=null)
+				{
+					Object object = list.get(0);
+
+					specimen.setSpecimenRequirement((SpecimenRequirement)object);
+				}
 			if(specimen.getSpecimenCollectionGroup() != null && specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration() != null
 					&& specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol() != null)
 			{
@@ -2882,6 +2950,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 //					generateLabel = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel();
 //				}
 			}
+			if(specimen.getSpecimenRequirement() != null)
+			{
+				if(specimen.getSpecimenRequirement().getGenLabel() && !Validator.isEmpty(specimen.getSpecimenRequirement().getLabelFormat()))
+				{
+					generateLabel = specimen.getSpecimenRequirement().getGenLabel();
+				}
+			}
 			if(!generateLabel)
 	//		if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 			{
@@ -2891,6 +2966,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					throw this.getBizLogicException(null, "label.mandatory", "");
 				}
 			}
+			}
+			catch(ApplicationException ex)
+			{
+				throw this.getBizLogicException(ex, ex.getErrorKeyAsString(), ex.getLogMessage());
+			}
+		}
 
 	}
 
@@ -3966,7 +4047,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				//bug 15260 end
 			}
 
-			generateLabel(newSpecimenCollection);
+//			generateLabel(newSpecimenCollection);
 			iterator = newSpecimenCollection.iterator();
 
 			while (iterator.hasNext())
@@ -5349,28 +5430,28 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * @param dao object
 	 * @throws BizLogicException Generic BizLogic Exception
 	 */
-	public void insertMultiple(Collection<AbstractDomainObject> objCollection, DAO dao,
-			SessionDataBean sessionDataBean) throws BizLogicException
-	{
-		//  Authorization to ADD multiple objects (e.g. Aliquots) checked here
-		for (AbstractDomainObject obj : objCollection)
-		{
-			if (isAuthorized(dao, obj, sessionDataBean))
-			{
-				validate(obj, dao, Constants.ADD);
-			}
-			else
-			{
-				ErrorKey errorKey = ErrorKey.getErrorKey("access.execute.action.denied");
-				throw new BizLogicException(errorKey, null,	"");
-			}
-		}
-		generateLabel(objCollection);
-		for (AbstractDomainObject obj : objCollection)
-		{
-			insert(obj, dao, sessionDataBean);
-		}
-	}
+//	public void insertMultiple(Collection<AbstractDomainObject> objCollection, DAO dao,
+//			SessionDataBean sessionDataBean) throws BizLogicException
+//	{
+//		//  Authorization to ADD multiple objects (e.g. Aliquots) checked here
+//		for (AbstractDomainObject obj : objCollection)
+//		{
+//			if (isAuthorized(dao, obj, sessionDataBean))
+//			{
+//				validate(obj, dao, Constants.ADD);
+//			}
+//			else
+//			{
+//				ErrorKey errorKey = ErrorKey.getErrorKey("access.execute.action.denied");
+//				throw new BizLogicException(errorKey, null,	"");
+//			}
+//		}
+////		generateLabel(objCollection);
+//		for (AbstractDomainObject obj : objCollection)
+//		{
+//			insert(obj, dao, sessionDataBean);
+//		}
+//	}
 
 	private void generateLabel(Collection<AbstractDomainObject> objCollection) throws BizLogicException
 	{

@@ -502,6 +502,12 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("specimen.type")));
 			}
+			if(this.labelGenType.equals("2") && validator.isEmpty(this.labelFormat))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						"collectionProtocol.labelformat", ApplicationProperties
+						.getValue("collectionProtocol.labelformat")));
+			}
 			if (validator.isEmpty(this.type))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
@@ -638,6 +644,12 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",
 									ApplicationProperties
 											.getValue("cpbasedentry.quantityperaliquot")));
+						}
+						if(this.labelGenTypeForAliquot.equals("2") && validator.isEmpty(this.labelFormatForAliquot))
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+									"sp.req.aliquot.labelformat", ApplicationProperties
+									.getValue("sp.req.aliquot.labelformat")));
 						}
 					}
 					catch (final NumberFormatException exp)
@@ -776,6 +788,9 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 			{
 				boolean bSpecimenClass = false;
 				boolean bSpecimenType = false;
+				boolean validateLabel = false;
+				boolean labelGenType = false;
+				boolean labelFormat = false;
 				final Map deriveSpecimenMap = this.deriveSpecimenMap();
 				final Iterator it = deriveSpecimenMap.keySet().iterator();
 				while (it.hasNext())
@@ -791,6 +806,28 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 									"errors.item.selected", ApplicationProperties
 											.getValue("collectionprotocol.specimenclass")));
 							bSpecimenClass = true;
+						}
+					}
+					if(!labelGenType)
+					{
+						if ((key.indexOf("_labelGenType")) != -1 && mapValue != null)
+						{
+							if (mapValue.equals("2"))
+							{
+								validateLabel=true;
+								labelGenType = true;
+							}
+						}
+
+					}
+					if(!labelFormat && labelGenType)
+					{
+						if(validateLabel && (key.indexOf("_labelFormat")) != -1 && validator.isEmpty(mapValue))
+						{
+							labelFormat = true;
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+									"sp.req.derivative.labelformat", ApplicationProperties
+									.getValue("sp.req.derivative.labelformat")));
 						}
 					}
 					if ((key.indexOf("_concentration")) != -1 && mapValue != null)
@@ -878,6 +915,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	public Map deriveSpecimenMap()
 	{
 		int iCount;
+		boolean genLabel = false;
 		final Map deriveSpecimenMap = new LinkedHashMap<String, String>();
 		for (iCount = 1; iCount <= this.noOfDeriveSpecimen; iCount++)
 		{
@@ -909,23 +947,23 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 			key = "DeriveSpecimenBean:" + iCount + "_labelGenType";
 			final String labelGenType = (String) this.deriveSpecimenValues.get(key);
 			deriveSpecimenMap.put(key, labelGenType);
-			if(labelGenType != null && labelGenType.equals("1"))
+			if(labelGenType != null && labelGenType.equals("0"))
 			{
-				this.genLabel = Boolean.FALSE;
+				genLabel = Boolean.FALSE;
 			}
-			else if(labelGenType.equals("2") || labelGenType.equals("3"))
+			else if(labelGenType.equals("1") || labelGenType.equals("2"))
 			{
-				this.genLabel = Boolean.TRUE;
+				genLabel = Boolean.TRUE;
 			}
-			this.setDeriveSpecimenValue("DeriveSpecimenBean:" + iCount + "_genLabel", Boolean.toString(this.genLabel));
+			this.setDeriveSpecimenValue("DeriveSpecimenBean:" + iCount + "_genLabel", Boolean.toString(genLabel));
 
 			key = "DeriveSpecimenBean:" + iCount + "_labelFormat";
 			final String labelFormat = (String) this.deriveSpecimenValues.get(key);
 			deriveSpecimenMap.put(key, labelFormat);
 
 			key = "DeriveSpecimenBean:" + iCount + "_genLabel";
-			final String genLabel = (String) this.deriveSpecimenValues.get(key);
-			deriveSpecimenMap.put(key, genLabel);
+			final String derGenLabel = (String) this.deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, derGenLabel);
 
 		}
 		return deriveSpecimenMap;

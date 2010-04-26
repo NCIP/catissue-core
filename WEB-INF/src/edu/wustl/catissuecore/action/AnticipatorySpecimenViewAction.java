@@ -44,6 +44,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
@@ -490,15 +491,31 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		// Constants.ALIQUOT));
 		// specimenDataBean.setDeriveSpecimenCollection(getChildren(specimen,
 		// Constants.ALIQUOT));
+		setLabelGenProp(specimen, specimenDataBean);
+		return specimenDataBean;
+	}
+
+	/**
+	 * @param specimen
+	 * @param specimenDataBean
+	 */
+	private void setLabelGenProp(Specimen specimen, final GenericSpecimenVO specimenDataBean)
+	{
 		if(specimen.getSpecimenRequirement() != null)
 		{
-			specimenDataBean.setGenerateLabel(specimen.getSpecimenRequirement().getGenLabel());
+			if(specimen.getSpecimenRequirement().getGenLabel() && Validator.isEmpty(specimen.getSpecimenRequirement().getLabelFormat()))
+			{
+				specimenDataBean.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
+			}
+			else
+			{
+				specimenDataBean.setGenerateLabel(specimen.getSpecimenRequirement().getGenLabel());
+			}
 		}
 		else
 		{
 			specimenDataBean.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
 		}
-		return specimenDataBean;
 	}
 
 	/**

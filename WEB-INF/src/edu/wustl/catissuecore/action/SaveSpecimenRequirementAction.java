@@ -289,7 +289,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 
 		specimenRequirementBean.setLabelFormat(createSpecimenTemplateForm.getLabelFormatForAliquot());
 		specimenRequirementBean.setLabelGenType(createSpecimenTemplateForm.getLabelGenTypeForAliquot());
-		if(createSpecimenTemplateForm.getLabelGenTypeForAliquot() != null && createSpecimenTemplateForm.getLabelGenTypeForAliquot().equals("1"))
+		if(createSpecimenTemplateForm.getLabelGenTypeForAliquot() != null && createSpecimenTemplateForm.getLabelGenTypeForAliquot().equals("0"))
 		{
 			createSpecimenTemplateForm.setGenLabelForAliquot(false);
 		}

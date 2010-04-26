@@ -1229,7 +1229,7 @@ public class AliquotAction extends SecureAction
 			{
 				final String labelKey = "Specimen:" + i + "_label";
 				// aliquotMap.put(labelKey,"Abc");
-				aliquotMap.put(labelKey, form.getSpecimenLabel() + "_" + ++totalAliquotCount);
+//				aliquotMap.put(labelKey, form.getSpecimenLabel() + "_" + ++totalAliquotCount);
 			}
 
 		}

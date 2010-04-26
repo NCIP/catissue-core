@@ -85,15 +85,6 @@ body {
 
 }
 
-bulk_black_ar{
-	font-family: verdana;
-	font-size: 11px;
-	color: #171717;
-	vertical-align:middle;
-	margin:0px;
-	width:31;
-}
-
 .black_ar_t {
 	font-family: verdana;
 	font-size: 11px;
@@ -564,6 +555,13 @@ div.autocomplete {
 }
 .addRow_s{
 	width:14em;
+	font-family: verdana;
+	font-size: 11px;
+	color: #000000;
+
+}
+.addRow_s_new{
+	width:8em;
 	font-family: verdana;
 	font-size: 11px;
 	color: #000000;

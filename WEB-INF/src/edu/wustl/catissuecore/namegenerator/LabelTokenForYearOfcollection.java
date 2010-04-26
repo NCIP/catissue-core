@@ -1,9 +1,5 @@
 package edu.wustl.catissuecore.namegenerator;
 
-import java.util.Calendar;
-import java.util.Iterator;
-
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.SpecimenUtil;
 

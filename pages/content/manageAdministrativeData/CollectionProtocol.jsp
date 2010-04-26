@@ -280,6 +280,7 @@ function hideTreeChecked(radioButton)
 						<script>
 								var hideTreeVal=document.getElementById('generateLabel').value;
 								var defaultLabelGen = document.getElementById('defaultLabelGen').value;
+
 								var labelVal=document.getElementById('specimenLabelFormat').value;
 								//alert("ddd   "+hideTreeVal);
 								//alert("${requestScope.generateLabel}");
@@ -288,11 +289,26 @@ function hideTreeChecked(radioButton)
 										{
 											document.getElementById('generateLabelCheck3').checked=true;
 										}
+										<c:if test="${requestScope['org.apache.struts.action.ERROR'] != null }">
+										else if(hideTreeVal == 'true' && (labelVal == null || labelVal == ""))
+										{
+											document.getElementById('generateLabelCheck2').checked=true;
+											document.getElementById('specimenLabelFormat').disabled=true;
+											document.getElementById('generateLabel').value=false;
+		document.getElementById('defaultLabelGen').value=true;
+		document.getElementById('specimenLabelFormat').value="";
+										}
+										</c:if>
+										<c:if test="${requestScope['org.apache.struts.action.ERROR'] == null }">
 										else if(hideTreeVal == 'true' && defaultLabelGen == 'false' && (labelVal == null || labelVal == ""))
 										{
 											document.getElementById('generateLabelCheck3').checked=true;
 											document.getElementById('specimenLabelFormat').disabled=false;
+
+
+
 										}
+										</c:if>
 										else if(defaultLabelGen == 'true' && (labelVal == null || labelVal == ""))
 										{
 											document.getElementById('generateLabelCheck2').checked=true;

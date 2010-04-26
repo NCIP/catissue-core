@@ -86,6 +86,7 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ContainerType.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/CDEImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/PermissibleValueImpl.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/KeySequenceId.hbm.xml"/>
 
 		<mapping resource="edu/wustl/simplequery/hbm/QueryColumnData.hbm.xml"/>
 		<mapping resource="edu/wustl/simplequery/hbm/QueryTableData.hbm.xml"/>
@@ -124,7 +125,7 @@
 		<!-- Shipping Tracking Merge Himanshu-->
 		<mapping resource="edu/wustl/catissuecore/hbm/shippingtracking/BaseShipment.hbm.xml"/>
 		<!-- shipping tracking merge ends -->
-		
+
 		<!-- bulk Operations-->
 		<mapping resource="edu/wustl/bulkoperator/hbm/JobDetails.hbm.xml"/>
     </session-factory>

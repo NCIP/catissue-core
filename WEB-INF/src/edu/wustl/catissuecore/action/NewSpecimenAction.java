@@ -52,6 +52,7 @@ import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
@@ -74,6 +75,7 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
@@ -238,7 +240,37 @@ public class NewSpecimenAction extends SecureAction
 			// Lazy - specimenCollectionGroup.getCollectionProtocolRegistration()
 			final CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroup
 					.getCollectionProtocolRegistration();
-			specimenForm.setGenerateLabel(collectionProtocolRegistration.getCollectionProtocol().getGenerateLabel());
+			boolean generateLabel = collectionProtocolRegistration.getCollectionProtocol().getGenerateLabel();
+
+//			if(!Validator.isEmpty(specimenForm.getOperation()) && !specimenForm.getOperation().equals(Constants.EDIT))
+//			{
+//				specimenForm.setGenerateLabel(generateLabel);
+//			}
+			if (!Validator.isEmpty(specimenForm.getOperation()) && !specimenForm.getOperation().equals(Constants.ADD))
+			{
+				String hql = "select specimen.specimenRequirement from edu.wustl.catissuecore.domain.Specimen as specimen"
+					+" where specimen.id="+ specimenForm.getId();
+
+				List<Object[]> list=null;
+
+					list=AppUtility.executeQuery(hql);
+					if(list!=null && !list.isEmpty())
+					{
+						Object object = list.get(0);
+						SpecimenRequirement requirement = (SpecimenRequirement)object;
+						if(requirement != null && requirement.getGenLabel() && !Validator.isEmpty(requirement.getLabelFormat()))
+						{
+							generateLabel = requirement.getGenLabel();
+						}
+						else if(requirement != null && !requirement.getGenLabel())
+						{
+							generateLabel = requirement.getGenLabel();
+						}
+//						/objSpecimen.setSpecimenRequirement((SpecimenRequirement)object);
+					}
+
+			}
+			specimenForm.setGenerateLabel(generateLabel);
 			if (collectionProtocolRegistration == null
 					|| collectionProtocolRegistration.getSignedConsentDocumentURL() == null)
 			{

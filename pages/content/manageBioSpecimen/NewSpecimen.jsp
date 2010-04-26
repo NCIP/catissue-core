@@ -1232,7 +1232,7 @@
 				</logic:equal>
 						</tr>
 				<% // if( operation.equals(Constants.EDIT) || (!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl))
-				if( (form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT)) || (!form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT) && !form.isGenerateLabel()) || (!form.isGenerateLabel() && !Variables.isSpecimenBarcodeGeneratorAvl))
+				if(form.getCollectionStatus() != null &&( (form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT)) || (!form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT) && !form.isGenerateLabel()) || (!form.isGenerateLabel() && !Variables.isSpecimenBarcodeGeneratorAvl)))
 									{
 				%>
 

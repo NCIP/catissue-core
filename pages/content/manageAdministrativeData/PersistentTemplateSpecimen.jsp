@@ -2,7 +2,7 @@
 		<td class="cp_tabtable">
 			<br>
 				<table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
-					<html:hidden property="labelFormat" />
+
 					<tr>
                       <td colspan="3" align="left">
 						 <table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -331,11 +331,20 @@
 									<html:select property="labelGenType"
 									styleClass="formFieldSized8"
 									styleId="labelGenType" size="1"
-									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"
+									onchange="labelGenTypechanged(this,'labelFormat')">
 										<html:options collection= "labelGenTypeList" labelProperty="name" property="value"/>
 									</html:select>
 									&nbsp;&nbsp;&nbsp;&nbsp;<span align="right" class="black_ar" >
-									<html:text property="labelFormat" styleId="labelFormat" size="6"/></span>
+
+									<logic:equal name="createSpecimenTemplateForm" property="labelGenType" value="2">
+								<html:text styleClass="black_ar" property="labelFormat" styleId="labelFormat"  size="6"/>
+								</logic:equal>
+								<logic:notEqual name="createSpecimenTemplateForm" property="labelGenType" value="2">
+								<html:text styleClass="black_ar" property="labelFormat" styleId="labelFormat" disabled="true" size="6"/>
+								</logic:notEqual>
+
+									</span>
 								</logic:notEqual>
 								</td>
                               </tr>
@@ -364,14 +373,14 @@
                                 <label for="delete" align="center"><bean:message key="addMore.delete" /></label>
                               </span></td>
                               <td width="15%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> </span><bean:message key="collectionprotocol.specimenclass" /> </span></td>
-                              <td width="15%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="collectionprotocol.specimetype" /> </span></td>
+                              <td width="12%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="collectionprotocol.specimetype" /> </span></td>
                               <td width="20%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.storagelocation"/></span></td>
                               <td width="10%" class="tableheading"><span class="black_ar_b"><bean:message key="collectionprotocol.quantity" /></span></td>
                               <td width="10%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.concentration"/></span></td>
 
 							  <td width="15%" class="tableheading"><span class="black_ar_b"><span class="">Label Generation</span></td>
 
-							  <td width="10%" class="tableheading"><span class="black_ar_b">Label format</span></td>
+							  <td width="13%" class="tableheading"><span class="black_ar_b">Label format</span></td>
                             </tr>
 						  <script> document.forms[0].noOfDeriveSpecimen.value = <%=noOfDeriveSpecimen%> </script>
 
@@ -401,6 +410,8 @@
 					String labelType = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelGenType)";
 
 					String labelFormat = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelFormat)";
+
+					String changeLabelGenType = "labelGenTypechangedWithId('"+labelType+"','"+labelFormat+"')";
 			%>
 <tr>
 
@@ -487,7 +498,7 @@
 
 	                                <td class="black_ar" >
 									<html:select property="<%=specimenType%>"
-									styleClass="addRow_s"
+									styleClass="addRow_s_new"
 									styleId="<%=specimenType%>"  size="1"
 									onchange="<%=changeType%>"
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -530,6 +541,25 @@
 					{
 						concValue="0";
 					}
+					List labelGenList = (List)request.getAttribute("labelGenTypeList");
+					String genLabelType;
+					if(form.getDeriveSpecimenValue(labelType)!=null)
+					{
+						genLabelType= ((NameValueBean)labelGenList.get(Integer.valueOf(form.getDeriveSpecimenValue(labelType).toString()))).getName();
+					}
+				else
+				{
+					genLabelType=((NameValueBean)labelGenList.get(0)).getName();
+				}
+					String deriveLabelFormat;
+					if(form.getDeriveSpecimenValue(labelFormat) != null)
+					{
+					 deriveLabelFormat=form.getDeriveSpecimenValue(labelFormat).toString();
+					}
+					else
+					{
+						 deriveLabelFormat="";
+					}
 				%>
 									<logic:equal name="isPersistentValue" value="true">
 										<label>
@@ -538,7 +568,7 @@
 									</logic:equal>
 
 									 <logic:notEqual name="isPersistentValue" value="true">
-										<html:text styleClass="black_ar" size="10"  maxlength="10"
+										<html:text styleClass="black_ar" size="3"  maxlength="10"
 										styleId="<%=quantity%>" property="<%=quantity%>"
 										value="<%=qtyValue%>" style="text-align:right"/>
 									</logic:notEqual>
@@ -556,13 +586,49 @@
 								</logic:equal>
   							    <logic:notEqual name="isPersistentValue" value="true">
 									<td class="black_ar">
-										<html:text styleClass="black_ar" size="10"  maxlength="10"
+										<html:text styleClass="black_ar" size="3"  maxlength="10"
 											styleId="<%=concentration%>" property="<%=concentration%>"
 											disabled="<%=concReadOnly%>" value="<%=concValue%>" style="text-align:right"/>
 
 								</logic:notEqual>
 								&nbsp;<bean:message key="specimen.concentrationUnit" />
 
+								</td>
+
+								<td class="black_ar" >
+									<logic:notEqual name="isPersistentValue" value="true">
+									<html:select property="<%=labelType%>"
+									styleClass="formFieldSized8"
+									styleId="<%=labelType%>" size="1"
+									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"
+									onchange="<%=changeLabelGenType%>">
+										<html:options collection= "labelGenTypeList" labelProperty="name" property="value"/>
+									</html:select>
+									</logic:notEqual>
+									<logic:equal name="isPersistentValue" value="true">
+										<label>
+											<%=genLabelType%>
+			                            </label>
+									</logic:equal>
+								</td>
+
+								 <td class="black_ar">
+								<logic:notEqual name="isPersistentValue" value="true">
+
+
+								<logic:equal name="createSpecimenTemplateForm" property="<%=labelType%>" value="2">
+								<html:text styleClass="black_ar" property="<%=labelFormat%>" styleId="<%=labelFormat%>"  size="8"/>
+								</logic:equal>
+								<logic:notEqual name="createSpecimenTemplateForm" property="<%=labelType%>" value="2">
+								<html:text styleClass="black_ar" property="<%=labelFormat%>" styleId="<%=labelFormat%>" disabled="true" size="8"/>
+								</logic:notEqual>
+
+								</logic:notEqual>
+								<logic:equal name="isPersistentValue" value="true">
+										<label>
+											<%=deriveLabelFormat%>
+			                            </label>
+									</logic:equal>
 								</td>
                               </tr>
 
@@ -605,31 +671,27 @@
 									<td width="15%" class="black_ar" >
 									<bean:message key="aliquots.noOfAliquots"/>
 									</td>
-									<td width="15%" class="black_ar">
+									<td width="20%" class="black_ar">
 									<bean:message key="aliquots.qtyPerAliquot"/>
 									</td>
-									<td width="30%" class="black_ar">
+									<td width="25%" class="black_ar">
 									<bean:message key="cpbasedentry.storagelocation"/>
 									</td>
-									<td width="20%" align="right" class="black_ar" >Lable Generation</td>
-									<td width="20%" align="right" class="black_ar" >Label Format</td>
+									<td width="20%" align="left" class="black_ar" >Label Generation</td>
+									<td width="20%" align="left" class="black_ar" >Label Format</td>
 								</tr>
 								<tr>
-		                           <td width="10%" class="black_ar" >
+		                           <td class="black_ar" >
 
-										 &nbsp;
-										 <html:text styleClass="black_ar" styleId="noOfAliquots" size="10" property="noOfAliquots" style="text-align:right" maxlength="50" />
+
+										 <html:text styleClass="black_ar" styleId="noOfAliquots" size="8" property="noOfAliquots" style="text-align:right" maxlength="50" />
 									</td>
-		                            <td width="10%" class="black_ar">
-										<label for="qtyPerAliquot">
+		                            <td  class="black_ar">
 
-										 </label>&nbsp;
-										 <html:text styleClass="black_ar" styleId="quantityPerAliquot" size="10" property="quantityPerAliquot" style="text-align:right" maxlength="50" />
+										 <html:text styleClass="black_ar" styleId="quantityPerAliquot" size="8" property="quantityPerAliquot" style="text-align:right" maxlength="50" />
 									</td>
-		                            <td width="40%" class="black_ar">
-										<label for="storageLocation">
+		                            <td class="black_ar">
 
-										</label>&nbsp;
 										<autocomplete:AutoCompleteTag property="storageLocationForAliquotSpecimen"
 											    optionsList = "<%=request.getAttribute("storageContainerList")%>"
 												initialValue="<%=form.getStorageLocationForAliquotSpecimen()%>"
@@ -638,19 +700,25 @@
 												/>
 									</td>
 
-									<td width="20%" align="right" class="black_ar" >
+									<td align="left" class="black_ar" >
 									<html:select property="labelGenTypeForAliquot"
 									styleClass="formFieldSized8"
-									styleId="genLabelForAliquot" size="1"
-									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+									styleId="labelGenTypeForAliquot" size="1"
+									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"
+									onchange="labelGenTypechanged(this,'labelFormatForAliquot')">
 										<html:options collection= "labelGenTypeList" labelProperty="name" property="value"/>
 									</html:select>
 								</td>
 
-								 <td width="20%" align="right" class="black_ar">
-									<html:text styleClass="black_ar" size="10"  maxlength="10"
-										styleId="labelFormatForAliquot" property="labelFormatForAliquot"
-										style="text-align:right"/>
+								 <td align="left" class="black_ar">
+
+								 <logic:equal name="createSpecimenTemplateForm" property="labelGenTypeForAliquot" value="2">
+								<html:text styleClass="black_ar" property="labelFormatForAliquot" styleId="labelFormatForAliquot"  size="10"/>
+								</logic:equal>
+								<logic:notEqual name="createSpecimenTemplateForm" property="labelGenTypeForAliquot" value="2">
+								<html:text styleClass="black_ar" property="labelFormatForAliquot" styleId="labelFormatForAliquot" disabled="true" size="10"/>
+								</logic:notEqual>
+
 								</td>
 								</tr>
                           </table>
