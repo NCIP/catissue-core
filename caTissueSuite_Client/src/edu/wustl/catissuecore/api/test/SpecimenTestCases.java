@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import edu.wustl.catissuecore.api.test.TestCaseUtility;
 import edu.wustl.catissuecore.domain.Aliquot;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -46,6 +47,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		{
 			Specimen sp = new Specimen();
 			sp = (Specimen) TestCaseUtility.getObjectMap(Specimen.class);
+			sp.setLabel("specimen_"+UniqueKeyGeneratorUtil.getUniqueKey());
 			System.out.println("testUpdateCollectionStatusOfSpecimen Get Object Sp" + sp.getId());
 			List spCollection = appService.getObjects(sp);
 			sp = (Specimen) spCollection.get(0);
@@ -54,6 +56,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			//sp.setIsAvailable(true);
 			sp.setExternalIdentifierCollection(null);
 			System.out.println(sp + ": sp");
+			System.out.println("Specimen LABEL ####   " + sp.getLabel());
 			sp = (Specimen) appService.updateObject(sp);
 			System.out.println(sp + ": sp After Update");
 			assertTrue(" Domain Object is successfully added ---->    Name:: " + sp, true);
@@ -67,7 +70,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			assertFalse("Failed to create Domain Object", true);
 		}
 	}
-	
+
 	public void testUpdateSpecimenWithAvailableQtyGreaterThanInitialQty()
 	{
 		try
@@ -134,6 +137,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			Specimen sp = new Specimen();
 			sp = (Specimen) TestCaseUtility.getObjectMap(Specimen.class);
 			sp.setId(sp.getId());
+			sp.setLabel("specimen_test_"+UniqueKeyGeneratorUtil.getUniqueKey());
 			List spCollection = appService.getObjects(sp);
 			sp = (Specimen) spCollection.get(0);
 			sp.setCollectionStatus("Collected");
@@ -153,6 +157,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 				consentStatus.setStatus("Yes");
 				consentTierStatusCollection.add(consentStatus);
 			}
+			sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().setGenerateLabel(true);
 			sp.setConsentTierStatusCollection(consentTierStatusCollection);
 			System.out.println(sp + ": sp");
 			sp = (Specimen) appService.updateObject(sp);
@@ -1860,12 +1865,12 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			specimenObj.setCollectionStatus("Collected");
 			Logger.out.info("Inserting domain object------->" + specimenObj);
 			System.out.println("Before Creating Tissue Specimen");
-			specimenObj.setLabel(null);
+//			specimenObj.setLabel(null);
 			specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
 
 			TissueSpecimen childSpecimen1 = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			childSpecimen1.setParentSpecimen(specimenObj);
-			childSpecimen1.setLabel(null);
+//			childSpecimen1.setLabel(null);
 			childSpecimen1.setLineage("Aliquot");
 			childSpecimen1.setSpecimenCollectionGroup(scg);//bug 12073 and 12074
 			System.out.println("Befor creating Tissue Specimen");
@@ -1881,7 +1886,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 
 			TissueSpecimen childSpecimen2 = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			childSpecimen2.setParentSpecimen(specimenObj);
-			childSpecimen2.setLabel(null);
+//			childSpecimen2.setLabel(null);
 			childSpecimen2.setLineage("Aliquot");
 			childSpecimen2.setSpecimenCollectionGroup(scg);//bug 12073 and 12074
 			System.out.println("Befor creating Tissue Specimen");
@@ -1999,7 +2004,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			assertFalse("Failed to update activity status from closed to active of specimen", true);
 		}
 	}
-	
+
 	 public void testEditSiteUserCPAssociation() {
 		Logger.out.info("updating domain object site ------->");
 		try {
@@ -2011,4 +2016,6 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			assertFalse("failed to update Object", true);
 		}
 	}
+
+	 
 }

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import edu.wustl.catissuecore.api.test.TestCaseUtility;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -27,17 +28,17 @@ import gov.nih.nci.common.util.HQLCriteria;
 public class ParticipantTestCases extends CaTissueBaseTestCase {
 
 	AbstractDomainObject domainObject = null;
-	
+
 	public void testAddParticipantWithCPR()
 	{
 		try{
-			Participant participant= BaseTestCaseUtility.initParticipantWithCPR();			
+			Participant participant= BaseTestCaseUtility.initParticipantWithCPR();
 			System.out.println(participant);
-			participant = (Participant) appService.createObject(participant); 
+			participant = (Participant) appService.createObject(participant);
 			Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
 			Iterator cprItr = collectionProtocolRegistrationCollection.iterator();
 			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)cprItr.next();
-			
+
 			TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
 			TestCaseUtility.setObjectMap(participant, Participant.class);
 			System.out.println("Object created successfully");
@@ -50,10 +51,10 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			 assertFalse("could not add object", true);
 		 }
 	}
-	
+
 	public void testUpdateCPAssociatedCPRWithDeleteCollectionProtocolEvent()
 	{
-	    try 
+	    try
 		{
 	    	CollectionProtocolRegistration cpr = (CollectionProtocolRegistration)TestCaseUtility.getObjectMap(CollectionProtocolRegistration.class);
 	    	CollectionProtocol collectionProtocol = cpr.getCollectionProtocol();
@@ -78,14 +79,14 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	    	if(updatedCPECollection.size() > cpeCollection.size())
 	    	{
 	    		assertTrue("User can add events after participant regestered to CP", true);
-	    		
+
 	    	}
 	    	else
 	    	{
-	    		fail("User can add events after participant regestered to CP");	
+	    		fail("User can add events after participant regestered to CP");
 			}
-	    	
-	    } 
+
+	    }
 	    catch (Exception e)
 	    {
 	    	System.out
@@ -94,13 +95,13 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	    	fail("User can add events after participant regestered to CP");
 	    }
 	}
-	
+
 	public void testSearchParticipant()
 	{
 		Participant participant = new Participant();
     	Logger.out.info(" searching domain object");
     	participant.setId(new Long(1));
-   
+
          try {
         	 List resultList = appService.search(Participant.class,participant);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
@@ -108,16 +109,16 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedParticipant.getFirstName() +" "+returnedParticipant.getLastName());
         		// System.out.println(" Domain Object is successfully Found ---->  :: " + returnedDepartment.getName());
              }
-          } 
+          }
           catch (Exception e) {
            	Logger.out.error(e.getMessage(),e);
            	System.out.println("ParticipantTestCases.testSearchParticipant()"+e.getMessage());
            	e.printStackTrace();
            	assertFalse("Does not find Domain Object", true);
-	 		
+
           }
 	}
-	
+
 	public void testMatchingParticipant() {
 		List<?> resultList1 = null;
 		Participant  participant=new Participant();
@@ -129,16 +130,16 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 				System.out.println(resultList1.get(i));
 			}
 			assertTrue("Macthing participant list is retrieved using API", true);
-			
+
 		}catch(Exception e)
 		{
 			System.out.println("testMatchingParticipant"+ e.getMessage());
 			e.printStackTrace();
 			assertFalse("Not able to retrieve matching participant list using API", true);
 		}
-		
+
 	}
-	
+
 
 	public void testCaTissueLocalParticipantMatchingObects(){
 		List<?> resultList = null;
@@ -159,19 +160,19 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			assertFalse("Not able to retrieve local db matched participant list using API", true);
 		}
 	}
-	
+
 	public void testUpdateParticipant()
 	{
 		Participant participant =  BaseTestCaseUtility.initParticipantWithCPR();
     	Logger.out.info("updating domain object------->"+participant);
-	    try 
+	    try
 		{
 	    	participant = (Participant) appService.createObject(participant);
 	    	BaseTestCaseUtility.updateParticipant(participant);
 	    	Participant updatedParticipant = (Participant) appService.updateObject(participant);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant);
 	       	assertTrue("Domain object successfully updated ---->"+updatedParticipant, true);
-	    } 
+	    }
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	       	System.out.println("ParticipantTestCases.testUpdateParticipant()"+e.getMessage());
@@ -179,15 +180,15 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	 		assertFalse("failed to update Object", true);
 	    }
 	}
-	
+
 
 	public void testUpdateCPRWithBarcode()
 	{
 		Participant participant =  BaseTestCaseUtility.initParticipantWithCPR();
-		
+
 
     	Logger.out.info("updating domain object------->"+participant);
-	    try 
+	    try
 		{
 	    	participant = (Participant) appService.createObject(participant);
 	    	BaseTestCaseUtility.updateParticipant(participant);
@@ -199,7 +200,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	    	Participant updatedParticipant = (Participant) appService.updateObject(participant);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant);
 	       	assertTrue("Domain object successfully updated ---->"+updatedParticipant, true);
-	    } 
+	    }
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	       	System.out
@@ -208,15 +209,15 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	 		assertFalse("failed to update Object", true);
 	    }
 	}
-	
+
 
 	public void testUpdateCPRWithCaseSensitiveBarcode()
 	{
 		String uniqueKey=UniqueKeyGeneratorUtil.getUniqueKey();
 		Participant participant1 =  BaseTestCaseUtility.initParticipantWithCPR();
-		
+
     	Logger.out.info("updating domain object------->"+participant1);
-	    try 
+	    try
 		{
 	    	participant1 = (Participant) appService.createObject(participant1);
 	    	BaseTestCaseUtility.updateParticipant(participant1);
@@ -228,7 +229,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	    	Participant updatedParticipant1 = (Participant) appService.updateObject(participant1);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant1);
 	       	assertTrue("Domain object successfully updated ---->"+updatedParticipant1, true);
-	    } 
+	    }
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	       	System.out
@@ -236,10 +237,10 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	 		e.printStackTrace();
 	 		assertFalse("failed to update Object", true);
 	    }
-	    
+
 	    Participant participant2 =  BaseTestCaseUtility.initParticipantWithCPR();
     	Logger.out.info("updating domain object------->"+participant2);
-	    try 
+	    try
 		{
 	    	participant2 = (Participant) appService.createObject(participant2);
 	    	BaseTestCaseUtility.updateParticipant(participant2);
@@ -251,7 +252,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	    	Participant updatedParticipant2 = (Participant) appService.updateObject(participant2);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant2);
 	       	assertTrue("Domain object successfully updated ---->"+updatedParticipant2, true);
-	    } 
+	    }
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	       	System.out
@@ -260,8 +261,8 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	 		assertFalse("failed to update Object", true);
 	    }
 	}
-	
-	
+
+
 	public void testCollectedSCGAndNoOfChildSpecimens()
 	{
 		Participant participant =  BaseTestCaseUtility.initParticipantWithCPR();
@@ -285,22 +286,22 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			{
 				sprObj = (SpecimenCollectionGroup)scgItr.next();
 			}
-			
-			
+
+
 			TestCaseUtility.setObjectMap(sprObj, SpecimenCollectionGroup.class);
 			TestCaseUtility.setObjectMap(participant, Participant.class);
-			
+
 			String hqlQuery2="select elements(scg.specimenCollection)" +
 			" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg" +
 	    	" where scg.id="+sprObj.getId();
-        	
+
             System.out.println("-------------------");
         	HQLCriteria hqlCriteria2= new HQLCriteria(hqlQuery2);
         	List specimenCollection = appService.query(hqlCriteria2, SpecimenCollectionGroup.class.getName());
         	System.out.println("-------------------"+specimenCollection);
-        	
+
         	System.out.println("Criteria executed");
-			
+
 			//Iterator itr = sprObj.getSpecimenCollection().iterator();
         	Iterator itr =specimenCollection.iterator();
 			Specimen sp = null;
@@ -315,12 +316,12 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 					specimenAdded=true;
 				}
 			}
-			
+
 			if(sp==null)
 			{
 				assertFalse("No Specimens created under SCG", true);
 			}
-			
+
 		}
 		catch(Exception e)
 		{
@@ -330,7 +331,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 	 		assertFalse("Error occured in executing test case", true);
 		}
 	}
-	
+
 	/*public void testAddParticipantWithUniquePMI()
 	{
 		try{
@@ -341,9 +342,9 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			pmi.setSite(site);
 			pmi.setMedicalRecordNumber("1234");
 			pmi.setParticipant(participant);
-			participantMedicalIdentifierCollection.add(pmi);						
-			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);	
-			participant = (Participant) appService.createObject(participant); 
+			participantMedicalIdentifierCollection.add(pmi);
+			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
+			participant = (Participant) appService.createObject(participant);
 			assertTrue("Object created successfully", true);
 		 }
 		 catch(Exception e){
@@ -351,7 +352,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			 assertFalse("could not add object", true);
 		 }
 	}
-	
+
 	public void testAddParticipantWithDuplicatePMI()
 	{
 		try{
@@ -362,30 +363,30 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			pmi.setSite(site);
 			pmi.setMedicalRecordNumber("1234");
 			pmi.setParticipant(participant);
-			participantMedicalIdentifierCollection.add(pmi);						
-			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);				
-			participant = (Participant) appService.createObject(participant); 
-			assertFalse("Object created successfully", true);			
+			participantMedicalIdentifierCollection.add(pmi);
+			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
+			participant = (Participant) appService.createObject(participant);
+			assertFalse("Object created successfully", true);
 		 }
 		 catch(Exception e){
-			 e.printStackTrace();			 
+			 e.printStackTrace();
 			 assertTrue("Submission failed because Participant with same PMI is already exist", true);
 		 }
 	}*/
-	
+
 	public void testAddParticipantRegistrationWithUniquePMI()
 	{
-		
-		Participant participant= BaseTestCaseUtility.initParticipant();		
+
+		Participant participant= BaseTestCaseUtility.initParticipant();
 		Collection participantMedicalIdentifierCollection = new HashSet();
 		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
 		Site site =(Site)  TestCaseUtility.getObjectMap(Site.class);
 		pmi.setSite(site);
 		pmi.setMedicalRecordNumber("1234");
 		pmi.setParticipant(participant);
-		participantMedicalIdentifierCollection.add(pmi);						
+		participantMedicalIdentifierCollection.add(pmi);
 		participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
-		try{	
+		try{
 			participant = (Participant) appService.createObject(participant);
 		 }
 		 	catch(Exception e){
@@ -396,13 +397,13 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 		 }
 			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
 
-			CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+			CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 
 			collectionProtocolRegistration.setParticipant(participant);
 
 			collectionProtocolRegistration.setProtocolParticipantIdentifier("");
-					
+
 			collectionProtocolRegistration.setActivityStatus("Active");
 			try
 			{
@@ -413,20 +414,20 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			{
 				e.printStackTrace();
 			}
-			
+
 			//Setting Consent Tier Responses.
 			try
 			{
 				collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
 			}
 			catch (ParseException e)
-			{			
+			{
 				e.printStackTrace();
 			}
 			collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
 			User user = (User)TestCaseUtility.getObjectMap(User.class);
 			collectionProtocolRegistration.setConsentWitness(user);
-			
+
 			Collection consentTierResponseCollection = new HashSet();
 			Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
 			Iterator consentTierItr = consentTierCollection.iterator();
@@ -440,7 +441,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			}
 			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 		try
-		  {		
+		  {
 			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 			assertTrue("Participant Registration successfully created",true);
 		 }
@@ -452,35 +453,35 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			 assertFalse("could not add object", true);
 		 }
 	}
-	
+
 	public void testParticipantRegistrationWithDuplicatePMI()
 	{
-		
-		Participant participant= BaseTestCaseUtility.initParticipant();		
+
+		Participant participant= BaseTestCaseUtility.initParticipant();
 		Collection participantMedicalIdentifierCollection = new HashSet();
 		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
 		Site site =(Site)  TestCaseUtility.getObjectMap(Site.class);
 		pmi.setSite(site);
 		pmi.setMedicalRecordNumber("1234");
 		pmi.setParticipant(participant);
-		participantMedicalIdentifierCollection.add(pmi);						
+		participantMedicalIdentifierCollection.add(pmi);
 		participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
-		try{	
+		try{
 			participant = (Participant) appService.createObject(participant);
 		 }
 		 	catch(Exception e){
-			 e.printStackTrace();			 
+			 e.printStackTrace();
 			 assertTrue("Unable to create participant", true);
 		 }
 			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
 
-			CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+			CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 
 			collectionProtocolRegistration.setParticipant(participant);
 
 			collectionProtocolRegistration.setProtocolParticipantIdentifier("");
-			
+
 			collectionProtocolRegistration.setActivityStatus("Active");
 			try
 			{
@@ -491,20 +492,20 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			{
 				e.printStackTrace();
 			}
-			
+
 			//Setting Consent Tier Responses.
 			try
 			{
 				collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
 			}
 			catch (ParseException e)
-			{			
+			{
 				e.printStackTrace();
 			}
 			collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
 			User user = (User)TestCaseUtility.getObjectMap(User.class);
 			collectionProtocolRegistration.setConsentWitness(user);
-			
+
 			Collection consentTierResponseCollection = new HashSet();
 			Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
 			Iterator consentTierItr = consentTierCollection.iterator();
@@ -518,10 +519,10 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			}
 			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 		try
-		  {		
+		  {
 			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 			assertFalse("Shouldnot create object", true);
-			
+
 		 }
 		 catch(Exception e)
 		 {
@@ -529,21 +530,21 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			 assertTrue("Participant with same medical identifier ia already present", true);
 		 }
 	}
-	
+
 	public void testParticipantRegistrationWithUniquePPI()
 	{
-		
-		Participant participant= BaseTestCaseUtility.initParticipant();		
-		try{	
+
+		Participant participant= BaseTestCaseUtility.initParticipant();
+		try{
 			participant = (Participant) appService.createObject(participant);
 		 }
 		 	catch(Exception e){
-			 e.printStackTrace();			 
+			 e.printStackTrace();
 			 assertFalse("Unable to create participant", true);
 		 }
 			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
 
-			CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+			CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 
 			collectionProtocolRegistration.setParticipant(participant);
@@ -559,20 +560,20 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			{
 				e.printStackTrace();
 			}
-			
+
 			//Setting Consent Tier Responses.
 			try
 			{
 				collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
 			}
 			catch (ParseException e)
-			{			
+			{
 				e.printStackTrace();
 			}
 			collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
 			User user = (User)TestCaseUtility.getObjectMap(User.class);
 			collectionProtocolRegistration.setConsentWitness(user);
-			
+
 			Collection consentTierResponseCollection = new HashSet();
 			Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
 			Iterator consentTierItr = consentTierCollection.iterator();
@@ -586,9 +587,9 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			}
 			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 		try
-		  {		
+		  {
 			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
-			
+
 		 }
 		 catch(Exception e)
 		 {
@@ -596,21 +597,21 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			 assertFalse("could not add object", true);
 		 }
 	}
-	
+
 	public void testParticipantRegistrationWithDuplicatePPI()
 	{
-		
-		Participant participant= BaseTestCaseUtility.initParticipant();		
-		try{	
+
+		Participant participant= BaseTestCaseUtility.initParticipant();
+		try{
 			participant = (Participant) appService.createObject(participant);
 		 }
 		 	catch(Exception e){
-			 e.printStackTrace();			 
+			 e.printStackTrace();
 			 assertFalse("Unable to create participant", true);
 		 }
 			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
 
-			CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+			CollectionProtocol collectionProtocol =(CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 
 			collectionProtocolRegistration.setParticipant(participant);
@@ -626,20 +627,20 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			{
 				e.printStackTrace();
 			}
-			
+
 			//Setting Consent Tier Responses.
 			try
 			{
 				collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
 			}
 			catch (ParseException e)
-			{			
+			{
 				e.printStackTrace();
 			}
 			collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
 			User user = (User)TestCaseUtility.getObjectMap(User.class);
 			collectionProtocolRegistration.setConsentWitness(user);
-			
+
 			Collection consentTierResponseCollection = new HashSet();
 			Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
 			Iterator consentTierItr = consentTierCollection.iterator();
@@ -653,7 +654,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			}
 			collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 		try
-		  {		
+		  {
 			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistration);
 			assertFalse("Failed to create CPR with duplicate PPI", true);
 		 }
@@ -664,8 +665,8 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			 assertTrue("should not not create object", true);
 		 }
 	}
-	
-	
+
+
 	public void testUpdateParticipantWithoutCollectionProtocol()
 	{
 		try
@@ -674,7 +675,7 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			participant.setFirstName("fisrtname"+UniqueKeyGeneratorUtil.getUniqueKey());
 			participant.setLastName("lastName"+UniqueKeyGeneratorUtil.getUniqueKey());
 			participant.setActivityStatus("Active");
-			
+
 			Collection participantMedicalIdentifierCollection = new HashSet();
 			participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
 			participant=(Participant)appService.createObject(participant);
@@ -686,6 +687,8 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 			System.out.println(e.getMessage());
 			assertFalse("Can not update ", true);
 		}
-		
+
 	}
+
+	
 }

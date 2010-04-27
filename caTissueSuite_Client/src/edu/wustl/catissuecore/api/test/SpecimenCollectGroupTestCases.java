@@ -47,6 +47,7 @@ public class SpecimenCollectGroupTestCases extends CaTissueBaseTestCase
 			fail("Failed to add Domain Object");
 		}
 	}
+
 	
 	private void updateSCG(SpecimenCollectionGroup sprObj, Participant participant)
 	{
