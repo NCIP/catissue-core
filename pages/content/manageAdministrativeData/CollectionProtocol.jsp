@@ -270,10 +270,10 @@ function hideTreeChecked(radioButton)
 						 <input type="radio" value="3" id="generateLabelCheck3" name="generateLabelCheck" onclick="hideTreeChecked(this)"/>
 						 <span class="black_ar" valign="top">Custom</span>&nbsp;&nbsp;
 						<logic:equal name="collectionProtocolForm" property="generateLabel" value="true">
-						<html:text styleClass="black_ar" maxlength="100"  size="30" styleId="specimenLabelFormat" property="specimenLabelFormat" />
+						<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="specimenLabelFormat" property="specimenLabelFormat" />
 						</logic:equal>
 						<logic:equal name="collectionProtocolForm" property="generateLabel" value="false">
-						<html:text styleClass="black_ar" maxlength="100"  size="30" styleId="specimenLabelFormat" property="specimenLabelFormat" disabled="true" />
+						<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="specimenLabelFormat" property="specimenLabelFormat" disabled="true" />
 						</logic:equal>
 							</td>
 						</tr>

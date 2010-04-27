@@ -441,7 +441,7 @@ if(form != null)
 		sname="";
 		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelFormat)";
 
-		sname="<input type='text' name='" + objname + "' size='8'  maxlength='100' class='black_ar' id='" + objname + "' disabled='true'>"
+		sname="<input type='text' name='" + objname + "' size='8'  maxlength='255' class='black_ar' id='" + objname + "' disabled='true'>"
 		sname = sname + "&nbsp;"
 
 		spreqqty.innerHTML="" + sname;

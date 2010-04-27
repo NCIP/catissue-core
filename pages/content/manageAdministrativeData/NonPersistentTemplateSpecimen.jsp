@@ -201,13 +201,20 @@
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="labelGenTypechanged(this,'labelFormat')">
 										<html:options collection= "labelGenTypeList" labelProperty="name" property="value"/>
 									</html:select>
-									&nbsp;&nbsp;&nbsp;&nbsp;<span align="right" class="black_ar" >
+									</td>
+									</tr>
+									<tr>
+										<td colspan="3"/>
+										 <td align="center" class="black_ar">&nbsp;</td>
+                                <td align="left" class="black_ar"><label>Label Format</label></td>
+
+									<td><span class="black_ar" >
 
 								<logic:equal name="createSpecimenTemplateForm" property="labelGenType" value="2">
-								<html:text styleClass="black_ar" property="labelFormat" maxlength="100" styleId="labelFormat"  size="8"/>
+								<html:text styleClass="black_ar" property="labelFormat" maxlength="100" styleId="labelFormat"  size="23"/>
 								</logic:equal>
 								<logic:notEqual name="createSpecimenTemplateForm" property="labelGenType" value="2">
-								<html:text styleClass="black_ar" property="labelFormat" maxlength="100" styleId="labelFormat" disabled="true" size="8"/>
+								<html:text styleClass="black_ar" property="labelFormat" maxlength="100" styleId="labelFormat" disabled="true" size="23"/>
 								</logic:notEqual>
 								</span>
 								</td>
