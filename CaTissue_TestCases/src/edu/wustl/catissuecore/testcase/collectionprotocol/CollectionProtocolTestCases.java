@@ -32,6 +32,8 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		collForm.setOperation("add") ;
 		collForm.setShortTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		collForm.setStartDate("01-12-2009");
+		collForm.setGenerateLabel(true);
+		collForm.setSpecimenLabelFormat("CP_%PPI%_%STYPE%_%PPI_YOC_UID%");
 		setRequestPathInfo("/OpenCollectionProtocol");
 		setActionForm(collForm);
 		actionPerform();
@@ -124,6 +126,13 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("noOfAliquots", "2");
 		addRequestParameter("storageLocationForAliquotSpecimen", "Virtual");
 		addRequestParameter("operation", "add");
+
+		addRequestParameter("labelGenType", "1");
+		addRequestParameter("labelFormat", "");
+
+		addRequestParameter("labelGenTypeForAliquot", "1");
+		addRequestParameter("labelFormatForAliquot", "");
+
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
@@ -186,6 +195,8 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		collForm.setOperation("add") ;
 		collForm.setShortTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		collForm.setStartDate("01-12-2009");
+		collForm.setGenerateLabel(false);
+		collForm.setSpecimenLabelFormat("");
 		setRequestPathInfo("/OpenCollectionProtocol");
 		setActionForm(collForm);
 		actionPerform();
@@ -218,6 +229,13 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("receivedEventSpecimenId", "admin,admin");
 		addRequestParameter("pageOf", "specimenRequirement");
 		addRequestParameter("operation", "add");
+
+		addRequestParameter("labelGenType", "0");
+		addRequestParameter("labelFormat", "");
+
+		addRequestParameter("labelGenTypeForAliquot", "0");
+		addRequestParameter("labelFormatForAliquot", "");
+
 		actionPerform();
 		verifyForwardPath("/CreateSpecimenTemplate.do?operation=add");
 

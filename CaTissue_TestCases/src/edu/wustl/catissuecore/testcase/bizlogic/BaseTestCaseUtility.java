@@ -75,27 +75,27 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
 public class BaseTestCaseUtility {
-	
+
 	public static CollectionProtocol initCollectionProtocol()
 	{
 	    CollectionProtocol collectionProtocol = new CollectionProtocol();
-	    
+
 	    Collection consentTierColl = new LinkedHashSet();
 		ConsentTier c1 = new ConsentTier();
 		c1.setStatement("Consent for aids research");
 		consentTierColl.add(c1);
 		ConsentTier c2 = new ConsentTier();
 		c2.setStatement("Consent for cancer research");
-		consentTierColl.add(c2);		
+		consentTierColl.add(c2);
 		ConsentTier c3 = new ConsentTier();
 		c3.setStatement("Consent for Tb research");
 		consentTierColl.add(c3);
-		
+
 		collectionProtocol.setConsentTierCollection(consentTierColl);
 		collectionProtocol.setAliquotInSameContainer(new Boolean(true));
 		collectionProtocol.setDescriptionURL("");
 		collectionProtocol.setActivityStatus("Active");
-		
+
 		collectionProtocol.setEndDate(null);
 		collectionProtocol.setEnrollment(null);
 		collectionProtocol.setIrbIdentifier("77777");
@@ -104,17 +104,17 @@ public class BaseTestCaseUtility {
 		collectionProtocol.setTitle("ColProt"+UniqueKeyGeneratorUtil.getUniqueKey());
 		collectionProtocol.setShortTitle("cp"+UniqueKeyGeneratorUtil.getUniqueKey());
 		collectionProtocol.setEnrollment(2);
-		
+
 		System.out.println("reached setUp");
-		
+
 		try
 		{
 			collectionProtocol.setStartDate(Utility.parseDate("08/15/2003", Utility.datePattern("08/15/1975")));
-		
+
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage()); 
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -129,24 +129,26 @@ public class BaseTestCaseUtility {
 		}
 		collectionProtocol.setCollectionProtocolEventCollection(collectionProtocolEventList);
 
-		User principalInvestigator = new User();		
-		principalInvestigator.setId(new Long("1"));		
+		User principalInvestigator = new User();
+		principalInvestigator.setId(new Long("1"));
 		collectionProtocol.setPrincipalInvestigator(principalInvestigator);
-		
-	
+
+		collectionProtocol.setGenerateLabel(false);
+		collectionProtocol.setSpecimenLabelFormat(null);
+
 		Collection protocolCordinatorCollection = new HashSet();
 		//protocolCordinatorCollection.add(protocolCordinator);
 		collectionProtocol.setCoordinatorCollection(protocolCordinatorCollection);
-		
+
 		return collectionProtocol;
-		
+
 	}
-	
+
 	public static void setCollectionProtocolEvent(CollectionProtocolEvent collectionProtocolEvent)
 	{
 		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1.0));
 		collectionProtocolEvent.setCollectionPointLabel("PreStudy1"+ Math.random());
-		collectionProtocolEvent.setClinicalStatus("Operative");		
+		collectionProtocolEvent.setClinicalStatus("Operative");
 		collectionProtocolEvent.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		collectionProtocolEvent.setClinicalDiagnosis("Abdominal fibromatosis (disorder)");
 		Collection specimenCollection =null;
@@ -158,15 +160,15 @@ public class BaseTestCaseUtility {
 		{
 			specimenCollection =edu.wustl.catissuecore.util.CollectionProtocolUtil.getReqSpecimens(
 					specimenMap.values()
-					,null, collectionProtocolEvent);	
+					,null, collectionProtocolEvent);
 		}
 		collectionProtocolEvent.setSpecimenRequirementCollection(specimenCollection);
 	}
-	
+
 	private static SpecimenRequirementBean createSpecimenBean()
 	{
 		SpecimenRequirementBean specimenRequirementBean = createSpecimen();
-		
+
 		Map aliquotSpecimenMap = (Map)getChildSpecimenMap("Aliquot");
 		Map deriveSpecimenMap = (Map)getChildSpecimenMap("Derived");
 		specimenRequirementBean.setAliquotSpecimenCollection((LinkedHashMap)aliquotSpecimenMap);
@@ -188,19 +190,22 @@ public class BaseTestCaseUtility {
 		specimenRequirementBean.setConcentration("0");
 		specimenRequirementBean.setQuantity("10");
 		specimenRequirementBean.setStorageContainerForSpecimen("Auto");
-	
+		specimenRequirementBean.setGenerateLabel(false);
+		specimenRequirementBean.setLabelFormat(null);
+		specimenRequirementBean.setLabelGenType("0");
+
 		//Collected and received events
 		specimenRequirementBean.setCollectionEventUserId(1);
 		specimenRequirementBean.setReceivedEventUserId(1);
 		specimenRequirementBean.setCollectionEventContainer("Heparin Vacutainer");
 		specimenRequirementBean.setReceivedEventReceivedQuality("Cauterized");
 		specimenRequirementBean.setCollectionEventCollectionProcedure("Lavage");
-		
+
 		//Aliquot
 		specimenRequirementBean.setNoOfAliquots("2");
 		specimenRequirementBean.setQuantityPerAliquot("1");
 		specimenRequirementBean.setStorageContainerForAliquotSpecimem("Auto");
-		
+
 		specimenRequirementBean.setNoOfDeriveSpecimen(1);
 		specimenRequirementBean.setDeriveSpecimen(null);
 		return specimenRequirementBean;
@@ -248,7 +253,7 @@ public class BaseTestCaseUtility {
 		return aliquotMap;
 	}
 
-	
+
 	public static void updateCollectionProtocol(CollectionProtocol collectionProtocol)
 	{
 		collectionProtocol.setIrbIdentifier("abcdef");
@@ -266,20 +271,20 @@ public class BaseTestCaseUtility {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static CollectionProtocolEvent initCollectionProtocolEvent()
 	{
-		CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();		
+		CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();
 		collectionProtocolEvent.setClinicalStatus("New Diagnosis");
-		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1));		
+		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1));
 
 		//Setting collection point label
 		collectionProtocolEvent.setCollectionPointLabel("User entered value"+UniqueKeyGeneratorUtil.getUniqueKey());
-		
+
 		return collectionProtocolEvent;
-		
+
 	}
-	
+
 	public static User initUser()
 	{
 		User userObj = new User();
@@ -287,7 +292,7 @@ public class BaseTestCaseUtility {
 		userObj.setLoginName(userObj.getEmailAddress());
 		userObj.setLastName("last" + UniqueKeyGeneratorUtil.getUniqueKey());
 		userObj.setFirstName("name" + UniqueKeyGeneratorUtil.getUniqueKey());
-		
+
 		Address address = new Address();
 		address.setStreet("Main street");
 		address.setCity("New hampshier");
@@ -295,37 +300,37 @@ public class BaseTestCaseUtility {
 		address.setZipCode("12345");
 		address.setCountry("United States");
 		address.setPhoneNumber("212-223-2424");
-		address.setFaxNumber("212-223-2424");	 
-		
-		
+		address.setFaxNumber("212-223-2424");
+
+
 		userObj.setAddress(address);
-		
+
 		Institution inst = new Institution();
 		inst.setId(new Long(1));
 		userObj.setInstitution(inst);
-		
+
 		Department department = new Department();
 		department.setId(new Long(1));
 		userObj.setDepartment(department);
-		
+
 		CancerResearchGroup cancerResearchGroup =  new CancerResearchGroup();
 		cancerResearchGroup.setId(new Long(1));
 		userObj.setCancerResearchGroup(cancerResearchGroup);
-		
+
 		userObj.setRoleId("1");
 		userObj.setActivityStatus("Active");
 		userObj.setPageOf(Constants.PAGE_OF_SIGNUP);
 
 		return userObj;
 	}
-	
+
 	public static User initUpdateUser(User userObj)
 	{
 		userObj.setEmailAddress("sup"+UniqueKeyGeneratorUtil.getUniqueKey()+"@sup.com");
 		userObj.setLoginName(userObj.getEmailAddress());
 		userObj.setLastName("last" + UniqueKeyGeneratorUtil.getUniqueKey());
 		userObj.setFirstName("name" + UniqueKeyGeneratorUtil.getUniqueKey());
-		
+
 		Address address = new Address();
 		address.setStreet("Main street");
 		address.setCity("New hampshier");
@@ -333,27 +338,27 @@ public class BaseTestCaseUtility {
 		address.setZipCode("12345");
 		address.setCountry("United States");
 		address.setPhoneNumber("212-223-3434");
-		address.setFaxNumber("212-223-3434");	 
-		
-		
+		address.setFaxNumber("212-223-3434");
+
+
 		userObj.setAddress(address);
-		
-		Institution inst = (Institution)TestCaseUtility.getObjectMap(Institution.class); 
-		
+
+		Institution inst = (Institution)TestCaseUtility.getObjectMap(Institution.class);
+
 		userObj.setInstitution(inst);
-		
-		Department department = (Department)TestCaseUtility.getObjectMap(Department.class); 
+
+		Department department = (Department)TestCaseUtility.getObjectMap(Department.class);
 		userObj.setDepartment(department);
-		
-		CancerResearchGroup cancerResearchGroup = (CancerResearchGroup)TestCaseUtility.getObjectMap(CancerResearchGroup.class);  
+
+		CancerResearchGroup cancerResearchGroup = (CancerResearchGroup)TestCaseUtility.getObjectMap(CancerResearchGroup.class);
 		userObj.setCancerResearchGroup(cancerResearchGroup);
-		
+
 		userObj.setRoleId("1");
 		userObj.setActivityStatus("Active");
 
 		return userObj;
 	}
-	
+
 	public static Department initDepartment()
 	{
 		Department dept =new Department();
@@ -364,7 +369,7 @@ public class BaseTestCaseUtility {
 	{
 		department.setName("dt"+UniqueKeyGeneratorUtil.getUniqueKey());
 	}
-	
+
 	public static SpecimenCollectionGroup initSpecimenCollectionGroup()
 	{
 		CollectionProtocol collectionProt = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
@@ -377,50 +382,50 @@ public class BaseTestCaseUtility {
 		specimenCollectionGroup.setClinicalDiagnosis("Abdominal fibromatosis");
 		specimenCollectionGroup.setClinicalStatus("Operative");
 		specimenCollectionGroup.setActivityStatus("Active");
-		
+
 		CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)collectionProt.getCollectionProtocolEventCollection().iterator().next();
 
 		specimenCollectionGroup.setCollectionProtocolEvent(collectionProtocolEvent);
 
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)TestCaseUtility.getObjectMap(CollectionProtocolRegistration.class);
-		
-//		Participant participant =(Participant)TestCaseUtility.getObjectMap(Participant.class); 
+
+//		Participant participant =(Participant)TestCaseUtility.getObjectMap(Participant.class);
 //		collectionProtocolRegistration.setParticipant(participant);
-//		
-//		
+//
+//
 //		collectionProtocolRegistration.setCollectionProtocol(collectionProt);
 		specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 
 		specimenCollectionGroup.setName("Collection Protocol1_1_1.1.1");
 		//Setting Consent Tier Status.
 		Collection consentTierStatusCollection = new HashSet();
-		
-		ConsentTierStatus  consentTierStatus = new ConsentTierStatus();		
+
+		ConsentTierStatus  consentTierStatus = new ConsentTierStatus();
 		ConsentTier consentTier = new ConsentTier();
 		consentTier.setId(new Long(1));
 		consentTierStatus.setConsentTier(consentTier);
 		consentTierStatus.setStatus("Yes");
 		consentTierStatusCollection.add(consentTierStatus);
-		
-		ConsentTierStatus  consentTierStatus1 = new ConsentTierStatus();		
+
+		ConsentTierStatus  consentTierStatus1 = new ConsentTierStatus();
 		ConsentTier consentTier1 = new ConsentTier();
 		consentTier1.setId(new Long(2));
 		consentTierStatus1.setConsentTier(consentTier1);
 		consentTierStatus1.setStatus("Yes");
 		consentTierStatusCollection.add(consentTierStatus1);
-		
-		ConsentTierStatus  consentTierStatus2 = new ConsentTierStatus();		
+
+		ConsentTierStatus  consentTierStatus2 = new ConsentTierStatus();
 		ConsentTier consentTier2 = new ConsentTier();
 		consentTier2.setId(new Long(3));
 		consentTierStatus2.setConsentTier(consentTier2);
 		consentTierStatus2.setStatus("Yes");
 		consentTierStatusCollection.add(consentTierStatus2);
-		
+
 		specimenCollectionGroup.setConsentTierStatusCollection(consentTierStatusCollection);
-		
+
 		return specimenCollectionGroup;
 	}
-	
+
 	public static SpecimenCollectionGroup updateSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
 		Site site = (Site)TestCaseUtility.getObjectMap(Site.class);
@@ -436,56 +441,56 @@ public class BaseTestCaseUtility {
 		specimenCollectionGroup.setCollectionProtocolEvent(collectionProtocol);
 
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
-		Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class); 
+		Participant participant = (Participant)TestCaseUtility.getObjectMap(Participant.class);
 
 		collectionProtocolRegistration.setParticipant(participant);
 		collectionProtocolRegistration.setId(new Long(5));
 		CollectionProtocol collectionProt = new CollectionProtocol();
 		collectionProt.setId(new Long(21));
-		
+
 		collectionProtocolRegistration.setCollectionProtocol(collectionProt);
 		//collectionProtocolRegistration.setProtocolParticipantIdentifier("");
 		specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 
 		specimenCollectionGroup.setName("Collection Protocol1_1_1.1.1");
 
-		
+
 		//Setting Consent Tier Status.
 		Collection consentTierStatusCollection = new HashSet();
-		
-		ConsentTierStatus  consentTierStatus = new ConsentTierStatus();		
+
+		ConsentTierStatus  consentTierStatus = new ConsentTierStatus();
 		ConsentTier consentTier = new ConsentTier();
 		consentTier.setId(new Long(21));
 		consentTierStatus.setConsentTier(consentTier);
 		consentTierStatus.setStatus("Yes");
 		consentTierStatusCollection.add(consentTierStatus);
-		
-		ConsentTierStatus  consentTierStatus1 = new ConsentTierStatus();		
+
+		ConsentTierStatus  consentTierStatus1 = new ConsentTierStatus();
 		ConsentTier consentTier1 = new ConsentTier();
 		consentTier1.setId(new Long(22));
 		consentTierStatus1.setConsentTier(consentTier1);
 		consentTierStatus1.setStatus("Yes");
 		consentTierStatusCollection.add(consentTierStatus1);
-		
-		ConsentTierStatus  consentTierStatus2 = new ConsentTierStatus();		
+
+		ConsentTierStatus  consentTierStatus2 = new ConsentTierStatus();
 		ConsentTier consentTier2 = new ConsentTier();
 		consentTier2.setId(new Long(23));
 		consentTierStatus2.setConsentTier(consentTier2);
 		consentTierStatus2.setStatus("Yes");
 		consentTierStatusCollection.add(consentTierStatus2);
-		
+
 		specimenCollectionGroup.setConsentTierStatusCollection(consentTierStatusCollection);
-		
+
 		return specimenCollectionGroup;
 	}
-	
-	
+
+
 	public static CollectionProtocolRegistration initCollectionProtocolRegistration(Participant participant)
 	{
 		//Logger.configure("");
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
 
-		CollectionProtocol collectionProtocol =  (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+		CollectionProtocol collectionProtocol =  (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
 
 		collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 
@@ -502,21 +507,21 @@ public class BaseTestCaseUtility {
 		{
 			e.printStackTrace();
 		}
-		
+
 		//Setting Consent Tier Responses.
 		try
 		{
 			collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
 		}
 		catch (ParseException e)
-		{			
+		{
 			e.printStackTrace();
 		}
 		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
 		User user = (User)TestCaseUtility.getObjectMap(User.class);
 
 		collectionProtocolRegistration.setConsentWitness(user);
-		
+
 		Collection consentTierResponseCollection = new HashSet();
 		Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
 		if(consentTierCollection != null)
@@ -531,21 +536,21 @@ public class BaseTestCaseUtility {
 				consentTierResponseCollection.add(consentResponse);
 			}
 		}
-		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);		
+		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 		SpecimenCollectionGroup specimenCollectionGroup = createSCG(collectionProtocolRegistration);
-		
-		Collection specimenCollectionGroupCollection = new HashSet<SpecimenCollectionGroup>(); 
+
+		Collection specimenCollectionGroupCollection = new HashSet<SpecimenCollectionGroup>();
 		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
-		
+
 		return collectionProtocolRegistration;
 	}
-	
-	
+
+
 	public static SpecimenCollectionGroup createSCG(CollectionProtocolRegistration collectionProtocolRegistration)
 	{
 		Map<Specimen, List<Specimen>> specimenMap = new LinkedHashMap<Specimen, List<Specimen>>();
 		SpecimenCollectionGroup specimenCollectionGroup = null;
-		try 
+		try
 		{
 			Collection collectionProtocolEventCollection = collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
 			if(collectionProtocolEventCollection != null)
@@ -588,7 +593,7 @@ public class BaseTestCaseUtility {
 		}
 			return specimenCollectionGroup;
 	}
-	
+
 	public static SpecimenCollectionGroup updateSCG(SpecimenCollectionGroup sprObj, Participant participant)
 	{
 		System.out.println("After");
@@ -596,7 +601,7 @@ public class BaseTestCaseUtility {
 		System.out.println(participant+": participant");
 		System.out.println("Before Update");
 		sprObj.setCollectionStatus("Complete");
-		
+
 		CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
 		Collection consentTierCollection = collectionProtocol.getConsentTierCollection();
 		Iterator consentTierItr = consentTierCollection.iterator();
@@ -613,16 +618,16 @@ public class BaseTestCaseUtility {
 		sprObj.getCollectionProtocolRegistration().getCollectionProtocol().setId(new Long(1));
 		sprObj.getCollectionProtocolRegistration().setParticipant(participant);
 		Collection collectionProtocolEventList = new LinkedHashSet();
-		
-		
-		Site site = (Site)TestCaseUtility.getObjectMap(Site.class); 
+
+
+		Site site = (Site)TestCaseUtility.getObjectMap(Site.class);
 
 		sprObj.setSpecimenCollectionSite(site);
 		sprObj = setEventParameters(sprObj);
 		return sprObj;
-	
+
 }
-	
+
 	public static SpecimenCollectionGroup setEventParameters(SpecimenCollectionGroup sprObj)
 	{
 		System.out.println("Inside Event Parameters");
@@ -631,44 +636,44 @@ public class BaseTestCaseUtility {
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		collectionEventParameters.setCollectionProcedure("Not Specified");
 		collectionEventParameters.setComment("");
-		collectionEventParameters.setContainer("Not Specified");		
+		collectionEventParameters.setContainer("Not Specified");
 		Date timestamp = EventsUtil.setTimeStamp("08-15-1975","15","45");
 		collectionEventParameters.setTimestamp(timestamp);
 		User user = new User();
 		user.setId(new Long(1));
-		collectionEventParameters.setUser(user);	
-		collectionEventParameters.setSpecimenCollectionGroup(sprObj);	
-		
-		//Received Events		
+		collectionEventParameters.setUser(user);
+		collectionEventParameters.setSpecimenCollectionGroup(sprObj);
+
+		//Received Events
 		receivedEventParameters.setComment("");
 		User receivedUser = new User();
 		receivedUser.setId(new Long(1));
 		receivedEventParameters.setUser(receivedUser);
-		receivedEventParameters.setReceivedQuality("Not Specified");		
+		receivedEventParameters.setReceivedQuality("Not Specified");
 		Date receivedTimestamp = EventsUtil.setTimeStamp("08-15-1975","15","45");
-		receivedEventParameters.setTimestamp(receivedTimestamp);		
+		receivedEventParameters.setTimestamp(receivedTimestamp);
 		receivedEventParameters.setSpecimenCollectionGroup(sprObj);
 		specimenEventParametersCollection.add(collectionEventParameters);
 		specimenEventParametersCollection.add(receivedEventParameters);
 		sprObj.setSpecimenEventParametersCollection(specimenEventParametersCollection);
-		
+
 		return sprObj;
 	}
-	
+
 	private static Specimen getCloneSpecimen(Map<Specimen, List<Specimen>> specimenMap, SpecimenRequirement reqSpecimen, Specimen pSpecimen, SpecimenCollectionGroup specimenCollectionGroup, User user)
 	{
-		Collection childrenSpecimen = new LinkedHashSet<Specimen>(); 
+		Collection childrenSpecimen = new LinkedHashSet<Specimen>();
 		Specimen newSpecimen = null;
-		try 
+		try
 		{
 			newSpecimen = (Specimen) new SpecimenObjectFactory()
 				.getDomainObject(reqSpecimen.getClassName(),reqSpecimen);
 		}
-		catch (AssignDataException e1) 
+		catch (AssignDataException e1)
 		{
 			e1.printStackTrace();
 			return null;
-		}	
+		}
 		newSpecimen.setParentSpecimen(pSpecimen);
 		newSpecimen.setDefaultSpecimenEventCollection(user.getId());
 		newSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
@@ -681,7 +686,7 @@ public class BaseTestCaseUtility {
     	{
     		specimenMap.put(newSpecimen, null);
     	}
-		
+
 		Collection childrenSpecimenCollection = reqSpecimen.getChildSpecimenCollection();
     	if(childrenSpecimenCollection != null && !childrenSpecimenCollection.isEmpty())
 		{
@@ -696,7 +701,7 @@ public class BaseTestCaseUtility {
 		}
     	return newSpecimen;
 	}
-	
+
 	public Collection initConsentTier(boolean empty)
 	{
 //		Setting consent tiers for this protocol.
@@ -708,14 +713,14 @@ public class BaseTestCaseUtility {
 			consentTierColl.add(c1);
 			ConsentTier c2 = new ConsentTier();
 			c2.setStatement("Consent for cancer research");
-			consentTierColl.add(c2);		
+			consentTierColl.add(c2);
 			ConsentTier c3 = new ConsentTier();
 			c3.setStatement("Consent for Tb research");
-			consentTierColl.add(c3);	
+			consentTierColl.add(c3);
 		}
 		return consentTierColl;
-		
-	
+
+
 }
 	public static Institution initInstitution()
 	{
@@ -723,25 +728,25 @@ public class BaseTestCaseUtility {
 		institutionObj.setName("inst" + UniqueKeyGeneratorUtil.getUniqueKey());
 		return institutionObj;
 	}
-	
+
 	public static void updateInstitution(Institution institution)
 	{
 		institution.setName("inst"+UniqueKeyGeneratorUtil.getUniqueKey());
 	}
-	
+
 	public static CancerResearchGroup initCancerResearchGrp()
 	{
 		CancerResearchGroup cancerResearchGroup = new CancerResearchGroup();
 		cancerResearchGroup.setName("crgName" + UniqueKeyGeneratorUtil.getUniqueKey());
 		return cancerResearchGroup;
 	}
-	
+
 	public static void updateCancerResearchGrp(CancerResearchGroup cancerResearchGroup)
 	{
-		cancerResearchGroup.setName("crgName"+UniqueKeyGeneratorUtil.getUniqueKey());		
+		cancerResearchGroup.setName("crgName"+UniqueKeyGeneratorUtil.getUniqueKey());
 	}
-	
-	
+
+
 	public static DistributionProtocol initDistributionProtocol()
 	{
 		DistributionProtocol distributionProtocol = new DistributionProtocol();
@@ -749,8 +754,8 @@ public class BaseTestCaseUtility {
 		//User principalInvestigator = initUser();
 		User principalInvestigator =new User();
 		principalInvestigator.setId(new Long("1"));
-		
-		/*	
+
+		/*
 		new User();
 		principalInvestigator.setId(new Long(1));
 		*/
@@ -758,7 +763,7 @@ public class BaseTestCaseUtility {
 		distributionProtocol.setTitle("DP"+ UniqueKeyGeneratorUtil.getUniqueKey());
 		distributionProtocol.setShortTitle("DP1");
 		distributionProtocol.setIrbIdentifier("52266");
-		
+
 		try
 		{
 			distributionProtocol.setStartDate(Utility.parseDate("08/15/1975", Utility
@@ -768,12 +773,12 @@ public class BaseTestCaseUtility {
 		{
 			e.printStackTrace();
 		}
-		
+
 		distributionProtocol.setDescriptionURL("distribution protocol");
 		distributionProtocol.setEnrollment(new Integer(10));
 
 		DistributionSpecimenRequirement distributionSpecimenRequirement = initDistributionSpecimenRequirement();
-		/*	
+		/*
 		new SpecimenRequirement();
 		specimenRequirement.setPathologyStatus("Malignant");
 		specimenRequirement.setTissueSite("Placenta");
@@ -783,7 +788,7 @@ public class BaseTestCaseUtility {
 		quantity.setValue(new Double(10));
 		specimenRequirement.setQuantity(quantity);
 		*/
-			
+
 		Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection = new HashSet<DistributionSpecimenRequirement>();
 		distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
 		distributionProtocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);
@@ -791,7 +796,7 @@ public class BaseTestCaseUtility {
 		distributionProtocol.setActivityStatus("Active");
 		return distributionProtocol;
 	}
-	
+
 	public static DistributionSpecimenRequirement initDistributionSpecimenRequirement()
 	{
 		DistributionSpecimenRequirement distributionSpecimenRequirement = new DistributionSpecimenRequirement();
@@ -802,8 +807,8 @@ public class BaseTestCaseUtility {
 		distributionSpecimenRequirement.setQuantity(new Double(10));
 		return distributionSpecimenRequirement;
 	}
-	
-		
+
+
 	public static void updateDistributionProtocol(DistributionProtocol distributionProtocol)
 	{
 		User principalInvestigator = new User();
@@ -812,7 +817,7 @@ public class BaseTestCaseUtility {
 		distributionProtocol.setTitle("DP"+ UniqueKeyGeneratorUtil.getUniqueKey());
 		distributionProtocol.setShortTitle("DP"); //DP1
 		distributionProtocol.setIrbIdentifier("11111");//55555
-		
+
 		try
 		{
 			distributionProtocol.setStartDate(Utility.parseDate("08/15/1976", Utility
@@ -823,7 +828,7 @@ public class BaseTestCaseUtility {
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
-		
+
 		distributionProtocol.setDescriptionURL("");
 		distributionProtocol.setEnrollment(new Integer(20)); //10
 
@@ -833,14 +838,14 @@ public class BaseTestCaseUtility {
 		distributionSpecimenRequirement.setSpecimenType("Bile"); //DNA
 		distributionSpecimenRequirement.setSpecimenClass("Fluid"); //Molecular
 		distributionSpecimenRequirement.setQuantity(new Double(20));
-			
+
 		Collection<DistributionSpecimenRequirement> distributionSpecimenRequirementCollection = new HashSet<DistributionSpecimenRequirement>();
 		distributionSpecimenRequirementCollection.add(distributionSpecimenRequirement);
 		distributionProtocol.setDistributionSpecimenRequirementCollection(distributionSpecimenRequirementCollection);
 
 		distributionProtocol.setActivityStatus("Active"); //Active
 	}
-	
+
 	public static Site initSite()
 	{
 		Site siteObj = new Site();
@@ -853,8 +858,8 @@ public class BaseTestCaseUtility {
 		siteObj.setType("Laboratory");
 		siteObj.setActivityStatus("Active");
 		siteObj.setCoordinator(userObj);
-		
-	 
+
+
 		Address addressObj = new Address();
 		addressObj.setCity("Saint Louis");
 		addressObj.setCountry("United States");
@@ -866,22 +871,22 @@ public class BaseTestCaseUtility {
 		siteObj.setAddress(addressObj);
 		return siteObj;
 	}
-	
+
 	public static void updateSite(Site siteObj)
 	{
 		siteObj.setEmailAddress("admin1@admin.com");
 		siteObj.setName("updatedSite" + UniqueKeyGeneratorUtil.getUniqueKey());
 		siteObj.setType("Repository");
-		siteObj.setActivityStatus("Active");		
-		siteObj.getAddress().setCity("Saint Louis1"); 
+		siteObj.setActivityStatus("Active");
+		siteObj.getAddress().setCity("Saint Louis1");
 		siteObj.getAddress().setCountry("United States");
 		siteObj.getAddress().setFaxNumber("777-777-7777");
 		siteObj.getAddress().setPhoneNumber("212-223-2424");
 		siteObj.getAddress().setState("Missouri");
 		siteObj.getAddress().setStreet("4939 Children's Place1");
-		siteObj.getAddress().setZipCode("63111");		
+		siteObj.getAddress().setZipCode("63111");
 	}
-	
+
 	public static StorageType initStorageType()
 	{
 		StorageType storageTypeObj = new StorageType();
@@ -894,7 +899,7 @@ public class BaseTestCaseUtility {
 
 		capacity.setOneDimensionCapacity(new Integer(3));
 		capacity.setTwoDimensionCapacity(new Integer(3));
-		storageTypeObj.setCapacity(capacity);		
+		storageTypeObj.setCapacity(capacity);
 
 		Collection holdsStorageTypeCollection = new HashSet();
 		holdsStorageTypeCollection.add(storageTypeObj);
@@ -922,7 +927,7 @@ public class BaseTestCaseUtility {
 
 		capacity.setOneDimensionCapacity(new Integer(3));
 		capacity.setTwoDimensionCapacity(new Integer(3));
-		storageTypeObj.setCapacity(capacity);		
+		storageTypeObj.setCapacity(capacity);
 
 		Collection holdsStorageTypeCollection = new HashSet();
 		holdsStorageTypeCollection.add(storageTypeObj);
@@ -940,9 +945,9 @@ public class BaseTestCaseUtility {
 	}
 
 	public static void updateStorageType(StorageType updateStorageType)
-	{		
+	{
 		Capacity capacity = updateStorageType.getCapacity();
-		
+
 		updateStorageType.setDefaultTempratureInCentigrade(new Double(30));//-30
 		updateStorageType.setOneDimensionLabel("Label-1"); //label 1
 		updateStorageType.setTwoDimensionLabel("Label-2"); //label 2
@@ -950,10 +955,10 @@ public class BaseTestCaseUtility {
 		capacity.setOneDimensionCapacity(new Integer(2));//3
 		capacity.setTwoDimensionCapacity(new Integer(2));//3
 		updateStorageType.setCapacity(capacity);
-			
+
 	}
-	
-	
+
+
 	public static Participant initParticipant()
 	{
 		Participant participant = new Participant();
@@ -963,20 +968,20 @@ public class BaseTestCaseUtility {
 		participant.setGender("Male Gender");
 		participant.setEthnicity("Unknown");
 		participant.setSexGenotype("XX");
-		
-		
+
+
 
 		Collection raceCollection = new HashSet();
 		Race race = new Race();
 		race.setRaceName("White");
 		race.setParticipant(participant);
 		raceCollection.add(race);
-		
+
 		race = new Race();
 		race.setRaceName("Asian");
 		race.setParticipant(participant);
 		raceCollection.add(race);
-		
+
 		/*raceCollection.add("White");
 		raceCollection.add("Asian");*/
 		participant.setRaceCollection(raceCollection);
@@ -1003,7 +1008,7 @@ public class BaseTestCaseUtility {
 		race.setRaceName("Asian");
 		race.setParticipant(participant);
 		raceCollection.add(race);
-		
+
 		participant.setRaceCollection(raceCollection);
 		participant.setActivityStatus("Active");
 		participant.setEthnicity("Hispanic or Latino");
@@ -1014,13 +1019,13 @@ public class BaseTestCaseUtility {
 		participant.setCollectionProtocolRegistrationCollection(collectionProtocolRegistrationCollection);
 		return participant;
 	}
-	
+
 	public static void updateParticipant(Participant participant)
 	{
 		participant.setLastName("last" + UniqueKeyGeneratorUtil.getUniqueKey());
 		participant.setFirstName("frst" + UniqueKeyGeneratorUtil.getUniqueKey());
 		participant.setMiddleName("mdl" + UniqueKeyGeneratorUtil.getUniqueKey());
-		
+
 		participant.setVitalStatus("Alive"); //Dead
 		participant.setGender("Male Gender"); //
 		participant.setSexGenotype(""); //XX
@@ -1034,8 +1039,8 @@ public class BaseTestCaseUtility {
 		race.setRaceName("Unknown");
 		race.setParticipant(participant);
 		raceCollection.add(race);
-		
-		
+
+
 		//raceCollection.add("Black or African American"); //White
 		//raceCollection.add("Unknown"); //Asian
 		participant.setRaceCollection(raceCollection);
@@ -1044,9 +1049,9 @@ public class BaseTestCaseUtility {
 
 		Collection participantMedicalIdentifierCollection = new HashSet();
 		participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
-		
+
 	}
-	
+
 	public static StorageContainer initStorageContainer()
 	{
 		StorageContainer storageContainer = new StorageContainer();
@@ -1054,13 +1059,13 @@ public class BaseTestCaseUtility {
 
 		if(TestCaseUtility.getObjectMap(StorageType.class)!=null)
 		{
-			StorageType storageType =(StorageType)TestCaseUtility.getObjectMap(StorageType.class); 
+			StorageType storageType =(StorageType)TestCaseUtility.getObjectMap(StorageType.class);
 
 			storageContainer.setStorageType(storageType);
 		}
-		
-		Site site = (Site)TestCaseUtility.getObjectMap(Site.class); 
-		
+
+		Site site = (Site)TestCaseUtility.getObjectMap(Site.class);
+
 		storageContainer.setSite(site);
 
 		Integer conts = new Integer(1);
@@ -1073,7 +1078,7 @@ public class BaseTestCaseUtility {
 		capacity.setTwoDimensionCapacity(new Integer(3));
 		storageContainer.setCapacity(capacity);
 
-		CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class); 
+		CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
 
 		Collection collectionProtocolCollection = new HashSet();
 		collectionProtocolCollection.add(collectionProtocol);
@@ -1083,14 +1088,14 @@ public class BaseTestCaseUtility {
 	//	holdsStorageTypeCollection.add(storageType);
 		storageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
 
-		Collection holdsSpecimenClassCollection = new HashSet();		
+		Collection holdsSpecimenClassCollection = new HashSet();
 	//	holdsSpecimenClassCollection.add("--All--");
 		holdsSpecimenClassCollection.add("Tissue");
 		holdsSpecimenClassCollection.add("Fluid");
 		holdsSpecimenClassCollection.add("Cell");
 		holdsSpecimenClassCollection.add("Molecular");
 		storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
-		
+
 		Collection holdsSpecimenTypeColl = new HashSet();
 		try
 		{
@@ -1102,22 +1107,22 @@ public class BaseTestCaseUtility {
 			e.printStackTrace();
 		}
 		storageContainer.setHoldsSpecimenTypeCollection(holdsSpecimenTypeColl);
-		
+
 
 		storageContainer.setActivityStatus("Active");
 		storageContainer.setFull(Boolean.valueOf(false));
 		return storageContainer;
 	}
-	
-	
+
+
 	public static StorageContainer initStorageContainerHoldsTissueSpec()
 	{
 		StorageContainer storageContainer = new StorageContainer();
 		storageContainer.setName("sc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
-		
-		Site site = (Site)TestCaseUtility.getObjectMap(Site.class); 
-		
+
+		Site site = (Site)TestCaseUtility.getObjectMap(Site.class);
+
 		storageContainer.setSite(site);
 
 		Integer conts = new Integer(1);
@@ -1131,23 +1136,23 @@ public class BaseTestCaseUtility {
 		storageContainer.setCapacity(capacity);
 
 
-		Collection holdsSpecimenClassCollection = new HashSet();		
+		Collection holdsSpecimenClassCollection = new HashSet();
 		holdsSpecimenClassCollection.add("Tissue");
 		storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
-		
+
 		storageContainer.setActivityStatus("Active");
 		storageContainer.setFull(Boolean.valueOf(false));
 		return storageContainer;
 	}
 	public static void updateStorageContainer(StorageContainer storageContainer)
-	{	
+	{
 		StorageType storageType =(StorageType)TestCaseUtility.getObjectMap(StorageType.class);
 		storageContainer.setStorageType(storageType);
-		
+
 		Site site = (Site)TestCaseUtility.getObjectMap(Site.class);
 
 		storageContainer.setSite(site);
-		
+
 		storageContainer.setTempratureInCentigrade(new Double(30)); //-30
 		storageContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
@@ -1157,7 +1162,7 @@ public class BaseTestCaseUtility {
 		storageContainer.setCapacity(capacity);
 
 		CollectionProtocol collectionProtocol = (CollectionProtocol)TestCaseUtility.getObjectMap(CollectionProtocol.class);
-		
+
 		Collection collectionProtocolCollection = new HashSet();
 		collectionProtocolCollection.add(collectionProtocol);
 		storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
@@ -1166,17 +1171,17 @@ public class BaseTestCaseUtility {
 		holdsStorageTypeCollection.add(storageType);
 		storageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
 
-		Collection holdsSpecimenClassCollection = new HashSet();		
+		Collection holdsSpecimenClassCollection = new HashSet();
 		holdsSpecimenClassCollection.add("Tissue");
 		holdsSpecimenClassCollection.add("Fluid");
 		holdsSpecimenClassCollection.add("Molecular");
 		holdsSpecimenClassCollection.add("Cell");
 		storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
-		
+
 		storageContainer.setActivityStatus("Active");
-		storageContainer.setFull(Boolean.valueOf(false));		
+		storageContainer.setFull(Boolean.valueOf(false));
 	}
-	
+
 	public static Biohazard initBioHazard()
 	{
 		Biohazard bioHazard = new Biohazard();
@@ -1185,23 +1190,23 @@ public class BaseTestCaseUtility {
 		bioHazard.setType("Toxic");
 		return bioHazard;
 	}
-	
+
 	public static void updateBiohazard(Biohazard bioHazard)
 	{
 		bioHazard.setComment("Radioactive");
 		bioHazard.setName("bh" + UniqueKeyGeneratorUtil.getUniqueKey());
 		bioHazard.setType("Radioactive"); //Toxic
 	}
-	
+
 	public static OrderDetails initOrder()
-    {           
-          OrderDetails order = new OrderDetails();  
+    {
+          OrderDetails order = new OrderDetails();
           order.setComment("Comment");
-          
+
           //Obtain Distribution Protocol
           DistributionProtocol distributionProtocolObj = new DistributionProtocol();
           distributionProtocolObj.setId(new Long(2));
-          
+
 
           order.setDistributionProtocol(distributionProtocolObj);
           order.setName("Request1 ");
@@ -1216,32 +1221,32 @@ public class BaseTestCaseUtility {
           {
                 Logger.out.debug(""+e);
           }
-          Collection orderItemCollection = new HashSet();       
+          Collection orderItemCollection = new HashSet();
 
           Specimen specimen = new Specimen();
           specimen.setId(new Long(1));
 
           ExistingSpecimenOrderItem exSpOrderItem = new ExistingSpecimenOrderItem();
           exSpOrderItem.setDescription("OrderDetails Item 1 of Order_Id ");
-          exSpOrderItem.setStatus("New");           
-          
+          exSpOrderItem.setStatus("New");
+
           Double quantity =new Double(1);
           exSpOrderItem.setRequestedQuantity(quantity);
           exSpOrderItem.setSpecimen(specimen);
-               
+
           orderItemCollection.add(exSpOrderItem);
           order.setOrderItemCollection(orderItemCollection);
           return order;
     }
-	
+
 	public static OrderDetails updateOrderDetails(OrderDetails orderObj)
 	{
 		orderObj.setComment("UpdatedComment");
-		
+
 		//Obtain Distribution Protocol
         DistributionProtocol distributionProtocolObj = new DistributionProtocol();
         distributionProtocolObj.setId(new Long(2));
-		
+
 		orderObj.setDistributionProtocol(distributionProtocolObj);
         orderObj.setName("Updated Request Name");
         orderObj.setStatus("Pending");
@@ -1253,16 +1258,16 @@ public class BaseTestCaseUtility {
         {
               Logger.out.debug(""+e);
         }
-        Collection orderItemCollection = new HashSet(); 
+        Collection orderItemCollection = new HashSet();
         ExistingSpecimenOrderItem existingOrderItem =(ExistingSpecimenOrderItem) orderObj.getOrderItemCollection().iterator().next();
         existingOrderItem.setDescription("Updated OrderDetails Item 1 of Order_Id ");
-        existingOrderItem.setStatus("Pending - Protocol Review");          
+        existingOrderItem.setStatus("Pending - Protocol Review");
         existingOrderItem.setOrderDetails(orderObj);
-       
-        
+
+
         return orderObj;
 	}
-	
+
 	public static Distribution initDistribution()
 	{
 		Distribution distribution = new Distribution();
@@ -1271,70 +1276,70 @@ public class BaseTestCaseUtility {
 
 		Specimen specimen = new Specimen();
 		specimen.setId(new Long(1));
-		
 
-		
+
+
 		DistributedItem distributedItem = new DistributedItem();
 		distributedItem.setQuantity(new Double(1));
 		distributedItem.setSpecimen(specimen);
 		Collection distributedItemCollection = new HashSet();
 		distributedItemCollection.add(distributedItem);
 		distribution.setDistributedItemCollection(distributedItemCollection);
-		
+
 		DistributionProtocol distributionProtocol =  new DistributionProtocol();
 		distributionProtocol.setId(new Long(2));
 		distribution.setDistributionProtocol(distributionProtocol);
 		Site toSite = (Site)TestCaseUtility.getObjectMap(Site.class);
-		
+
 		distribution.setToSite(toSite);
 		distribution.setComment("");
 		User user = (User)TestCaseUtility.getObjectMap(User.class);
 		distribution.setDistributedBy(user);
-	 
+
 		return distribution;
 	}
-	
+
 	public static Distribution initDistribution(Specimen specimen)
 	{
 		Distribution distribution = new Distribution();
 
-		distribution.setActivityStatus("Active");		
+		distribution.setActivityStatus("Active");
 		DistributedItem distributedItem = new DistributedItem();
 		distributedItem.setQuantity(new Double(2));
 		distributedItem.setSpecimen(specimen);
 		Collection distributedItemCollection = new HashSet();
 		distributedItemCollection.add(distributedItem);
 		distribution.setDistributedItemCollection(distributedItemCollection);
-		
-		DistributionProtocol distributionProtocol = new DistributionProtocol();		
+
+		DistributionProtocol distributionProtocol = new DistributionProtocol();
 		distributionProtocol.setId(new Long(2));
 		distribution.setDistributionProtocol(distributionProtocol);
-		
+
 		Site toSite = (Site)TestCaseUtility.getObjectMap(Site.class);
-		
-		distribution.setToSite(toSite);	
+
+		distribution.setToSite(toSite);
 		distribution.setComment("");
 		User user = (User)TestCaseUtility.getObjectMap(User.class);
 		distribution.setDistributedBy(user);
 		return distribution;
 	}
-	
+
 	public static SpecimenCollectionGroup initSCG()
 	{
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		System.out.println("Before Creating SCG");
 	    CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) TestCaseUtility.getObjectMap(CollectionProtocolRegistration.class);
-	    
+
 	    scg =(SpecimenCollectionGroup) createSCG(cpr);
 	    Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
 	    scg.setSpecimenCollectionSite(site);
-	    scg.setName("SCG1"+UniqueKeyGeneratorUtil.getUniqueKey());		    
-	    scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);		    
+	    scg.setName("SCG1"+UniqueKeyGeneratorUtil.getUniqueKey());
+	    scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
 	    return scg;
-	
+
 	}
-	
-	
+
+
 	public static Specimen initTissueSpecimen()
 	{
 		System.out.println("Inside tissuespecimen");
@@ -1347,46 +1352,46 @@ public class BaseTestCaseUtility {
 		ts.setBarcode("Barcode_"+UniqueKeyGeneratorUtil.getUniqueKey());
 		ts.setSpecimenType("Fixed Tissue Block");
 		ts.setPathologicalStatus("Malignant");
-		
+
 		SpecimenCharacteristics specimenCharacteristics =  new SpecimenCharacteristics();
 
 		specimenCharacteristics.setTissueSide("Left");
 		specimenCharacteristics.setTissueSite("Placenta");
 		ts.setSpecimenCharacteristics(specimenCharacteristics);
-		
+
 		System.out.println("setting Qunatity");
 		Double quantity = new Double(10.0);
 		ts.setInitialQuantity(quantity);
 		ts.setAvailableQuantity(quantity);
 		ts.setIsAvailable(new Boolean(true));
 
-		System.out.println("Setting parameters");		
-		
+		System.out.println("Setting parameters");
+
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		collectionEventParameters.setComment("");
 		collectionEventParameters.setSpecimen(ts);
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
 		user.setId(new Long(1));
-		collectionEventParameters.setUser(user);		
+		collectionEventParameters.setUser(user);
 		try
 		{
 			collectionEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
 					.datePattern("08/15/1975")));
-					
+
 		}
 		catch (ParseException e1)
 		{
 			System.out.println("exception in APIDemo");
 			e1.printStackTrace();
 		}
-		
+
 		collectionEventParameters.setContainer("No Additive Vacutainer");
 		collectionEventParameters.setCollectionProcedure("Needle Core Biopsy");
-		
-		
+
+
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
-		receivedEventParameters.setUser(user);				
+		receivedEventParameters.setUser(user);
 		try
 		{
 			System.out.println("--- Start ---- 10");
@@ -1398,19 +1403,19 @@ public class BaseTestCaseUtility {
 			System.out.println("APIDemo");
 			e.printStackTrace();
 		}
-		
+
 		receivedEventParameters.setReceivedQuality("Acceptable");
 		receivedEventParameters.setComment("fdfd");
 		receivedEventParameters.setSpecimen(ts);
-		
+
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
 		specimenEventCollection.add(receivedEventParameters);
 		ts.setSpecimenEventCollection(specimenEventCollection);
-		
+
 		return ts;
 	}
-	
+
 	public static Specimen initMolecularSpecimen()
 	{
 		MolecularSpecimen molecularSpecimen = new MolecularSpecimen();
@@ -1430,20 +1435,20 @@ public class BaseTestCaseUtility {
 		molecularSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
 
 		molecularSpecimen.setPathologicalStatus("Malignant");
-		
+
 		Double quantity = new Double(10.0);
 		molecularSpecimen.setInitialQuantity(quantity);
 		molecularSpecimen.setAvailableQuantity(quantity);
 		// modified code here. chnged funcion name to setInitialQuantity(quantity) from setQuantity(quantity)
-		
+
 		molecularSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
 		molecularSpecimen.setComment("");
 		// Is virtually located
 //		molecularSpecimen.setStorageContainer(null);
-		
+
 //		molecularSpecimen.setPositionDimensionOne(null);
 //		molecularSpecimen.setPositionDimensionTwo(null);
-		
+
 		molecularSpecimen.setSpecimenPosition(null);
 //		Collection externalIdentifierCollection = new HashSet();
 //		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
@@ -1488,7 +1493,7 @@ public class BaseTestCaseUtility {
 		receivedEventParameters.setReceivedQuality("acceptable");
 		receivedEventParameters.setComment("received");
 		receivedEventParameters.setReceivedQuality("Cauterized");
-		
+
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
 		specimenEventCollection.add(receivedEventParameters);
@@ -1496,7 +1501,7 @@ public class BaseTestCaseUtility {
 
 		return molecularSpecimen;
 }
-	
+
 	public static Specimen initCellSpecimen()
 	{
 		CellSpecimen cellSpecimen = new CellSpecimen();
@@ -1519,7 +1524,7 @@ public class BaseTestCaseUtility {
 		cellSpecimen.setInitialQuantity(quantity);
 		cellSpecimen.setAvailableQuantity(quantity);
 		// modified code here. chnged funcion name to setInitialQuantity(quantity) from setQuantity(quantity)
-		
+
 		//cellSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
 		cellSpecimen.setComment("");
 		// Is virtually located
@@ -1527,7 +1532,7 @@ public class BaseTestCaseUtility {
 		cellSpecimen.setSpecimenPosition(null);
 //		cellSpecimen.setPositionDimensionOne(null);
 //		cellSpecimen.setPositionDimensionTwo(null);
-//		
+//
 
 //		Collection externalIdentifierCollection = new HashSet();
 //		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
@@ -1572,7 +1577,7 @@ public class BaseTestCaseUtility {
 		receivedEventParameters.setReceivedQuality("acceptable");
 		receivedEventParameters.setComment("received");
 		receivedEventParameters.setReceivedQuality("Cauterized");
-		
+
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
 		specimenEventCollection.add(receivedEventParameters);
@@ -1585,7 +1590,7 @@ public class BaseTestCaseUtility {
 		FluidSpecimen cellSpecimen = new FluidSpecimen();
 
 //		SpecimenCollectionGroup scg = (SpecimenCollectionGroup)TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-//		
+//
 
 //		molecularSpecimen.setSpecimenCollectionGroup(scg);
 		cellSpecimen.setSpecimenClass("Fluid");
@@ -1606,7 +1611,7 @@ public class BaseTestCaseUtility {
 		cellSpecimen.setInitialQuantity(quantity);
 		cellSpecimen.setAvailableQuantity(quantity);
 		// modified code here. chnged funcion name to setInitialQuantity(quantity) from setQuantity(quantity)
-		
+
 		//cellSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
 		cellSpecimen.setComment("");
 		// Is virtually located
@@ -1614,7 +1619,7 @@ public class BaseTestCaseUtility {
 		cellSpecimen.setSpecimenPosition(null);
 //		cellSpecimen.setPositionDimensionOne(null);
 //		cellSpecimen.setPositionDimensionTwo(null);
-		
+
 
 //		Collection externalIdentifierCollection = new HashSet();
 //		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
@@ -1659,7 +1664,7 @@ public class BaseTestCaseUtility {
 		receivedEventParameters.setReceivedQuality("acceptable");
 		receivedEventParameters.setComment("received");
 		receivedEventParameters.setReceivedQuality("Cauterized");
-		
+
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
 		specimenEventCollection.add(receivedEventParameters);
@@ -1667,9 +1672,9 @@ public class BaseTestCaseUtility {
 
 		return cellSpecimen;
 }
-	
-	
-	
+
+
+
 	public static SpecimenArrayType initSpecimenSpecimenArrayType()
 	{
 		SpecimenArrayType specimenArrayType = new SpecimenArrayType();
@@ -1681,9 +1686,9 @@ public class BaseTestCaseUtility {
 		specimenTypeCollection.add("Fixed Tissue");
 		specimenTypeCollection.add("Fixed Tissue Block");
 		specimenTypeCollection.add("Fixed Tissue Slide");
-		specimenTypeCollection.add("Fresh Tissue");		
+		specimenTypeCollection.add("Fresh Tissue");
 		specimenArrayType.setSpecimenTypeCollection(specimenTypeCollection);
-		
+
 		specimenArrayType.setComment("");
 		Capacity capacity = new Capacity();
 		capacity.setOneDimensionCapacity(new Integer(4));
@@ -1698,34 +1703,34 @@ public class BaseTestCaseUtility {
 //		capacity.setOneDimensionCapacity(new Integer(5));//4
 //		capacity.setTwoDimensionCapacity(new Integer(5));//4
 //		specimenArrayType.setCapacity(capacity);
-		return specimenArrayType;	
+		return specimenArrayType;
 	}
-	
+
 	public static SpecimenArray initSpecimenArray()
 	{
 		SpecimenArray specimenArray = new SpecimenArray();
 		SpecimenArrayType specimenArrayType = (SpecimenArrayType) TestCaseUtility.getObjectMap(SpecimenArrayType.class);
 
 		specimenArray.setSpecimenArrayType(specimenArrayType);
-		
+
 		specimenArray.setBarcode("bar" + UniqueKeyGeneratorUtil.getUniqueKey());
-		specimenArray.setName("sa" + UniqueKeyGeneratorUtil.getUniqueKey()); 
-		
+		specimenArray.setName("sa" + UniqueKeyGeneratorUtil.getUniqueKey());
+
 //		User createdBy = (User)TestCaseUtility.getObjectMap(User.class);
 		User createdBy = new User();
 		createdBy.setId(new Long(1));
 		specimenArray.setCreatedBy(createdBy);
-		
+
 		Capacity capacity = new Capacity();
 		capacity.setOneDimensionCapacity(4);
 		capacity.setTwoDimensionCapacity(4);
 		specimenArray.setCapacity(capacity);
-		
+
 		specimenArray.setComment("");
 		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
 //		StorageContainer storageContainer = new StorageContainer();
-	
-		
+
+
 //	specimenArray.setStorageContainer(storageContainer);
 		ContainerPosition containerPosition = new ContainerPosition();
 		containerPosition.setPositionDimensionOne(new Integer(1));
@@ -1733,45 +1738,45 @@ public class BaseTestCaseUtility {
 		containerPosition.setOccupiedContainer(specimenArray);
 		containerPosition.setParentContainer(storageContainer);
 		specimenArray.setLocatedAtPosition(containerPosition);
-		
+
 		Collection specimenArrayContentCollection = new HashSet();
 		SpecimenArrayContent specimenArrayContent = new SpecimenArrayContent();
-		
+
 		Specimen specimen = (Specimen) TestCaseUtility.getObjectMap(TissueSpecimen.class);
 
-		
+
 		specimenArrayContent.setSpecimen(specimen);
 		specimenArrayContent.setPositionDimensionOne(new Integer(1));
 		specimenArrayContent.setPositionDimensionTwo(new Integer(1));
-		
+
 //		Quantity quantity = new Quantity();
 //		quantity.setValue(new Double(1));
 //		specimenArrayContent.setInitialQuantity(quantity);
-		
+
 		specimenArrayContentCollection.add(specimenArrayContent);
 		specimenArray.setSpecimenArrayContentCollection(specimenArrayContentCollection);
-		return specimenArray;	
+		return specimenArray;
 	}
-	
+
 	public static SpecimenArray updateSpecimenArray(SpecimenArray specimenArray)
 	{
-		
-		
+
+
 		specimenArray.setBarcode("new updatedbarcode" + UniqueKeyGeneratorUtil.getUniqueKey());
-		specimenArray.setName("updated spec array" + UniqueKeyGeneratorUtil.getUniqueKey()); 
-		
+		specimenArray.setName("updated spec array" + UniqueKeyGeneratorUtil.getUniqueKey());
+
 		User createdBy = (User)TestCaseUtility.getObjectMap(User.class);
 //		User createdBy = new User();
 
 		specimenArray.setCreatedBy(createdBy);
-		
+
 //		Capacity capacity = new Capacity();
 //		capacity.setOneDimensionCapacity(5); //4
 //		capacity.setTwoDimensionCapacity(5); //4
 //		specimenArray.setCapacity(capacity);
 		return specimenArray;
 	}
-	
+
 	public static IdentifiedSurgicalPathologyReport initIdentifiedSurgicalPathologyReport()
 	{
 		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=new IdentifiedSurgicalPathologyReport();
@@ -1785,7 +1790,7 @@ public class BaseTestCaseUtility {
 				"This is the Final Diagnosis Text" +
 				"\n\n[GROSS DESCRIPTION]" +
 				"The specimen is received unfixed labeled hernia sac and consists of a soft, pink to yellow segment of fibrous and fatty tissue measuring 7.5cm in length x 3.2 x 0.9cm with a partly defined lumen.  Representative tissue submitted labeled 1A.";
-	
+
 		textContent.setData(data);
 		textContent.setSurgicalPathologyReport(identifiedSurgicalPathologyReport);
 		Set reportSectionCollection=new HashSet();
@@ -1793,31 +1798,31 @@ public class BaseTestCaseUtility {
 		reportSection1.setName("GDT");
 		reportSection1.setDocumentFragment("The specimen is received unfixed labeled hernia sac and consists of a soft, pink to yellow segment of fibrous and fatty tissue measuring 7.5cm in length x 3.2 x 0.9cm with a partly defined lumen.  Representative tissue submitted labeled 1A.");
 		reportSection1.setTextContent(textContent);
-		
+
 		ReportSection reportSection2=new ReportSection();
 		reportSection2.setName("FIN");
 		reportSection2.setDocumentFragment("This is the Final Diagnosis Text");
 		reportSection2.setTextContent(textContent);
-		
+
 		reportSectionCollection.add(reportSection1);
 		reportSectionCollection.add(reportSection2);
-		
+
 		textContent.setReportSectionCollection(reportSectionCollection);
-		
+
 		identifiedSurgicalPathologyReport.setTextContent(textContent);
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 		specimenCollectionGroup.setSurgicalPathologyNumber("SPN"+UniqueKeyGeneratorUtil.getUniqueKey());
 		identifiedSurgicalPathologyReport.setSpecimenCollectionGroup(specimenCollectionGroup);
 		return identifiedSurgicalPathologyReport;
 	}
-	
+
 	public static IdentifiedSurgicalPathologyReport updateIdentifiedSurgicalPathologyReport(IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport)
 	{
 		identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)TestCaseUtility.getObjectMap(IdentifiedSurgicalPathologyReport.class);
 		identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.DEIDENTIFIED);
 		return identifiedSurgicalPathologyReport;
 	}
-	
+
 	public static DeidentifiedSurgicalPathologyReport initDeIdentifiedSurgicalPathologyReport()
 	{
 		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport=new DeidentifiedSurgicalPathologyReport();
@@ -1826,17 +1831,17 @@ public class BaseTestCaseUtility {
 		deidentifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.PENDING_FOR_XML);
 		deidentifiedSurgicalPathologyReport.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		deidentifiedSurgicalPathologyReport.setSpecimenCollectionGroup(identifiedSurgicalPathologyReport.getSpecimenCollectionGroup());
-		
+
 		TextContent textContent = new TextContent();
 		String data="Report is de-identified \n"+identifiedSurgicalPathologyReport.getTextContent().getData();
 		textContent.setData(data);
 		textContent.setSurgicalPathologyReport(deidentifiedSurgicalPathologyReport);
-		
+
 		deidentifiedSurgicalPathologyReport.setTextContent(textContent);
-		
+
 		return deidentifiedSurgicalPathologyReport;
 	}
-	
+
 	public static DeidentifiedSurgicalPathologyReport updateIdentifiedSurgicalPathologyReport(DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
 	{
 		deidentifiedSurgicalPathologyReport=(DeidentifiedSurgicalPathologyReport)TestCaseUtility.getObjectMap(DeidentifiedSurgicalPathologyReport.class);
@@ -1844,10 +1849,10 @@ public class BaseTestCaseUtility {
 		TextContent textContent=deidentifiedSurgicalPathologyReport.getTextContent();
 		String data=textContent.getData();
 		data+="Updated\n";
-		
+
 		return deidentifiedSurgicalPathologyReport;
 	}
-	
+
 	/**
 	 * Create a aliquot domain object.
 	 * @return
@@ -1859,43 +1864,43 @@ public class BaseTestCaseUtility {
 		aliquot.setQuantityPerAliquot(1.0);
 		aliquot.setAliquotsInSameContainer(Boolean.TRUE);
 		aliquot.setSpecimenPositionCollection(new LinkedHashSet());
-		
-		return aliquot; 
+
+		return aliquot;
 	}
 	public static SpecimenCollectionGroup getSCGFromParticipant(Long participantId,CaTissueApplicationService appService)
 	{
 		CollectionProtocolRegistration cpr = null;
 		SpecimenCollectionGroup scg = null;
-		try 
+		try
 		{
 			String query = "from edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr where "
-				+ "cpr.participant.id= "+participantId;			
+				+ "cpr.participant.id= "+participantId;
 			List resultList = appService.search(query);
 
-			if (resultList != null && resultList.size() > 0) 
+			if (resultList != null && resultList.size() > 0)
 			{
 				cpr = (CollectionProtocolRegistration) resultList.get(0);
 				System.out.println("cpr "+cpr.getId());
-			}					
-		} 
-		catch (Exception e) 
+			}
+		}
+		catch (Exception e)
 		{
 			System.err.println("Exception in CollectionProtocolRegistration : getSCGFromParticipant()");
 			e.printStackTrace();
 		}
-		try 
+		try
 		{
 			String query = "from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where "
-				+ "scg.collectionProtocolRegistration.id= "+cpr.getId();			
+				+ "scg.collectionProtocolRegistration.id= "+cpr.getId();
 			List resultList = appService.search(query);
 
-			if (resultList != null && resultList.size() > 0) 
+			if (resultList != null && resultList.size() > 0)
 			{
 				scg = (SpecimenCollectionGroup) resultList.get(0);
 				System.out.println("scg "+scg.getId());
-			}					
-		} 
-		catch (Exception e) 
+			}
+		}
+		catch (Exception e)
 		{
 			System.out.println("Exception in SpecimenCollectionGroup : getSCGFromParticipant()");
 			e.printStackTrace();
