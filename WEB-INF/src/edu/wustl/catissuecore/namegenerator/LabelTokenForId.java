@@ -18,7 +18,7 @@ public class LabelTokenForId implements LabelTokens
 	 */
 	public String getTokenValue(Object object, String token, Long currVal)
 	{
-		currVal = currVal+1;
+//		currVal = currVal+1;
 		return currVal+"";
 	}
 

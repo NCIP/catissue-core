@@ -18,11 +18,9 @@ public class LabelTokenForPpiUId implements LabelTokens
 	{
 		long cprId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getId();
 		long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId();
-
 		String yearOfColl = SpecimenUtil.getCollectionYear(specimen);
 		String key = cpId+"_"+cprId+"_"+yearOfColl;
 		String type = "SpecimenCount";
-
 		long ctr = 0;
 		try
 		{

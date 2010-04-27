@@ -243,6 +243,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		request.setAttribute("isParticipantReg", collectionProtocolBean.isParticiapantReg());
 		request.setAttribute("opr", collectionProtocolBean.getOperation());
 
+
 		if ("newEvent".equals(pageOf))
 		{
 			return (mapping.findForward("newEvent"));
@@ -447,6 +448,25 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		createSpecimenTemplateForm.setGenLabel(specimenRequirementBean.isGenerateLabel());
 		createSpecimenTemplateForm.setLabelGenType(specimenRequirementBean.getLabelGenType());
 
+		createSpecimenTemplateForm.setGenLabelForAliquot(specimenRequirementBean.isGenLabelForAliquot());
+		createSpecimenTemplateForm.setLabelFormatForAliquot(specimenRequirementBean.getLabelFormatForAliquot());
+		createSpecimenTemplateForm.setLabelGenTypeForAliquot(specimenRequirementBean.getLabelGenTypeForAliquot());
+
+		if(specimenRequirementBean.getAliquotSpecimenCollection() != null)
+		{
+			final Iterator deriveSpecimenCollectionItr = (specimenRequirementBean.getAliquotSpecimenCollection()).keySet().iterator();
+			if(deriveSpecimenCollectionItr.hasNext())
+			{
+				SpecimenRequirementBean bean = (SpecimenRequirementBean)specimenRequirementBean.getAliquotSpecimenCollection().get(deriveSpecimenCollectionItr.next());
+				if(bean.getLineage().equals(Constants.ALIQUOT))
+				{
+					createSpecimenTemplateForm.setGenLabelForAliquot(bean.isGenerateLabel());
+					createSpecimenTemplateForm.setLabelFormatForAliquot(bean.getLabelFormat());
+					createSpecimenTemplateForm.setLabelGenTypeForAliquot(bean.getLabelGenType());
+				}
+			}
+
+		}
 	}
 
 	/**

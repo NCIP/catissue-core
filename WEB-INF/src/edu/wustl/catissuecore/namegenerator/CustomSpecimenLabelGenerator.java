@@ -83,6 +83,10 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 						String token = st.nextToken();
 						try
 						{
+							if(token.equals("SYS_UID"))
+							{
+								currentLabel = currentLabel+1;
+							}
 							String mylable = TokenFactory.getInstance(token).getTokenValue(objSpecimen,
 									token, currentLabel);
 							if (mylable == null)
@@ -111,10 +115,7 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 			{
 				final Collection<AbstractSpecimen> specimenCollection = objSpecimen
 						.getChildSpecimenCollection();
-
-
 				final Iterator<AbstractSpecimen> specCollItr = specimenCollection.iterator();
-
 				while (specCollItr.hasNext())
 				{
 					final Specimen objChildSpecimen = (Specimen) specCollItr.next();

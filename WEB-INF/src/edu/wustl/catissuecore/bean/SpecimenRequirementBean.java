@@ -139,6 +139,61 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 	private String labelGenType;
 
+	private String labelGenTypeForAliquot;
+
+	private String labelFormatForAliquot;
+
+	private boolean genLabelForAliquot;
+
+
+
+	public String getLabelGenTypeForAliquot()
+	{
+		return labelGenTypeForAliquot;
+	}
+
+
+
+
+	public void setLabelGenTypeForAliquot(String labelGenTypeForAliquot)
+	{
+		this.labelGenTypeForAliquot = labelGenTypeForAliquot;
+	}
+
+
+
+
+	public String getLabelFormatForAliquot()
+	{
+		return labelFormatForAliquot;
+	}
+
+
+
+
+	public void setLabelFormatForAliquot(String labelFormatForAliquot)
+	{
+		this.labelFormatForAliquot = labelFormatForAliquot;
+	}
+
+
+
+
+	public boolean isGenLabelForAliquot()
+	{
+		return genLabelForAliquot;
+	}
+
+
+
+
+	public void setGenLabelForAliquot(boolean genLabelForAliquot)
+	{
+		this.genLabelForAliquot = genLabelForAliquot;
+	}
+
+
+
 	public String getLabelGenType()
 	{
 		return labelGenType;
