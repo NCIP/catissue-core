@@ -290,8 +290,8 @@ public final class AssociatesCps
 
 			List<CollectionProtocol> cpList = hibernateDao.retrieve(CollectionProtocol.class
 					.getName(), Constants.ID, cpId);
-			CollectionProtocol cp = cpList.get(0);
-			Collection<StudyFormContext> sfcSet = cp.getStudyFormContextCollection();
+			CollectionProtocol collectionProtocol = cpList.get(0);
+			Collection<StudyFormContext> sfcSet = collectionProtocol.getStudyFormContextCollection();
 
 			for (Long entityId : entityIds)
 			{
@@ -309,7 +309,7 @@ public final class AssociatesCps
 								.info("Creating new form context for container : -----"
 										+ containerId);
 						StudyFormContext studyFormContext = new StudyFormContext();
-						updateStudyFormContext(cp, studyFormContext, containerId);
+						updateStudyFormContext(collectionProtocol, studyFormContext, containerId);
 						sfcSet.add(studyFormContext);
 						hibernateDao.insert(studyFormContext);
 					}
@@ -317,7 +317,7 @@ public final class AssociatesCps
 					{
 						logger.info("Got form context for container : -----" + containerId);
 						StudyFormContext studyFormContext = formContextList.get(0);
-						updateStudyFormContext(cp, studyFormContext, containerId);
+						updateStudyFormContext(collectionProtocol, studyFormContext, containerId);
 						sfcSet.add(studyFormContext);
 						hibernateDao.update(studyFormContext);
 					}

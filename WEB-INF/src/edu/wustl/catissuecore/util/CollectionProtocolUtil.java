@@ -105,8 +105,8 @@ public class CollectionProtocolUtil
 		long[] coordinatorIds = null;
 		collectionProtocolBean = new CollectionProtocolBean();
 		collectionProtocolBean.setConsentTierCounter(collectionProtocol.getConsentTierCollection().size());
-		Long id = Long.valueOf(collectionProtocol.getId().longValue());
-		collectionProtocolBean.setIdentifier(id);
+		Long identifier = Long.valueOf(collectionProtocol.getId().longValue());
+		collectionProtocolBean.setIdentifier(identifier);
 
 		coordinatorIds = getProtocolCordnateIds(collectionProtocol, coordinatorIds);
 
@@ -165,13 +165,13 @@ public class CollectionProtocolUtil
 		if(userCollection != null)
 		{
 			coordinatorIds = new long[userCollection.size()];
-			int i=0;
-			Iterator it = userCollection.iterator();
-			while(it.hasNext())
+			int counter=0;
+			Iterator iterator = userCollection.iterator();
+			while(iterator.hasNext())
 			{
-				User user = (User)it.next();
-				coordinatorIds[i] = user.getId().longValue();
-				i++;
+				User user = (User)iterator.next();
+				coordinatorIds[counter] = user.getId().longValue();
+				counter++;
 			}
 		}
 		return coordinatorIds;
@@ -190,10 +190,10 @@ public class CollectionProtocolUtil
 		{
 			clinicalDiagnosisArr = new String[clinicDiagnosisCollection.size()];
 			int index=0;
-			Iterator<ClinicalDiagnosis> it = clinicDiagnosisCollection.iterator();
-			while(it.hasNext())
+			Iterator<ClinicalDiagnosis> iterator = clinicDiagnosisCollection.iterator();
+			while(iterator.hasNext())
 			{
-				ClinicalDiagnosis clinicalDiagnosis = (ClinicalDiagnosis)it.next();
+				ClinicalDiagnosis clinicalDiagnosis = (ClinicalDiagnosis)iterator.next();
 				clinicalDiagnosisArr[index] = clinicalDiagnosis.getClinicalDiagnosis();
 				index++;
 			}
@@ -212,15 +212,15 @@ public class CollectionProtocolUtil
 			Collections.sort(consentsList,new IdComparator());//bug 8905
 			//Iterator consentTierCollIter = consentTierColl.iterator();
 			Iterator consentTierCollIter = consentsList.iterator();//bug 8905
-			int i = 0;
+			int counter = 0;
 			while(consentTierCollIter.hasNext())
 			{
 				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
-				String statement = "ConsentBean:"+i+"_statement";
-				String statementkey = "ConsentBean:"+i+"_consentTierID";
+				String statement = "ConsentBean:"+counter+"_statement";
+				String statementkey = "ConsentBean:"+counter+"_consentTierID";
 				tempMap.put(statement, consent.getStatement());
 				tempMap.put(statementkey, String.valueOf(consent.getId()));
-				i++;
+				counter++;
 			}
 		}
 		return tempMap;
@@ -667,10 +667,10 @@ public class CollectionProtocolUtil
 	 * @param request
 	 * @param cpSessionList
 	 */
-	public static void updateSession(HttpServletRequest request,  Long id)
+	public static void updateSession(HttpServletRequest request,  Long identifieer)
 			throws ApplicationException{
 
-		List sessionCpList = new CollectionProtocolBizLogic().retrieveCP(id);
+		List sessionCpList = new CollectionProtocolBizLogic().retrieveCP(identifieer);
 
 		if (sessionCpList == null || sessionCpList.size()<2){
 
@@ -680,7 +680,7 @@ public class CollectionProtocolUtil
 		HttpSession session = request.getSession();
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-		setPrivilegesForCP(id,session);
+		setPrivilegesForCP(identifieer,session);
 		CollectionProtocolBean collectionProtocolBean =
 			(CollectionProtocolBean)sessionCpList.get(0);
 		collectionProtocolBean.setOperation("update");
@@ -999,10 +999,10 @@ public class CollectionProtocolUtil
 			{
 					SpecimenCharacteristics specimenCharacteristics =
 							new SpecimenCharacteristics();
-					long id =specimenRequirementBean.getSpecimenCharsId();
-					if(id != -1)
+					long identifier =specimenRequirementBean.getSpecimenCharsId();
+					if(identifier != -1)
 					{
-						specimenCharacteristics.setId(Long.valueOf(id));
+						specimenCharacteristics.setId(Long.valueOf(identifier));
 					}
 					specimenCharacteristics.setTissueSide(
 							specimenRequirementBean.getTissueSide());
@@ -1165,21 +1165,21 @@ public class CollectionProtocolUtil
 		return reqSpecimen;
 	}
 
-	public static CollectionProtocol getCollectionProtocolForSCG(String id) throws ApplicationException
+	public static CollectionProtocol getCollectionProtocolForSCG(String identifier) throws ApplicationException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 		String sourceObjectName =  SpecimenCollectionGroup.class.getName();
 		String[] whereColName = {"id"};
 		String[] whereColCond = {"="};
-		Object[] whereColVal = {Long.parseLong(id)};
+		Object[] whereColVal = {Long.parseLong(identifier)};
 		String [] selectColumnName = {"collectionProtocolRegistration.collectionProtocol"};
 		List list = collectionProtocolBizLogic.retrieve(sourceObjectName,selectColumnName,whereColName,whereColCond,whereColVal,Constants.AND_JOIN_CONDITION);
 		CollectionProtocol returnVal=null;
 		if(list != null && !list.isEmpty())
 		{
-			CollectionProtocol cp = (CollectionProtocol) list.get(0);
-			returnVal= cp;
+			CollectionProtocol collectionProtocol = (CollectionProtocol) list.get(0);
+			returnVal= collectionProtocol;
 
 		}
 		return returnVal ;
@@ -1194,10 +1194,10 @@ public class CollectionProtocolUtil
 	{
 		Set keys = consentsMap.keySet();
 		List<String> idList = new ArrayList<String>();
-		Iterator it = keys.iterator();
-		while(it.hasNext())
+		Iterator iterator = keys.iterator();
+		while(iterator.hasNext())
 		{
-			String key = (String)it.next();
+			String key = (String)iterator.next();
 			idList.add(key);
 		}
 		Collections.sort(idList,new IdComparator());
@@ -1205,8 +1205,8 @@ public class CollectionProtocolUtil
 		Iterator idIterator = idList.iterator();
 		while(idIterator.hasNext())
 		{
-			String id = (String)idIterator.next();
-			idMap.put(id,consentsMap.get(id));
+			String identifier = (String)idIterator.next();
+			idMap.put(identifier,consentsMap.get(identifier));
 		}
 		return idMap;
 	}

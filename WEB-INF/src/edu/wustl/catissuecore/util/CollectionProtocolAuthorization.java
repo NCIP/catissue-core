@@ -33,7 +33,6 @@ import edu.wustl.security.exception.SMException;
 import edu.wustl.security.locator.CSMGroupLocator;
 import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeManager;
-import gov.nih.nci.security.exceptions.CSException;
 
 /**
  * @author supriya_dankh
@@ -100,9 +99,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 //		int noOfUsers = rowIdMap.size();
 		Set<Site> siteCollection = new HashSet<Site>();
 		Set<User> userCollection = new HashSet<User>();
-		Set<Long> siteIds = new HashSet<Long>();
-		String roleName = "";
-		
+		Set<Long> siteIds = new HashSet<Long>();		
 		for (Iterator<String> mapItr = rowIdMap.keySet().iterator(); mapItr.hasNext(); )
 		{
 			String key = mapItr.next();
@@ -271,22 +268,6 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 		}
 	}
 
-	/**
-	 * @param siteCollection
-	 * @param siteList
-	 */
-	private Set<Site> getSiteCollection(List<Long> siteList)
-	{
-		Set<Site> siteCollection = new HashSet<Site>();
-		for (Long siteId : siteList)
-		{
-			Site site = new Site();
-			site.setId(siteId);
-			siteCollection.add(site);
-		}
-		return siteCollection;
-	}
-
 	public void insertCoordinatorPrivileges(CollectionProtocol collectionProtocol,
 			Vector<SecurityDataBean> authorizationData) throws ApplicationException
 	{
@@ -350,8 +331,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 
 	private String[] getDynamicGroups(AbstractDomainObject obj)
 	{
-		String[] dynamicGroups = null;
-		return dynamicGroups;
+		return null;
 	}
 
 	/**
@@ -362,8 +342,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 	private gov.nih.nci.security.authorization.domainobjects.User getUserByID(String userId)
 			throws SMException
 	{
-		gov.nih.nci.security.authorization.domainobjects.User user = SecurityManagerFactory.getSecurityManager().getUserById(userId);
-		return user;
+		return SecurityManagerFactory.getSecurityManager().getUserById(userId);
 	}
 //not required
 	/**
@@ -386,7 +365,7 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 				queryWhereClause);
 		
 
-		if (csmUserIdList.isEmpty() == false)
+		if (!csmUserIdList.isEmpty())
 		{
 			Long csmUserId = (Long) csmUserIdList.get(0);
 
@@ -398,10 +377,10 @@ public class CollectionProtocolAuthorization implements edu.wustl.catissuecore.u
 
 	public boolean hasCoordinator(User coordinator, CollectionProtocol collectionProtocol)
 	{
-		Iterator<User> it = collectionProtocol.getCoordinatorCollection().iterator();
+		Iterator<User> iterator = collectionProtocol.getCoordinatorCollection().iterator();
 		boolean flag=false;
-		while (it.hasNext())
-		{	User coordinatorOld = it.next();
+		while (iterator.hasNext())
+		{	User coordinatorOld = iterator.next();
 			if (coordinator.getId().equals(coordinatorOld.getId()))
 			{
 				flag= true;

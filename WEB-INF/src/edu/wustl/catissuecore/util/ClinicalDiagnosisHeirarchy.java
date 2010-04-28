@@ -20,7 +20,7 @@ public class ClinicalDiagnosisHeirarchy
 	/**
 	 * Logger. 
 	 */
-	private Logger logger = Logger.getCommonLogger(ConstraintViolationFormatter.class);
+	private static final Logger logger = Logger.getCommonLogger(ConstraintViolationFormatter.class);
 	
 	static String DATABASE_SERVER_NAME;
 	static String DATABASE_SERVER_PORT_NUMBER;
@@ -74,8 +74,8 @@ public class ClinicalDiagnosisHeirarchy
 		return connection;
 	}
 
-	private List <String>populateClinicalDiagnosisHeirarchy(Connection connection) throws SQLException {
-		List< Long > identifiers = new ArrayList< Long >();
+	private List <String>populateClinicalDiagnosisHeirarchy(Connection connection) throws SQLException
+	{
 		String reteriveRootNode = "Select IDENTIFIER from catissue_permissible_value where"
 			+
 			" PUBLIC_ID ='Clinical_Diagnosis_PID'";
@@ -86,10 +86,10 @@ public class ClinicalDiagnosisHeirarchy
 			resultSet=statement.executeQuery(reteriveRootNode);
 			while(resultSet.next())
 			{
-				String id = resultSet.getString("IDENTIFIER");
-				idList.add(id);
+				String identifier = resultSet.getString("IDENTIFIER");
+				idList.add(identifier);
 
-				retrieveChilds(id, connection ,idList);
+				retrieveChilds(identifier, connection ,idList);
 			}
 			resultSet.close();
 			statement.close();
@@ -106,9 +106,9 @@ public class ClinicalDiagnosisHeirarchy
 
 		while(resultSet.next())
 		{
-			String id = resultSet.getString("IDENTIFIER");
-			idList.add(id);
-			retrieveChilds(id, connection ,idList);
+			String identifier = resultSet.getString("IDENTIFIER");
+			idList.add(identifier);
+			retrieveChilds(identifier, connection ,idList);
 		}
 		resultSet.close();
 		statement.close();

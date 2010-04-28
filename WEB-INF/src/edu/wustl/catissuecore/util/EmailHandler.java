@@ -22,7 +22,6 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.EmailDetails;
 import edu.wustl.common.util.global.SendEmail;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.manager.SecurityManagerFactory;
 
@@ -33,7 +32,7 @@ import edu.wustl.security.manager.SecurityManagerFactory;
  */
 public class EmailHandler
 {
-	private transient Logger logger = Logger.getCommonLogger(EmailHandler.class);
+	private static final Logger logger = Logger.getCommonLogger(EmailHandler.class);
     /**
      * Creates and sends the user registration approval emails to user and the administrator.
      * @param user The user whose registration is approved.

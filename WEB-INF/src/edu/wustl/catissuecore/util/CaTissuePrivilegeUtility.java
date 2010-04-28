@@ -551,7 +551,6 @@ public final class CaTissuePrivilegeUtility
 		IDAOFactory daoFact = DAOConfigFactory.getInstance().getDAOFactory(
 				CommonServiceLocator.getInstance().getAppName());
 		DAO hibernateDao = null;
-		CollectionProtocol cp = null;
 		// Added by Ravindra - contains user ids of those users who are asso. to
 		// the CP
 		// viz. PI of CP, co-ords of CP, users having explicit privileges on the

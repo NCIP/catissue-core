@@ -49,7 +49,6 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * @author ashish_gupta
@@ -140,13 +139,13 @@ public final class EventsUtil
 	{
 		Iterator<NameValueBean> itr = userList.iterator();
 		long returnId = Long.valueOf(-1);
-		for (int i = 0; itr.hasNext(); i++)
+		for (int counter = 0; itr.hasNext(); counter++)
 		{
 			NameValueBean nameValueBean = (NameValueBean) itr.next();
 			if (nameValueBean.getName() != null && nameValueBean.getName().trim().equals(userName))
 			{
-				String id = nameValueBean.getValue();
-				returnId = Long.valueOf(id).longValue();
+				String identifier = nameValueBean.getValue();
+				returnId = Long.valueOf(identifier);
 				break;
 			}
 		}

@@ -136,22 +136,19 @@ public final class ConsentUtil
 	{
 		try
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		
-		List specimenCollection =dao.retrieveAttribute(SpecimenCollectionGroup.class,Constants.SYSTEM_IDENTIFIER,scg.getId(),"elements(specimenCollection)");
-		Collection updatedSpecimenCollection = new HashSet();
-		if(specimenCollection != null)
-		{
-			Iterator specimenItr = specimenCollection.iterator() ;
-			while(specimenItr.hasNext())
+			List specimenCollection =dao.retrieveAttribute(SpecimenCollectionGroup.class,Constants.SYSTEM_IDENTIFIER,scg.getId(),"elements(specimenCollection)");
+			Collection updatedSpecimenCollection = new HashSet();
+			if(specimenCollection != null)
 			{
-				Specimen specimen = (Specimen)specimenItr.next();
-				updateSpecimenStatus(specimen, consentWithdrawalOption, consentTierID, dao, sessionDataBean);
-				updatedSpecimenCollection.add(specimen );
+				Iterator specimenItr = specimenCollection.iterator() ;
+				while(specimenItr.hasNext())
+				{
+					Specimen specimen = (Specimen)specimenItr.next();
+					updateSpecimenStatus(specimen, consentWithdrawalOption, consentTierID, dao, sessionDataBean);
+					updatedSpecimenCollection.add(specimen );
+				}
 			}
-		}
-		scg.setSpecimenCollection(updatedSpecimenCollection);
+			scg.setSpecimenCollection(updatedSpecimenCollection);
 		}
 		catch(DAOException daoExp)
 		{
@@ -300,10 +297,7 @@ public final class ConsentUtil
 	{
 		try 
 		{
-			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 			Long specimenId = (Long)specimen.getId();
-			
 			List childSpecimens = dao.retrieveAttribute(Specimen.class,Constants.SYSTEM_IDENTIFIER,specimenId, "elements(childSpecimenCollection)");
 			
 			//Collection childSpecimens = specimen.getChildrenSpecimen();
@@ -349,11 +343,8 @@ public final class ConsentUtil
 	{
 		Collection consentTierStatusCollection = new HashSet();
 		//Lazy Resolved ----  parentSpecimen.getConsentTierStatusCollection();
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
 		List parentStatusCollection = dao.retrieveAttribute(Specimen.class,Constants.SYSTEM_IDENTIFIER, parentSpecimen.getId(), "elements(consentTierStatusCollection)");
-		
 		if(parentStatusCollection != null)
 		{
 			Iterator parentStatusCollectionIterator = parentStatusCollection.iterator();
@@ -418,9 +409,6 @@ public final class ConsentUtil
 	 */
 	private static void updateSCGSpecimenCollection(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldSpecimenCollectionGroup, long consentTierID, String  statusValue, Collection newSCGConsentCollection, Collection oldSCGConsentCollection,DAO dao) throws BizLogicException, DAOException
 	{
-		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-	
 		List specimenCollection = dao.retrieveAttribute(SpecimenCollectionGroup.class,Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup.getId(),"elements(specimenCollection)");
 		//oldSpecimenCollectionGroup.getSpecimenCollection();
 		Collection updatedSpecimenCollection = new HashSet();
@@ -441,7 +429,9 @@ public final class ConsentUtil
 	public static void updateSpecimenConsentStatus(Specimen specimen, String applyChangesTo, long consentTierID, String  statusValue, Collection newConsentCollection, Collection oldConsentCollection,DAO dao) throws BizLogicException
 	{
 		if(applyChangesTo.equalsIgnoreCase(Constants.APPLY_ALL))
+		{
 			updateSpecimenConsentStatus(specimen, consentTierID, statusValue, applyChangesTo, dao);
+		}
 		else if(applyChangesTo.equalsIgnoreCase(Constants.APPLY))
 		{
 			//To pass both collections
@@ -705,8 +695,7 @@ public final class ConsentUtil
     	CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)factory.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
     	Object object  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), Long.valueOf(collectionProtocolID));		
 		CollectionProtocol collectionProtocol = (CollectionProtocol) object;
-		Collection consentTierCollection = (Collection)collectionProtocolBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), collectionProtocol.getId(), "elements(consentTierCollection)");
-		return consentTierCollection;
+		return (Collection)collectionProtocolBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), collectionProtocol.getId(), "elements(consentTierCollection)");
     }
 	
 	/**
@@ -736,7 +725,7 @@ public final class ConsentUtil
 			Long consentID;
 			if(partiResponseCollection!=null ||sortedStatusSet!=null)
 			{
-				int i = 0;
+				int counter = 0;
 				Iterator statusResponsIter = sortedStatusSet.iterator();			
 				while(statusResponsIter.hasNext())
 				{
@@ -750,12 +739,12 @@ public final class ConsentUtil
 						if(consentTierID.longValue()==consentID.longValue())						
 						{
 							ConsentTier consent = consentTierResponse.getConsentTier();
-							String idKey="ConsentBean:"+i+"_consentTierID";
-							String statementKey="ConsentBean:"+i+"_statement";
-							String participantResponsekey = "ConsentBean:"+i+"_participantResponse";
-							String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
-							String statusResponsekey  = "ConsentBean:"+i+statusResponse;
-							String statusResponseIDkey ="ConsentBean:"+i+statusResponseId;
+							String idKey="ConsentBean:"+counter+"_consentTierID";
+							String statementKey="ConsentBean:"+counter+"_statement";
+							String participantResponsekey = "ConsentBean:"+counter+"_participantResponse";
+							String participantResponceIdKey="ConsentBean:"+counter+"_participantResponseID";
+							String statusResponsekey  = "ConsentBean:"+counter+statusResponse;
+							String statusResponseIDkey ="ConsentBean:"+counter+statusResponseId;
 							
 							tempMap.put(idKey, consent.getId());
 							tempMap.put(statementKey,consent.getStatement());
@@ -763,7 +752,7 @@ public final class ConsentUtil
 							tempMap.put(participantResponceIdKey, consentTierResponse.getId());
 							tempMap.put(statusResponsekey, consentTierstatus.getStatus());
 							tempMap.put(statusResponseIDkey, consentTierstatus.getId());
-							i++;
+							counter++;
 							break;
 						}
 					}

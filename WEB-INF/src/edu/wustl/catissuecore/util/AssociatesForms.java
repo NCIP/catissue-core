@@ -13,7 +13,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.StudyFormContext;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.exception.ApplicationException;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
@@ -139,7 +138,6 @@ public final class AssociatesForms
 		{
 			if (containerId != null)
 			{
-				boolean isInsert = true;
 				List<StudyFormContext> studyFormList = hibernateDao.executeQuery("from "
 						+ StudyFormContext.class.getName() + " sfc where sfc.containerId="
 						+ containerId);
@@ -175,13 +173,13 @@ public final class AssociatesForms
 	private static void updateStudyFormContext(StudyFormContext studyFormContext, Long containerId)
 	{
 		studyFormContext.setContainerId(containerId);
-		if (!entityAndFormContainerIds.contains(containerId))
+		if (entityAndFormContainerIds.contains(containerId))
 		{
-			studyFormContext.setHideForm(true);
+			studyFormContext.setHideForm(false);
 		}
 		else
 		{
-			studyFormContext.setHideForm(false);
+			studyFormContext.setHideForm(true);
 		}
 	}
 

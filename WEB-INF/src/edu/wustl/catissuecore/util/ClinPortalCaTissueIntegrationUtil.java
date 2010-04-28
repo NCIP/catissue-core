@@ -135,7 +135,6 @@ public class ClinPortalCaTissueIntegrationUtil
        scgHql.append(" and scg.activityStatus='").append(Constants.ACTIVITY_STATUS_VALUES[1]).append("'");
        scgHql.append(" order by scg.id");
        final List scgColl = bizLogic.executeQuery(scgHql.toString());
-       final StringBuffer eventQuery = new StringBuffer();
        final Iterator iteratorSCG = scgColl.iterator();
         while (iteratorSCG.hasNext())
         {
@@ -177,7 +176,7 @@ public class ClinPortalCaTissueIntegrationUtil
         {
             keyList.add((String) keys[i]);
         }
-        int i = 0;
+        int counter = 0;
         final Iterator<Date> dateIterator = scgMap.values().iterator();
         long diff1 = 0;
         long diff2 = 0;
@@ -205,10 +204,10 @@ public class ClinPortalCaTissueIntegrationUtil
                 if (diff1 >= diff2)
                 {
                     diff1 = diff2;
-                    scgId = keyList.get(i);
+                    scgId = keyList.get(counter);
                 }
             }
-            i++;
+            counter++;
         }
         if (visitPrevDate != null && receivedSCGDate != null)
         {
@@ -277,11 +276,9 @@ public class ClinPortalCaTissueIntegrationUtil
       scgHql.append(" and scg.collectionStatus='").append(Constants.COMPLETE).append("'");
       scgHql.append(" order by scg.id");
       final List scgColl = bizLogic.executeQuery(scgHql.toString());
-      StringBuffer eventQuery = new StringBuffer();
       for(int i=0;i<scgColl.size();i++)
       {
            Object scgDetails = (Object) scgColl.get(i);
-           eventQuery = new StringBuffer();
            if (scgDetails.toString().equals(String.valueOf(scgId)))
            {
               currDate= getCEPDate(scgDetails.toString());
@@ -406,15 +403,16 @@ public class ClinPortalCaTissueIntegrationUtil
   * @param map
   * @return
   */
- public static boolean validateClinPortalMap(Map<String, Long> map)
- {
-     boolean result= false;
-     final Long csId = map.get(ClinPortalIntegrationConstants.CLINICAL_STUDY_ID);
-     final Long cseId = map.get(ClinPortalIntegrationConstants.EVENT_ID);
-     final Long pId = map.get(ClinPortalIntegrationConstants.CP_PARTICIPANT_ID);
-     if(csId!=null && cseId!=null && pId!=null)
-         result=true;
-
-     return result;
- }
+	public static boolean validateClinPortalMap(Map<String, Long> map)
+	{
+		boolean result= false;
+	    final Long csId = map.get(ClinPortalIntegrationConstants.CLINICAL_STUDY_ID);
+	    final Long cseId = map.get(ClinPortalIntegrationConstants.EVENT_ID);
+	    final Long pId = map.get(ClinPortalIntegrationConstants.CP_PARTICIPANT_ID);
+	    if(csId!=null && cseId!=null && pId!=null)
+	    {
+	    	result=true;
+	    }
+	    return result;
+	}
 }
