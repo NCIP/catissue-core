@@ -72,6 +72,7 @@ import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 
+// TODO: Auto-generated Javadoc
 /**
  * AliquotAction initializes all the fields of the page, Aliquots.jsp.
  *
@@ -80,25 +81,20 @@ import edu.wustl.dao.exception.DAOException;
 public class AliquotAction extends SecureAction
 {
 
-	/**
-	 * Logger instance.
-	 */
+	/** Logger instance. */
 	private static final Logger LOGGER = Logger.getCommonLogger(AliquotAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
-	 * @param mapping
-	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
-	 * @throws Exception
-	 *             generic exception
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 *
 	 * @return ActionForward : ActionForward
+	 *
+	 * @throws Exception generic exception
 	 */
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -135,17 +131,14 @@ public class AliquotAction extends SecureAction
 	/**
 	 * Overrides the execute method of Action class.
 	 *
-	 * @param mapping
-	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
-	 * @throws Exception
-	 *             generic exception
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 *
 	 * @return ActionForward : ActionForward
+	 *
+	 * @throws Exception generic exception
 	 */
 	public ActionForward executeContainerChange(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -180,17 +173,14 @@ public class AliquotAction extends SecureAction
 			{
 				return null;
 			}
-
-			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
-			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-			request.setAttribute(Constants.PAGE_OF, pageOf);
+			setRequestAttr(request, exceedingMaxLimit, pageOf, containerMap);
 			this.setParentSpecimenInRequest(request);
 			this.setPageData(request, pageOf, aliquotForm);
 			return mapping.findForward(pageOf);
 		}
 		catch (final DAOException daoException)
 		{
-			this.LOGGER.error(daoException.getMessage(), daoException);
+			LOGGER.error(daoException.getMessage(), daoException);
 			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
 					daoException.getMsgValues());
 		}
@@ -201,14 +191,28 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * @param aliquotForm
-	 *            object of AliquotForm
-	 * @param containerMap
-	 *            object of TreeMap for container data
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param response
-	 * @param mapping
+	 * Sets the request attr.
+	 *
+	 * @param request the request
+	 * @param exceedingMaxLimit the exceeding max limit
+	 * @param pageOf the page of
+	 * @param containerMap the container map
+	 */
+	private void setRequestAttr(HttpServletRequest request, final String exceedingMaxLimit,
+			final String pageOf, TreeMap containerMap)
+	{
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
+		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+		request.setAttribute(Constants.PAGE_OF, pageOf);
+	}
+
+	/**
+	 * Populate storage locations on container change.
+	 *
+	 * @param aliquotForm object of AliquotForm
+	 * @param containerMap object of TreeMap for container data
+	 * @param request object of HttpServletRequest
+	 * @param response the response
 	 */
 	private void populateStorageLocationsOnContainerChange(AliquotForm aliquotForm,
 			TreeMap containerMap, HttpServletRequest request, HttpServletResponse response)
@@ -226,9 +230,9 @@ public class AliquotAction extends SecureAction
 		if (!containerMap.isEmpty())
 		{
 			final Object[] containerId = containerMap.keySet().toArray();
-			for (int i = 0; i < containerId.length; i++)
+			for (int containerCtr = 0; containerCtr < containerId.length; containerCtr++)
 			{
-				final NameValueBean containerNvb = (NameValueBean) containerId[i];
+				final NameValueBean containerNvb = (NameValueBean) containerId[containerCtr];
 				if (flag && containerNvb.getValue().toString().equals(containerName))
 				{
 					flag = false;
@@ -237,40 +241,27 @@ public class AliquotAction extends SecureAction
 				{
 					continue;
 				}
-				final Map xDimMap = (Map) containerMap.get(containerId[i]);
+				final Map xDimMap = (Map) containerMap.get(containerId[containerCtr]);
 				counter = StorageContainerUtil.setAliquotMap("Specimen", xDimMap, containerId,
-						aliquotCount, counter, aliquotMap, i);
+						aliquotCount, counter, aliquotMap, containerCtr);
 				if (counter <= Integer.parseInt(aliquotCount))
 				{
-					i = containerId.length;
+					containerCtr = containerId.length;
 				}
 			}
 		}
-		//		aliquotMap.get("Specimen:4_StorageContainer_id");
 		final String requestType = request.getParameter("requestType");
 		if (requestType != null && "ajax".equals(requestType))
 		{
 			writeResponse(request, response, aliquotMap);
 
 		}
-		//		aliquotForm.setAliquotMap(aliquotMap);
-		//		if (counter < Integer.parseInt(aliquotCount))
-		//		{
-		//			ActionErrors errors = this.getActionErrors(request);
-		//
-		//			if (errors == null)
-		//			{
-		//				errors = new ActionErrors();
-		//			}
-		//			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-		//					"errors.locations.notSufficientForAliquotDropdown"));
-		//			this.saveErrors(request, errors);
-		//		}
 
 	}
 
 	/**
 	 * This method will be called when the container name get changed and write the response.
+	 *
 	 * @param request HttpServletRequest instance
 	 * @param response HttpServletResponse instance
 	 * @param aliquotMap map
@@ -282,8 +273,6 @@ public class AliquotAction extends SecureAction
 		try
 		{
 			final String mapString = aliquotMap.toString();
-			//int lastIndex=mapString.indexOf("}");
-			//String subString=mapString.substring(1, lastIndex);
 
 			resultObject.append("containerMap", mapString);
 
@@ -297,31 +286,25 @@ public class AliquotAction extends SecureAction
 		}
 		catch (JSONException e)
 		{
-			this.LOGGER.error(e.getMessage(), e);
-			//throw AppUtility.getApplicationException(e.getMessage(),e);
+			LOGGER.error(e.getMessage(), e);
 		}
 		catch (IOException e)
 		{
-			this.LOGGER.error(e.getMessage(), e);
-			//throw AppUtility.getApplicationException(e, e.getErrorKeyName(),
-			//e.getMsgValues());
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 
 	/**
 	 * Overrides the execute method of Action class.
 	 *
-	 * @param mapping
-	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
-	 * @throws Exception
-	 *             generic exception
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 *
 	 * @return ActionForward : ActionForward
+	 *
+	 * @throws Exception generic exception
 	 */
 	public ActionForward executeAliquotAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -751,9 +734,7 @@ public class AliquotAction extends SecureAction
 					}
 				}
 			}
-			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
-			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-			request.setAttribute(Constants.PAGE_OF, pageOf);
+			setRequestAttr(request, exceedingMaxLimit, pageOf, containerMap);
 
 			/*
 			 * String [] displayNameField = {Constants.SYSTEM_IDENTIFIER}; List
@@ -767,7 +748,7 @@ public class AliquotAction extends SecureAction
 		}
 		catch (final DAOException daoException)
 		{
-			this.LOGGER.error(daoException.getMessage(), daoException);
+			LOGGER.error(daoException.getMessage(), daoException);
 			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
 					daoException.getMsgValues());
 		}
@@ -780,13 +761,13 @@ public class AliquotAction extends SecureAction
 	/**
 	 * This method checks whether the specimen with given label exists or not.
 	 *
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param form
-	 *            object of AliquotForm
+	 * @param request object of HttpServletRequest
+	 * @param form object of AliquotForm
+	 * @param dao the dao
+	 *
 	 * @return String containing value for PAGEOF
-	 * @throws Exception
-	 *             generic exception
+	 *
+	 * @throws Exception generic exception
 	 */
 	private String checkForSpecimen(HttpServletRequest request, AliquotForm form, DAO dao)
 			throws Exception
@@ -902,7 +883,7 @@ public class AliquotAction extends SecureAction
 			}
 			this.populateParentSpecimenData(form, specimen);
 
-			form.setSpecimenID("" + specimen.getId());
+			form.setSpecimenID(specimen.getId().toString());
 
 			pageOf = this.checkQuantityPerAliquot(request, form);
 
@@ -938,12 +919,10 @@ public class AliquotAction extends SecureAction
 	 * This method checks whether there are sufficient storage locations are
 	 * available or not.
 	 *
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param containerMap
-	 *            Map containing data for contaner
-	 * @param aliquotCount
-	 *            aliquot count in int
+	 * @param request object of HttpServletRequest
+	 * @param containerMap Map containing data for contaner
+	 * @param aliquotCount aliquot count in int
+	 *
 	 * @return String containing value for PAGEOF
 	 */
 	private String checkForSufficientAvailablePositions(HttpServletRequest request,
@@ -983,19 +962,14 @@ public class AliquotAction extends SecureAction
 	/**
 	 * This method populates parent specimen's data in formbean.
 	 *
-	 * @param form
-	 *            : form
-	 * @param specimen
-	 *            : specimen
-	 * @param bizLogic
-	 *            : bizLogic
-	 * @throws ApplicationException
-	 *             : ApplicationException
+	 * @param form : form
+	 * @param specimen : specimen
+	 *
+	 * @throws ApplicationException : ApplicationException
 	 */
 	private void populateParentSpecimenData(AliquotForm form, Specimen specimen)
 			throws ApplicationException
 	{
-		// SpecimenCharacteristics chars= null;
 		form.setClassName(specimen.getClassName());
 		form.setType(specimen.getSpecimenType());
 		// bug 12954 start
@@ -1010,20 +984,6 @@ public class AliquotAction extends SecureAction
 		form.setPathologicalStatus(specimen.getPathologicalStatus());
 		form.setInitialAvailableQuantity(this.getAvailableQuantity(specimen));
 		form.setAvailableQuantity(this.getAvailableQuantity(specimen));
-		/**
-		 * Name: Virender Mehta Reviewer name: Aarti Sharma Description:
-		 * Resolved Performance Issue For retrive
-		 * specimen.getSpecimenCollectionGroup
-		 * ().getCollectionProtocolRegistration
-		 * ().getCollectionProtocol().getId(), fired hql.
-		 */
-		/*
-		 * String hql = "select scg.id "+
-		 * " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,"
-		 * + " edu.wustl.catissuecore.domain.Specimen as spec " +
-		 * " where spec.specimenCollectionGroup.id=scg.id and spec.id="
-		 * +specimen.getId();
-		 */
 
 		final String hql1 = "select specimen.specimenCollectionGroup.id,"
 				+ "specimen.specimenCollectionGroup."
@@ -1035,14 +995,6 @@ public class AliquotAction extends SecureAction
 		final Object[] obj = (Object[]) scgIdList.get(0);
 		final Object scgId = obj[0];
 		final Object cpID = obj[1];
-		/*
-		 * if(obj!=null) { CollectionProtocol collectionProtocol =
-		 * (CollectionProtocol) obj; cpID = collectionProtocol.getId(); }
-		 */
-		// cpID = (Long)bizLogic.retrieveAttribute(Specimen.class.getName(),
-		// specimen.getId(),
-		// "specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id"
-		// );
 		form.setSpCollectionGroupId(Long.valueOf(scgId.toString()));
 		form.setColProtId(Long.valueOf(cpID.toString()));
 		if (specimen instanceof MolecularSpecimen)
@@ -1056,27 +1008,12 @@ public class AliquotAction extends SecureAction
 	/**
 	 * This method returns the available quantity as per the specimen type.
 	 *
-	 * @param specimen
-	 *            object of Specimen
+	 * @param specimen object of Specimen
+	 *
 	 * @return String containing value for availableQuantity
 	 */
 	private String getAvailableQuantity(Specimen specimen)
 	{
-		/*
-		 * Aniruddha : 17/06/2006 TO BE DELETED LATER String availableQuantity =
-		 * ""; if(specimen instanceof CellSpecimen) { availableQuantity =
-		 * String.
-		 * valueOf(((CellSpecimen)specimen).getAvailableQuantityInCellCount());
-		 * } else if(specimen instanceof FluidSpecimen) { availableQuantity =
-		 * String
-		 * .valueOf(((FluidSpecimen)specimen).getAvailableQuantityInMilliliter
-		 * ()); } else if(specimen instanceof MolecularSpecimen) {
-		 * availableQuantity =String.valueOf(((MolecularSpecimen)specimen).
-		 * getAvailableQuantityInMicrogram()); } else if(specimen instanceof
-		 * TissueSpecimen) { availableQuantity =
-		 * String.valueOf(((TissueSpecimen)
-		 * specimen).getAvailableQuantityInGram()); } return availableQuantity;
-		 */
 		return specimen.getAvailableQuantity().toString();
 	}
 
@@ -1084,13 +1021,13 @@ public class AliquotAction extends SecureAction
 	 * This method distributes the available quantity among the aliquots. On
 	 * successful distribution the function return true else false.
 	 *
-	 * @param form
-	 *            object of AliquotForm
-	 * @param isDouble
-	 *            boolean for isDouble
+	 * @param form object of AliquotForm
+	 * @param isDouble boolean for isDouble
+	 * @param dao the dao
+	 *
 	 * @return boolean value for success
-	 * @throws Exception
-	 *             generic exception
+	 *
+	 * @throws Exception generic exception
 	 */
 	private boolean distributeAvailableQuantity(AliquotForm form, boolean isDouble, DAO dao)
 			throws Exception
@@ -1178,22 +1115,6 @@ public class AliquotAction extends SecureAction
 		}
 
 		final Map aliquotMap = form.getAliquotMap();
-		/**
-		 * Name : Virender Mehta Reviewer: Sachin Lale Description: By getting
-		 * instance of AbstractSpecimenGenerator abstract class current label
-		 * retrived and set.
-		 */
-		// Commented by Falguni -As now label generation is done in Biz logic
-		/*
-		 * SpecimenLabelGenerator abstractSpecimenGenerator =
-		 * SpecimenLabelGeneratorFactory.getInstance(); HashMap inputMap = new
-		 * HashMap(); inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY,
-		 * form.getSpecimenLabel());
-		 * inputMap.put(Constants.PARENT_SPECIMEN_ID_KEY, form.getSpecimenID());
-		 * List<String> aliquotLabels =
-		 * abstractSpecimenGenerator.getNextAvailableAliquotSpecimenlabel
-		 * (inputMap, aliquotCount);
-		 */
 		setAliquotMap(form, dao, aliquotCount, distributedQuantity, aliquotMap);
 
 		form.setAliquotMap(aliquotMap);
@@ -1201,12 +1122,15 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * @param form
-	 * @param dao
-	 * @param aliquotCount
-	 * @param distributedQuantity
-	 * @param aliquotMap
-	 * @throws BizLogicException
+	 * Sets the aliquot map.
+	 *
+	 * @param form the form
+	 * @param dao the dao
+	 * @param aliquotCount the aliquot count
+	 * @param distributedQuantity the distributed quantity
+	 * @param aliquotMap the aliquot map
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	private void setAliquotMap(AliquotForm form, DAO dao, final int aliquotCount,
 			String distributedQuantity, final Map aliquotMap) throws BizLogicException
@@ -1239,10 +1163,8 @@ public class AliquotAction extends SecureAction
 	 * This function populates the availability map with available storage
 	 * locations.
 	 *
-	 * @param form
-	 *            object of AliquotForm
-	 * @param containerMap
-	 *            Map containing data for container
+	 * @param form object of AliquotForm
+	 * @param containerMap Map containing data for container
 	 */
 	private void populateAliquotsStorageLocations(AliquotForm form, Map containerMap)
 	{
@@ -1295,13 +1217,12 @@ public class AliquotAction extends SecureAction
 	/**
 	 * This function checks the quantity per aliquot is valid or not.
 	 *
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param form
-	 *            object of AliquotForm
+	 * @param request object of HttpServletRequest
+	 * @param form object of AliquotForm
+	 *
 	 * @return String containing value for pageOf
-	 * @throws Exception
-	 *             generic exception
+	 *
+	 * @throws Exception generic exception
 	 */
 	private String checkQuantityPerAliquot(HttpServletRequest request, AliquotForm form)
 			throws Exception
@@ -1352,10 +1273,9 @@ public class AliquotAction extends SecureAction
 	/**
 	 * This method validates the formbean.
 	 *
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param form
-	 *            object of AliquotForm
+	 * @param request object of HttpServletRequest
+	 * @param form object of AliquotForm
+	 *
 	 * @return String containing value for pageOf
 	 */
 	private String validate(HttpServletRequest request, AliquotForm form)
@@ -1399,8 +1319,8 @@ public class AliquotAction extends SecureAction
 	 * This method returns the ActionErrors object present in the request scope.
 	 * If it is absent method creates & returns new ActionErrors object.
 	 *
-	 * @param request
-	 *            object of HttpServletRequest
+	 * @param request object of HttpServletRequest
+	 *
 	 * @return ActionErrors
 	 */
 	private ActionErrors getActionErrors(HttpServletRequest request)
@@ -1416,8 +1336,9 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * @param request
-	 *            object of HttpServletRequest
+	 * Sets the parent specimen in request.
+	 *
+	 * @param request object of HttpServletRequest
 	 */
 	/*
 	 * private void setParentSpecimenInRequest(HttpServletRequest request) { Map
@@ -1465,12 +1386,11 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * @param request
-	 *            : request
-	 * @param pageOf
-	 *            : pageOf
-	 * @param form
-	 *            : form
+	 * Sets the page data.
+	 *
+	 * @param request : request
+	 * @param pageOf : pageOf
+	 * @param form : form
 	 */
 	private void setPageData(HttpServletRequest request, String pageOf, AliquotForm form)
 	{
@@ -1547,6 +1467,8 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
+	 * Sets the action to request.
+	 *
 	 * @param request HttpServletRequest instance
 	 * @param CPQuery string
 	 * @param psid string
@@ -1601,6 +1523,8 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
+	 * Sets the label barcode to request.
+	 *
 	 * @param request HttpServletRequest instance
 	 */
 	private void setLabelBarcodeToRequest(HttpServletRequest request)
@@ -1625,10 +1549,9 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * @param request
-	 *            : request
-	 * @param form
-	 *            : form
+	 * Sets the aliquot data.
+	 *
+	 * @param request : request
 	 */
 	private void setAliquotData(HttpServletRequest request)
 	{
@@ -1648,14 +1571,12 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * @param request
-	 *            : request
-	 * @param form
-	 *            : form
-	 * @param psid
-	 *            : psid
-	 * @param cpQuery
-	 *            : cpQuery
+	 * Sets the aliquot beans.
+	 *
+	 * @param request : request
+	 * @param form : form
+	 * @param psid : psid
+	 * @param cpQuery : cpQuery
 	 */
 	private void setAliquotBeans(HttpServletRequest request, AliquotForm form, String psid,
 			String cpQuery)
@@ -1683,10 +1604,10 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * @param request
-	 *            : request
-	 * @param createdDate
-	 *            : createdDate
+	 * Sets the date component data.
+	 *
+	 * @param request : request
+	 * @param createdDate : createdDate
 	 */
 	public void setDateComponentData(HttpServletRequest request, String createdDate)
 	{
@@ -1710,8 +1631,10 @@ public class AliquotAction extends SecureAction
 	}
 
 	/**
-	 * @param form
-	 *            : form
+	 * Gets the object id.
+	 *
+	 * @param form : form
+	 *
 	 * @return String : String
 	 */
 	protected String getObjectId(AbstractActionForm form)

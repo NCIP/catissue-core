@@ -30,29 +30,28 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class SaveSpecimenRequirementAction.
+ *
  * @author renuka_bajpai
  */
 public class SaveSpecimenRequirementAction extends BaseAction
 {
 
-	/**
-	 * logger.
-	 */
+	/** logger. */
 
-	private transient final Logger logger = Logger
+	private static final Logger LOGGER = Logger
 			.getCommonLogger(SaveSpecimenRequirementAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 * @param mapping
-	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
+	 *
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 *
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
@@ -90,22 +89,24 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			}
 			catch (final Exception e)
 			{
-				this.logger.error(e.getMessage(), e);
+				LOGGER.error(e.getMessage(), e);
 				final ActionErrors actionErrors = new ActionErrors();
 				actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e
 						.getMessage()));
 				this.saveErrors(request, actionErrors);
-				return (mapping.findForward(Constants.FAILURE));
+				return mapping.findForward(Constants.FAILURE);
 			}
 		}
-		return (mapping.findForward(Constants.SUCCESS));
+		return mapping.findForward(Constants.SUCCESS);
 	}
 
 	/**
+	 * Creates the specimen bean.
 	 *
 	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
 	 * @param uniqueIdentifier : uniqueIdentifier
 	 * @param totalNoOfSpecimen : totalNoOfSpecimen
+	 *
 	 * @return SpecimenRequirementBean : SpecimenRequirementBean
 	 */
 	private SpecimenRequirementBean createSpecimenBean(
@@ -133,7 +134,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
 		try
 		{
-			if (deriveSpecimenMap != null && deriveSpecimenMap.size() != 0)
+			if (deriveSpecimenMap != null && !deriveSpecimenMap.isEmpty())
 			{
 				deriveSpecimenCollection = parser.generateData(deriveSpecimenMap);
 				deriveSpecimenMap = this.getderiveSpecimen(deriveSpecimenCollection,
@@ -142,8 +143,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		}
 		catch (final Exception e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 
 		specimenRequirementBean.setAliquotSpecimenCollection((LinkedHashMap) aliquotSpecimenMap);
@@ -152,10 +152,12 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	}
 
 	/**
+	 * Creates the specimen.
 	 *
 	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
 	 * @param uniqueIdentifier : uniqueIdentifier
 	 * @param totalNoOfSpecimen : totalNoOfSpecimen
+	 *
 	 * @return SpecimenRequirementBean : SpecimenRequirementBean
 	 */
 	private SpecimenRequirementBean createSpecimen(
@@ -179,22 +181,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setLabelGenTypeForAliquot(createSpecimenTemplateForm.getLabelGenTypeForAliquot());
 		specimenRequirementBean.setLabelFormatForAliquot(createSpecimenTemplateForm.getLabelFormatForAliquot());
 
-		if(createSpecimenTemplateForm.getLabelGenTypeForAliquot() != null && createSpecimenTemplateForm.getLabelGenTypeForAliquot().equals("0"))
-		{
-			createSpecimenTemplateForm.setGenLabelForAliquot(false);
-		}
-		else
-		{
-			createSpecimenTemplateForm.setGenLabelForAliquot(true);
-		}
-		if(createSpecimenTemplateForm.getLabelGenType() != null && createSpecimenTemplateForm.getLabelGenType().equals("0"))
-		{
-			createSpecimenTemplateForm.setGenLabel(false);
-		}
-		else
-		{
-			createSpecimenTemplateForm.setGenLabel(true);
-		}
+		setGenLabelType(createSpecimenTemplateForm);
 		specimenRequirementBean.setGenerateLabel(createSpecimenTemplateForm.isGenLabel());
 		specimenRequirementBean.setQuantityPerAliquot(createSpecimenTemplateForm
 				.getQuantityPerAliquot());
@@ -213,6 +200,33 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	}
 
 	/**
+	 * Sets the gen label type.
+	 *
+	 * @param createSpecimenTemplateForm the create specimen template form
+	 */
+	private void setGenLabelType(CreateSpecimenTemplateForm createSpecimenTemplateForm)
+	{
+		if(createSpecimenTemplateForm.getLabelGenTypeForAliquot() != null && createSpecimenTemplateForm.getLabelGenTypeForAliquot().equals("0"))
+		{
+			createSpecimenTemplateForm.setGenLabelForAliquot(false);
+		}
+		else
+		{
+			createSpecimenTemplateForm.setGenLabelForAliquot(true);
+		}
+		if(createSpecimenTemplateForm.getLabelGenType() != null && createSpecimenTemplateForm.getLabelGenType().equals("0"))
+		{
+			createSpecimenTemplateForm.setGenLabel(false);
+		}
+		else
+		{
+			createSpecimenTemplateForm.setGenLabel(true);
+		}
+	}
+
+	/**
+	 * Sets the session data bean.
+	 *
 	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
 	 * @param specimenRequirementBean : specimenRequirementBean
 	 */
@@ -246,9 +260,11 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	}
 
 	/**
+	 * Gets the aliquots.
 	 *
 	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
 	 * @param uniqueIdentifier : uniqueIdentifier
+	 *
 	 * @return Map : Map
 	 */
 	private Map getAliquots(CreateSpecimenTemplateForm createSpecimenTemplateForm,
@@ -270,12 +286,14 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	}
 
 	/**
+	 * Creates the aliquot.
 	 *
 	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
 	 * @param uniqueIdentifier : uniqueIdentifier
 	 * @param quantityPerAliquot : quantityPerAliquot
 	 * @param iCount : iCount
 	 * @param specimenRequirementBean : specimenRequirementBean
+	 *
 	 * @return String : String
 	 */
 	private String createAliquot(CreateSpecimenTemplateForm createSpecimenTemplateForm,
@@ -316,10 +334,12 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	}
 
 	/**
+	 * Getderive specimen.
 	 *
 	 * @param deriveSpecimenCollection : deriveSpecimenCollection
 	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
 	 * @param uniqueIdentifier : uniqueIdentifier
+	 *
 	 * @return Map : map
 	 */
 	private Map getderiveSpecimen(Collection deriveSpecimenCollection,
@@ -368,9 +388,11 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	}
 
 	/**
+	 * Inits the create specimen template form.
 	 *
 	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
 	 * @param request : request
+	 *
 	 * @throws Exception : Exception
 	 */
 	private void initCreateSpecimenTemplateForm(
@@ -386,18 +408,18 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		if (createSpecimenTemplateForm.getNoOfAliquots() != null
 				&& !createSpecimenTemplateForm.getNoOfAliquots().equals(""))
 		{
-			noOfAliquots = new Integer(createSpecimenTemplateForm.getNoOfAliquots());
+			noOfAliquots = Integer.valueOf(createSpecimenTemplateForm.getNoOfAliquots());
 		}
 		int noOfBeanAliquots = 0;
 		if (specimenRequirementBean.getNoOfAliquots() != null
 				&& !specimenRequirementBean.getNoOfAliquots().equals(""))
 		{
-			noOfBeanAliquots = new Integer(specimenRequirementBean.getNoOfAliquots());
+			noOfBeanAliquots =Integer.valueOf(specimenRequirementBean.getNoOfAliquots());
 		}
 		final int totalNewAliquots = noOfAliquots - noOfBeanAliquots;
 		if (totalNewAliquots < 0)
 		{
-			this.logger.debug("Cannot delete aliquot(s)");
+			LOGGER.debug("Cannot delete aliquot(s)");
 			throw new Exception("Cannot delete aliquot(s)");
 		}
 		LinkedHashMap newAliquotSpecimenMap = specimenRequirementBean
@@ -425,14 +447,14 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setAliquotSpecimenCollection(newAliquotSpecimenMap);
 
 		// Derive
-		final int noOfDeriveSpecimen = new Integer(createSpecimenTemplateForm
+		final int noOfDeriveSpecimen = Integer.valueOf(createSpecimenTemplateForm
 				.getNoOfDeriveSpecimen());
-		final int noOfBeanDerive = new Integer(specimenRequirementBean.getNoOfDeriveSpecimen());
+		final int noOfBeanDerive = Integer.valueOf(specimenRequirementBean.getNoOfDeriveSpecimen());
 		final int totalNewDeriveSpecimen = noOfDeriveSpecimen - noOfBeanDerive;
 		Collection deriveSpecimenCollection = null;
 		Map deriveSpecimenMap = createSpecimenTemplateForm.deriveSpecimenMap();
 		final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.bean");
-		if (deriveSpecimenMap != null && deriveSpecimenMap.size() != 0)
+		if (deriveSpecimenMap != null && !deriveSpecimenMap.isEmpty())
 		{
 			deriveSpecimenCollection = parser.generateData(deriveSpecimenMap);
 			// for ordering
@@ -483,8 +505,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	}
 
 	/**
+	 * Calculate quantity.
 	 *
 	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 *
 	 * @return Double : Double
 	 */
 	private Double calculateQuantity(CreateSpecimenTemplateForm createSpecimenTemplateForm)

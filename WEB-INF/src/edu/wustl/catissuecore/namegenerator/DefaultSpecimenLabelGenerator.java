@@ -7,28 +7,27 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * This  class which contains the default  implementation for Specimen label generation.
- * @author falguni_sachde
  *
+ * @author falguni_sachde
  */
 public class DefaultSpecimenLabelGenerator implements LabelGenerator
 {
 
-	/**
-	 * Current label.
-	 */
-	protected Long currentLabel;
+	/** Current label. */
+	protected transient Long currentLabel;
 
 	/**
 	 * Default Constructor.
+	 *
 	 * @throws ApplicationException Application Exception
 	 */
 	public DefaultSpecimenLabelGenerator() throws ApplicationException
@@ -44,11 +43,12 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 * called then this init function will be called.
 	 * This method will first check the Datatbase Name and then set function name that will convert
 	 * lable from int to String
+	 *
 	 * @throws ApplicationException Application Exception
 	 */
 	protected void init() throws ApplicationException
 	{
-		String databaseConstant = null;
+		String databaseConstant;
 
 		if (Constants.ORACLE_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
 				Constants.APPLICATION_NAME).getDataBaseType()))
@@ -78,6 +78,8 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	}
 
 	/**
+	 * Sets the next available aliquot specimenlabel.
+	 *
 	 * @param parentObject parent object
 	 * @param specimenObject specimen obj
 	 */
@@ -91,26 +93,32 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	}
 
 	/**
+	 * Aliquot count.
+	 *
 	 * @param parentObject parent object
 	 * @param aliquotCount aliquot count
+	 *
 	 * @return aliquotCount
 	 */
 	protected long aliquotCount(AbstractSpecimen parentObject, long aliquotCount)
 	{
+		long count = aliquotCount;
 		final Iterator<AbstractSpecimen> itr = parentObject.getChildSpecimenCollection().iterator();
 		while (itr.hasNext())
 		{
 			final Specimen spec = (Specimen) itr.next();
 			if (spec.getLineage().equals(Constants.DERIVED_SPECIMEN) || spec.getLabel() == null)
 			{
-				aliquotCount--;
+				count--;
 			}
 		}
-		aliquotCount++;
-		return aliquotCount;
+		count++;
+		return count;
 	}
 
 	/**
+	 * Sets the next available derive specimenlabel.
+	 *
 	 * @param parentObject parent obj
 	 * @param specimenObject specimen obj
 	 */
@@ -123,7 +131,10 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 
 	/**
 	 * Setting label.
+	 *
 	 * @param obj Specimen object
+	 *
+	 * @throws LabelGenException the label gen exception
 	 */
 	public synchronized void setLabel(Object obj) throws LabelGenException
 	{
@@ -135,24 +146,12 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 			return;
 		}
 
-		if(objSpecimen.getCollectionStatus() == null || !Constants.COLLECTION_STATUS_COLLECTED.equals(objSpecimen.getCollectionStatus()))
+		if(iscollStatusPending(objSpecimen))
 		{
 			throw new LabelGenException("Specimen status is not "+Constants.COLLECTION_STATUS_COLLECTED);
 		}
 
-		if (objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
-		{
-			this.currentLabel++;
-			objSpecimen.setLabel(this.currentLabel.toString());
-		}
-		else if (objSpecimen.getLineage().equals(Constants.ALIQUOT))
-		{
-			this.setNextAvailableAliquotSpecimenlabel(parentSpecimen, objSpecimen);
-		}
-		else if (objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
-		{
-			this.setNextAvailableDeriveSpecimenlabel(parentSpecimen, objSpecimen);
-		}
+		setSpecimenLabel(objSpecimen, parentSpecimen);
 
 		if (objSpecimen.getChildSpecimenCollection().size() > 0)
 		{
@@ -168,8 +167,46 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	}
 
 	/**
+	 * Iscoll status pending.
+	 *
+	 * @param objSpecimen the obj specimen
+	 *
+	 * @return true, if iscoll status pending
+	 */
+	private boolean iscollStatusPending(final Specimen objSpecimen)
+	{
+		return objSpecimen.getCollectionStatus() == null || !Constants.COLLECTION_STATUS_COLLECTED.equals(objSpecimen.getCollectionStatus());
+	}
+
+	/**
+	 * Sets the specimen label.
+	 *
+	 * @param objSpecimen the obj specimen
+	 * @param parentSpecimen the parent specimen
+	 */
+	private void setSpecimenLabel(final Specimen objSpecimen, final Specimen parentSpecimen)
+	{
+		if (objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
+		{
+			this.currentLabel++;
+			objSpecimen.setLabel(this.currentLabel.toString());
+		}
+		else if (objSpecimen.getLineage().equals(Constants.ALIQUOT))
+		{
+			this.setNextAvailableAliquotSpecimenlabel(parentSpecimen, objSpecimen);
+		}
+		else if (objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
+		{
+			this.setNextAvailableDeriveSpecimenlabel(parentSpecimen, objSpecimen);
+		}
+	}
+
+	/**
 	 * Setting Label.
+	 *
 	 * @param objSpecimenList Specimen object list
+	 *
+	 * @throws LabelGenException the label gen exception
 	 */
 	public synchronized void setLabel(List objSpecimenList) throws LabelGenException
 	{
@@ -185,8 +222,12 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 
 	/**
 	 * Returns label for the given domain object.
+	 *
 	 * @param obj Specimen obj
+	 *
 	 * @return label
+	 *
+	 * @throws LabelGenException the label gen exception
 	 */
 	public String getLabel(Object obj) throws LabelGenException
 	{
@@ -195,10 +236,12 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		return objSpecimen.getLabel();
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.namegenerator.LabelGenerator#setLabel(java.util.Collection)
+	 */
 	public void setLabel(Collection<AbstractDomainObject> object) throws LabelGenException
 	{
 		Iterator<AbstractDomainObject> iterator = object.iterator();
-			SpecimenCollectionGroup scg = null;
 			while (iterator.hasNext())
 			{
 				final Specimen newSpecimen = (Specimen) iterator.next();

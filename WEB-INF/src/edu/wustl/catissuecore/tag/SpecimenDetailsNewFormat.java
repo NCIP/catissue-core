@@ -25,100 +25,174 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
  * This tag will accept the list of specimens and display them in
  * editable or readonly mode.
  * It accepts following attributes:
- * 	columnHeaderListName
- * 	formName
- * 	dataListName
- * 	dataListType
- * 	columnListName
- * 	isReadOnly
- * 	displayColumnListName
+ * columnHeaderListName
+ * formName
+ * dataListName
+ * dataListType
+ * columnListName
+ * isReadOnly
+ * displayColumnListName
  *
  * @author mandar_deshmukh
- *
  */
 public class SpecimenDetailsNewFormat extends TagSupport
 {
 
+	/** The logger. */
 	private transient final Logger logger = Logger.getCommonLogger(SpecimenDetailsNewFormat.class);
+
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1234567890L;
 	// data type list used to display different types of data.
+	/** The data list types. */
 	private transient final String dataListTypes[] = {"Parent", "Aliquot", "Derived"};
 
+	/** The Constant COLUMN_NAMES. */
 	public static final String[] COLUMN_NAMES = {"Parent", "Label", "Barcode", "Type", "Quantity",
 			"Concentration", "Location", "Collected", "PrintLabel"};
 
+	/** The Constant COLUMN_LABELS. */
 	public static final String[] COLUMN_LABELS = {"specimen.label", "specimen.barcode",
 			"specimen.subType", "anticipatorySpecimen.Quantity",
 			"anticipatorySpecimen.Concentration", "anticipatorySpecimen.Location",
 			"anticipatorySpecimen.Collected", "specimen.printLabel"};
 
 	// ----------- Mandar : 2Dec08 for New UI format start -----------------------------
+	/** The Constant HDR1_COLS. */
 	public static final String[] HDR1_COLS = {"Parent", "Label", "Barcode", "Type", "Quantity",
 			"Concentration", "Location", "Collected", "PrintLabel"};
+
+	/** The Constant HDR2_COLS. */
 	public static final String[] HDR2_COLS = {"Type", "Pathological Status", "Tissue Side",
 			"Tissue Site"};
 
+	/** The Constant H1COL_LBLS. */
 	public static final String[] H1COL_LBLS = {"specimen.label", "specimen.barcode",
 			"specimen.subType", "anticipatorySpecimen.Quantity",
 			"anticipatorySpecimen.Concentration", "anticipatorySpecimen.Location",
 			"anticipatorySpecimen.Collected", "specimen.printLabel"};
 
+	/** The Constant H2COL_LBLS. */
 	public static final String[] H2COL_LBLS = {"specimen.subType", "specimen.pathologicalStatus",
 			"specimen.tissueSide", "specimen.tissueSite"};
 
 	// ----------- Mandar : 2Dec08 for New UI format end -------------------------------
 
+	/** The Constant TR_OPEN. */
 	private static transient final String TR_OPEN = "<TR>";
+
+	/** The Constant TR_CLOSE. */
 	private static transient final String TR_CLOSE = "</TR>";
+
+	/** The Constant TD_OPEN. */
 	private static transient final String TD_OPEN = "<TD>";
+
+	/** The Constant TD_CLOSE. */
 	private static transient final String TD_CLOSE = "</TD>";
+
+	/** The Constant STYLE_CLASS. */
 	private static transient final String STYLE_CLASS = "black_ar";
+
+	/** The Constant SPACE. */
 	private static transient final String SPACE = "&nbsp;";
+
+	/** The Constant TR_GRAY. */
 	private static transient final String TR_GRAY = "<TR class='tr_anti_bg_gray'>";
+
+	/** The Constant TR_BLUE. */
 	private static transient final String TR_BLUE = "<TR class='tr_anti_bg_blue'>";
+
+	/** The Constant TD_1HLF. */
 	private static transient final String TD_1HLF = "<TD width='";
+
+	/** The Constant TD_2HLF. */
 	private static transient final String TD_2HLF = "%'>";
 
 	//--------------- TAG Attribute Section start [Will be provided by the user of the tag thru the TAG.]------------
+	/** The display column list name. */
 	private String displayColumnListName = "";
+
+	/** The column header list name. */
 	private String columnHeaderListName = "";
+
+	/** The data list name. */
 	private String dataListName = "";
+
+	/** The is read only. */
 	private String isReadOnly = ""; // ------- as decided
+
+	/** The form name. */
 	private String formName = "";
+
+	/** The data list type. */
 	private String dataListType = "";
+
+	/** The column list name. */
 	private String columnListName = "";
 	//--------------- TAG Attribute Section end ------------
 
 	//---------------  Attribute Section start ------------
+	/** The column list. */
 	private transient List columnList = null; // List containing column names
 
+	/** The column header list. */
 	private transient List columnHeaderList = null;
+
+	/** The display column list. */
 	private transient List displayColumnList = null; // List of columns to show. If name not present hide the column.
+
+	/** The data list. */
 	private transient List dataList = null;
+
+	/** The show parent id. */
 	private transient boolean showParentId = false;
+
+	/** The element prefix part1. */
 	private String elementPrefixPart1 = "";
+
+	/** The function call. */
 	private transient String functionCall = "";
 
+	/** The xtra. */
 	private transient int xtra = 0;
+
+	/** The col num. */
 	private transient int colNum = 0;
+
+	/** The is parent list. */
 	private transient boolean isParentList = false;
+
+	/** The p wd. */
 	private transient int pWd = 10;
+
+	/** The c wd. */
 	private transient int cWd = 10;
+
+	/** The specimen summary form. */
 	SpecimenDetailsInfo specimenSummaryForm = null;
 
+	/** The generate label. */
 	private boolean generateLabel;
 
+	/** The display name. */
 	private String displayName;
 
+	/** The parent name. */
 	private String parentName;
 	//	--------------- Attribute Section end ------------
 
 
 
+	/**
+	 * Gets the display name.
+	 *
+	 * @return the display name
+	 */
 	public String getDisplayName()
 	{
 		return displayName;
@@ -126,89 +200,174 @@ public class SpecimenDetailsNewFormat extends TagSupport
 
 
 
+	/**
+	 * Sets the display name.
+	 *
+	 * @param displayName the new display name
+	 */
 	public void setDisplayName(String displayName)
 	{
 		this.displayName = displayName;
 	}
 
 
+	/**
+	 * Checks if is generate label.
+	 *
+	 * @return true, if is generate label
+	 */
 	public boolean isGenerateLabel()
 	{
 		return generateLabel;
 	}
 
 
+	/**
+	 * Sets the generate label.
+	 *
+	 * @param generateLabel the new generate label
+	 */
 	public void setGenerateLabel(boolean generateLabel)
 	{
 		this.generateLabel = generateLabel;
 	}
 
 	// ------------------Getter - Setter Section start ---------
+	/**
+	 * Gets the column header list name.
+	 *
+	 * @return the column header list name
+	 */
 	public String getColumnHeaderListName()
 	{
 		return this.columnHeaderListName;
 	}
 
+	/**
+	 * Sets the column header list name.
+	 *
+	 * @param columnHeaderListName the new column header list name
+	 */
 	public void setColumnHeaderListName(String columnHeaderListName)
 	{
 		this.columnHeaderListName = columnHeaderListName;
 	}
 
+	/**
+	 * Gets the data list name.
+	 *
+	 * @return the data list name
+	 */
 	public String getDataListName()
 	{
 		return this.dataListName;
 	}
 
+	/**
+	 * Sets the data list name.
+	 *
+	 * @param dataListName the new data list name
+	 */
 	public void setDataListName(String dataListName)
 	{
 		this.dataListName = dataListName;
 	}
 
+	/**
+	 * Gets the display column list name.
+	 *
+	 * @return the display column list name
+	 */
 	public String getDisplayColumnListName()
 	{
 		return this.displayColumnListName;
 	}
 
+	/**
+	 * Sets the display column list name.
+	 *
+	 * @param displayColumnListName the new display column list name
+	 */
 	public void setDisplayColumnListName(String displayColumnListName)
 	{
 		this.displayColumnListName = displayColumnListName;
 	}
 
+	/**
+	 * Gets the checks if is read only.
+	 *
+	 * @return the checks if is read only
+	 */
 	public String getIsReadOnly()
 	{
 		return this.isReadOnly;
 	}
 
+	/**
+	 * Sets the checks if is read only.
+	 *
+	 * @param isReadOnly the new checks if is read only
+	 */
 	public void setIsReadOnly(String isReadOnly)
 	{
 		this.isReadOnly = isReadOnly;
 	}
 
+	/**
+	 * Gets the form name.
+	 *
+	 * @return the form name
+	 */
 	public String getFormName()
 	{
 		return this.formName;
 	}
 
+	/**
+	 * Sets the form name.
+	 *
+	 * @param formName the new form name
+	 */
 	public void setFormName(String formName)
 	{
 		this.formName = formName;
 	}
 
+	/**
+	 * Gets the data list type.
+	 *
+	 * @return the data list type
+	 */
 	public String getDataListType()
 	{
 		return this.dataListType;
 	}
 
+	/**
+	 * Sets the data list type.
+	 *
+	 * @param dataListType the new data list type
+	 */
 	public void setDataListType(String dataListType)
 	{
 		this.dataListType = dataListType;
 	}
 
+	/**
+	 * Gets the column list name.
+	 *
+	 * @return the column list name
+	 */
 	public String getColumnListName()
 	{
 		return this.columnListName;
 	}
 
+	/**
+	 * Sets the column list name.
+	 *
+	 * @param columnListName the new column list name
+	 */
 	public void setColumnListName(String columnListName)
 	{
 		this.columnListName = columnListName;
@@ -219,6 +378,10 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	/**
 	 * A call back function, which gets executed by JSP runtime when opening tag for this
 	 * custom tag is encountered.
+	 *
+	 * @return the int
+	 *
+	 * @throws JspException the jsp exception
 	 */
 	public int doStartTag() throws JspException
 	{
@@ -259,7 +422,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	}
 
 	/**
-	 * A call back function
+	 * A call back function.
+	 *
+	 * @return the int
+	 *
+	 * @throws JspException the jsp exception
 	 */
 	public int doEndTag() throws JspException
 	{
@@ -287,6 +454,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 
 	/* method to validate the given values for the attributes.
 	 * Returns true if all required attributes are in proper valid format. Otherwise returns false.
+	 */
+	/**
+	 * Validate tag attributes.
+	 *
+	 * @return true, if successful
 	 */
 	private boolean validateTagAttributes()
 	{
@@ -343,6 +515,9 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		return result;
 	}
 
+	/**
+	 * Initialise elements.
+	 */
 	private void initialiseElements()
 	{
 		final ServletRequest request = this.pageContext.getRequest();
@@ -394,6 +569,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		}
 	}
 
+	/**
+	 * Checks if is list data type ok.
+	 *
+	 * @return true, if is list data type ok
+	 */
 	private boolean isListDataTypeOK()
 	{
 		boolean result = false;
@@ -417,6 +597,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		return result;
 	}
 
+	/**
+	 * Gets the data list.
+	 *
+	 * @return the data list
+	 */
 	private List getDataList()
 	{
 		List lst = new ArrayList();
@@ -459,6 +644,13 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		return lst;
 	}
 
+	/**
+	 * Gets the formatted value.
+	 *
+	 * @param obj the obj
+	 *
+	 * @return the formatted value
+	 */
 	private String getFormattedValue(Object obj)
 	{
 		String str = "";
@@ -473,12 +665,24 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		return str;
 	}
 
+	/**
+	 * Gets the hTML formatted value.
+	 *
+	 * @param obj the obj
+	 *
+	 * @return the hTML formatted value
+	 */
 	private String getHTMLFormattedValue(Object obj)
 	{
 		final String str = this.getFormattedValue(obj);
 		return (str.trim().length() > 0 ? str : SPACE);
 	}
 
+	/**
+	 * Validate lists.
+	 *
+	 * @return true, if successful
+	 */
 	private boolean validateLists()
 	{
 		boolean result = true;
@@ -498,6 +702,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		return result;
 	}
 
+	/**
+	 * Sets the fixed columns list.
+	 *
+	 * @param list the new fixed columns list
+	 */
 	private void setFixedColumnsList(List list)
 	{
 		if (list == null)
@@ -512,6 +721,13 @@ public class SpecimenDetailsNewFormat extends TagSupport
 
 	/*
 	 * Method to generate row output for generic specimen
+	 */
+	/**
+	 * Generate row output.
+	 *
+	 * @return the string
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	private String generateRowOutput() throws IOException
 	{
@@ -549,6 +765,14 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		return stringBuffer.toString();
 	}
 
+	/**
+	 * Adds the editable row.
+	 *
+	 * @param stringBuffer the string buffer
+	 * @param counter the counter
+	 * @param specimen the specimen
+	 * @param isTextRow the is text row
+	 */
 	private void addEditableRow(StringBuffer stringBuffer,
 			int counter, GenericSpecimen specimen,
 			boolean isTextRow)
@@ -592,6 +816,14 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	}
 
 	// ------------ Mandar : 2Dec08 New Code for new formatUI start----------------
+	/**
+	 * Creates the parent component.
+	 *
+	 * @param stringBuffer the string buffer
+	 * @param specimen the specimen
+	 * @param elementNamePrefix the element name prefix
+	 * @param isTextRow the is text row
+	 */
 	private void createParentComponent(StringBuffer stringBuffer,
 			GenericSpecimen specimen,
 			String elementNamePrefix, boolean isTextRow)
@@ -618,6 +850,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		stringBuffer.append(TD_CLOSE);
 	}
 
+	/**
+	 * Creates the parent radio component.
+	 *
+	 * @param stringBufffer the string bufffer
+	 * @param nameValue the name value
+	 */
 	private void createParentRadioComponent(StringBuffer stringBufffer,
 			String[] nameValue)
 	{
@@ -635,6 +873,14 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		//		 sb.append(TD_CLOSE);
 	}
 
+	/**
+	 * Creates the text component.
+	 *
+	 * @param stringBuffer the string buffer
+	 * @param nameValue the name value
+	 * @param styleClass the style class
+	 * @param size the size
+	 */
 	private void createTextComponent(StringBuffer stringBuffer,
 			String[] nameValue, String styleClass,
 			int size)
@@ -675,6 +921,13 @@ public class SpecimenDetailsNewFormat extends TagSupport
 
 	}
 
+	/**
+	 * Creates the header row1.
+	 *
+	 * @param stringBuffer the string buffer
+	 * @param string the string
+	 * @param specimen the specimen
+	 */
 	private void createHeaderRow1(StringBuffer stringBuffer,
 			String string, GenericSpecimen specimen)
 	{
@@ -789,6 +1042,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		stringBuffer.append(TR_CLOSE);
 	}
 
+	/**
+	 * Creates the header row2.
+	 *
+	 * @param stringBuffer the string buffer
+	 */
 	private void createHeaderRow2(StringBuffer stringBuffer)
 	{
 		String colspan = "";
@@ -828,6 +1086,15 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		stringBuffer.append(TR_CLOSE);
 	}
 
+	/**
+	 * Gets the 1 ele det at.
+	 *
+	 * @param counter the counter
+	 * @param specimen the specimen
+	 * @param elementNamePrefix the element name prefix
+	 *
+	 * @return the 1 ele det at
+	 */
 	private String[] get1EleDetAt(int counter, GenericSpecimen specimen, String elementNamePrefix)
 	{
 		String str[] = new String[2];
@@ -909,6 +1176,15 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		return str;
 	}
 
+	/**
+	 * Gets the 2 ele det at.
+	 *
+	 * @param counter the counter
+	 * @param specimen the specimen
+	 * @param elementNamePrefix the element name prefix
+	 *
+	 * @return the 2 ele det at
+	 */
 	private String[] get2EleDetAt(int counter, GenericSpecimen specimen, String elementNamePrefix)
 	{
 		final String str[] = new String[2];
@@ -936,8 +1212,18 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		return str;
 	}
 
+	/** The sizes. */
 	private final int[] sizes = {8, 8, 8, 8, 8, 5, 8, 8, 8, 8};
 
+	/**
+	 * Creates the field row.
+	 *
+	 * @param stringBuffer the string buffer
+	 * @param counter the counter
+	 * @param specimen the specimen
+	 * @param elementNamePrefix the element name prefix
+	 * @param isTextRow the is text row
+	 */
 	private void createFieldRow(StringBuffer stringBuffer,
 			int counter, GenericSpecimen specimen,
 			String elementNamePrefix, boolean isTextRow)
@@ -1086,6 +1372,13 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		stringBuffer.append(TR_CLOSE);
 	}
 
+	/**
+	 * Creates the new storage component.
+	 *
+	 * @param stringBuffer the string buffer
+	 * @param nameValue the name value
+	 * @param specimen the specimen
+	 */
 	private void createNewStorageComponent(StringBuffer stringBuffer,
 			String[] nameValue, GenericSpecimen specimen)
 	{
@@ -1176,6 +1469,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		stringBuffer.append("</table>");
 	}
 
+	/**
+	 * Creates the print component.
+	 *
+	 * @param stringBuffer the string buffer
+	 * @param nameValue the name value
+	 */
 	private void createPrintComponent(StringBuffer stringBuffer, String[] nameValue)
 	{
 		if (this.specimenSummaryForm.getShowCheckBoxes())
@@ -1197,6 +1496,13 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		}
 	}
 
+	/**
+	 * Creates the collected component.
+	 *
+	 * @param stringBuffer the string buffer
+	 * @param nameValue the name value
+	 * @param isTextRow the is text row
+	 */
 	private void createCollectedComponent(StringBuffer stringBuffer,
 			String[] nameValue, boolean isTextRow)
 	{
@@ -1233,6 +1539,14 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	}
 
 	// Mandar : 4Dec08
+	/**
+	 * Creates the text field row.
+	 *
+	 * @param stringBuffer the string buffer
+	 * @param counter the counter
+	 * @param specimen the specimen
+	 * @param elementNamePrefix the element name prefix
+	 */
 	private void createTextFieldRow(StringBuffer stringBuffer,
 			int counter, GenericSpecimen specimen,
 			String elementNamePrefix)
@@ -1278,6 +1592,14 @@ public class SpecimenDetailsNewFormat extends TagSupport
 
 	}
 
+	/**
+	 * Adds the remaining specimen elements.
+	 *
+	 * @param stringBuffer the string buffer
+	 * @param elementNamePrefix the element name prefix
+	 * @param specimen the specimen
+	 * @param isTextRow the is text row
+	 */
 	private void addRemainingSpecimenElements(StringBuffer stringBuffer, String elementNamePrefix,
 			GenericSpecimen specimen, boolean isTextRow)
 	{
@@ -1325,6 +1647,14 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		}
 	}
 
+	/**
+	 * Gets the remaining specimen elements data.
+	 *
+	 * @param specimen the specimen
+	 * @param elementNamePrefix the element name prefix
+	 *
+	 * @return the remaining specimen elements data
+	 */
 	private String[][] getRemainingSpecimenElementsData(GenericSpecimen specimen,
 			String elementNamePrefix)
 	{
@@ -1368,6 +1698,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		return str;
 	}
 
+	/**
+	 * Creates the hidden element.
+	 *
+	 * @param stringBuffer the string buffer
+	 * @param nameValue the name value
+	 */
 	private void createHiddenElement(StringBuffer stringBuffer,
 			String[] nameValue)
 	{

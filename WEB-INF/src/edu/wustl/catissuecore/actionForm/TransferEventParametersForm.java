@@ -1,7 +1,7 @@
 /**
  * <p>Title: TransferEventParametersForm Class</p>
  * <p>Description:  This Class handles the Transfer Event Parameters.
- * <p> It extends the EventParametersForm class.    
+ * <p> It extends the EventParametersForm class.
  * Copyright:    Copyright (c) 2005
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -25,84 +25,72 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class TransferEventParametersForm.
+ *
  * @author mandar_deshmukh
  *
- *  This Class handles the Transfer Event Parameters.
+ * This Class handles the Transfer Event Parameters.
  */
 public class TransferEventParametersForm extends SpecimenEventParametersForm
 {
 
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * logger Logger - Generic logger.
-	 */
+	/** logger Logger - Generic logger. */
 	private static Logger logger = Logger.getCommonLogger(TransferEventParametersForm.class);
-	/**
-	 * Reference to dimensional position one of the specimen in previous storage container before transfer.
-	 */
+
+	/** Reference to dimensional position one of the specimen in previous storage container before transfer. */
 	protected int fromPositionDimensionOne;
 
-	/**
-	 * Reference to dimensional position two of the specimen in previous storage container before transfer.
-	 */
+	/** Reference to dimensional position two of the specimen in previous storage container before transfer. */
 	protected int fromPositionDimensionTwo;
 
-	/**
-	 * Reference to dimensional position one of the specimen in new storage container after transfer.
-	 */
+	/** Reference to dimensional position one of the specimen in new storage container after transfer. */
 	protected String positionDimensionOne;
 
-	/**
-	 * Reference to dimensional position two of the specimen in new storage container after transfer.
-	 */
+	/** Reference to dimensional position two of the specimen in new storage container after transfer. */
 	protected String positionDimensionTwo;
 
-	/**
-	 * Storage Container to which the transfer is made. 
-	 */
+	/** Storage Container to which the transfer is made. */
 	protected String storageContainer;
 
-	/**
-	 * Storage Container from which the transfer is made.
-	 */
+	/** Storage Container from which the transfer is made. */
 	protected long fromStorageContainerId;
 
 	/*
-	 * Used for getting the TO and FROM Positions from the JSP 
+	 * Used for getting the TO and FROM Positions from the JSP
 	 */
+	/** The from position. */
 	protected String fromPosition;
 
+	/** The position in storage container. */
 	protected String positionInStorageContainer;
 
-	/**
-	 *  Radio button to choose dropdown or map to select storage container.
-	 */
+	/** Radio button to choose dropdown or map to select storage container. */
 	private int stContSelection = 1;
-	/**
-	 * Storage container name selected from map
-	 */
+
+	/** Storage container name selected from map. */
 	private String selectedContainerName;
-	/**
-	 * Storage pos1 selected from map
-	 */
+
+	/** Storage pos1 selected from map. */
 	private String pos1;
-	/**
-	 * Storage pos2 selected from map
-	 */
+
+	/** Storage pos2 selected from map. */
 	private String pos2;
-	/**
-	 * Storage Id selected from map
-	 */
+
+	/** Storage Id selected from map. */
 	protected String fromPositionData;
+
+	/** The container id. */
 	private String containerId;
 
 	/**
-	
-
-	/**
+	 * /**
 	 * Returns the Reference to dimensional position one of the specimen in previous storage container before transfer.
+	 *
 	 * @return fromPositionDimensionOne.
 	 */
 	public int getFromPositionDimensionOne()
@@ -111,9 +99,9 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-	 * Sets the fromPositionDimensionOne. 
-	 * @param fromPositionDimensionOne
-	 * Reference to dimensional position one of the specimen in previous storage container before transfer.
+	 * Sets the fromPositionDimensionOne.
+	 *
+	 * @param fromPositionDimensionOne Reference to dimensional position one of the specimen in previous storage container before transfer.
 	 */
 	public void setFromPositionDimensionOne(int fromPositionDimensionOne)
 	{
@@ -122,6 +110,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 
 	/**
 	 * Returns the Reference to dimensional position two of the specimen in previous storage container before transfer.
+	 *
 	 * @return fromPositionDimensionTwo.
 	 */
 	public int getFromPositionDimensionTwo()
@@ -130,10 +119,9 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-	 * Sets the fromPositionDimensionTwo. 
-	 * 
-	 * @param fromPositionDimensionTwo
-	 * Reference to dimensional position two of the specimen in previous storage container before transfer.
+	 * Sets the fromPositionDimensionTwo.
+	 *
+	 * @param fromPositionDimensionTwo Reference to dimensional position two of the specimen in previous storage container before transfer.
 	 */
 	public void setFromPositionDimensionTwo(int fromPositionDimensionTwo)
 	{
@@ -142,6 +130,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 
 	/**
 	 * Returns the Reference to dimensional position one of the specimen in new storage container after transfer.
+	 *
 	 * @return toPositionDimensionOne.
 	 */
 	public String getPositionDimensionOne()
@@ -150,9 +139,9 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-	 * Sets the toPositionDimensionOne. 
-	 * @param toPositionDimensionOne
-	 * Reference to dimensional position one of the specimen in new storage container after transfer.
+	 * Sets the toPositionDimensionOne.
+	 *
+	 * @param toPositionDimensionOne Reference to dimensional position one of the specimen in new storage container after transfer.
 	 */
 	public void setPositionDimensionOne(String toPositionDimensionOne)
 	{
@@ -161,6 +150,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 
 	/**
 	 * Returns the Reference to dimensional position two of the specimen in new storage container after transfer.
+	 *
 	 * @return toPositionDimensionTwo.
 	 */
 	public String getPositionDimensionTwo()
@@ -169,9 +159,9 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-	 * Sets the toPositionDimensionTwo. 
-	 * @param toPositionDimensionTwo
-	 * Reference to dimensional position two of the specimen in new storage container after transfer.
+	 * Sets the toPositionDimensionTwo.
+	 *
+	 * @param toPositionDimensionTwo Reference to dimensional position two of the specimen in new storage container after transfer.
 	 */
 	public void setPositionDimensionTwo(String toPositionDimensionTwo)
 	{
@@ -179,8 +169,9 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-	 * Returns the new StorageContainer.  
-	 * @return the new StorageContainer. 
+	 * Returns the new StorageContainer.
+	 *
+	 * @return the new StorageContainer.
 	 */
 	public String getStorageContainer()
 	{
@@ -188,8 +179,9 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-	 * @param toStorageContainerId
-	 *            The to StorageContainerId to set.
+	 * Sets the storage container.
+	 *
+	 * @param toStorageContainerId The to StorageContainerId to set.
 	 */
 	public void setStorageContainer(String toStorageContainerId)
 	{
@@ -197,8 +189,9 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-	 * Returns the old StorageContainer. 
-	 * @return the old StorageContainer. 
+	 * Returns the old StorageContainer.
+	 *
+	 * @return the old StorageContainer.
 	 */
 	public long getFromStorageContainerId()
 	{
@@ -207,7 +200,9 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-	 * @param fromStorageContainer The from StorageContainer to set.
+	 * Sets the from storage container id.
+	 *
+	 * @param fromStorageContainerId the from storage container id
 	 */
 	public void setFromStorageContainerId(long fromStorageContainerId)
 	{
@@ -216,6 +211,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 
 	//	 ----- SUPERCLASS METHODS
 	/**
+	 * Gets the form id.
+	 *
 	 * @return TRANSFER_EVENT_PARAMETERS_FORM_ID
 	 */
 	@Override
@@ -226,7 +223,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 
 	/**
 	 * Populates all the fields from the domain object to the form bean.
-	 * @param abstractDomain An AbstractDomain Object  
+	 *
+	 * @param abstractDomain An AbstractDomain Object
 	 */
 	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
@@ -293,9 +291,11 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 
 	/**
 	 * Overrides the validate method of ActionForm.
-	 * @return error ActionErrors instance
+	 *
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
+	 *
+	 * @return error ActionErrors instance
 	 */
 	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
@@ -372,6 +372,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
+	 * Gets the from position.
+	 *
 	 * @return Returns the fromPosition.
 	 */
 	public String getFromPosition()
@@ -380,6 +382,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
+	 * Sets the from position.
+	 *
 	 * @param fromPosition The fromPosition to set.
 	 */
 	public void setFromPosition(String fromPosition)
@@ -388,6 +392,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
+	 * Gets the position in storage container.
+	 *
 	 * @return Returns the toPosition.
 	 */
 	public String getPositionInStorageContainer()
@@ -396,6 +402,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
+	 * Sets the position in storage container.
+	 *
 	 * @param toPosition The toPosition to set.
 	 */
 	public void setPositionInStorageContainer(String toPosition)
@@ -404,6 +412,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
+	 * Gets the container id.
+	 *
 	 * @return Returns the containerId.
 	 */
 	public String getContainerId()
@@ -412,14 +422,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-	 * @param containerId The containerId to set.
-	 */
-	public void setContainerId(String containerId)
-	{
-		this.containerId = containerId;
-	}
-
-	/**
+	 * Gets the pos1.
+	 *
 	 * @return Returns the pos1.
 	 */
 	public String getPos1()
@@ -428,14 +432,18 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-	 * @param pos1 The pos1 to set.
+	 * Sets the container id.
+	 *
+	 * @param containerId The containerId to set.
 	 */
-	public void setPos1(String pos1)
+	public void setContainerId(String containerId)
 	{
-		this.pos1 = pos1;
+		this.containerId = containerId;
 	}
 
 	/**
+	 * Gets the pos2.
+	 *
 	 * @return Returns the pos2.
 	 */
 	public String getPos2()
@@ -444,6 +452,20 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
+	 * Sets the pos1.
+	 *
+	 * @param pos1 The pos1 to set.
+	 */
+	public void setPos1(String pos1)
+	{
+		this.pos1 = pos1;
+	}
+
+
+
+	/**
+	 * Sets the pos2.
+	 *
 	 * @param pos2 The pos2 to set.
 	 */
 	public void setPos2(String pos2)
@@ -451,15 +473,11 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		this.pos2 = pos2;
 	}
 
-	/**
-	 * @return Returns the selectedContainerName.
-	 */
-	public String getSelectedContainerName()
-	{
-		return this.selectedContainerName;
-	}
+
 
 	/**
+	 * Sets the selected container name.
+	 *
 	 * @param selectedContainerName The selectedContainerName to set.
 	 */
 	public void setSelectedContainerName(String selectedContainerName)
@@ -468,14 +486,19 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-	 * @return Returns the stContSelection.
+	 * Gets the selected container name.
+	 *
+	 * @return Returns the selectedContainerName.
 	 */
-	public int getStContSelection()
+	public String getSelectedContainerName()
 	{
-		return this.stContSelection;
+		return this.selectedContainerName;
 	}
 
+
 	/**
+	 * Sets the st cont selection.
+	 *
 	 * @param stContSelection The stContSelection to set.
 	 */
 	public void setStContSelection(int stContSelection)
@@ -483,20 +506,43 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		this.stContSelection = stContSelection;
 	}
 
+	/**
+	 * Gets the from position data.
+	 *
+	 * @return the from position data
+	 */
 	public String getFromPositionData()
 	{
 		return this.fromPositionData;
 	}
 
+	/**
+	 * Sets the from position data.
+	 *
+	 * @param fromPositionData the new from position data
+	 */
 	public void setFromPositionData(String fromPositionData)
 	{
 		this.fromPositionData = fromPositionData;
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAddNewObjectIdentifier(java.lang.String, java.lang.Long)
+	 */
 	@Override
 	public void setAddNewObjectIdentifier(String arg0, Long arg1)
 	{
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * Gets the st cont selection.
+	 *
+	 * @return Returns the stContSelection.
+	 */
+	public int getStContSelection()
+	{
+		return this.stContSelection;
 	}
 }

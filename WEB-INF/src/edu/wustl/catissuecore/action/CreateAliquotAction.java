@@ -52,31 +52,29 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class CreateAliquotAction.
+ *
  * @author virender_mehta
  */
 public class CreateAliquotAction extends BaseAction
 {
 
-	/**
-	 * logger.
-	 */
-	private transient final Logger logger = Logger.getCommonLogger(CreateAliquotAction.class);
+	/** logger. */
+	private static final Logger LOGGER = Logger.getCommonLogger(CreateAliquotAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
-	 * @param mapping
-	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
-	 * @throws Exception
-	 *             generic exception
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 *
 	 * @return ActionForward : ActionForward
+	 *
+	 * @throws Exception generic exception
 	 */
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
@@ -85,21 +83,15 @@ public class CreateAliquotAction extends BaseAction
 		final AliquotForm aliquotForm = (AliquotForm) form;
 		boolean insertAliquotSpecimen = true;
 		Collection<AbstractDomainObject> specimenCollection = null;
-		//List<AbstractDomainObject> specimenList = null;
-		//final String fromPrintAction = request.getParameter(Constants.FROM_PRINT_ACTION);
-		//final SessionDataBean sessionDataBean = this.getSessionData(request);
-		// Create SpecimenCollectionGroup Object
 		final SpecimenCollectionGroup scg = this.createSCG(aliquotForm);
-		// Create ParentSpecimen Object
 		final Specimen parentSpecimen = this.createParentSpecimen(aliquotForm);
-		// Create Specimen Map
 		try
 		{
 			specimenCollection = this.createAliquotDomainObject(aliquotForm, scg, parentSpecimen);
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 			final ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e
 					.getMessage()));
@@ -117,17 +109,7 @@ public class CreateAliquotAction extends BaseAction
 		specimenList.addAll(specimenCollection);
 		if(insertAliquotSpecimen)
 		{
-			final Specimen specimen = (Specimen) specimenList.get(0);
-			request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimen.getId().toString());
-			if (specimen != null)
-			{
-				aliquotForm.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
-				aliquotForm.setScgName(specimen.getSpecimenCollectionGroup().getGroupName());
-			}
-			this.calculateAvailableQuantityForParent(specimenList, aliquotForm);
-			this.updateParentSpecimen(parentSpecimen,
-			Double.parseDouble(aliquotForm.getAvailableQuantity()));
-			aliquotForm.setSpecimenList(specimenList);
+			setAliquotform(request, aliquotForm, parentSpecimen, specimenList);
 		}
 		final String fromPrintAction = request.getParameter(Constants.FROM_PRINT_ACTION);
 		// mapping.findforward
@@ -136,21 +118,45 @@ public class CreateAliquotAction extends BaseAction
 	}
 
 	/**
-	 * @param mapping
-	 *            : mapping
-	 * @param request
-	 *            : request
-	 * @param aliquotForm
-	 *            : aliquotForm
-	 * @param fromPrintAction
-	 *            : fromPrintAction
-	 * @param insertAliquotSpecimen
-	 *            : insertAliquotSpecimen
-	 * @param specimenList
-	 *            : specimenList
+	 * Sets the aliquotform.
+	 *
+	 * @param request the request
+	 * @param aliquotForm the aliquot form
+	 * @param parentSpecimen the parent specimen
+	 * @param specimenList the specimen list
+	 *
+	 * @throws Exception the exception
+	 */
+	private void setAliquotform(HttpServletRequest request, final AliquotForm aliquotForm,
+			final Specimen parentSpecimen, List<AbstractDomainObject> specimenList)
+			throws Exception
+	{
+		final Specimen specimen = (Specimen) specimenList.get(0);
+		request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimen.getId().toString());
+		if (specimen != null)
+		{
+			aliquotForm.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getId());
+			aliquotForm.setScgName(specimen.getSpecimenCollectionGroup().getGroupName());
+		}
+		this.calculateAvailableQuantityForParent(specimenList, aliquotForm);
+		this.updateParentSpecimen(parentSpecimen,
+		Double.parseDouble(aliquotForm.getAvailableQuantity()));
+		aliquotForm.setSpecimenList(specimenList);
+	}
+
+	/**
+	 * Gets the find forward.
+	 *
+	 * @param mapping : mapping
+	 * @param request : request
+	 * @param aliquotForm : aliquotForm
+	 * @param fromPrintAction : fromPrintAction
+	 * @param insertAliquotSpecimen : insertAliquotSpecimen
+	 * @param specimenList : specimenList
+	 *
 	 * @return ActionForward : ActionForward
-	 * @throws Exception
-	 *             : Exception
+	 *
+	 * @throws Exception : Exception
 	 */
 	private ActionForward getFindForward(ActionMapping mapping, HttpServletRequest request,
 			AliquotForm aliquotForm, String fromPrintAction, boolean insertAliquotSpecimen,
@@ -161,7 +167,7 @@ public class CreateAliquotAction extends BaseAction
 			SpecimenCollectionGroup scg = null;
 			String hql = "from edu.wustl.catissuecore.domain.SpecimenCollectionGroup scg where scg.id="+aliquotForm.getSpCollectionGroupId();
 			List scgList = AppUtility.executeQuery(hql);
-			if(scgList!=null && !scgList.isEmpty())
+			if(isSpecimenListEmpty(scgList))
 			{
 				scg = (SpecimenCollectionGroup)scgList.get(0) ;
 			}
@@ -207,15 +213,15 @@ public class CreateAliquotAction extends BaseAction
 	}
 
 	/**
-	 * @param request
-	 *            : request
-	 * @param sessionDataBean
-	 *            : sessionDataBean
-	 * @param specimenCollection
-	 *            : specimenCollection
+	 * Insert aliquot specimen.
+	 *
+	 * @param request : request
+	 * @param sessionDataBean : sessionDataBean
+	 * @param specimenCollection : specimenCollection
+	 *
 	 * @return boolean : boolean
-	 * @throws UserNotAuthorizedException
-	 *             : UserNotAuthorizedException
+	 *
+	 * @throws UserNotAuthorizedException : UserNotAuthorizedException
 	 */
 	private boolean insertAliquotSpecimen(HttpServletRequest request,
 			SessionDataBean sessionDataBean, Collection<AbstractDomainObject> specimenCollection)
@@ -229,8 +235,7 @@ public class CreateAliquotAction extends BaseAction
 		}
 		catch (final BizLogicException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			final ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e
 					.getCustomizedMsg()));
@@ -240,8 +245,7 @@ public class CreateAliquotAction extends BaseAction
 		}
 		catch (final DAOException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			final ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", e
 					.getCustomizedMsg()));
@@ -251,8 +255,7 @@ public class CreateAliquotAction extends BaseAction
 		}
 		catch (final UserNotAuthorizedException e)
 		{
-			this.logger.error(e.getMessage(),e);
-			e.printStackTrace() ;
+			LOGGER.error(e.getMessage(),e);
 			String userName = "";
 			if (sessionDataBean != null)
 			{
@@ -276,12 +279,6 @@ public class CreateAliquotAction extends BaseAction
 			final ActionError error = new ActionError("access.addedit.object.denied", userName,
 					className, decoratedPrivilegeName, baseObject);
 			actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
-
-			// ActionErrors actionErrors = new ActionErrors();
-			// ActionError error = new
-			// ActionError("access.addedit.object.denied",
-			// sessionDataBean.getUserName(), Specimen.class.getName());
-			// actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
 			this.saveErrors(request, actionErrors);
 			return false;
 		}
@@ -289,18 +286,15 @@ public class CreateAliquotAction extends BaseAction
 	}
 
 	/**
-	 * @param sessionDataBean
-	 *            : sessionDataBean
-	 * @param specimenCollection
-	 *            : specimenCollection
-	 * @param specimenDisposeReason
-	 *            : specimenDisposeReason
-	 * @throws DAOException
-	 *             : DAOException
-	 * @throws UserNotAuthorizedException
-	 *             : UserNotAuthorizedException
-	 * @throws BizLogicException
-	 *             : BizLogicException
+	 * Dispose parent specimen.
+	 *
+	 * @param sessionDataBean : sessionDataBean
+	 * @param specimenCollection : specimenCollection
+	 * @param specimenDisposeReason : specimenDisposeReason
+	 *
+	 * @throws DAOException : DAOException
+	 * @throws UserNotAuthorizedException : UserNotAuthorizedException
+	 * @throws BizLogicException : BizLogicException
 	 */
 	private void disposeParentSpecimen(SessionDataBean sessionDataBean,
 			Collection<AbstractDomainObject> specimenCollection, String specimenDisposeReason)
@@ -316,11 +310,13 @@ public class CreateAliquotAction extends BaseAction
 	}
 
 	/**
-	 * @param aliquotForm
-	 *            : aliquotForm
+	 * Creates the parent specimen.
+	 *
+	 * @param aliquotForm : aliquotForm
+	 *
 	 * @return Specimen : Specimen
-	 * @throws AssignDataException
-	 *             : AssignDataException
+	 *
+	 * @throws AssignDataException : AssignDataException
 	 */
 	private Specimen createParentSpecimen(AliquotForm aliquotForm) throws AssignDataException
 	{
@@ -338,8 +334,10 @@ public class CreateAliquotAction extends BaseAction
 	}
 
 	/**
+	 * Creates the scg.
 	 *
 	 * @param aliquotForm : aliquotForm
+	 *
 	 * @return SpecimenCollectionGroup : SpecimenCollectionGroup
 	 */
 	private SpecimenCollectionGroup createSCG(AliquotForm aliquotForm)
@@ -350,11 +348,14 @@ public class CreateAliquotAction extends BaseAction
 	}
 
 	/**
+	 * Creates the aliquot domain object.
 	 *
 	 * @param aliquotForm : aliquotForm
 	 * @param scg : scg
 	 * @param parentSpecimen : parentSpecimen
+	 *
 	 * @return Collection < AbstractDomainObject > : Collection < AbstractDomainObject >
+	 *
 	 * @throws ApplicationException : ApplicationException
 	 */
 	private Collection<AbstractDomainObject> createAliquotDomainObject(AliquotForm aliquotForm,
@@ -394,7 +395,7 @@ public class CreateAliquotAction extends BaseAction
 				posDim1Key = specimenKey + i + "_positionDimensionOne" + fromMapsuffixKey;
 				posDim2Key = specimenKey + i + "_positionDimensionTwo" + fromMapsuffixKey;
 			}
-			new Validator();
+//			new Validator();
 			final String quantity = (String) aliquotMap.get(quantityKey);
 			String containerId = (String) aliquotMap.get(containerIdKey);
 			Long storageContainerId = null;
@@ -440,10 +441,10 @@ public class CreateAliquotAction extends BaseAction
 			aliquotSpecimen.setSpecimenClass(aliquotForm.getClassName());
 			aliquotSpecimen.setSpecimenType(aliquotForm.getType());
 			aliquotSpecimen.setPathologicalStatus(aliquotForm.getPathologicalStatus());
-			aliquotSpecimen.setInitialQuantity(new Double(quantity));
-			aliquotSpecimen.setAvailableQuantity(new Double(quantity));
+			aliquotSpecimen.setInitialQuantity(Double.valueOf(quantity));
+			aliquotSpecimen.setAvailableQuantity(Double.valueOf(quantity));
 
-			final StorageContainer sc = new StorageContainer();
+			final StorageContainer sContainer = new StorageContainer();
 			// bug 11479
 			if ((containerId != null || containername != null) && posDim1 != null
 					&& posDim2 != null)
@@ -454,10 +455,10 @@ public class CreateAliquotAction extends BaseAction
 				{
 					specPos.setPositionDimensionOne(Integer.valueOf(posDim1));
 					specPos.setPositionDimensionTwo(Integer.valueOf(posDim2));
-					sc.setId(storageContainerId);
+					sContainer.setId(storageContainerId);
 				}
-				sc.setName(containername);
-				specPos.setStorageContainer(sc);
+				sContainer.setName(containername);
+				specPos.setStorageContainer(sContainer);
 				specPos.setSpecimen(aliquotSpecimen);
 				aliquotSpecimen.setSpecimenPosition(specPos);
 			}
@@ -471,7 +472,7 @@ public class CreateAliquotAction extends BaseAction
 				}
 				else
 				{
-					final Double concentration = new Double(aliquotForm.getConcentration());
+					final Double concentration = Double.valueOf(aliquotForm.getConcentration());
 					if (concentration != null)
 					{
 						((MolecularSpecimen) aliquotSpecimen)
@@ -490,9 +491,7 @@ public class CreateAliquotAction extends BaseAction
 			}
 			catch (final ParseException e)
 			{
-				this.logger.error("Invalid Date Parser Exception: " + e.getMessage(), e);
-				// System.out.println("Invalid Date Parser Exception ");
-				//e.printStackTrace();
+				LOGGER.error("Invalid Date Parser Exception: " + e.getMessage(), e);
 			}
 			aliquotSpecimen.setCreatedOn(myDate);
 			aliquotSpecimen.setParentSpecimen(parentSpecimen);
@@ -520,6 +519,7 @@ public class CreateAliquotAction extends BaseAction
 	/**
 	 * This function calculates the available quantity of parent after creating
 	 * aliquots.
+	 *
 	 * @param specimenList : specimenList
 	 * @param aliquotForm : aliquotForm
 	 */
@@ -527,7 +527,7 @@ public class CreateAliquotAction extends BaseAction
 	{
 		Double totalAliquotQty = 0.0;
 
-		if (specimenList != null && !specimenList.isEmpty())
+		if (isSpecimenListEmpty(specimenList))
 		{
 			final Iterator itr = specimenList.iterator();
 			while (itr.hasNext())
@@ -554,6 +554,26 @@ public class CreateAliquotAction extends BaseAction
 		}
 	}
 
+	/**
+	 * Checks if is specimen list empty.
+	 *
+	 * @param specimenList the specimen list
+	 *
+	 * @return true, if checks if is specimen list empty
+	 */
+	private boolean isSpecimenListEmpty(List specimenList)
+	{
+		return specimenList != null && !specimenList.isEmpty();
+	}
+
+	/**
+	 * Update parent specimen.
+	 *
+	 * @param parentSpecimen the parent specimen
+	 * @param quantity the quantity
+	 *
+	 * @throws Exception the exception
+	 */
 	private void updateParentSpecimen(Specimen parentSpecimen, Double quantity) throws Exception
 	{
 		DAO dao = AppUtility.openDAOSession(null);

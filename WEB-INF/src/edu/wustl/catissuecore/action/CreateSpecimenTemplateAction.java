@@ -47,9 +47,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger
+	private static final Logger LOGGER = Logger
 			.getCommonLogger(CreateSpecimenTemplateAction.class);
 
+	private static final String ERROR_STRING="error";
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -85,7 +86,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		{
 			session.setAttribute(Constants.TREE_NODE_ID, selectedNode);
 		}
-		if (pageOf != null && pageOf.equalsIgnoreCase("error"))
+		if (pageOf != null && pageOf.equalsIgnoreCase(ERROR_STRING))
 		{
 			// Bug 11567 S
 			// getEventAndSpecimenBean(mapkey, request);
@@ -118,7 +119,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 				.getListFromCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS));
 		final Map subTypeMap = AppUtility.getSpecimenTypeMap();
 		specimenClassList = AppUtility.getSpecimenClassList();
-		if (operation.equals("add") && pageOf != null && !pageOf.equals("error")
+		if (operation.equals("add") && pageOf != null && !pageOf.equals(ERROR_STRING)
 				&& !pageOf.equals("delete"))
 		{
 			// Setting the default values
@@ -230,12 +231,9 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			session.setAttribute(Constants.TREE_NODE_ID, nodeId);
 		}
 		this.setUserInForm(request, operation, createSpecimenTemplateForm);
-		if (operation.equals(Constants.EDIT) && !pageOf.equals("error"))
+		if (Constants.EDIT.equals(operation) && !ERROR_STRING.equals(pageOf) && !"delete".equals(pageOf))
 		{
-			if (!pageOf.equals("delete"))
-			{
 				this.initCreateSpecimenTemplateForm(createSpecimenTemplateForm, mapkey, request);
-			}
 		}
 
 		final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
@@ -248,7 +246,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		{
 			return (mapping.findForward("newEvent"));
 		}
-		if (pageOf != null && pageOf.equals("error"))
+		if (pageOf != null && pageOf.equals(ERROR_STRING))
 		{
 			return (mapping.findForward(Constants.SUCCESS));
 		}
@@ -313,8 +311,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		}
 		catch (final BizLogicException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 
 		request.setAttribute(Constants.USERLIST, userCollection);
@@ -398,7 +395,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
-	 *
+	 * Initialise the create specimen form.
 	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
 	 * @param mapkey : mapkey
 	 * @param request : request
@@ -428,6 +425,27 @@ public class CreateSpecimenTemplateAction extends BaseAction
 
 		this.setCollAndRecEvents(createSpecimenTemplateForm, request, specimenRequirementBean);
 		// Derive
+		setDerivative(createSpecimenTemplateForm, specimenRequirementBean);
+		createSpecimenTemplateForm.setLabelFormat(specimenRequirementBean.getLabelFormat());
+
+		createSpecimenTemplateForm.setGenLabel(specimenRequirementBean.isGenerateLabel());
+		createSpecimenTemplateForm.setLabelGenType(specimenRequirementBean.getLabelGenType());
+
+		createSpecimenTemplateForm.setGenLabelForAliquot(specimenRequirementBean.isGenLabelForAliquot());
+		createSpecimenTemplateForm.setLabelFormatForAliquot(specimenRequirementBean.getLabelFormatForAliquot());
+		createSpecimenTemplateForm.setLabelGenTypeForAliquot(specimenRequirementBean.getLabelGenTypeForAliquot());
+
+		setLabelProperties(createSpecimenTemplateForm, specimenRequirementBean);
+	}
+
+	/**
+	 * Will set derivative values in form.
+	 * @param createSpecimenTemplateForm createSpecimenTemplateForm
+	 * @param specimenRequirementBean specimenRequirementBean
+	 */
+	private void setDerivative(CreateSpecimenTemplateForm createSpecimenTemplateForm,
+			final SpecimenRequirementBean specimenRequirementBean)
+	{
 		LinkedHashMap deriveSpecimenLinkedHashMap = null;
 		if (specimenRequirementBean.getDeriveSpecimenCollection() != null
 				&& !specimenRequirementBean.getDeriveSpecimenCollection().isEmpty())
@@ -443,15 +461,16 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			createSpecimenTemplateForm.setNoOfDeriveSpecimen(0);
 		}
 		createSpecimenTemplateForm.setDeriveSpecimenValues(deriveSpecimenLinkedHashMap);
-		createSpecimenTemplateForm.setLabelFormat(specimenRequirementBean.getLabelFormat());
+	}
 
-		createSpecimenTemplateForm.setGenLabel(specimenRequirementBean.isGenerateLabel());
-		createSpecimenTemplateForm.setLabelGenType(specimenRequirementBean.getLabelGenType());
-
-		createSpecimenTemplateForm.setGenLabelForAliquot(specimenRequirementBean.isGenLabelForAliquot());
-		createSpecimenTemplateForm.setLabelFormatForAliquot(specimenRequirementBean.getLabelFormatForAliquot());
-		createSpecimenTemplateForm.setLabelGenTypeForAliquot(specimenRequirementBean.getLabelGenTypeForAliquot());
-
+	/**
+	 * Will set the label properties to form.
+	 * @param createSpecimenTemplateForm createSpecimenTemplateForm
+	 * @param specimenRequirementBean specimenRequirementBean
+	 */
+	private void setLabelProperties(CreateSpecimenTemplateForm createSpecimenTemplateForm,
+			final SpecimenRequirementBean specimenRequirementBean)
+	{
 		if(specimenRequirementBean.getAliquotSpecimenCollection() != null)
 		{
 			final Iterator deriveSpecimenCollectionItr = (specimenRequirementBean.getAliquotSpecimenCollection()).keySet().iterator();
@@ -470,6 +489,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
+	 * set coll and rec parameters.
 	 * @param createSpecimenTemplateForm
 	 *            createSpecimenTemplateForm
 	 * @param request
@@ -487,7 +507,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 
 		final Collection userColl = (Collection) request.getAttribute(Constants.USERLIST);
 		final Iterator itr = userColl.iterator();
-		for (int i = 0; itr.hasNext(); i++)
+		while(itr.hasNext())
 		{
 			final NameValueBean nameValueBean = (NameValueBean) itr.next();
 			if (String.valueOf(collEventId).equals(nameValueBean.getValue()))

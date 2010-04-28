@@ -1,6 +1,6 @@
 /**
  * <p>Title: StorageContainerForm Class>
- * <p>Description:  This Class is used to encapsulate all the request parameters passed 
+ * <p>Description:  This Class is used to encapsulate all the request parameters passed
  * from StorageContainer.jsp page. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -40,179 +40,129 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.util.HibernateMetaData;
 
+// TODO: Auto-generated Javadoc
 /**
  * This Class is used to encapsulate all the request parameters passed from StorageType.jsp page.
+ *
  * @author aniruddha_phadnis
- * */
+ */
 public class StorageContainerForm extends AbstractActionForm implements IPrinterTypeLocation, ISpecimenType
 {
 
-	/**
-	 * logger Logger - Generic logger.
-	 */
+	/** logger Logger - Generic logger. */
 	private static final Logger logger = Logger.getCommonLogger(StorageContainerForm.class);
-	/**
-	 * SerialVersionUID.
-	 */
+
+	/** SerialVersionUID. */
 	private static final long serialVersionUID = 1234567890L;
-	/**
-	 * An id which refers to the type of the storage.
-	 */
+
+	/** An id which refers to the type of the storage. */
 	private long typeId = -1;
 
-	/**
-	 * An name which refers to the type of the storage.
-	 */
+	/** An name which refers to the type of the storage. */
 	private String typeName;
 
-	/**
-	 * An id which refers to Parent Container of this container.
-	 */
+	/** An id which refers to Parent Container of this container. */
 	private long parentContainerId;
 
-	/**
-	 * Position label shown after selecting from storage container map viewer.
-	 */
+	/** Position label shown after selecting from storage container map viewer. */
 	private String positionInParentContainer;
 
-	/**
-	 * An id which refers to the site of the container if it is parent container.
-	 */
+	/** An id which refers to the site of the container if it is parent container. */
 	private long siteId;
-	/**
-	 * An name which refers to the site of the container if it is parent container.
-	 */
+
+	/** An name which refers to the site of the container if it is parent container. */
 	private String siteName;
-	/**
-	 * An name for parent container type.
-	 */
+
+	/** An name for parent container type. */
 	private String parentContainerSelected = "Site";
-	/**
-	 * A default temperature of the storage container.
-	 */
+
+	/** A default temperature of the storage container. */
 	private String defaultTemperature;
 
-	/**
-	 * Capacity in dimension one.
-	 */
+	/** Capacity in dimension one. */
 	private int oneDimensionCapacity;
 
-	/**
-	 * Capacity in dimension two.
-	 */
+	/** Capacity in dimension two. */
 	private int twoDimensionCapacity = 1;
 
-	/**
-	 * Text label for dimension one.
-	 */
+	/** Text label for dimension one. */
 	private String oneDimensionLabel;
 
-	/**
-	 * Text label for dimension two.
-	 */
+	/** Text label for dimension two. */
 	private String twoDimensionLabel;
 
-	/**
-	 * Starting Number.
-	 */
+	/** Starting Number. */
 	private String startNumber = "";
 
-	/**
-	 * Container name.
-	 */
+	/** Container name. */
 	private String containerName = "";
-	/**
-	 * No. of containers.
-	 */
+
+	/** No. of containers. */
 	private int noOfContainers = 1;
 
-	/**
-	 * Text label for dimension two.
-	 */
+	/** Text label for dimension two. */
 	private String barcode;
-	/**
-	 * Key.
-	 */
+
+	/** Key. */
 	private String key;
 
-	/**
-	 * Radio button to choose site/parentContainer.
-	 */
+	/** Radio button to choose site/parentContainer. */
 	private int checkedButton = 1;
 
-	/**
-	 * Radio button to choose dropdown or map to select storage container.
-	 */
+	/** Radio button to choose dropdown or map to select storage container. */
 	private int stContSelection = 1;
-	/**
-	 * Storage container name selected from map.
-	 */
+
+	/** Storage container name selected from map. */
 	private String selectedContainerName;
-	/**
-	 * Storage pos1 selected from map.
-	 */
+
+	/** Storage pos1 selected from map. */
 	private String pos1;
-	/**
-	 * Storage pos2 selected from map.
-	 */
+
+	/** Storage pos2 selected from map. */
 	private String pos2;
-	/**
-	 * Storage Id selected from map.
-	 */
+
+	/** Storage Id selected from map. */
 	private String containerId;
 
-	/**
-	 * Tells whether this container is full or not.
-	 */
+	/** Tells whether this container is full or not. */
 	private String isFull = "False";
-	/**
-	 * Position for dimension 1.
-	 */
+
+	/** Position for dimension 1. */
 	private int positionDimensionOne;
 
-	/**
-	 * Position for dimension 2.
-	 */
+	/** Position for dimension 2. */
 	private int positionDimensionTwo;
 
-	/**
-	 * site name for particular parent container.
-	 */
+	/** site name for particular parent container. */
 	private String siteForParentContainer;
-	/**
-	 * collectionIds contains Id's of collection Protocols that this container can hold.
-	 */
+
+	/** collectionIds contains Id's of collection Protocols that this container can hold. */
 	private long[] collectionIds = new long[]{-1};
 
-	/**
-	 * holdStorageTypeIds contains Id's of Storage Types that this container can hold.
-	 */
+	/** holdStorageTypeIds contains Id's of Storage Types that this container can hold. */
 	private long[] holdsStorageTypeIds;
-	/**
-	 * holdsSpecimenArrTypeIds contains Id's of SpecimenArray type that this container can hold.
-	 */
+
+	/** holdsSpecimenArrTypeIds contains Id's of SpecimenArray type that this container can hold. */
 	private long[] holdsSpecimenArrTypeIds;
-	/**
-	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold.
-	 */
+
+	/** holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold. */
 	private String[] holdsSpecimenClassTypes;
-	/**
-	 * List of Specimen Types that Storage Type can hold.
-	 */
+
+	/** List of Specimen Types that Storage Type can hold. */
 	private String[] holdsTissueSpType;
-	/**
-	 * List of Specimen Types that Storage Type can hold.
-	 */
+
+	/** List of Specimen Types that Storage Type can hold. */
 	private String[] holdsFluidSpType;
-	/**
-	 * List of Specimen Types that Storage Type can hold.
-	 */
+
+	/** List of Specimen Types that Storage Type can hold. */
 	private String[] holdsCellSpType;
-	/**
-	 * List of Specimen Types that Storage Type can hold.
-	 */
+
+	/** List of Specimen Types that Storage Type can hold. */
 	private String[] holdsMolSpType;
+
 	/**
+	 * Gets the holds tissue sp type.
+	 *
 	 * @return holdsTissueSpType holdsTissueSpType.
 	 */
 	public String[] getHoldsTissueSpType()
@@ -221,6 +171,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the holds tissue sp type.
+	 *
 	 * @param holdsTissueSpType holdsTissueSpType
 	 */
 	public void setHoldsTissueSpType(String[] holdsTissueSpType)
@@ -229,6 +181,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the holds fluid sp type.
+	 *
 	 * @return holdsFluidSpType
 	 */
 	public String[] getHoldsFluidSpType()
@@ -237,6 +191,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the holds fluid sp type.
+	 *
 	 * @param holdsFluidSpType holdsFluidSpType
 	 */
 	public void setHoldsFluidSpType(String[] holdsFluidSpType)
@@ -245,6 +201,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the holds cell sp type.
+	 *
 	 * @return holdsCellSpType
 	 */
 	public String[] getHoldsCellSpType()
@@ -253,6 +211,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the holds cell sp type.
+	 *
 	 * @param holdsCellSpType holdsCellSpType
 	 */
 	public void setHoldsCellSpType(String[] holdsCellSpType)
@@ -261,6 +221,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the holds mol sp type.
+	 *
 	 * @return holdsMolSpType
 	 */
 	public String[] getHoldsMolSpType()
@@ -269,40 +231,34 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
-	 *@param holdsMolSpType holdsMolSpType
+	 * Sets the holds mol sp type.
+	 *
+	 * @param holdsMolSpType holdsMolSpType
 	 */
 	public void setHoldsMolSpType(String[] holdsMolSpType)
 	{
 		this.holdsMolSpType = holdsMolSpType;
 	}
 
-	/**
-	 * A map that contains distinguished fields (container name,barcode,parent location) per container.
-	 */
+	/** A map that contains distinguished fields (container name,barcode,parent location) per container. */
 	private Map similarContainersMap = new HashMap();
-	/**
-	 * SpecimenOrArray Type.
-	 */
+
+	/** SpecimenOrArray Type. */
 	private String specimenOrArrayType;
-	/**
-	 * Print Check box.
-	 */
+
+	/** Print Check box. */
 	private String printCheckbox;
-	/**
-	 * Printer Type.
-	 */
+
+	/** Printer Type. */
 	private String printerType;
-	/**
-	 * Printer Location.
-	 */
+
+	/** Printer Location. */
 	private String printerLocation;
-	/**
-	 * Forward To.
-	 */
+
+	/** Forward To. */
 	private String nextForwardTo;
-	/**
-	 * Specifies if the Bar code is editable or not.
-	 */
+
+	/** Specifies if the Bar code is editable or not. */
 	private String isBarcodeEditable = (String) DefaultValueManager
 			.getDefaultValue(Constants.IS_BARCODE_EDITABLE);
 
@@ -316,6 +272,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * This function Copies the data from an storage type object to a StorageTypeForm object.
+	 *
 	 * @param abstractDomain StorageContainerObject
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
@@ -468,54 +425,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
-	 * Returns an id which refers to the type of the storage.
-	 * @return An id which refers to the type of the storage.
-	 * @see #setTypeId(long)
-	 */
-	public long getTypeId()
-	{
-		return this.typeId;
-	}
-
-	/**
-	 * @return Returns the containerId.
-	 */
-	public String getContainerId()
-	{
-		return this.containerId;
-	}
-
-	/**
-	 * @param containerId The containerId to set.
-	 */
-	public void setContainerId(String containerId)
-	{
-		this.containerId = containerId;
-	}
-	/**
-	 * @return parentContainerSelected
-	 */
-	public String getParentContainerSelected()
-	{
-		return this.parentContainerSelected;
-	}
-	/**
-	 * @param parentContainerSelected parentContainerSelected
-	 */
-	public void setParentContainerSelected(String parentContainerSelected)
-	{
-		this.parentContainerSelected = parentContainerSelected;
-	}
-
-	/**
-	 * @return Returns the pos1.
-	 */
-	public String getPos1()
-	{
-		return this.pos1;
-	}
-
-	/**
+	 * Sets the pos1.
+	 *
 	 * @param pos1 The pos1 to set.
 	 */
 	public void setPos1(String pos1)
@@ -524,6 +435,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the pos2.
+	 *
 	 * @return Returns the pos2.
 	 */
 	public String getPos2()
@@ -532,6 +445,72 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Returns an id which refers to the type of the storage.
+	 *
+	 * @return An id which refers to the type of the storage.
+	 *
+	 * @see #setTypeId(long)
+	 */
+	public long getTypeId()
+	{
+		return this.typeId;
+	}
+
+	/**
+	 * Gets the container id.
+	 *
+	 * @return Returns the containerId.
+	 */
+	public String getContainerId()
+	{
+		return this.containerId;
+	}
+
+	/**
+	 * Sets the container id.
+	 *
+	 * @param containerId The containerId to set.
+	 */
+	public void setContainerId(String containerId)
+	{
+		this.containerId = containerId;
+	}
+
+	/**
+	 * Gets the parent container selected.
+	 *
+	 * @return parentContainerSelected
+	 */
+	public String getParentContainerSelected()
+	{
+		return this.parentContainerSelected;
+	}
+
+	/**
+	 * Sets the parent container selected.
+	 *
+	 * @param parentContainerSelected parentContainerSelected
+	 */
+	public void setParentContainerSelected(String parentContainerSelected)
+	{
+		this.parentContainerSelected = parentContainerSelected;
+	}
+
+	/**
+	 * Gets the pos1.
+	 *
+	 * @return Returns the pos1.
+	 */
+	public String getPos1()
+	{
+		return this.pos1;
+	}
+
+
+
+	/**
+	 * Sets the pos2.
+	 *
 	 * @param pos2 The pos2 to set.
 	 */
 	public void setPos2(String pos2)
@@ -540,6 +519,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the selected container name.
+	 *
 	 * @return Returns the selectedContainerName.
 	 */
 	public String getSelectedContainerName()
@@ -548,6 +529,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the selected container name.
+	 *
 	 * @param selectedContainerName The selectedContainerName to set.
 	 */
 	public void setSelectedContainerName(String selectedContainerName)
@@ -556,6 +539,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the st cont selection.
+	 *
 	 * @return Returns the stContSelection.
 	 */
 	public int getStContSelection()
@@ -564,6 +549,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the st cont selection.
+	 *
 	 * @param stContSelection The stContSelection to set.
 	 */
 	public void setStContSelection(int stContSelection)
@@ -573,7 +560,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Sets an id which refers to the type of the storage.
+	 *
 	 * @param typeId An id which refers to the type of the storage.
+	 *
 	 * @see #getTypeId()
 	 */
 	public void setTypeId(long typeId)
@@ -583,7 +572,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Returns the capacity of dimension one.
+	 *
 	 * @return int the capacity of dimension one.
+	 *
 	 * @see #setOneDimensionCapacity(int)
 	 */
 	public int getOneDimensionCapacity()
@@ -593,7 +584,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Sets the capacity of dimension one.
+	 *
 	 * @param oneDimensionCapacity the capacity of dimension one to be set.
+	 *
 	 * @see #getOneDimensionCapacity()
 	 */
 	public void setOneDimensionCapacity(int oneDimensionCapacity)
@@ -603,7 +596,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Returns the capacity of dimension two.
+	 *
 	 * @return int the capacity of dimension two.
+	 *
 	 * @see #setTwoDimensionCapacity(int)
 	 */
 	public int getTwoDimensionCapacity()
@@ -613,7 +608,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Sets the capacity of dimension two.
+	 *
 	 * @param twoDimensionCapacity the capacity of dimension two to be set.
+	 *
 	 * @see #getTwoDimensionCapacity()
 	 */
 	public void setTwoDimensionCapacity(int twoDimensionCapacity)
@@ -623,7 +620,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Returns the label of dimension one.
+	 *
 	 * @return String the label of dimension one.
+	 *
 	 * @see #setOneDimensionLabel(String)
 	 */
 	public String getOneDimensionLabel()
@@ -633,7 +632,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Sets the label of dimension one.
+	 *
 	 * @param oneDimensionLabel the label of dimension one to be set.
+	 *
 	 * @see #getOneDimensionLabel()
 	 */
 	public void setOneDimensionLabel(String oneDimensionLabel)
@@ -643,7 +644,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Returns the label of dimension two.
+	 *
 	 * @return String the label of dimension two.
+	 *
 	 * @see #setTwoDimensionLabel(String)
 	 */
 	public String getTwoDimensionLabel()
@@ -653,7 +656,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Sets the label of dimension two.
+	 *
 	 * @param twoDimensionLabel the label of dimension two to be set.
+	 *
 	 * @see #getTwoDimensionLabel()
 	 */
 	public void setTwoDimensionLabel(String twoDimensionLabel)
@@ -663,7 +668,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Returns an id which refers to Parent Container of this container.
+	 *
 	 * @return long An id which refers to Parent Container of this container.
+	 *
 	 * @see #setParentContainerId(long)
 	 */
 	public long getParentContainerId()
@@ -673,7 +680,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Sets an id which refers to Parent Container of this container.
+	 *
 	 * @param parentContainerId An id which refers to Parent Container of this container.
+	 *
 	 * @see #getParentContainerId()
 	 */
 	public void setParentContainerId(long parentContainerId)
@@ -682,6 +691,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the position in parent container.
+	 *
 	 * @return Returns the positionInParentContainer.
 	 */
 	public String getPositionInParentContainer()
@@ -690,6 +701,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the position in parent container.
+	 *
 	 * @param positionInParentContainer The positionInParentContainer to set.
 	 */
 	public void setPositionInParentContainer(String positionInParentContainer)
@@ -699,7 +712,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Returns an id which refers to the site of the container if it is parent container.
+	 *
 	 * @return long An id which refers to the site of the container if it is parent container.
+	 *
 	 * @see #setSiteId(long)
 	 */
 	public long getSiteId()
@@ -709,7 +724,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Sets an id which refers to the site of the container if it is parent container.
+	 *
 	 * @param siteId An id which refers to the site of the container if it is parent container.
+	 *
 	 * @see #getSiteId()
 	 */
 	public void setSiteId(long siteId)
@@ -719,7 +736,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Returns an name which refers to the site of the container if it is parent container.
+	 *
 	 * @return String An name which refers to the site of the container if it is parent container.
+	 *
 	 * @see #setSiteName(String)
 	 */
 	public String getSiteName()
@@ -729,7 +748,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Sets an name which refers to the site of the container if it is parent container.
+	 *
 	 * @param siteName An name which refers to the site of the container if it is parent container.
+	 *
 	 * @see #getSiteName()
 	 */
 	public void setSiteName(String siteName)
@@ -738,6 +759,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the form id.
+	 *
 	 * @return Returns the id assigned to form bean
 	 */
 	@Override
@@ -758,7 +781,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	/**
 	 * Resets the values of all the fields.
 	 * Is called by the overridden reset method defined in ActionForm.
-	 * */
+	 */
 	@Override
 	protected void reset()
 	{
@@ -766,6 +789,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the no of containers.
+	 *
 	 * @return Returns the noOfContainers.
 	 */
 	public int getNoOfContainers()
@@ -774,6 +799,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the no of containers.
+	 *
 	 * @param noOfContainers The noOfContainers to set.
 	 */
 	public void setNoOfContainers(int noOfContainers)
@@ -782,6 +809,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the start number.
+	 *
 	 * @return Returns the startNumber.
 	 */
 	public String getStartNumber()
@@ -790,6 +819,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the start number.
+	 *
 	 * @param startNumber The startNumber to set.
 	 */
 	public void setStartNumber(String startNumber)
@@ -798,6 +829,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the barcode.
+	 *
 	 * @return Returns the barcode.
 	 */
 	public String getBarcode()
@@ -806,6 +839,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the barcode.
+	 *
 	 * @param barcode The barcode to set.
 	 */
 	public void setBarcode(String barcode)
@@ -814,6 +849,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the key.
+	 *
 	 * @return Returns the key.
 	 */
 	public String getKey()
@@ -822,6 +859,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the key.
+	 *
 	 * @param key The key to set.
 	 */
 	public void setKey(String key)
@@ -830,6 +869,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the checked button.
+	 *
 	 * @return Returns the checkedButton.
 	 */
 	public int getCheckedButton()
@@ -838,6 +879,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the checked button.
+	 *
 	 * @param checkedButton The checkedButton to set.
 	 */
 	public void setCheckedButton(int checkedButton)
@@ -846,6 +889,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the is full.
+	 *
 	 * @return Returns the isFull.
 	 */
 	public String getIsFull()
@@ -854,6 +899,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the is full.
+	 *
 	 * @param isFull The isFull to set.
 	 */
 	public void setIsFull(String isFull)
@@ -863,6 +910,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Gets the Container Name.
+	 *
 	 * @return container Name
 	 */
 	public String getContainerName()
@@ -872,6 +920,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * sets the name of the container.
+	 *
 	 * @param containerName container Name to set
 	 */
 	public void setContainerName(String containerName)
@@ -880,6 +929,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the position dimension one.
+	 *
 	 * @return Returns the positionDimensionOne.
 	 */
 	public int getPositionDimensionOne()
@@ -888,6 +939,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the position dimension one.
+	 *
 	 * @param positionDimensionOne The positionDimensionOne to set.
 	 */
 	public void setPositionDimensionOne(int positionDimensionOne)
@@ -896,6 +949,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the position dimension two.
+	 *
 	 * @return Returns the positionDimensionTwo.
 	 */
 	public int getPositionDimensionTwo()
@@ -904,6 +959,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the position dimension two.
+	 *
 	 * @param positionDimensionTwo The positionDimensionTwo to set.
 	 */
 	public void setPositionDimensionTwo(int positionDimensionTwo)
@@ -913,6 +970,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * collection Id's that this container can hold.
+	 *
 	 * @return collection Id's array
 	 */
 	public long[] getCollectionIds()
@@ -922,6 +980,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Setting the Collection Id array.
+	 *
 	 * @param collectionIds - array of collection Id's to set
 	 */
 	public void setCollectionIds(long[] collectionIds)
@@ -931,6 +990,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * getting Specimen class Type Id's that this container can hold.
+	 *
 	 * @return specimenClassType Id's array
 	 */
 	public String[] getHoldsSpecimenClassTypes()
@@ -940,6 +1000,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Setting the SpecimenClassType Id array.
+	 *
 	 * @param holdsSpecimenClassTypes - array of SpecimenClassType Id's to set
 	 */
 	public void setHoldsSpecimenClassTypes(String[] holdsSpecimenClassTypes)
@@ -949,6 +1010,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * StorageType Id's that this container can hold.
+	 *
 	 * @return StorageType Id' array
 	 */
 	public long[] getHoldsStorageTypeIds()
@@ -958,6 +1020,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * setting the StorageType Id array.
+	 *
 	 * @param holdsStorageTypeIds - array of StorageType id's to set
 	 */
 	public void setHoldsStorageTypeIds(long[] holdsStorageTypeIds)
@@ -967,7 +1030,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Sets the Specimen Array Type Holds List.
+	 *
 	 * @param holdsSpecimenArrTypeIds the list of specimen array type Ids to be set.
+	 *
 	 * @see #getHoldsSpecimenArrTypeIds()
 	 */
 	public void setHoldsSpecimenArrTypeIds(long[] holdsSpecimenArrTypeIds)
@@ -976,10 +1041,12 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
-	* Returns the list of specimen array type Ids that this Storage Type can hold.
-	* @return long[] the list of specimen array type Ids.
-	* @see #setHoldsSpecimenArrTypeIds(long[])
-	*/
+	 * Returns the list of specimen array type Ids that this Storage Type can hold.
+	 *
+	 * @return long[] the list of specimen array type Ids.
+	 *
+	 * @see #setHoldsSpecimenArrTypeIds(long[])
+	 */
 	public long[] getHoldsSpecimenArrTypeIds()
 	{
 		return this.holdsSpecimenArrTypeIds;
@@ -987,7 +1054,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Returns the map that contains distinguished fields per aliquots.
+	 *
 	 * @return The map that contains distinguished fields per aliquots.
+	 *
 	 * @see #setAliquotMap(Map)
 	 */
 	public Map getSimilarContainersMap()
@@ -997,7 +1066,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Sets the map of distinguished fields of aliquots.
+	 *
 	 * @param similarContainersMap A map of distinguished fields of aliquots.
+	 *
 	 * @see #getAliquotMap()
 	 */
 	public void setSimilarContainersMap(Map similarContainersMap)
@@ -1007,6 +1078,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Associates the specified object with the specified key in the map.
+	 *
 	 * @param key the key to which the object is mapped.
 	 * @param value the object which is to be mapped.
 	 */
@@ -1017,7 +1089,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Returns the object to which this map maps the specified key.
+	 *
 	 * @param key the required key.
+	 *
 	 * @return the object to which this map maps the specified key.
 	 */
 	public Object getSimilarContainerMapValue(String key)
@@ -1028,8 +1102,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	/**
 	 * This method sets Identifier of Objects inserted by AddNew
 	 * activity in Form-Bean which initialized AddNew action.
+	 *
 	 * @param addNewFor - FormBean ID of the object inserted
-	 *  @param addObjectIdentifier - Identifier of the Object inserted
+	 * @param addObjectIdentifier - Identifier of the Object inserted
 	 */
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
 	{
@@ -1045,9 +1120,11 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Overrides the validate method of ActionForm.
-	 * @return error ActionErrors instance
+	 *
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
+	 *
+	 * @return error ActionErrors instance
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
@@ -1248,6 +1325,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Check position for parent.
+	 *
 	 * @param errors ActionErrors
 	 */
 	private void checkPositionForParent(ActionErrors errors)
@@ -1263,10 +1342,11 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * This function if 'any' option is selected then no other option should be selected.
+	 *
 	 * @param errors Action Errors
 	 * @param Ids Array of long ids
 	 * @param message Message used in ApplicationProperties
-	 * */
+	 */
 	void checkValidSelectionForAny(long[] Ids, String message, ActionErrors errors)
 	{
 		if (Ids != null && Ids.length > 1)
@@ -1284,6 +1364,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the site for parent container.
+	 *
 	 * @return siteForParentContainer
 	 */
 	public String getSiteForParentContainer()
@@ -1292,6 +1374,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the site for parent container.
+	 *
 	 * @param siteForParentContainer Setting siteForParentContainer
 	 */
 	public void setSiteForParentContainer(String siteForParentContainer)
@@ -1300,6 +1384,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the specimen or array type.
+	 *
 	 * @return specimenOrArrayType
 	 */
 	public String getSpecimenOrArrayType()
@@ -1308,34 +1394,48 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Sets the specimen or array type.
+	 *
 	 * @param specimenOrArrayType Setting specimenOrArrayType
 	 */
 	public void setSpecimenOrArrayType(String specimenOrArrayType)
 	{
 		this.specimenOrArrayType = specimenOrArrayType;
 	}
+
 	/**
+	 * Gets the next forward to.
+	 *
 	 * @return nextForwardTo
 	 */
 	public String getNextForwardTo()
 	{
 		return this.nextForwardTo;
 	}
+
 	/**
+	 * Sets the printer location.
+	 *
 	 * @param printerLocation Printer Location
 	 */
 	public void setPrinterLocation(String printerLocation)
 	{
 		this.printerLocation = printerLocation;
 	}
+
 	/**
+	 * Gets the printer type.
+	 *
 	 * @return printerType
 	 */
 	public String getPrinterType()
 	{
 		return this.printerType;
 	}
+
 	/**
+	 * Sets the printer type.
+	 *
 	 * @param printerType Printer Type
 	 */
 	public void setPrinterType(String printerType)
@@ -1344,6 +1444,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
+	 * Gets the is barcode editable.
+	 *
 	 * @return isBarcodeEditable
 	 */
 	public String getIsBarcodeEditable()
@@ -1351,7 +1453,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		return this.isBarcodeEditable;
 	}
 
-	/** 
+	/**
+	 * Sets the is barcode editable.
+	 *
 	 * @param isBarcodeEditable Setter method for isBarcodeEditable.
 	 */
 	public void setIsBarcodeEditable(String isBarcodeEditable)
@@ -1361,7 +1465,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Sets an name which refers to the type of the storage.
+	 *
 	 * @param typeName An id which refers to the type of the storage.
+	 *
 	 * @see #getTypeName()
 	 */
 	public void setTypeName(String typeName)
@@ -1371,7 +1477,9 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Returns an name which refers to the type of the storage.
+	 *
 	 * @return An name which refers to the type of the storage.
+	 *
 	 * @see #setTypeName(String)
 	 */
 	public String getTypeName()
@@ -1380,10 +1488,12 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	}
 
 	/**
-	* Returns the default temperature of the storage container.
-	* @return double the default temperature of the storage container to be set.
-	* @see #setDefaultTemperature(double)
-	*/
+	 * Returns the default temperature of the storage container.
+	 *
+	 * @return double the default temperature of the storage container to be set.
+	 *
+	 * @see #setDefaultTemperature(double)
+	 */
 	public String getDefaultTemperature()
 	{
 		return this.defaultTemperature;
@@ -1391,35 +1501,49 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 	/**
 	 * Sets the default temperature of the storage container.
+	 *
 	 * @param defaultTemperature the default temperature of the storage container to be set.
+	 *
 	 * @see #getDefaultTemperature()
 	 */
 	public void setDefaultTemperature(String defaultTemperature)
 	{
 		this.defaultTemperature = defaultTemperature;
 	}
+
 	/**
+	 * Sets the next forward to.
+	 *
 	 * @param nextForwardTo Forward To
 	 */
 	public void setNextForwardTo(String nextForwardTo)
 	{
 		this.nextForwardTo = nextForwardTo;
 	}
+
 	/**
+	 * Gets the print checkbox.
+	 *
 	 * @return printCheckbox
 	 */
 	public String getPrintCheckbox()
 	{
 		return this.printCheckbox;
 	}
+
 	/**
+	 * Sets the print checkbox.
+	 *
 	 * @param printCheckbox Print Check box
 	 */
 	public void setPrintCheckbox(String printCheckbox)
 	{
 		this.printCheckbox = printCheckbox;
 	}
+
 	/**
+	 * Gets the printer location.
+	 *
 	 * @return printerLocation
 	 */
 	public String getPrinterLocation()

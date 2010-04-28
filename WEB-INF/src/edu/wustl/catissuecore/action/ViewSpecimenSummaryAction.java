@@ -54,7 +54,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(ViewSpecimenSummaryAction.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(ViewSpecimenSummaryAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -153,7 +153,11 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 				this.verifyPrintStatus(summaryForm, session);// janhavi
 			}
 
-			if (request.getParameter("save") != null)
+			if (request.getParameter("save") == null)
+			{
+				this.saveToken(request);
+			}
+			else
 			{
 				if (!this.isTokenValid(request))
 				{
@@ -174,10 +178,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 				{
 					return mapping.findForward(summaryForm.getSubmitAction());
 				}
-			}
-			else
-			{
-				this.saveToken(request);
+
 			}
 
 			final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
@@ -253,7 +254,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 		}
 		catch (final Exception exception)
 		{
-			this.logger.error(exception.getMessage(), exception);
+			LOGGER.error(exception.getMessage(), exception);
 			// exception.printStackTrace();
 			final ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item",
@@ -427,7 +428,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	{
 		final LinkedHashMap deriveMap = parentSessionObject.getDeriveSpecimenCollection();
 		Collection parentCollection;
-		if (deriveMap != null && !deriveMap.isEmpty())
+		if (isderiveMapEmpty(deriveMap))
 		{
 			// return null;
 
@@ -452,7 +453,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 		// Search Derived in derived specimen tree.
 		final LinkedHashMap aliquotMap = parentSessionObject.getAliquotSpecimenCollection();
 
-		if (aliquotMap != null && !aliquotMap.isEmpty())
+		if (isderiveMapEmpty(aliquotMap))
 		{
 			parentCollection = aliquotMap.values();
 			final Iterator parentIterator = parentCollection.iterator();
@@ -473,6 +474,15 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	}
 
 	/**
+	 * @param deriveMap
+	 * @return
+	 */
+	private boolean isderiveMapEmpty(final LinkedHashMap deriveMap)
+	{
+		return deriveMap != null && !deriveMap.isEmpty();
+	}
+
+	/**
 	 * @param parentSessionObject
 	 *            : parentSessionObject
 	 * @param aliquotKey
@@ -483,7 +493,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			String aliquotKey)
 	{
 		final LinkedHashMap aliquotMap = parentSessionObject.getAliquotSpecimenCollection();
-		if (aliquotMap != null && !aliquotMap.isEmpty())
+		if (isderiveMapEmpty(aliquotMap))
 		{
 			GenericSpecimen aliquotSessionObject = (GenericSpecimen) aliquotMap.get(aliquotKey);
 			if (aliquotSessionObject != null)
@@ -507,7 +517,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 		// Search Aliquot in derived specimen tree.
 		final LinkedHashMap deriveMap = parentSessionObject.getDeriveSpecimenCollection();
 
-		if (deriveMap != null && !deriveMap.isEmpty())
+		if (isderiveMapEmpty(deriveMap))
 		{
 			final Collection parentCollection = deriveMap.values();
 			final Iterator parentIterator = parentCollection.iterator();
@@ -550,7 +560,13 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			eventId = "dummy";
 		}
 
-		if (eventId != null)
+		if (eventId == null)
+		{
+			summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS);
+			specimenMap = (LinkedHashMap) session.getAttribute(Constants.SPECIMEN_LIST_SESSION_MAP);
+
+		}
+		else
 		{
 			if (summaryForm.getRequestType() == null)
 			{
@@ -558,12 +574,9 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 						.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_COLLECTION_PROTOCOL);
 			}
 			final StringTokenizer stringTokenizer = new StringTokenizer(eventId, "_");
-			if (stringTokenizer != null)
+			if (stringTokenizer != null && stringTokenizer.hasMoreTokens())
 			{
-				if (stringTokenizer.hasMoreTokens())
-				{
 					eventId = stringTokenizer.nextToken();
-				}
 			}
 
 			final Map collectionProtocolEventMap = (Map) session
@@ -599,11 +612,6 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			}
 			summaryForm.setEventId(eventId);
 		}
-		else
-		{
-			summaryForm.setRequestType(ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS);
-			specimenMap = (LinkedHashMap) session.getAttribute(Constants.SPECIMEN_LIST_SESSION_MAP);
-		}
 
 		return specimenMap;
 	}
@@ -625,13 +633,10 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 		summaryForm.setSpecimenList(specimenList);
 		String selectedSpecimenId = summaryForm.getSelectedSpecimenId();
 
-		if (selectedSpecimenId == null)
+		if (selectedSpecimenId == null && isSpecimenListEmpty(specimenList))
 		{
-			if (specimenList != null && !specimenList.isEmpty())
-			{
 				selectedSpecimenId = (specimenList.get(0)).getUniqueIdentifier();
 				summaryForm.setSelectedSpecimenId(selectedSpecimenId);
-			}
 		}
 		final GenericSpecimen selectedSpecimen = specimenMap.get(selectedSpecimenId);
 
@@ -668,6 +673,15 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 		summaryForm.setDerivedList(this.getSpecimenList(nestedDerives));
 		AppUtility.setDefaultPrinterTypeLocation(summaryForm);
 
+	}
+
+	/**
+	 * @param specimenList
+	 * @return
+	 */
+	private boolean isSpecimenListEmpty(final LinkedList<GenericSpecimen> specimenList)
+	{
+		return specimenList != null && !specimenList.isEmpty();
 	}
 
 	/**
@@ -779,7 +793,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "'";
 
 		final List specimenList = AppUtility.executeQuery(hql);
-		if ((specimenList != null) && (specimenList).size() > 0)
+		if ((specimenList != null) && !(specimenList).isEmpty())
 		{
 			return true;
 		}
@@ -815,7 +829,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 		while (specItr.hasNext())
 		{
 			final GenericSpecimen pSpecimen = (GenericSpecimen) specItr.next();
-			//bug 15395 
+			//bug 15395
 			if(!pSpecimen.getReadOnly())
 			{
 				if (pSpecimen.getCheckedSpecimen() == false)
@@ -901,7 +915,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 		}*/
 		for (final GenericSpecimen specimen : allSpcimens)
 		{
-			if (specimen.getPrintSpecimen() == true)
+			if (specimen.getPrintSpecimen())
 			{
 				printSpecimenSet.add(specimen);
 			}
@@ -973,30 +987,30 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			final String cpid = request.getParameter("cpid");
 			// List initialValues = null;
 			TreeMap containerMap = new TreeMap();
-			final StorageContainerForSpecimenBizLogic scbizLogic = 
+			final StorageContainerForSpecimenBizLogic scbizLogic =
 			new StorageContainerForSpecimenBizLogic();
 			long cpId = 0;
 			cpId = Long.parseLong(cpid);
 			containerMap = scbizLogic.
 			getAllocatedContainerMapForSpecimen(AppUtility.setparameterList(cpId,className,0,type),
 			sessionData, dao);
-			final StringBuffer sb = new StringBuffer();
+			final StringBuffer stringBuffer = new StringBuffer();
 			if (containerMap.isEmpty())
 			{
-				sb.append("No Container available for the specimen");
+				stringBuffer.append("No Container available for the specimen");
 			}
 			else
 			{
-				sb.append(this.checkForFreeInitialValues(containerMap, asignedPositonSet));
+				stringBuffer.append(this.checkForFreeInitialValues(containerMap, asignedPositonSet));
 				session.setAttribute("asignedPositonSet", asignedPositonSet);
 			}
-			final String msg = sb.toString();
+			final String msg = stringBuffer.toString();
 			response.getWriter().write(msg);
 		}
 
 		catch (final DAOException daoException)
 		{
-			this.logger.error(daoException.getMessage(),daoException);
+			LOGGER.error(daoException.getMessage(),daoException);
 			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
 					daoException.getMsgValues());
 		}
@@ -1017,7 +1031,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	private String checkForFreeInitialValues(Map containerMap, Set asignedPositonSet)
 	{
 		//System.out.println("containerMap :: " + containerMap + "\n\n");
-		if (containerMap.size() > 0)
+		if (!containerMap.isEmpty())
 		{
 			StringBuffer mainKey = null;
 			final Set containerMapkeySet = containerMap.keySet();
@@ -1028,9 +1042,9 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 				final NameValueBean containerMapkey = (NameValueBean) containerMapkeySetitr.next();
 				//System.out.println("\t" + containerMapkey);
 				mainKey.append(containerMapkey.getName());
-				mainKey.append("#");
+				mainKey.append('#');
 				mainKey.append(containerMapkey.getValue());
-				mainKey.append("#");
+				mainKey.append('#');
 				final Map maincontainerMapvaluemap1 = (Map) containerMap.get(containerMapkey);
 				final Set maincontainerMapvaluemap1keySet = maincontainerMapvaluemap1.keySet();
 				final Iterator maincontainerMapvaluemap1keySetitr = maincontainerMapvaluemap1keySet
@@ -1043,7 +1057,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 					//System.out.println("\t\t" + maincontainerMapvaluemap1key);
 					final StringBuffer pos1 = new StringBuffer();
 					pos1.append(maincontainerMapvaluemap1key.getValue());
-					pos1.append("#");
+					pos1.append('#');
 					final List list = (List) maincontainerMapvaluemap1
 							.get(maincontainerMapvaluemap1key);
 

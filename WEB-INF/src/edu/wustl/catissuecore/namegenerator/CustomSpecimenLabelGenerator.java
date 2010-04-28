@@ -13,12 +13,12 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class CustomSpecimenLabelGenerator.
  */
@@ -30,7 +30,7 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 {
 
 	/** The logger. */
-	private static Logger logger = Logger.getCommonLogger(CustomSpecimenLabelGenerator.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(CustomSpecimenLabelGenerator.class);
 
 
 	/**
@@ -55,7 +55,7 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 	public synchronized void setLabel(Object obj) throws LabelGenException
 	{
 		final Specimen objSpecimen = (Specimen) obj;
-		if(objSpecimen.getCollectionStatus() == null || !Constants.COLLECTION_STATUS_COLLECTED.equals(objSpecimen.getCollectionStatus()))
+		if(isCollStatusPending(objSpecimen))
 		{
 			throw new LabelGenException("Specimen status is not "+Constants.COLLECTION_STATUS_COLLECTED);
 		}
@@ -63,53 +63,11 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 		{
 			throw new LabelGenException("Label already assigned");
 		}
-			final Specimen parentSpecimen = (Specimen) objSpecimen.getParentSpecimen();
 
-			this.getSpecimenReq(objSpecimen);
+			this.setSpecimenReq(objSpecimen);
 			this.setScgData(objSpecimen);
 
-			StringBuffer buffer = new StringBuffer();
-			String labelFormat="";
-
-			if(isGenLabel(objSpecimen))
-			{
-					labelFormat = getLabelFormat(objSpecimen, buffer);
-
-				if (!Validator.isEmpty(labelFormat))
-				{
-					StringTokenizer st = new StringTokenizer(labelFormat.toString(), "%");
-					while (st.hasMoreTokens())
-					{
-						String token = st.nextToken();
-						try
-						{
-							if(token.equals("SYS_UID"))
-							{
-								currentLabel = currentLabel+1;
-							}
-							String mylable = TokenFactory.getInstance(token).getTokenValue(objSpecimen,
-									token, currentLabel);
-							if (mylable == null)
-							{
-								mylable = "";
-							}
-							buffer.append(mylable);
-
-						}
-						catch (final Exception ex)
-						{
-							logger.info(ex);
-						}
-					}
-//						buffer.append("_");
-//						buffer.append(getSpecimenCount(objSpecimen));
-				}
-				objSpecimen.setLabel(buffer.toString());
-			}
-			else
-			{
-				throw new LabelGenException("Manual Label Generation is selected for this specimen");
-			}
+			setLabelForSpecimen(objSpecimen);
 
 			if (objSpecimen.getChildSpecimenCollection().size() > 0)
 			{
@@ -124,10 +82,93 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 			}
 	}
 
+	/**
+	 * Checks if is coll status pending.
+	 *
+	 * @param objSpecimen the obj specimen
+	 *
+	 * @return true, if checks if is coll status pending
+	 */
+	private boolean isCollStatusPending(final Specimen objSpecimen)
+	{
+		return objSpecimen.getCollectionStatus() == null || !Constants.COLLECTION_STATUS_COLLECTED.equals(objSpecimen.getCollectionStatus());
+	}
 
 	/**
-	 * @param objSpecimen
-	 * @return
+	 * Sets the label for specimen.
+	 *
+	 * @param objSpecimen the obj specimen
+	 *
+	 * @throws LabelGenException the label gen exception
+	 */
+	private void setLabelForSpecimen(final Specimen objSpecimen) throws LabelGenException
+	{
+		StringBuffer buffer = new StringBuffer();
+
+		if(isGenLabel(objSpecimen))
+		{
+			String labelFormat = getLabelFormat(objSpecimen, buffer);
+
+			if (!Validator.isEmpty(labelFormat))
+			{
+				StringTokenizer tokenizer = new StringTokenizer(labelFormat, "%");
+				while (tokenizer.hasMoreTokens())
+				{
+					String token = tokenizer.nextToken();
+					try
+					{
+						buffer.append(getTokenValue(objSpecimen, token));
+
+					}
+					catch (final Exception ex)
+					{
+						LOGGER.info(ex);
+					}
+				}
+//						buffer.append("_");
+//						buffer.append(getSpecimenCount(objSpecimen));
+			}
+			objSpecimen.setLabel(buffer.toString());
+		}
+		else
+		{
+			throw new LabelGenException("Manual Label Generation is selected for this specimen");
+		}
+	}
+
+	/**
+	 * Gets the token value.
+	 *
+	 * @param objSpecimen the obj specimen
+	 * @param token the token
+	 *
+	 * @return the token value
+	 *
+	 * @throws NameGeneratorException the name generator exception
+	 */
+	private String getTokenValue(final Specimen objSpecimen, String token)
+			throws NameGeneratorException
+	{
+		if("SYS_UID".equals(token))
+		{
+			currentLabel = currentLabel+1;
+		}
+		String mylable = TokenFactory.getInstance(token).getTokenValue(objSpecimen,
+				token, currentLabel);
+		if (mylable == null)
+		{
+			mylable = "";
+		}
+		return mylable;
+	}
+
+
+	/**
+	 * Checks if is gen label.
+	 *
+	 * @param objSpecimen the obj specimen
+	 *
+	 * @return true, if checks if is gen label
 	 */
 	private boolean isGenLabel(final Specimen objSpecimen)
 	{
@@ -136,10 +177,12 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 
 
 	/**
-	 * @param objSpecimen
-	 * @param buffer
-	 * @param labelFormat
-	 * @return
+	 * Gets the label format.
+	 *
+	 * @param objSpecimen the obj specimen
+	 * @param buffer the buffer
+	 *
+	 * @return the label format
 	 */
 	private String getLabelFormat(final Specimen objSpecimen, StringBuffer buffer)
 	{
@@ -151,7 +194,7 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 				currentLabel = currentLabel+1;
 				buffer.append(currentLabel);
 			}
-			else if(objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel() && !Validator.isEmpty(objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat()))
+			else if(isCPLabelformatAvl(objSpecimen))
 			{
 				labelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
 			}
@@ -166,17 +209,32 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 			currentLabel = currentLabel+1;
 			buffer.append(currentLabel);
 		}
-		else if(objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel() && !Validator.isEmpty(objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat()))
+		else if(isCPLabelformatAvl(objSpecimen))
 		{
 			labelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
 		}
 		return labelFormat;
 	}
 
+	/**
+	 * Checks if is cp labelformat avl.
+	 *
+	 * @param objSpecimen the obj specimen
+	 *
+	 * @return true, if checks if is cp labelformat avl
+	 */
+	private boolean isCPLabelformatAvl(final Specimen objSpecimen)
+	{
+		return objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel() && !Validator.isEmpty(objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat());
+	}
+
 
 	/**
-	 * @param objSpecimen
-	 * @return
+	 * Checks if is cp default.
+	 *
+	 * @param objSpecimen the obj specimen
+	 *
+	 * @return true, if checks if is cp default
 	 */
 	private boolean isCPDefault(final Specimen objSpecimen)
 	{
@@ -185,7 +243,9 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 
 
 	/**
-	 * @param objSpecimen
+	 * Sets the scg data.
+	 *
+	 * @param objSpecimen the obj specimen
 	 */
 	private void setScgData(final Specimen objSpecimen)
 	{
@@ -202,9 +262,11 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 
 
 	/**
-	 * @param objSpecimen
+	 * Sets the specimen req.
+	 *
+	 * @param objSpecimen the obj specimen
 	 */
-	private void getSpecimenReq(final Specimen objSpecimen)
+	private void setSpecimenReq(final Specimen objSpecimen)
 	{
 		if(objSpecimen.getSpecimenRequirement() == null && objSpecimen.getId() != null)
 		{
@@ -223,28 +285,13 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 			}
 			catch(ApplicationException exp)
 			{
-				logger.info(exp);
+				LOGGER.info(exp);
 			}
 		}
 	}
 
 
 
-	/**
-	 * Checks if is aliquot.
-	 *
-	 * @param objSpecimen the obj specimen
-	 *
-	 * @return true, if checks if is aliquot
-	 */
-	private boolean isAliquot(final Specimen objSpecimen)
-	{
-		if(objSpecimen.getLineage() == null)
-		{
-			objSpecimen.setLineage(Constants.NEW_SPECIMEN);
-		}
-		return objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN) ||objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN);
-	}
 
 
 	/* (non-Javadoc)
@@ -262,29 +309,15 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 		specimenObject.setLabel(this.currentLabel.toString());
 	}
 
-	public synchronized void setLabel(Collection<AbstractDomainObject> object) throws LabelGenException
-	{
-		Iterator<AbstractDomainObject> iterator = object.iterator();
-			SpecimenCollectionGroup scg = null;
-			while (iterator.hasNext())
-			{
-				final Specimen newSpecimen = (Specimen) iterator.next();
-				if(scg == null)
-				{
-					if(newSpecimen.getSpecimenCollectionGroup() != null && newSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration() != null)
-					{
-						scg = newSpecimen.getSpecimenCollectionGroup();
-					}
-					else
-					{
-						scg = getSCGData(newSpecimen);
-					}
-				}
-				getSpecimenReq(newSpecimen);
-			}
-	}
 
 
+	/**
+	 * Gets the sCG data.
+	 *
+	 * @param spec the spec
+	 *
+	 * @return the sCG data
+	 */
 	private SpecimenCollectionGroup getSCGData(Specimen spec)
 	{
 		String hql = "select scg.collectionProtocolRegistration.collectionProtocol.generateLabel," +
@@ -297,8 +330,8 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
-		CollectionProtocol cp = new CollectionProtocol();
-		List list = null;
+		CollectionProtocol protocol = new CollectionProtocol();
+		List list;
 		try
 		{
 			list = AppUtility.executeQuery(hql);
@@ -310,17 +343,17 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 			{
 				labelFormat = obje[1].toString();
 			}
-			Long cprId = Long.valueOf((obje[2].toString()));
+			Long cprId = Long.valueOf(obje[2].toString());
 			String PPI= obje[3].toString();
 			Long scgId = Long.valueOf(obje[4].toString());
 			Long cpId = Long.valueOf(obje[5].toString());
-			cp.setId(cpId);
-			cp.setSpecimenLabelFormat(labelFormat);
-			cp.setGenerateLabel(generateLabel);
+			protocol.setId(cpId);
+			protocol.setSpecimenLabelFormat(labelFormat);
+			protocol.setGenerateLabel(generateLabel);
 
 			cpr.setId(cprId);
 			cpr.setProtocolParticipantIdentifier(PPI);
-			cpr.setCollectionProtocol(cp);
+			cpr.setCollectionProtocol(protocol);
 
 			scg.setId(scgId);
 			scg.setCollectionProtocolRegistration(cpr);
@@ -328,7 +361,7 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 		}
 		catch (ApplicationException e)
 		{
-			logger.info(e);
+			LOGGER.info(e);
 		}
 		return scg;
 	}

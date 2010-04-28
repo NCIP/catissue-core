@@ -14,7 +14,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author nitesh_marwaha
  *
  */
-public class TokenFactory
+public final class TokenFactory
 {
 
 	/** Logger object. */
@@ -29,7 +29,7 @@ public class TokenFactory
 	}
 
 	/** Singleton instance of SpecimenLabelGenerator. */
-	private static Map<String, Object> TokenMap = new HashMap<String, Object>();
+	private static Map<String, Object> tokenMap = new HashMap<String, Object>();
 
 	/**
 	 * Get singleton instance of SpecimenLabelGenerator.
@@ -46,8 +46,8 @@ public class TokenFactory
 	{
 		try
 		{
-			LabelTokens labelToken = null;
-			if (TokenMap.get(tokenKey) == null)
+			LabelTokens labelToken;
+			if (tokenMap.get(tokenKey) == null)
 			{
 				String className = PropertyHandler.getTokenValue(tokenKey);
 
@@ -57,13 +57,13 @@ public class TokenFactory
 				}
 				else
 				{
-					TokenMap.put(tokenKey, Class.forName(className).newInstance());
-					labelToken = (LabelTokens)TokenMap.get(tokenKey);
+					tokenMap.put(tokenKey, Class.forName(className).newInstance());
+					labelToken = (LabelTokens)tokenMap.get(tokenKey);
 				}
 			}
 			else
 			{
-				labelToken = (LabelTokens)TokenMap.get(tokenKey);
+				labelToken = (LabelTokens)tokenMap.get(tokenKey);
 			}
 			return labelToken;
 		}

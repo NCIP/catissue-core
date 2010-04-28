@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.namegenerator;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.LabelGenUtil;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 
 // TODO: Auto-generated Javadoc
@@ -16,9 +17,11 @@ import edu.wustl.common.util.global.Validator;
 public class LabelTokenForSpecimenType implements LabelTokens
 {
 
+	private static final Logger LOGGER = Logger.getCommonLogger(LabelTokenForSpecimenType.class);
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.namegenerator.LabelTokens#getTokenValue(java.lang.Object, java.lang.String)
+	/**
+	 * This will return the value of the token provided.
+	 * @see edu.wustl.catissuecore.namegenerator.LabelTokens#getTokenValue(java.lang.Object, java.lang.String, java.lang.Long)
 	 */
 	public String getTokenValue(Object object, String token, Long currVal)
 	{
@@ -30,12 +33,12 @@ public class LabelTokenForSpecimenType implements LabelTokens
 			if(Validator.isEmpty(valToReplace))
 			{
 				char abc = objSpecimen.getSpecimenType().charAt(1);
-				valToReplace = abc+"";
+				valToReplace = Character.toString(abc);
 			}
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			LOGGER.info(e.getMessage());
 		}
 		return valToReplace;
 	}

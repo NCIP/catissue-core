@@ -15,6 +15,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -61,6 +63,7 @@ import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.Position;
 import edu.wustl.catissuecore.util.SpecimenUtil;
@@ -4200,7 +4203,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			return;
 		}
-		final Iterator<AbstractSpecimen> iterator = childrenSpecimens.iterator();
+
+		List<AbstractSpecimen> lstSpecimen = new ArrayList<AbstractSpecimen>();
+		Iterator<AbstractSpecimen> itr = childrenSpecimens.iterator();
+		while(itr.hasNext())
+		{
+			lstSpecimen.add(itr.next());
+		}
+
+		final Comparator spIdComp = new IdComparator();
+		Collections.sort(lstSpecimen, spIdComp);
+
+		final Iterator<AbstractSpecimen> iterator = lstSpecimen.iterator();
 		while (iterator.hasNext())
 		{
 			final Specimen specimen = (Specimen) iterator.next();
@@ -5419,63 +5433,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch(ApplicationException exp)
 		{
-//			this.LOGGER.error(exp.getMessage(),exp) ;
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 
 		}
 		return count;
 	}
 
-	/**
-	 * This method insert collection of objects.
-	 * @param objCollection Collection of objects to be inserted
-	 * @param sessionDataBean  session specific data
-	 * @param dao object
-	 * @throws BizLogicException Generic BizLogic Exception
-	 */
-//	public void insertMultiple(Collection<AbstractDomainObject> objCollection, DAO dao,
-//			SessionDataBean sessionDataBean) throws BizLogicException
-//	{
-//		//  Authorization to ADD multiple objects (e.g. Aliquots) checked here
-//		for (AbstractDomainObject obj : objCollection)
-//		{
-//			if (isAuthorized(dao, obj, sessionDataBean))
-//			{
-//				validate(obj, dao, Constants.ADD);
-//			}
-//			else
-//			{
-//				ErrorKey errorKey = ErrorKey.getErrorKey("access.execute.action.denied");
-//				throw new BizLogicException(errorKey, null,	"");
-//			}
-//		}
-////		generateLabel(objCollection);
-//		for (AbstractDomainObject obj : objCollection)
-//		{
-//			insert(obj, dao, sessionDataBean);
-//		}
-//	}
 
-	private void generateLabel(Collection<AbstractDomainObject> objCollection) throws BizLogicException
-	{
-
-		try
-		{
-			final LabelGenerator spLblGenerator;
-					spLblGenerator = LabelGeneratorFactory
-					.getInstance(Constants.CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-				spLblGenerator.setLabel(objCollection);
-		}
-		catch (final NameGeneratorException e)
-		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			throw this.getBizLogicException(e, "name.generator.exp", "");
-		}
-		catch (LabelGenException e)
-		{
-			this.logger.error(e.getMessage(), e);
-		}
-
-	}
 }

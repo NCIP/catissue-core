@@ -8,33 +8,38 @@ import java.util.Map;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.common.util.global.Status;
 
+// TODO: Auto-generated Javadoc
 /**
- *  @author janhavi_hasabnis
+ * The Class CollectionProtocolBean.
  *
+ * @author janhavi_hasabnis
  */
 public class CollectionProtocolBean implements Serializable
 {
-	/**
-	 * serialVersionUID.
-	 */
+
+	/** serialVersionUID. */
 	private static final long serialVersionUID = 1L;
-	/**
-	 * identifier.
-	 */
+
+	/** identifier. */
 	private Long identifier = null;
-	/**
-	 * protocolCoordinatorIds.
-	 */
+
+	/** protocolCoordinatorIds. */
 	private long[] coordinatorIds;
-	/**
-	 * principalInvestigatorId.
-	 */
+
+	/** principalInvestigatorId. */
 	private long principalInvestigatorId;
 
+	/** The generate label. */
 	private boolean generateLabel;
 
+	/** The default label gen. */
 	private boolean defaultLabelGen;
 
+	/**
+	 * Checks if is default label gen.
+	 *
+	 * @return true, if is default label gen
+	 */
 	public boolean isDefaultLabelGen()
 	{
 		return defaultLabelGen;
@@ -43,58 +48,57 @@ public class CollectionProtocolBean implements Serializable
 
 
 
+	/**
+	 * Sets the default label gen.
+	 *
+	 * @param defaultLabelGen the new default label gen
+	 */
 	public void setDefaultLabelGen(boolean defaultLabelGen)
 	{
 		this.defaultLabelGen = defaultLabelGen;
 	}
 
+	/** The label format. */
 	private String labelFormat;
 
 
 
 
-	/**
-	 * irbID.
-	 */
+	/** irbID. */
 	private String irbID;
-	/**
-	 * descriptionURL.
-	 */
+
+	/** descriptionURL. */
 	private String descriptionURL;
-	/**
-	 * title.
-	 */
+
+	/** title. */
 	private String title;
-	/**
-	 * shortTitle.
-	 */
+
+	/** shortTitle. */
 	private String shortTitle;
-	/**
-	 * startDate.
-	 */
+
+	/** startDate. */
 	private String startDate;
-	/**
-	 * endDate.
-	 */
+
+	/** endDate. */
 	private String endDate;
-	/**
-	 * enrollment.
-	 */
+
+	/** enrollment. */
 	private String enrollment;
-	/**
-	 * siteIds.
-	 */
+
+	/** siteIds. */
 	private long[] siteIds;
-	/**
-	 * isParticiapantReg.
-	 */
+
+	/** isParticiapantReg. */
 	private boolean isParticiapantReg = false;
 
-	/**
-	 * clinicalDiagnosis values.
-	 */
+	/** clinicalDiagnosis values. */
 	private String[] clinicalDiagnosis;
 
+	/**
+	 * Gets the label format.
+	 *
+	 * @return the label format
+	 */
 	public String getLabelFormat()
 	{
 		return labelFormat;
@@ -102,18 +106,33 @@ public class CollectionProtocolBean implements Serializable
 
 
 
+	/**
+	 * Sets the label format.
+	 *
+	 * @param labelFormat the new label format
+	 */
 	public void setLabelFormat(String labelFormat)
 	{
 		this.labelFormat = labelFormat;
 	}
 
 
+	/**
+	 * Checks if is generate label.
+	 *
+	 * @return true, if is generate label
+	 */
 	public boolean isGenerateLabel()
 	{
 		return generateLabel;
 	}
 
 
+	/**
+	 * Sets the generate label.
+	 *
+	 * @param generateLabel the new generate label
+	 */
 	public void setGenerateLabel(boolean generateLabel)
 	{
 		this.generateLabel = generateLabel;
@@ -121,6 +140,7 @@ public class CollectionProtocolBean implements Serializable
 
 	/**
 	 * This will return the clinicalDiagnosis values.
+	 *
 	 * @return clinicalDiagnosis clinicalDiagnosis.
 	 */
 	public String[] getClinicalDiagnosis()
@@ -130,6 +150,7 @@ public class CollectionProtocolBean implements Serializable
 
 	/**
 	 * This will be called to set clinicalDiagnosis.
+	 *
 	 * @param clinicalDiagnosis clinicalDiagnosis.
 	 */
 	public void setClinicalDiagnosis(String[] clinicalDiagnosis)
@@ -138,6 +159,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Checks if is particiapant reg.
+	 *
 	 * @return - boolean
 	 */
 	public boolean isParticiapantReg()
@@ -146,6 +169,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the particiapant reg.
+	 *
 	 * @param isParticiapantRegParam - isParticiapantRegParam
 	 */
 	public void setParticiapantReg(boolean isParticiapantRegParam)
@@ -153,39 +178,30 @@ public class CollectionProtocolBean implements Serializable
 		this.isParticiapantReg = isParticiapantRegParam;
 	}
 
-	/**
-	 * whether Aliquote in same container.
-	 */
+	/** whether Aliquote in same container. */
 	private boolean aliqoutInSameContainer = false;
-	/**
-	* Activity Status.
-	*/
+
+	/** Activity Status. */
 	private String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.toString();
 
-	/**
-	 * Unsigned Form Url for the Consents.
-	 */
+	/** Unsigned Form Url for the Consents. */
 	private String unsignedConsentURLName;
 
-	/**
-	 * Map for Storing Values of Consent Tiers.
-	 */
+	/** Map for Storing Values of Consent Tiers. */
 	private Map<String, String> consentValues = new LinkedHashMap<String, String>();//bug 8905
 
-	/**
-	 * No of Consent Tier.
-	 */
+	/** No of Consent Tier. */
 	private int consentTierCounter;
-	/**
-	 * CheckBox for consent is checked or not.
-	 */
+
+	/** CheckBox for consent is checked or not. */
 	private boolean consentWaived = false;
-	/**
-	 * operation.
-	 */
+
+	/** operation. */
 	private String operation = "Add";
 
 	/**
+	 * Gets the coordinator ids.
+	 *
 	 * @return - array of long.
 	 */
 	public long[] getCoordinatorIds()
@@ -194,6 +210,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the coordinator ids.
+	 *
 	 * @param coordinatorIdsParam - coordinatorIdsParam
 	 */
 	public void setCoordinatorIds(long[] coordinatorIdsParam)
@@ -202,6 +220,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the principal investigator id.
+	 *
 	 * @return - principalInvestigatorId
 	 */
 	public long getPrincipalInvestigatorId()
@@ -210,6 +230,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the principal investigator id.
+	 *
 	 * @param principalInvestigatorIdParam - principalInvestigatorIdParam
 	 */
 	public void setPrincipalInvestigatorId(long principalInvestigatorIdParam)
@@ -218,6 +240,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the irb id.
+	 *
 	 * @return - irbID
 	 */
 	public String getIrbID()
@@ -226,6 +250,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the irb id.
+	 *
 	 * @param irbIDParam - irbIDParam
 	 */
 	public void setIrbID(String irbIDParam)
@@ -234,6 +260,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the description url.
+	 *
 	 * @return - descriptionURL
 	 */
 	public String getDescriptionURL()
@@ -242,6 +270,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the description url.
+	 *
 	 * @param descriptionURLParam - descriptionURLParam
 	 */
 	public void setDescriptionURL(String descriptionURLParam)
@@ -250,6 +280,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the title.
+	 *
 	 * @return - title
 	 */
 	public String getTitle()
@@ -258,6 +290,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the title.
+	 *
 	 * @param titleParam - titleParam
 	 */
 	public void setTitle(String titleParam)
@@ -266,6 +300,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the short title.
+	 *
 	 * @return - shortTitle
 	 */
 	public String getShortTitle()
@@ -274,6 +310,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the short title.
+	 *
 	 * @param shortTitleParam - shortTitleParam
 	 */
 	public void setShortTitle(String shortTitleParam)
@@ -282,6 +320,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the start date.
+	 *
 	 * @return - startDate
 	 */
 	public String getStartDate()
@@ -290,6 +330,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the start date.
+	 *
 	 * @param startDateParam - startDateParam
 	 */
 	public void setStartDate(String startDateParam)
@@ -298,6 +340,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the enrollment.
+	 *
 	 * @return - enrollment
 	 */
 	public String getEnrollment()
@@ -306,6 +350,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the enrollment.
+	 *
 	 * @param enrollmentParam -enrollmentParam
 	 */
 	public void setEnrollment(String enrollmentParam)
@@ -314,6 +360,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the unsigned consent url name.
+	 *
 	 * @return - unsignedConsentURLName
 	 */
 	public String getUnsignedConsentURLName()
@@ -322,6 +370,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the unsigned consent url name.
+	 *
 	 * @param unsignedConsentURLNameParam - unsignedConsentURLNameParam
 	 */
 	public void setUnsignedConsentURLName(String unsignedConsentURLNameParam)
@@ -330,6 +380,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the consent values.
+	 *
 	 * @return - consentValues
 	 */
 	public Map<String, String> getConsentValues()
@@ -338,6 +390,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the consent values.
+	 *
 	 * @param consentValuesParam - consentValuesParam
 	 */
 	public void setConsentValues(Map<String, String> consentValuesParam)
@@ -346,6 +400,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the consent tier counter.
+	 *
 	 * @return - consentTierCounter
 	 */
 	public int getConsentTierCounter()
@@ -354,6 +410,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the consent tier counter.
+	 *
 	 * @param consentTierCounterParam - consentTierCounterParam
 	 */
 	public void setConsentTierCounter(int consentTierCounterParam)
@@ -362,6 +420,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Checks if is consent waived.
+	 *
 	 * @return - consentWaived
 	 */
 	public boolean isConsentWaived()
@@ -370,6 +430,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the consent waived.
+	 *
 	 * @param consentWaivedParam - consentWaivedParam
 	 */
 	public void setConsentWaived(boolean consentWaivedParam)
@@ -378,6 +440,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the identifier.
+	 *
 	 * @return - identifier
 	 */
 	public Long getIdentifier()
@@ -386,6 +450,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the identifier.
+	 *
 	 * @param identifierParam - identifierParam
 	 */
 	public void setIdentifier(Long identifierParam)
@@ -394,6 +460,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the operation.
+	 *
 	 * @return - operation
 	 */
 	public String getOperation()
@@ -402,6 +470,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the operation.
+	 *
 	 * @param operationParam - operationParam
 	 */
 	public void setOperation(String operationParam)
@@ -410,6 +480,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the activity status.
+	 *
 	 * @return - activityStatus
 	 */
 	public String getActivityStatus()
@@ -418,6 +490,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the activity status.
+	 *
 	 * @param activityStatusParam - activityStatusParam
 	 */
 	public void setActivityStatus(String activityStatusParam)
@@ -426,6 +500,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the end date.
+	 *
 	 * @return - endDate
 	 */
 	public String getEndDate()
@@ -434,6 +510,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the end date.
+	 *
 	 * @param endDateParam - endDateParam
 	 */
 	public void setEndDate(String endDateParam)
@@ -442,6 +520,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Checks if is aliqout in same container.
+	 *
 	 * @return - aliqoutInSameContainer
 	 */
 	public boolean isAliqoutInSameContainer()
@@ -450,6 +530,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the aliqout in same container.
+	 *
 	 * @param aliqoutInSameContainerParam - aliqoutInSameContainerParam
 	 */
 	public void setAliqoutInSameContainer(boolean aliqoutInSameContainerParam)
@@ -458,6 +540,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Gets the site ids.
+	 *
 	 * @return - siteIds
 	 */
 	public long[] getSiteIds()
@@ -466,6 +550,8 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 	/**
+	 * Sets the site ids.
+	 *
 	 * @param siteIdsParam - siteIdsParam
 	 */
 	public void setSiteIds(long[] siteIdsParam)
@@ -475,6 +561,7 @@ public class CollectionProtocolBean implements Serializable
 
 	/**
 	 * parentCollectionProtocol.
+	 *
 	 * @return parentCollectionProtocol.
 	 */
 	public CollectionProtocol getParentCollectionProtocol()
@@ -484,6 +571,7 @@ public class CollectionProtocolBean implements Serializable
 
 	/**
 	 * sequenceNumber.
+	 *
 	 * @return sequenceNumber.
 	 */
 	public Integer getSequenceNumber()
@@ -493,6 +581,7 @@ public class CollectionProtocolBean implements Serializable
 
 	/**
 	 * type.
+	 *
 	 * @return type.
 	 */
 	public String getType()
@@ -502,6 +591,7 @@ public class CollectionProtocolBean implements Serializable
 
 	/**
 	 * studyCalendarEventPoint.
+	 *
 	 * @return studyCalendarEventPoint.
 	 */
 	public Double getStudyCalendarEventPoint()
@@ -511,6 +601,7 @@ public class CollectionProtocolBean implements Serializable
 
 	/**
 	 * parentCollectionProtocol.
+	 *
 	 * @param parentCollectionProtocol parentCollectionProtocol.
 	 */
 	public void setParentCollectionProtocol(CollectionProtocol parentCollectionProtocol)
@@ -520,6 +611,7 @@ public class CollectionProtocolBean implements Serializable
 
 	/**
 	 * sequenceNumber.
+	 *
 	 * @param sequenceNumber sequenceNumber.
 	 */
 	public void setSequenceNumber(Integer sequenceNumber)
@@ -529,6 +621,7 @@ public class CollectionProtocolBean implements Serializable
 
 	/**
 	 * type.
+	 *
 	 * @param type type.
 	 */
 	public void setType(String type)
@@ -538,6 +631,7 @@ public class CollectionProtocolBean implements Serializable
 
 	/**
 	 * setStudyCalendarEventPoint .
+	 *
 	 * @param studyCalendarEventPoint studyCalendarEventPoint.
 	 */
 	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint)
@@ -545,32 +639,24 @@ public class CollectionProtocolBean implements Serializable
 		this.studyCalendarEventPoint = studyCalendarEventPoint;
 	}
 
-	/**
-	 * Parent Collection Protocol.
-	 */
+	/** Parent Collection Protocol. */
 	private CollectionProtocol parentCollectionProtocol;
 
-	/**
-	 * Sequence Number.
-	 */
+	/** Sequence Number. */
 	private Integer sequenceNumber;
-	/**
-	 * Collection Protocol type - Arm, Cycle, Phase.
-	 */
+
+	/** Collection Protocol type - Arm, Cycle, Phase. */
 	private String type;
 
-	/**
-	 * Defines the relative time point in days.
-	 */
+	/** Defines the relative time point in days. */
 	private Double studyCalendarEventPoint;
 
-	/**
-	 * Parent collection protocol Identifier.
-	 */
+	/** Parent collection protocol Identifier. */
 	private Long parentCollectionProtocolId;
 
 	/**
 	 * This method will be called to get parentCollectionProtocolId.
+	 *
 	 * @return parentCollectionProtocolId.
 	 */
 	public Long getParentCollectionProtocolId()
@@ -580,6 +666,7 @@ public class CollectionProtocolBean implements Serializable
 
 	/**
 	 * This method will be called to set parentCollectionProtocolId.
+	 *
 	 * @param parentCollectionProtocolId parentCollectionProtocolId.
 	 */
 	public void setParentCollectionProtocolId(Long parentCollectionProtocolId)

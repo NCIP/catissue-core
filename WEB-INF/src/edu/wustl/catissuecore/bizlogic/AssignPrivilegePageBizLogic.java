@@ -45,10 +45,11 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 
+// TODO: Auto-generated Javadoc
 /**
  * AssignPrivilegePageBizLogic is a class which contains the implementations for
  * ShowAssignPrivilegePageAction.
- * 
+ *
  * @author jitendra_agrawal
  * @author vipin_bansal
  */
@@ -56,9 +57,25 @@ import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 {
 
-	private static Logger logger = Logger.getCommonLogger(AssignPrivilegePageBizLogic.class);
+	/** The Constant LOGGER. */
+	private static final  Logger LOGGER = Logger.getCommonLogger(AssignPrivilegePageBizLogic.class);
+
+	/** The scientist privileges list. */
 	List<NameValueBean> scientistPrivilegesList = Variables.privilegeGroupingMap.get("SCIENTIST");
 
+/** The Constant SITE_STRING. */
+private static final String SITE_STRING="SITE";
+
+	/**
+	 * Gets the record names.
+	 *
+	 * @param recordIds the record ids
+	 * @param privilegesForm the privileges form
+	 *
+	 * @return the record names
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 */
 	public List getRecordNames(Set recordIds, AssignPrivilegesForm privilegesForm)
 			throws BizLogicException
 	{
@@ -68,12 +85,12 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		{
 			final Object[] whereColumn = new Long[recordIds.size()];
 			final Iterator itr = recordIds.iterator();
-			int i = 0;
+			int identifier = 0;
 			while (itr.hasNext())
 			{
 				final NameValueBean nameValueBean = (NameValueBean) itr.next();
-				whereColumn[i] = Long.valueOf(nameValueBean.getValue());
-				i++;
+				whereColumn[identifier] = Long.valueOf(nameValueBean.getValue());
+				identifier++;
 			}
 			final String sourceObjectName = privilegesForm.getObjectType();
 			final String[] selectColumnName = new String[2];
@@ -97,9 +114,9 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 
 			if (!list.isEmpty())
 			{
-				for (i = 0; i < list.size(); i++)
+				for (identifier = 0; identifier < list.size(); identifier++)
 				{
-					final Object[] obj = (Object[]) list.get(i);
+					final Object[] obj = (Object[]) list.get(identifier);
 					recordNames.add(new NameValueBean(obj[0], obj[1]));
 				}
 			}
@@ -110,10 +127,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Gets the list of Site objects to be shown on UI for assign privileges.
-	 * 
-	 * @param isToExcludeDisabled
+	 *
+	 * @param isToExcludeDisabled the is to exclude disabled
+	 * @param sessionDataBean the session data bean
+	 *
 	 * @return List<NameValueBean> of sites.
-	 * @throws BizLogicException
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	public List<NameValueBean> getSiteList(boolean isToExcludeDisabled,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -154,6 +174,15 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		return siteNameValueBeanList;
 	}
 
+	/**
+	 * Gets the cP list.
+	 *
+	 * @param isToExcludeDisabled the is to exclude disabled
+	 *
+	 * @return the cP list
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 */
 	public List<NameValueBean> getCPList(boolean isToExcludeDisabled) throws BizLogicException
 	{
 		final String sourceObjectName = CollectionProtocol.class.getName();
@@ -181,11 +210,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * Gets list of users when page is loaded
-	 * 
-	 * @param isToExcludeDisabled
+	 * Gets list of users when page is loaded.
+	 *
+	 * @param isToExcludeDisabled the is to exclude disabled
+	 *
 	 * @return List of user NameVAlueBean objects.
-	 * @throws BizLogicException
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	public List<NameValueBean> getUserList(boolean isToExcludeDisabled) throws BizLogicException
 	{
@@ -215,10 +246,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * Gets list of roles when page is loaded
-	 * 
+	 * Gets list of roles when page is loaded.
+	 *
+	 * @param pageOf the page of
+	 *
 	 * @return List of role NameValueBean objects.
-	 * @throws BizLogicException
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	public List<NameValueBean> getRoleList(String pageOf) throws BizLogicException
 	{
@@ -230,7 +264,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
+			AssignPrivilegePageBizLogic.LOGGER.error(e.getMessage(), e);
 			throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 		}
 
@@ -246,10 +280,10 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 			{
 				final Role role = (Role) iterator.next();
 				final NameValueBean nameValueBean = new NameValueBean();
-				if ((Constants.PAGE_OF_ASSIGN_PRIVILEGE).equalsIgnoreCase(pageOf))
+				if (Constants.PAGE_OF_ASSIGN_PRIVILEGE.equalsIgnoreCase(pageOf))
 				{
-					if (!((Constants.ROLE_SUPER_ADMINISTRATOR).equals(role.getName()))
-							&& !((Constants.ROLE_ADMINISTRATOR).equals(role.getName())))
+					if (!(Constants.ROLE_SUPER_ADMINISTRATOR.equals(role.getName()))
+							&& !(Constants.ROLE_ADMINISTRATOR.equals(role.getName())))
 					{
 						nameValueBean.setName(role.getName());
 						nameValueBean.setValue(String.valueOf(role.getId()));
@@ -258,8 +292,8 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 				}
 				else if (pageOf != null)
 				{
-					if ((Constants.ROLE_SUPER_ADMINISTRATOR).equals(role.getName())
-							&& (Constants.SUPER_ADMIN_USER).equals("" + role.getId()))
+					if (Constants.ROLE_SUPER_ADMINISTRATOR.equals(role.getName())
+							&& Constants.SUPER_ADMIN_USER.equals("" + role.getId()))
 					{
 						nameValueBean.setName(Constants.SUPERADMINISTRATOR);
 					}
@@ -276,11 +310,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * Gets list of actions when page is loaded
-	 * 
-	 * @param isToExcludeDisabled
+	 * Gets list of actions when page is loaded.
+	 *
+	 * @param isToExcludeDisabled the is to exclude disabled
+	 *
 	 * @return List of user NameVAlueBean objects.
-	 * @throws BizLogicException
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	public List<NameValueBean> getActionList(boolean isToExcludeDisabled) throws BizLogicException
 	{
@@ -293,13 +329,22 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		return privilegeNameValueBeanList;
 	}
 
+	/**
+	 * Gets the action list for user page.
+	 *
+	 * @param isToExcludeDisabled the is to exclude disabled
+	 *
+	 * @return the action list for user page
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 */
 	public List<NameValueBean> getActionListForUserPage(boolean isToExcludeDisabled)
 			throws BizLogicException
 	{
 		final List<NameValueBean> privilegeNameValueBeanList = new ArrayList<NameValueBean>();
 		final List<NameValueBean> cpPrivilegesList = Variables.privilegeGroupingMap.get("CP");
 
-		final List<NameValueBean> sitePrivilegesList = Variables.privilegeGroupingMap.get("SITE");
+		final List<NameValueBean> sitePrivilegesList = Variables.privilegeGroupingMap.get(SITE_STRING);
 
 		final Set<NameValueBean> set = new HashSet<NameValueBean>();
 		set.addAll(cpPrivilegesList);
@@ -314,14 +359,15 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Gives list of JSONObjects, having user NameValueBean assigned to selected
-	 * sites as a response
-	 * 
-	 * @param selectedSitesList
-	 * @param assignPrivilegePageBizLogic
+	 * sites as a response.
+	 *
+	 * @param selectedSitesList the selected sites list
+	 *
 	 * @return List<JSONObject> ,list of JSONObjects, having user NameValueBean
-	 *         assigned to selected sites
-	 * @throws JSONException
-	 * @throws IOException
+	 * assigned to selected sites
+	 *
+	 * @throws JSONException the JSON exception
+	 * @throws IOException 	 * @throws BizLogicException the biz logic exception
 	 */
 	public List<JSONObject> getUsersForThisSites(List<Long> selectedSitesList)
 			throws BizLogicException, JSONException
@@ -341,9 +387,12 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Gives the list of user NameValueBeanObjects that are registered under the
 	 * selected sites.
-	 * 
-	 * @param selectedSitesList
+	 *
+	 * @param selectedSitesList the selected sites list
+	 *
 	 * @return List<NameValueBean> list of user NameValueBeanObjects .
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	public List<NameValueBean> getUsersForSelectedSites(List<Long> selectedSitesList)
 			throws BizLogicException
@@ -372,9 +421,12 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Given a list selected sites , this method will return the list of users
 	 * registered under them.
-	 * 
-	 * @param siteIds
+	 *
+	 * @param siteId the site id
+	 *
 	 * @return List of user registered under the given site
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	public List<NameValueBean> getUsersList(long siteId) throws BizLogicException
 	{
@@ -399,7 +451,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
+			AssignPrivilegePageBizLogic.LOGGER.error(e.getMessage(), e);
 			throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 
 		}
@@ -412,6 +464,16 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		return nameValuBeanList;
 	}
 
+	/**
+	 * Gets the c ps for this sites.
+	 *
+	 * @param selectedSitesList the selected sites list
+	 *
+	 * @return the c ps for this sites
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 * @throws JSONException the JSON exception
+	 */
 	public List<JSONObject> getCPsForThisSites(List<Long> selectedSitesList)
 			throws BizLogicException, JSONException
 	{
@@ -432,6 +494,15 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		return arrayList;
 	}
 
+	/**
+	 * Gets the c ps for selected sites.
+	 *
+	 * @param selectedSitesList the selected sites list
+	 *
+	 * @return the c ps for selected sites
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 */
 	public List<NameValueBean> getCPsForSelectedSites(List<Long> selectedSitesList)
 			throws BizLogicException
 	{
@@ -456,6 +527,15 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		return list;
 	}
 
+	/**
+	 * Gets the c ps list.
+	 *
+	 * @param siteId the site id
+	 *
+	 * @return the c ps list
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 */
 	public List<NameValueBean> getCPsList(long siteId) throws BizLogicException
 	{
 		DAO dao = null;
@@ -477,8 +557,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
+			AssignPrivilegePageBizLogic.LOGGER.error(e.getMessage(), e);
 			throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 		}
 		finally
@@ -490,14 +569,19 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Gives list of JSONObjects, having action NameValueBean assigned to
-	 * selected role as a response
-	 * 
-	 * @param roleId
-	 * @param assignPrivilegePageBizLogic
+	 * selected role as a response.
+	 *
+	 * @param roleId the role id
+	 * @param pageOf the page of
+	 * @param selectedSiteIds the selected site ids
+	 * @param selectedCPIds the selected cp ids
+	 * @param isAllCPChecked the is all cp checked
+	 *
 	 * @return List<JSONObject> ,list of JSONObjects, having action
-	 *         NameValueBean assigned to selected role
-	 * @throws JSONException
-	 * @throws BizLogicException
+	 * NameValueBean assigned to selected role
+	 *
+	 * @throws JSONException the JSON exception
+	 * @throws BizLogicException the biz logic exception
 	 */
 	public List<JSONObject> getActionsForThisRole(String roleId, String pageOf,
 			List<Long> selectedSiteIds, List<Long> selectedCPIds, boolean isAllCPChecked)
@@ -518,13 +602,14 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 			else
 			{
 				actionList = this.getActionList(false);
-				if (!"0".equals(roleId))
+				if ("0".equals(roleId))
 				{
-					selectedActionsList = this.getActionsList(roleId);
+					selectedActionsList = new ArrayList<NameValueBean>();
 				}
 				else
 				{
-					selectedActionsList = new ArrayList<NameValueBean>();
+					selectedActionsList = this.getActionsList(roleId);
+
 				}
 			}
 		}
@@ -539,14 +624,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
-				if ((selectedCPIds != null) && !selectedCPIds.isEmpty() && selectedCPIds.size() > 0)
+				if ((selectedCPIds != null) && !selectedCPIds.isEmpty() && !selectedCPIds.isEmpty())
 				{
 					actionList = this.getReformedNameValueBeanList(Variables.privilegeGroupingMap
 							.get("CP"));
 				}
 
-				else if ((selectedSiteIds != null) && !selectedSiteIds.isEmpty()
-						&& selectedSiteIds.size() > 0)
+				else if ((selectedSiteIds != null) && !selectedSiteIds.isEmpty())
 				{
 					if (isAllCPChecked)
 					{
@@ -563,13 +647,14 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 				{
 					actionList = this.getActionListForUserPage(false);
 				}
-				if (!"0".equals(roleId))
+				if ("0".equals(roleId))
 				{
-					selectedActionsList = this.getActionsList(roleId);
+					selectedActionsList = new ArrayList<NameValueBean>();
 				}
 				else
 				{
-					selectedActionsList = new ArrayList<NameValueBean>();
+					selectedActionsList = this.getActionsList(roleId);
+
 				}
 			}
 		}
@@ -594,14 +679,18 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param actionList
+	 * Gets the reformed name value bean list.
+	 *
+	 * @param list the list
+	 *
+	 * @return the reformed name value bean list
 	 */
 	// Remove underscore .Use Utility.getDisplayLabelForUnderscore method
 	private List<NameValueBean> getReformedNameValueBeanList(List<NameValueBean> list)
 	{
 		List<NameValueBean> reformedList = null;
 
-		if (list != null && !list.isEmpty() && list.size() > 0)
+		if (list != null && !list.isEmpty())
 		{
 			reformedList = new ArrayList<NameValueBean>();
 
@@ -615,6 +704,17 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		return reformedList;
 	}
 
+	/**
+	 * Gets the actions for this sites.
+	 *
+	 * @param selectedRoleId the selected role id
+	 * @param isAllCPChecked the is all cp checked
+	 *
+	 * @return the actions for this sites
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 * @throws JSONException the JSON exception
+	 */
 	public List<JSONObject> getActionsForThisSites(String selectedRoleId, boolean isAllCPChecked)
 			throws BizLogicException, JSONException
 	{
@@ -666,6 +766,16 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		return arrayList;
 	}
 
+	/**
+	 * Gets the actions for this c ps.
+	 *
+	 * @param selectedRoleId the selected role id
+	 *
+	 * @return the actions for this c ps
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 * @throws JSONException the JSON exception
+	 */
 	public List<JSONObject> getActionsForThisCPs(String selectedRoleId) throws BizLogicException,
 			JSONException
 	{
@@ -720,9 +830,12 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Given a selected role this method will return the list of actions under
 	 * this role.
-	 * 
-	 * @param role
+	 *
+	 * @param roleId the role id
+	 *
 	 * @return List of actions assigned to the selected role
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	public List<NameValueBean> getActionsList(String roleId) throws BizLogicException
 	{
@@ -751,8 +864,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (final SMException e)
 				{
-					AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
-					e.printStackTrace();
+					AssignPrivilegePageBizLogic.LOGGER.error(e.getMessage(), e);
 					throw this.getBizLogicException(e, "error.privileges.from.given.role", roleId);
 				}
 			}
@@ -786,8 +898,11 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param role
-	 * @param nameValuBeanList
+	 * Gets the action data.
+	 *
+	 * @param actionIds the action ids
+	 *
+	 * @return the action data
 	 */
 	/*
 	 * public List<NameValueBean> getActionsForSelRole(String roleId) {
@@ -806,7 +921,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	 */
 	/**
 	 * Gets action data from request
-	 * 
+	 *
 	 * @param request
 	 *            HttpServletRequest
 	 * @return List<String> list of actionIds
@@ -825,10 +940,11 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * Gives user related sites
-	 * 
-	 * @param userId
-	 * @param siteIdsList
+	 * Gives user related sites.
+	 *
+	 * @param siteIdsList the site ids list
+	 * @param user the user
+	 *
 	 * @return List<Integer> list of siteIds related to selected user
 	 */
 	public List<Site> getUserSiteRelation(User user, List<Long> siteIdsList)
@@ -850,12 +966,14 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * Create the BeanObject
-	 * 
-	 * @param user
-	 * @param userRelatedSites
-	 * @param roleId
-	 * @param actionIdsList
+	 * Create the BeanObject.
+	 *
+	 * @param user the user
+	 * @param userRelatedSites the user related sites
+	 * @param roleNameValueBean the role name value bean
+	 * @param actionBeanList the action bean list
+	 * @param isCustChecked the is cust checked
+	 *
 	 * @return SiteUserRolePrivilegeBean bean Object
 	 */
 	public SiteUserRolePrivilegeBean setUserPrivilegeSummary(User user,
@@ -877,16 +995,19 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * gives JSONObject as a response for summary
-	 * 
-	 * @param userRelatedSites
-	 * @param rowId
-	 * @param user
-	 * @param roleId
-	 * @param actionIdsList
+	 * gives JSONObject as a response for summary.
+	 *
+	 * @param userRelatedSites the user related sites
+	 * @param rowId the row id
+	 * @param user the user
+	 * @param roleNameValueBean the role name value bean
+	 * @param actionBeanList the action bean list
+	 * @param isCustChecked the is cust checked
+	 *
 	 * @return JSONObject for response
-	 * @throws JSONException
-	 * @throws CSException
+	 *
+	 * @throws JSONException the JSON exception
+	 * @throws CSException 	 * @throws BizLogicException the biz logic exception
 	 */
 	public JSONObject getObjectForUPSummary(String rowId, NameValueBean roleNameValueBean,
 			List<Site> userRelatedSites, User user, List<NameValueBean> actionBeanList,
@@ -907,13 +1028,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 
 		// for sites
 		final StringBuffer sbForSites = new StringBuffer();
-		if (userRelatedSites != null && userRelatedSites.size() > 0)
+		if (userRelatedSites != null && !userRelatedSites.isEmpty())
 		{
 			for (int i = 0; i < userRelatedSites.size(); i++)
 			{
 				if (i > 0)
 				{
-					sbForSites.append(",");
+					sbForSites.append(',');
 				}
 				sbForSites.append(userRelatedSites.get(i).getName());
 			}
@@ -941,7 +1062,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 				actionName = actionBeanList.get(i).getName();
 				if (i > 0)
 				{
-					sbForActions.append(",");
+					sbForActions.append(',');
 				}
 				// if((actionName).equals("PHI_ACCESS"))
 				// {
@@ -972,10 +1093,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * Delete row from the map
-	 * 
-	 * @param deletedRowsArray
-	 * @param rowIdObjectBeanMap
+	 * Delete row from the map.
+	 *
+	 * @param deletedRowsArray the deleted rows array
+	 * @param rowIdBeanMap the row id bean map
+	 * @param operation the operation
+	 *
+	 * @return the map< string, site user role privilege bean>
 	 */
 	public Map<String, SiteUserRolePrivilegeBean> deletePrivilege(
 			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap, String deletedRowsArray,
@@ -995,7 +1119,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 			{
 				rowIdBeanMap.remove(deletedRowId);
 			}
-			else if ((Constants.EDIT).equals(operation))
+			else if (Constants.EDIT.equals(operation))
 			{
 				surp.setRowDeleted(true);
 				rowIdBeanMap.put(deletedRowId, surp);
@@ -1008,13 +1132,20 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Gives Map having rowId and UsersummaryBean Object and returns a list
 	 * containing rowId and userSummaryBean Object,used to send response.
-	 * 
-	 * @param rowIdBeanMap
-	 * @param userIds
-	 * @param siteIds
-	 * @param roleId
-	 * @param actionIds
+	 *
+	 * @param rowIdBeanMap the row id bean map
+	 * @param userIds the user ids
+	 * @param siteIds the site ids
+	 * @param roleId the role id
+	 * @param actionIds the action ids
+	 * @param isCustChecked the is cust checked
+	 * @param operation the operation
+	 *
 	 * @return List<JSONObject> of userSummaryBean Objects
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 * @throws JSONException the JSON exception
+	 * @throws CSException the CS exception
 	 */
 	public List<JSONObject> addPrivilege(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap,
 			String userIds, String siteIds, String roleId, String actionIds, boolean isCustChecked,
@@ -1074,7 +1205,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 
 					// Set keySet = map.keySet();
 					// Iterator iterator = keySet.iterator();
-					//				
+					//
 					// while(iterator.hasNext())
 					// {
 					// String rowId =(String)iterator.next();
@@ -1112,7 +1243,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 						}
 						catch (final CSException e)
 						{
-							AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
+							AssignPrivilegePageBizLogic.LOGGER.error(e.getMessage(), e);
 							final ErrorKey errorKey = ErrorKey.getErrorKey("role.nt.retrieved");
 							throw new BizLogicException(errorKey, e, "");
 						}
@@ -1138,7 +1269,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 					final SiteUserRolePrivilegeBean surpBean = this.setUserPrivilegeSummary(user,
 							userRelatedSites, roleNameValueBean, actionBeanList, isCustChecked);
 
-					final String rowId = "" + userId;
+					final String rowId = String.valueOf(userId);
 
 					this.updateRowInEditMode(rowIdBeanMap, operation, rowId);
 
@@ -1154,16 +1285,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			AssignPrivilegePageBizLogic.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
-			daoExp.printStackTrace();
+			AssignPrivilegePageBizLogic.LOGGER.error(daoExp.getMessage(), daoExp);
 			// ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
 			throw new BizLogicException(daoExp.getErrorKey(), daoExp, daoExp.getMsgValues());
 		}
 		catch (final SMException smExp)
 		{
-			AssignPrivilegePageBizLogic.logger.error(smExp.getMessage(), smExp);
-			smExp.printStackTrace();
+			AssignPrivilegePageBizLogic.LOGGER.error(smExp.getMessage(), smExp);
 			throw this.getBizLogicException(smExp, smExp.getErrorKeyName(), smExp.getMsgValues());
 		}
 		finally
@@ -1174,14 +1302,16 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param rowIdBeanMap
-	 * @param operation
-	 * @param rowId
+	 * Update row in edit mode.
+	 *
+	 * @param rowIdBeanMap the row id bean map
+	 * @param operation the operation
+	 * @param rowId the row id
 	 */
 	private void updateRowInEditMode(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap,
 			String operation, String rowId)
 	{
-		if ((Constants.EDIT).equalsIgnoreCase(operation))
+		if (Constants.EDIT.equalsIgnoreCase(operation))
 		{
 			final SiteUserRolePrivilegeBean tempBean = rowIdBeanMap.get(rowId);
 			if (rowIdBeanMap.containsKey(rowId) && !tempBean.isRowEdited())
@@ -1195,21 +1325,21 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * Method to show userPrivilege summary details on tab change
-	 * 
-	 * @param session
-	 * @param dao
+	 * Method to show userPrivilege summary details on tab change.
+	 *
+	 * @param map the map
+	 * @param pageOf the page of
+	 *
 	 * @return List of String array
-	 * @throws CSObjectNotFoundException
-	 * @throws CSException
-	 * @throws BizLogicException
+	 *
+	 * @throws CSObjectNotFoundException 	 * @throws CSException 	 * @throws BizLogicException the biz logic exception
 	 */
 	public List<String[]> privilegeDataOnTabSwitch(Map<String, SiteUserRolePrivilegeBean> map,
 			String pageOf) throws BizLogicException
 	{
 		List<String[]> list = null;
 
-		if (map != null && !map.isEmpty() && map.size() > 0)
+		if (map != null && !map.isEmpty())
 		{
 			list = new ArrayList<String[]>();
 
@@ -1309,9 +1439,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param bean
-	 * @return
-	 * @throws BizLogicException
+	 * Display privileges names.
+	 *
+	 * @param bean the bean
+	 *
+	 * @return the string
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	public String displayPrivilegesNames(SiteUserRolePrivilegeBean bean) throws BizLogicException
 	{
@@ -1327,7 +1461,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 				actionName = nameValueBean.getName();
 				if (i > 0)
 				{
-					sbForActions.append(",");
+					sbForActions.append(',');
 				}
 				sbForActions.append(AppUtility.getDisplayLabelForUnderscore(actionName));
 
@@ -1341,22 +1475,24 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 				// sbForActions.append(Utility.getDisplayLabelForUnderscore(
 				// actionName));
 				// }
-				//		 
+				//
 			}
 		}
 		else if (!bean.isCustChecked())
 		{
 			sbForActions.append(Constants.ALL_DEFAULT_PRIVILEGES);
 		}
-		final String actionNames = sbForActions.toString();
-		return actionNames;
+		return sbForActions.toString();
 	}
 
 	/**
-	 * @param dao
-	 * @param bean
-	 * @return
-	 * @throws BizLogicException
+	 * Display site names.
+	 *
+	 * @param bean the bean
+	 *
+	 * @return the string
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	public String displaySiteNames(SiteUserRolePrivilegeBean bean) throws BizLogicException
 	{
@@ -1367,7 +1503,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 			{
 				if (i > 0)
 				{
-					sbForSitesNames.append(",");
+					sbForSitesNames.append(',');
 				}
 
 				final Site site = bean.getSiteList().get(i);
@@ -1375,10 +1511,20 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 
-		final String sites = sbForSitesNames.toString();
-		return sites;
+		return sbForSitesNames.toString();
 	}
 
+	/**
+	 * Edits the privilege.
+	 *
+	 * @param rowIdBeanMap the row id bean map
+	 * @param selectedRow the selected row
+	 *
+	 * @return the list< json object>
+	 *
+	 * @throws JSONException the JSON exception
+	 * @throws BizLogicException the biz logic exception
+	 */
 	public List<JSONObject> editPrivilege(Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap,
 			String selectedRow) throws JSONException, BizLogicException
 	{
@@ -1438,7 +1584,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 			List<NameValueBean> actionList = null;
 			final List<NameValueBean> privileges = surp.getPrivileges();
 
-			if (("7").equals(roleId))
+			if ("7".equals(roleId))
 			{
 				actionList = this.getReformedNameValueBeanList(this.scientistPrivilegesList);
 			}
@@ -1499,6 +1645,23 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	 * errors.add(ActionErrors.GLOBAL_ERROR, error); } return errors; }
 	 */
 	// for user page--
+	/**
+	 * Adds the privilege for user page.
+	 *
+	 * @param rowIdBeanMap the row id bean map
+	 * @param cpIds the cp ids
+	 * @param siteIds the site ids
+	 * @param roleId the role id
+	 * @param actionIds the action ids
+	 * @param isAllCPChecked the is all cp checked
+	 * @param operation the operation
+	 *
+	 * @return the list< json object>
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 * @throws JSONException the JSON exception
+	 * @throws CSException the CS exception
+	 */
 	public List<JSONObject> addPrivilegeForUserPage(
 			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap, String cpIds, String siteIds,
 			String roleId, String actionIds, boolean isAllCPChecked, String operation)
@@ -1536,7 +1699,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 						roleName = "Custom";
 						role = new Role();
 						role.setName(roleName);
-						role.setId(new Long(roleId));
+						role.setId(Long.valueOf(roleId));
 					}
 
 					final long cpId = cpIdsList.get(k);
@@ -1591,7 +1754,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 						roleName = "Custom";
 						role = new Role();
 						role.setName(roleName);
-						role.setId(new Long(roleId));
+						role.setId(Long.valueOf(roleId));
 					}
 
 					final long siteId = siteIdsList.get(k);
@@ -1607,7 +1770,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 							.setUserPrivilegeSummaryForUserPage(null, siteLists, role,
 									actionBeanList, isAllCPChecked, operation);
 
-					final String rowId = "" + siteId;
+					final String rowId = String.valueOf(siteId);
 
 					this.updateRowInEditMode(rowIdBeanMap, operation, rowId);
 
@@ -1622,7 +1785,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException e)
 		{
-			AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
+			AssignPrivilegePageBizLogic.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 			throw new BizLogicException(e.getErrorKey(), e, e.getMsgValues());
 		}
@@ -1634,6 +1797,14 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		return listForUPSummary;
 	}
 
+	/**
+	 * Gets the cP site relation for user page.
+	 *
+	 * @param collectionProtocol the collection protocol
+	 * @param siteIdsList the site ids list
+	 *
+	 * @return the cP site relation for user page
+	 */
 	public List<Site> getCPSiteRelationForUserPage(CollectionProtocol collectionProtocol,
 			List<Long> siteIdsList)
 	{
@@ -1654,6 +1825,18 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	// Returns SiteUserRolePrivilegeBean Bean for user page
+	/**
+	 * Sets the user privilege summary for user page.
+	 *
+	 * @param collectionProtocol the collection protocol
+	 * @param cpRelatedSites the cp related sites
+	 * @param role the role
+	 * @param actionBeanList the action bean list
+	 * @param isAllCPChecked the is all cp checked
+	 * @param operation the operation
+	 *
+	 * @return the site user role privilege bean
+	 */
 	public SiteUserRolePrivilegeBean setUserPrivilegeSummaryForUserPage(
 			CollectionProtocol collectionProtocol, List<Site> cpRelatedSites, Role role,
 			List<NameValueBean> actionBeanList, boolean isAllCPChecked, String operation)
@@ -1677,6 +1860,21 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	// Returns summmary Object
+	/**
+	 * Gets the object for up summary for user page.
+	 *
+	 * @param rowId the row id
+	 * @param role the role
+	 * @param cpRelatedSites the cp related sites
+	 * @param collectionProtocol the collection protocol
+	 * @param actionBeanList the action bean list
+	 * @param isAllCPChecked the is all cp checked
+	 *
+	 * @return the object for up summary for user page
+	 *
+	 * @throws JSONException the JSON exception
+	 * @throws BizLogicException the biz logic exception
+	 */
 	public JSONObject getObjectForUPSummaryForUserPage(String rowId, Role role,
 			List<Site> cpRelatedSites, CollectionProtocol collectionProtocol,
 			List<NameValueBean> actionBeanList, boolean isAllCPChecked) throws JSONException,
@@ -1698,7 +1896,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 			{
 				if (i > 0)
 				{
-					sbForSites.append(",");
+					sbForSites.append(',');
 				}
 				sbForSites.append(cpRelatedSites.get(i).getName());
 			}
@@ -1740,6 +1938,17 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		return jsonobject;
 	}
 
+	/**
+	 * Edits the privilege for user page.
+	 *
+	 * @param rowIdBeanMap the row id bean map
+	 * @param selectedRow the selected row
+	 *
+	 * @return the list< json object>
+	 *
+	 * @throws JSONException the JSON exception
+	 * @throws BizLogicException the biz logic exception
+	 */
 	public List<JSONObject> editPrivilegeForUserPage(
 			Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap, String selectedRow)
 			throws JSONException, BizLogicException
@@ -1805,7 +2014,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		List<NameValueBean> actionList = null;
 		final List<NameValueBean> privileges = surp.getPrivileges();
 
-		if (("7").equals(roleId))
+		if ("7".equals(roleId))
 		{
 			actionList = this.getReformedNameValueBeanList(this.scientistPrivilegesList);
 		}
@@ -1841,9 +2050,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param actionIdsList
-	 * @return
-	 * @throws CSException
+	 * Gets the privileges name value bean list.
+	 *
+	 * @param actionIdsList the action ids list
+	 *
+	 * @return the privileges name value bean list
+	 *
+	 * @throws CSException 	 * @throws BizLogicException the biz logic exception
 	 */
 	// Takes List of ids of actions and gives list of NameValueBean pairs of
 	// actions.
@@ -1873,7 +2086,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			AssignPrivilegePageBizLogic.logger.error(e.getMessage(), e);
+			AssignPrivilegePageBizLogic.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 			throw this.getBizLogicException(e, "error.privileges.from.given.role", actionId);
 		}
@@ -1881,6 +2094,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 	}
 
 	// To remove "Select" option from list.
+	/**
+	 * Removes the select.
+	 *
+	 * @param list the list
+	 *
+	 * @return the list< name value bean>
+	 */
 	public List<NameValueBean> removeSelect(List<NameValueBean> list)
 	{
 		if (list != null && !list.isEmpty() && list.size() > 0)
@@ -1890,7 +2110,7 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 				final String val = "" + ((NameValueBean) list.get(len)).getValue();
 				final String name = ((NameValueBean) list.get(len)).getName();
 				if ((("" + Constants.SELECT_OPTION_VALUE).equalsIgnoreCase(val))
-						&& ((Constants.SELECT_OPTION).equalsIgnoreCase(name)))
+						&& (Constants.SELECT_OPTION.equalsIgnoreCase(name)))
 				{
 					list.remove(len);
 				}
@@ -1901,6 +2121,15 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 
 	// Takes list of NameValueBean as input and Gives JSONArray of JSON Objects
 	// having Name and Value as fields.
+	/**
+	 * Gets the jSON obj list of name value.
+	 *
+	 * @param list the list
+	 *
+	 * @return the jSON obj list of name value
+	 *
+	 * @throws JSONException the JSON exception
+	 */
 	public List<JSONObject> getJSONObjListOfNameValue(List<NameValueBean> list)
 			throws JSONException
 	{
@@ -1923,6 +2152,13 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 
 	// Takes String ,having ids joined with separartor ",",as a input and
 	// Returns List of ids of long type.
+	/**
+	 * Gets the input data.
+	 *
+	 * @param ids the ids
+	 *
+	 * @return the input data
+	 */
 	public List<Long> getInputData(String ids)
 	{
 		long tempId;
@@ -1941,6 +2177,14 @@ public class AssignPrivilegePageBizLogic extends CatissueDefaultBizLogic
 		return list;
 	}
 
+	/**
+	 * Gets the common eles list.
+	 *
+	 * @param list1 the list1
+	 * @param list2 the list2
+	 *
+	 * @return the common eles list
+	 */
 	public List<NameValueBean> getCommonElesList(List<NameValueBean> list1,
 			List<NameValueBean> list2)
 	{

@@ -1,6 +1,6 @@
 /**
  * <p>Title: SpecimenCollectionGroupForm Class>
- * <p>Description:  SpecimenCollectionGroupForm Class is used to encapsulate 
+ * <p>Description:  SpecimenCollectionGroupForm Class is used to encapsulate
  * all the request parameters passed from New SpecimenCollectionGroup webpage. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -40,9 +40,11 @@ import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- * SpecimenCollectionGroupForm Class is used to encapsulate 
+ * SpecimenCollectionGroupForm Class is used to encapsulate
  * all the request parameters passed from New SpecimenCollectionGroup webpage.
+ *
  * @author ajay_sharma
  */
 public class SpecimenCollectionGroupForm extends AbstractActionForm
@@ -51,164 +53,161 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			IPrinterTypeLocation
 {
 
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * logger Logger - Generic logger.
-	 */
+	/** logger Logger - Generic logger. */
 	private static Logger logger = Logger.getCommonLogger(SpecimenCollectionGroupForm.class);
+
+	/** The clinical diagnosis. */
 	private String clinicalDiagnosis = (String) DefaultValueManager
 			.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS);
 
+	/** The clinical status. */
 	private String clinicalStatus = (String) DefaultValueManager
 			.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS);
 
-	/**
-	 * Specifies if the barcode is editable or not
-	 */
+	/** Specifies if the barcode is editable or not. */
 	private String isBarcodeEditable = (String) DefaultValueManager
 			.getDefaultValue(Constants.IS_BARCODE_EDITABLE);
 
+	/** The surgical pathology number. */
 	private String surgicalPathologyNumber;
 
+	/** The participants medical identifier id. */
 	private long participantsMedicalIdentifierId;
 
+	/** The barcode. */
 	private String barcode;
 
-	/**
-	* Name : Ashish Gupta
-	* Reviewer Name : Sachin Lale 
-	* Bug ID: 2741
-	* Patch ID: 2741_9	 
-	* Description: Event Attributes
-	*/
+	/** Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741 Patch ID: 2741_9 Description: Event Attributes. */
 	private long collectionEventId; // Mandar : CollectionEvent 10-July-06
+
+	/** The collection event specimen id. */
 	private long collectionEventSpecimenId;
+
+	/** The collection event user id. */
 	private long collectionEventUserId;
+
+	/** The collection eventdate of event. */
 	private String collectionEventdateOfEvent;
+
+	/** The collection event time in hours. */
 	private String collectionEventTimeInHours;
+
+	/** The collection event time in minutes. */
 	private String collectionEventTimeInMinutes;
+
+	/** The collection event collection procedure. */
 	private String collectionEventCollectionProcedure;
+
+	/** The collection event container. */
 	private String collectionEventContainer;
+
+	/** The collection event comments. */
 	private String collectionEventComments = "";
 
+	/** The received event id. */
 	private long receivedEventId;
+
+	/** The received event specimen id. */
 	private long receivedEventSpecimenId;
+
+	/** The received event user id. */
 	private long receivedEventUserId;
+
+	/** The received event date of event. */
 	private String receivedEventDateOfEvent;
+
+	/** The received event time in hours. */
 	private String receivedEventTimeInHours;
+
+	/** The received event time in minutes. */
 	private String receivedEventTimeInMinutes;
+
+	/** The received event received quality. */
 	private String receivedEventReceivedQuality;
+
+	/** The received event comments. */
 	private String receivedEventComments = "";
 
-	/**
-	 * An id which refers to the site of the container if it is parent container.
-	 */
+	/** An id which refers to the site of the container if it is parent container. */
 	private long siteId;
 
+	/** The collection protocol id. */
 	private long collectionProtocolId;
 
+	/** The collection protocol event id. */
 	private long collectionProtocolEventId;
 
+	/** The offset. */
 	protected int offset = 0;
-	/**
-	 * Nmae: Vijay Pande
-	 * Reviewer Name: Aarti Sharma
-	 * Name of the variable changed from checkedButton to radionButton since this name was conflicting with the same name used on specimen page and creating problem (Wrong value was set) in CP based view
-	 * Please check all the references of the variable radioButtonForParticipant
-	 */
+
+	/** Nmae: Vijay Pande Reviewer Name: Aarti Sharma Name of the variable changed from checkedButton to radionButton since this name was conflicting with the same name used on specimen page and creating problem (Wrong value was set) in CP based view Please check all the references of the variable radioButtonForParticipant. */
 	/**
 	 * Radio button to choose participantName/participantNumber.
 	 */
 	private int radioButtonForParticipant = 1;
 	//Consent Tracking Module Virender Mehta
-	/**
-	 * Map for Storing responses for Consent Tiers.
-	 */
+	/** Map for Storing responses for Consent Tiers. */
 	protected Map consentResponseForScgValues = new HashMap();
-	/**
-	 * No of Consent Tier
-	 */
+
+	/** No of Consent Tier. */
 	private int consentTierCounter = 0;
-	/**
-	 * Signed Consent URL
-	 */
+
+	/** Signed Consent URL. */
 	protected String signedConsentUrl = "";
-	/**
-	 * Witness name that may be PI
-	 */
+
+	/** Witness name that may be PI. */
 	protected String witnessName;
 
-	/**
-	 * Consent Date, Date on which Consent is Signed
-	 */
+	/** Consent Date, Date on which Consent is Signed. */
 	protected String consentDate = "";
 
-	/**
-	 * This will be set in case of withdrawl popup
-	 */
+	/** This will be set in case of withdrawl popup. */
 	protected String withdrawlButtonStatus = Constants.WITHDRAW_RESPONSE_NOACTION;
-	/**
-	 * This will be set in case if there is any change in response.
-	 */
+
+	/** This will be set in case if there is any change in response. */
 	protected String applyChangesTo = Constants.APPLY_NONE;
-	/**
-	 * If user changes the response after submiting response then this string will have 
-	 * responseKeys for which response is changed .
-	 */
+
+	/** If user changes the response after submiting response then this string will have responseKeys for which response is changed . */
 	protected String stringOfResponseKeys = "";
 
-	//Consent Tracking Module Virender Mehta 
+	//Consent Tracking Module Virender Mehta
 
-	/**
-	 * unique name for Specimen Collection Group 
-	 */
+	/** unique name for Specimen Collection Group. */
 	private String name;
 
-	/**For Migration Start**/
+	/** For Migration Start*. */
 	/**
-	 * participantName 
+	 * participantName
 	 */
 	private String participantName;
 
+	/** The participant id. */
 	private long participantId;
 
+	/** The protocol participant identifier. */
 	private String protocolParticipantIdentifier;
 
 	//For AddNew functionality
+	/** The collection protocol registration id. */
 	private long collectionProtocolRegistrationId;
-	/**
-	 * Name : Ashish Gupta
-	 * Reviewer Name : Sachin Lale 
-	 * Bug ID: 2741
-	 * Patch ID: 2741_4	 
-	 * Description: Attribute to set events in specimens associated with this scg
-	*/
+
+	/** Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: 2741 Patch ID: 2741_4 Description: Attribute to set events in specimens associated with this scg. */
 	private boolean applyEventsToSpecimens = false;
-	/**
-	 * Name : Falguni Sachde
-	 *  
-	 * 
-	 * 	 
-	 * Description: Attribute to set Collection Protocol Short name to associated with this scg
-	*/
+
+	/** Name : Falguni Sachde    Description: Attribute to set Collection Protocol Short name to associated with this scg. */
 	private String collectionProtocolName;
-	/**
-	 * Name : Falguni Sachde
-	 *  
-	 * 
-	 * 	 
-	 * Description: Attribute to set Participant Name concatenated with Participant Identifier.
-	*/
+
+	/** Name : Falguni Sachde    Description: Attribute to set Participant Name concatenated with Participant Identifier. */
 	private String participantNameWithProtocolId;
 
-	/**
-	 * Comments given by user.
-	 */
+	/** Comments given by user. */
 
 	/**
 	 * Name: Shital Lawhale
-	 * Reviewer Name : Sachin Lale 
+	 * Reviewer Name : Sachin Lale
 	 * Bug ID: 3052
 	 * Patch ID: 3052_1_2
 	 * See also: 1_1 to 1_5
@@ -216,37 +215,30 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	private String comment;
 
-	/**
-	 * Name : Ashish Gupta
-	 * Reviewer Name : Sachin Lale 
-	 * Bug ID: Multiple Specimen Bug
-	 * Patch ID: Multiple Specimen Bug_3 
-	 * See also: 1-8
-	 * Description: number of specimens field on scg form
-	*/
+	/** Name : Ashish Gupta Reviewer Name : Sachin Lale Bug ID: Multiple Specimen Bug Patch ID: Multiple Specimen Bug_3 See also: 1-8 Description: number of specimens field on scg form. */
 	private int numberOfSpecimens;
 
-	/**
-	 * Name: Chetan Patil
-	 * Reviewer: Sachin Lale
-	 * Bug ID: Bug#4227
-	 * Patch ID: Bug#4227_1
-	 * Description: buttonType stores the id of the button only if button for Add Multiple Specimen
-	 * is clicked. If the value of this varaiable is null then the validation of number of specimen
-	 * against actual number of specimen requirements is skipped. 
-	 */
+	/** Name: Chetan Patil Reviewer: Sachin Lale Bug ID: Bug#4227 Patch ID: Bug#4227_1 Description: buttonType stores the id of the button only if button for Add Multiple Specimen is clicked. If the value of this varaiable is null then the validation of number of specimen against actual number of specimen requirements is skipped. */
 	private String buttonType;
 
+	/** The collection status. */
 	private String collectionStatus;
 
+	/** The print checkbox. */
 	private String printCheckbox;
+
+	/** The printer type. */
 	private String printerType;
 
+	/** The printer location. */
 	private String printerLocation;
 
+	/** The next forward to. */
 	private String nextForwardTo;
 
 	/**
+	 * Gets the button type.
+	 *
 	 * @return the buttonType
 	 */
 	public String getButtonType()
@@ -255,6 +247,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the button type.
+	 *
 	 * @param buttonType the buttonType to set
 	 */
 	public void setButtonType(String buttonType)
@@ -263,6 +257,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the number of specimens.
+	 *
 	 * @return the numberOfSpecimens
 	 */
 	public int getNumberOfSpecimens()
@@ -271,6 +267,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the number of specimens.
+	 *
 	 * @param numberOfSpecimens the numberOfSpecimens to set
 	 */
 	public void setNumberOfSpecimens(int numberOfSpecimens)
@@ -279,7 +277,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * No argument constructor for SpecimenCollectionGroupForm class 
+	 * No argument constructor for SpecimenCollectionGroupForm class.
 	 */
 	public SpecimenCollectionGroupForm()
 	{
@@ -287,6 +285,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the clinical diagnosis.
+	 *
 	 * @return Returns the clinicalDiagnosis.
 	 */
 	public String getClinicalDiagnosis()
@@ -295,6 +295,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the clinical diagnosis.
+	 *
 	 * @param cinicalDiagnosis The clinicalDiagnosis to set.
 	 */
 	public void setClinicalDiagnosis(String cinicalDiagnosis)
@@ -303,6 +305,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the name.
+	 *
 	 * @return Returns the name.
 	 */
 	public String getName()
@@ -311,6 +315,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the name.
+	 *
 	 * @param name The name to set.
 	 */
 	public void setName(String name)
@@ -319,6 +325,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the surgical pathology number.
+	 *
 	 * @return Returns the surgicalPathologyNumber.
 	 */
 	public String getSurgicalPathologyNumber()
@@ -327,6 +335,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the surgical pathology number.
+	 *
 	 * @param surgicalPathologyNumber The surgicalPathologyNumber to set.
 	 */
 	public void setSurgicalPathologyNumber(String surgicalPathologyNumber)
@@ -335,6 +345,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the participant id.
+	 *
 	 * @return participantId
 	 */
 	public long getParticipantId()
@@ -343,6 +355,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the participant id.
+	 *
 	 * @param participantId Setting participant id
 	 */
 	public void setParticipantId(long participantId)
@@ -351,7 +365,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * For AddNew functionality
+	 * For AddNew functionality.
+	 *
 	 * @return collectionProtocolRegistrationId
 	 */
 	public long getCollectionProtocolRegistrationId()
@@ -360,6 +375,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the collection protocol registration id.
+	 *
 	 * @param collectionProtocolRegistrationId Setting Collection Prot reg id
 	 */
 	public void setCollectionProtocolRegistrationId(long collectionProtocolRegistrationId)
@@ -368,6 +385,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the radio button for participant.
+	 *
 	 * @return Returns the radioButtonForParticipant value.
 	 */
 	public int getRadioButtonForParticipant()
@@ -376,6 +395,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the radio button for participant.
+	 *
 	 * @param radioButton The radioButtonForParticipant to set.
 	 */
 	public void setRadioButtonForParticipant(int radioButton)
@@ -388,25 +409,26 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	/**
 	 * Resets the values of all the fields.
-	 * Is called by the overridden reset method defined in ActionForm.  
-	 * */
+	 * Is called by the overridden reset method defined in ActionForm.
+	 */
 	@Override
 	protected void reset()
 	{
 		//		this.clinicalDiagnosis = null;
-		//	    
+		//
 		//		this.clinicalStatus = null;;
-		//		
+		//
 		//		this.surgicalPathologyNumber = null;
-		//		
+		//
 		//		this.protocolParticipantIdentifier =  null;
 		//		radioButtonForParticipant = 1;
 	}
 
 	/**
-	   * This function Copies the data from an storage type object to a StorageTypeForm object.
-	   * @param abstractDomain A StorageType object containing the information about storage type of the container.  
-	   */
+	 * This function Copies the data from an storage type object to a StorageTypeForm object.
+	 *
+	 * @param abstractDomain A StorageType object containing the information about storage type of the container.
+	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		//		if(operation.equals("add" ) )
@@ -430,7 +452,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 				.getSurgicalPathologyNumber());
 		/**
 		* Name: Shital Lawhale
-		* Reviewer Name : Sachin Lale 
+		* Reviewer Name : Sachin Lale
 		* Bug ID: 3052
 		* Patch ID: 3052_1_4
 		* See also: 1_1 to 1_5
@@ -440,7 +462,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 		////		ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
 		//		surgicalPathologyNumber = AppUtility.toString(clinicalReport.getSurgicalPathologyNumber());
-		//		
+		//
 		//		if(clinicalReport.getParticipantMedicalIdentifier()!=null)
 		//		{
 		//			participantsMedicalIdentifierId = clinicalReport.getParticipantMedicalIdentifier().getId().longValue();
@@ -539,15 +561,15 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		/**
 		 * For Consent tracking setting UI attributes
 		 */
-		final User witness = specimenCollectionGroup.getCollectionProtocolRegistration()
+		final User consentWitness = specimenCollectionGroup.getCollectionProtocolRegistration()
 				.getConsentWitness();
-		if (witness == null || witness.getFirstName() == null)
+		if (consentWitness == null || consentWitness.getFirstName() == null)
 		{
 			this.witnessName = "";
 		}
 		else
 		{
-			this.witnessName = CommonUtilities.toString(witness.getFirstName());
+			this.witnessName = CommonUtilities.toString(consentWitness.getFirstName());
 		}
 		this.signedConsentUrl = CommonUtilities.toString(specimenCollectionGroup
 				.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
@@ -556,9 +578,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 				CommonServiceLocator.getInstance().getDatePattern());
 		/**
 		* Name : Ashish Gupta
-		* Reviewer Name : Sachin Lale 
+		* Reviewer Name : Sachin Lale
 		* Bug ID: 2741
-		* Patch ID: 2741_10	 
+		* Patch ID: 2741_10
 		* Description: Method to populate Events in SCG form
 		*/
 		//Populating the events
@@ -572,7 +594,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * @param specimenCollectionGroup Settign Sp Coll Group 
+	 * Sets the scg events.
+	 *
+	 * @param specimenCollectionGroup Settign Sp Coll Group
 	 */
 	private void setSCGEvents(SpecimenCollectionGroup specimenCollectionGroup)
 	{
@@ -633,8 +657,11 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 * Gets the form id.
+	 *
 	 * @return SPECIMEN_COLLECTION_GROUP_FORM_ID
+	 *
+	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 */
 	@Override
 	public int getFormId()
@@ -643,6 +670,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the site id.
+	 *
 	 * @return siteId
 	 */
 	public long getSiteId()
@@ -651,6 +680,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the site id.
+	 *
 	 * @param siteId Setting Site id
 	 */
 	public void setSiteId(long siteId)
@@ -659,6 +690,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the clinical status.
+	 *
 	 * @return clinicalStatus
 	 */
 	public String getClinicalStatus()
@@ -667,6 +700,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the clinical status.
+	 *
 	 * @param clinicalStatus Settign clinicalStatus
 	 */
 	public void setClinicalStatus(String clinicalStatus)
@@ -675,6 +710,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the collection protocol event id.
+	 *
 	 * @return collectionProtocolEventId
 	 */
 	public long getCollectionProtocolEventId()
@@ -683,6 +720,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the collection protocol event id.
+	 *
 	 * @param collectionProtocolEventId Setting collectionProtocolEventId
 	 */
 	public void setCollectionProtocolEventId(long collectionProtocolEventId)
@@ -691,6 +730,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the collection protocol id.
+	 *
 	 * @return collectionProtocolId
 	 */
 	public long getCollectionProtocolId()
@@ -699,6 +740,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the collection protocol id.
+	 *
 	 * @param collectionProtocolId Setting collectionProtocolId
 	 */
 	public void setCollectionProtocolId(long collectionProtocolId)
@@ -707,6 +750,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the participants medical identifier id.
+	 *
 	 * @return participantsMedicalIdentifierId
 	 */
 	public long getParticipantsMedicalIdentifierId()
@@ -715,6 +760,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the participants medical identifier id.
+	 *
 	 * @param participantsMedicalIdentifierId Setting  participantsMedicalIdentifierId
 	 */
 	public void setParticipantsMedicalIdentifierId(long participantsMedicalIdentifierId)
@@ -723,6 +770,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the protocol participant identifier.
+	 *
 	 * @return protocolParticipantIdentifier
 	 */
 	public String getProtocolParticipantIdentifier()
@@ -731,6 +780,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the protocol participant identifier.
+	 *
 	 * @param protocolParticipantIdentifier Setting protocolParticipantIdentifier
 	 */
 	public void setProtocolParticipantIdentifier(String protocolParticipantIdentifier)
@@ -740,9 +791,11 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	/**
 	 * Overrides the validate method of ActionForm.
-	 * @return error ActionErrors instance
+	 *
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
+	 *
+	 * @return error ActionErrors instance
 	 */
 	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
@@ -861,9 +914,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			}
 			/**
 			* Name : Ashish Gupta
-			* Reviewer Name : Sachin Lale 
+			* Reviewer Name : Sachin Lale
 			* Bug ID: 2741
-			* Patch ID: 2741_4	 
+			* Patch ID: 2741_4
 			* Description: Methods for validation of events in scg
 			*/
 			//Time validation
@@ -882,9 +935,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			//Added by Ashish for Multiple Specimens
 			/**
 			 * Name : Ashish Gupta
-			 * Reviewer Name : Sachin Lale 
+			 * Reviewer Name : Sachin Lale
 			 * Bug ID: Multiple Specimen Bug
-			 * Patch ID: Multiple Specimen Bug_4 
+			 * Patch ID: Multiple Specimen Bug_4
 			 * See also: 1-8
 			 * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
 			*/
@@ -900,7 +953,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 				}
 			}
 			request.getSession().setAttribute("scgForm", this);
-			//For setting whether to set specimen 
+			//For setting whether to set specimen
 			final String applyToString = request.getParameter("applyToSpecimenValue");
 			if (applyToString != null && applyToString.equals("true"))
 			{
@@ -912,16 +965,17 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		{
 			// use of logger as per bug 79
 			SpecimenCollectionGroupForm.logger.error(excp.getMessage(), excp);
-			excp.printStackTrace(); 
+			excp.printStackTrace();
 			errors = new ActionErrors();
 		}
 		return errors;
 	}
 
 	/**
-	 * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
+	 * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action.
+	 *
 	 * @param addNewFor - FormBean ID of the object inserted
-	 *  @param addObjectIdentifier - Identifier of the Object inserted 
+	 * @param addObjectIdentifier - Identifier of the Object inserted
 	 */
 	@Override
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
@@ -950,6 +1004,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	//Consent Tracking Module Virender Mehta
 	/**
+	 * Gets the consent response for scg values.
+	 *
 	 * @return consentResponseForScgValues  The comments associated with Response at Specimen Collection Group level
 	 */
 	public Map getConsentResponseForScgValues()
@@ -958,6 +1014,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the consent response for scg values.
+	 *
 	 * @param consentResponseForScgValues  The comments associated with Response at Specimen Collection Group level
 	 */
 	public void setConsentResponseForScgValues(Map consentResponseForScgValues)
@@ -966,6 +1024,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the consent response for scg value.
+	 *
 	 * @param key Key prepared for saving data.
 	 * @param value Values correspponding to key
 	 */
@@ -978,7 +1038,10 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the consent response for scg value.
+	 *
 	 * @param key Key prepared for saving data.
+	 *
 	 * @return consentResponseForScgValues.get(key)
 	 */
 	public Object getConsentResponseForScgValue(String key)
@@ -987,6 +1050,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the all consent response for scg value.
+	 *
 	 * @return values in map consentResponseForScgValues
 	 */
 	public Collection getAllConsentResponseForScgValue()
@@ -995,7 +1060,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 *@return consentTierCounter  This will keep track of count of Consent Tier
+	 * Gets the consent tier counter.
+	 *
+	 * @return consentTierCounter  This will keep track of count of Consent Tier
 	 */
 	public int getConsentTierCounter()
 	{
@@ -1003,7 +1070,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 *@param consentTierCounter  This will keep track of count of Consent Tier
+	 * Sets the consent tier counter.
+	 *
+	 * @param consentTierCounter  This will keep track of count of Consent Tier
 	 */
 	public void setConsentTierCounter(int consentTierCounter)
 	{
@@ -1011,6 +1080,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the consent date.
+	 *
 	 * @return consentDate The Date on Which Consent is Signed
 	 */
 	public String getConsentDate()
@@ -1019,6 +1090,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the consent date.
+	 *
 	 * @param consentDate The Date on Which Consent is Signed
 	 */
 	public void setConsentDate(String consentDate)
@@ -1027,6 +1100,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the apply changes to.
+	 *
 	 * @return applyChangesTo
 	 */
 	public String getApplyChangesTo()
@@ -1035,7 +1110,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * @param applyChangesTo 
+	 * Sets the apply changes to.
+	 *
+	 * @param applyChangesTo the apply changes to
 	 */
 	public void setApplyChangesTo(String applyChangesTo)
 	{
@@ -1043,7 +1120,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * 
+	 * Gets the string of response keys.
+	 *
 	 * @return stringOfResponseKeys
 	 */
 	public String getStringOfResponseKeys()
@@ -1052,8 +1130,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * 
-	 * @param stringOfResponseKeys
+	 * Sets the string of response keys.
+	 *
+	 * @param stringOfResponseKeys the string of response keys
 	 */
 	public void setStringOfResponseKeys(String stringOfResponseKeys)
 	{
@@ -1062,6 +1141,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	/**
 	 * This function creates Array of String of keys and add them into the consentTiersList.
+	 *
 	 * @return consentTiersList
 	 */
 	public Collection getConsentTiers()
@@ -1087,17 +1167,10 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		return consentTiersList;
 	}
 
-	/**
-	 * This function returns the format of Key
-	 * @return consentResponseForScgValues(ConsentBean:`_specimenCollectionGroupLevelResponse) 
-	 */
-	public String getConsentTierMap()
-	{
-		return "consentResponseForScgValues(ConsentBean:`_specimenCollectionGroupLevelResponse)";
-	}
-
 	//Consent Tracking Module Virender Mehta
 	/**
+	 * Gets the collection event collection procedure.
+	 *
 	 * @return the collectionEventCollectionProcedure
 	 */
 	public String getCollectionEventCollectionProcedure()
@@ -1106,6 +1179,20 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * This function returns the format of Key.
+	 *
+	 * @return consentResponseForScgValues(ConsentBean:`_specimenCollectionGroupLevelResponse)
+	 */
+	public String getConsentTierMap()
+	{
+		return "consentResponseForScgValues(ConsentBean:`_specimenCollectionGroupLevelResponse)";
+	}
+
+
+
+	/**
+	 * Sets the collection event collection procedure.
+	 *
 	 * @param collectionEventCollectionProcedure the collectionEventCollectionProcedure to set
 	 */
 	public void setCollectionEventCollectionProcedure(String collectionEventCollectionProcedure)
@@ -1113,15 +1200,11 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.collectionEventCollectionProcedure = collectionEventCollectionProcedure;
 	}
 
-	/**
-	 * @return the collectionEventComments
-	 */
-	public String getCollectionEventComments()
-	{
-		return this.collectionEventComments;
-	}
+
 
 	/**
+	 * Sets the collection event comments.
+	 *
 	 * @param collectionEventComments the collectionEventComments to set
 	 */
 	public void setCollectionEventComments(String collectionEventComments)
@@ -1130,14 +1213,19 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * @return the collectionEventContainer
+	 * Gets the collection event comments.
+	 *
+	 * @return the collectionEventComments
 	 */
-	public String getCollectionEventContainer()
+	public String getCollectionEventComments()
 	{
-		return this.collectionEventContainer;
+		return this.collectionEventComments;
 	}
 
+
 	/**
+	 * Sets the collection event container.
+	 *
 	 * @param collectionEventContainer the collectionEventContainer to set
 	 */
 	public void setCollectionEventContainer(String collectionEventContainer)
@@ -1146,6 +1234,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the collection eventdate of event.
+	 *
 	 * @return the collectionEventdateOfEvent
 	 */
 	public String getCollectionEventdateOfEvent()
@@ -1154,6 +1244,18 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the collection event container.
+	 *
+	 * @return the collectionEventContainer
+	 */
+	public String getCollectionEventContainer()
+	{
+		return this.collectionEventContainer;
+	}
+
+	/**
+	 * Sets the collection eventdate of event.
+	 *
 	 * @param collectionEventdateOfEvent the collectionEventdateOfEvent to set
 	 */
 	public void setCollectionEventdateOfEvent(String collectionEventdateOfEvent)
@@ -1162,6 +1264,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the collection event id.
+	 *
 	 * @return the collectionEventId
 	 */
 	public long getCollectionEventId()
@@ -1170,6 +1274,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the collection event id.
+	 *
 	 * @param collectionEventId the collectionEventId to set
 	 */
 	public void setCollectionEventId(long collectionEventId)
@@ -1178,6 +1284,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the collection event specimen id.
+	 *
 	 * @return the collectionEventSpecimenId
 	 */
 	public long getCollectionEventSpecimenId()
@@ -1186,6 +1294,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the collection event specimen id.
+	 *
 	 * @param collectionEventSpecimenId the collectionEventSpecimenId to set
 	 */
 	public void setCollectionEventSpecimenId(long collectionEventSpecimenId)
@@ -1194,6 +1304,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the collection event time in hours.
+	 *
 	 * @return the collectionEventTimeInHours
 	 */
 	public String getCollectionEventTimeInHours()
@@ -1202,6 +1314,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the collection event time in hours.
+	 *
 	 * @param collectionEventTimeInHours the collectionEventTimeInHours to set
 	 */
 	public void setCollectionEventTimeInHours(String collectionEventTimeInHours)
@@ -1210,6 +1324,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the collection event time in minutes.
+	 *
 	 * @return the collectionEventTimeInMinutes
 	 */
 	public String getCollectionEventTimeInMinutes()
@@ -1218,6 +1334,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the collection event time in minutes.
+	 *
 	 * @param collectionEventTimeInMinutes the collectionEventTimeInMinutes to set
 	 */
 	public void setCollectionEventTimeInMinutes(String collectionEventTimeInMinutes)
@@ -1226,6 +1344,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the received event date of event.
+	 *
 	 * @return the receivedEventDateOfEvent
 	 */
 	public String getReceivedEventDateOfEvent()
@@ -1234,6 +1354,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the received event date of event.
+	 *
 	 * @param receivedEventDateOfEvent the receivedEventDateOfEvent to set
 	 */
 	public void setReceivedEventDateOfEvent(String receivedEventDateOfEvent)
@@ -1242,6 +1364,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the received event id.
+	 *
 	 * @return the receivedEventId
 	 */
 	public long getReceivedEventId()
@@ -1250,6 +1374,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the received event id.
+	 *
 	 * @param receivedEventId the receivedEventId to set
 	 */
 	public void setReceivedEventId(long receivedEventId)
@@ -1258,6 +1384,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the received event received quality.
+	 *
 	 * @return the receivedEventReceivedQuality
 	 */
 	public String getReceivedEventReceivedQuality()
@@ -1266,6 +1394,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the received event received quality.
+	 *
 	 * @param receivedEventReceivedQuality the receivedEventReceivedQuality to set
 	 */
 	public void setReceivedEventReceivedQuality(String receivedEventReceivedQuality)
@@ -1274,6 +1404,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the received event specimen id.
+	 *
 	 * @return the receivedEventSpecimenId
 	 */
 	public long getReceivedEventSpecimenId()
@@ -1282,6 +1414,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the received event specimen id.
+	 *
 	 * @param receivedEventSpecimenId the receivedEventSpecimenId to set
 	 */
 	public void setReceivedEventSpecimenId(long receivedEventSpecimenId)
@@ -1290,6 +1424,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the received event time in hours.
+	 *
 	 * @return the receivedEventTimeInHours
 	 */
 	public String getReceivedEventTimeInHours()
@@ -1298,6 +1434,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the received event time in hours.
+	 *
 	 * @param receivedEventTimeInHours the receivedEventTimeInHours to set
 	 */
 	public void setReceivedEventTimeInHours(String receivedEventTimeInHours)
@@ -1306,6 +1444,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the collection event user id.
+	 *
 	 * @return the collectionEventUserId
 	 */
 	public long getCollectionEventUserId()
@@ -1314,6 +1454,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the collection event user id.
+	 *
 	 * @param collectionEventUserId the collectionEventUserId to set
 	 */
 	public void setCollectionEventUserId(long collectionEventUserId)
@@ -1322,6 +1464,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the received event comments.
+	 *
 	 * @return the receivedEventComments
 	 */
 	public String getReceivedEventComments()
@@ -1330,6 +1474,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the received event comments.
+	 *
 	 * @param receivedEventComments the receivedEventComments to set
 	 */
 	public void setReceivedEventComments(String receivedEventComments)
@@ -1338,6 +1484,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the received event time in minutes.
+	 *
 	 * @return the receivedEventTimeInMinutes
 	 */
 	public String getReceivedEventTimeInMinutes()
@@ -1346,6 +1494,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the received event time in minutes.
+	 *
 	 * @param receivedEventTimeInMinutes the receivedEventTimeInMinutes to set
 	 */
 	public void setReceivedEventTimeInMinutes(String receivedEventTimeInMinutes)
@@ -1354,6 +1504,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the received event user id.
+	 *
 	 * @return the receivedEventUserId
 	 */
 	public long getReceivedEventUserId()
@@ -1362,6 +1514,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the received event user id.
+	 *
 	 * @param receivedEventUserId the receivedEventUserId to set
 	 */
 	public void setReceivedEventUserId(long receivedEventUserId)
@@ -1370,6 +1524,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Checks if is apply events to specimens.
+	 *
 	 * @return the applyEventsToSpecimens
 	 */
 	public boolean isApplyEventsToSpecimens()
@@ -1378,6 +1534,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the apply events to specimens.
+	 *
 	 * @param applyEventsToSpecimens the applyEventsToSpecimens to set
 	 */
 	public void setApplyEventsToSpecimens(boolean applyEventsToSpecimens)
@@ -1387,11 +1545,13 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	/**
 	 * Name: Shital Lawhale
-	 * Reviewer Name : Sachin Lale 
+	 * Reviewer Name : Sachin Lale
 	 * Bug ID: 3052
 	 * Patch ID: 3052_1_3
 	 * See also: 1_1 to 1_5
 	 * Description : A comment field at the Specimen Collection Group.
+	 *
+	 * @return the comment
 	 */
 
 	/**
@@ -1403,6 +1563,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the comment.
+	 *
 	 * @param comment : user comment to set
 	 */
 
@@ -1411,13 +1573,12 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.comment = comment;
 	}
 
-	/**
-	 * Patch ID: Bug#3184_7
-	 */
+	/** Patch ID: Bug#3184_7. */
 	private String restrictSCGCheckbox;
 
 	/**
-	 * This method returns the value of the checkbox
+	 * This method returns the value of the checkbox.
+	 *
 	 * @return the restrictSCGCheckbox
 	 */
 	public String getRestrictSCGCheckbox()
@@ -1426,7 +1587,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * This method sets the value of Checkbox
+	 * This method sets the value of Checkbox.
+	 *
 	 * @param restrictSCGCheckbox the restrictSCGCheckbox to set
 	 */
 	public void setRestrictSCGCheckbox(String restrictSCGCheckbox)
@@ -1434,7 +1596,11 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.restrictSCGCheckbox = restrictSCGCheckbox;
 	}
 
-	/**For Migration Start**/
+	/**
+	 * For Migration Start*.
+	 *
+	 * @return the participant name
+	 */
 
 	/**
 	 * This method returns the value of the participantName
@@ -1446,7 +1612,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * This method sets the participantName
+	 * This method sets the participantName.
+	 *
 	 * @param participantName the participantName to set
 	 */
 	public void setParticipantName(String participantName)
@@ -1454,16 +1621,31 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.participantName = participantName;
 	}
 
+	/**
+	 * Gets the collection protocol name.
+	 *
+	 * @return the collection protocol name
+	 */
 	public String getCollectionProtocolName()
 	{
 		return this.collectionProtocolName;
 	}
 
+	/**
+	 * Sets the collection protocol name.
+	 *
+	 * @param collectionProtocolName the new collection protocol name
+	 */
 	public void setCollectionProtocolName(String collectionProtocolName)
 	{
 		this.collectionProtocolName = collectionProtocolName;
 	}
 
+	/**
+	 * Gets the participant name with protocol id.
+	 *
+	 * @return the participant name with protocol id
+	 */
 	public String getParticipantNameWithProtocolId()
 	{
 		this.participantNameWithProtocolId = "";
@@ -1491,82 +1673,151 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		return this.participantNameWithProtocolId;
 	}
 
+	/**
+	 * Sets the participant name with protocol id.
+	 *
+	 * @param participantNameProtocolId the new participant name with protocol id
+	 */
 	public void setParticipantNameWithProtocolId(String participantNameProtocolId)
 	{
 		this.participantNameWithProtocolId = participantNameProtocolId;
 	}
 
+	/**
+	 * Gets the collection status.
+	 *
+	 * @return the collection status
+	 */
 	public String getCollectionStatus()
 	{
 		return this.collectionStatus;
 	}
 
+	/**
+	 * Sets the collection status.
+	 *
+	 * @param collectionStatus the new collection status
+	 */
 	public void setCollectionStatus(String collectionStatus)
 	{
 		this.collectionStatus = collectionStatus;
 	}
 
+	/**
+	 * Gets the next forward to.
+	 *
+	 * @return the next forward to
+	 */
 	public String getNextForwardTo()
 	{
 		return this.nextForwardTo;
 	}
 
+	/**
+	 * Sets the next forward to.
+	 *
+	 * @param nextForwardTo the new next forward to
+	 */
 	public void setNextForwardTo(String nextForwardTo)
 	{
 		this.nextForwardTo = nextForwardTo;
 	}
 
+	/**
+	 * Gets the prints the checkbox.
+	 *
+	 * @return the prints the checkbox
+	 */
 	public String getPrintCheckbox()
 	{
 		return this.printCheckbox;
 	}
 
+	/**
+	 * Sets the prints the checkbox.
+	 *
+	 * @param printCheckbox the new prints the checkbox
+	 */
 	public void setPrintCheckbox(String printCheckbox)
 	{
 		this.printCheckbox = printCheckbox;
 	}
 
+	/**
+	 * Gets the offset.
+	 *
+	 * @return the offset
+	 */
 	public int getOffset()
 	{
 		return this.offset;
 	}
 
+	/**
+	 * Sets the offset.
+	 *
+	 * @param offset the new offset
+	 */
 	public void setOffset(int offset)
 	{
 		this.offset = offset;
 	}
 
+	/**
+	 * Gets the barcode.
+	 *
+	 * @return the barcode
+	 */
 	public String getBarcode()
 	{
 		return this.barcode;
 	}
 
+	/**
+	 * Sets the barcode.
+	 *
+	 * @param barcode the new barcode
+	 */
 	public void setBarcode(String barcode)
 	{
 		this.barcode = barcode;
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.IPrinterTypeLocation#getPrinterLocation()
+	 */
 	public String getPrinterLocation()
 	{
 		return this.printerLocation;
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.IPrinterTypeLocation#setPrinterLocation(java.lang.String)
+	 */
 	public void setPrinterLocation(String printerLocation)
 	{
 		this.printerLocation = printerLocation;
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.IPrinterTypeLocation#getPrinterType()
+	 */
 	public String getPrinterType()
 	{
 		return this.printerType;
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.actionForm.IPrinterTypeLocation#setPrinterType(java.lang.String)
+	 */
 	public void setPrinterType(String printerType)
 	{
 		this.printerType = printerType;
 	}
 
 	/**
+	 * Gets the is barcode editable.
+	 *
 	 * @return isBarcodeEditable
 	 */
 	public String getIsBarcodeEditable()
@@ -1574,7 +1825,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		return this.isBarcodeEditable;
 	}
 
-	/** 
+	/**
+	 * Sets the is barcode editable.
+	 *
 	 * @param isBarcodeEditable Setter method for isBarcodeEditable
 	 */
 	public void setIsBarcodeEditable(String isBarcodeEditable)
@@ -1583,6 +1836,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the signed consent url.
+	 *
 	 * @return signedConsentUrl The reference to the electric signed document(eg PDF file)
 	 */
 	public String getSignedConsentUrl()
@@ -1591,6 +1846,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the signed consent url.
+	 *
 	 * @param signedConsentUrl The reference to the electric signed document(eg PDF file)
 	 */
 	public void setSignedConsentUrl(String signedConsentUrl)
@@ -1599,6 +1856,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the witness name.
+	 *
 	 * @return witnessName The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
 	 */
 	public String getWitnessName()
@@ -1607,6 +1866,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the witness name.
+	 *
 	 * @param witnessName The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
 	 */
 	public void setWitnessName(String witnessName)
@@ -1615,7 +1876,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * It returns status of button(return,discard,reset)
+	 * It returns status of button(return,discard,reset).
+	 *
 	 * @return withdrawlButtonStatus
 	 */
 	public String getWithdrawlButtonStatus()
@@ -1624,7 +1886,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 
 	/**
-	 * It returns status of button(return,discard,reset)
+	 * It returns status of button(return,discard,reset).
+	 *
 	 * @param withdrawlButtonStatus return,discard,reset
 	 */
 	public void setWithdrawlButtonStatus(String withdrawlButtonStatus)

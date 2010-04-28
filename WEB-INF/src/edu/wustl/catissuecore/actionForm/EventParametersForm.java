@@ -1,7 +1,7 @@
 /**
  * <p>Title: EventParametersForm Class</p>
  * <p>Description:  This Class will be the super class for all Event Parameter classes.
- * <p> It contains the common attributes of the Event Parameter classes.   
+ * <p> It contains the common attributes of the Event Parameter classes.
  * Copyright:    Copyright (c) 2005
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Mandar Deshmukh
@@ -27,50 +27,43 @@ import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class EventParametersForm.
+ *
  * @author mandar_deshmukh
- *  This Class will be the super class for all Event Parameter classes.
+ * This Class will be the super class for all Event Parameter classes.
  */
 public abstract class EventParametersForm extends AbstractActionForm
 {
 
-	/**
-	 * 
-	 */
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 7656338598031229913L;
-	/**
-	 * logger Logger - Generic logger.
-	 */
+
+	/** logger Logger - Generic logger. */
 	private static Logger logger = Logger.getCommonLogger(EventParametersForm.class);
-	/**
-	 * Time in hours for the Event Parameter.
-	 * */
+
+	/** Time in hours for the Event Parameter. */
 	protected String timeInHours;
 
-	/**
-	 * Time in minutes for the Event Parameter.
-	 * */
+	/** Time in minutes for the Event Parameter. */
 	protected String timeInMinutes;
 
-	/**
-	 * Date of the Event Parameter.
-	 * */
+	/** Date of the Event Parameter. */
 	protected String dateOfEvent;
 
-	/**
-	 * Id of the User.   
-	 */
+	/** Id of the User. */
 	protected long userId;
 
-	/**
-	 * Comments on the event parameter.   
-	 */
+	/** Comments on the event parameter. */
 	protected String comments;
 
 	// ----- variable declaration end
 
 	// ------ GET SET methods
 	/**
+	 * Gets the comments.
+	 *
 	 * @return Returns the comments.
 	 */
 	public String getComments()
@@ -79,6 +72,8 @@ public abstract class EventParametersForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the comments.
+	 *
 	 * @param comments The comments to set.
 	 */
 	public void setComments(String comments)
@@ -87,6 +82,8 @@ public abstract class EventParametersForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the date of event.
+	 *
 	 * @return Returns the dateOfEvent.
 	 */
 	public String getDateOfEvent()
@@ -95,6 +92,8 @@ public abstract class EventParametersForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the date of event.
+	 *
 	 * @param dateOfEvent The dateOfEvent to set.
 	 */
 	public void setDateOfEvent(String dateOfEvent)
@@ -103,6 +102,8 @@ public abstract class EventParametersForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the time in minutes.
+	 *
 	 * @return Returns the time_InMinutes.
 	 */
 	public String getTimeInMinutes()
@@ -111,6 +112,8 @@ public abstract class EventParametersForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the time in minutes.
+	 *
 	 * @param timeInMinutes The time_InMinutes to set.
 	 */
 	public void setTimeInMinutes(String timeInMinutes)
@@ -119,6 +122,8 @@ public abstract class EventParametersForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the time in hours.
+	 *
 	 * @return Returns the timeStamp.
 	 */
 	public String getTimeInHours()
@@ -127,6 +132,8 @@ public abstract class EventParametersForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the time in hours.
+	 *
 	 * @param timeStamp The timeStamp to set.
 	 */
 	public void setTimeInHours(String timeStamp)
@@ -135,6 +142,8 @@ public abstract class EventParametersForm extends AbstractActionForm
 	}
 
 	/**
+	 * Gets the user id.
+	 *
 	 * @return Returns the userId.
 	 */
 	public long getUserId()
@@ -143,6 +152,8 @@ public abstract class EventParametersForm extends AbstractActionForm
 	}
 
 	/**
+	 * Sets the user id.
+	 *
 	 * @param userId The userId to set.
 	 */
 	public void setUserId(long userId)
@@ -161,9 +172,11 @@ public abstract class EventParametersForm extends AbstractActionForm
 
 	/**
 	 * Overrides the validate method of ActionForm.
-	 * @return error ActionErrors instance
+	 *
 	 * @param mapping Actionmapping instance
 	 * @param request HttpServletRequest instance
+	 *
+	 * @return error ActionErrors instance
 	 */
 	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
@@ -185,9 +198,12 @@ public abstract class EventParametersForm extends AbstractActionForm
 		return errors;
 	}
 
-	/** 
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+	/**
+	 * Sets the all values.
+	 *
 	 * @param abstractDomain An AbstractDomainObject obj
+	 *
+	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{

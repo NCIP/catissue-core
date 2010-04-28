@@ -1,6 +1,6 @@
 /**
 * <p>Title: CollectionProtocolForm Class>
-* <p>Description:  CollectionProtocolForm Class is used to encapsulate all the request parameters passed 
+* <p>Description:  CollectionProtocolForm Class is used to encapsulate all the request parameters passed
 * from User Add/Edit webpage. </p>
 * Copyright:    Copyright (c) year
 * Company: Washington University, School of Medicine, St. Louis.
@@ -28,65 +28,53 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
  * CollectionProtocolForm Class is used to encapsulate all the request
  * parameters passed from collection protocol Add/Edit webpage.
- * 
+ *
  * @author Mandar Deshmukh
  * @author gautam_shetty
  */
 public class CollectionProtocolForm extends SpecimenProtocolForm
 {
 
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * logger Logger - Generic logger.
-	 */
-	private static Logger logger = Logger.getCommonLogger(CollectionProtocolForm.class);
+	/** logger Logger - Generic logger. */
+	private static final Logger LOGGER = Logger.getCommonLogger(CollectionProtocolForm.class);
 
+	/** The coordinator ids. */
 	protected long[] coordinatorIds;
 
-	/**
-	 * Counter that contains number of rows in the 'Add More' functionality. outer block
-	 */
+	/** Counter that contains number of rows in the 'Add More' functionality. outer block */
 	private int outerCounter = 1;
 
-	/**
-	 * Patch Id : Collection_Event_Protocol_Order_4
-	 * Description : To get CollectionProtocol Events in order (Changed from HashMap to LinkedHashMap)
-	 */
+	/** Patch Id : Collection_Event_Protocol_Order_4 Description : To get CollectionProtocol Events in order (Changed from HashMap to LinkedHashMap). */
 	/**
 	 * Counter that contains number of rows in the 'Add More' functionality. inner block
 	 */
 	protected Map innerLoopValues = new LinkedHashMap();
 
-	/**
-	 * whether Aliquote in same container
-	 */
+	/** whether Aliquote in same container. */
 	protected boolean aliqoutInSameContainer = false;
 
 	//Consent tracking(Virender Mehta)
-	/**
-	 * Unsigned Form Url for the Consents
-	 */
+	/** Unsigned Form Url for the Consents. */
 	protected String unsignedConsentURLName;
 
-	/**
-	 * Map for Storing Values of Consent Tiers.
-	 */
+	/** Map for Storing Values of Consent Tiers. */
 	protected Map consentValues = new HashMap();
 
-	/**
-	 * No of Consent Tier
-	 */
+	/** No of Consent Tier. */
 	private int consentTierCounter = 0;
-	/**
-	 * CheckBox for consent is checked or not
-	 */
+
+	/** CheckBox for consent is checked or not. */
 	private boolean consentWaived = false;
 	//Consent tracking(Virender Mehta)
 
+	/** The site ids. */
 	protected long[] siteIds;
 
 	/**
@@ -98,7 +86,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
-	 * @param key  Value of Key 
+	 * Sets the value.
+	 *
+	 * @param key  Value of Key
 	 * @param value Value corrosponding to the Key
 	 */
 	@Override
@@ -111,8 +101,11 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Gets the value.
+	 *
+	 * @param key This is used to get corresponding Value from the Map
+	 *
 	 * @return This is used to get corresponding Value from the Map
-	 * @param key This is used to get corresponding Value from the Map   
 	 */
 	@Override
 	public Object getValue(final String key)
@@ -121,6 +114,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Gets the all values.
+	 *
 	 * @return values in map
 	 */
 	@Override
@@ -130,6 +125,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Gets the values.
+	 *
 	 * @return values
 	 */
 	@Override
@@ -139,6 +136,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Sets the values.
+	 *
 	 * @param values Set the values
 	 */
 	@Override
@@ -148,6 +147,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Gets the inner loop values.
+	 *
 	 * @return innerLoopValues
 	 */
 	public Map getInnerLoopValues()
@@ -156,6 +157,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Sets the inner loop values.
+	 *
 	 * @param innerLoopValues The innerLoopValues to set.
 	 */
 	public void setInnerLoopValues(final Map innerLoopValues)
@@ -165,6 +168,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 	/**
 	 * Associates the specified object with the specified key in the map.
+	 *
 	 * @param key the key to which the object is mapped.
 	 * @param value the object which is mapped.
 	 */
@@ -178,8 +182,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 	/**
 	 * Returns the object to which this map maps the specified key.
-	 * 
+	 *
 	 * @param key the required key.
+	 *
 	 * @return the object to which this map maps the specified key.
 	 */
 	public Object getIvl(final String key)
@@ -188,6 +193,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Gets the outer counter.
+	 *
 	 * @return Returns the outerCounter.
 	 */
 	public int getOuterCounter()
@@ -196,6 +203,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Sets the outer counter.
+	 *
 	 * @param outerCounter The outerCounter to set.
 	 */
 	public void setOuterCounter(final int outerCounter)
@@ -204,7 +213,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
-	 * Method to set class attributes
+	 * Method to set class attributes.
 	 */
 	@Override
 	protected void reset()
@@ -216,6 +225,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Gets the coordinator ids.
+	 *
 	 * @return Returns the protocolcoordinator ids.
 	 */
 	public long[] getCoordinatorIds()
@@ -224,6 +235,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Sets the coordinator ids.
+	 *
 	 * @param coordinatorIds The coordinatorIds to set.
 	 */
 	public void setCoordinatorIds(long[] coordinatorIds)
@@ -233,6 +246,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 	/**
 	 * Copies the data from an AbstractDomain object to a DistributionProtocolForm object.
+	 *
 	 * @param abstractDomain An AbstractDomain object.
 	 */
 	@Override
@@ -245,7 +259,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			this.aliqoutInSameContainer = cProtocol.getAliquotInSameContainer().booleanValue();
 		}
 
-		//For Consent Tracking 
+		//For Consent Tracking
 		this.unsignedConsentURLName = cProtocol.getUnsignedConsentDocumentURL();
 
 		if (cProtocol.getConsentsWaived() == null)
@@ -267,8 +281,11 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 	/**
 	 * For Consent Tracking
-	 * Setting the consentValuesMap 
-	 * @param consentTierColl This Containes the collection of ConsentTier
+	 * Setting the consentValuesMap.
+	 *
+	 * @param mapping the mapping
+	 * @param request the request
+	 *
 	 * @return tempMap
 	 */
 	//	private Map prepareConsentTierMap(Collection consentTierColl)
@@ -276,7 +293,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	//		Map tempMap = new HashMap();
 	//		if(consentTierColl!=null)
 	//		{
-	//			Iterator consentTierCollIter = consentTierColl.iterator();			
+	//			Iterator consentTierCollIter = consentTierColl.iterator();
 	//			int i = 0;
 	//			while(consentTierCollIter.hasNext())
 	//			{
@@ -302,7 +319,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	@Override
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		logger.debug("OPERATION : ----- : " + this.getOperation());
+		LOGGER.debug("OPERATION : ----- : " + this.getOperation());
 		ActionErrors errors = super.validate(mapping, request);
 		//		Validator validator = new Validator();
 		try
@@ -322,13 +339,12 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				}
 			}
 
-			logger.debug("Protocol Coordinators : " + this.coordinatorIds);
+			LOGGER.debug("Protocol Coordinators : " + this.coordinatorIds);
 		}
 		catch (final Exception excp)
 		{
 			// use of logger as per bug 79
-			CollectionProtocolForm.logger.error(excp.getMessage(), excp);
-			excp.printStackTrace() ;
+			CollectionProtocolForm.LOGGER.error(excp.getMessage(), excp);
 			//logger.debug(excp);
 			errors = new ActionErrors();
 		}
@@ -336,7 +352,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
-	 * Returns the id assigned to form bean
+	 * Returns the id assigned to form bean.
+	 *
 	 * @return COLLECTION_PROTOCOL_FORM_ID
 	 */
 	@Override
@@ -346,32 +363,33 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
-	 * This is the main method, main( ) is the method called when a Java application begins
-	 * @param args array of instances of the class String.
-	 * args receives any command-line arguments present when the program is executed.
+	 * This is the main method, main( ) is the method called when a Java application begins.
+	 *
+	 * @param addNewFor the add new for
+	 * @param addObjectIdentifier the add object identifier
 	 */
 	//	public static void main(String[] args)
 	//	{
 	//		int maxCount=1;
 	////		int maxIntCount=1;
-	//		
+	//
 	//		CollectionProtocolForm collectionProtocolForm = null;
-	//		
+	//
 	//		Object obj = new Object();//request.getAttribute("collectionProtocolForm");
-	//		
+	//
 	//		if(obj != null && obj instanceof CollectionProtocolForm)
 	//		{
 	//			collectionProtocolForm = (CollectionProtocolForm)obj;
 	//			maxCount = collectionProtocolForm.getOuterCounter();
 	//		}
-	//	
+	//
 	//		for(int counter=1;counter<=maxCount;counter++)
 	//		{
 	//			String commonLabel = "value(CollectionProtocolEvent:" + counter;
-	//			
+	//
 	//			String cid = "ivl(" + counter + ")";
 	//			String functionName = "insRow('" + commonLabel + "','" + cid +"')";
-	//			
+	//
 	//			if(collectionProtocolForm!=null)
 	//			{
 	//				Object o = collectionProtocolForm.getIvl(cid);
@@ -379,11 +397,11 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	//			}
 	//		}
 	//	}
-	//	
+	//
 	/**
 	 * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
 	 * @param addNewFor - FormBean ID of the object inserted
-	 *  @param addObjectIdentifier - Identifier of the Object inserted 
+	 *  @param addObjectIdentifier - Identifier of the Object inserted
 	 */
 	@Override
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
@@ -401,6 +419,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Checks if is aliqout in same container.
+	 *
 	 * @return Returns the aliqoutInSameContainer.
 	 */
 	public boolean isAliqoutInSameContainer()
@@ -409,6 +429,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Sets the aliqout in same container.
+	 *
 	 * @param aliqoutInSameContainer The aliqoutInSameContainer to set.
 	 */
 	public void setAliqoutInSameContainer(boolean aliqoutInSameContainer)
@@ -419,7 +441,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	//	For Consent Tracking Start
 
 	/**
-	 * @return unsignedConsentURLName  Get Unsigned Signed URL name  
+	 * Gets the unsigned consent url name.
+	 *
+	 * @return unsignedConsentURLName  Get Unsigned Signed URL name
 	 */
 	public String getUnsignedConsentURLName()
 	{
@@ -427,6 +451,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Sets the unsigned consent url name.
+	 *
 	 * @param unsignedConsentURLName  Set Unsigned Signed URL name
 	 */
 	public void setUnsignedConsentURLName(String unsignedConsentURLName)
@@ -435,6 +461,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Sets the consent value.
+	 *
 	 * @param key Key
 	 * @param value Value
 	 */
@@ -447,7 +475,10 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Gets the consent value.
+	 *
 	 * @param key Key
+	 *
 	 * @return Statements
 	 */
 	public Object getConsentValue(final String key)
@@ -456,7 +487,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
-	 * 
+	 * Gets the consent values.
+	 *
 	 * @return consentValues   Set Consents into the Map
 	 */
 	public Map getConsentValues()
@@ -465,6 +497,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * Sets the consent values.
+	 *
 	 * @param consentValues Set Consents into the Map
 	 */
 	public void setConsentValues(final Map consentValues)
@@ -473,7 +507,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
-	 *@return consentTierCounter  This will keep track of count of Consent Tier
+	 * Gets the consent tier counter.
+	 *
+	 * @return consentTierCounter  This will keep track of count of Consent Tier
 	 */
 	public int getConsentTierCounter()
 	{
@@ -481,7 +517,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
-	 * 
+	 * Sets the consent tier counter.
+	 *
 	 * @param consentTierCounter  This will keep track of count of Consent Tier
 	 */
 	public void setConsentTierCounter(int consentTierCounter)
@@ -490,7 +527,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
-	 * If consent waived is true then no need to check consents prior to distribution
+	 * If consent waived is true then no need to check consents prior to distribution.
+	 *
 	 * @return consentWaived
 	 */
 	public boolean isConsentWaived()
@@ -499,7 +537,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
-	 * If consent waived is true then no need to check consents prior to distribution
+	 * If consent waived is true then no need to check consents prior to distribution.
+	 *
 	 * @param consentWaived If consent waived is true then no need to check consents prior to distribution
 	 */
 	public void setConsentWaived(final boolean consentWaived)
@@ -507,47 +546,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		this.consentWaived = consentWaived;
 	}
 
-	//	For Consent Tracking End
-
-	public long[] getSiteIds()
-	{
-		return this.siteIds;
-	}
-
-	public void setSiteIds(final long[] siteIds)
-	{
-		this.siteIds = siteIds;
-	}
-
-	/**
-	 * parentCollectionProtocol.
-	 * @return parentCollectionProtocol.
-	 */
-	public CollectionProtocol getParentCollectionProtocol()
-	{
-		return this.parentCollectionProtocol;
-	}
-
-	/**
-	 * sequenceNumber.
-	 * @return sequence no.
-	 */
-	public Integer getSequenceNumber()
-	{
-		return this.sequenceNumber;
-	}
-
-	/**
-	 * type.
-	 * @return type.
-	 */
-	public String getType()
-	{
-		return this.type;
-	}
-
 	/**
 	 * studyCalendarEventPoint.
+	 *
 	 * @return studyCalendarEventPoint.
 	 */
 	public Double getStudyCalendarEventPoint()
@@ -555,8 +556,31 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		return this.studyCalendarEventPoint;
 	}
 
+	//	For Consent Tracking End
+
+	/**
+	 * Gets the site ids.
+	 *
+	 * @return the site ids
+	 */
+	public long[] getSiteIds()
+	{
+		return this.siteIds;
+	}
+
+	/**
+	 * Sets the site ids.
+	 *
+	 * @param siteIds the new site ids
+	 */
+	public void setSiteIds(final long[] siteIds)
+	{
+		this.siteIds = siteIds;
+	}
+
 	/**
 	 * parentCollectionProtocol.
+	 *
 	 * @param parentCollectionProtocol parentCollectionProtocol.
 	 */
 	public void setParentCollectionProtocol(CollectionProtocol parentCollectionProtocol)
@@ -566,6 +590,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 	/**
 	 * Set sequence no.
+	 *
 	 * @param sequenceNumber sequenceNumber.
 	 */
 	public void setSequenceNumber(Integer sequenceNumber)
@@ -573,9 +598,25 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		this.sequenceNumber = sequenceNumber;
 	}
 
+
+	/**
+	 * type.
+	 *
+	 * @return type.
+	 */
+	public String getType()
+	{
+		return this.type;
+	}
+
+
+
+
+
 	/**
 	 * Set type.
-	 * @param type
+	 *
+	 * @param type the type
 	 */
 	public void setType(String type)
 	{
@@ -584,6 +625,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 	/**
 	 * Set study calendar point.
+	 *
 	 * @param studyCalendarEventPoint studyCalendarEventPoint.
 	 */
 	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint)
@@ -591,32 +633,25 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		this.studyCalendarEventPoint = studyCalendarEventPoint;
 	}
 
-	/**
-	 * Parent Collection Protocol.
-	 */
+	/** Parent Collection Protocol. */
 	protected CollectionProtocol parentCollectionProtocol;
 
-	/**
-	 * Sequence Number.
-	 */
+	/** Sequence Number. */
 	protected Integer sequenceNumber;
-	/**
-	 * Collection Protocol type - Arm, Cycle, Phase.
-	 */
+
+	/** Collection Protocol type - Arm, Cycle, Phase. */
 	protected String type;
 
-	/**
-	 * Defines the relative time point in days.
-	 */
+
+	/** Defines the relative time point in days. */
 	protected Double studyCalendarEventPoint;
 
-	/**
-	 * Parent collection protocol Identifier.
-	 */
+	/** Parent collection protocol Identifier. */
 	protected Long parentCollectionProtocolId;
 
 	/**
-	 * get parentCollecetionProtocol id.  
+	 * get parentCollecetionProtocol id.
+	 *
 	 * @return parentCollecetionProtocol id.
 	 */
 	public Long getParentCollectionProtocolId()
@@ -625,21 +660,21 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
-	 * Set parentCollecetionProtocol id.  
-	 * @param parentCollectionProtocolId
+	 * Set parentCollecetionProtocol id.
+	 *
+	 * @param parentCollectionProtocolId the parent collection protocol id
 	 */
 	public void setParentCollectionProtocolId(Long parentCollectionProtocolId)
 	{
 		this.parentCollectionProtocolId = parentCollectionProtocolId;
 	}
 
-	/**
-	 * protocolCoordinatorIds : This will hold the clinical Diagnosis values.
-	 */
+	/** protocolCoordinatorIds : This will hold the clinical Diagnosis values. */
 	private String[] protocolCoordinatorIds;
 
 	/**
 	 * This will give the clinical diagnosis values.
+	 *
 	 * @return protocolCoordinatorIds : clinicalDiagnosis.
 	 */
 	public String[] getProtocolCoordinatorIds()
@@ -649,12 +684,33 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 	/**
 	 * This will set the clinical diagnosis values.
+	 *
 	 * @param protocolCoordinatorIds clinicalDiagnosis.
 	 */
 	public void setProtocolCoordinatorIds(String[] protocolCoordinatorIds)
 	{
 		this.protocolCoordinatorIds = protocolCoordinatorIds;
 	}
-	
-	
+
+	/**
+	 * parentCollectionProtocol.
+	 *
+	 * @return parentCollectionProtocol.
+	 */
+	public CollectionProtocol getParentCollectionProtocol()
+	{
+		return this.parentCollectionProtocol;
+	}
+
+	/**
+	 * sequenceNumber.
+	 *
+	 * @return sequence no.
+	 */
+	public Integer getSequenceNumber()
+	{
+		return this.sequenceNumber;
+	}
+
+
 }

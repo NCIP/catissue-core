@@ -75,18 +75,13 @@ public final class LabelAndBarcodeGeneratorInitializer
 	 */
 	private static void setSpcimenLabelBarcodeGentorInstances() throws NameGeneratorException
 	{
-		LabelGenerator specimenGeneratorInstance;
-		LabelGenerator scgLableGeneratorInstance;
 		LabelGenerator ppiLabelGeneratorInstance;
 		BarcodeGenerator specBarcodeGeneratorInstance;
-		BarcodeGenerator scgBarcodeGeneratorInstance;
 		BarcodeGenerator cprBarcodeGeneratorInstance;
-		specimenGeneratorInstance = LabelGeneratorFactory
-				.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-		if (specimenGeneratorInstance != null)
-		{
-			//Variables.isSpecimenLabelGeneratorAvl = true;
-		}
+//		if (specimenGeneratorInstance != null)
+//		{
+//			//Variables.isSpecimenLabelGeneratorAvl = true;
+//		}
 		ppiLabelGeneratorInstance = LabelGeneratorFactory
 				.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
 		if (ppiLabelGeneratorInstance != null)
@@ -100,8 +95,28 @@ public final class LabelAndBarcodeGeneratorInitializer
 		{
 			Variables.isSpecimenBarcodeGeneratorAvl = true;
 		}
-		scgLableGeneratorInstance = LabelGeneratorFactory
-				.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
+
+		setSCGGenratorVar();
+		cprBarcodeGeneratorInstance = BarcodeGeneratorFactory
+				.getInstance(Constants.COLL_PROT_REG_BARCODE_GENERATOR_PROPERTY_NAME);
+		if (cprBarcodeGeneratorInstance != null)
+		{
+			Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl = true;
+		}
+
+	}
+
+	/**
+	 * sets the global variable for SCG label n barcode.
+	 * @param scgLableGeneratorInstance
+	 * @throws NameGeneratorException
+	 */
+	private static void setSCGGenratorVar()
+			throws NameGeneratorException
+	{
+		BarcodeGenerator scgBarcodeGeneratorInstance;
+		LabelGenerator scgLableGeneratorInstance = LabelGeneratorFactory
+		.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
 		if (scgLableGeneratorInstance != null)
 		{
 			Variables.isSpecimenCollGroupLabelGeneratorAvl = true;
@@ -112,13 +127,6 @@ public final class LabelAndBarcodeGeneratorInitializer
 		{
 			Variables.isSpecimenCollGroupBarcodeGeneratorAvl = true;
 		}
-		cprBarcodeGeneratorInstance = BarcodeGeneratorFactory
-				.getInstance(Constants.COLL_PROT_REG_BARCODE_GENERATOR_PROPERTY_NAME);
-		if (cprBarcodeGeneratorInstance != null)
-		{
-			Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl = true;
-		}
-
 	}
 
 }

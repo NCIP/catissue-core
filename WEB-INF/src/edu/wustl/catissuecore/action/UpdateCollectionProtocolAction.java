@@ -27,31 +27,30 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class UpdateCollectionProtocolAction.
+ *
  * @author renuka_bajpai
  */
 public class UpdateCollectionProtocolAction extends BaseAction
 {
 
-	/**
-	 * logger.
-	 */
-	private transient final Logger logger = Logger
+	/** logger. */
+	private static final Logger LOGGER = Logger
 			.getCommonLogger(UpdateCollectionProtocolAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 * @param mapping
-	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
-	 * @throws Exception
-	 *             generic exception
+	 *
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 *
 	 * @return ActionForward : ActionForward
+	 *
+	 * @throws Exception generic exception
 	 */
 
 	@Override
@@ -77,14 +76,7 @@ public class UpdateCollectionProtocolAction extends BaseAction
 					.getCoolectionProtocolDTO(collectionProtocol, session);
 			bizLogic.update(collectionProtocolDTO, null, 0, sessionDataBean);
 			CollectionProtocolUtil.updateSession(request, collectionProtocol.getId());
-			if (Constants.DISABLED.equals(collectionProtocolBean.getActivityStatus()))
-			{
-				target = "disabled";
-			}
-			else
-			{
-				target = Constants.SUCCESS;
-			}
+			target = getTarget(collectionProtocolBean);
 			final ActionMessages actionMessages = new ActionMessages();
 			actionMessages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"object.edit.successOnly", "Collection Protocol"));
@@ -93,12 +85,12 @@ public class UpdateCollectionProtocolAction extends BaseAction
 		}
 		catch (final Exception exception)
 		{
-			this.logger.error(exception.getMessage(), exception);
+			LOGGER.error(exception.getMessage(), exception);
 			final ActionErrors actionErrors = new ActionErrors();
 
 			if (exception instanceof UserNotAuthorizedException)
 			{
-				final UserNotAuthorizedException ex = (UserNotAuthorizedException) exception;
+				final UserNotAuthorizedException excep = (UserNotAuthorizedException) exception;
 				final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
 						.getAttribute(Constants.SESSION_DATA);
 				String userName = "";
@@ -108,17 +100,10 @@ public class UpdateCollectionProtocolAction extends BaseAction
 					userName = sessionDataBean.getUserName();
 				}
 				final String className = Constants.COLLECTION_PROTOCOL;
-				final String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(ex
+				final String decoratedPrivilegeName = AppUtility.getDisplayLabelForUnderscore(excep
 						.getPrivilegeName());
 				String baseObject = "";
-				if (ex.getBaseObject() != null && ex.getBaseObject().trim().length() != 0)
-				{
-					baseObject = ex.getBaseObject();
-				}
-				else
-				{
-					baseObject = className;
-				}
+				baseObject = getBaseObj(excep, className);
 
 				final ActionError error = new ActionError("access.addedit.object.denied", userName,
 						className, decoratedPrivilegeName, baseObject);
@@ -134,5 +119,48 @@ public class UpdateCollectionProtocolAction extends BaseAction
 			target = Constants.FAILURE;
 		}
 		return mapping.findForward(target);
+	}
+
+	/**
+	 * Gets the target.
+	 *
+	 * @param collectionProtocolBean the collection protocol bean
+	 *
+	 * @return the target
+	 */
+	private String getTarget(final CollectionProtocolBean collectionProtocolBean)
+	{
+		String target;
+		if (Constants.DISABLED.equals(collectionProtocolBean.getActivityStatus()))
+		{
+			target = "disabled";
+		}
+		else
+		{
+			target = Constants.SUCCESS;
+		}
+		return target;
+	}
+
+	/**
+	 * Gets the base obj.
+	 *
+	 * @param exception the exception
+	 * @param className the class name
+	 *
+	 * @return the base obj
+	 */
+	private String getBaseObj(final UserNotAuthorizedException exception, final String className)
+	{
+		String baseObject;
+		if (exception.getBaseObject() != null && exception.getBaseObject().trim().length() != 0)
+		{
+			baseObject = exception.getBaseObject();
+		}
+		else
+		{
+			baseObject = className;
+		}
+		return baseObject;
 	}
 }
