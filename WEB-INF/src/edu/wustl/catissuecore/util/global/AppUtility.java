@@ -642,21 +642,21 @@ public class AppUtility
 	 */
 	private static Calendar getCalendar(String date, String pattern)
 	{
+		Calendar calendar = Calendar.getInstance();
 		try
 		{
-			final SimpleDateFormat dateformat = new SimpleDateFormat(pattern);
-			final Date givenDate = dateformat.parse(date);
-			final Calendar calendar = Calendar.getInstance();
-			calendar.setTime(givenDate);
-			return calendar;
+			if(!Constants.DOUBLE_QUOTES.equals(date.trim()))
+			{
+				final SimpleDateFormat dateformat = new SimpleDateFormat(pattern);
+				final Date givenDate = dateformat.parse(date);
+				calendar.setTime(givenDate);
+			}
 		}
 		catch (final Exception e)
 		{
 			AppUtility.logger.error(e.getMessage(),e);
-			e.printStackTrace();
-			final Calendar calendar = Calendar.getInstance();
-			return calendar;
 		}
+		return calendar;
 	}
 
 	public static void main(String[] args)
