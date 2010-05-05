@@ -32,7 +32,6 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		collForm.setOperation("add") ;
 		collForm.setShortTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		collForm.setStartDate("01-12-2009");
-		collForm.setGenerateLabel(true);
 		collForm.setSpecimenLabelFormat("CP_%PPI%_%STYPE%_%PPI_YOC_UID%");
 		setRequestPathInfo("/OpenCollectionProtocol");
 		setActionForm(collForm);
@@ -195,7 +194,6 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		collForm.setOperation("add") ;
 		collForm.setShortTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		collForm.setStartDate("01-12-2009");
-		collForm.setGenerateLabel(false);
 		collForm.setSpecimenLabelFormat("");
 		setRequestPathInfo("/OpenCollectionProtocol");
 		setActionForm(collForm);

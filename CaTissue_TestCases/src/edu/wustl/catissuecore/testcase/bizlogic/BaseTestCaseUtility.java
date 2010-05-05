@@ -133,7 +133,7 @@ public class BaseTestCaseUtility {
 		principalInvestigator.setId(new Long("1"));
 		collectionProtocol.setPrincipalInvestigator(principalInvestigator);
 
-		collectionProtocol.setGenerateLabel(false);
+//		collectionProtocol.setGenerateLabel(false);
 		collectionProtocol.setSpecimenLabelFormat(null);
 
 		Collection protocolCordinatorCollection = new HashSet();
@@ -192,7 +192,6 @@ public class BaseTestCaseUtility {
 		specimenRequirementBean.setStorageContainerForSpecimen("Auto");
 		specimenRequirementBean.setGenerateLabel(false);
 		specimenRequirementBean.setLabelFormat(null);
-		specimenRequirementBean.setLabelGenType("0");
 
 		//Collected and received events
 		specimenRequirementBean.setCollectionEventUserId(1);
