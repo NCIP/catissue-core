@@ -53,7 +53,7 @@ public final class TokenFactory
 
 				if (className == null || "".equals(className))
 				{
-					labelToken = new DefaultLabelTokens();
+					throw new TokenNotFoundException("");
 				}
 				else
 				{
@@ -66,6 +66,12 @@ public final class TokenFactory
 				labelToken = (LabelTokens)tokenMap.get(tokenKey);
 			}
 			return labelToken;
+		}
+		catch(final TokenNotFoundException exp)
+		{
+			LOGGER.info(exp.getMessage(), exp);
+			throw new TokenNotFoundException("Could not create LabelGenerator instance: "
+					+ exp.getMessage());
 		}
 		catch (final IllegalAccessException e)
 		{

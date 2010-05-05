@@ -118,11 +118,10 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 					try
 					{
 						buffer.append(getTokenValue(objSpecimen, token));
-
 					}
-					catch (final Exception ex)
+					catch (final NameGeneratorException ex)
 					{
-						LOGGER.info(ex);
+						throw new LabelException(ex.getMessage());
 					}
 				}
 //						buffer.append("_");
@@ -149,12 +148,20 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 	private String getTokenValue(final Specimen objSpecimen, String token)
 			throws NameGeneratorException
 	{
-		if("SYS_UID".equals(token))
+//		if("SYS_UID".equals(token))
+//		{
+//			currentLabel = currentLabel+1;
+//		}
+		String mylable = "";
+		try
 		{
-			currentLabel = currentLabel+1;
+			mylable = TokenFactory.getInstance(token).getTokenValue(objSpecimen);
+
 		}
-		String mylable = TokenFactory.getInstance(token).getTokenValue(objSpecimen,
-				token, currentLabel);
+		catch(TokenNotFoundException exp)
+		{
+			mylable = token;
+		}
 		if (mylable == null)
 		{
 			mylable = "";
@@ -172,9 +179,65 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 	 */
 	private boolean isGenLabel(final Specimen objSpecimen)
 	{
-		return (objSpecimen.getSpecimenRequirement() != null && objSpecimen.getSpecimenRequirement().getGenLabel()) || objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel();
+		boolean isGenLabel = false;
+
+		if(objSpecimen.getSpecimenRequirement() != null && Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
+		{
+			isGenLabel = false;
+		}
+		else if(objSpecimen.getSpecimenRequirement() != null && !Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()) && !objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%"))
+		{
+			isGenLabel = true;
+		}
+		else if(objSpecimen.getSpecimenRequirement() != null && objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%"))
+		{
+			isGenLabel = isLblGenOnForCP(objSpecimen);
+		}
+		else if(objSpecimen.getSpecimenRequirement() == null)
+		{
+			isGenLabel = isLblGenOnForCP(objSpecimen);
+		}
+		return isGenLabel;
 	}
 
+
+	public static boolean isLblGenOnForCP(Specimen objSpecimen)
+	{
+		String lineage = objSpecimen.getLineage();
+		String parentLabelformat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+		String deriveLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
+		String aliquotLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
+		boolean isGenLabel = false;
+		if(Constants.NEW_SPECIMEN.equals(lineage))
+		{
+			isGenLabel = !Validator.isEmpty(parentLabelformat);
+		}
+		else if(Constants.DERIVED_SPECIMEN.equals(lineage))
+		{
+			isGenLabel = getGenLabelForChildSpecimen(deriveLabelFormat,parentLabelformat);
+		}
+		else if(Constants.ALIQUOT.equals(lineage))
+		{
+			isGenLabel = getGenLabelForChildSpecimen(aliquotLabelFormat,parentLabelformat);
+		}
+		return isGenLabel;
+	}
+
+
+	private static boolean getGenLabelForChildSpecimen(String format,String parentLabelformat)
+	{
+		boolean isGenLabel = false;
+
+		if(!Validator.isEmpty(format) && !format.contains("%CP_DEFAULT%"))
+		{
+			isGenLabel = true;
+		}
+		else if(!Validator.isEmpty(format) && format.contains("%CP_DEFAULT%"))
+		{
+			isGenLabel = !Validator.isEmpty(parentLabelformat);
+		}
+		return isGenLabel;
+	}
 
 	/**
 	 * Gets the label format.
@@ -187,29 +250,43 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 	private String getLabelFormat(final Specimen objSpecimen, StringBuffer buffer)
 	{
 		String labelFormat = "";
-		if(objSpecimen.getSpecimenRequirement() != null && objSpecimen.getSpecimenRequirement().getGenLabel() && Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
+		if(objSpecimen.getSpecimenRequirement() != null)
 		{
-			if(isCPDefault(objSpecimen))
+			if(objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%"))
 			{
-				currentLabel = currentLabel+1;
-				buffer.append(currentLabel);
+//				labelFormat=objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+				labelFormat = getSpecimenLabelFormat(objSpecimen);
 			}
-			else if(isCPLabelformatAvl(objSpecimen))
+			else if(!objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%"))
 			{
-				labelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+				labelFormat = objSpecimen.getSpecimenRequirement().getLabelFormat();
 			}
 		}
 
-		else if(objSpecimen.getSpecimenRequirement() != null && objSpecimen.getSpecimenRequirement().getGenLabel() && !Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
+		else if(objSpecimen.getSpecimenRequirement() == null)
 		{
-			labelFormat=objSpecimen.getSpecimenRequirement().getLabelFormat();
+			labelFormat = getSpecimenLabelFormat(objSpecimen);
 		}
-		else if(isCPDefault(objSpecimen))
+
+		return labelFormat;
+	}
+
+	private String  getSpecimenLabelFormat(Specimen objSpecimen)
+	{
+		String labelFormat = "";
+		if(Constants.NEW_SPECIMEN.equals(objSpecimen.getLineage()))
 		{
-			currentLabel = currentLabel+1;
-			buffer.append(currentLabel);
+			labelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
 		}
-		else if(isCPLabelformatAvl(objSpecimen))
+		else if(Constants.DERIVED_SPECIMEN.equals(objSpecimen.getLineage()))
+		{
+			labelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
+		}
+		else if(Constants.ALIQUOT.equals(objSpecimen.getLineage()))
+		{
+			labelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
+		}
+		if(labelFormat.contains("%CP_DEFAULT%"))
 		{
 			labelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
 		}
@@ -223,10 +300,10 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 	 *
 	 * @return true, if checks if is cp labelformat avl
 	 */
-	private boolean isCPLabelformatAvl(final Specimen objSpecimen)
-	{
-		return objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel() && !Validator.isEmpty(objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat());
-	}
+//	private boolean isCPLabelformatAvl(final Specimen objSpecimen)
+//	{
+//		return objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel() && !Validator.isEmpty(objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat());
+//	}
 
 
 	/**
@@ -236,18 +313,19 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 	 *
 	 * @return true, if checks if is cp default
 	 */
-	private boolean isCPDefault(final Specimen objSpecimen)
-	{
-		return objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel() && Validator.isEmpty(objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat());
-	}
+//	private boolean isCPDefault(final Specimen objSpecimen)
+//	{
+//		return objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel() && Validator.isEmpty(objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat());
+//	}
 
 
 	/**
 	 * Sets the scg data.
 	 *
 	 * @param objSpecimen the obj specimen
+	 * @throws LabelException
 	 */
-	private void setScgData(final Specimen objSpecimen)
+	private void setScgData(final Specimen objSpecimen) throws LabelException
 	{
 		if(objSpecimen.getSpecimenCollectionGroup() == null || objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration() == null)
 		{
@@ -265,8 +343,9 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 	 * Sets the specimen req.
 	 *
 	 * @param objSpecimen the obj specimen
+	 * @throws LabelException
 	 */
-	private void setSpecimenReq(final Specimen objSpecimen)
+	private void setSpecimenReq(final Specimen objSpecimen) throws LabelException
 	{
 		if(objSpecimen.getSpecimenRequirement() == null && objSpecimen.getId() != null)
 		{
@@ -286,6 +365,7 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 			catch(ApplicationException exp)
 			{
 				LOGGER.info(exp);
+				throw new LabelException(exp.getMessage());
 			}
 		}
 	}
@@ -317,11 +397,13 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 	 * @param spec the spec
 	 *
 	 * @return the sCG data
+	 * @throws LabelException
 	 */
-	private SpecimenCollectionGroup getSCGData(Specimen spec)
+	private SpecimenCollectionGroup getSCGData(Specimen spec) throws LabelException
 	{
-		String hql = "select scg.collectionProtocolRegistration.collectionProtocol.generateLabel," +
-		"scg.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, "+
+		String hql = "select scg.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat," +
+		"scg.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, "+
+		"scg.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat, "+
 		"scg.collectionProtocolRegistration.id, "+
 		" scg.collectionProtocolRegistration.protocolParticipantIdentifier, " +
 		"scg.id, "  +
@@ -337,20 +419,35 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 			list = AppUtility.executeQuery(hql);
 
 			Object[] obje = (Object[])list.get(0);
-			boolean generateLabel = (Boolean)obje[0];
 			String labelFormat ="";
+			if(obje[0] != null)
+			{
+				labelFormat = obje[0].toString();
+			}
+
+			String derivativeLabelForma ="";
 			if(obje[1] != null)
 			{
-				labelFormat = obje[1].toString();
+				derivativeLabelForma = obje[1].toString();
 			}
-			Long cprId = Long.valueOf(obje[2].toString());
-			String PPI= obje[3].toString();
-			Long scgId = Long.valueOf(obje[4].toString());
-			Long cpId = Long.valueOf(obje[5].toString());
+
+			String aliquotLabelFormat ="";
+			if(obje[2] != null)
+			{
+				aliquotLabelFormat = obje[2].toString();
+			}
+
+			Long cprId = Long.valueOf(obje[3].toString());
+			String PPI = null;
+			if(obje[4] != null)
+			PPI= obje[4].toString();
+
+			Long scgId = Long.valueOf(obje[5].toString());
+			Long cpId = Long.valueOf(obje[6].toString());
 			protocol.setId(cpId);
 			protocol.setSpecimenLabelFormat(labelFormat);
-			protocol.setGenerateLabel(generateLabel);
-
+			protocol.setDerivativeLabelFormat(derivativeLabelForma);
+			protocol.setAliquotLabelFormat(aliquotLabelFormat);
 			cpr.setId(cprId);
 			cpr.setProtocolParticipantIdentifier(PPI);
 			cpr.setCollectionProtocol(protocol);
@@ -359,9 +456,10 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 			scg.setCollectionProtocolRegistration(cpr);
 
 		}
-		catch (ApplicationException e)
+		catch (ApplicationException exp)
 		{
-			LOGGER.info(e);
+			LOGGER.info(exp);
+			throw new LabelException(exp.getMessage());
 		}
 		return scg;
 	}

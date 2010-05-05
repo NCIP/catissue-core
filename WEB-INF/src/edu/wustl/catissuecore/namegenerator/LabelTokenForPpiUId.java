@@ -21,7 +21,7 @@ public class LabelTokenForPpiUId implements LabelTokens
 	 * @see edu.wustl.catissuecore.namegenerator.LabelTokens#getTokenValue(java.lang.Object,
 	 * java.lang.String, java.lang.Long)
 	 */
-	public String getTokenValue(Object object, String token, Long currVal)
+	public String getTokenValue(Object object)
 	{
 		return getSpecimenCount((Specimen)object);
 	}

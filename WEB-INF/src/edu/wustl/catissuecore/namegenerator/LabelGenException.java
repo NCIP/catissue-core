@@ -9,7 +9,7 @@ package edu.wustl.catissuecore.namegenerator;
  * @author nitesh_marwaha
  *
  */
-public class LabelGenException extends Exception
+public class LabelGenException extends NameGeneratorException
 {
 
 	/** Serial Version UID. */

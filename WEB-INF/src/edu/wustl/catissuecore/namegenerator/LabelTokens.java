@@ -20,5 +20,5 @@ public interface LabelTokens
 	 *
 	 * @return the token value
 	 */
-	String getTokenValue(Object object,String token, Long currVal);
+	String getTokenValue(Object object);
 }

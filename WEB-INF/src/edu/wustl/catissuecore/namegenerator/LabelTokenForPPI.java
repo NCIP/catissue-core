@@ -21,7 +21,7 @@ public class LabelTokenForPPI implements LabelTokens
 	 * java.lang.String, java.lang.Long)
 	 */
 
-	public String getTokenValue(Object object, String token, Long currVal)
+	public String getTokenValue(Object object)
 	{
 		Specimen objSpecimen = (Specimen) object;
 		return objSpecimen.getSpecimenCollectionGroup().
