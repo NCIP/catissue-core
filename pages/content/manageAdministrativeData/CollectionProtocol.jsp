@@ -73,35 +73,7 @@ function updateCPTree()
   window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
 }
 
-function hideTreeChecked(radioButton)
-{//alert('hell');
 
-//alert(document.getElementById('generateLabelCheck2').checked);
-	if(radioButton.value == 1)
-	{
-		document.getElementById('generateLabel').value=false;
-		document.getElementById('defaultLabelGen').value=false;
-		document.getElementById('specimenLabelFormat').value="";
-		document.getElementById('specimenLabelFormat').disabled=true;
-	}
-	if(radioButton.value == 2)
-	{
-		document.getElementById('generateLabel').value=false;
-		document.getElementById('defaultLabelGen').value=true;
-		document.getElementById('specimenLabelFormat').value="";
-		document.getElementById('specimenLabelFormat').disabled=true;
-	}
-	if(radioButton.value == 3)
-	{
-		document.getElementById('defaultLabelGen').value=false;
-		document.getElementById('generateLabel').value=true;
-		document.getElementById('specimenLabelFormat').disabled=false;
-	}
-
-
-
-
-}
 </script>
 
 <style>
@@ -141,8 +113,7 @@ function hideTreeChecked(radioButton)
 						<html:hidden property="onSubmit"/>
 						<html:hidden property="id" />
 					    <html:hidden property="redirectTo"/>
-	<html:hidden property="generateLabel" styleId="generateLabel"/>
-	<html:hidden property="defaultLabelGen" styleId="defaultLabelGen"/>
+
 						<html:hidden property="sequenceNumber" />
 						<html:hidden property="type" />
 						<html:hidden property="studyCalendarEventPoint" />
@@ -153,8 +124,8 @@ function hideTreeChecked(radioButton)
 					</script>
                       <tr>
                         <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
-                        <td width="22%" align="left" class="black_ar"><bean:message key="collectionprotocol.principalinvestigator" /> </td>
-                        <td width="77%" align="left"><label><html:select property="principalInvestigatorId" styleClass="formFieldSizedNew" styleId="principalInvestigatorId" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"><html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/></html:select>&nbsp;<html:link href="#" styleId="newUser" styleClass="view"onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=collectionProtocol&addNewFor=principalInvestigator')"><bean:message key="buttons.addNew" /></html:link></label></td>
+                        <td width="30%" align="left" class="black_ar"><bean:message key="collectionprotocol.principalinvestigator" /> </td>
+                        <td width="69%" align="left"><label><html:select property="principalInvestigatorId" styleClass="formFieldSizedNew" styleId="principalInvestigatorId" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"><html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/></html:select>&nbsp;<html:link href="#" styleId="newUser" styleClass="view"onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=collectionProtocol&addNewFor=principalInvestigator')"><bean:message key="buttons.addNew" /></html:link></label></td>
                      </tr>
                       <tr>
                         <td align="center" class="black_ar">&nbsp;</td>
@@ -259,62 +230,32 @@ function hideTreeChecked(radioButton)
 <!------------------------------------------------------------------------>
 						<tr>
 							<td align="center" class="black_ar">&nbsp;</td>
-							<td align="left" class="black_ar"><label>Generate Labels?</label></td>
+							<td align="left" class="black_ar">Parent Specimen Label Format</td>
 							<td>
-							<input type="radio" value="1" id="generateLabelCheck1" name="generateLabelCheck" onclick="hideTreeChecked(this)" checked="true"/>
-						<span class="black_ar" valign="top">
-						No</span>&nbsp;&nbsp;
-						<input type="radio" value="2" id="generateLabelCheck2" name="generateLabelCheck" onclick="hideTreeChecked(this)"/>
-						 <span class="black_ar" valign="top">Default</span>
-						 &nbsp;&nbsp;
-						 <input type="radio" value="3" id="generateLabelCheck3" name="generateLabelCheck" onclick="hideTreeChecked(this)"/>
-						 <span class="black_ar" valign="top">Custom</span>&nbsp;&nbsp;
-						<logic:equal name="collectionProtocolForm" property="generateLabel" value="true">
+
 						<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="specimenLabelFormat" property="specimenLabelFormat" />
-						</logic:equal>
-						<logic:equal name="collectionProtocolForm" property="generateLabel" value="false">
-						<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="specimenLabelFormat" property="specimenLabelFormat" disabled="true" />
-						</logic:equal>
+
 							</td>
 						</tr>
-						<script>
-								var hideTreeVal=document.getElementById('generateLabel').value;
-								var defaultLabelGen = document.getElementById('defaultLabelGen').value;
+						<tr>
+							<td align="center" class="black_ar">&nbsp;</td>
+							<td align="left" class="black_ar">Derivative Specimen Label Format</td>
+							<td>
 
-								var labelVal=document.getElementById('specimenLabelFormat').value;
-								//alert("ddd   "+hideTreeVal);
-								//alert("${requestScope.generateLabel}");
+						<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="derivativeLabelFormat" property="derivativeLabelFormat" />
 
-										if(hideTreeVal == 'true' && labelVal != null && labelVal != "")
-										{
-											document.getElementById('generateLabelCheck3').checked=true;
-										}
-										<c:if test="${requestScope['org.apache.struts.action.ERROR'] != null }">
-										else if(hideTreeVal == 'true' && (labelVal == null || labelVal == ""))
-										{
-											document.getElementById('generateLabelCheck2').checked=true;
-											document.getElementById('specimenLabelFormat').disabled=true;
-											document.getElementById('generateLabel').value=false;
-		document.getElementById('defaultLabelGen').value=true;
-		document.getElementById('specimenLabelFormat').value="";
-										}
-										</c:if>
-										<c:if test="${requestScope['org.apache.struts.action.ERROR'] == null }">
-										else if(hideTreeVal == 'true' && defaultLabelGen == 'false' && (labelVal == null || labelVal == ""))
-										{
-											document.getElementById('generateLabelCheck3').checked=true;
-											document.getElementById('specimenLabelFormat').disabled=false;
+							</td>
+						</tr>
+						<tr>
+							<td align="center" class="black_ar">&nbsp;</td>
+							<td align="left" class="black_ar">Aliquot Specimen Label Format</td>
+							<td>
 
+						<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="aliquotLabelFormat" property="aliquotLabelFormat" />
 
+							</td>
+						</tr>
 
-										}
-										</c:if>
-										else if(defaultLabelGen == 'true' && (labelVal == null || labelVal == ""))
-										{
-											document.getElementById('generateLabelCheck2').checked=true;
-											document.getElementById('specimenLabelFormat').disabled=true;
-										}
-							</script>
 							<tr height="8">
 						<td colspan="3"/>
 					  </tr>
@@ -340,11 +281,3 @@ function hideTreeChecked(radioButton)
             </table>
 			</html:form>
 
-<script>
-function onCheckboxButtonClick(radioButton)
-{
-	var generateLabel  = document.getElementById("generateLabel");
-			var specimenLabelFormat = document.getElementById("specimenLabelFormat");
-}
-
-</script>

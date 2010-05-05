@@ -61,6 +61,8 @@ function updateCPTree()
     	<html:hidden property="irbID" />
     	<html:hidden property="generateLabel" />
     	<html:hidden property="specimenLabelFormat" />
+    	<html:hidden property="derivativeLabelFormat" />
+    	<html:hidden property="aliquotLabelFormat" />
 		<html:hidden property="descriptionURL" />
 		<html:hidden property="enrollment" />
 		<html:hidden property="endDate" />

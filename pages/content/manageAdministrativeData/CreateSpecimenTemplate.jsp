@@ -413,35 +413,15 @@ if(form != null)
 
 		spreqqty.innerHTML="" + sname;
 
-		//Label Generation Type
-		var spreqqty=x.insertCell(6)
-		spreqqty.className="black_ar";
-		sname="";
-		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelGenType)";
 
-		var labelFormatName= "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelFormat)";
-		sname= "<select name='" + objname + "' size='1' class='formFieldSized8' id='" + objname + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id) onchange=labelGenTypechanged(this,'"+labelFormatName+"')>";
-
-		<%
-			for(int i=0;i<labelGenTypeList.size();i++)
-		{
-			String labelGenTypeName = "" + ((NameValueBean)labelGenTypeList.get(i)).getName();
-			String labelGenTypeValue = "" + ((NameValueBean)labelGenTypeList.get(i)).getValue();
-		%>
-			sname = sname + "<option value='<%=labelGenTypeValue%>'><%=labelGenTypeName%></option>";
-		<%}%>
-
-		sname = sname + "</select>"
-
-		spreqqty.innerHTML="" + sname;
 
 		//Label Format
-		var spreqqty=x.insertCell(7)
+		var spreqqty=x.insertCell(6)
 		spreqqty.className="black_ar";
 		sname="";
 		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelFormat)";
 
-		sname="<input type='text' name='" + objname + "' size='8'  maxlength='255' class='black_ar' id='" + objname + "' disabled='true'>"
+		sname="<input type='text' name='" + objname + "' size='25'  maxlength='255' class='black_ar' id='" + objname + "'>"
 		sname = sname + "&nbsp;"
 
 		spreqqty.innerHTML="" + sname;
