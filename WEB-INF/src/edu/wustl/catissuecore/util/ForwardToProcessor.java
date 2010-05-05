@@ -84,7 +84,12 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			}
 			if(!forwardToHashMap.containsKey("generateLabel") && specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration() != null)
 			{
-				forwardToHashMap.put("generateLabel", specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
+				String parentLabelformat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+				String deriveLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
+				String aliquotLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
+				String lineage = specimen.getLineage();
+				forwardToHashMap.put("generateLabel", SpecimenUtil.isLblGenOnForCP(parentLabelformat,deriveLabelFormat,aliquotLabelFormat,lineage));
+
 			}
 			//end of fix for bug no.7439
 			//Derive New from This Specimen
@@ -198,4 +203,6 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 
 		return forwardToHashMap;
 	}
+
+
 }

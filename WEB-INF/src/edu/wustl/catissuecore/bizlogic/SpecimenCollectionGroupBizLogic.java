@@ -374,10 +374,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			this.LOGGER.error(nameGeneratorException.getMessage(), nameGeneratorException);
 			throw this.getBizLogicException(nameGeneratorException, "name.generator.exp", "");
 		}
-		catch (LabelGenException e)
-		{
-			this.LOGGER.error(e.getMessage(), e);
-			}
+
 	}
 
 	/**
@@ -2868,7 +2865,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			this.LOGGER.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -2890,7 +2886,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				"collectionProtocolRegistration.collectionProtocol.id",
 				"collectionProtocolRegistration.collectionProtocol.activityStatus",
 				"collectionProtocolRegistration.collectionProtocol.specimenLabelFormat",
-				"collectionProtocolRegistration.collectionProtocol.generateLabel"};
+				"collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat",
+				"collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat"};
 		final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 		return list;
 	}
@@ -2910,7 +2907,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		if (dataList.size() != 0)
 		{
 			final Object[] valArr = (Object[]) dataList.get(0);
-			if (valArr != null && valArr.length == 8)
+			if (valArr != null && valArr.length == 9)
 			{
 				final Long identifier = (Long) valArr[0];
 				final String activityStatus = (String) valArr[1];
@@ -2929,7 +2926,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				}
 				if(valArr[7] != null)
 				{
-					collectionProtocol.setGenerateLabel(Boolean.valueOf(valArr[7].toString()));
+					collectionProtocol.setDerivativeLabelFormat(valArr[6].toString());
+				}
+				if(valArr[8] != null)
+				{
+					collectionProtocol.setAliquotLabelFormat(valArr[6].toString());
 				}
 				//For bug #15994
 				String CpShortTitle;
@@ -2960,7 +2961,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					catch(LazyInitializationException e)
 					{
 						this.LOGGER.error(e.getMessage(),e) ;
-						e.printStackTrace() ;
 						absScg.setConsentTierStatusCollection(consentTierStatusCollection);
 					}
 				}

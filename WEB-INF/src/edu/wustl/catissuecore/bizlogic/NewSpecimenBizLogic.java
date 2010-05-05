@@ -56,6 +56,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
+import edu.wustl.catissuecore.namegenerator.LabelException;
 import edu.wustl.catissuecore.namegenerator.LabelGenException;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
@@ -803,7 +804,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				catch (final NameGeneratorException e)
 				{
 					this.logger.error(e.getMessage(), e);
-					e.printStackTrace();
 					throw this.getBizLogicException(e, "name.generator.exp", "");
 				}
 			}
@@ -1120,70 +1120,80 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					spLblGenerator.setLabel(specimen);
 //				}
 			}
-			catch (final NameGeneratorException e)
+			catch(LabelException e)
 			{
 				this.logger.error(e.getMessage(), e);
-				throw this.getBizLogicException(e, "name.generator.exp", "");
+				throw this.getBizLogicException(e, "errors.item", e.getMessage());
 			}
 			catch (LabelGenException e)
 			{
 				this.logger.info(e);
 			}
+			catch (final NameGeneratorException e)
+			{
+				this.logger.error(e.getMessage(), e);
+				throw this.getBizLogicException(e, "name.generator.exp", "");
+			}
+
 		}
-	}
+ 	}
 
 	/**
 	 * @param specimen
-	 * @param generateLabel
 	 * @return
 	 */
-	private boolean isGenerateLabel(Specimen specimen)
-	{
-		boolean generateLabel = false;
-		if(specimen.getSpecimenCollectionGroup() != null && specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration() != null)
-		{
-			generateLabel= specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel();
-		}
-		else
-		{
-			String hql = "select scg.collectionProtocolRegistration.protocolParticipantIdentifier,"+
-				" scg.collectionProtocolRegistration.collectionProtocol.id,"+
-				" scg.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat,"+
-				" scg.collectionProtocolRegistration.collectionProtocol.generateLabel" +
-				" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where scg.id="+specimen.getSpecimenCollectionGroup().getId();
-			try
-			{
-				List list = AppUtility.executeQuery(hql);
-				if(list!=null && !list.isEmpty())
-				{
-					Object[] obje = (Object[])list.get(0);
-					generateLabel = (Boolean)obje[3];
-					String PPI= obje[0].toString();
-					String labelFormat = null;
-					if(obje[2] != null)
-					labelFormat = obje[2].toString();
-					Long cpId = Long.valueOf(obje[1].toString());
-					//SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
-					CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
-					CollectionProtocol cp = new CollectionProtocol();
-					cp.setId(cpId);
-					cp.setGenerateLabel(generateLabel);
-					cp.setSpecimenLabelFormat(labelFormat);
-					cpr.setCollectionProtocol(cp);
-					cpr.setProtocolParticipantIdentifier(PPI);
-					//specimen.setSpecimenCollectionGroup(scg);
-					specimen.getSpecimenCollectionGroup().setCollectionProtocolRegistration(cpr);
-				}
-			}
-			catch (ApplicationException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-		return generateLabel;
-	}
+//	private boolean isGenerateLabel(Specimen specimen)
+//	{
+//		boolean generateLabel = false;
+//		if(specimen.getSpecimenCollectionGroup() != null && specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration() != null)
+//		{
+//			String parentLabelformat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+//			String deriveLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
+//			String aliquotLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
+//			String lineage = specimen.getLineage();
+//			generateLabel= SpecimenUtil.isLblGenOnForCP(parentLabelformat, deriveLabelFormat, aliquotLabelFormat, lineage);
+//		}
+//		else
+//		{
+//			String hql = "select scg.collectionProtocolRegistration.protocolParticipantIdentifier,"+
+//				" scg.collectionProtocolRegistration.collectionProtocol.id,"+
+//				" scg.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat,"+
+//				" scg.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat," +
+//				" scg.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat" +
+//				" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where scg.id="+specimen.getSpecimenCollectionGroup().getId();
+//			try
+//			{
+//				List list = AppUtility.executeQuery(hql);
+//				if(list!=null && !list.isEmpty())
+//				{
+//					Object[] obje = (Object[])list.get(0);
+//					generateLabel = (Boolean)obje[3];
+//					String PPI= obje[0].toString();
+//					String labelFormat = null;
+//					if(obje[2] != null)
+//					labelFormat = obje[2].toString();
+//					Long cpId = Long.valueOf(obje[1].toString());
+//					//SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+//					CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+//					CollectionProtocol cp = new CollectionProtocol();
+//					cp.setId(cpId);
+//					cp.setGenerateLabel(generateLabel);
+//					cp.setSpecimenLabelFormat(labelFormat);
+//					cpr.setCollectionProtocol(cp);
+//					cpr.setProtocolParticipantIdentifier(PPI);
+//					//specimen.setSpecimenCollectionGroup(scg);
+//					specimen.getSpecimenCollectionGroup().setCollectionProtocolRegistration(cpr);
+//				}
+//			}
+//			catch (ApplicationException e)
+//			{
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//		}
+//		return generateLabel;
+//	}
 
 	/**
 	 * @param specimen
@@ -1536,7 +1546,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException doexp)
 		{
 			this.logger.error(doexp.getMessage(),doexp);
-			doexp.printStackTrace();
 			throw this.getBizLogicException(doexp, doexp.getErrorKeyName(), doexp.getMsgValues());
 		}
 	}
@@ -2743,10 +2752,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				if(temp!= null)// && temp.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel())
 				{
 
-					String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.generateLabel " +
-							"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id ="+ temp.getId();
-					List list = AppUtility.executeQuery(hql);
-					boolean generateLabel = (Boolean)list.get(0);
+
+					boolean generateLabel = false;//(Boolean)list.get(0);
 //					if(!generateLabel)
 //					{
 						this.validateLable(obj,generateLabel);
@@ -2771,7 +2778,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		catch (final ApplicationException exp)
 		{
 			this.logger.error(exp.getMessage(), exp);
-			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		return result;
@@ -2779,15 +2785,57 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * @param obj : obj
-	 * @param generateLabel
+	 * @param isLabelOnForCP
 	 * @throws BizLogicException  : BizLogicException
 	 */
 	private void validateLable(Object obj, boolean isLabelOnForCP) throws BizLogicException
 	{
 		final Iterator specimenIterator = ((LinkedHashSet) obj).iterator();
+
+		SpecimenCollectionGroup scg = null;
 		while (specimenIterator.hasNext())
 		{
 			final Specimen temp = (Specimen) specimenIterator.next();
+			if(scg == null)
+			{
+				String parentLabelFormat = null;
+				String deriveLabelFormat = null;
+				String aliquotLabelFormat = null;
+				String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
+				"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
+				"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat " +
+				"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id ="+ temp.getId();
+				try
+				{
+					List list = AppUtility.executeQuery(hql);
+					Object[] obje = (Object[])list.get(0);
+					if(obje[0] != null)
+					parentLabelFormat = obje[0].toString();
+					if(obje[1] != null)
+					deriveLabelFormat = obje[1].toString();
+					if(obje[2] != null)
+					aliquotLabelFormat = obje[2].toString();
+					scg = new SpecimenCollectionGroup();
+					CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+					CollectionProtocol cp = new CollectionProtocol();
+					cp.setSpecimenLabelFormat(parentLabelFormat);
+					cp.setDerivativeLabelFormat(deriveLabelFormat);
+					cp.setAliquotLabelFormat(aliquotLabelFormat);
+					cpr.setCollectionProtocol(cp);
+					scg.setCollectionProtocolRegistration(cpr);
+					temp.setSpecimenCollectionGroup(scg);
+
+				}
+				catch (ApplicationException e)
+				{
+					logger.debug(e.getMessage());
+					throw this.getBizLogicException(e,e.getErrorKeyAsString(),e.getMessage());
+				}
+			}
+			else
+			{
+				temp.setSpecimenCollectionGroup(scg);
+			}
 
 			if(!isLabelOnforSpecimen(temp,isLabelOnForCP))
 			{
@@ -2795,6 +2843,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				{
 					throw this.getBizLogicException(null, "label.mandatory", "");
 				}
+			}
 				final Collection aliquotsCollection = temp.getChildSpecimenCollection();
 				if (aliquotsCollection != null)
 				{
@@ -2802,6 +2851,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					while (aliquotItert.hasNext())
 					{
 						final Specimen tempAliquot = (Specimen) aliquotItert.next();
+						if(scg != null)
+						{
+							tempAliquot.setSpecimenCollectionGroup(scg);
+						}
 						if(!isLabelOnforSpecimen(tempAliquot,isLabelOnForCP))
 						{
 							if (Validator.isEmpty(tempAliquot.getLabel()) && tempAliquot.getCollectionStatus().equalsIgnoreCase("Collected"))
@@ -2811,7 +2864,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						}
 					}
 				}
-			}
+			//}
 		}
 	}
 
@@ -2836,21 +2889,22 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 
-					if(objSpecimen.getSpecimenRequirement() != null)
-					{
-						if(objSpecimen.getSpecimenRequirement().getGenLabel() && !Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
-						{
-							isLabelOnForSpecimen = objSpecimen.getSpecimenRequirement().getGenLabel();
-						}
-						else if(objSpecimen.getSpecimenRequirement().getGenLabel() && Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
-						{
-							isLabelOnForSpecimen = isLabelOnForCP;
-						}
-					}
-					else
-					{
-						isLabelOnForSpecimen = isLabelOnForCP;
-					}
+//					if(objSpecimen.getSpecimenRequirement() != null)
+//					{
+//						if(objSpecimen.getSpecimenRequirement().getGenLabel() && !Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
+//						{
+//							isLabelOnForSpecimen = objSpecimen.getSpecimenRequirement().getGenLabel();
+//						}
+//						else if(objSpecimen.getSpecimenRequirement().getGenLabel() && Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
+//						{
+//							isLabelOnForSpecimen = isLabelOnForCP;
+//						}
+//					}
+//					else
+//					{
+//						isLabelOnForSpecimen = isLabelOnForCP;
+//					}
+					isLabelOnForSpecimen = SpecimenUtil.isGenLabel(objSpecimen);
 
 
 			}
@@ -2943,7 +2997,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			if(specimen.getSpecimenCollectionGroup() != null && specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration() != null
 					&& specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol() != null)
 			{
-				generateLabel = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel();
+				String parentLabelformat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+				String deriveLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
+				String aliquotLabelFormat = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
+				String lineage = specimen.getLineage();
+				generateLabel = SpecimenUtil.isLblGenOnForCP(parentLabelformat, deriveLabelFormat, aliquotLabelFormat, lineage);
 			}
 			else
 			{
@@ -2958,10 +3016,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			if(specimen.getSpecimenRequirement() != null)
 			{
-				if(specimen.getSpecimenRequirement().getGenLabel() && !Validator.isEmpty(specimen.getSpecimenRequirement().getLabelFormat()))
-				{
-					generateLabel = specimen.getSpecimenRequirement().getGenLabel();
-				}
+//				if(specimen.getSpecimenRequirement().getGenLabel() && !Validator.isEmpty(specimen.getSpecimenRequirement().getLabelFormat()))
+//				{
+					generateLabel = SpecimenUtil.isGenLabel(specimen);
+//				}
 			}
 			if(!generateLabel)
 	//		if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
@@ -2995,39 +3053,65 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			if(specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId() != null)
 			{
-				hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.generateLabel," +
-						" specimen.specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier, " +
-						"specimen.specimenCollectionGroup.id "+
+				hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier, " +
+						"specimen.specimenCollectionGroup.id, "+
+						"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, "+
+						"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, "+
+						"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat "+
 				"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id ="+ specimen.getParentSpecimen().getId();
 			}
 			else if(specimen.getParentSpecimen() != null && !Validator.isEmpty(specimen.getParentSpecimen().getLabel()))
 			{
-				hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.generateLabel, " +
-						"specimen.specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier, " +
-						"specimen.specimenCollectionGroup.id "+
+				hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier, " +
+						"specimen.specimenCollectionGroup.id, "+
+						"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, "+
+						"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, "+
+						"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat "+
 				"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.label ='"+ specimen.getParentSpecimen().getLabel()+"'";
 			}
 			else
 			{
-				hql = "select scg.collectionProtocolRegistration.collectionProtocol.generateLabel," +
-				" scg.collectionProtocolRegistration.protocolParticipantIdentifier, " +
-				"scg.id "  +
+				hql = "select scg.collectionProtocolRegistration.protocolParticipantIdentifier, " +
+				"scg.id, "  +
+				"scg.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, "+
+				"scg.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, "+
+				"scg.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat "+
 				"from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where scg.id ="+ specimen.getSpecimenCollectionGroup().getId();
 			}
 			List list = AppUtility.executeQuery(hql);
 			Object[] obje = (Object[])list.get(0);
-			generateLabel = (Boolean)obje[0];
-			String PPI= obje[1].toString();
-			Long scgId = Long.valueOf(obje[2].toString());
+
+			String PPI=null;
+			if(obje[0] != null)
+			PPI= obje[0].toString();
+			Long scgId = Long.valueOf(obje[1].toString());
+
+			String specimenLabelFormat = null;
+			if(obje[2] != null)
+			specimenLabelFormat = obje[2].toString();
+
+			String derivativeLabelFormat = null;
+			if(obje[3] != null)
+				derivativeLabelFormat = obje[3].toString();
+
+			String aliquotLabelFormat = null;
+			if(obje[4] != null)
+				aliquotLabelFormat = obje[4].toString();
+
 			SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 			scg.setId(scgId);
 			CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
 			CollectionProtocol cp = new CollectionProtocol();
-			cpr.setCollectionProtocol(cp);
+			cp.setSpecimenLabelFormat(specimenLabelFormat);
+			cp.setDerivativeLabelFormat(derivativeLabelFormat);
+			cp.setAliquotLabelFormat(aliquotLabelFormat);
+
 			cpr.setProtocolParticipantIdentifier(PPI);
-			cp.setGenerateLabel(generateLabel);
+
+			cpr.setCollectionProtocol(cp);
 			specimen.setSpecimenCollectionGroup(scg);
 			specimen.getSpecimenCollectionGroup().setCollectionProtocolRegistration(cpr);
+			generateLabel = SpecimenUtil.isLblGenOnForCP(specimenLabelFormat, derivativeLabelFormat, aliquotLabelFormat, specimen.getLineage());
 		}
 		catch (ApplicationException e)
 		{

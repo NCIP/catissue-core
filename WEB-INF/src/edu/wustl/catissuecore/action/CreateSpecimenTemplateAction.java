@@ -173,20 +173,6 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		storageContainerList.add(new NameValueBean("Auto", "Auto"));
 		storageContainerList.add(new NameValueBean("Manual", "Manual"));
 
-		List labelGenTypeList = new ArrayList();
-		labelGenTypeList.add(new NameValueBean("Off", "0"));
-		labelGenTypeList.add(new NameValueBean("CP Default", "1"));
-		labelGenTypeList.add(new NameValueBean("Custom", "2"));
-
-		if(createSpecimenTemplateForm.getLabelGenType() == null)
-		{
-			request.setAttribute("labelGenType",labelGenTypeList.get(0));
-		}
-		else
-		{
-			request.setAttribute("labelGenType", ((NameValueBean)labelGenTypeList.get(Integer.valueOf(createSpecimenTemplateForm.getLabelGenType()))).getName());
-		}
-		request.setAttribute("labelGenTypeList", labelGenTypeList);
 
 		// setting the procedure
 		final List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
@@ -388,10 +374,6 @@ public class CreateSpecimenTemplateAction extends BaseAction
 
 		createSpecimenTemplateForm.setLabelFormat(null);
 		createSpecimenTemplateForm.setLabelFormatForAliquot(null);
-		createSpecimenTemplateForm.setLabelGenType("0");
-		createSpecimenTemplateForm.setLabelGenTypeForAliquot("0");
-		createSpecimenTemplateForm.setGenLabel(false);
-		createSpecimenTemplateForm.setGenLabelForAliquot(false);
 	}
 
 	/**
@@ -428,12 +410,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		setDerivative(createSpecimenTemplateForm, specimenRequirementBean);
 		createSpecimenTemplateForm.setLabelFormat(specimenRequirementBean.getLabelFormat());
 
-		createSpecimenTemplateForm.setGenLabel(specimenRequirementBean.isGenerateLabel());
-		createSpecimenTemplateForm.setLabelGenType(specimenRequirementBean.getLabelGenType());
-
-		createSpecimenTemplateForm.setGenLabelForAliquot(specimenRequirementBean.isGenLabelForAliquot());
 		createSpecimenTemplateForm.setLabelFormatForAliquot(specimenRequirementBean.getLabelFormatForAliquot());
-		createSpecimenTemplateForm.setLabelGenTypeForAliquot(specimenRequirementBean.getLabelGenTypeForAliquot());
 
 		setLabelProperties(createSpecimenTemplateForm, specimenRequirementBean);
 	}
@@ -479,9 +456,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 				SpecimenRequirementBean bean = (SpecimenRequirementBean)specimenRequirementBean.getAliquotSpecimenCollection().get(deriveSpecimenCollectionItr.next());
 				if(bean.getLineage().equals(Constants.ALIQUOT))
 				{
-					createSpecimenTemplateForm.setGenLabelForAliquot(bean.isGenerateLabel());
 					createSpecimenTemplateForm.setLabelFormatForAliquot(bean.getLabelFormat());
-					createSpecimenTemplateForm.setLabelGenTypeForAliquot(bean.getLabelGenType());
 				}
 			}
 

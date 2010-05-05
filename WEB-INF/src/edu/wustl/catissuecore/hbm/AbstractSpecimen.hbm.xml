@@ -373,15 +373,6 @@
             length="255"
         />
 
-        <property
-            name="genLabel"
-            type="boolean"
-            update="true"
-            insert="true"
-            column="GENERATE_LABEL"
-        />
-
-
 		<property
 	            name="storageType"
 	            type="string"

@@ -728,15 +728,6 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 								final long stContainerId = Long.parseLong(form
 										.getStorageContainer());
 
-								/*	if (this.specimenPosition == null
-								 *  || this.specimenPosition.storageContainer
-								 *   == null)
-								{
-									this.specimenPosition
-									 = new SpecimenPosition();
-									this.specimenPosition.storageContainer
-									 = new StorageContainer();
-								}*/
 								this.specimenPosition.storageContainer.setId(stContainerId);
 								this.specimenPosition.positionDimensionOne = Integer.valueOf(form
 										.getPositionDimensionOne());
@@ -926,24 +917,18 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		}
 		if (form.getStContSelection() == 1)
 		{
-			//	this.storageContainer = null;
 			this.specimenPosition = null;
 		}
 		if (form.getStContSelection() == 2)
 		{
-			final long stContainerId = Long.parseLong(form.getStorageContainer());
-			this.specimenPosition.storageContainer.setId(stContainerId);
-			/*if (this.specimenPosition == null)
-			{
-				this.specimenPosition = new SpecimenPosition();
-			}*/
+			final long containerId = Long.parseLong(form.getStorageContainer());
+			this.specimenPosition.storageContainer.setId(containerId);
 			this.specimenPosition.positionDimensionOne = Integer.valueOf(form
 					.getPositionDimensionOne());
 			this.specimenPosition.positionDimensionTwo = Integer.valueOf(form
 					.getPositionDimensionTwo());
 			this.specimenPosition.specimen = this;
 
-			//this.specimenPosition.storageContainer = this.storageContainer;
 		}
 		else if (form.getStContSelection() == 3)
 		{
@@ -951,16 +936,9 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 			if (form.getPos1() != null && !form.getPos1().trim().equals("")
 					&& form.getPos2() != null && !form.getPos2().trim().equals(""))
 			{
-				/*if (this.specimenPosition == null)
-				{
-					this.specimenPosition
-					= new SpecimenPosition();
-				}*/
 				this.specimenPosition.positionDimensionOne = Integer.valueOf(form.getPos1());
 				this.specimenPosition.positionDimensionTwo = Integer.valueOf(form.getPos2());
 				this.specimenPosition.specimen = this;
-				//this.specimenPosition.storageContainer
-				//= this.storageContainer;
 			}
 
 		}

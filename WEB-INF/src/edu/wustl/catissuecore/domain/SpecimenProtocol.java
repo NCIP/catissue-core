@@ -91,15 +91,15 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 */
 	protected String activityStatus;
 
-	/**
-	 * for setting label generation property to on or off.
-	 */
-	protected Boolean generateLabel;
 
 	/**
 	 * Label format for specimens associated with this CP.
 	 */
 	protected String specimenLabelFormat;
+
+	protected String derivativeLabelFormat;
+
+	protected String aliquotLabelFormat;
 
 
 	/**
@@ -123,23 +123,38 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	}
 
 
-	/**
-	 * Returns true if label generation is set to on or vice versa.
-	 * @return true if label generation is set to on or vice versa.
-	 */
-	public Boolean getGenerateLabel()
+
+	public String getDerivativeLabelFormat()
 	{
-		return generateLabel;
+		return derivativeLabelFormat;
 	}
 
 
-	/**
-	 * @param generateLabel
-	 */
-	public void setGenerateLabel(Boolean generateLabel)
+
+
+	public void setDerivativeLabelFormat(String derivativeLabelFormat)
 	{
-		this.generateLabel = generateLabel;
+		this.derivativeLabelFormat = derivativeLabelFormat;
 	}
+
+
+
+
+	public String getAliquotLabelFormat()
+	{
+		return aliquotLabelFormat;
+	}
+
+
+
+
+	public void setAliquotLabelFormat(String aliquotLabelFormat)
+	{
+		this.aliquotLabelFormat = aliquotLabelFormat;
+	}
+
+
+
 
 	/**
 	 * Default Constructor.
@@ -360,7 +375,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 			this.title = spForm.getTitle();
 			this.shortTitle = spForm.getShortTitle();
 			this.irbIdentifier = spForm.getIrbID();
-			this.generateLabel=spForm.isGenerateLabel();
+//			this.generateLabel=spForm.isGenerateLabel();
 			this.specimenLabelFormat= spForm.getSpecimenLabelFormat();
 			this.startDate = CommonUtilities.parseDate(spForm.getStartDate(), CommonUtilities
 					.datePattern(spForm.getStartDate()));

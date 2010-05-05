@@ -90,9 +90,10 @@ public class DefineEventsAction extends BaseAction
 		cpBean.setEnrollment(cpForm.getEnrollment());
 		cpBean.setDescriptionURL(cpForm.getDescriptionURL());
 		cpBean.setIrbID(cpForm.getIrbID());
-		cpBean.setGenerateLabel(cpForm.isGenerateLabel());
 		cpBean.setActivityStatus(cpForm.getActivityStatus());
 		cpBean.setLabelFormat(cpForm.getSpecimenLabelFormat());
+		cpBean.setDerivativeLabelFormat(cpForm.getDerivativeLabelFormat());
+		cpBean.setAliquotLabelFormat(cpForm.getAliquotLabelFormat());
 		cpBean.setAliqoutInSameContainer(cpForm.isAliqoutInSameContainer());
 		//For Consent Tab
 		cpBean.setConsentTierCounter(cpForm.getConsentTierCounter());

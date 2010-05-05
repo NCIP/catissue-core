@@ -120,8 +120,9 @@ public class CollectionProtocolUtil
 		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date, Constants.DATE_FORMAT) );
 		collectionProtocolBean.setDescriptionURL(collectionProtocol.getDescriptionURL());
 		collectionProtocolBean.setUnsignedConsentURLName(collectionProtocol.getUnsignedConsentDocumentURL());
-		collectionProtocolBean.setGenerateLabel(collectionProtocol.getGenerateLabel().booleanValue());
 		collectionProtocolBean.setLabelFormat(collectionProtocol.getSpecimenLabelFormat());
+		collectionProtocolBean.setDerivativeLabelFormat(collectionProtocol.getDerivativeLabelFormat());
+		collectionProtocolBean.setAliquotLabelFormat(collectionProtocol.getAliquotLabelFormat());
 		if(collectionProtocol.getConsentsWaived()==null)
 		{
 			collectionProtocol.setConsentsWaived(false);
@@ -415,19 +416,6 @@ public class CollectionProtocolUtil
 
 		setAliquotAndDerivedColl(reqSpecimen, parentName, speRequirementBean);
 		speRequirementBean.setLabelFormat(reqSpecimen.getLabelFormat());
-		speRequirementBean.setGenerateLabel(reqSpecimen.getGenLabel());
-		if(reqSpecimen.getGenLabel() && Validator.isEmpty(reqSpecimen.getLabelFormat()))
-		{
-			speRequirementBean.setLabelGenType("1");
-		}
-		else if(reqSpecimen.getGenLabel() && !Validator.isEmpty(reqSpecimen.getLabelFormat()))
-		{
-			speRequirementBean.setLabelGenType("2");
-		}
-		else
-		{
-			speRequirementBean.setLabelGenType("0");
-		}
 		return speRequirementBean;
 	}
 
@@ -574,26 +562,10 @@ public class CollectionProtocolUtil
 			derivedSpecimenKey.append("_unit" );
 			derivedObjectMap.put(derivedSpecimenKey.toString(), "");
 
-			derivedSpecimenKey = getKeyBase(deriveCtr);
-			derivedSpecimenKey.append("_labelGenType" );
-			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getLabelGenType());
 
 			derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_labelFormat" );
 			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getLabelFormat());
-
-			derivedSpecimenKey = getKeyBase(deriveCtr);
-			derivedSpecimenKey.append("_genLabel" );
-			if(derivedSpecimen.getLabelGenType() != null && derivedSpecimen.getLabelGenType().equals("1"))
-			{
-				derivedObjectMap.put(derivedSpecimenKey.toString(), Boolean.toString(false));
-			}
-			else
-			{
-				derivedObjectMap.put(derivedSpecimenKey.toString(), Boolean.toString(true));
-			}
-
-
 
 			deriveCtr++;
 		}
@@ -779,8 +751,9 @@ public class CollectionProtocolUtil
 
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
 		collectionProtocol.setId(cpBean.getIdentifier());
-		collectionProtocol.setGenerateLabel(cpBean.isGenerateLabel());
 		collectionProtocol.setSpecimenLabelFormat(cpBean.getLabelFormat());
+		collectionProtocol.setDerivativeLabelFormat(cpBean.getDerivativeLabelFormat());
+		collectionProtocol.setAliquotLabelFormat(cpBean.getAliquotLabelFormat());
 		collectionProtocol.setActivityStatus(cpBean.getActivityStatus());
 		collectionProtocol.setConsentsWaived(cpBean.isConsentWaived());
 		collectionProtocol.setAliquotInSameContainer(cpBean.isAliqoutInSameContainer());
@@ -1161,7 +1134,6 @@ public class CollectionProtocolUtil
 		reqSpecimen.setStorageType(storageType);
 		reqSpecimen.setSpecimenClass(specimenRequirementBean.getClassName());
 		reqSpecimen.setLabelFormat(specimenRequirementBean.getLabelFormat());
-		reqSpecimen.setGenLabel(specimenRequirementBean.isGenerateLabel());
 		return reqSpecimen;
 	}
 

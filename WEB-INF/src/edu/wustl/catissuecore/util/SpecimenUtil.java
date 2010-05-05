@@ -11,6 +11,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
@@ -158,5 +159,80 @@ public final class SpecimenUtil
 		}
 		valToReplace = yearOfcoll+"";
 		return valToReplace;
+	}
+
+	public static boolean isLblGenOnForCP(String parentLabelformat, String deriveLabelFormat,
+			String aliquotLabelFormat, String lineage)
+	{
+		boolean isGenLabel = false;
+		if(Constants.NEW_SPECIMEN.equals(lineage))
+		{
+			isGenLabel = !Validator.isEmpty(parentLabelformat);
+		}
+		else if(Constants.DERIVED_SPECIMEN.equals(lineage))
+		{
+			isGenLabel = getGenLabelForChildSpecimen(deriveLabelFormat,parentLabelformat);
+		}
+		else if(Constants.ALIQUOT.equals(lineage))
+		{
+			isGenLabel = getGenLabelForChildSpecimen(aliquotLabelFormat,parentLabelformat);
+		}
+		return isGenLabel;
+	}
+
+
+	private static boolean getGenLabelForChildSpecimen(String format,
+			String parentLabelformat)
+	{
+		boolean isGenLabel = false;
+
+		if(!Validator.isEmpty(format) && !format.contains("%CP_DEFAULT%"))
+		{
+			isGenLabel = true;
+		}
+		else if(!Validator.isEmpty(format) && format.contains("%CP_DEFAULT%"))
+		{
+			isGenLabel = !Validator.isEmpty(parentLabelformat);
+		}
+		return isGenLabel;
+	}
+
+	/**
+	 * Checks if is gen label.
+	 *
+	 * @param objSpecimen the obj specimen
+	 *
+	 * @return true, if checks if is gen label
+	 */
+	public static boolean isGenLabel(final Specimen objSpecimen)
+	{
+		boolean isGenLabel = false;
+
+		String lineage = objSpecimen.getLineage();
+		if(lineage == null)
+		{
+			lineage = objSpecimen.getSpecimenRequirement().getLineage();
+		}
+		String parentLabelformat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+		String deriveLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
+		String aliquotLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
+
+		if(objSpecimen.getSpecimenRequirement() != null && Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
+		{
+			isGenLabel = false;
+		}
+		else if(objSpecimen.getSpecimenRequirement() != null && !Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()) && !objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%"))
+		{
+			isGenLabel = true;
+		}
+		else if(objSpecimen.getSpecimenRequirement() != null && objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%"))
+		{
+			isGenLabel = SpecimenUtil.isLblGenOnForCP(parentLabelformat, deriveLabelFormat, aliquotLabelFormat, lineage);
+		}
+		else if(objSpecimen.getSpecimenRequirement() == null)
+		{
+			isGenLabel = SpecimenUtil.isLblGenOnForCP(parentLabelformat, deriveLabelFormat, aliquotLabelFormat, lineage);
+		}
+		return isGenLabel;
 	}
 }

@@ -188,13 +188,20 @@ public class FlexInterface
 		catch (final Exception e)
 		{
 			FlexInterface.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
-		if(scg != null)
+		if (parentName != null)
 		{
-			generateLabel=scg.getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel();
+			 scg = this.getSpecimenCollGrp(parentName);
 		}
+//		if(scg != null)
+//		{//need to add condition here
+//			String parentLabelformat = scg.getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+//			String deriveLabelFormat = scg.getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
+//			String aliquotLabelFormat = scg.getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
+//			//String lineage = specimen.getLineage();
+//		//	generateLabel=scg.getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel();
+//		}
 
 		return spBean;
 	}

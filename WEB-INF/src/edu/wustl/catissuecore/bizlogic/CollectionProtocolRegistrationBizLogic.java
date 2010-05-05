@@ -2204,10 +2204,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				e.printStackTrace();
 				throw this.getBizLogicException(e, "name.generator.exp", "");
 			}
-			catch (LabelGenException e)
-			{
-				this.logger.error(e.getMessage(), e);
-			}
+
 		}
 		else
 		{

@@ -413,8 +413,10 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setEndDate(collectionProtocolBean.getEndDate());
 		collectionProtocolForm.setAliqoutInSameContainer(collectionProtocolBean
 				.isAliqoutInSameContainer());
-		collectionProtocolForm.setGenerateLabel(collectionProtocolBean.isGenerateLabel());
+//		collectionProtocolForm.setGenerateLabel(collectionProtocolBean.isGenerateLabel());
 		collectionProtocolForm.setSpecimenLabelFormat(collectionProtocolBean.getLabelFormat());
+		collectionProtocolForm.setDerivativeLabelFormat(collectionProtocolBean.getDerivativeLabelFormat());
+		collectionProtocolForm.setAliquotLabelFormat(collectionProtocolBean.getAliquotLabelFormat());
 		// For Consent Tab
 		collectionProtocolForm
 				.setConsentTierCounter(collectionProtocolBean.getConsentTierCounter());

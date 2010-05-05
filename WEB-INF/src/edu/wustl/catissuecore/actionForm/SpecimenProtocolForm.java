@@ -62,23 +62,29 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 
 	protected String enrollment;
 
-	protected boolean generateLabel = false;
+	protected String aliquotLabelFormat;
 
-	protected boolean defaultLabelGen = false;
-
-
-	public boolean isDefaultLabelGen()
+	public String getAliquotLabelFormat()
 	{
-		return defaultLabelGen;
+		return aliquotLabelFormat;
 	}
 
-
-
-
-	public void setDefaultLabelGen(boolean defaultLabelGen)
+	public void setAliquotLabelFormat(String aliquotLabelFormat)
 	{
-		this.defaultLabelGen = defaultLabelGen;
+		this.aliquotLabelFormat = aliquotLabelFormat;
 	}
+
+	public String getDerivativeLabelFormat()
+	{
+		return derivativeLabelFormat;
+	}
+
+	public void setDerivativeLabelFormat(String derivativeLabelFormat)
+	{
+		this.derivativeLabelFormat = derivativeLabelFormat;
+	}
+
+	protected String derivativeLabelFormat;
 
 	protected String specimenLabelFormat;
 
@@ -95,17 +101,6 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		this.specimenLabelFormat = labelFormat;
 	}
 
-
-	public boolean isGenerateLabel()
-	{
-		return generateLabel;
-	}
-
-
-	public void setGenerateLabel(boolean generateLabel)
-	{
-		this.generateLabel = generateLabel;
-	}
 
 	/**
 	 * Patch Id : Collection_Event_Protocol_Order_8 (Changed from HashMap to LinkedHashMap)
@@ -333,7 +328,6 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 			this.principalInvestigatorId = -1;
 		}
 
-		this.generateLabel=protocol.getGenerateLabel();
 		this.specimenLabelFormat=protocol.getSpecimenLabelFormat();
 		this.title = CommonUtilities.toString(protocol.getTitle());
 		this.shortTitle = CommonUtilities.toString(protocol.getShortTitle());
@@ -444,17 +438,17 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 										.getValue("specimenprotocol.invaliddate")));
 					}
 				}
-				if(this.generateLabel && validator.isEmpty(this.specimenLabelFormat))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-							"collectionProtocol.labelformat", ApplicationProperties
-							.getValue("collectionProtocol.labelformat")));
-					//"Label Format is mandatory for custom label generation"
-				}
-				else if(this.defaultLabelGen)
-				{
-					this.generateLabel = this.defaultLabelGen;
-				}
+//				if(this.generateLabel && validator.isEmpty(this.specimenLabelFormat))
+//				{
+//					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//							"collectionProtocol.labelformat", ApplicationProperties
+//							.getValue("collectionProtocol.labelformat")));
+//					//"Label Format is mandatory for custom label generation"
+//				}
+//				else if(this.defaultLabelGen)
+//				{
+//					this.generateLabel = this.defaultLabelGen;
+//				}
 				if (!Validator.isEmpty(this.enrollment))
 				{
 

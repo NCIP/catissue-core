@@ -799,12 +799,12 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("specimen.type")));
 			}
-			if(this.labelGenType.equals("2") && validator.isEmpty(this.labelFormat))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"collectionProtocol.labelformat", ApplicationProperties
-						.getValue("collectionProtocol.labelformat")));
-			}
+//			if(this.labelGenType.equals("2") && validator.isEmpty(this.labelFormat))
+//			{
+//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//						"collectionProtocol.labelformat", ApplicationProperties
+//						.getValue("collectionProtocol.labelformat")));
+//			}
 			if (validator.isEmpty(this.type))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
@@ -942,12 +942,12 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 									ApplicationProperties
 											.getValue("cpbasedentry.quantityperaliquot")));
 						}
-						if(this.labelGenTypeForAliquot.equals("2") && validator.isEmpty(this.labelFormatForAliquot))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-									"sp.req.aliquot.labelformat", ApplicationProperties
-									.getValue("sp.req.aliquot.labelformat")));
-						}
+//						if(this.labelGenTypeForAliquot.equals("2") && validator.isEmpty(this.labelFormatForAliquot))
+//						{
+//							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//									"sp.req.aliquot.labelformat", ApplicationProperties
+//									.getValue("sp.req.aliquot.labelformat")));
+//						}
 					}
 					catch (final NumberFormatException exp)
 					{
@@ -1085,9 +1085,9 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 			{
 				boolean bSpecimenClass = false;
 				boolean bSpecimenType = false;
-				boolean validateLabel = false;
-				boolean labelGenType = false;
-				boolean labelFormat = false;
+//				boolean validateLabel = false;
+//				boolean labelGenType = false;
+//				boolean labelFormat = false;
 				final Map deriveSpecimenMap = this.deriveSpecimenMap();
 				final Iterator it = deriveSpecimenMap.keySet().iterator();
 				while (it.hasNext())
@@ -1105,28 +1105,28 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 							bSpecimenClass = true;
 						}
 					}
-					if(!labelGenType)
-					{
-						if ((key.indexOf("_labelGenType")) != -1 && mapValue != null)
-						{
-							if (mapValue.equals("2"))
-							{
-								validateLabel=true;
-								labelGenType = true;
-							}
-						}
-
-					}
-					if(!labelFormat && labelGenType)
-					{
-						if(validateLabel && (key.indexOf("_labelFormat")) != -1 && validator.isEmpty(mapValue))
-						{
-							labelFormat = true;
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-									"sp.req.derivative.labelformat", ApplicationProperties
-									.getValue("sp.req.derivative.labelformat")));
-						}
-					}
+//					if(!labelGenType)
+//					{
+//						if ((key.indexOf("_labelGenType")) != -1 && mapValue != null)
+//						{
+//							if (mapValue.equals("2"))
+//							{
+//								validateLabel=true;
+//								labelGenType = true;
+//							}
+//						}
+//
+//					}
+//					if(!labelFormat && labelGenType)
+//					{
+//						if(validateLabel && (key.indexOf("_labelFormat")) != -1 && validator.isEmpty(mapValue))
+//						{
+//							labelFormat = true;
+//							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//									"sp.req.derivative.labelformat", ApplicationProperties
+//									.getValue("sp.req.derivative.labelformat")));
+//						}
+//					}
 					if ((key.indexOf("_concentration")) != -1 && mapValue != null)
 					{
 						mapValue = new BigDecimal(mapValue).toPlainString();
@@ -1246,26 +1246,10 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 			final String storageLocation = (String) this.deriveSpecimenValues.get(key);
 			deriveSpecimenMap.put(key, storageLocation);
 
-			key = "DeriveSpecimenBean:" + iCount + "_labelGenType";
-			final String labelGenType = (String) this.deriveSpecimenValues.get(key);
-			deriveSpecimenMap.put(key, labelGenType);
-			if(labelGenType != null && labelGenType.equals("0"))
-			{
-				genLabel = Boolean.FALSE;
-			}
-			else if(labelGenType.equals("1") || labelGenType.equals("2"))
-			{
-				genLabel = Boolean.TRUE;
-			}
-			this.setDeriveSpecimenValue("DeriveSpecimenBean:" + iCount + "_genLabel", Boolean.toString(genLabel));
 
 			key = "DeriveSpecimenBean:" + iCount + "_labelFormat";
 			final String labelFormat = (String) this.deriveSpecimenValues.get(key);
 			deriveSpecimenMap.put(key, labelFormat);
-
-			key = "DeriveSpecimenBean:" + iCount + "_genLabel";
-			final String derGenLabel = (String) this.deriveSpecimenValues.get(key);
-			deriveSpecimenMap.put(key, derGenLabel);
 
 		}
 		return deriveSpecimenMap;
@@ -1301,53 +1285,7 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	}
 
-	/** The label gen type. */
-	private String labelGenType;
 
-	/**
-	 * Gets the label gen type.
-	 *
-	 * @return the label gen type
-	 */
-	public String getLabelGenType()
-	{
-		return labelGenType;
-	}
-
-
-	/**
-	 * Sets the label gen type.
-	 *
-	 * @param labelGenType the new label gen type
-	 */
-	public void setLabelGenType(String labelGenType)
-	{
-		this.labelGenType = labelGenType;
-	}
-
-	/** The gen label. */
-	private boolean genLabel = false;
-
-	/**
-	 * Checks if is gen label.
-	 *
-	 * @return true, if is gen label
-	 */
-	public boolean isGenLabel()
-	{
-		return genLabel;
-	}
-
-
-	/**
-	 * Sets the gen label.
-	 *
-	 * @param genLabel the new gen label
-	 */
-	public void setGenLabel(boolean genLabel)
-	{
-		this.genLabel = genLabel;
-	}
 
 	/** For SCG labeling,this will be exposed through API and not in the model. */
 	private String labelFormat;
@@ -1372,29 +1310,6 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 		this.labelFormat = labelFormat;
 	}
 
-	/** The gen label for aliquot. */
-	private boolean genLabelForAliquot;
-
-	/**
-	 * Checks if is gen label for aliquot.
-	 *
-	 * @return true, if is gen label for aliquot
-	 */
-	public boolean isGenLabelForAliquot()
-	{
-		return genLabelForAliquot;
-	}
-
-
-	/**
-	 * Sets the gen label for aliquot.
-	 *
-	 * @param genLabelForAliquot the new gen label for aliquot
-	 */
-	public void setGenLabelForAliquot(boolean genLabelForAliquot)
-	{
-		this.genLabelForAliquot = genLabelForAliquot;
-	}
 
 
 	/**
@@ -1421,28 +1336,4 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	/** The label format for aliquot. */
 	private String labelFormatForAliquot;
 
-	/** The label gen type for aliquot. */
-	private String labelGenTypeForAliquot;
-
-
-	/**
-	 * Gets the label gen type for aliquot.
-	 *
-	 * @return the label gen type for aliquot
-	 */
-	public String getLabelGenTypeForAliquot()
-	{
-		return labelGenTypeForAliquot;
-	}
-
-
-	/**
-	 * Sets the label gen type for aliquot.
-	 *
-	 * @param labelGenTypeForAliquot the new label gen type for aliquot
-	 */
-	public void setLabelGenTypeForAliquot(String labelGenTypeForAliquot)
-	{
-		this.labelGenTypeForAliquot = labelGenTypeForAliquot;
-	}
 }

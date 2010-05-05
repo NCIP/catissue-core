@@ -563,7 +563,7 @@ public class SpecimenForm extends AbstractActionForm
 		this.concentration = "";
 		this.comments = specimen.getComment();
 		this.setActivityStatus(specimen.getActivityStatus());
-		this.generateLabel=specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel();
+//		this.generateLabel=specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel();
 		/**
 		 * Patch ID: 3835_1_30
 		 * See also: 1_1 to 1_5

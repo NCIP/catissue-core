@@ -29,8 +29,6 @@ public class CollectionProtocolBean implements Serializable
 	/** principalInvestigatorId. */
 	private long principalInvestigatorId;
 
-	/** The generate label. */
-	private boolean generateLabel;
 
 	/** The default label gen. */
 	private boolean defaultLabelGen;
@@ -61,8 +59,29 @@ public class CollectionProtocolBean implements Serializable
 	/** The label format. */
 	private String labelFormat;
 
+	private String derivativeLabelFormat;
 
+	private String aliquotLabelFormat;
 
+	public String getDerivativeLabelFormat()
+	{
+		return derivativeLabelFormat;
+	}
+
+	public void setDerivativeLabelFormat(String derivativeLabelFormat)
+	{
+		this.derivativeLabelFormat = derivativeLabelFormat;
+	}
+
+	public String getAliquotLabelFormat()
+	{
+		return aliquotLabelFormat;
+	}
+
+	public void setAliquotLabelFormat(String aliquotLabelFormat)
+	{
+		this.aliquotLabelFormat = aliquotLabelFormat;
+	}
 
 	/** irbID. */
 	private String irbID;
@@ -117,26 +136,6 @@ public class CollectionProtocolBean implements Serializable
 	}
 
 
-	/**
-	 * Checks if is generate label.
-	 *
-	 * @return true, if is generate label
-	 */
-	public boolean isGenerateLabel()
-	{
-		return generateLabel;
-	}
-
-
-	/**
-	 * Sets the generate label.
-	 *
-	 * @param generateLabel the new generate label
-	 */
-	public void setGenerateLabel(boolean generateLabel)
-	{
-		this.generateLabel = generateLabel;
-	}
 
 	/**
 	 * This will return the clinicalDiagnosis values.

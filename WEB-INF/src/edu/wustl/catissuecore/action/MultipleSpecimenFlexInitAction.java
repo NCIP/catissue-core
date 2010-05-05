@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -142,12 +143,25 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 					specimenCollectionGroupName = (String) obj;
 				}
 				String generateLabel = Boolean.toString(false);
-				String hql = "select scg.collectionProtocolRegistration.collectionProtocol.generateLabel" +
+				String hql = "select scg.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
+				"scg.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
+				"scg.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat "+
 				" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where scg.name='"+specimenCollectionGroupName+"'";
+
 				try
 				{
 					List list = AppUtility.executeQuery(hql);
-					generateLabel = Boolean.toString(!(Boolean)list.get(0));
+					String parentLabelFormat = null;
+					String deriveLabelFormat = null;
+					String aliquotLabelFormat = null;
+					Object[] obje = (Object[])list.get(0);
+					if(obje[0] != null)
+					parentLabelFormat = obje[0].toString();
+					if(obje[1] != null)
+					deriveLabelFormat = obje[1].toString();
+					if(obje[2] != null)
+					aliquotLabelFormat = obje[2].toString();
+					generateLabel = Boolean.toString(!SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, "New"));
 				}
 				catch (ApplicationException e)
 				{
@@ -178,6 +192,31 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 				if(forwardToHashMap.get("generateLabel") != null)
 				{
 					generateLabel= Boolean.toString(!(Boolean)forwardToHashMap.get("generateLabel"));
+				}
+				String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
+				"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
+				"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat " +
+				"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.label ='"+ parentSpecimenLabel+"'";
+
+				try
+				{
+					List list = AppUtility.executeQuery(hql);
+					String parentLabelFormat = null;
+					String deriveLabelFormat = null;
+					String aliquotLabelFormat = null;
+					Object[] obje = (Object[])list.get(0);
+					if(obje[0] != null)
+					parentLabelFormat = obje[0].toString();
+					if(obje[1] != null)
+					deriveLabelFormat = obje[1].toString();
+					if(obje[2] != null)
+					aliquotLabelFormat = obje[2].toString();
+					generateLabel = Boolean.toString(!SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, "Derived"));
+				}
+				catch (ApplicationException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				request.setAttribute("SHOW_LABEL", generateLabel);
 

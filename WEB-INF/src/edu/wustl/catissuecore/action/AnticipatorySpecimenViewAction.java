@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
+import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -501,21 +502,57 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	 */
 	private void setLabelGenProp(Specimen specimen, final GenericSpecimenVO specimenDataBean)
 	{
-		if(specimen.getSpecimenRequirement() != null)
+		specimenDataBean.setGenerateLabel(isGenLabel(specimen));
+//		if(specimen.getSpecimenRequirement() != null)
+//		{
+//			if(specimen.getSpecimenRequirement().getGenLabel() && Validator.isEmpty(specimen.getSpecimenRequirement().getLabelFormat()))
+//			{
+//				specimenDataBean.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
+//			}
+//			else
+//			{
+//				specimenDataBean.setGenerateLabel(specimen.getSpecimenRequirement().getGenLabel());
+//			}
+//		}
+//		else
+//		{
+//			specimenDataBean.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
+//		}
+	}
+
+	/**
+	 * Checks if is gen label.
+	 *
+	 * @param objSpecimen the obj specimen
+	 *
+	 * @return true, if checks if is gen label
+	 */
+	private boolean isGenLabel(final Specimen objSpecimen)
+	{
+		boolean isGenLabel = false;
+
+		String lineage = objSpecimen.getLineage();
+		String parentLabelformat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+		String deriveLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
+		String aliquotLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
+
+		if(objSpecimen.getSpecimenRequirement() != null && Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
 		{
-			if(specimen.getSpecimenRequirement().getGenLabel() && Validator.isEmpty(specimen.getSpecimenRequirement().getLabelFormat()))
-			{
-				specimenDataBean.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
-			}
-			else
-			{
-				specimenDataBean.setGenerateLabel(specimen.getSpecimenRequirement().getGenLabel());
-			}
+			isGenLabel = false;
 		}
-		else
+		else if(objSpecimen.getSpecimenRequirement() != null && !Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()) && !objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%"))
 		{
-			specimenDataBean.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
+			isGenLabel = true;
 		}
+		else if(objSpecimen.getSpecimenRequirement() != null && objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%"))
+		{
+			isGenLabel = SpecimenUtil.isLblGenOnForCP(parentLabelformat, deriveLabelFormat, aliquotLabelFormat, lineage);
+		}
+		else if(objSpecimen.getSpecimenRequirement() == null)
+		{
+			isGenLabel = SpecimenUtil.isLblGenOnForCP(parentLabelformat, deriveLabelFormat, aliquotLabelFormat, lineage);
+		}
+		return isGenLabel;
 	}
 
 	/**

@@ -806,7 +806,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		catch (final ApplicationException e)
 		{
 			logger.error(e.getMessage(), e);
-			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}

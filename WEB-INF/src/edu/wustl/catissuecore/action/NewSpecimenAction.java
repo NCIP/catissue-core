@@ -58,6 +58,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -241,7 +242,16 @@ public class NewSpecimenAction extends SecureAction
 			// Lazy - specimenCollectionGroup.getCollectionProtocolRegistration()
 			final CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroup
 					.getCollectionProtocolRegistration();
-			boolean generateLabel = collectionProtocolRegistration.getCollectionProtocol().getGenerateLabel();
+			String parentLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getSpecimenLabelFormat();
+			String derivativeLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getDerivativeLabelFormat();
+			String aliquotLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getAliquotLabelFormat();
+
+			String lineage = specimenForm.getLineage();
+			if(lineage == null)
+			{
+				lineage = Constants.NEW_SPECIMEN;
+			}
+			boolean generateLabel = SpecimenUtil.isLblGenOnForCP(parentLabelFormat, derivativeLabelFormat, aliquotLabelFormat, lineage);
 
 //			if(!Validator.isEmpty(specimenForm.getOperation()) && !specimenForm.getOperation().equals(Constants.EDIT))
 //			{
@@ -259,14 +269,18 @@ public class NewSpecimenAction extends SecureAction
 					{
 						Object object = list.get(0);
 						SpecimenRequirement requirement = (SpecimenRequirement)object;
-						if(requirement != null && requirement.getGenLabel() && !Validator.isEmpty(requirement.getLabelFormat()))
-						{
-							generateLabel = requirement.getGenLabel();
-						}
-						else if(requirement != null && !requirement.getGenLabel())
-						{
-							generateLabel = requirement.getGenLabel();
-						}
+						Specimen specimen = new Specimen();
+						specimen.setSpecimenRequirement(requirement);
+						specimen.setLineage(specimenForm.getLineage());
+						specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+//						if(requirement != null && requirement.getGenLabel() && !Validator.isEmpty(requirement.getLabelFormat()))
+//						{
+//							generateLabel = requirement.getGenLabel();
+//						}
+//						else if(requirement != null && !requirement.getGenLabel())
+//						{
+							generateLabel = SpecimenUtil.isGenLabel(specimen);
+//						}
 //						/objSpecimen.setSpecimenRequirement((SpecimenRequirement)object);
 					}
 

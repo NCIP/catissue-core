@@ -135,45 +135,10 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	/** The generate label. */
 	private boolean generateLabel = false;
 
-	/** The label gen type. */
-	private String labelGenType;
 
-	/** The label gen type for aliquot. */
-	private String labelGenTypeForAliquot;
 
 	/** The label format for aliquot. */
 	private String labelFormatForAliquot;
-
-	/** The gen label for aliquot. */
-	private boolean genLabelForAliquot;
-
-
-
-	/**
-	 * Gets the label gen type for aliquot.
-	 *
-	 * @return the label gen type for aliquot
-	 */
-	public String getLabelGenTypeForAliquot()
-	{
-		return labelGenTypeForAliquot;
-	}
-
-
-
-
-	/**
-	 * Sets the label gen type for aliquot.
-	 *
-	 * @param labelGenTypeForAliquot the new label gen type for aliquot
-	 */
-	public void setLabelGenTypeForAliquot(String labelGenTypeForAliquot)
-	{
-		this.labelGenTypeForAliquot = labelGenTypeForAliquot;
-	}
-
-
-
 
 	/**
 	 * Gets the label format for aliquot.
@@ -185,9 +150,6 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		return labelFormatForAliquot;
 	}
 
-
-
-
 	/**
 	 * Sets the label format for aliquot.
 	 *
@@ -196,56 +158,6 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	public void setLabelFormatForAliquot(String labelFormatForAliquot)
 	{
 		this.labelFormatForAliquot = labelFormatForAliquot;
-	}
-
-
-
-
-	/**
-	 * Checks if is gen label for aliquot.
-	 *
-	 * @return true, if is gen label for aliquot
-	 */
-	public boolean isGenLabelForAliquot()
-	{
-		return genLabelForAliquot;
-	}
-
-
-
-
-	/**
-	 * Sets the gen label for aliquot.
-	 *
-	 * @param genLabelForAliquot the new gen label for aliquot
-	 */
-	public void setGenLabelForAliquot(boolean genLabelForAliquot)
-	{
-		this.genLabelForAliquot = genLabelForAliquot;
-	}
-
-
-
-	/**
-	 * Gets the label gen type.
-	 *
-	 * @return the label gen type
-	 */
-	public String getLabelGenType()
-	{
-		return labelGenType;
-	}
-
-
-
-	/**
-	 * Sets the label gen type.
-	 *
-	 * @param labelGenType the new label gen type
-	 */
-	public void setLabelGenType(String labelGenType)
-	{
-		this.labelGenType = labelGenType;
 	}
 
 
