@@ -1,6 +1,7 @@
-alter table CATISSUE_SPECIMEN_PROTOCOL add column GENERATE_LABEL tinyint(1) default 0;
 alter table CATISSUE_SPECIMEN_PROTOCOL add column LABEL_FORMAT varchar(255) default null;
-alter table CATISSUE_CP_REQ_SPECIMEN add column GENERATE_LABEL tinyint(1) default 0;
+
+alter table CATISSUE_SPECIMEN_PROTOCOL add column DERIV_LABEL_FORMAT varchar(255) default null;
+alter table CATISSUE_SPECIMEN_PROTOCOL add column ALIQUOT_LABEL_FORMAT varchar(255) default null;
 
 CREATE TABLE KEY_SEQ_GENERATOR
    (	IDENTIFIER bigint(20) NOT NULL auto_increment,
