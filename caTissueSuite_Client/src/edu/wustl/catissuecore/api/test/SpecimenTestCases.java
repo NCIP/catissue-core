@@ -157,7 +157,6 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 				consentStatus.setStatus("Yes");
 				consentTierStatusCollection.add(consentStatus);
 			}
-			sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().setGenerateLabel(true);
 			sp.setConsentTierStatusCollection(consentTierStatusCollection);
 			System.out.println(sp + ": sp");
 			sp = (Specimen) appService.updateObject(sp);
@@ -2017,5 +2016,5 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		}
 	}
 
-	 
+
 }

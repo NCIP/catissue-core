@@ -104,7 +104,6 @@ public class BaseTestCaseUtility {
 		collectionProtocol.setShortTitle("cp"+UniqueKeyGeneratorUtil.getUniqueKey());
 		collectionProtocol.setEnrollment(2);
 
-		collectionProtocol.setGenerateLabel(true);
 		collectionProtocol.setSpecimenLabelFormat("");
 		System.out.println("reached setUp");
 
@@ -192,8 +191,6 @@ public class BaseTestCaseUtility {
 		specimenRequirementBean.setQuantity("10");
 		specimenRequirementBean.setStorageContainerForSpecimen("Auto");
 		specimenRequirementBean.setLabelFormat(null);
-		specimenRequirementBean.setGenerateLabel(true);
-		specimenRequirementBean.setLabelGenType("1");
 
 		//Collected and received events
 		specimenRequirementBean.setCollectionEventUserId(1);
@@ -207,8 +204,6 @@ public class BaseTestCaseUtility {
 		specimenRequirementBean.setQuantityPerAliquot("1");
 		specimenRequirementBean.setStorageContainerForAliquotSpecimem("Auto");
 		specimenRequirementBean.setLabelFormatForAliquot(null);
-		specimenRequirementBean.setLabelGenTypeForAliquot("1");
-		specimenRequirementBean.setGenLabelForAliquot(true);
 
 		specimenRequirementBean.setNoOfDeriveSpecimen(1);
 		specimenRequirementBean.setDeriveSpecimen(null);
@@ -251,8 +246,6 @@ public class BaseTestCaseUtility {
 			specimenRequirementBean.setStorageContainerForAliquotSpecimem(null);
 			specimenRequirementBean.setStorageContainerForSpecimen("Auto");
 			specimenRequirementBean.setDeriveSpecimen(null);
-			specimenRequirementBean.setGenerateLabel(true);
-			specimenRequirementBean.setLabelGenType("1");
 			specimenRequirementBean.setLabelFormat("");
 			aliquotMap.put(iCount, specimenRequirementBean);
 		}

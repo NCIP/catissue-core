@@ -63,7 +63,6 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 
 		collectionProtocol.setPrincipalInvestigator(user);
 		collectionProtocol.setActivityStatus("Active");
-		collectionProtocol.setGenerateLabel(false);
 		collectionProtocol.setSpecimenLabelFormat(null);
 
 		CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();
