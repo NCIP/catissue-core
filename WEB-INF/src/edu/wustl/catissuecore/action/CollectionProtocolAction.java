@@ -50,6 +50,7 @@ import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class initializes the fields in the CollectionProtocol Add/Edit webpage.
  *
@@ -129,7 +130,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			this.initCollectionProtocolPage(request, form, pageOf, mapping);
 		}
 
-		if (operation.equals("add") && invokeFunction == null)
+		if ("add".equals(operation) && invokeFunction == null)
 		{
 			this.initCleanSession(request);
 		}
@@ -177,7 +178,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 
 		if (button != null)
 		{
-			if (button.equals("deleteSpecimenReq"))
+			if ("deleteSpecimenReq".equals(button))
 			{
 				MapDataParser.deleteRow(key, map, request.getParameter("status"), outer);
 			}
@@ -230,14 +231,12 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			appendingPath = reqPath
 					+ "|/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
 		}
-		if (!operation.equals("add"))
+		if (!"add".equals(operation) && collectionProtocolForm != null)
 		{
-			if (collectionProtocolForm != null)
-			{
+
 				appendingPath = "/CollectionProtocolSearch.do?operation="
 						+ "search&pageOf=pageOfCollectionProtocol&id="
 						+ collectionProtocolForm.getId();
-			}
 		}
 
 		final boolean readOnlyValue = false;
@@ -257,7 +256,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		}
 		boolean flagforPageView = false;
 
-		if (pageView.equals("add") || pageView.equals("edit"))
+		if ("add".equals(pageView) || "edit".equals(pageView))
 		{
 			flagforPageView = true;
 		}
@@ -342,41 +341,40 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 
 		final Object object = collectionProtocolBizLogic.retrieve(CollectionProtocol.class
 				.getName(), Long.valueOf(cp_id));
-		final CollectionProtocol collectionProtocolObject = (CollectionProtocol) object;
-		return collectionProtocolObject;
+		return (CollectionProtocol) object;
 	}
 
 	/**
+	 * Prepares consent map.
 	 * @param consentTierColl
 	 *            : consentTierColl
 	 * @return Map : Map
 	 */
 	private Map prepareConsentMap(Collection consentTierColl)
 	{
-		final Map tempMap = new HashMap();
+		Map tempMap = null;
 		if (consentTierColl != null)
 		{
+			tempMap = new HashMap();
 			final Iterator consentTierCollIter = consentTierColl.iterator();
-			int i = 0;
+			int consentCtr = 0;
 			while (consentTierCollIter.hasNext())
 			{
 				final ConsentTier consent = (ConsentTier) consentTierCollIter.next();
-				final String statement = "ConsentBean:" + i + "_statement";
-				final String statementkey = "ConsentBean:" + i + "_consentTierID";
+				final String statement = "ConsentBean:" + consentCtr + "_statement";
+				final String statementkey = "ConsentBean:" + consentCtr + "_consentTierID";
 				tempMap.put(statement, consent.getStatement());
 				tempMap.put(statementkey, consent.getId());
-				i++;
+				consentCtr++;
 			}
-			this.consentCounter = i;
-			return tempMap;
+			this.consentCounter = consentCtr;
+
 		}
-		else
-		{
-			return null;
-		}
+		return tempMap;
 	}
 
 	/**
+	 * Initialise the collection protocol page.
 	 * @param request
 	 *            : request
 	 * @param form
@@ -435,6 +433,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	}
 
 	/**
+	 * While initialisation cleans the session.
 	 * @param request
 	 *            : request
 	 */

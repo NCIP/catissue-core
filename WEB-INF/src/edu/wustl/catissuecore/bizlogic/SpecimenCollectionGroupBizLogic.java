@@ -2926,11 +2926,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				}
 				if(valArr[7] != null)
 				{
-					collectionProtocol.setDerivativeLabelFormat(valArr[6].toString());
+					collectionProtocol.setDerivativeLabelFormat(valArr[7].toString());
 				}
 				if(valArr[8] != null)
 				{
-					collectionProtocol.setAliquotLabelFormat(valArr[6].toString());
+					collectionProtocol.setAliquotLabelFormat(valArr[8].toString());
 				}
 				//For bug #15994
 				String CpShortTitle;

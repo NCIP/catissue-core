@@ -57,11 +57,11 @@ public class OpenCollectionProtocolAction extends BaseAction
 			request.setAttribute(Constants.OPERATION, operation);
 			final String treeNode = "cpName_" + cpBean.getTitle();
 			session.setAttribute(Constants.TREE_NODE_ID, treeNode);
-//			request.setAttribute("labelGeneration", cpBean.isGenerateLabel());
+			//			request.setAttribute("labelGeneration", cpBean.isGenerateLabel());
 		}
 		request.setAttribute("formName", formName);
-//		request.setAttribute("labelGen", labelGen);
-//		System.out.println("formName   &&****#$#$#$#$$##$#$   :  "+ cpBean.isGenerateLabel());
+		//		request.setAttribute("labelGen", labelGen);
+		//		System.out.println("formName   &&****#$#$#$#$$##$#$   :  "+ cpBean.isGenerateLabel());
 		return mapping.findForward(Constants.SUCCESS);
 	}
 

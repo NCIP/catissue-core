@@ -48,7 +48,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(CatissueDefaultBizLogic.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(CatissueDefaultBizLogic.class);
 
 	/**
 	 * @see edu.wustl.common.bizlogic.IBizLogic#isAuthorized.
@@ -100,8 +100,14 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			{
 				privilegeName = this.getPrivilegeName(domainObject);
 				privilegeCache = this.getPrivilegeCache(sessionDataBean);
-				if (!protectionElementName.equalsIgnoreCase("ADMIN_PROTECTION_ELEMENT"))
+				if (protectionElementName.equalsIgnoreCase("ADMIN_PROTECTION_ELEMENT"))
 				{
+					isAuthorized = privilegeCache
+					.hasPrivilege(protectionElementName, privilegeName);
+				}
+				else
+				{
+
 					final String[] prArray = protectionElementName.split("_");
 					final String baseObjectId = prArray[0];
 					String objId = "";
@@ -115,11 +121,6 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 						}
 					}
 				}
-				else
-				{
-					isAuthorized = privilegeCache
-							.hasPrivilege(protectionElementName, privilegeName);
-				}
 			}
 			if (!isAuthorized)
 			{
@@ -131,8 +132,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final SMException exception)
 		{
-			this.logger.error(exception.getMessage(), exception);
-			exception.printStackTrace();
+			LOGGER.error(exception.getMessage(), exception);
 			throw this.getBizLogicException(exception, exception.getErrorKeyAsString(), exception
 					.getLogMessage());
 		}
@@ -189,8 +189,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this.getBizLogicException(daoExp,
 					daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -213,8 +212,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this.getBizLogicException(daoExp,
 					daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -238,8 +236,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this.getBizLogicException(daoExp,
 					daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -262,8 +259,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this.getBizLogicException(daoExp,
 					daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -306,9 +302,9 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 			final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
 					sessionDataBean.getUserName());
 
-			final StringBuffer sb = new StringBuffer();
-			sb.append(edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_CLASS_NAME)
-					.append("_");
+			final StringBuffer buffer = new StringBuffer();
+			buffer.append(edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_CLASS_NAME)
+					.append('_');
 			boolean isPresent = false;
 
 			for (final Long cpId : cpIds)
@@ -318,17 +314,17 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 				final String[] privilegeNames = privilegeName.split(",");
 				if (privilegeNames.length > 1)
 				{
-					if ((privilegeCache.hasPrivilege(sb.toString() + cpId.toString(),
-							privilegeNames[0])))
+					if (privilegeCache.hasPrivilege(buffer.toString() + cpId.toString(),
+							privilegeNames[0]))
 					{
-						isPresent = privilegeCache.hasPrivilege(sb.toString()
+						isPresent = privilegeCache.hasPrivilege(buffer.toString()
 								+ cpId.toString(),privilegeNames[1]);
 						isPresent = !isPresent;
 					}
 				}
 				else
 				{
-					isPresent = privilegeCache.hasPrivilege(sb.toString() + cpId.toString(),
+					isPresent = privilegeCache.hasPrivilege(buffer.toString() + cpId.toString(),
 							privilegeName);
 				}
 
@@ -347,8 +343,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final SMException smEx)
 		{
-			this.logger.error(smEx.getMessage(),smEx);
-			smEx.printStackTrace();
+			LOGGER.error(smEx.getMessage(),smEx);
 			throw this.getBizLogicException(smEx, smEx.getErrorKeyName(), smEx.getMsgValues());
 		}
 		return true;
@@ -386,9 +381,8 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final Exception excep)
 		{
-			this.logger.error("Titli search index cound not be refreshed for opeartion."
+			LOGGER.error("Titli search index cound not be refreshed for opeartion."
 					+ operation, excep);
-			excep.printStackTrace();
 		}
 
 	}
@@ -434,8 +428,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final BizLogicException bizLogicExp)
 		{
-			this.logger.error(bizLogicExp.getMessage(),bizLogicExp);
-			bizLogicExp.printStackTrace();
+			LOGGER.error(bizLogicExp.getMessage(),bizLogicExp);
 		}
 	}
 

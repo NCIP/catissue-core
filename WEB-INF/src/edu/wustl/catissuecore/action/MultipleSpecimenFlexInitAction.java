@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
 
 //import edu.wustl.common.action.SecureAction;
@@ -117,7 +118,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		request.setAttribute("PARENT_NAME", parentName);
 		request.setAttribute("SP_COUNT", numberOfSpecimens);
 		request.setAttribute("SHOW_PARENT_SELECTION", showParentSelection);
-//		request.setAttribute("SHOW_LABEL", showLabel);
+		//		request.setAttribute("SHOW_LABEL", showLabel);
 		request.setAttribute("SHOW_BARCODE", showBarcode);
 		request.setAttribute("DATE_FORMAT", dateFormat.toUpperCase());
 
@@ -128,8 +129,9 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 	 * @param request : request
 	 * @param parentType : parentType
 	 * @return String : String
+	 * @throws BizLogicException
 	 */
-	private String getParentName(HttpServletRequest request, String parentType)
+	private String getParentName(HttpServletRequest request, String parentType) throws BizLogicException
 	{
 		final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 		if (forwardToHashMap != null)
@@ -143,33 +145,13 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 					specimenCollectionGroupName = (String) obj;
 				}
 				String generateLabel = Boolean.toString(false);
-				String hql = "select scg.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
-				"scg.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
-				"scg.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat "+
-				" from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where scg.name='"+specimenCollectionGroupName+"'";
+				String hql = "select scg.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, "
+						+ "scg.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, "
+						+ "scg.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat "
+						+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where scg.name='"
+						+ specimenCollectionGroupName + "'";
 
-				try
-				{
-					List list = AppUtility.executeQuery(hql);
-					String parentLabelFormat = null;
-					String deriveLabelFormat = null;
-					String aliquotLabelFormat = null;
-					Object[] obje = (Object[])list.get(0);
-					if(obje[0] != null)
-					parentLabelFormat = obje[0].toString();
-					if(obje[1] != null)
-					deriveLabelFormat = obje[1].toString();
-					if(obje[2] != null)
-					aliquotLabelFormat = obje[2].toString();
-					generateLabel = Boolean.toString(!SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, "New"));
-				}
-				catch (ApplicationException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				request.setAttribute("SHOW_LABEL", generateLabel);
+				setRequestAttribute(request, generateLabel, hql);
 				return specimenCollectionGroupName;
 			}
 			else if (Constants.DERIVED_SPECIMEN_TYPE.equals(parentType))
@@ -189,41 +171,82 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 					}
 				}
 				String generateLabel = Boolean.toString(false);
-				if(forwardToHashMap.get("generateLabel") != null)
+				if (forwardToHashMap.get("generateLabel") != null)
 				{
-					generateLabel= Boolean.toString(!(Boolean)forwardToHashMap.get("generateLabel"));
+					generateLabel = Boolean.toString(!(Boolean) forwardToHashMap
+							.get("generateLabel"));
 				}
-				String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
-				"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
-				"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat " +
-				"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.label ='"+ parentSpecimenLabel+"'";
+				String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, "
+						+ "specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, "
+						+ "specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat "
+						+ "from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.label ='"
+						+ parentSpecimenLabel + "'";
 
-				try
-				{
-					List list = AppUtility.executeQuery(hql);
-					String parentLabelFormat = null;
-					String deriveLabelFormat = null;
-					String aliquotLabelFormat = null;
-					Object[] obje = (Object[])list.get(0);
-					if(obje[0] != null)
-					parentLabelFormat = obje[0].toString();
-					if(obje[1] != null)
-					deriveLabelFormat = obje[1].toString();
-					if(obje[2] != null)
-					aliquotLabelFormat = obje[2].toString();
-					generateLabel = Boolean.toString(!SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, "Derived"));
-				}
-				catch (ApplicationException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				request.setAttribute("SHOW_LABEL", generateLabel);
-
+				//				try
+				//				{
+				//					List list = AppUtility.executeQuery(hql);
+				//					String parentLabelFormat = null;
+				//					String deriveLabelFormat = null;
+				//					String aliquotLabelFormat = null;
+				//					Object[] obje = (Object[])list.get(0);
+				//					if(obje[0] != null)
+				//					parentLabelFormat = obje[0].toString();
+				//					if(obje[1] != null)
+				//					deriveLabelFormat = obje[1].toString();
+				//					if(obje[2] != null)
+				//					aliquotLabelFormat = obje[2].toString();
+				//					generateLabel = Boolean.toString(!SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, "Derived"));
+				//				}
+				//				catch (ApplicationException e)
+				//				{
+				//					// TODO Auto-generated catch block
+				//					e.printStackTrace();
+				//				}
+				//				request.setAttribute("SHOW_LABEL", generateLabel);
+				setRequestAttribute(request, generateLabel, hql);
 				return parentSpecimenLabel;
 			}
 		}
 		return "";
+	}
+
+	/**
+	 * @param request
+	 * @param generateLabel
+	 * @param hql
+	 * @throws BizLogicException
+	 */
+	private void setRequestAttribute(HttpServletRequest request, String generateLabel, String hql) throws BizLogicException
+	{
+		try
+		{
+			List list = AppUtility.executeQuery(hql);
+			String parentLabelFormat = null;
+			String deriveLabelFormat = null;
+			String aliquotLabelFormat = null;
+			Object[] obje = (Object[]) list.get(0);
+			if (obje[0] != null)
+			{
+				parentLabelFormat = obje[0].toString();
+			}
+			if (obje[1] != null)
+			{
+				deriveLabelFormat = obje[1].toString();
+			}
+			if (obje[2] != null)
+			{
+				aliquotLabelFormat = obje[2].toString();
+			}
+			generateLabel = Boolean.toString(!SpecimenUtil.isLblGenOnForCP(parentLabelFormat,
+					deriveLabelFormat, aliquotLabelFormat, "New"));
+		}
+		catch (ApplicationException e)
+		{
+//			LOGGER.error(e.getMessage(), e);
+			throw new BizLogicException(e.getErrorKey(), e, e.getMessage());
+		}
+
+		request.setAttribute("SHOW_LABEL", generateLabel);
 	}
 
 	/**

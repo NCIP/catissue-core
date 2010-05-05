@@ -47,6 +47,7 @@ import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -310,6 +311,7 @@ public class AliquotAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		DAO dao = null;
+
 		try
 		{
 			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
@@ -320,6 +322,34 @@ public class AliquotAction extends SecureAction
 			final String spType = aliquotForm.getType();
 			final String aliquotCt = aliquotForm.getNoOfAliquots();
 			final long cpId = aliquotForm.getColProtId();
+			String parentLabelFormat = null;
+			String deriveLabelFormat = null;
+			String aliquotLabelFormat = null;
+
+			String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
+			"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
+			"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat " +
+			"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id ="+ aliquotForm.getId();
+//				"select collectionProtocol.specimenLabelFormat, " +
+//			"collectionProtocol.derivativeLabelFormat, " +
+//			"collectionProtocol.aliquotLabelFormat " +
+//			"from edu.wustl.catissuecore.domain.CollectionProtocol as collectionProtocol where collectionProtocol.id ="+ cpId;
+
+			List formatList = AppUtility.executeQuery(hql);
+			Object[] obje = (Object[])formatList.get(0);
+			if(obje[0] != null)
+			{
+				parentLabelFormat = obje[0].toString();
+			}
+			if(obje[1] != null)
+			{
+				deriveLabelFormat = obje[1].toString();
+			}
+			if(obje[2] != null)
+			{
+				aliquotLabelFormat = obje[2].toString();
+			}
+			aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, Constants.ALIQUOT));
 			final StorageContainerForSpecimenBizLogic scBiz = new StorageContainerForSpecimenBizLogic();
 			// boolean to indicate whether the suitable containers to be shown
 			// in dropdown

@@ -39,7 +39,7 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 	/**
 	 *  Logger object.
 	 */
-	private static final transient Logger logger = Logger
+	private static final transient Logger LOGGER = Logger
 			.getCommonLogger(CpBasedViewBizLogic.class);
 
 	/**
@@ -138,15 +138,11 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final BizLogicException bizEx)
 		{
-			CpBasedViewBizLogic.logger.error(bizEx.getMessage(),bizEx);
-			// TODO Auto-generated catch block
-			bizEx.printStackTrace();
+			CpBasedViewBizLogic.LOGGER.error(bizEx.getMessage(),bizEx);
 		}
 		catch (final SMException smEx)
 		{
-			CpBasedViewBizLogic.logger.error(smEx.getMessage(),smEx);
-			// TODO Auto-generated catch block
-			smEx.printStackTrace();
+			CpBasedViewBizLogic.LOGGER.error(smEx.getMessage(),smEx);
 		}
 		return cpDetailsList;
 	}
@@ -188,9 +184,7 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final BizLogicException bizEx)
 		{
-			CpBasedViewBizLogic.logger.error(bizEx.getMessage(),bizEx);
-			// TODO Auto-generated catch block
-			bizEx.printStackTrace();
+			CpBasedViewBizLogic.LOGGER.error(bizEx.getMessage(),bizEx);
 		}
 		return collectionProtocolBeanList;
 	}
@@ -259,33 +253,29 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 				final Object[] participantObj = participantList.get(j);
 				participantDisplayInfo = this.getFormattedParticpantInfo(participantObj);
 				final int index = participantDisplayInfo.indexOf(":");
-				Long Id = null;
+				Long identifier = null;
 				String name = "";
 				//Id = new Long(participantDisplayInfo.substring(0, index));
-				Id = Long.valueOf((participantDisplayInfo.substring(0, index)));
+				identifier = Long.valueOf(participantDisplayInfo.substring(0, index));
 				name = participantDisplayInfo.substring(index + 1);
-				participantInfoList.add(new CpAndParticipentsBean(name, Id.toString()));
+				participantInfoList.add(new CpAndParticipentsBean(name, identifier.toString()));
 
 			}
 		}
 		catch (final DAOException daoExp)
 		{
-			CpBasedViewBizLogic.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+			CpBasedViewBizLogic.LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		catch (final ApplicationException appEx)
 		{
-			CpBasedViewBizLogic.logger.error(appEx.getMessage(),appEx);
-			appEx.printStackTrace();
-			// TODO Auto-generated catch block
+			CpBasedViewBizLogic.LOGGER.error(appEx.getMessage(),appEx);
 			throw new ApplicationException(appEx.getErrorKey(), appEx, appEx.getMsgValues());
 		}
 		catch (final Exception exp)
 		{
-			CpBasedViewBizLogic.logger.error(exp.getMessage(),exp);
-			exp.printStackTrace();
+			CpBasedViewBizLogic.LOGGER.error(exp.getMessage(),exp);
 		}
 		return participantInfoList;
 	}
@@ -336,7 +326,7 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 				participantDisplayInfo = participantDisplayInfo + " , " + firstName;
 			}
 		}
-		if (participantDisplayInfo.equals(""))
+		if ("".equals(participantDisplayInfo))
 		{
 			participantDisplayInfo = "N/A";
 		}
@@ -349,7 +339,7 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 			participantDisplayInfo = participantDisplayInfo + " (N/A)";
 		}
 
-		if (participantDisplayInfo.equals(""))
+		if ("".equals(participantDisplayInfo))
 		{
 			participantDisplayInfo = "N/A";
 		}

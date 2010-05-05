@@ -569,7 +569,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 					}
 				}
 //				else if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
-				else if(this.generateLabel && key.endsWith("_label"))
+				else if(!this.generateLabel && key.endsWith("_label"))
 				{
 					//by Falguni
 					final String value = (String) this.aliquotMap.get(key);

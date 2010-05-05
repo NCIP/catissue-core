@@ -38,32 +38,33 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class CreateSpecimenTemplateAction.
+ *
  * @author renuka_bajpai
  */
 public class CreateSpecimenTemplateAction extends BaseAction
 {
 
-	/**
-	 * logger.
-	 */
+	/** logger. */
 	private static final Logger LOGGER = Logger
 			.getCommonLogger(CreateSpecimenTemplateAction.class);
 
+	/** The Constant ERROR_STRING. */
 	private static final String ERROR_STRING="error";
+
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 * @param mapping
-	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
-	 * @throws Exception
-	 *             generic exception
+	 *
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 *
 	 * @return ActionForward : ActionForward
+	 *
+	 * @throws Exception generic exception
 	 */
 	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
@@ -230,30 +231,33 @@ public class CreateSpecimenTemplateAction extends BaseAction
 
 		if ("newEvent".equals(pageOf))
 		{
-			return (mapping.findForward("newEvent"));
+			return mapping.findForward("newEvent");
 		}
 		if (pageOf != null && pageOf.equals(ERROR_STRING))
 		{
-			return (mapping.findForward(Constants.SUCCESS));
+			return mapping.findForward(Constants.SUCCESS);
 		}
 
 		final String redirectTo = request.getParameter("redirectTo");
 
 		if (redirectTo != null && redirectTo.equals("defineEvents"))
 		{
-			return (mapping.findForward("defineEvents"));
+			return mapping.findForward("defineEvents");
 		}
 		else
 		{
-			return (mapping.findForward(Constants.SUCCESS));
+			return mapping.findForward(Constants.SUCCESS);
 		}
 
 	}
 
 	/**
+	 * Sets the user in form.
+	 *
 	 * @param request : request
 	 * @param operation : operation
 	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
+	 *
 	 * @throws BizLogicException : BizLogicException
 	 */
 	private void setUserInForm(HttpServletRequest request, String operation,
@@ -278,10 +282,13 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
+	 * Retrive user.
 	 *
 	 * @param request : request
 	 * @param operation : operation
+	 *
 	 * @return Collection < User > : Collection < User >
+	 *
 	 * @throws BizLogicException : BizLogicException
 	 */
 	private Collection<User> retriveUser(HttpServletRequest request, String operation)
@@ -305,10 +312,12 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
+	 * Gets the specimen bean from map.
 	 *
 	 * @param keyToken : keyToken
 	 * @param specimenRequirementBean : specimenRequirementBean
 	 * @param parentKey : parentKey
+	 *
 	 * @return SpecimenRequirementBean : SpecimenRequirementBean
 	 */
 	private SpecimenRequirementBean getSpecimenBeanFromMap(StringTokenizer keyToken,
@@ -344,8 +353,9 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
-	 * @param createSpecimenTemplateForm
-	 *            createSpecimenTemplateForm
+	 * Clear form on add specimen requirement.
+	 *
+	 * @param createSpecimenTemplateForm createSpecimenTemplateForm
 	 */
 	private void clearFormOnAddSpecimenRequirement(
 			CreateSpecimenTemplateForm createSpecimenTemplateForm)
@@ -378,6 +388,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 
 	/**
 	 * Initialise the create specimen form.
+	 *
 	 * @param createSpecimenTemplateForm : createSpecimenTemplateForm
 	 * @param mapkey : mapkey
 	 * @param request : request
@@ -417,6 +428,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 
 	/**
 	 * Will set derivative values in form.
+	 *
 	 * @param createSpecimenTemplateForm createSpecimenTemplateForm
 	 * @param specimenRequirementBean specimenRequirementBean
 	 */
@@ -442,6 +454,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 
 	/**
 	 * Will set the label properties to form.
+	 *
 	 * @param createSpecimenTemplateForm createSpecimenTemplateForm
 	 * @param specimenRequirementBean specimenRequirementBean
 	 */
@@ -465,12 +478,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 
 	/**
 	 * set coll and rec parameters.
-	 * @param createSpecimenTemplateForm
-	 *            createSpecimenTemplateForm
-	 * @param request
-	 *            HttpServletRequest
-	 * @param specimenRequirementBean
-	 *            Specimen requirement bean
+	 *
+	 * @param createSpecimenTemplateForm createSpecimenTemplateForm
+	 * @param request HttpServletRequest
+	 * @param specimenRequirementBean Specimen requirement bean
 	 */
 	private void setCollAndRecEvents(CreateSpecimenTemplateForm createSpecimenTemplateForm,
 			HttpServletRequest request, SpecimenRequirementBean specimenRequirementBean)
@@ -513,10 +524,11 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	}
 
 	/**
-	 * @param mapkey
-	 *            Key for Event
-	 * @param request
-	 *            HttpServletRequest
+	 * Gets the event and specimen bean.
+	 *
+	 * @param mapkey Key for Event
+	 * @param request HttpServletRequest
+	 *
 	 * @return specimenRequirementBean
 	 */
 	private SpecimenRequirementBean getEventAndSpecimenBean(String mapkey,
@@ -542,7 +554,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 				.get(specimenKey);
 		final SpecimenRequirementBean specimenRequirementBean = this.getSpecimenBeanFromMap(
 				stringToken, parentSpecimenRequirementBean, specimenKey);
-		if (new Long(specimenRequirementBean.getId()) != null
+		if (Long.valueOf(specimenRequirementBean.getId()) != null
 				&& specimenRequirementBean.getId() > 0)
 		{
 			request.setAttribute("isPersistent", true);

@@ -50,7 +50,10 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class AnticipatorySpecimenViewAction.
+ *
  * @author abhijit_naik
  */
 public class AnticipatorySpecimenViewAction extends BaseAction
@@ -68,7 +71,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger
+	private static final Logger LOGGER = Logger
 			.getCommonLogger(AnticipatorySpecimenViewAction.class);
 	/**
 	 * asignedPositonSet.
@@ -102,17 +105,17 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			boolean isFromSpecimenEditPage = false;
 			final SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
 			final HttpSession session = request.getSession();
-			Long id = specimenCollectionGroupForm.getId();
+			Long identifier = specimenCollectionGroupForm.getId();
 			Long specimenId = null;
 			final SpecimenAutoStorageContainer autoStorageContainer = new SpecimenAutoStorageContainer();
 			final HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 			if (forwardToHashMap != null)
 			{
-				id = (Long) forwardToHashMap.get("specimenCollectionGroupId");
+				identifier = (Long) forwardToHashMap.get("specimenCollectionGroupId");
 
-				if (id != null)
+				if (identifier != null)
 				{
-					specimenCollectionGroupForm.setId(id);
+					specimenCollectionGroupForm.setId(identifier);
 				}
 
 				specimenId = (Long) forwardToHashMap.get("specimenId");
@@ -125,7 +128,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			}
 			final SpecimenCollectionGroupBizLogic scgBizLogic = new SpecimenCollectionGroupBizLogic();
 			session.setAttribute(Constants.SCGFORM, specimenCollectionGroupForm.getId());
-			final SpecimenCollectionGroup specimencollectionGroup = scgBizLogic.getSCGFromId(id,
+			final SpecimenCollectionGroup specimencollectionGroup = scgBizLogic.getSCGFromId(identifier,
 					sessionDataBean, true, dao);
 			if (specimencollectionGroup.getActivityStatus().equalsIgnoreCase(
 					Status.ACTIVITY_STATUS_DISABLED.toString()))
@@ -135,15 +138,15 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			this.cpId = specimencollectionGroup.getCollectionProtocolRegistration()
 					.getCollectionProtocol().getId();
 
-			if (!isFromSpecimenEditPage)
+			if (isFromSpecimenEditPage)
 			{
-				this.addSCGSpecimensToSession(session, specimencollectionGroup,
+				final Collection scgSpecimenList = specimencollectionGroup.getSpecimenCollection();
+				this.getSpcimensToShowOnSummary(specimenId, scgSpecimenList, session,
 						autoStorageContainer, dao);
 			}
 			else
 			{
-				final Collection scgSpecimenList = specimencollectionGroup.getSpecimenCollection();
-				this.getSpcimensToShowOnSummary(specimenId, scgSpecimenList, session,
+				this.addSCGSpecimensToSession(session, specimencollectionGroup,
 						autoStorageContainer, dao);
 			}
 			request.setAttribute("RequestType",
@@ -167,6 +170,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	}
 
 	/**
+	 * Add scg specimens to session.
 	 * @param session : session
 	 * @param specimencollectionGroup : specimencollectionGroup
 	 * @throws DAOException : DAOException
@@ -290,13 +294,13 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	/**
 	 *
 	 * @param specimenMap : specimenMap
-	 * @param id : id
+	 * @param identifier : id
 	 * @param specBean : specBean
 	 * @param prefix : prefix
 	 * @return LinkedHashMap < String , GenericSpecimen > : LinkedHashMap
 	 */
 	private LinkedHashMap<String, GenericSpecimen> getOrderedMap(
-			LinkedHashMap<String, GenericSpecimen> specimenMap, Long id,
+			LinkedHashMap<String, GenericSpecimen> specimenMap, Long identifier,
 			GenericSpecimenVO specBean, String prefix)
 	{
 		final LinkedHashMap<String, GenericSpecimen> orderedMap = new LinkedHashMap<String, GenericSpecimen>();
@@ -305,13 +309,13 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		{
 			final String keyVal = (String) element;
 			final String keyId = keyVal.substring(prefix.length());
-			if (Long.parseLong(keyId) > id)
+			if (Long.parseLong(keyId) > identifier)
 			{
 				orderedMap.put(keyVal, specimenMap.get(keyVal));
 				specimenMap.remove(keyVal);
 			}
 		}
-		specimenMap.put(prefix + id, specBean);
+		specimenMap.put(prefix + identifier, specBean);
 		if (!orderedMap.isEmpty())
 		{
 			specimenMap.putAll(orderedMap);
@@ -376,8 +380,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			while (aliquotItr.hasNext())
 			{
 				final String key = (String) aliquotItr.next();
-				final GenericSpecimenVO sp = (GenericSpecimenVO) aliquotMap.get(key);
-				this.addToSpToAutoCont(sp, autoStorageContainer);
+				final GenericSpecimenVO spec = (GenericSpecimenVO) aliquotMap.get(key);
+				this.addToSpToAutoCont(spec, autoStorageContainer);
 
 			}
 		}
@@ -388,8 +392,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			while (derivedItr.hasNext())
 			{
 				final String key = (String) derivedItr.next();
-				final GenericSpecimenVO sp = (GenericSpecimenVO) derivedMap.get(key);
-				this.addToSpToAutoCont(sp, autoStorageContainer);
+				final GenericSpecimenVO spec = (GenericSpecimenVO) derivedMap.get(key);
+				this.addToSpToAutoCont(spec, autoStorageContainer);
 			}
 		}
 
@@ -435,17 +439,6 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			specimenDataBean.setTissueSide(characteristics.getTissueSide());
 			specimenDataBean.setTissueSite(characteristics.getTissueSite());
 		}
-		// specimenDataBean.setExternalIdentifierCollection(specimen.
-		// getExternalIdentifierCollection());
-		//specimenDataBean.setBiohazardCollection(specimen.getBiohazardCollection
-		// ());
-		// specimenDataBean.setSpecimenEventCollection(specimen.
-		// getSpecimenEventCollection());
-
-		// specimenDataBean.setSpecimenCollectionGroup(specimen.
-		// getSpecimenCollectionGroup());
-
-		// specimenDataBean.setStorageContainer(null);
 		String concentration = "";
 		if ("Molecular".equals(specimen.getClassName()))
 		{
@@ -459,7 +452,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		if (specimen != null && specimen.getSpecimenPosition() != null)
 		{
 			final StorageContainer container = specimen.getSpecimenPosition().getStorageContainer();
-			this.logger.info("-----------Container while getting from domain--:" + container);
+			LOGGER.info("-----------Container while getting from domain--:" + container);
 			specimenDataBean.setContainerId(String.valueOf(container.getId()));
 			specimenDataBean.setSelectedContainerName(container.getName());
 			specimenDataBean.setPositionDimensionOne(String.valueOf(specimen.getSpecimenPosition()
@@ -482,43 +475,10 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			specimenDataBean.setStorageContainerForSpecimen(storageType);
 
 		}
-		/*
-		 * if ("Auto".equals(storageType)) {
-		 * autoStorageContainer.addSpecimen(specimenDataBean,
-		 * specimenDataBean.getClassName()); }
-		 */
-		// setChildren(specimen, specimenDataBean);
-		// specimenDataBean.setAliquotSpecimenCollection(getChildren(specimen,
-		// Constants.ALIQUOT));
-		// specimenDataBean.setDeriveSpecimenCollection(getChildren(specimen,
-		// Constants.ALIQUOT));
-		setLabelGenProp(specimen, specimenDataBean);
+		specimenDataBean.setGenerateLabel(isGenLabel(specimen));
 		return specimenDataBean;
 	}
 
-	/**
-	 * @param specimen
-	 * @param specimenDataBean
-	 */
-	private void setLabelGenProp(Specimen specimen, final GenericSpecimenVO specimenDataBean)
-	{
-		specimenDataBean.setGenerateLabel(isGenLabel(specimen));
-//		if(specimen.getSpecimenRequirement() != null)
-//		{
-//			if(specimen.getSpecimenRequirement().getGenLabel() && Validator.isEmpty(specimen.getSpecimenRequirement().getLabelFormat()))
-//			{
-//				specimenDataBean.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
-//			}
-//			else
-//			{
-//				specimenDataBean.setGenerateLabel(specimen.getSpecimenRequirement().getGenLabel());
-//			}
-//		}
-//		else
-//		{
-//			specimenDataBean.setGenerateLabel(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel());
-//		}
-	}
 
 	/**
 	 * Checks if is gen label.
@@ -529,30 +489,49 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	 */
 	private boolean isGenLabel(final Specimen objSpecimen)
 	{
-		boolean isGenLabel = false;
+		boolean isGenLabelON = false;
 
 		String lineage = objSpecimen.getLineage();
-		String parentLabelformat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
-		String deriveLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
-		String aliquotLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
+		String specimenLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+		String derLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
+		String alLabelFomrat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
 
-		if(objSpecimen.getSpecimenRequirement() != null && Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
+		if(isLabelFormatEmpty(objSpecimen))
 		{
-			isGenLabel = false;
+			isGenLabelON = false;
 		}
-		else if(objSpecimen.getSpecimenRequirement() != null && !Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()) && !objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%"))
+		else if(isLabelFromatCPDefault(objSpecimen))
 		{
-			isGenLabel = true;
+			isGenLabelON = SpecimenUtil.isLblGenOnForCP(specimenLabelFormat, derLabelFormat, alLabelFomrat, lineage);
 		}
-		else if(objSpecimen.getSpecimenRequirement() != null && objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%"))
+		else if(!isLabelFromatCPDefault(objSpecimen))
 		{
-			isGenLabel = SpecimenUtil.isLblGenOnForCP(parentLabelformat, deriveLabelFormat, aliquotLabelFormat, lineage);
+			isGenLabelON = true;
 		}
+
 		else if(objSpecimen.getSpecimenRequirement() == null)
 		{
-			isGenLabel = SpecimenUtil.isLblGenOnForCP(parentLabelformat, deriveLabelFormat, aliquotLabelFormat, lineage);
+			isGenLabelON = SpecimenUtil.isLblGenOnForCP(specimenLabelFormat, derLabelFormat, alLabelFomrat, lineage);
 		}
-		return isGenLabel;
+		return isGenLabelON;
+	}
+
+	/**
+	 * @param objSpecimen
+	 * @return
+	 */
+	private boolean isLabelFromatCPDefault(final Specimen objSpecimen)
+	{
+		return objSpecimen.getSpecimenRequirement() != null && !Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()) && objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%");
+	}
+
+	/**
+	 * @param objSpecimen
+	 * @return
+	 */
+	private boolean isLabelFormatEmpty(final Specimen objSpecimen)
+	{
+		return objSpecimen.getSpecimenRequirement() != null && Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat());
 	}
 
 	/**

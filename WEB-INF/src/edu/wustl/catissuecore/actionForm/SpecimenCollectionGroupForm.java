@@ -1109,15 +1109,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		return this.applyChangesTo;
 	}
 
-	/**
-	 * Sets the apply changes to.
-	 *
-	 * @param applyChangesTo the apply changes to
-	 */
-	public void setApplyChangesTo(String applyChangesTo)
-	{
-		this.applyChangesTo = applyChangesTo;
-	}
+
 
 	/**
 	 * Gets the string of response keys.
@@ -1129,6 +1121,15 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		return this.stringOfResponseKeys;
 	}
 
+	/**
+	 * Sets the apply changes to.
+	 *
+	 * @param applyChangesTo the apply changes to
+	 */
+	public void setApplyChangesTo(String applyChangesTo)
+	{
+		this.applyChangesTo = applyChangesTo;
+	}
 	/**
 	 * Sets the string of response keys.
 	 *

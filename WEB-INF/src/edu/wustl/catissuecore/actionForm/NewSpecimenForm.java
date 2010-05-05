@@ -1590,7 +1590,15 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	{
 		return this.withdrawlButtonStatus;
 	}
-
+	/**
+	 * Gets the apply changes to.
+	 *
+	 * @return the apply changes to
+	 */
+	public String getApplyChangesTo()
+	{
+		return this.applyChangesTo;
+	}
 	/**
 	 * It returns status of button(return,discard,reset).
 	 *
@@ -1601,15 +1609,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 		this.withdrawlButtonStatus = withdrawlButtonStatus;
 	}
 
-	/**
-	 * Gets the apply changes to.
-	 *
-	 * @return the apply changes to
-	 */
-	public String getApplyChangesTo()
-	{
-		return this.applyChangesTo;
-	}
+
 
 	/**
 	 * Sets the apply changes to.
@@ -1621,15 +1621,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 		this.applyChangesTo = applyChangesTo;
 	}
 
-	/**
-	 * Gets the string of response keys.
-	 *
-	 * @return stringOfResponseKeys
-	 */
-	public String getStringOfResponseKeys()
-	{
-		return this.stringOfResponseKeys;
-	}
+
 
 	/**
 	 * Sets the string of response keys.
@@ -1641,6 +1633,15 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 		this.stringOfResponseKeys = stringOfResponseKeys;
 	}
 
+	/**
+	 * Gets the string of response keys.
+	 *
+	 * @return stringOfResponseKeys
+	 */
+	public String getStringOfResponseKeys()
+	{
+		return this.stringOfResponseKeys;
+	}
 	/**
 	 * This function creates Array of String of keys and add them into the consentTiersList.
 	 *

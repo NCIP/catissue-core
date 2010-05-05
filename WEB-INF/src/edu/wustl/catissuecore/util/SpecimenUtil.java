@@ -206,33 +206,33 @@ public final class SpecimenUtil
 	 */
 	public static boolean isGenLabel(final Specimen objSpecimen)
 	{
-		boolean isGenLabel = false;
+		boolean isGenerateLabel = false;
 
 		String lineage = objSpecimen.getLineage();
 		if(lineage == null)
 		{
 			lineage = objSpecimen.getSpecimenRequirement().getLineage();
 		}
-		String parentLabelformat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
-		String deriveLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
-		String aliquotLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
+		String pLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+		String derLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
+		String aliqLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
 
 		if(objSpecimen.getSpecimenRequirement() != null && Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()))
 		{
-			isGenLabel = false;
+			isGenerateLabel = false;
 		}
 		else if(objSpecimen.getSpecimenRequirement() != null && !Validator.isEmpty(objSpecimen.getSpecimenRequirement().getLabelFormat()) && !objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%"))
 		{
-			isGenLabel = true;
+			isGenerateLabel = true;
 		}
 		else if(objSpecimen.getSpecimenRequirement() != null && objSpecimen.getSpecimenRequirement().getLabelFormat().contains("%CP_DEFAULT%"))
 		{
-			isGenLabel = SpecimenUtil.isLblGenOnForCP(parentLabelformat, deriveLabelFormat, aliquotLabelFormat, lineage);
+			isGenerateLabel = SpecimenUtil.isLblGenOnForCP(pLabelFormat, derLabelFormat, aliqLabelFormat, lineage);
 		}
 		else if(objSpecimen.getSpecimenRequirement() == null)
 		{
-			isGenLabel = SpecimenUtil.isLblGenOnForCP(parentLabelformat, deriveLabelFormat, aliquotLabelFormat, lineage);
+			isGenerateLabel = SpecimenUtil.isLblGenOnForCP(pLabelFormat, derLabelFormat, aliqLabelFormat, lineage);
 		}
-		return isGenLabel;
+		return isGenerateLabel;
 	}
 }

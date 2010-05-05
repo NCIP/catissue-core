@@ -111,7 +111,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Logger added for Specimen class.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(NewSpecimenBizLogic.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(NewSpecimenBizLogic.class);
 	/**
 	 * containerHoldsSpecimenClasses.
 	 */
@@ -126,7 +126,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * storageContainerIds.
 	 */
 	private HashSet<String> storageContainerIds = new HashSet<String>();
-	private String storagePositions = new String();
+	private String storagePositions = "";
 	/**
 	 * cpbased.
 	 */
@@ -185,8 +185,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.error(exp.getMessage(), exp);
-			exp.printStackTrace();
+			LOGGER.error(exp.getMessage(), exp);
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
@@ -219,14 +218,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				queryWhereClause.addCondition(new EqualClause("id", parentSpecimen.getId()));
 				final List list = dao
 						.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-				if (list.size() != 0)
-				{
-					this.retrieveParentSpecimenDetailsFromId(dao, parentSpecimen, list);
-				}
-				else
+				if (list.isEmpty())
 				{
 					throw this.getBizLogicException(null, "invalid.parent.specimen.identifier",
 							parentSpecimen.getId().toString());
+
+				}
+				else
+				{
+					this.retrieveParentSpecimenDetailsFromId(dao, parentSpecimen, list);
 				}
 				parentSpecimen = this.retrieveParentSpecimenCollectionTypeData(dao, parentSpecimen);
 			}
@@ -256,13 +256,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			parentSpecimen.setCreatedOn((Date) valArr[1]);
 
 			SpecimenCollectionGroup specimenCollectionGroup = null;
-			if (parentSpecimen.getSpecimenCollectionGroup() != null)
+			if (parentSpecimen.getSpecimenCollectionGroup() == null)
 			{
-				specimenCollectionGroup = parentSpecimen.getSpecimenCollectionGroup();
+				specimenCollectionGroup = new SpecimenCollectionGroup();
 			}
 			else
 			{
-				specimenCollectionGroup = new SpecimenCollectionGroup();
+				specimenCollectionGroup = parentSpecimen.getSpecimenCollectionGroup();
+
 			}
 			specimenCollectionGroup.setId((Long) valArr[2]);
 			specimenCollectionGroup.setActivityStatus((String) valArr[3]);
@@ -299,30 +300,32 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 		queryWhereClause.addCondition(new EqualClause("id", parentSpecimen.getId()));
 		final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-		if (list.size() != 0)
+		if (!list.isEmpty())
 		{
 			final Object[] valArr = (Object[]) list.get(0);
 			if (valArr != null)
 			{
 				SpecimenPosition position = null;
-				if (parentSpecimen.getSpecimenPosition() != null)
+				if (parentSpecimen.getSpecimenPosition() == null)
 				{
-					position = parentSpecimen.getSpecimenPosition();
+					position = new SpecimenPosition();
 				}
 				else
 				{
-					position = new SpecimenPosition();
+					position = parentSpecimen.getSpecimenPosition();
+
 				}
 				position.setId((Long) valArr[0]);
 
 				StorageContainer storageContainer = null;
-				if (position.getStorageContainer() != null)
+				if (position.getStorageContainer() == null)
 				{
-					storageContainer = parentSpecimen.getSpecimenPosition().getStorageContainer();
+					storageContainer = new StorageContainer();
 				}
 				else
 				{
-					storageContainer = new StorageContainer();
+					storageContainer = parentSpecimen.getSpecimenPosition().getStorageContainer();
+
 				}
 				storageContainer.setId((Long) valArr[1]);
 				storageContainer.setName((String) valArr[2]);
@@ -345,7 +348,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			throws DAOException, BizLogicException
 	{
 		Collection childSpecimenCollection = parentSpecimen.getChildSpecimenCollection();
-		if (childSpecimenCollection == null || childSpecimenCollection.isEmpty())
+		if (isChildSpeCollectionEmpty(childSpecimenCollection))
 		{
 			childSpecimenCollection = (Collection) this.retrieveAttribute(dao, Specimen.class,
 					parentSpecimen.getId(), "elements(childSpecimenCollection)");
@@ -358,7 +361,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}*/
 
 		Collection consentTierStatusCollection = parentSpecimen.getConsentTierStatusCollection();
-		if (consentTierStatusCollection == null || consentTierStatusCollection.isEmpty())
+		if (isChildSpeCollectionEmpty(consentTierStatusCollection))
 		{
 			consentTierStatusCollection = (Collection) this.retrieveAttribute(dao, Specimen.class,
 					parentSpecimen.getId(), "elements(consentTierStatusCollection)");
@@ -371,7 +374,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}*/
 
 		Collection bioHazardCollection = parentSpecimen.getBiohazardCollection();
-		if (bioHazardCollection == null || bioHazardCollection.isEmpty())
+		if (isChildSpeCollectionEmpty(bioHazardCollection))
 		{
 			bioHazardCollection = (Collection) this.retrieveAttribute(dao, Specimen.class,
 					parentSpecimen.getId(), "elements(biohazardCollection)");
@@ -384,7 +387,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}*/
 
 		Collection specimenEventCollection = parentSpecimen.getSpecimenEventCollection();
-		if (specimenEventCollection == null || specimenEventCollection.isEmpty())
+		if (isChildSpeCollectionEmpty(specimenEventCollection))
 		{
 			specimenEventCollection = (Collection) this.retrieveAttribute(dao, Specimen.class,
 					parentSpecimen.getId(), "elements(specimenEventCollection)");
@@ -396,6 +399,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			for Parent Specimen : " + parentSpecimen.getId());
 		}*/
 		return parentSpecimen;
+	}
+
+	/**
+	 * @param childSpecimenCollection
+	 * @return
+	 */
+	private boolean isChildSpeCollectionEmpty(Collection childSpecimenCollection)
+	{
+		return childSpecimenCollection == null || childSpecimenCollection.isEmpty();
 	}
 
 	/**
@@ -676,13 +688,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void setQuantity(Specimen specimen)
 	{
 		final Double avQty = specimen.getAvailableQuantity();
-		if (avQty != null && avQty == 0)
+		if (avQty != null && avQty == 0 && Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()))
 		{
-			if (Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()))
-			{
+//			if (Constants.COLLECTION_STATUS_COLLECTED.equals(specimen.getCollectionStatus()))
+//			{
 				specimen.setAvailableQuantity(specimen.getInitialQuantity());
 				specimen.setIsAvailable(Boolean.TRUE);
-			}
+//			}
 		}
 		if (Constants.ALIQUOT.equals(specimen.getLineage()))
 		{
@@ -803,7 +815,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (final NameGeneratorException e)
 				{
-					this.logger.error(e.getMessage(), e);
+					LOGGER.error(e.getMessage(), e);
 					throw this.getBizLogicException(e, "name.generator.exp", "");
 				}
 			}
@@ -859,25 +871,26 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			// Bug 11481 S
 			final String lineage = specimen.getLineage();
-			final CollectionProtocol cp = new CollectionProtocol();
+			final CollectionProtocol protocol = new CollectionProtocol();
 			final Long scgId = specimen.getSpecimenCollectionGroup().getId();
 
 			Long colpId;
 			String activityStatus = null;
-			if (specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration() != null)
+			if (specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration() == null)
 			{
-				colpId = (Long) specimen.getSpecimenCollectionGroup()
-						.getCollectionProtocolRegistration().getCollectionProtocol().getId();
-				activityStatus = specimen.getSpecimenCollectionGroup()
-						.getCollectionProtocolRegistration().getCollectionProtocol()
-						.getActivityStatus();
-				cp.setId(colpId);
-				cp.setActivityStatus(activityStatus);
+				activityStatus = this.getCollectionProtocolIdAndActivityStatus(specimen, dao, protocol,
+						activityStatus);
+
 			}
 			else
 			{
-				activityStatus = this.getCollectionProtocolIdAndActivityStatus(specimen, dao, cp,
-						activityStatus);
+				colpId = (Long) specimen.getSpecimenCollectionGroup()
+				.getCollectionProtocolRegistration().getCollectionProtocol().getId();
+		activityStatus = specimen.getSpecimenCollectionGroup()
+				.getCollectionProtocolRegistration().getCollectionProtocol()
+				.getActivityStatus();
+		protocol.setId(colpId);
+		protocol.setActivityStatus(activityStatus);
 			}
 			if (lineage != null && !lineage.equalsIgnoreCase("New"))
 			{
@@ -885,14 +898,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						.getCollectionStatus();
 				if (!parentCollStatus.equalsIgnoreCase(Constants.COLLECTION_STATUS_COLLECTED))
 				{
-					this.checkStatus(dao, cp, "Collection Protocol");
+					this.checkStatus(dao, protocol, "Collection Protocol");
 				}
 			}
 			else
 			{
 				if (activityStatus.equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 				{
-					this.checkStatus(dao, cp, "Collection Protocal");
+					this.checkStatus(dao, protocol, "Collection Protocal");
 				}
 			}
 			// Bug 11481 E
@@ -902,8 +915,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -930,7 +942,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		queryWhereClause.addCondition(new EqualClause("id", specimen.getSpecimenCollectionGroup()
 				.getId()));
 		final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-		if (list.size() != 0)
+		if (!list.isEmpty())
 		{
 			final Object[] valArr = (Object[]) list.get(0);
 			if (valArr != null)
@@ -1008,7 +1020,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 			queryWhereClause.addCondition(new EqualClause(column, value));
 			final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-			if (list.size() != 0)
+			if (!list.isEmpty())
 			{
 				final Object[] valArr = (Object[]) list.get(0);
 				if (valArr != null)
@@ -1024,8 +1036,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1099,7 +1110,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 //		if(generateLabel)
 //		{
 
-		if(specimen.getCollectionStatus() != null && specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED))
+		if(isStatusCollected(specimen))
 		{
 			try
 			{
@@ -1122,21 +1133,30 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			catch(LabelException e)
 			{
-				this.logger.error(e.getMessage(), e);
+				this.LOGGER.error(e.getMessage(), e);
 				throw this.getBizLogicException(e, "errors.item", e.getMessage());
 			}
 			catch (LabelGenException e)
 			{
-				this.logger.info(e);
+				this.LOGGER.info(e);
 			}
 			catch (final NameGeneratorException e)
 			{
-				this.logger.error(e.getMessage(), e);
+				this.LOGGER.error(e.getMessage(), e);
 				throw this.getBizLogicException(e, "name.generator.exp", "");
 			}
 
 		}
  	}
+
+	/**
+	 * @param specimen
+	 * @return
+	 */
+	private boolean isStatusCollected(Specimen specimen)
+	{
+		return specimen.getCollectionStatus() != null && specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED);
+	}
 
 	/**
 	 * @param specimen
@@ -1305,8 +1325,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final Exception e)
 			{
-				this.logger.error("Exception occured while updating aliquots"+e.getMessage(),e);
-				e.printStackTrace();
+				LOGGER.error("Exception occured while updating aliquots"+e.getMessage(),e);
 			}
 			finally
 			{
@@ -1336,13 +1355,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 			dynamicGroups[0] = securityManager.getProtectionGroupByName(obj, name);
 
-			this.logger.debug("Dynamic Group name: " + dynamicGroups[0]);
+			LOGGER.debug("Dynamic Group name: " + dynamicGroups[0]);
 			TaskTimeCalculater.endTask(getDynaGrps);
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		return dynamicGroups;
@@ -1366,7 +1384,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	{
 		Collection holdsSpecimenClassColl = this.containerHoldsSpecimenClasses.get(container
 				.getId());
-		if (holdsSpecimenClassColl == null || holdsSpecimenClassColl.isEmpty())
+		if (isChildSpeCollectionEmpty(holdsSpecimenClassColl))
 		{
 			if (container.getHoldsSpecimenClassCollection() == null
 					|| container.getHoldsSpecimenClassCollection().isEmpty())
@@ -1389,7 +1407,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		if (collectionProtColl == null)
 		{
 			collectionProtColl = container.getCollectionProtocolCollection();
-			if (collectionProtColl == null || collectionProtColl.isEmpty())
+			if (isChildSpeCollectionEmpty(collectionProtColl))
 			{
 				collectionProtColl = (Collection) this.retrieveAttribute(dao,
 						StorageContainer.class, container.getId(),
@@ -1503,8 +1521,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1545,7 +1562,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException doexp)
 		{
-			this.logger.error(doexp.getMessage(),doexp);
+			LOGGER.error(doexp.getMessage(),doexp);
 			throw this.getBizLogicException(doexp, doexp.getErrorKeyName(), doexp.getMsgValues());
 		}
 	}
@@ -1600,8 +1617,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1703,18 +1719,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					|| specimen.getCollectionStatus().equalsIgnoreCase(
 							Constants.COLLECTION_STATUS_PENDING))
 			{
-				specimen.setIsAvailable(new Boolean(false));
+				specimen.setIsAvailable(Boolean.FALSE);
 			}
 			else if (specimenOld.getAvailableQuantity() != null
 					&& specimenOld.getAvailableQuantity() == 0)
 			{
-				specimen.setIsAvailable(new Boolean(true));
+				specimen.setIsAvailable(Boolean.TRUE);
 			}
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1758,7 +1773,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				throw this.getBizLogicException(null, "errors.specimen.under.subspecimen", "");
 			}
-			this.logger.debug("Loading ParentSpecimen: " + specimen.getParentSpecimen().getId());
+			LOGGER.debug("Loading ParentSpecimen: " + specimen.getParentSpecimen().getId());
 			final SpecimenCollectionGroup scg = this.loadSpecimenCollectionGroup(specimen
 					.getParentSpecimen().getId(), dao);
 			specimen.setSpecimenCollectionGroup(scg);
@@ -1894,12 +1909,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					.getExternalIdentifierCollection();
 			if (externalIdentifierCollection != null)
 			{
-				final Iterator<ExternalIdentifier> it = externalIdentifierCollection.iterator();
+				final Iterator<ExternalIdentifier> iterator = externalIdentifierCollection.iterator();
 				final Collection<ExternalIdentifier> perstExIdColl = persistentSpecimen
 						.getExternalIdentifierCollection();
-				while (it.hasNext())
+				while (iterator.hasNext())
 				{
-					final ExternalIdentifier exId = (ExternalIdentifier) it.next();
+					final ExternalIdentifier exId = (ExternalIdentifier) iterator.next();
 					ExternalIdentifier persistExId = null;
 					if (exId.getId() == null)
 					{
@@ -1923,7 +1938,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -2051,7 +2066,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (final DAOException daoExp)
 				{
-					this.logger.error(daoExp.getMessage(), daoExp);
+					LOGGER.error(daoExp.getMessage(), daoExp);
 					throw this.getBizLogicException(daoExp,
 							daoExp.getErrorKeyName(), daoExp.getMsgValues());
 				}
@@ -2169,7 +2184,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 				// bug 8294
 				String storageValue = null;
-				final Long id = specimen.getSpecimenPosition().getStorageContainer().getId();
+				final Long identifier = specimen.getSpecimenPosition().getStorageContainer().getId();
 				final Integer pos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
 				final Integer pos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
 				final String containerName = specimen.getSpecimenPosition().getStorageContainer()
@@ -2181,7 +2196,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				else
 				{
-					storageValue = StorageContainerUtil.getStorageValueKey(null, id.toString(),
+					storageValue = StorageContainerUtil.getStorageValueKey(null, identifier.toString(),
 							pos1, pos2);
 				}
 				if (!this.storageContainerIds.contains(storageValue))
@@ -2208,8 +2223,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.error(exp.getMessage(), exp);
-			exp.printStackTrace();
+			LOGGER.error(exp.getMessage(), exp);
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
@@ -2234,7 +2248,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		queryWhereClause.addCondition(new EqualClause("id", specimen.getSpecimenPosition()
 				.getStorageContainer().getId()));
 		final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-		if (list.size() != 0)
+		if (!list.isEmpty())
 		{
 			final Object[] valArr = (Object[]) list.get(0);
 			if (valArr != null)
@@ -2251,7 +2265,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					queryClause.addCondition(new EqualClause(Constants.SYSTEM_IDENTIFIER, specimen
 							.getSpecimenPosition().getStorageContainer().getId()));
 					final List innerList = dao.retrieve(sourceObjectName, columnName, queryClause);
-					if (innerList.size() != 0)
+					if (!innerList.isEmpty())
 					{
 						final ContainerPosition containerPosition = new ContainerPosition();
 						containerPosition.setId((Long) innerList.get(0));
@@ -2292,8 +2306,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				this.validateUserForContainer(sessionDataBean, parentStorageContainer);
 			}
-			final Object o = HibernateMetaData.getProxyObjectImpl(storageContainerObj);
-			final String storageContainerSecObj = o.getClass().getName() + "_"
+			final Object object = HibernateMetaData.getProxyObjectImpl(storageContainerObj);
+			final String storageContainerSecObj = object.getClass().getName() + "_"
 					+ storageContainerObj.getId();
 			final boolean userAuthorize = true;
 			// Commented by Vishvesh & Ravindra for MSR for C1
@@ -2308,8 +2322,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			throw AppUtility.handleSMException(e);
 		}
 	}
@@ -2369,8 +2382,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -2487,7 +2499,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	public void disableRelatedObjectsForSpecimenCollectionGroup(DAO dao,
 			Long specimenCollectionGroupArr[]) throws BizLogicException
 	{
-		this.logger.debug("disableRelatedObjects NewSpecimenBizLogic");
+		LOGGER.debug("disableRelatedObjects NewSpecimenBizLogic");
 		final List listOfSpecimenId = super.disableObjects(dao, Specimen.class,
 				"specimenCollectionGroup", "CATISSUE_SPECIMEN", "SPECIMEN_COLLECTION_GROUP_ID",
 				specimenCollectionGroupArr);
@@ -2777,7 +2789,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.error(exp.getMessage(), exp);
+			this.LOGGER.error(exp.getMessage(), exp);
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 		return result;
@@ -2810,11 +2822,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					List list = AppUtility.executeQuery(hql);
 					Object[] obje = (Object[])list.get(0);
 					if(obje[0] != null)
+					{
 					parentLabelFormat = obje[0].toString();
+					}
 					if(obje[1] != null)
+					{
 					deriveLabelFormat = obje[1].toString();
+					}
 					if(obje[2] != null)
+					{
 					aliquotLabelFormat = obje[2].toString();
+					}
 					scg = new SpecimenCollectionGroup();
 					CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
 					CollectionProtocol cp = new CollectionProtocol();
@@ -2828,7 +2846,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (ApplicationException e)
 				{
-					logger.debug(e.getMessage());
+					LOGGER.debug(e.getMessage());
 					throw this.getBizLogicException(e,e.getErrorKeyAsString(),e.getMessage());
 				}
 			}
@@ -3163,7 +3181,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					String message = exp.getMessage();
 					message += " (This message is for Derived Specimen " + j
 							+ " of Parent Specimen number )";
-					this.logger.error(message, exp);
+					this.LOGGER.error(message, exp);
 					exp.printStackTrace();
 					throw this.getBizLogicException(exp, "msg.for.derived.spec", Integer.valueOf(j)
 							.toString());
@@ -3377,7 +3395,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.error(exp.getMessage(), exp);
+			this.LOGGER.error(exp.getMessage(), exp);
 			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
@@ -3440,7 +3458,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
+			this.LOGGER.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
@@ -3536,7 +3554,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					}
 					catch (DAOException daoExp)
 					{
-						logger.error(daoExp.getMessage(), daoExp);
+						LOGGER.error(daoExp.getMessage(), daoExp);
 						throw new BizLogicException(daoExp.getErrorKey(), daoExp, daoExp
 								.getMsgValues());
 					}
@@ -3612,7 +3630,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exp)
 		{
-			this.logger.error(exp.getMessage(), exp);
+			this.LOGGER.error(exp.getMessage(), exp);
 			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
@@ -3716,7 +3734,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final CloneNotSupportedException exception)
 		{
-			this.logger.error(exception.getMessage(), exception);
+			this.LOGGER.error(exception.getMessage(), exception);
 			exception.printStackTrace();
 		}
 		return deriveEventCollection;
@@ -3748,7 +3766,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception exception)
 		{
-			this.logger.error(exception.getMessage(), exception);
+			this.LOGGER.error(exception.getMessage(), exception);
 			exception.printStackTrace();
 		}
 
@@ -3792,7 +3810,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
+			this.LOGGER.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
@@ -3842,7 +3860,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.error(e.getMessage(), e);
+			this.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
@@ -3971,7 +3989,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException exception)
 		{
-			this.logger.error(exception.getMessage(), exception);
+			this.LOGGER.error(exception.getMessage(), exception);
 			exception.printStackTrace();
 			try
 			{
@@ -3979,7 +3997,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final DAOException e)
 			{
-				this.logger.error(e.getMessage(), e);
+				this.LOGGER.error(e.getMessage(), e);
 				e.printStackTrace();
 				throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 			}
@@ -4205,7 +4223,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException exp)
 		{
-			this.logger.error(exp.getMessage(),exp);
+			this.LOGGER.error(exp.getMessage(),exp);
 			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
@@ -4258,7 +4276,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException exception)
 		{
-			this.logger.error(exception.getMessage(), exception);
+			this.LOGGER.error(exception.getMessage(), exception);
 			exception.printStackTrace();
 			throw this.getBizLogicException(exception, exception.getErrorKeyName(), exception
 					.getMsgValues());
@@ -4389,7 +4407,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
+			this.LOGGER.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
@@ -4550,7 +4568,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (final DAOException e)
 				{
-					this.logger.error(e.getMessage(), e);
+					this.LOGGER.error(e.getMessage(), e);
 					e.printStackTrace();
 					throw this.getBizLogicException(e, "ext.mult.spec.nt.updated", "");
 				}
@@ -4834,7 +4852,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception exception)
 		{
-			this.logger.error(exception.getMessage(), exception);
+			this.LOGGER.error(exception.getMessage(), exception);
 			exception.printStackTrace();
 			throw this.getBizLogicException(exception, "failed.spec.details", " "
 					+ exception.getMessage());
@@ -4906,7 +4924,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException exp)
 		{
-			this.logger.error(exp.getMessage(), exp);
+			this.LOGGER.error(exp.getMessage(), exp);
 			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
@@ -4932,7 +4950,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			}
 			catch (final BizLogicException ex)
 			{
-				this.logger.error(ex.getMessage(), ex);
+				this.LOGGER.error(ex.getMessage(), ex);
 				ex.printStackTrace();
 				final ActionErrors actionErrors = new ActionErrors();
 				actionErrors.add(actionErrors.GLOBAL_MESSAGE, new ActionError("errors.item", ex
@@ -4997,7 +5015,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception e)
 		{
-			this.logger.error(e.getMessage(), e);
+			this.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 
@@ -5246,7 +5264,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final SMException e)
 		{
-			this.logger.error(e.getMessage(), e);
+			this.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 			throw AppUtility.handleSMException(e);
 		}
@@ -5332,12 +5350,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final BizLogicException e)
 		{
-			this.logger.error(e.getMessage(), e);
+			this.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		catch (final DAOException e)
 		{
-			this.logger.error(e.getMessage(), e);
+			this.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
 		if (result != null)
@@ -5395,7 +5413,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.error(e.getMessage(),e);
+			this.LOGGER.error(e.getMessage(),e);
 			e.printStackTrace();
 			throw new BizLogicException(e);
 		}

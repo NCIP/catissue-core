@@ -63,24 +63,41 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CollectionProtocolUtil.
+ */
 public class CollectionProtocolUtil
 {
 
-	private static Logger logger = Logger.getCommonLogger(CollectionProtocolUtil.class);
+	/** The Constant LOGGER. */
+	private static final Logger LOGGER = Logger.getCommonLogger(CollectionProtocolUtil.class);
+
+	/** The Constant MOLECULAR_SPECIMEN_CLASS. */
 	private static final String MOLECULAR_SPECIMEN_CLASS = "Molecular";
 
+	/** The event bean. */
 	private LinkedHashMap<String, CollectionProtocolEventBean> eventBean =
 						new LinkedHashMap<String, CollectionProtocolEventBean> ();
 
-	private static final String storageTypeArr[]= {"Virtual", "Auto","Manual"};
+	/** The Constant STORAGE_TYPE_ARR. */
+	private static final String STORAGE_TYPE_ARR[]= {"Virtual", "Auto","Manual"};
+
+	/**
+	 * Gets the storage type value.
+	 *
+	 * @param type the type
+	 *
+	 * @return the storage type value
+	 */
 	public static Integer getStorageTypeValue(String type)
 	{
 		int returnVal=Integer.valueOf(0);
-		for (int i=0;i<storageTypeArr.length;i++)
+		for (int ctr=0;ctr<STORAGE_TYPE_ARR.length;ctr++)
 		{
-			if(storageTypeArr[i].equals(type))
+			if(STORAGE_TYPE_ARR[ctr].equals(type))
 			{
-				returnVal=Integer.valueOf(i);
+				returnVal=Integer.valueOf(ctr);
 				break;
 			}
 		}
@@ -88,26 +105,45 @@ public class CollectionProtocolUtil
 		return returnVal; 	//default considered as 'Virtual';
 	}
 
+	/**
+	 * Gets the storage type value.
+	 *
+	 * @param type the type
+	 *
+	 * @return the storage type value
+	 */
 	public static String getStorageTypeValue(Integer type)
 	{
-		String storeArr=storageTypeArr[type.intValue()];
+		String storeArr;//STORAGE_TYPE_ARR[type.intValue()];
 		if (type == null)
 		{
-			storeArr=storageTypeArr[0]; //default considered as 'Virtual';
+			storeArr=STORAGE_TYPE_ARR[0]; //default considered as 'Virtual';
+		}
+		else
+		{
+			storeArr=STORAGE_TYPE_ARR[type.intValue()];
 		}
 		//if(type.intValue()>2) return storageTypeArr[1];
 		return storeArr;
 	}
 
+	/**
+	 * Gets the collection protocol bean.
+	 *
+	 * @param collectionProtocol the collection protocol
+	 *
+	 * @return the collection protocol bean
+	 */
 	public static CollectionProtocolBean getCollectionProtocolBean(CollectionProtocol collectionProtocol)
 	{
 		CollectionProtocolBean collectionProtocolBean;
-		long[] coordinatorIds = null;
+
 		collectionProtocolBean = new CollectionProtocolBean();
 		collectionProtocolBean.setConsentTierCounter(collectionProtocol.getConsentTierCollection().size());
 		Long identifier = Long.valueOf(collectionProtocol.getId().longValue());
 		collectionProtocolBean.setIdentifier(identifier);
 
+		long[] coordinatorIds = null;
 		coordinatorIds = getProtocolCordnateIds(collectionProtocol, coordinatorIds);
 
 		collectionProtocolBean.setCoordinatorIds(coordinatorIds);
@@ -115,28 +151,7 @@ public class CollectionProtocolUtil
 		/**For Clinical Diagnosis subset **/
 		collectionProtocolBean.setClinicalDiagnosis(getClinicalDiagnosis(collectionProtocol));
 
-		collectionProtocolBean.setPrincipalInvestigatorId(collectionProtocol.getPrincipalInvestigator().getId().longValue());
-		Date date = collectionProtocol.getStartDate();
-		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date, Constants.DATE_FORMAT) );
-		collectionProtocolBean.setDescriptionURL(collectionProtocol.getDescriptionURL());
-		collectionProtocolBean.setUnsignedConsentURLName(collectionProtocol.getUnsignedConsentDocumentURL());
-		collectionProtocolBean.setLabelFormat(collectionProtocol.getSpecimenLabelFormat());
-		collectionProtocolBean.setDerivativeLabelFormat(collectionProtocol.getDerivativeLabelFormat());
-		collectionProtocolBean.setAliquotLabelFormat(collectionProtocol.getAliquotLabelFormat());
-		if(collectionProtocol.getConsentsWaived()==null)
-		{
-			collectionProtocol.setConsentsWaived(false);
-		}
-		collectionProtocolBean.setConsentWaived (collectionProtocol.getConsentsWaived().booleanValue());
-		collectionProtocolBean.setIrbID(collectionProtocol.getIrbIdentifier());
-		collectionProtocolBean.setTitle(collectionProtocol.getTitle());
-		collectionProtocolBean.setShortTitle(collectionProtocol.getShortTitle());
-		collectionProtocolBean.setEnrollment(String.valueOf(collectionProtocol.getEnrollment()));
-		collectionProtocolBean.setConsentValues(prepareConsentTierMap(collectionProtocol.getConsentTierCollection()));
-		collectionProtocolBean.setActivityStatus(collectionProtocol.getActivityStatus());
-		collectionProtocolBean.setAliqoutInSameContainer(collectionProtocol.getAliquotInSameContainer().booleanValue());
-		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(),CommonServiceLocator.getInstance().getDatePattern());
-		collectionProtocolBean.setEndDate(endDate);
+		setBasicCPProps(collectionProtocol, collectionProtocolBean);
 		if(collectionProtocol.getCollectionProtocolRegistrationCollection().size() > 0)
 		{
 			collectionProtocolBean.setParticiapantReg(true);
@@ -155,9 +170,57 @@ public class CollectionProtocolUtil
 	}
 
 	/**
-	 * @param collectionProtocol
-	 * @param coordinatorIds
-	 * @return
+	 * Sets the basic cp props.
+	 *
+	 * @param collectionProtocol the collection protocol
+	 * @param collectionProtocolBean the collection protocol bean
+	 */
+	private static void setBasicCPProps(CollectionProtocol collectionProtocol,
+			CollectionProtocolBean collectionProtocolBean)
+	{
+		collectionProtocolBean.setPrincipalInvestigatorId(collectionProtocol.getPrincipalInvestigator().getId().longValue());
+		Date date = collectionProtocol.getStartDate();
+		collectionProtocolBean.setStartDate(edu.wustl.common.util.Utility.parseDateToString(date, Constants.DATE_FORMAT) );
+		collectionProtocolBean.setDescriptionURL(collectionProtocol.getDescriptionURL());
+		collectionProtocolBean.setUnsignedConsentURLName(collectionProtocol.getUnsignedConsentDocumentURL());
+		setLabelFormatProps(collectionProtocol, collectionProtocolBean);
+		if(collectionProtocol.getConsentsWaived()==null)
+		{
+			collectionProtocol.setConsentsWaived(false);
+		}
+		collectionProtocolBean.setConsentWaived (collectionProtocol.getConsentsWaived().booleanValue());
+		collectionProtocolBean.setIrbID(collectionProtocol.getIrbIdentifier());
+		collectionProtocolBean.setTitle(collectionProtocol.getTitle());
+		collectionProtocolBean.setShortTitle(collectionProtocol.getShortTitle());
+		collectionProtocolBean.setEnrollment(String.valueOf(collectionProtocol.getEnrollment()));
+		collectionProtocolBean.setConsentValues(prepareConsentTierMap(collectionProtocol.getConsentTierCollection()));
+		collectionProtocolBean.setActivityStatus(collectionProtocol.getActivityStatus());
+		collectionProtocolBean.setAliqoutInSameContainer(collectionProtocol.getAliquotInSameContainer().booleanValue());
+		String endDate = Utility.parseDateToString(collectionProtocol.getEndDate(),CommonServiceLocator.getInstance().getDatePattern());
+		collectionProtocolBean.setEndDate(endDate);
+	}
+
+	/**
+	 * Sets label format properties.
+	 *
+	 * @param collectionProtocol the collection protocol
+	 * @param collectionProtocolBean the collection protocol bean
+	 */
+	private static void setLabelFormatProps(CollectionProtocol collectionProtocol,
+			CollectionProtocolBean collectionProtocolBean)
+	{
+		collectionProtocolBean.setLabelFormat(collectionProtocol.getSpecimenLabelFormat());
+		collectionProtocolBean.setDerivativeLabelFormat(collectionProtocol.getDerivativeLabelFormat());
+		collectionProtocolBean.setAliquotLabelFormat(collectionProtocol.getAliquotLabelFormat());
+	}
+
+	/**
+	 * Gets the protocol cordnate ids.
+	 *
+	 * @param collectionProtocol the collection protocol
+	 * @param coordinatorIds the coordinator ids
+	 *
+	 * @return the protocol cordnate ids
 	 */
 	private static long[] getProtocolCordnateIds(CollectionProtocol collectionProtocol,
 			long[] coordinatorIds)
@@ -179,9 +242,11 @@ public class CollectionProtocolUtil
 	}
 
 	/**
-	 * @param collectionProtocol
-	 * @param coordinatorIds
-	 * @return
+	 * Returns string array of clinical diagnosis.
+	 *
+	 * @param collectionProtocol the collection protocol
+	 *
+	 * @return the clinical diagnosis
 	 */
 	private static String[] getClinicalDiagnosis(CollectionProtocol collectionProtocol)
 	{
@@ -203,6 +268,13 @@ public class CollectionProtocolUtil
 	}
 
 
+	/**
+	 * Prepare consent tier map.
+	 *
+	 * @param consentTierColl the consent tier coll
+	 *
+	 * @return the map
+	 */
 	public static Map prepareConsentTierMap(Collection consentTierColl)
 	{
 		Map tempMap = new LinkedHashMap();//bug 8905
@@ -227,6 +299,17 @@ public class CollectionProtocolUtil
 		return tempMap;
 	}
 
+	/**
+	 * Gets the collection protocol event bean.
+	 *
+	 * @param collectionProtocolEvent the collection protocol event
+	 * @param counter the counter
+	 * @param dao the dao
+	 *
+	 * @return the collection protocol event bean
+	 *
+	 * @throws DAOException the DAO exception
+	 */
 	public static CollectionProtocolEventBean getCollectionProtocolEventBean(
 			CollectionProtocolEvent  collectionProtocolEvent, int counter, DAO dao) throws DAOException
 	{
@@ -250,6 +333,13 @@ public class CollectionProtocolUtil
 		return eventBean;
 	}
 
+	/**
+	 * Gets the sorted cp event list.
+	 *
+	 * @param genericList the generic list
+	 *
+	 * @return the sorted cp event list
+	 */
 	public static List getSortedCPEventList(List genericList)
 	{
 		//Comparator to sort the List of Map chronologically.
@@ -294,6 +384,15 @@ public class CollectionProtocolUtil
 		Collections.sort(genericList, identifierComparator);
 		return genericList;
 	}
+
+	/**
+	 * Gets the specimens map.
+	 *
+	 * @param reqSpecimenCollection the req specimen collection
+	 * @param parentUniqueId the parent unique id
+	 *
+	 * @return the specimens map
+	 */
 	public static LinkedHashMap<String, GenericSpecimen> getSpecimensMap(Collection<SpecimenRequirement> reqSpecimenCollection,
 			String parentUniqueId)
 	{
@@ -314,6 +413,15 @@ public class CollectionProtocolUtil
 		return reqSpecimenMap;
 	}
 
+	/**
+	 * Gets the child aliquots.
+	 *
+	 * @param reqSpecimen the req specimen
+	 * @param parentuniqueId the parentunique id
+	 * @param parentName the parent name
+	 *
+	 * @return the child aliquots
+	 */
 	private static LinkedHashMap<String, GenericSpecimen> getChildAliquots(SpecimenRequirement reqSpecimen,
 			String parentuniqueId, String parentName)
 	{
@@ -338,6 +446,15 @@ public class CollectionProtocolUtil
 		return aliquotMap;
 	}
 
+	/**
+	 * Gets the child derived.
+	 *
+	 * @param specimen the specimen
+	 * @param parentuniqueId the parentunique id
+	 * @param parentName the parent name
+	 *
+	 * @return the child derived
+	 */
 	private static LinkedHashMap<String, GenericSpecimen> getChildDerived(SpecimenRequirement specimen,
 			String parentuniqueId, String parentName)
 	{
@@ -364,6 +481,14 @@ public class CollectionProtocolUtil
 		return derivedMap;
 	}
 
+	/**
+	 * Gets the unique id.
+	 *
+	 * @param lineage the lineage
+	 * @param ctr the ctr
+	 *
+	 * @return the unique id
+	 */
 	private static String getUniqueId(String lineage, int ctr)
 	{	String constantVal=null;
 		if(Constants.NEW_SPECIMEN.equals(lineage))
@@ -381,6 +506,17 @@ public class CollectionProtocolUtil
 		}
 		return constantVal;
 	}
+
+	/**
+	 * Gets the specimen bean.
+	 *
+	 * @param reqSpecimen the req specimen
+	 * @param parentName the parent name
+	 * @param parentUniqueId the parent unique id
+	 * @param specCtr the spec ctr
+	 *
+	 * @return the specimen bean
+	 */
 	private static SpecimenRequirementBean getSpecimenBean(SpecimenRequirement reqSpecimen, String parentName,
 										String parentUniqueId, int specCtr)
 	{
@@ -421,9 +557,10 @@ public class CollectionProtocolUtil
 
 	/**
 	 * set Specimen Requirements.
-	 * @param reqSpecimen
-	 * @param speRequirementBean
-	 * @param characteristics
+	 *
+	 * @param reqSpecimen the req specimen
+	 * @param speRequirementBean the spe requirement bean
+	 * @param characteristics the characteristics
 	 */
 	private static void updateSpeRequirementBean(
 			SpecimenRequirement reqSpecimen,
@@ -450,11 +587,11 @@ public class CollectionProtocolUtil
 	}
 
 	/**
+	 * Sets the aliquot and derived coll.
 	 *
-	 * @param reqSpecimen
-	 * @param parentName
-	 * @param speRequirementBean
-	 * @return
+	 * @param reqSpecimen the req specimen
+	 * @param parentName the parent name
+	 * @param speRequirementBean the spe requirement bean
 	 */
 	private static void setAliquotAndDerivedColl(
 			SpecimenRequirement reqSpecimen, String parentName,
@@ -486,8 +623,9 @@ public class CollectionProtocolUtil
 
 	/**
 	 * set specimen requirement bean by DerivedCollection.
-	 * @param speRequirementBean
-	 * @param derivedCollection
+	 *
+	 * @param speRequirementBean the spe requirement bean
+	 * @param derivedCollection the derived collection
 	 */
 	private static void setDeriveQuantity(
 			SpecimenRequirementBean speRequirementBean,
@@ -505,9 +643,10 @@ public class CollectionProtocolUtil
 	}
 
 	/**
-	 *  set specimen requirement bean by AliquotCollection.
-	 * @param speRequirementBean
-	 * @param aliquotCollection
+	 * set specimen requirement bean by AliquotCollection.
+	 *
+	 * @param speRequirementBean the spe requirement bean
+	 * @param aliquotCollection the aliquot collection
 	 */
 	private static void setQuantityPerAliquot(
 			SpecimenRequirementBean speRequirementBean,
@@ -522,6 +661,14 @@ public class CollectionProtocolUtil
 			speRequirementBean.setQuantityPerAliquot(aliquotSpecimen.getQuantity());
 		}
 	}
+
+	/**
+	 * Gets the dervired object map.
+	 *
+	 * @param derivedCollection the derived collection
+	 *
+	 * @return the dervired object map
+	 */
 	public static LinkedHashMap getDerviredObjectMap(Collection<GenericSpecimen> derivedCollection)
 	{
 		LinkedHashMap<String, String> derivedObjectMap = new LinkedHashMap<String, String> ();
@@ -573,8 +720,11 @@ public class CollectionProtocolUtil
 	}
 
 	/**
-	 * @param deriveCtr
-	 * @return
+	 * Gets the key base.
+	 *
+	 * @param deriveCtr the derive ctr
+	 *
+	 * @return the key base
 	 */
 	private static StringBuffer getKeyBase(int deriveCtr)
 	{
@@ -584,6 +734,12 @@ public class CollectionProtocolUtil
 		return derivedSpecimenKey;
 	}
 
+	/**
+	 * Sets the specimen event parameters.
+	 *
+	 * @param reqSpecimen the req specimen
+	 * @param specimenRequirementBean the specimen requirement bean
+	 */
 	private  static void setSpecimenEventParameters(SpecimenRequirement reqSpecimen, SpecimenRequirementBean specimenRequirementBean)
 	{
 		Collection eventsParametersColl = reqSpecimen.getSpecimenEventCollection();
@@ -602,9 +758,10 @@ public class CollectionProtocolUtil
 	}
 
 	/**
-	 * set setSpeciEevntParams
-	 * @param specimenRequirementBean
-	 * @param iter
+	 * set setSpeciEevntParams.
+	 *
+	 * @param specimenRequirementBean the specimen requirement bean
+	 * @param iter the iter
 	 */
 	private static void setSpecimenEvents(
 			SpecimenRequirementBean specimenRequirementBean, Iterator iter)
@@ -636,8 +793,12 @@ public class CollectionProtocolUtil
 	}
 
 	/**
-	 * @param request
-	 * @param cpSessionList
+	 * Update session.
+	 *
+	 * @param request the request
+	 * @param identifieer the identifieer
+	 *
+	 * @throws ApplicationException the application exception
 	 */
 	public static void updateSession(HttpServletRequest request,  Long identifieer)
 			throws ApplicationException{
@@ -667,6 +828,12 @@ public class CollectionProtocolUtil
 
 	}
 
+	/**
+	 * Sets the privileges for cp.
+	 *
+	 * @param cpId the cp id
+	 * @param session the session
+	 */
 	private static  void setPrivilegesForCP(Long cpId,HttpSession session)
 	{
 		Map<String,SiteUserRolePrivilegeBean> map = CaTissuePrivilegeUtility.getPrivilegesOnCP(cpId);
@@ -676,10 +843,14 @@ public class CollectionProtocolUtil
 
 
 	/**
-	 * @param collectionProtocolEventColl
-	 * @return
-	 * @throws DAOException
-	 * @throws DAOException
+	 * Gets the collection protocol event map.
+	 *
+	 * @param collectionProtocolEventColl the collection protocol event coll
+	 * @param dao the dao
+	 *
+	 * @return the collection protocol event map
+	 *
+	 * @throws DAOException the DAO exception
 	 */
 	public static  LinkedHashMap<String, CollectionProtocolEventBean> getCollectionProtocolEventMap(
 			Collection collectionProtocolEventColl, DAO dao) throws DAOException
@@ -700,6 +871,15 @@ public class CollectionProtocolUtil
 		return eventMap;
 	}
 
+	/**
+	 * Populate collection protocol objects.
+	 *
+	 * @param request the request
+	 *
+	 * @return the collection protocol
+	 *
+	 * @throws Exception the exception
+	 */
 	public static CollectionProtocol populateCollectionProtocolObjects(HttpServletRequest request)
 		throws Exception
 	{
@@ -741,9 +921,12 @@ public class CollectionProtocolUtil
 
 	/**
 	 * Creates collection protocol domain object from given collection protocol bean.
-	 * @param cpBean
-	 * @return
-	 * @throws Exception
+	 *
+	 * @param cpBean the cp bean
+	 *
+	 * @return the collection protocol
+	 *
+	 * @throws Exception the exception
 	 */
 	private static CollectionProtocol createCollectionProtocolDomainObject(
 			CollectionProtocolBean cpBean) throws Exception
@@ -778,8 +961,7 @@ public class CollectionProtocolUtil
 		}
 		catch(NumberFormatException e)
 		{
-			CollectionProtocolUtil.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			CollectionProtocolUtil.LOGGER.error(e.getMessage(), e);
 			enrollmentNo = Integer.valueOf(0);
 		}
 		collectionProtocol.setEnrollment(enrollmentNo);
@@ -812,8 +994,11 @@ public class CollectionProtocolUtil
 
 	/**
 	 * This method will be called to return the CollectionProtocol.
+	 *
 	 * @param parentCollectionProtocolId : parentCollectionProtocolId.
+	 *
 	 * @return the collectionProtocol.
+	 *
 	 * @throws ApplicationException ApplicationException.
 	 */
 	public static CollectionProtocol getParentCollectionProtocol(Long parentCollectionProtocolId) throws ApplicationException
@@ -835,9 +1020,11 @@ public class CollectionProtocolUtil
 	}
 
 	/**
-	 * @param collectionProtocol
-	 * @param siteCollection
-	 * @param siteArr
+	 * Sets the site coll.
+	 *
+	 * @param collectionProtocol the collection protocol
+	 * @param siteCollection the site collection
+	 * @param cpBean the cp bean
 	 */
 	private static void setSiteColl(
 			CollectionProtocol collectionProtocol,
@@ -858,10 +1045,11 @@ public class CollectionProtocolUtil
 	}
 
 	/**
+	 * Sets the coordinator coll.
 	 *
-	 * @param collectionProtocol
-	 * @param coordinatorCollection
-	 * @param coordinatorsArr
+	 * @param collectionProtocol the collection protocol
+	 * @param coordinatorCollection the coordinator collection
+	 * @param cpBean the cp bean
 	 */
 	private static void setCoordinatorColl(
 			CollectionProtocol collectionProtocol,
@@ -882,10 +1070,11 @@ public class CollectionProtocolUtil
 	}
 
 	/**
+	 * Sets the clinical diagnosis.
 	 *
-	 * @param collectionProtocol
-	 * @param clinicalDiagnosis
-	 * @param coordinatorsArr
+	 * @param collectionProtocol the collection protocol
+	 * @param clinicalDiagnosis the clinical diagnosis
+	 * @param cpBean the cp bean
 	 */
 	private static void setClinicalDiagnosis(
 			CollectionProtocol collectionProtocol,
@@ -910,11 +1099,13 @@ public class CollectionProtocolUtil
 	}
 
 	/**
-	* This function used to create CollectionProtocolEvent domain object
-	* from given CollectionProtocolEventBean Object.
-	* @param cpEventBean
-	* @return CollectionProtocolEvent domain object.
-	*/
+	 * This function used to create CollectionProtocolEvent domain object
+	 * from given CollectionProtocolEventBean Object.
+	 *
+	 * @param cpEventBean the cp event bean
+	 *
+	 * @return CollectionProtocolEvent domain object.
+	 */
 	private static CollectionProtocolEvent getCollectionProtocolEvent(
 		CollectionProtocolEventBean cpEventBean)
 	{
@@ -951,11 +1142,13 @@ public class CollectionProtocolUtil
 
 
 	/**
-	 * creates collection of Specimen domain objects
-	 * @param specimenRequirementBeanColl
-	 * @param parentSpecimen
-	 * @param cpEvent
-	 * @return
+	 * creates collection of Specimen domain objects.
+	 *
+	 * @param specimenRequirementBeanColl the specimen requirement bean coll
+	 * @param parentSpecimen the parent specimen
+	 * @param cpEvent the cp event
+	 *
+	 * @return the req specimens
 	 */
 	public static Collection getReqSpecimens(Collection specimenRequirementBeanColl,
 			SpecimenRequirement parentSpecimen, CollectionProtocolEvent cpEvent )
@@ -1042,6 +1235,12 @@ public class CollectionProtocolUtil
 	}
 
 
+	/**
+	 * Sets the specimen events.
+	 *
+	 * @param reqSpecimen the req specimen
+	 * @param specimenRequirementBean the specimen requirement bean
+	 */
 	private static  void setSpecimenEvents(SpecimenRequirement reqSpecimen, SpecimenRequirementBean specimenRequirementBean)
 	{
 		//seting collection event values
@@ -1076,10 +1275,13 @@ public class CollectionProtocolUtil
 		reqSpecimen.setSpecimenEventCollection(specimenEventCollection);
 
 	}
+
 	/**
 	 * creates specimen domain object from given specimen requirement bean.
-	 * @param specimenRequirementBean
-	 * @return
+	 *
+	 * @param specimenRequirementBean the specimen requirement bean
+	 *
+	 * @return the specimen domain object
 	 */
 	private static SpecimenRequirement getSpecimenDomainObject(SpecimenRequirementBean specimenRequirementBean)
 	{
@@ -1107,9 +1309,8 @@ public class CollectionProtocolUtil
 		}
 		catch (Exception e1)
 		{
-			CollectionProtocolUtil.logger.error("Error in setting Section " +
+			CollectionProtocolUtil.LOGGER.error("Error in setting Section " +
 					"header Priorities"+e1.getMessage(),e1);
-			e1.printStackTrace();
 			return null;
 		}
 
@@ -1137,6 +1338,15 @@ public class CollectionProtocolUtil
 		return reqSpecimen;
 	}
 
+	/**
+	 * Gets the collection protocol for scg.
+	 *
+	 * @param identifier the identifier
+	 *
+	 * @return the collection protocol for scg
+	 *
+	 * @throws ApplicationException the application exception
+	 */
 	public static CollectionProtocol getCollectionProtocolForSCG(String identifier) throws ApplicationException
 	{
 		IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -1158,8 +1368,10 @@ public class CollectionProtocolUtil
 	}
 	//bug 8905
 	/**
-	 * This method is used to sort consents according to id
-	 * @param consents Map
+	 * This method is used to sort consents according to id.
+	 *
+	 * @param consentsMap the consents map
+	 *
 	 * @return sorted map
 	 */
 	public static Map sortConsentMap(Map consentsMap)
@@ -1185,6 +1397,7 @@ public class CollectionProtocolUtil
 
 	/**
 	 * Update the Clinical Diagnosis value.
+	 *
 	 * @param request request
 	 * @param collectionProtocolBean collectionProtocolBean
 	 */
@@ -1218,7 +1431,9 @@ public class CollectionProtocolUtil
 
 	/**
 	 * returns the errors.
+	 *
 	 * @param request gives the error key.
+	 *
 	 * @return errors.
 	 */
 	public static ActionErrors getActionErrors(HttpServletRequest request)
@@ -1232,12 +1447,15 @@ public class CollectionProtocolUtil
 	}
 
 	/**
-     * This method will return collectionProtocolId.
-     * @param specimenId - specimen id
-     * @param dao - DAO obj
-     * @return collectionProtocolId - collectionProtocolId
-     * @throws BizLogicException - BizLogicException
-     */
+	 * This method will return collectionProtocolId.
+	 *
+	 * @param specimenId - specimen id
+	 * @param dao - DAO obj
+	 *
+	 * @return collectionProtocolId - collectionProtocolId
+	 *
+	 * @throws BizLogicException - BizLogicException
+	 */
     public static String getCPIdFromSpecimen(String specimenId,DAO dao) throws BizLogicException
     {
     	String collectionProtocolId = "";
