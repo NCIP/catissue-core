@@ -46,6 +46,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 	private static final Logger LOGGER = Logger
 			.getCommonLogger(SaveSpecimenRequirementAction.class);
 
+	private static String isPersistent = null;
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
@@ -68,6 +69,8 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		final String eventKey = request.getParameter(Constants.EVENT_KEY);
 		final String nodeId = "New_" + eventKey;
 		session.setAttribute(Constants.TREE_NODE_ID, nodeId);
+		isPersistent = request.getParameter("isPersistent");
+		request.setAttribute("isPersistent", isPersistent);
 		if (operation.equals(Constants.ADD))
 		{
 			final Map collectionProtocolEventMap = (Map) session
@@ -356,15 +359,17 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			specimenRequirementBean.setNoOfDeriveSpecimen(0);
 
 			specimenRequirementBean.setLabelFormat(deriveSpecimenBean.getLabelFormat());
-//			if(deriveSpecimenBean.getId() == null)
-//			{
-//				specimenRequirementBean.setId(-1l);
-//			}
-//			else
-//			{
-//				specimenRequirementBean.setId(deriveSpecimenBean.getId());
-//			}
-
+			if(isPersistent.equals("true"))
+			{
+				if(deriveSpecimenBean.getId() == null)
+				{
+//					specimenRequirementBean.setId(-1l);
+				}
+				else
+				{
+					specimenRequirementBean.setId(deriveSpecimenBean.getId());
+				}
+			}
 			deriveSpecimenMap.put(specimenRequirementBean.getUniqueIdentifier(),
 					specimenRequirementBean);
 			deriveSpecimenCount = deriveSpecimenCount + 1;

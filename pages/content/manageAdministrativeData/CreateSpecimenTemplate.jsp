@@ -276,7 +276,7 @@ if(form != null)
 	}
 	function saveSpecimens()
 	{
-		var action ="SaveSpecimenRequirements.do?pageOf=specimenRequirement&redirectTo=defineEvents&key="+"<%=mapKey%>"+"&operation="+"<%=operation%>";
+		var action ="SaveSpecimenRequirements.do?pageOf=specimenRequirement&redirectTo=defineEvents&key="+"<%=mapKey%>"+"&operation="+"<%=operation%>"+"&isPersistent=${requestScope.isPersistent}";
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}
@@ -328,7 +328,7 @@ if(form != null)
 		//spreqno.className="formFieldNoBordersSimple";
 
 		var srIdentifier = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_id)";
-		var cell1 = "<input type='hidden' name='" + srIdentifier + "' value='"+rowno+"' id='" + srIdentifier + "'>";
+		var cell1 = "<input type='hidden' name='" + srIdentifier + "' value='' id='" + srIdentifier + "'>";
 
 		//spreqno.innerHTML="" + rowno+"." + cell1;
 

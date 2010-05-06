@@ -59,7 +59,7 @@ function updateCPTree()
 		<html:hidden property="title" />
 		<html:hidden property="principalInvestigatorId" />
     	<html:hidden property="irbID" />
-    	<html:hidden property="generateLabel" />
+
     	<html:hidden property="specimenLabelFormat" />
     	<html:hidden property="derivativeLabelFormat" />
     	<html:hidden property="aliquotLabelFormat" />
