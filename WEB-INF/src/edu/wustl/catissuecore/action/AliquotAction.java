@@ -335,21 +335,7 @@ public class AliquotAction extends SecureAction
 //			"collectionProtocol.aliquotLabelFormat " +
 //			"from edu.wustl.catissuecore.domain.CollectionProtocol as collectionProtocol where collectionProtocol.id ="+ cpId;
 
-			List formatList = AppUtility.executeQuery(hql);
-			Object[] obje = (Object[])formatList.get(0);
-			if(obje[0] != null)
-			{
-				parentLabelFormat = obje[0].toString();
-			}
-			if(obje[1] != null)
-			{
-				deriveLabelFormat = obje[1].toString();
-			}
-			if(obje[2] != null)
-			{
-				aliquotLabelFormat = obje[2].toString();
-			}
-			aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, Constants.ALIQUOT));
+
 			final StorageContainerForSpecimenBizLogic scBiz = new StorageContainerForSpecimenBizLogic();
 			// boolean to indicate whether the suitable containers to be shown
 			// in dropdown
@@ -708,6 +694,10 @@ public class AliquotAction extends SecureAction
 			// this code is used in case we come from Specimen page
 			if (specimenLabel != null)
 			{
+				hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
+				"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
+				"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat " +
+				"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.label ='"+ specimenLabel+"'";
 				aliquotForm.setSpecimenLabel(specimenLabel);
 				// by falguni-When user selects parent specimen barcode and
 				// submit.
@@ -774,6 +764,24 @@ public class AliquotAction extends SecureAction
 			 */
 			this.setParentSpecimenInRequest(request);
 			this.setPageData(request, pageOf, aliquotForm);
+			List formatList = AppUtility.executeQuery(hql);
+			if(!formatList.isEmpty())
+			{
+				Object[] obje = (Object[])formatList.get(0);
+				if(obje[0] != null)
+				{
+					parentLabelFormat = obje[0].toString();
+				}
+				if(obje[1] != null)
+				{
+					deriveLabelFormat = obje[1].toString();
+				}
+				if(obje[2] != null)
+				{
+					aliquotLabelFormat = obje[2].toString();
+				}
+			}
+			aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, Constants.ALIQUOT));
 			return mapping.findForward(pageOf);
 		}
 		catch (final DAOException daoException)

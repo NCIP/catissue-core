@@ -151,7 +151,7 @@
           <td colspan="2" align="left" class="bottomtd">
           <logic:equal name="isParticipantReg" value="true">
 			<span class="messagetexterror">
-				User can not edit existing Events and Specimen Requirements
+				User can not edit existing Events and Specimen Requirements except for the Label Format
 			</span>
 		</logic:equal>
 				<!--<div id="labelFormatErrDiv" style="display:none">

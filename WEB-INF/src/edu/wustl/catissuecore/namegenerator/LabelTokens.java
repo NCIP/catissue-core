@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.namegenerator;
 
+import edu.wustl.common.exception.ApplicationException;
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -20,5 +22,5 @@ public interface LabelTokens
 	 *
 	 * @return the token value
 	 */
-	String getTokenValue(Object object);
+	String getTokenValue(Object object) throws ApplicationException;
 }

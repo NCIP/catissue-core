@@ -2960,7 +2960,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					}
 					catch(LazyInitializationException e)
 					{
-						this.LOGGER.error(e.getMessage(),e) ;
+//						this.LOGGER.error(e.getMessage(),e) ;
 						absScg.setConsentTierStatusCollection(consentTierStatusCollection);
 					}
 				}
@@ -3130,7 +3130,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		catch (final ApplicationException exp)
 		{
 			this.LOGGER.error(exp.getMessage(), exp);
-			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}

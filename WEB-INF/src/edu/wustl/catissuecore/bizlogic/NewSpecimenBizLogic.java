@@ -1102,47 +1102,28 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		/**
 		 * Call Specimen label generator if automatic generation is specified
 		 */
-//		if (edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
-
-//		boolean generateLabel= false;
-//		generateLabel = isGenerateLabel(specimen);
-////		if(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getGenerateLabel())
-//		if(generateLabel)
-//		{
 
 		if(isStatusCollected(specimen))
 		{
 			try
 			{
-//				if (specimen.getLabel() == null || "".equals(specimen.getLabel()))
-//				{
 					final LabelGenerator spLblGenerator;
-//					if(Validator.isEmpty(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat()))
-//					{
-//						spLblGenerator = LabelGeneratorFactory
-//						.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-//
-//					}
-//					else
-//					{
 						spLblGenerator = LabelGeneratorFactory
 						.getInstance(Constants.CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-//					}
 					spLblGenerator.setLabel(specimen);
-//				}
 			}
 			catch(LabelException e)
 			{
-				this.LOGGER.error(e.getMessage(), e);
+				LOGGER.error(e.getMessage(), e);
 				throw this.getBizLogicException(e, "errors.item", e.getMessage());
 			}
 			catch (LabelGenException e)
 			{
-				this.LOGGER.info(e);
+				LOGGER.info(e);
 			}
 			catch (final NameGeneratorException e)
 			{
-				this.LOGGER.error(e.getMessage(), e);
+				LOGGER.error(e.getMessage(), e);
 				throw this.getBizLogicException(e, "name.generator.exp", "");
 			}
 

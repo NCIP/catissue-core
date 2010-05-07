@@ -162,6 +162,10 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 		{
 			mylable = token;
 		}
+		catch(ApplicationException excep)
+		{
+			throw new NameGeneratorException(excep.getMessage());
+		}
 		if (mylable == null)
 		{
 			mylable = "";
