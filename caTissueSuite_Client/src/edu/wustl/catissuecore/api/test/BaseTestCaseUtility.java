@@ -105,6 +105,8 @@ public class BaseTestCaseUtility {
 		collectionProtocol.setEnrollment(2);
 
 		collectionProtocol.setSpecimenLabelFormat("");
+		collectionProtocol.setDerivativeLabelFormat("");
+		collectionProtocol.setAliquotLabelFormat("");
 		System.out.println("reached setUp");
 
 		try

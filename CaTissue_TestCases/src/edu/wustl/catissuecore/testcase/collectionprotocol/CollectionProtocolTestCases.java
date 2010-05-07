@@ -1,10 +1,12 @@
 package edu.wustl.catissuecore.testcase.collectionprotocol;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
+import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.User;
@@ -32,7 +34,9 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		collForm.setOperation("add") ;
 		collForm.setShortTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		collForm.setStartDate("01-12-2009");
-		collForm.setSpecimenLabelFormat("CP_%PPI%_%STYPE%_%PPI_YOC_UID%");
+		collForm.setSpecimenLabelFormat("CP_%PPI%_%SP_TYPE%_%PPI_YOC_UID%_%YR_OF_COLL%");
+		collForm.setAliquotLabelFormat("%PSPEC_LABEL%_%PSPEC_UID%");
+		collForm.setDerivativeLabelFormat("CP_%PPI%_%SP_TYPE%_%PPI_YOC_UID%_%YR_OF_COLL%");
 		setRequestPathInfo("/OpenCollectionProtocol");
 		setActionForm(collForm);
 		actionPerform();
@@ -126,11 +130,9 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("storageLocationForAliquotSpecimen", "Virtual");
 		addRequestParameter("operation", "add");
 
-		addRequestParameter("labelGenType", "1");
-		addRequestParameter("labelFormat", "");
+		addRequestParameter("labelFormat", "%CP_DEFAULT%");
 
-		addRequestParameter("labelGenTypeForAliquot", "1");
-		addRequestParameter("labelFormatForAliquot", "");
+		addRequestParameter("labelFormatForAliquot", "%CP_DEFAULT%");
 
 		actionPerform();
 		verifyForward("success");
@@ -194,7 +196,9 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		collForm.setOperation("add") ;
 		collForm.setShortTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
 		collForm.setStartDate("01-12-2009");
-		collForm.setSpecimenLabelFormat("");
+		collForm.setSpecimenLabelFormat("%SYS_UID%");
+		collForm.setDerivativeLabelFormat("%CP_DEFAULT%");
+		collForm.setAliquotLabelFormat("%CP_DEFAULT%");
 		setRequestPathInfo("/OpenCollectionProtocol");
 		setActionForm(collForm);
 		actionPerform();
@@ -228,11 +232,9 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("pageOf", "specimenRequirement");
 		addRequestParameter("operation", "add");
 
-		addRequestParameter("labelGenType", "0");
-		addRequestParameter("labelFormat", "");
+		addRequestParameter("labelFormat", "%CP_DEFAULT%");
 
-		addRequestParameter("labelGenTypeForAliquot", "0");
-		addRequestParameter("labelFormatForAliquot", "");
+		addRequestParameter("labelFormatForAliquot", "%CP_DEFAULT%");
 
 		actionPerform();
 		verifyForwardPath("/CreateSpecimenTemplate.do?operation=add");
@@ -294,6 +296,9 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		addRequestParameter("noOfAliquots", "2");
 		addRequestParameter("storageLocationForAliquotSpecimen", "Virtual");
 		addRequestParameter("operation", "add");
+		addRequestParameter("labelFormat", "%CP_DEFAULT%");
+
+		addRequestParameter("labelFormatForAliquot", "%CP_DEFAULT%");
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
@@ -411,4 +416,35 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 //		TestCaseUtility.setNameObjectMap("CollectionProtocol",collectionProtocol);
 //
 //     }
+
+	public void testAddCPR()
+	{
+		setRequestPathInfo("/CPQuerySubCollectionProtocolRegistrationAd");
+		CollectionProtocolRegistrationForm cprForm = new CollectionProtocolRegistrationForm();
+		cprForm.setCollectionProtocolShortTitle("");
+		cprForm.setParticipantID(0);
+		cprForm.setParticipantName("");
+		cprForm.setParticipantProtocolID("");
+		cprForm.setRegistrationDate("");
+		cprForm.setBarcode("");
+		cprForm.setConsentResponseValues(new HashMap());
+		cprForm.setConsentTierCounter(0);
+		cprForm.setSignedConsentUrl("");
+		cprForm.setWitnessId(0);
+		cprForm.setConsentDate("");
+
+		cprForm.setWithdrawlButtonStatus("");
+		cprForm.setStudyCalEvtPoint("");
+		cprForm.setOffset(0);
+		cprForm.setConsentDate("");
+		cprForm.setConsentDate("");
+		cprForm.setConsentDate("");cprForm.setConsentDate("");
+
+		actionPerform();
+		String errormsg[] = new String[]{"errors.item"};
+		//verifyActionErrors(errormsg);
+
+
+
+	}
 }

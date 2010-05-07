@@ -11,6 +11,7 @@ import edu.wustl.catissuecore.actionForm.EmbeddedEventParametersForm;
 import edu.wustl.catissuecore.actionForm.FixedEventParametersForm;
 import edu.wustl.catissuecore.actionForm.FluidSpecimenReviewEventParametersForm;
 import edu.wustl.catissuecore.actionForm.FrozenEventParametersForm;
+import edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm;
 import edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm;
 import edu.wustl.catissuecore.actionForm.ProcedureEventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpunEventParametersForm;
@@ -718,6 +719,15 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		specimenEventCollection.add( disposalEventObject );
 		specimen.setSpecimenEventCollection( specimenEventCollection );
 
+	}
+
+	public void testlistSpecimenEventParametersForm()
+	{
+		setRequestPathInfo("/DisposalEventParameters");
+
+		ListSpecimenEventParametersForm form = new ListSpecimenEventParametersForm();
+		form.setSpecimenEventParameter(null);
+		actionPerform();
 	}
 
 }

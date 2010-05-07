@@ -145,14 +145,24 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	    try
 		{
 	    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
+
 		   	Logger.out.info("updating domain object------->"+collectionProtocol);
 	    	BaseTestCaseUtility.updateCollectionProtocol(collectionProtocol);
 	    	//System.out.println("befor");
 	    	//System.out.println(collectionProtocol.getId()+">>>>");
+	    	String labelFormat = "CP_%PPI%_%SP_TYPE%_%YR_OF_COLL%_%PPI_YOC_UID%";
+	    	String derivaeLabelfomrat = "%CP_DEFAULT%";
+	    	String aliquotLabelFormat = "%CP_DEFAULT%";
+	    	collectionProtocol.setSpecimenLabelFormat(labelFormat);
+	    	collectionProtocol.setDerivativeLabelFormat(derivaeLabelfomrat);
+	    	collectionProtocol.setAliquotLabelFormat(aliquotLabelFormat);
 	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
 	    	//System.out.println("after");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
 	    	assertTrue("Domain object updated successfully", true);
+	    	assertEquals(labelFormat,updatedCollectionProtocol.getSpecimenLabelFormat());
+	    	assertEquals(derivaeLabelfomrat,updatedCollectionProtocol.getDerivativeLabelFormat());
+	    	assertEquals(aliquotLabelFormat,updatedCollectionProtocol.getAliquotLabelFormat());
 	    }
 	    catch (Exception e)
 	    {
