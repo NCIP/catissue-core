@@ -71,34 +71,47 @@ import edu.wustl.query.flex.dag.DAGPanel;
 import edu.wustl.query.flex.dag.DAGPath;
 import edu.wustl.query.flex.dag.SingleNodeCustomFormulaNode;
 
+// TODO: Auto-generated Javadoc
 /**
  * Flex interface class for displaying the collection protocols and participants.
  */
 public class FlexInterface
 {
 
-	/**
-	 * Logger object.
-	 */
+	/** Logger object. */
 	private final static transient Logger logger = Logger.getCommonLogger(FlexInterface.class);
+
+	/** The session. */
 	private HttpSession session = null;
+
+	/** The is to initialize session. */
 	private boolean isToInitializeSession = true;
 
+	/** The generate label. */
 	private boolean generateLabel = false;
+
 	/**
 	 * Constructor.
+	 *
 	 * @throws Exception : Exception
 	 */
 	public FlexInterface() throws Exception
 	{
 	}
 
+	/**
+	 * Sets the session initialization false.
+	 */
 	public void setSessionInitializationFalse()
 	{
 		isToInitializeSession = false;
 	}
+
 	/**
-	 * @param str.
+	 * Say.
+	 *
+	 * @param str the str
+	 *
 	 * @return SpecimenBean object
 	 */
 	public SpecimenBean say(String str)
@@ -109,11 +122,15 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param mode.
-	 * @param parentType
-	 * @param parentName
+	 * Inits the flex interface for multiple sp.
+	 *
+	 * @param parentType the parent type
+	 * @param parentName the parent name
+	 * @param mode the mode
+	 *
 	 * @return SpecimenBean object
-	 * @throws DAOException
+	 *
+	 * @throws DAOException the DAO exception
 	 */
 	public SpecimenBean initFlexInterfaceForMultipleSp(String mode, String parentType,
 			String parentName) throws DAOException
@@ -207,7 +224,10 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param nvBeanList.
+	 * To str list.
+	 *
+	 * @param nvBeanList the nv bean list
+	 *
 	 * @return list
 	 */
 	private List<String> toStrList(List<NameValueBean> nvBeanList)
@@ -221,6 +241,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the tissue side pv list.
+	 *
 	 * @return list.
 	 */
 	public List<String> getTissueSidePVList()
@@ -231,7 +253,10 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the tissue site pv list.
+	 *
 	 * @return List.
+	 *
 	 * @throws BizLogicException :BizLogicException
 	 */
 	public List<String> getTissueSitePVList() throws BizLogicException
@@ -241,6 +266,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the pathological status pv list.
+	 *
 	 * @return list of Pathological Status permissible values.
 	 */
 	public List<String> getPathologicalStatusPVList()
@@ -251,6 +278,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the specimen class status pv list.
+	 *
 	 * @return List.
 	 */
 	public List<String> getSpecimenClassStatusPVList()
@@ -269,6 +298,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the fluid specimen type pv list.
+	 *
 	 * @return List.
 	 */
 	public List<String> getFluidSpecimenTypePVList()
@@ -279,6 +310,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the tissue specimen type pv list.
+	 *
 	 * @return List.
 	 */
 	public List<String> getTissueSpecimenTypePVList()
@@ -289,6 +322,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the molecular specimen type pv list.
+	 *
 	 * @return List.
 	 */
 	public List<String> getMolecularSpecimenTypePVList()
@@ -299,6 +334,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the cell specimen type pv list.
+	 *
 	 * @return List.
 	 */
 	public List<String> getCellSpecimenTypePVList()
@@ -309,6 +346,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the specimen type status pv list.
+	 *
 	 * @return List.
 	 */
 	public List getSpecimenTypeStatusPVList()
@@ -317,6 +356,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the scg list.
+	 *
 	 * @return List.
 	 */
 	public List getSCGList()
@@ -325,7 +366,10 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the user list.
+	 *
 	 * @return List.
+	 *
 	 * @throws BizLogicException : BizLogicException
 	 */
 	public List getUserList() throws BizLogicException
@@ -337,6 +381,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the procedure list.
+	 *
 	 * @return List
 	 */
 	public List getProcedureList()
@@ -347,6 +393,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the container list.
+	 *
 	 * @return List
 	 */
 	public List getContainerList()
@@ -357,6 +405,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the received quality list.
+	 *
 	 * @return List
 	 */
 	public List getReceivedQualityList()
@@ -367,6 +417,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the biohazard type list.
+	 *
 	 * @return List
 	 */
 	public List getBiohazardTypeList()
@@ -378,6 +430,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the biohazard name list.
+	 *
 	 * @return List
 	 */
 	public List getBiohazardNameList()
@@ -426,7 +480,10 @@ public class FlexInterface
 	}
 
 	/**
+	 * Write specimen.
+	 *
 	 * @param spBeanList : SpecimenBean object.
+	 *
 	 * @return String.
 	 */
 	public String writeSpecimen(List<SpecimenBean> spBeanList)
@@ -472,7 +529,10 @@ public class FlexInterface
 	}
 
 	/**
+	 * Write specimen1.
+	 *
 	 * @param spBeanList : SpecimenBean object.
+	 *
 	 * @return String
 	 */
 	public String writeSpecimen1(List<SpecimenBean> spBeanList)
@@ -504,7 +564,10 @@ public class FlexInterface
 	}
 
 	/**
+	 * Edits the specimen.
+	 *
 	 * @param spBeanList : SpecimenBean object.
+	 *
 	 * @return String
 	 */
 	public String editSpecimen(List<SpecimenBean> spBeanList)
@@ -639,6 +702,8 @@ public class FlexInterface
 	}
 
 	/**
+	 * Read specimen.
+	 *
 	 * @return SpecimenBean object.
 	 */
 	public SpecimenBean readSpecimen()
@@ -653,7 +718,10 @@ public class FlexInterface
 	}
 
 	/**
+	 * Read specimen list.
+	 *
 	 * @return List of specimens.
+	 *
 	 * @throws BizLogicException : BizLogicException
 	 */
 	public List<SpecimenBean> readSpecimenList() throws BizLogicException
@@ -712,8 +780,11 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param specimen.
-	 * @param mode
+	 * Prepare specimen bean.
+	 *
+	 * @param mode the mode
+	 * @param specimen the specimen
+	 *
 	 * @return SpecimenBean object
 	 */
 	private SpecimenBean prepareSpecimenBean(Specimen specimen, String mode)
@@ -795,7 +866,10 @@ public class FlexInterface
 	}
 
 	/**
+	 * Gets the biohazard bean collection.
+	 *
 	 * @param biohazardColl .
+	 *
 	 * @return list of BiohazardBeanCollection
 	 */
 	private List getBiohazardBeanCollection(Collection biohazardColl)
@@ -818,7 +892,10 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param externalIdentiferColl.
+	 * Gets the external identifer bean collection.
+	 *
+	 * @param externalIdentiferColl the external identifer coll
+	 *
 	 * @return list of ExternalIdentiferBeanCollection
 	 */
 	private List getExternalIdentiferBeanCollection(Collection externalIdentiferColl)
@@ -842,7 +919,10 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param specimenClass.
+	 * Gets the specimen instance.
+	 *
+	 * @param specimenClass the specimen class
+	 *
 	 * @return Specimen object
 	 */
 	private Specimen getSpecimenInstance(String specimenClass)
@@ -869,10 +949,14 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param spBean.
-	 * @param speicmenAutoStorageCont
+	 * Prepare generic specimen.
+	 *
+	 * @param speicmenAutoStorageCont the speicmen auto storage cont
+	 * @param spBean the sp bean
+	 *
 	 * @return SpecimenDataBean object
-	 * @throws ApplicationException
+	 *
+	 * @throws ApplicationException the application exception
 	 */
 	private SpecimenDataBean prepareGenericSpecimen(SpecimenBean spBean,
 			SpecimenAutoStorageContainer speicmenAutoStorageCont) throws ApplicationException
@@ -1017,7 +1101,10 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param sp
+	 * Prepare generic specimen.
+	 *
+	 * @param sp the sp
+	 *
 	 * @return SpecimenDataBean object.
 	 */
 	private SpecimenDataBean prepareGenericSpecimen(Specimen sp)
@@ -1071,9 +1158,12 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param specimenDataBean.
-	 * @param collectionProtocolId
-	 * @param speicmenAutoStorageCont
+	 * Gets the storage containers.
+	 *
+	 * @param collectionProtocolId the collection protocol id
+	 * @param speicmenAutoStorageCont the speicmen auto storage cont
+	 * @param specimenDataBean the specimen data bean
+	 *
 	 * @return SpecimenDataBean object
 	 */
 	private SpecimenDataBean getStorageContainers(SpecimenDataBean specimenDataBean,
@@ -1103,7 +1193,10 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param spBean.
+	 * Prepare specimen.
+	 *
+	 * @param spBean the sp bean
+	 *
 	 * @return Specimen object
 	 */
 	private Specimen prepareSpecimen(SpecimenBean spBean)
@@ -1171,7 +1264,10 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param exIdColl.
+	 * Gets the external identifier coll.
+	 *
+	 * @param exIdColl the ex id coll
+	 *
 	 * @return HashSet of ExternalIdentifierCollection
 	 */
 	private HashSet getExternalIdentifierColl(Collection exIdColl)
@@ -1204,7 +1300,10 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param biohazardColl.
+	 * Gets the biohazard coll.
+	 *
+	 * @param biohazardColl the biohazard coll
+	 *
 	 * @return HashSet of BiohazardCollection
 	 */
 	private HashSet getBiohazardColl(Collection biohazardColl)
@@ -1230,8 +1329,11 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param type.
-	 * @param name
+	 * Gets the biohazard identifier.
+	 *
+	 * @param name the name
+	 * @param type the type
+	 *
 	 * @return Long :BiohazardIdentifier
 	 */
 	private Long getBiohazardIdentifier(String type, String name)
@@ -1264,7 +1366,10 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param scgName.
+	 * Gets the specimen coll grp.
+	 *
+	 * @param scgName the scg name
+	 *
 	 * @return SpecimenCollectionGroup object
 	 */
 	private SpecimenCollectionGroup getSpecimenCollGrp(String scgName)
@@ -1299,7 +1404,10 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param spId.
+	 * Gets the specimen coll grp for specimen.
+	 *
+	 * @param spId the sp id
+	 *
 	 * @return SpecimenCollectionGroup object.
 	 */
 	private SpecimenCollectionGroup getSpecimenCollGrpForSpecimen(String spId)
@@ -1334,7 +1442,10 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param specimen.
+	 * Sets the storage cont for specimen.
+	 *
+	 * @param specimen the specimen
+	 *
 	 * @return  Specimen object
 	 */
 	private Specimen setStorageContForSpecimen(Specimen specimen)
@@ -1369,7 +1480,10 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param parentName.
+	 * Gets the parent specimen.
+	 *
+	 * @param parentName the parent name
+	 *
 	 * @return Specimen object
 	 */
 	private Specimen getParentSpecimen(String parentName)
@@ -1411,9 +1525,13 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param collectionEvent.
+	 * Gets the collection event parameters.
+	 *
+	 * @param collectionEvent the collection event
+	 *
 	 * @return CollectionEventParameters object
-	 * @throws BizLogicException
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	private CollectionEventParameters getCollectionEventParameters(
 			EventParamtersBean collectionEvent) throws BizLogicException
@@ -1431,9 +1549,13 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param receivedEvent.
+	 * Gets the received event parameters.
+	 *
+	 * @param receivedEvent the received event
+	 *
 	 * @return ReceivedEventParameters object
-	 * @throws BizLogicException
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	private ReceivedEventParameters getReceivedEventParameters(EventParamtersBean receivedEvent)
 			throws BizLogicException
@@ -1450,9 +1572,12 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param date.
-	 * @param hour
-	 * @param minute
+	 * Gets the time stamp.
+	 *
+	 * @param hour the hour
+	 * @param minute the minute
+	 * @param date the date
+	 *
 	 * @return Date object
 	 */
 	private Date getTimeStamp(Date date, String hour, String minute)
@@ -1466,9 +1591,13 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param userName.
+	 * Gets the user.
+	 *
+	 * @param userName the user name
+	 *
 	 * @return User object
-	 * @throws BizLogicException
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	private User getUser(String userName) throws BizLogicException
 	{
@@ -1498,7 +1627,8 @@ public class FlexInterface
 
 	//	Methods added by Baljeet
 	/**
-	 * This method retrieves the List if all Collection Protocols
+	 * This method retrieves the List if all Collection Protocols.
+	 *
 	 * @return The cp List.
 	 */
 	public List getCpList()
@@ -1541,9 +1671,14 @@ public class FlexInterface
 	}
 
 	/**
-	 * This method retrieves the List of participants associated with a cp
+	 * This method retrieves the List of participants associated with a cp.
+	 *
 	 * @param cpId :Collection protocol Id
+	 * @param cpTitle the cp title
+	 *
 	 * @return the list of Participants
+	 *
+	 * @throws ApplicationException the application exception
 	 */
 	public List getParticipantsList(String cpId, String cpTitle) throws ApplicationException
 	{
@@ -1566,12 +1701,14 @@ public class FlexInterface
 	}
 
 	/**
-	 * This mehtod returns the XML String for generating tree
+	 * This mehtod returns the XML String for generating tree.
+	 *
 	 * @param cpId : Selcted Collection Protocol ID
 	 * @param pId : Selected Participant Id
+	 *
 	 * @return : The XML String for tree data
-	 * @throws Exception
-	 */
+	 *
+	 * @throws Exception 	 */
 	public String getTreeData(String cpId, String pId)
 	{
 		//System.out.println("In get tree data method & cpID is:"+cpId);
@@ -1591,10 +1728,14 @@ public class FlexInterface
 	}
 
 	/**
-	 * @param cpId.
-	 * @param pId
+	 * Chk arm shifting.
+	 *
+	 * @param pId the id
+	 * @param cpId the cp id
+	 *
 	 * @return boolean
-	 * @throws Exception
+	 *
+	 * @throws Exception the exception
 	 */
 	public Boolean chkArmShifting(String cpId, String pId) throws Exception
 	{

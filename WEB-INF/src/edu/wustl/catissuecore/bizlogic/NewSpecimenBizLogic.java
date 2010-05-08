@@ -101,6 +101,7 @@ import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 
+// TODO: Auto-generated Javadoc
 /**
  * NewSpecimenHDAO is used to add new specimen information into the database
  * using hibernate.
@@ -108,32 +109,32 @@ import edu.wustl.security.privilege.PrivilegeManager;
 public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 {
 
-	/**
-	 * Logger added for Specimen class.
-	 */
+	/** Logger added for Specimen class. */
 	private static final Logger LOGGER = Logger.getCommonLogger(NewSpecimenBizLogic.class);
-	/**
-	 * containerHoldsSpecimenClasses.
-	 */
+
+	/** containerHoldsSpecimenClasses. */
 	private Map<Long, Collection<String>> containerHoldsSpecimenClasses = new HashMap<Long, Collection<String>>();
 
-	/**
-	 * containerHoldsCPs.
-	 */
+	/** containerHoldsCPs. */
 	private Map<Long, Collection<CollectionProtocol>> containerHoldsCPs = new HashMap<Long, Collection<CollectionProtocol>>();
 
-	/**
-	 * storageContainerIds.
-	 */
+	/** storageContainerIds. */
 	private HashSet<String> storageContainerIds = new HashSet<String>();
+
+	/** The storage positions. */
 	private String storagePositions = "";
-	/**
-	 * cpbased.
-	 */
+
+	/** cpbased. */
 	private boolean cpbased = false;
 
 	/**
 	 * Pre-insert method.
+	 *
+	 * @param obj the obj
+	 * @param dao the dao
+	 * @param sessionDataBean the session data bean
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	protected void preInsert(final Object obj, final DAO dao, final SessionDataBean sessionDataBean)
 			throws BizLogicException
@@ -144,14 +145,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Saves the Specimen object in the database.
-	 * @param obj
-	 *            The Specimen object to be saved.
-	 * @param sessionDataBean
-	 *            The session in which the object is saved.
-	 * @param dao
-	 *            DAO object
-	 * @throws BizLogicException
-	 *             Database related Exception
+	 *
+	 * @param obj The Specimen object to be saved.
+	 * @param sessionDataBean The session in which the object is saved.
+	 * @param dao DAO object
+	 *
+	 * @throws BizLogicException Database related Exception
 	 */
 	protected void insert(final Object obj, final DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
@@ -191,8 +190,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Sets the parent.
+	 *
 	 * @param dao DAO Object
 	 * @param specimen Specimen Object
+	 *
 	 * @throws BizLogicException : BizLogicException
 	 * @throws DAOException : DAOException
 	 */
@@ -241,10 +243,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * retrieve Parent Specimen Details From Id.
-	 * @param dao
-	 * @param parentSpecimen
-	 * @param list
-	 * @throws DAOException
+	 *
+	 * @param dao the dao
+	 * @param parentSpecimen the parent specimen
+	 * @param list the list
+	 *
+	 * @throws DAOException the DAO exception
 	 */
 	private void retrieveParentSpecimenDetailsFromId(DAO dao, Specimen parentSpecimen,
 			final List list) throws DAOException
@@ -286,10 +290,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Method to retrieve storage container info.
-	 * @param dao
-	 * @param parentSpecimen
-	 * @return
-	 * @throws DAOException
+	 *
+	 * @param dao the dao
+	 * @param parentSpecimen the parent specimen
+	 *
+	 * @return the specimen
+	 *
+	 * @throws DAOException the DAO exception
 	 */
 	private Specimen retrieveStorageContainerInfo(DAO dao, Specimen parentSpecimen)
 			throws DAOException
@@ -338,11 +345,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Retrieve Parent Specimen Collection Type data.
-	 * @param dao
-	 * @param parentSpecimen
+	 *
+	 * @param dao the dao
+	 * @param parentSpecimen the parent specimen
+	 *
 	 * @return Specimen object
-	 * @throws DAOException
-	 * @throws BizLogicException
+	 *
+	 * @throws DAOException the DAO exception
+	 * @throws BizLogicException the biz logic exception
 	 */
 	private Specimen retrieveParentSpecimenCollectionTypeData(DAO dao, Specimen parentSpecimen)
 			throws DAOException, BizLogicException
@@ -402,8 +412,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param childSpecimenCollection
-	 * @return
+	 * Checks if is child spe collection empty.
+	 *
+	 * @param childSpecimenCollection the child specimen collection
+	 *
+	 * @return true, if checks if is child spe collection empty
 	 */
 	private boolean isChildSpeCollectionEmpty(Collection childSpecimenCollection)
 	{
@@ -411,18 +424,19 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Specimen Object to be save
-	 * @param sessionDataBean
-	 *            The session in which the object is saved.
-	 * @param dao
-	 *            DAO object
-	 * @throws BizLogicException
-	 *             Database related Exception
+	 * Populate domain object to insert.
+	 *
+	 * @param specimen Specimen Object to be save
+	 * @param sessionDataBean The session in which the object is saved.
+	 * @param dao DAO object
+	 * @param pos1 the pos1
+	 * @param pos2 the pos2
+	 *
+	 * @throws BizLogicException Database related Exception
 	 * @throws DAOException : DAOException
-	 *             User Not Authorized Exception
+	 * User Not Authorized Exception
 	 * @throws SMException : SMException
-       Bug 15392
+	 * Bug 15392
 	 */
 	private void populateDomainObjectToInsert(DAO dao, SessionDataBean sessionDataBean,
 			Specimen specimen,Integer pos1,Integer pos2) throws BizLogicException, DAOException, SMException
@@ -445,10 +459,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen object containing quantity.
-	 * quantity of Specimen
-	 * @param specimen
-	 * Specimen object to insert
+	 * Calculate quantity.
+	 *
+	 * @param specimen Specimen object to insert
 	 */
 	private void calculateQuantity(Specimen specimen)
 	{
@@ -475,11 +488,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Parent Specimen
-	 * @throws BizLogicException
-	 *             Database related Exception This method retrieves the parent
-	 *             specimen events and sets them in the parent specimen
+	 * Sets the parent specimen data.
+	 *
+	 * @param specimen Parent Specimen
+	 *
+	 * @throws BizLogicException Database related Exception This method retrieves the parent
+	 * specimen events and sets them in the parent specimen
 	 */
 	private void setParentSpecimenData(Specimen specimen)
 	{
@@ -499,10 +513,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Current Specimen
-	 * @param parentSpecimen
-	 *            Parent Specimen Object
+	 * Sets the parent bio hazard.
+	 *
+	 * @param specimen Current Specimen
+	 * @param parentSpecimen Parent Specimen Object
 	 */
 	private void setParentBioHazard(Specimen parentSpecimen, Specimen specimen)
 	{
@@ -521,9 +535,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            This method sets the created on date = collection date
-	 **/
+	 * Sets the created on date.
+	 *
+	 * @param specimen This method sets the created on date = collection date
+	 */
 	private void setCreatedOnDate(Specimen specimen)
 	{
 		final Collection<SpecimenEventParameters> specimenEventsCollection = specimen
@@ -545,11 +560,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Set default events to specimens
-	 * @param sessionDataBean
-	 *            Session data bean This method sets the default events to
-	 *            specimens if they are null
+	 * Sets the default events to specimen.
+	 *
+	 * @param specimen Set default events to specimens
+	 * @param sessionDataBean Session data bean This method sets the default events to
+	 * specimens if they are null
 	 */
 	private void setDefaultEventsToSpecimen(Specimen specimen, SessionDataBean sessionDataBean)
 	{
@@ -572,12 +587,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * This method gives the error message. This method is override for
 	 * customizing error message
-	 * @param obj
-	 *            - Object
-	 * @param operation
-	 *            Type of operation
-	 * @param daoException
-	 *            Database related Exception
+	 *
+	 * @param obj - Object
+	 * @param operation Type of operation
+	 * @param daoException Database related Exception
+	 *
 	 * @return formatedException returns formated exception
 	 */
 	public String getErrorMessage(DAOException daoException, Object obj, String operation)
@@ -597,9 +611,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Dispose specimen.
+	 *
 	 * @param sessionDataBean : sessionDataBean
 	 * @param specimen  : specimen
 	 * @param disposalReason  : disposalReason
+	 *
 	 * @throws BizLogicException  : BizLogicException
 	 * @throws UserNotAuthorizedException : UserNotAuthorizedException
 	 */
@@ -615,18 +632,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Dispose specimen.
+	 *
 	 * @param disposalReason : disposalReason
-	 * @param dao
-	 *            DAO object
-	 * @param sessionDataBean
-	 *            Session details
-	 * @param specimen
-	 *            parent specimen object
-	 * @throws BizLogicException
-	 *             Database related Exception
-	 * @throws UserNotAuthorizedException
-	 *             User is not Authorized
-	 * @throws BizLogicException
+	 * @param dao DAO object
+	 * @param sessionDataBean Session details
+	 * @param specimen parent specimen object
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 * @throws UserNotAuthorizedException User is not Authorized
 	 */
 	public void disposeSpecimen(SessionDataBean sessionDataBean, AbstractSpecimen specimen,
 			DAO dao, String disposalReason) throws BizLogicException, UserNotAuthorizedException
@@ -640,9 +654,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Creates the dispose event.
+	 *
 	 * @param disposalReason : disposalReason
 	 * @param sessionDataBean : sessionDataBean
 	 * @param specimen : specimen
+	 *
 	 * @return DisposalEventParameters
 	 */
 
@@ -661,6 +678,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Sets the specimen created on date.
+	 *
 	 * @param specimen : specimen
 	 */
 	private void setSpecimenCreatedOnDate(Specimen specimen)
@@ -683,6 +702,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Sets the quantity.
+	 *
 	 * @param specimen  : specimen
 	 */
 	private void setQuantity(Specimen specimen)
@@ -703,6 +724,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Sets the specimen events.
+	 *
 	 * @param specimen : specimen
 	 * @param sessionDataBean  : sessionDataBean
 	 */
@@ -739,18 +762,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Specimen Object
-	 * @param dao
-	 *            DAO object
-	 * @param sessionDataBean
-	 *            Session data
-	 * @throws BizLogicException
-	 *             Database related exception
-	 * @throws SMException
-	 *             Security related exception
+	 * Insert child specimens.
+	 *
+	 * @param specimen Specimen Object
+	 * @param dao DAO object
+	 * @param sessionDataBean Session data
+	 * @param pos1 the pos1
+	 * @param pos2 the pos2
+	 *
+	 * @throws BizLogicException Database related exception
+	 * @throws SMException Security related exception
 	 * @throws DAOException : DAOException
-       Bug 15392
+	 * Bug 15392
 	 */
 	private void insertChildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean,Integer pos1,Integer pos2)
 			throws BizLogicException, DAOException, SMException
@@ -769,10 +792,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param parentSpecimen
-	 *            Parent Specimen Object
-	 * @param childSpecimen
-	 *            Child Specimen Object
+	 * Sets the parent characteristics.
+	 *
+	 * @param parentSpecimen Parent Specimen Object
+	 * @param childSpecimen Child Specimen Object
 	 */
 	private void setParentCharacteristics(Specimen parentSpecimen, Specimen childSpecimen)
 	{
@@ -796,10 +819,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Specimen Object
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Generate bar code.
+	 *
+	 * @param specimen Specimen Object
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void generateBarCode(Specimen specimen) throws BizLogicException
 	{
@@ -823,8 +847,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 * Specimen Object
+	 * Sets the default external identifiers.
+	 *
+	 * @param specimen Specimen Object
 	 * Collection of external identifier.
 	 */
 	private void setDefaultExternalIdentifiers(Specimen specimen)
@@ -851,11 +876,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Sets the specimen parent.
+	 *
 	 * @param specimen Specimen Object
 	 * @param dao DAO object
 	 * Parent Specimen Object
-	 * @throws BizLogicException
-	 * Database related Exception
+	 *
+	 * @throws BizLogicException Database related Exception
 	 */
 	private void setSpecimenParent(Specimen specimen, DAO dao) throws BizLogicException
 	{
@@ -923,12 +950,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * get Collection Protocol Id And ActivityStatus.
-	 * @param specimen
-	 * @param dao
-	 * @param cp
-	 * @param activityStatus
-	 * @return
-	 * @throws DAOException
+	 *
+	 * @param specimen the specimen
+	 * @param dao the dao
+	 * @param cp the cp
+	 * @param activityStatus the activity status
+	 *
+	 * @return the collection protocol id and activity status
+	 *
+	 * @throws DAOException the DAO exception
 	 */
 	private String getCollectionProtocolIdAndActivityStatus(Specimen specimen, DAO dao,
 			final CollectionProtocol cp, String activityStatus) throws DAOException
@@ -960,13 +990,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * This Function is used to get Activity Status and Collection Protocol ID.
 	 *
-	 * @param dao
-	 *            DAO object
-	 * @param scgId
+	 * @param dao DAO object
+	 * @param parentSpecimen the parent specimen
+	 *
 	 * @return CollectionProtocol
-	 * @throws BizLogicException
-	 * @throws ClassNotFoundException
-	 */
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 * @throws ClassNotFoundException 	 */
 	/*
 	 * public CollectionProtocol getActivityStatusOfCollectionProtocol(DAO dao,
 	 * Long scgId) throws BizLogicException { List activityStatusList = null;
@@ -1045,10 +1075,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * get Parent Specimen Object By Label.
-	 * @param dao
-	 * @param parentSpecimen
-	 * @param valArr
-	 * @throws DAOException
+	 *
+	 * @param dao the dao
+	 * @param parentSpecimen the parent specimen
+	 * @param valArr the val arr
+	 *
+	 * @throws DAOException the DAO exception
 	 */
 	private void getParentSpecimenObjectByLabel(DAO dao, Specimen parentSpecimen,
 			final Object[] valArr) throws DAOException
@@ -1076,8 +1108,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Sets the scg to specimen.
+	 *
 	 * @param specimen : specimen
 	 * @param dao : dao
+	 *
 	 * @throws BizLogicException  : BizLogicException
 	 */
 	private void setSCGToSpecimen(Specimen specimen, DAO dao) throws BizLogicException
@@ -1092,10 +1127,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Specimen Object
-	 * @throws BizLogicException
-	 *             Database related Exception
+	 * Generate label.
+	 *
+	 * @param specimen Specimen Object
+	 *
+	 * @throws BizLogicException Database related Exception
 	 */
 	private void generateLabel(Specimen specimen) throws BizLogicException
 	{
@@ -1131,8 +1167,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
  	}
 
 	/**
-	 * @param specimen
-	 * @return
+	 * Checks if is status collected.
+	 *
+	 * @param specimen the specimen
+	 *
+	 * @return true, if checks if is status collected
 	 */
 	private boolean isStatusCollected(Specimen specimen)
 	{
@@ -1140,8 +1179,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 * @return
+	 * Sets the specimen to external identifier.
+	 *
+	 * @param specimen the specimen
+	 * @param externalIdentifierCollection the external identifier collection
 	 */
 //	private boolean isGenerateLabel(Specimen specimen)
 //	{
@@ -1214,10 +1255,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Specimen object
-	 * @param externalIdentifierCollection
-	 *            Collection of external identifier
+	 * Sets the empty external identifier.
+	 *
+	 * @param specimen Specimen object
+	 * @param externalIdentifierCollection Collection of external identifier
 	 */
 	private void setEmptyExternalIdentifier(Specimen specimen,
 			Collection<ExternalIdentifier> externalIdentifierCollection)
@@ -1230,14 +1271,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param obj
-	 *            Domain object
-	 *@param dao
-	 *            DAO object
-	 *@param sessionDataBean
-	 *            The session in which the object is saved.
-	 *@throws BizLogicException
-	 *             Database related Exception
+	 * Post insert.
+	 *
+	 * @param obj Domain object
+	 * @param dao DAO object
+	 * @param sessionDataBean The session in which the object is saved.
+	 *
+	 * @throws BizLogicException Database related Exception
 	 */
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws BizLogicException
@@ -1248,16 +1288,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Past Insert method.
 	 *
-	 * @param speCollection
-	 *            Specimen Collection
-	 *@param dao
-	 *            DAO object
-	 *@param sessionDataBean
-	 *            The session in which the object is saved.
-	 *@throws BizLogicException
-	 *             Database related Exception
-	 *@throws UserNotAuthorizedException
-	 *             User Not Authorized Exception
+	 * @param speCollection Specimen Collection
+	 * @param dao DAO object
+	 * @param sessionDataBean The session in which the object is saved.
+	 *
+	 * @throws BizLogicException Database related Exception
+	 * @throws UserNotAuthorizedException User Not Authorized Exception
 	 */
 	protected void postInsert(Collection<AbstractDomainObject> speCollection, DAO dao,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -1278,12 +1314,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	* @param currentObj
-	*            Current Object
-	* @param oldObj
-	*            Persistent Object
-	* @throws BizLogicException : BizLogicException
-	*/
+	 * Update child attributes.
+	 *
+	 * @param currentObj Current Object
+	 * @param oldObj Persistent Object
+	 *
+	 * @throws BizLogicException : BizLogicException
+	 */
 	private void updateChildAttributes(Object currentObj, Object oldObj) throws BizLogicException
 	{
 		JDBCDAO jdbcDao = null;
@@ -1316,9 +1353,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param obj
-	 *            AbstractDomainObject
+	 * Gets the dynamic groups.
+	 *
+	 * @param obj AbstractDomainObject
+	 *
 	 * @return dynamicGroups Dynamic group entry for CSM
+	 *
 	 * @throws BizLogicException : BizLogicException
 	 */
 	protected String[] getDynamicGroups(AbstractSpecimenCollectionGroup obj)
@@ -1350,14 +1390,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Check Container is valid for the specimen.
 	 *
-	 * @param container
-	 *            Storage Container Object
-	 * @param specimen
-	 *            Current Specimen Object
-	 * @param dao
-	 *            DAO Object
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * @param container Storage Container Object
+	 * @param specimen Current Specimen Object
+	 * @param dao DAO Object
+	 *
+	 * @throws BizLogicException Database related exception
 	 * @throws DAOException : DAOException
 	 */
 	protected void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen,
@@ -1409,13 +1446,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Current Specimen
-	 * @param dao
-	 *            DAO object
+	 * Retrive scg and cp.
+	 *
+	 * @param specimen Current Specimen
+	 * @param dao DAO object
+	 *
 	 * @return CP
-	 * @throws BizLogicException
-	 *             database exception
+	 *
+	 * @throws BizLogicException database exception
 	 * @throws DAOException : DAOException
 	 */
 	private CollectionProtocol retriveSCGAndCP(Specimen specimen, DAO dao)
@@ -1466,13 +1504,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimenID
-	 *            Specimen Identifier
-	 * @param dao
-	 *            DAO object
+	 * Load specimen collection group.
+	 *
+	 * @param specimenID Specimen Identifier
+	 * @param dao DAO object
+	 *
 	 * @return specimenCollectionGroup SCG object
-	 * @throws BizLogicException
-	 *             Database related Exception
+	 *
+	 * @throws BizLogicException Database related Exception
 	 */
 	private SpecimenCollectionGroup loadSpecimenCollectionGroup(Long specimenID, DAO dao)
 			throws BizLogicException
@@ -1512,16 +1551,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Updates the persistent object in the database.
 	 *
-	 * @param obj
-	 *            The object to be updated.
-	 * @param oldObj
-	 *            Persistent object
-	 * @param dao
-	 *            DAO object
-	 * @param sessionDataBean
-	 *            The session in which the object is saved
-	 * @throws BizLogicException
-	 *             Database related Exception
+	 * @param obj The object to be updated.
+	 * @param oldObj Persistent object
+	 * @param dao DAO object
+	 * @param sessionDataBean The session in which the object is saved
+	 *
+	 * @throws BizLogicException Database related Exception
 	 */
 	public void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
@@ -1549,16 +1584,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param obj
-	 *            The object to be updated.
-	 * @param oldObj
-	 *            Persistent object
-	 * @param dao
-	 *            DAO object
-	 * @param sessionDataBean
-	 *            The session in which the object is saved
-	 * @throws BizLogicException
-	 *             Database related Exception
+	 * Update specimen.
+	 *
+	 * @param obj The object to be updated.
+	 * @param oldObj Persistent object
+	 * @param dao DAO object
+	 * @param sessionDataBean The session in which the object is saved
+	 *
+	 * @throws BizLogicException Database related Exception
 	 */
 	private void updateSpecimen(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
@@ -1610,10 +1643,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * postUpdate method.
-	 * @param dao
-	 * @param currentObj
-	 * @param oldObj
-	 * @param sessionDataBean
+	 *
+	 * @param dao the dao
+	 * @param currentObj the current obj
+	 * @param oldObj the old obj
+	 * @param sessionDataBean the session data bean
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	protected void postUpdate(DAO dao, Object currentObj, Object oldObj,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -1622,14 +1658,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param specimen
-	 *            Specimen
-	 * @param persistentSpecimen
-	 *            parentSpecimen
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Disable specimen.
+	 *
+	 * @param dao DAO object
+	 * @param specimen Specimen
+	 * @param persistentSpecimen parentSpecimen
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void disableSpecimen(DAO dao, Specimen specimen, Specimen persistentSpecimen)
 			throws BizLogicException
@@ -1666,16 +1701,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param sessionDataBean
-	 *            Session details
-	 * @param specimen
-	 *            Current Specimen
-	 * @param specimenOld
-	 *            Old Specimen
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Update specimen data.
+	 *
+	 * @param dao DAO object
+	 * @param sessionDataBean Session details
+	 * @param specimen Current Specimen
+	 * @param specimenOld Old Specimen
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void updateSpecimenData(DAO dao, SessionDataBean sessionDataBean, Specimen specimen,
 			Specimen specimenOld) throws BizLogicException
@@ -1717,14 +1750,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param specimen
-	 *            Current Specimen
-	 * @param specimenOld
-	 *            Old Specimen
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Validate specimen.
+	 *
+	 * @param dao DAO object
+	 * @param specimen Current Specimen
+	 * @param specimenOld Old Specimen
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void validateSpecimen(DAO dao, Specimen specimen, Specimen specimenOld)
 			throws BizLogicException
@@ -1763,18 +1795,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param sessionDataBean
-	 *            Session data
-	 * @param specimen
-	 *            Current Specimen
-	 * @param specimenOld
-	 *            Persistent Specimen
-	 * @param persistentSpecimen
-	 *            Persistent Specimen
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Creates the persistent specimen obj.
+	 *
+	 * @param dao DAO object
+	 * @param sessionDataBean Session data
+	 * @param specimen Current Specimen
+	 * @param specimenOld Persistent Specimen
+	 * @param persistentSpecimen Persistent Specimen
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void createPersistentSpecimenObj(DAO dao, SessionDataBean sessionDataBean,
 			Specimen specimen, Specimen specimenOld, Specimen persistentSpecimen)
@@ -1826,11 +1855,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * add Specimen Events
-	 * @param persistentSpecimen
-	 * @param specimen
-	 * @param sessionDataBean
-	 * @param oldStatus
+	 * add Specimen Events.
+	 *
+	 * @param persistentSpecimen the persistent specimen
+	 * @param specimen the specimen
+	 * @param sessionDataBean the session data bean
+	 * @param oldStatus the old status
 	 */
 	private void addSpecimenEvents(Specimen persistentSpecimen, Specimen specimen,
 			SessionDataBean sessionDataBean, String oldStatus)
@@ -1866,18 +1896,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param sessionDataBean
-	 *            Session data
-	 * @param specimen
-	 *            Current Specimen
-	 * @param specimenOld
-	 *            Persistent Specimen
-	 * @param persistentSpecimen
-	 *            Persistent Specimen
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Sets the external identifier.
+	 *
+	 * @param dao DAO object
+	 * @param sessionDataBean Session data
+	 * @param specimen Current Specimen
+	 * @param specimenOld Persistent Specimen
+	 * @param persistentSpecimen Persistent Specimen
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void setExternalIdentifier(DAO dao, SessionDataBean sessionDataBean, Specimen specimen,
 			Specimen specimenOld, Specimen persistentSpecimen) throws BizLogicException
@@ -1926,10 +1953,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Current Specimen
-	 * @param parentSpecimenID
-	 *            Parent Specimen Identifier
+	 * Checks if is under sub specimen.
+	 *
+	 * @param specimen Current Specimen
+	 * @param parentSpecimenID Parent Specimen Identifier
+	 *
 	 * @return boolean true or false
 	 */
 	private boolean isUnderSubSpecimen(Specimen specimen, Long parentSpecimenID)
@@ -1955,8 +1983,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Current Specimen
+	 * Sets the disable to sub specimen.
+	 *
+	 * @param specimen Current Specimen
 	 */
 	private void setDisableToSubSpecimen(Specimen specimen)
 	{
@@ -1974,16 +2003,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param specimen
-	 *            Current Specimen
-	 * @param sessionDataBean
-	 *            Session details
-	 * @throws BizLogicException
-	 *             Database related exception
-	 * @throws SMException
-	 *             Security related exception
+	 * Sets the specimen attributes.
+	 *
+	 * @param dao DAO object
+	 * @param specimen Current Specimen
+	 * @param sessionDataBean Session details
+	 *
+	 * @throws BizLogicException Database related exception
+	 * @throws SMException Security related exception
 	 */
 	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean)
 			throws BizLogicException, SMException
@@ -2012,8 +2039,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Set Specimen Event Parameter User Identifier.
+	 *
 	 * @param specimen Specimen
 	 * @param dao DAO
+	 *
 	 * @throws BizLogicException BizLogicException
 	 */
 	private void setSpecimenEventParameterUserIdentifier(Specimen specimen,
@@ -2056,6 +2085,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Sets the consent tier status.
+	 *
 	 * @param specimen : specimen
 	 * @param consentTierStatusCollection : specimen
 	 */
@@ -2079,12 +2110,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO Object
-	 * @param specimen
-	 *            Current Specimen
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Sets the parent specimen.
+	 *
+	 * @param dao DAO Object
+	 * @param specimen Current Specimen
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void setParentSpecimen(DAO dao, Specimen specimen) throws BizLogicException
 	{
@@ -2097,14 +2128,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param specimen
-	 *            Current Specimen
-	 * @param sessionDataBean
-	 *            Session details
-	 * @param partOfMultipleSpecimen
-	 *            boolean true or false
+	 * Sets the storage location to new specimen.
+	 *
+	 * @param dao DAO object
+	 * @param specimen Current Specimen
+	 * @param sessionDataBean Session details
+	 * @param partOfMultipleSpecimen boolean true or false
+	 * @param specPos1 the spec pos1
+	 * @param specPos2 the spec pos2
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	// Bug 15392
 	private void setStorageLocationToNewSpecimen(DAO dao, Specimen specimen,
@@ -2211,11 +2244,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * retreieve Storage Container Of Specimen.
-	 * @param dao
-	 * @param specimen
-	 * @param storageContainerObj
-	 * @return
-	 * @throws DAOException
+	 *
+	 * @param dao the dao
+	 * @param specimen the specimen
+	 * @param storageContainerObj the storage container obj
+	 *
+	 * @return the storage container
+	 *
+	 * @throws DAOException the DAO exception
 	 */
 	private StorageContainer retreieveStorageContainerOfSpecimen(DAO dao, Specimen specimen,
 			StorageContainer storageContainerObj) throws DAOException
@@ -2260,12 +2296,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param sessionDataBean
-	 *            Session Details
-	 * @param storageContainerObj
-	 *            Storage Container Object
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Validate user for container.
+	 *
+	 * @param sessionDataBean Session Details
+	 * @param storageContainerObj Storage Container Object
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void validateUserForContainer(SessionDataBean sessionDataBean,
 			Container storageContainerObj) throws BizLogicException
@@ -2309,10 +2345,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Current Specimen
-	 * @param storageContainerObj
-	 *            Storage Container Object
+	 * Chk parent storage container.
+	 *
+	 * @param specimen Current Specimen
+	 * @param storageContainerObj Storage Container Object
+	 *
 	 * @return storageContainerObj Storage Container Object
 	 */
 	private StorageContainer chkParentStorageContainer(Specimen specimen,
@@ -2336,13 +2373,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Current Specimen
-	 * @param dao
-	 *            object
+	 * Sets the storage container id.
+	 *
+	 * @param specimen Current Specimen
+	 * @param dao object
+	 *
 	 * @return storageContainerObj Storage Container Object
-	 * @throws BizLogicException
-	 *             Database related exception
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private StorageContainer setStorageContainerId(DAO dao, Specimen specimen)
 			throws BizLogicException
@@ -2371,12 +2409,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Sets the specimen storage recursively.
+	 *
 	 * @param newSpecimen : newSpecimen
 	 * @param dao : dao
 	 * @param sessionDataBean : sessionDataBean
 	 * @param partOfMultipleSpecimen : partOfMultipleSpecimen
-	 * @param pos1 position one
 	 * @param pos1 position two
+	 * @param pos2 the pos2
+	 *
 	 * @throws BizLogicException : BizLogicException
 	 */
 	 //Bug 15392
@@ -2420,10 +2461,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Current Specimen
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Allocate position for specimen.
+	 *
+	 * @param specimen Current Specimen
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void allocatePositionForSpecimen(Specimen specimen) throws BizLogicException
 	{
@@ -2470,12 +2512,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO Object
-	 * @param specimenCollectionGroupArr
-	 *            Array of Specimen Collection Group
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Disable related objects for specimen collection group.
+	 *
+	 * @param dao DAO Object
+	 * @param specimenCollectionGroupArr Array of Specimen Collection Group
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	public void disableRelatedObjectsForSpecimenCollectionGroup(DAO dao,
 			Long specimenCollectionGroupArr[]) throws BizLogicException
@@ -2491,12 +2533,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param speIDArr
-	 *            Array of Specimen Id
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Disable sub specimens.
+	 *
+	 * @param dao DAO object
+	 * @param speIDArr Array of Specimen Id
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void disableSubSpecimens(DAO dao, Long speIDArr[]) throws BizLogicException
 	{
@@ -2516,26 +2558,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * Todo Remove this method
+	 * Todo Remove this method.
 	 *
-	 * @param dao
-	 *            DAO object
-	 * @param privilegeName
-	 *            Type of privilege
-	 * @param specimenCollectionGroupArr
-	 *            Array of specimenCollectionGroup
-	 * @param userId
-	 *            User Identifier
-	 * @param assignToUser
-	 *            boolean
-	 * @param roleId
-	 *            Role id
-	 * @param assignOperation
-	 *            boolean
-	 * @throws BizLogicException
-	 *             Database related exception
-	 * @throws SMException
-	 *             Security related exception
+	 * @param dao DAO object
+	 * @param obj the obj
+	 * @param operation the operation
+	 *
+	 * @return true, if validate
+	 *
+	 * @throws BizLogicException Database related exception
+	 * @throws SMException Security related exception
 	 */
 	/*
 	 * public void assignPrivilegeToRelatedObjectsForSCG(DAO dao, String
@@ -2777,8 +2809,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Validate lable.
+	 *
 	 * @param obj : obj
-	 * @param isLabelOnForCP
+	 * @param isLabelOnForCP the is label on for cp
+	 *
 	 * @throws BizLogicException  : BizLogicException
 	 */
 	private void validateLable(Object obj, boolean isLabelOnForCP) throws BizLogicException
@@ -2868,6 +2903,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 
+	/**
+	 * Checks if is label onfor specimen.
+	 *
+	 * @param objSpecimen the obj specimen
+	 * @param isLabelOnForCP the is label on for cp
+	 *
+	 * @return true, if is label onfor specimen
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 */
 	private boolean isLabelOnforSpecimen(final Specimen objSpecimen, boolean isLabelOnForCP) throws BizLogicException
 	{
 		boolean isLabelOnForSpecimen = false;
@@ -2917,17 +2962,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Validate Single Specimen.
 	 *
-	 * @param specimen
-	 *            Specimen Object to validate
-	 * @param dao
-	 *            DAO object
-	 * @param operation
-	 *            Add/Edit
-	 * @param partOfMulipleSpecimen
-	 *            boolean
+	 * @param specimen Specimen Object to validate
+	 * @param dao DAO object
+	 * @param operation Add/Edit
+	 * @param partOfMulipleSpecimen boolean
+	 *
 	 * @return boolean
-	 * @throws BizLogicException
-	 *             Database related exception
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private boolean validateSingleSpecimen(Specimen specimen, DAO dao, String operation,
 			boolean partOfMulipleSpecimen) throws BizLogicException
@@ -2969,7 +3011,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Validate Label For Single Specimen.
+	 *
 	 * @param specimen Specimen.
+	 *
 	 * @throws BizLogicException BizLogicException.
 	 */
 	private void validateLabelForSingleSpecimen(Specimen specimen) throws BizLogicException
@@ -3039,9 +3083,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 * @return
-	 * @throws ApplicationException
+	 * Inits the scg.
+	 *
+	 * @param specimen the specimen
+	 *
+	 * @return true, if inits the scg
+	 *
+	 * @throws ApplicationException 	 * @throws BizLogicException the biz logic exception
 	 */
 	private boolean initSCG(Specimen specimen) throws BizLogicException
 	{
@@ -3121,11 +3169,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 
 	/**
-	 * validate Derived Specimens
-	 * @param specimen
-	 * @param dao
-	 * @param operation
-	 * @throws BizLogicException
+	 * validate Derived Specimens.
+	 *
+	 * @param specimen the specimen
+	 * @param dao the dao
+	 * @param operation the operation
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	private void validateDerivedSpecimens(Specimen specimen, DAO dao, String operation)
 			throws BizLogicException
@@ -3176,15 +3226,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Specimen to validate
-	 * @param operation
-	 *            Add/Edit
-	 * @param validator
-	 *            Validator ObjectClass contains the methods used for validation
-	 *            of the fields in the userform
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Validate enumerated data.
+	 *
+	 * @param specimen Specimen to validate
+	 * @param operation Add/Edit
+	 * @param validator Validator ObjectClass contains the methods used for validation
+	 * of the fields in the userform
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void validateEnumeratedData(Specimen specimen, String operation, Validator validator)
 			throws BizLogicException
@@ -3246,12 +3295,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Specimen to validate.
-	 * @param specimen.
-	 * @param validator
-	 * Validator ObjectClass contains the methods used for validation
+	 *
+	 * @param validator Validator ObjectClass contains the methods used for validation
 	 * of the fields in the userform
-	 * @throws BizLogicException
-	 * Database related exception
+	 * @param specimen the specimen
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void validateSpecimenData(Specimen specimen, Validator validator)
 			throws BizLogicException
@@ -3287,10 +3336,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Specimen to validate
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Validate specimen characterstics.
+	 *
+	 * @param specimen Specimen to validate
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void validateSpecimenCharacterstics(Specimen specimen) throws BizLogicException
 	{
@@ -3339,13 +3389,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Specimen to validate
-	 * @param validator
-	 *            Validator ObjectClass contains the methods used for validation
-	 *            of the fields in the userform
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Validate specimen event.
+	 *
+	 * @param specimen Specimen to validate
+	 * @param validator Validator ObjectClass contains the methods used for validation
+	 * of the fields in the userform
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void validateSpecimenEvent(Specimen specimen, Validator validator)
 			throws BizLogicException
@@ -3381,12 +3431,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Specimen to validate
-	 * @param dao
-	 *            DAO object
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Validate storage container.
+	 *
+	 * @param specimen Specimen to validate
+	 * @param dao DAO object
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void validateStorageContainer(Specimen specimen, DAO dao) throws BizLogicException
 	{
@@ -3444,13 +3494,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Specimen to validate
-	 * @param validator
-	 *            Validator ObjectClass contains the methods used for validation
-	 *            of the fields in the userform
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Validate external identifier.
+	 *
+	 * @param specimen Specimen to validate
+	 * @param validator Validator ObjectClass contains the methods used for validation
+	 * of the fields in the userform
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void validateExternalIdentifier(Specimen specimen, Validator validator)
 			throws BizLogicException
@@ -3484,13 +3534,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Specimen to validate
-	 * @param validator
-	 *            Validator ObjectClass contains the methods used for validation
-	 *            of the fields in the userform
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Validate bio hazard.
+	 *
+	 * @param specimen Specimen to validate
+	 * @param validator Validator ObjectClass contains the methods used for validation
+	 * of the fields in the userform
+	 * @param dao the dao
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void validateBioHazard(Specimen specimen, Validator validator, DAO dao) throws BizLogicException
 	{
@@ -3542,16 +3593,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimen
-	 *            Specimen to validate
-	 * @param operation
-	 *            Add/Edit
-	 * @param dao
-	 *            DAO object
-	 * @param partOfMulipleSpecimen
-	 *            boolean
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * Validate fields.
+	 *
+	 * @param specimen Specimen to validate
+	 * @param dao DAO object
+	 * @param partOfMulipleSpecimen boolean
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	private void validateFields(Specimen specimen, DAO dao,
 			boolean partOfMulipleSpecimen) throws BizLogicException
@@ -3618,10 +3666,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * This function checks whether the storage position of a specimen is
 	 * changed or not & returns the status accordingly.
 	 *
-	 * @param oldSpecimen
-	 *            Persistent Object
-	 * @param newSpecimen
-	 *            New Object
+	 * @param oldSpecimen Persistent Object
+	 * @param newSpecimen New Object
+	 *
 	 * @return boolean
 	 */
 	private boolean isStoragePositionChanged(Specimen oldSpecimen, Specimen newSpecimen)
@@ -3678,10 +3725,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Set event parameters from parent specimen to derived specimen.
 	 *
-	 * @param parentSpecimen
-	 *            specimen
-	 * @param deriveSpecimen
-	 *            Derived Specimen
+	 * @param parentSpecimen specimen
+	 * @param deriveSpecimen Derived Specimen
+	 *
 	 * @return set
 	 */
 	private Set<AbstractDomainObject> populateDeriveSpecimenEventCollection(
@@ -3719,8 +3765,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * This method will retrive no of specimen in the catissue_specimen table.
 	 *
-	 * @param sessionData
-	 *            Session data
+	 * @param sessionData Session data
+	 *
 	 * @return Count of Specimen
 	 */
 	public int totalNoOfSpecimen(SessionDataBean sessionData)
@@ -3751,12 +3797,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * This function will retrive SCG Id from SCG Name.
 	 *
-	 * @param specimen
-	 *            Current Specimen
-	 * @param dao
-	 *            DAO Object
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * @param specimen Current Specimen
+	 * @param dao DAO Object
+	 *
+	 * @throws BizLogicException Database related exception
 	 */
 	public void retriveSCGIdFromSCGName(Specimen specimen, DAO dao) throws BizLogicException
 	{
@@ -3795,16 +3839,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * This method updates the consents and specimen based on the the consent
 	 * withdrawal option.
 	 *
-	 * @param specimen
-	 *            New object
-	 * @param oldSpecimen
-	 *            Old Object
-	 * @param dao
-	 *            DAO object
-	 * @param sessionDataBean
-	 *            Session Details
-	 * @throws BizLogicException
-	 *             Database exception
+	 * @param specimen New object
+	 * @param oldSpecimen Old Object
+	 * @param dao DAO object
+	 * @param sessionDataBean Session Details
+	 *
+	 * @throws BizLogicException Database exception
 	 */
 	private void updateConsentWithdrawStatus(Specimen specimen, Specimen oldSpecimen, DAO dao,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -3842,14 +3882,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * This method is used to update the consent status of child specimens as
 	 * per the option selected by the user.
-	 * @param specimen
-	 *            New object
-	 * @param oldSpecimen
-	 *            Old Object
-	 * @param dao
-	 *            DAO object
-	 * @throws BizLogicException
-	 *             Database exception
+	 *
+	 * @param specimen New object
+	 * @param oldSpecimen Old Object
+	 * @param dao DAO object
+	 *
+	 * @throws BizLogicException Database exception
 	 * @throws DAOException : DAOException
 	 */
 	private void updateConsentStatus(Specimen specimen, DAO dao, Specimen oldSpecimen)
@@ -3889,15 +3927,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * This function is used to update specimens and their dervied & aliquot
 	 * specimens.
-	 * @param newSpecimenCollection
-	 *            List of specimens to update along with children specimens.
-	 * @param sessionDataBean
-	 *            current user session information
-	 * @param dao
-	 *            DAO object
-	 * @throws BizLogicException
-	 *             If DAO fails to update one or more specimens this function
-	 *             will throw DAOException.
+	 *
+	 * @param newSpecimenCollection List of specimens to update along with children specimens.
+	 * @param sessionDataBean current user session information
+	 * @param dao DAO object
+	 *
+	 * @throws BizLogicException If DAO fails to update one or more specimens this function
+	 * will throw DAOException.
 	 * @throws DAOException : DAOException
 	 */
 	public void updateAnticipatorySpecimens(DAO dao,
@@ -3911,14 +3947,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * This function is used to bulk update multiple specimens. If any specimen
 	 * contains children specimens those will be inserted
 	 *
-	 * @param newSpecimenCollection
-	 *            List of specimens to update along with new children specimens
-	 *            if any. 7
-	 * @param sessionDataBean
-	 *            current user session information
-	 * @throws BizLogicException
-	 *             If DAO fails to update one or more specimens this function
-	 *             will throw DAOException.
+	 * @param newSpecimenCollection List of specimens to update along with new children specimens
+	 * if any. 7
+	 * @param sessionDataBean current user session information
+	 *
+	 * @throws BizLogicException If DAO fails to update one or more specimens this function
+	 * will throw DAOException.
 	 */
 	public void bulkUpdateSpecimens(Collection<AbstractDomainObject> newSpecimenCollection,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -3985,19 +4019,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param sessionDataBean
-	 *            Session details
-	 * @param dao
-	 *            DAO Object
-	 * @param childSpecimenCtr
-	 *            Count
-	 * @param specimenDO
-	 *            Persistent object
-	 * @param childrenSpecimenCollection
-	 *            childSpecimen Collection
+	 * Update child specimen.
+	 *
+	 * @param sessionDataBean Session details
+	 * @param dao DAO Object
+	 * @param childSpecimenCtr Count
+	 * @param specimenDO Persistent object
+	 * @param childrenSpecimenCollection childSpecimen Collection
+	 *
 	 * @return count
-	 * @throws BizLogicException
-	 *             Database Exception
+	 *
+	 * @throws BizLogicException Database Exception
 	 */
 	private int updateChildSpecimen(SessionDataBean sessionDataBean, DAO dao, int childSpecimenCtr,
 			Specimen specimenDO, Collection<AbstractSpecimen> childrenSpecimenCollection)
@@ -4018,8 +4050,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * allocate Specimen Postions Recursively.
-	 * @param newSpecimen
-	 * @throws BizLogicException
+	 *
+	 * @param newSpecimen the new specimen
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	private void allocateSpecimenPostionsRecursively(Specimen newSpecimen) throws BizLogicException
 	{
@@ -4046,8 +4080,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * get Storage Container.
-	 * @param specimen
-	 * @return
+	 *
+	 * @param specimen the specimen
+	 *
+	 * @return the storage container
 	 */
 	private StorageContainer getStorageContainer(Specimen specimen)
 	{
@@ -4061,16 +4097,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param newSpecimenCollection
-	 *            Specimen Collection
-	 * @param sessionDataBean
-	 *            Session Details
-	 * @param updateChildrens
-	 *            boolean
-	 * @throws BizLogicException
-	 *             Database exception
+	 * Update multiple specimens.
+	 *
+	 * @param dao DAO object
+	 * @param newSpecimenCollection Specimen Collection
+	 * @param sessionDataBean Session Details
+	 * @param updateChildrens boolean
+	 *
+	 * @throws BizLogicException Database exception
 	 * @throws DAOException : DAOException
 	 */
 	protected void updateMultipleSpecimens(DAO dao,
@@ -4148,13 +4182,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * This function validate if CP is closed then anticipatory specimen can not
 	 * be collected.
-	 * @param dao
-	 *            DAO object
+	 *
+	 * @param dao the dao
 	 * @param newSpecimen : newSpecimen
 	 * @param specimenDO : specimenDO
-	 * @param dao
-	 * @throws BizLogicException
-	 *             Database exception
+	 *
+	 * @throws BizLogicException Database exception
 	 */
 	public void validateIfCPisClosed(Specimen specimenDO, Specimen newSpecimen, DAO dao)
 			throws BizLogicException
@@ -4202,17 +4235,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	// Bug 11481 E
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param sessionDataBean
-	 *            Session Details
-	 * @param updateChildrens
-	 *            boolean
-	 * @param newSpecimen
-	 *            Specimen Object
-	 * @throws BizLogicException
-	 *             Database exception
+	 * Update single specimen.
+	 *
+	 * @param dao DAO object
+	 * @param sessionDataBean Session Details
+	 * @param updateChildrens boolean
+	 * @param newSpecimen Specimen Object
+	 *
 	 * @return Specimen object
+	 *
+	 * @throws BizLogicException Database exception
 	 */
 	public Specimen updateSingleSpecimen(DAO dao, Specimen newSpecimen,
 			SessionDataBean sessionDataBean, boolean updateChildrens) throws BizLogicException
@@ -4254,16 +4286,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param specimenVO
-	 *            New Object
-	 * @param specimenDO
-	 *            Persistent object
-	 * @param sessionDataBean
-	 *            Session Details
-	 * @throws BizLogicException
-	 *             Database exception
+	 * Update children specimens.
+	 *
+	 * @param dao DAO object
+	 * @param specimenVO New Object
+	 * @param specimenDO Persistent object
+	 * @param sessionDataBean Session Details
+	 *
+	 * @throws BizLogicException Database exception
 	 */
 	private void updateChildrenSpecimens(DAO dao, Specimen specimenVO, Specimen specimenDO,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -4301,13 +4331,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Get the related specimen.
-	 * @param id
-	 *            Identifier
-	 * @param specimenCollection
-	 *            Specimen Collection
+	 *
+	 * @param id Identifier
+	 * @param specimenCollection Specimen Collection
+	 *
 	 * @return Specimen
-	 * @throws BizLogicException
-	 *             Database exception
+	 *
+	 * @throws BizLogicException Database exception
 	 */
 	private Specimen getCorelatedSpecimen(Long id, Collection<AbstractSpecimen> specimenCollection)
 			throws BizLogicException
@@ -4326,12 +4356,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Checks duplicate specimen fields.
-	 * @param specimen
-	 *            Specimen
-	 * @param dao
-	 *            DAO object
-	 * @throws BizLogicException
-	 *             Database exception
+	 *
+	 * @param specimen Specimen
+	 * @param dao DAO object
+	 *
+	 * @throws BizLogicException Database exception
 	 */
 	private void checkDuplicateSpecimenFields(Specimen specimen, DAO dao) throws BizLogicException
 	{
@@ -4385,16 +4414,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param specimenVO
-	 *            New Object
-	 * @param specimenDO
-	 *            Persistent object
-	 * @param sessionDataBean
-	 *            session details
-	 * @throws BizLogicException
-	 *             Database exception
+	 * Update specimen domain object.
+	 *
+	 * @param dao DAO object
+	 * @param specimenVO New Object
+	 * @param specimenDO Persistent object
+	 * @param sessionDataBean session details
+	 *
+	 * @throws BizLogicException Database exception
 	 */
 	private void updateSpecimenDomainObject(DAO dao, Specimen specimenVO, Specimen specimenDO,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -4445,16 +4472,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param specimenVO
-	 *            New Object
-	 * @param specimenDO
-	 *            Persistent object
-	 * @param sessionDataBean
-	 *            session details
-	 * @throws BizLogicException
-	 *             Database exception
+	 * Sets the specimen data.
+	 *
+	 * @param dao DAO object
+	 * @param specimenVO New Object
+	 * @param specimenDO Persistent object
+	 * @param sessionDataBean session details
+	 *
+	 * @throws BizLogicException Database exception
 	 */
 	private void setSpecimenData(DAO dao, Specimen specimenVO, Specimen specimenDO,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -4492,16 +4517,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param specimenVO
-	 *            New Object
-	 * @param specimenDO
-	 *            Persistent object
-	 * @param sessionDataBean
-	 *            session details
-	 * @throws BizLogicException
-	 *             Database exception
+	 * Update extenal identifier.
+	 *
+	 * @param dao DAO object
+	 * @param specimenVO New Object
+	 * @param specimenDO Persistent object
+	 * @param sessionDataBean session details
+	 *
+	 * @throws BizLogicException Database exception
 	 */
 	private void updateExtenalIdentifier(DAO dao, Specimen specimenVO, Specimen specimenDO,
 			SessionDataBean sessionDataBean) throws BizLogicException
@@ -4548,12 +4571,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * Logic for Calculate Quantity.
-	 * @param specimenVO
-	 *            New Specimen object
-	 * @param specimenDO
-	 *            Persistent Object
-	 * @throws BizLogicException
-	 *             Database Exception
+	 *
+	 * @param specimenVO New Specimen object
+	 * @param specimenDO Persistent Object
+	 *
+	 * @throws BizLogicException Database Exception
 	 */
 	private void calculateAvailableQunatity(Specimen specimenVO, Specimen specimenDO)
 			throws BizLogicException
@@ -4645,14 +4667,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specimenDO
-	 *            Persistent object
-	 * @param differenceQty
-	 *            Change in quantity
-	 * @param newAvailQty
-	 *            New Available quantity
-	 * @throws BizLogicException
-	 *             Database Exception
+	 * Calculate parent quantity.
+	 *
+	 * @param specimenDO Persistent object
+	 * @param differenceQty Change in quantity
+	 * @param newAvailQty New Available quantity
+	 *
+	 * @throws BizLogicException Database Exception
 	 */
 	private void calculateParentQuantity(Specimen specimenDO, double differenceQty,
 			double newAvailQty) throws BizLogicException
@@ -4678,6 +4699,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Gets the container holds c ps.
+	 *
 	 * @return containerHoldsCPs
 	 */
 	public Map<Long, Collection<CollectionProtocol>> getContainerHoldsCPs()
@@ -4686,8 +4709,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param containerHoldsCPs
-	 *            Map of container that can holds CP
+	 * Sets the container holds c ps.
+	 *
+	 * @param containerHoldsCPs Map of container that can holds CP
 	 */
 	public void setContainerHoldsCPs(Map<Long, Collection<CollectionProtocol>> containerHoldsCPs)
 	{
@@ -4695,6 +4719,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Gets the container holds specimen classes.
+	 *
 	 * @return containerHoldsSpecimenClasses containerHoldsSpecimenClasses
 	 */
 	public Map<Long, Collection<String>> getContainerHoldsSpecimenClasses()
@@ -4703,8 +4729,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param containerHoldsSpecimenClasses
-	 *            container of SpecimenClasses
+	 * Sets the container holds specimen classes.
+	 *
+	 * @param containerHoldsSpecimenClasses container of SpecimenClasses
 	 */
 	public void setContainerHoldsSpecimenClasses(
 			Map<Long, Collection<String>> containerHoldsSpecimenClasses)
@@ -4713,14 +4740,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param dao
-	 *            DAO object
-	 * @param specimenVO
-	 *            New Specimen object
-	 * @param specimenDO
-	 *            Persistent Object
-	 * @throws BizLogicException
-	 *             Database Exception
+	 * Sets the storage container.
+	 *
+	 * @param dao DAO object
+	 * @param specimenVO New Specimen object
+	 * @param specimenDO Persistent Object
+	 *
+	 * @throws BizLogicException Database Exception
 	 */
 	private void setStorageContainer(DAO dao, Specimen specimenVO, Specimen specimenDO)
 			throws BizLogicException
@@ -4750,6 +4776,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Checks if is cpbased.
+	 *
 	 * @return boolean
 	 */
 	public boolean isCpbased()
@@ -4758,8 +4786,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param cpbased
-	 *            boolean
+	 * Sets the cpbased.
+	 *
+	 * @param cpbased boolean
 	 */
 	public void setCpbased(boolean cpbased)
 	{
@@ -4770,12 +4799,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 * This function throws BizLogicException if the domainObj is of type
 	 * SpecimenCollectionRequirementGroup.
 	 *
-	 * @param domainObj
-	 *            current domain object
-	 * @param uiForm
-	 *            current form
-	 * @throws BizLogicException
-	 *             BizLogic exception
+	 * @param domainObj current domain object
+	 * @param uiForm current form
+	 *
+	 * @throws BizLogicException BizLogic exception
 	 */
 	protected void prePopulateUIBean(AbstractDomainObject domainObj, IValueObject uiForm)
 			throws BizLogicException
@@ -4798,13 +4825,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * This function is used for retriving specimen and sub specimen's
 	 * attributes.
+	 *
 	 * @param sessionData : sessionData
-	 * @param specimenID
-	 *            id of the specimen
-	 * @param finalDataList
-	 *            the data list to be populated
-	 * @throws BizLogicException : BizLogicException
+	 * @param specimenID id of the specimen
+	 * @param finalDataList the data list to be populated
+	 * @param dao the dao
+	 *
 	 * @return Specimen
+	 *
+	 * @throws BizLogicException : BizLogicException
 	 */
 	public Specimen getSpecimen(String specimenID, List finalDataList, SessionDataBean sessionData,
 			DAO dao) throws BizLogicException
@@ -4829,9 +4858,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Gets the specimen internal.
 	 *
 	 * @param specimen  : specimen
 	 * @param finalDataList : finalDataList
+	 *
 	 * @throws BizLogicException  :BizLogicException
 	 */
 	private void getSpecimenInternal(Specimen specimen, List finalDataList)
@@ -4875,7 +4906,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 *
 	 * @param specimenID : specimenID
 	 * @param dao : dao
+	 *
 	 * @return Specimen
+	 *
 	 * @throws BizLogicException : BizLogicException
 	 */
 	public Specimen getSpecimenObj(String specimenID, DAO dao) throws BizLogicException
@@ -4898,10 +4931,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Check parent specimen disposal.
+	 *
 	 * @param sessionDataBean : sessionDataBean
 	 * @param specimen : specimen
 	 * @param dao : dao
 	 * @param disposalReason : disposalReason
+	 *
 	 * @throws UserNotAuthorizedException : UserNotAuthorizedException
 	 * @throws DAOException : DAOException
 	 */
@@ -4928,11 +4964,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * Called from DefaultBizLogic to get ObjectId for authorization check.
 	 * (non-Javadoc)
+	 *
 	 * @param dao : dao
 	 * @param domainObject : domainObject
+	 *
 	 * @return String
+	 *
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO,
-	 *      java.lang.Object)
+	 * java.lang.Object)
 	 */
 	public String getObjectId(DAO dao, Object domainObject)
 	{
@@ -5000,8 +5039,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * To get PrivilegeName for authorization check from
 	 * 'PermissionMapDetails.xml' (non-Javadoc).
+	 *
 	 * @param domainObject : domainObject
+	 *
 	 * @return String
+	 *
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getPrivilegeName(java.lang.Object)
 	 */
 	protected String getPrivilegeKey(Object domainObject)
@@ -5035,13 +5077,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * (non-Javadoc).
+	 *
 	 * @param dao : dao
 	 * @param domainObject : domainObject
 	 * @param sessionDataBean : sessionDataBean
+	 *
 	 * @return boolean
+	 *
 	 * @throws BizLogicException : BizLogicException
+	 *
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO,
-	 *      java.lang.Object, edu.wustl.common.beans.SessionDataBean)
+	 * java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
 	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean)
 			throws BizLogicException
@@ -5237,6 +5283,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * isReadDeniedTobeChecked.
+	 *
+	 * @return true, if checks if is read denied tobe checked
 	 */
 	@Override
 	public boolean isReadDeniedTobeChecked()
@@ -5246,6 +5294,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * getReadDeniedPrivilegeName.
+	 *
+	 * @return the read denied privilege name
 	 */
 	@Override
 	public String getReadDeniedPrivilegeName()
@@ -5255,8 +5305,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * validate Collection Status.
-	 * @param specimen
-	 * @throws BizLogicException
+	 *
+	 * @param specimen the specimen
+	 *
+	 * @throws BizLogicException the biz logic exception
 	 */
 	private void validateCollectionStatus(Specimen specimen) throws BizLogicException
 	{
@@ -5272,10 +5324,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * This method called from orderbizlogic to distribute and close specimen.
+	 *
 	 * @param sessionDataBean : sessionDataBean
 	 * @param specimen : specimen
 	 * @param dao  :dao
 	 * @param disposalReason : disposalReason
+	 *
 	 * @throws BizLogicException : BizLogicException
 	 * @throws UserNotAuthorizedException : UserNotAuthorizedException
 	 */
@@ -5290,8 +5344,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * refresh Titli Search Index Single.
-	 * @param operation
-	 * @param obj
+	 *
+	 * @param operation the operation
+	 * @param obj the obj
 	 */
 	protected void refreshTitliSearchIndexSingle(String operation, Object obj)
 	{
@@ -5339,11 +5394,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param specId
-	 *            : specId
+	 * Gets the total no of aliquot specimen.
+	 *
+	 * @param specId : specId
+	 * @param dao the dao
+	 *
 	 * @return long : long
-	 * @throws BizLogicException
-	 *             : BizLogicException
+	 *
+	 * @throws BizLogicException : BizLogicException
 	 */
 	public synchronized long getTotalNoOfAliquotSpecimen(Long specId, DAO dao)
 			throws BizLogicException
@@ -5383,11 +5441,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
+	 * Gets the cp id.
 	 *
 	 * @param dao - dao
 	 * @param cpId - cp Id
 	 * @param specimen - specimen
+	 *
 	 * @return cp Id
+	 *
 	 * @throws DAOException - DAOException
 	 */
 
@@ -5419,14 +5480,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return cpId;
 	}
+
 	/**
 	 * To check wether the Continer to display can holds the given
 	 * specimenClass.
-	 * @param specimenClass
-	 *            The specimenClass Name.
-	 * @param storageContainer
-	 *            The StorageContainer reference to be displayed on the page.
+	 *
+	 * @param specimenClass The specimenClass Name.
+	 * @param storageContainer The StorageContainer reference to be displayed on the page.
+	 *
 	 * @return true if the given continer can hold the specimenClass.
+	 *
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	public boolean canHoldSpecimenClass(String specimenClass, StorageContainer storageContainer)
@@ -5451,11 +5514,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * To check wether the Continer to display can holds the given
 	 * specimenType.
-	 * @param specimenType
-	 *            The specimenType Name.
-	 * @param storageContainer
-	 *            The StorageContainer reference to be displayed on the page.
+	 *
+	 * @param specimenType The specimenType Name.
+	 * @param storageContainer The StorageContainer reference to be displayed on the page.
+	 *
 	 * @return true if the given continer can hold the specimenType.
+	 *
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	public boolean canHoldSpecimenType(String specimenType, StorageContainer storageContainer)
@@ -5479,6 +5543,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 
 
+	/**
+	 * Gets the specimen count for cp.
+	 *
+	 * @param ppi the ppi
+	 *
+	 * @return the specimen count for cp
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 */
 	public Long getSpecimenCountForCP(String ppi) throws BizLogicException
 	{
 		Long count=0l;

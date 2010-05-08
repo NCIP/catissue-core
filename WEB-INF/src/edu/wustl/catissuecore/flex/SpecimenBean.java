@@ -12,44 +12,86 @@ import java.util.List;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SpecimenBean.
+ */
 public class SpecimenBean implements Externalizable
 {
 
-	/**
-	 *
-	 */
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
+	/** The sp id. */
 	public Long spID = -1L;
 	/*public String scgName = "A";
 	public String parentSpecimenName = "B";*/
+	/** The parent type. */
 	public String parentType = "";
+
+	/** The parent name. */
 	public String parentName = "";
 
+	/** The specimen label. */
 	public String specimenLabel = "";
+
+	/** The specimen barcode. */
 	public String specimenBarcode = "";
+
+	/** The lineage. */
 	public String lineage = "";
 
+	/** The specimen class. */
 	public String specimenClass = "";
+
+	/** The specimen type. */
 	public String specimenType = "";
 
+	/** The tissue site. */
 	public String tissueSite = "";
+
+	/** The tissue side. */
 	public String tissueSide = "";
+
+	/** The pathological status. */
 	public String pathologicalStatus = "";
 
+	/** The creation date. */
 	public Date creationDate = new Date();
+
+	/** The quantity. */
 	public Double quantity = new Double(0);
+
+	/** The concentration. */
 	public Double concentration = new Double(0);
+
+	/** The storage. */
 	public String storage = "";
+
+	/** The comment. */
 	public String comment = "";
+
+	/** The ex id coll. */
 	public List<ExternalIdentifier> exIdColl = new ArrayList<ExternalIdentifier>();
+
+	/** The biohazard coll. */
 	public List<Biohazard> biohazardColl = new ArrayList<Biohazard>();
+
+	/** The collection event. */
 	public EventParamtersBean collectionEvent = new EventParamtersBean();
+
+	/** The received event. */
 	public EventParamtersBean receivedEvent = new EventParamtersBean();
+
+	/** The derived coll. */
 	public List<SpecimenBean> derivedColl = new ArrayList<SpecimenBean>();
 
+	/** The mode. */
 	public String mode = "";
 
+	/**
+	 * Instantiates a new specimen bean.
+	 */
 	public SpecimenBean()
 	{
 
@@ -57,6 +99,11 @@ public class SpecimenBean implements Externalizable
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getClassName()
+	 */
+	/**
+	 * Gets the class name.
+	 *
+	 * @return the class name
 	 */
 	public String getClassName()
 	{
@@ -66,6 +113,11 @@ public class SpecimenBean implements Externalizable
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getConcentration()
+	 */
+	/**
+	 * Gets the concentration.
+	 *
+	 * @return the concentration
 	 */
 	public String getConcentration()
 	{
@@ -80,6 +132,11 @@ public class SpecimenBean implements Externalizable
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getDisplayName()
 	 */
+	/**
+	 * Gets the display name.
+	 *
+	 * @return the display name
+	 */
 	public String getDisplayName()
 	{
 		// TODO Auto-generated method stub
@@ -88,6 +145,11 @@ public class SpecimenBean implements Externalizable
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getParentName()
+	 */
+	/**
+	 * Gets the parent name.
+	 *
+	 * @return the parent name
 	 */
 	public String getParentName()
 	{
@@ -98,6 +160,11 @@ public class SpecimenBean implements Externalizable
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getPathologicalStatus()
 	 */
+	/**
+	 * Gets the pathological status.
+	 *
+	 * @return the pathological status
+	 */
 	public String getPathologicalStatus()
 	{
 		// TODO Auto-generated method stub
@@ -106,6 +173,11 @@ public class SpecimenBean implements Externalizable
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getQuantity()
+	 */
+	/**
+	 * Gets the quantity.
+	 *
+	 * @return the quantity
 	 */
 	public String getQuantity()
 	{
@@ -120,6 +192,11 @@ public class SpecimenBean implements Externalizable
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getStorageContainerForSpecimen()
 	 */
+	/**
+	 * Gets the storage container for specimen.
+	 *
+	 * @return the storage container for specimen
+	 */
 	public String getStorageContainerForSpecimen()
 	{
 		// TODO Auto-generated method stub
@@ -128,6 +205,11 @@ public class SpecimenBean implements Externalizable
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getTissueSide()
+	 */
+	/**
+	 * Gets the tissue side.
+	 *
+	 * @return the tissue side
 	 */
 	public String getTissueSide()
 	{
@@ -138,6 +220,11 @@ public class SpecimenBean implements Externalizable
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getTissueSite()
 	 */
+	/**
+	 * Gets the tissue site.
+	 *
+	 * @return the tissue site
+	 */
 	public String getTissueSite()
 	{
 		// TODO Auto-generated method stub
@@ -147,6 +234,11 @@ public class SpecimenBean implements Externalizable
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getType()
 	 */
+	/**
+	 * Gets the type.
+	 *
+	 * @return the type
+	 */
 	public String getType()
 	{
 		// TODO Auto-generated method stub
@@ -155,6 +247,11 @@ public class SpecimenBean implements Externalizable
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#getUniqueIdentifier()
+	 */
+	/**
+	 * Gets the unique identifier.
+	 *
+	 * @return the unique identifier
 	 */
 	public String getUniqueIdentifier()
 	{
@@ -167,6 +264,9 @@ public class SpecimenBean implements Externalizable
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
+	 */
 	public void writeExternal(ObjectOutput out) throws IOException
 	{
 		System.out.println("SERVER IN writeExternal START");
@@ -199,6 +299,9 @@ public class SpecimenBean implements Externalizable
 		System.out.println("SERVER IN writeExternal DONE");
 	}
 
+	/* (non-Javadoc)
+	 * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
+	 */
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
 	{
 		System.out.println("SERVER IN readExternal");
@@ -232,6 +335,9 @@ public class SpecimenBean implements Externalizable
 		System.out.println(this.toString());
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString()
 	{
@@ -246,11 +352,21 @@ public class SpecimenBean implements Externalizable
 				+ this.exIdColl + "\n" + "collEvent " + this.collectionEvent;
 	}
 
+	/**
+	 * Gets the lineage.
+	 *
+	 * @return the lineage
+	 */
 	public String getLineage()
 	{
 		return this.lineage;
 	}
 
+	/**
+	 * Sets the lineage.
+	 *
+	 * @param lineage the new lineage
+	 */
 	public void setLineage(String lineage)
 	{
 		this.lineage = lineage;

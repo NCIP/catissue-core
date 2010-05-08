@@ -2088,4 +2088,80 @@ public class BaseTestCaseUtility {
 
 		return deidentifiedSurgicalPathologyReport;
 	}
+
+	public static Specimen initNewTissueSpecimen()
+	{
+		System.out.println("Inside tissuespecimen");
+		TissueSpecimen ts= new TissueSpecimen();
+		ts.setSpecimenClass("Tissue");
+//		ts.setLabel("TissueSpecimen"+UniqueKeyGeneratorUtil.getUniqueKey());
+		ts.setActivityStatus("Active");
+		ts.setCollectionStatus("Collected");
+		System.out.println("Inside Type");
+		ts.setBarcode("Barcode"+UniqueKeyGeneratorUtil.getUniqueKey());
+		ts.setSpecimenType("Fixed Tissue Block");
+		ts.setPathologicalStatus("Malignant");
+
+		SpecimenCharacteristics specimenCharacteristics =  new SpecimenCharacteristics();
+		//specimenCharacteristics.setId(new Long(1));
+		specimenCharacteristics.setTissueSide("Left");
+		specimenCharacteristics.setTissueSite("Placenta");
+		ts.setSpecimenCharacteristics(specimenCharacteristics);
+
+		System.out.println("setting Qunatity");
+		Double quantity = new Double(10.0);
+		ts.setInitialQuantity(quantity);
+		ts.setAvailableQuantity(quantity);
+		ts.setIsAvailable(new Boolean(true));
+
+		System.out.println("Setting parameters");
+
+		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		collectionEventParameters.setComment("");
+		collectionEventParameters.setSpecimen(ts);
+		//User user = (User)TestCaseUtility.getObjectMap(User.class);
+		User user = new User();
+		user.setId(new Long(1));
+		collectionEventParameters.setUser(user);
+		try
+		{
+			collectionEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+
+		}
+		catch (ParseException e1)
+		{
+			System.out.println("exception in APIDemo");
+			e1.printStackTrace();
+		}
+
+		collectionEventParameters.setContainer("No Additive Vacutainer");
+		collectionEventParameters.setCollectionProcedure("Needle Core Biopsy");
+
+
+		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		receivedEventParameters.setUser(user);
+		try
+		{
+			System.out.println("--- Start ---- 10");
+			receivedEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+		}
+		catch (ParseException e)
+		{
+			System.out.println("APIDemo");
+			e.printStackTrace();
+		}
+
+		receivedEventParameters.setReceivedQuality("Acceptable");
+		receivedEventParameters.setComment("fdfd");
+		receivedEventParameters.setSpecimen(ts);
+
+		Collection specimenEventCollection = new HashSet();
+		specimenEventCollection.add(collectionEventParameters);
+		specimenEventCollection.add(receivedEventParameters);
+		ts.setSpecimenEventCollection(specimenEventCollection);
+
+		return ts;
+	}
 }

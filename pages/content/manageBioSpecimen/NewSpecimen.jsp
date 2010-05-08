@@ -1691,9 +1691,12 @@
 										String onChange = "onCustomListBoxChange(this)";
 										String className = form.getClassName();
 										String sptype = form.getType();
-										String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
-										if (collectionProtocolId==null)
+
+										String collectionProtocolId =null;
+										if (request.getAttribute(Constants.COLLECTION_PROTOCOL_ID)==null)
 											collectionProtocolId="";
+										else
+											collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
 										if (className==null)
 											className="";
 										String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"

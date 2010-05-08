@@ -104,6 +104,9 @@ public class BaseTestCaseUtility {
 		collectionProtocol.setTitle("ColProt"+UniqueKeyGeneratorUtil.getUniqueKey());
 		collectionProtocol.setShortTitle("cp"+UniqueKeyGeneratorUtil.getUniqueKey());
 		collectionProtocol.setEnrollment(2);
+		collectionProtocol.setSpecimenLabelFormat("CP_%PPI%_%SP_TYPE%_%PPI_YOC_UID%_%YR_OF_COLL%");
+		collectionProtocol.setDerivativeLabelFormat("CP_%PPI%_%SP_TYPE%_%PPI_YOC_UID%_%YR_OF_COLL%");
+		collectionProtocol.setAliquotLabelFormat("%PSPEC_LABEL%_%PSPEC_UID%");
 
 		System.out.println("reached setUp");
 
@@ -134,7 +137,6 @@ public class BaseTestCaseUtility {
 		collectionProtocol.setPrincipalInvestigator(principalInvestigator);
 
 //		collectionProtocol.setGenerateLabel(false);
-		collectionProtocol.setSpecimenLabelFormat(null);
 
 		Collection protocolCordinatorCollection = new HashSet();
 		//protocolCordinatorCollection.add(protocolCordinator);
@@ -190,8 +192,7 @@ public class BaseTestCaseUtility {
 		specimenRequirementBean.setConcentration("0");
 		specimenRequirementBean.setQuantity("10");
 		specimenRequirementBean.setStorageContainerForSpecimen("Auto");
-		specimenRequirementBean.setGenerateLabel(false);
-		specimenRequirementBean.setLabelFormat(null);
+		specimenRequirementBean.setLabelFormat("%CP_DEFAULT%");
 
 		//Collected and received events
 		specimenRequirementBean.setCollectionEventUserId(1);
@@ -207,6 +208,7 @@ public class BaseTestCaseUtility {
 
 		specimenRequirementBean.setNoOfDeriveSpecimen(1);
 		specimenRequirementBean.setDeriveSpecimen(null);
+		specimenRequirementBean.setLabelFormatForAliquot("%CP_DEFAULT%");
 		return specimenRequirementBean;
 	}
 
@@ -246,6 +248,7 @@ public class BaseTestCaseUtility {
 			specimenRequirementBean.setStorageContainerForAliquotSpecimem(null);
 			specimenRequirementBean.setStorageContainerForSpecimen("Auto");
 			specimenRequirementBean.setDeriveSpecimen(null);
+			specimenRequirementBean.setLabelFormat("%CP_DEFAULT%");
 			aliquotMap.put(iCount, specimenRequirementBean);
 		}
 		System.out.println(aliquotMap.size()+":aliquotMap.size()");

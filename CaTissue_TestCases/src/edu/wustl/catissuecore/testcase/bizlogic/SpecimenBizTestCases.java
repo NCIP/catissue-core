@@ -55,14 +55,14 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			Specimen sp = new Specimen();
 			sp = (Specimen) TestCaseUtility.getObjectMap(Specimen.class);
 			System.out.println("testUpdateCollectionStatusOfSpecimen Get Object Sp" + sp.getId());
-			
+
 			String query = "from edu.wustl.catissuecore.domain.Specimen as specimen where "
- 				+ "specimen.id="+sp.getId();	
-        	 List resultList = appService.search(query); 
+ 				+ "specimen.id="+sp.getId();
+        	 List resultList = appService.search(query);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		  sp = (Specimen) resultsIterator.next();
         	 }
-			
+
 			//List spCollection = appService.getObjects(sp);
 			//sp = (Specimen) spCollection.get(0);
 			System.out.println("Get Object Sp");
@@ -96,12 +96,12 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			sp.setId(sp.getId());
 
 			String query = "from edu.wustl.catissuecore.domain.Specimen as specimen where "
- 				+ "specimen.id="+sp.getId();	
+ 				+ "specimen.id="+sp.getId();
         	 List resultList = appService.search(query);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		  sp = (Specimen) resultsIterator.next();
         	 }
-			
+
 			//List spCollection = appService.getObjects(sp);
 			//sp = (Specimen) spCollection.get(0);
 			sp.setCollectionStatus("Collected");
@@ -392,7 +392,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		try
 		{
 			String query = "from edu.wustl.catissuecore.domain.Specimen as specimen where "
-				+ "specimen.barcode= '"+cachedSpecimen.getBarcode()+"'";	
+				+ "specimen.barcode= '"+cachedSpecimen.getBarcode()+"'";
 			List resultList = appService.search(query);
 			if (resultList != null)
 			{
@@ -419,7 +419,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		try
 		{
 			String query = "from edu.wustl.catissuecore.domain.TissueSpecimen as tissueSpecimen where "
-				+ "tissueSpecimen.id= "+cachedSpecimen.getId();	
+				+ "tissueSpecimen.id= "+cachedSpecimen.getId();
 			List resultList = appService.search(query);
 			for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();)
 			{
@@ -450,9 +450,9 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		try
 		{
 			String query = "from edu.wustl.catissuecore.domain.Specimen as specimen where "
- 				+ "specimen.id="+cachedSpecimen.getId();	
+ 				+ "specimen.id="+cachedSpecimen.getId();
         	List resultList = appService.search(query);
-        	 
+
 			//List resultList = appService.search(Specimen.class, specimen);
 			for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();)
 			{
@@ -559,13 +559,13 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 
 		SpecimenCollectionGroup scg = (SpecimenCollectionGroup) createSCGWithConsents(cp);
 		CollectionProtocolRegistration collectionProtocolRegistration = scg.getCollectionProtocolRegistration();
-			
+
 		Collection consStatusCol = scg.getConsentTierStatusCollection();
 		Collection consResponseCol = null;
 		try
 		{
 			consResponseCol = AppUtility.executeQuery("Select elements(cpr.consentTierResponseCollection) from CollectionProtocolRegistration cpr where cpr.id="+collectionProtocolRegistration.getId());
-			
+
 		}
 		catch (Exception e)
 		{
@@ -574,8 +574,8 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			e.printStackTrace();
 			assertFalse(e.getMessage(), true);
 		}
-		
-		
+
+
 
 		Iterator consResItr = consResponseCol.iterator();
 		Iterator consStatusItr = consStatusCol.iterator();
@@ -695,7 +695,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		try
 		{
 			consResponseCol = AppUtility.executeQuery("Select elements(cpr.consentTierResponseCollection) from CollectionProtocolRegistration cpr where cpr.id="+collectionProtocolRegistration.getId());
-			
+
 		}
 		catch (Exception e)
 		{
@@ -778,7 +778,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		consentTierCollection = cp.getConsentTierCollection();
 
 		//			Iterator ConsentierItr = consentTierCollection.iterator();
-		//			
+		//
 		//			ConsentTier c1= (ConsentTier) ConsentierItr.next();
 		//			ConsentTierResponse r1 = new ConsentTierResponse();
 		//			r1.setResponse("Yes");
@@ -824,7 +824,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		//Site site = (Site) TestCaseUtility.getObjectMap(Site.class);
 		Site site = new Site();
 		site.setId(new Long(1));
-		
+
 		scg.setSpecimenCollectionSite(site);
 		scg.setName("New SCG" + UniqueKeyGeneratorUtil.getUniqueKey());
 		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
@@ -1268,7 +1268,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Create CPR with all consent responses as Yes
 	 * Change CPR response to No
-	 * All SCG and Specimens have same consent status as CPR. 
+	 * All SCG and Specimens have same consent status as CPR.
 	 */
 	public void testVerifyConsentResponseChangeWithCPRChange()
 	{
@@ -1841,7 +1841,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-			
+
 			//SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 			//scg.setId(new Long(36));
 			System.out.println("SpecimenTestCases.testAddTissueSpecimen(): " + scg);
@@ -1887,10 +1887,10 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println("Parent label" + specimenObj.getLabel());
 			System.out.println("Child Specimen label" + childSpecimen1.getLabel());
 			System.out.println("Child Specimen label" + childSpecimen2.getLabel());
-			if (childSpecimen1.getLabel().equals(specimenObj.getLabel() + "_1") && childSpecimen2.getLabel().equals(specimenObj.getLabel() + "_2"))
-			{
-				assertTrue(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);
-			}
+//			if (childSpecimen1.getLabel().equals(specimenObj.getLabel() + "_1") && childSpecimen2.getLabel().equals(specimenObj.getLabel() + "_2"))
+//			{
+//				assertTrue(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);
+//			}
 		}
 		catch (Exception e)
 		{
@@ -1911,10 +1911,10 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		{
 			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-			
+
 			//SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 			//scg.setId(new Long(36));
-			
+
 			specimenObj.setSpecimenCollectionGroup(scg);
 			specimenObj.setCollectionStatus("Collected");
 			specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
@@ -1988,7 +1988,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			assertFalse(e.getMessage(), true);
 		}
 	}
-	
+
 	 public void testEditSiteUserCPAssociation() {
 		Logger.out.info("updating domain object site ------->");
 		try {
@@ -2106,14 +2106,14 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 			{
 				assertTrue(" Child specimen 2 is successfully added ----> Position :: " + childSpecimen2.getSpecimenPosition().getPositionDimensionOne() +" "+
 						childSpecimen2.getSpecimenPosition().getPositionDimensionTwo(), true);
-			}				
+			}
 
 		}
 		catch(Exception e)
 		{
 			System.out.println("testStoragePositionsOfAliquots()");
 			Logger.out.error(e.getMessage(),e);
-			e.printStackTrace();	           	
+			e.printStackTrace();
 		}
 	}
 

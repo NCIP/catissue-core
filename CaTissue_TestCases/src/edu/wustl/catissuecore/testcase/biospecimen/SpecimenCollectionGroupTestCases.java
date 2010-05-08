@@ -183,4 +183,18 @@ public class SpecimenCollectionGroupTestCases extends CaTissueSuiteBaseTest
 
     }
 
+    public void testSCGajaxAction()
+    {
+    	SpecimenCollectionGroup collectionGroup = (SpecimenCollectionGroup) TestCaseUtility.getNameObjectMap("SpecimenCollectionGroup");
+    	setRequestPathInfo("/GotoSCG");
+		addRequestParameter("scgId", collectionGroup.getId().toString());
+    	addRequestParameter("collectionProtocolId", collectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().toString());
+    	addRequestParameter("visitNumber", "");
+    	addRequestParameter("participantId", "");
+    	addRequestParameter("collectionProtocolEventId", "");
+    	addRequestParameter("participantId", "");
+
+		actionPerform();
+    }
+
 }

@@ -2016,5 +2016,60 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		}
 	}
 
+	 public void testSpecimenLabelAsPerFormat()
+	 {
+		 try
+			{
+		    	CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getObjectMap(CollectionProtocol.class);
+
+			   	Logger.out.info("updating domain object------->"+collectionProtocol);
+		    	BaseTestCaseUtility.updateCollectionProtocol(collectionProtocol);
+		    	//System.out.println("befor");
+		    	//System.out.println(collectionProtocol.getId()+">>>>");
+		    	String labelFormat = "CP_%PPI%_%SP_TYPE%_%YR_OF_COLL%_%PPI_YOC_UID%";
+		    	String derivaeLabelfomrat = "%CP_DEFAULT%";
+		    	String aliquotLabelFormat = "%CP_DEFAULT%";
+		    	collectionProtocol.setSpecimenLabelFormat(labelFormat);
+		    	collectionProtocol.setDerivativeLabelFormat(derivaeLabelfomrat);
+		    	collectionProtocol.setAliquotLabelFormat(aliquotLabelFormat);
+		    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol)appService.updateObject(collectionProtocol);
+		    	//System.out.println("after");
+
+		    	TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initNewTissueSpecimen();
+				SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+				System.out.println("SpecimenTestCases.testAddTissueSpecimen(): " + scg);
+				specimenObj.setSpecimenCollectionGroup(scg);
+				Logger.out.info("Inserting domain object------->" + specimenObj);
+				System.out.println("Before Creating Tissue Specimen");
+				specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
+
+				String PPI = scg.getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
+				String fomrattedLabel = "CP_"+PPI;
+				System.out.println("THE PPPI VALUE IS ------------> :::: "+PPI);
+				System.out.println("THE LABEL FORMAT IS ------------> :::: "+ labelFormat);
+				if(specimenObj.getLabel().contains(fomrattedLabel))
+				{
+					assertTrue(" Label generated as per given format :: " + specimenObj.getLabel(), true);
+				}
+				else
+				{
+					System.out.println("THE LABEL FORMAT IS ------------> :::: "+ specimenObj.getLabel());
+					fail("Failed to generate label as per the given format");
+				}
+//				TestCaseUtility.setObjectMap(specimenObj, TissueSpecimen.class);
+				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
+				Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
+				assertTrue(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);
+
+		    }
+		    catch (Exception e)
+		    {
+		    	Logger.out.error(e.getMessage(),e);
+		    	e.printStackTrace();
+		    	//assertFalse("Failed to update object",true);
+		    	fail("Failed to update object");
+		    }
+	 }
+
 
 }
