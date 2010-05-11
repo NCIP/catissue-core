@@ -304,7 +304,7 @@ public class CaCoreAPIService
 	{
 		try
 		{
-			return appService.getParticipantMatchingObects(participant);
+			return appService.getParticipantMatchingObects(participant,null);
 		}
 		catch (final ApplicationException e)
 		{

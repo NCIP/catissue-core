@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import oracle.sql.CLOB;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
@@ -42,9 +43,7 @@ import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
 import edu.wustl.catissuecore.namegenerator.DefaultSCGLabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
-import edu.wustl.catissuecore.util.ClinPortalCaTissueIntegrationUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.ClinPortalIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -1289,88 +1288,18 @@ public class CaCoreAppServicesDelegator
 	 * @throws Exception the exception
 	 */
 	public List delegateGetCaTissueLocalParticipantMatchingObects(String userName,
-			Object domainObject, Long cpId) throws Exception
+			Object domainObject, Set<Long> cpIdSet) throws Exception
 	{
 		List matchingObjects = new ArrayList();
 		this.checkNullObject(domainObject, "Domain Object");
-		final String className = domainObject.getClass().getName();
-		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 
-		ParticipantBizLogic bizLogic = (ParticipantBizLogic) factory.getBizLogic(className);
+		Participant participant = (Participant) domainObject;
 
 
-		matchingObjects = ParticipantManagerUtility.getListOfMatchingParticipants(
-				(Participant) domainObject, getSessionDataBean(userName), null, null);
-
-		if (cpId != null)
-		{
-			matchingObjects=processListForMatchWithinCP(matchingObjects, cpId);
-		}
+        matchingObjects = ParticipantManagerUtility.findMatchedParticipants((Participant) domainObject,null,cpIdSet);
 		return matchingObjects;
 	}
 
-	public List processListForMatchWithinCP(List<DefaultLookupResult> matchPartpantLst, Long cpId)
-			throws ApplicationException
-	{
-		List idList = this.getPartcipantIdsList(cpId);
-		matchPartpantLst = filerMatchedList(matchPartpantLst, idList);
-		return matchPartpantLst;
-	}
-
-	public List<DefaultLookupResult> filerMatchedList(List<DefaultLookupResult> matchPartpantLst,
-			List idList)
-	{
-
-		List<DefaultLookupResult> matchPartpantLstFiltred = new ArrayList<DefaultLookupResult>();
-		Iterator<DefaultLookupResult> itr = matchPartpantLst.iterator();
-
-		if (!idList.isEmpty() && idList.get(0) != null && String.valueOf(idList.get(0)) != "")
-		{
-			List participantIdList = (List) idList;
-			while (itr.hasNext())
-			{
-				DefaultLookupResult result = (DefaultLookupResult) itr.next();
-				Participant participant = (Participant) result.getObject();
-				if ((participantIdList).contains(String.valueOf(participant.getId().longValue())))
-				{
-					matchPartpantLstFiltred.add(result);
-				}
-			}
-		}
-		return matchPartpantLstFiltred;
-	}
-
-	public static List getPartcipantIdsList(Long id) throws ApplicationException
-	{
-		List idListArray = null;
-		List<String> idList = new ArrayList<String>();
-		JDBCDAO jdbcDAO = null;
-		String query = null;
-		try
-		{
-			query = "SELECT PARTICIPANT_ID FROM CATISSUE_COLL_PROT_REG WHERE COLLECTION_PROTOCOL_ID='"
-					+ id + "'";
-			jdbcDAO = AppUtility.openJDBCSession();
-			idListArray = jdbcDAO.executeQuery(query);
-			if (!idListArray.isEmpty() && idListArray.get(0) != "")
-			{
-				for (Iterator<List> itr = idListArray.iterator(); itr.hasNext();)
-				{
-					idList.add(String.valueOf(((List) itr.next()).get(0)));
-				}
-			}
-		}
-		catch (DAOException exp)
-		{
-			// TODO Auto-generated catch block
-			throw new DAOException(exp.getErrorKey(), exp, exp.getMsgValues());
-		}
-		finally
-		{
-			jdbcDAO.closeSession();
-		}
-		return idList;
-	}
 
 
 }
