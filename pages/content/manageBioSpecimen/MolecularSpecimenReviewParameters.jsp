@@ -152,10 +152,10 @@ function calculateAbsorbanceRatio()
 				<tr>  
 				  <td align="center" class="black_ar">&nbsp;</td>
 				  <td align="left" class="black_ar"><bean:message key="molecularspecimenreviewparameters.absorbanceat260"/> </td>
-                  <td align="left"><html:text styleClass="black_ar" maxlength="10"  size="30" styleId="absorbanceAt260" property="absorbanceAt260" onkeyup="calculateAbsorbanceRatio();"/></td>
+                  <td align="left"><html:text styleClass="black_ar" maxlength="10"  size="30" styleId="absorbanceAt260" property="absorbanceAt260" onblur="calculateAbsorbanceRatio();"/></td>
                   <td align="left">&nbsp;</td>
 				  <td align="left" class="black_ar"><bean:message key="molecularspecimenreviewparameters.absorbanceat280"/> </td>
-                  <td align="left"><html:text styleClass="black_ar" maxlength="10"  size="30" styleId="absorbanceAt280" property="absorbanceAt280" onkeyup="calculateAbsorbanceRatio();"/></td>
+                  <td align="left"><html:text styleClass="black_ar" maxlength="10"  size="30" styleId="absorbanceAt280" property="absorbanceAt280" onblur="calculateAbsorbanceRatio();"/></td>
 				
 				</tr>
 				
