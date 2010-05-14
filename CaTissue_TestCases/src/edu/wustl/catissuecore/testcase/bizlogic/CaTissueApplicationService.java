@@ -9,21 +9,21 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
 
 
-public class CaTissueApplicationService 
+public class CaTissueApplicationService
 {
-		
+
 	public Object createObject(Object obj) throws Exception
 	{
 		SessionDataBean bean = CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN;
 		obj = new CaCoreAppServicesDelegator().delegateAdd(bean.getUserName(), obj);
 		return obj;
 	}
-	
+
 	public List<Participant> getParticipantMatchingObects(Object obj) throws Exception
 	{
 		List<Participant> participantList = null;
 		SessionDataBean bean = CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN;
-		participantList = new CaCoreAppServicesDelegator().delegateGetParticipantMatchingObects(bean.getUserName(), obj);
+		participantList = new CaCoreAppServicesDelegator().delegateGetParticipantMatchingObects(bean.getUserName(), obj, null);
 		return participantList;
 	}
 
@@ -34,7 +34,7 @@ public class CaTissueApplicationService
 		new CaCoreAppServicesDelegator().delegateGetSpecimenCollectionGroupLabel(bean.getUserName(),obj);
 		return label;
 	}
-	
+
 	public Object updateObject(Object obj) throws Exception
 	{
 		SessionDataBean bean = CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN;
@@ -43,7 +43,7 @@ public class CaTissueApplicationService
 	}
 
 	public List search(String hql) throws Exception
-	{ 
+	{
 		List resultList = null;
 		resultList = AppUtility.executeQuery(hql);
 		return resultList;
@@ -92,7 +92,7 @@ public class CaTissueApplicationService
 //		return null;
 //	}
 //
-		
+
 //
 //	@Override
 //	public List search(String arg0, List arg1) throws ApplicationException

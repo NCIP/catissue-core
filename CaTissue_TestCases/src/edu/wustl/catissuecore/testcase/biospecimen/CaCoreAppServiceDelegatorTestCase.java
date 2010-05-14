@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.testcase.biospecimen;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -24,7 +25,7 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 {
 	 /**
 	  * Search all participant and check if PHI data is visible
-	  */ 
+	  */
 	  public void testGetNullObjects()
 	  {
 		try
@@ -32,7 +33,7 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 			new CaCoreAppServicesDelegator().delegateGetObjects(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(), null);
 		}
 		 catch(Exception e){
-			 
+
 		     System.out
 					.println("ScientistRoleTestCases.testGetObjects()"+e.getMessage());
 			 e.printStackTrace();
@@ -41,16 +42,16 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 	  }
 		 /**
 		  * Search all participant and check if PHI data is visible
-		  */ 
+		  */
 		  public void testGetObjectsWithNullId()
 		  {
 			try
 			{
-				Participant p = new Participant();			
-				new CaCoreAppServicesDelegator().delegateGetObjects(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(), p);	
+				Participant p = new Participant();
+				new CaCoreAppServicesDelegator().delegateGetObjects(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(), p);
 			}
 			 catch(Exception e){
-				 
+
 			     System.out
 						.println("ScientistRoleTestCases.testGetObjects()"+e.getMessage());
 				 e.printStackTrace();
@@ -74,14 +75,14 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 			}
 		}
 		 catch(Exception e){
-			 
+
 		     System.out
 					.println("ScientistRoleTestCases.testDelegateLogin()"+e.getMessage());
 			 e.printStackTrace();
 			 assertTrue(e.getMessage(), true);
 		 }
 	  }
-	  
+
 	  public void testDelegateGetSpecimenCollectionGroupLabel()
 	  {
 		try
@@ -102,7 +103,7 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 			}
 		}
 		 catch(Exception e){
-			 
+
 		     System.out
 					.println("ScientistRoleTestCases.testdelegateGetSpecimenCollectionGroupLabel()"+e.getMessage());
 			 e.printStackTrace();
@@ -113,7 +114,7 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 	  {
 		try
 		{
-			
+
 			String label = new CaCoreAppServicesDelegator().delegateGetDefaultValue(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(), Constants.DEFAULT_SPECIMEN);
 			if(label==null)
 			{
@@ -121,12 +122,12 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 			}
 		}
 		 catch(Exception e){
-			 
+
 		     System.out
 					.println("ScientistRoleTestCases.testDelegateGetDefaultValue()"+e.getMessage());
 			 e.printStackTrace();
 			 assertFalse(e.getMessage(), true);
-			 
+
 		 }
 	  }
 		public void testAuditQuery()
@@ -134,7 +135,7 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 			try
 			{
 				StringBuffer hql = new StringBuffer();
-			  	String targetClassName = IdentifiedSurgicalPathologyReport.class.getName(); 
+			  	String targetClassName = IdentifiedSurgicalPathologyReport.class.getName();
 				hql.append("select xxTargetAliasxx.activityStatus,xxTargetAliasxx.isFlagForReview,xxTargetAliasxx.reportStatus,xxTargetAliasxx.collectionDateTime,xxTargetAliasxx.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 				appService.auditAPIQuery(hql.toString(),CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName());
 			 }
@@ -176,9 +177,10 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 				p.setLastName("participant_last_name");
 				p.setActivityStatus("Active");
 				CollectionProtocol cp = (CollectionProtocol)TestCaseUtility.getNameObjectMap("CollectionProtocol");
-
+				Set<Long> cpIdSet = new HashSet<Long>();
+				cpIdSet.add(cp.getId());
 				List list = new CaCoreAppServicesDelegator().
-					delegateGetCaTissueLocalParticipantMatchingObects(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),p, cp.getId());
+					delegateGetCaTissueLocalParticipantMatchingObects(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),p, cpIdSet);
 				System.out.println("Matching participant list size:"+list.size());
 				if(list.size()==0)
 				{
@@ -193,7 +195,7 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 				 assertFalse(e.getMessage(), true);
 			 }
 		}
-		
+
 		public void testDelegateGetParticipantMatchingObects()
 		{
 			try
@@ -206,14 +208,14 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 				ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
 				Site site =(Site)  TestCaseUtility.getNameObjectMap("Site");
 				pmi.setSite(site);
-				
+
 				System.out.println("Site is "+site.getName());
 				pmi.setMedicalRecordNumber("12");
 				pmi.setParticipant(p);
 				participantMedicalIdentifierCollection.add(pmi);
-				p.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);	
+				p.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
 				List list = new CaCoreAppServicesDelegator().
-				delegateGetParticipantMatchingObects(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),p);
+				delegateGetParticipantMatchingObects(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),p, null);
 				System.out.println("Matching participant list size:"+list.size());
 			 }
 			 catch(Exception e)
