@@ -312,6 +312,10 @@ public class UpdateSpecimenStatusAction extends BaseAction
 					{
 						if (specimen.getId().longValue() == gSpecimen.getId())
 						{
+							if(Constants.ALIQUOT.equals(specimen.getLineage()))
+							{
+								specimen.setLabel(gSpecimen.getDisplayName());
+							}
 							specimensToPrint.add(specimen);
 						}
 					}

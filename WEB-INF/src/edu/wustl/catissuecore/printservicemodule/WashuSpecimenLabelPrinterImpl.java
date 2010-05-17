@@ -48,7 +48,7 @@ public class WashuSpecimenLabelPrinterImpl extends SpecimenLabelPrinterImpl
 			dataMap.put(PrintWebServiceConstants.SPECIMEN_TYPE, CommonUtilities.toString(specimen
 					.getSpecimenType()));
 		}
-		if (label == null)
+		if (label == null || label.equals(""))
 		{
 			label = specimen.getSpecimenType();
 		}
@@ -83,7 +83,7 @@ public class WashuSpecimenLabelPrinterImpl extends SpecimenLabelPrinterImpl
 			dataMap.put(PrintWebServiceConstants.SPECIMEN_LINEAGE, CommonUtilities
 					.toString(specimen.getLineage()));
 		}
-		if (specimen.getMessageLabel() != null)
+		if (specimen.getMessageLabel() != null && !"".equals(specimen.getMessageLabel()))
 		{
 			dataMap.put(PrintWebServiceConstants.SPECIMEN_MESSAGE_LABEL, CommonUtilities
 					.toString(specimen.getMessageLabel()));
