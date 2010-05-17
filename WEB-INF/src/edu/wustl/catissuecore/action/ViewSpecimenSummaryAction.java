@@ -781,8 +781,8 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	 */
 	protected boolean isSpecimenExists(Long cpId) throws ApplicationException
 	{
-
-		final String hql = " select" + " elements(scg.specimenCollection) " + "from "
+		boolean isSpecimenExist = false;
+		final String hql = " select" + " count(scg.specimenCollection.id) " + "from "
 				+ " edu.wustl.catissuecore.domain.CollectionProtocol as cp"
 				+ ", edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr"
 				+ ", edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg"
@@ -795,12 +795,14 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 		final List specimenList = AppUtility.executeQuery(hql);
 		if ((specimenList != null) && !(specimenList).isEmpty())
 		{
-			return true;
+			int val = Integer.valueOf(specimenList.get(0).toString());
+			if(val != 0)
+			{
+				isSpecimenExist = true;
+			}
+
 		}
-		else
-		{
-			return false;
-		}
+		return isSpecimenExist;
 
 	}
 
