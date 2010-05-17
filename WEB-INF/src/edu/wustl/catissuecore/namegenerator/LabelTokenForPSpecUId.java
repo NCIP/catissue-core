@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.namegenerator;
 
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.KeySequenceGeneratorUtil;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
@@ -20,7 +21,7 @@ public class LabelTokenForPSpecUId implements LabelTokens
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.namegenerator.LabelTokens#getTokenValue(java.lang.Object)
 	 */
-	public String getTokenValue(Object object)
+	public String getTokenValue(Object object) throws ApplicationException
 	{
 		return getParentSequenceNumber(object);
 	}
@@ -31,14 +32,15 @@ public class LabelTokenForPSpecUId implements LabelTokens
 	 * @param object the object
 	 *
 	 * @return the parent sequence number
+	 * @throws ApplicationException
 	 */
-	private String getParentSequenceNumber(Object object)
+	private String getParentSequenceNumber(Object object) throws ApplicationException
 	{
 		Specimen specimen = (Specimen)object;
 		Long parentSeqCtr = 0l;
 		if(specimen.getParentSpecimen()== null)
 		{
-
+			throw new ApplicationException(null, null, "Parent Specimen is not available");
 		}
 		else
 		{
