@@ -167,7 +167,7 @@ public final class SpecimenUtil
 		boolean isGenLabel = false;
 		if(Constants.NEW_SPECIMEN.equals(lineage))
 		{
-			isGenLabel = !Validator.isEmpty(parentLabelformat);
+			isGenLabel = !Validator.isEmpty(parentLabelformat) && !parentLabelformat.equals("%CP_DEFAULT%");
 		}
 		else if(Constants.DERIVED_SPECIMEN.equals(lineage))
 		{
@@ -192,7 +192,7 @@ public final class SpecimenUtil
 		}
 		else if(!Validator.isEmpty(format) && format.contains("%CP_DEFAULT%"))
 		{
-			isGenLabel = !Validator.isEmpty(parentLabelformat);
+			isGenLabel = !Validator.isEmpty(parentLabelformat) && !parentLabelformat.equals("%CP_DEFAULT%");
 		}
 		return isGenLabel;
 	}

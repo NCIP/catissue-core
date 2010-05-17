@@ -191,7 +191,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 		}
 		final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
 				.get(collectionProtocolEventKey);
-		if (new Long(collectionProtocolEventBean.getId()) != null
+		if (collectionProtocolEventBean != null && new Long(collectionProtocolEventBean.getId()) != null
 				&& collectionProtocolEventBean.getId() > 0)
 		{
 			request.setAttribute("isPersistent", true);
