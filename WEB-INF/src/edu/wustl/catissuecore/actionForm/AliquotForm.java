@@ -528,14 +528,18 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 
 			final Iterator keyIterator = this.aliquotMap.keySet().iterator();
 
+			boolean isLabelErrAdded = false;
+			boolean isQtyErrAdded = false;
+			boolean isLocErrAdded = false;
 			while (keyIterator.hasNext())
 			{
 
 				final String key = (String) keyIterator.next();
 
-				if (key.endsWith("_quantity"))
+				if (key.endsWith("_quantity") && !isQtyErrAdded)
 				{
 					String value = (String) this.aliquotMap.get(key);
+
 					try
 					{
 						value = new BigDecimal(value).toPlainString();
@@ -544,6 +548,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 						{
 							if (!validator.isDouble(value, true))
 							{
+								isQtyErrAdded = true;
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 										"errors.item.format", ApplicationProperties
 												.getValue("specimen.quantity")));
@@ -554,6 +559,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 						{
 							if (!validator.isNumeric(value, 0))
 							{
+								isQtyErrAdded = true;
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 										"errors.item.format", ApplicationProperties
 												.getValue("specimen.quantity")));
@@ -563,29 +569,32 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 					}
 					catch (final NumberFormatException exp)
 					{
+						isQtyErrAdded = true;
 						this.logger.error(exp.getMessage(),exp) ;
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties.getValue("specimen.quantity")));
 					}
 				}
 //				else if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
-				else if(!this.generateLabel && key.endsWith("_label"))
+				else if(!this.generateLabel && key.endsWith("_label") && !isLabelErrAdded)
 				{
 					//by Falguni
 					final String value = (String) this.aliquotMap.get(key);
 					//         			System.out.println("value");
 					if (Validator.isEmpty(value))
 					{
+						isLabelErrAdded = true;
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.item.required", ApplicationProperties
 										.getValue("specimen.label")));
 					}
 				}
-				else if (key.indexOf("_positionDimension") != -1)
+				else if (key.indexOf("_positionDimension") != -1 && !isLocErrAdded)
 				{
 					final String value = (String) this.aliquotMap.get(key);
 					if (value != null && !value.trim().equals("") && !validator.isDouble(value))
 					{
+						isLocErrAdded = true;
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties
 										.getValue("specimen.positionInStorageContainer")));
