@@ -794,7 +794,7 @@ public class NewSpecimenAction extends SecureAction
 							final String spClass = specimenForm.getClassName();
 							final String spType = specimenForm.getType();
 							LOGGER.info("cpId :" + cpId + "spClass:" + spClass);
-							request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId);
+							request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, String.valueOf(cpId));
 							if (virtuallyLocated != null && virtuallyLocated.equals("false"))
 							{
 								specimenForm.setVirtuallyLocated(false);
