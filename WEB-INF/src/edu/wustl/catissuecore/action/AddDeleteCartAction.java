@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.query.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
 import edu.wustl.common.query.queryobject.impl.metadata.SelectedColumnsMetadata;
+import edu.wustl.common.querysuite.queryobject.IOutputAttribute;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.QuerySessionData;
 import edu.wustl.query.util.global.AQConstants;
@@ -73,10 +74,27 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 				.getAttribute(Constants.SELECTED_COLUMN_META_DATA);
 
 		//QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-		List<AttributeInterface> attributeList = null;
+
+		List<AttributeInterface> attributeList = new ArrayList<AttributeInterface>();
+
 		if (selectedColumnMetaData != null)
 		{
-			attributeList = selectedColumnMetaData.getAttributeList();
+			List<IOutputAttribute> savedAttr = selectedColumnMetaData.getSelectedOutputAttributeList();
+			if(savedAttr != null)
+			{
+				for (IOutputAttribute attr : savedAttr)
+				{
+					attributeList.add(attr.getAttribute());
+				}
+			}
+			else
+			{
+				List<QueryOutputTreeAttributeMetadata> selAtrMetadataList = selectedColumnMetaData.getSelectedAttributeMetaDataList();
+				for (QueryOutputTreeAttributeMetadata attrMetadata :  selAtrMetadataList)
+				{
+					attributeList.add(attrMetadata.getAttribute());
+				}
+			}
 		}
 
 		// Check if user wants to add in Shopping Cart.
