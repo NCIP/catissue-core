@@ -1780,6 +1780,10 @@ public class AppUtility
 	private static String getDataFromRow(List row, String myData)
 	{
 		int j;
+		if(myData != null && !"".equals(myData) && (myData.length() > 1))
+		{
+			myData = myData + ",";
+		}
 		myData = myData + "\"";
 		for (j = 0; j < (row.size() - 1); j++)
 		{
@@ -1804,7 +1808,7 @@ public class AppUtility
 			myData = myData + "";
 		}
 		myData = myData + "\"";
-		myData = myData + ",";
+
 		return myData;
 	}
 
