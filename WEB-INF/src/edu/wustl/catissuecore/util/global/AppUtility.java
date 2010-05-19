@@ -3815,6 +3815,37 @@ public class AppUtility
         }
         return csmUserName;
     }
+	/**
+	 * This method is called from BaseDistributionReportAction.java and DistributionReportSaveAction.java
+	 * Method to get the array of column names selected. If this is called for export, the column
+	 * name should not contain "Print" column.
+	 * @param selectedColumnsList
+	 * @param columnNames
+	 * @param index
+	 * @return
+	 */
+    public static String[] getColNames(String[] selectedColumnsList, String[] columnNames, int index)
+	{
+		for (int i=index; i < selectedColumnsList.length; i++)
+		{
+			/*
+			 * Split the string which is in the form
+			 * TableAlias.columnNames.columnDisplayNames to get the column Names
+			 */
+			final StringTokenizer st = new StringTokenizer(selectedColumnsList[i], ".");
+			while (st.hasMoreTokens())
+			{
+				st.nextToken();
+				st.nextToken();
+				columnNames[i] = st.nextToken();
+				if (st.hasMoreTokens())
+				{
+					st.nextToken();
+				}
+			}
+		}
+		return columnNames;
+	}
 
 
 

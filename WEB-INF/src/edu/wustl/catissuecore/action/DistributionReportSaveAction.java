@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.domain.Distribution;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.ExportReport;
@@ -89,6 +91,19 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 			SendFile.sendFileToClient(response, filePath, fileName, contentType);
 		}
 		return null;
+	}
+
+	/**
+	 * Method to fetch the column names selected by user to export and
+	 * removing the "Print" column from the list.
+	 */
+	protected String[] getColumnNames(String[] selectedColumnsList)
+	{
+		List<String> listSelColumns = new ArrayList<String>(Arrays.asList(selectedColumnsList));
+		listSelColumns.removeAll(Arrays.asList("Print : Specimen"));
+		selectedColumnsList = listSelColumns.toArray(new String[0]);
+		String[] columnNames = new String[selectedColumnsList.length];
+		return AppUtility.getColNames(selectedColumnsList, columnNames, 0);
 	}
 
 	/**

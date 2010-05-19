@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -65,30 +66,12 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	 */
 	protected String[] getColumnNames(String[] selectedColumnsList)
 	{
-		final String[] columnNames = new String[selectedColumnsList.length];
+		String[] columnNames = new String[selectedColumnsList.length];
 		//bug 13605
 		int i=0;
 		columnNames[i] = selectedColumnsList[i];	
 		i++;
-		for (; i < selectedColumnsList.length; i++)
-		{
-			/*
-			 * Split the string which is in the form
-			 * TableAlias.columnNames.columnDisplayNames to get the column Names
-			 */
-			final StringTokenizer st = new StringTokenizer(selectedColumnsList[i], ".");
-			while (st.hasMoreTokens())
-			{
-				st.nextToken();
-				st.nextToken();
-				columnNames[i] = st.nextToken();
-				this.logger.debug("Selected column names in configuration " + columnNames[i]);
-				if (st.hasMoreTokens())
-				{
-					st.nextToken();
-				}
-			}
-		}
+		columnNames = AppUtility.getColNames(selectedColumnsList, columnNames, 1);
 		return columnNames;
 	}
 
