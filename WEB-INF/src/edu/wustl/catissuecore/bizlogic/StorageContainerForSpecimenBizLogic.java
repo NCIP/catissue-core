@@ -356,7 +356,8 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 				"AND d.activity_status = 'Active' AND d.cont_full = 0 " +
 				"GROUP BY d.identifier, d.NAME, f.one_dimension_capacity," +
 				"f.two_dimension_capacity,(f.one_dimension_capacity * f.two_dimension_capacity)) view1 " +
-				"WHERE  cscspt.storage_container_id = view1.identifier AND cscpc.storage_container_id = view1.identifier");
+				"WHERE  cscspt.storage_container_id = view1.identifier AND cscpc.storage_container_id = view1.identifier " +
+				"and available_slots > 0 order by identifier");
 
 		
 		logger.debug(String.format("%s:%s:%s", this.getClass().getSimpleName(),
