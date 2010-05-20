@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -185,6 +186,33 @@ public class CreateSpecimenAction extends SecureAction
 								.toString();
 						request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimenID);
 						createForm.setParentSpecimenLabel(parentSpecimenLabel);
+						String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
+						"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
+						"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat " +
+						"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id ="+ parentSpecimenID;
+
+						List formatList = AppUtility.executeQuery(hql);
+						String parentLabelFormat = null;
+						String deriveLabelFormat = null;
+						String aliquotLabelFormat = null;
+						if(!formatList.isEmpty())
+						{
+							Object[] obje = (Object[])formatList.get(0);
+							if(obje[0] != null)
+							{
+								parentLabelFormat = obje[0].toString();
+							}
+							if(obje[1] != null)
+							{
+								deriveLabelFormat = obje[1].toString();
+							}
+							if(obje[2] != null)
+							{
+								aliquotLabelFormat = obje[2].toString();
+							}
+						}
+						createForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, Constants.DERIVED_SPECIMEN));
+
 						createForm.setLabel("");
 					}
 

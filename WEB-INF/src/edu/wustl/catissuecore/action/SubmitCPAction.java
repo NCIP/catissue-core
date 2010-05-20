@@ -44,7 +44,7 @@ public class SubmitCPAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(SubmitCPAction.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(SubmitCPAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -100,7 +100,7 @@ public class SubmitCPAction extends BaseAction
 		}
 		catch (final ApplicationException ex)
 		{
-			this.logger.error(ex.getMessage(), ex);
+			LOGGER.error(ex.getMessage(), ex);
 			target = Constants.FAILURE;
 			// String errorMsg = ex.getFormattedMessage();
 			// resultMap.put(Constants.ERROR_DETAIL, errorMsg);
