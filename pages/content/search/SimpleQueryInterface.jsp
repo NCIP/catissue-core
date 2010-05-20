@@ -93,7 +93,7 @@ function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,ov
 			calendarShow.value = "Show";
 			var innerStr = "<div id='"+ overDiv +"' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
 			//innerStr = innerStr + "<a href=\"javascript:show_calendar('"+fieldValue+"',null,null,'MM-DD-YYYY');\">";
-			innerStr = innerStr + "<img src=\"images\\calendar.gif\" width=24 height=22 border=0 onclick='scwShow("+ fieldValue + ",event);'>";
+			innerStr = innerStr + "<img src=\"images/calendar.gif\" width=24 height=22 border=0 onclick='scwShow("+ fieldValue + ",event);'>";
 			//innerStr = innerStr + "</a>";
 			td.innerHTML = innerStr;
 		}
@@ -103,21 +103,21 @@ function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,ov
 			td.innerHTML = "&nbsp;";
 			txtField.readOnly="";
 			calendarShow.value = "";
-		}	
-	}	
+		}
+	}
 }
 
 function onAttributeChange(element,opComboName,txtFieldID)
 {
 	var columnValue = element.options[element.selectedIndex].value;
 	var index = columnValue.lastIndexOf(".");
-	
+
 	var opCombo = document.getElementById(opComboName);
 	opCombo.options.length=0;
 
 	var txtField = document.getElementById(txtFieldID);
 	txtField.disabled = false;
-	
+
 	if(element.value == "<%=Constants.SELECT_OPTION%>")
 	{
 		opCombo.options[0] = new Option("<%=Constants.SELECT_OPTION%>","-1");
@@ -158,7 +158,7 @@ function showDatafield(element,txtFieldID)
 	var dataStr = element.options[element.selectedIndex].value;
 	var dataValue = new String(dataStr);
 	var txtField = document.getElementById(txtFieldID);
-	
+
 	if(dataValue == "<%=Operator.IS_NULL%>" || dataValue == "<%=Operator.IS_NOT_NULL%>")
 	{
 		txtField.disabled = true;
@@ -171,8 +171,8 @@ function showDatafield(element,txtFieldID)
 
 function vieMapTabSelected(){
 
- 
- var action= "OpenStorageContainer.do?operation=showEditAPageAndMap&pageOf=pageOfStorageContainer"; 
+
+ var action= "OpenStorageContainer.do?operation=showEditAPageAndMap&pageOf=pageOfStorageContainer";
 	document.forms[0].action=action;
 	document.forms[0].submit();
 }
@@ -197,10 +197,10 @@ function vieMapTabSelected(){
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td class="td_table_head"><span class="wh_ar_b"><bean:message key="<%=header%>" /></span></td>
-      <% 
+      <%
 	       String pageTitle= "Page Title - "+ApplicationProperties.getValue(header);
-	  %> 	   
-		
+	  %>
+
 		<td align="right"><img src="images/uIEnhancementImages/table_title_corner2.gif" alt="<%=pageTitle%>"  width="31" height="24" /></td>
       </tr>
     </table></td>
@@ -213,11 +213,11 @@ function vieMapTabSelected(){
 	<!----Add tab hidden for the Specimen Search----->
 	<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_DISTRIBUTION%>">
 		<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_DISTRIBUTION_ARRAY%>">
-			<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_NEW_SPECIMEN%>">			
+			<logic:notEqual name="pageOf" value="<%=Constants.PAGE_OF_NEW_SPECIMEN%>">
         		<td valign="bottom"><html:link href="#" onclick="callSerachAction('CommonTab.do')">
-				<img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link></td>		
+				<img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" /></html:link></td>
        		</logic:notEqual>
-			
+
 			<td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22" border="0" /></td>
 		</logic:notEqual>
 	</logic:notEqual>
@@ -246,7 +246,7 @@ function vieMapTabSelected(){
 	  </logic:equal>
     </table>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
-      
+
       <tr>
         <td colspan="2" align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
       </tr>
@@ -606,8 +606,8 @@ function vieMapTabSelected(){
 													+ "incrementCounter();callSerachAction('SimpleQueryInterfaceValidate.do?pageOf="
 													+ pageOf + "');";
 										%>
-										
-									
+
+
             <tr>
               <td colspan="7" align="left" class="black_ar" ><table width="100%" border="0" cellspacing="0" cellpadding="1">
                   <tr>
@@ -622,7 +622,7 @@ function vieMapTabSelected(){
  		+ "_Operator_operator)','');"
  		+ "callSerachAction('SimpleQueryInterface.do?pageOf="
  		+ pageOf + "');";
- %> 
+ %>
                     <td align="left"><html:button property="deleteValue" styleClass="black_ar"
 										onclick="deleteChecked('simpleQuery','SimpleQueryInterface.do?pageOf=<%=pageOf%>',document.forms[0].counter,'chk_',false,document.forms[0].deleteValue)"
 										disabled="true">
