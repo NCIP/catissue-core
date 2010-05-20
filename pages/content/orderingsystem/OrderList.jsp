@@ -38,13 +38,13 @@ String enable="false";
 	{
 		var	tbodyId = "tbody_"	+ arrayName;
 		var tbodyElement = document.getElementById(tbodyId);
-			
+
 		var rows = new Array();
 		if(tbodyElement != null)
 		{
 		rows = tbodyElement.rows;
 		}
-			
+
 		for(var i=0;i<rows.length;i++)
 		{
 			var chkId = arrayName + "_" + i;
@@ -65,18 +65,18 @@ String enable="false";
 			action = "<%= Constants.ACTION_SAVE_ORDER_ITEM %>"+"?typeOf=specimen";
 		if(temp=="specimenArray")
 			action = "<%= Constants.ACTION_SAVE_ORDER_ARRAY_ITEM %>"+"?typeOf=specimenArray";
-			
+
 		if(temp=="pathologyCase")
 			action = "<%=Constants.ACTION_SAVE_ORDER_PATHOLOGY_ITEM %>"+"?typeOf=pathologyCase";
-			
-		document.OrderList.action = action ;		
-	    document.OrderList.submit();    
+
+		document.OrderList.action = action ;
+	    document.OrderList.submit();
 
 	}
 
 	//Remove the selected order items from the requested list.
 	function onRemove()
-	{	
+	{
 			var action;
 			var temp='<%=req%>';
 			if(temp=="specimen")
@@ -86,11 +86,11 @@ String enable="false";
 
 			if(temp=="pathologyCase")
 				action = "<%= Constants.ACTION_REMOVE_ORDER_ITEM_PATHOLOGYCASE %>"+"&typeOf=pathologyCase&remove=yes";
-		
-			document.OrderList.action = action;		
+
+			document.OrderList.action = action;
 			document.OrderList.submit();
 	}
-	
+
 	//to disable and enable "Remove" button
 	function enableRemove()
 	{
@@ -116,25 +116,25 @@ String enable="false";
 			document.OrderList.removeButton.disabled=true;
 
 	}
-			
 
 
-		
-		//Function to expand and collapse the specimen data block.	
+
+
+		//Function to expand and collapse the specimen data block.
 		function expand(arrayName)
-		{			
+		{
 			switchObj = document.getElementById('switch_'+arrayName);
 			dataObj = document.getElementById('data_'+arrayName);
-		
+
 			if(dataObj.style.display != 'none') //Clicked on - image
 			{
-				dataObj.style.display = 'none';				
+				dataObj.style.display = 'none';
 				switchObj.innerHTML = '<img src="images/uIEnhancementImages/maximize.png" height="16" width="16" border="0"/>';
 			}
 			else  							   //Clicked on + image
 			{
 				if(navigator.appName == "Microsoft Internet Explorer")
-				{					
+				{
 					dataObj.style.display = 'block';
 				}
 				else
@@ -144,7 +144,7 @@ String enable="false";
 				switchObj.innerHTML = '<img src="images/uIEnhancementImages/minimize.png" height="16" width="16" border="0"/>';
 			}
 		}
-	
+
 </script>
 
 <html:form action="<%= Constants.ACTION_SAVE_ORDER_ITEM %>" type="edu.wustl.catissuecore.actionForm.OrderSpecimenForm"
@@ -161,7 +161,7 @@ String enable="false";
 						<td colspan="2" align="left" class="tr_bg_blue1 blue_ar_b">
 							<label for="orderListTitle">
 					  			<bean:message key="orderingSystem.header.label.orderList" />
-					  		</label>  
+					  		</label>
 						</td>
                      </tr>
                      <tr>
@@ -251,9 +251,9 @@ String enable="false";
 									<bean:message key="orderingSystem.orderTable.column.requestQuantity" />
 								</td>
   							</tr>
-		
+
 				<%
-			
+
 						if((session.getAttribute("RequestedBioSpecimens"))!=null)
 				{
 						enable="false";
@@ -261,27 +261,27 @@ String enable="false";
 						orderItemsMap = (HashMap) session.getAttribute("RequestedBioSpecimens");
 						int i=0;
 						if(orderItemsMap.containsKey("None"))
-						{		
+						{
 							String tbodyId = "tbody_None";
 				%>
-			
-					<!-- Block to display order items in the orderlist -->	
+
+					<!-- Block to display order items in the orderlist -->
 							<tbody id="<%=tbodyId%>">
 				<%
-						int itemIndex=0;				
+						int itemIndex=0;
 						List orderItemsList=(List)orderItemsMap.get("None");
 						if(orderItemsList.size()>0)
 						enable="true";
 						if(session.getAttribute("DefineArrayFormObjects") != null)
 						{
-						 	List defineArrayObjList = (ArrayList)session.getAttribute("DefineArrayFormObjects");	
+						 	List defineArrayObjList = (ArrayList)session.getAttribute("DefineArrayFormObjects");
 						 	Iterator iter = defineArrayObjList.iterator();
 						 	while(iter.hasNext())
 						 	{
 						 		DefineArrayForm daF = (DefineArrayForm)iter.next();
 						 		if(orderItemsMap.containsKey(daF.getArrayName()))
-						 		{	
-					 				List itemsInArrayList = (ArrayList)orderItemsMap.get(daF.getArrayName());		
+						 		{
+					 				List itemsInArrayList = (ArrayList)orderItemsMap.get(daF.getArrayName());
 						 			if(itemsInArrayList.size() < 1)
 						 			{
 						 				enable = "false";
@@ -292,13 +292,13 @@ String enable="false";
 					 			{
 					 				enable = "false";
 					 				break;
-						 		}					 			
+						 		}
 						 	}
 						}
-				
+
 						for(Iterator listItr = orderItemsList.iterator();listItr.hasNext();)
 						{
-							OrderSpecimenBean orderSpecimenBeanObj=(OrderSpecimenBean)listItr.next();	
+							OrderSpecimenBean orderSpecimenBeanObj=(OrderSpecimenBean)listItr.next();
 							String specimenName = "value(OrderSpecimenBean:"+i+"_specimenName)";
 							String requestedQuantity = "value(OrderSpecimenBean:"+i+"_requestedQuantity)";
 							String unitRequestedQuantity="value(OrderSpecimenBean:"+i+"_unitRequestedQuantity)";
@@ -317,9 +317,9 @@ String enable="false";
 							String keyToRemove = "None_" + orderSpecimenBeanObj.getSpecimenName() + "_" + new Integer(itemIndex).toString();
 							String checkId = "None_" + new Integer(itemIndex).toString();
 				%>
- 			
+
 				    		  <tr>
-								<td align="left" class="black_ar" >					
+								<td align="left" class="black_ar" >
 									<html:multibox property="itemsToRemove" value="<%=keyToRemove%>" styleId="<%=checkId%>" onclick="enableRemove()"/>
 								</td>
 								<td align="left" class="black_ar">
@@ -342,10 +342,10 @@ String enable="false";
 									<%=orderSpecimenBeanObj.getSpecimenName()%>
 								</td>
 								<td align="left" class="black_ar">
-										
-				<%if(orderSpecimenBeanObj.getTypeOfItem().equals("specimenArray") &&		orderSpecimenBeanObj.getIsDerived().equals("false"))			  		
+
+				<%if(orderSpecimenBeanObj.getTypeOfItem().equals("specimenArray") &&		orderSpecimenBeanObj.getIsDerived().equals("false"))
 					{
-				%>	
+				%>
 										1
 				<%	}
 					else
@@ -358,37 +358,37 @@ String enable="false";
 										<%=orderSpecimenBeanObj.getUnitRequestedQuantity()%>
 
 										<html:hidden property="<%=arrayName%>" value="None"/>
-										<html:hidden property="<%=isDerived%>" value="<%=orderSpecimenBeanObj.getIsDerived()%>"/>	
-										<html:hidden property="<%=specimenName%>" value="<%=orderSpecimenBeanObj.getSpecimenName()%>"/>	
-										<html:hidden property="<%=specimenClass%>" value="<%=orderSpecimenBeanObj.getSpecimenClass()%>"/>	
-										<html:hidden property="<%=specimenType%>" value="<%=orderSpecimenBeanObj.getSpecimenType()%>"/>	
+										<html:hidden property="<%=isDerived%>" value="<%=orderSpecimenBeanObj.getIsDerived()%>"/>
+										<html:hidden property="<%=specimenName%>" value="<%=orderSpecimenBeanObj.getSpecimenName()%>"/>
+										<html:hidden property="<%=specimenClass%>" value="<%=orderSpecimenBeanObj.getSpecimenClass()%>"/>
+										<html:hidden property="<%=specimenType%>" value="<%=orderSpecimenBeanObj.getSpecimenType()%>"/>
 										<html:hidden property="<%=specimenId%>" value="<%=orderSpecimenBeanObj.getSpecimenId()%>"/>
-										<html:hidden property="<%=description%>" value="<%=orderSpecimenBeanObj.getDescription()%>"/>	
+										<html:hidden property="<%=description%>" value="<%=orderSpecimenBeanObj.getDescription()%>"/>
 										<html:hidden property="<%=availableQuantity%>" value="<%=orderSpecimenBeanObj.getAvailableQuantity()%>"/>
-										<html:hidden property="<%=typeOfItem%>" value="<%=orderSpecimenBeanObj.getTypeOfItem()%>"/>	
+										<html:hidden property="<%=typeOfItem%>" value="<%=orderSpecimenBeanObj.getTypeOfItem()%>"/>
 										<html:hidden property="<%=requestedQuantity%>" value="<%=orderSpecimenBeanObj.getRequestedQuantity()%>"/>
 										<html:hidden property="<%=unitRequestedQuantity%>" value="<%=orderSpecimenBeanObj.getUnitRequestedQuantity()%>"/>
-										<html:hidden property="<%=pathologicalStatus%>" value="<%=orderSpecimenBeanObj.getPathologicalStatus()%>"/>	
+										<html:hidden property="<%=pathologicalStatus%>" value="<%=orderSpecimenBeanObj.getPathologicalStatus()%>"/>
 										<html:hidden property="<%=tissueSite%>" value="<%=orderSpecimenBeanObj.getTissueSite()%>"/>
 										<html:hidden property="<%=specimenCollectionGroup%>" value="<%=orderSpecimenBeanObj.getSpecimenCollectionGroup()%>"/>
-												
+
 									</td>
-							 </tr>			
-	<%		
+							 </tr>
+	<%
 						 i++;
 						itemIndex++;
 					}//End for loop to iterate orderItemsList
 	%>
 		   				</tbody>
-		   		 
-			   		<!-- Block to display order items in the orderlist ends here -->		   			
-			  
+
+			   		<!-- Block to display order items in the orderlist ends here -->
+
 	<%
 				}//End If(orderItemsMap.containsKey("None"))
-	%>		
+	%>
 					</table>
 				</td>
-			</tr>	
+			</tr>
  	<!-- Block for OrderList Ends here-->
 	<%
 			//If some array is defined.
@@ -404,17 +404,17 @@ String enable="false";
 	%>
 			<tr>
 			<td nowrap class="dividerline">
-		 		<!-- Block to display Array starts here  -->		
+		 		<!-- Block to display Array starts here  -->
 				<table cellspacing="0" cellpadding="0" border="0" summary="Display the defined array information" width="100%">
 					<tr>
 						<td>
-								
+
 								<!-- table to display array info Starts-->
 								 <table cellspacing="0" cellpadding="3" border="0" summary="Display Defined Array information" width="100%" >
 									<tr>
 										<td align="left" width="100%" nowrap colspan="2" class="black_ar_b">
 											<label for="arrayName" >
-												<bean:message key="requesteddetails.arrayName" /><%=defineArrayFormObj.getArrayName()%> 
+												<bean:message key="requesteddetails.arrayName" /><%=defineArrayFormObj.getArrayName()%>
 											</label>
 										</td>
 									</tr>
@@ -422,10 +422,10 @@ String enable="false";
 										<td align="left" nowrap class="black_ar" colspan="2">
 											<label for="dimensions">
 												<bean:message key="orderingSystem.tableheader.label.dimensions" />:
-												<%= defineArrayFormObj.getDimenmsionX() %> , <%= defineArrayFormObj.getDimenmsionY() %> 
+												<%= defineArrayFormObj.getDimenmsionX() %> , <%= defineArrayFormObj.getDimenmsionY() %>
 											</label>
 										</td>
-										
+
 									</tr>
 									<tr>
 										<td align="left" nowrap class="black_ar" colspan="2">
@@ -443,17 +443,17 @@ String enable="false";
 											</label>
 										</td>
 										<td align="middle" width="5%" class="black_ar">
-												<a id="<%= switchArray %>" style="text-decoration:none" href="javascript:expand('<%=defineArrayFormObj.getArrayName()%>');">  
+												<a id="<%= switchArray %>" style="text-decoration:none" href="javascript:expand('<%=defineArrayFormObj.getArrayName()%>');">
 										 		<img src="images/uIEnhancementImages/minimize.png" height="16" width="16" border="0"/>
 										</td>
 									</tr>
 								 </table>
 								<!-- table to display array info Ends-->
 							</td>
-						</tr>	
+						</tr>
 						<tr id="<%= dataArray %>">
 							 <td class="showhide">
-							
+
 							<!-- table to display checkbox,speicmen name and count -->
 								<table cellspacing="0" cellpadding="3" border="0" summary="Display Specimen Name,Req Qty" width="100%" >
 									<tr>
@@ -483,11 +483,11 @@ String enable="false";
 							if(orderItemsList.size()>0)
 								enable="true";
 
-							
+
 							for(Iterator listItr = orderItemsList.iterator();listItr.hasNext();)
 							{
-								OrderSpecimenBean orderSpecimenBeanObj=(OrderSpecimenBean)listItr.next();	
-						
+								OrderSpecimenBean orderSpecimenBeanObj=(OrderSpecimenBean)listItr.next();
+
 								String specimenName = "value(OrderSpecimenBean:"+i+"_specimenName)";
 								String requestedQuantity = "value(OrderSpecimenBean:"+i+"_requestedQuantity)";
 								String unitRequestedQuantity="value(OrderSpecimenBean:"+i+"_unitRequestedQuantity)";
@@ -499,69 +499,70 @@ String enable="false";
 								String description = "value(OrderSpecimenBean:"+i+"_description)";
 								String availableQuantity = "value(OrderSpecimenBean:"+i+"_availableQuantity)";
 								String arrayName = "value(OrderSpecimenBean:"+i+"_arrayName)";
-								String typeOfItem = "value(OrderSpecimenBean:"+i+"_typeOfItem)";	
-								
+								String typeOfItem = "value(OrderSpecimenBean:"+i+"_typeOfItem)";
+
 								String pathologicalStatus="value(OrderSpecimenBean:"+i+"_pathologicalStatus)";
 								String tissueSite="value(OrderSpecimenBean:"+i+"_tissueSite)";
 								String specimenCollectionGroup="value(OrderSpecimenBean:"+i+"_specimenCollectionGroup)";
 
-								
+
 								String keyToRemove = defineArrayFormObj.getArrayName() + "_" + orderSpecimenBeanObj.getSpecimenName() + "_" + new Integer(itemIndex).toString();
 								String checkId = defineArrayFormObj.getArrayName() + "_" + new Integer(itemIndex).toString();
 	%>
-									 
+
 												  <tr>
-													  	<td>					
+													  	<td>
 															<!--input type="checkbox" id="chkidArray" name="chkidArray" /-->
 															<html:multibox property="itemsToRemove" value="<%=keyToRemove%>" styleId="<%=checkId%>" onclick="enableRemove()"/>
 														</td>
-														
+
 													  	<td align="left" class="black_ar">
 														<%if(orderSpecimenBeanObj.getTypeOfItem().equals("pathologyCase"))
 														{%>
-															<img src="images\Participant.GIF" border="0"/>
+															<img src="images/Participant.GIF" border="0"/>
 														<%}
 														else
 														{%>
 														<%if(orderSpecimenBeanObj.getIsDerived().equals("true"))
 														{%>
-															<img src="images\Distribution.GIF" border="0"/>
+
+															<img src="images/Distribution.GIF" border="0"/>
 														<%}
 														}%>
 													  		<%=orderSpecimenBeanObj.getSpecimenName()%>
 													  	</td>
-													  	
+
 													  	<td align="left" class="black_ar">
 													  	<%=orderSpecimenBeanObj.getRequestedQuantity()%>&nbsp;
 													  	<%=orderSpecimenBeanObj.getUnitRequestedQuantity()%>
 													  	</td>
 												  </tr>
-											  
+
 										<html:hidden property="<%=arrayName%>" value="<%=defineArrayFormObj.getArrayName()%>"/>
-										<html:hidden property="<%=isDerived%>" value="<%=orderSpecimenBeanObj.getIsDerived()%>"/>	
-										<html:hidden property="<%=specimenName%>" value="<%=orderSpecimenBeanObj.getSpecimenName()%>"/>	
-										<html:hidden property="<%=specimenClass%>" value="<%=orderSpecimenBeanObj.getSpecimenClass()%>"/>	
-										<html:hidden property="<%=specimenType%>" value="<%=orderSpecimenBeanObj.getSpecimenType()%>"/>	
+										<html:hidden property="<%=isDerived%>" value="<%=orderSpecimenBeanObj.getIsDerived()%>"/>
+										<html:hidden property="<%=specimenName%>" value="<%=orderSpecimenBeanObj.getSpecimenName()%>"/>
+										<html:hidden property="<%=specimenClass%>" value="<%=orderSpecimenBeanObj.getSpecimenClass()%>"/>
+										<html:hidden property="<%=specimenType%>" value="<%=orderSpecimenBeanObj.getSpecimenType()%>"/>
 										<html:hidden property="<%=specimenId%>" value="<%=orderSpecimenBeanObj.getSpecimenId()%>"/>
-										<html:hidden property="<%=description%>" value="<%=orderSpecimenBeanObj.getDescription()%>"/>	
+										<html:hidden property="<%=description%>" value="<%=orderSpecimenBeanObj.getDescription()%>"/>
 										<html:hidden property="<%=availableQuantity%>" value="<%=orderSpecimenBeanObj.getAvailableQuantity()%>"/>
-										<html:hidden property="<%=typeOfItem%>" value="<%=orderSpecimenBeanObj.getTypeOfItem()%>"/>	
+										<html:hidden property="<%=typeOfItem%>" value="<%=orderSpecimenBeanObj.getTypeOfItem()%>"/>
 										<html:hidden property="<%=requestedQuantity%>" value="<%=orderSpecimenBeanObj.getRequestedQuantity()%>"/>
 										<html:hidden property="<%=unitRequestedQuantity%>" value="<%=orderSpecimenBeanObj.getUnitRequestedQuantity()%>"/>
-										<html:hidden property="<%=pathologicalStatus%>" value="<%=orderSpecimenBeanObj.getPathologicalStatus()%>"/>	
+										<html:hidden property="<%=pathologicalStatus%>" value="<%=orderSpecimenBeanObj.getPathologicalStatus()%>"/>
 										<html:hidden property="<%=tissueSite%>" value="<%=orderSpecimenBeanObj.getTissueSite()%>"/>
 										<html:hidden property="<%=specimenCollectionGroup%>" value="<%=orderSpecimenBeanObj.getSpecimenCollectionGroup()%>"/>
 
-										
+
 	<%
 								itemIndex++;
 							  i++;
 							}//End for
 	%>
-										</tbody>									 
+										</tbody>
 	 						 		</td>
-								</tr>							
-	<%	
+								</tr>
+	<%
 						}//End if(map contains arrayName)
 	%>
 						</table>
@@ -569,9 +570,9 @@ String enable="false";
 				  </td>
 			  </tr>
 		</table>
-	<!-- Block to display Array ends here  -->	
+	<!-- Block to display Array ends here  -->
     </td>
-</tr>	
+</tr>
 	</logic:iterate>
 	<%
 				}//End IF(session.getAttribute("DefineArrayFormObjects") != null)
@@ -581,29 +582,29 @@ String enable="false";
 			if(session.getAttribute("DefineArrayFormObjects") != null)
 			{
 				 	List defineArrayFormList = (ArrayList)session.getAttribute("DefineArrayFormObjects");
-	%>				
+	%>
 		<logic:iterate id="defineArrayFormObj"	collection="<%=defineArrayFormList%>" type="edu.wustl.catissuecore.actionForm.DefineArrayForm">
   <tr>
 	<td nowrap colspan="3">
-		 		<!-- Block to display Array starts here  -->	
+		 		<!-- Block to display Array starts here  -->
 		 <table cellspacing="0" cellpadding="0" border="0" summary="Display the defined array information" width="100%">
 					<tr>
 						<td class="dividerline">
-								
+
 								<!-- table to display array info Starts-->
 								 <table cellspacing="0" cellpadding="3" border="0" summary="Display Defined Array information" width="100%" >
 									<tr>
 										<td colspan="2" align="left" class="black_ar_b">
 											<label for="arrayName">
-												<%=defineArrayFormObj.getArrayName() + " Array"%> 
+												<%=defineArrayFormObj.getArrayName() + " Array"%>
 											</label>
-										</td>										
+										</td>
 									</tr>
 									<tr>
 										<td align="left" nowrap width="20%" class="black_ar" colspan="2">
 											<label for="dimensions">
 												<bean:message key="orderingSystem.tableheader.label.dimensions" />:
-												<%= defineArrayFormObj.getDimenmsionX() %> , <%= defineArrayFormObj.getDimenmsionY() %> 
+												<%= defineArrayFormObj.getDimenmsionX() %> , <%= defineArrayFormObj.getDimenmsionY() %>
 											</label>
 										</td>
 									</tr>
@@ -613,10 +614,10 @@ String enable="false";
 												<bean:message key="orderingSystem.tableheader.label.type" />:
 												<%= defineArrayFormObj.getArrayTypeName() %>
 											</label>
-										</td>																				
+										</td>
 									</tr>
 									<tr>
-										
+
 										<td align="left" nowrap width="95%" class="black_ar">
 											<label for="class">
 												<bean:message key="orderingSystem.tableheader.label.class" />:
@@ -627,20 +628,20 @@ String enable="false";
 										<%
 											String switchArray = "switch_" + defineArrayFormObj.getArrayName();
 										%>
-												<a id="<%= switchArray %>" style="text-decoration:none" href="javascript:expand('<%=defineArrayFormObj.getArrayName()%>');">  
+												<a id="<%= switchArray %>" style="text-decoration:none" href="javascript:expand('<%=defineArrayFormObj.getArrayName()%>');">
 										 		<img src="images/uIEnhancementImages/minimize.png" height="16" width="16" border="0"/>
 										</td>
 									</tr>
 								 </table>
 								<!-- table to display array info Ends-->
 						</td>
-				</tr>	
+				</tr>
 				<%
 					String dataArray = "data_" + defineArrayFormObj.getArrayName();
 				%>
 				<tr id="<%= dataArray %>">
 					 <td>
-							
+
 							<!-- table to display checkbox,speicmen name and count -->
 								<table cellspacing="0" cellpadding="3" border="0" summary="Display Specimen Name,Req Qty" width="100%" >
 									  <tr>
@@ -659,9 +660,9 @@ String enable="false";
 				</tr>
 		</table>
 	</td>
- </tr>											
+ </tr>
 		</logic:iterate>
-	<%		   	
+	<%
 			 } //End if(session.getAttribute("DefineArrayFormObjects") != null)
 		} //End else(when no orderitems added,then,display empty defined arrays)
 	%>
@@ -681,9 +682,9 @@ String enable="false";
 								document.OrderList.orderButton.disabled=false;
 							  }
 						  </script>
-					
+
 		<!-- action buttons end -->
-	</td>		 
+	</td>
 </tr>
 
 </table> <!--main table ends -->
