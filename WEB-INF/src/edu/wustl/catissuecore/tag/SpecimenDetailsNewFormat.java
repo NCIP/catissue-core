@@ -889,7 +889,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		/*stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
 				+ "\" class=\"" + styleClass + "\" size=\"" + size + "\">");*/
 //		if(!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
-		if (!this.generateLabel && (nameValue[0].contains("parentName")) )
+		if ((nameValue[0].contains("parentName")) )
 		{
 			stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
   				+ "\" class=\"" + styleClass + "\" size=\"" + size + "disabled=\"disabled\""+"\">");
