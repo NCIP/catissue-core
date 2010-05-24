@@ -419,7 +419,7 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 
 	public void testAddCPR()
 	{
-		setRequestPathInfo("/CPQuerySubCollectionProtocolRegistrationAd");
+		setRequestPathInfo("/CPQuerySubCollectionProtocolRegistrationAdd");
 		CollectionProtocolRegistrationForm cprForm = new CollectionProtocolRegistrationForm();
 		cprForm.setCollectionProtocolShortTitle("");
 		cprForm.setParticipantID(0);
