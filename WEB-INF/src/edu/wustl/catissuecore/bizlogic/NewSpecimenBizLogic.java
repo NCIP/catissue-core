@@ -4263,6 +4263,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					this.validateIfCPisClosed(specimenDO, newSpecimen, dao);
 					// Bug 11481 E
 					this.updateSpecimenDomainObject(dao, newSpecimen, specimenDO, sessionDataBean);
+					if(specimenDO.getParentSpecimen() != null && !Constants.COLLECTION_STATUS_COLLECTED.equals(((Specimen)specimenDO.getParentSpecimen()).getCollectionStatus()))
+					{
+						throw this.getBizLogicException(null, "errors.item", ApplicationProperties.getValue("specimen.parent.label.required"));
+					}
 					if (updateChildrens)
 					{
 						this.updateChildrenSpecimens(dao, newSpecimen, specimenDO, sessionDataBean);
