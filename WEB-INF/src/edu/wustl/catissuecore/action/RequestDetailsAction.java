@@ -87,7 +87,7 @@ public class RequestDetailsAction extends BaseAction
 	 * logger.
 	 */
 
-	private transient final Logger logger = Logger.getCommonLogger(RequestDetailsAction.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(RequestDetailsAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -435,8 +435,7 @@ public class RequestDetailsAction extends BaseAction
 
 		catch (final DAOException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
+			LOGGER.error(e.getMessage(), e);
 
 		}
 		finally
@@ -447,8 +446,7 @@ public class RequestDetailsAction extends BaseAction
 			}
 			catch (final DAOException daoEx)
 			{
-				this.logger.error(daoEx.getMessage(), daoEx);
-				daoEx.printStackTrace() ;
+				LOGGER.error(daoEx.getMessage(), daoEx);
 			}
 		}
 	}

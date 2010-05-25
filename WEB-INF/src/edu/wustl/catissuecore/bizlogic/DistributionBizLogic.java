@@ -66,7 +66,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 	/**
 	 *  Logger object.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(DistributionBizLogic.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(DistributionBizLogic.class);
 
 	/**
 	 * Saves the Distribution object in the database.
@@ -103,8 +103,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
+			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -139,8 +138,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException ex)
 		{
-			this.logger.error(ex.getMessage(), ex);
-			ex.printStackTrace() ;
+			LOGGER.error(ex.getMessage(), ex);
 			throw this.getBizLogicException(ex, ex.getErrorKeyName(), ex.getMsgValues());
 		}
 		return distributed;
@@ -182,14 +180,12 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final ApplicationException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
+			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, "errors.distribution.closedOrDisableSite", "");
 		}
 		catch (final ClassNotFoundException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
+			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, "errors.distribution.closedOrDisableSite", "");
 		}
 
@@ -287,13 +283,12 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			// Mandar : 04-Apr-06 for updating the removed specimens start
 			this.updateRemovedSpecimens(distributedItemCollection, oldDistributedItemCollection,
 					dao, sessionDataBean);
-			this.logger.debug("Update Successful ...04-Apr-06");
+			LOGGER.debug("Update Successful ...04-Apr-06");
 			// Mandar : 04-Apr-06 end
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace() ;
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -318,7 +313,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			double availabeQty = Double.parseDouble(tissueSpecimen.getAvailableQuantity()
 					.toString());// tissueSpecimen.getAvailableQuantityInGram().
 			// doubleValue();
-			this.logger.debug("TissueAvailabeQty" + availabeQty);
+			LOGGER.debug("TissueAvailabeQty" + availabeQty);
 			if (availabeQty <= quantity)
 			{
 				tissueSpecimen.setAvailableQuantity(new Double(0.0));
@@ -326,7 +321,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			else
 			{
 				availabeQty = availabeQty - quantity;
-				this.logger.debug("TissueAvailabeQty after deduction" + availabeQty);
+				LOGGER.debug("TissueAvailabeQty after deduction" + availabeQty);
 				tissueSpecimen.setAvailableQuantity(new Double(availabeQty));// tissueSpecimen
 				// .
 				// setAvailableQuantityInGram
@@ -551,8 +546,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace() ;
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -670,8 +664,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException daoExp)
 		{
-			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace() ;
+			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -698,7 +691,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			{
 				final DistributedItem item = (DistributedItem) it.next();
 				final boolean isPresentInNew = newDistributedItemCollection.contains(item);
-				this.logger.debug("Old Object in New Collection : " + isPresentInNew);
+				LOGGER.debug("Old Object in New Collection : " + isPresentInNew);
 				if (!isPresentInNew)
 				{
 					Object specimenObj = dao.retrieveById(Specimen.class.getName(), item.getSpecimen()
@@ -710,12 +703,11 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 				}
 
 			}
-			this.logger.debug("Update Successful ...04-Apr-06");
+			LOGGER.debug("Update Successful ...04-Apr-06");
 		}
 		catch (final DAOException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
+			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -730,9 +722,9 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 			double availabeQty = Double.parseDouble(tissueSpecimen.getAvailableQuantity()
 					.toString());// tissueSpecimen.getAvailableQuantityInGram().
 			// doubleValue();
-			this.logger.debug("TissueAvailabeQty" + availabeQty);
+			LOGGER.debug("TissueAvailabeQty" + availabeQty);
 			availabeQty = availabeQty + quantity;
-			this.logger.debug("TissueAvailabeQty after addition" + availabeQty);
+			LOGGER.debug("TissueAvailabeQty after addition" + availabeQty);
 			tissueSpecimen.setAvailableQuantity(new Double(availabeQty));// tissueSpecimen
 			// .
 			// setAvailableQuantityInGram
@@ -922,6 +914,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 				arrayDetails.add(CommonUtilities.toString(specimenArray.getSpecimenArrayType()
 						.getSpecimenTypeCollection()));
 				arrayDetails.add(CommonUtilities.toString(specimenArray.getComment()));
+				arrayDetails.add(specimenArray.getId());
 				arrayEntries.add(arrayDetails);
 			}
 		}
@@ -953,8 +946,7 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final DAOException e)
 		{
-			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
+			LOGGER.error(e.getMessage(), e);
 			return null;
 		}
 		finally

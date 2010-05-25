@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.domain.Distribution;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.vo.ArrayDistributionReportEntry;
 import edu.wustl.common.beans.SessionDataBean;
@@ -66,10 +68,17 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 		// Set the columns for Distribution report
 		final String action = configForm.getNextAction();
 		final String[] selectedColumns = this.getSelectedColumns(action, configForm, true);
-		final String[] columnNames = this.getColumnNames(selectedColumns);
+//		final String[] columnNames = this.getColumnNames(selectedColumns);
 
 		final String[] specimenColumns = Constants.SPECIMEN_IN_ARRAY_SELECTED_COLUMNS;
-		final String[] specimenColumnNames = this.getColumnNames(specimenColumns);
+		final String[] specimenColumnNames;
+			List<String> listSelColumns = new ArrayList<String>(Arrays.asList(specimenColumns));
+		listSelColumns.removeAll(Arrays.asList("Print : Specimen"));
+		specimenColumnNames = listSelColumns.toArray(new String[0]);
+		String[] columnNames = new String[specimenColumnNames.length];
+		columnNames = AppUtility.getColNames(specimenColumnNames, columnNames, 0);
+
+//			this.getColumnNames(specimenColumns);
 
 		final List listOfData = this.getListOfArrayDataForSave(dist, configForm, sessionData,
 				selectedColumns, specimenColumns);

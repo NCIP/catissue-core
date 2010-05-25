@@ -2553,7 +2553,7 @@ public class Constants
 	//"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
 
 	/** The Constant SPECIMEN_IN_ARRAY_SELECTED_COLUMNS. */
-	public static final String SPECIMEN_IN_ARRAY_SELECTED_COLUMNS[] = {
+	public static final String SPECIMEN_IN_ARRAY_SELECTED_COLUMNS[] = {"Print : Specimen",
 			"Specimen.LABEL.Label : Specimen", "Specimen.BARCODE.barcode : Specimen",
 			"SpecimenArrayContent.PositionDimensionOne.PositionDimensionOne : Specimen",
 			"SpecimenArrayContent.PositionDimensionTwo.PositionDimensionTwo : Specimen",
@@ -2562,7 +2562,7 @@ public class Constants
 			"SpecimenCharacteristics.TISSUE_SITE.Tissue Site : Specimen",};
 
 	/** The Constant ARRAY_SELECTED_COLUMNS. */
-	public static final String ARRAY_SELECTED_COLUMNS[] = {
+	public static final String ARRAY_SELECTED_COLUMNS[] = {"Print : Specimen",
 			"SpecimenArray.Name.Name : SpecimenArray", "Container.barcode.Barcode : SpecimenArray",
 			"ContainerType.name.ArrayType : ContainerType",
 			"Container.PositionDimensionOne.Position One: Container",

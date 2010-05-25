@@ -128,6 +128,17 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		final DistributionBizLogic bizLogic = (DistributionBizLogic) factory
 				.getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 		final List listOfData = bizLogic.getListOfArray(dist);
+		if (!listOfData.isEmpty())
+		{
+
+			List tempList = new ArrayList();
+			for(int i=0;i<listOfData.size();i++)
+			{
+				List list = (List) listOfData.get( i );
+				list.add( 0, "false" );
+			}
+
+		}
 
 		// Set the request attributes for the Distribution report data
 		request.setAttribute(Constants.DISTRIBUTION_REPORT_FORM, distributionReportForm);
