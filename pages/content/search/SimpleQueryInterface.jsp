@@ -453,7 +453,7 @@ function vieMapTabSelected(){
 											<%
 														} else if (attributeType
 														.equals(Constants.FIELD_TYPE_BIGINT)
-														|| attributeType.equals("double")) {
+														|| attributeType.equals("double") || attributeType.equals("integer")) {
 											%>
 											<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
 											<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
