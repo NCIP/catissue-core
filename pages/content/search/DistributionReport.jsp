@@ -6,7 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ConfigureResultViewForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page import="edu.wustl.common.util.SendFile"%>
 <%
         List dataList = (List)request.getAttribute(Constants.DISTRIBUTED_ITEMS_DATA);
@@ -16,7 +16,7 @@
 		String []selectedColumns=form.getSelectedColumnNames();
 		String reportSaveAction = "";
 		String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
-		
+
 		if(distForm.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) {
 			reportSaveAction = Constants.DISTRIBUTION_REPORT_SAVE_ACTION;
 			if(pageOf != null && pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
@@ -33,8 +33,8 @@
 			}
 
 		}
-		
-%> 
+
+%>
 <script language="JavaScript">
 	function changeAction()
 	{
@@ -46,19 +46,19 @@
    function printLabels()
    {
 	    var specimenIdsStr = "";
-	    for(var ii=0; ii < <%=dataList.size()%>; ii++) 
-		{ 
+	    for(var ii=0; ii < <%=dataList.size()%>; ii++)
+		{
 	    	if(document.getElementsByName("print")[ii].checked)
-		    {  
+		    { 
 				specimenIdsStr = specimenIdsStr + document.getElementsByName("print")[ii].id;
-				specimenIdsStr = specimenIdsStr + ":";							       
-		    }		 
+				specimenIdsStr = specimenIdsStr + ":";
+		    }
 		}
 		document.forms[0].specimenIdString.value = specimenIdsStr;
 		setFormAction("DistributionReport.do?forward=printLabels");
-		document.forms[0].submit();        
+		document.forms[0].submit();
    }
-	
+
 	function changeActionOnConfig()
 	{
 		document.forms[0].reportAction.value="true";
@@ -75,35 +75,35 @@
 	function ChangePrintCheckBoxStatus()
 	{
 		var countOfCheckboxes = document.getElementsByName("print").length;
-         for(var ii=0; ii < countOfCheckboxes; ii++) 
-		 {
+         for(var ii=0; ii < countOfCheckboxes; ii++)
+		 {//alert(document.getElementsByName("print")[ii].checked);
 			 if(document.forms[0].printAll.checked)
 			 {
-               document.forms[0].print[ii].checked = true;
+               document.getElementsByName("print")[ii].checked = true;
 			 }
 			 else
 			 {
-                document.forms[0].print[ii].checked = false;
+                document.getElementsByName("print")[ii].checked = false;
 			 }
 
-		 }  
-		
+		 }
+
 	}
 	function selectOptions(element)
 	{
-		for(i=0;i<element.length;i++) 
+		for(i=0;i<element.length;i++)
 		{
-			element.options[i].selected=true;			
+			element.options[i].selected=true;
 		}
 	}
-	
+
 </script>
 <style>
 	tr#hiddenCombo
 	{
 	 display:none;
 	}
-	
+
 </style>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -116,7 +116,7 @@
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
-	
+
       <tr>
         <td class="td_table_head"><span class="wh_ar_b"><bean:message key="distribution.name"/>
 		</span></td>
@@ -134,14 +134,14 @@
 			 <td valign="bottom">
 				<a href="SimpleQueryInterface.do?pageOf=pageOfArrayDistribution&aliasName=Distribution_array"> <img src="images/uIEnhancementImages/tab_array_user.gif" alt="Array Report" width="107" height="22" /></a></td>
 	</logic:equal>
-	  
+
 		<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_DISTRIBUTION_ARRAY%>">
 			    <tr>
         <td class="td_tab_bg" >
 			<img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
 			 <td valign="bottom" ><a href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution"><img src="images/uIEnhancementImages/tab_specimen_user.gif" alt="Specimen Report" width="126" height="22" border="0" /></a></td>
                      <td valign="bottom"><img src="images/uIEnhancementImages/tab_array_user_selected.gif" alt="Array Report" width="107" height="22" /></td>
-                    
+
 		</logic:equal>
 			<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
@@ -220,17 +220,17 @@
            	 	</html:select>
         	</td>
 		</tr>
-		
+
 	</table>
 	</td>
 	</tr>
         <tr onclick="javascript:showHide('distributedItems')">
           <td width="80%" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;
 		  <bean:message key="distribution.distributedItem"/> </span></td>
-		  
+
 		  <td width="20%" align="right" class="tr_bg_blue1"><a href="#" id="imgArrow_distributedItems"><img src="images/uIEnhancementImages/dwn_arrow1.gif" width="80" height="9" hspace="10" border="0" alt="Show Details"></a></td>
         </tr>
-		
+
 		<tr>
           <td colspan="3" class="showhide1"><div id="distributedItems" style="display:none" >
 		  <table width="100%" border="0" cellspacing="0" cellpadding="3">
@@ -243,18 +243,18 @@
 						key="buttons.selectAll" /> </span>
 			</td>
 			<td colspan="<%=(columnNames.length-1)%>" align="right" nowrap >
-		  
+
 						<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
 						<a href="#" onclick="changeActionOnConfig()" class="view">
 						<span class="view">
 						<bean:message  key="buttons.configure" /></span></a>
-						
+
 					</span></td>
 		</tr>
 
                   <tr class="tableheading">
                     <td align="left" class="black_ar_b">#</td>
-					<% 
+					<%
 				 		for(int i=0;i<columnNames.length;i++)
 				 		{
 				 	%>
@@ -263,10 +263,10 @@
 						}
 					%>
                   </tr>
-				  	
+
                   <tr>
-				   <%						
-				 		//List rowData = (List)itr.next();					
+				   <%
+				 		//List rowData = (List)itr.next();
 				 		Iterator innerItr= dataList.iterator();
 						int i1=1;
 				 		while(innerItr.hasNext())
@@ -276,9 +276,9 @@
 									fontStyle="tabletd1";
 				 %>
                     <td align="left" class="<%=fontStyle%>" ><%=i1%></td>
-						 <%			
-							
-				 			List rowElements = (List)innerItr.next();							
+						 <%
+
+				 			List rowElements = (List)innerItr.next();
 				 			//Iterator elementItr= rowElements.iterator();
 				 			//int j=0;
 				 			//while(elementItr.hasNext() && j<columnNames.length)
@@ -286,7 +286,7 @@
 				 			{
 								if(j==0)
 								{
-                                   
+
 				 %>
  <td align="left" class="<%=fontStyle%>">
        <%if(rowElements.get(0).equals("true")){ %>
@@ -304,12 +304,12 @@
                   </tr>
 				<%
 				 		}
-				 	%>				
+				 	%>
                 </table>
 				</div></td>
-              </tr>		  
+              </tr>
 		<tr>
-		
+
 		<td>
 		 <table><tr><td>
 
@@ -328,8 +328,8 @@
 					<html:button styleId="printCheckbox" property="printButton" onclick="printLabels()" >
 							<bean:message  key="print.checkboxLabel" />
 					</html:button>
-					</span>								
-			</td>			
+					</span>
+			</td>
         </tr>
       </table></td>
   </tr>
@@ -337,4 +337,4 @@
 <script language="JavaScript" type="text/javascript">
 displayPrinterTypeLocation();
 </script>
-</html:form>			
+</html:form>
