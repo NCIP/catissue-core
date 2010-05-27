@@ -69,12 +69,13 @@
 
 
 
-function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,overDiv)
+function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,overDiv,ctr)
 {
     setDateFormat("<%=CommonServiceLocator.getInstance().getDatePattern()%>");
 	var dataStr = element.options[element.selectedIndex].value;
 	var dataValue = new String(dataStr);
 	var lastInd = dataValue.lastIndexOf(".");
+	//alert(document.getElementById("showCalendar(SimpleConditionsNode:"+ctr+"_showCalendar)").value);
 	if(lastInd == -1)
 		return;
 	else
@@ -96,9 +97,12 @@ function showDateColumn(element,valueField,columnID,showCalendarID,fieldValue,ov
 			innerStr = innerStr + "<img src=\"images/calendar.gif\" width=24 height=22 border=0 onclick='scwShow("+ fieldValue + ",event);'>";
 			//innerStr = innerStr + "</a>";
 			td.innerHTML = innerStr;
+			document.getElementById("showCalendar(SimpleConditionsNode:"+ctr+"_showCalendar)").value=true;
+			//alert(document.getElementById("showCalendar(SimpleConditionsNode:"+ctr+"_showCalendar)").value);
 		}
 		else
 		{
+			document.getElementById("showCalendar(SimpleConditionsNode:"+ctr+"_showCalendar)").value="";
 			var td = document.getElementById(columnID);
 			td.innerHTML = "&nbsp;";
 			txtField.readOnly="";
@@ -332,7 +336,7 @@ function vieMapTabSelected(){
 											String functionName = "showDateColumn(this,'"
 											+ attributeValueID + "','" + columnID + "','"
 											+ showCalendarValue + "','" + fieldName + "','"
-											+ overDiv + "')";
+											+ overDiv + "','"+i+"')";
 											String attributeId = "attribute" + i;
 											String operatorId = "operator" + i;
 											String onAttributeChange = "onAttributeChange(this,'"
@@ -546,20 +550,20 @@ function vieMapTabSelected(){
 												<%=Operator.IS_NOT_NULL%>
 											</html:option>
 										</html:select>
+										<html:hidden property="<%=showCalendarValue%>"
+											styleId="<%=showCalendarValue%>" />
 			  </td>
 			  <td class="blue_ar_b" id="<%=columnID%>" size=3><!--  ********************* Mandar Code ********************** -->
 										<!-- ***** Code added to check multiple rows for Calendar icon ***** -->
-										<html:hidden property="<%=showCalendarValue%>"
-											styleId="<%=showCalendarValue%>" /> <%
+										 <%
  		showCal = (String) form.getShowCalendar(showCalendarKey);
  		if (showCal != null && showCal.trim().length() > 0) {
  %>
 										<div id="<%=overDiv%>"
 											style="position:absolute; visibility:hidden; z-index:1000;"></div>
-										<a
-											href="javascript:show_calendar('<%=fieldName%>',null,null,'MM-DD-YYYY');">
-										<img src="images\calendar.gif" width=24 height=22 border=0>
-										</a> <%
+
+										<img src="images/calendar.gif" width='24' height='22' border='0' onclick='scwShow(<%=fieldName%>,event);'>
+										 <%
  } else {
  %> &nbsp; <%
  }
