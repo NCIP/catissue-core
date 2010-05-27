@@ -1099,7 +1099,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			{
 				final ErrorKey errorKey = ErrorKey.getErrorKey("Err.ConstraintViolation");
 				throw new BizLogicException(errorKey, null,
-						"Collection Protocol Registration:COLLECTION_PROTOCOL_ID,PROTOCOL_PARTICIPANT_ID");
+				"Participant:Participant Protocol ID within this Collection Protocol");
 			}
 
 			// Mandar 22-Jan-07 To disable consents accordingly in SCG and
