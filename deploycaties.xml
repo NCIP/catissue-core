@@ -8,15 +8,15 @@
 			<pathelement location="./lib/ant-contrib.jar" />
 		</classpath>
 	</taskdef>
-	
+
 	<property file="deploycaties.properties" />
 	<property file="caTissueInstall.properties" />
-	
+
 	<property name="base.dir" value="." />
 	<property name="temp.dir" value="./tempCatissuecore" />
 	<property name="temp.caties.dir" value="./tempCaties" />
 	<property name="lib.dir" value="${base.dir}/lib" />
-	
+
 	<condition property="deidentifier.selected" value="deploy_deid_server" >
 		<equals arg1="${install.deid.deidentifier}" arg2="yes" casesensitive="false" />
 	</condition>
@@ -54,17 +54,6 @@
 			<equals arg1="" arg2="${jboss.server.port}" />
 			<then>
 				<fail message="The property 'jboss.server.port' can not be empty in caTissueInstall.properties" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="yes" arg2="${jboss.container.secure}" />
-			<then>
-				<if>
-					<equals arg1="" arg2="${keystore.file.path}" />
-					<then>
-						<fail message="The property 'keystore.file.path' can not be empty since JBoss is running on HTTPS" />
-					</then>
-				</if>
 			</then>
 		</if>
 		<!-- Assertions for add collection protocol-->
@@ -121,7 +110,7 @@
 				</if>
 			</then>
 		</if>
-		
+
 		<!-- Assertions for concept coder server -->
 		<if>
 			<equals arg1="yes" arg2="${install.concept.code.server}" />
@@ -154,10 +143,10 @@
 		</if>
 		<!-- Assertions for deidentifier server -->
 		<antcall target="assertfordeidentifier" />
-		
+
 	</target>
-	
-	
+
+
 	<target name="assertfordeidentifier">
 		<!-- Assertions for deidentifier server -->
 		<if>
@@ -195,7 +184,7 @@
 			</then>
 		</if>
 	</target>
-	
+
 	<!--Target call for Deployment of caTIES -->
 	<target name="deploy_caties"  >
 		<antcall target="assertforcaties" />
@@ -216,7 +205,7 @@
 		<jar destfile="${temp.caties.dir}/caties.jar" basedir="${temp.caties.dir}/classes" />
 		<delete dir="${temp.caties.dir}/classes" />
 	</target>
-	
+
 	<target name="replacefiletoken">
 		<copy file="${basedir}/caTIES_conf/caTIES.properties" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/build.xml" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
@@ -247,7 +236,7 @@
 		</if>
 		<antcall target="replacedeidentfierrelatedtoken" />
 	</target>
-	
+
 	<target name="replacedeidentfierrelatedtoken">
 		<if>
 			<equals arg1="${install.deid.deidentifier}" arg2="yes" />
@@ -258,7 +247,7 @@
 					<replacefilter token="@@DEIDENTIFIER_PROP_2@@" value="deidDnyFolder=${deid.dny.folder}" />
 					<replacefilter token="@@DEIDENTIFIER_PROP_3@@" value="deidConfigFilename=deid.cfg" />
 					<replacefilter token="@@DEIDENTIFIER_PROP_4@@" value="deidDTDFilename=Dataset.dtd" />
-				</replace>	
+				</replace>
 			</then>
 		</if>
 		<if>
@@ -267,12 +256,12 @@
 				<copy file="${basedir}/caTIES_conf/ScrubberConfiguration.xml" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
 				<replace file="${temp.caties.dir}/caTIES_conf/ScrubberConfiguration.xml">
 					<replacefilter token="@@CONTEXT_FOLDER@@" value="${deidentifier.installation.dir}\caTIES_conf" />
-				</replace>	
+				</replace>
 				<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
 					<replacefilter token="@@DEIDENTIFIER_CLASS_NAME@@" value="edu.wustl.catissuecore.deidentifier.harvardscrubber.HarvardSrubberDeidentifier" />
 					<replacefilter token="@@DEIDENTIFIER_PROP_1@@" value="harvardScrubberDTDFilename=${deidentifier.installation.dir}/Scrubber.dtd" />
 					<replacefilter token="@@DEIDENTIFIER_PROP_2@@" value="harvardScrubberConfigFilename=${deidentifier.installation.dir}/caTIES_conf/ScrubberConfiguration.xml" />
-				</replace>	
+				</replace>
 			</then>
 		</if>
 		<if>
@@ -280,7 +269,7 @@
 			<then>
 				<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
 					<replacefilter token="@@DEIDENTIFIER_CLASS_NAME@@" value="edu.wustl.catissuecore.deidentifier.DoNothingDeidentifier" />
-				</replace>	
+				</replace>
 			</then>
 		</if>
 		<if>
@@ -288,7 +277,7 @@
 			<then>
 				<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
 					<replacefilter token="@@DEIDENTIFIER_CLASS_NAME@@" value="${deidentifier.class.name}" />
-				</replace>	
+				</replace>
 			</then>
 		</if>
 		<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
@@ -297,9 +286,9 @@
 			<replacefilter token="@@DEIDENTIFIER_PROP_2@@" value="" />
 			<replacefilter token="@@DEIDENTIFIER_PROP_3@@" value="" />
 			<replacefilter token="@@DEIDENTIFIER_PROP_4@@" value="" />
-		</replace>	
+		</replace>
 	</target>
-	
+
 	<target name="deploy_caties_internal">
 		<if>
 			<equals arg1="yes" arg2="${install.report.loader.server}" />
@@ -326,7 +315,7 @@
 			</then>
 		</if>
 	</target>
-	
+
 	<target name="deploy_report_loader" >
 		<copy todir="${report.loader.installation.dir}/lib">
 			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib" />
@@ -337,8 +326,8 @@
 		<copy file="${basedir}/caTIES_conf/sites_configuration.xml" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
 		<copyfile src="${basedir}/caTIES_conf/logger.properties" dest="${report.loader.installation.dir}/log4j.properties" />
 		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${report.loader.installation.dir}" overwrite="true" />
-		<copy file="./catissuecore-properties/caTissueCore_Properties.xml" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />		
-		<copy file="${temp.caties.dir}/caties.jar" todir="${report.loader.installation.dir}" overwrite="true" />	
+		<copy file="./catissuecore-properties/caTissueCore_Properties.xml" todir="${report.loader.installation.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${temp.caties.dir}/caties.jar" todir="${report.loader.installation.dir}" overwrite="true" />
 	</target>
 
 	<target name="deploy_concept_code_server" >
@@ -349,8 +338,8 @@
 		<copy file="${temp.caties.dir}/caTIES_conf/remoteService.xml" todir="${concept.code.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${concept.code.installation.dir}" overwrite="true" />
 		<copyfile src="${basedir}/caTIES_conf/logger.properties" dest="${concept.code.installation.dir}/log4j.properties" />
-		<copy file="${temp.caties.dir}/caties.jar" todir="${concept.code.installation.dir}" overwrite="true" />	
-		<unzip src="gate.zip" dest="${concept.code.installation.dir}/gate" /> 
+		<copy file="${temp.caties.dir}/caties.jar" todir="${concept.code.installation.dir}" overwrite="true" />
+		<unzip src="gate.zip" dest="${concept.code.installation.dir}/gate" />
 		<replace file="${concept.code.installation.dir}/gate/gate_3_1/application/plugins/caTIES/creole.xml">
 			<replacefilter token="@@HOST@@" value="${jboss.server.host}" />
 			<replacefilter token="@@PORT@@" value="${jboss.server.port}" />
@@ -360,12 +349,12 @@
 
 	<target name="deploy_deid_server" >
 		<antcall target="copycommonfiles" />
-		<copy file="${basedir}/caTIES_conf/deid.cfg" todir="${deidentifier.installation.dir}/caTIES_conf" overwrite="true" />		
+		<copy file="${basedir}/caTIES_conf/deid.cfg" todir="${deidentifier.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="JniDeID.dll" todir="${deidentifier.installation.dir}" overwrite="true" />
 		<copy file="Dataset.dtd" todir="${deidentifier.installation.dir}" overwrite="true" />
-		
+
 	</target>
-	
+
 	<target name="deploy_harvardscrubber_server" >
 		<antcall target="copycommonfiles" />
 		<copy file="${temp.caties.dir}/caTIES_conf/ScrubberConfiguration.xml" todir="${deidentifier.installation.dir}/caTIES_conf" overwrite="true" />
@@ -375,17 +364,17 @@
 		<copy file="${basedir}/caTIES_conf/regex.list" todir="${deidentifier.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/ScrubberConfiguration.xsd" todir="${deidentifier.installation.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/Scrubber.dtd" todir="${deidentifier.installation.dir}" overwrite="true" />
-		
+
 	</target>
-	
+
 	<target name="deploy_donothing_server" >
 		<antcall target="copycommonfiles" />
 	</target>
-	
+
 	<target name="deploy_custom_server" >
 		<antcall target="copycommonfiles" />
 	</target>
-	
+
 	<target name="copycommonfiles">
 		<copy todir="${deidentifier.installation.dir}/lib">
 			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib" />
@@ -394,6 +383,6 @@
 		<copy file="${temp.caties.dir}/caTIES_conf/remoteService.xml" todir="${deidentifier.installation.dir}/caTIES_conf" overwrite="true" />
 		<copyfile src="${basedir}/caTIES_conf/logger.properties" dest="${deidentifier.installation.dir}/log4j.properties" />
 		<copy file="${temp.caties.dir}/caTIES_conf/build.xml" todir="${deidentifier.installation.dir}" overwrite="true" />
-		<copy file="${temp.caties.dir}/caties.jar" todir="${deidentifier.installation.dir}" overwrite="true" />	
+		<copy file="${temp.caties.dir}/caties.jar" todir="${deidentifier.installation.dir}" overwrite="true" />
 	</target>
 </project>
