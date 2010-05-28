@@ -7,6 +7,9 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.util.logger.Logger;
@@ -54,8 +57,13 @@ public class CaCoreAPIService
 	{
 		try
 		{
-			System.setProperty("javax.net.ssl.trustStore", CaTIESProperties
-					.getValue(CaTIESConstants.KEYSTORE_FILE_PATH));
+			HostnameVerifier hostVerifier = new HostnameVerifier()
+			{
+				public boolean verify(String urlHostName, SSLSession session)
+				{
+					return true;
+	            }
+			};
 			appService = ApplicationServiceProvider.getRemoteInstance();
 			clientSession = ClientSession.getInstance();
 			try
