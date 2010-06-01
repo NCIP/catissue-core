@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -146,7 +145,7 @@ public class SpecimenAutoStorageContainer {
 					new StorageContainerForSpecimenBizLogic();
 				Iterator<GenericSpecimen> itr = specimenDataBeanList.iterator();
 				Map<String, LinkedList<GenericSpecimen>> spTypeMap =
-					new HashMap<String, LinkedList<GenericSpecimen>>();
+					new LinkedHashMap<String, LinkedList<GenericSpecimen>>();
 				String specimenType = null;
 				while(itr.hasNext())
 				{
