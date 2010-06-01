@@ -143,14 +143,14 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 			throw new AssignDataException(errorKey, null, "SpunEventParameters.java :");
 		}
 	}
-	
+
 	/**
 	 * Do the round off for the required attributes (if any)
 	 */
 	@Override
 	public void doRoundOff() {
 		if (gravityForce != null) {
-			gravityForce = AppUtility.RoundOff(gravityForce, 2);
+			gravityForce = AppUtility.RoundOff(gravityForce, 5);
 		}
 	}
 }

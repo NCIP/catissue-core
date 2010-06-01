@@ -1492,10 +1492,10 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	 */
 	public void doRoundOff() {
 		if (initialQuantity != null) {
-			initialQuantity = AppUtility.truncate(initialQuantity, 2);
+			initialQuantity = AppUtility.truncate(initialQuantity, 5);
 		}
 		if (availableQuantity != null) {
-			availableQuantity = AppUtility.truncate(availableQuantity, 2);
+			availableQuantity = AppUtility.truncate(availableQuantity, 5);
 		}
 	}
 }

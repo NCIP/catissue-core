@@ -262,16 +262,16 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	@Override
 	public void doRoundOff() {
 		if (neoplasticCellularityPercentage != null) {
-			neoplasticCellularityPercentage = AppUtility.RoundOff(neoplasticCellularityPercentage, 2);
+			neoplasticCellularityPercentage = AppUtility.RoundOff(neoplasticCellularityPercentage, 5);
 		}
 		if (necrosisPercentage != null) {
-			necrosisPercentage = AppUtility.RoundOff(necrosisPercentage, 2);
+			necrosisPercentage = AppUtility.RoundOff(necrosisPercentage, 5);
 		}
 		if (lymphocyticPercentage != null) {
-			lymphocyticPercentage = AppUtility.RoundOff(lymphocyticPercentage, 2);
+			lymphocyticPercentage = AppUtility.RoundOff(lymphocyticPercentage, 5);
 		}
 		if (totalCellularityPercentage != null) {
-			totalCellularityPercentage = AppUtility.RoundOff(totalCellularityPercentage, 2);
+			totalCellularityPercentage = AppUtility.RoundOff(totalCellularityPercentage, 5);
 		}
 	}
 }

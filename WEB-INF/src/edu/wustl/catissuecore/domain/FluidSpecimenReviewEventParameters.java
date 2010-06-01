@@ -118,14 +118,14 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 					"FluidSpecimenReviewEventParameters.java :");
 		}
 	}
-	
+
 	/**
 	 * Do the round off for the required attributes (if any)
 	 */
 	@Override
 	public void doRoundOff() {
 		if (cellCount != null) {
-			cellCount = AppUtility.RoundOff(cellCount, 2);
+			cellCount = AppUtility.RoundOff(cellCount, 5);
 		}
 	}
 }

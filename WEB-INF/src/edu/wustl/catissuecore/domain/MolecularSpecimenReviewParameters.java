@@ -295,20 +295,20 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 					"MolecularSpecimenReviewParameters.java :");
 		}
 	}
-	
+
 	/**
 	 * Do the round off for the required attributes (if any)
 	 */
 	@Override
 	public void doRoundOff() {
 		if (absorbanceAt260 != null) {
-			absorbanceAt260 = AppUtility.RoundOff(absorbanceAt260, 2);
+			absorbanceAt260 = AppUtility.RoundOff(absorbanceAt260, 5);
 		}
 		if (absorbanceAt280 != null) {
-			absorbanceAt280 = AppUtility.RoundOff(absorbanceAt280, 2);
+			absorbanceAt280 = AppUtility.RoundOff(absorbanceAt280, 5);
 		}
 		if (ratio28STo18S != null) {
-			ratio28STo18S = AppUtility.RoundOff(ratio28STo18S, 2);
+			ratio28STo18S = AppUtility.RoundOff(ratio28STo18S, 5);
 		}
 	}
 }

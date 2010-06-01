@@ -147,17 +147,17 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters
 					.getNeoplasticCellularityPercentage());
 		}
 	}
-	
+
 	/**
 	 * Do the round off for the required attributes (if any)
 	 */
 	@Override
 	public void doRoundOff() {
 		if (neoplasticCellularityPercentage != null) {
-			neoplasticCellularityPercentage = AppUtility.RoundOff(neoplasticCellularityPercentage, 2);
+			neoplasticCellularityPercentage = AppUtility.RoundOff(neoplasticCellularityPercentage, 5);
 		}
 		if (viableCellPercentage != null) {
-			viableCellPercentage = AppUtility.RoundOff(viableCellPercentage, 2);
+			viableCellPercentage = AppUtility.RoundOff(viableCellPercentage, 5);
 		}
 	}
 }
