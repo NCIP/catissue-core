@@ -2426,6 +2426,24 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException
 	{
 		this.storageContainerIds.clear();
+		setSpecimenPosition(newSpecimen, dao, sessionDataBean, partOfMultipleSpecimen, pos1, pos2);
+
+	}
+
+	/**
+	 * Set Specimen Position.
+	 * @param newSpecimen Specimen
+	 * @param dao DAO
+	 * @param sessionDataBean SessionDataBean
+	 * @param pos1 Integer
+	 * @param pos2 Integer
+	 * @throws BizLogicException BizLogicException
+	 */
+	//Bug17288
+	private void setSpecimenPosition(Specimen newSpecimen, DAO dao,
+			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen, 
+			Integer pos1, Integer pos2) throws BizLogicException
+	{
 		this.setStorageLocationToNewSpecimen(dao, newSpecimen, sessionDataBean, true,pos1,pos2);
 		if (newSpecimen.getChildSpecimenCollection() != null)
 		{
@@ -2453,11 +2471,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						pos2 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionTwo();
 					}
 				}
-				this.setSpecimenStorageRecursively(specimen, dao, sessionDataBean, true,pos1,pos2);
+				this.setSpecimenPosition(specimen, dao, sessionDataBean, true, pos1, pos2);
 
 			}
 		}
-
 	}
 
 	/**
