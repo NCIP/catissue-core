@@ -1844,13 +1844,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			((MolecularSpecimen) persistentSpecimen).setConcentrationInMicrogramPerMicroliter(conc);
 		}
 		final String oldStatus = specimenOld.getCollectionStatus();
+		this.addSpecimenEvents(persistentSpecimen, specimen, sessionDataBean, oldStatus);
 		if (!Constants.COLLECTION_STATUS_COLLECTED.equals(oldStatus))
 		{
 			this.generateLabel(persistentSpecimen);
 			this.generateBarCode(persistentSpecimen);
 		}
-		this.addSpecimenEvents(persistentSpecimen, specimen, sessionDataBean, oldStatus);
-
 		this.setExternalIdentifier(dao, sessionDataBean, specimen, specimenOld, persistentSpecimen);
 	}
 
@@ -4471,6 +4470,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			specimenDO.setCollectionStatus(specimenVO.getCollectionStatus());
 		}
+		this.addSpecimenEvents(specimenDO, specimenVO, sessionDataBean, oldStatus);
 		if (!Constants.COLLECTION_STATUS_COLLECTED.equals(oldStatus))
 		{
 			this.generateLabel(specimenDO);
@@ -4489,7 +4489,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			((MolecularSpecimen) specimenDO)
 					.setConcentrationInMicrogramPerMicroliter(concentration);
 		}
-		this.addSpecimenEvents(specimenDO, specimenVO, sessionDataBean, oldStatus);
 	}
 
 	/**
