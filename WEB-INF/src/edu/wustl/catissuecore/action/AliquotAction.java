@@ -692,7 +692,7 @@ public class AliquotAction extends SecureAction
 				}
 			}
 			// this code is used in case we come from Specimen page
-			if (specimenLabel != null)
+			if (specimenLabel != null && !"".equals(specimenLabel.trim()))
 			{
 				hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
 				"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
@@ -701,22 +701,16 @@ public class AliquotAction extends SecureAction
 				aliquotForm.setSpecimenLabel(specimenLabel);
 				// by falguni-When user selects parent specimen barcode and
 				// submit.
-				if (!aliquotForm.getCheckedButton().equals("2"))
-				{
-					aliquotForm.setCheckedButton("1");
-				}
-				// resolvede bug #4236 Virender Mehta
-				if (aliquotForm.getCheckedButton().equals("1"))
-				{
-					tempAliquotMap.put(Constants.SYSTEM_LABEL, aliquotForm.getSpecimenLabel());
-					tempAliquotMap.put(Constants.SYSTEM_BARCODE, aliquotForm.getBarcode());
-				}
-				else
-				{
-					tempAliquotMap.put(Constants.SYSTEM_BARCODE, aliquotForm.getBarcode());
-				}
+				populateTempAliqoutMap(aliquotForm, tempAliquotMap);
 			}
-
+			else if(aliquotForm.getBarcode() != null && !"".equals(aliquotForm.getBarcode()))
+			{
+				hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
+				"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
+				"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat " +
+				"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.barcode ='" + aliquotForm.getBarcode() + "'";
+				populateTempAliqoutMap(aliquotForm, tempAliquotMap);
+			}
 			// Map containerMap = bizLogic.getAllocatedContainerMap();
 			TreeMap containerMap = new TreeMap();
 			if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGE_OF)))
@@ -793,6 +787,29 @@ public class AliquotAction extends SecureAction
 		finally
 		{
 			AppUtility.closeDAOSession(dao);
+		}
+	}
+
+	/**
+	 * Populate Temp Aliqout Map.
+	 * @param aliquotForm AliquotForm
+	 * @param tempAliquotMap Map
+	 */
+	private void populateTempAliqoutMap(final AliquotForm aliquotForm, Map tempAliquotMap)
+	{
+		if (!aliquotForm.getCheckedButton().equals("2"))
+		{
+			aliquotForm.setCheckedButton("1");
+		}
+		// resolvede bug #4236 Virender Mehta
+		if (aliquotForm.getCheckedButton().equals("1"))
+		{
+			tempAliquotMap.put(Constants.SYSTEM_LABEL, aliquotForm.getSpecimenLabel());
+			tempAliquotMap.put(Constants.SYSTEM_BARCODE, aliquotForm.getBarcode());
+		}
+		else
+		{
+			tempAliquotMap.put(Constants.SYSTEM_BARCODE, aliquotForm.getBarcode());
 		}
 	}
 
