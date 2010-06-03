@@ -247,7 +247,7 @@ public class NewSpecimenAction extends SecureAction
 			String aliquotLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getAliquotLabelFormat();
 
 			String lineage = specimenForm.getLineage();
-			if(lineage == null)
+			if(lineage == null || "".equals(lineage))
 			{
 				lineage = Constants.NEW_SPECIMEN;
 			}
