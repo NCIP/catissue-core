@@ -831,7 +831,7 @@ public class CaCoreAppServicesDelegator
 	 *
 	 * @throws Exception exception
 	 */
-	public List delegateGetParticipantMatchingObects(final String userName, final Object domainObject,Long csId)
+	public List delegateGetParticipantMatchingObects( final Object domainObject,Long csId,final String userName)
 			throws Exception
 	{
 		List matchingObjects = new ArrayList();
