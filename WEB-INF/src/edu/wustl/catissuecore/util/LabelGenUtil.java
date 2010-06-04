@@ -128,7 +128,7 @@ public class LabelGenUtil
 				}
 			}
 		}
-		return null;
+		return document.getElementsByTagName("DEFAULT_NAME").item(0).getChildNodes().item(0).getNodeValue();
 	}
 
 	/**

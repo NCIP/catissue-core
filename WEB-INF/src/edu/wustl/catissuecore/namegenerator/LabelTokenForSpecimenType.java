@@ -32,7 +32,7 @@ public class LabelTokenForSpecimenType implements LabelTokens
 			valToReplace = LabelGenUtil.getTypeAbbriviation(objSpecimen.getSpecimenType());
 			if(Validator.isEmpty(valToReplace))
 			{
-				char abc = objSpecimen.getSpecimenType().charAt(1);
+				char abc = objSpecimen.getSpecimenType().charAt(0);
 				valToReplace = Character.toString(abc);
 			}
 		}
