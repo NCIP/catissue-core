@@ -23,7 +23,7 @@ public class CaTissueApplicationService
 	{
 		List<Participant> participantList = null;
 		SessionDataBean bean = CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN;
-		participantList = new CaCoreAppServicesDelegator().delegateGetParticipantMatchingObects(bean.getUserName(), obj, null);
+		participantList = new CaCoreAppServicesDelegator().delegateGetParticipantMatchingObects(obj,null,bean.getUserName());
 		return participantList;
 	}
 
