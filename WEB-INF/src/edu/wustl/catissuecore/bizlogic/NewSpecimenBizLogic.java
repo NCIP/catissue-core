@@ -2424,9 +2424,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen,Integer pos1,Integer pos2)
 			throws BizLogicException
 	{
-		this.storageContainerIds.clear();
 		setSpecimenPosition(newSpecimen, dao, sessionDataBean, partOfMultipleSpecimen, pos1, pos2);
-
 	}
 
 	/**
@@ -4153,6 +4151,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			Integer position1 = null;
 			Integer position2 = null;
 			//while (iterator.hasNext())
+			storageContainerIds.clear();
 			for(int i=0;i<array.length;i++)
 			{
 				final Specimen newSpecimen = (Specimen) array[i];
@@ -4161,21 +4160,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				   position1 = newSpecimen.getSpecimenPosition().getPositionDimensionOne();
 				   position2 = newSpecimen.getSpecimenPosition().getPositionDimensionTwo();
 				}
-			//	final Specimen newSpecimen = (Specimen) iterator.next();
-				if(((position1 == null || position2 == null) && i!=0))
-				{
-				    //bug 15448
-					if(((Specimen) array[i-1]).getSpecimenPosition() != null)
-					{
-						position1 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionOne();
-						position2 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionTwo();
-					}
-				}
 				this.setSpecimenStorageRecursively(newSpecimen, dao, sessionDataBean, true,
 							position1,position2);
 				//bug 15260 end
 			}
-
 //			generateLabel(newSpecimenCollection);
 			iterator = newSpecimenCollection.iterator();
 
