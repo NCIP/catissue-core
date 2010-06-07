@@ -56,8 +56,8 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		actionPerform();
 		verifyForward("pageOfCellSpecimenReviewParameters");
 		CellSpecimenReviewParametersForm cellForm= (CellSpecimenReviewParametersForm) getActionForm();
-		cellForm.setNeoplasticCellularityPercentage("1.9999");
-		cellForm.setViableCellPercentage( "1.9999" );
+		cellForm.setNeoplasticCellularityPercentage("1.999999");
+		cellForm.setViableCellPercentage( "1.999999" );
 		addRequestParameter("specimenId",specimen.getId().toString());
 		cellForm.setSpecimenId( specimen.getId() );
 		cellForm.setForwardTo( "success" );
@@ -230,7 +230,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		verifyForward("pageOfFluidSpecimenReviewParameters");
 		FluidSpecimenReviewEventParametersForm fluidForm = (FluidSpecimenReviewEventParametersForm) getActionForm();
 		addRequestParameter("specimenId",specimen.getId().toString());
-		fluidForm.setCellCount( "1.9999" );
+		fluidForm.setCellCount( "1.999999" );
 		fluidForm.setForwardTo( "success" );
 		fluidForm.setSpecimenId( specimen.getId() );
 		setActionForm(form);
@@ -307,8 +307,8 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		molecularForm.setQualityIndex( "1" );
 		molecularForm.setGelNumber( "2" );
 		molecularForm.setLaneNumber( "3" );
-		molecularForm.setAbsorbanceAt260( "1.9999" );
-		molecularForm.setAbsorbanceAt280( "1.9999" );
+		molecularForm.setAbsorbanceAt260( "1.999999" );
+		molecularForm.setAbsorbanceAt280( "1.999999" );
 		molecularForm.setRatio28STo18S( "1" );
 		molecularForm.setForwardTo( "success" );
 		setActionForm(form);
@@ -391,7 +391,7 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		verifyForward("pageOfSpunEventParameters");
 		SpunEventParametersForm spunForm = (SpunEventParametersForm) getActionForm();
 		addRequestParameter("specimenId",specimen.getId().toString());
-		spunForm.setGravityForce( "1.9999" );
+		spunForm.setGravityForce( "1.999999" );
 		spunForm.setDurationInMinutes( "30" );
 		spunForm.setForwardTo( "success" );
 		spunForm.setSpecimenId( specimen.getId() );
@@ -464,10 +464,10 @@ public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest
 		verifyForward("pageOfTissueSpecimenReviewParameters");
 		TissueSpecimenReviewEventParametersForm tissueForm = (TissueSpecimenReviewEventParametersForm) getActionForm();
 		addRequestParameter("specimenId",specimen.getId().toString());
-		tissueForm.setNeoplasticCellularityPercentage( "1.99999" );
-		tissueForm.setNecrosisPercentage( "1.99999" );
-		tissueForm.setLymphocyticPercentage( "1.99999" );
-		tissueForm.setTotalCellularityPercentage( "1.99999" );
+		tissueForm.setNeoplasticCellularityPercentage( "1.999999" );
+		tissueForm.setNecrosisPercentage( "1.999999" );
+		tissueForm.setLymphocyticPercentage( "1.999999" );
+		tissueForm.setTotalCellularityPercentage( "1.999999" );
 		tissueForm.setHistologicalQuality( "Good- Definable Cellular Detail" );
 		tissueForm.setForwardTo( "success" );
 		tissueForm.setSpecimenId( specimen.getId() );
