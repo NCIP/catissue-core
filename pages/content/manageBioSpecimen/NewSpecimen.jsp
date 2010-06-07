@@ -1348,6 +1348,7 @@
 						     	</label>
 							</td>
 							<td align="left" class="black_new">
+							<input type="hidden" id="initialClassValue" value="<%=form.getClassName()%>" >
 					<%
 							String classReadOnly = "false";
 							if(operation.equals(Constants.EDIT))

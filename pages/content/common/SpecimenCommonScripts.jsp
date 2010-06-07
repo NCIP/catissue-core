@@ -15,7 +15,7 @@
 <%
 	/**
 	 * Patch ID: Bug#3184_3
-	 * Description: Previously, the code below was trying to find value for "-- Select --" as key in the 
+	 * Description: Previously, the code below was trying to find value for "-- Select --" as key in the
 	 * specimenTypeMap which was throwing nulling pointer exception. The code has been changed to skip that value.
 	 */
 	for(int classCount=0; classCount < specimenClassList.size(); classCount++)
@@ -33,23 +33,23 @@
 			if(listSize == subList.size()-1 )
 				arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\"";
 			else
-    			arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\",";   
+    			arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\",";
 		}
 %>
 		var <%=keyObj%>Array = new Array(<%=arrayData%>);
-		
-<%	    		
+
+<%
 	}
 
-%>	
+%>
 		  /**
  			* Name : Virender Mehta
- 			* Reviewer Name : Sachin Lale 
+ 			* Reviewer Name : Sachin Lale
  			* Bug ID: 4062
- 			* Description: This function is used to populate Specimen Type ComboBox when a specimen Class is selected. 
+ 			* Description: This function is used to populate Specimen Type ComboBox when a specimen Class is selected.
 			*/
 		function typeChangeGeneralized(arrayName)
-		{ 
+		{
 			var specimenTypeCombo = "type";
 			ele = document.getElementById(specimenTypeCombo);
 			//To Clear the Combo Box
@@ -64,7 +64,7 @@
 			}
 		}
         function typeChange(arrayName)
-		{ 
+		{
 			arrayName.sort();
 			// TODO change this code as per generated HTML of tag -- Santosh
 			/*  This variable is used to clear previous autocompleter as it was creating some problem -- Santosh*/
@@ -78,7 +78,7 @@
 			for(i=1;i<arrayName.length;i++)
 			{
 					tmpArray[i-1] = arrayName[i];
-			}  
+			}
 			//autoCompleteResult += "new Autocompleter.Combobox(\"" + property + "\",\"" + div + "\",'nameofarrow',valuesInList,  { tokens: new Array(), fullSearch: true, partialSearch: true,defaultArray:" + "valuesInList" + ",choices: " + numberOfResults + ",autoSelect:true, minChars: "+ numberOfCharacters +" });";
 			AutoC = new Autocompleter.Combobox("type","divFortype","typearrow",tmpArray,  { tokens: new Array(), fullSearch: true, partialSearch: true,defaultArray: tmpArray,autoSelect:true});
 		}
@@ -90,7 +90,7 @@
 	var subTypeData5 = "<%=Constants.MICRODISSECTED%>";
 	var subTypeData6 = "<%=Constants.FIXED_TISSUE_SLIDE%>";
 
-	
+
 
 // units array
 	var ugul = new Array(7);
@@ -102,15 +102,15 @@
 	ugul[5]="<%=Constants.UNIT_CN%>";
 	ugul[6]="<%=Constants.UNIT_CL%>";
 
-	
+
 // Changes unit on subtype list changed
-/* 
+/*
 	Function updated as per new Types added for Tissue class.
 	Mandar : 25-Apr-06 : Bug 1414
 */
 	function onSubTypeChangeUnit(typeList,element,unitspan)
 	{
-	  
+
 		var classList = document.getElementById(typeList);
 		var className = document.getElementById("className").value;
 		//alert(className);
@@ -126,8 +126,8 @@
 				unit1.innerHTML = "<%=Constants.UNIT_CN%>";
 			}
 			document.forms[0].unit.value = "<%=Constants.UNIT_CN%>";
-		}	
-		else 
+		}
+		else
 		{
 			if(className == "Tissue")
 			{
@@ -136,7 +136,7 @@
 				if(selectedOption == subTypeData5)
 				{
 					document.getElementById(unitspan).innerHTML = "<%=Constants.UNIT_CL%>";
-			
+
 					if(unit1!=null)
 					{
 						unit1.innerHTML = "<%=Constants.UNIT_CL%>";
@@ -152,20 +152,32 @@
 					}
 					document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
 				}
-			}	
+			}
 		}
 	}
 
 // changes unit when specimen class selected
 		function onTypeChange(element)
 		{
+			//bug 17352- Changes to check the previously selected value and current value.
+			// If both the values are same, the type dropdown will not be re-loaded.
+			var initialValue = document.getElementById("initialClassValue");
+			if(initialValue != null && initialValue.value==element.value)
+			{
+				document.getElementById("initialClassValue").value = element.value;
+				return;
+			}
+			else if(initialValue != null)
+			{
+				document.getElementById("initialClassValue").value = element.value;
+			}
 			var unit = document.getElementById("unitSpan");
 			var unit1 = document.getElementById("unitSpan1");
 			var unitSpecimen = "";
 			document.forms[0].concentration.disabled = true;
 			var subType = document.getElementById("type");
 			subType.disabled = false;
-			
+
 			if(element.value == "Tissue")
 			{
 				unitSpecimen = "<%=Constants.UNIT_GM%>";
@@ -198,24 +210,24 @@
 			if(unit1!=null)
 			{
 				unit1.innerHTML = unitSpecimen;
-			}	
+			}
 			subType.value="";
 		}
 
 // biohazard selection
 
 		function onBiohazardTypeSelected(element)
-		{ 
+		{
 			var i = (element.name).indexOf("_");
 			var indColon = (element.name).indexOf(":");
 			var comboNo = (element.name).substring(indColon+1,i);
-			
+
 			var comboToRefresh = "bhId" + comboNo;
-			
+
 			ele = document.getElementById(comboToRefresh);
 			//To Clear the Combo Box
 			ele.options.length = 0;
-			
+
 			ele.options[0] = new Option('-- Select --','-1');
 			var j=1;
 			//Populating the corresponding Combo Box
@@ -234,8 +246,8 @@
 		if(type == "<%=Constants.FROZEN_TISSUE_SLIDE%>" || type =="<%=Constants.FIXED_TISSUE_BLOCK%>" || type == "<%=Constants.FROZEN_TISSUE_BLOCK%>" || type == "<%=Constants.NOT_SPECIFIED%>" || type == "<%=Constants.FIXED_TISSUE_SLIDE%>")
 		{
 			return("<%=Constants.UNIT_CN%>");
-		}	
-		else 
+		}
+		else
 		{
 			if(type == "<%=Constants.MICRODISSECTED%>")
 			{
@@ -245,7 +257,7 @@
 			{
 				return("<%=Constants.UNIT_GM%>");
 			}
-		}	
+		}
 	}
 	else if(classname == "Fluid")
 	{
