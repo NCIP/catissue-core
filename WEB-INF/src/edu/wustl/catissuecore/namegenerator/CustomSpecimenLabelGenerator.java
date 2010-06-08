@@ -467,6 +467,32 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 		}
 		return scg;
 	}
-
-
+	/**
+	 * Set Label.
+	 * @param obj Object
+	 * @param ignoreCollectedStatus boolean
+	 * @throws LabelGenException LabelGenException
+	 */
+	public synchronized void setLabel(Object obj, boolean ignoreCollectedStatus) throws LabelGenException
+	{
+		final Specimen objSpecimen = (Specimen) obj;
+		if (objSpecimen.getLabel() != null)
+		{
+			throw new LabelGenException("Label already assigned");
+		}
+		this.setSpecimenReq(objSpecimen);
+		this.setScgData(objSpecimen);
+		setLabelForSpecimen(objSpecimen);
+		if (objSpecimen.getChildSpecimenCollection().size() > 0)
+		{
+			final Collection<AbstractSpecimen> specimenCollection = objSpecimen
+					.getChildSpecimenCollection();
+			final Iterator<AbstractSpecimen> specCollItr = specimenCollection.iterator();
+			while (specCollItr.hasNext())
+			{
+				final Specimen objChildSpecimen = (Specimen) specCollItr.next();
+				this.setLabel(objChildSpecimen);
+			}
+		}
+	}
 }

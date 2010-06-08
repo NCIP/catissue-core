@@ -35,6 +35,8 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.namegenerator.CustomSpecimenLabelGenerator;
+import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
@@ -43,6 +45,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -677,13 +680,26 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 				{
 					if (specimen.getLabel() == null || specimen.getLabel().equals(""))
 					{
-
 						if (specimen.getLineage().equals(Constants.ALIQUOT))
 						{
-							if (specimen.getParentSpecimen().getLabel() != null)
+							CustomSpecimenLabelGenerator labelGenerator;
+							try
 							{
-								specimen.setLabel(specimen.getParentSpecimen().getLabel() + "_"
-										+ (++lastChildNo));
+								labelGenerator = new CustomSpecimenLabelGenerator();
+								labelGenerator.setLabel(specimen, true);
+							}
+							catch (NameGeneratorException exp)
+							{
+								//bug17378
+								if (specimen.getParentSpecimen().getLabel() != null)
+								{
+									specimen.setLabel(specimen.getParentSpecimen().getLabel() + "_"
+											+ (++lastChildNo));
+								}
+							}
+							catch (ApplicationException appExp)
+							{
+								LOGGER.error(appExp.getMessage(), appExp);
 							}
 						}
 						else if (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
@@ -691,7 +707,6 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 							specimen.setLabel(specimen.getLabel());
 						}
 					}
-
 				}
 			}
 		}
