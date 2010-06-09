@@ -11,7 +11,7 @@ table#browserDetailsContainer
 	padding-left:10px;
 }
 </style>
-<script language="JavaScript"> 
+<script language="JavaScript">
 function wustlkey()
 {
 	  var answer=confirm("WASHINGTON UNIVERSITY USERS: Please press Cancel and first log into caTissue using your WUSTL Key and password. After successfully logging in,you will be able to request for your account to be activated in caTissue. \n\nALL OTHER USERS: Please press OK to proceed.");
@@ -41,7 +41,7 @@ function wustlkey()
 	}
 
 
-</script> 
+</script>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
@@ -98,7 +98,7 @@ function wustlkey()
 							</td>
 							</tr>
 							<!-- Mandar : 16Jan09 PSPL Info -->
-							
+
 							<tr>
 								<td><a
 									href="PrivacyNotice.do?PAGE_TITLE_KEY=app.privacyNotice&FILE_NAME_KEY=app.privacyNotice.file"
@@ -144,7 +144,7 @@ function wustlkey()
 			</tr>
 			<tr>
 				<td background="images/uIEnhancementImages/shadow_down.gif"></td>
-				<td><img src="images/uIEnhancementImages/shadow_corner.gif" 
+				<td><img src="images/uIEnhancementImages/shadow_corner.gif"
 				alt="Shadow Corner"
 					width="5" height="5" /></td>
 			</tr>
@@ -218,7 +218,7 @@ function wustlkey()
 											<%
 												if(Boolean.parseBoolean(XMLPropertyHandler.getValue(Constants.IDP_ENABLED)))
 												{
-											%>	
+											%>
 											  <td>
 												<a href="#"
 													class="view" onclick="wustlkey();"><bean:message key="app.signup" /></a>
@@ -227,13 +227,13 @@ function wustlkey()
 												}
 												else{
 													%>
-												
+
 													<td><a
 													href="SignUp.do?operation=add&amp;pageOf=pageOfSignUp"
 													class="view"><bean:message key="app.signup" /></a>
 													</td>
 											<%} %>
-	
+
 											</tr>
 										</table>
 										</td>
@@ -329,10 +329,17 @@ function wustlkey()
 	</tr>
 	<tr>
 <!-- 		<td align="center" valign="bottom">&nbsp;<img border="0" src="images/pspllogo.gif" width="75" height="71"></td>
- -->	
+ -->
  		<td align="center" valign="bottom">&nbsp;<A HREF="http://www.persistentsys.com"><img border="0" src="images/pspllogo.gif" width="75" height="71"></A></td>
 		<td rowspan="2" align="right" valign="bottom">
 		<table width="96%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td class="black_ar"><bean:message
+				key="app.adobe.required" /></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
 			<tr>
 				<td class="blue_ar_b"><bean:message
 					key="app.certified.browsers" /></td>
@@ -355,23 +362,6 @@ function wustlkey()
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
-
-			</tr>
-			<tr>
-				<td class="blue_ar_b"><bean:message
-					key="app.optimal.resolutions" /></td>
-			</tr>
-			<tr>
-				<td class="black_ar"><img
-					src="images/uIEnhancementImages/logo_windows.gif" alt="Windows "
-					width="16" height="16" hspace="3" vspace="3" align="absmiddle" /><bean:message
-					key="app.optimal.resolutions.win" /><br />
-				<img src="images/uIEnhancementImages/logo_mac.gif" alt="Mac"
-					width="16" height="16" hspace="3" vspace="3" align="absmiddle" /><bean:message
-					key="app.optimal.resolutions.mac" /><br>
-
-				<br />
-				</td>
 			</tr>
 		</table>
 		</td>
@@ -394,7 +384,7 @@ function wustlkey()
 						</p>
 						</td>
 						<td width="50%" align="center"><a href="http://www.nih.gov/"><img
-							src="images/uIEnhancementImages/logo2.gif" 
+							src="images/uIEnhancementImages/logo2.gif"
 							alt="National Institues of Health" width="56" height="50"
 							border="0" /></a></td>
 					</tr>
