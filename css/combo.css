@@ -18,6 +18,7 @@
     position:relative; /* for calculating scroll offsets */
     zoom:1;
     overflow-x:hidden;
+    height:40px;
 }
 .x-combo-list-hd {
     font:bold 11px tahoma, arial, helvetica, sans-serif;
