@@ -218,10 +218,10 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 
 			final Collection distributedItemCollection = distribution
 					.getDistributedItemCollection();
-			final Iterator it = distributedItemCollection.iterator();
-			while (it.hasNext())
+			final Iterator iterator = distributedItemCollection.iterator();
+			while (iterator.hasNext())
 			{
-				final DistributedItem item = (DistributedItem) it.next();
+				final DistributedItem item = (DistributedItem) iterator.next();
 
 				/**
 				 * Start: Change for API Search --- Jitendra 06/10/2006 In Case
@@ -686,10 +686,10 @@ public class DistributionBizLogic extends CatissueDefaultBizLogic
 		{
 			// iterate through the old collection and find the specimens that
 			// are removed.
-			final Iterator it = oldDistributedItemCollection.iterator();
-			while (it.hasNext())
+			final Iterator iterator = oldDistributedItemCollection.iterator();
+			while (iterator.hasNext())
 			{
-				final DistributedItem item = (DistributedItem) it.next();
+				final DistributedItem item = (DistributedItem) iterator.next();
 				final boolean isPresentInNew = newDistributedItemCollection.contains(item);
 				LOGGER.debug("Old Object in New Collection : " + isPresentInNew);
 				if (!isPresentInNew)

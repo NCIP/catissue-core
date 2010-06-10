@@ -592,8 +592,8 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 			{
 				final Long sysId = container.getId();
 				final Object object = dao.retrieveById(StorageContainer.class.getName(), sysId);
-				final StorageContainer sc = (StorageContainer) object;
-				container.setSite(sc.getSite());
+				final StorageContainer strContainer = (StorageContainer) object;
+				container.setSite(strContainer.getSite());
 			}
 		}
 		catch (final DAOException daoExp)

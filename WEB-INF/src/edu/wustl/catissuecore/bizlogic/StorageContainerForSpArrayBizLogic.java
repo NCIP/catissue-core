@@ -74,37 +74,37 @@ public class StorageContainerForSpArrayBizLogic extends AbstractSCSelectionBizLo
 		{
 			includeAllIdQueryStr = "";
 		}
-		final StringBuilder sb = new StringBuilder();
-		sb
+		final StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder
 				.append("SELECT VIEW1.IDENTIFIER, VIEW1.NAME, VIEW1.ONE_DIMENSION_CAPACITY, VIEW1.TWO_DIMENSION_CAPACITY from ");
-		sb.append("(");
-		sb
+		stringBuilder.append("(");
+		stringBuilder
 				.append(" SELECT t1.IDENTIFIER,t1.name,c.one_dimension_capacity , c.two_dimension_capacity, (c.ONE_DIMENSION_CAPACITY * c.TWO_DIMENSION_CAPACITY)  CAPACITY ");
-		sb
+		stringBuilder
 				.append(" FROM CATISSUE_CONTAINER t1 JOIN CATISSUE_CAPACITY c on t1.CAPACITY_ID=c.IDENTIFIER ");
-		sb.append(" LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER t2 on t2.IDENTIFIER=t1.IDENTIFIER ");
-		sb
+		stringBuilder.append(" LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER t2 on t2.IDENTIFIER=t1.IDENTIFIER ");
+		stringBuilder
 				.append(" LEFT OUTER JOIN CATISSUE_SPECIMEN_POSITION K ON t1.IDENTIFIER = K.CONTAINER_ID ");
-		sb
+		stringBuilder
 				.append(" LEFT OUTER JOIN CATISSUE_CONTAINER_POSITION L ON t1.IDENTIFIER = L.PARENT_CONTAINER_ID ");
-		sb.append(" LEFT OUTER join catissue_site S on S.IDENTIFIER = t2.SITE_ID ");
-		sb.append(" WHERE t2.IDENTIFIER IN ");
-		sb
+		stringBuilder.append(" LEFT OUTER join catissue_site S on S.IDENTIFIER = t2.SITE_ID ");
+		stringBuilder.append(" WHERE t2.IDENTIFIER IN ");
+		stringBuilder
 				.append(" (SELECT t4.STORAGE_CONTAINER_ID from CATISSUE_CONT_HOLDS_SPARRTYPE t4  where t4.SPECIMEN_ARRAY_TYPE_ID = '"
 						+ sp_arr_type_id + "'");
-		sb.append(includeAllIdQueryStr);
-		sb.append(")");
+		stringBuilder.append(includeAllIdQueryStr);
+		stringBuilder.append(")");
 		if (!sessionData.isAdmin())
 		{
-			sb.append(" AND t2.SITE_ID in (SELECT SITE_ID from CATISSUE_SITE_USERS where USER_ID="
+			stringBuilder.append(" AND t2.SITE_ID in (SELECT SITE_ID from CATISSUE_SITE_USERS where USER_ID="
 					+ sessionData.getUserId() + ")");
 		}
-		sb.append("AND t1.ACTIVITY_STATUS='" + Status.ACTIVITY_STATUS_ACTIVE
+		stringBuilder.append("AND t1.ACTIVITY_STATUS='" + Status.ACTIVITY_STATUS_ACTIVE
 				+ "' and S.ACTIVITY_STATUS='Active' and t1.CONT_FULL=0) VIEW1 ");
-		sb
+		stringBuilder
 				.append(" GROUP BY VIEW1.IDENTIFIER, VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY, VIEW1.TWO_DIMENSION_CAPACITY ,VIEW1.CAPACITY ");
-		sb.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) >  0");
-		sb.append(" order by IDENTIFIER");
-		return new String[]{sb.toString()};
+		stringBuilder.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) >  0");
+		stringBuilder.append(" order by IDENTIFIER");
+		return new String[]{stringBuilder.toString()};
 	}
 }

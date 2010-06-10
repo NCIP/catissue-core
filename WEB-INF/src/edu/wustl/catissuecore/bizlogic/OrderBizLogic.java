@@ -1344,17 +1344,17 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param id : id
+	 * @param identifier : id
 	 * @param dao : dao
 	 * @return to retrieve the orderDetails object.
 	 * @throws BizLogicException : BizLogicException
 	 */
-	public OrderDetails getOrderListFromDB(String id, DAO dao) throws BizLogicException
+	public OrderDetails getOrderListFromDB(String identifier, DAO dao) throws BizLogicException
 	{
 		try
 		{
 			final Object object = dao
-					.retrieveById(OrderDetails.class.getName(), Long.parseLong(id));
+					.retrieveById(OrderDetails.class.getName(), Long.parseLong(identifier));
 
 			final OrderDetails orderDetails = (OrderDetails) object;
 			return orderDetails;

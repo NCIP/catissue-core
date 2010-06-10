@@ -56,9 +56,9 @@ public class SpecimenTreeBizLogic extends CatissueDefaultBizLogic implements Tre
 	 * Parametrized Constructor
 	 * @param specimenList
 	 */
-	public SpecimenTreeBizLogic(Long id, boolean specimenCollGroup)
+	public SpecimenTreeBizLogic(Long identifier, boolean specimenCollGroup)
 	{
-		this.id = id;
+		this.id = identifier;
 		this.specimenCollGroup = specimenCollGroup;
 	}
 
@@ -116,7 +116,6 @@ public class SpecimenTreeBizLogic extends CatissueDefaultBizLogic implements Tre
 		catch (final BizLogicException exp)
 		{
 			this.logger.error(exp.getMessage(), exp);
-			exp.printStackTrace();
 		}
 		return allNodes;
 	}

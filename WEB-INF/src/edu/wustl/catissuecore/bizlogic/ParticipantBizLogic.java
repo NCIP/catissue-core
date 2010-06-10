@@ -317,11 +317,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	{
 		final Collection<ParticipantMedicalIdentifier> pmiColl =
 		participant.getParticipantMedicalIdentifierCollection();
-		final Iterator<ParticipantMedicalIdentifier> it =
+		final Iterator<ParticipantMedicalIdentifier> iterator =
 		pmiColl.iterator();
-		while (it.hasNext())
+		while (iterator.hasNext())
 		{
-			final ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it
+			final ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) iterator
 			.next();
 			ApiSearchUtil.setParticipantMedicalIdentifierDefault(pmIdentifier);
 			pmIdentifier.setParticipant(participant);
@@ -998,12 +998,12 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 			else
 			{
-				final StringBuffer sb = new StringBuffer();
+				final StringBuffer stringBuffer = new StringBuffer();
 				boolean isNewCPRPresent = false;
 
 				if (cprCollection != null && !cprCollection.isEmpty())
 				{
-					sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
+					stringBuffer.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
 					for (final CollectionProtocolRegistration cpr : cprCollection)
 					{
 						if (cpr.getId() == null)
@@ -1012,14 +1012,14 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 							{
 								return objectId;
 							}
-							sb.append("_").append(cpr.getCollectionProtocol().getId());
+							stringBuffer.append("_").append(cpr.getCollectionProtocol().getId());
 							isNewCPRPresent = true;
 						}
 					}
 				}
 				if (isNewCPRPresent)
 				{
-					return sb.toString();
+					return stringBuffer.toString();
 				}
 			}
 		}

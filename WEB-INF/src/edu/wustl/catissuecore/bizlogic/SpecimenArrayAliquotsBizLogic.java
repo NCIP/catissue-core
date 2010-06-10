@@ -470,8 +470,8 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 					final String str = (String) columnList.get(0);
 					if (!str.equals(""))
 					{
-						final long no = Long.parseLong(str);
-						return no + 1;
+						final long number = Long.parseLong(str);
+						return number + 1;
 					}
 				}
 			}

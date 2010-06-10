@@ -828,20 +828,20 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			final List list = reteriveSCObject(dao, scID);
 			if (!list.isEmpty())
 			{
-				final StorageContainer pc = populateSCObject(list);
-				final boolean hasAccess = StorageContainerUtil.validateContainerAccess(dao, pc, sessionDataBean);
+				final StorageContainer strCont = populateSCObject(list);
+				final boolean hasAccess = StorageContainerUtil.validateContainerAccess(dao, strCont, sessionDataBean);
 				logger.debug("hasAccess..............." + hasAccess);
 				if (!hasAccess)
 				{
 					throw this.getBizLogicException(null, "access.use.object.denied", "");
 				}
-				this.checkStatus(dao, pc, "Storage Container");
-				new SiteBizLogic().checkClosedSite(dao, pc.getId(), "Container Site");
-				final boolean isValidPosition = StorageContainerUtil.validatePosition(pc, posOne, posTwo);
+				this.checkStatus(dao, strCont, "Storage Container");
+				new SiteBizLogic().checkClosedSite(dao, strCont.getId(), "Container Site");
+				final boolean isValidPosition = StorageContainerUtil.validatePosition(strCont, posOne, posTwo);
 				logger.debug("isValidPosition : " + isValidPosition);
 				if (isValidPosition)
 				{
-					canUsePosition(dao, specimen,parameterList, pc);
+					canUsePosition(dao, specimen,parameterList, strCont);
 				}
 				else
 				{
@@ -1299,9 +1299,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			Site site = getSite(dao, storageContainer);
 			if (site != null)
 			{
-				final StringBuffer sb = new StringBuffer();
-				sb.append(Site.class.getName()).append("_").append(site.getId().toString());
-				objId = sb.toString();
+				final StringBuffer stringBuffer = new StringBuffer();
+				stringBuffer.append(Site.class.getName()).append("_").append(site.getId().toString());
+				objId = stringBuffer.toString();
 			}
 		}
 		return objId;
@@ -1384,7 +1384,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}

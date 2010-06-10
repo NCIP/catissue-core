@@ -633,11 +633,11 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				final Iterator<CollectionProtocol> iteratorofchildCP = childCPColl.iterator();
 				while (iteratorofchildCP.hasNext())
 				{
-					final CollectionProtocol cp = iteratorofchildCP.next();
-					if (cp != null)
+					final CollectionProtocol collectionProtocol = iteratorofchildCP.next();
+					if (collectionProtocol != null)
 					{
 						final CollectionProtocolRegistration cpr = this
-								.getCPRbyCollectionProtocolIDAndParticipantID(dao, cp.getId(),
+								.getCPRbyCollectionProtocolIDAndParticipantID(dao, collectionProtocol.getId(),
 										collectionProtocolRegistration.getParticipant().getId());
 						if (cpr != null)
 						{
@@ -645,17 +645,17 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 							if (callMethod.equals(Constants.CHILD_STATUS))
 							{
 								callRecursive = this
-										.checkChildStatus(dao, sessionDataBean, cp, cpr);
+										.checkChildStatus(dao, sessionDataBean, collectionProtocol, cpr);
 							}
 							else if (callMethod.equals(Constants.CHILD_DATE))
 							{
 								callRecursive = this.checkUpdateChildDate(dao, sessionDataBean,
-										collectionProtocolRegistration, cp, cpr);
+										collectionProtocolRegistration, collectionProtocol, cpr);
 							}
 							else if (callMethod.equals(Constants.CHILD_OFFSET))
 							{
 								callRecursive = this.checkUpdateChildOffset(dao,
-										offset, cp, cpr);
+										offset, collectionProtocol, cpr);
 							}
 							if (callRecursive)
 							{
@@ -679,16 +679,16 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	 * @param dao
 	 * @param sessionDataBean
 	 * @param collectionProtocolRegistration
-	 * @param cp
+	 * @param collProt
 	 * @param cpr
 	 * @throws BizLogicException
 
 	 */
 	private boolean checkUpdateChildDate(DAO dao, SessionDataBean sessionDataBean,
-			CollectionProtocolRegistration collectionProtocolRegistration, CollectionProtocol cp,
+			CollectionProtocolRegistration collectionProtocolRegistration, CollectionProtocol collProt,
 			CollectionProtocolRegistration cpr) throws BizLogicException, DAOException
 	{
-		this.setRegDate(cpr, cp.getStudyCalendarEventPoint(), collectionProtocolRegistration
+		this.setRegDate(cpr, collProt.getStudyCalendarEventPoint(), collectionProtocolRegistration
 				.getRegistrationDate());
 		final Integer offsetOfCurrentCPR = cpr.getOffset();
 		{
@@ -701,8 +701,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		dao.update(cpr);
 		//updateOffsetForEventsForAlreadyRegisteredCPR(dao, sessionDataBean, cpr);
-		if (cp.getChildCollectionProtocolCollection() != null
-				&& cp.getChildCollectionProtocolCollection().size() != 0)
+		if (collProt.getChildCollectionProtocolCollection() != null
+				&& collProt.getChildCollectionProtocolCollection().size() != 0)
 		{
 			return true;
 			//checkAndUpdateChildDate(dao, sessionDataBean, cpr);
@@ -874,14 +874,14 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	/**
 	 * create Clone Of CPR.
 	 * @param cpr
-	 * @param cp
+	 * @param collProtocol
 	 * @return
 	 */
 	public CollectionProtocolRegistration createCloneOfCPR(CollectionProtocolRegistration cpr,
-			CollectionProtocol cp)
+			CollectionProtocol collProtocol)
 	{
 		final CollectionProtocolRegistration cloneCPR = new CollectionProtocolRegistration(cpr);
-		cloneCPR.setCollectionProtocol(cp);
+		cloneCPR.setCollectionProtocol(collProtocol);
 		return cloneCPR;
 
 	}

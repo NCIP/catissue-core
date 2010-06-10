@@ -245,11 +245,11 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 
 				final String simContPrefix = "simCont:" + i + "_";
 				final String contName = (String) simMap.get(simContPrefix + "name");
-				final String Id = (String) simMap.get(simContPrefix + "Id");
+				final String identifier = (String) simMap.get(simContPrefix + "Id");
 				final StorageContainer cont = new StorageContainer(container);
 				// Logger.out.info("contName:" + contName);
 
-				cont.setId(new Long(Id));
+				cont.setId(new Long(identifier));
 				cont.setName(contName); // by falguni ...Container name is
 				// generated via label generator.
 				if (checkButton == 2)
@@ -377,8 +377,8 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 	@Override
 	public String getObjectId(DAO dao, Object domainObject)
 	{
-		final StringBuffer sb = new StringBuffer();
-		sb.append(Site.class.getName());
+		final StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(Site.class.getName());
 		try
 		{
 			if (domainObject instanceof StorageContainer)
@@ -417,7 +417,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 					{
 						if (!siteIds.contains(site.getId()))
 						{
-							sb.append("_" + site.getId().toString());
+							stringBuffer.append("_" + site.getId().toString());
 						}
 						siteIds.add(site.getId());
 					}
@@ -425,7 +425,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 
 				for (final Long siteId : siteIds)
 				{
-					sb.append("_" + siteId.toString());
+					stringBuffer.append("_" + siteId.toString());
 				}
 			}
 		}
@@ -434,7 +434,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 			this.logger.error(daoExp.getMessage(), daoExp);
 			daoExp.printStackTrace();
 		}
-		return sb.toString();
+		return stringBuffer.toString();
 	}
 
 	/**

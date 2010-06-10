@@ -182,8 +182,8 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 				.getPrincipalInvestigator().getId());
 		if (userObj != null)
 		{
-			final User pi = (User) userObj;
-			distributionProtocol.setPrincipalInvestigator(pi);
+			final User principalInvestigator = (User) userObj;
+			distributionProtocol.setPrincipalInvestigator(principalInvestigator);
 		}
 	}
 

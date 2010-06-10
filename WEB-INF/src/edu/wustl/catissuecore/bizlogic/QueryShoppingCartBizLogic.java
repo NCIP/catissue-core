@@ -298,15 +298,15 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 			List entityName)
 	{
 		final List<Integer> idIndexList = new ArrayList<Integer>();
-		int i = 0;
+		int counter = 0;
 		for (final AttributeInterface attribute : cartAttributeList)
 		{
 			if ((attribute.getName().equals(Constants.ID))
 					&& (entityName.contains(attribute.getEntity().getName())))
 			{
-				idIndexList.add(new Integer(i));
+				idIndexList.add(new Integer(counter));
 			}
-			i++;
+			counter++;
 		}
 
 		return idIndexList;
@@ -325,15 +325,15 @@ public class QueryShoppingCartBizLogic extends CatissueDefaultBizLogic
 			List entityName, String attributeName)
 	{
 		final List<Integer> idIndexList = new ArrayList<Integer>();
-		int i = 0;
+		int counter = 0;
 		for (final AttributeInterface attribute : cartAttributeList)
 		{
 			if ((attribute.getName().equals(attributeName))
 					&& (entityName.contains(attribute.getEntity().getName())))
 			{
-				idIndexList.add(new Integer(i));
+				idIndexList.add(new Integer(counter));
 			}
-			i++;
+			counter++;
 		}
 
 		return idIndexList;

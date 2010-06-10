@@ -309,10 +309,7 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 	private String getNoCPRestrictionQuery(final List<Object> parameterList,
 			final Boolean isCPUnique, final Boolean isSPClassUnique,final Boolean isSPTypeUnique)
 	{
-
-		final long cpId = (Long)parameterList.get(0);
 		final String spClass = (String)parameterList.get(1);
-		final int aliquotCount = (Integer)parameterList.get(2);
 		final String spType = (String)parameterList.get(3);
 		final SessionDataBean sessionData = (SessionDataBean)parameterList.get(4);
 		final Long userId = sessionData.getUserId();

@@ -1148,10 +1148,10 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	{
 		SpecimenArray specimenArray = null;
 		Specimen specimen = null;
-		final StringBuffer sb = new StringBuffer();
+		final StringBuffer stringBuffer = new StringBuffer();
 		try
 		{
-			sb.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
+			stringBuffer.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
 			Collection<SpecimenArrayContent> specimenArrayContentCollection = null;
 
 			if (domainObject instanceof SpecimenArray)
@@ -1178,7 +1178,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					final SpecimenCollectionGroup scg = specimen.getSpecimenCollectionGroup();
 					final CollectionProtocolRegistration cpr = scg
 							.getCollectionProtocolRegistration();
-					sb.append(Constants.UNDERSCORE).append(cpr.getCollectionProtocol().getId());
+					stringBuffer.append(Constants.UNDERSCORE).append(cpr.getCollectionProtocol().getId());
 				}
 			}
 
@@ -1188,7 +1188,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			this.logger.error(e.getMessage(), e);
 			e.printStackTrace();
 		}
-		return sb.toString();
+		return stringBuffer.toString();
 	}
 
 	/**
@@ -1236,7 +1236,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			// place
 			protectionElementName = this.getObjectId(dao, domainObject);
 			Site site = null;
-			StorageContainer sc = null;
+			StorageContainer storContainer = null;
 			// Handle for SERIAL CHECKS, whether user has access to source site
 			// or not
 			if (domainObject instanceof SpecimenArray)
@@ -1259,13 +1259,13 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					}
 					if (specimen.getSpecimenPosition() != null)
 					{
-						sc = specimen.getSpecimenPosition().getStorageContainer();
+						storContainer = specimen.getSpecimenPosition().getStorageContainer();
 					}
 
 					if (specimen.getSpecimenPosition() != null
 							&& specimen.getSpecimenPosition().getStorageContainer().getSite() == null)
 					{
-						sc = (StorageContainer) dao.retrieveById(StorageContainer.class.getName(),
+						storContainer = (StorageContainer) dao.retrieveById(StorageContainer.class.getName(),
 								specimen.getSpecimenPosition().getStorageContainer().getId());
 					}
 
@@ -1274,7 +1274,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 					if (specimenPosition != null) // Specimen is NOT Virtually
 					// Located
 					{
-						site = sc.getSite();
+						site = storContainer.getSite();
 						final Set<Long> siteIdSet = new UserBizLogic()
 								.getRelatedSiteIds(sessionDataBean.getUserId());
 
