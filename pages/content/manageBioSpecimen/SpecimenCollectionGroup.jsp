@@ -16,8 +16,6 @@
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
-
 <script src="jss/script.js" type="text/javascript"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
@@ -26,100 +24,90 @@
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <%
  	String operation = (String)request.getAttribute(Constants.OPERATION);
- 		String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
- 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
- 		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
- 		String signedConsentDate = "";
- 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-
- 		String clinportalUrl =(String) request.getAttribute(ClinPortalIntegrationConstants.CALLBACK_URL);
- 		boolean isAddNew = false;
-
- 		Long scgEntityId = null;
- 		scgEntityId = (Long)request.getAttribute(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID);
- 		String staticEntityName=null;
- 		staticEntityName = AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY;
- 		String participantId=null;
- 		Object obj = request.getAttribute("specimenCollectionGroupForm");
- 		SpecimenCollectionGroupForm form =null;
- 		if(obj != null && obj instanceof SpecimenCollectionGroupForm)
- 		{
- 	form=(SpecimenCollectionGroupForm)obj;
- 	participantId=""+form.getParticipantId();
- 		}
- 		String id = request.getParameter("id");
- 		String appendingPath = "/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
- 		if (reqPath != null)
+	String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
+	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+	String signedConsentDate = "";
+	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+	String warning_unsaved_data = ApplicationProperties.getValue("unsaved.data.warning");
+	String clinportalUrl =(String) request.getAttribute(ClinPortalIntegrationConstants.CALLBACK_URL);
+	boolean isAddNew = false;
+	Long scgEntityId = null;
+	scgEntityId = (Long)request.getAttribute(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID);
+	String staticEntityName=null;
+	staticEntityName = AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY;
+	String participantId=null;
+	Object obj = request.getAttribute("specimenCollectionGroupForm");
+	SpecimenCollectionGroupForm form =null;
+	if(obj != null && obj instanceof SpecimenCollectionGroupForm)
+	{
+ 		form=(SpecimenCollectionGroupForm)obj;
+ 		participantId=""+form.getParticipantId();
+	}
+	String id = request.getParameter("id");
+	String appendingPath = "/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
+	if (reqPath != null)
  	appendingPath = reqPath + "|/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
-
- 	   		if(form  != null)
+ 	if(form  != null)
  	{
  		if(id==null)
  		{
  			id=String.valueOf(form.getId());
  		}
  	}
- 		String nodeId="";
- 		String formName, pageView = operation ,editViewButton="buttons."+Constants.EDIT;
- 		boolean readOnlyValue=false,readOnlyForAll=false;
- 	   	if(!operation.equals("add") )
- 	   	{
+	String nodeId="";
+	String formName, pageView = operation ,editViewButton="buttons."+Constants.EDIT;
+	boolean readOnlyValue=false,readOnlyForAll=false;
+	if(!operation.equals("add") )
+	{
+		if(form != null)
+		{
+			appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf="+pageOf+"&id="+form.getId() ;
+					int radioButtonForParticipant1 = form.getRadioButtonForParticipant();
+			nodeId= "SpecimenCollectionGroup_"+form.getId();
 
-
- 	if(form != null)
- 	{
- 		appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf="+pageOf+"&id="+form.getId() ;
- 		   		int radioButtonForParticipant1 = form.getRadioButtonForParticipant();
- 		nodeId= "SpecimenCollectionGroup_"+form.getId();
-
- 		   	}
+		}
 
  	   	}
-
-
-
  		if(operation.equals(Constants.EDIT)|| operation.equals("viewAnnotations"))
  		{
- 	editViewButton="buttons."+Constants.VIEW;
- 	formName = Constants.SPECIMEN_COLLECTION_GROUP_EDIT_ACTION +"?";
- 	readOnlyValue=true;
- 	if(pageOf.equals(Constants.QUERY))
- 		formName = Constants.QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
- 	if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
- 	{
- 		formName = Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
- 	}
+			editViewButton="buttons."+Constants.VIEW;
+			formName = Constants.SPECIMEN_COLLECTION_GROUP_EDIT_ACTION +"?";
+			readOnlyValue=true;
+			if(pageOf.equals(Constants.QUERY))
+				formName = Constants.QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
+			if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
+			}
  		}
  		else
  		{
- 	formName = Constants.SPECIMEN_COLLECTION_GROUP_ADD_ACTION;
- 	if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
- 	{
- 		formName = Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_ADD_ACTION + "?pageOf="+pageOf;
- 	}
- 	readOnlyValue=false;
+			formName = Constants.SPECIMEN_COLLECTION_GROUP_ADD_ACTION;
+			if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_ADD_ACTION + "?pageOf="+pageOf;
+			}
+ 			readOnlyValue=false;
  		}
  		long idToTree =0;
  		if(form!=null)
  		{
- 	idToTree = form.getId();
+ 			idToTree = form.getId();
  		}
  		String currentReceivedDate = "";
  		String currentCollectionDate = "";
  		if (form != null)
  		{
- 	currentReceivedDate = form.getReceivedEventDateOfEvent();
- 	if(currentReceivedDate == null)
- 			currentReceivedDate = "";
- 	currentCollectionDate = form.getCollectionEventdateOfEvent();
- 	if(currentCollectionDate == null)
+		currentReceivedDate = form.getReceivedEventDateOfEvent();
+		if(currentReceivedDate == null)
+				currentReceivedDate = "";
+		currentCollectionDate = form.getCollectionEventdateOfEvent();
+		if(currentCollectionDate == null)
  			currentCollectionDate = "";
  		}
 
  		String formNameForCal = "specimenCollectionGroupForm";
-
- 		//Patch ID: Bug#3184_32
- 		//Description: Get the actual number of specimen collections
  		String numberOfSpecimenCollection = (String)request.getAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
  		if(numberOfSpecimenCollection == null)
  		{
@@ -138,14 +126,11 @@
 		//Added by Falguni to refresh participant tree
 		var nodeid =  "<%=nodeId%>";
 	//	top.frames["cpAndParticipantView"].editParticipant(<%=participantId%>,nodeid);
-
 		if(nodeid!=""&&nodeid!="1")
 		{
 	//	alert("nodeid: "+nodeid);
-
 		refreshTree('<%=Constants.CP_AND_PARTICIPANT_VIEW%>','<%=Constants.CP_TREE_VIEW%>','<%=Constants.CP_SEARCH_CP_ID%>','<%=Constants.CP_SEARCH_PARTICIPANT_ID%>','<%=nodeId%>');
 		}
-
 		</script>
 	<%
 		}
@@ -163,120 +148,126 @@
 		}
 	</script>
 	<script language="JavaScript">
-
-
 	function makeClinPortalUrl()
 	{
 		var submitButton = document.getElementById("submitOnly");
 		submitButton.disabled = false;
-
 		document.getElementById('isClinicalDataEntry').value="true";
 		var scgId=document.getElementById("id").value;
 		var url='<%=clinportalUrl%>'+"&scgId="+scgId;
-		document.getElementById('clinicalDataEntryURL').value=url;
-
-		if (window.ActiveXObject)
+		if (confirm("<%=warning_unsaved_data%>"))
 		{
-			submitButton.click();
-		}
-		else
-		{
-			submitButton.enable();
-			if(submitButton.enable())
+			document.getElementById('clinicalDataEntryURL').value=url;
+			if (window.ActiveXObject)
 			{
 				submitButton.click();
 			}
 			else
 			{
-				makeClinPortalUrl();
+				submitButton.enable();
+				if(submitButton.enable())
+				{
+					submitButton.click();
+				}
+				else
+				{
+					makeClinPortalUrl();
+				}
 			}
 		}
+		else
+		{
+			var clinportalPath = url.split("?");
+			var clinportalPath1 = clinportalPath[0];
+			var clinportalPath2 = clinportalPath[1];
+			var request = newXMLHTTPReq();
+			request.onreadystatechange = getReadyStateHandler(request,openClinportalPage,true);
+			request.open("POST","AjaxAction.do?method=encryptData",true);
+			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			var dataToSend = clinportalPath2;
+			request.send(dataToSend);
+		}
 	}
-
 	function logout()
 	{
 		var request = newXMLHTTPReq();
 		request.onreadystatechange = getReadyStateHandler(request,"",true);
-		//send data to ActionServlet
-		//Open connection to servlet
 		request.open("POST","AjaxAction.do?method=logout",true);
 		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 		var dataToSend = "";
 		request.send(dataToSend);
 	}
 
-
-
-
-     	function showAnnotations()
+	function openClinportalPage(dataString)
+	{
+		var clinportalUrl='<%=clinportalUrl%>';
+		var clinportalUrlPath = clinportalUrl.split("?");
+		var clinportalUrlPath1 = clinportalUrlPath[0];
+		logout();
+		window.top.location=clinportalUrlPath1 + "?method=login&path=" + dataString;
+	}
+	function showAnnotations()
+	{
+		var action="DisplayAnnotationDataEntryPage.do?entityId=<%=scgEntityId%>&entityRecordId=<%=id%>&staticEntityName=<%=staticEntityName%>&pageOf=<%=pageOf%>&operation=viewAnnotations";
+		document.forms[0].action=action;
+		document.forms[0].submit();
+	}
+	function onRadioButtonClick(element)
+	{
+		if(element.value == 1)
 		{
-			var action="DisplayAnnotationDataEntryPage.do?entityId=<%=scgEntityId%>&entityRecordId=<%=id%>&staticEntityName=<%=staticEntityName%>&pageOf=<%=pageOf%>&operation=viewAnnotations";
-			document.forms[0].action=action;
-			document.forms[0].submit();
+			document.forms[0].participantId.disabled = false;
+			document.forms[0].protocolParticipantIdentifier.disabled = true;
+			document.forms[0].participantsMedicalIdentifierId.disabled = false;
 		}
-
-    	function onRadioButtonClick(element)
+		else
 		{
-			if(element.value == 1)
+			document.forms[0].participantId.disabled = true;
+			document.forms[0].protocolParticipantIdentifier.disabled = false;
+			//disable Medical Record number field.
+			document.forms[0].participantsMedicalIdentifierId.disabled = true;
+		}
+	}
+	function onChangeEvent(element)
+	{
+		var getCPID=document.getElementById('collectionProtocolId');
+		var cpID=getCPID.value;
+		var getID=document.getElementById(element);
+		var index=getID.selectedIndex;
+		if(index<0)
+		{
+			alert("Please Select Valid Value");
+		}
+		else
+		{
+			if(element=='collectionProtocolEventId')
 			{
-				document.forms[0].participantId.disabled = false;
-				document.forms[0].protocolParticipantIdentifier.disabled = true;
-				document.forms[0].participantsMedicalIdentifierId.disabled = false;
+				var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&protocolEventId=true&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&" +
+					"isOnChange=true&cpID="+cpID;
 			}
 			else
 			{
-				document.forms[0].participantId.disabled = true;
-				document.forms[0].protocolParticipantIdentifier.disabled = false;
+				var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&protocolEventId=false&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&" +
+					"isOnChange=true&cpID="+cpID;
 
-
-				//disable Medical Record number field.
-				document.forms[0].participantsMedicalIdentifierId.disabled = true;
 			}
+			changeAction(action);
 		}
-
-		 //Consent Tracking Module (Virender Mehta)
-		function onChangeEvent(element)
-		{
-			var getCPID=document.getElementById('collectionProtocolId');
-			var cpID=getCPID.value;
-        	var getID=document.getElementById(element);
-		    var index=getID.selectedIndex;
-			if(index<0)
-			{
-				alert("Please Select Valid Value");
-			}
-	        else
-			{
-	        	if(element=='collectionProtocolEventId')
-				{
-					var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&protocolEventId=true&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&" +
-	        			"isOnChange=true&cpID="+cpID;
-				}
-				else
-				{
-					var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&protocolEventId=false&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&" +
-	        			"isOnChange=true&cpID="+cpID;
-
-				}
-	        	changeAction(action);
-	        }
-		}
-	    function onChange(element)
-		{
-        	var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=pageOfSpecimenCollectionGroup&" +
-        			"isOnChange=true";
-        	changeAction(action);
-		}
-        function changeAction(action)
-        {
-			document.forms[0].action = action;
-			document.forms[0].submit();
-        }
+	}
+	function onChange(element)
+	{
+		var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=pageOfSpecimenCollectionGroup&" +
+				"isOnChange=true";
+		changeAction(action);
+	}
+	function changeAction(action)
+	{
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}
 		var applyToSpecimen;
 		function checkForChanges()
 		{
-			//alert("in check for changes");
-			//user entered values
 			var collectionEventdateOfEvent = document.getElementById("collectionEventdateOfEvent").value;
 			var collectionEventUserId = document.getElementById("collectionEventUserId").value;
 			var collectionEventTimeInHours = document.getElementById("displaycollectionEventTimeInHours").value;
@@ -339,12 +330,10 @@
 				var answer = confirm(appResources);
 				if(answer)
 				{
-				//alert("Confirm OK");
 					applyToSpecimen = 'true';
 				}
 				else
 				{
-				//alert("Confirm CANCEL");
 					applyToSpecimen = 'false';
 				}
 			}
@@ -382,7 +371,6 @@
 			// Description: User is allowed to click the Add Multiple Specimen irrespective of state of restric checkbox.
 			// Patch ID: Bug#3184_34
 			var submitAndAddMultipleButton =  document.getElementById("submitAndAddMultiple");
-
 			var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
 			if(enteredValue > 1)
 			{
@@ -403,15 +391,12 @@
 				submitAndAddMultipleButton.disabled = false;
 			}
 		}
-
-
 		function disableButtonsOnCheck(restrictCheckbox)
 		{
 			var submitButton = document.getElementById("submitOnly");
 			var addSpecimenButton = document.getElementById("submitAndAdd");
 			// Patch ID: Bug#3184_35
 			var submitAndAddMultipleButton = document.getElementById("submitAndAddMultiple");
-
 			if(restrictCheckbox.checked)
 			{
 				submitButton.disabled = false;
@@ -438,19 +423,14 @@
 			}
 			<%}%>
 		}
-		//Patch ID: Bug#4227_4
-		//Description: This method sets the value of button id to the buttonType hidden variable.
-		//This method is called on the onkeydown or onmousedown of Add Specimen and Add Multiple Specimen button.
+
 		function setButtonType(addButton)
 		{
 			document.getElementById("buttonType").value = addButton.id;
 		}
 
-
-	// Consent Tracking Module Virender mehta
 	function switchToTab(selectedTab)
 	{
-		//var operation = document.forms[0].operation.value;
 		var displayKey="block";
 		var showAlways="block";
 		if(!document.all)
@@ -515,10 +495,7 @@
 				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents1.gif alt=Consents width=76 height=22 border=0>"
 			}
 		}
-
 	}
-
-	//This function is for changing the behaviour of TABs
 	function updateTab(tab1, tab2)
 	{
 		tab1.onmouseover=null;
@@ -529,8 +506,6 @@
 		tab2.onmouseover=function() { changeMenuStyle(this,'tabMenuItemOver'),showCursor();};
 		tab2.onmouseout=function() {changeMenuStyle(this,'tabMenuItem'),hideCursor();};
 	}
-
-		//This function will Switch tab to specimenCollectionGroup page
 		function specimencollgroup()
 		{
 			switchToTab("specimenCollectionGroupTab");
@@ -566,9 +541,6 @@
 			consentPage();
 		}
 	  }
-// Consent Tracking Module Virender mehta
-
-		//View SPR Vijay pande
 		function viewSPR()
 		{
 			<%Long reportId=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID);%>
@@ -590,7 +562,7 @@
 		}
 
 
-function editSCG()
+	function editSCG()
 		{
 			var tempId='<%=request.getParameter("id")%>';
 			var action="SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+tempId;
@@ -702,8 +674,6 @@ function editSCG()
 			</tr>
 			</table><!-- Mandar 31Oct08 -->
 				<%@ include file="EditSpecimenCollectionGroup.jsp" %>
-
-
 	<%
 	}
 	%>
@@ -741,8 +711,6 @@ function editSCG()
 				</table>
 			</td>
 			</tr>
-
-
 			<tr>
 				<td class="tabField" colspan="6">
 
@@ -753,8 +721,6 @@ function editSCG()
 	<%
 	}
 	%>
-
-
 
 	<%
 	if(pageView.equals("edit"))
