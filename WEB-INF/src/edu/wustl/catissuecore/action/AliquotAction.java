@@ -711,6 +711,24 @@ public class AliquotAction extends SecureAction
 				"from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.barcode ='" + aliquotForm.getBarcode() + "'";
 				populateTempAliqoutMap(aliquotForm, tempAliquotMap);
 			}
+			List formatList = AppUtility.executeQuery(hql);
+			if(!formatList.isEmpty())
+			{
+				Object[] obje = (Object[])formatList.get(0);
+				if(obje[0] != null)
+				{
+					parentLabelFormat = obje[0].toString();
+				}
+				if(obje[1] != null)
+				{
+					deriveLabelFormat = obje[1].toString();
+				}
+				if(obje[2] != null)
+				{
+					aliquotLabelFormat = obje[2].toString();
+				}
+			}
+			aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, Constants.ALIQUOT));
 			// Map containerMap = bizLogic.getAllocatedContainerMap();
 			TreeMap containerMap = new TreeMap();
 			if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGE_OF)))
@@ -758,7 +776,7 @@ public class AliquotAction extends SecureAction
 			 */
 			this.setParentSpecimenInRequest(request);
 			this.setPageData(request, pageOf, aliquotForm);
-			List formatList = AppUtility.executeQuery(hql);
+			/*List formatList = AppUtility.executeQuery(hql);
 			if(!formatList.isEmpty())
 			{
 				Object[] obje = (Object[])formatList.get(0);
@@ -774,7 +792,7 @@ public class AliquotAction extends SecureAction
 				{
 					aliquotLabelFormat = obje[2].toString();
 				}
-			}
+			}*/
 			aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, Constants.ALIQUOT));
 			return mapping.findForward(pageOf);
 		}
@@ -1208,7 +1226,10 @@ public class AliquotAction extends SecureAction
 			{
 				final String labelKey = "Specimen:" + i + "_label";
 				// aliquotMap.put(labelKey,"Abc");
-//				aliquotMap.put(labelKey, form.getSpecimenLabel() + "_" + ++totalAliquotCount);
+				if(!form.isGenerateLabel())
+				{
+					aliquotMap.put(labelKey, form.getSpecimenLabel() + "_" + ++totalAliquotCount);
+				}
 			}
 
 		}
