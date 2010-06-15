@@ -360,7 +360,7 @@ public class CustomSpecimenLabelGenerator extends DefaultSpecimenLabelGenerator
 			try
 			{
 				list=AppUtility.executeQuery(hql);
-				if(list!=null)
+				if(list!=null && !list.isEmpty())
 				{
 					Object object = list.get(0);
 					objSpecimen.setSpecimenRequirement((SpecimenRequirement)object);
