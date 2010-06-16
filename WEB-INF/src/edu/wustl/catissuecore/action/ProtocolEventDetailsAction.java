@@ -195,7 +195,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 				&& collectionProtocolEventBean.getId() > 0)
 		{
 			request.setAttribute("isPersistent", true);
-
+		}
 		protocolEventDetailsForm.setClinicalDiagnosis(collectionProtocolEventBean
 				.getClinicalDiagnosis());
 		protocolEventDetailsForm.setClinicalStatus(collectionProtocolEventBean.getClinicalStatus());
@@ -217,7 +217,6 @@ public class ProtocolEventDetailsAction extends BaseAction
 		protocolEventDetailsForm.setCollectionProtocolEventkey(collectionProtocolEventKey);
 
 		protocolEventDetailsForm.setLabelFormat(collectionProtocolEventBean.getLabelFormat());
-		}
 
 	}
 
