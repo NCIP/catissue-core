@@ -54,17 +54,17 @@ public class UpdateMetadata
 	/**
 	 * Database specific compare operator.
 	 */
-	static String DB_SPECIFIC_COMPARE_OPERATOR;
+	static String dbSpecifiecCompareOperator;
 
 	/**
 	 * Specify IS Upgrade.
 	 */
-	static String IS_UPGRADE = "false";
+	static String isUpgrade = "false";
 
 	/**
 	 * Specify Build Version.
 	 */
-	static String BUILD_VERSION = null;
+	static String buildVersion = null;
 
 	/**
 	 * Main Method.
@@ -82,14 +82,14 @@ public class UpdateMetadata
 			connection.setAutoCommit(true);
 			stmt = connection.createStatement();
 			UpdateMetadataUtil.isExecuteStatement = true;
-			DB_SPECIFIC_COMPARE_OPERATOR = UpdateMetadataUtil.getDBCompareModifier();
-			if (IS_UPGRADE.equals("true"))
+			dbSpecifiecCompareOperator = UpdateMetadataUtil.getDBCompareModifier();
+			if (isUpgrade.equals("true"))
 			{
-				if (BUILD_VERSION != null && BUILD_VERSION.equals("p2top4"))
+				if (buildVersion != null && buildVersion.equals("p2top4"))
 				{
 					updateFromP2toP4();
 				}
-				else if (BUILD_VERSION != null && BUILD_VERSION.equals("1.1_to_p2"))
+				else if (buildVersion != null && buildVersion.equals("1.1_to_p2"))
 				{
 					updateRc4ToP2();
 				}
@@ -181,8 +181,8 @@ public class UpdateMetadata
 				+ "(Select IDENTIFIER from dyextn_abstract_metadata " + " where IDENTIFIER in "
 				+ "(Select IDENTIFIER from dyextn_attribute where ENTIY_ID in "
 				+ "(Select IDENTIFIER from dyextn_abstract_metadata where name "
-				+ DB_SPECIFIC_COMPARE_OPERATOR + "'edu.wustl.catissuecore.domain.Container')) "
-				+ "and NAME " + DB_SPECIFIC_COMPARE_OPERATOR + "'full')))");
+				+ dbSpecifiecCompareOperator + "'edu.wustl.catissuecore.domain.Container')) "
+				+ "and NAME " + dbSpecifiecCompareOperator + "'full')))");
 		UpdateMetadataUtil.executeSQLs(dbUpdateSQL, connection.createStatement(), false);
 		// Deepti
 		//Commenting following part as the label should be displayed as Full and not cont_full.
@@ -193,9 +193,9 @@ public class UpdateMetadata
 				"Select IDENTIFIER from dyextn_attribute
 				 where ENTIY_ID in (Select IDENTIFIER
 				  from dyextn_abstract_metadata " +
-				"where name "+DB_SPECIFIC_COMPARE_OPERATOR
+				"where name "+dbSpecifiecCompareOperator
 				+"'edu.wustl.catissuecore.domain.Container')) " +
-						"and NAME "+DB_SPECIFIC_COMPARE_OPERATOR+"'full'");
+						"and NAME "+dbSpecifiecCompareOperator+"'full'");
 		if(rs.next())
 		{
 			Long identifier = rs.getLong(1);
@@ -264,8 +264,8 @@ public class UpdateMetadata
 			throw new RuntimeException("In sufficient number of arguments");
 		}
 		DATABASE_TYPE = args[2];
-		IS_UPGRADE = args[7];
-		BUILD_VERSION = args[8];
+		isUpgrade = args[7];
+		buildVersion = args[8];
 	}
 
 
@@ -294,10 +294,10 @@ public class UpdateMetadata
 			final Long pathId = rs.getLong(1) + 1;
 			rs = stmt.executeQuery("select INTERMEDIATE_PATH from path"
 					+ " where FIRST_ENTITY_ID = (select IDENTIFIER"
-					+ " from dyextn_abstract_metadata where NAME " + DB_SPECIFIC_COMPARE_OPERATOR
+					+ " from dyextn_abstract_metadata where NAME " + dbSpecifiecCompareOperator
 					+ "'edu.wustl.catissuecore.domain.Site')"
 					+ " and LAST_ENTITY_ID = (select IDENTIFIER"
-					+ " from dyextn_abstract_metadata where NAME " + DB_SPECIFIC_COMPARE_OPERATOR
+					+ " from dyextn_abstract_metadata where NAME " + dbSpecifiecCompareOperator
 					+ "'edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup')");
 			if (rs.next())
 			{
@@ -309,11 +309,11 @@ public class UpdateMetadata
 									+ " INTERMEDIATE_PATH, LAST_ENTITY_ID) select " + pathId
 									+ ", (select IDENTIFIER"
 									+ " from dyextn_abstract_metadata where NAME "
-									+ DB_SPECIFIC_COMPARE_OPERATOR
+									+ dbSpecifiecCompareOperator
 									+ "'edu.wustl.catissuecore.domain.Site'),'" + intermediatePath
 									+ "',(select IDENTIFIER"
 									+ " from dyextn_abstract_metadata where name"
-									+ DB_SPECIFIC_COMPARE_OPERATOR
+									+ dbSpecifiecCompareOperator
 									+ "'edu.wustl.catissuecore.domain.SpecimenCollectionGroup')",
 							connection.createStatement());
 				}
@@ -321,10 +321,10 @@ public class UpdateMetadata
 				{
 					UpdateMetadataUtil.executeInsertSQL("insert into path values(" + pathId
 							+ ", (select IDENTIFIER from dyextn_abstract_metadata where NAME "
-							+ DB_SPECIFIC_COMPARE_OPERATOR
+							+ dbSpecifiecCompareOperator
 							+ "'edu.wustl.catissuecore.domain.Site'),'" + intermediatePath
 							+ "',(select IDENTIFIER from dyextn_abstract_metadata where name"
-							+ DB_SPECIFIC_COMPARE_OPERATOR
+							+ dbSpecifiecCompareOperator
 							+ "'edu.wustl.catissuecore.domain.SpecimenCollectionGroup'))",
 							connection.createStatement());
 				}
@@ -469,36 +469,36 @@ public class UpdateMetadata
 
 		stmt = connection.createStatement();
 		UpdateMetadataUtil.executeInsertSQL("update path set FIRST_ENTITY_ID = (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where NAME " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.AbstractSpecimen')"
 				+ " where FIRST_ENTITY_ID in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where NAME " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.Specimen') and "
 				+ "LAST_ENTITY_ID in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where NAME " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.SpecimenCharacteristics')", connection
 				.createStatement());
 		UpdateMetadataUtil.executeInsertSQL("update  path set LAST_ENTITY_ID = (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where NAME " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.AbstractSpecimen')"
 				+ " where FIRST_ENTITY_ID in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where NAME " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.Specimen')"
 				+ " and LAST_ENTITY_ID in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where NAME " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.Specimen')", connection.createStatement());
 		UpdateMetadataUtil
 				.executeInsertSQL("update  path set FIRST_ENTITY_ID = (Select IDENTIFIER"
 						+ " from dyextn_abstract_metadata where NAME "
-						+ DB_SPECIFIC_COMPARE_OPERATOR
+						+ dbSpecifiecCompareOperator
 						+ "'edu.wustl.catissuecore.domain.AbstractSpecimen')"
 						+ " where FIRST_ENTITY_ID in" + " (Select IDENTIFIER"
 						+ " from dyextn_abstract_metadata where NAME "
-						+ DB_SPECIFIC_COMPARE_OPERATOR
+						+ dbSpecifiecCompareOperator
 						+ " 'edu.wustl.catissuecore.domain.Specimen')"
 						+ " and LAST_ENTITY_ID in (Select IDENTIFIER"
 						+ " from dyextn_abstract_metadata where NAME "
-						+ DB_SPECIFIC_COMPARE_OPERATOR
+						+ dbSpecifiecCompareOperator
 						+ "'edu.wustl.catissuecore.domain.AbstractSpecimen')", connection
 						.createStatement());
 
@@ -506,17 +506,17 @@ public class UpdateMetadata
 
 		dbUpdateSQL.add("update dyextn_entity set INHERITANCE_STRATEGY = 3 where"
 				+ " PARENT_ENTITY_ID = (select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.Specimen')");
 
 		stmt = connection.createStatement();
 		rs = stmt.executeQuery("select DE_ASSOCIATION_ID" + " from intra_model_association"
 				+ " where ASSOCIATION_ID in (select INTERMEDIATE_PATH"
 				+ " from path where FIRST_ENTITY_ID in (select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.AbstractSpecimen')"
 				+ " and LAST_ENTITY_ID in (select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.SpecimenCharacteristics'))");
 		if (rs.next())
 		{
@@ -536,75 +536,75 @@ public class UpdateMetadata
 				+ " 'CATISSUE_CELL_SPECIMEN' where IDENTIFIER ="
 				+ " (select IDENTIFIER from dyextn_table_properties"
 				+ "  where ABSTRACT_ENTITY_ID = (select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.CellSpecimen'))");
 
 		dbUpdateSQL.add("update dyextn_database_properties set NAME ="
 				+ " 'CATISSUE_FLUID_SPECIMEN' where IDENTIFIER ="
 				+ " (select IDENTIFIER from dyextn_table_properties"
 				+ "  where ABSTRACT_ENTITY_ID = (select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.FluidSpecimen'))");
 
 		dbUpdateSQL.add("update dyextn_database_properties set NAME ="
 				+ " 'CATISSUE_MOLECULAR_SPECIMEN' where IDENTIFIER ="
 				+ " (select IDENTIFIER from dyextn_table_properties"
 				+ "  where ABSTRACT_ENTITY_ID = (select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.MolecularSpecimen'))");
 
 		dbUpdateSQL.add("update dyextn_database_properties set NAME ="
 				+ " 'CATISSUE_TISSUE_SPECIMEN' where IDENTIFIER ="
 				+ " (select IDENTIFIER from dyextn_table_properties"
 				+ "  where ABSTRACT_ENTITY_ID = (select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.TissueSpecimen'))");
 
 		dbUpdateSQL.add("update dyextn_attribute set ENTIY_ID ="
 				+ " (Select IDENTIFIER from dyextn_abstract_metadata" + " where name "
-				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ dbSpecifiecCompareOperator
 				+ " 'edu.wustl.catissuecore.domain.AbstractSpecimen')"
 				+ " where IDENTIFIER in (Select identifier from"
-				+ " dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'pathologicalStatus') and ENTIY_ID" + " in (Select identifier"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.Specimen')");
 
 		dbUpdateSQL.add("update dyextn_attribute set ENTIY_ID ="
 				+ " (Select IDENTIFIER from dyextn_abstract_metadata where name "
-				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ dbSpecifiecCompareOperator
 				+ " 'edu.wustl.catissuecore.domain.AbstractSpecimen')"
 				+ " where IDENTIFIER in (Select identifier"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'type') and ENTIY_ID in (Select identifier"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.Specimen')");
 
 		dbUpdateSQL.add("update dyextn_attribute set ENTIY_ID ="
 				+ " (Select IDENTIFIER from dyextn_abstract_metadata" + " where name "
-				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ dbSpecifiecCompareOperator
 				+ " 'edu.wustl.catissuecore.domain.AbstractSpecimen')"
 				+ " where IDENTIFIER in (Select identifier"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'lineage')");
 
 		dbUpdateSQL.add("update dyextn_attribute set ENTIY_ID ="
 				+ " (Select IDENTIFIER from dyextn_abstract_metadata where name "
-				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ dbSpecifiecCompareOperator
 				+ " 'edu.wustl.catissuecore.domain.AbstractSpecimen')"
 				+ " where IDENTIFIER in (Select identifier"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'initialQuantity') and ENTIY_ID in (Select identifier"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.Specimen')");
 
 		stmt = connection.createStatement();
 		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata"
 				+ " where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute"
 				+ " where ENTIY_ID in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.Specimen')) and NAME "
-				+ DB_SPECIFIC_COMPARE_OPERATOR + "'type'");
+				+ dbSpecifiecCompareOperator + "'type'");
 		if (rs.next())
 		{
 			final Long identifier = rs.getLong(1);
@@ -617,9 +617,9 @@ public class UpdateMetadata
 		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata"
 				+ " where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute"
 				+ " where ENTIY_ID in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.Specimen')) and NAME "
-				+ DB_SPECIFIC_COMPARE_OPERATOR + "'available'");
+				+ dbSpecifiecCompareOperator + "'available'");
 		if (rs.next())
 		{
 			final Long identifier = rs.getLong(1);
@@ -632,9 +632,9 @@ public class UpdateMetadata
 		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata"
 				+ " where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute"
 				+ " where ENTIY_ID in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.CellSpecimen')) and NAME "
-				+ DB_SPECIFIC_COMPARE_OPERATOR + "'available'");
+				+ dbSpecifiecCompareOperator + "'available'");
 		if (rs.next())
 		{
 			final Long identifier = rs.getLong(1);
@@ -647,9 +647,9 @@ public class UpdateMetadata
 		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata"
 				+ " where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute"
 				+ " where ENTIY_ID in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.FluidSpecimen')) and NAME "
-				+ DB_SPECIFIC_COMPARE_OPERATOR + "'available'");
+				+ dbSpecifiecCompareOperator + "'available'");
 		if (rs.next())
 		{
 			final Long identifier = rs.getLong(1);
@@ -662,9 +662,9 @@ public class UpdateMetadata
 		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata"
 				+ " where IDENTIFIER in (Select IDENTIFIER"
 				+ " from dyextn_attribute where ENTIY_ID in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.MolecularSpecimen')) and NAME "
-				+ DB_SPECIFIC_COMPARE_OPERATOR + "'available'");
+				+ dbSpecifiecCompareOperator + "'available'");
 		if (rs.next())
 		{
 			final Long identifier = rs.getLong(1);
@@ -677,9 +677,9 @@ public class UpdateMetadata
 		rs = stmt.executeQuery("select IDENTIFIER from dyextn_abstract_metadata"
 				+ " where IDENTIFIER in (Select IDENTIFIER"
 				+ " from dyextn_attribute where ENTIY_ID in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.TissueSpecimen')) and NAME "
-				+ DB_SPECIFIC_COMPARE_OPERATOR + "'available'");
+				+ dbSpecifiecCompareOperator + "'available'");
 		if (rs.next())
 		{
 			final Long identifier = rs.getLong(1);
@@ -696,9 +696,9 @@ public class UpdateMetadata
 				+ " in (Select IDENTIFIER from dyextn_abstract_metadata "
 				+ " where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute"
 				+ " where ENTIY_ID in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.AbstractSpecimen')) and NAME "
-				+ DB_SPECIFIC_COMPARE_OPERATOR + "'specimenType')))");
+				+ dbSpecifiecCompareOperator + "'specimenType')))");
 
 		dbUpdateSQL.add("update dyextn_database_properties set NAME ="
 				+ " 'INITIAL_QUANTITY' where IDENTIFIER"
@@ -708,17 +708,17 @@ public class UpdateMetadata
 				+ " in (Select IDENTIFIER from dyextn_abstract_metadata"
 				+ "  where IDENTIFIER in (Select IDENTIFIER from dyextn_attribute"
 				+ " where ENTIY_ID in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.AbstractSpecimen')) and NAME "
-				+ DB_SPECIFIC_COMPARE_OPERATOR + "'initialQuantity')))");
+				+ dbSpecifiecCompareOperator + "'initialQuantity')))");
 
 		dbUpdateSQL.add("update dyextn_attribute set ENTIY_ID ="
 				+ " (Select IDENTIFIER from dyextn_abstract_metadata where name "
-				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ dbSpecifiecCompareOperator
 				+ " 'edu.wustl.catissuecore.domain.AbstractSpecimen')"
 				+ " where IDENTIFIER in (Select IDENTIFIER" + " from dyextn_association"
 				+ "  where TARGET_ENTITY_ID" + " in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ " 'edu.wustl.catissuecore.domain.SpecimenCharacteristics')"
 				+ " and SOURCE_ROLE_ID in (Select identifier" + " from dyextn_role where NAME ="
 				+ " 'edu.wustl.catissuecore.domain.Specimen'))");
@@ -727,23 +727,23 @@ public class UpdateMetadata
 		rs = stmt.executeQuery("select DE_ASSOCIATION_ID from intra_model_association"
 				+ " where ASSOCIATION_ID in (select INTERMEDIATE_PATH from path"
 				+ " where FIRST_ENTITY_ID in (select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.AbstractSpecimen')"
 				+ " and LAST_ENTITY_ID in (select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.AbstractSpecimen'))");
 		while (rs.next())
 		{
 			final Long identifier = rs.getLong(1);
 			dbUpdateSQL.add("update dyextn_association set TARGET_ENTITY_ID ="
 					+ " (Select IDENTIFIER " + "from dyextn_abstract_metadata where name "
-					+ DB_SPECIFIC_COMPARE_OPERATOR
+					+ dbSpecifiecCompareOperator
 					+ " 'edu.wustl.catissuecore.domain.AbstractSpecimen')" + " where IDENTIFIER="
 					+ identifier);
 
 			dbUpdateSQL.add("update dyextn_attribute set ENTIY_ID ="
 					+ " (Select IDENTIFIER from dyextn_abstract_metadata" + " where name "
-					+ DB_SPECIFIC_COMPARE_OPERATOR
+					+ dbSpecifiecCompareOperator
 					+ "'edu.wustl.catissuecore.domain.AbstractSpecimen')" + " where IDENTIFIER="
 					+ identifier);
 		}
@@ -751,18 +751,18 @@ public class UpdateMetadata
 
 		dbUpdateSQL.add("update dyextn_entity set PARENT_ENTITY_ID ="
 				+ " (Select IDENTIFIER from dyextn_abstract_metadata where name "
-				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ dbSpecifiecCompareOperator
 				+ " 'edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup')"
 				+ " where IDENTIFIER in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.CollectionProtocolEvent')");
 
 		dbUpdateSQL.add("update dyextn_entity set PARENT_ENTITY_ID ="
 				+ " (Select IDENTIFIER from dyextn_abstract_metadata where name "
-				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ dbSpecifiecCompareOperator
 				+ " 'edu.wustl.catissuecore.domain.AbstractSpecimen')"
 				+ " where IDENTIFIER in (Select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.Specimen')");
 
 		//CSM changes related to query
@@ -778,10 +778,10 @@ public class UpdateMetadata
 
 		//Delete initial curated path between OrderDetails and TissueSpecimen which is invalid
 		dbUpdateSQL.add("delete from path where FIRST_ENTITY_ID in (select identifier"
-				+ " from dyextn_abstract_metadata where NAME " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.OrderDetails')"
 				+ " and LAST_ENTITY_ID= (select identifier"
-				+ " from dyextn_abstract_metadata where NAME " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.TissueSpecimen')");
 		dbUpdateSQL.add("insert into dyextn_tagged_value select Max(IDENTIFIER)+1,"
 				+ " 'IS_BIRTH_DATE','true',847 from dyextn_tagged_value");
@@ -839,7 +839,7 @@ public class UpdateMetadata
 
 		dbUpdateSQL.add("update dyextn_abstract_metadata set NAME="
 				+ "'edu.wustl.catissuecore.domain.DistributionSpecimenRequirement'"
-				+ " where NAME " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " where NAME " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.SpecimenRequirement'");
 
 		stmt = connection.createStatement();
@@ -848,10 +848,10 @@ public class UpdateMetadata
 				+ " from intra_model_association where ASSOCIATION_ID ="
 				+ " (select INTERMEDIATE_PATH from path"
 				+ " where FIRST_ENTITY_ID=(select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.DistributionProtocol')"
 				+ " and LAST_ENTITY_ID=(select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.DistributionSpecimenRequirement')))");
 		if (rs.next())
 		{
@@ -867,10 +867,10 @@ public class UpdateMetadata
 				+ " from intra_model_association where ASSOCIATION_ID ="
 				+ " (select INTERMEDIATE_PATH from path"
 				+ " where FIRST_ENTITY_ID=(select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.DistributionProtocol')"
 				+ " and LAST_ENTITY_ID=(select IDENTIFIER"
-				+ " from dyextn_abstract_metadata where name " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where name " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.DistributionSpecimenRequirement')))");
 		if (rs.next())
 		{
@@ -880,34 +880,34 @@ public class UpdateMetadata
 		}
 
 		dbUpdateSQL.add("delete from path where FIRST_ENTITY_ID in (select identifier"
-				+ " from dyextn_abstract_metadata where NAME " + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME " + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.DistributionSpecimenRequirement')"
 				+ "	and LAST_ENTITY_ID= (select identifier"
-				+ " from dyextn_abstract_metadata where NAME" + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME" + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.QuantityInMicrogram')");
 
 		dbUpdateSQL.add("delete from path where FIRST_ENTITY_ID in"
 				+ " (select identifier from dyextn_abstract_metadata where NAME "
-				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.DistributionSpecimenRequirement')"
 				+ "	and LAST_ENTITY_ID= (select identifier"
-				+ " from dyextn_abstract_metadata where NAME" + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME" + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.QuantityInGram')");
 
 		dbUpdateSQL.add("delete from path where FIRST_ENTITY_ID"
 				+ " in (select identifier from dyextn_abstract_metadata where NAME "
-				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.DistributionSpecimenRequirement')"
 				+ " and LAST_ENTITY_ID= (select identifier"
-				+ " from dyextn_abstract_metadata where NAME" + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME" + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.QuantityInMilliliter')");
 
 		dbUpdateSQL.add("delete from path where FIRST_ENTITY_ID"
 				+ " in (select identifier from dyextn_abstract_metadata where NAME "
-				+ DB_SPECIFIC_COMPARE_OPERATOR
+				+ dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.DistributionSpecimenRequirement')"
 				+ " and LAST_ENTITY_ID= (select identifier"
-				+ " from dyextn_abstract_metadata where NAME" + DB_SPECIFIC_COMPARE_OPERATOR
+				+ " from dyextn_abstract_metadata where NAME" + dbSpecifiecCompareOperator
 				+ "'edu.wustl.catissuecore.domain.QuantityInCount')");
 
 		dbUpdateSQL
