@@ -2160,6 +2160,31 @@
 		</java>
 	</target>
 
+	<target name="update_metadata_for_model_changes_mysql_P5_to_P5.1" description="Updating DE Metadata for model changes (mysql).....">
+		<echo message="P5_to_P5.1....Updating DE Metadata for model changes (mysql)....." />
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
+		<java classname="edu.wustl.catissuecore.querysuite.metadata.AddAssociationP5ToP51"  fork="true" maxmemory="512m" failonerror="true">
+			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
+			<classpath refid="temp.classpath" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+
+			<arg value="${database.host}"/>
+			<arg value="${database.port}"/>
+			<arg value="${database.type}"/>
+			<arg value="${database.name}"/>
+			<arg value="${database.username}"/>
+			<arg value="${database.password}"/>
+			<arg value="${mysql.driver.string}"/>
+			<arg value="${isUpgrade}"/>
+			<arg value="${buildVersion}"/>
+		</java>
+	</target>
+
 	<target name="update_metadata_for_model_changes_oracle" description="Updating DE Metadata for model changes (oracle).....">
 		<echo message="Updating DE Metadata for model changes (oracle)....." />
 		<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadata"  fork="true" maxmemory="512m" failonerror="true">
@@ -2182,6 +2207,30 @@
 		</java>
 		<antcall target="reset_sequences" />
 	</target>
+
+	<target name="update_metadata_for_model_changes_oracle_P5_to_P5.1" description="Updating DE Metadata for model changes (oracle).....">
+			<echo message="P5_to_P5.1...Updating DE Metadata for model changes (oracle)....." />
+				<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+				<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
+			<java classname="edu.wustl.catissuecore.querysuite.metadata.AddAssociationP5ToP51"  fork="true" maxmemory="512m" failonerror="true">
+				<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
+				<classpath refid="temp.classpath" />
+				<classpath>
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+				<arg value="${database.host}"/>
+				<arg value="${database.port}"/>
+				<arg value="${database.type}"/>
+				<arg value="${database.name}"/>
+				<arg value="${database.username}"/>
+				<arg value="${database.password}"/>
+				<arg value="${oracle.driver.string}"/>
+				<arg value="${isUpgrade}"/>
+				<arg value="${buildVersion}"/>
+			</java>
+		</target>
 
 	<!-- Start : DE Integration Restructure for p5 -->
 
@@ -4414,6 +4463,8 @@ Thanking You,
 			</sql>
 
 			<antcall target="integrate_bulk_operation_mysql" />
+			<echo message="Upgrading MSSQL Metadata from p5 to p5.1" />
+			<antcall target="update_metadata_for_model_changes_mysql_P5_to_P5.1" />
 
 		</target>
 
@@ -4428,6 +4479,8 @@ Thanking You,
 					</fileset>
 				</classpath>
 			</sql>
+			<echo message="Upgrading Oracle Metadata from p5 to p5.1" />
+		    <antcall target="update_metadata_for_model_changes_oracle_P5_to_P5.1" />
 	   </target>
 
 

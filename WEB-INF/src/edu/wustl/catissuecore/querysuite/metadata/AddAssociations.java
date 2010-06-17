@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * AddAssociations.
@@ -15,6 +16,10 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class AddAssociations
 {
+	/**
+	 * logger Logger - Generic logger.
+	 */
+	private static final Logger LOGGER = Logger.getCommonLogger(AddAssociations.class);
 
 	/**
 	 * Connection instance.
@@ -29,7 +34,7 @@ public class AddAssociations
 	/**
 	 * SQL for DYEXTN_COLUMN_PROPERTIES table
 	 */
-	private static final String INSERT_COLUMN_PROP = "insert into DYEXTN_COLUMN_PROPERTIES "
+	private static final String INS_COL_PROP = "insert into DYEXTN_COLUMN_PROPERTIES "
 			+ "(IDENTIFIER,CNSTR_KEY_PROP_ID) values(";
 	/**
 	 * SQL for dyextn_database_properties table
@@ -43,13 +48,13 @@ public class AddAssociations
 	/**
 	 * SQL for dyextn_association table
 	 */
-	private static final String INSERT_ASSOCIATION = "insert into dyextn_association values (";
+	private static final String INS_ASSOC = "insert into dyextn_association values (";
 
 	/**
 	 * Constructor.
 	 * @param connection Connection object.
 	 */
-	AddAssociations(Connection connection)
+	AddAssociations(final Connection connection)
 	{
 		this.connection = connection;
 	}
@@ -74,13 +79,21 @@ public class AddAssociations
 	 * @throws IOException IO Exception
 	 */
 	public void addAssociation(final String entityName, final String associatedEntityName,
-			String associationName, String associationType, String roleName, boolean isSwap,
-			String roleNameTable, String srcAssociationId, String targetAssociationId,
+			final String associationName, final String associationType, String roleName, boolean isSwap,
+			final String roleNameTable, String srcAssociationId, String targetAssociationId,
 			int maxCardinality, int isSystemGenerated, String direction, boolean mmflag,
 			String... entityGrpName) throws SQLException, IOException
 	{
 		final Long nextIdOfAbstractMetadata = getNextId("dyextn_abstract_metadata", "identifier");
-		final Long nextIdOfDERole = getNextId("dyextn_role", "identifier");
+		Long nextIdOfDERole;
+		if(!isSwap && srcAssociationId == null)
+		{
+			nextIdOfDERole = getRoleId("dyextn_role", "identifier");
+		}
+		else
+		{
+			nextIdOfDERole = getNextId("dyextn_role", "identifier");
+		}
 		final Long nextIdOfDBProperties = getNextId("dyextn_database_properties", "identifier");
 		final Long nextIDintraModelAssociation = getNextId("intra_model_association", "ASSOCIATION_ID");
 		final Long nextIdPath = getNextId("path", "PATH_ID");
@@ -90,7 +103,7 @@ public class AddAssociations
 		final Long entityId = getIdentifier(sql);
 		if (entityId == 0)
 		{
-			System.out.println("Entity not found of name ");
+			LOGGER.info("Entity not found of name ");
 		}
 
 		sql = "select identifier from dyextn_abstract_metadata where name like '"
@@ -98,7 +111,7 @@ public class AddAssociations
 		Long associatedEntityId = getIdentifier(sql);
 		if (associatedEntityId == 0)
 		{
-			System.out.println("Entity not found of name ");
+			LOGGER.info("Entity not found of name ");
 		}
 
 		insertAssociationData(associationName, nextIdOfAbstractMetadata, entityId);
@@ -134,12 +147,12 @@ public class AddAssociations
 		{
 			if (isSystemGenerated == 0)
 			{
-				sql = INSERT_ASSOCIATION + nextIdOfAbstractMetadata + ",'" + direction + "',"
+				sql = INS_ASSOC + nextIdOfAbstractMetadata + ",'" + direction + "',"
 						+ associatedEntityId + "," + roleId + "," + nextIdOfDERole + ",0,0)";
 			}
 			else
 			{
-				sql = INSERT_ASSOCIATION + nextIdOfAbstractMetadata + ",'" + direction + "',"
+				sql = INS_ASSOC + nextIdOfAbstractMetadata + ",'" + direction + "',"
 						+ associatedEntityId + "," + roleId + "," + nextIdOfDERole + ",1,0)";
 			}
 		}
@@ -147,9 +160,10 @@ public class AddAssociations
 		{
 			final Long lastIdOfDERole = nextIdOfDERole - 2;
 			final Long idOfDERole = nextIdOfDERole - 1;
-			sql = INSERT_ASSOCIATION + nextIdOfAbstractMetadata + ",'" + direction + "',"
-					+ associatedEntityId + "," + lastIdOfDERole + "," + idOfDERole + ","
-					+ isSystemGenerated + ",0)";
+
+				sql = INS_ASSOC + nextIdOfAbstractMetadata + ",'" + direction + "',"
+						+ associatedEntityId + "," + lastIdOfDERole + "," + idOfDERole + ","
+						+ isSystemGenerated + ",0)";
 		}
 		UpdateMetadataUtil.executeInsertSQL(sql, this.connection.createStatement());
 		sql = INSERT_DB_PROP + nextIdOfDBProperties + ",'" + associationName + "')";
@@ -206,9 +220,18 @@ public class AddAssociations
 		}
 		else
 		{
-			sqldeconskeyprop = "insert into DYEXTN_CONSTRAINTKEY_PROP(IDENTIFIER,"
-					+ "PRIMARY_ATTRIBUTE_ID,SRC_CONSTRAINT_KEY_ID) values ("
-					+ nextIddeconskeypro + "," + attrid + "," + constraintid + ")";
+			if(srcAssociationId == null)
+			{
+				sqldeconskeyprop = "insert into DYEXTN_CONSTRAINTKEY_PROP(IDENTIFIER,"
+					+ "PRIMARY_ATTRIBUTE_ID,TGT_CONSTRAINT_KEY_ID) values ("
+					+ nextIddeconskeypro + "," + assoattid + "," + constraintid + ")";
+			}
+			else
+			{
+				sqldeconskeyprop = "insert into DYEXTN_CONSTRAINTKEY_PROP(IDENTIFIER,"
+						+ "PRIMARY_ATTRIBUTE_ID,SRC_CONSTRAINT_KEY_ID) values ("
+						+ nextIddeconskeypro + "," + attrid + "," + constraintid + ")";
+			}
 
 			if (mmflag)
 			{
@@ -234,17 +257,7 @@ public class AddAssociations
 
 		long nextIdDBPropforCol = getNextId("dyextn_database_properties", "identifier");
 		String sqlDBPropforCol = null;
-		if (!mmflag)
-		{
-			sqlDBPropforCol = INSERT_DB_PROP + nextIdDBPropforCol + ",'" + srcAssociationId + "')";
-
-			UpdateMetadataUtil.executeInsertSQL(sqlDBPropforCol, this.connection.createStatement());
-			String sqlColPropforConsKey = INSERT_COLUMN_PROP + nextIdDBPropforCol + ","
-					+ consKeyId1 + ")";
-
-			UpdateMetadataUtil.executeInsertSQL(sqlColPropforConsKey, this.connection.createStatement());
-		}
-		else
+		if (mmflag)
 		{
 			if (isSwap)
 			{
@@ -252,7 +265,7 @@ public class AddAssociations
 						+ "')";
 				UpdateMetadataUtil.executeInsertSQL(sqlDBPropforCol, this.connection
 						.createStatement());
-				String sqlColPropforConsKey = INSERT_COLUMN_PROP + nextIdDBPropforCol + ","
+				String sqlColPropforConsKey = INS_COL_PROP + nextIdDBPropforCol + ","
 						+ consKeyId1 + ")";
 
 				UpdateMetadataUtil.executeInsertSQL(sqlColPropforConsKey, this.connection
@@ -262,7 +275,7 @@ public class AddAssociations
 						+ "')";
 				UpdateMetadataUtil.executeInsertSQL(sqlDBPropforCol, this.connection
 						.createStatement());
-				String sqlCOlPropForConsKey = INSERT_COLUMN_PROP + nextIdDBPropforCol + ","
+				String sqlCOlPropForConsKey = INS_COL_PROP + nextIdDBPropforCol + ","
 						+ consKeyId2 + ")";
 
 				UpdateMetadataUtil.executeInsertSQL(sqlCOlPropForConsKey, this.connection
@@ -275,7 +288,7 @@ public class AddAssociations
 
 				UpdateMetadataUtil.executeInsertSQL(sqlDBPropforCol, this.connection
 						.createStatement());
-				String sqlColPropforConsKey = INSERT_COLUMN_PROP + nextIdDBPropforCol + ","
+				String sqlColPropforConsKey = INS_COL_PROP + nextIdDBPropforCol + ","
 						+ consKeyId1 + ")";
 
 				UpdateMetadataUtil.executeInsertSQL(sqlColPropforConsKey, this.connection
@@ -286,11 +299,27 @@ public class AddAssociations
 				UpdateMetadataUtil.executeInsertSQL(sqlDBPropforCol, this.connection
 						.createStatement());
 
-				String sqlCOlPropForConsKey = INSERT_COLUMN_PROP + nextIdDBPropforCol + ","
+				String sqlCOlPropForConsKey = INS_COL_PROP + nextIdDBPropforCol + ","
 						+ consKeyId2 + ")";
 				UpdateMetadataUtil.executeInsertSQL(sqlCOlPropForConsKey, this.connection
 						.createStatement());
 			}
+		}
+		else
+		{
+			if(!isSwap && srcAssociationId == null)
+			{
+				sqlDBPropforCol = INSERT_DB_PROP + nextIdDBPropforCol + ",'" + targetAssociationId + "')";
+			}
+			else
+			{
+				sqlDBPropforCol = INSERT_DB_PROP + nextIdDBPropforCol + ",'" + srcAssociationId + "')";
+			}
+			UpdateMetadataUtil.executeInsertSQL(sqlDBPropforCol, this.connection.createStatement());
+			String sqlColPropforConsKey = INS_COL_PROP + nextIdDBPropforCol + ","
+					+ consKeyId1 + ")";
+
+			UpdateMetadataUtil.executeInsertSQL(sqlColPropforConsKey, this.connection.createStatement());
 		}
 
 		//-------------------------------
@@ -407,6 +436,11 @@ public class AddAssociations
 			sql = INSERT_CONST_PROP + nextIdDbProp + ",'" + srcAssociationId + "',null,"
 					+ nextIdMetadata + ")";
 		}
+		else if (srcAssociationId == null)
+		{
+			sql = INSERT_CONST_PROP + nextIdDbProp + ",null,'" + targetId + "',"
+					+ nextIdMetadata + ")";
+		}
 		else
 		{
 			sql = INSERT_CONST_PROP + nextIdDbProp + ",'" + srcAssociationId + "','" + targetId
@@ -427,6 +461,29 @@ public class AddAssociations
 	{
 		final Statement stmt = this.connection.createStatement();
 		String sql = "select max(" + column + ") from " + tablename;
+		ResultSet resultSet = stmt.executeQuery(sql);
+		long nextId = 0;
+		if (resultSet.next())
+		{
+			long maxId = resultSet.getLong(1);
+			nextId = maxId + 1;
+		}
+		resultSet.close();
+		stmt.close();
+		return nextId;
+	}
+
+	/**
+	 *
+	 * @param tablename
+	 * @param column
+	 * @return
+	 * @throws SQLException
+	 */
+	private Long getRoleId(String tablename, String column) throws SQLException
+	{
+		final Statement stmt = this.connection.createStatement();
+		String sql = "select target_role_id from dyextn_association where identifier in (select de_association_id from intra_model_association where association_id = (select intermediate_path from path where first_entity_id = (select identifier from dyextn_abstract_metadata where name = 'edu.wustl.catissuecore.domain.SpecimenArrayContent') and last_entity_id = (select identifier from dyextn_abstract_metadata where name = 'edu.wustl.catissuecore.domain.SpecimenArray')))";
 		ResultSet resultSet = stmt.executeQuery(sql);
 		long nextId = 0;
 		if (resultSet.next())
