@@ -2438,7 +2438,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	 */
 	//Bug17288
 	private void setSpecimenPosition(Specimen newSpecimen, DAO dao,
-			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen, 
+			SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen,
 			Integer pos1, Integer pos2) throws BizLogicException
 	{
 		this.setStorageLocationToNewSpecimen(dao, newSpecimen, sessionDataBean, true,pos1,pos2);
@@ -4155,10 +4155,30 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			for(int i=0;i<array.length;i++)
 			{
 				final Specimen newSpecimen = (Specimen) array[i];
+				String newSpecContName = "";
+				Long newSpecContId = 0l;
 				if(newSpecimen.getSpecimenPosition()!=null)
 				{
+					newSpecContName= newSpecimen.getSpecimenPosition().getStorageContainer().getName();
+					newSpecContId = newSpecimen.getSpecimenPosition().getStorageContainer().getId();
 				   position1 = newSpecimen.getSpecimenPosition().getPositionDimensionOne();
 				   position2 = newSpecimen.getSpecimenPosition().getPositionDimensionTwo();
+				}
+//				final Specimen newSpecimen = (Specimen) iterator.next();
+				if(((position1 == null || position2 == null) && i!=0))
+				{
+				    //bug 15448
+					if(((Specimen) array[i-1]).getSpecimenPosition() != null)
+					{
+						String prevSpecContName = ((Specimen) array[i-1]).getSpecimenPosition().getStorageContainer().getName();
+						Long precSpecContId = ((Specimen) array[i-1]).getSpecimenPosition().getStorageContainer().getId();
+						if(isContNameEqual(newSpecContName, prevSpecContName)
+								|| isContIdEqual(newSpecContId, precSpecContId))
+						{
+							position1 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionOne();
+							position2 = ((Specimen) array[i-1]).getSpecimenPosition().getPositionDimensionTwo();
+						}
+					}
 				}
 				this.setSpecimenStorageRecursively(newSpecimen, dao, sessionDataBean, true,
 							position1,position2);
@@ -4180,6 +4200,28 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			this.storageContainerIds.clear();
 		}
+	}
+
+	/**
+	 * @param newSpecContId
+	 * @param precSpecContId
+	 * @return
+	 */
+	private boolean isContIdEqual(Long newSpecContId, Long precSpecContId)
+	{
+		return (newSpecContId != null && newSpecContId != 0 && precSpecContId != null && precSpecContId != 0
+				&& precSpecContId == newSpecContId);
+	}
+
+	/**
+	 * @param newSpecContName
+	 * @param prevSpecContName
+	 * @return
+	 */
+	private boolean isContNameEqual(String newSpecContName, String prevSpecContName)
+	{
+		return (!Validator.isEmpty(newSpecContName) && !Validator.isEmpty(prevSpecContName) &&
+				newSpecContName.equals(prevSpecContName));
 	}
 
 	// Bug 11481 S
