@@ -2899,6 +2899,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					while (aliquotItert.hasNext())
 					{
 						final Specimen tempAliquot = (Specimen) aliquotItert.next();
+						this.validateLable(aliquotsCollection,isLabelOnForCP);
 						if(scg != null)
 						{
 							tempAliquot.setSpecimenCollectionGroup(scg);
