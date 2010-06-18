@@ -1212,6 +1212,7 @@
 								<label for="parentSpecimenId">
 									<%=form.getParentSpecimenName()%>
 								</label>
+
  			        	  </td>
 				</logic:equal>
 
@@ -1294,8 +1295,10 @@
 
 				<%}
 							else  if((!form.isGenerateLabel() && Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
+
 				{
 				%>
+
 						<tr>
 							<td align="center" class="black_ar">
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
@@ -1601,6 +1604,9 @@
 								</td>
 							</tr>
 			</logic:equal>
+			<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+			<html:hidden property="collectionStatus"/>
+			</logic:notEqual>
 			<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 							<tr>
 								<td align="center" class="black_ar">
