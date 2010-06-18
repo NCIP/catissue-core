@@ -25,8 +25,19 @@ public interface LabelGenerator
 	 * @param object Object for which label will be generated
 	 */
 	void setLabel(List object) throws LabelGenException;
-
+	/**
+	 * Set Label.
+	 * @param object Collection of AbstractDomainObject
+	 * @throws LabelGenException LabelGenException
+	 */
 	void setLabel(Collection<AbstractDomainObject> object) throws LabelGenException;
+	/**
+	 * Set Label for given Object.
+	 * @param object Object for which label will be generated
+	 * @param ignoreCollectedStatus boolean to ignore collected status and generate label
+	 * @throws LabelGenException LabelGenException
+	 */
+	void setLabel(Object object, boolean ignoreCollectedStatus) throws LabelGenException;
 	/**
 	 * Returns Label for given Object.
 	 * @param object -Object for which label will be returned

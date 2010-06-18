@@ -248,4 +248,10 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 				this.setLabel(newSpecimen);
 			}
 	}
+
+	public void setLabel(Object object, boolean ignoreCollectedStatus) throws LabelGenException
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

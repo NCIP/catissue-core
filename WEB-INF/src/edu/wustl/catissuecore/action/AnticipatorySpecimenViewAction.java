@@ -36,6 +36,8 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.namegenerator.CustomSpecimenLabelGenerator;
+import edu.wustl.catissuecore.namegenerator.LabelGenerator;
+import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.IdComparator;
@@ -682,11 +684,12 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 					{
 						if (specimen.getLineage().equals(Constants.ALIQUOT))
 						{
-							CustomSpecimenLabelGenerator labelGenerator;
 							try
 							{
-								labelGenerator = new CustomSpecimenLabelGenerator();
-								labelGenerator.setLabel(specimen, true);
+								final LabelGenerator spLblGenerator;
+								spLblGenerator = LabelGeneratorFactory
+								.getInstance(Constants.CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
+								spLblGenerator.setLabel(specimen, true);
 							}
 							catch (NameGeneratorException exp)
 							{
@@ -696,10 +699,6 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 									specimen.setLabel(specimen.getParentSpecimen().getLabel() + "_"
 											+ (++lastChildNo));
 								}
-							}
-							catch (ApplicationException appExp)
-							{
-								LOGGER.error(appExp.getMessage(), appExp);
 							}
 						}
 						else if (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN))

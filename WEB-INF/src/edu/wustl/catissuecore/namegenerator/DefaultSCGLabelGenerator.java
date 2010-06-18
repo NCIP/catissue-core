@@ -108,4 +108,10 @@ public class DefaultSCGLabelGenerator implements LabelGenerator
 		// TODO Auto-generated method stub
 
 	}
+
+	public void setLabel(Object object, boolean ignoreCollectedStatus) throws LabelGenException
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }
