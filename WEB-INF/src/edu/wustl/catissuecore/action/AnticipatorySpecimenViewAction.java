@@ -693,27 +693,6 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 								}
 							}
 						}
-//							try
-//							{
-//								final LabelGenerator spLblGenerator;
-//								spLblGenerator = LabelGeneratorFactory
-//								.getInstance(Constants.CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-//								spLblGenerator.setLabel(specimen, true);
-//							}
-//							catch (NameGeneratorException exp)
-//							{
-//								//bug17378
-//								if (specimen.getParentSpecimen().getLabel() != null)
-//								{
-//									specimen.setLabel(specimen.getParentSpecimen().getLabel() + "_"
-//											+ (++lastChildNo));
-//								}
-//							}
-//						}
-//						else if (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
-//						{
-//							specimen.setLabel(specimen.getLabel());
-//						}
 					}
 				}
 			}
