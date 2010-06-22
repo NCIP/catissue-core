@@ -684,16 +684,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 					{
 						if (specimen.getLineage().equals(Constants.ALIQUOT))
 						{
-							try
+							if(!isGenLabel(specimen))
 							{
-								final LabelGenerator spLblGenerator;
-								spLblGenerator = LabelGeneratorFactory
-								.getInstance(Constants.CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-								spLblGenerator.setLabel(specimen, true);
-							}
-							catch (NameGeneratorException exp)
-							{
-								//bug17378
 								if (specimen.getParentSpecimen().getLabel() != null)
 								{
 									specimen.setLabel(specimen.getParentSpecimen().getLabel() + "_"
@@ -701,10 +693,27 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 								}
 							}
 						}
-						else if (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
-						{
-							specimen.setLabel(specimen.getLabel());
-						}
+//							try
+//							{
+//								final LabelGenerator spLblGenerator;
+//								spLblGenerator = LabelGeneratorFactory
+//								.getInstance(Constants.CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
+//								spLblGenerator.setLabel(specimen, true);
+//							}
+//							catch (NameGeneratorException exp)
+//							{
+//								//bug17378
+//								if (specimen.getParentSpecimen().getLabel() != null)
+//								{
+//									specimen.setLabel(specimen.getParentSpecimen().getLabel() + "_"
+//											+ (++lastChildNo));
+//								}
+//							}
+//						}
+//						else if (specimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
+//						{
+//							specimen.setLabel(specimen.getLabel());
+//						}
 					}
 				}
 			}
