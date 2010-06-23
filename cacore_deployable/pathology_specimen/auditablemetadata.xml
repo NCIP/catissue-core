@@ -1,425 +1,699 @@
 <?xml version='1.0' encoding='utf-8'?>
 <AuditableMetaData>
-<AuditableClass className="pathology_specimen.AdditionalPathologicFinding" relationShipType="main" roleName="">
-	<attribute name="comments" dataType="java.lang.String" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenDetails1Impl" relationShipType="main" roleName="">
+	<attribute name="detail" dataType="java.lang.String" />
+	<attribute name="additionalPathologicFinding" dataType="edu.wustl.catissuecore.domain.Biomarker.AdditionalPathologicFinding" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenHistologicTypeImpl" relationShipType="main" roleName="">
+	<attribute name="SpecimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="type" dataType="java.lang.String" />
 		<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.Assay" relationShipType="main" roleName="">
-	<attribute name="specimenAnnotation" dataType="pathology_specimen.SpecimenAnnotation" />
-		<attribute name="assayKit" dataType="pathology_specimen.AssayKit" />
-	<attribute name="date" dataType="java.util.Date" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.CNSSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.AssayKit" relationShipType="main" roleName="">
-	<attribute name="kitName" dataType="java.lang.String" />
-	<attribute name="lotNumber" dataType="java.lang.String" />
-	<attribute name="assay" dataType="pathology_specimen.Assay" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.KidneySpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.Biomarker" relationShipType="main" roleName="">
-	<attribute name="assay" dataType="pathology_specimen.Assay" />
-	<attribute name="unitOfMeasurement" dataType="java.lang.String" />
-	<attribute name="biomarkerQualitativeValue" dataType="java.lang.String" />
-	<attribute name="biomarkerQuantitativeValue" dataType="java.lang.Float" />
-	<attribute name="id" dataType="java.lang.Long" />
-	<attribute name="biomarkerName" dataType="java.lang.String" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.BreastSpecimenNottinghamHistologicScore" relationShipType="main" roleName="">
-	<attribute name="mitoticCountScore" dataType="java.lang.String" />
-	<attribute name="nuclearPleomorphismScore" dataType="java.lang.String" />
-	<attribute name="tubuleFormationScore" dataType="java.lang.String" />
-	<attribute name="totalNottinghamScore" dataType="java.lang.Long" />
-	<attribute name="breastSpecimenPathologyAnnotation" dataType="pathology_specimen.BreastSpecimenPathologyAnnotation" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.BreastSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="mitoticCountIfOtherGradingSystemUsed" dataType="java.lang.Long" />
-	<attribute name="breastSpecimenNottinghamHistologicScore" dataType="pathology_specimen.BreastSpecimenNottinghamHistologicScore" />
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.SpecimenRecordEntry" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.CNSSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.SpecimenRecordEntry" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ColorectalSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="tumorBorderConfiguration" dataType="java.lang.String" />
-	<attribute name="intratumoralPeritumoralLymphocyticResponse" dataType="java.lang.String" />
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.SpecimenRecordEntry" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.AdditionalPathologicFindingImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.AssayImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.AssayKitImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.BiomarkerImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.BreastSpecimenNottinghamHistologicScoreImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.BreastSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.CNSSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.ColorectalSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.KidneySpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.LungSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.MelanomaSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.PancreasSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.ProstateSpecimenGleasonScoreImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.ProstateSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenAdditionalFindingImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenBaseSolidTissuePathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenDetails1Impl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenDetailsImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenGleasonScoreImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenHistologicGradeImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenHistologicTypeImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenHistologicVariantTypeImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenInvasionImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenLabAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenNottinghamHistologicScoreImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.impl.SpecimenRecordEntryImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.KidneySpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.SpecimenRecordEntry" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.LungSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.SpecimenRecordEntry" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.MelanomaSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.MelanomaSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
 	<attribute name="depthOfInvasionCannotBeDetermined" dataType="java.lang.Boolean" />
-	<attribute name="tumorRegression" dataType="java.lang.String" />
+			<attribute name="tumorRegression" dataType="java.lang.String" />
 	<attribute name="depthOfInvasion" dataType="java.lang.Double" />
 	<attribute name="id" dataType="java.lang.Long" />
 	<attribute name="tumorInfiltratingLymphocytes" dataType="java.lang.String" />
 	<attribute name="mitoticIndex" dataType="java.lang.String" />
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.SpecimenRecordEntry" />
+		<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
 	<attribute name="ulceration" dataType="java.lang.String" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.PancreasSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.SpecimenRecordEntry" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ProstateSpecimenGleasonScore" relationShipType="main" roleName="">
-	<attribute name="prostateSpecimenPathologyAnnotation" dataType="pathology_specimen.ProstateSpecimenPathologyAnnotation" />
-	<attribute name="secondaryPatternScore" dataType="java.lang.String" />
-	<attribute name="tertiaryPatternScore" dataType="java.lang.String" />
-	<attribute name="primaryPatternScore" dataType="java.lang.String" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ProstateSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="proportionOrPercentOfProstaticTissueInvolvedByTumor" dataType="java.lang.Double" />
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.SpecimenRecordEntry" />
-	<attribute name="prostateSpecimenGleasonScore" dataType="pathology_specimen.ProstateSpecimenGleasonScore" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenAdditionalFinding" relationShipType="main" roleName="">
-	<attribute name="SpecimenBaseSolidTissuePathologyAnnotation" dataType="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation" />
-	<attribute name="pathologicFinding" dataType="java.lang.String" />
-	<attribute name="id" dataType="java.lang.Long" />
-	</AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenAnnotation" relationShipType="main" roleName="">
-			<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.SpecimenRecordEntry" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.PancreasSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
 				<attribute name="Comments" dataType="java.lang.String" />
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.SpecimenRecordEntry" />
-	<attribute name="invasion" dataType="pathology_specimen.SpecimenInvasion" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenDetails" relationShipType="main" roleName="">
-	<attribute name="AdditionalFinding" dataType="pathology_specimen.SpecimenAdditionalFinding" />
-	<attribute name="details" dataType="java.lang.String" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.ProstateSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+	<attribute name="proportionOrPercentOfProstaticTissueInvolvedByTumor" dataType="java.lang.Double" />
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+	<attribute name="prostateSpecimenGleasonScore" dataType="edu.wustl.catissuecore.domain.Biomarker.ProstateSpecimenGleasonScore" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenDetails1" relationShipType="main" roleName="">
-	<attribute name="detail" dataType="java.lang.String" />
-	<attribute name="additionalPathologicFinding" dataType="pathology_specimen.AdditionalPathologicFinding" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenGleasonScore" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenGleasonScoreImpl" relationShipType="main" roleName="">
 	<attribute name="secondaryPatternScore" dataType="java.lang.Integer" />
 	<attribute name="tertiaryPatternScore" dataType="java.lang.Integer" />
 	<attribute name="primaryPatternScore" dataType="java.lang.Integer" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenHistologicGrade" relationShipType="main" roleName="">
-	<attribute name="specimenBaseSolidTissuePathologyAnnotation" dataType="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation" />
-	<attribute name="grade" dataType="java.lang.String" />
-	<attribute name="otherGradingSystemName" dataType="java.lang.String" />
-	<attribute name="gradingSystemName" dataType="java.lang.String" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenHistologicType" relationShipType="main" roleName="">
-	<attribute name="SpecimenBaseSolidTissuePathologyAnnotation" dataType="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation" />
-	<attribute name="type" dataType="java.lang.String" />
-		<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenHistologicVariantType" relationShipType="main" roleName="">
-	<attribute name="otherHistologicType" dataType="java.lang.String" />
-	<attribute name="HistologicType" dataType="pathology_specimen.SpecimenHistologicType" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenInvasion" relationShipType="main" roleName="">
-	<attribute name="venousInvasion" dataType="java.lang.String" />
-	<attribute name="perineuralInvasion" dataType="java.lang.String" />
-	<attribute name="specimenBaseSolidTissuePathologyAnnotation" dataType="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation" />
-	<attribute name="id" dataType="java.lang.Long" />
-	<attribute name="lymphaticInvasion" dataType="java.lang.String" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenLabAnnotation" relationShipType="main" roleName="">
-	<attribute name="specimenAnnotation" dataType="pathology_specimen.SpecimenAnnotation" />
-	<attribute name="otherLabTestName" dataType="java.lang.String" />
-	<attribute name="result" dataType="java.lang.String" />
-	<attribute name="testDate" dataType="java.util.Date" />
-	<attribute name="resultUnits" dataType="java.lang.String" />
-	<attribute name="id" dataType="java.lang.Long" />
-	<attribute name="labTestName" dataType="java.lang.String" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenNottinghamHistologicScore" relationShipType="main" roleName="">
-	<attribute name="mitoticCountScore" dataType="java.lang.Integer" />
-	<attribute name="nuclearPleomorphismScore" dataType="java.lang.Integer" />
-	<attribute name="tubuleFormationScore" dataType="java.lang.Integer" />
-	<attribute name="totalNottinghamScore" dataType="java.lang.Integer" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.SpecimenRecordEntry" relationShipType="main" roleName="">
-										<attribute name="id" dataType="java.lang.Long" />
-	</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.AdditionalPathologicFinding" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.AdditionalPathologicFindingImpl" relationShipType="main" roleName="">
 	<attribute name="comments" dataType="java.lang.String" />
 		<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.AdditionalPathologicFindingImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.Assay" relationShipType="main" roleName="">
-	<attribute name="specimenAnnotation" dataType="pathology_specimen.ws.SpecimenAnnotation" />
-		<attribute name="assayKit" dataType="pathology_specimen.ws.AssayKit" />
-	<attribute name="date" dataType="java.util.Date" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.AssayImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.AssayKit" relationShipType="main" roleName="">
-	<attribute name="kitName" dataType="java.lang.String" />
-	<attribute name="lotNumber" dataType="java.lang.String" />
-	<attribute name="assay" dataType="pathology_specimen.ws.Assay" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.AssayKitImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.Biomarker" relationShipType="main" roleName="">
-	<attribute name="assay" dataType="pathology_specimen.ws.Assay" />
-	<attribute name="unitOfMeasurement" dataType="java.lang.String" />
-	<attribute name="biomarkerQualitativeValue" dataType="java.lang.String" />
-	<attribute name="biomarkerQuantitativeValue" dataType="java.lang.Float" />
-	<attribute name="id" dataType="java.lang.Long" />
-	<attribute name="biomarkerName" dataType="java.lang.String" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.BiomarkerImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.BreastSpecimenNottinghamHistologicScore" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenRecordEntryImpl" relationShipType="main" roleName="">
+										<attribute name="id" dataType="java.lang.Long" />
+	</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.BreastSpecimenNottinghamHistologicScoreImpl" relationShipType="main" roleName="">
 	<attribute name="mitoticCountScore" dataType="java.lang.String" />
 	<attribute name="nuclearPleomorphismScore" dataType="java.lang.String" />
-	<attribute name="tubuleFormationScore" dataType="java.lang.String" />
 	<attribute name="totalNottinghamScore" dataType="java.lang.Long" />
-	<attribute name="breastSpecimenPathologyAnnotation" dataType="pathology_specimen.ws.BreastSpecimenPathologyAnnotation" />
+	<attribute name="tubuleFormationScore" dataType="java.lang.String" />
+	<attribute name="breastSpecimenPathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.BreastSpecimenPathologyAnnotation" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.BreastSpecimenNottinghamHistologicScoreImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.BreastSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="mitoticCountIfOtherGradingSystemUsed" dataType="java.lang.Long" />
-	<attribute name="breastSpecimenNottinghamHistologicScore" dataType="pathology_specimen.ws.BreastSpecimenNottinghamHistologicScore" />
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.ws.SpecimenRecordEntry" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.AssayKitImpl" relationShipType="main" roleName="">
+	<attribute name="kitName" dataType="java.lang.String" />
+	<attribute name="lotNumber" dataType="java.lang.String" />
+	<attribute name="assay" dataType="edu.wustl.catissuecore.domain.Biomarker.Assay" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.BreastSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenInvasionImpl" relationShipType="main" roleName="">
+	<attribute name="perineuralInvasion" dataType="java.lang.String" />
+	<attribute name="venousInvasion" dataType="java.lang.String" />
+	<attribute name="specimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="lymphaticInvasion" dataType="java.lang.String" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.CNSSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.ws.SpecimenRecordEntry" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenBaseSolidTissuePathologyAnnotationImpl" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.CNSSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.ColorectalSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="tumorBorderConfiguration" dataType="java.lang.String" />
-	<attribute name="intratumoralPeritumoralLymphocyticResponse" dataType="java.lang.String" />
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.ws.SpecimenRecordEntry" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.ColorectalSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.KidneySpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.ws.SpecimenRecordEntry" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.KidneySpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.LungSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.ws.SpecimenRecordEntry" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.LungSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.MelanomaSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="depthOfInvasionCannotBeDetermined" dataType="java.lang.Boolean" />
-	<attribute name="tumorRegression" dataType="java.lang.String" />
-	<attribute name="depthOfInvasion" dataType="java.lang.Double" />
-	<attribute name="id" dataType="java.lang.Long" />
-	<attribute name="tumorInfiltratingLymphocytes" dataType="java.lang.String" />
-	<attribute name="mitoticIndex" dataType="java.lang.String" />
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.ws.SpecimenRecordEntry" />
-	<attribute name="ulceration" dataType="java.lang.String" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.MelanomaSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.PancreasSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.ws.SpecimenRecordEntry" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.PancreasSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.ProstateSpecimenGleasonScore" relationShipType="main" roleName="">
-	<attribute name="prostateSpecimenPathologyAnnotation" dataType="pathology_specimen.ws.ProstateSpecimenPathologyAnnotation" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.ProstateSpecimenGleasonScoreImpl" relationShipType="main" roleName="">
+	<attribute name="prostateSpecimenPathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ProstateSpecimenPathologyAnnotation" />
 	<attribute name="secondaryPatternScore" dataType="java.lang.String" />
 	<attribute name="tertiaryPatternScore" dataType="java.lang.String" />
 	<attribute name="primaryPatternScore" dataType="java.lang.String" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.ProstateSpecimenGleasonScoreImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.ProstateSpecimenPathologyAnnotation" relationShipType="main" roleName="">
-	<attribute name="proportionOrPercentOfProstaticTissueInvolvedByTumor" dataType="java.lang.Double" />
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.ws.SpecimenRecordEntry" />
-	<attribute name="prostateSpecimenGleasonScore" dataType="pathology_specimen.ws.ProstateSpecimenGleasonScore" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.ProstateSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenAdditionalFinding" relationShipType="main" roleName="">
-	<attribute name="SpecimenBaseSolidTissuePathologyAnnotation" dataType="pathology_specimen.ws.SpecimenBaseSolidTissuePathologyAnnotation" />
-	<attribute name="pathologicFinding" dataType="java.lang.String" />
-	<attribute name="id" dataType="java.lang.Long" />
-	</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenAdditionalFindingImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenAnnotation" relationShipType="main" roleName="">
-			<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.ws.SpecimenRecordEntry" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenBaseSolidTissuePathologyAnnotation" relationShipType="main" roleName="">
-				<attribute name="Comments" dataType="java.lang.String" />
-	<attribute name="SpecimenRecordEntry" dataType="pathology_specimen.ws.SpecimenRecordEntry" />
-	<attribute name="invasion" dataType="pathology_specimen.ws.SpecimenInvasion" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenBaseSolidTissuePathologyAnnotationImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenDetails" relationShipType="main" roleName="">
-	<attribute name="AdditionalFinding" dataType="pathology_specimen.ws.SpecimenAdditionalFinding" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenDetailsImpl" relationShipType="main" roleName="">
+	<attribute name="AdditionalFinding" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenAdditionalFinding" />
 	<attribute name="details" dataType="java.lang.String" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenDetails1" relationShipType="main" roleName="">
-	<attribute name="detail" dataType="java.lang.String" />
-	<attribute name="additionalPathologicFinding" dataType="pathology_specimen.ws.AdditionalPathologicFinding" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.AssayImpl" relationShipType="main" roleName="">
+	<attribute name="specimenAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenAnnotation" />
+	<attribute name="kitName" dataType="java.lang.String" />
+		<attribute name="assayKit" dataType="edu.wustl.catissuecore.domain.Biomarker.AssayKit" />
+	<attribute name="date" dataType="java.util.Date" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenDetails1Impl" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.ColorectalSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+	<attribute name="tumorBorderConfiguration" dataType="java.lang.String" />
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="intratumoralPeritumoralLymphocyticResponse" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenDetailsImpl" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenHistologicGradeImpl" relationShipType="main" roleName="">
+	<attribute name="specimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="grade" dataType="java.lang.String" />
+	<attribute name="otherGradingSystemName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="gradingSystemName" dataType="java.lang.String" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenGleasonScore" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenLabAnnotationImpl" relationShipType="main" roleName="">
+	<attribute name="specimenAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenAnnotation" />
+	<attribute name="otherLabTestName" dataType="java.lang.String" />
+	<attribute name="result" dataType="java.lang.String" />
+	<attribute name="testDate" dataType="java.util.Date" />
+	<attribute name="resultUnits" dataType="java.lang.String" />
+	<attribute name="labTestName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenHistologicVariantTypeImpl" relationShipType="main" roleName="">
+	<attribute name="otherHistologicType" dataType="java.lang.String" />
+	<attribute name="HistologicType" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenHistologicType" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenAdditionalFindingImpl" relationShipType="main" roleName="">
+	<attribute name="SpecimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="pathologicFinding" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.BiomarkerImpl" relationShipType="main" roleName="">
+	<attribute name="assay" dataType="edu.wustl.catissuecore.domain.Biomarker.Assay" />
+	<attribute name="biomarkerQualitativeValue" dataType="java.lang.String" />
+	<attribute name="unitOfMeasurement" dataType="java.lang.String" />
+	<attribute name="biomarkerQuantitativeValue" dataType="java.lang.Float" />
+	<attribute name="biomarkerName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenNottinghamHistologicScoreImpl" relationShipType="main" roleName="">
+	<attribute name="mitoticCountScore" dataType="java.lang.Integer" />
+	<attribute name="nuclearPleomorphismScore" dataType="java.lang.Integer" />
+	<attribute name="totalNottinghamScore" dataType="java.lang.Integer" />
+	<attribute name="tubuleFormationScore" dataType="java.lang.Integer" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.SpecimenAnnotationImpl" relationShipType="main" roleName="">
+			<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.LungSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.impl.BreastSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+	<attribute name="mitoticCountIfOtherGradingSystemUsed" dataType="java.lang.Long" />
+	<attribute name="breastSpecimenNottinghamHistologicScore" dataType="edu.wustl.catissuecore.domain.Biomarker.BreastSpecimenNottinghamHistologicScore" />
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.Assay" relationShipType="main" roleName="">
+	<attribute name="specimenAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenAnnotation" />
+	<attribute name="kitName" dataType="java.lang.String" />
+		<attribute name="assayKit" dataType="edu.wustl.catissuecore.domain.Biomarker.AssayKit" />
+	<attribute name="date" dataType="java.util.Date" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenHistologicVariantType" relationShipType="main" roleName="">
+	<attribute name="otherHistologicType" dataType="java.lang.String" />
+	<attribute name="HistologicType" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenHistologicType" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.AdditionalPathologicFinding" relationShipType="main" roleName="">
+	<attribute name="comments" dataType="java.lang.String" />
+		<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenLabAnnotation" relationShipType="main" roleName="">
+	<attribute name="specimenAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenAnnotation" />
+	<attribute name="otherLabTestName" dataType="java.lang.String" />
+	<attribute name="result" dataType="java.lang.String" />
+	<attribute name="testDate" dataType="java.util.Date" />
+	<attribute name="resultUnits" dataType="java.lang.String" />
+	<attribute name="labTestName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.KidneySpecimenPathologyAnnotation" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenHistologicType" relationShipType="main" roleName="">
+	<attribute name="SpecimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="type" dataType="java.lang.String" />
+		<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.PancreasSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" relationShipType="main" roleName="">
+										<attribute name="id" dataType="java.lang.Long" />
+	</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.CNSSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenHistologicGrade" relationShipType="main" roleName="">
+	<attribute name="specimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="grade" dataType="java.lang.String" />
+	<attribute name="otherGradingSystemName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="gradingSystemName" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" relationShipType="main" roleName="">
+	<attribute name="perineuralInvasion" dataType="java.lang.String" />
+	<attribute name="venousInvasion" dataType="java.lang.String" />
+	<attribute name="specimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="lymphaticInvasion" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenDetails" relationShipType="main" roleName="">
+	<attribute name="AdditionalFinding" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenAdditionalFinding" />
+	<attribute name="details" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenBaseSolidTissuePathologyAnnotation" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.Assay" relationShipType="main" roleName="">
+	<attribute name="specimenAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenAnnotation" />
+	<attribute name="kitName" dataType="java.lang.String" />
+		<attribute name="assayKit" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.AssayKit" />
+	<attribute name="date" dataType="java.util.Date" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenHistologicVariantType" relationShipType="main" roleName="">
+	<attribute name="otherHistologicType" dataType="java.lang.String" />
+	<attribute name="HistologicType" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenHistologicType" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.AdditionalPathologicFinding" relationShipType="main" roleName="">
+	<attribute name="comments" dataType="java.lang.String" />
+		<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenDetails1Impl" relationShipType="main" roleName="">
+	<attribute name="detail" dataType="java.lang.String" />
+	<attribute name="additionalPathologicFinding" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.AdditionalPathologicFinding" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenLabAnnotation" relationShipType="main" roleName="">
+	<attribute name="specimenAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenAnnotation" />
+	<attribute name="otherLabTestName" dataType="java.lang.String" />
+	<attribute name="result" dataType="java.lang.String" />
+	<attribute name="testDate" dataType="java.util.Date" />
+	<attribute name="resultUnits" dataType="java.lang.String" />
+	<attribute name="labTestName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenHistologicTypeImpl" relationShipType="main" roleName="">
+	<attribute name="SpecimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="type" dataType="java.lang.String" />
+		<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.CNSSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.KidneySpecimenPathologyAnnotation" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenHistologicType" relationShipType="main" roleName="">
+	<attribute name="SpecimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="type" dataType="java.lang.String" />
+		<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.KidneySpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.PancreasSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" relationShipType="main" roleName="">
+										<attribute name="id" dataType="java.lang.Long" />
+	</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.CNSSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenHistologicGrade" relationShipType="main" roleName="">
+	<attribute name="specimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="grade" dataType="java.lang.String" />
+	<attribute name="otherGradingSystemName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="gradingSystemName" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.MelanomaSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+	<attribute name="depthOfInvasionCannotBeDetermined" dataType="java.lang.Boolean" />
+			<attribute name="tumorRegression" dataType="java.lang.String" />
+	<attribute name="depthOfInvasion" dataType="java.lang.Double" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="tumorInfiltratingLymphocytes" dataType="java.lang.String" />
+	<attribute name="mitoticIndex" dataType="java.lang.String" />
+		<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="ulceration" dataType="java.lang.String" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.PancreasSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.ProstateSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+	<attribute name="proportionOrPercentOfProstaticTissueInvolvedByTumor" dataType="java.lang.Double" />
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="prostateSpecimenGleasonScore" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.ProstateSpecimenGleasonScore" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" relationShipType="main" roleName="">
+	<attribute name="perineuralInvasion" dataType="java.lang.String" />
+	<attribute name="venousInvasion" dataType="java.lang.String" />
+	<attribute name="specimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="lymphaticInvasion" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenDetails" relationShipType="main" roleName="">
+	<attribute name="AdditionalFinding" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenAdditionalFinding" />
+	<attribute name="details" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenGleasonScoreImpl" relationShipType="main" roleName="">
 	<attribute name="secondaryPatternScore" dataType="java.lang.Integer" />
 	<attribute name="tertiaryPatternScore" dataType="java.lang.Integer" />
 	<attribute name="primaryPatternScore" dataType="java.lang.Integer" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenGleasonScoreImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenHistologicGrade" relationShipType="main" roleName="">
-	<attribute name="specimenBaseSolidTissuePathologyAnnotation" dataType="pathology_specimen.ws.SpecimenBaseSolidTissuePathologyAnnotation" />
-	<attribute name="grade" dataType="java.lang.String" />
-	<attribute name="otherGradingSystemName" dataType="java.lang.String" />
-	<attribute name="gradingSystemName" dataType="java.lang.String" />
-	<attribute name="id" dataType="java.lang.Long" />
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenHistologicGradeImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenHistologicType" relationShipType="main" roleName="">
-	<attribute name="SpecimenBaseSolidTissuePathologyAnnotation" dataType="pathology_specimen.ws.SpecimenBaseSolidTissuePathologyAnnotation" />
-	<attribute name="type" dataType="java.lang.String" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.AdditionalPathologicFindingImpl" relationShipType="main" roleName="">
+	<attribute name="comments" dataType="java.lang.String" />
 		<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenHistologicTypeImpl" relationShipType="main" roleName="">
-</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenHistologicVariantType" relationShipType="main" roleName="">
-	<attribute name="otherHistologicType" dataType="java.lang.String" />
-	<attribute name="HistologicType" dataType="pathology_specimen.ws.SpecimenHistologicType" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntryImpl" relationShipType="main" roleName="">
+										<attribute name="id" dataType="java.lang.Long" />
+	</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenBaseSolidTissuePathologyAnnotation" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenHistologicVariantTypeImpl" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.BreastSpecimenNottinghamHistologicScoreImpl" relationShipType="main" roleName="">
+	<attribute name="mitoticCountScore" dataType="java.lang.String" />
+	<attribute name="nuclearPleomorphismScore" dataType="java.lang.String" />
+	<attribute name="totalNottinghamScore" dataType="java.lang.Long" />
+	<attribute name="tubuleFormationScore" dataType="java.lang.String" />
+	<attribute name="breastSpecimenPathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.BreastSpecimenPathologyAnnotation" />
+	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenInvasion" relationShipType="main" roleName="">
-	<attribute name="venousInvasion" dataType="java.lang.String" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.AssayKitImpl" relationShipType="main" roleName="">
+	<attribute name="kitName" dataType="java.lang.String" />
+	<attribute name="lotNumber" dataType="java.lang.String" />
+	<attribute name="assay" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.Assay" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.AssayKit" relationShipType="main" roleName="">
+	<attribute name="kitName" dataType="java.lang.String" />
+	<attribute name="lotNumber" dataType="java.lang.String" />
+	<attribute name="assay" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.Assay" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.BreastSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+	<attribute name="mitoticCountIfOtherGradingSystemUsed" dataType="java.lang.Long" />
+	<attribute name="breastSpecimenNottinghamHistologicScore" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.BreastSpecimenNottinghamHistologicScore" />
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenAnnotation" relationShipType="main" roleName="">
+			<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasionImpl" relationShipType="main" roleName="">
 	<attribute name="perineuralInvasion" dataType="java.lang.String" />
-	<attribute name="specimenBaseSolidTissuePathologyAnnotation" dataType="pathology_specimen.ws.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="venousInvasion" dataType="java.lang.String" />
+	<attribute name="specimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenBaseSolidTissuePathologyAnnotation" />
 	<attribute name="id" dataType="java.lang.Long" />
 	<attribute name="lymphaticInvasion" dataType="java.lang.String" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenInvasionImpl" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.ProstateSpecimenGleasonScore" relationShipType="main" roleName="">
+	<attribute name="prostateSpecimenPathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.ProstateSpecimenPathologyAnnotation" />
+	<attribute name="secondaryPatternScore" dataType="java.lang.String" />
+	<attribute name="tertiaryPatternScore" dataType="java.lang.String" />
+	<attribute name="primaryPatternScore" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenLabAnnotation" relationShipType="main" roleName="">
-	<attribute name="specimenAnnotation" dataType="pathology_specimen.ws.SpecimenAnnotation" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.LungSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenBaseSolidTissuePathologyAnnotationImpl" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.MelanomaSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+	<attribute name="depthOfInvasionCannotBeDetermined" dataType="java.lang.Boolean" />
+			<attribute name="tumorRegression" dataType="java.lang.String" />
+	<attribute name="depthOfInvasion" dataType="java.lang.Double" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="tumorInfiltratingLymphocytes" dataType="java.lang.String" />
+	<attribute name="mitoticIndex" dataType="java.lang.String" />
+		<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="ulceration" dataType="java.lang.String" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenAdditionalFinding" relationShipType="main" roleName="">
+	<attribute name="SpecimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="pathologicFinding" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.ProstateSpecimenGleasonScoreImpl" relationShipType="main" roleName="">
+	<attribute name="prostateSpecimenPathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.ProstateSpecimenPathologyAnnotation" />
+	<attribute name="secondaryPatternScore" dataType="java.lang.String" />
+	<attribute name="tertiaryPatternScore" dataType="java.lang.String" />
+	<attribute name="primaryPatternScore" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenDetailsImpl" relationShipType="main" roleName="">
+	<attribute name="AdditionalFinding" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenAdditionalFinding" />
+	<attribute name="details" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.AssayImpl" relationShipType="main" roleName="">
+	<attribute name="specimenAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenAnnotation" />
+	<attribute name="kitName" dataType="java.lang.String" />
+		<attribute name="assayKit" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.AssayKit" />
+	<attribute name="date" dataType="java.util.Date" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.ColorectalSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+	<attribute name="tumorBorderConfiguration" dataType="java.lang.String" />
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="intratumoralPeritumoralLymphocyticResponse" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenHistologicGradeImpl" relationShipType="main" roleName="">
+	<attribute name="specimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="grade" dataType="java.lang.String" />
+	<attribute name="otherGradingSystemName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="gradingSystemName" dataType="java.lang.String" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenLabAnnotationImpl" relationShipType="main" roleName="">
+	<attribute name="specimenAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenAnnotation" />
 	<attribute name="otherLabTestName" dataType="java.lang.String" />
 	<attribute name="result" dataType="java.lang.String" />
 	<attribute name="testDate" dataType="java.util.Date" />
 	<attribute name="resultUnits" dataType="java.lang.String" />
-	<attribute name="id" dataType="java.lang.Long" />
 	<attribute name="labTestName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenLabAnnotationImpl" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.BreastSpecimenNottinghamHistologicScore" relationShipType="main" roleName="">
+	<attribute name="mitoticCountScore" dataType="java.lang.String" />
+	<attribute name="nuclearPleomorphismScore" dataType="java.lang.String" />
+	<attribute name="totalNottinghamScore" dataType="java.lang.Long" />
+	<attribute name="tubuleFormationScore" dataType="java.lang.String" />
+	<attribute name="breastSpecimenPathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.BreastSpecimenPathologyAnnotation" />
+	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenNottinghamHistologicScore" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.ColorectalSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+	<attribute name="tumorBorderConfiguration" dataType="java.lang.String" />
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="intratumoralPeritumoralLymphocyticResponse" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.ProstateSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+	<attribute name="proportionOrPercentOfProstaticTissueInvolvedByTumor" dataType="java.lang.Double" />
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="prostateSpecimenGleasonScore" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.ProstateSpecimenGleasonScore" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenNottinghamHistologicScore" relationShipType="main" roleName="">
 	<attribute name="mitoticCountScore" dataType="java.lang.Integer" />
 	<attribute name="nuclearPleomorphismScore" dataType="java.lang.Integer" />
-	<attribute name="tubuleFormationScore" dataType="java.lang.Integer" />
 	<attribute name="totalNottinghamScore" dataType="java.lang.Integer" />
+	<attribute name="tubuleFormationScore" dataType="java.lang.Integer" />
 	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenNottinghamHistologicScoreImpl" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenHistologicVariantTypeImpl" relationShipType="main" roleName="">
+	<attribute name="otherHistologicType" dataType="java.lang.String" />
+	<attribute name="HistologicType" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenHistologicType" />
+	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenRecordEntry" relationShipType="main" roleName="">
-										<attribute name="id" dataType="java.lang.Long" />
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenAdditionalFindingImpl" relationShipType="main" roleName="">
+	<attribute name="SpecimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="pathologicFinding" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
 	</AuditableClass>
-<AuditableClass className="pathology_specimen.ws.SpecimenRecordEntryImpl" relationShipType="main" roleName="">
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenDetails1" relationShipType="main" roleName="">
+	<attribute name="detail" dataType="java.lang.String" />
+	<attribute name="additionalPathologicFinding" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.AdditionalPathologicFinding" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.BiomarkerImpl" relationShipType="main" roleName="">
+	<attribute name="assay" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.Assay" />
+	<attribute name="biomarkerQualitativeValue" dataType="java.lang.String" />
+	<attribute name="unitOfMeasurement" dataType="java.lang.String" />
+	<attribute name="biomarkerQuantitativeValue" dataType="java.lang.Float" />
+	<attribute name="biomarkerName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenNottinghamHistologicScoreImpl" relationShipType="main" roleName="">
+	<attribute name="mitoticCountScore" dataType="java.lang.Integer" />
+	<attribute name="nuclearPleomorphismScore" dataType="java.lang.Integer" />
+	<attribute name="totalNottinghamScore" dataType="java.lang.Integer" />
+	<attribute name="tubuleFormationScore" dataType="java.lang.Integer" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenGleasonScore" relationShipType="main" roleName="">
+	<attribute name="secondaryPatternScore" dataType="java.lang.Integer" />
+	<attribute name="tertiaryPatternScore" dataType="java.lang.Integer" />
+	<attribute name="primaryPatternScore" dataType="java.lang.Integer" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenAnnotationImpl" relationShipType="main" roleName="">
+			<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.Biomarker" relationShipType="main" roleName="">
+	<attribute name="assay" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.Assay" />
+	<attribute name="biomarkerQualitativeValue" dataType="java.lang.String" />
+	<attribute name="unitOfMeasurement" dataType="java.lang.String" />
+	<attribute name="biomarkerQuantitativeValue" dataType="java.lang.Float" />
+	<attribute name="biomarkerName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.LungSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ws.BreastSpecimenPathologyAnnotationImpl" relationShipType="main" roleName="">
+	<attribute name="mitoticCountIfOtherGradingSystemUsed" dataType="java.lang.Long" />
+	<attribute name="breastSpecimenNottinghamHistologicScore" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.BreastSpecimenNottinghamHistologicScore" />
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.ws.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.AssayKit" relationShipType="main" roleName="">
+	<attribute name="kitName" dataType="java.lang.String" />
+	<attribute name="lotNumber" dataType="java.lang.String" />
+	<attribute name="assay" dataType="edu.wustl.catissuecore.domain.Biomarker.Assay" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.BreastSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+	<attribute name="mitoticCountIfOtherGradingSystemUsed" dataType="java.lang.Long" />
+	<attribute name="breastSpecimenNottinghamHistologicScore" dataType="edu.wustl.catissuecore.domain.Biomarker.BreastSpecimenNottinghamHistologicScore" />
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenAnnotation" relationShipType="main" roleName="">
+			<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ProstateSpecimenGleasonScore" relationShipType="main" roleName="">
+	<attribute name="prostateSpecimenPathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.ProstateSpecimenPathologyAnnotation" />
+	<attribute name="secondaryPatternScore" dataType="java.lang.String" />
+	<attribute name="tertiaryPatternScore" dataType="java.lang.String" />
+	<attribute name="primaryPatternScore" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.LungSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.MelanomaSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+	<attribute name="depthOfInvasionCannotBeDetermined" dataType="java.lang.Boolean" />
+			<attribute name="tumorRegression" dataType="java.lang.String" />
+	<attribute name="depthOfInvasion" dataType="java.lang.Double" />
+	<attribute name="id" dataType="java.lang.Long" />
+	<attribute name="tumorInfiltratingLymphocytes" dataType="java.lang.String" />
+	<attribute name="mitoticIndex" dataType="java.lang.String" />
+		<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="ulceration" dataType="java.lang.String" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenAdditionalFinding" relationShipType="main" roleName="">
+	<attribute name="SpecimenBaseSolidTissuePathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenBaseSolidTissuePathologyAnnotation" />
+	<attribute name="pathologicFinding" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
+	</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.BreastSpecimenNottinghamHistologicScore" relationShipType="main" roleName="">
+	<attribute name="mitoticCountScore" dataType="java.lang.String" />
+	<attribute name="nuclearPleomorphismScore" dataType="java.lang.String" />
+	<attribute name="totalNottinghamScore" dataType="java.lang.Long" />
+	<attribute name="tubuleFormationScore" dataType="java.lang.String" />
+	<attribute name="breastSpecimenPathologyAnnotation" dataType="edu.wustl.catissuecore.domain.Biomarker.BreastSpecimenPathologyAnnotation" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ColorectalSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+	<attribute name="tumorBorderConfiguration" dataType="java.lang.String" />
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="intratumoralPeritumoralLymphocyticResponse" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.ProstateSpecimenPathologyAnnotation" relationShipType="main" roleName="">
+	<attribute name="proportionOrPercentOfProstaticTissueInvolvedByTumor" dataType="java.lang.Double" />
+				<attribute name="Comments" dataType="java.lang.String" />
+	<attribute name="SpecimenRecordEntry" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenRecordEntry" />
+	<attribute name="invasion" dataType="edu.wustl.catissuecore.domain.Biomarker.SpecimenInvasion" />
+	<attribute name="prostateSpecimenGleasonScore" dataType="edu.wustl.catissuecore.domain.Biomarker.ProstateSpecimenGleasonScore" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenNottinghamHistologicScore" relationShipType="main" roleName="">
+	<attribute name="mitoticCountScore" dataType="java.lang.Integer" />
+	<attribute name="nuclearPleomorphismScore" dataType="java.lang.Integer" />
+	<attribute name="totalNottinghamScore" dataType="java.lang.Integer" />
+	<attribute name="tubuleFormationScore" dataType="java.lang.Integer" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenDetails1" relationShipType="main" roleName="">
+	<attribute name="detail" dataType="java.lang.String" />
+	<attribute name="additionalPathologicFinding" dataType="edu.wustl.catissuecore.domain.Biomarker.AdditionalPathologicFinding" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.SpecimenGleasonScore" relationShipType="main" roleName="">
+	<attribute name="secondaryPatternScore" dataType="java.lang.Integer" />
+	<attribute name="tertiaryPatternScore" dataType="java.lang.Integer" />
+	<attribute name="primaryPatternScore" dataType="java.lang.Integer" />
+	<attribute name="id" dataType="java.lang.Long" />
+</AuditableClass>
+<AuditableClass className="edu.wustl.catissuecore.domain.Biomarker.Biomarker" relationShipType="main" roleName="">
+	<attribute name="assay" dataType="edu.wustl.catissuecore.domain.Biomarker.Assay" />
+	<attribute name="biomarkerQualitativeValue" dataType="java.lang.String" />
+	<attribute name="unitOfMeasurement" dataType="java.lang.String" />
+	<attribute name="biomarkerQuantitativeValue" dataType="java.lang.Float" />
+	<attribute name="biomarkerName" dataType="java.lang.String" />
+	<attribute name="id" dataType="java.lang.Long" />
 </AuditableClass>
 </AuditableMetaData>
