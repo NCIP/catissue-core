@@ -472,17 +472,17 @@ public class SaveSpecimenRequirementAction extends BaseAction
 
 		if (totalNewDeriveSpecimen > 0)
 		{
-//			for (int iCount = 0; iCount < noOfBeanDerive; iCount++)
-//			{
-//				deriveSpecimenMap.remove(keyArr[iCount]);
-//			}
+			for (int iCount = 0; iCount < noOfBeanDerive; iCount++)
+			{
+				deriveSpecimenMap.remove(keyArr[iCount]);
+			}
 			if (oldDeriveSpecimenMap == null)
 			{
 				oldDeriveSpecimenMap = new LinkedHashMap();
 			}
 			oldDeriveSpecimenMap.putAll(deriveSpecimenMap);
-//			specimenRequirementBean.setDeriveSpecimenCollection(oldDeriveSpecimenMap);
-			specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap)deriveSpecimenMap);
+			specimenRequirementBean.setDeriveSpecimenCollection(oldDeriveSpecimenMap);
+//			specimenRequirementBean.setDeriveSpecimenCollection((LinkedHashMap)deriveSpecimenMap);
 		}
 		else
 		{
