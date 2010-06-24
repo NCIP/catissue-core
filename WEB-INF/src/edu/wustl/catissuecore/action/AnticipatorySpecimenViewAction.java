@@ -35,10 +35,6 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.namegenerator.CustomSpecimenLabelGenerator;
-import edu.wustl.catissuecore.namegenerator.LabelGenerator;
-import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
-import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
@@ -47,7 +43,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -676,26 +671,39 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			while (itr.hasNext())
 			{
 				final Specimen specimen = (Specimen) itr.next();
-				if (specimen.getId().equals(specimenId)
-						|| (specimen.getParentSpecimen() != null && specimen.getParentSpecimen()
-								.getId().equals(specimenId)))
+				lastChildNo = setLabelForSpecimen(specimenId, lastChildNo, specimen);
+			}
+		}
+	}
+
+	/**
+	 * Set Label For Specimen.
+	 * @param specimenId Long
+	 * @param lastChildNo Long
+	 * @param specimen Specimen
+	 * @return lastChildNo long
+	 */
+	private long setLabelForSpecimen(Long specimenId, long lastChildNo, final Specimen specimen)
+	{
+		if (specimen.getId().equals(specimenId)
+				|| (specimen.getParentSpecimen() != null && specimen.getParentSpecimen()
+						.getId().equals(specimenId)))
+		{
+			if (specimen.getLabel() == null || specimen.getLabel().equals(""))
+			{
+				if (specimen.getLineage().equals(Constants.ALIQUOT))
 				{
-					if (specimen.getLabel() == null || specimen.getLabel().equals(""))
+					if(!isGenLabel(specimen))
 					{
-						if (specimen.getLineage().equals(Constants.ALIQUOT))
+						if (specimen.getParentSpecimen().getLabel() != null)
 						{
-							if(!isGenLabel(specimen))
-							{
-								if (specimen.getParentSpecimen().getLabel() != null)
-								{
-									specimen.setLabel(specimen.getParentSpecimen().getLabel() + "_"
-											+ (++lastChildNo));
-								}
-							}
+							specimen.setLabel(specimen.getParentSpecimen().getLabel() + "_"
+									+ (++lastChildNo));
 						}
 					}
 				}
 			}
 		}
+		return lastChildNo;
 	}
 }
