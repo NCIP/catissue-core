@@ -221,7 +221,7 @@ public class AliquotAction extends SecureAction
 		final Map aliquotMap = aliquotForm.getAliquotMap();
 		final String aliquotCount = request.getParameter("noOfAliquots");//aliquotForm.getNoOfAliquots();
 		int counter = Integer.parseInt(request.getParameter("rowNo"));
-		final String containerKey = "Specimen:" + counter + "_StorageContainer_id";
+//		final String containerKey = "Specimen:" + counter + "_StorageContainer_id";
 		final String containerName = request.getParameter("containerName");//(String) aliquotMap.get(containerKey);
 		boolean flag = true;
 		if (containerName != null && containerName.equals("-1"))
@@ -324,7 +324,7 @@ public class AliquotAction extends SecureAction
 			final long cpId = aliquotForm.getColProtId();
 			String parentLabelFormat = null;
 			String deriveLabelFormat = null;
-			String aliquotLabelFormat = null;
+			String aliqLabelFormat = null;
 
 			String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
 			"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
@@ -421,8 +421,8 @@ public class AliquotAction extends SecureAction
 				 * diffrent containers when 'Store all Containers aliquots in
 				 * same container' is true
 				 */
-				boolean areContainersDifferent = false;
-				boolean wrongContainerName = false;
+				boolean areContDifferent = false;
+				boolean wrongContName = false;
 
 				if (aliquotForm.isAliqoutInSameContainer()
 						&& aliquotForm.getButtonClicked().equalsIgnoreCase("create"))
@@ -461,7 +461,7 @@ public class AliquotAction extends SecureAction
 
 							if (list.isEmpty())
 							{
-								wrongContainerName = true;
+								wrongContName = true;
 								ActionErrors errors = this.getActionErrors(request);
 								if (errors == null)
 								{
@@ -488,7 +488,7 @@ public class AliquotAction extends SecureAction
 							// check whether all container IDs are same
 							if (containerId == null || !containerId.equals(tempContainerId))
 							{
-								areContainersDifferent = true;
+								areContDifferent = true;
 							}
 						}
 
@@ -507,7 +507,7 @@ public class AliquotAction extends SecureAction
 				List<Object> parameterList = AppUtility.setparameterList(cpId, spClass, Integer
 						.parseInt(aliquotCt), spType);
 
-				if (arePropsChanged || areContainersDifferent
+				if (arePropsChanged || areContDifferent
 						|| aliquotForm.getButtonClicked().equalsIgnoreCase("checkbox"))
 				{
 
@@ -542,7 +542,7 @@ public class AliquotAction extends SecureAction
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.aliquots.reSubmit"));
 					}
-					else if (areContainersDifferent && !wrongContainerName)
+					else if (areContDifferent && !wrongContName)
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"errors.aliquots.sameStorageContainer"));
@@ -568,7 +568,7 @@ public class AliquotAction extends SecureAction
 				 * has selected the same container 2. 'Store all aliquots in
 				 * same container..' Checkbox is unchecked
 				 */
-				if (!areContainersDifferent)
+				if (!areContDifferent)
 				{
 					final Map aliquotMap = aliquotForm.getAliquotMap();
 					final Iterator keyIterator = aliquotMap.keySet().iterator();
@@ -725,10 +725,10 @@ public class AliquotAction extends SecureAction
 				}
 				if(obje[2] != null)
 				{
-					aliquotLabelFormat = obje[2].toString();
+					aliqLabelFormat = obje[2].toString();
 				}
 			}
-			aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, Constants.ALIQUOT));
+			aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliqLabelFormat, Constants.ALIQUOT));
 			// Map containerMap = bizLogic.getAllocatedContainerMap();
 			TreeMap containerMap = new TreeMap();
 			if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGE_OF)))
@@ -793,7 +793,7 @@ public class AliquotAction extends SecureAction
 					aliquotLabelFormat = obje[2].toString();
 				}
 			}*/
-			aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, Constants.ALIQUOT));
+			aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliqLabelFormat, Constants.ALIQUOT));
 			return mapping.findForward(pageOf);
 		}
 		catch (final DAOException daoException)
@@ -946,13 +946,13 @@ public class AliquotAction extends SecureAction
 			 * ().getCollectionProtocolEvent()
 			 * .getCollectionProtocol().getAliqoutInSameContainer(); fired hql.
 			 */
-			Boolean aliquotInSameContainer = null;
-			aliquotInSameContainer = (Boolean) bizLogic.retrieveAttribute(Specimen.class.getName(),
+			Boolean aliqInSameCont = null;
+			aliqInSameCont = (Boolean) bizLogic.retrieveAttribute(Specimen.class.getName(),
 					specimen.getId(), "specimenCollectionGroup.collectionProtocolEvent."
 							+ "collectionProtocol.aliquotInSameContainer");
-			if (aliquotInSameContainer != null)
+			if (aliqInSameCont != null)
 			{
-				form.setAliqoutInSameContainer(aliquotInSameContainer.booleanValue());
+				form.setAliqoutInSameContainer(aliqInSameCont.booleanValue());
 			}
 			this.populateParentSpecimenData(form, specimen);
 

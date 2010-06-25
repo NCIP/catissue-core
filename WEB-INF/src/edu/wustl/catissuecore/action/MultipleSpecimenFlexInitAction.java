@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.action;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
