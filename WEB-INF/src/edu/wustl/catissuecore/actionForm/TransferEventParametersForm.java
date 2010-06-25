@@ -274,18 +274,20 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 					+ this.positionDimensionOne
 					+ ","
 					+ this.positionDimensionTwo + ")";
-			this.fromPosition = transferEventParametersObject.getFromStorageContainer()
-					.getStorageType().getName()
-					+ " : "
-					+ this.fromStorageContainerId
-					+ " Pos("
-					+ this.fromPositionDimensionOne
-					+ "," + this.fromPositionDimensionTwo + ")";
+			if(transferEventParametersObject.getFromStorageContainer() != null)
+			{
+				this.fromPosition = transferEventParametersObject.getFromStorageContainer()
+						.getStorageType().getName()
+						+ " : "
+						+ this.fromStorageContainerId
+						+ " Pos("
+						+ this.fromPositionDimensionOne
+						+ "," + this.fromPositionDimensionTwo + ")";
+			}
 		}
 		catch (final Exception excp)
 		{
 			TransferEventParametersForm.logger.error(excp.getMessage(),excp);
-			excp.printStackTrace() ;
 		}
 	}
 
