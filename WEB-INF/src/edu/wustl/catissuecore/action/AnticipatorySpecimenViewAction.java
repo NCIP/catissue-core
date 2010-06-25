@@ -697,8 +697,9 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 					{
 						if (specimen.getParentSpecimen().getLabel() != null)
 						{
-							specimen.setLabel(specimen.getParentSpecimen().getLabel() + "_"
-									+ (++lastChildNo));
+							specimen.setLabel(
+								specimen.getParentSpecimen().getLabel() + "_"
+								+ (++lastChildNo));
 						}
 					}
 				}
