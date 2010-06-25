@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -144,12 +145,14 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 				{
 					specimenCollectionGroupName = (String) obj;
 				}
+
+				String  scgName = specimenCollectionGroupName.replace("'", "''");
 				String generateLabel = Boolean.toString(false);
 				String hql = "select scg.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, "
 						+ "scg.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, "
 						+ "scg.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat "
 						+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg where scg.name='"
-						+ specimenCollectionGroupName + "'";
+						+ scgName + "'";
 
 				setRequestAttribute(request, generateLabel, hql,Constants.NEW_SPECIMEN);
 				return specimenCollectionGroupName;
@@ -176,11 +179,12 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 					generateLabel = Boolean.toString(!(Boolean) forwardToHashMap
 							.get("generateLabel"));
 				}
+				String parentName = parentSpecimenLabel.replace("'", "''");
 				String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, "
 						+ "specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, "
 						+ "specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat "
 						+ "from edu.wustl.catissuecore.domain.Specimen as specimen where specimen.label ='"
-						+ parentSpecimenLabel + "'";
+						+ parentName + "'";
 
 				//				try
 				//				{
