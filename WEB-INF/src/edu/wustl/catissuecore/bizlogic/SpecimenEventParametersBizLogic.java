@@ -529,8 +529,16 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					pos2 = trEvent.getToPositionDimensionTwo();
 					if(((pos1 == null || pos2 == null) && i!=0))
 					{
-						pos1 = ((TransferEventParameters)(events.get(i-1))).getToPositionDimensionOne();
-						pos2 = ((TransferEventParameters)(events.get(i-1))).getToPositionDimensionTwo();
+						String prevToStrContName = ((TransferEventParameters)(events.get(i-1))).
+									getToStorageContainer().getName();
+						String toStrContName = trEvent.getToStorageContainer().getName();
+						if((!Validator.isEmpty(prevToStrContName))
+							&& (!Validator.isEmpty(toStrContName))
+								&& (toStrContName.equals(prevToStrContName)))
+						{
+							pos1 = ((TransferEventParameters)(events.get(i-1))).getToPositionDimensionOne();
+							pos2 = ((TransferEventParameters)(events.get(i-1))).getToPositionDimensionTwo();
+						}
 					}
 					eventNumber = (Integer) containerEventNumberMap.get(trEvent
 							.getToStorageContainer().getName());

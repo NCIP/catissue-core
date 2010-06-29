@@ -166,8 +166,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			{
 				String positionStr = storagePositions;
 				String positions[] = positionStr.split(",");
-				pos1 = Integer.valueOf(positions[0]);
-				pos2 = Integer.valueOf(positions[1]);
+				String strContainerName = positions[0];
+				if((!Validator.isEmpty(strContainerName.trim()))
+					&& (specimen.getSpecimenPosition() != null
+							&& !Validator.isEmpty(specimen.getSpecimenPosition().
+									getStorageContainer().getName()))
+								&& (strContainerName.equals(specimen.getSpecimenPosition().
+									getStorageContainer().getName())))
+				{
+					pos1 = Integer.valueOf(positions[1]);
+					pos2 = Integer.valueOf(positions[2]);
+				}
 			}
 			this.populateDomainObjectToInsert(dao, sessionDataBean, specimen,pos1,pos2);
 			specimen.doRoundOff();
@@ -175,6 +184,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			if(specimen.getSpecimenPosition()!=null)
 			{
 				StringBuffer posBuffer =  new StringBuffer();
+				posBuffer.append(specimen.getSpecimenPosition().getStorageContainer().getName());
+				posBuffer.append(',');
 				posBuffer.append(specimen.getSpecimenPosition().getPositionDimensionOne());
 				posBuffer.append(',');
 				posBuffer.append(specimen.getSpecimenPosition().getPositionDimensionTwo());
@@ -4162,8 +4173,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				{
 					newSpecContName= newSpecimen.getSpecimenPosition().getStorageContainer().getName();
 					newSpecContId = newSpecimen.getSpecimenPosition().getStorageContainer().getId();
-				   position1 = newSpecimen.getSpecimenPosition().getPositionDimensionOne();
-				   position2 = newSpecimen.getSpecimenPosition().getPositionDimensionTwo();
+					position1 = newSpecimen.getSpecimenPosition().getPositionDimensionOne();
+					position2 = newSpecimen.getSpecimenPosition().getPositionDimensionTwo();
 				}
 //				final Specimen newSpecimen = (Specimen) iterator.next();
 				if(((position1 == null || position2 == null) && i!=0))
