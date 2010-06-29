@@ -32,7 +32,7 @@ public class CatissueCoreSessionListener implements HttpSessionListener
 
 	public void sessionCreated(HttpSessionEvent arg0)
 	{
-
+		//
 	}
 
 	//Cleanup after session invalidates.

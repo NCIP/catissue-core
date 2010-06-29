@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSessionBindingListener;
 public class CatissueCoreSessionBindingListener implements HttpSessionBindingListener
 {
 
-	public void valueBound(HttpSessionBindingEvent e)
+	public void valueBound(HttpSessionBindingEvent httpSessionBindEvent)
 	{
 
 	}
@@ -24,7 +24,7 @@ public class CatissueCoreSessionBindingListener implements HttpSessionBindingLis
 	 * @param session Object of HttpSessionBindingEvent.
 	 */
 
-	public void valueUnbound(HttpSessionBindingEvent e)
+	public void valueUnbound(HttpSessionBindingEvent httpSessionBindEvent)
 	{
 
 	}

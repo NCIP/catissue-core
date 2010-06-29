@@ -50,7 +50,6 @@ public class MailUtility
 		catch (final MessagingException e)
 		{
 			logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 		final boolean emailStatus = email.sendMail(emailDetails);
 		return emailStatus;
