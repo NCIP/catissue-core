@@ -85,12 +85,6 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderItem.hbm.xml" />
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />
 
-
-		<!--List of classes required for Query module-->
-		<mapping resource="edu/wustl/common/hbm/AbstractCategorialAttribute.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/AbstractCategorialClass.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/AbstractCategory.hbm.xml"/>
-
 		<mapping resource="edu/wustl/common/hbm/BaseExpression.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Condition.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Connector.hbm.xml" />

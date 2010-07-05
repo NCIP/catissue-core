@@ -4,9 +4,9 @@
     "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
-	
+
     <session-factory>
- <!--    
+ <!--
     	<property name="show_sql">false</property>
     	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="connection.datasource">java:/catissuecore</property>
@@ -16,14 +16,14 @@
 		<property name="hibernate.jdbc.batch_size">0</property>
    -->
      	<property name="show_sql">false</property>
-    	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>	
+    	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
     	<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
         <property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
         <property name="connection.driver_class">@@JDBC_DRIVER@@</property>
 	    <property name="connection.url">@@CONNECTION_URL@@</property>
 	    <property name="connection.username">@@USER_NAME@@</property>
-	    <property name="connection.password">@@PASSWORD@@</property>   
-	    <property name="hibernate.jdbc.batch_size">0</property>   
+	    <property name="connection.password">@@PASSWORD@@</property>
+	    <property name="hibernate.jdbc.batch_size">0</property>
 
     	<!--Consent Tracking Suite-->
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTier.hbm.xml"/>
@@ -92,11 +92,6 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderItem.hbm.xml" />
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />
 
-		<!--List of classes required for Query module-->
-		<mapping resource="edu/wustl/common/hbm/AbstractCategorialAttribute.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/AbstractCategorialClass.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/AbstractCategory.hbm.xml"/>
-
 		<mapping resource="edu/wustl/common/hbm/BaseExpression.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Condition.hbm.xml" />
 		<mapping resource="edu/wustl/common/hbm/Connector.hbm.xml" />
@@ -124,5 +119,5 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/shippingtracking/BaseShipment.hbm.xml"/>
 		<!-- shipping tracking merge ends -->
     </session-factory>
-    
+
 </hibernate-configuration>
