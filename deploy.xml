@@ -1324,6 +1324,8 @@
 		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" />
 		<!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
 		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" />
+		<antcall target="upgrade_db_from_DE_1.4.0.1_to_DE_1.4.0.2" />
+		<antcall target="upgrade_db_from_DE_1.4.0_to_DE_1.4.2"/>
 		<antcall target="upgrade_de_integration_restructure_metadata"/>
 
 		<antcall target="update_metadata_for_tagged_values"/>
@@ -1352,7 +1354,7 @@
 
 	<!--MySQL Database Creation -->
 	<target name="deploy_db_mysql" description="MySQL Database Creation">
-		<echo message="Initializing MySQL Database for caTissue Suite v1.1.p5. Application..." />
+		<echo message="Initializing MySQL Database for caTissue Suite v1.2. Application..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}">
 			<transaction src="${mysql.sql.dir}/catissuecore.sql" />
 		<!--	<transaction src="${dbupgrade.sql.dir}/MySql/DEIntegrationRestructure.sql" />  -->
@@ -1811,9 +1813,9 @@
 	<!--</target> -->
 	<!-- Removing unnecessary PE -->
 
-	<target name="upgrade_db" description="Upgrading Database v1.1.p5 to v1.1.p5.1">
-		<echo message="Upgrading Database v1.1.p5 to v1.1.p5.1" />
-		<antcall target="upgrade_db_from_p5_to_p5.1"/>
+	<target name="upgrade_db" description="Upgrading Database v1.1 to v1.2">
+		<echo message="Upgrading Database v1.1 to v1.2" />
+		<antcall target="upgrade_db_from_v1.1_to_v1.2"/>
 	</target>
 
 	<target name="upgrade_db_from_v1.1_to_p4" description="Target for Application and Database Upgrade from caTissue v1.1 to p4">
@@ -1869,7 +1871,7 @@
 					<param name="isUpgrade" value="true"/>
 					<param name="buildVersion" value="p2top4"/>
 				</antcall>
-				<antcall target="update_metadata_for_tagged_values"/>
+
 				<antcall target="update_metaPhone_data_for_participant"/>
 		</target>
 
@@ -1884,6 +1886,7 @@
 		<antcall target="upgrade_db_from_DE_1.2.0_to_DE_1.3.0"/>
 		<!-- <antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" />  -->
 		<antcall target="upgrade_db_from_DE_1.3.0_to_DE_1.4.0"/>
+		<antcall target="update_metadata_for_tagged_values"/>
 	    <if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -4462,7 +4465,6 @@ Thanking You,
 				</classpath>
 			</sql>
 
-			<antcall target="integrate_bulk_operation_mysql" />
 			<echo message="Upgrading MSSQL Metadata from p5 to p5.1" />
 			<antcall target="update_metadata_for_model_changes_mysql_P5_to_P5.1" />
 
@@ -4482,6 +4484,15 @@ Thanking You,
 			<echo message="Upgrading Oracle Metadata from p5 to p5.1" />
 		    <antcall target="update_metadata_for_model_changes_oracle_P5_to_P5.1" />
 	   </target>
+
+		<target name="upgrade_db_from_v1.1_to_v1.2" description="Target for Application and Database Upgrade from caTissue v1.1 to v1.2">
+			<echo message="Upgrading Database v1.1 to v1.2" />
+			<antcall target="upgrade_db_from_v1.1_to_p4" />
+			<antcall target="upgrade_db_from_p4_to_p5" />
+			<antcall target="upgrade_db_from_p5_to_p5.1" />
+			<antcall target="upgrade_db_from_DE_1.4.0.1_to_DE_1.4.0.2" />
+			<antcall target="upgrade_db_from_DE_1.4.0_to_DE_1.4.2"/>
+		</target>
 
 
 </project>
