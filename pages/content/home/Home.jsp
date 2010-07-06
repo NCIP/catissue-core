@@ -80,25 +80,7 @@ function wustlkey()
 									class="view"><span class="wh_ar_b"></span><bean:message
 									key="app.ncicbHome" /></a></td>
 							</tr>
-							<!-- Mandar : 8Jan09 PSPL Info -->
-							<tr>
-							<td>
-								<a href="http://www.persistentsys.com/newpspl/catissue-lsd.shtml" class="view" target="_blank"><span class="wh_ar_b"></span>
-								<bean:message key="pspl.catissue.support" />
-								</a>
-							</td>
-							</tr>
-							<!-- Mandar : 8Jan09 PSPL Info -->
 							<!-- Mandar : 16Jan09 PSPL Info -->
-							<tr>
-							<td>
-								<a href="Aboutv11p.do" class="view"><span class="wh_ar_b"></span>
-								<bean:message key="pspl.catissue.about" arg0="<%=ApplicationProperties.getValue("app.version")%>"/>
-								</a>
-							</td>
-							</tr>
-							<!-- Mandar : 16Jan09 PSPL Info -->
-
 							<tr>
 								<td><a
 									href="PrivacyNotice.do?PAGE_TITLE_KEY=app.privacyNotice&FILE_NAME_KEY=app.privacyNotice.file"
@@ -330,7 +312,7 @@ function wustlkey()
 	<tr>
 <!-- 		<td align="center" valign="bottom">&nbsp;<img border="0" src="images/pspllogo.gif" width="75" height="71"></td>
  -->
- 		<td align="center" valign="bottom">&nbsp;<A HREF="http://www.persistentsys.com"><img border="0" src="images/pspllogo.gif" width="75" height="71"></A></td>
+ 		<td align="center" valign="bottom">&nbsp</td>
 		<td rowspan="2" align="right" valign="bottom">
 		<table width="96%" border="0" cellspacing="0" cellpadding="0">
 			<tr>
@@ -408,11 +390,5 @@ function wustlkey()
 	<tr>
 		<td colspan="5" align="center" valign="top" bgcolor="#bcbcbc"><img
 			src="images/uIEnhancementImages/spacer.gif" alt="Spacer" width="1" height="1" /></td>
-	</tr>
-	<!-- Mandar : 7Dec09 For PSPL Info -->
-	<tr>
-		<td colspan="5" align="center" valign="top" class="bgblue_white">
-		<bean:message key="pspl.catissue.footNote" arg0="<%=ApplicationProperties.getValue("app.version")%>"/>
-		</td>
 	</tr>
 </table>
