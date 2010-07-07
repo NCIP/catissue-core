@@ -131,13 +131,13 @@ public class Participant extends AbstractDomainObject
 	/**
 	 * A collection of medical record identification number that refers to a Participant.
 	 * */
-	protected Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = 
+	protected Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection =
 					new LinkedHashSet<ParticipantMedicalIdentifier>();
 
 	/**
 	 * A collection of registration of a Participant to a Collection Protocol.
 	 */
-	protected Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = 
+	protected Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection =
 				new HashSet<CollectionProtocolRegistration>();
 
 	/**
@@ -149,11 +149,11 @@ public class Participant extends AbstractDomainObject
 	 */
 	protected String metaPhoneCode;
 
-	/**
-	 * empiId : EMPI id of the participant.
-	 */
-	protected String empiId = "";
-	
+//	/**
+//	 * empiId : EMPI id of the participant.
+//	 */
+//	protected String empiId = "";
+
 	public String getMetaPhoneCode()
 	{
 		return this.metaPhoneCode;
@@ -584,15 +584,15 @@ public class Participant extends AbstractDomainObject
 		this.collectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection;
 	}
 
-	public String getEmpiId()
-	{
-		return this.empiId;
-	}
-
-	public void setEmpiId(String empiId)
-	{
-		this.empiId = empiId;
-	}
+//	public String getEmpiId()
+//	{
+//		return this.empiId;
+//	}
+//
+//	public void setEmpiId(String empiId)
+//	{
+//		this.empiId = empiId;
+//	}
 
 	/**
 	 *
@@ -892,20 +892,20 @@ public class Participant extends AbstractDomainObject
 	{
 		return AppUtility.getlLabel(this.lastName, this.firstName);
 	}
-	/**
-	 * Get getEmpiIdStatus
-	 */
-	public String getEmpiIdStatus()
-	{
-		throw new UnsupportedOperationException("Un-Implemented method");
-	}
-	/**
-	 * set EmpiId Status
-	 * @param empiIdStatus EMPI Status
-	 */
-	public void setEmpiIdStatus(String empiIdStatus)
-	{
-		throw new UnsupportedOperationException("Un-Implemented method");
-	}
+//	/**
+//	 * Get getEmpiIdStatus
+//	 */
+//	public String getEmpiIdStatus()
+//	{
+//		throw new UnsupportedOperationException("Un-Implemented method");
+//	}
+//	/**
+//	 * set EmpiId Status
+//	 * @param empiIdStatus EMPI Status
+//	 */
+//	public void setEmpiIdStatus(String empiIdStatus)
+//	{
+//		throw new UnsupportedOperationException("Un-Implemented method");
+//	}
 
 }

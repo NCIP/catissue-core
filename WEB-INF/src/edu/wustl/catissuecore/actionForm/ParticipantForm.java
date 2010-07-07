@@ -1,6 +1,6 @@
 /**
- * <p>Title: ParticipantForm Class>
- * <p>Description:  ParticipantForm Class is used to encapsulate all the request parameters passed 
+' * <p>Title: ParticipantForm Class>
+ * <p>Description:  ParticipantForm Class is used to encapsulate all the request parameters passed
  * from Participant Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -52,7 +52,7 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * ParticipantForm Class is used to encapsulate all the request parameters passed 
+ * ParticipantForm Class is used to encapsulate all the request parameters passed
  * from Participant Add/Edit webpage.
  * @author gautam_shetty
  */
@@ -150,12 +150,12 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	 * Abhishek Mehta
 	 */
 	/**
-	 * Map to handle values of registration of a Participant to a Collection Protocol. 
+	 * Map to handle values of registration of a Participant to a Collection Protocol.
 	 */
 	protected Map collectionProtocolRegistrationValues = new LinkedHashMap();
 
 	/**
-	 * Consent Response Collection for given collection protocols 
+	 * Consent Response Collection for given collection protocols
 	 */
 	protected Collection<ConsentResponseBean> consentResponseBeanCollection;
 
@@ -177,7 +177,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	private long cpId = -1;
 
 	/**
-	 * Initializes an empty ParticipantForm object. 
+	 * Initializes an empty ParticipantForm object.
 	 */
 	public ParticipantForm()
 	{
@@ -211,7 +211,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 
 	/**
 	 * Copies the data from an AbstractDomain object to a ParticipantForm object.
-	 * @param abstractDomain An AbstractDomain object.  
+	 * @param abstractDomain An AbstractDomain object.
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -252,7 +252,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 				CommonServiceLocator.getInstance().getDatePattern());;
 		this.vitalStatus = participant.getVitalStatus();
 
-		//Populating the map with the participant medical identifiers data 
+		//Populating the map with the participant medical identifiers data
 		final Collection medicalIdentifierCollection = participant
 				.getParticipantMedicalIdentifierCollection();
 
@@ -295,7 +295,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 			this.valueCounter = medicalIdentifierCollection.size();
 		}
 
-		//Populating the map with the registrations of a Participant to a Collection Protocol. 
+		//Populating the map with the registrations of a Participant to a Collection Protocol.
 		//(Abhishek Mehta)
 		final Collection collectionProtocolRegistrationCollection = participant
 				.getCollectionProtocolRegistrationCollection();
@@ -493,7 +493,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	}
 
 	/**
-	 * Returns the last name of the Participant. 
+	 * Returns the last name of the Participant.
 	 * @return String the last name of the Participant.
 	 * @see #setFirstName(String)
 	 */
@@ -689,7 +689,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	{
 		final ActionErrors errors = new ActionErrors();
 		final Validator validator = new Validator();
-		//Abhishek Mehta 
+		//Abhishek Mehta
 		// To get the consent response from session.
 		final HttpSession session = request.getSession();
 
@@ -755,7 +755,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 						ApplicationProperties.getValue("participant.socialSecurityNumber")));
 			}
 
-			//Validation for Blank Participant 
+			//Validation for Blank Participant
 			if (validator.isEmpty(this.lastName)
 					&& validator.isEmpty(this.firstName)
 					&& validator.isEmpty(this.middleName)
@@ -909,7 +909,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 
 	/*
 	 * This method will get the consent response from session and creates ConsentResponseBean Collection
-	 *  Abhishek Mehta 
+	 *  Abhishek Mehta
 	 */
 	private void setConsentResponse(HttpSession session)
 	{
@@ -1192,7 +1192,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	}
 
 	/**
-	 * Returns the Consent Response HashTable entered by the user. 
+	 * Returns the Consent Response HashTable entered by the user.
 	 * @return
 	 */
 	public Map getConsentResponseHashTable()
@@ -1201,7 +1201,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	}
 
 	/**
-	 * Returns the Consent Response Collection entered by the user. 
+	 * Returns the Consent Response Collection entered by the user.
 	 * @return
 	 */
 	public Collection<ConsentResponseBean> getConsentResponseBeanCollection()
@@ -1210,7 +1210,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	}
 
 	/**
-	 * 
+	 *
 	 * @param consentResponseBeanCollection Consent Response Collection entered by the user
 	 */
 	public void setConsentResponseBeanCollection(
@@ -1220,7 +1220,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	}
 
 	/**
-	 * 
+	 *
 	 * @param consentResponseHashTable Consent Response HashTable entered by the user
 	 */
 	public void setConsentResponseHashTable(Map consentResponseHashTable)
@@ -1236,7 +1236,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 		return this.isBarcodeEditable;
 	}
 
-	/** 
+	/**
 	 * @param isBarcodeEditable Setter method for isBarcodeEditable
 	 */
 	public void setIsBarcodeEditable(String isBarcodeEditable)
@@ -1251,34 +1251,34 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	{
 		throw new UnsupportedOperationException("Un-Implemented method");
 	}
-	/**
-	 * Get EMPI Id
-	 */
-	public String getEmpiId()
-	{
-		throw new UnsupportedOperationException("Un-Implemented method");
-	}
-	/**
-	 * Get EMPI Status
-	 */
-	public String getEmpiIdStatus()
-	{
-		throw new UnsupportedOperationException("Un-Implemented method");
-	}
-	/**
-	 * Set EMPI ID
-	 * @param empiID EMPI ID
-	 */
-	public void setEmpiId(String empiID)
-	{
-		throw new UnsupportedOperationException("Un-Implemented method");
-	}
-	/**
-	 * @param empiStatus EMPI Status
-	 */
-	public void setEmpiIdStatus(String empiStatus)
-	{
-		throw new UnsupportedOperationException("Un-Implemented method");
-	}
+//	/**
+//	 * Get EMPI Id
+//	 */
+//	public String getEmpiId()
+//	{
+//		throw new UnsupportedOperationException("Un-Implemented method");
+//	}
+//	/**
+//	 * Get EMPI Status
+//	 */
+//	public String getEmpiIdStatus()
+//	{
+//		throw new UnsupportedOperationException("Un-Implemented method");
+//	}
+//	/**
+//	 * Set EMPI ID
+//	 * @param empiID EMPI ID
+//	 */
+//	public void setEmpiId(String empiID)
+//	{
+//		throw new UnsupportedOperationException("Un-Implemented method");
+//	}
+//	/**
+//	 * @param empiStatus EMPI Status
+//	 */
+//	public void setEmpiIdStatus(String empiStatus)
+//	{
+//		throw new UnsupportedOperationException("Un-Implemented method");
+//	}
 
 }

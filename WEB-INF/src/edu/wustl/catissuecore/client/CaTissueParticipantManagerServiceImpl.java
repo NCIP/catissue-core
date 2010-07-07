@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.client;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -160,6 +161,12 @@ public class CaTissueParticipantManagerServiceImpl implements IParticipantManage
 	public Set<Long> getProtocolIdLstForMICSEnabledForMatching(Long arg0)
 			throws ApplicationException
 	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public LinkedHashSet<Long> getParticipantPICordinators(long arg0)
+			throws ApplicationException {
 		// TODO Auto-generated method stub
 		return null;
 	}

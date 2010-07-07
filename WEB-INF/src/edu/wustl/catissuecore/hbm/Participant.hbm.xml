@@ -61,18 +61,6 @@
             column="BIRTH_DATE"
         />
 
-
-		 <property
-            name="empiId"
-            type="string"
-            update="true"
-            insert="true"
-            column="EMPI_ID"
-            length="50"
-        />
-
-
-
         <property
             name="gender"
             type="string"
