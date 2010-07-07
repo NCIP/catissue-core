@@ -58,15 +58,15 @@ function virtualLocationSelChanged(specimenId) { if(document.getElementById("Vir
 			<bean:define id="firstSpecimen" value="true" />
 			<table width="100%" border="0" cellspacing="0" cellpadding="2" style="table-layout:fixed">
 				<tr>
-					<td width="5%" class="tableheading"><strong><bean:message key="specimenPPI"/></strong></td>
-					<td width="20%" class="tableheading"><strong><bean:message key="specimenLabel"/></strong></td>
-					<td width="15%" class="tableheading"><strong><bean:message key="specimenType"/></strong></td>
+					<td width="10%" class="tableheading"><strong><bean:message key="specimenPPI"/></strong></td>
+					<td width="19%" class="tableheading"><strong><bean:message key="specimenLabel"/></strong></td>
+					<td width="14%" class="tableheading"><strong><bean:message key="specimenType"/></strong></td>
 					<td width="8%" class="tableheading"><strong><bean:message key="specimenQuantity"/></strong></td>
-					<td width="16%" class="tableheading"><strong><bean:message key="specimenfromLocation"/></strong></td>
-					<td width="19%" class="tableheading" nowrap><strong><bean:message key="specimenDestContainer"/></strong></td>
+					<td width="15%" class="tableheading"><strong><bean:message key="specimenfromLocation"/></strong></td>
+					<td width="18%" class="tableheading" nowrap><strong><bean:message key="specimenDestContainer"/></strong></td>
 
   <!--  if first Specimen in the list add "Apply to All" Link -->
-					<td class="tableheading" width="17%" align="right">
+					<td class="tableheading" width="16%" align="right">
 						  <logic:equal name="firstSpecimen"  value="true" >
 						   <html:link href="#" styleClass="black_ar" onmouseover="Tip('Apply first location to all',WIDTH,280)" onclick="javascript:beforeApplyAll();" > <bean:message key="aliquots.applyFirstToAll"/> </html:link>  <bean:define id="firstSpecimen" value="false"/>
 						  </logic:equal>
