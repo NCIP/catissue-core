@@ -12,18 +12,20 @@ package edu.wustl.catissuecore.caties.util;
  * Created on May 15, 2006
  */
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -32,6 +34,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SiteInfoHandler
 {
+
 	/**
 	 * logger.
 	 */
@@ -40,6 +43,7 @@ public class SiteInfoHandler
 	 * document.
 	 */
 	private static Document document = null;
+	public static Map<String, List<String>> siteAbrMap = new HashMap<String, List<String>>();
 
 	/**
 	 * Initialization method.
@@ -60,169 +64,69 @@ public class SiteInfoHandler
 				// throws SAXException,IOException,IllegalArgumentException(if path is null
 			}
 		}
-		catch (final SAXException e)
+		catch (final Exception exp)
 		{
-			SiteInfoHandler.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
-			throw e;
-		}
-		catch (final IOException e)
-		{
-			SiteInfoHandler.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
-			throw e;
-		}
-		catch (final ParserConfigurationException e)
-		{
-			SiteInfoHandler.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
-			throw e;
+			SiteInfoHandler.logger.error(exp.getMessage(), exp);
+			throw exp;
 		}
 	}
 
-	/**
-	 *
-	 * <p>
-	 * Description:This method takes the property siteName as String argument and
-	 * returns the abbreviation value as String.
-	 * </p>
-	 * @return pValue currousponding abbreviated value
-	 * @throws Exception generic exception
-	 * @param siteName name of the site
-	 */
-	public static String getSiteAbbriviation(String siteName) throws Exception
+	public static void validateAndCreateMapOfSites() throws Exception
 	{
 		// it gives the rootNode of the xml file
-		final Element root = document.getDocumentElement();
-
-		final NodeList children = root.getChildNodes();
-		for (int i = 0; i < children.getLength(); i++)
+		final Element sitesRoot = document.getDocumentElement();
+		final NodeList siteNode = sitesRoot.getElementsByTagName("site");
+		int totalSiteNode = siteNode.getLength();
+		logger.info("totalSiteNode " + totalSiteNode);
+		for (int s = 0; s < totalSiteNode; s++)
 		{
-			final Node child = children.item(i);
+			List<String> siteNames = new LinkedList<String>();
+			Node firstSiteNode = siteNode.item(s);
+			Element firstSiteElement = (Element) firstSiteNode;
 
-			if (child instanceof Element)
+			NodeList abrList = firstSiteElement.getElementsByTagName("SITE_ABBRIVIATION");
+			Element abrElement = (Element) abrList.item(0);
+
+			NodeList textLNList = abrElement.getChildNodes();
+			String abr = ((Node) textLNList.item(0)).getNodeValue().trim();
+			logger.info("abr : " + abr);
+
+			NodeList siteList = firstSiteElement.getElementsByTagName("SITE_NAME");
+			logger.info("siteList.getLength() " + siteList.getLength());
+			for (int i = 0; i < siteList.getLength(); i++)
 			{
-				// it gives the subchild nodes in the xml file(name & value)
-				final NodeList subChildNodes = child.getChildNodes();
+				Node site = siteList.item(i);
+				Element siteElement = (Element) site;
 
-				boolean isNameFound = false;
-				//Logger.out.debug("subchildNodes : "+subChildNodes.getLength());
-				for (int j = 0; j < subChildNodes.getLength(); j++)
+				NodeList textSiteNameList = siteElement.getChildNodes();
+				String siteName = ((Node) textSiteNameList.item(0)).getNodeValue().trim();
+				logger.info("siteName " + siteName);
+				if (siteName != null)
 				{
-					final Node subchildNode = subChildNodes.item(j);
-					final String subNodeName = subchildNode.getNodeName();
-					//Logger.out.debug("subnodeName : "+subNodeName);
-					if (subNodeName.equals(CaTIESConstants.SITE_NAME))
-					{
-						final String pName = subchildNode.getFirstChild().getNodeValue();
-						//Logger.out.debug("pName : "+pName);
-						if (siteName.equals(pName))
-						{
-							//Logger.out.debug("pName : "+pName);
-							isNameFound = true;
-						}
-					}
+					logger.info("siteName is not null " + siteName);
+					final String siteHql = "select count(*)"
+							+ " from edu.wustl.catissuecore.domain.Site as site "
+							+ " where site.name='" + siteName + "' ";
+					logger.info("siteHql =========  " + siteHql);
+					final List sitResultList = (List) CaCoreAPIService.executeQuery(siteHql,
+							Site.class.getName());
 
-					if (isNameFound && subNodeName.equals(CaTIESConstants.SITE_ABBRIVIATION))
+					logger.info("-------------sitResultList.size() " + sitResultList.size());
+					if (sitResultList != null && sitResultList.size() != 0
+							&& Integer.parseInt(sitResultList.get(0).toString()) <= 0)
 					{
-						return subchildNode.getFirstChild().getNodeValue();
+						//logger.info("got site");
+						logger.error("SITE_NAME  " + siteName
+								+ " given in xml not valid for the SITE_ABBRIVIATION  " + abr);
+						throw new Exception("SITE_NAME  " + siteName
+								+ " given in xml not valid for the SITE_ABBRIVIATION  " + abr);
 					}
+					siteNames.add(siteName);
+					logger.info(siteName + " added in list");
 				}
-			}
-		}
-		return null;
-	}
+			} // for site ends
 
-	/**
-	 * <p>
-	 * Description:This method takes the property siteName as String argument and
-	 * returns the abbreviation value as String.
-	 * </p>
-	 * @param abbr abbreviated site name
-	 * @return pValue associated site name
-	 * @throws Exception generic exception
-	 */
-	public static String getSiteName(String abbr) throws Exception
-	{
-		// it gives the rootNode of the xml file
-		final Element root = document.getDocumentElement();
-
-		final NodeList children = root.getChildNodes();
-		for (int i = 0; i < children.getLength(); i++)
-		{
-			final Node child = children.item(i);
-
-			if (child instanceof Element)
-			{
-				// it gives the subchild nodes in the xml file(name & value)
-				final NodeList subChildNodes = child.getChildNodes();
-
-				boolean isNameFound = false;
-				//Logger.out.debug("subchildNodes : "+subChildNodes.getLength());
-				for (int j = subChildNodes.getLength() - 1; j >= 0; j--)
-				{
-					final Node subchildNode = subChildNodes.item(j);
-					final String subNodeName = subchildNode.getNodeName();
-					//Logger.out.debug("subnodeName : "+subNodeName);
-					if (subNodeName.equals(CaTIESConstants.SITE_ABBRIVIATION))
-					{
-						final String pName = subchildNode.getFirstChild().getNodeValue();
-						//Logger.out.debug("pName : "+pName);
-						if(pName != null && abbr != null)
-						{
-							if (abbr.equals(pName))
-							{
-								//Logger.out.debug("pName : "+pName);
-								isNameFound = true;
-							}
-						}
-					}
-					if (isNameFound && subNodeName.equals(CaTIESConstants.SITE_NAME))
-					{
-						return subchildNode.getFirstChild().getNodeValue();
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * <p>
-	 * Description:This method returns the default site name value.
-	 * </p>
-	 * @return pValue default site name
-	 */
-	public static String getDefaultSiteName()
-	{
-		try
-		{
-			// it gives the rootNode of the xml file
-			final Element root = document.getDocumentElement();
-
-			final NodeList children = root.getChildNodes();
-			for (int i = 0; i < children.getLength(); i++)
-			{
-				final Node child = children.item(i);
-
-				if (child instanceof Element)
-				{
-					//Logger.out.debug("subchildNodes : "+subChildNodes.getLength());
-					Logger.out.info("subnodeName : " + child.getNodeName());
-					if (child.getNodeName().equals(CaTIESConstants.DEFAULT_SITE_NAME))
-					{
-						final String pName = child.getFirstChild().getNodeValue();
-						Logger.out.info("sitename:" + pName);
-						return pName;
-					}
-				}
-			}
-		}
-		catch (final Exception ex)
-		{
-			SiteInfoHandler.logger.error(ex.getMessage(), ex);
-			ex.printStackTrace() ;
-		}
-		return null;
-	}
+			siteAbrMap.put(abr, siteNames);
+		} // for ends
+	}	
 }

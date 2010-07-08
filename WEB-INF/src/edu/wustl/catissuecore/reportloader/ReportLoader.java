@@ -7,13 +7,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
-
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
-import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -30,6 +26,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
+import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 
 /**
@@ -72,7 +69,7 @@ public class ReportLoader
 	/**
 	 * Specify default Site Name.
 	 */
-	private static final String DEFAULT_SITE_NAME = SiteInfoHandler.getDefaultSiteName();
+	//private static final String DEFAULT_SITE_NAME = SiteInfoHandler.getDefaultSiteName();
 
 	/**
 	 * Constructor.
@@ -125,7 +122,7 @@ public class ReportLoader
 			if (this.scg == null || this.scg.getId() == 0)
 			{
 				//check for exactly matching SCG
-				this.logger.info("Checking for Matching SCG. Default site name:"
+				/*this.logger.info("Checking for Matching SCG. Default site name:"
 						+ DEFAULT_SITE_NAME + " :" + this.site.getName());
 				if (this.site.getName().equalsIgnoreCase(DEFAULT_SITE_NAME))
 				{
@@ -133,7 +130,7 @@ public class ReportLoader
 					this.scg = (SpecimenCollectionGroup) CaCoreAPIService.getObject(
 							SpecimenCollectionGroup.class, "surgicalPathologyNumber",
 							this.surgicalPathologyNumber);
-				}
+				}*/
 				if (this.scg == null || this.scg.getId() == 0)
 				{
 					// if scg is null create new scg
@@ -271,13 +268,12 @@ public class ReportLoader
 		List cprList = null;
 
 		// retrive CollectionProtocolRegistration with current participant and collectionProtocol
-		final DetachedCriteria criteria = DetachedCriteria
-				.forClass(CollectionProtocolRegistration.class);
-		criteria.add(Restrictions.eq("participant", participant));
-		criteria.add(Restrictions.eq("collectionProtocol", cp));
+		String hqlQuery = "from CollectionProtocolRegistration obj where participant.id = "+participant.getId()+" and collectionProtocol.id="+cp.getId();
+		final HQLCriteria hqlCriteria = new HQLCriteria(hqlQuery);
+
 		try
 		{
-			cprList = (List) CaCoreAPIService.executeQuery(criteria,
+			cprList = (List) CaCoreAPIService.executeQuery(hqlCriteria.getHqlString(),
 					CollectionProtocolRegistration.class.getName());
 			// check for existence
 			if (cprList != null && cprList.size() > 0)

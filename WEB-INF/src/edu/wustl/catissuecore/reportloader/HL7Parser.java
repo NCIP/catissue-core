@@ -16,6 +16,7 @@ import java.util.StringTokenizer;
 import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -104,7 +105,7 @@ public class HL7Parser implements Parser
 	 * @param abbrToHeader hashMap of String, String
 	 */
 	private void process(Participant participant, Map<String, Set> reportMap,
-			SpecimenCollectionGroup scg, HashMap<String, String> abbrToHeader)
+			SpecimenCollectionGroup scg, String siteName, HashMap<String, String> abbrToHeader)
 	{
 		logger.debug("Procesing report");
 		ReportLoader reportLoader = null;
@@ -114,8 +115,51 @@ public class HL7Parser implements Parser
 		try
 		{
 			//participant = parserParticipantInformation(line);
-			site = HL7ParserUtil.parseSiteInformation(HL7ParserUtil.getReportDataFromReportMap(
-					reportMap, CaTIESConstants.PID));
+			/*pratha commented bcz of complier errors */
+			/*site = HL7ParserUtil.parseSiteInformation(HL7ParserUtil.getReportDataFromReportMap(			
+					reportMap, CaTIESConstants.PID));*/
+
+			/*List siteNames = null;
+			try
+			{
+				siteNames = HL7ParserUtil.parseSiteInformation(HL7ParserUtil.getReportDataFromReportMap(
+						reportMap, CaTIESConstants.PID));
+			}
+			catch (final Exception ex)
+			{
+				HL7Parser.logger.error("Error while parsing Site information"+
+						ex.getMessage(), ex);
+				ex.printStackTrace();
+			}
+			
+			logger.info("Number of sites found in xml " + siteNames.size());
+			String siteName;
+			Iterator siteNameItr = siteNames.iterator();
+			while(siteNameItr.hasNext()) {
+				 siteName = (String)siteNameItr.next();
+				 logger.info("siteName "+ siteName);
+				 if (siteName != null)
+					{
+						// check for site in DB
+						site = (Site) CaCoreAPIService.getObject(Site.class, Constants.NAME,
+								siteName);
+						if (site == null)
+						{
+							HL7Parser.logger.error("Site name " + siteName + " not found in"
+									+ " the database!");
+						}
+					} 
+			}*/
+			//logger.info("In process scg "+ scg.getGroupName());
+			//logger.info("In process scg.getSpecimenCollectionSite() "+ scg.getSpecimenCollectionSite());
+
+			///////////////
+			site = ReportLoaderUtil.getSite(siteName);
+			logger.info("In process method  Site found from scg " + site.getName());
+			//pratha
+			/////////////////////		
+
+			//site = scg.getSpecimenCollectionSite();
 			spn = HL7ParserUtil.getSurgicalPathologyNumber(HL7ParserUtil
 					.getReportDataFromReportMap(reportMap, CaTIESConstants.OBR));
 			report = IdentifiedReportGenerator.getIdentifiedReport(reportMap, abbrToHeader);
@@ -139,9 +183,8 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception ex)
 		{
-			HL7Parser.logger.error("Error while parsing the " +
-					"report map"+ex.getMessage(), ex);
-			ex.printStackTrace() ;
+			HL7Parser.logger.error("Error while parsing the " + "report map" + ex.getMessage(), ex);
+			ex.printStackTrace();
 		}
 	}
 
@@ -153,7 +196,7 @@ public class HL7Parser implements Parser
 	 * @param abbrToHeader hashMap of String, String
 	 */
 	public void parseString(Participant participant, String reportText,
-			SpecimenCollectionGroup scg, HashMap<String, String> abbrToHeader)
+			SpecimenCollectionGroup scg, String siteName, HashMap<String, String> abbrToHeader)
 	{
 		HL7Parser.logger.debug("Inside parseString method");
 		Map<String, Set> reportMap = null;
@@ -170,13 +213,12 @@ public class HL7Parser implements Parser
 			}
 			else
 			{
-				this.process(participant, reportMap, scg, abbrToHeader);
+				this.process(participant, reportMap, scg, siteName, abbrToHeader);
 			}
 		}
 		catch (final Exception ex)
 		{
-			HL7Parser.logger.error("Error while creating" +
-					" report map "+ex.getMessage(), ex);
+			HL7Parser.logger.error("Error while creating" + " report map " + ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
 	}
@@ -188,6 +230,7 @@ public class HL7Parser implements Parser
 	public void parse(String fileName)
 	{
 		//IdentifiedSurgicalPathologyReport report = null;
+		logger.info("In HL7Parser ");
 		StringTokenizer strTokenizer = null;
 		String token = null;
 		Map<String, Set> reportMap = null;
@@ -254,36 +297,35 @@ public class HL7Parser implements Parser
 				}
 			}
 			fileParseEndTime = new Date().getTime();
-			HL7Parser.logger.info("Parsing File " + fileName + ": Finished at " + new Date().toString());
+			HL7Parser.logger.info("Parsing File " + fileName + ": Finished at "
+					+ new Date().toString());
 			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER, "Total " + counter
 					+ " reports are added to report queue from file " + fileName + " Time "
 					+ "reuired for parsing:" + (fileParseEndTime - fileParseStartTime));
 		}
 		catch (final Exception ex)
 		{
-			HL7Parser.logger.error("Error while reading" +
-					" HL7 file "+ex.getMessage(), ex);
+			HL7Parser.logger.error("Error while reading" + " HL7 file " + ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
 		finally
 		{
 			try
 			{
-				HL7Parser.logger.info("Final Count of the reports that are added to queue is=" + counter);
+				HL7Parser.logger.info("Final Count of the reports that are added to queue is="
+						+ counter);
 				// close handle to file
 				bufferedReader.close();
 				fileReader.close();
 			}
 			catch (final IOException ex)
 			{
-				HL7Parser.logger.error("Error while closing file handle "+
-						ex.getMessage(), ex);
+				HL7Parser.logger.error("Error while closing file handle " + ex.getMessage(), ex);
 				ex.printStackTrace();
 			}
 			catch (final Exception ex)
 			{
-				HL7Parser.logger.error("Error while closing file handle "+
-						ex.getMessage(), ex);
+				HL7Parser.logger.error("Error while closing file handle " + ex.getMessage(), ex);
 				ex.printStackTrace();
 			}
 		}
@@ -297,119 +339,133 @@ public class HL7Parser implements Parser
 	protected static String validateAndSaveReportMap(Map<String, Set> reportMap)
 	{
 		Set<Participant> participantList = null;
-		List<DefaultLookupResult> defaultLookUPResultList = null;
 		String reportText = null;
 		SpecimenCollectionGroup scg = null;
 		String status = null;
 		String siteName = null;
 		String participantName = null;
+		ReportLoaderQueue queue = new ReportLoaderQueue();
+
 		final String surgicalPathologyNumber = HL7ParserUtil
 				.getSurgicalPathologyNumber(HL7ParserUtil.getReportDataFromReportMap(reportMap,
 						CaTIESConstants.OBR));
-		// parse site information
-		Site site = null;
-		try
+		if (!HL7ParserUtil.validateReportMap(reportMap))
 		{
-			site = HL7ParserUtil.parseSiteInformation(HL7ParserUtil.getReportDataFromReportMap(
-					reportMap, CaTIESConstants.PID));
-		}
-		catch (final Exception ex)
-		{
-			HL7Parser.logger.error("Error while parsing Site information"+
-					ex.getMessage(), ex);
-			ex.printStackTrace();
-		}
-		ReportLoaderQueue queue = new ReportLoaderQueue();
-		if (site == null)
-		{
-			status = CaTIESConstants.SITE_NOT_FOUND;
+			status = CaTIESConstants.INVALID_REPORT_SECTION;
+			logger.error("Report section under process is valid");
 			queue.setParticipantCollection(participantList);
 			queue.setStatus(status);
+
 		}
 		else
 		{
+			// parse site information
+			Site site = null;
+			String abrSiteName = null;
 			try
 			{
-				siteName = site.getName();
-				if (HL7ParserUtil.validateReportMap(reportMap))
+				abrSiteName = HL7ParserUtil.parseSiteInformation(HL7ParserUtil
+						.getReportDataFromReportMap(reportMap, CaTIESConstants.PID));
+				logger.info("abrSiteName " + abrSiteName);
+			}
+			catch (final Exception ex)
+			{
+				HL7Parser.logger.error("Error while parsing Site information " + ex.getMessage(),
+						ex);
+				ex.printStackTrace();
+			}
+			boolean siteFound = false;
+			logger.info("Number of Sites Collection found in xml "
+					+ SiteInfoHandler.siteAbrMap.size());
+			List siteNames = (List) SiteInfoHandler.siteAbrMap.get(abrSiteName);
+			if (siteNames != null && SiteInfoHandler.siteAbrMap.size() > 0)
+			{
+				logger.info("siteNames.size() " + siteNames.size());
+				Iterator siteNameItr = siteNames.iterator();
+				while (siteNameItr.hasNext())
 				{
-					status = CaTIESConstants.NEW;
-
-					// Creating participant object from report text
-					final Participant participant = HL7ParserUtil.parserParticipantInformation(
-							HL7ParserUtil
-									.getReportDataFromReportMap(reportMap, CaTIESConstants.PID),
-							site);
-					participantName = participant.getLastName() + "," + participant.getFirstName();
-
-					logger.info("Checking for Matching SCG");
-					//	check for matching scg here
-					logger.info("-------------" + site.getName());
-					logger.info("-------------" + surgicalPathologyNumber);
-					scg = ReportLoaderUtil.getExactMatchingSCG(site, surgicalPathologyNumber);
-
-					if ((participant.getSocialSecurityNumber() == null || participant
-							.getSocialSecurityNumber().trim().equals(""))
-							&& (participant.getFirstName() == null || participant.getFirstName()
-									.trim().equals(""))
-							&& (participant.getLastName() == null || participant.getLastName()
-									.trim().equals(""))
-							&& participant.getBirthDate() == null
-							&& participant.getParticipantMedicalIdentifierCollection() == null)
+					siteName = (String) siteNameItr.next();
+					logger.info("siteName " + siteName);
+					if (siteName != null)
 					{
-						queue = getQueueForAllFieldsEmpty(scg, participant, status);
-					}
-					else
-					{
-						defaultLookUPResultList = CaCoreAPIService
-								.getParticipantMatchingObects(participant);
+						try
+						{
+							status = CaTIESConstants.NEW;
+							site = ReportLoaderUtil.getSite(siteName);
+							logger.info("In process method  Site found from scg " + site.getName());
+							// Creating participant object from report text
+							logger.info("Checking for Matching SCG");
+							//	check for matching scg here
+							//logger.info("-------------" + site.getName());
+							logger.info("-------------" + surgicalPathologyNumber);
+							scg = ReportLoaderUtil.getExactMatchingSCG(site,
+									surgicalPathologyNumber);
 
-						if ((defaultLookUPResultList != null) && !defaultLookUPResultList.isEmpty())
-						{
-							queue = getQueueForNotEmptyAmbiguityList(scg, defaultLookUPResultList,
-									participant, status, site);
-						}
-						else
-						{
-							logger.info("No matching participant found");
-							if (scg == null)
+							//Added for Dave's changes - bug #14742
+							logger.info("scg " + scg);
+							if (scg != null && scg.getIdentifiedSurgicalPathologyReport() != null)
 							{
-								logger.info("Creating new one no scg with"
-										+ " same spr is found--Action1");
-								participantList = createPartcipant(participant, status);
-								queue.setParticipantCollection(participantList);
-								queue.setStatus(CaTIESConstants.NEW);
-							}
-							else
-							{
-								logger.info("Conflict resolver scg with"
-										+ " same spr is found-Action4");
+								logger.info("scg.getIdentifiedSurgicalPathologyReport() "
+										+ scg.getIdentifiedSurgicalPathologyReport());
+								logger.info("Conflict resolver scg with same spr is found-Action4");
 								final Participant scgParticipant = ReportLoaderUtil
 										.getParticipant(scg.getId());
 								participantList = new HashSet<Participant>();
 								participantList.add(scgParticipant);
 								queue.setParticipantCollection(participantList);
-								queue.setStatus(CaTIESConstants.STATUS_PARTICIPANT_CONFLICT);
+								queue.setStatus(CaTIESConstants.STATUS_SCG_CONFLICT);
+								siteFound = true;
+								logger.info("siteFound " + siteFound + " breaking wkhile loop");
+								break;
+							}
+							else if (scg != null)
+							{
+								logger.info("Conflict resolver scg with same spr is found-Action5");
+								final Participant scgParticipant = ReportLoaderUtil
+										.getParticipant(scg.getId());
+								participantList = new HashSet<Participant>();
+								participantList.add(scgParticipant);
+								queue.setParticipantCollection(participantList);
+								queue.setStatus(CaTIESConstants.NEW);
+								siteFound = true;
+								logger.info("siteFound " + siteFound + " breaking wkhile loop");
+								break;
 							}
 						}
+						catch (final Exception ex)
+						{
+							logger.info("=========== here 6 ===========");
+							HL7Parser.logger.error("Error occured while creating participant "
+									+ ex.getMessage(), ex);
+							status = CaTIESConstants.PARTICIPANT_CREATION_ERROR;
+							queue.setStatus(status);
+						}
+					}
+				}// while closes 
+
+				if (scg == null && !siteFound)
+				{
+					logger.info("=========== here 7 ===========");
+					try
+					{
+						logger.info("creating scg with first site name ");
+						site = ReportLoaderUtil.getSite(siteNames.get(0).toString());
+						final Participant participant = HL7ParserUtil.parserParticipantInformation(
+								HL7ParserUtil.getReportDataFromReportMap(reportMap,
+										CaTIESConstants.PID), site);
+						participantList = createPartcipant(participant, status);
+						queue.setParticipantCollection(participantList);
+						queue.setStatus(CaTIESConstants.NEW);
+						siteFound = true;
+						logger.info("siteFound " + siteFound);
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
 					}
 				}
-				else
-				{
-					status = CaTIESConstants.INVALID_REPORT_SECTION;
-					HL7Parser.logger.error("Report section under process is not valid");
-					queue.setParticipantCollection(participantList);
-					queue.setStatus(status);
-				}
 			}
-			catch (final Exception ex)
-			{
-				HL7Parser.logger.error("Error occured while creating participant"+
-						ex.getMessage(), ex);
-				status = CaTIESConstants.PARTICIPANT_CREATION_ERROR;
-				queue.setStatus(status);
-			}
-		}
+		}//else proceed report
 
 		final IdentifiedSurgicalPathologyReport report = IdentifiedReportGenerator
 				.extractOBRSegment(HL7ParserUtil.getReportDataFromReportMap(reportMap,
@@ -419,7 +475,199 @@ public class HL7Parser implements Parser
 		// Save report to report queue
 		addReportToQueue(queue, reportText, scg, siteName, participantName,
 				surgicalPathologyNumber, report.getCollectionDateTime());
+		//} // else procees report ends
 		return status;
+
+	}
+
+	/**
+	 * This method validates and save report queue object.
+	 * @param reportMap report map containing report
+	 * @return status String representing status of the execution on method
+	 */
+	protected static String validateAndSaveReportMap_old(Map<String, Set> reportMap)
+	{
+		Set<Participant> participantList = null;
+		List<DefaultLookupResult> defaultLookUPResultList = null;
+		String reportText = null;
+		SpecimenCollectionGroup scg = null;
+		String status = null;
+		String siteName = null;
+		String participantName = null;
+		ReportLoaderQueue queue = new ReportLoaderQueue();
+		if (!HL7ParserUtil.validateReportMap(reportMap))
+		{
+			status = CaTIESConstants.INVALID_REPORT_SECTION;
+			logger.error("Report section under process is valid");
+			queue.setParticipantCollection(participantList);
+			queue.setStatus(status);
+
+		}
+		else
+		{
+			final String surgicalPathologyNumber = HL7ParserUtil
+					.getSurgicalPathologyNumber(HL7ParserUtil.getReportDataFromReportMap(reportMap,
+							CaTIESConstants.OBR));
+			// parse site information
+			Site site = null;
+			String abrSiteName = null;
+			try
+			{
+				abrSiteName = HL7ParserUtil.parseSiteInformation(HL7ParserUtil
+						.getReportDataFromReportMap(reportMap, CaTIESConstants.PID));
+				logger.info("abrSiteName " + abrSiteName);
+			}
+			catch (final Exception ex)
+			{
+				HL7Parser.logger.error("Error while parsing Site information " + ex.getMessage(),
+						ex);
+				ex.printStackTrace();
+			}
+			boolean siteFound = false;
+			logger.info("Number of Sites Collection found in xml "
+					+ SiteInfoHandler.siteAbrMap.size());
+			List siteNames = (List) SiteInfoHandler.siteAbrMap.get(abrSiteName);
+			if (siteNames != null && SiteInfoHandler.siteAbrMap.size() > 0)
+			{
+				logger.info("siteNames.size() " + siteNames.size());
+				Iterator siteNameItr = siteNames.iterator();
+				while (siteNameItr.hasNext())
+				{
+					siteName = (String) siteNameItr.next();
+					logger.info("siteName " + siteName);
+					if (siteName != null)
+					{
+						try
+						{
+							status = CaTIESConstants.NEW;
+							site = ReportLoaderUtil.getSite(siteName);
+							logger.info("In process method  Site found from scg " + site.getName());
+							// Creating participant object from report text
+							final Participant participant = HL7ParserUtil
+									.parserParticipantInformation(HL7ParserUtil
+											.getReportDataFromReportMap(reportMap,
+													CaTIESConstants.PID), site);
+							participantName = participant.getLastName() + ","
+									+ participant.getFirstName();
+
+							logger.info("Checking for Matching SCG");
+							//	check for matching scg here
+							logger.info("-------------" + site.getName());
+							logger.info("-------------" + surgicalPathologyNumber);
+							scg = ReportLoaderUtil.getExactMatchingSCG(site,
+									surgicalPathologyNumber);
+
+							if ((participant.getSocialSecurityNumber() == null || participant
+									.getSocialSecurityNumber().trim().equals(""))
+									&& (participant.getFirstName() == null || participant
+											.getFirstName().trim().equals(""))
+									&& (participant.getLastName() == null || participant
+											.getLastName().trim().equals(""))
+									&& participant.getBirthDate() == null
+									&& participant.getParticipantMedicalIdentifierCollection() == null)
+							{
+								logger.info("=========== here 1 ===========");
+								queue = getQueueForAllFieldsEmpty(scg, participant, status);
+								siteFound = true;
+								logger.info("siteFound " + siteFound + " breaking while loop");
+								break;
+							}
+							else
+							{
+								logger.info("=========== here 2 ===========");
+								defaultLookUPResultList = CaCoreAPIService
+										.getParticipantMatchingObects(participant);
+
+								if ((defaultLookUPResultList != null)
+										&& !defaultLookUPResultList.isEmpty())
+								{
+									logger.info("=========== here 3 ===========");
+									queue = getQueueForNotEmptyAmbiguityList(scg,
+											defaultLookUPResultList, participant, status, site);
+									siteFound = true;
+									logger.info("siteFound " + siteFound + " breaking while loop");
+									break;
+								}
+								else
+								{
+									logger.info("=========== here 4 ===========");
+									logger.info("No matching participant found");
+									if (scg != null)
+									{
+										logger.info("=========== here 5 ===========");
+										logger.info("Conflict resolver scg with"
+												+ " same spr is found-Action4");
+										final Participant scgParticipant = ReportLoaderUtil
+												.getParticipant(scg.getId());
+										participantList = new HashSet<Participant>();
+										participantList.add(scgParticipant);
+										queue.setParticipantCollection(participantList);
+										queue
+												.setStatus(CaTIESConstants.STATUS_PARTICIPANT_CONFLICT);
+										siteFound = true;
+										logger.info("siteFound " + siteFound
+												+ " breaking while loop");
+										break;
+									}
+								}
+							} //else ends
+						}
+						catch (final Exception ex)
+						{
+							logger.info("=========== here 6 ===========");
+							HL7Parser.logger.error("Error occured while creating participant "
+									+ ex.getMessage(), ex);
+							status = CaTIESConstants.PARTICIPANT_CREATION_ERROR;
+							queue.setStatus(status);
+						}
+					}
+				}// while closes 
+
+				if (scg == null && defaultLookUPResultList != null
+						&& defaultLookUPResultList.isEmpty() && !siteFound)
+				{
+					logger.info("=========== here 7 ===========");
+					try
+					{
+						logger.info("creating scg with first site name ");
+						site = ReportLoaderUtil.getSite(siteNames.get(0).toString());
+						final Participant participant = HL7ParserUtil.parserParticipantInformation(
+								HL7ParserUtil.getReportDataFromReportMap(reportMap,
+										CaTIESConstants.PID), site);
+						participantList = createPartcipant(participant, status);
+						queue.setParticipantCollection(participantList);
+						queue.setStatus(CaTIESConstants.NEW);
+						siteFound = true;
+						logger.info("siteFound " + siteFound);
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+				}
+
+				logger.info("siteFound " + siteFound + " after while loop ");
+				if (!siteFound)
+				{
+					logger.info("siteFound " + siteFound);
+					status = CaTIESConstants.SITE_NOT_FOUND;
+					queue.setParticipantCollection(participantList);
+					queue.setStatus(status);
+				}
+				//}
+			}//else proceed report
+
+			final IdentifiedSurgicalPathologyReport report = IdentifiedReportGenerator
+					.extractOBRSegment(HL7ParserUtil.getReportDataFromReportMap(reportMap,
+							CaTIESConstants.OBR));
+			reportText = HL7ParserUtil.getReportText(reportMap);
+
+			// Save report to report queue
+			addReportToQueue(queue, reportText, scg, siteName, participantName,
+					surgicalPathologyNumber, report.getCollectionDateTime());
+		} // else procees report ends
+		return status;
+
 	}
 
 	/**
@@ -440,11 +688,13 @@ public class HL7Parser implements Parser
 			MatchingStatusForSSNPMI isSSNPMI = MatchingStatusForSSNPMI.NOMATCH;
 			int oneMatchOtherNullCounter = 0;
 			boolean isOneMatchOtherNull = false;
-			logger.info("defaultLookUPResultListsize ***********" + defaultLookUPResultList.size());
+			logger
+					.info("defaultLookUPResultListsize *********** "
+							+ defaultLookUPResultList.size());
 			for (int count = 0; count < defaultLookUPResultList.size(); count++)
 			{
 				final DefaultLookupResult defaultLookupResult = defaultLookUPResultList.get(count);
-				logger.info("*********existing participant weight ="
+				logger.info("*********existing participant weight = "
 						+ defaultLookupResult.getWeight());
 				final MatchingStatusForSSNPMI isSSNPMITemp = defaultLookupResult.getIsSSNPMI();
 				if (isSSNPMITemp == MatchingStatusForSSNPMI.EXACT)
@@ -484,7 +734,7 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			HL7Parser.logger.error(excp.getMessage(),excp);
+			HL7Parser.logger.error(excp.getMessage(), excp);
 			excp.printStackTrace();
 		}
 		return queue;
@@ -546,7 +796,7 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			HL7Parser.logger.error(excp.getMessage(),excp);
+			HL7Parser.logger.error(excp.getMessage(), excp);
 			excp.printStackTrace();
 		}
 		return queue;
@@ -600,7 +850,7 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			HL7Parser.logger.error(excp.getMessage(),excp);
+			HL7Parser.logger.error(excp.getMessage(), excp);
 			excp.printStackTrace();
 		}
 		return queue;
@@ -630,7 +880,7 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			HL7Parser.logger.error(excp.getMessage(),excp);
+			HL7Parser.logger.error(excp.getMessage(), excp);
 			excp.printStackTrace();
 		}
 		return queue;
@@ -711,7 +961,7 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			HL7Parser.logger.error(excp.getMessage(),excp);
+			HL7Parser.logger.error(excp.getMessage(), excp);
 			excp.printStackTrace();
 		}
 		return queue;
@@ -769,7 +1019,7 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			HL7Parser.logger.error(excp.getMessage(),excp);
+			HL7Parser.logger.error(excp.getMessage(), excp);
 			excp.printStackTrace();
 		}
 		return queue;
@@ -822,7 +1072,7 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			HL7Parser.logger.error(excp.getMessage(),excp);
+			HL7Parser.logger.error(excp.getMessage(), excp);
 			excp.printStackTrace();
 		}
 		return queue;
@@ -873,7 +1123,7 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			HL7Parser.logger.error(excp.getMessage(),excp);
+			HL7Parser.logger.error(excp.getMessage(), excp);
 			excp.printStackTrace();
 		}
 		return queue;
@@ -901,7 +1151,8 @@ public class HL7Parser implements Parser
 			}
 			else
 			{
-				HL7Parser.logger.info("******** UI Participant has null fields and SCG exact match");
+				HL7Parser.logger
+						.info("******** UI Participant has null fields and SCG exact match");
 				final Participant scgParticipant = ReportLoaderUtil.getParticipant(scg.getId());
 				participantList = new HashSet<Participant>();
 				participantList.add(scgParticipant);
@@ -912,7 +1163,7 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			HL7Parser.logger.error(excp.getMessage(),excp);
+			HL7Parser.logger.error(excp.getMessage(), excp);
 			excp.printStackTrace();
 		}
 		return queue;
@@ -940,8 +1191,7 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception e)
 		{
-			HL7Parser.logger.error("Error while creating participant"+
-					e.getMessage(), e);
+			HL7Parser.logger.error("Error while creating participant" + e.getMessage(), e);
 			e.printStackTrace();
 			status = CaTIESConstants.PARTICIPANT_CREATION_ERROR;
 		}
@@ -1010,7 +1260,7 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception excp)
 		{
-			HL7Parser.logger.error(excp.getMessage(),excp);
+			HL7Parser.logger.error(excp.getMessage(), excp);
 			excp.printStackTrace();
 		}
 		return pListBasedOnWt;
@@ -1051,8 +1301,7 @@ public class HL7Parser implements Parser
 		}
 		catch (final Exception ex)
 		{
-			HL7Parser.logger.error("Error while creating queue"+
-					ex.getMessage(), ex);
+			HL7Parser.logger.error("Error while creating queue" + ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
 	}

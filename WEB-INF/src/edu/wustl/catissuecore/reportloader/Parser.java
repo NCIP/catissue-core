@@ -29,7 +29,7 @@ public interface Parser
 	 * @throws Exception Exception while parsing the string.
 	 */
 	void parseString(Participant participant, String reportText,
-			SpecimenCollectionGroup specimenCollectionGroup, HashMap<String, String> abbrToHeader)
+			SpecimenCollectionGroup specimenCollectionGroup, String siteName, HashMap<String, String> abbrToHeader)
 			throws Exception;
 
 }

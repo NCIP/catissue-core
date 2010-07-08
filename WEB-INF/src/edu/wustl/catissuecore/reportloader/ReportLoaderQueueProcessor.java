@@ -89,7 +89,7 @@ public class ReportLoaderQueueProcessor extends Thread
 							final String reportText = reportLoaderQueue.getReportText();
 							startTime = new Date().getTime();
 							parser.parseString(participant, reportText, reportLoaderQueue
-									.getSpecimenCollectionGroup(), abbrToHeader);
+									.getSpecimenCollectionGroup(),reportLoaderQueue.getSiteName(),  abbrToHeader);
 							endTime = new Date().getTime();
 							this.logger.info("Report loaded successfully,"
 									+ " deleting report queue object");

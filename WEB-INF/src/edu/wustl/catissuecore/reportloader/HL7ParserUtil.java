@@ -6,17 +6,15 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import edu.wustl.catissuecore.caties.util.CaCoreAPIService;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
-import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 
@@ -350,13 +348,14 @@ public final class HL7ParserUtil
 	 * @param pidLine PID line (participant information)
 	 * @return Site object
 	 */
-	protected static Site parseSiteInformation(String pidLine)
+	protected static String parseSiteInformation(String pidLine)
 	{
 		logger.info("Parsing Site Information");
 		StringTokenizer strTokenizer = null;
 		String field = null;
-		String siteName = null;
-		Site siteObj = null;
+		String abbrSiteName = null;
+		List<String> siteNames = null;
+		//Site siteObj = null;
 		try
 		{
 			String newPidLine = pidLine.replace('|', '~');
@@ -386,23 +385,23 @@ public final class HL7ParserUtil
 						// site in abrrevatted for
 						if (st2.hasMoreTokens())
 						{
-							siteName = st2.nextToken();
-							logger.info("Site name found:" + siteName);
+							abbrSiteName = st2.nextToken();
+							logger.info("Site name found:" + abbrSiteName);
 						}
 					}
-					try
+					/*p try
 					{
 						// find out actual name of site from its abbreviation using
 						//site configuration file
-						siteName = SiteInfoHandler.getSiteName(siteName);
+						siteNames = SiteInfoHandler.getSiteNames(abbrSiteName);
 					}
 					catch (final Exception ex)
 					{
-						HL7ParserUtil.logger.error("Site name not found in config file: " + siteName +
+						HL7ParserUtil.logger.error("Site name not found in config file: " + abbrSiteName +
 								ex.getMessage(),ex);
 						ex.printStackTrace();
-					}
-					if (siteName != null)
+					}*/
+					/*if (siteName != null)
 					{
 						// check for site in DB
 						siteObj = (Site) CaCoreAPIService.getObject(Site.class, Constants.NAME,
@@ -412,7 +411,7 @@ public final class HL7ParserUtil
 							HL7ParserUtil.logger.error("Site name " + siteName + " not found in"
 									+ " the database!");
 						}
-					}
+					} */
 					break;
 				}
 			}
@@ -422,8 +421,9 @@ public final class HL7ParserUtil
 			HL7ParserUtil.logger.error(excp.getMessage(),excp);
 			excp.printStackTrace();
 		}
-		return siteObj;
+		return abbrSiteName;
 	}
+
 
 	/**
 	* Method to retrieve report data from report map.

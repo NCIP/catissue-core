@@ -162,6 +162,24 @@ public final class ReportLoaderUtil
 		return null;
 	}
 
+	public static Site getSite(String siteName) throws Exception {
+		  
+		Site site = null;
+		final String scgHql = "select site"
+			+ " from edu.wustl.catissuecore.domain.Site as site "
+			+ " where site.name='" + siteName +"'";
+		logger.info("-------------" + scgHql );
+		final List resultList = (List) CaCoreAPIService.executeQuery(scgHql,
+			Site.class.getName());
+
+		logger.info("-------------" + scgHql + "   " + resultList.size());
+		if (resultList != null && resultList.size() == 1)
+		{
+		 site = (Site) resultList.get(0);
+		}
+		  return site;
+	  }
+	
 	/**
 	 * Checks is Partial Matching SCG.
 	 * @param participant participant

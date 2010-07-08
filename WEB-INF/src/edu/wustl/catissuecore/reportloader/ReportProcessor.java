@@ -11,7 +11,6 @@ import java.util.Date;
 import edu.wustl.catissuecore.caties.util.CSVLogger;
 import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.caties.util.CaTIESProperties;
-import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -73,9 +72,9 @@ public class ReportProcessor implements Observer
 	 */
 	public void run(Object obj)
 	{
+		System.out.println("in ReportProcessor run method ");
 		String[] files = null;
-		final String siteInfoFileName = CaTIESProperties
-				.getValue(CaTIESConstants.SITE_INFO_FILENAME);
+		//pfinal String siteInfoFileName = CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME);
 		try
 		{
 			files = (String[]) obj;
@@ -89,7 +88,7 @@ public class ReportProcessor implements Observer
 						this.logger.info("parsing file " + file);
 						// Initializing SiteInfoHandler to avoid restart of server to get
 						//new site names added to file at run time
-						SiteInfoHandler.init(siteInfoFileName);
+						//pSiteInfoHandler.init(siteInfoFileName);
 						// calling parser to parse file
 						final Long startTime = new Date().getTime();
 						this.parser.parse(this.inputFileDir + File.separator + file);

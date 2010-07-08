@@ -44,9 +44,8 @@ public class FilePoller implements Observable
 	 */
 	public static void main(String[] args)
 	{
-		String[] files = null;
-		File inputDir = null;
 		FilePoller poller = null;
+		String isTestCase = System.getProperty("TestCase");
 
 		try
 		{
@@ -70,6 +69,7 @@ public class FilePoller implements Observable
 					+ CaTIESConstants.CSVLOGGER_PROCESSING_TIME);
 			// for empty row after heading
 			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER, "");
+			SiteInfoHandler.validateAndCreateMapOfSites();
 
 			final Observer obr = new ReportProcessor();
 			// registering poller to the object obr
@@ -94,8 +94,11 @@ public class FilePoller implements Observable
 			ReportLoaderUtil.createDir(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR));
 			ReportLoaderUtil.createDir(CaTIESProperties.getValue(CaTIESConstants.BAD_FILE_DIR));
 			// Thread for stopping file poller server
-			final Thread stopThread = new StopServer(CaTIESConstants.FILE_POLLER_PORT);
-			stopThread.start();
+			if(isTestCase == null)
+			{
+				final Thread stopThread = new StopServer(CaTIESConstants.FILE_POLLER_PORT);
+				stopThread.start();
+			}
 		}
 		catch (final IOException ex)
 		{
@@ -111,21 +114,22 @@ public class FilePoller implements Observable
 		}
 		try
 		{
-			inputDir = new File(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR));
-			// Loop to contineusly poll on directory for new incoming files
-			while (true)
+			if(isTestCase != null && isTestCase.equalsIgnoreCase("TRUE"))
 			{
-				files = inputDir.list();
-				if (files.length > 0)
+				for(int iCount=0;iCount<2;iCount++)
 				{
-					logger.info("Invoking parser to parse input file");
-					// this invokes ReportProcessor thread
-					poller.obr.notifyEvent(files);
+					readInputFile(poller);
 				}
-				logger.info("Report Loader Server is going to sleep for "
-						+ CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME) + "ms");
-				Thread.sleep(Long.parseLong(CaTIESProperties
-						.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
+			}
+			else
+			{
+				// Loop to contineusly poll on directory for new incoming files
+				while (true)
+				{
+					readInputFile(poller);
+					logger.info("Report Loader Server is going to sleep for "
+							+ CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME) + "ms");
+				}
 			}
 		}
 		catch (final Exception ex)
@@ -161,5 +165,33 @@ public class FilePoller implements Observable
 	public void setObr(Observer obr)
 	{
 		this.obr = obr;
+	}
+	/**
+	 * Method to read the input report hl7 files.
+	 * @param poller
+	 * @throws NumberFormatException
+	 * @throws InterruptedException
+	 */
+	private static void readInputFile(FilePoller poller) throws NumberFormatException, InterruptedException {
+		File[] files = null;
+		File inputDir = new File(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR));
+		files = inputDir.listFiles();
+		String[] fileNames = new String[files.length];
+		for(int i=0,j=0;i<files.length;i++)
+		{
+			if (files[i].isFile())
+			{
+				fileNames[j] = files[i].getName();
+				j++;
+		    }
+		}
+		if (fileNames.length > 0)
+		{
+			logger.info("Invoking parser to parse input file");
+			// this invokes ReportProcessor thread
+			poller.obr.notifyEvent(fileNames);
+		}
+		Thread.sleep(Long.parseLong(CaTIESProperties
+					.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
 	}
 }
