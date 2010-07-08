@@ -241,12 +241,12 @@
 	</property>
 
 	<property>
-		<name>empi.MaxNoOfPatients</name>
+		<name>patient.MaxNoOfPatients</name>
 		<value>100</value>
 	</property>
 
 	<property>
-		<name>empi.threshold</name>
+		<name>patient.threshold</name>
 		<value>20</value>
 	</property>
 
