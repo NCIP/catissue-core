@@ -28,17 +28,17 @@ import edu.wustl.catissuecore.api.test.UserTestCases;
 
 public class CaTissueTestSuite
 {
-	
+
 	/*public static void main(String[] args)
 	{
 		junit.swingui.TestRunner.run(CaTissueTestSuite.class);
 	}*/
-	
-	public static junit.framework.Test suite() 
+
+	public static junit.framework.Test suite()
 	{
 		TestSuite suite = new TestSuite("Test for edu.wustl.catissuecore.bizlogic.test");
 		//$JUnit-BEGIN$
-		
+
 		suite.addTestSuite(InstitutionTestCases.class);
 		suite.addTestSuite(DepartmentTestCases.class);
 		suite.addTestSuite(CancerResearchGrpTestCases.class);
@@ -59,17 +59,17 @@ public class CaTissueTestSuite
 		suite.addTestSuite(DisableFunctionalityTestCases.class);
 		suite.addTestSuite(MSRSuperAdminTestCases.class);
 		suite.addTestSuite(ScientistRoleTestCases.class);
-		suite.addTestSuite(ComplexCollectionProtocolTestCases.class);		
+		suite.addTestSuite(ComplexCollectionProtocolTestCases.class);
 		suite.addTestSuite(ScientistRoleCaGridTestCases.class);
 		suite.addTestSuite(AdminRoleCaGridTestCases.class);
-		suite.addTestSuite(ParticipantEmpiTestCase.class);
+//		suite.addTestSuite(ParticipantEmpiTestCase.class);
 		suite.addTestSuite(BulkOperationTestCases.class);
 	/*	suite.addTestSuite(SupervisorRoleTestCases.class);
-		suite.addTestSuite(TechnicianRoleTestCases.class);	
+		suite.addTestSuite(TechnicianRoleTestCases.class);
 		suite.addTestSuite(ScientistRoleTestCases.class);*/
 	//	suite.addTestSuite(PrivilegeBasedTestCases.class);
 		//$JUnit-END$
 		return suite;
 	}
-	
+
 }
