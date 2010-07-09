@@ -13,7 +13,6 @@ import edu.wustl.catissuecore.api.test.DistributionProtocolTestCases;
 import edu.wustl.catissuecore.api.test.IdentifiedSurgicalPathologyReportTestCases;
 import edu.wustl.catissuecore.api.test.InstitutionTestCases;
 import edu.wustl.catissuecore.api.test.MSRSuperAdminTestCases;
-import edu.wustl.catissuecore.api.test.ParticipantEmpiTestCase;
 import edu.wustl.catissuecore.api.test.ParticipantTestCases;
 import edu.wustl.catissuecore.api.test.ScientistRoleCaGridTestCases;
 import edu.wustl.catissuecore.api.test.ScientistRoleTestCases;
