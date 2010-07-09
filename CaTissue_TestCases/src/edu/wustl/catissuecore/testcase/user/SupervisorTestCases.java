@@ -59,14 +59,14 @@ public class SupervisorTestCases extends CaTissueSuiteBaseTest
 			Collection<Site> siteCollection = new HashSet<Site>();
 			siteCollection.add(site);
 			user.setSiteCollection(siteCollection);
-			user = (User)appService.createObject(user);	
+			user = (User)appService.createObject(user);
 			System.out.println("superviosr "+user.getFirstName());
 			Logger.out.info("Supervisor User added successfully");
 			assertTrue("Supervisor User added successfully", true);
-		    user.setNewPassword("Login123");
-		   	user = (User)appService.updateObject(user);	
+		    user.setNewPassword("Test123");
+		   	user = (User)appService.updateObject(user);
 		   	TestCaseUtility.setNameObjectMap( "Supervisor", user );
-			
+
 		 }
 		 catch(Exception e)
 		 {
@@ -74,14 +74,14 @@ public class SupervisorTestCases extends CaTissueSuiteBaseTest
 			 e.printStackTrace();
 			 assertFalse("Could not add a Supervisor into System", true);
 		 }
-		
-	
-		
+
+
+
 	}
 	/**
 	 * Test Collection Protocol Add.
 	 */
-	
+
 	public void testCollectionProtocolAddForSupervisor()
 	{
 		/*Collection Protocol Details*/
@@ -179,7 +179,7 @@ public class SupervisorTestCases extends CaTissueSuiteBaseTest
 			List<NameValueBean> privilegesList = new ArrayList<NameValueBean>();
 			privilegesList.add( new NameValueBean("Registration","18") );
 			privilegesList.add( new NameValueBean("Specimen Processing","26") );
-			privilegesList.add( new NameValueBean("Distribution","21") );		
+			privilegesList.add( new NameValueBean("Distribution","21") );
 			privilegeBean.setPrivileges( privilegesList );
 			User user = (User)TestCaseUtility.getNameObjectMap( "Supervisor" );
 			privilegeBean.setUser(user);
@@ -244,40 +244,40 @@ public class SupervisorTestCases extends CaTissueSuiteBaseTest
 		setRequestPathInfo("/Login");
 		User user = (User)TestCaseUtility.getNameObjectMap( "Supervisor" );
 		addRequestParameter("loginName", user.getEmailAddress());
-		addRequestParameter("password", "Login123");
+		addRequestParameter("password", "Test123");
 		actionPerform();
 		String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 		SessionDataBean sessionData = null;
-		if(getSession().getAttribute(Constants.TEMP_SESSION_DATA) != null) 
+		if(getSession().getAttribute(Constants.TEMP_SESSION_DATA) != null)
 		{
 			sessionData = (SessionDataBean)getSession().getAttribute(Constants.TEMP_SESSION_DATA);
 		}
-		else 
+		else
 		{
 			sessionData = (SessionDataBean)getSession().getAttribute(Constants.SESSION_DATA);
 		}
 		String userId = sessionData.getUserId().toString();
-		setRequestPathInfo("/UpdatePassword");		
+		setRequestPathInfo("/UpdatePassword");
 		addRequestParameter("id",userId);
 		addRequestParameter("operation", "");
 		addRequestParameter("pageOf",pageOf);
-		addRequestParameter("oldPassword", "Login123");
-		addRequestParameter("newPassword", "Test123");
-		addRequestParameter("confirmNewPassword", "Test123");
+		addRequestParameter("oldPassword", "Test123");
+		addRequestParameter("newPassword", "Login123");
+		addRequestParameter("confirmNewPassword", "Login123");
 		actionPerform();
-		verifyForward("success");		
+		verifyForward("success");
 		System.out.println("----"+getActualForward());
 	}
 	/**
 	 * Test Login with Valid Login name and Password.
-	 */	
+	 */
 
 	public void testSupervisorLogin()
 	{
 		setRequestPathInfo("/Login") ;
 		User user = (User)TestCaseUtility.getNameObjectMap( "Supervisor" );
 		addRequestParameter("loginName", user.getEmailAddress());
-		addRequestParameter("password", "Test123");
+		addRequestParameter("password", "Login123");
 		logger.info("start in login");
 		actionPerform();
 		logger.info("Login: "+getActualForward());
@@ -286,12 +286,12 @@ public class SupervisorTestCases extends CaTissueSuiteBaseTest
 		CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN=bean;
 		verifyNoActionErrors();
 		logger.info("end in login");
-	} 
-	
+	}
+
 	/**
 	 * Test Participant Add.
 	 */
-	
+
 	public void testParticipantAddWithSupervisorUser()
 	{
 		/*Participant add and registration*/
@@ -307,45 +307,45 @@ public class SupervisorTestCases extends CaTissueSuiteBaseTest
 		partForm.setOperation("add") ;
 
 		CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getNameObjectMap("CollectionProtocol");
-		
+
 		Map<String,String> collProtRegVal = new LinkedHashMap<String,String>();
-		
+
 		collProtRegVal.put("CollectionProtocolRegistration:" +
 				"1_CollectionProtocol_shortTitle",collectionProtocol.getShortTitle()) ;
-		
+
 		collProtRegVal.put("CollectionProtocolRegistration:" +
 				"1_registrationDate", "01-01-2008") ;
-		
+
 		collProtRegVal.put("CollectionProtocolRegistration:" +
 				"1_activityStatus", collectionProtocol.getActivityStatus()) ;
-		
+
 		collProtRegVal.put("CollectionProtocolRegistration:" +
 				"1_isConsentAvailable", "None Defined") ;
-		
+
 		collProtRegVal.put("CollectionProtocolRegistration:" +
 				"1_CollectionProtocol_id", ""+collectionProtocol.getId()) ;
-		
+
 		collProtRegVal.put("CollectionProtocolRegistration:" +
 				"1_CollectionProtocol_Title", collectionProtocol.getTitle()) ;
-		
+
 		collProtRegVal.put("CollectionProtocolRegistration:" +
 				"1_protocolParticipantIdentifier", ""+collectionProtocol.getId()) ;
-		
+
 		partForm.setCollectionProtocolRegistrationValues(collProtRegVal) ;
-		
+
 		setRequestPathInfo("/ParticipantAdd");
 		setActionForm(partForm);
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
-		
+
 		ParticipantForm form=(ParticipantForm) getActionForm();
-		
+
 		Participant participant = new Participant();
 		participant.setId(form.getId());
 		participant.setFirstName(form.getFirstName());
 		participant.setLastName(form.getLastName());
-		
+
 		Date birthDate = new Date();
 		String dd = new String();
 		String mm = new String();
@@ -353,37 +353,37 @@ public class SupervisorTestCases extends CaTissueSuiteBaseTest
 		dd = form.getBirthDate().substring(0,1);
 		mm = form.getBirthDate().substring(3,4);
 		yyyy = form.getBirthDate().substring(6,9);
-		
+
 		birthDate.setDate(Integer.parseInt(dd));
 		birthDate.setMonth(Integer.parseInt(mm));
 		birthDate.setYear(Integer.parseInt(yyyy));
 		participant.setBirthDate(birthDate);
-		
+
 		Collection collectionProtocolRegistrationCollection = new HashSet();
 		collectionProtocolRegistrationCollection.add(collectionProtocol);
 		participant.setCollectionProtocolRegistrationCollection(collectionProtocolRegistrationCollection);
 		TestCaseUtility.setNameObjectMap("Participant",participant);
 	}
-	
+
 	public void testSupervisorUserUpdateSpecimen()
 	{
 		Specimen specimen = null;
 		Participant participant = (Participant) TestCaseUtility.getNameObjectMap("Participant");
 		System.out.println("participant "+participant.getFirstName()+" id "+participant.getId());
 		SpecimenCollectionGroup scg = BaseTestCaseUtility.getSCGFromParticipant(participant.getId(),appService);
-		try 
+		try
 		{
 			String query = "from edu.wustl.catissuecore.domain.Specimen as specimen where "
-				+ "specimen.specimenCollectionGroup.id= "+scg.getId();			
+				+ "specimen.specimenCollectionGroup.id= "+scg.getId();
 			List resultList = appService.search(query);
 
-			if (resultList != null && resultList.size() > 0) 
+			if (resultList != null && resultList.size() > 0)
 			{
 				specimen = (Specimen) resultList.get(0);
 				System.out.println("specimen "+specimen.getId());
-			}					
-		} 
-		catch (Exception e) 
+			}
+		}
+		catch (Exception e)
 		{
 			System.out.println( "SupervisorTestCases.testSupervisorUserUpdateSpecimen()" +e.getMessage());
 			e.printStackTrace();
@@ -404,10 +404,10 @@ public class SupervisorTestCases extends CaTissueSuiteBaseTest
 		{
 			System.out.println("Exception in updating specimen : testSupervisorUserUpdateSpecimen()");
 			e.printStackTrace();
-		}		
+		}
 
 	}
-	
+
 	public void testSupervisorUserUpdateSCG()
 	{
 		SpecimenCollectionGroup scg = null;
@@ -415,7 +415,7 @@ public class SupervisorTestCases extends CaTissueSuiteBaseTest
 		System.out.println("participant "+participant.getFirstName()+" id "+participant.getId());
 		scg = BaseTestCaseUtility.getSCGFromParticipant(participant.getId(),appService);
 		Site site = (Site)TestCaseUtility.getNameObjectMap("Site");
-		
+
 		try
 		{
 			System.out.println("Before Update");
@@ -434,28 +434,28 @@ public class SupervisorTestCases extends CaTissueSuiteBaseTest
 					consentStatus.setConsentTier(consentTier);
 					consentStatus.setStatus("No");
 					consentTierStatusCollection.add(consentStatus);
-				}				
-			}		
+				}
+			}
 			scg.setConsentTierStatusCollection(consentTierStatusCollection);
 			scg.getCollectionProtocolRegistration().setParticipant(participant);
 			BaseTestCaseUtility.setEventParameters( scg );
 			SpecimenCollectionGroup updatedSCG = (SpecimenCollectionGroup)appService.updateObject(scg);
-			System.out.println(updatedSCG.getCollectionStatus().equals("Complete"));			
+			System.out.println(updatedSCG.getCollectionStatus().equals("Complete"));
 			if(updatedSCG.getCollectionStatus().equals("Complete"))
 			{
 				assertTrue("SCG Collected ---->", true);
-			}			
+			}
 		}
 		catch(Exception e)
 		{
 			System.out.println( "SupervisorTestCases.testSupervisorUserUpdateSCG()" );
 			e.printStackTrace();
 		}
-		
-	}
-	
-	 
 
-	
-	
+	}
+
+
+
+
+
 }

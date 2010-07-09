@@ -24,7 +24,7 @@ import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.system.comm.client.ClientSession;
 
-public class ScientistRoleTestCases extends CaTissueBaseTestCase 
+public class ScientistRoleTestCases extends CaTissueBaseTestCase
 {
  static ApplicationService appService = null;
  public void setUp()
@@ -33,22 +33,22 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 	ClientSession cs = ClientSession.getInstance();
 	//System.setProperty("javax.net.ssl.trustStore", "E://jboss//server//default//conf//chap8.keystore");
 	try
-	{ 
-		cs.startSession("scientist@admin.com", "Test123");
-	} 	
-				
-	catch (Exception ex) 
-	{ 
-		System.out.println(ex.getMessage()); 
+	{
+		cs.startSession("scientist@admin.com", "Login123");
+	}
+
+	catch (Exception ex)
+	{
+		System.out.println(ex.getMessage());
 		ex.printStackTrace();
 		fail("Fail to create connection");
 		System.exit(1);
 	}
 }
- 
+
  /**
   * Search all participant and check if PHI data is visible
-  */ 
+  */
   public void testSearchParticipantWithScientistLogin()
   {
 	try
@@ -69,8 +69,8 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			System.out.println("Participant Last name :"+retutnParticpant.getLastName());
 			System.out.println("Participant Middle Name:"+retutnParticpant.getMiddleName());
 			System.out.println("Participant SSN no:"+retutnParticpant.getSocialSecurityNumber());
-			
-			Collection<ParticipantMedicalIdentifier> pmiCollection 
+
+			Collection<ParticipantMedicalIdentifier> pmiCollection
 				= retutnParticpant.getParticipantMedicalIdentifierCollection();
 			for (Iterator<ParticipantMedicalIdentifier> iterator = pmiCollection.iterator();iterator.hasNext();)
 		    {
@@ -81,8 +81,8 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 		        }
 		        System.out.println("Participant->PMI MedicalRecordNumber:"+participantMedId.getMedicalRecordNumber());
 		    }
-			
-		    Collection<CollectionProtocolRegistration> cpCollection 
+
+		    Collection<CollectionProtocolRegistration> cpCollection
 		    				= retutnParticpant.getCollectionProtocolRegistrationCollection();
 		    for (Iterator<CollectionProtocolRegistration> iterator=cpCollection.iterator();iterator.hasNext();)
 		    {
@@ -99,7 +99,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 		}
 	 }
 	 catch(Exception e){
-		 
+
 	     System.out
 				.println("ScientistRoleTestCases.testSearchParticipantWithScientistLogin()"+e.getMessage());
 		 e.printStackTrace();
@@ -127,7 +127,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 		 catch(Exception e)
 		 {
 			 System.out
-				.println("ScientistRoleTestCases.testSearchPMIWithScientistLogin():"+e.getMessage());	
+				.println("ScientistRoleTestCases.testSearchPMIWithScientistLogin():"+e.getMessage());
 			 e.printStackTrace();
 			 assertFalse(e.getMessage(), true);
 		 }
@@ -135,7 +135,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
   /**
 	  * Search all CPR and check if PHI data is visible
 	  *
-	  */ 
+	  */
 	  public void testSearchProtocolRegistrationWithScientistLogin()
 	  {
 		try
@@ -167,7 +167,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
   /**
 	  * Search all SCG and check if PHI data is visible
 	  *
-	  */ 
+	  */
 	  public void testSearchSpecimenCollectionGroupWithScientistLogin()
 	  {
 		try{
@@ -191,7 +191,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 				System.out.println("SCG->CPR->RegistrationDate :"+ returnedReg.getRegistrationDate());
 			    System.out.println("SCG->CPR->ConsentSignatureDate :"+ returnedReg.getConsentSignatureDate());
 			    System.out.println("SCG->CPR->SignedConsentDocumentURL:"+ returnedReg.getSignedConsentDocumentURL());
-			     
+
 				Collection<SpecimenEventParameters> spEvent = returnedSCG.getSpecimenEventParametersCollection();
 			    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
 			    while(eveItr.hasNext())
@@ -230,7 +230,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 						fail("TissueSpecimen PHI data is visible to scientist");
 					}
 					System.out.println("TissueSpecimen->CreatedOn:"+spe.getCreatedOn());
-				
+
 					Collection<SpecimenEventParameters> spEvent = spe.getSpecimenEventCollection();
 				    Iterator<SpecimenEventParameters> eveItr = spEvent.iterator();
 				    while(eveItr.hasNext())
@@ -242,7 +242,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 				    	}
 				    	System.out.println("TissueSpecimen TimeStamp :"+spEventParam.getTimestamp());
 				    }
-				    
+
 				    if(spe.getSpecimenCollectionGroup().getSurgicalPathologyNumber()!=null)
 					{
 						fail("TissueSpecimen->SCG PHI data is visible to scientist");
@@ -269,7 +269,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			 }
 		}
 		/**
-		 * Test Search Molecular Specimen and test for PHI data 
+		 * Test Search Molecular Specimen and test for PHI data
 		 */
 	  public void testSearchMolecularSpecimenWithScientistLogin()
 	  {
@@ -323,7 +323,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			 }
 		}
 	  /**
-		* Test Search Cell Specimen and test for PHI data 
+		* Test Search Cell Specimen and test for PHI data
 		*/
 	  public void testSearchCellSpecimenWithScientistLogin()
 	  {
@@ -377,7 +377,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 			 }
 		}
 	  /**
-		 * Test Search Fluid Specimen and test for PHI data 
+		 * Test Search Fluid Specimen and test for PHI data
 		 */
 	  public void testSearchFluidSpecimenWithScientistLogin()
 	  {
@@ -430,8 +430,8 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 				 assertFalse(e.getMessage(), true);
 			 }
 		}
-	
-	  
+
+
 		/**
 		 * Test search SpecimenArrayContent and test for PHI data
 		 */
@@ -460,9 +460,9 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 				 e.printStackTrace();
 				 assertFalse(e.getMessage(), true);
 			 }
-			
+
 		}
-		
+
 		/**
 		 * Test search for ReceivedEventParameters and test for PHI data
 		 */
@@ -482,7 +482,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 					}
 					System.out.println("ReceivedEventParameters:TimeStamp:"+rec.getTimestamp());
 				}
-			} 
+			}
 			catch(Exception e)
 			{
 				System.out
@@ -510,7 +510,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 					}
 					System.out.println("CollectionEventParameters:Timestamp:"+cep.getTimestamp());
 				}
-			} 
+			}
 			catch(Exception e)
 			{
 				System.out
@@ -538,7 +538,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 					}
 					System.out.println("MolecularSpecimenReviewParameters :Timestamp : " + mol.getTimestamp());
 				}
-			} 
+			}
 			catch(Exception e)
 			{
 				System.out
@@ -547,7 +547,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 				assertFalse(e.getMessage(), true);
 			}
 		}
-		
+
 		/**
 		 * Test search for DeidentifiedSurgicalPathologyReport and test for PHI data
 		 */
@@ -612,5 +612,5 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 				 assertFalse(e.getMessage(), true);
 			 }
 		}
-				
+
 	}

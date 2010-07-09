@@ -334,7 +334,7 @@ public class AddAnticipatedSCGInParticipant
 		ClientSession cs = ClientSession.getInstance();
 		try
 		{
-			cs.startSession("admin@admin.com", "Login123");
+			cs.startSession("admin@admin.com", "Test123");
 		}
 
 		catch (Exception ex)

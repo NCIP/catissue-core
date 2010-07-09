@@ -69,7 +69,7 @@ import org.apache.log4j.PropertyConfigurator;
  */
 
 public class ClientDemo_CA
-{	
+{
 	static
 	{
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
@@ -82,9 +82,9 @@ public class ClientDemo_CA
 	static ApplicationService appServiceDeIntegration = null;
 	static ApplicationService appServiceDEEntity = null;
 	static ApplicationService appServiceCatissue = null;
-	
+
 	private static EntityManagerInterface entityManager = EntityManager.getInstance();
-	
+
 	public static void main(String[] args)
 	{
 		System.out.println("*** ClientDemo_CA...");
@@ -95,18 +95,18 @@ public class ClientDemo_CA
 			//caTissue Service
 			initCaTissueService();
 			//TODO 3
-			cs.startSession("admin@admin.com", "Login123");
+			cs.startSession("admin@admin.com", "Test123");
 			edu.wustl.catissuecore.domain.Participant participant = searchParticipant();
 			if(participant!=null)
 			{
 				addAnnotationToStaticEntity(participant.getId());
-				System.out.println("Added annotation");	
+				System.out.println("Added annotation");
 				//Query
 				queryDEClass(participant.getId());
-				
+
 				queryTreatmentAnnotation();
 			}
-			
+
 		}
 		catch (Exception ex)
 		{
@@ -131,7 +131,7 @@ public class ClientDemo_CA
 		appServiceDEEntity = ApplicationServiceProvider.getRemoteInstance("http://localhost:8080/CA/http/remoteService");
 	}
 	/**
-	 * 
+	 *
 	 */
 	private static void initDEIntegrationService()
 	{
@@ -142,8 +142,8 @@ public class ClientDemo_CA
 
 	/**
 	 * @return
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
 	 */
 	private static void addAnnotationToStaticEntity(Long participantId) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
@@ -154,16 +154,16 @@ public class ClientDemo_CA
 			//TODO 5
 			Object deObjectToBeCreated = getDEToBeCreated(participantId);
 //			Object deObjectToBeCreated = getHealthExaminationAnnotation();
-			
+
 			//TODO 6
 			AlcoholHealthAnnotation createdDE = (AlcoholHealthAnnotation)appServiceDEEntity.createObject(deObjectToBeCreated);
 			System.out.println("Newly created Annotation = "  +  createdDE);
-			
+
 			System.out.println("Updating Integration Tables");
 			updateIntegrationTables(participantId,createdDE.getId());
 		}
 		catch (ApplicationException e)
-		{			
+		{
 			e.printStackTrace();
 		}
 
@@ -174,7 +174,7 @@ public class ClientDemo_CA
 	 */
 	private static void queryTreatmentAnnotation()
 	{
-		
+
 		TreatmentAnnotation treatmentAnnotation = new TreatmentAnnotation();
 		treatmentAnnotation.setAgent("ACACIA");
 		treatmentAnnotation.setOtherAgent("Other");
@@ -206,54 +206,54 @@ public class ClientDemo_CA
 	}
 	/**
 	 * @param createdDE
-		 * @throws DynamicExtensionsApplicationException 
-		 * @throws DynamicExtensionsSystemException 
-		 * @throws ApplicationException 
+		 * @throws DynamicExtensionsApplicationException
+		 * @throws DynamicExtensionsSystemException
+		 * @throws ApplicationException
 	 */
 	private static void updateIntegrationTables(Long staticEntityId,Long deEntityId) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, ApplicationException
 	{
 		initDEIntegrationService();
 		Long particpantClassId = getEntityId(STATIC_ENTITY_CLASS_NAME);
 		System.out.println("Entity Id for Participant " + particpantClassId);
-	
+
 		Long smokingHistoryContainerId =getContainerId(DE_CLASS_NAME);
 		System.out.println("Container Id for Person " + smokingHistoryContainerId);
-		
+
 		EntityMapRecord entityMapRecord = initEntityMapRecord(staticEntityId,deEntityId, getFormContext(particpantClassId, smokingHistoryContainerId));
 		insertEntityMapRecord(entityMapRecord);
 	}
 
-	
+
 
 	/**
 	 * @param participantId
 	 * @return
-	 * @throws ApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws ApplicationException
+	 * @throws DynamicExtensionsSystemException
 	 */
 	private static Object getDEToBeCreated(Long participantId) throws ApplicationException, DynamicExtensionsSystemException
 	{
 		Participant partcipant = new Participant();
-		partcipant.setId(participantId);	
-	
+		partcipant.setId(participantId);
+
 		AlcoholHealthAnnotation alcoholHealthAnnotation = new AlcoholHealthAnnotation();
 		System.out.println("Getting next id");
 		Long smokingHistoryId = getNextIdentifier(DE_CLASS_NAME);
 		alcoholHealthAnnotation.setId(smokingHistoryId);
-		
+
 		alcoholHealthAnnotation.setAgent("Agent 1");
 		alcoholHealthAnnotation.setDrinksPerWeek(new Long(7));
 		alcoholHealthAnnotation.setOtherAgent("Other Agent 1");
 		alcoholHealthAnnotation.setYearsAgentFree(new Double(1.2));
 		alcoholHealthAnnotation.setParticipant(partcipant);
-			
+
 		return alcoholHealthAnnotation;
 	}
 	/**
 	 * @return
 	 */
 	private static Object getHealthExaminationAnnotation()
-	{	
+	{
 		HealthExaminationAnnotation healthExaminationAnnotation = new HealthExaminationAnnotation();
 		Long smokingHistoryId = null;
 		try
@@ -273,8 +273,8 @@ public class ClientDemo_CA
 		healthExaminationAnnotation.setId(smokingHistoryId);
 		healthExaminationAnnotation.setNameOfProcedure("Name");
 		healthExaminationAnnotation.setOtherProcedure("Other");
-		
-		
+
+
 		return healthExaminationAnnotation;
 	}
 
@@ -285,17 +285,17 @@ public class ClientDemo_CA
 	{
 		Participant p = new Participant();
 		p.setId(participantId);
-		
+
 		TreatmentRegimen treatmentRegimen = new TreatmentRegimen();
 		treatmentRegimen.setTreatmentRegimen("Regimen 1");
 		treatmentRegimen.setParticipant(p);
-	
+
 		try {
 			System.out.println("Searching treatmentRegimen "   + treatmentRegimen);
 			initDEService();
-	
+
 			List resultList = appServiceCatissue.search(TreatmentRegimen.class,treatmentRegimen);
-	
+
 			System.out.println("Returned treatmentRegimen " + resultList);
 			if(resultList!=null)
 			{
@@ -307,7 +307,7 @@ public class ClientDemo_CA
 					System.out.println("AlcoholHealthAnnotation Id: " + returnedTreatmentRegimen.getParticipant().getId());
 					System.out.println("----------------------------------------------------------------------");
 					System.out.println("/n AlcoholHealthAnnotation retrieved Agent : " + returnedTreatmentRegimen.getTreatmentRegimen());
-	
+
 				}
 			}
 		}
@@ -317,15 +317,15 @@ public class ClientDemo_CA
 	}
 
 	/**
-	 * @throws ApplicationException 
-	 * @throws DynamicExtensionsSystemException 
-	 * 
+	 * @throws ApplicationException
+	 * @throws DynamicExtensionsSystemException
+	 *
 	 */
 	private static Long getNextIdentifier(String deEntity) throws ApplicationException, DynamicExtensionsSystemException
 	{
 		/*DetachedCriteria maxDEIdentifierCriteria = DetachedCriteria.forClass(deClass).setProjection( Property.forName("id").count());
 		List identifierList = appServiceDEEntity.query(maxDEIdentifierCriteria, deClass.getName());
-		
+
 		if(identifierList!=null)
 		{
 			Iterator identifierIterator = identifierList.iterator();
@@ -335,7 +335,7 @@ public class ClientDemo_CA
 				System.out.println("I = " + maxIdentifier);
 				Long l =new Long(maxIdentifier.intValue() + 1);
 				return (l);
-				
+
 			}
 		}
 		return null;*/
@@ -425,7 +425,7 @@ public class ClientDemo_CA
 	{
 			Long entityId = getEntityId(string);
 			return entityManager.getContainerIdForEntity(entityId);
-		
+
 	}
 
 
@@ -488,9 +488,9 @@ public class ClientDemo_CA
 	private static edu.wustl.catissuecore.domain.Participant getParticipantToSearch()
 	{
 		edu.wustl.catissuecore.domain.Participant participant = new edu.wustl.catissuecore.domain.Participant();;
-		//Set parameters for participant to be searched 
-		participant.setId(1L);	//Set ID. 
-		
+		//Set parameters for participant to be searched
+		participant.setId(1L);	//Set ID.
+
 		return participant;
 	}
 

@@ -74,15 +74,15 @@ public class ClientDemo
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
 	private static Logger logger =Logger.getCommonLogger(ClientDemo.class);
-	
+
 	private final static String STATIC_ENTITY_CLASS_NAME = "edu.wustl.catissuecore.domain.Participant";
 	private final static String DE_CLASS_NAME = "SmokingHistory";
 	static ApplicationService appServiceDeIntegration = null;
 	static ApplicationService appServiceDEEntity = null;
 	static ApplicationService appServiceCatissue = null;
-	
+
 	private static EntityManagerInterface entityManager = EntityManager.getInstance();
-	
+
 	public static void main(String[] args)
 	{
 		System.out.println("*** ClientDemo...");
@@ -92,14 +92,14 @@ public class ClientDemo
 		{
 			//caTissue Service
 			initCaTissueService();
-			cs.startSession("admin@admin.com", "Test123");
+			cs.startSession("admin@admin.com", "Login123");
 			edu.wustl.catissuecore.domain.Participant participant = searchParticipant();
 			if(participant!=null)
 			{
 				addAnnotationToStaticEntity(participant.getId());
-				System.out.println("Added annotation");	
+				System.out.println("Added annotation");
 			}
-			
+
 		}
 		catch (Exception ex)
 		{
@@ -123,7 +123,7 @@ public class ClientDemo
 		appServiceDEEntity = ApplicationServiceProvider.getRemoteInstance("http://localhost:8080/patienthistory/http/remoteService");
 	}
 	/**
-	 * 
+	 *
 	 */
 	private static void initDEIntegrationService()
 	{
@@ -134,8 +134,8 @@ public class ClientDemo
 
 	/**
 	 * @return
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
 	 */
 	private static void addAnnotationToStaticEntity(Long participantId) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
@@ -146,7 +146,7 @@ public class ClientDemo
 			Object deObjectToBeCreated = getDEToBeCreated(participantId);
 			SmokingHistory createdDE = (SmokingHistory)appServiceDEEntity.createObject(deObjectToBeCreated);
 			System.out.println("Newly created Annotation = "  +  createdDE);
-			
+
 			System.out.println("Updating Integration Tables");
 			updateIntegrationTables(participantId,createdDE.getId());
 		}
@@ -161,9 +161,9 @@ public class ClientDemo
 
 	/**
  * @param createdDE
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
-	 * @throws ApplicationException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
+	 * @throws ApplicationException
  */
 private static void updateIntegrationTables(Long staticEntityId,Long deEntityId) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, ApplicationException
 {
@@ -173,18 +173,18 @@ private static void updateIntegrationTables(Long staticEntityId,Long deEntityId)
 
 	Long smokingHistoryContainerId =getContainerId(DE_CLASS_NAME);
 	System.out.println("Container Id for Person " + smokingHistoryContainerId);
-	
+
 	EntityMapRecord entityMapRecord = initEntityMapRecord(staticEntityId,deEntityId, getFormContext(particpantClassId, smokingHistoryContainerId));
 	insertEntityMapRecord(entityMapRecord);
 }
 
-	
+
 
 	/**
  * @param participantId
  * @return
-	 * @throws ApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws ApplicationException
+	 * @throws DynamicExtensionsSystemException
  */
 private static Object getDEToBeCreated(Long participantId) throws ApplicationException, DynamicExtensionsSystemException
 {
@@ -207,15 +207,15 @@ private static Object getDEToBeCreated(Long participantId) throws ApplicationExc
 }
 
 	/**
-	 * @throws ApplicationException 
-	 * @throws DynamicExtensionsSystemException 
- * 
+	 * @throws ApplicationException
+	 * @throws DynamicExtensionsSystemException
+ *
  */
 private static Long getNextIdentifier(String deEntity) throws ApplicationException, DynamicExtensionsSystemException
 {
 	/*DetachedCriteria maxDEIdentifierCriteria = DetachedCriteria.forClass(deClass).setProjection( Property.forName("id").count());
 	List identifierList = appServiceDEEntity.query(maxDEIdentifierCriteria, deClass.getName());
-	
+
 	if(identifierList!=null)
 	{
 		Iterator identifierIterator = identifierList.iterator();
@@ -225,7 +225,7 @@ private static Long getNextIdentifier(String deEntity) throws ApplicationExcepti
 			System.out.println("I = " + maxIdentifier);
 			Long l =new Long(maxIdentifier.intValue() + 1);
 			return (l);
-			
+
 		}
 	}
 	return null;*/
@@ -315,7 +315,7 @@ private static Long getNextIdentifier(String deEntity) throws ApplicationExcepti
 	{
 			Long entityId = getEntityId(string);
 			return entityManager.getContainerIdForEntity(entityId);
-		
+
 	}
 
 
@@ -378,9 +378,9 @@ private static Long getNextIdentifier(String deEntity) throws ApplicationExcepti
 	private static edu.wustl.catissuecore.domain.Participant getParticipantToSearch()
 	{
 		edu.wustl.catissuecore.domain.Participant participant = new edu.wustl.catissuecore.domain.Participant();;
-		//Set parameters for participant to be searched 
-		participant.setId(1L);	//Set ID. 
-		
+		//Set parameters for participant to be searched
+		participant.setId(1L);	//Set ID.
+
 		return participant;
 	}
 

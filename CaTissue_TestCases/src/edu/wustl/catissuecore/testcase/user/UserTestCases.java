@@ -17,11 +17,11 @@ import edu.wustl.common.util.logger.Logger;
 
 public class UserTestCases extends CaTissueSuiteBaseTest
 {
-	
-	
+
+
 	public void testSupervisorAdd()
 	{
-		addRequestParameter("pageOf", "pageOfUserAdmin");		
+		addRequestParameter("pageOf", "pageOfUserAdmin");
 		UserForm form = new UserForm();
         form.setFirstName("user_first_name_" + UniqueKeyGeneratorUtil.getUniqueKey());
         form.setLastName("user_last_name_" + UniqueKeyGeneratorUtil.getUniqueKey());
@@ -49,17 +49,17 @@ public class UserTestCases extends CaTissueSuiteBaseTest
         setActionForm(form);
 		actionPerform();
 		verifyForward("success");
-		verifyNoActionErrors();				
-		
-		User supervisor = new User();		
+		verifyNoActionErrors();
+
+		User supervisor = new User();
 		supervisor.setId(form.getId());
 		supervisor.setLastName(form.getLastName());
 		supervisor.setFirstName(form.getFirstName());
 		supervisor.setEmailAddress(form.getEmailAddress());
-		
+
 		//add site object to objectMap
 		TestCaseUtility.setNameObjectMap("Supervisor",supervisor);
-		
+
 	}
 	public void testAddScientist()
 	 {
@@ -75,9 +75,9 @@ public class UserTestCases extends CaTissueSuiteBaseTest
 			Logger.out.info("Scientist User added successfully");
 			System.out.println("Scientist User added successfully");
 			assertTrue("Scientist User added successfully", true);
-		    user.setNewPassword("Login123");
-		   	user = (User)appService.updateObject(user);		
-			
+		    user.setNewPassword("Test123");
+		   	user = (User)appService.updateObject(user);
+
 		 }
 		 catch(Exception e)
 		 {
@@ -86,5 +86,5 @@ public class UserTestCases extends CaTissueSuiteBaseTest
 			 assertFalse("Could not add a Scientist into System", true);
 		 }
 	 }
-	
+
 }

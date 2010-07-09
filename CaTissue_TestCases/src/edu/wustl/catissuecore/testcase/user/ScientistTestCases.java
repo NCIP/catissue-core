@@ -48,55 +48,55 @@ import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 
 public class ScientistTestCases  extends CaTissueSuiteBaseTest
 {
-	
+
 	/**
 	 * Test First Time Login.
 	 */
-	
+
 	public void testFirstTimeScientistLogin()
 	{
 		setRequestPathInfo("/Logout") ;
-		actionPerform();		
+		actionPerform();
 		verifyForward("success");
 		CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN = null;
-		
+
 		setRequestPathInfo("/Login");
 		User user = (User)TestCaseUtility.getNameObjectMap( "Scientist" );
 		addRequestParameter("loginName", user.getEmailAddress());
-		addRequestParameter("password", "Login123");
+		addRequestParameter("password", "Test123");
 		actionPerform();
 		String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 		SessionDataBean sessionData = null;
-		if(getSession().getAttribute(Constants.TEMP_SESSION_DATA) != null) 
+		if(getSession().getAttribute(Constants.TEMP_SESSION_DATA) != null)
 		{
 			sessionData = (SessionDataBean)getSession().getAttribute(Constants.TEMP_SESSION_DATA);
 		}
-		else 
+		else
 		{
 			sessionData = (SessionDataBean)getSession().getAttribute(Constants.SESSION_DATA);
 		}
 		String userId = sessionData.getUserId().toString();
-		setRequestPathInfo("/UpdatePassword");		
+		setRequestPathInfo("/UpdatePassword");
 		addRequestParameter("id",userId);
 		addRequestParameter("operation", "");
 		addRequestParameter("pageOf",pageOf);
-		addRequestParameter("oldPassword", "Login123");
-		addRequestParameter("newPassword", "Test123");
-		addRequestParameter("confirmNewPassword", "Test123");
+		addRequestParameter("oldPassword", "Test123");
+		addRequestParameter("newPassword", "Login123");
+		addRequestParameter("confirmNewPassword", "Login123");
 		actionPerform();
-		verifyForward("success");		
+		verifyForward("success");
 		System.out.println("----"+getActualForward());
 	}
 	/**
 	 * Test Login with Valid Login name and Password.
-	 */	
+	 */
 
 	public void testScientistLogin()
 	{
 		setRequestPathInfo("/Login") ;
 		User user = (User)TestCaseUtility.getNameObjectMap( "Scientist" );
 		addRequestParameter("loginName", user.getEmailAddress());
-		addRequestParameter("password", "Test123");
+		addRequestParameter("password", "Login123");
 		logger.info("start in login");
 		actionPerform();
 		logger.info("Login: "+getActualForward());
@@ -105,7 +105,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 		CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN=bean;
 		verifyNoActionErrors();
 		logger.info("end in login");
-	} 
+	}
 	/**
 	 * Test Institution Add.
 	 */
@@ -115,18 +115,18 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 		institutionForm.setName("Inst_"+UniqueKeyGeneratorUtil.getUniqueKey());
 		institutionForm.setOperation("add");
 		setRequestPathInfo("/InstitutionAdd");
-		setActionForm(institutionForm);	
-		
+		setActionForm(institutionForm);
+
 		actionPerform();
 		verifyForward("failure");
 		//verify action errors
 		String errormsg[] = new String[]{"errors.item"};
-		verifyActionErrors(errormsg);		
+		verifyActionErrors(errormsg);
 	}
 	/**
 	 * Test Department Add.
 	 */
-	
+
 	public void testDepartmentAddWithScientistUser()
 	{
 		DepartmentForm departmentForm  = new DepartmentForm ();
@@ -134,7 +134,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 		departmentForm.setOperation("add");
 		setRequestPathInfo("/DepartmentAdd");
 		setActionForm(departmentForm);
-		
+
 		actionPerform();
 		verifyForward("failure");
 		//verify action errors
@@ -144,7 +144,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test Site Add.
 	 */
-	
+
 	public void testAddRepositorySiteWithScientistUser()
 	{
 		RequestParameterUtility.setAddSiteParams(this);
@@ -177,7 +177,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test Cancer Research Group Add.
 	 */
-	
+
 	public void testCancerResearchGroupAddWithScientistUser()
 	{
 		CancerResearchGroupForm cancerResearchGroupForm = new CancerResearchGroupForm();
@@ -194,7 +194,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test Distribution Protocol Add.
 	 */
-	
+
 	public void testDistributionProtocolAddWithScientistUser()
 	{
 		DistributionProtocolForm distProtocolForm = new DistributionProtocolForm();
@@ -214,7 +214,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test Specimen Array Type Add.
 	 */
-	
+
 	public void testSpecimenArrayTypeAddWithScientistUser()
 	{
 		SpecimenArrayTypeForm specForm = new SpecimenArrayTypeForm();
@@ -235,7 +235,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Type Add.
 	 */
-	
+
 	public void testStorageTypeAddWithScientistUser()
 	{
 		StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeForm(this,
@@ -252,7 +252,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Container Add.
 	 */
-	
+
 	public void testStorageContainerAddWithScientistUser()
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap( "StorageType" );
@@ -298,11 +298,11 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 		String errormsg[] = new String[]{"errors.item"};
 		verifyActionErrors(errormsg);
 	}
-	
+
 	/**
 	 * Test Collection Protocol Add.
 	 */
-	
+
 	public void testCollectionProtocolAddWithScientistUser()
 	{
 		/*Collection Protocol Details*/
@@ -398,7 +398,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	/**
 	 * Test Participant Add.
 	 */
-	
+
 	public void testParticipantAddWithScientistUser()
 	{
 		/*Participant add and registration*/
@@ -414,32 +414,32 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 		partForm.setOperation("add") ;
 
 		CollectionProtocol collectionProtocol = (CollectionProtocol) TestCaseUtility.getNameObjectMap("CollectionProtocol");
-		
+
 		Map<String,String> collProtRegVal = new LinkedHashMap<String,String>();
-		
+
 		collProtRegVal.put("CollectionProtocolRegistration:" +
 				"1_CollectionProtocol_shortTitle",collectionProtocol.getShortTitle()) ;
-		
+
 		collProtRegVal.put("CollectionProtocol" +
 				"Registration:1_registrationDate", "01-01-2008") ;
-		
+
 		collProtRegVal.put("CollectionProtocol" +
 				"Registration:1_activityStatus", collectionProtocol.getActivityStatus()) ;
-		
+
 		collProtRegVal.put("CollectionProtocol" +
 				"Registration:1_isConsentAvailable", "None Defined") ;
-		
+
 		collProtRegVal.put("CollectionProtocol" +
 				"Registration:1_CollectionProtocol_id", ""+collectionProtocol.getId()) ;
-		
+
 		collProtRegVal.put("CollectionProtocol" +
 				"Registration:1_CollectionProtocol_Title", collectionProtocol.getTitle()) ;
-		
+
 		collProtRegVal.put("CollectionProtocol" +
 				"Registration:1_protocolParticipantIdentifier", ""+collectionProtocol.getId()) ;
-		
+
 		partForm.setCollectionProtocolRegistrationValues(collProtRegVal) ;
-		
+
 		setRequestPathInfo("/ParticipantAdd");
 		setActionForm(partForm);
 		actionPerform();
@@ -448,16 +448,16 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 		String errormsg[] = new String[]{"errors.item"};
 		verifyActionErrors(errormsg);
 	}
-	
+
 	/**
 	  * Search all participant and check if PHI data is visible
-	  */ 
+	  */
 	  public void testCaGridQueryParticipantWithScientistLogin()
 	  {
 		try
 		{
 			StringBuffer hql = new StringBuffer();
-			String targetClassName = Participant.class.getName(); 
+			String targetClassName = Participant.class.getName();
 			hql.append("select xxTargetAliasxx.lastName,xxTargetAliasxx.firstName,xxTargetAliasxx.middleName,xxTargetAliasxx.birthDate,xxTargetAliasxx.empiId,xxTargetAliasxx.gender,xxTargetAliasxx.sexGenotype,xxTargetAliasxx.ethnicity,xxTargetAliasxx.socialSecurityNumber,xxTargetAliasxx.activityStatus,xxTargetAliasxx.deathDate,xxTargetAliasxx.vitalStatus,xxTargetAliasxx.metaPhoneCode,xxTargetAliasxx.id" +
 					" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 			List result = appService.query(hql.toString());
@@ -473,7 +473,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				{
 					fail("Participant PHI data is visible to scientist");
 				}
-				Collection<ParticipantMedicalIdentifier> pmiCollection 
+				Collection<ParticipantMedicalIdentifier> pmiCollection
 					= retutnParticpant.getParticipantMedicalIdentifierCollection();
 				if(pmiCollection!=null)
 				{
@@ -485,9 +485,9 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				        	fail("Participant PHI data is visible to scientist");
 				        }
 				    }
-				}	
-				
-			    Collection<CollectionProtocolRegistration> cprCollection 
+				}
+
+			    Collection<CollectionProtocolRegistration> cprCollection
 			    				= retutnParticpant.getCollectionProtocolRegistrationCollection();
 			    if(cprCollection!=null)
 			    {
@@ -500,18 +500,18 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				        	fail("Participant PHI data is visible to scientist");
 				        }
 				    }
-			    }    
+			    }
 			}
 		 }
 		 catch(Exception e){
-			 
+
 		     System.out
 					.println("ScientistRoleTestCases.testCaGridQueryParticipantWithScientistLogin()"+e.getMessage());
 			 e.printStackTrace();
 			 assertFalse(e.getMessage(), true);
 		 }
 	  }
-	 
+
 	  /**
 	   * Search all PMI and check if PHI data is visible
 	   */
@@ -520,7 +520,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 		  try
 		  {
 			  	StringBuffer hql = new StringBuffer();
-			  	String targetClassName = ParticipantMedicalIdentifier.class.getName(); 
+			  	String targetClassName = ParticipantMedicalIdentifier.class.getName();
 				hql.append("select xxTargetAliasxx.medicalRecordNumber,xxTargetAliasxx.id,xxTargetAliasxx.participant.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 
 				List result = appService.query(hql.toString());
@@ -538,7 +538,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 			 catch(Exception e)
 			 {
 				 System.out
-					.println("ScientistRoleTestCases.testSearchPMIWithScientistLogin():"+e.getMessage());	
+					.println("ScientistRoleTestCases.testSearchPMIWithScientistLogin():"+e.getMessage());
 				 e.printStackTrace();
 				 assertFalse(e.getMessage(), true);
 			 }
@@ -546,13 +546,13 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	  /**
 		  * Search all CPR and check if PHI data is visible
 		  *
-		  */ 
+		  */
 		  public void testCaGridQueryProtocolRegistrationWithScientistLogin()
 		  {
 			try
 			{
 				StringBuffer hql = new StringBuffer();
-			  	String targetClassName = CollectionProtocolRegistration.class.getName(); 
+			  	String targetClassName = CollectionProtocolRegistration.class.getName();
 				hql.append("Select xxTargetAliasxx.consentSignatureDate,xxTargetAliasxx.signedConsentDocumentURL,xxTargetAliasxx.protocolParticipantIdentifier,xxTargetAliasxx.barcode,xxTargetAliasxx.registrationDate,xxTargetAliasxx.activityStatus,xxTargetAliasxx.offset,xxTargetAliasxx.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 
 				List result = appService.query(hql.toString());
@@ -581,12 +581,12 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 	  /**
 		  * Search all SCG and check if PHI data is visible
 		  *
-		  */ 
+		  */
 		  public void testCaGridQuerySpecimenCollectionGroupWithScientistLogin()
 		  {
 			try{
 				StringBuffer hql = new StringBuffer();
-			  	String targetClassName = SpecimenCollectionGroup.class.getName(); 
+			  	String targetClassName = SpecimenCollectionGroup.class.getName();
 				hql.append("select xxTargetAliasxx.name,xxTargetAliasxx.barcode,xxTargetAliasxx.collectionStatus,xxTargetAliasxx.encounterTimestamp,xxTargetAliasxx.comment,xxTargetAliasxx.surgicalPathologyNumber,xxTargetAliasxx.offset,xxTargetAliasxx.clinicalDiagnosis,xxTargetAliasxx.clinicalStatus,xxTargetAliasxx.activityStatus,xxTargetAliasxx.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 
 				List result = appService.query(hql.toString());
@@ -609,7 +609,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 						{
 							fail("SpecimenCollectionGroup PHI data is visible to scientist");
 						}
-					}	
+					}
 					Collection<SpecimenEventParameters> spEvent = returnedSCG.getSpecimenEventParametersCollection();
 					if(spEvent!=null)
 					{
@@ -622,7 +622,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 					    		fail("SpecimenCollectionGroup PHI data is visible to scientist");
 					    	}
 					    }
-					}   
+					}
 				}
 			 }
 			 catch(Exception e){
@@ -641,7 +641,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				try
 				{
 					StringBuffer hql = new StringBuffer();
-				  	String targetClassName = TissueSpecimen.class.getName(); 
+				  	String targetClassName = TissueSpecimen.class.getName();
 					hql.append("select xxTargetAliasxx.label,xxTargetAliasxx.isAvailable,xxTargetAliasxx.comment,xxTargetAliasxx.activityStatus,xxTargetAliasxx.collectionStatus,xxTargetAliasxx.barcode,xxTargetAliasxx.createdOn,xxTargetAliasxx.availableQuantity,xxTargetAliasxx.initialQuantity,xxTargetAliasxx.pathologicalStatus,xxTargetAliasxx.lineage,xxTargetAliasxx.specimenClass,xxTargetAliasxx.specimenType,xxTargetAliasxx.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 					List result = appService.query(hql.toString());
 					List list = CaTissueSuiteTestUtil.createObjectList(targetClassName,result);
@@ -659,14 +659,14 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				 }
 			}
 			/**
-			 * Test Search Molecular Specimen and test for PHI data 
+			 * Test Search Molecular Specimen and test for PHI data
 			 */
 		  public void testCaGridQueryMolecularSpecimenWithScientistLogin()
 		  {
 				try
 				{
 					StringBuffer hql = new StringBuffer();
-				  	String targetClassName = MolecularSpecimen.class.getName(); 
+				  	String targetClassName = MolecularSpecimen.class.getName();
 					hql.append("select xxTargetAliasxx.concentrationInMicrogramPerMicroliter,xxTargetAliasxx.label,xxTargetAliasxx.isAvailable,xxTargetAliasxx.comment,xxTargetAliasxx.activityStatus,xxTargetAliasxx.collectionStatus,xxTargetAliasxx.barcode,xxTargetAliasxx.createdOn,xxTargetAliasxx.availableQuantity,xxTargetAliasxx.initialQuantity,xxTargetAliasxx.pathologicalStatus,xxTargetAliasxx.lineage,xxTargetAliasxx.specimenClass,xxTargetAliasxx.specimenType,xxTargetAliasxx.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 					List result = appService.query(hql.toString());
 					List list = CaTissueSuiteTestUtil.createObjectList(targetClassName,result);
@@ -683,14 +683,14 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				 }
 			}
 		  /**
-			* Test Search Cell Specimen and test for PHI data 
+			* Test Search Cell Specimen and test for PHI data
 			*/
 		  public void testCaGridQueryCellSpecimenWithScientistLogin()
 		  {
 				try
 				{
 					StringBuffer hql = new StringBuffer();
-				  	String targetClassName = CellSpecimen.class.getName(); 
+				  	String targetClassName = CellSpecimen.class.getName();
 					hql.append("select xxTargetAliasxx.label,xxTargetAliasxx.isAvailable,xxTargetAliasxx.comment,xxTargetAliasxx.activityStatus,xxTargetAliasxx.collectionStatus,xxTargetAliasxx.barcode,xxTargetAliasxx.createdOn,xxTargetAliasxx.availableQuantity,xxTargetAliasxx.initialQuantity,xxTargetAliasxx.pathologicalStatus,xxTargetAliasxx.lineage,xxTargetAliasxx.specimenClass,xxTargetAliasxx.specimenType,xxTargetAliasxx.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 					List result = appService.query(hql.toString());
 					List list = CaTissueSuiteTestUtil.createObjectList(targetClassName,result);
@@ -707,14 +707,14 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				 }
 			}
 		  /**
-			 * Test Search Fluid Specimen and test for PHI data 
+			 * Test Search Fluid Specimen and test for PHI data
 			 */
 		  public void testCaGridQueryFluidSpecimenWithScientistLogin()
 		  {
 				try
 				{
 					StringBuffer hql = new StringBuffer();
-				  	String targetClassName = FluidSpecimen.class.getName(); 
+				  	String targetClassName = FluidSpecimen.class.getName();
 					hql.append("select xxTargetAliasxx.label,xxTargetAliasxx.isAvailable,xxTargetAliasxx.comment,xxTargetAliasxx.activityStatus,xxTargetAliasxx.collectionStatus,xxTargetAliasxx.barcode,xxTargetAliasxx.createdOn,xxTargetAliasxx.availableQuantity,xxTargetAliasxx.initialQuantity,xxTargetAliasxx.pathologicalStatus,xxTargetAliasxx.lineage,xxTargetAliasxx.specimenClass,xxTargetAliasxx.specimenType,xxTargetAliasxx.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 					List result = appService.query(hql.toString());
 					List list = CaTissueSuiteTestUtil.createObjectList(targetClassName,result);
@@ -731,8 +731,8 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 					 assertFalse(e.getMessage(), true);
 				 }
 			}
-		
-		  
+
+
 			/**
 			 * Test search SpecimenArrayContent and test for PHI data
 			 */
@@ -741,11 +741,11 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				try
 				{
 					StringBuffer hql = new StringBuffer();
-				  	String targetClassName = SpecimenArrayContent.class.getName(); 
+				  	String targetClassName = SpecimenArrayContent.class.getName();
 					hql.append("select xxTargetAliasxx.concentrationInMicrogramPerMicroliter,xxTargetAliasxx.initialQuantity,xxTargetAliasxx.positionDimensionOne,xxTargetAliasxx.positionDimensionTwo,xxTargetAliasxx.id,xxTargetAliasxx.specimen.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 					List result = appService.query(hql.toString());
 					List list = CaTissueSuiteTestUtil.createObjectList(targetClassName,result);
-					
+
 					List sacCollection = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),list);
 					System.out.println("Total SpecimenArrayContent Count:"+sacCollection.size());
 					Iterator itr = sacCollection.iterator();
@@ -765,9 +765,9 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 					 e.printStackTrace();
 					 assertFalse(e.getMessage(), true);
 				 }
-				
+
 			}
-			
+
 			/**
 			 * Test search for ReceivedEventParameters and test for PHI data
 			 */
@@ -776,7 +776,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				try
 				{
 					StringBuffer hql = new StringBuffer();
-				  	String targetClassName = ReceivedEventParameters.class.getName(); 
+				  	String targetClassName = ReceivedEventParameters.class.getName();
 					hql.append("select xxTargetAliasxx.receivedQuality,xxTargetAliasxx.timestamp,xxTargetAliasxx.comment,xxTargetAliasxx.id,xxTargetAliasxx.specimenCollectionGroup.id,xxTargetAliasxx.specimen.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 					List result = appService.query(hql.toString());
 					List list = CaTissueSuiteTestUtil.createObjectList(targetClassName,result);
@@ -791,7 +791,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 							fail("ReceivedEventParameters PHI data is visible to scientist");
 						}
 					}
-				} 
+				}
 				catch(Exception e)
 				{
 					System.out
@@ -808,7 +808,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				try
 				{
 					StringBuffer hql = new StringBuffer();
-				  	String targetClassName = CollectionEventParameters.class.getName(); 
+				  	String targetClassName = CollectionEventParameters.class.getName();
 					hql.append("select xxTargetAliasxx.collectionProcedure,xxTargetAliasxx.container,xxTargetAliasxx.timestamp,xxTargetAliasxx.comment,xxTargetAliasxx.id,xxTargetAliasxx.specimenCollectionGroup.id,xxTargetAliasxx.specimen.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 					List result = appService.query(hql.toString());
 					List list = CaTissueSuiteTestUtil.createObjectList(targetClassName,result);
@@ -823,7 +823,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 							fail("CollectionEventParameters PHI data is visible to scientist");
 						}
 					}
-				} 
+				}
 				catch(Exception e)
 				{
 					System.out
@@ -840,7 +840,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				try
 				{
 					StringBuffer hql = new StringBuffer();
-				  	String targetClassName = MolecularSpecimenReviewParameters.class.getName(); 
+				  	String targetClassName = MolecularSpecimenReviewParameters.class.getName();
 					hql.append("select xxTargetAliasxx.gelImageURL,xxTargetAliasxx.qualityIndex,xxTargetAliasxx.laneNumber,xxTargetAliasxx.gelNumber,xxTargetAliasxx.absorbanceAt260,xxTargetAliasxx.absorbanceAt280,xxTargetAliasxx.ratio28STo18S,xxTargetAliasxx.timestamp,xxTargetAliasxx.comment,xxTargetAliasxx.id,xxTargetAliasxx.specimenCollectionGroup.id,xxTargetAliasxx.specimen.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 					List result = appService.query(hql.toString());
 					List list = CaTissueSuiteTestUtil.createObjectList(targetClassName,result);
@@ -855,7 +855,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 							fail("MolecularSpecimenReviewParameters PHI data is visible to scientist");
 						}
 					}
-				} 
+				}
 				catch(Exception e)
 				{
 					System.out
@@ -864,7 +864,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 					assertFalse(e.getMessage(), true);
 				}
 			}
-			
+
 			/**
 			 * Test search for DeidentifiedSurgicalPathologyReport and test for PHI data
 			 */
@@ -873,7 +873,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				try
 				{
 					StringBuffer hql = new StringBuffer();
-				  	String targetClassName = DeidentifiedSurgicalPathologyReport.class.getName(); 
+				  	String targetClassName = DeidentifiedSurgicalPathologyReport.class.getName();
 					hql.append("select xxTargetAliasxx.isQuarantined,xxTargetAliasxx.activityStatus,xxTargetAliasxx.isFlagForReview,xxTargetAliasxx.reportStatus,xxTargetAliasxx.collectionDateTime,xxTargetAliasxx.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 					List result = appService.query(hql.toString());
 					List list = CaTissueSuiteTestUtil.createObjectList(targetClassName,result);
@@ -906,7 +906,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 				try
 				{
 					StringBuffer hql = new StringBuffer();
-				  	String targetClassName = IdentifiedSurgicalPathologyReport.class.getName(); 
+				  	String targetClassName = IdentifiedSurgicalPathologyReport.class.getName();
 					hql.append("select xxTargetAliasxx.activityStatus,xxTargetAliasxx.isFlagForReview,xxTargetAliasxx.reportStatus,xxTargetAliasxx.collectionDateTime,xxTargetAliasxx.id from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 					List result = appService.query(hql.toString());
 					List list = CaTissueSuiteTestUtil.createObjectList(targetClassName,result);
@@ -932,7 +932,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 					 assertFalse(e.getMessage(), true);
 				 }
 			}
-			
+
 			private void validateSpecimenData(String className, List spCollection)
 			{
 				Iterator<Specimen> itr = spCollection.iterator();
@@ -943,7 +943,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 					{
 						fail(className+" PHI data is visible to scientist");
 					}
-				
+
 					Collection<SpecimenEventParameters> spEvent = spe.getSpecimenEventCollection();
 					if(spEvent!=null||!spEvent.isEmpty())
 					{
@@ -961,16 +961,16 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 					}
 				}
 			}
-			
+
 //			/**
 //			  * Search all participant and check if PHI data is visible
-//			  */ 
+//			  */
 //			  public void testQueryParticipantWithScientistLogin()
 //			  {
 //				try
 //				{
 //					StringBuffer hql = new StringBuffer();
-//					String targetClassName = Participant.class.getName(); 
+//					String targetClassName = Participant.class.getName();
 //					hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 //					List result = appService.query(hql.toString());
 //					List parList = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
@@ -984,7 +984,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //						{
 //							fail("Participant PHI data is visible to scientist");
 //						}
-//						Collection<ParticipantMedicalIdentifier> pmiCollection 
+//						Collection<ParticipantMedicalIdentifier> pmiCollection
 //							= retutnParticpant.getParticipantMedicalIdentifierCollection();
 //						if(pmiCollection!=null)
 //						{
@@ -996,9 +996,9 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //						        	fail("Participant PHI data is visible to scientist");
 //						        }
 //						    }
-//						}	
-//						
-//					    Collection<CollectionProtocolRegistration> cprCollection 
+//						}
+//
+//					    Collection<CollectionProtocolRegistration> cprCollection
 //					    				= retutnParticpant.getCollectionProtocolRegistrationCollection();
 //					    if(cprCollection!=null)
 //					    {
@@ -1011,18 +1011,18 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //						        	fail("Participant PHI data is visible to scientist");
 //						        }
 //						    }
-//					    }    
+//					    }
 //					}
 //				 }
 //				 catch(Exception e){
-//					 
+//
 //				     System.out
 //							.println("ScientistRoleTestCases.testQueryParticipantWithScientistLogin()"+e.getMessage());
 //					 e.printStackTrace();
 //					 assertFalse(e.getMessage(), true);
 //				 }
 //			  }
-//			 
+//
 //			  /**
 //			   * Search all PMI and check if PHI data is visible
 //			   */
@@ -1031,7 +1031,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //				  try
 //				  {
 //					  	StringBuffer hql = new StringBuffer();
-//					  	String targetClassName = ParticipantMedicalIdentifier.class.getName(); 
+//					  	String targetClassName = ParticipantMedicalIdentifier.class.getName();
 //						hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 //
 //						List result = appService.query(hql.toString());
@@ -1049,7 +1049,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //					 catch(Exception e)
 //					 {
 //						 System.out
-//							.println("ScientistRoleTestCases.testSearchPMIWithScientistLogin():"+e.getMessage());	
+//							.println("ScientistRoleTestCases.testSearchPMIWithScientistLogin():"+e.getMessage());
 //						 e.printStackTrace();
 //						 assertFalse(e.getMessage(), true);
 //					 }
@@ -1057,13 +1057,13 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //			  /**
 //				  * Search all CPR and check if PHI data is visible
 //				  *
-//				  */ 
+//				  */
 //				  public void testQueryProtocolRegistrationWithScientistLogin()
 //				  {
 //					try
 //					{
 //						StringBuffer hql = new StringBuffer();
-//					  	String targetClassName = CollectionProtocolRegistration.class.getName(); 
+//					  	String targetClassName = CollectionProtocolRegistration.class.getName();
 //						hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 //
 //						List result = appService.query(hql.toString());
@@ -1091,12 +1091,12 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //			  /**
 //				  * Search all SCG and check if PHI data is visible
 //				  *
-//				  */ 
+//				  */
 //				  public void testQuerySpecimenCollectionGroupWithScientistLogin()
 //				  {
 //					try{
 //						StringBuffer hql = new StringBuffer();
-//					  	String targetClassName = SpecimenCollectionGroup.class.getName(); 
+//					  	String targetClassName = SpecimenCollectionGroup.class.getName();
 //						hql.append("select from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 //
 //						List result = appService.query(hql.toString());
@@ -1119,7 +1119,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //								{
 //									fail("SpecimenCollectionGroup PHI data is visible to scientist");
 //								}
-//							}	
+//							}
 //							Collection<SpecimenEventParameters> spEvent = returnedSCG.getSpecimenEventParametersCollection();
 //							if(spEvent!=null)
 //							{
@@ -1132,7 +1132,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //							    		fail("SpecimenCollectionGroup PHI data is visible to scientist");
 //							    	}
 //							    }
-//							}   
+//							}
 //						}
 //					 }
 //					 catch(Exception e){
@@ -1151,10 +1151,10 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //						try
 //						{
 //							StringBuffer hql = new StringBuffer();
-//						  	String targetClassName = TissueSpecimen.class.getName(); 
+//						  	String targetClassName = TissueSpecimen.class.getName();
 //							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 //							List result = appService.query(hql.toString());
-//			
+//
 //							List<Specimen> spCollection = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
 //
 //							validateSpecimenData(targetClassName,spCollection);
@@ -1168,7 +1168,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //							 assertFalse(e.getMessage(), true);
 //						 }
 //					}
-//				  
+//
 //					/**
 //					 * Test search SpecimenArrayContent and test for PHI data
 //					 */
@@ -1177,10 +1177,10 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //						try
 //						{
 //							StringBuffer hql = new StringBuffer();
-//						  	String targetClassName = SpecimenArrayContent.class.getName(); 
+//						  	String targetClassName = SpecimenArrayContent.class.getName();
 //							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 //							List result = appService.query(hql.toString());
-//							
+//
 //							List sacCollection = appService.delegateSearchFilter(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),result);
 //							System.out.println("Total SpecimenArrayContent Count:"+sacCollection.size());
 //							Iterator itr = sacCollection.iterator();
@@ -1200,9 +1200,9 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //							 e.printStackTrace();
 //							 assertFalse(e.getMessage(), true);
 //						 }
-//						
+//
 //					}
-//					
+//
 //					/**
 //					 * Test search for ReceivedEventParameters and test for PHI data
 //					 */
@@ -1211,7 +1211,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //						try
 //						{
 //							StringBuffer hql = new StringBuffer();
-//						  	String targetClassName = ReceivedEventParameters.class.getName(); 
+//						  	String targetClassName = ReceivedEventParameters.class.getName();
 //							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 //							List result = appService.query(hql.toString());
 //
@@ -1225,7 +1225,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //									fail("ReceivedEventParameters PHI data is visible to scientist");
 //								}
 //							}
-//						} 
+//						}
 //						catch(Exception e)
 //						{
 //							System.out
@@ -1243,7 +1243,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //						try
 //						{
 //							StringBuffer hql = new StringBuffer();
-//						  	String targetClassName = DeidentifiedSurgicalPathologyReport.class.getName(); 
+//						  	String targetClassName = DeidentifiedSurgicalPathologyReport.class.getName();
 //							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 //							List result = appService.query(hql.toString());
 //
@@ -1275,7 +1275,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 //						try
 //						{
 //							StringBuffer hql = new StringBuffer();
-//						  	String targetClassName = IdentifiedSurgicalPathologyReport.class.getName(); 
+//						  	String targetClassName = IdentifiedSurgicalPathologyReport.class.getName();
 //							hql.append("from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 //							List result = appService.query(hql.toString());
 //

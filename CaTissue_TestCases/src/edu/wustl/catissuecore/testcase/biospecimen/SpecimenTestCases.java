@@ -742,7 +742,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 //	public void testSupervisorLogin()
 //	  {
 //		   	addRequestParameter("loginName","super@super.com");
-//	        addRequestParameter("password","Test123");
+//	        addRequestParameter("password","Login123");
 //	        setRequestPathInfo("/Login.do");
 //	        actionPerform();
 //	        //verifyForward("/Home.do");

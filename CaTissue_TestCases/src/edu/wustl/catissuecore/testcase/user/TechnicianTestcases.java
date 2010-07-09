@@ -21,17 +21,17 @@ public class TechnicianTestcases extends CaTissueSuiteBaseTest
 	 * Negative Test Case.
 	 * Test logout.
 	 */
-	
+
 	public void testLogoutSupervisorAndLoginAsSuperAdmin()
 	{
 		setRequestPathInfo("/Logout") ;
-		actionPerform();		
+		actionPerform();
 		verifyForward("success");
 		CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN = null;
-		
+
 		setRequestPathInfo("/Login") ;
 		addRequestParameter("loginName", "admin@admin.com");
-		addRequestParameter("password", "Test123");
+		addRequestParameter("password", "Login123");
 		logger.info("start in login");
 		actionPerform();
 		logger.info("Login: "+getActualForward());
@@ -43,7 +43,7 @@ public class TechnicianTestcases extends CaTissueSuiteBaseTest
 		verifyNoActionErrors();
 		logger.info("end in login");
 	}
-	
+
 	public void testTechnicianAdd()
 	{
 		try
@@ -57,13 +57,13 @@ public class TechnicianTestcases extends CaTissueSuiteBaseTest
 			Collection<Site> siteCollection = new HashSet<Site>();
 			siteCollection.add(site);
 			user.setSiteCollection(siteCollection);
-			user = (User)appService.createObject(user);			
+			user = (User)appService.createObject(user);
 			Logger.out.info("Technician User added successfully");
 			assertTrue("Technician User added successfully", true);
-		    user.setNewPassword("Login123");
-		   	user = (User)appService.updateObject(user);	
+		    user.setNewPassword("Test123");
+		   	user = (User)appService.updateObject(user);
 		   	TestCaseUtility.setNameObjectMap( "Technician", user );
-			
+
 		 }
 		 catch(Exception e)
 		 {
@@ -71,7 +71,7 @@ public class TechnicianTestcases extends CaTissueSuiteBaseTest
 			 e.printStackTrace();
 			 assertFalse("Could not add a Technician into System", true);
 		 }
-		
+
 	}
 	/**
 	 * change Supervisor password
@@ -81,40 +81,40 @@ public class TechnicianTestcases extends CaTissueSuiteBaseTest
 		setRequestPathInfo("/Login");
 		User user = (User)TestCaseUtility.getNameObjectMap( "Technician" );
 		addRequestParameter("loginName", user.getEmailAddress());
-		addRequestParameter("password", "Login123");
+		addRequestParameter("password", "Test123");
 		actionPerform();
 		String pageOf = (String) request.getAttribute(Constants.PAGE_OF);
 		SessionDataBean sessionData = null;
-		if(getSession().getAttribute(Constants.TEMP_SESSION_DATA) != null) 
+		if(getSession().getAttribute(Constants.TEMP_SESSION_DATA) != null)
 		{
 			sessionData = (SessionDataBean)getSession().getAttribute(Constants.TEMP_SESSION_DATA);
 		}
-		else 
+		else
 		{
 			sessionData = (SessionDataBean)getSession().getAttribute(Constants.SESSION_DATA);
 		}
 		String userId = sessionData.getUserId().toString();
-		setRequestPathInfo("/UpdatePassword");		
+		setRequestPathInfo("/UpdatePassword");
 		addRequestParameter("id",userId);
 		addRequestParameter("operation", "");
 		addRequestParameter("pageOf",pageOf);
-		addRequestParameter("oldPassword", "Login123");
-		addRequestParameter("newPassword", "Test123");
-		addRequestParameter("confirmNewPassword", "Test123");
+		addRequestParameter("oldPassword", "Test123");
+		addRequestParameter("newPassword", "Login123");
+		addRequestParameter("confirmNewPassword", "Login123");
 		actionPerform();
-		verifyForward("success");		
+		verifyForward("success");
 		System.out.println("----"+getActualForward());
 	}
 	/**
 	 * Test Login with Valid Login name and Password.
-	 */	
+	 */
 
 	public void testTechnicianLogin()
 	{
 		setRequestPathInfo("/Login") ;
 		User user = (User)TestCaseUtility.getNameObjectMap( "Technician" );
 		addRequestParameter("loginName", user.getEmailAddress());
-		addRequestParameter("password", "Test123");
+		addRequestParameter("password", "Login123");
 		logger.info("start in login");
 		actionPerform();
 		logger.info("Login: "+getActualForward());
@@ -123,6 +123,6 @@ public class TechnicianTestcases extends CaTissueSuiteBaseTest
 		CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN=bean;
 		verifyNoActionErrors();
 		logger.info("end in login");
-	} 
-	
+	}
+
 }

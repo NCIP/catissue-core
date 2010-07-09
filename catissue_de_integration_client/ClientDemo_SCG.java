@@ -89,9 +89,9 @@ public class ClientDemo_SCG
 	static ApplicationService appServiceDeIntegration = null;
 	static ApplicationService appServiceDEEntity = null;
 	static ApplicationService appServiceCatissue = null;
-	
+
 	private static EntityManagerInterface entityManager = EntityManager.getInstance();
-	
+
 	public static void main(String[] args)
 	{
 		System.out.println("*** ClientDemo_SCG...");
@@ -102,22 +102,22 @@ public class ClientDemo_SCG
 			//caTissue Service
 			initCaTissueService();
 			//TODO 3
-			cs.startSession("admin@admin.com", "Login123");
+			cs.startSession("admin@admin.com", "Test123");
 			edu.wustl.catissuecore.domain.SpecimenCollectionGroup specimenCollectionGroup = searchSpecimenCollectionGroup();
 			if(specimenCollectionGroup!=null)
 			{
 				addAnnotationToStaticEntity(specimenCollectionGroup.getId());
-				System.out.println("Added annotation");	
+				System.out.println("Added annotation");
 				//Query
 				queryDEClass(specimenCollectionGroup.getId());
-			
+
 			}
 			//QUERY
 			queryRadicalProstatectomyPathologyAnnotation();
 			queryBaseSolidTissuePathologyAnnotation();
 			//Query 1
 			queryPancreasPathologyAnnotation();
-			
+
 		}
 		catch (Exception ex)
 		{
@@ -142,7 +142,7 @@ public class ClientDemo_SCG
 		appServiceDEEntity = ApplicationServiceProvider.getRemoteInstance("http://localhost:8080/pathologySCG/http/remoteService");
 	}
 	/**
-	 * 
+	 *
 	 */
 	private static void initDEIntegrationService()
 	{
@@ -153,8 +153,8 @@ public class ClientDemo_SCG
 
 	/**
 	 * @return
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
 	 */
 	private static void addAnnotationToStaticEntity(Long specimenCollectionGroupId) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
@@ -168,15 +168,15 @@ public class ClientDemo_SCG
 	//		Object deObjectToBeCreated = getBreastMargin();
 			//TODO 6
 			BaseHaematologyPathologyAnnotation createdDE = (BaseHaematologyPathologyAnnotation)appServiceDEEntity.createObject(deObjectToBeCreated);
-			
+
 	//		RadicalProstatectomyPathologyAnnotation createdDE = (RadicalProstatectomyPathologyAnnotation)appServiceDEEntity.createObject(deObjectToBeCreated);
 			System.out.println("Newly created Annotation = "  +  createdDE);
-			
+
 			System.out.println("Updating Integration Tables");
 			updateIntegrationTables(specimenCollectionGroupId,createdDE.getId());
 		}
 		catch (ApplicationException e)
-		{			
+		{
 			e.printStackTrace();
 		}
 
@@ -186,10 +186,10 @@ public class ClientDemo_SCG
 	 */
 	private static void queryPancreasPathologyAnnotation()
 	{
-		
+
 		PancreasPathologyAnnotation pancreasPathologyAnnotation = new PancreasPathologyAnnotation();
 		pancreasPathologyAnnotation.setSpecimenProcedure("Needle Incisional Biopsy");
-		
+
 		try {
 			System.out.println("Searching pancreasPathologyAnnotation "   + pancreasPathologyAnnotation);
 			initDEService();
@@ -218,13 +218,13 @@ public class ClientDemo_SCG
 							//due to lazy initialization error of consent tier response
 							CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
 							cpr.setId(collectionProtocolRegistration.getId());
-							
+
 							Participant p = new Participant();
 							Collection<CollectionProtocolRegistration> cprColl = new HashSet<CollectionProtocolRegistration>();
 							cprColl.add(cpr);
-							
+
 							p.setCollectionProtocolRegistrationCollection(cprColl);
-							
+
 							List patients = appServiceCatissue.search(Participant.class, p);
 							if(patients != null)
 							{
@@ -243,12 +243,12 @@ public class ClientDemo_SCG
 										System.out.println("Death Date = "+deathDate);
 										System.out.println("Birth Date = "+birthDate);
 									}
-									
+
 									//Cannot retrieve race collection due to bug in catissue APi
 								//	System.out.println("PATIENT RACE = " + patient.getRaceCollection());
 								}
 							}
-							
+
 						}
 					}
 
@@ -260,14 +260,14 @@ public class ClientDemo_SCG
 		}
 	}
 	/**
-	 * 
+	 *
 	 */
 	private static void queryBaseSolidTissuePathologyAnnotation()
 	{
-		
+
 		BaseSolidTissuePathologyAnnotation baseSolidTissuePathologyAnnotation = new BaseSolidTissuePathologyAnnotation();
 		baseSolidTissuePathologyAnnotation.setSpecimenProcedure("");
-		
+
 		try {
 			System.out.println("Searching baseSolidTissuePathologyAnnotation "   + baseSolidTissuePathologyAnnotation);
 			initDEService();
@@ -294,21 +294,21 @@ public class ClientDemo_SCG
 		}
 	}
 	/**
-	 * Query 3- Dosent work on caCORE 3.2 or Hibernate 3.0.5 and Hib 3.1.3 due to wrong Join query formed 
+	 * Query 3- Dosent work on caCORE 3.2 or Hibernate 3.0.5 and Hib 3.1.3 due to wrong Join query formed
 	 */
 	private static void queryRadicalProstatectomyPathologyAnnotation()
 	{
 		RadicalProstatectomyPathologyAnnotation radicalProstatectomyPathologyAnnotation = new RadicalProstatectomyPathologyAnnotation();
 		radicalProstatectomyPathologyAnnotation.setSeminalVesicleInvasion("c");
-		
-		
+
+
 		ExtraprostaticExtension extraprostaticExtension = new ExtraprostaticExtension();
 		extraprostaticExtension.setStatus("ABC");
 		//extraprostaticExtension.setId(new Long(1));
 //		extraprostaticExtension.setRadicalProstatectomyPathologyAnnotation(radicalProstatectomyPathologyAnnotation);
-		
+
 		radicalProstatectomyPathologyAnnotation.setExtraprostaticExtension(extraprostaticExtension);
-		
+
 		try {
 			System.out.println("Searching radicalProstatectomyPathologyAnnotation "   + radicalProstatectomyPathologyAnnotation);
 			initDEService();
@@ -345,7 +345,7 @@ public class ClientDemo_SCG
 		BaseHaematologyPathologyAnnotation baseHaematologyPathologyAnnotation = new BaseHaematologyPathologyAnnotation();
 		//baseHaematologyPathologyAnnotation.setSpecimenCollectionGroup(specimenCollectionGroup);
 		baseHaematologyPathologyAnnotation.setOtherSpecimenProcedure("Other");
-		
+
 		try {
 			System.out.println("Searching baseHaematologyPathologyAnnotation "   + baseHaematologyPathologyAnnotation);
 			initDEService();
@@ -378,11 +378,11 @@ public class ClientDemo_SCG
 	{
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg.setId(specimenCollectionGroupId);
-		
+
 		RadicalProstatectomyPathologyAnnotation radicalProstatectomyPathologyAnnotation = new RadicalProstatectomyPathologyAnnotation();
 		radicalProstatectomyPathologyAnnotation.setSeminalVesicleInvasion("No Seminal Vesicle present");
 		radicalProstatectomyPathologyAnnotation.setSpecimenCollectionGroup(scg);
-		
+
 		try
 		{
 			radicalProstatectomyPathologyAnnotation.setId(getNextIdentifier("RadicalProstatectomyPathologyAnnotation"));
@@ -397,59 +397,59 @@ public class ClientDemo_SCG
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		ExtraprostaticExtension extraprostaticExtension = new ExtraprostaticExtension();
 		extraprostaticExtension.setStatus("Present");
 		extraprostaticExtension.setId(new Long(3));
 		extraprostaticExtension.setRadicalProstatectomyPathologyAnnotation(radicalProstatectomyPathologyAnnotation);
-		
+
 		radicalProstatectomyPathologyAnnotation.setExtraprostaticExtension(extraprostaticExtension);
-		
-		
+
+
 		return radicalProstatectomyPathologyAnnotation;
 	}
 
 	/**
 	 * @param createdDE
-		 * @throws DynamicExtensionsApplicationException 
-		 * @throws DynamicExtensionsSystemException 
-		 * @throws ApplicationException 
+		 * @throws DynamicExtensionsApplicationException
+		 * @throws DynamicExtensionsSystemException
+		 * @throws ApplicationException
 	 */
 	private static void updateIntegrationTables(Long staticEntityId,Long deEntityId) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, ApplicationException
 	{
 		initDEIntegrationService();
 		Long particpantClassId = getEntityId(STATIC_ENTITY_CLASS_NAME);
 		System.out.println("Entity Id for specimenCollectionGroup " + particpantClassId);
-	
+
 		Long smokingHistoryContainerId =getContainerId(DE_CLASS_NAME);
 		System.out.println("Container Id for Person " + smokingHistoryContainerId);
-		
+
 		EntityMapRecord entityMapRecord = initEntityMapRecord(staticEntityId,deEntityId, getFormContext(particpantClassId, smokingHistoryContainerId));
 		insertEntityMapRecord(entityMapRecord);
 	}
 
-	
+
 
 	/**
 	 * @param participantId
 	 * @return
-		 * @throws ApplicationException 
-		 * @throws DynamicExtensionsSystemException 
+		 * @throws ApplicationException
+		 * @throws DynamicExtensionsSystemException
 	 */
 	private static Object getDEToBeCreated(Long specimenCollectionGroupId) throws ApplicationException, DynamicExtensionsSystemException
 	{
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg.setId(specimenCollectionGroupId);
-	
+
 		//BreastMargin breastMargin = new BreastMargin();
 		BaseHaematologyPathologyAnnotation baseHaematologyPathologyAnnotation = new BaseHaematologyPathologyAnnotation();
 		System.out.println("Getting next id");
 		Long smokingHistoryId = getNextIdentifier(DE_CLASS_NAME);
 	//	breastMargin.setId(smokingHistoryId);
-	//	
+	//
 	//	breastMargin.setMarginLocation("Location");
 	//	breastMargin.setMarginStatus("Status");
-		
+
 	//	baseHaematologyPathologyAnnotation.setSpecimenCollectionGroup(scg);
 		baseHaematologyPathologyAnnotation.setAdequacyOfSpecimen("Adequacy");
 		baseHaematologyPathologyAnnotation.setBiopsyOrAspirateSite("Biopsy");
@@ -458,7 +458,7 @@ public class ClientDemo_SCG
 		baseHaematologyPathologyAnnotation.setOtherBiopsyOrAspirateSite("OtherBiopsy");
 		baseHaematologyPathologyAnnotation.setOtherSpecimenProcedure("Other");
 		baseHaematologyPathologyAnnotation.setSpecimenProcedure("Procedure");
-				
+
 		return baseHaematologyPathologyAnnotation;
 	}
 	/**
@@ -467,7 +467,7 @@ public class ClientDemo_SCG
 	private static Object getBreastMargin()
 	{
 		BreastMargin breastMargin = new BreastMargin();
-		
+
 		System.out.println("Getting next id");
 		Long smokingHistoryId = null;
 		try
@@ -485,23 +485,23 @@ public class ClientDemo_SCG
 			e.printStackTrace();
 		}
 		breastMargin.setId(smokingHistoryId);
-	//	
+	//
 		breastMargin.setMarginLocation("Location");
 		breastMargin.setMarginStatus("Status");
-		
+
 		return breastMargin;
 	}
 
 	/**
-	 * @throws ApplicationException 
-	 * @throws DynamicExtensionsSystemException 
-	 * 
+	 * @throws ApplicationException
+	 * @throws DynamicExtensionsSystemException
+	 *
 	 */
 	private static Long getNextIdentifier(String deEntity) throws ApplicationException, DynamicExtensionsSystemException
 	{
 		/*DetachedCriteria maxDEIdentifierCriteria = DetachedCriteria.forClass(deClass).setProjection( Property.forName("id").count());
 		List identifierList = appServiceDEEntity.query(maxDEIdentifierCriteria, deClass.getName());
-		
+
 		if(identifierList!=null)
 		{
 			Iterator identifierIterator = identifierList.iterator();
@@ -511,7 +511,7 @@ public class ClientDemo_SCG
 				System.out.println("I = " + maxIdentifier);
 				Long l =new Long(maxIdentifier.intValue() + 1);
 				return (l);
-				
+
 			}
 		}
 		return null;*/
@@ -601,7 +601,7 @@ public class ClientDemo_SCG
 	{
 			Long entityId = getEntityId(string);
 			return entityManager.getContainerIdForEntity(entityId);
-		
+
 	}
 
 
@@ -664,9 +664,9 @@ public class ClientDemo_SCG
 	private static edu.wustl.catissuecore.domain.SpecimenCollectionGroup getSpecimenCollectionGroupToSearch()
 	{
 		edu.wustl.catissuecore.domain.SpecimenCollectionGroup specimenCollectionGroup = new edu.wustl.catissuecore.domain.SpecimenCollectionGroup();;
-		//Set parameters for participant to be searched 
-		specimenCollectionGroup.setId(2L);	//Set ID. 
-		
+		//Set parameters for participant to be searched
+		specimenCollectionGroup.setId(2L);	//Set ID.
+
 		return specimenCollectionGroup;
 	}
 

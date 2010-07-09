@@ -63,12 +63,12 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 	  {
 		try
 		{
-			Boolean flag = new CaCoreAppServicesDelegator().delegateLogin(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(), "Test123");
+			Boolean flag = new CaCoreAppServicesDelegator().delegateLogin(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(), "Login123");
 			if(!flag)
 			{
 				assertFalse("Cannot Login", true);
 			}
-			flag = new CaCoreAppServicesDelegator().delegateLogin("catissue@catissue.com", "Test123");
+			flag = new CaCoreAppServicesDelegator().delegateLogin("catissue@catissue.com", "Login123");
 			if(flag)
 			{
 				assertFalse("Logged in with invalid user", true);

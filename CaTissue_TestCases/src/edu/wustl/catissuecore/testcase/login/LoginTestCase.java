@@ -13,7 +13,7 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	 * Negative Test Case.
 	 * Test Login with empty Login name.
 	 */
-	
+
 	public void testLoginWithEmptyLoginName()
 	{
 		setRequestPathInfo("/Login") ;
@@ -27,12 +27,12 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 		String errormsg[] = new String[] {"errors.item.required"};
 		verifyActionErrors(errormsg);
 	}
-	
+
 	/**
 	 * Negative Test Case.
 	 * Test Login with empty Password.
 	 */
-	
+
 	public void testLoginWithEmptyLoginPassword()
 	{
 		setRequestPathInfo("/Login") ;
@@ -45,12 +45,12 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 		String errormsg[] = new String[] {"errors.item.required"};
 		verifyActionErrors(errormsg);
 	}
-	
+
 	/**
 	 * Negative Test Case.
 	 * Test Login with Invalid Format of Login and Password.
 	 */
-	
+
 	public void testLoginWithInvalidFormatLogin()
 	{
 		setRequestPathInfo("/Login") ;
@@ -70,12 +70,12 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	 * Test Login with Invalid Login name and password.
 	 * bug 10997
 	 */
-	
+
 	public void testInvalidLogin()
 	{
 		/**
 		 * reset method is modified for running successfully.
-		 * this test case using Login Form. 
+		 * this test case using Login Form.
 		 */
 		setRequestPathInfo("/Login") ;
 		addRequestParameter("loginName", "admin@admin.com");
@@ -91,13 +91,13 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	/**
 	 * Test Login with Valid Login name and Password.
 	 */
-	
+
 	public void testSuccessfulLogin()
 	{
-		
+
 		setRequestPathInfo("/Login") ;
 		addRequestParameter("loginName", "admin@admin.com");
-		addRequestParameter("password", "Test123");
+		addRequestParameter("password", "Login123");
 		logger.info("start in login");
 		actionPerform();
 		//verifyForward("/Home.do");
@@ -109,5 +109,5 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 		CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN=bean;
 		verifyNoActionErrors();
 		logger.info("end in login");
-	} 
+	}
 }

@@ -13,7 +13,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import gov.nih.nci.system.comm.client.ClientSession;
 
 /**
- * 
+ *
  * @author juberahamad_patel
  *
  */
@@ -22,8 +22,8 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
 	/**
 	 * common password for all users
 	 */
-	public static final String password = "Test123";
-	
+	public static final String password = "Login123";
+
 	public void tearDown()
 	{
 		System.out.println("Inside MSRBaseTestCase.teardown()");
@@ -33,20 +33,20 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
 	protected void loginAs(String userName)
 	{
 		ClientSession.getInstance().terminateSession();
-		
+
 		try
-		{ 
+		{
 			ClientSession.getInstance().startSession(userName, password);
-		} 	
-		catch (Exception ex) 
-		{ 
-			System.out.println(ex.getMessage()); 
+		}
+		catch (Exception ex)
+		{
+			System.out.println(ex.getMessage());
 			ex.printStackTrace();
 			fail();
 			System.exit(1);
 		}
 	}
-	
+
 	protected Site createNewSite()
 	{
 		Site site = null;
@@ -61,10 +61,10 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
 			e.printStackTrace();
 			assertFalse(e.getMessage(), true);
 		}
-		
+
 		return site;
 	}
-	
+
 	protected User createNewSiteAdmin(Site site)
 	{
 		User user = null;
@@ -72,9 +72,9 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
 		{
            List siteList = new ArrayList();
            siteList.add(site);
-           
+
             user = createNewUserWithGivenRoleOnGivenSite(Constants.ADMIN_USER,siteList);
-			
+
 		}
 		catch(Exception e)
 		{
@@ -82,17 +82,17 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
 			e.printStackTrace();
 			assertFalse(e.getMessage(), true);
 		}
-		
+
 		return user;
 	}
-    
+
     protected User createNewSiteSupervisor(List siteList)
     {
         User user = null;
         try
         {
             user = createNewUserWithGivenRoleOnGivenSite("2",siteList);
-            
+
         }
         catch(Exception e)
         {
@@ -100,7 +100,7 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
             e.printStackTrace();
             assertFalse(e.getMessage(), true);
         }
-        
+
         return user;
     }
 
@@ -110,7 +110,7 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
         try
         {
             user = createNewUserWithGivenRoleOnGivenSite("3",siteList);
-            
+
         }
         catch(Exception e)
         {
@@ -118,17 +118,17 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
             e.printStackTrace();
             assertFalse(e.getMessage(), true);
         }
-        
+
         return user;
     }
-    
+
     protected User createNewScientist()
     {
         User user = null;
         try
         {
             user = createNewUserWithGivenRoleOnGivenSite("7",new ArrayList());
-            
+
         }
         catch(Exception e)
         {
@@ -136,17 +136,17 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
             e.printStackTrace();
             assertFalse(e.getMessage(), true);
         }
-        
+
         return user;
     }
-    
+
     protected User createNewUserWithGivenRoleOnGivenSite(String roleId, List siteList)
     {
         User user = null;
         try
         {
             user = BaseTestCaseUtility.initUser();
-            
+
             //TODO how to make it site admin ?
             user.setRoleId(roleId);
             user.setActivityStatus("Active");
@@ -157,8 +157,8 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
             user = (User)appService.createObject(user);
             user.setNewPassword(password);
             user = (User)appService.updateObject(user);
-                
-            
+
+
         }
         catch(Exception e)
         {
@@ -166,38 +166,38 @@ public class MSRBaseTestCase extends CaTissueSuiteBaseTest
             e.printStackTrace();
             assertFalse(e.getMessage(), true);
         }
-        
+
         return user;
     }
-	
-	protected StorageContainer createNewSC(Site site) throws Exception 
+
+	protected StorageContainer createNewSC(Site site) throws Exception
 	{
 		StorageContainer sc = null;
 			sc = BaseTestCaseUtility.initStorageContainer();
-		
+
 			StorageType storageType = BaseTestCaseUtility.initStorageType();
 			storageType.setId(new Long(3));
 			sc.setStorageType(storageType);
-					
+
 			sc.getCollectionProtocolCollection().clear();
-			
+
 			//TODO additional processing
-						
+
 			sc.setSite(site);
 			sc = (StorageContainer) appService.createObject(sc);
-		
-		
+
+
 		return sc;
 	}
-	
-	
+
+
 	protected boolean confirmUserNotAuthorizedException(Exception e)
 	{
 		return true;
-	
-		//TODO write the right implementation - currently we are assuming that any exception 
+
+		//TODO write the right implementation - currently we are assuming that any exception
 		//on client side is due to UserNotAuthorizedException on server side
-		
+
 		/*
 		Throwable t =e;
 		System.out.println("Name : " +t.getClass().getName());

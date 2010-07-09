@@ -79,9 +79,9 @@ public class ClientDemo_Specimen
 	static ApplicationService appServiceDeIntegration = null;
 	static ApplicationService appServiceDEEntity = null;
 	static ApplicationService appServiceCatissue = null;
-	
+
 	private static EntityManagerInterface entityManager = EntityManager.getInstance();
-	
+
 	public static void main(String[] args)
 	{
 		System.out.println("*** ClientDemo_Specimen...");
@@ -92,16 +92,16 @@ public class ClientDemo_Specimen
 			//caTissue Service
 			initCaTissueService();
 			//TODO 3
-			cs.startSession("admin@admin.com", "Login123");
+			cs.startSession("admin@admin.com", "Test123");
 			edu.wustl.catissuecore.domain.Specimen specimen = searchSpecimen();
 			if(specimen!=null)
 			{
 				addAnnotationToStaticEntity(specimen.getId());
-				System.out.println("Added annotation");	
+				System.out.println("Added annotation");
 				//Query
 				queryDEClass(specimen.getId());
 			}
-			
+
 		}
 		catch (Exception ex)
 		{
@@ -126,7 +126,7 @@ public class ClientDemo_Specimen
 		appServiceDEEntity = ApplicationServiceProvider.getRemoteInstance("http://localhost:8080/pathologySpecimen/http/remoteService");
 	}
 	/**
-	 * 
+	 *
 	 */
 	private static void initDEIntegrationService()
 	{
@@ -137,8 +137,8 @@ public class ClientDemo_Specimen
 
 	/**
 	 * @return
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
 	 */
 	private static void addAnnotationToStaticEntity(Long specimenId) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
@@ -151,12 +151,12 @@ public class ClientDemo_Specimen
 			//TODO 6
 			MelanomaSpecimenPathologyAnnotation createdDE = (MelanomaSpecimenPathologyAnnotation)appServiceDEEntity.createObject(deObjectToBeCreated);
 			System.out.println("Newly created Annotation = "  +  createdDE);
-			
+
 			System.out.println("Updating Integration Tables");
 			updateIntegrationTables(specimenId,createdDE.getId());
 		}
 		catch (ApplicationException e)
-		{			
+		{
 			e.printStackTrace();
 		}
 	}
@@ -172,7 +172,7 @@ public class ClientDemo_Specimen
 		melanomaSpecimenPathologyAnnotation.setSpecimen(specimen);
 		melanomaSpecimenPathologyAnnotation.setDepthOfInvasion(new Double(2));
 		melanomaSpecimenPathologyAnnotation.setComments("Comment");
-		
+
 		try {
 			System.out.println("Searching MelanomaSpecimenPathologyAnnotation "   + melanomaSpecimenPathologyAnnotation);
 			initDEService();
@@ -202,42 +202,42 @@ public class ClientDemo_Specimen
 
 	/**
  * @param createdDE
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
-	 * @throws ApplicationException 
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException
+	 * @throws ApplicationException
 	 */
 	private static void updateIntegrationTables(Long staticEntityId,Long deEntityId) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, ApplicationException
 	{
 		initDEIntegrationService();
 		Long particpantClassId = getEntityId(STATIC_ENTITY_CLASS_NAME);
 		System.out.println("Entity Id for specimenCollectionGroup " + particpantClassId);
-	
+
 		Long smokingHistoryContainerId =getContainerId(DE_CLASS_NAME);
 		System.out.println("Container Id for Person " + smokingHistoryContainerId);
-		
+
 		EntityMapRecord entityMapRecord = initEntityMapRecord(staticEntityId,deEntityId, getFormContext(particpantClassId, smokingHistoryContainerId));
 		insertEntityMapRecord(entityMapRecord);
 	}
 
-	
+
 
 	/**
 	 * @param participantId
 	 * @return
-		 * @throws ApplicationException 
-		 * @throws DynamicExtensionsSystemException 
+		 * @throws ApplicationException
+		 * @throws DynamicExtensionsSystemException
 	 */
 	private static Object getDEToBeCreated(Long specimenId) throws ApplicationException, DynamicExtensionsSystemException
 	{
 		Specimen specimen = new Specimen();
 		specimen.setId(specimenId);
-	
+
 		MelanomaSpecimenPathologyAnnotation melanomaSpecimenPathologyAnnotation = new MelanomaSpecimenPathologyAnnotation();
 		System.out.println("Getting next id");
 		Long smokingHistoryId = getNextIdentifier(DE_CLASS_NAME);
-		
+
 		melanomaSpecimenPathologyAnnotation.setSpecimen(specimen);
-	
+
 		melanomaSpecimenPathologyAnnotation.setId(smokingHistoryId);
 		melanomaSpecimenPathologyAnnotation.setComments("Comments");
 		melanomaSpecimenPathologyAnnotation.setDepthOfInvasion(new Double(2));
@@ -246,20 +246,20 @@ public class ClientDemo_Specimen
 		melanomaSpecimenPathologyAnnotation.setUlceration("Ulceration");
 		melanomaSpecimenPathologyAnnotation.setTumorRegression("TumorRegression");
 		melanomaSpecimenPathologyAnnotation.setTumorInfiltratingLymphocytes("TumorInfiltratingLymphocytes");
-			
+
 		return melanomaSpecimenPathologyAnnotation;
 	}
 
 	/**
-	 * @throws ApplicationException 
-	 * @throws DynamicExtensionsSystemException 
-	 * 
+	 * @throws ApplicationException
+	 * @throws DynamicExtensionsSystemException
+	 *
 	 */
 	private static Long getNextIdentifier(String deEntity) throws ApplicationException, DynamicExtensionsSystemException
 	{
 		/*DetachedCriteria maxDEIdentifierCriteria = DetachedCriteria.forClass(deClass).setProjection( Property.forName("id").count());
 		List identifierList = appServiceDEEntity.query(maxDEIdentifierCriteria, deClass.getName());
-		
+
 		if(identifierList!=null)
 		{
 			Iterator identifierIterator = identifierList.iterator();
@@ -269,7 +269,7 @@ public class ClientDemo_Specimen
 				System.out.println("I = " + maxIdentifier);
 				Long l =new Long(maxIdentifier.intValue() + 1);
 				return (l);
-				
+
 			}
 		}
 		return null;*/
@@ -359,7 +359,7 @@ public class ClientDemo_Specimen
 	{
 			Long entityId = getEntityId(string);
 			return entityManager.getContainerIdForEntity(entityId);
-		
+
 	}
 
 
@@ -422,9 +422,9 @@ public class ClientDemo_Specimen
 	private static edu.wustl.catissuecore.domain.Specimen getSpecimenToSearch()
 	{
 		edu.wustl.catissuecore.domain.Specimen specimen = new edu.wustl.catissuecore.domain.Specimen();;
-		//Set parameters for participant to be searched 
-		specimen.setId(2L);	//Set ID. 
-		
+		//Set parameters for participant to be searched
+		specimen.setId(2L);	//Set ID.
+
 		return specimen;
 	}
 
