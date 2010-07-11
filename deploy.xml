@@ -1668,7 +1668,7 @@
 
 
 	<!--Target for Application and Database Upgrade from Suite 1.0  to Suite 1.1-->
-	<target name="upgrade_all" depends="assert, upgrade_db, upgrade_app" description="Target for Application and Database Upgrade from Suite 1.0  to Suite 1.1">
+	<target name="upgrade_all" depends="assert, upgrade_db, upgrade_app" description="Target for Application and Database Upgrade from v1.1  to V1.2">
 	</target>
 
 	<!--Target for Application and Database Upgrade from caTissueCore v1.2.2  to Suite 1.1-->
@@ -1828,6 +1828,7 @@
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
+					<antcall target="update_sequences" />
 					<antcall target="upgrade_oracle_from_v1.1_to_v1.1p2" />
 				</then>
 			</elseif>
@@ -1925,6 +1926,19 @@
 		</sql>
 	</target>
 
+	<!-- Target to re-set the sequence when upgrading from V1.1 to V1.2-->
+	<target name="update_sequences" description="Updating sequence in case of upgrade from V1.1 to V1.2">
+			<echo message="Updating the sequence"></echo>
+			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
+				<transaction src="${dbupgrade.sql.dir}/Oracle/DBSeqUpdate_v1.1_to_v1.2.sql" />
+			    <transaction>commit;</transaction>
+				<classpath>
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+			</sql>
+	</target>
 	<!-- Removing unnecessary PE Oracle-->
 	<target name="upgrade_oracle_from_v1.1_to_v1.1p2" description="Upgrading Oracle Database and removing unused Protection Element">
 		<echo message="Upgrading Oracle Database and removing unused Protection Element" />
@@ -2697,7 +2711,7 @@
 		<echo message="jboss.container.secure property is set to: ${jboss.container.secure} protocol set to: ${protocol}" />
 		<echo message="Sending mail to: ${email.administrative.emailAddress}" />
 		<echo message="Sending mail from: ${email.sendEmailFrom.emailAddress}" />
-		<mail mailhost="${email.mailServer}" subject="caTissueSuite v1.1.p5 Successfully Deployed" encoding="plain" failonerror="false">
+		<mail mailhost="${email.mailServer}" subject="caTissueSuite v1.2 Successfully Deployed" encoding="plain" failonerror="false">
 			<from address="${email.sendEmailFrom.emailAddress}" />
 			<to address="${email.administrative.emailAddress}" />
 			<message>
