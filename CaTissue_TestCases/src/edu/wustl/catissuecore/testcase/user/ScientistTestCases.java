@@ -458,7 +458,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 		{
 			StringBuffer hql = new StringBuffer();
 			String targetClassName = Participant.class.getName();
-			hql.append("select xxTargetAliasxx.lastName,xxTargetAliasxx.firstName,xxTargetAliasxx.middleName,xxTargetAliasxx.birthDate,xxTargetAliasxx.empiId,xxTargetAliasxx.gender,xxTargetAliasxx.sexGenotype,xxTargetAliasxx.ethnicity,xxTargetAliasxx.socialSecurityNumber,xxTargetAliasxx.activityStatus,xxTargetAliasxx.deathDate,xxTargetAliasxx.vitalStatus,xxTargetAliasxx.metaPhoneCode,xxTargetAliasxx.id" +
+			hql.append("select xxTargetAliasxx.lastName,xxTargetAliasxx.firstName,xxTargetAliasxx.middleName,xxTargetAliasxx.birthDate,xxTargetAliasxx.gender,xxTargetAliasxx.sexGenotype,xxTargetAliasxx.ethnicity,xxTargetAliasxx.socialSecurityNumber,xxTargetAliasxx.activityStatus,xxTargetAliasxx.deathDate,xxTargetAliasxx.vitalStatus,xxTargetAliasxx.metaPhoneCode,xxTargetAliasxx.id" +
 					" from "+targetClassName+" xxTargetAliasxx where xxTargetAliasxx.id>=1 and xxTargetAliasxx.id<=100");
 			List result = appService.query(hql.toString());
 			List list = CaTissueSuiteTestUtil.createObjectList(targetClassName,result);
