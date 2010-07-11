@@ -22,7 +22,7 @@ public class CaTissueBaseTestCase extends BaseTestCase{
 
 	static ApplicationService appService = null;
 	static final String loginName = "admin@admin.com";
-	static final String password = "Test123";
+	static final String password = "Login123";
 	static final String jbossURL = "http://ps4153:8080/catissuecore";
 	static final String keyStorePath = "G:/jboss-4.2.2.GA/server/default/conf/chap8.keystore";
 
