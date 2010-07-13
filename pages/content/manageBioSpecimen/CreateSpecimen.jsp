@@ -340,7 +340,9 @@
 										<td width="17%" align="left">
 											<span class="black_ar"><bean:message key="specimen.subType"/></span>
 										</td>
-											<td align="left" class="black_ar" >	<autocomplete:AutoCompleteTag property="type"
+											<td align="left" class="black_ar" >
+											<div id="specimenTypeId">
+											<autocomplete:AutoCompleteTag property="type"
 											styleClass="black_ar"
 											size="27"
 											optionsList = "${requestScope.specimenTypeMap}"
@@ -348,6 +350,7 @@
 											onChange="onSubTypeChangeUnit('className',this,'unitSpan')"
 											readOnly="false"
 											dependsOn="${createSpecimenForm.className}"  />
+											</div>
 										</td>
 									</tr>
 									<tr>
