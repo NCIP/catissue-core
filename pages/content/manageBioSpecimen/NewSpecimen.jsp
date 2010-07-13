@@ -1407,6 +1407,7 @@
 												      readOnlyForAliquot = "true";
 												}
 						%>
+						<div id="specimenTypeId">
 									<autocomplete:AutoCompleteTag property="type"
 										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
 										  initialValue="<%=form.getType()%>" onChange="<%=subTypeFunctionName%>"
@@ -1414,6 +1415,7 @@
 										  size="25"
 										  styleClass="black_ar"
 										/>
+						</div>
 								</td>
 							</tr>
 							<tr>

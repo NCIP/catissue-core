@@ -79,8 +79,15 @@
 			{
 					tmpArray[i-1] = arrayName[i];
 			}
-			//autoCompleteResult += "new Autocompleter.Combobox(\"" + property + "\",\"" + div + "\",'nameofarrow',valuesInList,  { tokens: new Array(), fullSearch: true, partialSearch: true,defaultArray:" + "valuesInList" + ",choices: " + numberOfResults + ",autoSelect:true, minChars: "+ numberOfCharacters +" });";
-			AutoC = new Autocompleter.Combobox("type","divFortype","typearrow",tmpArray,  { tokens: new Array(), fullSearch: true, partialSearch: true,defaultArray: tmpArray,autoSelect:true});
+			var divDoc = document.getElementById("specimenTypeId");
+			divDoc.innerHTML = "";
+
+			 var valuesInList =tmpArray;
+
+			divDoc.innerHTML = '<div id="divFortype" style="display: none;" class="autocomplete"></div><input type="text" class="black_ar" value=""size="25" id="type" name="type"onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"onblur="trimByAutoTag(this)"/><image id="typearrow" src="images/autocompleter.gif" alt="Click" width="18" height="19" hspace="0" vspace="0" align="absmiddle" />';
+
+			var AutoC = new Autocompleter.Combobox("type","divFortype","typearrow",tmpArray,  { tokens: new Array(), fullSearch: true, partialSearch: true,defaultArray: tmpArray,autoSelect:true});
+
 		}
 	// Mandar 25-apr-06 : bug 1414 : Tissue type changed.
 	var subTypeData1 = "<%=Constants.FROZEN_TISSUE_SLIDE%>";
