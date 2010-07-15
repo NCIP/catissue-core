@@ -35,6 +35,7 @@ import edu.common.dynamicextensions.dao.impl.DynamicExtensionDAO;
 import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domain.userinterface.Container;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
+import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
@@ -43,13 +44,14 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationExcept
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManagerConstants;
+import edu.common.dynamicextensions.xmi.exporter.XMIExporterUtility;
+import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.annotations.PathObject;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.StudyFormContext;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -592,7 +594,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	{
 		final String staticEntityId = (String) request.getSession().getAttribute(
 				AnnotationConstants.SELECTED_STATIC_ENTITYID );
-		request.getSession().removeAttribute( AnnotationConstants.SELECTED_STATIC_ENTITYID );
+		//request.getSession().removeAttribute( AnnotationConstants.SELECTED_STATIC_ENTITYID );
 
 		return staticEntityId;
 	}
@@ -761,9 +763,13 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 
 			/*final List < EntityMap > entityMapList = getEntityMapsForDE( Long.valueOf( container
 					.getValue() ) );*/
-			CatissueCoreCacheManager catCoreCacheMgr = CatissueCoreCacheManager.getInstance();
-			Long staticEntityId = (Long) catCoreCacheMgr
-					.getObjectFromCache(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID);
+			//TODO need to add alternate logic to imporve the performance
+			EntityInterface entityInterface= (EntityInterface) EntityCache.getInstance().getContainerById(Long.valueOf( container
+					.getValue())).getAbstractEntity();
+
+			EntityGroupInterface entityGroup = entityInterface.getEntityGroup();
+			Long staticEntityId = XMIExporterUtility.getHookEntityName(entityGroup).getId();
+
 			if (staticEntityId != null)
 			{
 				//final Iterator < EntityMap > entityMapIterator = entityMapList.iterator();

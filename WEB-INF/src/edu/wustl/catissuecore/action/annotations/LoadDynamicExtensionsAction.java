@@ -48,6 +48,7 @@ public class LoadDynamicExtensionsAction extends BaseAction
 		String staticEntityId = annotationForm.getSelectedStaticEntityId();
 		String[] conditions = new String[]{"All"};
 
+
 		if (annotationForm.getConditionVal() != null)
 		{
 			conditions = annotationForm.getConditionVal();
@@ -74,12 +75,11 @@ public class LoadDynamicExtensionsAction extends BaseAction
 	private String getDynamicExtensionsURL(HttpServletRequest request)
 	{
 		//Get Dynamic extensions URL
-		final String dynamicExtensionsURL = request.getContextPath()
+		String dynamicExtensionsURL = request.getContextPath()
 				+ WebUIManager.getCreateContainerURL();
-		final StringBuffer dynExturl = new StringBuffer();
-		dynExturl.append( dynamicExtensionsURL );
+
 		final SessionDataBean sessionbean = (SessionDataBean) request.getSession().getAttribute(
-				edu.wustl.catissuecore.util.global.Constants.SESSION_DATA );
+				edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
 
 		final String userId = sessionbean.getUserId().toString();
 		//request.getSession().getAttribute("SESSION_DATA").toString();
@@ -89,40 +89,23 @@ public class LoadDynamicExtensionsAction extends BaseAction
 			isAuthenticatedUser = "true";
 		}
 		//append container id if any
-		if (request.getParameter( "containerId" ) != null)
+		if (request.getParameter("containerId") != null)
 		{
-			dynExturl.append( '?' );
-			dynExturl.append( WebUIManagerConstants.CONATINER_IDENTIFIER_PARAMETER_NAME );
-			dynExturl.append( '=' );
-			dynExturl.append( request.getParameter( "containerId" ) );
-			/*dynamicExtensionsURL = dynamicExtensionsURL + "?"
+			dynamicExtensionsURL = dynamicExtensionsURL + "?"
 					+ WebUIManagerConstants.CONATINER_IDENTIFIER_PARAMETER_NAME + "="
-					+ request.getParameter("containerId");*/
-			dynExturl.append( '&' );
-			dynExturl.append( WebUIManager.getCallbackURLParamName() );
-			dynExturl.append( '=' );
-			dynExturl.append( request.getContextPath() );
-			dynExturl.append( "&isAuthenticatedUser=" );
-			dynExturl.append( isAuthenticatedUser );
-			/*dynamicExtensionsURL = dynamicExtensionsURL + "&"
+					+ request.getParameter("containerId");
+			dynamicExtensionsURL = dynamicExtensionsURL + "&"
 					+ WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath()
 					+ AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN
-					+ "&isAuthenticatedUser=" + isAuthenticatedUser;*/
+					+ "&isAuthenticatedUser=" + isAuthenticatedUser;
 		}
 		else
 		{
 			//append callback parameter
-			dynExturl.append( '?' );
-			dynExturl.append( WebUIManager.getCallbackURLParamName() );
-			dynExturl.append( '=' );
-			dynExturl.append( request.getContextPath() );
-			dynExturl.append( AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN );
-			dynExturl.append( "&isAuthenticatedUser=" );
-			dynExturl.append( isAuthenticatedUser );
-			/*dynamicExtensionsURL = dynamicExtensionsURL + "?"
+			dynamicExtensionsURL = dynamicExtensionsURL + "?"
 					+ WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath()
 					+ AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN
-					+ "&isAuthenticatedUser=" + isAuthenticatedUser;*/
+					+ "&isAuthenticatedUser=" + isAuthenticatedUser;
 		}
 		return dynamicExtensionsURL;
 	}

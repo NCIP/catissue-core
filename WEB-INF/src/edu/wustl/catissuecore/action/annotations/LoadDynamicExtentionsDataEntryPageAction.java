@@ -71,9 +71,6 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 			AnnotationDataEntryForm annotationDataEntryForm)
 			throws DynamicExtensionsSystemException, BizLogicException
 	{
-		final String staticEntityId = annotationDataEntryForm.getParentEntityId();
-		final String dynEntContainerId = annotationDataEntryForm.getSelectedAnnotation();
-
 		// Set into Cache
 		// CatissueCoreCacheManager cacheManager =
 		// CatissueCoreCacheManager.getInstance();
@@ -97,10 +94,11 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	private String getDynamicExtensionsDataEntryURL(HttpServletRequest request,
 			AnnotationDataEntryForm annotationDataEntryForm)
 	{
-		final String dynExtDataEntryURL = request.getContextPath()
+
+		String dynExtDataEntryURL = request.getContextPath()
 				+ WebUIManager.getLoadDataEntryFormActionURL();
 		final SessionDataBean sessionbean = (SessionDataBean) request.getSession().getAttribute(
-				edu.wustl.catissuecore.util.global.Constants.SESSION_DATA );
+				edu.wustl.catissuecore.util.global.Constants.SESSION_DATA);
 		final String userId = sessionbean.getUserId().toString();
 		String isAuthenticatedUser = "false";
 		if (userId != null)
@@ -109,51 +107,28 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		}
 
 		// Append container id
-		this.logger.info( "Load data entry page for Dynamic Extension Entity ["
-				+ annotationDataEntryForm.getSelectedAnnotation() + "]" );
-		final StringBuffer dynExturl = new StringBuffer();
-		dynExturl.append( dynExtDataEntryURL );
-		dynExturl.append( '&' );
-		dynExturl.append( WebUIManagerConstants.CONATINER_IDENTIFIER_PARAMETER_NAME );
-		dynExturl.append( '=' );
-		dynExturl.append( annotationDataEntryForm.getSelectedAnnotation() );
-		/*dynExtDataEntryURL = dynExtDataEntryURL + "&"
+		this.logger.info("Load data entry page for Dynamic Extension Entity ["
+				+ annotationDataEntryForm.getSelectedAnnotation() + "]");
+		dynExtDataEntryURL = dynExtDataEntryURL + "&"
 				+ WebUIManagerConstants.CONATINER_IDENTIFIER_PARAMETER_NAME + "="
-				+ annotationDataEntryForm.getSelectedAnnotation();*/
-		final String operation = request.getParameter( "operation" );
-		final String selectedAnnotation = request.getParameter( "selectedAnnotation" );
-		String callbackURL = AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DATA_ENTRY
-		+ "?" + "editOperation=" + operation + "@selectedAnnotation=" + selectedAnnotation;
-		if (request.getParameter( "recordId" ) != null)
+				+ annotationDataEntryForm.getSelectedAnnotation();
+		if (request.getParameter("recordId") != null)
 		{
-			this.logger.info( "Loading details of record id [" + request.getParameter( "recordId" )
-					+ "]" );
-			dynExturl.append( '&' );
-			dynExturl.append( WebUIManagerConstants.RECORD_IDENTIFIER_PARAMETER_NAME );
-			dynExturl.append( '=' );
-			dynExturl.append( request.getParameter( "recordId" ) );
-			/*dynExtDataEntryURL = dynExtDataEntryURL + "&"
+			this.logger.info("Loading details of record id [" + request.getParameter("recordId")
+					+ "]");
+			dynExtDataEntryURL = dynExtDataEntryURL + "&"
 					+ WebUIManagerConstants.RECORD_IDENTIFIER_PARAMETER_NAME + "="
-					+ request.getParameter("recordId");*/
-			callbackURL = callbackURL + "@deData=edit";
+					+ request.getParameter("recordId");
 		}
-		else
-		{
-			callbackURL = callbackURL + "@deData=add";
-		}
-
+		final String operation = request.getParameter("operation");
+		final String selectedAnnotation = request.getParameter("selectedAnnotation");
+		final String callbackURL = AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DATA_ENTRY
+				+ "?" + "editOperation=" + operation + "@selectedAnnotation=" + selectedAnnotation;
 		// append callback url
-		dynExturl.append( '&' );
-		dynExturl.append( WebUIManager.getCallbackURLParamName() );
-		dynExturl.append( '=' );
-		dynExturl.append( request.getContextPath() );
-		dynExturl.append( callbackURL );
-		dynExturl.append( "&isAuthenticatedUser=" );
-		dynExturl.append( isAuthenticatedUser );
-		/*dynExtDataEntryURL = dynExtDataEntryURL + "&" + WebUIManager.getCallbackURLParamName()
+		dynExtDataEntryURL = dynExtDataEntryURL + "&" + WebUIManager.getCallbackURLParamName()
 				+ "=" + request.getContextPath() + callbackURL + "&isAuthenticatedUser="
-				+ isAuthenticatedUser;*/
-		return dynExturl.toString();
+				+ isAuthenticatedUser;
+		return dynExtDataEntryURL;
 	}
 
 }

@@ -143,7 +143,7 @@ public class AnnotationUtil
 
 		systemEntityList.add(new NameValueBean(Constants.SELECT_OPTION,
 				Constants.SELECT_OPTION_VALUE));
-		String key = "";
+		String key = null;
 		if (staticEntityInformationList != null && !staticEntityInformationList.isEmpty())
 		{
 			final CatissueCoreCacheManager cache = CatissueCoreCacheManager.getInstance();
@@ -151,7 +151,7 @@ public class AnnotationUtil
 			while (listIterator.hasNext())
 			{
 				final NameValueBean nameValueBean = (NameValueBean) listIterator.next();
-				key = getKeyFromEntityName(nameValueBean.getValue());
+				key = getHookEntityIdByName(nameValueBean.getValue());
 				if (key != null && !key.equals(""))
 				{
 					systemEntityList.add(new NameValueBean(nameValueBean.getName(), cache
@@ -167,7 +167,7 @@ public class AnnotationUtil
 	 * @param entityName - entityName
 	 * @return - String
 	 */
-	private static String getKeyFromEntityName(String entityName)
+/*	private static String getKeyFromEntityName(String entityName)
 	{
 		String key = "";
 		if (entityName != null)
@@ -185,6 +185,31 @@ public class AnnotationUtil
 				key = AnnotationConstants.SPECIMEN_ENTITY_ID;
 			}
 		}
+		return key;
+	}*/
+	/**
+	 *
+	 * @param abstractRecordEntry
+	 * @return
+	 */
+	public static String getHookEntityIdByName(String  abstractRecordEntryName)
+	{
+		String key = null;
+		final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
+				.getInstance();
+		if (abstractRecordEntryName.equals(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY))
+		{
+			key = AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID;
+		}
+		else if (abstractRecordEntryName.equals(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY))
+		{
+			key = AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID;
+		}
+		else
+		{
+			key = AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID;
+		}
+
 		return key;
 	}
 

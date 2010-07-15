@@ -315,7 +315,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 				.getOperationStatusParameterName());
 		String editOperation = request.getParameter("editOperation");
 		final String[] parameters = editOperation.split("@");
-		String deDataAddEditCase = (parameters[2].split("="))[1].toString();
+		String deDataAddEditCase = (parameters[1].split("="))[0].toString();
 		if ((operationStatus != null)
 				&& (operationStatus.trim().equals(WebUIManagerConstants.SUCCESS))
 				&& !"edit".equals(deDataAddEditCase))
@@ -577,7 +577,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		{
 			String associatedStaticEntity = AnnotationUtil
 					.getAssociatedStaticEntityForRecordEntry(staticEntityName);
-			final ICPCondition annoCondn = this.getConditionInvoker( associatedStaticEntity );
+			final ICPCondition annoCondn = this.getConditionInvoker( staticEntityName );
 			if (annoCondn != null)
 			{
 				cpIdList = annoCondn
@@ -982,12 +982,14 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 					Long recEntryEntityId = AnnotationUtil.getHookEntityId(recordEntry);
 					Collection recIdList = annotationBizLogic.getDynamicRecordIdFromStaticId(
 							recordEntry.getId(), containerId, recEntryEntityId);
-					String recId = recIdList.iterator().next().toString();
-					if (dynamicEntity != null
-							&& dynamicEntity.getName().equalsIgnoreCase(entityId)
-							&& !recordIds.contains(recId))
-					{
-						recordIds.add(Long.valueOf(recId));
+					if(recIdList.iterator().hasNext()){
+						String recId = recIdList.iterator().next().toString();
+						if (dynamicEntity != null
+								&& dynamicEntity.getName().equalsIgnoreCase(entityId)
+								&& !recordIds.contains(recId))
+						{
+							recordIds.add(Long.valueOf(recId));
+						}
 					}
 				}
 			}

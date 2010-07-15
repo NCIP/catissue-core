@@ -8,6 +8,9 @@
 
 package edu.wustl.catissuecore.action.annotations;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,7 +18,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.wustl.catissuecore.actionForm.AnnotationForm;
+import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.exception.BizLogicException;
 
 /**
  * @author renuka_bajpai
@@ -36,12 +44,12 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ActionForward actionfwd = null;
+		ActionForward actionfwd = mapping.findForward( Constants.SUCCESS );
 
-		/*final AnnotationForm annotationForm = (AnnotationForm) form;
+		final AnnotationForm annotationForm = (AnnotationForm) form;
 
 		this.saveConditions( annotationForm, request );
-		actionfwd = mapping.findForward( Constants.SUCCESS );*/
+		actionfwd = mapping.findForward( Constants.SUCCESS );
 
 		return actionfwd;
 	}
@@ -52,14 +60,14 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 	 * @throws BizLogicException : BizLogicException
 	 * @throws DynamicExtensionsSystemException : DynamicExtensionsSystemException
 	 */
-	/*private void saveConditions(AnnotationForm annotationForm, HttpServletRequest request)
+	private void saveConditions(AnnotationForm annotationForm, HttpServletRequest request)
 			throws BizLogicException, DynamicExtensionsSystemException
 	{
 
-		final String containerId = request.getParameter( "containerId" );
+	/*	final String containerId = request.getParameter( "containerId" );
 		final AnnotationBizLogic bizLogic = new AnnotationBizLogic();
 		List dynamicList = new ArrayList();
-		dynamicList = bizLogic.getListOfStaticEntities( Long.valueOf( containerId ) );
+*/		/*dynamicList = bizLogic.getListOfStaticEntities( Long.valueOf( containerId ) );
 		final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
 				.getInstance();
 
@@ -162,6 +170,6 @@ public class SaveAnnotationsConditionsAction extends BaseAction
 				entityMap.setFormContextCollection( currFormColl );
 				bizLogic.updateEntityMap( entityMap );
 			}
-		}
-	}*/
+		}*/
+	}
 }

@@ -216,9 +216,9 @@ public class AnnotationConstants
 	 * EDIT.
 	 */
 	public static final String EDIT = "Edit";
-	
+
 	public static  final String CELL_START = "<cell>";
-	
+
 	public static  final String CELL_END = "</cell>";
 
 	public static final String ENTITY_NAME_PARTICIPANT_REC_ENTRY = "edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry";
