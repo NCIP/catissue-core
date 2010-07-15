@@ -650,8 +650,11 @@
 		</copy>
 
 		<copy todir="${zip.dir}/SQL" overwrite="true">
-			<fileset dir="${base.dir}/SQL" />
+			<fileset dir="${base.dir}/SQL" >
+				<exclude name="**/Permissible_values/*.ctl"/>
+			</fileset>
 		</copy>
+
 		<!--delete dir="${zip.dir}/SQL/DBUpgrade" /-->
 
 		<copy file="MySql_DB_Creation.sql" todir="${zip.dir}" overwrite="true" />
