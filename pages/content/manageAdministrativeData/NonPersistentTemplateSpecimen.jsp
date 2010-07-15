@@ -50,6 +50,7 @@
                                 <td width="1%" align="center"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
 							    <td width="15%" align="left"><label for="type" class="black_ar"><bean:message key="specimen.subType"/></label></td>
                                 <td width="28%" align="left" class="black_ar">
+                                <div id="specimenTypeId">
 									<autocomplete:AutoCompleteTag property="type"
 									  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
 									  initialValue="<%=form.getType()%>"
@@ -60,6 +61,7 @@
 									  size="20"
 
 							        />
+							        </div>
 								</td>
                               </tr>
                               <tr>

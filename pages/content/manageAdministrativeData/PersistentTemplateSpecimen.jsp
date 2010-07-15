@@ -68,6 +68,7 @@
 								</logic:equal>
 								<logic:notEqual name="isPersistent" value="true">
 									<td width="28%" align="left" class="black_ar">
+									<div id="specimenTypeId">
 										<autocomplete:AutoCompleteTag property="type"
 										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
 										  initialValue="<%=form.getType()%>"
@@ -77,6 +78,7 @@
 										  styleClass="black_ar"
 										  size="20"
 										/>
+										</div>
 									</td>
 								</logic:notEqual>
                         </tr>
