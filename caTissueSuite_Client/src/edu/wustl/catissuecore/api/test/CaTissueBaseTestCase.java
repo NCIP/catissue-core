@@ -4,8 +4,12 @@
 package edu.wustl.catissuecore.api.test;
 
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+
 import edu.wustl.common.test.BaseTestCase;
-import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.global.Validator;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.system.comm.client.ClientSession;
@@ -24,7 +28,7 @@ public class CaTissueBaseTestCase extends BaseTestCase{
 	static final String loginName = "admin@admin.com";
 	static final String password = "Login123";
 	static final String jbossURL = "http://ps4153:8080/catissuecore";
-	static final String keyStorePath = "G:/jboss-4.2.2.GA/server/default/conf/chap8.keystore";
+	static final String keyStorePath = "";
 
 	public CaTissueBaseTestCase(){
 		super();
@@ -35,7 +39,18 @@ public class CaTissueBaseTestCase extends BaseTestCase{
 	public void setUp(){
 
 		//Logger.configure("");
-		System.setProperty("javax.net.ssl.trustStore", keyStorePath);
+		if(!Validator.isEmpty(keyStorePath))
+		{
+			System.setProperty("javax.net.ssl.trustStore", keyStorePath);
+		}
+		final HostnameVerifier hostVerifier = new HostnameVerifier()
+        {
+            public boolean verify(final String urlHostName,final SSLSession session)
+            {
+                return true;
+            }
+        };
+        HttpsURLConnection.setDefaultHostnameVerifier(hostVerifier);
 		appService = ApplicationServiceProvider.getApplicationService();
 		ClientSession cs = ClientSession.getInstance();
 		try
