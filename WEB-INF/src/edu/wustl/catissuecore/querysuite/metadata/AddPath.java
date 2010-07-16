@@ -12,13 +12,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.wustl.catissuecore.util.AssociatesForms;
+import edu.wustl.common.util.logger.Logger;
+
 /**
  * AddPath.
  *
  */
 public class AddPath
 {
-
+	private static final Logger logger = Logger.getCommonLogger(AssociatesForms.class);
 	/**
 	 * specify superClass And SubClasses Map.
 	 */
@@ -289,7 +292,7 @@ public class AddPath
 			}
 			else
 			{
-				System.out.println("Entity with name : " + key + " not found");
+				logger.info("Entity with name : " + key + " not found");
 			}
 		}
 		stmt.close();
