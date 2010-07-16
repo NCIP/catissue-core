@@ -57,7 +57,7 @@ public class DeleteSpecimenArrayAction extends CommonAddEditAction
 	@Override
 	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-			
+
 	{
 
 		final Map arrayContentMap = (Map) request.getSession().getAttribute(
@@ -82,7 +82,6 @@ public class DeleteSpecimenArrayAction extends CommonAddEditAction
 		catch (final Exception exception)
 		{
 			this.logger.error(exception.getMessage(), exception);
-			exception.printStackTrace();
 		}
 		return super.executeXSS(mapping, abstractForm, request, response);
 	}
