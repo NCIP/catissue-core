@@ -70,7 +70,6 @@ public class AddInstitutionAction extends CommonAddEditAction
 			catch (final BizLogicException bizEx)
 			{
 				this.logger.error("Exception occurred in retrieving Institution",bizEx);
-				bizEx.printStackTrace();
 			}
 		}
 		final PrintWriter out = response.getWriter();
