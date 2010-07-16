@@ -34,7 +34,7 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger
+	private static final Logger logger = Logger
 			.getCommonLogger( LoadDynamicExtentionsDataEntryPageAction.class );
 
 	/**
