@@ -95,7 +95,6 @@ public abstract class BaseAppletAction extends Action
 		{
 			request.setAttribute(Constants.INPUT_APPLET_DATA, null);
 			this.logger.error(excep.getMessage(),excep);
-			excep.printStackTrace() ;
 		}
 	}
 
@@ -164,8 +163,8 @@ public abstract class BaseAppletAction extends Action
 		setAttributeFromParameter(request, Constants.OPERATION);
 		setAttributeFromParameter(request, Constants.MENU_SELECTED);
 		checkAddNewOperation(request);
-		
-		
+
+
 		// -- code for handling method calls
 		final String methodName = request.getParameter(Constants.METHOD_NAME);
 		if (methodName != null)
@@ -230,17 +229,14 @@ public abstract class BaseAppletAction extends Action
 		catch (final NoSuchMethodException excp1)
 		{
 			this.logger.error(excp1.getMessage(), excp1);
-			excp1.printStackTrace();
 		}
 		catch (final NullPointerException excp2)
 		{
 			this.logger.error(excp2.getMessage(), excp2);
-			excp2.printStackTrace() ;
 		}
 		catch (final SecurityException excp3)
 		{
 			this.logger.error(excp3.getMessage(), excp3);
-			excp3.printStackTrace() ;
 		}
 		return null;
 	}
@@ -281,7 +277,7 @@ public abstract class BaseAppletAction extends Action
 			removeFormBeanStack(request);
 		}
 	}
-	
+
 	/**
 	 * sets required attributes.
 	 * @param request HTTPServletRequest calling the action
@@ -298,7 +294,7 @@ public abstract class BaseAppletAction extends Action
 			request.setAttribute(Constants.SUBMITTED_FOR, Constants.SUBMITTED_FOR_ADD_NEW);
 		}
 	}
-	
+
 	/**
 	 * remove data from current session.
 	 * @param request HttpServletRequest
