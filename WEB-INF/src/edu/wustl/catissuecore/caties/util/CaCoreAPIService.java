@@ -64,6 +64,12 @@ public class CaCoreAPIService
 					return true;
 	            }
 			};
+			String keyStoreFilePath = CaTIESProperties.getValue(CaTIESConstants.KEYSTORE_FILE_PATH).trim();
+			if(keyStoreFilePath != null && !"".equals(keyStoreFilePath))
+			{
+				System.setProperty("javax.net.ssl.trustStore", CaTIESProperties
+						.getValue(CaTIESConstants.KEYSTORE_FILE_PATH));
+			}
 			appService = ApplicationServiceProvider.getRemoteInstance();
 			clientSession = ClientSession.getInstance();
 			try

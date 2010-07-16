@@ -50,12 +50,12 @@
 				<fail message="The property 'jboss.server.host' can not be empty in caTissueInstall.properties" />
 			</then>
 		</if>
-		<if>
+		<!--<if>
 			<equals arg1="" arg2="${jboss.server.port}" />
 			<then>
 				<fail message="The property 'jboss.server.port' can not be empty in caTissueInstall.properties" />
 			</then>
-		</if>
+		</if>-->
 		<!-- Assertions for add collection protocol-->
 		<if>
 			<equals arg1="yes" arg2="${add.default.collection.protocol}" />
@@ -127,12 +127,12 @@
 						<fail message="The property 'jboss.server.host' can not be empty in caTissueInstall.properties" />
 					</then>
 				</if>
-				<if>
+				<!--<if>
 					<equals arg1="" arg2="${jboss.server.port}" />
 					<then>
 						<fail message="The property 'jboss.server.port' can not be empty in caTissueInstall.properties" />
 					</then>
-				</if>
+				</if>-->
 				<if>
 					<equals arg1="" arg2="${caties.mmtx.home}" />
 					<then>
@@ -220,17 +220,25 @@
 			<replacefilter token="@@PROCESS_FILES_DIR@@" value="${process.file.dir}" />
 			<replacefilter token="@@GATE_HOME@@" value="${concept.code.installation.dir}/gate/gate_3_1" />
 		</replace>
+		<property name="jboss.server.host.jboss.server.port" value="${jboss.server.host}:${jboss.server.port}" />
+		<if>
+			<equals arg1="" arg2="${jboss.server.port}" />
+			<then>
+				<var name="jboss.server.host.jboss.server.port" unset="true"/>
+				<property name="jboss.server.host.jboss.server.port" value="${jboss.server.host}" />
+			</then>
+		</if>
 		<if>
 			<equals arg1="${jboss.container.secure}" arg2="yes" />
 			<then>
 				<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
-					<replacefilter token="@@HOST:PORT@@" value="https://${jboss.server.host}:${jboss.server.port}" />
+					<replacefilter token="@@HOST:PORT@@" value="https://${jboss.server.host.jboss.server.port}" />
 					<replacefilter token="@@KEYSTORE_FILE_PATH@@" value="${keystore.file.path}" />
 				</replace>
 			</then>
 			<else>
 				<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
-					<replacefilter token="@@HOST:PORT@@" value="http://${jboss.server.host}:${jboss.server.port}" />
+					<replacefilter token="@@HOST:PORT@@" value="http://${jboss.server.host.jboss.server.port}" />
 				</replace>
 			</else>
 		</if>

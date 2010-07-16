@@ -3101,23 +3101,28 @@ Thanking You,
 		</delete>
 	</target>
 
-
-
-
 	<target name="deploy_gate" depends="assertforgate" description="deploying gate">
 		<echo message="Deploying gate...." />
+		<property name="jboss.server.host.jboss.server.port" value="${jboss.server.host}:${jboss.server.port}" />
 		<unzip src="gate.zip" dest="${jboss.server.url}/deploy/gate.war" />
+		<if>
+			<equals arg1="" arg2="${jboss.server.port}" />
+			<then>
+				<var name="jboss.server.host.jboss.server.port" unset="true"/>
+				<property name="jboss.server.host.jboss.server.port" value="${jboss.server.host}}" />
+			</then>
+		</if>		
 		<if>
 			<equals arg1="${jboss.container.secure}" arg2="yes" />
 			<then>
 				<replace file="${jboss.server.url}/deploy/gate.war/gate_3_1/application/plugins/caTIES/creole.xml">
-					<replacefilter token="@@HOST:PORT@@" value="https://${jboss.server.host}:${jboss.server.port}" />
+					<replacefilter token="@@HOST:PORT@@" value="https://${jboss.server.host.jboss.server.port}" />
 					<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
 				</replace>
 			</then>
 			<else>
 				<replace file="${jboss.server.url}/deploy/gate.war/gate_3_1/application/plugins/caTIES/creole.xml">
-					<replacefilter token="@@HOST:PORT@@" value="http://${jboss.server.host}:${jboss.server.port}" />
+					<replacefilter token="@@HOST:PORT@@" value="http://${jboss.server.host.jboss.server.port}" />
 					<replacefilter token="@@MMTX_HOME@@" value="${caties.mmtx.home}" />
 				</replace>
 			</else>
@@ -3143,12 +3148,12 @@ Thanking You,
 				<fail message="The property 'jboss.server.host' can not be empty" />
 			</then>
 		</if>
-		<if>
+		<!--<if>
 			<equals arg1="" arg2="${jboss.server.port}" />
 			<then>
 				<fail message="The property 'jboss.server.port' can not be empty" />
 			</then>
-		</if>
+		</if>-->
 	</target>
 	<target name="upgrade_db_demodel" description="upgrade the db model">
 		<if>
