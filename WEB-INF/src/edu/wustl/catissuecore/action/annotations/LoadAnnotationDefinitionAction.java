@@ -152,7 +152,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 				final String containerCaption = entityManager.getContainerCaption( Long.valueOf( containerId ));
 				request.setAttribute( Constants.CONTAINER_NAME, containerCaption );
 
-				this.getCPConditions( annotationForm, containerId, request );
+				this.getCPConditions( annotationForm, containerId);
 				actionfwd = mapping.findForward( Constants.SUCCESS );
 			}
 		}
@@ -173,8 +173,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws BizLogicException
 	 * @throws NumberFormatException
 	 */
-	private void getCPConditions(AnnotationForm annotationForm, String containerId,
-			HttpServletRequest request) throws NumberFormatException, BizLogicException
+	private void getCPConditions(AnnotationForm annotationForm, String containerId) throws NumberFormatException, BizLogicException
 	{
 		if (containerId != null)
 		{
@@ -294,23 +293,23 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			{
 				deletedAssociationIdArray = deletedAssociationIds.split( "_" );
 			}
-			final DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
+			//final DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
 			//List < EntityMap > entityMapList = null;
 			List entityMapList = null;
 			try
 			{
 				/*entityMapList = defaultBizLogic.retrieve( EntityMap.class.getName(), "containerId",
 						Long.parseLong( dynExtContainerId ) );*/
-				if (entityMapList == null || entityMapList.isEmpty())
+				/*if (entityMapList == null || entityMapList.isEmpty())
 				{//If entity map is not present then Add case
 					// Commented By Deepali
-					/*final EntityMap entityMap = getEntityMap( request, staticEntityId,
+					final EntityMap entityMap = getEntityMap( request, staticEntityId,
 							dynExtContainerId, staticRecordIds );
-					final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();*/
+					final AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
 					// commented by pavan, as local extentions is not in use
 					//annotationBizLogic.insertEntityMap( entityMap );
-				}
-				else
+				}*/
+				if(!(entityMapList == null) && !entityMapList.isEmpty())
 				{//if entity map is present then Edit case
 					//Getting the static entity id
 
@@ -358,7 +357,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 						final Set < PathObject > processedPathList = new HashSet < PathObject >();
 						//Adding paths from second level as first level paths between static entity and top level dynamic entity have already been added
 						this.addQueryPathsForEntityHierarchy( (EntityInterface) dynamicContainer
-								.getAbstractEntity(), staticEntity, association.getId(),
+								.getAbstractEntity(), staticEntity,
 								staticEntity.getId(), processedPathList );
 
 					}
@@ -444,7 +443,6 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	/**
 	 * @param dynamicEntity - dynamicEntity
 	 * @param staticEntity - staticEntity
-	 * @param associationId - associationId
 	 * @param staticEntityId - staticEntityId
 	 * @param processedPathList - processedPathList
 	 * @throws DynamicExtensionsSystemException - DynamicExtensionsSystemException
@@ -452,7 +450,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 	 * @throws BizLogicException - BizLogicException
 	 */
 	private void addQueryPathsForEntityHierarchy(EntityInterface dynamicEntity,
-			EntityInterface staticEntity, Long associationId, Long staticEntityId,
+			EntityInterface staticEntity, Long staticEntityId,
 			Set < PathObject > processedPathList) throws DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, BizLogicException
 	{
@@ -470,35 +468,35 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		}
 
 		//final Long start = Long.valueOf( System.currentTimeMillis() );
-		final boolean ispathAdded = this.isPathAdded( staticEntity.getId(), dynamicEntity.getId() );
-		if (!ispathAdded && dynamicEntity.getId() != null)
+		//final boolean ispathAdded = this.isPathAdded( staticEntity.getId(), dynamicEntity.getId() );
+		/*if (!ispathAdded && dynamicEntity.getId() != null)
 		{
 			//if (dynamicEntity.getId() != null)
 			//{
 			// commented by pavan as ;Local Extentions is not in use now.
-				/*edu.wustl.catissuecore.bizlogic.AnnotationUtil.addPathsForQuery( staticEntity
-						.getId(), dynamicEntity, staticEntityId, associationId );*/
+				edu.wustl.catissuecore.bizlogic.AnnotationUtil.addPathsForQuery( staticEntity
+						.getId(), dynamicEntity, staticEntityId, associationId );
 			//}
-		}
+		}*/
 		final Collection < AssociationInterface > associationCollection = dynamicEntity
 				.getAllAssociations();
 		for (final AssociationInterface association : associationCollection)
 		{
 			//System.out.println( "PERSISTING PATH" );
 			this.addQueryPathsForEntityHierarchy( association.getTargetEntity(), dynamicEntity,
-					association.getId(), staticEntityId, processedPathList );
+					 staticEntityId, processedPathList );
 		}
 		//final Long end = Long.valueOf( System.currentTimeMillis() );
 		/*System.out.println( "Time required to add complete paths is" + ( end - start ) / 1000
 				+ "seconds" );*/
 	}
 
-	/**
+/*	*//**
 	 * @param staticEntityId - staticEntityId
 	 * @param dynamicEntityId - dynamicEntityId
 	 * @return boolean
-	 */
-	private boolean isPathAdded(Long staticEntityId, Long dynamicEntityId/*, Long deAssociationId*/)
+	 *//*
+	private boolean isPathAdded(Long staticEntityId, Long dynamicEntityId, Long deAssociationId)
 	{
 		boolean ispathAdded = false;
 		JDBCDAO jdbcDAO = null;
@@ -548,7 +546,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 		}
 		return ispathAdded;
 	}
-
+*/
 	/**
 	 * @param request - HttpServletRequest
 	 * @param staticEntityId - staticEntityId
@@ -1115,8 +1113,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
 			throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
 		final EntityManagerInterface entityManager = EntityManager.getInstance();
-		final Collection < NameValueBean > entityGroups = entityManager.getAllEntityGroupBeans();
-		return entityGroups;
+
+		return  entityManager.getAllEntityGroupBeans();
 	}
 
 	/* (non-Javadoc)

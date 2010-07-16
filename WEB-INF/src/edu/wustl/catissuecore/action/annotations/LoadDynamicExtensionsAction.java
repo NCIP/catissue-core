@@ -89,23 +89,24 @@ public class LoadDynamicExtensionsAction extends BaseAction
 			isAuthenticatedUser = "true";
 		}
 		//append container id if any
-		if (request.getParameter("containerId") != null)
-		{
-			dynamicExtensionsURL = dynamicExtensionsURL + "?"
-					+ WebUIManagerConstants.CONATINER_IDENTIFIER_PARAMETER_NAME + "="
-					+ request.getParameter("containerId");
-			dynamicExtensionsURL = dynamicExtensionsURL + "&"
-					+ WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath()
-					+ AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN
-					+ "&isAuthenticatedUser=" + isAuthenticatedUser;
-		}
-		else
+		if (request.getParameter("containerId") == null)
 		{
 			//append callback parameter
 			dynamicExtensionsURL = dynamicExtensionsURL + "?"
 					+ WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath()
 					+ AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN
 					+ "&isAuthenticatedUser=" + isAuthenticatedUser;
+		}
+		else
+		{
+			dynamicExtensionsURL = dynamicExtensionsURL + "?"
+			+ WebUIManagerConstants.CONATINER_IDENTIFIER_PARAMETER_NAME + "="
+			+ request.getParameter("containerId");
+			dynamicExtensionsURL = dynamicExtensionsURL + "&"
+			+ WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath()
+			+ AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN
+			+ "&isAuthenticatedUser=" + isAuthenticatedUser;
+
 		}
 		return dynamicExtensionsURL;
 	}
