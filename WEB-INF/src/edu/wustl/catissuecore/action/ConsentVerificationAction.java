@@ -205,7 +205,6 @@ public class ConsentVerificationAction extends BaseAction
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 		final CollectionProtocolRegistration cprObject = collectionProtocolRegistration;
 		// Getting WitnessName,Consent Date,Signed Url using
