@@ -70,7 +70,6 @@ public class AddCRGAction extends CommonAddEditAction
 			{
 				this.logger.error("Exception occurred in retrieving" +
 						" Cancer Research Group"+bizExcep.getMessage(),bizExcep);
-				bizExcep.printStackTrace();
 			}
 		}
 
