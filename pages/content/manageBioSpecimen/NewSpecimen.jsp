@@ -1233,7 +1233,10 @@
 				</logic:equal>
 						</tr>
 				<% // if( operation.equals(Constants.EDIT) || (!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl))
-				if(form.getCollectionStatus() != null &&( (form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT)) || (!form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT) && !form.isGenerateLabel()) || (!form.isGenerateLabel() && !Variables.isSpecimenBarcodeGeneratorAvl)))
+				if(form.getCollectionStatus() != null 
+								 &&( (form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT)) 
+										 || (!form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT) && !form.isGenerateLabel()) 
+										 	|| (!form.isGenerateLabel() && !Variables.isSpecimenBarcodeGeneratorAvl)))
 									{
 				%>
 
@@ -1260,8 +1263,8 @@
 									<bean:message key="specimen.barcode"/>
 								</label>
 							</td>
-							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
-								<logic:equal name="newSpecimenForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>" >
+						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+							<logic:equal name="newSpecimenForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>" >
 								<td width="34%" align="left" class="black_ar">
 								<%
 								if(form.getBarcode()!=null)
@@ -1270,13 +1273,27 @@
 									<label for="barcode">
 										<%=form.getBarcode()%>
 									</label>
+									
 								<%
 								}
 								else
 								{%>
 									<label for="barcode">
 									</label>
-								<%}%>
+									
+								<%}
+								
+								//if(form.getLabel() != null){ %>
+						<!-- 		<label for="label">
+										<%//=form.getLabel() %>
+									</label>  -->
+								<%//}else{%>
+								
+							<!-- 	  <label for="label">
+									
+									</label> -->
+								<%// }    %>	
+								
 								<html:hidden property="barcode" />
 								</td>
 								</logic:equal>
@@ -1294,7 +1311,11 @@
 						</tr>
 
 				<%}
-							else  if((!form.isGenerateLabel() && Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
+							//else  if(((!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+								//	&& !form.isGenerateLabel() && Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
+					else  if(((!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+						&& !form.isGenerateLabel() ) && operation.equals(Constants.ADD) )
+							
 
 				{
 				%>
@@ -1407,7 +1428,7 @@
 												      readOnlyForAliquot = "true";
 												}
 						%>
-						<div id="specimenTypeId">
+									<div id="specimenTypeId">
 									<autocomplete:AutoCompleteTag property="type"
 										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
 										  initialValue="<%=form.getType()%>" onChange="<%=subTypeFunctionName%>"
@@ -1415,7 +1436,7 @@
 										  size="25"
 										  styleClass="black_ar"
 										/>
-						</div>
+									</div>
 								</td>
 							</tr>
 							<tr>
@@ -1607,7 +1628,7 @@
 							</tr>
 			</logic:equal>
 			<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-			<html:hidden property="collectionStatus"/>
+				<html:hidden property="collectionStatus"/>
 			</logic:notEqual>
 			<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 							<tr>
@@ -1616,7 +1637,8 @@
 								</td>
 				                <td align="left" class="black_ar">
 									<label for="collectionStatus">
-										<bean:message key="specimenCollectionGroup.collectionStatus" />
+									<bean:message key="specimenCollectionGroup.collectionStatus" />
+										
 									</label>
 								</td>
 								<td class="black_new">
