@@ -2,7 +2,7 @@
  *<p>Title: </p>
  *<p>Description:  </p>
  *<p>Copyright:TODO</p>
- *@author 
+ *@author
  *@version 1.0
  */
 
@@ -25,7 +25,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author preeti_munot
- * 
+ *
  */
 public class AnnotationForm extends AbstractActionForm implements Serializable
 {
@@ -33,9 +33,9 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(AnnotationForm.class);
+	private static final Logger logger = Logger.getCommonLogger(AnnotationForm.class);
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -153,7 +153,7 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
 			if ((this.deoperation != null && "add".equals(this.deoperation))
 					&& (validator.isValidOption(String.valueOf(this.selectedStaticEntityId)) == false))
 			{
-				//				if (validator.isValidOption(String.valueOf(selectedStaticEntityId)) == false) 
+				//				if (validator.isValidOption(String.valueOf(selectedStaticEntityId)) == false)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("anno.Entity")));
@@ -164,7 +164,6 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
 		catch (final Exception excp)
 		{
 			AnnotationForm.logger.error(excp.getMessage(), excp);
-			excp.printStackTrace() ;
 		}
 		return errors;
 	}
