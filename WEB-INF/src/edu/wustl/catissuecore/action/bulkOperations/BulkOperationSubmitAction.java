@@ -120,7 +120,6 @@ public class BulkOperationSubmitAction extends BaseAction
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
 			this.saveErrors(request, errors);
 			this.logger.error(excp.getCustomizedMsg(),excp);
-			excp.printStackTrace();
 		}
 
 		return mapping.findForward(target);
