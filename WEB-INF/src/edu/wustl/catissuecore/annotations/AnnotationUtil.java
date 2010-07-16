@@ -48,7 +48,7 @@ public class AnnotationUtil
 
 {
 
-	private transient final Logger logger = Logger.getCommonLogger(AnnotationUtil.class);
+	private static final Logger logger = Logger.getCommonLogger(AnnotationUtil.class);
 	/**
 	 * This method updates module map by parsing xml file
 	 * @param xmlFileName file to be parsed
@@ -274,7 +274,7 @@ public class AnnotationUtil
 		}
 		catch (ApplicationException e)
 		{
-			e.printStackTrace();
+			logger.info(e.getMessage());
 		}
 
 		return Long.valueOf(obj.toString());
