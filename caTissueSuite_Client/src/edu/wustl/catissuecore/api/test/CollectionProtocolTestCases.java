@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import edu.wustl.catissuecore.api.test.BaseTestCaseUtility;
+import edu.wustl.catissuecore.api.test.TestCaseUtility;
 import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -574,5 +576,33 @@ public class CollectionProtocolTestCases extends CaTissueBaseTestCase
 	}
 	*/
 
+	public void testAddCollectionProtocolWithPIAndCordName()
+	{
+		try
+		 {
+			System.out.println("In testAddCollectionProtocolWithPIAndCordName");
+			CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();
+			System.out.println("After initCollectionProtocol");
+			User principalInvestigator = new User();
+			principalInvestigator.setLoginName("admin@admin.com");
+			collectionProtocol.setPrincipalInvestigator(principalInvestigator);
+			System.out.println("Set PI to CP");
+			Collection<User> coordinatorCollection = new HashSet();
+			User protCoordinator = new User();
+			protCoordinator.setLoginName("test@admin.com");
+			coordinatorCollection.add(protCoordinator);
+			collectionProtocol.setCoordinatorCollection(coordinatorCollection);
+			System.out.println("Set Coordinator to CP");
+			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
+			TestCaseUtility.setObjectMap(collectionProtocol, CollectionProtocol.class);
+			assertTrue("Object added successfully", true);
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 fail("could not add object");
+		 }
+	}
 
 }

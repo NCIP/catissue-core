@@ -773,4 +773,63 @@ public class UserTestCases extends CaTissueBaseTestCase {
 
 		 }
 	}*/
+
+	/**
+	 * Add a User.
+	 * @return void
+	 */
+	 public void testAddNewUser()
+	 {
+		try{
+			User userObj = new User();
+			userObj.setEmailAddress("test@admin.com");
+			userObj.setLoginName(userObj.getEmailAddress());
+			userObj.setLastName("Test");
+			userObj.setFirstName("Test");
+
+			Address address = new Address();
+			address.setStreet("Main street");
+			address.setCity("New hampshier");
+			address.setState("Alabama");
+			address.setZipCode("12345");
+			address.setCountry("United States");
+			address.setPhoneNumber("212-223-2424");
+			address.setFaxNumber("212-223-2424");
+
+
+			userObj.setAddress(address);
+
+			Institution inst = new Institution();
+			inst.setId(new Long(1));
+			userObj.setInstitution(inst);
+
+			Department department = new Department();
+			department.setId(new Long(1));
+			userObj.setDepartment(department);
+
+			CancerResearchGroup cancerResearchGroup =  new CancerResearchGroup();
+			cancerResearchGroup.setId(new Long(1));
+			userObj.setCancerResearchGroup(cancerResearchGroup);
+
+			userObj.setRoleId("7");
+			userObj.setActivityStatus("Active");
+			userObj.setPageOf(Constants.PAGE_OF_USER_ADMIN);
+
+
+			userObj = (User)appService.createObject(userObj);
+
+			userObj.setNewPassword("Login123");
+
+			userObj.setRoleId("7");
+			userObj.setActivityStatus("Active");
+			userObj.setPageOf(Constants.PAGE_OF_USER_ADMIN);
+			userObj = (User)appService.updateObject(userObj);
+		 }
+		 catch(Exception e){
+			 Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertFalse("Could not add a User with a Scientist Role "+e.getMessage(), true);
+		 }
+	 }
+
 }

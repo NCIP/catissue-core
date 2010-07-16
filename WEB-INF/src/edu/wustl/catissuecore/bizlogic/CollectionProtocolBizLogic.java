@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import org.hibernate.HibernateException;
-
 import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
@@ -59,11 +57,12 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.privilege.PrivilegeManager;
 
@@ -83,13 +82,13 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			.getCommonLogger(CollectionProtocolBizLogic.class);
 
 	private static final String PRINCIPAL_INVESTIGATOR = "Principal Investigator";
+	private static final String PROTOCOL_COORDINATOR = "Protocol Coordinator";
 	private static final String ERROR_ITEM_REQUIRED="errors.item.required";
 	/**
 	 * Saves the CollectionProtocol object in the database.
 	 * @param obj The CollectionProtocol object to be saved.
 	 * @param session The session in which the object is saved.
 	 * @throws BizLogicException
-	 * @throws HibernateException Exception thrown during hibernate operations.
 	 */
 	@Override
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
@@ -118,26 +117,26 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * Saves the CollectionProtocol object in the database.
 	 * @param dao.
 	 * @param sessionDataBean
-	 * @param collectionProtocol
+	 * @param collProtocol
 	 * @param rowIdMap
 	 * @throws BizLogicException
 	 */
 	private void insertCollectionProtocol(DAO dao, SessionDataBean sessionDataBean,
-			CollectionProtocol collectionProtocol, Map<String, SiteUserRolePrivilegeBean> rowIdMap)
+			CollectionProtocol collProtocol, Map<String, SiteUserRolePrivilegeBean> rowIdMap)
 			throws BizLogicException
 	{
 		try
 		{
-			this.setPrincipalInvestigator(dao, collectionProtocol);
-			this.setCoordinatorCollection(dao, collectionProtocol);
-			dao.insert(collectionProtocol);
-			this.insertCPEvents(dao, sessionDataBean, collectionProtocol);
-			this.insertchildCollectionProtocol(dao, sessionDataBean, collectionProtocol, rowIdMap);
+			this.setPrincipalInvestigator(dao, collProtocol);
+			this.setCoordinatorCollection(dao, collProtocol);
+			dao.insert(collProtocol);
+			this.insertCPEvents(dao, sessionDataBean, collProtocol);
+			this.insertchildCollectionProtocol(dao, sessionDataBean, collProtocol, rowIdMap);
 			final HashSet<CollectionProtocol> protectionObjects = new HashSet<CollectionProtocol>();
-			protectionObjects.add(collectionProtocol);
+			protectionObjects.add(collProtocol);
 
 			final CollectionProtocolAuthorization collectionProtocolAuthorization = new CollectionProtocolAuthorization();
-			collectionProtocolAuthorization.authenticate(collectionProtocol, protectionObjects,
+			collectionProtocolAuthorization.authenticate(collProtocol, protectionObjects,
 					rowIdMap);
 		}
 		catch (final ApplicationException exception)
@@ -176,8 +175,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * to be added
 	 *
 	 * @throws BizLogicException If fails to insert events or its specimens
-	 * @throws UserNotAuthorizedException If user is not authorized or session information
-	 * is incorrect.
 	 */
 	private void insertCPEvents(DAO dao, SessionDataBean sessionDataBean,
 			CollectionProtocol collectionProtocol) throws BizLogicException
@@ -211,7 +208,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @param sessionDataBean
 	 * @param collectionProtocol
 	 * @throws BizLogicException
-	 * @throws UserNotAuthorizedException
 	 */
 	private void insertchildCollectionProtocol(DAO dao, SessionDataBean sessionDataBean,
 			CollectionProtocol collectionProtocol, Map<String, SiteUserRolePrivilegeBean> rowIdMap)
@@ -238,7 +234,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @param sessionDataBean object containing session information which
 	 * is required for authorization.
 	 * @throws BizLogicException
-	 * @throws UserNotAuthorizedException
 	 */
 	private void insertSpecimens(RequirementSpecimenBizLogic bizLogic, DAO dao,
 			Collection<SpecimenRequirement> reqSpecimenCollection, SessionDataBean sessionDataBean,
@@ -373,7 +368,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @param sessionDataBean
 	 * @param collectionProtocol
 	 * @throws BizLogicException
-	 * @throws UserNotAuthorizedException
 	 */
 	private void modifyCPObject(DAO dao, SessionDataBean sessionDataBean,
 			CollectionProtocol collectionProtocol) throws BizLogicException
@@ -644,7 +638,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				if (!collectionProtocolAuthorization.hasCoordinator(coordinator,
 						collectionProtocolOld))
 				{
-					this.checkStatus(dao, coordinator, "Coordinator");
+					this.checkStatus(dao, coordinator, PROTOCOL_COORDINATOR);
 				}
 			}
 		}
@@ -681,7 +675,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @param collectionProtocol Transient CP object
 	 * @param collectionProtocolOld Old CP Object
 	 * @throws BizLogicException Database related exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
 	 */
 	private void updateCollectionProtocolEvents(DAO dao, SessionDataBean sessionDataBean,
 			CollectionProtocol collectionProtocol,
@@ -797,7 +790,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * @param dao DAO object
 	 * @param collectionProtocolEvent CPE Object
 	 * @throws BizLogicException Database related exception
-	 * @throws UserNotAuthorizedException User Not Authorized Exception
 	 */
 	private void insertCollectionProtocolEvent(DAO dao,
 			CollectionProtocolEvent collectionProtocolEvent) throws BizLogicException
@@ -1044,10 +1036,37 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		{
 			validator.validateDate(protocol.getEndDate().toString(), false);
 		}
-
-		if (protocol.getPrincipalInvestigator().getId() == -1)
+		if ((protocol.getPrincipalInvestigator().getId() == null
+				|| protocol.getPrincipalInvestigator().getId() == -1)
+				&& (protocol.getPrincipalInvestigator().getLoginName() == null
+					|| Validator.isEmpty(protocol.getPrincipalInvestigator().getLoginName())))
 		{
 			throw this.getBizLogicException(null, ERROR_ITEM_REQUIRED, PRINCIPAL_INVESTIGATOR);
+		}
+		else if (protocol.getPrincipalInvestigator().getId() == null
+				&& (protocol.getPrincipalInvestigator().getLoginName() != null
+				|| !Validator.isEmpty(protocol.getPrincipalInvestigator().getLoginName())))
+		{
+			final List list = getUserByLoginName(dao, protocol.getPrincipalInvestigator().getLoginName());
+
+			/*List list = null;
+			list = dao.executeQuery("select id,activityStatus from edu.wustl.catissuecore.domain.User where loginName='"+protocol.getPrincipalInvestigator()
+					.getLoginName()+"'");*/
+			if (list == null || list.isEmpty())
+			{
+				throw this.getBizLogicException(null, "errors.entity.notExists",
+						PRINCIPAL_INVESTIGATOR);
+			}
+			else if(list != null && !list.isEmpty())
+			{
+				Object[] object = (Object[])list.get(0);
+				final User user = new User();
+				user.setId((Long)object[0]);
+				user.setActivityStatus((String)object[1]);
+				// check for closed User
+				this.checkStatus(dao, user, "User");
+				protocol.setPrincipalInvestigator(user);
+			}
 		}
 		try
 		{
@@ -1078,6 +1097,25 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			while (protocolCoordinatorItr.hasNext())
 			{
 				final User protocolCoordinator = (User) protocolCoordinatorItr.next();
+				if (protocolCoordinator.getId() == null
+						&& (protocolCoordinator.getLoginName() != null
+						|| !Validator.isEmpty(protocolCoordinator.getLoginName())))
+				{
+					final List list = getUserByLoginName(dao, protocolCoordinator.getLoginName());
+					if(list == null || list.isEmpty())
+					{
+						throw this.getBizLogicException(null, "errors.entity.notExists",
+								PROTOCOL_COORDINATOR);
+					}
+					else if (list != null && !list.isEmpty())
+					{
+						final Object[] object = (Object[])list.get(0);
+						protocolCoordinator.setId((Long)object[0]);
+						protocolCoordinator.setActivityStatus((String)object[1]);
+						// check for closed User
+						this.checkStatus(dao, protocolCoordinator, "User");
+					}
+				}
 				if (protocolCoordinator.getId() == protocol.getPrincipalInvestigator().getId())
 				{
 					throw this.getBizLogicException(null, "errors.pi.coordinator.same", "");
@@ -1600,7 +1638,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 * Over-ridden for the case of Site Admin user should be able to create
 	 * Collection Protocol for Site to which he belongs
 	 * (non-Javadoc)
-	 * @throws UserNotAuthorizedException
 	 * @throws BizLogicException
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#isAuthorized(edu.wustl.common.dao.DAO, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
@@ -1642,9 +1679,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			return true;
 		}
 
-		if (domainObject instanceof CollectionProtocol)
+/*		if (domainObject instanceof CollectionProtocol)
 		{
-		}
+		}*/
 		if (domainObject instanceof CollectionProtocolDTO)
 		{
 			cpDTO = (CollectionProtocolDTO) domainObject;
@@ -1691,7 +1728,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			return null;
 		}
 		//Query changed for bug #16295
-		String query = "select cp.siteCollection.id " +
+		final String query = "select cp.siteCollection.id " +
 				" from edu.wustl.catissuecore.domain.CollectionProtocol cp " +
 				" where cp.id = " + cpId;
 		List<Long> list = this.executeQuery(query);
@@ -1821,5 +1858,32 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 
 		return cpNameValueList;
+	}
+	/**
+	 * Method to get the id and activity status of a user based on the login name.
+	 * @param dao
+	 * @param loginName
+	 * @return
+	 */
+	private List getUserByLoginName(DAO dao, String loginName) throws BizLogicException
+	{
+		List list = null;
+		try
+		{
+			String column = "loginName";
+			final String sourceObjectName = User.class.getName();
+			final String[] selectColumnName = {"id", "activityStatus"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause(column, loginName));
+			list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+		}
+		catch (final DAOException daoExp)
+		{
+			CollectionProtocolBizLogic.LOGGER.error(daoExp.getMessage(), daoExp);
+			/*throw this.getBizLogicException(null, "errors.entity.notExists",
+					"Coordinator");*/
+			throw new BizLogicException(daoExp.getErrorKey(), daoExp, daoExp.getMessage());
+		}
+		return list;
 	}
 }

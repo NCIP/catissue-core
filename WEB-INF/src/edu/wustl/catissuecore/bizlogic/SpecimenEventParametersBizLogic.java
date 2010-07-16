@@ -339,8 +339,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				|| specimenEventParameter.getUser().getLoginName().length() > 0)
 		{
 			String column = "loginName";
-			list = dao.executeQuery("select id,activityStatus from edu.wustl.catissuecore.domain.User where loginName="+specimenEventParameter.getUser()
-					.getLoginName());
+			list = dao.executeQuery("select id,activityStatus from edu.wustl.catissuecore.domain.User where loginName='"+specimenEventParameter.getUser()
+					.getLoginName()+"'");
 		}
 		if(list!=null&&!list.isEmpty())
 		{
