@@ -80,7 +80,6 @@ public class OrderSpecimenInitAction extends BaseAction
 			catch (final Exception excp)
 			{
 				this.logger.error(excp.getMessage(), excp);
-				excp.printStackTrace();				
 			}
 
 			request.setAttribute("typeOf", "specimen");

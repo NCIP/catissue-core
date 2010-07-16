@@ -863,7 +863,6 @@ public class ParticipantAction extends SecureAction
 			catch (final Exception e)
 			{
 				this.logger.error(e.getMessage(), e);
-				e.printStackTrace();
 				return null;
 			}
 			finally

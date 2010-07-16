@@ -95,7 +95,6 @@ public class ForgotPasswordSearchAction extends XSSSupportedAction
 		{
 			target = new String(Constants.FAILURE);
 			this.logger.error(excp.getMessage());
-			excp.printStackTrace() ;
 		}
 
 		return (mapping.findForward(target));

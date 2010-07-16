@@ -194,7 +194,6 @@ public class SiteAction extends SecureAction
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
 			coordinatorId = null;
 		}
 		return coordinatorId;
