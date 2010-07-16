@@ -887,7 +887,6 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		catch (final Exception excp)
 		{
 			Specimen.logger.error(excp.getMessage(), excp);
-			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "Specimen.java :");
 
@@ -961,7 +960,6 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		catch (final Exception e)
 		{
 			Specimen.logger.error(e.getMessage(),e);
-			e.printStackTrace();
 		}
 		final Iterator iter = beanObjColl.iterator();
 		final Collection consentResponseColl = new HashSet();

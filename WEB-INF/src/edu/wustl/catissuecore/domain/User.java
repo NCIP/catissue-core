@@ -41,7 +41,7 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
  * processing, or utilization.
  * @hibernate.class table="CATISSUE_USER"
  */
-public class User extends AbstractDomainObject implements Serializable, 
+public class User extends AbstractDomainObject implements Serializable,
 									IActivityStatus, IUser
 {
 
@@ -567,7 +567,6 @@ public class User extends AbstractDomainObject implements Serializable,
 		catch (final SMException e)
 		{
 			this.logger.error(e.getMessage(),e);
-			e.printStackTrace() ;
 		}
 
 		return roleId;
@@ -772,7 +771,6 @@ public class User extends AbstractDomainObject implements Serializable,
 		catch (final Exception excp)
 		{
 			this.logger.error(excp.getMessage(),excp);
-			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "User.java :");
 		}
