@@ -8,9 +8,6 @@
 
 package edu.wustl.catissuecore.action.annotations;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,7 +17,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
-import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.exception.BizLogicException;
