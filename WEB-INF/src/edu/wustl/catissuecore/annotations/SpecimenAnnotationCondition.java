@@ -2,7 +2,7 @@
  *<p>Title: </p>
  *<p>Description:  </p>
  *<p>Copyright:TODO</p>
- *@author 
+ *@author
  *@version 1.0
  */
 
@@ -21,11 +21,11 @@ import edu.wustl.common.util.logger.Logger;
 public class SpecimenAnnotationCondition implements ICPCondition
 {
 
-	private transient final Logger logger = Logger
+	private static final Logger logger = Logger
 			.getCommonLogger(SpecimenAnnotationCondition.class);
 
 	/**
-	 *Returns the list Of collection protocol with which the given specimen is registerd 
+	 *Returns the list Of collection protocol with which the given specimen is registerd
 	 */
 	public List getCollectionProtocolList(Long entityInstanceId)
 	{
@@ -56,7 +56,6 @@ public class SpecimenAnnotationCondition implements ICPCondition
 		catch (final BizLogicException e)
 		{
 			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return annotationsList;
