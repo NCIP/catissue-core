@@ -72,7 +72,6 @@ public class AddDepartmentAction extends CommonAddEditAction
 			catch (final BizLogicException bizEx)
 			{
 				this.logger.error("Exception occurred in retrieving Department",bizEx);
-				bizEx.printStackTrace();
 			}
 		}
 
