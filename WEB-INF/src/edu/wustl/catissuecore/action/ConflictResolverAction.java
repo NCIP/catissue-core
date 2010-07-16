@@ -162,7 +162,6 @@ public class ConflictResolverAction extends BaseAction
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 			// System.out.println("Error Occurred !!!!!");
 			errorMessage = ApplicationProperties.getValue("errors.caTies.conflict.genericmessage");
 			// Setting the status to NEW
@@ -334,7 +333,6 @@ public class ConflictResolverAction extends BaseAction
 		catch (final Exception e)
 		{
 			this.logger.error("Error Updating ReportQueue" + e);
-			e.printStackTrace() ;
 		}
 	}
 
