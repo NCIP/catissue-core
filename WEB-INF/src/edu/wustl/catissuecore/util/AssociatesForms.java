@@ -35,7 +35,7 @@ public final class AssociatesForms
 	{
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
-	private static Logger logger = Logger.getCommonLogger(AssociatesForms.class);
+	private static final Logger logger = Logger.getCommonLogger(AssociatesForms.class);
 	/*
 	 * create singleton object
 	 */
