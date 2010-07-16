@@ -102,7 +102,6 @@ public class Utility
 		catch (final IOException ex)
 		{
 			Utility.logger.error("Error in setting Section header Priorities"+ex.getMessage(), ex);
-			ex.printStackTrace();
 			throw new Exception(ex.getMessage());
 		}
 		return abbrToHeader;
@@ -188,14 +187,12 @@ public class Utility
 		{
 			Utility.logger.error("Failed parsing response \n"
 					+ deIDResponse + "\n\n\n"+ex.getMessage(), ex);
-			ex.printStackTrace();
 			throw ex;
 		}
 		catch (final Exception ex)
 		{
 			Utility.logger.error("Failed parsing response \n"
 					+ deIDResponse + "\n\n\n"+ex.getMessage(), ex);
-			ex.printStackTrace();
 			throw ex;
 		}
 		return deidSprText;
