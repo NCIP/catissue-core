@@ -2,7 +2,7 @@
  *<p>Title: </p>
  *<p>Description:  </p>
  *<p>Copyright:TODO</p>
- *@author 
+ *@author
  *@version 1.0
  */
 
@@ -23,16 +23,15 @@ public class SCGAnnotationCondition implements ICPCondition
 	/**
 	 * logger Generic Logger.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(SCGAnnotationCondition.class);
+	private static final Logger logger = Logger.getCommonLogger(SCGAnnotationCondition.class);
 
 	/**
-	 *Returns the list Of collection protocol with which the given scg is registerd 
+	 *Returns the list Of collection protocol with which the given scg is registerd
 	 */
 	public List getCollectionProtocolList(Long entityInstanceId)
 	{
 		final List<Long> annotationsList = new ArrayList<Long>();
 		final DefaultBizLogic bizLogic = new DefaultBizLogic();
-		new ArrayList();
 		try
 		{
 			if (entityInstanceId != null || !entityInstanceId.equals(""))
@@ -44,7 +43,7 @@ public class SCGAnnotationCondition implements ICPCondition
 				     CollectionProtocolRegistration cpReg = (CollectionProtocolRegistration)scg.getCollectionProtocolRegistration();
 				     if(cpReg!=null && cpReg.getCollectionProtocol()!=null && cpReg.getCollectionProtocol().getId()!=null )
 				         annotationsList.add(cpReg.getCollectionProtocol().getId());
-				     
+
 				 }*/
 
 				final CollectionProtocol collectionProtocol = (CollectionProtocol) bizLogic
@@ -60,7 +59,6 @@ public class SCGAnnotationCondition implements ICPCondition
 		catch (final BizLogicException e)
 		{
 			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return annotationsList;
