@@ -47,15 +47,18 @@ public final class LabelGeneratorFactory
 			if (labelgeneratorMap.get(generatorType) == null)
 			{
 				String className = PropertyHandler.getValue(generatorType);
-				if(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME.equals(generatorType))
+				
+				
+				/*if(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME.equals(generatorType))
 				{
 					className="edu.wustl.catissuecore.namegenerator.DefaultSpecimenLabelGenerator";
-				}
+				}*/
+				
 				if(Constants.CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME.equals(generatorType))
 				{
 					className="edu.wustl.catissuecore.namegenerator.CustomSpecimenLabelGenerator";
 				}
-
+				
 				if (className != null && !"".equals(className))
 				{
 					labelgeneratorMap.put(generatorType, Class.forName(className).newInstance());

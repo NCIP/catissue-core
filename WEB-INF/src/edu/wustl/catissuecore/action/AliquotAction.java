@@ -728,7 +728,12 @@ public class AliquotAction extends SecureAction
 					aliqLabelFormat = obje[2].toString();
 				}
 			}
-			aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliqLabelFormat, Constants.ALIQUOT));
+			if(Variables.isSpecimenLabelGeneratorAvl){
+				aliquotForm.setGenerateLabel(false);
+			}else{
+				aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliqLabelFormat, Constants.ALIQUOT));
+			}
+			
 			// Map containerMap = bizLogic.getAllocatedContainerMap();
 			TreeMap containerMap = new TreeMap();
 			if (Constants.PAGE_OF_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGE_OF)))
@@ -1209,14 +1214,28 @@ public class AliquotAction extends SecureAction
 			String distributedQuantity, final Map aliquotMap) throws BizLogicException
 	{
 		long totalAliquotCount = 0;
-		if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
-				&& form.getSpecimenLabel() != null)
+		/*if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
+				&& form.getSpecimenLabel() != null)*/
+		if (form.getSpecimenLabel() != null)	
 		{
 			final NewSpecimenBizLogic specBizLogic = new NewSpecimenBizLogic();
 			totalAliquotCount = specBizLogic.getTotalNoOfAliquotSpecimen(Long.valueOf(form
 					.getSpecimenID()), dao);
+			
+			for (int i = 1; i <= aliquotCount; i++)
+			{
+				final String qtyKey = "Specimen:" + i + "_quantity";
+				aliquotMap.put(qtyKey, distributedQuantity);
+				final String labelKey = "Specimen:" + i + "_label";
+				aliquotMap.put(labelKey, form.getSpecimenLabel() + "_" + ++totalAliquotCount);
+					
+			}
+
 		}
-		for (int i = 1; i <= aliquotCount; i++)
+	}
+		
+		
+		/*for (int i = 1; i <= aliquotCount; i++)
 		{
 			final String qtyKey = "Specimen:" + i + "_quantity";
 			aliquotMap.put(qtyKey, distributedQuantity);

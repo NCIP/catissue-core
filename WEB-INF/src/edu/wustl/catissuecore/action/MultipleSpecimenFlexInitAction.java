@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
@@ -79,7 +80,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 			showBarcode = "false";
 		}
 		this.setMSPRequestParame(request, mode, parentType, parentName, numberOfSpecimens,
-				showParentSelection, showLabel, showBarcode, CommonServiceLocator.getInstance()
+				showParentSelection, showBarcode, CommonServiceLocator.getInstance()
 						.getDatePattern());
 
 		final String pageOf = request.getParameter("pageOf");
@@ -110,7 +111,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 	 */
 	private void setMSPRequestParame(HttpServletRequest request, String mode, String parentType,
 			String parentName, String numberOfSpecimens, String showParentSelection,
-			String showLabel, String showBarcode, String dateFormat)
+			String showBarcode, String dateFormat)
 	{
 
 		request.setAttribute("MODE", mode);
@@ -118,7 +119,6 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		request.setAttribute("PARENT_NAME", parentName);
 		request.setAttribute("SP_COUNT", numberOfSpecimens);
 		request.setAttribute("SHOW_PARENT_SELECTION", showParentSelection);
-		//		request.setAttribute("SHOW_LABEL", showLabel);
 		request.setAttribute("SHOW_BARCODE", showBarcode);
 		request.setAttribute("DATE_FORMAT", dateFormat.toUpperCase());
 
@@ -224,6 +224,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 	{
 		try
 		{
+			
 			List list = AppUtility.executeQuery(hql);
 			String parentLabelFormat = null;
 			String aliquotLabelFormat = null;
@@ -249,8 +250,11 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 //			LOGGER.error(e.getMessage(), e);
 			throw new BizLogicException(e.getErrorKey(), e, e.getMessage());
 		}
-
-		request.setAttribute("SHOW_LABEL", generateLabel);
+		if(Variables.isSpecimenLabelGeneratorAvl){
+			request.setAttribute("SHOW_LABEL", Boolean.toString(!Variables.isSpecimenLabelGeneratorAvl));
+		}else{	
+			request.setAttribute("SHOW_LABEL", generateLabel);
+		}
 	}
 
 	/**
@@ -261,7 +265,6 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 	private String getNumberOfSpecimens(HttpServletRequest request)
 	{
 		String numberOfSpecimens = request.getParameter(Constants.NUMBER_OF_SPECIMENS);
-		System.out.println("numberOfSpecimens " + numberOfSpecimens);
 		if (numberOfSpecimens == null || numberOfSpecimens.equals(""))
 		{
 			numberOfSpecimens = "1";

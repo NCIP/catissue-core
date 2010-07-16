@@ -63,6 +63,7 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -242,10 +243,14 @@ public class NewSpecimenAction extends SecureAction
 			// Lazy - specimenCollectionGroup.getCollectionProtocolRegistration()
 			final CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroup
 					.getCollectionProtocolRegistration();
-			String parentLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getSpecimenLabelFormat();
-			String derivativeLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getDerivativeLabelFormat();
-			String aliquotLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getAliquotLabelFormat();
-
+			String parentLabelFormat = null;
+			String derivativeLabelFormat = null;
+			String aliquotLabelFormat = null;
+ 			if(!Variables.isSpecimenLabelGeneratorAvl){
+				parentLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getSpecimenLabelFormat();
+				derivativeLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getDerivativeLabelFormat();
+				aliquotLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getAliquotLabelFormat();
+			}
 			String lineage = specimenForm.getLineage();
 			if(lineage == null || "".equals(lineage))
 			{

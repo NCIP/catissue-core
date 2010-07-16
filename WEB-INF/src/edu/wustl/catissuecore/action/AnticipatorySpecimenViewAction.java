@@ -41,6 +41,7 @@ import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
 import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
@@ -475,7 +476,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			specimenDataBean.setStorageContainerForSpecimen(storageType);
 
 		}
-		specimenDataBean.setGenerateLabel(isGenLabel(specimen));
+		specimenDataBean.setGenerateLabel(Variables.isSpecimenLabelGeneratorAvl || isGenLabel(specimen));
 		return specimenDataBean;
 	}
 
@@ -693,7 +694,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			{
 				if (specimen.getLineage().equals(Constants.ALIQUOT))
 				{
-					if(!isGenLabel(specimen))
+					if( Variables.isSpecimenLabelGeneratorAvl || !isGenLabel(specimen))
 					{
 						if (specimen.getParentSpecimen().getLabel() != null)
 						{

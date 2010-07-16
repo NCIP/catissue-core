@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -788,7 +789,9 @@ public class SpecimenForm extends AbstractActionForm
 
 				//Changed by falguni
 //				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
-				if(!this.generateLabel && Validator.isEmpty(this.label))
+				
+				//Changed by Santosh Ganacharya
+				if((!Variables.isSpecimenLabelGeneratorAvl)&&(!this.generateLabel) && (Validator.isEmpty(this.label)))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.label")));

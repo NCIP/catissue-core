@@ -75,34 +75,42 @@ public final class LabelAndBarcodeGeneratorInitializer
 	 */
 	private static void setSpcimenLabelBarcodeGentorInstances() throws NameGeneratorException
 	{
+		LabelGenerator specimenGeneratorInstance;
 		LabelGenerator ppiLabelGeneratorInstance;
 		BarcodeGenerator specBarcodeGeneratorInstance;
 		BarcodeGenerator cprBarcodeGeneratorInstance;
-//		if (specimenGeneratorInstance != null)
-//		{
-//			//Variables.isSpecimenLabelGeneratorAvl = true;
-//		}
-		ppiLabelGeneratorInstance = LabelGeneratorFactory
-				.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
-		if (ppiLabelGeneratorInstance != null)
-		{
-			Variables.isProtocolParticipantIdentifierLabelGeneratorAvl = true;
-		}
-
+		
+		
 		specBarcodeGeneratorInstance = BarcodeGeneratorFactory
-				.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
+		.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
 		if (specBarcodeGeneratorInstance != null)
 		{
 			Variables.isSpecimenBarcodeGeneratorAvl = true;
 		}
-
-		setSCGGenratorVar();
+		
+		specimenGeneratorInstance = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
+		if (specimenGeneratorInstance != null)
+		{
+			Variables.isSpecimenLabelGeneratorAvl = true;
+		}
+		
+		ppiLabelGeneratorInstance = LabelGeneratorFactory
+						.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
+		if (ppiLabelGeneratorInstance != null)
+		{
+			Variables.isProtocolParticipantIdentifierLabelGeneratorAvl = true;
+		}
+		
+		setSCGGenratorVar();		
 		cprBarcodeGeneratorInstance = BarcodeGeneratorFactory
 				.getInstance(Constants.COLL_PROT_REG_BARCODE_GENERATOR_PROPERTY_NAME);
 		if (cprBarcodeGeneratorInstance != null)
 		{
 			Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl = true;
 		}
+		
+		
+		
 
 	}
 
