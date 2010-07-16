@@ -2,7 +2,7 @@
  *<p>Title: </p>
  *<p>Description:  </p>
  *<p>Copyright:TODO</p>
- *@author 
+ *@author
  *@version 1.0
  */
 
@@ -27,8 +27,8 @@ public class ParticipantAnnotationCondition implements ICPCondition
 			.getCommonLogger(ParticipantAnnotationCondition.class);
 
 	/**
-	 * Returns the list of protocol with which the given participant is registered 
-	 * 
+	 * Returns the list of protocol with which the given participant is registered
+	 *
 	 */
 	public List getCollectionProtocolList(Long entityInstanceId)
 	{
@@ -70,7 +70,6 @@ public class ParticipantAnnotationCondition implements ICPCondition
 		catch (final BizLogicException e)
 		{
 			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 		return annotationsList;
