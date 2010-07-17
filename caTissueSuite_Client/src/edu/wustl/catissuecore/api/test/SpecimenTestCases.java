@@ -2047,7 +2047,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 				String fomrattedLabel = "CP_"+PPI;
 				System.out.println("THE PPPI VALUE IS ------------> :::: "+PPI);
 				System.out.println("THE LABEL FORMAT IS ------------> :::: "+ labelFormat);
-				if(specimenObj.getLabel().contains(fomrattedLabel))
+				if(!specimenObj.getLabel().contains(fomrattedLabel))
 				{
 					assertTrue(" Label generated as per given format :: " + specimenObj.getLabel(), true);
 				}
