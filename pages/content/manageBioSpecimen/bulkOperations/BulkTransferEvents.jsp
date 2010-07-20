@@ -58,7 +58,7 @@ function virtualLocationSelChanged(specimenId) { if(document.getElementById("Vir
 			<bean:define id="firstSpecimen" value="true" />
 			<table width="100%" border="0" cellspacing="0" cellpadding="2" style="table-layout:fixed">
 				<tr>
-					<td width="10%" class="tableheading"><strong><bean:message key="specimenPPI"/></strong></td>
+					<td width="10%" class="tableheading" nowrap="nowrap"><strong><bean:message key="specimenPPI"/></strong></td>
 					<td width="19%" class="tableheading"><strong><bean:message key="specimenLabel"/></strong></td>
 					<td width="14%" class="tableheading"><strong><bean:message key="specimenType"/></strong></td>
 					<td width="8%" class="tableheading"><strong><bean:message key="specimenQuantity"/></strong></td>
