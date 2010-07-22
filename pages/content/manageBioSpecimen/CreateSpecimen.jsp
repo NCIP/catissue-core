@@ -119,7 +119,7 @@
 
 		function onAddToCart()
 		{
-			confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
+
 			var printFlag = document.getElementById("printCheckbox");
 			if(printFlag.checked)
 		    {
@@ -130,6 +130,7 @@
                // setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartForwardtoDerive','success');
             	setSubmittedFor("ForwardTo","addSpecimenToCart");
             }
+			confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
 
 		}
 
