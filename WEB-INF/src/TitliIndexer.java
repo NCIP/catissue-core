@@ -40,7 +40,7 @@ public class TitliIndexer
 		catch (TitliException e)
 		{
 			TitliIndexer.logger.error(e.getMessage(),e) ;
-			System.out.println("Exception occured while initialising TiTLi Search");
+			System.out.println("Exception occured while initialising Keyword Search");
 			e.printStackTrace();
 		}
 	}

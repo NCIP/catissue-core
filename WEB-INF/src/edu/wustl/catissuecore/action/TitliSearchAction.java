@@ -25,7 +25,7 @@ import edu.wustl.common.util.global.TitliSearchConstants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * perform Titli Search.
+ * perform Titli Search/Keyword Search.
  *
  * @author Juber Patel
  */
@@ -75,7 +75,7 @@ public class TitliSearchAction extends XSSSupportedAction
 			// String displaySearchString =
 			// ApplicationProperties.getValue(Constants
 			// .TITLI_SEARCH_STRING_PROPERTY, placeHolders);
-			titliSearchForm.setDisplaySearchString("TiTLi Search");
+			titliSearchForm.setDisplaySearchString("Keyword Search");
 
 			// set the internationalized displayStats
 			placeHolders = new ArrayList();
@@ -119,7 +119,7 @@ public class TitliSearchAction extends XSSSupportedAction
 			this.logger.error("TitliException in TitliSearchAction : " + e.getMessage(), e);
 			e.printStackTrace() ;
 		}
-		this.logger.info("from titli search action..............!!");
+		this.logger.info("from keyword search action..............!!");
 		// System.out.println("from titli search action..............!!");
 		return mapping.findForward(Constants.SUCCESS);
 	}

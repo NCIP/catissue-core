@@ -19,7 +19,7 @@ import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * Initialize Titli Search.
+ * Initialize Titli Search/ Keyword Search
  *
  * @author Juber Patel
  *

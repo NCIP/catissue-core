@@ -5415,7 +5415,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * refresh Titli Search Index Single.
+	 * refresh Titli Search/ Keyword Search Index Single.
 	 *
 	 * @param operation the operation
 	 * @param obj the obj

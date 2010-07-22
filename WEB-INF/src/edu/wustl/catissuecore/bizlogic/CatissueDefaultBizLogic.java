@@ -350,7 +350,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	}
 
 	/**
-	 * refresh the titli search index to reflect the changes in the database.
+	 * refresh the titli search/ Keyword Search index to reflect the changes in the database.
 	 * @param operation the operation to be performed : "insert", "update" or "delete"
 	 * @param obj the object corresponding to the record to be refreshed
 	 */
@@ -381,7 +381,7 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (final Exception excep)
 		{
-			LOGGER.error("Titli search index cound not be refreshed for opeartion."
+			LOGGER.error("Keyword search index cound not be refreshed for opeartion."
 					+ operation, excep);
 		}
 
