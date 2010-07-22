@@ -612,14 +612,31 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		/* end bug 6015 */
 
 		final String initialQuantity = specimenVO.getQuantity();
-		if (initialQuantity != null && !"".equals(initialQuantity))
+		//newly added ---- Ketaki 
+		Double quanityConvertedToDouble = null;
+		
+		if(initialQuantity==null || "".equals(initialQuantity))
 		{
-				specimen.setInitialQuantity(new Double(initialQuantity));
+			quanityConvertedToDouble = new Double(0);
+			specimen.setInitialQuantity(quanityConvertedToDouble);
+		}
+		else
+		{
+				try 
+				{
+					quanityConvertedToDouble = new Double(initialQuantity);
+					specimen.setInitialQuantity(quanityConvertedToDouble);
+				} 
+				catch (NumberFormatException e) 
+				{
+					LOGGER.error(e.getMessage(),e);
+				}
 		}
 		if (specimenVO.getCheckedSpecimen())
 		{
 			specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
-			specimen.setAvailableQuantity(new Double(initialQuantity));
+			
+			specimen.setAvailableQuantity(quanityConvertedToDouble);
 			if ((specimen.getAvailableQuantity() != null && specimen.getAvailableQuantity()
 					.doubleValue() > 0))
 			{
