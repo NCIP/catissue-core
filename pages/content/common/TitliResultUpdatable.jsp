@@ -96,7 +96,7 @@
 		      <tr>
 				<td class="td_table_head">
 					<span class="wh_ar_b">
-						Titli Search Results
+						Keyword Search Results
 					</span>
 				</td>
 		        <td>
