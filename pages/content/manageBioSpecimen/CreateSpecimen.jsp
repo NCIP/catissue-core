@@ -355,7 +355,11 @@
 										</td>
 									</tr>
 									<tr>
-									<logic:equal name="createSpecimenForm" property="generateLabel" value="false">
+
+									<%
+									if(!Variables.isSpecimenLabelGeneratorAvl && !form.isGenerateLabel())
+									{
+									%>
 										<td align="center" class="black_ar">
 										<logic:notEqual name="oper" value="${requestScope.view}">
 											<span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" />
@@ -368,7 +372,8 @@
 										<td class="black_ar" align="left">
 											<html:text styleClass="black_ar" size="30" maxlength="50"  styleId="label" property="label" readonly="${requestScope.readOnlyForAll}"/>
 										</td>
-									</logic:equal>	<%-- if(!Variables.isSpecimenLabelGeneratorAvl) --%>
+										<%}%>
+<%-- if(!Variables.isSpecimenLabelGeneratorAvl) --%>
 									<logic:notEqual name="isSpecimenBarcodeGeneratorAvl" value="true">
 										<td width="1%" align="center">
 											<span class="blue_ar_b"></span>
