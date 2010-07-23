@@ -28,6 +28,8 @@ import java.util.Set;
 
 import oracle.sql.CLOB;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
+import edu.wustl.catissuecore.ctms.integrator.CDMSIntegrator;
+import edu.wustl.catissuecore.ctms.integrator.CatissueCdmsURLInformationObject;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -50,11 +52,9 @@ import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.participant.utility.ParticipantManagerUtility;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -159,7 +159,7 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final Exception e)
 		{
-			this.LOGGER.error("Delegate Add-->" + e.getMessage(),e);
+			this.LOGGER.error("Delegate Add-->" + e.getMessage(), e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -208,7 +208,7 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final Exception e)
 		{
-			this.LOGGER.error("Delegate Edit" + e.getMessage(),e);
+			this.LOGGER.error("Delegate Edit" + e.getMessage(), e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -300,7 +300,7 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final SMException ex)
 		{
-			this.LOGGER.error("Review Role not found!"+ex.getMessage(),ex);
+			this.LOGGER.error("Review Role not found!" + ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
 		return isUserisAdmin;
@@ -831,8 +831,8 @@ public class CaCoreAppServicesDelegator
 	 *
 	 * @throws Exception exception
 	 */
-	public List delegateGetParticipantMatchingObects( final Object domainObject,Long csId,final String userName)
-			throws Exception
+	public List delegateGetParticipantMatchingObects(final Object domainObject, Long csId,
+			final String userName) throws Exception
 	{
 		List matchingObjects = new ArrayList();
 		this.checkNullObject(domainObject, "Domain Object");
@@ -874,11 +874,11 @@ public class CaCoreAppServicesDelegator
 	{
 		LabelGenerator specimenCollectionGroupLableGenerator = LabelGeneratorFactory
 				.getInstance(Constants.SPECIMEN_COLL_GROUP_LABEL_GENERATOR_PROPERTY_NAME);
-		if(specimenCollectionGroupLableGenerator == null)
+		if (specimenCollectionGroupLableGenerator == null)
 		{
 			DefaultSCGLabelGenerator defaultSCGLabelGenerator = new DefaultSCGLabelGenerator();
 			defaultSCGLabelGenerator.getLabel(obj);
-			specimenCollectionGroupLableGenerator = (LabelGenerator)defaultSCGLabelGenerator;
+			specimenCollectionGroupLableGenerator = (LabelGenerator) defaultSCGLabelGenerator;
 		}
 		return specimenCollectionGroupLableGenerator.getLabel(obj);
 	}
@@ -1269,13 +1269,12 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final Exception e)
 		{
-			this.LOGGER.error("Delegate Add-->" + e.getMessage(),e);
+			this.LOGGER.error("Delegate Add-->" + e.getMessage(), e);
 			e.printStackTrace();
 			throw e;
 		}
 		return domainObject;
 	}
-
 
 	/**
 	 * Delegate get ca tissue local participant matching obects.
@@ -1295,11 +1294,16 @@ public class CaCoreAppServicesDelegator
 
 		Participant participant = (Participant) domainObject;
 
-
-        matchingObjects = ParticipantManagerUtility.findMatchedParticipants((Participant) domainObject,null,cpIdSet);
+		matchingObjects = ParticipantManagerUtility.findMatchedParticipants(
+				(Participant) domainObject, null, cpIdSet);
 		return matchingObjects;
 	}
 
-
+	public String getSpecimenCollectionGroupURL(final String userName, Object urlInformationObject)
+			throws Exception
+	{
+		CDMSIntegrator integrator = new CDMSIntegrator();
+		return integrator.getSpecimenCollectionGroupURL((CatissueCdmsURLInformationObject)urlInformationObject);
+	}
 
 }

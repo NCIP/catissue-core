@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
 import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.global.ClinPortalIntegrationConstants;
+import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.beans.SessionDataBean;
@@ -105,13 +105,13 @@ public class LoginAction extends XSSSupportedAction
 
 			//			final String forwardTo = authenticateUser(request, loginForm, userStatus);
 			String forwardTo = null;
-			if (request.getParameter(ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL) != null
-					&& !(ClinPortalIntegrationConstants.DOUBLE_QUOTE
+			if (request.getParameter(CDMSIntegrationConstants.IS_COMING_FROM_CLINPORTAL) != null
+					&& !(CDMSIntegrationConstants.DOUBLE_QUOTE
 							.equals(request
-									.getParameter(ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL)))
+									.getParameter(CDMSIntegrationConstants.IS_COMING_FROM_CLINPORTAL)))
 					&& Boolean
 							.valueOf(request
-									.getParameter(ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL)))
+									.getParameter(CDMSIntegrationConstants.IS_COMING_FROM_CLINPORTAL)))
 			{
 				forwardTo = Constants.SUCCESS;
 			}
@@ -129,7 +129,7 @@ public class LoginAction extends XSSSupportedAction
 			{
 				ActionForward fwd = validateUser(mapping, request, loginForm, loginName);
 				String pageOf = request.getParameter(Constants.PAGE_OF);
-				if (pageOf != null && pageOf.equals(ClinPortalIntegrationConstants.SCG))
+				if (pageOf != null && pageOf.equals(CDMSIntegrationConstants.SCG))
 				{
 					return mapping.findForward(Constants.SCG);
 				}

@@ -620,6 +620,7 @@
 			<replacefilter token="@@APP-ADDITIONAL-INFO@@" value="${app.additional.info}" />
 			<replacefilter token="@@integrationEnabled@@" value="${clinportal.integrationEnabled}" />
 			<replacefilter token="@@ClinPortalURL@@" value="${clinportal.url}" />
+			<replacefilter token="@@ClinPortalKeyStorePath@@" value="${clinportal.keystorePath}" />
 
 			<replacefilter token="@@use.email.commonpackage.config@@" value="${use.email.commonpackage.config}" />
 			<replacefilter token="@@email.sendEmailTo.emailAddress@@" value="${email.sendEmailTo.emailAddress}" />

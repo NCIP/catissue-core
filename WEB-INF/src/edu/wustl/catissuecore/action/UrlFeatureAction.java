@@ -10,7 +10,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.ClinPortalIntegrationConstants;
+import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
 import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.util.global.PasswordManager;
 
@@ -39,15 +39,15 @@ public class UrlFeatureAction extends XSSSupportedAction
 		String csmUserId = "";
 		for (String s : strArray)
 		{
-			if (s.startsWith(ClinPortalIntegrationConstants.CSM_USER_ID))
+			if (s.startsWith(CDMSIntegrationConstants.CSM_USER_ID))
 			{
 				String[] sa = s.split("=");
 				csmUserId = sa[1];
 			}
-			else if (s.startsWith(ClinPortalIntegrationConstants.EVENTENTRYID))
+			else if (s.startsWith(CDMSIntegrationConstants.EVENTENTRYID))
 			{
 				String[] sa = s.split("=");
-				request.getSession().setAttribute(ClinPortalIntegrationConstants.EVENTENTRYID,
+				request.getSession().setAttribute(CDMSIntegrationConstants.EVENTENTRYID,
 						sa[1]);
 			}
 		}
@@ -72,10 +72,10 @@ public class UrlFeatureAction extends XSSSupportedAction
 		loginForm.setLoginName(loginName);
 		{
 			//Forward to the Login
-			actionForward = mapping.findForward(ClinPortalIntegrationConstants.LOGIN);
+			actionForward = mapping.findForward(CDMSIntegrationConstants.LOGIN);
 		}
 //		String path = actionForward.getPath();//+"&participantId="+pId;
-		String path = actionForward.getPath()+ ClinPortalIntegrationConstants.DELIMETER + ClinPortalIntegrationConstants.IS_COMING_FROM_CLINPORTAL+"=true";
+		String path = actionForward.getPath()+ CDMSIntegrationConstants.DELIMETER + CDMSIntegrationConstants.IS_COMING_FROM_CLINPORTAL+"=true";
 		ActionForward newActionForward = new ActionForward();
 		newActionForward.setName(actionForward.getName());
 		newActionForward.setRedirect(false);

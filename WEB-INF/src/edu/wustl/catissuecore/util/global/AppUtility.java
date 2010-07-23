@@ -3736,13 +3736,13 @@ public class AppUtility
     public static String getSubParameterValue(String url,String target)
     {
         String value="";
-        String arr[]=url.split(ClinPortalIntegrationConstants.DELIMETER);
+        String arr[]=url.split(CDMSIntegrationConstants.DELIMETER);
 
         for (String string : arr)
         {
             if(string.contains(target))
             {
-                String []values=string.split(ClinPortalIntegrationConstants.EQUALS);
+                String []values=string.split(CDMSIntegrationConstants.EQUALS);
                 value=values[1];
             }
         }
@@ -3850,7 +3850,4 @@ public class AppUtility
 		}
 		return columnNames;
 	}
-
-
-
 }

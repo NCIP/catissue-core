@@ -10,7 +10,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="edu.wustl.catissuecore.util.global.ClinPortalIntegrationConstants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.CDMSIntegrationConstants"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
@@ -30,7 +30,7 @@
 	String signedConsentDate = "";
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 	String warning_unsaved_data = ApplicationProperties.getValue("unsaved.data.warning");
-	String clinportalUrl =(String) request.getAttribute(ClinPortalIntegrationConstants.CALLBACK_URL);
+	String clinportalUrl =(String) request.getAttribute(CDMSIntegrationConstants.CALLBACK_URL);
 	boolean isAddNew = false;
 	Long scgEntityId = null;
 	scgEntityId = (Long)request.getAttribute(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID);
