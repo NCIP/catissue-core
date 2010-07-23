@@ -71,6 +71,37 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		}
 	}
 
+	/**
+	 * Test to Update Collection Status Of Specimen.
+	 */
+	public void testUpdateCollectedSpecimenWithEmptyLabel()
+	{
+		try
+		{
+			Specimen sp = new Specimen();
+			sp = (Specimen) TestCaseUtility.getObjectMap(Specimen.class);
+			sp.setLabel("");
+			System.out.println("testUpdateCollectionStatusOfSpecimen Get Object Sp" + sp.getId());
+			List spCollection = appService.getObjects(sp);
+			sp = (Specimen) spCollection.get(0);
+			System.out.println("Get Object Sp");
+			sp.setExternalIdentifierCollection(null);
+			System.out.println(sp + ": sp");
+			System.out.println("Specimen LABEL ####   " + sp.getLabel());
+			sp = (Specimen) appService.updateObject(sp);
+			System.out.println(sp + ": sp After Update");
+			assertFalse(" specimen object updated with empty label ---->    Name:: " + sp, true);
+			assertEquals(sp.getIsAvailable().booleanValue(),true);
+		}
+		catch (Exception e)
+		{
+			Logger.out.error("testUpdateCollectedSpecimenWithEmptyLabel" + e.getMessage(), e);
+			System.out.println("SpecimenTestCases.testUpdateCollectedSpecimenWithEmptyLabel:" + e.getMessage());
+			e.printStackTrace();
+			assertTrue("Failed to update specimen with empty label", true);
+		}
+	}
+
 	public void testUpdateSpecimenWithAvailableQtyGreaterThanInitialQty()
 	{
 		try

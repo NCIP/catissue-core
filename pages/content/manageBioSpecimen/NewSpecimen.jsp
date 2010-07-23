@@ -1233,11 +1233,10 @@
 				</logic:equal>
 						</tr>
 				<% // if( operation.equals(Constants.EDIT) || (!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl))
-				if(form.getCollectionStatus() != null 
-								 &&( (form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT)) 
-										 || (!form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT) && !form.isGenerateLabel()) 
-										 	|| (!form.isGenerateLabel() && !Variables.isSpecimenBarcodeGeneratorAvl)))
-									{
+				if(form.getCollectionStatus() != null &&( (!form.getCollectionStatus().equals("Pending") && operation.equals(Constants.EDIT))
+				|| (!form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT) && (!Variables.isSpecimenLabelGeneratorAvl && !form.isGenerateLabel()))
+				|| ((!Variables.isSpecimenLabelGeneratorAvl && !form.isGenerateLabel()) && !Variables.isSpecimenBarcodeGeneratorAvl)))
+				{
 				%>
 
 						<tr>
@@ -1273,27 +1272,27 @@
 									<label for="barcode">
 										<%=form.getBarcode()%>
 									</label>
-									
+
 								<%
 								}
 								else
 								{%>
 									<label for="barcode">
 									</label>
-									
+
 								<%}
-								
+
 								//if(form.getLabel() != null){ %>
 						<!-- 		<label for="label">
 										<%//=form.getLabel() %>
 									</label>  -->
 								<%//}else{%>
-								
+
 							<!-- 	  <label for="label">
-									
+
 									</label> -->
-								<%// }    %>	
-								
+								<%// }    %>
+
 								<html:hidden property="barcode" />
 								</td>
 								</logic:equal>
@@ -1315,7 +1314,7 @@
 								//	&& !form.isGenerateLabel() && Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
 					else  if(((!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 						&& !form.isGenerateLabel() ) && operation.equals(Constants.ADD) )
-							
+
 
 				{
 				%>
@@ -1638,7 +1637,7 @@
 				                <td align="left" class="black_ar">
 									<label for="collectionStatus">
 									<bean:message key="specimenCollectionGroup.collectionStatus" />
-										
+
 									</label>
 								</td>
 								<td class="black_new">
