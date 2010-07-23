@@ -693,7 +693,7 @@
 
 	<!--Target call for both fresh deployment and database creation-->
 	<target name="deploy_all" description="Target call for both fresh deployment and database creation">
-	<!--	<antcall target="assert" />-->
+		<antcall target="assert" />
 		<antcall target="deploy_db" />
 		<antcall target="deploy_app" />
 		<antcall target="server_security" />
@@ -759,7 +759,7 @@
 
 	<target name="pre_initialization" description="initialisation prior to deploying application">
 		<antcall target="clean_server" />
-		<!--<antcall target="assert" />-->
+		<antcall target="assert" />
 		<delete dir="${temp.dir}" />
 		<antcall target="init" />
 		<antcall target="configure_war" />
