@@ -305,11 +305,26 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 		final GenericSpecimen selectedSpecimen = (GenericSpecimen) specimenMap.get(selectedItem);
 
 		this.updateSpecimenToSession(summaryForm, specimenMap);
-		if (selectedSpecimen != null)
-		{
-			this.updateAliquotToSession(summaryForm, selectedSpecimen);
-			this.updateDerivedToSession(summaryForm, selectedSpecimen);
-		}
+
+//		final Iterator iterator = summaryForm.getSpecimenList().iterator();
+//		while (iterator.hasNext())
+//		{
+//			final GenericSpecimen specimenFormVO = (GenericSpecimen) iterator.next();
+//
+//			final GenericSpecimen specimenSessionVO = (GenericSpecimen) specimenMap
+//					.get(specimenFormVO.getUniqueIdentifier());
+//
+//			if (specimenSessionVO != null)
+//			{
+//				this.setFormValuesToSession(specimenFormVO, specimenSessionVO);
+//			}
+//
+//		}
+//		if (selectedSpecimen != null)
+//		{
+//			this.updateAliquotToSession(summaryForm, selectedSpecimen);
+//			this.updateDerivedToSession(summaryForm, selectedSpecimen);
+//		}
 	}
 
 	/**
@@ -334,6 +349,8 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			if (specimenSessionVO != null)
 			{
 				this.setFormValuesToSession(specimenFormVO, specimenSessionVO);
+				this.updateAliquotToSession(summaryForm, specimenSessionVO);
+				this.updateDerivedToSession(summaryForm, specimenSessionVO);
 			}
 
 		}
