@@ -210,6 +210,10 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 				return parentSpecimenLabel;
 			}
 		}
+		else
+		{
+			request.setAttribute("SHOW_LABEL", Boolean.toString(!Variables.isSpecimenLabelGeneratorAvl));
+		}
 		return "";
 	}
 
@@ -224,7 +228,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 	{
 		try
 		{
-			
+
 			List list = AppUtility.executeQuery(hql);
 			String parentLabelFormat = null;
 			String aliquotLabelFormat = null;
@@ -252,7 +256,7 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		}
 		if(Variables.isSpecimenLabelGeneratorAvl){
 			request.setAttribute("SHOW_LABEL", Boolean.toString(!Variables.isSpecimenLabelGeneratorAvl));
-		}else{	
+		}else{
 			request.setAttribute("SHOW_LABEL", generateLabel);
 		}
 	}
