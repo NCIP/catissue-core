@@ -3111,7 +3111,7 @@ Thanking You,
 				<var name="jboss.server.host.jboss.server.port" unset="true"/>
 				<property name="jboss.server.host.jboss.server.port" value="${jboss.server.host}}" />
 			</then>
-		</if>		
+		</if>
 		<if>
 			<equals arg1="${jboss.container.secure}" arg2="yes" />
 			<then>
@@ -4340,17 +4340,14 @@ Thanking You,
 					<replacefilter token="@@DATABASE_PASSWORD@@" value="${csm.database.password}" />
 			</replace>
 			</then>
-			<elseif>
-				<equals arg1="false" arg2="${idp.enabled}" />
-			<then>
+			<else>
 				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 					<include name="*.cfg.xml" />
 					<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
 					<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
 					<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
 				</replace>
-			</then>
-			</elseif>
+			</else>
 			</if>
 	</target>
 	<target name="upgrade_saved_queries" description="Upgrading saved queries....">
@@ -4363,7 +4360,7 @@ Thanking You,
                 <include name="ApplicationSecurityConfig.xml" />
                 <replacefilter token="@@hibernate-config-file@@" value="${temp.dir}/catissuecore/WEB-INF/classes/QueryHibernate.cfg.xml" />
           </replace>
-          <java classname="edu.wustl.query.querysuite.UpgradeSavedQueries" fork="true" maxmemory="1024M">
+          <java classname="edu.wustl.query.upgrade.UpgradeSavedQueries" fork="true" maxmemory="1024M">
                 <classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
                 <classpath refid="temp.classpath" />
                 <classpath>
@@ -4372,6 +4369,7 @@ Thanking You,
                       </fileset>
                 </classpath>
                 <arg value="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationSecurityConfig.xml"/>
+          		<arg value="${saved.query.owner}"/>
           </java>
 		<delete dir="${temp.dir}" />
     </target>
