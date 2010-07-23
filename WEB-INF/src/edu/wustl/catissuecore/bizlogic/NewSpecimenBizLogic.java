@@ -1159,11 +1159,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					if(Variables.isSpecimenLabelGeneratorAvl){
 						spLblGenerator = LabelGeneratorFactory
 						.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-						
+
 					}else{
 						spLblGenerator = LabelGeneratorFactory
 						.getInstance(Constants.CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
-					}	
+					}
 					spLblGenerator.setLabel(specimen);
 			}
 			catch(LabelException e)
@@ -1779,6 +1779,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	private void validateSpecimen(DAO dao, Specimen specimen, Specimen specimenOld)
 			throws BizLogicException
 	{
+		if(!Validator.isEmpty(specimenOld.getLabel())&& Validator.isEmpty(specimen.getLabel()))
+		{
+			throw this.getBizLogicException(null, "label.mandatory", "");
+		}
 		if (this.isStoragePositionChanged(specimenOld, specimen))
 		{
 			if (Constants.COLLECTION_STATUS_PENDING.equals(specimenOld.getCollectionStatus())
@@ -3057,7 +3061,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 
 
 		boolean generateLabel = false;
-		
+
 		if(specimen.getSpecimenRequirement() == null && specimen.getId() != null)
 		{
 			String hql = "select specimen.specimenRequirement from edu.wustl.catissuecore.domain.Specimen as specimen"
