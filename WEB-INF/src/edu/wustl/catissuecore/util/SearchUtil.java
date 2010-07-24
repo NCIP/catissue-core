@@ -143,19 +143,19 @@ public final  class SearchUtil
 	{
 		String link = "";
 		
-		if(objectName.equals("Participant"))
+		if("Participant".equals(objectName))
 		{
 			link = "ParticipantAdvanceSearch.do?pageOf=pageOfParticipantAdvanceSearch&selectedNode=";
 		}
-		else if(objectName.equals("CollectionProtocol"))
+		else if("CollectionProtocol".equals(objectName))
 		{
 			link = "CollectionProtocolAdvanceSearch.do?pageOf=pageOfCollectionProtocolAdvanceSearch&selectedNode=";
 		}
-		else if(objectName.equals("Specimen"))
+		else if("Specimen".equals(objectName))
 		{
 			link = "SpecimenAdvanceSearch.do?pageOf=pageOfSpecimenAdvanceSearch&selectedNode=";
 		}
-		else if(objectName.equals("SpecimenCollectionGroup"))
+		else if("SpecimenCollectionGroup".equals(objectName))
 		{
 			link = "SpecimenCollectionGroupAdvanceSearch.do?pageOf=pageOfSpecimenCollectionGroupAdvanceSearch&selectedNode=";
 		}
@@ -173,18 +173,18 @@ public final  class SearchUtil
 	 * @param msgKey  Label of row
 	 * @param tblName  Used for creating key of field
 	 * @param colName  Represents name of field
-	 * @param id  Represents id of field
+	 * @param identifier  Represents id of field
 	 * @param opList  For populating value of comboBox
 	 * @param valueList  For populating value in case of comboBox in 3rd column of table
 	 * @param unitFieldKey  Used for specimen page only 
 	 * @return  instance of SearchFieldData
 	 */	
-	public static SearchFieldData initSearchUIData(String dataType,String msgKey, String aliasName,String colName,String id,
+	public static SearchFieldData initSearchUIData(String dataType,String msgKey, String aliasName,String colName,String identifier,
     		String opList,String valueList,String unitFieldKey)
     {
 		//Initializing HTMLField class
-    	HTMLField oprationField = new HTMLField(createKey(aliasName,colName,true),id+"Combo",opList);
-    	HTMLField valueField = new HTMLField(createKey(aliasName,colName,false),id,valueList);
+    	HTMLField oprationField = new HTMLField(createKey(aliasName,colName,true),identifier+"Combo",opList);
+    	HTMLField valueField = new HTMLField(createKey(aliasName,colName,false),identifier,valueList);
     	
     	//Function Name used according to dataType of field
     	String funcName = "";
@@ -193,12 +193,12 @@ public final  class SearchUtil
     	if( dataType.equals(SearchUtil.DATE) || (dataType).equals(SearchUtil.NUMERIC))
     	{
     		//Passing 3 parameters out of this two are representing id of textbox
-			funcName = "onDateOperatorChange(this,'" + id + "1','" + id + "2')";
+			funcName = "onDateOperatorChange(this,'" + identifier + "1','" + identifier + "2')";
     	}
     	else
     	{
     		//passing id of field from where function is called and next field's id
-    		funcName = "onOperatorChange('" + (id+"Combo") + "','" + id +"')";
+    		funcName = "onOperatorChange('" + (identifier+"Combo") + "','" + identifier +"')";
     	}
     	
     	return new SearchFieldData(dataType, msgKey ,oprationField,valueField,funcName,unitFieldKey);
@@ -337,7 +337,7 @@ public final  class SearchUtil
 		for(int i=0;i<searchFieldData.length;i++)
 		{
 			String key = searchFieldData[i].getValueField().getName().trim();
-			key = key.substring(key.indexOf("(")+1,key.length()-1);
+			key = key.substring(key.indexOf('(')+1,key.length()-1);
 			
 			String labelName = searchFieldData[i].getLabelKey();
 			String dataType = searchFieldData[i].getDataType();
@@ -351,19 +351,19 @@ public final  class SearchUtil
 	public static int getFormId(String aliasName)
 	{
 		int formId = 0;
-		if(aliasName.equals("Participant"))
+		if("Participant".equals(aliasName))
 		{
 			formId = Constants.PARTICIPANT_FORM_ID;
 		}
-		else if(aliasName.equals("CollectionProtocol"))
+		else if("CollectionProtocol".equals(aliasName))
 		{
 			formId = Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID;
 		}
-		else if(aliasName.equals("Specimen"))
+		else if("Specimen".equals(aliasName))
 		{
 			formId = Constants.NEW_SPECIMEN_FORM_ID;
 		}
-		else if(aliasName.equals("SpecimenCollectionGroup"))
+		else if("SpecimenCollectionGroup".equals(aliasName))
 		{
 			formId = Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID;
 		}
@@ -391,14 +391,14 @@ public final  class SearchUtil
 			}
 		}
 		
-		if(!columnDisplayName.equals(""))
+		if("".equals(columnDisplayName))
 		{
-			ResourceBundle myResources =ResourceBundle.getBundle("ApplicationResources");
-			colName = myResources.getString(columnDisplayName);
+			colName = columnDisplayName;
 		}
 		else 
 		{
-			colName = columnDisplayName;
+			ResourceBundle myResources =ResourceBundle.getBundle("ApplicationResources");
+			colName = myResources.getString(columnDisplayName);
 		}
 		return colName;
 	}
@@ -417,11 +417,11 @@ public final  class SearchUtil
 	  	//Adding SELECT Option
 	  	newTableList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 	  	
-	  	Iterator it = tableSet.iterator();
+	  	Iterator iterator = tableSet.iterator();
 	  	
-	  	while(it.hasNext())
+	  	while(iterator.hasNext())
 	  	{
-	  		NameValueBean bean = (NameValueBean) it.next();
+	  		NameValueBean bean = (NameValueBean) iterator.next();
 	  		
 	  		//Adding tables related to Event Parameters only.
 	  		if(bean.getName().endsWith("Parameters") || bean.getName().endsWith("Parameter"))

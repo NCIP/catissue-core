@@ -167,7 +167,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			int specimenArrayDistributedCnt = 0;
 			OrderDetails order = (OrderDetails) domainObject;
 			Collection distributionColl = order.getDistributionCollection();
-			if (distributionColl != null && distributionColl.size() > 0)
+			if (distributionColl != null && !distributionColl.isEmpty())
 			{
 				Iterator itr1 = distributionColl.iterator();
 				while (itr1.hasNext())
@@ -179,10 +179,13 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 					{
 						DistributedItem distributedItem = (DistributedItem) itr2.next();
 						if (distributedItem.getSpecimen() != null)
+						{
 							specimenDistributedCnt++;
+						}
 						else if (distributedItem.getSpecimenArray() != null)
+						{
 							specimenArrayDistributedCnt++;
-
+						}
 					}
 					forwardToHashMap.put("distributionId", distribution.getId());
 					if (specimenDistributedCnt > 0 && specimenArrayDistributedCnt == 0)

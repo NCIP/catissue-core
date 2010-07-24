@@ -222,15 +222,6 @@ public final class GridUtil {
 				.escapeXml(colValue)));
 		}
 		cellXML.append(GridUtil.getCellEndTag());
-		try
-		{
-//		final InitialContext ctx = new InitialContext();
-//		final DataSource ds = (DataSource) ctx.lookup("java:/catissuecore");
-		}
-		catch (Exception e)
-		{
-			System.out.println("");
-		}
 		return cellXML.toString();
 	}
 

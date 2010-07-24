@@ -350,15 +350,15 @@ public final class StorageContainerUtil
 	{
 		if (resultSet != null)
 		{
-			int x, y;
+			int countX, countY;
 			for (int i = 0; i < resultSet.size(); i++)
 			{
 				final Object[] columnList = (Object[]) resultSet.get(i);
 				if ((columnList != null) && (columnList.length == 2))
 				{
-					x = (Integer) columnList[0];
-					y = (Integer) columnList[1];
-					positions[x][y] = false;
+					countX = (Integer) columnList[0];
+					countY = (Integer) columnList[1];
+					positions[countX][countY] = false;
 				}
 			}
 		}
@@ -470,7 +470,6 @@ public final class StorageContainerUtil
 	private static Capacity getContainerCapacity(Container container, DAO dao) throws DAOException
 	{
 		Capacity scCapacity = container.getCapacity();
-		final String dim1, dim2;
 		if (scCapacity == null)
 		{
 			scCapacity = new Capacity();
@@ -793,7 +792,7 @@ public final class StorageContainerUtil
 	}
 
 	public static int setAliquotMap(String objectKey, Map xDimMap, Object[] containerId,
-			String noOfAliquots, int counter, Map aliquotMap, int i)
+			String noOfAliquots, int counter, Map aliquotMap, int count1)
 	{
 		objectKey = objectKey + ":";
 		if (!xDimMap.isEmpty())
@@ -816,7 +815,7 @@ public final class StorageContainerUtil
 						final String pos1Key = objectKey + counter + "_positionDimensionOne";
 						final String pos2Key = objectKey + counter + "_positionDimensionTwo";
 
-						aliquotMap.put(containerKey, ((NameValueBean) containerId[i]).getValue());
+						aliquotMap.put(containerKey, ((NameValueBean) containerId[count1]).getValue());
 						aliquotMap.put(pos1Key, ((NameValueBean) xDim[j]).getValue());
 						aliquotMap.put(pos2Key, ((NameValueBean) yDimList.get(k)).getValue());
                         counter++;
@@ -919,10 +918,10 @@ public final class StorageContainerUtil
 		boolean flag = false;
 		if (pos1 != null && !pos1.trim().equals(""))
 		{
-			long l = 1;
+			long longNumber = 1;
 			try
 			{
-				l = Long.parseLong(pos1);
+				longNumber = Long.parseLong(pos1);
 			}
 			catch (final Exception e)
 			{
@@ -931,17 +930,17 @@ public final class StorageContainerUtil
 				flag = true;
 
 			}
-			if (l <= 0)
+			if (longNumber <= 0)
 			{
 				flag = true;
 			}
 		}
 		if (pos2 != null && !pos2.trim().equals(""))
 		{
-			long l = 1;
+			long longNumber = 1;
 			try
 			{
-				l = Long.parseLong(pos2);
+				longNumber = Long.parseLong(pos2);
 			}
 			catch (final Exception e)
 			{
@@ -950,7 +949,7 @@ public final class StorageContainerUtil
 				flag = true;
 
 			}
-			if (l <= 0)
+			if (longNumber <= 0)
 			{
 				flag = true;
 			}
@@ -975,7 +974,7 @@ public final class StorageContainerUtil
 		if (containerName != null)
 		{
 			storageValue.append(containerName);
-			storageValue.append(":");
+			storageValue.append(':');
 			storageValue.append(containerPos1);
 			storageValue.append(" ,");
 			storageValue.append(containerPos2);
@@ -983,7 +982,7 @@ public final class StorageContainerUtil
 		else if (containerID != null)
 		{
 			storageValue.append(containerID);
-			storageValue.append(":");
+			storageValue.append(':');
 			storageValue.append(containerPos1);
 			storageValue.append(" ,");
 			storageValue.append(containerPos2);
@@ -1339,8 +1338,8 @@ public final class StorageContainerUtil
 					final String str = (String) columnList.get(0);
 					if (!str.equals(""))
 					{
-						final long no = Long.parseLong(str);
-						return no + 1;
+						final long longNumber = Long.parseLong(str);
+						return longNumber + 1;
 					}
 				}
 			}
@@ -1364,11 +1363,11 @@ public final class StorageContainerUtil
 	 * @param siteName - Site name.
 	 * @param typeName - site type.
 	 * @param operation - operation
-	 * @param Id - id.
+	 * @param longIdentifier - id.
 	 * @return String container name.
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	public String getContainerName(String siteName, String typeName, String operation, long Id)
+	public String getContainerName(String siteName, String typeName, String operation, long longIdentifier)
 			throws ApplicationException
 	{
 		String containerName = "";
@@ -1397,7 +1396,7 @@ public final class StorageContainerUtil
 			}
 			else
 			{
-				containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(Id);
+				containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(longIdentifier);
 			}
 		}
 		return containerName;
@@ -1430,8 +1429,6 @@ public final class StorageContainerUtil
 						.addCondition(new EqualClause("SITE_ID", Long.valueOf(parentID))).andOpr()
 						.addCondition(new NullClause("PARENT_CONTAINER_ID"));
 			}
-			final String joinCondition = Constants.AND_JOIN_CONDITION;
-
 			final JDBCDAO jdbcDAO = DAOConfigFactory.getInstance().getDAOFactory(
 					Constants.APPLICATION_NAME).getJDBCDAO();
 
@@ -1451,8 +1448,8 @@ public final class StorageContainerUtil
 					logger.info("str---------------:" + str);
 					if (!str.equals(""))
 					{
-						final int no = Integer.parseInt(str);
-						return no + 1;
+						final int intNumber = Integer.parseInt(str);
+						return intNumber + 1;
 					}
 				}
 			}
@@ -1759,22 +1756,24 @@ public final class StorageContainerUtil
 	public static boolean validateContainerAccess(DAO dao, StorageContainer container,
 			SessionDataBean sessionDataBean) throws BizLogicException
 	{
+		boolean flag = true;
 		logger.debug("validateContainerAccess..................");
 		if (sessionDataBean != null && sessionDataBean.isAdmin())
 		{
-			return true;
+			return flag;
 		}
 		final Long userId = sessionDataBean.getUserId();
 		Site site = null;
 		Set<Long> loggedInUserSiteIdSet = null;
 		site = new SiteBizLogic().getSite(dao, container.getId());
 		loggedInUserSiteIdSet = new UserBizLogic().getRelatedSiteIds(userId);
-		if (loggedInUserSiteIdSet != null && loggedInUserSiteIdSet.contains(new Long(site.getId())))
+		if (loggedInUserSiteIdSet != null && loggedInUserSiteIdSet.contains(Long.valueOf(site.getId())))
 		{
-			return true;
+			return flag;
 		}
 		else
 		{
+			flag = false;
 			return false;
 		}
 	}
@@ -1933,7 +1932,6 @@ public final class StorageContainerUtil
 		{
 			String sourceObjectName = StorageContainer.class.getName();
 			final String[] selectColumnName = {"id"};
-			final String joinCondition = Constants.AND_JOIN_CONDITION;
 			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 			queryWhereClause.addCondition(
 					new EqualClause("locatedAtPosition.positionDimensionOne", current
@@ -2295,10 +2293,10 @@ public final class StorageContainerUtil
 			int fluidCount = 0;
 			int cellCount = 0;
 			int molCount = 0;
-			final Iterator<String> it = specimenTypeCollection.iterator();
-			while (it.hasNext())
+			final Iterator<String> iterator = specimenTypeCollection.iterator();
+			while (iterator.hasNext())
 			{
-				final String specimenType = (String) it.next();
+				final String specimenType = (String) iterator.next();
 				if(Constants.NOT_SPECIFIED.equals(specimenType))
 				{
 					final Iterator<String> itera = specimenClassTypeCollection.iterator();

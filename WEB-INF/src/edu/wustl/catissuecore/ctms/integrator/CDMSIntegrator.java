@@ -17,11 +17,11 @@ import javax.net.ssl.SSLSession;
 public class CDMSIntegrator
 {
 
-	private static ApplicationService applicationService = null;
-	private ClientSession clientSession = null;
-	private final String ctmsServiceURL = XMLPropertyHandler
+	private transient ApplicationService applicationService = null;
+	private transient ClientSession clientSession = null;
+	private final transient String ctmsServiceURL = XMLPropertyHandler
 			.getValue(CDMSIntegrationConstants.CLINPORTAL_SERVICE_URL);
-	private final String ctmsKeystorePath = XMLPropertyHandler
+	private final transient String ctmsKeystorePath = XMLPropertyHandler
 			.getValue(CDMSIntegrationConstants.KEYSTORE_FILE_PATH);
 
 	public String getSpecimenCollectionGroupURL(
@@ -53,7 +53,7 @@ public class CDMSIntegrator
 	{
 		if (caTissueUrl.contains(".do"))
 		{
-			int lastIndex = caTissueUrl.lastIndexOf("/");
+			int lastIndex = caTissueUrl.lastIndexOf('/');
 			caTissueUrl = caTissueUrl.substring(0, lastIndex);
 		}
 		caTissueUrl = caTissueUrl + "/";
@@ -63,7 +63,7 @@ public class CDMSIntegrator
 	private String formReqParameter(String parameterName, String value)
 	{
 		StringBuffer str = new StringBuffer();
-		str.append("&").append(parameterName).append("=").append(value);
+		str.append('&').append(parameterName).append('=').append(value);
 		return str.toString();
 	}
 

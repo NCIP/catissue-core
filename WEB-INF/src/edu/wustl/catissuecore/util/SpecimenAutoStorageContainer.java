@@ -203,16 +203,16 @@ public class SpecimenAutoStorageContainer {
 			}
 
 			String storageId = ((NameValueBean) containerId[i]).getValue();
-			StorageContainer sc = new StorageContainer();
-			sc.setId(Long.valueOf(storageId));
-			sc.setName(((NameValueBean) containerId[i]).getName());
+			StorageContainer storageCont = new StorageContainer();
+			storageCont.setId(Long.valueOf(storageId));
+			storageCont.setName(((NameValueBean) containerId[i]).getName());
 			
 
 			Map xDimMap = (Map) containerMap.get(containerId[i]);
 			if (!xDimMap.isEmpty())
 			{
 				counter = populateStoragePositions(specimenDataBeanList,  counter,
-						 sc, xDimMap);
+						 storageCont, xDimMap);
 			}
 		}
 
@@ -222,12 +222,12 @@ public class SpecimenAutoStorageContainer {
 	/**
 	 * @param specimenDataBeanList
 	 * @param counter
-	 * @param sc
+	 * @param storageContainer
 	 * @param xDimMap
 	 * @return
 	 */
 	private int populateStoragePositions(LinkedList specimenDataBeanList, int counter,
-			StorageContainer sc, Map xDimMap)
+			StorageContainer storageContainer, Map xDimMap)
 	{
 		
 		Object[] xDim = xDimMap.keySet().toArray();
@@ -248,7 +248,7 @@ public class SpecimenAutoStorageContainer {
 				}
 				GenericSpecimen specimenDataBean = 
 					(GenericSpecimen)specimenDataBeanList.get(counter);
-				String stName = sc.getName();
+				String stName = storageContainer.getName();
 				String posOne = ((NameValueBean) xDim[j]).getValue();
 				String posTwo = ((NameValueBean) yDimList.get(k)).getValue();
 				String storageValue = stName+":"+posOne+" ,"+posTwo; 
@@ -263,7 +263,7 @@ public class SpecimenAutoStorageContainer {
 				{
 					if(!storageContainerIds.contains(storageValue))
 					{													
-						specimenDataBean.setContainerId(String.valueOf(sc.getId()));
+						specimenDataBean.setContainerId(String.valueOf(storageContainer.getId()));
 						specimenDataBean.setSelectedContainerName(stName);
 						specimenDataBean.setPositionDimensionOne(posOne);
 						specimenDataBean.setPositionDimensionTwo(posTwo);

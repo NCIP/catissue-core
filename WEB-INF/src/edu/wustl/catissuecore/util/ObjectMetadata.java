@@ -63,25 +63,25 @@ public class ObjectMetadata implements titli.controller.interfaces.ObjectMetadat
 	 */
 	public String getUniqueIdentifier(Object obj)
 	{
-		String id = null;
+		String identifier = null;
 		if(obj instanceof AbstractDomainObject)
 		{
-			id= ((AbstractDomainObject) obj).getId().toString();
+			identifier= ((AbstractDomainObject) obj).getId().toString();
 		}
 		else if(obj instanceof UserDTO)
 		{
 			UserDTO userDto = (UserDTO)obj;
 			User user = userDto.getUser();
-			id= user.getId().toString();
+			identifier= user.getId().toString();
 		}
 		else if(obj instanceof CollectionProtocolDTO)
 		{
 			CollectionProtocolDTO CpDto = (CollectionProtocolDTO) obj;
 			CollectionProtocol collectionProtocol = CpDto.getCollectionProtocol();
 			
-			id=  collectionProtocol.getId().toString();
+			identifier=  collectionProtocol.getId().toString();
 		}
 		
-		return id;
+		return identifier;
 	}
 }

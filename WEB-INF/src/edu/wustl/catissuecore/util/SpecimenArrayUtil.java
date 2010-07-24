@@ -45,10 +45,10 @@ public final class SpecimenArrayUtil {
         if ((specimenTypeCollection != null) && (!specimenTypeCollection.isEmpty())) {
         	specimenTypes = new String[specimenTypeCollection.size()];
         	String specimenTypeStr = null;
-        	int i = 0;
-        	for (Iterator iter = specimenTypeCollection.iterator(); iter.hasNext();i++) {
+        	int counter = 0;
+        	for (Iterator iter = specimenTypeCollection.iterator(); iter.hasNext();counter++) {
 				specimenTypeStr = (String) iter.next();
-				specimenTypes[i] = specimenTypeStr;
+				specimenTypes[counter] = specimenTypeStr;
 			}
         }
 		return specimenTypes;

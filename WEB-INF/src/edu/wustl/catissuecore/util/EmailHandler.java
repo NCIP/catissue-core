@@ -115,7 +115,7 @@ public class EmailHandler
         
         //Append the comments given by the administrator, if any.
         if ((user.getComments() != null) 
-                && ("".equals(user.getComments()) == false))
+                && (!"".equals(user.getComments())))
         {
             body = body + "\n\n" + ApplicationProperties.getValue("userRegistration.reject.comments")
             					 + user.getComments();

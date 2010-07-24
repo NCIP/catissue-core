@@ -23,9 +23,9 @@ public class CSVFileParser extends FileReader
 {
 
 	//CSV file reader
-	private CSVReader reader;
+	private transient CSVReader reader;
 	//stores the line
-	private String[] line;
+	private transient String[] line;
 	//stores line number
 	private static long lineNumber = 0;
 	//stores entityIdsCollection

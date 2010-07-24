@@ -47,7 +47,7 @@ public final class SpecimenUtil
 			queryWhereClause1.addCondition(new EqualClause("id", specimenId));
 			final List list = dao.retrieve(sourceObjectName1, selectColumnName1, queryWhereClause1);
 
-			if (list.size() > 0)
+			if (!list.isEmpty())
 			{
 				String previousStatus = list.get(0).toString();
 				if (previousStatus != null
@@ -120,7 +120,7 @@ public final class SpecimenUtil
 				}
 			}
 
-			if (list != null && list.size() > 0)
+			if (list != null && !list.isEmpty())
 			{
 				specimenId = Long.valueOf(list.get(0).toString());
 			}
@@ -157,7 +157,7 @@ public final class SpecimenUtil
 
 			}
 		}
-		valToReplace = yearOfcoll+"";
+		valToReplace = yearOfcoll + Constants.DOUBLE_QUOTES;
 		return valToReplace;
 	}
 
@@ -167,7 +167,7 @@ public final class SpecimenUtil
 		boolean isGenLabel = false;
 		if(Constants.NEW_SPECIMEN.equals(lineage))
 		{
-			isGenLabel = !Validator.isEmpty(parentLabelformat) && !parentLabelformat.equals("%CP_DEFAULT%");
+			isGenLabel = !Validator.isEmpty(parentLabelformat) && !"%CP_DEFAULT%".equals(parentLabelformat);
 		}
 		else if(Constants.DERIVED_SPECIMEN.equals(lineage))
 		{
@@ -192,7 +192,7 @@ public final class SpecimenUtil
 		}
 		else if(!Validator.isEmpty(format) && format.contains("%CP_DEFAULT%"))
 		{
-			isGenLabel = !Validator.isEmpty(parentLabelformat) && !parentLabelformat.equals("%CP_DEFAULT%");
+			isGenLabel = !Validator.isEmpty(parentLabelformat) && !"%CP_DEFAULT%".equals(parentLabelformat);
 		}
 		return isGenLabel;
 	}

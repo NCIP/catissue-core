@@ -419,7 +419,7 @@ public class CDMSCaTissueIntegrationUtil
              Map<String, Date> completedSCG = new HashMap<String, Date>();
              Map<String, Date> anticipatedSCG = new HashMap<String, Date>();
              util.getScg(collectionEventId, cprId, completedSCG, anticipatedSCG);
-             if (anticipatedSCG.size() > 0)
+             if (!anticipatedSCG.isEmpty())
              {
                  scgId = util.getClosestDate(anticipatedSCG, visitCurrDate,visitPrevDate);
              }
@@ -464,7 +464,7 @@ public class CDMSCaTissueIntegrationUtil
 				Map<String, Date> completedSCG = new HashMap<String, Date>();
 				Map<String, Date> anticipatedSCG = new HashMap<String, Date>();
 				util.getScg(collectionEventId, cprId, completedSCG, anticipatedSCG);
-				if (anticipatedSCG.size() > 0)
+				if (!anticipatedSCG.isEmpty())
 				{
 					scgId = util.getClosestDate(anticipatedSCG, visitCurrDate, visitPrevDate);
 				}

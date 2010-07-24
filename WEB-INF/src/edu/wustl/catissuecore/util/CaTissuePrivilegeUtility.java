@@ -267,7 +267,7 @@ public final class CaTissuePrivilegeUtility
 						bean.setSiteList(siteList);
 						bean.setUser(user);
 						updateCPStatus(privilegeCache, entry, bean, siteId);
-						map.put("" + site.getId(), bean);
+						map.put(Constants.DOUBLE_QUOTES + site.getId(), bean);
 					}
 				}
 			}

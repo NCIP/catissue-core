@@ -107,7 +107,7 @@ public class IdComparator implements Comparator
 	private String getId(String arg)
 	{
 		String[] first = ((String)arg).split(":");
-		String id = null;
+		String identifier = null;
 		if(first.length > 0)
 		{
 			for(String s : first)
@@ -115,11 +115,11 @@ public class IdComparator implements Comparator
 				if(s.contains("_"))
 				{
 					String[] idStmt = ((String)s).split("_");
-					id = idStmt[0];
+					identifier = idStmt[0];
 				}
 			}
 		}
-		return id;
+		return identifier;
 	}
 
 }

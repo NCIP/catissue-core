@@ -24,11 +24,11 @@ import javax.net.ssl.SSLSession;
  */
 public class CDMSAPIService
 {
-    private ApplicationService appService = null;
-    private ClientSession clientSession = null;
-	private final String CPServerUrl = XMLPropertyHandler
+    private transient ApplicationService appService = null;
+    private transient ClientSession clientSession = null;
+	private final transient String CPServerUrl = XMLPropertyHandler
 			.getValue(CDMSIntegrationConstants.CLINPORTAL_SERVICE_URL);
-	private final String ctmsKeystorePath = XMLPropertyHandler
+	private final transient String ctmsKeystorePath = XMLPropertyHandler
 			.getValue(CDMSIntegrationConstants.KEYSTORE_FILE_PATH);
 
     /**

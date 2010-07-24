@@ -34,7 +34,6 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
-import edu.wustl.dao.exception.DAOException;
 
 /**
  * <p>This class initializes the fields of MultipleSpecimenValidationUtil.java</p>
@@ -97,12 +96,12 @@ public final class MultipleSpecimenValidationUtil
 				continue;
 			}
 
-			Iterator it = derivedSpecimens.iterator();
+			Iterator iterator = derivedSpecimens.iterator();
 			//validate derived specimens
-			int i = 0;
-			while (it.hasNext())
+			int counter = 0;
+			while (iterator.hasNext())
 			{
-				Specimen derivedSpecimen = (Specimen) it.next();
+				Specimen derivedSpecimen = (Specimen) iterator.next();
 				derivedSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 				derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
@@ -113,7 +112,7 @@ public final class MultipleSpecimenValidationUtil
 				{
 					break;
 				}
-				i++;
+				counter++;
 			}
 
 		}
@@ -159,11 +158,11 @@ public final class MultipleSpecimenValidationUtil
 					long cpId = ((Long) idList[2]).longValue();//here
 					specimen.getSpecimenCollectionGroup().setId(scgId);
 					//TODO instantiate associated objects(CPR & CP) & set IDs
-					CollectionProtocol cp = new CollectionProtocol();
-					cp.setId(Long.valueOf(cpId));
+					CollectionProtocol collProtocol = new CollectionProtocol();
+					collProtocol.setId(Long.valueOf(cpId));
 					CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
 					cpr.setId(Long.valueOf(cprId));
-					cpr.setCollectionProtocol(cp);
+					cpr.setCollectionProtocol(collProtocol);
 					((SpecimenCollectionGroup) specimen.getSpecimenCollectionGroup())
 							.setCollectionProtocolRegistration(cpr);
 				}

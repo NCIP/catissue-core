@@ -24,7 +24,7 @@ public class ParticipantComparator implements Comparator
 	    	compString1 = sb1.substring(sb1.indexOf("(")+1);
 	    	compString2 = sb2.substring(sb2.indexOf("(")+1);
 	    }
-	    if(comparisonDone && ((!ppi1.equals("N/A")) || (!ppi2.equals("N/A"))))
+	    if(comparisonDone && ((!"N/A".equals(ppi1) || (!"N/A".equals(ppi2)))))
 	    {
 	    	compString1 = ppi1;
 	    	compString2 = ppi2;

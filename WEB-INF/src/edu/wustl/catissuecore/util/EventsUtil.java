@@ -139,7 +139,7 @@ public final class EventsUtil
 	{
 		Iterator<NameValueBean> itr = userList.iterator();
 		long returnId = Long.valueOf(-1);
-		for (int counter = 0; itr.hasNext(); counter++)
+		while(itr.hasNext())
 		{
 			NameValueBean nameValueBean = (NameValueBean) itr.next();
 			if (nameValueBean.getName() != null && nameValueBean.getName().trim().equals(userName))
@@ -278,7 +278,11 @@ public final class EventsUtil
 	public static Date setTimeStamp(String dateOfEvent, String timeInHrs, String timeInMinutes)
 	{
 		Date timestamp = null;
-		if (dateOfEvent != null && dateOfEvent.trim().length() != 0)
+		if (Validator.isEmpty(dateOfEvent))
+		{
+			timestamp = Calendar.getInstance().getTime();
+		}
+		else
 		{
 			Calendar calendar = Calendar.getInstance();
 			try
@@ -295,10 +299,6 @@ public final class EventsUtil
 				EventsUtil.logger.error("Exception in Parsing Date" + e.getMessage(),e);
 				e.printStackTrace();
 			}
-		}
-		else
-		{
-			timestamp = Calendar.getInstance().getTime();
 		}
 		return timestamp;
 	}
