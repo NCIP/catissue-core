@@ -7,18 +7,23 @@ import edu.wustl.catissuecore.actionForm.EventParametersForm;
 import edu.wustl.catissuecore.actionForm.ProcedureEventParametersForm;
 import edu.wustl.catissuecore.util.global.Constants;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author renuka_bajpai
+ * The Class ProcedureEventParametersAction.
  *
+ * @author renuka_bajpai
  */
 public class ProcedureEventParametersAction extends SpecimenEventParametersAction
 {
 
 	/**
-	* @param request object of HttpServletRequest
-	* @param eventParametersForm : eventParametersForm
-	* @throws Exception : Exception
-	*/
+	 * Sets the request parameters.
+	 *
+	 * @param request object of HttpServletRequest
+	 * @param eventParametersForm : eventParametersForm
+	 *
+	 * @throws Exception : Exception
+	 */
 	@Override
 	protected void setRequestParameters(HttpServletRequest request,
 			EventParametersForm eventParametersForm) throws Exception

@@ -54,7 +54,7 @@ public class ParticipantSelectAction extends BaseAction
 	/**
 	 * logger.
 	 */
-	private transient final Logger logger = Logger.getCommonLogger(ParticipantSelectAction.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(ParticipantSelectAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -89,7 +89,7 @@ public class ParticipantSelectAction extends BaseAction
 		final String objectName = iDomainObjectFactory
 				.getDomainObjectName(abstractForm.getFormId());
 
-		this.logger.info("Participant Id-------------------"
+		LOGGER.info("Participant Id-------------------"
 				+ request.getParameter("participantId"));
 
 		final Object object = bizLogic.retrieve(objectName, new Long(request
@@ -97,7 +97,7 @@ public class ParticipantSelectAction extends BaseAction
 		request.removeAttribute("participantForm");
 		final Participant participant = (Participant) object;
 
-		this.logger.info("Last name in ParticipantSelectAction:" + participant.getLastName());
+		LOGGER.info("Last name in ParticipantSelectAction:" + participant.getLastName());
 		/**
 		 * Name: Vijay Pande Reviewer Name: Aarti Sharma Instead of
 		 * setAllValues() method retrieveFroEditMode() method is called to
@@ -118,7 +118,7 @@ public class ParticipantSelectAction extends BaseAction
 		// Attributes to decide AddNew action
 		final String submittedFor = request.getParameter(Constants.SUBMITTED_FOR);
 
-		this.logger.info("submittedFor in ParticipantSelectAction:" + submittedFor);
+		LOGGER.info("submittedFor in ParticipantSelectAction:" + submittedFor);
 		// ------------------------------------------------ AddNewAction
 		// Starts----------------------------
 		// if AddNew action is executing, load FormBean from Session and
@@ -141,9 +141,9 @@ public class ParticipantSelectAction extends BaseAction
 							.getAbstractActionForm();
 
 					final String forwardTo = addNewSessionDataBean.getForwardTo();
-					this.logger.debug("forwardTo in ParticipantSelectAction--------->" + forwardTo);
+					LOGGER.debug("forwardTo in ParticipantSelectAction--------->" + forwardTo);
 
-					this.logger.info("Id-----------------" + abstractDomain.getId());
+					LOGGER.info("Id-----------------" + abstractDomain.getId());
 					// Setting Identifier of new object into the FormBean to
 					// populate it on the JSP page
 					sessionFormBean.setAddNewObjectIdentifier(addNewSessionDataBean.getAddNewFor(),
@@ -158,10 +158,10 @@ public class ParticipantSelectAction extends BaseAction
 					{
 						session.removeAttribute(Constants.FORM_BEAN_STACK);
 						request.setAttribute(Constants.SUBMITTED_FOR, "Default");
-						this.logger.debug("SubmittedFor set as Default in "
+						LOGGER.debug("SubmittedFor set as Default in "
 								+ "ParticipantSelectAction");
 
-						this.logger.debug("cleaning FormBeanStack from session*************");
+						LOGGER.debug("cleaning FormBeanStack from session*************");
 					}
 					else
 					{
@@ -175,7 +175,7 @@ public class ParticipantSelectAction extends BaseAction
 					final String formBeanName = CommonUtilities.getFormBeanName(sessionFormBean);
 					request.setAttribute(formBeanName, sessionFormBean);
 
-					this.logger.debug("InitiliazeAction operation=========>"
+					LOGGER.debug("InitiliazeAction operation=========>"
 							+ sessionFormBean.getOperation());
 
 					// Storing Success messages into Request to display on JSP
@@ -195,16 +195,16 @@ public class ParticipantSelectAction extends BaseAction
 					// page
 					if ((sessionFormBean.getOperation().equals("edit")))
 					{
-						this.logger.debug("Edit object Identifier while"
+						LOGGER.debug("Edit object Identifier while"
 								+ " AddNew is from Edit operation==>" + sessionFormBean.getId());
 						final ActionForward editForward = new ActionForward();
 
 						final String addPath = (mapping.findForward(forwardTo)).getPath();
-						this.logger.debug("Operation before edit==========>" + addPath);
+						LOGGER.debug("Operation before edit==========>" + addPath);
 
 						final String editPath = addPath.replaceFirst("operation=add",
 								"operation=edit");
-						this.logger.debug("Operation edited=============>" + editPath);
+						LOGGER.debug("Operation edited=============>" + editPath);
 						editForward.setPath(editPath);
 
 						return editForward;
@@ -230,7 +230,7 @@ public class ParticipantSelectAction extends BaseAction
 		// ----------ForwardTo Starts----------------
 		else if ((submittedFor != null) && (submittedFor.equals("ForwardTo")))
 		{
-			this.logger
+			LOGGER
 					.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
 
 			// Storing appropriate value of SUBMITTED_FOR attribute
@@ -246,12 +246,12 @@ public class ParticipantSelectAction extends BaseAction
 		if (abstractForm.getForwardTo() != null && abstractForm.getForwardTo().trim().length() > 0)
 		{
 			final String forwardTo = abstractForm.getForwardTo();
-			this.logger.debug("ForwardTo in Add :-- : " + forwardTo);
+			LOGGER.debug("ForwardTo in Add :-- : " + forwardTo);
 			target = forwardTo;
 			// return (mapping.findForward(forwardTo));
 		}
 
-		this.logger.info("target in ParticipantSelectAction:" + target);
+		LOGGER.info("target in ParticipantSelectAction:" + target);
 		return (mapping.findForward(target));
 
 	}

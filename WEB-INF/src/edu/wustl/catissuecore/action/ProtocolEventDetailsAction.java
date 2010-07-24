@@ -22,7 +22,10 @@ import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.cde.CDEManager;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class ProtocolEventDetailsAction.
+ *
  * @author renuka_bajpai
  */
 public class ProtocolEventDetailsAction extends BaseAction
@@ -31,17 +34,14 @@ public class ProtocolEventDetailsAction extends BaseAction
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
-	 * @param mapping
-	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
-	 * @throws Exception
-	 *             generic exception
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 *
 	 * @return ActionForward : ActionForward
+	 *
+	 * @throws Exception generic exception
 	 */
 	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
@@ -156,12 +156,11 @@ public class ProtocolEventDetailsAction extends BaseAction
 	}
 
 	/**
-	 * @param mapping
-	 *            ActionMapping
-	 * @param protocolEventDetailsForm
-	 *            protocolEventDetails Form
-	 * @param request
-	 *            HttpServletRequest
+	 * Inits the specimenrequirement form.
+	 *
+	 * @param mapping ActionMapping
+	 * @param protocolEventDetailsForm protocolEventDetails Form
+	 * @param request HttpServletRequest
 	 */
 	private void initSpecimenrequirementForm(ActionMapping mapping,
 			ProtocolEventDetailsForm protocolEventDetailsForm, HttpServletRequest request)

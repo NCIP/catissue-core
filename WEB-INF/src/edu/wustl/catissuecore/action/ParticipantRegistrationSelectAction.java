@@ -35,29 +35,27 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author renuka_bajpai
+ * The Class ParticipantRegistrationSelectAction.
  *
+ * @author renuka_bajpai
  */
 public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 {
 
-	/**
-	 * logger.
-	 */
-	private transient final Logger logger = Logger
+	/** logger. */
+	private static final Logger LOGGER = Logger
 			.getCommonLogger(ParticipantRegistrationSelectAction.class);
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
-	 * @param mapping
-	 *            object of ActionMapping
-	 * @param form
-	 *            object of ActionForm
-	 * @param request
-	 *            object of HttpServletRequest
-	 * @param response
-	 *            object of HttpServletResponse
+	 *
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 *
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
@@ -78,7 +76,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 			final String objectName = iDomainObjectFactory.getDomainObjectName(participantForm
 					.getFormId());
 
-			this.logger.info("Participant Id-------------------"
+			LOGGER.info("Participant Id-------------------"
 					+ request.getParameter("participantId"));
 
 			final Object object = bizLogic.retrieve(objectName, new Long(request
@@ -86,7 +84,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 			abstractDomain = (AbstractDomainObject) object;
 			final Participant participant = (Participant) abstractDomain;
 
-			this.logger.info("Last name in ParticipantSelectAction:" + participant.getLastName());
+			LOGGER.info("Last name in ParticipantSelectAction:" + participant.getLastName());
 
 			// To append the cpr to already existing cprs
 			//Gets the collection Protocol Registration map from ActionForm
@@ -151,14 +149,14 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 		}
 		catch (final Exception e)
 		{
-			this.logger.error(e.getMessage());
-			e.printStackTrace() ;
+			LOGGER.error(e.getMessage());
 		}
 
 		return forward;
 	}
 
 	/**
+	 * Update consent response.
 	 *
 	 * @param consentResponseBeanCollection : consentResponseBeanCollection
 	 * @param consentResponseBeanCollectionOld : consentResponseBeanCollectionOld
@@ -185,9 +183,11 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 	}
 
 	/**
+	 * Checks if is already exist.
 	 *
 	 * @param consentResponseBeanCollection : consentResponseBeanCollection
 	 * @param collectionProtocolId : collectionProtocolId
+	 *
 	 * @return boolean : boolean
 	 */
 	private boolean isAlreadyExist(Collection consentResponseBeanCollection,
@@ -208,8 +208,10 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 	}
 
 	/**
+	 * Participant medical identifier map.
 	 *
 	 * @param participantMedicalIdentifier : participantMedicalIdentifier
+	 *
 	 * @return Map : Map
 	 */
 	private Map participantMedicalIdentifierMap(Map participantMedicalIdentifier)
@@ -246,12 +248,15 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 	}
 
 	/**
+	 * Append collection protocol registrations.
 	 *
 	 * @param mapCollectionProtocolRegistration : mapCollectionProtocolRegistration
 	 * @param cprCount : cprCount
 	 * @param mapCollectionProtocolRegistrationOld : mapCollectionProtocolRegistrationOld
 	 * @param cprCountOld : cprCountOld
+	 *
 	 * @return Map : Map
+	 *
 	 * @throws Exception : Exception
 	 */
 	private Map appendCollectionProtocolRegistrations(Map mapCollectionProtocolRegistration,
@@ -318,8 +323,10 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 	}
 
 	/**
+	 * Participant collection protocol registration.
 	 *
 	 * @param collectionProtocolRegistrationValues : collectionProtocolRegistrationValues
+	 *
 	 * @return Map : Map
 	 */
 	private Map participantCollectionProtocolRegistration(Map collectionProtocolRegistrationValues)
