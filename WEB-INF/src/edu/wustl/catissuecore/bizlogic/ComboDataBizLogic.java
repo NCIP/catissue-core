@@ -17,9 +17,6 @@ import edu.wustl.common.cde.PermissibleValueImpl;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.QueryWhereClause;
-import edu.wustl.dao.condition.EqualClause;
-import edu.wustl.dao.condition.LikeClause;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -39,7 +36,7 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 	public List getClinicalDiagnosisList(String query,boolean showSubset) throws BizLogicException
 	{
 		// populating clinical Diagnosis field
-		final List clinicalDiagnosisList = new ArrayList();
+		final List<NameValueBean> clinicalDiagnosisList = new ArrayList();
 		final String sourceObjectName = PermissibleValueImpl.class.getName();
 		final String[] selectColumnName = {"value"};
 		DAO dao = null;
@@ -50,22 +47,14 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 
 			dao = this.openDAOSession(null);
 
-			final QueryWhereClause whereClause = new QueryWhereClause(sourceObjectName);
-			whereClause.addCondition(new LikeClause("value", "%" + query + "%")).andOpr()
-					.addCondition(new EqualClause("cde.publicId", "Clinical_Diagnosis_PID"));
+			String hql = "Select PermissibleValueImpl.value from edu.wustl.common.cde.PermissibleValueImpl PermissibleValueImpl WHERE PermissibleValueImpl.value like lower('%"+query+"%') AND PermissibleValueImpl.cde.publicId = 'Clinical_Diagnosis_PID'";
 
-			final List dataList = dao.retrieve(sourceObjectName, selectColumnName, whereClause);
+			List dataList = dao.executeQuery(hql);
 
 			this.closeDAOSession(dao);
 
-			// Iterator<String> iterator =
-			// bizLogic.retrieve(sourceObjectName,selectColumnName
-			// ,whereColumnName, whereColumnCondition,whereColumnValue,
-			// joinCondition).iterator();
 			final Iterator<String> iterator = dataList.iterator();
 
-			// CDEBizLogic cdeBizLogic = (CDEBizLogic)
-			// BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
 			clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION, ""
 					+ Constants.SELECT_OPTION_VALUE));
 
@@ -84,21 +73,6 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 			{
 				clinicalDiagnosisList.add(new NameValueBean(Constants.SHOW_SUBSET+"end",Constants.SHOW_SUBSET));
 			}
-			//Collections.sort(clinicalDiagnosisList);
-			// cdeBizLogic.getFilteredCDE( new HashSet(list),
-			// clinicalDiagnosisList);
-
-			// CDE cde = CDEManager.getCDEManager().getCDE(Constants.
-			// CDE_NAME_CLINICAL_DIAGNOSIS);
-			// CDEBizLogic cdeBizLogic = (CDEBizLogic)
-			// BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
-			// List clinicalDiagnosisList = new ArrayList();
-			// clinicalDiagnosisList.add(new
-			// NameValueBean(Constants.SELECT_OPTION, "" +
-			// Constants.SELECT_OPTION_VALUE));
-			// cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(),
-			// clinicalDiagnosisList);
-
 		}
 		catch (final DAOException exp)
 		{
