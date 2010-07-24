@@ -78,20 +78,20 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 	{
 		try
 		{
-			Specimen sp = new Specimen();
-			sp = (Specimen) TestCaseUtility.getObjectMap(Specimen.class);
-			sp.setLabel("");
-			System.out.println("testUpdateCollectionStatusOfSpecimen Get Object Sp" + sp.getId());
-			List spCollection = appService.getObjects(sp);
-			sp = (Specimen) spCollection.get(0);
-			System.out.println("Get Object Sp");
-			sp.setExternalIdentifierCollection(null);
-			System.out.println(sp + ": sp");
-			System.out.println("Specimen LABEL ####   " + sp.getLabel());
-			sp = (Specimen) appService.updateObject(sp);
-			System.out.println(sp + ": sp After Update");
-			assertFalse(" specimen object updated with empty label ---->    Name:: " + sp, true);
-			assertEquals(sp.getIsAvailable().booleanValue(),true);
+			TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+			System.out.println("SpecimenTestCases.testAddTissueSpecimen(): " + scg);
+			specimenObj.setSpecimenCollectionGroup(scg);
+			Logger.out.info("Inserting domain object------->" + specimenObj);
+			System.out.println("Before Creating Tissue Specimen");
+			specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
+			System.out.println("testUpdateCollectionStatusOfSpecimen Get Object Sp" + specimenObj.getId());
+			specimenObj.setComment("testSpecimenForUpdate");
+			specimenObj.setLabel("");
+			specimenObj.setComment("testSpecimenForUpdate");
+			specimenObj = (TissueSpecimen) appService.updateObject(specimenObj);
+			System.out.println(specimenObj + ": sp After Update");
+			assertFalse(" specimen object updated with empty label ---->    Name:: " + specimenObj, true);
 		}
 		catch (Exception e)
 		{
