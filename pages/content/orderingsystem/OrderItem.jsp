@@ -479,14 +479,14 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 						
 						%>
 
-							<td class="black_ar" width="26%"><autocomplete:AutoCompleteTag
+							<td class="black_ar" width="26%"><div id="specimenTypeId"><autocomplete:AutoCompleteTag
 								property="type"
 								optionsList="<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
 								initialValue="<%=form.getType()%>"
 								onChange="<%=subTypeFunctionName%>"
 								readOnly="<%=readOnlyForAliquot%>"
 								dependsOn="<%=form.getClassName()%>" styleClass="black_ar"
-								size="20" /></td>
+								size="20" /></div></td>
 						</tr>
 						<tr>
 							<td width="1%" align="center" class="black_ar"><img
