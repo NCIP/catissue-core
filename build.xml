@@ -688,7 +688,7 @@
 		</copy>
 		<!--- caTIES related files  start-->
 		<copy todir="${zip.dir}/caTIES_conf" overwrite="true">
-			<fileset dir="${base.dir}/CaTIES_conf" />
+			<fileset dir="${base.dir}/caTIES_conf" />
 		</copy>
 		<copy file="Dataset.dtd" todir="${zip.dir}" overwrite="true" />
 		<copy file="JniDeID.dll" todir="${zip.dir}" overwrite="true" />
