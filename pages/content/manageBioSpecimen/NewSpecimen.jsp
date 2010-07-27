@@ -1280,18 +1280,7 @@
 									<label for="barcode">
 									</label>
 
-								<%}
-
-								//if(form.getLabel() != null){ %>
-						<!-- 		<label for="label">
-										<%//=form.getLabel() %>
-									</label>  -->
-								<%//}else{%>
-
-							<!-- 	  <label for="label">
-
-									</label> -->
-								<%// }    %>
+								<%} %>
 
 								<html:hidden property="barcode" />
 								</td>
@@ -1356,9 +1345,14 @@
 							<td colspan="3">&nbsp;
 							</td>
 						</tr>
-			<%
+				<%
+					}else 
+					{ %>
+							<html:hidden property="barcode" />					
+					   <% 
 					}
 			 %>
+
 						<tr>
 							<td align="center" class="black_ar">
 								<span class="blue_ar_b">
