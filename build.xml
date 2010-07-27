@@ -1032,6 +1032,7 @@
 				<include name="**/edu/wustl/catissuecore/namegenerator/**"/>
 				<include name="**/edu/wustl/catissuecore/caties/**"/>
 				<include name="**/edu/wustl/catissuecore/hbm/**"/>
+				<include name="**/edu/wustl/catissuecore/ctms/integrator/**"/>
 
 				<exclude name="**/CVS*" />
 				<exclude name="**/java.policy.applet*" />
