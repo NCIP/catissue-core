@@ -17,7 +17,6 @@ import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.processor.CatissueLoginProcessor;
-import edu.wustl.catissuecore.util.global.ClinPortalIntegrationConstants;
 import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.XSSSupportedAction;
