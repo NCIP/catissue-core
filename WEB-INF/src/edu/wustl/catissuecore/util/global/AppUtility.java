@@ -3737,13 +3737,13 @@ public class AppUtility
     public static String getSubParameterValue(final String url,final String target)
     {
         String value="";
-        final String arr[]=url.split(ClinPortalIntegrationConstants.DELIMETER);
+        final String arr[]=url.split(CDMSIntegrationConstants.DELIMETER);
 
         for (final String string : arr)
         {
             if(string.contains(target))
             {
-                final String []values=string.split(ClinPortalIntegrationConstants.EQUALS);
+                final String []values=string.split(CDMSIntegrationConstants.EQUALS);
                 value=values[1];
             }
         }
