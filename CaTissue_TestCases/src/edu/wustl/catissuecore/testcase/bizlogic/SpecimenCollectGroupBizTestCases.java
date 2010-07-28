@@ -275,7 +275,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 			scg = (SpecimenCollectionGroup) appService.createObject(scg);
 			duplicateSCG = (SpecimenCollectionGroup) appService.createObject(duplicateSCG);
 			System.out.println("After Creating SCG");
-			fail("Test Failed. Duplicate SCG name should not throw exception" + e.getMessage());
+			fail("Test Failed. Duplicate SCG name should not throw exception");
 
 		}
 		catch (Exception e)
