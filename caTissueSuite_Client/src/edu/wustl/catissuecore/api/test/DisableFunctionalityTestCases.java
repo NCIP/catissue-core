@@ -120,100 +120,108 @@ public class DisableFunctionalityTestCases extends CaTissueBaseTestCase {
 	}   
 	
 	public void testDisableStorageContainerHavingChildContainer()
-    {
-        try
-        {
-            Site site= BaseTestCaseUtility.initSite();            
-            site = (Site) appService.createObject(site);
-            
-            StorageType storageType = BaseTestCaseUtility.initStorageType();
-            storageType = (StorageType) appService.createObject(storageType);
-            
-            
-            StorageContainer parentContainer = new StorageContainer();
-            parentContainer.setStorageType(storageType);
-            parentContainer.setSite(site);
+	{
+		try
+		{
+			Site site = BaseTestCaseUtility.initSite();
+			site = (Site) appService.createObject(site);
 
-            Integer conts = new Integer(2);
-            parentContainer.setNoOfContainers(conts);
-            parentContainer.setTempratureInCentigrade(new Double(-30));
-            parentContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
+			StorageType storageType = BaseTestCaseUtility.initStorageType();
+			storageType = (StorageType) appService.createObject(storageType);
 
-            Capacity capacity = new Capacity();
-            capacity.setOneDimensionCapacity(new Integer(5));
-            capacity.setTwoDimensionCapacity(new Integer(5));
-            parentContainer.setCapacity(capacity);
-            
-            parentContainer.setNoOfContainers(new Integer(3));
-            
-            Collection holdsStorageTypeCollection = new HashSet();
-            holdsStorageTypeCollection.add(storageType);
-           
-            parentContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
-            
-            CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
-            cp = (CollectionProtocol) appService.createObject(cp);
-            
-            Collection collectionProtocolCollection = new HashSet();
-            collectionProtocolCollection.add(cp);
-           
-            parentContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-            
-            SpecimenArrayType sat = BaseTestCaseUtility.initSpecimenSpecimenArrayType();
-            sat = (SpecimenArrayType) appService.createObject(sat);
-            Collection holdsSpecimenArrayTypeCollection = new HashSet();
-            holdsSpecimenArrayTypeCollection.add(sat);
-           
-            parentContainer.setHoldsSpecimenArrayTypeCollection(holdsSpecimenArrayTypeCollection);
-            
-            parentContainer.setActivityStatus("Active");
-            parentContainer.setFull(Boolean.valueOf(false));
-            
-            parentContainer = (StorageContainer) appService.createObject(parentContainer);
-            System.out.println("Parent:"+parentContainer.getId());
-           
-           // System.out.println("Parent:"+StorageContainerUtil.getChildren(dao, containerId).getChildren().size());
-            TestCaseUtility.setObjectMap(parentContainer,StorageContainer.class);
-        
-            StorageContainer subStorageContainer = new StorageContainer();
-            subStorageContainer.setStorageType(storageType);
-            
-            ContainerPosition cPos = new ContainerPosition();
-            cPos.setParentContainer(parentContainer);
-            cPos.setPositionDimensionOne(new Integer(1));
-            cPos.setPositionDimensionOne(new Integer(2));
-            cPos.setOccupiedContainer(subStorageContainer);
-            subStorageContainer.setLocatedAtPosition(cPos);
-            
-            subStorageContainer.setNoOfContainers(new Integer(1));
-            subStorageContainer.setActivityStatus("Active");
-            Capacity capacity1 = new Capacity();
-            capacity1.setOneDimensionCapacity(new Integer(5));
-            capacity1.setTwoDimensionCapacity(new Integer(5));
-            subStorageContainer.setCapacity(capacity1);
-            subStorageContainer.setFull(Boolean.valueOf(false));
-           
-            subStorageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
-            
-            subStorageContainer = (StorageContainer) appService.createObject(subStorageContainer);
-            
-            System.out.println("Childcontainer:"+subStorageContainer.getId());
-           
- //           System.out.println("ParentC:"+subStorageContainer.getParent().getName());
-           
-    //        System.out.println("Parent:"+parentContainer.getChildren().size());
-            
-            StorageContainer parentConatiertoUpdate = getStorageContainer(parentContainer.getId());
-            
-            parentConatiertoUpdate.setActivityStatus("Disabled");
-            StorageContainer updatedparentContainer = (StorageContainer) appService.updateObject(parentConatiertoUpdate);
-            
-     }catch(Exception e){
-		 Logger.out.error(e.getMessage(),e);
-		 e.printStackTrace();
-		 assertFalse("Failed to disable storage Container", true);
+			StorageContainer parentContainer = new StorageContainer();
+			parentContainer.setStorageType(storageType);
+			parentContainer.setSite(site);
+
+			Integer conts = new Integer(2);
+			parentContainer.setNoOfContainers(conts);
+			parentContainer.setTempratureInCentigrade(new Double(-30));
+			parentContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
+
+			Capacity capacity = new Capacity();
+			capacity.setOneDimensionCapacity(new Integer(5));
+			capacity.setTwoDimensionCapacity(new Integer(5));
+			parentContainer.setCapacity(capacity);
+
+			parentContainer.setNoOfContainers(new Integer(3));
+
+			Collection holdsStorageTypeCollection = new HashSet();
+			holdsStorageTypeCollection.add(storageType);
+
+			parentContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
+
+			CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
+			cp = (CollectionProtocol) appService.createObject(cp);
+
+			Collection collectionProtocolCollection = new HashSet();
+			collectionProtocolCollection.add(cp);
+
+			parentContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+
+			SpecimenArrayType sat = BaseTestCaseUtility.initSpecimenSpecimenArrayType();
+			sat = (SpecimenArrayType) appService.createObject(sat);
+			Collection holdsSpecimenArrayTypeCollection = new HashSet();
+			holdsSpecimenArrayTypeCollection.add(sat);
+
+			parentContainer.setHoldsSpecimenArrayTypeCollection(holdsSpecimenArrayTypeCollection);
+
+			parentContainer.setActivityStatus("Active");
+			parentContainer.setFull(Boolean.valueOf(false));
+
+			parentContainer = (StorageContainer) appService.createObject(parentContainer);
+			System.out.println("Parent:" + parentContainer.getId());
+
+			// System.out.println("Parent:"+StorageContainerUtil.getChildren(dao, containerId).getChildren().size());
+			TestCaseUtility.setObjectMap(parentContainer, StorageContainer.class);
+
+			StorageContainer subStorageContainer = new StorageContainer();
+			subStorageContainer.setStorageType(storageType);
+
+			ContainerPosition cPos = new ContainerPosition();
+			cPos.setParentContainer(parentContainer);
+			cPos.setPositionDimensionOne(new Integer(1));
+			cPos.setPositionDimensionOne(new Integer(2));
+			cPos.setOccupiedContainer(subStorageContainer);
+			subStorageContainer.setLocatedAtPosition(cPos);
+
+			subStorageContainer.setNoOfContainers(new Integer(1));
+			subStorageContainer.setActivityStatus("Active");
+			Capacity capacity1 = new Capacity();
+			capacity1.setOneDimensionCapacity(new Integer(5));
+			capacity1.setTwoDimensionCapacity(new Integer(5));
+			subStorageContainer.setCapacity(capacity1);
+			subStorageContainer.setFull(Boolean.valueOf(false));
+
+			subStorageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
+
+			subStorageContainer = (StorageContainer) appService.createObject(subStorageContainer);
+
+			System.out.println("Childcontainer:" + subStorageContainer.getId());
+
+			//           System.out.println("ParentC:"+subStorageContainer.getParent().getName());
+
+			//        System.out.println("Parent:"+parentContainer.getChildren().size());
+
+			StorageContainer parentConatiertoUpdate = getStorageContainer(parentContainer.getId());
+
+			parentConatiertoUpdate.setActivityStatus("Disabled");
+			StorageContainer updatedparentContainer = (StorageContainer) appService
+					.updateObject(parentConatiertoUpdate);
+			assertTrue("Successfully executed testDisableStorageContainerHavingChildContainer.",
+					true);
+
+		}
+		catch (Exception e)
+		{
+			Logger.out.error(e.getMessage(), e);
+			e.printStackTrace();
+			System.out.println("testDisableStorageContainerHavingChildContainer : "
+					+ e.getMessage());
+			assertFalse(
+					"testDisableStorageContainerHavingChildContainer: Failed to disable storage Container",
+					true);
+		}
 	}
-    }
 	
 	 
 	
