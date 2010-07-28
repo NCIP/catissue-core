@@ -126,7 +126,6 @@ import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 import edu.wustl.security.privilege.PrivilegeUtility;
 import edu.wustl.simplequery.bizlogic.QueryBizLogic;
-import edu.wustl.wustlkey.util.global.WUSTLKeyUtility;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroup;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -230,14 +229,14 @@ public class AppUtility
 		return subTypeMap;
 	}
 
-	public static List<NameValueBean> getSpecimenTypes(String specimenClass)
+	public static List<NameValueBean> getSpecimenTypes(final String specimenClass)
 	{
 		final Map<String, List<NameValueBean>> specimenTypeMap = getSpecimenTypeMap();
-		final List<NameValueBean> typeList = (List<NameValueBean>) specimenTypeMap.get(specimenClass);
+		final List<NameValueBean> typeList = specimenTypeMap.get(specimenClass);
 		return typeList;
 	}
 
-	public static String getSpecimenClassName(AbstractSpecimen specimen)
+	public static String getSpecimenClassName(final AbstractSpecimen specimen)
 	{
 		if (specimen instanceof CellSpecimen)
 		{
@@ -259,7 +258,7 @@ public class AppUtility
 		return null;
 	}
 
-	public static int getEventParametersFormId(SpecimenEventParameters eventParameter)
+	public static int getEventParametersFormId(final SpecimenEventParameters eventParameter)
 	{
 		if (eventParameter instanceof CheckInCheckOutEventParameter)
 		{
@@ -311,7 +310,7 @@ public class AppUtility
 	 *            Type of specimen
 	 * @return true if qunatity is of type double else false.
 	 */
-	public static boolean isQuantityDouble(String className, String type)
+	public static boolean isQuantityDouble(final String className, final String type)
 	{
 		if (Constants.CELL.equals(className))
 		{
@@ -348,7 +347,7 @@ public class AppUtility
 	 *            Type of specimen
 	 * @return the unit of specimen quantity.
 	 */
-	public static String getUnit(String className, String type)
+	public static String getUnit(final String className, final String type)
 	{
 		if (className == null || type == null || className.equals("-1"))
 		{
@@ -397,7 +396,7 @@ public class AppUtility
 	 *            Name of specimen class
 	 * @return the particular specimen object as per the specimen class.
 	 */
-	public static Specimen getSpecimen(Specimen specimen)
+	public static Specimen getSpecimen(final Specimen specimen)
 	{
 		if (specimen instanceof CellSpecimen)
 		{
@@ -447,7 +446,7 @@ public class AppUtility
 	 * list in which nameValueBean is stored with Type and Identifier of storage
 	 * type. and returns this list
 	 */
-	public static List getStorageTypeList(List list, boolean includeAny)
+	public static List getStorageTypeList(final List list, final boolean includeAny)
 	{
 		NameValueBean typeAny = null;
 		final List storageTypeList = new ArrayList();
@@ -516,7 +515,7 @@ public class AppUtility
 	 * create a list in which nameValueBean is stored with Title and Identifier
 	 * of Collection Protocol. and returns this list
 	 */
-	public static List getCollectionProtocolList(List list)
+	public static List getCollectionProtocolList(final List list)
 	{
 		final List collectionProtocolList = new ArrayList();
 
@@ -536,7 +535,7 @@ public class AppUtility
 	 * create a list in which nameValueBean is stored with specimen array and
 	 * Identifier of specimen Array type. and returns this list
 	 */
-	public static List getSpecimenArrayTypeList(List list)
+	public static List getSpecimenArrayTypeList(final List list)
 	{
 		NameValueBean typeAny = null;
 		final List spArrayTypeList = new ArrayList();
@@ -573,7 +572,7 @@ public class AppUtility
 	 * @return Month of the given date.
 	 * @author mandar_deshmukh
 	 */
-	public static int getMonth(String date, String pattern)
+	public static int getMonth(final String date, final String pattern)
 	{
 		int month = 0;
 		month = getCalendar(date, pattern).get(Calendar.MONTH);
@@ -581,7 +580,7 @@ public class AppUtility
 		return month;
 	}
 
-	public static int getMonth(String date)
+	public static int getMonth(final String date)
 	{
 		int month = 0;
 
@@ -598,14 +597,14 @@ public class AppUtility
 	 * @return Day of the given date.
 	 * @author mandar_deshmukh
 	 */
-	public static int getDay(String date, String pattern)
+	public static int getDay(final String date, final String pattern)
 	{
 		int day = 0;
 		day = getCalendar(date, pattern).get(Calendar.DAY_OF_MONTH);
 		return day;
 	}
 
-	public static int getDay(String date)
+	public static int getDay(final String date)
 	{
 		int day = 0;
 		day = getCalendar(date, pattern).get(Calendar.DAY_OF_MONTH);
@@ -620,14 +619,14 @@ public class AppUtility
 	 * @return Year of the given date.
 	 * @author mandar_deshmukh
 	 */
-	public static int getYear(String date, String pattern)
+	public static int getYear(final String date, final String pattern)
 	{
 		int year = 0;
 		year = getCalendar(date, pattern).get(Calendar.YEAR);
 		return year;
 	}
 
-	public static int getYear(String date)
+	public static int getYear(final String date)
 	{
 		int year = 0;
 		year = getCalendar(date, pattern).get(Calendar.YEAR);
@@ -640,9 +639,9 @@ public class AppUtility
 	 * date provided. If invalid date is provided it returns the current
 	 * calendar instance.
 	 */
-	private static Calendar getCalendar(String date, String pattern)
+	private static Calendar getCalendar(final String date, final String pattern)
 	{
-		Calendar calendar = Calendar.getInstance();
+		final Calendar calendar = Calendar.getInstance();
 		try
 		{
 			if(!Constants.DOUBLE_QUOTES.equals(date.trim()))
@@ -659,7 +658,7 @@ public class AppUtility
 		return calendar;
 	}
 
-	public static void main(String[] args)
+	public static void main(final String[] args)
 	{
 		/*String s = "ds fsbsdjf hsfsdfdsh f,sd fsdfjbhsdj sdf,sdf s,sd fds,sd ffs,sd f\"sd fs \"sd fsdF \"sf";
 		Object s1 = toNewGridFormat(s);
@@ -701,7 +700,7 @@ public class AppUtility
 	 * @param cdeName
 	 * @return
 	 */
-	public static List getListForCDE(String cdeName)
+	public static List getListForCDE(final String cdeName)
 	{
 		final CDE cde = CDEManager.getCDEManager().getCDE(cdeName);
 		final List valueList = new ArrayList();
@@ -728,7 +727,7 @@ public class AppUtility
 	 * @param permissibleValue
 	 * @return
 	 */
-	private static List loadPermissibleValue(PermissibleValue permissibleValue)
+	private static List loadPermissibleValue(final PermissibleValue permissibleValue)
 	{
 		final List pvList = new ArrayList();
 		final String value = permissibleValue.getValue();
@@ -783,7 +782,7 @@ public class AppUtility
 	 *            If Operation = Edit then "Withdraw" is added in the List
 	 * @return listOfResponces
 	 */
-	public static List<NameValueBean> responceList(String addeditOperation)
+	public static List<NameValueBean> responceList(final String addeditOperation)
 	{
 		final List<NameValueBean> listOfResponces = new ArrayList<NameValueBean>();
 		listOfResponces.add(new NameValueBean(Constants.NOT_SPECIFIED, Constants.NOT_SPECIFIED));
@@ -796,7 +795,7 @@ public class AppUtility
 		return listOfResponces;
 	}
 
-	public static Long toLong(String string) throws NumberFormatException
+	public static Long toLong(final String string) throws NumberFormatException
 	{
 		if ((string != null) && (string.trim() != ""))
 		{
@@ -825,8 +824,8 @@ public class AppUtility
 	 * @see edu.wustl.catissuecore.util.global.AppUtility#toNewGridFormat(java.lang.Object)
 	 *      Patch ID: SimpleSearchEdit_6
 	 */
-	public static Object toNewGridFormatWithHref(List<String> row,
-			Map<Integer, QueryResultObjectData> hyperlinkColumnMap, int index)
+	public static Object toNewGridFormatWithHref(final List<String> row,
+			final Map<Integer, QueryResultObjectData> hyperlinkColumnMap, final int index)
 	{
 		Object obj = row.get(index);
 
@@ -883,7 +882,7 @@ public class AppUtility
 	 * column width.
 	 *
 	 */
-	public static String getColumnWidth(List columnNames)
+	public static String getColumnWidth(final List columnNames)
 	{
 		String colWidth = getColumnWidth((String) columnNames.get(0));
 
@@ -895,7 +894,7 @@ public class AppUtility
 		return colWidth;
 	}
 
-	private static String getColumnWidth(String columnName)
+	private static String getColumnWidth(final String columnName)
 	{
 		/*
 		 * Patch ID: Bug#3090_31 Description: The first column which is just a
@@ -958,7 +957,7 @@ public class AppUtility
 	 *         compatible or not
 	 * @throws DAOException
 	 */
-	public static boolean validateSpecimenTypeClass(String specimenClass, String specimenType)
+	public static boolean validateSpecimenTypeClass(final String specimenClass, final String specimenType)
 			throws ApplicationException
 	{
 		final List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
@@ -984,7 +983,7 @@ public class AppUtility
 	 * @param listType
 	 * @return
 	 */
-	public static List getListFromCDE(String listType)
+	public static List getListFromCDE(final String listType)
 	{
 		final List CDEList = CDEManager.getCDEManager().getPermissibleValueList(listType, null);
 		return CDEList;
@@ -1006,7 +1005,7 @@ public class AppUtility
 	 * @throws Exception
 	 *             generic exception
 	 */
-	public static String getToolTipText(NewSpecimenForm specimenForm) throws ApplicationException
+	public static String getToolTipText(final NewSpecimenForm specimenForm) throws ApplicationException
 	{
 		final StringBuffer toolTipText = new StringBuffer("");
 
@@ -1050,7 +1049,7 @@ public class AppUtility
 	 * @throws BizLogicException BizLogic Exception
 	 * @throws DAOException generic DAO Exception
 	 */
-	public static String getUserNameById(Long userId) throws BizLogicException, DAOException
+	public static String getUserNameById(final Long userId) throws BizLogicException, DAOException
 	{
 		final String className = User.class.getName();
 		final String colName = edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER;
@@ -1073,8 +1072,8 @@ public class AppUtility
 	 * @param form
 	 * @param specimenCollectionGroupForm
 	 */
-	public static void setEventsFromScg(ActionForm form,
-			SpecimenCollectionGroupForm specimenCollectionGroupForm)
+	public static void setEventsFromScg(final ActionForm form,
+			final SpecimenCollectionGroupForm specimenCollectionGroupForm)
 	{
 		final NewSpecimenForm newSpecimenForm = (NewSpecimenForm) form;
 
@@ -1125,7 +1124,7 @@ public class AppUtility
 	 * @throws BizLogicException BizLogic Exception.
 	 */
 	public static SpecimenCollectionGroup getSpecimenCollectionGroup(
-			String specimenCollectionGroupId) throws ApplicationException
+			final String specimenCollectionGroupId) throws ApplicationException
 	{
 		final String sourceObjectName = SpecimenCollectionGroup.class.getName();
 
@@ -1143,7 +1142,7 @@ public class AppUtility
 		return specimenCollectionGroup;
 	}
 
-	public static String getSCGId(String scgName) throws Exception
+	public static String getSCGId(final String scgName) throws Exception
 	{
 		String scgId = Utility.toString(null);
 		final String sourceObjectName = SpecimenCollectionGroup.class.getName();
@@ -1173,7 +1172,7 @@ public class AppUtility
 	 *            atribute based on which rspective key is to generate
 	 * @return key for map attribute
 	 */
-	public static String getParticipantMedicalIdentifierKeyFor(int identifier, String keyFor)
+	public static String getParticipantMedicalIdentifierKeyFor(final int identifier, final String keyFor)
 	{
 		return (Constants.PARTICIPANT_MEDICAL_IDENTIFIER + identifier + keyFor);
 	}
@@ -1185,7 +1184,7 @@ public class AppUtility
 	 *            The collectio of domain objects.
 	 * @return The array of ids from the given DomainObject collection.
 	 */
-	public static long[] getobjectIds(Collection domainObjectCollection)
+	public static long[] getobjectIds(final Collection domainObjectCollection)
 	{
 		final long ids[] = new long[domainObjectCollection.size()];
 		int counter = 0;
@@ -1207,9 +1206,9 @@ public class AppUtility
 	 * @return
 	 * @throws DAOException
 	 */
-	public static List getPaginationDataList(HttpServletRequest request,
-			SessionDataBean sessionData, int recordsPerPage, int pageNum,
-			QuerySessionData querySessionData) throws ApplicationException
+	public static List getPaginationDataList(final HttpServletRequest request,
+			final SessionDataBean sessionData, final int recordsPerPage, final int pageNum,
+			final QuerySessionData querySessionData) throws ApplicationException
 	{
 		List paginationDataList;
 		querySessionData.setRecordsPerPage(recordsPerPage);
@@ -1262,7 +1261,7 @@ public class AppUtility
 	 * @throws ClassNotFoundException
 	 *             ClassNotFoundException
 	 */
-	public static List<Object[]> executeQuery(String hql) throws ApplicationException
+	public static List<Object[]> executeQuery(final String hql) throws ApplicationException
 	{
 		final IDAOFactory daofactory = DAOConfigFactory.getInstance().getDAOFactory(
 				Constants.APPLICATION_NAME);
@@ -1283,7 +1282,7 @@ public class AppUtility
 	 * @throws ClassNotFoundException
 	 *             ClassNotFoundException
 	 */
-	public static List executeSQLQuery(String sql) throws ApplicationException
+	public static List executeSQLQuery(final String sql) throws ApplicationException
 	{
 		final JDBCDAO jdbcDAO = openJDBCSession();
 		final List list = jdbcDAO.executeQuery(sql);
@@ -1298,7 +1297,7 @@ public class AppUtility
 	 * @return results list
 	 * @throws ApplicationException instance of ApplicationException
 	 */
-	public static List executeSQLQuery(String sql, List<ColumnValueBean> valueBeanList) throws ApplicationException
+	public static List executeSQLQuery(final String sql, final List<ColumnValueBean> valueBeanList) throws ApplicationException
 	{
 		final JDBCDAO jdbcDAO = openJDBCSession();
 		final List list = jdbcDAO.executeQuery(sql,null , valueBeanList);
@@ -1306,7 +1305,7 @@ public class AppUtility
 		return list;
 	}
 
-	public static Long getLastAvailableValue(String sql) throws ApplicationException
+	public static Long getLastAvailableValue(final String sql) throws ApplicationException
 	{
 		Long noOfRecords = Long.valueOf("0");
 		List list = null;
@@ -1343,9 +1342,9 @@ public class AppUtility
 	}
 
 	// for conflictResolver pagination:kalpana
-	public static PagenatedResultData executeForPagination(String sql,
-			SessionDataBean sessionDataBean, boolean isSecureExecute, Map queryResultObjectDataMap,
-			boolean hasConditionOnIdentifiedField, int startIndex, int totoalRecords)
+	public static PagenatedResultData executeForPagination(final String sql,
+			final SessionDataBean sessionDataBean, final boolean isSecureExecute, final Map queryResultObjectDataMap,
+			final boolean hasConditionOnIdentifiedField, final int startIndex, final int totoalRecords)
 			throws DAOException, SQLException
 	{
 		try
@@ -1380,7 +1379,7 @@ public class AppUtility
 	 *            title of the saved query (may be greater than 125 characters)
 	 * @return - query title upto 125 characters
 	 */
-	public static String getQueryTitle(String title)
+	public static String getQueryTitle(final String title)
 	{
 		String multilineTitle = "";
 		if (title.length() <= Constants.CHARACTERS_IN_ONE_LINE)
@@ -1401,7 +1400,7 @@ public class AppUtility
 	 *            title of the saved query
 	 * @return tooltip string
 	 */
-	public static String getTooltip(String title)
+	public static String getTooltip(final String title)
 	{
 		final String tooltip = title.replaceAll("'", Constants.SINGLE_QUOTE_ESCAPE_SEQUENCE); // escape sequence
 		// for '
@@ -1417,7 +1416,7 @@ public class AppUtility
 	 * @throws DAOException
 	 * @throws ClassNotFoundException
 	 */
-	public static boolean isQuarantined(Long reportId) throws ApplicationException
+	public static boolean isQuarantined(final Long reportId) throws ApplicationException
 	{
 		final String hqlString = "select ispr.deIdentifiedSurgicalPathologyReport.id "
 				+ " from edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport as ispr, "
@@ -1447,8 +1446,8 @@ public class AppUtility
 	 *            second attribute value
 	 * @return List containing value1 and valu2 in sorted order
 	 */
-	public static ArrayList<String> getAttributeValuesInProperOrder(String dataType, String value1,
-			String value2)
+	public static ArrayList<String> getAttributeValuesInProperOrder(final String dataType, final String value1,
+			final String value2)
 	{
 		String val1 = value1;
 		String val2 = value2;
@@ -1516,7 +1515,7 @@ public class AppUtility
 	 *            Number of days to be added
 	 * @return
 	 */
-	public static Date getNewDateByAdditionOfDays(Date date, int daysToBeAdded)
+	public static Date getNewDateByAdditionOfDays(final Date date, final int daysToBeAdded)
 	{
 		final Calendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
@@ -1531,7 +1530,7 @@ public class AppUtility
 	 * @return
 	 * @throws DAOException
 	 */
-	public static Long getUserID(DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	public static Long getUserID(final DAO dao, final SessionDataBean sessionDataBean) throws DAOException
 	{
 		Long userID = sessionDataBean.getUserId();
 		if (userID == null)
@@ -1564,7 +1563,7 @@ public class AppUtility
 	 * @param orderItemIds
 	 * @return
 	 */
-	public static String getCommaSeparatedIds(Collection orderItemIds)
+	public static String getCommaSeparatedIds(final Collection orderItemIds)
 	{
 		int counter = 1;
 		final Iterator orderItemIdsIterator = orderItemIds.iterator();
@@ -1587,7 +1586,7 @@ public class AppUtility
 	 * @param scg_id Selected SpecimenCollectionGroup ID
 	 * @return collectionProtocolRegistration
 	 */
-	public static CollectionProtocolRegistration getcprObj(String cpr_id)
+	public static CollectionProtocolRegistration getcprObj(final String cpr_id)
 			throws ApplicationException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -1605,7 +1604,7 @@ public class AppUtility
 	 * @param scg_id Selected SpecimenCollectionGroup ID
 	 * @return specimenCollectionGroupObject
 	 */
-	public static SpecimenCollectionGroup getSCGObj(String scg_id, DAO dao)
+	public static SpecimenCollectionGroup getSCGObj(final String scg_id, final DAO dao)
 			throws ApplicationException
 	{
 		final Object object = dao.retrieveById(SpecimenCollectionGroup.class.getName(), Long
@@ -1624,7 +1623,7 @@ public class AppUtility
 	 * @param specimenCollectionGroupForm
 	 * @throws DAOException
 	 */
-	public static long setUserInForm(HttpServletRequest request, String operation)
+	public static long setUserInForm(final HttpServletRequest request, final String operation)
 			throws ApplicationException
 	{
 		long collectionEventUserId = 0;
@@ -1649,7 +1648,7 @@ public class AppUtility
 	 * @return
 	 * @throws DAOException
 	 */
-	public static int getNextUniqueNo(String sourceObjectName, String[] selectColumnName)
+	public static int getNextUniqueNo(final String sourceObjectName, final String[] selectColumnName)
 			throws ApplicationException
 	{
 		final JDBCDAO jdbcDAO = openJDBCSession();
@@ -1675,7 +1674,7 @@ public class AppUtility
 	/**
 	 * @return
 	 */
-	public static String getlLabel(String lastName, String firstName)
+	public static String getlLabel(final String lastName, final String firstName)
 	{
 		if (lastName != null && !lastName.equals("") && firstName != null && !firstName.equals(""))
 		{
@@ -1697,7 +1696,7 @@ public class AppUtility
 	 * @param responseString
 	 * @return
 	 */
-	public static String getResponseString(HttpServletRequest request, String responseString)
+	public static String getResponseString(final HttpServletRequest request, String responseString)
 	{
 		final ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 		logger.info("Errors:" + errors);
@@ -1722,7 +1721,7 @@ public class AppUtility
 	 * @param classType
 	 * @return
 	 */
-	public static Specimen getSpecimenObject(String classType)
+	public static Specimen getSpecimenObject(final String classType)
 	{
 		Specimen specimen;
 		if (Constants.CELL.equals(classType))
@@ -1748,7 +1747,7 @@ public class AppUtility
 	 *
 	 */
 
-	public static Specimen getSpecimen(String specimenId)
+	public static Specimen getSpecimen(final String specimenId)
 	{
 		DAO dao = null;
 		Specimen specimen = null;
@@ -1777,7 +1776,7 @@ public class AppUtility
 	 * @param myData - myData
 	 * @return String
 	 */
-	private static String getDataFromRow(List row, String myData)
+	private static String getDataFromRow(final List row, String myData)
 	{
 		int counter;
 		if(myData != null && !"".equals(myData) && (myData.length() > 1))
@@ -1818,7 +1817,7 @@ public class AppUtility
 	 */
 	//Added null check as label was coming null when label generation is off.
 	//bug 13487
-	public static String getmyData(List dataList)
+	public static String getmyData(final List dataList)
 	{
 		String myData = "[";
 		int counter = 0;
@@ -1837,7 +1836,7 @@ public class AppUtility
 		return myData;
 	}
 
-	public static String getcolumns(List columnList)
+	public static String getcolumns(final List columnList)
 	{
 		String columns = "\"";
 		int col;
@@ -1854,7 +1853,7 @@ public class AppUtility
 		return columns;
 	}
 
-	public static String getcolWidth(List columnList, boolean isWidthInPercent)
+	public static String getcolWidth(final List columnList, final boolean isWidthInPercent)
 	{
 
 		String colWidth = "\"";
@@ -1881,7 +1880,7 @@ public class AppUtility
 		return colWidth;
 	}
 
-	public static String getcolTypes(List dataList)
+	public static String getcolTypes(final List dataList)
 	{
 		final StringBuffer colTypes = new StringBuffer();
 		colTypes.append("\"");
@@ -1890,7 +1889,7 @@ public class AppUtility
 		return colTypes.toString();
 	}
 
-	public static void setGridData(List dataList, List columnList, HttpServletRequest request)
+	public static void setGridData(final List dataList, final List columnList, final HttpServletRequest request)
 	{
 		request.setAttribute("myData", getmyData(dataList));
 		request.setAttribute("columns", getcolumns(columnList));
@@ -1940,7 +1939,7 @@ public class AppUtility
 	 * @return User object
 	 * @throws DAOException
 	 */
-	public static User getUser(String loginName) throws ApplicationException
+	public static User getUser(final String loginName) throws ApplicationException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final UserBizLogic userBizLogic = (UserBizLogic) factory.getBizLogic(User.class.getName());
@@ -1974,8 +1973,8 @@ public class AppUtility
 		return storagePositionTypeList;
 	}
 
-	public static boolean checkForAllCurrentAndFutureCPs(String privilegeName,
-			SessionDataBean sessionDataBean, String cpId)
+	public static boolean checkForAllCurrentAndFutureCPs(final String privilegeName,
+			final SessionDataBean sessionDataBean, final String cpId)
 	{
 		boolean allowOperation = false;
 		DAO dao = null;
@@ -2098,7 +2097,7 @@ public class AppUtility
 	 * To distribute bean data in case C & F checkbox is checked
 	 * into 2 beans - 1 for CP privileges, other for Site privileges
 	 */
-	public static Map splitBeanData(SiteUserRolePrivilegeBean siteUserRolePrivBean)
+	public static Map splitBeanData(final SiteUserRolePrivilegeBean siteUserRolePrivBean)
 	{
 		final Map<String, SiteUserRolePrivilegeBean> rowIdMap = new HashMap<String, SiteUserRolePrivilegeBean>();
 
@@ -2172,7 +2171,7 @@ public class AppUtility
 		return cpPrivileges;
 	}
 
-	public static void processDeletedPrivileges(SiteUserRolePrivilegeBean siteUserRolePrivilegeBean)
+	public static void processDeletedPrivileges(final SiteUserRolePrivilegeBean siteUserRolePrivilegeBean)
 			throws ApplicationException
 	{
 		final SiteUserRolePrivilegeBean bean = siteUserRolePrivilegeBean;
@@ -2239,7 +2238,7 @@ public class AppUtility
 		}
 	}
 
-	private static void removePrivilageCache(String groupName, String pgName, User user)
+	private static void removePrivilageCache(final String groupName, final String pgName, final User user)
 			throws SMException, CSTransactionException
 	{
 		Group group = new Group();
@@ -2276,7 +2275,7 @@ public class AppUtility
 	 * @param e SMException instance
 	 * @return BizLogicException instance
 	 */
-	public static BizLogicException handleSMException(SMException smExp)
+	public static BizLogicException handleSMException(final SMException smExp)
 	{
 		logger.debug(smExp.getLogMessage());
 		final ErrorKey errorKey = ErrorKey.getErrorKey(smExp.getErrorKeyAsString());
@@ -2284,7 +2283,7 @@ public class AppUtility
 	}
 
 	public static void processDeletedPrivilegesOnCPPage(
-			SiteUserRolePrivilegeBean siteUserRolePrivilegeBean, Long cpId)
+			final SiteUserRolePrivilegeBean siteUserRolePrivilegeBean, final Long cpId)
 
 	{
 		try
@@ -2325,7 +2324,7 @@ public class AppUtility
 	 * @return
 	 */
 	public static CollectionProtocolDTO getCoolectionProtocolDTO(
-			CollectionProtocol collectionProtocol, HttpSession session)
+			final CollectionProtocol collectionProtocol, final HttpSession session)
 	{
 		final CollectionProtocolDTO collectionProtocolDTO = new CollectionProtocolDTO();
 		final Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session
@@ -2363,8 +2362,8 @@ public class AppUtility
 			return ex;
 		}*/
 
-	public static BizLogicException getUserNotAuthorizedException(String privilegeName,
-			String protectionElementName)
+	public static BizLogicException getUserNotAuthorizedException(final String privilegeName,
+			final String protectionElementName)
 	{
 		final BizLogicException bizExp = getUserNotAuthorizedException(privilegeName,
 				protectionElementName, null);
@@ -2378,8 +2377,8 @@ public class AppUtility
 	 * @return UserNotAuthorizedException - exception if user is not authorized
 	 */
 
-	public static BizLogicException getUserNotAuthorizedException(String privilegeName,
-			String protectionElementName, String domainObjName)
+	public static BizLogicException getUserNotAuthorizedException(final String privilegeName,
+			final String protectionElementName, String domainObjName)
 	{
 		String baseObjectUpdated = domainObjName;
 		String baseObjectId = "";
@@ -2423,7 +2422,7 @@ public class AppUtility
 	* @param name
 	* @return
 	*/
-	private static String getActualClassName(String name)
+	private static String getActualClassName(final String name)
 	{
 		if (name != null && name.trim().length() != 0)
 		{
@@ -2438,8 +2437,8 @@ public class AppUtility
 	}
 
 	//bug 11611 and 11659 end
-	public static boolean hasPrivilegeToView(String objName, Long identifier,
-			SessionDataBean sessionDataBean, String privilegeName)
+	public static boolean hasPrivilegeToView(final String objName, final Long identifier,
+			final SessionDataBean sessionDataBean, final String privilegeName)
 	{
 		if (sessionDataBean != null && sessionDataBean.isAdmin())
 		{
@@ -2513,8 +2512,8 @@ public class AppUtility
 		return true;
 	}
 
-	private static boolean hasPrivilegeToViewMatchingParticipant(List cpIdsList,
-			SessionDataBean sessionDataBean, String privilegeName) throws ApplicationException
+	private static boolean hasPrivilegeToViewMatchingParticipant(final List cpIdsList,
+			final SessionDataBean sessionDataBean, final String privilegeName) throws ApplicationException
 	{
 		final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
 				sessionDataBean.getUserName());
@@ -2534,8 +2533,8 @@ public class AppUtility
 		return false;
 	}
 
-	private static boolean returnHasPrivilege(SessionDataBean sessionDataBean,
-			String privilegeName, PrivilegeCache privilegeCache, StringBuffer strBuffer, Object cpId)
+	private static boolean returnHasPrivilege(final SessionDataBean sessionDataBean,
+			final String privilegeName, final PrivilegeCache privilegeCache, final StringBuffer strBuffer, final Object cpId)
 	{
 		DAO dao = null;
 		boolean isPresent = false;
@@ -2625,8 +2624,8 @@ public class AppUtility
 	 * @throws DAOException Databse related exception
 	 */
 
-	public static HttpServletRequest setCollectionProtocolList(HttpServletRequest request,
-			Long siteId, DAO dao) throws ApplicationException
+	public static HttpServletRequest setCollectionProtocolList(final HttpServletRequest request,
+			final Long siteId, final DAO dao) throws ApplicationException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final SiteBizLogic siteBizLogic = (SiteBizLogic) factory
@@ -2663,7 +2662,7 @@ public class AppUtility
 	 * On User and CP page
 	 * @param roleName Role name
 	 */
-	public static void processRole(String roleName)
+	public static void processRole(final String roleName)
 	{
 		if (roleName.startsWith("0"))
 		{
@@ -2695,8 +2694,8 @@ public class AppUtility
 	 * @return
 	 * @throws UserNotAuthorizedException
 	 */
-	public static boolean returnIsAuthorized(SessionDataBean sessionDataBean, String privilegeName,
-			String protectionElementName) throws BizLogicException
+	public static boolean returnIsAuthorized(final SessionDataBean sessionDataBean, final String privilegeName,
+			final String protectionElementName) throws BizLogicException
 	{
 		boolean isAuthorized = false;
 		PrivilegeCache privilegeCache;
@@ -2743,8 +2742,8 @@ public class AppUtility
 		return isAuthorized;
 	}
 
-	public static boolean checkPrivilegeOnCP(Object domainObject, String protectionElementName,
-			String privilegeName, SessionDataBean sessionDataBean) throws ApplicationException
+	public static boolean checkPrivilegeOnCP(final Object domainObject, final String protectionElementName,
+			final String privilegeName, final SessionDataBean sessionDataBean) throws ApplicationException
 	{
 		boolean isAuthorized = false;
 
@@ -2784,8 +2783,8 @@ public class AppUtility
 		return isAuthorized;
 	}
 
-	public static boolean checkOnCurrentAndFuture(SessionDataBean sessionDataBean,
-			String protectionElementName, String privilegeName) throws BizLogicException
+	public static boolean checkOnCurrentAndFuture(final SessionDataBean sessionDataBean,
+			final String protectionElementName, final String privilegeName) throws BizLogicException
 	{
 		boolean isAuthorized = false;
 		final String protectionElementNames[] = protectionElementName.split("_");
@@ -2805,7 +2804,7 @@ public class AppUtility
 		return isAuthorized;
 	}
 
-	public static void setDefaultPrinterTypeLocation(IPrinterTypeLocation form)
+	public static void setDefaultPrinterTypeLocation(final IPrinterTypeLocation form)
 	{
 		if (form.getPrinterLocation() == null)
 		{
@@ -2828,8 +2827,8 @@ public class AppUtility
 	 * @return the identifier of the Object
 	 * @throws DAOException fails to do database operation
 	 */
-	public static Object getObjectIdentifier(String whereColumnValue, String selectObjName,
-			String whereColumnName, String appName) throws ApplicationException
+	public static Object getObjectIdentifier(final String whereColumnValue, final String selectObjName,
+			final String whereColumnName, final String appName) throws ApplicationException
 	{
 		Object identifier = null;
 		final DefaultBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
@@ -2877,7 +2876,7 @@ public class AppUtility
 	 * @throws DynamicExtensionsSystemException fails to get forms,entity
 	 * @throws DAOException fail to do database operation
 	 */
-	public static Map<Long, Long> getAllContainers(Set<Long> entityGroupIds)
+	public static Map<Long, Long> getAllContainers(final Set<Long> entityGroupIds)
 			throws DynamicExtensionsSystemException, ApplicationException
 	{
 		// Map for storing containers corresponding to entitiesIds
@@ -2925,7 +2924,7 @@ public class AppUtility
 	/**
 	 * To check the validity of the date format specified by user in the config file.
 	 */
-	public static boolean isValidDateFormat(String dateFormat)
+	public static boolean isValidDateFormat(final String dateFormat)
 	{
 		boolean result = false;
 		boolean result1 = false;
@@ -2970,7 +2969,7 @@ public class AppUtility
 	 * @param objectName object Name.
 	 * @return Label.
 	 */
-	public static String getDisplayLabelForUnderscore(String objectName)
+	public static String getDisplayLabelForUnderscore(final String objectName)
 	{
 		final StringBuffer formatedStr = new StringBuffer();
 		final String[] tokens = objectName.split("_");
@@ -2989,7 +2988,7 @@ public class AppUtility
 	 * @param str String to be converted to Proper case.
 	 * @return The String in Proper case.
 	 */
-	public static String initCap(String str)
+	public static String initCap(final String str)
 	{
 		StringBuffer retStr;
 		if (Validator.isEmpty(str))
@@ -3006,8 +3005,8 @@ public class AppUtility
 		return retStr.toString();
 	}
 
-	public static ApplicationException getApplicationException(Exception exception,
-			String errorName, String msgValues)
+	public static ApplicationException getApplicationException(final Exception exception,
+			final String errorName, final String msgValues)
 	{
 		return new ApplicationException(ErrorKey.getErrorKey(errorName), exception, msgValues);
 
@@ -3032,7 +3031,7 @@ public class AppUtility
 		return jdbcDAO;
 	}
 
-	public static void closeJDBCSession(JDBCDAO jdbcDAO) throws ApplicationException
+	public static void closeJDBCSession(final JDBCDAO jdbcDAO) throws ApplicationException
 	{
 		try
 		{
@@ -3050,7 +3049,7 @@ public class AppUtility
 
 	}
 
-	public static DAO openDAOSession(SessionDataBean sessionDataBean) throws ApplicationException
+	public static DAO openDAOSession(final SessionDataBean sessionDataBean) throws ApplicationException
 	{
 		DAO dao = null;
 		try
@@ -3068,7 +3067,7 @@ public class AppUtility
 		return dao;
 	}
 
-	public static void closeDAOSession(DAO dao) throws ApplicationException
+	public static void closeDAOSession(final DAO dao) throws ApplicationException
 	{
 		try
 		{
@@ -3091,7 +3090,7 @@ public class AppUtility
 	 * @return boolean isNumber -true if given String is in proper number
 	 *         format or else returns false
 	 */
-	public static boolean isNumeric(String sText)
+	public static boolean isNumeric(final String sText)
 	{
 		final String validChars = "0123456789.E";
 		boolean isNumber = true;
@@ -3115,7 +3114,7 @@ public class AppUtility
 	 * @param specimenClassList : specimenClassList
 	 * @return Map : Map
 	 */
-	public static Map getSubTypeMap(Set setPV, List specimenClassList)
+	public static Map getSubTypeMap(final Set setPV, final List specimenClassList)
 	{
 		final Iterator itr = setPV.iterator();
 
@@ -3152,8 +3151,8 @@ public class AppUtility
 	 * @param datalist : datalist
 	 * @param finalDataListVector : finalDataListVector
 	 */
-	public static Vector<StorageContainerTreeNode> createTreeNodeVector(List datalist,
-			Vector<StorageContainerTreeNode> finalDataListVector)
+	public static Vector<StorageContainerTreeNode> createTreeNodeVector(final List datalist,
+			final Vector<StorageContainerTreeNode> finalDataListVector)
 	{
 		if (datalist != null && datalist.size() != 0)
 		{
@@ -3189,8 +3188,8 @@ public class AppUtility
 	 * @Description This method will retrieve all the Tissue Sites under the
 	 *              selected node
 	 */
-	public static List<StorageContainerTreeNode> getTissueSiteNodes(Long identifier,
-			String nodeName, String parentId) throws ApplicationException
+	public static List<StorageContainerTreeNode> getTissueSiteNodes(final Long identifier,
+			final String nodeName, final String parentId) throws ApplicationException
 	{
 		JDBCDAO dao = null;
 		List<StorageContainerTreeNode> tissueSiteNodeVector = new LinkedList<StorageContainerTreeNode>();
@@ -3255,9 +3254,9 @@ public class AppUtility
 	 */
 
 	public static List<StorageContainerTreeNode> getTreeNodeDataVector(
-			List<StorageContainerTreeNode> treeNodeDataVector, Long childNodeId,
-			String childNodeName, String activityStatus, Long childCount, Long parentNodeId,
-			String parentNodeName)
+			final List<StorageContainerTreeNode> treeNodeDataVector, final Long childNodeId,
+			final String childNodeName, final String activityStatus, final Long childCount, final Long parentNodeId,
+			final String parentNodeName)
 	{
 		final String dummyNodeName = Constants.DUMMY_NODE_NAME;
 		StorageContainerTreeNode containerNode = new StorageContainerTreeNode(childNodeId,
@@ -3297,7 +3296,7 @@ public class AppUtility
 	 *         clicked (i.e parent Node or child node)
 	 */
 
-	public static String createSql(Long identifier, String parentId)
+	public static String createSql(final Long identifier, final String parentId)
 	{
 		String sql = "";
 
@@ -3326,7 +3325,7 @@ public class AppUtility
 	 * @return child count of the container identifier
 	 */
 
-	public static long getChildCount(Long identifier, JDBCDAO dao) throws ApplicationException
+	public static long getChildCount(final Long identifier, final JDBCDAO dao) throws ApplicationException
 	{
 		long count = 0;
 		final String sql = " SELECT COUNT(CA1.PARENT_IDENTIFIER)"
@@ -3336,8 +3335,8 @@ public class AppUtility
 				+ " AND CA1.PARENT_IDENTIFIER =? "
 				+ " GROUP BY CA1.PARENT_IDENTIFIER";
 
-		ColumnValueBean columnValueBean = new ColumnValueBean(identifier);
-		List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+		final ColumnValueBean columnValueBean = new ColumnValueBean(identifier);
+		final List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
 		columnValueBeanList.add(columnValueBean);
 		try
 		{
@@ -3369,7 +3368,7 @@ public class AppUtility
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public static SessionDataBean getSessionDataBean(String userName) throws BizLogicException
+	public static SessionDataBean getSessionDataBean(final String userName) throws BizLogicException
 	{
 		SessionDataBean sessionDataBean = null;
 
@@ -3388,8 +3387,10 @@ public class AppUtility
 			{
 				user = getUser(userName);
 			    if (user == null)
+                {
                     throw new BizLogicException(ErrorKey.getErrorKey("user.not.exists"),
                             null,"User does not exist");
+                }
 			}
 			catch (final ApplicationException e)
 			{
@@ -3451,17 +3452,17 @@ public class AppUtility
 	 */
 	public static List getAllSpecimenType()
 	{
-		List<String> classList = new LinkedList<String>();
-	    List<NameValueBean> specimenTypeList = new LinkedList<NameValueBean>();
+		final List<String> classList = new LinkedList<String>();
+	    final List<NameValueBean> specimenTypeList = new LinkedList<NameValueBean>();
 	    classList.add(Constants.TISSUE);
 	    classList.add(Constants.FLUID);
 	    classList.add(Constants.CELL);
 	    classList.add(Constants.MOLECULAR);
 
-	    Iterator<String> classItr = classList.iterator();
+	    final Iterator<String> classItr = classList.iterator();
 	    while(classItr.hasNext())
 	    {
-	    	List<NameValueBean> subList = new LinkedList<NameValueBean>();
+	    	final List<NameValueBean> subList = new LinkedList<NameValueBean>();
 	    	subList.addAll(AppUtility.getSpecimenTypes(classItr.next()));
 	    	subList.remove(0);
 	    	specimenTypeList.addAll(subList);
@@ -3496,12 +3497,12 @@ public class AppUtility
 	 * @return List of collectionProtocol title.
 	 * @throws ApplicationException
 	 */
-	public static List getSpecimenClassList(String identifier) throws ApplicationException
+	public static List getSpecimenClassList(final String identifier) throws ApplicationException
 	{
 		final String sql = " SELECT SP.SPECIMEN_CLASS CLASS FROM CATISSUE_STOR_CONT_SPEC_CLASS SP "
 				+ "WHERE SP.STORAGE_CONTAINER_ID = ?";
-		ColumnValueBean valueBean = new ColumnValueBean(identifier);
-		List<ColumnValueBean> valueBeansList = new ArrayList<ColumnValueBean>();
+		final ColumnValueBean valueBean = new ColumnValueBean(identifier);
+		final List<ColumnValueBean> valueBeansList = new ArrayList<ColumnValueBean>();
 		valueBeansList.add(valueBean);
 		return getResult(sql,valueBeansList);
 	}
@@ -3512,14 +3513,14 @@ public class AppUtility
 	 * @return List of collectionProtocol title.
 	 * @throws ApplicationException
 	 */
-	public static List getClassAndTypeList(String id) throws ApplicationException
+	public static List getClassAndTypeList(final String id) throws ApplicationException
 	{
 		final String sql = "SELECT PV1.value Class, SP.SPECIMEN_TYPE FROM catissue_permissible_value PV,catissue_permissible_value PV1," +
 				"CATISSUE_STOR_CONT_SPEC_TYPE SP WHERE PV.parent_identifier = PV1.identifier and " +
 				"PV1.value in (select specimen_class from catissue_stor_cont_spec_class where storage_container_id=? ) and " +
 				"pv.value = sp.specimen_type and SP.STORAGE_CONTAINER_ID =? order by Class";
-		ColumnValueBean valueBean = new ColumnValueBean(id);
-		List<ColumnValueBean> valueBeansList = new ArrayList<ColumnValueBean>();
+		final ColumnValueBean valueBean = new ColumnValueBean(id);
+		final List<ColumnValueBean> valueBeansList = new ArrayList<ColumnValueBean>();
 		valueBeansList.add(valueBean);
 		valueBeansList.add(valueBean);
 		return getResult(sql,valueBeansList);
@@ -3531,12 +3532,12 @@ public class AppUtility
 	 * @return List of collectionProtocol title.
 	 * @throws ApplicationException
 	 */
-	public static List getSpecimenTypeList(String id) throws ApplicationException
+	public static List getSpecimenTypeList(final String id) throws ApplicationException
 	{
 		final String sql = " SELECT SP.SPECIMEN_TYPE FROM CATISSUE_STOR_CONT_SPEC_TYPE SP "
 				+ "WHERE SP.STORAGE_CONTAINER_ID = ?";
-		ColumnValueBean bean = new ColumnValueBean(id);
-		List<ColumnValueBean> valueBeanList = new ArrayList<ColumnValueBean>();
+		final ColumnValueBean bean = new ColumnValueBean(id);
+		final List<ColumnValueBean> valueBeanList = new ArrayList<ColumnValueBean>();
 		valueBeanList.add(bean);
 		return getResult(sql,valueBeanList);
 	}
@@ -3547,7 +3548,7 @@ public class AppUtility
 	 * @return List
 	 * @throws ApplicationException ApplicationException
 	 */
-	private static List getResult(final String sql, List<ColumnValueBean> valueBeanList) throws ApplicationException
+	private static List getResult(final String sql, final List<ColumnValueBean> valueBeanList) throws ApplicationException
 	{
 		final List resultList = executeSQLQuery(sql,valueBeanList);
 		return getListOfString(resultList);
@@ -3584,7 +3585,7 @@ public class AppUtility
 	 * @return List of collectionProtocol title.
 	 * @throws ApplicationException
 	 */
-	public static List getCollectionProtocolList(String id) throws ApplicationException
+	public static List getCollectionProtocolList(final String id) throws ApplicationException
 	{
 		// Query to return titles of collection protocol related to given
 		final String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_SPECIMEN_PROTOCOL SP, CATISSUE_ST_CONT_COLL_PROT_REL SC "
@@ -3612,7 +3613,7 @@ public class AppUtility
 	 * @param siteId - siteId
 	 * @return boolean value
 	 */
-	public static boolean hasPrivilegeonSite(Set<Long> siteidSet, Long siteId)
+	public static boolean hasPrivilegeonSite(final Set<Long> siteidSet, final Long siteId)
 	{
 		boolean hasPrivilege = true;
 		if (siteidSet != null)
@@ -3632,9 +3633,9 @@ public class AppUtility
 	 * @return List<Object>
 	 */
 	public static List<Object> setparameterList(
-	long cpId, String spClass, int aliquotCount, String spType)
+	final long cpId, final String spClass, final int aliquotCount, final String spType)
 	{
-		List<Object> parameterList = new LinkedList<Object>();
+		final List<Object> parameterList = new LinkedList<Object>();
 		parameterList.add(cpId);
 		parameterList.add(spClass);
 		parameterList.add(aliquotCount);
@@ -3648,7 +3649,7 @@ public class AppUtility
 	 */
 	public static List<String> getAllSpType() throws ApplicationException
 	{
-		String sql = "select value from catissue_permissible_value where parent_identifier in (1,2,3,4)";
+		final String sql = "select value from catissue_permissible_value where parent_identifier in (1,2,3,4)";
 		final List resultList = executeSQLQuery(sql);
 		return getListOfString(resultList);
 	}
@@ -3659,7 +3660,7 @@ public class AppUtility
 	 */
 	public static List<String> getAllTissueSpType() throws ApplicationException
 	{
-		String sql = "select value from catissue_permissible_value where parent_identifier =4";
+		final String sql = "select value from catissue_permissible_value where parent_identifier =4";
 		final List resultList = executeSQLQuery(sql);
 		return getListOfString(resultList);
 	}
@@ -3670,7 +3671,7 @@ public class AppUtility
 	 */
 	public static List<String> getAllFluidSpType() throws ApplicationException
 	{
-		String sql = "select value from catissue_permissible_value where parent_identifier =3";
+		final String sql = "select value from catissue_permissible_value where parent_identifier =3";
 		final List resultList = executeSQLQuery(sql);
 		return getListOfString(resultList);
 	}
@@ -3681,7 +3682,7 @@ public class AppUtility
 	 */
 	public static List<String> getAllMolecularType() throws ApplicationException
 	{
-		String sql = "select value from catissue_permissible_value where parent_identifier =1";
+		final String sql = "select value from catissue_permissible_value where parent_identifier =1";
 		final List resultList = executeSQLQuery(sql);
 		return getListOfString(resultList);
 	}
@@ -3692,7 +3693,7 @@ public class AppUtility
 	 */
 	public static List<String> getAllCellType() throws ApplicationException
 	{
-		String sql = "select value from catissue_permissible_value where parent_identifier =2";
+		final String sql = "select value from catissue_permissible_value where parent_identifier =2";
 		final List resultList = executeSQLQuery(sql);
 		return getListOfString(resultList);
 	}
@@ -3701,12 +3702,12 @@ public class AppUtility
 	 * @param precision
 	 * @return
 	 */
-	public static double RoundOff(double valueToBeRoundOff, int precision)
+	public static double RoundOff(double valueToBeRoundOff, final int precision)
 	 {
 		//Round-off function which will do actual round-off. It will auto-consider exponential values.
-		double doubleNumber = Math.pow(10,precision);
+		final double doubleNumber = Math.pow(10,precision);
 		valueToBeRoundOff = valueToBeRoundOff * doubleNumber;
-	  	double tmp = Math.round(valueToBeRoundOff);
+	  	final double tmp = Math.round(valueToBeRoundOff);
 	  	return tmp/doubleNumber;
 	  }
 
@@ -3715,15 +3716,15 @@ public class AppUtility
 	 * @param precision
 	 * @return
 	 */
-	 public static double truncate(double valueToBeTruncateOff, int precision)
+	 public static double truncate(final double valueToBeTruncateOff, final int precision)
 	 {
 		// If valueToBeRoundOff is exponantial value then it wull not truncate it
-	    String val = new Double(valueToBeTruncateOff).toString();
+	    final String val = new Double(valueToBeTruncateOff).toString();
 		if(val.contains("E") || val.contains("e")) {
 			return valueToBeTruncateOff;
 		}
-		double doubleNumber = Math.pow(10,precision);
-		int newInt = (int) (valueToBeTruncateOff * doubleNumber);
+		final double doubleNumber = Math.pow(10,precision);
+		final int newInt = (int) (valueToBeTruncateOff * doubleNumber);
 	  	return newInt/doubleNumber;
 	  }
 
@@ -3733,16 +3734,16 @@ public class AppUtility
      * @param target
      * @return
      */
-    public static String getSubParameterValue(String url,String target)
+    public static String getSubParameterValue(final String url,final String target)
     {
         String value="";
-        String arr[]=url.split(CDMSIntegrationConstants.DELIMETER);
+        final String arr[]=url.split(ClinPortalIntegrationConstants.DELIMETER);
 
-        for (String string : arr)
+        for (final String string : arr)
         {
             if(string.contains(target))
             {
-                String []values=string.split(CDMSIntegrationConstants.EQUALS);
+                final String []values=string.split(ClinPortalIntegrationConstants.EQUALS);
                 value=values[1];
             }
         }
@@ -3754,16 +3755,16 @@ public class AppUtility
      * @param loginName
      * @throws BizLogicException
      */
-    public static String getPassord(String loginName) throws BizLogicException
+    public static String getPassord(final String loginName) throws BizLogicException
     {
         String password="";
         try
         {
             if (loginName != null)
             {
-                String queryStr = "SELECT PASSWORD FROM CSM_USER WHERE LOGIN_NAME='"
+                final String queryStr = "SELECT PASSWORD FROM CSM_USER WHERE LOGIN_NAME='"
                         + loginName + "' ";
-                List result=WUSTLKeyUtility.executeQueryUsingDataSource(queryStr, false,
+                List result=edu.wustl.migrator.util.Utility.executeQueryUsingDataSource(queryStr, false,
                         edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
                 if(!result.isEmpty())
                 {
@@ -3773,14 +3774,14 @@ public class AppUtility
                 }
             }
         }
-        catch (ApplicationException e)
+        catch (final ApplicationException e)
         {
             logger.debug(e.getMessage(), e);
             throw new BizLogicException(ErrorKey
                     .getErrorKey("biz.update.error"), e,
                     "Error in database operation");
         }
-        catch (PasswordEncryptionException e)
+        catch (final PasswordEncryptionException e)
         {
             logger.debug(e.getMessage(), e);
             throw new BizLogicException(null, null, e.getMessage());
@@ -3793,24 +3794,24 @@ public class AppUtility
      * @param csmUserId
      * @throws BizLogicException
      */
-    public static String getCsmUserName(String csmUserId) throws BizLogicException
+    public static String getCsmUserName(final String csmUserId) throws BizLogicException
     {
         String csmUserName = null;
         try
         {
-             StringBuffer loginNameHQL = new StringBuffer(60);
+             final StringBuffer loginNameHQL = new StringBuffer(60);
             loginNameHQL.append("select user.loginName from ");
             loginNameHQL.append(User.class.getName());
             loginNameHQL.append(" as user where user.csmUserId=");
             loginNameHQL.append(csmUserId);
 
-            List  loginNameList = executeQuery(loginNameHQL.toString());
+            final List  loginNameList = executeQuery(loginNameHQL.toString());
             if (loginNameList != null && !loginNameList.isEmpty())
             {
                 csmUserName = loginNameList.get(0).toString();
             }
         }
-        catch (ApplicationException e)
+        catch (final ApplicationException e)
         {
             logger.debug(e.getMessage(), e);
             throw new BizLogicException(ErrorKey
@@ -3828,7 +3829,7 @@ public class AppUtility
 	 * @param index
 	 * @return
 	 */
-    public static String[] getColNames(String[] selectedColumnsList, String[] columnNames, int index)
+    public static String[] getColNames(final String[] selectedColumnsList, final String[] columnNames, final int index)
 	{
 		for (int i=index; i < selectedColumnsList.length; i++)
 		{
