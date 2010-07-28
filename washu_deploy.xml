@@ -4,7 +4,7 @@
 <project name="caTissue Suite v1.1P2.IDP">
 	<import file="deploy.xml"/>
 	<property file="./washuInstall.properties"/>
-	
+
 	<target name="deploy_app_with_idp" depends="deploy_app">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -18,10 +18,10 @@
 		</then>
 		</elseif>
 		</if>
-		<antcall target="IdPSettings"/>	
+		<antcall target="IdPSettings"/>
 		<antcall target="jboss_configuration" />
 	</target>
-	
+
 
 	 <target name="mysql_csm_config_with_idp" >
 	  	<copy file="${base.dir}/idp/idp_catissuecore-ds.xml" tofile="${temp.dir}/catissuecore-ds.xml" overwrite="true"/>
@@ -120,6 +120,19 @@
 					</classpath>
 				</sql>
 		</target>
+
+	<target name="upgrade_idp_db_to_support_generic_migration">
+				<echo message="Creating table in IDP database..." />
+					<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}" userid="${csm.database.username}" password="${csm.database.password}" onerror="continue" rdbms="oracle">
+						<transaction src="${oracle.sql.dir}/idp_upgrade_support_generic_migration.sql" />
+						<transaction>commit;</transaction>
+						<classpath>
+							<fileset dir="${lib.dir}">
+								<include name="*.jar" />
+							</fileset>
+						</classpath>
+					</sql>
+			</target>
 
 	<!-- IDP settings ends-->
 </project>
