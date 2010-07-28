@@ -58,20 +58,21 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	
 	public void testAddStorageContaierWithDuplicateName()
 	{
-
-		try{
-			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
-			storageContainer.setName(((StorageContainer)TestCaseUtility.getObjectMap(StorageContainer.class)).getName());
-			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
-			 assertTrue("Add container with new Label ass label generator is active", true);
-			
-		 }
-		 catch(Exception e){
-			 e.printStackTrace();
-			 System.out.println("Can not create Container as container with same name already exist");
-			 assertFalse("could not add object", true);
-			
-		 }
+		try
+		{
+			StorageContainer storageContainer = BaseTestCaseUtility.initStorageContainer();
+			storageContainer.setName(((StorageContainer) TestCaseUtility
+					.getObjectMap(StorageContainer.class)).getName());
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
+			assertFalse("Add container with new Label ass label generator is active", true);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out
+					.println("Can not create Container as container with same name already exist");
+			assertTrue("could not add object", true);
+		}
 	}
 	
 	public void testUpdatedStorageContaierWithDuplicateName()
