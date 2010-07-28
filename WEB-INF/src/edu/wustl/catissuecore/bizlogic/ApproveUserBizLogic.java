@@ -29,7 +29,6 @@ import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
@@ -41,11 +40,11 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.migrator.util.Utility;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeManager;
-import edu.wustl.wustlkey.util.global.WUSTLKeyUtility;
 
 /**
  * ApproveUserBizLogic is the bizLogic class for approve users.
@@ -73,12 +72,12 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 *             Database related Exception
 	 */
 	@Override
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
+	protected void update(final DAO dao, final Object obj, final Object oldObj, final SessionDataBean sessionDataBean)
 	throws BizLogicException
 	{
 		User user = null;
 		UserDTO userDTO = null;
-		
+
 		User oldUser = null;
 		if (obj instanceof UserDTO)
 		{
@@ -129,7 +128,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (final Exception exp)
 		{
-			this.logger.error(exp.getMessage(), exp);
+			logger.error(exp.getMessage(), exp);
 			new UserBizLogic().deleteCSMUser(csmUser);
 			final ErrorKey errorKey = ErrorKey.getErrorKey("pwd.encrytion.error");
 			throw new BizLogicException(errorKey, exp, "");
@@ -142,9 +141,9 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * @param user User Object
 	 * @throws ApplicationException ApplicationException
 	 */
-	private void emailHandler(User user) throws ApplicationException
+	private void emailHandler(final User user) throws ApplicationException
 	{
-		EmailHandler emailHandler = new EmailHandler();
+		final EmailHandler emailHandler = new EmailHandler();
 		// If user is approved send approval and login details emails to the
 		// user and administrator.
 		if (Status.ACTIVITY_STATUS_ACTIVE.toString().equals(user.getActivityStatus()))
@@ -172,9 +171,9 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * @throws PasswordEncryptionException PasswordEncryptionException
 	 * @throws BizLogicException BizLogicException
 	 */
-	private void approveUser(Object user1,User oldUser,
-			gov.nih.nci.security.authorization.domainobjects.User csmUser, DAO dao,
-			SessionDataBean sessionDataBean) throws BizLogicException, DAOException, SMException,
+	private void approveUser(final Object user1,final User oldUser,
+			final gov.nih.nci.security.authorization.domainobjects.User csmUser, final DAO dao,
+			final SessionDataBean sessionDataBean) throws BizLogicException, DAOException, SMException,
 			PasswordEncryptionException
 	{
 		User user = null;
@@ -227,7 +226,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * @param user User Object
 	 * @throws SMException SMException
 	 */
-	private void decideRole(gov.nih.nci.security.authorization.domainobjects.User csmUser, User user)
+	private void decideRole(final gov.nih.nci.security.authorization.domainobjects.User csmUser, final User user)
 	throws SMException
 	{
 		String role = "";
@@ -256,8 +255,8 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * @return authorizationData
 	 * @throws SMException SMException
 	 */
-	private Vector getAuthorizationData(AbstractDomainObject obj,
-			Map<String, SiteUserRolePrivilegeBean> userRowIdMap) throws SMException
+	private Vector getAuthorizationData(final AbstractDomainObject obj,
+			final Map<String, SiteUserRolePrivilegeBean> userRowIdMap) throws SMException
 			{
 		final Vector authorizationData = new Vector();
 		final Set group = new HashSet();
@@ -297,7 +296,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException BizLogicException
 	 */
 	@Override
-	public List retrieve(String className, String colName, Object colValue)
+	public List retrieve(final String className, final String colName, final Object colValue)
 	throws BizLogicException
 	{
 		List userList = null;
@@ -320,7 +319,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 *  @return Id
 	 */
 	@Override
-	public String getObjectId(DAO dao, Object domainObject)
+	public String getObjectId(final DAO dao, final Object domainObject)
 	{
 		return new UserBizLogic().getObjectId(dao, domainObject);
 	}
@@ -332,7 +331,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * @return String
 	 */
 	@Override
-	protected String getPrivilegeKey(Object domainObject)
+	protected String getPrivilegeKey(final Object domainObject)
 	{
 		return Constants.ADD_EDIT_USER;
 	}
@@ -347,7 +346,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException BizLogicException
 	 */
 	@Override
-	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean)
+	public boolean isAuthorized(final DAO dao, final Object domainObject, final SessionDataBean sessionDataBean)
 	throws BizLogicException
 	{
 		boolean isAuthorized = false;
@@ -369,7 +368,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * @return Boolean true/false
 	 * @throws BizLogicException object of BizLogicException
 	 */
-	private boolean checkUser(Object domainObject, SessionDataBean sessionDataBean)
+	private boolean checkUser(final Object domainObject, final SessionDataBean sessionDataBean)
 	throws BizLogicException
 	{
 		return new UserBizLogic().checkUser(domainObject, sessionDataBean);
@@ -382,8 +381,8 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 	 * 			Object of CSM User
 	 * @throws BizLogicException Object of BizLogicException
 	 */
-	private void migrateToWustlKey(User user,
-			gov.nih.nci.security.authorization.domainobjects.User csmUser)
+	private void migrateToWustlKey(final User user,
+			final gov.nih.nci.security.authorization.domainobjects.User csmUser)
 	throws BizLogicException
 	{
 		if (Status.ACTIVITY_STATUS_ACTIVE.toString().equals(user.getActivityStatus()))
@@ -392,15 +391,15 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
 			{
 				if(user.getWustlKey()!=null)
 				{
-					String queryStr ="INSERT INTO CSM_MIGRATE_USER VALUES" +
+					final String queryStr ="INSERT INTO CSM_MIGRATE_USER VALUES" +
 					"( '"+user.getLoginName()+"','"+user.getWustlKey()+"')";
-					WUSTLKeyUtility.executeQueryUsingDataSource
+					Utility.executeQueryUsingDataSource
 					(queryStr,true,edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
 				}
 			}
-			catch (ApplicationException e)
+			catch (final ApplicationException e)
 			{
-				this.logger.error(e.getMessage(), e);
+				logger.error(e.getMessage(), e);
 				new UserBizLogic().deleteCSMUser(csmUser);
 				throw new BizLogicException(ErrorKey.getErrorKey("db.insert.data.error"), e,
 				"Error in database operation");
