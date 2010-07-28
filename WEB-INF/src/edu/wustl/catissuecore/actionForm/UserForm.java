@@ -169,14 +169,14 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String[] getSiteIds()
 	{
-		return this.siteIds;
+		return siteIds;
 	}
 
 	/**
 	 * Set Site ID's.
 	 * @param siteIds ID's of Site
 	 */
-	public void setSiteIds(String[] siteIds)
+	public void setSiteIds(final String[] siteIds)
 	{
 		this.siteIds = siteIds;
 	}
@@ -195,13 +195,13 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getConfirmEmailAddress()
 	{
-		return this.confirmEmailAddress;
+		return confirmEmailAddress;
 	}
 
 	/**
 	 * @param confirmEmailAddress The confirmEmailAddress to set.
 	 */
-	public void setConfirmEmailAddress(String confirmEmailAddress)
+	public void setConfirmEmailAddress(final String confirmEmailAddress)
 	{
 		this.confirmEmailAddress = confirmEmailAddress;
 	}
@@ -213,7 +213,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getLastName()
 	{
-		return (this.lastName);
+		return (lastName);
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class UserForm extends AbstractActionForm
 	 * @param lastName Last Name of the user
 	 * @see #getFirstName()
 	 */
-	public void setLastName(String lastName)
+	public void setLastName(final String lastName)
 	{
 		this.lastName = lastName;
 	}
@@ -233,7 +233,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getFirstName()
 	{
-		return (this.firstName);
+		return (firstName);
 	}
 
 	/**
@@ -241,7 +241,7 @@ public class UserForm extends AbstractActionForm
 	 * @param firstName String representing the first name of the user.
 	 * @see #getFirstName()
 	 */
-	public void setFirstName(String firstName)
+	public void setFirstName(final String firstName)
 	{
 		this.firstName = firstName;
 	}
@@ -253,7 +253,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public long getInstitutionId()
 	{
-		return (this.institutionId);
+		return (institutionId);
 	}
 
 	/**
@@ -261,9 +261,9 @@ public class UserForm extends AbstractActionForm
 	 * @param institution String representing the institutionId of the user.
 	 * @see #getinstitution()
 	 */
-	public void setInstitutionId(long institution)
+	public void setInstitutionId(final long institution)
 	{
-		this.institutionId = institution;
+		institutionId = institution;
 	}
 
 	/**
@@ -272,7 +272,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getEmailAddress()
 	{
-		return (this.emailAddress);
+		return (emailAddress);
 	}
 
 	/**
@@ -280,7 +280,7 @@ public class UserForm extends AbstractActionForm
 	 * @param emailAddress String representing emailAddress address of the user
 	 * @see #getEmailAddress()
 	 */
-	public void setEmailAddress(String emailAddress)
+	public void setEmailAddress(final String emailAddress)
 	{
 		this.emailAddress = emailAddress;
 	}
@@ -290,7 +290,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getConfirmNewPassword()
 	{
-		return this.confirmNewPassword;
+		return confirmNewPassword;
 	}
 
 	/**
@@ -298,7 +298,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getNewPassword()
 	{
-		return this.newPassword;
+		return newPassword;
 	}
 
 	/**
@@ -306,13 +306,13 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getOldPassword()
 	{
-		return this.oldPassword;
+		return oldPassword;
 	}
 
 	/**
 	 * @param confirmNewPassword The confirmNewPassword to set.
 	 */
-	public void setConfirmNewPassword(String confirmNewPassword)
+	public void setConfirmNewPassword(final String confirmNewPassword)
 	{
 		this.confirmNewPassword = confirmNewPassword;
 	}
@@ -320,7 +320,7 @@ public class UserForm extends AbstractActionForm
 	/**
 	 * @param newPassword The newPassword to set.
 	 */
-	public void setNewPassword(String newPassword)
+	public void setNewPassword(final String newPassword)
 	{
 		this.newPassword = newPassword;
 	}
@@ -328,7 +328,7 @@ public class UserForm extends AbstractActionForm
 	/**
 	 * @param oldPassword The oldPassword to set.
 	 */
-	public void setOldPassword(String oldPassword)
+	public void setOldPassword(final String oldPassword)
 	{
 		this.oldPassword = oldPassword;
 	}
@@ -340,7 +340,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public long getDepartmentId()
 	{
-		return (this.departmentId);
+		return (departmentId);
 	}
 
 	/**
@@ -348,9 +348,9 @@ public class UserForm extends AbstractActionForm
 	 * @param department String representing departmentId of the user.
 	 * @see #getDepartmentId()
 	 */
-	public void setDepartmentId(long department)
+	public void setDepartmentId(final long department)
 	{
-		this.departmentId = department;
+		departmentId = department;
 	}
 
 	/**
@@ -360,7 +360,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public long getCancerResearchGroupId()
 	{
-		return this.cancerResearchGroupId;
+		return cancerResearchGroupId;
 	}
 
 	/**
@@ -368,9 +368,9 @@ public class UserForm extends AbstractActionForm
 	 * @param cancerResearchGroup The cancerResearchGroupId to set.
 	 * @see #getCancerResearchGroupId()
 	 */
-	public void setCancerResearchGroupId(long cancerResearchGroup)
+	public void setCancerResearchGroupId(final long cancerResearchGroup)
 	{
-		this.cancerResearchGroupId = cancerResearchGroup;
+		cancerResearchGroupId = cancerResearchGroup;
 	}
 
 	/**
@@ -380,7 +380,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getStreet()
 	{
-		return (this.street);
+		return (street);
 	}
 
 	/**
@@ -388,7 +388,7 @@ public class UserForm extends AbstractActionForm
 	 * @param street String representing mailing address of the user.
 	 * @see #getStreet()
 	 */
-	public void setStreet(String street)
+	public void setStreet(final String street)
 	{
 		this.street = street;
 	}
@@ -400,7 +400,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getCity()
 	{
-		return (this.city);
+		return (city);
 	}
 
 	/**
@@ -408,7 +408,7 @@ public class UserForm extends AbstractActionForm
 	 * @param city String representing city of the user.
 	 * @see #getCity()
 	 */
-	public void setCity(String city)
+	public void setCity(final String city)
 	{
 		this.city = city;
 	}
@@ -420,7 +420,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getState()
 	{
-		return (this.state);
+		return (state);
 	}
 
 	/**
@@ -428,7 +428,7 @@ public class UserForm extends AbstractActionForm
 	 * @param state String representing state of the user.
 	 * @see #getState()
 	 */
-	public void setState(String state)
+	public void setState(final String state)
 	{
 		this.state = state;
 	}
@@ -440,7 +440,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getCountry()
 	{
-		return (this.country);
+		return (country);
 	}
 
 	/**
@@ -448,7 +448,7 @@ public class UserForm extends AbstractActionForm
 	 * @param country String representing country of the user.
 	 * @see #getCountry()
 	 */
-	public void setCountry(String country)
+	public void setCountry(final String country)
 	{
 		this.country = country;
 	}
@@ -460,7 +460,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getZipCode()
 	{
-		return this.zipCode;
+		return zipCode;
 	}
 
 	/**
@@ -468,7 +468,7 @@ public class UserForm extends AbstractActionForm
 	 * @param zipCode The zip code to set.
 	 * @see #getZip()
 	 */
-	public void setZipCode(String zipCode)
+	public void setZipCode(final String zipCode)
 	{
 		this.zipCode = zipCode;
 	}
@@ -480,7 +480,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getPhoneNumber()
 	{
-		return this.phoneNumber;
+		return phoneNumber;
 	}
 
 	/**
@@ -488,7 +488,7 @@ public class UserForm extends AbstractActionForm
 	 * @param phoneNumber The phone number to set.
 	 * @see #getphoneNumber()
 	 */
-	public void setPhoneNumber(String phoneNumber)
+	public void setPhoneNumber(final String phoneNumber)
 	{
 		this.phoneNumber = phoneNumber;
 	}
@@ -500,7 +500,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getFaxNumber()
 	{
-		return this.faxNumber;
+		return faxNumber;
 	}
 
 	/**
@@ -508,7 +508,7 @@ public class UserForm extends AbstractActionForm
 	 * @param faxNumber The fax to set.
 	 * @see #getFax()
 	 */
-	public void setFaxNumber(String faxNumber)
+	public void setFaxNumber(final String faxNumber)
 	{
 		this.faxNumber = faxNumber;
 	}
@@ -519,7 +519,7 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getRole()
 	{
-		return this.role;
+		return role;
 	}
 
 	/**
@@ -527,7 +527,7 @@ public class UserForm extends AbstractActionForm
 	 * @param role the role of the user.
 	 * @see #getRole()
 	 */
-	public void setRole(String role)
+	public void setRole(final String role)
 	{
 		if (role != null && role.equalsIgnoreCase("-1"))
 		{
@@ -545,13 +545,13 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getComments()
 	{
-		return this.comments;
+		return comments;
 	}
 
 	/**
 	 * @param comments The comments to set.
 	 */
-	public void setComments(String comments)
+	public void setComments(final String comments)
 	{
 		this.comments = comments;
 	}
@@ -563,8 +563,8 @@ public class UserForm extends AbstractActionForm
 	public int getFormId()
 	{
 		int formId = Constants.APPROVE_USER_FORM_ID;
-		if ((this.getPageOf() != null)
-				&& !(Constants.PAGE_OF_APPROVE_USER.equals(this.getPageOf())))
+		if ((getPageOf() != null)
+				&& !(Constants.PAGE_OF_APPROVE_USER.equals(getPageOf())))
 		{
 			formId = Constants.USER_FORM_ID;
 		}
@@ -577,13 +577,13 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getStatus()
 	{
-		return this.status;
+		return status;
 	}
 
 	/**
 	 * @param status The status to set.
 	 */
-	public void setStatus(String status)
+	public void setStatus(final String status)
 	{
 		this.status = status;
 	}
@@ -593,13 +593,13 @@ public class UserForm extends AbstractActionForm
 	 */
 	public Long getCsmUserId()
 	{
-		return this.csmUserId;
+		return csmUserId;
 	}
 
 	/**
 	 * @param csmUserId The csmUserId to set.
 	 */
-	public void setCsmUserId(Long csmUserId)
+	public void setCsmUserId(final Long csmUserId)
 	{
 		this.csmUserId = csmUserId;
 	}
@@ -644,37 +644,37 @@ public class UserForm extends AbstractActionForm
 	 * Copies the data from an AbstractDomain object to a UserForm object.
 	 * @param abstractDomain An AbstractDomain object.
 	 */
-	public void setAllValues(AbstractDomainObject abstractDomain)
+	public void setAllValues(final AbstractDomainObject abstractDomain)
 	{
-		if (!Constants.PAGE_OF_CHANGE_PASSWORD.equals(this.getPageOf()))
+		if (!Constants.PAGE_OF_CHANGE_PASSWORD.equals(getPageOf()))
 		{
 			final User user = (User) abstractDomain;
 
-			this.setId(user.getId().longValue());
-			this.lastName = user.getLastName();
-			this.firstName = user.getFirstName();
+			setId(user.getId().longValue());
+			lastName = user.getLastName();
+			firstName = user.getFirstName();
 
-			this.wustlKey = user.getWustlKey();
-			this.setInstId(user);
-			this.setInstId(user);
-			this.emailAddress = user.getEmailAddress();
+			wustlKey = user.getWustlKey();
+			setInstId(user);
+			setInstId(user);
+			emailAddress = user.getEmailAddress();
 
 			//Mandar : 24-Apr-06 : bug id 972 : confirmEmailAddress
-			this.confirmEmailAddress = this.emailAddress;
-			this.setDptCRG(user);
-			this.setAddr(user);
+			confirmEmailAddress = emailAddress;
+			setDptCRG(user);
+			setAddr(user);
 			//Populate the activity status, comments and role for approve user and user edit.
-			this.setUserData(user);
-			this.setDptCRG(user);
-			this.setAddr(user);
+			setUserData(user);
+			setDptCRG(user);
+			setAddr(user);
 			//Populate the activity status, comments and role for approve user and user edit.
-			this.setUserData(user);
-			if (Constants.PAGE_OF_USER_ADMIN.equals(this.getPageOf()))
+			setUserData(user);
+			if (Constants.PAGE_OF_USER_ADMIN.equals(getPageOf()))
 			{
-				this.setCsmUserId(user.getCsmUserId());
+				setCsmUserId(user.getCsmUserId());
 				try
 				{
-					this.setPwd();
+					setPwd();
 				}
 				catch (final SMException e)
 				{
@@ -682,16 +682,16 @@ public class UserForm extends AbstractActionForm
 					e.printStackTrace();
 				}
 			}
-			if (Constants.PAGE_OF_USER_PROFILE.equals(this.getPageOf()))
+			if (Constants.PAGE_OF_USER_PROFILE.equals(getPageOf()))
 			{
-				this.role = user.getRoleId();
+				role = user.getRoleId();
 			}
 		}
-		logger.debug("this.activityStatus............." + this.getActivityStatus());
-		logger.debug("this.comments" + this.comments);
-		logger.debug("this.role" + this.role);
-		logger.debug("this.status" + this.status);
-		logger.debug("this.csmUserid" + this.csmUserId);
+		logger.debug("this.activityStatus............." + getActivityStatus());
+		logger.debug("this.comments" + comments);
+		logger.debug("this.role" + role);
+		logger.debug("this.status" + status);
+		logger.debug("this.csmUserid" + csmUserId);
 	}
 
 	/**
@@ -699,41 +699,40 @@ public class UserForm extends AbstractActionForm
 	 */
 	private void setPwd() throws SMException
 	{
-		if (this.csmUserId != null) //in case user not approved
+		if (csmUserId != null) //in case user not approved
 		{
 			final gov.nih.nci.security.authorization.domainobjects.User csmUser =
 				SecurityManagerFactory.getSecurityManager().
-				getUserById(this.getCsmUserId().toString());
+				getUserById(getCsmUserId().toString());
 			if (csmUser != null)
 			{
-				this.setNewPassword(csmUser.getPassword());
-				this.setConfirmNewPassword(csmUser.getPassword());
+				setNewPassword(csmUser.getPassword());
+				setConfirmNewPassword(csmUser.getPassword());
 			}
 		}
 		else
 		{
-			this.setNewPassword("");
-			this.setConfirmNewPassword("");
+			setNewPassword("");
+			setConfirmNewPassword("");
 		}
 	}
 
 	/**
 	 * @param user Set User
 	 */
-	private void setUserData(User user)
+	private void setUserData(final User user)
 	{
-		if ((this.getFormId() == Constants.APPROVE_USER_FORM_ID)
-				|| ((this.getPageOf() != null) && (Constants.PAGE_OF_USER_ADMIN.equals(this
-						.getPageOf()))))
+		if ((getFormId() == Constants.APPROVE_USER_FORM_ID)
+				|| ((getPageOf() != null) && (Constants.PAGE_OF_USER_ADMIN.equals(getPageOf()))))
 		{
-			this.setActivityStatus(user.getActivityStatus());
+			setActivityStatus(user.getActivityStatus());
 
-			this.setCmts(user);
-			this.setUserRole(user.getRoleId());
-			if (this.getFormId() == Constants.APPROVE_USER_FORM_ID)
+			setCmts(user);
+			setUserRole(user.getRoleId());
+			if (getFormId() == Constants.APPROVE_USER_FORM_ID)
 			{
-				this.status = user.getActivityStatus();
-				this.setStats();
+				status = user.getActivityStatus();
+				setStats();
 			}
 		}
 	}
@@ -743,88 +742,88 @@ public class UserForm extends AbstractActionForm
 	 */
 	private void setStats()
 	{
-		if (this.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
+		if (getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.toString()))
 		{
-			this.status = Status.APPROVE_USER_APPROVE_STATUS.toString();
+			status = Status.APPROVE_USER_APPROVE_STATUS.toString();
 		}
-		else if (this.getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
+		else if (getActivityStatus().equals(Status.ACTIVITY_STATUS_CLOSED.toString()))
 		{
-			this.status = Status.APPROVE_USER_REJECT_STATUS.toString();
+			status = Status.APPROVE_USER_REJECT_STATUS.toString();
 		}
-		else if (this.getActivityStatus().equals(Status.ACTIVITY_STATUS_NEW.toString()))
+		else if (getActivityStatus().equals(Status.ACTIVITY_STATUS_NEW.toString()))
 		{
-			this.status = Status.APPROVE_USER_PENDING_STATUS.toString();
+			status = Status.APPROVE_USER_PENDING_STATUS.toString();
 		}
 	}
 
 	/**
 	 * @param user User Object
 	 */
-	private void setCmts(User user)
+	private void setCmts(final User user)
 	{
 		if (!CommonUtilities.isNull(user.getComments()))
 		{
-			this.comments = user.getComments();
+			comments = user.getComments();
 		}
 	}
 
 	/**
 	 * @param user User Object
 	 */
-	private void setAddr(User user)
+	private void setAddr(final User user)
 	{
 		if (!CommonUtilities.isNull(user.getAddress()))
 		{
-			this.street = user.getAddress().getStreet();
-			this.city = user.getAddress().getCity();
-			this.state = user.getAddress().getState();
-			this.country = user.getAddress().getCountry();
-			this.zipCode = user.getAddress().getZipCode();
-			this.phoneNumber = user.getAddress().getPhoneNumber();
-			this.faxNumber = user.getAddress().getFaxNumber();
+			street = user.getAddress().getStreet();
+			city = user.getAddress().getCity();
+			state = user.getAddress().getState();
+			country = user.getAddress().getCountry();
+			zipCode = user.getAddress().getZipCode();
+			phoneNumber = user.getAddress().getPhoneNumber();
+			faxNumber = user.getAddress().getFaxNumber();
 		}
 	}
 
 	/**
 	 * @param user User Object
 	 */
-	private void setDptCRG(User user)
+	private void setDptCRG(final User user)
 	{
 		if (!CommonUtilities.isNull(user.getDepartment()))
 		{
-			this.departmentId = user.getDepartment().getId().longValue();
+			departmentId = user.getDepartment().getId().longValue();
 		}
 
 		if (!CommonUtilities.isNull(user.getCancerResearchGroup()))
 		{
-			this.cancerResearchGroupId = user.getCancerResearchGroup().getId().longValue();
+			cancerResearchGroupId = user.getCancerResearchGroup().getId().longValue();
 		}
 	}
 
 	/**
 	 * @param user User object
 	 */
-	private void setInstId(User user)
+	private void setInstId(final User user)
 	{
 		if (!CommonUtilities.isNull(user.getInstitution()))
 		{
-			this.institutionId = user.getInstitution().getId().longValue();
+			institutionId = user.getInstitution().getId().longValue();
 		}
 	}
 
 	/**
 	 * @param roleId Role Id
 	 */
-	private void setUserRole(String roleId)
+	private void setUserRole(final String roleId)
 	{
-		this.role = "";
+		role = "";
 		if (roleId != null && roleId.equalsIgnoreCase(Constants.ADMIN_USER))
 		{
-			this.role = Constants.SUPER_ADMIN_USER;
+			role = Constants.SUPER_ADMIN_USER;
 		}
 		if (roleId != null && roleId.equalsIgnoreCase(Constants.SUPER_ADMIN_USER))
 		{
-			this.role = Constants.SUPER_ADMIN_USER;
+			role = Constants.SUPER_ADMIN_USER;
 		}
 	}
 	/**
@@ -833,7 +832,7 @@ public class UserForm extends AbstractActionForm
 	 * @param key error key
 	 * @param value value of error key
 	 */
-	private void chkEmpty(ActionErrors errors, Validator validator, String key, String value)
+	private void chkEmpty(final ActionErrors errors, final Validator validator, final String key, final String value)
 	{
 		if (Validator.isEmpty(value))
 		{
@@ -850,41 +849,41 @@ public class UserForm extends AbstractActionForm
 	 * @param request HttpServletRequest instance
 	 */
 	@Override
-	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	public ActionErrors validate(final ActionMapping mapping, final HttpServletRequest request)
 	{
 		final ActionErrors errors = new ActionErrors();
 		final Validator validator = new Validator();
 		try
 		{
-			if (this.getOperation() != null)
+			if (getOperation() != null)
 			{
-				if (this.getPageOf().equals(Constants.PAGE_OF_CHANGE_PASSWORD))
+				if (getPageOf().equals(Constants.PAGE_OF_CHANGE_PASSWORD))
 				{
-					this.chkEmpty(errors, validator, "user.oldPassword", this.oldPassword);
-					this.chkEmpty(errors, validator, "user.newPassword", this.newPassword);
-					this.chkEmpty(errors, validator, "user.confirmNewPassword",
-							this.confirmNewPassword);
-					this.chkNwOdPwds(errors, validator);
-					this.chkNOPwds1(request, errors, validator);
+					chkEmpty(errors, validator, "user.oldPassword", oldPassword);
+					chkEmpty(errors, validator, "user.newPassword", newPassword);
+					chkEmpty(errors, validator, "user.confirmNewPassword",
+							confirmNewPassword);
+					chkNwOdPwds(errors, validator);
+					chkNOPwds1(request, errors, validator);
 				}
 				else
 				{
-					this.setRedirectValue(validator);
+					setRedirectValue(validator);
 					logger.debug("user form ");
-					this.ifAddEdit(errors, validator);
+					ifAddEdit(errors, validator);
 
-					if (this.getPageOf().equals(Constants.PAGE_OF_APPROVE_USER))
+					if (getPageOf().equals(Constants.PAGE_OF_APPROVE_USER))
 					{
-						this.chkValOpt(errors, validator,
-								"user.approveOperation", this.status);
-						this.chkValOpt(errors, validator, "user.approveOperation",
-						this.status);
+						chkValOpt(errors, validator,
+								"user.approveOperation", status);
+						chkValOpt(errors, validator, "user.approveOperation",
+						status);
 					}
 					//Bug- 1516:
-					this.adminEdit(request, errors, validator);
+					adminEdit(request, errors, validator);
 					// Mandar 10-apr-06 : bugid :353 end
 					//Bug- 1516:
-					this.adminEdit(request, errors, validator);
+					adminEdit(request, errors, validator);
 					// Mandar 10-apr-06 : bugid :353 end
 				}
 				validateWashUEmailAddress(errors);
@@ -923,36 +922,36 @@ public class UserForm extends AbstractActionForm
 	 * @param errors Object of ActionErrors
 	 * @param validator Object of Validator
 	 */
-	private void ifAddEdit(ActionErrors errors, Validator validator)
+	private void ifAddEdit(final ActionErrors errors, final Validator validator)
 	{
-		if (this.getOperation().equals(Constants.ADD) || this.getOperation().equals(Constants.EDIT))
+		if (getOperation().equals(Constants.ADD) || getOperation().equals(Constants.EDIT))
 		{
-			this.chkSites(errors, validator);
-			this.chkMail(errors, validator, "user.emailAddress", this.emailAddress);
+			chkSites(errors, validator);
+			chkMail(errors, validator, "user.emailAddress", emailAddress);
 
 			// Mandar : 24-Apr-06 Bugid:972 confirmEmailAddress start
-			if (!this.getPageOf().equals(Constants.PAGE_OF_USER_PROFILE))
+			if (!getPageOf().equals(Constants.PAGE_OF_USER_PROFILE))
 			{
-				this.chkMail(errors, validator, "user.confirmemailAddress",
-						this.confirmEmailAddress);
-				this.compMail(errors);
+				chkMail(errors, validator, "user.confirmemailAddress",
+						confirmEmailAddress);
+				compMail(errors);
 			}
 			//Mandar : 24-Apr-06 Bugid:972 confirmEmailAddress end
 
-			this.chkNames(errors, validator, "user.lastName", this.lastName);
-			this.chkNames(errors, validator, "user.firstName", this.firstName);
-			this.chkEmpty(errors, validator, "user.city", this.city);
+			chkNames(errors, validator, "user.lastName", lastName);
+			chkNames(errors, validator, "user.firstName", firstName);
+			chkEmpty(errors, validator, "user.city", city);
 			if (edu.wustl.catissuecore.util.global.Variables.isStateRequired)
 			{
-				this.chkValOpt(errors, validator, "user.state", this.state);
+				chkValOpt(errors, validator, "user.state", state);
 			}
-			this.chkValOpt(errors, validator, "user.country", this.country);
-			this.chkValOpt(errors, validator, "user.institution", String
-					.valueOf(this.institutionId));
-			this.chkValOpt(errors, validator, "user.department", String.valueOf(this.departmentId));
-			this.chkValOpt(errors, validator, "user.cancerResearchGroup", String
-					.valueOf(this.cancerResearchGroupId));
-			this.chkValOpt(errors, validator, "user.activityStatus", this.getActivityStatus());
+			chkValOpt(errors, validator, "user.country", country);
+			chkValOpt(errors, validator, "user.institution", String
+					.valueOf(institutionId));
+			chkValOpt(errors, validator, "user.department", String.valueOf(departmentId));
+			chkValOpt(errors, validator, "user.cancerResearchGroup", String
+					.valueOf(cancerResearchGroupId));
+			chkValOpt(errors, validator, "user.activityStatus", getActivityStatus());
 		}
 	}
 
@@ -962,7 +961,7 @@ public class UserForm extends AbstractActionForm
 	 * @param key error key
 	 * @param value value of error key
 	 */
-	private void chkNames(ActionErrors errors, Validator validator, String key, String value)
+	private void chkNames(final ActionErrors errors, final Validator validator, final String key, final String value)
 	{
 		if (Validator.isEmpty(value))
 		{
@@ -981,22 +980,21 @@ public class UserForm extends AbstractActionForm
 	 * @param validator Object of Validator
 	 * @param request HttpServletRequest
 	 */
-	private void adminEdit(HttpServletRequest request, ActionErrors errors, Validator validator)
+	private void adminEdit(final HttpServletRequest request, final ActionErrors errors, final Validator validator)
 	{
-		if (this.getPageOf().equals(Constants.PAGE_OF_USER_ADMIN)
-				&& this.getOperation().equals(Constants.EDIT))
+		if (getPageOf().equals(Constants.PAGE_OF_USER_ADMIN)
+				&& getOperation().equals(Constants.EDIT))
 		{
 			final String pageFrom = request.getParameter("pageFrom");
 			if (!"ApproveUser".equals(pageFrom))
 			{
-				this.chkEmpty(errors, validator, "user.newPassword", this.newPassword);
-				this
-						.chkEmpty(errors, validator, "user.confirmNewPassword",
-								this.confirmNewPassword);
+				chkEmpty(errors, validator, "user.newPassword", newPassword);
+				chkEmpty(errors, validator, "user.confirmNewPassword",
+								confirmNewPassword);
 
-				this.chkNwOdPwds(errors, validator);
+				chkNwOdPwds(errors, validator);
 				//Bug-7979
-				this.chkPwd(request, errors);
+				chkPwd(request, errors);
 			}
 		}
 	}
@@ -1005,14 +1003,14 @@ public class UserForm extends AbstractActionForm
 	 * @param request HttpServletRequest
 	 * @param errors Object of ActionErrors
 	 */
-	private void chkPwd(HttpServletRequest request, ActionErrors errors)
+	private void chkPwd(final HttpServletRequest request, final ActionErrors errors)
 	{
 		int result = PasswordManager.SUCCESS;
-		if (!Constants.DUMMY_PASSWORD.equals(this.newPassword))
+		if (!Constants.DUMMY_PASSWORD.equals(newPassword))
 		{
 			final Boolean isPasswordChanged = (Boolean) request.getSession().getAttribute(
 					Constants.PASSWORD_CHANGE_IN_SESSION);
-			result = PasswordManager.validatePasswordOnFormBean(this.newPassword, this.oldPassword,
+			result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword,
 					isPasswordChanged);
 		}
 
@@ -1031,7 +1029,7 @@ public class UserForm extends AbstractActionForm
 	 * @param key error key
 	 * @param value value of error key
 	 */
-	private void chkValOpt(ActionErrors errors, Validator validator, String key, String value)
+	private void chkValOpt(final ActionErrors errors, final Validator validator, final String key, final String value)
 	{
 		if (!validator.isValidOption(value))
 		{
@@ -1043,9 +1041,9 @@ public class UserForm extends AbstractActionForm
 	/**
 	 * @param errors Object of ActionErrors
 	 */
-	private void compMail(ActionErrors errors)
+	private void compMail(final ActionErrors errors)
 	{
-		if (!this.confirmEmailAddress.equals(this.emailAddress))
+		if (!confirmEmailAddress.equals(emailAddress))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.email.mismatch"));
 		}
@@ -1057,7 +1055,7 @@ public class UserForm extends AbstractActionForm
 	 * @param key error key
 	 * @param value value of error key
 	 */
-	private void chkMail(ActionErrors errors, Validator validator, String key, String value)
+	private void chkMail(final ActionErrors errors, final Validator validator, final String key, final String value)
 	{
 		if (Validator.isEmpty(value))
 		{
@@ -1078,9 +1076,9 @@ public class UserForm extends AbstractActionForm
 	 * @param errors Object of ActionErrors
 	 * @param validator Object of Validator
 	 */
-	private void chkSites(ActionErrors errors, Validator validator)
+	private void chkSites(final ActionErrors errors, final Validator validator)
 	{
-		if (this.siteIds != null && this.siteIds.length > 0 && Validator.isEmpty(this.role))
+		if (siteIds != null && siteIds.length > 0 && Validator.isEmpty(role))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 					ApplicationProperties.getValue("user.roleIsRequired")));
@@ -1092,16 +1090,16 @@ public class UserForm extends AbstractActionForm
 	 * @param errors Object of ActionErrors
 	 * @param validator Object of Validator
 	 */
-	private void chkNOPwds1(HttpServletRequest request, ActionErrors errors, Validator validator)
+	private void chkNOPwds1(final HttpServletRequest request, final ActionErrors errors, final Validator validator)
 	{
-		if (!Validator.isEmpty(this.newPassword) && !Validator.isEmpty(this.oldPassword))
+		if (!Validator.isEmpty(newPassword) && !Validator.isEmpty(oldPassword))
 		{
 			// Call static method PasswordManager.validatePasswordOnFormBean() where params are
 			// new password,old password,user name
 			final Boolean isPasswordChanged = (Boolean) request.getSession().getAttribute(
 					Constants.PASSWORD_CHANGE_IN_SESSION);
-			final int result = PasswordManager.validatePasswordOnFormBean(this.newPassword,
-					this.oldPassword, isPasswordChanged);
+			final int result = PasswordManager.validatePasswordOnFormBean(newPassword,
+					oldPassword, isPasswordChanged);
 
 			if (result != PasswordManager.SUCCESS)
 			{
@@ -1119,11 +1117,11 @@ public class UserForm extends AbstractActionForm
 	 * @param validator
 	 * 			Object of validator
 	 */
-	private void chkNwOdPwds(ActionErrors errors, Validator validator)
+	private void chkNwOdPwds(final ActionErrors errors, final Validator validator)
 	{
-		if (!Validator.isEmpty(this.newPassword) && !Validator.isEmpty(this.confirmNewPassword))
+		if (!Validator.isEmpty(newPassword) && !Validator.isEmpty(confirmNewPassword))
 		{
-			if (!this.newPassword.equals(this.confirmNewPassword))
+			if (!newPassword.equals(confirmNewPassword))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 						"errors.confirmNewPassword.reType"));
@@ -1138,19 +1136,19 @@ public class UserForm extends AbstractActionForm
 	 * @param addObjectIdentifier - Identifier of the Object inserted
 	 */
 	@Override
-	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
+	public void setAddNewObjectIdentifier(final String addNewFor, final Long addObjectIdentifier)
 	{
 		if (addNewFor.equals("institution"))
 		{
-			this.setInstitutionId(addObjectIdentifier.longValue());
+			setInstitutionId(addObjectIdentifier.longValue());
 		}
 		else if (addNewFor.equals("department"))
 		{
-			this.setDepartmentId(addObjectIdentifier.longValue());
+			setDepartmentId(addObjectIdentifier.longValue());
 		}
 		else if (addNewFor.equals("cancerResearchGroup"))
 		{
-			this.setCancerResearchGroupId(addObjectIdentifier.longValue());
+			setCancerResearchGroupId(addObjectIdentifier.longValue());
 		}
 	}
 
@@ -1160,14 +1158,14 @@ public class UserForm extends AbstractActionForm
 	 */
 	public String getWustlKey()
 	{
-		return this.wustlKey;
+		return wustlKey;
 	}
 
 	/**
 	 * Set WUSTLKey of the WashU User.
 	 * @param wustlKey WustlKey of a user
 	 */
-	public void setWustlKey(String wustlKey)
+	public void setWustlKey(final String wustlKey)
 	{
 		this.wustlKey = wustlKey;
 	}
