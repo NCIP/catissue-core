@@ -115,13 +115,18 @@ public class LoginAction extends XSSSupportedAction
 
         if (loginResult.isAuthenticationSuccess())
         {
-            if (MigrationState.NEW_WUSTL_USER.equals(loginResult.getMigratedLoginName()))
+            if (MigrationState.NEW_WUSTL_USER.equals(loginResult.getMigrationState()))
             {
                 forwardTo = setSignUpPageAttributes(request, loginForm);
             }
             else
             {
                 forwardTo = validateUser(request, loginResult);
+            }
+
+            if (MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()))
+            {
+                forwardTo=Constants.SUCCESS;
             }
         }
         else
