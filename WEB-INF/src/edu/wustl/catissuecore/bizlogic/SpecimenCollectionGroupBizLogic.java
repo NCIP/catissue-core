@@ -26,10 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.LazyInitializationException;
-
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -47,7 +45,6 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.namegenerator.BarcodeGenerator;
 import edu.wustl.catissuecore.namegenerator.BarcodeGeneratorFactory;
-import edu.wustl.catissuecore.namegenerator.LabelGenException;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
@@ -1261,8 +1258,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-			queryWhereClause.addCondition(new EqualClause(whereColumnName[0], whereColumnValue[0]))
-					.andOpr();
+			queryWhereClause.addCondition(new EqualClause(whereColumnName[0], whereColumnValue[0])).andOpr();
 
 			if (cpr.getParticipant() != null)
 			{
@@ -1505,6 +1501,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				List cprList = retrieve(
 						group.getCollectionProtocolRegistration().getClass().getName(),
 						"protocolParticipantIdentifier", group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
+				if(cprList == null || cprList.isEmpty())
+				{							
+					    message = ApplicationProperties
+					       .getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
+						throw this.getBizLogicException(null, "errors.item.invalid", message);
+				}
 				CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)cprList.get(0);
 				group.setCollectionProtocolRegistration(collectionProtocolRegistration);
 			}
@@ -1516,7 +1518,20 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				message = ApplicationProperties.getValue("specimenCollectionGroup.site");
 				throw this.getBizLogicException(null, "errors.item.invalid", message);
 			}
-
+			else
+			{
+				final String sourceObjectName = Site.class.getName();
+				final String[] selectColumnName = {"name"};
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				queryWhereClause.addCondition(new EqualClause("id", group.getSpecimenCollectionSite().getId()));
+				final List list = dao
+						.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+				if (list.isEmpty())
+				{
+					message = ApplicationProperties.getValue("specimenCollectionGroup.site");
+					throw this.getBizLogicException(null, "errors.item.invalid", message);
+				}				
+			}			
 			if (validator.isEmpty(group.getName()))
 			{
 				if ((Constants.ADD.equals(operation) && !edu.wustl.catissuecore.util.global.Variables.isSpecimenCollGroupLabelGeneratorAvl)
@@ -1769,8 +1784,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		final String[] selectColumnName1 = {};
 
 		queryWhereClause1.addCondition(new EqualClause(equalCondition, equalValue));
-		queryWhereClause1.andOpr();
-		queryWhereClause1.addCondition(new EqualClause("collectionProtocol.id", cpId));
 		final List list = dao
 				.retrieve(sourceObjectName1, selectColumnName1, queryWhereClause1);
 		if(list.size()>0)
@@ -1780,9 +1793,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			if(actualCpId != 0 && cpId != 0 && actualCpId != cpId)
 			{
 				String message = ApplicationProperties
-				.getValue("specimenCollectionGroup.studyCalendarEventPoint");
-				throw this.getBizLogicException(null, "errors.item.invalid",
-						message);
+				.getValue("specimenCollectionGroup.studyCalenderEventPointAndPPID");
+				throw this.getBizLogicException(null, "", message);
 			}
 			group.getCollectionProtocolEvent().setId(eventObj.getId());
 		}
