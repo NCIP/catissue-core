@@ -13,15 +13,12 @@
 		+ Constants.CP_QUERY_BIO_SPECIMEN + "')";
 	}
 %>
-
-
 <script language="JavaScript">
 function participantRegRow(subdivtag)
 		{
 			var collectionProtocolRegistrationVal = parseInt(document.forms[0].collectionProtocolRegistrationValueCounter.value);
 			collectionProtocolRegistrationVal = collectionProtocolRegistrationVal + 1;
 			document.forms[0].collectionProtocolRegistrationValueCounter.value = collectionProtocolRegistrationVal;
-			
 			var rows = new Array(); 
 			rows = document.getElementById(subdivtag).rows;
 			var cprSize = rows.length;
@@ -32,14 +29,11 @@ function participantRegRow(subdivtag)
 			cprCheckb.className="black_ar";
 			sname="";
 			cellNo +=1;
-			
-			var identifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) +"_id)";
+	   		var identifier = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) +"_id)";
 			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-			
 			var name = "CollectionProtocolRegistrationChk_"+(cprSize+1);
 			sname = sname +"<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteParticipantRegistrationValue,document.forms[0].collectionProtocolRegistrationValueCounter,'CollectionProtocolRegistrationChk_')\">";
 			cprCheckb.innerHTML=""+sname;
-			
 			// Second Cell
 			var cprTitle=row.insertCell(cellNo);
 			cprTitle.className="black_ar";
@@ -64,7 +58,6 @@ function participantRegRow(subdivtag)
 			sname = sname + "<input type='hidden' name='" + collectionProtocolTitleValue + "' value='' id='" + collectionProtocolTitleValue + "'>";
 			cprTitle.innerHTML="" + sname;
 			cellNo +=1;
-			
 			//third Cell
 			var cprParticipantId=row.insertCell(cellNo);
 			cprParticipantId.className="black_ar";
@@ -76,7 +69,6 @@ function participantRegRow(subdivtag)
 			
 			<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
 			{%>
-						
 			//fourth Cell
 			var cprBarcode=row.insertCell(cellNo);
 			cprBarcode.className="black_ar";
@@ -88,8 +80,7 @@ function participantRegRow(subdivtag)
 			<%}%>
 			
 			<%String registrationDate = edu.wustl.common.util.Utility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern());%>
-    		
-			//Fifth Cell
+    		//Fifth Cell
 			var cprRegistrationDate=row.insertCell(cellNo);
 			cprRegistrationDate.className="black_ar";
 			cprRegistrationDate.colSpan=1;
@@ -98,7 +89,6 @@ function participantRegRow(subdivtag)
 			sname = "<input type='text' name='" + name + "' maxlength='30' size='10' class='black_ar' id='" + name + "' value = '<%=registrationDate%>'>";
 			cprRegistrationDate.innerHTML=sname;
 			cellNo +=1;
-			
 			//Sixth Cell
 			var cprActivityStatus=row.insertCell(cellNo);
 			cprActivityStatus.className="black_ar";
@@ -137,18 +127,15 @@ function participantRegRow(subdivtag)
 			spanTag.appendChild(anchorTag);
 			consent.appendChild(spanTag);
 			document.getElementById(keyValue).onchange=function(){getConsent(name,collectionProtocolValue,collectionProtocolTitleValue,(cprSize+1),anchorTagKey,consentCheckStatus)};
-	
 		}
     	function setSubmittedForParticipant(submittedFor,forwardTo)
 		{
 			document.forms[0].submittedFor.value = submittedFor;
 			document.forms[0].forwardTo.value    = forwardTo;
-			
 			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
 				document.forms[0].submittedFor.value = "AddNew";
 			<%}%>			
 			<%if(request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
-
 				if(document.forms[0].radioValue.value=="Add")
 				{
 					document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
@@ -194,7 +181,6 @@ function participantRegRow(subdivtag)
 			checkActivityStatusForCPR();	
 	}
 }
-
 	function setCollectionProtocolTitle()
 	{
 		var collectionProtocolRegistrationVal = parseInt(document.forms[0].collectionProtocolRegistrationValueCounter.value);
@@ -219,7 +205,6 @@ function participantRegRow(subdivtag)
 			document.getElementById(collectionProtocolTitleKey).value = collectionProtocolTitle;
 		}
 	}
-
 	function checkActivityStatusForCPR()
 		{
 			var collectionProtocolRegistrationVal = parseInt(document.forms[0].collectionProtocolRegistrationValueCounter.value);
@@ -241,7 +226,6 @@ function participantRegRow(subdivtag)
 					}
 				}
 			}
-			
 			if (isAllActive==true)
 			{
 				document.forms[0].submit();
@@ -251,16 +235,10 @@ function participantRegRow(subdivtag)
 		{
      		 Tip(titleMessage,BGCOLOR,'#FFFFFF',BORDERCOLOR,'#000000',FONTCOLOR,'#000000',WIDTH,'30',FOLLOWMOUSE,'FALSE');
     	}
-   
 </script>
-
-
-
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
-
-
 <table width="100%" border="0" cellpadding="0" cellspacing="0"
 	class="maintable" height="100%"><!-- Mandar 6Nov08 -->
 	<tr>
@@ -278,9 +256,6 @@ function participantRegRow(subdivtag)
 			property="redirectTo" /></td>
 		<td><html:hidden property="pageOf" value="<%=pageOf%>" /></td>
 	</tr>
-
-
-	
 		<logic:notEqual name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 		<tr>
@@ -297,7 +272,6 @@ function participantRegRow(subdivtag)
 			</td>
 		</tr>
 		</logic:notEqual>
-	
 
 	<tr height="98%">
 		<td class="tablepadding">
@@ -309,7 +283,6 @@ function participantRegRow(subdivtag)
 					<td class="td_tab_bg"><img
 						src="images/uIEnhancementImages/spacer.gif" alt="spacer"
 						width="50" height="1"></td>
-
 					<td valign="bottom"><img
 						src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add"
 						width="57" height="22" /></td>
@@ -318,16 +291,12 @@ function participantRegRow(subdivtag)
 						<img src="images/uIEnhancementImages/tab_edit_notSelected.jpg"
 							alt="Edit" width="59" height="22" border="0" />
 					</html:link></td>
-			
 					<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
 				</tr>
 			</table>
 				</logic:notEqual>
-
 		</logic:equal>
-
 		<!--for Edit-->
-			
 			<logic:equal name="operation" value="edit">
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
@@ -337,17 +306,32 @@ function participantRegRow(subdivtag)
 					<td valign="bottom" ><html:link href="#" onclick="showAnnotations()"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></html:link></td><td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td></tr></table>
 			</logic:equal>
 		<table width="100%" border="0" cellpadding="3" cellspacing="0"
-			class="whitetable_bg" height="95%">
-					
+			class="whitetable_bg" >
 			<tr>
-				<td colspan="2" align="left" class="bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %></td>
+				<td colspan="2" align="left" class="bottomtd">
+				
+			<%if (request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST) != null
+									&& dataList.size() > 0){%>
+				<tr>
+					<td colspan="2" align="left" class="bottomtd"><%@ include
+						file="/pages/content/common/caTissueParticipantRegActionErrors.jsp"%></td>
+				</tr>
+			<%}else{%>
+			<tr>
+				<td colspan="2" align="left" class="bottomtd"><%@ include
+					file="/pages/content/common/ActionErrors.jsp"%></td>
 			</tr>
-			
-			<tr>
+           <%}%>				
+				</td>
+			</tr>
+	    	<tr>
 				<td colspan="2" align="left" class="tr_bg_blue1"><span
 					class="blue_ar_b">&nbsp;<bean:message
 					key="participant.details" /></span></td>
 			</tr>
+			 <!--This included jsp file is used to include Participant matching grid. -->
+			 <%@ include file="/pages/content/manageBioSpecimen/ParticipantLookup.jsp"%>
+					
 			<tr>
 				<td colspan="2" align="left" class="showhide" height="100%">
 				<table width="100%" border="0" cellspacing="0" cellpadding="3" height="100%">
@@ -408,7 +392,6 @@ function participantRegRow(subdivtag)
 											key="participant.middleName" /></br><html:text styleClass="black_ar" maxlength="255"
 											size="15" styleId="middleName" property="middleName"
 											readonly="<%=readOnlyForAll%>" /></td>
-
 							</tr>
 						</table>
 						</td>
@@ -452,7 +435,6 @@ function participantRegRow(subdivtag)
 								<%=nameValueBean.getName()%>
 							</html:radio>&nbsp;&nbsp;&nbsp;
 								</logic:iterate></td>
-
 					</tr>
 					<tr>
 						<td width="1%" align="center" class="black_ar">&nbsp;</td>
@@ -640,7 +622,6 @@ function participantRegRow(subdivtag)
 							}
 						%>
 					</tbody>
-
 					<!-- Medical Identifiers End here -->
 					<tr>
 						<td align="left" class="black_ar"><html:button
@@ -664,7 +645,6 @@ function participantRegRow(subdivtag)
 			<tr>
 				<td colspan="2" class="bottomtd"></td>
 			</tr>
-
 			<tr onclick="javascript:showHide('add_participant_registeration')">
 				<td width="90%" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="participant.collectionProtocolReg" /> </span></td>
 				<td width="10%" align="right" class="tr_bg_blue1"><a href="#"
@@ -674,9 +654,7 @@ function participantRegRow(subdivtag)
 										
 							<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details"
 					width="80" height="9" hspace="10" border="0" />
-
 					</logic:equal>
-
 					<logic:notEqual name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
 
@@ -747,7 +725,6 @@ function participantRegRow(subdivtag)
 						<%
 							}
 						%>
-						
 						<td width="25%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantRegistrationDate" />
 						</td>
@@ -933,13 +910,11 @@ function participantRegRow(subdivtag)
 								id="<%=consentResponseDisplay%>"> <%
  	}
  %> </span></td>
-
 						</tr>
 						<%
 							}
 						%>
 					</tbody>
-
 					<tr>
 						<td align="left" class="black_ar" colspan="3"><html:button
 							property="addKeyValue" styleClass="black_ar"
@@ -956,82 +931,11 @@ function participantRegRow(subdivtag)
 						<td class="black_ar" >&nbsp;</td>
 						<td class="black_ar">&nbsp;</td>
 						<td class="black_ar">&nbsp;</td>
-						
 					</tr>
-
-
 				</table>
 				</div>
 				</td>
 			</tr>
-			<tr>
-				<td colspan="2" class="bottomtd"></td>
-			</tr>
-			<%
-				if (request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST) != null
-									&& dataList.size() > 0) {
-								isRegisterButton = true;
-								if (request.getAttribute(Constants.SUBMITTED_FOR) != null
-								&& request.getAttribute(Constants.SUBMITTED_FOR)
-										.equals("AddNew")) {
-									isRegisterButton = false;
-								}
-			%>
-
-
-			<tr>
-				<td colspan="2">
-				<table summary="" cellpadding="0" cellspacing="0" border="0">
-					<tr>
-						<td class="black_ar_b" height="25"><bean:message
-							key="participant.lookup" /></td>
-					</tr>
-					<tr height=110 valign=top>
-						<td valign=top class="formFieldAllBorders">
-						<script>
-					function participant(id)
-					{
-						var cl = mygrid.cells(id,mygrid.getColumnCount()-1);
-						var pid = cl.getValue();
-						 document.forms[0].submittedFor.value = "AddNew";
-						 var pageOf = "<%=pageOf%>";
-						if(pageOf == "<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>")
-						{
-							window.location.href = 'CPQueryParticipantSelect.do?submittedFor=AddNew&operation=add&participantId='+pid
-						}
-						else
-						{
-							window.location.href = 'ParticipantLookup.do?submittedFor=AddNew&operation=add&participantId='+pid
-						}						
-					} 				
-
-					/* 
-						to be used when you want to specify another javascript function for row selection.
-						useDefaultRowClickHandler =1 | any value other than 1 indicates you want to use another row click handler.
-						useFunction = "";  Function to be used. 	
-					*/
-					var useDefaultRowClickHandler =2;
-					var useFunction = "participant";	
-					var wdt = getWidth(90);
-					if(wdt>1000)wdt=getWidth(63.5);
-			</script> <%@ include file="/pages/content/search/AdvanceGrid.jsp"%>
-						</td>
-					</tr>
-					<tr>
-						<td align="center" colspan="7" class="formFieldWithNoTopBorder">
-						<INPUT TYPE='RADIO' NAME='chkName' value="Add"
-							onclick="CreateNewClick()"> <font size="2">Ignore
-						matches and create new participant </font> </INPUT>&nbsp;&nbsp; <INPUT
-							TYPE='RADIO' NAME='chkName' value="Lookup"
-							onclick="LookupAgain()" checked=true> <font size="2">Lookup
-						again </font> </INPUT></td>
-					</tr>
-				</table>
-				</td>
-			</tr>
-			<%
-					}
-					%>
 			<tr>
 				<td colspan="2" class="buttonbg">
 				<% String changeAction = "setFormAction('" + formName + "')";
@@ -1062,9 +966,7 @@ function participantRegRow(subdivtag)
 									String forwardToSubmit = forwardToSubmitFunctionName;
 									String forwardToSCG = forwardToSCGFunctionName;
 								%>
-
 						<!-- PUT YOUR COMMENT HERE -->
-
 						<logic:equal name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 						<td nowrap >
@@ -1076,10 +978,8 @@ function participantRegRow(subdivtag)
 							</html:button>
 						</td>
 						</logic:equal>
-
 						<logic:notEqual name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-
 							<td>
 								<html:button styleClass="blue_ar_b"
 								property="registratioPage" title="Submit Only"
@@ -1096,10 +996,8 @@ function participantRegRow(subdivtag)
 								</logic:equal>
 							</td>
 						</logic:notEqual>
-
 						<logic:equal name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-
 							<td nowrap>&nbsp;|&nbsp;<html:button styleClass="blue_ar_c"
 								property="registratioPage"
 								value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[2][0]%>"
@@ -1113,7 +1011,6 @@ function participantRegRow(subdivtag)
 								<html:button styleClass="blue_ar_c" property="disableRecord"
 									title="Disable Participant" value="Delete" onclick="<%=deleteAction%>">
 								</html:button>&nbsp;
-								
 							 </logic:equal>
 							 </td>
 						</logic:equal>
