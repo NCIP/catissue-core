@@ -5766,19 +5766,4 @@ public class Constants
 	/** The Constant CUTTOFFPOINTS. */
 	public static final String CUTTOFFPOINTS = "cutoffPoints";
 
-	// Added by Geeta for eMPI
-	/** The Constant EMPIDBURL. */
-	public static final String EMPIDBURL = "empi.DBURL";
-
-	/** The Constant EMPIDBUSERNAME. */
-	public static final String EMPIDBUSERNAME = "empi.DBUserName";
-
-	/** The Constant EMPIDBUSERPASSWORD. */
-	public static final String EMPIDBUSERPASSWORD = "empi.DBUserPassword";
-
-	/** The Constant EMPIDBSCHEMA. */
-	public static final String EMPIDBSCHEMA = "empi.DBSchema";
-
-	/** The Constant EMPIDBDRIVERNAME. */
-	public static final String EMPIDBDRIVERNAME = "empi.DBDriverName";
 }
