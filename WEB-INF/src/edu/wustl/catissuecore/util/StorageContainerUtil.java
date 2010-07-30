@@ -87,9 +87,9 @@ public final class StorageContainerUtil
 		// TODO move all code to common utility
 
 		// getting instance of catissueCoreCacheManager and getting participantMap from cache
-		final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
+		final CatissueCoreCacheManager catCoreCacheMngr = CatissueCoreCacheManager
 				.getInstance();
-		final List disabledconts = (ArrayList) catissueCoreCacheManager
+		final List disabledconts = (ArrayList) catCoreCacheMngr
 				.getObjectFromCache(Constants.MAP_OF_DISABLED_CONTAINERS);
 		return disabledconts;
 	}
@@ -139,7 +139,7 @@ public final class StorageContainerUtil
     * @throws ApplicationException - ApplicationException
     */
    //Bug 15392
-	public static Position getFirstAvailablePositionsInContainer(StorageContainer storageContainer,
+	public static Position getFirstAvailablePositionsInContainer(final StorageContainer storageContainer,
 			HashSet<String> allocatedPositions, DAO dao,Integer pos1,Integer pos2) throws ApplicationException
 	{
 		final Position position = getFirstAvailablePositionInContainer(storageContainer,
@@ -154,8 +154,8 @@ public final class StorageContainerUtil
 	 *
 	 * @param containerId - containerId
 	 * @param aliquotCount - aliquotCount
-	 * @param positionDimensionOne -  Dimension X
-	 * @param positionDimensionTwo - Dimension Y
+	 * @param posDimOne -  Dimension X
+	 * @param posDimTwo - Dimension Y
 	 * @param dao - DAO object
 	 * @param pos1 - position one
 	 * @param pos2 - position two
@@ -164,28 +164,28 @@ public final class StorageContainerUtil
 	 */
 	//Bug 15392
 	public static Map<NameValueBean, List<NameValueBean>> getAvailablePositionMapForContainer(String containerId, int aliquotCount,
-			Integer positionDimensionOne, Integer positionDimensionTwo, DAO dao,Integer pos1,Integer pos2)
+			Integer posDimOne, Integer posDimTwo, DAO dao,Integer pos1,Integer pos2)
 			throws BizLogicException
 			{
 		final Map<NameValueBean, List<NameValueBean>> map = new TreeMap<NameValueBean, List<NameValueBean>>();
 		int count = 0;
-		final int dimX = positionDimensionOne + 1;
-		final int dimY = positionDimensionTwo + 1;
+		final int dimX = posDimOne + 1;
+		final int dimY = posDimTwo + 1;
 
-		final boolean[][] availablePosistions = getAvailablePositionsForContainer(containerId,
+		final boolean[][] availPositions = getAvailablePositionsForContainer(containerId,
 				dimX, dimY, dao);
 
-		for (int x = 1; x < availablePosistions.length; x++)
+		for (int x = 1; x < availPositions.length; x++)
 		{
 			if(x >= pos1)
 			{
 				final List<NameValueBean> list = new ArrayList<NameValueBean>();
-                if(pos2 == (availablePosistions[x].length-1))
+                if(pos2 == (availPositions[x].length-1))
                 {
                 	pos2 = 0;
                 	continue;
                 }
-				for (int y = 1; y < availablePosistions[x].length; y++)
+				for (int y = 1; y < availPositions[x].length; y++)
 				{
 					if(x == pos1)//bug 15412
 					{
@@ -194,7 +194,7 @@ public final class StorageContainerUtil
 						  continue;
 						}
 					}
-					if (availablePosistions[x][y])
+					if (availPositions[x][y])
 					{
 						list.add(new NameValueBean(new Integer(y), new Integer(y)));
 						count++;
@@ -288,7 +288,6 @@ public final class StorageContainerUtil
 		catch (final DAOException daoEx)
 		{
 			logger.error(daoEx.getMessage(),daoEx);
-			daoEx.printStackTrace();
 			throw new BizLogicException(daoEx);
 		}
 		return position;
@@ -336,7 +335,6 @@ public final class StorageContainerUtil
 		catch (final DAOException daoEx)
 		{
 			logger.error(daoEx.getMessage(),daoEx);
-			daoEx.printStackTrace();
 
 			throw new BizLogicException(daoEx);
 		}
@@ -461,7 +459,6 @@ public final class StorageContainerUtil
 		catch (final DAOException daoEx)
 		{
 			logger.error(daoEx.getMessage(),daoEx);
-			daoEx.printStackTrace();
 			throw new BizLogicException(daoEx);
 		}
 		return position;
@@ -1044,7 +1041,6 @@ public final class StorageContainerUtil
 			catch (final DAOException e)
 			{
 				StorageContainerUtil.logger.error(e.getMessage(), e);
-				e.printStackTrace();
 				throw new BizLogicException(e);
 			}
 		}
@@ -1063,9 +1059,9 @@ public final class StorageContainerUtil
 	public static boolean isPositionAvailable(JDBCDAO jdbcDao, String containerId, String containerName,
 			String pos1, String pos2) throws ApplicationException
 	{
-		if (!isSpecimenAssigned(jdbcDao, containerId, containerName, pos1, pos2))
+		if (!isSpecimenAssigned(containerId, containerName, pos1, pos2))
 		{
-			if (!isContainerAssigned(jdbcDao, containerId, containerName, pos1, pos2))
+			if (!isContainerAssigned(containerId, containerName, pos1, pos2))
 			{
 				return true;
 			}
@@ -1074,7 +1070,6 @@ public final class StorageContainerUtil
 	}
 	/**
 	 * Checking container.
-	 * @param jdbcDao JDBCDAO object
 	 * @param containerId container Identifier
 	 * @param containerName container name
 	 * @param pos1 position dim 1
@@ -1082,7 +1077,7 @@ public final class StorageContainerUtil
 	 * @return Boolean
 	 * @throws ApplicationException ApplicationException
 	 */
-	private static  boolean isContainerAssigned(JDBCDAO jdbcDao, String containerId, String containerName,
+	private static  boolean isContainerAssigned(String containerId, String containerName,
 			String pos1, String pos2) throws ApplicationException
 	{
 		final StringBuilder query = new StringBuilder();
@@ -1101,7 +1096,7 @@ public final class StorageContainerUtil
 				+ " and contPos.positionDimensionTwo=" + pos2);
 		final List allocatedList = AppUtility.executeQuery(query.toString());
 
-		if ((allocatedList != null) && (allocatedList.size() > 0))
+		if ((allocatedList != null) && (!allocatedList.isEmpty()))
 		{
 			return true;
 		}
@@ -1110,7 +1105,6 @@ public final class StorageContainerUtil
 
 	/**
 	 * Checking specimen.
-	 * @param jdbcDao JDBCDAO object
 	 * @param containerId container Identifier
 	 * @param containerName container name
 	 * @param pos1 position dim 1
@@ -1118,7 +1112,7 @@ public final class StorageContainerUtil
 	 * @return Boolean
 	 * @throws ApplicationException
 	 */
-	private static boolean isSpecimenAssigned(JDBCDAO jdbcDao, String containerId, String containerName,
+	private static boolean isSpecimenAssigned(String containerId, String containerName,
 			String pos1, String pos2) throws ApplicationException
 	{
 		final StringBuilder query = new StringBuilder();
@@ -1135,7 +1129,7 @@ public final class StorageContainerUtil
 		query.append(" and specPos.positionDimensionOne=" + pos1
 				+ "  and specPos.positionDimensionTwo=" + pos2);
 		final List allocatedList = AppUtility.executeQuery(query.toString());
-		if ((allocatedList != null) && (allocatedList.size() > 0))
+		if ((allocatedList != null) && (!allocatedList.isEmpty()))
 		{
 			return true;
 		}
@@ -1194,7 +1188,6 @@ public final class StorageContainerUtil
 		catch (final DAOException e1)
 		{
 			logger.error(e1.getMessage(),e1);
-			e1.printStackTrace();
 			throw new BizLogicException(e1);
 		}
 
@@ -1308,7 +1301,6 @@ public final class StorageContainerUtil
 		catch (final ApplicationException exp)
 		{
 			logger.error(exp.getMessage(), exp);
-			exp.printStackTrace();
 			ErrorKey errorKey = ErrorKey.getErrorKey(exp.getErrorKeyName());
 			throw new BizLogicException(errorKey, exp, exp.getMsgValues());
 		}
@@ -1336,7 +1328,7 @@ public final class StorageContainerUtil
 				if (!columnList.isEmpty())
 				{
 					final String str = (String) columnList.get(0);
-					if (!str.equals(""))
+					if (!"".equals(str))
 					{
 						final long longNumber = Long.parseLong(str);
 						return longNumber + 1;
@@ -1349,7 +1341,6 @@ public final class StorageContainerUtil
 		catch (final DAOException daoExp)
 		{
 			logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
 			throw new ApplicationException(errorKey, daoExp, daoExp.getMsgValues());
 		}
@@ -1446,7 +1437,7 @@ public final class StorageContainerUtil
 				{
 					final String str = (String) columnList.get(0);
 					logger.info("str---------------:" + str);
-					if (!str.equals(""))
+					if (!"".equals(str))
 					{
 						final int intNumber = Integer.parseInt(str);
 						return intNumber + 1;
@@ -1459,7 +1450,6 @@ public final class StorageContainerUtil
 		catch (final DAOException daoExp)
 		{
 			logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
 			throw new ApplicationException(errorKey, daoExp, daoExp.getMsgValues());
 		}
@@ -1524,7 +1514,6 @@ public final class StorageContainerUtil
 		catch (final DAOException daoExp)
 		{
 			logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
 			throw new BizLogicException(errorKey, daoExp, daoExp.getMsgValues());
 		}
@@ -1588,7 +1577,6 @@ public final class StorageContainerUtil
 		catch (final ApplicationException e)
 		{
 			logger.error(e.getMessage(), e);
-			e.printStackTrace() ;
 			ErrorKey errorKey = ErrorKey.getErrorKey(e.getErrorKeyName());
 			throw new ApplicationException(errorKey, e, e.getMsgValues());
 		}
@@ -1631,7 +1619,7 @@ public final class StorageContainerUtil
 			flag = 0;
 			final CollectionProtocol cpOld = (CollectionProtocol) itrOld.next();
 			final Iterator itrNew = cpCollNew.iterator();
-			if (cpCollNew.size() == 0)
+			if (cpCollNew.isEmpty())
 			{
 				break;
 			}
@@ -1734,7 +1722,7 @@ public final class StorageContainerUtil
 	{
 
 		final StorageType storageTypeAny = new StorageType();
-		storageTypeAny.setId(new Long("1"));
+		storageTypeAny.setId(Long.valueOf("1"));
 		storageTypeAny.setName("All");
 		if (parent.getHoldsStorageTypeCollection().contains(storageTypeAny))
 		{
@@ -1860,7 +1848,6 @@ public final class StorageContainerUtil
 		catch (final DAOException daoExp)
 		{
 			logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
 			throw new BizLogicException(errorKey, daoExp, daoExp.getMsgValues());
 		}
@@ -1908,7 +1895,6 @@ public final class StorageContainerUtil
 			catch (final Exception e)
 			{
 				logger.error("Error in isContainerAvailable : " + e.getMessage(),e);
-				e.printStackTrace() ;
 				return false;
 			}
 		}
@@ -2011,7 +1997,6 @@ public final class StorageContainerUtil
 		catch (final Exception e)
 		{
 			logger.error("Error in isContainerAvailable : " + e.getMessage(),e);
-			e.printStackTrace();
 			return false;
 		}
 	}
@@ -2084,7 +2069,7 @@ public final class StorageContainerUtil
 				boolean isPosAvail = false;
 				if (specimen != null)
 				{
-					if ((!((specimen.getLineage()).equalsIgnoreCase("New")))
+					if (!(specimen.getLineage().equalsIgnoreCase("New"))
 							&& ((Long) obj).longValue() == specimen.getId().longValue())
 					{
 						isPosAvail = true;
@@ -2188,7 +2173,7 @@ public final class StorageContainerUtil
 	public static boolean canReduceDimension(DAO dao, Long storageContainerId, Integer dimOne,
 		Integer dimTwo) throws DAOException
 	{
-		if (!isSpecimenAssignedWithinDimensions(dao, storageContainerId, dimOne, dimTwo))
+		if (!isSpecimenAssignedWithinDimensions(dao, storageContainerId, dimOne))
 		{
 			if (!isContainerAssignedWithinDimensions(dao, storageContainerId, dimOne, dimTwo))
 			{
@@ -2228,12 +2213,11 @@ public final class StorageContainerUtil
 	 * @param dao DAO Object
 	 * @param storageContainerId Container identifier
 	 * @param dimOne Position  one
-	 * @param dimTwo Position  two
 	 * @return Boolean
 	 * @throws DAOException DAOException
 	 */
 	private static boolean isSpecimenAssignedWithinDimensions(DAO dao, Long storageContainerId,
-		Integer dimOne, Integer dimTwo) throws DAOException
+		Integer dimOne) throws DAOException
 	{
 		final StringBuilder specQuery = new StringBuilder();
 		specQuery.append("from SpecimenPosition sp ");
@@ -2373,6 +2357,71 @@ public final class StorageContainerUtil
 			e.printStackTrace();
 		}
 	}
+
+	 /**
+	 * This method will populate Specimen Type collection based on classes selected by user.
+	 * @param specimenClassTypeCollection Specimen Class Type Collection
+	 * @param specimenTypeCollection Specimen Type Collection
+	 * @param form StorageType/StorageContainer form
+	 */
+	public static void populateSpecimenType(StorageContainer container)
+	{
+		try
+		{
+			final Collection specimenClassTypeCollection = container.getHoldsSpecimenClassCollection();
+			final Collection specimenTypeCollection = container.getHoldsSpecimenTypeCollection();
+			Collection<String> spType = new HashSet<String>();
+			if(specimenClassTypeCollection != null || !specimenClassTypeCollection.isEmpty())
+			{
+				final Iterator<String> itrSpClass = specimenClassTypeCollection.iterator();
+				while (itrSpClass.hasNext())
+				{
+					final String specimenClass = (String) itrSpClass.next();
+					if(Constants.TISSUE.equals(specimenClass))
+					{
+						List<String> tissueList= AppUtility.getAllTissueSpType();
+						spType = setSpecimenType(tissueList, specimenTypeCollection, spType, AppUtility.getAllTissueSpType());
+					}
+					else if(Constants.CELL.equals(specimenClass))
+					{
+						List<String> cellList= AppUtility.getAllCellType();
+						spType = setSpecimenType(cellList, specimenTypeCollection, spType, AppUtility.getAllCellType());
+					}
+					else if(Constants.FLUID.equals(specimenClass))
+					{
+						List<String> fluidList= AppUtility.getAllFluidSpType();
+						spType = setSpecimenType(fluidList, specimenTypeCollection, spType, AppUtility.getAllFluidSpType());
+					}
+					else if(Constants.MOLECULAR.equals(specimenClass))
+					{
+						List<String> molList= AppUtility.getAllMolecularType();
+						spType = setSpecimenType(molList, specimenTypeCollection, spType, AppUtility.getAllMolecularType());
+					}
+				}
+				if(!spType.isEmpty())
+				{
+					spType.addAll(container.getHoldsSpecimenTypeCollection());
+					container.setHoldsSpecimenTypeCollection(spType);
+				}
+			}
+		}
+		catch (ApplicationException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private static Collection<String> setSpecimenType(List<String> specimenTypeList, Collection specimenTypeCollection,
+			Collection<String> spType, List<String> newSpecimenTypeList)
+	{
+		specimenTypeList.retainAll(specimenTypeCollection);
+		if(specimenTypeList.isEmpty())
+		{
+			spType.addAll(newSpecimenTypeList);
+		}
+		return spType;
+	}
+
 	/**
 	 * Set Specimen Type List.
 	 * @param request HttpServletRequest

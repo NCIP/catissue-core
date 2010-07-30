@@ -39,13 +39,13 @@ import edu.wustl.common.util.logger.Logger;
 
 public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	AbstractDomainObject domainObject = null;
-	
+
 	public void testAddStorageContainer()
 	{
 		try{
-			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
+			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
 			System.out.println(storageContainer);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 			TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
@@ -55,7 +55,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			 assertFalse("could not add object", true);
 		 }
 	}
-	
+
 	public void testAddStorageContaierWithDuplicateName()
 	{
 		try
@@ -74,23 +74,23 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			assertTrue("could not add object", true);
 		}
 	}
-	
+
 	public void testUpdatedStorageContaierWithDuplicateName()
 	{
 
 		try{
-			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
-			
-			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
+
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 			storageContainer.setName(((StorageContainer)TestCaseUtility.getObjectMap(StorageContainer.class)).getName());
 			storageContainer=(StorageContainer) appService.updateObject(storageContainer);
 			assertFalse("could not add object", true);
-			
+
 		 }
 		 catch(Exception e){
 			 e.printStackTrace();
 			 System.out.println("Can not create Container as container with same name already exist");
-			 
+
 			 assertTrue("Add container with new Label ass label generator is active", true);
 		 }
 	}
@@ -101,7 +101,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	{
 		StorageContainer storageContainer = (StorageContainer)TestCaseUtility.getObjectMap(StorageContainer.class);
 		System.out.println("Before Update");
-	    try 
+	    try
 		{
 	    	Capacity capacity = storageContainer.getCapacity();
 			capacity.setOneDimensionCapacity(new Integer(4));
@@ -110,8 +110,8 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	    	System.out.println("After Update");
 	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
 	       	assertTrue("Domain object successfully updated ---->"+updatedStorageContainer, true);
-	    } 
-	    catch (Exception e) 
+	    }
+	    catch (Exception e)
 	    {
 	 		e.printStackTrace();
 	 		System.out
@@ -119,7 +119,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	 		assertFalse("failed to update Object:"+e.getMessage(), true);
 	    }
 	}
-	
+
 	/**
 	 * Test case to edit the Name and Temperature  capacity of the Storage Container
 	 */
@@ -127,15 +127,15 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	{
 		StorageContainer storageContainer = (StorageContainer)TestCaseUtility.getObjectMap(StorageContainer.class);
 		System.out.println("Before Update");
-	    try 
+	    try
 		{
 	    	storageContainer.setTempratureInCentigrade(new Double(-70));
 	    	storageContainer.setName("UpdatedSC" + UniqueKeyGeneratorUtil.getUniqueKey());
 	    	System.out.println("After Update");
 	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
 	       	assertTrue("Domain object successfully updated ---->"+updatedStorageContainer, true);
-	    } 
-	    catch (Exception e) 
+	    }
+	    catch (Exception e)
 	    {
 	 		e.printStackTrace();
 	 		System.out
@@ -144,7 +144,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	    }
 	}
 	/**
-	 * test case to add parent container 
+	 * test case to add parent container
 	 *
 	 */
 	public void testAddParentStorageContainer()
@@ -164,11 +164,11 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			sttype.setId(1L);
 			holdsStorageTypeCollection.add(sttype);
 			storageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
-			
+
 			System.out.println(storageContainer);
-			
-			
-			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+
+
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 			TestCaseUtility.setNameObjectMap("ParentContainer", storageContainer);
 			System.out.println("Object created successfully");
 			assertTrue("Object added successfully", true);
@@ -190,7 +190,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		try
 		{
 			StorageContainer parent = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
-			
+
 			StorageContainer storageContainer1= BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection = new HashSet();
 			storageContainer1.setCollectionProtocolCollection(collectionProtocolCollection);
@@ -200,9 +200,9 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			containerPosition1.setParentContainer(parent);
 			storageContainer1.setLocatedAtPosition(containerPosition1);
 			System.out.println(storageContainer1);
-			storageContainer1 = (StorageContainer) appService.createObject(storageContainer1); 
+			storageContainer1 = (StorageContainer) appService.createObject(storageContainer1);
 			System.out.println("ChildStorageContainer created successfully");
-			
+
 			StorageContainer storageContainer2= BaseTestCaseUtility.initStorageContainer();
 			Collection collectionProtocolCollection1 = new HashSet();
 			storageContainer2.setCollectionProtocolCollection(collectionProtocolCollection1);
@@ -212,9 +212,9 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			containerPosition2.setParentContainer(parent);
 			storageContainer2.setLocatedAtPosition(containerPosition2);
 			System.out.println(storageContainer2);
-			storageContainer2 = (StorageContainer) appService.createObject(storageContainer2); 
+			storageContainer2 = (StorageContainer) appService.createObject(storageContainer2);
 			System.out.println("ChildStorageContainer created successfully");
-			
+
 			assertTrue("Object added successfully", true);
 		 }
 		 catch(Exception e){
@@ -226,7 +226,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		 }
 	}
 	/**
-	 * negative Test case to ad container at occupied position 
+	 * negative Test case to ad container at occupied position
 	 *
 	 */
 	public void testAddChildStorageContainerOnOccupiedPosition()
@@ -234,7 +234,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		try
 		{
 			StorageContainer parent = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
-			
+
 			StorageContainer storageContainer1= BaseTestCaseUtility.initStorageContainer();
 			ContainerPosition containerPosition1 = new ContainerPosition();
 			containerPosition1.setPositionDimensionOne(1);
@@ -242,7 +242,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			containerPosition1.setParentContainer(parent);
 			storageContainer1.setLocatedAtPosition(containerPosition1);
 			System.out.println(storageContainer1);
-			storageContainer1 = (StorageContainer) appService.createObject(storageContainer1); 
+			storageContainer1 = (StorageContainer) appService.createObject(storageContainer1);
 			System.out.println("Object created successfully");
 
 			assertFalse("Object added successfully", true);
@@ -265,10 +265,10 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			{
 				StorageContainer storageContainer = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
 
-				
+
 				StorageContainer parent = new StorageContainer();
 				parent.setId(storageContainer.getId());
-				
+
 				ContainerPosition containerPosition = new ContainerPosition();
 				containerPosition.setPositionDimensionOne(1);
 				containerPosition.setPositionDimensionTwo(2);
@@ -297,30 +297,30 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		StorageContainer storageContainer = new StorageContainer();
     	Logger.out.info(" searching domain object");
     	storageContainer.setId(new Long(1));
-   
+
          try {
         	 List resultList = appService.search(StorageContainer.class,storageContainer);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 StorageContainer returnedStorageContainer = (StorageContainer) resultsIterator.next();
-        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " 
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: "
         				 + returnedStorageContainer.getName());
         		// System.out.println(" Domain Object is successfully Found ---->  :: " + returnedDepartment.getName());
              }
-          } 
+          }
           catch (Exception e) {
            	Logger.out.error(e.getMessage(),e);
            	e.printStackTrace();
            	assertFalse("Does not find Domain Object", true);
-	 		
+
           }
 	}
-	
+
 	public void testUpdateContainerWithCaseSensitiveBarcode()
 	{
 		StorageContainer storageContainer1 =  BaseTestCaseUtility.initStorageContainer();
 		System.out.println("Before Update");
     	Logger.out.info("updating domain object------->"+storageContainer1);
-	    try 
+	    try
 		{
 	    	String  uniqueKey=UniqueKeyGeneratorUtil.getUniqueKey();
 	    	storageContainer1 = (StorageContainer) appService.createObject(storageContainer1);
@@ -329,11 +329,11 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	    	System.out.println("After Update");
 	    	StorageContainer updatedStorageContainer1 = (StorageContainer) appService.updateObject(storageContainer1);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer1);
-	
+
 	       	StorageContainer storageContainer2 =  BaseTestCaseUtility.initStorageContainer();
 	       	System.out.println("Before Update");
 	       	Logger.out.info("updating domain object------->"+storageContainer2);
-	   
+
 	    	storageContainer2 = (StorageContainer) appService.createObject(storageContainer2);
 	    	BaseTestCaseUtility.updateStorageContainer(storageContainer2);
 	    	storageContainer1.setBarcode("container barcode"+uniqueKey);
@@ -350,28 +350,28 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	 		assertFalse("failed to update Object", true);
 	    }
 	}
-	
-	    
+
+
 		public void testSearchContainerWithCaseSensitiveBarcode()
 		{
 			StorageContainer storageContainer1 =  BaseTestCaseUtility.initStorageContainer();
 			System.out.println("Before Update");
 	    	Logger.out.info("updating domain object------->"+storageContainer1);
 	    	String  uniqueKey=UniqueKeyGeneratorUtil.getUniqueKey();
-		    try 
+		    try
 			{
-		    	
+
 		    	storageContainer1 = (StorageContainer) appService.createObject(storageContainer1);
 		    	BaseTestCaseUtility.updateStorageContainer(storageContainer1);
 		    	storageContainer1.setBarcode("CONTAINER BAORCODE"+uniqueKey);
 		    	System.out.println("After Update");
 		    	StorageContainer updatedStorageContainer1 = (StorageContainer) appService.updateObject(storageContainer1);
 		       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer1);
-		
+
 		       	StorageContainer storageContainer2 =  BaseTestCaseUtility.initStorageContainer();
 		       	System.out.println("Before Update");
 		       	Logger.out.info("updating domain object------->"+storageContainer2);
-		   
+
 		    	storageContainer2 = (StorageContainer) appService.createObject(storageContainer2);
 		    	BaseTestCaseUtility.updateStorageContainer(storageContainer2);
 		    	storageContainer1.setBarcode("container barcode"+uniqueKey);
@@ -387,11 +387,11 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 						.println("StorageContainerTestCases.testUpdateStorageContainer()"+e.getMessage() );
 		 		assertFalse("failed to update Object", true);
 		    }
-		     
+
 			StorageContainer storageContainer = new StorageContainer();
 	    	Logger.out.info(" searching domain object");
 	    	storageContainer.setBarcode("CONTAINER BAORCODE"+uniqueKey);
-	   
+
 	         try {
 	        	 List resultList = appService.search(StorageContainer.class,storageContainer);
 	        	if(resultList.size()==1)
@@ -401,12 +401,12 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	        	else{
 	        		assertFalse("Does not find Domain Object", true);
 	        	}
-	          } 
+	          }
 	          catch (Exception e) {
 	           	Logger.out.error(e.getMessage(),e);
 	           	e.printStackTrace();
 	           	assertFalse("Does not find Domain Object", true);
-		 		
+
 	          }
 		}
 	public void testUpdateStorageContainer()
@@ -414,7 +414,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
 		System.out.println("Before Update");
     	Logger.out.info("updating domain object------->"+storageContainer);
-	    try 
+	    try
 		{
 	    	storageContainer = (StorageContainer) appService.createObject(storageContainer);
 	    	BaseTestCaseUtility.updateStorageContainer(storageContainer);
@@ -422,7 +422,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer);
 	       	assertTrue("Domain object successfully updated ---->"+updatedStorageContainer, true);
-	    } 
+	    }
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
@@ -431,26 +431,26 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	 		assertFalse("failed to update Object", true);
 	    }
 	}
-	
+
 	public void testUpdateStorageContainerWithParentChanged()
 	{
 		StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
 		System.out.println("Before Update");
     	Logger.out.info("updating domain object------->"+storageContainer);
-	    try 
+	    try
 		{
 	    	storageContainer = (StorageContainer) appService.createObject(storageContainer);
 	    	StorageContainer cachedContainer = (StorageContainer) TestCaseUtility.getObjectMap(StorageContainer.class);
-	    	Container parent = new StorageContainer(); 
+	    	Container parent = new StorageContainer();
 	    	parent.setId(cachedContainer.getId());
 	    	storageContainer.setParentChanged(true);
 	    	ContainerPosition cntPos = new ContainerPosition();
-	    	cntPos.setParentContainer(parent);    
+	    	cntPos.setParentContainer(parent);
 	    	System.out.println("After Update");
 	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
 	       	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer);
 	       	assertTrue("Domain object successfully updated ---->"+updatedStorageContainer, true);
-	    } 
+	    }
 	    catch (Exception e) {
 	       	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
@@ -459,13 +459,13 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	 		assertFalse("failed to update Object", true);
 	    }
 	}
-	
+
 	public void testUpdateStorageContainerToClosedActivityStatus()
 	{
 		try{
-			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
+			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
 			System.out.println(storageContainer);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 			System.out.println("Object created successfully");
 			storageContainer.setActivityStatus("Closed");
 			StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
@@ -479,13 +479,13 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			 assertFalse("Could notclose Storage Container", true);
 		 }
 	}
-	
+
 	public void testUpdateStorageContainerToDisabledActivityStatus()
 	{
 		try{
-			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
+			StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
 			System.out.println(storageContainer);
-			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 			System.out.println("Object created successfully");
 			storageContainer.setActivityStatus("Disabled");
 			StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
@@ -499,52 +499,52 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			 assertFalse("Could not disable Storage Container", true);
 		 }
 	}
-	
+
 	public void testAddStorageContainerToClosedSite()
 	{
 	try{
-		Site site= BaseTestCaseUtility.initSite(); 	
+		Site site= BaseTestCaseUtility.initSite();
 		System.out.println(site);
 		try{
-			site = (Site) appService.createObject(site); 
+			site = (Site) appService.createObject(site);
 		}catch(Exception e){
-			Logger.out.error(e.getMessage(),e);	
-			e.printStackTrace();	
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
 			assertFalse("Failed to create site ", true);
 		}
-		
+
 		site.setActivityStatus("Closed");
-		
+
 		try{
 			site =(Site)appService.updateObject(site);
 		 }catch(Exception e){
-			Logger.out.error(e.getMessage(),e);	
-			e.printStackTrace();	
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
 			assertFalse("Failed to close the site ", true);
 		 }
-		
-		StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer(); 
+
+		StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
 		System.out.println(storageContainer);
 		storageContainer.setSite(site);
-		
+
 		try{
-			storageContainer = (StorageContainer) appService.createObject(storageContainer); 
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 			assertFalse("Storage Container successfully created", true);
-	
+
 		}catch(Exception e){
-			Logger.out.error(e.getMessage(),e);	
-			e.printStackTrace();	
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
 			assertTrue("Could not add Storage Container to close site ", true);
 		 }
-			
+
 	}catch(Exception e){
-		Logger.out.error(e.getMessage(),e);	
-		e.printStackTrace();	
+		Logger.out.error(e.getMessage(),e);
+		e.printStackTrace();
 		assertFalse("Test Failed", true);
 	}
-  }	
+  }
 	public void testAddTissueSpecimenInStorageContainerWithClosedSite()
-	{ 
+	{
 		Site site = BaseTestCaseUtility.initSite();
 		try{
 			site = (Site) appService.createObject(site);
@@ -553,9 +553,9 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
 			 assertFalse("Failed to create site", true);
-		}		
-		
-			
+		}
+
+
 		CollectionProtocol cp = BaseTestCaseUtility.initCollectionProtocol();
 		try{
 			cp = (CollectionProtocol) appService.createObject(cp);
@@ -565,21 +565,21 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
            	e.printStackTrace();
            	assertFalse("Failed to create collection protocol", true);
 		}
-		StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();			
+		StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
 		storageContainer.setSite(site);
 		Collection cpCollection = new HashSet();
 		cpCollection.add(cp);
 		storageContainer.setCollectionProtocolCollection(cpCollection);
-		try{			
-			storageContainer = (StorageContainer) appService.createObject(storageContainer); 			
+		try{
+			storageContainer = (StorageContainer) appService.createObject(storageContainer);
 		}catch(Exception e){
 			 Logger.out.error(e.getMessage(),e);
 			 e.printStackTrace();
 			 assertFalse("Failed create Storage Container", true);
 		}
-		
+
 		Participant participant = BaseTestCaseUtility.initParticipant();
-		
+
 		try{
 			participant = (Participant) appService.createObject(participant);
 		}
@@ -599,33 +599,33 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
 					Utility.datePattern("08/15/1975")));
 			collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
-			
+
 		}
 		catch (ParseException e)
-		{			
+		{
 			e.printStackTrace();
 			assertFalse("Failed to add registration date", true);
 		}
 		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
 		User user = (User)TestCaseUtility.getObjectMap(User.class);
 		collectionProtocolRegistration.setConsentWitness(user);
-		
+
 		Collection consentTierResponseCollection = new HashSet();
 		Collection consentTierCollection = cp.getConsentTierCollection();
-		
+
 		Iterator ConsentierItr = consentTierCollection.iterator();
 		Iterator ConsentierResponseItr = consentTierResponseCollection.iterator();
-		
+
 		while(ConsentierItr.hasNext())
 		{
 			ConsentTier consentTier = (ConsentTier)ConsentierItr.next();
 			ConsentTierResponse consentResponse = new ConsentTierResponse();
 			consentResponse.setResponse("Yes");
-			consentResponse.setConsentTier(consentTier);		
+			consentResponse.setConsentTier(consentTier);
 		}
-	
+
 		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
-	
+
 		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 		System.out.println("Creating CPR");
 		try{
@@ -636,15 +636,15 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
            	e.printStackTrace();
            	assertFalse("Failed to register participant", true);
 		}
-		
+
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg =(SpecimenCollectionGroup) BaseTestCaseUtility.createSCG(collectionProtocolRegistration);
 		scg.setSpecimenCollectionSite(site);
-		scg.setName("New SCG"+UniqueKeyGeneratorUtil.getUniqueKey());		    
+		scg.setName("New SCG"+UniqueKeyGeneratorUtil.getUniqueKey());
 		scg = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(scg);
 		System.out.println("Creating SCG");
-		
-		
+
+
 		try{
 			scg = (SpecimenCollectionGroup) appService.createObject(scg);
 		}
@@ -653,9 +653,9 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
            	e.printStackTrace();
            	assertFalse("Failed to create SCG", true);
 		}
-		
+
 		site.setActivityStatus("Closed");
-		
+
 		try{
 			site = (Site) appService.updateObject(site);
 		}
@@ -664,7 +664,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			 e.printStackTrace();
 			 assertFalse("Could not update site", true);
 		}
-		
+
 		TissueSpecimen ts =(TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 		SpecimenPosition sp = new SpecimenPosition();
 		sp.setStorageContainer(storageContainer);
@@ -672,12 +672,12 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		sp.setPositionDimensionOne(new Integer(1));
 		sp.setPositionDimensionTwo(new Integer(2));
 		ts.setSpecimenPosition(sp);
-		
-		
+
+
 		ts.setSpecimenCollectionGroup(scg);
 		ts.setLabel("TisSpec"+UniqueKeyGeneratorUtil.getUniqueKey());
 		System.out.println("Befor creating Tissue Specimen");
-		
+
 		try{
 			ts = (TissueSpecimen) appService.createObject(ts);
 			System.out.println("TissueSpec:"+ts.getLabel());
@@ -685,9 +685,9 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		}
 		catch(Exception e){
 			assertTrue("Failed to add Specimen in container with closed site", true);
-		}	
-	
-	
+		}
+
+
 	}
 
 	public void testAddSpecimenArrayType()
@@ -708,24 +708,24 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			fail("Failed to add Domain Object");
 		}
 	}
-	
+
 	 public void testSearchSpecimenArrayType()
 	 {
-    	try 
+    	try
     	{
     	//	SpecimenArrayType cachedSpecimenArrayType = (SpecimenArrayType) TestCaseUtility.getObjectMap(SpecimenArrayType.class);
     		SpecimenArrayType specimenArrayType = new SpecimenArrayType();
     		specimenArrayType.setId(new Long(16));
-	     	Logger.out.info(" searching domain object");		    	
+	     	Logger.out.info(" searching domain object");
 	    	List resultList = appService.search(SpecimenArrayType.class,specimenArrayType);
-        	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+        	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();)
         	{
         		SpecimenArrayType returnedSpecimenArray = (SpecimenArrayType)resultsIterator.next();
         		assertTrue("Specimen Array Type is successfully Found" , true);
         		Logger.out.info(" Specimen Array type is successfully Found ---->  :: " + returnedSpecimenArray.getName());
             }
-       } 
-       catch (Exception e) 
+       }
+       catch (Exception e)
        {
     	 Logger.out.error(e.getMessage(),e);
  		 e.printStackTrace();
@@ -734,7 +734,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 	}
 	 public void testUpdateSpecimenArrayType()
 	 {
-		try 
+		try
 		{
 			SpecimenArrayType specimenArrayType =  BaseTestCaseUtility.initSpecimenSpecimenArrayType();
 			specimenArrayType =  (SpecimenArrayType) appService.createObject(specimenArrayType);
@@ -743,8 +743,8 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			SpecimenArrayType updateSpecimenSpecimenArrayType = (SpecimenArrayType) appService.updateObject(specimenArrayType);
 			assertTrue("updateSpecimenSpecimenArrayType is successfully updated" , true);
 			Logger.out.info("updateSpecimenSpecimenArrayType successfully updated ---->"+updateSpecimenSpecimenArrayType);
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
@@ -772,24 +772,24 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				fail("Failed to add Domain Object");
 			}
 		}
-	 
+
 	 public void testSearchSpecimenArray()
 	 {
-    	try 
+    	try
     	{
     		SpecimenArray cachedSpecimenArray = (SpecimenArray) TestCaseUtility.getObjectMap(SpecimenArray.class);
     		SpecimenArray specimenArray = new SpecimenArray();
     		specimenArray.setId(cachedSpecimenArray.getId());
-	     	Logger.out.info(" searching domain object");		    	
+	     	Logger.out.info(" searching domain object");
 	    	List resultList = appService.search(SpecimenArray.class,specimenArray);
-        	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+        	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();)
         	{
         		SpecimenArray returnedSpecimenArray = (SpecimenArray)resultsIterator.next();
         		assertTrue("Specimen Array is successfully Found" , true);
         		Logger.out.info(" Specimen Array is successfully Found ---->  :: " + returnedSpecimenArray.getName());
             }
-       } 
-       catch (Exception e) 
+       }
+       catch (Exception e)
        {
     	 Logger.out.error(e.getMessage(),e);
  		 e.printStackTrace();
@@ -814,7 +814,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				fail("Failed to add Domain Object");
 			}
 		}
-	 
+
 	 public void testUpdateSpecimenArrayWithDuplicateName()
 		{
 			try
@@ -825,9 +825,9 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 
 	    		SpecimenArray specimenArray1 = new SpecimenArray();
 	    		specimenArray1.setId(1L);
-		     	Logger.out.info(" searching domain object");		    	
+		     	Logger.out.info(" searching domain object");
 		    	List resultList = appService.search(SpecimenArray.class,specimenArray1);
-	        	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+	        	for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();)
 	        	{
 	        		SpecimenArray returnedSpecimenArray = (SpecimenArray)resultsIterator.next();
 	        		specimenArray.setName(returnedSpecimenArray.getName());
@@ -840,18 +840,18 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
 				assertTrue("fails since specimen array with the same label exist",true);
-				
+
 			}
 		}
-		
+
 	 /**
-	  * Add Tissue specimen at given container position 
+	  * Add Tissue specimen at given container position
 	  *
 	  */
 	 public void testAddTissueSpecimenAtContainerPosition()
 		{
 			   try {
-				   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();		
+				   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 				   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 				   StorageContainer parent = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
 				   SpecimenPosition position = new SpecimenPosition();
@@ -859,14 +859,14 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				   position.setPositionDimensionTwo(3);
 				   position.setStorageContainer(parent);
 				   specimenObj.setSpecimenPosition(position);
-					
+
 				   specimenObj.setSpecimenCollectionGroup(scg);
 				   Logger.out.info("Inserting domain object------->"+specimenObj);
 				   System.out.println("Before Creating Tissue Specimen");
 				   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
 				   Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
 				   Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-				   assertTrue(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);			
+				   assertTrue(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);
 				}
 				catch(Exception e)
 				{
@@ -876,7 +876,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 					e.printStackTrace();
 					assertFalse("Failed to create Domain Object", true);
 				}
-				
+
 		}
 		/**
 		 * Negative Test add specimen at ocupied container position
@@ -885,7 +885,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		public void testAddTissueSpecimenAtOccupiedPosition()
 		{
 			   try {
-				   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();		
+				   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 				   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 				   StorageContainer parent = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
 				   SpecimenPosition position = new SpecimenPosition();
@@ -893,14 +893,14 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				   position.setPositionDimensionTwo(3);
 				   position.setStorageContainer(parent);
 				   specimenObj.setSpecimenPosition(position);
-					
+
 				   specimenObj.setSpecimenCollectionGroup(scg);
 				   Logger.out.info("Inserting domain object------->"+specimenObj);
 				   System.out.println("Before Creating Tissue Specimen");
 				   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
 				   Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
 				   Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-				   assertFalse(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);			
+				   assertFalse(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel(), true);
 				}
 				catch(Exception e)
 				{
@@ -910,38 +910,38 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 					e.printStackTrace();
 					assertTrue("Position not free: "+e.getMessage(), true);
 				}
-				
+
 		}
 		/*Update the storage location of anticipated specimen ,
-		 * if collection status is set to collected 
+		 * if collection status is set to collected
 		*/
-		
+
 		 public void testUpdateAnticipatedSpecimen()
 			{
 				   try {
-					   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();		
+					   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 					   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-					
+
 					   specimenObj.setSpecimenCollectionGroup(scg);
 					   Logger.out.info("Inserting domain object------->"+specimenObj);
 					   System.out.println("Before Creating Anticipated  Specimen");
 					   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
 					   Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
 					   Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-					   
+
 					   TissueSpecimen tissueSpecimen = new TissueSpecimen();
 					   tissueSpecimen.setId(specimenObj.getId());
 					   List resultList = appService.search(TissueSpecimen.class,tissueSpecimen);
 					   Logger.out.info(" Domain Object is successfully found ---->    Name:: " + specimenObj.getLabel());
-					
+
 					   StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
 					   storageContainer.setCollectionProtocolCollection(new HashSet());
-					   storageContainer = (StorageContainer) appService.createObject(storageContainer); 
-					   assertTrue(" Domain Object is successfully added ---->    Name:: " + storageContainer.getId(), true);	
+					   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+					   assertTrue(" Domain Object is successfully added ---->    Name:: " + storageContainer.getId(), true);
 					   tissueSpecimen=(TissueSpecimen) resultList.get(0);
-					  
+
 					   tissueSpecimen.setCollectionStatus("Collected");
-					   
+
 					   SpecimenPosition position = new SpecimenPosition();
 					   position.setPositionDimensionOne(1);
 					   position.setPositionDimensionTwo(3);
@@ -950,7 +950,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 					   tissueSpecimen.setExternalIdentifierCollection(null);
 					   tissueSpecimen=(TissueSpecimen) appService.updateObject(tissueSpecimen);
 					   assertTrue(" Domain Object is successfully updated  ---->    Name:: " + storageContainer.getId(), true);
-					  
+
 					}
 					catch(Exception e)
 					{
@@ -960,39 +960,39 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 						e.printStackTrace();
 						assertFalse("Failed to update Anticipated  Specimen Object", true);
 					}
-					
+
 			}
-		 
+
 			/*Update the storage location of anticipated specimen ,
-			 * if collection status is set to Pending 
+			 * if collection status is set to Pending
 			*/
 		 public void testUpdateAnticipatedSpecimenWithPendingStatus()
 			{
 				   try {
-					   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();		
+					   TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 					   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-					
+
 					   specimenObj.setSpecimenCollectionGroup(scg);
 					   Logger.out.info("Inserting domain object------->"+specimenObj);
 					   System.out.println("Before Creating Anticipated  Specimen");
 					   specimenObj =  (TissueSpecimen) appService.createObject(specimenObj);
 					   Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
 					   Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-					   
+
 					   TissueSpecimen tissueSpecimen = new TissueSpecimen();
 					   tissueSpecimen.setId(specimenObj.getId());
 					   List resultList = appService.search(TissueSpecimen.class,tissueSpecimen);
 					   Logger.out.info(" Domain Object is successfully found ---->    Name:: " + specimenObj.getLabel());
 					   System.out.println("after  searching Anticipated  Specimen");
-					
+
 					   StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
 					   storageContainer.setCollectionProtocolCollection(new HashSet());
-					   storageContainer = (StorageContainer) appService.createObject(storageContainer); 
-					   assertTrue(" Domain Object is successfully added ---->    Name:: " + storageContainer.getId(), true);	
+					   storageContainer = (StorageContainer) appService.createObject(storageContainer);
+					   assertTrue(" Domain Object is successfully added ---->    Name:: " + storageContainer.getId(), true);
 					   tissueSpecimen=(TissueSpecimen) resultList.get(0);
-					  
+
 					   tissueSpecimen.setCollectionStatus("Pending");
-					   
+
 					   SpecimenPosition position = new SpecimenPosition();
 					   position.setPositionDimensionOne(1);
 					   position.setPositionDimensionTwo(3);
@@ -1001,7 +1001,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 					   tissueSpecimen.setExternalIdentifierCollection(null);
 					   tissueSpecimen=(TissueSpecimen) appService.updateObject(tissueSpecimen);
 					   assertFalse(" Domain Object is successfully updated  ---->    Name:: " + storageContainer.getId(), true);
-					  
+
 					}
 					catch(Exception e)
 					{
@@ -1011,11 +1011,11 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 						e.printStackTrace();
 						assertTrue("Failed to update Container Location for due to pending status of specimen  ", true);
 					}
-					
+
 			}
-		 
+
 		 /**
-		  * Search Specimen located at given position 
+		  * Search Specimen located at given position
 		  *
 		  */
 		public void testSpecimenLocatedAtPosition()
@@ -1023,10 +1023,10 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				try
 				{
 					StorageContainer storageContainer = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
-					
+
 					StorageContainer parent = new StorageContainer();
 					parent.setId(storageContainer.getId());
-					
+
 					SpecimenPosition position = new SpecimenPosition();
 					position.setPositionDimensionOne(1);
 					position.setPositionDimensionTwo(3);
@@ -1052,7 +1052,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 		 * Get all position of storage container occupied by specimen
 		 *
 		 */
-		
+
 		public void testSearchOccupiedSpecimenPositions()
 		{
 				try
@@ -1060,7 +1060,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 					StorageContainer parent = (StorageContainer)TestCaseUtility.getNameObjectMap("ParentContainer");
 					StorageContainer storageContainer = new StorageContainer();
 					storageContainer.setId(parent.getId());
-					
+
 					List result = appService.search(SpecimenPosition.class, storageContainer);
 					if(result.size()>1||result.size()<1)
 					{
@@ -1089,68 +1089,68 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				   MolecularSpecimen mSpecimenObj = (MolecularSpecimen) BaseTestCaseUtility.initMolecularSpecimen();
 				   FluidSpecimen fSpecimenObj = (FluidSpecimen) BaseTestCaseUtility.initFluidSpecimen();
 				   CellSpecimen cSpecimenObj = (CellSpecimen) BaseTestCaseUtility.initCellSpecimen();
-				   
+
 				   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-				   
+
 				   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
 				   Capacity capacity = new Capacity();
 				   capacity.setOneDimensionCapacity(new Integer(2));
 				   capacity.setTwoDimensionCapacity(new Integer(2));
 				   storageContainer.setCapacity(capacity);
 				   storageContainer = (StorageContainer) appService.createObject(storageContainer);
-			   
+
 				   SpecimenPosition pos1 = new SpecimenPosition();
 				   pos1.setPositionDimensionOne(1);
 				   pos1.setPositionDimensionTwo(1);
 				   pos1.setStorageContainer(storageContainer);
 				   tSpecimenObj.setSpecimenPosition(pos1);
-					
+
 				   SpecimenPosition pos2 = new SpecimenPosition();
 				   pos2.setPositionDimensionOne(1);
 				   pos2.setPositionDimensionTwo(2);
 				   pos2.setStorageContainer(storageContainer);
 				   mSpecimenObj.setSpecimenPosition(pos2);
-					
+
 				   SpecimenPosition pos3 = new SpecimenPosition();
 				   pos3.setPositionDimensionOne(2);
 				   pos3.setPositionDimensionTwo(1);
 				   pos3.setStorageContainer(storageContainer);
 				   cSpecimenObj.setSpecimenPosition(pos3);
-					
+
 				   SpecimenPosition pos4 = new SpecimenPosition();
 				   pos4.setPositionDimensionOne(2);
 				   pos4.setPositionDimensionTwo(2);
 				   pos4.setStorageContainer(storageContainer);
 				   fSpecimenObj.setSpecimenPosition(pos4);
-					
-				   
+
+
 				   tSpecimenObj.setSpecimenCollectionGroup(scg);
 				   cSpecimenObj.setSpecimenCollectionGroup(scg);
 				   mSpecimenObj.setSpecimenCollectionGroup(scg);
 				   fSpecimenObj.setSpecimenCollectionGroup(scg);
-				   
+
 				   System.out.println("Before Creating Specimen object");
-				   
+
 				   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 				   mSpecimenObj = (MolecularSpecimen) appService.createObject(mSpecimenObj);
 				   fSpecimenObj = (FluidSpecimen) appService.createObject(fSpecimenObj);
 				   cSpecimenObj = (CellSpecimen) appService.createObject(cSpecimenObj);
-				   
-				   Capacity cap = storageContainer.getCapacity();	
+
+				   Capacity cap = storageContainer.getCapacity();
 				   cap.setOneDimensionCapacity(new Integer(1));
 				   cap.setTwoDimensionCapacity(new Integer(1));
 				   storageContainer = (StorageContainer) appService.updateObject(storageContainer);
-				   assertFalse("Container is already Full:" +storageContainer , true);  
+				   assertFalse("Container is already Full:" +storageContainer , true);
 			}
 			catch(Exception e)
 			{
 				System.out.println("TestCaseTesting.testDecreseCapacityOfFullContainer()");
 				e.printStackTrace();
 				assertTrue("Failed to Update as Storage Container is already Full :" +e.getMessage() , true);
-				
+
 			}
 		}
-		
+
 		/**
 		 * Test case for Transfer Specimen Position from one position to another
 		 */
@@ -1160,12 +1160,12 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			 {
 				   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 				   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-				   
+
 				   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
 				   Collection collectionProtocolCollection = new HashSet();
 				   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
 				   storageContainer = (StorageContainer) appService.createObject(storageContainer);
-			   
+
 				   SpecimenPosition pos1 = new SpecimenPosition();
 				   pos1.setPositionDimensionOne(1);
 				   pos1.setPositionDimensionTwo(1);
@@ -1175,7 +1175,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				   System.out.println("Before Creating Specimen object");
 				   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 				   System.out.println("After Creating Specimen object");
-				   			   
+
 				   TransferEventParameters spe = new TransferEventParameters();
 				   spe.setSpecimen(tSpecimenObj);
 			       spe.setTimestamp(new Date(System.currentTimeMillis()));
@@ -1194,17 +1194,17 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				   spe = (TransferEventParameters) appService.createObject(spe);
 				   System.out.println("After Creating Specimen object");
 				   assertTrue("Specimen Position Sucessfully Transfered :" + spe , true);
-				   
+
 			}
 			catch(Exception e)
 			{
 				System.out.println("TestCaseTesting.testTransferPositionOFSpecimen()");
 				e.printStackTrace();
-				assertFalse("Container is already Full:" +e.getMessage(), true);  
-				
+				assertFalse("Container is already Full:" +e.getMessage(), true);
+
 			}
 		}
-		
+
 		/**
 		 * Negative test case: Test case for Transfer Specimen Position from one position to another Occupied container
 		 */
@@ -1215,12 +1215,12 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 				   MolecularSpecimen mSpecimenObj = (MolecularSpecimen) BaseTestCaseUtility.initMolecularSpecimen();
 				   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-				   
+
 				   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
 				   Collection collectionProtocolCollection = new HashSet();
 				   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
 				   storageContainer = (StorageContainer) appService.createObject(storageContainer);
-			   
+
 				   SpecimenPosition pos1 = new SpecimenPosition();
 				   pos1.setPositionDimensionOne(1);
 				   pos1.setPositionDimensionTwo(1);
@@ -1230,8 +1230,8 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				   System.out.println("Before Creating Tissue Specimen object");
 				   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 				   System.out.println("After Creating Tissue Specimen object");
-				   
-				   
+
+
 				   SpecimenPosition pos2 = new SpecimenPosition();
 				   pos2.setPositionDimensionOne(2);
 				   pos2.setPositionDimensionTwo(2);
@@ -1241,7 +1241,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				   System.out.println("Before Creating Molecular Specimen object");
 				   mSpecimenObj = (MolecularSpecimen) appService.createObject(mSpecimenObj);
 				   System.out.println("After Creating Molecular Specimen object");
-				   
+
 				   TransferEventParameters spe = new TransferEventParameters();
 				   spe.setSpecimen(tSpecimenObj);
 			       spe.setTimestamp(new Date(System.currentTimeMillis()));
@@ -1259,8 +1259,8 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				   System.out.println("Before Creating TransferEvent");
 				   spe = (TransferEventParameters) appService.createObject(spe);
 				   System.out.println("After Creating Specimen object");
-				   assertFalse("Container is already Full", true);  
-				   
+				   assertFalse("Container is already Full", true);
+
 			}
 			catch(Exception e)
 			{
@@ -1278,12 +1278,12 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			 {
 				   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
 				   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-				   
+
 				   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
 				   Collection collectionProtocolCollection = new HashSet();
 				   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
 				   storageContainer = (StorageContainer) appService.createObject(storageContainer);
-			   
+
 				   SpecimenPosition pos1 = new SpecimenPosition();
 				   pos1.setPositionDimensionOne(1);
 				   pos1.setPositionDimensionTwo(1);
@@ -1293,7 +1293,7 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 				   System.out.println("Before Creating Specimen object");
 				   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
 				   System.out.println("After Creating Specimen object");
-				   			   
+
 				   DisposalEventParameters disposalEvent = new DisposalEventParameters();
 			       disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
  		           disposalEvent.setSpecimen(tSpecimenObj);
@@ -1308,20 +1308,64 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			       disposalEvent = (DisposalEventParameters) appService.createObject(disposalEvent);
 			       if(Status.ACTIVITY_STATUS_DISABLED.toString().equals(disposalEvent.getSpecimen().getActivityStatus()))
 			       {
-			    	   assertTrue("Disposed event sucessfully fired: Activity Status Disable :" + disposalEvent , true);   
+			    	   assertTrue("Disposed event sucessfully fired: Activity Status Disable :" + disposalEvent , true);
 			       }
 			       else
 			       {
-			    	   assertFalse("Disposed event Failed:" + disposalEvent , true);   
+			    	   assertFalse("Disposed event Failed:" + disposalEvent , true);
 			       }
 			}
 			catch(Exception e)
 			{
 				System.out.println("TestCaseTesting.testInsertDisposeSpecimenEvent()");
 				e.printStackTrace();
-				assertFalse("Container is already Full:" +e.getMessage(), true);  
-				
+				assertFalse("Container is already Full:" +e.getMessage(), true);
+
 			}
 		}
-	
+
+		public void testAddStorageContainerWithSpClass()
+		{
+			try{
+				StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
+				System.out.println(storageContainer);
+				Collection<String> holdsSpecimenClassCollection = new HashSet<String>();
+				holdsSpecimenClassCollection.add("Tissue");
+				holdsSpecimenClassCollection.add("Cell");
+				storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
+				storageContainer = (StorageContainer) appService.createObject(storageContainer);
+				TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
+				System.out.println("Object created successfully with Specimen Classes and all types for selected classes.");
+				assertTrue("Object added successfully", true);
+			 }
+			 catch(Exception e){
+				 e.printStackTrace();
+				 assertFalse("could not add object", true);
+			 }
+		}
+
+		public void testAddStrContWithSpClassAndSpType()
+		{
+			try{
+				StorageContainer storageContainer= BaseTestCaseUtility.initStorageContainer();
+				System.out.println(storageContainer);
+				Collection<String> holdsSpecimenClassCollection = new HashSet<String>();
+				holdsSpecimenClassCollection.add("Tissue");
+				holdsSpecimenClassCollection.add("Cell");
+				Collection<String> holdsSpecimenTypeCollection = new HashSet<String>();
+				holdsSpecimenTypeCollection.add("Fixed Tissue");
+				holdsSpecimenTypeCollection.add("Cell");
+				storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
+				storageContainer.setHoldsSpecimenTypeCollection(holdsSpecimenTypeCollection);
+				storageContainer = (StorageContainer) appService.createObject(storageContainer);
+				TestCaseUtility.setObjectMap(storageContainer, StorageContainer.class);
+				System.out.println("Object created successfully with Specimen Classes and selected specimen types.");
+				assertTrue("Object added successfully", true);
+			 }
+			 catch(Exception e){
+				 e.printStackTrace();
+				 assertFalse("could not add object", true);
+			 }
+		}
+
 }

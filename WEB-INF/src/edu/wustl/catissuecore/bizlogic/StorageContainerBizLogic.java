@@ -174,7 +174,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -446,10 +445,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	{
 		if (container.getLocatedAtPosition() != null)
 		{
-			final StorageContainer parentStorageContainer = (StorageContainer) dao
+			final StorageContainer parentStrgCont = (StorageContainer) dao
 					.retrieveById(StorageContainer.class.getName(), container
 							.getLocatedAtPosition().getParentContainer().getId());
-			container.getLocatedAtPosition().setParentContainer(parentStorageContainer);
+			container.getLocatedAtPosition().setParentContainer(parentStrgCont);
 		}
 		logger.debug("container.isParentChanged() : " + container.isParentChanged());
 		if (container.isParentChanged())
@@ -486,16 +485,16 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	private void checkCapacity(final DAO dao, final StorageContainer container,
 			final StorageContainer oldContainer) throws DAOException, BizLogicException
 	{
-		final Integer oldContainerDimOne = oldContainer.getCapacity().getOneDimensionCapacity();
-		final Integer oldContainerDimTwo = oldContainer.getCapacity().getTwoDimensionCapacity();
-		final Integer newContainerDimOne = container.getCapacity().getOneDimensionCapacity();
-		final Integer newContainerDimTwo = container.getCapacity().getTwoDimensionCapacity();
-		if (oldContainerDimOne.intValue() > newContainerDimOne.intValue()
-				|| oldContainerDimTwo.intValue() > newContainerDimTwo.intValue())
+		final Integer oldContDimOne = oldContainer.getCapacity().getOneDimensionCapacity();
+		final Integer oldContDimTwo = oldContainer.getCapacity().getTwoDimensionCapacity();
+		final Integer newContDimOne = container.getCapacity().getOneDimensionCapacity();
+		final Integer newContDimTwo = container.getCapacity().getTwoDimensionCapacity();
+		if (oldContDimOne.intValue() > newContDimOne.intValue()
+				|| oldContDimTwo.intValue() > newContDimTwo.intValue())
 		{
-			final boolean canReduceDimension = StorageContainerUtil.canReduceDimension(dao, oldContainer
-					.getId(), newContainerDimOne, newContainerDimTwo);
-			if (!canReduceDimension)
+			final boolean canReduceDim = StorageContainerUtil.canReduceDimension(dao, oldContainer
+					.getId(), newContDimOne, newContDimTwo);
+			if (!canReduceDim)
 			{
 				throw this.getBizLogicException(null, "errors.storageContainer.cannotReduce",
 						"");
@@ -896,18 +895,18 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	}
 	/**
 	 * @param dao DAO object
-	 * @param storageContainerID StorageContainer Id
+	 * @param strgContID StorageContainer Id
 	 * @return List of Storage Container object
 	 * @throws DAOException DAOException
 	 */
-	private List reteriveSCObject(DAO dao, String storageContainerID) throws DAOException
+	private List reteriveSCObject(DAO dao, String strgContID) throws DAOException
 	{
 		final String sourceObjectName = StorageContainer.class.getName();
 		final String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER,
 				"capacity.oneDimensionCapacity", "capacity.twoDimensionCapacity", "name"};
 		final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 		queryWhereClause.addCondition(new EqualClause(Constants.SYSTEM_IDENTIFIER, Long
-				.valueOf(storageContainerID)));
+				.valueOf(strgContID)));
 		return dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 	}
 	/**
@@ -959,6 +958,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			validateStTypeAndTemp(container, validator);
 			validatePosition(dao, container, validator);
 			validateStatus(operation, container);
+
+			StorageContainerUtil.populateSpecimenType(container);
 			return true;
 		}
 		catch (final DAOException daoExp)
@@ -1195,7 +1196,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void validateContParent(final StorageContainer container) throws BizLogicException
 	{
-		String message;
 		if (container.getLocatedAtPosition() != null
 				&& container.getLocatedAtPosition().getParentContainer() == null)
 		{
@@ -1241,17 +1241,17 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	public long[] getDefaultHoldCollectionProtocolList(StorageContainer container)
 			throws BizLogicException
 	{
-		final Collection spcimenArrayTypeCollection = (Collection) this.retrieveAttribute(
+		final Collection spArrayTypeColl = (Collection) this.retrieveAttribute(
 				StorageContainer.class.getName(), container.getId(),
 				"elements(collectionProtocolCollection)");
 		long[] cpList = null;
-		if (spcimenArrayTypeCollection.isEmpty())
+		if (spArrayTypeColl.isEmpty())
 		{
 			cpList = new long[]{-1};
 		}
 		else
 		{
-			cpList = AppUtility.getobjectIds(spcimenArrayTypeCollection);
+			cpList = AppUtility.getobjectIds(spArrayTypeColl);
 		}
 		return cpList;
 	}
@@ -1352,19 +1352,19 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	/**
 	 * @param dao - DAO object.
 	 * @param sessionDataBean - SessionDataBean object
-	 * @param disabledContainerList - list of StorageContainers
+	 * @param disableContList - list of StorageContainers
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	private void disableSubStorageContainer(DAO dao, SessionDataBean sessionDataBean,
-			List<StorageContainer> disabledContainerList) throws BizLogicException
+			List<StorageContainer> disableContList) throws BizLogicException
 	{
 		try
 		{
-			final int count = disabledContainerList.size();
+			final int count = disableContList.size();
 			final List containerIdList = new ArrayList();
 			for (int i = 0; i < count; i++)
 			{
-				final StorageContainer container = disabledContainerList.get(i);
+				final StorageContainer container = disableContList.get(i);
 				containerIdList.add(container.getId());
 			}
 			final List listOfSpecimenIDs = this.getRelatedObjects(dao, Specimen.class,
@@ -1377,7 +1377,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			}
 			for (int i = 0; i < count; i++)
 			{
-				final StorageContainer container = disabledContainerList.get(i);
+				final StorageContainer container = disableContList.get(i);
 				dao.update(container);
 			}
 		}
@@ -1392,11 +1392,11 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	 * @param storageContainer - StorageContainer object.
 	 * @param disabledConts -List of disabledConts
 	 * @param dao - DAO object
-	 * @param disabledContainerList - list of disabledContainers
+	 * @param disableContList - list of disabledContainers
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	private void setDisableToSubContainer(StorageContainer storageContainer, List disabledConts,
-			DAO dao, List disabledContainerList) throws BizLogicException
+			DAO dao, List disableContList) throws BizLogicException
 	{
 
 		try
@@ -1412,9 +1412,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 					container.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
 					this.addEntriesInDisabledMap(container, disabledConts);
 					container.setLocatedAtPosition(null);
-					disabledContainerList.add(container);
+					disableContList.add(container);
 					setDisableToSubContainer(container, disabledConts, dao,
-							disabledContainerList);
+							disableContList);
 				}
 			}
 			storageContainer.getOccupiedPositions().clear();
