@@ -64,14 +64,14 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
 			storageContainer.setName(((StorageContainer) TestCaseUtility
 					.getObjectMap(StorageContainer.class)).getName());
 			storageContainer = (StorageContainer) appService.createObject(storageContainer);
-			assertFalse("Add container with new Label ass label generator is active", true);
+			assertTrue("could not add object", true);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out
 					.println("Can not create Container as container with same name already exist");
-			assertTrue("could not add object", true);
+			assertFalse("Add container with new Label ass label generator is active", true);
 		}
 	}
 

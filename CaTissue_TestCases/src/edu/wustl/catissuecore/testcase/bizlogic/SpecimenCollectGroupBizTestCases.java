@@ -275,8 +275,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 			scg = (SpecimenCollectionGroup) appService.createObject(scg);
 			duplicateSCG = (SpecimenCollectionGroup) appService.createObject(duplicateSCG);
 			System.out.println("After Creating SCG");
-			fail("Test Failed. Duplicate SCG name should not throw exception");
-
+			assertTrue("Submission doe not fail since label generator already present", true);
 		}
 		catch (Exception e)
 		{
@@ -284,8 +283,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 			System.out.println("SpecimenCollectGroupTestCases.testAddSCGWithDuplicateName()"
 					+ e.getMessage());
 			e.printStackTrace();
-			assertTrue("Submission doe not fail since label generator already present", true);
-
+			fail("Test Failed. Duplicate SCG name should not throw exception");
 		}
 
 	}
