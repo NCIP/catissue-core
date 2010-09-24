@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.TissueSpecimenReviewEventParametersForm;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -262,16 +263,16 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 	@Override
 	public void doRoundOff() {
 		if (neoplasticCellularityPercentage != null) {
-			neoplasticCellularityPercentage = AppUtility.RoundOff(neoplasticCellularityPercentage, 5);
+			neoplasticCellularityPercentage = AppUtility.roundOff(neoplasticCellularityPercentage, Constants.QUANTITY_PRECISION);
 		}
 		if (necrosisPercentage != null) {
-			necrosisPercentage = AppUtility.RoundOff(necrosisPercentage, 5);
+			necrosisPercentage = AppUtility.roundOff(necrosisPercentage, Constants.QUANTITY_PRECISION);
 		}
 		if (lymphocyticPercentage != null) {
-			lymphocyticPercentage = AppUtility.RoundOff(lymphocyticPercentage, 5);
+			lymphocyticPercentage = AppUtility.roundOff(lymphocyticPercentage, Constants.QUANTITY_PRECISION);
 		}
 		if (totalCellularityPercentage != null) {
-			totalCellularityPercentage = AppUtility.RoundOff(totalCellularityPercentage, 5);
+			totalCellularityPercentage = AppUtility.roundOff(totalCellularityPercentage, Constants.QUANTITY_PRECISION);
 		}
 	}
 }

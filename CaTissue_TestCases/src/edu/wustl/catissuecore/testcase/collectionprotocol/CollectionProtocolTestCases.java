@@ -9,6 +9,7 @@ import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
@@ -441,10 +442,213 @@ public class CollectionProtocolTestCases extends CaTissueSuiteBaseTest
 		cprForm.setConsentDate("");cprForm.setConsentDate("");
 
 		actionPerform();
+
+		cprForm = (CollectionProtocolRegistrationForm)getActionForm();
+		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+		cpr.setId(cprForm.getId());
+		TestCaseUtility.setNameObjectMap("CollectionProtocolRegistration",cpr);
 		String errormsg[] = new String[]{"errors.item"};
 		//verifyActionErrors(errormsg);
 
 
 
 	}
+
+
+	public void testAliquotCountInCP()
+	{
+
+			/*Collection Protocol Details*/
+			CollectionProtocolForm collForm = new CollectionProtocolForm();
+			collForm.setPrincipalInvestigatorId(1L) ;
+			collForm.setTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
+			collForm.setOperation("add") ;
+			collForm.setShortTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
+			collForm.setStartDate("01-12-2009");
+			collForm.setSpecimenLabelFormat("CP_%PPI%_%SP_TYPE%_%PPI_YOC_UID%_%YR_OF_COLL%");
+			collForm.setAliquotLabelFormat("%PSPEC_LABEL%_%PSPEC_UID%");
+			collForm.setDerivativeLabelFormat("CP_%PPI%_%SP_TYPE%_%PPI_YOC_UID%_%YR_OF_COLL%");
+			setRequestPathInfo("/OpenCollectionProtocol");
+			setActionForm(collForm);
+			actionPerform();
+	        verifyForward("success");
+
+	        /*Event Details*/
+	        setRequestPathInfo("/DefineEvents");
+	        addRequestParameter("pageOf", "pageOfDefineEvents");
+			addRequestParameter("operation", "add");
+			actionPerform();
+			verifyForward("pageOfDefineEvents");
+
+	        setRequestPathInfo("/SaveProtocolEvents");
+			addRequestParameter("pageOf", "pageOfDefineEvents");
+			addRequestParameter("studyCalendarEventPoint","20");
+			addRequestParameter("collectionProtocolEventkey", "-1");
+			addRequestParameter("collectionPointLabel", "ECP_" + UniqueKeyGeneratorUtil.getUniqueKey());
+			addRequestParameter("clinicalStatus","Not Specified");
+			addRequestParameter("clinicalDiagnosis", "Not Specified");
+
+			addRequestParameter("collectionEventId", "1");
+			addRequestParameter("collectionEventUserId", "1");
+			addRequestParameter("collectionUserName", "admin,admin");
+			addRequestParameter("collectionEventSpecimenId", "0");
+
+			addRequestParameter("receivedEventId", "1" );
+			addRequestParameter("receivedEventUserId", "1");
+			addRequestParameter("receivedUserName", "admin,admin");
+			addRequestParameter("receivedEventSpecimenId", "admin,admin");
+			addRequestParameter("pageOf", "specimenRequirement");
+			addRequestParameter("operation", "add");
+			actionPerform();
+			verifyForwardPath("/CreateSpecimenTemplate.do?operation=add");
+
+			/*Save Specimen Requirements*/
+
+			setRequestPathInfo("/SaveSpecimenRequirements");
+			addRequestParameter("displayName", "spreq_" + UniqueKeyGeneratorUtil.getUniqueKey());
+
+			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
+			addRequestParameter("collectionUserName", "" + bean.getLastName() + "," + bean.getFirstName());
+
+			addRequestParameter("collectionEventCollectionProcedure", "");
+
+			addRequestParameter("collectionEventContainer", "Not Specified");
+
+			addRequestParameter("key", "E1");
+			addRequestParameter("receivedEventReceivedQuality", "Not Specified");
+			addRequestParameter("collectionEventId", "1");
+			addRequestParameter("collectionEventUserId", "1");
+			addRequestParameter("collectionUserName", "admin,admin");
+			addRequestParameter("collectionEventSpecimenId", "0");
+
+			addRequestParameter("receivedEventId", "1" );
+			addRequestParameter("receivedEventUserId", "1");
+			addRequestParameter("receivedUserName", "admin,admin");
+			addRequestParameter("receivedEventSpecimenId", "admin,admin");
+
+			addRequestParameter("collectionEventCollectionProcedure", "Lavage");
+			addRequestParameter("collectionEventContainer", "CPT");
+			addRequestParameter("className", "Tissue");
+			addRequestParameter("tissueSite", "Anal canal");
+			addRequestParameter("tissueSide", "Left");
+			addRequestParameter("pathologicalStatus", "Metastatic");
+			addRequestParameter("storageLocationForSpecimen","Auto");
+			addRequestParameter("type","Frozen Tissue");
+			addRequestParameter("collectionEventComments", "");
+			addRequestParameter("receivedEventReceivedQuality","Frozen");
+			addRequestParameter("receivedEventComments", "");
+			addRequestParameter("quantity", "10");
+			addRequestParameter("quantityPerAliquot", "5");
+			addRequestParameter("noOfAliquots", "1.5");
+			addRequestParameter("storageLocationForAliquotSpecimen", "Virtual");
+			addRequestParameter("operation", "add");
+
+			addRequestParameter("labelFormat", "%CP_DEFAULT%");
+
+			addRequestParameter("labelFormatForAliquot", "%CP_DEFAULT%");
+
+			actionPerform();
+			verifyForward("failure");
+			String errormsg[] = new String[]{"errors.item.format"};
+			verifyActionErrors(errormsg);
+	}
+
+	public void testDecimalAliquotCountInCP()
+	{
+
+			/*Collection Protocol Details*/
+			CollectionProtocolForm collForm = new CollectionProtocolForm();
+			collForm.setPrincipalInvestigatorId(1L) ;
+			collForm.setTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
+			collForm.setOperation("add") ;
+			collForm.setShortTitle("cp_" + UniqueKeyGeneratorUtil.getUniqueKey());
+			collForm.setStartDate("01-12-2009");
+			collForm.setSpecimenLabelFormat("CP_%PPI%_%SP_TYPE%_%PPI_YOC_UID%_%YR_OF_COLL%");
+			collForm.setAliquotLabelFormat("%PSPEC_LABEL%_%PSPEC_UID%");
+			collForm.setDerivativeLabelFormat("CP_%PPI%_%SP_TYPE%_%PPI_YOC_UID%_%YR_OF_COLL%");
+			setRequestPathInfo("/OpenCollectionProtocol");
+			setActionForm(collForm);
+			actionPerform();
+	        verifyForward("success");
+
+	        /*Event Details*/
+	        setRequestPathInfo("/DefineEvents");
+	        addRequestParameter("pageOf", "pageOfDefineEvents");
+			addRequestParameter("operation", "add");
+			actionPerform();
+			verifyForward("pageOfDefineEvents");
+
+	        setRequestPathInfo("/SaveProtocolEvents");
+			addRequestParameter("pageOf", "pageOfDefineEvents");
+			addRequestParameter("studyCalendarEventPoint","20");
+			addRequestParameter("collectionProtocolEventkey", "-1");
+			addRequestParameter("collectionPointLabel", "ECP_" + UniqueKeyGeneratorUtil.getUniqueKey());
+			addRequestParameter("clinicalStatus","Not Specified");
+			addRequestParameter("clinicalDiagnosis", "Not Specified");
+
+			addRequestParameter("collectionEventId", "1");
+			addRequestParameter("collectionEventUserId", "1");
+			addRequestParameter("collectionUserName", "admin,admin");
+			addRequestParameter("collectionEventSpecimenId", "0");
+
+			addRequestParameter("receivedEventId", "1" );
+			addRequestParameter("receivedEventUserId", "1");
+			addRequestParameter("receivedUserName", "admin,admin");
+			addRequestParameter("receivedEventSpecimenId", "admin,admin");
+			addRequestParameter("pageOf", "specimenRequirement");
+			addRequestParameter("operation", "add");
+			actionPerform();
+			verifyForwardPath("/CreateSpecimenTemplate.do?operation=add");
+
+			/*Save Specimen Requirements*/
+
+			setRequestPathInfo("/SaveSpecimenRequirements");
+			addRequestParameter("displayName", "spreq_" + UniqueKeyGeneratorUtil.getUniqueKey());
+
+			SessionDataBean bean = (SessionDataBean)getSession().getAttribute("sessionData");
+			addRequestParameter("collectionUserName", "" + bean.getLastName() + "," + bean.getFirstName());
+
+			addRequestParameter("collectionEventCollectionProcedure", "");
+
+			addRequestParameter("collectionEventContainer", "Not Specified");
+
+			addRequestParameter("key", "E1");
+			addRequestParameter("receivedEventReceivedQuality", "Not Specified");
+			addRequestParameter("collectionEventId", "1");
+			addRequestParameter("collectionEventUserId", "1");
+			addRequestParameter("collectionUserName", "admin,admin");
+			addRequestParameter("collectionEventSpecimenId", "0");
+
+			addRequestParameter("receivedEventId", "1" );
+			addRequestParameter("receivedEventUserId", "1");
+			addRequestParameter("receivedUserName", "admin,admin");
+			addRequestParameter("receivedEventSpecimenId", "admin,admin");
+
+			addRequestParameter("collectionEventCollectionProcedure", "Lavage");
+			addRequestParameter("collectionEventContainer", "CPT");
+			addRequestParameter("className", "Tissue");
+			addRequestParameter("tissueSite", "Anal canal");
+			addRequestParameter("tissueSide", "Left");
+			addRequestParameter("pathologicalStatus", "Metastatic");
+			addRequestParameter("storageLocationForSpecimen","Auto");
+			addRequestParameter("type","Frozen Tissue");
+			addRequestParameter("collectionEventComments", "");
+			addRequestParameter("receivedEventReceivedQuality","Frozen");
+			addRequestParameter("receivedEventComments", "");
+			addRequestParameter("quantity", "10");
+			addRequestParameter("quantityPerAliquot", "5");
+			addRequestParameter("noOfAliquots", "1.0");
+			addRequestParameter("storageLocationForAliquotSpecimen", "Virtual");
+			addRequestParameter("operation", "add");
+
+			addRequestParameter("labelFormat", "%CP_DEFAULT%");
+
+			addRequestParameter("labelFormatForAliquot", "%CP_DEFAULT%");
+
+			actionPerform();
+			verifyForward("success");
+			verifyNoActionErrors();
+	}
+
+
 }

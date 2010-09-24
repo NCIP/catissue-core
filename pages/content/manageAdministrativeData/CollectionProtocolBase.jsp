@@ -5,7 +5,7 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<script>var imgsrc="/de/images/";</script>
+
 <script language="JavaScript" type="text/javascript" src="de/jss/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="de/jss/scr.js"></script>
 <script language="JavaScript" type="text/javascript" src="de/jss/combobox.js"></script>
@@ -56,11 +56,12 @@
 	function saveCP()
 	{
 		selectAllClinicalDiagnosis();
+		var isSaveCollectionProtocol = false;
 		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
-	    if(formId!=null)
+		if(formId!=null)
 		{
-			var action="DefineEvents.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}";
-
+			var action="SaveCollectionProtocol.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}&refreshWholePage=true";
+            isSaveCollectionProtocol = true;
 		}
 		else
 		{
@@ -84,7 +85,7 @@
 
 		if(window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'] != null && window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['operation'] != null)
 		{
-			if(pageOf=window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['pageOf'] == null)
+           	if(pageOf=window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['pageOf'] == null)
 			{
 
 				var operation=window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['operation'].value;
@@ -93,10 +94,12 @@
 					formId.target = '_top';
 				}
 			}
+			if(isSaveCollectionProtocol == true && formId.target!='_top')
+			{
+				 action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=${requestScope.operation}&refreshWholePage=false";
+			}
 		}
-
-		formId.action=action;
-
+      	formId.action=action;
         formId.submit();
 	}
 
@@ -173,7 +176,7 @@
 				</td>
 							 <td width="80%" valign="top" >
 							 <logic:equal name="operation" value="add">
-								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol" scrolling="auto" frameborder="0" width="100%" height="450" >
+								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&isErrorPage=${requestScope.isErrorPage}" scrolling="auto" frameborder="0" width="100%" height="450" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 							</logic:equal>

@@ -62,7 +62,7 @@ public class ArrayDistributionReportSaveAction extends ArrayDistributionReportAc
 				edu.wustl.security.global.Constants.CLASS_LEVEL_SECURE_RETRIEVE);
 		final SessionDataBean sessionData = this.getSessionData(request);
 		final DistributionReportForm distributionReportForm = this.getDistributionReportForm(dist);
-		distributionReportForm.setDistributionType(new Integer(
+		distributionReportForm.setDistributionType(Integer.valueOf(
 				Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE));
 
 		// Set the columns for Distribution report

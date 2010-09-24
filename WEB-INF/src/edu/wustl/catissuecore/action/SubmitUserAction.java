@@ -328,7 +328,6 @@ public class SubmitUserAction extends XSSSupportedAction
 			catch (final Exception ex)
 			{
 				this.logger.error(ex.getMessage(), ex);
-				ex.printStackTrace();
 			}
 			final HttpSession session = request.getSession();
 			final UserDTO userCurrent = this.getUserDTO((User) this.abstractDomain, session);
@@ -343,7 +342,6 @@ public class SubmitUserAction extends XSSSupportedAction
 			catch (final Exception ex)
 			{
 				this.logger.error(ex.getMessage(), ex);
-				ex.printStackTrace();
 			}
 
 			if ((abstractForm.getActivityStatus() != null)
@@ -550,7 +548,7 @@ public class SubmitUserAction extends XSSSupportedAction
 	 *            QueryBizLogic
 	 * @param objectName
 	 *            String
-	 * @throws DAOException 
+	 * @throws DAOException
 	 */
 	private void addMessage(ActionMessages messages, AbstractDomainObject abstractDomain,
 			String addoredit, QueryBizLogic queryBizLogic, String objectName) throws DAOException

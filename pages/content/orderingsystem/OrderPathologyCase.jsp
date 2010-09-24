@@ -18,16 +18,16 @@
 <%@ page import="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"%>
 <%@ page import="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"%>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 
 <%
 OrderPathologyCaseForm form = (OrderPathologyCaseForm)request.getAttribute("orderPathologyCaseForm");
   	Collection pathologyCase;
 	pathologyCase=(List)request.getAttribute("pathologyCase");
-	
+
 %>
-<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>	
-<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>	
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script language="JavaScript">
 
@@ -62,21 +62,21 @@ function showDerivative(objectenabled,objectdisabled,element)
 		showenabled.display="block";
 		var showdisabled=document.getElementById('showdisabled').style;
 		showdisabled.display="none";
-		
+
 		for(var i = 0; i < <%=size%>; i++)
 		{
 			var requestQtyId = "requestedQuantity"+i;
 			document.getElementById(requestQtyId).value="";
 			document.getElementById(requestQtyId).readOnly=false;
 		}
-		
+
 		span_tags = document.all.tags("span");
 		for(var counter = 0; counter < span_tags.length; counter++)
 		{
 			var current_object = span_tags[counter+1];
 			current_object.innerHTML="";
 		}
-		
+
 	}
 	if(element=="block")
 	{
@@ -86,26 +86,26 @@ function showDerivative(objectenabled,objectdisabled,element)
 		showenabled.display="none";
 		var showdisabled=document.getElementById('showdisabled').style;
 		showdisabled.display="block";
-		
-		
+
+
 		for(var i = 0; i < <%=size%>; i++)
 		{
 			var requestQtyId = "requestedQuantity"+i;
 			document.getElementById(requestQtyId).value="1";
 			document.getElementById(requestQtyId).readOnly=true;
 		}
-			
+
 		var unitreq=document.getElementById("unitSpan");
 		unitreq.innerHTML="Count";
-		
+
 		span_tags = document.all.tags("span");
 		for(var counter = 0; counter < span_tags.length; counter++)
 		{
 			var current_object = span_tags[counter+1];
 			current_object.innerHTML=unitreq.innerHTML;
 		}
-		
-		
+
+
 	}
 }
 
@@ -117,7 +117,7 @@ function checkAl(element)
 	{
 			    var collectionProtocolId = "value(OrderSpecimenBean:"+i+"_collectionProtocol)";
 				var collectionProtocol =  document.getElementById(collectionProtocolId).value;
-				
+
 				for(var j=0;j<document.forms[0].selectedItems.length;j++)
 				{
 					 var collectionProtocolIdInner = "value(OrderSpecimenBean:"+j+"_collectionProtocol)";
@@ -203,10 +203,10 @@ function IsNumeric(sText)
    var ValidChars = "0123456789.";
    var IsNumber=true;
    var Char;
-   for (i = 0; i < sText.length && IsNumber == true; i++) 
-   { 
-      Char = sText.charAt(i); 
-      if (ValidChars.indexOf(Char) == -1) 
+   for (i = 0; i < sText.length && IsNumber == true; i++)
+   {
+      Char = sText.charAt(i);
+      if (ValidChars.indexOf(Char) == -1)
       {
          IsNumber = false;
       }
@@ -217,22 +217,22 @@ function IsNumeric(sText)
 function DefineArray()
 {
 	var action="DefineArray.do?typeOf="+"<%=Constants.PATHOLOGYCASE_ORDER_FORM_TYPE%>";
-	document.OrderPathologyCase.action = action ;		
-    document.OrderPathologyCase.submit();    
+	document.OrderPathologyCase.action = action ;
+    document.OrderPathologyCase.submit();
 }
 
 function biospecimenArray()
 {
 	var action="OrderBiospecimenArray.do";
-	document.OrderPathologyCase.action = action ;		
-    document.OrderPathologyCase.submit();    
+	document.OrderPathologyCase.action = action ;
+    document.OrderPathologyCase.submit();
 }
 
 function specimen()
 {
 	var action="OrderExistingSpecimen.do";
-	document.OrderPathologyCase.action = action ;		
-    document.OrderPathologyCase.submit();    
+	document.OrderPathologyCase.action = action ;
+    document.OrderPathologyCase.submit();
 }
 
 
@@ -260,7 +260,7 @@ function orderToList()
 	else
 	{
 		var action="AddToOrderListPathologyCase.do?typeOf=pathologyCase";
-		document.OrderPathologyCase.action = action ;		
+		document.OrderPathologyCase.action = action ;
 		document.OrderPathologyCase.submit();
 	}
 }
@@ -274,7 +274,7 @@ function onCheck(element)
 	var cnt=0;
 	var len=<%=pathologyCase.size()%>;
 	if(len=="1")
-	{    
+	{
 		if(document.OrderPathologyCase.selectedItems.checked==true);
 		cnt++;
 	}
@@ -283,12 +283,12 @@ function onCheck(element)
 		for(var i=0;i<document.OrderPathologyCase.selectedItems.length;i++)
 		{
 			var checkBoxId = "checkBox_"+i;
-			
+
 			var colprotId = "value(OrderSpecimenBean:"+i+"_collectionProtocol)";
 			var colprotValue =  document.getElementById(colprotId).value;
 
 			if(colprotValue != collectionProtocol)
-				document.getElementById(checkBoxId).disabled=true;	
+				document.getElementById(checkBoxId).disabled=true;
 
 			if(document.OrderPathologyCase.selectedItems[i].checked==true)
 			{
@@ -314,7 +314,7 @@ function enableCheckBox()
 	for(var i=0;i<document.OrderPathologyCase.selectedItems.length;i++)
 	{
 			var checkBoxId = "checkBox_"+i;
-			document.getElementById(checkBoxId).disabled=false;	
+			document.getElementById(checkBoxId).disabled=false;
 			if(document.OrderPathologyCase.selectedItems[i].checked==true)
 			{
 				document.OrderPathologyCase.orderButton.disabled=false;
@@ -334,11 +334,9 @@ function enableCheckBox()
 <!-- Include external css and js files-->
 <LINK REL=StyleSheet HREF="css/styleSheet.css" TYPE="text/css">
 <script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
-
-
 <html:form action="AddToOrderListSpecimen.do" type="edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm"
 			name="OrderPathologyCase">
- <div>			
+ <div>
    <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" valign="top">
 	<tr>
 		<td class="bottomtd">&nbsp;
@@ -419,24 +417,24 @@ function enableCheckBox()
 								<%
 										String classValue = (String)form.getClassName();
 										specimenTypeList = (List)specimenTypeMap.get(classValue);
-										
+
 										boolean subListEnabled = false;
-								
+
 										if(specimenTypeList == null)
 										{
 											specimenTypeList = new ArrayList();
 											specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 										}
-										
-										
+
+
 										pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-										
-										String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')"; 
-										
+
+										String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')";
+
 										String readOnlyForAliquot = "false";
-						
+
 							%>
-								
+							<div id="specimenTypeId">
 											<autocomplete:AutoCompleteTag property="type"
 											  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
 											  initialValue="<%=form.getType()%>"
@@ -446,6 +444,7 @@ function enableCheckBox()
 											  styleClass="black_ar"
 											  size="25"
 									        />
+							</div>
 										</td>
 									</tr>
 								</table>
@@ -508,11 +507,11 @@ function enableCheckBox()
 									<autocomplete:AutoCompleteTag property="tissueSite"
 										  optionsList = "<%=request.getAttribute(Constants.TISSUE_SITE_LIST)%>"
 										  initialValue=""
-										  
+
 										  styleClass="black_ar"
 										  size="25"
 							        />
-									
+
 								</td>
 								<td align="center" width="1%" class="black_ar">
 									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
@@ -540,7 +539,7 @@ function enableCheckBox()
 						</html:button>
 					</td>
 				</tr>
-			<%	
+			<%
 			if(request.getAttribute("value")!=null)
 			{
 				String strarray[]=(String[])request.getAttribute("array");
@@ -562,7 +561,7 @@ function enableCheckBox()
 							 <td class="tableheading"><strong>
 								<bean:message key="orderingsystem.label.colprot" />
 								</strong>
-							  </td>	
+							  </td>
 
 
 							 <td class="tableheading"><strong>
@@ -576,12 +575,12 @@ function enableCheckBox()
 		                </tr>
 						<tr><td class="bottomtd"></td></tr>
 						<!-- getting values form the specimen object-->
-						
+
 						<%
 							int i=0;
 							Iterator it=pathologyCase.iterator();
 							while(it.hasNext())
-							{				
+							{
 					        	SurgicalPathologyReport obj=(SurgicalPathologyReport)it.next();
 								String cnt=new Integer(i).toString();
 								String unitRequestedQuantity = "value(OrderSpecimenBean:"+i+"_unitRequestedQuantity)";
@@ -613,8 +612,8 @@ function enableCheckBox()
 										getCollectionProtocol().getTitle();
 									continue;
 								}
-								
-								
+
+
 							%>
 							<tr>
 								<td valign="top">
@@ -630,19 +629,19 @@ function enableCheckBox()
 								</td>
 								<td class="black_ar_t">
 									<%=collectionProtocol%>
-									<html:hidden property="<%=collectionProtocolId%>" styleId="<%=collectionProtocolId%>" 
+									<html:hidden property="<%=collectionProtocolId%>" styleId="<%=collectionProtocolId%>"
 									value="<%=collectionProtocol%>"/>
 								</td>
 								<td class="black_ar_t">
 										<html:text styleClass="black_ar" maxlength="8"  size="5"  styleId="<%=requestedQuantityId%>" property="<%=requestedQuantity%>" style="text-align:right"/>
 										&nbsp;
-										<span id="unitSpan"></span>		
+										<span id="unitSpan"></span>
 										<html:hidden property="<%=unitRequestedQuantity%>" value="" styleId="unitRequestedQuantity"/>
 										<html:hidden property="<%=isDerived%>" styleId="isDerived" value=""/>
 								</td>
 
 								<td class="black_ar_t">
-										<html:textarea styleClass="black_ar" rows="2" cols="25"  styleId="description" property="<%=description%>"/>		
+										<html:textarea styleClass="black_ar" rows="2" cols="25"  styleId="description" property="<%=description%>"/>
 								</td>
 							</tr>
 							<%i++;
@@ -664,10 +663,10 @@ function enableCheckBox()
 						</label>
 				  </td>
 				  <td align="left" class="black_new dividerline">
-						<html:select property="addToArray" styleClass="formFieldSized10" size="1" 
+						<html:select property="addToArray" styleClass="formFieldSized10" size="1"
 						 			onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-									<html:options collection="<%= Constants.ORDERTO_LIST_ARRAY  %>" labelProperty="name" property="value"/>		
-								</html:select> 
+									<html:options collection="<%= Constants.ORDERTO_LIST_ARRAY  %>" labelProperty="name" property="value"/>
+								</html:select>
 								&nbsp; <a href="#" class="view" onclick="DefineArray()"><bean:message key="orderingsystem.button.defineArray"/></a>
 				 </td>
 			</tr>

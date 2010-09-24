@@ -223,7 +223,7 @@ public class Constants
 	public static final String CONSENT_TABLE = "tableId4";
 
 	/** The Constant DISABLE. */
-	public static final String DISABLE = "disable";
+	public static final String DISABLE = "Disabled";
 
 	/** The Constant SCG_ID. */
 	public static final String SCG_ID = "-1";
@@ -5455,8 +5455,8 @@ public class Constants
 	/** The Constant USER_ROLE. */
 	public static final String USER_ROLE = "USER_ROLE";
 
-	/** The Constant TITLI_CONFIGURED. */
-	public static final String TITLI_CONFIGURED = "TitliConfigured";
+	/** The Constant KEYWORD_CONFIGURED. */
+	public static final String KEYWORD_CONFIGURED = "KeywordSearchConfigured";
 
 	//merged constants......................................Deepti plz confirm
 	/** The Constant COLLECTION_PROTOCOL_CLASS_NAME. */
@@ -5748,8 +5748,14 @@ public class Constants
 	/** The Constant TREE_APPLET_NAME. */
 	public static final String TREE_APPLET_NAME = "treeApplet";
 
-	/** The Constant MAXIMUM_RECORDS_FOR_TITLI_RESULTS. */
-	public static final String MAXIMUM_RECORDS_FOR_TITLI_RESULTS = "titli.result.maximumRecords";
+	/** The Constant MAXIMUM_RECORDS_FOR_KEYWORD_RESULTS. */
+	public static final String MAXIMUM_RECORDS_FOR_KEYWORD_RESULTS = "keywordSearch.result.maximumRecords";
+
+	 /** The Constant MAX_LIMIT_FOR_KEYWORDSEARCH. */
+	public static final String MAX_LIMIT_FOR_KEYWORDSEARCH = "keywordSearch.max.limit";
+
+	/** The Constant MAX_LIMIT_EXCEEDED. */
+	public static final String MAX_LIMIT_EXCEEDED = "maxLimitExceeded";
 
 	/** The Constant IDP_ENABLED. */
 	public static final String IDP_ENABLED = "idp.enabled";
@@ -5766,4 +5772,21 @@ public class Constants
 	/** The Constant CUTTOFFPOINTS. */
 	public static final String CUTTOFFPOINTS = "cutoffPoints";
 
+	/** The Constant CAS_LOGOUT_URL. */
+	public static final String CAS_LOGOUT_URL = "cas.logout.url";
+
+	/** The Constant for setting precision when rounding off initial/available quantity. */
+	public static final int QUANTITY_PRECISION = 5;
+
+	/** The Constant key for setting the catissue cdms integration class name. */
+	public static final String CDMS_INTEGRATION_CLASSNAME = "cdms.integrator.class";
+
+	/** The Constant key for setting the catissue cdms integration properties file in system properties. */
+	public static final String CATISSUE_CDMS_INTEGRATION_PROP_FILE_NAME = "catissue.cdms.integration.class";
+
+	/** The Constant ERROR_PAGE_FOR_CP. */
+	public static final String ERROR_PAGE_FOR_CP = "isErrorPage";
+
+	/** The Constant REFRESH_WHOLE_PAGE. */
+	public static final String REFRESH_WHOLE_PAGE = "refreshWholePage";
 }

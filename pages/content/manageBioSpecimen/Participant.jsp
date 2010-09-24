@@ -585,7 +585,7 @@ tr#hiddenCombo
 				</tr>
 				<tr>
 				<td colspan="5" height="*">
-				<%@ include file="DisplayAnnotationDataEntryPage.jsp" %>
+				<jsp:include page="DisplayAnnotationDataEntryPage.jsp" />
 				</td>
 				</tr>
 			</table>

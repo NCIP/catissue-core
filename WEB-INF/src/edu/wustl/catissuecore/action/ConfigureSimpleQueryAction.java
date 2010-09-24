@@ -139,7 +139,7 @@ public class ConfigureSimpleQueryAction extends BaseAction
 			//Logger.out.debug("counter in configure"+(String)
 			//session.getAttribute(Constants.SIMPLE_QUERY_COUNTER));
 			//Counter required for redefining the query
-			map.put("counter", new String("" + counter));
+			map.put("counter", "" + counter);
 			session.setAttribute(edu.wustl.simplequery.global.Constants.SIMPLE_QUERY_MAP, map);
 		}
 

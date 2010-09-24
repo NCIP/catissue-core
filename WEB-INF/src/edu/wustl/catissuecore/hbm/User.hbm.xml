@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-    
+
 <hibernate-mapping
 >
     <class
@@ -10,7 +10,7 @@
         table="CATISSUE_USER"
         lazy="true"
     >
-    
+
     <cache usage="read-write" />
 
         <id
@@ -22,11 +22,11 @@
         >
             <generator class="native">
                 <param name="sequence">CATISSUE_USER_SEQ</param>
-              <!--  
-                  To add non XDoclet generator parameters, create a file named 
-                  hibernate-generator-params-User.xml 
-                  containing the additional parameters and place it in your merge dir. 
-              --> 
+              <!--
+                  To add non XDoclet generator parameters, create a file named
+                  hibernate-generator-params-User.xml
+                  containing the additional parameters and place it in your merge dir.
+              -->
             </generator>
         </id>
 
@@ -84,7 +84,7 @@
             column="ACTIVITY_STATUS"
             length="50"
         />
-		
+
 		  <property
             name="firstTimeLogin"
             type="boolean"
@@ -92,42 +92,42 @@
             insert="true"
             column="FIRST_TIME_LOGIN"
         />
-        
+
         <many-to-one
             name="department"
             class="edu.wustl.catissuecore.domain.Department"
             cascade="none"
-             
+
             update="true"
             insert="true"
-            column="DEPARTMENT_ID"  lazy="false" 
+            column="DEPARTMENT_ID"  lazy="false"
         />
 
         <many-to-one
             name="cancerResearchGroup"
             class="edu.wustl.catissuecore.domain.CancerResearchGroup"
             cascade="none"
-             
+
             update="true"
             insert="true"
-            column="CANCER_RESEARCH_GROUP_ID"  lazy="false" 
+            column="CANCER_RESEARCH_GROUP_ID"  lazy="false"
         />
 
         <many-to-one
             name="institution"
             class="edu.wustl.catissuecore.domain.Institution"
             cascade="none"
-             
+
             update="true"
             insert="true"
-            column="INSTITUTION_ID"  lazy="false" 
+            column="INSTITUTION_ID"  lazy="false"
         />
 
         <many-to-one
             name="address"
             class="edu.wustl.catissuecore.domain.Address"
             cascade="none"
-             
+
             update="true"
             insert="true"
             column="ADDRESS_ID"
@@ -141,7 +141,7 @@
             cascade="save-update"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
             <key
@@ -152,7 +152,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.CollectionProtocol"
                 column="COLLECTION_PROTOCOL_ID"
-                 
+
              />
 
         </set>
@@ -178,12 +178,12 @@
         <set
             name="passwordCollection"
             table="CATISSUE_PASSWORD"
-            fetch="join" lazy="false" 
+            fetch="join" lazy="false"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
         >
-        
+
         <cache usage="read-write" />
 
             <key
@@ -197,7 +197,7 @@
 
         </set>
 
-<!-- 
+<!--
 
 		<set
             name="clinicalStudyCollection"
@@ -216,7 +216,7 @@
             <many-to-many
                 class="edu.wustl.catissuecore.domain.ClinicalStudy"
                 column="CLINICAL_STUDY_ID"
-                 
+
              />
 
         </set>
@@ -243,7 +243,7 @@
              />
 
         </set>
-        
+
          <set
             name="assignedProtocolCollection"
             table="CATISSUE_USER_CP"
@@ -266,14 +266,6 @@
 
         </set>
 
- 		<property
-            name="wustlKey"
-            type="string"
-            update="true"
-            insert="true"
-            column="WUSTLKEY"
-            length="100"
-        />
            <!--
             To add non XDoclet property mappings, create a file named
                 hibernate-properties-User.xml

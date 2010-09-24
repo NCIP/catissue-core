@@ -24,9 +24,6 @@ public class TechnicianTestcases extends CaTissueSuiteBaseTest
 
 	public void testLogoutSupervisorAndLoginAsSuperAdmin()
 	{
-		setRequestPathInfo("/Logout") ;
-		actionPerform();
-		verifyForward("success");
 		CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN = null;
 
 		setRequestPathInfo("/Login") ;
@@ -48,16 +45,19 @@ public class TechnicianTestcases extends CaTissueSuiteBaseTest
 	{
 		try
 		 {
+			System.out.println("In testTechnicianAdd");
 			User user = BaseTestCaseUtility.initUser();
 			user.setRoleId( "3" );
 			user.setEmailAddress("Technician"+ UniqueKeyGeneratorUtil.getUniqueKey()+"@Technician.com");
 			user.setLoginName(user.getEmailAddress());
 			user.setPageOf(Constants.PAGE_OF_USER_ADMIN);
 			Site site = (Site)TestCaseUtility.getNameObjectMap("Site");
+			System.out.println("Site = "+site.getName());
 			Collection<Site> siteCollection = new HashSet<Site>();
 			siteCollection.add(site);
 			user.setSiteCollection(siteCollection);
 			user = (User)appService.createObject(user);
+			System.out.println("user created");
 			Logger.out.info("Technician User added successfully");
 			assertTrue("Technician User added successfully", true);
 		    user.setNewPassword("Test123");

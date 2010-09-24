@@ -194,7 +194,6 @@
 		<attribute name="startDate" dataType="Date" />
 		<attribute name="activityStatus" dataType="String" />
 		<attribute name="comments" dataType="String" />
-		<attribute name="wustlKey" dataType="String" />
 		<containmentAssociationCollection
 			className="edu.wustl.catissuecore.domain.Address"
 			relationShipType="containment"

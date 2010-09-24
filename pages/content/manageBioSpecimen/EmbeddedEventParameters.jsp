@@ -7,7 +7,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.EmbeddedEventParametersForm"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page language="java" isELIgnored="false" %>
 <head>
 <!-- Mandar : 434 : for tooltip -->
@@ -20,9 +20,9 @@
 <!-- Mandar 21-Aug-06 : calendar changes end -->
 
 </head>
-        			
+
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
-    
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 
 <html:form action='${requestScope.formName}'>
@@ -45,7 +45,7 @@
                 <td align="left" valign="middle" class="black_ar" width="30%"><html:select property="userId" styleClass="formFieldSized18" styleId="userId" size="1"
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value"/>
-				</html:select></td>  
+				</html:select></td>
 				<td width="1%"></td>
 				<td colspan="2"></td></tr>
                 <tr>
@@ -69,19 +69,19 @@
 			  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 			  styleClass="black_ar" size="5" />
 </logic:empty><span class="grey_ar_s"><bean:message key="page.dateFormat" /></span></td>
-                
+
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar" width="8%"><bean:message key="eventparameters.time"/></td>
                   <td align="left"><span class="black_ar"><autocomplete:AutoCompleteTag property="timeInHours"
 					   optionsList = '${requestScope.hourList}'
 					   initialValue='${embeddedEventParametersForm.timeInHours}'
 					  styleClass="black_ar"
-					  staticField="false" size="3" />                    &nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+					  staticField="false" size="4" />                    &nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
                     <autocomplete:AutoCompleteTag property="timeInMinutes"
 						   optionsList = '${requestScope.minutesList}'
 						  initialValue='${embeddedEventParametersForm.timeInMinutes}'
 						  styleClass="black_ar"
-						  staticField="false" size="3" />	                    &nbsp;<bean:message key="eventparameters.timeinminutes"/></span></td>
+						  staticField="false" size="4" />	                    &nbsp;<bean:message key="eventparameters.timeinminutes"/></span></td>
                 </tr>
                 <tr>
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
@@ -92,8 +92,8 @@
 						  initialValue='${embeddedEventParametersForm.embeddingMedium}'
 						  styleClass="black_ar" size="30"/></td>
                 </tr>
-                
-                
+
+
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/></td><td align="left" colspan="5"><html:textarea styleClass="black_ar"  styleId="comments" property="comments" cols="73" rows="4"/></td>
@@ -105,10 +105,10 @@
           <td class="buttonbg">
 			<html:submit styleClass="blue_ar_b" value="Submit" onclick='${requestScope.changeAction}' />
 			</td>
-        </tr>	
-	 
+        </tr>
+
 
 	 <!-- NEW Embedded EventParameters ends-->
-	 
+
 	 </html:form>
  </table>

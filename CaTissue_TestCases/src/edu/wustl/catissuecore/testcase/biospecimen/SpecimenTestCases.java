@@ -9,7 +9,6 @@ import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
-import edu.wustl.catissuecore.domain.Aliquot;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -442,7 +441,35 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		TestCaseUtility.setNameObjectMap("Aliquot",aliquot);
 	}
 
-	public void testAliquot()
+	
+	public void testAliquotCount()
+	{
+		setRequestPathInfo("/Aliquots");
+		actionPerform();
+		AliquotForm aliquotForm = new AliquotForm();
+		Specimen parent = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
+		aliquotForm.setSpecimenLabel( parent.getLabel() );
+		aliquotForm.setClassName( parent.getSpecimenClass() );
+		aliquotForm.setType( parent.getSpecimenType() );
+		aliquotForm.setNoOfAliquots( "1.5" );
+		aliquotForm.setQuantityPerAliquot( "1" );
+		aliquotForm.setSpecimenID( parent.getId().toString() );
+		aliquotForm.setNextForwardTo( "" );
+		aliquotForm.setButtonClicked("submit");
+		addRequestParameter("pageOf", "pageOfCreateAliquot");
+		addRequestParameter("operation", "add");
+		aliquotForm.setSpCollectionGroupId( parent.getSpecimenCollectionGroup().getId() );
+		setActionForm(aliquotForm);
+		setRequestPathInfo("/CreateAliquots");
+		
+		actionPerform();
+		verifyForward("pageOfAliquot");
+		String errormsg[] = new String[]{"errors.item.format"};
+		verifyActionErrors(errormsg);
+	}
+	
+	
+	/*public void testAliquot()
 	{
 		Specimen specimen = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
 		NewSpecimenForm specimenForm = null;
@@ -799,7 +826,7 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 		String errormsg[] = new String[] {"access.addedit.object.denied"};
 		verifyActionErrors(errormsg);
 
-	}	*/
+	}*/
 
 
 	 public void testCreateDerivativeOfSpecimen()
@@ -1112,7 +1139,6 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 			}
 			catch (BizLogicException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println(sc.getName()+">>>>>>>>>>>>>>");
@@ -1496,4 +1522,29 @@ public class SpecimenTestCases extends CaTissueSuiteBaseTest
 	    	TestCaseUtility.setNameObjectMap("SpecimenForTranfer",specimen);
 	   	}
 
+	public void testDecimalAliquotCount()
+	{
+		setRequestPathInfo("/Aliquots");
+		actionPerform();
+		AliquotForm aliquotForm = new AliquotForm();
+		Specimen parent = (Specimen) TestCaseUtility.getNameObjectMap("Specimen");
+		aliquotForm.setSpecimenLabel( parent.getLabel() );
+		aliquotForm.setClassName( parent.getSpecimenClass() );
+		aliquotForm.setType( parent.getSpecimenType() );
+		aliquotForm.setNoOfAliquots( "1.0" );
+		aliquotForm.setQuantityPerAliquot( "1" );
+		aliquotForm.setSpecimenID( parent.getId().toString() );
+		aliquotForm.setNextForwardTo( "" );
+		aliquotForm.setButtonClicked("submit");
+		addRequestParameter("pageOf", "pageOfCreateAliquot");
+		addRequestParameter("operation", "add");
+		aliquotForm.setSpCollectionGroupId( parent.getSpecimenCollectionGroup().getId() );
+		setActionForm(aliquotForm);
+		setRequestPathInfo("/CreateAliquots");
+		
+		actionPerform();
+		verifyForward("pageOfCreateAliquot");
+		verifyNoActionErrors();
+	}
+	
 }

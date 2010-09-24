@@ -89,11 +89,11 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		}
 		final Long reportId = Long.valueOf(reportIdStr);
 
-		Long id = null;
+		Long sprId = null;
 		if (strId != null)
 		{
-			id = new Long(strId);
-			viewSPR.setId(id);
+			sprId = new Long(strId);
+			viewSPR.setId(sprId);
 		}
 		final String strIdentifier = request.getParameter(Constants.IDENTIFIER);
 		Long identifier = null;
@@ -154,7 +154,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 
 		// Falguni:Performance Enhancement -User clicks on Report tab then
 		// annotation page on Edit participant page
-		Long participantEntityId = null;
+		Long partEntityId = null;
 		/*if (CatissueCoreCacheManager.getInstance().getObjectFromCache("participantEntityId") != null)
 		{
 			participantEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
@@ -171,23 +171,23 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
 				AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID) != null)
 		{
-			participantEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
+			partEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
 					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID);
 		}
 		else
 		{
-			participantEntityId = AnnotationUtil
+			partEntityId = AnnotationUtil
 					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
 			CatissueCoreCacheManager.getInstance().addObjectToCache(
-					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID, participantEntityId);
+					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID, partEntityId);
 		}
 		request.setAttribute(AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID,
-				participantEntityId);
+				partEntityId);
 
 		if (pageOf.equalsIgnoreCase(Constants.PAGE_OF_NEW_SPECIMEN)
 				|| pageOf.equalsIgnoreCase(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 		{
-			request.setAttribute(Constants.ID, id.toString());
+			request.setAttribute(Constants.ID, sprId.toString());
 		}
 		final String flow = request.getParameter("flow");
 		if (flow != null && flow.equals("viewReport"))
@@ -247,7 +247,6 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			catch (final Exception ex)
 			{
 				logger.error(ex.getMessage(),ex);
-				ex.printStackTrace();
 			}
 		}
 	}
@@ -266,8 +265,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			obj = (Object[]) scgList.get(i);
 			if (obj[1] != null || (obj[1] != null && !((String) obj[1]).equals("")))
 			{
-				final NameValueBean nb = new NameValueBean(obj[1], ((Long) obj[2]).toString());
-				reportIDList.add(nb);
+				final NameValueBean nameValueBean = new NameValueBean(obj[1], ((Long) obj[2]).toString());
+				reportIDList.add(nameValueBean);
 			}
 		}
 		return reportIDList;
@@ -301,16 +300,16 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			bizLogic = factory.getBizLogic(Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID);
 			final Object object = bizLogic.retrieve(PathologyReportReviewParameter.class.getName(),
 					identifier);
-			final PathologyReportReviewParameter pathologyReportReviewParameter = (PathologyReportReviewParameter) object;
-			viewSPR.setUserComments(pathologyReportReviewParameter.getComment());
+			final PathologyReportReviewParameter pathRepReviewParameter = (PathologyReportReviewParameter) object;
+			viewSPR.setUserComments(pathRepReviewParameter.getComment());
 			final User user = (User) defaultBizLogic.retrieveAttribute(
-					PathologyReportReviewParameter.class.getName(), pathologyReportReviewParameter
+					PathologyReportReviewParameter.class.getName(), pathRepReviewParameter
 							.getId(), "user");
 			witnessFullName = user.getFirstName() + ", " + user.getLastName() + "'s";
 			viewSPR.setUserName(witnessFullName);
 			final SurgicalPathologyReport surgicalPathologyReport = (SurgicalPathologyReport) defaultBizLogic
 					.retrieveAttribute(PathologyReportReviewParameter.class.getName(),
-							pathologyReportReviewParameter.getId(), "surgicalPathologyReport");
+							pathRepReviewParameter.getId(), "surgicalPathologyReport");
 			if (surgicalPathologyReport instanceof DeidentifiedSurgicalPathologyReport)
 			{
 				final Long identifiedSurgicalPathologyReportId = (Long) defaultBizLogic
@@ -373,7 +372,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 
 		final List participantIdList = bizLogic.retrieve(sourceObjectName, selectColumnName,
 				whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-		if (participantIdList != null && participantIdList.size() > 0)
+		if (participantIdList != null && !participantIdList.isEmpty())
 		{
 			return (Long) participantIdList.get(0);
 		}
@@ -398,7 +397,6 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		catch (final Exception ex)
 		{
 			logger.error(ex.getMessage(), ex);
-			ex.printStackTrace();
 			return null;
 		}
 	}
@@ -435,7 +433,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			// Call to SecurityManager.checkPermission bypassed &
 			// instead, call redirected to privilegeCache.hasPrivilege
 			isAuthorized = privilegeCache.hasPrivilege(
-					aliasName + "_" + String.valueOf(identifier), Permissions.READ_DENIED);
+					aliasName + "_" + identifier, Permissions.READ_DENIED);
 			// boolean isAuthorized =
 			// SecurityManager.getInstance(ViewSurgicalPathologyReportAction
 			// .class).
@@ -447,8 +445,10 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				// the object.
 				// Call to SecurityManager.checkPermission bypassed &
 				// instead, call redirected to privilegeCache.hasPrivilege
-				boolean hasPrivilegeOnIdentifiedData = privilegeCache.hasPrivilege(aliasName + "_"
-						+ identifier, Permissions.REGISTRATION);
+				boolean hasPrivilegeOnIdentifiedData = (privilegeCache.hasPrivilege(aliasName + "_"
+						+ identifier, Permissions.REGISTRATION) || privilegeCache.hasPrivilege(aliasName + "_"
+								+ identifier, Permissions.PHI) || privilegeCache.hasPrivilege(aliasName + "_"
+										+ identifier, Permissions.IDENTIFIED_DATA_ACCESS));
 				if (!hasPrivilegeOnIdentifiedData)
 				{
 					hasPrivilegeOnIdentifiedData = AppUtility.checkForAllCurrentAndFutureCPs(

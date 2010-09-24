@@ -7,7 +7,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 
@@ -28,7 +28,7 @@
       </tr>
     </table>
       <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
-      
+
       <tr>
         <td width="1%"  align="left" class="bottomtd">
         	<%@ include file="/pages/content/common/ActionErrors.jsp" %>
@@ -36,13 +36,13 @@
       </tr>
       <tr>
         <td  align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;<logic:equal name="bulkEventOperationsForm" property="operation" value="<%=Constants.BULK_TRANSFERS%>">
-								<bean:message key="bulk.events.operation"/> 
+								<bean:message key="bulk.events.operation"/>
 							</logic:equal>
 							<logic:equal name="bulkEventOperationsForm" property="operation" value="<%=Constants.BULK_DISPOSALS%>">
-								<bean:message key="bulk.events.disposals"/> 
+								<bean:message key="bulk.events.disposals"/>
 							</logic:equal></span></td>
       </tr>
-      
+
       <tr>
         <td  class="showhide"><table width="100%" border="0" cellpadding="3" cellspacing="0">
             <tr>
@@ -76,26 +76,25 @@
 								  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
 								  initialValue="<%=hours%>"
 								  styleClass="black_ar"
-								  size="3"
+								  size="4"
 								  staticField="false"
 						    	/>&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
                <autocomplete:AutoCompleteTag property="timeInMinutes"
 									  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
 									  initialValue="<%=minutes%>"
 									  styleClass="black_ar"
-									  size="3"
+									  size="4"
 									  staticField="false"
 							   />	&nbsp;<bean:message key="eventparameters.timeinminutes"/> </span></td>
             </tr>
-            
-            
+
+
             <tr>
               <td align="center" class="black_ar">&nbsp;</td>
               <td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/></td>
               <td align="left" valign="top" class="black_ar_t"><html:textarea styleClass="black_ar" cols="70" rows="3"  styleId="comments" property="comments"/></td>
             </tr>
-	
-	 
-	  
-	  
-	  
+
+
+
+

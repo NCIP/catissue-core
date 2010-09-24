@@ -1,7 +1,7 @@
-<!-- 
+<!--
 	This JSP page is to create/display similar containers from/of Parent Storage Container.
 	Author : Chetan B H
-	Date   : 
+	Date   :
 -->
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
@@ -27,12 +27,12 @@
 		String printAction ="printStorageContainer";
 		String label1 = null;
 		String label2 = null;
-		
+
 		StorageContainerForm form;
 		if(obj != null && obj instanceof StorageContainerForm)
 		{
 			form = (StorageContainerForm)obj;
-			
+
 			label1 = form.getOneDimensionLabel();
 			label2 = form.getTwoDimensionLabel();
 
@@ -57,8 +57,8 @@
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/prototype.js"></script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/scr.js"></script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/combobox.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/ext-base.js"></script>
-	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/ext-all.js"></script>
+	<script language="JavaScript" type="text/javascript" src="jss/ext-base.js"></script>
+	<script language="JavaScript" type="text/javascript" src="jss/ext-all.js"></script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/combos.js"></script>
 	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/ajax.js"></script>
 
@@ -76,12 +76,12 @@
 	<script>Ext.onReady(function(){var myUrl= 'SpecimenTypeDataAction.do?method=Cell';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'CB_cell',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'cell'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7 ||  Ext.isSafari3){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});</script>
 
 	<script>Ext.onReady(function(){var myUrl= 'SpecimenTypeDataAction.do?method=Molecular';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'CB_molecular',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'molecular'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7 || Ext.isSafari3){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});</script>
-	
+
 
 	<script language="JavaScript">
 		function onCreate()
 		{
-			var action = '<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>';			
+			var action = '<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>';
 			action = action + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_SIMILAR_CONTAINERS%>' + "&menuSelected=7";
 			//alert("action "+action);
 			document.forms[0].action = action;
@@ -89,7 +89,7 @@
 		}
 		function selectSpType()
 	{
-		var tissue = document.getElementById('holdsTissueSpType');		
+		var tissue = document.getElementById('holdsTissueSpType');
 		var fluid  = document.getElementById('holdsFluidSpType');
 		var cell   = document.getElementById('holdsCellSpType');
 		var mol    = document.getElementById('holdsMolSpType');
@@ -108,7 +108,7 @@
 				fluid.options[i].selected=true;
 			}
 		}
-		
+
 		if (cell != null)
 		{
 			for (i = cell.options.length-1; i >= 0; i--)
@@ -116,7 +116,7 @@
 				cell.options[i].selected=true;
 			}
 		}
-		
+
 		if (mol != null)
 		{
 			for (i = mol.options.length-1; i >= 0; i--)
@@ -126,13 +126,13 @@
 		}
 	}
 
-		
+
 		function onRadioButtonClick(element, row)
 		{
-			var elmtname = element.name;			
-			
+			var elmtname = element.name;
+
 			var listBox	= document.getElementById("siteId_"+row);
-			
+
 			var parentContBox = document.getElementById("customListBox_"+row+"_0");
 			var xContBox = document.getElementById("customListBox_"+row+"_1");
 			var yContBox = document.getElementById("customListBox_"+row+"_2");
@@ -140,7 +140,7 @@
 			if(element.value == 1)
 			{
 				listBox.disabled = false;
-				
+
 				parentContBox.disabled = true;
 				xContBox.disabled = true;
 				yContBox.disabled = true;
@@ -157,11 +157,11 @@
 				//document.forms[0].customListBox_1_1.disabled = false;
 				//document.forms[0].customListBox_1_2.disabled = false;
 				//document.forms[0].Map.disabled = false;
-				
+
 				listBox.disabled = true;
 			}
 		}
-		
+
 		function onClick(element)
 		{
 			var elementCP = document.getElementById("collectionIds");
@@ -171,7 +171,7 @@
 			elementCP.disabled = false;
 			elementHolds.disabled = false;
 			elementSpecimenHolds.disabled = false;
-			
+
 			//action = "<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>";
 			//action = action + "?pageOf="+"<%=Constants.PAGE_OF_CREATE_SIMILAR_CONTAINERS%>"+"&menuSelected=7";
 			var action = document.forms[0].action; //"<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>";
@@ -183,33 +183,33 @@
 			{
 				setSubmittedForPrint('ForwardTo','<%=printAction%>','success');
 			}
-			document.forms[0].submit;			
+			document.forms[0].submit;
 		}
-		
+
 		function onSiteChange1(element, row)
 		{
 			var containerNameElement = document.getElementById("containerName_"+row);
-						
+
 			var selectedIndex = element.selectedIndex;
 			var selected_text = element.options[selectedIndex].text;
-			
+
 			var value = containerNameElement.value;
 			var index = value.indexOf("_");
 			var suffix = value.substring(index+1);
 			//alert("suffix "+suffix+" selected_text "+selected_text);
 			containerNameElement.value = selected_text+"_"+suffix;
 		}
-		
+
 		function onSiteChange(i)
 		{
-			
+
 
 			var typeElement = document.forms[0].typeName.value;
 			var siteElement = document.getElementById("siteId_"+i);
 
 			if(typeElement.value != "-1" && siteElement.value != "-1" )
 			{
-					//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
+					//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate
 					//and it is giving error. So these fields are truncated in case it is longer than 40.
 					//It also solves Bug 2829:System fails to create a default unique storage container name
 			        var maxSiteName = siteElement.options[siteElement.selectedIndex].text;
@@ -222,16 +222,16 @@
 					{
 						maxTypeName = maxTypeName.substring(0,39);
 					}
-					
-					
+
+
 					//var siteNameElement = document.forms["storageContainerForm"].getElementById("siteId");//similarContainerMapValue(simCont:1_siteName)
 					var formElements = document.forms["storageContainerForm"].elements;
 					var siteNameElement = formElements["similarContainerMapValue(simCont:"+i+"_siteName)"];
 					siteNameElement.value = maxSiteName;
-					
-					
-				}	
-			
+
+
+				}
+
 
 		}
 		function onParentContainerChange(i)
@@ -239,7 +239,7 @@
 		}
 		function getSiteName(id)
 		{
-		}	
+		}
 		function resetName(i)
 		{
 			var containerNameElement = document.getElementById("containerName_"+i);
@@ -251,38 +251,38 @@
 			else
 			{
 				onParentContainerChange(i);
-			}	
-				
+			}
+
 		}
-		
+
 		function onRadioButtonClickOfSpecimen(element)
 		{
 			var specimenClass = document.getElementById("holdsSpecimenClassTypeIds");
 			var specimenArray = document.getElementById("holdsSpecimenArrTypeIds");
 			if(element == "Specimen")
 			{
-				specimenClass.disabled = false;		
+				specimenClass.disabled = false;
 				specimenArray.disabled = true;
 				var len = specimenArray.length;
-				for (var i = 0; i < len; i++) 
+				for (var i = 0; i < len; i++)
 				{
 					specimenArray.options[i].selected = false;
 				}
-		
+
 			}
 			if(element == "SpecimenArray")
 			{
 				specimenClass.disabled = true;
 				specimenArray.disabled = false;
 				var len = specimenClass.length;
-				for (var i = 0; i < len; i++) 
+				for (var i = 0; i < len; i++)
 				{
 					specimenClass.options[i].selected = false;
 				}
 			}
 		}
-		
-	//function containing the common code for enable and disable of auto/manual text boxes	
+
+	//function containing the common code for enable and disable of auto/manual text boxes
 	function commonShowHideCode(rowNo,menuSelectedValue)
 	{
 		var st1 = "container_" + rowNo + "_0";
@@ -294,10 +294,10 @@
 		var mapButton="mapButton_" + rowNo ;
 		var stContainerNameFromMap = document.getElementById(st1);
 		var pos1FromMap = document.getElementById(pos1);
-		var pos2FromMap = document.getElementById(pos2);    		    		
+		var pos2FromMap = document.getElementById(pos2);
 		var stContainerNameFromDropdown = document.getElementById(st2);
 		var pos1FromDropdown = document.getElementById(pos11);
-		var pos2FromDropdown = document.getElementById(pos12);    		    		
+		var pos2FromDropdown = document.getElementById(pos12);
 		var containerMapButton =  document.getElementById(mapButton);
 
 		var autoDiv = document.getElementById("auto_"+rowNo);
@@ -328,28 +328,28 @@
 			pos1FromDropdown.disabled = true;
 			pos2FromDropdown.disabled = true;
 
-			autoDiv.style.display  = 'none';	
-			manualDiv.style.display = 'block';	
+			autoDiv.style.display  = 'none';
+			manualDiv.style.display = 'block';
 		}
 	}
 
 	function onStorageRadioClickInAliquot(element)
-	{		
+	{
 		elementId=element.id;
 		var index1 =  elementId.lastIndexOf('_');
 		var index2 =  elementId.lastIndexOf(')');
 		//rowNumber of the element
 		var i = (elementId).substring(index1+1,index2);
-		commonShowHideCode(i,element.value);		
-	}		
-	
+		commonShowHideCode(i,element.value);
+	}
+
 	//onload function for assigning the storagetype same as they were earlier prior when submit pressed
 	function setPositionsOnLoad()
 	{
 		<% for(int i=1;i<=rowCounter;i++)
 		{%>
 			var selectBox = document.getElementById("similarContainerMapValue(radio_<%=i%>)");
-			commonShowHideCode(<%=i%>,selectBox.value);			
+			commonShowHideCode(<%=i%>,selectBox.value);
 		<%}%>
 	}
 
@@ -359,14 +359,19 @@
 		frameUrl+="&storageContainerName="+storageContainer;
 		//Patch ID: Bug#4116_2
 		openPopupWindow(frameUrl,'similarContainerPage');
-    }	
+    }
+	function calltest()
+	{
+		document.getElementById('sp_type').style.display='none';
+		showHide('sp_type');
+	}
 	</script>
 
 </head>
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
-<body onload="javascript:showHide('sp_type')">
+<body onload="javascript:calltest()">
 <body onload="setPositionsOnLoad()">
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <html:form action="<%=Constants.SIMILAR_CONTAINERS_ADD_ACTION%>">
@@ -375,7 +380,7 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" >
 	<%
 		StorageContainerForm simForm = (StorageContainerForm)request.getAttribute("storageContainerForm");
-		
+
 		String sType = simForm.getTypeName();
 		String siteName = simForm.getSiteName();
 		String siteId = Long.toString(simForm.getSiteId());
@@ -405,27 +410,27 @@
                   </table></td>
                 </tr>
                 <tr>
-     
+
 			<html:hidden property="id" />
 			<html:hidden property="operation" value="add"/>
-	
-    
+
+
 			<html:hidden property="siteId" value="<%=siteId%>"/>
-			<html:hidden property="siteForParentContainer"/>	
-	
+			<html:hidden property="siteForParentContainer"/>
+
 			<html:hidden property="noOfContainers" value="<%=noOfContainers%>" />
 			<html:hidden property="typeName"/>
-	
-  			<html:hidden property="submittedFor" value=""/>	
+
+  			<html:hidden property="submittedFor" value=""/>
 			<html:hidden property="forwardTo" value=""/>
 			<html:hidden property="nextForwardTo" />
-  	
-  	
+
+
 			<html:hidden property="similarContainerMapValue(checkedButton)" value="<%=checkButtonStatus%>"/>
 			<html:hidden property="parentContainerSelected"/>
 		</td>
     </tr>
-  	
+
     <tr>
 	    <td class="cp_tabtable"><br>
 			<table width="100%" border="0" cellpadding="3" cellspacing="0">
@@ -433,7 +438,7 @@
               		 <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
                      <td width="17%" align="left" class="black_ar"><bean:message key="storageContainer.type"/></td>
 					 <td width="28%""align="left"><html:select property="typeId" styleClass="formFieldSizedNew" styleId="storageContainerType" size="1"><html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/></html:select></td>
-				  
+
                       <td width="1%" align="center" class="black_ar">&nbsp;</td>
                       <td width="17%" align="left" valign="top" class="black_ar"><label for="defaultTemperature"><bean:message key="storageContainer.temperature"/></label></td>
 					 <td width="38%"align="left" class="grey_ar"><html:text styleClass="black_ar" style="text-align:right" maxlength="50"  size="15" styleId="defaultTemperature" property="defaultTemperature" /><span class="black_ar">&nbsp;<sup>0</sup>C</span></td>
@@ -454,7 +459,7 @@
 					 <td align="left">
 						<html:text styleClass="black_ar"  maxlength="50"  size="15" style="text-align:right" styleId="oneDimensionCapacity" property="oneDimensionCapacity" />
 					</td>
-				 
+
                       <td align="center" valign="top" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="4" /></td>
                       <td align="left" valign="top" class="black_ar" onmouseover="Tip(' <%=label2%>')">
 						<%
@@ -495,7 +500,7 @@
 							 <td align="left" class="tabletd1"><label><html:radio property="specimenOrArrayType" value="Specimen" onclick="onRadioButtonClickOfSpecimen('Specimen')"/> <bean:message key="storageContainer.specimenClass"/><label></td>
 							 <td align="left" class="tabletd1"><label><html:radio property="specimenOrArrayType" value="SpecimenArray" onclick="onRadioButtonClickOfSpecimen('SpecimenArray')"/> <bean:message key="storageContainer.specimenArrayType"/><label></td>
 							</tr>
-						
+
 							<tr>
                               <td width="26%" align="left" class="tabletd1"><html:select property="holdsStorageTypeIds" styleClass="formFieldSizedSC" styleId="holdsStorageTypeIds" size="4" multiple="true" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"><html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/></html:select></td>
 						      <td width="26%" align="left" class="tabletd1">
@@ -523,15 +528,15 @@
 							</html:select>
 							</logic:equal>
 						</td>
-						
+
 				  </tr>
 				 <tr>
                       <td colspan="6" class="bottomtd"></td>
                   </tr>
 				 </table></td>
-				
+
                               </tr>
-				
+
 		<tr onclick="javascript:showHide('sp_type')">
           <td width="96%" colspan="5" align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="storageType.holdsSpecimenClass"/></span></td>
           <td width="4%" align="right" class="tr_bg_blue1">
@@ -540,10 +545,10 @@
 			  </a>
 		  </td>
 		</tr>
-		
+
 		<tr>
-			<td colspan="6" valign="top" class="showhide1"><div id="sp_type" style="display:block">
-				
+			<td colspan="6" valign="top" class="showhide1"><div id="sp_type">
+
 				<table width="100%" colspan="6" border="0" cellpadding="2" cellspacing="0">
 					 <tr>
 						<td width="1%" align="left" class="tabletd1">&nbsp;</td>
@@ -551,32 +556,32 @@
 							<label for="holdsTissueSpType">
 								<bean:message key="specimenclass.tissue" />
 							</label>
-						</td>	
+						</td>
 						<div id="tissueDIV">
-						<td width="35%" class="tabletd1">
-							<mCombo:multiSelectUsingCombo identifier="tissue" styleClass="tabletd1" 
+						<td width="40%" class="tabletd1">
+							<mCombo:multiSelectUsingCombo identifier="tissue" styleClass="tabletd1"
 								addNewActionStyleClass="tabletd1" size="20"
-								addButtonOnClick="moveOptions('tissue','holdsTissueSpType', 'add')" 
-								removeButtonOnClick="moveOptions('holdsTissueSpType','tissue', 'edit')" 
-								selectIdentifier="holdsTissueSpType" 
+								addButtonOnClick="moveOptions('tissue','holdsTissueSpType', 'add')"
+								removeButtonOnClick="moveOptions('holdsTissueSpType','tissue', 'edit')"
+								selectIdentifier="holdsTissueSpType"
 								collection="<%=(List) request.getAttribute(Constants.TISSUE_SPECIMEN)%>" numRows="5"/>
 						</td>
 						</div>
 					</tr>
-					
+
 					<tr>
 						<td width="1%" align="left" class="tabletd1">&nbsp;</td>
 						<td class="tabletd1">
 							<label for="holdsFluidSpType">
 								<bean:message key="specimenclass.fluid" />
 							</label>
-						</td>	
-						<td width="35%" class="tabletd1">
-							<mCombo:multiSelectUsingCombo identifier="fluid" styleClass="tabletd1" 
+						</td>
+						<td width="40%" class="tabletd1">
+							<mCombo:multiSelectUsingCombo identifier="fluid" styleClass="tabletd1"
 								addNewActionStyleClass="tabletd1" size="20"
-								addButtonOnClick="moveOptions('fluid','holdsFluidSpType', 'add')" 
-								removeButtonOnClick="moveOptions('holdsFluidSpType','fluid', 'edit')" 
-								selectIdentifier="holdsFluidSpType" 
+								addButtonOnClick="moveOptions('fluid','holdsFluidSpType', 'add')"
+								removeButtonOnClick="moveOptions('holdsFluidSpType','fluid', 'edit')"
+								selectIdentifier="holdsFluidSpType"
 								collection="<%=(List) request.getAttribute(Constants.FLUID_SPECIMEN)%>" numRows="5"/>
 						</td>
 					</tr>
@@ -586,13 +591,13 @@
 							<label for="holdsCellSpType">
 								<bean:message key="specimenclass.cell" />
 							</label>
-						</td>	
-						<td width="35%" class="tabletd1">
-							<mCombo:multiSelectUsingCombo identifier="cell" styleClass="tabletd1" 
+						</td>
+						<td width="40%" class="tabletd1">
+							<mCombo:multiSelectUsingCombo identifier="cell" styleClass="tabletd1"
 								addNewActionStyleClass="tabletd1" size="20"
-								addButtonOnClick="moveOptions('cell','holdsCellSpType', 'add')" 
-								removeButtonOnClick="moveOptions('holdsCellSpType','cell', 'edit')" 
-								selectIdentifier="holdsCellSpType" 
+								addButtonOnClick="moveOptions('cell','holdsCellSpType', 'add')"
+								removeButtonOnClick="moveOptions('holdsCellSpType','cell', 'edit')"
+								selectIdentifier="holdsCellSpType"
 								collection="<%=(List) request.getAttribute(Constants.CELL_SPECIMEN)%>" numRows="5"/>
 						</td>
 					</tr>
@@ -602,13 +607,13 @@
 							<label for="holdsMolSpType">
 								<bean:message key="specimenclass.molecular" />
 							</label>
-						</td>	
-						<td width="35%" class="tabletd1">
-							<mCombo:multiSelectUsingCombo identifier="molecular" styleClass="tabletd1" 
+						</td>
+						<td width="40%" class="tabletd1">
+							<mCombo:multiSelectUsingCombo identifier="molecular" styleClass="tabletd1"
 								addNewActionStyleClass="tabletd1" size="20"
-								addButtonOnClick="moveOptions('molecular','holdsMolSpType', 'add')" 
-								removeButtonOnClick="moveOptions('holdsMolSpType','molecular', 'edit')" 
-								selectIdentifier="holdsMolSpType" 
+								addButtonOnClick="moveOptions('molecular','holdsMolSpType', 'add')"
+								removeButtonOnClick="moveOptions('holdsMolSpType','molecular', 'edit')"
+								selectIdentifier="holdsMolSpType"
 								collection="<%=(List)request.getAttribute(Constants.MOLECULAR_SPECIMEN)%>" numRows="5"/>
 						</td>
 					</tr>
@@ -622,7 +627,7 @@
                             <tr>
 								<td colspan="2"  width="7%" class="tabletd1">#</td>
 							 <% if(!Variables.isStorageContainerLabelGeneratorAvl ) {
-				    	     %>                              
+				    	     %>
 							   <td class="tabletd1"><strong><bean:message key="storageContainer.containerName"/></strong></td>
 							  <%
 							} %>
@@ -636,9 +641,9 @@
 								}
           						if(Variables.isStorageContainerBarcodeGeneratorAvl ) {
           							colspanValue++;
-          						}						    
+          						}
 						   %>
-						   
+
 							 <td class="tabletd1"><strong>
 							<logic:equal name="storageContainerForm" property="parentContainerSelected" value="Site">
 							<bean:message key="storageContainer.site"/>
@@ -646,16 +651,16 @@
 							<logic:notEqual name="storageContainerForm" property="parentContainerSelected" value="Site">
 							<bean:message key="storageContainer.parentContainer"/>
 							</logic:notEqual></strong></td>
-                             </tr>                                                      
-							
-						
+                             </tr>
+
+
 						  <%-- n-combo-box start --%>
-	  
+
 						<%
 						   Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 						//System.out.println("dataMap -> "+dataMap.size());
-							session.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,dataMap);							
-							
+							session.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,dataMap);
+
 							String[] labelNames = {"ID","Pos1","Pos2"};
 							labelNames = Constants.STORAGE_CONTAINER_LABEL;
 							String[] attrNames = { "parentContainerId", "positionDimensionOne", "positionDimensionTwo"};
@@ -665,7 +670,7 @@
 							////initValues[0] = form.getPositionInParentContainer();
 							//initValues[1] = Integer.toString(form.getPositionDimensionOne());
 							//initValues[2] = Integer.toString(form.getPositionDimensionTwo());
-							
+
 							//String rowNumber = "1";
 							String styClass = "formFieldSized5";
 							String tdStyleClass = "customFormField";
@@ -675,30 +680,30 @@
 							//boolean buttonDisabled = true;
 							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','800','600','no');return false";
 	 	                    //String buttonOnClicked = "StorageMapWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2&amp;storageType=','name','810','320','yes');return false";
-							
-							
-						
+
+
+
 							String noOfEmptyCombos = "3";
-							
+
 						%>
-					
+
 				<%=ScriptGenerator.getJSForOutermostDataTable()%>
-			
-	  
+
+
 			  <%
 				form = simForm;
 				int counter=0;
-		        Map similarContainersMap = form.getSimilarContainersMap(); 
+		        Map similarContainersMap = form.getSimilarContainersMap();
 				if(form != null)
 				{
 					counter = (int)form.getNoOfContainers();
 				}
-		
+
 				//System.out.println("counter  <<-->> "+counter);
 				String contName = siteName+"_"+sType+"_";
-		
+
 				List initValuesList = (List)request.getAttribute("initValues");
-		
+
 				for(int i=1;i<=counter;i++)
 				{
 					String onChange = "onCustomListBoxChange(this),onParentContainerChange('"+ i+"')";
@@ -706,7 +711,7 @@
 					String barcodeKey = "similarContainerMapValue(simCont:" + i + "_barcode)";
 					String siteKey = "similarContainerMapValue(simCont:" + i + "_siteId)";
 					//String checkButtonKey = "value(simCont:" + i + "_checkButton)";
-			
+
 					String contNameSId = "containerName_"+i;
 					String barSId = "barcode_"+i;
 					//String checkButtSId = "checkedButton_"+i;
@@ -715,13 +720,13 @@
 					String rowNumber = ""+i;
 					String buttonId = "Map_"+i;
 					String onSiteChange = "onSiteChange('"+ i+"')";
-					
-					
-					
+
+
+
 		String containerMap = "similarContainerMapValue(mapButton_" + i + ")";
 		String containerMapStyle = "mapButton_" + i ;
-		
-		
+
+
 		//Keys for container if selected from Map
 		String containerIdFromMapKey = "similarContainerMapValue(simCont:" + i + "_StorageContainer_id_fromMap)";
 		String containerNameFromMapKey = "similarContainerMapValue(simCont:" + i + "_StorageContainer_name_fromMap)";
@@ -733,16 +738,16 @@
 		String pos1Style = "pos1_" + i + "_1";
 		String pos2Style = "pos2_" + i + "_2";
 		String rbKey = "radio_" + i ;
-		
+
 		long storageType = form.getTypeId();
-		
-		
+
+
 			String frameUrl = "ShowFramedPage.do?pageOf=pageOfAliquot&amp;containerStyleId=" + containerIdStyle + "&amp;xDimStyleId=" + pos1Style + "&amp;yDimStyleId=" + pos2Style
 			                   + "&amp;containerStyle=" + containerStyle + "&amp;storageType=" + storageType ;
-			        System.out.println("frameUrl:"+frameUrl);				
-	
+			        System.out.println("frameUrl:"+frameUrl);
+
 		       String buttonOnClicked = "mapButtonClickedInAliquot('"+frameUrl+"','"+i+"')"; //javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false";
-		
+
 		//falguni //generate hidden variable for sitename select combo box values
 		String siteNamekey = "similarContainerMapValue(simCont:" + i + "_siteName)";
 		String siteNamevalue = (String)similarContainersMap.get("simCont:"+i+"_siteName");
@@ -752,22 +757,22 @@
 	    if(similarContainersMap.get(rbKey)==null)
 		{
 		   similarContainersMap.put(rbKey,"1");
-	    } 
-	    
+	    }
+
 		 int radioSelected = Integer.parseInt(similarContainersMap.get(rbKey).toString());
 		 boolean dropDownDisable = false;
 		 boolean textBoxDisable = false;
-								
+
 			if(radioSelected == 1)
-			{									
+			{
 				textBoxDisable = true;
 			}
 			else if(radioSelected == 2)
 			{
-				dropDownDisable = true;									
-		    }					
-	
-				
+				dropDownDisable = true;
+		    }
+
+
 					String resetNameFunction = "resetName('"+ i+"')";
 					attrNames[0] = "similarContainerMapValue(simCont:"+i+"_parentContainerId)";
 					attrNames[1] = "similarContainerMapValue(simCont:"+i+"_positionDimensionOne)";
@@ -776,48 +781,48 @@
 					{
 						initValues = (String[])initValuesList.get(i-1);
 					}
-			
+
 			   		if(checkButtonStatus.equals("2"))
 	   				{
-				   %>	
+				   %>
 	   				<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
-				   <% 
+				   <%
 	   				}
 				   %>
-	  
+
 						<tr>
 						<td width="5%" class="black_ar"><%=i%>
 						</td>
                            <td class="black_ar" align="left"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="5" /></td>
 						    <% if(!Variables.isStorageContainerLabelGeneratorAvl ) {
 				    		%>
-				    	
-		    				<% 
+
+		    				<%
 				    		if(i == 1 && (simForm.getContainerName() != null) && !(simForm.getContainerName().equals("")) )
 					    	{
 			    			%>
 						    <td class="black_ar_t"><html:text styleClass="black_ar"  maxlength="100"  size="30" styleId="<%=contNameSId%>" property="<%=containerNameKey%>" /></td>
-								<% 
+								<%
 		    					}else{
 							    %>
 							 <td class="black_ar_t">
 								<html:text styleClass="black_ar"  maxlength="255"  size="30" styleId="<%=contNameSId%>" property="<%=containerNameKey%>"/>
 								&nbsp;
-								<%-- <html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>"> 
+								<%-- <html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>">
 								<bean:message key="StorageContainer.resetName" />
 								</html:link>--%>
 							</td>
-			
-								<% 
+
+								<%
 		    					}
 							    %>
-							 <%}%>  
+							 <%}%>
 							 <% if(!Variables.isStorageContainerBarcodeGeneratorAvl ) {
-				    		%> 
+				    		%>
 						    <td class="black_ar_t"><html:text styleClass="black_ar"  maxlength="255"  size="30" styleId="<%=barSId%>" property="<%=barcodeKey%>" /></td>
 							<%
 							} %>
-							
+
 							<% int colspanValue1 =0 ;
 						    if(Variables.isStorageContainerLabelGeneratorAvl ) {
 						    colspanValue1++;
@@ -825,7 +830,7 @@
           			        if(Variables.isStorageContainerBarcodeGeneratorAvl ) {
           			        colspanValue1++;
           			        }
-						    
+
 						   %>
 							<td class="black_ar"  >
 								<table summary="" cellpadding="0" cellspacing="0" border="0">
@@ -837,16 +842,16 @@
 										</html:select>
 										</logic:equal>
 										</td>
-									
-									
-									
-							
+
+
+
+
 							<td nowrap class="black_ar">
-							<logic:notEqual name="storageContainerForm" property="parentContainerSelected" value="Site">	
+							<logic:notEqual name="storageContainerForm" property="parentContainerSelected" value="Site">
 							  <table border="0"  cellpadding="2" cellspacing="0">
 								<tr>
 								<td>
-								
+
 								<!--<html:radio value="1" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/>-->
 
 								<html:select property="<%=stContSelection%>" styleClass="black_ar"
@@ -859,15 +864,15 @@
 								</td>
 								<html:hidden styleId="<%=containerIdStyle%>" property="<%=containerIdFromMapKey%>"/>
 								<td align="left" class="black_ar">
-								
+
 								<div id="auto_<%=i%>" style="display:block" >
-									<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
-										attributeNames="<%=attrNames%>" 
-										initialValues="<%=initValues%>"  
-										styleClass = "black_ar" 
-										tdStyleClass = "<%=tdStyleClass%>" 
-										labelNames="<%=labelNames%>" 
-										rowNumber="<%=rowNumber%>" 
+									<ncombo:nlevelcombo dataMap="<%=dataMap%>"
+										attributeNames="<%=attrNames%>"
+										initialValues="<%=initValues%>"
+										styleClass = "black_ar"
+										tdStyleClass = "<%=tdStyleClass%>"
+										labelNames="<%=labelNames%>"
+										rowNumber="<%=rowNumber%>"
 										onChange = "<%=onChange%>"
 										formLabelStyle="nComboGroup"
 										disabled = "<%=dropDownDisable%>"
@@ -877,12 +882,12 @@
 										</table>
 								</div>
 								</td>
-							
+
 								<!--<td>
 								<html:radio value="2" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/>
 								</td>-->
 								<td align="left" class="black_ar">
-								
+
 								<div id="manual_<%=i%>" style="display:none" >
 									<html:text styleClass="black_ar"  size="25" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled = "<%=textBoxDisable%>"/>
 									<html:text styleClass="black_ar"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled = "<%=textBoxDisable%>"/>
@@ -898,12 +903,12 @@
 						</logic:notEqual>
 
 						</td>
-						</tr>			
-						</table>	
+						</tr>
+						</table>
 					  </td>
-					</tr>		   
-	  			
-	   	
+					</tr>
+
+
 					  <%
 					  	//maxIdentifier++;
 						} //For
@@ -922,33 +927,33 @@
 									<bean:message key="print.checkboxLabel"/>
 							</span>
 					       </html:checkbox>
-					    </td>							
+					    </td>
 	<!--  Added for displaying  printer type and location -->
 					    <td>
 					   	    <%@ include file="/pages/content/common/PrinterLocationTypeComboboxes.jsp" %>
 			 		   </td>
 				     </tr>
 				   </table>
-              	  </tr>	
+              	  </tr>
 
 			  <tr>
                 <td colspan="6" class="buttonbg">
                 <html:submit styleClass="blue_ar_b" onclick="onClick(this)">
                 <bean:message key="buttons.submit"/></html:submit>
                 </td>
-	    	 </tr>			  	
-					  
+	    	 </tr>
+
 					</table>
-					
+
 				</td>
-			</tr>	
-			
+			</tr>
+
 			<!--
 			/**
 			 * Name : Vijay_Pande
-			 * Reviewer Name : Sachin_Lale 
+			 * Reviewer Name : Sachin_Lale
 			 * Bug ID: 4141
-			 * Patch ID: 4141_1 
+			 * Patch ID: 4141_1
 			 * See also: -
 			 * Description: Following three tags are commented to remove imbalancing os tags.
 	     	*/
@@ -956,10 +961,10 @@
 		<!--	</table>
 		</td>
 	</tr>	-->
-	
-		
+
+
 <%
-		
+
 	} //If pageOf != PAGEOF_SIMILAR_CONTAINERS
 %>
 </table>

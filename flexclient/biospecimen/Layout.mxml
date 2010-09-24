@@ -6,7 +6,7 @@
 
   		import mx.managers.PopUpManager;
 		import util.Utility;
-  		import mx.messaging.channels.SecureAMFChannel;
+		import mx.messaging.channels.SecureAMFChannel;
   		import mx.messaging.channels.AMFChannel;
   		import mx.messaging.ChannelSet;
   		import mx.events.CloseEvent;
@@ -109,6 +109,7 @@
 			public var collectionProtocolId:String;
 			public var participantId:String;
 			public var scgId:String;
+			private var isScrollbarRequired:Boolean = false;
 			public var collectionEventId:String;
 
               public var selectedNode:Object = new Object;
@@ -179,6 +180,7 @@
 	*/
     private function selectTreeNode():void
     {
+
 		var scrollToTreeIndex:Number = 0;
 		selectedNode=null;
 		parentNode=null;
@@ -197,7 +199,7 @@
 		      for(var i:Number=0; i<xmlList.length; i++)
 		      {
 				  var xmlNode:XML = xmlList.getItemAt(i) as XML;
-				  // call iterateNode to iterate all nodes fall under this Node
+				   // call iterateNode to iterate all nodes fall under this Node
 				  if(iterateTreeNode(xmlNode,xmlNode))
 				  {
 					// expand the parent node
@@ -225,11 +227,30 @@
 	    specimenTree.dataProvider = treeData;
         // validate the tree after changing teh dataProvider
 		specimenTree.validateNow();
-        for(var j:Number=0; j<treeData.length; j++)
+	    isScrollbarRequired = false;
+	    for(var j:Number=0; j<treeData.length; j++)
    	    {
        		var xmlNode:XML = treeData.getItemAt(j) as XML;
-       		setIcons(xmlNode);
+       		//bug 18112
+		    if(isScrollbarRequired == false)
+		    {
+		       var scgName:String = xmlNode.@name;
+		       //if length of scg name is upto 37 then will be displayed properly
+		       if(scgName != null && scgName.length > 37)
+	           {
+	              specimenTree.horizontalScrollPolicy="on";
+		          specimenTree.maxHorizontalScrollPosition = specimenTree.measureWidthOfItems(0,0) - specimenTree.width + 5;
+	              isScrollbarRequired = true;
+	            }
+	            else
+	            {
+	               specimenTree.horizontalScrollPolicy="off";
+		           isScrollbarRequired = false;
+	            }
+		     }
+		    setIcons(xmlNode);
 	    }
+
 	    // call methid to show specidifed node selected
 		selectTreeNode();
     }
@@ -351,16 +372,16 @@
 			onCpChange();
 		}
   	}
-  	
+
   	  public function disableParticipant():void
      {
         refreshCP();
        	Sp.inputArea.text="";
-	 	spDetailsLabel.text = "";   
+	 	spDetailsLabel.text = "";
      }
 
 
-     
+
 
 	/*
   	   Collection protocol Event Handler Method
@@ -381,7 +402,7 @@
 				break;
 			}
 		}
-		
+
 		if(collProtocolName == null)
 		{
 			Alert.show("Please enter valid Collection Protocol identifier.");
@@ -432,7 +453,7 @@
 				break;
 			}
 		}
-		
+
 		if(participantName == null)
 		{
 			Alert.show("No participant with given identifier exists for this Collection Protocol.");
@@ -485,7 +506,7 @@
 		{
 			var nodeId:String = "SpecimenCollectionGroup_"+scgId;
 			nodeIdToSelect = nodeId;
-			
+
 			selectTreeNode();
 
 			CursorManager.setBusyCursor();
@@ -508,7 +529,6 @@
 		if(specimenTree.selectedItem != null)
 		{
 			var type:String = specimenTree.selectedItem.@type;
-
 			if(type.match("Phase") || type.match("Arm") || type.match("Cycle"))
 			{
 				chkForCollectionProtocolType(type);
@@ -543,7 +563,7 @@
 
 
 
-  	
+
 
    	/*
    		This Method is invoked on change of Collection Protocol & retrieves the associated Participants
@@ -555,7 +575,7 @@
 		var url : URLRequest = new URLRequest("javascript: clearFrame()");
 		navigateToURL(url,"_self");
 	}
-	
+
 	public function refreshCP():void
 	{
 	    var selectedCp : NameValueBean = new NameValueBean();
@@ -571,7 +591,7 @@
 			remoteObj.getParticipantsList(selectedCp.value, selectedCp.name);
 		}
 
-		specimenTree.dataProvider = null;	
+		specimenTree.dataProvider = null;
 	}
 
 	/*
@@ -682,14 +702,8 @@
 		     spDetailsLabel.text = title;//+"  "+selectedParticipant.name;
 
 		   //Here we can get data for specimen tree details
-
-
-    	     var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);
-
-		     var refreshParticipants:String = "false";
-
-
-
+            var str:String = remoteObj.getTreeData(selectedCpId,selectedParticipantId);
+	        var refreshParticipants:String = "false";
 		    //invoking the java script method
 	    	var url : URLRequest = new URLRequest("javascript: onParticipantClick('"+ selectedParticipantId + "','"+ selectedCpId + "','" + refreshParticipants+"')");
 			navigateToURL(url,"_self");
@@ -742,9 +756,6 @@
  /*
      Tree Handler  Method
     */
-
-
-
     private function setIcons(xmlNode:XML) : void
     {
 		var nodeType:String = xmlNode.@type;
@@ -821,7 +832,7 @@
 
 
     }
-    
+
     /*
       Sachin: Fuction to be called To refresh Participant Name after edit participant
     */
@@ -889,6 +900,7 @@
 	 */
 	 private function onNodeClick():void
 	 {
+
 	 	CursorManager.setBusyCursor();
 	 	loadNodeInfo();
 	 	CursorManager.removeBusyCursor();
@@ -986,20 +998,17 @@
 	    	selectedParticipant = spCombo as NameValueBean
 		    var selectedParticipantId :String = selectedParticipant.value;
 
-			 var selectedParentCp : NameValueBean = new NameValueBean();
-	    	 selectedParentCp =  cpCombo as NameValueBean;
-			  var selectedParentCpId :String = selectedParentCp.value;
+			var selectedParentCp : NameValueBean = new NameValueBean();
+	    	selectedParentCp =  cpCombo as NameValueBean;
+			var selectedParentCpId :String = selectedParentCp.value;
 	    	var type:String = specimenTree.selectedItem.@type;
 			var selectedCpId:String = "-1";
 	    	var index:int =id.indexOf("_");
 	    	if(index != -1)
 	    	{
 	    		selectedCpId = id.substr(index+1);
-
 	    	}
 	    	var displayName:String = selectedParentCpId+":"+specimenTree.selectedItem.@regDate;
-
-
           	var url : URLRequest = new URLRequest("javascript: tonclick('"+ id +"','"+ selectedCpId + "','"+ selectedParticipantId +"','"+ displayName +"')");
 		    navigateToURL(url,"_self");
 	}
@@ -1064,7 +1073,6 @@
     	}
     }*/
 
-
     /*
        This mehod is for adding toolTip for each tree node
     */
@@ -1072,7 +1080,7 @@
     public function addToolTip(item:Object):String
     {
     	 var node:XML = XML(item);
-         var s:String = node.@toolTip;
+	     var s:String = node.@toolTip;
        	 if(s != null && s.length >0)
 	     {
 	        var toolTipArray :Array = s.split(";");
@@ -1125,7 +1133,7 @@
 	    	}
 	    }
     }
-  	]]>
+]]>
   </mx:Script>
 
 	<mx:RemoteObject id="remoteObj" destination="cdeService" showBusyCursor="true" >
@@ -1181,7 +1189,7 @@
                    		folderClosedIcon="@Embed(source='/images/Specimen.gif')" folderOpenIcon="@Embed(source='/images/Specimen.gif')"
                    		 defaultLeafIcon="@Embed(source='/images/Specimen.gif')" disclosureClosedIcon="@Embed(source='/images/nolines_plus.gif')"
                    		 disclosureOpenIcon="@Embed(source='/images/nolines_minus.gif')" showDataTips="true"
-                   		 dataTipFunction="addToolTip" />
+                   		  dataTipFunction="addToolTip" />
 				</mx:VBox>
 
 		</mx:VBox>

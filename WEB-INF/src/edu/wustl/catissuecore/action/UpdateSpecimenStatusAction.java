@@ -87,7 +87,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		final ViewSpecimenSummaryForm specimenSummaryForm = (ViewSpecimenSummaryForm) form;
 		try
 		{
-			dao = AppUtility.openDAOSession(sessionDataBean);
+
 			final String eventId = specimenSummaryForm.getEventId();
 
 			final HttpSession session = request.getSession();
@@ -106,6 +106,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				bizLogic.update(specimenDomainCollection, specimenDomainCollection, 0,
 						sessionDataBean);
 			}
+			dao = AppUtility.openDAOSession(sessionDataBean);
 			final Object obj = session.getAttribute("SCGFORM");
 
 			// 11July08 : Mandar : For GenericSpecimen
@@ -312,7 +313,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 					{
 						if (specimen.getId().longValue() == gSpecimen.getId())
 						{
-							if(Constants.ALIQUOT.equals(specimen.getLineage()))
+							if(Constants.ALIQUOT.equals(specimen.getLineage()) && Constants.COLLECTION_STATUS_PENDING.equals(specimen.getCollectionStatus()))
 							{
 								specimen.setLabel(gSpecimen.getDisplayName());
 							}
@@ -612,22 +613,21 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		/* end bug 6015 */
 
 		final String initialQuantity = specimenVO.getQuantity();
-		//newly added ---- Ketaki 
+		//newly added ---- Ketaki
 		Double quanityConvertedToDouble = null;
-		
+
 		if(initialQuantity==null || "".equals(initialQuantity))
 		{
-			quanityConvertedToDouble = new Double(0);
-			specimen.setInitialQuantity(quanityConvertedToDouble);
+			throw AppUtility.getApplicationException(null, "errors.item.required","Quantity");
 		}
 		else
 		{
-				try 
+				try
 				{
 					quanityConvertedToDouble = new Double(initialQuantity);
 					specimen.setInitialQuantity(quanityConvertedToDouble);
-				} 
-				catch (NumberFormatException e) 
+				}
+				catch (NumberFormatException e)
 				{
 					LOGGER.error(e.getMessage(),e);
 				}
@@ -635,7 +635,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		if (specimenVO.getCheckedSpecimen())
 		{
 			specimen.setCollectionStatus(Constants.SPECIMEN_COLLECTED);
-			
+
 			specimen.setAvailableQuantity(quanityConvertedToDouble);
 			if ((specimen.getAvailableQuantity() != null && specimen.getAvailableQuantity()
 					.doubleValue() > 0))

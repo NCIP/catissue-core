@@ -114,6 +114,9 @@ public interface GenericSpecimen extends Serializable
 	public void setAliquotSpecimenCollection(
 			LinkedHashMap<String, GenericSpecimen> aliquotSpecimenCollection);
 
+	public Specimen getParentSpecimen();
+
+	public void setParentSpecimen(Specimen parentSpecimen);
 	/**
 	 * Sets the class name.
 	 *

@@ -9,7 +9,7 @@
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.TransferEventParametersForm"%>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page language="java" isELIgnored="false" %>
 
 <!-- Mandar : 434 : for tooltip -->
@@ -25,29 +25,29 @@
 <script language="JavaScript">
 
 function toStoragePositionChange(element)
-{	
+{
 	var autoDiv = document.getElementById("AutoDiv");
 	var manualDiv = document.getElementById("ManualDiv");
 
 	if(element.value == 1)
-	{   
+	{
 		manualDiv.style.display='none';
 		autoDiv.style.display  = 'block';
 	}
 	else
 	if(element.value == 2)
-	{				
-		autoDiv.style.display  = 'none';	
-		manualDiv.style.display = 'block';				
-	}			
+	{
+		autoDiv.style.display  = 'none';
+		manualDiv.style.display = 'block';
+	}
 }
 
 </SCRIPT>
 
 
-			
+
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
-    
+
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
 <html:form action='${requestScope.formName}'>
 	<html:hidden property="operation" />
@@ -61,7 +61,7 @@ function toStoragePositionChange(element)
           <td  class="showhide1"></td>
         </tr>
 		<!-- Name of the transfereventparameters -->
-<!-- User -->		
+<!-- User -->
 		<tr>
           <td colspan="4" class="showhide"><table width="100%" border="0" cellpadding="1" cellspacing="0">
                <tr>
@@ -74,7 +74,7 @@ function toStoragePositionChange(element)
 				<td width="1%" colspan="4"></td>
                 </tr>
 
-<!-- date -->		
+<!-- date -->
 		<tr>
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar"><bean:message key="eventparameters.dateofevent"/></td>
@@ -98,7 +98,7 @@ function toStoragePositionChange(element)
 						  styleClass="black_ar" size="5" />
 				</logic:empty>
                     <span class="grey_ar_s"><bean:message key="page.dateFormat" /></span></td>
-					
+
                   <td align="center" class="black_ar" width="1%"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar" width="8%"><bean:message key="eventparameters.time"/></td>
                   <td colspan="0" align="left"><span class="black_ar">
@@ -107,21 +107,21 @@ function toStoragePositionChange(element)
 					   initialValue='${transferEventParametersForm.timeInHours}'
 					  styleClass="black_ar"
 					  staticField="false"
-						size = "3" /> 
+						size = "4" />
 					  &nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
                     <autocomplete:AutoCompleteTag property="timeInMinutes"
 						  optionsList = '${requestScope.minutesList}'
 						  initialValue='${transferEventParametersForm.timeInMinutes}'
 						  styleClass="black_ar"
-						  staticField="false"  size="3"/>	
+						  staticField="false"  size="4"/>
 				<label for="eventparameters.timeinminutes">
-					&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
+					&nbsp;<bean:message key="eventparameters.timeinminutes"/>
 				</label></span></td>
                 </tr>
-		
-		
 
-<!-- fromPosition -->		
+
+
+<!-- fromPosition -->
 		<tr>
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar"><bean:message key="transfereventparameters.fromposition"/></td>
@@ -134,36 +134,36 @@ function toStoragePositionChange(element)
 				<logic:empty name="transferEventParametersForm" property="fromPositionData" >
 				<html:text styleClass="black_ar" size="30" styleId="fromPosition" property="fromPosition" readonly="true" />
 				</logic:empty>
-				
+
 				<logic:notEmpty name="transferEventParametersForm" property="fromPositionData" >
 				<html:text styleClass="black_ar" size="30" styleId="fromPositionData" property="fromPositionData" readonly="true" />
 				</logic:notEmpty>
                   </span></td>
                 </tr>
 
-<!-- toPosition -->		
+<!-- toPosition -->
 		<tr>
 			<td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar"><bean:message key="transfereventparameters.toposition"/></td>
 			<%-- n-combo-box start --%>
 			${requestScope.getJSForOutermostDataTable}
 			${requestScope.getJSEquivalentFor }
-			
-			
+
+
 			<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-			
-			<td class="black_ar" align = "left" colspan="4">					
+
+			<td class="black_ar" align = "left" colspan="4">
 				<table border="0" align="left" cellpadding="0" cellspacing="0">
 							<tr >
 							<logic:equal name="operation" value='${requestScope.add}'>
-								<td>								
+								<td>
 								<html:select property="stContSelection" styleClass="black_ar"
 											styleId="stContSelection" size="1"	onmouseover="showTip(this.id)"
 											onmouseout="hideTip(this.id)" onchange= "toStoragePositionChange(this)">
 										<html:options collection="storageListForTransferEvent"
 														labelProperty="name" property="value" />
-								</html:select> 
-										
+								</html:select>
+
 								&nbsp;&nbsp;
 								</td>
 								</logic:equal>
@@ -172,14 +172,14 @@ function toStoragePositionChange(element)
 										<ncombo:nlevelcombo dataMap='${requestScope.dataMap}'
 								attributeNames='${requestScope.attrNames}'
 								initialValues='${requestScope.initValues}'
-								styleClass ='${requestScope.styClass}' 
-								tdStyleClass ='${requestScope.tdStyleClass}' 
+								styleClass ='${requestScope.styClass}'
+								tdStyleClass ='${requestScope.tdStyleClass}'
 								labelNames='${requestScope.labelNames}'
 								rowNumber='${requestScope.rowNumber}'
-								onChange ='${requestScope.onChange}' 
-								
+								onChange ='${requestScope.onChange}'
+
 								tdStyleClassArray='${requestScope.tdStyleClassArray}'
-								formLabelStyle="formLabelBorderless"							
+								formLabelStyle="formLabelBorderless"
 								noOfEmptyCombos = '${requestScope.noOfEmptyCombos}'/>
 											</tr>
 											</table>
@@ -188,33 +188,33 @@ function toStoragePositionChange(element)
 								</td>
 								<td class="groupElements">
 									<div id="ManualDiv" style="display:none" >
-									
+
 										<html:text styleClass="black_ar"  size="15" styleId="selectedContainerName"
 													property="selectedContainerName" />
-												<html:text styleClass="black_ar"  size="3" styleId="pos1" 
+												<html:text styleClass="black_ar"  size="3" styleId="pos1"
 													property="pos1" />
-												<html:text styleClass="black_ar"  size="3" styleId="pos2" 
+												<html:text styleClass="black_ar"  size="3" styleId="pos2"
 													property="pos2" />
 												<html:button styleClass="black_ar" property="containerMap"												onclick="${requestScope.buttonOnClicked}" >
 														<bean:message key="buttons.map"/>
-												</html:button>									
-									</div>								
+												</html:button>
+									</div>
 								</td>
-								
+
 							</tr>
-							</table>										
+							</table>
 			</td>
-			
-			
+
+
 
 <%--		 n-combo-box end --%>
-					
-		</tr>	
+
+		</tr>
 
 
 
 
-<!-- comments -->		
+<!-- comments -->
 		<tr>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" valign="top" class="black_ar_t">
@@ -234,11 +234,11 @@ function toStoragePositionChange(element)
         </tr>
 
 		</table>
-		
+
 	  </td>
 	 </tr>
 
 	 <!-- NEW TRANSFER_EVENT_PARAMETERS ends-->
-	 
+
 	 </html:form>
  </table>

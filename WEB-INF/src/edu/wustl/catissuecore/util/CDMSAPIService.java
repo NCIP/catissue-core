@@ -27,9 +27,9 @@ public class CDMSAPIService
     private transient ApplicationService appService = null;
     private transient ClientSession clientSession = null;
 	private final transient String CPServerUrl = XMLPropertyHandler
-			.getValue(CDMSIntegrationConstants.CLINPORTAL_SERVICE_URL);
+			.getValue(CDMSIntegrationConstants.CDMS_SERVICE_URL);
 	private final transient String ctmsKeystorePath = XMLPropertyHandler
-			.getValue(CDMSIntegrationConstants.KEYSTORE_FILE_PATH);
+			.getValue(CDMSIntegrationConstants.CDMS_KEYSTORE_FILE_PATH);
 
     /**
      * Method to initialize the CaCoreAPIService

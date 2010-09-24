@@ -36,13 +36,13 @@ public class CDMSIntegrationConstants
     public static final String CALLBACK_URL="callBackURL";
     public static final String EVENTENTRYID = "eventEntryId";
     public static final String CP_PARTICIPANT_ID = "pId";
-    public static final String CLINPORTAL_SERVICE_URL = "ClinPortalServiceURL";
+    public static final String CDMS_SERVICE_URL = "CdmsServiceURL";
     public static final String CATISSUE_SERVICE_URL = "CatissueServiceURL";
-    public static final String KEYSTORE_FILE_PATH = "clinportal.keyStorePath";
-    public static final String CLINPORTAL_SERVICE_ENABLED = "clinportal.integrationEnabled";
+    public static final String CDMS_KEYSTORE_FILE_PATH = "cdms.keyStorePath";
+    public static final String CDMS_SERVICE_ENABLED = "cdms.integrationEnabled";
     public static final String CP_BASED_VIEW= "cpBasedView";
-    public static final String CLINPORTAL_URL="clinportal.url";
-    public static final String CLINPORTAL_URL_CONTEXT(String url)
+    public static final String CDMS_URL="cdms.url";
+    public static final String CDMS_URL_CONTEXT(String url)
     {
         return url+URLFEATURE;
     }

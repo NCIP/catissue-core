@@ -1269,61 +1269,6 @@ public class StorageContainerTestCases extends CaTissueBaseTestCase{
   			    assertTrue("Specimen Position Sucessfully Transfered :" + e.getMessage() , true);
 			}
 		}
-		/**
-		 * Test case for Dispose Specimen Event
-		 */
-		public void testInsertDisposeSpecimenEvent()
-		 {
-			 try
-			 {
-				   TissueSpecimen tSpecimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
-				   SpecimenCollectionGroup scg = (SpecimenCollectionGroup) TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
-
-				   StorageContainer storageContainer =  BaseTestCaseUtility.initStorageContainer();
-				   Collection collectionProtocolCollection = new HashSet();
-				   storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
-				   storageContainer = (StorageContainer) appService.createObject(storageContainer);
-
-				   SpecimenPosition pos1 = new SpecimenPosition();
-				   pos1.setPositionDimensionOne(1);
-				   pos1.setPositionDimensionTwo(1);
-				   pos1.setStorageContainer(storageContainer);
-				   tSpecimenObj.setSpecimenPosition(pos1);
-				   tSpecimenObj.setSpecimenCollectionGroup(scg);
-				   System.out.println("Before Creating Specimen object");
-				   tSpecimenObj = (TissueSpecimen) appService.createObject(tSpecimenObj);
-				   System.out.println("After Creating Specimen object");
-
-				   DisposalEventParameters disposalEvent = new DisposalEventParameters();
-			       disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.toString());
- 		           disposalEvent.setSpecimen(tSpecimenObj);
-			       disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
-			       User user = new User();
-			       user.setId(1l);//admin
-			       disposalEvent.setUser(user);
-			       disposalEvent.setReason("Testing API");
-			       disposalEvent.setComment("Dispose Event");
-			       disposalEvent.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
-			       System.out.println("Before Creating DisposeEvent");
-			       disposalEvent = (DisposalEventParameters) appService.createObject(disposalEvent);
-			       if(Status.ACTIVITY_STATUS_DISABLED.toString().equals(disposalEvent.getSpecimen().getActivityStatus()))
-			       {
-			    	   assertTrue("Disposed event sucessfully fired: Activity Status Disable :" + disposalEvent , true);
-			       }
-			       else
-			       {
-			    	   assertFalse("Disposed event Failed:" + disposalEvent , true);
-			       }
-			}
-			catch(Exception e)
-			{
-				System.out.println("TestCaseTesting.testInsertDisposeSpecimenEvent()");
-				e.printStackTrace();
-				assertFalse("Container is already Full:" +e.getMessage(), true);
-
-			}
-		}
-
 		public void testAddStorageContainerWithSpClass()
 		{
 			try{

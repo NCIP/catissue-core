@@ -9,6 +9,9 @@
 
 package edu.wustl.catissuecore.util.global;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +27,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -99,6 +103,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.PagenatedResultData;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.QuerySessionData;
@@ -1329,13 +1334,10 @@ public class AppUtility
 		catch (final DAOException daoExp)
 		{
 			AppUtility.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 		}
 		catch (final ApplicationException e)
 		{
 			AppUtility.logger.error(e.getMessage(),e);
-			e.printStackTrace();
-			// TODO Auto-generated catch block
 			throw new ApplicationException(e.getErrorKey(), e, e.getMessage());
 		}
 		return noOfRecords;
@@ -1365,7 +1367,6 @@ public class AppUtility
 		catch (final SMException exception)
 		{
 			AppUtility.logger.error("Security Exception:"+exception.getMessage(), exception);
-			exception.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("sm.operation.error");
 			throw new DAOException(errorKey, exception, "");
 		}
@@ -1470,7 +1471,6 @@ public class AppUtility
 				AppUtility.logger.error("Can not parse the given date" +
 						" in getAttributeValuesInProperOrder() method :"
 								+ e.getMessage(),e);
-				e.printStackTrace();
 			}
 		}
 		else
@@ -1765,7 +1765,6 @@ public class AppUtility
 		{
 			// TODO Auto-generated catch block
 			AppUtility.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 			return null;
 		}
 		return specimen;
@@ -1863,7 +1862,7 @@ public class AppUtility
 			String fixedColWidth = null;
 			if (isWidthInPercent)
 			{
-				fixedColWidth = String.valueOf(120 / columnList.size());
+				fixedColWidth = String.valueOf(120/columnList.size());
 			}
 			else
 			{
@@ -1893,10 +1892,11 @@ public class AppUtility
 	{
 		request.setAttribute("myData", getmyData(dataList));
 		request.setAttribute("columns", getcolumns(columnList));
-		boolean isWidthInPercent = false;
-		if (columnList.size() < 10)
+		boolean isWidthInPercent = true;
+		if(request.getAttribute("pageOf") != null &&
+				request.getAttribute("pageOf").equals("pageOfUserAdmin"))
 		{
-			isWidthInPercent = true;
+			isWidthInPercent=false;
 		}
 		request.setAttribute("colWidth", getcolWidth(columnList, isWidthInPercent));
 		request.setAttribute("isWidthInPercent", isWidthInPercent);
@@ -2076,7 +2076,6 @@ public class AppUtility
 		catch (final ApplicationException e)
 		{
 			AppUtility.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 		finally
 		{
@@ -2087,7 +2086,6 @@ public class AppUtility
 			catch (final DAOException e)
 			{
 				AppUtility.logger.error(e.getMessage(), e);
-				e.printStackTrace();
 			}
 		}
 		return false;
@@ -2221,19 +2219,16 @@ public class AppUtility
 		catch (final SMException e)
 		{
 			AppUtility.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 			handleSMException(e);
 		}
 		catch (final CSTransactionException e)
 		{
 			AppUtility.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 			throw getApplicationException(e, "utility.error", "");
 		}
 		catch (final ClassNotFoundException e)
 		{
 			AppUtility.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 			throw getApplicationException(e, "clz.not.found.error", "");
 		}
 	}
@@ -2308,12 +2303,10 @@ public class AppUtility
 		catch (final ApplicationException e)
 		{
 			AppUtility.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 		catch (final CSTransactionException e)
 		{
 			AppUtility.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 
 	}
@@ -2471,7 +2464,6 @@ public class AppUtility
 			catch (final ApplicationException e)
 			{
 				AppUtility.logger.error(e.getMessage(), e);
-				e.printStackTrace();
 			}
 		}
 		else
@@ -2507,7 +2499,6 @@ public class AppUtility
 		catch (final SMException e)
 		{
 			AppUtility.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 		return true;
 	}
@@ -2598,7 +2589,6 @@ public class AppUtility
 		catch (final ApplicationException e)
 		{
 			AppUtility.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 		finally
 		{
@@ -2609,7 +2599,6 @@ public class AppUtility
 			catch (final ApplicationException e)
 			{
 				AppUtility.logger.error(e.getMessage(), e);
-				e.printStackTrace();
 			}
 		}
 
@@ -2681,7 +2670,6 @@ public class AppUtility
 			catch (final Exception e)
 			{
 				AppUtility.logger.error(e.getMessage(), e);
-				e.printStackTrace();
 			}
 		}
 	}
@@ -2731,7 +2719,6 @@ public class AppUtility
 		catch (final SMException e)
 		{
 			AppUtility.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 			handleSMException(e);
 		}
 		if (!isAuthorized)
@@ -3024,7 +3011,6 @@ public class AppUtility
 		catch (final DAOException daoExp)
 		{
 			AppUtility.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp
 					.getErrorKeyName());
 		}
@@ -3043,7 +3029,6 @@ public class AppUtility
 		catch (final DAOException daoExp)
 		{
 			AppUtility.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
@@ -3061,7 +3046,6 @@ public class AppUtility
 		catch (final DAOException daoExp)
 		{
 			AppUtility.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return dao;
@@ -3079,7 +3063,6 @@ public class AppUtility
 		catch (final DAOException daoExp)
 		{
 			AppUtility.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw getApplicationException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
@@ -3237,7 +3220,6 @@ public class AppUtility
 		catch (final DAOException daoExp)
 		{
 			AppUtility.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw new ApplicationException(daoExp.getErrorKey(), daoExp, daoExp.getMsgValues());
 		}
 		finally
@@ -3702,30 +3684,13 @@ public class AppUtility
 	 * @param precision
 	 * @return
 	 */
-	public static double RoundOff(double valueToBeRoundOff, final int precision)
+	public static double roundOff(double valueToBeRoundOff, final int precision)
 	 {
 		//Round-off function which will do actual round-off. It will auto-consider exponential values.
-		final double doubleNumber = Math.pow(10,precision);
-		valueToBeRoundOff = valueToBeRoundOff * doubleNumber;
-	  	final double tmp = Math.round(valueToBeRoundOff);
-	  	return tmp/doubleNumber;
-	  }
+		double multiplier = Math.pow(10,precision);
+		double valueToReturn = (double)(Math.round(valueToBeRoundOff * multiplier)/multiplier);
 
-	/**
-	 * @param valueToBeRoundOff
-	 * @param precision
-	 * @return
-	 */
-	 public static double truncate(final double valueToBeTruncateOff, final int precision)
-	 {
-		// If valueToBeRoundOff is exponantial value then it wull not truncate it
-	    final String val = new Double(valueToBeTruncateOff).toString();
-		if(val.contains("E") || val.contains("e")) {
-			return valueToBeTruncateOff;
-		}
-		final double doubleNumber = Math.pow(10,precision);
-		final int newInt = (int) (valueToBeTruncateOff * doubleNumber);
-	  	return newInt/doubleNumber;
+		return valueToReturn;
 	  }
 
     /**
@@ -3749,8 +3714,7 @@ public class AppUtility
         }
         return value;
     }
-
-       /**
+      /**
      * returns password from csm db on loginname
      * @param loginName
      * @throws BizLogicException
@@ -3762,9 +3726,12 @@ public class AppUtility
         {
             if (loginName != null)
             {
-                final String queryStr = "SELECT PASSWORD FROM CSM_USER WHERE LOGIN_NAME='"
-                        + loginName + "' ";
-                List result=edu.wustl.migrator.util.Utility.executeQueryUsingDataSource(queryStr, false,
+                final String queryStr = "SELECT PASSWORD FROM CSM_USER WHERE LOGIN_NAME=?";
+                final List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>();
+                final ColumnValueBean loginNameBean = new ColumnValueBean(loginName);
+                parameters.add(loginNameBean);
+
+                List result=edu.wustl.migrator.util.Utility.executeQueryUsingDataSource(queryStr,parameters, false,
                         edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
                 if(!result.isEmpty())
                 {
@@ -3850,5 +3817,59 @@ public class AppUtility
 			}
 		}
 		return columnNames;
+	}
+
+    public static String isValidCount(String count, ActionErrors errors)
+    {
+    	String valueToReturn = count;
+    	try
+    	{
+	    	double valueInDouble=Double.valueOf(count);
+
+			int valueInInt=(int)Math.abs(valueInDouble);
+			double diff = valueInDouble-valueInInt;
+			if(diff > 0.0)
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+						ApplicationProperties.getValue("aliquots.noOfAliquots")));
+			}
+			else
+			{
+				valueToReturn = Integer.toString(valueInInt);
+			}
+		}
+		catch(NumberFormatException e)
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+					ApplicationProperties.getValue("aliquots.noOfAliquots")));
+		}
+    	return valueToReturn;
+    }
+    /**
+	 * Get caTissue Cdms Install properties file.
+	 * @return Properties.
+	 */
+	public static Properties getPropertiesFile(String propertiesFileName)
+			throws ApplicationException
+	{
+		Properties props = new Properties();
+		try
+		{
+			FileInputStream propFile = new FileInputStream(propertiesFileName);
+			props.load(propFile);
+		}
+		catch (FileNotFoundException fnfException)
+		{
+			logger.debug(propertiesFileName + " file not found.", fnfException);
+			ErrorKey errorkey = ErrorKey.getErrorKey("file.not.found");
+			throw new ApplicationException(errorkey, null, propertiesFileName);
+		}
+		catch (IOException ioException)
+		{
+			logger.debug("Error while accessing " + propertiesFileName + " file.", ioException);
+			ErrorKey errorkey = ErrorKey.getErrorKey("file.reading.error");
+			throw new ApplicationException(errorkey, null, propertiesFileName);
+		}
+		return props;
 	}
 }

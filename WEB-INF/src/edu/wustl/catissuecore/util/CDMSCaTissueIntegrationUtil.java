@@ -12,7 +12,7 @@ import java.util.Map;
 import org.apache.struts.action.ActionForward;
 
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
-import edu.wustl.catissuecore.ctms.integrator.CatissueCdmsURLInformationObject;
+import edu.wustl.catissuecore.cdms.integrator.CatissueCdmsURLInformationObject;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -29,6 +29,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.migrator.util.Utility;
 
 public class CDMSCaTissueIntegrationUtil {
@@ -36,7 +37,7 @@ public class CDMSCaTissueIntegrationUtil {
 			.getCommonLogger(CDMSCaTissueIntegrationUtil.class);
 
 	/**
-	 * 
+	 *
 	 * @param scgId
 	 * @return
 	 * @throws BizLogicException
@@ -54,7 +55,7 @@ public class CDMSCaTissueIntegrationUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public static ActionForward cpBasedViewActionFwd() {
@@ -66,7 +67,7 @@ public class CDMSCaTissueIntegrationUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param parameterName
 	 * @param value
 	 * @return
@@ -80,7 +81,7 @@ public class CDMSCaTissueIntegrationUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param loginName
 	 * @return
 	 * @throws BizLogicException
@@ -89,20 +90,23 @@ public class CDMSCaTissueIntegrationUtil {
 			throws BizLogicException {
 		String password = "";
 		try {
-			final String queryStr = "SELECT PASSWORD FROM CSM_USER WHERE login_name='"
-					+ loginName + "'";
-			List pwdList = Utility.executeQueryUsingDataSource(queryStr, false,
+			final String queryStr = "SELECT PASSWORD FROM CSM_USER WHERE login_name=?";
+			 final List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>();
+             final ColumnValueBean loginNameBean = new ColumnValueBean(loginName);
+             parameters.add(loginNameBean);
+
+			List pwdList = Utility.executeQueryUsingDataSource(queryStr,parameters, false,
 					edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
 			if (pwdList != null && !pwdList.isEmpty()) {
 				pwdList = (List) pwdList.get(0);
 				password = pwdList.get(0).toString();
 				password = PasswordManager.decrypt(password);
 			}
-		} catch (ApplicationException e) {
+		} catch (final ApplicationException e) {
 			throw new BizLogicException(ErrorKey
 					.getErrorKey("db.insert.data.error"), e,
 					"Error in database operation");
-		} catch (PasswordEncryptionException e) {
+		} catch (final PasswordEncryptionException e) {
 			throw new BizLogicException(ErrorKey
 					.getErrorKey("common.errors.item"), e,
 					"Failed while updating ");
@@ -112,7 +116,7 @@ public class CDMSCaTissueIntegrationUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param collectionEventId
 	 * @param cprId
 	 * @param completedSCG
@@ -156,7 +160,7 @@ public class CDMSCaTissueIntegrationUtil {
 	}
 
 	/***
-	 * 
+	 *
 	 * @param scgMap
 	 * @param visitCurrDate
 	 * @param visitPrevDate
@@ -181,7 +185,7 @@ public class CDMSCaTissueIntegrationUtil {
 		}
 		Date receivedSCGDate = null;
 		while (dateIterator.hasNext()) {
-			receivedSCGDate = (Date) dateIterator.next();
+			receivedSCGDate = dateIterator.next();
 			if (receivedSCGDate != null && visitCurrDate != null) {
 				receivedSCGDate.setHours(0);
 				receivedSCGDate.setMinutes(0);
@@ -211,7 +215,7 @@ public class CDMSCaTissueIntegrationUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param num
 	 * @return
 	 */
@@ -224,7 +228,7 @@ public class CDMSCaTissueIntegrationUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param date
 	 * @return
 	 */
@@ -236,14 +240,14 @@ public class CDMSCaTissueIntegrationUtil {
 		Date toCheck = null;
 		try {
 			toCheck = dateFormat.parse(date);
-		} catch (ParseException e) {
+		} catch (final ParseException e) {
 			LOGGER.error(e.getMessage());
 		}
 		return toCheck;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param map
 	 * @return
 	 * @throws BizLogicException
@@ -252,9 +256,9 @@ public class CDMSCaTissueIntegrationUtil {
 			final Long pId, final Long cpeId, final Long scgId, Date currDate,
 			Date prevDate) throws BizLogicException {
 		final StringBuilder scgHql = new StringBuilder();
-		Map map = new HashMap();
+		final Map map = new HashMap();
 		final DefaultBizLogic bizLogic = new DefaultBizLogic();
-		Long cprId = getCPRId(pId, cpId);
+		final Long cprId = getCPRId(pId, cpId);
 		scgHql.append("select scg.id from ").append(
 				SpecimenCollectionGroup.class.getName()).append(" as scg");
 		scgHql.append(" where scg.collectionProtocolEvent.id= ").append(cpeId);
@@ -267,11 +271,11 @@ public class CDMSCaTissueIntegrationUtil {
 		scgHql.append(" order by scg.id");
 		final List scgColl = bizLogic.executeQuery(scgHql.toString());
 		for (int i = 0; i < scgColl.size(); i++) {
-			Object scgDetails = (Object) scgColl.get(i);
+			Object scgDetails = scgColl.get(i);
 			if (scgDetails.toString().equals(String.valueOf(scgId))) {
 				currDate = getCEPDate(scgDetails.toString());
 				if (i > 0) {
-					scgDetails = (Object) scgColl.get(i - 1);
+					scgDetails = scgColl.get(i - 1);
 					prevDate = getCEPDate(scgDetails.toString());
 				}
 				map.put(CDMSIntegrationConstants.RECENT_SCG_DATE, currDate);
@@ -283,16 +287,16 @@ public class CDMSCaTissueIntegrationUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param informationObject
 	 * @throws BizLogicException
 	 */
 	public void getSCGRelatedEncounteredDate(
-			CatissueCdmsURLInformationObject informationObject)
+			final CatissueCdmsURLInformationObject informationObject)
 			throws BizLogicException {
 		final StringBuilder scgHql = new StringBuilder();
 		final DefaultBizLogic bizLogic = new DefaultBizLogic();
-		Long cprId = getCPRId(Long.valueOf(informationObject
+		final Long cprId = getCPRId(Long.valueOf(informationObject
 				.getParticipantIdentifier()), Long.valueOf(informationObject
 				.getCollectionProtocolIdentifier()));
 		scgHql.append("select scg.id from ").append(
@@ -309,12 +313,12 @@ public class CDMSCaTissueIntegrationUtil {
 		final List scgColl = bizLogic.executeQuery(scgHql.toString());
 		Date currDate = null, prevDate = null;
 		for (int i = 0; i < scgColl.size(); i++) {
-			Object scgDetails = (Object) scgColl.get(i);
+			Object scgDetails = scgColl.get(i);
 			if (scgDetails.toString().equals(
 					informationObject.getSpecimenCollectionGroupIdentifier())) {
 				currDate = getCEPDate(scgDetails.toString());
 				if (i > 0) {
-					scgDetails = (Object) scgColl.get(i - 1);
+					scgDetails = scgColl.get(i - 1);
 					prevDate = getCEPDate(scgDetails.toString());
 				}
 				informationObject
@@ -327,7 +331,7 @@ public class CDMSCaTissueIntegrationUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param scgId
 	 * @return
 	 * @throws BizLogicException
@@ -347,7 +351,7 @@ public class CDMSCaTissueIntegrationUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param participantId
 	 * @param cpId
 	 * @return
@@ -364,20 +368,20 @@ public class CDMSCaTissueIntegrationUtil {
 			queryClause.addCondition(new EqualClause("collectionProtocol.id",
 					cpId));
 			final String[] colName = { "id" };
-			List cpr = new DefaultBizLogic().retrieve(
+			final List cpr = new DefaultBizLogic().retrieve(
 					CollectionProtocolRegistration.class.getName(), colName,
 					queryClause);
 			if (cpr != null && !cpr.isEmpty()) {
 				cprId = Long.valueOf(cpr.get(0).toString());
 			}
-		} catch (DAOException e) {
+		} catch (final DAOException e) {
 			throw new BizLogicException(e);
 		}
 		return cprId;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param loginName
 	 * @param collectionProtocolId
 	 * @param participantId
@@ -387,24 +391,24 @@ public class CDMSCaTissueIntegrationUtil {
 	 * @return
 	 * @throws BizLogicException
 	 */
-	public String getRecentSCG_OLD(String loginName, Long collectionProtocolId,
-			Long participantId, Long collectionEventId, String visitNum,
-			Long visitId) throws BizLogicException {
-		CDMSAPIService apiService = new CDMSAPIService();
-		CDMSCaTissueIntegrationUtil util = new CDMSCaTissueIntegrationUtil();
+	public String getRecentSCG_OLD(final String loginName, final Long collectionProtocolId,
+			final Long participantId, final Long collectionEventId, final String visitNum,
+			final Long visitId) throws BizLogicException {
+		final CDMSAPIService apiService = new CDMSAPIService();
+		final CDMSCaTissueIntegrationUtil util = new CDMSCaTissueIntegrationUtil();
 		String scgId = null;
 		try {
-			Map<String, Date> map = apiService.getVisitRelatedEncounteredDate(
+			final Map<String, Date> map = apiService.getVisitRelatedEncounteredDate(
 					loginName, visitId, collectionEventId,
 					collectionProtocolId, participantId);
-			Date visitPrevDate = map
+			final Date visitPrevDate = map
 					.get(CDMSIntegrationConstants.PREV_VISIT_DATE);
-			Date visitCurrDate = map
+			final Date visitCurrDate = map
 					.get(CDMSIntegrationConstants.RECENT_VISIT_DATE);
-			Long cprId = util.getCPRId(participantId, collectionProtocolId);
+			final Long cprId = util.getCPRId(participantId, collectionProtocolId);
 			if (cprId != null) {
-				Map<String, Date> completedSCG = new HashMap<String, Date>();
-				Map<String, Date> anticipatedSCG = new HashMap<String, Date>();
+				final Map<String, Date> completedSCG = new HashMap<String, Date>();
+				final Map<String, Date> anticipatedSCG = new HashMap<String, Date>();
 				util.getScg(collectionEventId, cprId, completedSCG,
 						anticipatedSCG);
 				if (!anticipatedSCG.isEmpty()) {
@@ -415,16 +419,16 @@ public class CDMSCaTissueIntegrationUtil {
 							visitPrevDate);
 				}
 			}
-		} catch (DAOException e) {
+		} catch (final DAOException e) {
 			throw new BizLogicException(e);
-		} catch (Exception e1) {
+		} catch (final Exception e1) {
 			throw new BizLogicException(null, e1, e1.getMessage());
 		}
 		return scgId;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param loginName
 	 * @param collectionProtocolId
 	 * @param participantId
@@ -434,16 +438,16 @@ public class CDMSCaTissueIntegrationUtil {
 	 * @return
 	 * @throws BizLogicException
 	 */
-	public String getRecentSCG(Long collectionProtocolId, Long participantId,
-			Long collectionEventId, Date visitPrevDate, Date visitCurrDate)
+	public String getRecentSCG(final Long collectionProtocolId, final Long participantId,
+			final Long collectionEventId, final Date visitPrevDate, final Date visitCurrDate)
 			throws BizLogicException {
-		CDMSCaTissueIntegrationUtil util = new CDMSCaTissueIntegrationUtil();
+		final CDMSCaTissueIntegrationUtil util = new CDMSCaTissueIntegrationUtil();
 		String scgId = null;
 		try {
-			Long cprId = util.getCPRId(participantId, collectionProtocolId);
+			final Long cprId = util.getCPRId(participantId, collectionProtocolId);
 			if (cprId != null) {
-				Map<String, Date> completedSCG = new HashMap<String, Date>();
-				Map<String, Date> anticipatedSCG = new HashMap<String, Date>();
+				final Map<String, Date> completedSCG = new HashMap<String, Date>();
+				final Map<String, Date> anticipatedSCG = new HashMap<String, Date>();
 				util.getScg(collectionEventId, cprId, completedSCG,
 						anticipatedSCG);
 				if (!anticipatedSCG.isEmpty()) {
@@ -454,18 +458,18 @@ public class CDMSCaTissueIntegrationUtil {
 							visitPrevDate);
 				}
 			}
-		} catch (Exception e1) {
+		} catch (final Exception e1) {
 			throw new BizLogicException(null, e1, e1.getMessage());
 		}
 		return scgId;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param map
 	 * @return
 	 */
-	public static boolean validateClinPortalMap(Map<String, Long> map) {
+	public static boolean validateClinPortalMap(final Map<String, Long> map) {
 		boolean result = false;
 		final Long csId = map.get(CDMSIntegrationConstants.CLINICAL_STUDY_ID);
 		final Long cseId = map.get(CDMSIntegrationConstants.EVENT_ID);

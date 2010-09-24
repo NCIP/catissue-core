@@ -103,7 +103,7 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 
 			// create data source and bind to JNDI
 			DataSource caTissueDS = getDataSource();
-			
+
 			DataSource dynamicExtnDS = getDataSource();
 			initialContext.createSubcontext(CaTissueSuiteTestUtil.CATISSUE_DATASOURCE_JNDI_NAME);
 			initialContext.createSubcontext(CaTissueSuiteTestUtil.DE_DATASOURCE_JNDI_NAME);
@@ -144,7 +144,7 @@ public class InitializationTestCase extends CaTissueSuiteBaseTest
 						applicationHome+"/catissuecore-properties/caTissueCore_Properties.xml");
 				System.setProperty("java.security.auth.login.config",
 						applicationHome+"/CaTissue_TestCases/test_login.conf");
-				System.setProperty("app.domainAuthFilePath",applicationHome+"/catissuecore-properties/AuthenticationDomain.xml");
+				System.setProperty("app.domainAuthFilePath",applicationHome+"/catissuecore-properties/IDPAuthentication.xml");
 				//Files added for BulkOperationTestCases
 				if (!initComplete)
 				{

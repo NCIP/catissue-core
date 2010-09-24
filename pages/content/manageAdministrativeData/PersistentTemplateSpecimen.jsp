@@ -319,6 +319,10 @@
 								    />
 								</td>
   							   </logic:notEqual>
+							   <%
+								if(Variables.isTemplateBasedLblGeneratorAvl)
+								{
+							%>
                                 <td align="center" class="black_ar">&nbsp;</td>
 
                                 <td align="left" class="black_ar">Label Format</td>
@@ -329,6 +333,12 @@
 								<html:text styleClass="black_ar"property="labelFormat" maxlength="255" styleId="labelFormat" size="23"/></span>
 
 								</td>
+								<%}
+								else
+								{
+								%>
+								<td colspan="3"/>
+								<%}%>
                               </tr>
                             </table>
                             <br>
@@ -359,9 +369,13 @@
                               <td width="20%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.storagelocation"/></span></td>
                               <td width="10%" class="tableheading"><span class="black_ar_b"><bean:message key="collectionprotocol.quantity" /></span></td>
                               <td width="10%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.concentration"/></span></td>
-
+<%
+								if(Variables.isTemplateBasedLblGeneratorAvl)
+								{
+							%>
 
 							  <td width="28%" class="tableheading"><span class="black_ar_b">Label format</span></td>
+							  <%}%>
                             </tr>
 						  <script> document.forms[0].noOfDeriveSpecimen.value = <%=noOfDeriveSpecimen%> </script>
 
@@ -557,12 +571,16 @@
 								&nbsp;<bean:message key="specimen.concentrationUnit" />
 
 								</td>
-
+<%
+								if(Variables.isTemplateBasedLblGeneratorAvl)
+								{
+							%>
 								<td class="black_ar" >
 
 								<html:text styleClass="black_ar" maxlength="255" property="<%=labelFormat%>" styleId="<%=labelFormat%>"  size="25"/>
 
 								</td>
+								<%}%>
                               </tr>
 
 
@@ -610,8 +628,12 @@
 									<td width="30%" class="black_ar">
 									<bean:message key="cpbasedentry.storagelocation"/>
 									</td>
-
+<%
+								if(Variables.isTemplateBasedLblGeneratorAvl)
+								{
+							%>
 									<td width="35%" align="left" class="black_ar" >Label Format</td>
+									<%}%>
 								</tr>
 								<tr>
 		                           <td class="black_ar" >
@@ -632,13 +654,17 @@
 												size="20"
 												/>
 									</td>
-
+<%
+								if(Variables.isTemplateBasedLblGeneratorAvl)
+								{
+							%>
 									<td align="left" class="black_ar" >
 
 								<html:text styleClass="black_ar" maxlength="255" property="labelFormatForAliquot" styleId="labelFormatForAliquot"  size="25"/>
 
 
 								</td>
+								<%}%>
 								</tr>
                           </table>
 						</div>

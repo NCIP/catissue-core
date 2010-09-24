@@ -19,7 +19,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
-
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 
 <%
 List storageContainerList	= (List)request.getAttribute("storageContainerList");
@@ -362,7 +362,7 @@ if(form != null)
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_specimenType)";
 		var functionName = "onSubTypeChangeUnitforCP('" + specimenClassName + "',this,'" + objunit + "')" ;
 
-		sname= "<select name='" + objname + "' size='1' class='addRow_s_new' id='" + objname + "' onChange=" + functionName + " onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
+		sname= "<select name='" + objname + "' size='1' class='formFieldSized8' id='" + objname + "' onChange=" + functionName + " onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 
 		sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";
 
@@ -414,7 +414,10 @@ if(form != null)
 		spreqqty.innerHTML="" + sname;
 
 
-
+						<%
+								if(Variables.isTemplateBasedLblGeneratorAvl)
+								{
+							%>
 		//Label Format
 		var spreqqty=x.insertCell(6)
 		spreqqty.className="black_ar";
@@ -425,7 +428,7 @@ if(form != null)
 		sname = sname + "&nbsp;"
 
 		spreqqty.innerHTML="" + sname;
-
+<%}%>
 	}
 	window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>&operation=${requestScope.operation}";
 </script>

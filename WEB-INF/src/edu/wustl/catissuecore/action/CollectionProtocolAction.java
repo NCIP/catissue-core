@@ -90,7 +90,6 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	{
 		super.executeSecureAction(mapping, form, request, response);
 		// pageOf required for Advance Search Object View.
-
 		final String tabSel = request.getParameter("tabSel");
 		request.setAttribute("tabSel", tabSel);
 		final List<NameValueBean> clinicalDiagnosis = new ArrayList<NameValueBean>();
@@ -124,16 +123,23 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		{
 			operation = Constants.ADD;
 		}
-
+		//bug 18481 start
+        boolean condition1 = (request.getParameter(Constants.ERROR_PAGE_FOR_CP)!=null && !request.getParameter(Constants.ERROR_PAGE_FOR_CP).equals(""));
+		boolean condition2 = request.getParameter(Constants.REFRESH_WHOLE_PAGE)!=null && request.getParameter(Constants.REFRESH_WHOLE_PAGE).equals(Constants.FALSE);
+		if(condition1 && !condition2)
+		{
+			invokeFunction = "cp";
+		}
+		//bug 18481 end
 		if (invokeFunction != null && cpBean != null)
 		{
 			this.initCollectionProtocolPage(request, form, pageOf, mapping);
 		}
-
-		if ("add".equals(operation) && invokeFunction == null)
+		if ("add".equals(operation) && invokeFunction == null && !condition1) //bug 18481
 		{
 			this.initCleanSession(request);
 		}
+
 
 		this.LOGGER.debug("operation in coll prot action" + operation);
 		// Sets the operation attribute to be used in the Edit/View Collection
@@ -204,7 +210,6 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 				.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
 		final List predefinedConsentsList = (List) request
 				.getAttribute(Constants.PREDEFINED_CADSR_CONSENTS);
-
 		final String tab = request.getParameter("tab");
 		String formName;
 		final String pageView = operation;
@@ -240,7 +245,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		}
 
 		final boolean readOnlyValue = false;
-		if (operation.equals(Constants.EDIT))
+		if (Constants.EDIT.equals(operation))
 		{
 			editViewButton = "buttons." + Constants.VIEW;
 			formName = Constants.COLLECTIONPROTOCOL_EDIT_ACTION;

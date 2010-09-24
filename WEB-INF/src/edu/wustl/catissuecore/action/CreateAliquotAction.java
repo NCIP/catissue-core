@@ -2,7 +2,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -82,12 +81,12 @@ public class CreateAliquotAction extends BaseAction
 	{
 		final AliquotForm aliquotForm = (AliquotForm) form;
 		boolean insertAliquotSpecimen = true;
-		Collection<AbstractDomainObject> specimenCollection = null;
+		Collection<AbstractDomainObject> specimenColl = null;
 		final SpecimenCollectionGroup scg = this.createSCG(aliquotForm);
 		final Specimen parentSpecimen = this.createParentSpecimen(aliquotForm);
 		try
 		{
-			specimenCollection = this.createAliquotDomainObject(aliquotForm, scg, parentSpecimen);
+			specimenColl = this.createAliquotDomainObject(aliquotForm, scg, parentSpecimen);
 		}
 		catch (final ApplicationException e)
 		{
@@ -103,10 +102,10 @@ public class CreateAliquotAction extends BaseAction
 		final SessionDataBean sessionDataBean = this.getSessionData(request);
 		// Insert Specimen Map
 		insertAliquotSpecimen = this.insertAliquotSpecimen(request, sessionDataBean,
-				specimenCollection);
+				specimenColl);
 		// Convert Specimen HashSet to List
 		List<AbstractDomainObject> specimenList = new LinkedList<AbstractDomainObject>();
-		specimenList.addAll(specimenCollection);
+		specimenList.addAll(specimenColl);
 		if(insertAliquotSpecimen)
 		{
 			setAliquotform(request, aliquotForm, parentSpecimen, specimenList);
@@ -536,9 +535,8 @@ public class CreateAliquotAction extends BaseAction
 				if (specimen.getInitialQuantity() != null)
 				{
 					Double intQuantity = specimen.getInitialQuantity().doubleValue();
-					final DecimalFormat dFormat = new DecimalFormat("#.000");
 					totalAliquotQty = totalAliquotQty + intQuantity;
-					totalAliquotQty = Double.parseDouble(dFormat.format(totalAliquotQty));
+					totalAliquotQty = AppUtility.roundOff(totalAliquotQty, Constants.QUANTITY_PRECISION);
 				}
 
 			}
@@ -546,9 +544,8 @@ public class CreateAliquotAction extends BaseAction
 			{
 				Double intQuantity = Double.valueOf(aliquotForm
 						.getInitialAvailableQuantity());
-				final DecimalFormat dFormat = new DecimalFormat("#.000");
-				final Double availableQuantity = Double.parseDouble(dFormat.format(intQuantity))
-						- totalAliquotQty;
+				Double availableQuantity = intQuantity - totalAliquotQty;
+				availableQuantity = AppUtility.roundOff(availableQuantity, Constants.QUANTITY_PRECISION);
 				aliquotForm.setAvailableQuantity(availableQuantity.toString());
 			}
 		}

@@ -138,7 +138,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			sp = (Specimen) spCollection.get(0);
 			System.out.println("Get Object Sp");
 			sp.setCollectionStatus("Collected");
-			sp.setActivityStatus(Constants.DISABLED);
+			sp.setActivityStatus(Constants.DISABLE);
 			//sp.setIsAvailable(true);
 			sp.setExternalIdentifierCollection(null);
 			System.out.println(sp + ": sp");
@@ -2035,7 +2035,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		}
 	}
 
-	 public void testEditSiteUserCPAssociation() {
+	 public void testShiftSpecimenInSCG() {
 		Logger.out.info("updating domain object site ------->");
 		try {
 			ExcelTestCaseUtility.shiftSpecimenInSCG();
@@ -2102,5 +2102,55 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		    }
 	 }
 
+	 /**
+		 * Negative Test to Add Tissue Specimen with disabled SCG.
+		 */
+		public void testAddTissueSpecimenWithDisableSCG()
+		{
+			try
+			{
+				TissueSpecimen specimenObj = (TissueSpecimen) BaseTestCaseUtility.initTissueSpecimen();
+				SpecimenCollectionGroup scg = (SpecimenCollectionGroup) BaseTestCaseUtility.initSCG();
+				try
+				 {
+					scg = (SpecimenCollectionGroup) appService.createObject(scg);
+					System.out.println("Specimen Collection Group is created.");
+				 }
+				 catch(Exception e)
+				 {
+					 Logger.out.error(e.getMessage(),e);
+					 System.out.println("Specimen Collection Group could not be created.");
+					 e.printStackTrace();
+					 fail("could not add object");
+				 }
+				 scg.setActivityStatus(Constants.DISABLE);
+				 try
+				 {
+					 scg = (SpecimenCollectionGroup) appService.updateObject(scg);
+					System.out.println("Specimen Collection Group with activity status as disabled is updated.");
+				 }
+				 catch(Exception e)
+				 {
+					 Logger.out.error(e.getMessage(),e);
+					 System.out.println("Specimen Collection Group with activity status as disabled is not created.");
+					 e.printStackTrace();
+					 fail("could not update object");
+				 }
+				System.out.println("SpecimenTestCases.testAddTissueSpecimenWithDisableSCG(): " + scg);
+				specimenObj.setSpecimenCollectionGroup(scg);
+				Logger.out.info("Inserting domain object------->" + specimenObj);
+				System.out.println("Before Creating Tissue Specimen");
+				specimenObj = (TissueSpecimen) appService.createObject(specimenObj);
+				assertFalse("Failed to create specimen with disabled SCG.", true);
+			}
+			catch (Exception e)
+			{
+				System.out.println("Failed to create specimen with disabled SCG.");
+				System.out.println(e);
+				Logger.out.error(e.getMessage(), e);
+				e.printStackTrace();
+		 		assertTrue("Unable to create specimen with disabled SCG.", true);
+			}
+		}
 
 }

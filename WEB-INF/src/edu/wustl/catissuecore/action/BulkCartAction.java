@@ -65,7 +65,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 			this.removeSessionAttributes(session);
 			this.getOrderableEntityIds(searchForm, session, cart);
 
-			target = new String(Constants.REQUEST_TO_ORDER);
+			target = Constants.REQUEST_TO_ORDER;
 		}
 		else if (Constants.BULK_TRANSFERS.equals(operation)
 				|| Constants.BULK_DISPOSALS.equals(operation))
@@ -146,7 +146,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 			this.getMapDetailsForShipment(session, entityIdsMap);
 		}
 
-		target = new String(operation);
+		target = operation;
 
 		return target;
 	}
@@ -243,7 +243,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 		String target;
 		session.setAttribute(Constants.SPECIMEN_ID,
 		this.getSpecimenIDs( searchForm, session, operation ));
-		target = new String(operation);
+		target = operation;
 		return target;
 	}
 	/**
@@ -286,7 +286,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 		forwardToPrintMap.put(Constants.PRINT_SPECIMEN_FROM_LISTVIEW,
 		this.getSpecimenIDs( searchForm, session, operation ));
 		request.setAttribute("forwardToPrintMap", forwardToPrintMap);
-		target = new String(operation);
+		target = operation;
 		return target;
 	}
 	/**
@@ -310,7 +310,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 				Arrays.asList(Constants.specimenNameArray), this.getCheckboxValues(searchForm)));
 		request.setAttribute(Constants.SPECIMEN_ID, specimenIds);
 		request.setAttribute(Constants.OPERATION, operation);
-		target = new String(operation);
+		target = operation;
 		return target;
 	}
 

@@ -19,13 +19,20 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.LoginResult;
 import edu.wustl.processor.LoginProcessor;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.manager.SecurityManagerFactory;
 
+/**
+ * This class contains the business login for login functionality.
+ *
+ * @author niharika_sharma
+ */
 public final class CatissueLoginProcessor extends LoginProcessor
 {
+
     /**
      * Empty private constructor to avoid instantiation.
      */
@@ -34,18 +41,30 @@ public final class CatissueLoginProcessor extends LoginProcessor
 
     }
 
-    /**
-     * Common Logger for catissue Login Processor.
-     */
+    /** Common Logger for catissue Login Processor. */
     private static final Logger LOGGER = Logger.getCommonLogger(CatissueLoginProcessor.class);
 
-    public static LoginResult processUserLogin(final HttpServletRequest request, final String loginName,
-            final String password) throws CatissueException
+    /**
+     * This method process the action of user login by authenticaton the user as
+     * well as auditing the login attempt.
+     *
+     * @param request
+     *            the request
+     * @param loginCredentials
+     *            the login credentials
+     *
+     * @return the login result
+     *
+     * @throws CatissueException
+     *             the catissue exception
+     */
+    public static LoginResult processUserLogin(final HttpServletRequest request,
+            final LoginCredentials loginCredentials) throws CatissueException
     {
         LoginResult loginResult = null;
         try
         {
-            loginResult = processUserLogin(loginName, password);
+            loginResult = processUserLogin(loginCredentials);
         }
         catch (final Exception exception)
         {
@@ -53,13 +72,26 @@ public final class CatissueLoginProcessor extends LoginProcessor
         }
         finally
         {
-            auditLogin(loginResult, loginName, request);
+            auditLogin(loginResult, loginCredentials.getLoginName(), request);
         }
 
         return loginResult;
     }
 
-    private static void auditLogin(final LoginResult loginResult, final String loginName,
+    /**
+     * This method performs the auditing of the login attempt.
+     *
+     * @param loginResult
+     *            the login result
+     * @param loginName
+     *            the login name
+     * @param request
+     *            the request
+     *
+     * @throws CatissueException
+     *             the catissue exception
+     */
+    public static void auditLogin(final LoginResult loginResult, final String loginName,
             final HttpServletRequest request) throws CatissueException
     {
         HibernateDAO dao = null;
@@ -112,6 +144,15 @@ public final class CatissueLoginProcessor extends LoginProcessor
         }
     }
 
+    /**
+     * This private method closes the hibernate session.
+     *
+     * @param dao
+     *            the dao
+     *
+     * @throws CatissueException
+     *             the catissue exception
+     */
     private static void closeHibernateSession(final HibernateDAO dao) throws CatissueException
     {
         try
@@ -132,9 +173,11 @@ public final class CatissueLoginProcessor extends LoginProcessor
      * lower case add prefix "pageOf" to modified role name and forward to that
      * page.
      *
-     * @param loginId
-     *            : loginId
+     * @param role
+     *            the role
+     *
      * @return String : String
+     *
      * @throws SMException
      *             : SMException
      */
@@ -156,12 +199,13 @@ public final class CatissueLoginProcessor extends LoginProcessor
     /**
      * This method will check the expiry of the password.
      *
-     * @param loginForm
-     *            LoginForm
      * @param validUser
      *            Object of valid user
+     *
      * @return result
+     *
      * @throws CatissueException
+     *             the catissue exception
      */
     public static String isPasswordExpired(final User validUser) throws CatissueException
     {
@@ -182,6 +226,17 @@ public final class CatissueLoginProcessor extends LoginProcessor
         return isPasswordExpired;
     }
 
+    /**
+     * Gets the user role.
+     *
+     * @param validUser
+     *            the valid user
+     *
+     * @return the user role
+     *
+     * @throws CatissueException
+     *             the catissue exception
+     */
     public static String getUserRole(final User validUser) throws CatissueException
     {
         String role = "";
@@ -197,6 +252,18 @@ public final class CatissueLoginProcessor extends LoginProcessor
         return role;
     }
 
+    /**
+     * This method fetches the catissue user from the database by making
+     * bizlogic calls.
+     *
+     * @param loginName
+     *            the login name
+     *
+     * @return the user
+     *
+     * @throws CatissueException
+     *             the catissue exception
+     */
     public static User getUser(final String loginName) throws CatissueException
     {
         User user = null;

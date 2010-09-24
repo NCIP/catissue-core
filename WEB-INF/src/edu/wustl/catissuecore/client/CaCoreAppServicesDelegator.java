@@ -28,8 +28,8 @@ import java.util.Set;
 
 import oracle.sql.CLOB;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
-import edu.wustl.catissuecore.ctms.integrator.CDMSIntegrator;
-import edu.wustl.catissuecore.ctms.integrator.CatissueCdmsURLInformationObject;
+import edu.wustl.catissuecore.cdms.integrator.CatissueCdmsURLInformationObject;
+import edu.wustl.catissuecore.cdms.integrator.CdmsIntegratorImpl;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -831,8 +831,8 @@ public class CaCoreAppServicesDelegator
 	 *
 	 * @throws Exception exception
 	 */
-	public List delegateGetParticipantMatchingObects(final Object domainObject, Long csId,
-			final String userName) throws Exception
+	public List delegateGetParticipantMatchingObects(final String userName,
+			final Object domainObject, Long protocolId) throws Exception
 	{
 		List matchingObjects = new ArrayList();
 		this.checkNullObject(domainObject, "Domain Object");
@@ -1302,7 +1302,7 @@ public class CaCoreAppServicesDelegator
 	public String getSpecimenCollectionGroupURL(final String userName, Object urlInformationObject)
 			throws Exception
 	{
-		CDMSIntegrator integrator = new CDMSIntegrator();
+		CdmsIntegratorImpl integrator = new CdmsIntegratorImpl();
 		return integrator.getSpecimenCollectionGroupURL((CatissueCdmsURLInformationObject)urlInformationObject);
 	}
 

@@ -246,19 +246,19 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 			{
 				aliquotLabelFormat = obje[2].toString();
 			}
-			generateLabel = Boolean.toString(!SpecimenUtil.isLblGenOnForCP(parentLabelFormat,
-					deriveLabelFormat, aliquotLabelFormat, lineage));
+//			generateLabel = Boolean.toString(!SpecimenUtil.isLblGenOnForCP(parentLabelFormat,
+//					deriveLabelFormat, aliquotLabelFormat, lineage));
 		}
 		catch (ApplicationException e)
 		{
 //			LOGGER.error(e.getMessage(), e);
 			throw new BizLogicException(e.getErrorKey(), e, e.getMessage());
 		}
-		if(Variables.isSpecimenLabelGeneratorAvl){
+//		if(Variables.isSpecimenLabelGeneratorAvl){
 			request.setAttribute("SHOW_LABEL", Boolean.toString(!Variables.isSpecimenLabelGeneratorAvl));
-		}else{
-			request.setAttribute("SHOW_LABEL", generateLabel);
-		}
+//		}else{
+//			request.setAttribute("SHOW_LABEL", generateLabel);
+//		}
 	}
 
 	/**

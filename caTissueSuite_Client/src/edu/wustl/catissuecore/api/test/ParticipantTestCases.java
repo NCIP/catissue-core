@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.api.test;
 
 import java.text.ParseException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -19,6 +20,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
@@ -47,6 +49,25 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 		 catch(Exception e){
 			 System.out
 					.println("ParticipantTestCases.testAddParticipantWithCPR()"+e.getMessage());
+			 e.printStackTrace();
+			 assertFalse("could not add object", true);
+		 }
+	}
+	public void testUpdateParticipantWithCPR()
+	{
+		try{
+			CollectionProtocolRegistration collectionProtocolRegistration= (CollectionProtocolRegistration)TestCaseUtility.getObjectMap(CollectionProtocolRegistration.class);
+			CollectionProtocolRegistration collectionProtocolRegistration3=new CollectionProtocolRegistration();
+			collectionProtocolRegistration3.setId(collectionProtocolRegistration.getId());
+			List collectionProtocolRegistrationList=appService.search(CollectionProtocolRegistration.class,collectionProtocolRegistration3);
+			collectionProtocolRegistration.setRegistrationDate(new Date());
+			collectionProtocolRegistration = (CollectionProtocolRegistration) appService.updateObject(collectionProtocolRegistrationList.get(0));
+
+			assertTrue("Object updated successfully", true);
+		 }
+		 catch(Exception e){
+			 System.out
+					.println("ParticipantTestCases.testUpdateParticipantWithCPR()"+e.getMessage());
 			 e.printStackTrace();
 			 assertFalse("could not add object", true);
 		 }
@@ -690,5 +711,92 @@ public class ParticipantTestCases extends CaTissueBaseTestCase {
 
 	}
 
-	
+	public void testAddParticipantWithoutGender()
+	{
+		try{
+			Participant participant= BaseTestCaseUtility.initParticipantWithoutGender();
+			System.out.println("Participant initialed without gender...."+participant);
+			participant = (Participant) appService.createObject(participant);
+			Collection collectionProtocolRegistrationCollection = participant.getCollectionProtocolRegistrationCollection();
+			Iterator cprItr = collectionProtocolRegistrationCollection.iterator();
+			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)cprItr.next();
+
+			TestCaseUtility.setObjectMap(collectionProtocolRegistration, CollectionProtocolRegistration.class);
+			TestCaseUtility.setObjectMap(participant, Participant.class);
+			System.out.println("Object created successfully");
+			assertTrue("Object added successfully", true);
+		 }
+		 catch(Exception e){
+			 System.out
+					.println("ParticipantTestCases.testAddParticipantWithoutGender()"+e.getMessage());
+			 e.printStackTrace();
+			 assertFalse("could not add object", true);
+		 }
+	}
+	/**
+	 * Negative test case to create a participant with disabled CP.
+	 */
+	public void testAddParticipantWithDisabledCP()
+	{
+
+		Participant participant= BaseTestCaseUtility.initParticipant();
+		participant.setFirstName("Nitesh");
+		Collection collectionProtocolRegistrationCollection = new HashSet();
+		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+		CollectionProtocol collectionProtocol = BaseTestCaseUtility.initCollectionProtocol();
+		try
+		 {
+			collectionProtocol = (CollectionProtocol) appService.createObject(collectionProtocol);
+			System.out.println("Collection protocol is created.");
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 System.out.println("Collection protocol could not be created.");
+			 e.printStackTrace();
+			 fail("could not add object");
+		 }
+		 collectionProtocol.setActivityStatus(Constants.DISABLE);
+		 try
+		 {
+			collectionProtocol = (CollectionProtocol) appService.updateObject(collectionProtocol);
+			System.out.println("Collection protocol with activity status as disabled is created.");
+		 }
+		 catch(Exception e)
+		 {
+			 Logger.out.error(e.getMessage(),e);
+			 System.out.println("Collection protocol with activity status as disabled is not created.");
+			 e.printStackTrace();
+			 fail("could not update object");
+		 }
+		 collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+		 collectionProtocolRegistration.setParticipant(participant);
+		 collectionProtocolRegistration.setProtocolParticipantIdentifier("123");
+		 collectionProtocolRegistration.setActivityStatus("Active");
+		 collectionProtocolRegistrationCollection.add(collectionProtocolRegistration);
+		try
+		{
+			collectionProtocolRegistration.setRegistrationDate(Utility.parseDate("08/15/1975",
+					Utility.datePattern("08/15/1975")));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			fail("could not add object");
+		}
+
+		participant.setCollectionProtocolRegistrationCollection(collectionProtocolRegistrationCollection);
+		try
+		{
+			participant = (Participant) appService.createObject(participant);
+			assertFalse("Failed to register participant with disabled CP.", true);
+	    }
+	 	catch(Exception e)
+	 	{
+	 		e.printStackTrace();
+	 		System.out.println("Failed to register participant with disabled CP.");
+	 		assertTrue("Unable to create participant with disabled CP.", true);
+	 	}
+	}
+
 }

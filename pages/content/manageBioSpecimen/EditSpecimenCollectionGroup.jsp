@@ -1,11 +1,7 @@
 <script type="text/javascript" src="jss/ext-base.js"></script>
 <script type="text/javascript" src="jss/ext-all.js"></script>
 <script type="text/javascript" src="jss/combos.js"></script>
-<script type="text/javascript" src="jss/examples.js"></script>
-<link rel="stylesheet" type="text/css" href="css/ext-all.css" />
-<link rel="stylesheet" type="text/css" href="css/xtheme-gray.css" />
-<link rel="stylesheet" type="text/css" href="css/combo.css" />
-<link rel="stylesheet" type="text/css" href="css/examples.css" />
+<link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <%
 	/**

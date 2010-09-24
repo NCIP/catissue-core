@@ -167,7 +167,7 @@ function insRow(subdivtag)
 		sname = sname + "<option value='<%=((NameValueBean)tissueSiteList.get(i)).getValue()%>'><%=((NameValueBean)tissueSiteList.get(i)).getName()%></option>";
 	<%}%>
 	sname = sname + "</select>"
-	var url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+objname+"&cdeName=Tissue%20Site";
+	var url = "TissueSiteTree.do?pageOf=pageOfTissueSite&propertyName="+objname+"&cdeName=Tissue%20Site";
 	// Patch ID: Bug#3090_8
 	sname = sname + "<a href='#' onclick=javascript:NewWindow('" + url + "','name','360','525','no');return false>";
 	sname = sname + "<img src='images/uIEnhancementImages/ic_cl_diag.gif' border='0' align='absmiddle' height='16' hspace='5' width='16' title='Tissue Site Selector'></a>";
@@ -528,7 +528,7 @@ function insRow(subdivtag)
 									<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 									</html:select>
 			<%
-						String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName="+objname+"&cdeName=Tissue%20Site";			
+						String url = "TissueSiteTree.do?pageOf=pageOfTissueSite&propertyName="+objname+"&cdeName=Tissue%20Site";
 			%>
 									<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
 									<img src="images/uIEnhancementImages/ic_cl_diag.gif" alt="Clinical Diagnosis" width="16" height="16" hspace="5" align="absmiddle" title='Tissue Site Selector' border="0"/>

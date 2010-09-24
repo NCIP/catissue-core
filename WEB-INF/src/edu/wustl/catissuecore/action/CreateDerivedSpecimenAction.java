@@ -103,7 +103,7 @@ public class CreateDerivedSpecimenAction extends BaseAction
 			parentSpecimenLabel = (String) valuesMap.get(parentSpecimenLabelKey);
 			requestedClass = (String) valuesMap.get(requestedClassKey);
 			requestedType = (String) valuesMap.get(requestedTypeKey);
-			requestedQty = ((String) valuesMap.get(requestedQtyKey)).toString();
+			requestedQty = (String) valuesMap.get(requestedQtyKey);
 			parentSpecimenId = ((String) valuesMap.get(parentSpecimenIdKey)).toString();
 
 		}

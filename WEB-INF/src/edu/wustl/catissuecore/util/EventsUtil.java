@@ -253,7 +253,7 @@ public final class EventsUtil
 			{
 				if (!validator.isValidOption(receivedEventParameters.getReceivedQuality()))
 				{
-					String message = ApplicationProperties.getValue("collectioneventparameters.receivedquality");
+					String message = ApplicationProperties.getValue("receivedeventparameters.receivedquality");
 					throw AppUtility.getApplicationException( null, "errors.item.required",message);
 				}
 				List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);

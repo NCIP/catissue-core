@@ -224,7 +224,9 @@ function setEditableChkbox(checkAllPages)
 
 	if(useFunction == "participant")
 	{
-		mygrid.entBox.style.width= wdt;					//"650px";
+		/*Bug id 17850 : Participant matching page displays 2 scroll bars,one for
+		grid and another for entire page. By making it "100%" grid will fit into the page.*/ 
+		mygrid.entBox.style.width= "100%";		//"650px";//wdt
 		colDataTypes=colDataTypes.replace(/ch/,"ra");
 		colDataTypes=colDataTypes.replace(/int/,"ro");
 		columns=","+columns+",";

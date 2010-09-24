@@ -45,6 +45,7 @@ public class Variables
 	public static int maximumTreeNodeLimit;
 	public static int maximumTreeNodeLimitForChildNode;
 	public static boolean isSpecimenLabelGeneratorAvl = false;
+	public static boolean isTemplateBasedLblGeneratorAvl = false;
 	public static boolean isStorageContainerLabelGeneratorAvl = false;
 	public static boolean isSpecimenBarcodeGeneratorAvl = false;
 	public static boolean isStorageContainerBarcodeGeneratorAvl = false;

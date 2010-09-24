@@ -8,6 +8,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
 import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 
 import edu.wustl.catissuecore.domain.Participant;
@@ -64,6 +65,7 @@ public class CaCoreAPIService
 					return true;
 	            }
 			};
+			HttpsURLConnection.setDefaultHostnameVerifier(hostVerifier);
 			String keyStoreFilePath = CaTIESProperties.getValue(CaTIESConstants.KEYSTORE_FILE_PATH).trim();
 			if(keyStoreFilePath != null && !"".equals(keyStoreFilePath))
 			{
@@ -318,10 +320,29 @@ public class CaCoreAPIService
 	{
 		try
 		{
-			return appService.getParticipantMatchingObects(participant,null);
+			logger.info("::::::::::::::::::In getParticipantMatchingObects:::::::::");
+			return appService.getParticipantMatchingObects(participant);
 		}
 		catch (final ApplicationException e)
 		{
+			CaCoreAPIService.logger.error("Error while retrieving" +
+					" matching participant list"+e.getMessage(),e);
+			e.printStackTrace() ;
+			throw new Exception("Error while retrieving matching participant list" + e.getMessage());
+		}
+	}
+
+	public static List getCaTissueLocalParticipantMatchingObects(Participant participant) throws Exception
+	{
+		try
+		{
+			logger.info("::::::::::::::::::In getCaTissueLocalParticipantMatchingObects:::::::::");
+			return appService.getCaTissueLocalParticipantMatchingObects(participant, null);
+		}
+		catch (final ApplicationException e)
+		{
+			System.out.println("::::::::::::::::::Exception In getParticipantMatchingObects:::::::::");
+			logger.info("::::::::::::::::::Exception In getParticipantMatchingObects:::::::::");
 			CaCoreAPIService.logger.error("Error while retrieving" +
 					" matching participant list"+e.getMessage(),e);
 			e.printStackTrace() ;

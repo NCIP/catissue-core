@@ -107,13 +107,13 @@ public class DefineArrayAction extends BaseAction
 
 				final Capacity capacityobj = containerTyperow.getCapacity();
 
-				defineArray.setDimenmsionX(new Integer(capacityobj.getOneDimensionCapacity())
+				defineArray.setDimenmsionX(Integer.valueOf(capacityobj.getOneDimensionCapacity())
 						.toString());
-				defineArray.setDimenmsionY(new Integer(capacityobj.getTwoDimensionCapacity())
+				defineArray.setDimenmsionY(Integer.valueOf(capacityobj.getTwoDimensionCapacity())
 						.toString());
 				defineArray.setArrayClass(containerTyperow.getSpecimenClass());
 
-				final String dimen = new Integer(capacityobj.getOneDimensionCapacity()).toString()
+				final String dimen = Integer.valueOf(capacityobj.getOneDimensionCapacity()).toString()
 						+ ":" + new Integer(capacityobj.getTwoDimensionCapacity()).toString() + ":"
 						+ defineArray.getArrayClass();
 

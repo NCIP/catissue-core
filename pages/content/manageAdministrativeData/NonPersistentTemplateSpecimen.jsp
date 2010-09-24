@@ -194,6 +194,10 @@
 									  size="20"
 								    />
 								</td>
+								<%
+									if(Variables.isTemplateBasedLblGeneratorAvl)
+									{
+								%>
                                 <td align="center" class="black_ar">&nbsp;</td>
                                 <td align="left" class="black_ar"><label>Label Format</label></td>
                                 <td align="left">
@@ -201,6 +205,10 @@
 								<html:text styleClass="black_ar" property="labelFormat" maxlength="255" styleId="labelFormat"  size="23"/>
 
 								</td>
+								<%}
+								else{%>
+								<td colspan="3" />
+								<%}%>
                               </tr>
                             </table>
                             <br>
@@ -222,6 +230,10 @@
                        <td colspan="2" class="showhide1">
 							<div id="derive_specimen" style="display:none" >
 								<table width="100%" border="0" cellspacing="0" cellpadding="4">
+								<%
+								if(Variables.isTemplateBasedLblGeneratorAvl)
+								{
+							%>
 									<tr>
                               <td width="5%" class="tableheading"><span class="black_ar_b">
                                 <label for="delete" align="center"><bean:message key="addMore.delete" /></label>
@@ -234,6 +246,23 @@
 
 							   <td width="28%" class="tableheading"><span class="black_ar_b">Label Format</span></td>
                             </tr>
+							<%
+								}
+							   else
+							   {%>
+								<tr>
+                              <td width="5%" class="tableheading"><span class="black_ar_b">
+                                <label for="delete" align="center"><bean:message key="addMore.delete" /></label>
+                              </span></td>
+                              <td width="15%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /> </span><bean:message key="collectionprotocol.specimenclass" /> </span></td>
+                              <td width="12%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="collectionprotocol.specimetype" /> </span></td>
+                              <td width="20%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.storagelocation"/></span></td>
+                              <td width="10%" class="tableheading"><span class="black_ar_b"><bean:message key="collectionprotocol.quantity" /></span></td>
+                              <td width="10%" class="tableheading"><span class="black_ar_b"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span> <bean:message key="cpbasedentry.concentration"/></span></td>
+
+
+                            </tr>
+							   <%}%>
 						  <script> document.forms[0].noOfDeriveSpecimen.value = <%=noOfDeriveSpecimen%> </script>
 
 										<TBODY id="DeriveSpecimenBean">
@@ -341,7 +370,10 @@
 										disabled="<%=concReadOnly%>" value="<%=concValue%>" style="text-align:right"/>
 								</td>
 
-
+						<%
+								if(Variables.isTemplateBasedLblGeneratorAvl)
+								{
+							%>
 								 <td class="black_ar">
 
 
@@ -350,7 +382,7 @@
 
 
 								</td>
-
+						<%}%>
                               </tr>
 
 
@@ -388,7 +420,12 @@
                     <td colspan="2" align="left" class="showhide1">
 						<div id="aliquot" style="display:none" >
 							<table width="100%" border="0" cellspacing="0" cellpadding="4">
+									<%
+								if(Variables.isTemplateBasedLblGeneratorAvl)
+								{
+							%>
 								<tr>
+
 									<td width="15%" class="black_ar" >
 									<bean:message key="aliquots.noOfAliquots"/>
 									</td>
@@ -399,7 +436,7 @@
 									<bean:message key="cpbasedentry.storagelocation"/>
 									</td>
 
-									<td width="350%" align="left" class="black_ar" >Label Format</td>
+									<td width="35%" align="left" class="black_ar" >Label Format</td>
 								</tr>
 								<tr>
 		                           <td class="black_ar" >
@@ -429,6 +466,44 @@
 								</td>
 
 								</tr>
+								<%}
+								else
+								{%>
+									<tr>
+
+									<td width="30%" class="black_ar" >
+									<bean:message key="aliquots.noOfAliquots"/>
+									</td>
+									<td width="30%" class="black_ar">
+									<bean:message key="aliquots.qtyPerAliquot"/>
+									</td>
+									<td width="40%" class="black_ar">
+									<bean:message key="cpbasedentry.storagelocation"/>
+									</td>
+
+
+								</tr>
+								<tr>
+		                           <td class="black_ar" >
+
+										 <html:text styleClass="black_ar" styleId="noOfAliquots" size="8" property="noOfAliquots" style="text-align:right" maxlength="50" />
+									</td>
+		                            <td class="black_ar">
+
+										 <html:text styleClass="black_ar" styleId="quantityPerAliquot" size="8" property="quantityPerAliquot" style="text-align:right" maxlength="50" />
+									</td>
+		                            <td class="black_ar">
+
+										<autocomplete:AutoCompleteTag property="storageLocationForAliquotSpecimen"
+											    optionsList = "<%=request.getAttribute("storageContainerList")%>"
+												initialValue="<%=form.getStorageLocationForAliquotSpecimen()%>"
+												styleClass="black_ar"
+												size="20"
+												/>
+									</td>
+
+								</tr>
+								<%}%>
                           </table>
 						</div>
                       </td>

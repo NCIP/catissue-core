@@ -273,8 +273,13 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			}
 			else if (exception instanceof ApplicationException)
 			{
+				String errorMsg = ((ApplicationException) exception).getCustomizedMsg();
+				if(errorMsg==null)
+				{
+					errorMsg =exception.getMessage();
+				}
 				actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item",
-						((ApplicationException) exception).getCustomizedMsg()));
+						errorMsg));
 			}
 			else
 			{
@@ -374,6 +379,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 				specimenDataBean.setPositionDimensionTwo(String.valueOf(specimen
 						.getSpecimenPosition().getPositionDimensionTwo()));
 			}
+			specimenDataBean.setLabel(specimen.getLabel());
 			final LinkedHashMap<String, GenericSpecimen> derivesMap = specimenDataBean
 					.getDeriveSpecimenCollection();
 			final Collection derivesCollection = derivesMap.values();
@@ -382,6 +388,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 			{
 				final SpecimenDataBean deriveSpecimenDataBean = (SpecimenDataBean) deriveItr.next();
 				final Specimen deriveSpec = deriveSpecimenDataBean.getCorresSpecimen();
+
 				if ((deriveSpec.getSpecimenPosition() != null)
 						&& (deriveSpec.getSpecimenPosition().getPositionDimensionOne() != null)
 						&& (deriveSpec.getSpecimenPosition().getPositionDimensionTwo() != null))
@@ -391,6 +398,10 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 					deriveSpecimenDataBean.setPositionDimensionTwo(String.valueOf(deriveSpec
 							.getSpecimenPosition().getPositionDimensionTwo()));
 				}
+				deriveSpecimenDataBean.setParentSpecimen((Specimen)deriveSpec.getParentSpecimen());
+				deriveSpecimenDataBean.setLabel(deriveSpec.getLabel());
+				deriveSpecimenDataBean.setParentName(deriveSpec.getParentSpecimen().getLabel());
+
 			}
 		}
 		dao.closeSession();

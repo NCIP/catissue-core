@@ -789,7 +789,7 @@ public class SpecimenForm extends AbstractActionForm
 
 				//Changed by falguni
 //				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
-				
+
 				//Changed by Santosh Ganacharya
 				if((!Variables.isSpecimenLabelGeneratorAvl)&&(!this.generateLabel) && (Validator.isEmpty(this.label)))
 				{
@@ -834,11 +834,11 @@ public class SpecimenForm extends AbstractActionForm
 						}
 
 						//bug#7788
-						if (Constants.FIXED_TISSUE_BLOCK.equals(this.type)
+						if (Constants.TISSUE.equals(this.className) && (Constants.FIXED_TISSUE_BLOCK.equals(this.type)
 								|| Constants.FIXED_TISSUE_SLIDE.equals(this.type)
 								|| Constants.FROZEN_TISSUE_BLOCK.equals(this.type)
 								|| Constants.FROZEN_TISSUE_SLIDE.equals(this.type)
-								|| Constants.NOT_SPECIFIED.equals(this.type))
+								|| Constants.NOT_SPECIFIED.equals(this.type)))
 						{
 							final Double initialFloorQty = Math.floor(Double
 									.parseDouble(this.quantity));
@@ -865,7 +865,8 @@ public class SpecimenForm extends AbstractActionForm
 				}
 				else
 				{
-					this.quantity = "0";
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.quantity")));
+
 				}
 				if (this instanceof NewSpecimenForm
 						&& this.getOperation().equalsIgnoreCase(Constants.EDIT))
@@ -904,11 +905,11 @@ public class SpecimenForm extends AbstractActionForm
 							}
 
 							//bug#7788
-							if (Constants.FIXED_TISSUE_BLOCK.equals(this.type)
+							if (Constants.TISSUE.equals(className) && (Constants.FIXED_TISSUE_BLOCK.equals(this.type)
 									|| Constants.FIXED_TISSUE_SLIDE.equals(this.type)
 									|| Constants.FROZEN_TISSUE_BLOCK.equals(this.type)
 									|| Constants.FROZEN_TISSUE_SLIDE.equals(this.type)
-									|| Constants.NOT_SPECIFIED.equals(this.type))
+									|| Constants.NOT_SPECIFIED.equals(this.type)))
 							{
 								final Double availableFloorQty = Math.floor(Double
 										.parseDouble(this.availableQuantity));

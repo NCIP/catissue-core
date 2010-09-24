@@ -743,6 +743,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			final GenericSpecimen specimen = (GenericSpecimen) specimenList.get(counter);
 			displayName = specimen.getDisplayName();
 			parentName = specimen.getParentName();
+			if(Validator.isEmpty(parentName) && specimen.getParentSpecimen() != null && Validator.isEmpty(specimen.getParentSpecimen().getLabel()))
+			{
+				parentName = specimen.getParentSpecimen().getLabel();
+				specimen.setParentName(parentName);
+			}
+
 			this.generateLabel=specimen.isGenerateLabel();
 //			this.specimenSummaryForm.setGenerateLabel(generateLabel);
 			if (Constants.TRUE.equalsIgnoreCase(this.isReadOnly) || specimen.getReadOnly())
@@ -892,7 +898,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		if ((nameValue[0].contains("parentName")) )
 		{
 			stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
-  				+ "\" class=\"" + styleClass + "\" size=\"" + size + "disabled=\"disabled\""+"\">");
+  				+ "\" class=\"" + styleClass + "\" size=\"" + size + "\" disabled=\"disabled\""+"\">");
 		}
 		else
 		{
@@ -1015,11 +1021,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 						{
 							stringBuffer.append(TD_1HLF + this.cWd + TD_2HLF);
 						}
-						else if(cnt == 0 && Validator.isEmpty(this.parentName) && this.generateLabel && this.columnHeaderList
-								.get(cnt).equals("anticipatorySpecimen.Parent"))
-						{
-							stringBuffer.append(TD_1HLF + this.cWd + TD_2HLF);
-						}
+//						else if(cnt == 0 && Validator.isEmpty(this.parentName) && this.generateLabel && this.columnHeaderList
+//								.get(cnt).equals("anticipatorySpecimen.Parent"))
+//						{
+//							stringBuffer.append(TD_1HLF + this.cWd + TD_2HLF);
+//						}
 						else
 						{
 						stringBuffer.append(TD_1HLF + this.cWd + TD_2HLF);

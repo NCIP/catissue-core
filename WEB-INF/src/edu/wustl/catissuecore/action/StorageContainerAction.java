@@ -424,7 +424,7 @@ public class StorageContainerAction extends SecureAction
 	private void setSpecimenClass(final StorageContainerForm sceForm,
 			final StorageContainerBizLogic bizLogic) throws BizLogicException
 	{
-		if(sceForm.getId()>0 && 
+		if(sceForm.getId()>0 &&
 			"Specimen".equals(sceForm.getSpecimenOrArrayType()))
 		{
 			final StorageContainer storagecont = (StorageContainer)bizLogic.
@@ -459,7 +459,7 @@ public class StorageContainerAction extends SecureAction
 	 *            : operation
 	 * @param request
 	 *            : request
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	private void onTypeChange(StorageContainerForm storageContainerForm, String operation,
 			HttpServletRequest request) throws ApplicationException
@@ -675,7 +675,6 @@ public class StorageContainerAction extends SecureAction
 		catch (final DAOException daoEx)
 		{
 			this.logger.error(daoEx.getMessage(),daoEx);
-			daoEx.printStackTrace();
 			throw new BizLogicException(daoEx);
 		}
 	}
@@ -707,7 +706,7 @@ public class StorageContainerAction extends SecureAction
 		}
 
 	}
-	
+
 	/**
 	 * @param request
 	 *            : request
@@ -767,7 +766,7 @@ public class StorageContainerAction extends SecureAction
 				.setPositionDimensionTwo(storageContainerBean.getPositionDimensionTwo());
 		storageContainerForm.setContainerId(storageContainerBean.getContainerId());
 		storageContainerForm.setContainerName(storageContainerBean.getContainerName());
-	
+
 		storageContainerForm.setHoldsSpecimenArrTypeIds(storageContainerBean
 				.getHoldsSpecimenArrTypeIds());
 		storageContainerForm.setHoldsSpecimenClassTypes(storageContainerBean

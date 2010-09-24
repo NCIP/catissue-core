@@ -13,8 +13,8 @@
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties" %>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="edu.wustl.common.util.global.Status" %>
-<%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
+
+
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
@@ -94,6 +94,11 @@
 %>
 
 <head>
+<script> var imgsrc="catissuecore/images/de/";</script>
+<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/prototype.js"></script>
+	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/scr.js"></script>
+	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/combobox.js"></script>
+	<script language="JavaScript" type="text/javascript" src="/catissuecore/javascripts/de/ajax.js"></script>
 	<script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -101,6 +106,7 @@
 	<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 	<link href="css/catissue_suite.css" type="text/css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+
 <style>
 	.hidden
 	{
@@ -168,8 +174,8 @@
 			}
 
 		}
-		
-		
+
+
 
 	/*	function onRadioButtonClick(element)
 		{
@@ -668,7 +674,7 @@ function setParentContainerType()
 }
 function selectSpType()
 	{
-		var tissue = document.getElementById('holdsTissueSpType');		
+		var tissue = document.getElementById('holdsTissueSpType');
 		var fluid  = document.getElementById('holdsFluidSpType');
 		var cell   = document.getElementById('holdsCellSpType');
 		var mol    = document.getElementById('holdsMolSpType');
@@ -687,7 +693,7 @@ function selectSpType()
 				fluid.options[i].selected=true;
 			}
 		}
-		
+
 		if (cell != null)
 		{
 			for (i = cell.options.length-1; i >= 0; i--)
@@ -695,7 +701,7 @@ function selectSpType()
 				cell.options[i].selected=true;
 			}
 		}
-		
+
 		if (mol != null)
 		{
 			for (i = mol.options.length-1; i >= 0; i--)
@@ -711,9 +717,14 @@ function addNewTypeAction(action)
 	document.forms[0].action = action;
 	document.forms[0].submit();
 }
+function calltest()
+	{
+		document.getElementById('sp_type').style.display='none';
+		showHide('sp_type');
+	}
 	</script>
 </head>
-<body onload="javascript:showHide('sp_type')">
+<body onload="javascript:calltest()">
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <body >
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
@@ -949,7 +960,7 @@ function addNewTypeAction(action)
 					}
 					%>
 					<% if(!Variables.isStorageContainerBarcodeGeneratorAvl || operation.equals(Constants.EDIT))
-					{%>
+					{%><td/>
                         <td  align="left" class="black_ar"><bean:message key="storageContainer.barcode" /></td>
 						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
 							<td width="18%" align="left" class="black_ar_t">
@@ -969,7 +980,7 @@ function addNewTypeAction(action)
 							<html:hidden property="barcode"/>
 							</logic:equal>
 							<logic:notEqual name="storageContainerForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
-							<html:text styleClass="formFieldSized10" maxlength="255"  size="30" styleId="barcode" property="barcode"/>
+							<html:text styleClass="black_ar" maxlength="255"  size="15" styleId="barcode" property="barcode"/>
 							</logic:notEqual>
 							</td>
 
@@ -977,7 +988,7 @@ function addNewTypeAction(action)
 						</tr>
 						</logic:equal>
 						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
-							<td width="30%" align="left"><html:text styleClass="formFieldSized10" maxlength="255"  size="30" styleId="barcode" property="barcode"/></td>
+							<td width="30%" align="left"><html:text styleClass="black_ar" maxlength="255"  size="15" styleId="barcode" property="barcode"/></td>
 						</logic:notEqual>
 					</tr>
 					<%
@@ -1015,7 +1026,7 @@ function addNewTypeAction(action)
 						 </label></td>
 
 						 <td align="left" valign="top"><html:text styleClass="black_ar" maxlength="10"  style="text-align:right" size="15" styleId="oneDimensionCapacity" property="oneDimensionCapacity"/></td>
-						 
+
 						 <td align="left" valign="top" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" />
 						<label for="twoDimensionLabel" onmouseover="Tip(' <%=label2%>')">
 							<%
@@ -1106,7 +1117,7 @@ function addNewTypeAction(action)
 		     </table>
 			</td>
         </tr>
-		
+
 		</table>
 			</td>
 				</tr>
@@ -1119,7 +1130,7 @@ function addNewTypeAction(action)
 		  </td>
 		</tr>
 		<tr>
-			<td colspan="2" valign="top" class="showhide1"><div id="sp_type" style="display:block">
+			<td colspan="2" valign="top" class="showhide1"><div id="sp_type">
 				<jsp:include page="/pages/content/manageAdministrativeData/multiSelect.jsp"/>
 			</td>
 		</tr>
@@ -1127,7 +1138,7 @@ function addNewTypeAction(action)
 		 <tr>
              <td>
 					  <table>
-						
+
 					    <tr>
 						  <td colspan="1" width="20%" nowrap>
 							<html:checkbox styleId="printCheckbox" property="printCheckbox" value="true" onclick="showPriterTypeLocation()">

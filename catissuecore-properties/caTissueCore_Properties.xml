@@ -42,16 +42,6 @@
     </property>
 
 	<property>
-		<name>institution.logo.tooltip</name>
-		<value>Sitemen cencer center</value>
-	</property>
-
-	<property>
-		<name>institution.url</name>
-		<value>http://bioinformatics.wustl.edu</value>
-	</property>
-
-	<property>
 		<name>use.proxy.server</name>
 		<value>false</value>
 	</property>
@@ -155,7 +145,7 @@
 	</property>
 	<property>
 		<name>ParticipantLookupAlgo</name>
-		<value>edu.wustl.common.participant.bizlogic.ParticipantLookupLogic</value>
+		<value>edu.wustl.common.participant.bizlogic.ParticipantLookupLogicWithDynamicCutOff</value>
 	</property>
 	<property>
 		<name>SSNExact</name>
@@ -502,12 +492,12 @@
 	<!--  property for the help page links/icons -->
 	<property>
 		<name>userguide.link</name>
-		<value>caTissue_Suite_User_Manual_v11p5.doc</value>
+		<value>caTissue_Suite_User_Manual.doc</value>
 	</property>
 
 	<property>
 		<name>technicalguide.link</name>
-		<value>caTissueSuite_Technical_Guide_V11p5.doc</value>
+		<value>caTissueSuite_v1_2_Technical_Guide.doc</value>
 	</property>
 
 	<property>
@@ -595,16 +585,12 @@
 		<value></value>
 	</property>
 	<property>
-		<name>TitliConfigured</name>
+		<name>KeywordSearchConfigured</name>
 		<value>false</value>
 	</property>
 	<property>
-		<name>titli.result.maximumRecords</name>
+		<name>keywordSearch.result.maximumRecords</name>
 		<value>1000</value>
-	</property>
-	<property>
-		<name>idp.enabled</name>
-		<value>@@IDP-ENABLED@@</value>
 	</property>
 		<!--  property to set max record per query for caCORE API-->
 	<property>
@@ -614,30 +600,40 @@
 
 
 
-<!--ClinPortal-caTissue Integration-->
+	<!--CDMS-caTissue Integration-->
 	<property>
-		<name>clinportal.integrationEnabled</name>
+		<name>cdms.integrationEnabled</name>
 		<value>@@integrationEnabled@@</value>
 	</property>
 
 	<property>
-		<name>clinportal.keyStorePath</name>
-		<value>@@ClinPortalKeyStorePath@@</value>
-	</property>
-
-
-	<property>
-		<name>clinportal.url</name>
-		<value>@@ClinPortalURL@@</value>
+		<name>cdms.keyStorePath</name>
+		<value>@@CdmsKeyStorePath@@</value>
 	</property>
 
 	<property>
-		<name>ClinPortalServiceURL</name>
-		<value>@@ClinPortalURL@@/http/remoteService</value>
+		<name>cdms.url</name>
+		<value>@@CdmsURL@@</value>
+	</property>
+
+	<property>
+		<name>CdmsServiceURL</name>
+		<value>@@CdmsURL@@/http/remoteService</value>
 	</property>
 
 	<property>
 		<name>tablespace</name>
 		<value></value>
 	</property>
+
+	<!-- CAS keystore path -->
+	<property>
+		<name>cas.keystorePath</name>
+		<value>@@CasKeystorePath@@</value>
+	</property>
+	<property>
+		<name>cas.logout.url</name>
+		<value>@@cas.logout.url@@/cas/logout</value>
+	</property>
+
 </properties>

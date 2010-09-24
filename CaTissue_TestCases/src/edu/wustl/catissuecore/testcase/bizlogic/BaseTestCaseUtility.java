@@ -1514,6 +1514,7 @@ public class BaseTestCaseUtility {
 		cellSpecimen.setSpecimenType("Fixed Cell Block");
 		cellSpecimen.setIsAvailable(new Boolean(true));
 		cellSpecimen.setActivityStatus("Active");
+		cellSpecimen.setCollectionStatus("Pending");
 
 		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 		specimenCharacteristics.setTissueSide("Left");
@@ -1601,6 +1602,7 @@ public class BaseTestCaseUtility {
 		cellSpecimen.setSpecimenType("Amniotic Fluid");
 		cellSpecimen.setIsAvailable(new Boolean(true));
 		cellSpecimen.setActivityStatus("Active");
+		cellSpecimen.setCollectionStatus("Pending");
 
 		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 		specimenCharacteristics.setTissueSide("Left");

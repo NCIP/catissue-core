@@ -15,7 +15,7 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
 	<script language="javascript">
-		
+
 	</script>
 <!-- Mandar 21-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
@@ -25,17 +25,17 @@
 <!-- Mandar 21-Aug-06 : calendar changes end -->
 
 </head>
-	
-<body>			
+
+<body>
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
-    
+
 <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 <html:form action='${requestScope.formName}'>
 
 	<!-- NEW TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS REGISTRATION BEGINS-->
 	<tr>
 	<td>
-	
+
 	<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 			<html:hidden property="operation"/>
 			<html:hidden property="id" />
@@ -47,24 +47,24 @@
         </tr>
         <tr>
           <td colspan="4" class="showhide1"></td>
-        </tr> 
+        </tr>
         <tr >
 
 	<table width="100%" border="0" cellpadding="3" cellspacing="0">
-              
-            
+
+
 		<!-- Name of the tissueSpecimenReviewEventParameters -->
-			<!--  User -->	 
+			<!--  User -->
 				<tr>
                   <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td width="16%" align="left" nowrap class="black_ar"><bean:message key="eventparameters.user"/></td>
-                <td width="30%" align="left" valign="middle" class="black_ar"><html:select property="userId" styleClass="formFieldSized18" styleId="userId" size="1" 
+                <td width="30%" align="left" valign="middle" class="black_ar"><html:select property="userId" styleClass="formFieldSized18" styleId="userId" size="1"
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 					<html:options collection='${requestScope.userListforJSP}' labelProperty="name" property="value" />
-				</html:select></td>              
+				</html:select></td>
                 </tr>
-             
-			 <!-- date Time -->   
+
+			 <!-- date Time -->
 				<tr>
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar"><bean:message key="eventparameters.dateofevent" /></td>
@@ -85,12 +85,12 @@
 			  id="dateOfEvent"
 			  formName="tissueSpecimenReviewEventParametersForm"
 			  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
-			  
+
 			  styleClass="black_ar"
 					/>
 </logic:empty><span class="grey_ar_s">
                    <bean:message key="page.dateFormat" />&nbsp</span></td>
-                  
+
                   <!-- Time -->
 				  <td align="left" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td class="black_ar" width="15%" ><bean:message key="eventparameters.time" /></td>
@@ -99,19 +99,19 @@
 					   initialValue='${tissueSpecimenReviewEventParametersForm.timeInHours}'
 					  styleClass="black_ar"
 					  staticField="false"
-					  size="3"
+					  size="4"
 			    />	                   &nbsp;<bean:message key="eventparameters.timeinhours" />. &nbsp;&nbsp;
                      <autocomplete:AutoCompleteTag property="timeInMinutes"
 						  optionsList = '${requestScope.minutesList}'
 						  initialValue='${tissueSpecimenReviewEventParametersForm.timeInMinutes}'
 						  styleClass="black_ar"
 						  staticField="false"
-						  size="3"
+						  size="4"
 				    />	                  &nbsp;<bean:message key="eventparameters.timeinminutes" />.</span></td>
-                  
-				  
+
+
                 </tr>
-             <!-- neoPlastic and Necrosis -->   
+             <!-- neoPlastic and Necrosis -->
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" class="black_ar"><LABEL for="type"><bean:message key="tissuespecimenrevieweventparameters.neoplasticcellularitypercentage"/>  </LABEL></td>
@@ -121,7 +121,7 @@
 				  <td align="left" class="black_ar"><bean:message key="tissuespecimenrevieweventparameters.necrosispercentage"/>  </td>
                   <td align="left"><html:text styleClass="black_ar" maxlength="50"  size="30" styleId="necrosisPercentage" property="necrosisPercentage" /></td>
                 </tr>
-              
+
 				<tr>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" class="black_ar"><LABEL for="type"><bean:message key="tissuespecimenrevieweventparameters.lymphocyticpercentage"/></LABEL></td>
@@ -134,21 +134,21 @@
 				<tr>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" class="black_ar"><LABEL for="type"><bean:message key="tissuespecimenrevieweventparameters.histologicalquality"/> </LABEL></td>
-                  <td align="left" class="black_ar"><autocomplete:AutoCompleteTag property="histologicalQuality" 
+                  <td align="left" class="black_ar"><autocomplete:AutoCompleteTag property="histologicalQuality"
 						  optionsList ='${requestScope.histologicalQualityList}'
 						  initialValue='${tissueSpecimenReviewEventParametersForm.histologicalQuality}'
 						  styleClass="black_ar"
 						  size="27"
 				    />	&nbsp;</td>
-                  
-				   
+
+
                 </tr>
-                
+
                 <tr>
                   <td align="center" class="black_ar">&nbsp;</td>
                   <td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/> </td><td colspan="4" align="left"><html:textarea styleClass="black_ar" cols="73" rows="4"  styleId="comments" property="comments" /></td>
                 </tr>
-               
+
   </table>
   </tr>
    <tr>

@@ -76,13 +76,20 @@ body {
 	color: #ffffff;
 }
 
+.black_ar_b_13 {
+	font-family: verdana;
+	font-size: 13px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;
+}
+
 .black_ar {
 	font-family: verdana;
 	font-size: 11px;
 	color: #171717;
 	vertical-align:middle;
 	margin:0px;
-
 }
 
 .black_ar_t {
@@ -533,6 +540,13 @@ div.autocomplete {
 	color: #000000;
 	width:18em;
 	}
+
+	.formFielDisabled{ /* for the autocomplete tag */
+  	font-family: verdana;
+	font-size: 11px;
+	color: grey;
+	width:18em;
+	}
 	.formFieldSized19{ /* for the autocomplete tag */
 	font-family:verdana;
 	border:1px solid #6E81A6;
@@ -555,13 +569,6 @@ div.autocomplete {
 }
 .addRow_s{
 	width:14em;
-	font-family: verdana;
-	font-size: 11px;
-	color: #000000;
-
-}
-.addRow_s_new{
-	width:8em;
 	font-family: verdana;
 	font-size: 11px;
 	color: #000000;

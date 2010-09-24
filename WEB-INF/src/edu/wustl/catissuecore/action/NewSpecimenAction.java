@@ -256,7 +256,7 @@ public class NewSpecimenAction extends SecureAction
 			{
 				lineage = Constants.NEW_SPECIMEN;
 			}
-			boolean generateLabel = SpecimenUtil.isLblGenOnForCP(parentLabelFormat, derivativeLabelFormat, aliquotLabelFormat, lineage);
+//			boolean generateLabel = SpecimenUtil.isLblGenOnForCP(parentLabelFormat, derivativeLabelFormat, aliquotLabelFormat, lineage);
 
 //			if(!Validator.isEmpty(specimenForm.getOperation()) && !specimenForm.getOperation().equals(Constants.EDIT))
 //			{
@@ -284,13 +284,13 @@ public class NewSpecimenAction extends SecureAction
 //						}
 //						else if(requirement != null && !requirement.getGenLabel())
 //						{
-							generateLabel = SpecimenUtil.isGenLabel(specimen);
+//							generateLabel = SpecimenUtil.isGenLabel(specimen);
 //						}
 //						/objSpecimen.setSpecimenRequirement((SpecimenRequirement)object);
 					}
 
 			}
-			specimenForm.setGenerateLabel(generateLabel);
+			specimenForm.setGenerateLabel(Variables.isSpecimenLabelGeneratorAvl);
 			if (collectionProtocolRegistration == null
 					|| collectionProtocolRegistration.getSignedConsentDocumentURL() == null)
 			{

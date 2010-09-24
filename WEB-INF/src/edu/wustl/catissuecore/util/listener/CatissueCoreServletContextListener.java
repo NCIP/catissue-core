@@ -45,6 +45,8 @@ import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exception.ParseException;
+import edu.wustl.common.participant.client.IParticipantManagerLookupLogic;
+import edu.wustl.common.participant.domain.IParticipant;
 import edu.wustl.common.util.CVSTagReader;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -95,6 +97,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			logApplnInfo();
 			DefaultValueManager.validateAndInitDefaultValueMap();
 			BulkOperationUtility.changeBulkOperationStatusToFailed();
+			IParticipantManagerLookupLogic lookUpLogic = (IParticipantManagerLookupLogic) Utility.getObject(XMLPropertyHandler
+					.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
+			lookUpLogic.initParticipantCache();
 			logger.info("Initialization complete");
 		}
 		catch (final Exception e)
@@ -155,7 +160,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	private void initTitliIndex()
 	{
 		TitliResultGroup.isTitliConfigured = Boolean.parseBoolean(XMLPropertyHandler
-				.getValue(Constants.TITLI_CONFIGURED));
+				.getValue(Constants.KEYWORD_CONFIGURED));
 	}
 
 	/**

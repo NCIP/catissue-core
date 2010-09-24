@@ -76,38 +76,53 @@ public class MaskUsingDEMetatdata
 			{
 				final Collection<AttributeInterface> attributeCollection = entity
 						.getAttributeCollection();
+
+
 				for (final AttributeInterface attribute : attributeCollection)
 				{
+
 					// updated code for derived attributes
 					if (!this.isTagPresent(attribute, "Derived")) //Please verify the tag value used to identify whether the attributes is inherited or not
 					{
-						if (!entity.getName().contains("Deprecated"))
+						System.out.println("entity.getName  &&&&&&&&&&&&&&&"+entity.getName());
+						if (!entity.getName().contains("Deprecated") && !entity.getName().contains("Password"))
+											//.getTableProperties().getName().equalsIgnoreCase("CATISSUE_PASSWORD"))
 						{
-							if (attribute.getIsIdentified() != null
-									&& attribute.getIsIdentified() == true
-									&& attribute.getAttributeTypeInformation().getDataType()
-											.equalsIgnoreCase("String"))
-							{
-								this.maskString(attribute.getColumnProperties().getName(), entity
-										.getTableProperties().getName(), session);
-							}
-							else if (attribute.getAttributeTypeInformation().getDataType()
-									.equalsIgnoreCase("Date"))
-							{
-								this.maskDate(attribute.getColumnProperties().getName(), entity
-										.getTableProperties().getName(), session);
-							}
-							else if (this.isCommentFiled(attribute))
-							{
-								this.maskString(attribute.getColumnProperties().getName(), entity
-										.getTableProperties().getName(), session);
-							}
+						//System.out.println("entity.getTableProperties().getName()  &&&&&&&&&&&&&&&"+entity.getTableProperties().getName());
+
+								if (attribute.getIsIdentified() != null
+										&& attribute.getIsIdentified() == true
+										&& attribute.getAttributeTypeInformation().getDataType()
+												.equalsIgnoreCase("String"))
+								{
+								//System.out.println("entity.getTableProperties().getName()  &&&&&&&&&&&&&&&"+entity.getTableProperties().getName());
+									this.maskString(attribute.getColumnProperties().getName(), entity
+											.getTableProperties().getName(), session);
+								}
+
+								else if (attribute.getAttributeTypeInformation().getDataType()
+										.equalsIgnoreCase("Date"))
+								{
+								//System.out.println("entity.getTableProperties().getName()  &&&&&&&&&&&&&&&"+entity.getTableProperties().getName());
+									this.maskDate(attribute.getColumnProperties().getName(), entity
+											.getTableProperties().getName(), session);
+								}
+								else if (this.isCommentFiled(attribute))
+								{
+								//System.out.println("entity.getTableProperties().getName()  &&&&&&&&&&&&&&&"+entity.getTableProperties().getName());
+									this.maskString(attribute.getColumnProperties().getName(), entity
+											.getTableProperties().getName(), session);
+								}
+
 						}
 					}
 				}
 			}
+
+
 			// sql String to delete  ReportQueue table
 			String sqlString = "truncate table CATISSUE_REPORT_QUEUE";
+			System.out.println("done ########### : "+sqlString);
 			this.executeQuery(sqlString, session);
 
 			// sql String to delete ReportQueue table
@@ -118,31 +133,31 @@ public class MaskUsingDEMetatdata
 
 			// Disable constraints on audit tables.
 			this.disableAuditTables(session);
-			
+
 			sqlString = "truncate table catissue_bulk_operation";
 			this.executeQuery(sqlString, session);
-			
+
 			sqlString = "truncate table job_details";
 			this.executeQuery(sqlString, session);
-			
+
 			sqlString = "truncate table catissue_data_audit_event_log";
 			this.executeQuery(sqlString, session);
-			
+
 			sqlString = "truncate table catissue_audit_event_query_log";
 			this.executeQuery(sqlString, session);
-			
+
 			sqlString = "truncate table catissue_audit_event_details";
 			this.executeQuery(sqlString, session);
-			
+
 			sqlString = "truncate table catissue_audit_event_log";
 			this.executeQuery(sqlString, session);
-			
+
 			sqlString = "update catissue_audit_event set USER_ID=null";
 			this.executeQuery(sqlString, session);
-			
+
 			sqlString = "truncate table catissue_audit_event";
 			this.executeQuery(sqlString, session);
-			
+
 			// Enable constraints on audit tables.
 			this.enableAuditTables(session);
 
@@ -336,13 +351,13 @@ public class MaskUsingDEMetatdata
 
 		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT DISABLE CONSTRAINT FKACAF697A2206F20F";
 		this.executeQuery(sqlString, session);
-		
+
 		sqlString = "ALTER TABLE catissue_data_audit_event_log DISABLE CONSTRAINT FK5C07745DC62F96A411";
 		this.executeQuery(sqlString, session);
-		
+
 		sqlString = "ALTER TABLE catissue_data_audit_event_log DISABLE CONSTRAINT FK5C07745DC62F96A412";
 		this.executeQuery(sqlString, session);
-		
+
 	}
 
 	/**
@@ -363,10 +378,10 @@ public class MaskUsingDEMetatdata
 
 		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT ENABLE CONSTRAINT FKACAF697A2206F20F";
 		this.executeQuery(sqlString, session);
-		
+
 		sqlString = "ALTER TABLE catissue_data_audit_event_log ENABLE CONSTRAINT FK5C07745DC62F96A411";
 		this.executeQuery(sqlString, session);
-		
+
 		sqlString = "ALTER TABLE catissue_data_audit_event_log ENABLE CONSTRAINT FK5C07745DC62F96A412";
 		this.executeQuery(sqlString, session);
 	}
@@ -390,7 +405,7 @@ public class MaskUsingDEMetatdata
 
 		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT NOCHECK CONSTRAINT ALL";
 		this.executeQuery(sqlString, session);
-		
+
 		sqlString = "ALTER TABLE catissue_data_audit_event_log NOCHECK CONSTRAINT ALL";
 		this.executeQuery(sqlString, session);
 	}
@@ -414,7 +429,7 @@ public class MaskUsingDEMetatdata
 
 		sqlString = "ALTER TABLE CATISSUE_AUDIT_EVENT CHECK CONSTRAINT ALL";
 		this.executeQuery(sqlString, session);
-		
+
 		sqlString = "ALTER TABLE catissue_data_audit_event_log CHECK CONSTRAINT ALL";
 		this.executeQuery(sqlString, session);
 	}
@@ -427,11 +442,15 @@ public class MaskUsingDEMetatdata
 	 */
 	private boolean isTagPresent(AbstractMetadataInterface entity, String tag)
 	{
+
 		boolean isTagPresent = false;
+
 		final Collection<TaggedValueInterface> taggedValueCollection = entity
 				.getTaggedValueCollection();
+
 		for (final TaggedValueInterface tagValue : taggedValueCollection)
 		{
+
 			if (tagValue.getKey().equalsIgnoreCase(tag))
 			{
 				isTagPresent = true;

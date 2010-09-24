@@ -32,7 +32,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Container Add.
 	 */
-	
+
 	public void testStorageContainerAdd()
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
@@ -97,7 +97,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Container Add.
 	 */
-	
+
 	public void testAddRestrictedStorageContainer()
 	{
 		StorageTypeForm storageTypeForm = RequestParameterUtility.createStorageTypeFormWithTypeRestriction(this,
@@ -106,7 +106,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		setRequestPathInfo("/StorageTypeAdd");
 		setActionForm(storageTypeForm);
 		actionPerform();
-		
+
 		verifyForward("success");
 		verifyNoActionErrors();
 		verifyActionMessages(new String[]{"object.add.successOnly"});
@@ -124,7 +124,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		capacity.setOneDimensionCapacity(form.getOneDimensionCapacity());
 		capacity.setTwoDimensionCapacity(form.getTwoDimensionCapacity());
 		storageType.setCapacity(capacity);
-		
+
 		StorageContainerForm storageContainerForm = new StorageContainerForm();
 		storageContainerForm.setTypeId(storageType.getId());
 		logger.info("----StorageTypeId : " + storageType.getId());
@@ -137,7 +137,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		storageContainerForm.setOneDimensionLabel("row");
 		storageContainerForm.setTwoDimensionLabel("row");
 		storageContainerForm.setDefaultTemperature("29");
-	
+
 		String[] holdsSpecimenClassCollection = new String[4];
 		holdsSpecimenClassCollection[0]="Fluid";
 		holdsSpecimenClassCollection[1]="Tissue";
@@ -154,7 +154,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		storageContainerForm.setHoldsMolSpType(molecular);
 
 		storageContainerForm.setSpecimenOrArrayType("Specimen");
-		
+
 		storageContainerForm.setActivityStatus("Active");
 		storageContainerForm.setIsFull("False");
 		storageContainerForm.setOperation("add");
@@ -168,12 +168,14 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test Storage Container Add Freezer Container.
 	 */
-	
+
 	public void testAddFreezerContainer()
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("Freezer_StorageType");
+		System.out.println("freezer name and id : "+storageType.getName()+" :::: "+ storageType.getId());
 
 		StorageType storageTypeBox = (StorageType) TestCaseUtility.getNameObjectMap("Box_StorageType");
+		System.out.println("box name and id : "+storageTypeBox.getName()+" :::: "+ storageTypeBox.getId());
 
 		StorageContainerForm storageContainerForm = new StorageContainerForm();
 		storageContainerForm.setTypeId(storageType.getId());
@@ -181,6 +183,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 
 		Site site = (Site) TestCaseUtility.getNameObjectMap("Site");
 		storageContainerForm.setSiteId(site.getId());
+		System.out.println("site name and id : "+site.getName()+" :::: "+ site.getId());
 
 		storageContainerForm.setNoOfContainers(1);
 		storageContainerForm.setOneDimensionCapacity(5);
@@ -199,11 +202,13 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		storageContainerForm.setHoldsSpecimenClassTypes(holdsSpecimenClassCollection);
 		storageContainerForm.setActivityStatus("Active");
 		storageContainerForm.setOperation("add");
+		System.out.println("before adding container");
 		setRequestPathInfo("/StorageContainerAdd");
 		setActionForm(storageContainerForm);
 		actionPerform();
 		verifyForward("success");
 		verifyNoActionErrors();
+		System.out.println("after adding container for freezer");
 
 		StorageContainerForm containerForm=(StorageContainerForm) getActionForm();
 		StorageContainer storageContainer = new StorageContainer();
@@ -226,7 +231,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Test case to add a container of type box under container of type freezer.
 	 */
-	
+
 	public void testAddBoxContainerUnderFreezer()
 	{
 		StorageContainer parentStorageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("FreezerContainer");
@@ -306,7 +311,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * Inserting a storage container named "ParentStorageContainer"
 	 */
-	
+
 	public void testAddParentStorageContainer()
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("Freezer_StorageType");
@@ -367,7 +372,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	 * Negative test case
 	 */
 
-	
+
 	public void testAddChildContainerOnOccupiedPosition()
 	{
 		StorageContainer parentStorageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("FreezerContainer");
@@ -423,7 +428,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * This will update the parent container and position.
 	 */
-	
+
 	public void testUpdateContainerParentAndPosition()
 	{
 		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("ChildContainerToEdit");
@@ -494,7 +499,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	 * Test Storage Container Add invalid parent container.
 	 * Negative Test Case.
 	 */
-	
+
 	public void testAddChildContainerWithInvalidParentContainer()
 	{
 		StorageContainer parentStorageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
@@ -530,7 +535,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		verifyForward("failure");
 		verifyActionErrors(new String[]{"errors.item"});
 	}
-	
+
 	public void testStorageContainerBizLogicAddWithNullObject()
 	{
 //		//TODO
@@ -631,7 +636,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	/**
 	 * This test case will edit the "StorageContainer" and update the container's capacity.
 	 */
-	
+
 	public void testUpdateContainerCapacity()
 	{
 		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
@@ -693,7 +698,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 
 
 
-//	
+//
 //	public void testCallToGetSiteList() throws BizLogicException
 //	{
 //		final String[] siteDisplayField = {"name"};
@@ -709,7 +714,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 //
 //	}
 
-	
+
 	public void testAddBoxWithAutoOption()
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("Box_StorageType");
@@ -781,7 +786,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		verifyNoActionErrors();
 
 	}
-	
+
 	public void testClickOnViewMap()
 	{
 		setRequestPathInfo("/OpenStorageContainer");
@@ -808,7 +813,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	}
 
 	//TissueSiteTreeAction
-	
+
 	public void testClickOnTissueSiteSelector()
 	{
 		setRequestPathInfo("/TissueSiteTree");
@@ -821,7 +826,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	}
 
 	//TissueSiteTreeAction, ShowChildNodes
-	
+
 	public void testClickOnTissueSiteSelectorAndSelectNode()
 	{
 		setRequestPathInfo("/TissueSiteTree");
@@ -844,7 +849,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	 * StorageContainersAction
 	 * StorageContainerAddAction
 	 */
-	
+
 	public void testAddSimilarContainer()
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("StorageType");
@@ -899,7 +904,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 	 * StorageContainersAction
 	 * StorageContainerAddAction
 	 */
-	
+
 	public void testClickStorageContainerNode()
 	{
 		StorageContainer storageContainer = (StorageContainer) TestCaseUtility.getNameObjectMap("StorageContainer");
@@ -918,7 +923,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		verifyNoActionErrors();
 	}
 
-	
+
 	public void testShowFramedPage()
 	{
 		setRequestPathInfo("/ShowFramedPage");
@@ -928,7 +933,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		actionPerform();
 	}
 
-	
+
 	public void testStorageContainerAddForSpecimenArrayType()
 	{
 		StorageType storageType = (StorageType) TestCaseUtility.getNameObjectMap("SpecimenArrayStorageType");

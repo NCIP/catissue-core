@@ -8,11 +8,9 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.bizlogic.BaseTestCaseUtility;
-import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
 
 public class UserTestCases extends CaTissueSuiteBaseTest
@@ -22,7 +20,7 @@ public class UserTestCases extends CaTissueSuiteBaseTest
 	public void testSupervisorAdd()
 	{
 		addRequestParameter("pageOf", "pageOfUserAdmin");
-		UserForm form = new UserForm();
+		final UserForm form = new UserForm();
         form.setFirstName("user_first_name_" + UniqueKeyGeneratorUtil.getUniqueKey());
         form.setLastName("user_last_name_" + UniqueKeyGeneratorUtil.getUniqueKey());
         form.setCity("Pune");
@@ -37,11 +35,11 @@ public class UserTestCases extends CaTissueSuiteBaseTest
         form.setRole("2");
         form.setEmailAddress("super"+UniqueKeyGeneratorUtil.getUniqueKey()+"@super.com");
         form.setConfirmEmailAddress(form.getEmailAddress());
-        Site site = (Site)TestCaseUtility.getNameObjectMap("Site");
-        String siteIds[] = new String[1];
+        final Site site = (Site)TestCaseUtility.getNameObjectMap("Site");
+        final String siteIds[] = new String[1];
         siteIds[0] = site.getId().toString();
         form.setSiteIds(siteIds);
-        form.setWustlKey("");
+        form.setTargetLoginName("");
 		addRequestParameter("operation", "add");
 		addRequestParameter("dirtyVar", "true");
 		addRequestParameter("menuSelected", "1");
@@ -51,7 +49,7 @@ public class UserTestCases extends CaTissueSuiteBaseTest
 		verifyForward("success");
 		verifyNoActionErrors();
 
-		User supervisor = new User();
+		final User supervisor = new User();
 		supervisor.setId(form.getId());
 		supervisor.setLastName(form.getLastName());
 		supervisor.setFirstName(form.getFirstName());
@@ -79,7 +77,7 @@ public class UserTestCases extends CaTissueSuiteBaseTest
 		   	user = (User)appService.updateObject(user);
 
 		 }
-		 catch(Exception e)
+		 catch(final Exception e)
 		 {
 			 System.out.println("UserTestCases.testAddScientist()"+ e.getMessage());
 			 e.printStackTrace();

@@ -1,6 +1,7 @@
 <%@
 	page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"
 %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%
 	String dynamicExtensionsURL =(String) request.getAttribute(AnnotationConstants.DYNAMIC_EXTN_URL_ATTRIB);
           boolean mac = false;
@@ -9,7 +10,7 @@
 			{
 			    mac = true;
 			}
-	String height = "100%";		
+	String height = "100%";
 	if(mac)
 	{
 	  height="100%";

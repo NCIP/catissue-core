@@ -60,25 +60,21 @@ public class DEIntegration extends edu.common.dynamicextensions.DEIntegration.DE
 					Long.valueOf(hookEntityId));
 			Collection<AssociationInterface> asntCollection = staticEntity
 					.getAssociationCollection();
-			do
+			AssociationInterface asntInterface = null;
+			for (AssociationInterface association : asntCollection)
 			{
-				AssociationInterface asntInterface = null;
-				for (AssociationInterface association : asntCollection)
+				if (association.getTargetEntity().equals(dynamicEntity))
 				{
-					if (association.getTargetEntity().equals(dynamicEntity))
-					{
-						asntInterface = association;
-						break;
-					}
+					asntInterface = association;
+					break;
 				}
-				if (asntInterface != null)
-				{
-					entityManager.associateEntityRecords(asntInterface, staticEntityRecId,
-							dynaEntityRecId);
-				}
-				dynamicEntity = dynamicEntity.getParentEntity();
 			}
-			while (dynamicEntity != null);
+			if (asntInterface != null)
+			{
+				entityManager.associateEntityRecords(asntInterface, staticEntityRecId,
+						dynaEntityRecId);
+			}
+
 		}
 		catch (DynamicExtensionsSystemException e)
 		{

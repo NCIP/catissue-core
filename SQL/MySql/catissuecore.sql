@@ -126,6 +126,8 @@ drop table if exists catissue_catissue_bulk_operation;
 drop table if exists catissue_stor_type_spec_type;
 drop table if exists catissue_stor_cont_spec_type;
 
+DROP TABLE IF EXISTS `csm_migrate_user`;
+
 SET FOREIGN_KEY_CHECKS=1;
 
 create table CATISSUE_PERMISSIBLE_VALUE (
@@ -722,7 +724,6 @@ create table CATISSUE_USER (
    CSM_USER_ID bigint,
    STATUS_COMMENT text,
    FIRST_TIME_LOGIN bit default 1,
-   WUSTLKEY varchar(100) UNIQUE,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_TIS_SPE_EVENT_PARAM (
@@ -1260,7 +1261,7 @@ create table CATISSUE_CONTAINER_POSITION(
 	constraint FK_OCCUPIED_CONTAINER foreign key (PARENT_CONTAINER_ID) references CATISSUE_CONTAINER (IDENTIFIER)
 )ENGINE = INNODB DEFAULT CHARSET = utf8;
 
-//Msr changes
+/*Msr changes*/
 CREATE TABLE CATISSUE_SITE_USERS (
    SITE_ID BIGINT ,
    USER_ID BIGINT ,
@@ -1341,3 +1342,13 @@ CREATE TABLE KEY_SEQ_GENERATOR
 	KEY_TYPE VARCHAR(255) NOT NULL,
 	 PRIMARY KEY (IDENTIFIER)
 	 );
+
+	 /*Added for IDP in catissue V1.2*/
+CREATE TABLE `csm_migrate_user` (
+  `LOGIN_NAME` varchar(100) NOT NULL,
+  `TARGET_IDP_NAME` varchar(100) default NULL,
+  `MIGRATED_LOGIN_NAME` varchar(100) default NULL,
+  `MIGRATION_STATUS` varchar(100) default NULL,
+  PRIMARY KEY  (`LOGIN_NAME`)
+);
+

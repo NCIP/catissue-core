@@ -2,22 +2,22 @@
 <!DOCTYPE web-app
 PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 "http://java.sun.com/dtd/web-app_2_3.dtd">
-    
+
 <web-app>
 
    <display-name>caTISSUE Core</display-name>
-   
+
    <!-- This error-page has been added as a general solution for Bug:8581 -->
   <error-page>
   		<exception-type>java.lang.Exception</exception-type>
   		<location>/pages/content/home/Error.jsp</location>
-  </error-page> 
+  </error-page>
   <!-- application properties file path -->
   <context-param>
     	<param-name>applicationproperties</param-name>
     	<param-value>ApplicationResources.properties</param-value>
   </context-param>
-  
+
   <!-- base class for Application Resource bundle -->
   <context-param>
     	<param-name>resourcebundleclass</param-name>
@@ -32,21 +32,21 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
   </listener>
 
 <!--Environment entry for datasource JNDI name -->
-   <env-entry> 
-            <env-entry-name>DataSource</env-entry-name> 
-            <env-entry-value>java:/catissuecore</env-entry-value> 
-            <env-entry-type>java.lang.String</env-entry-type> 
+   <env-entry>
+            <env-entry-name>DataSource</env-entry-name>
+            <env-entry-value>java:/catissuecore</env-entry-value>
+            <env-entry-type>java.lang.String</env-entry-type>
         </env-entry>
-     
+
  <!-- Standard Action Servlet Configuration (with debugging) -->
 
    <servlet>
      <servlet-name>action</servlet-name>
      <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
-       
+
      <init-param>
       <param-name>config</param-name>
-      <param-value>/WEB-INF/struts-config.xml</param-value>
+	  <param-value>/WEB-INF/struts-config.xml</param-value>
     </init-param>
     <init-param>
       <param-name>debug</param-name>
@@ -55,7 +55,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     <init-param>
       <param-name>detail</param-name>
       <param-value>2</param-value>
-    </init-param>     
+    </init-param>
     <load-on-startup>2</load-on-startup>
    </servlet>
 
@@ -63,7 +63,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
      <servlet-name>ResponseServlet</servlet-name>
      <servlet-class>edu.wustl.common.struts.ResponseServlet</servlet-class>
    </servlet>
-	
+
  <!-- Standard Action Servlet Mapping -->
   <servlet-mapping>
      <servlet-name>action</servlet-name>
@@ -74,10 +74,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
      <servlet-name>ResponseServlet</servlet-name>
      <url-pattern>/ResponseServlet</url-pattern>
   </servlet-mapping>
-  
+
 	<session-config>
 	<session-timeout>30</session-timeout> |#1 </session-config>
-  
+
  <!--Usual Welcome-file-list-->
   <welcome-file-list>
 	 <welcome-file>/pages/index.jsp</welcome-file>
@@ -92,17 +92,17 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	  <taglib-uri>/WEB-INF/struts-logic.tld</taglib-uri>
 	  <taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
   </taglib>
-  
+
   <taglib>
 	  <taglib-uri>/WEB-INF/struts-bean.tld</taglib-uri>
 	  <taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
   </taglib>
-  
+
   <taglib>
 	  <taglib-uri>/WEB-INF/PagenationTag.tld</taglib-uri>
 	  <taglib-location>/WEB-INF/PagenationTag.tld</taglib-location>
   </taglib>
-  
+
   <taglib>
 	  <taglib-uri>/WEB-INF/AutoCompleteTag.tld</taglib-uri>
 	  <taglib-location>/WEB-INF/AutoCompleteTag.tld</taglib-location>
@@ -112,24 +112,24 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	  <taglib-uri>/WEB-INF/nlevelcombo.tld</taglib-uri>
 	  <taglib-location>/WEB-INF/nlevelcombo.tld</taglib-location>
   </taglib>
-  
+
   <taglib>
 	  <taglib-uri>/WEB-INF/specimenDetails.tld</taglib-uri>
 	  <taglib-location>/WEB-INF/specimenDetails.tld</taglib-location>
   </taglib>
-  
+
   <taglib>
 	  <taglib-uri>/WEB-INF/twoColDetailsTag.tld</taglib-uri>
 	  <taglib-location>/WEB-INF/twoColDetailsTag.tld</taglib-location>
   </taglib>
-  
-  
+
+
 <!--  caCore like system entries -->
 	<context-param>
        	<param-name>cacoreBeans.Properties</param-name>
 		<param-value>cacoreBeans.properties,evsBeans.properties</param-value>
 	</context-param>
-	
+
 	<context-param>
 	    <param-name>cacoreFormat.xsl</param-name>
 		<param-value>xslt/cacoreFormat.xsl</param-value>
@@ -161,8 +161,8 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 			org.springframework.web.servlet.DispatcherServlet
 		</servlet-class>
 		<load-on-startup>3</load-on-startup>
-	</servlet>	
-    
+	</servlet>
+
     <servlet>
 		<servlet-name>sdkstartup</servlet-name>
 		<servlet-class>
@@ -170,7 +170,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		</servlet-class>
     	<load-on-startup>1</load-on-startup>
     </servlet>
-    
+
     <servlet>
         <servlet-name>AxisServlet</servlet-name>
         <display-name>Apache-Axis Servlet</display-name>
@@ -178,49 +178,49 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     </servlet>
     <servlet>
         <servlet-name>GetXML</servlet-name>
-        <servlet-class>gov.nih.nci.system.proxy.HTTPQuery</servlet-class>        	
+        <servlet-class>gov.nih.nci.system.proxy.HTTPQuery</servlet-class>
     </servlet>
     <servlet>
     	<servlet-name>GetHTML</servlet-name>
-    	<servlet-class>gov.nih.nci.system.proxy.HTTPQuery</servlet-class>        	
+    	<servlet-class>gov.nih.nci.system.proxy.HTTPQuery</servlet-class>
     </servlet>
 	<servlet>
     	<servlet-name>Happy</servlet-name>
-		<jsp-file>/Happy.jsp</jsp-file>     	
+		<jsp-file>/Happy.jsp</jsp-file>
     </servlet>
-    
+
 	<servlet-mapping>
 		<servlet-name>httpinvoker</servlet-name>
 		<url-pattern>/http/*</url-pattern>
 	</servlet-mapping>
-    
+
     <servlet-mapping>
         <servlet-name>sdkstartup</servlet-name>
         <url-pattern>/server/HTTPServer</url-pattern>
     </servlet-mapping>
-    
-    
+
+
     <servlet-mapping>
         <servlet-name>AxisServlet</servlet-name>
         <url-pattern>/ws/AxisServlet</url-pattern>
     </servlet-mapping>
-    
-    
+
+
     <servlet-mapping>
         <servlet-name>AxisServlet</servlet-name>
         <url-pattern>*.jws</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
         <servlet-name>AxisServlet</servlet-name>
         <url-pattern>/ws/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
     	<servlet-name>GetXML</servlet-name>
     	<url-pattern>/GetXML</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
     	<servlet-name>GetHTML</servlet-name>
       	<url-pattern>/GetHTML</url-pattern>
@@ -231,12 +231,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     </servlet-mapping>
 <!--  End caCore like system entries -->
 
-<!-- Filter for accessing flex components -->	
+<!-- Filter for accessing flex components -->
    <filter>
         <filter-name>FlexComponentFilter</filter-name>
         <filter-class>edu.wustl.catissuecore.filter.FlexComponentFilter</filter-class>
         <description>
-          
+
         </description>
     </filter>
     <filter-mapping>
@@ -244,7 +244,94 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
       <url-pattern>/flexclient/*</url-pattern>
     </filter-mapping>
 <!-- Filter configuration finish -->
- 
+
+<!-- Filter for CAS configuration START-->
+
+	<filter>
+		<filter-name>NoActionFilter</filter-name>
+		<filter-class>edu.wustl.catissuecore.util.NoActionFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/SignUp.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/SignUpUserAdd.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/ReportProblem.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/ContactUs.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/SummaryPage.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/RedirectToHelp.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/Disclaimer.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/PrivacyNotice.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/Accessibility.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/ReportedProblemAdd.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/BulkLogin.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/BulkHandler.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/ImportPVAction.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>NoActionFilter</filter-name>
+		<url-pattern>/CreateCategoryAction.do</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>CASFilter</filter-name>
+	    <filter-class>edu.yale.its.tp.cas.client.filter.CASFilter</filter-class>
+		<init-param>
+			<param-name>edu.yale.its.tp.cas.client.filter.loginUrl</param-name>
+			<param-value>@@cas-server-url-login@@/cas/login</param-value>
+		</init-param>
+		<init-param>
+			<param-name>edu.yale.its.tp.cas.client.filter.validateUrl</param-name>
+			<param-value>@@cas-server-url-validateUrl@@/cas/serviceValidate</param-value>
+		</init-param>
+		<init-param>
+			<param-name>edu.yale.its.tp.cas.client.filter.serverName</param-name>
+			<param-value>@@catissue-cas-login-serverName@@</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>CASFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+
+<!-- Filter for CAS configuration finish -->
+
 <!-- FLEX Configuration START-->
 
 <context-param>
@@ -377,7 +464,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<filter-name>StingerFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
-	
+
     <!-- for WebSphere deployment, please uncomment -->
     <!--
     <resource-ref>

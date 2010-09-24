@@ -180,7 +180,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		catch (final ApplicationException e)
 		{
 			logger.error(e.getMessage(), e);
-			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
@@ -282,7 +281,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			catch (final NameGeneratorException e)
 			{
 				logger.error(e.getMessage(), e);
-				e.printStackTrace() ;
 				throw this.getBizLogicException(e, "name.generator.exp", "");
 			}
 		}
@@ -380,7 +378,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 					this.setDisableToSubContainer(oldContForChange, disabledConts,
 							dao, disabledContList);
 					oldContForChange.getOccupiedPositions().clear();
-					this.disableSubStorageContainer(dao, sessionDataBean, disabledContList);
+					this.disableSubStorageContainer(dao, disabledContList);
 					updateConPOs(dao, oldContainer, oldContForChange);
 				}
 				else
@@ -392,9 +390,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -725,7 +721,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		catch (final ApplicationException exp)
 		{
 			logger.error(exp.getMessage(), exp);
-			exp.printStackTrace();
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
@@ -856,9 +851,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 	/**
@@ -965,9 +958,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 
 	}
@@ -1209,8 +1200,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	private void validateContSite(final StorageContainer container) throws BizLogicException
 	{
 		String message;
-		if (container.getSite() == null || container.getSite().getId() == null
-				|| container.getSite().getId() <= 0)
+		if (container.getSite() == null || ((container.getSite().getId() == null
+				|| container.getSite().getId() <= 0 )&& (container.getSite().getName() == null||"".equals(container.getSite().getName()))))
 		{
 			message = ApplicationProperties.getValue("storageContainer.site");
 			throw this.getBizLogicException(null, "errors.item.invalid", message);
@@ -1277,9 +1268,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		return specimenPosColl;
 	}
@@ -1316,24 +1305,50 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		{
 			try
 			{
-				final Object object = dao.retrieveById(StorageContainer.class.getName(),
-						storageContainer.getLocatedAtPosition().getParentContainer().getId());
-				if (object != null)
+				final String[] selectColumnName ={};
+				final String sourceObjectName = StorageContainer.class.getName();
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				String errMsg = Constants.DOUBLE_QUOTES;
+				if(storageContainer.getLocatedAtPosition().getParentContainer().getName() != null 
+						&& storageContainer.getLocatedAtPosition().getParentContainer().getName() != "")
 				{
-					final StorageContainer parentContainer = (StorageContainer) object;
+					errMsg = "Storage Container Name";
+					queryWhereClause.addCondition(new EqualClause("name", storageContainer.getLocatedAtPosition().getParentContainer().getName()));
+				}
+				else
+				{
+					errMsg = "Storage Container Identifier";
+					queryWhereClause.addCondition(new EqualClause("id", storageContainer.getLocatedAtPosition().getParentContainer().getId()));
+				}
+				final List list = dao.retrieve(sourceObjectName, selectColumnName,	queryWhereClause);
+
+				if (!list.isEmpty())
+				{
+					final StorageContainer parentContainer = (StorageContainer) list.get(0);
 					site = parentContainer.getSite();
+				}
+				else
+				{
+					this.logger.debug("Storage Container id :"+storageContainer.getLocatedAtPosition().getParentContainer().getId()
+							+ " or Storage Container name : "
+							  +storageContainer.getLocatedAtPosition().getParentContainer().getName()+" is invalid");
+					throw this.getBizLogicException(null,"errors.item.format",errMsg);
 				}
 			}
 			catch (final DAOException e)
 			{
 				logger.error(e.getMessage(), e);
-				e.printStackTrace();
-				throw this
-				.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+				throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 			}
 		}
 		else
 		{
+			if(storageContainer.getSite().getId()==null)
+			{
+				final SiteBizLogic sBiz = new SiteBizLogic();
+				Long siteId = sBiz.retriveSiteIdByName(dao, storageContainer.getSite().getName());
+				storageContainer.getSite().setId(siteId);
+			}
 			site = storageContainer.getSite();
 		}
 		return site;
@@ -1355,8 +1370,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	 * @param disableContList - list of StorageContainers
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	private void disableSubStorageContainer(DAO dao, SessionDataBean sessionDataBean,
-			List<StorageContainer> disableContList) throws BizLogicException
+	private void disableSubStorageContainer(DAO dao, List<StorageContainer> disableContList) throws BizLogicException
 	{
 		try
 		{
@@ -1423,7 +1437,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		catch (final ApplicationException exp)
 		{
 			logger.error(exp.getMessage(), exp);
-			exp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey(exp.getErrorKeyName());
 			throw new BizLogicException(errorKey, exp, exp.getMsgValues());
 		}

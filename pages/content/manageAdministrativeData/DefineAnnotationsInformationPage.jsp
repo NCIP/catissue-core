@@ -1,4 +1,5 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%
 			String operation = request.getParameter("operation");
 
@@ -19,6 +20,9 @@
 			<td align="justify" colspan="2" height="60" style="font-family:arial,helvetica,verdana,sans-serif; font-size:0.8em; padding-left:0.6em; background-color:#F4F4F5; color:#000000;">As a good database administration practice, we suggest that you take a backup of the database before creating any new Dynamic Extensions or editing the existing Dynamic Extensions.</td>
 		</tr>
 
+		<tr>
+			<td align="justify" colspan="2" height="60" style="font-family:arial,helvetica,verdana,sans-serif; font-size:0.8em; padding-left:0.6em; background-color:#F4F4F5; color:#000000;"><bean:message  key="form.creation.message" /></td>
+		</tr>
 		<tr>
 			<td align="right" height="*" width="50%" bgcolor="#F4F4F5">
 				<input  type="button" class="actionButton" value="Back"  onclick="document.location.href='ManageAdministrativeData.do?dummy=dummy'" />

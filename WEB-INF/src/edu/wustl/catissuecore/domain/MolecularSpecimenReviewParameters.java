@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -302,13 +303,13 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	@Override
 	public void doRoundOff() {
 		if (absorbanceAt260 != null) {
-			absorbanceAt260 = AppUtility.RoundOff(absorbanceAt260, 5);
+			absorbanceAt260 = AppUtility.roundOff(absorbanceAt260, Constants.QUANTITY_PRECISION);
 		}
 		if (absorbanceAt280 != null) {
-			absorbanceAt280 = AppUtility.RoundOff(absorbanceAt280, 5);
+			absorbanceAt280 = AppUtility.roundOff(absorbanceAt280, Constants.QUANTITY_PRECISION);
 		}
 		if (ratio28STo18S != null) {
-			ratio28STo18S = AppUtility.RoundOff(ratio28STo18S, 5);
+			ratio28STo18S = AppUtility.roundOff(ratio28STo18S, Constants.QUANTITY_PRECISION);
 		}
 	}
 }

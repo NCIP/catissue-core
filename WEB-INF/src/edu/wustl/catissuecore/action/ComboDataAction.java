@@ -1,4 +1,3 @@
-
 package edu.wustl.catissuecore.action;
 
 import java.io.PrintWriter;
@@ -7,16 +6,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.json.JSONObject;
-
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -31,7 +27,6 @@ import edu.wustl.common.beans.NameValueBean;
  */
 public class ComboDataAction extends BaseAction
 {
-
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
@@ -69,7 +64,7 @@ public class ComboDataAction extends BaseAction
 
 		if(collectionProtocolId != null)
 		{
-			final String cprHQL = "select clinicalDiag.clinicalDiagnosis"
+			final String cprHQL = "select clinicalDiag.name"
 				+ " from edu.wustl.catissuecore.domain.ClinicalDiagnosis as clinicalDiag" + " where " +
 						"clinicalDiag.collectionProtocol.id="+collectionProtocolId;
 			final List<Object[]> dataList = AppUtility.executeQuery(cprHQL);
@@ -99,10 +94,8 @@ public class ComboDataAction extends BaseAction
 	private void getClinicalDiagnosisBean(
 			Collection<NameValueBean> clinicalDiagnosisBean,
 			final List<String> dataList,boolean isShowAllSet)
-	
 	{
 		final Iterator<String> iterator = dataList.iterator();
-		
 		if(!dataList.isEmpty())
 		{
 			clinicalDiagnosisBean.add(new NameValueBean(Constants.SELECT_OPTION, ""+Constants.SELECT_OPTION_VALUE));
@@ -115,9 +108,7 @@ public class ComboDataAction extends BaseAction
 				final String clinicaDiagnosisvalue = (String)iterator.next();
 				clinicalDiagnosisBean.add(new NameValueBean(clinicaDiagnosisvalue,
 						clinicaDiagnosisvalue));
-
 			}
-
 			if(isShowAllSet)
 			{
 				clinicalDiagnosisBean.add(new NameValueBean(Constants.SHOW_ALL_VALUES+"End", Constants.SHOW_ALL_VALUES));

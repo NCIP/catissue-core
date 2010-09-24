@@ -197,7 +197,7 @@ public class ConsentVerificationAction extends BaseAction
 		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
 				.getAttribute(Constants.SESSION_DATA);
 		final CaCoreAppServicesDelegator caCoreAppServicesDelegator = new CaCoreAppServicesDelegator();
-		final String userName = sessionDataBean.getUserName().toString();
+		final String userName = sessionDataBean.getUserName();
 		try
 		{
 			caCoreAppServicesDelegator.delegateSearchFilter(userName, cprObjectList);

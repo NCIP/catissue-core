@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
+import edu.upmc.opi.caBIG.caTIES.client.vr.utils.App;
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
@@ -1490,10 +1491,13 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	 */
 	public void doRoundOff() {
 		if (initialQuantity != null) {
-			initialQuantity = AppUtility.truncate(initialQuantity, 5);
+			//initialQuantity = AppUtility.truncate(initialQuantity, 5);
+
+			initialQuantity = AppUtility.roundOff(initialQuantity, Constants.QUANTITY_PRECISION);
 		}
 		if (availableQuantity != null) {
-			availableQuantity = AppUtility.truncate(availableQuantity, 5);
+			//availableQuantity = AppUtility.truncate(availableQuantity, 5);
+			availableQuantity = AppUtility.roundOff(availableQuantity, Constants.QUANTITY_PRECISION);
 		}
 	}
 }

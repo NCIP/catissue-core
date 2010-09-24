@@ -59,7 +59,6 @@ import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.condition.NotEqualClause;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.HibernateMetaData;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * @author mandar_deshmukh
@@ -129,16 +128,16 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
-			checkStatusAndGetUserId(specimenEventParametersObject, dao);
+			SpecimenEventParameters specimenEvent = (SpecimenEventParameters) obj;
+			checkStatusAndGetUserId(specimenEvent, dao);
 			//			Ashish - 6/6/07 - performance improvement
 			Object specimenObject = null;
-			specimenObject = retrieveSpecimenLabelName(dao, specimenEventParametersObject);
+			specimenObject = retrieveSpecimenLabelName(dao, specimenEvent);
 
 			final Specimen specimen = (Specimen) specimenObject;
 			// check for closed Specimen
 
-			if (specimenEventParametersObject instanceof DisposalEventParameters)
+			if (specimenEvent instanceof DisposalEventParameters)
 			{
 				this.checkStatus(dao, specimen, Constants.DISPOSAL_EVENT_PARAMETERS);
 			}
@@ -146,19 +145,24 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			{
 				this.checkStatus(dao, specimen, Constants.SPECIMEN);
 			}
+			if(Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(specimen.getActivityStatus()))
+			{
+				throw this.getBizLogicException(null, "error.object.disabled",
+				"Specimen");
+			}
 
 			if (specimen != null)
 			{
-				specimenEventParametersObject.setSpecimen(specimen);
-				if (specimenEventParametersObject instanceof TransferEventParameters)
+				specimenEvent.setSpecimen(specimen);
+				if (specimenEvent instanceof TransferEventParameters)
 				{
-					final TransferEventParameters transferEventParameters = (TransferEventParameters) specimenEventParametersObject;
+					final TransferEventParameters transferEvent = (TransferEventParameters) specimenEvent;
 					StorageContainer storageContainerObj = new StorageContainer();
 
 					List stNamelist = null;
 					final String sourceObjectName = StorageContainer.class.getName();
 					String[] selectColumnName = null;
-					storageContainerObj = transferEventParameters.getToStorageContainer();
+					storageContainerObj = transferEvent.getToStorageContainer();
 					if (storageContainerObj != null
 							&& (storageContainerObj.getId() != null || storageContainerObj
 									.getName() != null))
@@ -170,7 +174,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 							final QueryWhereClause queryWhereClause = new QueryWhereClause(
 									sourceObjectName);
 							queryWhereClause.addCondition(new EqualClause("name",
-									transferEventParameters.getToStorageContainer().getName()));
+									transferEvent.getToStorageContainer().getName()));
 							stNamelist = dao.retrieve(sourceObjectName, selectColumnName,
 									queryWhereClause);
 							if (!stNamelist.isEmpty())
@@ -184,7 +188,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 							final QueryWhereClause queryWhereClause = new QueryWhereClause(
 									sourceObjectName);
 							queryWhereClause.addCondition(new EqualClause("id",
-									transferEventParameters.getToStorageContainer().getId()));
+									transferEvent.getToStorageContainer().getId()));
 
 							stNamelist = dao.retrieve(sourceObjectName, selectColumnName,
 									queryWhereClause);
@@ -202,9 +206,9 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 								.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
 						final String contId = storageContainerObj.getId().toString();
-						final String posOne = transferEventParameters.getToPositionDimensionOne()
+						final String posOne = transferEvent.getToPositionDimensionOne()
 								.toString();
-						final String posTwo = transferEventParameters.getToPositionDimensionTwo()
+						final String posTwo = transferEvent.getToPositionDimensionTwo()
 								.toString();
 						storageContainerBizLogic.checkContainer(dao, StorageContainerUtil
 								.setparameterList(contId, posOne, posTwo, false), sessionDataBean,
@@ -230,28 +234,20 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						specimen.setSpecimenPosition(specimenPosition);
 					}
 					specimenPosition.setStorageContainer(storageContainerObj);
-					specimenPosition.setPositionDimensionOne(transferEventParameters
+					specimenPosition.setPositionDimensionOne(transferEvent
 							.getToPositionDimensionOne());
-					specimenPosition.setPositionDimensionTwo(transferEventParameters
+					specimenPosition.setPositionDimensionTwo(transferEvent
 							.getToPositionDimensionTwo());
 					dao.update(specimen,null);
-					transferEventParameters.setToStorageContainer(storageContainerObj);
+					transferEvent.setToStorageContainer(storageContainerObj);
 				}
-				if (specimenEventParametersObject instanceof DisposalEventParameters)
+				if (specimenEvent instanceof DisposalEventParameters)
 				{
-					final DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
+					final DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEvent;
 					if (disposalEventParameters.getActivityStatus().equals(
 							Status.ACTIVITY_STATUS_DISABLED.getStatus()))
 					{
 						this.disableSubSpecimens(dao, specimen.getId().toString(), specimenIds);
-					}
-					Object objectContainer = null;
-					if (specimen.getSpecimenPosition() != null
-							&& specimen.getSpecimenPosition().getStorageContainer() != null
-							&& specimen.getSpecimenPosition().getStorageContainer().getId() != null)
-					{
-						objectContainer = dao.retrieveById(StorageContainer.class.getName(),
-								specimen.getSpecimenPosition().getStorageContainer().getId());
 					}
 					final SpecimenPosition prevPosition = specimen.getSpecimenPosition();
 					specimen.setSpecimenPosition(null);
@@ -265,14 +261,13 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				}
 
 			}
-			specimen.getSpecimenEventCollection().add(specimenEventParametersObject);
-			specimenEventParametersObject.doRoundOff();
-			dao.insert(specimenEventParametersObject);
+			specimen.getSpecimenEventCollection().add(specimenEvent);
+			specimenEvent.doRoundOff();
+			dao.insert(specimenEvent);
 		}
 		catch (final DAOException daoExp)
 		{
 			this.LOGGER.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -297,11 +292,10 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					specimenEventParametersObject.getSpecimen().getId());
 		}
 		else if (specimenEventParametersObject.getSpecimen().getLabel() != null
-				|| specimenEventParametersObject.getSpecimen().getLabel().length() > 0)
+				&& specimenEventParametersObject.getSpecimen().getLabel().length() > 0)
 		{
 			String column = "label";
-			List list = null;
-			list = dao.retrieve(Specimen.class.getName(), column, specimenEventParametersObject
+			List list = dao.retrieve(Specimen.class.getName(), column, specimenEventParametersObject
 					.getSpecimen().getLabel());
 			if (list.isEmpty())
 			{
@@ -314,6 +308,25 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 			}
 		}
+		else if (specimenEventParametersObject.getSpecimen() instanceof Specimen
+				&& ((Specimen)specimenEventParametersObject.getSpecimen()).getBarcode() != null
+				&& ((Specimen)specimenEventParametersObject.getSpecimen()).getBarcode().length() > 0)
+		{
+			final Specimen specimen= (Specimen) specimenEventParametersObject.getSpecimen();
+			String column = "barcode";
+			List list = dao.retrieve(Specimen.class.getName(), column, specimen.getBarcode());
+			if (list.isEmpty())
+			{
+				throw this.getBizLogicException(null, "invalid.barcode",
+						specimen.getBarcode());
+			}
+			else
+			{
+				specimenObject = list.get(0);
+
+			}
+		}
+
 		return specimenObject;
 	}
 
@@ -328,19 +341,19 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			throws DAOException, BizLogicException
 	{
 		List list = null;
+		String message = "";
 		if (specimenEventParameter.getUser().getId() != null)
 		{
 			list = dao.executeQuery("select id,activityStatus from edu.wustl.catissuecore.domain.User where id="+specimenEventParameter.getUser()
 					.getId());
-
-
+			message = ApplicationProperties.getValue("app.UserID");
 		}
 		else if (specimenEventParameter.getUser().getLoginName() != null
 				|| specimenEventParameter.getUser().getLoginName().length() > 0)
 		{
-			String column = "loginName";
 			list = dao.executeQuery("select id,activityStatus from edu.wustl.catissuecore.domain.User where loginName='"+specimenEventParameter.getUser()
 					.getLoginName()+"'");
+			message = ApplicationProperties.getValue("user.loginName");
 		}
 		if(list!=null&&!list.isEmpty())
 		{
@@ -351,6 +364,10 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			// check for closed User
 			this.checkStatus(dao, user, "User");
 			specimenEventParameter.setUser(user);
+		}
+		else
+		{
+			throw this.getBizLogicException(null, "errors.item.forboformat", message);
 		}
 
 	}
@@ -385,28 +402,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		}
-	}
-
-	/**
-	 * @param specimen - Specimen object.
-	 * @param container - StorageContainer object
-	 * @param disabledConts - Map of disabledConts
-	 */
-	private void addEntriesInDisabledMap(Specimen specimen, StorageContainer container,
-			Map disabledConts)
-	{
-		final String contNameKey = "StorageContName";
-		final String contIdKey = "StorageContIdKey";
-		final String pos1Key = "pos1";
-		final String pos2Key = "pos2";
-		final Map containerDetails = new TreeMap();
-		containerDetails.put(contNameKey, container.getName());
-		containerDetails.put(contIdKey, container.getId());
-		containerDetails.put(pos1Key, specimen.getSpecimenPosition().getPositionDimensionOne());
-		containerDetails.put(pos2Key, specimen.getSpecimenPosition().getPositionDimensionTwo());
-
-		disabledConts.put(specimen.getId().toString(), containerDetails);
-
 	}
 
 	/**
@@ -453,7 +448,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExption)
 		{
 			this.LOGGER.error(daoExption.getMessage(), daoExption);
-			daoExption.printStackTrace();
 			throw this.getBizLogicException(daoExption, daoExption.getErrorKeyName(), daoExption
 					.getMsgValues());
 		}
@@ -564,13 +558,11 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				//bug 15258 and 15260
 				if (specimenEventParameters instanceof TransferEventParameters)
 				{
-					isValidEvent = this.validateSingleTransferEvent(specimenEventParameters, dao, operation, eventNumber
-							.intValue(),pos1,pos2);
+					isValidEvent = this.validateSingleTransferEvent(specimenEventParameters, dao, operation,pos1,pos2);
 				}
 				else
 				{
-					isValidEvent = this.validateSingleEvent(specimenEventParameters, dao, operation, eventNumber
-							.intValue());
+					isValidEvent = this.validateSingleEvent(specimenEventParameters, dao, operation);
 				}
 				if(!isValidEvent)
 				{
@@ -580,7 +572,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
-			return this.validateSingleEvent(obj, dao, operation, 0);
+			return this.validateSingleEvent(obj, dao, operation);
 		}
 		return true;
 	}
@@ -596,7 +588,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException - BizLogicException
 	 */
 	//Bug 15392
-	private boolean validateSingleTransferEvent(Object obj, DAO dao, String operation, int numberOfEvent,Integer pos1,Integer pos2)
+	private boolean validateSingleTransferEvent(Object obj, DAO dao, String operation,Integer pos1,Integer pos2)
 	throws BizLogicException
 	{
 		final SpecimenEventParameters eventParameter = (SpecimenEventParameters) obj;
@@ -676,7 +668,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				}
 				catch (ApplicationException e)
 				{
-					e.printStackTrace();
+					this.LOGGER.error(e.getMessage(), e);
 					throw new
 					BizLogicException(e.getErrorKey(),e,e.getMsgValues());
 				}
@@ -728,7 +720,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	 * @return boolean value
 	 * @throws BizLogicException throws BizLogicException.
 	 */
-	private boolean validateSingleEvent(Object obj, DAO dao, String operation, int numberOfEvent)
+	private boolean validateSingleEvent(Object obj, DAO dao, String operation)
 			throws BizLogicException
 	{
 		final SpecimenEventParameters eventParameter = (SpecimenEventParameters) obj;
@@ -869,7 +861,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				TransferEventParameters trEvent = (TransferEventParameters)eventParameter;
 				pos1 = trEvent.getToPositionDimensionOne();
 				pos2 = trEvent.getToPositionDimensionTwo();
-					validateSingleTransferEvent(obj, dao, operation, numberOfEvent, pos1, pos2);
+					validateSingleTransferEvent(obj, dao, operation,pos1, pos2);
 		}
 		return true;
 	}
@@ -936,35 +928,33 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			this.LOGGER.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
-
-	/**
-	 * @param dao : DAO object.
-	 * @param parameter - TransferEventParameters object
-	 * @return Specimen obejct
-	 * @throws BizLogicException throws BizLogicException
-	 */
-	private Specimen getSpecimenObject(DAO dao, SpecimenEventParameters parameter)
-			throws BizLogicException
-	{
-		try
-		{
-			final Specimen specimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
-					parameter.getSpecimen().getId());
-			return specimen;
-		}
-		catch (final DAOException daoExp)
-		{
-			this.LOGGER.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
-		}
-	}
+//removed unused methods
+//	/**
+//	 * @param dao : DAO object.
+//	 * @param parameter - TransferEventParameters object
+//	 * @return Specimen obejct
+//	 * @throws BizLogicException throws BizLogicException
+//	 */
+//	private Specimen getSpecimenObject(DAO dao, SpecimenEventParameters parameter)
+//			throws BizLogicException
+//	{
+//		try
+//		{
+//			final Specimen specimen = (Specimen) dao.retrieveById(Specimen.class.getName(),
+//					parameter.getSpecimen().getId());
+//			return specimen;
+//		}
+//		catch (final DAOException daoExp)
+//		{
+//			this.LOGGER.error(daoExp.getMessage(), daoExp);
+//			throw this
+//					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+//		}
+//	}
 
 	/**
 	 * @param dao - DAO object.
@@ -1026,7 +1016,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException e)
 		{
 			this.LOGGER.error(e.getMessage(), e);
-			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		return list;
@@ -1086,7 +1075,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			this.LOGGER.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1185,7 +1173,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException e)
 		{
 			this.LOGGER.error(e.getMessage(), e);
-			e.printStackTrace();
 			throw new BizLogicException(e);
 		}
 		return objectId;
@@ -1268,7 +1255,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch (final ApplicationException daoExp)
 		{
 			this.LOGGER.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
@@ -1330,7 +1316,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch (final ApplicationException appExp)
 		{
 			this.LOGGER.error(appExp.getMessage(), appExp);
-			appExp.printStackTrace();
 			throw this
 					.getBizLogicException(appExp, appExp.getErrorKeyName(), appExp.getMsgValues());
 		}
@@ -1349,7 +1334,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		final AbstractSpecimen specimen = spe.getSpecimen();
 		List<Long> list = null;
 		Long siteId = null;
-		SpecimenPosition specimenPosition = null;
+		//SpecimenPosition specimenPosition = null;
 		try
 		{
 			/*
@@ -1377,7 +1362,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			// bug id 13887
 			List specimenPositionlist = dao.retrieveAttribute(Specimen.class, "id", specimen
 					.getId(), "specimenPosition");
-			if (specimenPositionlist.size() > 0) // Specimen is NOT Virtually Located
+			if (!specimenPositionlist.isEmpty()) // Specimen is NOT Virtually Located
 			{
 				// bug id #13455 start
 				final String query = "select specimen.specimenPosition.storageContainer.site.id from edu.wustl.catissuecore.domain.Specimen as specimen where "
@@ -1401,7 +1386,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException e)
 		{
 			this.LOGGER.error(e.getMessage(), e);
-			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 

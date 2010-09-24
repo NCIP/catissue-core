@@ -1,5 +1,5 @@
 <!-- For Calendar Component -->
-<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>		
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
@@ -45,24 +45,24 @@
 					  <logic:equal name="operation" value="edit">
                        <logic:equal name="shipmentForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
 						    <c:out value="${shipmentForm.barcode}"/>
-	                    	<html:hidden styleId="barcode" property="barcode"/>							
+	                    	<html:hidden styleId="barcode" property="barcode"/>
 	                    </logic:equal>
 
                          <logic:equal name="shipmentForm" property="isBarcodeEditable" value="<%=Constants.TRUE%>">
 	                    	<html:text styleClass="black_ar" size="29" styleId="barcode" property="barcode"/>
 	                    </logic:equal>
-					 </logic:equal> 
+					 </logic:equal>
                     </td>
                   </tr>
                   <tr>
                     <td align="center" valign="top" class="black_ar"><span class="blue_ar_b"><img src="images/shippingtracking/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="4" /></span></td>
                     <td align="left" valign="top" class="black_ar"><bean:message key="shipment.senderSite" bundle="msg.shippingtracking"/></td>
-                    <td align="left" valign="top" class="black_ar" class="black_ar"><label>	
+                    <td align="left" valign="top" class="black_ar" class="black_ar"><label>
                     	<logic:equal name="operation" value="view">
 	                    	<c:out value="${requestScope.senderSiteName}"/>
 	                    	<html:hidden styleId="senderSiteId" property="senderSiteId"/>
 	                    </logic:equal>
-	                    <logic:notEqual name="operation" value="view">		   
+	                    <logic:notEqual name="operation" value="view">
 							<c:set var="senderSiteId" value="${shipmentForm.senderSiteId}"/>
 							<c:set var="initialSiteSelected" value="${requestScope.initialSiteSelected}"/>
 							<jsp:useBean id="initialSiteSelected" type="java.lang.String"/>
@@ -85,7 +85,7 @@
 											initialValue="<%=senderSiteId%>"
 											styleClass="black_ar"
 											staticField="false" size="27" />
-									</logic:notEqual>									
+									</logic:notEqual>
 							</logic:notEmpty>
 							<logic:empty name="senderSiteId">
 										<autocomplete:AutoCompleteTag
@@ -106,7 +106,7 @@
 	                    	<c:out value="${requestScope.receiverSiteName}"/>
 	                    	<html:hidden styleId="receiverSiteId" property="receiverSiteId"/>
 	                    </logic:equal>
-	                    <logic:notEqual name="operation" value="view">	
+	                    <logic:notEqual name="operation" value="view">
 								<c:set var="receiverSiteId" value="${shipmentForm.receiverSiteId}"/>
 								<logic:notEmpty name="receiverSiteId">
 										<jsp:useBean id="receiverSiteId" type="java.lang.Long"/>
@@ -139,7 +139,7 @@
 				  			<html:hidden styleId="sendTimeHour" property="sendTimeHour"/>
 				  			<html:hidden styleId="sendTimeMinutes" property="sendTimeMinutes"/>
 	                    </logic:equal>
-	                    <logic:notEqual name="operation" value="view">	
+	                    <logic:notEqual name="operation" value="view">
                     	<%
 							 if(shipmentDate!=null && shipmentDate.trim().length() > 0)
 							{
@@ -149,18 +149,18 @@
 						%>
 									<ncombo:DateTimeComponent name="sendDate"
 															  id="sendDate"
-						 									  formName="shipmentForm"	
+						 									  formName="shipmentForm"
 															  month= "<%=month %>"
 															  year= "<%=year %>"
-															  day= "<%= day %>" 
+															  day= "<%= day %>"
 															  pattern="<%= CommonServiceLocator.getInstance().getDatePattern()%>"
 															  value="<%=shipmentDate %>"
 															  styleClass="black_ar"
-																	 />		
-						<% 
+																	 />
+						<%
 							}
 							else
-							{  
+							{
 								String initialShippingDate=(String)request.getAttribute("initialShippingDate");
 								if(initialShippingDate!=null && initialShippingDate.trim().length()>0)
 								{
@@ -170,14 +170,14 @@
 						 %>
 									<ncombo:DateTimeComponent name="sendDate"
 															  id="sendDate"
-						 									  formName="shipmentForm"	
+						 									  formName="shipmentForm"
 						 									  month= "<%=month %>"
 															  year= "<%=year %>"
-															  day= "<%= day %>" 
+															  day= "<%= day %>"
 															  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 															  value="<%=initialShippingDate%>"
-															  styleClass="black_ar" 
-																	 />		
+															  styleClass="black_ar"
+																	 />
 								<%
 								}
 								else
@@ -186,11 +186,11 @@
 									<ncombo:DateTimeComponent name="sendDate"
 															  id="sendDate"
 						 									  formName="shipmentForm"
-						 									  
+
 						 									    pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
-															  styleClass="black_ar" 
-																	 />		
-								
+															  styleClass="black_ar"
+																	 />
+
 						<%
 								}
 							}
@@ -204,7 +204,7 @@
 											optionsList="<%=request.getAttribute(edu.wustl.catissuecore.util.global.Constants.HOUR_LIST)%>"
 											initialValue="<%=sendTimeHour%>"
 											styleClass="black_ar"
-											staticField="false" size="3" />
+											staticField="false" size="4" />
 								</logic:notEmpty>
 								<logic:empty name="sendTimeHour">
 										<c:set var="initialShippingHour" value="${requestScope.initialShippingHour}"/>
@@ -214,7 +214,7 @@
 											optionsList="<%=request.getAttribute(edu.wustl.catissuecore.util.global.Constants.HOUR_LIST)%>"
 											initialValue="<%=initialShippingHour%>"
 											styleClass="black_ar"
-											staticField="false" size="3" />
+											staticField="false" size="4" />
 								</logic:empty>
 								&nbsp;<bean:message key="shipment.send.time.hour" bundle="msg.shippingtracking"/>&nbsp;&nbsp;
 								<c:set var="sendTimeMinutes" value="${shipmentForm.sendTimeMinutes}"/>
@@ -224,7 +224,7 @@
 										   optionsList="<%=request.getAttribute(edu.wustl.catissuecore.util.global.Constants.MINUTES_LIST)%>"
 										   initialValue="<%=sendTimeMinutes%>"
 										   styleClass="black_ar"
-										   staticField="false" size="3" />	  
+										   staticField="false" size="4" />
 								</logic:notEmpty>
 								<logic:empty name="sendTimeMinutes">
 										<c:set var="initialShippingmMinute" value="${requestScope.initialShippingmMinute}"/>
@@ -234,10 +234,10 @@
 										   optionsList="<%=request.getAttribute(edu.wustl.catissuecore.util.global.Constants.MINUTES_LIST)%>"
 										   initialValue="<%=initialShippingmMinute%>"
 										   styleClass="black_ar"
-										   staticField="false" size="3" />	  
+										   staticField="false" size="4" />
 								</logic:empty>
 
-			                
+
 			   &nbsp;<bean:message key="shipment.send.time.minute" bundle="msg.shippingtracking"/></span>
                     </label></td>
                     <td align="left" valign="top">&nbsp;</td>
@@ -249,7 +249,7 @@
 				  			<c:out value="${shipmentForm.senderComments}"/>
 				  			<html:hidden styleId="senderComments" property="senderComments"/>
 	                    </logic:equal>
-	                    <logic:notEqual name="operation" value="view">	
+	                    <logic:notEqual name="operation" value="view">
                     		<html:textarea styleClass="black_ar" rows="2" cols="50" styleId="senderComments" property="senderComments"/>
                    		</logic:notEqual>
                     </td>

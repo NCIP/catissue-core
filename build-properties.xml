@@ -1,5 +1,6 @@
 	<project name="caTissue Properties">
 		<property file="caTissueInstall.properties" />
+		<property file="caTissueCdmsIntegration.properties" />
 		<property file="allTokens.properties" />
 		<property name="cacore.version" value="3.2" />
 		<property name="csm.version" value="3.2" />

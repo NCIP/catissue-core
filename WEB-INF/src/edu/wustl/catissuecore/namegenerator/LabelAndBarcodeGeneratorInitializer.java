@@ -79,38 +79,43 @@ public final class LabelAndBarcodeGeneratorInitializer
 		LabelGenerator ppiLabelGeneratorInstance;
 		BarcodeGenerator specBarcodeGeneratorInstance;
 		BarcodeGenerator cprBarcodeGeneratorInstance;
-		
-		
+
+
 		specBarcodeGeneratorInstance = BarcodeGeneratorFactory
 		.getInstance(Constants.SPECIMEN_BARCODE_GENERATOR_PROPERTY_NAME);
 		if (specBarcodeGeneratorInstance != null)
 		{
 			Variables.isSpecimenBarcodeGeneratorAvl = true;
 		}
-		
+
+
 		specimenGeneratorInstance = LabelGeneratorFactory.getInstance(Constants.SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME);
 		if (specimenGeneratorInstance != null)
 		{
 			Variables.isSpecimenLabelGeneratorAvl = true;
 		}
-		
+		if(specimenGeneratorInstance instanceof TemplateBasedLabelGenerator)
+		{
+			Variables.isTemplateBasedLblGeneratorAvl = true;
+		}
+
 		ppiLabelGeneratorInstance = LabelGeneratorFactory
 						.getInstance(Constants.PROTOCOL_PARTICIPANT_IDENTIFIER_LABEL_GENERATOR_PROPERTY_NAME);
 		if (ppiLabelGeneratorInstance != null)
 		{
 			Variables.isProtocolParticipantIdentifierLabelGeneratorAvl = true;
 		}
-		
-		setSCGGenratorVar();		
+
+		setSCGGenratorVar();
 		cprBarcodeGeneratorInstance = BarcodeGeneratorFactory
 				.getInstance(Constants.COLL_PROT_REG_BARCODE_GENERATOR_PROPERTY_NAME);
 		if (cprBarcodeGeneratorInstance != null)
 		{
 			Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl = true;
 		}
-		
-		
-		
+
+
+
 
 	}
 

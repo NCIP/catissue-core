@@ -17,6 +17,7 @@
 	String title="caTissue Suite v1.1" ;
 	String propertyName = null, cdeName=null;
 	String height = "100%",width="100%";
+	String propName = (String)request.getAttribute("propName");	
 	if(reload!=null && reload.equals("true"))
     	{
     		treeNodeIDToBeReloaded=request.getParameter(Constants.TREE_NODE_ID);
@@ -87,7 +88,14 @@ overflow:scroll;
 		var activityStatus=tree.getUserData(id,'activityStatus');
 		if(activityStatus=="Closed")
 		{
-			var txtProperty =parent.opener.document.getElementById("tissueSite");	
+			if('<%=propName%>' != null)
+			{
+				var txtProperty = parent.opener.document.getElementById("<%=propName%>");
+			}
+			else
+			{
+				var txtProperty = parent.opener.document.getElementById("tissueSite");	
+			}
 			txtProperty.value =id;
 			top.window.close() ;
 		}
@@ -172,12 +180,12 @@ overflow:scroll;
 
 		//This function is called when any of the node is selected in the tree 
 		function tonclick(id)
-			{				
+			{	
 				var nodeId=tree.getUserData(id,'nodeId');
 			    var activityStatus=tree.getUserData(id,'activityStatus');
 			    var parentId=tree.getUserData(id,'parentId');
 				if( parentId != "0")
-				{					
+				{
 					if("<%=pageOf%>" == "<%=Constants.PAGE_OF_SPECIMEN%>")
 					{
 						window.parent.<%=Constants.DATA_VIEW_FRAME%>.location="<%=Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION%>?<%=Constants.SYSTEM_IDENTIFIER%>="+nodeId+"&<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Status.ACTIVITY_STATUS.toString()%>="+activityStatus+"";

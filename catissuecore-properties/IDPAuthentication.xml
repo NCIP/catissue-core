@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<IDPS>
+	<IDP name="CSM">
+		<class name="edu.wustl.authmanager.CSMAuthManager" />
+		<idpdetails>
+		<defaultidp>true</defaultidp>
+		<displayname>CSM</displayname>
+		</idpdetails>
+		<idp-configuration>
+		</idp-configuration>
+        <user-attributes>
+		</user-attributes>
+		<migration-details>
+
+		</migration-details>
+	</IDP>
+
+</IDPS>

@@ -7,14 +7,14 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionEventParametersForm"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page language="java" isELIgnored="false" %>
 
 <head>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="javascript">
-		
+
 	</script>
 <!-- Mandar 21-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
@@ -23,14 +23,14 @@
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <!-- Mandar 21-Aug-06 : calendar changes end -->
 </head>
-			
-<%@ include file="/pages/content/common/ActionErrors.jsp" %>    
-<table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+
+<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
 <html:form action='${requestScope.formName}'>
 	<html:hidden property="operation" />
 	<html:hidden property="id" />
-	<html:hidden property="specimenId" value='${requestScope.specimenId}'/>        
-        
+	<html:hidden property="specimenId" value='${requestScope.specimenId}'/>
+
 	<tr>
           <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">
           	&nbsp;<bean:message key="eventparameters"/> &quot;<em><bean:message key="collectioneventparameter"/></em>&quot;</span></td>
@@ -75,7 +75,7 @@
 					  styleClass="black_ar"	/>
 			  </logic:empty>
 			  <span class="grey_ar_s"><bean:message key="page.dateFormat" /></span></td>
-                
+
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar" width="8%"><bean:message key="eventparameters.time"/></td>
                   <td align="left"><span class="black_ar">
@@ -83,14 +83,14 @@
 				optionsList = '${requestScope.hourList}'
 				initialValue='${collectionEventParametersForm.timeInHours}'
 				styleClass="black_ar"
-				staticField="false" size="3" />	&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+				staticField="false" size="4" />	&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
 			<autocomplete:AutoCompleteTag property="timeInMinutes"
 			   optionsList = '${requestScope.minutesList}'
 			   initialValue='${collectionEventParametersForm.timeInMinutes}'
 			   styleClass="black_ar"
-			   staticField="false" size="3" />	                  
+			   staticField="false" size="4" />
 			   &nbsp;<bean:message key="eventparameters.timeinminutes"/></span></td>
-                </tr>  
+                </tr>
 
 <!-- Mandar : For procedure Start -->
                 <tr>
@@ -101,13 +101,13 @@
 				optionsList = '${requestScope.procedureList}'
 				initialValue='${collectionEventParametersForm.collectionProcedure}'
 				styleClass="black_ar"
-				staticField="false" size="30" />	
+				staticField="false" size="30" />
 			</span>
 		  </td>
-                
+
 <!-- Mandar : For procedure End -->
 <!-- Mandar : For container Start -->
-                
+
                   <td align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
                   <td align="left" class="black_ar" width="8%"><LABEL for="container"><bean:message key="collectioneventparameters.container"/></LABEL></td>
                   <td align="left"><span class="black_ar">
@@ -115,7 +115,7 @@
 				optionsList = '${requestScope.containerList}'
 				initialValue='${collectionEventParametersForm.container}'
 				styleClass="black_ar"
-				staticField="false" size="30" />	
+				staticField="false" size="30" />
 			</span>
 		  </td>
                 </tr>

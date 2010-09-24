@@ -568,4 +568,16 @@ public final class GenericSpecimenVO implements GenericSpecimen
 		this.printSpecimen = printSpecimen;
 	}
 
+
+	public Specimen getParentSpecimen() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public void setParentSpecimen(Specimen parentSpecimen) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

@@ -129,7 +129,6 @@ public class PrintAction extends XSSSupportedAction
 				catch (final DAOException exception)
 				{
 					this.logger.error(exception.getMessage(), exception);
-					exception.printStackTrace();
 					throw exception;
 				}
 				finally
@@ -314,7 +313,6 @@ public class PrintAction extends XSSSupportedAction
 				catch (final DAOException exception)
 				{
 					this.logger.error(exception.getMessage(), exception);
-					exception.printStackTrace();
 					throw exception;
 				}
 				finally
@@ -369,7 +367,6 @@ public class PrintAction extends XSSSupportedAction
 			// Any other exception
 			// e.printStackTrace();
 			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 			ActionMessages messages = (ActionMessages) request.getAttribute(MESSAGE_KEY);
 			if (messages == null)
 			{
@@ -444,7 +441,6 @@ public class PrintAction extends XSSSupportedAction
 		catch (DAOException daoException)
 		{
 			this.logger.error(daoException.getMessage(), daoException);
-			daoException.printStackTrace();
 			throw new BizLogicException(daoException.getErrorKey(), daoException, daoException
 					.getMsgValues());
 		}
@@ -511,7 +507,6 @@ public class PrintAction extends XSSSupportedAction
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 			throw new Exception("Error Printing label");
 		}
 		if (listofAliquot != null)

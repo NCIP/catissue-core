@@ -31,9 +31,6 @@
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 
 <script language="JavaScript" >
-
-
-
 		//Set last refresh time
 		if(window.parent!=null)
 		{
@@ -408,7 +405,7 @@
 				<strong><bean:message key="specimen.type"/></strong>
 				</label>
 				</td>
-				<td class="noneditable">-${aliquotForm.className}
+				<td class="noneditable">${aliquotForm.className}
 				<html:hidden styleId="className" property="className" />
 				</td>
 				<td class="noneditable">
@@ -417,7 +414,7 @@
 				</label>
 				</td>
 				<td class="noneditable">
-					-${aliquotForm.type}
+					 ${aliquotForm.type}
 					<html:hidden styleId="type" property="type" />
 				</td>
 				</tr>
@@ -427,7 +424,7 @@
 				<strong><bean:message key="specimen.tissueSite"/></strong>
 				</label>
 				</td>
-				<td class="noneditable">-${aliquotForm.tissueSite}
+				<td class="noneditable">${aliquotForm.tissueSite}
 		<html:hidden property="tissueSite" />
 				</td>
 				<td class="noneditable">
@@ -435,7 +432,7 @@
 		<strong><bean:message key="specimen.tissueSide"/></strong>
 		</label>
 	</td>
-	<td class="noneditable"> -${aliquotForm.tissueSide}
+	<td class="noneditable">${aliquotForm.tissueSide}
 		<html:hidden property="tissueSide" />
 	</td>
 </tr>
@@ -445,7 +442,7 @@
 			<strong><bean:message key="specimen.pathologicalStatus"/></strong>
 		</label>
 	</td>
-	<td class="noneditable"> -${aliquotForm.pathologicalStatus}
+	<td class="noneditable">${aliquotForm.pathologicalStatus}
 		<html:hidden property="pathologicalStatus" />
 	</td>
 	<td class="noneditable">
@@ -455,7 +452,7 @@
 	</td>
 	<td class="noneditable" >
 		<logic:notEmpty name="aliquotForm" property="concentration">
-			-${aliquotForm.concentration}
+			${aliquotForm.concentration}
 			<html:hidden property="concentration" />
 			&nbsp;<bean:message key="specimen.concentrationUnit"/>
 		</logic:notEmpty>
@@ -470,7 +467,7 @@
 			<strong><bean:message key="aliquots.initialAvailableQuantity"/></strong>
 		</label>
 	</td>
-	<td class="noneditable"> -${aliquotForm.initialAvailableQuantity}
+	<td class="noneditable">${aliquotForm.initialAvailableQuantity}
 		<html:hidden property="initialAvailableQuantity" />
 		&nbsp; ${requestScope.unit}
 	</td>
@@ -479,7 +476,7 @@
 			<strong><bean:message key="aliquots.currentAvailableQuantity"/></strong>
 		</label>
 	</td>
-	<td class="noneditable"> -${aliquotForm.availableQuantity}
+	<td class="noneditable">${aliquotForm.availableQuantity}
 		<html:hidden property="availableQuantity" />
 		&nbsp; ${requestScope.unit}
 	</td>
@@ -521,7 +518,6 @@
 		<% if(Variables.isSpecimenLabelGeneratorAvl || (!form.isGenerateLabel())) {	%>
 			<td width="12%" align="left" nowrap="nowrap" class="black_ar_b" ><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0"/>&nbsp;<bean:message key="specimen.label"/></td>
 		<%} %>
-	
 
 		<logic:equal name="isSpecimenBarcodeGeneratorAvl" value="false">
 		<td  width="12%" class="black_ar_b" >
@@ -559,7 +555,7 @@ ${aliquotBean.jsScript}
 			</td>
 	    </logic:equal>
 		<td >
-			<html:text styleClass="black_ar"  maxlength="50"  size="2" styleId="${aliquotBean.qtyKey}" property="${aliquotBean.qtyKey}" disabled="false" style="text-align:right" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
+			<html:text styleClass="black_ar"  maxlength="50"  size="10" styleId="${aliquotBean.qtyKey}" property="${aliquotBean.qtyKey}" disabled="false" style="text-align:right" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 			<span class="black_ar_t" valign="center" >${requestScope.unit}</span>
 		</td>
 		<td colspan='${requestScope.colspanValue1+1}' >

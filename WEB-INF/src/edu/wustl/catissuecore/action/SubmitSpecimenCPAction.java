@@ -180,7 +180,6 @@ public class SubmitSpecimenCPAction extends BaseAction
 
 			final String errorMsg = ex.getMessage();
 			resultMap.put(Constants.ERROR_DETAIL, errorMsg);
-			ex.printStackTrace();
 			final ActionErrors actionErrors = new ActionErrors();
 			actionErrors.add(ActionMessages.GLOBAL_MESSAGE, new ActionError("errors.item", ex
 					.getMessage()));

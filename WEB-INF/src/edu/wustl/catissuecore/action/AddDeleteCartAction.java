@@ -242,7 +242,7 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 		}
 		// set the options
 		this.setCartView(request, cart);
-		target = new String(Constants.SHOPPING_CART_DELETE);
+		target = Constants.SHOPPING_CART_DELETE;
 
 		return target;
 	}
@@ -292,7 +292,7 @@ public class AddDeleteCartAction extends QueryShoppingCartAction
 			}
 		}
 
-		target = new String(Constants.SHOPPING_CART_ADD);
+		target = Constants.SHOPPING_CART_ADD;
 		request.setAttribute(Constants.PAGINATION_DATA_LIST, dataList);
 		return target;
 	}

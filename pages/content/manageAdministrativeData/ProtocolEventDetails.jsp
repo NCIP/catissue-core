@@ -2,11 +2,7 @@
 <script type="text/javascript" src="jss/ext-base.js"></script>
 <script type="text/javascript" src="jss/ext-all.js"></script>
 <script type="text/javascript" src="jss/combos.js"></script>
-<script type="text/javascript" src="jss/examples.js"></script>
-<link rel="stylesheet" type="text/css" href="css/ext-all.css" />
-<link rel="stylesheet" type="text/css" href="css/xtheme-gray.css" />
-<link rel="stylesheet" type="text/css" href="css/combo.css" />
-<link rel="stylesheet" type="text/css" href="css/examples.css" />
+<link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
@@ -101,3 +97,7 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
 		<%@ include file="/pages/content/manageAdministrativeData/NonPersistentProtocolEvent.jsp" %>
 	</logic:notEqual>
 </html:form>
+
+<script>
+window.top.document.getElementById("errorRow").innerHTML = "";
+</script>

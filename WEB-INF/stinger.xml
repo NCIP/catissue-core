@@ -49,6 +49,10 @@ the Stinger project lead at eric.sheridan@owasp.org
 		<exclude>/catissuecore/BulkOperation.do</exclude>
 		<exclude>/catissuecore/BulkHandler.do</exclude>
 		<exclude>/catissuecore/FileUpload.do</exclude>
+		<!-- The action used to upload the permissible values while creating Local extentions -->
+		<exclude>/catissuecore/UploadFileAction.do*</exclude>
+		<!-- Uploads the file in the file control on DE form using ajax -->
+		<exclude>/catissuecore/UploadFile.do*</exclude>
 		<exclude>/catissuecore/SpecimenArray.do*</exclude>
 		<exclude>/catissuecore/SpecimenArrayAppletAction.do*</exclude>
 		<exclude>/catissuecore/SpecimenArrayAdd.do*</exclude>
@@ -60,6 +64,7 @@ the Stinger project lead at eric.sheridan@owasp.org
 		<exclude>/catissuecore/SpecimenArrayEdit.do/..//SpecimenArrayAppletAction.do</exclude>
 		<exclude>/catissuecore/InitCreateDefineArray.do/..//SpecimenArrayAppletAction.do</exclude>
 		<exclude>/catissuecore/SearchObject.do/..//SpecimenArrayAppletAction.do</exclude>
+		<exclude>/catissuecore/SimpleSearch.do/..//SpecimenArrayAppletAction.do</exclude>
 		<exclude>/catissuecore/CreateCategoryAction.do*</exclude>
 		<exclude>/catissuecore/ImportPVAction.do*</exclude>
 		<exclude>/catissuecore/ConsentVerification.do</exclude>

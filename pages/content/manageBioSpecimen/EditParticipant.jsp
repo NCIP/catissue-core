@@ -19,7 +19,7 @@ function participantRegRow(subdivtag)
 			var collectionProtocolRegistrationVal = parseInt(document.forms[0].collectionProtocolRegistrationValueCounter.value);
 			collectionProtocolRegistrationVal = collectionProtocolRegistrationVal + 1;
 			document.forms[0].collectionProtocolRegistrationValueCounter.value = collectionProtocolRegistrationVal;
-			var rows = new Array(); 
+			var rows = new Array();
 			rows = document.getElementById(subdivtag).rows;
 			var cprSize = rows.length;
 			var row = document.getElementById(subdivtag).insertRow(cprSize);
@@ -66,7 +66,7 @@ function participantRegRow(subdivtag)
 			sname="<input type='text' name='" + name + "' maxlength='30' size='10' class='black_ar' id='" + name + "'>";
 			cprParticipantId.innerHTML="" + sname;
 			cellNo +=1;
-			
+
 			<%if((!Variables.isSpecimenCollGroupBarcodeGeneratorAvl) || operation.equals(Constants.EDIT))
 			{%>
 			//fourth Cell
@@ -78,7 +78,7 @@ function participantRegRow(subdivtag)
 			cprBarcode.innerHTML="" + sname;
 			cellNo +=1;
 			<%}%>
-			
+
 			<%String registrationDate = edu.wustl.common.util.Utility.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern());%>
     		//Fifth Cell
 			var cprRegistrationDate=row.insertCell(cellNo);
@@ -107,16 +107,16 @@ function participantRegRow(subdivtag)
 			sname = sname + "</select>";
 			cprActivityStatus.innerHTML=sname;
 			cellNo +=1;
-											
+
 			//Seventh Cell
 			var consent=row.insertCell(cellNo);
 			consent.className="black_ar";
 			sname="";
-			
+
 			var spanTag=document.createElement("span");
 			var consentCheckStatus="consentCheckStatus_"+(cprSize+1);
 			spanTag.setAttribute("id",consentCheckStatus);
-				
+
 			var name = "CollectionProtocolConsentChk_"+ (cprSize+1);
 			var anchorTagKey = "ConsentCheck_"+ (cprSize+1);
 			var collectionProtocolValue = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + (cprSize+1) + "_CollectionProtocol_id)";
@@ -134,8 +134,8 @@ function participantRegRow(subdivtag)
 			document.forms[0].forwardTo.value    = forwardTo;
 			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
 				document.forms[0].submittedFor.value = "AddNew";
-			<%}%>			
-			<%if(request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
+			<%}%>
+			<%if(request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>
 				if(document.forms[0].radioValue.value=="Add")
 				{
 					document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
@@ -159,12 +159,12 @@ function participantRegRow(subdivtag)
 						<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 						{%>
 							document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_LOOKUP_ACTION%>";
-						<%}%>												
+						<%}%>
 						document.forms[0].submit();
 					}
-				}		
-			<%}%>	
-	setCollectionProtocolTitle();		
+				}
+			<%}%>
+	setCollectionProtocolTitle();
 	if((document.forms[0].activityStatus != undefined) && (document.forms[0].activityStatus.value == "Disabled"))
    	{
 	    var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
@@ -175,10 +175,10 @@ function participantRegRow(subdivtag)
 			document.forms[0].action = actionForward;
 			document.forms[0].submit();
 		}
-	} 
+	}
 	else
 	{
-			checkActivityStatusForCPR();	
+			checkActivityStatusForCPR();
 	}
 }
 	function setCollectionProtocolTitle()
@@ -274,7 +274,7 @@ function participantRegRow(subdivtag)
 		</logic:notEqual>
 
 	<tr height="98%">
-		<td class="tablepadding">
+		<td class="tablepadding" valign="top">
 		<logic:equal name="operation" value="add">
 			<logic:notEqual name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
@@ -309,7 +309,7 @@ function participantRegRow(subdivtag)
 			class="whitetable_bg" >
 			<tr>
 				<td colspan="2" align="left" class="bottomtd">
-				
+
 			<%if (request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST) != null
 									&& dataList.size() > 0){%>
 				<tr>
@@ -321,7 +321,7 @@ function participantRegRow(subdivtag)
 				<td colspan="2" align="left" class="bottomtd"><%@ include
 					file="/pages/content/common/ActionErrors.jsp"%></td>
 			</tr>
-           <%}%>				
+           <%}%>
 				</td>
 			</tr>
 	    	<tr>
@@ -331,7 +331,7 @@ function participantRegRow(subdivtag)
 			</tr>
 			 <!--This included jsp file is used to include Participant matching grid. -->
 			 <%@ include file="/pages/content/manageBioSpecimen/ParticipantLookup.jsp"%>
-					
+
 			<tr>
 				<td colspan="2" align="left" class="showhide" height="100%">
 				<table width="100%" border="0" cellspacing="0" cellpadding="3" height="100%">
@@ -376,7 +376,7 @@ function participantRegRow(subdivtag)
 							<tr>
 								<td class="black_ar"><bean:message
 											key="participant.lastName" /></br>
-								
+
 								<html:text styleClass="black_ar" maxlength="255"
 											size="15" styleId="lastName" name="participantForm"
 											property="lastName" readonly="<%=readOnlyForAll%>"
@@ -446,7 +446,7 @@ function participantRegRow(subdivtag)
 							ParticipantForm form = (ParticipantForm) request
 															.getAttribute("participantForm");
 													Boolean deathDisable = new Boolean("false");
-													if (!form.getVitalStatus().trim().equals("Dead")) {
+													if (form.getVitalStatus()!=null && !form.getVitalStatus().trim().equals("Dead")) {
 														deathDisable = new Boolean("true");
 													}
 													if (currentDeathDate.trim().length() > 0) {
@@ -542,7 +542,7 @@ function participantRegRow(subdivtag)
 						value="<%=Constants.EDIT%>">
 						<tr>
 							<td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
-						
+
 							<td valign="middle"><label for="activityStatus"
 								class="black_ar"><bean:message
 								key="participant.activityStatus" /></label></td>
@@ -563,14 +563,14 @@ function participantRegRow(subdivtag)
 			<tr onclick="javascript:showHide('add_medical_identifier')">
 				<td width="90%" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="participant.medicalIdentifier" /> </span></td>
 				<td width="10%" align="right" class="tr_bg_blue1"><a href="#"
-					id="imgArrow_add_medical_identifier">				
+					id="imgArrow_add_medical_identifier">
 					<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details"
-					width="80" height="9" hspace="10" border="0" />					
+					width="80" height="9" hspace="10" border="0" />
 				</a></td>
 			</tr>
 			<tr>
-				<td colspan="2" class="showhide1">				
-				<div id="add_medical_identifier" style="display:none">			
+				<td colspan="2" class="showhide1">
+				<div id="add_medical_identifier" style="display:none">
 				<table width="100%" border="0" cellspacing="0" cellpadding="3">
 
 					<tr class="tableheading">
@@ -651,7 +651,7 @@ function participantRegRow(subdivtag)
 					id="imgArrow_add_participant_registeration">
 					<logic:equal name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
-										
+
 							<img src="images/uIEnhancementImages/dwn_arrow1.gif" alt="Show Details"
 					width="80" height="9" hspace="10" border="0" />
 					</logic:equal>
@@ -659,15 +659,15 @@ function participantRegRow(subdivtag)
 						value="<%=Constants.EDIT%>">
 
 						<img src="images/uIEnhancementImages/up_arrow.gif" alt="Hide Details"
-					width="80" height="9" hspace="10" border="0" />		
-												
+					width="80" height="9" hspace="10" border="0" />
+
 					</logic:notEqual>
-					
+
 						</a></td>
 			</tr>
 			<tr>
 				<td colspan="2">
-				
+
 				<logic:equal name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
 						<div id="add_participant_registeration" style="display:none">
@@ -678,7 +678,7 @@ function participantRegRow(subdivtag)
 				</logic:notEqual>
 				<table width="100%" border="0" cellspacing="0" cellpadding="3">
 				<logic:equal name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">					
+						value="<%=Constants.EDIT%>">
 					<tr class="tableheading">
 						<td width="3%" align="left" class="black_ar_b">Select</td>
 						<td width="18%" align="left" class="black_ar_b"><bean:message
@@ -706,12 +706,12 @@ function participantRegRow(subdivtag)
 					</tr>
 				</logic:equal>
 				<logic:notEqual name="<%=Constants.OPERATION%>"
-						value="<%=Constants.EDIT%>">						
+						value="<%=Constants.EDIT%>">
 					<tr class="tableheading">
 						<td width="3%" align="left" class="black_ar_b">Select</td>
 						<td width="25%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.protocolTitle" /></td>
-							
+
 							<td width="13%" align="left" class="black_ar_b"><bean:message
 							key="participant.collectionProtocolReg.participantProtocolID" />
 							</td>
@@ -849,13 +849,13 @@ function participantRegRow(subdivtag)
 								if((!Variables.isCollectionProtocolRegistrationBarcodeGeneratorAvl) || operation.equals(Constants.EDIT)){
 							%>
 										<td align="left" class="black_ar">
-										<logic:equal name="participantForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">	
+										<logic:equal name="participantForm" property="isBarcodeEditable" value="<%=Constants.FALSE%>">
 										<%
 												if(form.getCollectionProtocolRegistrationValue(barcodeKey)!=null) {
 											%>
 											<label for="barcode" >
 											<%=form.getCollectionProtocolRegistrationValue(barcodeKey)%>
-											</label>									
+											</label>
 										<%
 																				}else{
 																			%>
@@ -949,7 +949,7 @@ function participantRegRow(subdivtag)
 					<tr>
 						<%--
 									String normalSubmitFunctionName = "setSubmittedForParticipant('" + submittedFor+ "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]+"')";
-									String forwardToSubmitFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";									
+									String forwardToSubmitFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";
 									String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 									String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
 									String forwardToSubmit = forwardToSubmitFunctionName + ","+confirmDisableFuncName;
@@ -985,9 +985,9 @@ function participantRegRow(subdivtag)
 								property="registratioPage" title="Submit Only"
 								onclick="<%=normalSubmit%>">
 								<bean:message key="buttons.submit" />
-								</html:button><!-- delete button added for deleting the objects --> 
+								</html:button><!-- delete button added for deleting the objects -->
 								<logic:equal name="operation" value="edit">
-									<% 	
+									<%
 										String deleteAction="deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
 									%>
 									|&nbsp;<html:button styleClass="blue_ar_c" property="disableRecord"
@@ -1005,7 +1005,7 @@ function participantRegRow(subdivtag)
 								onmouseover="showMessage('Create additional Specimen Collection Group to collect specimens which were  not anticipated as per protocol')">
 							</html:button>
 							<logic:equal name="operation" value="edit">
-										|<% 	
+										|<%
 										String deleteAction="deleteObject('" + formName +"','" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 									%>
 								<html:button styleClass="blue_ar_c" property="disableRecord"

@@ -146,7 +146,6 @@ public class UpdateStatusAction extends BaseAction
 		{
 			this.logger.error("Error occurred while sending response string for update status - "
 					+ ie.getMessage());
-			ie.printStackTrace();
 		}
 	}
 

@@ -14,6 +14,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,12 +36,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
+import edu.wustl.bulkoperator.util.BulkOperationException;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
-import edu.wustl.catissuecore.ctms.integrator.CDMSIntegrator;
-import edu.wustl.catissuecore.ctms.integrator.CatissueCdmsURLInformationObject;
+import edu.wustl.catissuecore.cdms.integrator.CatissueCdmsIntegrator;
+import edu.wustl.catissuecore.cdms.integrator.CatissueCdmsURLInformationObject;
+import edu.wustl.catissuecore.cdms.integrator.CdmsIntegratorImpl;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -55,8 +59,6 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.util.CDMSAPIService;
-import edu.wustl.catissuecore.util.CDMSCaTissueIntegrationUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -159,7 +161,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			final String str = request.getParameter("isOnChange");
 			if (str != null && "true".equals(str))
 			{
-					isOnChange = true;
+				isOnChange = true;
 			}
 			// For Consent Tracking (Virender Mehta) - Start
 
@@ -174,15 +176,14 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			String typeRadioButton = null;
 			String selectedCPId = String.valueOf(specimenCollectionGroupForm
 					.getCollectionProtocolId());
-			if (selectedCPId
-					.equalsIgnoreCase(Constants.SELECTED_COLLECTION_PROTOCOL_ID))
+			if (selectedCPId.equalsIgnoreCase(Constants.SELECTED_COLLECTION_PROTOCOL_ID))
 			{
 				final Map forwardToHashMap = (Map) request
 						.getAttribute(Constants.FORWARD_TO_HASHMAP);
 				if (forwardToHashMap != null)
 				{
-					selectedCPId = forwardToHashMap.get(
-							Constants.COLLECTION_PROTOCOL_ID).toString();
+					selectedCPId = forwardToHashMap.get(Constants.COLLECTION_PROTOCOL_ID)
+							.toString();
 					selectedParticipantOrPPIdentifierId = forwardToHashMap.get(
 							Constants.PARTICIPANT_ID).toString();
 					typeRadioButton = Constants.PARTICIPANT_ID;
@@ -218,14 +219,13 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			{
 				// Get CollectionprotocolRegistration Object
 				collectionProtocolRegistration = this.getcollectionProtocolRegistrationObj(
-						selectedParticipantOrPPIdentifierId, selectedCPId,
-						typeRadioButton, dao);
+						selectedParticipantOrPPIdentifierId, selectedCPId, typeRadioButton, dao);
 			}
 			else if (specimenCollectionGroupForm.getId() != 0)
 			{
 				// Get CollectionprotocolRegistration Object
-//				final SpecimenCollectionGroupBizLogic specimenCollectiongroupBizLogic = (SpecimenCollectionGroupBizLogic) factory
-//						.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+				//				final SpecimenCollectionGroupBizLogic specimenCollectiongroupBizLogic = (SpecimenCollectionGroupBizLogic) factory
+				//						.getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 				final List cpRegnList = dao.retrieveAttribute(SpecimenCollectionGroup.class, "id",
 						specimenCollectionGroupForm.getId(), "collectionProtocolRegistration");
 				if ((cpRegnList != null) && (!cpRegnList.isEmpty()))
@@ -464,8 +464,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					&& ((request.getAttribute(Constants.SUBMITTED_FOR).equals("Default")) || (request
 							.getAttribute(Constants.SUBMITTED_FOR).equals(Constants.ADDNEW_LINK))))
 			{
-				LOGGER
-						.debug("Populating CP and Participant in SCG ====  AddNew operation loop");
+				LOGGER.debug("Populating CP and Participant in SCG ====  AddNew operation loop");
 
 				final Long cprId = specimenCollectionGroupForm
 						.getCollectionProtocolRegistrationId();
@@ -545,9 +544,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 						// Load Clinical status for a given study calander event
 						// point
-						cPEObject = bizLogic
-								.retrieve(CollectionProtocolEvent.class.getName(),
-										specimenCollectionGroupForm.getCollectionProtocolEventId());
+						if (!(specimenCollectionGroupForm.getCollectionProtocolEventId() == 0))
+						{
+							cPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
+									specimenCollectionGroupForm.getCollectionProtocolEventId());
+						}
 						if (isOnChange && cPEObject != null)
 						{
 							this.setCalendarEventPoint(cPEObject, request,
@@ -708,8 +709,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 						.getCollectionProtocolId(), bizLogic, request, specimenCollectionGroupForm);
 
 				// Load Clinical status for a given study calander event point
-				cPEObject = dao.retrieveById(CollectionProtocolEvent.class.getName(),
-						specimenCollectionGroupForm.getCollectionProtocolEventId());
+				if (!(specimenCollectionGroupForm.getCollectionProtocolEventId() == 0))
+				{
+					cPEObject = dao.retrieveById(CollectionProtocolEvent.class.getName(),
+							specimenCollectionGroupForm.getCollectionProtocolEventId());
+				}
 				if (cPEObject != null)
 				{
 					this.setCalendarEventPoint(cPEObject, request, specimenCollectionGroupForm);
@@ -822,15 +826,14 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID) == null)
 			{
 				scgEntityId = AnnotationUtil
-				.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
-		CatissueCoreCacheManager.getInstance().addObjectToCache(
-				AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID, scgEntityId);
+						.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
+				CatissueCoreCacheManager.getInstance().addObjectToCache(
+						AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID, scgEntityId);
 			}
 			else
 			{
 				scgEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache(
 						AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID);
-
 
 			}
 			request.setAttribute(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID, scgEntityId);
@@ -868,13 +871,14 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			session.setAttribute(Constants.IDENTIFIED_REPORT_ID, reportId);
 
 			session.removeAttribute("asignedPositonSet");
-		    final String isClinPortalServiceEnabled = XMLPropertyHandler.getValue(CDMSIntegrationConstants.CLINPORTAL_SERVICE_ENABLED);
-		    if(isClinPortalServiceEnabled.equals(Constants.TRUE))
-		    {
-		        long strt=System.currentTimeMillis();
-		        formClinportalURL(request,specimenCollectionGroupForm,sessionData.getUserName());
-		        long end=System.currentTimeMillis();
-		    }
+			final String isClinPortalServiceEnabled = XMLPropertyHandler
+					.getValue(CDMSIntegrationConstants.CDMS_SERVICE_ENABLED);
+			if (isClinPortalServiceEnabled.equals(Constants.TRUE))
+			{
+				long strt = System.currentTimeMillis();
+				formClinportalURL(request, specimenCollectionGroupForm, sessionData.getUserName());
+				long end = System.currentTimeMillis();
+			}
 
 		}
 		finally
@@ -884,108 +888,109 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		return mapping.findForward(pageOf);
 	}
 
-	 /**
- 	 * 1: get scgId != null => get catissue pid,cp id ,cpe id
- 	 * 2: get clinportal pid, cs id ,cse id
- 	 * 3: if scgid == null =>.
- 	 *
- 	 * @param request the request
- 	 * @param specimenCollectionGroupForm the specimen collection group form
- 	 * @param loginName the login name
- 	 *
- 	 * @throws BizLogicException the biz logic exception
- 	 */
-    /*private void formClinportalURL_OLD(final HttpServletRequest request,
-            final SpecimenCollectionGroupForm specimenCollectionGroupForm,
-            final String loginName) throws BizLogicException
-    {
-        final SessionDataBean sessionData = (SessionDataBean) request.getSession()
-        .getAttribute(Constants.SESSION_DATA);
-        StringBuilder url = new StringBuilder();
-        try
-        {
-        	final Long scgID = specimenCollectionGroupForm.getId();
-            final CDMSAPIService clinPortalAPIService = new CDMSAPIService();
+	/**
+	 * 1: get scgId != null => get catissue pid,cp id ,cpe id
+	 * 2: get clinportal pid, cs id ,cse id
+	 * 3: if scgid == null =>.
+	 *
+	 * @param request the request
+	 * @param specimenCollectionGroupForm the specimen collection group form
+	 * @param loginName the login name
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 */
+	/*private void formClinportalURL_OLD(final HttpServletRequest request,
+	        final SpecimenCollectionGroupForm specimenCollectionGroupForm,
+	        final String loginName) throws BizLogicException
+	{
+	    final SessionDataBean sessionData = (SessionDataBean) request.getSession()
+	    .getAttribute(Constants.SESSION_DATA);
+	    StringBuilder url = new StringBuilder();
+	    try
+	    {
+	    	final Long scgID = specimenCollectionGroupForm.getId();
+	        final CDMSAPIService clinPortalAPIService = new CDMSAPIService();
 
-            String clinportalUrl = XMLPropertyHandler
-                    .getValue(CDMSIntegrationConstants.CLINPORTAL_URL);
-            final Map<String, Long> map = clinPortalAPIService.getClinPortalURLIds(sessionData.getUserName(),
-                    specimenCollectionGroupForm.getCollectionProtocolId(),
-                    specimenCollectionGroupForm.getParticipantId(),
-                    specimenCollectionGroupForm.getCollectionProtocolEventId(),specimenCollectionGroupForm.getId());
-            if(CDMSCaTissueIntegrationUtil.validateClinPortalMap(map)){
-            clinportalUrl = CDMSIntegrationConstants.CLINPORTAL_URL_CONTEXT(clinportalUrl);
-            url.append(clinportalUrl);
-            String visitId =(String) request.getSession().getAttribute(CDMSIntegrationConstants.EVENTENTRYID);
-            final Long csId = map.get(CDMSIntegrationConstants.CLINICAL_STUDY_ID);
-            if(visitId==null)
-            {
-                *//**
-                 * get corresponding visit id to scgId if present
-                 * else get near to visit Id of scgIdf
-                 *//*
-                if(map.get(CDMSIntegrationConstants.EVENTENTRYID)==null)
-                {
-                	//Set error message.....
-                    setErrorMessage(request);
+	        String clinportalUrl = XMLPropertyHandler
+	                .getValue(CDMSIntegrationConstants.CDMS_URL);
+	        final Map<String, Long> map = clinPortalAPIService.getClinPortalURLIds(sessionData.getUserName(),
+	                specimenCollectionGroupForm.getCollectionProtocolId(),
+	                specimenCollectionGroupForm.getParticipantId(),
+	                specimenCollectionGroupForm.getCollectionProtocolEventId(),specimenCollectionGroupForm.getId());
+	        if(CDMSCaTissueIntegrationUtil.validateClinPortalMap(map)){
+	        clinportalUrl = CDMSIntegrationConstants.CLINPORTAL_URL_CONTEXT(clinportalUrl);
+	        url.append(clinportalUrl);
+	        String visitId =(String) request.getSession().getAttribute(CDMSIntegrationConstants.EVENTENTRYID);
+	        final Long csId = map.get(CDMSIntegrationConstants.CLINICAL_STUDY_ID);
+	        if(visitId==null)
+	        {
+	            *//**
+	                 * get corresponding visit id to scgId if present
+	                 * else get near to visit Id of scgIdf
+	                 */
+	/*
+	                if(map.get(CDMSIntegrationConstants.EVENTENTRYID)==null)
+	                {
+	                	//Set error message.....
+	                    setErrorMessage(request);
 
-                 }
-                else
-                {
-                	visitId=map.get(CDMSIntegrationConstants.EVENTENTRYID).toString();
-                }
-            }
-            if (visitId != null && scgID != null && !visitId.equals("0") && scgID >0)
-            {
-                request.getSession().removeAttribute(CDMSIntegrationConstants.EVENTENTRYID);
-                url.append(CDMSIntegrationConstants.EVENTENTRYID).append(
-                        CDMSIntegrationConstants.EQUALS).append(
-                        String.valueOf(visitId));
-            }
-            else
-            {
-                
-                 * get  CS id from CP id , get CSE id from CPE id, get PId and user login name
-                 
-                final Long cseId = map.get(CDMSIntegrationConstants.EVENT_ID);
-                final Long pId = map.get(CDMSIntegrationConstants.CP_PARTICIPANT_ID);
+	                 }
+	                else
+	                {
+	                	visitId=map.get(CDMSIntegrationConstants.EVENTENTRYID).toString();
+	                }
+	            }
+	            if (visitId != null && scgID != null && !visitId.equals("0") && scgID >0)
+	            {
+	                request.getSession().removeAttribute(CDMSIntegrationConstants.EVENTENTRYID);
+	                url.append(CDMSIntegrationConstants.EVENTENTRYID).append(
+	                        CDMSIntegrationConstants.EQUALS).append(
+	                        String.valueOf(visitId));
+	            }
+	            else
+	            {
 
-                url.append(CDMSIntegrationConstants.CP_PARTICIPANT_ID)
-                        .append(Constants.EQUALS).append(pId);
-                url.append(CDMSCaTissueIntegrationUtil.formReqParameter(
-                        CDMSIntegrationConstants.CLINICAL_STUDY_ID,String.valueOf(csId)));
-                url.append(CDMSCaTissueIntegrationUtil.formReqParameter(
-                        CDMSIntegrationConstants.EVENT_ID, String.valueOf(cseId)));
-            }
-            url.append(CDMSCaTissueIntegrationUtil.formReqParameter(CDMSIntegrationConstants.SCGID,Utility.toString(scgID)));
-            url.append(CDMSCaTissueIntegrationUtil.formReqParameter(CDMSIntegrationConstants.CSM_USER_ID, sessionData.getCsmUserId()));
-            url.append(CDMSCaTissueIntegrationUtil.formReqParameter("&method", CDMSIntegrationConstants.LOGIN));
-            if(csId==null || csId<=0)
-            {
-                url=new StringBuilder();
-            }}
-        }
-        catch (Exception e)
-        {
-            LOGGER.out.error(e.getMessage());
-        }
-        request.setAttribute(CDMSIntegrationConstants.CALLBACK_URL, url.toString());
+	                 * get  CS id from CP id , get CSE id from CPE id, get PId and user login name
 
-    }*/
-    /**
-     * Form Clinportal URL.
-     * @param request HttpServletRequest
-     * @param specimenCollectionGroupForm SpecimenCollectionGroupForm
-     * @param loginName String
-     * @throws BizLogicException BizLogicException
-     */
-    private void formClinportalURL(final HttpServletRequest request,
+	                final Long cseId = map.get(CDMSIntegrationConstants.EVENT_ID);
+	                final Long pId = map.get(CDMSIntegrationConstants.CP_PARTICIPANT_ID);
+
+	                url.append(CDMSIntegrationConstants.CP_PARTICIPANT_ID)
+	                        .append(Constants.EQUALS).append(pId);
+	                url.append(CDMSCaTissueIntegrationUtil.formReqParameter(
+	                        CDMSIntegrationConstants.CLINICAL_STUDY_ID,String.valueOf(csId)));
+	                url.append(CDMSCaTissueIntegrationUtil.formReqParameter(
+	                        CDMSIntegrationConstants.EVENT_ID, String.valueOf(cseId)));
+	            }
+	            url.append(CDMSCaTissueIntegrationUtil.formReqParameter(CDMSIntegrationConstants.SCGID,Utility.toString(scgID)));
+	            url.append(CDMSCaTissueIntegrationUtil.formReqParameter(CDMSIntegrationConstants.CSM_USER_ID, sessionData.getCsmUserId()));
+	            url.append(CDMSCaTissueIntegrationUtil.formReqParameter("&method", CDMSIntegrationConstants.LOGIN));
+	            if(csId==null || csId<=0)
+	            {
+	                url=new StringBuilder();
+	            }}
+	        }
+	        catch (Exception e)
+	        {
+	            LOGGER.out.error(e.getMessage());
+	        }
+	        request.setAttribute(CDMSIntegrationConstants.CALLBACK_URL, url.toString());
+
+	    }*/
+	/**
+	 * Form Clinportal URL.
+	 * @param request HttpServletRequest
+	 * @param specimenCollectionGroupForm SpecimenCollectionGroupForm
+	 * @param loginName String
+	 * @throws BizLogicException BizLogicException
+	 */
+	private void formClinportalURL(final HttpServletRequest request,
 			final SpecimenCollectionGroupForm specimenCollectionGroupForm, final String loginName)
 			throws BizLogicException
 	{
 		String url = new String();
-		final SessionDataBean sessionData = (SessionDataBean) request.getSession()
-			.getAttribute(Constants.SESSION_DATA);
+		final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
+				Constants.SESSION_DATA);
 		try
 		{
 			CatissueCdmsURLInformationObject informationObject = new CatissueCdmsURLInformationObject();
@@ -1000,21 +1005,22 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			informationObject.setVisitIdentifier((String) request.getSession().getAttribute(
 					CDMSIntegrationConstants.EVENTENTRYID));
 			informationObject.setUrl(XMLPropertyHandler
-					.getValue(CDMSIntegrationConstants.CLINPORTAL_URL));
+					.getValue(CDMSIntegrationConstants.CDMS_URL));
 			informationObject.setUserCSMIdentifier(sessionData.getCsmUserId());
 
-			CDMSIntegrator integrator = new CDMSIntegrator();
+			CatissueCdmsIntegrator catissueCdmsIntegrator = getClassNameFromCatissueCdmsPropertiesFile();
 
-			String password = AppUtility.getPassord(loginName);	
-			url = integrator.getVisitInformationURL(informationObject, loginName, password);
-			if(url.contains(CDMSIntegrationConstants.EVENTENTRYID + CDMSIntegrationConstants.EQUALS))
+			String password = AppUtility.getPassord(loginName);
+			url = catissueCdmsIntegrator.getVisitInformationURL(informationObject, loginName, password);
+			if (url.contains(CDMSIntegrationConstants.EVENTENTRYID
+					+ CDMSIntegrationConstants.EQUALS))
 			{
 				request.getSession().removeAttribute(CDMSIntegrationConstants.EVENTENTRYID);
 			}
 			else
 			{
 				//Set error message....
-                setErrorMessage(request);
+				setErrorMessage(request);
 			}
 		}
 		catch (gov.nih.nci.system.applicationservice.ApplicationException appExp)
@@ -1039,32 +1045,63 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		request.setAttribute(CDMSIntegrationConstants.CALLBACK_URL, url.toString());
 	}
 
-    /**
-     * Sets the error message.
-     *
-     * @param request the request
-     */
-    private void setErrorMessage(final HttpServletRequest request)
-    {
-        ActionErrors actionErrors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-        if (actionErrors == null)
-        {
-            actionErrors = new ActionErrors();
-        }
-        final ActionError actionError = new ActionError("errors.item","No Visit");
-        actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
-        saveErrors(request, actionErrors);
+	/**
+	 * 
+	 * @return
+	 * @throws BulkOperationException
+	 */
+	public static CatissueCdmsIntegrator getClassNameFromCatissueCdmsPropertiesFile()
+			throws ApplicationException, Exception
+	{
+		String fileName = System.getProperty(Constants.CATISSUE_CDMS_INTEGRATION_PROP_FILE_NAME);
+		Properties properties;
+		CatissueCdmsIntegrator catissueCdmsIntegrator = null;
+		try
+		{
+			properties = AppUtility.getPropertiesFile(fileName);
+			String cdmsIntegrationClassName = properties
+					.getProperty(Constants.CDMS_INTEGRATION_CLASSNAME);
+			Class klass = Class.forName(cdmsIntegrationClassName);
+			Constructor constructor = klass.getConstructor(null);
+			catissueCdmsIntegrator = (CatissueCdmsIntegrator) constructor.newInstance();
+		}
+		catch (ApplicationException appExp)
+		{
+			throw appExp;
+		}
+		catch (Exception exp)
+		{
+			throw exp;
+		}
+		return catissueCdmsIntegrator;
+	}
 
-    }
+	/**
+	 * Sets the error message.
+	 *
+	 * @param request the request
+	 */
+	private void setErrorMessage(final HttpServletRequest request)
+	{
+		ActionErrors actionErrors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+		if (actionErrors == null)
+		{
+			actionErrors = new ActionErrors();
+		}
+		final ActionError actionError = new ActionError("errors.item", "No Visit");
+		actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
+		saveErrors(request, actionErrors);
 
-    /**
-     * Sets the events id.
-     *
-     * @param specimenCollectionGroupForm : specimenCollectionGroupForm
-     * @param bizLogic : bizLogic
-     *
-     * @throws BizLogicException : BizLogicException
-     */
+	}
+
+	/**
+	 * Sets the events id.
+	 *
+	 * @param specimenCollectionGroupForm : specimenCollectionGroupForm
+	 * @param bizLogic : bizLogic
+	 *
+	 * @throws BizLogicException : BizLogicException
+	 */
 	private void setEventsId(SpecimenCollectionGroupForm specimenCollectionGroupForm,
 			SpecimenCollectionGroupBizLogic bizLogic) throws BizLogicException
 	{
@@ -1376,7 +1413,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		// Patch: 8533_5
 		if (list.size() >= 2 && form.getCollectionProtocolEventId() <= 0)
 		{
-			form.setCollectionProtocolEventId(Long.valueOf(((NameValueBean) list.get(1)).getValue()));
+			form.setCollectionProtocolEventId(Long
+					.valueOf(((NameValueBean) list.get(1)).getValue()));
 		}
 	}
 
@@ -1584,7 +1622,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 		catch (final DAOException daoEx)
 		{
-			LOGGER.error(daoEx.getMessage(),daoEx);
+			LOGGER.error(daoEx.getMessage(), daoEx);
 			throw new BizLogicException(daoEx);
 		}
 		return collectionProtocolRegistration;
@@ -1670,7 +1708,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 		}
 		catch (final DAOException daoEx)
 		{
-			LOGGER.error(daoEx.getMessage(),daoEx);
+			LOGGER.error(daoEx.getMessage(), daoEx);
 			throw new BizLogicException(daoEx);
 		}
 	}

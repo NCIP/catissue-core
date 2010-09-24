@@ -431,14 +431,14 @@ public class AutomateImportSS
 		{
 			file.delete();
 		}
-		final BufferedWriter bw = new BufferedWriter(new FileWriter(new File(ctlFileName)));
+		final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(ctlFileName)));
 		final String value = "LOAD DATA INFILE '" + csvFileName + "' " + "\nBADFILE '/sample.bad'"
 				+ "\nDISCARDFILE '/sample.dsc'" + "\nAPPEND " + "\nINTO TABLE " + tableName + " "
 				+ "\nFIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"'\n";
 		final String columnName = this.getColumnName(connection, tableName);
-		bw.write(value + columnName);
-		bw.flush();
-		bw.close();
+		bufferedWriter.write(value + columnName);
+		bufferedWriter.flush();
+		bufferedWriter.close();
 		System.out.println(value);
 		System.out.println("Exporting table data : " + tableName + " to file : " + ctlFileName);
 	}
@@ -522,9 +522,9 @@ public class AutomateImportSS
 		try
 		{
 			String line, identity = "", tableName;
-			final BufferedReader br = new BufferedReader(fin);
+			final BufferedReader bufferedReader = new BufferedReader(fin);
 
-			while ((line = br.readLine()) != null)
+			while ((line = bufferedReader.readLine()) != null)
 			{
 				final StringTokenizer st = new StringTokenizer(line, ",");
 
@@ -560,18 +560,18 @@ public class AutomateImportSS
 class StreamGobbler extends Thread
 {
 
-	InputStream is;
+	InputStream inputStream;
 
 	StreamGobbler(InputStream is)
 	{
-		this.is = is;
+		this.inputStream = is;
 	}
 
 	public void run()
 	{
 		try
 		{
-			final InputStreamReader isr = new InputStreamReader(this.is);
+			final InputStreamReader isr = new InputStreamReader(this.inputStream);
 			final BufferedReader br = new BufferedReader(isr);
 			String line = null;
 

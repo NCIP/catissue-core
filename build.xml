@@ -39,6 +39,7 @@
 	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect"/>
 	<property name="client.dir" value="${base.dir}/caTissueSuite_Client" />
 	<property name="project.src.domain" value="${base.dir}/WEB-INF/src/edu/wustl/catissuecore/domain/"/>
+	<property name="custom.impl.lib.dir" value="${base.dir}/custom_impl_lib" />
 
 	<!-- flex related properties -->
 <property name="FLEX_HOME" value="E:/Flex SDK 2"/>
@@ -103,18 +104,38 @@
 		<!-- Create the temp directory for caCORE CSM war file-->
 		<mkdir dir="${temp.dir}"/>
 		<antcall target="check.java.version"></antcall>
+		<copy todir="${base.dir}/custom_impl_lib" overwrite="true">
+							        <fileset file="Default_label_barcode_gen.jar" />
+							        <fileset file="label_barcode_gen_client.jar" />
+							       	<fileset file="WEB-INF/lib/IDPAuthenticationManager0_0.jar" />
+								</copy>
 	</target>
+
+	<target name="Catissue_Cdms_Client_Integration" description="Creates a caTissue CDMS integration jar">
+		<delete file="caTissueCdmsIntegration.jar" />
+
+		<jar destfile="caTissueCdmsIntegration.jar">
+			<fileset dir="${target.dir}" >
+    			<include name="**/ICatissueCdmsIntegrator.class"/>
+				<include name="**/CatissueCdmsIntegrator.class"/>
+    			<include name="**/CatissueCdmsURLInformationObject.class"/>
+			</fileset>
+		</jar>
+	</target>
+
 	<target name="Label_BarCode_Generator_Client">
 		<delete file="label_barcode_gen_client.jar" />
 
-	<jar destfile="label_barcode_gen_client.jar">
-		<fileset dir="${target.dir}" >
-    		<include name="**/LabelGenerator.class"/>
-			<include name="**/LabelGeneratorFactory.class"/>
-    		<include name="**/BarcodeGenerator.class"/>
-			<include name="**/BarcodeGeneratorFactory.class"/>
-		</fileset>
-	</jar>
+		<jar destfile="label_barcode_gen_client.jar">
+			<fileset dir="${target.dir}" >
+	    		<include name="**/LabelGenerator.class"/>
+				<include name="**/LabelGeneratorFactory.class"/>
+	    		<include name="**/BarcodeGenerator.class"/>
+				<include name="**/BarcodeGeneratorFactory.class"/>
+				<include name="**/LabelTokens.class"/>
+				<include name="**/TokenFactory.class"/>
+			</fileset>
+		</jar>
 	</target>
 
 	<target name="Default_Label_BarCode_Generator"  depends ="Label_BarCode_Generator_Client,build_client_jar">
@@ -134,6 +155,8 @@
 			<exclude name="**/LabelGeneratorFactory.class"/>
     		<exclude name="**/BarcodeGenerator.class"/>
 			<exclude name="**/BarcodeGeneratorFactory.class"/>
+			<exclude name="**/LabelTokens.class"/>
+			<exclude name="**/TokenFactory.class"/>
 		</fileset>
 	</jar>
 	</target>
@@ -263,6 +286,7 @@
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
 	<target name="build_war" depends="init, compile, unpack_cacore_war,replace_database_type,
 		common_build_war,build_client_jar">
+
 	</target>
 	<!-- Create war file for installable zip file.Please us this target when creating installable zip.
 		Note: database type is not replaced
@@ -271,7 +295,7 @@
 	</target>
 
 	<!-- build catissuecore war file which is common to above both targets -->
-	<target name="common_build_war" depends ="Default_Label_BarCode_Generator,PrintService_Module,create_war">
+	<target name="common_build_war" depends ="Default_Label_BarCode_Generator,Catissue_Cdms_Client_Integration,PrintService_Module,create_war">
 	</target>
 
 	<!--Start of Integrating the Bulk Operation Module  -->
@@ -327,12 +351,14 @@
 
 		<copy todir="WEB-INF/lib" overwrite="true">
 			<fileset dir="${base.dir}"  >
-				<include name="Default_label_barcode_gen.jar" />
+			    <include name="Default_label_barcode_gen.jar" />
 				<include name="label_barcode_gen_client.jar" />
 				<include name="printservice_client.jar" />
 				<include name="printservice_module.jar" />
+				<include name="caTissueCdmsIntegration.jar" />
 			</fileset>
 		</copy>
+		<delete file="caTissueCdmsIntegration.jar"/>
 	     <delete file="${base.dir}/MANIFEST.MF"/>
 	     <manifest file="${base.dir}/MANIFEST.MF">
 
@@ -377,7 +403,9 @@
 				<include name="caTissue_Suite_User_Manual_v11p5.doc" />
 				<include name="caTissueSuite_Technical_Guide_V11p5.doc" />
 				<include name="caTissueSuiteV11_UML.zip" />
+				<include name="**/WEB-INF/classes/**/cdms/CdmsIntegratorImpl.class" />
 	    		<exclude name="**/WEB-INF/classes/**/namegenerator/*"/>
+				<exclude name="**/WEB-INF/classes/**/cdms/*"/>
 
 				<exclude name="**/pages/subMenu/**" />
 				<exclude name="**/log4j.properties" />
@@ -586,7 +614,6 @@
 
 		<copy file="catissuecore.war" todir="${zip.dir}" overwrite="true" />
 		<copy file="label_barcode_gen_client.jar" todir="${zip.dir}" overwrite="true" />
-		<copy file="Default_label_barcode_gen.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="printservice_module.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="printservice_client.jar" todir="${zip.dir}" overwrite="true" />
 		<copy file="${base.dir}/WEB-INF/lib/PrintCatissueCore_Client.jar" todir="${zip.dir}" overwrite="true" />
@@ -597,31 +624,36 @@
 		<copy file="AdvanceQuery_Installable.zip" todir="${zip.dir}" overwrite="true" />
 		<copy file="bulkoperator.zip" todir="${zip.dir}" overwrite="true" />
 		<copy file="bulkOperation.properties" todir="${zip.dir}" overwrite="true" />
+		<copy file="caTissueCdmsIntegration.properties" todir="${zip.dir}" overwrite="true" />
 		<!-- only single war file is being used so comment it -->
 		<!-- <copy file="catissuecorecsm.war" todir="${zip.dir}" overwrite="true" /> -->
 		<copy file="catissuecore-ds.xml" todir="${zip.dir}" overwrite="true" />
 
 		<copy file="allTokens.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
-		<copy file="washuInstall.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="Show_Hide_Forms.csv" todir="${zip.dir}" overwrite="true" />
 		<copy file="Show_Hide_Forms.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="build-properties.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
-		<copy file="washu_deploy.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="DEDeploy.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="performance.properties" todir="${zip.dir}" overwrite="true" />
-		<!--copy file="log4j.xml" todir="${zip.dir}" overwrite="true" /> -->
 		<copy file="login-config.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="properties-service.xml" todir="${zip.dir}" overwrite="true" />
     	<copy file="deploy_uk_edin.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploy_barcode_generator_DFCI.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="taggedvalues.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="paths.txt" todir="${zip.dir}" overwrite="true" />
+		<copy file="cas.war" todir="${zip.dir}" overwrite="true" />
+
+		<copy todir="${zip.dir}/custom_impl_lib" overwrite="true">
+			        <fileset file="Default_label_barcode_gen.jar" />
+			        <fileset file="label_barcode_gen_client.jar" />
+			       	<fileset file="${base.dir}/WEB-INF/lib/IDPAuthenticationManager0_0.jar" />
+				</copy>
 
 		<copy todir="${zip.dir}/idp" overwrite="true">
-					<fileset dir="${base.dir}/idp" />
+			<fileset dir="${base.dir}/idp" />
 		</copy>
 
 		<copy todir="${zip.dir}/catissuecore-properties" overwrite="true">
@@ -1032,7 +1064,7 @@
 				<include name="**/edu/wustl/catissuecore/namegenerator/**"/>
 				<include name="**/edu/wustl/catissuecore/caties/**"/>
 				<include name="**/edu/wustl/catissuecore/hbm/**"/>
-				<include name="**/edu/wustl/catissuecore/ctms/integrator/**"/>
+				<include name="**/edu/wustl/catissuecore/cdms/integrator/**"/>
 
 				<exclude name="**/CVS*" />
 				<exclude name="**/java.policy.applet*" />

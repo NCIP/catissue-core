@@ -34,7 +34,7 @@ import titli.model.fetch.TitliFetchException;
 import titli.model.util.TitliResultGroup;
 import edu.wustl.catissuecore.actionForm.TitliSearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.XSSSupportedAction;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.PagenatedResultData;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -59,7 +59,7 @@ import edu.wustl.simplequery.query.Table;
  *
  * @author Juber Patel
  */
-public class TitliFetchAction extends XSSSupportedAction
+public class TitliFetchAction extends SecureAction
 {
 
 	/**
@@ -98,8 +98,7 @@ public class TitliFetchAction extends XSSSupportedAction
 	 *            the response
 	 * @return action forward
 	 */
-	@Override
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		// set the request and session attributes required by DataView.jsp and
@@ -193,7 +192,7 @@ public class TitliFetchAction extends XSSSupportedAction
 		try
 		{
 			final String maxNoOfRecords = XMLPropertyHandler
-					.getValue(Constants.MAXIMUM_RECORDS_FOR_TITLI_RESULTS);
+					.getValue(Constants.MAXIMUM_RECORDS_FOR_KEYWORD_RESULTS);
 			final int maxLimit = Integer.parseInt(maxNoOfRecords);
 
 			final Name dbName = Titli.getInstance().getDatabases().keySet().toArray(new Name[0])[0];

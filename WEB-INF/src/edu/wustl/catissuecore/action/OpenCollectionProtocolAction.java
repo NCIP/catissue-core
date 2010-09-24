@@ -60,6 +60,8 @@ public class OpenCollectionProtocolAction extends BaseAction
 			//			request.setAttribute("labelGeneration", cpBean.isGenerateLabel());
 		}
 		request.setAttribute("formName", formName);
+		//bug 18481
+		request.setAttribute(Constants.ERROR_PAGE_FOR_CP, request.getParameter(Constants.ERROR_PAGE_FOR_CP));
 		//		request.setAttribute("labelGen", labelGen);
 		//		System.out.println("formName   &&****#$#$#$#$$##$#$   :  "+ cpBean.isGenerateLabel());
 		return mapping.findForward(Constants.SUCCESS);

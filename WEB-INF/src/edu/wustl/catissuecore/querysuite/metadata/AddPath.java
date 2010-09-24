@@ -21,35 +21,58 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class AddPath
 {
-	private static final Logger logger = Logger.getCommonLogger(AssociatesForms.class);
+	private static final Logger LOGGER = Logger.getCommonLogger(AssociatesForms.class);
 	/**
 	 * specify superClass And SubClasses Map.
 	 */
-	static Map<String, List<String>> superClassAndSubClassesMap = new HashMap<String, List<String>>();
+	public static Map<String, List<String>> superClassAndSubClassesMap = new HashMap<String, List<String>>();
 	/**
 	 * specify superClass And Associations Map.
 	 */
-	static Map<String, List<String>> superClassAndAssociationsMap = new HashMap<String, List<String>>();
+	public static Map<String, List<String>> superClassAndAssociationsMap = new HashMap<String, List<String>>();
 	/**
 	 * specify event Parameters SubClasses Map.
 	 */
-	static Map<String, List<String>> eventParametersSubClassesMap = new HashMap<String, List<String>>();
+	public static Map<String, List<String>> eventParametersSubClassesMap = new HashMap<String, List<String>>();
+	/**
+	 * specify superClass name and Description Map.
+	 */
+	public static Map<String, String> superClassDescMap = new HashMap<String, String>();
 	/**
 	 * specify identifier.
 	 */
-	int identifier = 0;
-
+	private int identifier = 0;
+	/**
+	 * Cell Specimen.
+	 */
+	private static final String CELL_SPECIMEN = "edu.wustl.catissuecore.domain.CellSpecimen";
+	/**
+	 * Fluid Specimen.
+	 */
+	private static final String FLUID_SPECIMEN = "edu.wustl.catissuecore.domain.FluidSpecimen";
+	/**
+	 * Molecular Specimen.
+	 */
+	private static final String MOLECULAR_SPECIMEN = "edu.wustl.catissuecore.domain.MolecularSpecimen";
+	/**
+	 * Tissue Specimen.
+	 */
+	private static final String TISSUE_SPECIMEN = "edu.wustl.catissuecore.domain.TissueSpecimen";
+	/**
+	 * Specimen.
+	 */
+	private static final String SPECIMEN = "edu.wustl.catissuecore.domain.Specimen";
 	/**
 	 * Initialize Data.
 	 */
 	public static void initData()
 	{
 		List<String> subClassesList = new ArrayList<String>();
-		subClassesList.add("edu.wustl.catissuecore.domain.CellSpecimen");
-		subClassesList.add("edu.wustl.catissuecore.domain.FluidSpecimen");
-		subClassesList.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
-		subClassesList.add("edu.wustl.catissuecore.domain.TissueSpecimen");
-		superClassAndSubClassesMap.put("edu.wustl.catissuecore.domain.Specimen", subClassesList);
+		subClassesList.add(CELL_SPECIMEN);
+		subClassesList.add(FLUID_SPECIMEN);
+		subClassesList.add(MOLECULAR_SPECIMEN);
+		subClassesList.add(TISSUE_SPECIMEN);
+		superClassAndSubClassesMap.put(SPECIMEN, subClassesList);
 
 		List<String> associationsList = new ArrayList<String>();
 		associationsList.add("edu.wustl.catissuecore.domain.SpecimenRequirement");
@@ -57,14 +80,14 @@ public class AddPath
 		associationsList.add("edu.wustl.catissuecore.domain.SpecimenArrayContent");
 		associationsList.add("edu.wustl.catissuecore.domain.DistributedItem");
 		superClassAndAssociationsMap
-				.put("edu.wustl.catissuecore.domain.Specimen", associationsList);
+				.put(SPECIMEN, associationsList);
 
 		subClassesList = new ArrayList<String>();
-		subClassesList.add("edu.wustl.catissuecore.domain.Specimen");
-		subClassesList.add("edu.wustl.catissuecore.domain.CellSpecimen");
-		subClassesList.add("edu.wustl.catissuecore.domain.FluidSpecimen");
-		subClassesList.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
-		subClassesList.add("edu.wustl.catissuecore.domain.TissueSpecimen");
+		subClassesList.add(SPECIMEN);
+		subClassesList.add(CELL_SPECIMEN);
+		subClassesList.add(FLUID_SPECIMEN);
+		subClassesList.add(MOLECULAR_SPECIMEN);
+		subClassesList.add(TISSUE_SPECIMEN);
 		superClassAndSubClassesMap.put("edu.wustl.catissuecore.domain.AbstractSpecimen",
 				subClassesList);
 
@@ -85,7 +108,7 @@ public class AddPath
 
 		associationsList = new ArrayList<String>();
 		associationsList.add("edu.wustl.catissuecore.domain.CollectionProtocolEvent");
-		associationsList.add("edu.wustl.catissuecore.domain.Specimen");
+		associationsList.add(SPECIMEN);
 		superClassAndAssociationsMap.put("edu.wustl.catissuecore.domain.SpecimenRequirement",
 				associationsList);
 
@@ -165,11 +188,11 @@ public class AddPath
 			superClassAndAssociationsMap = new HashMap<String, List<String>>();
 
 			final List<String> associationsList = new ArrayList<String>();
-			associationsList.add("edu.wustl.catissuecore.domain.Specimen");
-			associationsList.add("edu.wustl.catissuecore.domain.CellSpecimen");
-			associationsList.add("edu.wustl.catissuecore.domain.FluidSpecimen");
-			associationsList.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
-			associationsList.add("edu.wustl.catissuecore.domain.TissueSpecimen");
+			associationsList.add(SPECIMEN);
+			associationsList.add(CELL_SPECIMEN);
+			associationsList.add(FLUID_SPECIMEN);
+			associationsList.add(MOLECULAR_SPECIMEN);
+			associationsList.add(TISSUE_SPECIMEN);
 			superClassAndAssociationsMap.put(
 					"edu.wustl.catissuecore.domain.SpecimenEventParameters", associationsList);
 		}
@@ -191,8 +214,7 @@ public class AddPath
 		while (iterator.hasNext())
 		{
 			final String key = iterator.next();
-			sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "
-					+ UpdateMetadataUtil.getDBCompareModifier() + "'" + key + "'";
+			sql = getSqlForDesc(key);
 			stmt = connection.createStatement();
 			resultSet = stmt.executeQuery(sql);
 			if (resultSet.next())
@@ -202,9 +224,7 @@ public class AddPath
 				final List<String> associationsList = superClassAndAssociationsMap.get(key);
 				for (final String associatedEntityName : associationsList)
 				{
-					sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "
-							+ UpdateMetadataUtil.getDBCompareModifier() + "'"
-							+ associatedEntityName + "'";
+					sql = getSqlForDesc(associatedEntityName);
 					final Statement stmt4 = connection.createStatement();
 					resultSet = stmt4.executeQuery(sql);
 					if (resultSet.next())
@@ -224,10 +244,7 @@ public class AddPath
 							{
 								String subClassEntityId;
 								final Statement stmt1 = connection.createStatement();
-								sql = "Select IDENTIFIER from"
-										+ " dyextn_abstract_metadata where NAME "
-										+ UpdateMetadataUtil.getDBCompareModifier() + "'"
-										+ subClassEntity + "'";
+								sql = getSqlForDesc(subClassEntity);
 								final ResultSet rs1 = stmt.executeQuery(sql);
 								if (rs1.next())
 								{
@@ -292,12 +309,35 @@ public class AddPath
 			}
 			else
 			{
-				logger.info("Entity with name : " + key + " not found");
+				LOGGER.info("Entity with name : " + key + " not found");
 			}
 		}
 		stmt.close();
 		insertPathSQL.addAll(this.getInsertPathStatementsSpecimen(connection));//bug 11336
 		return insertPathSQL;
+	}
+
+	/**
+	 * Get appropriate SQL to get the identifier of the DE entity.
+	 * @param key key
+	 * @return sql
+	 */
+	private String getSqlForDesc(String key)
+	{
+		String sql;
+		final String description = superClassDescMap.get(key);
+		if (description == null)
+		{
+			sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "
+				+ UpdateMetadataUtil.getDBCompareModifier() + "'" + key + "'";
+		}
+		else
+		{
+			sql = "Select IDENTIFIER from dyextn_abstract_metadata where NAME "
+				+ UpdateMetadataUtil.getDBCompareModifier() + "'" + key +
+				"' and CREATED_DATE is not null";
+		}
+		return sql;
 	}
 
 	//bug 11336
@@ -312,36 +352,36 @@ public class AddPath
 		final Map<String, List<String>> associationsMap = new HashMap<String, List<String>>();
 
 		final List<String> associationsListSpecimen = new ArrayList<String>();
-		associationsListSpecimen.add("edu.wustl.catissuecore.domain.FluidSpecimen");
-		associationsListSpecimen.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
-		associationsListSpecimen.add("edu.wustl.catissuecore.domain.TissueSpecimen");
-		associationsListSpecimen.add("edu.wustl.catissuecore.domain.CellSpecimen");
-		associationsMap.put("edu.wustl.catissuecore.domain.Specimen", associationsListSpecimen);
+		associationsListSpecimen.add(FLUID_SPECIMEN);
+		associationsListSpecimen.add(MOLECULAR_SPECIMEN);
+		associationsListSpecimen.add(TISSUE_SPECIMEN);
+		associationsListSpecimen.add(CELL_SPECIMEN);
+		associationsMap.put(SPECIMEN, associationsListSpecimen);
 
 		final List<String> associationsListCell = new ArrayList<String>();
-		associationsListCell.add("edu.wustl.catissuecore.domain.FluidSpecimen");
-		associationsListCell.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
-		associationsListCell.add("edu.wustl.catissuecore.domain.TissueSpecimen");
-		associationsMap.put("edu.wustl.catissuecore.domain.CellSpecimen", associationsListCell);
+		associationsListCell.add(FLUID_SPECIMEN);
+		associationsListCell.add(MOLECULAR_SPECIMEN);
+		associationsListCell.add(TISSUE_SPECIMEN);
+		associationsMap.put(CELL_SPECIMEN, associationsListCell);
 
 		final List<String> associationsListFluid = new ArrayList<String>();
-		associationsListFluid.add("edu.wustl.catissuecore.domain.CellSpecimen");
-		associationsListFluid.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
-		associationsListFluid.add("edu.wustl.catissuecore.domain.TissueSpecimen");
-		associationsMap.put("edu.wustl.catissuecore.domain.FluidSpecimen", associationsListFluid);
+		associationsListFluid.add(CELL_SPECIMEN);
+		associationsListFluid.add(MOLECULAR_SPECIMEN);
+		associationsListFluid.add(TISSUE_SPECIMEN);
+		associationsMap.put(FLUID_SPECIMEN, associationsListFluid);
 
 		final List<String> associationsListMolecular = new ArrayList<String>();
-		associationsListMolecular.add("edu.wustl.catissuecore.domain.CellSpecimen");
-		associationsListMolecular.add("edu.wustl.catissuecore.domain.FluidSpecimen");
-		associationsListMolecular.add("edu.wustl.catissuecore.domain.TissueSpecimen");
-		associationsMap.put("edu.wustl.catissuecore.domain.MolecularSpecimen",
+		associationsListMolecular.add(CELL_SPECIMEN);
+		associationsListMolecular.add(FLUID_SPECIMEN);
+		associationsListMolecular.add(TISSUE_SPECIMEN);
+		associationsMap.put(MOLECULAR_SPECIMEN,
 				associationsListMolecular);
 
 		final List<String> associationsListTissue = new ArrayList<String>();
-		associationsListTissue.add("edu.wustl.catissuecore.domain.CellSpecimen");
-		associationsListTissue.add("edu.wustl.catissuecore.domain.FluidSpecimen");
-		associationsListTissue.add("edu.wustl.catissuecore.domain.MolecularSpecimen");
-		associationsMap.put("edu.wustl.catissuecore.domain.TissueSpecimen", associationsListTissue);
+		associationsListTissue.add(CELL_SPECIMEN);
+		associationsListTissue.add(FLUID_SPECIMEN);
+		associationsListTissue.add(MOLECULAR_SPECIMEN);
+		associationsMap.put(TISSUE_SPECIMEN, associationsListTissue);
 
 		return associationsMap;
 	}

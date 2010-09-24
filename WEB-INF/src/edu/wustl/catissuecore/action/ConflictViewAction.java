@@ -179,7 +179,7 @@ public class ConflictViewAction extends SecureAction
 
 		final List dataList = this.makeGridData(list);
 		AppUtility.setGridData(dataList, columnList, request);
-		final Integer identifierFieldIndex = new Integer(1);
+		final Integer identifierFieldIndex = Integer.valueOf(1);
 		request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
 		request.setAttribute("pageOf", "pageOfConflictResolver");
 		request.getSession().setAttribute(Constants.SELECTED_FILTER,

@@ -288,7 +288,6 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 		{
 			this.noOfAliquots = "";
 		}
-
 	}
 
 	/**
@@ -904,7 +903,9 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 			if (!this.noOfAliquots.equals(""))
 			{
-				if (!validator.isNumeric(this.noOfAliquots))
+				this.noOfAliquots = AppUtility.isValidCount(this.noOfAliquots, errors);
+				
+				if (!validator.isNumeric(this.noOfAliquots, 1))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("specimenArrayAliquots.noOfAliquots")));

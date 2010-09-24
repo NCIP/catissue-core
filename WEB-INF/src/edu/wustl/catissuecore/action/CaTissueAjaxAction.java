@@ -54,7 +54,7 @@ public class CaTissueAjaxAction extends DispatchAction
 		{
 			String key = keys.next();
 			String[] value = parameterMap.get(key);
-			dataString = dataString + key + "=" + value[0] + "&";
+			dataString = dataString + key + '=' + value[0] + '&';
 		}
 
 		dataString = dataString.substring(0, dataString.length() - 1);

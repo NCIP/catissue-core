@@ -26,12 +26,12 @@
 <script language="JavaScript" type="text/javascript"
 	src="jss/caTissueSuite.js"></script>
 
-<script language="JavaScript">  
-	var errorMessForRole='${requestScope.errorMessageForRole}';	
-	var errorMessForSite='${requestScope.errorMessageForSite}';	
-	var errorMessForUser='${requestScope.errorMessageForUser}';	
-	var errorMessForCP='${requestScope.errorMessageForCP}';	
-	var errorMessForPriv='${requestScope.errorMessageForPrivilege}';	
+<script language="JavaScript">
+	var errorMessForRole='${requestScope.errorMessageForRole}';
+	var errorMessForSite='${requestScope.errorMessageForSite}';
+	var errorMessForUser='${requestScope.errorMessageForUser}';
+	var errorMessForCP='${requestScope.errorMessageForCP}';
+	var errorMessForPriv='${requestScope.errorMessageForPrivilege}';
 </script>
 
 </head>
@@ -57,7 +57,7 @@
 	<html:form action='${requestScope.formName}'>
 		<html:hidden property="operation" styleId="operation" />
 		<html:hidden property="submittedFor" />
-		<html:hidden property="wustlKey" />
+		<html:hidden property="targetLoginName" />
 		<html:hidden property="pageOf" />
 		<html:hidden property="id" />
 		<html:hidden property="csmUserId" />
@@ -66,7 +66,7 @@
 			<html:hidden property="activityStatus" />
 		</logic:equal>
 
-		<logic:notEqual name="wustlKey" value=''>
+		<logic:notEqual name="targetLoginName" value=''>
 			<html:hidden property="lastName"/>
 			<html:hidden property="firstName"/>
 		</logic:notEqual>
@@ -215,7 +215,7 @@
 								<td width="32%" align="left" colspan="3" valign="top">&nbsp;</td>
 							</logic:equal>
 						</tr>
-						<logic:notEqual name="wustlKey" value=''>
+						<logic:notEqual name="targetLoginName" value=''>
 						<tr>
 							<td align="center" class="black_ar"><span class="blue_ar_b"><img
 								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
@@ -242,7 +242,7 @@
 							<td align="left" valign="top">&nbsp;</td>
 						</tr>
 						</logic:notEqual>
-						<logic:equal name="wustlKey" value=''>
+						<logic:equal name="targetLoginName" value=''>
 						<tr>
 							<td align="center" class="black_ar"><span class="blue_ar_b"><img
 								src="images/uIEnhancementImages/star.gif" alt="Mandatory"
@@ -263,7 +263,7 @@
 							<td align="left" valign="top">&nbsp;</td>
 						</tr>
 						</logic:equal>
-						
+
 						<logic:equal name="pageOf" value='${requestScope.pageOfUserAdmin}'>
 							<logic:equal name="operation" value='${requestScope.editforJSP}'>
 								<tr>
@@ -412,15 +412,15 @@
 								</html:link>
 							</logic:notEqual></a></td>
 						</tr>
-						
-						<logic:notEqual name="wustlKey" value=''>
+
+						<logic:notEqual name="targetLoginName" value=''>
 							<tr id="autoDiv">
 									<td align="center" class="black_ar">&nbsp;</td>
 									<td styleId="abc" align="left" class="black_ar"><bean:message
 										key="app.wustlkey" /></td>
 									<td width="22%" align="left" class="black_ar">
 										<label>
-											${requestScope.userForm.wustlKey}
+											${requestScope.userForm.targetLoginName}
 										</label>
 									</td>
 									<td align="left" class="black_ar">&nbsp;</td>
@@ -467,7 +467,7 @@
 									<td width="17%" align="left" class="black_ar"><bean:message
 										key="assignPrivileges.site(s)" /></td>
 									<td rowspan="2" width="19%" align="left" class="black_ar">
-								
+
 									<c:if test='${requestScope.flagForSARole==true}'>
 										<html:select property="siteIds" styleId="siteIds" size="4"
 											styleClass="formFieldSizedNew" multiple="multiple"
@@ -496,8 +496,9 @@
 									<td width="17%" align="left" class="black_ar"><bean:message
 										key="assignPrivileges.collectionProtocol(s)" /></td>
 									<td width="19%" class="black_ar"><input type="checkbox"
-										checked="true" id="cpCheckId"
-										onclick="eventOnChkBoxClick('cpCheckId','cpIds','siteIds','roleIds')"><bean:message
+										checked="checked" id="cpCheckId"
+										onclick="eventOnChkBoxClick('cpCheckId','cpIds','siteIds','roleIds')"
+										onchange="eventOnChkBoxClick('cpCheckId','cpIds','siteIds','roleIds')"/><bean:message
 										key="assignPrivileges.allCurrentAndFuture" /></td>
 									<td width="13%" class="black_ar">&nbsp;</td>
 									<td width="1%" align="center" class="black_ar"><span
@@ -536,7 +537,7 @@
 									<td width="1%" align="center" class="black_ar">&nbsp;</td>
 									<td width="17%" align="left" class="black_ar"></td>
 									<td width="19%" class="black_ar"><select
-										class="formFieldSizedNew" id="cpIds" size="4"
+										class="formFielDisabled" id="cpIds" size="4"
 										multiple="multiple"
 										onchange="getActionsForThisCPs(this.id,'siteIds','roleIds','cpCheckId')"
 										disabled="true">
@@ -588,7 +589,7 @@
 												key="assignPrivileges.site(s)" /></td>
 											<td width="22%" class="black_ar_b" align="left"><bean:message
 												key="assignPrivileges.collectionProtocol(s)" /></td>
-											
+
 											<logic:notEqual name="pageOf"
 												value='${requestScope.pageOfUserProfile}'>
 												<td width="40%" class="black_ar_b" align="left"><bean:message
@@ -633,7 +634,7 @@
 																	<%
 																	} else {
 																	%>
-																
+
 																<tr id="<%=arr[4]%>">
 																	<%
 																	}
@@ -655,7 +656,7 @@
 																	%><span><%=arr[1]%></span></td>
 
 																	<td width="22%" class="black_ar"><span><%=arr[0]%></span></td>
-																	
+
 																	<logic:notEqual name="pageOf"
 																		value='${requestScope.pageOfUserProfile}'>
 
@@ -816,7 +817,7 @@
 												page="/ManageAdministrativeData.do" styleClass="cancellink">
 												<bean:message key="buttons.cancel" />
 											</html:link>
-										</logic:notEqual>  
+										</logic:notEqual>
 										<logic:equal parameter="openInCPFrame" value='yes'>
 											<html:link
 												page="/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol"
@@ -824,7 +825,7 @@
 												<bean:message key="buttons.cancel" />
 											</html:link>
 										</logic:equal>
-									</logic:notEqual> <logic:equal name="pageOf" 
+									</logic:notEqual> <logic:equal name="pageOf"
 										value='${requestScope.pageOfSignUp}'>
 										<a href="#" class="cancellink"><html:link
 											page="/RedirectHome.do" styleClass="cancellink">

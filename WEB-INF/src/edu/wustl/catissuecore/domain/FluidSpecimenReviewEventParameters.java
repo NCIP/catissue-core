@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.FluidSpecimenReviewEventParametersForm;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -125,7 +126,7 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 	@Override
 	public void doRoundOff() {
 		if (cellCount != null) {
-			cellCount = AppUtility.RoundOff(cellCount, 5);
+			cellCount = AppUtility.roundOff(cellCount, Constants.QUANTITY_PRECISION);
 		}
 	}
 }

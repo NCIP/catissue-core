@@ -46,7 +46,10 @@ import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.participant.bizlogic.CommonParticipantBizlogic;
+import edu.wustl.common.participant.client.IParticipantManagerLookupLogic;
+import edu.wustl.common.participant.domain.IParticipant;
 import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
@@ -58,8 +61,10 @@ import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
+import edu.wustl.dao.exception.AuditException;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.security.exception.SMException;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
@@ -111,11 +116,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	private void resisterCPR(final DAO dao, SessionDataBean sessionDataBean, final Participant participant)
 			throws DAOException, BizLogicException
 	{
-		final Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
+		final Collection<CollectionProtocolRegistration> cprCollection = participant
 				.getCollectionProtocolRegistrationCollection();
 
-		if (collectionProtocolRegistrationCollection == null ||
-				collectionProtocolRegistrationCollection.isEmpty())
+		if (cprCollection == null ||
+				cprCollection.isEmpty())
 		{
 			this.insertAuthData(participant);
 		}
@@ -194,6 +199,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException
 	{
 		super.postInsert(obj, dao, sessionDataBean);
+		IParticipantManagerLookupLogic lookUpLogic = (IParticipantManagerLookupLogic) Utility.getObject(XMLPropertyHandler
+				.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
+		IParticipant participant = (Participant)obj;
+		lookUpLogic.updatePartiicpantCache(participant);
+
 	}
 
 	/**
@@ -220,21 +230,21 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		Long cpId;
 		String protPartiId;
 		CollectionProtocolRegistration oldCPRegistration;
-		CollectionProtocolRegistration collectionProtocolRegistration;
+		CollectionProtocolRegistration cpr;
 		while (itrCPRCollection.hasNext())
 		{
-			collectionProtocolRegistration = (CollectionProtocolRegistration) itrCPRCollection
+			cpr = (CollectionProtocolRegistration) itrCPRCollection
 					.next();
-			if (collectionProtocolRegistration.getCollectionProtocol().getId() != null)
+			if (cpr.getCollectionProtocol().getId() != null)
 			{
-				cpId = collectionProtocolRegistration.getCollectionProtocol().getId().longValue();
+				cpId = cpr.getCollectionProtocol().getId().longValue();
 
 				oldCPRegistration = this.getCollectionProtocolRegistrationOld(cpId,
 						oldCPRCollection);
 				if (oldCPRegistration == null)
 				{
-					collectionProtocolRegistration.getParticipant().getId().longValue();
-					protPartiId = collectionProtocolRegistration
+					cpr.getParticipant().getId().longValue();
+					protPartiId = cpr
 							.getProtocolParticipantIdentifier();
 
 					if (protPartiId == null)
@@ -244,12 +254,15 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				}
 				else
 				{
-					cprBizLogic.postUpdate(dao, collectionProtocolRegistration, oldCPRegistration,
+					cprBizLogic.postUpdate(dao, cpr, oldCPRegistration,
 							sessionDataBean);
 				}
 			}
 		}
 		super.postUpdate(dao, currentObj, oldObj, sessionDataBean);
+		IParticipantManagerLookupLogic lookUpLogic = (IParticipantManagerLookupLogic) Utility.getObject(XMLPropertyHandler
+				.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
+		lookUpLogic.updatePartiicpantCache((IParticipant)participant);
 	}
 
 	/**
@@ -407,10 +420,10 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				if (collProtReg.getCollectionProtocol() != null
 						&& !collProtReg.equals(""))
 				{
-					final long collectionProtocolId = collProtReg
+					final long collProtId = collProtReg
 							.getCollectionProtocol().getId().longValue();
 					if (this.isCollectionProtocolExist(newCPRColl,
-							collectionProtocolId))
+							collProtId))
 					{
 						isCPDuplicate = true;
 					}
@@ -426,13 +439,13 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 
 	/**
 	 * @param cprColl : collectionProtocolRegistrationCollection.
-	 * @param collectinProtocolId : collectinProtocolId.
+	 * @param collProtId : collectinProtocolId.
 	 * @return boolean value based on CP.
 	 */
 	private boolean isCollectionProtocolExist(Collection<CollectionProtocolRegistration> cprColl,
-			long collectinProtocolId)
+			long collProtId)
 	{
-		boolean isCollectionProtocolExist = false;
+		boolean isCollProtExist = false;
 		final Iterator<CollectionProtocolRegistration> itrCPR =
 			cprColl.iterator();
 		while (itrCPR.hasNext())
@@ -441,12 +454,12 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					.next();
 			final long cpId = collProtReg.getCollectionProtocol().getId()
 					.longValue();
-			if (cpId == collectinProtocolId)
+			if (cpId == collProtId)
 			{
-				isCollectionProtocolExist = true;
+				isCollProtExist = true;
 			}
 		}
-		return isCollectionProtocolExist;
+		return isCollProtExist;
 	}
 
 	/**
@@ -487,7 +500,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 */
     protected boolean isCollectedSpecimenExists(DAO dao, Long participantId) throws BizLogicException
 	{
-		 boolean isCollectedSpecimenExists = false;
+		 boolean isCollSpecExists = false;
       	final String hql = "select count(s.id) " + "from"
 				+ " edu.wustl.catissuecore.domain.Participant as p"
 				+ ",edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr"
@@ -499,15 +512,15 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				+ Status.ACTIVITY_STATUS_ACTIVE.toString() + "' and s.collectionStatus = '"+Constants.COLLECTION_STATUS_COLLECTED+"'";
 
 		final List specimenList = (List) this.executeHqlQuery(dao, hql);
-		if ((specimenList != null) && specimenList.size() != 0 && !specimenList.get( 0 ).toString().equals( "0" ))
+		if ((specimenList != null) && !specimenList.isEmpty() && !specimenList.get( 0 ).toString().equals( "0" ))
 		{
-			isCollectedSpecimenExists = true;
+			isCollSpecExists = true;
 		}
 		else
 		{
-			isCollectedSpecimenExists = false;
+			isCollSpecExists = false;
 		}
-		return isCollectedSpecimenExists;
+		return isCollSpecExists;
 
 	}
 	/**
@@ -527,11 +540,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		{
 			throw getBizLogicException(null, exp.getMsgValues(), exp.getCustomizedMsg());
 		}
-		final Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection =
+		final Collection<CollectionProtocolRegistration> cprCollection =
 			validateCPR(dao, participant,validator);
-		final boolean isDuplicateCollectionProtocol = this
-				.isDuplicateCollectionProtocol(collectionProtocolRegistrationCollection);
-		if (isDuplicateCollectionProtocol)
+		final boolean isCPDuplicate = this
+				.isDuplicateCollectionProtocol(cprCollection);
+		if (isCPDuplicate)
 		{
 			throw this.getBizLogicException(null,
 					"errors.participant.duplicate.collectionProtocol", "");
@@ -651,25 +664,34 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			if(cprID.getCollectionProtocol().getId() == null
-					&& cprID.getCollectionProtocol().getTitle() != null)
-			{
-				final String collectionProtocolTitle = cprID.
-							getCollectionProtocol().getTitle();
+				final String cpTitle = cprID.
+				getCollectionProtocol().getTitle();
 				final String sourceObjectName = CollectionProtocol.class.getName();
-				final String[] selectColumnName = {"id"};
+				final String[] selectColumnName = {"id","activityStatus"};
 				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-				queryWhereClause.addCondition(new EqualClause("title", collectionProtocolTitle));
+				if(cprID.getCollectionProtocol().getId() != null)
+				{
+					queryWhereClause.addCondition(new EqualClause("id", cprID.getCollectionProtocol().getId()));
+				}
+				else if(cpTitle != null)
+				{
+					queryWhereClause.addCondition(new EqualClause("title", cpTitle));
+				}
 				final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 				if (!list.isEmpty())
 				{
-					cprID.getCollectionProtocol().setId((Long)list.get(0));
+					Object objCP[] = (Object[])list.get(0);
+					cprID.getCollectionProtocol().setId((Long)objCP[0]);
+					cprID.getCollectionProtocol().setActivityStatus((String)objCP[1]);
+					if(Constants.DISABLE.equals(cprID.getCollectionProtocol().getActivityStatus()))
+					{
+						throw this.getBizLogicException(null, "cp.disabled", "");
+					}
 				}
 				else
 				{
 					throw this.getBizLogicException(null, "cp.nt.found", "");
 				}
-			}
 		}
 		catch (DAOException e)
 		{
@@ -702,10 +724,10 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			dao = this.openDAOSession(null);
-			final String participantQueryStr = "from " + Participant.class.getName()
+			final String partQueryStr = "from " + Participant.class.getName()
 					+ " where activityStatus !='" + Status.ACTIVITY_STATUS_DISABLED.toString()
 					+ "'";
-			final List<Participant> listOfParticipants = dao.executeQuery(participantQueryStr);
+			final List<Participant> listOfParticipants = dao.executeQuery(partQueryStr);
 			if (listOfParticipants != null)
 			{
 				final Iterator<Participant> participantIterator = listOfParticipants.iterator();
@@ -872,8 +894,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			final List list = dao.executeQuery(hql);
-			return list;
+			return dao.executeQuery(hql);
 		}
 		catch (final DAOException daoExp)
 		{
@@ -982,7 +1003,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 * (non-Javadoc)
 	 * @see edu.wustl.common.bizlogic.DefaultBizLogic#getObjectId(edu.wustl.common.dao.DAO, java.lang.Object)
 	 */
-	public String getObjectId(DAO dao, Object domainObject)
+	public String getObjectId(DAO dao, Object domainObject) throws BizLogicException
 	{
 		final String objectId = Constants.ADD_GLOBAL_PARTICIPANT;
 
@@ -1012,6 +1033,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 							{
 								return objectId;
 							}
+							checkForCollectionProtocolIdentifier(dao, cpr);
 							stringBuffer.append("_").append(cpr.getCollectionProtocol().getId());
 							isNewCPRPresent = true;
 						}
@@ -1055,11 +1077,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 
 			final String privilegeName = this.getPrivilegeName(domainObject);
-			final String protectionElementName = this.getObjectId(dao, domainObject);
+			final String protEltName = this.getObjectId(dao, domainObject);
 			final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
 					sessionDataBean.getUserName());
 
-			if (protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
+			if (protEltName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
 			{
 				User user = null;
 				try
@@ -1099,7 +1121,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
-				final String[] prArray = protectionElementName.split("_");
+				final String[] prArray = protEltName.split("_");
 				final String baseObjectId = prArray[0];
 				String objId = "";
 				for (int i = 1; i < prArray.length; i++)
@@ -1121,11 +1143,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			else
 			// Check for ALL CURRENT & FUTURE CASE
 			{
-				if (!protectionElementName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
+				if (!protEltName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
 				{
-					final String protectionElementNames[] = protectionElementName.split("_");
+					final String protEltNames[] = protEltName.split("_");
 
-					final Long cpId = Long.valueOf(protectionElementNames[1]);
+					final Long cpId = Long.valueOf(protEltNames[1]);
 					final Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean
 							.getUserId(), false);
 
@@ -1133,17 +1155,17 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					{
 						//bug 11611 and 11659
 						throw AppUtility.getUserNotAuthorizedException(privilegeName,
-								protectionElementName, domainObject.getClass().getSimpleName());
+								protEltName, domainObject.getClass().getSimpleName());
 					}
 					isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(privilegeName,
-							sessionDataBean, protectionElementNames[1]);
+							sessionDataBean, protEltNames[1]);
 				}
 			}
 			if (!isAuthorized)
 			{
 				//bug 11611 and 11659
 				throw AppUtility.getUserNotAuthorizedException(privilegeName,
-						protectionElementName, domainObject.getClass().getSimpleName());
+						protEltName, domainObject.getClass().getSimpleName());
 			}
 		}
 		catch (final SMException e1)
@@ -1226,11 +1248,11 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 		{
 			super.refreshTitliSearchIndexSingle(operation, obj);
 			final Participant participant = (Participant) obj;
-			final Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = participant
+			final Collection<CollectionProtocolRegistration> cprCollection = participant
 					.getCollectionProtocolRegistrationCollection();
-			if (collectionProtocolRegistrationCollection != null)
+			if (cprCollection != null)
 			{
-				final Iterator<CollectionProtocolRegistration> itcprCollection = collectionProtocolRegistrationCollection
+				final Iterator<CollectionProtocolRegistration> itcprCollection = cprCollection
 						.iterator();
 
 				while (itcprCollection.hasNext())

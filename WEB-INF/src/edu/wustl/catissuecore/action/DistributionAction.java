@@ -408,7 +408,6 @@ public class DistributionAction extends SecureAction
 		catch (final Exception e)
 		{
 			this.logger.error(e.getMessage(), e);
-			e.printStackTrace();
 		}
 		final CollectionProtocolRegistration cprObject = collectionProtocolRegistration;// (
 		final String witnessName = ConsentUtil.getWitnessName(bizLogic, initialWitnessValue,

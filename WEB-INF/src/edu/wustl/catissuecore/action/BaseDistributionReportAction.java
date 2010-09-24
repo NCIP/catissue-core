@@ -68,9 +68,9 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	{
 		String[] columnNames = new String[selectedColumnsList.length];
 		//bug 13605
-		int i=0;
-		columnNames[i] = selectedColumnsList[i];	
-		i++;
+		int counter=0;
+		columnNames[counter] = selectedColumnsList[counter];	
+		counter++;
 		columnNames = AppUtility.getColNames(selectedColumnsList, columnNames, 1);
 		return columnNames;
 	}
@@ -335,7 +335,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	 */
 	protected void setSelectedMenuRequestAttribute(HttpServletRequest request)
 	{
-		request.setAttribute(Constants.MENU_SELECTED, new String("16"));
+		request.setAttribute(Constants.MENU_SELECTED, "16");
 	}
 
 	/**

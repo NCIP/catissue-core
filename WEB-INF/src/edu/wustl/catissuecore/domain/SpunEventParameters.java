@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.SpunEventParametersForm;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -150,7 +151,7 @@ public class SpunEventParameters extends SpecimenEventParameters implements java
 	@Override
 	public void doRoundOff() {
 		if (gravityForce != null) {
-			gravityForce = AppUtility.RoundOff(gravityForce, 5);
+			gravityForce = AppUtility.roundOff(gravityForce, Constants.QUANTITY_PRECISION);
 		}
 	}
 }

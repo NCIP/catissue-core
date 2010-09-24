@@ -213,6 +213,7 @@ public class AddAssociations
 						+ ")";
 				consKeyId1 = nextIddeconskeypro;
 				nextIddeconskeypro = nextIddeconskeypro + 1;
+				consKeyId2 = nextIddeconskeypro;
 			}
 			sqldeconskeyprop = "insert into DYEXTN_CONSTRAINTKEY_PROP(IDENTIFIER,"
 					+ "PRIMARY_ATTRIBUTE_ID,TGT_CONSTRAINT_KEY_ID) values ("

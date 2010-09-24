@@ -215,7 +215,7 @@ public class CaCoreAppServiceDelegatorTestCase extends CaTissueSuiteBaseTest
 				participantMedicalIdentifierCollection.add(pmi);
 				p.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
 				List list = new CaCoreAppServicesDelegator().
-				delegateGetParticipantMatchingObects(p,null,CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName());
+				delegateGetParticipantMatchingObects(CaTissueSuiteTestUtil.USER_SESSION_DATA_BEAN.getUserName(),p,null);
 				System.out.println("Matching participant list size:"+list.size());
 			 }
 			 catch(Exception e)

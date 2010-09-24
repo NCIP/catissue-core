@@ -10,6 +10,7 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <head>
 <SCRIPT LANGUAGE="JavaScript">
 	var search1='`';
@@ -20,29 +21,17 @@
 <script src="jss/calendarComponent.js" language="JavaScript" type="text/javascript"></script>
 
 
-<script>var imgsrc="catissuecore/images/de/";</script>
-<script language="JavaScript" type="text/javascript"
-	src="javascripts/de/prototype.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="javascripts/de/scr.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="javascripts/de/combobox.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="javascripts/de/ext-base.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="javascripts/de/ext-all.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="javascripts/de/combos.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="javascripts/de/ajax.js"></script>
+<script>var imgsrc="images/de/";</script>
+<script language="JavaScript" type="text/javascript" src="javascripts/de/prototype.js"></script>
+<script language="JavaScript" type="text/javascript" src="javascripts/de/scr.js"></script>
+<script language="JavaScript" type="text/javascript" src="javascripts/de/combobox.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/ext-all.js"></script>
+<script language="JavaScript" type="text/javascript" src="javascripts/de/ajax.js"></script>
 <script language="JavaScript" type="text/javascript" src="/jss/multiselectUsingCombo.js"></script>
-
 <LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
-
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
-
-
 
 <%
 	String selectText = "--Select--";
@@ -175,7 +164,7 @@ function updateCPTree()
                       <tr>
                         <td align="center" class="black_ar">&nbsp;</td>
                         <td align="left" class="black_ar"><label for="consentWaived"><bean:message key="consent.consentwaived" /></label></td>
-                        <td align="left" class="black_ar"><label for="consentWaived"><bean:message key="consent.consentwaivedyes" /></label><html:radio property="consentWaived" styleId="consentWaived" value="true"/>&nbsp;&nbsp;<label for="consentWaived"><bean:message key="consent.consentwaivedno" /></label><html:radio property="consentWaived" styleId="consentWaived" value="false"/></label></td>
+                        <td align="left" class="black_ar"><html:radio property="consentWaived" styleId="consentWaived" value="true"/>&nbsp;<label for="consentWaived"><bean:message key="consent.consentwaivedyes" /></label>&nbsp;&nbsp;<html:radio property="consentWaived" styleId="consentWaived" value="false"/><label for="consentWaived">&nbsp;<bean:message key="consent.consentwaivedno" /></label></td>
                       </tr>
                       <tr>
                         <td align="center" class="black_ar">&nbsp;</td>
@@ -228,12 +217,17 @@ function updateCPTree()
 
 						</tr>
 <!------------------------------------------------------------------------>
+
+<%
+	if(Variables.isTemplateBasedLblGeneratorAvl)
+	{
+%>
 						<tr>
 							<td align="center" class="black_ar">&nbsp;</td>
 							<td align="left" class="black_ar">Parent Specimen Label Format</td>
 							<td>
 
-						<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="specimenLabelFormat" property="specimenLabelFormat" />
+						<html:text styleClass="black_ar" maxlength="255"  size="108" styleId="specimenLabelFormat" property="specimenLabelFormat" />
 
 							</td>
 						</tr>
@@ -242,7 +236,7 @@ function updateCPTree()
 							<td align="left" class="black_ar">Derivative Specimen Label Format</td>
 							<td>
 
-						<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="derivativeLabelFormat" property="derivativeLabelFormat" />
+						<html:text styleClass="black_ar" maxlength="255"  size="108" styleId="derivativeLabelFormat" property="derivativeLabelFormat" />
 
 							</td>
 						</tr>
@@ -251,17 +245,18 @@ function updateCPTree()
 							<td align="left" class="black_ar">Aliquot Specimen Label Format</td>
 							<td>
 
-						<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="aliquotLabelFormat" property="aliquotLabelFormat" />
+						<html:text styleClass="black_ar" maxlength="255"  size="108" styleId="aliquotLabelFormat" property="aliquotLabelFormat" />
 
 							</td>
 						</tr>
-
+<%}%>
 							<tr height="8">
 						<td colspan="3"/>
 					  </tr>
 						<tr>
 							<td align="center" class="black_ar">&nbsp;</td>
-							<td align="left" class="black_ar" colspan="2"><label>Store all aliquot(s) in same container?</label>&nbsp;&nbsp;&nbsp;&nbsp;
+							<td align="left" class="black_ar"><label>Store all aliquot(s) in same container?</label>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td align="left" class="black_ar">
 							<html:radio property="aliqoutInSameContainer" styleId="aliqoutInSameContainer" value="true"/>&nbsp;<bean:message key="consent.consentwaivedyes" />&nbsp;&nbsp;<html:radio property="aliqoutInSameContainer" styleId="aliqoutInSameContainer" value="false"/>&nbsp;<label for="consentWaived"><bean:message key="consent.consentwaivedno" /></label>
 							</td>
 
@@ -280,4 +275,11 @@ function updateCPTree()
               </tr>
             </table>
 			</html:form>
+
+<script>
+if(document.getElementById("errorRow")!=null && document.getElementById("errorRow").innerHTML.trim()!="")
+{
+	  window.top.document.getElementById("errorRow").innerHTML = "";
+}
+</script>
 

@@ -31,7 +31,7 @@
         </id>
 
         <property
-            name="clinicalDiagnosis"
+            name="name"
             type="string"
             update="true"
             insert="true"

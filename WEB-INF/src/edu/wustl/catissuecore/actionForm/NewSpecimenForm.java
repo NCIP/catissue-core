@@ -743,7 +743,9 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 				}
 				//Validation for aliquot quantity, resolved bug# 4040 (Virender)
 				if (this.checkedButton)
-				{
+				{	
+					this.noOfAliquots = AppUtility.isValidCount(this.noOfAliquots, errors);
+					
 					if (!validator.isNumeric(this.noOfAliquots, 1))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(ERROR_ITEM_FORMAT,

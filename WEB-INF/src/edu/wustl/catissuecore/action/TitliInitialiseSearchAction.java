@@ -14,7 +14,7 @@ import org.apache.struts.action.ActionMapping;
 import titli.model.Titli;
 import titli.model.TitliException;
 import titli.model.util.TitliTableMapper;
-import edu.wustl.common.action.XSSSupportedAction;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
@@ -24,7 +24,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author Juber Patel
  *
  */
-public class TitliInitialiseSearchAction extends XSSSupportedAction
+public class TitliInitialiseSearchAction extends SecureAction
 {
 
 	/**
@@ -45,8 +45,7 @@ public class TitliInitialiseSearchAction extends XSSSupportedAction
 	 * @return action forward
 	 *
 	 */
-	@Override
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		try

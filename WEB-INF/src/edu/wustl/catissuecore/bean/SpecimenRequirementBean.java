@@ -1086,4 +1086,14 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		this.labelFormat = labelFormat;
 	}
 
+	public Specimen getParentSpecimen() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setParentSpecimen(Specimen parentSpecimen) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

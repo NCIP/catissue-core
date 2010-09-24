@@ -181,7 +181,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 
 	    	Collection<ClinicalDiagnosis> clinicalDiagnosisCollection = new LinkedHashSet<ClinicalDiagnosis>();
 	    	ClinicalDiagnosis clinicalDiagnosisObj = new ClinicalDiagnosis();
-			clinicalDiagnosisObj.setClinicalDiagnosis("Abdominal fibromatosis (disorder)");
+			clinicalDiagnosisObj.setName("Abdominal fibromatosis (disorder)");
 			clinicalDiagnosisObj.setCollectionProtocol(collectionProtocol);
 			clinicalDiagnosisCollection.add(clinicalDiagnosisObj);
 	    	collectionProtocol.setClinicalDiagnosisCollection(clinicalDiagnosisCollection);
@@ -191,7 +191,7 @@ public class CollectionProtocolBizTestCases extends CaTissueSuiteBaseTest
 	    	Iterator itr = clinicalDiagnosisCollection.iterator();
 	    	if(itr.hasNext())
 	    	{
-	    		System.out.println("-testUpdateCollectionProtocolWithclinicalDiagnosisCollection-"+((ClinicalDiagnosis)itr.next()).getClinicalDiagnosis());
+	    		System.out.println("-testUpdateCollectionProtocolWithclinicalDiagnosisCollection-"+((ClinicalDiagnosis)itr.next()).getName());
 	    		//System.out.println("after");
 		    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
 		    	assertTrue("testUpdateCollectionProtocolWithclinicalDiagnosisCollection successfully added !!", true);

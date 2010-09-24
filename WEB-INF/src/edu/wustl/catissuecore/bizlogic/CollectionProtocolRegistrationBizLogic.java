@@ -1127,6 +1127,11 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			this.updateConsentResponseForSCG(collectionProtocolRegistration,oldCollectionProtocolRegistration, dao);
 			persistentCPR.setConsentTierResponseCollection(collectionProtocolRegistration
 					.getConsentTierResponseCollection());
+
+			setConsetResponseCollection(dao, collectionProtocolRegistration,
+					persistentCPR);
+
+
 			persistentCPR.setConsentWitness(collectionProtocolRegistration.getConsentWitness());
 			persistentCPR.setConsentSignatureDate(collectionProtocolRegistration
 					.getConsentSignatureDate());
@@ -1213,6 +1218,40 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			this.LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
+	}
+
+	private void setConsetResponseCollection(
+			DAO dao,
+			final CollectionProtocolRegistration collectionProtocolRegistration,
+			CollectionProtocolRegistration persistentCPR)
+			throws BizLogicException {
+		try
+		{
+			Collection<ConsentTierResponse> consentTierResponseColl=collectionProtocolRegistration
+			.getConsentTierResponseCollection();
+			if(consentTierResponseColl!=null &&consentTierResponseColl.iterator().hasNext()){
+				/*
+				 *  To check that the collection is lazily initialized
+				 *  iterating the collection is required.
+				 */
+				consentTierResponseColl.iterator().next();
+			}
+
+			persistentCPR.setConsentTierResponseCollection(collectionProtocolRegistration
+						.getConsentTierResponseCollection());
+
+		}
+		catch (org.hibernate.LazyInitializationException e) {
+			/*
+			 * for #15570
+			 *
+			 */
+			final Collection consentTierResponseCollection = (Collection) this.retrieveAttribute(
+					dao, CollectionProtocolRegistration.class, collectionProtocolRegistration.getId(),
+					"elements(consentTierResponseCollection)");
+			persistentCPR.setConsentTierResponseCollection(consentTierResponseCollection);
+
 		}
 	}
 
@@ -1925,7 +1964,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					final CollectionProtocol protocol = (CollectionProtocol) iteratorofchildCP.next();
 					if (protocol != null && protocol.getSequenceNumber() != null)
 					{
-						if (protocol.getSequenceNumber().intValue() > sequenceNumber.intValue())
+						if (sequenceNumber != null && protocol.getSequenceNumber().intValue() > sequenceNumber.intValue())
 						{
 							CollectionProtocolRegistration cpr;
 

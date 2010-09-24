@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -144,6 +145,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 			}
 		}
 
+		this.aliquotCount = AppUtility.isValidCount(this.aliquotCount, errors);
 		if (!validator.isNumeric(this.aliquotCount))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",

@@ -387,7 +387,6 @@ public class CreateArrayInitAction extends BaseAction
 		catch (final DAOException excep)
 		{
 			this.logger.error(excep.getMessage(),excep);
-			excep.printStackTrace();
 			throw new BizLogicException(excep);
 		}
 		return specimenTypeList;

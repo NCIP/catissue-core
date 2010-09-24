@@ -4,7 +4,7 @@
 
 <project name="caTissueSuite Client" default="compile_junit_TestCases" >
 	<property file="../caTissueInstall.properties"/>
-	<!--define require dir and Properties -->	
+	<!--define require dir and Properties -->
 	<property name="base.dir" value="."/>
 	<property name="target.dir" value="./classes" />
 	<property name="conf.dir" value="conf" />
@@ -16,21 +16,21 @@
 	<property name="report.dir" value="." />
 	<property name="project.src" value="../WEB-INF/classes/"/>
 	<property name="project.src.domain" value="../WEB-INF/src/edu/wustl/catissuecore/domain/"/>
-	
+
 	<path id="cp">
 		<fileset dir="lib">
 			<include name="**/*.jar"/>
 		</fileset>
 		<pathelement path="${conf.dir}"/>
 	</path>
-    
-	
+
+
 	<path id="app.classpath">
 		<fileset dir="${base.dir}">
 			<include name="*.jar"/>
 		</fileset>
 	</path>
-	<!-- Target ,compile and runDemo are disabled as it no longer supported .Only Junit test cases are available.-->	
+	<!-- Target ,compile and runDemo are disabled as it no longer supported .Only Junit test cases are available.-->
     <!-- Compile all files, generated and hand-written -->
     <!--<target name="compile">
         <javac destdir="${base.dir}" includes="**/*.*" includeAntRuntime="false">
@@ -42,9 +42,9 @@
             </classpath>
         </javac>
     </target>
-	-->	
+	-->
 	<!-- run TestClient java file -->
-	<!--<target name="runDemo" depends="compile">		
+	<!--<target name="runDemo" depends="compile">
 		<java classname="ClientDemo" fork="true">
 			<classpath refid="cp"/>
 			<classpath>
@@ -54,8 +54,8 @@
 						value="${conf.dir}/client_log4j.properties"/>
 		</java>
 	</target>-->
-	
-	
+
+
 	<!-- =================================================================== -->
 	<!-- Junit TestCases for Nightly Build  -->
 	<!-- =================================================================== -->
@@ -82,14 +82,14 @@
 		<mkdir dir="${report.dir}/Nightly_Build_Report" />
 		<mkdir dir="${report.dir}/Nightly_Build_Report/Html_reports" />
 
-		<junit printsummary="yes" fork="yes" haltonfailure="no">
+		<junit printsummary="yes" fork="yes" haltonfailure="no" maxmemory="1024m">
 			<formatter type="xml" />
 			<sysproperty key="net.sourceforge.cobertura.datafile"
 				file="${jboss.home.dir}/bin/cobertura.ser" />
-			<classpath>				
+			<classpath>
 				<pathelement path="${base.dir}/conf" />
 				<fileset dir="./lib">
-					<exclude name="./lib/catissuecore.jar" />	
+					<exclude name="./lib/catissuecore.jar" />
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
@@ -99,18 +99,18 @@
 				<pathelement path="${test.src.dir}" />
 				<pathelement path= "${test.classes.dir}" />
 			</classpath>
-			
-		
+
+
 			<batchtest todir="${report.dir}/Nightly_Build_Report">
 				<fileset dir="${test.src.dir}">
 					<include name="**/CaTissueTestSuite.java" />
-				</fileset>				
+				</fileset>
 			</batchtest>
 		</junit>
 	</target>
-	
+
   <target name="runNightlyBuild" depends="runJunitTestCases">
-		
+
 		<junitreport todir="${report.dir}/Nightly_Build_Report">
 			<fileset dir="${report.dir}/Nightly_Build_Report">
 				<include name="TEST-*.xml" />

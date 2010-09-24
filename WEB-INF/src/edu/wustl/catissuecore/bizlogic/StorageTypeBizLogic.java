@@ -13,13 +13,13 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
@@ -27,7 +27,8 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.exception.AuditException;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 
 /**
@@ -75,9 +76,7 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			StorageTypeBizLogic.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 		
 	}
@@ -115,9 +114,7 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 		catch (final DAOException daoExp)
 		{
 			StorageTypeBizLogic.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	
 	}
@@ -154,8 +151,8 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
-			final String s = new String("- _");
-			final String delimitedString = validator.delimiterExcludingGiven(s);
+			final String delimiter = new String("- _");
+			final String delimitedString = validator.delimiterExcludingGiven(delimiter);
 			if (validator.containsSpecialCharacters(storageType.getName(), delimitedString))
 			{
 
@@ -176,7 +173,6 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 					.getOneDimensionCapacity())))
 			{
 				message = ApplicationProperties.getValue("storageType.oneDimensionCapacity");
-
 				throw this.getBizLogicException(null, "errors.item.format", message);
 
 			}
@@ -186,13 +182,11 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 		{
 			message = ApplicationProperties.getValue("storageType.oneDimensionLabel");
 			throw this.getBizLogicException(null, "errors.item.required", message);
-
 		}
 		if (Validator.isEmpty(String.valueOf(storageType.getCapacity().getTwoDimensionCapacity())))
 		{
 			message = ApplicationProperties.getValue("storageType.twoDimensionCapacity");
 			throw this.getBizLogicException(null, "errors.item.required", message);
-
 		}
 		else
 		{
@@ -200,9 +194,7 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 					.getTwoDimensionCapacity())))
 			{
 				message = ApplicationProperties.getValue("storageType.twoDimensionCapacity");
-
 				throw this.getBizLogicException(null, "errors.item.format", message);
-
 			}
 		}
 
@@ -262,13 +254,13 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 			{
 				holdsSpecimenClasses = new String[specimenClassTypeCollection.size()];
 
-				final Iterator it = specimenClassTypeCollection.iterator();
-				int i = 0;
-				while (it.hasNext())
+				final Iterator iterator = specimenClassTypeCollection.iterator();
+				int index = 0;
+				while (iterator.hasNext())
 				{
-					final String specimenClassType = (String) it.next();
-					holdsSpecimenClasses[i] = specimenClassType;
-					i++;
+					final String specimenClassType = (String) iterator.next();
+					holdsSpecimenClasses[index] = specimenClassType;
+					index++;
 				}
 			}
 		}
@@ -297,13 +289,13 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 			{
 				holdsSpType = new String[spTypeColl.size()];
 
-				final Iterator<String> it = spTypeColl.iterator();
-				int i = 0;
-				while (it.hasNext())
+				final Iterator<String> iterator = spTypeColl.iterator();
+				int index = 0;
+				while (iterator.hasNext())
 				{
-					final String spType = (String) it.next();
-					holdsSpType[i] = spType;
-					i++;
+					final String spType = (String) iterator.next();
+					holdsSpType[index] = spType;
+					index++;
 				}
 			}
 		}
@@ -352,21 +344,42 @@ public class StorageTypeBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			final Object storageTypeObj = dao.retrieveById(StorageType.class.getName(), container
-					.getStorageType().getId());
-			if (storageTypeObj != null)
+			final StorageType storageType = container.getStorageType();
+			if (storageType != null)
 			{
-				final StorageType type = (StorageType) storageTypeObj;
-				container.setStorageType(type);
-			}
+				final String[] selectColumnName ={};
+				final String sourceObjectName = StorageType.class.getName();
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				String errMsg = Constants.DOUBLE_QUOTES;
+				if(container.getStorageType().getName() != null && container.getStorageType().getName() != "")
+				{
+					errMsg = "Storage Type Name";
+					queryWhereClause.addCondition(new EqualClause("name", storageType.getName()));
+				}
+				else
+				{
+					errMsg = "Storage Type Identifier";
+					queryWhereClause.addCondition(new EqualClause("id", storageType.getId()));
+				}
+				final List list = dao.retrieve(sourceObjectName, selectColumnName,	queryWhereClause);
 
+				if (!list.isEmpty())
+				{
+					final StorageType type = (StorageType) list.get(0);
+					container.setStorageType(type);
+				}
+				else
+				{
+					this.logger.debug("Storage Type :"+storageType.getId()+ " or Storage Type name : "
+							  +storageType.getName()+" is invalid");
+					throw this.getBizLogicException(null,"errors.item.format",errMsg);
+				}
+			}
 		}
 		catch (final DAOException daoExp)
 		{
 			this.logger.error(daoExp.getMessage(), daoExp);
-			daoExp.printStackTrace();
-			throw this
-					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
 	/**

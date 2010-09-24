@@ -96,9 +96,9 @@ public class CreateSpecimenAction extends SecureAction
 	{
 		final CreateSpecimenForm createForm = (CreateSpecimenForm) form;
 
-		final List<NameValueBean> storagePositionList = AppUtility.getStoragePositionTypeList();
+		final List<NameValueBean> strgPosList = AppUtility.getStoragePositionTypeList();
 
-		request.setAttribute("storageList", storagePositionList);
+		request.setAttribute("storageList", strgPosList);
 		// List of keys used in map of ActionForm
 		final List key = new ArrayList();
 		key.add("ExternalIdentifier:i_name");
@@ -107,7 +107,7 @@ public class CreateSpecimenAction extends SecureAction
 		// boolean to indicate whether the suitable containers to be shown in
 		// dropdown
 		// is exceeding the max limit.
-		final String exceedingMaxLimit = "false";
+		String exceedingMaxLimit = "false";
 
 		// Gets the map from ActionForm
 		final Map map = createForm.getExternalIdentifier();
@@ -172,7 +172,7 @@ public class CreateSpecimenAction extends SecureAction
 				// validation should not happen.
 				if (request.getParameter("button") == null)
 				{
-					String parentSpecimenLabel = null;
+					String parentSpecLbl = null;
 					Long parentSpecimenID = null;
 					// Bug-2784: If coming from NewSpecimen page, then only set
 					// parent specimen label.
@@ -182,10 +182,10 @@ public class CreateSpecimenAction extends SecureAction
 							&& forwardToHashMap.get(Constants.SPECIMEN_LABEL) != null)
 					{
 						parentSpecimenID = (Long) forwardToHashMap.get("parentSpecimenId");
-						parentSpecimenLabel = forwardToHashMap.get(Constants.SPECIMEN_LABEL)
+						parentSpecLbl = forwardToHashMap.get(Constants.SPECIMEN_LABEL)
 								.toString();
 						request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimenID);
-						createForm.setParentSpecimenLabel(parentSpecimenLabel);
+						createForm.setParentSpecimenLabel(parentSpecLbl);
 						String hql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.specimenLabelFormat, " +
 						"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.derivativeLabelFormat, " +
 						"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.aliquotLabelFormat " +
@@ -194,7 +194,7 @@ public class CreateSpecimenAction extends SecureAction
 						List formatList = AppUtility.executeQuery(hql);
 						String parentLabelFormat = null;
 						String deriveLabelFormat = null;
-						String aliquotLabelFormat = null;
+						String alqLabelFrmt = null;
 						if(!formatList.isEmpty())
 						{
 							Object[] obje = (Object[])formatList.get(0);
@@ -208,10 +208,10 @@ public class CreateSpecimenAction extends SecureAction
 							}
 							if(obje[2] != null)
 							{
-								aliquotLabelFormat = obje[2].toString();
+								alqLabelFrmt = obje[2].toString();
 							}
 						}
-						createForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliquotLabelFormat, Constants.DERIVED_SPECIMEN));
+						createForm.setGenerateLabel(Variables.isSpecimenLabelGeneratorAvl);
 
 						createForm.setLabel("");
 					}
@@ -227,7 +227,7 @@ public class CreateSpecimenAction extends SecureAction
 						// int totalNoOfSpecimen =
 						// bizLogic.totalNoOfSpecimen(sessionData)+1;
 						final HashMap inputMap = new HashMap();
-						inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, parentSpecimenLabel);
+						inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, parentSpecLbl);
 						inputMap.put(Constants.PARENT_SPECIMEN_ID_KEY, String
 								.valueOf(parentSpecimenID));
 
@@ -370,14 +370,14 @@ public class CreateSpecimenAction extends SecureAction
 			{
 				containerMap = new TreeMap();
 				final Integer identifier = Integer.valueOf(createForm.getStorageContainer());
-				String parentContainerName = "";
+				String parentCntName = "";
 
 				final Object object = dao.retrieveById(StorageContainer.class.getName(), Long.valueOf(
 						createForm.getStorageContainer()));
 				if (object != null)
 				{
 					final StorageContainer container = (StorageContainer) object;
-					parentContainerName = container.getName();
+					parentCntName = container.getName();
 
 				}
 				final Integer pos1 = Integer.valueOf(createForm.getPositionDimensionOne());
@@ -388,7 +388,7 @@ public class CreateSpecimenAction extends SecureAction
 
 				final Map pos1Map = new TreeMap();
 				pos1Map.put(new NameValueBean(pos1, pos1), pos2List);
-				containerMap.put(new NameValueBean(parentContainerName, identifier), pos1Map);
+				containerMap.put(new NameValueBean(parentCntName, identifier), pos1Map);
 
 				final String[] startingPoints = new String[]{"-1", "-1", "-1"};
 				if (createForm.getStorageContainer() != null
@@ -498,8 +498,8 @@ public class CreateSpecimenAction extends SecureAction
 		final List columnList = new ArrayList();
 		columnList.addAll(Arrays.asList(Constants.DERIVED_SPECIMEN_COLUMNS));
 		AppUtility.setGridData(dataList, columnList, request);
-		final int identifierFieldIndex = 4;
-		request.setAttribute("identifierFieldIndex", identifierFieldIndex);
+		int idFieldIndex = 4;
+		request.setAttribute("identifierFieldIndex", idFieldIndex);
 		return mapping.findForward(Constants.SUCCESS);
 	}
 

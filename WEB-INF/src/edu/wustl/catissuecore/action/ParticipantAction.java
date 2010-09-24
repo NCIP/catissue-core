@@ -118,8 +118,8 @@ public class ParticipantAction extends SecureAction
 
 		if (participantForm.getOperation().equals(Constants.ADD))
 		{
-			final String clearConsentSession = request.getParameter("clearConsentSession");
-			if (clearConsentSession != null && clearConsentSession.equals("true"))
+			final String clrConsentSess = request.getParameter("clearConsentSession");
+			if (clrConsentSess != null && clrConsentSess.equals("true"))
 			{
 					session.removeAttribute(Constants.CONSENT_RESPONSE);
 			}
@@ -139,10 +139,10 @@ public class ParticipantAction extends SecureAction
 			request.setAttribute("participantId", String.valueOf(participantForm.getId()));
 			// Setting Consent Response Bean to Session
 			// Abhishek Mehta
-			final Map consentResponseHashTable = participantForm.getConsentResponseHashTable();
-			if (consentResponseHashTable != null)
+			final Map consentResponseHT = participantForm.getConsentResponseHashTable();
+			if (consentResponseHT != null)
 			{
-				session.setAttribute(Constants.CONSENT_RESPONSE, consentResponseHashTable);
+				session.setAttribute(Constants.CONSENT_RESPONSE, consentResponseHT);
 			}
 		}
 		/*
@@ -172,23 +172,23 @@ public class ParticipantAction extends SecureAction
 
 		// Start Collection Protocol Registration For Participant
 		// Abhishek Mehta
-		final List collectionProtocolRegistrationKey = new ArrayList();
+		final List cprKey = new ArrayList();
 
-		collectionProtocolRegistrationKey
+		cprKey
 				.add("CollectionProtocolRegistration:outer_CollectionProtocol_id");
-		collectionProtocolRegistrationKey
+		cprKey
 				.add("CollectionProtocolRegistration:outer_CollectionProtocol_shortTitle");
-		collectionProtocolRegistrationKey
+		cprKey
 				.add("CollectionProtocolRegistration:outer_protocolParticipantIdentifier");
-		collectionProtocolRegistrationKey.add("CollectionProtocolRegistration:outer_id");
-		collectionProtocolRegistrationKey
+		cprKey.add("CollectionProtocolRegistration:outer_id");
+		cprKey
 				.add("CollectionProtocolRegistration:outer_registrationDate");
-		collectionProtocolRegistrationKey
+		cprKey
 				.add("CollectionProtocolRegistration:outer_isConsentAvailable");
-		collectionProtocolRegistrationKey
+		cprKey
 				.add("CollectionProtocolRegistration:outer_activityStatus");
 
-		final Map mapCollectionProtocolRegistration = participantForm
+		final Map mapCPR = participantForm
 				.getCollectionProtocolRegistrationValues();
 
 		final String fromSubmitAction = request.getParameter("fromSubmitAction");
@@ -196,19 +196,19 @@ public class ParticipantAction extends SecureAction
 		{
 
 
-			if (mapCollectionProtocolRegistration != null
-					&& !mapCollectionProtocolRegistration.isEmpty())
+			if (mapCPR != null
+					&& !mapCPR.isEmpty())
 			{
 				final int count = participantForm.getCollectionProtocolRegistrationValueCounter();
 				for (int i = 1; i <= count; i++)
 				{
-					final String collectionProtocolRegistrationActivityStausKey = "CollectionProtocolRegistration:"
+					final String cprActStatusKey = "CollectionProtocolRegistration:"
 							+ i + "_activityStatus";
-					if (mapCollectionProtocolRegistration
-							.get(collectionProtocolRegistrationActivityStausKey) == null)
+					if (mapCPR
+							.get(cprActStatusKey) == null)
 					{
 						participantForm.setCollectionProtocolRegistrationValue(
-								collectionProtocolRegistrationActivityStausKey,
+								cprActStatusKey,
 								Status.ACTIVITY_STATUS_ACTIVE.toString());
 					}
 				}
@@ -230,12 +230,12 @@ public class ParticipantAction extends SecureAction
 			this.updateCollectionProtocolRegistrationCollection(bizlogic, participantForm,
 					count);
 			final int cprCount = this.updateCollectionProtocolRegistrationMap(
-					mapCollectionProtocolRegistration, count);
+					mapCPR, count);
 			participantForm.setCollectionProtocolRegistrationValueCounter(cprCount);
 		}
 
-		MapDataParser.deleteRow(collectionProtocolRegistrationKey,
-				mapCollectionProtocolRegistration, "true");
+		MapDataParser.deleteRow(cprKey,
+				mapCPR, "true");
 
 		// Sets the collection Protocol if page is opened from collection
 		// protocol registration
@@ -244,39 +244,39 @@ public class ParticipantAction extends SecureAction
 			final String pageOf = request.getParameter(Constants.PAGE_OF);
 			if (pageOf.equalsIgnoreCase(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 			{
-				final String collectionProtocolId = request.getParameter(Constants.CP_SEARCH_CP_ID);
-				if (collectionProtocolId != null)
+				final String collProtId = request.getParameter(Constants.CP_SEARCH_CP_ID);
+				if (collProtId != null)
 				{
-					 String collectionProtocolIdKey = "CollectionProtocolRegistration:1_CollectionProtocol_id";
-					 String isConsentAvailableKey = "CollectionProtocolRegistration:1_isConsentAvailable";
-					 String collectionProtocolRegistrationActivityStausKey = "CollectionProtocolRegistration:1_activityStatus";
-					 String collectionProtocolRegistrationDateKey = "CollectionProtocolRegistration:1_registrationDate";
+					 String cpIdKey = "CollectionProtocolRegistration:1_CollectionProtocol_id";
+					 String isConsentAvailKey = "CollectionProtocolRegistration:1_isConsentAvailable";
+					 String cprActivityStausKey = "CollectionProtocolRegistration:1_activityStatus";
+					 String cprDateKey = "CollectionProtocolRegistration:1_registrationDate";
 
-					participantForm.setCollectionProtocolRegistrationValue(collectionProtocolIdKey,
-							collectionProtocolId);
+					participantForm.setCollectionProtocolRegistrationValue(cpIdKey,
+							collProtId);
 
 					final Collection consentList = this.getConsentList(bizlogic,
-							collectionProtocolId);
+							collProtId);
 					if (consentList != null && consentList.isEmpty())
 					{
 						participantForm.setCollectionProtocolRegistrationValue(
-								isConsentAvailableKey, Constants.NO_CONSENTS_DEFINED);
+								isConsentAvailKey, Constants.NO_CONSENTS_DEFINED);
 					}
 					else if (consentList != null && !consentList.isEmpty())
 					{
 						participantForm
-								.setCollectionProtocolRegistrationValue(isConsentAvailableKey,
+								.setCollectionProtocolRegistrationValue(isConsentAvailKey,
 										Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
 					}
 					participantForm.setCollectionProtocolRegistrationValue(
-							collectionProtocolRegistrationActivityStausKey,
+							cprActivityStausKey,
 							Status.ACTIVITY_STATUS_ACTIVE.toString());
-					final String collectionProtocolRegistrationDateValue = CommonUtilities
+					final String cprDateValue = CommonUtilities
 							.parseDateToString(Calendar.getInstance().getTime(),
 									CommonServiceLocator.getInstance().getDatePattern());
 					participantForm.setCollectionProtocolRegistrationValue(
-							collectionProtocolRegistrationDateKey,
-							collectionProtocolRegistrationDateValue);
+							cprDateKey,
+							cprDateValue);
 					participantForm.setCollectionProtocolRegistrationValueCounter(1);
 				}
 			}
@@ -284,17 +284,17 @@ public class ParticipantAction extends SecureAction
 
 		// Sets the collection Protocol if page is opened in add mode or if that
 		// participant doesnt have any registration
-		if (mapCollectionProtocolRegistration != null
-				&& mapCollectionProtocolRegistration.isEmpty()
+		if (mapCPR != null
+				&& mapCPR.isEmpty()
 				|| participantForm.getCollectionProtocolRegistrationValueCounter() == 0)
 		{
-			 String collectionProtocolRegistrationDateKey = "CollectionProtocolRegistration:1_registrationDate";
+			 String collProtRegDateKey = "CollectionProtocolRegistration:1_registrationDate";
 			 String collectionProtocolRegistrationActivityStausKey = "CollectionProtocolRegistration:1_activityStatus";
-			 String collectionProtocolRegistrationDateValue = CommonUtilities
+			 String collProtRegDatVal = CommonUtilities
 					.parseDateToString(Calendar.getInstance().getTime(), CommonServiceLocator
 							.getInstance().getDatePattern());
 			participantForm.setDefaultCollectionProtocolRegistrationValue(
-					collectionProtocolRegistrationDateKey, collectionProtocolRegistrationDateValue);
+					collProtRegDateKey, collProtRegDatVal);
 			participantForm.setDefaultCollectionProtocolRegistrationValue(
 					collectionProtocolRegistrationActivityStausKey, Status.ACTIVITY_STATUS_ACTIVE
 							.toString());
@@ -322,17 +322,6 @@ public class ParticipantAction extends SecureAction
 				Constants.CDE_NAME_GENDER, null);
 		genderList.remove(0);
 		request.setAttribute(Constants.GENDER_LIST, genderList);
-		if (participantForm.getGender() == null || participantForm.getGender().equals(""))
-		{
-			final Iterator itr = genderList.iterator();
-			while (itr.hasNext())
-			{
-				final NameValueBean nvb = (NameValueBean) itr.next();
-				participantForm.setGender(nvb.getValue());
-				break;
-			}
-
-		}
 
 		// Sets the genotypeList attribute to be used in the Add/Edit
 		// Participant Page.
@@ -356,17 +345,7 @@ public class ParticipantAction extends SecureAction
 				Constants.CDE_VITAL_STATUS, null);
 		vitalStatusList.remove(0);
 		request.setAttribute(Constants.VITAL_STATUS_LIST, vitalStatusList);
-		if (participantForm.getVitalStatus() == null || participantForm.getVitalStatus().equals(""))
-		{
-			final Iterator itr = vitalStatusList.iterator();
-			while (itr.hasNext())
-			{
-				final NameValueBean nvb = (NameValueBean) itr.next();
-				participantForm.setVitalStatus(nvb.getValue());
-				break;
-			}
 
-		}
 		// Sets the activityStatusList attribute to be used in the Site Add/Edit
 		// Page.
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
@@ -389,10 +368,10 @@ public class ParticipantAction extends SecureAction
 		if (sessionDataBean != null && sessionDataBean.isAdmin())
 		{
 			// Set the collection protocol title list
-			final String cpSourceObjectName = CollectionProtocol.class.getName();
+			final String cpSrcObjName = CollectionProtocol.class.getName();
 			final String[] cpDisplayNameFields = {"shortTitle"};
 			final String cpValueField = Constants.SYSTEM_IDENTIFIER;
-			list = partBiz.getList(cpSourceObjectName, cpDisplayNameFields,
+			list = partBiz.getList(cpSrcObjName, cpDisplayNameFields,
 					cpValueField, true);
 		}
 		else
@@ -711,10 +690,10 @@ public class ParticipantAction extends SecureAction
 				CollectionProtocolRegistration.class.getName(), cprId,
 				"elements(consentTierResponseCollection)");
 
-		final Iterator it = consentResponseBeanCollection.iterator();
-		while (it.hasNext())
+		final Iterator itrRespBean = consentResponseBeanCollection.iterator();
+		while (itrRespBean.hasNext())
 		{
-			final ConsentResponseBean consentResponseBean = (ConsentResponseBean) it.next();
+			final ConsentResponseBean consentResponseBean = (ConsentResponseBean) itrRespBean.next();
 			final long cpId = consentResponseBean.getCollectionProtocolID();
 			if (cpId == colProtId) // Searching for same collection protocol
 			{

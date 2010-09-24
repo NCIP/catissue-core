@@ -1,7 +1,7 @@
 <!-- For Calendar Component -->
-<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>	
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>	
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page import = "edu.wustl.common.util.global.CommonServiceLocator" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.Utility" %>
@@ -41,8 +41,8 @@
                     	 <c:if test="${operation=='view' or operation=='viewNonEditable'}">
 						   	<c:out value="${requestScope.senderSiteName}"/>
 	                    	<html:hidden styleId="senderSiteId" property="senderSiteId"/>
-	                    </c:if>	
-						<c:if test="${operation=='add' or operation=='edit'}">   
+	                    </c:if>
+						<c:if test="${operation=='add' or operation=='edit'}">
 							<c:set var="senderSiteId" value="${shipmentRequestForm.senderSiteId}"/>
 							<c:set var="initialSiteSelected" value="${requestScope.initialSiteSelected}"/>
 							<jsp:useBean id="initialSiteSelected" type="java.lang.String"/>
@@ -64,7 +64,7 @@
 											initialValue="<%=senderSiteId%>"
 											styleClass="black_ar"
 											staticField="false" size="27" />
-									</logic:notEqual>	
+									</logic:notEqual>
 							</logic:notEmpty>
 							<logic:empty name="senderSiteId">
 										<autocomplete:AutoCompleteTag
@@ -81,7 +81,7 @@
                     <td align="center" valign="top" class="black_ar"><span class="blue_ar_b"><img src="images/shippingtracking/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="4" /></span></td>
                     <td align="left" valign="top" class="black_ar"><bean:message key="shipment.sendDate" bundle="msg.shippingtracking"/></td>
                     <td align="left" valign="top" class="black_ar"><label>
-                    	  <c:if test="${operation=='add' or operation=='edit'}">  
+                    	  <c:if test="${operation=='add' or operation=='edit'}">
 	                    	<%
 							 if(shipmentDate!=null && shipmentDate.trim().length() > 0)
 							{
@@ -91,18 +91,18 @@
 						%>
 									<ncombo:DateTimeComponent name="sendDate"
 															  id="sendDate"
-						 									  formName="shipmentRequestForm"	
+						 									  formName="shipmentRequestForm"
 															  month= "<%=month %>"
 															  year= "<%=year %>"
-															  day= "<%= day %>" 
+															  day= "<%= day %>"
 															    pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 															  value="<%=shipmentDate %>"
 															  styleClass="black_ar"
-																	 />		
-						<% 
+																	 />
+						<%
 							}
 							else
-							{  
+							{
 								String initialShippingDate=(String)request.getAttribute("initialShippingDate");
 								if(initialShippingDate!=null && initialShippingDate.trim().length()>0)
 								{
@@ -112,14 +112,14 @@
 						 %>
 									<ncombo:DateTimeComponent name="sendDate"
 															  id="sendDate"
-						 									  formName="shipmentRequestForm"	
+						 									  formName="shipmentRequestForm"
 						 									  month= "<%=month %>"
 															  year= "<%=year %>"
-															  day= "<%= day %>" 
+															  day= "<%= day %>"
 															    pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
 															  value="<%=initialShippingDate%>"
-															  styleClass="black_ar" 
-																	 />		
+															  styleClass="black_ar"
+																	 />
 								<%
 								}
 								else
@@ -128,10 +128,10 @@
 									<ncombo:DateTimeComponent name="sendDate"
 															  id="sendDate"
 															    pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
-						 									  formName="shipmentRequestForm"	
-															  styleClass="black_ar" 
-																	 />		
-								
+						 									  formName="shipmentRequestForm"
+															  styleClass="black_ar"
+																	 />
+
 						<%
 								}
 							}
@@ -144,7 +144,7 @@
 												optionsList="<%=request.getAttribute(edu.wustl.catissuecore.util.global.Constants.HOUR_LIST)%>"
 												initialValue="<%=sendTimeHour%>"
 												styleClass="black_ar"
-												staticField="false" size="3" />
+												staticField="false" size="4" />
 									</logic:notEmpty>
 									<logic:empty name="sendTimeHour">
 												<c:set var="initialShippingHour" value="${requestScope.initialShippingHour}"/>
@@ -154,7 +154,7 @@
 											optionsList="<%=request.getAttribute(edu.wustl.catissuecore.util.global.Constants.HOUR_LIST)%>"
 											initialValue="<%=initialShippingHour%>"
 											styleClass="black_ar"
-											staticField="false" size="3" />
+											staticField="false" size="4" />
 									</logic:empty>
 									&nbsp;<bean:message key="shipment.send.time.hour" bundle="msg.shippingtracking"/>&nbsp;&nbsp;
 									<c:set var="sendTimeMinutes" value="${shipmentRequestForm.sendTimeMinutes}"/>
@@ -164,7 +164,7 @@
 											   optionsList="<%=request.getAttribute(edu.wustl.catissuecore.util.global.Constants.MINUTES_LIST)%>"
 											   initialValue="<%=sendTimeMinutes%>"
 											   styleClass="black_ar"
-											   staticField="false" size="3" />	  
+											   staticField="false" size="4" />
 									</logic:notEmpty>
 									<logic:empty name="sendTimeMinutes">
 												<c:set var="initialShippingmMinute" value="${requestScope.initialShippingmMinute}"/>
@@ -174,10 +174,10 @@
 										   optionsList="<%=request.getAttribute(edu.wustl.catissuecore.util.global.Constants.MINUTES_LIST)%>"
 										   initialValue="<%=initialShippingmMinute%>"
 										   styleClass="black_ar"
-										   staticField="false" size="3" />	  
+										   staticField="false" size="4" />
 									</logic:empty>
-	
-				                
+
+
 				   &nbsp;<bean:message key="shipment.send.time.minute" bundle="msg.shippingtracking"/></span>
 				  		</c:if>
 				  		 <c:if test="${operation=='view' or operation=='viewNonEditable'}">
@@ -201,7 +201,7 @@
                     		<html:hidden styleId="senderComments" property="senderComments"/>
 	                    	<c:out value="${shipmentRequestForm.senderComments}"/>
 	                    </c:if>
-	                    <c:if test="${operation=='add' or operation=='edit'}"> 
+	                    <c:if test="${operation=='add' or operation=='edit'}">
 	                    	<html:textarea styleClass="black_ar" rows="2" cols="50" styleId="senderComments" property="senderComments"/>
 	                    </c:if>
 					</td>

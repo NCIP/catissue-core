@@ -14,7 +14,7 @@
 			%>
 			<tr>
 				<td colspan="2">
-				<table summary="" cellpadding="0" cellspacing="0" border="0">
+				<table width="100%" summary="" cellpadding="0" cellspacing="0" border="0">
 					<tr>
 						<td class="black_ar_b" height="25"><bean:message
 							key="participant.lookup" /></td>

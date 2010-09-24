@@ -43,29 +43,29 @@ public class AddAssociation
 		addAssociations.addAssociation(entityName, targetEntityName, "CATISSUE_USER_CP",
 				"ASSOCIATION", "assignedProtocolCollection", true,
 				"assignedProtocolUserCollection", "COLLECTION_PROTOCOL_ID", "USER_ID", 2, 1,
-				"BI_DIRECTIONAL", false);
+				"BI_DIRECTIONAL", true);
 		addAssociations.addAssociation(targetEntityName, entityName, "CATISSUE_USER_CP",
 				"ASSOCIATION", "assignedProtocolUserCollection", false,
 				"assignedProtocolCollection", "COLLECTION_PROTOCOL_ID", "USER_ID", 2, 0,
-				"BI_DIRECTIONAL", false);
+				"BI_DIRECTIONAL", true);
 
 		entityName = "edu.wustl.catissuecore.domain.CollectionProtocol";
 		targetEntityName = "edu.wustl.catissuecore.domain.Site";
 		addAssociations.addAssociation(entityName, targetEntityName, "CATISSUE_SITE_CP",
 				"ASSOCIATION", "siteCollection", true, "collectionProtocolCollection", "SITE_ID",
-				"COLLECTION_PROTOCOL_ID", 2, 1, "BI_DIRECTIONAL", false);
+				"COLLECTION_PROTOCOL_ID", 2, 1, "BI_DIRECTIONAL", true);
 		addAssociations.addAssociation(targetEntityName, entityName, "CATISSUE_SITE_CP",
 				"ASSOCIATION", "collectionProtocolCollection", false, "siteCollection", "SITE_ID",
-				"COLLECTION_PROTOCOL_ID", 2, 0, "BI_DIRECTIONAL", false);
+				"COLLECTION_PROTOCOL_ID", 2, 0, "BI_DIRECTIONAL", true);
 
 		entityName = "edu.wustl.catissuecore.domain.Site";
 		targetEntityName = "edu.wustl.catissuecore.domain.User";
 		addAssociations.addAssociation(entityName, targetEntityName, "CATISSUE_SITE_USERS",
 				"ASSOCIATION", "siteCollection", true, "assignedSiteUserCollection", "USER_ID",
-				"SITE_ID", 2, 1, "BI_DIRECTIONAL", false);
+				"SITE_ID", 2, 1, "BI_DIRECTIONAL", true);
 		addAssociations.addAssociation(targetEntityName, entityName, "CATISSUE_SITE_USERS",
 				"ASSOCIATION", "assignedSiteUserCollection", false, "siteCollection", "USER_ID",
-				"SITE_ID", 2, 0, "BI_DIRECTIONAL", false);
+				"SITE_ID", 2, 0, "BI_DIRECTIONAL", true);
 
 		entityName = "edu.wustl.catissuecore.domain.Site";
 		targetEntityName = "edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup";

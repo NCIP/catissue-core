@@ -503,6 +503,24 @@
 		</java>
 	</target>
 
+	<!-- Target used to upgrade the dynamic data for bug :  17759-->
+	<target name="upgrade_db_maincontainer_data_fixes" description="fixes the data from the inheritance case in main containers bug no:17759">
+		<antcall target="setupClassExecutionEnvironment" />
+		<java classname="edu.common.dynamicextensions.util.MainContainerDataFixer" fork="true" maxmemory="1024M">
+					<classpath>
+						<pathelement location="${temp.dir.DE}" />
+						<fileset dir="${lib.dir.DE}">
+							<include name="*.jar" />
+							<exclude name="uml-1.3.jar" />
+						</fileset>
+						<fileset dir="${extra.lib.dir.DE}">
+							<include name="jboss-j2ee.jar" />
+							<include name="jta.jar" />
+						</fileset>
+					</classpath>
+				</java>
+			</target>
+
 	<!-- - - - - - - - - - - - - - - - - -
           target: import.xmi.for.testcases
          - - - - - - - - - - - - - - - - - -->

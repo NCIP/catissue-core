@@ -79,7 +79,7 @@ public class FlexInterface
 {
 
 	/** Logger object. */
-	private final static transient Logger logger = Logger.getCommonLogger(FlexInterface.class);
+	private final static Logger LOGGER = Logger.getCommonLogger(FlexInterface.class);
 
 	/** The session. */
 	private HttpSession session = null;
@@ -182,7 +182,7 @@ public class FlexInterface
 								final List list = bizLogic.retrieve(SpecimenEventParameters.class
 										.getName(), selectColName, whereColName, whereColCond,
 										whereColVal, Constants.AND_JOIN_CONDITION);
-								logger.info("List:" + list);
+								LOGGER.info("List:" + list);
 								if (list != null && !list.isEmpty())
 								{
 									final User user = (User) list.get(0);
@@ -204,7 +204,7 @@ public class FlexInterface
 		}
 		catch (final Exception e)
 		{
-			FlexInterface.logger.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		}
 
 		if (parentName != null)
@@ -471,8 +471,7 @@ public class FlexInterface
 		}
 		catch (final BizLogicException e)
 		{
-			FlexInterface.logger.error("Error mesg :" + e.getMessage(),e);
-			e.printStackTrace();
+			LOGGER.error("Error mesg :" + e.getMessage(),e);
 		}
 
 		return biohazardNameList;
@@ -488,7 +487,7 @@ public class FlexInterface
 	 */
 	public String writeSpecimen(List<SpecimenBean> spBeanList)
 	{
-		logger.debug("spBeanList size " + spBeanList.size());
+		LOGGER.debug("spBeanList size " + spBeanList.size());
 		//Map<String, String> msgMap = new HashMap<String, String>();
 		//LinkedHashMap<Specimen,List> specimenMap = new LinkedHashMap<Specimen,List>();
 		final LinkedHashMap<String, GenericSpecimen> viewSpecimenMap = new LinkedHashMap<String, GenericSpecimen>();
@@ -502,8 +501,10 @@ public class FlexInterface
 		{
 			for (final SpecimenBean spBean : spBeanList)
 			{
+				SpecimenDataBean spDataBean = new SpecimenDataBean();
+				spDataBean.setUniqueIdentifier(""+i);
 				SpecimenDataBean specimenDataBean = this.prepareGenericSpecimen(spBean,
-						speicmenAutoStorageCont);
+						speicmenAutoStorageCont,spDataBean);
 				specimenDataBean = this.getStorageContainers(specimenDataBean, specimenDataBean
 						.getCollectionProtocolId(), speicmenAutoStorageCont);
 				specimenDataBean.uniqueId = "" + i;
@@ -521,8 +522,7 @@ public class FlexInterface
 		catch (final Exception ex)
 		{
 			message = ex.getMessage();
-			FlexInterface.logger.error(message, ex);
-			ex.printStackTrace();
+			LOGGER.error(message, ex);
 		}
 
 		return message;
@@ -556,8 +556,7 @@ public class FlexInterface
 		catch (final Exception ex)
 		{
 			message = ex.getMessage();
-			FlexInterface.logger.error(message, ex);
-			ex.printStackTrace();
+			LOGGER.error(message, ex);
 		}
 
 		return message;
@@ -662,12 +661,12 @@ public class FlexInterface
 									derivedBean.parentName = spBean.specimenLabel;
 									derivedBean.parentType = edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN_TYPE;
 									SpecimenDataBean derivedDataBean = this.prepareGenericSpecimen(
-											derivedBean, speicmenAutoStorageCont);
+											derivedBean, speicmenAutoStorageCont,spDataBean);
 									derivedDataBean = this.getStorageContainers(derivedDataBean,
 											derivedDataBean.getCollectionProtocolId(),
 											speicmenAutoStorageCont);
-									derivedDataBean.uniqueId = "d" + i;
-									derivedMap.put("d" + i, derivedDataBean);
+									derivedDataBean.uniqueId = "d" + i+spDataBean.getUniqueIdentifier();
+									derivedMap.put(derivedDataBean.getUniqueIdentifier(), derivedDataBean);
 									i++;
 
 								}
@@ -676,8 +675,7 @@ public class FlexInterface
 						}
 						catch (final ApplicationException e)
 						{
-							FlexInterface.logger.error(e.getMessage(), e);
-							e.printStackTrace();
+							LOGGER.error(e.getMessage(), e);
 						}
 					}
 
@@ -695,8 +693,7 @@ public class FlexInterface
 		}
 		catch (final ApplicationException e)
 		{
-			FlexInterface.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		return "success:Specimens Updated Successfully";
 	}
@@ -708,7 +705,7 @@ public class FlexInterface
 	 */
 	public SpecimenBean readSpecimen()
 	{
-		logger.info("SERVER readSpecimen");
+		LOGGER.info("SERVER readSpecimen");
 		final SpecimenBean sb = new SpecimenBean();
 		sb.specimenLabel = "tp";
 		sb.tissueSite = "VULVA";
@@ -953,13 +950,14 @@ public class FlexInterface
 	 *
 	 * @param speicmenAutoStorageCont the speicmen auto storage cont
 	 * @param spBean the sp bean
+	 * @param spDataBean
 	 *
 	 * @return SpecimenDataBean object
 	 *
 	 * @throws ApplicationException the application exception
 	 */
 	private SpecimenDataBean prepareGenericSpecimen(SpecimenBean spBean,
-			SpecimenAutoStorageContainer speicmenAutoStorageCont) throws ApplicationException
+			SpecimenAutoStorageContainer speicmenAutoStorageCont, SpecimenDataBean spDataBean) throws ApplicationException
 	{
 		final SpecimenDataBean specimenDataBean = new SpecimenDataBean();
 		final Specimen corresSpecimen = new Specimen();
@@ -1086,13 +1084,13 @@ public class FlexInterface
 				derivedBean.receivedEvent = spBean.receivedEvent;
 				derivedBean.parentType = edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN_TYPE;
 				final SpecimenDataBean derivedDataBean = this.prepareGenericSpecimen(derivedBean,
-						speicmenAutoStorageCont);
+						speicmenAutoStorageCont,spDataBean);
 				derivedDataBean.setCollectionProtocolId(specimenDataBean.getCollectionProtocolId());
 				derivedDataBean
 						.setLineage(edu.wustl.catissuecore.util.global.Constants.DERIVED_SPECIMEN);
-				derivedDataBean.setUniqueIdentifier("d" + i);
+				derivedDataBean.setUniqueIdentifier("d" + i+"_"+spDataBean.getUniqueIdentifier());
 				derivedDataBean.setParentName(spBean.specimenLabel);
-				derivedMap.put("d" + i, derivedDataBean);
+				derivedMap.put(derivedDataBean.getUniqueIdentifier(), derivedDataBean);
 				i++;
 			}
 			specimenDataBean.setDeriveSpecimenCollection(derivedMap);
@@ -1358,8 +1356,7 @@ public class FlexInterface
 		}
 		catch (final BizLogicException e)
 		{
-			FlexInterface.logger.error("Error whioe getting biohazard Id:" + e.getMessage(),e);
-			e.printStackTrace();
+			LOGGER.error("Error whioe getting biohazard Id:" + e.getMessage(),e);
 		}
 
 		return null;
@@ -1395,8 +1392,7 @@ public class FlexInterface
 		}
 		catch (final BizLogicException e)
 		{
-			FlexInterface.logger.error("Error whioe getting scg :" + e.getMessage(),e);
-			e.printStackTrace();
+			LOGGER.error("Error whioe getting scg :" + e.getMessage(),e);
 		}
 
 		return null;
@@ -1433,8 +1429,7 @@ public class FlexInterface
 		}
 		catch (final BizLogicException e)
 		{
-			FlexInterface.logger.error("Error whioe getting scg :" + e.getMessage(),e);
-			e.printStackTrace();
+			LOGGER.error("Error whioe getting scg :" + e.getMessage(),e);
 		}
 
 		return null;
@@ -1471,8 +1466,7 @@ public class FlexInterface
 
 		catch (final BizLogicException e)
 		{
-			FlexInterface.logger.error("Error whioe getting attributes for sp :" + e.getMessage(),e);
-			e.printStackTrace();
+			LOGGER.error("Error whioe getting attributes for sp :" + e.getMessage(),e);
 		}
 
 		return specimen;
@@ -1516,8 +1510,7 @@ public class FlexInterface
 		}
 		catch (final BizLogicException e)
 		{
-			FlexInterface.logger.error("Error whioe getting specimen :" + e.getMessage(),e);
-			e.printStackTrace();
+			LOGGER.error("Error whioe getting specimen :" + e.getMessage(),e);
 		}
 
 		return null;
@@ -1664,8 +1657,7 @@ public class FlexInterface
 		}
 		catch (final ApplicationException e)
 		{
-			FlexInterface.logger.error(e.getMessage(), e);
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		return cpList;
 	}
@@ -1721,8 +1713,7 @@ public class FlexInterface
 		}
 		catch (final Exception e)
 		{
-			FlexInterface.logger.error("Error while getting tree date :" + e.getMessage(), e);
-			e.printStackTrace();
+			LOGGER.error("Error while getting tree date :" + e.getMessage(), e);
 		}
 		return str;
 	}

@@ -1,32 +1,17 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.XMLPropertyHandler,edu.wustl.common.util.global.ApplicationProperties,edu.wustl.catissuecore.util.global.Variables,edu.wustl.common.beans.SessionDataBean"%>
+<%@ page
+	import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.XMLPropertyHandler,edu.wustl.common.util.global.ApplicationProperties,edu.wustl.catissuecore.util.global.Variables,edu.wustl.common.beans.SessionDataBean"%>
 
 <style type="text/css">
-table#browserDetailsContainer
-{
-	font-family:arial,helvetica,verdana,sans-serif;
-	font-size:0.7em;
-	padding-left:10px;
+table#browserDetailsContainer {
+	font-family: arial, helvetica, verdana, sans-serif;
+	font-size: 0.7em;
+	padding-left: 10px;
 }
 </style>
 <script language="JavaScript">
-function wustlkey()
-{
-	  var answer=confirm("WASHINGTON UNIVERSITY USERS: Please press Cancel and first log into caTissue using your WUSTL Key and password. After successfully logging in,you will be able to request for your account to be activated in caTissue. \n\nALL OTHER USERS: Please press OK to proceed.");
-	  var url;
-	  var currentURL = window.location;
-	  if(answer==false)
-	  {
-		window.close();
-	  }
-	  else
-	  {
-		url = currentURL.protocol+"//"+currentURL.host+"/catissuecore/SignUp.do?operation=add&pageOf=pageOfSignUp"
-		window.location.href = url;
-	  }
-  }
 
 	function forgotId()
 	{
@@ -95,25 +80,26 @@ function wustlkey()
 
 							</tr>
 							<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
-							<tr>
-								<td><a
-									href="Accessibility.do?PAGE_TITLE_KEY=app.accessibility&FILE_NAME_KEY=app.accessibility.file"
-									class="view"><span class="wh_ar_b"></span><bean:message
-									key="app.accessibility" /></a></td>
-							</tr>
-							<tr>
-								<td style="padding-bottom:16px;"><a
-									href="RedirectToHelp.do" class="view"><span class="wh_ar_b"></span><bean:message
-									key="app.help" /></a></td>
-							</tr>
+								<tr>
+									<td><a
+										href="Accessibility.do?PAGE_TITLE_KEY=app.accessibility&FILE_NAME_KEY=app.accessibility.file"
+										class="view"><span class="wh_ar_b"></span><bean:message
+										key="app.accessibility" /></a></td>
+								</tr>
+								<tr>
+									<td style="padding-bottom: 16px;"><a
+										href="RedirectToHelp.do" class="view"><span
+										class="wh_ar_b"></span><bean:message key="app.help" /></a></td>
+								</tr>
 							</logic:empty>
-							<logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
-							<tr>
-								<td style="padding-bottom:16px;"><a
-									href="Accessibility.do?PAGE_TITLE_KEY=app.accessibility&FILE_NAME_KEY=app.accessibility.file"
-									class="view"><span class="wh_ar_b"></span><bean:message
-									key="app.accessibility" /></a></td>
-							</tr>
+							<logic:notEmpty scope="session"
+								name="<%=Constants.SESSION_DATA%>">
+								<tr>
+									<td style="padding-bottom: 16px;"><a
+										href="Accessibility.do?PAGE_TITLE_KEY=app.accessibility&FILE_NAME_KEY=app.accessibility.file"
+										class="view"><span class="wh_ar_b"></span><bean:message
+										key="app.accessibility" /></a></td>
+								</tr>
 							</logic:notEmpty>
 						</table>
 						</td>
@@ -121,24 +107,22 @@ function wustlkey()
 				</table>
 				</td>
 				<td width="5"
-					background="images/uIEnhancementImages/shadow_right.gif" style="background-repeat: repeat-y"></td>
+					background="images/uIEnhancementImages/shadow_right.gif"
+					style="background-repeat: repeat-y"></td>
 
 			</tr>
 			<tr>
 				<td background="images/uIEnhancementImages/shadow_down.gif"></td>
 				<td><img src="images/uIEnhancementImages/shadow_corner.gif"
-				alt="Shadow Corner"
-					width="5" height="5" /></td>
+					alt="Shadow Corner" width="5" height="5" /></td>
 			</tr>
 		</table>
-		<!--Mandar:7dec09 <br /> -->
-<!-- 		<p align="left">
+		<!--Mandar:7dec09 <br /> --> <!-- 		<p align="left">
 			<a href="http://www.persistentsys.com/CompetencyCenters/LifeSciences/caTissueSupportCenter/tabid/181/Default.aspx" class="view">
 				<span class="wh_ar_b"></span><bean:message key="pspl.catissue.support" />
 			</a>
 		</p>
- -->		<!--Mandar:7dec09 <br /> -->
-		</td>
+ --> <!--Mandar:7dec09 <br /> --></td>
 		<td width="0%" rowspan="3" valign="top"><img
 			src="images/uIEnhancementImages/sep_left.gif" width="8" height="458" /></td>
 		<td width="49%" rowspan="3" align="center" valign="top"><img
@@ -168,17 +152,16 @@ function wustlkey()
 						</td>
 					</tr>
 					<tr>
-						<td colspan="3" align="left" class="showhide1">
-						<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+						<td colspan="3" align="left" class="showhide1"><%@ include
+							file="/pages/content/common/ActionErrors.jsp"%>
 						<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 							<html:form styleId="form1" styleClass="whitetable_bg"
 								action="/Login.do">
 								<table width="98%" border="0" cellpadding="4" cellspacing="0">
 									<tr>
-										<td class="black_ar"><bean:message key="app.UserID" />
-										</td>
+										<td class="black_ar"><bean:message key="app.UserID" /></td>
 										<td><html:text styleClass="black_ar" property="loginName"
-											size="20"/></td>
+											size="20" /></td>
 									</tr>
 									<tr>
 										<td class="black_ar"><bean:message key="app.password" />
@@ -195,33 +178,32 @@ function wustlkey()
 													class="blue_ar_b" value="Login" /> <a href="#"
 													class="blue"><span class="wh_ar_b"></span></a></td>
 												<td><img src="images/uIEnhancementImages/or_dot.gif"
-												 alt="Divider line"
-													width="1" height="15" hspace="5" /></td>
-											<%
-												if(Boolean.parseBoolean(XMLPropertyHandler.getValue(Constants.IDP_ENABLED)))
-												{
-											%>
-											  <td>
-												<a href="#"
-													class="view" onclick="wustlkey();"><bean:message key="app.signup" /></a>
-												</td>
-											<%
-												}
-												else{
-													%>
+													alt="Divider line" width="1" height="15" hspace="5" /></td>
+												<%
+												    if (Boolean.parseBoolean(XMLPropertyHandler
+																			.getValue(Constants.IDP_ENABLED))) {
+												%>
+												<td><a
+													href="SignUp.do?operation=add&pageOf=pageOfSignUp"
+													class="view"><bean:message key="app.signup" /></a></td>
+												<%
+												    } else {
+												%>
 
-													<td><a
+												<td><a
 													href="SignUp.do?operation=add&amp;pageOf=pageOfSignUp"
-													class="view"><bean:message key="app.signup" /></a>
-													</td>
-											<%} %>
+													class="view"><bean:message key="app.signup" /></a></td>
+												<%
+												    }
+												%>
 
 											</tr>
 										</table>
 										</td>
 									</tr>
 									<tr>
-										<td>&nbsp;</td><td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
 										<!-- <td align="left" valign="middle"><a
 											href="ForgotPassword.do" class="view"><bean:message
 											key="app.requestPassword" /> </a></td>
@@ -235,14 +217,14 @@ function wustlkey()
 							<tr>
 								<TD class="welcomeContent">
 								<%
-													Object obj = request.getSession().getAttribute(
-													Constants.SESSION_DATA);
-											if (obj != null) {
-												SessionDataBean sessionData = (SessionDataBean) obj;
-										%> Dear <%=sessionData.getLastName()%>, &nbsp;<%=sessionData.getFirstName()%><br>
+								    Object obj = request.getSession().getAttribute(
+														Constants.SESSION_DATA);
+												if (obj != null) {
+													SessionDataBean sessionData = (SessionDataBean) obj;
+								%> Dear <%=sessionData.getLastName()%>, &nbsp;<%=sessionData.getFirstName()%><br>
 								<%
-										}
-										%> <bean:message key="app.welcomeNote"
+								    }
+								%> <bean:message key="app.welcomeNote"
 									arg0="<%=ApplicationProperties.getValue("app.name")%>"
 									arg1="<%=ApplicationProperties.getValue("app.version")%>"
 									arg2="<%=Variables.applicationAdditionInfo%>" /></TD>
@@ -258,66 +240,32 @@ function wustlkey()
 			<tr>
 				<td background="images/uIEnhancementImages/shadow_down.gif"></td>
 				<td><img src="images/uIEnhancementImages/shadow_corner.gif"
-				alt="Shadow Corner"
-					width="5" height="5" /></td>
+					alt="Shadow Corner" width="5" height="5" /></td>
 			</tr>
-<%
-	if(Boolean.parseBoolean(XMLPropertyHandler.getValue(Constants.IDP_ENABLED)))
-	{
-%>
-		<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
-			<tr>
-				<td>
-					&nbsp;
-				</td>
-			</tr>
-			<tr>
-				<td class="black_new">
-					<div><b>To get your Login ID and password:</b></div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-				&nbsp;
-				</td>
-			</tr>
-			<tr>
-				<td class="black_new">
-					<div>For <b>Washington University</b> users:</div>
-				</td>
-			</tr>
-			<tr>
-				<td class="black_new">
-					<a href="#"	class="view" onclick="forgotId();"><bean:message key="forgotId.wustlkey" /></a>
-				</td>
-			</tr>
-			<tr>
-				<td class="black_new">
-					<a href="#"	class="view" onclick="forgotPassword();"><bean:message key="forgotpassword.wustlkeypassword" /></a>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					&nbsp;
-				</td>
-			</tr>
-		</logic:empty>
-<%
-	}
-%>
+			<%
+			    if (Boolean.parseBoolean(XMLPropertyHandler
+								.getValue(Constants.IDP_ENABLED))) {
+			%>
+			<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+			</logic:empty>
+			<%
+			    }
+			%>
 		</table>
 
 		</td>
 	</tr>
 	<tr>
-<!-- 		<td align="center" valign="bottom">&nbsp;<img border="0" src="images/pspllogo.gif" width="75" height="71"></td>
+		<!-- 		<td align="center" valign="bottom">&nbsp;<img border="0" src="images/pspllogo.gif" width="75" height="71"></td>
  -->
- 		<td align="center" valign="bottom">&nbsp</td>
+		<td align="center" valign="bottom">&nbsp</td>
 		<td rowspan="2" align="right" valign="bottom">
 		<table width="96%" border="0" cellspacing="0" cellpadding="0">
 			<tr>
-				<td class="black_ar"><bean:message
-				key="app.adobe.required" /></td>
+				<td class="black_ar"><bean:message key="app.adobe.required" /></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
@@ -354,7 +302,7 @@ function wustlkey()
 			<tr>
 				<td align="center"
 					background="images/uIEnhancementImages/box_bg.gif"
-					style="background-repeat:no-repeat; background-position:center;">
+					style="background-repeat: no-repeat; background-position: center;">
 				<table width="100%" border="0" cellspacing="0" cellpadding="4">
 					<tr>
 
@@ -373,8 +321,8 @@ function wustlkey()
 					<tr>
 						<td align="center"><a href="http://www.dhhs.gov/"><img
 							src="images/uIEnhancementImages/logo3.gif"
-							alt="Department of Health &amp; Human Services" width="54" height="50"
-							border="0" /></a></td>
+							alt="Department of Health &amp; Human Services" width="54"
+							height="50" border="0" /></a></td>
 						<td align="center"><a href="http://www.firstgov.gov/"><img
 							src="images/uIEnhancementImages/logo4.gif"
 							alt="First Government Logo" width="92" height="50" border="0" /></a></td>
@@ -389,6 +337,7 @@ function wustlkey()
 	</tr>
 	<tr>
 		<td colspan="5" align="center" valign="top" bgcolor="#bcbcbc"><img
-			src="images/uIEnhancementImages/spacer.gif" alt="Spacer" width="1" height="1" /></td>
+			src="images/uIEnhancementImages/spacer.gif" alt="Spacer" width="1"
+			height="1" /></td>
 	</tr>
 </table>

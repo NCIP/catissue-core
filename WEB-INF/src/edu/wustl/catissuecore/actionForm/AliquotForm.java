@@ -507,6 +507,16 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 		final ActionErrors errors = new ActionErrors();
 		final Validator validator = new Validator();
 
+		
+		this.noOfAliquots = AppUtility.isValidCount(this.noOfAliquots, errors);
+		
+		if (!validator.isNumeric(this.noOfAliquots, 1))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+					ApplicationProperties.getValue("aliquots.noOfAliquots")));
+		}
+		
+		
 		if (Constants.PAGE_OF_ALIQUOT_SUMMARY.equals(request.getParameter(Constants.PAGE_OF)))
 		{
 			/**

@@ -21,6 +21,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import edu.wustl.auth.exception.AuthenticationException;
+import edu.wustl.auth.exception.MigrationRuleException;
+import edu.wustl.authmanager.IDPAuthManager;
+import edu.wustl.authmanager.factory.AuthManagerFactory;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
@@ -57,6 +61,10 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.domain.LoginCredentials;
+import edu.wustl.domain.UserDetails;
+import edu.wustl.migrator.exception.MigratorException;
 import edu.wustl.migrator.util.Utility;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
@@ -250,6 +258,10 @@ public class UserBizLogic extends CatissueDefaultBizLogic
                 updateUserDetails(user, userRowIdMap);
             }
             dao.insert(user);
+            if (Constants.PAGE_OF_SIGNUP.equals(user.getPageOf()))
+            {
+                insertUserIDPInformation(user);
+            }
 
             final Set protectionObjects = new HashSet();
             protectionObjects.add(user);
@@ -297,6 +309,26 @@ public class UserBizLogic extends CatissueDefaultBizLogic
             // ErrorKey errorKey = ErrorKey.getErrorKey("dao.error");
             throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 
+        }
+    }
+
+    private void insertUserIDPInformation(final User user) throws BizLogicException
+    {
+        try
+        {
+            if (!Validator.isEmpty(user.getTargetIdp()))
+            {
+                final UserDetails userDetails = new UserDetails();
+                userDetails.setLoginName(user.getLoginName());
+                userDetails.setMigratedLoginName(user.getTargetIdpLoginName());
+                userDetails.setTargetIDP(user.getTargetIdp());
+                Utility.migrateUser(userDetails);
+            }
+        }
+        catch (final MigratorException e)
+        {
+            UserBizLogic.LOGGER.error(e.getMessage(), e);
+            throw getBizLogicException(e, "migration.info.updation.error", "");
         }
     }
 
@@ -1496,6 +1528,13 @@ public class UserBizLogic extends CatissueDefaultBizLogic
             user = (User) obj;
         }
 
+        if (Constants.PAGE_OF_SIGNUP.equals(user.getPageOf()))
+        {
+            if (!Validator.isEmpty(user.getTargetIdp()))
+            {
+                validateIDPInformation(user);
+            }
+        }
         /**
          * Start: Change for API Search --- Jitendra 06/10/2006 In Case of Api
          * Search, previoulsy it was failing since there was default class level
@@ -1558,6 +1597,77 @@ public class UserBizLogic extends CatissueDefaultBizLogic
         return true;
     }
 
+    private void validateIDPInformation(final User user) throws BizLogicException
+    {
+        validateForEmptyMigrationFields(user);
+        validateMigrationRule(user);
+        authenticateMigrationCredentials(user);
+    }
+
+    private void validateMigrationRule(final User user) throws BizLogicException
+    {
+        final UserDetails userDetails = new UserDetails();
+        userDetails.setLoginName(user.getLoginName());
+        userDetails.setMigratedLoginName(user.getTargetIdpLoginName());
+        userDetails.setTargetIDP(user.getTargetIdp());
+        try
+        {
+            final boolean statisfiesRule=Utility.isStatisfyMigrationRule(userDetails);
+            if(!statisfiesRule)
+            {
+                throw getBizLogicException(null, "app.migration.rule.check.error", "");
+            }
+        }
+        catch (final MigrationRuleException e)
+        {
+            LOGGER.debug(e);
+            throw getBizLogicException(null, "app.migration.rule.check.error", "");
+        }
+    }
+
+    private void authenticateMigrationCredentials(final User user) throws BizLogicException
+    {
+        try
+        {
+            final IDPAuthManager authManager = AuthManagerFactory.getInstance().getAuthManagerInstance(
+                    user.getTargetIdp());
+
+            final LoginCredentials loginCredentials = new LoginCredentials();
+            loginCredentials.setLoginName(user.getTargetIdpLoginName());
+            loginCredentials.setPassword(user.getTargetPassword());
+            final boolean authenticationSuccesful = authManager.authenticate(loginCredentials);
+            if (!authenticationSuccesful)
+            {
+                LOGGER.debug("Authentication of user against " + user.getTargetIdp() + " failed.");
+                throw getBizLogicException(null, "errors.incorrectLoginIDPassword", "");
+            }
+        }
+        catch (final AuthenticationException e)
+        {
+            LOGGER.debug(e);
+            throw getBizLogicException(null, "app.target.idp.auth.error", "");
+        }
+    }
+
+    private void validateForEmptyMigrationFields(final User user) throws BizLogicException
+    {
+        if (Validator.isEmpty(user.getTargetIdpLoginName()))
+        {
+            if (Validator.isEmpty(user.getTargetPassword()))
+            {
+                throw getBizLogicException(null, "app.target.loginname.password.required", "");
+            }
+            else
+            {
+                throw getBizLogicException(null, "errors.item.required", "user.loginName");
+            }
+        }
+        else if (Validator.isEmpty(user.getTargetPassword()))
+        {
+            throw getBizLogicException(null, "errors.item.required", "user.password");
+        }
+    }
+
     // Added by Ashish
     /**
      * Api validate.
@@ -1610,16 +1720,16 @@ public class UserBizLogic extends CatissueDefaultBizLogic
                 throw getBizLogicException(null, "Err.ConstraintViolation", "User :"
                         + ApplicationProperties.getValue(USER_EMAIL_ADDRESS));
             }
-            if (null != user.getWustlKey() && !"".equals(user.getWustlKey()))
-            {
-                if (!user.getEmailAddress().endsWith(edu.wustl.wustlkey.util.global.Constants.WUSTL_EDU)
-                        && !user.getEmailAddress().endsWith(
-                                edu.wustl.wustlkey.util.global.Constants.WUSTL_EDU_CAPS))
-                {
-                    message = ApplicationProperties.getValue("email.washu.user");
-                    throw getBizLogicException(null, ERRORS_ITEM_REQUIRED, message);
-                }
-            }
+//            if (null != user.getTargetIdpLoginName() && !"".equals(user.getTargetIdpLoginName()))
+//            {
+//                if (!user.getEmailAddress().endsWith(edu.wustl.wustlkey.util.global.Constants.WUSTL_EDU)
+//                        && !user.getEmailAddress().endsWith(
+//                                edu.wustl.wustlkey.util.global.Constants.WUSTL_EDU_CAPS))
+//                {
+//                    message = ApplicationProperties.getValue("email.washu.user");
+//                    throw getBizLogicException(null, ERRORS_ITEM_REQUIRED, message);
+//                }
+//            }
         }
         if (validator.isEmpty(user.getLastName()))
         {
@@ -2488,11 +2598,17 @@ public class UserBizLogic extends CatissueDefaultBizLogic
     {
         try
         {
-            if (user.getWustlKey() != null)
+            if (user.getTargetIdpLoginName() != null)
             {
-                final String queryStr = "UPDATE CSM_MIGRATE_USER SET LOGIN_NAME='" + user.getLoginName() + "' "
-                        + "WHERE WUSTLKEY ='" + user.getWustlKey() + "'";
-                Utility.executeQueryUsingDataSource(queryStr, true,
+                final String queryStr = "UPDATE CSM_MIGRATE_USER SET LOGIN_NAME=? WHERE WUSTLKEY =?";
+                final List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>();
+                final ColumnValueBean loginNameBean = new ColumnValueBean(user.getLoginName());
+                final ColumnValueBean wustlKeyNameBean = new ColumnValueBean(user.getTargetIdpLoginName());
+
+                parameters.add(loginNameBean);
+                parameters.add(wustlKeyNameBean);
+
+                Utility.executeQueryUsingDataSource(queryStr, parameters, true,
                         edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
             }
         }
@@ -2515,9 +2631,9 @@ public class UserBizLogic extends CatissueDefaultBizLogic
     public User getUser(final String loginName) throws BizLogicException
     {
         User validUser = null;
-        final String getActiveUser = "from "+User.class.getName()+" user where "
-                + "user.activityStatus= " + "'" + Status.ACTIVITY_STATUS_ACTIVE.toString()
-                + "' and user.loginName =" + "'" + loginName + "'";
+        final String getActiveUser = "from " + User.class.getName() + " user where " + "user.activityStatus= "
+                + "'" + Status.ACTIVITY_STATUS_ACTIVE.toString() + "' and user.loginName =" + "'" + loginName
+                + "'";
         final DefaultBizLogic bizlogic = new DefaultBizLogic();
         final List<User> users = bizlogic.executeQuery(getActiveUser);
         if (users != null && !users.isEmpty())

@@ -23,7 +23,7 @@ public class ClinicalDiagnosis extends AbstractDomainObject implements Serializa
 	/**
 	 * Clinical Diagnosis value.
 	 */
-	private String clinicalDiagnosis;
+	private String name;
 
 	/**
 	 * Collection Protocol instance.
@@ -52,18 +52,18 @@ public class ClinicalDiagnosis extends AbstractDomainObject implements Serializa
 	 * This method is called to get the clinical Diagnosis.
 	 * @return clinicalDiagnosis clinicalDiagnosis.
 	 */
-	public String getClinicalDiagnosis()
+	public String getName()
 	{
-		return clinicalDiagnosis;
+		return name;
 	}
 
 	/**
 	 * set clinicalDiagnosis.
 	 * @param clinicalDiagnosis clinicalDiagnosis
 	 */
-	public void setClinicalDiagnosis(String clinicalDiagnosis)
+	public void setName(String name)
 	{
-		this.clinicalDiagnosis = clinicalDiagnosis;
+		this.name = name;
 	}
 
     /**

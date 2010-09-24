@@ -87,7 +87,6 @@ public class SpecimenArrayAddEditAction extends CommonAddEditAction
 			catch (final Exception exception)
 			{
 				this.logger.error(exception.getMessage(), exception);
-				exception.printStackTrace();
 			}
 		}
 		return super.executeXSS(mapping, form, request, response);

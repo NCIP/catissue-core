@@ -93,7 +93,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			}
 			//end of fix for bug no.7439
 			//Derive New from This Specimen
-			if (actionForm.getForwardTo().equals("createNew") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("PrintSpecimenEdit") || actionForm.getForwardTo().equals("addSpecimenToCartForwardtoDerive") || actionForm.getForwardTo().equals("addSpecimenToCartPrintAndForward"))
+			if (actionForm.getForwardTo().equals("printDeriveSpecimen") ||actionForm.getForwardTo().equals("createNew") || actionForm.getForwardTo().equals("CPQueryPrintSpecimenAdd")||actionForm.getForwardTo().equals("CPQueryPrintSpecimenEdit") || actionForm.getForwardTo().equals("PrintSpecimenEdit") || actionForm.getForwardTo().equals("addSpecimenToCartForwardtoDerive") || actionForm.getForwardTo().equals("addSpecimenToCartPrintAndForward"))
 			{
 				forwardToHashMap.put("parentSpecimenId", domainObject.getId());
 				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());

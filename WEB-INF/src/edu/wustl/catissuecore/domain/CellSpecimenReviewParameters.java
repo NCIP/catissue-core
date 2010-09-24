@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.CellSpecimenReviewParametersForm;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
@@ -154,10 +155,10 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters
 	@Override
 	public void doRoundOff() {
 		if (neoplasticCellularityPercentage != null) {
-			neoplasticCellularityPercentage = AppUtility.RoundOff(neoplasticCellularityPercentage, 5);
+			neoplasticCellularityPercentage = AppUtility.roundOff(neoplasticCellularityPercentage, Constants.QUANTITY_PRECISION);
 		}
 		if (viableCellPercentage != null) {
-			viableCellPercentage = AppUtility.RoundOff(viableCellPercentage, 5);
+			viableCellPercentage = AppUtility.roundOff(viableCellPercentage, Constants.QUANTITY_PRECISION);
 		}
 	}
 }

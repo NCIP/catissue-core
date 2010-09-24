@@ -259,7 +259,7 @@ public class CollectionProtocolUtil
 			while(iterator.hasNext())
 			{
 				ClinicalDiagnosis clinicalDiagnosis = (ClinicalDiagnosis)iterator.next();
-				clinicalDiagnosisArr[index] = clinicalDiagnosis.getClinicalDiagnosis();
+				clinicalDiagnosisArr[index] = clinicalDiagnosis.getName();
 				index++;
 			}
 		}
@@ -1088,7 +1088,7 @@ public class CollectionProtocolUtil
 				if (!"".equals(clinicalDiagnosisArr[i]))
 				{
 					final ClinicalDiagnosis clinicalDiagnosisObj = new ClinicalDiagnosis();
-					clinicalDiagnosisObj.setClinicalDiagnosis(clinicalDiagnosisArr[i]);
+					clinicalDiagnosisObj.setName(clinicalDiagnosisArr[i]);
 					clinicalDiagnosisObj.setCollectionProtocol(collectionProtocol);
 					clinicalDiagnosis.add(clinicalDiagnosisObj);
 				}

@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import edu.wustl.auth.exception.AuthenticationException;
 import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.CatissueException;
@@ -23,8 +24,10 @@ import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.LoginResult;
 import edu.wustl.migrator.MigrationState;
+import edu.wustl.processor.LoginProcessor;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Roles;
 import edu.wustl.security.privilege.PrivilegeManager;
@@ -105,17 +108,20 @@ public class LoginAction extends XSSSupportedAction
     }
 
     private String processUserLogin(final ActionForm form, final HttpServletRequest request)
-            throws CatissueException, NamingException, ApplicationException
+            throws CatissueException, NamingException, ApplicationException, AuthenticationException
     {
         String forwardTo;
         final LoginForm loginForm = (LoginForm) form;
-        final String loginName = loginForm.getLoginName();
+        final LoginCredentials loginCredentials = new LoginCredentials();
+        loginCredentials.setLoginName(loginForm.getLoginName());
+        loginCredentials.setPassword(loginForm.getPassword());
+        LoginProcessor.authenticate(loginCredentials);
         final edu.wustl.domain.LoginResult loginResult = CatissueLoginProcessor.processUserLogin(request,
-                loginName, loginForm.getPassword());
+                loginCredentials);
 
         if (loginResult.isAuthenticationSuccess())
         {
-            if (MigrationState.NEW_WUSTL_USER.equals(loginResult.getMigrationState()))
+            if (MigrationState.NEW_IDP_USER.equals(loginResult.getMigrationState()))
             {
                 forwardTo = setSignUpPageAttributes(request, loginForm);
             }
@@ -124,30 +130,41 @@ public class LoginAction extends XSSSupportedAction
                 forwardTo = validateUser(request, loginResult);
             }
 
-            if (MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()))
+            if (!Constants.FAILURE.equals(forwardTo)
+                    && MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()))
             {
-                forwardTo=Constants.SUCCESS;
+                forwardTo = Constants.SUCCESS;
             }
         }
         else
         {
             LoginAction.LOGGER.info("User " + loginForm.getLoginName()
                     + " Invalid user. Sending back to the login Page");
-            handleError(request, "errors.incorrectLoginIDPassword");
+            if (MigrationState.MIGRATED.equals(loginResult.getMigrationState())
+                    && loginForm.getLoginName().equals(loginResult.getAppLoginName()))
+            {
+                LoginAction.LOGGER.info("User " + loginForm.getLoginName()
+                        + " Migrated user. Sending back to the login Page");
+                handleError(request, "app.migrateduser");
+            }
+            else
+            {
+                handleError(request, "errors.incorrectLoginIDPassword");
+            }
             forwardTo = Constants.FAILURE;
         }
+
+
+
         return forwardTo;
     }
 
     private boolean isRequestFromClinportal(final HttpServletRequest request)
     {
         return request.getParameter(CDMSIntegrationConstants.IS_COMING_FROM_CLINPORTAL) != null
-                    && !(CDMSIntegrationConstants.DOUBLE_QUOTE
-                            .equals(request
-                                    .getParameter(CDMSIntegrationConstants.IS_COMING_FROM_CLINPORTAL)))
-                    && Boolean
-                            .valueOf(request
-                                    .getParameter(CDMSIntegrationConstants.IS_COMING_FROM_CLINPORTAL));
+                && !(CDMSIntegrationConstants.DOUBLE_QUOTE.equals(request
+                        .getParameter(CDMSIntegrationConstants.IS_COMING_FROM_CLINPORTAL)))
+                && Boolean.valueOf(request.getParameter(CDMSIntegrationConstants.IS_COMING_FROM_CLINPORTAL));
     }
 
     /**
@@ -294,11 +311,10 @@ public class LoginAction extends XSSSupportedAction
         return forwardTo;
     }
 
-
     private boolean isToCheckForPasswordExpiry(final LoginResult loginResult, final String validRole)
     {
         return !MigrationState.MIGRATED.equals(loginResult.getMigrationState())
-                && !MigrationState.NEW_WUSTL_USER.equals(loginResult.getMigrationState())
+                && !MigrationState.NEW_IDP_USER.equals(loginResult.getMigrationState())
                 && !MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState())
                 && !(isUserHasRole(validRole));
     }

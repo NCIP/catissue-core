@@ -372,7 +372,7 @@ public class CollectionProtocol extends SpecimenProtocol
 					if (!"".equals(clinicalDiagnosis))
 					{
 						final ClinicalDiagnosis clinicalDiagnosisObj = new ClinicalDiagnosis();
-						clinicalDiagnosisObj.setClinicalDiagnosis(clinicalDiagnosis);
+						clinicalDiagnosisObj.setName(clinicalDiagnosis);
 						clinicalDiagnosisObj.setCollectionProtocol(this);
 						this.clinicalDiagnosisCollection.add(clinicalDiagnosisObj);
 					}

@@ -42,7 +42,7 @@ public class TissueSiteTreeAction extends BaseAction
 		final String success = Constants.SUCCESS;
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		final String cdeName = request.getParameter("cdeName");
-
+		final String propName = request.getParameter("propertyName");
 		if (Constants.PAGE_OF_TISSUE_SITE.equals(pageOf))
 		{
 			final String dummyNodeName = Constants.DUMMY_NODE_NAME;
@@ -64,6 +64,7 @@ public class TissueSiteTreeAction extends BaseAction
 			}
 			finalDataListVector = AppUtility.createTreeNodeVector(dataList, finalDataListVector);
 			request.setAttribute(Constants.TREE_DATA, finalDataListVector);
+			request.setAttribute("propName", propName);
 		}
 		return mapping.findForward(success);
 	}

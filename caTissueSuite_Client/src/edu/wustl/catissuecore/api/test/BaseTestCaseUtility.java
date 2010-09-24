@@ -1,7 +1,5 @@
 package edu.wustl.catissuecore.api.test;
 
-
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -143,7 +141,6 @@ public class BaseTestCaseUtility {
 		collectionProtocol.setCoordinatorCollection(protocolCordinatorCollection);
 
 		return collectionProtocol;
-
 	}
 
 	public static void setCollectionProtocolEvent(CollectionProtocolEvent collectionProtocolEvent)
@@ -255,7 +252,6 @@ public class BaseTestCaseUtility {
 		return aliquotMap;
 	}
 
-
 	public static void updateCollectionProtocol(CollectionProtocol collectionProtocol)
 	{
 		collectionProtocol.setIrbIdentifier("abcdef");
@@ -284,8 +280,7 @@ public class BaseTestCaseUtility {
 		collectionProtocolEvent.setCollectionPointLabel("User entered value"+UniqueKeyGeneratorUtil.getUniqueKey());
 
 		return collectionProtocolEvent;
-
-	}
+    }
 
 	public static User initUser()
 	{
@@ -341,7 +336,6 @@ public class BaseTestCaseUtility {
 		address.setCountry("United States");
 		address.setPhoneNumber("212-223-3434");
 		address.setFaxNumber("212-223-3434");
-
 
 		userObj.setAddress(address);
 
@@ -472,7 +466,6 @@ public class BaseTestCaseUtility {
 
 		specimenCollectionGroup.setName("Collection Protocol1_1_1.1.1");
 
-
 		//Setting Consent Tier Status.
 		Collection consentTierStatusCollection = new HashSet();
 
@@ -501,7 +494,6 @@ public class BaseTestCaseUtility {
 
 		return specimenCollectionGroup;
 	}
-
 
 	public static CollectionProtocolRegistration initCollectionProtocolRegistration(Participant participant)
 	{
@@ -564,7 +556,6 @@ public class BaseTestCaseUtility {
 
 		return collectionProtocolRegistration;
 	}
-
 
 	public static SpecimenCollectionGroup createSCG(CollectionProtocolRegistration collectionProtocolRegistration)
 	{
@@ -650,8 +641,8 @@ public class BaseTestCaseUtility {
 		//site.setId(new Long(1));
 		sprObj.setSpecimenCollectionSite(site);
 		sprObj = setEventParameters(sprObj);
-		return sprObj;
 
+		return sprObj;
 }
 
 	public static SpecimenCollectionGroup setEventParameters(SpecimenCollectionGroup sprObj)
@@ -745,9 +736,8 @@ public class BaseTestCaseUtility {
 			consentTierColl.add(c3);
 		}
 		return consentTierColl;
-
-
-}
+	}
+	
 	public static Institution initInstitution()
 	{
 		Institution institutionObj = new Institution();
@@ -889,7 +879,6 @@ public class BaseTestCaseUtility {
 		siteObj.setActivityStatus("Active");
 		siteObj.setCoordinator(userObj);
 
-
 		Address addressObj = new Address();
 		addressObj.setCity("Saint Louis");
 		addressObj.setCountry("United States");
@@ -997,7 +986,6 @@ public class BaseTestCaseUtility {
 
 	}
 
-
 	public static Participant initParticipant()
 	{
 		Participant participant = new Participant();
@@ -1007,8 +995,6 @@ public class BaseTestCaseUtility {
 		participant.setGender("Male Gender");
 		participant.setEthnicity("Unknown");
 		participant.setSexGenotype("XX");
-
-
 
 		Collection raceCollection = new HashSet();
 		Race race = new Race();
@@ -1078,7 +1064,6 @@ public class BaseTestCaseUtility {
 		race.setRaceName("Unknown");
 		race.setParticipant(participant);
 		raceCollection.add(race);
-
 
 		//raceCollection.add("Black or African American"); //White
 		//raceCollection.add("Unknown"); //Asian
@@ -1358,8 +1343,6 @@ public class BaseTestCaseUtility {
 		specimen.setAvailableQuantity(quantity);
 		*/
 
-
-
 		DistributedItem distributedItem = new DistributedItem();
 		distributedItem.setQuantity(new Double(1));
 		distributedItem.setSpecimen(specimen);
@@ -1448,7 +1431,6 @@ public class BaseTestCaseUtility {
 	    return scg;
 
 	}
-
 
 	/*public static Specimen initTissueSpecimen()
 	{
@@ -1749,6 +1731,7 @@ public class BaseTestCaseUtility {
 		cellSpecimen.setSpecimenType("Fixed Cell Block");
 		cellSpecimen.setIsAvailable(new Boolean(true));
 		cellSpecimen.setActivityStatus("Active");
+		cellSpecimen.setCollectionStatus("Pending");
 
 		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 		specimenCharacteristics.setTissueSide("Left");
@@ -1824,38 +1807,39 @@ public class BaseTestCaseUtility {
 }
 	public static Specimen initFluidSpecimen()
 	{
-		FluidSpecimen cellSpecimen = new FluidSpecimen();
+		FluidSpecimen fluidSpecimen = new FluidSpecimen();
 
 //		SpecimenCollectionGroup scg = (SpecimenCollectionGroup)TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
 //
 //		//specimenCollectionGroup.setId(new Long(1));
 //		molecularSpecimen.setSpecimenCollectionGroup(scg);
-		cellSpecimen.setSpecimenClass("Fluid");
-		cellSpecimen.setLabel("Fluid Specimen"+UniqueKeyGeneratorUtil.getUniqueKey());
-		cellSpecimen.setBarcode("FluidSpecBarcode"+UniqueKeyGeneratorUtil.getUniqueKey());
-		cellSpecimen.setSpecimenType("Amniotic Fluid");
-		cellSpecimen.setIsAvailable(new Boolean(true));
-		cellSpecimen.setActivityStatus("Active");
+		fluidSpecimen.setSpecimenClass("Fluid");
+		fluidSpecimen.setLabel("Fluid Specimen"+UniqueKeyGeneratorUtil.getUniqueKey());
+		fluidSpecimen.setBarcode("FluidSpecBarcode"+UniqueKeyGeneratorUtil.getUniqueKey());
+		fluidSpecimen.setSpecimenType("Amniotic Fluid");
+		fluidSpecimen.setIsAvailable(new Boolean(true));
+		fluidSpecimen.setActivityStatus("Active");
+		fluidSpecimen.setCollectionStatus("Pending");
 
 		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 		specimenCharacteristics.setTissueSide("Left");
 		specimenCharacteristics.setTissueSite("Placenta");
-		cellSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
+		fluidSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
 
-		cellSpecimen.setPathologicalStatus("Malignant");
+		fluidSpecimen.setPathologicalStatus("Malignant");
 
 		Double quantity = new Double(10.0);
-		cellSpecimen.setInitialQuantity(quantity);
-		cellSpecimen.setAvailableQuantity(quantity);
+		fluidSpecimen.setInitialQuantity(quantity);
+		fluidSpecimen.setAvailableQuantity(quantity);
 		// modified code here. chnged funcion name to setInitialQuantity(quantity) from setQuantity(quantity)
 
-		//cellSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
-		cellSpecimen.setComment("");
+		//fluidSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
+		fluidSpecimen.setComment("");
 		// Is virtually located
-//		cellSpecimen.setStorageContainer(null);
-		cellSpecimen.setSpecimenPosition(null);
-//		cellSpecimen.setPositionDimensionOne(null);
-//		cellSpecimen.setPositionDimensionTwo(null);
+//		fluidSpecimen.setStorageContainer(null);
+		fluidSpecimen.setSpecimenPosition(null);
+//		fluidSpecimen.setPositionDimensionOne(null);
+//		fluidSpecimen.setPositionDimensionTwo(null);
 
 
 //		Collection externalIdentifierCollection = new HashSet();
@@ -1870,7 +1854,7 @@ public class BaseTestCaseUtility {
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
 		user.setId(new Long(1));
-		collectionEventParameters.setSpecimen(cellSpecimen);
+		collectionEventParameters.setSpecimen(fluidSpecimen);
 	//	collectionEventParameters.setId(new Long(0));
 		collectionEventParameters.setUser(user);
 		try
@@ -1887,7 +1871,7 @@ public class BaseTestCaseUtility {
 
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		receivedEventParameters.setUser(user);
-		receivedEventParameters.setSpecimen(cellSpecimen);
+		receivedEventParameters.setSpecimen(fluidSpecimen);
 		//receivedEventParameters.setId(new Long(0));
 		try
 		{
@@ -1905,9 +1889,9 @@ public class BaseTestCaseUtility {
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
 		specimenEventCollection.add(receivedEventParameters);
-		cellSpecimen.setSpecimenEventCollection(specimenEventCollection);
+		fluidSpecimen.setSpecimenEventCollection(specimenEventCollection);
 
-		return cellSpecimen;
+		return fluidSpecimen;
 }
 
 
@@ -2164,4 +2148,34 @@ public class BaseTestCaseUtility {
 
 		return ts;
 	}
+
+	public static Participant initParticipantWithoutGender()
+	{
+		Participant participant = new Participant();
+		participant.setLastName("lname"+UniqueKeyGeneratorUtil.getUniqueKey());
+		participant.setFirstName("fname"+UniqueKeyGeneratorUtil.getUniqueKey());
+		participant.setEthnicity("Unknown");
+		participant.setSexGenotype("XX");
+
+		Collection raceCollection = new HashSet();
+		Race race = new Race();
+		race.setRaceName("White");
+		race.setParticipant(participant);
+		raceCollection.add(race);
+		race = new Race();
+		race.setRaceName("Asian");
+		race.setParticipant(participant);
+		raceCollection.add(race);
+
+		participant.setRaceCollection(raceCollection);
+		participant.setActivityStatus("Active");
+		participant.setEthnicity("Hispanic or Latino");
+		Logger.out.info("Participant added successfully -->Name:"+participant.getFirstName()+" "+participant.getLastName());
+		Collection collectionProtocolRegistrationCollection = new HashSet();
+		CollectionProtocolRegistration collectionProtocolRegistration = initCollectionProtocolRegistration(participant);
+		collectionProtocolRegistrationCollection.add(collectionProtocolRegistration);
+		participant.setCollectionProtocolRegistrationCollection(collectionProtocolRegistrationCollection);
+		return participant;
+	}
+
 }

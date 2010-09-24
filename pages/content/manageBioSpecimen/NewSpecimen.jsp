@@ -1603,15 +1603,19 @@
 										</label>
 									</span>
 								</td>
-
-								<td align="center" class="black_ar">&nbsp;
-								</td>
-								<td width="16%" align="left" class="black_ar">
-									<label for="availableQuantity">
+								
+								<td align="center" class="black_ar">
+				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
+								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+				</logic:notEqual>
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;
+				</logic:equal>
+							</td>
+							<td align="left" class="black_ar">
+								<label for="availableQuantity">
 										<bean:message key="specimen.availableQuantity" />
-									</label>
-								</td>
-
+								</label>
+							</td>
 								<td width="28%" align="left" class="black_ar">
 									<html:text styleClass="black_ar" maxlength="10"  size="10"						styleId="availableQuantity" property="availableQuantity"					style="text-align:right" />
 									<span id="unitSpan1">

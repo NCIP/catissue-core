@@ -476,7 +476,14 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			specimenDataBean.setStorageContainerForSpecimen(storageType);
 
 		}
-		specimenDataBean.setGenerateLabel(Variables.isSpecimenLabelGeneratorAvl || isGenLabel(specimen));
+		if(Variables.isTemplateBasedLblGeneratorAvl)//bug  18681
+		{
+			specimenDataBean.setGenerateLabel(isGenLabel(specimen));
+		}
+		else
+		{
+		    specimenDataBean.setGenerateLabel(Variables.isSpecimenLabelGeneratorAvl);// || isGenLabel(specimen));
+		}
 		return specimenDataBean;
 	}
 
