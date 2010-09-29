@@ -19,6 +19,9 @@
 <script src="jss/splitter.js" type="text/javascript"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
 <script src="jss/caTissueSuite.js" type="text/javascript"></script>
+<script type="text/javascript" src="jss/dhtmlwindow.js"></script>
+<script type="text/javascript" src="jss/modal.js"></script>
+<script type="text/javascript" src="jss/ajax.js"></script>
 
 <html>
 <tiles:importAttribute />
@@ -33,6 +36,7 @@
 		var pageLoadTime;
 		var warnTimeout;
 		var defTimeout;
+		var pvwindow;
 		<%
 			int timeOut = -1;
 			int advanceTime = Integer.parseInt(XMLPropertyHandler.getValue(Constants.SESSION_EXPIRY_WARNING_ADVANCE_TIME));
@@ -78,14 +82,7 @@
 			else
 			{
 				defTimeout = setTimeout('sendToHomePage()', advanceTime*60*1000);
-				var choice = confirm("<%= advanceTimeoutMesg %>");
-
-				if(choice == 0) //cancel pressed, extend session
-				{
-					clearTimeout(defTimeout);
-					sendBlankRequest();
-					setAdvanceSessionTimeout(timeOut);
-				}
+				pvwindow=dhtmlmodal.open('Session Timeout', 'iframe', 'pages/SessionTimeOutWin.html','Session Timeout Warning', 'width=280px,height=115px,center=1,resize=0,scrolling=1');
 			}
 		}
 
@@ -102,6 +99,7 @@
 
 		function sendToHomePage()
 		{
+			pvwindow.hide(); // closes the message box when session expires
 				<%
 				   Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
 				   if(obj != null)
@@ -114,6 +112,18 @@
 				<%
 				   }
 				%>
+		}
+
+		function cancelMethod()
+		{
+			clearTimeout(defTimeout);
+			sendBlankRequest();
+			setAdvanceSessionTimeout(timeOut);
+		}
+
+		function getSessionWarnMessage()
+		{
+			return '<%=advanceTimeoutMesg%>';
 		}
 
 		function detectApplicationUsageActivity()
