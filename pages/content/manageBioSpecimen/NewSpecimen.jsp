@@ -1234,8 +1234,8 @@
 						</tr>
 				<% // if( operation.equals(Constants.EDIT) || (!Variables.isSpecimenLabelGeneratorAvl && !Variables.isSpecimenBarcodeGeneratorAvl))
 				if(form.getCollectionStatus() != null &&( (!form.getCollectionStatus().equals("Pending") && operation.equals(Constants.EDIT))
-				|| (!form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT) && (!Variables.isSpecimenLabelGeneratorAvl && !form.isGenerateLabel()))
-				|| ((!Variables.isSpecimenLabelGeneratorAvl && !form.isGenerateLabel()) && !Variables.isSpecimenBarcodeGeneratorAvl)))
+				|| (!form.getCollectionStatus().equals("Collected") && operation.equals(Constants.EDIT) && (!form.isGenerateLabel()))
+				|| ((!form.isGenerateLabel()) && !Variables.isSpecimenBarcodeGeneratorAvl)))
 				{
 				%>
 
@@ -1301,8 +1301,7 @@
 				<%}
 							//else  if(((!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
 								//	&& !form.isGenerateLabel() && Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
-					else  if(((!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
-						&& !form.isGenerateLabel() ) && operation.equals(Constants.ADD) )
+					else  if(!form.isGenerateLabel() && operation.equals(Constants.ADD) )
 
 
 				{
@@ -1328,7 +1327,7 @@
 							</td>
 						</tr>
 				<%
-						 }else if((form.isGenerateLabel() && !Variables.isSpecimenBarcodeGeneratorAvl) && operation.equals(Constants.ADD) )
+						 }else if((form.isGenerateLabel()) && operation.equals(Constants.ADD) )
 						{
 
 				%>
@@ -1346,10 +1345,10 @@
 							</td>
 						</tr>
 				<%
-					}else 
+					}else
 					{ %>
-							<html:hidden property="barcode" />					
-					   <% 
+							<html:hidden property="barcode" />
+					   <%
 					}
 			 %>
 
@@ -1603,7 +1602,7 @@
 										</label>
 									</span>
 								</td>
-								
+
 								<td align="center" class="black_ar">
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
 								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />

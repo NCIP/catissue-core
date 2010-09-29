@@ -736,7 +736,20 @@ public class AliquotAction extends SecureAction
 					aliqLabelFormat = obje[2].toString();
 				}
 			}
-				aliquotForm.setGenerateLabel(Variables.isSpecimenLabelGeneratorAvl);
+				if(Variables.isTemplateBasedLblGeneratorAvl)
+				{
+					aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliqLabelFormat, Constants.ALIQUOT));
+
+				}
+				else if(Variables.isSpecimenLabelGeneratorAvl)
+				{
+					aliquotForm.setGenerateLabel(true);
+				}
+				else
+				{
+					aliquotForm.setGenerateLabel(false);
+				}
+
 
 			// Map containerMap = bizLogic.getAllocatedContainerMap();
 			TreeMap containerMap = new TreeMap();
@@ -807,7 +820,20 @@ public class AliquotAction extends SecureAction
 					aliquotLabelFormat = obje[2].toString();
 				}
 			}*/
-			aliquotForm.setGenerateLabel(Variables.isSpecimenLabelGeneratorAvl);
+			if(Variables.isTemplateBasedLblGeneratorAvl)
+			{
+				aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliqLabelFormat, Constants.ALIQUOT));
+
+			}
+			else if(Variables.isSpecimenLabelGeneratorAvl)
+			{
+				aliquotForm.setGenerateLabel(true);
+			}
+			else
+			{
+				aliquotForm.setGenerateLabel(false);
+			}
+//			aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliqLabelFormat, Constants.ALIQUOT));
 			return mapping.findForward(pageOf);
 		}
 		catch (final DAOException daoException)
@@ -1256,7 +1282,10 @@ public class AliquotAction extends SecureAction
 				final String qtyKey = "Specimen:" + i + "_quantity";
 				aliquotMap.put(qtyKey, distributedQuantity);
 				final String labelKey = "Specimen:" + i + "_label";
-				aliquotMap.put(labelKey, form.getSpecimenLabel() + "_" + ++totalAliquotCount);
+				if(!form.isGenerateLabel())
+				{
+					aliquotMap.put(labelKey, form.getSpecimenLabel() + "_" + ++totalAliquotCount);
+				}
 
 			}
 

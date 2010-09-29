@@ -498,28 +498,30 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	private boolean isGenLabel(final Specimen objSpecimen)
 	{
 		boolean isGenLabelON = false;
+		if(Variables.isTemplateBasedLblGeneratorAvl)
+		{
+			String lineage = objSpecimen.getLineage();
+			String specimenLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
+			String derLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
+			String alLabelFomrat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
 
-		String lineage = objSpecimen.getLineage();
-		String specimenLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getSpecimenLabelFormat();
-		String derLabelFormat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getDerivativeLabelFormat();
-		String alLabelFomrat = objSpecimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getAliquotLabelFormat();
+			if(isLabelFormatEmpty(objSpecimen))
+			{
+				isGenLabelON = false;
+			}
+			else if(isLabelFromatCPDefault(objSpecimen))
+			{
+				isGenLabelON = SpecimenUtil.isLblGenOnForCP(specimenLabelFormat, derLabelFormat, alLabelFomrat, lineage);
+			}
+			else if(!isLabelFromatCPDefault(objSpecimen))
+			{
+				isGenLabelON = true;
+			}
 
-		if(isLabelFormatEmpty(objSpecimen))
-		{
-			isGenLabelON = false;
-		}
-		else if(isLabelFromatCPDefault(objSpecimen))
-		{
-			isGenLabelON = SpecimenUtil.isLblGenOnForCP(specimenLabelFormat, derLabelFormat, alLabelFomrat, lineage);
-		}
-		else if(!isLabelFromatCPDefault(objSpecimen))
-		{
-			isGenLabelON = true;
-		}
-
-		else if(objSpecimen.getSpecimenRequirement() == null)
-		{
-			isGenLabelON = SpecimenUtil.isLblGenOnForCP(specimenLabelFormat, derLabelFormat, alLabelFomrat, lineage);
+			else if(objSpecimen.getSpecimenRequirement() == null)
+			{
+				isGenLabelON = SpecimenUtil.isLblGenOnForCP(specimenLabelFormat, derLabelFormat, alLabelFomrat, lineage);
+			}
 		}
 		return isGenLabelON;
 	}
@@ -701,7 +703,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			{
 				if (specimen.getLineage().equals(Constants.ALIQUOT))
 				{
-					if( Variables.isSpecimenLabelGeneratorAvl || !isGenLabel(specimen))
+					if( !isGenLabel(specimen))
 					{
 						if (specimen.getParentSpecimen().getLabel() != null)
 						{

@@ -246,7 +246,7 @@ public class NewSpecimenAction extends SecureAction
 			String parentLabelFormat = null;
 			String derivativeLabelFormat = null;
 			String aliquotLabelFormat = null;
- 			if(!Variables.isSpecimenLabelGeneratorAvl){
+ 			if(Variables.isTemplateBasedLblGeneratorAvl){
 				parentLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getSpecimenLabelFormat();
 				derivativeLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getDerivativeLabelFormat();
 				aliquotLabelFormat = collectionProtocolRegistration.getCollectionProtocol().getAliquotLabelFormat();
@@ -256,12 +256,12 @@ public class NewSpecimenAction extends SecureAction
 			{
 				lineage = Constants.NEW_SPECIMEN;
 			}
-//			boolean generateLabel = SpecimenUtil.isLblGenOnForCP(parentLabelFormat, derivativeLabelFormat, aliquotLabelFormat, lineage);
+			boolean generateLabel = SpecimenUtil.isLblGenOnForCP(parentLabelFormat, derivativeLabelFormat, aliquotLabelFormat, lineage);
 
-//			if(!Validator.isEmpty(specimenForm.getOperation()) && !specimenForm.getOperation().equals(Constants.EDIT))
-//			{
-//				specimenForm.setGenerateLabel(generateLabel);
-//			}
+			if(!Validator.isEmpty(specimenForm.getOperation()) && !specimenForm.getOperation().equals(Constants.EDIT))
+			{
+				specimenForm.setGenerateLabel(generateLabel);
+			}
 			if (!Validator.isEmpty(specimenForm.getOperation()) && !specimenForm.getOperation().equals(Constants.ADD))
 			{
 				String hql = "select specimen.specimenRequirement from edu.wustl.catissuecore.domain.Specimen as specimen"
@@ -284,13 +284,26 @@ public class NewSpecimenAction extends SecureAction
 //						}
 //						else if(requirement != null && !requirement.getGenLabel())
 //						{
-//							generateLabel = SpecimenUtil.isGenLabel(specimen);
+							generateLabel = SpecimenUtil.isGenLabel(specimen);
 //						}
 //						/objSpecimen.setSpecimenRequirement((SpecimenRequirement)object);
 					}
 
 			}
-			specimenForm.setGenerateLabel(Variables.isSpecimenLabelGeneratorAvl);
+			if(Variables.isTemplateBasedLblGeneratorAvl)
+			{
+				specimenForm.setGenerateLabel(generateLabel);
+
+			}
+			else if(Variables.isSpecimenLabelGeneratorAvl)
+			{
+				specimenForm.setGenerateLabel(Variables.isSpecimenLabelGeneratorAvl);
+			}
+			else
+			{
+				specimenForm.setGenerateLabel(false);
+			}
+
 			if (collectionProtocolRegistration == null
 					|| collectionProtocolRegistration.getSignedConsentDocumentURL() == null)
 			{

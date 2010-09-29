@@ -212,7 +212,14 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 		}
 		else
 		{
-			request.setAttribute("SHOW_LABEL", Boolean.toString(!Variables.isSpecimenLabelGeneratorAvl));
+			if(Variables.isTemplateBasedLblGeneratorAvl)
+			{
+				request.setAttribute("SHOW_LABEL",Boolean.toString(true));
+			}
+			else
+			{
+				request.setAttribute("SHOW_LABEL", Boolean.toString(!Variables.isSpecimenLabelGeneratorAvl));
+			}
 		}
 		return "";
 	}
@@ -246,8 +253,8 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 			{
 				aliquotLabelFormat = obje[2].toString();
 			}
-//			generateLabel = Boolean.toString(!SpecimenUtil.isLblGenOnForCP(parentLabelFormat,
-//					deriveLabelFormat, aliquotLabelFormat, lineage));
+			generateLabel = Boolean.toString(!SpecimenUtil.isLblGenOnForCP(parentLabelFormat,
+					deriveLabelFormat, aliquotLabelFormat, lineage));
 		}
 		catch (ApplicationException e)
 		{
@@ -255,10 +262,22 @@ public class MultipleSpecimenFlexInitAction extends SecureAction
 			throw new BizLogicException(e.getErrorKey(), e, e.getMessage());
 		}
 //		if(Variables.isSpecimenLabelGeneratorAvl){
-			request.setAttribute("SHOW_LABEL", Boolean.toString(!Variables.isSpecimenLabelGeneratorAvl));
+//			request.setAttribute("SHOW_LABEL", Boolean.toString(!Variables.isSpecimenLabelGeneratorAvl));
 //		}else{
 //			request.setAttribute("SHOW_LABEL", generateLabel);
 //		}
+		if(Variables.isTemplateBasedLblGeneratorAvl)
+		{
+			request.setAttribute("SHOW_LABEL", Boolean.toString(Boolean.valueOf(generateLabel)));
+		}
+		else if(Variables.isSpecimenLabelGeneratorAvl)
+		{
+			request.setAttribute("SHOW_LABEL", Boolean.toString(!Variables.isSpecimenLabelGeneratorAvl));
+		}
+		else
+		{
+			request.setAttribute("SHOW_LABEL", Boolean.toString(true));
+		}
 	}
 
 	/**

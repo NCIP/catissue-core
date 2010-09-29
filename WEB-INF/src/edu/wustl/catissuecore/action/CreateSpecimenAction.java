@@ -211,7 +211,18 @@ public class CreateSpecimenAction extends SecureAction
 								alqLabelFrmt = obje[2].toString();
 							}
 						}
-						createForm.setGenerateLabel(Variables.isSpecimenLabelGeneratorAvl);
+						if(Variables.isTemplateBasedLblGeneratorAvl)
+						{
+							createForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, alqLabelFrmt, Constants.DERIVED_SPECIMEN));
+						}
+						else if(Variables.isSpecimenLabelGeneratorAvl)
+						{
+							createForm.setGenerateLabel(true);
+						}
+						else
+						{
+							createForm.setGenerateLabel(false);
+						}
 
 						createForm.setLabel("");
 					}

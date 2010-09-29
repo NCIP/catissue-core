@@ -357,7 +357,7 @@
 									<tr>
 
 									<%
-									if(!Variables.isSpecimenLabelGeneratorAvl && !form.isGenerateLabel())
+									if(!form.isGenerateLabel())
 									{
 									%>
 										<td align="center" class="black_ar">

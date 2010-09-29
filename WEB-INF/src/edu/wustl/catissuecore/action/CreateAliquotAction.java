@@ -505,7 +505,8 @@ public class CreateAliquotAction extends BaseAction
 			specimenCharacteristics.setTissueSite(aliquotForm.getTissueSite());
 			aliquotSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
 			// bug no. 8081 and 8083
-			if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+//			if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl)
+				if(aliquotMap.get(specimenKey + i + "_label") != null)
 			{
 				aliquotSpecimen.setLabel((String) aliquotMap.get(specimenKey + i + "_label"));
 			}
