@@ -706,9 +706,6 @@
 		<copy todir="${zip.dir}/catissue_de_integration_client" overwrite="true">
 					<fileset dir="${base.dir}/catissue_de_integration_client" />
 				</copy>
-		<copy todir="${zip.dir}/caTissueSuite_Client" overwrite="true">
-			<fileset dir="${base.dir}/caTissueSuite_Client" />
-		</copy>
 		<copy todir="${zip.dir}/BulkOperations" overwrite="true">
 			<fileset dir="${base.dir}/BulkOperations" />
 		</copy>
@@ -749,6 +746,22 @@
 		</copy>
 		<zip destfile="${zip.file}" basedir="${zip.dir}" />
 		<delete dir="${zip.dir}" />
+		<antcall target="create_API_client_zip"></antcall>
+	</target>
+
+	<target name="create_API_client_zip">
+		<property name="APIclientzip.dir" value="${base.dir}/caTISSUE_Suite_API_Client_v${application.version}_Installable" />
+		<property name="APIclientzip.file" value="${base.dir}/caTissue_Suite_API_Client_v${application.version}_Installable.zip" />
+		<delete file="${APIclientzip.file}" />
+		<delete dir="${APIclientzip.dir}" />
+		<mkdir dir="${APIclientzip.dir}" />
+		<copy todir="${APIclientzip.dir}/caTissueSuite_Client" overwrite="true">
+			<fileset dir="${base.dir}/caTissueSuite_Client" />
+			<fileset file="${base.dir}/caTissueInstall.properties" />
+		</copy>
+
+		<zip destfile="${APIclientzip.file}" basedir="${APIclientzip.dir}" />
+		<delete dir="${APIclientzip.dir}" />
 	</target>
 
 

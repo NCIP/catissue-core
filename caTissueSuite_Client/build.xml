@@ -3,7 +3,7 @@
 <!--Ant Script for create Build for caTISSUE Core-->
 
 <project name="caTissueSuite Client" default="compile_junit_TestCases" >
-	<property file="../caTissueInstall.properties"/>
+	<property file="./caTissueInstall.properties"/>
 	<!--define require dir and Properties -->
 	<property name="base.dir" value="."/>
 	<property name="target.dir" value="./classes" />
