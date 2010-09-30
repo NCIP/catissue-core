@@ -106,9 +106,8 @@
 				   {
 				%>
 				   var timeoutMessage = "<%= ApplicationProperties.getValue("app.session.timeout") %>";
-				   alert(timeoutMessage);
-
 				   window.location.href = "Logout.do";
+				   alert(timeoutMessage);
 				<%
 				   }
 				%>
