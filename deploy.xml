@@ -986,10 +986,10 @@
 	<!--End of Integrating the Advance Query Module  -->
 	<target name="jboss_configuration" description="configuring jboss">
 		<antcall target="copy_files" />
-			<replace file="${basedir}/caTissueSuite_Client/conf/remoteService.xml">
+			<!--<replace file="${basedir}/caTissueSuite_Client/conf/remoteService.xml">
 	           <replacefilter token="@@HOST@@" value="${jboss.server.host}" />
 	           <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
-	        </replace>
+	        </replace>-->
 		<antcall target="config_jboss_files" />
 	</target>
 
