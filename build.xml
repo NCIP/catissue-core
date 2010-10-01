@@ -400,8 +400,8 @@
 				<include name="client-config.wsdd" />
 				<include name="Applet/**" />
 				<include name="caTissue_Suite_User_Manual.pdf" />
-				<include name="caTissue_Suite_User_Manual_v11p5.doc" />
-				<include name="caTissueSuite_Technical_Guide_V11p5.doc" />
+				<include name="caTissue_Suite_User_Manual.doc" />
+				<include name="caTissueSuite_v1_2_Technical_Guide.doc" />
 				<include name="caTissueSuiteV11_UML.zip" />
 				<include name="**/WEB-INF/classes/**/cdms/CdmsIntegratorImpl.class" />
 	    		<exclude name="**/WEB-INF/classes/**/namegenerator/*"/>
