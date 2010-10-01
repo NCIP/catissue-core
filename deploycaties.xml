@@ -209,7 +209,7 @@
 	<target name="replacefiletoken">
 		<copy file="${basedir}/caTIES_conf/caTIES.properties" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
 		<copy file="${basedir}/caTIES_conf/build.xml" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
-		<copy file="${base.dir}/caTissueSuite_Client/conf/remoteService.xml" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
+		<copy file="${base.dir}/caTIES_conf/remoteService.xml" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
 		<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
 			<replacefilter token="@@COLL_PROT_TITLE@@" value="${collection.protocol.title}" />
 			<replacefilter token="@@SITE_NAME@@" value="${site.name}" />
