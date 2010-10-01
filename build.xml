@@ -706,6 +706,11 @@
 		<copy todir="${zip.dir}/catissue_de_integration_client" overwrite="true">
 					<fileset dir="${base.dir}/catissue_de_integration_client" />
 				</copy>
+
+		<copy todir="${zip.dir}/caTissueSuite_Client" overwrite="true"> 
+              <fileset dir="${base.dir}/caTissueSuite_Client" /> 
+        </copy>
+
 		<copy todir="${zip.dir}/BulkOperations" overwrite="true">
 			<fileset dir="${base.dir}/BulkOperations" />
 		</copy>
