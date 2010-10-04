@@ -42,7 +42,7 @@ public class BizLogicFactory implements IFactory
 	 */
 	public IBizLogic getBizLogic(int FORM_ID)
 	{
-		this.logger.debug("In Biz Logic Factory , Form ID: " + FORM_ID);
+		logger.debug("In Biz Logic Factory , Form ID: " + FORM_ID);
 
 		IBizLogic bizLogic = null;
 
@@ -403,9 +403,17 @@ public class BizLogicFactory implements IFactory
 		{
 			bizLogic = new ShipmentRequestBizLogic();
 		}
-		else if(className.equals("edu.wustl.catissuecore.domain.Aliquot"))
+		else if (className.equals("edu.wustl.catissuecore.domain.Aliquot"))
 		{
 			bizLogic = new AliquotBizLogic();
+		}
+		else if (className
+				.equals("edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry")
+				|| className
+						.equals("edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry")
+				|| className.equals("edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry"))
+		{
+			bizLogic = new AnnotationBizLogic();
 		}
 		else
 		{
