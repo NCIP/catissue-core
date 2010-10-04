@@ -737,10 +737,10 @@
 		<!-- DE conf files end -->
 		<!-- Copying DEIntegration.war
 		<copy file="deintegration.war" todir="${zip.dir}" overwrite="true" /> -->
-		<!-- Copying CA model wars
+		<!-- Copying CA model wars -->
 		<copy file="CA.war" todir="${zip.dir}" overwrite="true" />
 		<copy file="pathologySpecimen.war" todir="${zip.dir}" overwrite="true" />
-		<copy file="pathologySCG.war" todir="${zip.dir}" overwrite="true" /> -->
+		<copy file="pathologySCG.war" todir="${zip.dir}" overwrite="true" />
 		<!-- Copying private public migrator directory -->
 		<copy todir="${zip.dir}/private_public_migrator" overwrite="true">
 			<fileset dir="${base.dir}/private_public_migrator" />
@@ -763,6 +763,9 @@
 		<copy todir="${APIclientzip.dir}/caTissueSuite_Client" overwrite="true">
 			<fileset dir="${base.dir}/caTissueSuite_Client" />
 			<fileset file="${base.dir}/caTissueInstall.properties" />
+		</copy>
+		<copy todir="${APIclientzip.dir}/catissue_de_integration_client" overwrite="true">
+			<fileset dir="${base.dir}/catissue_de_integration_client" />
 		</copy>
 
 		<zip destfile="${APIclientzip.file}" basedir="${APIclientzip.dir}" />
