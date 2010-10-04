@@ -5,14 +5,15 @@
 <project name="catissue_de_integration_client" default="compile">
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
-			<pathelement location=".././lib/ant-contrib.jar" />
+			<pathelement location="./lib/ant-contrib.jar" />
 		</classpath>
 	</taskdef>
 	<!--define require dir and Properties -->
 	<property name="base.dir" value="." />
 	<property name="conf.dir" value="conf" />
 	<property name="lib.dir" value="lib" />
-	<property name="src.dir" value="." />
+	<property name="src.dir" value="./src" />
+	<property name="classes.dir" value="./classes" />
 	<property name="oracle.dialect.string" value="org.hibernate.dialect.Oracle9Dialect" />
 	<property name="mysql.dialect.string" value="org.hibernate.dialect.MySQLDialect" />
 
@@ -23,22 +24,17 @@
 
 
 	<path id="cp">
-		<pathelement path="${conf.dir}" />
 		<fileset dir="lib">
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
 
-	<path id="app.classpath">
-		<fileset dir="${base.dir}">
-			<include name="*.jar" />
-		</fileset>
-	</path>
-
 	<!-- Compile all files, generated and hand-written -->
 	<target name="compile">
-		<javac destdir="${base.dir}" includes="**/*.*" includeAntRuntime="false">
-			<src path="${base.dir}" />
+		<delete dir="${classes.dir}" failonerror="false"/>
+		<mkdir dir="${classes.dir}"/>
+		<javac destdir="${classes.dir}" includes="**/*.*" includeAntRuntime="false">
+			<src path="${src.dir}" />
 			<classpath>
 				<fileset dir="lib">
 					<include name="**/*.jar" />
@@ -48,181 +44,97 @@
 	</target>
 
 
-	<property name="unzip.dir" value="../${base.dir}" />
-	<property file="${unzip.dir}/caTissueInstall.properties" />
+	<property file="clientInstall.properties" />
 
-	<target name="modifyDEJar">
-		<unjar src="${lib.dir}/DynamicExtensions.jar" dest="${base.dir}/temp/DynamicExtensions" />
-
-		<copy file="${unzip.dir}/DE_conf/DynamicExtensionsHibernate.cfg.xml" todir="${base.dir}/temp/DynamicExtensions" overwrite="true" />
-
+	<target name="modifyDEConfigFiles">
+		<copy file="${conf.dir}/DynamicExtensionsHibernate.cfg.xml" todir="${classes.dir}" overwrite="true" />
+		<copy file="${conf.dir}/ApplicationDAOProperties.xml" todir="${classes.dir}" overwrite="true" />
+		<copy file="${conf.dir}/client_log4j.properties" tofile="${base.dir}/log4j.properties" overwrite="true" />
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<replace dir="${base.dir}/temp/DynamicExtensions">
-					<include name="*.cfg.xml" />
+				<replace dir="${classes.dir}">
+					<include name="*.xml" />
 					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
 					<replacefilter token="@@DRIVER@@" value="${mysql.driver.string}" />
 					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+					<replacefilter token="@@dbproperties@@" value="MySQLDAOProperties.xml" />
 				</replace>
 			</then>
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<replace dir="${base.dir}/temp/DynamicExtensions">
-						<include name="*.cfg.xml" />
+					<replace dir="${classes.dir}">
+						<include name="*.xml" />
 						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
 						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
 						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+						<replacefilter token="@@dbproperties@@" value="OracleDAOProperties.xml" />
 					</replace>
 				</then>
 			</elseif>
 		</if>
-		<replace dir="${base.dir}/temp/DynamicExtensions">
+		<replace dir="${classes.dir}">
 			<include name="*.cfg.xml" />
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
+			<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
 
 		</replace>
-
-		<jar destfile="${lib.dir}/DynamicExtensions.jar" basedir="${base.dir}/temp/DynamicExtensions" />
-		<delete dir="${base.dir}/temp/DynamicExtensions" />
 	</target>
 
 
 
 	<!-- run TestClient java file -->
-	<target name="runDemo" depends="compile">
-				<java classname="ClientDemo" fork="true"> 
-				<classpath refid="cp" />
-				<classpath>
-					<pathelement location="${src.dir}" />
-				</classpath>
-				<sysproperty key="log4j.configuration" value="${conf.dir}/client_log4j.properties" />
-			</java>
-		</target>
-	<target name="runDemo_SpecimenModel" depends="compile">
-			<java classname="ClientDemo_Specimen" fork="true"> 
-			<classpath refid="cp" />
+	<target name="runDemo_SpecimenModel" depends="compile,modifyDEConfigFiles,update.jboss.url" description="It will run the demo programme to insert the data into the Specimen model as well as will query the data inserted using the API's">
+		<java classname="client.ClientDemo_Specimen" fork="true">
+			<arg value="${jboss.server.url}" />
+			<arg value="${application.username}" />
+			<arg value="${application.password}" />
 			<classpath>
-				<pathelement location="${src.dir}" />
+				<pathelement location="${classes.dir}" />
 			</classpath>
-			<sysproperty key="log4j.configuration" value="${conf.dir}/client_log4j.properties" />
-		</java>
-	</target>
-	
-	<target name="runDemo_SCGModel" depends="compile">
-
-		<java classname="ClientDemo_SCG" fork="true"> 
-
 			<classpath refid="cp" />
-			<classpath>
-				<pathelement location="${src.dir}" />
-			</classpath>
-			<sysproperty key="log4j.configuration" value="${conf.dir}/client_log4j.properties" />
-		</java>
-	</target>
-	
-	<target name="runDemo_CAModel" depends="compile">
-		<java classname="ClientDemo_CA" fork="true">
 
-			<classpath refid="cp" />
-			<classpath>
-				<pathelement location="${src.dir}" />
-			</classpath>
-			<sysproperty key="log4j.configuration" value="${conf.dir}/client_log4j.properties" />
 		</java>
 	</target>
 
-	<target name="copyDeIntegrationWar">
-		<antcall target="updateDBProperties">
-			<param name="warName" value="CA"/>
-		</antcall>
-		<antcall target="updateDBProperties">
-			<param name="warName" value="pathologySCG"/>
-		</antcall>
-		<antcall target="updateDBProperties">
-			<param name="warName" value="pathologySpecimen"/>
-		</antcall>
-		<antcall target="updateDBProperties">
-			<param name="warName" value="deintegration"/>
-		</antcall>
-			
-		<delete includeemptydirs="true">
-			<fileset dir="${base.dir}/temp">
-				<include name="**/*" />
-			</fileset>
-		</delete>
+	<target name="runDemo_SCGModel" depends="compile,modifyDEConfigFiles,update.jboss.url" description="It will run the demo programme to insert the data into the SCG model as well as will query the data inserted using the API's">
+			<java classname="client.ClientDemo_SCG" fork="true">
+			<arg value="${jboss.server.url}" />
+			<arg value="${application.username}" />
+			<arg value="${application.password}" />
+			<classpath>
+				<pathelement location="${classes.dir}" />
+			</classpath>
+			<classpath refid="cp" />
 
+		</java>
 	</target>
-	
-	<target name="updateDBProperties">
-		<unwar src="${unzip.dir}/${warName}.war" dest="${base.dir}/temp/${warName}" />
-		<copy file="${unzip.dir}/DE_conf/hibernate.properties" todir="${base.dir}/temp/${warName}/WEB-INF/classes" overwrite="true" />
 
+	<target name="runDemo_CAModel" depends="compile,modifyDEConfigFiles,update.jboss.url" description="It will run the demo programme to insert the data into the ClinicalAnnotations model as well as will query the data inserted using the API's">
+		<java classname="client.ClientDemo_CA" fork="true">
+			<arg value="${jboss.server.url}" />
+			<arg value="${application.username}" />
+			<arg value="${application.password}" />
+			<classpath>
+				<pathelement location="${classes.dir}" />
+			</classpath>
+			<classpath refid="cp" />
+
+		</java>
+	</target>
+	<target name="update.jboss.url">
 		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
+			<equals arg1="yes" arg2="${jboss.container.secure}" />
 			<then>
-				<replace dir="${base.dir}/temp/${warName}/WEB-INF/classes">
-					<include name="hibernate.properties" />
-					<replacefilter token="@@DIALECT@@" value="org.hibernate.dialect.MySQLDialect" />
-					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-				</replace>
+				<property name="jboss.server.url" value="https://${jboss.server.host}:${jboss.server.port}" />
 			</then>
-
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<replace dir="${base.dir}/temp/${warName}/WEB-INF/classes">
-						<include name="hibernate.properties" />
-						<replacefilter token="@@DIALECT@@" value="org.hibernate.dialect.Oracle9Dialect" />
-						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
-						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-					</replace>
-				</then>
-			</elseif>
+			<else>
+				<property name="jboss.server.url" value="http://${jboss.server.host}:${jboss.server.port}" />
+			</else>
 		</if>
-		<replace dir="${base.dir}/temp/${warName}/WEB-INF/classes">
-			<include name="hibernate.properties" />
-			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-			<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}" />
-
-		</replace>
-
-		<war destfile="${base.dir}/temp/${warName}.war" webxml="${base.dir}/temp/${warName}/WEB-INF/web.xml">
-			<fileset dir="${base.dir}/temp/${warName}">
-				<include name="**/**/**.*" />
-			</fileset>
-		</war>
-
-		<copy todir="${jboss.home.dir}/server/default/deploy" file="${base.dir}/temp/${warName}.war" overwrite="true" />
-		<delete file="${base.dir}/temp/${warName}.war" />
-
-	</target>
-	
-	
-	<target name="modifyProjectWar">
-			<unwar src="../catissuecore.war" dest="${base.dir}/temp/catissuecore" />
-			<unwar src="${caCORE.jBoss.home.dir}/server/default/deploy/${caCORE.project.name}.war" dest="${base.dir}/temp/${caCORE.project.name}" />
-			<copy file="${base.dir}/temp/catissuecore/WEB-INF/lib/hibernate3.jar" todir="${base.dir}/temp/${caCORE.project.name}/WEB-INF/lib" overwrite="true" />
-
-
-			<war destfile="${base.dir}/temp/${caCORE.project.name}.war" webxml="${base.dir}/temp/${caCORE.project.name}/WEB-INF/web.xml">
-				<fileset dir="${base.dir}/temp/${caCORE.project.name}">
-					<include name="**/**/**.*" />
-				</fileset>
-			</war>
-
-			<copy todir="${caCORE.jBoss.home.dir}/server/default/deploy" file="${base.dir}/temp/${caCORE.project.name}.war" overwrite="true" />
-
-		<!--	<delete includeemptydirs="true">
-				<fileset dir="${base.dir}/temp">
-					<include name="**/*" />
-				</fileset>
-			</delete>
-
-			<delete file="${base.dir}/temp/deintegration.war" />   -->
+		<echo message="${jboss.server.url}"/>
 		</target>
-	
-</project>
+
+
+	</project>
