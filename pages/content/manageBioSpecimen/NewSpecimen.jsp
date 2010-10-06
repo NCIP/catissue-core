@@ -693,6 +693,8 @@
 			}
 			else{*/
 				var id = document.forms[0].id.value;
+				var label = document.getElementById("label").value;
+
 				<%
 				formNameAction = "ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters";
 				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
