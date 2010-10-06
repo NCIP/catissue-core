@@ -492,12 +492,12 @@
 	<!--  property for the help page links/icons -->
 	<property>
 		<name>userguide.link</name>
-		<value>caTissue_Suite_User_Manual.doc</value>
+		<value>https://gforge.nci.nih.gov/docman/view.php/689/23167/caTissue_Suite_User_Manual.doc</value>
 	</property>
 
 	<property>
 		<name>technicalguide.link</name>
-		<value>caTissueSuite_v1_2_Technical_Guide.doc</value>
+		<value>https://gforge.nci.nih.gov/docman/view.php/689/23168/caTissueSuite_v1_2_Technical_Guide.doc</value>
 	</property>
 
 	<property>
@@ -635,5 +635,4 @@
 		<name>cas.logout.url</name>
 		<value>@@cas.logout.url@@/cas/logout</value>
 	</property>
-
 </properties>
