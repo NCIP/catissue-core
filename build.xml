@@ -120,6 +120,10 @@
 				<include name="**/CatissueCdmsIntegrator.class"/>
     			<include name="**/CatissueCdmsURLInformationObject.class"/>
 			</fileset>
+			<manifest>
+				<attribute name="Build-on" value="${TODAY} ${TSTAMP}" />
+				<attribute name="SVN-URL" value="${dist.revision}" />
+			</manifest>
 		</jar>
 	</target>
 
@@ -135,6 +139,10 @@
 				<include name="**/LabelTokens.class"/>
 				<include name="**/TokenFactory.class"/>
 			</fileset>
+			<manifest>
+				<attribute name="Build-on" value="${TODAY} ${TSTAMP}" />
+				<attribute name="SVN-URL" value="${dist.revision}" />
+			</manifest>
 		</jar>
 	</target>
 
@@ -158,6 +166,10 @@
 			<exclude name="**/LabelTokens.class"/>
 			<exclude name="**/TokenFactory.class"/>
 		</fileset>
+		<manifest>
+			<attribute name="Build-on" value="${TODAY} ${TSTAMP}" />
+			<attribute name="SVN-URL" value="${dist.revision}" />
+		</manifest>
 	</jar>
 	</target>
 	<target name="PrintService_Client">
@@ -169,6 +181,10 @@
 				<include name="**/LabelPrinterFactory.class"/>
 	    		<include name="**/PropertyHandler.class"/>
 			</fileset>
+			<manifest>
+				<attribute name="Build-on" value="${TODAY} ${TSTAMP}" />
+				<attribute name="SVN-URL" value="${dist.revision}" />
+			</manifest>
 		</jar>
 		</target>
 
@@ -182,6 +198,10 @@
 			<!--<fileset dir="${target.dir}/edu/wustl/catissuecore/printservicemodule" >
 						<include  name="PrintServiceImplementor.properties" />
 			</fileset>-->
+			<manifest>
+				<attribute name="Build-on" value="${TODAY} ${TSTAMP}" />
+				<attribute name="SVN-URL" value="${dist.revision}" />
+			</manifest>
 		</jar>
 		</target>
 
@@ -707,8 +727,8 @@
 					<fileset dir="${base.dir}/catissue_de_integration_client" />
 				</copy>
 
-		<copy todir="${zip.dir}/caTissueSuite_Client" overwrite="true"> 
-              <fileset dir="${base.dir}/caTissueSuite_Client" /> 
+		<copy todir="${zip.dir}/caTissueSuite_Client" overwrite="true">
+              <fileset dir="${base.dir}/caTissueSuite_Client" />
         </copy>
 
 		<copy todir="${zip.dir}/BulkOperations" overwrite="true">
