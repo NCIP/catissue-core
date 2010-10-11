@@ -43,50 +43,50 @@ public class HL7Parser implements Parser
 	/**
 	 * Points for exact SSN.
 	 */
-	private static final int POINTS_FOR_SSN_EXACT = Integer.parseInt(XMLPropertyHandler
+	private static final int PTS_FOR_SSN_EXACT = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_SSN_EXACT));
 
 	/**
 	 * Points for exact PMI.
 	 */
-	private static final int POINTS_FOR_PMI_EXACT = Integer.parseInt(XMLPropertyHandler
+	private static final int PTS_FOR_PMI_EXACT = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_PMI_EXACT));
 
 	/**
 	 * Points for exact Date Of Birth.
 	 */
-	private static final int POINTS_FOR_DOB_EXACT = Integer.parseInt(XMLPropertyHandler
+	private static final int PTS_FOR_DOB_EXACT = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_DOB_EXACT));
 
 	/**
 	 * Points for exact Last Name.
 	 */
-	private static final int POINTS_FOR_LASTNAME_EXACT = Integer.parseInt(XMLPropertyHandler
+	private static final int PTS_FOR_LNAME = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_LAST_NAME_EXACT));
 
 	/**
 	 * Points for exact First Name.
 	 */
-	private static final int POINTS_FOR_FIRSTNAME_EXACT = Integer.parseInt(XMLPropertyHandler
+	private static final int PTS_FOR_FNAME = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_FIRST_NAME_EXACT));
 
 	/**
 	 * Total Points.
 	 */
-	private static final int TOTAL_POINTS_FROM_PROPERTIES = POINTS_FOR_FIRSTNAME_EXACT
-			+ POINTS_FOR_LASTNAME_EXACT + POINTS_FOR_DOB_EXACT + POINTS_FOR_SSN_EXACT
-			+ POINTS_FOR_PMI_EXACT;
+	private static final int TOTAL_PTS_PROPS = PTS_FOR_FNAME
+			+ PTS_FOR_LNAME + PTS_FOR_DOB_EXACT + PTS_FOR_SSN_EXACT
+			+ PTS_FOR_PMI_EXACT;
 
 	/**
 	 * Points of Threshold 1.
 	 */
-	private static final int POINTS_FOR_THRESHOLD1 = Integer.parseInt(XMLPropertyHandler
+	private static final int PTS_THRESHOLD1 = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_THRESHOLD1));
 
 	/**
 	 * Points of Threshold 2.
 	 */
-	private static final int POINTS_FOR_THRESHOLD2 = Integer.parseInt(XMLPropertyHandler
+	private static final int PTS_THRESHOLD2 = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.SPR_THRESHOLD2));
 
 	/**
@@ -410,69 +410,73 @@ public class HL7Parser implements Parser
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-
-						if ((participant.getSocialSecurityNumber() == null || participant
-								.getSocialSecurityNumber().trim().equals(""))
-								&& (participant.getFirstName() == null || participant.getFirstName()
-										.trim().equals(""))
-								&& (participant.getLastName() == null || participant.getLastName()
-										.trim().equals(""))
-								&& participant.getBirthDate() == null
-								&& participant.getParticipantMedicalIdentifierCollection() == null)
+						logger.info("\nsiteName = "+siteName+"        siteNames.get(siteNames.size()-1) = "+siteNames.get(siteNames.size()-1));
+						if(scg != null || siteName==siteNames.get(siteNames.size()-1))
 						{
-							logger.info("::::::::::::::::all empty fields for participant:::::::::");
-							queue = getQueueForAllFieldsEmpty(scg, participant, status);
-						}
-						else
-						{
-							try {
-								logger.info(":::::::::::::::: before defaultLookUPResultList :::::::::");
-								defaultLookUPResultList = CaCoreAPIService
-										.getParticipantMatchingObects(participant);
-								logger.info(":::::::::::::::: after defaultLookUPResultList :::::::::");
-							} catch (Exception e) {
-								logger.info("\n :::::::::::::::Exception in participant matching::::::::::: \n");
-								logger.error(e.getMessage());
-								logger.error(e.fillInStackTrace());
-								e.printStackTrace();
-							}
-
-							if ((defaultLookUPResultList != null) && !defaultLookUPResultList.isEmpty())
+							if ((participant.getSocialSecurityNumber() == null || participant
+									.getSocialSecurityNumber().trim().equals(""))
+									&& (participant.getFirstName() == null || participant.getFirstName()
+											.trim().equals(""))
+									&& (participant.getLastName() == null || participant.getLastName()
+											.trim().equals(""))
+									&& participant.getBirthDate() == null
+									&& participant.getParticipantMedicalIdentifierCollection() == null)
 							{
-								logger.info(":::::::::::::::: defaultLookUPResultList is not null and empty :::::::::");
-								queue = getQueueForNotEmptyAmbiguityList(scg, defaultLookUPResultList,
-										participant, status, site);
+								logger.info("::::::::::::::::all empty fields for participant:::::::::");
+								queue = getQueueForAllFieldsEmpty(scg, participant, status);
 							}
 							else
 							{
-								logger.info("No matching participant found");
-								if (scg == null)
+								try {
+									logger.info(":::::::::::::::: before defaultLookUPResultList :::::::::");
+									defaultLookUPResultList = CaCoreAPIService
+											.getParticipantMatchingObects(participant);
+									logger.info(":::::::::::::::: after defaultLookUPResultList :::::::::");
+								} catch (Exception e) {
+									logger.info("\n :::::::::::::::Exception in participant matching::::::::::: \n");
+									logger.error(e.getMessage());
+									logger.error(e.fillInStackTrace());
+									e.printStackTrace();
+								}
+
+								if ((defaultLookUPResultList != null) && !defaultLookUPResultList.isEmpty())
 								{
-									logger.info("Creating new one no scg with"
-											+ " same spr is found--Action1");
-									participantList = createPartcipant(participant, status);
-									queue.setParticipantCollection(participantList);
-									queue.setStatus(CaTIESConstants.NEW);
+									logger.info(":::::::::::::::: defaultLookUPResultList is not null and empty :::::::::");
+									queue = getQueueForNotEmptyAmbiguityList(scg, defaultLookUPResultList,
+											participant, status, site);
 								}
 								else
 								{
-									logger.info("Conflict resolver scg with"
-											+ " same spr is found-Action4");
-									Participant scgParticipant;
-									try {
-										scgParticipant = ReportLoaderUtil
-												.getParticipant(scg.getId());
-										logger.info("::::::::::::::Line 467::::::::::::::::::");
-									participantList = new HashSet<Participant>();
-									participantList.add(scgParticipant);
-									queue.setParticipantCollection(participantList);
-									queue.setStatus(CaTIESConstants.STATUS_PARTICIPANT_CONFLICT);
-									} catch (Exception e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
+									logger.info("No matching participant found");
+									if (scg == null)
+									{
+										logger.info("Creating new one no scg with"
+												+ " same spr is found--Action1");
+										participantList = createPartcipant(participant, status);
+										queue.setParticipantCollection(participantList);
+										queue.setStatus(CaTIESConstants.NEW);
+									}
+									else
+									{
+										logger.info("Conflict resolver scg with"
+												+ " same spr is found-Action4");
+										Participant scgParticipant;
+										try {
+											scgParticipant = ReportLoaderUtil
+													.getParticipant(scg.getId());
+											logger.info("::::::::::::::Line 467::::::::::::::::::");
+										participantList = new HashSet<Participant>();
+										participantList.add(scgParticipant);
+										queue.setParticipantCollection(participantList);
+										queue.setStatus(CaTIESConstants.STATUS_PARTICIPANT_CONFLICT);
+										} catch (Exception e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
 									}
 								}
 							}
+							break;
 						}
 					}
 				}
@@ -604,7 +608,7 @@ public class HL7Parser implements Parser
 			{
 				logger.info("\n:::: In getQueueForAllCases ::::::: SSN & PMI no match");
 				final double participantWeight = defaultLookUPResultList.get(0).getWeight();
-				final double totalPoint = TOTAL_POINTS_FROM_PROPERTIES;
+				final double totalPoint = TOTAL_PTS_PROPS;
 				logger.info("\n:::: totalPoint = "+totalPoint+"  participantWeight = "+participantWeight);
 				if (defaultLookUPResultList.size() == 1 && totalPoint == participantWeight)
 				{
@@ -769,7 +773,7 @@ public class HL7Parser implements Parser
 			Set<Participant> pListBasedOnWt = new HashSet<Participant>();
 
 			final double lowerWtLimit = SPR_CUT_OFF;
-			final double upperWtLimit = POINTS_FOR_THRESHOLD2;
+			final double upperWtLimit = PTS_THRESHOLD2;
 			final boolean lowerWtLimitFlag = false;
 			final boolean upperWtLimitFlag = true;
 
@@ -820,7 +824,7 @@ public class HL7Parser implements Parser
 			double upperWtLimit;
 			boolean lowerWtLimitFlag;
 			boolean upperWtLimitFlag;
-			lowerWtLimit = POINTS_FOR_THRESHOLD1 - 1;
+			lowerWtLimit = PTS_THRESHOLD1 - 1;
 			upperWtLimit = 0;
 			lowerWtLimitFlag = true;
 			upperWtLimitFlag = false;
@@ -882,7 +886,7 @@ public class HL7Parser implements Parser
 			for (final DefaultLookupResult defaultLookupResult : defaultLookUPResultList)
 			{
 				participantWt = defaultLookupResult.getWeight();
-				if (participantWt >= POINTS_FOR_THRESHOLD1)
+				if (participantWt >= PTS_THRESHOLD1)
 				{
 					pListBasedOnWt.add((Participant) defaultLookupResult.getObject());
 				}
