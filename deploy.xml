@@ -1328,10 +1328,6 @@
 		<antcall target="modifyDEWars">
 			<param name="warName" value="pathologySpecimen"/>
 		</antcall>
-
-		<antcall target="modifyDEWars">
-			<param name="warName" value="deintegration"/>
-		</antcall>
 	</target>
 
 	<target name="modifyDEWars" description="Modify the DE war">
