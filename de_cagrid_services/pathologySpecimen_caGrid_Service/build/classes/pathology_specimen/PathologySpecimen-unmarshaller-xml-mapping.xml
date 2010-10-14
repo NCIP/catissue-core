@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://www.castor.org/mapping.dtd">
+
+<mapping>
+  <class name="pathology_specimen.SpecimenNottinghamHistologicScore" identity="id">
+    <map-to xml="SpecimenNottinghamHistologicScore" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="totalNottinghamScore" type="integer">
+      <bind-xml name="totalNottinghamScore" node="attribute" />
+    </field>
+    <field name="mitoticCountScore" type="integer">
+      <bind-xml name="mitoticCountScore" node="attribute" />
+    </field>
+    <field name="nuclearPleomorphismScore" type="integer">
+      <bind-xml name="nuclearPleomorphismScore" node="attribute" />
+    </field>
+    <field name="tubuleFormationScore" type="integer">
+      <bind-xml name="tubuleFormationScore" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_specimen.SpecimenHistologicGrade" identity="id">
+    <map-to xml="SpecimenHistologicGrade" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="grade" type="string">
+      <bind-xml name="grade" node="attribute" />
+    </field>
+    <field name="otherGradingSystemName" type="string">
+      <bind-xml name="otherGradingSystemName" node="attribute" />
+    </field>
+    <field name="gradingSystemName" type="string">
+      <bind-xml name="gradingSystemName" node="attribute" />
+    </field>
+    <field name="specimenBaseSolidTissuePathologyAnnotation" type="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation">
+      <bind-xml name="SpecimenBaseSolidTissuePathologyAnnotation" type="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation" location="specimenBaseSolidTissuePathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.SpecimenInvasion" identity="id">
+    <map-to xml="SpecimenInvasion" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="perineuralInvasion" type="string">
+      <bind-xml name="perineuralInvasion" node="attribute" />
+    </field>
+    <field name="venousInvasion" type="string">
+      <bind-xml name="venousInvasion" node="attribute" />
+    </field>
+    <field name="lymphaticInvasion" type="string">
+      <bind-xml name="lymphaticInvasion" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_specimen.SpecimenHistologicVariantType" identity="id">
+    <map-to xml="SpecimenHistologicVariantType" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherHistologicType" type="string">
+      <bind-xml name="otherHistologicType" node="attribute" />
+    </field>
+    <field name="HistologicType" type="pathology_specimen.SpecimenHistologicType">
+      <bind-xml name="SpecimenHistologicType" type="pathology_specimen.SpecimenHistologicType" location="HistologicType" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.SpecimenHistologicType" identity="id">
+    <map-to xml="SpecimenHistologicType" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="type" type="string">
+      <bind-xml name="type" node="attribute" />
+    </field>
+    <field name="HistologicVariantType" type="pathology_specimen.SpecimenHistologicVariantType" collection="collection">
+      <bind-xml name="SpecimenHistologicVariantType" type="pathology_specimen.SpecimenHistologicVariantType" location="HistologicVariantType" node="element" />
+    </field>
+    <field name="SpecimenBaseSolidTissuePathologyAnnotation" type="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation">
+      <bind-xml name="SpecimenBaseSolidTissuePathologyAnnotation" type="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation" location="SpecimenBaseSolidTissuePathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation" identity="id">
+    <map-to xml="SpecimenBaseSolidTissuePathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="comments" type="string">
+      <bind-xml name="comments" node="attribute" />
+    </field>
+    <field name="HistologicType" type="pathology_specimen.SpecimenHistologicType" collection="collection">
+      <bind-xml name="SpecimenHistologicType" type="pathology_specimen.SpecimenHistologicType" location="HistologicType" node="element" />
+    </field>
+    <field name="histologicGrade" type="pathology_specimen.SpecimenHistologicGrade" collection="collection">
+      <bind-xml name="SpecimenHistologicGrade" type="pathology_specimen.SpecimenHistologicGrade" location="histologicGrade" node="element" />
+    </field>
+    <field name="additionalFinding" type="pathology_specimen.SpecimenAdditionalFinding" collection="collection">
+      <bind-xml name="SpecimenAdditionalFinding" type="pathology_specimen.SpecimenAdditionalFinding" location="additionalFinding" node="element" />
+    </field>
+    <field name="SpecimenRecordEntry_SpecimenBaseSolidTissuePathologyAnnotation" type="pathology_specimen.SpecimenRecordEntry">
+      <bind-xml name="SpecimenRecordEntry" type="pathology_specimen.SpecimenRecordEntry" location="SpecimenRecordEntry_SpecimenBaseSolidTissuePathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.SpecimenDetails1" identity="id">
+    <map-to xml="SpecimenDetails1" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="detail" type="string">
+      <bind-xml name="detail" node="attribute" />
+    </field>
+    <field name="additionalPathologicFinding" type="pathology_specimen.AdditionalPathologicFinding">
+      <bind-xml name="AdditionalPathologicFinding" type="pathology_specimen.AdditionalPathologicFinding" location="additionalPathologicFinding" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.AdditionalPathologicFinding" identity="id">
+    <map-to xml="AdditionalPathologicFinding" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="comments" type="string">
+      <bind-xml name="comments" node="attribute" />
+    </field>
+    <field name="detailsCollection" type="pathology_specimen.SpecimenDetails1" collection="collection">
+      <bind-xml name="SpecimenDetails1" type="pathology_specimen.SpecimenDetails1" location="detailsCollection" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.SpecimenGleasonScore" identity="id">
+    <map-to xml="SpecimenGleasonScore" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="tertiaryPatternScore" type="integer">
+      <bind-xml name="tertiaryPatternScore" node="attribute" />
+    </field>
+    <field name="secondaryPatternScore" type="integer">
+      <bind-xml name="secondaryPatternScore" node="attribute" />
+    </field>
+    <field name="primaryPatternScore" type="integer">
+      <bind-xml name="primaryPatternScore" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_specimen.SpecimenAdditionalFinding" identity="id">
+    <map-to xml="SpecimenAdditionalFinding" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="pathologicFinding" type="string">
+      <bind-xml name="pathologicFinding" node="attribute" />
+    </field>
+    <field name="SpecimenBaseSolidTissuePathologyAnnotation" type="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation">
+      <bind-xml name="SpecimenBaseSolidTissuePathologyAnnotation" type="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation" location="SpecimenBaseSolidTissuePathologyAnnotation" node="element" />
+    </field>
+    <field name="Details" type="pathology_specimen.SpecimenDetails" collection="collection">
+      <bind-xml name="SpecimenDetails" type="pathology_specimen.SpecimenDetails" location="Details" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.SpecimenDetails" identity="id">
+    <map-to xml="SpecimenDetails" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="details" type="string">
+      <bind-xml name="details" node="attribute" />
+    </field>
+    <field name="AdditionalFinding" type="pathology_specimen.SpecimenAdditionalFinding">
+      <bind-xml name="SpecimenAdditionalFinding" type="pathology_specimen.SpecimenAdditionalFinding" location="AdditionalFinding" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.ProstateSpecimenGleasonScore" identity="id">
+    <map-to xml="ProstateSpecimenGleasonScore" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="tertiaryPatternScore" type="string">
+      <bind-xml name="tertiaryPatternScore" node="attribute" />
+    </field>
+    <field name="secondaryPatternScore" type="string">
+      <bind-xml name="secondaryPatternScore" node="attribute" />
+    </field>
+    <field name="primaryPatternScore" type="string">
+      <bind-xml name="primaryPatternScore" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_specimen.BreastSpecimenNottinghamHistologicScore" identity="id">
+    <map-to xml="BreastSpecimenNottinghamHistologicScore" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="totalNottinghamScore" type="long">
+      <bind-xml name="totalNottinghamScore" node="attribute" />
+    </field>
+    <field name="mitoticCountScore" type="string">
+      <bind-xml name="mitoticCountScore" node="attribute" />
+    </field>
+    <field name="nuclearPleomorphismScore" type="string">
+      <bind-xml name="nuclearPleomorphismScore" node="attribute" />
+    </field>
+    <field name="tubuleFormationScore" type="string">
+      <bind-xml name="tubuleFormationScore" node="attribute" />
+    </field>
+  </class>
+  <class name="pathology_specimen.SpecimenRecordEntry" identity="id">
+    <map-to xml="SpecimenRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="ProstateSpecimenPathologyAnnotationCollection" type="pathology_specimen.ProstateSpecimenPathologyAnnotation" collection="collection">
+      <bind-xml name="ProstateSpecimenPathologyAnnotation" type="pathology_specimen.ProstateSpecimenPathologyAnnotation" location="ProstateSpecimenPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="MelanomaSpecimenPathologyAnnotationCollection" type="pathology_specimen.MelanomaSpecimenPathologyAnnotation" collection="collection">
+      <bind-xml name="MelanomaSpecimenPathologyAnnotation" type="pathology_specimen.MelanomaSpecimenPathologyAnnotation" location="MelanomaSpecimenPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="KidneySpecimenPathologyAnnotationCollection" type="pathology_specimen.KidneySpecimenPathologyAnnotation" collection="collection">
+      <bind-xml name="KidneySpecimenPathologyAnnotation" type="pathology_specimen.KidneySpecimenPathologyAnnotation" location="KidneySpecimenPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="LungSpecimenPathologyAnnotationCollection" type="pathology_specimen.LungSpecimenPathologyAnnotation" collection="collection">
+      <bind-xml name="LungSpecimenPathologyAnnotation" type="pathology_specimen.LungSpecimenPathologyAnnotation" location="LungSpecimenPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="SpecimenBaseSolidTissuePathologyAnnotationCollection" type="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation" collection="collection">
+      <bind-xml name="SpecimenBaseSolidTissuePathologyAnnotation" type="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation" location="SpecimenBaseSolidTissuePathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="PancreasSpecimenPathologyAnnotationCollection" type="pathology_specimen.PancreasSpecimenPathologyAnnotation" collection="collection">
+      <bind-xml name="PancreasSpecimenPathologyAnnotation" type="pathology_specimen.PancreasSpecimenPathologyAnnotation" location="PancreasSpecimenPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="CNSSpecimenPathologyAnnotationCollection" type="pathology_specimen.CNSSpecimenPathologyAnnotation" collection="collection">
+      <bind-xml name="CNSSpecimenPathologyAnnotation" type="pathology_specimen.CNSSpecimenPathologyAnnotation" location="CNSSpecimenPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="BreastSpecimenPathologyAnnotationCollection" type="pathology_specimen.BreastSpecimenPathologyAnnotation" collection="collection">
+      <bind-xml name="BreastSpecimenPathologyAnnotation" type="pathology_specimen.BreastSpecimenPathologyAnnotation" location="BreastSpecimenPathologyAnnotationCollection" node="element" />
+    </field>
+    <field name="ColorectalSpecimenPathologyAnnotationCollection" type="pathology_specimen.ColorectalSpecimenPathologyAnnotation" collection="collection">
+      <bind-xml name="ColorectalSpecimenPathologyAnnotation" type="pathology_specimen.ColorectalSpecimenPathologyAnnotation" location="ColorectalSpecimenPathologyAnnotationCollection" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.BreastSpecimenPathologyAnnotation" identity="id" extends="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation">
+    <map-to xml="BreastSpecimenPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="mitoticCountIfOtherGradingSystemUsed" type="long">
+      <bind-xml name="mitoticCountIfOtherGradingSystemUsed" node="attribute" />
+    </field>
+    <field name="SpecimenRecordEntry_BreastSpecimenPathologyAnnotation" type="pathology_specimen.SpecimenRecordEntry">
+      <bind-xml name="SpecimenRecordEntry" type="pathology_specimen.SpecimenRecordEntry" location="SpecimenRecordEntry_BreastSpecimenPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.CNSSpecimenPathologyAnnotation" identity="id" extends="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation">
+    <map-to xml="CNSSpecimenPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="SpecimenRecordEntry_CNSSpecimenPathologyAnnotation" type="pathology_specimen.SpecimenRecordEntry">
+      <bind-xml name="SpecimenRecordEntry" type="pathology_specimen.SpecimenRecordEntry" location="SpecimenRecordEntry_CNSSpecimenPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.ColorectalSpecimenPathologyAnnotation" identity="id" extends="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation">
+    <map-to xml="ColorectalSpecimenPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="intratumoralPeritumoralLymphocyticResponse" type="string">
+      <bind-xml name="intratumoralPeritumoralLymphocyticResponse" node="attribute" />
+    </field>
+    <field name="tumorBorderConfiguration" type="string">
+      <bind-xml name="tumorBorderConfiguration" node="attribute" />
+    </field>
+    <field name="SpecimenRecordEntry_ColorectalSpecimenPathologyAnnotation" type="pathology_specimen.SpecimenRecordEntry">
+      <bind-xml name="SpecimenRecordEntry" type="pathology_specimen.SpecimenRecordEntry" location="SpecimenRecordEntry_ColorectalSpecimenPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.KidneySpecimenPathologyAnnotation" identity="id" extends="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation">
+    <map-to xml="KidneySpecimenPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="SpecimenRecordEntry_KidneySpecimenPathologyAnnotation" type="pathology_specimen.SpecimenRecordEntry">
+      <bind-xml name="SpecimenRecordEntry" type="pathology_specimen.SpecimenRecordEntry" location="SpecimenRecordEntry_KidneySpecimenPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.MelanomaSpecimenPathologyAnnotation" identity="id" extends="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation">
+    <map-to xml="MelanomaSpecimenPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="mitoticIndex" type="string">
+      <bind-xml name="mitoticIndex" node="attribute" />
+    </field>
+    <field name="tumorRegression" type="string">
+      <bind-xml name="tumorRegression" node="attribute" />
+    </field>
+    <field name="tumorInfiltratingLymphocytes" type="string">
+      <bind-xml name="tumorInfiltratingLymphocytes" node="attribute" />
+    </field>
+    <field name="depthOfInvasionCannotBeDetermined" type="boolean">
+      <bind-xml name="depthOfInvasionCannotBeDetermined" node="attribute" />
+    </field>
+    <field name="depthOfInvasion" type="double">
+      <bind-xml name="depthOfInvasion" node="attribute" />
+    </field>
+    <field name="ulceration" type="string">
+      <bind-xml name="ulceration" node="attribute" />
+    </field>
+    <field name="SpecimenRecordEntry_MelanomaSpecimenPathologyAnnotation" type="pathology_specimen.SpecimenRecordEntry">
+      <bind-xml name="SpecimenRecordEntry" type="pathology_specimen.SpecimenRecordEntry" location="SpecimenRecordEntry_MelanomaSpecimenPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.PancreasSpecimenPathologyAnnotation" identity="id" extends="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation">
+    <map-to xml="PancreasSpecimenPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="SpecimenRecordEntry_PancreasSpecimenPathologyAnnotation" type="pathology_specimen.SpecimenRecordEntry">
+      <bind-xml name="SpecimenRecordEntry" type="pathology_specimen.SpecimenRecordEntry" location="SpecimenRecordEntry_PancreasSpecimenPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.ProstateSpecimenPathologyAnnotation" identity="id" extends="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation">
+    <map-to xml="ProstateSpecimenPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="proportionOrPercentOfProstaticTissueInvolvedByTumor" type="double">
+      <bind-xml name="proportionOrPercentOfProstaticTissueInvolvedByTumor" node="attribute" />
+    </field>
+    <field name="SpecimenRecordEntry_ProstateSpecimenPathologyAnnotation" type="pathology_specimen.SpecimenRecordEntry">
+      <bind-xml name="SpecimenRecordEntry" type="pathology_specimen.SpecimenRecordEntry" location="SpecimenRecordEntry_ProstateSpecimenPathologyAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="pathology_specimen.LungSpecimenPathologyAnnotation" identity="id" extends="pathology_specimen.SpecimenBaseSolidTissuePathologyAnnotation">
+    <map-to xml="LungSpecimenPathologyAnnotation" ns-uri="gme://caCORE.caCORE/3.2/pathology_specimen" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="SpecimenRecordEntry_LungSpecimenPathologyAnnotation" type="pathology_specimen.SpecimenRecordEntry">
+      <bind-xml name="SpecimenRecordEntry" type="pathology_specimen.SpecimenRecordEntry" location="SpecimenRecordEntry_LungSpecimenPathologyAnnotation" node="element" />
+    </field>
+  </class>
+</mapping>
+

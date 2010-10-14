@@ -1,0 +1,559 @@
+<ns1:DomainModel projectShortName="CA" projectVersion="1.2" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice">
+ <ns1:exposedUMLAssociationCollection>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="1" roleName="GeneralHealthDiagnosis">
+     <ns1:UMLClassReference refid="EAID_30198419_EDBE_4c4b_965F_9A65A0009AF9"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="FamilyHistoryAnnotation">
+     <ns1:UMLClassReference refid="EAID_11BF9CB1_F108_4818_B6A6_20BA74032CE9"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="FamilyHistoryAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_11BF9CB1_F108_4818_B6A6_20BA74032CE9"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_FamilyHistoryAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="treatmentRegimen">
+     <ns1:UMLClassReference refid="EAID_3466AFE4_8A7B_4640_9B62_66C9546B5FCB"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="1" roleName="treatmentOrderCollection">
+     <ns1:UMLClassReference refid="EAID_27CE5BF6_8140_4aed_8081_D77E4D859182"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="0" roleName="radRXAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_E889E9EC_D04F_4d0a_B30A_C11B3DB25594"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="deprecatedAnnotation2">
+     <ns1:UMLClassReference refid="EAID_27CE5BF6_8140_4aed_8081_D77E4D859182"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="chemoRXAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_59CC2A5D_B673_4a9b_8173_A5C8BAFF74F1"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="deprecatedAnnotation2">
+     <ns1:UMLClassReference refid="EAID_27CE5BF6_8140_4aed_8081_D77E4D859182"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="NoEvidentDiseaseHealthAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_2A6D5225_4A7A_429a_BD78_81D61AB124C8"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_NoEvidentDiseaseHealthAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="LocalRecurrenceHealthExaminationAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_30206154_FA95_4581_AAD4_9615CD56F486"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_LocalRecurrenceHealthExaminationAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="radiationTherapy">
+     <ns1:UMLClassReference refid="EAID_3133680C_6A36_4d1d_8134_029BD6280E0A"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="TreatmentOrder">
+     <ns1:UMLClassReference refid="EAID_706561F9_1907_4e74_BAD3_9941568CC06C"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="1" roleName="TreatmentOrder">
+     <ns1:UMLClassReference refid="EAID_706561F9_1907_4e74_BAD3_9941568CC06C"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="TreatmentRegimen">
+     <ns1:UMLClassReference refid="EAID_3466AFE4_8A7B_4640_9B62_66C9546B5FCB"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="TreatmentRegimenCollection">
+     <ns1:UMLClassReference refid="EAID_3466AFE4_8A7B_4640_9B62_66C9546B5FCB"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_TreatmentRegimen">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="1" roleName="Duration">
+     <ns1:UMLClassReference refid="EAID_634C19DD_091E_45cc_B9C6_B401BB030CF8"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="TreatmentAnnotation">
+     <ns1:UMLClassReference refid="EAID_364C268B_ED21_45c9_A4B7_05FA4C9B0E58"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="TreatmentAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_364C268B_ED21_45c9_A4B7_05FA4C9B0E58"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_TreatmentAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="ChemoRXAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_59CC2A5D_B673_4a9b_8173_A5C8BAFF74F1"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_ChemoRXAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="Duration">
+     <ns1:UMLClassReference refid="EAID_634C19DD_091E_45cc_B9C6_B401BB030CF8"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="EnvironmentalExposuresHealthAnnotation">
+     <ns1:UMLClassReference refid="EAID_F12D6553_A68B_42b2_91B8_8001ED851F6B"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="DistantRecurrenceHealthExaminationAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_6B223BC9_100F_439c_9FE0_288BA73D8290"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_DistantRecurrenceHealthExaminationAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="Chemotherapy">
+     <ns1:UMLClassReference refid="EAID_8944F175_C158_4af9_9B62_3A3725963D26"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="TreatmentOrder">
+     <ns1:UMLClassReference refid="EAID_706561F9_1907_4e74_BAD3_9941568CC06C"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="SmokingHealthAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_7525D8B8_5A90_4f3b_A3C2_E5E61FD9A1BD"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_SmokingHealthAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="RecurrenceHealthExaminationAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_8A1D527C_9260_4e4a_B347_51FAC904748D"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_RecurrenceHealthExaminationAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="NewDiagnosisHealthAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_8D93F0DA_07FD_4342_9F25_32E043D295C4"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_NewDiagnosisHealthAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="LabAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_AF75C7E1_30D7_480e_9B98_313ADE006CA3"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_LabAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="HealthExaminationAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_B423B64F_09D9_41f4_9CA0_72DFF635E770"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_HealthExaminationAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="AlcoholHealthAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_C2AA14BE_A97B_44ed_B276_46042E94B601"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_AlcoholHealthAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="-1" minCardinality="0" roleName="RadRXAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_E889E9EC_D04F_4d0a_B30A_C11B3DB25594"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_RadRXAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+  <ns1:UMLAssociation bidirectional="false">
+   <ns1:targetUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="1" roleName="EnvironmentalExposuresHealthAnnotationCollection">
+     <ns1:UMLClassReference refid="EAID_F12D6553_A68B_42b2_91B8_8001ED851F6B"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:targetUMLAssociationEdge>
+   <ns1:sourceUMLAssociationEdge>
+    <ns1:UMLAssociationEdge maxCardinality="1" minCardinality="0" roleName="ParticipantRecordEntry_EnvironmentalExposuresHealthAnnotation">
+     <ns1:UMLClassReference refid="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE"/>
+    </ns1:UMLAssociationEdge>
+   </ns1:sourceUMLAssociationEdge>
+  </ns1:UMLAssociation>
+ </ns1:exposedUMLAssociationCollection>
+ <ns1:exposedUMLClassCollection>
+  <ns1:UMLClass allowableAsTarget="true" className="FamilyHistoryAnnotation" description="FamilyHistoryAnnotation" id="EAID_11BF9CB1_F108_4818_B6A6_20BA74032CE9" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns2:umlAttributeCollection xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns2:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1810978235" version="1.0"/>
+    <ns2:UMLAttribute dataTypeName="java.lang.String" name="otherRelation" publicID="-1810978234" version="1.0"/>
+    <ns2:UMLAttribute dataTypeName="java.lang.String" name="relation" publicID="-1810978233" version="1.0"/>
+   </ns2:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="DeprecatedAnnotation2" description="TreatmentOrder" id="EAID_27CE5BF6_8140_4aed_8081_D77E4D859182" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns3:umlAttributeCollection xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns3:UMLAttribute dataTypeName="java.lang.Integer" name="cycle" publicID="1369271297" version="1.0"/>
+    <ns3:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="1369271298" version="1.0"/>
+   </ns3:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="NoEvidentDiseaseHealthAnnotation" description="NoEvidentDiseaseHealthAnnotation" id="EAID_2A6D5225_4A7A_429a_BD78_81D61AB124C8" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns4:umlAttributeCollection xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns4:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="178747810" version="1.0"/>
+    <ns4:UMLAttribute dataTypeName="java.util.Date" name="dateOfExamination" publicID="-1337773538" version="1.0"/>
+    <ns4:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1337773537" version="1.0"/>
+    <ns4:UMLAttribute dataTypeName="java.lang.String" name="nameOfProcedure" publicID="-1337773536" version="1.0"/>
+    <ns4:UMLAttribute dataTypeName="java.lang.String" name="otherProcedure" publicID="-1337773535" version="1.0"/>
+   </ns4:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="GeneralHealthDiagnosis" description="GeneralHealthDiagnosis" id="EAID_30198419_EDBE_4c4b_965F_9A65A0009AF9" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns5:umlAttributeCollection xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns5:UMLAttribute dataTypeName="java.lang.Long" name="ageAtDiagnosis" publicID="577140222" version="1.0"/>
+    <ns5:UMLAttribute dataTypeName="java.lang.String" name="clinicalDiagnosis" publicID="577140223" version="1.0"/>
+    <ns5:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="577140224" version="1.0"/>
+    <ns5:UMLAttribute dataTypeName="java.lang.String" name="otherClinicalDiagnosis" publicID="577140225" version="1.0"/>
+   </ns5:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="LocalRecurrenceHealthExaminationAnnotation" description="LocalRecurrenceHealthExaminationAnnotation" id="EAID_30206154_FA95_4581_AAD4_9615CD56F486" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns6:umlAttributeCollection xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns6:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="1690854959" version="1.0"/>
+    <ns6:UMLAttribute dataTypeName="java.lang.String" name="clinicalDiagnosis" publicID="1196765934" version="1.0"/>
+    <ns6:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="1196765935" version="1.0"/>
+    <ns6:UMLAttribute dataTypeName="java.lang.String" name="otherClinicalDiagnosis" publicID="1196765936" version="1.0"/>
+    <ns6:UMLAttribute dataTypeName="java.util.Date" name="dateOfExamination" publicID="-1337773538" version="1.0"/>
+    <ns6:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1337773537" version="1.0"/>
+    <ns6:UMLAttribute dataTypeName="java.lang.String" name="nameOfProcedure" publicID="-1337773536" version="1.0"/>
+    <ns6:UMLAttribute dataTypeName="java.lang.String" name="otherProcedure" publicID="-1337773535" version="1.0"/>
+    <ns6:UMLAttribute dataTypeName="java.util.Date" name="dateOfExamination" publicID="-1337773538" version="1.0"/>
+    <ns6:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1337773537" version="1.0"/>
+    <ns6:UMLAttribute dataTypeName="java.lang.String" name="nameOfProcedure" publicID="-1337773536" version="1.0"/>
+    <ns6:UMLAttribute dataTypeName="java.lang.String" name="otherProcedure" publicID="-1337773535" version="1.0"/>
+   </ns6:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="RadRXAnnotationSet" description="RadRXAnnotationSet" id="EAID_3133680C_6A36_4d1d_8134_029BD6280E0A" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns7:umlAttributeCollection xmlns:ns7="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns7:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="4206383" version="1.0"/>
+    <ns7:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1943178662" version="1.0"/>
+    <ns7:UMLAttribute dataTypeName="java.lang.String" name="agent" publicID="-1280925544" version="1.0"/>
+    <ns7:UMLAttribute dataTypeName="java.lang.Double" name="dose" publicID="-1280925543" version="1.0"/>
+    <ns7:UMLAttribute dataTypeName="java.lang.String" name="doseUnits" publicID="-1280925542" version="1.0"/>
+    <ns7:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1280925541" version="1.0"/>
+    <ns7:UMLAttribute dataTypeName="java.lang.String" name="otherAgent" publicID="-1280925540" version="1.0"/>
+    <ns7:UMLAttribute dataTypeName="java.lang.String" name="agent" publicID="-1280925544" version="1.0"/>
+    <ns7:UMLAttribute dataTypeName="java.lang.Double" name="dose" publicID="-1280925543" version="1.0"/>
+    <ns7:UMLAttribute dataTypeName="java.lang.String" name="doseUnits" publicID="-1280925542" version="1.0"/>
+    <ns7:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1280925541" version="1.0"/>
+    <ns7:UMLAttribute dataTypeName="java.lang.String" name="otherAgent" publicID="-1280925540" version="1.0"/>
+   </ns7:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="TreatmentRegimen" description="TreatmentRegimen" id="EAID_3466AFE4_8A7B_4640_9B62_66C9546B5FCB" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns8:umlAttributeCollection xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns8:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1363746430" version="1.0"/>
+    <ns8:UMLAttribute dataTypeName="java.lang.String" name="treatmentRegimen" publicID="-1363746429" version="1.0"/>
+   </ns8:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="TreatmentAnnotation" description="TreatmentAnnotation" id="EAID_364C268B_ED21_45c9_A4B7_05FA4C9B0E58" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns9:umlAttributeCollection xmlns:ns9="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns9:UMLAttribute dataTypeName="java.lang.String" name="agent" publicID="-1280925544" version="1.0"/>
+    <ns9:UMLAttribute dataTypeName="java.lang.Double" name="dose" publicID="-1280925543" version="1.0"/>
+    <ns9:UMLAttribute dataTypeName="java.lang.String" name="doseUnits" publicID="-1280925542" version="1.0"/>
+    <ns9:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1280925541" version="1.0"/>
+    <ns9:UMLAttribute dataTypeName="java.lang.String" name="otherAgent" publicID="-1280925540" version="1.0"/>
+   </ns9:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="ChemoRXAnnotation" description="ChemoRXAnnotation" id="EAID_59CC2A5D_B673_4a9b_8173_A5C8BAFF74F1" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns10:umlAttributeCollection xmlns:ns10="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns10:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1521678981" version="1.0"/>
+    <ns10:UMLAttribute dataTypeName="java.lang.String" name="agent" publicID="-1280925544" version="1.0"/>
+    <ns10:UMLAttribute dataTypeName="java.lang.Double" name="dose" publicID="-1280925543" version="1.0"/>
+    <ns10:UMLAttribute dataTypeName="java.lang.String" name="doseUnits" publicID="-1280925542" version="1.0"/>
+    <ns10:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1280925541" version="1.0"/>
+    <ns10:UMLAttribute dataTypeName="java.lang.String" name="otherAgent" publicID="-1280925540" version="1.0"/>
+   </ns10:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="Duration" description="Duration" id="EAID_634C19DD_091E_45cc_B9C6_B401BB030CF8" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns11:umlAttributeCollection xmlns:ns11="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns11:UMLAttribute dataTypeName="java.lang.Long" name="durationInDays" publicID="-752943552" version="1.0"/>
+    <ns11:UMLAttribute dataTypeName="java.util.Date" name="endDate" publicID="-752943551" version="1.0"/>
+    <ns11:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-752943550" version="1.0"/>
+    <ns11:UMLAttribute dataTypeName="java.util.Date" name="startDate" publicID="-752943549" version="1.0"/>
+   </ns11:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="DistantRecurrenceHealthExaminationAnnotation" description="DistantRecurrenceHealthExaminationAnnotation" id="EAID_6B223BC9_100F_439c_9FE0_288BA73D8290" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns12:umlAttributeCollection xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns12:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-728896307" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.lang.String" name="otherTissueSite" publicID="-728896306" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.lang.String" name="tissueSite" publicID="-728896305" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.lang.String" name="clinicalDiagnosis" publicID="1196765934" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="1196765935" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.lang.String" name="otherClinicalDiagnosis" publicID="1196765936" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.util.Date" name="dateOfExamination" publicID="-1337773538" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1337773537" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.lang.String" name="nameOfProcedure" publicID="-1337773536" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.lang.String" name="otherProcedure" publicID="-1337773535" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.util.Date" name="dateOfExamination" publicID="-1337773538" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1337773537" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.lang.String" name="nameOfProcedure" publicID="-1337773536" version="1.0"/>
+    <ns12:UMLAttribute dataTypeName="java.lang.String" name="otherProcedure" publicID="-1337773535" version="1.0"/>
+   </ns12:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="TreatmentOrder" description="TreatmentOrder" id="EAID_706561F9_1907_4e74_BAD3_9941568CC06C" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns13:umlAttributeCollection xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns13:UMLAttribute dataTypeName="java.lang.Long" name="cycle" publicID="1845514449" version="1.0"/>
+    <ns13:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="1845514450" version="1.0"/>
+   </ns13:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="SmokingHealthAnnotation" description="SmokingHealthAnnotation" id="EAID_7525D8B8_5A90_4f3b_A3C2_E5E61FD9A1BD" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns14:umlAttributeCollection xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns14:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-908991139" version="1.0"/>
+    <ns14:UMLAttribute dataTypeName="java.lang.Long" name="packsPerDay" publicID="-908991138" version="1.0"/>
+    <ns14:UMLAttribute dataTypeName="java.lang.String" name="agent" publicID="-1980698872" version="1.0"/>
+    <ns14:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1980698871" version="1.0"/>
+    <ns14:UMLAttribute dataTypeName="java.lang.String" name="otherAgent" publicID="-1980698870" version="1.0"/>
+    <ns14:UMLAttribute dataTypeName="java.lang.Double" name="yearsAgentFree" publicID="-1980698869" version="1.0"/>
+   </ns14:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="Chemotherapy" description="Chemotherapy" id="EAID_8944F175_C158_4af9_9B62_3A3725963D26" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns15:umlAttributeCollection xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns15:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-731454477" version="1.0"/>
+    <ns15:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1521678981" version="1.0"/>
+    <ns15:UMLAttribute dataTypeName="java.lang.String" name="agent" publicID="-1280925544" version="1.0"/>
+    <ns15:UMLAttribute dataTypeName="java.lang.Double" name="dose" publicID="-1280925543" version="1.0"/>
+    <ns15:UMLAttribute dataTypeName="java.lang.String" name="doseUnits" publicID="-1280925542" version="1.0"/>
+    <ns15:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1280925541" version="1.0"/>
+    <ns15:UMLAttribute dataTypeName="java.lang.String" name="otherAgent" publicID="-1280925540" version="1.0"/>
+   </ns15:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="RecurrenceHealthExaminationAnnotation" description="RecurrenceHealthExaminationAnnotation" id="EAID_8A1D527C_9260_4e4a_B347_51FAC904748D" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns16:umlAttributeCollection xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns16:UMLAttribute dataTypeName="java.lang.String" name="clinicalDiagnosis" publicID="1196765934" version="1.0"/>
+    <ns16:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="1196765935" version="1.0"/>
+    <ns16:UMLAttribute dataTypeName="java.lang.String" name="otherClinicalDiagnosis" publicID="1196765936" version="1.0"/>
+    <ns16:UMLAttribute dataTypeName="java.util.Date" name="dateOfExamination" publicID="-1337773538" version="1.0"/>
+    <ns16:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1337773537" version="1.0"/>
+    <ns16:UMLAttribute dataTypeName="java.lang.String" name="nameOfProcedure" publicID="-1337773536" version="1.0"/>
+    <ns16:UMLAttribute dataTypeName="java.lang.String" name="otherProcedure" publicID="-1337773535" version="1.0"/>
+   </ns16:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="NewDiagnosisHealthAnnotation" description="NewDiagnosisHealthAnnotation" id="EAID_8D93F0DA_07FD_4342_9F25_32E043D295C4" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns17:umlAttributeCollection xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns17:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-2133339439" version="1.0"/>
+    <ns17:UMLAttribute dataTypeName="java.util.Date" name="dateOfExamination" publicID="-1337773538" version="1.0"/>
+    <ns17:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1337773537" version="1.0"/>
+    <ns17:UMLAttribute dataTypeName="java.lang.String" name="nameOfProcedure" publicID="-1337773536" version="1.0"/>
+    <ns17:UMLAttribute dataTypeName="java.lang.String" name="otherProcedure" publicID="-1337773535" version="1.0"/>
+   </ns17:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="DeprecatedAnnotation1" description="DeprecatedAnnotation1" id="EAID_A064DA79_C578_435e_8B5B_A0675901F56C" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns18:umlAttributeCollection xmlns:ns18="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns18:UMLAttribute dataTypeName="java.lang.Integer" name="ageAtDiagnosis" publicID="1227025881" version="1.0"/>
+    <ns18:UMLAttribute dataTypeName="java.lang.String" name="clinicalDiagnosis" publicID="1227025882" version="1.0"/>
+    <ns18:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="1227025883" version="1.0"/>
+    <ns18:UMLAttribute dataTypeName="java.lang.String" name="otherClinicalDiagnosis" publicID="1227025884" version="1.0"/>
+   </ns18:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="LabAnnotation" description="LabAnnotation" id="EAID_AF75C7E1_30D7_480e_9B98_313ADE006CA3" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns19:umlAttributeCollection xmlns:ns19="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns19:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-850830457" version="1.0"/>
+    <ns19:UMLAttribute dataTypeName="java.lang.String" name="labTestName" publicID="-850830456" version="1.0"/>
+    <ns19:UMLAttribute dataTypeName="java.lang.String" name="otherLabTestName" publicID="-850830455" version="1.0"/>
+    <ns19:UMLAttribute dataTypeName="java.lang.String" name="result" publicID="-850830454" version="1.0"/>
+    <ns19:UMLAttribute dataTypeName="java.lang.String" name="resultUnits" publicID="-850830453" version="1.0"/>
+    <ns19:UMLAttribute dataTypeName="java.util.Date" name="testDate" publicID="-850830452" version="1.0"/>
+   </ns19:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="HealthExaminationAnnotation" description="HealthExaminationAnnotation" id="EAID_B423B64F_09D9_41f4_9CA0_72DFF635E770" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns20:umlAttributeCollection xmlns:ns20="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns20:UMLAttribute dataTypeName="java.util.Date" name="dateOfExamination" publicID="-1337773538" version="1.0"/>
+    <ns20:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1337773537" version="1.0"/>
+    <ns20:UMLAttribute dataTypeName="java.lang.String" name="nameOfProcedure" publicID="-1337773536" version="1.0"/>
+    <ns20:UMLAttribute dataTypeName="java.lang.String" name="otherProcedure" publicID="-1337773535" version="1.0"/>
+   </ns20:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="AlcoholHealthAnnotation" description="AlcoholHealthAnnotation" id="EAID_C2AA14BE_A97B_44ed_B276_46042E94B601" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns21:umlAttributeCollection xmlns:ns21="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns21:UMLAttribute dataTypeName="java.lang.Long" name="drinksPerWeek" publicID="128015267" version="1.0"/>
+    <ns21:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="128015268" version="1.0"/>
+    <ns21:UMLAttribute dataTypeName="java.lang.String" name="agent" publicID="-1980698872" version="1.0"/>
+    <ns21:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1980698871" version="1.0"/>
+    <ns21:UMLAttribute dataTypeName="java.lang.String" name="otherAgent" publicID="-1980698870" version="1.0"/>
+    <ns21:UMLAttribute dataTypeName="java.lang.Double" name="yearsAgentFree" publicID="-1980698869" version="1.0"/>
+   </ns21:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="ParticipantRecordEntry" description="ParticipantRecordEntry" id="EAID_DE654A7E_51F3_4fb5_8C0B_B7E83EFF52FE" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns22:umlAttributeCollection xmlns:ns22="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns22:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="533671367" version="1.0"/>
+   </ns22:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="RadRXAnnotation" description="RadRXAnnotationSet" id="EAID_E889E9EC_D04F_4d0a_B30A_C11B3DB25594" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns23:umlAttributeCollection xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns23:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1943178662" version="1.0"/>
+    <ns23:UMLAttribute dataTypeName="java.lang.String" name="agent" publicID="-1280925544" version="1.0"/>
+    <ns23:UMLAttribute dataTypeName="java.lang.Double" name="dose" publicID="-1280925543" version="1.0"/>
+    <ns23:UMLAttribute dataTypeName="java.lang.String" name="doseUnits" publicID="-1280925542" version="1.0"/>
+    <ns23:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1280925541" version="1.0"/>
+    <ns23:UMLAttribute dataTypeName="java.lang.String" name="otherAgent" publicID="-1280925540" version="1.0"/>
+   </ns23:umlAttributeCollection>
+  </ns1:UMLClass>
+  <ns1:UMLClass allowableAsTarget="true" className="EnvironmentalExposuresHealthAnnotation" description="EnvironmentalExposuresHealthAnnotation" id="EAID_F12D6553_A68B_42b2_91B8_8001ED851F6B" packageName="clinical_annotation" projectName="CA" projectVersion="1.2">
+   <ns24:umlAttributeCollection xmlns:ns24="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+    <ns24:UMLAttribute dataTypeName="java.lang.String" name="agent" publicID="-1980698872" version="1.0"/>
+    <ns24:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1980698871" version="1.0"/>
+    <ns24:UMLAttribute dataTypeName="java.lang.String" name="otherAgent" publicID="-1980698870" version="1.0"/>
+    <ns24:UMLAttribute dataTypeName="java.lang.Double" name="yearsAgentFree" publicID="-1980698869" version="1.0"/>
+   </ns24:umlAttributeCollection>
+  </ns1:UMLClass>
+ </ns1:exposedUMLClassCollection>
+ <ns1:umlGeneralizationCollection>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_2A6D5225_4A7A_429a_BD78_81D61AB124C8"/>
+   <ns1:superClassReference refid="EAID_B423B64F_09D9_41f4_9CA0_72DFF635E770"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_30206154_FA95_4581_AAD4_9615CD56F486"/>
+   <ns1:superClassReference refid="EAID_8A1D527C_9260_4e4a_B347_51FAC904748D"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_3133680C_6A36_4d1d_8134_029BD6280E0A"/>
+   <ns1:superClassReference refid="EAID_E889E9EC_D04F_4d0a_B30A_C11B3DB25594"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_E889E9EC_D04F_4d0a_B30A_C11B3DB25594"/>
+   <ns1:superClassReference refid="EAID_364C268B_ED21_45c9_A4B7_05FA4C9B0E58"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_59CC2A5D_B673_4a9b_8173_A5C8BAFF74F1"/>
+   <ns1:superClassReference refid="EAID_364C268B_ED21_45c9_A4B7_05FA4C9B0E58"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_8944F175_C158_4af9_9B62_3A3725963D26"/>
+   <ns1:superClassReference refid="EAID_59CC2A5D_B673_4a9b_8173_A5C8BAFF74F1"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_6B223BC9_100F_439c_9FE0_288BA73D8290"/>
+   <ns1:superClassReference refid="EAID_8A1D527C_9260_4e4a_B347_51FAC904748D"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_7525D8B8_5A90_4f3b_A3C2_E5E61FD9A1BD"/>
+   <ns1:superClassReference refid="EAID_F12D6553_A68B_42b2_91B8_8001ED851F6B"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_8A1D527C_9260_4e4a_B347_51FAC904748D"/>
+   <ns1:superClassReference refid="EAID_B423B64F_09D9_41f4_9CA0_72DFF635E770"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_8D93F0DA_07FD_4342_9F25_32E043D295C4"/>
+   <ns1:superClassReference refid="EAID_B423B64F_09D9_41f4_9CA0_72DFF635E770"/>
+  </ns1:UMLGeneralization>
+  <ns1:UMLGeneralization>
+   <ns1:subClassReference refid="EAID_C2AA14BE_A97B_44ed_B276_46042E94B601"/>
+   <ns1:superClassReference refid="EAID_F12D6553_A68B_42b2_91B8_8001ED851F6B"/>
+  </ns1:UMLGeneralization>
+ </ns1:umlGeneralizationCollection>
+</ns1:DomainModel>
