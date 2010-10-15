@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="CA" targetNamespace="http://clinical_annotation/CA/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://clinical_annotation/CA/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://clinical_annotation/CA/bindings" location="CA_bindings.wsdl"/>
-  <wsdl:service name="CAService">
-    <wsdl:port name="CAPortTypePort" binding="binding:CAPortTypeSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>

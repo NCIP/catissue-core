@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="PathologySpecimen" targetNamespace="http://pathology_specimen/PathologySpecimen/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://pathology_specimen/PathologySpecimen/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://pathology_specimen/PathologySpecimen/bindings" location="PathologySpecimen_bindings.wsdl"/>
-  <wsdl:service name="PathologySpecimenService">
-    <wsdl:port name="PathologySpecimenPortTypePort" binding="binding:PathologySpecimenPortTypeSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>
