@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
  <Target name="edu.wustl.catissuecore.domain.TissueSpecimen">
 	<Group logicRelation="AND">
@@ -20,6 +21,6 @@
 		</Association>
 	</Group>
 </Target>
-	<ns3:QueryModifier countOnly="true" xsi:type="ns3:QueryModifier" xmlns:ns3="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
- </ns3:QueryModifier>
+	
+ 
 </CQLQuery>

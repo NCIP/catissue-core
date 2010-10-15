@@ -15,14 +15,14 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.oasis.wsrf.properties.GetResourcePropertyResponse;
 
 import org.globus.gsi.GlobusCredential;
-
-import edu.wustl.catissuecore.stubs.CaTissueSuitePortType;
-import edu.wustl.catissuecore.stubs.service.CaTissueSuiteServiceAddressingLocator;
-import edu.wustl.catissuecore.common.CaTissueSuiteI;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
+
+import edu.wustl.catissuecore.stubs.CaTissueSuitePortType;
+import edu.wustl.catissuecore.stubs.service.CaTissueSuiteServiceAddressingLocator;
+import edu.wustl.catissuecore.common.CaTissueSuiteI;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 
 /**
@@ -58,31 +58,15 @@ public class CaTissueSuiteClient extends CaTissueSuiteClientBase implements CaTi
 		System.out.println(CaTissueSuiteClient.class.getName() + " -url <service url>");
 	}
 	
-	private static void printResults(CQLQueryResults cqlQueryResult) {
-		CQLQueryResultsIterator iter = new CQLQueryResultsIterator(cqlQueryResult, true);
-		if(!iter.hasNext())
-		{
-			System.out.println("No Result Found");
-		}
-		while (iter.hasNext())
-		{
-			System.out.println("\n" + iter.next());
-		}
-	}
-	
 	public static void main(String [] args){
 	    System.out.println("Running the Grid Service Client");
-		try
-		{
-			if(!(args.length < 3))
-			{
-				if(args[0].equals("-url"))
-				{
-					
-					CaTissueSuiteClient client = new CaTissueSuiteClient(args[1]);
-				  // place client calls here if you want to use this main as a
-				  // test....
-				  for(int i =2;i<args.length;i++)
+		try{
+		if(!(args.length < 2)){
+			if(args[0].equals("-url")){
+			  CaTissueSuiteClient client = new CaTissueSuiteClient(args[1]);
+			  // place client calls here if you want to use this main as a
+			  // test....
+			    for(int i =2;i<args.length;i++)
 				  {
 					  String cqlFileName = args[i];
 					  System.out.println("Running query: "+cqlFileName);
@@ -98,23 +82,30 @@ public class CaTissueSuiteClient extends CaTissueSuiteClientBase implements CaTi
 							e.printStackTrace();
 						}
 				  }	
-				} 
-				else 
-				{
-					usage();
-					System.exit(1);
-				}
-			}
-			else 
-			{
+			} else {
 				usage();
 				System.exit(1);
 			}
+		} else {
+			usage();
+			System.exit(1);
 		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
+		}
+	}
+
+		
+	private static void printResults(CQLQueryResults cqlQueryResult) {
+		CQLQueryResultsIterator iter = new CQLQueryResultsIterator(cqlQueryResult, true);
+		if(!iter.hasNext())
+		{
+			System.out.println("No Result Found");
+		}
+		while (iter.hasNext())
+		{
+			System.out.println("\n" + iter.next());
 		}
 	}
 

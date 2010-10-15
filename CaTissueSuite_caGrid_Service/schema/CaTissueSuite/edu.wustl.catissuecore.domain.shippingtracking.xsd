@@ -1,24 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" xmlns:edu.wustl.catissuecore.domain="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:edu.wustl.catissuecore.domain.pathology="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" xmlns:edu.wustl.catissuecore.domain="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:edu.wustl.catissuecore.domain.deintegration="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" xmlns:edu.wustl.catissuecore.domain.pathology="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" elementFormDefault="qualified">
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" schemaLocation="edu.wustl.catissuecore.domain.pathology.xsd" />
+  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" schemaLocation="edu.wustl.catissuecore.domain.deintegration.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" schemaLocation="edu.wustl.catissuecore.domain.xsd" />
-  <xs:element name="Shipment" type="Shipment" />
-  <xs:complexType name="Shipment">
-    <xs:complexContent>
-      <xs:extension base="BaseShipment">
-        <xs:sequence />
-        <xs:attribute name="barcode" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ShipmentRequest" type="ShipmentRequest" />
-  <xs:complexType name="ShipmentRequest">
-    <xs:complexContent>
-      <xs:extension base="BaseShipment">
-        <xs:sequence />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
   <xs:element name="BaseShipment" type="BaseShipment" />
   <xs:complexType name="BaseShipment">
     <xs:sequence>
@@ -65,6 +49,23 @@
     <xs:attribute name="receiverComments" type="xs:string" />
     <xs:attribute name="sendDate" type="xs:dateTime" />
     <xs:attribute name="senderComments" type="xs:string" />
+  </xs:complexType>
+  <xs:element name="Shipment" type="Shipment" />
+  <xs:complexType name="Shipment">
+    <xs:complexContent>
+      <xs:extension base="BaseShipment">
+        <xs:sequence />
+        <xs:attribute name="barcode" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ShipmentRequest" type="ShipmentRequest" />
+  <xs:complexType name="ShipmentRequest">
+    <xs:complexContent>
+      <xs:extension base="BaseShipment">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 </xs:schema>
 

@@ -20,12 +20,12 @@
 	<!-- Configuration files (security, etc.) to be included in the GAR file -->
 	<property name="garetc.id" value="garetc" />
 	<fileset dir="tmp/etc" id="garetc" />
-	
-	
+
+
 	<property name="tomcat.dir" value="${env.CATALINA_HOME}" />
-	
+
 	<property name="jboss.dir" value="${env.JBOSS_HOME}" />
-	
+
 	<target name="setDeploymentProperties">
 		<property file="deploy.properties" />
 		<property name="globus.webapp" value="wsrf" />
@@ -78,24 +78,11 @@
 			<replacefilter token="REGISTRATION_REFRESH" value="${index.service.registration.refresh_seconds}" />
 			<replacefilter token="INDEX_REFRESH" value="${index.service.index.refresh_milliseconds}" />
 		</replace>
-		
+
 		<taskdef name="createDeploymentFile" classname="gov.nih.nci.cagrid.introduce.servicetasks.deployment.DeploymentFileGeneratorTask" classpathref="tasks.run.classpath" />
-		
+
 	</target>
 
-	<!--This replace the caCORE URl given in service.properties in remoteService.xml in caGrid-sdkQuery32-core-1.2.jar-->
-	<target name="replaceRemoteService">
-		<property file="service.properties" />
-		<property name="temp.dir" value="./caGrid-1.1-sdkQuery32-coretmp" />
-		<property name="sdk32Jar" value="./caGrid-sdkQuery32-core-1.2.jar" />
-		<unjar src="${sdk32Jar}" dest="${temp.dir}" />
-		<replace file="${temp.dir}/remoteService.xml">
-			<replacefilter token="@@cacore.url@@" value="${cqlQueryProcessorConfig_appserviceUrl}" />
-		</replace>
-		<jar destfile="${temp.dir}/${sdk32Jar}" basedir="${temp.dir}"/>
-		<copy file="${temp.dir}/${sdk32Jar}" tofile="${lib.dir}/${sdk32Jar}" />
-		<delete dir="${temp.dir}"/>  
-	</target>
 
 	<!-- deploy service to tomcat -->
 	<target name="deployTomcat" depends="all,setDeploymentProperties" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
@@ -119,6 +106,26 @@
 		<runtarget target="deployWebApp" />
 	</target>
 
+	<!--This replace the caCORE URl given in service.properties in remoteService.xml in caGrid-sdkQuery32-core-1.2.jar-->
+	<target name="replaceRemoteService">
+		<property file="service.properties" />
+		<property name="temp.dir" value="./caGrid-1.1-sdkQuery32-coretmp" />
+		<property name="temp.dir.de" value ="./tempDynamicExtensions"/>
+		<property name="sdk32Jar" value="./caGrid-sdkQuery32-core-1.2.jar" />
+		<unjar src="${sdk32Jar}" dest="${temp.dir}" />
+		<replace file="${temp.dir}/remoteService.xml">
+			<replacefilter token="@@cacore.url@@" value="${cqlQueryProcessorConfig_appserviceUrl}" />
+		</replace>
+		<jar destfile="${temp.dir}/${sdk32Jar}" basedir="${temp.dir}"/>
+		<delete dir="${temp.dir}"/>
+		<mkdir dir="${temp.dir.de}"/>
+		<unjar src="${lib.dir}/DynamicExtensions.jar" dest="${temp.dir.de}" />
+				<delete file="${temp.dir.de}/remoteService.xml" />
+		<jar destfile="${temp.dir.de}/DynamicExtensions.jar" basedir="${temp.dir.de}"/>
+		<copy file="${temp.dir.de}/DynamicExtensions.jar" todir="${lib.dir}" overwrite="true"/>
+		<delete dir="${temp.dir.de}"/>
+	</target>
+
 	<!-- deploy service to jboss -->
 	<target name="deployJBoss" depends="all,setDeploymentProperties" description="Deploys to JBOSS_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 
@@ -126,7 +133,7 @@
 		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/WEB-INF/lib" />
 		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
         <property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/WEB-INF/etc" />
-		
+
 		<echo message="Deploying service ${service.deployment.path} under JBoss at ${webapp.deploy.dir}" />
 
 		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
@@ -238,37 +245,37 @@
 		<delete dir="${gar.name}" />
 		<!-- deploy the gar -->
 	</target>
-	
-	
+
+
 	<target name="undeployGlobus" depends="checkGlobus,setDeploymentProperties" description="undeploy a service from a globus container (to set the services properties file set the ant command line variable -Dservice.properties.file)">
-		
+
 		<property name="webapp.deploy.dir" value="${ext.globus.dir}" />
 		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/lib" />
 		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
 		<property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/etc" />
 
-		<echo message="Undeploying service ${service.deployment.path} under Globus at ${webapp.deploy.dir}" />
+		<echo message="Deploying service ${service.deployment.path} under Globus at ${webapp.deploy.dir}" />
 
 		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
-		
+
 		<taskdef name="undeployTool" classname="gov.nih.nci.cagrid.introduce.servicetasks.undeployment.UndeployServiceTask" classpathref="tasks.run.classpath" />
-		<undeployTool/>	
+		<undeployTool/>
 		<runtarget target="postUndeployGlobus" />
 	</target>
-	
+
 	<target name="undeployTomcat" depends="checkGlobus,setDeploymentProperties" description="undeploy a service from a tomcat container (to set the services properties file set the ant command line variable -Dservice.properties.file)">
-		
+
 		<property name="webapp.deploy.dir" value="${tomcat.dir}/webapps/${globus.webapp}" />
 		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/WEB-INF/lib" />
 		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
 		<property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/WEB-INF/etc" />
 
-		<echo message="Undeploying service ${service.deployment.path} under Tomcat at ${webapp.deploy.dir}" />
+		<echo message="Uneploying service ${service.deployment.path} under Tomcat at ${webapp.deploy.dir}" />
 
 		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
-		
+
 		<taskdef name="undeployTool" classname="gov.nih.nci.cagrid.introduce.servicetasks.undeployment.UndeployServiceTask" classpathref="tasks.run.classpath" />
-		<undeployTool/>	
+		<undeployTool/>
 		<runtarget target="postUndeployTomcat" />
 	</target>
 
@@ -279,13 +286,13 @@
 		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
 		<property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/WEB-INF/etc" />
 
-		<echo message="Undeploying service ${service.deployment.path} under JBoss at ${webapp.deploy.dir}" />
+		<echo message="Unploying service ${service.deployment.path} under JBoss at ${webapp.deploy.dir}" />
 
 		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
-		
+
 		<taskdef name="undeployTool" classname="gov.nih.nci.cagrid.introduce.servicetasks.undeployment.UndeployServiceTask" classpathref="tasks.run.classpath" />
-		<undeployTool/>		
+		<undeployTool/>
 		<runtarget target="postUndeployJBoss" />
 	</target>
-	
+
 </project>

@@ -20,7 +20,7 @@
         <parameter>
           <name>domainModelFile</name>
           <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the domainModel extract -->
-          <value>ETC-PATH/catissuesuitev11.xml</value>
+          <value>ETC-PATH/fixed_catissue_v12_final.xml</value>
         </parameter>
         <parameter>
           <name>serviceMetadataFile</name>
