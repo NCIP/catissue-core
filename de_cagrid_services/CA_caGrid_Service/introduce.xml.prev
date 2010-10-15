@@ -1,0 +1,247 @@
+<ns1:ServiceDescription introduceVersion="1.2" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+ <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="anySimpleType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="anyURI" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="base64Binary" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="byte" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="date" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="dateTime" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="decimal" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="double" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="duration" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ENTITIES" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ENTITY" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="float" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gDay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gMonth" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gMonthDay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gYear" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gYearMonth" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="hexBinary" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ID" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IDREF" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IDREFS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="int" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="language" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="long" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Name" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NCName" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="negativeInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NMTOKEN" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NMTOKENS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonNegativeInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonPositiveInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="normalizedString" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NOTATION" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="positiveInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QName" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="short" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="time" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="token" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedByte" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedInt" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedLong" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedShort" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./CATypes.xsd" namespace="http://clinical_annotation/CA/types" packageName="clinical_annotation.stubs.types" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CAReference" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/security/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CommunicationMechanism" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="CommunicationStyle" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSISecureConversation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSISecureMessage" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSITransport" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="None" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./clinical_annotation.xsd" namespace="gme://caCORE.caCORE/3.2/clinical_annotation" packageName="clinical_annotation" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="AlcoholHealthAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="AlcoholHealthAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ChemoRXAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ChemoRXAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Chemotherapy" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Chemotherapy" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DeprecatedAnnotation1" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DeprecatedAnnotation1" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DeprecatedAnnotation2" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DeprecatedAnnotation2" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DistantRecurrenceHealthExaminationAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DistantRecurrenceHealthExaminationAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Duration" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Duration" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="EnvironmentalExposuresHealthAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="EnvironmentalExposuresHealthAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="FamilyHistoryAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="FamilyHistoryAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="GeneralHealthDiagnosis" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="GeneralHealthDiagnosis" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="HealthExaminationAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="HealthExaminationAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="LabAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="LabAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="LocalRecurrenceHealthExaminationAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="LocalRecurrenceHealthExaminationAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="NewDiagnosisHealthAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="NewDiagnosisHealthAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="NoEvidentDiseaseHealthAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="NoEvidentDiseaseHealthAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ParticipantRecordEntry" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ParticipantRecordEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="RadRXAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="RadRXAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="RadRXAnnotationSet" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="RadRXAnnotationSet" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="RecurrenceHealthExaminationAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="RecurrenceHealthExaminationAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SmokingHealthAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SmokingHealthAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TreatmentAnnotation" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TreatmentAnnotation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TreatmentOrder" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TreatmentOrder" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TreatmentRegimen" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TreatmentRegimen" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./1_gov.nih.nci.cagrid.CQLQuery.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" packageName="gov.nih.nci.cagrid.cqlquery" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CQLQuery" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./1_gov.nih.nci.cagrid.CQLResultSet.xsd" namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" packageName="gov.nih.nci.cagrid.cqlresultset" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CQLQueryResultCollection" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./CA_CQLResultTypes.xsd" namespace="http://clinical_annotation/CA/CQLResultTypes" packageName="clinical_annotation.cqlresulttypes" xsi:type="ns2:NamespaceType"/>
+  <ns2:Namespace location="./xsd/cagrid/types/data/data.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" packageName="gov.nih.nci.cagrid.metadata.dataservice" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="DomainModel" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAssociation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLAssociationEdge" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLClass" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLClassReference" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="UMLGeneralization" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./DataServiceExceptions.xsd" namespace="http://gov.nih.nci.cagrid.data/DataServiceExceptions" packageName="gov.nih.nci.cagrid.data.faults" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="MalformedQueryException" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QueryProcessingException" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+ </ns2:Namespaces>
+ <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns3:Service name="CA" namespace="http://clinical_annotation/CA" packageName="clinical_annotation" xsi:type="ns3:ServiceType">
+   <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods">
+    <ns4:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns5:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns5:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns5="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="GetMRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns6:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns6:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns6="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="GetRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns7:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns7:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns7="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="QueryRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns4:MethodType">
+     <ns4:Output qName="ns8:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+     <ns9:MethodSecurity xsi:type="ns9:MethodSecurity" xmlns:ns9="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns9:SecuritySetting xsi:type="ns9:SecuritySetting">None</ns9:SecuritySetting>
+      <ns9:MethodAuthorization xsi:type="ns9:MethodAuthorization">
+       <ns9:NoAuthorization xsi:type="ns9:NoAuthorization"/>
+      </ns9:MethodAuthorization>
+     </ns9:MethodSecurity>
+     <ns4:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
+     <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
+    </ns4:Method>
+    <ns4:Method description="The standard caGrid Data Service query method." isImported="true" isProvided="true" name="query" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns10:CQLQuery" description="The CQL query to be executed against the data source." isArray="false" name="cqlQuery" xmlns:ns10="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery"/>
+     </ns4:Inputs>
+     <ns4:Output qName="ns11:CQLQueryResultCollection" description="The result of executing the CQL query against the data source." isArray="false" xmlns:ns11="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="Thrown when an error occurs in processing a CQL query" name="QueryProcessingException" qname="ns12:QueryProcessingException" xmlns:ns12="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
+      <ns4:Exception description="Thrown when a query is found to be improperly formed" name="MalformedQueryException" qname="ns13:MalformedQueryException" xmlns:ns13="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
+     </ns4:Exceptions>
+     <ns4:ImportInformation inputMessage="ns14:QueryRequest" namespace="http://gov.nih.nci.cagrid.data/DataService" outputMessage="ns14:QueryResponse" packageName="gov.nih.nci.cagrid.data" portTypeName="DataServicePortType" wsdlFile="DataService.wsdl" xmlns:ns14="http://gov.nih.nci.cagrid.data/DataService"/>
+     <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.data.service.globus.DataServiceProviderImpl"/>
+    </ns4:Method>
+   </ns4:Methods>
+   <ns15:ResourcePropertiesList xsi:type="ns15:ResourcePropertiesListType" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns15:ResourceProperty qName="ns16:DomainModel" fileLocation="fixed_clinical_annotation_new.xml" populateFromFile="true" register="true" xsi:type="ns15:ResourcePropertyType" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+    <ns15:ResourceProperty qName="ns17:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns15:ResourcePropertyType" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+   </ns15:ResourcePropertiesList>
+   <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
+    <ns3:Main xsi:type="ns3:Main"/>
+    <ns3:Singleton xsi:type="ns3:Singleton"/>
+    <ns3:Identifiable xsi:type="ns3:Identifiable"/>
+    <ns3:ResourcePropertyManagement xsi:type="ns3:ResourcePropertyManagement"/>
+   </ns3:ResourceFrameworkOptions>
+  </ns3:Service>
+ </ns3:Services>
+ <ns18:Extensions xsi:type="ns18:ExtensionsType" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns18:Extension name="cagrid_metadata" version="1.2" xsi:type="ns18:ExtensionType"/>
+  <ns18:Extension name="data" version="1.2" xsi:type="ns18:ExtensionType">
+   <ns18:ExtensionData>
+    <ns19:Data xsi:type="ns19:Data" xmlns:ns19="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension">
+         <ns19:AdditionalLibraries xsi:type="ns19:AdditionalLibraries">
+          <ns19:JarName xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">caGrid-sdkQuery32-core-1.2.jar</ns19:JarName>
+
+     </ns19:AdditionalLibraries>
+
+         <ns19:CadsrInformation noDomainModel="false" projectVersion="1.2" serviceUrl="http://cagrid-service.nci.nih.gov:8080/wsrf/services/cagrid/CaDSRService" useSuppliedModel="true" xsi:type="ns19:CadsrInformation">
+          <ns19:Packages mappedNamespace="gme://caCORE.caCORE/3.2/clinical_annotation" name="clinical_annotation" xsi:type="ns19:CadsrPackage">
+           <ns19:CadsrClass className="FamilyHistoryAnnotation" elementName="FamilyHistoryAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="DeprecatedAnnotation2" elementName="DeprecatedAnnotation2" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="NoEvidentDiseaseHealthAnnotation" elementName="NoEvidentDiseaseHealthAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="GeneralHealthDiagnosis" elementName="GeneralHealthDiagnosis" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="LocalRecurrenceHealthExaminationAnnotation" elementName="LocalRecurrenceHealthExaminationAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="RadRXAnnotationSet" elementName="RadRXAnnotationSet" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="TreatmentRegimen" elementName="TreatmentRegimen" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="TreatmentAnnotation" elementName="TreatmentAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ChemoRXAnnotation" elementName="ChemoRXAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="Duration" elementName="Duration" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="DistantRecurrenceHealthExaminationAnnotation" elementName="DistantRecurrenceHealthExaminationAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="TreatmentOrder" elementName="TreatmentOrder" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="SmokingHealthAnnotation" elementName="SmokingHealthAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="Chemotherapy" elementName="Chemotherapy" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="RecurrenceHealthExaminationAnnotation" elementName="RecurrenceHealthExaminationAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="NewDiagnosisHealthAnnotation" elementName="NewDiagnosisHealthAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="DeprecatedAnnotation1" elementName="DeprecatedAnnotation1" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="LabAnnotation" elementName="LabAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="HealthExaminationAnnotation" elementName="HealthExaminationAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="AlcoholHealthAnnotation" elementName="AlcoholHealthAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="ParticipantRecordEntry" elementName="ParticipantRecordEntry" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="RadRXAnnotation" elementName="RadRXAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+           <ns19:CadsrClass className="EnvironmentalExposuresHealthAnnotation" elementName="EnvironmentalExposuresHealthAnnotation" selected="true" targetable="true" xsi:type="ns19:ClassMapping"/>
+
+      </ns19:Packages>
+
+     </ns19:CadsrInformation>
+
+         <ns19:ServiceFeatures serviceStyle="caCORE SDK v 3.2(.1)" useBdt="false" useGridIdeitifiers="false" useWsEnumeration="false" xsi:type="ns19:ServiceFeatures"/>
+
+    </ns19:Data>
+   </ns18:ExtensionData>
+  </ns18:Extension>
+ </ns18:Extensions>
+ <ns19:ServiceProperties xmlns:ns19="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns19:Property description="" isFromETC="false" key="queryProcessorClass" value="gov.nih.nci.cagrid.data.sdk32query.HQLCoreQueryProcessor"/>
+  <ns19:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_appserviceUrl" value="http://10.88.199.50:28080/CA/http/remoteService"/>
+  <ns19:Property description="The location of the server-config.wsdd file" isFromETC="true" key="serverConfigLocation" value="server-config.wsdd"/>
+  <ns19:Property description="The name of the class to use for CQL query structure validation" isFromETC="false" key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
+  <ns19:Property description="The name of the class to use for CQL validation against a domain model" isFromETC="false" key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>
+  <ns19:Property description="A flag to indicate that CQL should be validated for structural correctness" isFromETC="false" key="dataService_validateCqlFlag" value="false"/>
+  <ns19:Property description="A flag to indicate that CQL should be validated for correctness against the domain model" isFromETC="false" key="dataService_validateDomainModelFlag" value="false"/>
+  <ns19:Property description="The name of the file containing the class name to QName mapping" isFromETC="true" key="dataService_classMappingsFilename" value="classToQname.xml"/>
+ </ns19:ServiceProperties>
+</ns1:ServiceDescription>

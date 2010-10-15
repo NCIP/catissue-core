@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://www.castor.org/mapping.dtd">
+
+<mapping>
+  <class name="clinical_annotation.TreatmentAnnotation" identity="id">
+    <map-to xml="TreatmentAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="doseUnits" type="string">
+      <bind-xml name="doseUnits" node="attribute" />
+    </field>
+    <field name="dose" type="double">
+      <bind-xml name="dose" node="attribute" />
+    </field>
+    <field name="otherAgent" type="string">
+      <bind-xml name="otherAgent" node="attribute" />
+    </field>
+    <field name="agent" type="string">
+      <bind-xml name="agent" node="attribute" />
+    </field>
+    <field name="ParticipantRecordEntry_TreatmentAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_TreatmentAnnotation" node="element" />
+    </field>
+    <field name="Duration" type="clinical_annotation.Duration" collection="collection">
+      <bind-xml name="Duration" type="clinical_annotation.Duration" location="Duration" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.DeprecatedAnnotation2" identity="id">
+    <map-to xml="DeprecatedAnnotation2" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="cycle" type="integer">
+      <bind-xml name="cycle" node="attribute" />
+    </field>
+    <field name="chemoRXAnnotationCollection" type="clinical_annotation.ChemoRXAnnotation" collection="collection">
+      <bind-xml name="ChemoRXAnnotation" type="clinical_annotation.ChemoRXAnnotation" location="chemoRXAnnotationCollection" node="element" />
+    </field>
+    <field name="treatmentRegimen" type="clinical_annotation.TreatmentRegimen">
+      <bind-xml name="TreatmentRegimen" type="clinical_annotation.TreatmentRegimen" location="treatmentRegimen" node="element" />
+    </field>
+    <field name="radRXAnnotationCollection" type="clinical_annotation.RadRXAnnotation" collection="collection">
+      <bind-xml name="RadRXAnnotation" type="clinical_annotation.RadRXAnnotation" location="radRXAnnotationCollection" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.HealthExaminationAnnotation" identity="id">
+    <map-to xml="HealthExaminationAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="dateOfExamination" type="date">
+      <bind-xml name="dateOfExamination" node="attribute" />
+    </field>
+    <field name="otherProcedure" type="string">
+      <bind-xml name="otherProcedure" node="attribute" />
+    </field>
+    <field name="nameOfProcedure" type="string">
+      <bind-xml name="nameOfProcedure" node="attribute" />
+    </field>
+    <field name="ParticipantRecordEntry_HealthExaminationAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_HealthExaminationAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.DeprecatedAnnotation1" identity="id">
+    <map-to xml="DeprecatedAnnotation1" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="ageAtDiagnosis" type="integer">
+      <bind-xml name="ageAtDiagnosis" node="attribute" />
+    </field>
+    <field name="otherClinicalDiagnosis" type="string">
+      <bind-xml name="otherClinicalDiagnosis" node="attribute" />
+    </field>
+    <field name="clinicalDiagnosis" type="string">
+      <bind-xml name="clinicalDiagnosis" node="attribute" />
+    </field>
+  </class>
+  <class name="clinical_annotation.Duration" identity="id">
+    <map-to xml="Duration" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="durationInDays" type="long">
+      <bind-xml name="durationInDays" node="attribute" />
+    </field>
+    <field name="endDate" type="date">
+      <bind-xml name="endDate" node="attribute" />
+    </field>
+    <field name="startDate" type="date">
+      <bind-xml name="startDate" node="attribute" />
+    </field>
+    <field name="TreatmentAnnotation" type="clinical_annotation.TreatmentAnnotation">
+      <bind-xml name="TreatmentAnnotation" type="clinical_annotation.TreatmentAnnotation" location="TreatmentAnnotation" node="element" />
+    </field>
+    <field name="EnvironmentalExposuresHealthAnnotation" type="clinical_annotation.EnvironmentalExposuresHealthAnnotation">
+      <bind-xml name="EnvironmentalExposuresHealthAnnotation" type="clinical_annotation.EnvironmentalExposuresHealthAnnotation" location="EnvironmentalExposuresHealthAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.EnvironmentalExposuresHealthAnnotation" identity="id">
+    <map-to xml="EnvironmentalExposuresHealthAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="yearsAgentFree" type="double">
+      <bind-xml name="yearsAgentFree" node="attribute" />
+    </field>
+    <field name="otherAgent" type="string">
+      <bind-xml name="otherAgent" node="attribute" />
+    </field>
+    <field name="agent" type="string">
+      <bind-xml name="agent" node="attribute" />
+    </field>
+    <field name="Duration" type="clinical_annotation.Duration" collection="collection">
+      <bind-xml name="Duration" type="clinical_annotation.Duration" location="Duration" node="element" />
+    </field>
+    <field name="ParticipantRecordEntry_EnvironmentalExposuresHealthAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_EnvironmentalExposuresHealthAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.TreatmentRegimen" identity="id">
+    <map-to xml="TreatmentRegimen" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="treatmentRegimen" type="string">
+      <bind-xml name="treatmentRegimen" node="attribute" />
+    </field>
+    <field name="ParticipantRecordEntry_TreatmentRegimen" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_TreatmentRegimen" node="element" />
+    </field>
+    <field name="TreatmentOrder" type="clinical_annotation.TreatmentOrder" collection="collection">
+      <bind-xml name="TreatmentOrder" type="clinical_annotation.TreatmentOrder" location="TreatmentOrder" node="element" />
+    </field>
+    <field name="treatmentOrderCollection" type="clinical_annotation.DeprecatedAnnotation2" collection="collection">
+      <bind-xml name="DeprecatedAnnotation2" type="clinical_annotation.DeprecatedAnnotation2" location="treatmentOrderCollection" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.LabAnnotation" identity="id">
+    <map-to xml="LabAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="testDate" type="date">
+      <bind-xml name="testDate" node="attribute" />
+    </field>
+    <field name="resultUnits" type="string">
+      <bind-xml name="resultUnits" node="attribute" />
+    </field>
+    <field name="result" type="string">
+      <bind-xml name="result" node="attribute" />
+    </field>
+    <field name="otherLabTestName" type="string">
+      <bind-xml name="otherLabTestName" node="attribute" />
+    </field>
+    <field name="labTestName" type="string">
+      <bind-xml name="labTestName" node="attribute" />
+    </field>
+    <field name="ParticipantRecordEntry_LabAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_LabAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.FamilyHistoryAnnotation" identity="id">
+    <map-to xml="FamilyHistoryAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherRelation" type="string">
+      <bind-xml name="otherRelation" node="attribute" />
+    </field>
+    <field name="relation" type="string">
+      <bind-xml name="relation" node="attribute" />
+    </field>
+    <field name="GeneralHealthDiagnosis" type="clinical_annotation.GeneralHealthDiagnosis" collection="collection">
+      <bind-xml name="GeneralHealthDiagnosis" type="clinical_annotation.GeneralHealthDiagnosis" location="GeneralHealthDiagnosis" node="element" />
+    </field>
+    <field name="ParticipantRecordEntry_FamilyHistoryAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_FamilyHistoryAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.GeneralHealthDiagnosis" identity="id">
+    <map-to xml="GeneralHealthDiagnosis" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="ageAtDiagnosis" type="long">
+      <bind-xml name="ageAtDiagnosis" node="attribute" />
+    </field>
+    <field name="otherClinicalDiagnosis" type="string">
+      <bind-xml name="otherClinicalDiagnosis" node="attribute" />
+    </field>
+    <field name="clinicalDiagnosis" type="string">
+      <bind-xml name="clinicalDiagnosis" node="attribute" />
+    </field>
+    <field name="FamilyHistoryAnnotation" type="clinical_annotation.FamilyHistoryAnnotation">
+      <bind-xml name="FamilyHistoryAnnotation" type="clinical_annotation.FamilyHistoryAnnotation" location="FamilyHistoryAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.TreatmentOrder" identity="id">
+    <map-to xml="TreatmentOrder" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="cycle" type="long">
+      <bind-xml name="cycle" node="attribute" />
+    </field>
+    <field name="TreatmentRegimen" type="clinical_annotation.TreatmentRegimen">
+      <bind-xml name="TreatmentRegimen" type="clinical_annotation.TreatmentRegimen" location="TreatmentRegimen" node="element" />
+    </field>
+    <field name="radiationTherapy" type="clinical_annotation.RadRXAnnotationSet" collection="collection">
+      <bind-xml name="RadRXAnnotationSet" type="clinical_annotation.RadRXAnnotationSet" location="radiationTherapy" node="element" />
+    </field>
+    <field name="Chemotherapy" type="clinical_annotation.Chemotherapy" collection="collection">
+      <bind-xml name="Chemotherapy" type="clinical_annotation.Chemotherapy" location="Chemotherapy" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.ParticipantRecordEntry" identity="id">
+    <map-to xml="ParticipantRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="RadRXAnnotationCollection" type="clinical_annotation.RadRXAnnotation" collection="collection">
+      <bind-xml name="RadRXAnnotation" type="clinical_annotation.RadRXAnnotation" location="RadRXAnnotationCollection" node="element" />
+    </field>
+    <field name="DistantRecurrenceHealthExaminationAnnotationCollection" type="clinical_annotation.DistantRecurrenceHealthExaminationAnnotation" collection="collection">
+      <bind-xml name="DistantRecurrenceHealthExaminationAnnotation" type="clinical_annotation.DistantRecurrenceHealthExaminationAnnotation" location="DistantRecurrenceHealthExaminationAnnotationCollection" node="element" />
+    </field>
+    <field name="AlcoholHealthAnnotationCollection" type="clinical_annotation.AlcoholHealthAnnotation" collection="collection">
+      <bind-xml name="AlcoholHealthAnnotation" type="clinical_annotation.AlcoholHealthAnnotation" location="AlcoholHealthAnnotationCollection" node="element" />
+    </field>
+    <field name="SmokingHealthAnnotationCollection" type="clinical_annotation.SmokingHealthAnnotation" collection="collection">
+      <bind-xml name="SmokingHealthAnnotation" type="clinical_annotation.SmokingHealthAnnotation" location="SmokingHealthAnnotationCollection" node="element" />
+    </field>
+    <field name="ChemoRXAnnotationCollection" type="clinical_annotation.ChemoRXAnnotation" collection="collection">
+      <bind-xml name="ChemoRXAnnotation" type="clinical_annotation.ChemoRXAnnotation" location="ChemoRXAnnotationCollection" node="element" />
+    </field>
+    <field name="RecurrenceHealthExaminationAnnotationCollection" type="clinical_annotation.RecurrenceHealthExaminationAnnotation" collection="collection">
+      <bind-xml name="RecurrenceHealthExaminationAnnotation" type="clinical_annotation.RecurrenceHealthExaminationAnnotation" location="RecurrenceHealthExaminationAnnotationCollection" node="element" />
+    </field>
+    <field name="EnvironmentalExposuresHealthAnnotationCollection" type="clinical_annotation.EnvironmentalExposuresHealthAnnotation" collection="collection">
+      <bind-xml name="EnvironmentalExposuresHealthAnnotation" type="clinical_annotation.EnvironmentalExposuresHealthAnnotation" location="EnvironmentalExposuresHealthAnnotationCollection" node="element" />
+    </field>
+    <field name="LabAnnotationCollection" type="clinical_annotation.LabAnnotation" collection="collection">
+      <bind-xml name="LabAnnotation" type="clinical_annotation.LabAnnotation" location="LabAnnotationCollection" node="element" />
+    </field>
+    <field name="TreatmentAnnotationCollection" type="clinical_annotation.TreatmentAnnotation" collection="collection">
+      <bind-xml name="TreatmentAnnotation" type="clinical_annotation.TreatmentAnnotation" location="TreatmentAnnotationCollection" node="element" />
+    </field>
+    <field name="LocalRecurrenceHealthExaminationAnnotationCollection" type="clinical_annotation.LocalRecurrenceHealthExaminationAnnotation" collection="collection">
+      <bind-xml name="LocalRecurrenceHealthExaminationAnnotation" type="clinical_annotation.LocalRecurrenceHealthExaminationAnnotation" location="LocalRecurrenceHealthExaminationAnnotationCollection" node="element" />
+    </field>
+    <field name="TreatmentRegimenCollection" type="clinical_annotation.TreatmentRegimen" collection="collection">
+      <bind-xml name="TreatmentRegimen" type="clinical_annotation.TreatmentRegimen" location="TreatmentRegimenCollection" node="element" />
+    </field>
+    <field name="NoEvidentDiseaseHealthAnnotationCollection" type="clinical_annotation.NoEvidentDiseaseHealthAnnotation" collection="collection">
+      <bind-xml name="NoEvidentDiseaseHealthAnnotation" type="clinical_annotation.NoEvidentDiseaseHealthAnnotation" location="NoEvidentDiseaseHealthAnnotationCollection" node="element" />
+    </field>
+    <field name="NewDiagnosisHealthAnnotationCollection" type="clinical_annotation.NewDiagnosisHealthAnnotation" collection="collection">
+      <bind-xml name="NewDiagnosisHealthAnnotation" type="clinical_annotation.NewDiagnosisHealthAnnotation" location="NewDiagnosisHealthAnnotationCollection" node="element" />
+    </field>
+    <field name="FamilyHistoryAnnotationCollection" type="clinical_annotation.FamilyHistoryAnnotation" collection="collection">
+      <bind-xml name="FamilyHistoryAnnotation" type="clinical_annotation.FamilyHistoryAnnotation" location="FamilyHistoryAnnotationCollection" node="element" />
+    </field>
+    <field name="HealthExaminationAnnotationCollection" type="clinical_annotation.HealthExaminationAnnotation" collection="collection">
+      <bind-xml name="HealthExaminationAnnotation" type="clinical_annotation.HealthExaminationAnnotation" location="HealthExaminationAnnotationCollection" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.ChemoRXAnnotation" identity="id" extends="clinical_annotation.TreatmentAnnotation">
+    <map-to xml="ChemoRXAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="ParticipantRecordEntry_ChemoRXAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_ChemoRXAnnotation" node="element" />
+    </field>
+    <field name="deprecatedAnnotation2" type="clinical_annotation.DeprecatedAnnotation2">
+      <bind-xml name="DeprecatedAnnotation2" type="clinical_annotation.DeprecatedAnnotation2" location="deprecatedAnnotation2" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.RadRXAnnotation" identity="id" extends="clinical_annotation.TreatmentAnnotation">
+    <map-to xml="RadRXAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="deprecatedAnnotation2" type="clinical_annotation.DeprecatedAnnotation2">
+      <bind-xml name="DeprecatedAnnotation2" type="clinical_annotation.DeprecatedAnnotation2" location="deprecatedAnnotation2" node="element" />
+    </field>
+    <field name="ParticipantRecordEntry_RadRXAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_RadRXAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.RecurrenceHealthExaminationAnnotation" identity="id" extends="clinical_annotation.HealthExaminationAnnotation">
+    <map-to xml="RecurrenceHealthExaminationAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherClinicalDiagnosis" type="string">
+      <bind-xml name="otherClinicalDiagnosis" node="attribute" />
+    </field>
+    <field name="clinicalDiagnosis" type="string">
+      <bind-xml name="clinicalDiagnosis" node="attribute" />
+    </field>
+    <field name="ParticipantRecordEntry_RecurrenceHealthExaminationAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_RecurrenceHealthExaminationAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.AlcoholHealthAnnotation" identity="id" extends="clinical_annotation.EnvironmentalExposuresHealthAnnotation">
+    <map-to xml="AlcoholHealthAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="drinksPerWeek" type="long">
+      <bind-xml name="drinksPerWeek" node="attribute" />
+    </field>
+    <field name="ParticipantRecordEntry_AlcoholHealthAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_AlcoholHealthAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.NoEvidentDiseaseHealthAnnotation" identity="id" extends="clinical_annotation.HealthExaminationAnnotation">
+    <map-to xml="NoEvidentDiseaseHealthAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="ParticipantRecordEntry_NoEvidentDiseaseHealthAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_NoEvidentDiseaseHealthAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.SmokingHealthAnnotation" identity="id" extends="clinical_annotation.EnvironmentalExposuresHealthAnnotation">
+    <map-to xml="SmokingHealthAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="packsPerDay" type="long">
+      <bind-xml name="packsPerDay" node="attribute" />
+    </field>
+    <field name="ParticipantRecordEntry_SmokingHealthAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_SmokingHealthAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.NewDiagnosisHealthAnnotation" identity="id" extends="clinical_annotation.HealthExaminationAnnotation">
+    <map-to xml="NewDiagnosisHealthAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="ParticipantRecordEntry_NewDiagnosisHealthAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_NewDiagnosisHealthAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.DistantRecurrenceHealthExaminationAnnotation" identity="id" extends="clinical_annotation.RecurrenceHealthExaminationAnnotation">
+    <map-to xml="DistantRecurrenceHealthExaminationAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="otherTissueSite" type="string">
+      <bind-xml name="otherTissueSite" node="attribute" />
+    </field>
+    <field name="tissueSite" type="string">
+      <bind-xml name="tissueSite" node="attribute" />
+    </field>
+    <field name="ParticipantRecordEntry_DistantRecurrenceHealthExaminationAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_DistantRecurrenceHealthExaminationAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.LocalRecurrenceHealthExaminationAnnotation" identity="id" extends="clinical_annotation.RecurrenceHealthExaminationAnnotation">
+    <map-to xml="LocalRecurrenceHealthExaminationAnnotation" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="ParticipantRecordEntry_LocalRecurrenceHealthExaminationAnnotation" type="clinical_annotation.ParticipantRecordEntry">
+      <bind-xml name="ParticipantRecordEntry" type="clinical_annotation.ParticipantRecordEntry" location="ParticipantRecordEntry_LocalRecurrenceHealthExaminationAnnotation" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.Chemotherapy" identity="id" extends="clinical_annotation.ChemoRXAnnotation">
+    <map-to xml="Chemotherapy" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="TreatmentOrder" type="clinical_annotation.TreatmentOrder">
+      <bind-xml name="TreatmentOrder" type="clinical_annotation.TreatmentOrder" location="TreatmentOrder" node="element" />
+    </field>
+  </class>
+  <class name="clinical_annotation.RadRXAnnotationSet" identity="id" extends="clinical_annotation.RadRXAnnotation">
+    <map-to xml="RadRXAnnotationSet" ns-uri="gme://caCORE.caCORE/3.2/clinical_annotation" />
+    <field name="id" type="long">
+      <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="TreatmentOrder" type="clinical_annotation.TreatmentOrder">
+      <bind-xml name="TreatmentOrder" type="clinical_annotation.TreatmentOrder" location="TreatmentOrder" node="element" />
+    </field>
+  </class>
+</mapping>
+
