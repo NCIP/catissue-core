@@ -3,7 +3,7 @@
  <Target name="clinical_annotation.FamilyHistoryAnnotation">
 	<Group logicRelation="AND">
 		<Attribute name="id"  predicate="IS_NOT_NULL"/>
-		<Association roleName="generalHealthDiagnosisCollection" name="clinical_annotation.GeneralHealthDiagnosis">
+		<Association roleName="GeneralHealthDiagnosis" name="clinical_annotation.GeneralHealthDiagnosis">
 			<Group logicRelation="AND">
 				<Attribute name="id"  predicate="IS_NOT_NULL"/>
 				<Attribute name="clinicalDiagnosis"  predicate="IS_NOT_NULL"/>
