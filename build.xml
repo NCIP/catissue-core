@@ -1116,6 +1116,7 @@
 				<include name="commonpackage*.jar"/>
 				<include name="washu-commons*.jar"/>
 				<include name="DAO*.jar"/>
+				<include name="DynamicExtensions*.jar"/>
 				<include name="SimpleQuery*.jar"/>
 				<include name="securityManager*.jar"/>
 				<include name="AdvanceQuery*.jar"/>
@@ -1125,6 +1126,7 @@
 				<include name="commonpackage*.jar"/>
 				<include name="washu-commons*.jar"/>
 				<include name="DAO*.jar"/>
+				<include name="DynamicExtensions*.jar"/>
 				<include name="SimpleQuery*.jar"/>
 				<include name="securityManager*.jar"/>
 				<include name="AdvanceQuery*.jar"/>
@@ -1134,6 +1136,7 @@
 				<include name="commonpackage*.jar"/>
 				<include name="washu-commons*.jar"/>
 				<include name="DAO*.jar"/>
+				<include name="DynamicExtensions*.jar"/>
 				<include name="SimpleQuery*.jar"/>
 				<include name="securityManager*.jar"/>
 				<include name="AdvanceQuery*.jar"/>
@@ -1142,6 +1145,7 @@
 				<include name="commonpackage*.jar"/>
 				<include name="washu-commons*.jar"/>
 				<include name="DAO*.jar"/>
+				<include name="DynamicExtensions*.jar"/>
 				<include name="SimpleQuery*.jar"/>
 				<include name="securityManager*.jar"/>
 				<include name="AdvanceQuery*.jar"/>
@@ -1152,6 +1156,7 @@
             	<include name="commonpackage*.jar"/>
             	<include name="washu-commons*.jar"/>
             	<include name="DAO*.jar"/>
+            	<include name="DynamicExtensions*.jar"/>
             	<include name="SimpleQuery*.jar"/>
             	<include name="securityManager*.jar"/>
             	<include name="AdvanceQuery*.jar"/>
@@ -1166,6 +1171,7 @@
 	            <fileset dir="${lib.dir}">
 	            	<include name="commonpackage*.jar"/>
 					<include name="washu-commons*.jar"/>
+	            	<include name="DynamicExtensions*.jar"/>
 					<include name="DAO*.jar"/>
 					<include name="SimpleQuery*.jar"/>
 					<include name="securityManager*.jar"/>
@@ -1183,6 +1189,7 @@
 				<include name="washu-commons*.jar"/>
 				<include name="DAO*.jar"/>
 				<include name="SimpleQuery*.jar"/>
+            	<include name="DynamicExtensions*.jar"/>
 				<include name="securityManager*.jar"/>
             	<include name="AdvanceQuery*.jar"/>
             </fileset>
@@ -1199,6 +1206,7 @@
 				<include name="commonpackage*.jar"/>
 				<include name="washu-commons*.jar"/>
 				<include name="DAO*.jar"/>
+				<include name="DynamicExtensions*.jar"/>
 				<include name="SimpleQuery*.jar"/>
 				<include name="securityManager*.jar"/>
 				<include name="AdvanceQuery*.jar"/>
