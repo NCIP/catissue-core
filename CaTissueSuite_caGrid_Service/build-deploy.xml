@@ -117,6 +117,7 @@
 			<replacefilter token="@@cacore.url@@" value="${cqlQueryProcessorConfig_appserviceUrl}" />
 		</replace>
 		<jar destfile="${temp.dir}/${sdk32Jar}" basedir="${temp.dir}"/>
+		<copy file="${temp.dir}/${sdk32Jar}" tofile="${lib.dir}/${sdk32Jar}" />
 		<delete dir="${temp.dir}"/>
 		<mkdir dir="${temp.dir.de}"/>
 		<unjar src="${lib.dir}/DynamicExtensions.jar" dest="${temp.dir.de}" />
