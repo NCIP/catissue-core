@@ -4565,7 +4565,7 @@ Thanking You,
 		<unwar src="${base.dir}/cas.war" dest="${temp.dir}/cas" />
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml"
 			todir="${temp.dir}/cas/WEB-INF/classes/" overwrite="true" />
-		<war destfile="${temp.dir}/cas.war" webxml="${temp.dir}/cas/WEB-INF/web.xml" manifest="${base.dir}/MANIFEST.MF">
+		<war destfile="${temp.dir}/cas.war" webxml="${temp.dir}/cas/WEB-INF/web.xml" manifest="${temp.dir}/cas/META-INF/MANIFEST.MF">
 			<fileset dir="${temp.dir}/cas" includes="**/*"/>
 		</war>
 
