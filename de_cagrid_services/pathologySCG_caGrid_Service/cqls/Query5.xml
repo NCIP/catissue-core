@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+	<Target name="pathology_scg.TissueSide">
+		<Group logicRelation="AND">
+			<Attribute name="id" predicate="IS_NOT_NULL" />
+			<Attribute name="side" value="Left" predicate="EQUAL_TO" />
+
+			<Association roleName="TumorTissueSite" name="pathology_scg.TumorTissueSite">
+				<Group logicRelation="AND">
+					<Attribute name="id" predicate="IS_NOT_NULL" />
+					<Attribute name="site" value="Brain Stem" predicate="EQUAL_TO" />
+					<Association roleName="baseSolidTissuePathologyAnnotation"
+						name="pathology_scg.BaseSolidTissuePathologyAnnotation">
+						<Group logicRelation="AND">
+							<Attribute name="id" predicate="IS_NOT_NULL" />
+						</Group>
+					</Association>
+				</Group>
+			</Association>
+		</Group>
+	</Target>
+</CQLQuery>
