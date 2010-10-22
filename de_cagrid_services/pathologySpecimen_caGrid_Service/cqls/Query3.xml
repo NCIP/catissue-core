@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+	<Target name="pathology_specimen.MelanomaSpecimenPathologyAnnotation">
+		<Group logicRelation="AND">
+			<Attribute name="id" predicate="IS_NOT_NULL" />
+
+			<Association roleName="invasion"
+				name="pathology_specimen.SpecimenInvasion">
+
+				<Group logicRelation="AND">
+					<Attribute name="lymphaticInvasion" value="Absent"
+						predicate="EQUAL_TO" />
+				</Group>
+			</Association>
+		</Group>
+	</Target>
+</CQLQuery>
+
+
