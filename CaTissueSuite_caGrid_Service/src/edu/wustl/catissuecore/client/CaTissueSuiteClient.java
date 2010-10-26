@@ -2,7 +2,10 @@ package edu.wustl.catissuecore.client;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
-
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.cagrid.cqlquery.CQLQuery;
+import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
+import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.EngineConfiguration;
@@ -15,10 +18,6 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.oasis.wsrf.properties.GetResourcePropertyResponse;
 
 import org.globus.gsi.GlobusCredential;
-import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.cqlquery.CQLQuery;
-import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
-import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 
 import edu.wustl.catissuecore.stubs.CaTissueSuitePortType;
 import edu.wustl.catissuecore.stubs.service.CaTissueSuiteServiceAddressingLocator;
@@ -66,7 +65,7 @@ public class CaTissueSuiteClient extends CaTissueSuiteClientBase implements CaTi
 			  CaTissueSuiteClient client = new CaTissueSuiteClient(args[1]);
 			  // place client calls here if you want to use this main as a
 			  // test....
-			    for(int i =2;i<args.length;i++)
+			   for(int i =2;i<args.length;i++)
 				  {
 					  String cqlFileName = args[i];
 					  System.out.println("Running query: "+cqlFileName);
@@ -95,8 +94,6 @@ public class CaTissueSuiteClient extends CaTissueSuiteClientBase implements CaTi
 			System.exit(1);
 		}
 	}
-
-		
 	private static void printResults(CQLQueryResults cqlQueryResult) {
 		CQLQueryResultsIterator iter = new CQLQueryResultsIterator(cqlQueryResult, true);
 		if(!iter.hasNext())

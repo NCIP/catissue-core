@@ -66,86 +66,10 @@
    <ns2:SchemaElement type="Shipment" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ShipmentRequest" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./edu.wustl.catissuecore.domain.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" packageName="edu.wustl.catissuecore.domain" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="AbstractPosition" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="AbstractSpecimen" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="AbstractSpecimenCollectionGroup" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Address" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Biohazard" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CancerResearchGroup" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Capacity" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CellSpecimen" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CellSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CellSpecimenReviewParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CheckInCheckOutEventParameter" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ClinicalDiagnosis" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CollectionEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CollectionProtocol" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CollectionProtocolEvent" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CollectionProtocolRegistration" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ConsentTier" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ConsentTierResponse" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ConsentTierStatus" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Container" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ContainerPosition" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ContainerType" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Department" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="DerivedSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="DisposalEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="DistributedItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Distribution" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="DistributionProtocol" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="DistributionSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="EmbeddedEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ExistingSpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ExistingSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ExternalIdentifier" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FixedEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FluidSpecimen" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FluidSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FluidSpecimenReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FrozenEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Institution" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="MolecularSpecimen" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="MolecularSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="MolecularSpecimenReviewParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="NewSpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="NewSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="OrderDetails" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="OrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Participant" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ParticipantMedicalIdentifier" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Password" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="PathologicalCaseOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ProcedureEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Race" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ReceivedEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ReportedProblem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ReturnEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Site" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Specimen" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenArray" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenArrayContent" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenArrayType" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenCharacteristics" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenCollectionGroup" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenPosition" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenProtocol" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpunEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="StorageContainer" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="StorageType" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="StudyFormContext" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ThawEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="TissueSpecimen" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="TissueSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="TissueSpecimenReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="TransferEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="User" xsi:type="ns2:SchemaElementType"/>
+  <ns2:Namespace location="./edu.wustl.catissuecore.domain.deintegration.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" packageName="edu.wustl.catissuecore.domain.deintegration" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="ParticipantRecordEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SCGRecordEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SpecimenRecordEntry" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./edu.wustl.catissuecore.domain.pathology.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" packageName="edu.wustl.catissuecore.domain.pathology" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="BinaryContent" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="BinaryContent" xsi:type="ns2:SchemaElementType"/>
@@ -163,10 +87,86 @@
    <ns2:SchemaElement className="TextContent" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TextContent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="XMLContent" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="XMLContent" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./edu.wustl.catissuecore.domain.deintegration.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" packageName="edu.wustl.catissuecore.domain.deintegration" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement className="ParticipantRecordEntry" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ParticipantRecordEntry" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SCGRecordEntry" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SCGRecordEntry" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenRecordEntry" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenRecordEntry" xsi:type="ns2:SchemaElementType"/>
+  <ns2:Namespace location="./edu.wustl.catissuecore.domain.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" packageName="edu.wustl.catissuecore.domain" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="AbstractPosition" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="AbstractPosition" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="AbstractSpecimen" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="AbstractSpecimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="AbstractSpecimenCollectionGroup" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="AbstractSpecimenCollectionGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Address" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Address" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Biohazard" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Biohazard" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CancerResearchGroup" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CancerResearchGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Capacity" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Capacity" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CellSpecimen" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CellSpecimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CellSpecimenRequirement" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CellSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CellSpecimenReviewParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CellSpecimenReviewParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CheckInCheckOutEventParameter" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CheckInCheckOutEventParameter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ClinicalDiagnosis" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ClinicalDiagnosis" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CollectionEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CollectionEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CollectionProtocol" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CollectionProtocol" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CollectionProtocolEvent" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CollectionProtocolEvent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CollectionProtocolRegistration" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="CollectionProtocolRegistration" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ConsentTier" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ConsentTier" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ConsentTierResponse" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ConsentTierResponse" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ConsentTierStatus" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ConsentTierStatus" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Container" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Container" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ContainerPosition" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ContainerPosition" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ContainerType" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ContainerType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Department" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Department" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DerivedSpecimenOrderItem" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DerivedSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DisposalEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DisposalEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DistributedItem" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DistributedItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Distribution" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Distribution" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DistributionProtocol" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DistributionProtocol" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DistributionSpecimenRequirement" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="DistributionSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="EmbeddedEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="EmbeddedEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ExistingSpecimenArrayOrderItem" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ExistingSpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ExistingSpecimenOrderItem" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ExistingSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ExternalIdentifier" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ExternalIdentifier" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="FixedEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="FixedEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="FluidSpecimen" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="FluidSpecimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="FluidSpecimenRequirement" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="FluidSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="FluidSpecimenReviewEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="FluidSpecimenReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="FrozenEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="FrozenEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Institution" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Institution" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="MolecularSpecimen" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="MolecularSpecimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="MolecularSpecimenRequirement" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="MolecularSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="MolecularSpecimenReviewParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="MolecularSpecimenReviewParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="NewSpecimenArrayOrderItem" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="NewSpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="NewSpecimenOrderItem" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="NewSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="OrderDetails" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="OrderDetails" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="OrderItem" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="OrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Participant" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Participant" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ParticipantMedicalIdentifier" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ParticipantMedicalIdentifier" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Password" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Password" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="PathologicalCaseOrderItem" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="PathologicalCaseOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ProcedureEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ProcedureEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Race" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Race" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ReceivedEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ReceivedEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ReportedProblem" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ReportedProblem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ReturnEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ReturnEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ReviewEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Site" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Site" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Specimen" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Specimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenArray" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenArray" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenArrayContent" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenArrayContent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenArrayOrderItem" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenArrayType" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenArrayType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenCharacteristics" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenCharacteristics" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenCollectionGroup" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenCollectionGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenOrderItem" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenPosition" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenPosition" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenProtocol" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenProtocol" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenRequirement" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpunEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpunEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="StorageContainer" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="StorageContainer" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="StorageType" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="StorageType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="StudyFormContext" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="StudyFormContext" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ThawEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ThawEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TissueSpecimen" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TissueSpecimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TissueSpecimenRequirement" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TissueSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TissueSpecimenReviewEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TissueSpecimenReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TransferEventParameters" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TransferEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="User" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="User" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -479,7 +479,7 @@
  </ns18:Extensions>
  <ns19:ServiceProperties xmlns:ns19="gme://gov.nih.nci.cagrid.introduce/1/Property">
   <ns19:Property description="" isFromETC="false" key="queryProcessorClass" value="gov.nih.nci.cagrid.data.sdk32query.HQLCoreQueryProcessor"/>
-  <ns19:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_appserviceUrl" value="http://10.88.199.50:28080/catissuecore/http/remoteService"/>
+  <ns19:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_appserviceUrl" value="https://10.88.199.50:8080/wsrf/services/cagrid/CaTissueSuite"/>
   <ns19:Property description="The location of the server-config.wsdd file" isFromETC="true" key="serverConfigLocation" value="server-config.wsdd"/>
   <ns19:Property description="The name of the class to use for CQL query structure validation" isFromETC="false" key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
   <ns19:Property description="The name of the class to use for CQL validation against a domain model" isFromETC="false" key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>
