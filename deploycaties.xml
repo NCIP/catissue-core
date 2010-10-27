@@ -263,7 +263,7 @@
 			<then>
 				<copy file="${basedir}/caTIES_conf/ScrubberConfiguration.xml" todir="${temp.caties.dir}/caTIES_conf" overwrite="true" />
 				<replace file="${temp.caties.dir}/caTIES_conf/ScrubberConfiguration.xml">
-					<replacefilter token="@@CONTEXT_FOLDER@@" value="${deidentifier.installation.dir}\caTIES_conf" />
+					<replacefilter token="@@CONTEXT_FOLDER@@" value="${deidentifier.installation.dir}/caTIES_conf" />
 				</replace>
 				<replace file="${temp.caties.dir}/caTIES_conf/caTIES.properties">
 					<replacefilter token="@@DEIDENTIFIER_CLASS_NAME@@" value="edu.wustl.catissuecore.deidentifier.harvardscrubber.HarvardSrubberDeidentifier" />

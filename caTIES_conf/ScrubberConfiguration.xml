@@ -3,12 +3,12 @@
 	<TextProcessingRules>
 		<SavedIdentifiers>
 			<Label>Names</Label>
-			<FileLocation>@@CONTEXT_FOLDER@@\names.list</FileLocation>
+			<FileLocation>@@CONTEXT_FOLDER@@/names.list</FileLocation>
 			<ReplaceWith>xxxNAMExxx</ReplaceWith>
 			<CaseSensitive>false</CaseSensitive>
 		</SavedIdentifiers>
 		<RegularExpressions>
-			<FileLocation>@@CONTEXT_FOLDER@@\regex.list</FileLocation>
+			<FileLocation>@@CONTEXT_FOLDER@@/regex.list</FileLocation>
 			<ReplaceWith>xxxx</ReplaceWith>
 			<PrintRegexNameInResult>true</PrintRegexNameInResult>
 		</RegularExpressions>
