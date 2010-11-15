@@ -34,11 +34,23 @@
   </class>
   <class name="edu.wustl.catissuecore.domain.StudyFormContext" identity="id">
     <map-to xml="StudyFormContext" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
-    <field name="id" type="integer">
+    <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
     <field name="noOfEntries" type="integer">
       <bind-xml name="noOfEntries" node="attribute" />
+    </field>
+    <field name="formLabel" type="string">
+      <bind-xml name="formLabel" node="attribute" />
+    </field>
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="hideForm" type="boolean">
+      <bind-xml name="hideForm" node="attribute" />
+    </field>
+    <field name="containerId" type="long">
+      <bind-xml name="containerId" node="attribute" />
     </field>
   </class>
   <class name="edu.wustl.catissuecore.domain.AbstractSpecimen" identity="id">
@@ -559,17 +571,44 @@
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="modifiedDate" type="date">
+      <bind-xml name="modifiedDate" node="attribute" />
+    </field>
+    <field name="modifiedBy" type="string">
+      <bind-xml name="modifiedBy" node="attribute" />
+    </field>
   </class>
   <class name="edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry" identity="id">
     <map-to xml="ParticipantRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
     </field>
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="modifiedDate" type="date">
+      <bind-xml name="modifiedDate" node="attribute" />
+    </field>
+    <field name="modifiedBy" type="string">
+      <bind-xml name="modifiedBy" node="attribute" />
+    </field>
   </class>
   <class name="edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry" identity="id">
     <map-to xml="SpecimenRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
+    </field>
+    <field name="activityStatus" type="string">
+      <bind-xml name="activityStatus" node="attribute" />
+    </field>
+    <field name="modifiedDate" type="date">
+      <bind-xml name="modifiedDate" node="attribute" />
+    </field>
+    <field name="modifiedBy" type="string">
+      <bind-xml name="modifiedBy" node="attribute" />
     </field>
   </class>
   <class name="edu.wustl.catissuecore.domain.pathology.ConceptReferent" identity="id">

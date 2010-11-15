@@ -7,9 +7,10 @@ import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
 import javax.xml.namespace.QName;
-
+import edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry;
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.client.AxisClient;
+import edu.wustl.catissuecore.domain.Participant;
 import org.apache.axis.client.Stub;
 import org.apache.axis.configuration.FileProvider;
 import org.apache.axis.message.addressing.EndpointReferenceType;
@@ -94,9 +95,10 @@ public class CaTissueSuiteClient extends CaTissueSuiteClientBase implements CaTi
 			System.exit(1);
 		}
 	}
-	private static void printResults(CQLQueryResults cqlQueryResult) {
+	private static void printResults(CQLQueryResults cqlQueryResult)
+	{
 		CQLQueryResultsIterator iter = new CQLQueryResultsIterator(cqlQueryResult, true);
-		if(!iter.hasNext())
+		if (!iter.hasNext())
 		{
 			System.out.println("No Result Found");
 		}
@@ -104,6 +106,15 @@ public class CaTissueSuiteClient extends CaTissueSuiteClientBase implements CaTi
 		{
 			System.out.println("\n" + iter.next());
 		}
+		/*java.util.Iterator iter = new CQLQueryResultsIterator(cqlQueryResult,
+				CaTissueSuiteClient.class.getResourceAsStream("client-config.wsdd"));
+		while (iter.hasNext())
+		{
+			Participant g = (Participant) iter.next();
+			System.out.println("Found a gene:");
+			System.out.println(g.getId() + " -- " +  g.getObjectId());
+		}*/
+
 	}
 
   public org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(org.oasis.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException {

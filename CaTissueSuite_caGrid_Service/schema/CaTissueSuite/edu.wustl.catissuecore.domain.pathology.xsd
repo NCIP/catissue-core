@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" xmlns:edu.wustl.catissuecore.domain="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:edu.wustl.catissuecore.domain.deintegration="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" xmlns:edu.wustl.catissuecore.domain.shippingtracking="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" elementFormDefault="qualified">
+  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" schemaLocation="edu.wustl.catissuecore.domain.shippingtracking.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" schemaLocation="edu.wustl.catissuecore.domain.deintegration.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" schemaLocation="edu.wustl.catissuecore.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" schemaLocation="edu.wustl.catissuecore.domain.shippingtracking.xsd" />
   <xs:element name="ConceptReferent" type="ConceptReferent" />
   <xs:complexType name="ConceptReferent">
     <xs:sequence>

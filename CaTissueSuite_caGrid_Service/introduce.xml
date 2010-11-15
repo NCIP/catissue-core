@@ -61,16 +61,6 @@
    <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./edu.wustl.catissuecore.domain.shippingtracking.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" packageName="edu.wustl.catissuecore.domain.shippingtracking" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="BaseShipment" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Shipment" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ShipmentRequest" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./edu.wustl.catissuecore.domain.deintegration.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" packageName="edu.wustl.catissuecore.domain.deintegration" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="ParticipantRecordEntry" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SCGRecordEntry" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenRecordEntry" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
   <ns2:Namespace location="./edu.wustl.catissuecore.domain.pathology.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" packageName="edu.wustl.catissuecore.domain.pathology" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="BinaryContent" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="BinaryContent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="Concept" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Concept" xsi:type="ns2:SchemaElementType"/>
@@ -86,6 +76,16 @@
    <ns2:SchemaElement className="SurgicalPathologyReport" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SurgicalPathologyReport" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="TextContent" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="TextContent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="XMLContent" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="XMLContent" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./edu.wustl.catissuecore.domain.deintegration.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" packageName="edu.wustl.catissuecore.domain.deintegration" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="ParticipantRecordEntry" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ParticipantRecordEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SCGRecordEntry" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SCGRecordEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenRecordEntry" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="SpecimenRecordEntry" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./edu.wustl.catissuecore.domain.shippingtracking.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" packageName="edu.wustl.catissuecore.domain.shippingtracking" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="BaseShipment" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="BaseShipment" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Shipment" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="Shipment" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ShipmentRequest" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="ShipmentRequest" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./edu.wustl.catissuecore.domain.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" packageName="edu.wustl.catissuecore.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="AbstractPosition" deserializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32DeserializerFactory" serializer="gov.nih.nci.cagrid.data.style.cacore32.encoding.SDK32SerializerFactory" type="AbstractPosition" xsi:type="ns2:SchemaElementType"/>
@@ -237,7 +237,7 @@
     </ns4:Method>
    </ns4:Methods>
    <ns15:ResourcePropertiesList xsi:type="ns15:ResourcePropertiesListType" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns15:ResourceProperty qName="ns16:DomainModel" fileLocation="fixed_catissue_v12_final.xml" populateFromFile="true" register="true" xsi:type="ns15:ResourcePropertyType" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+    <ns15:ResourceProperty qName="ns16:DomainModel" fileLocation="catissue_v12_final_15_11.xml" populateFromFile="true" register="true" xsi:type="ns15:ResourcePropertyType" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
     <ns15:ResourceProperty qName="ns17:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns15:ResourcePropertyType" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
    </ns15:ResourcePropertiesList>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
@@ -479,7 +479,7 @@
  </ns18:Extensions>
  <ns19:ServiceProperties xmlns:ns19="gme://gov.nih.nci.cagrid.introduce/1/Property">
   <ns19:Property description="" isFromETC="false" key="queryProcessorClass" value="gov.nih.nci.cagrid.data.sdk32query.HQLCoreQueryProcessor"/>
-  <ns19:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_appserviceUrl" value="https://10.88.199.50:8080/wsrf/services/cagrid/CaTissueSuite"/>
+  <ns19:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_appserviceUrl" value="http://10.88.199.50:28080/catissuecore/http/remoteService"/>
   <ns19:Property description="The location of the server-config.wsdd file" isFromETC="true" key="serverConfigLocation" value="server-config.wsdd"/>
   <ns19:Property description="The name of the class to use for CQL query structure validation" isFromETC="false" key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
   <ns19:Property description="The name of the class to use for CQL validation against a domain model" isFromETC="false" key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>

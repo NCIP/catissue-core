@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" xmlns:edu.wustl.catissuecore.domain="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:edu.wustl.catissuecore.domain.pathology="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" xmlns:edu.wustl.catissuecore.domain.shippingtracking="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" elementFormDefault="qualified">
+  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" schemaLocation="edu.wustl.catissuecore.domain.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" schemaLocation="edu.wustl.catissuecore.domain.pathology.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" schemaLocation="edu.wustl.catissuecore.domain.shippingtracking.xsd" />
-  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" schemaLocation="edu.wustl.catissuecore.domain.xsd" />
   <xs:element name="SCGRecordEntry" type="SCGRecordEntry" />
   <xs:complexType name="SCGRecordEntry">
     <xs:sequence>
@@ -15,6 +15,9 @@
       </xs:element>
     </xs:sequence>
     <xs:attribute name="id" type="xs:long" />
+    <xs:attribute name="activityStatus" type="xs:string" />
+    <xs:attribute name="modifiedDate" type="xs:dateTime" />
+    <xs:attribute name="modifiedBy" type="xs:string" />
   </xs:complexType>
   <xs:element name="ParticipantRecordEntry" type="ParticipantRecordEntry" />
   <xs:complexType name="ParticipantRecordEntry">
@@ -28,6 +31,9 @@
       </xs:element>
     </xs:sequence>
     <xs:attribute name="id" type="xs:long" />
+    <xs:attribute name="activityStatus" type="xs:string" />
+    <xs:attribute name="modifiedDate" type="xs:dateTime" />
+    <xs:attribute name="modifiedBy" type="xs:string" />
   </xs:complexType>
   <xs:element name="SpecimenRecordEntry" type="SpecimenRecordEntry" />
   <xs:complexType name="SpecimenRecordEntry">
@@ -41,6 +47,9 @@
       </xs:element>
     </xs:sequence>
     <xs:attribute name="id" type="xs:long" />
+    <xs:attribute name="activityStatus" type="xs:string" />
+    <xs:attribute name="modifiedDate" type="xs:dateTime" />
+    <xs:attribute name="modifiedBy" type="xs:string" />
   </xs:complexType>
 </xs:schema>
 

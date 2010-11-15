@@ -1240,8 +1240,12 @@
   </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="StudyFormContext" id="EAID_064E3CDB_F759_4b31_8D50_76C71C67575D" packageName="edu.wustl.catissuecore.domain" projectName="CaTissueSuite" projectVersion="1.2">
    <ns4:umlAttributeCollection xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns4:UMLAttribute dataTypeName="java.lang.Integer" name="id" publicID="-1898315741" version="1.0"/>
+    <ns4:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1898315741" version="1.0"/>
     <ns4:UMLAttribute dataTypeName="java.lang.Integer" name="noOfEntries" publicID="-1898315740" version="1.0"/>
+    <ns4:UMLAttribute dataTypeName="java.lang.String" name="formLabel" publicID="-1898315739" version="1.0"/>
+    <ns4:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-1898315738" version="1.0"/>
+    <ns4:UMLAttribute dataTypeName="java.lang.Boolean" name="hideForm" publicID="-1898315737" version="1.0"/>
+    <ns4:UMLAttribute dataTypeName="java.lang.Long" name="containerId" publicID="-1898315736" version="1.0"/>
    </ns4:umlAttributeCollection>
   </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="StorageContainer" id="EAID_0E7509A1_5103_4de1_AA78_A745EF237D27" packageName="edu.wustl.catissuecore.domain" projectName="CaTissueSuite" projectVersion="1.2">
@@ -2716,6 +2720,9 @@
     <ns141:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-236588740" version="1.0">
      <ns141:SemanticMetadata conceptCode="C25364" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." conceptName="Identifier" order="0"/>
     </ns141:UMLAttribute>
+    <ns141:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-236588739" version="1.0"/>
+    <ns141:UMLAttribute dataTypeName="java.util.Date" name="modifiedDate" publicID="-236588738" version="1.0"/>
+    <ns141:UMLAttribute dataTypeName="java.lang.String" name="modifiedBy" publicID="-236588737" version="1.0"/>
    </ns141:umlAttributeCollection>
    <ns142:SemanticMetadata conceptCode="C45974" conceptDefinition="In object-oriented programming, an object is a self-contained entity that consists of both data and procedures to manipulate the data." conceptName="Computer Programming Object" order="0" xmlns:ns142="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns143:SemanticMetadata conceptCode="C25648" conceptDefinition="A state of connectedness between people, objects, or events; to be associated or connected with something." conceptName="Relationship" order="1" xmlns:ns143="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
@@ -2729,6 +2736,9 @@
     <ns148:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="1362738585" version="1.0">
      <ns148:SemanticMetadata conceptCode="C25364" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." conceptName="Identifier" order="0"/>
     </ns148:UMLAttribute>
+    <ns148:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="1362738586" version="1.0"/>
+    <ns148:UMLAttribute dataTypeName="java.util.Date" name="modifiedDate" publicID="1362738587" version="1.0"/>
+    <ns148:UMLAttribute dataTypeName="java.lang.String" name="modifiedBy" publicID="1362738588" version="1.0"/>
    </ns148:umlAttributeCollection>
    <ns149:SemanticMetadata conceptCode="C45974" conceptDefinition="In object-oriented programming, an object is a self-contained entity that consists of both data and procedures to manipulate the data." conceptName="Computer Programming Object" order="0" xmlns:ns149="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns150:SemanticMetadata conceptCode="C25648" conceptDefinition="A state of connectedness between people, objects, or events; to be associated or connected with something." conceptName="Relationship" order="1" xmlns:ns150="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
@@ -2740,6 +2750,9 @@
     <ns153:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-1414574027" version="1.0">
      <ns153:SemanticMetadata conceptCode="C25364" conceptDefinition="One or more characters used to identify, name, or characterize the nature, properties, or contents of a thing." conceptName="Identifier" order="0"/>
     </ns153:UMLAttribute>
+    <ns153:UMLAttribute dataTypeName="java.lang.String" name="activityStatus" publicID="-1414574026" version="1.0"/>
+    <ns153:UMLAttribute dataTypeName="java.util.Date" name="modifiedDate" publicID="-1414574025" version="1.0"/>
+    <ns153:UMLAttribute dataTypeName="java.lang.String" name="modifiedBy" publicID="-1414574024" version="1.0"/>
    </ns153:umlAttributeCollection>
    <ns154:SemanticMetadata conceptCode="C45974" conceptDefinition="In object-oriented programming, an object is a self-contained entity that consists of both data and procedures to manipulate the data." conceptName="Computer Programming Object" order="0" xmlns:ns154="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    <ns155:SemanticMetadata conceptCode="C25648" conceptDefinition="A state of connectedness between people, objects, or events; to be associated or connected with something." conceptName="Relationship" order="1" xmlns:ns155="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>

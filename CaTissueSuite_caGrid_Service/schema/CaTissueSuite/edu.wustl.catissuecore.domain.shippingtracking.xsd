@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" xmlns:edu.wustl.catissuecore.domain="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:edu.wustl.catissuecore.domain.deintegration="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" xmlns:edu.wustl.catissuecore.domain.pathology="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" elementFormDefault="qualified">
-  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" schemaLocation="edu.wustl.catissuecore.domain.pathology.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" schemaLocation="edu.wustl.catissuecore.domain.deintegration.xsd" />
+  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" schemaLocation="edu.wustl.catissuecore.domain.pathology.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" schemaLocation="edu.wustl.catissuecore.domain.xsd" />
   <xs:element name="BaseShipment" type="BaseShipment" />
   <xs:complexType name="BaseShipment">
