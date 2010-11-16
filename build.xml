@@ -740,10 +740,10 @@
 		<copy todir="${zip.dir}/CaTissueSuite_caGrid_Service" overwrite="true">
 			<fileset dir="${base.dir}/CaTissueSuite_caGrid_Service" />
 		</copy>
-
-		<copy todir="${zip.dir}/de_cagrid_services" overwrite="true">
+		<!-- DE grid service is not avaialbel in this buid so commenting this target -->
+		<!--<copy todir="${zip.dir}/de_cagrid_services" overwrite="true">
 			<fileset dir="${base.dir}/de_cagrid_services" />
-		</copy>
+		</copy>-->
 		<!--- caTIES related files  start-->
 		<copy todir="${zip.dir}/caTIES_conf" overwrite="true">
 			<fileset dir="${base.dir}/caTIES_conf" />
