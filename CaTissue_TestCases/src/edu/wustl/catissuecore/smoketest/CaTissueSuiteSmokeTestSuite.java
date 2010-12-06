@@ -47,6 +47,7 @@ public class CaTissueSuiteSmokeTestSuite
 		strutsSuite.addTestSuite(edu.wustl.catissuecore.smoketest.admin.CancerReaserchGroupTestCases.class);
 
 		strutsSuite.addTestSuite(edu.wustl.catissuecore.smoketest.login.LogoutTestcase.class);
+		strutsSuite.addTestSuite(TearDownSmokeTestCase.class);
 		return strutsSuite;
 	}
 

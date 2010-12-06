@@ -78,4 +78,52 @@ public class TestCaseDataUtil
 			}
 		}
 	}
+
+	public static void createSummaryReport(TestResult result)
+	{
+		String fileName= "./CaTissue_TestCases/Smoke_Test_Summary_Report.csv";
+		FileWriter writer = null;
+		try
+		{
+		File file= new File(fileName);
+		if(file.exists())
+			file.delete();
+		file.createNewFile();
+		writer = new FileWriter(file,true);
+		int valueListSize = 8;
+		StringBuffer line = new StringBuffer();
+//		for(int i=0;i<valueListSize;i++)
+//		{
+			line.setLength(0);
+
+			line.append("Scenario,Total Test cases Executed,Passed,Failed,Percent Passed(%)");
+//			}
+			line.deleteCharAt(line.length()-1);
+			line.append("\n");
+			int failedTestCount = result.errorCount()+result.failureCount();
+			int passedTestCount = result.runCount()-failedTestCount;
+			int totalTestCount = result.runCount();
+			double passedPercent = (double)(passedTestCount*100)/(double)totalTestCount;
+			line.append("Fresh,"+result.runCount()+","+passedTestCount+","+failedTestCount+","+passedPercent);
+			writer.append(line.toString());
+//		}
+	}
+	catch (IOException ioExp)
+	{
+
+		ioExp.printStackTrace();
+	}
+	finally
+	{
+		try
+		{
+			writer.close();
+		}
+		catch (IOException exp)
+		{
+			exp.printStackTrace();
+		}
+	}
+
+	}
 }
