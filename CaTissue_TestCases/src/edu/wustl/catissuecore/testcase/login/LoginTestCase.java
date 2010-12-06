@@ -1,4 +1,5 @@
 package edu.wustl.catissuecore.testcase.login;
+import edu.wustl.bulkoperator.actionForm.BulkOperationForm;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.common.beans.SessionDataBean;
@@ -14,6 +15,10 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 	 * Test Login with empty Login name.
 	 */
 
+	public void setUp() throws Exception
+	{
+		super.setUp();
+	}
 	public void testLoginWithEmptyLoginName()
 	{
 		setRequestPathInfo("/Login") ;
@@ -110,4 +115,19 @@ public class LoginTestCase extends CaTissueSuiteBaseTest
 		verifyNoActionErrors();
 		logger.info("end in login");
 	}
+
+	public void testBulk()
+	{
+		setConfigFile("/WEB-INF/bulkoperation-struts-config.xml");
+	    setRequestPathInfo("/BulkOperation");
+	    BulkOperationForm bulkOperationForm = new BulkOperationForm();
+	    setActionForm(bulkOperationForm);
+//	    addRequestParameter(parameterName, parameterValue)
+	    actionPerform();
+	    System.out.println("Forward    :"+getActualForward());
+	    verifyForward("pageOfBulkOperation");
+	    verifyNoActionErrors();
+
+	}
+
 }

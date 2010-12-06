@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.testcase;
 
 import junit.framework.TestSuite;
+import junit.framework.Test;
 import edu.wustl.catissuecore.testcase.admin.BiohazardTestCases;
 import edu.wustl.catissuecore.testcase.admin.CancerReaserchGroupTestCases;
 import edu.wustl.catissuecore.testcase.admin.DepartmentTestCases;
@@ -77,15 +78,15 @@ public class CaTissueSuiteTestSuite
 	{
 		//org.junit.runner.JUnitCore.main("edu.wustl.dao.test.HibernateInsertTestCase");
 
-		junit.awtui.TestRunner.run(CaTissueSuiteTestSuite.class);
-		//junit.swingui.TestRunner.run(CaTissueSuiteTestSuite.class);
+//		junit.awtui.TestRunner.run(CaTissueSuiteTestSuite.class);
+		junit.swingui.TestRunner.run(CaTissueSuiteTestSuite.class);
 	}
 
 
 	/**
 	 * @return daoSuite.
 	 */
-	public static junit.framework.Test suite()
+	public static Test suite()
 	{
 		TestSuite strutsSuite = new TestSuite("caTissue Junit Test Cases");
 //		daoSuite.addTestSuite(HibernateTestCaseForCatissue.class);

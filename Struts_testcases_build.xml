@@ -356,5 +356,36 @@
 
 	</target>
 
+	<target name="run_smoke_testcases" depends="compile_junit_testcases">
+		        <mkdir dir="${base.dir}/Nightly_Build_Struts_Report" />
+				<mkdir dir="${base.dir}/Nightly_Build_Struts_Report/Html_reports" />
+
+
+				<junit printsummary="yes" fork="yes" haltonfailure="no" >
+
+					<jvmarg value="-Xms128m"/>
+					<jvmarg value="-Xmx1024m"/>
+					<sysproperty key="net.sourceforge.cobertura.datafile" file="${cat.cobertura.dir}/strutscoverage.ser" />
+					<sysproperty key="app.home" value="."/>
+
+					<!--
+						Note the classpath order: instrumented classes are before the
+						original (uninstrumented) classes.  This is important.
+					-->
+
+					<classpath location="${cat.instrumented.dir}" />
+					<classpath refid="testcases.classpath" />
+					<classpath refid="cobertura.classpath" />
+
+					<formatter type="xml"/>
+
+					<batchtest fork="yes" todir="${base.dir}/Nightly_Build_Struts_Report">
+						<fileset dir="${cat.test.src.dir}">
+							<include name="**/CaTissueSuiteSmokeTestSuite.java" />
+						</fileset>
+					</batchtest>
+				</junit>
+			</target>
+
 
  </project>
