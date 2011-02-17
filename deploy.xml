@@ -132,11 +132,10 @@
 			<or>
 				<equals arg1="mysql" arg2="${database.type}" />
 				<equals arg1="oracle" arg2="${database.type}" />
-				<equals arg1="mssqlserver" arg2="${database.type}" />
 			</or>
 			<then />
 			<else>
-				<fail message="The value of property 'database.type' must be mysql ,oracle or mssqlserver" />
+				<fail message="The value of property 'database.type' must be mysql ,oracle" />
 			</else>
 		</if>
 
@@ -189,7 +188,7 @@
 		<if>
 			<equals arg1="" arg2="${database.port}" />
 			<then>
-				<fail message="The property 'database.port' can not be empty. Default port for MySQL:3306 ,for Oracle: 1521 and for MsSqlServer: 1433" />
+				<fail message="The property 'database.port' can not be empty. Default port for MySQL:3306 ,for Oracle: 1521" />
 			</then>
 		</if>
 		<if>
@@ -255,13 +254,6 @@
 			</then>
 		</if>
 
-		<!-- Validation of database schema name for MsSqlServer-->
-		<if>
-			<equals arg1="mssqlserver" arg2="${database.type}" />
-			<then>
-				<antcall target="validate_schema_name" />
-			</then>
-		</if>
 
 		<!-- Check whether JAVA_HOME environment variable set or not -->
 		<if>
@@ -303,21 +295,6 @@
 										</classpath>
 								</sql>
 							</then>
-						</elseif>
-						<elseif>
-							<equals arg1="mssqlserver" arg2="${database.type}" />
-							<then>
-								<echo message="Upgrading MsSqlServer Database for CA models metadata ..." />
-								<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
-									<transaction>select 1;</transaction>
-									<!--transaction>commit;</transaction-->
-									<classpath>
-										 <fileset dir="${lib.dir}">
-										 	<include name="*.jar" />
-										 </fileset>
-									</classpath>
-							</sql>
-						</then>
 						</elseif>
 
 				</if>
@@ -748,7 +725,6 @@
 			<fileset dir="${lib.dir}">
 				<include name="${mysql.lib}" />
 				<include name="${oracle.lib}" />
-				<include name="${mssqlserver.lib}" />
 			</fileset>
 		</copy>
 		<copy todir="${jboss.home.dir}/bin" overwrite="true">
@@ -896,12 +872,7 @@
 
 				</then>
 			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}" />
-				<then>
-					<antcall target="mssqlserver_config" />
-				</then>
-			</elseif>
+
 		</if>
 	</target>
 
@@ -1166,14 +1137,6 @@
 		</replace>
 	</target>
 
-	<!-- Modify dynamicextensions configuration For MsSQLServer -->
-	<target name="de_mssqlserver_config" description="Modify dynamicextensions configuration For MsSQLServer">
-		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
-			<replacefilter token="${mysql.dialect.string}" value="${mssqlserver.dialect.string}" />
-			<replacefilter token="${oracle.dialect.string}" value="${mssqlserver.dialect.string}" />
-			<replacefilter token="@@datasource@@" value="java:/catissuecore" />
-		</replace>
-	</target>
 
 	<!-- Integrating DynamicExtensions application with catissue -->
 	<target name="de_integrate_app" depends="de_check_prerequisite" if="file.exists" description="Integrating DynamicExtensions application with catissue">
@@ -1193,12 +1156,6 @@
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
 					<antcall target="de_oracle_config" />
-				</then>
-			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}" />
-				<then>
-					<antcall target="de_mssqlserver_config" />
 				</then>
 			</elseif>
 		</if>
@@ -1224,7 +1181,6 @@
 				<include name="displaytype-classname-mapping.properties" />
 				<include name="ControlConfigurations.xml" />
 				<include name="EAVValidationRules.xml" />
-				<include name="PrimitiveAttributeDataTypes_MSSQLSERVER.xml" />
 				<include name="PrimitiveAttributeDataTypes_MYSQL.xml" />
 				<include name="PrimitiveAttributeDataTypes_ORACLE.xml" />
 				<include name="RuleConfigurations.xml" />
@@ -1356,17 +1312,6 @@
 						</replace>
 					</then>
 				</elseif>
-				<elseif>
-					<equals arg1="mssqlserver" arg2="${database.type}" />
-					<then>
-						<replace dir="${temp.dir}/${warName}/WEB-INF/classes">
-							<include name="hibernate.properties" />
-							<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
-							<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
-							<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
-						</replace>
-					</then>
-				</elseif>
 			</if>
 			<replace dir="${temp.dir}/${warName}/WEB-INF/classes">
 				<include name="hibernate.properties" />
@@ -1440,13 +1385,6 @@
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
 					<antcall target="deploy_db_oracle" />
-				</then>
-			</elseif>
-			<!-- mssqlserver db -->
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}" />
-				<then>
-					<antcall target="deploy_db_mssqlserver" />
 				</then>
 			</elseif>
 			<else>
@@ -2155,15 +2093,6 @@
 					</antcall>
 				</then>
 			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}" />
-				<then>
-					<antcall target="update_metadata_for_model_changes_mssqlserver">
-						 <param name="isUpgrade" value="${isUpgrade}"/>
-						 <param name="buildVersion" value="${buildVersion}"/>
-					</antcall>
-				</then>
-			</elseif>
 			<else>
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
@@ -2201,21 +2130,6 @@
 						</classpath>
 					</sql>
 				</then>
-			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}" />
-				<then>
-					<echo message="Upgrading MsSqlServer Database for CA models metadata ..." />
-					<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
-					<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/updateCAModels.sql" />
-					<!--<transaction>commit;</transaction> -->
-					<classpath>
-						<fileset dir="${lib.dir}">
-							<include name="*.jar" />
-						</fileset>
-					</classpath>
-				</sql>
-			</then>
 			</elseif>
 
 			<else>
@@ -2349,13 +2263,6 @@
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
 					<antcall target="upgrade_de_integration_restructure_metadata_oracle" />
-				</then>
-			</elseif>
-			<!-- mssqlserver db -->
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}" />
-				<then>
-					<antcall target="upgrade_de_integration_restructure_metadata_mssqlserver" />
 				</then>
 			</elseif>
 		</if>
@@ -2571,12 +2478,6 @@
 					<antcall target="CAModel_import_data_oracle" />
 				</then>
 			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}" />
-				<then>
-					<antcall target="CAModel_import_data_mssqlserver" />
-				</then>
-			</elseif>
 			<else>
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
@@ -2777,12 +2678,6 @@ Thanking You,
 					<antcall target="firstUser_oracle"/>
 				</then>
 			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}"/>
-				<then>
-					<antcall target="firstUser_mssqlserver"/>
-				</then>
-			</elseif>
 		</if>
 	</target>
 
@@ -2898,17 +2793,6 @@ Thanking You,
 					<echo message="${database.type} ${database.name}" />
 				</then>
 			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}" />
-				<then>
-					<replace dir="${tempPath}" propertyfile="caTissueInstall.properties">
-						<include name="titli.properties" />
-						<replacefilter token="@@databaseurl@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
-						<replacefilter token="@@databasedriver@@" value="${mssqlserver.driver.string}" />
-					</replace>
-					<echo message="${database.type} ${database.name}" />
-				</then>
-			</elseif>
 		</if>
 	</target>
 
@@ -2959,17 +2843,6 @@ Thanking You,
 						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
 						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
 						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-					</replace>
-				</then>
-			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}"/>
-				<then>
-					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-						<include name="*.cfg.xml" />
-						<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
-						<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
-						<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
 					</replace>
 				</then>
 			</elseif>
@@ -3077,17 +2950,6 @@ Thanking You,
 						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
 						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
 						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-					</replace>
-				</then>
-			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}"/>
-				<then>
-					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-					<include name="*.cfg.xml" />
-					<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
-						<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
-						<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
 					</replace>
 				</then>
 			</elseif>
@@ -3350,12 +3212,6 @@ Thanking You,
 					<antcall target="st_deploy_db_oracle" />
 				</then>
 			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}" />
-				<then>
-					<antcall target="st_deploy_db_mssqlserver" />
-				</then>
-			</elseif>
 			<else>
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
@@ -3392,18 +3248,6 @@ Thanking You,
 		</sql>
 	</target>
 
-	<!-- Deploying shippingtracking db for mssqlserver -->
-	<target name="st_deploy_db_mssqlserver" description="Deploying shippingtracking db for mysqlServer">
-		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}" onerror="continue">
-			<transaction src="${base.dir}/SQL/MsSqlServer/shippingtracking.sql"/>
-
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-	</target>
 	<!--  ShippingTracking - end -->
 
 	<target name="alter_CA_model_Tables" description="Upgrading Oracle Database for DE model Application ...">
@@ -3419,258 +3263,6 @@ Thanking You,
 		</sql>
 	</target>
 
-	<!-- ACORN - mssqlserver migration - start -->
-
-	<!--MsSQLServer Database Creation -->
-	<target name="deploy_db_mssqlserver" description="Initializing MsSQLServer Database for caTissue Suite v1.1p4. Application...">
-
-		<echo message="Initializing MsSQLServer Database for caTissue Suite v1.1p4. Application..." />
-
-		<replace file="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql">
-			<replacefilter token="@@schema@@" value="${database.schemaname}" />
-		</replace>
-
-		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
-			<transaction src="${mssqlserver.sql.dir}/catissuecore.sql" />
-			<transaction src="${mssqlserver.sql.dir}/InitDB_CreateTable.sql" />
-			<transaction src="${mssqlserver.sql.dir}/Common/initDB_Insert_Common.sql" />
-			<transaction src="${mssqlserver.sql.dir}/Common/AlterTable.sql" />
-			<transaction src="${mssqlserver.sql.dir}/Common/CDE_DummyData_Common.sql" />
-			<transaction src="${mssqlserver.sql.dir}/csm_catissuecore.sql" />
-			<transaction src="${mssqlserver.sql.dir}/Common/insert_default_data.sql" />
-			<transaction src="${mssqlserver.sql.dir}/Common/indexes.sql" />
-			<transaction src="${mssqlserver.sql.dir}/dynamicextension.sql" />
-			<transaction src="${mssqlserver.sql.dir}/query/metadata_schema_script.sql" />
-			<transaction src="${mssqlserver.sql.dir}/query/caB2B Table Generation Script.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MsSqlServer/CAModel.sql"/>
-			<transaction src="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql" />
-
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-
-		<replace file="${mssqlserver.sql.dir}/UniqueKey_Constraint.sql">
-			<replacefilter token="${database.schemaname}" value="@@schema@@" />
-		</replace>
-
-		<antcall target="unzip_aq_installable" />
-		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="create_query_tables">
-			<property name="database.type" value="${database.type}" />
-			<property name="database.driver" value="${oracle.driver.string}" />
-			<property name="database.url" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
-			<property name="database.username" value="${database.username}" />
-			<property name="database.password" value="${database.password}" />
-			<property name="lib.dir" value="${lib.dir}" />
-		</ant>
-
-		<antcall  target="Export_Clinical_diagnosis_mssqlserver"/>
-		<antcall target="CAModel_import_data" />
-		<antcall target="temp_update_metadata_for_clob_support_mssqlserver" />
-		<antcall target="insert_entity_group_metadata_mssqlserver" />
-		<antcall target="upgrade_db_demodel_mssqlserver" />
-		<antcall target="update_metadata_for_model_changes" >
-			 <param name="isUpgrade" value="false"/>
-	    </antcall>
-		<antcall target="update_metadata_for_CA_model_changes" />
-
-	</target>
-
-	<target name="Export_Clinical_diagnosis_mssqlserver" description="Exporting data of Clinical diagnosis ... for mssqlserver">
-		<echo message="Exporting data of Clinical diagnosis ..." />
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<java classname="edu.wustl.catissuecore.util.global.AutomateImportSS" fork="true">
-			<classpath refid="temp.classpath" />
-			<classpath>
-				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes/"/>
-			</classpath>
-			<arg value="${database.host}"/>
-			<arg value="${database.port}"/>
-			<arg value="${database.type}"/>
-			<arg value="${database.name}"/>
-			<arg value="${database.username}"/>
-			<arg value="${database.password}"/>
-			<arg value="${mssqlserver.driver.string}"/>
-			<arg value="import"/>
-			<arg value="${basedir}/SQL/Permissible_values/MsSqlServer/dumpFileColumnInfo.txt" />
-			<arg value="\\${env.COMPUTERNAME}/SQL/Permissible_values/" />
-		</java>
-		<delete dir="${temp.dir}" />
-	</target>
-
-	<!--MsSQL server Database Upgradation -->
-	<target name="upgrade_db_demodel_mssqlserver" description="MsSQL server Database Upgradation">
-		<echo message="Upgrading MsSQLServer Database for DE model Application ..." />
-		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/dropdeconstraints.sql" />
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/createnewtable.sql" />
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/alterqueries.sql" />
-			<transaction src="${dbupgrade.sql.dir}/DEDBUpgrade/MsSqlServer/addconstraints.sql" />
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-	</target>
-
-	<target name="CAModel_import_data_mssqlserver" description="Importing CA models data for caTISSUE Suite Application to MsSQLSever Database ...">
-		<echo message="Importing CA models data for caTISSUE Suite Application to MsSQLSever Database ..." />
-		<java classname="edu.wustl.catissuecore.util.global.AutomateImportSS"  fork="true" maxmemory="512m">
-			<classpath refid="temp.classpath" />
-			<classpath>
-				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes/"/>
-			</classpath>
-			<arg value="${database.host}"/>
-			<arg value="${database.port}"/>
-			<arg value="${database.type}"/>
-			<arg value="${database.name}"/>
-			<arg value="${database.username}"/>
-			<arg value="${database.password}"/>
-			<arg value="${mssqlserver.driver.string}"/>
-			<arg value="import"/>
-			<arg value="${dbupgrade.sql.dir}/Common/MsSqlServer/dumpFileColumnInfo.txt" />
-			<arg value="\\${env.COMPUTERNAME}/SQL/DBUpgrade/Common/MsSqlServer/CAModelCSVs/" />
-		</java>
-	</target>
-
-	<target name="update_metadata_for_model_changes_mssqlserver" description="Updating DE Metadata for model changes (mssqlserver).....">
-		<echo message="Updating DE Metadata for model changes (mssqlserver)....." />
-		<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadata"  fork="true" maxmemory="512m">
-			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
-			<classpath refid="temp.classpath" />
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-			<arg value="${database.host}"/>
-			<arg value="${database.port}"/>
-			<arg value="${database.type}"/>
-			<arg value="${database.name}"/>
-			<arg value="${database.username}"/>
-			<arg value="${database.password}"/>
-			<arg value="${mssqlserver.driver.string}"/>
-			<arg value="${isUpgrade}"/>
-			<arg value="${buildVersion}"/>
-		</java>
-	</target>
-
-	<target name="temp_update_metadata_for_clob_support_mssqlserver" description="Upgrading MsSQLServer Database for supporting query on clob type attributes...">
-		<echo message="Upgrading MsSQLServer Database for supporting query on clob type attributes..." />
-		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
-			<transaction src="${mssqlserver.sql.dir}/query/temp_update_metadata.sql" />
-			<!-- <transaction>commit;</transaction> -->
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-	</target>
-
-	<target name="insert_entity_group_metadata_mssqlserver" description="Inserting entity group metadata for MsSqlServer...">
-		<echo message="Inserting entity group metadata for MsSqlServer..." />
-		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
-			<transaction src="${mssqlserver.sql.dir}/query/entity_group_metadata.sql" />
-			<!-- <transaction>commit;</transaction> -->
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-	</target>
-
-	<target name="firstUser_mssqlserver" description="Inserting first user for mysql">
-		<echo message="Encoding Password..."/>
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<copy file="${base.dir}/lib/j2ee.jar" tofile="${temp.dir}/catissuecore/WEB-INF/lib/j2ee.jar"/>
-		<java classname="edu.wustl.common.util.global.PasswordManager" fork="false" >
-	   	 <classpath refid="temp.classpath" />
-			<arg value="${base.dir}/catissuetmp.txt"/>
-			<arg value="${first.admin.password}"/>
-		</java>
-
-		<property file="${base.dir}/catissuetmp.txt"/>
-		<echo>
-			Encoded Password ${first.admin.encodedPassword}
-		</echo>
-
-		<echo message="Modifying caTissue Suite SQL file for user information..."/>
-		<copy file="${mssqlserver.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
-
-		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-			<include name="createUser.sql"/>
-			<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
-			<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}"/>
-			<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}"/>
-			<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
-			<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
-		</replace>
-
-		<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
-			<transaction src="${temp.dir}/createUser.sql" />
-			<!--<transaction>commit;</transaction> -->
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-		<delete dir="${temp.dir}" />
-
-	</target>
-
-	<!--Modify Configuration For MsSqlServer-->
-	<target name="mssqlserver_config" description="Modify Configuration For MsSqlServer">
-			<echo message="Modifying caTissue Suite MsSqlServer specific Configuration File..." />
-			<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties">
-				<include name="upt.hibernate.cfg.xml" />
-				<include name="catissuecore.hibernate.cfg.xml" />
-				<replacefilter token="@@dialect@@" value="${mssqlserver.dialect.string}" />
-			</replace>
-
-			<!-- added for csm orm1.cfg.xml file-->
-			<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties">
-				<include name="orm1.cfg.xml" />
-				<replacefilter token="@@dialect@@" value="${mssqlserver.dialect.h3.string}" />
-			</replace>
-
-			<!-- Configuring Data Source File-->
-			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties">
-				<include name="catissuecore-ds.xml" />
-				<include name="login-config.xml" />
-				<replacefilter token="@@databaseurl@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
-				<replacefilter token="@@username@@" value="${database.username}" />
-				<replacefilter token="@@pasword@@" value="${database.password}" />
-				<replacefilter token="@@databasedriver@@" value="${mssqlserver.driver.string}" />
-			</replace>
-
-
-			<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
-				<replacefilter token="${mysql.dialect.string}" value="${mssqlserver.dialect.string}" />
-			</replace>
-
-			<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
-				<replacefilter token="${mysql.dialect.string}" value="${mssqlserver.dialect.string}" />
-				<replacefilter token="&lt;!-- My sql settings -->" value="&lt;!-- My sql settings " />
-				<replacefilter token="&lt;!-- My sql settings end -->" value="My sql settings end -->" />
-			</replace>
-
-			<replace file="${temp.dir}/dynamicExtensionsjar/DynamicExtensionsHibernate.cfg.xml">
-				<replacefilter token="${mysql.dialect.string}" value="${mssqlserver.dialect.string}" />
-				<replacefilter token="${dynamicextensions.datasource}" value="${catissue.datasource}" />
-				<replacefilter token="&lt;!-- My sql settings -->" value="&lt;!-- My sql settings " />
-				<replacefilter token="&lt;!-- My sql settings end -->" value="My sql settings end -->" />
-			</replace>
-
-
-		</target>
-
-	<!-- ACORN - mssqlserver migration - end -->
 
 	<target name="show_hide_forms_based_on_CPs" description="set the show_hide_forms_based_on_CPs property">
 		<if>
@@ -3723,17 +3315,6 @@ Thanking You,
 					<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
 						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
 						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-					</replace>
-				</then>
-			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}" />
-				<then>
-					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-					<include name="*.cfg.xml" />
-						<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
-						<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
-						<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
 					</replace>
 				</then>
 			</elseif>
@@ -3792,25 +3373,6 @@ Thanking You,
 
 	<!-- Indexing tables for Keyword Search - end-->
 
-	<!--Target for validation of database schema name for MsSqlServer-->
-	<target name="validate_schema_name" description="Target for validation of database schema name for MsSqlServer">
-		<trycatch>
-	      	<try>
-				<sql driver="${mssqlserver.driver.string}" url="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" userid="${database.username}" password="${database.password}">
-					<transaction>IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '${database.schemaname}')
-							     RAISERROR('Error is occured while validating schema name', 16, 1);</transaction>
-					<classpath>
-						<fileset dir="${lib.dir}">
-				  			<include name="*.jar" />
-						</fileset>
-					</classpath>
-				</sql>
-			</try>
-			<catch>
-				<fail message="Database schema name validation fails.Please enter a valid database.schemaname property" />
-			</catch>
-		</trycatch>
-	</target>
 
 	<!-- IIS properties configuration -->
 	<target name="configure_IIS_properties" description="Configuring IIS properties...">
@@ -3901,17 +3463,6 @@ Thanking You,
 						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
 						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
 						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-					</replace>
-				</then>
-			</elseif>
-			<elseif>
-				<equals arg1="mssqlserver" arg2="${database.type}" />
-				<then>
-					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-						<include name="*.cfg.xml" />
-						<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
-						<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
-						<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
 					</replace>
 				</then>
 			</elseif>
@@ -4040,17 +3591,6 @@ Thanking You,
 				<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}"/>
 				<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}"/>
 				<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-				</replace>
-			</then>
-		</elseif>
-		<elseif>
-			<equals arg1="mssqlserver" arg2="${database.type}"/>
-			<then>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-				<include name="*.cfg.xml" />
-				<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
-				<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
-				<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.host}:${database.port};databaseName=${database.name};" />
 				</replace>
 			</then>
 		</elseif>
