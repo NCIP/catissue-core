@@ -1825,28 +1825,33 @@
 		<antcall target="upgrade_db_from_v1.1_to_v1.2"/>
 	</target>
 
+	<target name="upgrade_db_from_v1.1.p1 to v1.1.p2" description="Upgrading Database from v1.1.p1 to v1.1.p2">
+			<echo message="Upgrading Database v1.1.p1 to v1.1.p2" />
+			<if>
+				<equals arg1="mysql" arg2="${database.type}" />
+				<then>
+			    	<antcall target="upgrade_mysql_from_v1.1_to_v1.1p2" />
+				</then>
+				<elseif>
+				  <equals arg1="oracle" arg2="${database.type}" />
+					 <then>
+					 	<antcall target="update_sequences" />
+						<antcall target="upgrade_oracle_from_v1.1_to_v1.1p2" />
+					 </then>
+				 </elseif>
+				 <else>
+					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+				 </else>
+			</if>
+			<antcall target="update_metadata_for_model_changes">
+				<param name="isUpgrade" value="true"/>
+				<param name="buildVersion" value="1.1_to_p2"/>
+			</antcall>
+		</target>
+
 	<target name="upgrade_db_from_v1.1_to_p4" description="Target for Application and Database Upgrade from caTissue v1.1 to p4">
 	<echo message="Upgrading Database v1.1 to v1.1p4" />
-	   <if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<antcall target="upgrade_mysql_from_v1.1_to_v1.1p2" />
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<antcall target="update_sequences" />
-					<antcall target="upgrade_oracle_from_v1.1_to_v1.1p2" />
-				</then>
-			</elseif>
-			<else>
-				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-			</else>
-		</if>
-		<antcall target="update_metadata_for_model_changes">
-			<param name="isUpgrade" value="true"/>
-			<param name="buildVersion" value="1.1_to_p2"/>
-		</antcall>
+		<antcall target="upgrade_db_from_v1.1.p1 to v1.1.p2"/>
 		<antcall target="upgrade_db_from_p2_to_p4"/>
 	</target>
 
@@ -4270,5 +4275,32 @@ Thanking You,
 			<antcall target="oracle_config" />
 		</target>
 
+	<!-- Upgrade tasks for all P releases -->
+		<target name="upgrade_db_from_v1.1.p5.1 to v1.2" description="Upgrading Database from v1.1.p5.1 to v1.2">
+			<echo message="Upgrading Database v1.1.p5.1 to v1.2" />
+			<antcall target="upgrade_de_from_v1.1_to_1.2"/>
+			<antcall target="upgrade_query_metadata_for_1.2"/>
+			<antcall target="upgrade_db_for_1.2"/>
+			<antcall target="insertPaths"/>
+			<antcall target="upgrade_app"/>
+		</target>
+
+		<target name="upgrade_db_from_v1.1.p5 to v1.2" description="Upgrading Database from v1.1.p5 to v1.2">
+			<echo message="Upgrading Database v1.1.p5 to v1.2" />
+			<antcall target="upgrade_db_from_p5_to_p5.1"/>
+			<antcall target="upgrade_db_from_v1.1.p5.1 to v1.2"/>
+		</target>
+
+		<target name="upgrade_db_from_v1.1.p4.4 to v1.2" description="Upgrading Database from v1.1.p4.4 to v1.2" depends="upgrade_db_from_v1.1.p4 to v1.2">
+		</target>
+
+		<target name="upgrade_db_from_v1.1.p4.3 to v1.2" description="Upgrading Database from v1.1.p4.3 to v1.2" depends="upgrade_db_from_v1.1.p4 to v1.2">
+		</target>
+
+		<target name="upgrade_db_from_v1.1.p4 to v1.2" description="Upgrading Database from v1.1.p4 to v1.2">
+			<echo message="Upgrading Database v1.1.p4 to v1.2" />
+			<antcall target="upgrade_db_from_p4_to_p5"/>
+			<antcall target="upgrade_db_from_v1.1.p5 to v1.2"/>
+		</target>
 
 </project>
