@@ -775,7 +775,7 @@
 		<delete dir="${zip.dir}" />
 		<antcall target="create_API_client_zip"></antcall>
 	</target>
-	
+
 	<target name="create_zip_new" depends="createJavaDoc,installable_build_war">
 		<property name="zip.dir" value="${base.dir}/caTISSUE_Suite_v${application.version}_Installable" />
 		<property name="zip.file" value="${base.dir}/caTissue_Suite_v${application.version}_Installable.zip" />
@@ -783,15 +783,27 @@
 		<delete file="${zip.file}" />
 		<delete dir="${zip.dir}" />
 		<mkdir dir="${zip.dir}" />
-		
+
 		<copy file="bulkoperator.zip" todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true" />
+		<copy todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true">
+			<fileset file="${base.dir}/WEB-INF/lib/bulkoperator.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/castor-0.9.9.jar" />
+			<fileset file="${base.dir}/caTissueSuite_Client/lib/catissuecore.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/commons-logging.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/commons-httpclient*.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/commons-codec*.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/hibernate3.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/opencsv-1.8.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/struts.jar" />
+			<fileset file="${base.dir}/extra_lib/xerces.jar" />
+		</copy>
 		<copy file="bulkOperation.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
 		<copy file="BulkOperations/conf/log4j.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
-		
+
 		<copy todir="${zip.dir}/modules/caGridService" overwrite="true">
 			<fileset dir="${base.dir}/CaTissueSuite_caGrid_Service" />
 		</copy>
-		
+
 		<copy file="cas.war" todir="${zip.dir}/modules/cas/lib" overwrite="true" />
 
 		<copy file="gate.zip" todir="${zip.dir}/modules/caties/lib" overwrite="true" />
@@ -802,7 +814,7 @@
 		<copy file="JniDeID.dll" todir="${zip.dir}/modules/caties/conf" overwrite="true" />
 		<copy file="deploycaties.xml" todir="${zip.dir}/modules/caties/conf" overwrite="true" />
 		<copy file="deploycaties.properties" todir="${zip.dir}/modules/caties/conf" overwrite="true" />
-		
+
 		<copy todir="${zip.dir}/modules/catissue/images" overwrite="true">
 			<fileset file="${base.dir}/images/InstitutionLogo.gif" />
 		</copy>
@@ -818,6 +830,10 @@
 			<fileset file="${base.dir}/lib/j2ee.jar" />
 			<fileset file="${base.dir}/lib/log4j.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/sqljdbc.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/commonpackage*.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/DAO*.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/ParticipantManager*.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/washu-commons*.jar" />
 		</copy>
 		<copy todir="${zip.dir}/modules/catissue/conf/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/catissuecore-properties" />
@@ -833,16 +849,16 @@
 		<copy file="taggedvalues.xml" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
 		<copy file="caTissueCdmsIntegration.properties" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
 		<copy file="catissuecore-ds.xml" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
-		
+
 		<copy todir="${zip.dir}/modules/custom_impl_lib" overwrite="true">
 			<fileset file="Default_label_barcode_gen.jar" />
 			<fileset file="label_barcode_gen_client.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/IDPAuthenticationManager0_0.jar" />
 		</copy>
-		
+
 		<copy file="dynamicextensions.zip" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="clientFormCreator.zip" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
-		<copy file="${base.dir}/WEB-INF/lib/DynamicExtensions.jar" 
+		<copy file="${base.dir}/WEB-INF/lib/DynamicExtensions.jar"
 			todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="DEDeploy.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
 		<copy file="Show_Hide_Forms.csv" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
@@ -853,25 +869,25 @@
 		<copy file="CA.war" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="pathologySpecimen.war" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="pathologySCG.war" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
-		
+
 		<copy todir="${zip.dir}/modules/identity_provider_support/conf" overwrite="true">
 			<fileset dir="${base.dir}/idp" />
 		</copy>
-		
+
 		<copy todir="${zip.dir}/modules/minimal_data_sharing" overwrite="true">
 			<fileset dir="${base.dir}/minimalDataSharing" />
 		</copy>
-		
+
 		<copy file="printservice_module.jar" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
 		<copy file="printservice_client.jar" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
-		<copy file="${base.dir}/WEB-INF/lib/PrintCatissueCore_Client.jar" 
+		<copy file="${base.dir}/WEB-INF/lib/PrintCatissueCore_Client.jar"
 			todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
 		<copy file="caTissuePrintWebService.war" todir="${zip.dir}/modules/print_web_service/lib" overwrite="true" />
-		
+
 		<copy todir="${zip.dir}/modules/private_public_migrator" overwrite="true">
 			<fileset dir="${base.dir}/private_public_migrator" />
 		</copy>
-		
+
 		<copy file="AdvanceQuery_Installable.zip" todir="${zip.dir}/modules/query/lib" overwrite="true" />
 		<copy file="taggedvalues.xml" todir="${zip.dir}/modules/query/conf" overwrite="true" />
 		<copy file="paths.txt" todir="${zip.dir}/modules/query/conf" overwrite="true" />
@@ -883,9 +899,9 @@
 		</copy>
 
 		<zip destfile="${zip.file}" basedir="${zip.dir}" />
-		<delete dir="${zip.dir}" />
+		<!--<delete dir="${zip.dir}" />-->
 		<!--<target name="create_API_client_zip">-->
-		
+
 	</target>
 
 	<target name="create_API_client_zip">

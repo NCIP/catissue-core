@@ -854,7 +854,7 @@
 	</target>
 
 	<!-- configure titli.properties -->
-	<target name="app_configuration" description="configure titli.properties">		
+	<target name="app_configuration" description="configure titli.properties">
 		<antcall target="configure_keyword_search" >
 			<param name="tempPath" value="${temp.dir}/catissuecore/WEB-INF/classes"/>
 			<param name="mysqlDriver" value="org.gjt.mm.mysql.Driver"/>
@@ -1259,8 +1259,8 @@
 
 	<target name="modifyDEWars" description="Modify the DE war">
 		<echo>Modifying ${warName}.war....</echo>
-			<unwar src="${basedir}/${warName}.war" dest="${temp.dir}/${warName}" />
-			<copy file="${basedir}/DE_conf/hibernate.properties" todir="${temp.dir}/${warName}/WEB-INF/classes" overwrite="true" />
+			<unwar src="${basedir}/modules/dynamic_extensions/lib/${warName}.war" dest="${temp.dir}/${warName}" />
+			<copy file="${basedir}/modules/dynamic_extensions/conf/hibernate.properties" todir="${temp.dir}/${warName}/WEB-INF/classes" overwrite="true" />
 			<if>
 				<equals arg1="mysql" arg2="${database.type}" />
 				<then>
@@ -1271,7 +1271,6 @@
 						<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 					</replace>
 				</then>
-
 				<elseif>
 					<equals arg1="oracle" arg2="${database.type}" />
 					<then>
@@ -1288,7 +1287,6 @@
 				<include name="hibernate.properties" />
 				<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
 				<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
-
 			</replace>
 
 			<war destfile="${temp.dir}/${warName}.war" webxml="${temp.dir}/${warName}/WEB-INF/web.xml">
@@ -1306,7 +1304,7 @@
 				</fileset>
 			</delete>
 		<delete dir="${temp.dir}/${warName}" />
-		</target>
+	</target>
 
 	<!--Target for deployment with jboss config-->
 	<target name="config_jboss_files" description="Target for deployment with jboss config">
@@ -1362,7 +1360,7 @@
 			</else>
 		</if>
 		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
-		<antcall target="firstUser" /> 
+		<antcall target="firstUser" />
 
 		<!-- shippingtracking db -->
 		<antcall target="st_deploy_db" />
@@ -1441,7 +1439,7 @@
 		</ant>
 
 		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		
+
 		<antcall  target="Export_Clinical_diagnosis_mysql"/>
 		<antcall target="CAModel_import_data" />
 		<antcall target="temp_update_metadata_for_clob_support_mysql" />
@@ -1483,7 +1481,7 @@
 					</classpath>
 			</sql>
 		<antcall target="update_metadata_for_model_changes_mysql_post_P5" />
-		
+
 		<!--<delete dir="${temp.dir}" />-->
 	</target>
 
@@ -1566,7 +1564,7 @@
 		</sql>
 
 		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		
+
 		<antcall target="integrate_bulk_operation_oracle"/>
 
 		<antcall target="unzip_aq_installable" />
@@ -1601,7 +1599,7 @@
 				</fileset>
 			</classpath>
 		</sql>
-				
+
 		<antcall target="temp_update_metadata_for_clob_support_oracle" />
 		<antcall target="insert_entity_group_metadata_oracle" />
 		<antcall target="upgrade_db_demodel_oracle" />
@@ -1642,7 +1640,7 @@
 			</classpath>
 		</sql>
 		<antcall target="update_metadata_for_model_changes_oracle_post_P5" />
-		
+
 		<!--<delete dir="${temp.dir}" />-->
 	</target>
 
@@ -3403,7 +3401,7 @@ Thanking You,
 			<replacefilter token="@@JAVA_HOME@@" value="${env.JAVA_HOME}" />
 		</replace>
 	</target>
-	
+
 	<!-- Query Integration targets start -->
 	<target name="unzip_aq_installable" depends="aq_check_prerequisite" description="unzip the advance query zip">
 		<unzip src="${base.dir}/modules/query/lib/AdvanceQuery_Installable.zip" dest="${temp.dir}/AdvanceQuery"
@@ -3472,7 +3470,7 @@ Thanking You,
 
 	<!-- call this task in Feb End release while upgrading Db -->
 	<target name="upgrade_metadata_for_constraintproperties" depends="" description="upgrade_metadata_for_constraintproperties">
-		
+
 		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />-->
 		<antcall target="commondbconfig" />
 		<if>
@@ -3825,6 +3823,10 @@ Thanking You,
 
 	<target name="add_bulk_operation_template" description="this target adds the bulk operation XML and CSV template in the database.">
 		<echo message="Starting to load Bulk Operator Template.........." />
+		<copy file="${base.dir}/modules/bulk_operations/conf/log4j.properties" todir="${base.dir}/BulkOperations/conf" overwrite="true" />
+		<copy file="${base.dir}/modules/catissue/conf/catissuecore-properties/mapping.xml" todir="${base.dir}/catissuecore-properties" overwrite="true" />
+		<echo message="...................................................................................." />
+		<echo message= "" />
 		<java classname="edu.wustl.bulkoperator.ImportBulkOperationTemplate"
 				fork="true" maxmemory="1024m">
 			<arg value="${operationName}" />
@@ -3832,15 +3834,23 @@ Thanking You,
 			<arg value="${csvFile}" />
 			<arg value="${xmlFile}" />
 			<classpath>
-				<fileset dir="./caTissueSuite_Client/lib/">
+				<fileset dir="${base.dir}/modules/bulk_operations/lib">
 					<include name="*.jar" />
-					<exclude name="AdvanceQuery*.jar" />
 				</fileset>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</java>
+		<echo message="" />
+		<echo message="...................................................................................." />
+		<delete dir="${base.dir}/BulkOperations" />
+		<delete dir="${base.dir}/catissuecore-properties" />
+		<move todir="${base.dir}/modules/bulk_operations/log" overwrite="true">
+			<fileset dir="${base.dir}">
+				<include name="bulkoperator*.log*" />
+			</fileset>
+		</move>
 	</target>
 
 	<property name="operationName" value="" />
@@ -3854,6 +3864,9 @@ Thanking You,
 
 	<target name="runBulkOperation" description="this target runs the bulk operation module through API client.">
 		<echo message="Starting to run Bulk Operation... " />
+		<copy file="${base.dir}/modules/bulk_operations/conf/log4j.properties" todir="${base.dir}/BulkOperations/conf" overwrite="true" />
+		<copy file="${base.dir}/modules/catissue/conf/catissuecore-properties/mapping.xml" todir="${base.dir}/catissuecore-properties" overwrite="true" />
+		<echo message="...................................................................................." />
 		<java classname="edu.wustl.bulkoperator.client.BulkOperationCommand"
 				fork="true" maxmemory="1024m">
 			<arg value="${operationName}" />
@@ -3865,19 +3878,23 @@ Thanking You,
 			<arg value="${keyStoreLocation}" />
 			<arg value="${bulkArtifactsLocation}" />
 			<classpath>
-				<fileset dir="./caTissueSuite_Client/lib/">
+				<fileset dir="${base.dir}/modules/bulk_operations/lib">
 					<include name="*.jar" />
-					<exclude name="AdvanceQuery*.jar" />
 				</fileset>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
-					<exclude name="AdvanceQuery*.jar" />
-				</fileset>
-				<fileset dir="./caTissueSuite_Client/">
-						<include name="*.properties" />
 				</fileset>
 			</classpath>
 		</java>
+		<echo message="" />
+		<echo message="...................................................................................." />
+		<delete dir="${base.dir}/BulkOperations" />
+		<delete dir="${base.dir}/catissuecore-properties" />
+		<move todir="${base.dir}/modules/bulk_operations/log" overwrite="true">
+			<fileset dir="${base.dir}">
+				<include name="bulkoperator*.log*" />
+			</fileset>
+		</move>
 	</target>
 
 	<target name="insertPaths">
@@ -3893,7 +3910,7 @@ Thanking You,
 			<property name="lib.dir" value="${basedir}/modules/catissue/lib" />
 			<property name="property.file" value="${basedir}/caTissueInstall.properties" />
 		</ant>
-		<delete file="paths.txt" /> 
+		<delete file="paths.txt" />
 		<delete dir="${tempInsertPaths}" quiet="true"/>
 	</target>
 
@@ -4085,10 +4102,10 @@ Thanking You,
 
 	<target name="upgrade_db_from_v1.1_to_v1.2" description="Target for Application and Database Upgrade from caTissue v1.1 to v1.2">
 		<echo message="Upgrading Database v1.1 to v1.2" />
-		
+
 		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${temp.dir}" />	
+		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${temp.dir}" />
 
 		<antcall target="upgrade_db_from_v1.1_to_p4" />
 		<antcall target="upgrade_db_from_p4_to_p5" />
@@ -4097,10 +4114,10 @@ Thanking You,
 		<antcall target="upgrade_query_metadata_for_1.2"/>
 		<antcall target="upgrade_db_for_1.2"/>
 		<antcall target="insertPaths"/>
-		<antcall target="deleteFiles"/>		
+		<antcall target="deleteFiles"/>
 		<!--<delete dir="${temp.dir}" />-->
 	</target>
-	
+
 	<target name="deleteFiles" description="Delete the files which are created while caTissue deployment">
 		<move todir="${base.dir}/modules/catissue/log" overwrite="true">
 			<fileset dir="${base.dir}">
@@ -4113,13 +4130,13 @@ Thanking You,
 			<then>
 				<move file="PathsLog.txt" todir="${base.dir}/modules/query/log" overwrite="true" />
 			</then>
-			<else>				
+			<else>
 			</else>
 		</if>
 		<antcall target="deleteFileSQLerror"/>
 		<antcall target="deleteFileMetadata"/>
-		<antcall target="deleteFileCatissuetmp"/>				
-		<move todir="${base.dir}/modules/dynamic_extensions/log" overwrite="true">			
+		<antcall target="deleteFileCatissuetmp"/>
+		<move todir="${base.dir}/modules/dynamic_extensions/log" overwrite="true">
 			<fileset dir="${base.dir}/log">
 				<include name="*.*" />
 			</fileset>
@@ -4136,7 +4153,7 @@ Thanking You,
 			<then>
 				<move file="SQLerror.txt" todir="${base.dir}/modules/query/log" overwrite="true" />
 			</then>
-			<else>				
+			<else>
 			</else>
 		</if>
 	</target>
@@ -4148,7 +4165,7 @@ Thanking You,
 			<then>
 				<move file="metadata.sql" todir="${base.dir}/modules/catissue/log" overwrite="true" />
 			</then>
-			<else>				
+			<else>
 			</else>
 		</if>
 	</target>
@@ -4160,7 +4177,7 @@ Thanking You,
 			<then>
 				<delete file="${base.dir}/catissuetmp.txt" />
 			</then>
-			<else>				
+			<else>
 			</else>
 		</if>
 	</target>
