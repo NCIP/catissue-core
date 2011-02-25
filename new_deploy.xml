@@ -4292,8 +4292,8 @@ Thanking You,
 	</target>
 
 	<!--Target call for both fresh deployment of caTissue-->
-	<target name="deploy_app" depends="">
-		<!--<if>
+	<target name="deploy_app" depends="deploy_app_catissue">
+		<if>
 			<equals arg1="mysql" arg2="${csm.database.type}" />
 		<then>
 				<antcall target="mysql_csm_config_with_idp"/>
@@ -4305,7 +4305,7 @@ Thanking You,
 		</then>
 		</elseif>
 		</if>
-	 	<antcall target="jboss_configuration" />-->
+	 	<antcall target="jboss_configuration" />
 		<antcall target="deleteFiles" />
 	</target>
 
