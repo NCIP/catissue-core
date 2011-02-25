@@ -4303,4 +4303,13 @@ Thanking You,
 			<antcall target="upgrade_db_from_v1.1.p5 to v1.2"/>
 		</target>
 
+	    <target name="upgrade_db_from_v1.1.p2.2 to v1.2" description="Upgrading Database from v1.1.p2.2 to v1.2" depends="upgrade_db_from_v1.1.p2 to v1.2">
+		</target>
+
+		<target name="upgrade_db_from_v1.1.p2 to v1.2" description="Upgrading Database from v1.1.p2 to v1.2">
+				<echo message="Upgrading Database vp2 to v1.2" />
+				<antcall target="upgrade_db_from_p2_to_p4"/>
+				<antcall target="upgrade_db_from_v1.1.p4 to v1.2"/>
+		</target>
+
 </project>
