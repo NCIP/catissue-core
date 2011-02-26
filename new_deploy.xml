@@ -2801,10 +2801,10 @@ Thanking You,
 			</fileset>
 		</delete>
 
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
 		<antcall target="replace_app_dao_prop_file"/>
-		<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
-		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
+		<copy file="${base.dir}/modules/dynamic_extensions/conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
 		<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
 
@@ -2887,11 +2887,11 @@ Thanking You,
 				<echo message="------------------------------------------" />
 				<echo message=" " />
 
-				<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
+				<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
 
-				<ant antfile="DEDeploy.xml" dir="." target="setupClassExecutionEnvironment" />
+				<ant antfile="${base.dir}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="setupClassExecutionEnvironment" />
 
-				<ant antfile="DEDeploy.xml" dir="." target="export.xmi.and.generate.cacore">
+				<ant antfile="${base.dir}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="export.xmi.and.generate.cacore">
 					<property name="xmi.name" value="${filename}" />
 					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
 					<property name="de.zip.location" value="${temp.dir}/dynamicextensions" />
@@ -2903,8 +2903,12 @@ Thanking You,
 		</if>
 		<delete dir="${export.dir}" />
 		<delete dir="${tempcacore.dir}" />
+		<move todir="${base.dir}/modules/dynamic_extensions/log" overwrite="true">
+			<fileset dir="${base.dir}/log">
+				<include name="*.log" />
+			</fileset>
+		</move>
 	</target>
-
 
 	<target name="Associate_forms" description="Associating forms with catissue">
 		<delete quiet="true" includeemptydirs="true">
