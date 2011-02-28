@@ -11,9 +11,9 @@
 	</taskdef>
 
 	<loadfile property="dist.revision" srcFile="./.svn/entries">
-			<filterchain>
-				<headfilter lines="1" skip="4"/>
-			</filterchain>
+		<filterchain>
+			<headfilter lines="1" skip="4"/>
+		</filterchain>
 	</loadfile>
 
 	<!--define require dir and Properties -->
@@ -623,7 +623,7 @@
 	    </javadoc>
 	</target>
 
-	<target name="create_zip" depends="createJavaDoc,installable_build_war">
+	<target name="create_zip_old" depends="createJavaDoc,installable_build_war">
 		<property name="zip.dir" value="${base.dir}/caTISSUE_Suite_v${application.version}_Installable" />
 		<property name="zip.file" value="${base.dir}/caTissue_Suite_v${application.version}_Installable.zip" />
 
@@ -655,8 +655,8 @@
 		<copy file="Show_Hide_Forms.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="build-properties.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
-		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="DEDeploy.xml" todir="${zip.dir}" overwrite="true" />
+		<copy file="deploy_old.xml" todir="${zip.dir}" overwrite="true" />
+		<copy file="DEDeploy_old.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="performance.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="login-config.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="properties-service.xml" todir="${zip.dir}" overwrite="true" />
@@ -776,13 +776,15 @@
 		<antcall target="create_API_client_zip"></antcall>
 	</target>
 
-	<target name="create_zip_new" depends="createJavaDoc,installable_build_war">
+	<target name="create_zip" depends="createJavaDoc,installable_build_war">
 		<property name="zip.dir" value="${base.dir}/caTISSUE_Suite_v${application.version}_Installable" />
 		<property name="zip.file" value="${base.dir}/caTissue_Suite_v${application.version}_Installable.zip" />
 
 		<delete file="${zip.file}" />
 		<delete dir="${zip.dir}" />
 		<mkdir dir="${zip.dir}" />
+
+		<copy file="readme.txt" todir="${zip.dir}" overwrite="true" />
 
 		<copy file="bulkoperator.zip" todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true" />
 		<copy todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true">
@@ -842,7 +844,7 @@
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="build-properties.xml" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
-		<copy file="new_deploy.xml" todir="${zip.dir}" overwrite="true" />
+		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="performance.properties" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
 		<copy file="login-config.xml" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
 		<copy file="properties-service.xml" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
@@ -861,7 +863,6 @@
 		<copy file="${base.dir}/WEB-INF/lib/DynamicExtensions.jar"
 			todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="DEDeploy.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
-		<copy file="Show_Hide_Forms.csv" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
 		<copy file="Show_Hide_Forms.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
 		<copy todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true">
 			<fileset dir="${base.dir}/DE_conf" />
