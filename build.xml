@@ -776,7 +776,7 @@
 		<antcall target="create_API_client_zip"></antcall>
 	</target>
 
-	<target name="create_zip" depends="createJavaDoc,installable_build_war">
+	<target name="create_zip" depends="">
 		<property name="zip.dir" value="${base.dir}/caTISSUE_Suite_v${application.version}_Installable" />
 		<property name="zip.file" value="${base.dir}/caTissue_Suite_v${application.version}_Installable.zip" />
 
@@ -802,29 +802,29 @@
 		<copy file="bulkOperation.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
 		<copy file="BulkOperations/conf/log4j.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
 
-		<copy todir="${zip.dir}/modules/caGridService" overwrite="true">
+		<copy todir="${zip.dir}/modules/caGrid_service" overwrite="true">
 			<fileset dir="${base.dir}/CaTissueSuite_caGrid_Service" />
 		</copy>
 
-		<copy file="cas.war" todir="${zip.dir}/modules/cas/lib" overwrite="true" />
+		<copy file="cas.war" todir="${zip.dir}/modules/CAS/lib" overwrite="true" />
 
-		<copy file="gate.zip" todir="${zip.dir}/modules/caties/lib" overwrite="true" />
-		<copy todir="${zip.dir}/modules/caties/conf" overwrite="true">
+		<copy file="gate.zip" todir="${zip.dir}/modules/caTIES/lib" overwrite="true" />
+		<copy todir="${zip.dir}/modules/caTIES/conf" overwrite="true">
 			<fileset dir="${base.dir}/caTIES_conf" />
 		</copy>
-		<copy file="Dataset.dtd" todir="${zip.dir}/modules/caties/conf" overwrite="true" />
-		<copy file="JniDeID.dll" todir="${zip.dir}/modules/caties/conf" overwrite="true" />
-		<copy file="deploycaties.xml" todir="${zip.dir}/modules/caties/conf" overwrite="true" />
-		<copy file="deploycaties.properties" todir="${zip.dir}/modules/caties/conf" overwrite="true" />
+		<copy file="Dataset.dtd" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
+		<copy file="JniDeID.dll" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
+		<copy file="deploycaties.xml" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
+		<copy file="deploycaties.properties" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
 
-		<copy todir="${zip.dir}/modules/catissue/images" overwrite="true">
+		<copy todir="${zip.dir}/modules/caTissue/images" overwrite="true">
 			<fileset file="${base.dir}/images/InstitutionLogo.gif" />
 		</copy>
-		<copy todir="${zip.dir}/modules/catissue/images/uIEnhancementImages" overwrite="true">
+		<copy todir="${zip.dir}/modules/caTissue/images/uIEnhancementImages" overwrite="true">
 			<fileset file="${base.dir}/images/uIEnhancementImages/siteman_logo.gif" />
 		</copy>
-		<copy file="catissuecore.war" todir="${zip.dir}/modules/catissue/lib" overwrite="true" />
-		<copy todir="${zip.dir}/modules/catissue/lib" overwrite="true">
+		<copy file="catissuecore.war" todir="${zip.dir}/modules/caTissue/lib" overwrite="true" />
+		<copy todir="${zip.dir}/modules/caTissue/lib" overwrite="true">
 			<fileset file="${base.dir}/extra_lib/ant-contrib.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/mysql-connector-java-5.0.8-bin.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/ojdbc14.jar" />
@@ -837,20 +837,21 @@
 			<fileset file="${base.dir}/WEB-INF/lib/ParticipantManager*.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/washu-commons*.jar" />
 		</copy>
-		<copy todir="${zip.dir}/modules/catissue/conf/catissuecore-properties" overwrite="true">
+		<copy todir="${zip.dir}/modules/caTissue/conf/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/catissuecore-properties" />
 		</copy>
-		<copy file="allTokens.properties" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
+		<copy file="allTokens.properties" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
-		<copy file="build-properties.xml" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
+		<copy file="build-properties.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
 		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="performance.properties" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
-		<copy file="login-config.xml" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
-		<copy file="properties-service.xml" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
-		<copy file="taggedvalues.xml" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
-		<copy file="caTissueCdmsIntegration.properties" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
-		<copy file="catissuecore-ds.xml" todir="${zip.dir}/modules/catissue/conf" overwrite="true" />
+		<rename src="${zip.dir}/deploy.xml" dest="${zip.dir}/build.xml"/>
+		<copy file="performance.properties" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
+		<copy file="login-config.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
+		<copy file="properties-service.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
+		<copy file="taggedvalues.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
+		<copy file="caTissueCdmsIntegration.properties" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
+		<copy file="catissuecore-ds.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 
 		<copy todir="${zip.dir}/modules/custom_impl_lib" overwrite="true">
 			<fileset file="Default_label_barcode_gen.jar" />

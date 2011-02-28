@@ -6,18 +6,18 @@
 	<!--define require dir and Properties -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
-			<pathelement location="./modules/catissue/lib/ant-contrib.jar" />
+			<pathelement location="./modules/caTissue/lib/ant-contrib.jar" />
 		</classpath>
 	</taskdef>
 
 	<property environment="env" />
-	<import file="./modules/catissue/conf/build-properties.xml"/>
-	<propertyfile file="${basedir}/modules/catissue/conf/allTokens.properties"/>
+	<import file="./modules/caTissue/conf/build-properties.xml"/>
+	<propertyfile file="${basedir}/modules/caTissue/conf/allTokens.properties"/>
 	<property name="base.dir" value="." />
 	<property name="temp.dir" value="./temp" />
 	<property name="camodel.dir" value="${base.dir}/ca_model" />
 	<property name="csm.dir" value="${temp.dir}/tempcsm" />
-	<property name="lib.dir" value="${base.dir}/modules/catissue/lib" />
+	<property name="lib.dir" value="${base.dir}/modules/caTissue/lib" />
 	<property name="root.lib.dir" value="${base.dir}/lib" />
 	<property name="mysql.sql.dir" value="${base.dir}/SQL/MySql" />
 	<property name="dbupgrade.sql.dir" value="${base.dir}/SQL/DBUpgrade" />
@@ -307,12 +307,12 @@
 	<target name="init" description="Extrct WAR and copy Configuration files to temp directory">
 		<echo message="Initializing installation..." />
 
-		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
 		<unwar src="${base.dir}/modules/print_web_service/lib/caTissuePrintWebService.war" dest="${temp.dir}/caTissuePrintWebService" />
 		<unjar src="${temp.dir}/catissuecore/WEB-INF/lib/DynamicExtensions.jar" dest="${temp.dir}/dynamicExtensionsjar" />
 		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
 		<copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
-			<fileset dir="${base.dir}/modules/catissue/conf/catissuecore-properties" />
+			<fileset dir="${base.dir}/modules/caTissue/conf/catissuecore-properties" />
 		</copy>
 		<copy todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true">
 			<fileset dir="${base.dir}/modules/custom_impl_lib" />
@@ -322,12 +322,12 @@
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/tempcsm"/> -->
 
 		<antcall target="configure_contactus" />
-		<copy file="${base.dir}/modules/caties/conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true" />
-		<copy file="${base.dir}/modules/catissue/conf/catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
+		<copy file="${base.dir}/modules/caTIES/conf/SectionHeaderConfig.txt" todir="${temp.dir}/catissuecore-properties" overwrite="true" />
+		<copy file="${base.dir}/modules/caTissue/conf/catissuecore-ds.xml" todir="${temp.dir}" overwrite="true" />
 
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}" />
-		<copy file="${base.dir}/modules/catissue/conf/login-config.xml" todir="${temp.dir}" overwrite="true" />
-		<copy file="${base.dir}/modules/catissue/conf/properties-service.xml" todir="${temp.dir}" overwrite="true" />
+		<copy file="${base.dir}/modules/caTissue/conf/login-config.xml" todir="${temp.dir}" overwrite="true" />
+		<copy file="${base.dir}/modules/caTissue/conf/properties-service.xml" todir="${temp.dir}" overwrite="true" />
 	</target>
 
 	<target name="configure_log4j" description="Configure log4j.properties">
@@ -356,7 +356,7 @@
 	<target name="adopter_configuration" description="Modify Adopter's Institution images, URL of Institution website and Contact Us, Privacy Notice, Disclaimer, Accessibility Text Files">
 		<echo message="Updating Site Images" />
 		<copy todir="${temp.dir}/images" overwrite="true">
-			<fileset dir="${base.dir}/modules/catissue/images" />
+			<fileset dir="${base.dir}/modules/caTissue/images" />
 		</copy>
 	</target>
 
@@ -693,7 +693,7 @@
 			</fileset>
 		</copy>
 
-		<copy file="${basedir}/modules/catissue/conf/performance.properties" todir="${jboss.home.dir}/server/default/conf" overwrite="true"/>
+		<copy file="${basedir}/modules/caTissue/conf/performance.properties" todir="${jboss.home.dir}/server/default/conf" overwrite="true"/>
 
 		<replace dir="${jboss.server.url}/catissuecore-properties">
 			<include name="ApplicationSecurityConfig.xml" />
@@ -728,7 +728,7 @@
 		</copy>
 		<!--Copying caTissueCdmsIntegration.properties file-->
 		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
-			<fileset dir="${base.dir}/modules/catissue/conf">
+			<fileset dir="${base.dir}/modules/caTissue/conf">
 				<include name="caTissueCdmsIntegration.properties" />
 			</fileset>
 		</copy>
@@ -1359,7 +1359,7 @@
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
 		</if>
-		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
+		<!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
 		<antcall target="firstUser" />
 
 		<!-- shippingtracking db -->
@@ -1438,7 +1438,7 @@
 			<property name="lib.dir" value="${root.lib.dir}" />
 		</ant>
 
-		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 
 		<antcall  target="Export_Clinical_diagnosis_mysql"/>
 		<antcall target="CAModel_import_data" />
@@ -1563,7 +1563,7 @@
 			</classpath>
 		</sql>
 
-		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 
 		<antcall target="integrate_bulk_operation_oracle"/>
 
@@ -2062,7 +2062,7 @@
 
 	<!-- DE Metadata Upgradation -->
 	<target name="update_metadata_for_model_changes" description="DE Metadata Upgradation">
-		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
+		<!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
 		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
 		<antcall target="replacecfgfiles"></antcall>
 		<if>
@@ -2152,7 +2152,7 @@
 
 	<target name="update_metadata_for_model_changes_mysql_post_P5" description="Updating DE Metadata for model changes (mysql).....">
 		<echo message="Updating DE Metadata for model changes (mysql) post P5....." />
-		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
+		<!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
 		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
 		<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateQueryMetadata"  fork="true" maxmemory="512m" failonerror="true">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
@@ -2225,9 +2225,9 @@
 	<!-- Start : DE Integration Restructure for p5 -->
 
 	<target name="insertCuratedPathForRecordEntry">
-		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
+		<!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
 		<antcall target="replacecfgfiles"/>
-		<copy file="${base.dir}/modules/catissue/conf/catissuecore-properties/log4j.properties" todir="${base.dir}" overwrite="true"/>
+		<copy file="${base.dir}/modules/caTissue/conf/catissuecore-properties/log4j.properties" todir="${base.dir}" overwrite="true"/>
 		<java classname="edu.wustl.catissuecore.querysuite.metadata.AddCuratedPathsForRecordEntry" fork="true" maxmemory="1024M" failonerror="false">
 			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
 			<classpath refid="temp.classpath" />
@@ -2242,7 +2242,7 @@
 	</target>
 
 	<target name="upgrade_de_integration_restructure_metadata" description="Start : DE Integration Restructure for p5 ">
-		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
+		<!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -2332,7 +2332,7 @@
 
 	<target name="upgrade_de_integration_restructure_data" depends="" description="Updating data as per restructured DE integration.....">
 
-		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />-->
+		<!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />-->
 		<antcall target="commondbconfig" />
 		<echo message="Updating data as per restructured DE integration....." />
 		<if>
@@ -2415,7 +2415,7 @@
 
 	<target name="Export_Clinical_diagnosis_mysql" description="Exporting data of Clinical diagnosis ... for Mysql">
 		<echo message="Exporting data of Clinical diagnosis ..." />
-		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
+		<!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
 		<java classname="edu.wustl.common.util.impexp.AutomateImport" fork="true">
 			<classpath refid="temp.classpath" />
 			<arg value="${database.host}"/>
@@ -2434,7 +2434,7 @@
 
 	<target name="Export_Clinical_diagnosis_oracle" description="Exporting data of Clinical diagnosis ... for Oracle">
 		<echo message="Exporting data of Clinical diagnosis ..." />
-		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
+		<!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
 		<java classname="edu.wustl.common.util.impexp.AutomateImport" fork="true">
 			<classpath refid="temp.classpath" />
 			<arg value="${database.host}"/>
@@ -2456,7 +2456,7 @@
 
 	<!--Data import for CAModel -->
 	<target name="CAModel_import_data" description="Importing CA model data">
-		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
+		<!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
 		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -2714,17 +2714,17 @@ Thanking You,
 
 	<target name="firstUser_mysql" description="Inserting the first user mentioned in the caTissueInstall.properties file For Mysql">
 		<echo message="Encoding Password..."/>
-		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
+		<!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
 
 		<java classname="edu.wustl.common.util.global.PasswordManager" fork="true">
 
 			<classpath refid="temp.classpath" />
 
-			<arg value="${base.dir}/modules/catissue/conf/catissuetmp.txt"/>
+			<arg value="${base.dir}/modules/caTissue/conf/catissuetmp.txt"/>
 			<arg value="${first.admin.password}"/>
 		</java>
 
-		<property file="${base.dir}/modules/catissue/conf/catissuetmp.txt"/>
+		<property file="${base.dir}/modules/caTissue/conf/catissuetmp.txt"/>
 			<echo>
 					Encoded Password ${first.admin.encodedPassword}
 			</echo>
@@ -2801,7 +2801,7 @@ Thanking You,
 			</fileset>
 		</delete>
 
-		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
 		<antcall target="replace_app_dao_prop_file"/>
 		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
 		<copy file="${base.dir}/modules/dynamic_extensions/conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
@@ -2917,7 +2917,7 @@ Thanking You,
 			</fileset>
 		</delete>
 
-		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
 
 		<!-- Inject db-util.properties entry in catissue -> db-util.properties -->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
@@ -3284,7 +3284,7 @@ Thanking You,
 			</fileset>
 		</delete>
 
-		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
 		<!-- Inject db-util.properties entry in catissue -> db-util.properties -->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
 			<replacefilter token="${catissue.hibernate.config.file}" value="${catissue.hibernate.config.file}, DynamicExtensionsHibernate.cfg.xml" />
@@ -3349,7 +3349,7 @@ Thanking You,
 		<property name="mysql.driver" value="com.mysql.jdbc.Driver" ></property>
 		<echo message="Indexing tables for Keyword Search....." />
 		<property name="tempKeywordSearch" value="${basedir}/temp/tempKeywordSearch"></property>
-		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${tempKeywordSearch}" />
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${tempKeywordSearch}" />
 
 		<antcall target="configure_keyword_search" >
 			<param name="tempPath" value="${tempKeywordSearch}/WEB-INF/classes" />
@@ -3438,7 +3438,7 @@ Thanking You,
 				<include name="**/*" />
 			</fileset>
 		</delete>
-		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />-->
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />-->
 
 		<copy file="${base.dir}/modules/dynamic_extensions/conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<copy file="${base.dir}/modules/dynamic_extensions/conf/DynamicExtensionsHibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
@@ -3476,7 +3476,7 @@ Thanking You,
 	<!-- call this task in Feb End release while upgrading Db -->
 	<target name="upgrade_metadata_for_constraintproperties" depends="" description="upgrade_metadata_for_constraintproperties">
 
-		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />-->
+		<!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />-->
 		<antcall target="commondbconfig" />
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -3565,7 +3565,7 @@ Thanking You,
 				<include name="**/*" />
 			</fileset>
 		</delete>
-		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
 		<unzip src="${base.dir}/dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />-->
 		<unjar src="${base.dir}/modules/dynamic_extensions/lib/DynamicExtensions.jar" dest="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
 		<copy file="${base.dir}/modules/dynamic_extensions/lib/DynamicExtensions.jar" todir="${temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
@@ -3680,11 +3680,11 @@ Thanking You,
 
 
 	<target name="update_metadata_for_tagged_values" depends="" description="update metadata for tagged values">
-		<!--<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />-->
+		<!--<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />-->
 		<antcall target="commondbconfig" />
 		<echo message="Updating Tagged Values....." />
 			<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateMetadataTagPath" fork="true" maxmemory="1024M" failonerror="true">
-				<arg value="${base.dir}/modules/catissue/conf/taggedvalues.xml" />
+				<arg value="${base.dir}/modules/caTissue/conf/taggedvalues.xml" />
 				<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
 				<classpath refid="temp.classpath" />
 					<classpath>
@@ -3800,7 +3800,7 @@ Thanking You,
 	<target name="upgrade_saved_queries" description="Upgrading saved queries....">
 		<echo message="Upgrading saved queries...."/>
 		<!--<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>-->
-	    <copy file="${base.dir}/modules/catissue/conf/catissuecore-properties/ApplicationSecurityConfig.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+	    <copy file="${base.dir}/modules/caTissue/conf/catissuecore-properties/ApplicationSecurityConfig.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 	    <antcall target="replacecfgfiles" />
 		<antcall target="replaceQuerycfgfile" />
 	    <replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
@@ -3829,7 +3829,7 @@ Thanking You,
 	<target name="add_bulk_operation_template" description="this target adds the bulk operation XML and CSV template in the database.">
 		<echo message="Starting to load Bulk Operator Template.........." />
 		<copy file="${base.dir}/modules/bulk_operations/conf/log4j.properties" todir="${base.dir}/BulkOperations/conf" overwrite="true" />
-		<copy file="${base.dir}/modules/catissue/conf/catissuecore-properties/mapping.xml" todir="${base.dir}/catissuecore-properties" overwrite="true" />
+		<copy file="${base.dir}/modules/caTissue/conf/catissuecore-properties/mapping.xml" todir="${base.dir}/catissuecore-properties" overwrite="true" />
 		<echo message="...................................................................................." />
 		<echo message= "" />
 		<java classname="edu.wustl.bulkoperator.ImportBulkOperationTemplate"
@@ -3870,7 +3870,7 @@ Thanking You,
 	<target name="runBulkOperation" description="this target runs the bulk operation module through API client.">
 		<echo message="Starting to run Bulk Operation... " />
 		<copy file="${base.dir}/modules/bulk_operations/conf/log4j.properties" todir="${base.dir}/BulkOperations/conf" overwrite="true" />
-		<copy file="${base.dir}/modules/catissue/conf/catissuecore-properties/mapping.xml" todir="${base.dir}/catissuecore-properties" overwrite="true" />
+		<copy file="${base.dir}/modules/caTissue/conf/catissuecore-properties/mapping.xml" todir="${base.dir}/catissuecore-properties" overwrite="true" />
 		<echo message="...................................................................................." />
 		<java classname="edu.wustl.bulkoperator.client.BulkOperationCommand"
 				fork="true" maxmemory="1024m">
@@ -3905,14 +3905,14 @@ Thanking You,
 	<target name="insertPaths">
 		<antcall target="unzip_aq_installable" />
 		<property name="tempInsertPaths" value="${basedir}/temp/tempInsertPaths"></property>
-		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${tempInsertPaths}" />
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${tempInsertPaths}" />
 		<antcall target="replacecfgfilesForInsertPaths"/>
 		<copy file="${basedir}/modules/query/conf/paths.txt" todir="${basedir}" overwrite="true" />
 		<ant dir="${temp.dir}/AdvanceQuery" inheritAll="false" antfile="queryintegration.xml" target="insertPaths">
 			<property name="parent.base.dir" value="${basedir}" />
 			<property name="deploy.temp.dir" value="${basedir}" />
 			<property name="war.dir" value="temp/tempInsertPaths" />
-			<property name="lib.dir" value="${basedir}/modules/catissue/lib" />
+			<property name="lib.dir" value="${basedir}/modules/caTissue/lib" />
 			<property name="property.file" value="${basedir}/caTissueInstall.properties" />
 		</ant>
 		<delete file="paths.txt" />
@@ -4108,7 +4108,7 @@ Thanking You,
 	<target name="upgrade_db_from_v1.1_to_v1.2" description="Target for Application and Database Upgrade from caTissue v1.1 to v1.2">
 		<echo message="Upgrading Database v1.1 to v1.2" />
 
-		<unwar src="${base.dir}/modules/catissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 		<mkdir dir="${de.temp.dir}" />
 		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${temp.dir}" />
 
@@ -4124,7 +4124,7 @@ Thanking You,
 	</target>
 
 	<target name="deleteFiles" description="Delete the files which are created while caTissue deployment">
-		<move todir="${base.dir}/modules/catissue/log" overwrite="true">
+		<move todir="${base.dir}/modules/caTissue/log" overwrite="true">
 			<fileset dir="${base.dir}">
 				<include name="*.log" />
 			</fileset>
@@ -4168,7 +4168,7 @@ Thanking You,
 		<if>
 			<equals arg1="${isFileAvailable}" arg2="true"/>
 			<then>
-				<move file="metadata.sql" todir="${base.dir}/modules/catissue/log" overwrite="true" />
+				<move file="metadata.sql" todir="${base.dir}/modules/caTissue/log" overwrite="true" />
 			</then>
 			<else>
 			</else>
@@ -4196,7 +4196,7 @@ Thanking You,
 	<target name="deploy_cas" description="Target to integrate cas with the application">
 		<echo message="Deploy CAS with the application...." />
 
-		<unwar src="${base.dir}/modules/cas/lib/cas.war" dest="${temp.dir}/cas" />
+		<unwar src="${base.dir}/modules/CAS/lib/cas.war" dest="${temp.dir}/cas" />
 		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml"
 			todir="${temp.dir}/cas/WEB-INF/classes/" overwrite="true" />
 		<war destfile="${temp.dir}/cas.war" webxml="${temp.dir}/cas/WEB-INF/web.xml" manifest="${temp.dir}/cas/META-INF/MANIFEST.MF">
