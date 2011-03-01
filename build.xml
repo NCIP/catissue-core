@@ -655,8 +655,8 @@
 		<copy file="Show_Hide_Forms.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="build-properties.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
-		<copy file="deploy_old.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="DEDeploy_old.xml" todir="${zip.dir}" overwrite="true" />
+		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
+		<copy file="DEDeploy.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="performance.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="login-config.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="properties-service.xml" todir="${zip.dir}" overwrite="true" />
@@ -844,8 +844,8 @@
 		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
 		<copy file="build-properties.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
-		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
-		<rename src="${zip.dir}/deploy.xml" dest="${zip.dir}/build.xml"/>
+		<copy file="deploy_zip.xml" todir="${zip.dir}" overwrite="true" />
+		<rename src="${zip.dir}/deploy_zip.xml" dest="${zip.dir}/build.xml"/>
 		<copy file="performance.properties" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="login-config.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="properties-service.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
@@ -863,7 +863,8 @@
 		<copy file="clientFormCreator.zip" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="${base.dir}/WEB-INF/lib/DynamicExtensions.jar"
 			todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
-		<copy file="DEDeploy.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
+		<copy file="DEDeploy_zip.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
+		<rename src="${zip.dir}/modules/dynamic_extensions/conf/DEDeploy_zip.xml" dest="${zip.dir}/modules/dynamic_extensions/conf/DEDeploy.xml"/>
 		<copy file="Show_Hide_Forms.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
 		<copy todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true">
 			<fileset dir="${base.dir}/DE_conf" />
