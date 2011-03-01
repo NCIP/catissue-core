@@ -904,8 +904,8 @@
 		</copy>
 
 		<zip destfile="${zip.file}" basedir="${zip.dir}" />
-		<!--<delete dir="${zip.dir}" />-->
-		<!--<target name="create_API_client_zip">-->
+		<delete dir="${zip.dir}" />
+		<target name="create_API_client_zip">
 
 	</target>
 
