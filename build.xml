@@ -814,7 +814,8 @@
 		</copy>
 		<copy file="Dataset.dtd" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
 		<copy file="JniDeID.dll" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
-		<copy file="deploycaties.xml" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
+		<copy file="deploycaties_zip.xml" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
+		<rename src="${zip.dir}/modules/caTIES/conf/deploycaties_zip.xml" dest="${zip.dir}/modules/caTIES/conf/deploycaties.xml"/>
 		<copy file="deploycaties.properties" todir="${zip.dir}/modules/caTIES/conf" overwrite="true" />
 
 		<copy todir="${zip.dir}/modules/caTissue/images" overwrite="true">
@@ -836,6 +837,7 @@
 			<fileset file="${base.dir}/WEB-INF/lib/DAO*.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/ParticipantManager*.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/washu-commons*.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/securityManager*.jar" />
 		</copy>
 		<copy todir="${zip.dir}/modules/caTissue/conf/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/catissuecore-properties" />

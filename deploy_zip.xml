@@ -12,6 +12,7 @@
 
 	<property environment="env" />
 	<import file="./modules/caTissue/conf/build-properties.xml"/>
+	<property file="./modules/caTIES/conf/deploycaties.properties" />
 	<propertyfile file="${basedir}/modules/caTissue/conf/allTokens.properties"/>
 	<property name="base.dir" value="." />
 	<property name="temp.dir" value="./temp" />
@@ -55,6 +56,7 @@
 
 	<var name="databaseurl" value="" />
 	<import file="./modules/dynamic_extensions/conf/DEDeploy.xml" />
+	<import file="./modules/caTIES/conf/deploycaties.xml" />
 
 	<property name="tempcacore.dir" value="${base.dir}/temp_deaudit_related_files" />
 	<property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
