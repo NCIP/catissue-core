@@ -905,7 +905,7 @@
 
 		<zip destfile="${zip.file}" basedir="${zip.dir}" />
 		<delete dir="${zip.dir}" />
-		<antcall name="create_API_client_zip" />
+		<antcall target="create_API_client_zip" />
 
 	</target>
 
