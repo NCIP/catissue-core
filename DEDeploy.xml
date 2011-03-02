@@ -9,9 +9,9 @@
 
 	<property file="DynamicExtensionsInstall.properties" />
 	<property name="base.dir" value="." />
-	<property name="de.temp.dir" value="${base.dir}/temp/detemp" />
+	<property name="de.temp.dir" value="${base.dir}/detemp" />
 	<property name="temp.dir.DE" value="${de.temp.dir}/temp" />
-	<property name="tempcacore.dir" value="${base.dir}/temp/temp_deaudit_related_files" />
+	<property name="tempcacore.dir" value="${base.dir}/temp_deaudit_related_files" />
 	<property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
 	<property name="cacoresdk.dir" value="${tempcacore.dir}/caCoreSDK" />
 	<property name="cacore.dir" value="${tempcacore.dir}/temp_caCORESDK" />
@@ -44,7 +44,7 @@
 		<echo message="Initializing Database for DynamicExtentions Application..." />
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
 		</unzip>
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
@@ -100,7 +100,7 @@
 	<target name="upgrade_db_from_DE_1.2.0_to_DE_1.3.0" description="upgrade db from DE v 1.2.0 to DE v 1.3.0">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
 		</unzip>
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
@@ -135,7 +135,7 @@
 	<target name="upgrade_db_from_DE_1.3.0_to_DE_1.3.1" description="upgrade db from DE v1.3.0 to v1.3.1">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
 		</unzip>
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
@@ -169,10 +169,10 @@
 	</target>
 
 	<target name="upgrade_db_from_DE_1.3.0_to_DE_1.4.0" description="upgrade db from DE v1.3.0 to v1.4.0">
-		<!--<delete dir="${de.temp.dir}" failonerror="no" />
+		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
-		</unzip>-->
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
 				<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
@@ -209,7 +209,7 @@
 	<target name="upgrade_db_from_DE_1.3.1_to_DE_1.4.0" description="upgrade db from DE v1.3.1 to v1.4.0">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
 		</unzip>
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
@@ -245,10 +245,10 @@
 	</target>
 
 	<target name="upgrade_db_from_DE_1.4.0_to_DE_1.4.2" description="upgrade db from DE v1.4.0 to v1.4.2">
-		<!--<delete dir="${de.temp.dir}" failonerror="no" />
+		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
-		</unzip>-->
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
 				<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
@@ -415,7 +415,7 @@
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
 		<mkdir dir="${temp.dir.DE}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}" overwrite="true">
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}" overwrite="true">
 		</unzip>
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
@@ -595,9 +595,9 @@
 	<target name="create_csv_from_xml" description="description">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/conf/clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
+		<unzip src="clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
 		<copy file="./${de.temp.dir}/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
-		<mkdir dir="${base.dir}/modules/dynamic_extensions/log" />
+		<mkdir dir="./log" />
 		<replace file="./log4j.properties">
 			<replacefilter token="@@jbosshome@@" value="." />
 		</replace>
@@ -624,9 +624,9 @@
 	<target name="create_category" description="Target used to create the Category">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/conf/clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
+		<unzip src="clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
 		<copy file="./${de.temp.dir}/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
-		<mkdir dir="${base.dir}/modules/dynamic_extensions/log" />
+		<mkdir dir="./log" />
 		<replace file="./log4j.properties">
 			<replacefilter token="@@jbosshome@@" value="." />
 		</replace>
@@ -649,9 +649,9 @@
 	<target name="create_category_metadata_file" description="Target used to create the Category">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/conf/clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
+		<unzip src="clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
 		<copy file="./${de.temp.dir}/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
-		<mkdir dir="${base.dir}/modules/dynamic_extensions/log" />
+		<mkdir dir="./log" />
 		<replace file="./log4j.properties">
 			<replacefilter token="@@jbosshome@@" value="." />
 		</replace>
@@ -694,9 +694,9 @@
 
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/conf/clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
+		<unzip src="clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
 		<copy file="./${de.temp.dir}/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
-		<mkdir dir="${base.dir}/modules/dynamic_extensions/log" />
+		<mkdir dir="./log" />
 		<replace file="./log4j.properties">
 			<replacefilter token="@@jbosshome@@" value="." />
 		</replace>
@@ -861,17 +861,17 @@
 
 	<target name="create_loggger_properties_file" description="create loggger properties file">
 		<copy file="./${de.temp.dir}/conf/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
-		<mkdir dir="${base.dir}/modules/dynamic_extensions/log" />
+		<mkdir dir="./log" />
 		<replace file="./log4j.properties">
 			<replacefilter token="@@jbosshome@@" value="." />
 		</replace>
 	</target>
 
 	<target name="reset_record_entry_sequence" description="reset record entry sequence">
-		<!--<delete dir="${de.temp.dir}" failonerror="no" />
+		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
-		</unzip>-->
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
 				<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
@@ -890,7 +890,7 @@
 	<target name="update_pvs_for_stinger" description="updates the pvs for suspecious charaters in stinger ">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
 		</unzip>
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
@@ -955,7 +955,7 @@
 	<target name="reset_DE_sequences" description="reset DE sequences">
 		<delete dir="${de.temp.dir}" failonerror="no" />
 		<mkdir dir="${de.temp.dir}" />
-		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
+		<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
 		</unzip>
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
@@ -1204,7 +1204,7 @@
 
 		<!-- The comma is explicitly given so that if value is empty still it is passed as parameter to java class -->
 		<java failonerror="true" classname="edu.wustl.metadata.util.EntityGroupName" fork="yes" maxmemory="1024m">
-			<arg value="${tempcacore.dir}/temp_exported_xmi/" />
+			<arg value="${base.dir}/temp_deaudit_related_files/temp_exported_xmi/" />
 			<arg value="${exclude.entitygroup}," />
 			<arg value="${include.entitygroup}," />
 			<classpath>
@@ -1523,10 +1523,10 @@
 		</target>
 
 	<target name="upgrade_db_from_DE_1.4.0.1_to_DE_1.4.0.2" description="upgrade_db_from_DE_1.4.0.1_to_DE_1.4.0.2">
-			<!--<delete dir="${de.temp.dir}" failonerror="no" />
+			<delete dir="${de.temp.dir}" failonerror="no" />
 			<mkdir dir="${de.temp.dir}" />
-			<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
-			</unzip>-->
+			<unzip src="dynamicextensions.zip" dest="${de.temp.dir}">
+			</unzip>
 			<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 				<classpath>
 					<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
