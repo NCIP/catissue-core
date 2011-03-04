@@ -852,8 +852,11 @@
 		<copy file="login-config.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="properties-service.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="taggedvalues.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
-		<copy file="caTissueCdmsIntegration.properties" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
+		<copy file="caTissueCdmsIntegration.properties" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" 
+		/>
 		<copy file="catissuecore-ds.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
+		<copy file="Sample-login-config.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
+		<copy file="Sample-properties-service.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 
 		<copy todir="${zip.dir}/modules/custom_impl_lib" overwrite="true">
 			<fileset file="Default_label_barcode_gen.jar" />
