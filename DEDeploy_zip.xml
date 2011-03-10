@@ -824,12 +824,7 @@
 					<include name="jta.jar" />
 				</fileset>
 			</classpath>
-		</java>
-		<move todir="${base.dir}/modules/dynamic_extensions/log" overwrite="true">
-			<fileset dir="${base.dir}/log">
-				<include name="*.log" />
-			</fileset>
-		</move>
+		</java>		
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - -

@@ -784,7 +784,7 @@
 		<delete dir="${zip.dir}" />
 		<mkdir dir="${zip.dir}" />
 
-		<copy file="readme.txt" todir="${zip.dir}" overwrite="true" />
+		<copy file="README.txt" todir="${zip.dir}" overwrite="true" />
 
 		<copy file="bulkoperator.zip" todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true" />
 		<copy todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true">

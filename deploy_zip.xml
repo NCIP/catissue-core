@@ -1815,29 +1815,54 @@
 		<echo message="Upgrading Database v1.1 to v1.2" />
 		<antcall target="upgrade_db_from_v1.1_to_v1.2"/>
 	</target>
-
-	<target name="upgrade_db_from_v1.1_to_p4" description="Target for Application and Database Upgrade from caTissue v1.1 to p4">
-	<echo message="Upgrading Database v1.1 to v1.1p4" />
-	   <if>
+	
+	<target name="upgrade_db_from_v1.1.p1 to v1.1.p2" description="Upgrading Database from v1.1.p1 to v1.1.p2">
+		<echo message="Upgrading Database v1.1.p1 to v1.1.p2" />
+		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<antcall target="upgrade_mysql_from_v1.1_to_v1.1p2" />
+		    	<antcall target="upgrade_mysql_from_v1.1_p1_to_v1.1p2" />
 			</then>
 			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<antcall target="update_sequences" />
-					<antcall target="upgrade_oracle_from_v1.1_to_v1.1p2" />
-				</then>
-			</elseif>
-			<else>
+			  <equals arg1="oracle" arg2="${database.type}" />
+				 <then>
+				 	<!--<antcall target="update_sequences" />-->
+					<antcall target="upgrade_oracle_from_v1.1_p1_to_v1.1p2" />
+				 </then>
+			 </elseif>
+			 <else>
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-			</else>
+			 </else>
+		</if>
+	</target>
+
+	<target name="upgrade_db_from_v1.1 to v1.1.p2" description="Upgrading Database from v1.1.p1 to v1.1.p2">
+		<echo message="Upgrading Database v1.1.p1 to v1.1.p2" />
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+		    	<antcall target="upgrade_mysql_from_v1.1_to_v1.1p2" />
+			</then>
+			<elseif>
+			  <equals arg1="oracle" arg2="${database.type}" />
+				 <then>
+				 	<antcall target="update_sequences" />
+					<antcall target="upgrade_oracle_from_v1.1_to_v1.1p2" />
+				 </then>
+			 </elseif>
+			 <else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			 </else>
 		</if>
 		<antcall target="update_metadata_for_model_changes">
 			<param name="isUpgrade" value="true"/>
 			<param name="buildVersion" value="1.1_to_p2"/>
 		</antcall>
+	</target>
+
+	<target name="upgrade_db_from_v1.1_to_p4" description="Target for Application and Database Upgrade from caTissue v1.1 to p4">
+	<echo message="Upgrading Database v1.1 to v1.1p4" />
+		<antcall target="upgrade_db_from_v1.1 to v1.1.p2"/>
 		<antcall target="upgrade_db_from_p2_to_p4"/>
 	</target>
 
@@ -1849,30 +1874,30 @@
 
 	<target name="upgrade_db_from_p2_to_p4" description="Target for Database Upgrade from caTissue p2 to p4">
 		<echo message="Upgrading Database v1.1p2 to v1.1p4" />
-			        <if>
-					<equals arg1="mysql" arg2="${database.type}" />
-					<then>
-						<antcall target="upgrade_mysql_from_v1.1p2_to_v1.1p4" />
-					</then>
-					<elseif>
-						<equals arg1="oracle" arg2="${database.type}" />
-						<then>
-							<antcall target="upgrade_oracle_from_v1.1p2_to_v1.1p4" />
-						</then>
-					</elseif>
-					<else>
-						<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-					</else>
-				</if>
-				<antcall target="upgrade_category_entity_names">
-				</antcall>
-				<antcall target="update_metadata_for_model_changes">
-					<param name="isUpgrade" value="true"/>
-					<param name="buildVersion" value="p2top4"/>
-				</antcall>
+			<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="upgrade_mysql_from_v1.1p2_to_v1.1p4" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="upgrade_oracle_from_v1.1p2_to_v1.1p4" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+		<antcall target="upgrade_category_entity_names">
+		</antcall>
+		<antcall target="update_metadata_for_model_changes">
+			<param name="isUpgrade" value="true"/>
+			<param name="buildVersion" value="p2top4"/>
+		</antcall>
 
-				<antcall target="update_metaPhone_data_for_participant"/>
-		</target>
+		<antcall target="update_metaPhone_data_for_participant"/>
+	</target>
 
 	<target name="upgrade_all_from_p4_to_p5" description="Target for Application and Database Upgrade from caTissue p4 to p5">
 		<antcall target="assert"/>
@@ -1923,6 +1948,19 @@
 			</classpath>
 		</sql>
 	</target>
+	
+	<target name="upgrade_mysql_from_v1.1_p1_to_v1.1p2" description="Upgrading MySQL Database and removing unused Protection Element">
+		<echo message="Upgrading MySQL Database and removing unused Protection Element" />
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
+			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.1_p1_to_v1.1p2.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
 
 	<!-- Target to re-set the sequence when upgrading from V1.1 to V1.2-->
 	<target name="update_sequences" description="Updating sequence in case of upgrade from V1.1 to V1.2">
@@ -1951,6 +1989,19 @@
 					</classpath>
 			</sql>
    </target>
+
+	<target name="upgrade_oracle_from_v1.1_p1_to_v1.1p2" description="Upgrading Oracle Database and removing unused Protection Element">
+		<echo message="Upgrading Oracle Database and removing unused Protection Element" />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
+		<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_v1.1_p1_to_v1.1p2.sql" />
+		<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
 
 	<!-- Upgrading from Suite1.1 p2 to p4 - MySQL -->
 	<target name="upgrade_mysql_from_v1.1p2_to_v1.1p4" description="Upgrading from Suite1.1 p2 to p4 - MySQL">
@@ -2956,7 +3007,7 @@ Thanking You,
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
 			<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
 		</replace>
-		<echo>${entitiesFormsCSVFile}</echo>
+
 		<java classname="edu.wustl.catissuecore.util.AssociatesForms" fork="true" maxmemory="512m">
 			<arg value="${entitiesFormsCSVFile}"/>
 			<classpath>
@@ -4362,6 +4413,75 @@ Thanking You,
 				<replacefilter token="@@CSMpasword@@" value="${csm.database.password}"/>
 		</replace>
 		<antcall target="oracle_config" />
+	</target>
+
+	<!-- Upgrade tasks for all P releases -->
+	<target name="upgrade_p5.1" description="Upgrading Database from v1.1.p5.1 to v1.2">
+		<echo message="Upgrading Database v1.1.p5.1 to v1.2" />
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
+		<antcall target="upgrade_de_from_v1.1_to_1.2"/>
+		<antcall target="upgrade_query_metadata_for_1.2"/>
+		<antcall target="upgrade_db_for_1.2"/>
+		<antcall target="insertPaths"/>
+		<antcall target="upgrade_app"/>
+		<antcall target="deleteFiles"/>
+	</target>
+
+	<target name="upgrade_p5" description="Upgrading Database from v1.1.p5 to v1.2">
+		<echo message="Upgrading Database v1.1.p5 to v1.2" />
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
+		<antcall target="upgrade_db_from_p5_to_p5.1"/>
+		<antcall target="upgrade_p5.1"/>		
+	</target>
+
+	<target name="upgrade_p4.4" description="Upgrading Database from v1.1.p4.4 to v1.2" depends="upgrade_p4">
+	</target>
+
+	<target name="upgrade_p4.3" description="Upgrading Database from v1.1.p4.3 to v1.2" depends="upgrade_p4">
+	</target>
+
+	<target name="upgrade_p4" description="Upgrading Database from v1.1.p4 to v1.2">
+		<echo message="Upgrading Database v1.1.p4 to v1.2" />
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
+		<antcall target="upgrade_db_from_p4_to_p5"/>
+		<antcall target="upgrade_p5"/>		
+	</target>
+
+	<target name="upgrade_p2.2" description="Upgrading Database from v1.1.p2.2 to v1.2" depends="upgrade_p2">		
+	</target>
+
+	<target name="upgrade_p2" description="Upgrading Database from v1.1.p2 to v1.2">
+		<echo message="Upgrading Database vp2 to v1.2" />
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
+		<antcall target="upgrade_db_from_p2_to_p4"/>		
+		<antcall target="upgrade_p4"/>
+	</target>
+
+	<target name="upgrade_p1" description="Upgrading Database from v1.1.p1 to v1.2">
+		<echo message="Upgrading Database v1.1.p1 to v1.2" />
+		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
+		<antcall target="upgrade_db_from_v1.1.p1 to v1.1.p2"/>		
+		<antcall target="upgrade_p2"/>	
 	</target>
 
 </project>
