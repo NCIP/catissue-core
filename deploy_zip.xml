@@ -4189,11 +4189,6 @@ Thanking You,
 		<antcall target="deleteFileSQLerror"/>
 		<antcall target="deleteFileMetadata"/>
 		<antcall target="deleteFileCatissuetmp"/>
-		<move todir="${base.dir}/modules/dynamic_extensions/log" overwrite="true">
-			<fileset dir="${base.dir}/log">
-				<include name="*.*" />
-			</fileset>
-		</move>
 		<!--<delete dir="${base.dir}/log" />-->
 		<delete file="${base.dir}/log4j.properties" />
 		<delete dir="${base.dir}/@@jbosshome@@" />
