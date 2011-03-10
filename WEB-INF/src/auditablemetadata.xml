@@ -417,12 +417,7 @@
 		<attribute name="ethnicity" dataType="String" />
 		<attribute name="socialSecurityNumber" dataType="String" />
 		<attribute name="vitalStatus" dataType="String" />
-		<attribute name="metaPhoneCode" dataType="String" />
-		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
-			relationShipType="containment"
-			roleName="collectionProtocolRegistrationCollection">
-		</containmentAssociationCollection>
+		<attribute name="metaPhoneCode" dataType="String" />		
 		<containmentAssociationCollection
 			className="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
 			relationShipType="containment"
