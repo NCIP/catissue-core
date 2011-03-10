@@ -2956,11 +2956,6 @@ Thanking You,
 		</if>
 		<delete dir="${export.dir}" />
 		<delete dir="${tempcacore.dir}" />
-		<move todir="${base.dir}/modules/dynamic_extensions/log" overwrite="true">
-			<fileset dir="${base.dir}/log">
-				<include name="*.log" />
-			</fileset>
-		</move>
 	</target>
 
 	<target name="Associate_forms" description="Associating forms with catissue">

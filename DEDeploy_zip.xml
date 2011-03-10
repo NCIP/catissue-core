@@ -644,11 +644,6 @@
 				</fileset>
 			</classpath>
 		</java>
-		<move todir="${base.dir}/modules/dynamic_extensions/log" overwrite="true">
-			<fileset dir="${base.dir}/log">
-				<include name="*.log" />
-			</fileset>
-		</move>
 		<delete file="${base.dir}/log4j.properties" />
 	</target>
 
@@ -721,11 +716,6 @@
 
 		<delete dir="${base.dir}/tempPVDir" />
 		<delete file="${base.dir}/ImportPVDir.zip" />
-		<move todir="${base.dir}/modules/dynamic_extensions/log" overwrite="true">
-			<fileset dir="${base.dir}/log">
-				<include name="*.log" />
-			</fileset>
-		</move>
 		<delete file="${base.dir}/log4j.properties" />
 
 	</target>
