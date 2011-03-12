@@ -14,8 +14,7 @@
 			<include name="**/*.jar"/>
 		</fileset>
 		<pathelement path="${conf.dir}"/>
-	</path>
-    
+	</path>    
 	
 	<path id="app.classpath">
 		<fileset dir="${base.dir}">
@@ -35,8 +34,7 @@
 	        	  </fileset>
 	            </classpath>
 	        </javac>
-	</target>
-	
+	</target>	
 
 	<target name="runMDSTestCases" depends="compile">
 		<mkdir dir="${report.dir}/MDS_Report" />
@@ -71,6 +69,5 @@
 				<report todir="${report.dir}/MDS_Report/Html_reports" />
 			</junitreport>
 	</target>
-	
 	
 </project>

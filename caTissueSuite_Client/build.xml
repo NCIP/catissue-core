@@ -1,6 +1,6 @@
 <?xml version ="1.0"?>
 
-<!--Ant Script for create Build for caTISSUE Core-->
+<!--Ant Script for running the caTissue caCORE API programs -->
 
 <project name="caTissueSuite Client" default="compile_junit_TestCases" >
 	<property file="./caTissueInstall.properties"/>
@@ -24,59 +24,33 @@
 		<pathelement path="${conf.dir}"/>
 	</path>
 
-
 	<path id="app.classpath">
 		<fileset dir="${base.dir}">
 			<include name="*.jar"/>
 		</fileset>
 	</path>
-	<!-- Target ,compile and runDemo are disabled as it no longer supported .Only Junit test cases are available.-->
-    <!-- Compile all files, generated and hand-written -->
-    <!--<target name="compile">
-        <javac destdir="${base.dir}" includes="**/*.*" includeAntRuntime="false">
-            <src path="${base.dir}"/>
-            <classpath>
-       		  <fileset dir="lib">
-        			<include name="**/*.jar"/>
-        	  </fileset>
-            </classpath>
-        </javac>
-    </target>
-	-->
-	<!-- run TestClient java file -->
-	<!--<target name="runDemo" depends="compile">
-		<java classname="ClientDemo" fork="true">
-			<classpath refid="cp"/>
-			<classpath>
-				<pathelement location="${src.dir}"/>
-			</classpath>
-			<sysproperty key="log4j.configuration"
-						value="${conf.dir}/client_log4j.properties"/>
-		</java>
-	</target>-->
-
 
 	<!-- =================================================================== -->
 	<!-- Junit TestCases for Nightly Build  -->
 	<!-- =================================================================== -->
 	<property name="test.classes.dir" value="${base.dir}/classes" />
-		<target name="compile_junit_TestCases">
-			<delete dir="${test.classes.dir}"/>
-			<mkdir dir="${test.classes.dir}" />
-	        <javac destdir="${test.classes.dir}" includes="**/*.java" includeAntRuntime="false">
-	            <src path="${test.src.dir}"/>
-	            <classpath>
-	       		  <fileset dir="${lib.dir}">
-	        			<include name="**/*.jar"/>
-	        	  </fileset>
-	            </classpath>
-	        </javac>
-			<copy todir="${test.classes.dir}">
-				<fileset dir="${base.dir}">
-					<include name="ApplicationResources.properties" />
-				</fileset>
-			</copy>
-		</target>
+	<target name="compile_junit_TestCases">
+		<delete dir="${test.classes.dir}"/>
+		<mkdir dir="${test.classes.dir}" />
+		<javac destdir="${test.classes.dir}" includes="**/*.java" includeAntRuntime="false">
+			<src path="${test.src.dir}"/>
+			<classpath>
+			  <fileset dir="${lib.dir}">
+					<include name="**/*.jar"/>
+			  </fileset>
+			</classpath>
+		</javac>
+		<copy todir="${test.classes.dir}">
+			<fileset dir="${base.dir}/conf">
+				<include name="ApplicationResources.properties" />
+			</fileset>
+		</copy>
+	</target>
 
 	<target name="runJunitTestCases" depends="compile_junit_TestCases">
 		<mkdir dir="${report.dir}/Nightly_Build_Report" />
@@ -100,7 +74,6 @@
 				<pathelement path= "${test.classes.dir}" />
 			</classpath>
 
-
 			<batchtest todir="${report.dir}/Nightly_Build_Report">
 				<fileset dir="${test.src.dir}">
 					<include name="**/CaTissueTestSuite.java" />
@@ -109,8 +82,7 @@
 		</junit>
 	</target>
 
-  <target name="runNightlyBuild" depends="runJunitTestCases">
-
+	<target name="runNightlyBuild" depends="runJunitTestCases">
 		<junitreport todir="${report.dir}/Nightly_Build_Report">
 			<fileset dir="${report.dir}/Nightly_Build_Report">
 				<include name="TEST-*.xml" />

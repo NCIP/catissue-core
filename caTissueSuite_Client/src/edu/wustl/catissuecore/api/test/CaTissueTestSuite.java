@@ -61,7 +61,6 @@ public class CaTissueTestSuite
 		suite.addTestSuite(ComplexCollectionProtocolTestCases.class);
 		suite.addTestSuite(ScientistRoleCaGridTestCases.class);
 		suite.addTestSuite(AdminRoleCaGridTestCases.class);
-		suite.addTestSuite(BulkOperationTestCases.class);
 		//$JUnit-END$
 		return suite;
 	}

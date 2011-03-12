@@ -214,7 +214,7 @@ public class SiteTestCases extends CaTissueBaseTestCase {
 		}		
 	} 
 
-	public void testEditSiteUserCPAssociation()
+	/*public void testEditSiteUserCPAssociation()
 	{
     	Logger.out.info("updating domain object site ------->");
 	    try 
@@ -227,5 +227,5 @@ public class SiteTestCases extends CaTissueBaseTestCase {
 	 		e.printStackTrace();
 	 		assertFalse("failed to update Object", true);
 	    }
-	}
+	}*/
 }

@@ -2035,7 +2035,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 		}
 	}
 
-	 public void testShiftSpecimenInSCG() {
+	/* public void testShiftSpecimenInSCG() {
 		Logger.out.info("updating domain object site ------->");
 		try {
 			ExcelTestCaseUtility.shiftSpecimenInSCG();
@@ -2045,7 +2045,7 @@ public class SpecimenTestCases extends CaTissueBaseTestCase
 			e.printStackTrace();
 			assertFalse("failed to update Object", true);
 		}
-	}
+	}*/
 
 	 public void testSpecimenLabelAsPerFormat()
 	 {
