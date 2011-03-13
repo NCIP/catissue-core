@@ -920,7 +920,6 @@
 		<mkdir dir="${APIclientzip.dir}" />
 		<copy todir="${APIclientzip.dir}/caTissueSuite_Client" overwrite="true">
 			<fileset dir="${base.dir}/caTissueSuite_Client" />
-			<fileset file="${base.dir}/caTissueInstall.properties" />
 		</copy>
 		<copy todir="${APIclientzip.dir}/catissue_de_integration_client" overwrite="true">
 			<fileset dir="${base.dir}/catissue_de_integration_client" />
