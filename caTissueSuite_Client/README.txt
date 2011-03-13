@@ -41,6 +41,6 @@ Link: http://gforge.nci.nih.gov/docman/index.php?group_id=689&selected_doc_group
 
 SVN Tags
 ========================================
-TBD
+https://ncisvn.nci.nih.gov/svn/catissue_persistent/catissuecore/tags/caTissue_v1.2_RC6_13MAR2011_TAG
 
 Thank you for using caTissue Suite Client.
