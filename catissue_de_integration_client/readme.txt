@@ -1,12 +1,12 @@
 Prerequisite :
 DE models war should have been deployed in the Jboss along with the caTissue war.
-To deploy the de wars there is a target 'deploy_ca_model_war' in the deploy.xml of caTissue application.
+To deploy the de wars there is a target 'deploy_ca_model_war' in the build.xml of caTissue application.
 
 Steps to run the demo client.
 1. Run ant target 
-<CATISSUE_HOME>\ant -f deploy.xml deploy_ca_model_war.
+<CATISSUE_HOME>\ant deploy_ca_model_war.
 2. Change directory to 'catissue_de_integration_client'
-3. Modify clientInstall.prooperties file.
+3. Modify clientInstall.properties file.
 4. Run command 
 <CLIENT_HOME>\ant runDemo_CAModel' 
 The above command will run the demo programme to insert the data into the ClinicalAnnotations model as well as will query the data inserted using the API's.
