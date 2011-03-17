@@ -1,4 +1,30 @@
-create or replace FUNCTION sf_compSchemaTab_Diffcols
+CREATE OR REPLACE FUNCTION     sf_getcolumns
+(
+
+   pvchTablename        IN VARCHAR2,
+   pvchSchema1      in varchar2
+)
+return varchar2
+is
+cols varchar(2000):='';
+begin
+
+  FOR c IN (select COLUMN_NAME as col1  from DBA_TAB_COLS where table_name =pvchTablename  and owner = pvchSchema1)
+  LOOP
+
+    cols:= cols|| c.col1 || ',';
+
+
+     END LOOP;
+  cols:=substr(cols, 0, length(cols)-1);
+  DBMS_OUTPUT.PUT_LINE(cols);
+return cols;
+
+end ;
+/
+
+
+CREATE OR REPLACE FUNCTION sf_compTabInschemasWDiffStruct
 (
 
    pvchTablename        IN VARCHAR2,
@@ -7,15 +33,15 @@ create or replace FUNCTION sf_compSchemaTab_Diffcols
 )
 return varchar2
 IS
-asd varchar2(4000);
+asd varchar(4000);
 begin
-  FOR c IN (select COLUMN_NAME as col1, DATA_TYPE, DATA_LENGTH, DATA_PRECISION,data_SCALE,  nullable
+  FOR c IN (select COLUMN_NAME as col1
   fROM (
       select TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION , data_SCALE, nullable
           from DBA_TAB_COLS
        where table_name = pvchTablename
          and owner = pvchSchema1
-  minus
+  intersect
      select TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION , data_SCALE, nullable
         from DBA_TAB_COLS
       where table_name = pvchTablename
@@ -23,36 +49,70 @@ begin
    )
  )
         LOOP
+            DBMS_OUTPUT.put_line ('c.col1 in sf_compTabInschemasWDiffStruct '||c.col1);
+   asd:= asd || c.col1||',';
 
-
-case
-	 when c.DATA_TYPE  like '%CHAR%' then
-	 	  asd:= asd || ' '||c.col1||' '|| lower(c.DATA_TYPE) ||'('||c.DATA_LENGTH  ||'),';
-  	 when c.DATA_TYPE   in ('NUMBER', 'FLOAT')   then
-	 	  case when c.data_SCALE >0 then
-		     	asd:= asd || ' '||c.col1||' '|| lower(c.DATA_TYPE) ||'('||c.DATA_PRECISION || ','|| to_char(c.data_SCALE)  ||'),';
-		  else
-		     	asd:= asd || ' '||c.col1||' '|| lower(c.DATA_TYPE) ||'('||c.DATA_PRECISION || '),';
-		  end case;
-   	 when (c.DATA_TYPE   in ('DATE') or   c.DATA_TYPE    like '%TIME%'  ) then
-	    	 	  asd:= asd || ' '||c.col1||' '|| lower(c.DATA_TYPE)||',' ;
-
-	when c.DATA_TYPE    like '%LOB%' then
-		    	 	  asd:= asd || ' '||c.col1||' '|| lower(c.DATA_TYPE) ||',';
-		else
-					asd:= asd || ' '||c.col1||' '|| lower(c.DATA_TYPE) ||',' ;
-
-end 	case 		  ;
-
-            DBMS_OUTPUT.put_line (asd);
         END LOOP;
 
-            DBMS_OUTPUT.put_line (asd);
+            DBMS_OUTPUT.put_line ('asd in sf_compTabInschemasWDiffStruct last '||asd);
+            DBMS_OUTPUT.put_line ('return  in sf_compTabInschemasWDiffStruct last '||substr(asd, 0, length(asd)-1));
    return substr(asd, 0, length(asd)-1);
+end ;
+/
+
+	create or replace FUNCTION sf_compSchemaTab_Diffcols
+	(
+
+	   pvchTablename        IN VARCHAR2,
+	   pvchSchema1      in varchar2,
+	   pvchSchema2      in varchar2
+	)
+	return varchar2
+	IS
+	asd varchar2(4000);
+	begin
+	  FOR c IN (select COLUMN_NAME as col1, DATA_TYPE, DATA_LENGTH, DATA_PRECISION,data_SCALE,  nullable
+	  fROM (
+		  select TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION , data_SCALE, nullable
+			  from DBA_TAB_COLS
+		   where table_name = pvchTablename
+			 and owner = pvchSchema1
+	  minus
+		 select TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION , data_SCALE, nullable
+			from DBA_TAB_COLS
+		  where table_name = pvchTablename
+		  and owner =pvchSchema2
+	   )
+	 )
+			LOOP
 
 
+	case
+		 when c.DATA_TYPE  like '%CHAR%' then
+			  asd:= asd || ' '||c.col1||' '|| lower(c.DATA_TYPE) ||'('||c.DATA_LENGTH  ||'),';
+		 when c.DATA_TYPE   in ('NUMBER', 'FLOAT')   then
+			  case when c.data_SCALE >0 then
+					asd:= asd || ' '||c.col1||' '|| lower(c.DATA_TYPE) ||'('||c.DATA_PRECISION || ','|| to_char(c.data_SCALE)  ||'),';
+			  else
+					asd:= asd || ' '||c.col1||' '|| lower(c.DATA_TYPE) ||'('||c.DATA_PRECISION || '),';
+			  end case;
+		 when (c.DATA_TYPE   in ('DATE') or   c.DATA_TYPE    like '%TIME%'  ) then
+					  asd:= asd || ' '||c.col1||' '|| lower(c.DATA_TYPE)||',' ;
 
-end;
+		when c.DATA_TYPE    like '%LOB%' then
+						  asd:= asd || ' '||c.col1||' '|| lower(c.DATA_TYPE) ||',';
+			else
+						asd:= asd || ' '||c.col1||' '|| lower(c.DATA_TYPE) ||',' ;
+
+	end 	case 		  ;
+
+				DBMS_OUTPUT.put_line (asd);
+			END LOOP;
+
+				DBMS_OUTPUT.put_line (asd);
+	   return substr(asd, 0, length(asd)-1);
+	end;
+/
 
 
 CREATE OR REPLACE FUNCTION sf_compTabDataRowsDiffStruct
@@ -106,44 +166,6 @@ end ;
 /
 
 
-CREATE OR REPLACE FUNCTION sf_compTabInschemasWDiffStruct
-(
-
-   pvchTablename        IN VARCHAR2,
-   pvchSchema1      in varchar2,
-   pvchSchema2      in varchar2
-)
-return varchar2
-IS
-asd varchar(4000);
-begin
-  FOR c IN (select COLUMN_NAME as col1
-  fROM (
-      select TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION , data_SCALE, nullable
-          from DBA_TAB_COLS
-       where table_name = pvchTablename
-         and owner = pvchSchema1
-  intersect
-     select TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION , data_SCALE, nullable
-        from DBA_TAB_COLS
-      where table_name = pvchTablename
-      and owner =pvchSchema2
-   )
- )
-        LOOP
-            DBMS_OUTPUT.put_line ('c.col1 in sf_compTabInschemasWDiffStruct '||c.col1);
-   asd:= asd || c.col1||',';
-
-        END LOOP;
-
-            DBMS_OUTPUT.put_line ('asd in sf_compTabInschemasWDiffStruct last '||asd);
-            DBMS_OUTPUT.put_line ('return  in sf_compTabInschemasWDiffStruct last '||substr(asd, 0, length(asd)-1));
-   return substr(asd, 0, length(asd)-1);
-
-
-
-end ;
-/
 
 
 CREATE OR REPLACE FUNCTION     sf_compTablesDataRows
@@ -185,8 +207,6 @@ select  count(*) into asd
 DBMS_OUTPUT.PUT_LINE( 'lsql is  sf_compTablesDataRows after last -->'||lsql);
      execute immediate lsql into asd;  -- 19373
   end if ;
-
-
 return asd;
 end ;
 /
@@ -235,37 +255,10 @@ return 'false';
 else
 return 'true';
 end if ;
-
-
-
 end ;
 /
 
 
-CREATE OR REPLACE FUNCTION     sf_getcolumns
-(
-
-   pvchTablename        IN VARCHAR2,
-   pvchSchema1      in varchar2
-)
-return varchar2
-is
-cols varchar(2000):='';
-begin
-
-  FOR c IN (select COLUMN_NAME as col1  from DBA_TAB_COLS where table_name =pvchTablename  and owner = pvchSchema1)
-  LOOP
-
-    cols:= cols|| c.col1 || ',';
-
-
-     END LOOP;
-  cols:=substr(cols, 0, length(cols)-1);
-  DBMS_OUTPUT.PUT_LINE(cols);
-return cols;
-
-end ;
-/
 
 create or replace FUNCTION     sf_compDataInTables
 (
