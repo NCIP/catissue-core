@@ -1,4 +1,4 @@
-DELIMITER $$;
+DELIMITER $$
 
 DROP FUNCTION IF EXISTS `mysql`.`sf_getColumns`$$
 
@@ -26,4 +26,4 @@ set cols= left(cols, length(cols)-1);
 return cols;
 END$$
 
-DELIMITER ;$$
+DELIMITER ;

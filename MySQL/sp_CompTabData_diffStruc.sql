@@ -1,4 +1,4 @@
-DELIMITER $$;
+DELIMITER $$
 
 DROP PROCEDURE IF EXISTS `mysql`.`sp_CompTabData_diffStruc`$$
 
@@ -28,4 +28,4 @@ EXECUTE s1 ;
 DEALLOCATE PREPARE s1 ;
     END$$
 
-DELIMITER ;$$
+DELIMITER ;

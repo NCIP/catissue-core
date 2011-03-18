@@ -1,3 +1,5 @@
+DELIMITER $$
+
 DROP PROCEDURE IF EXISTS `mysql`.`sp_compareDataWithDiffStruc`$$
 
 CREATE DEFINER=`root`@`%` PROCEDURE `sp_compareDataWithDiffStruc`
@@ -19,3 +21,5 @@ PREPARE s2 FROM @query1;
 execute s2;
 deallocate prepare s2;
 END$$
+
+DELIMITER ;

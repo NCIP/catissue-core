@@ -1,7 +1,6 @@
-DELIMITER $$;
+DELIMITER $$
 
 DROP PROCEDURE IF EXISTS `mysql`.`Sp_compTables`$$
-
 CREATE DEFINER=`root`@`%` PROCEDURE `Sp_compTables`(
 pvchSchema1 varchar(100),
 pvchSchema2 varchar(100)
@@ -133,4 +132,7 @@ declare  c1 cursor for  select table_name  from information_schema.tables where 
 	select * From mysql.compTablesDataRows;
 END$$
 
-DELIMITER ;$$
+truncate table comptablesdatarows$$
+truncate table common_row_count$$
+
+DELIMITER ;

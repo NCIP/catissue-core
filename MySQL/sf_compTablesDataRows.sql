@@ -1,4 +1,4 @@
-DELIMITER $$;
+DELIMITER $$
 
 DROP PROCEDURE IF EXISTS `mysql`.`sf_compTablesDataRows`$$
 
@@ -32,4 +32,4 @@ execute s1 ;
 deallocate prepare s1 ;
 END$$
 
-DELIMITER ;$$
+DELIMITER ;

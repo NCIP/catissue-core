@@ -1,4 +1,4 @@
-DELIMITER $$;
+DELIMITER $$
 
 DROP FUNCTION IF EXISTS `mysql`.`sf_compTablesInschemas`$$
 
@@ -25,4 +25,4 @@ return 'true';
 end if ;
 END$$
 
-DELIMITER ;$$
+DELIMITER ;
