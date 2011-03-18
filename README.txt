@@ -8,7 +8,7 @@ Tools Knowledge Center website: https://cabig-kc.nci.nih.gov/Biospecimen/KC/inde
 Prerequisites:
 =======================================
 Certified Server OS: Windows Microsoft Windows XP Professional Version 2002 Service Pack 2,
-Linux Red Hat 9 or Red Hat Enterprise ES/AS 2.1 or higher, Mac 10.4.6
+Linux Red Hat 9 or Red Hat Enterprise ES/AS 2.1 or higher
 Certified Databases: Oracle 10.2.0.2.0, MySQL 5.0.45
 Note: The Oracle client is required on the machine hosting the JBoss server.
 Build tool: Ant 1.7
@@ -49,6 +49,6 @@ Link: http://gforge.nci.nih.gov/docman/index.php?group_id=689&selected_doc_group
 
 SVN Tags
 ========================================
-https://ncisvn.nci.nih.gov/svn/catissue_persistent/catissuecore/tags/caTissue_v1.2_RC6_15MAR2011_TAG
+https://ncisvn.nci.nih.gov/svn/catissue_persistent/catissuecore/tags/caTissue_v1.2_RC6_TAG
 
 Thank you for using caTissue Suite.

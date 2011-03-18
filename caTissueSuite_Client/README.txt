@@ -7,8 +7,8 @@ Tools Knowledge Center website: https://cabig-kc.nci.nih.gov/Biospecimen/KC/inde
 
 Prerequisites:
 =======================================
-Certified Server OS: Windows Microsoft Windows XP Professional Version 2002 Service Pack 2,
-Linux Red Hat 9 or Red Hat Enterprise ES/AS 2.1 or higher, Mac 10.4.6
+Certified Client OS: Windows Microsoft Windows XP Professional Version 2002 Service Pack 2,
+Linux Red Hat 9 or Red Hat Enterprise ES/AS 2.1 or higher
 Build tool: Ant 1.7
 Java: JDK 1.5
 
@@ -41,6 +41,6 @@ Link: http://gforge.nci.nih.gov/docman/index.php?group_id=689&selected_doc_group
 
 SVN Tags
 ========================================
-https://ncisvn.nci.nih.gov/svn/catissue_persistent/catissuecore/tags/caTissue_v1.2_RC6_15MAR2011_TAG
+https://ncisvn.nci.nih.gov/svn/catissue_persistent/catissuecore/tags/caTissue_v1.2_RC6_TAG
 
 Thank you for using caTissue Suite Client.
