@@ -27,7 +27,6 @@ mds_build.xml: This is the main run process that manages all the Minimal Data Sh
 Executing
 ========================================
 To run caTissue Client API: ant runNightlyBuild
-To run Minimal Data Sharing: ant runMDSClient
 
 Support (caBIG(tm) TBPT Knowledge Center)
 ========================================
