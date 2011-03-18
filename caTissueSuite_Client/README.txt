@@ -16,18 +16,15 @@ Directories
 ========================================
 conf: This folder has the configuration files for caTissue Client and caCORE API client.
 lib: This folder contains the library files.
-mds_src: This folder has all the API source code for Minimal Data Sharing client API.
 src: This folder has all the API source code for caTissue Client API test cases.
 
 Files
 ========================================
 build.xml: This is the main run process that manages all the caTissue Client API Test Suite.
-mds_build.xml: This is the main run process that manages all the Minimal Data Sharing API Test Suite.
 
 Executing
 ========================================
 To run caTissue Client API: ant runNightlyBuild
-To run Minimal Data Sharing: ant runMDSClient
 
 Support (caBIG(tm) TBPT Knowledge Center)
 ========================================
