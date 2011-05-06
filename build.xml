@@ -85,7 +85,7 @@
 		<property name="cat.cobertura.dir" value="${base.dir}" />
 		<property name="cat.instrumented.dir" value="./instrument"/>
 		<property name="cobertura.lib" value="./cobertura/lib"/>
-		<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
+		
 
 
 		<path id="cobertura.classpath">
@@ -94,6 +94,7 @@
 				<include name="**/*.jar" />
 			</fileset>
 		</path>
+		<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
 
 	<!-- sub tasks -->
 	<target name="init" description="initialize">
