@@ -7,7 +7,6 @@ package edu.wustl.catissuecore.action.annotations;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,7 +33,6 @@ import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.annotations.ICPCondition;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
-import edu.wustl.catissuecore.domain.StudyFormContext;
 import edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry;
 import edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry;
 import edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry;
@@ -1117,32 +1115,19 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			DynamicExtensionsApplicationException, DynamicExtensionsSystemException,
 			ApplicationException
 	{
-		AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
+
 		String staticEntityName = (String) request.getSession().getAttribute("staticEntityName");
 		String selectedStaticEntityRecordId = (String) request.getSession().getAttribute(
 				AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
-		AbstractRecordEntry abstractRecordEntry = annotationBizLogic.createRecordEntry(
-				staticEntityName, selectedStaticEntityRecordId);
-		abstractRecordEntry.setActivityStatus("Active");
-		abstractRecordEntry.setModifiedDate(new Date());
-		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
-				.getAttribute(Constants.SESSION_DATA);
-		if (sessionDataBean != null)
-		{
-			abstractRecordEntry.setModifiedBy(sessionDataBean.getLastName() + ","
-					+ sessionDataBean.getFirstName());
-		}
-		StudyFormContext studyFormContext = annotationBizLogic
-				.getStudyFormContext(dynEntContainerId);
-		abstractRecordEntry.setFormContext(studyFormContext);
-		abstractRecordEntry = annotationBizLogic.insertAbstractRecordEntry(abstractRecordEntry);
-		AnnotationBizLogic annoBizLogic = new AnnotationBizLogic();
-		Long recordEntryId = abstractRecordEntry.getId();
 		String staticEntityId = (String) request.getSession().getAttribute(
 				AnnotationConstants.SELECTED_STATIC_ENTITYID);
-		annoBizLogic.associateRecords(Long.valueOf(dynEntContainerId), recordEntryId, Long
-				.valueOf(dynExtRecordId), Long.valueOf(staticEntityId));
+		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession()
+			.getAttribute(Constants.SESSION_DATA);
+		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+		bizLogic.createHookEntityObject(dynExtRecordId, dynEntContainerId, staticEntityName,
+				selectedStaticEntityRecordId, staticEntityId, sessionDataBean);
 	}
+
 
 	/**
 	 * Get Record Entry List.

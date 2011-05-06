@@ -325,6 +325,7 @@
 		<antcall target="unzip_bulkoperation_installable" />
 		<ant dir="${base.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="bulkoperation_integrate_app">
 			<property name="deploy.temp.dir" value="${basedir}"/>
+			<property name="config.dir" value="${basedir}/catissuecore-properties"/>
 			<property name="bulkoperation.base.dir" value="${basedir}/bulkoperation" />
 		</ant>
 		<!--Copying bulkOperation.properties file-->
@@ -789,6 +790,7 @@
 		<copy file="bulkoperator.zip" todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true" />
 		<copy todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true">
 			<fileset file="${base.dir}/WEB-INF/lib/bulkoperator.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/DynamicExtensions*.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/castor-0.9.9.jar" />
 			<fileset file="${base.dir}/caTissueSuite_Client/lib/catissuecore.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/commons-logging.jar" />
@@ -801,6 +803,11 @@
 		</copy>
 		<copy file="bulkOperation.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
 		<copy file="BulkOperations/conf/log4j.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
+		<copy todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true">
+			<fileset dir="${base.dir}/BulkOperations/conf/">
+				<include name="*.xml" />
+			</fileset>
+		</copy>
 
 		<copy todir="${zip.dir}/modules/caGrid_service" overwrite="true">
 			<fileset dir="${base.dir}/CaTissueSuite_caGrid_Service" />

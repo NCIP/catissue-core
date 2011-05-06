@@ -955,6 +955,20 @@
 			</ant>
 	</target>
 	<!--End of Integrating the Advance Query Module  -->
+	
+	<!--Integration of Bulk Operations starts-->
+	<target name="integrate_bulk_operations" description="Start of Integrating the Bulk operation Module">
+			<echo>Integrating the  Bulk Operation Module</echo>
+			<antcall target="unzip_bulkoperation_installable" />
+			<ant dir="${temp.dir}/bulkoperation" inheritAll="false"
+				antfile="bulkoperationintegration.xml" target="replace-tiles-properties">
+				<property name="parent.base.dir" value="${base.dir}" />
+				<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore" />
+				<property name="war.dir" value="catissuecore" />
+			</ant>
+	</target>
+	
+	<!--End of Integrating the Bulk operation Module  -->
 	<target name="jboss_configuration" description="configuring jboss">
 		<antcall target="copy_files" />
 			<!--<replace file="${basedir}/caTissueSuite_Client/conf/remoteService.xml">
@@ -969,6 +983,8 @@
 			<antcall target="pre_initialization" />
 			<antcall target="db_configuration" />
 			<antcall target="integrate_advanced_query"/>
+			<antcall target="integrate_bulk_operations"/>
+		
 			<antcall target="app_configuration"/>
 			<tstamp>
 				<format property="before_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
@@ -3877,7 +3893,7 @@ Thanking You,
 
 	<target name="add_bulk_operation_template" description="this target adds the bulk operation XML and CSV template in the database.">
 		<echo message="Starting to load Bulk Operator Template.........." />
-		<java classname="edu.wustl.bulkoperator.ImportBulkOperationTemplate"
+		<java classname="edu.wustl.bulkoperator.templateImport.ImportBulkOperationTemplate"
 				fork="true" maxmemory="1024m">
 			<arg value="${operationName}" />
 			<arg value="${dropdownName}" />
@@ -3892,7 +3908,9 @@ Thanking You,
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
+			<sysproperty key="config.dir" value="catissuecore-properties" />
 		</java>
+		
 	</target>
 
 	<property name="operationName" value="" />
@@ -4363,5 +4381,72 @@ Thanking You,
 				<antcall target="upgrade_db_from_v1.1.p1 to v1.1.p2"/>
 				<antcall target="upgrade_p2"/>
 		</target>
+	
+	<!-- =================================
+		       generate.bo.template
+	     ================================= -->
+	<property name="categoryNameOrFile" value=" " />
+	<property name="mappingXMLFile" value="${base.dir}/tempbulkoperator/mapping.xml" />
+	<target name="generate.bo.template" description="Creates the XML and CSV template required for bulk operation.">
+		<unzip dest="${base.dir}/tempbulkoperator" src="${base.dir}/bulkoperator.zip" />
+		<delete quiet="true" includeemptydirs="true">
+			<fileset dir="${temp.dir}/catissuecore">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore" />
+		<antcall target="replace_app_dao_prop_file"/>
+		<unzip src="dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
+		<copy file="${base.dir}/DE_conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+		<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
+		<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
+
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+				</replace>
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+					<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+					<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+					</replace>
+				</then>
+			</elseif>
+		</if>
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+			<include name="*.cfg.xml" />
+			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+			<replacefilter token="${token.database.password}" value="${database.password}" />
+		</replace>
+
+		
+		<java classname="edu.wustl.catissuecore.util.BOTemplateGenerator" fork="true" maxmemory="1024M" failonerror="true">
+			<arg value="${categoryNameOrFile}" />
+			<arg value="${mappingXMLFile}" />
+			<classpath>
+				<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+				<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+					<include name="*.jar" />
+					<exclude name="uml-1.3.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			
+			<sysproperty key="static.template.dir" value="./BulkOperations/conf" />
+		</java>
+		<delete dir="${base.dir}/tempbulkoperator" failonerror="false"></delete>
+	</target>
 
 </project>
