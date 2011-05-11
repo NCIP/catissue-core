@@ -4186,6 +4186,64 @@ Thanking You,
 		<antcall target="deleteFiles"/>
 		<!--<delete dir="${temp.dir}" />-->
 	</target>
+	
+	<target name="upgarde_db_from_v1.2_to_v1.2.1" depends="upgrade_bulk_operation"></target>
+
+	<target name="upgrade_bulk_operation" description="Executes the Bulk Operation Mysql commands.">
+		<antcall target="unzip_bulkoperation_installable" />
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="alter_bulk_operation_table">
+					<property name="database.driver" value="${mysql.driver.string}" />
+					<property name="database.type" value="${database.type}" />
+					<property name="parent.base.dir" value="${basedir}/lib" />
+					<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+					<property name="database.username" value="${database.username}" />
+					<property name="database.password" value="${database.password}" />
+					<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+				</ant>
+				<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="upgrade_bulk_operation_table">
+					<property name="database.driver" value="${mysql.driver.string}" />
+					<property name="database.type" value="${database.type}" />
+					<property name="parent.base.dir" value="${basedir}/lib" />
+					<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+					<property name="database.username" value="${database.username}" />
+					<property name="database.password" value="${database.password}" />
+					<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+				</ant>
+			</then>
+			<elseif>
+			<equals arg1="oracle" arg2="${database.type}" />
+			<then>
+				<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="alter_bulk_operation_table">
+					<property name="database.driver" value="${oracle.driver.string}" />
+					<property name="database.type" value="${database.type}" />
+					<property name="parent.base.dir" value="${basedir}/lib" />
+					<property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+					<property name="database.username" value="${database.username}" />
+					<property name="database.password" value="${database.password}" />
+					<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+					<property name="rdbms" value="oracle" />
+				</ant>
+				<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="upgrade_bulk_operation_table">
+					<property name="database.driver" value="${oracle.driver.string}" />
+					<property name="database.type" value="${database.type}" />
+					<property name="parent.base.dir" value="${basedir}/lib" />
+					<property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+					<property name="database.username" value="${database.username}" />
+					<property name="database.password" value="${database.password}" />
+					<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+					<property name="rdbms" value="oracle" />
+				</ant>
+			</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+		
+	</target>
 
 	<target name="deleteFiles" description="Delete the files which are created while caTissue deployment">
 		<move todir="${base.dir}/modules/caTissue/log" overwrite="true">
@@ -4534,7 +4592,8 @@ Thanking You,
 				<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
 			</replace>
 		<copy file="${base.dir}/modules/bulk_operations/conf/log4j.properties" todir="${base.dir}" overwrite="true"/>
-		<java classname="edu.wustl.catissuecore.util.BOTemplateGenerator" fork="true" maxmemory="1024M" failonerror="true">
+		<java classname="edu.wustl.catissuecore.util.BOTemplateGeneratorClient" fork="true" maxmemory="1024M" failonerror="true">
+			<arg value="category"/>
 			<arg value="${categoryNameOrFile}" />
 			<arg value="${mappingXMLFile}" />
 
@@ -4557,5 +4616,73 @@ Thanking You,
 				</move>
 			<delete file="${base.dir}/log4j.properties"></delete>
 		</target>
+	
+	<property name="entityNameOrFile" value=" " />
+	<target name="generate.bo.template.entity" description="Generate template File For De Entities">
+			<delete quiet="true" includeemptydirs="true">
+					<fileset dir="${temp.dir}/catissuecore">
+						<include name="**/*" />
+					</fileset>
+				</delete>
+				<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+				<antcall target="replace_app_dao_prop_file"/>
+				<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
+				<copy file="${base.dir}/modules/dynamic_extensions/conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+				<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
+				<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
+
+				
+				<if>
+					<equals arg1="mysql" arg2="${database.type}" />
+					<then>
+						<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+							<include name="*.cfg.xml" />
+							<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+							<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+							<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+						</replace>
+					</then>
+					<elseif>
+						<equals arg1="oracle" arg2="${database.type}" />
+						<then>
+							<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+								<include name="*.cfg.xml" />
+								<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+								<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+								<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+							</replace>
+						</then>
+					</elseif>
+				</if>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+					<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+				</replace>
+			<copy file="${base.dir}/modules/bulk_operations/conf/log4j.properties" todir="${base.dir}" overwrite="true"/>
+			<java classname="edu.wustl.catissuecore.util.BOTemplateGeneratorClient" fork="true" maxmemory="1024M" failonerror="true">
+				<arg value="entity"/>
+				<arg value="${entityNameOrFile}" />
+				<arg value="${mappingXMLFile}" />
+
+					<classpath>
+						<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+						<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+							<include name="*.jar" />
+							<exclude name="uml-1.3.jar" />
+						</fileset>
+						<fileset dir="${lib.dir}">
+								<include name="*.jar" />
+						</fileset>
+					</classpath>
+				<sysproperty key="static.template.dir" value="${base.dir}/modules/bulk_operations/conf" />
+				</java>
+				<move todir="${base.dir}/modules/bulk_operations/log" overwrite="true">
+						<fileset dir="${base.dir}">
+							<include name="bulkoperator*.log*" />
+						</fileset>
+					</move>
+				<delete file="${base.dir}/log4j.properties"></delete>
+			</target>
 		
 </project>

@@ -9,9 +9,13 @@ import java.util.Map;
 
 import edu.common.dynamicextensions.domaininterface.BaseAbstractAttributeInterface;
 import edu.common.dynamicextensions.domaininterface.CategoryInterface;
+import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
 import edu.common.dynamicextensions.entitymanager.CategoryManager;
 import edu.common.dynamicextensions.entitymanager.CategoryManagerInterface;
+import edu.common.dynamicextensions.entitymanager.EntityManager;
+import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.util.DataValueMapUtility;
@@ -20,6 +24,7 @@ import edu.wustl.bulkoperator.appservice.AbstractBulkOperationAppService;
 import edu.wustl.bulkoperator.metadata.HookingInformation;
 import edu.wustl.bulkoperator.util.BulkOperationConstants;
 import edu.wustl.bulkoperator.util.BulkOperationException;
+import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
@@ -43,7 +48,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	private static final Logger LOGGER = Logger.getCommonLogger(CaTissueAppServiceImpl.class);
 
 	public CaTissueAppServiceImpl(boolean isAuthenticationRequired, String userName, String password)
-	 throws Exception
+			throws Exception
 	{
 		super(isAuthenticationRequired, userName, password);
 	}
@@ -151,21 +156,38 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	{
 		HookingInformation hookInformation = (HookingInformation) hookInformationObject;
 		Long dynExtObjectId = hookInformation.getDynamicExtensionObjectId();
-
-		DEIntegration deIntegration = new DEIntegration();
-		Long containerId = deIntegration.getRootCategoryContainerIdByName(hookInformation.getCategoryName());
+		Long containerId;
+		NameValueBean hookEntityBean;
 		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-		//
-		NameValueBean hookEntityBean = bizLogic.getHookEntityNameValueBean(containerId);
-		//write logic to find exact hook entity
-		Long selectedStaticEntityRecordId = getSelectedStaticEntityRecordId(hookEntityBean,hookInformation);
-		bizLogic.createHookEntityObject(dynExtObjectId.toString(), containerId.toString(),hookEntityBean.getName() ,
-				selectedStaticEntityRecordId.toString(), hookEntityBean.getValue(), hookInformation.getSessionDataBean());
+		if (!"".equals(hookInformation.getEntityGroupName()))
+		{
+			EntityGroupInterface entityGroup = EntityCache.getInstance().getEntityGroupByName(
+					hookInformation.getEntityGroupName());
+			EntityInterface entity = entityGroup.getEntityByName(hookInformation.getEntityName());
+			ContainerInterface container = (ContainerInterface) entity.getContainerCollection()
+					.iterator().next();
+			containerId = container.getId();
+			hookEntityBean = bizLogic.getHookEntiyNameValueBean(entity.getId(), hookInformation
+					.getEntityName());
+		}
+		else
+		{
+			DEIntegration deIntegration = new DEIntegration();
+			containerId = deIntegration.getRootCategoryContainerIdByName(hookInformation
+					.getCategoryName());
+			hookEntityBean = bizLogic.getHookEntityNameValueBeanForCategory(containerId,
+					hookInformation.getCategoryName());
+		}
 
+		//write logic to find exact hook entity
+		Long selectedStaticEntityRecordId = getSelectedStaticEntityRecordId(hookEntityBean,
+				hookInformation);
+		bizLogic.createHookEntityObject(dynExtObjectId.toString(), containerId.toString(),
+				hookEntityBean.getName(), selectedStaticEntityRecordId.toString(), hookEntityBean
+						.getValue(), hookInformation.getSessionDataBean());
 
 		return null;
 	}
-
 
 	/**
 	 * It will retrieve the ID of the hook entity with which the DE record should be
@@ -175,18 +197,18 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	 * @return id of the hook entity.
 	 * @throws BizLogicException exception.
 	 */
-	private Long getSelectedStaticEntityRecordId(NameValueBean hookEntityBean, HookingInformation hookInformation) throws BizLogicException
+	private Long getSelectedStaticEntityRecordId(NameValueBean hookEntityBean,
+			HookingInformation hookInformation) throws BizLogicException
 	{
-		String cpLabel = (String)hookInformation.getDataHookingInformation().get(
+		String cpLabel = (String) hookInformation.getDataHookingInformation().get(
 				BulkOperationConstants.COLLECTION_PROTOCOL_LABEL);
 		Long selectedEntityId = null;
 
-		if(hookEntityBean.getName().equals(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY))
+		if (hookEntityBean.getName().equals(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY))
 		{
-			selectedEntityId = getParticipantIdForHooking(hookInformation,
-					cpLabel);
+			selectedEntityId = getParticipantIdForHooking(hookInformation, cpLabel);
 		}
-		else if(hookEntityBean.getName().equals(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY))
+		else if (hookEntityBean.getName().equals(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY))
 		{
 			selectedEntityId = getSCGIdforHooking(hookInformation);
 
@@ -205,31 +227,33 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	 * @throws BizLogicException exception.
 	 */
 	private Long getSpecimenIdForHooking(HookingInformation hookInformation)
-			throws BizLogicException {
-		Long selectedEntityId =  (Long) hookInformation.getDataHookingInformation().get(
+			throws BizLogicException
+	{
+		Long selectedEntityId = (Long) hookInformation.getDataHookingInformation().get(
 				BulkOperationConstants.SPECIMEN_ID);
 		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-		if(selectedEntityId==null)
+		if (selectedEntityId == null)
 		{
-			String specimenLabel =  (String) hookInformation.getDataHookingInformation().get(
+			String specimenLabel = (String) hookInformation.getDataHookingInformation().get(
 					BulkOperationConstants.SPECIMEN_LABEL);
-			String specimenBarcode =  (String) hookInformation.getDataHookingInformation().get(
+			String specimenBarcode = (String) hookInformation.getDataHookingInformation().get(
 					BulkOperationConstants.SPECIMEN_BARCODE);
 
-			if(specimenLabel!=null && !specimenLabel.trim().equals(""))
+			if (specimenLabel != null && !specimenLabel.trim().equals(""))
 			{
 
-			//get the scgId on the basis of cp label & scg label
-				selectedEntityId= bizLogic.getSpecimenByLabel(specimenLabel);
+				//get the scgId on the basis of cp label & scg label
+				selectedEntityId = bizLogic.getSpecimenByLabel(specimenLabel);
 			}
 			else
 
 			{
 				selectedEntityId = bizLogic.getSpecimenByBarcode(specimenBarcode);
 			}
-			if(selectedEntityId==null)
+			if (selectedEntityId == null)
 			{
-				throw new BizLogicException(ErrorKey.getErrorKey("invalid.param.bo.specimen"), null,null);
+				throw new BizLogicException(ErrorKey.getErrorKey("invalid.param.bo.specimen"),
+						null, null);
 			}
 		}
 		else
@@ -239,40 +263,39 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 		return selectedEntityId;
 	}
 
-
 	/**
 	 * It will return the Id of the SCG retrieving it from the given hooking information.
 	 * @param hookInformation hooking information given by user.
 	 * @return id of the SCG.
 	 * @throws BizLogicException exception.
 	 */
-	private Long getSCGIdforHooking(HookingInformation hookInformation)
-			throws BizLogicException
+	private Long getSCGIdforHooking(HookingInformation hookInformation) throws BizLogicException
 	{
-		Long selectedEntityId =  (Long) hookInformation.getDataHookingInformation().get(
+		Long selectedEntityId = (Long) hookInformation.getDataHookingInformation().get(
 				BulkOperationConstants.SCG_ID);
 		SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
-		if(selectedEntityId==null)
+		if (selectedEntityId == null)
 		{
-			String scgLabel =  (String) hookInformation.getDataHookingInformation().get(
+			String scgLabel = (String) hookInformation.getDataHookingInformation().get(
 					BulkOperationConstants.SCG_NAME);
-			String scgBarcode =  (String) hookInformation.getDataHookingInformation().get(
+			String scgBarcode = (String) hookInformation.getDataHookingInformation().get(
 					BulkOperationConstants.SCG_BARCODE);
 
-			if(scgLabel!=null && !scgLabel.trim().equals(""))
+			if (scgLabel != null && !scgLabel.trim().equals(""))
 			{
 
-			//get the scgId on the basis of cp label & scg label
-				selectedEntityId= bizLogic.getScgIdFromName(scgLabel);
+				//get the scgId on the basis of cp label & scg label
+				selectedEntityId = bizLogic.getScgIdFromName(scgLabel);
 			}
 			else
 
 			{
 				selectedEntityId = bizLogic.getScgIdFromBarcode(scgBarcode);
 			}
-			if(selectedEntityId==null)
+			if (selectedEntityId == null)
 			{
-				throw new BizLogicException(ErrorKey.getErrorKey("invalid.param.bo.scg"), null,null);
+				throw new BizLogicException(ErrorKey.getErrorKey("invalid.param.bo.scg"), null,
+						null);
 			}
 		}
 		else
@@ -282,15 +305,14 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 		return selectedEntityId;
 	}
 
-
 	/**
 	 * It will return the Id of the participant retrieving it from the given hooking information.
 	 * @param hookInformation hooking information given by user.
 	 * @return id of the participant.
 	 * @throws BizLogicException exception.
 	 */
-	private Long getParticipantIdForHooking(HookingInformation hookInformation,
-			String cpLabel) throws BizLogicException
+	private Long getParticipantIdForHooking(HookingInformation hookInformation, String cpLabel)
+			throws BizLogicException
 	{
 		Long selectedEntityId;
 		ParticipantBizLogic bizLogic = new ParticipantBizLogic();
@@ -298,12 +320,13 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 				BulkOperationConstants.PARTICIPANT_ID);
 		String ppi = (String) hookInformation.getDataHookingInformation().get(
 				BulkOperationConstants.PPI);
-		if(selectedEntityId==null)
+		if (selectedEntityId == null)
 		{
 			selectedEntityId = bizLogic.getParticipantIdByPPI(cpLabel, ppi);
-			if(selectedEntityId==null)
+			if (selectedEntityId == null)
 			{
-				 throw new BizLogicException(ErrorKey.getErrorKey("invalid.param.bo.participant"), null,null);
+				throw new BizLogicException(ErrorKey.getErrorKey("invalid.param.bo.participant"),
+						null, null);
 			}
 		}
 		else
@@ -320,10 +343,45 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	 * @return Object
 	 * @throws Exception Exception
 	 */
-	@Override
-	protected Object insertDynExtObject(Object dynExtObject, Object catissueStaticObject)
+	public Long insertDEObject(String entityGroupName, String entityName,
+			final Map<String, Object> dataValue) throws Exception
 	{
-		return null;
+		Long recordIdentifier = null;
+		CategoryManager.getInstance();
+		EntityGroupInterface entityGroup = EntityCache.getInstance().getEntityGroupByName(
+				entityGroupName);
+
+		if (entityGroup == null)
+		{
+			LOGGER.error("Entity group with the name '" + entityGroupName + "' does not exist.");
+			throw new BulkOperationException("Entity group with name '" + entityGroupName
+					+ "' does not exist.");
+		}
+		EntityInterface entity = entityGroup.getEntityByName(entityName);
+		if (entity == null)
+		{
+			LOGGER.error("Entity with the name '" + entityName + "' does not exist.");
+			throw new BulkOperationException("Entity with name '" + entityName
+					+ "' does not exist.");
+		}
+		ContainerInterface containerInterface = (ContainerInterface) entity
+				.getContainerCollection().toArray()[0];
+		Map<BaseAbstractAttributeInterface, Object> attributeToValueMap = DataValueMapUtility
+				.getAttributeToValueMap(dataValue, entity);
+		List<String> errorList = ValidatorUtil.validateEntity(attributeToValueMap,
+				new ArrayList<String>(), containerInterface, true);
+		if (errorList.isEmpty())
+		{
+			EntityManagerInterface entityManager = EntityManager.getInstance();
+			Map map = attributeToValueMap;
+			recordIdentifier = entityManager.insertData(entity, map, null, null);
+		}
+		else
+		{
+			updateErrorMessages(errorList);
+		}
+		//TODO pass sessionDataBean instead of null, so that it gets audited.
+		return recordIdentifier;
 	}
 
 	/**
@@ -341,7 +399,8 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	{
 		Long recordIdentifier = null;
 		CategoryManager.getInstance();
-		CategoryInterface categoryInterface = CategoryManager.getInstance().getCategoryByName(categoryName);
+		CategoryInterface categoryInterface = CategoryManager.getInstance().getCategoryByName(
+				categoryName);
 
 		if (categoryInterface == null)
 		{
@@ -371,8 +430,6 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 		//TODO pass sessionDataBean instead of null, so that it gets audited.
 		return recordIdentifier;
 	}
-
-
 
 	/**
 	 * It will form a string of errors seen in the data & will throw a exception with
