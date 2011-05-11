@@ -4187,9 +4187,10 @@ Thanking You,
 		<!--<delete dir="${temp.dir}" />-->
 	</target>
 	
-	<target name="upgarde_db_from_v1.2_to_v1.2.1" depends="upgrade_bulk_operation"></target>
+	<target name="upgarde_db_from_v1.2_to_v1.2.1" depends="upgrade_bulk_operation" description="Target for Application and Database Upgrade from caTissue v1.2 to v1.2.1">
+	</target>
 
-	<target name="upgrade_bulk_operation" description="Executes the Bulk Operation Mysql commands.">
+	<target name="upgrade_bulk_operation" description="Executes the Bulk Operation update commands.">
 		<antcall target="unzip_bulkoperation_installable" />
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
