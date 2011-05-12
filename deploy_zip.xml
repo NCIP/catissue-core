@@ -874,7 +874,7 @@
 		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
 			<property name="database.driver" value="${mysql.driver.string}" />
 			<property name="database.type" value="${database.type}" />
-			<property name="parent.base.dir" value="${basedir}/lib" />
+			<property name="parent.base.dir" value="${basedir}/modules/caTissue/lib" />
 			<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 			<property name="database.username" value="${database.username}" />
 			<property name="database.password" value="${database.password}" />
@@ -887,7 +887,7 @@
 		<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="create_tables_for_bulk_operation">
 			<property name="database.driver" value="${oracle.driver.string}" />
 			<property name="database.type" value="${database.type}" />
-			<property name="parent.base.dir" value="${basedir}/lib" />
+			<property name="parent.base.dir" value="${basedir}/modules/caTissue/lib" />
 			<property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
 			<property name="database.username" value="${database.username}" />
 			<property name="database.password" value="${database.password}" />
@@ -4198,20 +4198,20 @@ Thanking You,
 				<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="alter_bulk_operation_table">
 					<property name="database.driver" value="${mysql.driver.string}" />
 					<property name="database.type" value="${database.type}" />
-					<property name="parent.base.dir" value="${basedir}/lib" />
+					<property name="parent.base.dir" value="${basedir}/modules/caTissue/lib"/>
 					<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 					<property name="database.username" value="${database.username}" />
 					<property name="database.password" value="${database.password}" />
-					<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+					<property name="deploy.temp.dir" value="${basedir}/temp"/>
 				</ant>
 				<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="upgrade_bulk_operation_table">
 					<property name="database.driver" value="${mysql.driver.string}" />
 					<property name="database.type" value="${database.type}" />
-					<property name="parent.base.dir" value="${basedir}/lib" />
+					<property name="parent.base.dir" value="${basedir}/modules/caTissue/lib" />
 					<property name="database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 					<property name="database.username" value="${database.username}" />
 					<property name="database.password" value="${database.password}" />
-					<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+					<property name="deploy.temp.dir" value="${basedir}/temp"/>
 				</ant>
 			</then>
 			<elseif>
@@ -4220,21 +4220,21 @@ Thanking You,
 				<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="alter_bulk_operation_table">
 					<property name="database.driver" value="${oracle.driver.string}" />
 					<property name="database.type" value="${database.type}" />
-					<property name="parent.base.dir" value="${basedir}/lib" />
+					<property name="parent.base.dir" value="${basedir}/modules/caTissue/lib" />
 					<property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
 					<property name="database.username" value="${database.username}" />
 					<property name="database.password" value="${database.password}" />
-					<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+					<property name="deploy.temp.dir" value="${basedir}/temp"/>
 					<property name="rdbms" value="oracle" />
 				</ant>
 				<ant dir="${temp.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="upgrade_bulk_operation_table">
 					<property name="database.driver" value="${oracle.driver.string}" />
 					<property name="database.type" value="${database.type}" />
-					<property name="parent.base.dir" value="${basedir}/lib" />
+					<property name="parent.base.dir" value="${basedir}/modules/caTissue/lib"/>
 					<property name="database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
 					<property name="database.username" value="${database.username}" />
 					<property name="database.password" value="${database.password}" />
-					<property name="deploy.temp.dir" value="${basedir}/deploytempCatissuecore"/>
+					<property name="deploy.temp.dir" value="${basedir}/temp"/>
 					<property name="rdbms" value="oracle" />
 				</ant>
 			</then>

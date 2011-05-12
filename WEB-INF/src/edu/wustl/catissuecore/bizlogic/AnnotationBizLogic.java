@@ -421,7 +421,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	 * @throws DynamicExtensionsSystemException exception.
 	 * @throws DAOException exception.
 	 */
-	public void createHookEntityObject(String dynExtRecordId, String dynEntContainerId,
+	public Long createHookEntityObject(String dynExtRecordId, String dynEntContainerId,
 			String staticEntityName, String selectedStaticEntityRecordId, String staticEntityId,
 			final SessionDataBean sessionDataBean) throws BizLogicException,
 			DynamicExtensionsSystemException, DAOException
@@ -444,6 +444,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 
 		associateRecords(Long.valueOf(dynEntContainerId), recordEntryId, Long
 				.valueOf(dynExtRecordId), Long.valueOf(staticEntityId));
+		return recordEntryId;
 	}
 
 	/**
@@ -453,7 +454,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	 * @param formName name of the form.
 	 * @return bean with name as static entity name & value as its entity id.
 	 * @throws DynamicExtensionsSystemException exception.
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	public NameValueBean getHookEntityNameValueBeanForCategory(Long rootContainerId, String formName)
 			throws DynamicExtensionsSystemException, ApplicationException
@@ -502,7 +503,7 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 		else
 		{
-			throw new ApplicationException(ErrorKey.getErrorKey("bo.error.no.hookentity"), null,
+			throw new ApplicationException(ErrorKey.getErrorKeyObject("bo.error.no.hookentity"), null,
 					formName);
 		}
 		return bean;

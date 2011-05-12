@@ -4554,7 +4554,7 @@ Thanking You,
 				<replacefilter token="${token.database.password}" value="${database.password}" />
 			</replace>
 
-			<echo message="${entityNameOrFile}"></echo>
+			
 			<java classname="edu.wustl.catissuecore.util.BOTemplateGeneratorClient" fork="true" maxmemory="1024M" failonerror="true">
 				<arg value="entity"/>
 				<arg value="${entityNameOrFile}" />

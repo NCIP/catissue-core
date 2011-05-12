@@ -133,7 +133,7 @@ public class BOTemplateGeneratorClient
 	 * @param args arguments containing mapping XML file and template XML file.
 	 * @param categoryName category name to generate category template.
 	 * @throws DynamicExtensionsSystemException throw DESystemException.
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	private static void createCategoryTemplate(String categoryName, String mappingxml)
 			throws DynamicExtensionsSystemException, ApplicationException
@@ -157,14 +157,18 @@ public class BOTemplateGeneratorClient
 	 * @param args arguments containing mapping XML file and template XML file.
 	 * @param entityName category name to generate category template.
 	 * @throws DynamicExtensionsSystemException throw DESystemException.
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	private static void createEntityTemplate(String entityName, String mappingxml)
 			throws DynamicExtensionsSystemException, ApplicationException
 	{
-		System.out.println("test " + entityName);
+
 		String[] split = entityName.split(":");
-		System.out.println(split[0]);
+		if(split.length<2)
+		{
+			throw new BulkOperationException(ApplicationProperties.getValue(
+					"bo.error.entityname.format"));
+		}
 		EntityGroupInterface entityGroup = EntityManager.getInstance().getEntityGroupByName(
 				split[0]);
 		if (entityGroup == null)
@@ -192,11 +196,16 @@ public class BOTemplateGeneratorClient
 	 */
 	private static void validateArguments(String[] args) throws BulkOperationException
 	{
-		final Integer minArgLength = 2;
+		final Integer minArgLength = 3;
 		if (args.length < minArgLength)
 		{
 			throw new BulkOperationException(ApplicationProperties.getValue(
 					"errors.invalid.arguement.numbers", String.valueOf(minArgLength)));
+		}
+		if("".equals(args[1].trim()))
+		{
+			throw new BulkOperationException(ApplicationProperties.getValue(
+					"bo.error.no.formname"));
 		}
 	}
 
@@ -206,7 +215,7 @@ public class BOTemplateGeneratorClient
 	 * @param xmlFilePath XML Template file path.
 	 * @param mappingXML XML file required for generation of XML template.
 	 * @throws DynamicExtensionsSystemException throws DESystemException.
-	 * @throws ApplicationException 
+	 * @throws ApplicationException
 	 */
 	public static void generateXMLAndCSVTemplate(String baseDir, String mappingXML, Object object)
 			throws DynamicExtensionsSystemException, ApplicationException

@@ -151,7 +151,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	 * @throws Exception Exception
 	 */
 	@Override
-	protected List<Object> hookStaticDynExtObject(Object hookInformationObject)
+	protected Long hookStaticDynExtObject(Object hookInformationObject)
 			throws DynamicExtensionsSystemException, ApplicationException
 	{
 		HookingInformation hookInformation = (HookingInformation) hookInformationObject;
@@ -159,7 +159,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 		Long containerId;
 		NameValueBean hookEntityBean;
 		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-		if (!"".equals(hookInformation.getEntityGroupName()))
+		if (hookInformation.getEntityGroupName()!=null && !"".equals(hookInformation.getEntityGroupName()))
 		{
 			EntityGroupInterface entityGroup = EntityCache.getInstance().getEntityGroupByName(
 					hookInformation.getEntityGroupName());
@@ -182,11 +182,11 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 		//write logic to find exact hook entity
 		Long selectedStaticEntityRecordId = getSelectedStaticEntityRecordId(hookEntityBean,
 				hookInformation);
-		bizLogic.createHookEntityObject(dynExtObjectId.toString(), containerId.toString(),
+		Long recordEntryId = bizLogic.createHookEntityObject(dynExtObjectId.toString(), containerId.toString(),
 				hookEntityBean.getName(), selectedStaticEntityRecordId.toString(), hookEntityBean
 						.getValue(), hookInformation.getSessionDataBean());
 
-		return null;
+		return recordEntryId;
 	}
 
 	/**
@@ -399,7 +399,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	{
 		Long recordIdentifier = null;
 		CategoryManager.getInstance();
-		CategoryInterface categoryInterface = CategoryManager.getInstance().getCategoryByName(
+		CategoryInterface categoryInterface = EntityCache.getInstance().getCategoryByName(
 				categoryName);
 
 		if (categoryInterface == null)

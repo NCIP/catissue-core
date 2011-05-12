@@ -1444,7 +1444,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				+ CollectionProtocolRegistration.class.getName()
 				+ " as cpr where cpr.protocolParticipantIdentifier = '"
 				+ ppi
-				+ "' and cpr.collectionProtocol.title= '"+ cpLabel+"' and cpr.activityStatus <> '"
+				+ "' and cpr.collectionProtocol.shortTitle= '"+ cpLabel+"' and cpr.activityStatus <> '"
 				+ Status.ACTIVITY_STATUS_DISABLED.toString()
 				+ "' ";
 
