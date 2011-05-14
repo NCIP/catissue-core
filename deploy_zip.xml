@@ -4188,6 +4188,7 @@ Thanking You,
 	</target>
 	
 	<target name="upgarde_db_from_v1.2_to_v1.2.1" depends="upgrade_bulk_operation" description="Target for Application and Database Upgrade from caTissue v1.2 to v1.2.1">
+		<antcall target="upgrade_category_entity_names"></antcall>
 	</target>
 
 	<target name="upgrade_bulk_operation" description="Executes the Bulk Operation update commands.">

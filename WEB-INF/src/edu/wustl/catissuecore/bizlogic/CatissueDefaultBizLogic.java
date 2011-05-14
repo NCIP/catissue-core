@@ -24,7 +24,9 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Constants;
@@ -34,6 +36,7 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
@@ -523,6 +526,26 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	{
 		super.delete(obj);
 		this.refreshTitliSearchIndex(TitliSearchConstants.TITLI_DELETE_OPERATION, obj);
+	}
+
+	protected List executeQuery(String query,List<ColumnValueBean> columnValueBean) throws ApplicationException
+	{
+		DAO dao =null;
+		List results = null;
+		try
+		{
+			dao = AppUtility.openDAOSession(null);
+			results = dao.executeQuery(query, columnValueBean);
+		}
+		catch (DAOException daoExp)
+		{
+			new ApplicationException(ErrorKey.getErrorKey(daoExp.getErrorKeyName()), daoExp, daoExp.getMsgValues());
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
+		return results;
 	}
 
 }

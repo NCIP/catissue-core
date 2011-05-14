@@ -63,6 +63,7 @@ import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.AuditException;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.global.Permissions;
@@ -1433,22 +1434,23 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 	 * @param cpLabel collection protocol Label.
 	 * @param ppi ppi of the participant.
 	 * @return id of the paticiapnt.
-	 * @throws BizLogicException exception.
+	 * @throws ApplicationException
 	 */
-	public Long getParticipantIdByPPI(String cpLabel,String ppi) throws BizLogicException
+	public Long getParticipantIdByPPI(String cpLabel,String ppi) throws ApplicationException
 	{
 		Long participantId = null;
 		if(ppi!=null && cpLabel!=null)
 		{
 			final String hql = "select cpr.participant.id from "
 				+ CollectionProtocolRegistration.class.getName()
-				+ " as cpr where cpr.protocolParticipantIdentifier = '"
-				+ ppi
-				+ "' and cpr.collectionProtocol.shortTitle= '"+ cpLabel+"' and cpr.activityStatus <> '"
+				+ " as cpr where cpr.protocolParticipantIdentifier = ? and cpr.collectionProtocol.shortTitle= ? and cpr.activityStatus <> '"
 				+ Status.ACTIVITY_STATUS_DISABLED.toString()
 				+ "' ";
 
-			List<Long> 	list = this.executeQuery(hql);
+			List<ColumnValueBean> columnValueBean = new ArrayList<ColumnValueBean>();
+			columnValueBean.add(new ColumnValueBean("ppi",ppi));
+			columnValueBean.add(new ColumnValueBean("shortTitle",cpLabel));
+			final List<Long> list = this.executeQuery(hql,columnValueBean);
 			if(list==null || list.isEmpty())
 			{
 				 throw new BizLogicException(ErrorKey.getErrorKey("invalid.ppi.participant"), null,

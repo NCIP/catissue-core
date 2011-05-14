@@ -195,10 +195,10 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	 * @param hookEntityBean bean of the hooking entity details.
 	 * @param hookInformation hooking information given by user in data csv.
 	 * @return id of the hook entity.
-	 * @throws BizLogicException exception.
+	 * @throws ApplicationException
 	 */
 	private Long getSelectedStaticEntityRecordId(NameValueBean hookEntityBean,
-			HookingInformation hookInformation) throws BizLogicException
+			HookingInformation hookInformation) throws ApplicationException
 	{
 		String cpLabel = (String) hookInformation.getDataHookingInformation().get(
 				BulkOperationConstants.COLLECTION_PROTOCOL_LABEL);
@@ -224,10 +224,10 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	 * It will return the Id of the specimen retrieving it from the given hooking information.
 	 * @param hookInformation hooking information given by user.
 	 * @return id of the specimen.
-	 * @throws BizLogicException exception.
+	 * @throws ApplicationException
 	 */
 	private Long getSpecimenIdForHooking(HookingInformation hookInformation)
-			throws BizLogicException
+			throws ApplicationException
 	{
 		Long selectedEntityId = (Long) hookInformation.getDataHookingInformation().get(
 				BulkOperationConstants.SPECIMEN_ID);
@@ -267,9 +267,9 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	 * It will return the Id of the SCG retrieving it from the given hooking information.
 	 * @param hookInformation hooking information given by user.
 	 * @return id of the SCG.
-	 * @throws BizLogicException exception.
+	 * @throws ApplicationException
 	 */
-	private Long getSCGIdforHooking(HookingInformation hookInformation) throws BizLogicException
+	private Long getSCGIdforHooking(HookingInformation hookInformation) throws ApplicationException
 	{
 		Long selectedEntityId = (Long) hookInformation.getDataHookingInformation().get(
 				BulkOperationConstants.SCG_ID);
@@ -309,10 +309,10 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	 * It will return the Id of the participant retrieving it from the given hooking information.
 	 * @param hookInformation hooking information given by user.
 	 * @return id of the participant.
-	 * @throws BizLogicException exception.
+	 * @throws ApplicationException
 	 */
 	private Long getParticipantIdForHooking(HookingInformation hookInformation, String cpLabel)
-			throws BizLogicException
+			throws ApplicationException
 	{
 		Long selectedEntityId;
 		ParticipantBizLogic bizLogic = new ParticipantBizLogic();

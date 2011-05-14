@@ -80,6 +80,7 @@ import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
@@ -3359,22 +3360,22 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * It will return the id of the scg with the given name.
 	 * @param scgName name of the scg.
 	 * @return id of the scg for given name.
-	 * @throws BizLogicException exception.
+	 * @throws ApplicationException
 	 */
-	public Long getScgIdFromName(String scgName) throws BizLogicException
+	public Long getScgIdFromName(String scgName) throws ApplicationException
 	{
 		Long scgId = null;
 		if(scgName!=null)
 		{
 			final String hql = "select scg.id from "
 					+ SpecimenCollectionGroup.class.getName()
-					+ " as scg where scg.name = '"
-					+ scgName
-					+ "' and scg.activityStatus <> '"
+					+ " as scg where scg.name = ? and scg.activityStatus <> '"
 					+ Status.ACTIVITY_STATUS_DISABLED.toString()
 					+ "' ";
 
-			final List<Long> list = this.executeQuery(hql);
+			List<ColumnValueBean> columnValueBean = new ArrayList<ColumnValueBean>();
+			columnValueBean.add(new ColumnValueBean("name",scgName));
+			final List<Long> list = this.executeQuery(hql,columnValueBean);
 			if(list==null || list.isEmpty())
 			{
 				throw new BizLogicException(ErrorKey.getErrorKey("invalid.name.scg"), null,
@@ -3390,22 +3391,21 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * It will return the id of the scg with the given barcode.
 	 * @param barcode barcode of the scg.
 	 * @return id of the scg.
-	 * @throws BizLogicException exception.
+	 * @throws ApplicationException
 	 */
-	public Long getScgIdFromBarcode(String barcode) throws BizLogicException
+	public Long getScgIdFromBarcode(String barcode) throws ApplicationException
 	{
 		Long scgId =null;
 		if(barcode!=null)
 		{
 		final String hql = "select scg.id from "
 					+ SpecimenCollectionGroup.class.getName()
-					+ " as scg where scg.barcode = '"
-					+ barcode
-					+ "' and scg.activityStatus <> '"
+					+ " as scg where scg.barcode = ? and scg.activityStatus <> '"
 					+ Status.ACTIVITY_STATUS_DISABLED.toString()
 					+ "' ";
-
-			final List<Long> list = this.executeQuery(hql);
+			List<ColumnValueBean> columnValueBean = new ArrayList<ColumnValueBean>();
+			columnValueBean.add(new ColumnValueBean("barcode",barcode));
+			final List<Long> list = this.executeQuery(hql,columnValueBean);
 			if(list==null || list.isEmpty())
 			{
 				throw new BizLogicException(ErrorKey.getErrorKey("invalid.barcode.scg"), null,
@@ -3441,5 +3441,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		return true;
 	}
+
+
 
 }

@@ -41,6 +41,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 
 /**
  * @author sandeep_chinta
@@ -513,19 +514,20 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	 * It will return the id of the specimen whose label is equal to given specimenLabel.
 	 * @param specimenLabel label of specimen whose id is needed.
 	 * @return id of the specimen.
-	 * @throws BizLogicException exception.
+	 * @throws ApplicationException
 	 */
-	public Long getSpecimenByLabel(String specimenLabel) throws BizLogicException
+	public Long getSpecimenByLabel(String specimenLabel) throws ApplicationException
 	{
 		Long specimenId = null;
 		if (specimenLabel != null)
 		{
 			final String hql = "select specimen.id from " + Specimen.class.getName()
-					+ " as specimen where specimen.label = '" + specimenLabel
-					+ "' and specimen.activityStatus <> '"
+					+ " as specimen where specimen.label = ? and specimen.activityStatus <> '"
 					+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' ";
 
-			final List<Long> list = this.executeQuery(hql);
+			List<ColumnValueBean> columnValueBean = new ArrayList<ColumnValueBean>();
+			columnValueBean.add(new ColumnValueBean("label",specimenLabel));
+			final List<Long> list = this.executeQuery(hql,columnValueBean);
 			if (list == null || list.isEmpty())
 			{
 				throw new BizLogicException(ErrorKey.getErrorKey("invalid.label.specimen"), null,
@@ -541,19 +543,20 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	 * It will return the id of the specimen whose barcode is equal to given specimenBarcode.
 	 * @param specimenBarcode barcode of specimen whose id is needed.
 	 * @return id of the specimen.
-	 * @throws BizLogicException exception.
+	 * @throws ApplicationException
 	 */
-	public Long getSpecimenByBarcode(String specimenBarcode) throws BizLogicException
+	public Long getSpecimenByBarcode(String specimenBarcode) throws ApplicationException
 	{
 		Long specimenId = null;
 		if (specimenBarcode != null)
 		{
 			final String hql = "select specimen.id from " + Specimen.class.getName()
-					+ " as specimen where specimen.barcode = '" + specimenBarcode
-					+ "' and specimen.activityStatus <> '"
+					+ " as specimen where specimen.barcode = ? and specimen.activityStatus <> '"
 					+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' ";
 
-			final List<Long> list = this.executeQuery(hql);
+			List<ColumnValueBean> columnValueBean = new ArrayList<ColumnValueBean>();
+			columnValueBean.add(new ColumnValueBean("barcode",specimenBarcode));
+			final List<Long> list = this.executeQuery(hql,columnValueBean);
 			if (list == null || list.isEmpty())
 			{
 				throw new BizLogicException(ErrorKey.getErrorKey("invalid.barcode.specimen"), null,
