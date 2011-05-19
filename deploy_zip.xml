@@ -472,12 +472,13 @@
 
 	<target name="clean_server" description="deletes the WAR file and cache from server, clean-up the server ">
 		<delete file="${jboss.server.url}/deploy/catissuecore.war" />
-		<if>
+		<delete file="${jboss.server.url}/deploy/cas.war" quiet="true"/>
+		<!--<if>
 			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
 			<then>
-				<delete file="${jboss.server.url}/deploy/cas.war" />
+				
 			</then>
-		</if>
+		</if>-->
 		<delete file="${jboss.server.url}/deploy/dynamicExtensions.war" />
 		<delete file="${jboss.server.url}/deploy/caTissuePrintWebService.war" />
 		<delete file="${jboss.server.url}/deploy/pathologySCG.war" />
@@ -972,13 +973,13 @@
 		</tstamp>
 		<echo>after cacore: ${after_cacore}</echo>
 		<antcall target="de_integrate_app" />
-		<if>
+		<!--<if>
 			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
 			<then>
 				<antcall target="deploy_cas" />
 			</then>
 		</if>
-		<antcall target="integrate_cas" />
+		<antcall target="integrate_cas" />-->
 		<antcall target="build_war" />
 		<antcall target="jboss_configuration" />
 		<antcall target="send_mail" />
@@ -1348,7 +1349,7 @@
 				<include name="properties-service.xml" />
 			</fileset>
 		</copy>
-		<if>
+		<!--<if>
 			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
 			<then>
 				<copy todir="${jboss.server.url}/deploy" overwrite="true">
@@ -1357,7 +1358,7 @@
 					</fileset>
 				</copy>
 			</then>
-		</if>
+		</if>-->
 		<delete file="${jboss.server.url}/lib/hibernate2.jar" />
 	</target>
 
@@ -4312,7 +4313,7 @@ Thanking You,
 		<antcall target="upgrade_db_maincontainer_data_fixes"/>
 	</target>
 
-	<target name="deploy_cas" description="Target to integrate cas with the application">
+	<!--<target name="deploy_cas" description="Target to integrate cas with the application">
 		<echo message="Deploy CAS with the application...." />
 
 		<unwar src="${base.dir}/modules/CAS/lib/cas.war" dest="${temp.dir}/cas" />
@@ -4401,7 +4402,7 @@ Thanking You,
 				</if>
 			</else>
 		</if>
-		<!--<if>
+		<!<if>
 			<equals arg1="yes" arg2="${cas.jboss.container.secure}" />
 			<then>
 				<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
@@ -4427,10 +4428,10 @@ Thanking You,
 				</replace>
 			</else>
 		</if>-->
-		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
+		<!--<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml">
 			<replacefilter token="@@catissue-cas-login-serverName@@" value="${jboss.server.host.port}" />
 		</replace>
-	</target>
+	</target>-->
 
 	<!--Target call for both fresh deployment of caTissue-->
 	<target name="deploy_app" depends="deploy_app_catissue">

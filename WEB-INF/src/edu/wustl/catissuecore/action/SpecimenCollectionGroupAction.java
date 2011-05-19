@@ -43,7 +43,6 @@ import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.cdms.integrator.CatissueCdmsIntegrator;
 import edu.wustl.catissuecore.cdms.integrator.CatissueCdmsURLInformationObject;
-import edu.wustl.catissuecore.cdms.integrator.CdmsIntegratorImpl;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -123,7 +122,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			// changes made by Baljeet
 			final String treeRefresh = request.getParameter("refresh");
 			request.setAttribute("refresh", treeRefresh);
-			final String test = (String) request.getParameter("clinicalDiagnosis");
+			final String test = request.getParameter("clinicalDiagnosis");
 			final SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
 			request.setAttribute("clinicalDiagnosis", specimenCollectionGroupForm
 					.getClinicalDiagnosis());
@@ -146,7 +145,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			request.setAttribute(Constants.MENU_SELECTED, "14");
 
 			// Gets the value of the operation parameter.
-			final String operation = (String) request.getParameter(Constants.OPERATION);
+			final String operation = request.getParameter(Constants.OPERATION);
 
 			// Sets the operation attribute to be used in the Edit/View Specimen
 			// Collection Group Page in Advance Search Object View.
@@ -154,7 +153,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			if (operation.equalsIgnoreCase(Constants.ADD))
 			{
 				specimenCollectionGroupForm.setId(0);
-				this.LOGGER.debug("SCGA : set to 0 " + specimenCollectionGroupForm.getId());
+				LOGGER.debug("SCGA : set to 0 " + specimenCollectionGroupForm.getId());
 			}
 
 			boolean isOnChange = false;
@@ -268,7 +267,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			// Resolved Lazy
 			// ----collectionProtocolRegistration.getConsentTierResponseCollection()
 
-			final List consentTierResponseList = (List) dao.retrieveAttribute(
+			final List consentTierResponseList = dao.retrieveAttribute(
 					CollectionProtocolRegistration.class, "id", collectionProtocolRegistration
 							.getId(), "elements(consentTierResponseCollection)");
 
@@ -481,7 +480,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 						final long pID = cpr.getParticipant().getId().longValue();
 						final String ppID = cpr.getProtocolParticipantIdentifier();
 
-						this.LOGGER.debug("cpID : " + cpID + "   ||" + "  pID : " + pID
+						LOGGER.debug("cpID : " + cpID + "   ||" + "  pID : " + pID
 								+ "    || ppID : " + ppID);
 
 						specimenCollectionGroupForm.setCollectionProtocolId(cpID);
@@ -743,7 +742,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			{
 				final CollectionProtocol collectionProtocol = (CollectionProtocol) cPObject;
 				collectionProtocolTitle = collectionProtocol.getTitle();
-				collectionProtocolName = (String) collectionProtocol.getShortTitle();
+				collectionProtocolName = collectionProtocol.getShortTitle();
 				specimenCollectionGroupForm.setCollectionProtocolName(collectionProtocolName);
 			}
 
@@ -1046,7 +1045,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 * @throws BulkOperationException
 	 */
@@ -1509,7 +1508,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			final Iterator iter = list.iterator();
 			while (iter.hasNext())
 			{
-				final Object identifier = (Object) iter.next();
+				final Object identifier = iter.next();
 				if (identifier != null)
 				{
 					return identifier.toString();

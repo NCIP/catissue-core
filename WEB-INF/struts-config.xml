@@ -24,7 +24,7 @@ PUBLIC
 		<form-bean name="domainObjectListForm" type="edu.wustl.catissuecore.actionForm.DomainObjectListForm"/>
 		<form-bean name="departmentForm" type="edu.wustl.catissuecore.actionForm.DepartmentForm"/>
 		<form-bean name="loginForm" type="edu.wustl.catissuecore.actionForm.LoginForm"/>
-		<form-bean name="casLoginForm" type="edu.wustl.catissuecore.actionForm.CasLoginForm"/>
+		<!-- <form-bean name="casLoginForm" type="edu.wustl.catissuecore.actionForm.CasLoginForm"/> -->
 		<form-bean name="newSpecimenForm" type="edu.wustl.catissuecore.actionForm.NewSpecimenForm"/>
 		<form-bean name="createSpecimenForm" type="edu.wustl.catissuecore.actionForm.CreateSpecimenForm"/>
 		<form-bean name="summaryForm" type="edu.wustl.catissuecore.actionForm.SummaryForm"/>
@@ -1149,7 +1149,7 @@ PUBLIC
 			<forward name="SCG" path="/GotoSCG.do" />
 		</action>
 
-		<action path="/CasLogin"
+		<!-- <action path="/CasLogin"
 			type="edu.wustl.catissuecore.action.CasLoginAction"
 			name="casLoginForm"
 			validate="true"
@@ -1165,7 +1165,7 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.mainTitlePageDef" />
 			<forward name="WashU" path="/SignUp.do?userFrom=WashU&amp;pageOf=pageOfSignUp&amp;operation=add" />
 			<forward name="SCG" path="/GotoSCG.do" />
-		</action>
+		</action> -->
 
 		<action path="/ShowMigrationPage"
 					type="edu.wustl.migrator.action.ShowMigrationPageAction"
@@ -5711,7 +5711,7 @@ PUBLIC
 			name="loginForm"
 			validate="false"
 			scope="request">
-			<forward name="login" path="/CasLogin.do?pageOf=SCG" />
+			<forward name="login" path="/Login.do?pageOf=SCG" />
 		</action>
 
 	   <action path="/AjaxAction" type="edu.wustl.catissuecore.action.CaTissueAjaxAction"

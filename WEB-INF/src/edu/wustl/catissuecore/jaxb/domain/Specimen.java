@@ -110,30 +110,30 @@ public class Specimen {
 
     protected long id;
     @XmlElement(name = "class")
-    protected String clazz;
+    protected String clazz="";
     @XmlElement
-    protected String type;
+    protected String type="";
     @XmlElement
-    protected String pathologicalStatus;
+    protected String pathologicalStatus="";
     protected double quantity;
     protected boolean isAvailable;
     @XmlElement
-    protected String tissueSite;
+    protected String tissueSite="";
     @XmlElement
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar collectionDate;
     @XmlElement
-    protected String accessionNumber;
+    protected String accessionNumber="";
     @XmlElement
-    protected String clinicalDiagnosis;
+    protected String clinicalDiagnosis="";
     @XmlElement
-    protected String clinicalStatus;
+    protected String clinicalStatus="";
     @XmlElement
-    protected String participantEmpi;
+    protected String participantEmpi="";
     @XmlElement
-    protected String storageSiteName;
+    protected String storageSiteName="";
     @XmlElement
-    protected String storageSiteCoordinator;
+    protected String storageSiteCoordinator="";
 
     /**
      * Gets the value of the id property.
@@ -172,7 +172,10 @@ public class Specimen {
      *
      */
     public void setClazz(String value) {
-        clazz = value;
+    	if(value!=null)
+		{
+			clazz = value;
+		}
     }
 
     /**
@@ -196,7 +199,10 @@ public class Specimen {
      *
      */
     public void setType(String value) {
-        type = value;
+    	if(value!=null)
+		{
+			type = value;
+		}
     }
 
     /**
@@ -220,7 +226,10 @@ public class Specimen {
      *
      */
     public void setPathologicalStatus(String value) {
-        pathologicalStatus = value;
+    	if(value!=null)
+		{
+			pathologicalStatus = value;
+		}
     }
 
     /**
@@ -236,6 +245,7 @@ public class Specimen {
      *
      */
     public void setQuantity(double value) {
+
         quantity = value;
     }
 
@@ -276,7 +286,10 @@ public class Specimen {
      *
      */
     public void setTissueSite(String value) {
-        tissueSite = value;
+    	if(value!=null)
+		{
+			tissueSite = value;
+		}
     }
 
     /**
@@ -312,6 +325,7 @@ public class Specimen {
      *
      */
     public String getAccessionNumber() {
+
         return accessionNumber;
     }
 
@@ -324,7 +338,10 @@ public class Specimen {
      *
      */
     public void setAccessionNumber(String value) {
-        accessionNumber = value;
+    	if(value!=null)
+		{
+			accessionNumber = value;
+		}
     }
 
     /**
@@ -348,7 +365,10 @@ public class Specimen {
      *
      */
     public void setClinicalDiagnosis(String value) {
-        clinicalDiagnosis = value;
+    	if(value!=null)
+		{
+			clinicalDiagnosis = value;
+		}
     }
 
     /**
@@ -372,7 +392,10 @@ public class Specimen {
      *
      */
     public void setClinicalStatus(String value) {
-        clinicalStatus = value;
+    	if(value!=null)
+		{
+			clinicalStatus = value;
+		}
     }
 
     /**
@@ -396,7 +419,10 @@ public class Specimen {
      *
      */
     public void setParticipantEmpi(String value) {
-        participantEmpi = value;
+    	if(value!=null)
+		{
+			participantEmpi = value;
+		}
     }
 
     /**
@@ -420,7 +446,10 @@ public class Specimen {
      *
      */
     public void setStorageSiteName(String value) {
-        storageSiteName = value;
+    	if(value!=null)
+		{
+			storageSiteName = value;
+		}
     }
 
     /**
@@ -444,7 +473,10 @@ public class Specimen {
      *
      */
     public void setStorageSiteCoordinator(String value) {
-        storageSiteCoordinator = value;
+    	if(value!=null)
+		{
+			storageSiteCoordinator = value;
+		}
     }
 
 }

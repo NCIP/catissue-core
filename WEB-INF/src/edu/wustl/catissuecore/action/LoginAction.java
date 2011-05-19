@@ -86,15 +86,13 @@ public class LoginAction extends XSSSupportedAction
             {
                 cleanSession(request);
                 LoginAction.LOGGER.info("Inside Login Action, Just before validation");
+                forwardTo = processUserLogin(form, request);
 
-                if (isRequestFromClinportal(request))
-                {
-                    forwardTo = Constants.SUCCESS;
-                }
-                else
-                {
-                    forwardTo = processUserLogin(form, request);
-                }
+                String pageOf = request.getParameter(Constants.PAGE_OF);
+                if (pageOf != null && pageOf.equals(CDMSIntegrationConstants.SCG))
+				{
+					forwardTo=Constants.SCG;
+				}
             }
             catch (final Exception ex)
             {

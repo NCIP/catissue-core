@@ -304,6 +304,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<filter-name>NoActionFilter</filter-name>
 		<url-pattern>/CreateCategoryAction.do</url-pattern>
 	</filter-mapping>
+<!-- 
 
 	<filter>
 		<filter-name>CASFilter</filter-name>
@@ -325,7 +326,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<filter-name>CASFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
-	<!-- Filter for CAS configuration finish -->
+	 Filter for CAS configuration finish -->
 
 	<!-- FLEX Configuration START-->
 	<context-param>
