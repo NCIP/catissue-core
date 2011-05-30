@@ -631,7 +631,7 @@
 			<replacefilter token="@@ADMIN-EMAILADDRESS@@" value="${email.administrative.emailAddress}" />
 			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
 			<replacefilter token="@@MAILSERVER-EMAILADDRESS@@" value="${email.mailServer}" />
-			<!--replacefilter token="@@IDP-ENABLED@@" value="${idp.enabled}" /> -->
+			<replacefilter token="@@IDP-ENABLED@@" value="${idp.enabled}" />
 			<replacefilter token="@@SESSION-TIME-OUT@@" value="${session.timeout}" />
 			<replacefilter token="@@APP-ADDITIONAL-INFO@@" value="${app.additional.info}" />
 			<replacefilter token="@@integrationEnabled@@" value="${cdms.integrationEnabled}" />
@@ -854,7 +854,143 @@
 				</then>
 			</elseif>
 		</if>
+		<if>
+					<equals arg1="${idp.enabled}" arg2="true" />
+					<then>
+						<antcall target="IdPWarConfig" />
+					</then>
+					<else>
+						<echo message="IdP is not enabled" />
+					</else>
+				</if>
 	</target>
+
+	<target name="IdPWarConfig">
+		<copy file="${base.dir}/modules/caTissue/conf/catissuecore-properties/log4j.properties" todir="${base.dir}" overwrite="true"/>
+
+				<delete file="${temp.dir}/PasswordManger.properties" quiet="true">
+				</delete>
+				<copy file="${base.dir}/modules/caTissue/conf/catissuecore-properties/IdPConfigure.xml"
+					tofile="${temp.dir}/catissuecore-properties/IdPConfigure.xml"
+					overwrite="true" />
+				<antcall target="encode_pwd_For_IDPConfigureXML">
+					<param name="pwd_file" value="${temp.dir}/encode_catissu_Pwd.txt" />
+					<param name="pwd_key" value="catissue_db_pwd" />
+					<param name="pwd_value" value="${database.password}" />
+				</antcall>
+				<delete file="${temp.dir}/encode_catissue_Pwd.txt">
+				</delete>
+				<antcall target="encode_pwd_For_IDPConfigureXML">
+					<param name="pwd_file" value="${temp.dir}/encode_clin_Pwd.txt" />
+					<param name="pwd_key" value="clinportal_db_pwd" />
+					<param name="pwd_value" value="${clinportal.database.password}" />
+				</antcall>
+				<delete file="${temp.dir}/encode_clin_Pwd.txt">
+				</delete>
+				<antcall target="encode_pwd_For_IDPConfigureXML">
+					<param name="pwd_file" value="${temp.dir}/encode_CSM_Pwd.txt" />
+					<param name="pwd_key" value="csm_db_pwd" />
+					<param name="pwd_value" value="${csm.database.password}" />
+				</antcall>
+				<delete file="${temp.dir}/encode_CSM_Pwd.txt">
+				</delete>
+
+				<property file="${temp.dir}/PasswordManger.properties" />
+				<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties">
+					<include name="IdPConfigure.xml" />
+
+					<replacefilter token="@@clinportal.database.type@@"
+						value="${clinportal.database.type}" />
+					<replacefilter token="@@clinportal.database.name@@"
+						value="${clinportal.database.name}" />
+					<replacefilter token="@@clinportal.database.host@@"
+						value="${clinportal.database.host}" />
+					<replacefilter token="@@clinportal.database.username@@"
+						value="${clinportal.database.username}" />
+					<replacefilter token="@@clinportal.database.password@@"
+						value="${clinportal_db_pwd}" />
+					<replacefilter token="@@clinportal.database.port@@"
+						value="${clinportal.database.port}" />
+
+					<replacefilter token="@@catissuecore.database.type@@"
+						value="${database.type}" />
+					<replacefilter token="@@catissuecore.database.name@@"
+						value="${database.name}" />
+					<replacefilter token="@@catissuecore.database.host@@"
+						value="${database.host}" />
+					<replacefilter token="@@catissuecore.database.username@@"
+						value="${database.username}" />
+					<replacefilter token="@@catissuecore.database.password@@"
+						value="${catissue_db_pwd}" />
+					<replacefilter token="@@catissuecore.database.port@@"
+						value="${database.port}" />
+
+					<replacefilter token="@@csm.database.type@@" value="${csm.database.type}" />
+					<replacefilter token="@@csm.database.name@@" value="${csm.database.name}" />
+					<replacefilter token="@@csm.database.host@@" value="${csm.database.host}" />
+					<replacefilter token="@@csm.database.username@@" value="${csm.database.username}" />
+					<replacefilter token="@@csm.database.password@@" value="${csm_db_pwd}" />
+					<replacefilter token="@@csm.database.port@@" value="${csm.database.port}" />
+				</replace>
+
+				<if>
+					<equals arg1="oracle" arg2="${database.type}" />
+					<then>
+						<replace dir="${temp.dir}/catissuecore-properties"
+							propertyfile="caTissueInstall.properties">
+							<include name="IdPConfigure.xml" />
+							<replacefilter token="@@clinportal.database.driverURL@@"
+								value="${oracle.driver.string}" />
+							<replacefilter token="@@catissuecore.database.driverURL@@"
+								value="${oracle.driver.string}" />
+							<replacefilter token="@@csm.database.driverURL@@"
+								value="${oracle.driver.string}" />
+						</replace>
+					</then>
+					<elseif>
+						<equals arg1="mysql" arg2="${database.type}" />
+						<then>
+							<replace dir="${temp.dir}/catissuecore-properties"
+								propertyfile="caTissueInstall.properties">
+								<include name="IdPConfigure.xml" />
+								<replacefilter token="@@clinportal.database.driverURL@@"
+									value="${mysql.driver.string}" />
+								<replacefilter token="@@catissuecore.database.driverURL@@"
+									value="${mysql.driver.string}" />
+								<replacefilter token="@@csm.database.driverURL@@"
+									value="${mysql.driver.string}" />
+							</replace>
+						</then>
+					</elseif>
+				</if>
+				<delete file="${temp.dir}/PasswordManger.properties">
+				</delete>
+				<delete file="${base.dir}/log4j.properties" quiet="true"/>
+				<delete dir="${base.dir}/@@jbosshome@@" quiet="true" />
+			</target>
+		
+		<!--
+				Encodes given password and write in passwordManager.properties file
+			-->
+			<target name="encode_pwd_For_IDPConfigureXML">
+				<property file="${temp.dir}/PasswordManger.properties" />
+				<java classname="edu.wustl.common.util.global.PasswordManager"
+					fork="true">
+					<classpath>
+						<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+						<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+					<arg value="${pwd_file}" />
+					<arg value="${pwd_value}" />
+				</java>
+
+				<property file="${pwd_file}" />
+				<propertyfile file="${temp.dir}/PasswordManger.properties">
+					<entry key="${pwd_key}" value="${first.admin.encodedPassword}" />
+				</propertyfile>
+			</target>
 
 	<!-- configure titli.properties -->
 	<target name="app_configuration" description="configure titli.properties">
