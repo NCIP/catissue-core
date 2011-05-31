@@ -62,7 +62,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 	/**
 	 * logger.
 	 */
-	private static transient final Logger LOGGER = Logger.getCommonLogger(CollectionProtocolAction.class);
+	private static transient final Logger LOGGER = Logger
+			.getCommonLogger(CollectionProtocolAction.class);
 	// This will keep track of no of consents for a particular participant
 	/**
 	 * consentCounter.
@@ -93,7 +94,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		final String tabSel = request.getParameter("tabSel");
 		request.setAttribute("tabSel", tabSel);
 		final List<NameValueBean> clinicalDiagnosis = new ArrayList<NameValueBean>();
-		request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES, clinicalDiagnosis);
+		request.setAttribute(edu.common.dynamicextensions.ui.util.Constants.SELECTED_VALUES,
+				clinicalDiagnosis);
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
 		String invokeFunction = request.getParameter("invokeFunction");
@@ -114,8 +116,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		final CollectionProtocolBean cpBean = (CollectionProtocolBean) newSession
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 
-		if (operation == null && cpBean != null
-				&& cpBean.getOperation().equals("update"))
+		if (operation == null && cpBean != null && cpBean.getOperation().equals("update"))
 		{
 			operation = Constants.EDIT;
 		}
@@ -124,9 +125,11 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			operation = Constants.ADD;
 		}
 		//bug 18481 start
-        boolean condition1 = (request.getParameter(Constants.ERROR_PAGE_FOR_CP)!=null && !request.getParameter(Constants.ERROR_PAGE_FOR_CP).equals(""));
-		boolean condition2 = request.getParameter(Constants.REFRESH_WHOLE_PAGE)!=null && request.getParameter(Constants.REFRESH_WHOLE_PAGE).equals(Constants.FALSE);
-		if(condition1 && !condition2)
+		boolean condition1 = (request.getParameter(Constants.ERROR_PAGE_FOR_CP) != null && !request
+				.getParameter(Constants.ERROR_PAGE_FOR_CP).equals(""));
+		boolean condition2 = request.getParameter(Constants.REFRESH_WHOLE_PAGE) != null
+				&& request.getParameter(Constants.REFRESH_WHOLE_PAGE).equals(Constants.FALSE);
+		if (condition1 && !condition2)
 		{
 			invokeFunction = "cp";
 		}
@@ -140,7 +143,6 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			this.initCleanSession(request);
 		}
 
-
 		this.LOGGER.debug("operation in coll prot action" + operation);
 		// Sets the operation attribute to be used in the Edit/View Collection
 		// Protocol Page in Advance Search Object View.
@@ -153,7 +155,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			// Resolved lazy --- collectionProtocol.getConsentTierCollection();
 			ColumnValueBean columnValueBean = new ColumnValueBean(collectionProtocol.getId());
 			final Collection consentTierCollection = (Collection) bizLogic.retrieveAttribute(
-					CollectionProtocol.class,collectionProtocol.getId(),
+					CollectionProtocol.class, collectionProtocol.getId(),
 					"elements(consentTierCollection)");
 			final Map tempMap = this.prepareConsentMap(consentTierCollection);
 			collectionProtocolForm.setConsentValues(tempMap);
@@ -239,9 +241,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		if (!"add".equals(operation) && collectionProtocolForm != null)
 		{
 
-				appendingPath = "/CollectionProtocolSearch.do?operation="
-						+ "search&pageOf=pageOfCollectionProtocol&id="
-						+ collectionProtocolForm.getId();
+			appendingPath = "/CollectionProtocolSearch.do?operation="
+					+ "search&pageOf=pageOfCollectionProtocol&id=" + collectionProtocolForm.getId();
 		}
 
 		final boolean readOnlyValue = false;
@@ -272,7 +273,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		final Integer collectionProtocolDay = Integer.valueOf(CommonUtilities
 				.getDay(currentCollectionProtocolDate));
 
-		final Integer collectionProtocolEndDateYear =Integer.valueOf(CommonUtilities
+		final Integer collectionProtocolEndDateYear = Integer.valueOf(CommonUtilities
 				.getYear(collectionProtocolEndDate));
 		final Integer collectionProtocolEndDateMonth = Integer.valueOf(CommonUtilities
 				.getMonth(collectionProtocolEndDate));
@@ -399,10 +400,10 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		collectionProtocolForm.setPrincipalInvestigatorId(collectionProtocolBean
 				.getPrincipalInvestigatorId());
-		collectionProtocolForm.setCoordinatorIds(collectionProtocolBean
-				.getCoordinatorIds());
+		collectionProtocolForm.setCoordinatorIds(collectionProtocolBean.getCoordinatorIds());
 		/**For Clinical Diagnosis Subset  **/
-		collectionProtocolForm.setProtocolCoordinatorIds(collectionProtocolBean.getClinicalDiagnosis());
+		collectionProtocolForm.setProtocolCoordinatorIds(collectionProtocolBean
+				.getClinicalDiagnosis());
 		CollectionProtocolUtil.updateClinicalDiagnosis(request, collectionProtocolBean);
 
 		collectionProtocolForm.setTitle(collectionProtocolBean.getTitle());
@@ -416,10 +417,12 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setEndDate(collectionProtocolBean.getEndDate());
 		collectionProtocolForm.setAliqoutInSameContainer(collectionProtocolBean
 				.isAliqoutInSameContainer());
-//		collectionProtocolForm.setGenerateLabel(collectionProtocolBean.isGenerateLabel());
+		//		collectionProtocolForm.setGenerateLabel(collectionProtocolBean.isGenerateLabel());
 		collectionProtocolForm.setSpecimenLabelFormat(collectionProtocolBean.getLabelFormat());
-		collectionProtocolForm.setDerivativeLabelFormat(collectionProtocolBean.getDerivativeLabelFormat());
-		collectionProtocolForm.setAliquotLabelFormat(collectionProtocolBean.getAliquotLabelFormat());
+		collectionProtocolForm.setDerivativeLabelFormat(collectionProtocolBean
+				.getDerivativeLabelFormat());
+		collectionProtocolForm
+				.setAliquotLabelFormat(collectionProtocolBean.getAliquotLabelFormat());
 		// For Consent Tab
 		collectionProtocolForm
 				.setConsentTierCounter(collectionProtocolBean.getConsentTierCounter());
@@ -433,7 +436,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 				.getStudyCalendarEventPoint());
 		collectionProtocolForm.setParentCollectionProtocolId(collectionProtocolBean
 				.getParentCollectionProtocolId());
-
+		collectionProtocolForm.setIsEMPIEnable(collectionProtocolBean.getIsEMPIEnable());
 		return mapping.findForward(pageOf);
 	}
 

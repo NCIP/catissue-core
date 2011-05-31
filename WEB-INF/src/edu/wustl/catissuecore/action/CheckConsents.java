@@ -160,6 +160,10 @@ public class CheckConsents extends BaseAction
 				{
 					out.print(Constants.CONSENT_WAIVED);//Consent Waived
 				}
+				else if (collectionProtocol.getIsEMPIEnabled().booleanValue())
+				{
+					out.print(Constants.IS_EMPI_ENABLED);
+				}
 				else if (consentTierStatusCollection.isEmpty())
 				{
 					//Writing to response

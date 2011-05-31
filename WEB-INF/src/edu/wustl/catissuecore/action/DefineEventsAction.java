@@ -76,10 +76,10 @@ public class DefineEventsAction extends BaseAction
 			CollectionProtocolBean cpBean)
 	{
 		cpBean.setPrincipalInvestigatorId(cpForm.getPrincipalInvestigatorId());
-		long[] coordinatorsId = (long[])cpForm.getCoordinatorIds();
-		if(coordinatorsId != null && coordinatorsId[0] != 0)
+		long[] coordinatorsId = cpForm.getCoordinatorIds();
+		if (coordinatorsId != null && coordinatorsId[0] != 0)
 		{
-		  cpBean.setCoordinatorIds(cpForm.getCoordinatorIds());
+			cpBean.setCoordinatorIds(cpForm.getCoordinatorIds());
 		}
 		/**For Clinical Diagnosis Subset  **/
 		cpBean.setClinicalDiagnosis(cpForm.getProtocolCoordinatorIds());
@@ -95,6 +95,8 @@ public class DefineEventsAction extends BaseAction
 		cpBean.setDerivativeLabelFormat(cpForm.getDerivativeLabelFormat());
 		cpBean.setAliquotLabelFormat(cpForm.getAliquotLabelFormat());
 		cpBean.setAliqoutInSameContainer(cpForm.isAliqoutInSameContainer());
+		/** Name:Amol */
+		cpBean.setIsEMPIEnable(cpForm.getIsEMPIEnable());
 		//For Consent Tab
 		cpBean.setConsentTierCounter(cpForm.getConsentTierCounter());
 		final Map consentMap = CollectionProtocolUtil.sortConsentMap(cpForm.getConsentValues());//bug 8905
