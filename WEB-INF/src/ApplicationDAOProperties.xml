@@ -46,7 +46,7 @@
 			</JDBCDAO>
 			
 		</DAOFactory>
-	 </Application> 
+	 </Application>
 	 
 	<!-- objectProcessingPeriod specifies the time in minutes after which the the processing will rerun recurringly. --> 
  <InterceptorObject objectProcessingPeriod="2">

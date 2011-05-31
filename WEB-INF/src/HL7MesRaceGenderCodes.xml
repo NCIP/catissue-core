@@ -1,0 +1,48 @@
+<properties>
+	<property>
+		<name>Female Gender</name>
+		<value>F</value>
+	</property>
+	<property>
+		<name>Male Gender</name>
+		<value>M</value>
+	</property>
+	<property>
+		<name>Unknown</name>
+		<value>U</value>
+	</property>
+	<property>
+		<name>Unspecified</name>
+		<value>U</value>
+	</property>
+	<property>
+		<name>Asian</name>
+		<value>O</value>
+	</property>
+	<property>
+		<name>American Indian or Alaska Native</name>
+		<value>A</value>
+	</property>
+	<property>
+		<name>Black or African American</name>
+		<value>B</value>
+	</property>
+	<property>
+		<name>White</name>
+		<value>C</value>
+	</property>
+	<property>
+		<name>Native Hawaiian or Other Pacific Islander</name>
+		<value>O</value>
+	</property>
+	<property>
+		<name>Not Reported</name>
+		<value>U</value>
+	</property>
+	<property>
+		<name>Not Specified</name>
+		<value>U</value>
+	</property>
+</properties>
+
+
