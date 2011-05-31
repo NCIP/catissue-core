@@ -1440,6 +1440,11 @@ function setDivWidth()
 	}
 }
 
+function processNextPartForEMPI()
+{
+	document.forms[0].action = "ProcessNextEMPIParticipantsAction.do?operation=processNextParticipant";
+	document.forms[0].submit();
+}
 
 function isHyperLink(str)
 {

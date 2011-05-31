@@ -444,3 +444,17 @@ function getWidth(wd)
 //	alert(newWd);
 	return newWd;
 }
+
+function validateDate(vDate){
+	if(vDate!= null && vDate.value!= null && vDate.value != ''){
+		if(vDate .value.match('^[0-9]\{1,2\}/[0-9]\{1,2\}/[0-9]\{4\}$')){
+		while(vDate.value.indexOf("/")> 0){
+		      if(vDate.value != null && vDate.value != '')
+		           {
+		    	      vDate.value = vDate.value.replace("/","-");
+		           }
+		      }
+		}
+	  }
+	}
+
