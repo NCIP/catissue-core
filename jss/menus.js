@@ -290,6 +290,30 @@ Ext.onReady(function(){
                     ]
                 }
             },
+            {
+                text: 'Process Messages',
+				tooltip:'Process Messages',
+				href:'ProcessMatchedParticipants.do?pageOf=pageOfMatchedParticipant&identifierFieldIndex=0',
+                menu: {        // <-- submenu by nested config object
+                    items: [
+                        // stick any markup in a menu
+                       {
+                            text: 'Registration',
+                            href:'ProcessMatchedParticipants.do?pageOf=pageOfMatchedParticipant&identifierFieldIndex=0'
+                        },
+                       {
+                    	   // Auto load messages menu
+                    	   text: 'Load Clinical Data',
+                   		   href:'FetchXmlMessages.do'
+                       },
+                       {
+                    	   //Administrator message queue menu
+                    	   text: 'Admin Messages Queue',
+                   		   href:'FetchAdminQueueMessages.do'
+                       }
+                    ]
+                }
+            },
               {
                 text: 'Specimen',
 				tooltip:'Edit Specimen',
