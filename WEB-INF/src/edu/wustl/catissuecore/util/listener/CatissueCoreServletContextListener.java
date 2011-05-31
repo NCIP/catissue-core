@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ProtectionGroups;
@@ -99,7 +100,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			IParticipantManagerLookupLogic lookUpLogic = (IParticipantManagerLookupLogic) Utility.getObject(XMLPropertyHandler
 					.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
 			lookUpLogic.initParticipantCache();
-			//initCiderIntegration();
+			initCiderIntegration();
 			logger.info("Initialization complete");
 		}
 		catch (final Exception e)
@@ -111,14 +112,14 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		QueryCoreServletContextListenerUtil.contextInitialized(sce, "java:/query");
 	}
 
-	/*private void initCiderIntegration()
+	private void initCiderIntegration()
 	{
 		if(XMLPropertyHandler.getValue("CiderWmqEnabled").equalsIgnoreCase("true"))
 		{
 			SpecimenWmqProcessor.getInstance();
 		}
 
-	}*/
+	}
 
 	/**
 	 * Initialize caTissue default properties.
@@ -356,7 +357,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			final CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
 					.getInstance();
 			catissueCoreCacheManager.shutdown();
-			//SpecimenWmqProcessor.cleanup();
+			SpecimenWmqProcessor.cleanup();
 		}
 		catch (final CacheException e)
 		{

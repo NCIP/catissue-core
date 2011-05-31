@@ -640,4 +640,32 @@
 		<name>cas.logout.url</name>
 		<value>@@cas.logout.url@@/cas/logout</value>
 	</property>
+	
+	<property>
+		<name>CiderWmqEnabled</name>
+		<value>@@CiderWMQEnabled@@</value>
+	</property>
+	
+	<property>
+		<name>CiderWMQServerName</name>
+		<value>@@CiderWMQServerName@@</value>
+	</property>
+	<!--  properties for cider integration for specimen queue -->
+	<property>
+		<name>CiderWMQMGRName</name>
+		<value>@@CiderWMQMGRName@@</value>
+	</property>
+	<property>
+		<name>CiderWMQChannel</name>
+		<value>@@CiderWMQChannel@@</value>
+	</property>
+	<property>
+		<name>CiderWMQPort</name>
+		<value>@@CiderWMQPort@@</value>
+	</property>
+	<property>
+		<name>CiderOutBoundQueue</name>
+		<value>@@CiderOutBoundQueue@@</value>
+	</property>
+	
 </properties>

@@ -257,6 +257,43 @@
 				<fail message="JAVA_HOME is not set. Please make sure to set JAVA_HOME environment variable to the directory of your local JDK." />
 			</then>
 		</if>
+		<if>
+					<equals arg1="true" arg2="${cider.integration.enabled}" casesensitive="false" />
+					<then>
+						<if>
+									<equals arg1="" arg2="${cider.outbound.queue}" />
+									<then>
+										<fail message="The property 'cider.outbound.queue' can not be empty" />
+									</then>
+								</if>
+								<if>
+									<equals arg1="" arg2="${cider.wmq.channel}" />
+									<then>
+										<fail message="The property 'cider.wmq.channel' can not be empty" />
+									</then>
+								</if>
+
+								<if>
+									<equals arg1="" arg2="${cider.wmq.mgr.name}" />
+									<then>
+										<fail message="The property 'cider.wmq.mgr.name' can not be empty" />
+									</then>
+								</if>
+								<if>
+									<equals arg1="" arg2="${cider.wmq.port}" />
+									<then>
+										<fail message="The property 'cider.wmq.port' can not be empty" />
+									</then>
+								</if>
+								<if>
+									<equals arg1="" arg2="${cider.wmq.server.name}" />
+									<then>
+										<fail message="The property 'cider.wmq.server.name' can not be empty" />
+									</then>
+								</if>
+						
+					</then>
+				</if>
 	</target>
 
 	<!--Target for validation of connection parameters-->
@@ -645,6 +682,14 @@
 			<replacefilter token="@@email.exception.subject@@" value="${email.exception.subject}" />
 
 			<replacefilter token="@@CasKeystorePath@@" value="${cas.server.keystore.path}" />
+			<replacefilter token="@@CiderWMQEnabled@@" value="${cider.integration.enabled}" />
+			<replacefilter token="@@CiderWMQServerName@@" value="${cider.wmq.server.name}" />
+			<replacefilter token="@@CiderWMQMGRName@@" value="${cider.wmq.mgr.name}" />
+			<replacefilter token="@@CiderWMQChannel@@" value="${cider.wmq.channel}" />
+			<replacefilter token="@@CiderWMQPort@@" value="${cider.wmq.port}" />
+			<!--<replacefilter token="@@CiderInBoundQueue@@" value="${cider.inbound.queue}" />-->
+			<replacefilter token="@@CiderOutBoundQueue@@" value="${cider.outbound.queue}" />
+				
 		</replace>
 
 		<!-- CAS logout url-->
