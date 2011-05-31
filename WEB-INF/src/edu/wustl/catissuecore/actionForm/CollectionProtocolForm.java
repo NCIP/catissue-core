@@ -74,8 +74,13 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	private boolean consentWaived = false;
 	//Consent tracking(Virender Mehta)
 
+	private boolean isEMPIEnable = false;
+
 	/** The site ids. */
 	protected long[] siteIds;
+
+	/** Name: Amol Pujari */
+	/** empi  */
 
 	/**
 	 * No argument constructor for CollectionProtocolForm class.
@@ -270,12 +275,18 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		{
 			this.consentWaived = cProtocol.getConsentsWaived().booleanValue();
 		}
-
+		if (cProtocol.getIsEMPIEnabled() == null)
+		{
+			this.isEMPIEnable = false;
+		}
+		else
+		{
+			this.isEMPIEnable = cProtocol.getIsEMPIEnabled().booleanValue();
+		}
 		//Bug #13312
 		this.sequenceNumber = cProtocol.getSequenceNumber();
 		this.type = cProtocol.getType();
 		this.studyCalendarEventPoint = cProtocol.getStudyCalendarEventPoint();
-
 		//this.consentValues = prepareConsentTierMap(cProtocol.getConsentTierCollection());
 	}
 
@@ -547,6 +558,22 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 
 	/**
+	 * @return the isEMPIEnable
+	 */
+	public boolean getIsEMPIEnable()
+	{
+		return this.isEMPIEnable;
+	}
+
+	/**
+	 * @param isEMPIEnable the isEMPIEnable to set
+	 */
+	public void setIsEMPIEnable(final boolean isEMPIEnable)
+	{
+		this.isEMPIEnable = isEMPIEnable;
+	}
+
+	/**
 	 * studyCalendarEventPoint.
 	 *
 	 * @return studyCalendarEventPoint.
@@ -598,7 +625,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		this.sequenceNumber = sequenceNumber;
 	}
 
-
 	/**
 	 * type.
 	 *
@@ -608,10 +634,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		return this.type;
 	}
-
-
-
-
 
 	/**
 	 * Set type.
@@ -641,7 +663,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 	/** Collection Protocol type - Arm, Cycle, Phase. */
 	protected String type;
-
 
 	/** Defines the relative time point in days. */
 	protected Double studyCalendarEventPoint;
@@ -711,6 +732,5 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		return this.sequenceNumber;
 	}
-
 
 }

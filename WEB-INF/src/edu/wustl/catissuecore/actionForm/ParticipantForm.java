@@ -176,6 +176,10 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 
 	private long cpId = -1;
 
+	protected String empiId = "";
+
+	protected String empiIdStatus = null;
+
 	/**
 	 * Initializes an empty ParticipantForm object.
 	 */
@@ -225,6 +229,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 		this.gender = participant.getGender();
 		this.genotype = participant.getSexGenotype();
 		this.setSSN(participant.getSocialSecurityNumber());
+		//		amol changes
+		this.setEmpiId(participant.getEmpiId());
+		this.setEmpiIdStatus(participant.getEmpiIdStatus());
 
 		final Collection raceCollection = participant.getRaceCollection();
 		if (raceCollection != null)
@@ -900,7 +907,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 		}
 		catch (final Exception excp)
 		{
-			ParticipantForm.logger.error(excp.getMessage(),excp);
+			ParticipantForm.logger.error(excp.getMessage(), excp);
 			excp.printStackTrace();
 		}
 
@@ -1251,34 +1258,55 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	{
 		throw new UnsupportedOperationException("Un-Implemented method");
 	}
-//	/**
-//	 * Get EMPI Id
-//	 */
-//	public String getEmpiId()
-//	{
-//		throw new UnsupportedOperationException("Un-Implemented method");
-//	}
-//	/**
-//	 * Get EMPI Status
-//	 */
-//	public String getEmpiIdStatus()
-//	{
-//		throw new UnsupportedOperationException("Un-Implemented method");
-//	}
-//	/**
-//	 * Set EMPI ID
-//	 * @param empiID EMPI ID
-//	 */
-//	public void setEmpiId(String empiID)
-//	{
-//		throw new UnsupportedOperationException("Un-Implemented method");
-//	}
-//	/**
-//	 * @param empiStatus EMPI Status
-//	 */
-//	public void setEmpiIdStatus(String empiStatus)
-//	{
-//		throw new UnsupportedOperationException("Un-Implemented method");
-//	}
 
+	//	/**
+	//	 * Get EMPI Id
+	//	 */
+	//	public String getEmpiId()
+	//	{
+	//		throw new UnsupportedOperationException("Un-Implemented method");
+	//	}
+	//	/**
+	//	 * Get EMPI Status
+	//	 */
+	//	public String getEmpiIdStatus()
+	//	{
+	//		throw new UnsupportedOperationException("Un-Implemented method");
+	//	}
+	//	/**
+	//	 * Set EMPI ID
+	//	 * @param empiID EMPI ID
+	//	 */
+	//	public void setEmpiId(String empiID)
+	//	{
+	//		throw new UnsupportedOperationException("Un-Implemented method");
+	//	}
+	//	/**
+	//	 * @param empiStatus EMPI Status
+	//	 */
+	//	public void setEmpiIdStatus(String empiStatus)
+	//	{
+	//		throw new UnsupportedOperationException("Un-Implemented method");
+	//	}
+
+	public String getEmpiId()
+	{
+		return empiId;
+	}
+
+	public String getEmpiIdStatus()
+	{
+		return empiIdStatus;
+	}
+
+	public void setEmpiId(String empiId)
+	{
+		this.empiId = empiId;
+	}
+
+	public void setEmpiIdStatus(String empiIdStatus)
+	{
+		this.empiIdStatus = empiIdStatus;
+
+	}
 }
