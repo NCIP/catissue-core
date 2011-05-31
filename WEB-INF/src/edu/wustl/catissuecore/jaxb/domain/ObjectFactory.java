@@ -68,7 +68,7 @@ public class ObjectFactory {
         return unmarshaller.unmarshal(new FileInputStream(fileName)) ;
     }
 
-    public void marshelExportDataXml(String packageName,String fileName,Object obj) throws JAXBException, FileNotFoundException
+    public void marshelExportDataXml(String packageName,String fileName,Object obj) throws JAXBException, FileNotFoundException, SAXException
     {
     	JAXBContext context =JAXBContext.newInstance(packageName) ;
         Marshaller marshaller =context.createMarshaller();

@@ -158,7 +158,15 @@
                 hibernate-properties-Site.xml
             containing the additional properties and place it in your merge dir.
         -->
-
+		<!--  Added for eMPI integration -->
+		 		<property
+		            name="facilityId"
+		            type="string"
+		            update="true"
+		            insert="true"
+		            column="FACILITY_ID"
+		            length="50"
+		        />
     </class>
 
 </hibernate-mapping>

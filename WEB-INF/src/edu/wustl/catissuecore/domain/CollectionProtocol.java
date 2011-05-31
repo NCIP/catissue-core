@@ -121,6 +121,9 @@ public class CollectionProtocol extends SpecimenProtocol
 	 */
 	protected Boolean consentsWaived;
 
+	/** Name: Amol */
+	protected Boolean isEMPIEnabled;
+
 	/**
 	 * A collection of registration of a Participant to a Collection Protocol.
 	 */
@@ -331,13 +334,13 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * storageContainerCollection; }
 	 */
 
-
 	public Collection<StudyFormContext> getStudyFormContextCollection()
 	{
 		return studyFormContextCollection;
 	}
 
-	public void setStudyFormContextCollection(Collection<StudyFormContext> studyFormContextCollection)
+	public void setStudyFormContextCollection(
+			Collection<StudyFormContext> studyFormContextCollection)
 	{
 		this.studyFormContextCollection = studyFormContextCollection;
 	}
@@ -438,6 +441,8 @@ public class CollectionProtocol extends SpecimenProtocol
 					.getConsentValues());
 
 			this.consentsWaived = new Boolean(cpForm.isConsentWaived());
+			this.isEMPIEnabled = new Boolean(cpForm.getIsEMPIEnable());
+			//			this.setIsEMPIEnable(cpForm.getIsEMPIEnable());
 		}
 		catch (final Exception excp)
 		{
@@ -621,6 +626,22 @@ public class CollectionProtocol extends SpecimenProtocol
 	}
 
 	/**
+	 * @return the isEMPIEnable
+	 */
+	public Boolean getIsEMPIEnabled()
+	{
+		return this.isEMPIEnabled;
+	}
+
+	/**
+	 * @param isEMPIEnable the isEMPIEnable to set
+	 */
+	public void setIsEMPIEnabled(Boolean isEMPIEnabled)
+	{
+		this.isEMPIEnabled = isEMPIEnabled;
+	}
+
+	/**
 	 * Get the type.
 	 * @return String type.
 	 */
@@ -669,7 +690,8 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * Set the child collection protocol.
 	 * @param childCollectionProtocolCollection which is a Collection.
 	 */
-	public void setChildCollectionProtocolCollection(Collection<CollectionProtocol> childCollectionProtocolCollection)
+	public void setChildCollectionProtocolCollection(
+			Collection<CollectionProtocol> childCollectionProtocolCollection)
 	{
 		this.childCollectionProtocolCollection = childCollectionProtocolCollection;
 	}
@@ -757,7 +779,9 @@ public class CollectionProtocol extends SpecimenProtocol
 	{
 		this.siteCollection = siteCollection;
 	}
+
 	protected Collection<ClinicalDiagnosis> clinicalDiagnosisCollection = new LinkedHashSet<ClinicalDiagnosis>();
+
 	/**
 	 * Fetch the clinical diagnosis set.
 	 * @return clinicalDiagnosisCollection.
@@ -771,7 +795,8 @@ public class CollectionProtocol extends SpecimenProtocol
 	 * Set the clinical diagnosis set.
 	 * @param clinicalDiagnosisCollection clinicalDiagnosisCollection
 	 */
-	public void setClinicalDiagnosisCollection(Collection<ClinicalDiagnosis> clinicalDiagnosisCollection)
+	public void setClinicalDiagnosisCollection(
+			Collection<ClinicalDiagnosis> clinicalDiagnosisCollection)
 	{
 		this.clinicalDiagnosisCollection = clinicalDiagnosisCollection;
 	}

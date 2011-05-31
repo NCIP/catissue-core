@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -33,6 +34,12 @@ import edu.wustl.security.manager.SecurityManagerFactory;
 public class EmailHandler
 {
 	private static final Logger logger = Logger.getCommonLogger(EmailHandler.class);
+	private static final String STR_CONST_CRLF = "\n\n";
+    private static final String KEY_ERROR_COMMON_EMAIL_HANDLER = "error.common.emailHandler";
+    private static final String STR_CONST_DEAR = "Dear ";
+    private static final String KEY_EMAIL_ADMIN_EMAIL_ADDRESS = "email.administrative.emailAddress";
+    private static final String REGARDS_CLINPORT = "email.catissuecore.team";
+    
     /**
      * Creates and sends the user registration approval emails to user and the administrator.
      * @param user The user whose registration is approved.
@@ -458,5 +465,51 @@ public class EmailHandler
         return emailStatus;
     }
 
+    public void sendEMPIAdminUserNotExitsEmail() throws BizLogicException, MessagingException{
+		String subject = ApplicationProperties.getValue("empi.adminuser.notexists.subject");
+		StringBuilder body = new StringBuilder();
+		body.append(STR_CONST_DEAR);
+		body.append("Administrator");
+		body.append(STR_CONST_CRLF);
+		body.append(ApplicationProperties.getValue("empi.adminuser.notexists.body.start"));
+		body.append(STR_CONST_CRLF);
+		body.append(ApplicationProperties.getValue("empi.adminuser.notexists.comments"));
+		body.append(STR_CONST_CRLF);
+		body.append(ApplicationProperties.getValue("empi.adminuser.invalid.body.end"));
+		body.append(STR_CONST_CRLF);
+		body.append(ApplicationProperties.getValue(REGARDS_CLINPORT));
 
+		boolean emailStatus;
+		emailStatus = sendEmailToAdministrator(subject, body.toString());
+
+		if (!emailStatus)
+		{
+			Logger.out.info(ApplicationProperties.getValue("empi.adminuser.notexists.email.failure") + XMLPropertyHandler.getValue(KEY_EMAIL_ADMIN_EMAIL_ADDRESS));
+		}
+	}
+    
+    public void sendEMPIAdminUserClosedEmail(User sendEMPIAdminUserInvalidEmail) throws BizLogicException, MessagingException{
+		String subject = ApplicationProperties.getValue("empi.adminuser.closed.subject");
+		StringBuilder body = new StringBuilder();
+		body.append(STR_CONST_DEAR);
+		body.append(sendEMPIAdminUserInvalidEmail.getLastName() + ",");
+		body.append(sendEMPIAdminUserInvalidEmail.getFirstName());
+		body.append(STR_CONST_CRLF);
+		body.append(ApplicationProperties.getValue("empi.adminuser.closed.body.start"));
+		body.append(STR_CONST_CRLF);
+		body.append(ApplicationProperties.getValue("empi.adminuser.closed.comments"));
+		body.append(STR_CONST_CRLF);
+		body.append(ApplicationProperties.getValue("empi.adminuser.invalid.body.end"));
+		body.append(STR_CONST_CRLF);
+		body.append(ApplicationProperties.getValue(REGARDS_CLINPORT));
+
+		boolean emailStatus;
+		emailStatus = sendEmailToAdministrator(subject, body.toString());
+
+		if (!emailStatus)
+		{
+			Logger.out.info(ApplicationProperties.getValue("empi.adminuser.closed.email.failure")+XMLPropertyHandler.getValue(KEY_EMAIL_ADMIN_EMAIL_ADDRESS));
+		}
+	}
+    
 }

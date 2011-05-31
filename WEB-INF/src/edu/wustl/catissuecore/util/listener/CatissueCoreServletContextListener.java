@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.jms.JMSException;
+import javax.mail.MessagingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -38,15 +40,19 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.ProtectionGroups;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.audit.AuditManager;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exception.ParseException;
-import edu.wustl.common.participant.client.IParticipantManagerLookupLogic;
+import edu.wustl.common.participant.utility.ParticipantManagerUtility;
+import edu.wustl.common.participant.utility.RaceGenderCodesProperyHandler;
 import edu.wustl.common.util.CVSTagReader;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -73,6 +79,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 * DATASOURCE_JNDI_NAME.
 	 */
 	private static final String JNDI_NAME = "java:/catissuecore";
+	
+	//class level instance to access methods for registering and unregistering queues
+	private final ParticipantManagerUtility participantManagerUtility = new ParticipantManagerUtility();
+
 	/**
 	 * This method is called during server startup, It is used when want some initliazation before
 	 * server start.
@@ -97,9 +107,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			logApplnInfo();
 			DefaultValueManager.validateAndInitDefaultValueMap();
 			BulkOperationUtility.changeBulkOperationStatusToFailed();
-			IParticipantManagerLookupLogic lookUpLogic = (IParticipantManagerLookupLogic) Utility.getObject(XMLPropertyHandler
-					.getValue(Constants.PARTICIPANT_LOOKUP_ALGO));
-			lookUpLogic.initParticipantCache();
+			
 			initCiderIntegration();
 			logger.info("Initialization complete");
 		}
@@ -110,6 +118,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 		}
 		QueryCoreServletContextListenerUtil.contextInitialized(sce, "java:/query");
+		
+		// eMPI integration initialization
+		initeMPI();
 	}
 
 	private void initCiderIntegration()
@@ -118,9 +129,66 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		{
 			SpecimenWmqProcessor.getInstance();
 		}
-
 	}
 
+	/**
+	 * Inite mpi.
+	 */
+	private void initeMPI()
+	{
+		try
+		{
+			checkEMPIAdminUser();
+			RaceGenderCodesProperyHandler.init("HL7MesRaceGenderCodes.xml");
+			participantManagerUtility.registerWMQListener();
+
+			try
+			{
+				ParticipantManagerUtility.initialiseParticiapntMatchScheduler();
+			}
+			catch (Exception excep)
+			{
+				logger
+						.error(" ####### ERROR WHILE INITIALISING THE SHECUDER FOR PROCESSING THE PARTICIPANTS ######### ");
+				logger.error(excep.getMessage(), excep);
+			}
+
+		}
+		catch (JMSException excep)
+		{
+			logger.error(" EMPI : ERROR WHILE REGISTERING WMQ LISTENER");
+			logger.error(excep.getMessage(), excep);
+		}
+		catch (Exception excep)
+		{
+			logger
+					.error("Could not initialized application, Error in loading the HL7 race gender code property handler.");
+			logger.error(excep.getMessage(), excep);
+		}
+		catch (Error excep)
+		{
+			logger.error("EMPI : ERROR WHILE REGISTERING WMQ LISTENER ");
+			logger.error(excep.getMessage(), excep);
+		}
+
+	}
+	
+	private void checkEMPIAdminUser() throws ApplicationException, MessagingException
+	{
+		String eMPIAdminUName = XMLPropertyHandler.getValue(Constants.HL7_LISTENER_ADMIN_USER);
+		User validUser = AppUtility.getUser(eMPIAdminUName);
+		EmailHandler emailHandlrObj = new EmailHandler();
+		if (validUser == null)
+		{
+			emailHandlrObj.sendEMPIAdminUserNotExitsEmail();
+		}
+		if (validUser != null
+				&& Constants.ACTIVITY_STATUS_CLOSED.equals(validUser.getActivityStatus()))
+		{
+			emailHandlrObj.sendEMPIAdminUserClosedEmail(validUser);
+		}
+	}
+	
 	/**
 	 * Initialize caTissue default properties.
 	 * @throws ClassNotFoundException ClassNotFoundException

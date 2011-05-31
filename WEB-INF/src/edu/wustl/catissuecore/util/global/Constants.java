@@ -198,6 +198,7 @@ public class Constants
 	/** The Constant CONSENT_WAIVED. */
 	public static final String CONSENT_WAIVED = "Consent Waived";
 
+	public static final String IS_EMPI_ENABLED = "eMPI Enabled";
 	/** The Constant NO_CONSENTS. */
 	public static final String NO_CONSENTS = "No Consents";
 
@@ -2273,7 +2274,7 @@ public class Constants
 	public static final String UNIT_CC = "cell count";
 
 	/** The Constant UNIT_MG. */
-	public static final String UNIT_MG = "\u00B5"+"g";
+	public static final String UNIT_MG = "\u00B5" + "g";
 
 	/** The Constant UNIT_CN. */
 	public static final String UNIT_CN = "count";
@@ -2544,8 +2545,7 @@ public class Constants
 	//bug#4981 :kalpana
 	/** The Constant SELECTED_COLUMNS. */
 	public static final String SELECTED_COLUMNS[] = {"Print : Specimen",
-			"Specimen.LABEL.Label : Specimen",
-			"AbstractSpecimen.SPECIMEN_TYPE.Type : Specimen",
+			"Specimen.LABEL.Label : Specimen", "AbstractSpecimen.SPECIMEN_TYPE.Type : Specimen",
 			"SpecimenCharacteristics.TISSUE_SITE.Tissue Site : Specimen",
 			"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side : Specimen",
 			"AbstractSpecimen.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
@@ -2675,8 +2675,8 @@ public class Constants
 			{"Specimen Collection Group", "createSpecimenCollectionGroup"}};
 
 	/** The Constant PARTICIPANT_FORWARD_TO_LIST. */
-	public static final String[][] PARTICIPANT_FORWARD_TO_LIST = {
-			{"Register Participant", "success"}, {"Submit", "createParticipantRegistration"},
+	public static final String[][] PARTICIPANT_FORWARD_TO_LIST = {{"Submit", "success"},
+			{"Submit", "createParticipantRegistration"},
 			{"Specimen Collection Group", "specimenCollectionGroup"},
 			{"Submit", "pageOfParticipantCPQuery"}
 
@@ -4689,7 +4689,7 @@ public class Constants
 	public static final String ABBREVIATION_XAML_FILE_NAME = "Abbreviations.xml";
 
 	/** The Constant LABEL_TOKEN_PROP_FILE_NAME. */
-	public static final String LABEL_TOKEN_PROP_FILE_NAME="LabelTokens.Properties";
+	public static final String LABEL_TOKEN_PROP_FILE_NAME = "LabelTokens.Properties";
 
 	/** The Constant CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME. */
 	public static final String CUSTOM_SPECIMEN_LABEL_GENERATOR_PROPERTY_NAME = "customSpecimenLabelGeneratorClass";
@@ -5115,14 +5115,14 @@ public class Constants
 	/** The Constant ADD_MULTIPLE_SPECIMEN_TO_CART_AND_PRINT. */
 	public static final String ADD_MULTIPLE_SPECIMEN_TO_CART_AND_PRINT = "addMltipleSpecimenToCartAndPrint";
 
-    /** The Constant PRINT_SPECIMEN_FROM_LISTVIEW. */
-    public static final String PRINT_SPECIMEN_FROM_LISTVIEW = "printSpecimenLabelFromListView";
+	/** The Constant PRINT_SPECIMEN_FROM_LISTVIEW. */
+	public static final String PRINT_SPECIMEN_FROM_LISTVIEW = "printSpecimenLabelFromListView";
 
-    /** The Constant PRINT_SPECIMEN_DISTRIBUTION_REPORT. */
-    public static final String PRINT_SPECIMEN_DISTRIBUTION_REPORT = "printSpecimenLabelFromDistribution";
+	/** The Constant PRINT_SPECIMEN_DISTRIBUTION_REPORT. */
+	public static final String PRINT_SPECIMEN_DISTRIBUTION_REPORT = "printSpecimenLabelFromDistribution";
 
-    /** The Constant PRINT_ANTICIPATORY_SPECIMENS. */
-    public static final String PRINT_ANTICIPATORY_SPECIMENS = "printAnticipatorySpecimens";
+	/** The Constant PRINT_ANTICIPATORY_SPECIMENS. */
+	public static final String PRINT_ANTICIPATORY_SPECIMENS = "printAnticipatorySpecimens";
 
 	/** The Constant ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE. */
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE = "Distributed And Close";
@@ -5751,7 +5751,7 @@ public class Constants
 	/** The Constant MAXIMUM_RECORDS_FOR_KEYWORD_RESULTS. */
 	public static final String MAXIMUM_RECORDS_FOR_KEYWORD_RESULTS = "keywordSearch.result.maximumRecords";
 
-	 /** The Constant MAX_LIMIT_FOR_KEYWORDSEARCH. */
+	/** The Constant MAX_LIMIT_FOR_KEYWORDSEARCH. */
 	public static final String MAX_LIMIT_FOR_KEYWORDSEARCH = "keywordSearch.max.limit";
 
 	/** The Constant MAX_LIMIT_EXCEEDED. */
@@ -5795,8 +5795,26 @@ public class Constants
 	 */
 	public static final String TEMPLATE_DIR = "XMLAndCSVTemplate";
 
+	public static final String PAGEOF = "pageOf";
+	public static final String IDENTIFIER_FIELD_INDEX = "identifierFieldIndex";
+
+	/** The Constant HL7_LISTENER_ADMIN_USER. */
+	public static final String HL7_LISTENER_ADMIN_USER = "HL7ListenerAdminUser";
+	public static final String ACTIVITY_STATUS_ACTIVE = "Active";
+	public static final String ACTIVITY_STATUS_CLOSED = "Closed";
+
 	/**
 	 * Constant for XML extension.
 	 */
 	public static final String XML_SUFFIX = ".xml";
+
+	public static final String PARTICIPANT_CONTINUE_LOOK_UP = "continueLookup";
+	public static final String GENERATE_EMPI_ID_NAME = "generateEMPIButtonName";
+	public static final String PARTICIPANT_ACTIVITY_PRIVILEGE = "ParticipantActivityStatus";
+	public static final String QUERY_PARTICIPANT_EDIT = "CPQueryParticipantEdit.do";
+	public static final String CS_ACTIVITY_STATUS = "CSActivityStatus";
+	public static final String CP_PARTICIPANT_LOOKUP_ACTION = "CPQueryParticipantLookup.do";
+	public static final String SPREADSHEET_DATA_LIST = "spreadsheetDataList";
+	public static final String QUERY_PARTICIPANT_ADD = "CPQueryParticipantAdd.do";
+	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
 }

@@ -143,6 +143,26 @@
             length="50"
         />
 
+		<!--  Added for EMPI integration -->
+		 <property
+            name="empiId"
+            type="string"
+            update="true"
+            insert="true"
+            column="EMPI_ID"
+            length="50"
+            unique="true"
+        />
+
+		   <property
+            name="empiIdStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="EMPI_ID_STATUS"
+            length="50"
+        />
+         
          <property
             name="metaPhoneCode"
             type="string"

@@ -416,6 +416,14 @@
             insert="true"
             column="CONSENTS_WAIVED"
         />
+        
+        <property
+            name="isEMPIEnabled"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="IS_EMPI_ENABLE"
+        />
 
 		<set name="studyFormContextCollection" table="CATISSUE_CP_STUDYFORMCONTEXT"
 			 inverse="true">

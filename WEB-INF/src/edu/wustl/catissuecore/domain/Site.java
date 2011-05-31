@@ -28,8 +28,11 @@ import edu.wustl.common.util.logger.Logger;
  * A physical location associated with biospecimen collection, storage, processing, or utilization.
  * @hibernate.class table="CATISSUE_SITE"
  */
-public class Site extends AbstractDomainObject implements java.io.Serializable, 
-					IActivityStatus, ISite
+public class Site extends AbstractDomainObject
+		implements
+			java.io.Serializable,
+			IActivityStatus,
+			ISite
 {
 
 	/**
@@ -93,6 +96,8 @@ public class Site extends AbstractDomainObject implements java.io.Serializable,
 	 * HashSet containing User.
 	 */
 	private Collection<User> assignedSiteUserCollection = new HashSet<User>();
+
+	protected String facilityId;
 
 	/**
 	 * Default Constructor Required by hibernate.
@@ -327,7 +332,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable,
 		}
 		catch (final Exception excp)
 		{
-			Site.logger.error(excp.getMessage(),excp);
+			Site.logger.error(excp.getMessage(), excp);
 			excp.printStackTrace();
 			final ErrorKey errorKey = ErrorKey.getErrorKey("assign.data.error");
 			throw new AssignDataException(errorKey, null, "Site.java :");
@@ -407,18 +412,21 @@ public class Site extends AbstractDomainObject implements java.io.Serializable,
 	{
 		this.assignedSiteUserCollection = userCollection;
 	}
+
 	/**
-	 * Get Facility Id
+	 * @return the facilityId
 	 */
 	public String getFacilityId()
 	{
-		throw new UnsupportedOperationException("Un-Implemented method");
+		return facilityId;
 	}
+
 	/**
-	 * @param facilityId set facility Id
+	 * @param facilityId the facilityId to set
 	 */
 	public void setFacilityId(String facilityId)
 	{
-		throw new UnsupportedOperationException("Un-Implemented method");
+		this.facilityId = facilityId;
 	}
+
 }

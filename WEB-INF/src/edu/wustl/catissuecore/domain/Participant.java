@@ -43,6 +43,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * An individual from whom a specimen is collected.
+ * 
  * @hibernate.class table="CATISSUE_PARTICIPANT"
  * @author aniruddha_phadnis
  * @author gautam_shetty
@@ -50,7 +51,8 @@ import edu.wustl.common.util.logger.Logger;
 public class Participant extends AbstractDomainObject
 		implements
 			java.io.Serializable,
-			IActivityStatus,IParticipant
+			IActivityStatus,
+			IParticipant
 {
 
 	/**
@@ -114,7 +116,8 @@ public class Participant extends AbstractDomainObject
 	protected String socialSecurityNumber;
 
 	/**
-	 * Defines whether this participant record can be queried (Active) or not queried (Inactive) by any actor.
+	 * Defines whether this participant record can be queried (Active) or not
+	 * queried (Inactive) by any actor.
 	 */
 	protected String activityStatus;
 
@@ -124,21 +127,24 @@ public class Participant extends AbstractDomainObject
 	protected Date deathDate;
 
 	/**
-	 * Defines the vital status of the participant like 'Dead', 'Alive' or 'Unknown'.
+	 * Defines the vital status of the participant like 'Dead', 'Alive' or
+	 * 'Unknown'.
 	 */
 	protected String vitalStatus;
 
+	protected String empiIdStatus = null;
+
+	private String gridValueSelected;
 	/**
-	 * A collection of medical record identification number that refers to a Participant.
+	 * A collection of medical record identification number that refers to a
+	 * Participant.
 	 * */
-	protected Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection =
-					new LinkedHashSet<ParticipantMedicalIdentifier>();
+	protected Collection<ParticipantMedicalIdentifier> participantMedicalIdentifierCollection = new LinkedHashSet<ParticipantMedicalIdentifier>();
 
 	/**
 	 * A collection of registration of a Participant to a Collection Protocol.
 	 */
-	protected Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection =
-				new HashSet<CollectionProtocolRegistration>();
+	protected Collection<CollectionProtocolRegistration> collectionProtocolRegistrationCollection = new HashSet<CollectionProtocolRegistration>();
 
 	/**
 	 * A collection of record entry objects for a participant
@@ -149,10 +155,12 @@ public class Participant extends AbstractDomainObject
 	 */
 	protected String metaPhoneCode;
 
-//	/**
-//	 * empiId : EMPI id of the participant.
-//	 */
-//	protected String empiId = "";
+	private String empiId = "";
+
+	// /**
+	// * empiId : EMPI id of the participant.
+	// */
+	// protected String empiId = "";
 
 	public String getMetaPhoneCode()
 	{
@@ -174,8 +182,11 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Parameterized Constructor.
-	 * @param form AbstractActionForm.
-	 * @throws AssignDataException : AssignDataException
+	 * 
+	 * @param form
+	 *            AbstractActionForm.
+	 * @throws AssignDataException
+	 *             : AssignDataException
 	 */
 	public Participant(AbstractActionForm form) throws AssignDataException
 	{
@@ -185,7 +196,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Copy Constructor.
-	 * @param participant Participant object
+	 * 
+	 * @param participant
+	 *            Participant object
 	 */
 	public Participant(final Participant participant)
 	{
@@ -231,11 +244,13 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns System generated unique id.
+	 * 
 	 * @return Long System generated unique id.
 	 * @see #setId(Long)
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-	 * unsaved-value="null" generator-class="native"
-	 * @hibernate.generator-param name="sequence" value="CATISSUE_PARTICIPANT_SEQ"
+	 *               unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence"
+	 *                            value="CATISSUE_PARTICIPANT_SEQ"
 	 */
 	@Override
 	public Long getId()
@@ -245,7 +260,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets system generated unique id.
-	 * @param identifier System generated unique id.
+	 * 
+	 * @param identifier
+	 *            System generated unique id.
 	 * @see #getId()
 	 * */
 	@Override
@@ -256,10 +273,11 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the last name of the Participant.
+	 * 
 	 * @return String representing the last name of the Participant.
 	 * @see #setLastName(String)
-	 * @hibernate.property name="lastName" type="string"
-	 * column="LAST_NAME" length="255"
+	 * @hibernate.property name="lastName" type="string" column="LAST_NAME"
+	 *                     length="255"
 	 */
 	public String getLastName()
 	{
@@ -268,7 +286,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the last name of the Participant.
-	 * @param lastName Last Name of the Participant.
+	 * 
+	 * @param lastName
+	 *            Last Name of the Participant.
 	 * @see #getLastName()
 	 */
 	public void setLastName(String lastName)
@@ -278,10 +298,11 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the first name of the Participant.
+	 * 
 	 * @return String representing the first name of the Participant.
 	 * @see #setFirstName(String)
-	 * @hibernate.property name="firstName" type="string"
-	 * column="FIRST_NAME" length="255"
+	 * @hibernate.property name="firstName" type="string" column="FIRST_NAME"
+	 *                     length="255"
 	 */
 	public String getFirstName()
 	{
@@ -290,7 +311,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the first name of the Participant.
-	 * @param firstName String representing the first name of the Participant.
+	 * 
+	 * @param firstName
+	 *            String representing the first name of the Participant.
 	 * @see #getFirstName()
 	 */
 	public void setFirstName(String firstName)
@@ -300,10 +323,11 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the middle name of the Participant.
+	 * 
 	 * @return String representing the middle name of the Participant.
 	 * @see #setMiddleName(String)
-	 * @hibernate.property name="middleName" type="string"
-	 * column="MIDDLE_NAME" length="255"
+	 * @hibernate.property name="middleName" type="string" column="MIDDLE_NAME"
+	 *                     length="255"
 	 */
 	public String getMiddleName()
 	{
@@ -312,7 +336,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the middle name of the Participant.
-	 * @param middleName String representing the middle name of the Participant.
+	 * 
+	 * @param middleName
+	 *            String representing the middle name of the Participant.
 	 * @see #getMiddleName()
 	 */
 	public void setMiddleName(String middleName)
@@ -322,6 +348,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the date of birth of the Participant.
+	 * 
 	 * @return String representing the middle name of the Participant.
 	 * @see #setBirthDate(String)
 	 * @hibernate.property name="birthDate" column="BIRTH_DATE" type="date"
@@ -333,7 +360,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the date of birth of the Participant.
-	 * @param birthDate String representing the date of birth of the Participant.
+	 * 
+	 * @param birthDate
+	 *            String representing the date of birth of the Participant.
 	 * @see #getDateOfBirth()
 	 */
 	public void setBirthDate(Date birthDate)
@@ -343,10 +372,11 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the gender of a participant.
+	 * 
 	 * @return String representing the gender of a participant.
 	 * @see #setGender(String)
-	 * @hibernate.property name="gender" type="string"
-	 * column="GENDER" length="20"
+	 * @hibernate.property name="gender" type="string" column="GENDER"
+	 *                     length="20"
 	 */
 	public String getGender()
 	{
@@ -355,7 +385,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the gender of a participant.
-	 * @param gender the gender of a participant.
+	 * 
+	 * @param gender
+	 *            the gender of a participant.
 	 * @see #getGender()
 	 */
 	public void setGender(String gender)
@@ -365,10 +397,11 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the genotype of a participant.
+	 * 
 	 * @return String representing the genotype of a participant.
 	 * @see #setSexGenotype(String)
-	 * @hibernate.property name="sexGenotype" type="string"
-	 * column="GENOTYPE" length="50"
+	 * @hibernate.property name="sexGenotype" type="string" column="GENOTYPE"
+	 *                     length="50"
 	 */
 	public String getSexGenotype()
 	{
@@ -377,7 +410,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the genotype of a participant.
-	 * @param sexGenotype the genotype of a participant.
+	 * 
+	 * @param sexGenotype
+	 *            the genotype of a participant.
 	 * @see #getSexGenotype()
 	 */
 	public void setSexGenotype(String sexGenotype)
@@ -385,32 +420,32 @@ public class Participant extends AbstractDomainObject
 		this.sexGenotype = sexGenotype;
 	}
 
-	//	/**
-	//     * Returns the race of the Participant.
-	//     * @return String representing the race of the Participant.
-	//     * @see #setRace(String)
-	//     * @hibernate.property name="race" type="string"
-	//     * column="RACE" length="50"
-	//     */
-	//	public String getRace()
-	//	{
-	//		return race;
-	//	}
+	// /**
+	// * Returns the race of the Participant.
+	// * @return String representing the race of the Participant.
+	// * @see #setRace(String)
+	// * @hibernate.property name="race" type="string"
+	// * column="RACE" length="50"
+	// */
+	// public String getRace()
+	// {
+	// return race;
+	// }
 	//
-	//	/**
-	//     * Sets the race of the Participant.
-	//     * @param race String representing the race of the Participant.
-	//     * @see #getRace()
-	//     */
-	//	public void setRace(String race)
-	//	{
-	//		this.race = race;
-	//	}
+	// /**
+	// * Sets the race of the Participant.
+	// * @param race String representing the race of the Participant.
+	// * @see #getRace()
+	// */
+	// public void setRace(String race)
+	// {
+	// this.race = race;
+	// }
 
 	/**
 	 * @return Returns the raceCollection.
 	 * @hibernate.set name="raceCollection" table="CATISSUE_RACE"
-	 * cascade="save-update" inverse="false" lazy="false"
+	 *                cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="PARTICIPANT_ID"
 	 * @hibernate.element type="string" column="NAME" length="30"
 	 */
@@ -420,7 +455,8 @@ public class Participant extends AbstractDomainObject
 	}
 
 	/**
-	 * @param raceCollection The raceCollection to set.
+	 * @param raceCollection
+	 *            The raceCollection to set.
 	 */
 	public void setRaceCollection(Collection raceCollection)
 	{
@@ -429,10 +465,11 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the ethnicity of the Participant.
+	 * 
 	 * @return Ethnicity of the Participant.
 	 * @see #setEthnicity(String)
-	 * @hibernate.property name="ethnicity" type="string"
-	 * column="ETHNICITY" length="50"
+	 * @hibernate.property name="ethnicity" type="string" column="ETHNICITY"
+	 *                     length="50"
 	 */
 	public String getEthnicity()
 	{
@@ -441,7 +478,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the ethnicity of the Participant.
-	 * @param ethnicity Ethnicity of the Participant.
+	 * 
+	 * @param ethnicity
+	 *            Ethnicity of the Participant.
 	 * @see #getEthnicity()
 	 */
 	public void setEthnicity(String ethnicity)
@@ -451,10 +490,13 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the Social Security Number of the Participant.
-	 * @return String representing the Social Security Number of the Participant.
+	 * 
+	 * @return String representing the Social Security Number of the
+	 *         Participant.
 	 * @see #setSocialSecurityNumber(String)
 	 * @hibernate.property name="socialSecurityNumber" type="string"
-	 * column="SOCIAL_SECURITY_NUMBER" length="50" unique="true"
+	 *                     column="SOCIAL_SECURITY_NUMBER" length="50"
+	 *                     unique="true"
 	 */
 	public String getSocialSecurityNumber()
 	{
@@ -463,7 +505,10 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the Social Security Number of the Participant.
-	 * @param socialSecurityNumber - String representing the Social Security Number of the Participant.
+	 * 
+	 * @param socialSecurityNumber
+	 *            - String representing the Social Security Number of the
+	 *            Participant.
 	 * @see #getSocialSecurityNumber()
 	 */
 	public void setSocialSecurityNumber(String socialSecurityNumber)
@@ -473,8 +518,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the activity status of the participant.
+	 * 
 	 * @hibernate.property name="activityStatus" type="string"
-	 * column="ACTIVITY_STATUS" length="50"
+	 *                     column="ACTIVITY_STATUS" length="50"
 	 * @return Returns the activity status of the participant.
 	 * @see #setActivityStatus(String)
 	 */
@@ -485,7 +531,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the activity status of the participant.
-	 * @param activityStatus activity status of the participant.
+	 * 
+	 * @param activityStatus
+	 *            activity status of the participant.
 	 * @see #getActivityStatus()
 	 */
 	public void setActivityStatus(String activityStatus)
@@ -495,6 +543,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the date of death of the Participant.
+	 * 
 	 * @return Date representing the death date of the Participant.
 	 * @see #setDeathDate(Date)
 	 * @hibernate.property name="deathDate" column="DEATH_DATE" type="date"
@@ -506,7 +555,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the date of birth of the Participant.
-	 * @param deathDate The deathDate to set.
+	 * 
+	 * @param deathDate
+	 *            The deathDate to set.
 	 */
 	public void setDeathDate(Date deathDate)
 	{
@@ -515,10 +566,11 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the vital status of the participant.
+	 * 
 	 * @return Returns the vital status of the participant.
 	 * @see #setVitalStatus(String)
 	 * @hibernate.property name="vitalStatus" type="string"
-	 * column="VITAL_STATUS" length="50"
+	 *                     column="VITAL_STATUS" length="50"
 	 */
 	public String getVitalStatus()
 	{
@@ -527,7 +579,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the vital status of the Participant.
-	 * @param vitalStatus The vitalStatus to set.
+	 * 
+	 * @param vitalStatus
+	 *            The vitalStatus to set.
 	 */
 	public void setVitalStatus(String vitalStatus)
 	{
@@ -535,12 +589,16 @@ public class Participant extends AbstractDomainObject
 	}
 
 	/**
-	 * Returns collection of medical identifiers associated with this participant.
+	 * Returns collection of medical identifiers associated with this
+	 * participant.
+	 * 
 	 * @return collection of medical identifiers of this participant.
-	 * @hibernate.set name="participantMedicalIdentifierCollection" table="CATISSUE_PART_MEDICAL_ID"
-	 * cascade="none" inverse="true" lazy="false"
+	 * @hibernate.set name="participantMedicalIdentifierCollection"
+	 *                table="CATISSUE_PART_MEDICAL_ID" cascade="none"
+	 *                inverse="true" lazy="false"
 	 * @hibernate.collection-key column="PARTICIPANT_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
+	 * @hibernate.collection-one-to-many 
+	 *                                   class="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
 	 * @see setParticipantMedicalIdentifierCollection(Collection)
 	 */
 	public Collection getParticipantMedicalIdentifierCollection()
@@ -550,7 +608,9 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the collection of medical identifiers of this participant.
-	 * @param participantMedicalIdentifierCollection collection of medical identifiers of this participant.
+	 * 
+	 * @param participantMedicalIdentifierCollection
+	 *            collection of medical identifiers of this participant.
 	 * @see #getParticipantMedicalIdentifierCollection()
 	 */
 	public void setParticipantMedicalIdentifierCollection(
@@ -560,11 +620,16 @@ public class Participant extends AbstractDomainObject
 	}
 
 	/**
-	 * Returns collection of collection protocol registrations of this participant.
-	 * @return collection of collection protocol registrations of this participant.
-	 * @hibernate.set name="collectionProtocolRegistrationCollection" table="CATISSUE_COLL_PROT_REG"
+	 * Returns collection of collection protocol registrations of this
+	 * participant.
+	 * 
+	 * @return collection of collection protocol registrations of this
+	 *         participant.
+	 * @hibernate.set name="collectionProtocolRegistrationCollection"
+	 *                table="CATISSUE_COLL_PROT_REG"
 	 * @hibernate.collection-key column="PARTICIPANT_ID"
-	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+	 * @hibernate.collection-one-to-many 
+	 *                                   class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
 	 * @see setCollectionProtocolRegistrationCollection(Collection)
 	 */
 	public Collection<CollectionProtocolRegistration> getCollectionProtocolRegistrationCollection()
@@ -574,8 +639,10 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Sets the collection protocol registrations of this participant.
-	 * @param collectionProtocolRegistrationCollection - Collection of collection
-	 * protocol registrations of this participant.
+	 * 
+	 * @param collectionProtocolRegistrationCollection
+	 *            - Collection of collection protocol registrations of this
+	 *            participant.
 	 * @see #getCollectionProtocolRegistrationCollection()
 	 */
 	public void setCollectionProtocolRegistrationCollection(
@@ -584,18 +651,18 @@ public class Participant extends AbstractDomainObject
 		this.collectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection;
 	}
 
-//	public String getEmpiId()
-//	{
-//		return this.empiId;
-//	}
-//
-//	public void setEmpiId(String empiId)
-//	{
-//		this.empiId = empiId;
-//	}
+	// public String getEmpiId()
+	// {
+	// return this.empiId;
+	// }
+	//
+	// public void setEmpiId(String empiId)
+	// {
+	// this.empiId = empiId;
+	// }
 
 	/**
-	 *
+	 * 
 	 * @return
 	 */
 	public Collection<ParticipantRecordEntry> getParticipantRecordEntryCollection()
@@ -604,7 +671,7 @@ public class Participant extends AbstractDomainObject
 	}
 
 	/**
-	 *
+	 * 
 	 * @param participantRecordEntryCollection
 	 */
 	public void setParticipantRecordEntryCollection(
@@ -614,9 +681,14 @@ public class Participant extends AbstractDomainObject
 	}
 
 	/**
-	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
-	 * @param abstractForm - A StorageTypeForm object containing the information about the StorageType.
-	 * @throws AssignDataException : AssignDataException
+	 * This function Copies the data from a StorageTypeForm object to a
+	 * StorageType object.
+	 * 
+	 * @param abstractForm
+	 *            - A StorageTypeForm object containing the information about
+	 *            the StorageType.
+	 * @throws AssignDataException
+	 *             : AssignDataException
 	 * */
 	@Override
 	public void setAllValues(IValueObject abstractForm) throws AssignDataException
@@ -632,6 +704,8 @@ public class Participant extends AbstractDomainObject
 			this.middleName = form.getMiddleName();
 			this.lastName = form.getLastName();
 
+			empiId = form.getEmpiId();
+			empiIdStatus = form.getEmpiIdStatus();
 			if (validator.isValidOption(form.getGender()))
 			{
 				this.gender = form.getGender();
@@ -659,10 +733,10 @@ public class Participant extends AbstractDomainObject
 				this.ethnicity = nullString;
 			}
 
-			//	        if(validator.isValidOption(form.getRace()) )
-			//	        	this.race = form.getRace();
-			//	        else
-			//	        	this.race = null;
+			// if(validator.isValidOption(form.getRace()) )
+			// this.race = form.getRace();
+			// else
+			// this.race = null;
 			this.raceCollection.clear();
 			final String[] raceTypes = form.getRaceTypes();
 			if (raceTypes != null)
@@ -715,8 +789,8 @@ public class Participant extends AbstractDomainObject
 			final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 			this.participantMedicalIdentifierCollection = parser.generateData(map);
 
-			//Collection Protocol Registration of the participant
-			//(Abhishek Mehta)
+			// Collection Protocol Registration of the participant
+			// (Abhishek Mehta)
 			this.collectionProtocolRegistrationCollection.clear();
 			final Map mapCollectionProtocolRegistrationCollection = form
 					.getCollectionProtocolRegistrationValues();
@@ -742,8 +816,11 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Setting Consent Response for the collection protocol.
-	 * @param form ParticipantForm.
-	 * @throws Exception : Exception
+	 * 
+	 * @param form
+	 *            ParticipantForm.
+	 * @throws Exception
+	 *             : Exception
 	 */
 	private void setConsentsResponseToCollectionProtocolRegistration(ParticipantForm form)
 			throws Exception
@@ -762,9 +839,13 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Set Consent Response for given collection protocol.
-	 * @param collectionProtocolRegistration CollectionProtocolRegistration.
-	 * @param consentResponseBeanCollection Collection.
-	 * @throws Exception : Exception
+	 * 
+	 * @param collectionProtocolRegistration
+	 *            CollectionProtocolRegistration.
+	 * @param consentResponseBeanCollection
+	 *            Collection.
+	 * @throws Exception
+	 *             : Exception
 	 */
 	private void setConsentResponse(CollectionProtocolRegistration collectionProtocolRegistration,
 			Collection consentResponseBeanCollection) throws Exception
@@ -834,8 +915,11 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Preparing consent response collection from entered response.
-	 * @param consentResponse Collection.
-	 * @param isResponse boolean.
+	 * 
+	 * @param consentResponse
+	 *            Collection.
+	 * @param isResponse
+	 *            boolean.
 	 * @return Collection.
 	 */
 	private Collection prepareConsentTierResponseCollection(Collection consentResponse,
@@ -867,10 +951,14 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Consent List for given collection protocol.
-	 * @param collectionProtocolID String.
+	 * 
+	 * @param collectionProtocolID
+	 *            String.
 	 * @return Collection.
-	 * @throws BizLogicException : BizLogicException
-	 * @throws NumberFormatException : NumberFormatException
+	 * @throws BizLogicException
+	 *             : BizLogicException
+	 * @throws NumberFormatException
+	 *             : NumberFormatException
 	 */
 	private Collection getConsentList(String collectionProtocolID) throws NumberFormatException,
 			BizLogicException
@@ -886,26 +974,59 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns message label to display on success add or edit.
+	 * 
 	 * @return String.
 	 */
 	public String getMessageLabel()
 	{
 		return AppUtility.getlLabel(this.lastName, this.firstName);
 	}
-//	/**
-//	 * Get getEmpiIdStatus
-//	 */
-//	public String getEmpiIdStatus()
-//	{
-//		throw new UnsupportedOperationException("Un-Implemented method");
-//	}
-//	/**
-//	 * set EmpiId Status
-//	 * @param empiIdStatus EMPI Status
-//	 */
-//	public void setEmpiIdStatus(String empiIdStatus)
-//	{
-//		throw new UnsupportedOperationException("Un-Implemented method");
-//	}
+
+	// /**
+	// * Get getEmpiIdStatus
+	// */
+	// public String getEmpiIdStatus()
+	// {
+	// throw new UnsupportedOperationException("Un-Implemented method");
+	// }
+	// /**
+	// * set EmpiId Status
+	// * @param empiIdStatus EMPI Status
+	// */
+	// public void setEmpiIdStatus(String empiIdStatus)
+	// {
+	// throw new UnsupportedOperationException("Un-Implemented method");
+	// }
+
+	public String getEmpiId()
+	{
+		return empiId;
+	}
+
+	public String getEmpiIdStatus()
+	{
+
+		return empiIdStatus;
+	}
+
+	public String getGridValueSelected()
+	{
+		return gridValueSelected;
+	}
+
+	public void setEmpiId(String empiId)
+	{
+		this.empiId = empiId;
+	}
+
+	public void setEmpiIdStatus(String empiIdStatus)
+	{
+		this.empiIdStatus = empiIdStatus;
+	}
+
+	public void setGridValueSelected(String gridValueSelected)
+	{
+		this.gridValueSelected = gridValueSelected;
+	}
 
 }
