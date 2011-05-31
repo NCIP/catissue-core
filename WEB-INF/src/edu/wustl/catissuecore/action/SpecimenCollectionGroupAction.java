@@ -1011,16 +1011,20 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 			String password = AppUtility.getPassord(loginName);
 			url = catissueCdmsIntegrator.getVisitInformationURL(informationObject, loginName, password);
-			if (url.contains(CDMSIntegrationConstants.EVENTENTRYID
-					+ CDMSIntegrationConstants.EQUALS))
-			{
-				request.getSession().removeAttribute(CDMSIntegrationConstants.EVENTENTRYID);
-			}
-			else
-			{
-				//Set error message....
-				setErrorMessage(request);
-			}
+	
+			if(!"".equals(url) && informationObject.getVisitIdentifier()==null)
+            {
+				if (url.contains(CDMSIntegrationConstants.EVENTENTRYID
+						+ CDMSIntegrationConstants.EQUALS))
+				{
+					request.getSession().removeAttribute(CDMSIntegrationConstants.EVENTENTRYID);
+				}
+				else
+				{
+					//Set error message....
+					setErrorMessage(request);
+				}
+            }
 		}
 		catch (gov.nih.nci.system.applicationservice.ApplicationException appExp)
 		{
