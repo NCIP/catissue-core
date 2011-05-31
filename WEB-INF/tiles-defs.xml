@@ -700,6 +700,11 @@
 	<definition name=".catissuecore.editBioSpecimenSearchResultsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/search/DataView.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.editBioSpecimenMatchedPartiDef"
+		extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/search/MatchedParticipantDataView.jsp" />
+	</definition>
 
 	<definition name=".catissuecore.editSpecimenArrayTypeSearchPageDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/search/DataView.jsp" />
