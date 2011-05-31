@@ -29,9 +29,10 @@ public class CollectionProtocolBean implements Serializable
 	/** principalInvestigatorId. */
 	private long principalInvestigatorId;
 
-
 	/** The default label gen. */
 	private boolean defaultLabelGen;
+
+	private boolean isEMPIEnable = false;
 
 	/**
 	 * Checks if is default label gen.
@@ -42,9 +43,6 @@ public class CollectionProtocolBean implements Serializable
 	{
 		return defaultLabelGen;
 	}
-
-
-
 
 	/**
 	 * Sets the default label gen.
@@ -123,8 +121,6 @@ public class CollectionProtocolBean implements Serializable
 		return labelFormat;
 	}
 
-
-
 	/**
 	 * Sets the label format.
 	 *
@@ -134,8 +130,6 @@ public class CollectionProtocolBean implements Serializable
 	{
 		this.labelFormat = labelFormat;
 	}
-
-
 
 	/**
 	 * This will return the clinicalDiagnosis values.
@@ -672,4 +666,21 @@ public class CollectionProtocolBean implements Serializable
 	{
 		this.parentCollectionProtocolId = parentCollectionProtocolId;
 	}
+
+	/**
+	 * @return the isEMPIEnable
+	 */
+	public boolean getIsEMPIEnable()
+	{
+		return this.isEMPIEnable;
+	}
+
+	/**
+	 * @param isEMPIEnable the isEMPIEnable to set
+	 */
+	public void setIsEMPIEnable(boolean isEMPIEnable)
+	{
+		this.isEMPIEnable = isEMPIEnable;
+	}
+
 }
