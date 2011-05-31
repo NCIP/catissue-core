@@ -4298,6 +4298,52 @@ Thanking You,
 					</else>
 				</if>
 			</target>
+	
+	<target name="upgrade_db_from_v1.2.1_to_1.2.2" description="Upgrading database for all changes required for v1.2.2">
+		<echo message="Upgrading Database" />
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="upgrade_db_from_v1.2.1_to_1.2.2_mysql" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="upgrade_db_from_v1.2.1_to_1.2.2_oracle" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+	</target>
+	<target name="upgrade_db_from_v1.2.1_to_1.2.2_mysql" description="Upgrading mysql database for all changes required for v1.2.2 ">
+		<echo message="Upgrading MySQL Database." />
+		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
+			<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.2.1_to_v1.2.2.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<echo message="Upgrading mysql database for all changes required for v1.2" />
+	</target>
+
+	<target name="upgrade_db_from_v1.2.1_to_1.2.2_oracle" description="Upgrading oracle database for all changes required for v1.2.2">
+		<echo message="Upgrading Oracle Database."/>
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
+			<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_v1.2.1_to_v1.2.2.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<echo message="Upgrading oracle database for all changes required for v1.2" />
+	</target>
 
 			<target name="upgrade_db_for_v1.2_mysql" description="Upgrading mysql database for all changes required for v1.2 ">
 				<echo message="Upgrading MySQL Database." />
