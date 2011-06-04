@@ -102,7 +102,7 @@ public class ParticipantAction extends SecureAction
 	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{
+			{
 
 		final String refPart = request.getParameter("refresh");
 		if (refPart != null)
@@ -119,7 +119,7 @@ public class ParticipantAction extends SecureAction
 		// After that we have to show the slected participant in o/p
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final ParticipantBizLogic partBiz = (ParticipantBizLogic) factory
-				.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		.getBizLogic(Constants.PARTICIPANT_FORM_ID);
 		final IBizLogic bizlogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 
 		if (request.getAttribute("participantSelect") != null
@@ -207,7 +207,7 @@ public class ParticipantAction extends SecureAction
 				for (int i = 1; i <= count; i++)
 				{
 					final String cprActStatusKey = "CollectionProtocolRegistration:" + i
-							+ "_activityStatus";
+					+ "_activityStatus";
 					if (mapCPR.get(cprActStatusKey) == null)
 					{
 						participantForm.setCollectionProtocolRegistrationValue(cprActStatusKey,
@@ -269,7 +269,7 @@ public class ParticipantAction extends SecureAction
 							.getInstance().getTime(), CommonServiceLocator.getInstance()
 							.getDatePattern());
 					participantForm
-							.setCollectionProtocolRegistrationValue(cprDateKey, cprDateValue);
+					.setCollectionProtocolRegistrationValue(cprDateKey, cprDateValue);
 					participantForm.setCollectionProtocolRegistrationValueCounter(1);
 				}
 			}
@@ -288,7 +288,7 @@ public class ParticipantAction extends SecureAction
 					collProtRegDatVal);
 			participantForm.setDefaultCollectionProtocolRegistrationValue(
 					collectionProtocolRegistrationActivityStausKey, Status.ACTIVITY_STATUS_ACTIVE
-							.toString());
+					.toString());
 			participantForm.setCollectionProtocolRegistrationValueCounter(1);
 		}
 
@@ -303,7 +303,7 @@ public class ParticipantAction extends SecureAction
 		request.setAttribute(Constants.OPERATION, operation);
 
 		// Sets the pageOf attribute (for Add,Edit or Query Interface)
-		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		String pageOf = request.getParameter(Constants.PAGE_OF);
 
 		request.setAttribute(Constants.PAGE_OF, pageOf);
 
@@ -366,7 +366,7 @@ public class ParticipantAction extends SecureAction
 		else
 		{
 			final CollectionProtocolBizLogic cpBizLogic = (CollectionProtocolBizLogic) factory
-					.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+			.getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
 			final String cpId = request.getParameter(Constants.CP_SEARCH_CP_ID);
 			list = partBiz.getCPForUserWithRegistrationAcess(sessionDataBean.getUserId());
 
@@ -406,7 +406,7 @@ public class ParticipantAction extends SecureAction
 		else
 		{
 			participantEntityId = AnnotationUtil
-					.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
+			.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
 			CatissueCoreCacheManager.getInstance().addObjectToCache(
 					AnnotationConstants.PARTICIPANT_REC_ENTRY_ENTITY_ID, participantEntityId);
 		}
@@ -418,11 +418,11 @@ public class ParticipantAction extends SecureAction
 		LOGGER.debug("pageOf :---------- " + pageOf);
 
 		return mapping.findForward(pageOf);
-	}
+			}
 
 	private void setEMPStatus(final HttpServletRequest request, ParticipantForm participantForm,
 			Map mapCPR, int count) throws ParseException, ApplicationException
-	{
+			{
 
 		participantForm = (ParticipantForm) request.getAttribute("participantForm");
 		request.setAttribute("csEMPIStatus", Constants.FALSE);
@@ -435,7 +435,7 @@ public class ParticipantAction extends SecureAction
 			for (int i = 1; i <= count; i++)
 			{
 				final String collectionProtocolTitle = "CollectionProtocolRegistration:" + i
-						+ "_CollectionProtocol_id";
+				+ "_CollectionProtocol_id";
 				if (mapCPR.get(collectionProtocolTitle) != null)
 				{
 
@@ -458,7 +458,7 @@ public class ParticipantAction extends SecureAction
 
 			}
 		}
-	}
+			}
 
 	private void setMesForeMPIIdGeneration(HttpServletRequest request)
 	{
@@ -528,7 +528,7 @@ public class ParticipantAction extends SecureAction
 	private void setEMPIIdStatus(final ParticipantForm participantForm,
 			final HttpServletRequest request) throws BizLogicException, DAOException,
 			ParseException
-	{
+			{
 		String mrn = null;
 		String key = ParticipantManagerUtility.getParticipantMedicalIdentifierKeyFor(1,
 				Constants.PARTICIPANT_MEDICAL_IDENTIFIER_MEDICAL_NUMBER);
@@ -538,7 +538,7 @@ public class ParticipantAction extends SecureAction
 		}
 		String ssn = participantForm.getSocialSecurityNumberPartA().concat(
 				participantForm.getSocialSecurityNumberPartB()).concat(
-				participantForm.getSocialSecurityNumberPartC());
+						participantForm.getSocialSecurityNumberPartC());
 		final String empiIdStatus = ParticipantManagerUtility.getPartiEMPIStatus(participantForm
 				.getId());
 		participantForm.setEmpiIdStatus(empiIdStatus);
@@ -548,7 +548,7 @@ public class ParticipantAction extends SecureAction
 		request.setAttribute(edu.wustl.common.participant.utility.Constants.EMPI_ID_STATUS,
 				empiIdStatus);
 		final String isMatchedFromEMPI = (String) request
-				.getAttribute(edu.wustl.common.participant.utility.Constants.IS_GENERATE_EMPI_PAGE);
+		.getAttribute(edu.wustl.common.participant.utility.Constants.IS_GENERATE_EMPI_PAGE);
 		if (empiIdStatus.equals(edu.wustl.common.participant.utility.Constants.EMPI_ID_PENDING))
 		{
 			request.setAttribute(Constants.GENERATE_EMPI_ID_NAME,
@@ -569,12 +569,12 @@ public class ParticipantAction extends SecureAction
 
 			if (ParticipantManagerUtility.isParticipantIsProcessing(participantForm.getId()))
 			{
-				/*
-				 * if (!Constants.TRUE.equals(isMatchedFromEMPI)) {
-				 * setMessage(request, "participant.empiid.generation.message");
-				 * }
-				 */
-				setMessage(request, "participant.empiid.generation.message", null);
+
+				if (!Constants.TRUE.equals(isMatchedFromEMPI)) {
+					setMessage(request, "participant.empiid.generation.message",null);
+				}
+
+				//				setMessage(request, "participant.empiid.generation.message", null);
 			}
 			else
 			{
@@ -586,13 +586,13 @@ public class ParticipantAction extends SecureAction
 
 		if (ParticipantManagerUtility.isParticipantIsProcessing(participantForm.getId()))
 		{
-			/*
-			 * if (!Constants.TRUE.equals(isMatchedFromEMPI)) {
-			 * setMessage(request, "participant.empiid.generation.message"); }
-			 */
-			setMessage(request, "participant.empiid.generation.message", null);
+
+			if (!Constants.TRUE.equals(isMatchedFromEMPI)) {
+				setMessage(request, "participant.empiid.generation.message",null); }
+
+			//			setMessage(request, "participant.empiid.generation.message", null);
 		}
-	}
+			}
 
 	/**
 	 * Update collection protocol registration collection.
@@ -609,20 +609,20 @@ public class ParticipantAction extends SecureAction
 	 */
 	private void updateCollectionProtocolRegistrationCollection(IBizLogic bizLogic,
 			ParticipantForm participantForm, int count) throws Exception
-	{
+			{
 		// Gets the collection Protocol Registration map from ActionForm
 		final Map mapCollectionProtocolRegistration = participantForm
-				.getCollectionProtocolRegistrationValues();
+		.getCollectionProtocolRegistrationValues();
 
 		if (mapCollectionProtocolRegistration != null
 				&& !mapCollectionProtocolRegistration.isEmpty())
 		{
 			final Collection consentResponseBeanCollection = participantForm
-					.getConsentResponseBeanCollection();
+			.getConsentResponseBeanCollection();
 			this.setParticipantCollectionProtocolRegistrationId(bizLogic, participantForm.getId(),
 					mapCollectionProtocolRegistration, consentResponseBeanCollection, count);
 		}
-	}
+			}
 
 	/**
 	 * Update collection protocol registration map.
@@ -639,16 +639,16 @@ public class ParticipantAction extends SecureAction
 	 */
 	private int updateCollectionProtocolRegistrationMap(Map mapCollectionProtocolRegistration,
 			int count) throws Exception
-	{
+			{
 		int cprCount = 0;
 		for (int i = 1; i <= count; i++)
 		{
 			final String isActive = "CollectionProtocolRegistration:" + i + "_activityStatus";
 			final String collectionProtocolTitle = "CollectionProtocolRegistration:" + i
-					+ "_CollectionProtocol_id";
+			+ "_CollectionProtocol_id";
 			final String activityStatus = (String) mapCollectionProtocolRegistration.get(isActive);
 			final String cpId = (String) mapCollectionProtocolRegistration
-					.get(collectionProtocolTitle);
+			.get(collectionProtocolTitle);
 			if (activityStatus == null && cpId == null)
 			{
 				cprCount++;
@@ -665,15 +665,15 @@ public class ParticipantAction extends SecureAction
 			{
 
 				final String collectionProtocolParticipantId = "CollectionProtocolRegistration:"
-						+ i + "_protocolParticipantIdentifier";
+					+ i + "_protocolParticipantIdentifier";
 				final String collectionProtocolRegistrationDate = "CollectionProtocolRegistration:"
-						+ i + "_registrationDate";
+					+ i + "_registrationDate";
 				final String collectionProtocolIdentifier = "CollectionProtocolRegistration:" + i
-						+ "_id";
+				+ "_id";
 				final String isConsentAvailable = "CollectionProtocolRegistration:" + i
-						+ "_isConsentAvailable";
+				+ "_isConsentAvailable";
 				final String collectionProtocolParticipantTitle = "CollectionProtocolRegistration:"
-						+ i + "_CollectionProtocol_shortTitle";
+					+ i + "_CollectionProtocol_shortTitle";
 
 				mapCollectionProtocolRegistration.remove(collectionProtocolTitle);
 				mapCollectionProtocolRegistration.remove(collectionProtocolParticipantId);
@@ -686,7 +686,7 @@ public class ParticipantAction extends SecureAction
 			}
 		}
 		return (count - cprCount);
-	}
+			}
 
 	/**
 	 * Gets the consent list.
@@ -705,7 +705,7 @@ public class ParticipantAction extends SecureAction
 	{
 		final Collection consentTierCollection = (Collection) bizLogic.retrieveAttribute(
 				CollectionProtocol.class.getName(), Long.parseLong(cpId),
-				"elements(consentTierCollection)");
+		"elements(consentTierCollection)");
 		return consentTierCollection;
 	}
 
@@ -726,15 +726,15 @@ public class ParticipantAction extends SecureAction
 	 *             : Exception
 	 */
 	private void setParticipantMedicalNumberId(IBizLogic bizLogic, Long participantId, Map map)
-			throws Exception
+	throws Exception
 	{
 		// By Abhishek
 		// ParticipantBizLogic bizLogic = (ParticipantBizLogic)
 		// BizLogicFactory.getInstance
 		// ().getBizLogic(Participant.class.getName());
 		final Collection paticipantMedicalIdentifierCollection = (Collection) bizLogic
-				.retrieveAttribute(Participant.class.getName(), participantId,
-						"elements(participantMedicalIdentifierCollection)");
+		.retrieveAttribute(Participant.class.getName(), participantId,
+		"elements(participantMedicalIdentifierCollection)");
 		final Iterator iter = paticipantMedicalIdentifierCollection.iterator();
 		while (iter.hasNext())
 		{
@@ -785,7 +785,7 @@ public class ParticipantAction extends SecureAction
 	 */
 	private void setParticipantCollectionProtocolRegistrationId(IBizLogic bizLogic,
 			Long participantId, Map map, Collection consentResponseBeanCollection, int cprCount)
-			throws Exception
+	throws Exception
 	{
 		this.LOGGER.debug("Action ::: participant id :: " + participantId);
 		// By Abhishek Mehta
@@ -793,14 +793,14 @@ public class ParticipantAction extends SecureAction
 		// BizLogicFactory.getInstance
 		// ().getBizLogic(Participant.class.getName());
 		final Collection collectionProtocolRegistrationCollection = (Collection) bizLogic
-				.retrieveAttribute(Participant.class.getName(), participantId,
-						"elements(collectionProtocolRegistrationCollection)");
+		.retrieveAttribute(Participant.class.getName(), participantId,
+		"elements(collectionProtocolRegistrationCollection)");
 		final Iterator iter = collectionProtocolRegistrationCollection.iterator();
 
 		while (iter.hasNext())
 		{
 			final CollectionProtocolRegistration cpri = (CollectionProtocolRegistration) iter
-					.next();
+			.next();
 			for (int i = 1; i <= cprCount; i++)
 			{
 				if (cpri.getCollectionProtocol() != null)
@@ -810,7 +810,7 @@ public class ParticipantAction extends SecureAction
 					List list = null;
 					String barcode = null;
 					final IFactory factory = AbstractFactoryConfig.getInstance()
-							.getBizLogicFactory();
+					.getBizLogicFactory();
 					final IBizLogic bizLogic1 = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 					list = bizLogic1.retrieve(CollectionProtocolRegistration.class.getName(),
 							new String[]{"barcode"}, new String[]{"id"}, new String[]{"="},
@@ -820,11 +820,11 @@ public class ParticipantAction extends SecureAction
 						barcode = ((String) list.get(0));
 					}
 					final String collectionProtocolIdKey = "CollectionProtocolRegistration:" + i
-							+ "_CollectionProtocol_id";
+					+ "_CollectionProtocol_id";
 					final String collectionProtocolRegistrationIdKey = "CollectionProtocolRegistration:"
-							+ i + "_id";
+						+ i + "_id";
 					final String isActive = "CollectionProtocolRegistration:" + i
-							+ "_activityStatus";
+					+ "_activityStatus";
 					// barcodekey added by geeta
 					final String barcodeKey = "CollectionProtocolRegistration:" + i + "_barcode";
 					if (map.containsKey(collectionProtocolIdKey))
@@ -871,17 +871,17 @@ public class ParticipantAction extends SecureAction
 	 */
 	private void setConsentResponseId(IBizLogic bizLogic, Long cprId, Long colProtId,
 			Collection consentResponseBeanCollection) throws Exception
-	{
+			{
 		// By Abhishek Mehta
 		final Collection consentTierResponseCollection = (Collection) bizLogic.retrieveAttribute(
 				CollectionProtocolRegistration.class.getName(), cprId,
-				"elements(consentTierResponseCollection)");
+		"elements(consentTierResponseCollection)");
 
 		final Iterator itrRespBean = consentResponseBeanCollection.iterator();
 		while (itrRespBean.hasNext())
 		{
 			final ConsentResponseBean consentResponseBean = (ConsentResponseBean) itrRespBean
-					.next();
+			.next();
 			final long cpId = consentResponseBean.getCollectionProtocolID();
 			if (cpId == colProtId) // Searching for same collection protocol
 			{
@@ -892,7 +892,7 @@ public class ParticipantAction extends SecureAction
 				while (iter.hasNext())
 				{
 					final ConsentTierResponse consentTierResponse = (ConsentTierResponse) iter
-							.next();
+					.next();
 					if (consentTierResponse.getId() != null)
 					{
 						final ConsentTier consentTier = consentTierResponse.getConsentTier();
@@ -916,7 +916,7 @@ public class ParticipantAction extends SecureAction
 				}
 			}
 		}
-	}
+			}
 
 	/**
 	 * Gets the associated identified report id.
@@ -933,7 +933,7 @@ public class ParticipantAction extends SecureAction
 	 */
 	private Long getAssociatedIdentifiedReportId(ParticipantBizLogic participantBizlogic,
 			Long participantId) throws BizLogicException
-	{
+			{
 		// By Abhishek Mehta
 		Long value = null;
 		final List idList = participantBizlogic.getSCGList(participantId);
@@ -943,7 +943,7 @@ public class ParticipantAction extends SecureAction
 			value = ((Long) obj[2]);
 		}
 		return value;
-	}
+			}
 
 	/**
 	 * Gets the object id.
@@ -985,7 +985,7 @@ public class ParticipantAction extends SecureAction
 						participantForm.getId());
 
 				final Collection<CollectionProtocolRegistration> collection = participant
-						.getCollectionProtocolRegistrationCollection();
+				.getCollectionProtocolRegistrationCollection();
 
 				if (collection != null && !collection.isEmpty())
 				{
