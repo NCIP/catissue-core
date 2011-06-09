@@ -1135,6 +1135,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 						SecurityManagerFactory.getSecurityManager().assignRoleToUser(
 								csmUser.getUserId().toString(), role);
+						edu.wustl.catissuecore.util.global.Variables.sessionDataMap.remove(user.getLoginName());
 					}
 				}
 

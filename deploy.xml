@@ -676,6 +676,12 @@
 
 	<target name="copy_files" description="copy Configuration Files to JBOSS Directory">
 		<echo message="Copying caTissue Suite Application Components..." />
+		<!--Copying caTissueCdmsIntegration.properties file-->
+		<copy todir="${temp.dir}/catissuecore-properties" overwrite="true">
+			<fileset dir="${basedir}">
+				<include name="caTissueCdmsIntegration.properties" />
+			</fileset>
+		</copy>
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
 			<replacefilter token="@@ADMIN-EMAILADDRESS@@" value="${email.administrative.emailAddress}" />
 			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
@@ -683,9 +689,9 @@
 			<replacefilter token="@@IDP-ENABLED@@" value="${idp.enabled}" />
 			<replacefilter token="@@SESSION-TIME-OUT@@" value="${session.timeout}" />
 			<replacefilter token="@@APP-ADDITIONAL-INFO@@" value="${app.additional.info}" />
-			<replacefilter token="@@integrationEnabled@@" value="${cdms.integrationEnabled}" />
-			<replacefilter token="@@CdmsURL@@" value="${cdms.url}" />
-			<replacefilter token="@@CdmsKeyStorePath@@" value="${cdms.keystorePath}" />
+			<replacefilter token="@@integrationEnabled@@" value="${clinportal.integrationEnabled}" />
+			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />
+			<replacefilter token="@@CdmsKeyStorePath@@" value="" />
 
 			<replacefilter token="@@use.email.commonpackage.config@@" value="${use.email.commonpackage.config}" />
 			<replacefilter token="@@email.sendEmailTo.emailAddress@@" value="${email.sendEmailTo.emailAddress}" />
@@ -717,7 +723,10 @@
 						<!--<replacefilter token="@@CiderInBoundQueue@@" value="${cider.inbound.queue}" />-->
 						<replacefilter token="@@CiderOutBoundQueue@@" value="${cider.outbound.queue}" />
 		</replace>
-
+		<replace file="${temp.dir}/catissuecore-properties/caTissueCdmsIntegration.properties">
+			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />
+			<replacefilter token="@@CdmsKeyStorePath@@" value="" />
+		</replace>
 		<!-- CAS logout url-->
 		<if>
 			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
@@ -800,12 +809,7 @@
 				<include name="bulkOperation.properties" />
 			</fileset>
 		</copy>
-		<!--Copying caTissueCdmsIntegration.properties file-->
-		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
-			<fileset dir="${basedir}">
-				<include name="caTissueCdmsIntegration.properties" />
-			</fileset>
-		</copy>
+		
 	</target>
 	<target name="deploy_ca_model_war" description="deploy the ca_model_war">
 		<antcall target="CopyCAModelWars"/>
@@ -1965,8 +1969,8 @@
 	</target>
 
 
-	<!--Target for Application and Database Upgrade from Suite 1.1 to Suite 1.2-->
-	<target name="upgrade_all" depends="assert, upgrade_db, upgrade_app" description="Target for Application and Database Upgrade from v1.1  to V1.2">
+	<!--Target for Application and Database Upgrade from Suite p5.1 to Suite 1.2.1-->
+	<target name="upgrade_all" depends="assert, upgrade_db, upgrade_app" description="Target for Application and Database Upgrade from vp5.1  to V1.2.1">
 	</target>
 
 	<!--Target for Application and Database Upgrade from caTissueCore v1.2.2  to Suite 1.1-->
@@ -1976,7 +1980,7 @@
 	</target>
  	-->
 
-	<!--Target for Application Upgrade from Suite 1.1 to Suite 1.2-->
+	<!--Target for Application Upgrade from Suite p5.1 to Suite 1.2.1-->
 	<target name="upgrade_app" depends="deploy_app" description="this target urgrades the catissue application only from the current version.">
 	</target>
 <!--
@@ -2025,10 +2029,10 @@
 	</target>
 
 
-	<!--Target for Database Upgrade from Suite 1.1 to Suite 1.2-->
-	<target name="upgrade_db" description="Upgrading Database v1.1 to v1.2">
-		<echo message="Upgrading Database v1.1 to v1.2" />
-		<antcall target="upgrade_db_from_v1.1_to_v1.2"/>
+	<!--Target for Database Upgrade from Suite p5.1 to Suite 1.2.1-->
+	<target name="upgrade_db" description="Upgrading Database vp5.1 to v1.2.1">
+		<echo message="Upgrading Database vP5.1 to v1.2.1" />
+		<antcall target="upgarde_p5.1_to_1.2.1"/>
 	</target>
 
 	<target name="upgrade_db_from_v1.1.p1 to v1.1.p2" description="Upgrading Database from v1.1.p1 to v1.1.p2">
@@ -4645,6 +4649,15 @@ Thanking You,
 			<antcall target="insertPaths"/>
 			<antcall target="upgrade_app"/>
 		</target>
+	
+	<target name="upgarde_p5.1_to_1.2.1" description="Upgrading Database from v1.1.p5.1 to v1.2.1">
+		
+		<antcall target="upgrade_de_from_v1.1_to_1.2"/>
+		<antcall target="upgrade_query_metadata_for_1.2"/>
+		<antcall target="upgrade_db_for_1.2"/>
+		<antcall target="insertPaths"/>
+		<antcall target="upgarde_db_from_v1.2_to_v1.2.1"/>
+	</target>
 
 		<target name="upgrade_p5" description="Upgrading Database from v1.1.p5 to v1.2">
 			<echo message="Upgrading Database v1.1.p5 to v1.2" />

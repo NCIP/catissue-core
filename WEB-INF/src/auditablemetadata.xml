@@ -1292,4 +1292,7 @@
 
 	</AuditableClass>
 
+	<AuditableClass className="edu.wustl.catissuecore.domain.SpecimenCiderMessage"
+		relationShipType="main" roleName="" isAuditable="false">
+	</AuditableClass>
 </AuditableMetaData>
