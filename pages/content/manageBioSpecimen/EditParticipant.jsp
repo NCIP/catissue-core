@@ -128,6 +128,25 @@ function participantRegRow(subdivtag)
 			consent.appendChild(spanTag);
 			document.getElementById(keyValue).onchange=function(){getConsent(name,collectionProtocolValue,collectionProtocolTitleValue,(cprSize+1),anchorTagKey,consentCheckStatus)};
 		}
+		function setSubmittedForParticipanteMPIGenerate(submittedFor,forwardTo){
+			var noOfreg = '<%=noOrRowsCollectionProtocolRegistration%>';
+            var vbirthDate = document.getElementById('birthDate');
+			var vdeathDate = document.getElementById('deathDate');
+            validateDate(vbirthDate);
+			validateDate(vdeathDate);
+			validateRegDate(noOfreg);
+			document.forms[0].submittedFor.value = submittedFor;
+			document.forms[0].forwardTo.value    = forwardTo;
+			document.forms[0].action="<%=edu.wustl.common.participant.utility.Constants.PARTICIPANT_EMPI_GENERATION_ACTION%>";
+			<%if (pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+					{%>
+				document.forms[0].action="<%=edu.wustl.common.participant.utility.Constants.CP_QUERY_PARTICIPANT_EMPI_GENERATION_ACTION%>";
+			<%}%>
+			document.forms[0].isGenerateEMPIID.value="yes";
+			document.forms[0].submit();
+		}
+
+		
     	function setSubmittedForParticipant(submittedFor,forwardTo)
 		{
 			document.forms[0].submittedFor.value = submittedFor;
@@ -235,6 +254,15 @@ function participantRegRow(subdivtag)
 		{
      		 Tip(titleMessage,BGCOLOR,'#FFFFFF',BORDERCOLOR,'#000000',FONTCOLOR,'#000000',WIDTH,'30',FOLLOWMOUSE,'FALSE');
     	}
+		function validateRegDate(param){
+			var i = 1;
+			while(i <= param){
+			var id  = 'collectionProtocolRegistrationValue(ClinicalStudyRegistration:' + i + '_registrationDate)';
+			var date  = document.getElementById(id);
+			validateDate(date);
+			i++;
+		  }
+		}
 </script>
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
@@ -242,12 +270,24 @@ function participantRegRow(subdivtag)
 <table width="100%" border="0" cellpadding="0" cellspacing="0"
 	class="maintable" height="100%"><!-- Mandar 6Nov08 -->
 	<tr>
-		<td><input type="hidden" name="participantId"
-			value="<%=participantId%>" /> <input type="hidden" name="cpId"
-			id="cpId" /> <input type="hidden" name="radioValue" /> <html:hidden
-			property="<%=Constants.OPERATION%>" value="<%=operation%>" /> <html:hidden
-			property="submittedFor" value="<%=submittedFor%>" /> <html:hidden
-			property="forwardTo" value="<%=forwardTo%>" /></td>
+		<td><input type="hidden" name="participantId" value="<%=participantId%>" /> 
+			<input type="hidden" name="cpId" id="cpId" />
+			<input type="hidden" name="radioValue" />
+			
+			<!--  Added by amol for eMPI integration  -->
+          	<input type="hidden" name="clickedRowSelected" value=""/>
+			<html:hidden property="empiId"/>
+  			<input type="hidden" name="generateeMPIIdforPartiId" value=""/>
+			<input type="hidden" name="clinPortalPartiId" value=""/>
+			<html:hidden property="empiIdStatus"/>
+  			<input type="hidden" name="isGenerateEMPIID" value=""/>
+			<input type="hidden" name="isGenerateHL7" value=""/>
+			<input type="hidden" name="isCaTissueLookUpNeeded" value="false"/>
+			
+            <html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>" /> 
+			<html:hidden property="submittedFor" value="<%=submittedFor%>" /> 
+			<html:hidden property="forwardTo" value="<%=forwardTo%>" />
+		</td>
 		<td><html:hidden property="valueCounter" /></td>
 		<td><html:hidden
 			property="collectionProtocolRegistrationValueCounter" /></td>
@@ -310,7 +350,7 @@ function participantRegRow(subdivtag)
 			<tr>
 				<td colspan="2" align="left" class="bottomtd">
 
-			<%if (request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST) != null
+			<%if (request.getAttribute(Constants.SPREADSHEET_DATA_LIST) != null
 									&& dataList.size() > 0){%>
 				<tr>
 					<td colspan="2" align="left" class="bottomtd"><%@ include
@@ -330,12 +370,42 @@ function participantRegRow(subdivtag)
 					key="participant.details" /></span></td>
 			</tr>
 			 <!--This included jsp file is used to include Participant matching grid. -->
-			 <%@ include file="/pages/content/manageBioSpecimen/ParticipantLookup.jsp"%>
+			 <jsp:include page="/pages/content/manageBioSpecimen/ParticipantLookup.jsp"/>
 
 			<tr>
 				<td colspan="2" align="left" class="showhide" height="100%">
 				<table width="100%" border="0" cellspacing="0" cellpadding="3" height="100%">
-					<!-- Added by Geeta -->
+					<!-- Added by Amol -->
+					<%if(pageView.equals("edit") && csEMPIStatus.equals("true") && generateeMPIButtonName!=null && !generateeMPIButtonName.equals("")){%>
+						<tr>
+							<td width="1%" align="center" class="black_ar">&nbsp;</td>
+							<td width="17%"><label for="eMPIId"
+									class="black_ar"> <bean:message
+									key="participant.eMPIId" /> </label>
+							</td>
+							<td width="82%">
+								<html:text styleClass="black_new" styleId="eMPIId" readonly="true"
+								property="empiId"/>
+							<%
+									if( request.getAttribute(Constants.SPREADSHEET_DATA_LIST) == null ){
+							%>
+									<html:button styleClass="blue_ar_b"
+											property="registratioPage"
+											title="Submit Only"
+											value="<%=generateeMPIButtonName%>"
+											onclick="<%=normalSubmitForEMPIGenerate%>"
+											disabled="<%=isGenerateEMPIDisabled%>"
+											styleId="btnParticipantSubmit">
+									</html:button>
+							<%
+									}
+
+							%>
+							</td>
+						</tr>
+						<%}%>
+					
+					
 					<%
 						if(!Variables.isSSNRemove) {
 					%>
@@ -537,6 +607,7 @@ function participantRegRow(subdivtag)
 			   <%
 			   	}
 			   %>
+			  
 					<!-- activitystatus -->
 					<logic:equal name="<%=Constants.OPERATION%>"
 						value="<%=Constants.EDIT%>">
@@ -965,6 +1036,8 @@ function participantRegRow(subdivtag)
 									String normalSubmit = normalSubmitFunctionName;
 									String forwardToSubmit = forwardToSubmitFunctionName;
 									String forwardToSCG = forwardToSCGFunctionName;
+									String normalSubmitForcaTissueParticipantMatch = "setSubmittedForCaTissueParticipantMatch('" + submittedFor + "','"+ Constants.PARTICIPANT_FORWARD_TO_LIST[0][1] + "')";
+									
 								%>
 						<!-- PUT YOUR COMMENT HERE -->
 						<logic:equal name="<%=Constants.PAGE_OF%>"
@@ -974,24 +1047,38 @@ function participantRegRow(subdivtag)
 								styleClass="blue_ar_b" property="registratioPage"
 								title="Register Participant"
 								value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>"
-								onclick="<%=forwardToSubmit%>">
+								onclick="<%=forwardToSubmit%>"
+								disabled="<%=isSubmitDisabled%>"
+								>
 							</html:button>
 						</td>
 						</logic:equal>
 						<logic:notEqual name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
+							<%
+if(request.getAttribute("ZERO_MATCHES") != null)
+{
+	isSubmitDisabled = true;
+}
+%>
 							<td>
 								<html:button styleClass="blue_ar_b"
 								property="registratioPage" title="Submit Only"
-								onclick="<%=normalSubmit%>">
+								onclick="<%=normalSubmit%>"
+								disabled="<%=isSubmitDisabled%>"
+								>
+								
 								<bean:message key="buttons.submit" />
-								</html:button><!-- delete button added for deleting the objects -->
+								</html:button>
+								<!-- delete button added for deleting the objects -->
 								<logic:equal name="operation" value="edit">
 									<%
 										String deleteAction="deleteObject('" + formName +"','" + Constants.ADMINISTRATIVE + "')";
 									%>
 									|&nbsp;<html:button styleClass="blue_ar_c" property="disableRecord"
-										title="Delete" value="Delete" onclick="<%=deleteAction%>">
+										title="Delete" value="Delete" onclick="<%=deleteAction%>"
+										disabled="<%=isSubmitDisabled%>"
+										>
 									</html:button>
 								</logic:equal>
 							</td>
@@ -1002,6 +1089,7 @@ function participantRegRow(subdivtag)
 								property="registratioPage"
 								value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[2][0]%>"
 								onclick="<%=forwardToSCG%>"
+								disabled="<%=isSubmitDisabled%>"
 								onmouseover="showMessage('Create additional Specimen Collection Group to collect specimens which were  not anticipated as per protocol')">
 							</html:button>
 							<logic:equal name="operation" value="edit">
@@ -1009,11 +1097,25 @@ function participantRegRow(subdivtag)
 										String deleteAction="deleteObject('" + formName +"','" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 									%>
 								<html:button styleClass="blue_ar_c" property="disableRecord"
-									title="Disable Participant" value="Delete" onclick="<%=deleteAction%>">
+									title="Disable Participant" value="Delete" onclick="<%=deleteAction%>" disabled="<%=isSubmitDisabled%>">
 								</html:button>&nbsp;
 							 </logic:equal>
 							 </td>
 						</logic:equal>
+						<logic:equal name="<%=edu.wustl.common.participant.utility.Constants.IS_GENERATE_EMPI_PAGE%>"
+							value="true">
+							<td nowrap>&nbsp;|
+								<input type="button" style="width:70"
+									class="blue_ar_c"
+									name="ProNextParticipant"
+									title="Proceed to the next participant"
+									value="Skip"
+									onclick="processNextPartForEMPI();"
+									id="ProNextParticipant">
+								</input>
+								</td>
+						</logic:equal>
+						
 					</tr>
 				</table>
 				<!-- action buttons end --></td>
