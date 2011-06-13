@@ -689,6 +689,21 @@
 			<replacefilter token="@@email.exception.subject@@" value="${email.exception.subject}" />
 
 			<replacefilter token="@@CasKeystorePath@@" value="${cas.server.keystore.path}" />
+			
+			<!-- added by Amol .For eMPI integration -->
+				<replacefilter token="@@empiDBURL@@" value="jdbc:db2://${empi.database.host}:${empi.database.port}/${empi.database.name}" />
+				<replacefilter token="@@empiDBUserName@@" value="${empi.database.username}" />
+				<replacefilter token="@@empiDBUserPassword@@" value="${empi.database.password}" />
+				<replacefilter token="@@empiDBDriverName@@" value="${db2.driver.string}" />
+				<replacefilter token="@@empiDBSchema@@" value="${empi.database.schema}" />
+				
+				<replacefilter token="@@WMQServerName@@" value="${wmq.server.name}" />
+				<replacefilter token="@@WMQMGRName@@" value="${wmq.mgr.name}" />
+				<replacefilter token="@@WMQChannel@@" value="${wmq.channel}" />
+				<replacefilter token="@@WMQPort@@" value="${wmq.port}" />
+				<replacefilter token="@@HL7ListenerAdminUser@@" value="${hl7.listener.admin.user}" />
+			<!-- END -->
+			
 			<replacefilter token="@@CiderWMQEnabled@@" value="${cider.integration.enabled}" />
 			<replacefilter token="@@CiderWMQServerName@@" value="${cider.wmq.server.name}" />
 			<replacefilter token="@@CiderWMQMGRName@@" value="${cider.wmq.mgr.name}" />
@@ -1690,7 +1705,7 @@
 					</classpath>
 			</sql>
 		<antcall target="update_metadata_for_model_changes_mysql_post_P5" />
-
+		<antcall target="upgrade_db_from_v1.2.1_to_1.2.2_mysql"/>
 		<!--<delete dir="${temp.dir}" />-->
 	</target>
 
@@ -1849,7 +1864,7 @@
 			</classpath>
 		</sql>
 		<antcall target="update_metadata_for_model_changes_oracle_post_P5" />
-
+		<antcall target="upgrade_db_from_v1.2.1_to_1.2.2_oracle"/>
 		<!--<delete dir="${temp.dir}" />-->
 	</target>
 
@@ -4874,70 +4889,173 @@ Thanking You,
 	
 	<property name="entityNameOrFile" value=" " />
 	<target name="generate.bo.template.entity" description="Generate template File For De Entities">
-			<delete quiet="true" includeemptydirs="true">
-					<fileset dir="${temp.dir}/catissuecore">
-						<include name="**/*" />
-					</fileset>
-				</delete>
-				<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
-				<antcall target="replace_app_dao_prop_file"/>
-				<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
-				<copy file="${base.dir}/modules/dynamic_extensions/conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-				<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
-				<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
-
-				
-				<if>
-					<equals arg1="mysql" arg2="${database.type}" />
+		<delete quiet="true" includeemptydirs="true">
+				<fileset dir="${temp.dir}/catissuecore">
+					<include name="**/*" />
+				</fileset>
+			</delete>
+			<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+			<antcall target="replace_app_dao_prop_file"/>
+			<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
+			<copy file="${base.dir}/modules/dynamic_extensions/conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+			<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
+			<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
+	
+			
+			<if>
+				<equals arg1="mysql" arg2="${database.type}" />
+				<then>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+						<include name="*.cfg.xml" />
+						<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+						<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+						<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+					</replace>
+				</then>
+				<elseif>
+					<equals arg1="oracle" arg2="${database.type}" />
 					<then>
 						<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 							<include name="*.cfg.xml" />
-							<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
-							<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-							<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+							<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+							<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
 						</replace>
 					</then>
-					<elseif>
-						<equals arg1="oracle" arg2="${database.type}" />
-						<then>
-							<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-								<include name="*.cfg.xml" />
-								<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
-								<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
-								<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
-							</replace>
-						</then>
-					</elseif>
-				</if>
-				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-					<include name="*.cfg.xml" />
-					<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-					<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
-				</replace>
-			<copy file="${base.dir}/modules/bulk_operations/conf/log4j.properties" todir="${base.dir}" overwrite="true"/>
-			<java classname="edu.wustl.catissuecore.util.BOTemplateGeneratorClient" fork="true" maxmemory="1024M" failonerror="true">
-				<arg value="entity"/>
-				<arg value="${entityNameOrFile}" />
-				<arg value="${mappingXMLFile}" />
-
-					<classpath>
-						<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
-						<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+				</elseif>
+			</if>
+			<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+				<include name="*.cfg.xml" />
+				<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+				<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+			</replace>
+		<copy file="${base.dir}/modules/bulk_operations/conf/log4j.properties" todir="${base.dir}" overwrite="true"/>
+		<java classname="edu.wustl.catissuecore.util.BOTemplateGeneratorClient" fork="true" maxmemory="1024M" failonerror="true">
+			<arg value="entity"/>
+			<arg value="${entityNameOrFile}" />
+			<arg value="${mappingXMLFile}" />
+	
+				<classpath>
+					<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+					<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+						<include name="*.jar" />
+						<exclude name="uml-1.3.jar" />
+					</fileset>
+					<fileset dir="${lib.dir}">
 							<include name="*.jar" />
-							<exclude name="uml-1.3.jar" />
-						</fileset>
-						<fileset dir="${lib.dir}">
-								<include name="*.jar" />
-						</fileset>
-					</classpath>
-				<sysproperty key="static.template.dir" value="${base.dir}/modules/bulk_operations/conf" />
-				</java>
-				<move todir="${base.dir}/modules/bulk_operations/log" overwrite="true">
-						<fileset dir="${base.dir}">
-							<include name="bulkoperator*.log*" />
-						</fileset>
-					</move>
-				<delete file="${base.dir}/log4j.properties"></delete>
-			</target>
-		
+					</fileset>
+				</classpath>
+			<sysproperty key="static.template.dir" value="${base.dir}/modules/bulk_operations/conf" />
+			</java>
+			<move todir="${base.dir}/modules/bulk_operations/log" overwrite="true">
+					<fileset dir="${base.dir}">
+						<include name="bulkoperator*.log*" />
+					</fileset>
+				</move>
+			<delete file="${base.dir}/log4j.properties"></delete>
+	</target>
+	<target name="createEMPIAdminUser_oracle">
+		<sql driver="${oracle.driver.string}"
+			url="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}"
+			userid="${csm.database.username}" password="${csm.database.password}"
+			onerror="continue" rdbms="oracle">
+			<transaction src="${oracle.sql.dir}/csm_createEMPIAdminUser.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<sql driver="${oracle.driver.string}" output="adminUser.properties"
+			print="yes" showheaders="false"
+			url="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}"
+			userid="${csm.database.username}" password="${csm.database.password}"
+			onerror="continue" rdbms="oracle">
+	
+			<![CDATA[        select 'user.id=' ||  user_id from csm_user where login_name='clinportal_eMPI@admin.com';
+				]]>
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<property file="${base.dir}/adminUser.properties" />
+		<echo>${user.id} </echo>
+		<copy file="${oracle.sql.dir}/clinportal_createEMPIAdminUser.sql"
+			tofile="${oracle.sql.dir}/clinportal_createEMPIAdminUser1.sql" />
+		<replace file="${oracle.sql.dir}/clinportal_createEMPIAdminUser1.sql"
+			token="@@id@@" value="${user.id}" />
+		<sql driver="${oracle.driver.string}"
+			url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+			userid="${database.username}" password="${database.password}"
+			onerror="continue" rdbms="oracle">
+			<transaction src="${oracle.sql.dir}/clinportal_createEMPIAdminUser1.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<delete file="adminUser.properties">
+		</delete>
+		<delete file="${oracle.sql.dir}/clinportal_createEMPIAdminUser1.sql">
+		</delete>
+	</target>
+	
+	
+	<target name="createEMPIAdminUser_mysql">
+		<sql driver="${mysql.driver.string}"
+			url="jdbc:mysql://@${csm.database.host}:${csm.database.port}/${csm.database.name}"
+			userid="${csm.database.username}" password="${csm.database.password}"
+			onerror="continue">
+			<transaction src="${mysql.sql.dir}/csm_createEMPIAdminUser.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<sql driver="${mysql.driver.string}" output="adminUser.properties"
+			print="yes" showheaders="false"
+			url="jdbc:mysql://@${csm.database.host}:${csm.database.port}/${csm.database.name}"
+			userid="${csm.database.username}" password="${csm.database.password}"
+			onerror="continue">
+	
+			<![CDATA[        select 'user.id=' ||  user_id from csm_user where login_name='clinportal_eMPI@admin.com';
+				]]>
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<property file="${base.dir}/adminUser.properties" />
+		<echo>${user.id} </echo>
+		<copy file="${mysql.sql.dir}/clinportal_createEMPIAdminUser.sql"
+			tofile="${mysql.sql.dir}/clinportal_createEMPIAdminUser1.sql" />
+		<replace file="${mysql.sql.dir}/clinportal_createEMPIAdminUser1.sql"
+			token="@@id@@" value="${user.id}" />
+		<sql driver="${mysql.driver.string}"
+			url="jdbc:mysql://${database.host}:${database.port}:${database.name}"
+			userid="${database.username}" password="${database.password}"
+			onerror="continue">
+			<transaction src="${mysql.sql.dir}/clinportal_createEMPIAdminUser1.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<delete file="adminUser.properties">
+		</delete>
+		<delete file="${mysql.sql.dir}/clinportal_createEMPIAdminUser1.sql">
+		</delete>
+	</target>	
 </project>

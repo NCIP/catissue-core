@@ -1711,6 +1711,7 @@
 					</classpath>
 			</sql>
 		<antcall target="update_metadata_for_model_changes_mysql_post_P5" />
+		<antcall target="upgrade_db_from_v1.2.1_to_1.2.2_mysql"/>
 	</target>
 	<target name="insert_entity_group_metadata_mysql" description="insert entity group metadata for mysql">
 		<echo message="Inserting entity group metadata for Mysql" />
@@ -1863,6 +1864,7 @@
 			</classpath>
 		</sql>
 		<antcall target="update_metadata_for_model_changes_oracle_post_P5" />
+		<antcall target="upgrade_db_from_v1.2.1_to_1.2.2_oracle"/>
 	</target>
 
 	<target name="reset_sequences" description="Resetting the sequences...">
@@ -4825,5 +4827,108 @@ Thanking You,
 			</java>
 			<delete dir="${base.dir}/tempbulkoperator" failonerror="false"></delete>
 		</target>
-
+	<target name="createEMPIAdminUser_oracle">
+		<sql driver="${oracle.driver.string}"
+			url="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}"
+			userid="${csm.database.username}" password="${csm.database.password}"
+			onerror="continue" rdbms="oracle">
+			<transaction src="${oracle.sql.dir}/csm_createEMPIAdminUser.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<sql driver="${oracle.driver.string}" output="adminUser.properties"
+			print="yes" showheaders="false"
+			url="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}"
+			userid="${csm.database.username}" password="${csm.database.password}"
+			onerror="continue" rdbms="oracle">
+	
+			<![CDATA[        select 'user.id=' ||  user_id from csm_user where login_name='clinportal_eMPI@admin.com';
+				]]>
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<property file="${base.dir}/adminUser.properties" />
+		<echo>${user.id} </echo>
+		<copy file="${oracle.sql.dir}/clinportal_createEMPIAdminUser.sql"
+			tofile="${oracle.sql.dir}/clinportal_createEMPIAdminUser1.sql" />
+		<replace file="${oracle.sql.dir}/clinportal_createEMPIAdminUser1.sql"
+			token="@@id@@" value="${user.id}" />
+		<sql driver="${oracle.driver.string}"
+			url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+			userid="${database.username}" password="${database.password}"
+			onerror="continue" rdbms="oracle">
+			<transaction src="${oracle.sql.dir}/clinportal_createEMPIAdminUser1.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<delete file="adminUser.properties">
+		</delete>
+		<delete file="${oracle.sql.dir}/clinportal_createEMPIAdminUser1.sql">
+		</delete>
+	</target>
+	
+	
+	<target name="createEMPIAdminUser_mysql">
+		<sql driver="${mysql.driver.string}"
+			url="jdbc:mysql://@${csm.database.host}:${csm.database.port}/${csm.database.name}"
+			userid="${csm.database.username}" password="${csm.database.password}"
+			onerror="continue">
+			<transaction src="${mysql.sql.dir}/csm_createEMPIAdminUser.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<sql driver="${mysql.driver.string}" output="adminUser.properties"
+			print="yes" showheaders="false"
+			url="jdbc:mysql://@${csm.database.host}:${csm.database.port}/${csm.database.name}"
+			userid="${csm.database.username}" password="${csm.database.password}"
+			onerror="continue">
+	
+			<![CDATA[        select 'user.id=' ||  user_id from csm_user where login_name='clinportal_eMPI@admin.com';
+				]]>
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<property file="${base.dir}/adminUser.properties" />
+		<echo>${user.id} </echo>
+		<copy file="${mysql.sql.dir}/clinportal_createEMPIAdminUser.sql"
+			tofile="${mysql.sql.dir}/clinportal_createEMPIAdminUser1.sql" />
+		<replace file="${mysql.sql.dir}/clinportal_createEMPIAdminUser1.sql"
+			token="@@id@@" value="${user.id}" />
+		<sql driver="${mysql.driver.string}"
+			url="jdbc:mysql://${database.host}:${database.port}:${database.name}"
+			userid="${database.username}" password="${database.password}"
+			onerror="continue">
+			<transaction src="${mysql.sql.dir}/clinportal_createEMPIAdminUser1.sql" />
+			<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</sql>
+		<delete file="adminUser.properties">
+		</delete>
+		<delete file="${mysql.sql.dir}/clinportal_createEMPIAdminUser1.sql">
+		</delete>
+	</target>
 </project>
