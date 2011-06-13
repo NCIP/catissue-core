@@ -133,7 +133,7 @@ function refreshProcesedParticipant(){
 	<%}else{%>
 	<tr>
 		<td align="left" class="tr_bg_blue1"><span class="blue_ar_b">
-		&nbsp; No processed participants found .... </span></td>
+		&nbsp; <bean:message key="participant.processed.notFound" /></span></td>
 	</tr>
 	<tr>
 		<td>
