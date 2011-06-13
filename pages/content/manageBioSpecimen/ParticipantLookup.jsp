@@ -1,9 +1,30 @@
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+
+<%@ page import="java.util.List"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+
+<%
+			boolean isRegisterButton = false;
+			List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+			List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+			String operation = (String)request.getAttribute(Constants.OPERATION);
+			String pageView=operation;
+			String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+			
+		String csEMPIStatus = org.apache.commons.lang.StringEscapeUtils.escapeHtml((String)request.getAttribute("csEMPIStatus"));
+		final String isMatchedFromEMPI=org.apache.commons.lang.StringEscapeUtils.escapeHtml((String)request.getAttribute(edu.wustl.common.participant.utility.Constants.MATCHED_PARTICIPANTS_FOUND_FROM_EMPI));
+		String empiGenerationFieldsInsufficient=org.apache.commons.lang.StringEscapeUtils.escapeHtml((String)request.getAttribute(edu.wustl.common.participant.utility.Constants.EMPI_GENERATION_FIELDS_INSUFFICIENT));
+		String catissueMatchedParticipantFound=org.apache.commons.lang.StringEscapeUtils.escapeHtml((String)request.getAttribute("CaTissueMatchedParticpant"));
+
+%>
  <!-- Data Grid for Participant Details Starts -->
          	<tr>
 				<td colspan="2" class="bottomtd"></td>
 			</tr>
 			<%
-				if (request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST) != null
+				if (request.getAttribute(Constants.SPREADSHEET_DATA_LIST) != null
 									&& dataList.size() > 0) {
 								isRegisterButton = true;
 								if (request.getAttribute(Constants.SUBMITTED_FOR) != null
@@ -12,6 +33,26 @@
 									isRegisterButton = false;
 								}
 			%>
+			<%
+												if(catissueMatchedParticipantFound!=null && catissueMatchedParticipantFound !="" && catissueMatchedParticipantFound.equals(Constants.TRUE)){
+										%>
+											<tr>
+												<td colspan="7" align="left" class="tr_bg_blue1"><span
+													class="blue_ar_b">&nbsp; Possible Participant Matches from caTissue </td>
+											</tr>
+										<%}else if(isMatchedFromEMPI!=null && Constants.TRUE.equals(isMatchedFromEMPI))	{%>
+										   <tr>
+												<td colspan="7" align="left" class="tr_bg_blue1"><span
+													class="blue_ar_b">&nbsp; <bean:message
+													key="participant.empi.lookup" /></td>
+											</tr>
+										<%}else{%>
+											<tr>
+												<td colspan="7" align="left" class="tr_bg_blue1"><span
+													class="blue_ar_b">&nbsp; <bean:message
+													key="participant.lookup" /></td>
+											</tr>
+                                       <%}%>
 			<tr>
 				<td colspan="2">
 				<table width="100%" summary="" cellpadding="0" cellspacing="0" border="0">
@@ -54,15 +95,30 @@
 			<%@ include file="/pages/content/search/AdvanceGrid.jsp"%>
 			</td>
 					</tr>
+					<% if (pageView.equals("edit") && isMatchedFromEMPI!=null && (Constants.TRUE.equals(isMatchedFromEMPI))) {
+										       if(!Constants.TRUE.equals(empiGenerationFieldsInsufficient)){
+										%>
+											<tr>
+							  					<td align="center" colspan="7" class="formFieldWithNoTopBorder">
+							     					<INPUT TYPE='RADIO' NAME='chkName' id="chkIgnoreGenerateEMPI" value="Add" onclick="GenerateEMPIID()"><font size="2">Ignore matches and generate eMPI </font></INPUT>&nbsp;&nbsp;
+							  					</td>
+											</tr>
+										<%}} else {%>
 					<tr>
 						<td align="center" colspan="7" class="formFieldWithNoTopBorder">
 						<INPUT TYPE='RADIO' NAME='chkName' value="Add"
 							onclick="CreateNewClick()"> <font size="2">Ignore
-						matches and create new participant </font> </INPUT>&nbsp;&nbsp; <INPUT
+						matches and create new participant </font> </INPUT>&nbsp;&nbsp; 
+						<%
+												if(catissueMatchedParticipantFound==null || catissueMatchedParticipantFound ==""){
+										        %><INPUT
 							TYPE='RADIO' NAME='chkName' value="Lookup"
 							onclick="LookupAgain()" checked=true> <font size="2">Lookup
-						again </font> </INPUT></td>
+						again </font> </INPUT>
+						<%}%>
+						</td>
 					</tr>
+					<%}%>
 				</table>
 				</td>
 			</tr>
