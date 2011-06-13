@@ -143,10 +143,24 @@
 		<name>lookup.cutoff</name>
 		<value>65</value>
 	</property>
+	
+	<!--  amol empi start -->
 	<property>
 		<name>ParticipantLookupAlgo</name>
 		<value>edu.wustl.common.participant.bizlogic.ParticipantLookupLogic</value>
 	</property>
+	<property>
+		<name>ParticipantLookupAlgoEMPI</name>
+		<value>edu.wustl.common.participant.bizlogic.ParticipantLookUpLogicEMPI</value>
+	</property>
+	<property>
+		<name>ParticipantLookupAlgoForMigratio</name>
+		<value>
+			edu.wustl.clinportal.bizlogic.ParticipantLookupLogicForMigration
+		</value>
+	</property>
+	<!-- amol empi end -->
+	
 	<property>
 		<name>SSNExact</name>
 		<value>30</value>
@@ -598,7 +612,74 @@
 		<value>10000</value>
 	</property>
 
+<!--  Added for EMPI integration -->
+	<property>
+		<name>empi.DBURL</name>
+		<value>@@empiDBURL@@</value>
+	</property>
+	<property>
+		<name>empi.DBDriverName</name>
+		<value>@@empiDBDriverName@@</value>
+	</property>
+	<property>
+		<name>empi.DBUserName</name>
+		<value>@@empiDBUserName@@</value>
+	</property>
+	<property>
+		<name>empi.DBUserPassword</name>
+		<value>@@empiDBUserPassword@@</value>
+	</property>
+	<property>
+		<name>empi.DBSchema</name>
+		<value>@@empiDBSchema@@</value>
+	</property>
+	<property>
+		<name>empi.MaxNoOfPatients</name>
+		<value>100</value>
+	</property>
+	<property>
+		<name>empi.threshold</name>
+		<value>20</value>
+	</property>
+	<property>
+		<name>WMQServerName</name>
+		<value>@@WMQServerName@@</value>
+	</property>
+	<property>
+		<name>WMQMGRName</name>
+		<value>@@WMQMGRName@@</value>
+	</property>
+	<property>
+		<name>WMQChannel</name>
+		<value>@@WMQChannel@@</value>
+	</property>
+	<property>
+		<name>WMQPort</name>
+		<value>@@WMQPort@@</value>
+	</property>
+	<property>
+		<name>InBoundQueue</name>
+		<value>BD.OUTBOUND.CLINPORTAL.EMPI</value>
+	</property>
+	<property>
+		<name>OutBoundQueue</name>
+		<value>BD.REGISTRATION.INBOUNDHL7</value>
+	</property>
 
+	<property>
+		<name>MergeMessageQueue</name>
+		<value>BD.CLINPORTAL.MERGES</value>
+	</property>
+
+	<property>
+		<name>HL7ListenerAdminUser</name>
+		<value>@@HL7ListenerAdminUser@@</value>
+	</property>
+
+	<property>
+		<name>ParticipantMatchingShchedularDelay</name>
+		<value>60000</value>
+	</property>
 
 	<!--CDMS-caTissue Integration-->
 	<property>
