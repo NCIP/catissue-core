@@ -300,8 +300,8 @@ Ext.onReady(function(){
                        {
                             text: 'Registration',
                             href:'ProcessMatchedParticipants.do?pageOf=pageOfMatchedParticipant&identifierFieldIndex=0'
-                        },
-                       {
+                        }
+                       /*{
                     	   // Auto load messages menu
                     	   text: 'Load Clinical Data',
                    		   href:'FetchXmlMessages.do'
@@ -310,7 +310,7 @@ Ext.onReady(function(){
                     	   //Administrator message queue menu
                     	   text: 'Admin Messages Queue',
                    		   href:'FetchAdminQueueMessages.do'
-                       }
+                       }*/
                     ]
                 }
             },
