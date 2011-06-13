@@ -15,13 +15,13 @@
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
-
+ 
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 
 
-<script src="jss/ajax.js"></script>
+<script src="jss/ajax.js"></script> 
 <script src="jss/script.js"></script>
-<!-- Mandar 11-Aug-06 : For calendar changes -->
+<!-- Mandar 11-Aug-06 : For calendar changes --> 
 <script src="jss/calendar.js"></script>
 <script src="jss/calendarComponent.js"></script>
 <script src="jss/titli.js"></script>
@@ -59,7 +59,6 @@ tr#hiddenCombo
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
 		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
-
 		String staticEntityName=null;
 		staticEntityName = AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY;
 		//Falguni:Performance Enhancement.
@@ -134,6 +133,50 @@ tr#hiddenCombo
 		noOrRowsCollectionProtocolRegistration =1;
 	}
 		}
+		
+		boolean isGenerateEMPIDisabled=false;
+		boolean isSubmitDisabled=false;
+		String generateeMPIButtonName="";
+		generateeMPIButtonName=org.apache.commons.lang.StringEscapeUtils.escapeHtml((String)request.getAttribute(Constants.GENERATE_EMPI_ID_NAME));
+		String csEMPIStatus = org.apache.commons.lang.StringEscapeUtils.escapeHtml((String)request.getAttribute("csEMPIStatus"));
+		final String isMatchedFromEMPI=org.apache.commons.lang.StringEscapeUtils.escapeHtml((String)request.getAttribute(edu.wustl.common.participant.utility.Constants.MATCHED_PARTICIPANTS_FOUND_FROM_EMPI));
+		String empiGenerationFieldsInsufficient=org.apache.commons.lang.StringEscapeUtils.escapeHtml((String)request.getAttribute(edu.wustl.common.participant.utility.Constants.EMPI_GENERATION_FIELDS_INSUFFICIENT));
+		String isEnableLinkedParticipantButton=org.apache.commons.lang.StringEscapeUtils.escapeHtml((String)request.getAttribute("isEnableLinkedParticipantButton"));
+		String catissueMatchedParticipantFound=org.apache.commons.lang.StringEscapeUtils.escapeHtml((String)request.getAttribute("CaTissueMatchedParticpant"));
+		
+		//amol changes
+		String fromProcessMessage = (String) request
+		.getAttribute(edu.wustl.common.participant.utility.Constants.IS_GENERATE_EMPI_PAGE);
+		if(fromProcessMessage == null){
+			request
+		.setAttribute(edu.wustl.common.participant.utility.Constants.IS_GENERATE_EMPI_PAGE,"false");
+		}
+		
+		//ends
+		String normalSubmitForEMPIGenerate = "setSubmittedForParticipanteMPIGenerate('"
+				+ submittedFor + "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1] + "')";
+		
+
+		if (pageView.equals("edit"))
+		{
+%>
+		<logic:equal name="participantForm" property="empiIdStatus"
+			value="<%=edu.wustl.common.participant.utility.Constants.EMPI_ID_PENDING%>">
+			<%
+				isGenerateEMPIDisabled = true;
+			isSubmitDisabled=true;
+							generateeMPIButtonName = edu.wustl.common.participant.utility.Constants.GENERATE_EMPI_ID;
+			%>
+
+		</logic:equal>
+		<logic:equal name="participantForm" property="empiIdStatus"
+			value="<%=edu.wustl.common.participant.utility.Constants.EMPI_ID_CREATED%>">
+			<%
+				generateeMPIButtonName = edu.wustl.common.participant.utility.Constants.REGENERATE_EMPI_ID;
+			%>
+		</logic:equal>
+	<%} 
+
 %>
 
 <head>
@@ -376,15 +419,25 @@ tr#hiddenCombo
 			//mandar for grid
 			var cl = mygrid.cells(participant_id,mygrid.getColumnCount()-1);
 			var pid = cl.getValue();
+			
 			//alert(pid);
 			//participant_id = pid;
 			//------------
 			//document.forms[0].participantId.value=participant_id;
+			var clicked_Row = participant_id;
+			if(document.forms[0].generateeMPIIdforPartiId.value == ""){
+				document.forms[0].generateeMPIIdforPartiId.value = document.forms[0].participantId.value;
+			}
+			if(document.forms[0].clinPortalPartiId.value==""){
+				document.forms[0].clinPortalPartiId.value = document.forms[0].participantId.value;
+			}
+			document.forms[0].clickedRowSelected.value=clicked_Row;
+			
 			document.forms[0].participantId.value=pid;
 			document.forms[0].id.value=pid;
 			document.forms[0].forwardTo.value="pageOfParticipant";
 			document.forms[0].action="ParticipantRegistrationSelect.do?operation=edit&pageOf=pageOfParticipant";
-
+			document.forms[0].isGenerateEMPIID.value="YES";
 			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 			{%>
 					document.forms[0].forwardTo.value="pageOfParticipantCPQuery";
@@ -483,6 +536,19 @@ tr#hiddenCombo
 				document.forms[0].submit();
 			}
 		}
+
+		function GenerateEMPIID()
+		{
+			document.forms[0].radioValue.value="GenerateHL7Mes";
+			document.forms[0].action="<%=edu.wustl.common.participant.utility.Constants.PARTICIPANT_EMPI_GENERATION_ACTION%>";
+			document.forms[0].isGenerateHL7.value="yes";
+			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+			{%>
+				document.forms[0].action="<%=edu.wustl.common.participant.utility.Constants.CP_QUERY_PARTICIPANT_EMPI_GENERATION_ACTION%>";
+			<%}%>
+                document.forms[0].registratioPage.disabled=false;
+		}
+		
 		function editParticipant()
 		{
 			//bug 7530 .Report id becomes the participant id thats why extra field PARTICIPANTIDFORREPORT added in the report.
@@ -515,6 +581,7 @@ tr#hiddenCombo
 
 
 	</script>
+<script language="JavaScript" type="text/javascript" src="jss/empi.js"></script>
 </head>
 
 <html:form action="<%=formName%>" style="height:100%,width=100%">
@@ -612,9 +679,7 @@ tr#hiddenCombo
 
 	 if(top.frames["cpAndParticipantView"] != undefined)
 	 {
-
 		top.frames["cpAndParticipantView"].refreshCpParticipants(<%=participantId%>);
-
 	 }
 	</script>
 
