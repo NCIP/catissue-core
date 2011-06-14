@@ -12,6 +12,8 @@ primary key (IDENTIFIER)
 );
 
 alter table catissue_collection_protocol add column IS_EMPI_ENABLE boolean;
+
+update catissue_collection_protocol set IS_EMPI_ENABLE = false; 
 alter table catissue_participant add column EMPI_ID varchar(50);
 alter table catissue_participant add column EMPI_ID_STATUS varchar(50);
 

@@ -9,7 +9,7 @@
 
     	<property name="show_sql">false</property>
     	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="connection.datasource">java:/catissuecore</property>
+	      <property name="connection.datasource">java:/catissuecore</property>
         <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>
     	<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
@@ -20,12 +20,14 @@
     	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
     	<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
         <property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
+        <property name="hibernate.jdbc.batch_size">0</property>
+       
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-	    <property name="connection.url">jdbc:mysql://localhost:3306/suite</property>
-	    <property name="connection.username">virender</property>
-	    <property name="connection.password">virender</property>
-	    <property name="hibernate.jdbc.batch_size">0</property>
-  -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+	    <property name="connection.url">jdbc:mysql://localhost:3306/catissue_12</property>
+	    <property name="connection.username">root</property>
+	    <property name="connection.password">root</property> -->
+	    
     	<!--Consent Tracking Suite-->
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTier.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierResponse.hbm.xml"/>
@@ -123,6 +125,9 @@
 
 		<!-- bulk Operations-->
 		<mapping resource="edu/wustl/bulkoperator/hbm/JobDetails.hbm.xml"/>
+		
+		<!-- caTissue-cider integration -->
+		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenCiderMessage.hbm.xml"/>
     </session-factory>
 
 </hibernate-configuration>

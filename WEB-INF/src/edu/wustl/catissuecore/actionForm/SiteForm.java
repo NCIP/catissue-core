@@ -1,6 +1,6 @@
 /**
  * <p>Title: SiteForm Class>
- * <p>Description:  This Class is used to encapsulate all the request parameters passed 
+ * <p>Description:  This Class is used to encapsulate all the request parameters passed
  * from Site.jsp page. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
@@ -59,6 +59,8 @@ public class SiteForm extends AbstractActionForm
 	 */
 	private String city;
 
+	protected String facilityId;
+
 	/**
 	 * Name : Virender Mehta
 	 * Reviewer: Sachin Lale
@@ -98,7 +100,7 @@ public class SiteForm extends AbstractActionForm
 	private long coordinatorId;
 
 	/**
-	 * No argument constructor for StorageTypeForm class 
+	 * No argument constructor for StorageTypeForm class
 	 */
 	public SiteForm()
 	{
@@ -107,25 +109,26 @@ public class SiteForm extends AbstractActionForm
 
 	/**
 	 * This function Copies the data from an site object to a SiteForm object.
-	 * @param abstractDomain An object containing the information about site.  
+	 * @param abstractDomain An object containing the information about site.
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		final Site site = (Site) abstractDomain;
 
 		this.setId(site.getId().longValue());
-		this.name = site.getName();
-		this.type = site.getType();
-		this.emailAddress = site.getEmailAddress();
-		this.street = site.getAddress().getStreet();
-		this.city = site.getAddress().getCity();
-		this.state = site.getAddress().getState();
-		this.country = site.getAddress().getCountry();
-		this.zipCode = site.getAddress().getZipCode();
-		this.phoneNumber = site.getAddress().getPhoneNumber();
-		this.faxNumber = site.getAddress().getFaxNumber();
+		name = site.getName();
+		type = site.getType();
+		emailAddress = site.getEmailAddress();
+		street = site.getAddress().getStreet();
+		city = site.getAddress().getCity();
+		state = site.getAddress().getState();
+		country = site.getAddress().getCountry();
+		zipCode = site.getAddress().getZipCode();
+		phoneNumber = site.getAddress().getPhoneNumber();
+		faxNumber = site.getAddress().getFaxNumber();
 		this.setActivityStatus(site.getActivityStatus());
-		this.coordinatorId = site.getCoordinator().getId().longValue();
+		coordinatorId = site.getCoordinator().getId().longValue();
+		facilityId = site.getFacilityId();
 	}
 
 	/**
@@ -135,7 +138,7 @@ public class SiteForm extends AbstractActionForm
 	 */
 	public String getName()
 	{
-		return this.name;
+		return name;
 	}
 
 	/**
@@ -151,13 +154,13 @@ public class SiteForm extends AbstractActionForm
 	/**
 	 * Returns the type of the site.
 	 * @return the type of the site.
-	 * @see #setType(String) 
+	 * @see #setType(String)
 	 */
 	public String getType()
 	{
-		return this.type;
+		return type;
 	}
-	
+
 	/**
 	 * Returns the Street Address of the site.
 	 * @return String representing mailing address of the site.
@@ -165,7 +168,7 @@ public class SiteForm extends AbstractActionForm
 	 */
 	public String getStreet()
 	{
-		return this.street;
+		return street;
 	}
 
 	/**
@@ -190,11 +193,11 @@ public class SiteForm extends AbstractActionForm
 	/**
 	 * Returns the id of the coordinator.
 	 * @return the id of the coordinator.
-	 * @see #setCoordinatorId(long) 
+	 * @see #setCoordinatorId(long)
 	 */
 	public long getCoordinatorId()
 	{
-		return this.coordinatorId;
+		return coordinatorId;
 	}
 
 	/**
@@ -211,7 +214,7 @@ public class SiteForm extends AbstractActionForm
 	 */
 	public String getEmailAddress()
 	{
-		return this.emailAddress;
+		return emailAddress;
 	}
 
 	/**
@@ -221,7 +224,7 @@ public class SiteForm extends AbstractActionForm
 	 */
 	public String getCity()
 	{
-		return this.city;
+		return city;
 	}
 
 	/**
@@ -241,7 +244,7 @@ public class SiteForm extends AbstractActionForm
 	 */
 	public String getState()
 	{
-		return this.state;
+		return state;
 	}
 
 	/**
@@ -261,7 +264,7 @@ public class SiteForm extends AbstractActionForm
 	 */
 	public String getCountry()
 	{
-		return this.country;
+		return country;
 	}
 
 	/**
@@ -284,13 +287,13 @@ public class SiteForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the zip code of the city where the site is. 
+	 * Returns the zip code of the city where the site is.
 	 * @return Returns the zip.
 	 * @see #setZip(String)
 	 */
 	public String getZipCode()
 	{
-		return this.zipCode;
+		return zipCode;
 	}
 
 	/**
@@ -310,11 +313,11 @@ public class SiteForm extends AbstractActionForm
 	 */
 	public String getPhoneNumber()
 	{
-		return this.phoneNumber;
+		return phoneNumber;
 	}
 
 	/**
-	 * Sets the phone number of the site. 
+	 * Sets the phone number of the site.
 	 * @param phoneNumber The phone number to site.
 	 * @see #getphoneNumber()
 	 */
@@ -330,7 +333,7 @@ public class SiteForm extends AbstractActionForm
 	 */
 	public String getFaxNumber()
 	{
-		return this.faxNumber;
+		return faxNumber;
 	}
 
 	/**
@@ -340,7 +343,7 @@ public class SiteForm extends AbstractActionForm
 	 */
 	public void setFaxNumber(String faxNum)
 	{
-		this.faxNumber = faxNum;
+		faxNumber = faxNum;
 	}
 
 	/**
@@ -354,7 +357,7 @@ public class SiteForm extends AbstractActionForm
 
 	/**
 	 * Resets the values of all the fields.
-	 * Is called by the overridden reset method defined in ActionForm.  
+	 * Is called by the overridden reset method defined in ActionForm.
 	 * */
 	@Override
 	protected void reset()
@@ -388,10 +391,10 @@ public class SiteForm extends AbstractActionForm
 		{
 			this.setRedirectValue(validator);
 
-			// Mandar 10-apr-06 : bugid :353 
+			// Mandar 10-apr-06 : bugid :353
 			// Error messages should be in the same sequence as the sequence of fields on the page.
 
-			if (Validator.isEmpty(this.name))
+			if (Validator.isEmpty(name))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("site.name")));
@@ -401,41 +404,41 @@ public class SiteForm extends AbstractActionForm
 			//            {
 			//                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("site.type")));
 			//            }
-			if (!validator.isValidOption(this.type))
+			if (!validator.isValidOption(type))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("site.type")));
 			}
-			if (this.coordinatorId == -1L)
+			if (coordinatorId == -1L)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("site.coordinator")));
 			}
 
-			if (!Validator.isEmpty(this.emailAddress)
-					&& !validator.isValidEmailAddress(this.emailAddress))
+			if (!Validator.isEmpty(emailAddress)
+					&& !validator.isValidEmailAddress(emailAddress))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 						ApplicationProperties.getValue("site.emailAddress")));
 			}
 
-			if (Validator.isEmpty(this.street))
+			if (Validator.isEmpty(street))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("site.street")));
 			}
-			if (Validator.isEmpty(this.city))
+			if (Validator.isEmpty(city))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("site.city")));
 			}
-			if (!validator.isValidOption(this.state))
+			if (!validator.isValidOption(state))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("site.state")));
 			}
 
-			if (!validator.isValidOption(this.country))
+			if (!validator.isValidOption(country))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("site.country")));
@@ -450,7 +453,7 @@ public class SiteForm extends AbstractActionForm
 				 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 			            "errors.item.required", ApplicationProperties
 			                    .getValue("site.zipCode")));
-			 }	
+			 }
 			 else
 			 {
 				 if(!validator.isValidZipCode(zipCode))
@@ -458,9 +461,9 @@ public class SiteForm extends AbstractActionForm
 					 errors.add(ActionErrors.GLOBAL_ERROR,
 			                new ActionError("errors.zipCode.format",
 			                        ApplicationProperties.getValue("site.zipCode")));
-				 }	
+				 }
 			 }
-			
+
 			*/
 			//             if(!validator.isEmpty(phoneNumber)&& !validator.isValidPhoneNumber(phoneNumber))
 			//         	 {
@@ -492,7 +495,7 @@ public class SiteForm extends AbstractActionForm
 	/**
 	 * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
 	 * @param addNewFor - FormBean ID of the object inserted
-	 *  @param addObjectIdentifier - Identifier of the Object inserted 
+	 *  @param addObjectIdentifier - Identifier of the Object inserted
 	 */
 	@Override
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
@@ -501,6 +504,22 @@ public class SiteForm extends AbstractActionForm
 		{
 			this.setCoordinatorId(addObjectIdentifier.longValue());
 		}
+	}
+
+	/**
+	 * @return the facilityId
+	 */
+	public String getFacilityId()
+	{
+		return facilityId;
+	}
+
+	/**
+	 * @param facilityId the facilityId to set
+	 */
+	public void setFacilityId(String facilityId)
+	{
+		this.facilityId = facilityId;
 	}
 
 }

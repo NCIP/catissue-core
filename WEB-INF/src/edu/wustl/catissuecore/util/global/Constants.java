@@ -5817,4 +5817,6 @@ public class Constants
 	public static final String SPREADSHEET_DATA_LIST = "spreadsheetDataList";
 	public static final String QUERY_PARTICIPANT_ADD = "CPQueryParticipantAdd.do";
 	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
+
+	public static final String CLICKED_ROW_SELECTED = "clickedRowSelected";
 }

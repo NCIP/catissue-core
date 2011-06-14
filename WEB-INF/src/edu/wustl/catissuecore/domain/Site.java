@@ -114,13 +114,13 @@ public class Site extends AbstractDomainObject
 	public Site(Site site)
 	{
 		super();
-		this.id = Long.valueOf(site.getId().longValue());
-		this.name = site.getName();
-		this.assignedSiteUserCollection = null;
-		this.collectionProtocolCollection = null;
-		this.abstractSpecimenCollectionGroupCollection = null;
-		this.coordinator = null;
-		this.address = null;
+		id = Long.valueOf(site.getId().longValue());
+		name = site.getName();
+		assignedSiteUserCollection = null;
+		collectionProtocolCollection = null;
+		abstractSpecimenCollectionGroupCollection = null;
+		coordinator = null;
+		address = null;
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class Site extends AbstractDomainObject
 	@Override
 	public Long getId()
 	{
-		return this.id;
+		return id;
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class Site extends AbstractDomainObject
 	@Override
 	public void setId(Long identifier)
 	{
-		this.id = identifier;
+		id = identifier;
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class Site extends AbstractDomainObject
 	 */
 	public String getName()
 	{
-		return this.name;
+		return name;
 	}
 
 	/**
@@ -190,7 +190,7 @@ public class Site extends AbstractDomainObject
 	 */
 	public String getType()
 	{
-		return this.type;
+		return type;
 	}
 
 	/**
@@ -211,7 +211,7 @@ public class Site extends AbstractDomainObject
 	 */
 	public String getEmailAddress()
 	{
-		return this.emailAddress;
+		return emailAddress;
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class Site extends AbstractDomainObject
 	 */
 	public User getCoordinator()
 	{
-		return this.coordinator;
+		return coordinator;
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class Site extends AbstractDomainObject
 	 */
 	public String getActivityStatus()
 	{
-		return this.activityStatus;
+		return activityStatus;
 	}
 
 	/**
@@ -276,7 +276,7 @@ public class Site extends AbstractDomainObject
 	 */
 	public Address getAddress()
 	{
-		return this.address;
+		return address;
 	}
 
 	/**
@@ -301,34 +301,35 @@ public class Site extends AbstractDomainObject
 		{
 
 			//Change for API Search   --- Ashwin 04/10/2006
-			if (SearchUtil.isNullobject(this.coordinator))
+			if (SearchUtil.isNullobject(coordinator))
 			{
-				this.coordinator = new User();
+				coordinator = new User();
 			}
 			//Change for API Search   --- Ashwin 04/10/2006
-			if (SearchUtil.isNullobject(this.address))
+			if (SearchUtil.isNullobject(address))
 			{
-				this.address = new Address();
+				address = new Address();
 			}
 
 			final SiteForm form = (SiteForm) abstractForm;
-			this.id = Long.valueOf(form.getId());
-			this.name = form.getName().trim();
-			this.type = form.getType();
+			id = Long.valueOf(form.getId());
+			name = form.getName().trim();
+			type = form.getType();
 
-			this.emailAddress = form.getEmailAddress();
+			emailAddress = form.getEmailAddress();
 
-			this.activityStatus = form.getActivityStatus();
+			activityStatus = form.getActivityStatus();
 			logger.debug("form.getCoordinatorId() " + form.getCoordinatorId());
-			this.coordinator.setId(Long.valueOf(form.getCoordinatorId()));
+			coordinator.setId(Long.valueOf(form.getCoordinatorId()));
 
-			this.address.setStreet(form.getStreet());
-			this.address.setCity(form.getCity());
-			this.address.setState(form.getState());
-			this.address.setCountry(form.getCountry());
-			this.address.setZipCode(form.getZipCode());
-			this.address.setPhoneNumber(form.getPhoneNumber());
-			this.address.setFaxNumber(form.getFaxNumber());
+			address.setStreet(form.getStreet());
+			address.setCity(form.getCity());
+			address.setState(form.getState());
+			address.setCountry(form.getCountry());
+			address.setZipCode(form.getZipCode());
+			address.setPhoneNumber(form.getPhoneNumber());
+			address.setFaxNumber(form.getFaxNumber());
+			this.setFacilityId(form.getFacilityId());
 		}
 		catch (final Exception excp)
 		{
@@ -346,7 +347,7 @@ public class Site extends AbstractDomainObject
 	@Override
 	public String getMessageLabel()
 	{
-		return this.name;
+		return name;
 	}
 
 	/**
@@ -355,7 +356,7 @@ public class Site extends AbstractDomainObject
 	 */
 	public Collection<AbstractSpecimenCollectionGroup> getAbstractSpecimenCollectionGroupCollection()
 	{
-		return this.abstractSpecimenCollectionGroupCollection;
+		return abstractSpecimenCollectionGroupCollection;
 	}
 
 	/**
@@ -378,7 +379,7 @@ public class Site extends AbstractDomainObject
 	*/
 	public Collection<CollectionProtocol> getCollectionProtocolCollection()
 	{
-		return this.collectionProtocolCollection;
+		return collectionProtocolCollection;
 	}
 
 	/**
@@ -401,7 +402,7 @@ public class Site extends AbstractDomainObject
 	 */
 	public Collection<User> getAssignedSiteUserCollection()
 	{
-		return this.assignedSiteUserCollection;
+		return assignedSiteUserCollection;
 	}
 
 	/**
@@ -410,7 +411,7 @@ public class Site extends AbstractDomainObject
 	 */
 	public void setAssignedSiteUserCollection(Collection<User> userCollection)
 	{
-		this.assignedSiteUserCollection = userCollection;
+		assignedSiteUserCollection = userCollection;
 	}
 
 	/**

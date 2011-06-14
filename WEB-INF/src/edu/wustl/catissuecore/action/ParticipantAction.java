@@ -72,7 +72,7 @@ import edu.wustl.dao.exception.DAOException;
 
 /**
  * This class initializes the fields in the Participant Add/Edit webpage.
- * 
+ *
  * @author gautam_shetty
  */
 public class ParticipantAction extends SecureAction {
@@ -84,7 +84,7 @@ public class ParticipantAction extends SecureAction {
 	/**
 	 * Overrides the execute method of Action class. Sets the various fields in
 	 * Participant Add/Edit webpage.
-	 * 
+	 *
 	 * @param mapping
 	 *            object of ActionMapping
 	 * @param form
@@ -93,9 +93,9 @@ public class ParticipantAction extends SecureAction {
 	 *            object of HttpServletRequest
 	 * @param response
 	 *            object of HttpServletResponse
-	 * 
+	 *
 	 * @return value for ActionForward object
-	 * 
+	 *
 	 * @throws Exception
 	 *             generic exception
 	 */
@@ -603,44 +603,34 @@ public class ParticipantAction extends SecureAction {
 
 		if (ParticipantManagerUtility.isParticipantIsProcessing(participantForm
 				.getId())) {
-//			count = this.getMatchingParticipantCount(request);
 			participantName = this.getParticipantName(participantForm);
-//			if (!Constants.TRUE.equals(isMatchedFromEMPI) && !count.equalsIgnoreCase("0")) {
-//				setMessage(request, "participant.empiid.generation.message",
-//						count);
-//			}
+			if (!Constants.TRUE.equals(isMatchedFromEMPI)) {
+				setMessage(request, "participant.empiid.generation.message",
+						participantName);
+			}
 
-			 setMessage(request, "participant.empiid.generation.message",
-			 participantName);
+//			 setMessage(request, "participant.empiid.generation.message",
+//			 participantName);
 		}
 	}
-	
+
 	private String getParticipantName(ParticipantForm participantForm){
 		String participantName = null;
 		participantName = participantForm.getLastName() + ", " + participantForm.getFirstName();
 		return participantName;
 	}
 
-	private String getMatchingParticipantCount(HttpServletRequest request) throws DAOException {
-		final SessionDataBean sessionDataBean = (SessionDataBean) request
-				.getSession().getAttribute(
-						edu.wustl.common.util.global.Constants.SESSION_DATA);
-		final Long userId = sessionDataBean.getUserId();
-		String count = new edu.wustl.common.participant.bizlogic.ParticipantMatchingBizLogic()
-				.getMatchedParticipantCount(userId);
-		return count;
-	}
 
 	/**
 	 * Update collection protocol registration collection.
-	 * 
+	 *
 	 * @param bizLogic
 	 *            : bizLogic
 	 * @param participantForm
 	 *            : participantForm
 	 * @param count
 	 *            : count
-	 * 
+	 *
 	 * @throws Exception
 	 *             : Exception
 	 */
@@ -663,14 +653,14 @@ public class ParticipantAction extends SecureAction {
 
 	/**
 	 * Update collection protocol registration map.
-	 * 
+	 *
 	 * @param mapCollectionProtocolRegistration
 	 *            : mapCollectionProtocolRegistration
 	 * @param count
 	 *            : count
-	 * 
+	 *
 	 * @return int : int
-	 * 
+	 *
 	 * @throws Exception
 	 *             : Exception
 	 */
@@ -730,14 +720,14 @@ public class ParticipantAction extends SecureAction {
 
 	/**
 	 * Gets the consent list.
-	 * 
+	 *
 	 * @param bizLogic
 	 *            : bizLogic
 	 * @param cpId
 	 *            : cpId
-	 * 
+	 *
 	 * @return Collection : Collection
-	 * 
+	 *
 	 * @throws BizLogicException
 	 *             : BizLogicException
 	 */
@@ -754,14 +744,14 @@ public class ParticipantAction extends SecureAction {
 	 * 4386 After adding new participant medical number CommonAddEdit was unable
 	 * to set id in the value map for participant medical number Therefore here
 	 * expicitly id of the participant medical number are set.
-	 * 
+	 *
 	 * @param bizLogic
 	 *            bizLogic
 	 * @param participantId
 	 *            : participantId
 	 * @param map
 	 *            : map
-	 * 
+	 *
 	 * @throws Exception
 	 *             : Exception
 	 */
@@ -815,7 +805,7 @@ public class ParticipantAction extends SecureAction {
 
 	/**
 	 * Sets the participant collection protocol registration id.
-	 * 
+	 *
 	 * @param bizLogic
 	 *            : bizLogic
 	 * @param participantId
@@ -826,7 +816,7 @@ public class ParticipantAction extends SecureAction {
 	 *            : consentResponseBeanCollection
 	 * @param cprCount
 	 *            : cprCount
-	 * 
+	 *
 	 * @throws Exception
 	 *             : Exception
 	 */
@@ -834,7 +824,7 @@ public class ParticipantAction extends SecureAction {
 			IBizLogic bizLogic, Long participantId, Map map,
 			Collection consentResponseBeanCollection, int cprCount)
 			throws Exception {
-		this.LOGGER.debug("Action ::: participant id :: " + participantId);
+		LOGGER.debug("Action ::: participant id :: " + participantId);
 		// By Abhishek Mehta
 		// ParticipantBizLogic bizLogic = (ParticipantBizLogic)
 		// BizLogicFactory.getInstance
@@ -906,7 +896,7 @@ public class ParticipantAction extends SecureAction {
 
 	/**
 	 * Sets the consent response id.
-	 * 
+	 *
 	 * @param bizLogic
 	 *            : bizLogic
 	 * @param cprId
@@ -915,7 +905,7 @@ public class ParticipantAction extends SecureAction {
 	 *            : colProtId
 	 * @param consentResponseBeanCollection
 	 *            : consentResponseBeanCollection
-	 * 
+	 *
 	 * @throws Exception
 	 *             : Exception
 	 */
@@ -936,9 +926,9 @@ public class ParticipantAction extends SecureAction {
 			if (cpId == colProtId) // Searching for same collection protocol
 			{
 
-				this.LOGGER.debug("Action ::: collection protocol id :: "
+				LOGGER.debug("Action ::: collection protocol id :: "
 						+ colProtId);
-				this.LOGGER
+				LOGGER
 						.debug("Action ::: collection protocol registration id  :: "
 								+ cprId);
 				final Iterator iter = consentTierResponseCollection.iterator();
@@ -958,7 +948,7 @@ public class ParticipantAction extends SecureAction {
 									.next();
 							final String ctId = consentBean.getConsentTierID();
 							if (ctId.equals(consentTierId)) {
-								this.LOGGER
+								LOGGER
 										.debug("Action ::: consent response  :: "
 												+ consentTierResponse
 														.getResponse());
@@ -976,14 +966,14 @@ public class ParticipantAction extends SecureAction {
 
 	/**
 	 * Gets the associated identified report id.
-	 * 
+	 *
 	 * @param participantBizlogic
 	 *            : participantBizlogic
 	 * @param participantId
 	 *            : participantId
-	 * 
+	 *
 	 * @return Long : Long
-	 * 
+	 *
 	 * @throws BizLogicException
 	 *             : BizLogicException
 	 */
@@ -1002,7 +992,7 @@ public class ParticipantAction extends SecureAction {
 
 	/**
 	 * Gets the object id.
-	 * 
+	 *
 	 * @return String : String
 	 */
 	public String getObjectId() {
@@ -1011,10 +1001,10 @@ public class ParticipantAction extends SecureAction {
 
 	/**
 	 * Gets the object id.
-	 * 
+	 *
 	 * @param form
 	 *            : form
-	 * 
+	 *
 	 * @return String : String
 	 */
 	protected String getObjectId(AbstractActionForm form) {
