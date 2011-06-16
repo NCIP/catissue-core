@@ -223,6 +223,9 @@
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
+				<fileset dir="./lib">
+					<include name="j2ee.jar" />
+				</fileset>
 				<pathelement location="${ant.home}\lib\ant.jar"/>
 			</classpath>
 			<classpath refid="cobertura.classpath" />
