@@ -1,14 +1,14 @@
 package edu.wustl.catissuecore.interceptor;
 
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import javax.jms.JMSException;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
@@ -26,24 +26,38 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
-import edu.wustl.catissuecore.jaxb.domain.CollectionEventType;
-import edu.wustl.catissuecore.jaxb.domain.CollectionProtocolRegistrationType;
-import edu.wustl.catissuecore.jaxb.domain.CollectionProtocolType;
-import edu.wustl.catissuecore.jaxb.domain.CoordinatorType;
-import edu.wustl.catissuecore.jaxb.domain.ObjectFactory;
-import edu.wustl.catissuecore.jaxb.domain.ParticipantType;
-import edu.wustl.catissuecore.jaxb.domain.PrincipalInvestigatorType;
-import edu.wustl.catissuecore.jaxb.domain.SCGCollectionType;
-import edu.wustl.catissuecore.jaxb.domain.SiteType;
-import edu.wustl.catissuecore.jaxb.domain.SpecimenCharacteristicsType;
-import edu.wustl.catissuecore.jaxb.domain.SpecimenCollectionGroupType;
-import edu.wustl.catissuecore.jaxb.domain.SpecimenCollectionType;
-import edu.wustl.catissuecore.jaxb.domain.SpecimenEventsType;
-import edu.wustl.catissuecore.jaxb.domain.SpecimenPositionType;
-import edu.wustl.catissuecore.jaxb.domain.SpecimenType;
-import edu.wustl.catissuecore.jaxb.domain.StorageContainerType;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.cider.jaxb.domain.CollectionEventType;
+import edu.wustl.cider.jaxb.domain.CollectionProtocolRegistrationType;
+import edu.wustl.cider.jaxb.domain.CollectionProtocolType;
+import edu.wustl.cider.jaxb.domain.CoordinatorType;
+import edu.wustl.cider.jaxb.domain.ObjectFactory;
+import edu.wustl.cider.jaxb.domain.ParticipantType;
+import edu.wustl.cider.jaxb.domain.PrincipalInvestigatorType;
+import edu.wustl.cider.jaxb.domain.SCGCollectionType;
+import edu.wustl.cider.jaxb.domain.SiteType;
+import edu.wustl.cider.jaxb.domain.SpecimenCharacteristicsType;
+import edu.wustl.cider.jaxb.domain.SpecimenCollectionGroupType;
+import edu.wustl.cider.jaxb.domain.SpecimenCollectionType;
+import edu.wustl.cider.jaxb.domain.SpecimenEventsType;
+import edu.wustl.cider.jaxb.domain.SpecimenPositionType;
+import edu.wustl.cider.jaxb.domain.SpecimenType;
+import edu.wustl.cider.jaxb.domain.StorageContainerType;
+import edu.wustl.cider.jaxb.domain.impl.CollectionEventTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.CollectionProtocolRegistrationTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.CollectionProtocolTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.CoordinatorTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.PrincipalInvestigatorTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.SCGCollectionTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.SiteTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.SpecimenCharacteristicsTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.SpecimenCollectionGroupTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.SpecimenCollectionTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.SpecimenEventsTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.SpecimenPositionTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.SpecimenTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.StorageContainerTypeImpl;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -82,7 +96,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 	/**
 	 * Package name for generated JAXB domain Objects.
 	 */
-	private static final String JAXB_PACKAGE_NAME="edu.wustl.catissuecore.jaxb.domain";
+	private static final String JAXB_PACKAGE_NAME="edu.wustl.cider.jaxb.domain";
 	static int no = 0;
 
 	/**
@@ -107,7 +121,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 				updateJaxbDomainObject(specimen, xmlParticipant);
 				String fileName = TEMP_DIR_LOCATION+FILE_NAME_PREFIX+specimen.getId()+Constants.XML_SUFFIX;
 
-				factory.marshelExportDataXml(JAXB_PACKAGE_NAME, fileName, factory.createParticipant(xmlParticipant));
+				marshall(xmlParticipant, fileName);
 				writeMessage(fileName);
 				updateSpecimenCiderMessageLog(specimen,type);
 				if(no%2==0)
@@ -116,11 +130,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 					throw new DAOException();
 				}
 				no++;
-			} catch (FileNotFoundException e) {
-				throw new InterceptProcessorException("001",objId,e,ApplicationProperties.getValue("error.interceptor.specimen.message",objId.toString()));
-			} catch (JAXBException e) {
-				throw new InterceptProcessorException("001",objId,e,ApplicationProperties.getValue("error.interceptor.specimen.message",objId.toString()));
-			} catch (DatatypeConfigurationException e) {
+			}catch (JAXBException e) {
 				throw new InterceptProcessorException("001",objId,e,ApplicationProperties.getValue("error.interceptor.specimen.message",objId.toString()));
 			}
 			catch (JMSException e)
@@ -133,6 +143,27 @@ public class SpecimenInterceptor implements InterceptProcessor
 			}
 			LOGGER.info("Processing successfull for object id = "+objId);
 		}
+
+	}
+
+	/*public static void main(String[] args) throws FileNotFoundException, JAXBException, BulkOperationException
+	{
+		ObjectFactory factory = new ObjectFactory();
+		ParticipantType xmlParticipant = factory.createParticipantType();
+
+		xmlParticipant.setEmpi("007");
+
+		String fileName = TEMP_DIR_LOCATION+FILE_NAME_PREFIX+"1"+Constants.XML_SUFFIX;
+
+		marshall(xmlParticipant, fileName);
+	}*/
+
+	public void marshall(Object participantObj,String fileName) throws JAXBException
+	{
+		JAXBContext jaxbContext = JAXBContext.newInstance(JAXB_PACKAGE_NAME);
+        // create an Unmarshaller
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.marshal(participantObj, new File(fileName));
 
 	}
 
@@ -168,10 +199,10 @@ public class SpecimenInterceptor implements InterceptProcessor
 	 * @throws ApplicationException
 	 */
 	private void updateJaxbDomainObject(Specimen specimen,ParticipantType xmlParticiapant)
-			throws DatatypeConfigurationException, ApplicationException
+			throws  ApplicationException
 	{
 		SpecimenCollectionGroup scg = getScgFromId(specimen.getSpecimenCollectionGroup());
-		CollectionProtocolRegistrationType xmlCPR = new CollectionProtocolRegistrationType();
+		CollectionProtocolRegistrationType xmlCPR = new CollectionProtocolRegistrationTypeImpl();
 		CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
 		updateObjectForCollectionProtocol(xmlCPR, cpr);
 		SpecimenCollectionGroupType xmlScg = updateObjectForScg(xmlCPR,scg);
@@ -181,15 +212,15 @@ public class SpecimenInterceptor implements InterceptProcessor
 
 	}
 
-	private void updateObjectForSpecimen(SpecimenCollectionGroupType xmlScg, Specimen specimen) throws BizLogicException, ApplicationException, DatatypeConfigurationException
+	private void updateObjectForSpecimen(SpecimenCollectionGroupType xmlScg, Specimen specimen) throws BizLogicException, ApplicationException
 	{
-		SpecimenCollectionType specimenCollection = new SpecimenCollectionType();
+		SpecimenCollectionType specimenCollection = new SpecimenCollectionTypeImpl();
 		xmlScg.setSpecimenCollection(specimenCollection);
 
-		SpecimenType xmlSpecimen = new SpecimenType();
+		SpecimenType xmlSpecimen = new SpecimenTypeImpl();
 		specimenCollection.getSpecimen().add(xmlSpecimen);
 
-		xmlSpecimen.setClazz(specimen.getClassName());
+		xmlSpecimen.setClassName(specimen.getClassName());
 		xmlSpecimen.setId(specimen.getId());
 		xmlSpecimen.setType(specimen.getSpecimenType());
 		xmlSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
@@ -197,7 +228,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 		xmlSpecimen.setIsAvailable(specimen.getIsAvailable());
 
 		// add specimen characterastics
-		SpecimenCharacteristicsType xmlCharacterastics = new SpecimenCharacteristicsType();
+		SpecimenCharacteristicsType xmlCharacterastics = new SpecimenCharacteristicsTypeImpl();
 		xmlCharacterastics.setTissueSite(specimen.getSpecimenCharacteristics().getTissueSite());
 		xmlSpecimen.setSpecimenCharacteristics(xmlCharacterastics);
 
@@ -210,9 +241,9 @@ public class SpecimenInterceptor implements InterceptProcessor
 			CollectionProtocolRegistrationType xmlCPR,
 			SpecimenCollectionGroup scg)
 	{
-		SCGCollectionType xmlScgCollection = new SCGCollectionType();
+		SCGCollectionType xmlScgCollection = new SCGCollectionTypeImpl();
 		xmlCPR.setSCGCollection(xmlScgCollection);
-		SpecimenCollectionGroupType xmlScg = new SpecimenCollectionGroupType();
+		SpecimenCollectionGroupType xmlScg = new SpecimenCollectionGroupTypeImpl();
 		xmlScgCollection.getSpecimenCollectionGroup().add(xmlScg);
 		//need to fetch the scg if clinical diagnosis
 		xmlScg.setAccessionNumber(scg.getSurgicalPathologyNumber());
@@ -265,7 +296,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 	private void updateObjectForCollectionProtocol(CollectionProtocolRegistrationType xmlCPR,
 			CollectionProtocolRegistration cpr) throws BizLogicException
 	{
-		CollectionProtocolType xmlCp = new CollectionProtocolType();
+		CollectionProtocolType xmlCp = new CollectionProtocolTypeImpl();
 		CollectionProtocol collectionProtocol = cpr.getCollectionProtocol();
 		if(collectionProtocol.getPrincipalInvestigator()==null)
 		{
@@ -276,7 +307,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 
 		// create PI
 		User principalInvestigator = collectionProtocol.getPrincipalInvestigator();
-		PrincipalInvestigatorType xmlPi = new PrincipalInvestigatorType();
+		PrincipalInvestigatorType xmlPi = new PrincipalInvestigatorTypeImpl();
 		xmlPi.setFirstName(principalInvestigator.getFirstName());
 		xmlPi.setLastName(principalInvestigator.getLastName());
 		xmlPi.setEmail(principalInvestigator.getEmailAddress());
@@ -286,7 +317,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 	}
 
 	private void updateXmlObjectForCollectionDate(Specimen specimen,
-			SpecimenType xmlSpecimen) throws DatatypeConfigurationException
+			SpecimenType xmlSpecimen)
 	{
 		if(specimen.getSpecimenEventCollection()!=null)
 		{
@@ -294,14 +325,13 @@ public class SpecimenInterceptor implements InterceptProcessor
 			{
 				if (eventParam instanceof CollectionEventParameters)
 				{
-					DatatypeFactory typeFactory = DatatypeFactory.newInstance();
-					GregorianCalendar gc = new GregorianCalendar();
-					gc.setTime(eventParam.getTimestamp());
-					XMLGregorianCalendar xmlCalendar = typeFactory.newXMLGregorianCalendar(gc);
-					CollectionEventType xmlCollEvent = new CollectionEventType();
-					xmlCollEvent.setCollectionDate(xmlCalendar);
+					Calendar calendar = Calendar.getInstance();
 
-					SpecimenEventsType xmlSpecimenEvent = new SpecimenEventsType();
+					calendar.setTime(eventParam.getTimestamp());
+					CollectionEventType xmlCollEvent = new CollectionEventTypeImpl();
+					xmlCollEvent.setCollectionDate(calendar);
+
+					SpecimenEventsType xmlSpecimenEvent = new SpecimenEventsTypeImpl();
 					xmlSpecimenEvent.setCollectionEvent(xmlCollEvent);
 					xmlSpecimen.setSpecimenEvents(xmlSpecimenEvent);
 					break;
@@ -317,15 +347,15 @@ public class SpecimenInterceptor implements InterceptProcessor
 		if(storageSite!=null)
 		{
 			//create xml specimen position
-			SpecimenPositionType xmlPosition = new SpecimenPositionType();
+			SpecimenPositionType xmlPosition = new SpecimenPositionTypeImpl();
 
 			User siteCoordinator = storageSite.getCoordinator();
 			// create storeage site then site & co-ordinator
-			StorageContainerType xmlContainer = new StorageContainerType();
-			SiteType xmlSite = new SiteType();
+			StorageContainerType xmlContainer = new StorageContainerTypeImpl();
+			SiteType xmlSite = new SiteTypeImpl();
 			xmlSite.setName(storageSite.getName());
 
-			CoordinatorType xmlCordinator = new CoordinatorType();
+			CoordinatorType xmlCordinator = new CoordinatorTypeImpl();
 			xmlCordinator.setEmail(siteCoordinator.getEmailAddress());
 			xmlCordinator.setFirstName(siteCoordinator.getFirstName());
 			xmlCordinator.setLastName(siteCoordinator.getLastName());
