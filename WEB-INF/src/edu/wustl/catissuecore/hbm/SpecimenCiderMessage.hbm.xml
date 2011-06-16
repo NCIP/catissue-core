@@ -7,7 +7,7 @@
 >
     <class
         name="edu.wustl.catissuecore.domain.SpecimenCiderMessage"
-        table="CATISSUE_SPECIMEN_CIDER_MESSAGE"
+        table="CATISSUE_SPECIMEN_MESSAGE_LOG"
 		lazy="true"
     >
     
