@@ -131,10 +131,13 @@ public class SpecimenInterceptor implements InterceptProcessor
 				}
 				no++;
 			}catch (JAXBException e) {
+				e.printStackTrace();
 				throw new InterceptProcessorException("001",objId,e,ApplicationProperties.getValue("error.interceptor.specimen.message",objId.toString()));
+
 			}
 			catch (JMSException e)
 			{
+				e.printStackTrace();
 					throw new InterceptProcessorException("002",objId,e,ApplicationProperties.getValue("error.interceptor.specimen.wmq",objId.toString()));
 			}
 			catch(Exception e)
