@@ -66,7 +66,6 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.InterceptProcessorException;
 import edu.wustl.dao.interceptor.InterceptProcessor;
 import edu.wustl.dao.interceptor.SaveUpdateInterceptThread.eventType;
-import gov.nih.nci.system.dao.DAOException;
 
 /**
  * This class is responsible for processing any activites that needs to be done whenever a specimen object is
@@ -97,7 +96,6 @@ public class SpecimenInterceptor implements InterceptProcessor
 	 * Package name for generated JAXB domain Objects.
 	 */
 	private static final String JAXB_PACKAGE_NAME="edu.wustl.cider.jaxb.domain";
-	static int no = 0;
 
 	/**
 	 * This method does the processing for given obj which is inserted or updates using hibernate session.
@@ -119,25 +117,18 @@ public class SpecimenInterceptor implements InterceptProcessor
 				ParticipantType xmlParticipant = factory.createParticipantType();
 
 				updateJaxbDomainObject(specimen, xmlParticipant);
-				String fileName = TEMP_DIR_LOCATION+FILE_NAME_PREFIX+specimen.getId()+Constants.XML_SUFFIX;
+				String fileName = TEMP_DIR_LOCATION+File.separator+FILE_NAME_PREFIX+specimen.getId()+Constants.XML_SUFFIX;
 
 				marshall(xmlParticipant, fileName);
 				writeMessage(fileName);
 				updateSpecimenCiderMessageLog(specimen,type);
-				if(no%2==0)
-				{
-					no++;
-					throw new DAOException();
-				}
-				no++;
+
 			}catch (JAXBException e) {
-				e.printStackTrace();
 				throw new InterceptProcessorException("001",objId,e,ApplicationProperties.getValue("error.interceptor.specimen.message",objId.toString()));
 
 			}
 			catch (JMSException e)
 			{
-				e.printStackTrace();
 					throw new InterceptProcessorException("002",objId,e,ApplicationProperties.getValue("error.interceptor.specimen.wmq",objId.toString()));
 			}
 			catch(Exception e)
