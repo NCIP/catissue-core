@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BulkOperationMetadata>
+
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Participant"
+		relationShipType="main" cardinality="1" roleName="participant"
+		templateName="addParticipant" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		
+		<containmentAssociationCollection className="edu.wustl.catissuecore.domain.Race" relationShipType="containment"
+		templateName="addParticipant" cardinality="*" roleName="raceCollection"  maxNoOfRecords="1" parentRoleName="participant" batchSize="5">
+			<attributeCollection name="raceName" csvColumnName="Race" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>					
+		</containmentAssociationCollection>		
+		
+		<attributeCollection name="socialSecurityNumber" csvColumnName="Social Security Number" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="lastName" csvColumnName="Last Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="firstName" csvColumnName="First Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="middleName" csvColumnName="Middle Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="birthDate" csvColumnName="Birth Date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="vitalStatus" csvColumnName="Vital Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="deathDate" csvColumnName="Death Date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="gender" csvColumnName="Gender" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="sexGenotype" csvColumnName="Sex-Genotype" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="ethnicity" csvColumnName="Ethinicity" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+	</BulkOperationClass>
+
+</BulkOperationMetadata>
+

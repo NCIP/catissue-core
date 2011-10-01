@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.StorageContainer" relationShipType="main" templateName="editParentContainer" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="storagecontainer">
+
+		<referenceAssociationCollection className="edu.wustl.catissuecore.domain.CollectionProtocol" relationShipType="association" templateName="editParentContainer" maxNoOfRecords="2" parentRoleName="" batchSize="5" cardinality="*" roleName="collectionProtocolCollection">
+			<attributeCollection name="id" csvColumnName="CP ID" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+		</referenceAssociationCollection>
+
+		<referenceAssociationCollection className="edu.wustl.catissuecore.domain.StorageType" relationShipType="association" templateName="editParentContainer" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="storageType">
+			<attributeCollection name="id" csvColumnName="Storage Type ID" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+		</referenceAssociationCollection>
+
+		<referenceAssociationCollection className="edu.wustl.catissuecore.domain.Site" relationShipType="association" templateName="editParentContainer" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="site">
+			<attributeCollection name="id" csvColumnName="Site ID" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+		</referenceAssociationCollection>
+
+		<containmentAssociationCollection className="edu.wustl.catissuecore.domain.Capacity" relationShipType="association" templateName="editParentContainer" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="capacity">
+			<attributeCollection name="oneDimensionCapacity" csvColumnName="Capacity Dimension One" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>
+			<attributeCollection name="twoDimensionCapacity" csvColumnName="Capacity Dimension Two" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>
+		</containmentAssociationCollection>
+
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="full" csvColumnName="Full" updateBasedOn="false" belongsTo="" dataType="java.lang.Boolean"/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="barcode" csvColumnName="Barcode" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="name" csvColumnName="container name" updateBasedOn="true" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="temperatureInCentigrade" csvColumnName="Temperature" updateBasedOn="false" belongsTo="" dataType="java.lang.Double"/>	
+		
+		<containmentAssociationCollection className="java.lang.String"						relationShipType="association" templateName="editParentContainer" maxNoOfRecords="2" parentRoleName="" batchSize="5" cardinality="*" roleName="holdsSpecimenClassCollection">
+				
+			<attributeCollection name="holdsSpecimenClassCollection" csvColumnName="holdsSpecimenClass" updateBasedOn="false" belongsTo="" dataType="java.lang.String" />
+
+		</containmentAssociationCollection>
+
+		<containmentAssociationCollection className="edu.wustl.catissuecore.domain.StorageType" relationShipType="association" templateName="editParentContainer" maxNoOfRecords="2" parentRoleName="" 
+		batchSize="5" cardinality="*" roleName="holdsStorageTypeCollection">
+
+			<attributeCollection name="id" csvColumnName="holdsStorageType" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+
+		</containmentAssociationCollection>
+		
+		<containmentAssociationCollection className="java.lang.String" relationShipType="association" templateName="editParentContainer" maxNoOfRecords="2" parentRoleName="" batchSize="5" cardinality="*" roleName="holdsSpecimenTypeCollection">
+				
+			<attributeCollection name="holdsSpecimenTypeCollection" csvColumnName="holdsSpecimenType" updateBasedOn="false" belongsTo="" dataType="java.lang.String" />
+
+		</containmentAssociationCollection>
+		
+		
+		<containmentAssociationCollection className="edu.wustl.catissuecore.domain.StorageType" relationShipType="association" templateName="editParentContainer" maxNoOfRecords="2" parentRoleName="" 
+		batchSize="5" cardinality="*" roleName="holdsStorageTypeCollection">
+
+			<attributeCollection name="id" csvColumnName="holdsStorageType" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+
+		</containmentAssociationCollection>
+		
+		
+			
+	</BulkOperationClass>
+</BulkOperationMetadata>

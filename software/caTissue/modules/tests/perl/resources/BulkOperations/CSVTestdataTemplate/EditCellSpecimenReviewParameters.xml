@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.CellSpecimenReviewParameters"
+		relationShipType="main" templateName="EditCellSpecimenReviewEvent"
+		isOneToManyAssociation="false" cardinality="1" roleName="CellSpecimenReviewParameters" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		
+		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="neoplasticCellularityPercentage" csvColumnName="Neo Plastic Cellularity Percentage" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>
+		<attributeCollection name="viableCellPercentage" csvColumnName="Viable Cell Percentage" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>	<attributeCollection name="id" csvColumnName="id" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>			
+	</BulkOperationClass>
+</BulkOperationMetadata>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters"
+		relationShipType="main" templateName="EditFluidSpecimenReviewParameters"
+		 cardinality="1" roleName="FluidSpecimenReviewEventParameters"  maxNoOfRecords="1" parentRoleName="FluidSpecimenReviewEventParameters" batchSize="5">
+		
+		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="cellCount" csvColumnName="Cell count" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>		<attributeCollection name="id" csvColumnName="id" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>		
+	</BulkOperationClass>
+</BulkOperationMetadata>

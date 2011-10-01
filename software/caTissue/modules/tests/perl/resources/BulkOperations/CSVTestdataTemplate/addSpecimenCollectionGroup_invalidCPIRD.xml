@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+		relationShipType="main" cardinality="1"	roleName="specimenCollectionGroup" templateName="CreateSpecimenCollectionGroup" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.Site"
+			relationShipType="association" cardinality="1" roleName="specimenCollectionSite"
+			templateName="CreateSpecimenCollectionGroup"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				<attributeCollection name="id" csvColumnName="Site ID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+		</referenceAssociationCollection>
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+			relationShipType="association" cardinality="1" roleName="collectionProtocolRegistration"
+			templateName="CreateSpecimenCollectionGroup" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				<attributeCollection name="id" csvColumnName="ID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+					</referenceAssociationCollection>
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+			relationShipType="association" cardinality="1" roleName="collectionProtocolEvent"
+			templateName="CreateSpecimenCollectionGroup" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+			<attributeCollection name="id" csvColumnName="collectionPointLabel" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+		</referenceAssociationCollection>
+
+		<attributeCollection name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="clinicalStatus" csvColumnName="Clinical Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+	</BulkOperationClass>
+</BulkOperationMetadata>

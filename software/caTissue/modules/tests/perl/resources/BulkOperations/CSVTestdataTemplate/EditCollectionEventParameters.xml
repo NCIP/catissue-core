@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.CollectionEventParameters"
+		relationShipType="main" templateName="editCollectionEventParameters"
+		 cardinality="1" roleName="collectionEventParameters"  maxNoOfRecords="1" parentRoleName="collectionEventParameters" batchSize="5">
+	<!--	<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association" templateName="editCollectionEventParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="user"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				<attributeCollection name="loginName" csvColumnName="User Login Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		</referenceAssociationCollection> -->
+		
+	
+		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="collectionProcedure" csvColumnName="collection Procedure" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="container" csvColumnName="container" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="id" csvColumnName="id" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>
+	</BulkOperationClass>
+</BulkOperationMetadata>

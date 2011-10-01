@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.StorageContainer" relationShipType="main" templateName="CreateChildContainer" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="storageContainer">
+
+		<referenceAssociationCollection className="edu.wustl.catissuecore.domain.StorageType" relationShipType="association" templateName="CreateChildContainer" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="storageType">
+
+			<attributeCollection name="id" csvColumnName="Storage Type ID" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+
+		</referenceAssociationCollection>
+
+				<containmentAssociationCollection className="edu.wustl.catissuecore.domain.Capacity"				 relationShipType="association" templateName="CreateChildContainer" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="capacity">
+
+			<attributeCollection name="oneDimensionCapacity" csvColumnName="Dimension one" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>
+			<attributeCollection name="twoDimensionCapacity" csvColumnName="Dimension Two" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>
+
+		</containmentAssociationCollection>
+
+		<referenceAssociationCollection className="edu.wustl.catissuecore.domain.ContainerPosition" relationShipType="association" templateName="CreateChildContainer" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="locatedAtPosition">
+
+			<attributeCollection name="positionDimensionOne" csvColumnName="Location one" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>
+			<attributeCollection name="positionDimensionTwo" csvColumnName="Location two" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>
+
+			<referenceAssociationCollection className="edu.wustl.catissuecore.domain.Container" relationShipType="association" templateName="CreateChildContainer" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="parentContainer">
+				
+				<attributeCollection name="name" csvColumnName="Parent Container Name" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+
+			</referenceAssociationCollection>
+
+		</referenceAssociationCollection>
+
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="full" csvColumnName="Full" updateBasedOn="false" belongsTo="" dataType="java.lang.Boolean"/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="name" csvColumnName="container name" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<!--<attributeCollection name="noOfContainers" csvColumnName="No Of Containers" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>-->
+
+		<containmentAssociationCollection className="java.lang.String"						relationShipType="association" templateName="CreateChildContainer" maxNoOfRecords="2" parentRoleName="" batchSize="5" cardinality="*" roleName="holdsSpecimenClassCollection">
+				
+			<attributeCollection name="holdsSpecimenClassCollection" csvColumnName="holdsSpecimenClass" updateBasedOn="false" belongsTo="" dataType="java.lang.String" />
+
+		</containmentAssociationCollection>
+
+		<containmentAssociationCollection className="edu.wustl.catissuecore.domain.StorageType" relationShipType="association" templateName="CreateChildContainer" maxNoOfRecords="2" parentRoleName="" 
+		batchSize="5" cardinality="*" roleName="holdsStorageTypeCollection">
+
+			<attributeCollection name="id" csvColumnName="holdsStorageType" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+
+		</containmentAssociationCollection>
+		
+
+	</BulkOperationClass>
+
+</BulkOperationMetadata>

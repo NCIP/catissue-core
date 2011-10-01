@@ -1,0 +1,596 @@
+
+package edu.wustl.catissuecore.bizlogic;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Set;
+
+import org.apache.struts.upload.FormFile;
+import org.xml.sax.SAXException;
+
+import edu.common.dynamicextensions.domain.integration.AbstractFormContext;
+import edu.common.dynamicextensions.domaininterface.AssociationInterface;
+import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.common.dynamicextensions.entitymanager.EntityManager;
+import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
+import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
+import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.wustl.cab2b.server.cache.EntityCache;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.sop.Action;
+import edu.wustl.catissuecore.domain.sop.SOP;
+import edu.wustl.catissuecore.uiobject.SOPUIObject;
+import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.SpecimenEventsUtility;
+import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
+
+public class SOPBizLogic extends CatissueDefaultBizLogic
+{
+
+	private transient final Logger logger = Logger.getCommonLogger(SOPBizLogic.class);
+
+	/**
+	 * Saves the Specimen Processing Procedure object in the database.
+	 * @param dao : DAO object
+	 * @param obj
+	 *            The SPP object to be saved.
+	 * @param sessionDataBean
+	 *            The session in which the object is saved.
+	 * @throws BizLogicException : BizLogicException
+	 */
+	@Override
+	protected void insert(final Object obj, Object uiObject, final DAO dao,
+			SessionDataBean sessionDataBean) throws BizLogicException
+	{
+		try
+		{
+			SOPUIObject sopUIObject = (SOPUIObject) uiObject;
+			SOP sop = (SOP) obj;
+			SOPXMLParser parser = SOPXMLParser.getInstance();
+			FormFile xmlFile = sopUIObject.getXmlFileName();
+			String xmlFileName = xmlFile.getFileName();
+			InputStream inputStream = xmlFile.getInputStream();
+			Set<Action> actionList = parser.parseXML(xmlFileName, inputStream);
+
+			for (Action action : actionList)
+			{
+				if (action.getActivityStatus() != null
+						&& action.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))
+				{
+					ApplicationException appExp = new ApplicationException(null, null,
+							Constants.SPP_ADD_ERROR_MSG);
+					appExp.setCustomizedMsg(Constants.SPP_ADD_ERROR_MSG);
+					this.logger.error(Constants.SPP_ADD_ERROR_MSG);
+					throw this.getBizLogicException(appExp, "", Constants.SPP_ADD_ERROR_MSG);
+				}
+			}
+
+			sop.setActionCollection(actionList);
+			dao.insert(sop);
+		}
+		catch (final DAOException daoExp)
+		{
+			if (daoExp.getWrapException().getCause().getMessage().contains(Constants.NAME_KEY))
+			{
+				ApplicationException appExp = new ApplicationException(null, null,
+						Constants.SPP_NAME_ERROR);
+				appExp.setCustomizedMsg(Constants.SPP_NAME_ERROR);
+				this.logger.error(Constants.SPP_NAME_ERROR, daoExp);
+				throw this.getBizLogicException(appExp, "", Constants.SPP_NAME_ERROR);
+			}
+			else if (daoExp.getWrapException().getCause().getMessage().contains(
+					Constants.BARCODE_KEY))
+			{
+				ApplicationException appExp = new ApplicationException(null, null,
+						Constants.SPP_BARCODE_ERROR);
+				appExp.setCustomizedMsg(Constants.SPP_BARCODE_ERROR);
+				this.logger.error(Constants.SPP_BARCODE_ERROR, daoExp);
+				throw this.getBizLogicException(appExp, "", Constants.SPP_BARCODE_ERROR);
+			}
+			else
+			{
+				this.logger.error(daoExp.getMessage(), daoExp);
+				daoExp.printStackTrace();
+				throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp
+						.getMsgValues());
+			}
+		}
+		catch (final IOException ioExp)
+		{
+			this.logger.error(ioExp.getMessage(), ioExp);
+			throw this.getBizLogicException(ioExp, "", ioExp.getLocalizedMessage());
+		}
+		catch (DynamicExtensionsSystemException deExp)
+		{
+			this.logger.error(deExp.getMessage(), deExp);
+			throw this.getBizLogicException(deExp, "", deExp.getLocalizedMessage());
+		}
+		catch (SAXException saxExp)
+		{
+			this.logger.error(saxExp.getMessage(), saxExp);
+			throw this.getBizLogicException(saxExp, "", saxExp.getLocalizedMessage());
+		}
+		catch (MissingResourceException e)
+		{
+			ApplicationException appExp = new ApplicationException(null, null,
+					Constants.INVALID_XML_MSG);
+			appExp.setCustomizedMsg(Constants.INVALID_XML_MSG);
+			this.logger.error(Constants.INVALID_XML_MSG, e);
+			throw this.getBizLogicException(appExp, "", Constants.INVALID_XML_MSG);
+		}
+	}
+
+	/**
+	 * Updates the persistent object in the database.
+	 * @param dao : dao
+	 * @param currentObj current object
+	 * @param oldObj : oldObj
+	 * @param obj
+	 *            The object to be updated.
+	 * @param sessionDataBean
+	 *            The session in which the object is saved.
+	 * @throws BizLogicException : BizLogicException
+	 */
+	@Override
+	protected void update(DAO dao, Object currentObj, Object oldObj, Object uiObject,
+			SessionDataBean sessionDataBean) throws BizLogicException
+	{
+		try
+		{
+			final SOP sopOldObj = (SOP) oldObj;
+			final SOP sopNewObj = (SOP) currentObj;
+			final SOPUIObject sopUIObj = (SOPUIObject) uiObject;
+
+			final String sppSpecReqHQL = Constants.SOP_SPEC_REQ_HQL + sopOldObj.getId();
+			final List specReqList = AppUtility.executeQuery(sppSpecReqHQL);
+
+			final String cpeHQL = Constants.SOP_CPE_HQL + sopOldObj.getId();
+			final List cpeList = AppUtility.executeQuery(cpeHQL);
+
+			SOPXMLParser parser = SOPXMLParser.getInstance();
+			FormFile xmlFile = sopUIObj.getXmlFileName();
+			String xmlFileName = xmlFile.getFileName();
+			InputStream inputStream = xmlFile.getInputStream();
+			Set<Action> actionList = parser.parseXML(xmlFileName, inputStream);
+			Set<Action> newActList = new HashSet<Action>();
+			Collection<Action> oldList = sopOldObj.getActionCollection();
+			sopNewObj.setActionCollection(new HashSet<Action>());
+			for (Action action : actionList)
+			{
+				for (Action oldAction : oldList)
+				{
+					if (action.getUniqueId().equals(oldAction.getUniqueId()))
+					{
+						if (!specReqList.isEmpty() || !cpeList.isEmpty())
+						{
+							if (oldAction.getBarcode() != null
+									&& !oldAction.getBarcode().equals(action.getBarcode())
+									|| !oldAction.getActionOrder().equals(action.getActionOrder())
+									|| action.getActivityStatus().equals(Constants.DISABLED))
+							{
+								ApplicationException appExp = new ApplicationException(null, null,
+										Constants.SOP_EDIT_WARNING);
+								appExp.setCustomizedMsg(Constants.SOP_EDIT_WARNING);
+								this.logger.error(Constants.SOP_EDIT_WARNING, appExp);
+								throw this.getBizLogicException(appExp, "",
+										Constants.SOP_EDIT_WARNING);
+							}
+							if (oldAction.getApplicationDefaultValue() != null)
+							{
+								action.setApplicationDefaultValue(oldAction
+										.getApplicationDefaultValue());
+							}
+						}
+						else
+						{
+							if (oldAction.getApplicationDefaultValue() != null)
+							{
+								action.setApplicationDefaultValue(oldAction
+										.getApplicationDefaultValue());
+							}
+						}
+						action.setId(oldAction.getId());
+						break;
+					}
+				}
+				newActList.add(action);
+			}
+			sopNewObj.getActionCollection().addAll(newActList);
+			dao.update(sopNewObj, sopOldObj);
+		}
+		catch (final DAOException daoExp)
+		{
+			if (daoExp.getWrapException().getCause().getMessage().contains(Constants.NAME_KEY))
+			{
+				ApplicationException appExp = new ApplicationException(null, null,
+						Constants.SPP_NAME_ERROR);
+				appExp.setCustomizedMsg(Constants.SPP_NAME_ERROR);
+				this.logger.error(Constants.SPP_NAME_ERROR, appExp);
+				throw this.getBizLogicException(appExp, "", Constants.SPP_NAME_ERROR);
+			}
+			else if (daoExp.getWrapException().getCause().getMessage().contains(
+					Constants.BARCODE_KEY))
+			{
+				ApplicationException appExp = new ApplicationException(null, null,
+						Constants.SPP_BARCODE_ERROR);
+				appExp.setCustomizedMsg(Constants.SPP_BARCODE_ERROR);
+				this.logger.error(Constants.SPP_BARCODE_ERROR, appExp);
+				throw this.getBizLogicException(appExp, "", Constants.SPP_BARCODE_ERROR);
+			}
+			else
+			{
+				this.logger.error(daoExp.getMessage(), daoExp);
+				daoExp.printStackTrace();
+				throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp
+						.getMsgValues());
+			}
+		}
+		catch (final IOException ioExp)
+		{
+			this.logger.error(ioExp.getMessage(), ioExp);
+			throw this.getBizLogicException(ioExp, "", ioExp.getLocalizedMessage());
+		}
+		catch (DynamicExtensionsSystemException deExp)
+		{
+			this.logger.error(deExp.getMessage(), deExp);
+			throw this.getBizLogicException(deExp, "", deExp.getLocalizedMessage());
+		}
+		catch (SAXException saxExp)
+		{
+			this.logger.error(saxExp.getMessage(), saxExp);
+			throw this.getBizLogicException(saxExp, "", saxExp.getLocalizedMessage());
+		}
+		catch (ApplicationException e)
+		{
+			this.logger.error(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
+		catch (MissingResourceException e)
+		{
+			ApplicationException appExp = new ApplicationException(null, null,
+					Constants.INVALID_XML_MSG);
+			appExp.setCustomizedMsg(Constants.INVALID_XML_MSG);
+			this.logger.error(Constants.INVALID_XML_MSG, e);
+			throw this.getBizLogicException(appExp, "", Constants.INVALID_XML_MSG);
+		}
+	}
+
+	/**
+	 * @param sopIdentifier
+	 * @return
+	 * @throws BizLogicException
+	 */
+	public SOP getSOPById(Long sopIdentifier) throws BizLogicException
+	{
+		return (SOP) retrieve(SOP.class.getName(), sopIdentifier);
+	}
+
+	/**
+	 * Called from DefaultBizLogic to get ObjectId for authorization check.
+	 * @param dao dao
+	 * @param domainObject domainObject
+	 * @return String ADMIN_PROTECTION_ELEMENT
+	 */
+	public String getObjectId(DAO dao, Object domainObject, Object uiObject)
+	{
+		return Constants.ADMIN_PROTECTION_ELEMENT;
+	}
+
+	/**
+	 * To get PrivilegeName for authorization check from.
+	 * 'PermissionMapDetails.xml' (non-Javadoc)
+	 * @param domainObject domainObject
+	 * @return String ADD_EDIT_SPP
+	 */
+	protected String getPrivilegeKey(Object domainObject)
+	{
+		return Constants.ADD_EDIT_SPP;
+	}
+
+	/**
+	 * Gets the scgs id by sopid.
+	 *
+	 * @param sopId the sop id
+	 * @return the scgs id by sopid
+	 * @throws ApplicationException the application exception
+	 */
+	public List getScgsIdBySOPID(Long sopId) throws ApplicationException
+	{
+		String query = "select scg.identifier from CATISSUE_SPECIMEN_COLL_GROUP as scg "
+				+ "inner join catissue_cpe_sop as ccs on ccs.cpe_identifier = scg.COLLECTION_PROTOCOL_EVENT_ID "
+				+ "where ccs.sop_identifier=" + sopId
+				+ " and scg.COLLECTION_STATUS not in ('Pending','overdue','not collected') ";
+		List idList = AppUtility.executeSQLQuery(query);
+		return idList;
+	}
+
+	/**
+	 * Gets the specimens id by sopid.
+	 *
+	 * @param sopId the sop id
+	 * @return the specimens id by sopid
+	 * @throws ApplicationException the application exception
+	 */
+	public List getSpecimensIdBySOPID(Long sopId) throws ApplicationException
+	{
+
+		String query = "select cs.identifier from catissue_specimen as cs "
+				+ "inner join catissue_cp_req_specimen cprs on cprs.identifier = cs.REQ_SPECIMEN_ID "
+				+ "where cprs.SOP_IDENTIFIER = "
+				+ sopId
+				+ " and cs.COLLECTION_STATUS ='Collected' "
+				+ "and cs.identifier not in (select caa.SPECIMEN_ID from catissue_action_application as caa where caa.SPECIMEN_ID= cs.identifier)";
+		List idList = AppUtility.executeSQLQuery(query);
+		return idList;
+	}
+
+	/**
+	 * Gets the all sop names.
+	 *
+	 * @return the all sop names
+	 *
+	 * @throws BizLogicException the biz logic exception
+	 */
+	public List getAllSOPNames() throws BizLogicException
+	{
+		DAO dao;
+		List<String> dataList = null;
+		List<NameValueBean> sopNameList = new ArrayList<NameValueBean>();
+		sopNameList.add(new NameValueBean(Constants.SELECT_OPTION, Constants.SELECT_OPTION));
+		try
+		{
+			dao = openDAOSession(null);
+			String hql = "Select name from edu.wustl.catissuecore.domain.sop.SOP";
+			dataList = dao.executeQuery(hql);
+			closeDAOSession(dao);
+		}
+		catch (DAOException e)
+		{
+			logger.error(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
+		Iterator<String> dataListIter = dataList.iterator();
+		while (dataListIter.hasNext())
+		{
+			String sopName = dataListIter.next();
+			sopNameList.add(new NameValueBean(sopName, sopName));
+		}
+		return sopNameList;
+	}
+
+	/**
+	 * @param sop
+	 * @return
+	 * @throws ApplicationException
+	 * @throws DynamicExtensionsSystemException
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws SQLException
+	 */
+	public Map<Action, Long> generateContextRecordIdMap(SOP sop) throws ApplicationException,
+			DynamicExtensionsSystemException, DynamicExtensionsApplicationException, SQLException
+	{
+		Map<Action, Long> contextRecordIdMap = new HashMap<Action, Long>();
+		for (Action action : sop.getActionCollection())
+		{
+			if (action.getApplicationDefaultValue() != null)
+			{
+				Long recordIdentifier = SpecimenEventsUtility.getRecordIdentifier(action
+						.getApplicationDefaultValue().getId(), action.getContainerId());
+				contextRecordIdMap.put(action, recordIdentifier);
+			}
+		}
+		return contextRecordIdMap;
+	}
+
+
+	/**
+	 * @param formContext
+	 * @param action
+	 * @return
+	 * @throws ApplicationException
+	 * @throws DynamicExtensionsSystemException
+	 * @throws DynamicExtensionsApplicationException
+	 * @throws SQLException
+	 */
+	public Map<AbstractFormContext, Long> generateContextRecordIdMap(
+			AbstractFormContext formContext, Action action) throws ApplicationException,
+			DynamicExtensionsSystemException, DynamicExtensionsApplicationException, SQLException
+	{
+		Map<AbstractFormContext, Long> contextRecordIdMap = new HashMap<AbstractFormContext, Long>();
+		if (action.getApplicationDefaultValue() != null)
+		{
+			Long recordIdentifier = SpecimenEventsUtility.getRecordIdentifier(action
+					.getApplicationDefaultValue().getId(), action.getContainerId());
+			contextRecordIdMap.put(formContext, recordIdentifier);
+		}
+		return contextRecordIdMap;
+	}
+
+	/**
+	 * Gets the sPP name list.
+	 *
+	 * @param scg the scg
+	 *
+	 * @return the sPP name list
+	 */
+	public List<NameValueBean> getSPPNameList(SpecimenCollectionGroup scg)
+	{
+		List<NameValueBean> sppNameList=new ArrayList<NameValueBean>();
+		sppNameList.add(new NameValueBean(Constants.SELECT_OPTION, Constants.SELECT_OPTION));
+
+		Collection<SOP> sppCollection=scg.getCollectionProtocolEvent().getSopCollection();
+		Iterator<SOP> sopIter=sppCollection.iterator();
+		while(sopIter.hasNext())
+		{
+			SOP spp=sopIter.next();
+			String sppName=spp.getName();
+			sppNameList.add(new NameValueBean(sppName,sppName));
+		}
+		return sppNameList;
+	}
+
+	/**
+	 * Gets the all sop event form names.
+	 *
+	 * @param dynamicEventMap the dynamic event map
+	 *
+	 * @return the all sop event form names
+	 */
+	public String[] getAllSOPEventFormNames(Map<String, Long> dynamicEventMap)
+	{
+		dynamicEventMap.clear();
+		EntityCache cache = EntityCache.getInstance();
+		EntityGroupInterface entityGroup = cache.getEntityGroupById(1L);
+		EntityInterface actionRecordEntry = entityGroup
+				.getEntityByName("edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry");
+		List<String> namesOfSOPEvents = new ArrayList<String>();
+		if (actionRecordEntry != null)
+		{
+			Collection<AssociationInterface> allAsso = actionRecordEntry.getAllAssociations();
+			for (AssociationInterface associationInterface : allAsso)
+			{
+				Collection<edu.common.dynamicextensions.domain.userinterface.Container> containerCollection = associationInterface
+						.getTargetEntity().getContainerCollection();
+				Iterator<edu.common.dynamicextensions.domain.userinterface.Container> contIter = containerCollection
+						.iterator();
+				if (contIter.hasNext())
+				{
+				/*	if(!"TransferEventParameters".equals(associationInterface.getTargetEntity().getName())
+							&& !"DisposalEventParameters".equals(associationInterface.getTargetEntity().getName()))
+					{*/
+					namesOfSOPEvents.add(edu.wustl.cab2b.common.util.Utility
+							.getFormattedString(associationInterface.getTargetEntity().getName()));
+					edu.common.dynamicextensions.domain.userinterface.Container container = contIter
+							.next();
+					dynamicEventMap.put(edu.wustl.cab2b.common.util.Utility
+							.getFormattedString(associationInterface.getTargetEntity().getName()),
+							container.getId());
+					//}
+				}
+			}
+		}
+		else
+		{
+			logger
+					.error("edu.wustl.catissuecore.util.global.AppUtility.getAllSOPEventFormNames(Map<String, Long>): actionRecordEntry is NULL!");
+		}
+		Collections.sort(namesOfSOPEvents);
+		String[] eventlist = new String[namesOfSOPEvents.size()-2];
+		for (int k = 0, l = 0; l < namesOfSOPEvents.size();l++)
+		{
+			if(!"Transfer Event Parameters".equals(namesOfSOPEvents.get(l))
+					&& !"Disposal Event Parameters".equals(namesOfSOPEvents.get(l)))
+			{
+				eventlist[k] = namesOfSOPEvents.get(l);
+				k++;
+			}
+
+		}
+		return eventlist;
+	}
+
+	/**
+	 * Gets the all events for spp.
+	 *
+	 * @param sppName the spp name
+	 *
+	 * @return the all events for spp
+	 * @throws BizLogicException
+	 */
+	public List getAllEventsForSPP(String sppName) throws BizLogicException
+	{
+		DAO dao;
+		Collection<Action> dataList = null;
+		List<NameValueBean> sppNameList = new ArrayList<NameValueBean>();
+		try
+		{
+			dao = openDAOSession(null);
+			String hql = "Select actionCollection from edu.wustl.catissuecore.domain.sop.SOP where name='"
+					+ sppName + "'";
+			dataList = dao.executeQuery(hql);
+			closeDAOSession(dao);
+			Iterator<Action> dataListIter = dataList.iterator();
+			while (dataListIter.hasNext())
+			{
+				Action action = dataListIter.next();
+				final EntityManagerInterface entityManager = EntityManager.getInstance();
+				String containerName = edu.wustl.cab2b.common.util.Utility
+						.getFormattedString(entityManager.getContainerCaption(action
+								.getContainerId()));
+				String sopActionName = sppName.concat(" : ").concat(action.getActionOrder().toString()).concat(" : ").concat(containerName);
+				sppNameList.add(new NameValueBean(sopActionName, sopActionName));
+			}
+		}
+		catch (ApplicationException e)
+		{
+			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
+		catch (DynamicExtensionsSystemException e)
+		{
+			e.printStackTrace();
+			this.logger.error(e.getMessage(), e);
+			throw this.getBizLogicException(e, "", e.getLocalizedMessage());
+		}
+		Collections.sort(sppNameList);
+		return sppNameList;
+	}
+
+	/**
+	 * Gets the all event names.
+	 *
+	 * @return the all event names
+	 */
+	public static List getAllEventNames()
+	{
+		List eventList = new ArrayList();
+		eventList.add(new NameValueBean(Constants.SELECT_OPTION, Constants.SELECT_OPTION));
+		EntityCache cache = EntityCache.getInstance();
+		EntityGroupInterface entityGroup = cache.getEntityGroupById(1L);
+		EntityInterface actionRecordEntry = entityGroup
+				.getEntityByName("edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry");
+		List<String> namesOfSOPEvents = new ArrayList<String>();
+		if (actionRecordEntry != null)
+		{
+			Collection<AssociationInterface> allAsso = actionRecordEntry.getAllAssociations();
+			for (AssociationInterface associationInterface : allAsso)
+			{
+				Collection<edu.common.dynamicextensions.domain.userinterface.Container> containerCollection = associationInterface
+						.getTargetEntity().getContainerCollection();
+				Iterator<edu.common.dynamicextensions.domain.userinterface.Container> contIter = containerCollection
+						.iterator();
+				if (contIter.hasNext())
+				{
+					namesOfSOPEvents.add(edu.wustl.cab2b.common.util.Utility
+							.getFormattedString(associationInterface.getTargetEntity().getName()));
+					edu.common.dynamicextensions.domain.userinterface.Container container = contIter
+							.next();
+					String eventName = edu.wustl.cab2b.common.util.Utility
+							.getFormattedString(associationInterface.getTargetEntity().getName());
+					eventList.add(new NameValueBean(eventName, eventName));
+				}
+			}
+		}
+		return eventList;
+	}
+
+}

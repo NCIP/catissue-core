@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.CollectionProtocol"
+		relationShipType="main" cardinality="1"	roleName="collectionProtocol" templateName="addCollectionProtocol" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association" cardinality="1" roleName="principalInvestigator"
+			templateName="addCollectionProtocol"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				<attributeCollection name="id" csvColumnName="Principal Investigator" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+		</referenceAssociationCollection>
+
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association" cardinality="*" roleName="coordinatorCollection"
+			templateName="addCollectionProtocol"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				<attributeCollection name="id" csvColumnName="Principal cordinator" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+		</referenceAssociationCollection>
+
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+			relationShipType="containment" templateName="addCollectionProtocol"  cardinality="*" roleName="collectionProtocolEventCollection" maxNoOfRecords="1" parentRoleName="collectionProtocol" batchSize="5">
+				<attributeCollection name="studyCalendarEventPoint" csvColumnName="study calender event point" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>					
+				<attributeCollection name="collectionPointLabel" csvColumnName="Collection Point Label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+				<attributeCollection name="clinicalStatus" csvColumnName="Clinical Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+
+		</containmentAssociationCollection>
+
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.ClinicalDiagnosis"
+			relationShipType="containment" templateName="addCollectionProtocol"  cardinality="*" roleName="clinicalDiagnosisCollection" maxNoOfRecords="1" parentRoleName="collectionProtocol" batchSize="5">
+				<attributeCollection name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>	
+		</containmentAssociationCollection>
+		<attributeCollection name="title" csvColumnName="CP Title" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="shortTitle" csvColumnName="Short Title" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="irbIdentifier" csvColumnName="IRB Identifier" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="startDate" csvColumnName="Start Date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="descriptionURL" csvColumnName="Description URL" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="consentsWaived" csvColumnName="Consents Waived" updateBasedOn="false" dataType="java.lang.Boolean" belongsTo=""/>
+		<attributeCollection name="aliquotInSameContainer" csvColumnName="Aliquot In Same Container" updateBasedOn="false" dataType="java.lang.Boolean" belongsTo=""/>
+		<attributeCollection name="enrollment" csvColumnName="enrollment" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
+
+	</BulkOperationClass>
+</BulkOperationMetadata>

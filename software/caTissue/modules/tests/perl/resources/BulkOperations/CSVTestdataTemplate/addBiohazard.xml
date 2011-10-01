@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Biohazard"
+		relationShipType="main" templateName="addBiohazard"  maxNoOfRecords="1"
+		parentRoleName="" batchSize="1"
+		cardinality="1" roleName="Biohazard">
+		<attributeCollection name="name" csvColumnName="Biohazard Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+        <attributeCollection name="type" csvColumnName="Type" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+	</BulkOperationClass>
+</BulkOperationMetadata>

@@ -1,0 +1,113 @@
+<securityConfig xmlns="http://www.globus.org">
+ <method name="noAuth"> 
+   <auth-method>
+    <none/>
+   </auth-method>
+ </method>
+ <method name="gsiSecConvDeleg">
+   <auth-method>
+    <GSISecureConversation/>
+   </auth-method>
+   <run-as>
+    <caller-identity/>
+   </run-as>
+ </method>
+  <method name="gsiTransportIntegrity">
+   <auth-method>
+    <GSITransport>
+     <protection-level>
+       <integrity/>
+      </protection-level>
+    </GSITransport>
+   </auth-method>
+  </method>
+  <method name="gsiTransportPrivacy">
+   <auth-method>
+    <GSITransport>
+     <protection-level>
+       <privacy/>
+      </protection-level>
+    </GSITransport>
+   </auth-method>
+  </method>
+  <method name="gsiTransportOnly">
+   <auth-method>
+    <GSITransport/>
+   </auth-method>
+  </method>
+  <method name="gsiSecConvIntegrity">
+   <auth-method>
+    <GSISecureConversation>
+     <protection-level>
+       <integrity/>
+      </protection-level>
+    </GSISecureConversation>
+   </auth-method>
+  </method>
+  <method name="gsiSecConvPrivacy">
+   <auth-method>
+    <GSISecureConversation>
+     <protection-level>
+       <privacy/>
+      </protection-level>
+    </GSISecureConversation>
+   </auth-method>
+  </method>
+  <method name="gsiSecConvOnly">
+   <auth-method>
+    <GSISecureConversation/>
+   </auth-method>
+  </method>
+  <method name="gsiSecMsgOnly">
+   <auth-method>
+    <GSISecureMessage/>
+   </auth-method>
+  </method>
+  <method name="gsiSecMsgPrivacy">
+   <auth-method>
+    <GSISecureMessage>
+     <protection-level>
+       <privacy/>
+      </protection-level>
+    </GSISecureMessage>
+   </auth-method>
+  </method>
+  <method name="gsiSecMsgIntegrity">
+   <auth-method>
+    <GSISecureMessage>
+     <protection-level>
+       <integrity/>
+      </protection-level>
+    </GSISecureMessage>
+   </auth-method>
+  </method>
+  <method name="gsiSec">
+   <auth-method>
+    <GSISecureMessage/>
+    <GSISecureConversation/>
+   </auth-method>
+  </method>
+  <method name="setNoAuthz">
+   <run-as>
+     <caller-identity/>
+   </run-as>
+   <auth-method>
+    <GSISecureConversation/>
+   </auth-method>
+  </method>
+  <method name="alterSecurityDesc">
+   <auth-method>
+    <GSISecureConversation/>
+   </auth-method>
+  </method>
+   <method name="subscribe">
+    <auth-method>
+     <GSISecureMessage/>
+     <GSISecureConversation/>
+    </auth-method>
+   </method>  
+  <authz value="self"/>
+  <auth-method>
+    <none/>
+  </auth-method>
+</securityConfig>

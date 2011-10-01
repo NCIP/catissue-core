@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<staticMetaData>
+<entities>
+	 <entity>
+		<entityName>edu.wustl.catissuecore.domain.sop.Action</entityName>
+		<parentEntity>edu.common.dynamicextensions.domain.integration.AbstractFormContext</parentEntity>
+		<tableName>CATISSUE_ACTION</tableName>
+		<isAbstract>false</isAbstract>
+		<attribute>
+			 <attributeNames>id</attributeNames>
+			 <tableColumn>IDENTIFIER</tableColumn>
+			 <attributeDataType>Long</attributeDataType>
+			<primaryKey>true</primaryKey>
+		</attribute>
+
+		<attribute>
+			 <attributeNames>barcode</attributeNames>
+			 <tableColumn>BARCODE</tableColumn>
+			 <attributeDataType>String</attributeDataType>
+			<primaryKey>false</primaryKey>
+		</attribute>
+
+		<attribute>
+			 <attributeNames>actionOrder</attributeNames>
+			 <tableColumn>ACTION_ORDER</tableColumn>
+			 <attributeDataType>Long</attributeDataType>
+			<primaryKey>false</primaryKey>
+		</attribute>
+
+		<attribute>
+			<attributeNames>uniqueId</attributeNames>
+			<tableColumn>UNIQUE_ID</tableColumn>
+			<attributeDataType>String</attributeDataType>
+			<primaryKey>false</primaryKey>
+		</attribute>
+	</entity>
+
+	<entity>
+		<entityName>edu.wustl.catissuecore.domain.sop.DefaultAction</entityName>
+		<parentEntity>edu.common.dynamicextensions.domain.integration.AbstractFormContext</parentEntity>
+		<tableName>CATISSUE_DEFAULT_ACTION</tableName>
+		<isAbstract>false</isAbstract>
+		<attribute>
+			 <attributeNames>id</attributeNames>
+			 <tableColumn>IDENTIFIER</tableColumn>
+			 <attributeDataType>Long</attributeDataType>
+			<primaryKey>true</primaryKey>
+		</attribute>
+	</entity>
+
+	<entity>
+		<entityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</entityName>
+		<parentEntity>edu.common.dynamicextensions.domain.integration.AbstractRecordEntry</parentEntity>
+		<tableName>CATISSUE_ACTION_APP_RCD_ENTRY</tableName>
+		<isAbstract>false</isAbstract>
+		<attribute>
+			<attributeNames>id</attributeNames>
+			<tableColumn>IDENTIFIER</tableColumn>
+			<attributeDataType>Long</attributeDataType>
+			<primaryKey>true</primaryKey>
+		</attribute>
+	</entity>
+
+
+	<entity>
+		 <entityName>edu.wustl.catissuecore.domain.sop.SOP</entityName>
+		 <parentEntity></parentEntity>
+		  <tableName>CATISSUE_SOP</tableName>
+		  <isAbstract>false</isAbstract>
+			<attribute>
+				 <attributeNames>id</attributeNames>
+				 <tableColumn>IDENTIFIER</tableColumn>
+				 <attributeDataType>Long</attributeDataType>
+				<primaryKey>true</primaryKey>
+			</attribute>
+			<attribute>
+				 <attributeNames>name</attributeNames>
+				 <tableColumn>NAME</tableColumn>
+				 <attributeDataType>String</attributeDataType>
+				<primaryKey>false</primaryKey>
+			</attribute>
+			<attribute>
+				 <attributeNames>barcode</attributeNames>
+				 <tableColumn>BARCODE</tableColumn>
+				 <attributeDataType>String</attributeDataType>
+				<primaryKey>false</primaryKey>
+			</attribute>
+	</entity>
+
+	<entity>
+		<entityName>edu.wustl.catissuecore.domain.sop.AbstractApplication</entityName>
+		<parentEntity></parentEntity>
+		<tableName>CATISSUE_ABSTRACT_APPLICATION</tableName>
+		<isAbstract>true</isAbstract>
+		<attribute>
+			 <attributeNames>id</attributeNames>
+			 <tableColumn>IDENTIFIER</tableColumn>
+			 <attributeDataType>Long</attributeDataType>
+			<primaryKey>true</primaryKey>
+		</attribute>
+		<attribute>
+			 <attributeNames>reasonDeviation</attributeNames>
+			 <tableColumn>REASON_DEVIATION</tableColumn>
+			 <attributeDataType>String</attributeDataType>
+			<primaryKey>false</primaryKey>
+		</attribute>
+		<attribute>
+			<attributeNames>timestamp</attributeNames>
+			 <tableColumn>TIMESTAMP</tableColumn>
+			 <attributeDataType>Date</attributeDataType>
+			<primaryKey>false</primaryKey>
+		</attribute>
+		<attribute>
+			 <attributeNames>comments</attributeNames>
+			 <tableColumn>COMMENTS</tableColumn>
+			 <attributeDataType>String</attributeDataType>
+			<primaryKey>false</primaryKey>
+		</attribute>
+	</entity>
+
+
+	<entity>
+		 <entityName>edu.wustl.catissuecore.domain.sop.SOPApplication</entityName>
+		 <parentEntity>edu.wustl.catissuecore.domain.sop.AbstractApplication</parentEntity>
+		  <tableName>CATISSUE_SOP_APPLICATION</tableName>
+		  <isAbstract>false</isAbstract>
+		  <attribute>
+			 <attributeNames>id</attributeNames>
+			 <tableColumn>IDENTIFIER</tableColumn>
+			 <attributeDataType>Long</attributeDataType>
+			<primaryKey>true</primaryKey>
+		</attribute>
+	</entity>
+
+
+	<entity>
+		 <entityName>edu.wustl.catissuecore.domain.sop.ActionApplication</entityName>
+		 <parentEntity>edu.wustl.catissuecore.domain.sop.AbstractApplication</parentEntity>
+		 <tableName>CATISSUE_ACTION_APPLICATION</tableName>
+		 <isAbstract>false</isAbstract>
+		 <attribute>
+			 <attributeNames>id</attributeNames>
+			 <tableColumn>IDENTIFIER</tableColumn>
+			 <attributeDataType>Long</attributeDataType>
+			<primaryKey>true</primaryKey>
+		</attribute>
+	</entity>
+</entities>
+
+<associations>
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.CollectionProtocolEvent</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOP</targetEntityName>
+		<associationName>CPE_SOP_Association</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>sopCollection</roleName>
+		<roleNameTable>collectionProtocolEvent</roleNameTable>
+		<isSwap>false</isSwap>
+		<srcAssociationId></srcAssociationId>
+		<targetAssociationId>CPE_IDENTIFIER</targetAssociationId>
+		<maxCardinality>2</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>SRC_DESTINATION</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.sop.SOP</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.Action</targetEntityName>
+		<associationName>CATISSUE_SOP_ACTION</associationName><!-- intermediate  table name for many to many -->
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>sopCollection</roleName>
+		<roleNameTable>actionCollection</roleNameTable>
+		<isSwap>true</isSwap>
+		<srcAssociationId>ACTION_IDENTIFIER</srcAssociationId>
+		<targetAssociationId>SOP_IDENTIFIER</targetAssociationId>
+		<maxCardinality>2</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>BI_DIRECTIONAL</direction>
+		<manytomany>true</manytomany>
+	</association>
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.sop.Action</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOP</targetEntityName>
+		<associationName>CATISSUE_SOP_ACTION</associationName> <!-- intermediate  table name for many to many -->
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>actionCollection</roleName>
+		<roleNameTable>sopCollection</roleNameTable>
+		<isSwap>false</isSwap>
+		<srcAssociationId>ACTION_IDENTIFIER</srcAssociationId>
+		<targetAssociationId>SOP_IDENTIFIER</targetAssociationId>
+		<maxCardinality>2</maxCardinality>
+		<isSystemGenerated>false</isSystemGenerated>
+		<direction>BI_DIRECTIONAL</direction>
+		<manytomany>true</manytomany>
+	</association>
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.sop.Action</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</targetEntityName>
+		<associationName>actionValue</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>applicationDefaultValue</roleName>
+		<roleNameTable>actionValue</roleNameTable>
+		<isSwap>false</isSwap>
+		<srcAssociationId>ACTION_APP_RECORD_ENTRY_ID</srcAssociationId>
+		<targetAssociationId>IDENTIFIER</targetAssociationId>
+		<maxCardinality>1</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>SRC_DESTINATION</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.SpecimenRequirement</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.Action</targetEntityName>
+		<associationName>requirementAction</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>creationEvent</roleName>
+		<roleNameTable>specimenRequirement_Action</roleNameTable>
+		<isSwap>false</isSwap>
+		<srcAssociationId>ACTION_IDENTIFIER</srcAssociationId>
+		<targetAssociationId>IDENTIFIER</targetAssociationId>
+		<maxCardinality>1</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>SRC_DESTINATION</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.SpecimenRequirement</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOP</targetEntityName>
+		<associationName>specimenRequirement_SOP</associationName> <!-- This name shud b in camel case but can be any name -->
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>processingSOP</roleName><!-- This is target role name as specified in model. This shud b also camelCase -->
+		<roleNameTable>specimenRequirementCollection</roleNameTable> <!-- This is the source role name as specified in model. This shid b in camelCase -->
+		<isSwap>false</isSwap>
+		<srcAssociationId>SOP_IDENTIFIER</srcAssociationId>
+		<targetAssociationId>IDENTIFIER</targetAssociationId>
+		<maxCardinality>1</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>SRC_DESTINATION</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.SpecimenCollectionGroup</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOPApplication</targetEntityName>
+		<associationName>scg_SOPApplication</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>scgSOP</roleName>
+		<roleNameTable>specimenCollectionGroup</roleNameTable>
+		<isSwap>false</isSwap>
+		<srcAssociationId></srcAssociationId>
+		<targetAssociationId>SCG_IDENTIFIER</targetAssociationId>
+		<maxCardinality>2</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>SRC_DESTINATION</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.sop.SOPApplication</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.ActionApplication</targetEntityName>
+		<associationName>sopApp_actionApp</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>sopActionApplicationCollection</roleName>
+		<roleNameTable>sopApplication</roleNameTable>
+		<isSwap>true</isSwap>
+		<srcAssociationId>SOP_APP_IDENTIFIER</srcAssociationId>
+		<targetAssociationId></targetAssociationId>
+		<maxCardinality>2</maxCardinality> <!-- one to many  -->
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>BI_DIRECTIONAL</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.sop.ActionApplication</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOPApplication</targetEntityName>
+		<associationName>actionApp_sopApplicationApp</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>sopApplication</roleName>
+		<roleNameTable></roleNameTable>
+		<isSwap>false</isSwap>
+		<srcAssociationId></srcAssociationId>
+		<targetAssociationId>SOP_APP_IDENTIFIER</targetAssociationId>
+		<maxCardinality>1</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>BI_DIRECTIONAL</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.sop.ActionApplication</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</targetEntityName>
+		<associationName>actionApp_actionApplicationRecord</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>applicationRecordEntry</roleName>
+		<roleNameTable>ActionApplication</roleNameTable>
+		<isSwap>false</isSwap>
+		<srcAssociationId>ACTION_APP_RECORD_ENTRY_ID</srcAssociationId>
+		<targetAssociationId>IDENTIFIER</targetAssociationId>
+		<maxCardinality>1</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>SRC_DESTINATION</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.Specimen</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOPApplication</targetEntityName>
+		<associationName>specimen_SOPAppliction</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>processingSOPApplication</roleName>
+		<roleNameTable>Specimen</roleNameTable>
+		<isSwap>false</isSwap>
+		<srcAssociationId>SOP_APPLICATION_ID</srcAssociationId>
+		<targetAssociationId>IDENTIFIER</targetAssociationId>
+		<maxCardinality>1</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>SRC_DESTINATION</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.Specimen</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.ActionApplication</targetEntityName>
+		<associationName>specimenToActionApplictionCollection</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>actionApplicationCollection</roleName>
+		<roleNameTable>specimen</roleNameTable>
+		<isSwap>true</isSwap>
+		<srcAssociationId>SPECIMEN_ID</srcAssociationId>
+		<targetAssociationId>IDENTIFIER</targetAssociationId>
+		<maxCardinality>2</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>SRC_DESTINATION</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.sop.SOP</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOPApplication</targetEntityName>
+		<associationName>sop_sopApplication</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>sopApplicationCollection</roleName>
+		<roleNameTable>sop</roleNameTable>
+		<isSwap>true</isSwap>
+		<srcAssociationId>SOP_IDENTIFIER</srcAssociationId>
+		<targetAssociationId></targetAssociationId>
+		<maxCardinality>2</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>BI_DIRECTIONAL</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+	 <association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.sop.SOPApplication</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOP</targetEntityName>
+		<associationName>sop_sopApplication</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>sop</roleName>
+		<roleNameTable></roleNameTable>
+		<isSwap>false</isSwap>
+		<srcAssociationId>SOP_IDENTIFIER</srcAssociationId>
+		<targetAssociationId></targetAssociationId>
+		<maxCardinality>2</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>BI_DIRECTIONAL</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.User</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.sop.AbstractApplication</targetEntityName>
+		<associationName>user_abstractApplication</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>userSOPAction</roleName>
+		<roleNameTable>userAbstracApplication</roleNameTable>
+		<isSwap>false</isSwap>
+		<srcAssociationId></srcAssociationId>
+		<targetAssociationId>USER_DETAILS</targetAssociationId>
+		<maxCardinality>2</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>SRC_DESTINATION</direction>
+		<manytomany>false</manytomany>
+	</association>
+
+</associations>
+
+</staticMetaData>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+		relationShipType="main" isOneToManyAssociation="true" cardinality="1"
+		roleName="specimenCollectionGroup" templateName="editSCG" maxNoOfRecords="1" parentRoleName="" batchSize="10">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.Site"
+			relationShipType="association" cardinality="1" roleName="specimenCollectionSite"
+			templateName="editSCG" isOneToManyAssociation="false" maxNoOfRecords="1" parentRoleName="" batchSize="10">
+				<attributeCollection name="id" csvColumnName="Collection Site" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+		</referenceAssociationCollection>
+		<attributeCollection name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="clinicalStatus" csvColumnName="Clinical Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="name" csvColumnName="SCG Name" updateBasedOn="true" dataType="java.lang.String" belongsTo=""/>
+	<!--	<attributeCollection name="id" csvColumnName="SCG ID" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/> -->
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+</BulkOperationClass>
+</BulkOperationMetadata>

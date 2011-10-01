@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="edu.wustl.catissuecore.domain.sop" auto-import="false" default-cascade="all">
+	<class name="AbstractApplication" table="catissue_abstract_application" lazy="false" >
+		<cache usage="read-write" />
+		<id name="id" type="long" column="IDENTIFIER">
+			<generator class="native">
+				<param name="sequence">CATISSUE_ABS_APPL_SEQ</param>
+			</generator>
+		</id>
+		<!-- Attributes mapping for the AbstractApplication class -->
+		<property name="reasonDeviation" type="string" column="REASON_DEVIATION"/>
+		<property name="timestamp" type="java.util.Date" column="TIMESTAMP"/>
+		<property name="comments" type="string" column="COMMENTS" length="4000" />
+		<!--<one-to-one name="user" class="edu.wustl.catissuecore.domain.User" cascade="none" constrained="false" property-ref="applicationCollection" />
+		 --><many-to-one
+            name="performedBy"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+
+            update="true"
+            insert="true"
+            column="USER_DETAILS"
+        />
+
+		<joined-subclass name="edu.wustl.catissuecore.domain.sop.ActionApplication" table="catissue_action_application" lazy="false">
+			<key column="IDENTIFIER" />
+			<!-- Associations mapping for the ActionApplication class -->
+			<many-to-one name="applicationRecordEntry" class="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry" column="ACTION_APP_RECORD_ENTRY_ID" not-null="false" lazy="false" cascade="none"/>
+				<many-to-one name="sopApplication" class="edu.wustl.catissuecore.domain.sop.SOPApplication" column="SOP_APP_IDENTIFIER"  not-null="false" cascade="all"/>
+				<many-to-one name="specimen" class="edu.wustl.catissuecore.domain.Specimen" column="SPECIMEN_ID"  lazy="false" not-null="false" cascade="none"/>
+		</joined-subclass>
+		<joined-subclass name="edu.wustl.catissuecore.domain.sop.SOPApplication" table="catissue_sop_application" lazy="false">
+			<key column="IDENTIFIER" />
+			<!-- Associations mapping for the SOPApplication class -->
+				<many-to-one name="sop" class="edu.wustl.catissuecore.domain.sop.SOP" column="SOP_IDENTIFIER" not-null="false" cascade="all"/>
+			<set name="sopActionApplicationCollection" lazy="false" cascade="all" inverse="false">
+				<cache usage="read-write" />
+				<key column="SOP_APP_IDENTIFIER" not-null="false" />
+				<one-to-many class="edu.wustl.catissuecore.domain.sop.ActionApplication"/>
+			</set>
+		</joined-subclass>
+	</class>
+</hibernate-mapping>

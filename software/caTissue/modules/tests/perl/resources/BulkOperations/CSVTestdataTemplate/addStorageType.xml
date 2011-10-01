@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.StorageType" relationShipType="main" templateName="addStorageType" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="storageType">
+
+		<containmentAssociationCollection className="edu.wustl.catissuecore.domain.Capacity" relationShipType="association" templateName="addStorageType" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="capacity">
+			<attributeCollection name="oneDimensionCapacity" csvColumnName="One Dimension" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>
+			<attributeCollection name="twoDimensionCapacity" csvColumnName="Two Dimension" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>
+		</containmentAssociationCollection>
+
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="name" csvColumnName="Storage Type Name" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="oneDimensionLabel" csvColumnName="oneDimensionLabel" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="twoDimensionLabel" csvColumnName="twoDimensionLabel" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="defaultTemperatureInCentigrade" csvColumnName="Temperature" updateBasedOn="false" belongsTo="" dataType="java.lang.Double"/>
+
+	</BulkOperationClass>
+</BulkOperationMetadata>

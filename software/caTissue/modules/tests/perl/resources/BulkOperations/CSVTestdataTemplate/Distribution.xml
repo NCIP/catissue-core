@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Distribution"
+		relationShipType="main" cardinality="1"	roleName="distribution" templateName="Distribution" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
+
+<referenceAssociationCollection	className="edu.wustl.catissuecore.domain.DistributionProtocol" relationShipType="association"	templateName="Distribution" cardinality="1" roleName="distributionProtocol" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+<attributeCollection name="id" csvColumnName="DP" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>	
+</referenceAssociationCollection>	
+
+<containmentAssociationCollection className="edu.wustl.catissuecore.domain.DistributedItem" relationShipType="containment" cardinality="*" roleName="distributedItemCollection" templateName="Distribution" maxNoOfRecords="10" parentRoleName="" batchSize="5">
+<attributeCollection name="quantity" csvColumnName="Qty" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>
+
+<referenceAssociationCollection	className="edu.wustl.catissuecore.domain.Specimen" relationShipType="association"	templateName="Distribution" cardinality="1" roleName="specimen" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+<attributeCollection name="id" csvColumnName="SpecimenID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>	
+</referenceAssociationCollection>	
+
+</containmentAssociationCollection>
+
+<referenceAssociationCollection	className="edu.wustl.catissuecore.domain.User" relationShipType="association"	templateName="Distribution" cardinality="1" roleName="distributedBy" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+<attributeCollection name="id" csvColumnName="UserID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>	
+</referenceAssociationCollection>
+
+<referenceAssociationCollection	className="edu.wustl.catissuecore.domain.Site" relationShipType="association"	templateName="Distribution" cardinality="1" roleName="toSite" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+<attributeCollection name="id" csvColumnName="SiteId" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>	
+</referenceAssociationCollection>
+
+<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>	
+<attributeCollection name="timestamp" csvColumnName="Date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>	
+<attributeCollection name="comment" csvColumnName="Comment" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>	
+	
+	</BulkOperationClass>
+</BulkOperationMetadata>

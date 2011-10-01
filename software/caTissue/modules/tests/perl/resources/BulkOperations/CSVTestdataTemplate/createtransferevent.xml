@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.TransferEventParameters"
+		relationShipType="main" templateName="CreateTransferEvent"
+		 cardinality="1" roleName="transferEventParameters"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association" templateName="CreateTransferEvent"
+			isOneToManyAssociation="false" cardinality="1" roleName="user"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				<attributeCollection name="id" csvColumnName="User ID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+		</referenceAssociationCollection>
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen"
+			relationShipType="association" templateName="CreateTransferEvent"
+			isOneToManyAssociation="false" cardinality="1" roleName="specimen"  maxNoOfRecords="1"
+			parentRoleName="" batchSize="5">
+				<attributeCollection name="label" csvColumnName="Specimen label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.StorageContainer"
+			relationShipType="containment" templateName="CreateTransferEvent"
+			 cardinality="1" roleName="toStorageContainer"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+			<attributeCollection name="name" csvColumnName="DestinationContainerName" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>	
+		</containmentAssociationCollection>
+		
+		<attributeCollection name="toPositionDimensionOne" csvColumnName="Postion1" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>	
+		<attributeCollection name="toPositionDimensionTwo" csvColumnName="Position2" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>	
+	</BulkOperationClass>
+</BulkOperationMetadata>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="edu.wustl.catissuecore.domain.sop">
+	<class name="SOP" table="catissue_sop" lazy="false" abstract="false" >
+		<cache usage="read-write" />
+		<id name="id" type="long" column="IDENTIFIER">
+			<generator class="native">
+				<param name="sequence">CATISSUE_SOP_SEQ</param>
+			</generator>
+		</id>
+		<!-- Attributes mapping for the SOP class -->
+		<property name="barcode" type="string" column="BARCODE"/>
+		<property name="name" type="string" column="NAME"/>
+		<!-- Associations mapping for the SOP class -->
+		<set name="actionCollection" lazy="false" inverse="false" cascade="all">
+			<cache usage="read-write" />
+			<key column="SOP_IDENTIFIER" />
+			<one-to-many class="edu.wustl.catissuecore.domain.sop.Action"/>
+		</set>
+		<set name="sopApplicationCollection" lazy="true" cascade="none" inverse="false">
+			<cache usage="read-write" />
+			<key column="SOP_IDENTIFIER" not-null="false" />
+			<one-to-many class="edu.wustl.catissuecore.domain.sop.SOPApplication"/>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BulkOperationMetadata>
+        <BulkOperationClass className="edu.wustl.catissuecore.domain.User"
+                relationShipType="main" cardinality="1" roleName="user" templateName="createUser" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+
+        <attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+        <attributeCollection name="comments" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+        <attributeCollection name="emailAddress" csvColumnName="Email Address" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+        <attributeCollection name="firstName" csvColumnName="First Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+        <attributeCollection name="lastName" csvColumnName="Last Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+        <attributeCollection name="loginName" csvColumnName="Login Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+        <attributeCollection name="startDate" csvColumnName="Start Date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+        <attributeCollection name="roleId" csvColumnName="Role Id" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+
+
+		<referenceAssociationCollection className="edu.wustl.catissuecore.domain.Site" relationShipType="association" templateName="createUser" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="*" roleName="siteCollection">
+		<attributeCollection name="id" csvColumnName="Site ID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+	</referenceAssociationCollection>
+
+        <referenceAssociationCollection className="edu.wustl.catissuecore.domain.Department" relationShipType="association" templateName="createUser" maxNoOfRecords="1" parentRoleName="user" batchSize="5" cardinality="1" roleName="department">
+                <attributeCollection name="id" csvColumnName="Department ID" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+        </referenceAssociationCollection>
+
+        <referenceAssociationCollection className="edu.wustl.catissuecore.domain.CancerResearchGroup" relationShipType="association" templateName="createUser" maxNoOfRecords="1" parentRoleName="user" batchSize="5" cardinality="1" roleName="cancerResearchGroup">
+                <attributeCollection name="id" csvColumnName="CancerResearchGroup ID" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+        </referenceAssociationCollection>
+
+
+        <referenceAssociationCollection className="edu.wustl.catissuecore.domain.Institution" relationShipType="association" templateName="createUser" maxNoOfRecords="1" parentRoleName="user" batchSize="5" cardinality="1" roleName="institution">
+                <attributeCollection name="id" csvColumnName="Institution ID" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+        </referenceAssociationCollection>
+
+        <containmentAssociationCollection className="edu.wustl.catissuecore.domain.Password" relationShipType="association" templateName="createUser" maxNoOfRecords="1" parentRoleName="user" batchSize="5" cardinality="*" roleName="passwordCollection">
+                <attributeCollection name="password" csvColumnName="Password" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+                <attributeCollection name="updateDate" csvColumnName="Update Date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>            
+        </containmentAssociationCollection>
+
+
+        <referenceAssociationCollection className="edu.wustl.catissuecore.domain.Address" relationShipType="association" templateName="createUser" maxNoOfRecords="1" parentRoleName="user" batchSize="5" cardinality="1" roleName="address">
+                <attributeCollection name="city" csvColumnName="City" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+                <attributeCollection name="country" csvColumnName="Country" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>                            <attributeCollection name="faxNumber" csvColumnName="Fax Number" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+                <attributeCollection name="phoneNumber" csvColumnName="Phone Number" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+                <attributeCollection name="state" csvColumnName="State" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+                <attributeCollection name="street" csvColumnName="Street" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+                <attributeCollection name="zipCode" csvColumnName="Zip Code" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+                </referenceAssociationCollection>
+
+        </BulkOperationClass>
+</BulkOperationMetadata>

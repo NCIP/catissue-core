@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.EmbeddedEventParameters"
+		relationShipType="main" templateName="createEmbeddedEventParameters"
+		 cardinality="1" roleName="MolecularSpecimenReviewEventParameters"  maxNoOfRecords="1" parentRoleName="MolecularSpecimenReviewEventParameters" batchSize="5">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association" templateName="createEmbeddedEventParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="user"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+			
+			<attributeCollection name="loginName" csvColumnName="UserLoginName" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen"
+			relationShipType="containment" templateName="createEmbeddedEventParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="specimen"  maxNoOfRecords="1" parentRoleName="FluidSpecimenReviewEventParameters" batchSize="5">
+			<attributeCollection name="label" csvColumnName="Specimen label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>	
+		</containmentAssociationCollection>
+		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="embeddingMedium" csvColumnName="Embedding Medium" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+	</BulkOperationClass>
+</BulkOperationMetadata>

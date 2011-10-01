@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Specimen"
+		relationShipType="main" cardinality="1" roleName="Specimen"
+		templateName="AddNonhumanSpecimen" maxNoOfRecords="1" parentRoleName="" batchSize="5" containerId="">
+
+		<attributeCollection name="id" csvColumnName="SpecimenID" updateBasedOn="true" belongsTo="" dataType="java.lang.Long"/>
+
+		
+		
+		<DEAssociationCollection className="Annotation.SpecimenTests.Testconductedonspecimen" relationShipType="containment" cardinality="1"    	roleName="Testconductedonspecimen" templateName="AddNonhumanSpecimen" maxNoOfRecords="1" parentRoleName="" batchSize="5" containerId="125">
+		
+			
+       <containmentAssociationCollection
+			className="Annotation.SpecimenTests.Testconductedonspecimen.TestsPerformed"
+			relationShipType="containment" templateName="AddNonhumanSpecimen" maxNoOfRecords="1" parentRoleName="Testconductedonspecimen" 
+			batchSize="5" cardinality="1" roleName="TestsPerformed">
+			
+			<attributeCollection name="date" csvColumnName="date" updateBasedOn="" belongsTo="" dataType="java.util.Date"/>
+			<attributeCollection name="nameofthetestconducted" csvColumnName="nameOfTestConducted" updateBasedOn="" belongsTo="" dataType="java.lang.String"/>
+		
+		</containmentAssociationCollection>
+	
+</DEAssociationCollection>
+
+	</BulkOperationClass>
+
+</BulkOperationMetadata>

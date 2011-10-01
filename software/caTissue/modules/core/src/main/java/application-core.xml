@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="
+	http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<!-- CXF required imports. -->
+	<import resource="classpath:META-INF/cxf/cxf-all.xml" />
+
+	<!-- Struts Action classes managed by Spring -->
+	<bean name="/CctsEventNotifications" autowire="byType"
+		class="edu.wustl.catissuecore.action.ccts.CctsEventNotificationsAction" />
+
+	<bean name="/CctsEventNotification" autowire="byType"
+		class="edu.wustl.catissuecore.action.ccts.CctsEventNotificationAction" />
+
+	<bean name="/DataQueue" autowire="byType"
+		class="edu.wustl.catissuecore.action.ccts.DataQueueAction" />
+
+
+	<!-- Biz Logic -->
+	<bean id="cctsIntegrationBizLogic"
+		class="edu.wustl.catissuecore.bizlogic.ccts.CctsIntegrationBizLogic"
+		p:serviceClientBeanId="subjectRegistrationClient" p:messageSource-ref="messageSource"
+		p:cctsEnabled="${ccts.integration.isEnabled}"
+		autowire="byType">
+		<property name="dataConverters">
+			<list>
+				<ref bean="participantConverter" />
+				<ref bean="registrationConverter" />
+			</list>
+		</property>
+		<property name="domainObjectComparators">
+			<list>
+				<ref bean="participantComparator" />
+				<ref bean="registrationComparator" />
+			</list>
+		</property>
+	</bean>
+	<bean id="participantBizLogic" class="edu.wustl.catissuecore.bizlogic.ParticipantBizLogic"
+		autowire="byType"
+		p:genericDAO-ref="genericDAO"
+		scope="prototype" />
+	<bean id="collectionProtocolRegistrationBizLogic"
+		autowire="byType"
+		p:genericDAO-ref="genericDAO"
+		class="edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic"
+		scope="prototype" />
+	<bean id="siteBizLogic" class="edu.wustl.catissuecore.bizlogic.SiteBizLogic"
+		scope="prototype" />
+	<bean id="userBizLogic" class="edu.wustl.catissuecore.bizlogic.UserBizLogic"
+		scope="prototype" />
+	<bean id="collectionProtocolBizLogic"
+		autowire="byType"
+		p:genericDAO-ref="genericDAO"
+		class="edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic"
+		scope="prototype" />
+	<bean id="participantComparator"
+		class="edu.wustl.catissuecore.bizlogic.ccts.ParticipantComparator" />
+	<bean id="registrationComparator"
+		class="edu.wustl.catissuecore.bizlogic.ccts.RegistrationComparator" />		
+	<bean id="participantConverter"
+		class="edu.wustl.catissuecore.bizlogic.ccts.ParticipantConverter"
+		autowire="byType" />
+	<bean id="registrationConverter"
+		class="edu.wustl.catissuecore.bizlogic.ccts.RegistrationConverter"
+		autowire="byType" />
+
+
+	<!-- DAO declarations -->
+	<bean id="notificationDAO" class="edu.wustl.catissuecore.dao.NotificationDAOImpl"
+		autowire="byType"></bean>
+	<bean id="dataQueueDAO" class="edu.wustl.catissuecore.dao.DataQueueDAOImpl"
+		autowire="byType"></bean>
+	<bean id="genericDAO" class="edu.wustl.catissuecore.dao.GenericDAOImpl" autowire-candidate="false"
+		autowire="byType"></bean>		
+
+	<!-- Transaction-related plumbing: http://static.springsource.org/spring/docs/1.2.x/reference/transaction.html#d0e5690 -->
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
+
+	<bean
+		class="org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor">
+		<property name="transactionInterceptor" ref="coreTxInterceptor" />
+	</bean>
+
+	<bean id="coreTxInterceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="HibernateTransactionManager" />
+		<property name="transactionAttributeSource">
+			<bean
+				class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource" />
+		</property>
+	</bean>
+
+	<!-- Scheduling -->
+	<bean id="schedulerFactory"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		lazy-init="false" destroy-method="destroy">
+		<property name="waitForJobsToCompleteOnShutdown">
+			<value>true</value>
+		</property>
+		<property name="autoStartup">
+			<value>true</value>
+		</property>
+		<property name="startupDelay">
+			<value>30</value>
+		</property>
+		<property name="applicationContextSchedulerContextKey">
+			<value>applicationContext</value>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="notificationProcessingTrigger" />
+				<ref bean="gridGroupSyncTrigger" />
+			</list>
+		</property>
+		<property name="quartzProperties">
+			<props>
+				<!-- Main -->
+				<prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>
+				<!-- ThreadPool -->
+				<prop key="org.quartz.threadPool.class">org.quartz.simpl.SimpleThreadPool</prop>
+				<prop key="org.quartz.threadPool.threadCount">5</prop>
+				<!-- Job store -->
+				<prop key="org.quartz.jobStore.class">org.quartz.simpl.RAMJobStore</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="notificationProcessingTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="notificationProcessingJobDetail" />
+		<property name="repeatInterval" value="5000" />
+		<property name="repeatCount" value="-1" />
+		<property name="misfireInstructionName"
+			value="MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT" />
+	</bean>
+
+	<bean id="notificationProcessingJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="notificationProcessor" />
+		<property name="targetMethod" value="process" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="notificationProcessor"
+		class="edu.wustl.catissuecore.bizlogic.ccts.NotificationQueueProcessor"
+		depends-on="servicesPropertyConfigurer" p:notificationTTL="${ccts.notificationTTL}"
+		p:enabled="${ccts.integration.isEnabled}"
+		p:delayBetweenAttempts="${ccts.delayBetweenAttempts}">
+		<property name="cctsEventProcessors">
+			<list>
+				<ref bean="participantEventProcessor" />
+				<ref bean="registrationEventProcessor" />
+			</list>
+		</property>
+		<property name="bizLogic">
+			<ref bean="cctsIntegrationBizLogic" />
+		</property>
+	</bean>
+
+	<bean id="gridGroupSyncTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="gridGroupSyncJobDetail" />
+		<property name="repeatInterval" value="86400000" /> <!-- every 24hrs 24*60*60000-> 60000 = 1 min -->
+		<property name="repeatCount" value="-1" />
+		<property name="misfireInstructionName"
+			value="MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT" />
+	</bean>
+
+	<bean id="gridGroupSyncJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gridGroupSync" />
+		<property name="targetMethod" value="syncAllMigratedUsers" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="gridGroupSync" class="edu.wustl.catissuecore.gridgrouper.GridGroupSync"/>
+	
+	<bean id="participantEventProcessor"
+		class="edu.wustl.catissuecore.bizlogic.ccts.ParticipantEventProcessor"
+		p:integrationBizLogic-ref="cctsIntegrationBizLogic"
+		p:serviceClientBeanId="subjectManagementClient"
+		p:participantBizLogic-ref="participantBizLogic" />
+
+	<bean id="registrationEventProcessor"
+		class="edu.wustl.catissuecore.bizlogic.ccts.RegistrationEventProcessor"
+		p:integrationBizLogic-ref="cctsIntegrationBizLogic"
+		p:serviceClientBeanId="subjectRegistrationClient" p:cprBizLogic-ref="collectionProtocolRegistrationBizLogic"
+		p:participantBizLogic-ref="participantBizLogic" />
+
+
+	<!-- Web service client -->
+	<bean id="servicesPropertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="propertiesArray">
+			<list>
+				<bean id="defaultServicesPropertyConfigurer"
+					class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+					<property name="locations">
+						<list>
+							<value>classpath:services.properties</value>
+						</list>
+					</property>
+					<property name="properties">
+						<props>
+							<prop key="ccts.integration.isEnabled">true</prop>
+							<prop key="sts.serviceName">{http://tempuri.org/}SecureTokenServiceService
+							</prop>
+							<prop key="sts.servicePortName">{http://tempuri.org/}ISecureTokenServiceService_Port
+							</prop>
+							<prop key="sts.serviceURL">https://dkrylov-PC:8181/STS/SecureTokenServiceService
+							</prop>
+							<prop key="sts.service.wsdlLocation">https://dkrylov-PC:8181/STS/SecureTokenServiceService?wsdl
+							</prop>
+							<prop key="ccts.subjectManagementService.URL">https://localhost:8443/c3pr/services/services/SubjectManagement
+							</prop>
+							<prop key="ccts.subjectManagementService.wsdlLocation">https://localhost:8443/c3pr/services/services/SubjectManagement?wsdl
+							</prop>
+							<prop key="ccts.subjectManagementService.serviceClass">edu.duke.cabig.c3pr.webservice.subjectmanagement.SubjectManagement
+							</prop>
+							<prop key="ccts.subjectRegistrationService.URL">https://localhost:8443/c3pr/services/services/SubjectRegistration
+							</prop>
+							<prop key="ccts.subjectRegistrationService.wsdlLocation">https://localhost:8443/c3pr/services/services/SubjectRegistration?wsdl
+							</prop>
+							<prop key="ccts.subjectRegistrationService.serviceClass">edu.duke.cabig.c3pr.webservice.subjectregistration.SubjectRegistration
+							</prop>
+							<prop key="sts.userName">jdoe01</prop>
+							<prop key="sts.password">Aa_111111</prop>
+							<prop key="ccts.notificationTTL">864000</prop>
+							<prop key="ccts.delayBetweenAttempts">5</prop>
+						</props>
+					</property>
+					<property name="ignoreResourceNotFound" value="true" />
+				</bean>
+			</list>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="ignoreResourceNotFound" value="true" />
+	</bean>
+
+	<jaxws:client id="subjectRegistrationClient"
+		serviceClass="${ccts.subjectRegistrationService.serviceClass}"
+		wsdlLocation="${ccts.subjectRegistrationService.wsdlLocation}"
+		address="${ccts.subjectRegistrationService.URL}">
+		<jaxws:features>
+			<bean class="org.apache.cxf.feature.LoggingFeature" />
+			<wsa:addressing xmlns:wsa="http://cxf.apache.org/ws/addressing" />
+		</jaxws:features>
+		<jaxws:properties>
+			<entry key="ws-security.sts.client">
+				<ref bean="stsClient" />
+			</entry>
+		</jaxws:properties>
+	</jaxws:client>
+
+
+	<jaxws:client id="subjectManagementClient"
+		serviceClass="${ccts.subjectManagementService.serviceClass}"
+		wsdlLocation="${ccts.subjectManagementService.wsdlLocation}" address="${ccts.subjectManagementService.URL}">
+		<jaxws:features>
+			<bean class="org.apache.cxf.feature.LoggingFeature" />
+			<wsa:addressing xmlns:wsa="http://cxf.apache.org/ws/addressing" />
+		</jaxws:features>
+		<jaxws:properties>
+			<entry key="ws-security.sts.client">
+				<ref bean="stsClient" />
+			</entry>
+		</jaxws:properties>
+	</jaxws:client>
+
+	<bean class="org.apache.cxf.ws.security.trust.STSClient" id="stsClient">
+		<constructor-arg ref="cxf" />
+		<property name="inInterceptors">
+			<list>
+				<ref bean="logInbound" />
+			</list>
+		</property>
+		<property name="outInterceptors">
+			<list>
+				<ref bean="logOutbound" />
+			</list>
+		</property>
+		<property name="outFaultInterceptors">
+			<list>
+				<ref bean="logOutbound" />
+			</list>
+		</property>
+		<property name="inFaultInterceptors">
+			<list>
+				<ref bean="logInbound" />
+			</list>
+		</property>
+		<property name="wsdlLocation" value="${sts.service.wsdlLocation}" />
+
+		<!-- Next two values come from STS's WSDL. -->
+		<property name="serviceName" value="${sts.serviceName}" />
+		<property name="endpointName" value="${sts.servicePortName}" />
+
+		<!-- STS must authenticate using Username Token profile and plain text 
+			username/password. -->
+		<property name="properties">
+			<map>
+				<entry key="ws-security.username" value="${sts.userName}" />
+				<entry key="ws-security.password" value="${sts.password}" />
+			</map>
+		</property>
+	</bean>
+
+
+	<bean id="logInbound" class="org.apache.cxf.interceptor.LoggingInInterceptor" />
+	<bean id="logOutbound" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+
+	<!-- Misc -->
+	<bean id="messageSource" autowire-candidate="false"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:ApplicationResources</value>
+				<value>classpath:CctsApplicationResources</value>
+			</list>
+		</property>
+		<property name="cacheSeconds" value="5" />
+		<property name="useCodeAsDefaultMessage" value="true" />
+	</bean>
+	
+	<bean id="springContextHolder" class="edu.wustl.catissuecore.util.SpringContextHolder" />
+	
+	<!-- This one is just to force eager initialization of GSIDClient in order to copy certs and sync trust store. -->
+	<!-- <bean id="edu.wustl.catissuecore.GSID.GSIDClient" class="edu.wustl.catissuecore.GSID.GSIDClient"/> -->
+	
+	<!-- This code will fix that annoying Globus issue. See edu.wustl.catissuecore.bizlogic.ccts.Utils.restoreDefaultHttpsURLHandler() -->
+	<bean id="edu.wustl.catissuecore.bizlogic.ccts.Utils" class="edu.wustl.catissuecore.bizlogic.ccts.Utils"/>
+	
+	<bean id="scheduledTask" class="org.springframework.scheduling.timer.ScheduledTimerTask">
+	    <property name="period" value="100" />
+	    <property name="timerTask" ref="edu.wustl.catissuecore.bizlogic.ccts.Utils" />
+	</bean>	
+	
+	<bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean" lazy-init="false">
+	    <property name="scheduledTimerTasks">
+	        <list>	            
+	            <ref bean="scheduledTask" />
+	        </list>
+	    </property>
+	</bean>	
+  
+</beans>

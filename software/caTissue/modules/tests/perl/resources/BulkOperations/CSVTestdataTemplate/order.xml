@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BulkOperationMetadata>
+
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.OrderDetails" relationShipType="main" 
+	           cardinality="1" roleName="orderDetails" templateName="order" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		
+		<referenceAssociationCollection className="edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem" 
+				relationShipType="containment"	templateName="order" cardinality="*" 
+				roleName="orderItemCollection"  maxNoOfRecords="3" parentRoleName="orderDetails" batchSize="5">
+					<attributeCollection name="status" csvColumnName="InnerStatus" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>						
+					
+					<referenceAssociationCollection className="edu.wustl.catissuecore.domain.Specimen" 
+						relationShipType="containment"	templateName="order" cardinality="1" 
+						roleName="specimen"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+						
+						<attributeCollection name="id" csvColumnName="SpecimenID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>						
+						
+					</referenceAssociationCollection>
+				
+				
+		</referenceAssociationCollection>
+		
+		<referenceAssociationCollection className="edu.wustl.catissuecore.domain.DistributionProtocol" relationShipType="association" templateName="order" cardinality="1" roleName="distributionProtocol"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				<attributeCollection name="id" csvColumnName="DP_id" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>					
+		</referenceAssociationCollection>
+		
+		<!--<attributeCollection name="comment" csvColumnName="comment" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>-->
+		<attributeCollection name="name" csvColumnName="name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+	    <attributeCollection name="requestedDate" csvColumnName="date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="status" csvColumnName="status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+	
+		
+	</BulkOperationClass>
+</BulkOperationMetadata>

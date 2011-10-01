@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest"
+		relationShipType="main" cardinality="1"	roleName="shipmentRequest" templateName="requestShipment" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+
+						
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.Site"
+			relationShipType="association" cardinality="1" roleName="senderSite"
+			templateName="requestShipment"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				
+				<attributeCollection name="id" csvColumnName="Receiver Site" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+				
+		</referenceAssociationCollection> 
+		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.StorageContainer"
+			relationShipType="association" cardinality="*" roleName="containerCollection"
+			templateName="requestShipment" maxNoOfRecords="5" parentRoleName="" batchSize="5"  >
+				
+				<attributeCollection name="name" csvColumnName="Container Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+				
+			<referenceAssociationCollection
+				className="edu.wustl.catissuecore.domain.Site"
+				relationShipType="association" cardinality="1" roleName="site"
+				templateName="requestShipment" maxNoOfRecords="1" parentRoleName="" batchSize="5"  >
+			
+				<attributeCollection name="id" csvColumnName="Sender Site" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+				
+			</referenceAssociationCollection>	
+			
+			
+		</referenceAssociationCollection>	
+
+		<attributeCollection name="createdDate" csvColumnName="Shipping Date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="label" csvColumnName="Shipment label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="receiverComments" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>		
+		
+	</BulkOperationClass>
+</BulkOperationMetadata>	

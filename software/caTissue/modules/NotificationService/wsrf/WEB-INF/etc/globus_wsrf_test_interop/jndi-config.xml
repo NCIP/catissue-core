@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
+    <service name="WidgetService">
+        <resource
+            name="home"
+            type="org.globus.interop.widget.WidgetHome">
+            <resourceParams>
+                <parameter>
+                    <name>factory</name>
+                    <value>org.globus.wsrf.jndi.BeanFactory</value>
+                </parameter>
+                <parameter>
+                    <name>resourceClass</name>
+                    <value>org.globus.interop.widget.Widget</value>
+                </parameter>
+                <parameter>
+                    <name>resourceKeyName</name>
+                    <value>{http://www.globus.org/namespaces/2004/06/core}WidgetKey</value>
+                </parameter>
+                <parameter>
+                    <name>resourceKeyType</name>
+                    <value>java.lang.String</value>
+                </parameter>
+            </resourceParams>
+        </resource>
+    </service>
+    <service name="WidgetNotificationService">
+        <resource
+            name="home"
+            type="org.globus.wsrf.impl.ServiceResourceHome">
+            <resourceParams>
+                <parameter>
+                    <name>factory</name>
+                    <value>org.globus.wsrf.jndi.BeanFactory</value>
+                </parameter>
+            </resourceParams>
+        </resource>
+    </service>
+</jndiConfig>

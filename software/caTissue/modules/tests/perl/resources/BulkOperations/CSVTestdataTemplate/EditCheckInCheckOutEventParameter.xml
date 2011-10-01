@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter"
+		relationShipType="main" templateName="EditCheckInCheckOutEventParameter"
+		 cardinality="1" roleName="MolecularSpecimenReviewEventParameters"  maxNoOfRecords="1" parentRoleName="MolecularSpecimenReviewEventParameters" batchSize="5">
+		
+		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="storageStatus" csvColumnName="Storage status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="id" csvColumnName="id" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>
+	</BulkOperationClass>
+</BulkOperationMetadata>

@@ -1,0 +1,54 @@
+#MAGE-TAB Version	1.1
+
+Investigation Title	caTissue MAGE-Tab import demo
+
+Experimental Design	disease_state_design
+Experimental Design Term Source REF	MO
+
+Experimental Factor Name	DISEASESTATE
+Experimental Factor Type	disease_state
+Experimental Factor Term Source REF	MO
+
+Person Last Name	Shrivastava
+Person First Name	Savita
+Person Mid Initials	S
+Person Email	sshrivastava@path.wustl.edu		
+Person Phone	314-362-3250
+Person Fax	314-362-3250
+Person Address	4320 Forest Park Ave St. Louis MO 63110
+Person Affiliation	Washington University in St. Louis
+Person Roles	investigator
+Person Roles Term Source REF	MO
+
+Quality Control Type	biological_replicate
+Quality Control Term Source REF	MO
+Replicate Type	biological_replicate
+Replicate Type Term Source REF	MO
+Normalization Type	
+Normalization Term Source REF	
+Normalization Term Accession Number	
+
+Date of Experiment	2010-04-07
+Public Release Date	2011-04-07
+
+PubMed ID	12345678
+Publication DOI	2011-04-07
+Publication Author List	Abcd; efgh; ijkl
+Publication Title	for demo
+Publication Status	submitted
+Publication Status Term Source REF	MO	
+
+Experiment Description	This is a demo experiment to test caTissue MAGE-TAB import
+
+Protocol Name	ss et al RNA extraction	
+Protocol Type	nucleic_acid_extraction
+Protocol Term Source REF	MO
+Protocol Description	"Total RNA was extracted and purified with Qiagen RNeasy kit (Qiagen, San Diego, CA)"	
+Protocol Parameters	
+Protocol Hardware	HP
+Protocol Software	Microarray Suite 5.0
+Protocol Contact
+SDRF File	magetab.sdrf	
+Term Source Name	MO	ICD-O-3 Topography	SNOMED-CT		
+Term Source File	http://mged.sourceforge.net/ontologies/MGEDOntology1.1.8.daml	http://www.who.int/classifications/icd/adaptations/oncology/en/	http://www.nlm.nih.gov/research/umls/Snomed/snomed_main.html
+Term Source Version	1.1.8			

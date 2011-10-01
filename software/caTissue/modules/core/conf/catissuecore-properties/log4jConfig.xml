@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
+		  	 debug="true">
+
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                   value=":: [%d{ISO8601}] %-5p %c{1}.%M() %x - %m%n" />
+        </layout>	    
+	</appender>
+    
+        <!--
+        If you change the log path, make sure to change the 'ant.props.local' property 'appLogsDir'
+        to reflect the new directory path that you specified. The ant script automatically
+        creates the directory.
+        -->
+
+        
+        <appender name="rollingLogFile" class="org.apache.log4j.RollingFileAppender">
+            <!-- uncomment for local grants_gov tomcat environment -->
+<param name="File" value="C:/security/logs/security-api.log"/>
+            <param name="MaxFileSize" value="5MB"/>
+            <param name="MaxBackupIndex" value="3"/>
+            <layout class="org.apache.log4j.PatternLayout">
+                <param name="ConversionPattern" 
+                       value="[%d{ISO8601}][%-5p][%c{1}.%M()%L]-%m%n" />
+            </layout>	
+        </appender>
+  
+    <category name="gov.nih.nci.security">
+        <priority value="debug"/>
+	</category>
+
+    <category name="test.gov.nih.nci.security">
+        <priority value="debug"/>
+	</category>
+   
+           
+	<root>
+	   <priority value ="debug" />
+           <appender-ref ref="rollingLogFile"/>
+	</root>
+
+	
+</log4j:configuration>
+
+

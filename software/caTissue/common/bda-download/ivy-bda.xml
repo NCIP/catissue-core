@@ -1,0 +1,134 @@
+<!--
+$Id: ivy-bda.xml 1729 2009-05-28 17:59:23Z saksass $
+$HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4/software/bda-build-template/software/common/bda-download/ivy-bda.xml $
+
+This is the definition of a virtual module called bda-download that has a dependency of bda-utils.  This virtual project causes the download of bda-utils from the NCICB Ivy Repository.  This file currently points to the 1.0 version of bda-utils if you want to use another version change the rev="1.0" to the desired version.
+-->
+<ivy-module version="1.0">
+	<info organisation="ncicb" module="bda-download"
+		/>
+  <configurations>
+    <conf name="default" />
+    <conf name="compile" />
+    <conf name="runtime" />
+    <conf name="test" extends="runtime" />
+    <conf name="test-pmd"/>
+    <conf name="test-selenium"/>
+    <conf name="test-junit"/>
+    <conf name="test-cobertura"/>
+    <conf name="test-javancss"/>
+    <conf name="test-checkstyle"/>
+    <conf name="test-findbugs"/>
+    <conf name="app_lib"/>
+    <conf name="bo"/>
+    <conf name="aq"/>
+    <conf name="de"/>
+    <conf name="idp"/>
+    <conf name="pm"/>
+    <conf name="web-inf"/>
+    <conf name="common_lib"/>
+    <conf name="limpopo"/>
+    <conf name="de-integration-client-lib"/>
+    <conf name="private_public_migrator"/>
+    <conf name="caTissuePrintWebService"/>
+    <conf name="CaTissueSuite_caGrid_Service"/>
+    <conf name="extra_lib"/>
+    <conf name="third_party_lib"/>
+    <conf name="src_lib"/>
+    <conf name="extra_lib"/>
+    <conf name="third_party_flex_lib"/>
+    <conf name="caTissueSuite_Client_lib"/>
+	<conf name="taskdef_lib"/>
+	<conf name="cacore_resources_lib"/>
+	<conf name="flex_jar"/>
+	<conf name="CaTissue_TestCases_lib"/>
+	<conf name="cobertura_lib"/>
+	<conf name="CaTissueSuite_caGrid_Service_lib"/>
+	<conf name="CaTissueSuite_caGrid_Service_tools_lib"/>
+	<conf name="Applet_lib"/>
+
+  </configurations>
+  <publications>
+  </publications>
+  <dependencies>
+  <!-- Dependent jars start here -->
+   	<dependency org="gov.nih.nci.catissue" name="CaTissueSuite_caGrid_Service" rev="2.0" conf="CaTissueSuite_caGrid_Service->*"/>
+   	<dependency org="gov.nih.nci.catissue" name="extra_lib" rev="2.0" conf="extra_lib->*"/>
+   	<dependency org="gov.nih.nci.catissue" name="third_party_lib" rev="2.0" conf="third_party_lib->*"/>
+   	<dependency org="gov.nih.nci.catissue" name="src_lib" rev="2.0" conf="src_lib->*"/>
+   	<dependency org="gov.nih.nci.catissue" name="extra_lib" rev="2.0" conf="extra_lib->*"/>
+   	<dependency org="gov.nih.nci.catissue" name="caTissuePrintWebService" rev="2.0" conf="caTissuePrintWebService->*"/>
+  	<dependency org="gov.nih.nci.catissue" name="private_public_migrator" rev="2.0" conf="private_public_migrator->*"/>
+    <dependency org="gov.nih.nci.catissue" name="catissue_de_integration_client" rev="2.0" conf="de-integration-client-lib->*"/>
+    <dependency org="gov.nih.nci.catissue" name="WEB-INF_lib" rev="2.0.3" conf="web-inf->*"/>
+    <dependency org="gov.nih.nci.catissue" name="common_lib" rev="2.0" conf="common_lib->*"/>
+
+    <dependency org="org.quartz-scheduler" name="quartz" rev="1.8.4" conf="web-inf->master,runtime">
+    	<exclude org="c3p0"/>
+	    <exclude org="javax.transaction"/>
+    </dependency>
+	<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.0" conf="web-inf->master,runtime" transitive="false"/>
+	<dependency org="org.apache.cxf" name="cxf-bundle" rev="2.2.10" transitive="false" conf="web-inf->master,runtime"/>
+	<dependency org="org.apache.ws.security" name="wss4j" rev="1.5.7" force="true" transitive="false"  conf="web-inf->master,runtime"/>
+	<dependency org="org.apache.neethi" name="neethi" rev="2.0.4" transitive="false"  conf="web-inf->master,runtime"/>
+	<dependency org="org.apache.santuario" name="xmlsec" rev="1.4.3" force="true" transitive="false"  conf="web-inf->*"/>
+	<dependency org="org.apache.ws.commons.schema" name="XmlSchema" rev="1.4.5" force="true" transitive="false"  conf="web-inf->master,runtime"/>
+	<dependency org="wsdl4j" name="wsdl4j" rev="1.6.2" transitive="false"  conf="web-inf->master,runtime"/>
+	<dependency org="org.springframework" name="spring" rev="2.5.6" force="true" transitive="false" conf="web-inf->*">
+		<artifact name="spring" type="jar"/>
+	</dependency>
+	<dependency org="org.springframework" name="spring-webmvc" rev="2.5.6" force="true" transitive="false" conf="web-inf->*">
+		<artifact name="spring-webmvc" type="jar"/>
+	</dependency>
+	<dependency org="org.springframework" name="spring-webmvc-struts" rev="2.5.6" force="true" transitive="false" conf="web-inf->*">
+		<artifact name="spring-webmvc-struts" type="jar"/>
+	</dependency>
+	<dependency org="javax.xml.soap" name="saaj-api" rev="1.3" force="true" transitive="false"  conf="web-inf->master,runtime"/>
+	<dependency org="com.sun.xml.messaging.saaj" name="saaj-impl" rev="1.3.2" force="true" transitive="false"  conf="web-inf->master,runtime"/>
+
+
+    <dependency org="gov.nih.nci.catissue" name="third_party_flex_lib" rev="2.0" conf="third_party_flex_lib->*"/>
+    <dependency org="gov.nih.nci.catissue" name="caTissueSuite_Client" rev="2.0" conf="caTissueSuite_Client_lib->*"/>
+	<dependency org="gov.nih.nci.catissue" name="taskdef_lib" rev="2.0" conf="taskdef_lib->*"/>
+
+	<dependency org="gov.nih.nci.catissue" name="Applet_lib" rev="2.0" conf="Applet_lib->*"/>
+	<dependency org="gov.nih.nci.catissue" name="cacore_resources_lib" rev="2.0" conf="cacore_resources_lib->*"/>
+	<dependency org="gov.nih.nci.catissue" name="flex_jar" rev="2.0" conf="flex_jar->*"/>
+	<dependency org="gov.nih.nci.catissue" name="CaTissue_TestCases_lib" rev="2.0" conf="CaTissue_TestCases_lib->*"/>
+	<dependency org="gov.nih.nci.catissue" name="cobertura_lib" rev="2.0" conf="cobertura_lib->*"/>
+	<dependency org="gov.nih.nci.catissue" name="CaTissueSuite_caGrid_Service_lib" rev="2.0" conf="CaTissueSuite_caGrid_Service_lib->*"/>
+	<dependency org="gov.nih.nci.catissue" name="CaTissueSuite_caGrid_Service_tools_lib" rev="2.0" conf="CaTissueSuite_caGrid_Service_tools_lib->*"/>
+
+
+    <dependency org="gov.nih.nci.advancedquery" name="AdvanceQuery" rev="1.2" conf="aq->*"/>
+    <dependency org="gov.nih.nci.bulkoperation" name="bulkoperation" rev="2.0" conf="bo->*"/>
+    <dependency org="gov.nih.nci.dynamicextension" name="DynamicExtensions" rev="1.5.1.7" conf="de->*"/>
+  	<dependency org="gov.nih.nci.idp" name="IDPAuthenticationManager" rev="0_0" conf="idp->*"/>
+    <dependency org="gov.nih.nci.participant-manager" name="ParticipantManager" rev="1.0" conf="pm->*"/>
+
+    <dependency org="gov.nih.nci.commonpackage" name="commonpackage" rev="1.2.w1" conf="app_lib->*"/>
+  	<dependency org="gov.nih.nci.dao" name="dao" rev="1.1.9.5.1" conf="app_lib->*"/>
+  	<dependency org="gov.nih.nci.query" name="query" rev="1.0" conf="app_lib->*"/>
+   	<dependency org="gov.nih.nci.securitymanager" name="securitymanager" rev="1.1.7.3" conf="app_lib->*"/>
+  	<dependency org="gov.nih.nci.simplequery" name="SimpleQuery" rev="1.1.9.2.2" conf="app_lib->*"/>
+  	<dependency org="gov.nih.nci.catissue" name="keywordSearch" rev="1.0" conf="app_lib->*"/>
+  	<dependency org="gov.nih.nci.washu-commons" name="washu-commons" rev="1.1.8" conf="app_lib->*"/>
+    <!-- Dependent jars end here -->
+    <dependency org="openqa" name="selenium-server" rev="1.0-beta-1" conf="test-selenium->master"/>
+    <dependency org="junit" name="junit" rev="4.3.1" conf="test-junit->master"/>
+    <dependency org="cobertura" name="cobertura" rev="1.9" conf="test-cobertura->runtime"/>
+    <dependency org="javancss" name="javancss" rev="29.50" conf="test-javancss->runtime"/>
+    <dependency org="checkstyle" name="checkstyle" rev="4.4" conf="test-checkstyle->runtime"/>
+    <dependency org="umd" name="findbugs-ant" rev="1.3.4" conf="test-findbugs->runtime"/>
+    <dependency org="pmd" name="pmd" rev="4.2.1" conf="test-pmd->runtime"/>
+    <dependency org="ncicb" name="bda-utils" rev="${bda.version}" changing="true" conf="runtime"/>
+    <dependency org="uk.ac.ebi.arrayexpress2" name="limpopo" rev="1.0.7.2" conf="limpopo->*"/>
+
+    <exclude org="gov.nih.nci.catissue" artifact="spring*" ext="jar"/>
+    <exclude org="gov.nih.nci.catissue" artifact="activation*" ext="jar"/>
+    <exclude org="gov.nih.nci.catissue" artifact="wss4j*" ext="jar"/>
+    <exclude org="gov.nih.nci.catissue" artifact="xmlsec*" ext="jar"/>
+    <exclude org="gov.nih.nci.catissue" artifact="namespace*" ext="jar"/>
+    <exclude org="gov.nih.nci.catissue" artifact="jaxb-api*" ext="jar"/>
+  </dependencies>
+</ivy-module>

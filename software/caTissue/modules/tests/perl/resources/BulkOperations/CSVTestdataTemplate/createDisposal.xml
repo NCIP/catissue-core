@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.DisposalEventParameters"
+		relationShipType="main" templateName="CreateDisposalEvent"
+		isOneToManyAssociation="false" cardinality="1" roleName="disposalEventParameters" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association" templateName="CreateDisposalEvent"
+			isOneToManyAssociation="false" cardinality="1" roleName="user" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				<attributeCollection name="loginName" csvColumnName="UserLoginName" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen"
+			relationShipType="containment" templateName="CreateDisposalEvent"
+			isOneToManyAssociation="false" cardinality="1" roleName="specimen" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+			<attributeCollection name="label" csvColumnName="Specimen label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+			</containmentAssociationCollection>
+			<attributeCollection name="activityStatus" csvColumnName="Activity status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+<attributeCollection name="reason" csvColumnName="Reason" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>	
+	
+	</BulkOperationClass>
+</BulkOperationMetadata>
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpunEventParameters"
+		relationShipType="main" templateName="EditSpunEventParameters"
+		 cardinality="1" roleName="MolecularSpecimenReviewEventParameters"  maxNoOfRecords="1" parentRoleName="MolecularSpecimenReviewEventParameters" batchSize="5">
+		
+		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>				
+		<attributeCollection name="id" csvColumnName="id" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>
+		<attributeCollection name="durationInMinutes" csvColumnName="Duration Min" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
+		<attributeCollection name="gravityForce" csvColumnName="Gravity" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>
+	</BulkOperationClass>
+</BulkOperationMetadata>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Specimen"
+		relationShipType="main" templateName="EditSpecimen"  maxNoOfRecords="1" parentRoleName="" batchSize="5"
+		cardinality="1" roleName="specimen">
+			
+		 <containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
+			relationShipType="containment" templateName="EditSpecimen" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="specimenCharacteristics">
+				<attributeCollection name="tissueSite" csvColumnName="Tissue Site" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+				<attributeCollection name="tissueSide" csvColumnName="Tissue Side" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		</containmentAssociationCollection>
+		
+		 <containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.ExternalIdentifier"
+			relationShipType="containment" templateName="EditSpecimen" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="*" roleName="externalIdentifierCollection">
+				<attributeCollection name="name" csvColumnName="EID name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+				<attributeCollection name="value" csvColumnName="EID value" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		</containmentAssociationCollection>
+		
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.SpecimenPosition"
+			relationShipType="containment" templateName="EditSpecimen" 
+			cardinality="1" roleName="specimenPosition" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				<attributeCollection name="positionDimensionOne" csvColumnName="Position one" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
+				<attributeCollection name="positionDimensionTwo" csvColumnName="Position two" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
+				<referenceAssociationCollection
+				className="edu.wustl.catissuecore.domain.StorageContainer"
+				relationShipType="association" templateName="EditSpecimen" 
+				cardinality="1" roleName="storageContainer"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+					<attributeCollection name="name" csvColumnName="Container name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+				</referenceAssociationCollection>			
+		</containmentAssociationCollection>
+		
+		<attributeCollection name="label" csvColumnName="Label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="barcode" csvColumnName="Barcode" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="createdOn" csvColumnName="Created On" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="comment" csvColumnName="Comment" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="isAvailable" csvColumnName="Is Available" updateBasedOn="false" dataType="java.lang.Boolean" belongsTo=""/>
+		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="specimenClass" csvColumnName="Specimen Class" updateBasedOn="false" dataType="java.lang.String" belongsTo="">
+
+			<discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimen"/>
+			<discriminatorCollection name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimen"/>
+			<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimen"/>
+			<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimen"/>
+
+		</attributeCollection>
+		<attributeCollection name="specimenType" csvColumnName="Type" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="initialQuantity" csvColumnName="Initial Quantity" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>
+		<attributeCollection name="availableQuantity" csvColumnName="Available Quantity" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>
+		<attributeCollection name="lineage" csvColumnName="Lineage" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="pathologicalStatus" csvColumnName="Pathological Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="concentrationInMicrogramPerMicroliter" csvColumnName="Concentration" updateBasedOn="false" dataType="java.lang.Double" belongsTo="edu.wustl.catissuecore.domain.MolecularSpecimen"/>
+		<attributeCollection name="label" csvColumnName="Label" updateBasedOn="true" dataType="java.lang.String" belongsTo=""/>
+	</BulkOperationClass>
+</BulkOperationMetadata>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass
+	className="edu.wustl.catissuecore.domain.SpecimenArrayType" relationShipType="main" templateName="addSAType"
+    parentRoleName="" maxNoOfRecords="1" batchSize="5" cardinality="1" roleName="specimenArrayType">
+	
+	    <referenceAssociationCollection
+					className="edu.wustl.catissuecore.domain.Capacity"
+					relationShipType="association" templateName="addSAType" cardinality="1" roleName="capacity" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+					
+			<attributeCollection name="oneDimensionCapacity" csvColumnName="Dimension One" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
+			<attributeCollection name="twoDimensionCapacity" csvColumnName="Dimension Two" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
+			
+		</referenceAssociationCollection>
+
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="name" csvColumnName="Array Type Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+	    <attributeCollection name="specimenClass" csvColumnName="Specimen Class" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+
+		<containmentAssociationCollection className="java.lang.String" relationShipType="association" templateName="addSAType" maxNoOfRecords="2" parentRoleName="" batchSize="5" cardinality="*" roleName="specimenTypeCollection">
+				
+			<attributeCollection name="specimenTypeCollection" csvColumnName="holdsSpecimenType" updateBasedOn="false" belongsTo="" dataType="java.lang.String" />
+
+		</containmentAssociationCollection>
+	</BulkOperationClass>
+</BulkOperationMetadata>
+
+
+

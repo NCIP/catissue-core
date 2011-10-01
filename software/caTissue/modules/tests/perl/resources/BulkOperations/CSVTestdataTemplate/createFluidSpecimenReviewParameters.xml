@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters"
+		relationShipType="main" templateName="createFluidSpecimenReviewParameters"
+		 cardinality="1" roleName="FluidSpecimenReviewEventParameters"  maxNoOfRecords="1" parentRoleName="FluidSpecimenReviewEventParameters" batchSize="5">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.User"
+			relationShipType="association" templateName="createFluidSpecimenReviewParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="user"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+<!--				<attributeCollection name="loginName" csvColumnName="User Login Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/> -->
+					<attributeCollection name="id" csvColumnName="User Id" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen"
+			relationShipType="containment" templateName="createFluidSpecimenReviewParameters"
+			isOneToManyAssociation="false" cardinality="1" roleName="specimen"  maxNoOfRecords="1" parentRoleName="FluidSpecimenReviewEventParameters" batchSize="5">
+			<attributeCollection name="label" csvColumnName="Specimen label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>	
+		</containmentAssociationCollection>
+		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="cellCount" csvColumnName="Cell count" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>
+		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>				
+	</BulkOperationClass>
+</BulkOperationMetadata>

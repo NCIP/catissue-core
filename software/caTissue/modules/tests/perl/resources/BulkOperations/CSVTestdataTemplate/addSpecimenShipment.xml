@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.shippingtracking.BaseShipment"
+		relationShipType="main" cardinality="1"	roleName="baseShipment" templateName="CreateShipment" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+
+						
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.Site"
+			relationShipType="association" cardinality="1" roleName="receiverSite"
+			templateName="CreateShipment"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				<attributeCollection name="id" csvColumnName="ReceiverSite" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+		</referenceAssociationCollection>
+		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.Site"
+			relationShipType="association" cardinality="1" roleName="senderSite"
+			templateName="CreateShipment"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				<attributeCollection name="id" csvColumnName="SenderSite" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+		</referenceAssociationCollection>
+		
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.Specimen"
+			relationShipType="association" cardinality="*" roleName="specimen"
+			templateName="CreateShipment" maxNoOfRecords="1" parentRoleName="" batchSize="5"  >
+				<attributeCollection name="label" csvColumnName="Label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		</referenceAssociationCollection>	
+
+		<attributeCollection name="createdDate" csvColumnName="Shipping Date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+		<attributeCollection name="label" csvColumnName="Shipment label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+			
+		
+	</BulkOperationClass>
+</BulkOperationMetadata>	

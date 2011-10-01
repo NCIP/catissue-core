@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpecimenArray" relationShipType="main" templateName="addSpecimenArray" parentRoleName="" maxNoOfRecords="1" batchSize="5" cardinality="1" roleName="specimanArray">
+
+    <referenceAssociationCollection className="edu.wustl.catissuecore.domain.Capacity" relationShipType="association" templateName="addSpecimenArray" cardinality="1" roleName="capacity" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		<attributeCollection name="oneDimensionCapacity" csvColumnName="Capacity_Dim_One" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
+		<attributeCollection name="twoDimensionCapacity" csvColumnName="Capacity_Dim_Two" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
+    </referenceAssociationCollection>
+
+   <referenceAssociationCollection className="edu.wustl.catissuecore.domain.SpecimenArrayType" relationShipType="main" templateName="addSpecimenArray" parentRoleName="" maxNoOfRecords="1" batchSize="5" cardinality="1" roleName="specimenArrayType">
+	    <containmentAssociationCollection className="java.lang.String" relationShipType="association" templateName="addSpecimenArray" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="*" roleName="specimenTypeCollection">
+			<attributeCollection name="specimenTypeCollection" csvColumnName="holdsSpecimenType" updateBasedOn="false" belongsTo="" dataType="java.lang.String" />
+       </containmentAssociationCollection>
+	 	<attributeCollection name="id" csvColumnName="Array Type" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+       <attributeCollection name="specimenClass" csvColumnName="Specimen Class" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+    </referenceAssociationCollection>
+			
+    <referenceAssociationCollection className="edu.wustl.catissuecore.domain.SpecimenArrayContent" relationShipType="association" templateName="addSpecimenArray" parentRoleName="" maxNoOfRecords="1" batchSize="5" cardinality="*" roleName="specimenArrayContentCollection">
+		<referenceAssociationCollection className="edu.wustl.catissuecore.domain.Specimen" relationShipType="association" templateName="addSpecimenArray" parentRoleName="" maxNoOfRecords="5" batchSize="5" cardinality="1" roleName="specimen">
+			<attributeCollection name="label" csvColumnName="Specimen_Label" updateBasedOn="false" dataType="java.lang.String"	belongsTo=""/>
+			<attributeCollection name="barcode" csvColumnName="Specimen_Barcode" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+    	</referenceAssociationCollection>
+		<attributeCollection name="positionDimensionOne" csvColumnName="Dim_One" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
+		<attributeCollection name="positionDimensionTwo" csvColumnName="Dim_Two" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
+	</referenceAssociationCollection>
+
+	<attributeCollection name="name" csvColumnName="Array_Label" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+	<attributeCollection name="barcode" csvColumnName="Spec_Array_Barcode" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+	<attributeCollection name="comment" csvColumnName="Spec_Array_Comments" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+	
+	<referenceAssociationCollection className="edu.wustl.catissuecore.domain.ContainerPosition" relationShipType="association" templateName="addSpecimenArray" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="locatedAtPosition">
+			<attributeCollection name="positionDimensionOne" csvColumnName="Storage_Position_Container_D1" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>
+			<attributeCollection name="positionDimensionTwo" csvColumnName="Storage_Position_Container_D2" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>
+		<referenceAssociationCollection className="edu.wustl.catissuecore.domain.Container" relationShipType="association" templateName="addSpecimenArray" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="parentContainer">
+			<attributeCollection name="id" csvColumnName="Storage_Position_Container_Id" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+    	</referenceAssociationCollection>
+    </referenceAssociationCollection>
+      
+    <referenceAssociationCollection className="edu.wustl.catissuecore.domain.User" relationShipType="association" templateName="addSpecimenArray" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="createdBy">
+		    <attributeCollection name="firstName" csvColumnName="Created by_First_Name" updateBasedOn="false" dataType="java.lang.String" belongsTo="" />				
+			<attributeCollection name="lastName" csvColumnName="Created by_Last_Name" updateBasedOn="false" dataType="java.lang.String" belongsTo="" />
+            <attributeCollection name="id" csvColumnName="Created By_User_ID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>  
+    </referenceAssociationCollection>
+	
+  	</BulkOperationClass>
+</BulkOperationMetadata>
+

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment name="defaultServerConfig" 
+    xmlns="http://xml.apache.org/axis/wsdd/" 
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <service name="WidgetService" provider="Handler"
+        use="literal" style="document">
+        <parameter name="allowedMethodsClass" 
+                   value="com.widgets.WidgetPortType"/>
+        <parameter name="handlerClass" 
+                   value="org.globus.axis.providers.RPCProvider"/>
+        <parameter name="className" 
+            value="org.globus.interop.widget.WidgetService"/>
+        <wsdlFile>share/schema/core/tests/interop/widget_service.wsdl</wsdlFile>
+        <parameter name="scope" value="Application"/>
+        <parameter name="providers" value="
+             DestroyProvider SetTerminationTimeProvider
+             GetRPProvider GetMRPProvider SetRPProvider QueryRPProvider
+         "/>
+
+    </service>
+
+    <service name="NotificationConsumerFactoryService" provider="Handler" 
+        use="literal" style="document">
+        <parameter name="allowedMethods" value="*"/>
+        <parameter name="handlerClass" 
+                   value="org.globus.axis.providers.RPCProvider"/>
+        <parameter name="className" 
+            value="org.globus.interop.notification.NotificationConsumerFactoryService"/>
+        <wsdlFile>share/schema/core/tests/interop/notification_consumer_factory_service.wsdl</wsdlFile>
+    </service>
+
+    <service name="WidgetNotificationService" provider="Handler"
+        use="literal" style="document">
+        <parameter name="allowedMethods" value="*"/>
+        <parameter name="scope" value="Application"/>
+        <parameter name="loadOnStartup" value="true"/>
+        <parameter name="providers" value="
+             GetRPProvider SubscribeProvider GetCurrentMessageProvider
+         "/>
+        <parameter name="handlerClass" 
+                   value="org.globus.axis.providers.RPCProvider"/>
+        <parameter name="className" 
+            value="org.globus.interop.widget.WidgetNotificationService"/>
+        <wsdlFile>share/schema/core/tests/interop/widget_notification_service.wsdl</wsdlFile>
+    </service>
+
+</deployment>

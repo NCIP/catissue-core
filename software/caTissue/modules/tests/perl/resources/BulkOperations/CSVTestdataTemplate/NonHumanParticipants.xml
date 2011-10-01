@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.Participant"
+		relationShipType="main" cardinality="1" roleName="participant"
+		templateName="AddNonhumanParticipants" maxNoOfRecords="1" parentRoleName="" batchSize="5" containerId="">
+
+		<attributeCollection name="id" csvColumnName="PatientID" updateBasedOn="true" belongsTo="" dataType="java.lang.Long"/>
+
+		
+		<DEAssociationCollection className="Annotation.ParticipantTests.NonHumanParticipant" relationShipType="containment" cardinality="1" roleName="NonHumanParticipant" templateName="AddNonhumanParticipants" maxNoOfRecords="1" parentRoleName="" batchSize="5" containerId="123">
+			
+       <attributeCollection name="bodypart" csvColumnName="Body Part" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="celltype" csvColumnName="CellType" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="species" csvColumnName="Species" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+		<attributeCollection name="strain" csvColumnName="Strain" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+	
+</DEAssociationCollection>
+
+	</BulkOperationClass>
+
+</BulkOperationMetadata>
