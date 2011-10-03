@@ -1,5 +1,5 @@
 -- To add unique constraint for Bugid:19485
-alter table CSM_MIGRATE_USER add constraint MIG_USR_KEY unique (TARGET_IDP_NAME, MIGRATED_LOGIN_NAME)
+-- alter table CSM_MIGRATE_USER add constraint MIG_USR_KEY unique (TARGET_IDP_NAME, MIGRATED_LOGIN_NAME)
 /
 
 -- Removed these columns as they are not required for more info refer bug 19643

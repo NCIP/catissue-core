@@ -1,7 +1,7 @@
 SET storage_engine=InnoDB;
 /
 -- To add unique constraint for Bugid:19485
-alter table csm_migrate_user add unique index(TARGET_IDP_NAME, MIGRATED_LOGIN_NAME);
+--alter table csm_migrate_user add unique index(TARGET_IDP_NAME, MIGRATED_LOGIN_NAME);
 /
 
 -- This is required for model change
