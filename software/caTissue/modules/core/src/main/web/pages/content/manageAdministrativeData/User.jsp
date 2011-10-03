@@ -27,6 +27,8 @@
 <link rel="stylesheet" type="text/css" href="css/userext-all.css" />
 <script language="JavaScript" type="text/javascript"
 	src="jss/caTissueSuite.js"></script>
+	<script language="JavaScript" type="text/javascript"
+	src="jss/ajax.js"></script>
 <script language="JavaScript" type="text/javascript"
 	src="jss/ctrp/ctrpUser.js"></script>
 
