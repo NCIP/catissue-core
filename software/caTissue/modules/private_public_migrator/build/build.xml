@@ -29,8 +29,8 @@
     <property name="create.oracle.staging.db" value="impdp ${stagingSystemUserName}/${stagingSystemPassword}@${stagingDBName} remap_schema=${privateDBUserName}:${stagingDBUserName} directory=data_pump_dir dumpfile=catissue_${TODAY}.dmp logfile=imp parallel=4 transform=oid:n @@TABLESPACE@@"/>
     <property name="create.oracle.private.dump" value="expdp ${stagingSystemUserName}/${stagingSystemPassword}@${stagingDBName} schemas=${privateDBUserName} directory=data_pump_dir dumpfile=catissue_${TODAY}.dmp logfile=catissueexp.log"/>
 
-    <property name="drop.mysql.staging.db" value="cmd /c mysql -u ${privateDBUserName} -p${privateDBPassword} -h ${privateDBHost} -P ${privateDBPort} &lt;${baseDir}/db/drop_staging_db_mysql.sql"/>
-    <property name="create.mysql.staging.db" value="cmd /c mysql -u ${stagingDBUserName} -p${stagingDBPassword} -h ${privateDBHost} -P ${privateDBPort} ${stagingDBName}&lt;privatedump_${TODAY}.sql"/>
+    <property name="drop.mysql.staging.db" value="cmd /c mysql -u ${stagingDBUserName} -p${stagingDBPassword} -h ${stagingDBHost} -P ${stagingDBPort} &lt;${baseDir}/db/drop_staging_db_mysql.sql"/>
+    <property name="create.mysql.staging.db" value="cmd /c mysql -u ${stagingDBUserName} -p${stagingDBPassword} -h ${stagingDBHost} -P ${stagingDBPort} ${stagingDBName}&lt;privatedump_${TODAY}.sql"/>
     <property name="create.mysql.private.dump" value="cmd /c mysqldump -u ${privateDBUserName} -p${privateDBPassword} -h ${privateDBHost} -P ${privateDBPort} ${privateDBName}&gt;privatedump_${TODAY}.sql"/>
 
     <property name="drop.oracle.public.db" value="sqlplus ${publicSystemUserName}/${publicSystemPassword}@${publicDBTNSName} @${baseDir}//db//drop_public_db_oracle.sql"/>
@@ -40,7 +40,7 @@
 
     <property name="drop.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} -P ${publicDBPort} &lt;${baseDir}/db/drop_public_db_mysql.sql"/>
     <property name="create.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} -P ${publicDBPort} ${publicDBName}&lt;publicdump_${TODAY}.sql"/>
-    <property name="create.mysql.public.dump" value="cmd /c mysqldump -u ${stagingDBUserName} -p${stagingDBPassword} -h ${privateDBHost} -P ${privateDBPort} ${stagingDBName}&gt;publicdump_${TODAY}.sql"/>
+    <property name="create.mysql.public.dump" value="cmd /c mysqldump -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} -P ${publicDBPort} ${publicDBName}&gt;publicdump_${TODAY}.sql"/>
 
 
     <target name="init">
