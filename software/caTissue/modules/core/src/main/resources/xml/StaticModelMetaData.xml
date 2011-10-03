@@ -377,8 +377,8 @@
 	</association>
 
 	<association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.User</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.AbstractApplication</targetEntityName>
+		<sourceEntityName>edu.wustl.catissuecore.domain.sop.AbstractApplication</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.User</targetEntityName>
 		<associationName>user_abstractApplication</associationName>
 		<associationTye>ASSOCIATION</associationTye>
 		<roleName>userSOPAction</roleName>
