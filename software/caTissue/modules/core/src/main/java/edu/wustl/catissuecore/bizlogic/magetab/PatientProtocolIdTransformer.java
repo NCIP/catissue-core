@@ -13,5 +13,11 @@ public class PatientProtocolIdTransformer extends AbstractCharacteristicTransfor
 		// TODO Auto-generated method stub
 		return specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getProtocolParticipantIdentifier();
 	}
+	
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

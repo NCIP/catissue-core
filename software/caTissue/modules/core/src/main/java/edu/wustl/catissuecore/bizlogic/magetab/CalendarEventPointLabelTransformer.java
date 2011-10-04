@@ -14,5 +14,11 @@ public class CalendarEventPointLabelTransformer extends AbstractCharacteristicTr
 		return specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getStudyCalendarEventPoint().toString()  + " " +
 		specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getCollectionPointLabel();
 	}
+	
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

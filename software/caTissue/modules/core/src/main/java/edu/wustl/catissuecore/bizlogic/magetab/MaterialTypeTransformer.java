@@ -50,4 +50,10 @@ public class MaterialTypeTransformer extends AbstractTransformer {
 
 	}
 	
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
 }

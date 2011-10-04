@@ -38,5 +38,11 @@ public class ExternalIdTransformer extends AbstractCharacteristicTransformer {
 //		CATISSUE_LABEL {public String toString() {return "caTissue Label";}},
 //		CATISSUE_BARCODE {public String toString() {return "caTissue Barcode";}}
 //	}
+	
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

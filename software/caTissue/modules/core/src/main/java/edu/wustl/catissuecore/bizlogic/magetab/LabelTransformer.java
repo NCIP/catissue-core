@@ -15,4 +15,9 @@ public class LabelTransformer extends AbstractCharacteristicTransformer {
 	}
 
 
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

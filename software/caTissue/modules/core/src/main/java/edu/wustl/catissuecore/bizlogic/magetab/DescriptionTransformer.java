@@ -29,5 +29,10 @@ public class DescriptionTransformer extends AbstractTransformer {
 			}
 		}
 	}
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
 }

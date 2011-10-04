@@ -165,7 +165,8 @@ public class MagetabExportWizardBean {
 					transformer.getLocalName(),
 					sourceTransformers.contains(transformer.getName()),
 					sampleTransformers.contains(transformer.getName()),
-					extractTransformers.contains(transformer.getName()));			
+					extractTransformers.contains(transformer.getName()),
+					transformer.isMageTabSpec());			
 			transformersSelections.put(transformer.getName(), transformerSelections);
 		}
 	}
@@ -185,7 +186,8 @@ public class MagetabExportWizardBean {
 					transformer.getLocalName(),
 					false,
 					sampleTransformers.contains(transformer.getName()),
-					false);			
+					false,
+					transformer.isMageTabSpec());			
 			transformersSelections.put(transformer.getName(), transformerSelections);
 		}
 	}

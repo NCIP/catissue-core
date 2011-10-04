@@ -14,4 +14,10 @@ public class CollectionProtocolTransformer extends AbstractCharacteristicTransfo
 		// TODO Auto-generated method stub
 		return specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getCollectionProtocol().getTitle();
 	}
+	
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

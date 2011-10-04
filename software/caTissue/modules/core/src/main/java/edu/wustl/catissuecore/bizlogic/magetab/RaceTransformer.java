@@ -29,4 +29,10 @@ public class RaceTransformer extends AbstractCharacteristicTransformer {
 		return value;
 	}
 	
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
 }

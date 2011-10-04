@@ -7,19 +7,21 @@ public class TransformerSelections {
 	private boolean selectedForSource;
 	private boolean selectedForSample;
 	private boolean selectedForExtract;
+	private boolean mageTabSpec;
 	
 	public TransformerSelections() {
 		
 	}
 	
 	public TransformerSelections(String name, String userFriendlyName, String localName,
-			boolean selectedForSource, boolean selectedForSample, boolean selectedForExtract) {
+			boolean selectedForSource, boolean selectedForSample, boolean selectedForExtract , boolean mageTabSpec) {
 		this.name = name;
 		this.userFriendlyName = userFriendlyName;
 		this.localName=localName;
 		this.selectedForSource = selectedForSource;
 		this.selectedForSample = selectedForSample;
 		this.selectedForExtract = selectedForExtract;
+		this.mageTabSpec = mageTabSpec;
 	}
 	
 	public String getName() {
@@ -57,5 +59,13 @@ public class TransformerSelections {
 	}
 	public void setLocalName(String localName) {
 		this.localName = localName;
+	}
+
+	public boolean isMageTabSpec() {
+		return mageTabSpec;
+	}
+
+	public void setMageTabSpec(boolean mageTabSpec) {
+		this.mageTabSpec = mageTabSpec;
 	}	
 }

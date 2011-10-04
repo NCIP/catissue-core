@@ -12,5 +12,12 @@ public class DiseaseStateTransformer extends AbstractCharacteristicTransformer {
 	public String getCharacteristicValue(Specimen specimen) {
 		return specimen.getSpecimenCollectionGroup().getClinicalDiagnosis();
 	}
+	
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 
 }

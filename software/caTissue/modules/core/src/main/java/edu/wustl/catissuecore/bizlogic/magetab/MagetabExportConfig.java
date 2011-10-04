@@ -128,6 +128,8 @@ public class MagetabExportConfig {
 				new CharacteristicTransformerConfig(null)));
 		
 		addTransformer(new ExternalIdTransformer());
+		addTransformer(new GsIdTransformer());
+		addTransformer(new LabelTransformer());
 		addTransformer(new OrganismPartTransformer(
 				new CharacteristicTransformerConfig(getTermSources().get("ICD-O-3 Topography"))));
 	
@@ -135,10 +137,14 @@ public class MagetabExportConfig {
 				new MaterialTypeTransformerConfig(
 						getTermSources().get("MO"), materialTypesMap,knownMolecularTypes)));
 		
+		//addTransformer(new MaterialTypeTransformer());
 		addTransformer(new SpecimenTypeTransformer(
 				new CharacteristicTransformerConfig(null)));	
 		addTransformer(new DescriptionTransformer());
-
+		addTransformer(new CollectionProtocolTransformer());
+		addTransformer(new PatientProtocolIdTransformer());
+		addTransformer(new ClinicalStatusTransformer());
+		addTransformer(new CalendarEventPointLabelTransformer());
 
 	}
 	
@@ -164,10 +170,16 @@ public class MagetabExportConfig {
 				"DiseaseState",
 				"PathologicalStatus",
 				"ExternalId",
+				"Global Specimen Identifier",
+				"Label",
 				"OrganismPart",
 				"MaterialType",
 				"SpecimenType",
-				"Description");
+				"Description",
+				"Collection Protocol Name",
+				"Protocol Participant ID",
+				"Clinical Status",
+				"Calendar Event Point Label");
 		
 	}
 
@@ -182,10 +194,14 @@ public class MagetabExportConfig {
 		//		"DiseaseState",
 		//		"PathologicalStatus",
 				"ExternalId",
+				"Global Specimen Identifier",
+				"Label",
 		//		"OrganismPart",
 				"MaterialType",
 				"SpecimenType",
-				"Description");
+				"Description",
+				"Clinical Status",
+				"Calendar Event Point Label");
 	}
 	
 	private void initExtractTransformers() {
@@ -199,9 +215,13 @@ public class MagetabExportConfig {
 		//		"DiseaseState",
 		//		"PathologicalStatus",
 				"ExternalId",
+				"Global Specimen Identifier",
+				"Label",
 		//		"OrganismPart",
 				"MaterialType",
 				"SpecimenType",
-				"Description");
+				"Description",
+				"Clinical Status",
+				"Calendar Event Point Label");
 			}
 }

@@ -16,4 +16,10 @@ public class NameTransformer extends AbstractTransformer {
 						.getBarcode()) ? specimen.getId()+"" : specimen.getBarcode()
 						: specimen.getLabel());
 	}
+	
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }

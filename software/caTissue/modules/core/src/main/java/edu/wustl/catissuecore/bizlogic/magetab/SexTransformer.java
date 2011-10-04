@@ -12,5 +12,11 @@ public class SexTransformer extends AbstractCharacteristicTransformer {
 	public String getCharacteristicValue(Specimen specimen) {
 		return specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant().getGender();
 	}
+	
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
 }

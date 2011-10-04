@@ -15,5 +15,9 @@ public class GsIdTransformer extends AbstractCharacteristicTransformer {
 		return specimen.getGlobalSpecimenIdentifier();
 	}
 
-
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

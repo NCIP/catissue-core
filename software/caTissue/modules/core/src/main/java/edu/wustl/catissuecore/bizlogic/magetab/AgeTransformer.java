@@ -44,4 +44,10 @@ public class AgeTransformer extends AbstractCharacteristicTransformer {
 		
 	}
 
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }

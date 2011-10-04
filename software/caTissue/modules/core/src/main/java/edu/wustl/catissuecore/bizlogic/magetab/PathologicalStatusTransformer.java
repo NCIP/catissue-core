@@ -12,5 +12,11 @@ public class PathologicalStatusTransformer extends AbstractCharacteristicTransfo
 	public String getCharacteristicValue(Specimen specimen) {
 		return specimen.getPathologicalStatus();
 	}
+	
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

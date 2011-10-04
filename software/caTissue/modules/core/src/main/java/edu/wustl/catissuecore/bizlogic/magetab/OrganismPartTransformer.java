@@ -19,5 +19,11 @@ public class OrganismPartTransformer extends AbstractCharacteristicTransformer {
 			return "";
 		}
 	}
+	
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

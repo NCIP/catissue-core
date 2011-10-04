@@ -13,4 +13,10 @@ public class SpecimenTypeTransformer extends AbstractCharacteristicTransformer {
 		return specimen.getSpecimenType();
 	}
 
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 }

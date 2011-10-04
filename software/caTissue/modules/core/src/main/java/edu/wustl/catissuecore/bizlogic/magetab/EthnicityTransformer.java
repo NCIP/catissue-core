@@ -12,5 +12,11 @@ public class EthnicityTransformer extends AbstractCharacteristicTransformer {
 	public String getCharacteristicValue(Specimen specimen) {
 		return specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant().getEthnicity();
 	}
+	
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
 }

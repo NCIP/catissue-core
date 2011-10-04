@@ -14,4 +14,9 @@ public class ClinicalStatusTransformer extends AbstractCharacteristicTransformer
 		return specimen.getSpecimenCollectionGroup().getClinicalStatus();
 	}
 
+	@Override
+	public boolean isMageTabSpec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

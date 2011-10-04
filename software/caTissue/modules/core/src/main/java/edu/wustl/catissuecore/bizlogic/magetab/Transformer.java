@@ -7,5 +7,6 @@ public interface Transformer {
 	String getName();
 	String getUserFriendlyName();
 	String getLocalName();
+	boolean isMageTabSpec();
 	void transform(Specimen specimen, AbstractSDRFNode sdrfNode);
 }
