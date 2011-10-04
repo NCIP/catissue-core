@@ -76,17 +76,24 @@ if (displayColumns.indexOf("Extract") != -1) {
 <input type="hidden" name="extractColumnSelected" value="<%=extract%>"/>
 
 <tr class="tableheading">
-	<th class="black_ar_b">&nbsp;</th>
+	<th class="black_ar_b">MAGE-TAB Attribute (caTissue Attribute)</th>
 	<%if(source) {%><th class="black_ar_b">Source</th><%} %>
 	<%if(sample) {%><th class="black_ar_b">Sample</th><%} %>
 	<%if(extract) {%><th class="black_ar_b">Extract</th><%} %>
 </tr>
 <% 
 Map<String, TransformerSelections> selections = wizardBean.getTransformersSelections();
+String text = "";
 for (Map.Entry<String, TransformerSelections> sel : selections.entrySet()) {
+if (sel.getValue().isMageTabSpec()) {
+	text = sel.getValue().getUserFriendlyName() + "&nbsp"; 
+} else {
+	text = "";
+}
 %>
 <tr>
-	<th class="black_new" align="left" title="<%= sel.getValue().getLocalName() %>"><%=sel.getValue().getUserFriendlyName() +"&nbsp;("+sel.getValue().getLocalName()+")" %></th>
+	
+	<th class="black_new" align="left" title="<%= sel.getValue().getLocalName() %>"> <%=text%>  <%="("+sel.getValue().getLocalName()+")"%></th>
 	<%if(source) {%>
 		<td class="black_new" align="center"><input type="checkbox" name="transformers" value="<%="chk_source_" + sel.getKey() %>" <%=sel.getValue().isSelectedForSource() ? " checked=\"checked\"" : "" %> ></input></td>
 	<%} %>
