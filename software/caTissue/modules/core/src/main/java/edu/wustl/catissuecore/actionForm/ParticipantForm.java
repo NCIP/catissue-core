@@ -332,14 +332,14 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 							+ i + "_registrationDate";
 					final String collectionProtocolIdentifier = "CollectionProtocolRegistration:"
 							+ i + "_id";
-					final String isConsentAvailable = "CollectionProtocolRegistration:" + i
-							+ "_isConsentAvailable";
+					/*final String isConsentAvailable = "CollectionProtocolRegistration:" + i
+							+ "_isConsentAvailable";*/
 					final String isActive = "CollectionProtocolRegistration:" + i
 							+ "_activityStatus";
 
 					final Collection consentTierCollection = collectionProtocolRegistration
 							.getCollectionProtocol().getConsentTierCollection();
-					if (consentTierCollection != null && consentTierCollection.isEmpty())
+					/*if (consentTierCollection != null && consentTierCollection.isEmpty())
 					{
 //						this.setIsConsentAvailable(Constants.NO_CONSENTS_DEFINED);
 						this.collectionProtocolRegistrationValues.put(isConsentAvailable,
@@ -350,7 +350,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 //						this.setIsConsentAvailable(Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
 						this.collectionProtocolRegistrationValues.put(isConsentAvailable,
 								Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
-					}
+					}*/
 
 					final String date = CommonUtilities.parseDateToString(
 							collectionProtocolRegistration.getRegistrationDate(),
