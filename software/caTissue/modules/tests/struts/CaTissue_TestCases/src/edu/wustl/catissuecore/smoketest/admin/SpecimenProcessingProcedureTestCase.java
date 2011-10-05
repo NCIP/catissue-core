@@ -49,7 +49,7 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 		actionPerform();
 
 		sopForm.setName(arr[0]);
-		
+
 
 		FormFile formFile;
 		FileItem fileItem;
@@ -71,16 +71,31 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 		verifyActionMessages(new String[]{"object.add.successOnly"});
 
 	}
-	
+
 	//Test Case to add Specimen Processing Procedure with defaults
 
 	public void testAddSPPWithDefault()
 	{
 		addRequestParameter(Constants.SET_DEFAULT_VALUE,"true");
-		testAddSPP();		
+		testAddSPP();
 	}
-	
+
 	public void testAddSPPBarCodeNull()
+	{
+		testAddSPP();
+	}
+
+	public void testAddSPPDuplicateBarcode()
+	{
+		testAddSPP();
+	}
+
+	public void testAddSPPDuplicateOrder()
+	{
+		testAddSPP();
+	}
+
+	public void testAddSPPDuplicateUniqueId()
 	{
 		testAddSPP();
 	}
@@ -236,7 +251,7 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 
 
 	}
-	
+
 	public void testApplySppForSpecimen()
 	{
 		    String[] inputData = getDataObject().getValues();
@@ -248,7 +263,7 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 		    setActionForm(utilizeSopForm);
 		    actionPerform();
 	}
-	
+
 	public void testApplySppForScg()
 	{
 		    String[] inputData = getDataObject().getValues();
@@ -260,5 +275,5 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 		    setActionForm(utilizeSopForm);
 		    actionPerform();
 	}
-	
+
 }
