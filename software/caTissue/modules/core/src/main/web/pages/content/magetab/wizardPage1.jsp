@@ -36,7 +36,7 @@ MagetabExportWizardBean wizardBean = (MagetabExportWizardBean)session.getAttribu
 	</tr>
         <tr>
             <td class="black_new">
-                <input type="checkbox" name="caArrayEnabled" value="Yes" checked="true"/>Remove parent to child relationship paths that have missing samples
+                <input type="checkbox" name="caArrayEnabled" value="Yes" checked="true"/>Do not include biospecimens that have incomplete information about sources, samples, and extracts.
             </td>
         </tr>
         
