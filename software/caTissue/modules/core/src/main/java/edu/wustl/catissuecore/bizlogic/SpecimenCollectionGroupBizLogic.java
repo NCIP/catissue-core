@@ -1246,8 +1246,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			identifier = this.getCPRIDFromParticipant(dao, specimenCollectionGroup,
 					oldSpecimenCollectionGroup);
 		}
-		cpr = (CollectionProtocolRegistration) dao.retrieveById(cpr.getClass().getName(),
-				identifier);
+			cpr = (CollectionProtocolRegistration) dao.retrieveById(cpr.getClass().getName(),
+					identifier);
 		specimenCollectionGroup.setCollectionProtocolRegistration(cpr);
 		if (cpr.getSpecimenCollectionGroupCollection() == null)
 		{
@@ -1552,6 +1552,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				
 				final List cprList = executeQuery(hqlQry);
 				
+				
 //				List cprList = retrieve(group.getCollectionProtocolRegistration().getClass()
 //						.getName(), "protocolParticipantIdentifier", group
 //						.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
@@ -1566,6 +1567,22 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) cprList
 						.get(0);
 				group.setCollectionProtocolRegistration(collectionProtocolRegistration);
+			}
+			else
+			{
+				final String sourceObjectName = CollectionProtocolRegistration.class.getName();
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				final String[] selectColumnName = {"id"};
+
+				queryWhereClause.addCondition(new EqualClause("id", group
+						.getCollectionProtocolRegistration().getId()));
+				final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+				
+				if(list.isEmpty())
+				{
+					throw this.getBizLogicException(null, "errors.item.invalid", ApplicationProperties
+							.getValue("specimenCollectionGroup.CollectionProtocoloRegistrationId"));
+				}
 			}
 			boolean invalidSite = true;
 			if(group.getSpecimenCollectionSite()!=null)
