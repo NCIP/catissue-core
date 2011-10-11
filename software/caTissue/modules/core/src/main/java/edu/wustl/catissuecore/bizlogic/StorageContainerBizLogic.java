@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import edu.wustl.catissuecore.domain.Capacity;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Site;
@@ -991,9 +992,11 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			final Validator validator = new Validator();
 			validateContainer(container, validator,stUIobject);
 			validateStTypeAndTemp(container, validator);
+			validateStCapacity(container);
 			validatePosition(dao, container, validator);
 			validateStatus(operation, container);
-
+			validateCPRestriction(dao,container,validator);
+			
 			StorageContainerUtil.populateSpecimenType(container);
 			return true;
 		}
@@ -1004,6 +1007,73 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		}
 
 	}
+	
+	private void validateStCapacity(StorageContainer container) throws BizLogicException
+	{
+		final Capacity capacityObj= container.getCapacity();
+		String message = null;
+		if(capacityObj!=null)
+		{			
+			if(capacityObj.getOneDimensionCapacity()==null)
+			{
+				message = ApplicationProperties.getValue("storageContainer.oneDimension");
+				
+			}
+			else if(capacityObj.getTwoDimensionCapacity()==null)
+			{
+				message = ApplicationProperties.getValue("storageContainer.twoDimension");
+			}
+		}
+		else
+		{
+			message =  ApplicationProperties.getValue("storageContainer.capacity");
+		}
+		if(message!=null)
+		{
+			throw this.getBizLogicException(null, "errors.item.required", message);
+		}
+		
+	}
+
+	
+	
+	private void validateCPRestriction(DAO dao, StorageContainer container,final Validator validator) throws BizLogicException, DAOException
+	{
+		final Collection<CollectionProtocol> collProtocol= container.getCollectionProtocolCollection();
+		if(collProtocol!=null&&!collProtocol.isEmpty())
+		{
+			for (CollectionProtocol collectionProtocol : collProtocol)
+			{
+				final String[] selectColumnName ={"id"};
+				final String sourceObjectName = CollectionProtocol.class.getName();
+				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+				String errMsg = "Collection Protocol";
+				
+				if(!validator.isEmpty(collectionProtocol.getTitle()))
+				{
+					queryWhereClause.addCondition(new EqualClause("title",collectionProtocol.getTitle()));
+				}
+				else
+				{
+					queryWhereClause.addCondition(new EqualClause("id",collectionProtocol.getId()));
+				}
+				
+				final List list = dao.retrieve(sourceObjectName, selectColumnName,	queryWhereClause);
+				
+				if (list.isEmpty())
+				{
+					this.logger.debug("Collection Protocol :"+collectionProtocol.getTitle()+ " or Collection Protocol Identifier : "
+						  +collectionProtocol.getId()+" is invalid");
+					throw this.getBizLogicException(null,"errors.item.format",errMsg);
+				}
+				collectionProtocol.setId((Long)list.get(0));
+			}
+		}
+	}
+	
+	
+	
+	
 	/**
 	 * @param operation Operation
 	 * @param container Storage Container
