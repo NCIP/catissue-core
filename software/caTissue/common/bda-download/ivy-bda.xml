@@ -103,7 +103,7 @@ This is the definition of a virtual module called bda-download that has a depend
     <dependency org="gov.nih.nci.advancedquery" name="AdvanceQuery" rev="1.2" conf="aq->*"/>
     <dependency org="gov.nih.nci.bulkoperation" name="bulkoperation" rev="2.0" conf="bo->*"/>
     <dependency org="gov.nih.nci.dynamicextension" name="DynamicExtensions" rev="1.5.1.7" conf="de->*"/>
-  	<dependency org="gov.nih.nci.idp" name="IDPAuthenticationManager" rev="0_0" conf="idp->*"/>
+  	<dependency org="gov.nih.nci.idp" name="IDPAuthenticationManager" rev="0_1" conf="idp->*"/>
     <dependency org="gov.nih.nci.participant-manager" name="ParticipantManager" rev="1.0" conf="pm->*"/>
 
     <dependency org="gov.nih.nci.commonpackage" name="commonpackage" rev="1.2.w1" conf="app_lib->*"/>
