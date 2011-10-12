@@ -106,21 +106,39 @@ public class DeleteNodeFromCPAction extends BaseAction
 	{
 		final SpecimenRequirementBean spReqBean = (SpecimenRequirementBean) specimenReqMap
 				.get(parentReqMapKey);
-		Map childMap = null;
-		if (specimenType == 'A')
+		
+		String childReqMapKey = parentReqMapKey + "_" + st.nextToken();		
+		Map aliquotMap = spReqBean.getAliquotSpecimenCollection();
+		if(aliquotMap.containsKey(childReqMapKey))
 		{
-			childMap = this.removeAliquot(collectionProtocolEventKey, spReqBean);
+			if(childReqMapKey.equals(collectionProtocolEventKey))
+			{
+				this.removeAliquot(collectionProtocolEventKey, spReqBean);
+			}
+			else
+			{
+				
+				this.removeChildSpecimen(aliquotMap, childReqMapKey, collectionProtocolEventKey, st,
+						specimenType);
+			}
 		}
-		else
+		Map deriveMap=spReqBean.getDeriveSpecimenCollection();
+		if(deriveMap.containsKey(childReqMapKey))
 		{
-			childMap = this.removeDerive(collectionProtocolEventKey, spReqBean);
+			if(childReqMapKey.equals(collectionProtocolEventKey))
+			{
+				this.removeDerive(collectionProtocolEventKey, spReqBean);
+				
+			}
+			else
+			{
+				
+				this.removeChildSpecimen(deriveMap, childReqMapKey, collectionProtocolEventKey, st,
+						specimenType);
+			}
 		}
-		if (childMap != null)
-		{
-			parentReqMapKey = parentReqMapKey + "_" + st.nextToken();
-			this.removeChildSpecimen(childMap, parentReqMapKey, collectionProtocolEventKey, st,
-					specimenType);
-		}
+	
+		
 	}
 
 	/**

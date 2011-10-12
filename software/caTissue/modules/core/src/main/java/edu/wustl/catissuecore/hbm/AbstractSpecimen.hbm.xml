@@ -54,7 +54,7 @@
 	    <many-to-one
 	            name="specimenCharacteristics"
 	            class="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-	            cascade="all"
+	            cascade="save-update"
 	            lazy="false"
 	            outer-join="auto"
 	            update="true"
