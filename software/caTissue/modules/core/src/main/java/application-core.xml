@@ -116,6 +116,7 @@
 			<list>
 				<ref bean="notificationProcessingTrigger" />
 				<ref bean="gridGroupSyncTrigger" />
+				<ref bean="gridCertificateSynchronizationTrigger" />
 			</list>
 		</property>
 		<property name="quartzProperties">
@@ -177,6 +178,23 @@
 		<property name="concurrent" value="false" />
 	</bean>
 	<bean id="gridGroupSync" class="edu.wustl.catissuecore.gridgrouper.GridGroupSync"/>
+	
+	<bean id="gridCertificateSynchronizationTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="gridCertificateSynchronizationJobDetail" />
+		<property name="repeatInterval" value="43200000" /> <!-- every 12hrs 12*60*60000-> 60000 = 1 min -->
+		<property name="repeatCount" value="-1" />
+		<property name="misfireInstructionName"
+			value="MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT" />
+	</bean>
+
+	<bean id="gridCertificateSynchronizationJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gridCertificateSynchronization" />
+		<property name="targetMethod" value="sync" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="gridCertificateSynchronization" class="edu.wustl.catissuecore.util.GridCertificateSynchronization"/>
+	
 	
 	<bean id="participantEventProcessor"
 		class="edu.wustl.catissuecore.bizlogic.ccts.ParticipantEventProcessor"

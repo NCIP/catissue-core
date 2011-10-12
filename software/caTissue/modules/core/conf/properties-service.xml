@@ -70,6 +70,7 @@
 		app.domainAuthFilePath=@@auth-properties-file@@
 		bulkoperator.appservice.class=@@bulk-operation-properties-file@@
 		catissue.cdms.integration.class=@@catissue-cdms-integration-properties-file@@
+		grid.service.urlsFilePath=@@service-urls-properties-file@@
     </attribute>
 
   </mbean>
