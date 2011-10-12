@@ -25,13 +25,17 @@ MagetabExportWizardBean wizardBean = (MagetabExportWizardBean)session.getAttribu
 <table width="100%">
 	<tr>
 		<td class="black_new">
+		<% if (wizardBean.isDna()) {%>
 			<input type="radio" name="defaultExtractType" value="DNA" <%="DNA".equals(wizardBean.getDefaultExtractType()) ? " checked=\"checked\"" : "" %> >
 				<bean:message key="magetab.dna"/> 
 			</input>
+		<%}%>
 			<br>
+		<% if (wizardBean.isRna()) {%>
 			<input type="radio" name="defaultExtractType" value="RNA" <%="RNA".equals(wizardBean.getDefaultExtractType()) ? " checked=\"checked\"" : "" %> >
 				<bean:message key="magetab.rna"/>
 			</input>
+		<%}%>
 		</td>
 	</tr>
         <tr>

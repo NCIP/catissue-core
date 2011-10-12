@@ -37,6 +37,8 @@ public class MagetabExportWizardBean {
 	private Map<String, TransformerSelections> transformersSelections;
     private String[] caArrayEnabled;
     private String displayColumns;
+    private boolean dna;
+    private boolean rna;
 	
 	public void init(List<Long> selectedSpecimensIds) {
 		this.selectedSpecimensIds = selectedSpecimensIds;
@@ -259,6 +261,22 @@ public class MagetabExportWizardBean {
 				}
 			}
 		}
+	}
+
+	public boolean isDna() {
+		return dna;
+	}
+
+	public void setDna(boolean dna) {
+		this.dna = dna;
+	}
+
+	public boolean isRna() {
+		return rna;
+	}
+
+	public void setRna(boolean rna) {
+		this.rna = rna;
 	}
 	
 //	public class SseTableRow {

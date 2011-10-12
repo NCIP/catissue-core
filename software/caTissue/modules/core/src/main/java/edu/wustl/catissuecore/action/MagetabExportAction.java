@@ -95,11 +95,15 @@ public class MagetabExportAction extends BaseAction
 		logger.debug("The number of specimens selected are "+dataList.size());
 		
 		int idColumnIndex = -1;
+		int typeColumnIndex = -1;
 		for (int i = 0; i < columnList.size(); i++) {
 			final String columnName = columnList.get(i).trim();
 			if (columnName.equalsIgnoreCase("ID") || columnName.equalsIgnoreCase("Identifier : Specimen") || columnName.equalsIgnoreCase("Id : Specimen")) {
 				idColumnIndex = i;
-				break;
+				//break;
+			}
+			if (columnName.equalsIgnoreCase("Type : Specimen")) {
+				typeColumnIndex = i;
 			}
 		}
 		
@@ -109,6 +113,8 @@ public class MagetabExportAction extends BaseAction
 		
 		// specimen ids store the ids of the specimens selected for mage tab export.
 		List<Long> specimenIds = new LinkedList<Long>();
+		boolean dna = false;
+		boolean rna = false;
 		if (isCheckAllAcrossAllChecked != null
 				&& isCheckAllAcrossAllChecked.equalsIgnoreCase("true"))
 		{
@@ -123,6 +129,12 @@ public class MagetabExportAction extends BaseAction
 				int index = Integer.parseInt(rowSN.substring(indexOf));
 				List<String> list = dataList.get(index);
 				specimenIds.add(Long.parseLong(list.get(idColumnIndex)));
+				if (list.get(typeColumnIndex) != null && list.get(typeColumnIndex).toString().equals("DNA")) {
+					dna = true;
+				}
+				if (list.get(typeColumnIndex) != null && list.get(typeColumnIndex).toString().equals("RNA")) {
+					rna = true;
+				}
 			}
 		}
 		
@@ -133,6 +145,8 @@ public class MagetabExportAction extends BaseAction
 			session.setAttribute(MagetabExportWizardBean.MAGETAB_EXPORT_WIZARD_BEAN, wizardBean);
 		}
 		wizardBean.init(specimenIds);
+		wizardBean.setDna(dna);
+		wizardBean.setRna(rna);
 		return mapping.findForward("startWizard");
 	}
 }
