@@ -1,16 +1,12 @@
 package edu.wustl.catissuecore.ctrp;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 import org.globus.gsi.GlobusCredential;
 
-import edu.wustl.catissuecore.GSID.GSIDClient;
-import edu.wustl.catissuecore.GSID.TargetGrid;
+import edu.wustl.catissuecore.util.GridPropertyFileReader;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.cacoresdk.util.GridAuthenticationClient;
 
@@ -33,10 +29,10 @@ public class CTRPGlobusCredentialCache {
 	 * Singleton instance of GlobusCredntialCache.
 	 */
 	private static Map<String, GlobusCredential> credentialMap = new HashMap<String, GlobusCredential>();
-	private static Properties dorianProps = new Properties();
-	private static String dorianURL;
-	private static String dorianSyncFilePath;
-	private static TargetGrid dorianTargetGridEnv;
+	//private static Properties dorianProps = new Properties();
+	//private static String dorianURL;
+	//private static String dorianSyncFilePath;
+	//private static TargetGrid dorianTargetGridEnv;
 
 	/**
 	 * Get globus credential per user login.
@@ -45,9 +41,11 @@ public class CTRPGlobusCredentialCache {
 	public static GlobusCredential getCredential(String userLogin,
 			String userPassword) throws Exception {
 		try {
-			if (dorianProps.size() == 0) {
-				loadDorianProperties();
-			}
+			Properties serviceUrls = GridPropertyFileReader.serviceUrls();
+			
+
+			String dorianUrl = serviceUrls.getProperty("cagrid.master.dorian.service.url");
+			
 			if ((credentialMap.get(userLogin) == null)
 					|| isReadyToExpire(credentialMap.get(userLogin))) {
 				// Sync trusted CA certificates
@@ -55,7 +53,7 @@ public class CTRPGlobusCredentialCache {
 //				GridAuthenticationClient.synchronizeOnce(dorianSyncFilePath);
 				// Get authentication credentials by logging into dorian
 				GlobusCredential credential = GridAuthenticationClient
-						.authenticate(dorianURL, dorianURL, userLogin,
+						.authenticate(dorianUrl, dorianUrl, userLogin,
 								userPassword);
 				if (credential != null) {
 					credentialMap.put(userLogin, credential);
@@ -69,7 +67,7 @@ public class CTRPGlobusCredentialCache {
 			throw new Exception(ex.getMessage(), ex);
 		}
 	}
-
+/**
 	public static void loadDorianProperties() throws Exception {
 		InputStream inputStream = CTRPGlobusCredentialCache.class
 				.getClassLoader().getResourceAsStream(
@@ -114,7 +112,7 @@ public class CTRPGlobusCredentialCache {
 					+ CTRPConstants.CTRP_PROPERTIES_FILE);
 		}
 	}
-
+**/
 	public static boolean isReadyToExpire(GlobusCredential credential)
 			throws Exception {
 		if (credential.getTimeLeft() <= CTRPConstants.DORIAN_AUTH_TIMEOUT_LIMIT) {

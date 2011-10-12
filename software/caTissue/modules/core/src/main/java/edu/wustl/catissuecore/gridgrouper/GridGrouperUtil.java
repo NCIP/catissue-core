@@ -1,6 +1,6 @@
 package edu.wustl.catissuecore.gridgrouper;
 
-import edu.wustl.catissuecore.GSID.TargetGrid;
+import edu.wustl.catissuecore.util.GridPropertyFileReader;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.migrator.util.Utility;
@@ -16,12 +16,6 @@ import gov.nih.nci.cagrid.gridgrouper.stubs.types.GridGrouperRuntimeFault;
 import gov.nih.nci.cagrid.gridgrouper.stubs.types.GroupNotFoundFault;
 import gov.nih.nci.logging.api.util.StringUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,91 +32,9 @@ import org.globus.gsi.GlobusCredential;
 
 public class GridGrouperUtil {
 
-	private static final String USER_NAME;
-	private static final String USER_PASSWORD;
-	private static final String DORIAN_URL;
-	private static final String GG_URL;
-	public static final boolean GG_IS_ENABLED;
-	private static final String GG_SYNC_DESC_FILE;
-	private static final String GG_TARGET_GRID;
-	private static final String JBOSS_HOME;
 	private static GlobusCredential globusCredentials = null;
 	private static GridGrouperClient client = null;
-	private static final String GG_STEMS;
 	private static Logger LOG = Logger.getLogger(GridGrouperUtil.class);
-	
-	/*****
-	 * Loading the properties file.
-	 */
-	static {
-		Properties defaultProps = new Properties();
-		InputStream in = null;
-		in = GridGrouperUtil.class.getClassLoader().getResourceAsStream(
-				GridGrouperConstant.GG_PROPERTIES_FILE);
-		if (in == null) {
-			LOG.error(GridGrouperConstant.GG_PROPERTIES_NOT_FOUND_ERR_MSG);
-			USER_NAME = null;
-			USER_PASSWORD = null;
-			DORIAN_URL = null;
-			GG_URL = null;
-			GG_IS_ENABLED = false;
-			GG_SYNC_DESC_FILE = null;
-			GG_TARGET_GRID=null;
-			JBOSS_HOME=null;
-			GG_STEMS=null;
-		} else {
-			try {
-				defaultProps.load(in);
-			} catch (IOException e) {
-				LOG.error(GridGrouperConstant.GG_PROPERTIES_LOAD_ERROR, e);
-				defaultProps = null;
-
-			}
-			if (defaultProps == null) {
-				USER_NAME = null;
-				USER_PASSWORD = null;
-				DORIAN_URL = null;
-				GG_URL = null;
-				GG_IS_ENABLED = false;
-				GG_SYNC_DESC_FILE=null;
-				GG_TARGET_GRID=null;
-				JBOSS_HOME=null;
-				GG_STEMS=null;
-			} else {
-				USER_NAME = defaultProps
-						.getProperty(GridGrouperConstant.GG_USER_NAME_KEY);
-				USER_PASSWORD = defaultProps
-						.getProperty(GridGrouperConstant.GG_PASSWORD_KEY);
-				DORIAN_URL = defaultProps
-						.getProperty(GridGrouperConstant.GG_DORIAN_URL_KEY);
-				GG_URL = defaultProps
-						.getProperty(GridGrouperConstant.GG_SERVICE_URL_KEY);
-				GG_SYNC_DESC_FILE=defaultProps.getProperty(GridGrouperConstant.GG_SYNC_DESC_FIlE_KEY);
-				GG_TARGET_GRID=defaultProps.getProperty(GridGrouperConstant.GG_TARGET_GRID);
-				JBOSS_HOME=defaultProps.getProperty(GridGrouperConstant.JBOSS_HOME);
-				GG_IS_ENABLED = Boolean.valueOf(
-						defaultProps
-								.getProperty(GridGrouperConstant.GG_IS_ENABLED_KEY))
-						.booleanValue();
-				GG_STEMS = defaultProps.getProperty(GridGrouperConstant.GG_STEMS_KEY);
-			}
-			LOG.debug("GridGrouper_IS_ENABLED = \"" + GG_IS_ENABLED + "\"");
-			LOG.debug("USER_NAME = \"" + USER_NAME + "\"");
-			LOG.debug("USER_PASSWORD = \"" + USER_PASSWORD + "\"");
-			LOG.debug("DORIAN_URL = \"" + DORIAN_URL + "\"");
-			LOG.debug("GridGrouper_URL = \"" + GG_URL + "\"");
-			LOG.debug("GridGrouper_SYNC_DESC_FILE = \""+GG_SYNC_DESC_FILE+"\"");
-			LOG.debug("GridGrouper_TARGET_GRID = \""+GG_TARGET_GRID+"\"");
-			System.out.println("GridGrouper_IS_ENABLED = \"" + GG_IS_ENABLED + "\"");
-			System.out.println("USER_NAME = \"" + USER_NAME + "\"");
-			System.out.println("USER_PASSWORD = \"" + USER_PASSWORD + "\"");
-			System.out.println("DORIAN_URL = \"" + DORIAN_URL + "\"");
-			System.out.println("GridGrouper_URL = \"" + GG_URL + "\"");
-			System.out.println("GridGrouper_SYNC_DESC_FILE = \""+GG_SYNC_DESC_FILE+"\"");
-			System.out.println("GridGrouper_TARGET_GRID = \""+GG_TARGET_GRID+"\"");
-		}
-
-	}
 	
 	/**************************************
 	 * This method is used to intialize the client if client is null and update
@@ -130,86 +42,35 @@ public class GridGrouperUtil {
 	 * threshold is managed using GG_TIMEOUT_LIMIT in GridGrouperConstant interface.
 	 */
 	public static void syncClient() {
-		if (!StringUtils.isBlank(USER_NAME)
-				&& !StringUtils.isBlank(USER_PASSWORD)
-				&& !StringUtils.isBlank(DORIAN_URL)
-				&& !StringUtils.isBlank(GG_URL)) {
-		//	if (globusCredentials == null
-			//		|| globusCredentials.getTimeLeft() <= GSIDConstant.GSID_TIMEOUT_LIMIT) {
+		Properties defaultProps = GridPropertyFileReader.configuredProperties();
+		Properties serviceUrls = GridPropertyFileReader.serviceUrls();
+		
+		String userName = defaultProps.getProperty(GridGrouperConstant.GG_USER_NAME_KEY);
+		String password = defaultProps.getProperty(GridGrouperConstant.GG_PASSWORD_KEY);
+		String dorianUrl = serviceUrls.getProperty("cagrid.master.dorian.service.url");
+		String gridGrouperUrl = serviceUrls.getProperty("cagrid.master.gridgrouper.service.url");
+		
+		if (!StringUtils.isBlank(userName)
+				&& !StringUtils.isBlank(password)
+				&& !StringUtils.isBlank(dorianUrl)
+				&& !StringUtils.isBlank(gridGrouperUrl)) {
 				try {
-					installRootCerts(TargetGrid.byName(GG_TARGET_GRID));
-					syncTrust();
-					globusCredentials = GridAuthenticationClient.authenticate(
-							DORIAN_URL, DORIAN_URL, USER_NAME, USER_PASSWORD);
+					globusCredentials = GridAuthenticationClient.authenticate(dorianUrl, dorianUrl, userName, password);
 				} catch (Exception e) {
 					LOG.error(GridGrouperConstant.GLOBUS_INIT_ERROR, e);
 				}
 				if (globusCredentials != null) {
 					try {
-						client = new GridGrouperClient(GG_URL,
-								globusCredentials);
+						client = new GridGrouperClient(gridGrouperUrl,globusCredentials);
 					} catch (MalformedURIException e) {
 						LOG.error(GridGrouperConstant.GG_URL_ERROR, e);
 					} catch (RemoteException e) {
 						LOG.error(GridGrouperConstant.GG_REMOTE_ERROR, e);
 					}
 				}
-		//	}
-
 		}
 	}
 	
-	public static void installRootCerts(TargetGrid targetGrid) throws Exception {
-		
-		String certificateDirName = JBOSS_HOME+ "/certificates/"+targetGrid.toString()+"-1.3/certificates";
-		//System.out.println(certificateDirName);
-		String targetDirectoryName = System.getProperty("user.home")+"/.globus/certificates";
-		File sourceDir = new File(certificateDirName);
-		File targetDir = new File(targetDirectoryName);
-		copyDirectory(sourceDir, targetDir);	
-	}
-
-    public static void copyDirectory(File sourceLocation , File targetLocation)
-    throws IOException {
-    	//System.out.println("COPY ING " + sourceLocation.getAbsolutePath() +   "   " + targetLocation.getAbsolutePath());
-        if (sourceLocation.isDirectory()) {
-            if (!targetLocation.exists()) {
-                targetLocation.mkdir();
-            }
-            
-            String[] children = sourceLocation.list();
-            for (int i=0; i<children.length; i++) {
-                copyDirectory(new File(sourceLocation, children[i]),
-                        new File(targetLocation, children[i]));
-            }
-        } else {
-            
-            InputStream in = new FileInputStream(sourceLocation);
-            OutputStream out = new FileOutputStream(targetLocation);
-            
-            // Copy the bits from instream to outstream
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            in.close();
-            out.close();
-        }
-    }
-	private static void syncTrust() {
-		//System.out.println("***********"+GSID_SYNC_DESC_FILE);
-		LOG.debug(GridGrouperConstant.GG_SYNCHRONIZE_START_MSG);
-		try
-		{
-			GridAuthenticationClient
-				.synchronizeOnce(GG_SYNC_DESC_FILE);
-		}catch(Exception e)
-		{
-			LOG.debug(GridGrouperConstant.GG_SYNCHRONIZE_ERROR_MSG,e);
-		}
-		LOG.debug(GridGrouperConstant.GG_SYNCHRONIZE_COMPLETE_MSG);
-	}
 	
 	public static GroupDescriptor[] getGroups(String stemName) throws Exception {
 		syncClient();
@@ -372,30 +233,6 @@ public class GridGrouperUtil {
 		return new HashMap<K, V>();
 	}
 	
-
-//	public static List<GroupDescriptor> getGroupsOnlyProvisinedInCatissue() throws Exception{
-//		// get all groups provisioned in catissue ...
-//		List<String> caTissuegroups = new ArrayList<String>();
-//		caTissuegroups.add("bootcamp:Bootcamp");
-//		
-//		for (String groupName:caTissuegroups) {
-//			GroupIdentifier groupId = getGroupIdentifier(groupName);
-//			// get group infor from grouper
-//			GroupDescriptor group = client.getGroup(groupId);
-//		}
-//		
-//
-//		Map<String, List<String>> map= new HashMap<String, List<String>>();
-//		for(String stem : getStems()){
-//			List<String> groups = new ArrayList<String>();
-//			for(GroupDescriptor gd : getGroups(stem)){
-//				groups.add(gd.getName());
-//			}
-//			map.put(stem, groups);
-//		}
-//		return null;
-//	}
-	
 	
 	public static boolean isIdentityPresentInGridGrouper(String gridUserName) throws Exception {
 		List<String> dbGroups = getGroupNamesFromDB();
@@ -422,26 +259,12 @@ public class GridGrouperUtil {
 		}
 		return flag;
 	}
-	
-	/**
-	 * Returns null if authentication fails ..
-	 * @param userName
-	 * @param password
-	 * @return
-	 */
-	public static GlobusCredential authenticate(String userName , String password) {
-		GlobusCredential credentials = null;
-		try {
-			syncTrust();
-			credentials = GridAuthenticationClient.authenticate(DORIAN_URL, DORIAN_URL, userName, password);
-		} catch (Exception e) {
-			LOG.error(GridGrouperConstant.GLOBUS_INIT_ERROR, e);
-		}
-		return credentials;
-	}
+
 	
 	public static List<String> getStems() throws Exception{
-		return Arrays.asList(GG_STEMS.split(";"));
+		Properties defaultProps = GridPropertyFileReader.configuredProperties();
+		String ggStems = defaultProps.getProperty(GridGrouperConstant.GG_STEMS_KEY);
+		return Arrays.asList(ggStems.split(";"));
 	}
 	
 	private static String getUserName(String subjectId) {

@@ -9,7 +9,7 @@ public interface GSIDConstant {
 	public final String GSID_IS_ENABLED_KEY="gsid.isEnabled";
 	public final String GSID_USER_NAME_KEY="gsid.userName";
 	public final String GSID_PASSWORD_KEY="gsid.password";
-	public final String GSID_DORIAN_URL_KEY="gsid.dorianURL";
+	//public final String GSID_DORIAN_URL_KEY="gsid.dorianURL";
 	public final String GSID_SERVICE_URL_KEY="gsid.serviceURL";
 	public final String GSID_REGISTER_APP_NAME="gsid.registerSite.applicationName";
 	public final String GSID_REGISTER_APP_URL="gsid.registerSite.applicationURL";
@@ -18,7 +18,7 @@ public interface GSIDConstant {
 	public final String GSID_REGISTER_CONTACT_EMAIL="gsid.registerSite.contactEmail";
 	public final String GSID_REGISTER_CONTACT_PHONE="gsid.registerSite.phoneNumber";
 	public final String GSID_REGISTER_ORGANIZATION="gsid.registerSite.organizationName";
-	public final String GSID_SYNC_DESC_FIlE_KEY="gsid.synDescriptionFileLocation";
+	//public final String GSID_SYNC_DESC_FIlE_KEY="gsid.synDescriptionFileLocation";
 	public final String GSID_TARGET_GRID="gsid.target.grid";
 	public final String JBOSS_HOME="jboss.home";
 	public final String GSID_ASSIGN_BUTTON_ENABLED="enable.gsid.assign.button";

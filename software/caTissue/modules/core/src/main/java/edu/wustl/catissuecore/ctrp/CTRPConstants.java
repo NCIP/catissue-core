@@ -6,9 +6,9 @@ package edu.wustl.catissuecore.ctrp;
 public class CTRPConstants {
 
 	public static final String CTRP_PROPERTIES_FILE = "ctrp.properties";
-	public static final String DORIAN_LOGIN_URL_PROP_NAME = "ctrp.dorian.loginURL";
+	//public static final String DORIAN_LOGIN_URL_PROP_NAME = "ctrp.dorian.loginURL";
 	public static final String DORIAN_TARGET_GRID_ENV = "ctrp.dorian.targetGridEnv";
-	public static final String DORIAN_SYNC_FILE_PROP_NAME = "ctrp.dorian.syncDescFile";
+	//public static final String DORIAN_SYNC_FILE_PROP_NAME = "ctrp.dorian.syncDescFile";
 	public static final long DORIAN_AUTH_TIMEOUT_LIMIT = 120;
 
 	public static final String CTRP_IS_ENABLED_KEY = "ctrp.isEnabled";

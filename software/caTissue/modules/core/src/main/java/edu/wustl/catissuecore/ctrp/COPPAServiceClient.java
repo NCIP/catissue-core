@@ -65,11 +65,7 @@ public class COPPAServiceClient {
 				.getProperty(CTRPConstants.CTRP_PASSWORD_KEY);
 		logger.debug(CTRPConstants.CTRP_USER_NAME_KEY + ":" + userLogin);
 		
-		try {
-			GSIDClient.installRootCertsAndSync();   
-		} catch (Exception e) {
-			logger.error(e,e);     
-		}
+
 
 		GlobusCredential credential = CTRPGlobusCredentialCache.getCredential(
 				userLogin, userPassword);

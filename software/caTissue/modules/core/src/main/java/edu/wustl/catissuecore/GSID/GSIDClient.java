@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.GSID;
 
+import edu.wustl.catissuecore.util.GridPropertyFileReader;
 import edu.wustl.common.exception.ErrorKey;
 import gov.nih.nci.cacoresdk.util.GridAuthenticationClient;
 import gov.nih.nci.cagrid.identifiers.client.IdentifiersNAServiceClient;
@@ -9,14 +10,12 @@ import gov.nih.nci.cagrid.identifiers.stubs.types.NamingAuthorityConfigurationFa
 import gov.nih.nci.cagrid.identifiers.stubs.types.NamingAuthoritySecurityFault;
 import gov.nih.nci.logging.api.util.StringUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.Properties;
 
 import org.apache.axis.types.URI.MalformedURIException;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.globus.gsi.GlobusCredential;
 /*******
@@ -26,7 +25,7 @@ import org.globus.gsi.GlobusCredential;
 public class GSIDClient {
 	private static final String USER_NAME;
 	private static final String USER_PASSWORD;
-	private static final String DORIAN_URL;
+	//private static final String DORIAN_URL;
 	private static final String GSID_URL;
 	public static final boolean GSID_IS_ENABLED;
 	private static final String REGISTER_APP_NAME;
@@ -36,7 +35,7 @@ public class GSIDClient {
 	private static final String REGISTER_CONTACT_EMAIL;
 	private static final String REGISTER_CONTACT_PHONE;
 	private static final String REGISTER_ORGANIZATION;
-	private static final String GSID_SYNC_DESC_FILE;
+	//private static final String GSID_SYNC_DESC_FILE;
 	private static final String GSID_TARGET_GRID;
 	private static final String JBOSS_HOME;
 	private static GlobusCredential globusCredentials = null;
@@ -60,7 +59,7 @@ public class GSIDClient {
 			LOG.error(GSIDConstant.GSID_PROPERTIES_NOT_FOUND_ERR_MSG);
 			USER_NAME = null;
 			USER_PASSWORD = null;
-			DORIAN_URL = null;
+			//DORIAN_URL = null;
 			GSID_URL = null;
 			GSID_IS_ENABLED = false;
 			REGISTER_APP_NAME = null;
@@ -70,7 +69,7 @@ public class GSIDClient {
 			REGISTER_CONTACT_EMAIL = null;
 			REGISTER_CONTACT_PHONE = null;
 			REGISTER_ORGANIZATION = null;
-			GSID_SYNC_DESC_FILE = null;
+			//GSID_SYNC_DESC_FILE = null;
 			GSID_TARGET_GRID=null;
 			JBOSS_HOME=null;
 			GSID_ASSIGN_BUTTON_ENABLED=false;
@@ -85,7 +84,7 @@ public class GSIDClient {
 			if (defaultProps == null) {
 				USER_NAME = null;
 				USER_PASSWORD = null;
-				DORIAN_URL = null;
+				//DORIAN_URL = null;
 				GSID_URL = null;
 				GSID_IS_ENABLED = false;
 				REGISTER_APP_NAME = null;
@@ -95,7 +94,7 @@ public class GSIDClient {
 				REGISTER_CONTACT_EMAIL = null;
 				REGISTER_CONTACT_PHONE = null;
 				REGISTER_ORGANIZATION = null;
-				GSID_SYNC_DESC_FILE=null;
+				//GSID_SYNC_DESC_FILE=null;
 				GSID_TARGET_GRID=null;
 				JBOSS_HOME=null;
 				GSID_ASSIGN_BUTTON_ENABLED=false;
@@ -104,8 +103,8 @@ public class GSIDClient {
 						.getProperty(GSIDConstant.GSID_USER_NAME_KEY);
 				USER_PASSWORD = defaultProps
 						.getProperty(GSIDConstant.GSID_PASSWORD_KEY);
-				DORIAN_URL = defaultProps
-						.getProperty(GSIDConstant.GSID_DORIAN_URL_KEY);
+				//DORIAN_URL = defaultProps
+					//	.getProperty(GSIDConstant.GSID_DORIAN_URL_KEY);
 				GSID_URL = defaultProps
 						.getProperty(GSIDConstant.GSID_SERVICE_URL_KEY);
 				REGISTER_APP_NAME = defaultProps
@@ -122,7 +121,7 @@ public class GSIDClient {
 						.getProperty(GSIDConstant.GSID_REGISTER_CONTACT_PHONE);
 				REGISTER_ORGANIZATION = defaultProps
 						.getProperty(GSIDConstant.GSID_REGISTER_ORGANIZATION);
-				GSID_SYNC_DESC_FILE=defaultProps.getProperty(GSIDConstant.GSID_SYNC_DESC_FIlE_KEY);
+				//GSID_SYNC_DESC_FILE=defaultProps.getProperty(GSIDConstant.GSID_SYNC_DESC_FIlE_KEY);
 				GSID_TARGET_GRID=defaultProps.getProperty(GSIDConstant.GSID_TARGET_GRID);
 				JBOSS_HOME=defaultProps.getProperty(GSIDConstant.JBOSS_HOME);
 				GSID_IS_ENABLED = Boolean.valueOf(
@@ -137,7 +136,7 @@ public class GSIDClient {
 			LOG.debug("GSID_IS_ENABLED = \"" + GSID_IS_ENABLED + "\"");
 			LOG.debug("USER_NAME = \"" + USER_NAME + "\"");
 			LOG.debug("USER_PASSWORD = \"" + USER_PASSWORD + "\"");
-			LOG.debug("DORIAN_URL = \"" + DORIAN_URL + "\"");
+			//LOG.debug("DORIAN_URL = \"" + DORIAN_URL + "\"");
 			LOG.debug("GSID_URL = \"" + GSID_URL + "\"");
 			LOG.debug("REGISTER_APP_NAME = \"" + REGISTER_APP_NAME + "\"");
 			LOG.debug("REGISTER_APP_URL = \"" + REGISTER_APP_URL + "\"");
@@ -150,16 +149,13 @@ public class GSIDClient {
 					+ "\"");
 			LOG.debug("REGISTER_ORGANIZATION = \"" + REGISTER_ORGANIZATION
 					+ "\"");
-			LOG.debug("GSID_SYNC_DESC_FILE = \""+GSID_SYNC_DESC_FILE+"\"");
+			//LOG.debug("GSID_SYNC_DESC_FILE = \""+GSID_SYNC_DESC_FILE+"\"");
 			LOG.debug("GSID_TARGET_GRID = \""+GSID_TARGET_GRID+"\"");
 			
 		}
 
 	}
-	
-	static {
-		if (GSID_IS_ENABLED) installRootCertsAndSync();
-	}
+
 	
 	public boolean isAssignButtonEnabled() {
 		return GSID_ASSIGN_BUTTON_ENABLED;
@@ -264,16 +260,21 @@ public class GSIDClient {
 	 * threshold is managed using GSID_TIMEOUT_LIMIT in GSIDConstant interface.
 	 */
 	public static void syncClient() {
+
+		Properties serviceUrls = GridPropertyFileReader.serviceUrls();
+
+		String dorianUrl = serviceUrls.getProperty("cagrid.master.dorian.service.url");
+		
+		
+		
 		if (!StringUtils.isBlank(USER_NAME)
 				&& !StringUtils.isBlank(USER_PASSWORD)
-				&& !StringUtils.isBlank(DORIAN_URL)
+				//&& !StringUtils.isBlank(DORIAN_URL)
 				&& !StringUtils.isBlank(GSID_URL)) {
-		//	if (globusCredentials == null
-			//		|| globusCredentials.getTimeLeft() <= GSIDConstant.GSID_TIMEOUT_LIMIT) {
 				try {
-					installRootCertsAndSync();
+					//installRootCertsAndSync();
 					globusCredentials = GridAuthenticationClient.authenticate(
-							DORIAN_URL, DORIAN_URL, USER_NAME, USER_PASSWORD);
+							dorianUrl, dorianUrl, USER_NAME, USER_PASSWORD);
 				} catch (Exception e) {
 					LOG.error(GSIDConstant.GLOBUS_INIT_ERROR, e);
 				}
@@ -291,59 +292,7 @@ public class GSIDClient {
 						LOG.error(GSIDConstant.GSID_REMOTE_ERROR, e);
 					}
 				}
-		//	}
-
 		}
-	}
-	/**
-	 * @throws Exception
-	 */
-	public static synchronized void installRootCertsAndSync() {
-		try {
-			final TargetGrid targetGrid = TargetGrid.byName(GSID_TARGET_GRID);
-			installRootCertsAndSync(targetGrid);
-		} catch (Exception e) {
-			LOG.error(e,e);
-		}  
-	}
-	/**
-	 * @param targetGrid
-	 * @throws Exception
-	 */
-	public static synchronized void installRootCertsAndSync(final TargetGrid targetGrid)
-			throws Exception {
-		try {
-			installRootCerts(targetGrid);
-			syncTrust();
-		} finally {
-			edu.wustl.catissuecore.bizlogic.ccts.Utils.restoreDefaultHttpsURLHandler();
-		}
-	}
-	public static synchronized void installRootCerts(TargetGrid targetGrid) throws Exception {
-		
-		String certificateDirName = JBOSS_HOME+ "/certificates/"+targetGrid.toString()+"-1.3/certificates";
-		//System.out.println(certificateDirName);
-		String targetDirectoryName = System.getProperty("user.home")+"/.globus/certificates";
-		File sourceDir = new File(certificateDirName);
-		File targetDir = new File(targetDirectoryName);
-		copyDirectory(sourceDir, targetDir);	
 	}
 
-    public static void copyDirectory(File sourceLocation , File targetLocation)
-    throws IOException {    	
-    	FileUtils.copyDirectory(sourceLocation, targetLocation);    	
-    }
-	private static synchronized void syncTrust() {
-		//System.out.println("***********"+GSID_SYNC_DESC_FILE);
-		LOG.debug(GSIDConstant.GSID_SYNCHRONIZE_START_MSG);
-		try
-		{
-			GridAuthenticationClient
-				.synchronizeOnce(GSID_SYNC_DESC_FILE);
-		}catch(Exception e)
-		{
-			LOG.error(GSIDConstant.GSID_SYNCHRONIZE_ERROR_MSG,e);
-		}
-		LOG.debug(GSIDConstant.GSID_SYNCHRONIZE_COMPLETE_MSG);
-	}
 }
