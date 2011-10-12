@@ -2222,7 +2222,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					&& specimen.getSpecimenPosition() != null) {
 				throw this.getBizLogicException(null, "status.collected", "");
 			}
-			//throw this.getBizLogicException(null, "position.nt.changed", "");
+			throw this.getBizLogicException(null, "position.nt.changed", "");
 		}
 		if (!specimenOld.getLineage().equals(specimen.getLineage())) {
 			throw this.getBizLogicException(null, "lineage.nt.changed", "");
