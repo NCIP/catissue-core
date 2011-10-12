@@ -1616,6 +1616,7 @@
 			<replacefilter token="@@app-properties-file@@" value="${jboss.server.url}/catissuecore-properties/caTissueCore_Properties.xml" />
 			<replacefilter token="@@app-dynamicuixml-file@@" value="${jboss.server.url}/catissuecore-properties/dynamicUI.xml" />
 			<replacefilter token="@@auth-properties-file@@" value="${jboss.server.url}/catissuecore-properties/IDPAuthentication.xml" />
+			<replacefilter token="@@service-urls-properties-file@@" value="${jboss.server.url}/certificates/${target.grid}/service_urls-${target.grid}.properties" />
 			<replacefilter token="@@bulk-operation-properties-file@@" value="${jboss.server.url}/catissuecore-properties/bulkOperation.properties" />
 			<replacefilter token="@@catissue-cdms-integration-properties-file@@" value="${jboss.server.url}/catissuecore-properties/caTissueCdmsIntegration.properties" />
 		</replace>
@@ -3336,8 +3337,8 @@ Thanking You,
 		<replace dir="${gsid.propsFolder}" propertyFile="${catissue.deploy.config.file}">
 			<include name="gsid.properties"  />
 			<replacefilter token="@@gsid.isEnabled@@" value="${gsid.isEnabled}"/>
-			<replacefilter token="@@gsid.dorianURL@@" value="${gsid.dorianURL}"/>
-			<replacefilter token="@@gsid.serviceURL@@" value="${gsid.serviceURL}"/>
+			<!--<replacefilter token="@@gsid.dorianURL@@" value="${gsid.dorianURL}"/> -->
+			<replacefilter token="@@gsid.serviceURL@@" value="${gsid.serviceURL}"/> 
 			<replacefilter token="@@gsid.assignEnabled@@" value="${gsid.assignEnabled}"/>
 			<replacefilter token="@@gsid.userName@@" value="${gsid.userName}"/>
 			<replacefilter token="@@gsid.password@@" value="${gsid.password}"/>
@@ -3348,13 +3349,13 @@ Thanking You,
 			<replacefilter token="@@gsid.registerSite.contactEmail@@" value="${gsid.registerSite.contactEmail}"/>
 			<replacefilter token="@@gsid.registerSite.phoneNumber@@" value="${gsid.registerSite.phoneNumber}"/>
 			<replacefilter token="@@gsid.registerSite.organizationName@@" value="${gsid.registerSite.organizationName}"/>
-			<replacefilter token="@@gsid.target.grid@@" value="${gsid.target.grid}"/>
-			<replacefilter token="@@gsid.synDescriptionFileLocation@@" value="${jboss.server.url}/catissuecore-properties/sync-description-gsid.xml"/>
+			<replacefilter token="@@gsid.target.grid@@" value="${target.grid}"/>
+			<!--<replacefilter token="@@gsid.synDescriptionFileLocation@@" value="${jboss.server.url}/catissuecore-properties/sync-description-gsid.xml"/>-->
 			<replacefilter token="@@jboss.home@@" value="${jboss.server.url}"/>
 			<replacefilter token="@@enable.gsid.assign.button@@" value="${enable.gsid.assign.button}"/>
 
 		</replace>
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/conf/sync-description.xml" todir="${jboss.server.url}/catissuecore-properties/" />
+		<!--<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/conf/sync-description.xml" todir="${jboss.server.url}/catissuecore-properties/" />-->
 	</target>
 
 	<target name="configure_gridgrouper_properties" description="Configures gridgrouper.properties according to properties in install.properties/upgrade.properties and other set of properties. In addition, it also copies the sync desc file to appropriate location">
@@ -3362,16 +3363,16 @@ Thanking You,
 		<replace dir="${gridgrouper.propsFolder}" propertyFile="${catissue.deploy.config.file}">
 			<include name="gridgrouper.properties"  />
 			<replacefilter token="@@gridgrouper.isEnabled@@" value="${gridgrouper.isEnabled}"/>
-			<replacefilter token="@@gridgrouper.dorianURL@@" value="${gridgrouper.dorianURL}"/>
-			<replacefilter token="@@gridgrouper.serviceURL@@" value="${gridgrouper.serviceURL}"/>
+			<!--<replacefilter token="@@gridgrouper.dorianURL@@" value="${gridgrouper.dorianURL}"/>
+			<replacefilter token="@@gridgrouper.serviceURL@@" value="${gridgrouper.serviceURL}"/>-->
 			<replacefilter token="@@gridgrouper.userName@@" value="${gridgrouper.userName}"/>
 			<replacefilter token="@@gridgrouper.password@@" value="${gridgrouper.password}"/>
 			<replacefilter token="@@gridgrouper.stems@@" value="${gridgrouper.stems}"/>
-			<replacefilter token="@@gridgrouper.target.grid@@" value="${gridgrouper.target.grid}"/>
-			<replacefilter token="@@gridgrouper.synDescriptionFileLocation@@" value="${jboss.server.url}/catissuecore-properties/sync-description-gridgrouper.xml"/>
+			<replacefilter token="@@gridgrouper.target.grid@@" value="${target.grid}"/>
+			<!--<replacefilter token="@@gridgrouper.synDescriptionFileLocation@@" value="${jboss.server.url}/catissuecore-properties/sync-description-gridgrouper.xml"/>-->
 			<replacefilter token="@@jboss.home@@" value="${jboss.server.url}"/>
 		</replace>
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/conf/sync-description-gridgrouper.xml" todir="${jboss.server.url}/catissuecore-properties/" />
+		<!--<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/conf/sync-description-gridgrouper.xml" todir="${jboss.server.url}/catissuecore-properties/" />-->
 	</target>
 
 	<target name="configure_magetab_properties" description="Configures gsid.properties according to properties in install.properties and other set of properties. In addition, it also copies the magetab.idf file to appropriate location">
@@ -3390,9 +3391,9 @@ Thanking You,
 		<replace dir="${ctrp.propsFolder}" propertyFile="${catissue.deploy.config.file}">
 			<include name="ctrp.properties"  />
 			<replacefilter token="@@ctrp.isEnabled@@" value="${ctrp.isEnabled}"/>
-			<replacefilter token="@@ctrp.dorian.targetGridEnv@@" value="${ctrp.dorian.targetGridEnv}"/>
-			<replacefilter token="@@ctrp.dorian.loginURL@@" value="${ctrp.dorian.loginURL}"/>
-			<replacefilter token="@@ctrp.dorian.syncDescFile@@" value="${jboss.server.url}/catissuecore-properties/sync-description-ctrp.xml"/>
+			<replacefilter token="@@ctrp.dorian.targetGridEnv@@" value="${target.grid}"/>
+			<!--<replacefilter token="@@ctrp.dorian.loginURL@@" value="${ctrp.dorian.loginURL}"/>-->
+			<!--<replacefilter token="@@ctrp.dorian.syncDescFile@@" value="${jboss.server.url}/catissuecore-properties/sync-description-ctrp.xml"/>-->
 			<replacefilter token="@@ctrp.userName@@" value="${ctrp.userName}"/>
 			<replacefilter token="@@ctrp.password@@" value="${ctrp.password}"/>
 			<replacefilter token="@@ctrp.person.serviceURL@@" value="${ctrp.person.serviceURL}"/>
@@ -3402,7 +3403,7 @@ Thanking You,
 			<replacefilter token="@@ctrp.pa.studyProtocol.serviceURL@@" value="${ctrp.pa.studyProtocol.serviceURL}"/>
 			<replacefilter token="@@ctrp.pa.studyContact.serviceURL@@" value="${ctrp.pa.studyContact.serviceURL}"/>
 		</replace>
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/conf/sync-description-ctrp.xml" todir="${jboss.server.url}/catissuecore-properties/" />
+		<!--<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/conf/sync-description-ctrp.xml" todir="${jboss.server.url}/catissuecore-properties/" />-->
 	</target>
 
 	<target name="configure_services_properties" description="Configures services.properties">
