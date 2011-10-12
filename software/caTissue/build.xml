@@ -932,10 +932,10 @@
 		<copy todir="${zip.dir}/modules/caTissue/conf/catissuecore-properties" overwrite="true">
 			<fileset dir="${conf.dir}/catissuecore-properties" />
 		</copy>
-		<!--<copy file="${temp.dir}/MANIFEST.MF" todir="${zip.dir}" overwrite="true" />-->
+		<!--<copy file="${temp.dir}/MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
 		<copy file="${conf.dir}/sync-description.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="${conf.dir}/sync-description-ctrp.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
-		<copy file="${conf.dir}/sync-description-gridgrouper.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
+		<copy file="${conf.dir}/sync-description-gridgrouper.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" /> -->
 		<copy file="${conf.dir}/magetab.idf" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="${conf.dir}/deploy.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
 		<copy file="${conf.dir}/login-config.xml" todir="${zip.dir}/modules/caTissue/conf" overwrite="true" />
@@ -948,7 +948,7 @@
 		<copy todir="${zip.dir}/modules/custom_impl_lib" overwrite="true">
 			<fileset file="${temp.dir}/Default_label_barcode_gen.jar" />
 			<fileset file="${temp.dir}/label_barcode_gen_client.jar" />
-			<fileset file="${compile.lib.dir}/IDPAuthenticationManager0_0.jar" />
+			<fileset file="${compile.lib.dir}/IDPAuthenticationManager0_1.jar" />
 		</copy>
 
 		<copy file="dynamicextensions.zip" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
@@ -1662,7 +1662,7 @@
 				<include name="AdvanceQuery.jar" />
 				<include name="bulkoperator.jar" />
 				<include name="query*.jar" />
-				<include name="IDPAuthenticationManager0_0.jar" />
+				<include name="IDPAuthenticationManager0_1.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${caTissueSuite_Client_lib.dir}" overwrite="true">
