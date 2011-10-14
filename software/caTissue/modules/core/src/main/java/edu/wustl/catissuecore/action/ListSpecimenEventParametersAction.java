@@ -492,7 +492,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			// Utility.parseDateToString(date,Constants.TIMESTAMP_PATTERN ); //
 			// Sri: Changed format for bug #463
 			final String eventDate = CommonUtilities.parseDateToString(date, CommonServiceLocator
-					.getInstance().getDatePattern()
+					.getInstance().getDatePattern()+Constants.SPACE_STR
 					+ edu.wustl.catissuecore.util.global.Constants.TIMESTAMP_PATTERN_MM_SS);
 			rowData.add(eventDate);
 
