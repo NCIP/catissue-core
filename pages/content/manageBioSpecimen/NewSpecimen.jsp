@@ -215,7 +215,8 @@
 	function onDeriveSubmit()
 	{
 	var operation = document.forms[0].operation.value;
-		<%String forwardToPrintPath = "PrintSpecimenAdd";%>
+		<%String forwardToPrintPath = "PrintSpecimenAdd";
+		formName = formName +"&path=fromSpecimen";%>
 
 		if(document.getElementById("deriveChk").checked == true)
 		{

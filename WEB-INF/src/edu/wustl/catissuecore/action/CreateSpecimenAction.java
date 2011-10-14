@@ -131,8 +131,11 @@ public class CreateSpecimenAction extends SecureAction
 		 * by default should be current date.
 		 */
 
-		createForm.setCreatedDate(edu.wustl.common.util.Utility.parseDateToString(Calendar
+		if(request.getParameter("path") != null || (createForm.getCreatedDate() == null || createForm.getCreatedDate() == ""))
+		{
+			createForm.setCreatedDate(edu.wustl.common.util.Utility.parseDateToString(Calendar
 				.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
+		}
 
 		String pageOf = null;
 		final String tempPageOf = (String) request.getParameter(PAGE_OF_STRING);

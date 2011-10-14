@@ -602,11 +602,25 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		Long fromContainerId = null;
 		Integer fromPos1 =  null;
 		Integer fromPos2 =  null;
-		if (specimen.getSpecimenPosition() != null)
+		if (specimen.getSpecimenPosition() != null) 
 		{
 			fromContainerId = specimen.getSpecimenPosition().getStorageContainer().getId();
 			fromPos1 = specimen.getSpecimenPosition().getPositionDimensionOne();
 			fromPos2 = specimen.getSpecimenPosition().getPositionDimensionTwo();
+			if(parameter.getFromStorageContainer() == null)
+			{
+				StorageContainer cont = new StorageContainer();
+				cont.setId(fromContainerId);
+				parameter.setFromStorageContainer(cont);
+			}
+			if(parameter.getFromPositionDimensionOne() == null)
+			{
+				parameter.setFromPositionDimensionOne(fromPos1);
+			}
+			if(parameter.getFromPositionDimensionTwo() == null)
+			{
+				parameter.setFromPositionDimensionTwo(fromPos2);
+			}
 		}
 
 		if ((fromContainerId == null && parameter.getFromStorageContainer() != null)

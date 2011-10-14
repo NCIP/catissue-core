@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+<BulkOperationClass templateName="CAT_Onco_Office_Visit" className="edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry"
+    relationShipType="main" cardinality="1" roleName="specimenRecordEntry" parentRoleName="" maxNoOfRecords="1" batchSize="5" id="0">
+    <dynExtCategoryAssociationCollection templateName="CAT_Onco_Office_Visit" className="MedOnc_Oncology_Appt 2.1" relationShipType="containment" 						cardinality="1" roleName="" parentRoleName="" maxNoOfRecords="1" batchSize="5" id="0">
+       <hookingInformation rootContainerId="0">
+			<attributeCollection name="specimenId" dataType="java.lang.Long" csvColumnName="Specimen ID" updateBasedOn="false" belongsTo="" id="0" format=""/>
+		</hookingInformation>
+    </dynExtCategoryAssociationCollection>
+</BulkOperationClass>
+</BulkOperationMetadata>

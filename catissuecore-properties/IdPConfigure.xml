@@ -1,0 +1,22 @@
+<IdPRegistration>
+	<application name="clinportal">
+		<database type="@@clinportal.database.type@@" driverURL="@@clinportal.database.driverURL@@" name="@@clinportal.database.name@@" host ="@@clinportal.database.host@@" userName="@@clinportal.database.username@@" password="@@clinportal.database.password@@" port="@@clinportal.database.port@@" />		
+		<applicationUserTableInfo tableName="CATISSUE_USER" sequenceName="CATISSUE_USER_SEQ">
+			<populateIdPObjectClass name="edu.wustl.common.idpInterface.impl.clinportal.ClinportalIdPObject"/>
+			<insertUpdateIdPObjectClass name="edu.wustl.common.idpInterface.impl.clinportal.InsertUpdateIdPObject"/>	
+		</applicationUserTableInfo>		
+	</application>
+	<application name="catissuecore">
+		<database type="@@catissuecore.database.type@@" driverURL="@@catissuecore.database.driverURL@@" name="@@catissuecore.database.name@@" host ="@@catissuecore.database.host@@" userName="@@catissuecore.database.username@@" password="@@catissuecore.database.password@@" port="@@catissuecore.database.port@@" />		
+		<applicationUserTableInfo tableName="CATISSUE_USER" sequenceName="CATISSUE_USER_SEQ">
+			<populateIdPObjectClass name="edu.wustl.common.idpInterface.impl.catissuecore.CaTissueIdPObject"/>
+			<insertUpdateIdPObjectClass name="edu.wustl.common.idpInterface.impl.catissuecore.InsertUpdateIdPObject"/>	
+		</applicationUserTableInfo>		
+	</application>
+	<application name="csm">
+		<database type="@@csm.database.type@@" driverURL="@@csm.database.driverURL@@" name="@@csm.database.name@@" host ="@@csm.database.host@@" userName="@@csm.database.username@@" password="@@csm.database.password@@" port="@@csm.database.port@@" />		
+		<applicationUserTableInfo tableName="CSM_USER" sequenceName="CSM_USER_USER_ID_SEQ">
+		</applicationUserTableInfo>		
+	</application>
+</IdPRegistration>
+

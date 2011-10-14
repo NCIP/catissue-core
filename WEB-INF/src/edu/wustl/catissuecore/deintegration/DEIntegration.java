@@ -35,14 +35,12 @@ public class DEIntegration extends edu.common.dynamicextensions.DEIntegration.DE
 	 * @param staticEntityRecId
 	 * @param dynaEntityRecId
 	 * @param hookEntityId
-	 * @throws DynamicExtensionsApplicationException
 	 * @throws DynamicExtensionsSystemException
 	 * @throws BizLogicException
 	 * @throws DAOException
 	 */
 	public void associateRecords(Long containerId, Long staticEntityRecId, Long dynaEntityRecId,
-			Long hookEntityId) throws DynamicExtensionsApplicationException,
-			DynamicExtensionsSystemException, BizLogicException, DAOException
+			Long hookEntityId) throws DynamicExtensionsSystemException, BizLogicException, DAOException
 	{
 		EntityManagerInterface entityManager = EntityManager.getInstance();
 		try
@@ -157,4 +155,10 @@ public class DEIntegration extends edu.common.dynamicextensions.DEIntegration.DE
 		return recordEntryId;
 
 	}*/
+
+	public Long getRootCategoryContainerIdByName(String categoryName)
+	throws DynamicExtensionsSystemException
+	{
+		return EntityManager.getInstance().getRootCategoryContainerIdByName(categoryName);
+	}
 }

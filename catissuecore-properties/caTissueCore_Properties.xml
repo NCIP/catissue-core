@@ -145,7 +145,7 @@
 	</property>
 	<property>
 		<name>ParticipantLookupAlgo</name>
-		<value>edu.wustl.common.participant.bizlogic.ParticipantLookupLogicWithDynamicCutOff</value>
+		<value>edu.wustl.common.participant.bizlogic.ParticipantLookupLogic</value>
 	</property>
 	<property>
 		<name>SSNExact</name>
@@ -601,6 +601,11 @@
 
 
 	<!--CDMS-caTissue Integration-->
+	<property>
+		<name>idp.enabled</name>
+		<value>@@IDP-ENABLED@@</value>
+	</property>
+	
 	<property>
 		<name>cdms.integrationEnabled</name>
 		<value>@@integrationEnabled@@</value>

@@ -1,7 +1,5 @@
 package edu.wustl.catissuecore.action;
 
-import java.net.URLEncoder;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,7 +12,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.dao.JDBCDAO;
 
 /**
@@ -70,7 +67,7 @@ public class LogoutAction extends BaseAction
         // Redirect to CAS logout page
 
 
-        String casRedirectURL=null;
+        /*String casRedirectURL=null;
         if (request.getRequestURL() != null)
         {
             casRedirectURL = getCASLogoutURL(request.getRequestURL().toString());
@@ -83,9 +80,9 @@ public class LogoutAction extends BaseAction
         else
         {
             response.sendRedirect(casRedirectURL);
-        }
+        }*/
 
-        return forwardTo;
+        return mapping.findForward(Constants.SUCCESS);
     }
 
     /**
@@ -95,7 +92,7 @@ public class LogoutAction extends BaseAction
      * @param request
      * @return CAS logout URL
      */
-    private String getCASLogoutURL(final String requestURL)
+    /*private String getCASLogoutURL(final String requestURL)
     {
         String casRedirectURL=null;
         final int index = requestURL.indexOf("Logout.do");
@@ -105,5 +102,5 @@ public class LogoutAction extends BaseAction
             + URLEncoder.encode(requestURL.substring(0, index)) + "CasLogin.do";
         }
         return casRedirectURL;
-    }
+    }*/
 }

@@ -39,6 +39,7 @@ import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -50,6 +51,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exception.PasswordEncryptionException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
+import edu.wustl.common.idp.IdPManager;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.PasswordManager;
@@ -262,7 +264,12 @@ public class UserBizLogic extends CatissueDefaultBizLogic
             {
                 insertUserIDPInformation(user);
             }
-
+            if (isIdpEnabled())
+			{
+				IdPManager idp = IdPManager.getInstance();
+				idp.addUserToQueue(SecurityManagerPropertiesLocator.getInstance()
+						.getApplicationCtxName(), csmUser);
+			}
             final Set protectionObjects = new HashSet();
             protectionObjects.add(user);
 
@@ -1129,6 +1136,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
                         SecurityManagerFactory.getSecurityManager().assignRoleToUser(
                                 csmUser.getUserId().toString(), role);
+                        Variables.sessionDataMap.remove(user.getLoginName());
                     }
                 }
 
@@ -1176,7 +1184,12 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
             // Modify the csm user.
             SecurityManagerFactory.getSecurityManager().modifyUser(csmUser);
-
+            if (isIdpEnabled())
+			{
+				IdPManager idp = IdPManager.getInstance();
+				idp.addUserToQueue(SecurityManagerPropertiesLocator.getInstance()
+						.getApplicationCtxName(), csmUser);
+			}
             if (isLoginUserUpdate)
             {
                 sessionDataBean.setUserName(csmUser.getLoginName());
@@ -2642,5 +2655,21 @@ public class UserBizLogic extends CatissueDefaultBizLogic
         }
         return validUser;
     }
+
+    /**
+	 * @return
+	 */
+	private boolean isIdpEnabled()
+	{
+		boolean result = false;
+		String idpEnabled = XMLPropertyHandler.getValue(Constants.IDP_ENABLED);
+		if (Constants.TRUE.equalsIgnoreCase(idpEnabled))
+		{
+			result = true;
+		}
+
+		return result;
+
+	}
 
 }

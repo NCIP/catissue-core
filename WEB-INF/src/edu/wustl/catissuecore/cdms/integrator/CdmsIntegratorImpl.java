@@ -1,6 +1,8 @@
 
 package edu.wustl.catissuecore.cdms.integrator;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.net.ssl.HostnameVerifier;
@@ -9,6 +11,7 @@ import javax.net.ssl.SSLSession;
 
 import edu.wustl.catissuecore.util.CDMSCaTissueIntegrationUtil;
 import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -84,10 +87,60 @@ public class CdmsIntegratorImpl extends CatissueCdmsIntegrator
 	{
 		initialize(loginName, password);
 		new CDMSCaTissueIntegrationUtil().getSCGRelatedEncounteredDate(urlInformationObject);
-		String url = (String) applicationService.getVisitInformationURL(urlInformationObject);
+		Map infoMap= new HashMap();
+		infoMap.put(CDMSIntegrationConstants.COLLECTION_PROTOCOL_ID, urlInformationObject.getCollectionProtocolIdentifier());
+		infoMap.put(CDMSIntegrationConstants.COLL_PROTOCOL_EVENT_ID, urlInformationObject.getCollectionProtocolEventIdentifier());
+		infoMap.put(CDMSIntegrationConstants.PARTICIPANT_ID, urlInformationObject.getParticipantIdentifier());
+		infoMap.put(CDMSIntegrationConstants.PREV_SCG_DATE, urlInformationObject.getPreviousSpecimenCollectionGroupDate());
+		infoMap.put(CDMSIntegrationConstants.RECENT_SCG_DATE, urlInformationObject.getRecentSpecimenCollectionGroupDate());
+		Map<String, Long> map = (Map<String,Long>)applicationService.getClinportalUrlIds(infoMap);
+		StringBuilder url = new StringBuilder();
+		Long scgID = Long.valueOf(urlInformationObject.getSpecimenCollectionGroupIdentifier());
+		if(CDMSCaTissueIntegrationUtil.validateClinPortalMap(map))
+		{
+            url.append(CDMSIntegrationConstants.CDMS_URL_CONTEXT(urlInformationObject.getUrl()));
+            final Long csId = map.get(CDMSIntegrationConstants.CLINICAL_STUDY_ID);
+            String	visitId=null;
+            if(map.get(CDMSIntegrationConstants.EVENTENTRYID)!=null)
+            {
+            	visitId=map.get(CDMSIntegrationConstants.EVENTENTRYID).toString();
+            }
+            if (visitId != null && scgID != null && !visitId.equals("0") && scgID >0)
+            {
+                url.append(CDMSIntegrationConstants.EVENTENTRYID).append(
+                		CDMSIntegrationConstants.EQUALS).append(
+                        String.valueOf(visitId));
+            }
+            else
+            {
+                /*
+                 * get  CS id from CP id , get CSE id from CPE id, get PId and user login name
+                 */
+                final Long cseId = map.get(CDMSIntegrationConstants.EVENT_ID);
+                final Long pId = map.get(CDMSIntegrationConstants.CP_PARTICIPANT_ID);
+
+                url.append(CDMSIntegrationConstants.CP_PARTICIPANT_ID)
+                        .append(CDMSIntegrationConstants.EQUALS).append(pId);
+                url.append(CDMSCaTissueIntegrationUtil.formReqParameter(
+                		CDMSIntegrationConstants.CLINICAL_STUDY_ID,String.valueOf(csId)));
+                url.append(CDMSCaTissueIntegrationUtil.formReqParameter(
+                		CDMSIntegrationConstants.EVENT_ID, String.valueOf(cseId)));
+            }
+            url.append(CDMSCaTissueIntegrationUtil.formReqParameter(CDMSIntegrationConstants.SCGID,Utility.toString(scgID)));
+            url.append(CDMSCaTissueIntegrationUtil.formReqParameter(CDMSIntegrationConstants.CSM_USER_ID, urlInformationObject.getUserCSMIdentifier()));
+            url.append(CDMSCaTissueIntegrationUtil.formReqParameter("&method", CDMSIntegrationConstants.LOGIN));
+            if(csId==null || csId<=0)
+            {
+                url=new StringBuilder();
+            }
+		}
+		//String url = applicationService.getVisitInformationURL(urlInformationObject);
 		terminateSession();
-		return url;
+		return url.toString();
 	}
+
+
+
 
 	public void initialize(String loginName, String password) throws Exception
 	{
@@ -117,6 +170,8 @@ public class CdmsIntegratorImpl extends CatissueCdmsIntegrator
 			throw ex;
 		}
 	}
+
+
 
 	private void terminateSession()
 	{

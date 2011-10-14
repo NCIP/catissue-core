@@ -29,6 +29,7 @@
 	<property name="generateforce" value="true" />
 	<property name="junit.jar" value="${lib.dir}/junit-4.1.jar" />
 	<property name="cobertura.dir" value="${target.dir}/reports/coverage" />
+	<property name="cobertura.lib" value="${base.dir}/cobertura" />
 	<property name="report.dir" value="${base.dir}/WEB-INF" />
 	<property name="catissue.applet.dir" value="${base.dir}/Applet/catissue" />
 	<property name="test.src.dir" value="${base.dir}/WEB-INF/src/edu/wustl/catissuecore/bizlogic/test" />
@@ -75,6 +76,12 @@
 		<path refid="app.classpath" />
 	</path>
 
+		<path id="cobertura.classpath">
+			<fileset dir="${cobertura.lib}">
+				<include name="cobertura.jar" />
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
 
 
 	<!-- struts test case related properties -->
@@ -85,15 +92,10 @@
 		<property name="cat.cobertura.dir" value="${base.dir}" />
 		<property name="cat.instrumented.dir" value="./instrument"/>
 		<property name="cobertura.lib" value="./cobertura/lib"/>
+		
+
+
 		<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
-
-
-		<path id="cobertura.classpath">
-			<fileset dir="${cobertura.lib}">
-				<include name="cobertura.jar" />
-				<include name="**/*.jar" />
-			</fileset>
-		</path>
 
 	<!-- sub tasks -->
 	<target name="init" description="initialize">
@@ -325,6 +327,7 @@
 		<antcall target="unzip_bulkoperation_installable" />
 		<ant dir="${base.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="bulkoperation_integrate_app">
 			<property name="deploy.temp.dir" value="${basedir}"/>
+			<property name="config.dir" value="${basedir}/catissuecore-properties"/>
 			<property name="bulkoperation.base.dir" value="${basedir}/bulkoperation" />
 		</ant>
 		<!--Copying bulkOperation.properties file-->
@@ -662,7 +665,7 @@
 		<copy file="properties-service.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="taggedvalues.xml" todir="${zip.dir}" overwrite="true" />
 		<copy file="paths.txt" todir="${zip.dir}" overwrite="true" />
-		<copy file="cas.war" todir="${zip.dir}" overwrite="true" />
+		<!--<copy file="cas.war" todir="${zip.dir}" overwrite="true" />-->
 
 		<copy todir="${zip.dir}/custom_impl_lib" overwrite="true">
 			        <fileset file="Default_label_barcode_gen.jar" />
@@ -789,6 +792,7 @@
 		<copy file="bulkoperator.zip" todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true" />
 		<copy todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true">
 			<fileset file="${base.dir}/WEB-INF/lib/bulkoperator.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/DynamicExtensions*.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/castor-0.9.9.jar" />
 			<fileset file="${base.dir}/caTissueSuite_Client/lib/catissuecore.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/commons-logging.jar" />
@@ -801,12 +805,17 @@
 		</copy>
 		<copy file="bulkOperation.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
 		<copy file="BulkOperations/conf/log4j.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
+		<copy todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true">
+			<fileset dir="${base.dir}/BulkOperations/conf/">
+				<include name="*.xml" />
+			</fileset>
+		</copy>
 
 		<copy todir="${zip.dir}/modules/caGrid_service" overwrite="true">
 			<fileset dir="${base.dir}/CaTissueSuite_caGrid_Service" />
 		</copy>
 
-		<copy file="cas.war" todir="${zip.dir}/modules/CAS/lib" overwrite="true" />
+		<!--<copy file="cas.war" todir="${zip.dir}/modules/CAS/lib" overwrite="true" />-->
 
 		<copy file="gate.zip" todir="${zip.dir}/modules/caTIES/lib" overwrite="true" />
 		<copy todir="${zip.dir}/modules/caTIES/conf" overwrite="true">

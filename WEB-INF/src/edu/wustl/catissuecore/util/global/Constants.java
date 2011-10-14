@@ -5789,4 +5789,14 @@ public class Constants
 
 	/** The Constant REFRESH_WHOLE_PAGE. */
 	public static final String REFRESH_WHOLE_PAGE = "refreshWholePage";
+
+	/**
+	 * Constant for directory.
+	 */
+	public static final String TEMPLATE_DIR = "XMLAndCSVTemplate";
+
+	/**
+	 * Constant for XML extension.
+	 */
+	public static final String XML_SUFFIX = ".xml";
 }

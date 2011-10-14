@@ -86,15 +86,13 @@ public class LoginAction extends XSSSupportedAction
             {
                 cleanSession(request);
                 LoginAction.LOGGER.info("Inside Login Action, Just before validation");
+                forwardTo = processUserLogin(form, request);
 
-                if (isRequestFromClinportal(request))
-                {
-                    forwardTo = Constants.SUCCESS;
-                }
-                else
-                {
-                    forwardTo = processUserLogin(form, request);
-                }
+                String pageOf = request.getParameter(Constants.PAGE_OF);
+                if (pageOf != null && pageOf.equals(CDMSIntegrationConstants.SCG))
+				{
+					forwardTo=Constants.SCG;
+				}
             }
             catch (final Exception ex)
             {
@@ -116,9 +114,19 @@ public class LoginAction extends XSSSupportedAction
         loginCredentials.setLoginName(loginForm.getLoginName());
         loginCredentials.setPassword(loginForm.getPassword());
         LoginProcessor.authenticate(loginCredentials);
-        final edu.wustl.domain.LoginResult loginResult = CatissueLoginProcessor.processUserLogin(request,
+        final edu.wustl.domain.LoginResult loginResult;
+        if(isRequestFromClinportal(request))
+        {
+        	loginResult = new LoginResult();
+        	loginResult.setAppLoginName(loginCredentials.getLoginName());
+        	loginResult.setAuthenticationSuccess(true);
+        	loginResult.setMigrationState(MigrationState.MIGRATED);
+        }
+        else
+        {
+        loginResult = CatissueLoginProcessor.processUserLogin(request,
                 loginCredentials);
-
+        }
         if (loginResult.isAuthenticationSuccess())
         {
             if (MigrationState.NEW_IDP_USER.equals(loginResult.getMigrationState()))
