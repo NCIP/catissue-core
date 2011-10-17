@@ -26,6 +26,7 @@ import java.util.Vector;
 import org.apache.commons.collections.Closure;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.hibernate.LazyInitializationException;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.wustl.catissuecore.TaskTimeCalculater;
@@ -58,6 +59,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
@@ -440,6 +442,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		else
 		{
 			collectionProtocol = (CollectionProtocol) obj;
+			gridPrivilegeList = new ArrayList<CPGridGrouperPrivilege>(collectionProtocol.getGridGrouperPrivileges());
 		}
 		isCollectionProtocolLabelUnique(collectionProtocol);
 		modifyCPObject(dao, sessionDataBean, collectionProtocol);
@@ -1501,42 +1504,94 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 						throw getBizLogicException(null, ERROR_ITEM_REQUIRED, message);
 					}
-
-					final Collection<SpecimenRequirement> reqCollection = event.getSpecimenRequirementCollection();
-
-					if (reqCollection != null && !reqCollection.isEmpty())
+					
+					Collection<SpecimenRequirement> reqCollection=null;
+					 
+					try
 					{
-						final Iterator<SpecimenRequirement> reqIterator = reqCollection.iterator();
-
-						while (reqIterator.hasNext())
+					
+					 reqCollection = event.getSpecimenRequirementCollection();
+					 if (reqCollection != null && !reqCollection.isEmpty())
 						{
+							final Iterator<SpecimenRequirement> reqIterator = reqCollection.iterator();
 
-							final SpecimenRequirement SpecimenRequirement = reqIterator.next();
-							// if (SpecimenRequirement == null)
-							// {
-							// //check removed for Bug #8533
-							// //Patch: 8533_2
-							// //throw new DAOException(ApplicationProperties
-							// // .getValue("protocol.spReqEmpty.errMsg"));
-							// }
-							ApiSearchUtil.setReqSpecimenDefault(SpecimenRequirement);
-							final String specimenClass = SpecimenRequirement.getSpecimenClass();
-							if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
+							while (reqIterator.hasNext())
 							{
-								throw getBizLogicException(null, "protocol.class.errMsg", "");
-							}
-							if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass),
-									SpecimenRequirement.getSpecimenType()))
-							{
-								throw getBizLogicException(null, "protocol.type.errMsg", "");
-							}
-							validateCreationEvent(SpecimenRequirement);
 
-							validateProcessingSPP(SpecimenRequirement);
+								final SpecimenRequirement SpecimenRequirement = reqIterator.next();
+								// if (SpecimenRequirement == null)
+								// {
+								// //check removed for Bug #8533
+								// //Patch: 8533_2
+								// //throw new DAOException(ApplicationProperties
+								// // .getValue("protocol.spReqEmpty.errMsg"));
+								// }
+								ApiSearchUtil.setReqSpecimenDefault(SpecimenRequirement);
+								final String specimenClass = SpecimenRequirement.getSpecimenClass();
+								if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
+								{
+									throw getBizLogicException(null, "protocol.class.errMsg", "");
+								}
+								if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass),
+										SpecimenRequirement.getSpecimenType()))
+								{
+									throw getBizLogicException(null, "protocol.type.errMsg", "");
+								}
+								validateCreationEvent(SpecimenRequirement);
+
+								validateProcessingSPP(SpecimenRequirement);
+
+							}
 
 						}
+					 
 
 					}
+					catch(LazyInitializationException liex)
+					{
+						
+							final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+							
+							final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+							
+							reqCollection = (Collection) bizLogic.retrieveAttribute(CollectionProtocolEvent.class,event.getId(),"elements(specimenRequirementCollection)");
+							
+							// its double time
+							if (reqCollection != null && !reqCollection.isEmpty())
+							{
+								final Iterator<SpecimenRequirement> reqIterator = reqCollection.iterator();
+
+								while (reqIterator.hasNext())
+								{
+
+									final SpecimenRequirement SpecimenRequirement = reqIterator.next();
+									// if (SpecimenRequirement == null)
+									// {
+									// //check removed for Bug #8533
+									// //Patch: 8533_2
+									// //throw new DAOException(ApplicationProperties
+									// // .getValue("protocol.spReqEmpty.errMsg"));
+									// }
+									ApiSearchUtil.setReqSpecimenDefault(SpecimenRequirement);
+									final String specimenClass = SpecimenRequirement.getSpecimenClass();
+									if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
+									{
+										throw getBizLogicException(null, "protocol.class.errMsg", "");
+									}
+									if (!Validator.isEnumeratedValue(AppUtility.getSpecimenTypes(specimenClass),
+											SpecimenRequirement.getSpecimenType()))
+									{
+										throw getBizLogicException(null, "protocol.type.errMsg", "");
+									}
+									validateCreationEvent(SpecimenRequirement);
+
+									validateProcessingSPP(SpecimenRequirement);
+
+								}
+
+							}
+					}
+					
 				}
 			}
 		}
