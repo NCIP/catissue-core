@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+		relationShipType="main" cardinality="1"	roleName="specimenCollectionGroup" templateName="NewSCGWithMultSpecimen1" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.Site"
+			relationShipType="association" cardinality="1" roleName="specimenCollectionSite"
+			templateName="NewSCGWithMultSpecimen1"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+				<attributeCollection name="id" csvColumnName="Site ID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+		</referenceAssociationCollection>
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+			relationShipType="association" cardinality="1" roleName="collectionProtocolRegistration"
+			templateName="NewSCGWithMultSpecimen1" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		<referenceAssociationCollection
+				className="edu.wustl.catissuecore.domain.CollectionProtocol"
+				relationShipType="association" templateName="NewSCGWithMultSpecimen1" cardinality="1" roleName="collectionProtocol" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
+				<attributeCollection name="title" csvColumnName="CP Title" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		</referenceAssociationCollection>
+				<attributeCollection name="protocolParticipantIdentifier" csvColumnName="PPI" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+					</referenceAssociationCollection>
+					
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+			relationShipType="association" cardinality="1" roleName="collectionProtocolEvent"
+			templateName="NewSCGWithMultSpecimen1" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+			<attributeCollection name="id" csvColumnName="collectionPointLabel" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+		</referenceAssociationCollection>
+		<containmentAssociationCollection className="edu.wustl.catissuecore.domain.TissueSpecimen"
+						relationShipType="containment" isOneToManyAssociation="true" cardinality="*"
+						roleName="specimenCollection" templateName="NewSCGWithMultSpecimen1" maxNoOfRecords="2" parentRoleName="specimenCollectionGroup" batchSize="10">
+							<containmentAssociationCollection className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
+							relationShipType="containment" isOneToManyAssociation="true" cardinality="1"
+							roleName="specimenCharacteristics" templateName="NewSCGWithMultSpecimen1" maxNoOfRecords="1" parentRoleName="" batchSize="10">
+								<attributeCollection name="tissueSide" csvColumnName="Tissue Side" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+								<attributeCollection name="tissueSite" csvColumnName="Tissue Site" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+							</containmentAssociationCollection>
+							<attributeCollection name="specimenClass" csvColumnName="Specimen Class" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+							<attributeCollection name="label" csvColumnName="Specimen Label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+							<attributeCollection name="activityStatus" csvColumnName="Specimen Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+							<attributeCollection name="collectionStatus" csvColumnName="Specimen Collection Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+							<attributeCollection name="specimenType" csvColumnName="Specimen Type" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+							<attributeCollection name="pathologicalStatus" csvColumnName="Pathological Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+							<attributeCollection name="initialQuantity" csvColumnName="Init Qty" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>
+							<attributeCollection name="availableQuantity" csvColumnName="Avail Qty" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>
+							<attributeCollection name="isAvailable" csvColumnName="Is Avail" updateBasedOn="false" dataType="java.lang.Boolean" belongsTo=""/>
+						</containmentAssociationCollection>
+			
+		<attributeCollection name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="clinicalStatus" csvColumnName="Clinical Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+	</BulkOperationClass>
+</BulkOperationMetadata>
