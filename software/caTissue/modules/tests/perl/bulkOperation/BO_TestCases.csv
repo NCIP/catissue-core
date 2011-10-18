@@ -576,7 +576,7 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 ,Test add parent container without restrictions(inherits storage type restrictions),admin@admin.com,Test123,addParentContainer_WO_Restriction.csv,addParentContainer.xml,CreateParentContainer,success,,Admin,Storage Container
 ,Test add child container without restrictions(inherits parent containers restrictions),admin@admin.com,Test123,addChildContainer_WO_Restriction.csv,addChildContainer.xml,CreateChildContainer,success,,Admin,Storage Container
 ,09_Storage_Type_Error_Temperature,admin@admin.com,Test123,editStorageType_temperature.csv,editStorageType.xml,editStorageType,failure, Please enter valid value for Temperature field.,Admin,Storage Type
-,011_Storage_Type_Add_Holds_Multiple_Container,admin@admin.com,Test123,addStorageType_WithRestrictions_storageType.csv,addStorageType_withRestrictions.xml,addStorageType,success,Admin,Storage Type
+,011_Storage_Type_Add_Holds_Multiple_Container,admin@admin.com,Test123,addStorageType_WithRestrictions_storageType.csv,addStorageType_withRestrictions.xml,addStorageType,success,Admin,Storage Type,
 ,create child container with specimen type restrictions,admin@admin.com,Test123,addChildContainer_specimenType_restriction.csv,addChildContainer_specimenType_restriction.xml,CreateChildContainer,success,,Admin,Storage Container
 ,Test Add Parent Container(Specimen Class Cell),admin@admin.com,Test123,addParentContainer_cell.csv,addParentContainer.xml,CreateParentContainer,success,,Admin,Storage Container
 ,Test Add Parent Container(Specimen Class Fluid),admin@admin.com,Test123,addParentContainer_Fluid.csv,addParentContainer.xml,CreateParentContainer,success,,Admin,Storage Container
@@ -585,3 +585,9 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 ,Test Add Child Container (Specimen Class Tissue),admin@admin.com,Test123,addChildContainer_Tissue.csv,addChildContainer.xml,CreateChildContainer,success,,Admin,Storage Container
 ,Test Add Child Container (Specimen Class Molecular),admin@admin.com,Test123,addChildContainer_Molecular.csv,addChildContainer.xml,CreateChildContainer,success,,Admin,Storage Container
 ,Test Add Child Container (Specimen Class Fluid),admin@admin.com,Test123,addChildContainer_fluid.csv,addChildContainer.xml,CreateChildContainer,success,,Admin,Storage Container
+26255,Test Create Participant Registration with SCG and Single  Specimen,dmp@dmp.com,Test1234,ParticipantWithSCGWithSpecimen.csv,ParticipantWithSCGWithSpecimen.xml,ParticipantWithSCGWithSpecimen,success,,Biospecimen,Specimen
+26256,Test Create Participant Registration with SCG ,dmp@dmp.com,Test1234,ParticipantWithSCGWithNoSpecimen.csv,ParticipantWithSCGWithNoSpecimen.xml,ParticipantWithSCGWithNoSpecimen,success,,Biospecimen,Specimen Collection Group
+26259,Test Create SCG and Single  Specimen,dmp@dmp.com,Test1234,CreateNewSCGWithSpecimen.csv,CreateNewSCGWithSpecimen.xml,NewSCGWithSpecimen,success,,Biospecimen,Specimen
+26260,Test Create Participant Registration with SCG and Multiple  Specimens,dmp@dmp.com,Test1234,ParticipantWithSCGWithMultSpecimen.csv,ParticipantWithSCGWithMultSpecimen.xml,ParticipantWithSCGWithMultSpecimen,success,,Biospecimen,Specimen
+26262,Test Create Participant Registration with Multiple SCG ,dmp@dmp.com,Test1234,MultScgWithNo_specimen.csv,MultScgWithNo_specimen.xml,MultSCGWithNoSpecimen,success,,Biospecimen,Specimen Collection Group
+26265,Test Create SCG and Multiple  Specimens,dmp@dmp.com,Test1234,CreateScgWithMultipleSpecimen.csv,CreateScgWithMultipleSpecimen.xml,NewSCGWithMultSpecimen1,success,,Biospecimen,Specimen
