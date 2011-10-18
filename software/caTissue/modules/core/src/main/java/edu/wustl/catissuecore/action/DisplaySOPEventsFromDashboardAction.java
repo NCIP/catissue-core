@@ -17,8 +17,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
-import edu.wustl.catissuecore.domain.sop.SOP;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.processor.SPPEventProcessor;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -54,7 +54,7 @@ public class DisplaySOPEventsFromDashboardAction extends SecureAction
 		Long sopId = Long.parseLong(request.getParameter("sopId"));
 		edu.wustl.dao.DAO dao = null;
 		dao = edu.wustl.catissuecore.util.global.AppUtility.openDAOSession(null);
-		SOP processingSOP = (SOP) dao.retrieveById(SOP.class.getName(), sopId);; // TODO - Retrieve SOP object based on
+		SpecimenProcessingProcedure processingSOP = (SpecimenProcessingProcedure) dao.retrieveById(SpecimenProcessingProcedure.class.getName(), sopId);; // TODO - Retrieve SOP object based on
 		// sop_id from request.
 
 		request.setAttribute("selectedAll", request.getParameter("selectedAll"));
@@ -74,7 +74,7 @@ public class DisplaySOPEventsFromDashboardAction extends SecureAction
 				.populateSPPEventsData(processingSOP);
 
 		Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
-		new SOPBizLogic().getAllSOPEventFormNames(dynamicEventMap);
+		new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
 		if (request.getSession().getAttribute("dynamicEventMap") == null)
 		{
 			request.getSession().setAttribute("dynamicEventMap", dynamicEventMap);

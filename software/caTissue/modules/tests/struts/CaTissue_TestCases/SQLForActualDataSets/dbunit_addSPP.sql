@@ -1,1 +1,1 @@
-catissue_sop;select NAME from catissue_sop where NAME='Structured'
+catissue_spp;select NAME from catissue_spp where NAME='Structured'

@@ -225,8 +225,8 @@ public class BizLogicFactory implements IFactory
 			case Constants.ACTION_APP_FORM_ID :
 				bizLogic = new ActionApplicationBizLogic();
 				break;
-			case Constants.SOP_ID :
-				bizLogic = new SOPBizLogic();
+			case Constants.SPP_ID :
+				bizLogic = new SPPBizLogic();
 				break;	
 			// END
 			case Constants.DEFAULT_BIZ_LOGIC :

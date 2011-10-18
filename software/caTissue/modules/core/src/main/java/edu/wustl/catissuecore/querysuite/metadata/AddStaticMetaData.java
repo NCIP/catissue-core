@@ -99,12 +99,12 @@ public class AddStaticMetaData
 		 * */
 
 		// The fully qualified name of parent class.
-		String parentClassName = "edu.wustl.catissuecore.domain.sop.AbstractApplication";
+		String parentClassName = "edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication";
 
 		// List of all children belonging to the parent class, for which paths have to be added
 		List<String> childClassNames = new ArrayList<String>();
-		childClassNames.add("edu.wustl.catissuecore.domain.sop.ActionApplication");
-		childClassNames.add("edu.wustl.catissuecore.domain.sop.SopApplication");
+		childClassNames.add("edu.wustl.catissuecore.domain.processingprocedure.ActionApplication");
+		childClassNames.add("edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProceduerApplication");
 
 		// List of all associating entities for which paths have to be added from child classes.
 		List<String> associatingEntityname = new ArrayList<String>();

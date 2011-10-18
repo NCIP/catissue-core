@@ -19,9 +19,9 @@ import edu.wustl.catissuecore.actionForm.DynamicEventForm;
 import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.sop.Action;
-import edu.wustl.catissuecore.domain.sop.ActionApplication;
-import edu.wustl.catissuecore.domain.sop.DefaultAction;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.DefaultAction;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SpecimenEventsUtility;
@@ -281,13 +281,13 @@ public class DynamicEventAction extends BaseAction
 				if (specimentList != null && !specimentList.isEmpty())
 				{
 					Specimen specimen = (Specimen) specimentList.get(0);
-					if(specimen.getProcessingSOPApplication() != null)
+					if(specimen.getProcessingSPPApplication() != null)
 					{
-						for(ActionApplication actionApplication : specimen.getProcessingSOPApplication().getSopActionApplicationCollection())
+						for(ActionApplication actionApplication : specimen.getProcessingSPPApplication().getSppActionApplicationCollection())
 						{
 							if(actionApplication.getId().toString().equals(actionApplicationId))
 							{
-								for(Action action : specimen.getSpecimenRequirement().getProcessingSOP().getActionCollection())
+								for(Action action : specimen.getSpecimenRequirement().getProcessingSPP().getActionCollection())
 								{
 									if(action.getContainerId().equals(containerId))
 									{

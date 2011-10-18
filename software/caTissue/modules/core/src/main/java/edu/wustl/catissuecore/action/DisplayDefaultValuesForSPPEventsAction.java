@@ -13,10 +13,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
-import edu.wustl.catissuecore.domain.sop.Action;
-import edu.wustl.catissuecore.domain.sop.SOP;
-import edu.wustl.catissuecore.sop.SOPActionComparator;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
+import edu.wustl.catissuecore.processingprocedure.SPPActionComparator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 
@@ -47,12 +47,12 @@ public class DisplayDefaultValuesForSPPEventsAction extends SecureAction
 		//Display SOP events
 		if (sopIdentifier != null)
 		{
-			SOPBizLogic sopBizLogic = new SOPBizLogic();
-			SOP sop = sopBizLogic.getSOPById(sopIdentifier);
-			Map<Action, Long> contextRecordIdMap = sopBizLogic.generateContextRecordIdMap(sop);
+			SPPBizLogic sopBizLogic = new SPPBizLogic();
+			SpecimenProcessingProcedure spp = sopBizLogic.getSPPById(sopIdentifier);
+			Map<Action, Long> contextRecordIdMap = sopBizLogic.generateContextRecordIdMap(spp);
 			request.setAttribute(Constants.CONTEXT_RECORD_MAP, contextRecordIdMap);
-			TreeSet<Action> actionList = new TreeSet<Action>(new SOPActionComparator());
-			actionList.addAll(sop.getActionCollection());
+			TreeSet<Action> actionList = new TreeSet<Action>(new SPPActionComparator());
+			actionList.addAll(spp.getActionCollection());
 			request.setAttribute("actionColl", actionList);
 			return mapping.findForward(Constants.PAGE_OF_DEF_VALUE_FOR_SOP);
 		}

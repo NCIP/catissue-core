@@ -77,9 +77,9 @@ import edu.wustl.catissuecore.domain.pathology.SemanticType;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.domain.pathology.XMLContent;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
 import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
-import edu.wustl.catissuecore.domain.sop.SOP;
 import edu.wustl.common.domain.AbstractDomainObject;
 
 public class DomainInstanceFactory
@@ -383,8 +383,8 @@ public class DomainInstanceFactory
 		else if(ShipmentRequest.class.equals(klass)){
 			instanceFactory = ShipmentRequestFactory.getInstance();
 		}
-		else if(SOP.class.equals(klass)){
-			instanceFactory = SOPFactory.getInstance();
+		else if(SpecimenProcessingProcedure.class.equals(klass)){
+			instanceFactory = SPPFactory.getInstance();
 		}
 		return instanceFactory;
 	}

@@ -1945,7 +1945,7 @@ public class Constants
 	/** The Constant SUMMARY_BIZLOGIC_ID. */
 	public static final int SUMMARY_BIZLOGIC_ID = 70;
 
-	/** The Constant SOP_BIZLOGIC_ID. */
+	/** The Constant SPP_BIZLOGIC_ID. */
 	public static final int ACTION_APP_FORM_ID = 71;
 	//Misc
 	/** The Constant SEPARATOR. */
@@ -2229,10 +2229,10 @@ public class Constants
 	/** The Constant DISTRIBUTIONPROTOCOL_EDIT_ACTION. */
 	public static final String DISTRIBUTIONPROTOCOL_EDIT_ACTION = "DistributionProtocolEdit.do";
 
-	/** The Constant SOP_ADD_ACTION. */
+	/** The Constant SPP_ADD_ACTION. */
 	public static final String SOP_ADD_ACTION = "SOPCreate.do";
 
-	/** The Constant SOP_EDIT_ACTION. */
+	/** The Constant SPP_EDIT_ACTION. */
 	public static final String SOP_EDIT_ACTION = "SOPEdit.do";
 
 	//Collection Status values
@@ -5884,8 +5884,8 @@ public class Constants
 
 	public static final String DIRTY_EDIT_FLAG = "dirtyEditFlag";
 
-	/** The constants for SOP. */
-	public static final int SOP_ID = 74;
+	/** The constants for SPP. */
+	public static final int SPP_ID = 74;
 
 	public static final String SELECTED_SPP = "selected_SPPs";
 
@@ -5931,7 +5931,7 @@ public class Constants
 
 	public static final String EVENT_ORDER_ERROR = "Order for more than one event within an SPP is same.";
 
-	/** The Constant PAGE_OF_DISPLAY_SOP_EVENTS. */
+	/** The Constant PAGE_OF_DISPLAY_SPP_EVENTS. */
 	public static final String PAGE_OF_DISPLAY_SOP_EVENTS = "pageOfDisplaySOPEvents";
 
 	public static final String CONTAINER_ID = "containerId";

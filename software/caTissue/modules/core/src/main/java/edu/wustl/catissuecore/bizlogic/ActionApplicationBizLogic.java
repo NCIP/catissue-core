@@ -3,7 +3,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import edu.common.dynamicextensions.domain.integration.AbstractFormContext;
 import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
-import edu.wustl.catissuecore.domain.sop.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.DAO;

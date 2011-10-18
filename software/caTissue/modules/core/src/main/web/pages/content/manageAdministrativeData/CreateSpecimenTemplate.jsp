@@ -436,7 +436,7 @@ eval(testCombo);
 		var spreqqty=x.insertCell(7)
 		spreqqty.className="black_ar";
 		sname="";
-		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_processingSOP)";
+		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_processingSPP)";
 		
 		nameForCombo = "combo_"+objname;
 		comboDataStorName = "ds_"+rowno;

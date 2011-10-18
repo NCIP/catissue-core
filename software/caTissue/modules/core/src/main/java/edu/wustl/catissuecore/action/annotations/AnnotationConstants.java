@@ -119,8 +119,8 @@ public class AnnotationConstants
 	 */
 	public static final String ENTITY_NAME_COLLECTION_PROTOCOL = "edu.wustl.catissuecore.domain.CollectionProtocol";
 
-	/** The Constant SOP_HOOKING_ENTITY. */
-	public static final String SOP_HOOKING_ENTITY = "edu.wustl.catissuecore.domain.sop.SOP";
+	/** The Constant SPP_HOOKING_ENTITY. */
+	public static final String SPP_HOOKING_ENTITY = "edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure";
 
 	/**
 	 * PARTICIPANT.

@@ -24,7 +24,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.QuickEventsForm;
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
@@ -53,7 +53,7 @@ public class QuickEventsAction extends BaseAction
 	{
 		Map dynamicEventMap= new HashMap();
 
-		request.setAttribute(Constants.EVENT_PARAMETERS_LIST, new SOPBizLogic().getAllSOPEventFormNames(dynamicEventMap));
+		request.setAttribute(Constants.EVENT_PARAMETERS_LIST, new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap));
 		request.setAttribute(Constants.SPECIMEN_ID, request.getAttribute(Constants.SPECIMEN_ID));
 		//add messages from session to request
 		final HttpSession session = request.getSession(true);

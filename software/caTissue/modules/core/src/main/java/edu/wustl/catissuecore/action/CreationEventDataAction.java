@@ -15,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import edu.emory.mathcs.backport.java.util.Collections;
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -40,7 +40,7 @@ public class CreationEventDataAction extends BaseAction{
 		String query = request.getParameter("query");
 		List creationEventList=new ArrayList();
 		creationEventList.add(new NameValueBean(Constants.NOT_SPECIFIED,Constants.NOT_SPECIFIED));
-		creationEventList.addAll(new SOPBizLogic().getAllEventsForSPP(sppName));
+		creationEventList.addAll(new SPPBizLogic().getAllEventsForSPP(sppName));
 
 		Collections.sort(creationEventList);
 		JSONArray jsonArray = new JSONArray();

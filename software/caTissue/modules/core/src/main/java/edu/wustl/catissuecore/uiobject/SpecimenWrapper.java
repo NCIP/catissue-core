@@ -10,9 +10,9 @@ import edu.wustl.catissuecore.domain.ISPPBizlogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
-import edu.wustl.catissuecore.domain.sop.ActionApplication;
-import edu.wustl.catissuecore.domain.sop.SOP;
-import edu.wustl.catissuecore.domain.sop.SOPApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
@@ -24,13 +24,13 @@ public class SpecimenWrapper implements ISPPBizlogic
 	Specimen specimen;
 
 	@Override
-	public Collection<SOPApplication> getSPPApplicationCollection()
+	public Collection<SpecimenProcessingProcedureApplication> getSPPApplicationCollection()
 	{
-		Collection<SOPApplication> sppApplicationCollection = new HashSet<SOPApplication>();
-		SOPApplication processingSOPApplication = this.specimen.getProcessingSOPApplication();
-		if (processingSOPApplication != null)
+		Collection<SpecimenProcessingProcedureApplication> sppApplicationCollection = new HashSet<SpecimenProcessingProcedureApplication>();
+		SpecimenProcessingProcedureApplication processingSPPApplication = this.specimen.getProcessingSPPApplication();
+		if (processingSPPApplication != null)
 		{
-			sppApplicationCollection.add(processingSOPApplication);
+			sppApplicationCollection.add(processingSPPApplication);
 		}
 		return sppApplicationCollection;
 	}
@@ -49,42 +49,42 @@ public class SpecimenWrapper implements ISPPBizlogic
 	}
 
 	@Override
-	public void updateSOPApplication(SOP spp, SOPApplication processingSOPApplication,
+	public void updateSPPApplication(SpecimenProcessingProcedure spp, SpecimenProcessingProcedureApplication processingSPPApplication,
 			Collection<ActionApplication> actionApplicationCollection,
 			SessionDataBean sessionLoginInfo) throws BizLogicException
 	{
 		ObjectCloner cloner = new ObjectCloner();
-		SOPApplication clonedSOPApplication = cloner.clone(processingSOPApplication);
+		SpecimenProcessingProcedureApplication clonedSPPApplication = cloner.clone(processingSPPApplication);
 
-		processingSOPApplication.setSop(spp);
-		processingSOPApplication.setSopActionApplicationCollection(actionApplicationCollection);
+		processingSPPApplication.setSpp(spp);
+		processingSPPApplication.setSppActionApplicationCollection(actionApplicationCollection);
 		IBizLogic defaultBizLogic = new CatissueDefaultBizLogic();
-		defaultBizLogic.update(processingSOPApplication, clonedSOPApplication, sessionLoginInfo);
+		defaultBizLogic.update(processingSPPApplication, clonedSPPApplication, sessionLoginInfo);
 
 	}
 
 	@Override
-	public void update(SOPApplication processingSOPApplication, SessionDataBean sessionLoginInfo)
+	public void update(SpecimenProcessingProcedureApplication processingSPPApplication, SessionDataBean sessionLoginInfo)
 			throws BizLogicException
 	{
 		IBizLogic defaultBizLogic = new CatissueDefaultBizLogic();
 		//update specimen object
 		Specimen newSpecimen = (Specimen) defaultBizLogic.retrieve(Specimen.class.getName(),
 				this.specimen.getId());
-		newSpecimen.setProcessingSOPApplication(processingSOPApplication);
+		newSpecimen.setProcessingSPPApplication(processingSPPApplication);
 		defaultBizLogic.update(newSpecimen, this.specimen, sessionLoginInfo);
 
 	}
 
 	@Override
 	public ActionApplication insertActionApplication(IBizLogic actionAppBizLogic,
-			SOPApplication processingSOPApplication, String reasonOfDeviation, User user,
+			SpecimenProcessingProcedureApplication processingSPPApplication, String reasonOfDeviation, User user,
 			ActionApplicationRecordEntry actionAppRecordEntry) throws BizLogicException
 	{
 		ActionApplication actionApplication = new ActionApplication();
 		actionApplication.setReasonDeviation(reasonOfDeviation);
 		actionApplication.setTimestamp(new Date());
-		actionApplication.setSopApplication(processingSOPApplication);
+		actionApplication.setSppApplication(processingSPPApplication);
 		actionApplication.setSpecimen(this.specimen);
 		actionApplication.setPerformedBy(user);
 		actionApplication.setApplicationRecordEntry(actionAppRecordEntry);

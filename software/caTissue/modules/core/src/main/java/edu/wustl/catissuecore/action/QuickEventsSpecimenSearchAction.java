@@ -30,7 +30,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.QuickEventsForm;
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -195,7 +195,7 @@ public class QuickEventsSpecimenSearchAction extends BaseAction
 		// resolved bug#4121
 		int errorCount = 0;
 		Map<String, Long>  dynamicEventMap=new HashMap<String, Long> ();
-		new SOPBizLogic().getAllSOPEventFormNames(dynamicEventMap);
+		new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
 		if( request.getSession().getAttribute("dynamicEventMap")==null)
 		{
 			request.getSession().setAttribute("dynamicEventMap",dynamicEventMap);

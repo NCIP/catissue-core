@@ -13,10 +13,10 @@ package edu.wustl.catissuecore.domain;
 import edu.wustl.catissuecore.bizlogic.uidomain.TransformerFactory;
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
 import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
-import edu.wustl.catissuecore.domain.sop.SOP;
-import edu.wustl.catissuecore.domain.sop.ActionApplication;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.bizlogic.UIDomainTransformer;
@@ -198,8 +198,8 @@ public class DomainObjectFactory implements IDomainObjectFactory
 			case Constants.ACTION_APP_FORM_ID :
 				className = ActionApplication.class.getName();
 				break;
-			case Constants.SOP_ID :
-				className = SOP.class.getName();
+			case Constants.SPP_ID :
+				className = SpecimenProcessingProcedure.class.getName();
 			break;
 			default :
 

@@ -28,9 +28,9 @@ public class GridScgImpl extends AbstractGridImpl
 			"inner join catissue_specimen_protocol sp on sp.IDENTIFIER = cpe.COLLECTION_PROTOCOL_ID " +
 			"inner join catissue_coll_prot_reg cpr on cpr.IDENTIFIER = scg.COLLECTION_PROTOCOL_REG_ID " +
 			"inner join catissue_participant cp on cp.IDENTIFIER = cpr.PARTICIPANT_ID " +
-			"inner join catissue_cpe_sop ccs on ccs.cpe_identifier = scg.COLLECTION_PROTOCOL_EVENT_ID " +
-			"where ccs.sop_identifier="+jsonString +" and scg.COLLECTION_STATUS not in ('Pending','overdue','not collected')" +
-					" and scg.identifier not in (select csapp.scg_identifier from catissue_sop_application csapp where csapp.SCG_IDENTIFIER =scg.IDENTIFIER  and ccs.sop_identifier = csapp.sop_identifier)";
+			"inner join catissue_cpe_spp ccs on ccs.cpe_identifier = scg.COLLECTION_PROTOCOL_EVENT_ID " +
+			"where ccs.spp_identifier="+jsonString +" and scg.COLLECTION_STATUS not in ('Pending','overdue','not collected')" +
+					" and scg.identifier not in (select csapp.scg_identifier from catissue_spp_application csapp where csapp.SCG_IDENTIFIER =scg.IDENTIFIER  and ccs.spp_identifier = csapp.spp_identifier)";
 		}
 		else
 		{
@@ -41,9 +41,9 @@ public class GridScgImpl extends AbstractGridImpl
 					"inner join catissue_specimen_protocol sp on sp.IDENTIFIER = cpe.COLLECTION_PROTOCOL_ID " +
 					"inner join catissue_coll_prot_reg cpr on cpr.IDENTIFIER = scg.COLLECTION_PROTOCOL_REG_ID " +
 					"inner join catissue_participant cp on cp.IDENTIFIER = cpr.PARTICIPANT_ID " +
-					"inner join catissue_cpe_sop ccs on ccs.cpe_identifier = scg.COLLECTION_PROTOCOL_EVENT_ID " +
-					"where ccs.sop_identifier="+jsonString +" and scg.COLLECTION_STATUS not in ('Pending','overdue','not collected')" +
-							" and scg.identifier not in (select csapp.scg_identifier from catissue_sop_application csapp where csapp.SCG_IDENTIFIER =scg.IDENTIFIER  and ccs.sop_identifier = csapp.sop_identifier) and sp.IDENTIFIER not in ("+readDeniedIds+")";
+					"inner join catissue_cpe_spp ccs on ccs.cpe_identifier = scg.COLLECTION_PROTOCOL_EVENT_ID " +
+					"where ccs.spp_identifier="+jsonString +" and scg.COLLECTION_STATUS not in ('Pending','overdue','not collected')" +
+							" and scg.identifier not in (select csapp.scg_identifier from catissue_spp_application csapp where csapp.SCG_IDENTIFIER =scg.IDENTIFIER  and ccs.spp_identifier = csapp.spp_identifier) and sp.IDENTIFIER not in ("+readDeniedIds+")";
 		}
 		return query;
 

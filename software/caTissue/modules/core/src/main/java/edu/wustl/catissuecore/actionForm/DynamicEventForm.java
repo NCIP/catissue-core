@@ -2,7 +2,7 @@ package edu.wustl.catissuecore.actionForm;
 
 import java.util.Calendar;
 
-import edu.wustl.catissuecore.domain.sop.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;

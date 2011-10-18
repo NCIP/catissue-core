@@ -1713,7 +1713,7 @@
 			<param name="filename" value="${resources.dir}/xmi/SpecimenEvents.xmi"/>
 			<param name="mainContainerList" value="${resources.dir}/csv/SpecimenEvents.csv"/>
 			<param name="package" value="sop"/>
-			<param name="hookentity" value="edu.wustl.catissuecore.domain.sop.SOP" />
+			<param name="hookentity" value="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" />
 			<param name="addQueryPaths" value="true"/>
 			<param name="generate.cacore" value="true"/>
 			<param name="jboss.home" value="${jboss.home}"/>
@@ -2241,7 +2241,7 @@
 		<antcall target="upgrade.old.schema.task" />
 
 		<antcall target="update_static_metadata"/>
-		<!-- This target will update the SOP metadata using import XMI-->
+		<!-- This target will update the SPP metadata using import XMI-->
 
 		<if>
 			<equals arg1="oracle" arg2="${database.type}" />
@@ -2253,7 +2253,7 @@
 			<param name="filename" value="${resources.dir}/xmi/SpecimenEvents.xmi"/>
 			<param name="mainContainerList" value="${resources.dir}/csv/SpecimenEvents.csv"/>
 			<param name="package" value="sop"/>
-			<param name="hookentity" value="edu.wustl.catissuecore.domain.sop.SOP" />
+			<param name="hookentity" value="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" />
 			<param name="addQueryPaths" value="true"/>
 			<param name="generate.cacore" value="true"/>
 			<param name="jboss.home" value="${jboss.home}"/>
@@ -5744,7 +5744,7 @@ Thanking You,
 			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.user}" />
 			<replacefilter token="${token.database.password}" value="${database.password}" />
 		</replace>
-		<java classname="edu.wustl.catissuecore.upgrade.UpgradeExistingEventsToSopEvents" fork="true" maxmemory="1024m" failonerror="true">
+		<java classname="edu.wustl.catissuecore.upgrade.UpgradeExistingEventsToSppEvents" fork="true" maxmemory="1024m" failonerror="true">
 			<classpath>
 				<pathelement location="${prop.temp.dir}/catissuecore/WEB-INF/classes" />
 				<fileset dir="${prop.temp.dir}/catissuecore/WEB-INF/lib">

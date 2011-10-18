@@ -31,7 +31,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
 import edu.wustl.catissuecore.domain.ClinicalDiagnosis;
@@ -49,8 +49,8 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.TissueSpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.domain.sop.Action;
-import edu.wustl.catissuecore.domain.sop.SOP;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
 import edu.wustl.catissuecore.factory.utils.CollectionProtocolUtility;
@@ -370,15 +370,15 @@ public class CollectionProtocolUtil
 	private static String[] getSPP(CollectionProtocolEvent collectionProtocolEvent)
 	{
 		String[] sppArr = null;
-		Collection<SOP> sopCollection = collectionProtocolEvent.getSopCollection();
-		if(sopCollection != null)
+		Collection<SpecimenProcessingProcedure> sppCollection = collectionProtocolEvent.getSppCollection();
+		if(sppCollection != null)
 		{
-			sppArr = new String[sopCollection.size()];
+			sppArr = new String[sppCollection.size()];
 			int index=0;
-			Iterator<SOP> iterator = sopCollection.iterator();
+			Iterator<SpecimenProcessingProcedure> iterator = sppCollection.iterator();
 			while(iterator.hasNext())
 			{
-				SOP spp = iterator.next();
+				SpecimenProcessingProcedure spp = iterator.next();
 				sppArr[index] = spp.getName();
 				index++;
 			}
@@ -603,9 +603,9 @@ public class CollectionProtocolUtil
 		{
 			speRequirementBean.setCreationEventForSpecimen("Not Specified");
 		}
-		if(reqSpecimen.getProcessingSOP()!=null)
+		if(reqSpecimen.getProcessingSPP()!=null)
 		{
-			speRequirementBean.setProcessingSOPForSpecimen(reqSpecimen.getProcessingSOP().getName());
+			speRequirementBean.setProcessingSOPForSpecimen(reqSpecimen.getProcessingSPP().getName());
 		}
 		else
 		{
@@ -1220,8 +1220,8 @@ public class CollectionProtocolUtil
 		collectionProtocolEvent.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		collectionProtocolEvent.setClinicalDiagnosis(cpEventBean.getClinicalDiagnosis());
 
-		Collection<SOP> sopCollection = new LinkedHashSet<SOP>();
-		setSPP(collectionProtocolEvent,sopCollection,cpEventBean);
+		Collection<SpecimenProcessingProcedure> sppCollection = new LinkedHashSet<SpecimenProcessingProcedure>();
+		setSPP(collectionProtocolEvent,sppCollection,cpEventBean);
 		if (cpEventBean.getId()==-1)
 		{
 			collectionProtocolEvent.setId(null);
@@ -1249,7 +1249,7 @@ public class CollectionProtocolUtil
 
 	private static void setSPP(
 			CollectionProtocolEvent collectionProtocolEvent,
-			Collection<SOP> sppColl, CollectionProtocolEventBean cpEventBean)
+			Collection<SpecimenProcessingProcedure> sppColl, CollectionProtocolEventBean cpEventBean)
 	{
 		String[] sppArr = cpEventBean.getSpecimenProcessingProcedure();
 
@@ -1257,30 +1257,30 @@ public class CollectionProtocolUtil
 		if (sppArr != null)
 		{
 			for (int i = 0; i < sppArr.length; i++) {
-				if(sopMap.get(sppArr[i])==null )
+				if(sppMap.get(sppArr[i])==null )
 				{
 					if (!"".equals(sppArr[i]))
 					{
 						List sppList=null;
 						try {
 							DAO dao = AppUtility.openDAOSession(null);
-							String hql = "from edu.wustl.catissuecore.domain.sop.SOP where name='"+sppArr[i]+"'";
+							String hql = "from edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure where name='"+sppArr[i]+"'";
 							sppList = dao.executeQuery(hql);
 							AppUtility.closeDAOSession(dao);
 						} catch (ApplicationException e) {
 							e.printStackTrace();	}
 						if(sppList!=null && !sppList.isEmpty())
 						{
-							sppColl.add((SOP) sppList.get(0));
+							sppColl.add((SpecimenProcessingProcedure) sppList.get(0));
 						}
 					}
 				}
 				else
 				{
-					sppColl.add(sopMap.get(sppArr[i]));
+					sppColl.add(sppMap.get(sppArr[i]));
 				}
 			}
-			collectionProtocolEvent.setSopCollection(sppColl);
+			collectionProtocolEvent.setSppCollection(sppColl);
 		}
 	}
 
@@ -1425,7 +1425,7 @@ public class CollectionProtocolUtil
 	}
 
 
-	static Map<String,SOP> sopMap=new HashMap<String,SOP>();
+	static Map<String,SpecimenProcessingProcedure> sppMap=new HashMap<String,SpecimenProcessingProcedure>();
 	/**
 	 * creates specimen domain object from given specimen requirement bean.
 	 *
@@ -1498,10 +1498,10 @@ public class CollectionProtocolUtil
 		if(specimenRequirementBean.getCreationEventForSpecimen()!=null && !specimenRequirementBean.getCreationEventForSpecimen().equalsIgnoreCase("Not Specified")
 				&& !specimenRequirementBean.getCreationEventForSpecimen().equalsIgnoreCase("-- Select --"))
 		{
-			List<SOP> sppList=null;
+			List<SpecimenProcessingProcedure> sppList=null;
 			List<Action> actionList=null;
 			Map<String,Long> map=new HashMap<String,Long>();
-			new SOPBizLogic().getAllSOPEventFormNames(map);
+			new SPPBizLogic().getAllSPPEventFormNames(map);
 			String[] sppWithEvent=specimenRequirementBean.getCreationEventForSpecimen().split(":");
 			Long contId=null;
 			if(sppWithEvent.length==3)
@@ -1510,12 +1510,12 @@ public class CollectionProtocolUtil
 				DAO dao =null;
 				try {
 					dao = AppUtility.openDAOSession(null);
-					String hql = "from edu.wustl.catissuecore.domain.sop.SOP where name='"+sppWithEvent[0]+"'";
+					String hql = "from edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure where name='"+sppWithEvent[0]+"'";
 					sppList = dao.executeQuery(hql);
 					if(sppList!=null && !sppList.isEmpty())
 					{
 						Action action=null;
-						SOP spp =sppList.get(0);
+						SpecimenProcessingProcedure spp =sppList.get(0);
 						Iterator<Action> iter=spp.getActionCollection().iterator();
 						while(iter.hasNext())
 						{
@@ -1553,7 +1553,7 @@ public class CollectionProtocolUtil
 			}
 			/*try {
 				DAO dao = AppUtility.openDAOSession(null);
-				String hql = "from edu.wustl.catissuecore.domain.sop.Action where containerId="+contId;
+				String hql = "from edu.wustl.catissuecore.domain.processingprocedure.Action where containerId="+contId;
 				actionList = dao.executeQuery(hql);
 				AppUtility.closeDAOSession(dao);
 			} catch (ApplicationException e) {
@@ -1573,26 +1573,26 @@ public class CollectionProtocolUtil
 		if(!Validator.isEmpty(specimenRequirementBean.getProcessingSOPForSpecimen())&& !specimenRequirementBean.getProcessingSOPForSpecimen().equalsIgnoreCase("Not Specified")
 				&& !specimenRequirementBean.getProcessingSOPForSpecimen().equalsIgnoreCase("-- Select --"))
 		{
-			if(sopMap.get(specimenRequirementBean.getProcessingSOPForSpecimen())==null)
+			if(sppMap.get(specimenRequirementBean.getProcessingSOPForSpecimen())==null)
 			{
-				List<SOP> sopList=null;
+				List<SpecimenProcessingProcedure> sppList=null;
 				try {
 					DAO dao = AppUtility.openDAOSession(null);
-					String hql = "from edu.wustl.catissuecore.domain.sop.SOP where name= \'"+specimenRequirementBean.getProcessingSOPForSpecimen()+"\'";
-					sopList = dao.executeQuery(hql);
+					String hql = "from edu.wustl.catissuecore.domain.processinprocedure.SpecimenProcessingProcedure where name= \'"+specimenRequirementBean.getProcessingSOPForSpecimen()+"\'";
+					sppList = dao.executeQuery(hql);
 					AppUtility.closeDAOSession(dao);
-					sopMap.put(specimenRequirementBean.getProcessingSOPForSpecimen(), sopList.get(0));
+					sppMap.put(specimenRequirementBean.getProcessingSOPForSpecimen(), sppList.get(0));
 
 				}
 				catch (ApplicationException e) {
 					e.printStackTrace();
 				}
 			}
-			reqSpecimen.setProcessingSOP(sopMap.get(specimenRequirementBean.getProcessingSOPForSpecimen()));
+			reqSpecimen.setProcessingSPP(sppMap.get(specimenRequirementBean.getProcessingSOPForSpecimen()));
 		}
 		else
 		{
-			reqSpecimen.setProcessingSOP(null);
+			reqSpecimen.setProcessingSPP(null);
 		}
 		return reqSpecimen;
 	}
@@ -1748,12 +1748,12 @@ public class CollectionProtocolUtil
 		String nameToReturn = null;
 		//Action action=null;
 		try {
-			sppNameList = AppUtility.executeSQLQuery("SELECT SPP.NAME FROM CATISSUE_ACTION ACTION,CATISSUE_CP_REQ_SPECIMEN REQ,CATISSUE_SOP SPP"
+			sppNameList = AppUtility.executeSQLQuery("SELECT SPP.NAME FROM CATISSUE_ACTION ACTION,CATISSUE_CP_REQ_SPECIMEN REQ,CATISSUE_SPP SPP"
 					+" WHERE "
 					+" REQ.IDENTIFIER="
 					+id
 					+" AND REQ.ACTION_IDENTIFIER=ACTION.IDENTIFIER"
-					+" AND ACTION.SOP_IDENTIFIER = SPP.IDENTIFIER");
+					+" AND ACTION.SPP_IDENTIFIER = SPP.IDENTIFIER");
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 		}

@@ -33,7 +33,7 @@ public class IntegrateDEData
 	{
 		EntityGroupInterface catissueEntityGroup = EntityCache.getInstance().getEntityGroupByName(
 				"Catissue Suite");
-		EntityInterface sopStaticEntity = catissueEntityGroup
+		EntityInterface sppStaticEntity = catissueEntityGroup
 				.getEntityByName("edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry");
 
 		EntityManagerInterface entityManager = EntityManager.getInstance();
@@ -49,7 +49,7 @@ public class IntegrateDEData
 			EntityInterface dynamicEntity = EntityCache.getInstance()
 					.getEntityById(dynamicEntityId);
 			EntityInterface staticEntity = EntityCache.getInstance().getEntityById(
-					Long.valueOf(sopStaticEntity.getId()));
+					Long.valueOf(sppStaticEntity.getId()));
 			Collection<AssociationInterface> asntCollection = staticEntity
 					.getAssociationCollection();
 			AssociationInterface asntInterface = null;

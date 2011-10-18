@@ -7,7 +7,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 
-import edu.wustl.catissuecore.domain.sop.SOP;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -96,7 +96,7 @@ public class SOPForm extends AbstractActionForm
 	public int getFormId()
 	{
 		// TODO Auto-generated method stub
-		return Constants.SOP_ID;
+		return Constants.SPP_ID;
 	}
 
 	@Override
@@ -149,9 +149,9 @@ public class SOPForm extends AbstractActionForm
 	@Override
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		final SOP sop = (SOP)abstractDomain;
-		this.setId(sop.getId());
-		this.setName(sop.getName());
-		this.setBarcode(sop.getBarcode());
+		final SpecimenProcessingProcedure spp = (SpecimenProcessingProcedure)abstractDomain;
+		this.setId(spp.getId());
+		this.setName(spp.getName());
+		this.setBarcode(spp.getBarcode());
 	}
 }

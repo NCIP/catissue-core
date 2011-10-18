@@ -61,7 +61,7 @@ public class UtilizeSopForm extends AbstractActionForm
 	public int getFormId()
 	{
 		// TODO Auto-generated method stub
-		return Constants.SOP_ID;
+		return Constants.SPP_ID;
 	}
 
 	@Override

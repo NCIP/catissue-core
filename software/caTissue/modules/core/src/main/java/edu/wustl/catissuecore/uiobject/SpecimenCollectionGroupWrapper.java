@@ -10,9 +10,9 @@ import edu.wustl.catissuecore.domain.ISPPBizlogic;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
-import edu.wustl.catissuecore.domain.sop.ActionApplication;
-import edu.wustl.catissuecore.domain.sop.SOP;
-import edu.wustl.catissuecore.domain.sop.SOPApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
@@ -23,9 +23,9 @@ public class SpecimenCollectionGroupWrapper implements ISPPBizlogic
 	SpecimenCollectionGroup specimenCollectionGroup;
 
 	@Override
-	public Collection<SOPApplication> getSPPApplicationCollection()
+	public Collection<SpecimenProcessingProcedureApplication> getSPPApplicationCollection()
 	{
-		return this.specimenCollectionGroup.getSopApplicationCollection();
+		return this.specimenCollectionGroup.getSppApplicationCollection();
 	}
 
 	@Override
@@ -41,23 +41,23 @@ public class SpecimenCollectionGroupWrapper implements ISPPBizlogic
 	}
 
 	@Override
-	public void updateSOPApplication(SOP spp, SOPApplication processingSOPApplication,
+	public void updateSPPApplication(SpecimenProcessingProcedure spp, SpecimenProcessingProcedureApplication processingSPPApplication,
 			Collection<ActionApplication> actionApplicationCollection,
 			SessionDataBean sessionLoginInfo) throws BizLogicException
 	{
-		processingSOPApplication.setSop(spp);
-		processingSOPApplication.setSopActionApplicationCollection(actionApplicationCollection);
+		processingSPPApplication.setSpp(spp);
+		processingSPPApplication.setSppActionApplicationCollection(actionApplicationCollection);
 	}
 
 	@Override
-	public void update(SOPApplication processingSOPApplication, SessionDataBean sessionLoginInfo)
+	public void update(SpecimenProcessingProcedureApplication processingSPPApplication, SessionDataBean sessionLoginInfo)
 			throws BizLogicException
 	{
 		IBizLogic defaultBizLogic = new CatissueDefaultBizLogic();
 		//update specimen object
 		SpecimenCollectionGroup oldSCG = (SpecimenCollectionGroup) defaultBizLogic.retrieve(
 				SpecimenCollectionGroup.class.getName(), this.specimenCollectionGroup.getId());
-		this.specimenCollectionGroup.getSopApplicationCollection().add(processingSOPApplication);
+		this.specimenCollectionGroup.getSppApplicationCollection().add(processingSPPApplication);
 
 		Collection<ConsentTierStatus> consentTierStatusCollection = (Collection<ConsentTierStatus>) defaultBizLogic
 				.retrieveAttribute(SpecimenCollectionGroup.class, this.specimenCollectionGroup
@@ -70,7 +70,7 @@ public class SpecimenCollectionGroupWrapper implements ISPPBizlogic
 
 	@Override
 	public ActionApplication insertActionApplication(IBizLogic actionAppBizLogic,
-			SOPApplication processingSOPApplication, String reasonOfDeviation, User user,
+			SpecimenProcessingProcedureApplication processingSPPApplication, String reasonOfDeviation, User user,
 			ActionApplicationRecordEntry actionAppRecordEntry) throws BizLogicException
 	{
 		ActionApplication actionApplication = new ActionApplication();

@@ -22,7 +22,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.bizlogic.ActionApplicationBizLogic;
 import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
-import edu.wustl.catissuecore.domain.sop.Action;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
 import edu.wustl.catissuecore.upgrade.IntegrateDEData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;

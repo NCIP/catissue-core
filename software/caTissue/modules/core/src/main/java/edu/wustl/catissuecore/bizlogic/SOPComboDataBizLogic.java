@@ -30,31 +30,31 @@ public class SOPComboDataBizLogic extends CatissueDefaultBizLogic
 	public List<NameValueBean> getSOPNameList(String query,boolean showSubset) throws BizLogicException
 	{
 
-		final List<NameValueBean> sopList = new ArrayList<NameValueBean>();
+		final List<NameValueBean> sppList = new ArrayList<NameValueBean>();
 		DAO dao = null;
 		try
 		{
 			new DefaultBizLogic();
 			dao = this.openDAOSession(null);
-			String hql = "Select name from edu.wustl.catissuecore.domain.sop.SOP";
+			String hql = "Select name from edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure";
 			List<String> dataList = dao.executeQuery(hql);
 			this.closeDAOSession(dao);
 			final Iterator<String> iterator = dataList.iterator();
-			sopList.add(new NameValueBean(Constants.SELECT_OPTION, ""
+			sppList.add(new NameValueBean(Constants.SELECT_OPTION, ""
 					+ Constants.SELECT_OPTION_VALUE));
 			if(showSubset)
 			{
-				sopList.add(new NameValueBean(Constants.SHOW_SUBSET+"start", Constants.SHOW_SUBSET));
+				sppList.add(new NameValueBean(Constants.SHOW_SUBSET+"start", Constants.SHOW_SUBSET));
 			}
 			while (iterator.hasNext())
 			{
-				final String sopValue = iterator.next();
-				sopList.add(new NameValueBean(sopValue,
-						sopValue));
+				final String sppValue = iterator.next();
+				sppList.add(new NameValueBean(sppValue,
+						sppValue));
 			}
 			if(showSubset)
 			{
-				sopList.add(new NameValueBean(Constants.SHOW_SUBSET+"end",Constants.SHOW_SUBSET));
+				sppList.add(new NameValueBean(Constants.SHOW_SUBSET+"end",Constants.SHOW_SUBSET));
 			}
 		}
 		catch (final DAOException exp)
@@ -67,6 +67,6 @@ public class SOPComboDataBizLogic extends CatissueDefaultBizLogic
 		{
 			this.closeDAOSession(dao);
 		}
-		return sopList;
+		return sppList;
 	}
 }

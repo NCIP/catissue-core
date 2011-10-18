@@ -109,17 +109,17 @@ public class DeriveSpecimenBean implements Serializable
 
 	private String labelFormat;
 
-	private String processingSOP;
+	private String processingSPP;
 
 	private String creationEvent;
 
 
-	public String getProcessingSOP() {
-		return processingSOP;
+	public String getProcessingSPP() {
+		return processingSPP;
 	}
 
-	public void setProcessingSOP(String processingSOP) {
-		this.processingSOP = processingSOP;
+	public void setProcessingSPP(String processingSPP) {
+		this.processingSPP = processingSPP;
 	}
 
 	public String getCreationEvent() {

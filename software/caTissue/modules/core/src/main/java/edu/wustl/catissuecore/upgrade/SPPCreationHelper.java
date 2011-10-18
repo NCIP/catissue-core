@@ -26,9 +26,9 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
-import edu.wustl.catissuecore.domain.sop.Action;
-import edu.wustl.catissuecore.domain.sop.DefaultAction;
-import edu.wustl.catissuecore.domain.sop.SOP;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
+import edu.wustl.catissuecore.domain.processingprocedure.DefaultAction;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
@@ -49,7 +49,7 @@ public class SPPCreationHelper
 	private static LocalHibernateDAO hibernateDAO = null;
 
 	/** The unique spp map. */
-	private static Map<String, SOP> uniqueSPPMap = new HashMap<String, SOP>();
+	private static Map<String, SpecimenProcessingProcedure> uniqueSPPMap = new HashMap<String, SpecimenProcessingProcedure>();
 
 	/**
 	 * Instantiates a new sPP creation helper.
@@ -69,7 +69,7 @@ public class SPPCreationHelper
 	 * @throws DynamicExtensionsSystemException
 	 * @throws DynamicExtensionsApplicationException
 	 */
-	public SOP getMatchingSPP(Collection<SpecimenEventParameters> specimenEventsCollection)
+	public SpecimenProcessingProcedure getMatchingSPP(Collection<SpecimenEventParameters> specimenEventsCollection)
 			throws ApplicationException, DynamicExtensionsApplicationException,
 			DynamicExtensionsSystemException
 	{
@@ -79,7 +79,7 @@ public class SPPCreationHelper
 		{
 			/* a. Create unisque SPP which will be used for all SR's depending on the
 			 *    values of Collection Event and Received Event */
-			SOP uniqueSPPs = createUniqueSPPs(specimenEventsCollection, uniqueKeyForSPP);
+			SpecimenProcessingProcedure uniqueSPPs = createUniqueSPPs(specimenEventsCollection, uniqueKeyForSPP);
 
 			uniqueSPPMap.put(uniqueKeyForSPP, uniqueSPPs);
 		}
@@ -118,16 +118,16 @@ public class SPPCreationHelper
 	 * Creates the unique sp ps.
 	 * @param eventsCollection the events collection
 	 * @param uniqueSPPName
-	 * @return the sOP
+	 * @return the SPP
 	 * @throws ApplicationException the application exception
 	 * @throws DynamicExtensionsSystemException
 	 * @throws DynamicExtensionsApplicationException
 	 */
-	private SOP createUniqueSPPs(Collection<SpecimenEventParameters> eventsCollection,
+	private SpecimenProcessingProcedure createUniqueSPPs(Collection<SpecimenEventParameters> eventsCollection,
 			String uniqueSPPName) throws ApplicationException,
 			DynamicExtensionsApplicationException, DynamicExtensionsSystemException
 	{
-		SOP defaultSpp = new SOP();
+		SpecimenProcessingProcedure defaultSpp = new SpecimenProcessingProcedure();
 		defaultSpp.setName(uniqueSPPName.replaceAll("#", "-"));
 		Collection<Action> actionCollection = new HashSet<Action>();
 		int uniqueOrderId = 0;
@@ -145,13 +145,13 @@ public class SPPCreationHelper
 			Long containerIdentifier = ((ContainerInterface) deEventParameters
 					.getContainerCollection().iterator().next()).getId();
 
-			EntityInterface sopStaticEntity = UpgradeExistingEventsToSopEvents.CATISSUE_ENTITY_GROUP
-					.getEntityByName(UpgradeExistingEventsToSopEvents.ACTION_APPLICATION_RECORD_ENTRY);
+			EntityInterface sppStaticEntity = UpgradeExistingEventsToSppEvents.CATISSUE_ENTITY_GROUP
+					.getEntityByName(UpgradeExistingEventsToSppEvents.ACTION_APPLICATION_RECORD_ENTRY);
 
 			// This is to hook DE data with static data (hook Event data with ActionApplicationRecordEntry)
 			IntegrateDE integrate = new IntegrateDE();
 			integrate.associateRecords(containerIdentifier, recordEntry.getId(),
-					deRecordIdentifier, sopStaticEntity.getId(), null);
+					deRecordIdentifier, sppStaticEntity.getId(), null);
 
 			Action action = new Action();
 			action.setApplicationDefaultValue(recordEntry);
@@ -316,7 +316,7 @@ public class SPPCreationHelper
 				hostClassName.length());
 
 		// Fetch the DE Embedded Event Object.
-		return UpgradeExistingEventsToSopEvents.MIGRATED_EVENTS.getEntityByName(deClassName);
+		return UpgradeExistingEventsToSppEvents.MIGRATED_EVENTS.getEntityByName(deClassName);
 	}
 
 	/**

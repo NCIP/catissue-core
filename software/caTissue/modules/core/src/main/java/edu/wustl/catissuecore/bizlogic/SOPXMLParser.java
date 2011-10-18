@@ -17,9 +17,9 @@ import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.util.DynamicExtensionsUtility;
-import edu.wustl.catissuecore.domain.sop.Action;
-import edu.wustl.catissuecore.sop.EventType;
-import edu.wustl.catissuecore.sop.SPPType;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
+import edu.wustl.catissuecore.processingprocedure.EventType;
+import edu.wustl.catissuecore.processingprocedure.SPPType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.metadata.XMLUtility;
 import edu.wustl.common.exception.ApplicationException;
@@ -64,8 +64,8 @@ public final class SOPXMLParser
 		final JAXBElement jAXBElement = (JAXBElement) XMLUtility.getJavaObjectForXML(xmlFile,
 				inputStream, packageName, Constants.SOP_XSD_FILENAME);
 
-		SPPType sop = (SPPType)jAXBElement.getValue();
-		List<EventType> events = sop.getEvent();
+		SPPType spp = (SPPType)jAXBElement.getValue();
+		List<EventType> events = spp.getEvent();
 		for(EventType event : events)
 		{
 			populateActionList(actionList, event);
@@ -75,7 +75,7 @@ public final class SOPXMLParser
 	}
 
 	/**
-	 * Populates the list of actions belonging to an SOP.
+	 * Populates the list of actions belonging to an SPP.
 	 * @param actionList actionList
 	 * @param event event
 	 * @throws DynamicExtensionsSystemException

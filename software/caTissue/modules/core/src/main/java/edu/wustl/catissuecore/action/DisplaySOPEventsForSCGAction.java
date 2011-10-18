@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.sop.SOP;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.processor.SPPEventProcessor;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -109,11 +109,11 @@ public class DisplaySOPEventsForSCGAction extends SecureAction
 	{
 		List<NameValueBean> sppNameList = new ArrayList<NameValueBean>();
 		sppNameList.add(new NameValueBean(Constants.SELECT_OPTION, Constants.SELECT_OPTION));
-		Collection<SOP> sppCollection = scgObject.getCollectionProtocolEvent().getSopCollection();
-		Iterator<SOP> sopIter = sppCollection.iterator();
+		Collection<SpecimenProcessingProcedure> sppCollection = scgObject.getCollectionProtocolEvent().getSppCollection();
+		Iterator<SpecimenProcessingProcedure> sopIter = sppCollection.iterator();
 		while (sopIter.hasNext())
 		{
-			SOP spp = sopIter.next();
+			SpecimenProcessingProcedure spp = sopIter.next();
 			String sppName1 = spp.getName();
 			sppNameList.add(new NameValueBean(sppName1, sppName1));
 		}

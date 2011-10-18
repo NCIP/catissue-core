@@ -38,13 +38,13 @@ import edu.common.dynamicextensions.domain.userinterface.Container;
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm;
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.domain.sop.AbstractApplication;
-import edu.wustl.catissuecore.domain.sop.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -304,8 +304,8 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			{
 				request.setAttribute(Constants.SPECIMEN_LABEL, specimenLabel);
 			}
-			request.setAttribute(Constants.EVENT_PARAMETERS_LIST, new SOPBizLogic()
-					.getAllSOPEventFormNames(dynamicEventMap));
+			request.setAttribute(Constants.EVENT_PARAMETERS_LIST, new SPPBizLogic()
+					.getAllSPPEventFormNames(dynamicEventMap));
 			request.getSession().setAttribute("dynamicEventMap", dynamicEventMap);
 
 		}

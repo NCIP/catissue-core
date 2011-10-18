@@ -16,7 +16,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -61,11 +61,11 @@ public class DisplaySPPForSCGAction extends SecureAction
 		request.setAttribute("id", scgId);
 		SpecimenCollectionGroup scgObject = (SpecimenCollectionGroup) bizLogic.retrieve(
 				SpecimenCollectionGroup.class.getName(), new Long(scgId));
-		List<NameValueBean> sppNameList = new SOPBizLogic().getSPPNameList(scgObject);
+		List<NameValueBean> sppNameList = new SPPBizLogic().getSPPNameList(scgObject);
 		request.setAttribute("sppNameList", sppNameList);
 		List<Map<String, Object>> sppEventDataCollection = null;
 		Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
-		new SOPBizLogic().getAllSOPEventFormNames(dynamicEventMap);
+		new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
 		request.getSession().setAttribute(Constants.DYNAMIC_EVENT_MAP, dynamicEventMap);
 		request.setAttribute("SOPEvents", sppEventDataCollection);
 		Long scgEntityId = null;

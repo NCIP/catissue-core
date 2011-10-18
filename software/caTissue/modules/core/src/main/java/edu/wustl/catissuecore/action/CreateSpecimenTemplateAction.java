@@ -22,7 +22,7 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
@@ -231,8 +231,8 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		request.setAttribute("storageContainerList", storageContainerList);
 
 		//final List eventsList = AppUtility.getAllEventNames();
-		SOPBizLogic sopBizLogic = new SOPBizLogic();
-		final List sopList = sopBizLogic.getAllSOPNames();
+		SPPBizLogic sopBizLogic = new SPPBizLogic();
+		final List sopList = sopBizLogic.getAllSPPNames();
 
 		// Dynamic Events List
 		//request.setAttribute("eventsList", eventsList);
@@ -293,7 +293,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		{
 			for(int i=0;i<sppArr.length;i++)
 			{
-				spp.addAll(new SOPBizLogic().getAllEventsForSPP(sppArr[i]));
+				spp.addAll(new SPPBizLogic().getAllEventsForSPP(sppArr[i]));
 			}
 		}
 		//request.setAttribute("eventsList", spp);

@@ -14,7 +14,7 @@ import org.apache.struts.action.ActionMapping;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -40,7 +40,7 @@ public class ClinincalStatusComboAction extends BaseAction
 		final Integer startFetch = Integer.parseInt(start);
 		final String requestFor = request.getParameter("requestFor");
 		List clinicalStatusList = null;
-		SOPBizLogic sopBizLogic = new SOPBizLogic();
+		SPPBizLogic sopBizLogic = new SPPBizLogic();
 		if("specimenClass".equals(requestFor))
 		{
 			clinicalStatusList = AppUtility.getSpecimenClassList();
@@ -65,7 +65,7 @@ public class ClinincalStatusComboAction extends BaseAction
 		}
 		else if("processingSPP".equals(requestFor))
 		{
-			clinicalStatusList = sopBizLogic.getAllSOPNames();
+			clinicalStatusList = sopBizLogic.getAllSPPNames();
 		}
 		else
 		{

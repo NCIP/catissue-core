@@ -38,7 +38,7 @@ import edu.wustl.catissuecore.bizlogic.ActionApplicationBizLogic;
 import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
 import edu.wustl.catissuecore.bizlogic.CpBasedViewBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.ISPPBizlogic;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -46,13 +46,13 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
-import edu.wustl.catissuecore.domain.sop.Action;
-import edu.wustl.catissuecore.domain.sop.ActionApplication;
-import edu.wustl.catissuecore.domain.sop.DefaultAction;
-import edu.wustl.catissuecore.domain.sop.SOP;
-import edu.wustl.catissuecore.domain.sop.SOPApplication;
-import edu.wustl.catissuecore.sop.ActionApplicationComparator;
-import edu.wustl.catissuecore.sop.SOPActionComparator;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.DefaultAction;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
+import edu.wustl.catissuecore.processingprocedure.ActionApplicationComparator;
+import edu.wustl.catissuecore.processingprocedure.SPPActionComparator;
 import edu.wustl.catissuecore.uiobject.SpecimenWrapper;
 import edu.wustl.catissuecore.upgrade.IntegrateDEData;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -76,7 +76,7 @@ import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
- * The Class SOPEventProcessor.
+ * The Class SPPEventProcessor.
  *
  * @author suhas_khot
  */
@@ -110,7 +110,7 @@ public class SPPEventProcessor
 		if (specimenObject != null)
 		{
 			//Fetch SPPApplication
-			SOPApplication sppApplication = specimenObject.getProcessingSOPApplication();
+			SpecimenProcessingProcedureApplication sppApplication = specimenObject.getProcessingSPPApplication();
 			//If SPPApplication is null than display SPP events with default value.
 			if (sppApplication == null)
 			{
@@ -141,7 +141,7 @@ public class SPPEventProcessor
 		if (specimenRequirement != null)
 		{
 			//fetch processing SPP from specimen requirement
-			SOP processingSPP = specimenRequirement.getProcessingSOP();
+			SpecimenProcessingProcedure processingSPP = specimenRequirement.getProcessingSPP();
 			//populate SPP events data for respective SPP
 			return populateSPPEventsData(processingSPP);
 		}
@@ -157,7 +157,7 @@ public class SPPEventProcessor
 	 *
 	 * @throws ApplicationException the application exception
 	 */
-	public List<Map<String, Object>> populateSPPEventsData(SOP processingSPP)
+	public List<Map<String, Object>> populateSPPEventsData(SpecimenProcessingProcedure processingSPP)
 			throws ApplicationException
 	{
 		List<Map<String, Object>> sppEventDataCollection = new ArrayList<Map<String, Object>>();
@@ -165,9 +165,9 @@ public class SPPEventProcessor
 		{
 			//generate dynamicEventMap
 			//			Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
-			//			AppUtility.getAllSOPEventFormNames(dynamicEventMap);
+			//			AppUtility.getAllSPPEventFormNames(dynamicEventMap);
 			//			request.getSession().setAttribute(Constants.DYNAMIC_EVENT_MAP, dynamicEventMap);
-			TreeSet<Action> actionList = new TreeSet<Action>(new SOPActionComparator());
+			TreeSet<Action> actionList = new TreeSet<Action>(new SPPActionComparator());
 			actionList.addAll(processingSPP.getActionCollection());
 			sppEventDataCollection = populateSPPEventsWithDefaultValue(actionList);
 		}
@@ -210,12 +210,12 @@ public class SPPEventProcessor
 	 * @throws ApplicationException the application exception
 	 */
 	public List<Map<String, Object>> populateSPPEventsBasedOnSPPApplication(
-			SOPApplication sppApplication) throws ApplicationException
+			SpecimenProcessingProcedureApplication sppApplication) throws ApplicationException
 	{
 		List<Map<String, Object>> sppEventData = new ArrayList<Map<String, Object>>();
 		//fetch all SPP Action Applications for the respective SPP Application
 		Collection<ActionApplication> actionApplicationCollection = sppApplication
-				.getSopActionApplicationCollection();
+				.getSppActionApplicationCollection();
 		if (actionApplicationCollection != null)
 		{
 			generatSPPEventData(sppEventData, actionApplicationCollection);
@@ -318,24 +318,24 @@ public class SPPEventProcessor
 	}
 
 	/**
-	 * Gets the sop by name.
+	 * Gets the spp by name.
 	 *
 	 * @param sppName the spp name
 	 *
-	 * @return the SOP by name
+	 * @return the SPP by name
 	 *
 	 * @throws BizLogicException the biz logic exception
 	 */
-	private SOP getSOPByName(final String sppName) throws BizLogicException
+	private SpecimenProcessingProcedure getSPPByName(final String sppName) throws BizLogicException
 	{
-		//Fetch processing SOP
-		SOP processingSOP = null;
+		//Fetch processing SPP
+		SpecimenProcessingProcedure processingSPP = null;
 		if(sppName != null)
 		{
-			List<SOP> sppList = defaultBizLogic.retrieve(SOP.class.getName(), "name", sppName);
-			processingSOP = sppList.get(0);
+			List<SpecimenProcessingProcedure> sppList = defaultBizLogic.retrieve(SpecimenProcessingProcedure.class.getName(), "name", sppName);
+			processingSPP = sppList.get(0);
 		}
-		return processingSOP;
+		return processingSPP;
 	}
 
 	/**
@@ -364,7 +364,7 @@ public class SPPEventProcessor
 			SQLException, BizLogicException, ApplicationException
 	{
 		//create new SPP Application object
-		SOPApplication processingSOPApplication = new SOPApplication();
+		SpecimenProcessingProcedureApplication processingSPPApplication = new SpecimenProcessingProcedureApplication();
 
 		Collection<ActionApplication> actionApplicationCollection = new HashSet<ActionApplication>();
 		for (AbstractFormContext formContext : formContextCollection)
@@ -372,16 +372,16 @@ public class SPPEventProcessor
 			Map<String, Object> staticParameters = formContextParameterMap.get(formContext);
 
 			ActionApplication actionApplication = associateRecEntryWithActionApp(actionAppBizLogic,
-					sppBizlogicObject, contextVsRecordIdMap, processingSOPApplication, formContext,
+					sppBizlogicObject, contextVsRecordIdMap, processingSPPApplication, formContext,
 					staticParameters);
 
 			actionApplicationCollection.add(actionApplication);
 
 		}
-		sppBizlogicObject.updateSOPApplication(getSOPByName(sppName), processingSOPApplication, actionApplicationCollection,
+		sppBizlogicObject.updateSPPApplication(getSPPByName(sppName), processingSPPApplication, actionApplicationCollection,
 				sessionLoginInfo);
 
-		sppBizlogicObject.update(processingSOPApplication, sessionLoginInfo);
+		sppBizlogicObject.update(processingSPPApplication, sessionLoginInfo);
 	}
 
 	/**
@@ -410,7 +410,7 @@ public class SPPEventProcessor
 			SQLException, BizLogicException, ApplicationException
 	{
 		//create new SPP Application object
-		SOPApplication processingSOPApplication = null;
+		SpecimenProcessingProcedureApplication processingSPPApplication = null;
 
 
 		ISPPBizlogic sppBizlogicObject = new SpecimenWrapper();
@@ -422,7 +422,7 @@ public class SPPEventProcessor
 			Map<String, Object> staticParameters = formContextParameterMap.get(formContext);
 
 			ActionApplication actionApplication = associateRecEntryWithActionApp(actionAppBizLogic,
-					sppBizlogicObject, contextVsRecordIdMap, processingSOPApplication, formContext,
+					sppBizlogicObject, contextVsRecordIdMap, processingSPPApplication, formContext,
 					staticParameters);
 
 			actionApplicationCollection.add(actionApplication);
@@ -435,7 +435,7 @@ public class SPPEventProcessor
 	 * @param actionAppBizLogic the action app biz logic
 	 * @param specimen the specimen
 	 * @param contextVsRecordIdMap the context vs record id map
-	 * @param processingSOPApplication the processing sop application
+	 * @param processingSPPApplication the processing spp application
 	 * @param formContext the form context
 	 * @param staticParameters the static parameters
 	 *
@@ -447,7 +447,7 @@ public class SPPEventProcessor
 	 */
 	private ActionApplication associateRecEntryWithActionApp(final IBizLogic actionAppBizLogic,
 			final ISPPBizlogic sppBizlogicObject, Map<AbstractFormContext, Long> contextVsRecordIdMap,
-			SOPApplication processingSOPApplication, AbstractFormContext formContext,
+			SpecimenProcessingProcedureApplication processingSPPApplication, AbstractFormContext formContext,
 			Map<String, Object> staticParameters) throws BizLogicException, ApplicationException, DynamicExtensionsCacheException
 	{
 		ActionApplicationRecordEntry actionAppRecordEntry = new ActionApplicationBizLogic()
@@ -457,7 +457,7 @@ public class SPPEventProcessor
 		String userId = (String) staticParameters.get(Constants.USER_ID);
 
 		ActionApplication actionApplication = sppBizlogicObject.insertActionApplication(actionAppBizLogic,
-				processingSOPApplication, staticParameters.get(Constants.REASON_DEVIATION)
+				processingSPPApplication, staticParameters.get(Constants.REASON_DEVIATION)
 						.toString(), getUser(userId), actionAppRecordEntry);
 
 		actionApplication.setApplicationRecordEntry(actionAppRecordEntry);
@@ -553,7 +553,7 @@ public class SPPEventProcessor
 	public String[] getSpecimenOrSCGIdArray(HttpServletRequest request, String scgId, boolean isSCG)
 			throws ApplicationException
 	{
-		SOPBizLogic sopBizlogic = new SOPBizLogic();
+		SPPBizLogic sppBizlogic = new SPPBizLogic();
 		String[] scgIdArr = {scgId};
 
 		if (Constants.TRUE.equals(request.getParameter("selectedAll")))
@@ -562,11 +562,11 @@ public class SPPEventProcessor
 			List idList;
 			if(isSCG)
 			{
-				idList = sopBizlogic.getScgsIdBySOPID(Long.parseLong(sppId));
+				idList = sppBizlogic.getScgsIdBySPPID(Long.parseLong(sppId));
 			}
 			else
 			{
-				idList = sopBizlogic.getSpecimensIdBySOPID(Long.parseLong(sppId));
+				idList = sppBizlogic.getSpecimensIdBySPPID(Long.parseLong(sppId));
 			}
 			scgIdArr = new String[idList.size()];
 			for (int cnt = 0; cnt < idList.size(); cnt++)
@@ -585,7 +585,7 @@ public class SPPEventProcessor
 	}
 
 	/**
-	 * Insert update de data for sop events.
+	 * Insert update de data for spp events.
 	 *
 	 * @param request the request
 	 * @param contextRecordIdMap the context record id map
@@ -599,7 +599,7 @@ public class SPPEventProcessor
 	 * @throws DynamicExtensionsApplicationException the dynamic extensions application exception
 	 * @throws SQLException the SQL exception
 	 */
-	public Map<AbstractFormContext, Long> insertUpdateDEDataForSOPEvents(
+	public Map<AbstractFormContext, Long> insertUpdateDEDataForSPPEvents(
 			HttpServletRequest request, Map<AbstractFormContext, Long> contextRecordIdMap,
 			Set<AbstractFormContext> formContextCollection) throws FileNotFoundException,
 			DynamicExtensionsSystemException, IOException, DynamicExtensionsApplicationException,
@@ -643,7 +643,7 @@ public class SPPEventProcessor
 		for (AbstractFormContext formContext : formContextCollection)
 		{
 			Map<String, Object> staticParametersList = formContextParameterMap.get(formContext);
-			ActionApplication actionApplication = getActionApplForSOPEvent(
+			ActionApplication actionApplication = getActionApplForSPPEvent(
 					actionApplicationCollection, formContext.getId());
 			updateActionApplication(actionAppBizLogic, contextRecordIdMap, formContext,
 					staticParametersList, actionApplication);
@@ -742,14 +742,14 @@ public class SPPEventProcessor
 	}
 
 	/**
-	 * Gets the action appl for sop event.
+	 * Gets the action appl for spp event.
 	 *
 	 * @param actionApplicationCollection the action application collection
 	 * @param formContextId the form context id
 	 *
-	 * @return the action appl for sop event
+	 * @return the action appl for spp event
 	 */
-	private ActionApplication getActionApplForSOPEvent(
+	private ActionApplication getActionApplForSPPEvent(
 			Collection<ActionApplication> actionApplicationCollection, Long formContextId)
 	{
 		for (ActionApplication actionApplication : actionApplicationCollection)
@@ -776,20 +776,20 @@ public class SPPEventProcessor
 			SpecimenCollectionGroup scgObject, String sppName) throws ApplicationException
 	{
 		List<Map<String, Object>> sppEventDataCollection = new ArrayList<Map<String, Object>>();
-		Collection<SOPApplication> sppAppCollection = scgObject.getSopApplicationCollection();
+		Collection<SpecimenProcessingProcedureApplication> sppAppCollection = scgObject.getSppApplicationCollection();
 
 		if (sppAppCollection != null && !sppAppCollection.isEmpty())
 		{
 			boolean sppDataEntryDone = false;
-			Iterator<SOPApplication> sppAppIter = sppAppCollection.iterator();
+			Iterator<SpecimenProcessingProcedureApplication> sppAppIter = sppAppCollection.iterator();
 			while (sppAppIter.hasNext())
 			{
-				SOPApplication sppApp = sppAppIter.next();
-				if (sppName.equalsIgnoreCase(sppApp.getSop().getName()))
+				SpecimenProcessingProcedureApplication sppApp = sppAppIter.next();
+				if (sppName.equalsIgnoreCase(sppApp.getSpp().getName()))
 				{
 					Collection<ActionApplication> actionApplicationCollection = (Collection<ActionApplication>) defaultBizLogic
-							.retrieveAttribute(SOPApplication.class, new Long(sppApp.getId()),
-									"elements(sopActionApplicationCollection)");
+							.retrieveAttribute(SpecimenProcessingProcedureApplication.class, new Long(sppApp.getId()),
+									"elements(sppActionApplicationCollection)");
 					if (actionApplicationCollection != null)
 					{
 						//populate SPP data
@@ -1001,9 +1001,9 @@ public class SPPEventProcessor
 	 *
 	 * @throws BizLogicException the biz logic exception
 	 */
-	public SOP getSPPBySpecimenId(Long specimenId) throws BizLogicException
+	public SpecimenProcessingProcedure getSPPBySpecimenId(Long specimenId) throws BizLogicException
 	{
-		SOP processingSPP = null;
+		SpecimenProcessingProcedure processingSPP = null;
 
 		//retrieves specimen object
 		Specimen specimenObject = (Specimen) defaultBizLogic.retrieve(Specimen.class.getName(),
@@ -1011,7 +1011,7 @@ public class SPPEventProcessor
 
 		if (specimenObject != null && specimenObject.getSpecimenRequirement() != null)
 		{
-			processingSPP = specimenObject.getSpecimenRequirement().getProcessingSOP();
+			processingSPP = specimenObject.getSpecimenRequirement().getProcessingSPP();
 		}
 		return processingSPP;
 	}
@@ -1032,10 +1032,10 @@ public class SPPEventProcessor
 	{
 		List<Map<String, Object>> sppEventDataCollection = new ArrayList<Map<String, Object>>();
 
-		Collection<SOP> sppCollection = scgObject.getCollectionProtocolEvent()
-				.getSopCollection();
-		Iterator<SOP> sppIter = sppCollection.iterator();
-		SOP spp = null;
+		Collection<SpecimenProcessingProcedure> sppCollection = scgObject.getCollectionProtocolEvent()
+				.getSppCollection();
+		Iterator<SpecimenProcessingProcedure> sppIter = sppCollection.iterator();
+		SpecimenProcessingProcedure spp = null;
 		while (sppIter.hasNext())
 		{
 			spp = sppIter.next();
@@ -1047,7 +1047,7 @@ public class SPPEventProcessor
 
 		sppEventDataCollection = populateSPPEventsData(spp);
 		Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
-		new SOPBizLogic().getAllSOPEventFormNames(dynamicEventMap);
+		new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
 		if (request.getSession().getAttribute("dynamicEventMap") == null)
 		{
 			request.getSession().setAttribute("dynamicEventMap", dynamicEventMap);

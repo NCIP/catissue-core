@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.Date;
 
 import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
-import edu.wustl.catissuecore.domain.sop.ActionApplication;
-import edu.wustl.catissuecore.domain.sop.SOP;
-import edu.wustl.catissuecore.domain.sop.SOPApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
@@ -37,38 +37,38 @@ public interface ISPPBizlogic
 	 *
 	 * @return the sPP application collection
 	 */
-	Collection<SOPApplication> getSPPApplicationCollection();
+	Collection<SpecimenProcessingProcedureApplication> getSPPApplicationCollection();
 
 	/**
-	 * Update sop application.
+	 * Update spp application.
 	 *
 	 * @param spp the spp
-	 * @param processingSOPApplication the processing sop application
+	 * @param processingSPPApplication the processing spp application
 	 * @param actionApplicationCollection the action application collection
 	 * @param sessionLoginInfo the session login info
 	 *
 	 * @throws BizLogicException the biz logic exception
 	 */
-	void updateSOPApplication(SOP spp, SOPApplication processingSOPApplication,
+	void updateSPPApplication(SpecimenProcessingProcedure spp, SpecimenProcessingProcedureApplication processingSPPApplication,
 			Collection<ActionApplication> actionApplicationCollection,
 			SessionDataBean sessionLoginInfo) throws BizLogicException;
 
 	/**
 	 * Update.
 	 *
-	 * @param processingSOPApplication the processing sop application
+	 * @param processingSPPApplication the processing spp application
 	 * @param sessionLoginInfo the session login info
 	 *
 	 * @throws BizLogicException the biz logic exception
 	 */
-	void update(SOPApplication processingSOPApplication,
+	void update(SpecimenProcessingProcedureApplication processingSPPApplication,
 			SessionDataBean sessionLoginInfo) throws BizLogicException;
 
 	/**
 	 * Insert action application.
 	 *
 	 * @param actionAppBizLogic the action app biz logic
-	 * @param processingSOPApplication the processing sop application
+	 * @param processingSPPApplication the processing spp application
 	 * @param reasonOfDeviation the reason of deviation
 	 * @param user the user
 	 * @param actionAppRecordEntry the action app record entry
@@ -78,7 +78,7 @@ public interface ISPPBizlogic
 	 * @throws BizLogicException the biz logic exception
 	 */
 	ActionApplication insertActionApplication(IBizLogic actionAppBizLogic,
-			SOPApplication processingSOPApplication, String reasonOfDeviation, User user,
+			SpecimenProcessingProcedureApplication processingSPPApplication, String reasonOfDeviation, User user,
 			ActionApplicationRecordEntry actionAppRecordEntry)throws BizLogicException;
 
 	/**

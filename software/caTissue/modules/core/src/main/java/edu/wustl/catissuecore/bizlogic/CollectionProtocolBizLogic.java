@@ -28,7 +28,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.hibernate.LazyInitializationException;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
@@ -43,8 +42,8 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.domain.sop.Action;
-import edu.wustl.catissuecore.domain.sop.SOP;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
@@ -90,8 +89,6 @@ import gov.nih.nci.cagrid.gridgrouper.bean.MemberDescriptor;
 import gov.nih.nci.security.UserProvisioningManager;
 import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.Role;
-import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
-import gov.nih.nci.security.exceptions.CSTransactionException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -1684,14 +1681,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		try
 		{
-			if(specimenRequirement.getProcessingSOP() != null)
+			if(specimenRequirement.getProcessingSPP() != null)
 			{
-				final String sourceObjectName = SOP.class.getName();
+				final String sourceObjectName = SpecimenProcessingProcedure.class.getName();
 
 				final QueryWhereClause queryWhereClause = new QueryWhereClause(
 						sourceObjectName);
 				queryWhereClause.addCondition(new EqualClause(
-						Constants.ID, specimenRequirement.getProcessingSOP().getId()));
+						Constants.ID, specimenRequirement.getProcessingSPP().getId()));
 				String[] selectedColumns = null;
 				final List processingSPPList = this.retrieve(
 						sourceObjectName, selectedColumns,

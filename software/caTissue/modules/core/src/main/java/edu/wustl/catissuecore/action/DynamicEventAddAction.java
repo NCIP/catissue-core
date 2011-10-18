@@ -128,7 +128,7 @@ public class DynamicEventAddAction extends BaseAction
 					if (recordIdentifier == null || "0".equalsIgnoreCase(recordIdentifier))
 					{
 						Map<AbstractFormContext, Long> contextVsRecordIdMap = sppEventProcessor
-								.insertUpdateDEDataForSOPEvents(request,
+								.insertUpdateDEDataForSPPEvents(request,
 										new HashMap<AbstractFormContext, Long>(),
 										formContextCollection);
 
@@ -144,7 +144,7 @@ public class DynamicEventAddAction extends BaseAction
 										.valueOf(recordIdentifier), formContextParameterMap,
 										formContextCollection);
 						//For each from Context collection update DE data
-						sppEventProcessor.insertUpdateDEDataForSOPEvents(request,
+						sppEventProcessor.insertUpdateDEDataForSPPEvents(request,
 								contextRecordIdMap, formContextCollection);
 					}
 				}

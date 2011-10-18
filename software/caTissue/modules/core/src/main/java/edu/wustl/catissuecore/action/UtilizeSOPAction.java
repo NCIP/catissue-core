@@ -36,7 +36,7 @@ public class UtilizeSOPAction extends BaseAction
 		Long sopId = 0L;
 		for (int i = 0; i < sopList.size(); i++)
 		{
-			edu.wustl.catissuecore.domain.sop.SOP sopObj = (edu.wustl.catissuecore.domain.sop.SOP) sopList
+			edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure sopObj = (edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure) sopList
 					.get(i);
 			final NameValueBean nvb = new NameValueBean(sopObj.getName(), sopObj.getId());
 			coll.add(nvb);
@@ -141,7 +141,7 @@ public class UtilizeSOPAction extends BaseAction
 		{
 			dao = edu.wustl.catissuecore.util.global.AppUtility.openDAOSession(null);
 
-			String hql = "from edu.wustl.catissuecore.domain.sop.SOP";
+			String hql = "from edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure";
 
 			sopList = dao.executeQuery(hql);
 

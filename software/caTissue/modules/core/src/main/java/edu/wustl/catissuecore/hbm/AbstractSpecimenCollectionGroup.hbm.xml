@@ -48,10 +48,10 @@
 				<one-to-many class="edu.wustl.catissuecore.domain.SpecimenRequirement" />
 			</set>
 
-			<set name="sopCollection" table="catissue_cpe_sop" lazy="false" cascade="save-update" inverse="false" sort="unsorted">
+			<set name="sppCollection" table="catissue_cpe_spp" lazy="false" cascade="save-update" inverse="false" sort="unsorted">
 				<cache usage="read-write" />
 					<key column="CPE_IDENTIFIER" />
-				<many-to-many class="edu.wustl.catissuecore.domain.sop.SOP" column="SOP_IDENTIFIER"/>
+				<many-to-many class="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" column="SPP_IDENTIFIER"/>
 			</set>
 
 
@@ -102,7 +102,7 @@
 					inverse="false" >
 				<cache usage="read-write" />
 				<key column="SCG_ID" />
-				<one-to-many class="edu.wustl.catissuecore.domain.sop.ActionApplication"/>
+				<one-to-many class="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication"/>
 			</set>
 
 			<set name="scgRecordEntryCollection" table="CATISSUE_SCG_REC_NTRY" lazy="false" inverse="true" cascade="save-update" sort="unsorted">
@@ -110,9 +110,9 @@
 				<one-to-many class="edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry" />
 			</set>
 
-			<set name="sopApplicationCollection" table="catissue_sop_application" lazy="false" inverse="false" cascade="save-update" sort="unsorted">
+			<set name="sppApplicationCollection" table="catissue_spp_application" lazy="false" inverse="false" cascade="save-update" sort="unsorted">
 				<key column="SCG_IDENTIFIER" />
-				<one-to-many class="edu.wustl.catissuecore.domain.sop.SOPApplication"/>
+				<one-to-many class="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication"/>
 			</set>
 
 			<property name="name" type="string" update="true" insert="true"

@@ -1,1 +1,1 @@
-catissue_sop;select NAME from catissue_sop where IDENTIFIER='1'
+catissue_spp;select NAME from catissue_spp where IDENTIFIER='1'

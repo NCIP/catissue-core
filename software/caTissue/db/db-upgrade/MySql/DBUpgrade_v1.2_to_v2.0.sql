@@ -89,8 +89,8 @@ CALL caCORE_UpgradeProc();
 DROP PROCEDURE caCORE_UpgradeProc;
 /
 
--- These SQL's are for creating SOP related tables and coresponding changes in the model for SOP
-create table catissue_sop (IDENTIFIER bigint auto_increment, NAME varchar(50) unique, BARCODE varchar(50) unique,  primary key (IDENTIFIER));
+-- These SQL's are for creating SPP related tables and coresponding changes in the model for SPP
+create table catissue_spp (IDENTIFIER bigint auto_increment, NAME varchar(50) unique, BARCODE varchar(50) unique,  primary key (IDENTIFIER));
 /
 
 create table catissue_abstract_application (IDENTIFIER bigint NOT NULL AUTO_INCREMENT, REASON_DEVIATION text, TIMESTAMP timestamp, USER_DETAILS bigint, COMMENTS text, primary key (IDENTIFIER), foreign key (USER_DETAILS) references catissue_user (IDENTIFIER));
@@ -99,39 +99,39 @@ create table catissue_abstract_application (IDENTIFIER bigint NOT NULL AUTO_INCR
 create table catissue_default_action (IDENTIFIER bigint(20) NOT NULL, PRIMARY KEY (IDENTIFIER));
 /
 
-create table catissue_sop_application (IDENTIFIER bigint, SOP_IDENTIFIER bigint, SCG_IDENTIFIER bigint, primary key (IDENTIFIER), foreign key (IDENTIFIER) references  catissue_abstract_application (IDENTIFIER) ,foreign key (SOP_IDENTIFIER) references catissue_sop (IDENTIFIER), foreign key (SCG_IDENTIFIER) references catissue_specimen_coll_group (IDENTIFIER));
+create table catissue_spp_application (IDENTIFIER bigint, SPP_IDENTIFIER bigint, SCG_IDENTIFIER bigint, primary key (IDENTIFIER), foreign key (IDENTIFIER) references  catissue_abstract_application (IDENTIFIER) ,foreign key (SPP_IDENTIFIER) references catissue_spp (IDENTIFIER), foreign key (SCG_IDENTIFIER) references catissue_specimen_coll_group (IDENTIFIER));
 /
 
-create table catissue_action_application (IDENTIFIER bigint, SOP_APP_IDENTIFIER bigint, SPECIMEN_ID bigint, SCG_ID bigint, primary key (IDENTIFIER), foreign key (IDENTIFIER) references catissue_abstract_application (IDENTIFIER), foreign key (SOP_APP_IDENTIFIER) references catissue_sop_application (IDENTIFIER), foreign key (SPECIMEN_ID) references catissue_specimen (IDENTIFIER), foreign key (SCG_ID) references catissue_specimen_coll_group (IDENTIFIER));
+create table catissue_action_application (IDENTIFIER bigint, SPP_APP_IDENTIFIER bigint, SPECIMEN_ID bigint, SCG_ID bigint, primary key (IDENTIFIER), foreign key (IDENTIFIER) references catissue_abstract_application (IDENTIFIER), foreign key (SPP_APP_IDENTIFIER) references catissue_spp_application (IDENTIFIER), foreign key (SPECIMEN_ID) references catissue_specimen (IDENTIFIER), foreign key (SCG_ID) references catissue_specimen_coll_group (IDENTIFIER));
 /
 
 create table catissue_action_app_rcd_entry (IDENTIFIER bigint, ACTION_APP_ID bigint, primary key (IDENTIFIER), foreign key (ACTION_APP_ID) references catissue_action_application (IDENTIFIER));
 /
 
-create table catissue_action (IDENTIFIER bigint, BARCODE varchar(50), ACTION_ORDER bigint, ACTION_APP_RECORD_ENTRY_ID bigint, SOP_IDENTIFIER bigint, UNIQUE_ID varchar(50) not null, IS_SKIPPED bit default 0, primary key (IDENTIFIER), foreign key (ACTION_APP_RECORD_ENTRY_ID) references catissue_action_app_rcd_entry (IDENTIFIER), foreign key (SOP_IDENTIFIER) references catissue_sop (IDENTIFIER));
+create table catissue_action (IDENTIFIER bigint, BARCODE varchar(50), ACTION_ORDER bigint, ACTION_APP_RECORD_ENTRY_ID bigint, SPP_IDENTIFIER bigint, UNIQUE_ID varchar(50) not null, IS_SKIPPED bit default 0, primary key (IDENTIFIER), foreign key (ACTION_APP_RECORD_ENTRY_ID) references catissue_action_app_rcd_entry (IDENTIFIER), foreign key (SPP_IDENTIFIER) references catissue_spp (IDENTIFIER));
 /
-ALTER TABLE catissue_action ADD CONSTRAINT sop_unique_id UNIQUE (SOP_IDENTIFIER,UNIQUE_ID);
+ALTER TABLE catissue_action ADD CONSTRAINT spp_unique_id UNIQUE (SPP_IDENTIFIER,UNIQUE_ID);
 /
-create table catissue_cpe_sop (cpe_identifier bigint(20),sop_identifier bigint(20),CONSTRAINT catissue_cpe_sop_1 FOREIGN KEY (cpe_identifier) REFERENCES catissue_coll_prot_event (IDENTIFIER),CONSTRAINT catissue_cpe_sop_2 FOREIGN KEY (sop_identifier) REFERENCES catissue_sop (IDENTIFIER));
+create table catissue_cpe_spp (cpe_identifier bigint(20),spp_identifier bigint(20),CONSTRAINT catissue_cpe_spp_1 FOREIGN KEY (cpe_identifier) REFERENCES catissue_coll_prot_event (IDENTIFIER),CONSTRAINT catissue_cpe_spp_2 FOREIGN KEY (spp_identifier) REFERENCES catissue_spp (IDENTIFIER));
 /
 alter table catissue_action_application add (ACTION_IDENTIFIER bigint, ACTION_APP_RECORD_ENTRY_ID bigint, foreign key (ACTION_IDENTIFIER) references catissue_action (IDENTIFIER), foreign key (ACTION_APP_RECORD_ENTRY_ID) references catissue_action_app_rcd_entry (IDENTIFIER));
 /
 SET foreign_key_checks = 0;
 /
 
-alter table catissue_cp_req_specimen add (SOP_IDENTIFIER bigint, ACTION_IDENTIFIER bigint, foreign key (SOP_IDENTIFIER) references catissue_sop (IDENTIFIER), foreign key (ACTION_IDENTIFIER) references catissue_action (IDENTIFIER));
+alter table catissue_cp_req_specimen add (SPP_IDENTIFIER bigint, ACTION_IDENTIFIER bigint, foreign key (SPP_IDENTIFIER) references catissue_spp (IDENTIFIER), foreign key (ACTION_IDENTIFIER) references catissue_action (IDENTIFIER));
 /
 
-alter table catissue_specimen add (SOP_APPLICATION_ID bigint, ACTION_APPLICATION_ID bigint, foreign key (SOP_APPLICATION_ID) references catissue_sop_application (IDENTIFIER), foreign key (ACTION_APPLICATION_ID) references catissue_action_application (IDENTIFIER));
+alter table catissue_specimen add (SPP_APPLICATION_ID bigint, ACTION_APPLICATION_ID bigint, foreign key (SPP_APPLICATION_ID) references catissue_spp_application (IDENTIFIER), foreign key (ACTION_APPLICATION_ID) references catissue_action_application (IDENTIFIER));
 /
 
 SET foreign_key_checks = 1;
 /
 
--- SQL's for SOP tables creation end
+-- SQL's for SPP tables creation end
 
---SQL's for inserting SOP metadata for simple search
-INSERT INTO CATISSUE_QUERY_TABLE_DATA  select max(TABLE_ID)+1, 'catissue_sop', 'Specimen Processing Procedure', 'SpecimenProcessingProcedure',2,1 FROM CATISSUE_QUERY_TABLE_DATA;
+--SQL's for inserting SPP metadata for simple search
+INSERT INTO CATISSUE_QUERY_TABLE_DATA  select max(TABLE_ID)+1, 'catissue_spp', 'Specimen Processing Procedure', 'SpecimenProcessingProcedure',2,1 FROM CATISSUE_QUERY_TABLE_DATA;
 /
 INSERT INTO CATISSUE_TABLE_RELATION select max(RELATIONSHIP_ID)+1,(SELECT max(TABLE_ID) FROM CATISSUE_QUERY_TABLE_DATA),(SELECT max(TABLE_ID) FROM CATISSUE_QUERY_TABLE_DATA), NULL FROM CATISSUE_TABLE_RELATION;
 /

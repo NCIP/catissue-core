@@ -72,10 +72,10 @@ public class ImportXmi extends AbstractXMIImporter
 				staticEntity = AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP;
 				hookEntity = AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY;
 			}
-			else if (AnnotationConstants.SOP_HOOKING_ENTITY.equals(args[3]))
+			else if (AnnotationConstants.SPP_HOOKING_ENTITY.equals(args[3]))
 			{
 				args[3] = AnnotationConstants.ENTITY_NAME_ACTION_APP_REC_ENTRY;
-				staticEntity = AnnotationConstants.SOP_HOOKING_ENTITY;
+				staticEntity = AnnotationConstants.SPP_HOOKING_ENTITY;
 				hookEntity = AnnotationConstants.ENTITY_NAME_ACTION_APP_REC_ENTRY;
 			}
 		}

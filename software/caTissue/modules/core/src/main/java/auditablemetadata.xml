@@ -273,9 +273,9 @@
 			roleName="specimenRequirementCollection">
 		</containmentAssociationCollection>
 		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.sop.SOP"
+			className="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure"
 			relationShipType="association"
-			roleName="sopCollection">
+			roleName="sppCollection">
 		</referenceAssociationCollection>
 
 	</AuditableClass>
@@ -296,12 +296,12 @@
 			roleName="specimenCharacteristics">
 		</containmentAssociationCollection>
 		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.sop.SOP"
+			className="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure"
 			relationShipType="association"
-			roleName="processingSOP">
+			roleName="processingSPP">
 		</referenceAssociationCollection>
 		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.sop.Action"
+			className="edu.wustl.catissuecore.domain.processingprocedure.Action"
 			relationShipType="association"
 			roleName="creationEvent">
 		</referenceAssociationCollection>
@@ -493,14 +493,14 @@
 			roleName="specimenCollectionSite">
 		</referenceAssociationCollection>
 		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.sop.ActionApplication"
+			className="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication"
 			relationShipType="association"
 			roleName="actionApplicationCollection">
 		</referenceAssociationCollection>
 		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.sop.SOPApplication"
+			className="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication"
 			relationShipType="association"
-			roleName="sopApplicationCollection">
+			roleName="sppApplicationCollection">
 		</referenceAssociationCollection>
 
 
@@ -548,19 +548,19 @@
 			roleName="externalIdentifierCollection">
 		</containmentAssociationCollection>
 		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.sop.ActionApplication"
+			className="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication"
 			relationShipType="containment"
 			roleName="actionApplicationCollection">
 		</containmentAssociationCollection>
 				<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.sop.ActionApplication"
+			className="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication"
 			relationShipType="containment"
 			roleName="creationEventAction">
 		</containmentAssociationCollection>
 		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.sop.SOPApplication"
+			className="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication"
 			relationShipType="association"
-			roleName="processingSOPApplication">
+			roleName="processingSPPApplication">
 		</referenceAssociationCollection>
 
 	</AuditableClass>
@@ -1336,25 +1336,25 @@
 
 	<!-- SPP related metadata starts -->
 
-	<AuditableClass className="edu.wustl.catissuecore.domain.sop.SOP" relationShipType="main" roleName="">
+	<AuditableClass className="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" relationShipType="main" roleName="">
 		<attribute name="id" dataType="Long" />
 		<attribute name="name" dataType="String" />
 		<attribute name="barcode" dataType="String" />
 
 		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.sop.Action"
+			className="edu.wustl.catissuecore.domain.processingprocedure.Action"
 			relationShipType="association"
 			roleName="actionCollection" >
 		</referenceAssociationCollection>
 
 		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.sop.SOPApplication"
+			className="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication"
 			relationShipType="association"
-			roleName="sopApplicationCollection" >
+			roleName="sppApplicationCollection" >
 		</referenceAssociationCollection>
 	</AuditableClass>
 
-	<AuditableClass className="edu.wustl.catissuecore.domain.sop.Action" relationShipType="main" roleName="">
+	<AuditableClass className="edu.wustl.catissuecore.domain.processingprocedure.Action" relationShipType="main" roleName="">
 		<attribute name="id" dataType="Long" />
 		<attribute name="actionOrder" dataType="Long" />
 		<attribute name="barcode" dataType="String" />
@@ -1368,11 +1368,11 @@
 		</referenceAssociationCollection>
 	</AuditableClass>
 
-	<AuditableClass className="edu.wustl.catissuecore.domain.sop.DefaultAction" relationShipType="main" roleName="">
+	<AuditableClass className="edu.wustl.catissuecore.domain.processingprocedure.DefaultAction" relationShipType="main" roleName="">
 		<attribute name="eventName" dataType="String" />
 	</AuditableClass>
 
-	<AuditableClass className="edu.wustl.catissuecore.domain.sop.AbstractApplication" relationShipType="main" roleName="">
+	<AuditableClass className="edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication" relationShipType="main" roleName="">
 		<attribute name="id" dataType="Long" />
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="reasonDeviation" dataType="String" />
@@ -1385,21 +1385,21 @@
 		</referenceAssociationCollection>
 	</AuditableClass>
 
-	<AuditableClass className="edu.wustl.catissuecore.domain.sop.SOPApplication" relationShipType="main" roleName="">
+	<AuditableClass className="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication" relationShipType="main" roleName="">
 		<attribute name="id" dataType="Long" />
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="reasonDeviation" dataType="String" />
 		<attribute name="comments" dataType="String" />
 
 		<referenceAssociationCollection
-			className="edu.wustl.catissuecore.domain.sop.ActionApplication"
+			className="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication"
 			relationShipType="association"
-			roleName="sopActionApplicationCollection" >
+			roleName="sppActionApplicationCollection" >
 		</referenceAssociationCollection>
 	</AuditableClass>
 
 
-	<AuditableClass className="edu.wustl.catissuecore.domain.sop.ActionApplication" relationShipType="main" roleName="">
+	<AuditableClass className="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication" relationShipType="main" roleName="">
 		<attribute name="id" dataType="Long" />
 		<attribute name="timestamp" dataType="Date" />
 		<attribute name="reasonDeviation" dataType="String" />

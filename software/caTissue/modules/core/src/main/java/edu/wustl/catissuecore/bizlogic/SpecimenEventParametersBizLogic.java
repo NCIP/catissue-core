@@ -37,8 +37,8 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
-import edu.wustl.catissuecore.domain.sop.ActionApplication;
-import edu.wustl.catissuecore.domain.sop.DefaultAction;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.DefaultAction;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
 import edu.wustl.catissuecore.factory.utils.SpecimenEventParametersUtility;
@@ -225,7 +225,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			}
 
 			Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
-			new SOPBizLogic().getAllSOPEventFormNames(dynamicEventMap);
+			new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
 			long containerId = dynamicEventMap.get("Transfer Event Parameters");
 
 			// This is required, because of changes in DE for doing data entry.
@@ -336,7 +336,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 
 			Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
-			new SOPBizLogic().getAllSOPEventFormNames(dynamicEventMap);
+			new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
 			long containerId = dynamicEventMap.get("Disposal Event Parameters");
 
 			// This is required, because of changes in DE for doing data entry.

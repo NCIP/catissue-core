@@ -365,7 +365,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			specimenRequirementBean.setNoOfDeriveSpecimen(0);
 
 			specimenRequirementBean.setCreationEventForSpecimen(deriveSpecimenBean.getCreationEvent());
-			specimenRequirementBean.setProcessingSOPForSpecimen(deriveSpecimenBean.getProcessingSOP());
+			specimenRequirementBean.setProcessingSOPForSpecimen(deriveSpecimenBean.getProcessingSPP());
 
 			specimenRequirementBean.setLabelFormat(deriveSpecimenBean.getLabelFormat());
 			if(isPersistent.equals("true"))

@@ -138,7 +138,7 @@
 		>
 			<cache usage="read-write" />
 			<key column="SPECIMEN_ID" />
-				<one-to-many class="edu.wustl.catissuecore.domain.sop.ActionApplication"/>
+				<one-to-many class="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication"/>
 		</set>
 
         <set
@@ -326,7 +326,7 @@
 
 		<many-to-one
 			name="creationEventAction"
-			class="edu.wustl.catissuecore.domain.sop.ActionApplication"
+			class="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication"
 			cascade="save-update"
 			outer-join="auto"
 			update="false"
@@ -336,13 +336,13 @@
 		/>
 
 		<many-to-one
-			name="processingSOPApplication"
-			class="edu.wustl.catissuecore.domain.sop.SOPApplication"
+			name="processingSPPApplication"
+			class="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication"
 			cascade="save-update"
 			outer-join="auto"
 			update="true"
             insert="true"
-			column="SOP_APPLICATION_ID"
+			column="SPP_APPLICATION_ID"
 			lazy="false"
 		/>
 
@@ -426,9 +426,9 @@
 		    />
 	    <many-to-one name="collectionProtocolEvent" class="edu.wustl.catissuecore.domain.CollectionProtocolEvent" cascade="none" outer-join="auto" update="true" insert="true" column="COLLECTION_PROTOCOL_EVENT_ID" />
 
-		<many-to-one name="processingSOP" class="edu.wustl.catissuecore.domain.sop.SOP" cascade="none" outer-join="auto" update="true" insert="true" column="SOP_IDENTIFIER"/>
+		<many-to-one name="processingSPP" class="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" cascade="none" outer-join="auto" update="true" insert="true" column="SPP_IDENTIFIER"/>
 
-		<many-to-one name="creationEvent" class="edu.wustl.catissuecore.domain.sop.Action" cascade="none" outer-join="auto" update="true" insert="true" column="ACTION_IDENTIFIER"/>
+		<many-to-one name="creationEvent" class="edu.wustl.catissuecore.domain.processingprocedure.Action" cascade="none" outer-join="auto" update="true" insert="true" column="ACTION_IDENTIFIER"/>
 
 	   <joined-subclass
             name="edu.wustl.catissuecore.domain.FluidSpecimenRequirement"

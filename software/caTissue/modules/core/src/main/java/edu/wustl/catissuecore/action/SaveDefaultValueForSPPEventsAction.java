@@ -25,9 +25,9 @@ import org.apache.struts.action.ActionMessages;
 import org.owasp.stinger.http.MutableHttpRequest;
 
 import edu.common.dynamicextensions.domain.integration.AbstractFormContext;
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.deintegration.DEIntegration;
-import edu.wustl.catissuecore.domain.sop.Action;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
 import edu.wustl.catissuecore.processor.SPPEventProcessor;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -86,14 +86,14 @@ public class SaveDefaultValueForSPPEventsAction extends SecureAction
 					MutableHttpRequest httprequest = getMockRequestObject(request,
 							formContextParameterMap, formContext);
 
-					Map<AbstractFormContext, Long> contextRecordIdMap = new SOPBizLogic()
+					Map<AbstractFormContext, Long> contextRecordIdMap = new SPPBizLogic()
 							.generateContextRecordIdMap(formContext, action);
 
 					Set<AbstractFormContext> contextCollection = new HashSet<AbstractFormContext>();
 					contextCollection.add(formContext);
 
 					Map<AbstractFormContext, Long> contextVsRecordIdMap = sppEventProcessor
-							.insertUpdateDEDataForSOPEvents(httprequest, contextRecordIdMap,
+							.insertUpdateDEDataForSPPEvents(httprequest, contextRecordIdMap,
 									contextCollection);
 
 					if (action.getApplicationDefaultValue() == null)

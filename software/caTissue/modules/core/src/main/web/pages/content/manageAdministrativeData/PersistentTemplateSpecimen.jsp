@@ -1,4 +1,4 @@
-<%@ page import="edu.wustl.catissuecore.bizlogic.SOPBizLogic"%>
+<%@ page import="edu.wustl.catissuecore.bizlogic.SPPBizLogic"%>
 <script type="text/javascript" src="jss/ext-base.js"></script>
 <script type="text/javascript" src="jss/ext-all.js"></script>
 <link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
@@ -49,31 +49,30 @@ Ext.onReady(function(){
 							   <td width="33%" align="left"  class="black_ar">
 								<%
 									String classValue = (String)form.getClassName();
-									specimenTypeList = (List)specimenTypeMap.get(classValue);
-									boolean subListEnabled = false;
-									if(specimenTypeList == null)
-									{
-										specimenTypeList = new ArrayList();
-										specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-									}
-									if(Constants.ALIQUOT.equals(form.getLineage()))
-									{
-										specimenTypeList = new ArrayList();
-										specimenTypeList.add(new NameValueBean(form.getType(),form.getType()));
-									}
-									pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-									String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')";
-									String readOnlyForAliquot = "false";
-									String readOnlyForSpecimen = "false";
-									if(Constants.ALIQUOT.equals(form.getLineage())&&operation.equals(Constants.EDIT))
-									{
-										  readOnlyForAliquot = "true";
-									}
-									if(!Constants.DERIVED_SPECIMEN.equals(form.getLineage())&&operation.equals(Constants.EDIT))
-									{
-										  readOnlyForSpecimen = "true";
-									}
-
+															specimenTypeList = (List)specimenTypeMap.get(classValue);
+															boolean subListEnabled = false;
+															if(specimenTypeList == null)
+															{
+																specimenTypeList = new ArrayList();
+																specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+															}
+															if(Constants.ALIQUOT.equals(form.getLineage()))
+															{
+																specimenTypeList = new ArrayList();
+																specimenTypeList.add(new NameValueBean(form.getType(),form.getType()));
+															}
+															pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+															String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')";
+															String readOnlyForAliquot = "false";
+															String readOnlyForSpecimen = "false";
+															if(Constants.ALIQUOT.equals(form.getLineage())&&operation.equals(Constants.EDIT))
+															{
+																  readOnlyForAliquot = "true";
+															}
+															if(!Constants.DERIVED_SPECIMEN.equals(form.getLineage())&&operation.equals(Constants.EDIT))
+															{
+																  readOnlyForSpecimen = "true";
+															}
 								%>
 								<logic:equal name="isPersistent" value="true">
 										<label>
@@ -239,8 +238,8 @@ Ext.onReady(function(){
 								<td align="left" class="black_ar_s">
 									<%
 										boolean concentrationDisabled = true;
-										if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
-										concentrationDisabled = false;
+																	if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
+																	concentrationDisabled = false;
 									%>
      									<html:text styleClass="black_ar" maxlength="10"  size="10"	styleId="concentration" property="concentration"  readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>" style="text-align:right"/>
 
@@ -266,7 +265,7 @@ Ext.onReady(function(){
                                 <td align="left" class="black_ar"><label for="institutionId">Processing SPP</label></td>
                                 <td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="processingSOPForSpecimen"
-									  optionsList = "<%=new SOPBizLogic().getAllSOPNames()%>"
+									  optionsList = "<%=new SPPBizLogic().getAllSPPNames()%>"
 									  initialValue="${createSpecimenTemplateForm.processingSOPForSpecimen}"
 									  styleClass="black_ar"
 									  onChange="resetDSforDerive(this)"
@@ -360,8 +359,8 @@ Ext.onReady(function(){
 
 					String creationEvent = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_creationEvent)";
 					String creationEventKey = "DeriveSpecimenBean:" + rowno + "_creationEvent";
-					String processingSOP = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_processingSOP)";
-					String processingSOPKey = "DeriveSpecimenBean:" + rowno + "_processingSOP";
+					String processingSOP = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_processingSPP)";
+					String processingSOPKey = "DeriveSpecimenBean:" + rowno + "_processingSPP";
 
 					String changeClass = "changeUnit('"+specimenClass+"','"+unit+"','"+concentration+"','"+specimenType+"')";
 					String changeType = "onSubTypeChangeUnitforCP('"+specimenClass+"','" + unit+ "')";

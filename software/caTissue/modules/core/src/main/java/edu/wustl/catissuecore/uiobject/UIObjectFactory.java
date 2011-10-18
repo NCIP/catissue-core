@@ -107,16 +107,16 @@ public class UIObjectFactory implements IUIObjectFactory
 		}
 		else if(form instanceof SOPForm)
 		{
-			uiObject = createSOPUIObject((SOPForm)form);
+			uiObject = createSPPUIObject((SOPForm)form);
 		}
 		return uiObject;
 	}
 
-	private UIObject createSOPUIObject(SOPForm form)
+	private UIObject createSPPUIObject(SOPForm form)
 	{
-		SOPUIObject sopUIObject = new SOPUIObject();
-		sopUIObject.setXmlFileName(form.getXmlFileName());
-		return sopUIObject;
+		SPPUIObject sppUIObject = new SPPUIObject();
+		sppUIObject.setXmlFileName(form.getXmlFileName());
+		return sppUIObject;
 	}
 
 	private UIObject createDisposalEventParametersUIObject(

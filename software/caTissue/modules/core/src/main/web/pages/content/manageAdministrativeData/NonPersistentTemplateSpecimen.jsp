@@ -13,7 +13,7 @@
 
 
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
-<%@ page import="edu.wustl.catissuecore.bizlogic.SOPBizLogic"%>
+<%@ page import="edu.wustl.catissuecore.bizlogic.SPPBizLogic"%>
 <%@ page import="java.util.*"%>
 <script>var imgsrc="images/de/";</script>
 <script language="JavaScript" type="text/javascript" src="javascripts/de/scr.js"></script>
@@ -26,11 +26,11 @@
 
 Ext.onReady(function(){
    Ext.QuickTips.init();
-   var processingSOPForSpecimen;
-   if(document.getElementById('processingSOPForSpecimen') != null)
-   	processingSOPForSpecimen = document.getElementById('processingSOPForSpecimen').value
+   var processingSPPForSpecimen;
+   if(document.getElementById('processingSPPForSpecimen') != null)
+   	processingSPPForSpecimen = document.getElementById('processingSPPForSpecimen').value
 
-  var myUrl= 'ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName='+processingSOPForSpecimen;
+  var myUrl= 'ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName='+processingSPPForSpecimen;
   var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),
         reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'
         }, [{name: 'excerpt', mapping: 'field'}])
@@ -61,30 +61,30 @@ Ext.onReady(function(){
 						   <td width="33%" align="left"  class="black_ar">
 			<%
 				String classValue = (String)form.getClassName();
-				specimenTypeList = (List)specimenTypeMap.get(classValue);
-				boolean subListEnabled = false;
-				if(specimenTypeList == null)
-				{
-					specimenTypeList = new ArrayList();
-					specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-				}
-				if(Constants.ALIQUOT.equals(form.getLineage()))
-				{
-					specimenTypeList = new ArrayList();
-					specimenTypeList.add(new NameValueBean(form.getType(),form.getType()));
-				}
-				pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-				String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')";
-				String readOnlyForAliquot = "false";
-				String readOnlyForSpecimen = "false";
-				if(Constants.ALIQUOT.equals(form.getLineage())&&operation.equals(Constants.EDIT))
-				{
-				      readOnlyForAliquot = "true";
-				}
-				if(!Constants.DERIVED_SPECIMEN.equals(form.getLineage())&&operation.equals(Constants.EDIT))
-				{
-				      readOnlyForSpecimen = "true";
-				}
+					specimenTypeList = (List)specimenTypeMap.get(classValue);
+					boolean subListEnabled = false;
+					if(specimenTypeList == null)
+					{
+						specimenTypeList = new ArrayList();
+						specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+					}
+					if(Constants.ALIQUOT.equals(form.getLineage()))
+					{
+						specimenTypeList = new ArrayList();
+						specimenTypeList.add(new NameValueBean(form.getType(),form.getType()));
+					}
+					pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+					String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')";
+					String readOnlyForAliquot = "false";
+					String readOnlyForSpecimen = "false";
+					if(Constants.ALIQUOT.equals(form.getLineage())&&operation.equals(Constants.EDIT))
+					{
+					      readOnlyForAliquot = "true";
+					}
+					if(!Constants.DERIVED_SPECIMEN.equals(form.getLineage())&&operation.equals(Constants.EDIT))
+					{
+					      readOnlyForSpecimen = "true";
+					}
 			%>
 									<autocomplete:AutoCompleteTag property="className"
 										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
@@ -175,8 +175,8 @@ Ext.onReady(function(){
                                 <td align="left" class="black_ar_s">
 			<%
 				boolean concentrationDisabled = true;
-				if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
-				concentrationDisabled = false;
+					if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
+					concentrationDisabled = false;
 			%>
      									<html:text styleClass="black_ar" maxlength="10"  size="10"	styleId="concentration" property="concentration"  readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>" style="text-align:right"/>&nbsp;<bean:message key="specimen.concentrationUnit" /></td>
                               </tr>
@@ -198,7 +198,7 @@ Ext.onReady(function(){
                                 <td align="left" class="black_ar"><label for="institutionId">Processing SPP</label></td>
                                 <td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="processingSOPForSpecimen"
-									  optionsList = "<%=new SOPBizLogic().getAllSOPNames()%>"
+									  optionsList = "<%=new SPPBizLogic().getAllSPPNames()%>"
 									  initialValue="<%=form.getProcessingSOPForSpecimen()%>"
 									  styleClass="black_ar"
 									  onChange="resetDSforDerive(this)"
@@ -299,7 +299,7 @@ Ext.onReady(function(){
 					String quantityvalue = "DeriveSpecimenBean:" + rowno + "_quantity";
 					String concentration = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_concentration)";
 					String creationEventForSpecimen = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_creationEvent)";
-					String processingSOPForSpecimen = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_processingSOP)";
+					String processingSPPForSpecimen = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_processingSPP)";
 //					String labelType = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelGenType)";
 
 					String labelFormat = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelFormat)";
@@ -392,17 +392,17 @@ Ext.onReady(function(){
 <%
 							comboDataStorName = "ds_ce_"+rowno;
 %>
-		if(document.getElementById('processingSOPForSpecimen') != null)
-	   			processingSPPName = document.getElementById('processingSOPForSpecimen').value;
+		if(document.getElementById('processingSPPForSpecimen') != null)
+	   			processingSPPName = document.getElementById('processingSPPForSpecimen').value;
 									Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName='+processingSPPName;var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '<%=creationEventForSpecimen%>',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: 'combo_<%=creationEventForSpecimen%>', fields: ['id_cp'],id: '<%=comboDataStorName%>'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
 									</script>
 
 								</td>
 
 								 <td class="black_ar" >
-								 <input type="text" name="combo_<%=processingSOPForSpecimen%>" id="combo_<%=processingSOPForSpecimen%>" size="6" value='<%=form.getDeriveSpecimenValue("DeriveSpecimenBean:" + rowno + "_processingSOP")%>'/>
+								 <input type="text" name="combo_<%=processingSPPForSpecimen%>" id="combo_<%=processingSPPForSpecimen%>" size="6" value='<%=form.getDeriveSpecimenValue("DeriveSpecimenBean:" + rowno + "_processingSPP")%>'/>
 									<script>
-									Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=processingSPP';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '<%=processingSOPForSpecimen%>',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: 'combo_<%=processingSOPForSpecimen%>'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
+									Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=processingSPP';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '<%=processingSPPForSpecimen%>',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: 'combo_<%=processingSPPForSpecimen%>'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
 									</script>
 
 

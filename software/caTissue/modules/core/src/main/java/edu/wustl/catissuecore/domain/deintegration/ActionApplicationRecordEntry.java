@@ -3,7 +3,7 @@ package edu.wustl.catissuecore.domain.deintegration;
 import java.io.Serializable;
 
 import edu.common.dynamicextensions.domain.integration.AbstractRecordEntry;
-import edu.wustl.catissuecore.domain.sop.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 /**
 	*
 	**/
@@ -16,7 +16,7 @@ public class ActionApplicationRecordEntry extends AbstractRecordEntry implements
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-	* An associated edu.wustl.catissuecore.domain.sop.ActionApplication object
+	* An associated edu.wustl.catissuecore.domain.processingprocedure.ActionApplication object
 	**/
 
 	private ActionApplication actionApplication;

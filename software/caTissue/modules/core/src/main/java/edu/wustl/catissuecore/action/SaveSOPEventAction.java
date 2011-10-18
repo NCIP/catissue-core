@@ -37,9 +37,9 @@ import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
 import edu.wustl.catissuecore.domain.ISPPBizlogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.sop.Action;
-import edu.wustl.catissuecore.domain.sop.ActionApplication;
-import edu.wustl.catissuecore.domain.sop.SOPApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
 import edu.wustl.catissuecore.processor.SPPEventProcessor;
 import edu.wustl.catissuecore.uiobject.SpecimenCollectionGroupWrapper;
 import edu.wustl.catissuecore.uiobject.SpecimenWrapper;
@@ -235,7 +235,7 @@ public class SaveSOPEventAction extends SecureAction
 		final IBizLogic actionAppBizLogic = (ActionApplicationBizLogic) factory
 				.getBizLogic(Constants.ACTION_APP_FORM_ID);
 
-		Collection<SOPApplication> sppAppCollection = sppBizlogicObject
+		Collection<SpecimenProcessingProcedureApplication> sppAppCollection = sppBizlogicObject
 				.getSPPApplicationCollection();
 
 		//Case 1: Insert data for SPP events.
@@ -251,11 +251,11 @@ public class SaveSOPEventAction extends SecureAction
 		{
 			boolean sppDataEntryDone = false;
 			//For SCG multiple SPP are hooked, but for Specimen single SPP is hooked.
-			Iterator<SOPApplication> sppAppIter = sppAppCollection.iterator();
+			Iterator<SpecimenProcessingProcedureApplication> sppAppIter = sppAppCollection.iterator();
 			while (sppAppIter.hasNext())
 			{
-				SOPApplication sopApplication = sppAppIter.next();
-				if ((isSCG && sopApplication.getSop().getName().equals(sppName)) || (!isSCG))
+				SpecimenProcessingProcedureApplication sopApplication = sppAppIter.next();
+				if ((isSCG && sopApplication.getSpp().getName().equals(sppName)) || (!isSCG))
 				{
 					sppDataEntryDone = updateSPPData(request, sppEventProcessor, actionAppBizLogic,
 							sopApplication);
@@ -289,20 +289,20 @@ public class SaveSOPEventAction extends SecureAction
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public boolean updateSPPData(HttpServletRequest request, SPPEventProcessor sppEventProcessor,
-			final IBizLogic actionAppBizLogic, SOPApplication sopApplication)
+			final IBizLogic actionAppBizLogic, SpecimenProcessingProcedureApplication sppApplication)
 			throws BizLogicException, ApplicationException, DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, SQLException, FileNotFoundException, IOException
 	{
 		//retrieves ActionApplication collection for a given SPPApplication
-		Collection<ActionApplication> actionApplicationCollection = sopApplication
-				.getSopActionApplicationCollection();
+		Collection<ActionApplication> actionApplicationCollection = sppApplication
+				.getSppActionApplicationCollection();
 		//Edit case
 		Map<AbstractFormContext, Long> contextRecordIdMap = sppEventProcessor
 				.editActionApplicationCollection(actionAppBizLogic,
 						actionApplicationCollection, formContextParameterMap,
 						formContextCollection);
 		//For each from Context collection update DE data
-		sppEventProcessor.insertUpdateDEDataForSOPEvents(request, contextRecordIdMap,
+		sppEventProcessor.insertUpdateDEDataForSPPEvents(request, contextRecordIdMap,
 				formContextCollection);
 		return true;
 	}
@@ -347,7 +347,7 @@ public class SaveSOPEventAction extends SecureAction
 	{
 		//Insert data for SPP events.
 		Map<AbstractFormContext, Long> contextVsRecordIdMap = sppEventProcessor
-				.insertUpdateDEDataForSOPEvents(request, new HashMap<AbstractFormContext, Long>(),
+				.insertUpdateDEDataForSPPEvents(request, new HashMap<AbstractFormContext, Long>(),
 						formContextCollection);
 		sppEventProcessor.insertSPPApplication(actionAppBizLogic, sppBizlogicObject,
 				contextVsRecordIdMap, sessionLoginInfo, formContextParameterMap,

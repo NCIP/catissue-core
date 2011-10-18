@@ -2,7 +2,7 @@
 <staticMetaData>
 <entities>
 	 <entity>
-		<entityName>edu.wustl.catissuecore.domain.sop.Action</entityName>
+		<entityName>edu.wustl.catissuecore.domain.processingprocedure.Action</entityName>
 		<parentEntity>edu.common.dynamicextensions.domain.integration.AbstractFormContext</parentEntity>
 		<tableName>CATISSUE_ACTION</tableName>
 		<isAbstract>false</isAbstract>
@@ -36,7 +36,7 @@
 	</entity>
 
 	<entity>
-		<entityName>edu.wustl.catissuecore.domain.sop.DefaultAction</entityName>
+		<entityName>edu.wustl.catissuecore.domain.processingprocedure.DefaultAction</entityName>
 		<parentEntity>edu.common.dynamicextensions.domain.integration.AbstractFormContext</parentEntity>
 		<tableName>CATISSUE_DEFAULT_ACTION</tableName>
 		<isAbstract>false</isAbstract>
@@ -63,9 +63,9 @@
 
 
 	<entity>
-		 <entityName>edu.wustl.catissuecore.domain.sop.SOP</entityName>
+		 <entityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</entityName>
 		 <parentEntity></parentEntity>
-		  <tableName>CATISSUE_SOP</tableName>
+		  <tableName>CATISSUE_SPP</tableName>
 		  <isAbstract>false</isAbstract>
 			<attribute>
 				 <attributeNames>id</attributeNames>
@@ -88,7 +88,7 @@
 	</entity>
 
 	<entity>
-		<entityName>edu.wustl.catissuecore.domain.sop.AbstractApplication</entityName>
+		<entityName>edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication</entityName>
 		<parentEntity></parentEntity>
 		<tableName>CATISSUE_ABSTRACT_APPLICATION</tableName>
 		<isAbstract>true</isAbstract>
@@ -120,9 +120,9 @@
 
 
 	<entity>
-		 <entityName>edu.wustl.catissuecore.domain.sop.SOPApplication</entityName>
-		 <parentEntity>edu.wustl.catissuecore.domain.sop.AbstractApplication</parentEntity>
-		  <tableName>CATISSUE_SOP_APPLICATION</tableName>
+		 <entityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</entityName>
+		 <parentEntity>edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication</parentEntity>
+		  <tableName>CATISSUE_SPP_APPLICATION</tableName>
 		  <isAbstract>false</isAbstract>
 		  <attribute>
 			 <attributeNames>id</attributeNames>
@@ -134,8 +134,8 @@
 
 
 	<entity>
-		 <entityName>edu.wustl.catissuecore.domain.sop.ActionApplication</entityName>
-		 <parentEntity>edu.wustl.catissuecore.domain.sop.AbstractApplication</parentEntity>
+		 <entityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</entityName>
+		 <parentEntity>edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication</parentEntity>
 		 <tableName>CATISSUE_ACTION_APPLICATION</tableName>
 		 <isAbstract>false</isAbstract>
 		 <attribute>
@@ -150,10 +150,10 @@
 <associations>
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.CollectionProtocolEvent</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOP</targetEntityName>
-		<associationName>CPE_SOP_Association</associationName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</targetEntityName>
+		<associationName>CPE_SPP_Association</associationName>
 		<associationTye>ASSOCIATION</associationTye>
-		<roleName>sopCollection</roleName>
+		<roleName>sppCollection</roleName>
 		<roleNameTable>collectionProtocolEvent</roleNameTable>
 		<isSwap>false</isSwap>
 		<srcAssociationId></srcAssociationId>
@@ -165,15 +165,15 @@
 	</association>
 
 	<association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.sop.SOP</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.Action</targetEntityName>
-		<associationName>CATISSUE_SOP_ACTION</associationName><!-- intermediate  table name for many to many -->
+		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.Action</targetEntityName>
+		<associationName>CATISSUE_SPP_ACTION</associationName><!-- intermediate  table name for many to many -->
 		<associationTye>ASSOCIATION</associationTye>
-		<roleName>sopCollection</roleName>
+		<roleName>sppCollection</roleName>
 		<roleNameTable>actionCollection</roleNameTable>
 		<isSwap>true</isSwap>
 		<srcAssociationId>ACTION_IDENTIFIER</srcAssociationId>
-		<targetAssociationId>SOP_IDENTIFIER</targetAssociationId>
+		<targetAssociationId>SPP_IDENTIFIER</targetAssociationId>
 		<maxCardinality>2</maxCardinality>
 		<isSystemGenerated>true</isSystemGenerated>
 		<direction>BI_DIRECTIONAL</direction>
@@ -181,15 +181,15 @@
 	</association>
 
 	<association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.sop.Action</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOP</targetEntityName>
-		<associationName>CATISSUE_SOP_ACTION</associationName> <!-- intermediate  table name for many to many -->
+		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.Action</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</targetEntityName>
+		<associationName>CATISSUE_SPP_ACTION</associationName> <!-- intermediate  table name for many to many -->
 		<associationTye>ASSOCIATION</associationTye>
 		<roleName>actionCollection</roleName>
-		<roleNameTable>sopCollection</roleNameTable>
+		<roleNameTable>sppCollection</roleNameTable>
 		<isSwap>false</isSwap>
 		<srcAssociationId>ACTION_IDENTIFIER</srcAssociationId>
-		<targetAssociationId>SOP_IDENTIFIER</targetAssociationId>
+		<targetAssociationId>SPP_IDENTIFIER</targetAssociationId>
 		<maxCardinality>2</maxCardinality>
 		<isSystemGenerated>false</isSystemGenerated>
 		<direction>BI_DIRECTIONAL</direction>
@@ -197,7 +197,7 @@
 	</association>
 
 	<association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.sop.Action</sourceEntityName>
+		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.Action</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</targetEntityName>
 		<associationName>actionValue</associationName>
 		<associationTye>ASSOCIATION</associationTye>
@@ -215,7 +215,7 @@
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.SpecimenRequirement</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.Action</targetEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.Action</targetEntityName>
 		<associationName>requirementAction</associationName>
 		<associationTye>ASSOCIATION</associationTye>
 		<roleName>creationEvent</roleName>
@@ -232,13 +232,13 @@
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.SpecimenRequirement</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOP</targetEntityName>
-		<associationName>specimenRequirement_SOP</associationName> <!-- This name shud b in camel case but can be any name -->
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</targetEntityName>
+		<associationName>specimenRequirement_SPP</associationName> <!-- This name shud b in camel case but can be any name -->
 		<associationTye>ASSOCIATION</associationTye>
-		<roleName>processingSOP</roleName><!-- This is target role name as specified in model. This shud b also camelCase -->
+		<roleName>processingSPP</roleName><!-- This is target role name as specified in model. This shud b also camelCase -->
 		<roleNameTable>specimenRequirementCollection</roleNameTable> <!-- This is the source role name as specified in model. This shid b in camelCase -->
 		<isSwap>false</isSwap>
-		<srcAssociationId>SOP_IDENTIFIER</srcAssociationId>
+		<srcAssociationId>SPP_IDENTIFIER</srcAssociationId>
 		<targetAssociationId>IDENTIFIER</targetAssociationId>
 		<maxCardinality>1</maxCardinality>
 		<isSystemGenerated>true</isSystemGenerated>
@@ -249,10 +249,10 @@
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.SpecimenCollectionGroup</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOPApplication</targetEntityName>
-		<associationName>scg_SOPApplication</associationName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</targetEntityName>
+		<associationName>scg_SPPApplication</associationName>
 		<associationTye>ASSOCIATION</associationTye>
-		<roleName>scgSOP</roleName>
+		<roleName>scgSPP</roleName>
 		<roleNameTable>specimenCollectionGroup</roleNameTable>
 		<isSwap>false</isSwap>
 		<srcAssociationId></srcAssociationId>
@@ -264,14 +264,14 @@
 	</association>
 
 	<association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.sop.SOPApplication</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.ActionApplication</targetEntityName>
-		<associationName>sopApp_actionApp</associationName>
+		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</targetEntityName>
+		<associationName>sppApp_actionApp</associationName>
 		<associationTye>ASSOCIATION</associationTye>
-		<roleName>sopActionApplicationCollection</roleName>
-		<roleNameTable>sopApplication</roleNameTable>
+		<roleName>sppActionApplicationCollection</roleName>
+		<roleNameTable>sppApplication</roleNameTable>
 		<isSwap>true</isSwap>
-		<srcAssociationId>SOP_APP_IDENTIFIER</srcAssociationId>
+		<srcAssociationId>SPP_APP_IDENTIFIER</srcAssociationId>
 		<targetAssociationId></targetAssociationId>
 		<maxCardinality>2</maxCardinality> <!-- one to many  -->
 		<isSystemGenerated>true</isSystemGenerated>
@@ -280,15 +280,15 @@
 	</association>
 
 	<association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.sop.ActionApplication</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOPApplication</targetEntityName>
-		<associationName>actionApp_sopApplicationApp</associationName>
+		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</targetEntityName>
+		<associationName>actionApp_sppApplicationApp</associationName>
 		<associationTye>ASSOCIATION</associationTye>
-		<roleName>sopApplication</roleName>
+		<roleName>sppApplication</roleName>
 		<roleNameTable></roleNameTable>
 		<isSwap>false</isSwap>
 		<srcAssociationId></srcAssociationId>
-		<targetAssociationId>SOP_APP_IDENTIFIER</targetAssociationId>
+		<targetAssociationId>SPP_APP_IDENTIFIER</targetAssociationId>
 		<maxCardinality>1</maxCardinality>
 		<isSystemGenerated>true</isSystemGenerated>
 		<direction>BI_DIRECTIONAL</direction>
@@ -296,7 +296,7 @@
 	</association>
 
 	<association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.sop.ActionApplication</sourceEntityName>
+		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</targetEntityName>
 		<associationName>actionApp_actionApplicationRecord</associationName>
 		<associationTye>ASSOCIATION</associationTye>
@@ -314,13 +314,13 @@
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.Specimen</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOPApplication</targetEntityName>
-		<associationName>specimen_SOPAppliction</associationName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</targetEntityName>
+		<associationName>specimen_SPPAppliction</associationName>
 		<associationTye>ASSOCIATION</associationTye>
-		<roleName>processingSOPApplication</roleName>
+		<roleName>processingSPPApplication</roleName>
 		<roleNameTable>Specimen</roleNameTable>
 		<isSwap>false</isSwap>
-		<srcAssociationId>SOP_APPLICATION_ID</srcAssociationId>
+		<srcAssociationId>SPP_APPLICATION_ID</srcAssociationId>
 		<targetAssociationId>IDENTIFIER</targetAssociationId>
 		<maxCardinality>1</maxCardinality>
 		<isSystemGenerated>true</isSystemGenerated>
@@ -330,7 +330,7 @@
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.Specimen</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.ActionApplication</targetEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</targetEntityName>
 		<associationName>specimenToActionApplictionCollection</associationName>
 		<associationTye>ASSOCIATION</associationTye>
 		<roleName>actionApplicationCollection</roleName>
@@ -345,14 +345,14 @@
 	</association>
 
 	<association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.sop.SOP</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOPApplication</targetEntityName>
-		<associationName>sop_sopApplication</associationName>
+		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</targetEntityName>
+		<associationName>spp_sppApplication</associationName>
 		<associationTye>ASSOCIATION</associationTye>
-		<roleName>sopApplicationCollection</roleName>
-		<roleNameTable>sop</roleNameTable>
+		<roleName>sppApplicationCollection</roleName>
+		<roleNameTable>spp</roleNameTable>
 		<isSwap>true</isSwap>
-		<srcAssociationId>SOP_IDENTIFIER</srcAssociationId>
+		<srcAssociationId>SPP_IDENTIFIER</srcAssociationId>
 		<targetAssociationId></targetAssociationId>
 		<maxCardinality>2</maxCardinality>
 		<isSystemGenerated>true</isSystemGenerated>
@@ -361,14 +361,14 @@
 	</association>
 
 	 <association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.sop.SOPApplication</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.sop.SOP</targetEntityName>
-		<associationName>sop_sopApplication</associationName>
+		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</targetEntityName>
+		<associationName>spp_sppApplication</associationName>
 		<associationTye>ASSOCIATION</associationTye>
-		<roleName>sop</roleName>
+		<roleName>spp</roleName>
 		<roleNameTable></roleNameTable>
 		<isSwap>false</isSwap>
-		<srcAssociationId>SOP_IDENTIFIER</srcAssociationId>
+		<srcAssociationId>SPP_IDENTIFIER</srcAssociationId>
 		<targetAssociationId></targetAssociationId>
 		<maxCardinality>2</maxCardinality>
 		<isSystemGenerated>true</isSystemGenerated>
@@ -377,11 +377,11 @@
 	</association>
 
 	<association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.sop.AbstractApplication</sourceEntityName>
+		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.User</targetEntityName>
 		<associationName>user_abstractApplication</associationName>
 		<associationTye>ASSOCIATION</associationTye>
-		<roleName>userSOPAction</roleName>
+		<roleName>userSPPAction</roleName>
 		<roleNameTable>userAbstracApplication</roleNameTable>
 		<isSwap>false</isSwap>
 		<srcAssociationId></srcAssociationId>

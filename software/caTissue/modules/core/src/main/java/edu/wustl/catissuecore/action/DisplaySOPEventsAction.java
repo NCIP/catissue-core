@@ -17,8 +17,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.SOPBizLogic;
-import edu.wustl.catissuecore.domain.sop.SOP;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.processor.SPPEventProcessor;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -63,7 +63,7 @@ public class DisplaySOPEventsAction extends SecureAction
 				.populateSPPEventsForASpecimen(specimenId);
 
 		Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
-		new SOPBizLogic().getAllSOPEventFormNames(dynamicEventMap);
+		new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
 		if (request.getSession().getAttribute("dynamicEventMap") == null)
 		{
 			request.getSession().setAttribute("dynamicEventMap", dynamicEventMap);
@@ -72,7 +72,7 @@ public class DisplaySOPEventsAction extends SecureAction
 		//Add SPP events data collection in request scope
 		request.setAttribute(Constants.SPP_EVENTS, sppEventDataCollection);
 
-		SOP processingSPP = sppEventProcessor.getSPPBySpecimenId(Long.valueOf(specimenId));
+		SpecimenProcessingProcedure processingSPP = sppEventProcessor.getSPPBySpecimenId(Long.valueOf(specimenId));
 		if (processingSPP != null)
 		{
 			request.setAttribute("nameOfSelectedSop", processingSPP.getName());
