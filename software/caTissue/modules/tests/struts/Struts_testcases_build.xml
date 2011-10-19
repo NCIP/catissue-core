@@ -9,12 +9,12 @@
 	</taskdef>
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 			<classpath>
-				<pathelement location="../../../target/lib/caTissue_lib/taskdef_lib/ant-contrib.jar" />
+				<pathelement location="../../../../target/lib/caTissue_lib/taskdef_lib/ant-contrib.jar" />
 			</classpath>
 		</taskdef>
 
 
-		<property name="base.dir" value="."/>
+		<property name="base.dir" value="../../"/>
 		<property name="catissue.base.dir" value="." />
 	     <property file="${catissue.base.dir}/install.properties"/>
 	    <property name="mysql.dialect.string" value="org.hibernate.dialect.MySQLDialect"> </property>
@@ -54,7 +54,7 @@
 		</path>
 
 	<!-- property files for init struts test case, when user tries to run from the eclipse -->
-	<property name="src_catissue.software.dir" value="../../.."/>
+	<property name="src_catissue.software.dir" value="../../../../"/>
 	<property name="src_catissue.exploded.dir" value="${src_catissue.software.dir}/target/dist/exploded"/>
 	<property name="src_catissue.temp.dir" value="${src_catissue.exploded.dir}/deploytempCatissuecore/catissuecore"/>
 	<property name="src_catissue.base.dir" value="${src_catissue.software.dir}/catissue"/>
@@ -618,7 +618,7 @@
 		    					<equals arg1="true" arg2="${file.exists}" />
 		    				</not>
 		    				<then>
-		    					<unwar src="${catissue.base.dir}/modules/caTissue/lib/catissuecore.war" dest="${catissue.temp.dir}" />
+		    					<unwar src="${src_catissue.exploded.dir}/modules/caTissue/lib/catissuecore.war" dest="${catissue.temp.dir}" />
 		    				</then>
 		    			</if>
 		<antcall target="instrument_junit_testcases"/>
