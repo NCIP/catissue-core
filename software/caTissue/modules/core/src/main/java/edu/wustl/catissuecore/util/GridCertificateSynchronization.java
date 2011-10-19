@@ -18,7 +18,7 @@ import gov.nih.nci.cacoresdk.util.GridAuthenticationClient;
 public class GridCertificateSynchronization {
 
 	private static Logger LOG = Logger.getLogger(GridGrouperUtil.class);
-	private static String CAGRID_VERSION = "1.3";
+	//private static String CAGRID_VERSION = "1.3";
 	
 	public GridCertificateSynchronization () {
 		
@@ -33,8 +33,8 @@ public class GridCertificateSynchronization {
 		//TargetGrid targetGrid = TargetGrid.byName(tg);
 		String jbossHome = defaultProps.getProperty(GridGrouperConstant.JBOSS_HOME);
 
-		String certificateDirName = jbossHome + "/certificates/"+targetGrid.toString()+"-"+CAGRID_VERSION+"/certificates";
-		String syncDescFile = jbossHome + "/certificates/"+targetGrid+"-"+CAGRID_VERSION+"/sync-description-"+targetGrid+"-"+CAGRID_VERSION+".xml";
+		String certificateDirName = jbossHome + "/certificates/"+targetGrid.toString()+"/certificates";
+		String syncDescFile = jbossHome + "/certificates/"+targetGrid+"/sync-description-"+targetGrid+".xml";
 		try {
 			installRootCerts(certificateDirName);
 			syncTrust(syncDescFile);
