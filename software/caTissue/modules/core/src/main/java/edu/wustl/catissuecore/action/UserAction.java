@@ -119,7 +119,7 @@ public class UserAction extends SecureAction
         jsonobject.put("emailAddress", email);
         jsonobject.put("errorMsg", "");
 
-        jsonobject.put("success", "Authentication successfull. Please enter your information below to have your account activated for use in caTissue");
+        jsonobject.put("success", "Authentication successfull. Please enter your information below to have your account activated for use in caTissue.");
         userDetailsList.add(jsonobject);
         return userDetailsList;
 	}
