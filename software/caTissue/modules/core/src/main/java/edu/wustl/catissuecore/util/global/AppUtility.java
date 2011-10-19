@@ -167,7 +167,7 @@ public class AppUtility
 	{
 		final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
 				Constants.CDE_NAME_SPECIMEN_CLASS);
-		final Set setPV = specimenClassCDE.getPermissibleValues();
+		final Set setPV = specimenClassCDE!=null?specimenClassCDE.getPermissibleValues():new java.util.HashSet();
 		return setPV;
 	}
 
