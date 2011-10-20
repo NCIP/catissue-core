@@ -164,8 +164,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4
 
 	<condition property="local.cbiit-ivy-repo.dir" value="">
 		<or>
-		<os family="unix" />
-			<os family="mac" />
+            <os family="unix" />
+            <os family="mac" />
 		</or>
 	</condition>
 
