@@ -1,2 +1,2 @@
-Site ID,PPID,Collection Status,collectionPointLabel,Clinical Diagnosis,Clinical Status,Activity Status
-1,1_1,Complete,1,Not Specified,Operativ,Active
+"SCG Name","Site ID","PPID","CP Title","Collection Status","collectionPointLabel","Clinical Diagnosis","Clinical Status","Activity Status","Create Anticipated Specimen"
+,281,"1_1","Skin Cancer","Complete","visit1","Multiple myeloma","New Diagosis","Active",TRUE

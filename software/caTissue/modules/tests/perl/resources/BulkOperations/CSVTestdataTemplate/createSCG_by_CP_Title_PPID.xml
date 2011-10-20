@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <BulkOperationMetadata>
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-		relationShipType="main" cardinality="1"	roleName="specimenCollectionGroup" templateName="CreateSCG" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		relationShipType="main" cardinality="1"	roleName="specimenCollectionGroup" templateName="CreateSpecimenCollectionGroup" maxNoOfRecords="1" parentRoleName="" batchSize="5">
 		<referenceAssociationCollection
 			className="edu.wustl.catissuecore.domain.Site"
 			relationShipType="association" cardinality="1" roleName="specimenCollectionSite"
-			templateName="CreateSCG"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
+			templateName="CreateSpecimenCollectionGroup"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
 				<attributeCollection name="name" csvColumnName="Site Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
 		</referenceAssociationCollection>
 		<referenceAssociationCollection
 			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
 			relationShipType="association" cardinality="1" roleName="collectionProtocolRegistration"
-			templateName="CreateSCG" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+			templateName="CreateSpecimenCollectionGroup" maxNoOfRecords="1" parentRoleName="" batchSize="5">
 				<attributeCollection name="protocolParticipantIdentifier" csvColumnName="PPID" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
 				<referenceAssociationCollection
 				className="edu.wustl.catissuecore.domain.CollectionProtocol"
-				relationShipType="association" templateName="CreateSCG" cardinality="1" roleName="collectionProtocol" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
+				relationShipType="association" templateName="CreateSpecimenCollectionGroup" cardinality="1" roleName="collectionProtocol" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
 				<attributeCollection name="title" csvColumnName="CP Title" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
 			</referenceAssociationCollection>
 		</referenceAssociationCollection>
@@ -23,9 +23,10 @@
 		<referenceAssociationCollection
 			className="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
 			relationShipType="association" cardinality="1" roleName="collectionProtocolEvent"
-			templateName="CreateSCG" maxNoOfRecords="1" parentRoleName="" batchSize="5">
-			<attributeCollection name="id" csvColumnName="Event id" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+			templateName="CreateSpecimenCollectionGroup" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+			<attributeCollection name="collectionPointLabel" csvColumnName="collectionPointLabel" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
         </referenceAssociationCollection>
+<attributeCollection name="name" csvColumnName="SCG Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
 		<attributeCollection name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
 		<attributeCollection name="clinicalStatus" csvColumnName="Clinical Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
 		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
