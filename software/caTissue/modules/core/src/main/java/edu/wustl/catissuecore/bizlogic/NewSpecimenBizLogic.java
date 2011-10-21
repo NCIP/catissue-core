@@ -2214,15 +2214,18 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				&& Validator.isEmpty(specimen.getLabel())) {
 			throw this.getBizLogicException(null, "label.mandatory", "");
 		}
-		if (this.isStoragePositionChanged(specimenOld, specimen)) {
-			if (Constants.COLLECTION_STATUS_PENDING.equals(specimenOld
-					.getCollectionStatus())
-					&& Constants.COLLECTION_STATUS_PENDING.equals(specimen
-							.getCollectionStatus())
-					&& specimen.getSpecimenPosition() != null) {
-				throw this.getBizLogicException(null, "status.collected", "");
+		if(!"transferDone".equalsIgnoreCase(specUIObject.getTransferStatus()))
+		{
+			if (this.isStoragePositionChanged(specimenOld, specimen)) {
+				if (Constants.COLLECTION_STATUS_PENDING.equals(specimenOld
+						.getCollectionStatus())
+						&& Constants.COLLECTION_STATUS_PENDING.equals(specimen
+								.getCollectionStatus())
+						&& specimen.getSpecimenPosition() != null) {
+					throw this.getBizLogicException(null, "status.collected", "");
+				}
+				throw this.getBizLogicException(null, "position.nt.changed", "");
 			}
-			throw this.getBizLogicException(null, "position.nt.changed", "");
 		}
 		if (!specimenOld.getLineage().equals(specimen.getLineage())) {
 			throw this.getBizLogicException(null, "lineage.nt.changed", "");
