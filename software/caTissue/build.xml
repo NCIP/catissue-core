@@ -1075,30 +1075,36 @@
 		<delete file="${StrutsTestzip.file}" />
 		<delete dir="${StrutsTestzip.dir}" />
 		<mkdir dir="${StrutsTestzip.dir}" />
+
 		<copy todir="${StrutsTestzip.dir}/CaTissue_TestCases" overwrite="true">
 			<fileset dir="${catissue.test}/struts/CaTissue_TestCases" />
 		</copy>
+
 		<copy todir="${StrutsTestzip.dir}/CaTissue_TestCases/lib" overwrite="true" verbose="true">
 			<fileset dir="${CaTissue_TestCases_lib.dir}" />
 		</copy>
+
 		<copy todir="${StrutsTestzip.dir}/cobertura/lib" overwrite="true" verbose="true">
 			<fileset dir="${cobertura_lib.dir}" />
 		</copy>
+
 		<copy todir="${StrutsTestzip.dir}/CaTissue_TestCases/extra_lib" overwrite="true" verbose="true">
 			<fileset dir="${caTissueSuite_Client_lib.dir}" />
 		</copy>
+
 		<copy todir="${StrutsTestzip.dir}" overwrite="true" verbose="true">
 			<fileset dir="${catissue.test}/struts">
 				<include name="Struts_testcases_build.xml" />
 			</fileset>
 		</copy>
+
 		<copy todir="${StrutsTestzip.dir}" overwrite="true" verbose="true">
 			<fileset dir="${catissue.test}/struts">
 				<include name="Old_Struts_testcases_build.xml" />
 			</fileset>
 		</copy>
+
 		<zip destfile="${StrutsTestzip.file}" basedir="${StrutsTestzip.dir}" />
-		<delete dir="${StrutsTestzip.dir}" />
 	</target>
 
 	<target name="create_BO_Test_zip">
