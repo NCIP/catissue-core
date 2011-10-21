@@ -207,6 +207,7 @@
 			</manifest>
 		</jar>
 	</target>
+
 	<target name="clean" description="clean up">
 		<delete includeemptydirs="true">
 			<fileset dir="${classes.dir}">
@@ -248,6 +249,7 @@
 		<antcall target="retrieve-Applet-lib-ivy-files" />
 		<antcall target="copy" />
 	</target>
+
 	<target name="retrieve-limpopo-ivy-files" depends="ivy-settings" description="Updates the local ivy repository">
 		<ivy:resolve refresh="true" conf="limpopo" />
 		<ivy:retrieve type="jar" pattern="${web_inf_lib.dir}/[artifact]-[revision].[ext]" conf="limpopo" />
@@ -1076,21 +1078,21 @@
 		<copy todir="${StrutsTestzip.dir}/CaTissue_TestCases" overwrite="true">
 			<fileset dir="${catissue.test}/struts/CaTissue_TestCases" />
 		</copy>
-		<copy todir="${StrutsTestzip.dir}/CaTissue_TestCases/lib" overwrite="true">
+		<copy todir="${StrutsTestzip.dir}/CaTissue_TestCases/lib" overwrite="true" verbose="true">
 			<fileset dir="${CaTissue_TestCases_lib.dir}" />
 		</copy>
-		<copy todir="${StrutsTestzip.dir}/cobertura/lib" overwrite="true">
+		<copy todir="${StrutsTestzip.dir}/cobertura/lib" overwrite="true" verbose="true">
 			<fileset dir="${cobertura_lib.dir}" />
 		</copy>
-		<copy todir="${StrutsTestzip.dir}/CaTissue_TestCases/extra_lib" overwrite="true">
+		<copy todir="${StrutsTestzip.dir}/CaTissue_TestCases/extra_lib" overwrite="true" verbose="true">
 			<fileset dir="${caTissueSuite_Client_lib.dir}" />
 		</copy>
-		<copy todir="${StrutsTestzip.dir}" overwrite="true">
+		<copy todir="${StrutsTestzip.dir}" overwrite="true" verbose="true">
 			<fileset dir="${catissue.test}/struts">
 				<include name="Struts_testcases_build.xml" />
 			</fileset>
 		</copy>
-		<copy todir="${StrutsTestzip.dir}" overwrite="true">
+		<copy todir="${StrutsTestzip.dir}" overwrite="true" verbose="true">
 			<fileset dir="${catissue.test}/struts">
 				<include name="Old_Struts_testcases_build.xml" />
 			</fileset>
@@ -1098,6 +1100,7 @@
 		<zip destfile="${StrutsTestzip.file}" basedir="${StrutsTestzip.dir}" />
 		<delete dir="${StrutsTestzip.dir}" />
 	</target>
+
 	<target name="create_BO_Test_zip">
 		<echo message="base.dir = ${base.dir}" />
 		<property name="BulkOperationZIP.dir" value="${base.dir}/caTISSUE_BulkOperations_Test_v${application.version}_Installable" />
