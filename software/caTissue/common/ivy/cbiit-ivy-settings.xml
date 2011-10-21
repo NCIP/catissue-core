@@ -55,6 +55,7 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 			</url>
 			 -->
 
+<!--
 			<url name="cbiit-ivy-repo">
 
 				<artifact pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
@@ -62,8 +63,9 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 				<artifact pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/[artifact].[ext]" />
 				<ivy pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/ivy.xml" />
 			</url>
+-->
 
-			<ibiblio name="cbiit-maven-mirror" m2compatible="true" root="https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk" changingPattern=".*SNAPSHOT" />
+			<!--<ibiblio name="cbiit-maven-mirror" m2compatible="true" root="https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk" changingPattern=".*SNAPSHOT" />-->
 			<!--<url name="cbiit-maven-mirror" m2compatible="true">
 				<artifact pattern="https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
 			</url>-->
