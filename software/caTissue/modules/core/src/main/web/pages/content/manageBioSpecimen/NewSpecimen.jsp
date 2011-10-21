@@ -2168,6 +2168,12 @@
 			</div>
 		</td>
 				<!---<td align="center" class="black_ar">&nbsp;</td>-->
+		<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+		<% if(showContainer!=null&&showContainer.equals("Pending"))
+		{
+			
+		}
+		else{%>
 		<td align="left" valign="top" class="black_ar" colspan="2">
 			<label for="reasonForTransfer">
 				Reason for Transfer
@@ -2177,6 +2183,8 @@
 		<td align="left" valign="top" colspan="2">
 			<html:textarea styleClass="black_ar_s"  rows="1" cols="40" styleId="reasonForTransfer" property="reasonForTransfer"/>
 		</td>
+		<% }%>
+		</logic:notEqual>
 		</tr>
 
 		<%}%>
@@ -2191,20 +2199,31 @@
 												{%>
 
 
-													<td class="black_ar" colspan="2">
+													<td class="black_ar" colspan="2" style="width: 15">
 														<bean:message key="specimen.virtualLocation" />
+													</td>
+													<td>
+													<div id="transferButton" >
+													<html:button
+																styleClass="blue_ar_b" property="transferButton"
+																title="Transfer"
+																value="Transfer"
+																onclick="showTransferArea()">
+															</html:button>
+													</div>
 													</td>
 												</tr>
 													<%
 												}
-
-												%>
-												<tr>
+												else
+												{
+													%>
+													<tr>
 														<td colspan="1">
 
 					<logic:equal name="transferStatus" value="">
 												<!--div that is not getting popuulated -->
-														<div id="fromlocationdiv" display="display:block">
+												<div id="fromlocationdiv" display="display:block">														<div id="fromlocationdiv" display="display:block">
 														<table cellpadding="0" cellspacing="0" border="0" >
 						<tr>
 							<td class="groupelements">
@@ -2269,9 +2288,8 @@
 													</td>-->
 
 													</tr>
-												<%
-
-
+													<%
+												}
 										}%>
 
 											</logic:notEqual>
@@ -2469,3 +2487,4 @@ showPriterTypeLocation();
 </body>
 </body>
 </body>
+
