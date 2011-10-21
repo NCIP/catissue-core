@@ -58,7 +58,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4
 
 	<!-- BDA standard structure -->
 	<property name="build.dir" location="." />
-	<property name="software.dir" location="../../" />
+	<property name="software.dir" location="${basedir}/../../" />
 	<property name="common.dir" location="${software.dir}/caTissue/common" />
 	<property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
 	<property name="target.dir" location="${software.dir}/target" />
@@ -250,6 +250,9 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4
 	</target>
 
 	<target name="init" description="Sets up build are and initalizes variables">
+
+        <echo message="-------------------------   ${tools.dir}" />
+
 		<echo message=" ______   ______   _______ " />
 		<echo message="(____  \ (______) (_______)" />
 		<echo message=" ____)  ) _     _  _______ " />
@@ -323,8 +326,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4
 
 	<target name="validate:pre:build">
 		<mkdir dir="${download.dir}"/>
-		<validate-pre-build
-			/>
+		<validate-pre-build />
 	</target>
 
 	<target name="build:all"

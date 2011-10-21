@@ -8,6 +8,8 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 <ivysettings>
 	<property name="ivy.project.repo" value="${target.dir}/local-repo-dir"/>
 	<property name="ivy.system.repo" value="${software.dir}/../../system-ivy-repo"/>
+    <property name="local.ivy.repo.dir" value="${software.dir}/caTissue/local.repo" />
+
 
 	<settings defaultResolver="ncicb-chain" />
 	<!-- defaultCacheDir causes the bda-utils module to use it's own cache directory -->
@@ -31,6 +33,21 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 				<artifact pattern="${local.cbiit-ivy-repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 				<ivy pattern="${local.cbiit-ivy-repo.dir}/[organisation]/[module]/[revision]/ivy.xml" />
 			</filesystem>
+
+            <filesystem name="LOCAL.REPO">
+                <artifact pattern="${local.ivy.repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+                <artifact pattern="${local.ivy.repo.dir}/[organisation]/[module]/[revision]/[artifact][revision].[ext]" />
+                <artifact pattern="${local.ivy.repo.dir}/[organisation]/[module]/[revision]/[artifact].[ext]" />
+                <ivy pattern="${local.ivy.repo.dir}/[organisation]/[module]/[revision]/ivy.xml" />
+            </filesystem>
+
+            <url name="NEXUS" m2compatible="true">
+                <artifact pattern="https://ncimvn.nci.nih.gov/nexus/content/repositories/public/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
+                <artifact pattern="https://ncimvn.nci.nih.gov/nexus/content/repositories/thirdparty/[organisation]/[module]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
+                <artifact pattern="https://ncimvn.nci.nih.gov/nexus/content/repositories/thirdparty/[organisation]/[module]/[artifact]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+                <artifact pattern="https://ncimvn.nci.nih.gov/nexus/content/repositories/public/[organisation]/[module]/[artifact]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+            </url>
+
 			<!-- <url name="cbiit-ivy-repo">
 
 				<artifact pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
@@ -45,6 +62,7 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 				<artifact pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/[artifact].[ext]" />
 				<ivy pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/ivy.xml" />
 			</url>
+
 			<ibiblio name="cbiit-maven-mirror" m2compatible="true" root="https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk" changingPattern=".*SNAPSHOT" />
 			<!--<url name="cbiit-maven-mirror" m2compatible="true">
 				<artifact pattern="https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>

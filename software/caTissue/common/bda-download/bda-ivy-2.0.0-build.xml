@@ -20,7 +20,7 @@ This ant build file downloads the bda project from the official NCICB Ivy Reposi
 	<property name="target.dir" location="../"/>
 	<property name="bda-utils.dir" location="${basedir}/bda-utils" />
 	<property name="commonlibrary.dir" location=""/>
-	<property name="bda.local.repo.dir" location="${software.dir}/../../bda-local-ivy-repo" />
+	<property name="bda.local.repo.dir" location="${software.dir}/bda-local-ivy-repo" />
 	<property name="bda.version" value="0.9.0" />
 
 	<property name="ivy.jar.file" value="ivy-2.0.0.jar" />
@@ -39,11 +39,9 @@ This ant build file downloads the bda project from the official NCICB Ivy Reposi
 	</path>
 
 	<!-- Conditions -->
-	<condition property="ivy.available">
-		<and>
-			<available file="${ivy.dest.file}" />
-		</and>
-	</condition>
+	<condition property="ivy.available"><and><available file="${ivy.dest.file}" /></and></condition>
+	<condition property="bda.available"><and><available file="${bda-utils.dir}/bda-build-utils-1.7.4.zip" /></and></condition>
+
 	<condition property="local.cbiit-ivy-repo.dir" value="/">
 		<or>            
 			<os family="unix" />    
@@ -90,15 +88,26 @@ This ant build file downloads the bda project from the official NCICB Ivy Reposi
 		<get src="${ivy-bda.src.url.base}/${ivy.bda.file}" dest="${ivy.bda.file}" />
 	</target>
 
-	<target name="retrieve-bda" description="This task retrieves bda project.  It also depends on targets that will download files required to get the ivy bda project." depends="   init,   download-ivy,   download-ivy-settings,   download-ivy-bda   ">
-		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.classpath" />
+	<target name="retrieve-bda" unless="bda.available" description="This task retrieves bda project.  It also depends on targets that will download files required to get the ivy bda project." depends="init, download-ivy, download-ivy-settings, download-ivy-bda">
+
+        <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.classpath" />
+
+<!--
+        <available file="${bda-utils.dir}/bda-build-utils-1.7.4.zip" property="bda.installed" value="true"/>
+        <condition property="bda.not.installed">
+            <not><available filepath="${bda-utils.dir}/bda-build-utils-1.7.4.zip"/></not>
+        </condition>
+-->
+
+        <!--<echo message="BDA INSTALLED: ${bda.installed}" />-->
+
 		<!--
 		<property name="ivy.checksums" value="md5,sha1"/>
 		<property name="ivy.checksums.ivy.instance" value="md5,sha1"/>
 		-->
 		<property name="ivy.dep.file" value="${ivy.bda.file}" />
-		<!-- Causes IVY to check last-modified http header to determine if it is going to download the file.  This can be modified on the resolver (settings file) with the resolve attribute of checkmodified.  It can also be set on the dependency level with the dependency attibute changing. If the web server does not send the http header last-modified it will never detect updates and you have to resort to clean cache to get the updated artifact and depeencies to download.-->
 		<property name="ivy.resolver.default.check.modified" value="true" />
+
 		<ivy:settings file="${ivy.settings.file}" />
 		<ivy:resolve refresh="true" conf="runtime" />
 		<ivy:retrieve pattern="${bda-utils.dir}/[artifact]-[revision].[ext]" conf="runtime" sync="true" />

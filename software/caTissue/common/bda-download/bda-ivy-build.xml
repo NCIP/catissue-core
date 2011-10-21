@@ -19,7 +19,7 @@ This ant build file downloads the bda project from the official NCICB Ivy Reposi
 	<property name="software.dir" value="${basedir}" />
 	<property name="bda-utils.dir" value="${basedir}/bda-utils" />
 	<property name="commonlibrary.dir" value=""/>
-	<property name="bda.local.repo.dir" value="${software.dir}/../../bda-local-ivy-repo" />
+	<property name="bda.local.repo.dir" value="${software.dir}/bda-local-ivy-repo" />
 	<property name="bda.version" value="0.9.0" />
 
 	<property name="ivy.file" value="ivy-2.0.0-beta2.jar" />
@@ -27,8 +27,8 @@ This ant build file downloads the bda project from the official NCICB Ivy Reposi
 	<property name="ivy.settings.file" value="ivy-bda-settings.xml" />
 	<property name="ivy.bda.file" value="ivy-bda.xml" />
 
-	<property name="ivy.src.url" value="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/apache/ivy/2.0.0-beta2/${ivy.file}" />
-	<property name="ivy-core.src.url" value="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/apache/ivy-core/2.0.0-beta2/${ivy-core.file}" />
+	<property name="ivy.src.url" value="https://ncimvn.nci.nih.gov/nexus/content/repositories/public/org/apache/ivy/ivy/2.0.0-beta2/${ivy.file}" />
+	<property name="ivy-core.src.url" value="https://ncimvn.nci.nih.gov/nexus/content/repositories/public/org/apache/ivy/ivy-core/2.0.0-beta2/${ivy-core.file}" />
 	<property name="ivy-bda.src.url.base" value="http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-download" />
 
 	<property name="ivy.dest.file" value="${lib.dir}/${ivy.file}" />

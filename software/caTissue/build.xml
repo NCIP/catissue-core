@@ -1072,6 +1072,7 @@
 	<target name="create_Struts_Test_zip">
 		<property name="StrutsTestzip.dir" value="${base.dir}/caTISSUE_Struts_Test_v${application.version}_Installable" />
 		<property name="StrutsTestzip.file" value="${base.dir}/caTissue_Struts_Test_v${application.version}_Installable.zip" />
+
 		<delete file="${StrutsTestzip.file}" />
 		<delete dir="${StrutsTestzip.dir}" />
 		<mkdir dir="${StrutsTestzip.dir}" />
