@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -31,9 +33,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.wustl.auth.exception.AuthFileParseException;
-import edu.wustl.auth.exception.AuthenticationException;
-import edu.wustl.authmanager.IDPAuthManager;
-import edu.wustl.authmanager.factory.AuthManagerFactory;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.ctrp.COPPAUtil;
@@ -63,7 +62,6 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
-import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.UserDetails;
 import edu.wustl.migrator.util.Utility;
 import edu.wustl.processor.LoginProcessor;
@@ -576,7 +574,7 @@ public class UserAction extends SecureAction
 	 * @param request
 	 *            Object of HttpServletRequest
 	 */
-	private void checkForWustlKey(final UserForm form, final HttpServletRequest request)
+	private void checkForWustlKey(final UserForm form, final HttpServletRequest request) 
 	{
 		final String userFrom = request.getParameter("userFrom");
 		final String grouperUser = request.getParameter("grouperUser");
@@ -593,12 +591,15 @@ public class UserAction extends SecureAction
 			form.setFirstName((String) request.getAttribute(edu.wustl.wustlkey.util.global.Constants.FIRST_NAME));
 			form.setLastName((String) request.getAttribute(edu.wustl.wustlkey.util.global.Constants.LAST_NAME));
 			final ActionMessages messages = new ActionMessages();
+			final ActionErrors errors = new ActionErrors();
 			if (grouperUser == null) {
 				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("app.washuuser"));
 			} else {
-				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("app.grouperuser"));
+				errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionError("app.grouperuser" , userRedirectedFromCas));
+				
 			}
 			saveMessages(request, messages);
+			saveErrors(request, errors);
 		}
 		if (Constants.TRUE.equals(errorPage))
 		{
