@@ -397,10 +397,12 @@
 			<property name="config.dir" value="${dist.dir}/modules/bulk_operations/conf" />
 		</ant>
 	</target>
+
 	<target name="unzip_bulkoperation_installable" depends="bulkoperation_check_prerequisite" description="unzip the bulk operation zip">
-		<unzip src="bulkoperator.zip" dest="${basedir}/bulkoperation" overwrite="true" />
+		<unzip src="${target.dir}/dist/bulkoperator.zip" dest="${basedir}/bulkoperation" overwrite="true" />
 	</target>
-	<target name="bulkoperation_check_prerequisite" description="Check bulkoperation.zip file exists or not in base directory">
+
+    <target name="bulkoperation_check_prerequisite" description="Check bulkoperation.zip file exists or not in base directory">
 		<!-- Check bulkoperation.zip file exists or not in base	directory. -->
 		<available file="${base.dir}/bulkoperator.zip" property="file.exists" value="false" />
 		<if>
@@ -859,7 +861,7 @@
 
 		<copy file="${docs.dir}/README.txt" todir="${zip.dir}" overwrite="true" />
 
-		<copy file="bulkoperator.zip" todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true" />
+		<copy file="${target.dir}/dist/bulkoperator.zip" todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true" />
 		<copy todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true">
 			<fileset dir="${caTissueSuite_Client_lib.dir}">
 				<include name="*.jar" />
@@ -953,8 +955,8 @@
 			<fileset file="${compile.lib.dir}/IDPAuthenticationManager0_1.jar" />
 		</copy>
 
-		<copy file="dynamicextensions.zip" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
-		<copy file="clientFormCreator.zip" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
+		<copy file="${target.dir}/dist/dynamicextensions.zip" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
+		<copy file="${target.dir}/dist/clientFormCreator.zip" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="${web_inf_lib.dir}/DynamicExtensions.jar" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="${conf.dir}/DEDeploy.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
 		<copy file="${conf.dir}/Show_Hide_Forms.xml" todir="${zip.dir}/modules/dynamic_extensions/conf" overwrite="true" />
@@ -989,7 +991,7 @@
 			<fileset dir="${private_public_migrator_lib.dir}" />
 		</copy>
 
-		<copy file="AdvanceQuery_Installable.zip" todir="${zip.dir}/modules/query/lib" overwrite="true" />
+		<copy file="${target.dir}/dist/AdvanceQuery_Installable.zip" todir="${zip.dir}/modules/query/lib" overwrite="true" />
 		<copy file="${conf.dir}/taggedvalues.xml" todir="${zip.dir}/modules/query/conf" overwrite="true" />
 		<!--<copy file="${conf.dir}/paths.txt" todir="${zip.dir}/modules/query/conf" overwrite="true" /> -->
 		<copy file="${conf.dir}/paths.txt" todir="${zip.dir}" overwrite="true" />
