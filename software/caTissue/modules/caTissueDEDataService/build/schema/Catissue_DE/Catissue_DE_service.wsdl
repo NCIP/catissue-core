@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="Catissue_DE" targetNamespace="http://de_entity/Catissue_DE/service" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:binding="http://de_entity/Catissue_DE/bindings" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
-  <wsdl:import namespace="http://de_entity/Catissue_DE/bindings" location="Catissue_DE_bindings.wsdl"/>
-  <wsdl:service name="Catissue_DEService">
-    <wsdl:port name="Catissue_DEPortTypePort" binding="binding:Catissue_DEPortTypeSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>
