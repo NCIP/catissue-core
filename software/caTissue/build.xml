@@ -697,7 +697,7 @@
 
 	<!--Deploys the application war file at JBOSS server by coping it to deploy directory of application server-->
 	<target name="deploy">
-		<antcall target="compile" />
+        <antcall target="compile" />
 		<antcall target="create_war" />
 		<copy file="${target.dir}/dist/catissuecore.war" todir="${jboss.server.url}/deploy" />
 		<copy file="${conf.dir}/caTissuePrintWebService.war" todir="${jboss.server.url}/deploy" />

@@ -42,7 +42,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4
 	<!-- Set application.base.path based on platform -->
 	<condition property="application.base.path" value="${application.base.path.linux}">
 		<or>
-		<os family="unix" />
+		    <os family="unix" />
 			<os family="mac" />
 		</or>
 	</condition>
@@ -1079,7 +1079,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4
 	<!--This is the tempory fix to run build++. In build++ a target
 			gives a call to the compile target of build.xml in src but this target was not there -->
     <target name="rewar">
-        <ant inheritAll="false" inheritRefs="false" antfile="${caTissue-webapp.build.file}" target="deploy" dir="${caTissue-webapp.base.dir}">
+        <ant inheritAll="true" inheritRefs="false" antfile="${caTissue-webapp.build.file}" target="deploy" dir="${caTissue-webapp.base.dir}">
             <property name="dist.dir" value="${caTissue-webapp.dir.dist}" />
             <property name="local.cbiit-ivy-repo.dir" value="${local.cbiit-ivy-repo.dir}"/>
         </ant>
