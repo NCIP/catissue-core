@@ -420,7 +420,7 @@
 	<!--End of Integrating the Bulk Operation Module  -->
 
 	<target name="create_war">
-		<delete file="catissuecore.war" />
+		<delete file="${target.dir}/dist/catissuecore.war" />
 		<copy todir="${temp.dir}/bulkoperation/src/java/WEB-INF" file="${catissue.web}/WEB-INF/struts-config.xml" />
 		<copy todir="${temp.dir}/bulkoperation/src/java/WEB-INF" file="${catissue.web}/WEB-INF/web.xml" />
 
@@ -459,8 +459,7 @@
 			<param name="deleteFromDir" value="${tempCatissuecore.dir}/catissue_cacore" />
 		</antcall>
 
-		<war destfile="catissuecore.war" webxml="${catissue.web}/WEB-INF/web.xml" duplicate="preserve" manifest="${temp.dir}/MANIFEST.MF">
-
+		<war destfile="${target.dir}/dist/catissuecore.war" webxml="${catissue.web}/WEB-INF/web.xml" duplicate="preserve" manifest="${temp.dir}/MANIFEST.MF">
 			<fileset dir="${temp.dir}/bulkoperation/src/web">
 				<include name="**/pages/**" />
 				<include name="**/jss/**" />
@@ -700,11 +699,11 @@
 	<target name="deploy">
 		<antcall target="compile" />
 		<antcall target="create_war" />
-
-		<copy file="catissuecore.war" todir="${jboss.server.url}/deploy" />
+		<copy file="${target.dir}/dist/catissuecore.war" todir="${jboss.server.url}/deploy" />
 		<copy file="${conf.dir}/caTissuePrintWebService.war" todir="${jboss.server.url}/deploy" />
 		<sleep seconds="2" />
 	</target>
+
 	<target name="createJavaDoc">
 		<javadoc destdir="${temp.dir}/${client.dir}/JavaDoc" author="true" version="true" use="true" windowtitle="JavaDoc">
 			<fileset dir="${project.src.domain}">
@@ -914,7 +913,7 @@
 		<copy todir="${zip.dir}/modules/caTissue/images" overwrite="true">
 			<fileset file="${catissue.web}/images/uIEnhancementImages/institution_logo.gif" />
 		</copy>
-		<copy file="${software.dir}/caTissue/catissuecore.war" todir="${zip.dir}/modules/caTissue/lib" overwrite="true" />
+		<copy file="${target.dir}/dist/catissuecore.war" todir="${zip.dir}/modules/caTissue/lib" overwrite="true" />
 		<copy todir="${zip.dir}/modules/caTissue/lib/common_lib" overwrite="true">
 			<fileset dir="${target.lib.dir}/caTissue_lib/common_lib">
 			</fileset>
