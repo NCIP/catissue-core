@@ -855,7 +855,7 @@
 
 	<target name="create_zip" depends="createJavaDoc, installable_build_war">
 		<property name="zip.dir" value="${dist.dir}" />
-		<property name="zip.file" value="${base.dir}/caTissue_Suite_v${application.version}_Installable.zip" />
+		<property name="zip.file" value="${target.dir}/dist/caTissue_Suite_v${application.version}_Installable.zip" />
 
 		<copy file="${docs.dir}/README.txt" todir="${zip.dir}" overwrite="true" />
 
@@ -1011,8 +1011,8 @@
 	</target>
 
 	<target name="create_API_client_zip">
-		<property name="APIclientzip.dir" value="${base.dir}/caTissueSuite_ApiClient_v${application.version}_Installable" />
-		<property name="APIclientzip.file" value="${base.dir}/caTissueSuite_ApiClient_v${application.version}_Installable.zip" />
+		<property name="APIclientzip.dir" value="${target.dir}/dist/caTissueSuite_ApiClient_v${application.version}_Installable" />
+		<property name="APIclientzip.file" value="${target.dir}/dist/caTissueSuite_ApiClient_v${application.version}_Installable.zip" />
 		<delete file="${APIclientzip.file}" />
 		<delete dir="${APIclientzip.dir}" />
 		<mkdir dir="${APIclientzip.dir}" />
@@ -1070,8 +1070,8 @@
 	</target>
 
 	<target name="create_Struts_Test_zip">
-		<property name="StrutsTestzip.dir" value="${base.dir}/caTISSUE_Struts_Test_v${application.version}_Installable" />
-		<property name="StrutsTestzip.file" value="${base.dir}/caTissue_Struts_Test_v${application.version}_Installable.zip" />
+		<property name="StrutsTestzip.dir" value="${target.dir}/dist/caTISSUE_Struts_Test_v${application.version}_Installable" />
+		<property name="StrutsTestzip.file" value="${target.dir}/dist/caTissue_Struts_Test_v${application.version}_Installable.zip" />
 
 		<delete file="${StrutsTestzip.file}" />
 		<delete dir="${StrutsTestzip.dir}" />
@@ -1110,8 +1110,8 @@
 
 	<target name="create_BO_Test_zip">
 		<echo message="base.dir = ${base.dir}" />
-		<property name="BulkOperationZIP.dir" value="${base.dir}/caTISSUE_BulkOperations_Test_v${application.version}_Installable" />
-		<property name="BulkOperationZIP.file" value="${base.dir}/caTISSUE_BulkOperations_Test_v${application.version}_Installable.zip" />
+		<property name="BulkOperationZIP.dir" value="${target.dir}/dist/caTISSUE_BulkOperations_Test_v${application.version}_Installable" />
+		<property name="BulkOperationZIP.file" value="${target.dir}/dist/caTISSUE_BulkOperations_Test_v${application.version}_Installable.zip" />
 		<delete file="${BulkOperationZIP.file}" />
 		<delete dir="${BulkOperationZIP.dir}" />
 		<mkdir dir="${BulkOperationZIP.dir}" />
@@ -1692,7 +1692,7 @@
 				<include name="DynamicExtensions.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${base.dir}" overwrite="true">
+		<copy todir="${target.dir}/dist" overwrite="true">
 			<fileset dir="${compile.lib.dir}">
 				<include name="AdvanceQuery_Installable.zip" />
 				<include name="bulkoperator.zip" />
