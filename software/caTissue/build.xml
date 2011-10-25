@@ -372,7 +372,7 @@
 	<!-- Create the Applet JAR Ends-->
 
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="build_war" depends="init,unpack_cacore_war, compile, build_client_jar,replace_database_type,common_build_war" />
+	<target name="build_war" depends="init, unpack_cacore_war, compile, build_client_jar, replace_database_type, common_build_war" />
 
 	<!--
 		Create war file for installable zip file.Please us this target when creating installable zip. Note: database type is not replaced
@@ -1299,6 +1299,7 @@
 
 	<!-- unpack caCORE war into temp folder -->
 	<target name="unpack_cacore_war" depends="clean_temp_dir_csmwar">
+        <echo message="Using caCore WAR files..." />
 		<unwar src="${catissue.modules}/cacore_resources/conf/catissue_cacore.war" dest="${tempCatissuecore.dir}/catissue_cacore" />
 		<delete file="${tempCatissuecore.dir}/catissue_cacore/WEB-INF/lib/jboss-common-jdbc-wrapper.jar" />
 		<delete file="${tempCatissuecore.dir}/catissue_cacore/WEB-INF/lib/ojdbc14-10.2.0.3.0.jar" />
