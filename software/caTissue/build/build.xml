@@ -1079,10 +1079,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4
 	<!--This is the tempory fix to run build++. In build++ a target
 			gives a call to the compile target of build.xml in src but this target was not there -->
     <target name="rewar">
-        <ant inheritAll="true" inheritRefs="false" antfile="${caTissue-webapp.build.file}" target="deploy" dir="${caTissue-webapp.base.dir}">
-            <property name="dist.dir" value="${caTissue-webapp.dir.dist}" />
-            <property name="local.cbiit-ivy-repo.dir" value="${local.cbiit-ivy-repo.dir}"/>
-        </ant>
+        <antcall target="build:caTissue-webapp">
+        </antcall>
     </target>
 
     <target name="compile">
