@@ -2,8 +2,55 @@
 <classpath>
 	<classpathentry including="**/*.java" kind="src" output="target/test-classes" path="src/test/java"/>
 	<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
-	<classpathentry kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/hibernate-core.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/acegi-security-1.0.4.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/addressing-1.0.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/axis.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/axis-url.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-authentication-service-client-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-authentication-service-common-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-authentication-service-stubs-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-core-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-dorian-client-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-dorian-common-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-dorian-stubs-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-gaards-core-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-gts-client-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-gts-common-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-gts-stubs-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-metadata-common-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-metadata-security-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-opensaml-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-ServiceSecurityProvider-client-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-ServiceSecurityProvider-common-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-ServiceSecurityProvider-service-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-ServiceSecurityProvider-stubs-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-syncgts-client-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-syncgts-common-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/caGrid-syncgts-stubs-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/clm.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/cog-axis.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/cog-url.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/commons-discovery-0.2.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/commons-httpclient-3.0.1.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/ehcache-1.2.4.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/globus_resolution_stubs_java.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/globus_transfer_stubs_java.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/jaxrpc.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/jboss-client.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/jdom-1.1.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/mobius_common_client-1.1.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/mysql-connector-java-5.0.8-bin.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/wsrf_core.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/wsrf_core_stubs.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/common_lib/wss4j-2.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/CaTissue_TestCases_lib/strutstest-2.1.3.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/CaTissue_TestCases_lib/strutsTestFramework.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/acrobat-core-charset.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/AdvanceQuery.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/asm-1.5.3.jar"/>
@@ -182,5 +229,5 @@
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/XmlSchema.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/xsdlib.jar"/>
-	<classpathentry kind="output" path="target/classes"/>
+	<classpathentry kind="output" path="out"/>
 </classpath>
