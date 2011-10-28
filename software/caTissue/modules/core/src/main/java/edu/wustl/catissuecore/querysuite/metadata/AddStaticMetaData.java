@@ -104,7 +104,7 @@ public class AddStaticMetaData
 		// List of all children belonging to the parent class, for which paths have to be added
 		List<String> childClassNames = new ArrayList<String>();
 		childClassNames.add("edu.wustl.catissuecore.domain.processingprocedure.ActionApplication");
-		childClassNames.add("edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProceduerApplication");
+		childClassNames.add("edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication");
 
 		// List of all associating entities for which paths have to be added from child classes.
 		List<String> associatingEntityname = new ArrayList<String>();

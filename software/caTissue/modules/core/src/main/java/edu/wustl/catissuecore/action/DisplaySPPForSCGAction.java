@@ -67,7 +67,7 @@ public class DisplaySPPForSCGAction extends SecureAction
 		Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
 		new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
 		request.getSession().setAttribute(Constants.DYNAMIC_EVENT_MAP, dynamicEventMap);
-		request.setAttribute("SOPEvents", sppEventDataCollection);
+		request.setAttribute("SPPEvents", sppEventDataCollection);
 		Long scgEntityId = null;
 		if (CatissueCoreCacheManager.getInstance().getObjectFromCache(
 				AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID) == null)

@@ -218,7 +218,7 @@ public class StorageContainerAction extends SecureAction
 				{
 					storageContainerForm.setIsFull("true");
 				}
-				final List storagetypeList = new ArrayList();
+				final List<NameValueBean> storagetypeList = new ArrayList<NameValueBean>();
 				final NameValueBean nvb = new NameValueBean(storageContainerForm.getTypeName(),
 						new Long(storageContainerForm.getTypeId()));
 				storagetypeList.add(nvb);
@@ -345,12 +345,12 @@ public class StorageContainerAction extends SecureAction
 		final String[] activityStatusArray = {Status.ACTIVITY_STATUS_DISABLED.toString(),
 				Status.ACTIVITY_STATUS_CLOSED.toString()};
 		final SessionDataBean sessionDataBean = this.getSessionData(request);
-		final List list = siteBizlog.getSiteList(siteDisplayField, valueField, activityStatusArray,
+		final List<NameValueBean> list = siteBizlog.getSiteList(siteDisplayField, valueField, activityStatusArray,
 				sessionDataBean.getUserId());
 		NameValueBean nvbForSelect = null;
 		if (list != null && !list.isEmpty())
 		{
-			nvbForSelect = (NameValueBean) list.get(0);
+			nvbForSelect = list.get(0);
 
 			if (!"-1".equals(nvbForSelect.getValue()))
 			{
@@ -440,7 +440,7 @@ public class StorageContainerAction extends SecureAction
 				final Iterator<String> it = spClassTypeCollection.iterator();
 				while (it.hasNext())
 				{
-					final String specimenClass = (String) it.next();
+					final String specimenClass = it.next();
 					holdsSpecimenClassTypes[i] = specimenClass;
 					i++;
 				}
@@ -500,7 +500,7 @@ public class StorageContainerAction extends SecureAction
 				{
 					storageContainerForm.setSpecimenOrArrayType("Specimen");
 				}
-				final Collection holdsSpArrayTypeCollection = (Collection) bizLogic
+				final Collection<SpecimenArrayType> holdsSpArrayTypeCollection = (Collection<SpecimenArrayType>) bizLogic
 						.retrieveAttribute(StorageType.class.getName(), type.getId(),
 								"elements(holdsSpecimenArrayTypeCollection)");
 				type.setHoldsSpecimenArrayTypeCollection(holdsSpArrayTypeCollection);
@@ -572,14 +572,14 @@ public class StorageContainerAction extends SecureAction
 			StorageContainerForm storageContainerForm, HttpServletRequest request, DAO dao)
 			throws ApplicationException
 	{
-		List initialValues = null;
+		List<String[]> initialValues = null;
 
 		initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
 		if (initialValues != null)
 		{
 			// Getting the default values in add case
 			String[] initValues = new String[3];
-			initValues = (String[]) initialValues.get(0);
+			initValues = initialValues.get(0);
 
 			// getting collection protocol list and name of the container for
 			// default selected parent container
@@ -624,7 +624,7 @@ public class StorageContainerAction extends SecureAction
 			StorageContainerForm storageContainerForm, HttpServletRequest request, DAO dao)
 			throws BizLogicException
 	{
-		List initialValues = null;
+		List<String[]> initialValues = null;
 		try
 		{
 			if (!Constants.SITE.equals(storageContainerForm.getParentContainerSelected()))
@@ -647,7 +647,7 @@ public class StorageContainerAction extends SecureAction
 							.toString();
 				}
 
-				initialValues = new Vector();
+				initialValues = new Vector<String[]>();
 				initialValues.add(startingPoints);
 			}
 			else if (Constants.SITE.equals(storageContainerForm.getParentContainerSelected()))

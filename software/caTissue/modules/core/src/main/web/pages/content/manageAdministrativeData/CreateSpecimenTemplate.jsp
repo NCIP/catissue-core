@@ -425,14 +425,14 @@ eval(testCombo);
 		spreqqty.innerHTML="" + sname;
 		var processingSPPName = "";
 		
-		if(document.getElementById('processingSOPForSpecimen') != null)
-	   			processingSPPName = document.getElementById('processingSOPForSpecimen').value;
+		if(document.getElementById('processingSPPForSpecimen') != null)
+	   			processingSPPName = document.getElementById('processingSPPForSpecimen').value;
 				
 		var testCombo="Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName='+processingSPPName;var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '"+objname+"' ,displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: '"+nameForCombo+"',fields: ['id_cp'],id: comboDataStorName});combo.on('expand', function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle('width', '250');combo.innerList.setStyle('width', '250');}else{combo.list.setStyle('width', 'auto');combo.innerList.setStyle('width', 'auto');}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});";
 eval(testCombo);
 
 
-		//processing SOP
+		//processing SPP
 		var spreqqty=x.insertCell(7)
 		spreqqty.className="black_ar";
 		sname="";

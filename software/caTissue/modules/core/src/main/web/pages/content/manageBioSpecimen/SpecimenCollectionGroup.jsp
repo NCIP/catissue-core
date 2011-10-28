@@ -214,9 +214,9 @@
 		document.forms[0].submit();
 	}
 
-	function sopEventClicked()
+	function sppEventClicked()
 		{
-			//alert('There are no SOPs associated with this Collection Protocol');
+			//alert('There are no SPPs associated with this Collection Protocol');
 			document.forms[0].onSubmit.value="";
 			var scgId = document.getElementById("id").value;
 			//alert(scgId);
@@ -227,7 +227,7 @@
 		}
 
 
-	function showSOP()
+	function showSPP()
 	{
 		var action="/catissuecore/DynamicEvent.do?eventName=Aliquot&pageOf=SpecimenCollectionGroup";
 		document.forms[0].action=action;
@@ -489,7 +489,7 @@
 		var consentTab=document.getElementById('consentTab');
 		var SCGImg = document.getElementById('SCGImage');
 		var consetsImg = document.getElementById('consentsImage');
-		var SOPImage=document.getElementById('SOPImage');
+		var SPPImage=document.getElementById('SPPImage');
 
 		if(selectedTab=="specimenCollectionGroupTab")
 		{
@@ -506,10 +506,10 @@
 		}
 		else
 		{
-			if('${requestScope.operation}' == "edit" && selectedTab=="SOP")
+			if('${requestScope.operation}' == "edit" && selectedTab=="SPP")
 			{
 				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_edit_collection2.gif  alt=Edit Specimen  Collection group  width=216 height=22 border=0 onclick=specimencollgroup()>"
-				SOPImage.innerHTML ="<img src=images/uIEnhancementImages/tab_consents1.gif alt=SOP width=76 height=22 border=0>"
+				SPPImage.innerHTML ="<img src=images/uIEnhancementImages/tab_consents1.gif alt=SPP width=76 height=22 border=0>"
 			}
 			if('${requestScope.operation}' == "edit")
 			{
@@ -556,9 +556,9 @@
 				<%}%>
 		}
 
-		function SOPPage()
+		function SPPPage()
 		{
-			switchToTab("SOP");
+			switchToTab("SPP");
 		}
 
 	  function showConsents()
@@ -692,7 +692,7 @@
 			<tr>
 				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
 				<td valign="bottom" id="specimenCollectionGroupTab"><a href="#" id="SCGImage"><img src="images/uIEnhancementImages/tab_edit_collection.gif" alt="Edit Specimen Collection Group" width="216" height="22"  border="0" onclick="specimencollgroup()"></a></td>
-				<td valign="bottom" onClick="sopEventClicked()"><a href="#"><img src="images/uIEnhancementImages/tab_sop2.gif" alt="Specimen Processing Procedure" width="50" height="22"  border="0"></a></td>
+				<td valign="bottom" onClick="sppEventClicked()"><a href="#"><img src="images/uIEnhancementImages/tab_spp2.gif" alt="Specimen Processing Procedure" width="50" height="22"  border="0"></a></td>
 				<td valign="bottom"  onClick="viewSPR()"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22"  border="0"></a></td>
 				<td valign="bottom" onClick="showAnnotations()"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></a></td>
 				<td align="left" valign="bottom" class="td_color_bfdcf3"   id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="consentPage()"></a></td>

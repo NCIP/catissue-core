@@ -135,7 +135,6 @@ public class DynamicEventAction extends BaseAction
 			String specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
 			if (specimenId == null)
 			{
-				final DynamicEventForm sopF = ((DynamicEventForm) dynamicEventForm);
 				request.setAttribute(Constants.SPECIMEN_ID, specimenId);
 			}
 		}

@@ -6,13 +6,13 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="java.util.Collection"%>
 <%@ page import="java.util.Map"%>
-<%@ page import="edu.wustl.catissuecore.domain.sop.Action"%>
+<%@ page import="edu.wustl.catissuecore.domain.processingprocedure.Action"%>
 <script type="text/javascript" src="jss/ext-base.js"></script>
 <script type="text/javascript" src="jss/ext-all.js"></script>
 
 <head>
 	<script>
-		function saveSPPEventsForSOP()
+		function saveSPPEventsForSPP()
 		{
 			var action=document.forms[0].action;
 
@@ -84,13 +84,13 @@
 					</tr>
 					<tr>
 						<td>
-							<div style="overflow:no; height: 100%;float: none" align="left" id ="sopEvents">
+							<div style="overflow:no; height: 100%;float: none" align="left" id ="sppEvents">
 							</div>
 						</td>
 					</tr>
 					<tr>
 						<td class="buttonbg">
-							<html:submit styleClass="blue_ar_b" value="Save" onclick="saveSPPEventsForSOP();"/>
+							<html:submit styleClass="blue_ar_b" value="Save" onclick="saveSPPEventsForSPP();"/>
 							<html:hidden styleId="name" property="name"/>
 							<html:hidden styleId="barcode" property="barcode"/>
 						</td>
@@ -114,7 +114,7 @@
 
 	function calculatePageHeight()
 	{
-		var sopEventDiv = document.getElementById('sopEvents');
+		var sppEventDiv = document.getElementById('sppEvents');
 		var iframeList = document.getElementsByTagName('iframe');
 		var allFrameHeights = 0;
 		for(j =0;j<iframeList.length;j++)
@@ -141,7 +141,7 @@
 		}
 		if(allFrameHeights != 0)
 		{
-			sopEventDiv.style.height=allFrameHeights+"px";
+			sppEventDiv.style.height=allFrameHeights+"px";
 		}
 	}
 </script>
@@ -174,7 +174,7 @@ for(Action action : actionCollection)
 	<script>
 
 		var formName<%=count%> = "<%=formContextId%>";
-		var sopevents<%=count%> = document.getElementById("sopEvents");
+		var sppevents<%=count%> = document.getElementById("sppEvents");
 		var formIframe<%=count%> = document.createElement("iframe");
 		formIframe<%=count%>.id = formName<%=count%>;
 		formIframe<%=count%>.name= formName<%=count%>;
@@ -182,7 +182,7 @@ for(Action action : actionCollection)
 		formIframe<%=count%>.style.width ="100%";
 		formIframe<%=count%>.scrolling="auto";
 		formIframe<%=count%>.setAttribute("src", "<%=iframeURL%>");
-		sopevents<%=count%>.appendChild(formIframe<%=count%>);
+		sppevents<%=count%>.appendChild(formIframe<%=count%>);
 		if(Ext.isIE)
 		{
 			<%if(count == listSize)

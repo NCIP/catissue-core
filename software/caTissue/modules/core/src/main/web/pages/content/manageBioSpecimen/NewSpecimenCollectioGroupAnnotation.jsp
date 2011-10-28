@@ -127,7 +127,7 @@ function editSCG()
 			document.forms[0].submit();
 		}
 
-			function sopEventClicked()
+			function sppEventClicked()
 		{
 			var scgId =<%=id%>;
 			var action= "DisplaySPPForSCGAction.do?SCG_ID="+scgId;
@@ -147,9 +147,9 @@ function editSCG()
 				<td valign="bottom">
 					<html:link styleId="specimenCollectionGroupTab" href="#" onclick="setTarget(); editSCG()">
 					<img src="images/uIEnhancementImages/tab_edit_collection2.gif" alt="Edit SpecimenCollection Group" width="216" height="22" border="0"></html:link></td>
-					<td valign="bottom" href="#" onClick="sopEventClicked()">
-					<html:link styleId="consentViewTab" href="#" onclick="sopEventClicked()">
-					<img src="images/uIEnhancementImages/tab_sop2.gif" alt="Specimen Processing Procedure" width="50" height="22"  border="0"></html:link></td>
+					<td valign="bottom" href="#" onClick="sppEventClicked()">
+					<html:link styleId="consentViewTab" href="#" onclick="sppEventClicked()">
+					<img src="images/uIEnhancementImages/tab_spp2.gif" alt="Specimen Processing Procedure" width="50" height="22"  border="0"></html:link></td>
 				<td valign="bottom"><html:link href="#" onclick="viewSPR()">
 					<img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></html:link></td>
 				<td valign="bottom">

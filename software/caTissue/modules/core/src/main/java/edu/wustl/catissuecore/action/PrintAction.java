@@ -185,7 +185,7 @@ public class PrintAction extends XSSSupportedAction
 				final LinkedHashSet specimenDomainCollection = (LinkedHashSet) forwardToPrintMap
 						.get("printMultipleSpecimen");
 				final Iterator iterator = specimenDomainCollection.iterator();
-				final List<AbstractDomainObject> specimenList = new ArrayList();
+				final List<AbstractDomainObject> specimenList = new ArrayList<AbstractDomainObject>();
 				while (iterator.hasNext())
 				{
 					final Specimen objSpecimen = (Specimen) iterator.next();
@@ -214,7 +214,7 @@ public class PrintAction extends XSSSupportedAction
 				final HashSet specimenDomainCollection = (HashSet) forwardToPrintMap
 						.get("printAntiSpecimen");
 				final Iterator iterator = specimenDomainCollection.iterator();
-				final List<AbstractDomainObject> specimenList = new ArrayList();
+				final List<AbstractDomainObject> specimenList = new ArrayList<AbstractDomainObject>();
 				while (iterator.hasNext())
 				{
 					final Specimen objSpecimen = (Specimen) iterator.next();
@@ -234,7 +234,7 @@ public class PrintAction extends XSSSupportedAction
 				final DAO dao = DAOConfigFactory.getInstance().getDAOFactory(
 						Constants.APPLICATION_NAME).getDAO();
 				boolean printStauts = false;
-				List similarContainerList = (List) request.getAttribute("similarContainerList");
+				List<NameValueBean> similarContainerList = (List<NameValueBean>) request.getAttribute("similarContainerList");
 				final LabelPrinter labelPrinter = LabelPrinterFactory
 						.getInstance("storagecontainer");
 				if (similarContainerList == null || similarContainerList.size() == 0)
@@ -245,7 +245,7 @@ public class PrintAction extends XSSSupportedAction
 					{
 						final NameValueBean bean = new
 						NameValueBean(containerId, containerId);
-						similarContainerList = new ArrayList();
+						similarContainerList = new ArrayList<NameValueBean>();
 						similarContainerList.add(bean);
 					}
 				}
@@ -256,8 +256,7 @@ public class PrintAction extends XSSSupportedAction
 						new ArrayList<AbstractDomainObject>();
 					for (int i = 0; i < similarContainerList.size(); i++)
 					{
-						final NameValueBean bean = (NameValueBean)
-						similarContainerList.get(i);
+						final NameValueBean bean = similarContainerList.get(i);
 						final String value = bean.getValue();
 						final Object object = dao.retrieveById
 						(StorageContainer.class.getName(),new Long(value));
@@ -405,7 +404,7 @@ public class PrintAction extends XSSSupportedAction
 	private List < AbstractDomainObject > getSpecimenList(HashSet specimenDomainCollection)
 	{
 		Iterator iterator = specimenDomainCollection.iterator();
-		List < AbstractDomainObject > specimenList = new ArrayList();
+		List < AbstractDomainObject > specimenList = new ArrayList<AbstractDomainObject>();
 		while (iterator.hasNext())
 		{
 			Specimen objSpecimen = (Specimen) iterator.next();
@@ -456,9 +455,9 @@ public class PrintAction extends XSSSupportedAction
 		List<String> specimenList = new ArrayList<String>();
 		if(key.equals( Constants.PRINT_SPECIMEN_FROM_LISTVIEW ))
 		{
-			LinkedHashSet<String> specimenIds = (LinkedHashSet) forwardToPrintMap
+			LinkedHashSet<String> specimenIds = (LinkedHashSet<String>) forwardToPrintMap
 			.get(key);
-			Iterator it = specimenIds.iterator();
+			Iterator<String> it = specimenIds.iterator();
 			while(it.hasNext())
 			{
 				specimenList.add(it.next().toString());
@@ -466,7 +465,7 @@ public class PrintAction extends XSSSupportedAction
 		}
 		else
 		{
-			specimenList = (List) forwardToPrintMap.get(key);
+			specimenList = (List<String>) forwardToPrintMap.get(key);
 		}
 		return specimenList;
 	}

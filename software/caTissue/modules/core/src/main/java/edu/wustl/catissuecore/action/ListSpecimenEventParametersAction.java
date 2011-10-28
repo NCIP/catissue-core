@@ -385,44 +385,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		}
 	}
 
-	/**
-	 * Gets the all sop event form names.
-	 * This method fetches the names of all the Classes of SOP Event associated with ActionApplicationRecordEntry.
-	 * These names are to be shown in the drop down on the event page.
-	 * @return the all sop event form names
-	 */
-	/*private String[] getAllSOPEventFormNames() {
-		int eventListSize=Constants.EVENT_PARAMETERS.length;
-		dynamicEventMap.clear();
-		EntityCache cache = EntityCache.getInstance();
-		EntityGroupInterface entityGroup = cache.getEntityGroupByName("Catissue_Suite");
-		EntityInterface actionRecordEntry = entityGroup.getEntityByName("ActionApplicationRecordEntry");
-		List<String> namesOfSOPEvents = new ArrayList<String>();
-		Collection<AssociationInterface> allAsso = actionRecordEntry.getAllAssociations();
-		for (AssociationInterface associationInterface : allAsso) {
-			Collection<edu.common.dynamicextensions.domain.userinterface.Container> containerCollection=associationInterface.getTargetEntity().getContainerCollection();
-			Iterator<edu.common.dynamicextensions.domain.userinterface.Container> contIter=containerCollection.iterator();
-			if(contIter.hasNext())
-			{
-				namesOfSOPEvents.add(associationInterface.getTargetEntity().getName());
-				edu.common.dynamicextensions.domain.userinterface.Container container=contIter.next();
-				dynamicEventMap.put(associationInterface.getTargetEntity().getName(), container.getId());
-			}
-
-		}
-		String[] eventlist= new String[eventListSize+namesOfSOPEvents.size()];
-		String[] defaultEventlist=Constants.EVENT_PARAMETERS;
-		for(int j=0;j<defaultEventlist.length;j++)
-		{
-			eventlist[j]=defaultEventlist[j];
-		}
-		for(int k=Constants.EVENT_PARAMETERS.length,l=0; l<namesOfSOPEvents.size();k++,l++)
-		{
-			eventlist[k]=namesOfSOPEvents.get(l);
-		}
-		return eventlist;
-	}*/
-
+	
 	// Patch ID: Bug#4180_2
 	/**
 	 * This method sorts the List of the Map of grid data chronologically.

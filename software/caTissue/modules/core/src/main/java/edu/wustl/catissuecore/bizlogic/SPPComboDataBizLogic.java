@@ -16,10 +16,10 @@ import edu.wustl.dao.exception.DAOException;
 /**
  * @author sagar_baldwa
  */
-public class SOPComboDataBizLogic extends CatissueDefaultBizLogic
+public class SPPComboDataBizLogic extends CatissueDefaultBizLogic
 {
 
-	private transient final Logger logger = Logger.getCommonLogger(SOPComboDataBizLogic.class);
+	private transient final Logger logger = Logger.getCommonLogger(SPPComboDataBizLogic.class);
 
 	/**
 	 * This method would return the Clinical Diagnosis List
@@ -27,7 +27,7 @@ public class SOPComboDataBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException
 	 * @throws BizLogicException
 	 */
-	public List<NameValueBean> getSOPNameList(String query,boolean showSubset) throws BizLogicException
+	public List<NameValueBean> getSPPNameList(String query,boolean showSubset) throws BizLogicException
 	{
 
 		final List<NameValueBean> sppList = new ArrayList<NameValueBean>();

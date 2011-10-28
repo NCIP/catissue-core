@@ -1,7 +1,7 @@
 package edu.wustl.catissuecore.smoketest.biospecimen;
 
 import edu.common.dynamicextensions.util.global.Variables;
-import edu.wustl.catissuecore.actionForm.DisplaySOPEventForm;
+import edu.wustl.catissuecore.actionForm.DisplaySPPEventForm;
 import edu.wustl.catissuecore.actionForm.DynamicEventForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.QuickEventsForm;
@@ -76,15 +76,15 @@ public class SPPDataEntryTestCase extends CaTissueSuiteSmokeBaseTest {
 		setActionForm(newSpecimenForm);
 		actionPerform();
 
-		DisplaySOPEventForm displaySOPEventForm=new DisplaySOPEventForm();
-		displaySOPEventForm.setSpecimenId(arr[2]);
-		displaySOPEventForm.setOperation("search");
+		DisplaySPPEventForm displaySPPEventForm=new DisplaySPPEventForm();
+		displaySPPEventForm.setSpecimenId(arr[2]);
+		displaySPPEventForm.setOperation("search");
 
-		setRequestPathInfo("/DisplaySOPEventsAction");
+		setRequestPathInfo("/DisplaySPPEventsAction");
 		addRequestParameter("operation", "search");
 		addRequestParameter(Constants.SPECIMEN_ID, arr[2]);
 		addRequestParameter("pageOf", "pageOfNewSpecimen");
-		setActionForm(displaySOPEventForm);
+		setActionForm(displaySPPEventForm);
 		actionPerform();
 
 		DynamicEventForm dynamicEventForm=new DynamicEventForm();
@@ -98,9 +98,9 @@ public class SPPDataEntryTestCase extends CaTissueSuiteSmokeBaseTest {
 		actionPerform();
 
 		clearRequestParameters();
-		displaySOPEventForm=new DisplaySOPEventForm();
-		displaySOPEventForm.setSppName(null);
-		setRequestPathInfo("/SaveSOPEventAction");
+		displaySPPEventForm=new DisplaySPPEventForm();
+		displaySPPEventForm.setSppName(null);
+		setRequestPathInfo("/SaveSPPEventAction");
 		addRequestParameter("pageOf", "pageOfNewSpecimen");
 		addRequestParameter("operation", "insertDEData");
 		addRequestParameter("specimenId", arr[2]);
@@ -118,7 +118,7 @@ public class SPPDataEntryTestCase extends CaTissueSuiteSmokeBaseTest {
 		addRequestParameter("Control_127_127_1_1", new String[]{arr[13]});
 		addRequestParameter("Control_127_127_2_1", new String[]{arr[14]});
 		Variables.jbossUrl=arr[15];
-		setActionForm(displaySOPEventForm);
+		setActionForm(displaySPPEventForm);
 		actionPerform();
 	}
 
@@ -174,15 +174,15 @@ public class SPPDataEntryTestCase extends CaTissueSuiteSmokeBaseTest {
 		setActionForm(newSpecimenForm);
 		actionPerform();
 
-		DisplaySOPEventForm displaySOPEventForm=new DisplaySOPEventForm();
-		displaySOPEventForm.setSpecimenId(arr[2]);
-		displaySOPEventForm.setOperation("search");
+		DisplaySPPEventForm displaySPPEventForm=new DisplaySPPEventForm();
+		displaySPPEventForm.setSpecimenId(arr[2]);
+		displaySPPEventForm.setOperation("search");
 
-		setRequestPathInfo("/DisplaySOPEventsAction");
+		setRequestPathInfo("/DisplaySPPEventsAction");
 		addRequestParameter("operation", "search");
 		addRequestParameter(Constants.SPECIMEN_ID, arr[2]);
 		addRequestParameter("pageOf", "pageOfNewSpecimen");
-		setActionForm(displaySOPEventForm);
+		setActionForm(displaySPPEventForm);
 		actionPerform();
 
 		DynamicEventForm dynamicEventForm=new DynamicEventForm();
@@ -196,7 +196,7 @@ public class SPPDataEntryTestCase extends CaTissueSuiteSmokeBaseTest {
 		actionPerform();
 
 		clearRequestParameters();
-		setRequestPathInfo("/SaveSOPEventAction");
+		setRequestPathInfo("/SaveSPPEventAction");
 		addRequestParameter("pageOf", "pageOfNewSpecimen");
 		addRequestParameter("operation", "insertDEData");
 		addRequestParameter("specimenId", arr[2]);
@@ -263,7 +263,7 @@ public class SPPDataEntryTestCase extends CaTissueSuiteSmokeBaseTest {
         addRequestParameter("id", arr[2]);
         actionPerform();
 
-        setRequestPathInfo("/DisplaySOPEventsForSCG");
+        setRequestPathInfo("/DisplaySPPEventsForSCG");
         addRequestParameter("id", arr[2]);
         addRequestParameter("sppName", "SPP_With_SpunEvent");
         actionPerform();
@@ -277,7 +277,7 @@ public class SPPDataEntryTestCase extends CaTissueSuiteSmokeBaseTest {
         addRequestParameter("pageOf", "pageOfDynamicEvents");
         actionPerform();
 
-        setRequestPathInfo("/SaveSOPEventAction");
+        setRequestPathInfo("/SaveSPPEventAction");
         addRequestParameter("id", arr[2]);
         addRequestParameter("pageOf", "pageOfSCG");
     	addRequestParameter(arr[3]+"!@!operation",new String[]{"edit"});
@@ -341,7 +341,7 @@ public class SPPDataEntryTestCase extends CaTissueSuiteSmokeBaseTest {
         addRequestParameter("id", arr[2]);
         actionPerform();
 
-        setRequestPathInfo("/DisplaySOPEventsForSCG");
+        setRequestPathInfo("/DisplaySPPEventsForSCG");
         addRequestParameter("id", arr[2]);
         addRequestParameter("sppName", "SPP_With_SpunEvent");
         actionPerform();
@@ -355,7 +355,7 @@ public class SPPDataEntryTestCase extends CaTissueSuiteSmokeBaseTest {
         addRequestParameter("pageOf", "pageOfDynamicEvents");
         actionPerform();
 
-        setRequestPathInfo("/SaveSOPEventAction");
+        setRequestPathInfo("/SaveSPPEventAction");
         addRequestParameter("id", arr[2]);
         addRequestParameter("pageOf", "pageOfSCG");
     	addRequestParameter(arr[3]+"!@!operation",new String[]{"edit"});
@@ -433,7 +433,7 @@ public class SPPDataEntryTestCase extends CaTissueSuiteSmokeBaseTest {
 		addRequestParameter("limit","15");
 		addRequestParameter("start","0");
 		addRequestParameter("query","");
-		setRequestPathInfo("/SOPData");
+		setRequestPathInfo("/SPPData");
 		actionPerform();
 	}
 }

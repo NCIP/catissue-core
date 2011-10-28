@@ -28,11 +28,11 @@ import edu.wustl.common.util.logger.Logger;
  * @author suhas_khot
  *
  */
-public class DisplaySOPEventsAction extends SecureAction
+public class DisplaySPPEventsAction extends SecureAction
 {
 
 	/** Initialize logger. */
-	private transient final Logger LOGGER = Logger.getCommonLogger(DisplaySOPEventsAction.class);
+	private transient final Logger LOGGER = Logger.getCommonLogger(DisplaySPPEventsAction.class);
 
 	/**
 	 * Overrides the execute method of Action class. Initializes the various
@@ -54,7 +54,7 @@ public class DisplaySOPEventsAction extends SecureAction
 	{
 		String pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
-		//SOPEventProcessor
+		//SPPEventProcessor
 		SPPEventProcessor sppEventProcessor = new SPPEventProcessor();
 		//Retrieve specimen object based on specimen Id
 		String specimenId = request.getParameter(Constants.SPECIMEN_ID);
@@ -75,8 +75,8 @@ public class DisplaySOPEventsAction extends SecureAction
 		SpecimenProcessingProcedure processingSPP = sppEventProcessor.getSPPBySpecimenId(Long.valueOf(specimenId));
 		if (processingSPP != null)
 		{
-			request.setAttribute("nameOfSelectedSop", processingSPP.getName());
-			request.setAttribute("selectedSopId", processingSPP.getId());
+			request.setAttribute("nameOfSelectedSpp", processingSPP.getName());
+			request.setAttribute("selectedSppId", processingSPP.getId());
 		}
 
 		return mapping.findForward(pageOf);

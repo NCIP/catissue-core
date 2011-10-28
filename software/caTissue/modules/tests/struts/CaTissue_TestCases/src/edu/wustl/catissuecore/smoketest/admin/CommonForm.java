@@ -18,7 +18,7 @@ public class CommonForm implements FormFile
 	FileItem fileItem;
 	String hudsonPath;
 
-	CommonForm(FileItem diskFileItem,String filePath)
+	public CommonForm(FileItem diskFileItem,String filePath)
 	{
 			this.fileItem = diskFileItem;
 			this.hudsonPath = new String(filePath);
@@ -27,7 +27,7 @@ public class CommonForm implements FormFile
 	@Override
 	public String getFileName() {
 		// TODO Auto-generated method stub
-			return "SOPTest.xml";
+			return "SPPTest.xml";
 	}
 
 	@Override

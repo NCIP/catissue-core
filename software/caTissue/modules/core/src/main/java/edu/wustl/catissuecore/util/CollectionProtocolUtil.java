@@ -605,11 +605,11 @@ public class CollectionProtocolUtil
 		}
 		if(reqSpecimen.getProcessingSPP()!=null)
 		{
-			speRequirementBean.setProcessingSOPForSpecimen(reqSpecimen.getProcessingSPP().getName());
+			speRequirementBean.setProcessingSPPForSpecimen(reqSpecimen.getProcessingSPP().getName());
 		}
 		else
 		{
-			speRequirementBean.setProcessingSOPForSpecimen("Not Specified");
+			speRequirementBean.setProcessingSPPForSpecimen("Not Specified");
 		}
 		SpecimenCharacteristics characteristics = reqSpecimen.getSpecimenCharacteristics();
 		updateSpeRequirementBean(reqSpecimen, speRequirementBean,
@@ -737,7 +737,7 @@ public class CollectionProtocolUtil
 			speRequirementBean.setStorageContainerForAliquotSpecimem(
 					aliquotSpecimen.getStorageContainerForSpecimen() );
 			speRequirementBean.setCreationEventForAliquot(aliquotSpecimen.getCreationEventForSpecimen());
-			speRequirementBean.setProcessingSOPForAliquot(aliquotSpecimen.getProcessingSOPForSpecimen());
+			speRequirementBean.setProcessingSPPForAliquot(aliquotSpecimen.getProcessingSPPForSpecimen());
 			speRequirementBean.setQuantityPerAliquot(aliquotSpecimen.getQuantity());
 		}
 	}
@@ -794,8 +794,8 @@ public class CollectionProtocolUtil
 			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getCreationEventForSpecimen());
 
 			derivedSpecimenKey = getKeyBase(deriveCtr);
-			derivedSpecimenKey.append("_processingSOP" );
-			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getProcessingSOPForSpecimen());
+			derivedSpecimenKey.append("_processingSPP" );
+			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getProcessingSPPForSpecimen());
 
 			derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_labelFormat" );
@@ -1570,25 +1570,25 @@ public class CollectionProtocolUtil
 		{
 			reqSpecimen.setCreationEvent(null);
 		}
-		if(!Validator.isEmpty(specimenRequirementBean.getProcessingSOPForSpecimen())&& !specimenRequirementBean.getProcessingSOPForSpecimen().equalsIgnoreCase("Not Specified")
-				&& !specimenRequirementBean.getProcessingSOPForSpecimen().equalsIgnoreCase("-- Select --"))
+		if(!Validator.isEmpty(specimenRequirementBean.getProcessingSPPForSpecimen())&& !specimenRequirementBean.getProcessingSPPForSpecimen().equalsIgnoreCase("Not Specified")
+				&& !specimenRequirementBean.getProcessingSPPForSpecimen().equalsIgnoreCase("-- Select --"))
 		{
-			if(sppMap.get(specimenRequirementBean.getProcessingSOPForSpecimen())==null)
+			if(sppMap.get(specimenRequirementBean.getProcessingSPPForSpecimen())==null)
 			{
 				List<SpecimenProcessingProcedure> sppList=null;
 				try {
 					DAO dao = AppUtility.openDAOSession(null);
-					String hql = "from edu.wustl.catissuecore.domain.processinprocedure.SpecimenProcessingProcedure where name= \'"+specimenRequirementBean.getProcessingSOPForSpecimen()+"\'";
+					String hql = "from edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure where name= \'"+specimenRequirementBean.getProcessingSPPForSpecimen()+"\'";
 					sppList = dao.executeQuery(hql);
 					AppUtility.closeDAOSession(dao);
-					sppMap.put(specimenRequirementBean.getProcessingSOPForSpecimen(), sppList.get(0));
+					sppMap.put(specimenRequirementBean.getProcessingSPPForSpecimen(), sppList.get(0));
 
 				}
 				catch (ApplicationException e) {
 					e.printStackTrace();
 				}
 			}
-			reqSpecimen.setProcessingSPP(sppMap.get(specimenRequirementBean.getProcessingSOPForSpecimen()));
+			reqSpecimen.setProcessingSPP(sppMap.get(specimenRequirementBean.getProcessingSPPForSpecimen()));
 		}
 		else
 		{

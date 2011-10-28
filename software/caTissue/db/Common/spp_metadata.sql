@@ -12,4 +12,4 @@ update dyextn_abstract_metadata set name = 'CollectionProtocolEvent' where name 
 update dyextn_abstract_metadata set name = 'SpecimenCollectionGroup' where name = 'edu.wustl.catissuecore.domain.SpecimenCollectionGroup';
 -- SQL's for importing SPP metadata into database ends
 
---INSERT INTO CATISSUE_QUERY_TABLE_DATA(TABLE_NAME,DISPLAY_NAME,ALIAS_NAME,PRIVILEGE_ID,FOR_SQI) VALUES ('catissue_sop','SOP','SOP',2,null)
+--INSERT INTO CATISSUE_QUERY_TABLE_DATA(TABLE_NAME,DISPLAY_NAME,ALIAS_NAME,PRIVILEGE_ID,FOR_SQI) VALUES ('catissue_spp','SPP','SPP',2,null)

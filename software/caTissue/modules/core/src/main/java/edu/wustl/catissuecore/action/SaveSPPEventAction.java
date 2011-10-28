@@ -31,7 +31,7 @@ import org.apache.struts.action.ActionMessages;
 import edu.common.dynamicextensions.domain.integration.AbstractFormContext;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.catissuecore.actionForm.DisplaySOPEventForm;
+import edu.wustl.catissuecore.actionForm.DisplaySPPEventForm;
 import edu.wustl.catissuecore.bizlogic.ActionApplicationBizLogic;
 import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
 import edu.wustl.catissuecore.domain.ISPPBizlogic;
@@ -56,7 +56,7 @@ import edu.wustl.common.factory.IFactory;
  * @author suhas_khot
  *
  */
-public class SaveSOPEventAction extends SecureAction
+public class SaveSPPEventAction extends SecureAction
 {
 
 	/** The container parameter list. */
@@ -91,7 +91,7 @@ public class SaveSOPEventAction extends SecureAction
 		final SessionDataBean sessionLoginInfo = this.getSessionData(request);
 
 		SPPEventProcessor sppEventProcessor = new SPPEventProcessor();
-		DisplaySOPEventForm displaySOPEventForm = (DisplaySOPEventForm) form;
+		DisplaySPPEventForm displaySPPEventForm = (DisplaySPPEventForm) form;
 
 		//parse request parameter map
 		formContextParameterMap = sppEventProcessor.populateFormContextParmaterMap(request
@@ -120,11 +120,11 @@ public class SaveSOPEventAction extends SecureAction
 			String[] domainObjectIdArr = sppEventProcessor.getSpecimenOrSCGIdArray(request,
 					domainObjectId, isSCG);
 
-			String sppName = displaySOPEventForm.getSppName();
+			String sppName = displaySPPEventForm.getSppName();
 
 			for (int cnt = 0; cnt < domainObjectIdArr.length; cnt++)
 			{
-				ISPPBizlogic sppBizlogicObject = getISPPWrapperObject(isSCG, displaySOPEventForm,
+				ISPPBizlogic sppBizlogicObject = getISPPWrapperObject(isSCG, displaySPPEventForm,
 						domainObjectIdArr[cnt]);
 				try
 				{
@@ -166,10 +166,10 @@ public class SaveSOPEventAction extends SecureAction
 			}
 			pageOf = getPageOf(request, isSCG);
 		}
-		if ("pageOfUtilizeSopOfScg".equals(request.getParameter(Constants.PAGE_OF))
-				|| "pageOfUtilizeSopofSpecimen".equals(request.getParameter(Constants.PAGE_OF)))
+		if ("pageOfUtilizeSppOfScg".equals(request.getParameter(Constants.PAGE_OF))
+				|| "pageOfUtilizeSppofSpecimen".equals(request.getParameter(Constants.PAGE_OF)))
 		{
-			request.setAttribute("sopValue", request.getParameter("sppId"));
+			request.setAttribute("sppValue", request.getParameter("sppId"));
 			if (request.getAttribute(Globals.ERROR_KEY) != null)
 			{
 				return getActionForward(request, isSCG);
@@ -254,11 +254,11 @@ public class SaveSOPEventAction extends SecureAction
 			Iterator<SpecimenProcessingProcedureApplication> sppAppIter = sppAppCollection.iterator();
 			while (sppAppIter.hasNext())
 			{
-				SpecimenProcessingProcedureApplication sopApplication = sppAppIter.next();
-				if ((isSCG && sopApplication.getSpp().getName().equals(sppName)) || (!isSCG))
+				SpecimenProcessingProcedureApplication sppApplication = sppAppIter.next();
+				if ((isSCG && sppApplication.getSpp().getName().equals(sppName)) || (!isSCG))
 				{
 					sppDataEntryDone = updateSPPData(request, sppEventProcessor, actionAppBizLogic,
-							sopApplication);
+							sppApplication);
 					break;
 				}
 			}
@@ -276,7 +276,7 @@ public class SaveSOPEventAction extends SecureAction
 	 * @param request the request
 	 * @param sppEventProcessor the spp event processor
 	 * @param actionAppBizLogic the action app biz logic
-	 * @param sopApplication the sop application
+	 * @param sppApplication the spp application
 	 *
 	 * @return true, if update spp data
 	 *
@@ -381,8 +381,8 @@ public class SaveSOPEventAction extends SecureAction
 	 */
 	private ActionForward getActionForward(HttpServletRequest request, boolean isSCG)
 	{
-		String url = "/DisplaySOPEventsFromDashboardAction.do?pageOf=pageOfDynamicEvent&selectedAll="
-				+ request.getParameter("selectedAll") + "&sopId=" + request.getParameter("sppId");
+		String url = "/DisplaySPPEventsFromDashboardAction.do?pageOf=pageOfDynamicEvent&selectedAll="
+				+ request.getParameter("selectedAll") + "&sppId=" + request.getParameter("sppId");
 		if (isSCG)
 		{
 			url = url + "&scgId=" + getSCGId(request);
@@ -436,7 +436,7 @@ public class SaveSOPEventAction extends SecureAction
 	 * Gets the ispp wrapper object.
 	 *
 	 * @param isSCG the is scg
-	 * @param displaySOPEventForm the display sop event form
+	 * @param displaySPPEventForm the display spp event form
 	 * @param domainObjectId the domain object id
 	 *
 	 * @return the ISPP wrapper object
@@ -444,13 +444,13 @@ public class SaveSOPEventAction extends SecureAction
 	 * @throws BizLogicException the biz logic exception
 	 */
 	private ISPPBizlogic getISPPWrapperObject(boolean isSCG,
-			DisplaySOPEventForm displaySOPEventForm, String domainObjectId)
+			DisplaySPPEventForm displaySPPEventForm, String domainObjectId)
 			throws BizLogicException
 	{
 		ISPPBizlogic sppBizlogicObject;
 		if (isSCG)
 		{
-			displaySOPEventForm.setScgId(domainObjectId);
+			displaySPPEventForm.setScgId(domainObjectId);
 			//Fetch Specimen Collection Group
 			SpecimenCollectionGroup scg = (SpecimenCollectionGroup) defaultBizLogic.retrieve(
 					SpecimenCollectionGroup.class.getName(), Long.valueOf(domainObjectId));
@@ -515,7 +515,7 @@ public class SaveSOPEventAction extends SecureAction
 		}
 		else
 		{
-			pageOf = "pageOfDisplaySOPEvents";
+			pageOf = "pageOfDisplaySPPEvents";
 			request.setAttribute(Constants.PAGE_OF, request.getParameter(Constants.PAGE_OF));
 		}
 		return pageOf;

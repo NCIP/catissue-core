@@ -33,12 +33,12 @@ import edu.wustl.common.util.logger.Logger;
  * @author atul_kaushal
  *
  */
-public class DisplaySOPEventsForSCGAction extends SecureAction
+public class DisplaySPPEventsForSCGAction extends SecureAction
 {
 
 	/** Initialize logger. */
 	private transient final Logger LOGGER = Logger
-			.getCommonLogger(DisplaySOPEventsForSCGAction.class);
+			.getCommonLogger(DisplaySPPEventsForSCGAction.class);
 
 	/**
 	 * Overrides the execute method of Action class. Initializes the various
@@ -64,7 +64,7 @@ public class DisplaySOPEventsForSCGAction extends SecureAction
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 
-		//SOPEventProcessor
+		//SPPEventProcessor
 		SPPEventProcessor sppEventProcessor = new SPPEventProcessor();
 		SpecimenCollectionGroup scgObject = null;
 		String scgId = request.getParameter("id");
@@ -110,10 +110,10 @@ public class DisplaySOPEventsForSCGAction extends SecureAction
 		List<NameValueBean> sppNameList = new ArrayList<NameValueBean>();
 		sppNameList.add(new NameValueBean(Constants.SELECT_OPTION, Constants.SELECT_OPTION));
 		Collection<SpecimenProcessingProcedure> sppCollection = scgObject.getCollectionProtocolEvent().getSppCollection();
-		Iterator<SpecimenProcessingProcedure> sopIter = sppCollection.iterator();
-		while (sopIter.hasNext())
+		Iterator<SpecimenProcessingProcedure> sppIter = sppCollection.iterator();
+		while (sppIter.hasNext())
 		{
-			SpecimenProcessingProcedure spp = sopIter.next();
+			SpecimenProcessingProcedure spp = sppIter.next();
 			String sppName1 = spp.getName();
 			sppNameList.add(new NameValueBean(sppName1, sppName1));
 		}

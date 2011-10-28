@@ -33,12 +33,10 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException
 	 * @throws BizLogicException
 	 */
-	public List getClinicalDiagnosisList(String query,boolean showSubset) throws BizLogicException
+	public List<NameValueBean> getClinicalDiagnosisList(String query,boolean showSubset) throws BizLogicException
 	{
 		// populating clinical Diagnosis field
-		final List<NameValueBean> clinicalDiagnosisList = new ArrayList();
-		final String sourceObjectName = PermissibleValueImpl.class.getName();
-		final String[] selectColumnName = {"value"};
+		final List<NameValueBean> clinicalDiagnosisList = new ArrayList<NameValueBean>();
 		DAO dao = null;
 		try
 		{
@@ -49,7 +47,7 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 
 			String hql = "Select PermissibleValueImpl.value from edu.wustl.common.cde.PermissibleValueImpl PermissibleValueImpl WHERE PermissibleValueImpl.value like lower('%"+query+"%') AND PermissibleValueImpl.cde.publicId = 'Clinical_Diagnosis_PID'";
 
-			List dataList = dao.executeQuery(hql);
+			List<String> dataList = dao.executeQuery(hql);
 
 			this.closeDAOSession(dao);
 
@@ -110,7 +108,7 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 		{
 			jsonArray = new JSONArray();
 			jsonObject = new JSONObject();
-			final List clinicalDiagnosisList;
+			final List<NameValueBean> clinicalDiagnosisList;
 			boolean showSubset = false;
 						
 			if(!clinicalDiagnosisBean.isEmpty() && Constants.SHOW_ALL_VALUES.equals(showOption))
@@ -124,10 +122,10 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 			}
 			else
 			{
-			  clinicalDiagnosisList = (List) clinicalDiagnosisBean;
+			  clinicalDiagnosisList = (List<NameValueBean>) clinicalDiagnosisBean;
 			}
 			jsonObject.put("totalCount", new Integer(clinicalDiagnosisList.size()));
-			final ListIterator iterator = clinicalDiagnosisList.listIterator(startFetch + 1);
+			final ListIterator<NameValueBean> iterator = clinicalDiagnosisList.listIterator(startFetch + 1);
 			final Integer total = limitFetch + startFetch;
 			// 1st record in List has value -1, so startFetch is incremented and
 			// made to fetch data from 2nd element from the List
@@ -137,7 +135,7 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 			{
 				if (iterator.hasNext())
 				{
-					final NameValueBean nameValueBean = (NameValueBean) iterator.next();
+					final NameValueBean nameValueBean = iterator.next();
 					if (nameValueBean.getName().toLowerCase().contains(query.toLowerCase())
 							|| query == null)
 					{

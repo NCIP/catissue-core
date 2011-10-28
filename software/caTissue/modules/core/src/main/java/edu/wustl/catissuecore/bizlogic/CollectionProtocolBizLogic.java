@@ -1695,14 +1695,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 						queryWhereClause);
 				if(processingSPPList == null || processingSPPList.isEmpty())
 				{
-					throw getBizLogicException(null, "errors.item.notExists", "ProcessingSOP");
+					throw getBizLogicException(null, "errors.item.notExists", "ProcessingSPP");
 				}
 			}
 		}
 		catch (final DAOException daoExp)
 		{
 			CollectionProtocolBizLogic.LOGGER.error(daoExp.getMessage(), daoExp);
-			throw getBizLogicException(null, "errors.item.notExists", "ProcessingSOP");
+			throw getBizLogicException(null, "errors.item.notExists", "ProcessingSPP");
 		}
 	}
 

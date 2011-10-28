@@ -23,7 +23,7 @@ PUBLIC
 		<form-bean name="reportedProblemForm" type="edu.wustl.catissuecore.actionForm.ReportedProblemForm"/>
 		<form-bean name="domainObjectListForm" type="edu.wustl.catissuecore.actionForm.DomainObjectListForm"/>
 		<form-bean name="departmentForm" type="edu.wustl.catissuecore.actionForm.DepartmentForm"/>
-		<form-bean name="sopForm" type="edu.wustl.catissuecore.actionForm.SOPForm"/>
+		<form-bean name="sppForm" type="edu.wustl.catissuecore.actionForm.SPPForm"/>
 		<form-bean name="loginForm" type="edu.wustl.catissuecore.actionForm.LoginForm"/>
 		<form-bean name="casLoginForm" type="edu.wustl.catissuecore.actionForm.CasLoginForm"/>
 		<form-bean name="newSpecimenForm" type="edu.wustl.catissuecore.actionForm.NewSpecimenForm"/>
@@ -38,7 +38,7 @@ PUBLIC
 		<form-bean name="storageTypeForm" type="edu.wustl.catissuecore.actionForm.StorageTypeForm"/>
 		<form-bean name="storageContainerForm" type="edu.wustl.catissuecore.actionForm.StorageContainerForm"/>
 		<form-bean name="siteForm" type="edu.wustl.catissuecore.actionForm.SiteForm"/>
-		<form-bean name="utilizeSopForm" type="edu.wustl.catissuecore.actionForm.UtilizeSopForm"/>
+		<form-bean name="utilizeSppForm" type="edu.wustl.catissuecore.actionForm.UtilizeSppForm"/>
 		<form-bean name="biohazardForm" type="edu.wustl.catissuecore.actionForm.BiohazardForm"/>
 		<form-bean name="cancerResearchGroupForm" type="edu.wustl.catissuecore.actionForm.CancerResearchGroupForm"/>
 		<!-- <form-bean name="frozenEventParametersForm" type="edu.wustl.catissuecore.actionForm.FrozenEventParametersForm"/> -->
@@ -129,7 +129,7 @@ PUBLIC
  		<!--  CTRP Integration-->
 	    <form-bean name="ctrpInstituionForm" type="edu.wustl.catissuecore.actionForm.CTRPInstitutionForm"/>
 	    <form-bean name="ctrpEntityForm" type="edu.wustl.catissuecore.actionForm.CTRPEntityForm"/>
-	    <form-bean name="displaySOPEventForm" type="edu.wustl.catissuecore.actionForm.DisplaySOPEventForm"/>
+	    <form-bean name="displaySPPEventForm" type="edu.wustl.catissuecore.actionForm.DisplaySPPEventForm"/>
 	</form-beans>
 
 	<!-- Global Exception Definitions -->
@@ -1898,75 +1898,75 @@ PUBLIC
 		</action>
 		<!-- DistributionProtocol Actions Ends-->
 
-		<!-- SOP Actions Starts-->
-		<action path="/SOP" type="edu.wustl.catissuecore.action.SOPAction"
-			name="sopForm" validate="false" scope="request">
-			<forward name="pageOfSOP" path=".catissuecore.SOPDef" />
+		<!-- SPP Actions Starts-->
+		<action path="/SPP" type="edu.wustl.catissuecore.action.SPPAction"
+			name="sppForm" validate="false" scope="request">
+			<forward name="pageOfSPP" path=".catissuecore.SPPDef" />
 			<forward name="pageOfSaveSPPDefaultValue" path="/SaveDefaultValueForSPPEvents.do" />
 			<forward name="pageOfDisplaySPPDefaultValue" path="/DisplayDefaultValueForSPPEvents.do" />
-			<forward name="failure" path=".catissuecore.SOPDef" />
+			<forward name="failure" path=".catissuecore.SPPDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
 
 		<action path="/SaveDefaultValueForSPPEvents"
 			type="edu.wustl.catissuecore.action.SaveDefaultValueForSPPEventsAction"
-			name="sopForm" validate="false" scope="request">
-			<forward name="pageOfSOP" path=".catissuecore.SOPDef" />
-			<forward name="failure" path=".catissuecore.SOPDef" />
+			name="sppForm" validate="false" scope="request">
+			<forward name="pageOfSPP" path=".catissuecore.SPPDef" />
+			<forward name="failure" path=".catissuecore.SPPDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 			<forward name="pageOfSaveSPPDefaultValue" path="/SaveDefaultValueForSPPEvents.do" />
 			<forward name="pageOfDisplaySPPDefaultValue" path="/DisplayDefaultValueForSPPEvents.do" />
 			<forward name="pageOfDefaultValue"
 				path="/pages/content/manageAdministrativeData/DefaultValueForSPPEvents.jsp" />
-			<forward name="pageOfDefaultValueForSOPEvents" path=".catissuecore.DefaultValueForSOPEventsDef" />
+			<forward name="pageOfDefaultValueForSPPEvents" path=".catissuecore.DefaultValueForSPPEventsDef" />
 		</action>
 
 		<action path="/DisplayDefaultValueForSPPEvents"
 			type="edu.wustl.catissuecore.action.DisplayDefaultValuesForSPPEventsAction"
-			name="sopForm" validate="false" scope="request">
-			<forward name="pageOfSOP" path=".catissuecore.SOPDef" />
-			<forward name="failure" path=".catissuecore.SOPDef" />
+			name="sppForm" validate="false" scope="request">
+			<forward name="pageOfSPP" path=".catissuecore.SPPDef" />
+			<forward name="failure" path=".catissuecore.SPPDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 			<forward name="pageOfSaveDefaultValue"
-				path="/pages/content/manageAdministrativeData/DefaultValueForSOPEvents.jsp" />
+				path="/pages/content/manageAdministrativeData/DefaultValueForSPPEvents.jsp" />
 			<forward name="pageOfSaveSPPDefaultValue" path="/SaveDefaultValueForSPPEvents.do" />
 			<forward name="pageOfDisplaySPPDefaultValue" path="/DisplayDefaultValueForSPPEvents.do" />
-			<forward name="pageOfDefaultValueForSOPEvents" path=".catissuecore.DefaultValueForSOPEventsDef" />
+			<forward name="pageOfDefaultValueForSPPEvents" path=".catissuecore.DefaultValueForSPPEventsDef" />
 		</action>
 
-		<action path="/SOPCreate"
+		<action path="/SPPCreate"
 			type="edu.wustl.common.action.CommonAddEditAction"
-			name="sopForm"
+			name="sppForm"
 			validate="true"
-			input="/SOP.do?operation=add&amp;pageOf=pageOfSOP&amp;menuSelected=12"
+			input="/SPP.do?operation=add&amp;pageOf=pageOfSPP&amp;menuSelected=12"
 			scope="request">
-			<forward name="success" path="/SOPSearch.do?pageOf=pageOfSOP" />
-			<forward name="failure" path="/SOP.do?operation=add&amp;pageOf=pageOfSOP&amp;menuSelected=12" />
+			<forward name="success" path="/SPPSearch.do?pageOf=pageOfSPP" />
+			<forward name="failure" path="/SPP.do?operation=add&amp;pageOf=pageOfSPP&amp;menuSelected=12" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
 
-		<action path="/SOPEdit"
+		<action path="/SPPEdit"
 			type="edu.wustl.common.action.CommonAddEditAction"
-			name="sopForm"
+			name="sppForm"
 			validate="true"
-			input="/SOP.do?operation=edit&amp;pageOf=pageOfSOP&amp;menuSelected=12"
+			input="/SPP.do?operation=edit&amp;pageOf=pageOfSPP&amp;menuSelected=12"
 			scope="request">
-			<forward name="success" path="/SOP.do?operation=edit&amp;pageOf=pageOfSOP&amp;menuSelected=12" />
-			<forward name="failure" path="/SOP.do?operation=edit&amp;pageOf=pageOfSOP&amp;menuSelected=12" />
+			<forward name="success" path="/SPP.do?operation=edit&amp;pageOf=pageOfSPP&amp;menuSelected=12" />
+			<forward name="failure" path="/SPP.do?operation=edit&amp;pageOf=pageOfSPP&amp;menuSelected=12" />
 		</action>
 
-		<action path="/SOPSearch"
+		<action path="/SPPSearch"
 		    type="edu.wustl.common.action.CommonSearchAction"
-			name="sopForm"
+			name="sppForm"
 			validate="false"
-			input="/SOP.do?operation=edit&amp;pageOf=pageOfSOP&amp;menuSelected=12"
+			input="/SPP.do?operation=edit&amp;pageOf=pageOfSPP&amp;menuSelected=12"
 			scope="request">
-			<forward name="pageOfSOP" path="/SOP.do?operation=edit&amp;pageOf=pageOfSOP&amp;menuSelected=12"/>
-			<forward name="failure" path="/SOP.do?operation=edit&amp;pageOf=pageOfSOP&amp;menuSelected=12"/>
+			<forward name="pageOfSPP" path="/SPP.do?operation=edit&amp;pageOf=pageOfSPP&amp;menuSelected=12"/>
+			<forward name="failure" path="/SPP.do?operation=edit&amp;pageOf=pageOfSPP&amp;menuSelected=12"/>
 		</action>
 
-		<action path="/SOPData" type="edu.wustl.catissuecore.action.SOPDataAction" scope="request"/>
-		<!-- SOP Actions Ends-->
+		<action path="/SPPData" type="edu.wustl.catissuecore.action.SPPDataAction" scope="request"/>
+		<!-- SPP Actions Ends-->
 
 		<action path="/CreationEventData" type="edu.wustl.catissuecore.action.CreationEventDataAction" scope="request"/>
 
@@ -2583,49 +2583,49 @@ PUBLIC
 		</action>
 		<!-- New Specimen Event Parameters Action End-->
 
-		<action path="/DisplaySOPEventsAction"
-			type="edu.wustl.catissuecore.action.DisplaySOPEventsAction"
-			name="displaySOPEventForm"
+		<action path="/DisplaySPPEventsAction"
+			type="edu.wustl.catissuecore.action.DisplaySPPEventsAction"
+			name="displaySPPEventForm"
 			scope="request">
 			<forward name="pageOfDynamicEvent" path=".catissuecore.newSpecimenSPPEvents" />
 			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.newSpecimenSPPEvents" />
 			<forward name="pageOfNewSpecimen" path=".catissuecore.newSpecimenSPPEventsDef" />
-			<forward name="pageOfSCG" path=".catissuecore.scgSOPEvents" />
+			<forward name="pageOfSCG" path=".catissuecore.scgSPPEvents" />
 			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
-			<forward name="pageOfSopData" path=".catissuecore.enterSpecimenSOPEvents" />
+			<forward name="pageOfSppData" path=".catissuecore.enterSpecimenSPPEvents" />
 		</action>
 
-		<action path="/DisplaySOPEventsForSCG"
-			type="edu.wustl.catissuecore.action.DisplaySOPEventsForSCGAction"
-			name="displaySOPEventForm"
+		<action path="/DisplaySPPEventsForSCG"
+			type="edu.wustl.catissuecore.action.DisplaySPPEventsForSCGAction"
+			name="displaySPPEventForm"
 			scope="request">
-			<forward name="pageOfSCG" path=".catissuecore.scgSOPEvents" />
+			<forward name="pageOfSCG" path=".catissuecore.scgSPPEvents" />
 			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/DisplaySOPEventsFromDashboardAction"
-			type="edu.wustl.catissuecore.action.DisplaySOPEventsFromDashboardAction"
-			name="displaySOPEventForm"
-			scope="request">
-			<forward name="pageOfDynamicEvent" path=".catissuecore.newSpecimenSPPEvents" />
-			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />
-			<forward name="access_denied" path="/ManageBioSpecimen.do" />
-			<forward name="pageOfSopData" path=".catissuecore.enterSpecimenSOPEvents" />
-		</action>
-
-		<action path="/SaveSOPEventAction"
-			type="edu.wustl.catissuecore.action.SaveSOPEventAction"
-			name="displaySOPEventForm"
+		<action path="/DisplaySPPEventsFromDashboardAction"
+			type="edu.wustl.catissuecore.action.DisplaySPPEventsFromDashboardAction"
+			name="displaySPPEventForm"
 			scope="request">
 			<forward name="pageOfDynamicEvent" path=".catissuecore.newSpecimenSPPEvents" />
-			<forward name="pageOfSCG" path="/DisplaySOPEventsForSCG.do" />
 			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
-			<forward name="pageOfDisplaySOPEvents" path="/DisplaySOPEventsAction.do" />
-			<forward name="pageOfUtilizeSopofSpecimen" path="/UtilizeSop.do?operation=specimen&amp;pageOf=pageOfUtilizeSop" />
-			<forward name="pageOfUtilizeSopOfScg" path="/UtilizeSop.do?operation=scg&amp;pageOf=pageOfUtilizeSop" />
+			<forward name="pageOfSppData" path=".catissuecore.enterSpecimenSPPEvents" />
+		</action>
+
+		<action path="/SaveSPPEventAction"
+			type="edu.wustl.catissuecore.action.SaveSPPEventAction"
+			name="displaySPPEventForm"
+			scope="request">
+			<forward name="pageOfDynamicEvent" path=".catissuecore.newSpecimenSPPEvents" />
+			<forward name="pageOfSCG" path="/DisplaySPPEventsForSCG.do" />
+			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+			<forward name="pageOfDisplaySPPEvents" path="/DisplaySPPEventsAction.do" />
+			<forward name="pageOfUtilizeSppofSpecimen" path="/UtilizeSpp.do?operation=specimen&amp;pageOf=pageOfUtilizeSpp" />
+			<forward name="pageOfUtilizeSppOfScg" path="/UtilizeSpp.do?operation=scg&amp;pageOf=pageOfUtilizeSpp" />
 
 			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.newSpecimenSPPEvents" />
 			<forward name="pageOfNewSpecimen" path=".catissuecore.newSpecimenSPPEventsDef" />
@@ -2633,9 +2633,9 @@ PUBLIC
 
 		<action path="/DisplaySPPForSCGAction"
 			type="edu.wustl.catissuecore.action.DisplaySPPForSCGAction"
-			name="displaySOPEventForm"
+			name="displaySPPEventForm"
 			scope="request">
-			<forward name="pageOfDynamicEvent" path=".catissuecore.scgSOPEvents" />
+			<forward name="pageOfDynamicEvent" path=".catissuecore.scgSPPEvents" />
 			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -2971,26 +2971,26 @@ PUBLIC
 		</action>
 		<!-- Site Actions Ends -->
 
-		<!-- Utilize SOP Begins -->
-		<action path="/UtilizeSop"
-			type="edu.wustl.catissuecore.action.UtilizeSOPAction"
-			name="utilizeSopForm"
+		<!-- Utilize SPP Begins -->
+		<action path="/UtilizeSpp"
+			type="edu.wustl.catissuecore.action.UtilizeSPPAction"
+			name="utilizeSppForm"
 			validate="false"
 			scope="request">
-			<forward name="specimenCollectionGroup" path=".catissuecore.utilizeSopPage" />
+			<forward name="specimenCollectionGroup" path=".catissuecore.utilizeSppPage" />
 		</action>
 
 
-		<action path="/UtilizeSop"
-			type="edu.wustl.catissuecore.action.UtilizeSOPAction"
-			name="utilizeSopForm"
+		<action path="/UtilizeSpp"
+			type="edu.wustl.catissuecore.action.UtilizeSPPAction"
+			name="utilizeSppForm"
 			validate="false"
-			input="/UtilizeSop.do?operation=add&amp;pageOf=pageOfUtilizeSop&amp;menuSelected=5"
+			input="/UtilizeSpp.do?operation=add&amp;pageOf=pageOfUtilizeSpp&amp;menuSelected=5"
 			scope="request">
 			<!-- forward name="success" path="/Site.do?operation=edit&amp;pageOf=pageOfSite&amp;menuSelected=5" /-->
-			<forward name="specimenCollectionGroup" path=".catissuecore.utilizeSopPage" />
+			<forward name="specimenCollectionGroup" path=".catissuecore.utilizeSppPage" />
 		</action>
-		<!-- Utilize SOP Ends -->
+		<!-- Utilize SPP Ends -->
 
 		<!-- Biohazard Actions Begins -->
         <action path="/Biohazard"
@@ -3859,7 +3859,7 @@ PUBLIC
 			<forward name="pageOfNewSpecimen" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>
-			<forward name="pageOfSOP" path=".catissuecore.editSearchPageDef"/>
+			<forward name="pageOfSPP" path=".catissuecore.editSearchPageDef"/>
 
 			<forward name="pageOfSpecimenArrayType" path=".catissuecore.editSearchPageDef"/>
 			<forward name="pageOfSpecimenArray" path=".catissuecore.editBioSpecimenSearchPageDef"/>
@@ -3960,7 +3960,7 @@ PUBLIC
 			<forward name="pageOfCancerResearchGroup" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfCollectionProtocol" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfDistributionProtocol" path=".catissuecore.editSearchResultsDef"/>
-			<forward name="pageOfSOP" path=".catissuecore.editSearchResultsDef"/>
+			<forward name="pageOfSPP" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfStorageType" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfStorageContainer" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfSite" path=".catissuecore.editSearchResultsDef"/>
@@ -4068,7 +4068,7 @@ PUBLIC
 			<forward name="pageOfCancerResearchGroup" path="/CancerResearchGroupSearch.do"/>
 			<forward name="pageOfCollectionProtocol" path="/CollectionProtocolSearch.do"/>
 			<forward name="pageOfDistributionProtocol" path="/DistributionProtocolSearch.do"/>
-			<forward name="pageOfSOP" path="/SOPSearch.do"/>
+			<forward name="pageOfSPP" path="/SPPSearch.do"/>
 			<forward name="pageOfStorageContainer" path="/EditStorageContainerSearch.do"/>
 			<forward name="pageOfTreeSC" path="/EditStorageContainerSearch.do"/>
 			<forward name="pageOfSite" path="/SiteSearch.do?pageOf=pageOfSite"/>
@@ -4114,7 +4114,7 @@ PUBLIC
 			<forward name="pageOfCollectionProtocol" path="/CollectionProtocolSearch.do"/>
 			<forward name="pageOfCollectionProtocolRegistration" path="/CollectionProtocolRegistrationSearch.do"/>
 			<forward name="pageOfDepartment" path="/DepartmentSearch.do"/>
-			<forward name="pageOfSOP" path="/SOPSearch.do"/>
+			<forward name="pageOfSPP" path="/SPPSearch.do"/>
 			<forward name="pageOfDistribution" path="/DistributionSearchFromMenu.do"/>
 			<forward name="pageOfDistributionProtocol" path="/DistributionProtocolSearch.do"/>
 			<forward name="pageOfArrayDistribution" path="/DistributionSearchFromMenu.do"/>
@@ -5946,7 +5946,7 @@ PUBLIC
 				<forward name="pageOfUserAdmin" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1"/>
 				<forward name="pageOfInstitution" path="/Institution.do?operation=add&amp;pageOf=pageOfInstitution&amp;menuSelected=2"/>
 				<forward name="pageOfDepartment" path="/Department.do?operation=add&amp;pageOf=pageOfDepartment&amp;menuSelected=3"/>
-				<forward name="pageOfSOP" path="/SOP.do?operation=add&amp;pageOf=pageOfSOP&amp;menuSelected=12"/>
+				<forward name="pageOfSPP" path="/SPP.do?operation=add&amp;pageOf=pageOfSPP&amp;menuSelected=12"/>
 				<forward name="pageOfCancerResearchGroup" path="/CancerResearchGroup.do?operation=add&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4"/>
 				<forward name="pageOfSite" path="/Site.do?operation=add&amp;pageOf=pageOfSite&amp;menuSelected=5"/>
 				<forward name="pageOfStorageType" path="/StorageType.do?operation=add&amp;pageOf=pageOfStorageType&amp;menuSelected=6"/>

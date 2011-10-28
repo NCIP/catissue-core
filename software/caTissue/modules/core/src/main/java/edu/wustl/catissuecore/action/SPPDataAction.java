@@ -14,7 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import edu.common.dynamicextensions.ui.util.Constants;
-import edu.wustl.catissuecore.bizlogic.SOPComboDataBizLogic;
+import edu.wustl.catissuecore.bizlogic.SPPComboDataBizLogic;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.BizLogicException;
@@ -25,7 +25,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
  * @author atul_kaushal
  * @version
  */
-public class SOPDataAction extends SecureAction
+public class SPPDataAction extends SecureAction
 {
 
 	@Override
@@ -51,24 +51,24 @@ public class SOPDataAction extends SecureAction
 
 		Integer total = limitFetch + startFetch;
 
-		List sop = getSOPValues(query);
+		List spp = getSPPValues(query);
 
-		List<NameValueBean> sopBean = new ArrayList<NameValueBean>();
-		populateQuerySpecificNameValueBeansList(sopBean, sop, query);
-		mainJsonObject.put("totalCount", sopBean.size());
-		request.setAttribute(Constants.SELECTED_VALUES, sopBean);
+		List<NameValueBean> sppBean = new ArrayList<NameValueBean>();
+		populateQuerySpecificNameValueBeansList(sppBean, spp, query);
+		mainJsonObject.put("totalCount", sppBean.size());
+		request.setAttribute(Constants.SELECTED_VALUES, sppBean);
 
-		for (int i = startFetch; i < total && i < sopBean.size(); i++)
+		for (int i = startFetch; i < total && i < sppBean.size(); i++)
 		{
 			JSONObject jsonObject = new JSONObject();
 			Locale locale = CommonServiceLocator.getInstance().getDefaultLocale();
 
 			if (query == null
-					|| sopBean.get(i).getName().toLowerCase(locale).contains(
+					|| sppBean.get(i).getName().toLowerCase(locale).contains(
 							query.toLowerCase(locale)) || query.length() == 0)
 			{
-				jsonObject.put("id", sopBean.get(i).getValue());
-				jsonObject.put("field", sopBean.get(i).getName());
+				jsonObject.put("id", sppBean.get(i).getValue());
+				jsonObject.put("field", sppBean.get(i).getName());
 				jsonArray.put(jsonObject);
 			}
 		}
@@ -86,10 +86,10 @@ public class SOPDataAction extends SecureAction
 	 * @param query
 	 * @throws BizLogicException
 	 */
-	private List getSOPValues(String query) throws BizLogicException
+	private List getSPPValues(String query) throws BizLogicException
 	{
-		SOPComboDataBizLogic sopComboDataBizObj = new SOPComboDataBizLogic();
-		return sopComboDataBizObj.getSOPNameList(query,false);
+		SPPComboDataBizLogic sppComboDataBizObj = new SPPComboDataBizLogic();
+		return sppComboDataBizObj.getSPPNameList(query,false);
 	}
 
 	/**

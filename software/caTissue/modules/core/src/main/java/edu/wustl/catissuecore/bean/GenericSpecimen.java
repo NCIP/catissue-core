@@ -414,11 +414,11 @@ public interface GenericSpecimen extends Serializable
 
 	public void setCreationEventForSpecimen(String creationEvent);
 
-	public void setProcessingSOPForSpecimen(String processing);
+	public void setProcessingSPPForSpecimen(String processing);
 
 	public String getCreationEventForSpecimen();
 
-	public String getProcessingSOPForSpecimen();
+	public String getProcessingSPPForSpecimen();
 	/*
 		public String getUniqueIdentifier();
 		public String getDisplayName();

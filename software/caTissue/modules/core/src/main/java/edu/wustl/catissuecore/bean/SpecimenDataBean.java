@@ -128,7 +128,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	private String creationEvent;
 
 	/** The container id. */
-	private String processingSOP;
+	private String processingSPP;
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#isGenerateLabel()
@@ -841,9 +841,9 @@ public class SpecimenDataBean implements GenericSpecimen
 	}
 
 	@Override
-	public String getProcessingSOPForSpecimen() {
+	public String getProcessingSPPForSpecimen() {
 		// TODO Auto-generated method stub
-		return processingSOP;
+		return processingSPP;
 	}
 
 	@Override
@@ -853,8 +853,8 @@ public class SpecimenDataBean implements GenericSpecimen
 	}
 
 	@Override
-	public void setProcessingSOPForSpecimen(String processingSOP) {
-		this.processingSOP=processingSOP;
+	public void setProcessingSPPForSpecimen(String processingSPP) {
+		this.processingSPP=processingSPP;
 
 	}
 

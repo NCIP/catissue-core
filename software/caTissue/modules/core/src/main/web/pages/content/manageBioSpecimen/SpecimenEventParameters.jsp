@@ -104,7 +104,7 @@ function showConsents()
 	addNewAction(<%= consentTab %>)
 }
 
-function showSOPEvents()
+function showSPPEvents()
 {
 	var specimenIdentifier = "<%=specimenIdentifier%>";
 	var consentTier=0;
@@ -115,7 +115,7 @@ function showSOPEvents()
 			SPPDisplayPageOf = "pageOfNewSpecimenCPQuery";
 		}
 	%>
-	var action= "DisplaySOPEventsAction.do?pageOf=<%=SPPDisplayPageOf%>&menuSelected=15&specimenId="+specimenIdentifier+"&consentTierCounter="+consentTier;
+	var action= "DisplaySPPEventsAction.do?pageOf=<%=SPPDisplayPageOf%>&menuSelected=15&specimenId="+specimenIdentifier+"&consentTierCounter="+consentTier;
 	document.forms[0].action = action;
 	document.forms[0].submit();
 }
@@ -231,7 +231,7 @@ window.onresize = function() { mdResDetector(); }
 							<img src="images/uIEnhancementImages/tab_events1.gif" alt="Events" width="56" height="22">
 						</td>
 						<td valign="bottom">
-							<a href="#" onClick="showSOPEvents()"><img src="images/uIEnhancementImages/tab_sop2.gif" alt="SOP" width="42" height="22" border="0"></a>
+							<a href="#" onClick="showSPPEvents()"><img src="images/uIEnhancementImages/tab_spp2.gif" alt="SPP" width="42" height="22" border="0"></a>
 						</td>
 						<td valign="bottom">
 							<a href="#" onClick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></a>

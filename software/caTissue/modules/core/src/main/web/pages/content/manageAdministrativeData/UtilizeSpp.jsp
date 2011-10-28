@@ -52,7 +52,7 @@ function onComboChange(asd){
 </script>
 
 
-	<html:form action="UtilizeSop.do">
+	<html:form action="UtilizeSpp.do">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
   <tr>
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
@@ -69,10 +69,10 @@ function onComboChange(asd){
 	<logic:equal name="operation" value="scg">
         <td valign="bottom" ><img src="images/uIEnhancementImages/scg_sel.gif" alt="Speciamn Collection Group" width="131" height="22" /></td>
         <td valign="bottom"><html:link
-													page="/UtilizeSop.do?operation=specimen&amp;pageOf=pageOfUtilizeSop&amp;menuSelected=5"><img src="images/uIEnhancementImages/speciman_notsel.gif" alt="Specimen" width="62" height="22" border="0" /></html:link></td>
+													page="/UtilizeSpp.do?operation=specimen&amp;pageOf=pageOfUtilizeSpp&amp;menuSelected=5"><img src="images/uIEnhancementImages/speciman_notsel.gif" alt="Specimen" width="62" height="22" border="0" /></html:link></td>
 	</logic:equal>
 	<logic:equal name="operation" value="specimen">
-		 <td valign="bottom" ><html:link page="/UtilizeSop.do?operation=scg&amp;pageOf=pageOfUtilizeSop&amp;menuSelected=5"><img src="images/uIEnhancementImages/scg_notsel.gif" alt="Speciamn Collection Group" width="131" height="22" /></html:link></td>
+		 <td valign="bottom" ><html:link page="/UtilizeSpp.do?operation=scg&amp;pageOf=pageOfUtilizeSpp&amp;menuSelected=5"><img src="images/uIEnhancementImages/scg_notsel.gif" alt="Speciamn Collection Group" width="131" height="22" /></html:link></td>
         <td valign="bottom"><img src="images/uIEnhancementImages/speciman_sel.gif" alt="Specimen" width="62" height="22" border="0" /></td>
 	</logic:equal>
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
@@ -96,17 +96,17 @@ function onComboChange(asd){
 				&nbsp;&nbsp;&nbsp;&nbsp;
 
 				<html:select
-										property="name" styleId="sopIds"
+										property="name" styleId="sppIds"
 										styleClass="formFieldSizedNew"
 										onchange="onComboChange(this,'cpCheckId')">
-										<html:options collection="sopList" labelProperty="name"
+										<html:options collection="sppList" labelProperty="name"
 											property="value" />
 									</html:select></td>
 			</td>
 	</tr>
 	<script>
-		selectedComboValue = ${requestScope.selectedSop};
-		var optionlist = document.getElementById("sopIds").options
+		selectedComboValue = ${requestScope.selectedSpp};
+		var optionlist = document.getElementById("sppIds").options
 		for(var cnt=0;cnt<optionlist.length;cnt++){
 			if(optionlist[cnt].value == selectedComboValue){
 				optionlist[cnt].selected = true;
@@ -180,17 +180,17 @@ function onComboChange(asd){
 				&nbsp;&nbsp;&nbsp;&nbsp;
 
 				<html:select
-										property="name" styleId="sopIds"
+										property="name" styleId="sppIds"
 										styleClass="formFieldSizedNew"
 										onchange="onComboChange(this,'cpCheckId')">
-										<html:options collection="sopList" labelProperty="name"
+										<html:options collection="sppList" labelProperty="name"
 											property="value" />
 									</html:select></td>
 			</td>
 	</tr>
 	<script>
-		selectedComboValue = ${requestScope.selectedSop};
-		var optionlist = document.getElementById("sopIds").options
+		selectedComboValue = ${requestScope.selectedSpp};
+		var optionlist = document.getElementById("sppIds").options
 		for(var cnt=0;cnt<optionlist.length;cnt++){
 			if(optionlist[cnt].value == selectedComboValue){
 				optionlist[cnt].selected = true;
@@ -283,10 +283,10 @@ function onSubmit(){
 	}
 	var url = ""
 	<logic:equal name="operation" value="scg">
-		url = "DisplaySOPEventsFromDashboardAction.do?pageOf=pageOfDynamicEvent&scgId="+selecedValue+"&selectedAll="+selectedAll+"&sopId="+selectedComboValue;
+		url = "DisplaySPPEventsFromDashboardAction.do?pageOf=pageOfDynamicEvent&scgId="+selecedValue+"&selectedAll="+selectedAll+"&sppId="+selectedComboValue;
 	</logic:equal>
 	<logic:equal name="operation" value="specimen">
-		url = "DisplaySOPEventsFromDashboardAction.do?pageOf=pageOfDynamicEvent&specimenId="+selecedValue+"&selectedAll="+selectedAll+"&sopId="+selectedComboValue;
+		url = "DisplaySPPEventsFromDashboardAction.do?pageOf=pageOfDynamicEvent&specimenId="+selecedValue+"&selectedAll="+selectedAll+"&sppId="+selectedComboValue;
 	</logic:equal>
 	location.href  = url;
 }
@@ -311,5 +311,5 @@ function onSelectAll(element){
 	}
 
 }
-onComboChange(document.getElementById("sopIds"),'cpCheckId');
+onComboChange(document.getElementById("sppIds"),'cpCheckId');
 </script>

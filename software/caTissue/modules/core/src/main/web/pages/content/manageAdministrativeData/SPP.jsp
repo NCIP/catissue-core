@@ -15,16 +15,16 @@
 
 	if (operation.equals(Constants.EDIT))
 	{
-    	formAction = Constants.SOP_EDIT_ACTION;
+    	formAction = Constants.SPP_EDIT_ACTION;
 	}
 	else
 	{
-		formAction = Constants.SOP_ADD_ACTION;
+		formAction = Constants.SPP_ADD_ACTION;
 	}
 %>
 <body>
 	<script>
-		function saveSOP()
+		function saveSPP()
 		{
 			var action = document.forms[0].action + "?setDefaultValue=true";
 			<%
@@ -58,10 +58,10 @@
 					</td>
 					<logic:equal name="operation" value="add">
 						<td  valign="bottom" ><img src="images/uIEnhancementImages/tab_add_selected.jpg" alt="Add" width="57" height="22" /></td>
-						<td  valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfSOP&aliasName=SpecimenProcessingProcedure"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
+						<td  valign="bottom"><html:link page="/SimpleQueryInterface.do?pageOf=pageOfSPP&aliasName=SpecimenProcessingProcedure"><img src="images/uIEnhancementImages/tab_edit_notSelected.jpg" alt="Edit" width="59" height="22" border="0" /></html:link></td>
 					</logic:equal>
 					<logic:equal name="operation" value="edit">
-						<td  valign="bottom" ><html:link page="/SOP.do?operation=add&pageOf=pageOfSOP"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" border ="0" /></html:link></td>
+						<td  valign="bottom" ><html:link page="/SPP.do?operation=add&pageOf=pageOfSPP"><img src="images/uIEnhancementImages/tab_add_notSelected.jpg" alt="Add" width="57" height="22" border ="0" /></html:link></td>
 						<td  valign="bottom" ><img src="images/uIEnhancementImages/tab_edit_selected.jpg" alt="Edit" width="59" height="22"/></td>
 					</logic:equal>
 					<td width="90%" valign="bottom" class="td_tab_bg">&nbsp;
@@ -134,7 +134,7 @@
 									</html:submit>
 								</td>
 								<td>
-									<input class="blue_ar_b" type="button" value="Save and Set Default Values" style="width:200" onclick="saveSOP()">
+									<input class="blue_ar_b" type="button" value="Save and Set Default Values" style="width:200" onclick="saveSPP()">
 								</td>
 								<td style="width:100%">
 								&nbsp;

@@ -124,11 +124,11 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		// Save the report data in a CSV file at server side
 		this.logger.debug("Save action");
 		final ExportReport report = new ExportReport(fileName);
-		final List distributionData = new ArrayList();
+		final List<List<String>> distributionData = new ArrayList<List<String>>();
 		this.addDistributionHeader(distributionData, distributionReportForm, report);
 		final String delimiter = Constants.DELIMETER;
-		final List distributedItemsColumns = new ArrayList();
-		final List columns = new ArrayList();
+		final List<List<String>> distributedItemsColumns = new ArrayList<List<String>>();
+		final List<String> columns = new ArrayList<String>();
 		for (final String columnName : columnNames)
 		{
 			columns.add(columnName);
@@ -136,18 +136,18 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
 		}
 		distributedItemsColumns.add(columns);
 		distributionData.addAll(distributedItemsColumns);
-		final List newDataList = new ArrayList();
+		final List<List> newDataList = new ArrayList<List>();
 		newDataList.add(listOfData);
-		final Iterator dataListItr = newDataList.iterator();
+		final Iterator<List> dataListItr = newDataList.iterator();
 		while (dataListItr.hasNext())
 		{
-			final List rowList = (List) dataListItr.next();
+			final List rowList = dataListItr.next();
 			// Remove extra ID columns from all rows.-Bug 5590
 			for (int cntRow = 0; cntRow < rowList.size(); cntRow++)
 			{
 				final List data = (List) rowList.get(cntRow);
 				final int extraColumns = data.size()
-						- ((List) distributedItemsColumns.get(0)).size();
+						- distributedItemsColumns.get(0).size();
 				// Remove extra ID columns
 				if (extraColumns > 0)
 				{

@@ -174,9 +174,9 @@ public final class CommonAppletUtil
 	 * @param array int array.
 	 * @return This method returns an List from int array.
 	 */
-	public static List createListFromArray(int[] array)
+	public static List<Integer> createListFromArray(int[] array)
 	{
-		final List list = new ArrayList();
+		final List<Integer> list = new ArrayList<Integer>();
 		if (array != null)
 		{
 			for (final int element : array)

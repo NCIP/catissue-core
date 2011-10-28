@@ -42,21 +42,21 @@ public class DisplayDefaultValuesForSPPEventsAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException, Exception
 	{
-		Long sopIdentifier = getSOPIdentifier(request);
+		Long sppIdentifier = getSPPIdentifier(request);
 
-		//Display SOP events
-		if (sopIdentifier != null)
+		//Display SPP events
+		if (sppIdentifier != null)
 		{
-			SPPBizLogic sopBizLogic = new SPPBizLogic();
-			SpecimenProcessingProcedure spp = sopBizLogic.getSPPById(sopIdentifier);
-			Map<Action, Long> contextRecordIdMap = sopBizLogic.generateContextRecordIdMap(spp);
+			SPPBizLogic sppBizLogic = new SPPBizLogic();
+			SpecimenProcessingProcedure spp = sppBizLogic.getSPPById(sppIdentifier);
+			Map<Action, Long> contextRecordIdMap = sppBizLogic.generateContextRecordIdMap(spp);
 			request.setAttribute(Constants.CONTEXT_RECORD_MAP, contextRecordIdMap);
 			TreeSet<Action> actionList = new TreeSet<Action>(new SPPActionComparator());
 			actionList.addAll(spp.getActionCollection());
 			request.setAttribute("actionColl", actionList);
-			return mapping.findForward(Constants.PAGE_OF_DEF_VALUE_FOR_SOP);
+			return mapping.findForward(Constants.PAGE_OF_DEF_VALUE_FOR_SPP);
 		}
-		return mapping.findForward(Constants.PAGE_OF_SOP);
+		return mapping.findForward(Constants.PAGE_OF_SPP);
 
 	}
 
@@ -64,15 +64,15 @@ public class DisplayDefaultValuesForSPPEventsAction extends SecureAction
 	 * @param request
 	 * @return
 	 */
-	private Long getSOPIdentifier(HttpServletRequest request)
+	private Long getSPPIdentifier(HttpServletRequest request)
 	{
-		Long sopIdentifier = (Long) request.getAttribute(Constants.ID);
-		if (sopIdentifier == null)
+		Long sppIdentifier = (Long) request.getAttribute(Constants.ID);
+		if (sppIdentifier == null)
 		{
-			sopIdentifier = Long.valueOf(request.getParameter(Constants.ID));
+			sppIdentifier = Long.valueOf(request.getParameter(Constants.ID));
 		}
-		request.setAttribute(Constants.ID, sopIdentifier);
-		return sopIdentifier;
+		request.setAttribute(Constants.ID, sppIdentifier);
+		return sppIdentifier;
 	}
 
 }

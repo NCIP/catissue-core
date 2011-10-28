@@ -86,10 +86,10 @@ request.setAttribute("showSPPHeader","true");
 		}
 	}
 
-	function submitSOPEvents()
+	function submitSPPEvents()
 	{
 		var specimenId = "<%=specimenIdentifier%>";
-		var action="SaveSOPEventAction.do?pageOf=<%=pageOf%>&operation=insertDEData&specimenId="+specimenId;
+		var action="SaveSPPEventAction.do?pageOf=<%=pageOf%>&operation=insertDEData&specimenId="+specimenId;
 
 		var search = 'Control';
 		var search1 = 'comboControl';
@@ -198,7 +198,7 @@ request.setAttribute("showSPPHeader","true");
 
 </head>
 
-<html:form action="SaveSOPEventAction.do?operation=insertDEData">
+<html:form action="SaveSPPEventAction.do?operation=insertDEData">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 		<tr>
 			<td class="tablepadding">
@@ -214,7 +214,7 @@ request.setAttribute("showSPPHeader","true");
 							<a href="#" onclick="onEventClicked();"><img src="images/uIEnhancementImages/tab_events2.gif" border="0" alt="Events" width="56" height="22"></a>
 						</td>
 						<td valign="bottom">
-							<img src="images/uIEnhancementImages/tab_sop1.gif" alt="SOP" width="42" height="22" border="0">
+							<img src="images/uIEnhancementImages/tab_spp1.gif" alt="SPP" width="42" height="22" border="0">
 						</td>
 						<td valign="bottom">
 							<a href="#" onClick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></a>
@@ -228,7 +228,7 @@ request.setAttribute("showSPPHeader","true");
 						<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
 					</tr>
 				</table>
-			<%@ include file="/pages/content/manageBioSpecimen/SOPEventsFromDashboard.jsp" %>
+			<%@ include file="/pages/content/manageBioSpecimen/SPPEventsFromDashboard.jsp" %>
 			</td>
 		</tr>
 	</table>

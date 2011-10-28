@@ -40,7 +40,7 @@ public class ClinincalStatusComboAction extends BaseAction
 		final Integer startFetch = Integer.parseInt(start);
 		final String requestFor = request.getParameter("requestFor");
 		List clinicalStatusList = null;
-		SPPBizLogic sopBizLogic = new SPPBizLogic();
+		SPPBizLogic sppBizLogic = new SPPBizLogic();
 		if("specimenClass".equals(requestFor))
 		{
 			clinicalStatusList = AppUtility.getSpecimenClassList();
@@ -61,11 +61,11 @@ public class ClinincalStatusComboAction extends BaseAction
 		else if("specimenEvent".equals(requestFor))
 		{
 			String processingSPP = request.getParameter("processingSPPName");
-			clinicalStatusList = sopBizLogic.getAllEventsForSPP(processingSPP);
+			clinicalStatusList = sppBizLogic.getAllEventsForSPP(processingSPP);
 		}
 		else if("processingSPP".equals(requestFor))
 		{
-			clinicalStatusList = sopBizLogic.getAllSPPNames();
+			clinicalStatusList = sppBizLogic.getAllSPPNames();
 		}
 		else
 		{

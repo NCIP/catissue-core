@@ -111,10 +111,9 @@ public class DistributionReportAction extends BaseDistributionReportAction
 		}
 		else
 		{
-			List tempList = new ArrayList();
 			for(int i=0;i<listOfData.size();i++)
 			{
-				List list = (List) listOfData.get( i );
+				List<String> list = (List<String>) listOfData.get( i );
 				list.add( 0, "false" );						
 			}				
 
@@ -128,7 +127,7 @@ public class DistributionReportAction extends BaseDistributionReportAction
 		request.setAttribute(Constants.DISTRIBUTION_REPORT_FORM, distributionReportForm);
 		request.setAttribute(Constants.COLUMN_NAMES_LIST, columnNames);
 		request.setAttribute(Constants.DISTRIBUTED_ITEMS_DATA, listOfData);
-		final HashMap forwardToPrintMap = new HashMap();
+		final HashMap<String, List<String>> forwardToPrintMap = new HashMap<String, List<String>>();
 		/**
 		 * specimenIdString is hidden field in DistributionReport.jsp which contains colon separated 
 		 * values of specimen ids selected for printing.
@@ -190,7 +189,7 @@ public class DistributionReportAction extends BaseDistributionReportAction
 			{
 				if(listOfData.get( i ) instanceof List)
 				{
-					List rowElements = (List)listOfData.get( i );
+					List<String> rowElements = (List<String>)listOfData.get( i );
 					for(String id : idList)
 					{
 						if(rowElements.contains( id ))

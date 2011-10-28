@@ -236,16 +236,16 @@ Ext.onReady(function(){
             {
                 text: 'Specimen Processing Procedure',
 				tooltip:'Create SPP',
-				href:'SOP.do?operation=add&pageOf=pageOfSOP',
+				href:'SPP.do?operation=add&pageOf=pageOfSPP',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                        {
                             text: 'Add SPP',
-                            href:'SOP.do?operation=add&pageOf=pageOfSOP'
+                            href:'SPP.do?operation=add&pageOf=pageOfSPP'
                         }, {
                             text: 'Edit SPP',
-                            href:'SimpleQueryInterface.do?pageOf=pageOfSOP&aliasName=SpecimenProcessingProcedure'
+                            href:'SimpleQueryInterface.do?pageOf=pageOfSPP&aliasName=SpecimenProcessingProcedure'
                         }
                     ]
                 }
@@ -409,7 +409,7 @@ Ext.onReady(function(){
             },{
                 text: 'Apply SPP',
 				tooltip:'Apply SPP',
-				href:'UtilizeSop.do?operation=scg&amp;pageOf=pageOfUtilizeSop&amp;menuSelected=5'
+				href:'UtilizeSpp.do?operation=scg&amp;pageOf=pageOfUtilizeSpp&amp;menuSelected=5'
             }
         ]
     });

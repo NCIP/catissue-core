@@ -13,12 +13,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.exception.ApplicationException;
 
-public class UtilizeSOPAction extends BaseAction
+public class UtilizeSPPAction extends BaseAction
 {
 
 	/* (non-Javadoc)
@@ -28,42 +29,40 @@ public class UtilizeSOPAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		Collection coll = new ArrayList<NameValueBean>();
-		edu.wustl.dao.DAO dao = null;
+		Collection<NameValueBean> coll = new ArrayList<NameValueBean>();
+		List<SpecimenProcessingProcedure> sppList = getSppList();
 
-		List sopList = getSopList();
-
-		Long sopId = 0L;
-		for (int i = 0; i < sopList.size(); i++)
+		Long sppId = 0L;
+		for (int i = 0; i < sppList.size(); i++)
 		{
-			edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure sopObj = (edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure) sopList
+			SpecimenProcessingProcedure sppObj = sppList
 					.get(i);
-			final NameValueBean nvb = new NameValueBean(sopObj.getName(), sopObj.getId());
+			final NameValueBean nvb = new NameValueBean(sppObj.getName(), sppObj.getId());
 			coll.add(nvb);
 			if (i == 0)
 			{
-				sopId = sopObj.getId();
+				sppId = sppObj.getId();
 			}
 		}
-		if (request.getParameter("sopValue") != null)
+		if (request.getParameter("sppValue") != null)
 		{
-			sopId = Long.parseLong(request.getParameter("sopValue").toString());
+			sppId = Long.parseLong(request.getParameter("sppValue").toString());
 		}
-		if (request.getAttribute("sopValue") != null)
+		if (request.getAttribute("sppValue") != null)
 		{
-			sopId = Long.parseLong(request.getAttribute("sopValue").toString());
+			sppId = Long.parseLong(request.getAttribute("sppValue").toString());
 		}
-		request.setAttribute("sopList", coll);
+		request.setAttribute("sppList", coll);
 		if (request.getParameter("operation").equals("scg"))
 		{
-			setScgGridData(request, sopId);
+			setScgGridData(request, sppId);
 		}
 		else
 		{
-			setSpecimenGridData(request, sopId);
+			setSpecimenGridData(request, sppId);
 		}
 
-		request.setAttribute("selectedSop", sopId);
+		request.setAttribute("selectedSpp", sppId);
 		return mapping.findForward("specimenCollectionGroup");
 	}
 
@@ -71,14 +70,13 @@ public class UtilizeSOPAction extends BaseAction
 	 * Sets the scg grid data.
 	 *
 	 * @param request the request
-	 * @param sopId the sop id
+	 * @param sppId the spp id
 	 *
 	 * @throws ApplicationException the application exception
 	 */
-	public static void setScgGridData(HttpServletRequest request, Long sopId)
+	public static void setScgGridData(HttpServletRequest request, Long sppId)
 			throws ApplicationException
 	{
-		final List<List<String>> gridData = new ArrayList<List<String>>();
 		final String[] columnList1 = {
 				"<input type='checkbox' id='gridselectall' name='vehicle' onclick='onSelectAll(this)' />",
 				"CP Title", "PPI", "Participant Name", "SCG Name", "Collection Time Point"};
@@ -100,14 +98,13 @@ public class UtilizeSOPAction extends BaseAction
 	 * Sets the specimen grid data.
 	 *
 	 * @param request the request
-	 * @param sopId the sop id
+	 * @param sppId the spp id
 	 *
 	 * @throws ApplicationException the application exception
 	 */
-	public static void setSpecimenGridData(HttpServletRequest request, Long sopId)
+	public static void setSpecimenGridData(HttpServletRequest request, Long sppId)
 			throws ApplicationException
 	{
-		final List<List<String>> gridData = new ArrayList<List<String>>();
 		final String[] columnList1 = {
 				"<input type='checkbox'  id='gridselectall' name='vehicle' onclick='onSelectAll(this)' />",
 				"CP Title", "PPI", "Participant Name", "SCG Name", "Collection Time Point",
@@ -127,15 +124,15 @@ public class UtilizeSOPAction extends BaseAction
 	}
 
 	/**
-	 * Gets the sop list.
+	 * Gets the spp list.
 	 *
-	 * @return the sop list
+	 * @return the spp list
 	 *
 	 * @throws Exception the exception
 	 */
-	public static List getSopList() throws Exception
+	public static List<SpecimenProcessingProcedure> getSppList() throws Exception
 	{
-		List sopList = null;
+		List<SpecimenProcessingProcedure> sppList = null;
 		edu.wustl.dao.DAO dao = null;
 		try
 		{
@@ -143,8 +140,7 @@ public class UtilizeSOPAction extends BaseAction
 
 			String hql = "from edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure";
 
-			sopList = dao.executeQuery(hql);
-
+			sppList = dao.executeQuery(hql);
 		}
 		catch (Exception ex)
 		{
@@ -154,7 +150,7 @@ public class UtilizeSOPAction extends BaseAction
 		{
 			AppUtility.closeDAOSession(dao);
 		}
-		return sopList;
+		return sppList;
 	}
 
 	/**

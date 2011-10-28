@@ -25,11 +25,11 @@ import edu.wustl.catissuecore.util.metadata.XMLUtility;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 
-public final class SOPXMLParser
+public final class SPPXMLParser
 {
-	private static SOPXMLParser parser;
+	private static SPPXMLParser parser;
 
-	private SOPXMLParser()
+	private SPPXMLParser()
 	{
 
 	}
@@ -38,11 +38,11 @@ public final class SOPXMLParser
 	 * get the only instance of this class
 	 * @return the only instance of this class
 	 */
-	public static SOPXMLParser getInstance()
+	public static SPPXMLParser getInstance()
 	{
 		if (parser==null)
 		{
-			parser= new SOPXMLParser();
+			parser= new SPPXMLParser();
 		}
 		return parser;
 	}
@@ -62,7 +62,7 @@ public final class SOPXMLParser
 		final String packageName = SPPType.class.getPackage().getName();
 
 		final JAXBElement jAXBElement = (JAXBElement) XMLUtility.getJavaObjectForXML(xmlFile,
-				inputStream, packageName, Constants.SOP_XSD_FILENAME);
+				inputStream, packageName, Constants.SPP_XSD_FILENAME);
 
 		SPPType spp = (SPPType)jAXBElement.getValue();
 		List<EventType> events = spp.getEvent();
@@ -101,12 +101,12 @@ public final class SOPXMLParser
 			EntityGroupInterface entityGroup = DynamicExtensionsUtility.getEntityGroupByName(entityGrp);
 			if(entityGroup == null)
 			{
-				throw new DynamicExtensionsSystemException(Constants.SOP_ENTITY_GRP_ERROR+": '"+entityGrp+"'");
+				throw new DynamicExtensionsSystemException(Constants.SPP_ENTITY_GRP_ERROR+": '"+entityGrp+"'");
 			}
 			EntityInterface entity = entityGroup.getEntityByName(name);
 			if(entity == null)
 			{
-				throw new DynamicExtensionsSystemException(Constants.SOP_EVENT_ERROR+": '"+name+"'");
+				throw new DynamicExtensionsSystemException(Constants.SPP_EVENT_ERROR+": '"+name+"'");
 			}
 			Collection<AbstractEntityInterface> containers = entity.getContainerCollection();
 			Iterator<AbstractEntityInterface> itr = containers.iterator();

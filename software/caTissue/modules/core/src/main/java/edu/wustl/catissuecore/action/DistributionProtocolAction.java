@@ -64,7 +64,7 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
 					.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 		}
 		//List of keys used in map of ActionForm
-		final List key = new ArrayList();
+		final List<String> key = new ArrayList<String>();
 		key.add("DistributionSpecimenRequirement:i_specimenClass");
 		key.add("DistributionSpecimenRequirement:i_specimenType");
 		key.add("DistributionSpecimenRequirement:i_tissueSite");

@@ -48,9 +48,9 @@
 
 %>
 <script>
-function showSOPEvents()
+function showSPPEvents()
 {
-	var action= "DisplaySOPEventsAction.do?pageOf=<%=pageOf%>&menuSelected=15&specimenId=<%=specimenIdentifier%>&consentTierCounter=0";
+	var action= "DisplaySPPEventsAction.do?pageOf=<%=pageOf%>&menuSelected=15&specimenId=<%=specimenIdentifier%>&consentTierCounter=0";
 	document.forms[0].action = action;
 	document.forms[0].submit();
 
@@ -84,7 +84,7 @@ function showEvent()
 				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" border="0" height="1"></td>
 		        <td valign="bottom" ><a href="#" onclick="addNewAction(<%= specimenPath %>)"><img src="images/uIEnhancementImages/tab_specimen_details2.gif" border="0" alt="Specimen Details" width="126" height="22" border="0"></a></td>
 		        <td valign="bottom"><a href="#" onclick="showEvent()"><img src="images/uIEnhancementImages/tab_events2.gif" alt="Show Events" border="0" width="56" height="22"></a></td>
-				<td valign="bottom"><a href="#" onclick="showSOPEvents()"><img src="images/uIEnhancementImages/tab_sop2.gif" alt="SOP" border="0" width="42" height="22"></a></td>
+				<td valign="bottom"><a href="#" onclick="showSPPEvents()"><img src="images/uIEnhancementImages/tab_spp2.gif" alt="SPP" border="0" width="42" height="22"></a></td>
 		        <td valign="bottom"><img src="images/uIEnhancementImages/tab_view_surgical1.gif" border="0" alt="View Annotation" width="216" height="22"></td>
 				<td valign="bottom"><a href="#" onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,<%=consentTierCounter%>,'<%=staticEntityName%>','<%=pageOf%>')"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" border="0" alt="Consents" width="116" height="22"></a></td>
 				<td valign="bottom"><a href="#" onClick="addNewAction(<%= consentTab %>)" id="consentTab">

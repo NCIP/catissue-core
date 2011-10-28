@@ -2419,7 +2419,7 @@ public class AppUtility
 	public static BizLogicException getUserNotAuthorizedException(final String privilegeName,
 			final String protectionElementName, String domainObjName)
 	{
-		if (domainObjName != null && domainObjName.equalsIgnoreCase("SOP"))
+		if (domainObjName != null && domainObjName.equalsIgnoreCase("SpecimenProcessingProcedure"))
 		{
 			domainObjName = "SPP";
 		}

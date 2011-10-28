@@ -207,7 +207,7 @@ public class NewSpecimenAction extends SecureAction
 			{
 				if ("deleteExId".equals(button))
 				{
-					final List key = new ArrayList();
+					final List<String> key = new ArrayList<String>();
 					key.add("ExternalIdentifier:i_name");
 					key.add("ExternalIdentifier:i_value");
 
@@ -217,7 +217,7 @@ public class NewSpecimenAction extends SecureAction
 				}
 				else
 				{
-					final List key = new ArrayList();
+					final List<String> key = new ArrayList<String>();
 					key.add("Biohazard:i_type");
 					key.add("Biohazard:i_id");
 
@@ -368,7 +368,7 @@ public class NewSpecimenAction extends SecureAction
 			{
 				initialSignedConsentDateValue = Constants.NULL;
 			}
-			final List cprObjectList = new ArrayList();
+			final List<CollectionProtocolRegistration> cprObjectList = new ArrayList<CollectionProtocolRegistration>();
 			cprObjectList.add(collectionProtocolRegistration);
 			/*
 			 * SessionDataBean sessionDataBean = (SessionDataBean)
@@ -477,7 +477,7 @@ public class NewSpecimenAction extends SecureAction
 								.retrieveAttribute((Class) SpecimenCollectionGroup.class, "id",
 										specimenCollectionGroup.getId(),
 										"elements(consentTierStatusCollection)");
-						final Map tempMap = this.prepareConsentMap(participantResponseList,
+						final Map<String, Comparable> tempMap = this.prepareConsentMap(participantResponseList,
 								consentResponseStatuslevel);
 						specimenForm.setConsentResponseForSpecimenValues(tempMap);
 					}
@@ -505,7 +505,7 @@ public class NewSpecimenAction extends SecureAction
 				/*
 				 * Bug id = 11480Resolved by : Himanshu Aseeja
 				 */
-				final List columnList = this.columnNames();
+				final List<String> columnList = this.columnNames();
 				final String consentResponseHql = "select elements(scg.collectionProtocolRegistration."
 						+ "consentTierResponseCollection)"
 						+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,"
@@ -518,7 +518,7 @@ public class NewSpecimenAction extends SecureAction
 						specimen.getId(), "elements(consentTierStatusCollection)");
 				final String specimenResponse = "_specimenLevelResponse";
 				final String specimenResponseId = "_specimenLevelResponseID";
-				final Map tempMap = ConsentUtil.prepareSCGResponseMap(consentResponseStatuslevel,
+				final Map<String, Comparable> tempMap = ConsentUtil.prepareSCGResponseMap(consentResponseStatuslevel,
 						consentResponse, specimenResponse, specimenResponseId);
 				specimenForm.setConsentResponseForSpecimenValues(tempMap);
 				specimenForm.setConsentTierCounter(participantResponseList.size());
@@ -709,8 +709,8 @@ public class NewSpecimenAction extends SecureAction
 			}
 			// ---- chetan 15-06-06 ----
 			final StorageContainerForSpecimenBizLogic scbizLogic = new StorageContainerForSpecimenBizLogic();
-			TreeMap containerMap = new TreeMap();
-			List initialValues = null;
+			TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>> containerMap = new TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>>();
+			List<String[]> initialValues = null;
 
 			if (operation.equals(Constants.ADD) || (transferStatus != null && transferStatus.equals("transferred")))
 			{
@@ -777,7 +777,7 @@ public class NewSpecimenAction extends SecureAction
 								startingPoints[0] = specimenForm.getStorageContainer();
 								startingPoints[1] = specimenForm.getPositionDimensionOne();
 								startingPoints[2] = specimenForm.getPositionDimensionTwo();
-								initialValues = new Vector();
+								initialValues = new Vector<String[]>();
 								initialValues.add(startingPoints);
 							}
 							LOGGER
@@ -789,7 +789,7 @@ public class NewSpecimenAction extends SecureAction
 			}
 			else
 			{
-				containerMap = new TreeMap();
+				containerMap = new TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>>();
 				final String[] startingPoints = new String[]{"-1", "-1", "-1"};
 
 				LOGGER.info("--------------container:" + specimenForm.getStorageContainer());
@@ -817,10 +817,10 @@ public class NewSpecimenAction extends SecureAction
 					final Integer pos1 = Integer.valueOf(specimenForm.getPositionDimensionOne());
 					final Integer pos2 = Integer.valueOf(specimenForm.getPositionDimensionTwo());
 
-					final List pos2List = new ArrayList();
+					final List<NameValueBean> pos2List = new ArrayList<NameValueBean>();
 					pos2List.add(new NameValueBean(pos2, pos2));
 
-					final Map pos1Map = new TreeMap();
+					final Map<NameValueBean, List<NameValueBean>> pos1Map = new TreeMap<NameValueBean, List<NameValueBean>>();
 					pos1Map.put(new NameValueBean(pos1, pos1), pos2List);
 					containerMap.put(new NameValueBean(parentContainerName, identifier), pos1Map);
 
@@ -841,7 +841,7 @@ public class NewSpecimenAction extends SecureAction
 						startingPoints[2] = specimenForm.getPositionDimensionTwo();
 					}
 				}
-				initialValues = new Vector();
+				initialValues = new Vector<String[]>();
 				LOGGER.info("Starting points[0]" + startingPoints[0]);
 				LOGGER.info("Starting points[1]" + startingPoints[1]);
 				LOGGER.info("Starting points[2]" + startingPoints[2]);
@@ -903,7 +903,7 @@ public class NewSpecimenAction extends SecureAction
 								startingPoints1[0] = specimenForm.getStorageContainer();
 								startingPoints1[1] = specimenForm.getPositionDimensionOne();
 								startingPoints1[2] = specimenForm.getPositionDimensionTwo();
-								initialValues = new Vector();
+								initialValues = new Vector<String[]>();
 								initialValues.add(startingPoints1);
 
 							}
@@ -912,7 +912,7 @@ public class NewSpecimenAction extends SecureAction
 									&& specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP)
 							{
 								final String[] startingPoints2 = new String[]{"-1", "-1", "-1"};
-								initialValues = new ArrayList();
+								initialValues = new ArrayList<String[]>();
 								initialValues.add(startingPoints2);
 								request.setAttribute("initValues", initialValues);
 							}
@@ -1046,26 +1046,26 @@ public class NewSpecimenAction extends SecureAction
 	{
 		// Setting the specimen type list
 		NameValueBean bean = new NameValueBean(specimenForm.getType(), specimenForm.getType());
-		final List specimenTypeList = new ArrayList();
+		final List<NameValueBean> specimenTypeList = new ArrayList<NameValueBean>();
 		specimenTypeList.add(bean);
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
 		// Setting tissue site list
 		bean = new NameValueBean(specimenForm.getTissueSite(), specimenForm.getTissueSite());
-		final List tissueSiteList = new ArrayList();
+		final List<NameValueBean> tissueSiteList = new ArrayList<NameValueBean>();
 		tissueSiteList.add(bean);
 		request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 
 		// Setting tissue side list
 		bean = new NameValueBean(specimenForm.getTissueSide(), specimenForm.getTissueSide());
-		final List tissueSideList = new ArrayList();
+		final List<NameValueBean> tissueSideList = new ArrayList<NameValueBean>();
 		tissueSideList.add(bean);
 		request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
 
 		// Setting pathological status list
 		bean = new NameValueBean(specimenForm.getPathologicalStatus(), specimenForm
 				.getPathologicalStatus());
-		final List pathologicalStatusList = new ArrayList();
+		final List<NameValueBean> pathologicalStatusList = new ArrayList<NameValueBean>();
 		pathologicalStatusList.add(bean);
 		request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
 	}
@@ -1275,9 +1275,9 @@ public class NewSpecimenAction extends SecureAction
 	 * @param consentResponse : consentResponse
 	 * @return Map : Map
 	 */
-	private Map prepareConsentMap(List participantResponseList, Collection consentResponse)
+	private Map<String, Comparable> prepareConsentMap(List participantResponseList, Collection consentResponse)
 	{
-		final Map tempMap = new HashMap();
+		final Map<String, Comparable> tempMap = new HashMap<String, Comparable>();
 		Long consentTierID;
 		Long consentID;
 		if (participantResponseList != null || consentResponse != null)
@@ -1674,9 +1674,9 @@ public class NewSpecimenAction extends SecureAction
 	 *
 	 * @return columnList
 	 */
-	public List columnNames()
+	public List<String> columnNames()
 	{
-		final List columnList = new ArrayList();
+		final List<String> columnList = new ArrayList<String>();
 		columnList.add(Constants.LABLE);
 		columnList.add(Constants.TYPE);
 		columnList.add(Constants.STORAGE_CONTAINER_LOCATION);

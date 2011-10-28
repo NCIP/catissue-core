@@ -7,16 +7,17 @@ import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.struts.upload.FormFile;
 
 import edu.wustl.catissuecore.actionForm.CPSearchForm;
-import edu.wustl.catissuecore.actionForm.DisplaySOPEventForm;
+import edu.wustl.catissuecore.actionForm.DisplaySPPEventForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
-import edu.wustl.catissuecore.actionForm.SOPForm;
+import edu.wustl.catissuecore.actionForm.SPPForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
-import edu.wustl.catissuecore.actionForm.UtilizeSopForm;
+import edu.wustl.catissuecore.actionForm.UtilizeSppForm;
 import edu.wustl.catissuecore.smoketest.CaTissueSuiteSmokeBaseTest;
+import edu.wustl.catissuecore.smoketest.admin.CommonForm;
+import edu.wustl.catissuecore.smoketest.util.DataObject;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
-import edu.wustl.testframework.util.DataObject;
 
 public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseTest
 {
@@ -40,15 +41,15 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 	{
 		String[] arr = getDataObject().getValues();
 
-		SOPForm sopForm = new SOPForm();
+		SPPForm sppForm = new SPPForm();
 
-		setRequestPathInfo("/SOP");
-		addRequestParameter("pageOf","pageOfSOP");
+		setRequestPathInfo("/SPP");
+		addRequestParameter("pageOf","pageOfSPP");
 		addRequestParameter("operation","add");
-		setActionForm(sopForm);
+		setActionForm(sppForm);
 		actionPerform();
 
-		sopForm.setName(arr[0]);
+		sppForm.setName(arr[0]);
 
 
 		FormFile formFile;
@@ -60,12 +61,12 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 
 		CommonForm commonForm = new CommonForm(fileItem,arr[7]);
 	    formFile =   (FormFile) commonForm;
-		sopForm.setXmlFileName(formFile);
-		sopForm.setBarcode(arr[8]);
+		sppForm.setXmlFileName(formFile);
+		sppForm.setBarcode(arr[8]);
 
-		setRequestPathInfo("/SOPCreate");
+		setRequestPathInfo("/SPPCreate");
 		addRequestParameter("operation","add");
-		setActionForm(sopForm);
+		setActionForm(sppForm);
 		actionPerform();
 
 		verifyActionMessages(new String[]{"object.add.successOnly"});
@@ -110,7 +111,7 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 
 		setRequestPathInfo("/SimpleQueryInterface");
 		addRequestParameter("aliasName", "SpecimenProcessingProcedure");
-		addRequestParameter("pageOf", "pageOfSOP" );
+		addRequestParameter("pageOf", "pageOfSPP" );
 		setActionForm(simpleQueryInterfaceForm);
 		actionPerform();
 
@@ -123,29 +124,29 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 
 		setRequestPathInfo("/SimpleSearch");
 		addRequestParameter("aliasName", "SpecimenProcessingProcedure");
-		addRequestParameter("pageOf", "pageOfSOP" );
+		addRequestParameter("pageOf", "pageOfSPP" );
 		setActionForm(simpleQueryInterfaceForm);
 		actionPerform();
 
 
 		setRequestPathInfo("/SearchObject");
-		addRequestParameter("pageOf", "pageOfSOP");
+		addRequestParameter("pageOf", "pageOfSPP");
 		addRequestParameter("operation", "search");
 		addRequestParameter("id", arr[2]);
 		actionPerform();
 
 
-		setRequestPathInfo("/SOPSearch");
+		setRequestPathInfo("/SPPSearch");
 		addRequestParameter("operation", "search");
-		addRequestParameter("pageOf", "pageOfSOP");
+		addRequestParameter("pageOf", "pageOfSPP");
 		actionPerform();
 
-		SOPForm sopForm = (SOPForm) getActionForm() ;
+		SPPForm sopForm = (SPPForm) getActionForm() ;
 
 
-		setRequestPathInfo("/SOP");
+		setRequestPathInfo("/SPP");
 		addRequestParameter("operation", "edit");
-		addRequestParameter("pageOf", "pageOfSOP");
+		addRequestParameter("pageOf", "pageOfSPP");
 		setActionForm(sopForm);
 		actionPerform();
 
@@ -161,9 +162,9 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 	    formFile =   (FormFile) commonForm;
 		sopForm.setXmlFileName(formFile);
 
-		setRequestPathInfo("/SOPEdit");
+		setRequestPathInfo("/SPPEdit");
 		addRequestParameter("operation", "edit");
-		addRequestParameter("pageOf", "pageOfSOP");
+		addRequestParameter("pageOf", "pageOfSPP");
 		setActionForm(sopForm);
 		actionPerform();
 		verifyForward("success");
@@ -177,7 +178,7 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 		    CPSearchForm cpSearchForm = new CPSearchForm();
 	        ParticipantForm participantForm = new ParticipantForm();
 	        NewSpecimenForm newSpecimenForm = new NewSpecimenForm();
-	        DisplaySOPEventForm displaySOPEventForm = new DisplaySOPEventForm();
+	        DisplaySPPEventForm displaySPPEventForm = new DisplaySPPEventForm();
 	        SpecimenCollectionGroupForm specimenCollectionGroupForm =new SpecimenCollectionGroupForm();
 
 
@@ -240,11 +241,11 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 	        setActionForm(newSpecimenForm);
 	        actionPerform();
 
-	        setRequestPathInfo("/DisplaySOPEventsAction");
+	        setRequestPathInfo("/DisplaySPPEventsAction");
 	        addRequestParameter("id", "2");
 	        addRequestParameter("operation", "edit");
 	        addRequestParameter("pageOf", "pageOfDynamicEvent");
-	        setActionForm(displaySOPEventForm);
+	        setActionForm(displaySPPEventForm);
 	        actionPerform();
 
 	      //  verifyForward("success");
@@ -257,10 +258,10 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 		    String[] inputData = getDataObject().getValues();
 		    addRequestParameter("sopValue", "1");
 		    addRequestParameter("operation", "specimen");
-			addRequestParameter("pageOf","pageOfSOP");
+			addRequestParameter("pageOf","pageOfSPP");
 		    setRequestPathInfo("/UtilizeSop");
-		    UtilizeSopForm utilizeSopForm = new UtilizeSopForm();
-		    setActionForm(utilizeSopForm);
+		    UtilizeSppForm utilizeSppForm = new UtilizeSppForm();
+		    setActionForm(utilizeSppForm);
 		    actionPerform();
 	}
 
@@ -269,10 +270,10 @@ public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseT
 		    String[] inputData = getDataObject().getValues();
 		    addRequestParameter("sopValue", "1");
 		    addRequestParameter("operation", "scg");
-			addRequestParameter("pageOf","pageOfSOP");
+			addRequestParameter("pageOf","pageOfSPP");
 		    setRequestPathInfo("/UtilizeSop");
-		    UtilizeSopForm utilizeSopForm = new UtilizeSopForm();
-		    setActionForm(utilizeSopForm);
+		    UtilizeSppForm utilizeSppForm = new UtilizeSppForm();
+		    setActionForm(utilizeSppForm);
 		    actionPerform();
 	}
 

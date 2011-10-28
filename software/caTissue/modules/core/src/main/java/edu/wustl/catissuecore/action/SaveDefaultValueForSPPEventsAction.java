@@ -63,8 +63,8 @@ public class SaveDefaultValueForSPPEventsAction extends SecureAction
 		Set<AbstractFormContext> formContextCollection = new HashSet<AbstractFormContext>();
 		Map<AbstractFormContext, Map<String, Object>> formContextParameterMap = new HashMap<AbstractFormContext, Map<String, Object>>();
 
-		ActionForward actionForward = mapping.findForward(Constants.PAGE_OF_SOP);
-		//Save SOP events
+		ActionForward actionForward = mapping.findForward(Constants.PAGE_OF_SPP);
+		//Save SPP events
 		if (Boolean.parseBoolean(request.getParameter(Constants.SAVE_SPP_EVENTS)))
 		{
 			SPPEventProcessor sppEventProcessor = new SPPEventProcessor();

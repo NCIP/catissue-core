@@ -11,7 +11,7 @@ import edu.wustl.catissuecore.actionForm.DisposalEventParametersForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.RequestDetailsForm;
-import edu.wustl.catissuecore.actionForm.SOPForm;
+import edu.wustl.catissuecore.actionForm.SPPForm;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
@@ -105,14 +105,14 @@ public class UIObjectFactory implements IUIObjectFactory
 		{
 			uiObject = createShipmentRequestUIObject((ShipmentRequestForm)form);
 		}
-		else if(form instanceof SOPForm)
+		else if(form instanceof SPPForm)
 		{
-			uiObject = createSPPUIObject((SOPForm)form);
+			uiObject = createSPPUIObject((SPPForm)form);
 		}
 		return uiObject;
 	}
 
-	private UIObject createSPPUIObject(SOPForm form)
+	private UIObject createSPPUIObject(SPPForm form)
 	{
 		SPPUIObject sppUIObject = new SPPUIObject();
 		sppUIObject.setXmlFileName(form.getXmlFileName());

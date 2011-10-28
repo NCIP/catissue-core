@@ -130,8 +130,6 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		final List listOfData = bizLogic.getListOfArray(dist);
 		if (!listOfData.isEmpty())
 		{
-
-			List tempList = new ArrayList();
 			for(int i=0;i<listOfData.size();i++)
 			{
 				List list = (List) listOfData.get( i );

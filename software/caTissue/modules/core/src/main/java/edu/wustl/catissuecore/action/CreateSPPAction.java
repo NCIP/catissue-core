@@ -9,7 +9,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.common.action.CommonAddEditAction;
 
-public class CreateSOPAction extends CommonAddEditAction
+public class CreateSPPAction extends CommonAddEditAction
 {
 
 	/* (non-Javadoc)

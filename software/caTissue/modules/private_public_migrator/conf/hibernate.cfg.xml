@@ -124,8 +124,8 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/CctsNotif.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/CctsNotifLog.hbm.xml"/>
 
-			<!-- SOP related mappings -->
-		<mapping resource="edu/wustl/catissuecore/hbm/SOP.hbm.xml"/>
+			<!-- SPP related mappings -->
+		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenProcessingProcedure.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractApplication.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Action.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ActionApplicationRecordEntry.hbm.xml"/>

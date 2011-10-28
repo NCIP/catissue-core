@@ -427,7 +427,7 @@ public class CollectionProtocolTestCases  extends CaTissueSuiteSmokeBaseTest
 			addRequestParameter("limit","15");
 			addRequestParameter("start","0");
 			addRequestParameter("query","");
-			setRequestPathInfo("/SOPData");
+			setRequestPathInfo("/SPPData");
 			actionPerform();
 
 	        setRequestPathInfo("/SaveProtocolEvents");
@@ -504,7 +504,7 @@ public class CollectionProtocolTestCases  extends CaTissueSuiteSmokeBaseTest
 			addRequestParameter("storageLocationForAliquotSpecimen", array[46]);
 			addRequestParameter("operation", "add");
 			addRequestParameter("labelFormat", array[47]);
-			addRequestParameter("processingSOPForSpecimen","SPP_With_SpunEvent");
+			addRequestParameter("processingSPPForSpecimen","SPP_With_SpunEvent");
 			addRequestParameter("creationEventForSpecimen","SPP_With_SpunEvent : 6 : Spun Event Parameters");
 
 			addRequestParameter("labelFormatForAliquot", array[48]);

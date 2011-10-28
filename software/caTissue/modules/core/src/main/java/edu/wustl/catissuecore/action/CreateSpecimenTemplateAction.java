@@ -169,25 +169,25 @@ public class CreateSpecimenTemplateAction extends BaseAction
 				.setReceivedEventReceivedQuality((String) DefaultValueManager
 						.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
 			}*/
-			if (createSpecimenTemplateForm.getProcessingSOPForSpecimen() == null)
+			if (createSpecimenTemplateForm.getProcessingSPPForSpecimen() == null)
 			{
 				createSpecimenTemplateForm
-				.setProcessingSOPForSpecimen(Constants.NOT_SPECIFIED);//AppUtility.getAllSOPNames());
+				.setProcessingSPPForSpecimen(Constants.NOT_SPECIFIED);
 			}
 			if (createSpecimenTemplateForm.getCreationEventForSpecimen() == null)
 			{
 				createSpecimenTemplateForm
-				.setCreationEventForSpecimen(Constants.NOT_SPECIFIED);//AppUtility.getAllEventNames());
+				.setCreationEventForSpecimen(Constants.NOT_SPECIFIED);
 			}
-			if (createSpecimenTemplateForm.getProcessingSOPForAliquot() == null)
+			if (createSpecimenTemplateForm.getProcessingSPPForAliquot() == null)
 			{
 				createSpecimenTemplateForm
-				.setProcessingSOPForAliquot(Constants.NOT_SPECIFIED);//AppUtility.getAllSOPNames());
+				.setProcessingSPPForAliquot(Constants.NOT_SPECIFIED);
 			}
 			if (createSpecimenTemplateForm.getCreationEventForAliquot() == null)
 			{
 				createSpecimenTemplateForm
-				.setCreationEventForAliquot(Constants.NOT_SPECIFIED);//AppUtility.getAllEventNames());
+				.setCreationEventForAliquot(Constants.NOT_SPECIFIED);
 			}
 		}
 		final List storageContainerList = new LinkedList();
@@ -231,14 +231,14 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		request.setAttribute("storageContainerList", storageContainerList);
 
 		//final List eventsList = AppUtility.getAllEventNames();
-		SPPBizLogic sopBizLogic = new SPPBizLogic();
-		final List sopList = sopBizLogic.getAllSPPNames();
+		SPPBizLogic sppBizLogic = new SPPBizLogic();
+		final List sppList = sppBizLogic.getAllSPPNames();
 
 		// Dynamic Events List
 		//request.setAttribute("eventsList", eventsList);
 
-		//SOP List
-		request.setAttribute("sopList", sopList);
+		//SPP List
+		request.setAttribute("sppList", sppList);
 
 		// Event Key
 		request.setAttribute("key", key);
@@ -259,7 +259,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		request.setAttribute("isParticipantReg", collectionProtocolBean.isParticiapantReg());
 		request.setAttribute("opr", collectionProtocolBean.getOperation());
 
-		//CODE FOR SELECTED SOP
+		//CODE FOR SELECTED SPP
 		final Map collectionProtocolEventMap = (Map) session
 		.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 
@@ -297,7 +297,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			}
 		}
 		//request.setAttribute("eventsList", spp);
-		request.setAttribute("sopEventList", spp);
+		request.setAttribute("sppEventList", spp);
 		if ("newEvent".equals(pageOf))
 		{
 			return mapping.findForward("newEvent");
@@ -445,14 +445,14 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		createSpecimenTemplateForm.setNoOfAliquots(null);
 		createSpecimenTemplateForm.setQuantityPerAliquot(null);
 		createSpecimenTemplateForm.setStorageLocationForAliquotSpecimen(null);
-		createSpecimenTemplateForm.setProcessingSOPForAliquot(null);
+		createSpecimenTemplateForm.setProcessingSPPForAliquot(null);
 		createSpecimenTemplateForm.setCreationEventForAliquot(null);
 		createSpecimenTemplateForm.setNoOfDeriveSpecimen(0);
 		createSpecimenTemplateForm.setAliquotSpecimenCollection(null);
 		createSpecimenTemplateForm.setDeriveSpecimenCollection(null);
 		createSpecimenTemplateForm.setDeriveSpecimenValues(null);
 		createSpecimenTemplateForm.setCreationEventForSpecimen(null);
-		createSpecimenTemplateForm.setProcessingSOPForSpecimen(null);
+		createSpecimenTemplateForm.setProcessingSPPForSpecimen(null);
 
 		createSpecimenTemplateForm.setLabelFormat(null);
 		createSpecimenTemplateForm.setLabelFormatForAliquot(null);
@@ -498,16 +498,16 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			specimenRequirementBean.setCreationEventForAliquot(Constants.NOT_SPECIFIED);
 		}
 			createSpecimenTemplateForm.setCreationEventForAliquot(specimenRequirementBean.getCreationEventForAliquot());
-		if(specimenRequirementBean.getProcessingSOPForSpecimen()==null)
+		if(specimenRequirementBean.getProcessingSPPForSpecimen()==null)
 		{
-			specimenRequirementBean.setProcessingSOPForSpecimen(Constants.NOT_SPECIFIED);
+			specimenRequirementBean.setProcessingSPPForSpecimen(Constants.NOT_SPECIFIED);
 		}
-		createSpecimenTemplateForm.setProcessingSOPForSpecimen(specimenRequirementBean.getProcessingSOPForSpecimen());
-		if(specimenRequirementBean.getProcessingSOPForAliquot()==null)
+		createSpecimenTemplateForm.setProcessingSPPForSpecimen(specimenRequirementBean.getProcessingSPPForSpecimen());
+		if(specimenRequirementBean.getProcessingSPPForAliquot()==null)
 		{
-			specimenRequirementBean.setProcessingSOPForAliquot(Constants.NOT_SPECIFIED);
+			specimenRequirementBean.setProcessingSPPForAliquot(Constants.NOT_SPECIFIED);
 		}
-		createSpecimenTemplateForm.setProcessingSOPForAliquot(specimenRequirementBean.getProcessingSOPForAliquot());
+		createSpecimenTemplateForm.setProcessingSPPForAliquot(specimenRequirementBean.getProcessingSPPForAliquot());
 
 		this.setCollAndRecEvents(createSpecimenTemplateForm, request, specimenRequirementBean);
 		// Derive
@@ -609,8 +609,8 @@ public class CreateSpecimenTemplateAction extends BaseAction
 				.getQuantityPerAliquot());  
 		createSpecimenTemplateForm.setStorageLocationForAliquotSpecimen(specimenRequirementBean
 				.getStorageContainerForAliquotSpecimem());
-		createSpecimenTemplateForm.setProcessingSOPForAliquot(specimenRequirementBean.getProcessingSOPForAliquot());
-		createSpecimenTemplateForm.setProcessingSOPForSpecimen(specimenRequirementBean.getProcessingSOPForSpecimen());
+		createSpecimenTemplateForm.setProcessingSPPForAliquot(specimenRequirementBean.getProcessingSPPForAliquot());
+		createSpecimenTemplateForm.setProcessingSPPForSpecimen(specimenRequirementBean.getProcessingSPPForSpecimen());
 		if(specimenRequirementBean.getCreationEventForAliquot()==null)
 		{
 			specimenRequirementBean.setCreationEventForAliquot(Constants.NOT_SPECIFIED);

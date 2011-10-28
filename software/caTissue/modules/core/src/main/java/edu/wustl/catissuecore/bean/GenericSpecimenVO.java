@@ -589,7 +589,7 @@ public final class GenericSpecimenVO implements GenericSpecimen
 
 
 	@Override
-	public String getProcessingSOPForSpecimen() {
+	public String getProcessingSPPForSpecimen() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -603,7 +603,7 @@ public final class GenericSpecimenVO implements GenericSpecimen
 
 
 	@Override
-	public void setProcessingSOPForSpecimen(String processing) {
+	public void setProcessingSPPForSpecimen(String processing) {
 		// TODO Auto-generated method stub
 
 	}

@@ -27,7 +27,7 @@ import edu.wustl.common.action.SecureAction;
  * @author suhas_khot
  *
  */
-public class DisplaySOPEventsFromDashboardAction extends SecureAction
+public class DisplaySPPEventsFromDashboardAction extends SecureAction
 {
 	/**
 	 * Overrides the execute method of Action class. Initializes the various
@@ -51,14 +51,14 @@ public class DisplaySOPEventsFromDashboardAction extends SecureAction
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		Long sopId = Long.parseLong(request.getParameter("sopId"));
+		Long sppId = Long.parseLong(request.getParameter("sppId"));
 		edu.wustl.dao.DAO dao = null;
 		dao = edu.wustl.catissuecore.util.global.AppUtility.openDAOSession(null);
-		SpecimenProcessingProcedure processingSOP = (SpecimenProcessingProcedure) dao.retrieveById(SpecimenProcessingProcedure.class.getName(), sopId);; // TODO - Retrieve SOP object based on
-		// sop_id from request.
+		SpecimenProcessingProcedure processingSPP = (SpecimenProcessingProcedure) dao.retrieveById(SpecimenProcessingProcedure.class.getName(), sppId);; // TODO - Retrieve SPP object based on
+		// spp_id from request.
 
 		request.setAttribute("selectedAll", request.getParameter("selectedAll"));
-		request.setAttribute("sppId", sopId);
+		request.setAttribute("sppId", sppId);
 		SPPEventProcessor sppEventProcessor = new SPPEventProcessor();
 		if (request.getParameter("specimenId") != null)
 		{
@@ -68,10 +68,10 @@ public class DisplaySOPEventsFromDashboardAction extends SecureAction
 		{
 			request.setAttribute("scgId", request.getParameter("scgId"));
 		}
-		request.setAttribute("nameOfSelectedSop", processingSOP.getName());
-		request.setAttribute("selectedSopId", processingSOP.getId());
+		request.setAttribute("nameOfSelectedSpp", processingSPP.getName());
+		request.setAttribute("selectedSppId", processingSPP.getId());
 		List<Map<String, Object>> sppEventDataCollection = sppEventProcessor
-				.populateSPPEventsData(processingSOP);
+				.populateSPPEventsData(processingSPP);
 
 		Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
 		new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
@@ -80,7 +80,7 @@ public class DisplaySOPEventsFromDashboardAction extends SecureAction
 			request.getSession().setAttribute("dynamicEventMap", dynamicEventMap);
 		}
 		request.setAttribute(Constants.SPP_EVENTS, sppEventDataCollection);
-		return mapping.findForward("pageOfSopData");
+		return mapping.findForward("pageOfSppData");
 	}
 
 }

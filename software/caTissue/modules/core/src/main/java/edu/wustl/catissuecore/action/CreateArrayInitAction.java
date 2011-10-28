@@ -131,7 +131,7 @@ public class CreateArrayInitAction extends BaseAction
 					// Set Specimen Class in request attribute to be displayed
 					// in
 					// SpecimenArray.jsp
-					final List specimenClassList = new ArrayList();
+					final List<NameValueBean> specimenClassList = new ArrayList<NameValueBean>();
 
 					final String colName = "specimenClass";
 					final String colValue = definedArrayRequestBean.getArrayClass();

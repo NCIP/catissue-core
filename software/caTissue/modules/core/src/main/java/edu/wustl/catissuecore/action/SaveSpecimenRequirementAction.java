@@ -204,7 +204,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm
 				.getStorageLocationForAliquotSpecimen());
 		specimenRequirementBean.setCreationEventForAliquot(createSpecimenTemplateForm.getCreationEventForAliquot());
-		specimenRequirementBean.setProcessingSOPForAliquot(createSpecimenTemplateForm.getProcessingSOPForAliquot());
+		specimenRequirementBean.setProcessingSPPForAliquot(createSpecimenTemplateForm.getProcessingSPPForAliquot());
 
 		// Derive
 		if (createSpecimenTemplateForm.getNoOfDeriveSpecimen() == 0)
@@ -250,7 +250,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setCollectionEventCollectionProcedure(createSpecimenTemplateForm
 				.getCollectionEventCollectionProcedure());*/
 		specimenRequirementBean.setCreationEventForSpecimen(createSpecimenTemplateForm.getCreationEventForSpecimen());
-		specimenRequirementBean.setProcessingSOPForSpecimen(createSpecimenTemplateForm.getProcessingSOPForSpecimen());
+		specimenRequirementBean.setProcessingSPPForSpecimen(createSpecimenTemplateForm.getProcessingSPPForSpecimen());
 
 		specimenRequirementBean.setLabelFormat(createSpecimenTemplateForm.getLabelFormat());
 //		specimenRequirementBean.setLabelFormatForAliquot(createSpecimenTemplateForm.getLabelFormatForAliquot()());
@@ -314,7 +314,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 				.getStorageLocationForAliquotSpecimen());
 
 		specimenRequirementBean.setCreationEventForSpecimen(createSpecimenTemplateForm.getCreationEventForAliquot());
-		specimenRequirementBean.setProcessingSOPForSpecimen(createSpecimenTemplateForm.getProcessingSOPForAliquot());
+		specimenRequirementBean.setProcessingSPPForSpecimen(createSpecimenTemplateForm.getProcessingSPPForAliquot());
 
 		specimenRequirementBean.setLabelFormat(createSpecimenTemplateForm.getLabelFormatForAliquot());
 		specimenRequirementBean.setDeriveSpecimen(null);
@@ -365,7 +365,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			specimenRequirementBean.setNoOfDeriveSpecimen(0);
 
 			specimenRequirementBean.setCreationEventForSpecimen(deriveSpecimenBean.getCreationEvent());
-			specimenRequirementBean.setProcessingSOPForSpecimen(deriveSpecimenBean.getProcessingSPP());
+			specimenRequirementBean.setProcessingSPPForSpecimen(deriveSpecimenBean.getProcessingSPP());
 
 			specimenRequirementBean.setLabelFormat(deriveSpecimenBean.getLabelFormat());
 			if(isPersistent.equals("true"))
@@ -456,7 +456,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setStorageContainerForAliquotSpecimem(createSpecimenTemplateForm
 				.getStorageLocationForAliquotSpecimen());
 		specimenRequirementBean.setCreationEventForAliquot(createSpecimenTemplateForm.getCreationEventForAliquot());
-		specimenRequirementBean.setProcessingSOPForAliquot(createSpecimenTemplateForm.getProcessingSOPForAliquot());
+		specimenRequirementBean.setProcessingSPPForAliquot(createSpecimenTemplateForm.getProcessingSPPForAliquot());
 		specimenRequirementBean.setAliquotSpecimenCollection(newAliquotSpecimenMap);
 
 		// Derive

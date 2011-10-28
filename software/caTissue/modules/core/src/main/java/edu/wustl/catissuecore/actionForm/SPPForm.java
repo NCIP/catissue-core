@@ -2,27 +2,32 @@ package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
-public class UtilizeSopForm extends AbstractActionForm
+public class SPPForm extends AbstractActionForm
 {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * logger Logger - Generic logger.
 	 */
-	private static Logger logger = Logger.getCommonLogger(SOPForm.class);
+	private static Logger logger = Logger.getCommonLogger(SPPForm.class);
 	/**
 	 * A string containing the name of the institute.
 	 */
 	private String name;
+
+	private String barcode;
 
 	private FormFile xmlFileName;
 	/**
@@ -51,12 +56,42 @@ public class UtilizeSopForm extends AbstractActionForm
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		final ActionErrors errors = new ActionErrors();
+		final Validator validator = new Validator();
+		try
+		{
+			String spChars = "!@#$%^&*()=+\\|{[]}\'\";:/?.>,<`~-";
+			if(Validator.isEmpty(this.name) && xmlFileName.getFileName().isEmpty())
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.fields"));
+			}
+			else
+			{
+				if (Validator.isEmpty(this.name))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.name.missing"));
+				}
+				else if(validator.containsSpecialCharacters(this.name, spChars))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.spcl.char"));
+				}
+				if(xmlFileName.getFileName().isEmpty())
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.file"));
+				}
+				else if(!this.xmlFileName.getFileName().endsWith(".xml"))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.valid.file"));
+				}
+			}
+		}
+		catch (final Exception excp)
+		{
+			SPPForm.logger.error(excp.getMessage(), excp);
+			excp.printStackTrace() ;
+		}
 		return errors;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
-	 */
 	@Override
 	public int getFormId()
 	{
@@ -87,9 +122,22 @@ public class UtilizeSopForm extends AbstractActionForm
 		this.name = name;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAddNewObjectIdentifier(java.lang.String, java.lang.Long)
+	/**
+	 * @param barcode the barcode to set
 	 */
+	public void setBarcode(String barcode)
+	{
+		this.barcode = barcode;
+	}
+
+	/**
+	 * @return the barcode
+	 */
+	public String getBarcode()
+	{
+		return barcode;
+	}
+
 	@Override
 	public void setAddNewObjectIdentifier(String addNewFor,
 			Long addObjectIdentifier)
@@ -98,13 +146,12 @@ public class UtilizeSopForm extends AbstractActionForm
 
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.actionForm.IValueObject#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
-	 */
 	@Override
-	public void setAllValues(AbstractDomainObject arg0)
+	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		// TODO Auto-generated method stub
-
+		final SpecimenProcessingProcedure spp = (SpecimenProcessingProcedure)abstractDomain;
+		this.setId(spp.getId());
+		this.setName(spp.getName());
+		this.setBarcode(spp.getBarcode());
 	}
 }

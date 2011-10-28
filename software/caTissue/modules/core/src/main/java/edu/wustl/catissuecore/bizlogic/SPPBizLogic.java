@@ -64,7 +64,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		{
 			SPPUIObject sppUIObject = (SPPUIObject) uiObject;
 			SpecimenProcessingProcedure spp = (SpecimenProcessingProcedure) obj;
-			SOPXMLParser parser = SOPXMLParser.getInstance();
+			SPPXMLParser parser = SPPXMLParser.getInstance();
 			FormFile xmlFile = sppUIObject.getXmlFileName();
 			String xmlFileName = xmlFile.getFileName();
 			InputStream inputStream = xmlFile.getInputStream();
@@ -159,13 +159,13 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 			final SpecimenProcessingProcedure sppNewObj = (SpecimenProcessingProcedure) currentObj;
 			final SPPUIObject sppUIObj = (SPPUIObject) uiObject;
 
-			final String sppSpecReqHQL = Constants.SOP_SPEC_REQ_HQL + sppOldObj.getId();
+			final String sppSpecReqHQL = Constants.SPP_SPEC_REQ_HQL + sppOldObj.getId();
 			final List specReqList = AppUtility.executeQuery(sppSpecReqHQL);
 
-			final String cpeHQL = Constants.SOP_CPE_HQL + sppOldObj.getId();
+			final String cpeHQL = Constants.SPP_CPE_HQL + sppOldObj.getId();
 			final List cpeList = AppUtility.executeQuery(cpeHQL);
 
-			SOPXMLParser parser = SOPXMLParser.getInstance();
+			SPPXMLParser parser = SPPXMLParser.getInstance();
 			FormFile xmlFile = sppUIObj.getXmlFileName();
 			String xmlFileName = xmlFile.getFileName();
 			InputStream inputStream = xmlFile.getInputStream();
@@ -187,11 +187,11 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 									|| action.getActivityStatus().equals(Constants.DISABLED))
 							{
 								ApplicationException appExp = new ApplicationException(null, null,
-										Constants.SOP_EDIT_WARNING);
-								appExp.setCustomizedMsg(Constants.SOP_EDIT_WARNING);
-								this.logger.error(Constants.SOP_EDIT_WARNING, appExp);
+										Constants.SPP_EDIT_WARNING);
+								appExp.setCustomizedMsg(Constants.SPP_EDIT_WARNING);
+								this.logger.error(Constants.SPP_EDIT_WARNING, appExp);
 								throw this.getBizLogicException(appExp, "",
-										Constants.SOP_EDIT_WARNING);
+										Constants.SPP_EDIT_WARNING);
 							}
 							if (oldAction.getApplicationDefaultValue() != null)
 							{
@@ -490,7 +490,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		else
 		{
 			logger
-					.error("edu.wustl.catissuecore.util.global.AppUtility.getAllSOPEventFormNames(Map<String, Long>): actionRecordEntry is NULL!");
+					.error("edu.wustl.catissuecore.util.global.AppUtility.getAllSPPEventFormNames(Map<String, Long>): actionRecordEntry is NULL!");
 		}
 		Collections.sort(namesOfSPPEvents);
 		String[] eventlist = new String[namesOfSPPEvents.size()-2];

@@ -63,11 +63,11 @@
 
 <script>
 
-function showSOPEvents()
+function showSPPEvents()
 {
 	var specimenIdentifier = "<%=specimenIdentifier%>";
 	var consentTier=0;
-	var action= "DisplaySOPEventsAction.do?pageOf=<%=pageOf%>&menuSelected=15&specimenId="+specimenIdentifier+"&consentTierCounter="+consentTier;
+	var action= "DisplaySPPEventsAction.do?pageOf=<%=pageOf%>&menuSelected=15&specimenId="+specimenIdentifier+"&consentTierCounter="+consentTier;
 	document.forms[0].action = action;
 	document.forms[0].submit();
 }
@@ -148,7 +148,7 @@ function showEvent()
 					<img src="images/uIEnhancementImages/tab_events2.gif" alt="Events" width="56" height="22" onclick="showEvent()" border="0"></html:link></td>
 				<td valign="bottom">
 					<html:link href="#">
-					<img src="images/uIEnhancementImages/tab_sop2.gif" alt="SOP" width="42" height="22" onclick="showSOPEvents()" border="0"></html:link></td>
+					<img src="images/uIEnhancementImages/tab_spp2.gif" alt="SPP" width="42" height="22" onclick="showSPPEvents()" border="0"></html:link></td>
 				<td valign="bottom">
 					<html:link href="#"  onclick="viewSPR()">
 					<img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></html:link></td>

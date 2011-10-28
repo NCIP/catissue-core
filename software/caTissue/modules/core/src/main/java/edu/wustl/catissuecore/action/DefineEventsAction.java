@@ -64,9 +64,8 @@ public class DefineEventsAction extends BaseAction
 			this.populateCollectionProtocolBean(cpForm, cpBean);
 			CollectionProtocolUtil.updateClinicalDiagnosis(request, cpBean);
 		}
-		List sopNameList=null;
-		final List<NameValueBean> sopList = new ArrayList();
-		request.getSession().setAttribute("sopList", sopList);
+		final List<NameValueBean> sppList = new ArrayList();
+		request.getSession().setAttribute("sppList", sppList);
 		final Long cpIdentifier = cpBean.getIdentifier();
 		session.setAttribute("CP_IDENTIFIER", cpIdentifier);
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN, cpBean);

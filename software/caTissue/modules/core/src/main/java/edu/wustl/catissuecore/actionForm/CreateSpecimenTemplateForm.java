@@ -128,16 +128,16 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 	/** The received user name. */
 	private String receivedUserName = null;
 
-	private String processingSOPForSpecimen;
+	private String processingSPPForSpecimen;
 
 	private String creationEventForSpecimen;
 
-	public String getProcessingSOPForSpecimen() {
-		return processingSOPForSpecimen;
+	public String getProcessingSPPForSpecimen() {
+		return processingSPPForSpecimen;
 	}
 
-	public void setProcessingSOPForSpecimen(String processingSOPForSpecimen) {
-		this.processingSOPForSpecimen = processingSOPForSpecimen;
+	public void setProcessingSPPForSpecimen(String processingSPPForSpecimen) {
+		this.processingSPPForSpecimen = processingSPPForSpecimen;
 	}
 
 	public String getCreationEventForSpecimen() {
@@ -149,17 +149,17 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 		this.creationEventForSpecimen = creationEventForSpecimen;
 	}
 
-	private String processingSOPForAliquot;
+	private String processingSPPForAliquot;
 
 	private String creationEventForAliquot;
 
 
-	public String getProcessingSOPForAliquot() {
-		return processingSOPForAliquot;
+	public String getProcessingSPPForAliquot() {
+		return processingSPPForAliquot;
 	}
 
-	public void setProcessingSOPForAliquot(String processingSOPForAliquot) {
-		this.processingSOPForAliquot = processingSOPForAliquot;
+	public void setProcessingSPPForAliquot(String processingSPPForAliquot) {
+		this.processingSPPForAliquot = processingSPPForAliquot;
 	}
 
 	public String getCreationEventForAliquot() {
@@ -1294,8 +1294,8 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 			deriveSpecimenMap.put(key, creationEvent);
 
 			key = "DeriveSpecimenBean:" + iCount + "_processingSPP";
-			final String processingSOP = (String) this.deriveSpecimenValues.get(key);
-			deriveSpecimenMap.put(key, processingSOP);
+			final String processingSPP = (String) this.deriveSpecimenValues.get(key);
+			deriveSpecimenMap.put(key, processingSPP);
 
 			key = "DeriveSpecimenBean:" + iCount + "_labelFormat";
 			final String labelFormat = (String) this.deriveSpecimenValues.get(key);

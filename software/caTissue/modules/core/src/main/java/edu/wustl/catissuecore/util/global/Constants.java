@@ -2230,10 +2230,10 @@ public class Constants
 	public static final String DISTRIBUTIONPROTOCOL_EDIT_ACTION = "DistributionProtocolEdit.do";
 
 	/** The Constant SPP_ADD_ACTION. */
-	public static final String SOP_ADD_ACTION = "SOPCreate.do";
+	public static final String SPP_ADD_ACTION = "SPPCreate.do";
 
 	/** The Constant SPP_EDIT_ACTION. */
-	public static final String SOP_EDIT_ACTION = "SOPEdit.do";
+	public static final String SPP_EDIT_ACTION = "SPPEdit.do";
 
 	//Collection Status values
 	/** The Constant COLLECTION_STATUS_PENDING. */
@@ -4013,7 +4013,7 @@ public class Constants
 	public static final String PAGE_OF_USER = "pageOfUserAdmin";
 
 	/** The Constant PAGE_OF_SPP. */
-	public static final String PAGE_OF_SPP = "pageOfSOP";
+	public static final String PAGE_OF_SPP = "pageOfSPP";
 
 	//Patch ID: Bug#4227_3
 	/** The Constant SUBMIT_AND_ADD_MULTIPLE. */
@@ -5895,7 +5895,7 @@ public class Constants
 
 	public static final String PAGE_OF_DYNAMIC_EVENT = "pageOfDynamicEvent";
 
-	public static final String SPP_EVENTS = "SOPEvents";
+	public static final String SPP_EVENTS = "SPPEvents";
 
 	public static final String DYNAMIC_EVENT_MAP = "dynamicEventMap";
 
@@ -5903,17 +5903,17 @@ public class Constants
 
 	public static final String ACTIVE = "Active";
 
-	public static final String SOP_XSD_FILENAME = "SOP.xsd";
+	public static final String SPP_XSD_FILENAME = "SPP.xsd";
 
-	public static final String SOP_ENTITY_GRP_ERROR = "Invalid Entity group name";
+	public static final String SPP_ENTITY_GRP_ERROR = "Invalid Entity group name";
 
-	public static final String SOP_EVENT_ERROR = "Invalid event name";
+	public static final String SPP_EVENT_ERROR = "Invalid event name";
 
-	public static final String SOP_EDIT_WARNING = "Existing events cannot be modified or deleted during SPP edit. You are allowed to only add new events.";
+	public static final String SPP_EDIT_WARNING = "Existing events cannot be modified or deleted during SPP edit. You are allowed to only add new events.";
 
-	public static final String SOP_SPEC_REQ_HQL = "select specReq.id from edu.wustl.catissuecore.domain.SpecimenRequirement as specReq where specReq.processingSOP.id = ";
+	public static final String SPP_SPEC_REQ_HQL = "select specReq.id from edu.wustl.catissuecore.domain.SpecimenRequirement as specReq where specReq.processingSPP.id = ";
 
-	public static final String SOP_CPE_HQL = "select cpe.id from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe left join cpe.sopCollection sop where sop.id = ";
+	public static final String SPP_CPE_HQL = "select cpe.id from edu.wustl.catissuecore.domain.CollectionProtocolEvent cpe left join cpe.sppCollection spp where spp.id = ";
 
 	public static final String INVALID_XML_MSG = "Invalid XML. Please recheck all the tags in the XML provided and reload it";
 
@@ -5932,7 +5932,7 @@ public class Constants
 	public static final String EVENT_ORDER_ERROR = "Order for more than one event within an SPP is same.";
 
 	/** The Constant PAGE_OF_DISPLAY_SPP_EVENTS. */
-	public static final String PAGE_OF_DISPLAY_SOP_EVENTS = "pageOfDisplaySOPEvents";
+	public static final String PAGE_OF_DISPLAY_SPP_EVENTS = "pageOfDisplaySPPEvents";
 
 	public static final String CONTAINER_ID = "containerId";
 
@@ -5940,15 +5940,15 @@ public class Constants
 
 	public static final String REASON_DEVIATION = "reasonDeviation";
 
-	public static final String PAGE_OF_SOP_DEFAULT_VALUE = "pageOfSOPDefaultValue";
+	public static final String PAGE_OF_SPP_DEFAULT_VALUE = "pageOfSPPDefaultValue";
 
 	public static final String SET_DEFAULT_VALUE = "setDefaultValue";
 
-	public static final String PAGE_OF_SOP = "pageOfSOP";
+	//public static final String PAGE_OF_SPP = "pageOfSPP";
 
 	public static final String CONTROL_DELIMITER = "!@!";
 
-	public static final String PAGE_OF_DEF_VALUE_FOR_SOP = "pageOfDefaultValueForSOPEvents";
+	public static final String PAGE_OF_DEF_VALUE_FOR_SPP = "pageOfDefaultValueForSPPEvents";
 
 	public static final String SAVE_SPP_EVENTS = "saveSPPEvents";
 

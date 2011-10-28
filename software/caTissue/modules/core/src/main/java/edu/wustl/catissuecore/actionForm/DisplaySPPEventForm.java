@@ -11,7 +11,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
  * @author suhas_khot
  *
  */
-public class DisplaySOPEventForm extends AbstractActionForm
+public class DisplaySPPEventForm extends AbstractActionForm
 {
 
 	private static final long serialVersionUID = 1L;
@@ -80,7 +80,7 @@ public class DisplaySOPEventForm extends AbstractActionForm
 	/**
 	 * No argument constructor for UserForm class
 	 */
-	public DisplaySOPEventForm()
+	public DisplaySPPEventForm()
 	{
 		//      reset();
 	}

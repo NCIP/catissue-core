@@ -15,11 +15,11 @@
 
 Ext.onReady(function(){
    Ext.QuickTips.init();
-   var processingSOPForSpecimen;
-   if(document.getElementById('processingSOPForSpecimen') != null)
-   	processingSOPForSpecimen = document.getElementById('processingSOPForSpecimen').value
+   var processingSPPForSpecimen;
+   if(document.getElementById('processingSPPForSpecimen') != null)
+   	processingSPPForSpecimen = document.getElementById('processingSPPForSpecimen').value
 
-  var myUrl= 'ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName='+processingSOPForSpecimen;
+  var myUrl= 'ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName='+processingSPPForSpecimen;
   var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),
         reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'
         }, [{name: 'excerpt', mapping: 'field'}])
@@ -252,7 +252,7 @@ Ext.onReady(function(){
                               <td align="left" class="black_ar">Specimen Creation Event</td>
 							  <td align="left" class="black_ar">
 									<autocomplete:AutoCompleteTag property="creationEventForSpecimen"
-									  optionsList = "<%=request.getAttribute("sopEventList")%>"
+									  optionsList = "<%=request.getAttribute("sppEventList")%>"
 									  initialValue="${createSpecimenTemplateForm.creationEventForSpecimen}"
 									  styleClass="black_ar"
 									  size="32"
@@ -264,9 +264,9 @@ Ext.onReady(function(){
                                 <td align="center" class="black_ar">&nbsp;</td>
                                 <td align="left" class="black_ar"><label for="institutionId">Processing SPP</label></td>
                                 <td align="left" class="black_ar">
-									<autocomplete:AutoCompleteTag property="processingSOPForSpecimen"
+									<autocomplete:AutoCompleteTag property="processingSPPForSpecimen"
 									  optionsList = "<%=new SPPBizLogic().getAllSPPNames()%>"
-									  initialValue="${createSpecimenTemplateForm.processingSOPForSpecimen}"
+									  initialValue="${createSpecimenTemplateForm.processingSPPForSpecimen}"
 									  styleClass="black_ar"
 									  onChange="resetDSforDerive(this)"
 									  size="20"
@@ -359,8 +359,8 @@ Ext.onReady(function(){
 
 					String creationEvent = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_creationEvent)";
 					String creationEventKey = "DeriveSpecimenBean:" + rowno + "_creationEvent";
-					String processingSOP = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_processingSPP)";
-					String processingSOPKey = "DeriveSpecimenBean:" + rowno + "_processingSPP";
+					String processingSPP = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_processingSPP)";
+					String processingSPPKey = "DeriveSpecimenBean:" + rowno + "_processingSPP";
 
 					String changeClass = "changeUnit('"+specimenClass+"','"+unit+"','"+concentration+"','"+specimenType+"')";
 					String changeType = "onSubTypeChangeUnitforCP('"+specimenClass+"','" + unit+ "')";
@@ -381,7 +381,7 @@ String comboDataStorName = "ds_"+rowno;
 					String typeclassValue = (String)form.getDeriveSpecimenValue(srSubTypeKeyName);
 					String storageLocationValue = (String)form.getDeriveSpecimenValue(storageLocationKey);
 					String creationEventValue = (String)form.getDeriveSpecimenValue(creationEventKey);
-					String processingSOPValue = (String)form.getDeriveSpecimenValue(processingSOPKey);
+					String processingSPPValue = (String)form.getDeriveSpecimenValue(processingSPPKey);
 					specimenTypeList = (List)specimenTypeMap.get(className);
 					boolean subListEnabled1 = false;
 					if(specimenTypeList == null)
@@ -534,8 +534,8 @@ String comboDataStorName = "ds_"+rowno;
 							comboDataStorName = "ds_ce_"+rowno;
 %>
 
-		if(document.getElementById('processingSOPForSpecimen') != null)
-	   			processingSPPName = document.getElementById('processingSOPForSpecimen').value;
+		if(document.getElementById('processingSPPForSpecimen') != null)
+	   			processingSPPName = document.getElementById('processingSPPForSpecimen').value;
 									Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName='+processingSPPName;var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '<%=creationEvent%>',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: 'combo_<%=creationEvent%>',fields: ['id_cp'],id: '<%=comboDataStorName%>'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
 									</script>
 									</td>
@@ -544,9 +544,9 @@ String comboDataStorName = "ds_"+rowno;
 								
 
 									<td class="black_ar" >
-									<input type="text" name="combo_<%=processingSOP%>" id="combo_<%=processingSOP%>" size="8" value="<%=processingSOPValue%>"/>
+									<input type="text" name="combo_<%=processingSPP%>" id="combo_<%=processingSPP%>" size="8" value="<%=processingSPPValue%>"/>
 										<script>
-									Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=processingSPP';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '<%=processingSOP%>',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: 'combo_<%=processingSOP%>'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
+									Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=processingSPP';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '<%=processingSPP%>',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: 'combo_<%=processingSPP%>'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
 									</script>
 									</td>
 								
@@ -661,9 +661,9 @@ String comboDataStorName = "ds_"+rowno;
 
 									 <td class="black_ar">
 
-									 <input type="text" name="combo_processingSOPForAliquot" id="combo_processingSOPForAliquot" size="12" value="<%=form.getProcessingSOPForAliquot()%>"/>
+									 <input type="text" name="combo_processingSPPForAliquot" id="combo_processingSPPForAliquot" size="12" value="<%=form.getProcessingSPPForAliquot()%>"/>
 										<script>
-									Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=processingSPP';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'processingSOPForAliquot',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: 'combo_processingSOPForAliquot'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
+									Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=processingSPP';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'processingSPPForAliquot',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: 'combo_processingSPPForAliquot'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
 									</script>
 
 

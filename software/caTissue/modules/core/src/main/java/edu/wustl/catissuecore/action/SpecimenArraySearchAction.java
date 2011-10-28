@@ -76,7 +76,7 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 		{
 			final ActionForward forward = super.executeXSS(mapping, form, request, response);
 			final SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
-			final List specimenTypeList = new ArrayList();
+			final List<NameValueBean> specimenTypeList = new ArrayList<NameValueBean>();
 
 			final String[] specimenTypeArr = specimenArrayForm.getSpecimenTypes();
 			String specimenType = null;
@@ -97,7 +97,7 @@ public class SpecimenArraySearchAction extends CommonSearchAction
 			final int columnCount = specimenArrayForm.getTwoDimensionCapacity();
 			int rowNo = 0;
 			int columnNo = 0;
-			final Map arrayContentMap = new HashMap();
+			final Map<String, String> arrayContentMap = new HashMap<String, String>();
 			String key = null;
 			String value = null;
 

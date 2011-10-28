@@ -49,8 +49,8 @@ the Stinger project lead at eric.sheridan@owasp.org
 		<exclude>/catissuecore/BulkOperation.do</exclude>
 		<exclude>/catissuecore/BulkHandler.do</exclude>
 		<exclude>/catissuecore/FileUpload.do</exclude>
-		<exclude>/catissuecore/SOPCreate.do</exclude>
-		<exclude>/catissuecore/SOPEdit.do</exclude>
+		<exclude>/catissuecore/SPPCreate.do</exclude>
+		<exclude>/catissuecore/SPPEdit.do</exclude>
 		<!-- The action used to upload the permissible values while creating Local extentions -->
 		<exclude>/catissuecore/UploadFileAction.do*</exclude>
 		<!-- Uploads the file in the file control on DE form using ajax -->

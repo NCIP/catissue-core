@@ -98,10 +98,10 @@
 		}
 	}
 
-	function submitSOPEvents()
+	function submitSPPEvents()
 	{
 		var scgId = <%=id%>;
-		var action="SaveSOPEventAction.do?operation=insertDEData&isSCG=true&id="+scgId+"&pageOf=pageOfSCG";
+		var action="SaveSPPEventAction.do?operation=insertDEData&isSCG=true&id="+scgId+"&pageOf=pageOfSCG";
 
 		var search = 'Control';
 		var search1 = 'comboControl';
@@ -254,7 +254,7 @@
 	function onParameterChange(element)
 	{
 	var action = "";
-	action = "DisplaySOPEventsForSCG.do?operation=add&sppName="+element.value+"&isSCG=true&id="+<%=id%>;
+	action = "DisplaySPPEventsForSCG.do?operation=add&sppName="+element.value+"&isSCG=true&id="+<%=id%>;
 	document.forms[0].action=action;
 	document.forms[0].submit();
 	}
@@ -263,7 +263,7 @@
 
 </head>
 
-<html:form action="SaveSOPEventAction.do?operation=insertDEData">
+<html:form action="SaveSPPEventAction.do?operation=insertDEData">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 		<tr>
 			<td class="tablepadding">
@@ -276,7 +276,7 @@
 							<a href="#" onclick="editSCG()"><img src="images/uIEnhancementImages/tab_edit_collection2.gif" alt="SCG Details" width="216" height="22" border="0"></a>
 						</td>
 						<td valign="bottom">
-							<img src="images/uIEnhancementImages/tab_sop1.gif" alt="SOP" width="42" height="22" border="0">
+							<img src="images/uIEnhancementImages/tab_spp1.gif" alt="SPP" width="42" height="22" border="0">
 						</td>
 						<td valign="bottom">
 							<a href="#" onClick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22" border="0"></a>
@@ -290,7 +290,7 @@
 						<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
 					</tr>
 				</table>
-				<%@ include file="/pages/content/manageBioSpecimen/SOPEventsFromDashboard.jsp" %>
+				<%@ include file="/pages/content/manageBioSpecimen/SPPEventsFromDashboard.jsp" %>
 			</td>
 		</tr>
 	</table>

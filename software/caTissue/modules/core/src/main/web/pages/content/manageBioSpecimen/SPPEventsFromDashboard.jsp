@@ -17,7 +17,7 @@
 		<tr class="tr_bg_blue1">
 			<td align="left" class="tr_bg_blue1">
 				<span class="blue_ar_b">&nbsp;SPP Label&nbsp;&nbsp;</span>
-				<span class="blue_ar_b" style="font-weight: normal">&nbsp;&nbsp;&nbsp;${requestScope.nameOfSelectedSop}</span>
+				<span class="blue_ar_b" style="font-weight: normal">&nbsp;&nbsp;&nbsp;${requestScope.nameOfSelectedSpp}</span>
 			</td>
 		</tr>
 		<%
@@ -46,12 +46,12 @@
 				<table width="100%" height="100%" style="overflow:no;" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 					<tr>
 						<td>
-							<div style="overflow:no; height: 100%;float: none" align="left" title="sopForms" id ="sopForms" ></div>
+							<div style="overflow:no; height: 100%;float: none" align="left" title="sppForms" id ="sppForms" ></div>
 						</td>
 					</tr>
 					<tr height="10%">
 						<td class="buttonbg">
-							<html:submit styleId="SOPEventSubmitBtn" styleClass="blue_ar_b" value="Submit" onclick="submitSOPEvents();"/>
+							<html:submit styleId="SPPEventSubmitBtn" styleClass="blue_ar_b" value="Submit" onclick="submitSPPEvents();"/>
 						</td>
 					</tr>
 					<tr>
@@ -114,7 +114,7 @@
 
 		function calculatePageHeight()
 		{
-			var sopEventDiv = document.getElementById('sopForms');
+			var sppEventDiv = document.getElementById('sppForms');
 			var iframeList = document.getElementsByTagName('iframe');
 			var allFrameHeights = 0;
 			for(j =0;j<iframeList.length;j++)
@@ -155,36 +155,36 @@
 			}
 			if(allFrameHeights != 0)
 			{
-				sopEventDiv.style.height=allFrameHeights+"px";
+				sppEventDiv.style.height=allFrameHeights+"px";
 			}
 		}
-		document.getElementById('sopForms').style.height = getiframeheight();
+		document.getElementById('sppForms').style.height = getiframeheight();
 	</script>
 
 
 	<%
-List<Map<String, Object>> sopEventDataList = (List<Map<String, Object>>) request.getAttribute("SOPEvents");
-if(sopEventDataList!=null && !sopEventDataList.isEmpty())
+List<Map<String, Object>> sppEventDataList = (List<Map<String, Object>>) request.getAttribute("SPPEvents");
+if(sppEventDataList!=null && !sppEventDataList.isEmpty())
 {
-	int listSize = sopEventDataList.size();
+	int listSize = sppEventDataList.size();
 	String height = 100/listSize+"%";
 	int count = 0;
-	for(Map<String, Object> sopDataList : sopEventDataList)
+	for(Map<String, Object> sppDataList : sppEventDataList)
 	{
 		++count;
-		Object actionAppId = sopDataList.get(Constants.ID);
-		Object formContextId = sopDataList.get("formContextId");
-		String eventName = sopDataList.get(Constants.CONTAINER_IDENTIFIER).toString();
-		String pageOfStr = sopDataList.get(Constants.PAGE_OF).toString();
-		String caption = sopDataList.get("Caption").toString();
+		Object actionAppId = sppDataList.get(Constants.ID);
+		Object formContextId = sppDataList.get("formContextId");
+		String eventName = sppDataList.get(Constants.CONTAINER_IDENTIFIER).toString();
+		String pageOfStr = sppDataList.get(Constants.PAGE_OF).toString();
+		String caption = sppDataList.get("Caption").toString();
 		String eventDate = null;
-		if(sopDataList.get(Constants.EVENT_DATE)!=null)
+		if(sppDataList.get(Constants.EVENT_DATE)!=null)
 		{
-			eventDate = sopDataList.get(Constants.EVENT_DATE).toString();
+			eventDate = sppDataList.get(Constants.EVENT_DATE).toString();
 		}
 %>
 <script>
-	var sopEventDiv = document.getElementById('sopForms');
+	var sppEventDiv = document.getElementById('sppForms');
 	var formName = "<%=formContextId%>";
 
 	var formContextIdElement = document.createElement("input");
@@ -192,7 +192,7 @@ if(sopEventDataList!=null && !sopEventDataList.isEmpty())
 	formContextIdElement.type= "hidden";
 	formContextIdElement.name ="formContextId";
 	formContextIdElement.value=<%=formContextId%>;
-	sopEventDiv.appendChild(formContextIdElement);
+	sppEventDiv.appendChild(formContextIdElement);
 
 	var formIframe = document.createElement("iframe");
 	formIframe.id = formName;
@@ -201,7 +201,7 @@ if(sopEventDataList!=null && !sopEventDataList.isEmpty())
 	formIframe.style.width ="100%";
 	formIframe.style.height ="<%=height%>";
 	formIframe.scrolling="no";
-	sopEventDiv.appendChild(formIframe);
+	sppEventDiv.appendChild(formIframe);
 	<%
 		String url;
 		if("0".equals(actionAppId.toString()))
@@ -261,7 +261,7 @@ else
 {
 %>
 <script>
-	document.getElementById('SOPEventSubmitBtn').disabled="disabled";
+	document.getElementById('SPPEventSubmitBtn').disabled="disabled";
 </script>
 <%
 }

@@ -108,8 +108,8 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractPosition.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ClinicalDiagnosis.hbm.xml"/>
 
-		<!-- SOP related mappings -->
-		<mapping resource="edu/wustl/catissuecore/hbm/SOP.hbm.xml"/>
+		<!-- SPP related mappings -->
+		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenProcessingProcedure.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/AbstractApplication.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Action.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/DefaultAction.hbm.xml"/>

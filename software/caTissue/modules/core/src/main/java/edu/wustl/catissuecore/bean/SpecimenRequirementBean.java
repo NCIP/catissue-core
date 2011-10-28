@@ -140,22 +140,22 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	/** The label format for aliquot. */
 	private String labelFormatForAliquot;
 
-	private String processingSOPForSpecimen;
+	private String processingSPPForSpecimen;
 
 	private String creationEventForSpecimen;
 
-	private String processingSOPForAliquot;
+	private String processingSPPForAliquot;
 
 	private String creationEventForAliquot;
 
 
 
-	public String getProcessingSOPForSpecimen() {
-		return processingSOPForSpecimen;
+	public String getProcessingSPPForSpecimen() {
+		return processingSPPForSpecimen;
 	}
 
-	public void setProcessingSOPForSpecimen(String processingSOPForSpecimen) {
-		this.processingSOPForSpecimen = processingSOPForSpecimen;
+	public void setProcessingSPPForSpecimen(String processingSPPForSpecimen) {
+		this.processingSPPForSpecimen = processingSPPForSpecimen;
 	}
 
 	public String getCreationEventForSpecimen() {
@@ -166,12 +166,12 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		this.creationEventForSpecimen = creationEventForSpecimen;
 	}
 
-	public String getProcessingSOPForAliquot() {
-		return processingSOPForAliquot;
+	public String getProcessingSPPForAliquot() {
+		return processingSPPForAliquot;
 	}
 
-	public void setProcessingSOPForAliquot(String processingSOPForAliquot) {
-		this.processingSOPForAliquot = processingSOPForAliquot;
+	public void setProcessingSPPForAliquot(String processingSPPForAliquot) {
+		this.processingSPPForAliquot = processingSPPForAliquot;
 	}
 
 	public String getCreationEventForAliquot() {
@@ -182,22 +182,6 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 		this.creationEventForAliquot = creationEventForAliquot;
 	}
 
-	/*public String getProcessingSOP() {
-		return processingSOPForSpecimen;
-	}*/
-
-	/*public void setProcessingSOP(String processingSOP) {
-		this.processingSOPForSpecimen = processingSOP;
-	}
-*/
-	/*public String getCreationEvent() {
-		return creationEventForSpecimen;
-	}
-
-	public void setCreationEvent(
-			String creationEvent) {
-		this.creationEventForSpecimen = creationEvent;
-	}*/
 
 	/**
 	 * Gets the label format for aliquot.

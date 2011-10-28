@@ -36,7 +36,7 @@ public class CreationEventDataAction extends BaseAction{
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String sppName = request.getParameter("processingSOPForSpecimen");
+		String sppName = request.getParameter("processingSPPForSpecimen");
 		String query = request.getParameter("query");
 		List creationEventList=new ArrayList();
 		creationEventList.add(new NameValueBean(Constants.NOT_SPECIFIED,Constants.NOT_SPECIFIED));
@@ -46,21 +46,21 @@ public class CreationEventDataAction extends BaseAction{
 		JSONArray jsonArray = new JSONArray();
 		JSONObject mainJsonObject = new JSONObject();
 
-		List<NameValueBean> sopBean = new ArrayList<NameValueBean>();
-		populateQuerySpecificNameValueBeansList(sopBean, creationEventList, "");
-		mainJsonObject.put("totalCount", sopBean.size());
+		List<NameValueBean> sppBean = new ArrayList<NameValueBean>();
+		populateQuerySpecificNameValueBeansList(sppBean, creationEventList, "");
+		mainJsonObject.put("totalCount", sppBean.size());
 
-		for (int i = 0; i < sopBean.size(); i++)
+		for (int i = 0; i < sppBean.size(); i++)
 		{
 			JSONObject jsonObject = new JSONObject();
 			Locale locale = CommonServiceLocator.getInstance().getDefaultLocale();
 
 			if (query == null
-					|| sopBean.get(i).getName().toLowerCase(locale).contains(
+					|| sppBean.get(i).getName().toLowerCase(locale).contains(
 							query.toLowerCase(locale)) || query.length() == 0)
 			{
-				jsonObject.put("id", sopBean.get(i).getValue());
-				jsonObject.put("field", sopBean.get(i).getName());
+				jsonObject.put("id", sppBean.get(i).getValue());
+				jsonObject.put("field", sppBean.get(i).getName());
 				jsonArray.put(jsonObject);
 			}
 		}

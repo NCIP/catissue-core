@@ -28,8 +28,8 @@
 		<put name="content" value="/pages/content/common/TitliResultUpdatable.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.utilizeSopPage" extends=".catissuecore.homePageDef">
-		<put name="content" value="/pages/content/manageAdministrativeData/UtilizeSop.jsp" />
+	<definition name=".catissuecore.utilizeSppPage" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/UtilizeSpp.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.keywordSearchWarningPage" extends=".catissuecore.homePageDef">
@@ -272,12 +272,12 @@
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.SOPDef" extends=".catissuecore.homePageDef">
-		<put name="content" value="/pages/content/manageAdministrativeData/SOP.jsp" />
+	<definition name=".catissuecore.SPPDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/SPP.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.DefaultValueForSOPEventsDef" extends=".catissuecore.homePageDef">
-		<put name="content" value="/pages/content/manageAdministrativeData/DefaultValueForSOPEvents.jsp" />
+	<definition name=".catissuecore.DefaultValueForSPPEventsDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/DefaultValueForSPPEvents.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.reportProblemEditDef" extends=".catissuecore.homePageDef">
@@ -378,15 +378,15 @@
 	</definition>
 
 	<definition name=".catissuecore.newSpecimenSPPEvents" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/SOPEvents.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/SPPEvents.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.newSpecimenSPPEventsDef" extends=".catissuecore.homePageDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/SOPEvents.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/SPPEvents.jsp" />
 	</definition>
 
-	<definition name=".catissuecore.enterSpecimenSOPEvents" extends=".catissuecore.homePageDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/enterSopData.jsp" />
+	<definition name=".catissuecore.enterSpecimenSPPEvents" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/enterSppData.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.newSpecimenEventParametersCPQueryDef" extends=".catissuecore.queryDataViewDef">
@@ -395,7 +395,7 @@
 
 	<!-- NEW SPECIMEN EVENT PARAMETERS -->
 
-	<definition name=".catissuecore.scgSOPEvents" extends=".catissuecore.queryDataViewDef">
+	<definition name=".catissuecore.scgSPPEvents" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenCollectionGroupSPPEvents.jsp" />
 	</definition>
 

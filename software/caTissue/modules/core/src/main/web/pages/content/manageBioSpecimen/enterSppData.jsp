@@ -72,7 +72,7 @@ request.setAttribute("showSkipEventCheckBoxes","true");
 <script src="<%=request.getContextPath()%>/javascripts/de/form_plugin.js" type="text/javascript"></script>
 
 <script>
-	function submitSOPEvents()
+	function submitSPPEvents()
 	{
 
 		<%
@@ -80,12 +80,12 @@ request.setAttribute("showSkipEventCheckBoxes","true");
 		if(request.getAttribute(Constants.SPECIMEN_ID)!=null){
 			IdentifierStr = (String)request.getAttribute(Constants.SPECIMEN_ID);
 		%>
-			var action="SaveSOPEventAction.do?pageOf=pageOfUtilizeSopofSpecimen&operation=insertDEData&specimenId="+"<%=IdentifierStr%>"+"&selectedAll="+${requestScope.selectedAll}+"&sppId="+${requestScope.sppId};
+			var action="SaveSPPEventAction.do?pageOf=pageOfUtilizeSppofSpecimen&operation=insertDEData&specimenId="+"<%=IdentifierStr%>"+"&selectedAll="+${requestScope.selectedAll}+"&sppId="+${requestScope.sppId};
 		<%
 		}else{
 			IdentifierStr = (String)request.getAttribute("scgId");
 		%>
-			var action="SaveSOPEventAction.do?pageOf=pageOfUtilizeSopOfScg&operation=insertDEData&scgId="+"<%=IdentifierStr%>"+"&sppName=<%=request.getAttribute("nameOfSelectedSop")%>"+"&selectedAll="+${requestScope.selectedAll}+"&sppId="+${requestScope.sppId};
+			var action="SaveSPPEventAction.do?pageOf=pageOfUtilizeSppOfScg&operation=insertDEData&scgId="+"<%=IdentifierStr%>"+"&sppName=<%=request.getAttribute("nameOfSelectedSpp")%>"+"&selectedAll="+${requestScope.selectedAll}+"&sppId="+${requestScope.sppId};
 		<%
 		}
 		%>
@@ -189,8 +189,8 @@ request.setAttribute("showSkipEventCheckBoxes","true");
     </table></td>
   </tr>
  </table>
-<html:form action="SaveSOPEventAction.do?operation=insertDEData">
+<html:form action="SaveSPPEventAction.do?operation=insertDEData">
 
-<%@ include file="/pages/content/manageBioSpecimen/SOPEventsFromDashboard.jsp" %>
+<%@ include file="/pages/content/manageBioSpecimen/SPPEventsFromDashboard.jsp" %>
 
 </html:form>
