@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:p="http://www.springframework.org/schema/p" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="
+	http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<!-- CXF required imports. -->
+	<import resource="classpath:META-INF/cxf/cxf-all.xml" />
 
 	<!-- Struts Action classes managed by Spring -->
 	<bean name="/CctsEventNotifications" autowire="byType"
@@ -218,20 +224,28 @@
 					<property name="properties">
 						<props>
 							<prop key="ccts.integration.isEnabled">true</prop>
-							<prop key="ccts.subjectManagementService.URL">https://localhost:8443/c3pr/services/services/SubjectManagement_UsernameToken
+							<prop key="sts.serviceName">{http://tempuri.org/}SecureTokenServiceService
 							</prop>
-							<prop key="ccts.subjectManagementService.wsdlLocation">https://localhost:8443/c3pr/services/services/SubjectManagement_UsernameToken?wsdl
+							<prop key="sts.servicePortName">{http://tempuri.org/}ISecureTokenServiceService_Port
+							</prop>
+							<prop key="sts.serviceURL">https://dkrylov-PC:8181/STS/SecureTokenServiceService
+							</prop>
+							<prop key="sts.service.wsdlLocation">https://dkrylov-PC:8181/STS/SecureTokenServiceService?wsdl
+							</prop>
+							<prop key="ccts.subjectManagementService.URL">https://localhost:8443/c3pr/services/services/SubjectManagement
+							</prop>
+							<prop key="ccts.subjectManagementService.wsdlLocation">https://localhost:8443/c3pr/services/services/SubjectManagement?wsdl
 							</prop>
 							<prop key="ccts.subjectManagementService.serviceClass">edu.duke.cabig.c3pr.webservice.subjectmanagement.SubjectManagement
 							</prop>
-							<prop key="ccts.subjectRegistrationService.URL">https://localhost:8443/c3pr/services/services/SubjectRegistration_UsernameToken
+							<prop key="ccts.subjectRegistrationService.URL">https://localhost:8443/c3pr/services/services/SubjectRegistration
 							</prop>
-							<prop key="ccts.subjectRegistrationService.wsdlLocation">https://localhost:8443/c3pr/services/services/SubjectRegistration_UsernameToken?wsdl
+							<prop key="ccts.subjectRegistrationService.wsdlLocation">https://localhost:8443/c3pr/services/services/SubjectRegistration?wsdl
 							</prop>
 							<prop key="ccts.subjectRegistrationService.serviceClass">edu.duke.cabig.c3pr.webservice.subjectregistration.SubjectRegistration
 							</prop>
-							<prop key="ccts.username">jdoe01</prop>
-							<prop key="ccts.password">Aa_111111</prop>
+							<prop key="sts.userName">jdoe01</prop>
+							<prop key="sts.password">Aa_111111</prop>
 							<prop key="ccts.notificationTTL">864000</prop>
 							<prop key="ccts.delayBetweenAttempts">5</prop>
 						</props>
@@ -243,16 +257,78 @@
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 		<property name="ignoreResourceNotFound" value="true" />
 	</bean>
-	
-	<bean id="subjectRegistrationClient" class="edu.wustl.catissuecore.bizlogic.ccts.SubjectRegistrationFactoryBean"	
-		p:username="${ccts.username}" p:password="${ccts.password}"		
-		p:wsdlLocation="${ccts.subjectRegistrationService.wsdlLocation}" p:address="${ccts.subjectRegistrationService.URL}">
+
+	<jaxws:client id="subjectRegistrationClient"
+		serviceClass="${ccts.subjectRegistrationService.serviceClass}"
+		wsdlLocation="${ccts.subjectRegistrationService.wsdlLocation}"
+		address="${ccts.subjectRegistrationService.URL}">
+		<jaxws:features>
+			<bean class="org.apache.cxf.feature.LoggingFeature" />
+			<wsa:addressing xmlns:wsa="http://cxf.apache.org/ws/addressing" />
+		</jaxws:features>
+		<jaxws:properties>
+			<entry key="ws-security.sts.client">
+				<ref bean="stsClient" />
+			</entry>
+		</jaxws:properties>
+	</jaxws:client>
+
+
+	<jaxws:client id="subjectManagementClient"
+		serviceClass="${ccts.subjectManagementService.serviceClass}"
+		wsdlLocation="${ccts.subjectManagementService.wsdlLocation}" address="${ccts.subjectManagementService.URL}">
+		<jaxws:features>
+			<bean class="org.apache.cxf.feature.LoggingFeature" />
+			<wsa:addressing xmlns:wsa="http://cxf.apache.org/ws/addressing" />
+		</jaxws:features>
+		<jaxws:properties>
+			<entry key="ws-security.sts.client">
+				<ref bean="stsClient" />
+			</entry>
+		</jaxws:properties>
+	</jaxws:client>
+
+	<bean class="org.apache.cxf.ws.security.trust.STSClient" id="stsClient">
+		<constructor-arg ref="cxf" />
+		<property name="inInterceptors">
+			<list>
+				<ref bean="logInbound" />
+			</list>
+		</property>
+		<property name="outInterceptors">
+			<list>
+				<ref bean="logOutbound" />
+			</list>
+		</property>
+		<property name="outFaultInterceptors">
+			<list>
+				<ref bean="logOutbound" />
+			</list>
+		</property>
+		<property name="inFaultInterceptors">
+			<list>
+				<ref bean="logInbound" />
+			</list>
+		</property>
+		<property name="wsdlLocation" value="${sts.service.wsdlLocation}" />
+
+		<!-- Next two values come from STS's WSDL. -->
+		<property name="serviceName" value="${sts.serviceName}" />
+		<property name="endpointName" value="${sts.servicePortName}" />
+
+		<!-- STS must authenticate using Username Token profile and plain text 
+			username/password. -->
+		<property name="properties">
+			<map>
+				<entry key="ws-security.username" value="${sts.userName}" />
+				<entry key="ws-security.password" value="${sts.password}" />
+			</map>
+		</property>
 	</bean>
 
-	<bean id="subjectManagementClient" class="edu.wustl.catissuecore.bizlogic.ccts.SubjectManagementFactoryBean"	
-		p:username="${ccts.username}" p:password="${ccts.password}"		
-		p:wsdlLocation="${ccts.subjectManagementService.wsdlLocation}" p:address="${ccts.subjectManagementService.URL}">
-	</bean>
+
+	<bean id="logInbound" class="org.apache.cxf.interceptor.LoggingInInterceptor" />
+	<bean id="logOutbound" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
 
 	<!-- Misc -->
 	<bean id="messageSource" autowire-candidate="false"
@@ -268,6 +344,9 @@
 	</bean>
 	
 	<bean id="springContextHolder" class="edu.wustl.catissuecore.util.SpringContextHolder" />
+	
+	<!-- This one is just to force eager initialization of GSIDClient in order to copy certs and sync trust store. -->
+	<!-- <bean id="edu.wustl.catissuecore.GSID.GSIDClient" class="edu.wustl.catissuecore.GSID.GSIDClient"/> -->
 	
 	<!-- This code will fix that annoying Globus issue. See edu.wustl.catissuecore.bizlogic.ccts.Utils.restoreDefaultHttpsURLHandler() -->
 	<bean id="edu.wustl.catissuecore.bizlogic.ccts.Utils" class="edu.wustl.catissuecore.bizlogic.ccts.Utils"/>
