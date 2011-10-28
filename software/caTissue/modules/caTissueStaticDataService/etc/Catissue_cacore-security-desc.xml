@@ -36,6 +36,18 @@
       <system-identity />
     </run-as>
   </method>
+  <method name="executeQuery">
+    <auth-method>
+      <GSITransport>
+        <protection-level>
+          <privacy />
+        </protection-level>
+      </GSITransport>
+    </auth-method>
+    <run-as>
+      <system-identity />
+    </run-as>
+  </method>
   <method name="insert">
     <auth-method>
       <GSITransport>

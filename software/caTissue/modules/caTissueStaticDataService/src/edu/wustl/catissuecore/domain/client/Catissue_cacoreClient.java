@@ -6,9 +6,13 @@ import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlresultset.CQLQueryResults;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import gov.nih.nci.cagrid.data.utilities.CQLQueryResultsIterator;
+import gov.nih.nci.cagrid.metadata.MetadataUtils;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import org.apache.axis.client.Stub;
+import org.apache.axis.message.addressing.Address;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;
+import org.cagrid.cql.utilities.CQL1toCQL2Converter;
 import org.cagrid.cql.utilities.CQL2SerializationUtil;
 import org.globus.gsi.GlobusCredential;
 
@@ -102,11 +106,11 @@ public class Catissue_cacoreClient extends Catissue_cacoreClientBase implements 
                                 CQLQuery cql1Query = (CQLQuery) Utils.deserializeDocument(cqlFileName, CQLQuery.class);
 
                                 // display as CQL2
-//                                EndpointReferenceType epr = new EndpointReferenceType(new Address(url));
-//                                DomainModel domainModel = MetadataUtils.getDomainModel(epr);
-//                                CQL1toCQL2Converter converter = new CQL1toCQL2Converter(domainModel);
-//                                org.cagrid.cql2.CQLQuery cql2Query = converter.convertToCql2Query(cql1Query);
-//                                System.out.println("As CQL2Query = " + CQL2SerializationUtil.serializeCql2Query(cql2Query));
+                                EndpointReferenceType epr = new EndpointReferenceType(new Address(url));
+                                DomainModel domainModel = MetadataUtils.getDomainModel(epr);
+                                CQL1toCQL2Converter converter = new CQL1toCQL2Converter(domainModel);
+                                org.cagrid.cql2.CQLQuery cql2Query = converter.convertToCql2Query(cql1Query);
+                                System.out.println("As CQL2Query = " + CQL2SerializationUtil.serializeCql2Query(cql2Query));
 
                                 CQLQueryResults cqlQueryResult = client.query(cql1Query);
 

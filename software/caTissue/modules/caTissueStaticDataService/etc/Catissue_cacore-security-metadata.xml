@@ -28,6 +28,11 @@
     <ns1:GSITransport protectionLevel="privacy" xsi:type="ns1:GSITransport"/>
    </ns1:CommunicationMechanism>
   </ns1:Operation>
+  <ns1:Operation name="executeQuery" xsi:type="ns1:Operation">
+   <ns1:CommunicationMechanism anonymousPermitted="false" xsi:type="ns1:CommunicationMechanism">
+    <ns1:GSITransport protectionLevel="privacy" xsi:type="ns1:GSITransport"/>
+   </ns1:CommunicationMechanism>
+  </ns1:Operation>
   <ns1:Operation name="insert" xsi:type="ns1:Operation">
    <ns1:CommunicationMechanism anonymousPermitted="false" xsi:type="ns1:CommunicationMechanism">
     <ns1:GSITransport protectionLevel="privacy" xsi:type="ns1:GSITransport"/>

@@ -234,11 +234,11 @@
 
 <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" encodingStyle="" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" type="ns1:edu.wustl.common.domain.AbstractDomainObject" qname="ns2:AbstractDomainObject" />
 
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="http://CQL.caBIG/2/org.cagrid.cql2" encodingStyle="" serializer="org.cagrid.cql.utilities.encoding.Cql2SerializerFactory" deserializer="org.cagrid.cql.utilities.encoding.Cql2DeserializerFactory" type="ns1:org.cagrid.cql2.AssociationPopulationSpecification" qname="ns2:AssociationPopulationSpecification" />
 
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="http://CQL.caBIG/2/org.cagrid.cql2" encodingStyle="" serializer="org.cagrid.cql.utilities.encoding.Cql2SerializerFactory" deserializer="org.cagrid.cql.utilities.encoding.Cql2DeserializerFactory" type="ns1:org.cagrid.cql2.CQLQuery" qname="ns2:CQLQuery" />
 
-
-
-
+<ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="http://CQL.caBIG/2/org.cagrid.cql2.results" encodingStyle="" serializer="org.cagrid.cql.utilities.encoding.Cql2SerializerFactory" deserializer="org.cagrid.cql.utilities.encoding.Cql2DeserializerFactory" type="ns1:org.cagrid.cql2.results.CQLQueryResults" qname="ns2:CQLQueryResults" />
 
 
 <!-- END INTRODUCE TYPEMAPPINGS -->
@@ -321,8 +321,7 @@
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:TissueSpecimenRequirement" type="java:edu.wustl.catissuecore.domain.ws.TissueSpecimenRequirement" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:TissueSpecimenReviewEventParameters" type="java:edu.wustl.catissuecore.domain.ws.TissueSpecimenReviewEventParameters" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:TransferEventParameters" type="java:edu.wustl.catissuecore.domain.ws.TransferEventParameters" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
-  
-<!-- START CQL 2 TYPE MAPPINGS -->
+  <!-- START CQL 2 TYPE MAPPINGS -->
   <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="http://CQL.caBIG/2/org.cagrid.cql2" encodingStyle="" serializer="org.cagrid.cql.utilities.encoding.Cql2SerializerFactory" deserializer="org.cagrid.cql.utilities.encoding.Cql2DeserializerFactory" type="ns1:org.cagrid.cql2.Aggregation" qname="ns2:Aggregation" />
   <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="http://CQL.caBIG/2/org.cagrid.cql2" encodingStyle="" serializer="org.cagrid.cql.utilities.encoding.Cql2SerializerFactory" deserializer="org.cagrid.cql.utilities.encoding.Cql2DeserializerFactory" type="ns1:org.cagrid.cql2.AssociationPopulationSpecification" qname="ns2:AssociationPopulationSpecification" />
   <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="http://CQL.caBIG/2/org.cagrid.cql2" encodingStyle="" serializer="org.cagrid.cql.utilities.encoding.Cql2SerializerFactory" deserializer="org.cagrid.cql.utilities.encoding.Cql2DeserializerFactory" type="ns1:org.cagrid.cql2.AttributeValue" qname="ns2:AttributeValue" />
@@ -350,4 +349,5 @@
   <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="http://CQL.caBIG/2/org.cagrid.cql2.results" encodingStyle="" serializer="org.cagrid.cql.utilities.encoding.Cql2SerializerFactory" deserializer="org.cagrid.cql.utilities.encoding.Cql2DeserializerFactory" type="ns1:org.cagrid.cql2.results.CQLResult" qname="ns2:CQLResult" />
   <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="http://CQL.caBIG/2/org.cagrid.cql2.results" encodingStyle="" serializer="org.cagrid.cql.utilities.encoding.Cql2SerializerFactory" deserializer="org.cagrid.cql.utilities.encoding.Cql2DeserializerFactory" type="ns1:org.cagrid.cql2.results.ExtendedCQLResult" qname="ns2:ExtendedCQLResult" />
   <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="http://CQL.caBIG/2/org.cagrid.cql2.results" encodingStyle="" serializer="org.cagrid.cql.utilities.encoding.Cql2SerializerFactory" deserializer="org.cagrid.cql.utilities.encoding.Cql2DeserializerFactory" type="ns1:org.cagrid.cql2.results.TargetAttribute" qname="ns2:TargetAttribute" />
-  <!-- END CQL 2 TYPE MAPPINGS --></deployment>
+  <!-- END CQL 2 TYPE MAPPINGS -->
+</deployment>
