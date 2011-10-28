@@ -3409,24 +3409,6 @@ Thanking You,
 	<target name="configure_services_properties" description="Configures services.properties">
 		<property name="services.propsFolder" value="${prop.temp.dir}/catissuecore/WEB-INF/classes"/>
 		<copy file="${catissue.deploy.config.file}" tofile="${services.propsFolder}/services.properties" overwrite="true" verbose="true" ></copy>
-		<!--
-		<replace dir="${services.propsFolder}" propertyFile="${catissue.deploy.config.file}">
-			<include name="services.properties"  />
-			<replacefilter token="@@ccts.integration.isEnabled@@" value="${ccts.integration.isEnabled}"/>
-			<replacefilter token="@@sts.serviceName@@" value="${sts.serviceName}"/>
-			<replacefilter token="@@sts.servicePortName@@" value="${sts.servicePortName}"/>
-			<replacefilter token="@@sts.serviceURL@@" value="${sts.serviceURL}"/>
-			<replacefilter token="@@sts.service.wsdlLocation@@" value="${sts.service.wsdlLocation}"/>
-			<replacefilter token="@@ccts.subjectManagementService.URL@@" value="${ccts.subjectManagementService.URL}"/>
-			<replacefilter token="@@ccts.subjectManagementService.wsdlLocation@@" value="${ccts.subjectManagementService.wsdlLocation}"/>
-			<replacefilter token="@@ccts.subjectManagementService.serviceClass@@" value="${ccts.subjectManagementService.serviceClass}"/>
-			<replacefilter token="@@ccts.subjectRegistrationService.URL@@" value="${ccts.subjectRegistrationService.URL}"/>
-			<replacefilter token="@@ccts.subjectRegistrationService.wsdlLocation@@" value="${ccts.subjectRegistrationService.wsdlLocation}"/>
-			<replacefilter token="@@ccts.subjectRegistrationService.serviceClass@@" value="${ccts.subjectRegistrationService.serviceClass}"/>
-			<replacefilter token="@@sts.userName@@" value="${sts.userName}"/>
-			<replacefilter token="@@sts.password@@" value="${sts.password}"/>
-		</replace>
-		-->
 	</target>
 
 
