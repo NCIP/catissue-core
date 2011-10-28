@@ -88,7 +88,7 @@ This is the definition of a virtual module called bda-download that has a depend
 
 
       <!--<dependency org="hibernate" name="hibernate" rev="3.2.0.GA" conf="common_lib->*"/>-->
-    <dependency org="org.hibernate" name="hibernate-core" rev="3.3.1.GAnci" conf="common_lib->*"/>
+    <dependency org="org.hibernate" name="hibernate-core" rev="3.3.1.GAnci" conf="app_lib->*"/>
 
     <dependency org="gov.nih.nci.catissue" name="third_party_flex_lib" rev="2.0" conf="third_party_flex_lib->*"/>
     <dependency org="gov.nih.nci.catissue" name="caTissueSuite_Client" rev="2.0" conf="caTissueSuite_Client_lib->*"/>
