@@ -180,7 +180,6 @@
   
   
   <!-- END INTRODUCE TYPEMAPPINGS -->
-  
   <!-- END INTRODUCE TYPEMAPPINGS -->
   <!--Writable API-->
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:Participant" type="java:edu.wustl.catissuecore.domain.ws.Participant" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
@@ -261,6 +260,7 @@
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:TissueSpecimenRequirement" type="java:edu.wustl.catissuecore.domain.ws.TissueSpecimenRequirement" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:TissueSpecimenReviewEventParameters" type="java:edu.wustl.catissuecore.domain.ws.TissueSpecimenReviewEventParameters" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:TransferEventParameters" type="java:edu.wustl.catissuecore.domain.ws.TransferEventParameters" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
+  
 <!-- START CQL 2 TYPE MAPPINGS -->
   <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="http://CQL.caBIG/2/org.cagrid.cql2" encodingStyle="" serializer="org.cagrid.cql.utilities.encoding.Cql2SerializerFactory" deserializer="org.cagrid.cql.utilities.encoding.Cql2DeserializerFactory" type="ns1:org.cagrid.cql2.Aggregation" qname="ns2:Aggregation" />
   <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="http://CQL.caBIG/2/org.cagrid.cql2" encodingStyle="" serializer="org.cagrid.cql.utilities.encoding.Cql2SerializerFactory" deserializer="org.cagrid.cql.utilities.encoding.Cql2DeserializerFactory" type="ns1:org.cagrid.cql2.AssociationPopulationSpecification" qname="ns2:AssociationPopulationSpecification" />

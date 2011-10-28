@@ -1,13 +1,12 @@
 package edu.wustl.catissuecore.domain.service;
 
 import edu.wustl.catissuecore.cacore.CaTissueWritableAppService;
-import edu.wustl.common.domain.ws.AbstractDomainObject;
 import edu.wustl.catissuecore.domain.converter.GenericConverter;
 import edu.wustl.catissuecore.domain.dozer.SpringProxyResolver;
 import edu.wustl.catissuecore.domain.util.PropertiesLoader;
 import edu.wustl.catissuecore.domain.util.Service;
+import edu.wustl.common.domain.ws.AbstractDomainObject;
 import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.dao.DAOException;
 import gov.nih.nci.system.query.SDKQuery;
 import gov.nih.nci.system.query.SDKQueryResult;
 import gov.nih.nci.system.query.example.InsertExampleQuery;
@@ -31,8 +30,15 @@ public class WAPIUtility {
 
     private static Logger log = Logger.getLogger(GenericConverter.class);
 
-    protected static CaTissueWritableAppService service() throws Exception {
+    public static CaTissueWritableAppService service() throws Exception {
         CaTissueWritableAppService service =  Service.getService(PropertiesLoader.getCaTissueSuperUserUsername(), PropertiesLoader.getCaTissueSuperUserPassword());
+//        CaTissueWritableAppService service =  Service.getService("admin@washu.edu", "Aa_111111");
+//        service.setGridIdentity();
+        return service;
+    }
+
+     public static CaTissueWritableAppService service(String url) throws Exception {
+        CaTissueWritableAppService service =  Service.getService(url, PropertiesLoader.getCaTissueSuperUserUsername(), PropertiesLoader.getCaTissueSuperUserPassword());
 //        CaTissueWritableAppService service =  Service.getService("admin@washu.edu", "Aa_111111");
 //        service.setGridIdentity();
         return service;

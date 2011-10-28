@@ -12,6 +12,7 @@ public class Service {
         return (CaTissueWritableAppService)ApplicationServiceProvider.getApplicationService(gc);
     }
 
+
     public static final CaTissueWritableAppService getService(String username, String password) throws Exception {
         CaTissueWritableAppService service = null;
         try {
@@ -20,6 +21,22 @@ public class Service {
             if (service == null) {
                 try {
                     service = (CaTissueWritableAppService)ApplicationServiceProvider.getApplicationService(username, password);
+                } catch (Exception e1) {
+                    throw new Exception(e1);
+                }
+            }
+        }
+        return service;
+    }
+
+    public static final CaTissueWritableAppService getService(String url, String username, String password) throws Exception {
+        CaTissueWritableAppService service = null;
+        try {
+            service = (CaTissueWritableAppService) ApplicationServiceProvider.getApplicationServiceFromUrl(url, username, password);
+        } catch (Exception e) {
+            if (service == null) {
+                try {
+                    service = (CaTissueWritableAppService)ApplicationServiceProvider.getApplicationServiceFromUrl(url, username, password);
                 } catch (Exception e1) {
                     throw new Exception(e1);
                 }
