@@ -68,7 +68,6 @@ This is the definition of a virtual module called bda-download that has a depend
 	    <exclude org="javax.transaction"/>
     </dependency>
 	<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.0" conf="web-inf->master,runtime" transitive="false"/>
-	<dependency org="org.apache.cxf" name="cxf-bundle" rev="2.2.10" transitive="false" conf="web-inf->master,runtime"/>
 	<dependency org="org.apache.ws.security" name="wss4j" rev="1.5.7" force="true" transitive="false"  conf="web-inf->master,runtime"/>
 	<dependency org="org.apache.neethi" name="neethi" rev="2.0.4" transitive="false"  conf="web-inf->master,runtime"/>
 	<dependency org="org.apache.santuario" name="xmlsec" rev="1.4.3" force="true" transitive="false"  conf="web-inf->*"/>
