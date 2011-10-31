@@ -247,7 +247,11 @@ public abstract class ServiceClientFactoryBean implements FactoryBean {
 	}
 	
 	protected javax.xml.ws.spi.Provider getProvider() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-		return (Provider) Class.forName("com.sun.xml.internal.ws.spi.ProviderImpl").newInstance();
+		try {
+			return (Provider) Class.forName("com.sun.xml.internal.ws.spi.ProviderImpl").newInstance();
+		} catch (ClassNotFoundException e) {
+			return (Provider) Class.forName("com.sun.xml.ws.spi.ProviderImpl").newInstance();
+		}
 	}
 	
 
