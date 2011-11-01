@@ -9,6 +9,10 @@
 
 package edu.wustl.catissuecore.util.shippingtracking;
 
+import java.util.Collection;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenPosition;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
 import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
 
@@ -25,7 +29,35 @@ public class ShipmentMailFormatterUtility
 	 */
 	public static String formatCreateShipmentMailBody(Shipment shipment)
 	{
-		return "Shipment created";
+		StringBuffer bodyText=new StringBuffer();
+		
+		
+		bodyText.append("Shipment Details:\n Shipment Label: "+shipment.getLabel()+"\nShipment Barcode: "+shipment.getBarcode());
+		bodyText.append("\nSender Site: "+shipment.getSenderSite().getName()+"\nReceiver Site: "+shipment.getReceiverSite().getName());
+		bodyText.append("\nSender :"+shipment.getSenderContactPerson().getFirstName()+","+shipment.getSenderContactPerson().getLastName()+"\nReceiver: "+shipment.getReceiverContactPerson().getFirstName()+","+shipment.getReceiverContactPerson().getLastName());
+		bodyText.append("\nSent On :"+shipment.getSendDate()+"\nComments: "+shipment.getSenderComments());
+		if(!shipment.getContainerCollection().isEmpty() && shipment.getContainerCollection()!=null)
+		{
+			bodyText.append("\n"+"Container Details:");
+			
+			bodyText.append("\n"+"Container Label: ");
+			
+			Collection<StorageContainer> storageContainerCollection=shipment.getContainerCollection();
+			
+			
+			for(StorageContainer container:storageContainerCollection)
+			{				
+				bodyText.append(container.getName());
+				
+				Collection<SpecimenPosition> specimenPosCollection=container.getSpecimenPositionCollection();
+				bodyText.append("\nSpecimen Label:");
+				for(SpecimenPosition specimenPosition:specimenPosCollection)
+				{
+					bodyText.append("\n"+specimenPosition.getSpecimen().getLabel());
+				}
+			}
+		}	
+		return bodyText.toString();
 	}
 
 	/**
@@ -36,7 +68,7 @@ public class ShipmentMailFormatterUtility
 	public static String getCreateShipmentMailSubject(Shipment shipment)
 	{
 		//TODO - exact contents required
-		return "Shipment created";
+		return "New Shipment "+shipment.getLabel()+" created";
 	}
 
 	/**
@@ -67,7 +99,36 @@ public class ShipmentMailFormatterUtility
 	public static String formatCreateShipmentRequestMailBody(ShipmentRequest shipmentRequest)
 	{
 		//TODO - exact contents required
-		return "Shipment request created";
+		StringBuffer mailBody= new StringBuffer();
+		mailBody.append("\nShipment Request Label: "+shipmentRequest.getLabel());
+		mailBody.append("\nRequester's Site: "+shipmentRequest.getSenderSite().getName());
+		mailBody.append("\nSent On: "+shipmentRequest.getCreatedDate());
+		mailBody.append("\nSender Comments: "+shipmentRequest.getSenderComments());
+		if(!shipmentRequest.getContainerCollection().isEmpty() && shipmentRequest.getContainerCollection()!=null)
+		{
+			mailBody.append("\n"+"Container Details:");
+			
+			mailBody.append("\n"+"Container Label: ");
+			Collection<StorageContainer> storageContainerCollection=shipmentRequest.getContainerCollection();
+			for(StorageContainer container:storageContainerCollection)
+			{
+				mailBody.append("\n"+container.getName());
+			}
+		}
+		Collection<Specimen> specimenCollection=shipmentRequest.getSpecimenCollection();
+		if(!shipmentRequest.getSpecimenCollection().isEmpty())
+		{
+			mailBody.append("\nSpecimen Details:"+"\nSpecimen Label:");
+			
+			for(Specimen specimen:specimenCollection)
+			{				
+				mailBody.append("\n"+specimen.getLabel());
+			}
+		}
+		
+		
+		
+		return mailBody.toString();
 	}
 
 	/**
@@ -77,7 +138,7 @@ public class ShipmentMailFormatterUtility
 	 */
 	public static String getCreateShipmentRequestMailSubject(ShipmentRequest shipmentRequest)
 	{
-		return "Shipment request created";
+		return "New Shipment Request "+shipmentRequest.getLabel()+" created";
 	}
 
 	//bug 12816 start
