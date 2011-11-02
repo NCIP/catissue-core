@@ -5,13 +5,13 @@
 <project name="catissue_de_integration_client" default="compile">
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
-			<pathelement location="C:/caTissue/software/target/lib/caTissue_lib/de_integration_client_lib/ant-contrib.jar" />
+			<pathelement location="../../../../target/lib/caTissue_lib/de_integration_client_lib/ant-contrib.jar" />
 		</classpath>
 	</taskdef>
 	<!--define require dir and Properties -->
 	<property name="base.dir" value="../" />
 	<property name="conf.dir" value="${base.dir}/conf" />
-	<property name="lib.dir" value="C:/caTissue/software/target/lib/caTissue_lib/de_integration_client_lib" />
+	<property name="lib.dir" value="../../../../target/lib/caTissue_lib/de_integration_client_lib" />
 	<property name="src.dir" value="${base.dir}/src/main/java" />
 	<property name="classes.dir" value="${base.dir}/target" />
 	<property name="oracle.dialect.string" value="org.hibernate.dialect.Oracle9Dialect" />
