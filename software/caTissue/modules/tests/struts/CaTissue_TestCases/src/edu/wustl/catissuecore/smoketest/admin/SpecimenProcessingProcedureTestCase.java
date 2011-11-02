@@ -5,7 +5,6 @@ import java.io.File;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.struts.upload.FormFile;
-
 import edu.wustl.catissuecore.actionForm.CPSearchForm;
 import edu.wustl.catissuecore.actionForm.DisplaySPPEventForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
@@ -14,10 +13,9 @@ import edu.wustl.catissuecore.actionForm.SPPForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.actionForm.UtilizeSppForm;
 import edu.wustl.catissuecore.smoketest.CaTissueSuiteSmokeBaseTest;
-import edu.wustl.catissuecore.smoketest.admin.CommonForm;
-import edu.wustl.catissuecore.smoketest.util.DataObject;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
+import edu.wustl.testframework.util.DataObject;
 
 public class SpecimenProcessingProcedureTestCase extends CaTissueSuiteSmokeBaseTest
 {
