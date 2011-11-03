@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
@@ -32,6 +38,7 @@ public abstract class ServiceClientFactoryBean implements FactoryBean {
 	private String password;
 	private String wsdlLocation;
 	private String address;
+	private boolean skipSSLVerification = true;
 
 	public ServiceClientFactoryBean() {
 		super();
@@ -243,16 +250,82 @@ public abstract class ServiceClientFactoryBean implements FactoryBean {
 				.getRequestContext();
 		ctx.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress());
 		setTimeouts(ctx);
+
+		if (isSkipSSLVerification())
+			disableSSLVerification();
+
 		return port;
 	}
-	
-	protected javax.xml.ws.spi.Provider getProvider() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+
+	private void disableSSLVerification() {
+		logger.warn("SSL certification verification is being disabled. This will allow this caTissue instance to connect to C3PR with invalid SSL certificates. Please use with caution.");
+		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return null;
+			}
+
+			public void checkClientTrusted(
+					java.security.cert.X509Certificate[] certs, String authType) {
+			}
+
+			public void checkServerTrusted(
+					java.security.cert.X509Certificate[] certs, String authType) {
+			}
+		} };
+
 		try {
-			return (Provider) Class.forName("com.sun.xml.internal.ws.spi.ProviderImpl").newInstance();
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection
+					.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		com.sun.net.ssl.HostnameVerifier hv = new com.sun.net.ssl.HostnameVerifier() {
+
+			public boolean verify(String urlHostname, String certHostname) {
+				return true;
+			}
+		};
+		com.sun.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(hv);
+
+		HostnameVerifier hv2 = new HostnameVerifier() {
+
+			public boolean verify(String urlHostName, SSLSession session) {
+				return true;
+			}
+		};
+		HttpsURLConnection.setDefaultHostnameVerifier(hv2);
+
+	}
+
+	protected javax.xml.ws.spi.Provider getProvider()
+			throws InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
+		try {
+			return (Provider) Class.forName(
+					"com.sun.xml.internal.ws.spi.ProviderImpl").newInstance();
 		} catch (ClassNotFoundException e) {
-			return (Provider) Class.forName("com.sun.xml.ws.spi.ProviderImpl").newInstance();
+			return (Provider) Class.forName("com.sun.xml.ws.spi.ProviderImpl")
+					.newInstance();
 		}
 	}
-	
+
+	/**
+	 * @return the skipSSLVerification
+	 */
+	public boolean isSkipSSLVerification() {
+		return skipSSLVerification;
+	}
+
+	/**
+	 * @param skipSSLVerification
+	 *            the skipSSLVerification to set
+	 */
+	public void setSkipSSLVerification(boolean skipSSLVerification) {
+		this.skipSSLVerification = skipSSLVerification;
+	}
 
 }

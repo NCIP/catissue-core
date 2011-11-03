@@ -234,6 +234,7 @@
 							<prop key="ccts.password">Aa_111111</prop>
 							<prop key="ccts.notificationTTL">864000</prop>
 							<prop key="ccts.delayBetweenAttempts">5</prop>
+							<prop key="ccts.skipSSLVerification">true</prop>
 						</props>
 					</property>
 					<property name="ignoreResourceNotFound" value="true" />
@@ -245,12 +246,12 @@
 	</bean>
 	
 	<bean id="subjectRegistrationClient" class="edu.wustl.catissuecore.bizlogic.ccts.SubjectRegistrationFactoryBean"	
-		p:username="${ccts.username}" p:password="${ccts.password}"		
+		p:username="${ccts.username}" p:password="${ccts.password}" p:skipSSLVerification="${ccts.skipSSLVerification}"		
 		p:wsdlLocation="${ccts.subjectRegistrationService.wsdlLocation}" p:address="${ccts.subjectRegistrationService.URL}">
 	</bean>
 
 	<bean id="subjectManagementClient" class="edu.wustl.catissuecore.bizlogic.ccts.SubjectManagementFactoryBean"	
-		p:username="${ccts.username}" p:password="${ccts.password}"		
+		p:username="${ccts.username}" p:password="${ccts.password}" p:skipSSLVerification="${ccts.skipSSLVerification}"		
 		p:wsdlLocation="${ccts.subjectManagementService.wsdlLocation}" p:address="${ccts.subjectManagementService.URL}">
 	</bean>
 
