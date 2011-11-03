@@ -126,7 +126,6 @@
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/cryptix32.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/cryptix-asn1.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/csmapi-4.2.jar"/>
-	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/cxf-bundle.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/DAO-1.1.9.5.1.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/Default_label_barcode_gen.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/dhtmlxconnector.jar"/>
