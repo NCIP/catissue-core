@@ -243,7 +243,7 @@
 		</property>
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 		<property name="ignoreResourceNotFound" value="true" />
-	</bean>
+	</bean> 
 	
 	<bean id="subjectRegistrationClient" class="edu.wustl.catissuecore.bizlogic.ccts.SubjectRegistrationFactoryBean"	
 		p:username="${ccts.username}" p:password="${ccts.password}" p:skipSSLVerification="${ccts.skipSSLVerification}"		
