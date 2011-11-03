@@ -24,6 +24,7 @@ public final class SubjectRegistrationFactoryBean extends
 
 	@Override
 	public Object getObject() throws Exception {
+		preSetup();
 		final QName qname = new QName(
 				"http://enterpriseservices.nci.nih.gov/SubjectRegistrationService",
 				"SubjectRegistrationService");

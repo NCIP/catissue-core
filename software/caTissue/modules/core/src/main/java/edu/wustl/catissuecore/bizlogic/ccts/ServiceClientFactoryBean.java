@@ -250,11 +250,12 @@ public abstract class ServiceClientFactoryBean implements FactoryBean {
 				.getRequestContext();
 		ctx.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getAddress());
 		setTimeouts(ctx);
+		return port;
+	}
 
+	protected void preSetup() {
 		if (isSkipSSLVerification())
 			disableSSLVerification();
-
-		return port;
 	}
 
 	private void disableSSLVerification() {
