@@ -1525,12 +1525,14 @@
 			<arg value="${package}" />
 			<classpath>
 				<pathelement location="${target.dir}" />
+				<pathelement location="${target.dir}/temp/WEB-INF/classes" />
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</java>
 	</target>
+
 	<target name="export_xmi" depends="compile">
 		<java classname="edu.wustl.catissuecore.annotations.xmi.XMIExporter" fork="true">
 			<arg value="${groupname}" />
