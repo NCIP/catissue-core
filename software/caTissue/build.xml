@@ -1,11 +1,10 @@
 <?xml version ="1.0"?>
 <!--Ant Script for create Build for caTISSUE Core-->
 <project name="caTissue Suite" default="compile" xmlns:ivy="antlib:org.apache.ivy.ant">
-	<loadfile property="dist.revision" srcFile="./.svn/entries">
-		<filterchain>
-			<headfilter lines="1" skip="4" />
-		</filterchain>
-	</loadfile>
+
+	<exec executable="svnversion" outputproperty="dist.revision">
+       <arg line="-n ."/>
+    </exec>
 
 	<!--define require dir and Properties -->
 	<property name="root.dir" location="${base.dir}/../../.." />
