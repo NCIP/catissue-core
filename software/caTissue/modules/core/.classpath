@@ -188,8 +188,6 @@
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/quartz.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/query-1.0.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/relaxngDatatype.jar"/>
-	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/saaj-api.jar"/>
-	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/saaj-impl.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/saxpath.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/script-api-1.0.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/scrubber-runtime.jar"/>
