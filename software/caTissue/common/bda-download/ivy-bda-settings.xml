@@ -16,6 +16,12 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 	<resolvers>
 		<!-- this is where you read from -->
 		<chain name="ncicb-chain">
+
+            <filesystem name="localResolver" local="true" >
+                  <ivy pattern="${user.home}/.ivy2/cache/[organisation]/[module]/ivy-[revision].xml"/>
+                  <artifact pattern="${user.home}/.ivy2/cache/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]"/>
+            </filesystem>
+
 			<filesystem name="local-project-repo" local="true">
 				<!-- Local project level repo -->
 				<artifact pattern="${ivy.project.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
