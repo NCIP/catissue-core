@@ -53,8 +53,8 @@
     </target>
 
 
-<!--
-    <target name="runQuery1" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths" description="Run the sample Client">
+
+    <target name="runQuery1_1" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths" description="Run the sample Client">
     <property name="runclasspath" refid="run.classpath"/>
 	<echo message="Connecting to service: ${service.url}" />
     <java failonerror="true" classname="edu.wustl.catissuecore.domain.client.Catissue_cacoreClient" classpathref="run.classpath" fork="yes">
@@ -65,7 +65,7 @@
         <arg value="./cqls/Query1.xml" />
   </java>
 </target>
--->
+
 
 <target name="runQuery2" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths" description="Run the sample Client">
     <property name="runclasspath" refid="run.classpath"/>
