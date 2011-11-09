@@ -23,6 +23,8 @@ import java.util.List;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.passwordutil.Password;
+import edu.wustl.catissuecore.passwordutil.Util;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.bizlogic.IActivityStatus;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -162,7 +164,7 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
     /**
      * Set of passwod collection for the user.
      */
-    protected Collection passwordCollection = new HashSet();
+    /*protected Collection passwordCollection = new HashSet();*/
 
     /**
      * WUSTLkey of a user.
@@ -669,20 +671,20 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
      * @hibernate.collection-one-to-many
      *                                   class="edu.wustl.catissuecore.domain.Password"
      * @return Collection.
-     */
+     *//*
     public Collection getPasswordCollection()
     {
         return passwordCollection;
-    }
+    }*/
 
     /**
      * @param passwordCollection
      *            of Collection type.
      */
-    public void setPasswordCollection(final Collection passwordCollection)
+    /*public void setPasswordCollection(final Collection passwordCollection)
     {
         this.passwordCollection = passwordCollection;
-    }
+    }*/
 
     /**
      * This function Copies the data from an UserForm object to a User object.
@@ -867,25 +869,6 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
         return edu.wustl.catissuecore.util.global.AppUtility.getlLabel(lastName, firstName);
     }
 
-    /**
-     * Get the latest password.
-     *
-     * @return Sting.
-     */
-    public String getLatestPassword()
-    {
-        String password = null;
-        final List pwdList = new ArrayList(getPasswordCollection());
-        if (pwdList != null)
-        {
-            Collections.sort(pwdList);
-            if (!pwdList.isEmpty())
-            {
-                password = ((Password) pwdList.get(0)).getPassword();
-            }
-        }
-        return password;
-    }
 
     /**
      * Returns true if a new user is added.

@@ -29,7 +29,6 @@ import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
-import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.UserDTO;
@@ -40,6 +39,8 @@ import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.passwordutil.Password;
+import edu.wustl.catissuecore.passwordutil.Util;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -187,7 +188,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
             user.setInstitution(institution);
             user.setCancerResearchGroup(cancerResearchGroup);
             final String generatedPassword = PasswordManager.generatePassword();
-
+            final Password password = new Password();
             // If the page is of signup user don't create the csm user.
             if (user.getPageOf() == null || !user.getPageOf().equals(Constants.PAGE_OF_SIGNUP))
             {
@@ -220,7 +221,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
                 // user.setPassword(csmUser.getPassword());
                 // Add password of user in password table.Updated by Supriya
                 // Dankh
-                final Password password = new Password();
+                
 
                 /**
                  * Start: Change for API Search --- Jitendra 06/10/2006 In Case
@@ -242,8 +243,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
                 password.setPassword(PasswordManager.encrypt(generatedPassword));
                 password.setUpdateDate(new Date());
 
-                user.getPasswordCollection().add(password);
-
+                //user.getPasswordCollection().add(password);
+                
                 LOGGER.debug("password stored in passwore table");
             }
 
@@ -260,6 +261,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
                 updateUserDetails(user, userRowIdMap);
             }
             dao.insert(user);
+            dao.insert(password);
             if (Constants.PAGE_OF_SIGNUP.equals(user.getPageOf()))
             {
                 insertUserIDPInformation(user);
@@ -1090,7 +1092,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
                 // Set values in password domain object and adds changed
                 // password in Password Collection
                 final Password password = new Password(PasswordManager.encrypt(user.getNewPassword()), user);
-                user.getPasswordCollection().add(password);
+                dao.insert(password);
+                //user.getPasswordCollection().add(password);
 
             }
 
@@ -1108,7 +1111,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
                 // Set values in password domain object and
                 // adds changed password in Password Collection
                 final Password password = new Password(PasswordManager.encrypt(user.getNewPassword()), user);
-                user.getPasswordCollection().add(password);
+                dao.insert(password);
+                //user.getPasswordCollection().add(password);
                 user.setFirstTimeLogin(Boolean.TRUE);
             }
             else
@@ -1230,11 +1234,10 @@ public class UserBizLogic extends CatissueDefaultBizLogic
      *
      * @throws PasswordEncryptionException
      *             Generic Password Encryption Exception
-     * @throws BizLogicException
-     *             BizLogic Exception
+     * @throws ApplicationException 
      */
     private void passwordValidation(final User user, final User oldUser, final String oldPassword)
-            throws PasswordEncryptionException, BizLogicException
+            throws PasswordEncryptionException, ApplicationException
     {
         final int result = validatePassword(oldUser, user.getNewPassword(), oldPassword);
 
@@ -1820,11 +1823,12 @@ public class UserBizLogic extends CatissueDefaultBizLogic
      *
      * @throws PasswordEncryptionException
      *             the password encryption exception
+     * @throws ApplicationException 
      */
     private int validatePassword(final User oldUser, final String newPassword, final String oldPassword)
-            throws PasswordEncryptionException
+            throws PasswordEncryptionException, ApplicationException
     {
-        final List oldPwdList = new ArrayList(oldUser.getPasswordCollection());
+        final ArrayList<Password> oldPwdList = Util.getPasswordCollection(oldUser);
         Collections.sort(oldPwdList);
         if (oldPwdList != null && !oldPwdList.isEmpty())
         {
@@ -1891,13 +1895,14 @@ public class UserBizLogic extends CatissueDefaultBizLogic
      *            - user object
      *
      * @return String
+     * @throws ApplicationException 
      *
      * @throws BizLogicException
      *             - throws BizLogicException
      */
-    public String checkFirstLoginAndExpiry(final User user)
+    public String checkFirstLoginAndExpiry(final User user) throws ApplicationException
     {
-        final List passwordList = new ArrayList(user.getPasswordCollection());
+        final ArrayList<Password> passwordList = new ArrayList(Util.getPasswordCollection(user));
 
         final boolean firstTimeLogin = getFirstLogin(user);
         // If user has logged in for the first time, return key of Change

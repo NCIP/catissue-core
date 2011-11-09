@@ -174,29 +174,6 @@
             column="STATUS_COMMENT"
             length="2000"
         />
-
-        <set
-            name="passwordCollection"
-            table="CATISSUE_PASSWORD"
-            fetch="join" lazy="false"
-            inverse="true"
-            cascade="save-update"
-            sort="unsorted"
-        >
-
-        <cache usage="read-write" />
-
-            <key
-                column="USER_ID"
-            >
-            </key>
-
-            <one-to-many
-                  class="edu.wustl.catissuecore.domain.Password"
-            />
-
-        </set>
-
 <!--
 
 		<set

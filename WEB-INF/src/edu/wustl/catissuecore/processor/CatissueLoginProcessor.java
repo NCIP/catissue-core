@@ -222,7 +222,11 @@ public final class CatissueLoginProcessor extends LoginProcessor
         {
             LOGGER.debug(exception);
             throw new CatissueException(exception);
-        }
+        } catch (ApplicationException exception) {
+			// TODO Auto-generated catch block
+        	LOGGER.debug(exception);
+            throw new CatissueException(exception);
+		}
         return isPasswordExpired;
     }
 

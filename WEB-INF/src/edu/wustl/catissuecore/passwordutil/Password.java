@@ -1,9 +1,10 @@
 
-package edu.wustl.catissuecore.domain;
+package edu.wustl.catissuecore.passwordutil;
 
 import java.io.Serializable;
 import java.util.Date;
 
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;

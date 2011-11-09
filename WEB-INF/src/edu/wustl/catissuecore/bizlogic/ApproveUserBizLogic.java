@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.UserDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
@@ -29,6 +28,8 @@ import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.passwordutil.Password;
+import edu.wustl.catissuecore.passwordutil.Util;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
@@ -217,7 +218,8 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
         decideRole(csmUser, user);
         user.setCsmUserId(csmUser.getUserId());
         final Password password = new Password(PasswordManager.encrypt(generatedPassword), user);
-        user.getPasswordCollection().add(password);
+        //user.getPasswordCollection().add(password);
+        
         logger.debug("password stored in passwore table");
         final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
         final Set protectionObjects = new HashSet();
@@ -228,7 +230,9 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
         }
         privilegeManager.insertAuthorizationData(getAuthorizationData(user, userRowIdMap), protectionObjects,
                 null, user.getObjectId());
+        dao.insert(password);
         dao.update(user, oldUser);
+        
     }
 
     /**
