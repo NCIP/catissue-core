@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
+import edu.wustl.catissuecore.actionForm.DisplaySPPEventForm;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.processor.SPPEventProcessor;
@@ -75,6 +76,10 @@ public class DisplaySPPEventsForSCGAction extends SecureAction
 		}
 		//Retrieve scg object based on scg Id
 		String sppName = request.getParameter("sppName");
+		if (sppName == null)
+		{
+			sppName = (String) request.getAttribute("sppName");
+		}
 		request.setAttribute("id", scgId);
 		request.setAttribute(Constants.PAGE_OF, Constants.PAGE_OF_SCG_CP_QUERY);
 
@@ -101,6 +106,9 @@ public class DisplaySPPEventsForSCGAction extends SecureAction
 
 		}
 		request.setAttribute(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID, scgEntityId);
+		DisplaySPPEventForm sppEveform=(DisplaySPPEventForm) form;
+		sppEveform.setSppName(sppName);
+		request.setAttribute("sppName", sppName);
 
 		return mapping.findForward(pageOf);
 	}

@@ -23,7 +23,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
@@ -85,8 +84,15 @@ public class DisplaySPPForSCGAction extends SecureAction
 		}
 		request.setAttribute(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID, scgEntityId);
 		request.setAttribute(Constants.PAGE_OF, "pageOfSpecimenCollectionGroupCPQuery");
+		String sppName=null;
+		if(sppNameList!=null && sppNameList.size()>1)
+		{
+			NameValueBean nvb=sppNameList.get(1);
+			sppName=nvb.getValue();
+		}
+		request.setAttribute("sppName", sppName);
 
-		return mapping.findForward("pageOfDynamicEvent");
+		return mapping.findForward("pageOfDataEntry");
 	}
 
 }
