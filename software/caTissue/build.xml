@@ -973,6 +973,10 @@
         </if>
         <copy file="${target.dir}/dist/${cacore-sdk-4.2-src.file}" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 
+        <!--caCoreSDK files for dozer-->
+        <echo message="Copying caCoreSDK files for dozer artifacts generation..." />
+        <zip destfile="${zip.dir}/modules/dynamic_extensions/lib/cacore-sdk.4.2-dozer.zip" basedir="${catissue.modules}/caCORE-SDK-dozer-templates/caCoreSDK.4.2.dozer" />
+
 		<!--<copy file="CA.war" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="pathologySpecimen.war" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 		<copy file="pathologySCG.war" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />-->
