@@ -1710,7 +1710,8 @@
 				<antcall target="reset_DE_sequences" />
 			</then>
 		</if>
-		<antcall target="import_xmi">
+
+        <antcall target="import_xmi">
 			<param name="filename" value="${resources.dir}/xmi/SpecimenEvents.xmi"/>
 			<param name="mainContainerList" value="${resources.dir}/csv/SpecimenEvents.csv"/>
 			<param name="package" value="sop"/>
