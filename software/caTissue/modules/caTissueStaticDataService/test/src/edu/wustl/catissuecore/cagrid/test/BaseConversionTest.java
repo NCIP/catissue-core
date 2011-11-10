@@ -1,3 +1,4 @@
+package edu.wustl.catissuecore.cagrid.test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.apache.log4j.Logger;

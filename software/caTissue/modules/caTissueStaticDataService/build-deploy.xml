@@ -46,7 +46,7 @@
 		</pathconvert>
 		<property name="gar.name" value="${service.deployment.dir.name}.gar" />
 
-		<property name="service.properties.file" value="service.properties" />
+		<property name="service.properties.file" value="tmp/service.properties" />
 	</target>
 
 	<target name="prepareDeploymentTmp" depends="checkGlobus,init">
@@ -62,6 +62,21 @@
 		<replace file="tmp/server-config.wsdd" value="${introduce.skeleton.service.name}" token="SERVICE-INSTANCE-PATH" />
 		<replace file="tmp/server-config.wsdd" value="${service.deployment.prefix}" token="SERVICE-INSTANCE-PREFIX" />
 		<replace file="tmp/server-config.wsdd" value="etc/${service.deployment.dir.name}" token="ETC-PATH" />
+		
+		<!-- Filter service.properties -->
+		<copy overwrite="true" todir="tmp" filtering="true" file="service.properties">
+			<filterset>
+				<filter token="APPLICATION_HOST" value="${applicationHostName}"/>
+				<filter token="APPLICATION_PORT" value="${applicationHostPort}"/>
+				<filter token="USE_HTTPS_URL" value="${useHttpsUrl}"/>
+				<filter token="USE_GRID_IDENTITY_LOGIN" value="${useGridIdentityLogin}"/>
+				<filter token="STATIC_LOGIN_USER" value="${staticLoginUser}"/>
+				<filter token="STATIC_LOGIN_PASS" value="${staticLoginPass}"/>
+				<filter token="USE_STATIC_LOGIN" value="${useStaticLogin}"/>
+				<filter token="USE_LOCAL_API_FLAG" value="${useLocalApiFlag}"/>
+			</filterset>
+		</copy>
+		
 		<!-- prepare the jndi file -->
 		<copy overwrite="true" todir="tmp" filtering="true" file="jndi-config.xml">
 			<filterset>

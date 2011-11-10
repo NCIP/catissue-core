@@ -9,6 +9,8 @@
 	<!-- Define the environment variable -->
 	<property environment="env" />
 
+	<property file="build.properties" />
+	
 	<property file="introduce.properties" />
 	<property name="introduce.ns.excludes" value="" />
 	<property name="service.name" value="${introduce.skeleton.service.name}" />
@@ -285,6 +287,17 @@
 				<include name="**/*" />
 			</fileset>
 		</copy>
+		
+		<copy todir="${build.dest}" overwrite="true" filtering="true">
+			<fileset dir="${src.dir}">
+				<include name="**/application-config-client-info.xml"/>
+			</fileset>
+			<filterset>
+				<filter token="APPLICATION_HOST" value="${applicationHostName}" />
+				<filter token="APPLICATION_PORT" value="${applicationHostPort}" />
+			</filterset>
+		</copy>
+		
 		<runtarget target="postCompile" />
 	</target>
 

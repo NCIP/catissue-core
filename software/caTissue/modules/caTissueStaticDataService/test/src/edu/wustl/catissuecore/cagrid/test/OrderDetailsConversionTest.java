@@ -1,3 +1,4 @@
+package edu.wustl.catissuecore.cagrid.test;
 import edu.wustl.catissuecore.domain.ws.OrderDetails;
 import edu.wustl.catissuecore.domain.client.Fixtures;
 import edu.wustl.catissuecore.domain.service.WAPIUtility;

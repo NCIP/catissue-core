@@ -108,9 +108,9 @@ public class Catissue_cacoreClient extends Catissue_cacoreClientBase implements 
                                 // display as CQL2
                                 EndpointReferenceType epr = new EndpointReferenceType(new Address(url));
                                 DomainModel domainModel = MetadataUtils.getDomainModel(epr);
-                                CQL1toCQL2Converter converter = new CQL1toCQL2Converter(domainModel);
-                                org.cagrid.cql2.CQLQuery cql2Query = converter.convertToCql2Query(cql1Query);
-                                System.out.println("As CQL2Query = " + CQL2SerializationUtil.serializeCql2Query(cql2Query));
+//                                CQL1toCQL2Converter converter = new CQL1toCQL2Converter(domainModel);
+//                                org.cagrid.cql2.CQLQuery cql2Query = converter.convertToCql2Query(cql1Query);
+//                                System.out.println("As CQL2Query = " + CQL2SerializationUtil.serializeCql2Query(cql2Query));
 
                                 CQLQueryResults cqlQueryResult = client.query(cql1Query);
 

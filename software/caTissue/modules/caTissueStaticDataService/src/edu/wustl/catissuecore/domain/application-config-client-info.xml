@@ -21,7 +21,7 @@
 	<bean id="catissue_cacoreApplicationService" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
 			<bean class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
-				<property name="serviceUrl" value="http://10.10.10.77:8080/catissuecore/http/applicationService"/>
+				<property name="serviceUrl" value="http://@APPLICATION_HOST@:@APPLICATION_PORT@/catissuecore/http/applicationService"/>
 				<property name="serviceInterface" value="edu.wustl.catissuecore.cacore.CaTissueWritableAppService"/>
 				<property name="httpInvokerRequestExecutor">
 				    <bean class="gov.nih.nci.system.springframework.remoting.httpinvoker.GSIHttpInvokerRequestExecutor"/>
@@ -38,7 +38,7 @@
 				<bean class="org.acegisecurity.providers.rcp.RemoteAuthenticationProvider">
 					<property name="remoteAuthenticationManager">
 						<bean class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
-						    <property name="serviceUrl" value="http://10.10.10.77:8080/catissuecore/http/remoteAuthenticationManager"/>
+						    <property name="serviceUrl" value="http://@APPLICATION_HOST@:@APPLICATION_PORT@/catissuecore/http/remoteAuthenticationManager"/>
 						    <property name="serviceInterface" value="org.acegisecurity.providers.rcp.RemoteAuthenticationManager"/>
 						</bean>
 					</property>

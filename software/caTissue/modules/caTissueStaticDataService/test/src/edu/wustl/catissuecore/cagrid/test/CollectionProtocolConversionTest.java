@@ -1,3 +1,4 @@
+package edu.wustl.catissuecore.cagrid.test;
 import edu.wustl.catissuecore.domain.ws.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ws.Participant;
 import edu.wustl.catissuecore.domain.ws.ParticipantRaceCollection;

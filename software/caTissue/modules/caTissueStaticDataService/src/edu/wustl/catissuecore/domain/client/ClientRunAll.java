@@ -50,8 +50,8 @@ public class ClientRunAll {
 
         // Create Collection Protocol
         CollectionProtocol cp = Fixtures.createCollectionProtocolWithOneCollectionProtocolEvent();
-        cp.setTitle("XYZ - 300 " + key);
-        cp.setShortTitle("XYZ - 300 Short " + key);
+        cp.setTitle("System Test Site " + key);
+        cp.setShortTitle("System Test Site " + key);
         CollectionProtocol cpResult = (CollectionProtocol) client.insert(cp);
         System.out.println(String.format("--> Collection Protocol inserted: %d", cpResult.getIdentifier()));
         cp.setIdentifier(cpResult.getIdentifier());
@@ -59,8 +59,8 @@ public class ClientRunAll {
         // Create Participant and associate with the Collection Protocol
         Participant p = new Participant();
         p.setActivityStatus("Active");
-        p.setFirstName("Alexander");
-        p.setLastName("Nevsky");
+        p.setFirstName("First" + key);
+        p.setLastName("Last" + key);
 
         // Create Participant Collection Protocol Registration
         p.setCollectionProtocolRegistrationCollection(Fixtures.getCollectionProtocolRegistrationWS(p, cp));

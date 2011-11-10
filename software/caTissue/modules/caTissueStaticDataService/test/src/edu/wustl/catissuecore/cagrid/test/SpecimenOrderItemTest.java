@@ -1,3 +1,4 @@
+package edu.wustl.catissuecore.cagrid.test;
 import edu.wustl.catissuecore.domain.ws.*;
 import edu.wustl.catissuecore.domain.service.WAPIUtility;
 
