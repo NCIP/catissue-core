@@ -1863,7 +1863,7 @@
         <mkdir dir="${de.temp.dir}/cacoresdk.4.2" />
 
         <!--Step 1: Unzip the default caCoreSDK release -->
-        <unzip src="${dynamic.extensions.location}/SDK-4.2-src.zip" dest="${de.temp.dir}/cacoresdk.4.2" overwrite="true" />
+        <unzip src="../../dynamic_extensions/lib/SDK-4.2-src.zip" dest="${de.temp.dir}/cacoresdk.4.2" overwrite="true" />
 
         <!--Step 2: Bring the adjusted files to support dozer artifacts generation -->
         <unzip src="../../dynamic_extensions/lib/cacore-sdk.4.2-dozer.zip" dest="${de.temp.dir}/cacoresdk.4.2/dozerFiles" overwrite="true" />
