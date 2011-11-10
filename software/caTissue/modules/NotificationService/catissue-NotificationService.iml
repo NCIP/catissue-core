@@ -1,65 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
   <component name="EclipseModuleManager">
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/addressing-1.0.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/axis.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/axis-url.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/bootstrap.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/cog-axis.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/cog-jglobus.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/cog-tomcat.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/cog-url.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/commonj.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/commons-beanutils.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/commons-cli-2.0.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/commons-collections-3.0.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/commons-digester.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/commons-discovery.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/commons-logging.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/concurrent.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/cryptix.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/cryptix32.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/cryptix-asn1.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/globus_usage_core.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/globus_usage_packets_common.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/globus_wsrf_tools_test.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/jaxrpc.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/jce-jdk13-125.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/jgss.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/junit.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/log4j-1.2.8.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/naming-common.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/naming-factory.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/naming-java.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/naming-resources.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/opensaml.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/puretls.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/resolver.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/saaj.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsdl4j.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_common.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_registry_stubs.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_registry.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_samples_authzService_stubs.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_samples_authzService.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_samples_counter_stubs.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_samples_counter.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_samples_mgmt_stubs.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_samples_mgmt.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_stubs.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_provider_jce.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_test_interop_stubs.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_test_interop.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_test_unit_stubs.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_test_unit.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_test.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wsrf_tools.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/wss4j.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/xalan.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/xercesImpl.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/xml-apis.jar" />
-    <libelement value="file://C:/Apps/ws-core-4.0.3/lib/xmlsec.jar" />
     <libelement value="jar://$MODULE_DIR$/lib/caGrid-advertisement-1.4.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/caGrid-core-1.4.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/caGrid-Introduce-serviceTools-1.4.jar!/" />
@@ -90,6 +31,65 @@
     <libelement value="jar://$MODULE_DIR$/lib/slf4j-api-1.4.0.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/slf4j-nop-1.4.3.jar!/" />
     <libelement value="jar://$MODULE_DIR$/extras/servlet-api.jar!/" />
+    <varelement var="jar://$GLOBUS$/lib/addressing-1.0.jar!/" value="GLOBUS/lib/addressing-1.0.jar" />
+    <varelement var="jar://$GLOBUS$/lib/axis.jar!/" value="GLOBUS/lib/axis.jar" />
+    <varelement var="jar://$GLOBUS$/lib/axis-url.jar!/" value="GLOBUS/lib/axis-url.jar" />
+    <varelement var="jar://$GLOBUS$/lib/bootstrap.jar!/" value="GLOBUS/lib/bootstrap.jar" />
+    <varelement var="jar://$GLOBUS$/lib/cog-axis.jar!/" value="GLOBUS/lib/cog-axis.jar" />
+    <varelement var="jar://$GLOBUS$/lib/cog-jglobus.jar!/" value="GLOBUS/lib/cog-jglobus.jar" />
+    <varelement var="jar://$GLOBUS$/lib/cog-tomcat.jar!/" value="GLOBUS/lib/cog-tomcat.jar" />
+    <varelement var="jar://$GLOBUS$/lib/cog-url.jar!/" value="GLOBUS/lib/cog-url.jar" />
+    <varelement var="jar://$GLOBUS$/lib/commonj.jar!/" value="GLOBUS/lib/commonj.jar" />
+    <varelement var="jar://$GLOBUS$/lib/commons-beanutils.jar!/" value="GLOBUS/lib/commons-beanutils.jar" />
+    <varelement var="jar://$GLOBUS$/lib/commons-cli-2.0.jar!/" value="GLOBUS/lib/commons-cli-2.0.jar" />
+    <varelement var="jar://$GLOBUS$/lib/commons-collections-3.0.jar!/" value="GLOBUS/lib/commons-collections-3.0.jar" />
+    <varelement var="jar://$GLOBUS$/lib/commons-digester.jar!/" value="GLOBUS/lib/commons-digester.jar" />
+    <varelement var="jar://$GLOBUS$/lib/commons-discovery.jar!/" value="GLOBUS/lib/commons-discovery.jar" />
+    <varelement var="jar://$GLOBUS$/lib/commons-logging.jar!/" value="GLOBUS/lib/commons-logging.jar" />
+    <varelement var="jar://$GLOBUS$/lib/concurrent.jar!/" value="GLOBUS/lib/concurrent.jar" />
+    <varelement var="jar://$GLOBUS$/lib/cryptix.jar!/" value="GLOBUS/lib/cryptix.jar" />
+    <varelement var="jar://$GLOBUS$/lib/cryptix32.jar!/" value="GLOBUS/lib/cryptix32.jar" />
+    <varelement var="jar://$GLOBUS$/lib/cryptix-asn1.jar!/" value="GLOBUS/lib/cryptix-asn1.jar" />
+    <varelement var="jar://$GLOBUS$/lib/globus_usage_core.jar!/" value="GLOBUS/lib/globus_usage_core.jar" />
+    <varelement var="jar://$GLOBUS$/lib/globus_usage_packets_common.jar!/" value="GLOBUS/lib/globus_usage_packets_common.jar" />
+    <varelement var="jar://$GLOBUS$/lib/globus_wsrf_tools_test.jar!/" value="GLOBUS/lib/globus_wsrf_tools_test.jar" />
+    <varelement var="jar://$GLOBUS$/lib/jaxrpc.jar!/" value="GLOBUS/lib/jaxrpc.jar" />
+    <varelement var="jar://$GLOBUS$/lib/jce-jdk13-125.jar!/" value="GLOBUS/lib/jce-jdk13-125.jar" />
+    <varelement var="jar://$GLOBUS$/lib/jgss.jar!/" value="GLOBUS/lib/jgss.jar" />
+    <varelement var="jar://$GLOBUS$/lib/junit.jar!/" value="GLOBUS/lib/junit.jar" />
+    <varelement var="jar://$GLOBUS$/lib/log4j-1.2.8.jar!/" value="GLOBUS/lib/log4j-1.2.8.jar" />
+    <varelement var="jar://$GLOBUS$/lib/naming-common.jar!/" value="GLOBUS/lib/naming-common.jar" />
+    <varelement var="jar://$GLOBUS$/lib/naming-factory.jar!/" value="GLOBUS/lib/naming-factory.jar" />
+    <varelement var="jar://$GLOBUS$/lib/naming-java.jar!/" value="GLOBUS/lib/naming-java.jar" />
+    <varelement var="jar://$GLOBUS$/lib/naming-resources.jar!/" value="GLOBUS/lib/naming-resources.jar" />
+    <varelement var="jar://$GLOBUS$/lib/opensaml.jar!/" value="GLOBUS/lib/opensaml.jar" />
+    <varelement var="jar://$GLOBUS$/lib/puretls.jar!/" value="GLOBUS/lib/puretls.jar" />
+    <varelement var="jar://$GLOBUS$/lib/resolver.jar!/" value="GLOBUS/lib/resolver.jar" />
+    <varelement var="jar://$GLOBUS$/lib/saaj.jar!/" value="GLOBUS/lib/saaj.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsdl4j.jar!/" value="GLOBUS/lib/wsdl4j.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_common.jar!/" value="GLOBUS/lib/wsrf_common.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_core_registry_stubs.jar!/" value="GLOBUS/lib/wsrf_core_registry_stubs.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_core_registry.jar!/" value="GLOBUS/lib/wsrf_core_registry.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_core_samples_authzService_stubs.jar!/" value="GLOBUS/lib/wsrf_core_samples_authzService_stubs.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_core_samples_authzService.jar!/" value="GLOBUS/lib/wsrf_core_samples_authzService.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_core_samples_counter_stubs.jar!/" value="GLOBUS/lib/wsrf_core_samples_counter_stubs.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_core_samples_counter.jar!/" value="GLOBUS/lib/wsrf_core_samples_counter.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_core_samples_mgmt_stubs.jar!/" value="GLOBUS/lib/wsrf_core_samples_mgmt_stubs.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_core_samples_mgmt.jar!/" value="GLOBUS/lib/wsrf_core_samples_mgmt.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_core_stubs.jar!/" value="GLOBUS/lib/wsrf_core_stubs.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_core.jar!/" value="GLOBUS/lib/wsrf_core.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_provider_jce.jar!/" value="GLOBUS/lib/wsrf_provider_jce.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_test_interop_stubs.jar!/" value="GLOBUS/lib/wsrf_test_interop_stubs.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_test_interop.jar!/" value="GLOBUS/lib/wsrf_test_interop.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_test_unit_stubs.jar!/" value="GLOBUS/lib/wsrf_test_unit_stubs.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_test_unit.jar!/" value="GLOBUS/lib/wsrf_test_unit.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_test.jar!/" value="GLOBUS/lib/wsrf_test.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wsrf_tools.jar!/" value="GLOBUS/lib/wsrf_tools.jar" />
+    <varelement var="jar://$GLOBUS$/lib/wss4j.jar!/" value="GLOBUS/lib/wss4j.jar" />
+    <varelement var="jar://$GLOBUS$/lib/xalan.jar!/" value="GLOBUS/lib/xalan.jar" />
+    <varelement var="jar://$GLOBUS$/lib/xercesImpl.jar!/" value="GLOBUS/lib/xercesImpl.jar" />
+    <varelement var="jar://$GLOBUS$/lib/xml-apis.jar!/" value="GLOBUS/lib/xml-apis.jar" />
+    <varelement var="jar://$GLOBUS$/lib/xmlsec.jar!/" value="GLOBUS/lib/xmlsec.jar" />
     <src_description expected_position="1">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="1" />
       <src_folder value="file://$MODULE_DIR$/test/src" expected_position="2" />
@@ -109,7 +109,7 @@
     <orderEntry type="module-library">
       <library name="addressing-1.0.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/addressing-1.0.jar" />
+          <root url="jar://$GLOBUS$/lib/addressing-1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -118,7 +118,7 @@
     <orderEntry type="module-library">
       <library name="axis.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/axis.jar" />
+          <root url="jar://$GLOBUS$/lib/axis.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -127,7 +127,7 @@
     <orderEntry type="module-library">
       <library name="axis-url.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/axis-url.jar" />
+          <root url="jar://$GLOBUS$/lib/axis-url.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -136,7 +136,7 @@
     <orderEntry type="module-library">
       <library name="bootstrap.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/bootstrap.jar" />
+          <root url="jar://$GLOBUS$/lib/bootstrap.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -145,7 +145,7 @@
     <orderEntry type="module-library">
       <library name="cog-axis.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/cog-axis.jar" />
+          <root url="jar://$GLOBUS$/lib/cog-axis.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -154,7 +154,7 @@
     <orderEntry type="module-library">
       <library name="cog-jglobus.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/cog-jglobus.jar" />
+          <root url="jar://$GLOBUS$/lib/cog-jglobus.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -163,7 +163,7 @@
     <orderEntry type="module-library">
       <library name="cog-tomcat.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/cog-tomcat.jar" />
+          <root url="jar://$GLOBUS$/lib/cog-tomcat.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -172,7 +172,7 @@
     <orderEntry type="module-library">
       <library name="cog-url.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/cog-url.jar" />
+          <root url="jar://$GLOBUS$/lib/cog-url.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -181,7 +181,7 @@
     <orderEntry type="module-library">
       <library name="commonj.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/commonj.jar" />
+          <root url="jar://$GLOBUS$/lib/commonj.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -190,7 +190,7 @@
     <orderEntry type="module-library">
       <library name="commons-beanutils.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/commons-beanutils.jar" />
+          <root url="jar://$GLOBUS$/lib/commons-beanutils.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -199,7 +199,7 @@
     <orderEntry type="module-library">
       <library name="commons-cli-2.0.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/commons-cli-2.0.jar" />
+          <root url="jar://$GLOBUS$/lib/commons-cli-2.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -208,7 +208,7 @@
     <orderEntry type="module-library">
       <library name="commons-collections-3.0.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/commons-collections-3.0.jar" />
+          <root url="jar://$GLOBUS$/lib/commons-collections-3.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -217,7 +217,7 @@
     <orderEntry type="module-library">
       <library name="commons-digester.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/commons-digester.jar" />
+          <root url="jar://$GLOBUS$/lib/commons-digester.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -226,7 +226,7 @@
     <orderEntry type="module-library">
       <library name="commons-discovery.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/commons-discovery.jar" />
+          <root url="jar://$GLOBUS$/lib/commons-discovery.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -235,7 +235,7 @@
     <orderEntry type="module-library">
       <library name="commons-logging.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/commons-logging.jar" />
+          <root url="jar://$GLOBUS$/lib/commons-logging.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -244,7 +244,7 @@
     <orderEntry type="module-library">
       <library name="concurrent.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/concurrent.jar" />
+          <root url="jar://$GLOBUS$/lib/concurrent.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -253,7 +253,7 @@
     <orderEntry type="module-library">
       <library name="cryptix.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/cryptix.jar" />
+          <root url="jar://$GLOBUS$/lib/cryptix.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -262,7 +262,7 @@
     <orderEntry type="module-library">
       <library name="cryptix32.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/cryptix32.jar" />
+          <root url="jar://$GLOBUS$/lib/cryptix32.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -271,7 +271,7 @@
     <orderEntry type="module-library">
       <library name="cryptix-asn1.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/cryptix-asn1.jar" />
+          <root url="jar://$GLOBUS$/lib/cryptix-asn1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -280,7 +280,7 @@
     <orderEntry type="module-library">
       <library name="globus_usage_core.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/globus_usage_core.jar" />
+          <root url="jar://$GLOBUS$/lib/globus_usage_core.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -289,7 +289,7 @@
     <orderEntry type="module-library">
       <library name="globus_usage_packets_common.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/globus_usage_packets_common.jar" />
+          <root url="jar://$GLOBUS$/lib/globus_usage_packets_common.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -298,7 +298,7 @@
     <orderEntry type="module-library">
       <library name="globus_wsrf_tools_test.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/globus_wsrf_tools_test.jar" />
+          <root url="jar://$GLOBUS$/lib/globus_wsrf_tools_test.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -307,7 +307,7 @@
     <orderEntry type="module-library">
       <library name="jaxrpc.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/jaxrpc.jar" />
+          <root url="jar://$GLOBUS$/lib/jaxrpc.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -316,7 +316,7 @@
     <orderEntry type="module-library">
       <library name="jce-jdk13-125.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/jce-jdk13-125.jar" />
+          <root url="jar://$GLOBUS$/lib/jce-jdk13-125.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -325,7 +325,7 @@
     <orderEntry type="module-library">
       <library name="jgss.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/jgss.jar" />
+          <root url="jar://$GLOBUS$/lib/jgss.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -334,7 +334,7 @@
     <orderEntry type="module-library">
       <library name="junit.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/junit.jar" />
+          <root url="jar://$GLOBUS$/lib/junit.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -343,7 +343,7 @@
     <orderEntry type="module-library">
       <library name="log4j-1.2.8.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/log4j-1.2.8.jar" />
+          <root url="jar://$GLOBUS$/lib/log4j-1.2.8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -352,7 +352,7 @@
     <orderEntry type="module-library">
       <library name="naming-common.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/naming-common.jar" />
+          <root url="jar://$GLOBUS$/lib/naming-common.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -361,7 +361,7 @@
     <orderEntry type="module-library">
       <library name="naming-factory.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/naming-factory.jar" />
+          <root url="jar://$GLOBUS$/lib/naming-factory.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -370,7 +370,7 @@
     <orderEntry type="module-library">
       <library name="naming-java.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/naming-java.jar" />
+          <root url="jar://$GLOBUS$/lib/naming-java.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -379,7 +379,7 @@
     <orderEntry type="module-library">
       <library name="naming-resources.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/naming-resources.jar" />
+          <root url="jar://$GLOBUS$/lib/naming-resources.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -388,7 +388,7 @@
     <orderEntry type="module-library">
       <library name="opensaml.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/opensaml.jar" />
+          <root url="jar://$GLOBUS$/lib/opensaml.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -397,7 +397,7 @@
     <orderEntry type="module-library">
       <library name="puretls.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/puretls.jar" />
+          <root url="jar://$GLOBUS$/lib/puretls.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -406,7 +406,7 @@
     <orderEntry type="module-library">
       <library name="resolver.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/resolver.jar" />
+          <root url="jar://$GLOBUS$/lib/resolver.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -415,7 +415,7 @@
     <orderEntry type="module-library">
       <library name="saaj.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/saaj.jar" />
+          <root url="jar://$GLOBUS$/lib/saaj.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -424,7 +424,7 @@
     <orderEntry type="module-library">
       <library name="wsdl4j.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsdl4j.jar" />
+          <root url="jar://$GLOBUS$/lib/wsdl4j.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -433,7 +433,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_common.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_common.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_common.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -442,7 +442,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_core_registry_stubs.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_registry_stubs.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_core_registry_stubs.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -451,7 +451,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_core_registry.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_registry.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_core_registry.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -460,7 +460,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_core_samples_authzService_stubs.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_samples_authzService_stubs.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_core_samples_authzService_stubs.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -469,7 +469,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_core_samples_authzService.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_samples_authzService.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_core_samples_authzService.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -478,7 +478,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_core_samples_counter_stubs.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_samples_counter_stubs.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_core_samples_counter_stubs.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -487,7 +487,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_core_samples_counter.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_samples_counter.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_core_samples_counter.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -496,7 +496,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_core_samples_mgmt_stubs.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_samples_mgmt_stubs.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_core_samples_mgmt_stubs.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -505,7 +505,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_core_samples_mgmt.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_samples_mgmt.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_core_samples_mgmt.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -514,7 +514,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_core_stubs.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core_stubs.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_core_stubs.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -523,7 +523,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_core.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_core.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_core.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -532,7 +532,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_provider_jce.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_provider_jce.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_provider_jce.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -541,7 +541,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_test_interop_stubs.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_test_interop_stubs.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_test_interop_stubs.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -550,7 +550,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_test_interop.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_test_interop.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_test_interop.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -559,7 +559,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_test_unit_stubs.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_test_unit_stubs.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_test_unit_stubs.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -568,7 +568,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_test_unit.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_test_unit.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_test_unit.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -577,7 +577,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_test.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_test.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_test.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -586,7 +586,7 @@
     <orderEntry type="module-library">
       <library name="wsrf_tools.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wsrf_tools.jar" />
+          <root url="jar://$GLOBUS$/lib/wsrf_tools.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -595,7 +595,7 @@
     <orderEntry type="module-library">
       <library name="wss4j.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/wss4j.jar" />
+          <root url="jar://$GLOBUS$/lib/wss4j.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -604,7 +604,7 @@
     <orderEntry type="module-library">
       <library name="xalan.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/xalan.jar" />
+          <root url="jar://$GLOBUS$/lib/xalan.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -613,7 +613,7 @@
     <orderEntry type="module-library">
       <library name="xercesImpl.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/xercesImpl.jar" />
+          <root url="jar://$GLOBUS$/lib/xercesImpl.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -622,7 +622,7 @@
     <orderEntry type="module-library">
       <library name="xml-apis.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/xml-apis.jar" />
+          <root url="jar://$GLOBUS$/lib/xml-apis.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -631,7 +631,7 @@
     <orderEntry type="module-library">
       <library name="xmlsec.jar">
         <CLASSES>
-          <root url="file://C:/Apps/ws-core-4.0.3/lib/xmlsec.jar" />
+          <root url="jar://$GLOBUS$/lib/xmlsec.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
