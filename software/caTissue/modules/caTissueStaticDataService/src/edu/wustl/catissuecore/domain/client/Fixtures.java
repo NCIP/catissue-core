@@ -259,6 +259,11 @@ public class Fixtures {
         String key = UniqueKeyGenerator.getKey();
 
         CollectionProtocol cp = new CollectionProtocol();
+        cp.setSiteCollection(new CollectionProtocolSiteCollection());
+        cp.getSiteCollection().setSite(new Site[1]);
+        cp.getSiteCollection().getSite()[0] = new Site();
+        cp.getSiteCollection().getSite()[0].setIdentifier(1);
+
         cp.setActivityStatus("Active");
         cp.setTitle("CP Title - " + key);
         cp.setShortTitle("CP Short Title - " + key);
