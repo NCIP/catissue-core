@@ -33,7 +33,7 @@ public class WritableAPIClient extends Catissue_cacoreClient  {
     /**
      *
      * When ran from IDE specify the location of client-config.wssd
-     * VM params: -Daxis.ClientConfigFile=C:\caTissue\software\caTissue\src\java\caGrid_service\caTissueStaticDataService\src\edu\wustl\catissuecore\domain\client\client-config.wsdd
+     * VM params: -Daxis.ClientConfigFile=C:\caTissue\software\caTissue\modules\caTissueStaticDataService\src\edu\wustl\catissuecore\domain\client\client-config.wsdd
      * Program params: url https://10.10.10.222:9443/wsrf/services/cagrid/Catissue_cacore CreateParticipant
      * */
     public static void main(String[] args) {
