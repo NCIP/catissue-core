@@ -18,6 +18,10 @@
                                           xmlns:ns1="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"
                                           xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws">
 
+                    <ns2:siteCollection>
+                        <ns2:Site dirtyEditFlag="false" identifier="1" remoteId="0" remoteManagedFlag="false"/>
+                    </ns2:siteCollection>
+
                     <ns2:collectionProtocolEventCollection>
                         <ns2:CollectionProtocolEvent
                                 activityStatus="Active"
