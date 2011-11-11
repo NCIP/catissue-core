@@ -113,7 +113,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	}
 
 	@Override
-	protected List<Object> hookStaticDynExtObject(Object arg0) throws Exception {
+	protected Long hookStaticDynExtObject(Object arg0) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -126,9 +126,11 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	}
 
 	@Override
-	protected Object insertDynExtObject(Object arg0, Object arg1)
-			throws Exception {
+	public Long insertDEObject(String arg0, String arg1,
+			Map<String, Object> arg2) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 }
