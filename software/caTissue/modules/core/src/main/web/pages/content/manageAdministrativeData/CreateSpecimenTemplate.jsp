@@ -428,7 +428,7 @@ eval(testCombo);
 		if(document.getElementById('processingSPPForSpecimen') != null)
 	   			processingSPPName = document.getElementById('processingSPPForSpecimen').value;
 				
-		var testCombo="Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName='+processingSPPName;var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '"+objname+"' ,displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: '"+nameForCombo+"',fields: ['id_cp'],id: comboDataStorName});combo.on('expand', function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle('width', '250');combo.innerList.setStyle('width', '250');}else{combo.list.setStyle('width', 'auto');combo.innerList.setStyle('width', 'auto');}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});";
+		var testCombo="Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName='+processingSPPName;var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '"+objname+"' ,displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'Not Specified',selectOnFocus:'true',applyTo: '"+nameForCombo+"',fields: ['id_cp'],id: comboDataStorName});combo.on('expand', function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle('width', '250');combo.innerList.setStyle('width', '250');}else{combo.list.setStyle('width', 'auto');combo.innerList.setStyle('width', 'auto');}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});";
 eval(testCombo);
 
 
@@ -444,7 +444,7 @@ eval(testCombo);
 		
 		spreqqty.innerHTML="" + sname;
 
-		var testCombo="Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=processingSPP';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '"+objname+"' ,displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: '"+nameForCombo+"'});combo.on('expand', function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle('width', '250');combo.innerList.setStyle('width', '250');}else{combo.list.setStyle('width', 'auto');combo.innerList.setStyle('width', 'auto');}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});";
+		var testCombo="Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=processingSPP';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '"+objname+"' ,displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'Not Specified',valueNotFoundText:'',selectOnFocus:'true',applyTo: '"+nameForCombo+"'});combo.on('expand', function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle('width', '250');combo.innerList.setStyle('width', '250');}else{combo.list.setStyle('width', 'auto');combo.innerList.setStyle('width', 'auto');}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});";
 eval(testCombo);
 
 						<%
@@ -477,14 +477,14 @@ eval(testCombo);
 				{
 
 			studyformObj.store.proxy.conn.url = "ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName="+element.value;
-			studyformObj.setValue("--Select--",false) ;
+			studyformObj.setValue("Not Specified",false) ;
 			studyformObj.store.reload();
 			}
 		}
 			var studyformObj = Ext.getCmp('aliquot_CE');
 
 			studyformObj.store.proxy.conn.url = "ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName="+element.value;
-			studyformObj.setValue("--Select--",false) ;
+			studyformObj.setValue("Not Specified",false) ;
 			studyformObj.store.reload();
 		
 		
