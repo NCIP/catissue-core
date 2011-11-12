@@ -4816,7 +4816,7 @@ Thanking You,
 			<sequential>
 				<copy file="@{caTissue-webapp.dir.dist}/modules/bulk_operations/conf/log4j.properties" todir="${base.dir}/BulkOperations/conf" overwrite="true" />
 				<echo message="...................................................................................." />
-				<java classname="edu.wustl.bulkoperator.ImportBulkOperationTemplate"
+				<java classname="edu.wustl.bulkoperator.templateImport.ImportBulkOperationTemplate"
 								fork="true" maxmemory="1024m">
 							<arg value="@{operationName}" />
 							<arg value="@{dropdownName}" />
