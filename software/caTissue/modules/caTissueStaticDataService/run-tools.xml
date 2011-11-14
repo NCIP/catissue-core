@@ -261,11 +261,13 @@
 
     <!-- START Service rebuild -->
     <target name="updateGridService" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths">
+        <!-- DOZER MERGE -->
         <foreach target="processDozer" param="fullFileName" inheritall="true">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
                 <include name="**/*-dozer-files.jar"/>
             </fileset>
         </foreach>
+        <!-- CLEAN UP -->
         <delete>
             <fileset dir="./de_codegen/artifacts">
                 <include name="*.jar" />
