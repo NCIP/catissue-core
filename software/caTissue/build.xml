@@ -969,9 +969,11 @@
             </not>
             <then>
                 <get src="${cacore-sdk-4.2-src.url}" dest="${target.dir}/dist/${cacore-sdk-4.2-src.file}" />
+                <get src="${cacore-sdk-4.4-src.url}" dest="${target.dir}/dist/${cacore-sdk-4.4-src.file}" />
             </then>
         </if>
         <copy file="${target.dir}/dist/${cacore-sdk-4.2-src.file}" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
+        <copy file="${target.dir}/dist/${cacore-sdk-4.4-src.file}" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 
         <!--caCoreSDK files for dozer-->
         <echo message="Copying caCoreSDK files for dozer artifacts generation..." />

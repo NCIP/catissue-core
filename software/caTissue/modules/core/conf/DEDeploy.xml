@@ -1764,10 +1764,6 @@
         <!-- Run caCoreSDK 3.2.1 to build artifacts -->
 		<ant antfile="build.xml" dir="${cacoresdk.dir}" target="build-system" />
 
-        <!-- Run caCoreSDK 4.2 for dozer artifacts generation -->
-        <echo message="DEBUG: THIS IS SUPPOSED TO CALL build:all on cacore-sdk-4.2-dozer" />
-        <!--<ant antfile="build.xml" dir="${de.temp.dir}/cacoresdk.4.2/example-project/" target="build:all" />-->
-
 		<delete dir="${cacore.dir}" />
 		<mkdir dir="${cacore.dir}" />
 		<unwar dest="${cacore.dir}" src="${cacoresdk.dir}/output/${entitygroupname}/package/${entitygroupname}.war" overwrite="true" />
@@ -1885,6 +1881,23 @@
 			<replacefilter token="@@MODEL_FILE@@" value="${entitygroupname}.xmi" />
 			<replacefilter token="@@APPLICATION_NAME@@" value="${entitygroupname}" />
 		</replace>
+
+        <!-- Run caCoreSDK 4.2 for dozer artifacts generation -->
+        <echo message="DEBUG: THIS IS SUPPOSED TO CALL build:all on cacore-sdk-4.2-dozer" />
+        <!--<ant antfile="build.xml" dir="${de.temp.dir}/cacoresdk.4.2/example-project/" target="build:all" />-->
+        <!-- Copy dozer-artifacts to dataservice -->
+        <available file="${de.temp.dir}/cacoresdk.4.2/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/${entitygroupname}-dozer-files.zip" property="dozerFilesExists"/>
+        <if>
+            <equals arg1="true" arg2="${dozerFilesExists}" />
+			<then>
+                <copy todir="../../caGrid_service/caTissueStaticDataService/de_codegen/artifacts" overwrite="true">
+                    <fileset dir="${de.temp.dir}/cacoresdk.4.2/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/">
+                        <include name="${entitygroupname}-dozer-files.zip" />
+                    </fileset>
+                </copy>
+                <echo message="Dozer files copied for: ${${entitygroupname}}" />
+            </then>
+        </if>
     </target>
 
 	<target name="unzip_caCORESDKzip" description="unzip caCore SDK zip">
@@ -1907,6 +1920,13 @@
 			</fileset>
 		</copy>
 
+        <!-- Copy XMIs to dataservice -->
+		<copy todir="../../caGrid_service/caTissueStaticDataService/de_codegen/xmi" overwrite="true">
+			<fileset dir="${export.dir}">
+				<include name="*.xmi" />
+			</fileset>
+		</copy>
+
 		<replace dir="${cacoresdk.dir}/conf">
 			<include name="deploy.properties" />
 			<replacefilter token="@@ENTITYNAME@@" value="${entity.group.name}.xmi" />
@@ -1914,6 +1934,8 @@
 			<replacefilter token="@@PACKAGE_NAME@@" value="${entity.package.name}" />
 			<replacefilter token="@@APPLICATION_NAME@@" value="${entity.group.name}" />
 		</replace>
+
+        <!--<copy file="${cacoresdk.dir}/conf/deploy.properties" tofile="c:/sb/models/deploy_${entity.group.name}.properties" />-->
 
         <echo message="${entity.group.name}.xmi" />
         <echo message="fixed_${entity.group.name}.xmi" />

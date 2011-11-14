@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.util;
+package edu.wustl.catissuecore.domain.util;
 
 import org.jdom.Document;
 import org.jdom.Element;

@@ -1,6 +1,12 @@
 <project name="run-tools file" basedir="." default="runClient">
-     <property name="service.url" value="https://127.0.0.1:48443/wsrf/services/cagrid/Catissue_cacore" />
-	 
+     <property name="service.url" value="https://127.0.0.1:9443/wsrf/services/cagrid/Catissue_cacore" />
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="./lib/ant-contrib.jar"/>
+        </classpath>
+    </taskdef>
+
 	<target name="runClient" depends="checkContribTasksDefined, defineContribTasks,checkGlobus, defineClasspaths" description="Run the sample Client">
         <echo message="Connecting to service: ${service.url}" />
         <java failonerror="true" classname="edu.wustl.catissuecore.domain.client.Catissue_cacoreClient" classpathref="run.classpath" fork="yes">
@@ -253,4 +259,63 @@
 
     <!--END     Writable API targets-->
 
+    <!-- START Service rebuild -->
+    <target name="updateGridService" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths">
+        <foreach target="processDozer" param="fullFileName" inheritall="true">
+            <fileset dir="./de_codegen/artifacts" casesensitive="yes">
+                <include name="**/*-dozer-files.jar"/>
+            </fileset>
+        </foreach>
+        <delete>
+            <fileset dir="./de_codegen/artifacts">
+                <include name="*.jar" />
+            </fileset>
+        </delete>
+        <delete>
+            <fileset dir="./temp" />
+        </delete>
+    </target>
+
+    <target name="processDozer">
+        <basename property="filename" file="${fullFileName}"/>
+        <echo message="Processing: ${filename} "/>
+        <mkdir dir="./temp/${filename}" />
+        <unjar src="${fullFileName}" dest="./temp/${filename}" />
+
+        <java failonerror="true" classname="edu.wustl.catissuecore.domain.util.DozerMerger" fork="yes">
+            <classpath>
+                <fileset dir="build/lib/"><include name="*.jar" /></fileset>
+                <fileset dir="lib/"><include name="*.jar" /></fileset>
+            </classpath>
+            <arg value="mappings"/>
+            <arg value="./temp/${filename}/DozerBeanMapping.xml"/>
+            <arg value="./src/DozerBeanMapping.xml"/>
+            <arg value="./src/DozerBeanMapping-result.xml"/>
+        </java>
+
+        <java failonerror="true" classname="edu.wustl.catissuecore.domain.util.DozerMerger" fork="yes">
+            <classpath>
+                <fileset dir="build/lib/"><include name="*.jar" /></fileset>
+                <fileset dir="lib/"><include name="*.jar" /></fileset>
+            </classpath>
+            <arg value="properties"/>
+            <arg value="./temp/${filename}/genericCustomConverterParentRef.properties"/>
+            <arg value="./src/edu/wustl/catissuecore/domain/genericCustomConverterParentRef.properties"/>
+            <arg value="./src/edu/wustl/catissuecore/domain/genericCustomConverterParentRef-result.properties"/>
+        </java>
+
+        <java failonerror="true" classname="edu.wustl.catissuecore.domain.util.DozerMerger" fork="yes">
+            <classpath>
+                <fileset dir="build/lib/"><include name="*.jar" /></fileset>
+                <fileset dir="lib/"><include name="*.jar" /></fileset>
+            </classpath>
+            <arg value="properties"/>
+            <arg value="./temp/${filename}/genericCustomConverterSets.properties"/>
+            <arg value="./src/edu/wustl/catissuecore/domain/genericCustomConverterSets.properties"/>
+            <arg value="./src/edu/wustl/catissuecore/domain/genericCustomConverterSets-result.properties"/>
+        </java>
+
+    </target>
+
+    <!-- END -->
 </project>
