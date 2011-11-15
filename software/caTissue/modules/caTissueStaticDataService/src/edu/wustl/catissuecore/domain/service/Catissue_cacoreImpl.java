@@ -27,9 +27,7 @@ public class Catissue_cacoreImpl extends Catissue_cacoreImplBase {
 		return ex;
 	}
 
-	public edu.wustl.common.domain.ws.AbstractDomainObject insert(
-			edu.wustl.common.domain.ws.AbstractDomainObject object)
-			throws RemoteException, QueryProcessingExceptionType {
+  public edu.wustl.common.domain.ws.AbstractDomainObject insert(edu.wustl.common.domain.ws.AbstractDomainObject object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
 
 		log.debug(">>> INSERTING: " + object.getClass());
 		edu.wustl.common.domain.ws.AbstractDomainObject ado = null;
@@ -42,9 +40,7 @@ public class Catissue_cacoreImpl extends Catissue_cacoreImplBase {
 		return ado;
 	}
 
-	public edu.wustl.common.domain.ws.AbstractDomainObject update(
-			edu.wustl.common.domain.ws.AbstractDomainObject object)
-			throws RemoteException, QueryProcessingExceptionType {
+  public edu.wustl.common.domain.ws.AbstractDomainObject update(edu.wustl.common.domain.ws.AbstractDomainObject object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
 		edu.wustl.common.domain.ws.AbstractDomainObject ado = null;
 		try {
 			ado = getClient().updateWsObject(object);
@@ -54,9 +50,7 @@ public class Catissue_cacoreImpl extends Catissue_cacoreImplBase {
 		return ado;
 	}
 
-	public edu.wustl.common.domain.ws.AbstractDomainObject disable(
-			edu.wustl.common.domain.ws.AbstractDomainObject object)
-			throws RemoteException, QueryProcessingExceptionType {
+  public edu.wustl.common.domain.ws.AbstractDomainObject disable(edu.wustl.common.domain.ws.AbstractDomainObject object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
 		edu.wustl.common.domain.ws.AbstractDomainObject ado = null;
 		WAPIClient client = null;
 		try {

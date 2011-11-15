@@ -521,737 +521,257 @@
   <ns46:Extension name="cagrid_metadata" version="1.4" xsi:type="ns46:ExtensionType"/>
   <ns46:Extension name="data" version="1.4" xsi:type="ns46:ExtensionType">
    <ns46:ExtensionData>
-    <ns45:Data xsi:type="ns45:Data" xmlns:ns45="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension">
-                         <ns45:ServiceFeatures useGridIdentifiers="false" useTransfer="false" useWsEnumeration="false" xsi:type="ns45:ServiceFeatures">
-                          <ns45:ServiceStyle name="caCORE SDK v 4.2" version="1.4" xsi:type="ns45:ServiceStyle"/>
+    <ns47:Data xsi:type="ns47:Data" xmlns:ns47="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension">
+         <ns47:ServiceFeatures useGridIdentifiers="false" useTransfer="false" useWsEnumeration="false" xsi:type="ns47:ServiceFeatures">
+          <ns47:ServiceStyle name="caCORE SDK v 4.2" version="1.4" xsi:type="ns47:ServiceStyle"/>
 
+     </ns47:ServiceFeatures>
 
+         <ns48:DataServiceAuditors xsi:type="ns48:DataServiceAuditors" xmlns:ns48="http://gov.nih.nci.cagrid.data/Auditing"/>
 
+         <ns47:ModelInformation source="preBuilt" xsi:type="ns47:ModelInformation">
+          <ns49:UMLProjectIdentifer identifier="catissue_cacore" version="2.0" xsi:type="ns49:UMLProjectIdentifer" xmlns:ns49="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
 
+          <ns47:ModelPackage packageName="edu.wustl.catissuecore.domain.deintegration" xsi:type="ns47:ModelPackage">
+           <ns47:ModelClass selected="true" shortClassName="SCGRecordEntry" targetable="true" xsi:type="ns47:ModelClass"/>
 
-     </ns45:ServiceFeatures>
+           <ns47:ModelClass selected="true" shortClassName="SpecimenRecordEntry" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ActionApplicationRecordEntry" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ParticipantRecordEntry" targetable="true" xsi:type="ns47:ModelClass"/>
 
+      </ns47:ModelPackage>
 
+          <ns47:ModelPackage packageName="edu.wustl.common.domain" xsi:type="ns47:ModelPackage">
+           <ns47:ModelClass selected="true" shortClassName="AbstractDomainObject" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                         <ns46:DataServiceAuditors xsi:type="ns46:DataServiceAuditors" xmlns:ns46="http://gov.nih.nci.cagrid.data/Auditing"/>
+      </ns47:ModelPackage>
 
+          <ns47:ModelPackage packageName="edu.wustl.catissuecore.domain.pathology" xsi:type="ns47:ModelPackage">
+           <ns47:ModelClass selected="true" shortClassName="IdentifiedSurgicalPathologyReport" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ReportSection" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="Concept" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ReportContent" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                         <ns45:ModelInformation source="preBuilt" xsi:type="ns45:ModelInformation">
-                          <ns47:UMLProjectIdentifer identifier="catissuecore" version="2.0" xsi:type="ns47:UMLProjectIdentifer" xmlns:ns47="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+           <ns47:ModelClass selected="true" shortClassName="PathologyReportReviewParameter" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="QuarantineEventParameter" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ConceptReferentClassification" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="XMLContent" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ReportLoaderQueue" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                          <ns45:ModelPackage packageName="edu.wustl.catissuecore.domain.deintegration" xsi:type="ns45:ModelPackage">
-                           <ns45:ModelClass selected="true" shortClassName="SCGRecordEntry" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="SurgicalPathologyReport" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="SemanticType" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="BinaryContent" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ConceptReferent" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="TextContent" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="SpecimenRecordEntry" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="DeidentifiedSurgicalPathologyReport" targetable="true" xsi:type="ns47:ModelClass"/>
 
+      </ns47:ModelPackage>
 
+          <ns47:ModelPackage packageName="edu.wustl.catissuecore.domain.sop" xsi:type="ns47:ModelPackage">
+           <ns47:ModelClass selected="true" shortClassName="SOP" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="AbstractApplication" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="Action" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="ActionApplicationRecordEntry" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="ActionApplication" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="SOPApplication" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="DefaultAction" targetable="true" xsi:type="ns47:ModelClass"/>
 
+      </ns47:ModelPackage>
 
+          <ns47:ModelPackage packageName="edu.wustl.catissuecore.domain.shippingtracking" xsi:type="ns47:ModelPackage">
+           <ns47:ModelClass selected="true" shortClassName="BaseShipment" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="ParticipantRecordEntry" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="Shipment" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ShipmentRequest" targetable="true" xsi:type="ns47:ModelClass"/>
 
+      </ns47:ModelPackage>
 
+          <ns47:ModelPackage packageName="edu.common.dynamicextensions.domain.integration" xsi:type="ns47:ModelPackage">
+           <ns47:ModelClass selected="true" shortClassName="AbstractFormContext" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="AbstractRecordEntry" targetable="true" xsi:type="ns47:ModelClass"/>
 
-      </ns45:ModelPackage>
+      </ns47:ModelPackage>
 
+          <ns47:ModelPackage packageName="edu.wustl.catissuecore.domain" xsi:type="ns47:ModelPackage">
+           <ns47:ModelClass selected="true" shortClassName="ReceivedEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ClinicalDiagnosis" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="OrderItem" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ContainerType" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                          <ns45:ModelPackage packageName="edu.wustl.common.domain" xsi:type="ns45:ModelPackage">
-                           <ns45:ModelClass selected="true" shortClassName="AbstractDomainObject" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="ContainerPosition" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="StudyFormContext" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ExternalIdentifier" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="SpecimenArrayOrderItem" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="User" targetable="true" xsi:type="ns47:ModelClass"/>
 
-      </ns45:ModelPackage>
+           <ns47:ModelClass selected="true" shortClassName="ParticipantMedicalIdentifier" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="NewSpecimenArrayOrderItem" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="CellSpecimenRequirement" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="AbstractPosition" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="FluidSpecimenRequirement" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                          <ns45:ModelPackage packageName="edu.wustl.catissuecore.domain.pathology" xsi:type="ns45:ModelPackage">
-                           <ns45:ModelClass selected="true" shortClassName="IdentifiedSurgicalPathologyReport" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="Site" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="FrozenEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="FluidSpecimen" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="SpecimenCharacteristics" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="MolecularSpecimen" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="ReportSection" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="OrderDetails" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="TransferEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="TissueSpecimenReviewEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="SpecimenArray" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="FluidSpecimenReviewEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="Concept" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="SpunEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="SpecimenRequirement" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="DistributionProtocol" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="SpecimenArrayContent" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="Race" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="ReportContent" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="SpecimenProtocol" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="CollectionProtocolRegistration" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ConsentTier" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="DistributedItem" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="SpecimenArrayType" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="PathologyReportReviewParameter" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="CellSpecimenReviewParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ProcedureEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ConsentTierStatus" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="SpecimenPosition" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="CellSpecimen" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="QuarantineEventParameter" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="Specimen" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="PathologicalCaseOrderItem" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="TissueSpecimen" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="Department" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="Distribution" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="ConceptReferentClassification" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="ExistingSpecimenOrderItem" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="TissueSpecimenRequirement" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="AbstractSpecimenCollectionGroup" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="Container" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="StorageType" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="XMLContent" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="Capacity" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="SpecimenCollectionGroup" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="SpecimenEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="Institution" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ThawEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="ReportLoaderQueue" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="NewSpecimenOrderItem" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="DistributionSpecimenRequirement" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="DerivedSpecimenOrderItem" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="MolecularSpecimenReviewParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="Password" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="SurgicalPathologyReport" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="CancerResearchGroup" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="CheckInCheckOutEventParameter" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="StorageContainer" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ConsentTierResponse" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ReviewEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="SemanticType" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="FixedEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="SpecimenOrderItem" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="MolecularSpecimenRequirement" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="CollectionEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="Biohazard" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="BinaryContent" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="CollectionProtocol" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="DisposalEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="EmbeddedEventParameters" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="Participant" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="Address" targetable="true" xsi:type="ns47:ModelClass"/>
 
-                           <ns45:ModelClass selected="true" shortClassName="ConceptReferent" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns47:ModelClass selected="true" shortClassName="CollectionProtocolEvent" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="AbstractSpecimen" targetable="true" xsi:type="ns47:ModelClass"/>
 
+           <ns47:ModelClass selected="true" shortClassName="ExistingSpecimenArrayOrderItem" targetable="true" xsi:type="ns47:ModelClass"/>
 
+      </ns47:ModelPackage>
 
+     </ns47:ModelInformation>
 
-                           <ns45:ModelClass selected="true" shortClassName="TextContent" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="DeidentifiedSurgicalPathologyReport" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-      </ns45:ModelPackage>
-
-
-
-
-
-                          <ns45:ModelPackage packageName="edu.wustl.catissuecore.domain.sop" xsi:type="ns45:ModelPackage">
-                           <ns45:ModelClass selected="true" shortClassName="SOP" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="AbstractApplication" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Action" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ActionApplication" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SOPApplication" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="DefaultAction" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-      </ns45:ModelPackage>
-
-
-
-
-
-                          <ns45:ModelPackage packageName="edu.wustl.catissuecore.domain.shippingtracking" xsi:type="ns45:ModelPackage">
-                           <ns45:ModelClass selected="true" shortClassName="BaseShipment" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Shipment" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ShipmentRequest" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-      </ns45:ModelPackage>
-
-
-
-
-
-                          <ns45:ModelPackage packageName="edu.common.dynamicextensions.domain.integration" xsi:type="ns45:ModelPackage">
-                           <ns45:ModelClass selected="true" shortClassName="AbstractFormContext" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="AbstractRecordEntry" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-      </ns45:ModelPackage>
-
-
-
-
-
-                          <ns45:ModelPackage packageName="edu.wustl.catissuecore.domain" xsi:type="ns45:ModelPackage">
-                           <ns45:ModelClass selected="true" shortClassName="ReceivedEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ClinicalDiagnosis" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="OrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ContainerType" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ContainerPosition" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="StudyFormContext" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ExternalIdentifier" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SpecimenArrayOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="User" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ParticipantMedicalIdentifier" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="NewSpecimenArrayOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="CellSpecimenRequirement" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="AbstractPosition" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="FluidSpecimenRequirement" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Site" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="FrozenEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="FluidSpecimen" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SpecimenCharacteristics" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="MolecularSpecimen" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="OrderDetails" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="TransferEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="TissueSpecimenReviewEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SpecimenArray" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="FluidSpecimenReviewEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SpunEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SpecimenRequirement" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="DistributionProtocol" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SpecimenArrayContent" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Race" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SpecimenProtocol" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="CollectionProtocolRegistration" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ConsentTier" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="DistributedItem" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SpecimenArrayType" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="CellSpecimenReviewParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ProcedureEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ConsentTierStatus" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SpecimenPosition" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="CellSpecimen" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Specimen" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="PathologicalCaseOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="TissueSpecimen" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Department" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Distribution" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ExistingSpecimenOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="TissueSpecimenRequirement" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="AbstractSpecimenCollectionGroup" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Container" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="StorageType" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Capacity" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SpecimenCollectionGroup" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SpecimenEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Institution" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ThawEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="NewSpecimenOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="DistributionSpecimenRequirement" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="DerivedSpecimenOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="MolecularSpecimenReviewParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Password" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="CancerResearchGroup" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="CheckInCheckOutEventParameter" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="StorageContainer" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ConsentTierResponse" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ReviewEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="FixedEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="SpecimenOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="MolecularSpecimenRequirement" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="CollectionEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Biohazard" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="CollectionProtocol" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="DisposalEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="EmbeddedEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Participant" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="Address" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="CollectionProtocolEvent" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="AbstractSpecimen" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-                           <ns45:ModelClass selected="true" shortClassName="ExistingSpecimenArrayOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
-
-
-
-
-
-      </ns45:ModelPackage>
-
-
-
-
-
-     </ns45:ModelInformation>
-
-
-
-
-
-    </ns45:Data>
+    </ns47:Data>
    </ns46:ExtensionData>
   </ns46:Extension>
  </ns46:Extensions>
