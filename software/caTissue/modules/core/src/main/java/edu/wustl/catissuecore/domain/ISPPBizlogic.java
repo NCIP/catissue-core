@@ -79,7 +79,7 @@ public interface ISPPBizlogic
 	 */
 	ActionApplication insertActionApplication(IBizLogic actionAppBizLogic,
 			SpecimenProcessingProcedureApplication processingSPPApplication, String reasonOfDeviation, User user,
-			ActionApplicationRecordEntry actionAppRecordEntry)throws BizLogicException;
+			Date dateOfEvent, ActionApplicationRecordEntry actionAppRecordEntry)throws BizLogicException;
 
 	/**
 	 * Update action application.

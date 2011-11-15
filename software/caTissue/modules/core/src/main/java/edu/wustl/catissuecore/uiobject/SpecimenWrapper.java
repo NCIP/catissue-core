@@ -79,11 +79,11 @@ public class SpecimenWrapper implements ISPPBizlogic
 	@Override
 	public ActionApplication insertActionApplication(IBizLogic actionAppBizLogic,
 			SpecimenProcessingProcedureApplication processingSPPApplication, String reasonOfDeviation, User user,
-			ActionApplicationRecordEntry actionAppRecordEntry) throws BizLogicException
+			Date dateOfEvent, ActionApplicationRecordEntry actionAppRecordEntry) throws BizLogicException
 	{
 		ActionApplication actionApplication = new ActionApplication();
 		actionApplication.setReasonDeviation(reasonOfDeviation);
-		actionApplication.setTimestamp(new Date());
+		actionApplication.setTimestamp((dateOfEvent != null) ? dateOfEvent : new Date());
 		actionApplication.setSppApplication(processingSPPApplication);
 		actionApplication.setSpecimen(this.specimen);
 		actionApplication.setPerformedBy(user);

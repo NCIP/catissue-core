@@ -456,13 +456,10 @@ public class SPPEventProcessor
 		//Fetch User identifier from map.
 		String userId = (String) staticParameters.get(Constants.USER_ID);
 
+		Date dateOfEvent = populateTimeStamp(staticParameters);
 		ActionApplication actionApplication = sppBizlogicObject.insertActionApplication(actionAppBizLogic,
 				processingSPPApplication, staticParameters.get(Constants.REASON_DEVIATION)
-						.toString(), getUser(userId), actionAppRecordEntry);
-
-		actionApplication.setApplicationRecordEntry(actionAppRecordEntry);
-		Date dateOfEvent = populateTimeStamp(staticParameters);
-		sppBizlogicObject.updateActionApplication(actionAppBizLogic, dateOfEvent, actionApplication);
+						.toString(), getUser(userId), dateOfEvent, actionAppRecordEntry);
 
 		IntegrateDEData integrateDEData = new IntegrateDEData();
 		integrateDEData.associateRecords(formContext.getContainerId(),
@@ -825,30 +822,30 @@ public class SPPEventProcessor
 			Map<String, Object> parameterMap) throws BizLogicException
 	{
 		Map<AbstractFormContext, Map<String, Object>> formContextParameterMap = new HashMap<AbstractFormContext, Map<String, Object>>();
-		Map<String, Object> controlValueMap;
-
-		for (String parameterName : parameterMap.keySet())
-		{
-			if (parameterName.indexOf(Constants.CONTROL_DELIMITER) != -1)
-			{
-				String formContextId = parameterName.split(Constants.CONTROL_DELIMITER)[0];
-				//retrieve formContext object
-				Action action = getActionById(formContextId);
-				if (action != null)
-				{
-					//if formContextParameterMap contains controlValueMap then use that map else create new map
-					if (formContextParameterMap.get(action) == null)
-					{
-						controlValueMap = new HashMap<String, Object>();
-					}
-					else
-					{
-						controlValueMap = formContextParameterMap.get(action);
-					}
-					controlValueMap.put(parameterName.split(Constants.CONTROL_DELIMITER)[1],
-							((Object[]) parameterMap.get(parameterName))[0]);
-					formContextParameterMap.put(action, controlValueMap);
+		Map<String, Action> ctxIdActionMap = new HashMap<String, Action>();
+		
+		for (String parameterName : parameterMap.keySet()) {
+			String[] paramTokens = parameterName.split(Constants.CONTROL_DELIMITER);
+			if (paramTokens.length == 1) {
+				continue;
+			}
+			
+			Action action = null;
+			if (ctxIdActionMap.containsKey(paramTokens[0])) {
+				action = ctxIdActionMap.get(paramTokens[0]);
+			} else {
+				action = getActionById(paramTokens[0]);
+				ctxIdActionMap.put(paramTokens[0], action);
+			}
+			
+			if (action != null) {
+				Map<String, Object> controlValueMap = formContextParameterMap.get(action);
+				if (controlValueMap == null) {
+					controlValueMap = new HashMap<String, Object>();
 				}
+				
+				controlValueMap.put(paramTokens[1], ((Object[])parameterMap.get(parameterName))[0]);
+				formContextParameterMap.put(action, controlValueMap);
 			}
 		}
 		return formContextParameterMap;
@@ -889,34 +886,33 @@ public class SPPEventProcessor
 			Map<String, Object> parameterMap) throws BizLogicException
 	{
 		Map<AbstractFormContext, Map<String, Object>> formContextParameterMap = new HashMap<AbstractFormContext, Map<String, Object>>();
-		Map<String, Object> controlValueMap;
-
-		for (String parameterName : parameterMap.keySet())
-		{
-			if (parameterName.indexOf(Constants.CONTROL_DELIMITER) != -1)
-			{
-				String formContextId = parameterName.split(Constants.CONTROL_DELIMITER)[0];
-				//retrieve formContext object
-				AbstractFormContext formContext = getDefaultActionById(formContextId);
-				if (formContext == null)
-				{
-					formContext = getActionById(formContextId);
+		Map<String, AbstractFormContext> ctxIdActionMap = new HashMap<String, AbstractFormContext>();
+		
+		for (String parameterName : parameterMap.keySet()) {
+			String[] paramTokens = parameterName.split(Constants.CONTROL_DELIMITER);
+			if (paramTokens.length == 1) {
+				continue;
+			}
+			
+			AbstractFormContext formContext = null;
+			if (ctxIdActionMap.containsKey(paramTokens[0])) {
+				formContext = ctxIdActionMap.get(paramTokens[0]);
+			} else {
+				formContext = getDefaultActionById(paramTokens[0]);
+				if (formContext == null) {
+					formContext = getActionById(paramTokens[0]);
 				}
-				if (formContext != null)
-				{
-					//if formContextParameterMap contains controlValueMap then use that map else create new map
-					if (formContextParameterMap.get(formContext) == null)
-					{
-						controlValueMap = new HashMap<String, Object>();
-					}
-					else
-					{
-						controlValueMap = formContextParameterMap.get(formContext);
-					}
-					controlValueMap.put(parameterName.split(Constants.CONTROL_DELIMITER)[1],
-							((Object[]) parameterMap.get(parameterName))[0]);
-					formContextParameterMap.put(formContext, controlValueMap);
+				ctxIdActionMap.put(paramTokens[0], formContext);
+			}
+			
+			if (formContext != null) {
+				Map<String, Object> controlValueMap = formContextParameterMap.get(formContext);
+				if (controlValueMap == null) {
+					controlValueMap = new HashMap<String, Object>();
 				}
+				
+				controlValueMap.put(paramTokens[1], ((Object[])parameterMap.get(parameterName))[0]);
+				formContextParameterMap.put(formContext, controlValueMap);
 			}
 		}
 		return formContextParameterMap;
