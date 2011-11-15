@@ -197,6 +197,7 @@ public class MultipleXMIsToXMLConverter {
 	}
 
 	public static void main(String[] args) {
+		System.out.println("Example usage: -i src\\test\\resources\\caTissueCore_v2.0.xmi -i src\\test\\resources\\org_specimen_model.xmi -o src\\test\\resources\\merged.xml");
 		List<File> xmiFiles = new ArrayList<File>();
 		File domainModelFile = new File("merged_domain_model.xml");
 		for (int i = 0; i < args.length; i++) {
