@@ -4,6 +4,7 @@
     <property name="src.dir" value="${basedir}/src/main/java"/>
     <property name="lib.dir" value="${basedir}/ext/dependencies"/>
     <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="xsdFile" value="${basedir}/gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.xsd"/>
 
     <path id="cp">
         <fileset dir="${lib.dir}/default/jars"><include name="**/*.jar"/></fileset>
@@ -53,7 +54,7 @@
             <classpath refid="cp" />
             <arg value="../caTissueStaticDataService"/>
             <arg value="Catissue_cacore"/>
-            <arg value="./gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.xsd"/>
+            <arg value="${xsdFile}"/>
         </java>
     </target>
 

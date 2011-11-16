@@ -292,7 +292,9 @@
     <target name="importXSD">
         <basename property="filename" file="${fullFileName}"/>
         <echo message="Processing: ${filename} "/>
-        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="runUpdate" dir="../DECodeGen/" />
+        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="runUpdate" dir="../DECodeGen/">
+            <property name="xsdFile" value="${fullFileName}" />
+        </ant>
     </target>
 
     <target name="processDozer">
