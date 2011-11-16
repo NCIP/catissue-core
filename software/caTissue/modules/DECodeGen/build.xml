@@ -1,0 +1,49 @@
+<project default="all" name="Dynamic Extensions Code Generation for DataService" basedir=".">
+
+    <property name="target.dir" value="${basedir}/target"/>
+    <property name="src.dir" value="${basedir}/src/main/java"/>
+    <property name="lib.dir" value="${basedir}/ext/dependencies"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
+
+    <target name="init">
+        <mkdir dir="${target.dir}/classes" />
+        <mkdir dir="${dist.dir}" />
+    </target>
+
+    <target name="clean">
+        <delete dir="${target.dir}"/>
+    </target>
+
+    <target name="compile">
+        <javac srcdir="${src.dir}" destdir="${target.dir}/classes">
+            <classpath>
+                <fileset dir="${lib.dir}/default/jars"><include name="**/*.jar"/></fileset>
+                <fileset dir="${lib.dir}/commons"><include name="**/*.jar"/></fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="jar">
+        <copy todir="${target.dir}/classes">
+            <fileset dir="${basedir}"><include name="schema/*" /></fileset>
+            <fileset dir="${basedir}"><include name="log" /></fileset>
+            <fileset dir="${basedir}"><include name="conf/*" /></fileset>
+        </copy>
+        <jar basedir="${target.dir}/classes" destfile="${dist.dir}/de.ds.codegen.jar" />
+    </target>
+
+    <target name="all" depends="init, compile, jar, displayUsage"/>
+
+    <target name="displayUsage">
+        <echo message="=================================="/>
+        <echo message="  USAGE:"/>
+        <echo message="  MAKE SURE THE JAR FILE de.ds.codegen.jar IS IN YOUR CLASSPATH"/>
+        <echo message="  INVOKE CLASS edu.wustl.catissuecore.IntroduceFacade "/>
+        <echo message="  AND PASS 3 ARGUMENTS: "/>
+        <echo message="  a. DATASERVICE FOLDER LOCATION "/>
+        <echo message="  b. DATASERVICE NAME "/>
+        <echo message="  c. XSD FILE TO BE IMPORTED INTO THE DATASERVICE "/>
+        <echo message="=================================="/>
+    </target>
+
+</project>
