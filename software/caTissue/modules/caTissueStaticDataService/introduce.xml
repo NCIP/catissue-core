@@ -779,23 +779,23 @@
   <ns47:Property description="" isFromETC="false" key="queryProcessorClass" value="edu.wustl.catissuecore.cagrid.CQLQueryProcessor"/>
   <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorClass" value="edu.wustl.catissuecore.cagrid.CQL2QueryProcessor"/>
   <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationName" value="catissue_cacore"/>
-  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useLocalApiFlag" value="false"/>
-  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationHostName" value="localhost"/>
-  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationHostPort" value="8080"/>
-  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useHttpsUrl" value="false"/>
+  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useLocalApiFlag" value="@USE_LOCAL_API_FLAG@"/>
+  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationHostName" value="@APPLICATION_HOST@"/>
+  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationHostPort" value="@APPLICATION_PORT@"/>
+  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useHttpsUrl" value="@USE_HTTPS_URL@"/>
   <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationName" value="catissue_cacore"/>
-  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useLocalApiFlag" value="false"/>
-  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationHostName" value="localhost"/>
-  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationHostPort" value="8080"/>
-  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useHttpsUrl" value="false"/>
-  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useStaticLogin" value="false"/>
-  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useGridIdentityLogin" value="true"/>
-  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_staticLoginPass" value="Login123"/>
-  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_staticLoginUser" value="admin@admin.com"/>
-  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useStaticLogin" value="false"/>
-  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useGridIdentityLogin" value="true"/>
-  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_staticLoginPass" value="Login123"/>
-  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_staticLoginUser" value="admin@admin.com"/>
+  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useLocalApiFlag" value="@USE_LOCAL_API_FLAG@"/>
+  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationHostName" value="@APPLICATION_HOST@"/>
+  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationHostPort" value="@APPLICATION_PORT@"/>
+  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useHttpsUrl" value="@USE_HTTPS_URL@"/>
+  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useStaticLogin" value="@STATIC_LOGIN_USER@"/>
+  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useGridIdentityLogin" value="@USE_GRID_IDENTITY_LOGIN@"/>
+  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_staticLoginPass" value="@STATIC_LOGIN_PASS@"/>
+  <ns47:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_staticLoginUser" value="@STATIC_LOGIN_USER@"/>
+  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useStaticLogin" value="@STATIC_LOGIN_USER@"/>
+  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useGridIdentityLogin" value="@USE_GRID_IDENTITY_LOGIN@"/>
+  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_staticLoginPass" value="@STATIC_LOGIN_PASS@"/>
+  <ns47:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_staticLoginUser" value="@STATIC_LOGIN_USER@"/>
   <ns47:Property description="The location of the server-config.wsdd file" isFromETC="true" key="serverConfigLocation" value="server-config.wsdd"/>
   <ns47:Property description="The name of the class to use for CQL query structure validation" isFromETC="false" key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
   <ns47:Property description="The name of the class to use for CQL validation against a domain model" isFromETC="false" key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>
