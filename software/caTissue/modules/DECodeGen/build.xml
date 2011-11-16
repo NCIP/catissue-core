@@ -7,7 +7,6 @@
 
     <path id="cp">
         <fileset dir="${lib.dir}/default/jars"><include name="**/*.jar"/></fileset>
-        <fileset dir="${lib.dir}/commons"><include name="**/*.jar"/></fileset>
     </path>
 
     <target name="init">
