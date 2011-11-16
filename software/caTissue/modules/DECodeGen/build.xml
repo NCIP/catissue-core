@@ -51,9 +51,9 @@
                 <fileset dir="${dist.dir}"><include name="*.jar" /></fileset>
             </classpath>
             <classpath refid="cp" />
-            <arg value="ONE"/>
-            <arg value="TWO"/>
-            <arg value="THREE"/>
+            <arg value="../caTissueStaticDataService"/>
+            <arg value="Catissue_cacore"/>
+            <arg value="./gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.xsd"/>
         </java>
     </target>
 

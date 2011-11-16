@@ -62,7 +62,7 @@ public final class IntroduceFacade {
 		NamespaceType namespace = new NamespaceType();
 		namespace.setLocation("." + File.separator + schemaFile.getName());
 		namespace.setNamespace(schema.getTargetNamespace());
-		namespace.setPackageName(FilenameUtils.getBaseName(schemaFile.getName()));
+		namespace.setPackageName(FilenameUtils.getBaseName(schemaFile.getName()) + ".ws");
 
 		Map<String, XSComplexType> typeMap = schema.getComplexTypes();
 		List<SchemaElementType> typeList = new ArrayList<SchemaElementType>();
@@ -85,8 +85,15 @@ public final class IntroduceFacade {
 	}
 
 	public static void main(String[] args) throws Exception {
-        IntroduceFacade _if = new IntroduceFacade(new File("C:\\caTissue\\software\\caTissue\\modules\\caTissueStaticDataService"), "Catissue_cacore");
-        _if.addSchemaTypes(new File("c:\\caTissue\\!\\gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.xsd"));
+        if (args.length < 3) {
+            System.out.println("Pass 3 arguments. See Usage.");
+        }
+
+        for (String s:args) {
+            System.out.println(s);
+        }
+        IntroduceFacade _if = new IntroduceFacade(new File(args[0]), args[1]);
+        _if.addSchemaTypes(new File(args[2]));
 	}
 
 }
