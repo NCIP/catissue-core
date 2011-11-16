@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="gme://gov.nih.nci.cagrid.introduce/1/DeploymentValidator"
+	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/DeploymentValidator">
+	<complexType name="DeploymentValidatorDescriptor">
+		<sequence>
+			<element name="ValidatorDescriptor" type="tns:ValidatorDescriptor" minOccurs="0" maxOccurs="unbounded"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="ValidatorDescriptor">
+		<attribute name="validationClass" type="string"></attribute>
+	</complexType>
+</schema>

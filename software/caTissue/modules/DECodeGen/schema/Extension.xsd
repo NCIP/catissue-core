@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="gme://gov.nih.nci.cagrid.introduce/1/Extension"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:grape="http://www.cagrid.org/1/grape"
+	targetNamespace="gme://gov.nih.nci.cagrid.introduce/1/Extension" elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.cagrid.org/1/grape" schemaLocation="../ext/dependencies/xsd/grape/xsd/grape.xsd"/>
+	<xs:element name="Extensions" type="ExtensionsType"/>
+	<xs:complexType name="ExtensionsType">
+		<xs:sequence>
+			<xs:element ref="Extension" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Extension" type="ExtensionType"/>
+	<xs:element name="ExtensionDescription">
+		<xs:annotation>
+			<xs:documentation>The extension type states whether or not this is a discovery type or
+				service type extension.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+		    <xs:sequence>
+			  <xs:choice>
+			  	  <xs:element ref="DiscoveryExtensionDescription"/>
+				  <xs:element ref="ServiceExtensionDescription"/>
+				  <xs:element ref="ResourcePropertyEditorExtensionDescription"/>
+				  <xs:element ref="AuthorizationExtensionDescription"/>
+				  <xs:element ref="DeploymentExtensionDescription"/>
+				  <xs:element ref="IntroduceGDEExtensionDescriptionType"/>
+			  </xs:choice>
+			  <xs:element ref="UpgradesDescription" minOccurs="0" maxOccurs="1"/>
+			</xs:sequence>
+			<xs:attribute name="version" type="xs:string"/>
+			<xs:attribute name="extensionType" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="IntroduceGDEExtensionDescriptionType" type="IntroduceGDEExtensionDescriptionType"/>
+	<xs:complexType name="IntroduceGDEExtensionDescriptionType">
+		<xs:sequence>
+		    <xs:element ref="grape:menus" minOccurs="0" maxOccurs="1"/>
+		    <xs:element ref="grape:configuration" minOccurs="0" maxOccurs="1"/>
+		    <xs:element ref="Properties"/>
+		</xs:sequence>
+		<xs:attribute name="displayName" type="xs:string" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	
+	<xs:element name="UpgradesDescription" type="UpgradesDescriptionType">
+		<xs:annotation>
+			<xs:documentation>Provides upgrade information for any extension type</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="UpgradesDescriptionType">
+	  <xs:sequence>
+	     <xs:element ref="UpgradeDescription" minOccurs="0" maxOccurs="unbounded"/>
+	  </xs:sequence>
+	</xs:complexType>
+	<xs:element name="UpgradeDescription" type="UpgradeDescriptionType"/>
+	<xs:complexType name="UpgradeDescriptionType">
+	  <xs:attribute name="fromVersion" type="xs:string" use="optional"/>
+	  <xs:attribute name="toVersion" type="xs:string" use="required"/>
+	  <xs:attribute name="upgradeClass" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:element name="ResourcePropertyEditorExtensionDescription"
+		type="ResourcePropertyEditorExtensionDescriptionType">
+		<xs:annotation>
+			<xs:documentation>Enables custom editors to be used for editing resource properties of specific data types.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ResourcePropertyEditorExtensionDescriptionType">
+		<xs:sequence>
+			<xs:element name="ResourcePropertyEditorPanel" type="xs:string" minOccurs="1"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Must extend the ResourcePropertyEditorPanel</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="Properties"/>
+		</xs:sequence>
+		<xs:attribute name="qname" type="xs:QName" use="required"/>
+		<xs:attribute name="displayName" type="xs:string" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:element name="DeploymentExtensionDescription"
+		type="DeploymentExtensionDescriptionType">
+		<xs:annotation>
+			<xs:documentation>This extension will be used to add functionality to the deployment window.</xs:documentation>
+		</xs:annotation>
+   </xs:element>
+	<xs:complexType name="DeploymentExtensionDescriptionType">
+		<xs:sequence>
+			<xs:element name="DeploymentUIPanel" type="xs:string" minOccurs="1"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Must extend the DeploymentUIPanel</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="Properties"/>
+		</xs:sequence>
+		<xs:attribute name="qname" type="xs:QName" use="required"/>
+		<xs:attribute name="displayName" type="xs:string" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:element name="DiscoveryExtensionDescription" type="DiscoveryExtensionDescriptionType">
+		<xs:annotation>
+			<xs:documentation>Enables type discovery componets, like filesystem or gme, to be plugged into the types panel in the modification viewer</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="DiscoveryExtensionDescriptionType">
+		<xs:sequence>
+			<xs:element name="DiscoveryToolsPanelExtension" type="xs:string" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Must extend the NamespaceTypeToolsComponent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DiscoveryPanelExtension" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Must extend the
+					NamespaceTypeDiscoveryComponent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="Properties"/>
+		</xs:sequence>
+		<xs:attribute name="displayName" type="xs:string" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:element name="ServiceExtensionDescription" type="ServiceExtensionDescriptionType"/>
+	<xs:complexType name="ServiceExtensionDescriptionType">
+		<xs:sequence>
+			<xs:element name="CreationPostProcessor" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Must implement the
+					CreationExtensionPostProcessor</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CreationUIDialog" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>GUI component that must extend a
+					CreationExtensionUIDialog</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CodegenPreProcessor" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>implement the CodegenExtensionPreProcessor</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CodegenPostProcessor" type="xs:string" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>implement the CodegenExtensionPostProcessor</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceModificationUIPanel" type="xs:string" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>ModificationViewer GUI component that must extend a
+						ServiceModificatoinUIPanel</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceDeploymentUIPanel" type="xs:string" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Deployment GUI component that must extend a
+						ServiceDeploymentUIPanel.  This must not edit anything introduce 
+						managed such as the model.  Only to be used for configuration etc.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceExtensionRemover" type="xs:string" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Class to implement for removing the extension from a service. Must extend the ServiceExtensionRemover interface.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceDeploymentValidator" type="xs:string" minOccurs="0"
+				maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Class that implements the DeploymentValidator interface.  This class should attempt to not depend on many jars and be light weight so that it can be deployed into the service so that it can be invoked when the service is deployed.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="Properties"/>
+		</xs:sequence>
+		<xs:attribute name="displayName" type="xs:string" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="isDeprecated" type="xs:boolean" use="optional"/>
+		<xs:attribute name="deprecatedDescription" type="xs:string" use="optional"/>
+		<xs:attribute name="shouldBeRemoved" type="xs:boolean" use="optional"/>
+	</xs:complexType>
+	<xs:element name="AuthorizationExtensionDescription"
+		type="AuthorizationExtensionDescriptionType"/>
+	<xs:complexType name="AuthorizationExtensionDescriptionType">
+		<xs:sequence>
+			<xs:element name="ServiceAuthorizationPanel" type="xs:string" minOccurs="0"
+				maxOccurs="1"/>
+			<xs:element name="MethodAuthorizationPanel" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="AuthorizationExtensionManager" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element ref="Properties"/>
+		</xs:sequence>
+		<xs:attribute name="displayName" type="xs:string" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:element name="Properties">
+		<xs:annotation>
+			<xs:documentation>To be used for extension configuration properties</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="makeGlobal" type="xs:boolean" use="optional"/>
+						<xs:attribute name="key" type="xs:string" use="required"/>
+						<xs:attribute name="value" type="xs:string" use="optional"/>
+						<xs:attribute name="displayName" type="xs:string" use="optional"/>
+						<xs:attribute name="description" type="xs:string" use="optional"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ExtensionType">
+		<xs:sequence>
+			<xs:element name="ExtensionData" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="extensionType" type="xs:string"/>
+		<xs:attribute name="version" type="xs:string" use="optional"/>
+	</xs:complexType>
+</xs:schema>

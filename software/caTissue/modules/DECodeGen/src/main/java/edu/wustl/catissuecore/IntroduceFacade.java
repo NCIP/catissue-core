@@ -54,19 +54,15 @@ public final class IntroduceFacade {
 		XSSchemaSet set = parser.getResult();
 		XSSchema schema = set.getSchema(1);
 
-		Utils.copyFile(schemaFile,
-				new File(getSchemasLocation(), schemaFile.getName()));
+		Utils.copyFile(schemaFile, new File(getSchemasLocation(), schemaFile.getName()));
 
 		final File introduceXML = new File(serviceDir, "introduce.xml");
-		ServiceDescription introService = (ServiceDescription) Utils
-				.deserializeDocument(introduceXML.getAbsolutePath(),
-						ServiceDescription.class);
+		ServiceDescription introService = (ServiceDescription) Utils.deserializeDocument(introduceXML.getAbsolutePath(), ServiceDescription.class);
 
 		NamespaceType namespace = new NamespaceType();
 		namespace.setLocation("." + File.separator + schemaFile.getName());
 		namespace.setNamespace(schema.getTargetNamespace());
-		namespace
-				.setPackageName(FilenameUtils.getBaseName(schemaFile.getName()));
+		namespace.setPackageName(FilenameUtils.getBaseName(schemaFile.getName()));
 
 		Map<String, XSComplexType> typeMap = schema.getComplexTypes();
 		List<SchemaElementType> typeList = new ArrayList<SchemaElementType>();
@@ -79,8 +75,7 @@ public final class IntroduceFacade {
 
 		CommonTools.addNamespace(introService, namespace);
 
-		Utils.serializeDocument(introduceXML.getAbsolutePath(), introService,
-				IntroduceConstants.INTRODUCE_SKELETON_QNAME);
+		Utils.serializeDocument(introduceXML.getAbsolutePath(), introService, IntroduceConstants.INTRODUCE_SKELETON_QNAME);
 
 		SyncTools sync = new SyncTools(serviceDir);
 		sync.sync();
@@ -89,8 +84,9 @@ public final class IntroduceFacade {
 
 	}
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args) throws Exception {
+        IntroduceFacade _if = new IntroduceFacade(new File("C:\\caTissue\\software\\caTissue\\modules\\caTissueStaticDataService"), "Catissue_cacore");
+        _if.addSchemaTypes(new File("c:\\caTissue\\!\\gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.xsd"));
 	}
 
 }
