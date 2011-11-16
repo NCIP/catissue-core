@@ -5,6 +5,11 @@
     <property name="lib.dir" value="${basedir}/ext/dependencies"/>
     <property name="dist.dir" value="${basedir}/dist"/>
 
+    <path id="cp">
+        <fileset dir="${lib.dir}/default/jars"><include name="**/*.jar"/></fileset>
+        <fileset dir="${lib.dir}/commons"><include name="**/*.jar"/></fileset>
+    </path>
+
     <target name="init">
         <mkdir dir="${target.dir}/classes" />
         <mkdir dir="${dist.dir}" />
@@ -16,10 +21,7 @@
 
     <target name="compile">
         <javac srcdir="${src.dir}" destdir="${target.dir}/classes">
-            <classpath>
-                <fileset dir="${lib.dir}/default/jars"><include name="**/*.jar"/></fileset>
-                <fileset dir="${lib.dir}/commons"><include name="**/*.jar"/></fileset>
-            </classpath>
+            <classpath refid="cp" />
         </javac>
     </target>
 
@@ -36,13 +38,24 @@
     <target name="displayUsage">
         <echo message="=================================="/>
         <echo message="  USAGE:"/>
-        <echo message="  MAKE SURE THE JAR FILE de.ds.codegen.jar IS IN YOUR CLASSPATH"/>
         <echo message="  INVOKE CLASS edu.wustl.catissuecore.IntroduceFacade "/>
         <echo message="  AND PASS 3 ARGUMENTS: "/>
         <echo message="  a. DATASERVICE FOLDER LOCATION "/>
         <echo message="  b. DATASERVICE NAME "/>
         <echo message="  c. XSD FILE TO BE IMPORTED INTO THE DATASERVICE "/>
         <echo message="=================================="/>
+    </target>
+
+    <target name="runUpgrade">
+        <java failonerror="true" classname="edu.wustl.catissuecore.IntroduceFacade" fork="yes">
+            <classpath>
+                <fileset dir="${dist.dir}"><include name="*.jar" /></fileset>
+            </classpath>
+            <classpath refid="cp" />
+            <arg value="ONE"/>
+            <arg value="TWO"/>
+            <arg value="THREE"/>
+        </java>
     </target>
 
 </project>
