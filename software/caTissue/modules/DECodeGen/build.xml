@@ -45,7 +45,7 @@
         <echo message="=================================="/>
     </target>
 
-    <target name="runUpgrade">
+    <target name="runUpdate">
         <java failonerror="true" classname="edu.wustl.catissuecore.IntroduceFacade" fork="no">
             <classpath>
                 <fileset dir="${dist.dir}"><include name="*.jar" /></fileset>
