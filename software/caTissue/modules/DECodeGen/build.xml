@@ -26,7 +26,6 @@
     <target name="jar">
         <copy todir="${target.dir}/classes">
             <fileset dir="${basedir}"><include name="schema/*" /></fileset>
-            <fileset dir="${basedir}"><include name="log" /></fileset>
             <fileset dir="${basedir}"><include name="conf/*" /></fileset>
         </copy>
         <jar basedir="${target.dir}/classes" destfile="${dist.dir}/de.ds.codegen.jar" />
