@@ -89,8 +89,9 @@ public final class IntroduceFacade {
             System.out.println("Pass 3 arguments. See Usage.");
         }
 
+        byte i = 0;
         for (String s:args) {
-            System.out.println(s);
+            System.out.println(new Character((char)(97 + i++)).toString() + ". " + s);
         }
         IntroduceFacade _if = new IntroduceFacade(new File(args[0]), args[1]);
         _if.addSchemaTypes(new File(args[2]));
