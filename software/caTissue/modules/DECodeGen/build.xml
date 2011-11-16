@@ -47,7 +47,8 @@
     </target>
 
     <target name="runUpdate">
-        <java failonerror="true" classname="edu.wustl.catissuecore.IntroduceFacade" fork="no">
+        <echo message="BASEDIR: ${basedir}" />
+        <java failonerror="true" classname="edu.wustl.catissuecore.IntroduceFacade" fork="no" dir="${basedir}">
             <classpath>
                 <fileset dir="${dist.dir}"><include name="*.jar" /></fileset>
             </classpath>
