@@ -260,22 +260,39 @@
     <!--END     Writable API targets-->
 
     <!-- START Service rebuild -->
-    <target name="updateGridService" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths">
+    <target name="updateService" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths">
+
+        <!-- XSD IMPORT -->
+        <foreach target="importXSD" param="fullFileName" inheritall="true">
+            <fileset dir="./de_codegen/xsd" casesensitive="yes">
+                <include name="**/*.xsd"/>
+            </fileset>
+        </foreach>
+
         <!-- DOZER MERGE -->
         <foreach target="processDozer" param="fullFileName" inheritall="true">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
                 <include name="**/*-dozer-files.jar"/>
             </fileset>
         </foreach>
+
         <!-- CLEAN UP -->
         <delete>
             <fileset dir="./de_codegen/artifacts">
                 <include name="*.jar" />
             </fileset>
         </delete>
+
         <delete>
             <fileset dir="./temp" />
         </delete>
+    </target>
+
+
+    <target name="importXSD">
+        <basename property="filename" file="${fullFileName}"/>
+        <echo message="Processing: ${filename} "/>
+        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="runUpdate" dir="../DECodeGen/" />
     </target>
 
     <target name="processDozer">
