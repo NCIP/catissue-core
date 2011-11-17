@@ -263,14 +263,14 @@
     <target name="updateService" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths">
 
         <!-- XSD IMPORT -->
-        <foreach target="importXSD" param="fullFileName" inheritall="true">
-            <fileset dir="./de_codegen/xsd" casesensitive="yes">
-                <include name="**/*.xsd"/>
+        <foreach target="importXSDs" param="fullJarFileName" inheritall="true">
+            <fileset dir="./de_codegen/artifacts" casesensitive="yes">
+                <include name="**/*-schema.jar"/>
             </fileset>
         </foreach>
 
         <!-- XMIs merge-->
-        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="mergeXMIs" dir="../DECodeGen/">
+        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="doMergeXMIs" dir="../DECodeGen/">
             <property name="xmiFolder" value="${basedir}/de_codegen/xmi" />
             <property name="outputXMLFile" value="${basedir}/de_codegen/xmi/mergeResult.xml" />
         </ant>
@@ -284,7 +284,8 @@
             </fileset>
         </foreach>
 
-        <!-- CLEAN UP -->
+<!--
+        &lt;!&ndash; CLEAN UP &ndash;&gt;
         <delete>
             <fileset dir="./de_codegen/artifacts">
                 <include name="*.jar" />
@@ -294,12 +295,24 @@
         <delete>
             <fileset dir="./temp" />
         </delete>
+-->
+    </target>
+
+    <target name="importXSDs">
+        <basename property="jarfilename" file="${fullJarFileName}"/>
+        <echo message="Processing XSD folder: ${jarfilename} "/>
+        <unjar src="${fullJarFileName}" dest="./temp/${jarfilename}" />
+        <foreach target="importXSD" param="fullFileName" inheritall="true">
+            <fileset dir="./temp/${jarfilename}" casesensitive="yes">
+                <include name="**/*.xsd"/>
+            </fileset>
+        </foreach>
     </target>
 
     <target name="importXSD">
         <basename property="filename" file="${fullFileName}"/>
-        <echo message="Processing: ${filename} "/>
-        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="runUpdate" dir="../DECodeGen/">
+        <echo message="Processing XSD file: ${filename} "/>
+        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="doImportXSD" dir="../DECodeGen/">
             <property name="xsdFile" value="${fullFileName}" />
         </ant>
     </target>
