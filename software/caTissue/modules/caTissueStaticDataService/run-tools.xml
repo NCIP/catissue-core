@@ -269,6 +269,14 @@
             </fileset>
         </foreach>
 
+        <!-- XMIs merge-->
+        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="mergeXMIs" dir="../DECodeGen/">
+            <property name="xmiFolder" value="${basedir}/de_codegen/xmi" />
+            <property name="outputXMLFile" value="${basedir}/de_codegen/xmi/mergeResult.xml" />
+        </ant>
+        <!-- OVERWRITE ./etc/catissue_cacore_domainModel.xml -->
+        <copy file="${basedir}/de_codegen/xmi/mergeResult.xml" tofile="${basedir}/etc/catissue_cacore_domainModel.xml" />
+
         <!-- DOZER MERGE -->
         <foreach target="processDozer" param="fullFileName" inheritall="true">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
@@ -287,7 +295,6 @@
             <fileset dir="./temp" />
         </delete>
     </target>
-
 
     <target name="importXSD">
         <basename property="filename" file="${fullFileName}"/>
