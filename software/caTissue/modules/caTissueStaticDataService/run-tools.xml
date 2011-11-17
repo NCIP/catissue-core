@@ -262,14 +262,14 @@
     <!-- START Service rebuild -->
     <target name="updateService" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths">
 
-        <!-- XSD IMPORT -->
+        <!-- XSDs IMPORT -->
         <foreach target="importXSDs" param="fullJarFileName" inheritall="true">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
                 <include name="**/*-schema.jar"/>
             </fileset>
         </foreach>
 
-        <!-- XMIs merge-->
+        <!-- XMIs MERGE-->
         <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="doMergeXMIs" dir="../DECodeGen/">
             <property name="xmiFolder" value="${basedir}/de_codegen/xmi" />
             <property name="outputXMLFile" value="${basedir}/de_codegen/xmi/mergeResult.xml" />
