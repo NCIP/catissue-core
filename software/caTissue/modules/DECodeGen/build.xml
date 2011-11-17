@@ -5,6 +5,8 @@
     <property name="lib.dir" value="${basedir}/ext/dependencies"/>
     <property name="dist.dir" value="${basedir}/dist"/>
     <property name="xsdFile" value="${basedir}/gov.nih.nci.cacoresdk.domain.inheritance.abstrakt.xsd"/>
+    <property name="xmiFolder" value="${basedir}/src/test/resources/xmi/"/>
+    <property name="outputXMLFile" value="${basedir}/src/test/resources/xmi/xmlResult.xml"/>
 
     <path id="cp">
         <fileset dir="${lib.dir}/default/jars"><include name="**/*.jar"/></fileset>
@@ -59,9 +61,9 @@
             </classpath>
             <classpath refid="cp" />
             <arg value="-s"/>
-            <arg value="src/test/resources/xmi/"/>
+            <arg value="${xmiFolder}"/>
             <arg value="-o"/>
-            <arg value="src/test/resources/xmi/result.xml"/>
+            <arg value="${outputXMLFile}"/>
         </java>
     </target>
 
