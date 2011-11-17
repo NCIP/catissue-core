@@ -56,9 +56,7 @@
 
     <target name="mergeXMIs">
         <java failonerror="true" classname="edu.wustl.catissuecore.MultipleXMIsToXMLConverter" fork="yes" dir="${basedir}">
-            <classpath>
-                <fileset dir="${dist.dir}"><include name="*.jar" /></fileset>
-            </classpath>
+            <classpath><fileset dir="${dist.dir}"><include name="*.jar" /></fileset></classpath>
             <classpath refid="cp" />
             <arg value="-s"/>
             <arg value="${xmiFolder}"/>
@@ -71,12 +69,10 @@
     <target name="runUpdate">
         <echo message="BASEDIR: ${basedir}" />
         <!-- IMPORT XSD -->
-        <java failonerror="true" classname="edu.wustl.catissuecore.IntroduceFacade" fork="no" dir="${basedir}">
-            <classpath>
-                <fileset dir="${dist.dir}"><include name="*.jar" /></fileset>
-            </classpath>
+        <java failonerror="true" classname="edu.wustl.catissuecore.IntroduceFacade" fork="yes" dir="${basedir}">
+            <classpath><fileset dir="${dist.dir}"><include name="*.jar" /></fileset></classpath>
             <classpath refid="cp" />
-            <arg value="../caTissueStaticDataService"/>
+            <arg value="../caTissueStaticDataService/"/>
             <arg value="Catissue_cacore"/>
             <arg value="${xsdFile}"/>
         </java>
