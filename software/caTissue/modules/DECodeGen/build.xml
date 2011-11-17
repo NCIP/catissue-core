@@ -43,11 +43,32 @@
         <echo message="  a. DATASERVICE FOLDER LOCATION "/>
         <echo message="  b. DATASERVICE NAME "/>
         <echo message="  c. XSD FILE TO BE IMPORTED INTO THE DATASERVICE "/>
+        <echo message=""/>
+        <echo message="  INVOKE CLASS edu.wustl.catissuecore.MultipleXMIsToXMLConverter "/>
+        <echo message="  AND PASS NEXT ARGUMENTS: "/>
+        <echo message="  a. -s FOLDER THAT CONTAINS xmi FILES"/>
+        <echo message="  b. -i xmi FILE PATH (ADD AS MANY AS NEEDED) "/>
+        <echo message="  c. -o XML OUTPUT FILE PATH "/>
         <echo message="=================================="/>
     </target>
 
+    <target name="mergeXMIs">
+        <java failonerror="true" classname="edu.wustl.catissuecore.MultipleXMIsToXMLConverter" fork="yes" dir="${basedir}">
+            <classpath>
+                <fileset dir="${dist.dir}"><include name="*.jar" /></fileset>
+            </classpath>
+            <classpath refid="cp" />
+            <arg value="-s"/>
+            <arg value="src/test/resources/xmi/"/>
+            <arg value="-o"/>
+            <arg value="src/test/resources/xmi/result.xml"/>
+        </java>
+    </target>
+
+    <!-- This target gets called on every XSD needed to be imported into DataService -->
     <target name="runUpdate">
         <echo message="BASEDIR: ${basedir}" />
+        <!-- IMPORT XSD -->
         <java failonerror="true" classname="edu.wustl.catissuecore.IntroduceFacade" fork="no" dir="${basedir}">
             <classpath>
                 <fileset dir="${dist.dir}"><include name="*.jar" /></fileset>

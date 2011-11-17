@@ -18,6 +18,7 @@ import gov.nih.nci.cagrid.metadata.xmi.XmiFileType;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,12 +34,12 @@ import org.apache.commons.logging.LogFactory;
  * Take multiple XMIs and produce a single caGrid domain model XML out of them.
  * 
  * @author Denis G. Krylov
- * 
+ * @author Ion C. Olaru
+ *
  */
 public class MultipleXMIsToXMLConverter {
 
-	private static final Log LOG = LogFactory
-			.getLog(MultipleXMIsToXMLConverter.class);
+	private static final Log LOG = LogFactory.getLog(MultipleXMIsToXMLConverter.class);
 
 	private List<File> xmiFiles = new ArrayList<File>();
 	private File domainModelFile;
@@ -196,19 +197,52 @@ public class MultipleXMIsToXMLConverter {
 
 	}
 
+    /**
+     * Returns a list of File objects that represent the ones to be merged to a single caGrid domain model XML
+     * @param folder Folder that contains all xmi files
+     * @return List<File>
+     * */
+    private static List<File> readXMIFolder(File folder) {
+        List<File> files = new ArrayList<File>();
+        String[] fileNames = folder.list(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return (name.endsWith(".xmi"));
+            }
+        });
+        if (fileNames.length > 0) {
+            for (String fileName : fileNames) {
+                files.add(new File(folder, fileName));
+            }
+        }
+        return files;
+    }
+
 	public static void main(String[] args) {
+		System.out.println("-i: one single input xmi file");
+		System.out.println("-s: one single folder that contains multiple xmi files");
+		System.out.println("-o: one single output xml file");
 		System.out.println("Example usage: -i src\\test\\resources\\caTissueCore_v2.0.xmi -i src\\test\\resources\\org_specimen_model.xmi -o src\\test\\resources\\merged.xml");
+		System.out.println("Example usage: -s src\\test\\resources\\xmi -o src\\test\\resources\\merged.xml");
+
 		List<File> xmiFiles = new ArrayList<File>();
 		File domainModelFile = new File("merged_domain_model.xml");
+
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
-			if ("-i".equals(arg))
-				xmiFiles.add(new File(args[i + 1]));
-			if ("-o".equals(arg))
-				domainModelFile = new File(args[i + 1]);
+
+            // input file
+			if ("-i".equals(arg)) xmiFiles.add(new File(args[i + 1]));
+
+            // output file
+			if ("-o".equals(arg)) domainModelFile = new File(args[i + 1]);
+
+            // input folder, which contains all xmi files to be merged
+			if ("-s".equals(arg)) {
+                xmiFiles.addAll(readXMIFolder(new File(args[i + 1])));
+            }
 		}
-		MultipleXMIsToXMLConverter converter = new MultipleXMIsToXMLConverter(
-				xmiFiles, domainModelFile);
+
+		MultipleXMIsToXMLConverter converter = new MultipleXMIsToXMLConverter(xmiFiles, domainModelFile);
 		converter.convert();
 	}
 
