@@ -29,7 +29,7 @@
             <element name="object">
               <complexType>
                 <sequence>
-                  <element ref="ns2:AbstractDomainObject" minOccurs="1" maxOccurs="1" />
+                  <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -39,7 +39,7 @@
       <element name="InsertResponse">
         <complexType>
           <sequence>
-            <element ref="ns2:AbstractDomainObject" minOccurs="1" maxOccurs="1" />
+            <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -49,7 +49,7 @@
             <element name="object">
               <complexType>
                 <sequence>
-                  <element ref="ns2:AbstractDomainObject" minOccurs="1" maxOccurs="1" />
+                  <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -59,7 +59,7 @@
       <element name="UpdateResponse">
         <complexType>
           <sequence>
-            <element ref="ns2:AbstractDomainObject" minOccurs="1" maxOccurs="1" />
+            <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
@@ -69,7 +69,7 @@
             <element name="object">
               <complexType>
                 <sequence>
-                  <element ref="ns2:AbstractDomainObject" minOccurs="1" maxOccurs="1" />
+                  <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
                 </sequence>
               </complexType>
             </element>
@@ -79,7 +79,7 @@
       <element name="DisableResponse">
         <complexType>
           <sequence>
-            <element ref="ns2:AbstractDomainObject" minOccurs="1" maxOccurs="1" />
+            <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>

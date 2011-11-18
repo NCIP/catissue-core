@@ -62,18 +62,18 @@
       </ns2:Operation>
       <ns2:Operation description="update" name="update">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns10:AbstractDomainObject" dimensionality="1" index="0" isArray="false" isRequired="false" name="object" xmlns:ns10="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
+        <ns2:InputParameter qName="xsd:anyType" dimensionality="1" index="0" isArray="false" isRequired="false" name="object" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns11:AbstractDomainObject" dimensionality="1" isArray="false" xmlns:ns11="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
+       <ns2:Output qName="xsd:anyType" dimensionality="1" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        <ns2:faultCollection>
         <ns2:Fault description="" name="QueryProcessingException"/>
        </ns2:faultCollection>
       </ns2:Operation>
       <ns2:Operation description="disable" name="disable">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns12:AbstractDomainObject" dimensionality="1" index="0" isArray="false" isRequired="false" name="object" xmlns:ns12="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
+        <ns2:InputParameter qName="xsd:anyType" dimensionality="1" index="0" isArray="false" isRequired="false" name="object" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns13:AbstractDomainObject" dimensionality="1" isArray="false" xmlns:ns13="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
+       <ns2:Output qName="xsd:anyType" dimensionality="1" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        <ns2:faultCollection>
         <ns2:Fault description="" name="QueryProcessingException"/>
        </ns2:faultCollection>
