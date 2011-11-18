@@ -19,8 +19,8 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 		<chain name="ncicb-chain">
 
             <filesystem name="localResolver" local="true" >
-                <ivy pattern="${user.home}/.ivy2/caTissue/[organisation]/[module]/[revision]/ivy-[revision].xml"/>
-                <artifact pattern="${user.home}/.ivy2/caTissue/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+                <ivy pattern="${user.home}/.ivy2/cache/[organisation]/[module]/[revision]/ivy-[revision].xml"/>
+                <artifact pattern="${user.home}/.ivy2/cache/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
             </filesystem>
 
 			<filesystem name="local-project-repo" local="true">
