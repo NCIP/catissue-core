@@ -60,7 +60,7 @@ public interface Catissue_cacoreI {
    * @throws QueryProcessingException
    *	
    */
-  public Object update(Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
+  public java.lang.Object update(java.lang.Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
 
   /**
    * disable
@@ -69,7 +69,7 @@ public interface Catissue_cacoreI {
    * @throws QueryProcessingException
    *	
    */
-  public Object disable(Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
+  public java.lang.Object disable(java.lang.Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
 
   public void abcd(java.lang.Object object) throws RemoteException ;
 

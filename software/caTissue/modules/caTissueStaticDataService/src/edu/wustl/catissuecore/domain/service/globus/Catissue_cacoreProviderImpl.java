@@ -34,13 +34,13 @@ public class Catissue_cacoreProviderImpl{
 
     public edu.wustl.catissuecore.domain.stubs.UpdateResponse update(edu.wustl.catissuecore.domain.stubs.UpdateRequest params) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
     edu.wustl.catissuecore.domain.stubs.UpdateResponse boxedResult = new edu.wustl.catissuecore.domain.stubs.UpdateResponse();
-    boxedResult.setObject(impl.update(params.getObject().getObject()));
+    boxedResult.setResponse(impl.update(params.getObject()));
     return boxedResult;
   }
 
     public edu.wustl.catissuecore.domain.stubs.DisableResponse disable(edu.wustl.catissuecore.domain.stubs.DisableRequest params) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
     edu.wustl.catissuecore.domain.stubs.DisableResponse boxedResult = new edu.wustl.catissuecore.domain.stubs.DisableResponse();
-    boxedResult.setObject((impl.disable(params.getObject().getObject())));
+    boxedResult.setResponse(impl.disable(params.getObject()));
     return boxedResult;
   }
 

@@ -40,7 +40,7 @@ public class Catissue_cacoreImpl extends Catissue_cacoreImplBase {
 		return ado;
 	}
 
-  public Object update(Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
+  public java.lang.Object update(java.lang.Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
 		Object ado = null;
 		try {
 			ado = getClient().updateWsObject(object);
@@ -50,7 +50,7 @@ public class Catissue_cacoreImpl extends Catissue_cacoreImplBase {
 		return ado;
 	}
 
-  public Object disable(Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
+  public java.lang.Object disable(java.lang.Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
 		Object ado = null;
 		WAPIClient client = null;
 		try {

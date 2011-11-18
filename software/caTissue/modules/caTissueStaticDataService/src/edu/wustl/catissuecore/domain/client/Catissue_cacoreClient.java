@@ -248,27 +248,23 @@ public class Catissue_cacoreClient extends Catissue_cacoreClientBase implements 
     }
   }
 
-  public Object update(Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
+  public java.lang.Object update(java.lang.Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"update");
     edu.wustl.catissuecore.domain.stubs.UpdateRequest params = new edu.wustl.catissuecore.domain.stubs.UpdateRequest();
-    edu.wustl.catissuecore.domain.stubs.UpdateRequestObject objectContainer = new edu.wustl.catissuecore.domain.stubs.UpdateRequestObject();
-    objectContainer.setObject(object);
-    params.setObject(objectContainer);
+    params.setObject(object);
     edu.wustl.catissuecore.domain.stubs.UpdateResponse boxedResult = portType.update(params);
-    return boxedResult.getObject();
+    return boxedResult.getResponse();
     }
   }
 
-  public Object disable(Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
+  public java.lang.Object disable(java.lang.Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"disable");
     edu.wustl.catissuecore.domain.stubs.DisableRequest params = new edu.wustl.catissuecore.domain.stubs.DisableRequest();
-    edu.wustl.catissuecore.domain.stubs.DisableRequestObject objectContainer = new edu.wustl.catissuecore.domain.stubs.DisableRequestObject();
-    objectContainer.setObject(object);
-    params.setObject(objectContainer);
+    params.setObject(object);
     edu.wustl.catissuecore.domain.stubs.DisableResponse boxedResult = portType.disable(params);
-    return boxedResult.getObject();
+    return boxedResult.getResponse();
     }
   }
 

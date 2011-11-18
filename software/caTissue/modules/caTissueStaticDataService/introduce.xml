@@ -467,20 +467,20 @@
      </ns4:Inputs>
      <ns4:Output qName="xsd:anyType" description="" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="QueryProcessingException" qname="ns32:QueryProcessingException" xmlns:ns32="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
+      <ns4:Exception description="" name="QueryProcessingException" qname="ns30:QueryProcessingException" xmlns:ns30="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
      </ns4:Exceptions>
-     <ns33:MethodSecurity xsi:type="ns33:MethodSecurity" xmlns:ns33="gme://gov.nih.nci.cagrid.introduce/1/Security">
-      <ns33:SecuritySetting xsi:type="ns33:SecuritySetting">Custom</ns33:SecuritySetting>
-      <ns33:TransportLevelSecurity xsi:type="ns33:TransportLevelSecurity">
-       <ns33:CommunicationMethod xsi:type="ns33:CommunicationMethod">Privacy</ns33:CommunicationMethod>
-      </ns33:TransportLevelSecurity>
-      <ns33:RunAsMode xsi:type="ns33:RunAsMode">System</ns33:RunAsMode>
-      <ns33:AnonymousClients xsi:type="ns33:AnonymousCommunication">No</ns33:AnonymousClients>
-      <ns33:MethodAuthorization xsi:type="ns33:MethodAuthorization">
-       <ns33:InheritServiceAuthorization xsi:type="ns33:InheritServiceAuthorization"/>
-      </ns33:MethodAuthorization>
-     </ns33:MethodSecurity>
-     <ns34:Extensions xsi:type="ns34:ExtensionsType" xmlns:ns34="gme://gov.nih.nci.cagrid.introduce/1/Extension"/>
+     <ns31:MethodSecurity xsi:type="ns31:MethodSecurity" xmlns:ns31="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns31:SecuritySetting xsi:type="ns31:SecuritySetting">Custom</ns31:SecuritySetting>
+      <ns31:TransportLevelSecurity xsi:type="ns31:TransportLevelSecurity">
+       <ns31:CommunicationMethod xsi:type="ns31:CommunicationMethod">Privacy</ns31:CommunicationMethod>
+      </ns31:TransportLevelSecurity>
+      <ns31:RunAsMode xsi:type="ns31:RunAsMode">System</ns31:RunAsMode>
+      <ns31:AnonymousClients xsi:type="ns31:AnonymousCommunication">No</ns31:AnonymousClients>
+      <ns31:MethodAuthorization xsi:type="ns31:MethodAuthorization">
+       <ns31:InheritServiceAuthorization xsi:type="ns31:InheritServiceAuthorization"/>
+      </ns31:MethodAuthorization>
+     </ns31:MethodSecurity>
+     <ns32:Extensions xsi:type="ns32:ExtensionsType" xmlns:ns32="gme://gov.nih.nci.cagrid.introduce/1/Extension"/>
     </ns4:Method>
     <ns4:Method description="disable" isImported="false" isProvided="false" name="disable" xsi:type="ns4:MethodType">
      <ns4:Inputs>
@@ -488,20 +488,20 @@
      </ns4:Inputs>
      <ns4:Output qName="xsd:anyType" description="" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="QueryProcessingException" qname="ns37:QueryProcessingException" xmlns:ns37="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
+      <ns4:Exception description="" name="QueryProcessingException" qname="ns33:QueryProcessingException" xmlns:ns33="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
      </ns4:Exceptions>
-     <ns38:MethodSecurity xsi:type="ns38:MethodSecurity" xmlns:ns38="gme://gov.nih.nci.cagrid.introduce/1/Security">
-      <ns38:SecuritySetting xsi:type="ns38:SecuritySetting">Custom</ns38:SecuritySetting>
-      <ns38:TransportLevelSecurity xsi:type="ns38:TransportLevelSecurity">
-       <ns38:CommunicationMethod xsi:type="ns38:CommunicationMethod">Privacy</ns38:CommunicationMethod>
-      </ns38:TransportLevelSecurity>
-      <ns38:RunAsMode xsi:type="ns38:RunAsMode">System</ns38:RunAsMode>
-      <ns38:AnonymousClients xsi:type="ns38:AnonymousCommunication">No</ns38:AnonymousClients>
-      <ns38:MethodAuthorization xsi:type="ns38:MethodAuthorization">
-       <ns38:InheritServiceAuthorization xsi:type="ns38:InheritServiceAuthorization"/>
-      </ns38:MethodAuthorization>
-     </ns38:MethodSecurity>
-     <ns39:Extensions xsi:type="ns39:ExtensionsType" xmlns:ns39="gme://gov.nih.nci.cagrid.introduce/1/Extension"/>
+     <ns34:MethodSecurity xsi:type="ns34:MethodSecurity" xmlns:ns34="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns34:SecuritySetting xsi:type="ns34:SecuritySetting">Custom</ns34:SecuritySetting>
+      <ns34:TransportLevelSecurity xsi:type="ns34:TransportLevelSecurity">
+       <ns34:CommunicationMethod xsi:type="ns34:CommunicationMethod">Privacy</ns34:CommunicationMethod>
+      </ns34:TransportLevelSecurity>
+      <ns34:RunAsMode xsi:type="ns34:RunAsMode">System</ns34:RunAsMode>
+      <ns34:AnonymousClients xsi:type="ns34:AnonymousCommunication">No</ns34:AnonymousClients>
+      <ns34:MethodAuthorization xsi:type="ns34:MethodAuthorization">
+       <ns34:InheritServiceAuthorization xsi:type="ns34:InheritServiceAuthorization"/>
+      </ns34:MethodAuthorization>
+     </ns34:MethodSecurity>
+     <ns35:Extensions xsi:type="ns35:ExtensionsType" xmlns:ns35="gme://gov.nih.nci.cagrid.introduce/1/Extension"/>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="abcd" xsi:type="ns4:MethodType">
      <ns4:Inputs>
@@ -511,11 +511,11 @@
      <ns4:Exceptions/>
     </ns4:Method>
    </ns4:Methods>
-   <ns40:ResourcePropertiesList xsi:type="ns40:ResourcePropertiesListType" xmlns:ns40="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns40:ResourceProperty qName="ns41:DomainModel" fileLocation="catissue_cacore_domainModel.xml" populateFromFile="true" register="true" xsi:type="ns40:ResourcePropertyType" xmlns:ns41="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
-    <ns40:ResourceProperty qName="ns42:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns40:ResourcePropertyType" xmlns:ns42="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
-    <ns40:ResourceProperty qName="ns43:QueryLanguageSupport" description="Describes the level of support for CQL versions" populateFromFile="false" register="true" xsi:type="ns40:ResourcePropertyType" xmlns:ns43="http://org.cagrid.dataservice.cql/QueryLanguageSupport"/>
-   </ns40:ResourcePropertiesList>
+   <ns36:ResourcePropertiesList xsi:type="ns36:ResourcePropertiesListType" xmlns:ns36="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns36:ResourceProperty qName="ns37:DomainModel" fileLocation="catissue_cacore_domainModel.xml" populateFromFile="true" register="true" xsi:type="ns36:ResourcePropertyType" xmlns:ns37="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+    <ns36:ResourceProperty qName="ns38:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns36:ResourcePropertyType" xmlns:ns38="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns36:ResourceProperty qName="ns39:QueryLanguageSupport" description="Describes the level of support for CQL versions" populateFromFile="false" register="true" xsi:type="ns36:ResourcePropertyType" xmlns:ns39="http://org.cagrid.dataservice.cql/QueryLanguageSupport"/>
+   </ns36:ResourcePropertiesList>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Main xsi:type="ns3:Main"/>
     <ns3:Singleton xsi:type="ns3:Singleton"/>
@@ -524,291 +524,291 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns44:Extensions xsi:type="ns44:ExtensionsType" xmlns:ns44="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns44:Extension name="cagrid_metadata" version="1.4" xsi:type="ns44:ExtensionType"/>
-  <ns44:Extension name="data" version="1.4" xsi:type="ns44:ExtensionType">
-   <ns44:ExtensionData>
-    <ns45:Data xsi:type="ns45:Data" xmlns:ns45="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension">
-         <ns45:ServiceFeatures useGridIdentifiers="false" useTransfer="false" useWsEnumeration="false" xsi:type="ns45:ServiceFeatures">
-          <ns45:ServiceStyle name="caCORE SDK v 4.2" version="1.4" xsi:type="ns45:ServiceStyle"/>
+ <ns40:Extensions xsi:type="ns40:ExtensionsType" xmlns:ns40="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns40:Extension name="cagrid_metadata" version="1.4" xsi:type="ns40:ExtensionType"/>
+  <ns40:Extension name="data" version="1.4" xsi:type="ns40:ExtensionType">
+   <ns40:ExtensionData>
+    <ns41:Data xsi:type="ns41:Data" xmlns:ns41="http://CQL.caBIG/1/gov.nih.nci.cagrid.data.extension">
+         <ns41:ServiceFeatures useGridIdentifiers="false" useTransfer="false" useWsEnumeration="false" xsi:type="ns41:ServiceFeatures">
+          <ns41:ServiceStyle name="caCORE SDK v 4.2" version="1.4" xsi:type="ns41:ServiceStyle"/>
 
-     </ns45:ServiceFeatures>
+     </ns41:ServiceFeatures>
 
-         <ns46:DataServiceAuditors xsi:type="ns46:DataServiceAuditors" xmlns:ns46="http://gov.nih.nci.cagrid.data/Auditing"/>
+         <ns42:DataServiceAuditors xsi:type="ns42:DataServiceAuditors" xmlns:ns42="http://gov.nih.nci.cagrid.data/Auditing"/>
 
-         <ns45:ModelInformation source="preBuilt" xsi:type="ns45:ModelInformation">
-          <ns47:UMLProjectIdentifer identifier="catissue_cacore" version="2.0" xsi:type="ns47:UMLProjectIdentifer" xmlns:ns47="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+         <ns41:ModelInformation source="preBuilt" xsi:type="ns41:ModelInformation">
+          <ns43:UMLProjectIdentifer identifier="catissue_cacore" version="2.0" xsi:type="ns43:UMLProjectIdentifer" xmlns:ns43="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
 
-          <ns45:ModelPackage packageName="edu.wustl.catissuecore.domain.deintegration" xsi:type="ns45:ModelPackage">
-           <ns45:ModelClass selected="true" shortClassName="SCGRecordEntry" targetable="true" xsi:type="ns45:ModelClass"/>
+          <ns41:ModelPackage packageName="edu.wustl.catissuecore.domain.deintegration" xsi:type="ns41:ModelPackage">
+           <ns41:ModelClass selected="true" shortClassName="SCGRecordEntry" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpecimenRecordEntry" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpecimenRecordEntry" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ActionApplicationRecordEntry" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ActionApplicationRecordEntry" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ParticipantRecordEntry" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ParticipantRecordEntry" targetable="true" xsi:type="ns41:ModelClass"/>
 
-      </ns45:ModelPackage>
+      </ns41:ModelPackage>
 
-          <ns45:ModelPackage packageName="edu.wustl.common.domain" xsi:type="ns45:ModelPackage">
-           <ns45:ModelClass selected="true" shortClassName="AbstractDomainObject" targetable="true" xsi:type="ns45:ModelClass"/>
+          <ns41:ModelPackage packageName="edu.wustl.common.domain" xsi:type="ns41:ModelPackage">
+           <ns41:ModelClass selected="true" shortClassName="AbstractDomainObject" targetable="true" xsi:type="ns41:ModelClass"/>
 
-      </ns45:ModelPackage>
+      </ns41:ModelPackage>
 
-          <ns45:ModelPackage packageName="edu.wustl.catissuecore.domain.pathology" xsi:type="ns45:ModelPackage">
-           <ns45:ModelClass selected="true" shortClassName="IdentifiedSurgicalPathologyReport" targetable="true" xsi:type="ns45:ModelClass"/>
+          <ns41:ModelPackage packageName="edu.wustl.catissuecore.domain.pathology" xsi:type="ns41:ModelPackage">
+           <ns41:ModelClass selected="true" shortClassName="IdentifiedSurgicalPathologyReport" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ReportSection" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ReportSection" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Concept" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Concept" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ReportContent" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ReportContent" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="PathologyReportReviewParameter" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="PathologyReportReviewParameter" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="QuarantineEventParameter" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="QuarantineEventParameter" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ConceptReferentClassification" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ConceptReferentClassification" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="XMLContent" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="XMLContent" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ReportLoaderQueue" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ReportLoaderQueue" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SurgicalPathologyReport" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SurgicalPathologyReport" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SemanticType" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SemanticType" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="BinaryContent" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="BinaryContent" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ConceptReferent" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ConceptReferent" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="TextContent" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="TextContent" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="DeidentifiedSurgicalPathologyReport" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="DeidentifiedSurgicalPathologyReport" targetable="true" xsi:type="ns41:ModelClass"/>
 
-      </ns45:ModelPackage>
+      </ns41:ModelPackage>
 
-          <ns45:ModelPackage packageName="edu.wustl.catissuecore.domain.sop" xsi:type="ns45:ModelPackage">
-           <ns45:ModelClass selected="true" shortClassName="SOP" targetable="true" xsi:type="ns45:ModelClass"/>
+          <ns41:ModelPackage packageName="edu.wustl.catissuecore.domain.sop" xsi:type="ns41:ModelPackage">
+           <ns41:ModelClass selected="true" shortClassName="SOP" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="AbstractApplication" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="AbstractApplication" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Action" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Action" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ActionApplication" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ActionApplication" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SOPApplication" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SOPApplication" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="DefaultAction" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="DefaultAction" targetable="true" xsi:type="ns41:ModelClass"/>
 
-      </ns45:ModelPackage>
+      </ns41:ModelPackage>
 
-          <ns45:ModelPackage packageName="edu.wustl.catissuecore.domain.shippingtracking" xsi:type="ns45:ModelPackage">
-           <ns45:ModelClass selected="true" shortClassName="BaseShipment" targetable="true" xsi:type="ns45:ModelClass"/>
+          <ns41:ModelPackage packageName="edu.wustl.catissuecore.domain.shippingtracking" xsi:type="ns41:ModelPackage">
+           <ns41:ModelClass selected="true" shortClassName="BaseShipment" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Shipment" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Shipment" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ShipmentRequest" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ShipmentRequest" targetable="true" xsi:type="ns41:ModelClass"/>
 
-      </ns45:ModelPackage>
+      </ns41:ModelPackage>
 
-          <ns45:ModelPackage packageName="edu.common.dynamicextensions.domain.integration" xsi:type="ns45:ModelPackage">
-           <ns45:ModelClass selected="true" shortClassName="AbstractFormContext" targetable="true" xsi:type="ns45:ModelClass"/>
+          <ns41:ModelPackage packageName="edu.common.dynamicextensions.domain.integration" xsi:type="ns41:ModelPackage">
+           <ns41:ModelClass selected="true" shortClassName="AbstractFormContext" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="AbstractRecordEntry" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="AbstractRecordEntry" targetable="true" xsi:type="ns41:ModelClass"/>
 
-      </ns45:ModelPackage>
+      </ns41:ModelPackage>
 
-          <ns45:ModelPackage packageName="edu.wustl.catissuecore.domain" xsi:type="ns45:ModelPackage">
-           <ns45:ModelClass selected="true" shortClassName="ReceivedEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+          <ns41:ModelPackage packageName="edu.wustl.catissuecore.domain" xsi:type="ns41:ModelPackage">
+           <ns41:ModelClass selected="true" shortClassName="ReceivedEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ClinicalDiagnosis" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ClinicalDiagnosis" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="OrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="OrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ContainerType" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ContainerType" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ContainerPosition" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ContainerPosition" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="StudyFormContext" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="StudyFormContext" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ExternalIdentifier" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ExternalIdentifier" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpecimenArrayOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpecimenArrayOrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="User" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="User" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ParticipantMedicalIdentifier" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ParticipantMedicalIdentifier" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="NewSpecimenArrayOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="NewSpecimenArrayOrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="CellSpecimenRequirement" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="CellSpecimenRequirement" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="AbstractPosition" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="AbstractPosition" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="FluidSpecimenRequirement" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="FluidSpecimenRequirement" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Site" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Site" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="FrozenEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="FrozenEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="FluidSpecimen" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="FluidSpecimen" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpecimenCharacteristics" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpecimenCharacteristics" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="MolecularSpecimen" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="MolecularSpecimen" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="OrderDetails" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="OrderDetails" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="TransferEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="TransferEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="TissueSpecimenReviewEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="TissueSpecimenReviewEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpecimenArray" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpecimenArray" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="FluidSpecimenReviewEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="FluidSpecimenReviewEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpunEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpunEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpecimenRequirement" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpecimenRequirement" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="DistributionProtocol" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="DistributionProtocol" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpecimenArrayContent" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpecimenArrayContent" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Race" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Race" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpecimenProtocol" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpecimenProtocol" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="CollectionProtocolRegistration" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="CollectionProtocolRegistration" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ConsentTier" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ConsentTier" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="DistributedItem" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="DistributedItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpecimenArrayType" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpecimenArrayType" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="CellSpecimenReviewParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="CellSpecimenReviewParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ProcedureEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ProcedureEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ConsentTierStatus" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ConsentTierStatus" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpecimenPosition" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpecimenPosition" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="CellSpecimen" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="CellSpecimen" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Specimen" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Specimen" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="PathologicalCaseOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="PathologicalCaseOrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="TissueSpecimen" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="TissueSpecimen" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Department" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Department" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Distribution" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Distribution" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ExistingSpecimenOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ExistingSpecimenOrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="TissueSpecimenRequirement" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="TissueSpecimenRequirement" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="AbstractSpecimenCollectionGroup" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="AbstractSpecimenCollectionGroup" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Container" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Container" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="StorageType" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="StorageType" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Capacity" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Capacity" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpecimenCollectionGroup" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpecimenCollectionGroup" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpecimenEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpecimenEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Institution" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Institution" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ThawEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ThawEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="NewSpecimenOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="NewSpecimenOrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="DistributionSpecimenRequirement" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="DistributionSpecimenRequirement" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="DerivedSpecimenOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="DerivedSpecimenOrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="MolecularSpecimenReviewParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="MolecularSpecimenReviewParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Password" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Password" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="CancerResearchGroup" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="CancerResearchGroup" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="CheckInCheckOutEventParameter" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="CheckInCheckOutEventParameter" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="StorageContainer" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="StorageContainer" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ConsentTierResponse" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ConsentTierResponse" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ReviewEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ReviewEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="FixedEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="FixedEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="SpecimenOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="SpecimenOrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="MolecularSpecimenRequirement" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="MolecularSpecimenRequirement" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="CollectionEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="CollectionEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Biohazard" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Biohazard" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="CollectionProtocol" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="CollectionProtocol" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="DisposalEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="DisposalEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="EmbeddedEventParameters" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="EmbeddedEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Participant" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Participant" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="Address" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="Address" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="CollectionProtocolEvent" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="CollectionProtocolEvent" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="AbstractSpecimen" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="AbstractSpecimen" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns45:ModelClass selected="true" shortClassName="ExistingSpecimenArrayOrderItem" targetable="true" xsi:type="ns45:ModelClass"/>
+           <ns41:ModelClass selected="true" shortClassName="ExistingSpecimenArrayOrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
-      </ns45:ModelPackage>
+      </ns41:ModelPackage>
 
-     </ns45:ModelInformation>
+     </ns41:ModelInformation>
 
-    </ns45:Data>
-   </ns44:ExtensionData>
-  </ns44:Extension>
- </ns44:Extensions>
- <ns45:ServiceProperties xmlns:ns45="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns45:Property description="" isFromETC="false" key="queryProcessorClass" value="edu.wustl.catissuecore.cagrid.CQLQueryProcessor"/>
-  <ns45:Property description="" isFromETC="false" key="cql2QueryProcessorClass" value="edu.wustl.catissuecore.cagrid.CQL2QueryProcessor"/>
-  <ns45:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationName" value="catissue_cacore"/>
-  <ns45:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useLocalApiFlag" value="@USE_LOCAL_API_FLAG@"/>
-  <ns45:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationHostName" value="@APPLICATION_HOST@"/>
-  <ns45:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationHostPort" value="@APPLICATION_PORT@"/>
-  <ns45:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useHttpsUrl" value="@USE_HTTPS_URL@"/>
-  <ns45:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationName" value="catissue_cacore"/>
-  <ns45:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useLocalApiFlag" value="@USE_LOCAL_API_FLAG@"/>
-  <ns45:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationHostName" value="@APPLICATION_HOST@"/>
-  <ns45:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationHostPort" value="@APPLICATION_PORT@"/>
-  <ns45:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useHttpsUrl" value="@USE_HTTPS_URL@"/>
-  <ns45:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useStaticLogin" value="@STATIC_LOGIN_USER@"/>
-  <ns45:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useGridIdentityLogin" value="@USE_GRID_IDENTITY_LOGIN@"/>
-  <ns45:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_staticLoginPass" value="@STATIC_LOGIN_PASS@"/>
-  <ns45:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_staticLoginUser" value="@STATIC_LOGIN_USER@"/>
-  <ns45:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useStaticLogin" value="@STATIC_LOGIN_USER@"/>
-  <ns45:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useGridIdentityLogin" value="@USE_GRID_IDENTITY_LOGIN@"/>
-  <ns45:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_staticLoginPass" value="@STATIC_LOGIN_PASS@"/>
-  <ns45:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_staticLoginUser" value="@STATIC_LOGIN_USER@"/>
-  <ns45:Property description="The location of the server-config.wsdd file" isFromETC="true" key="serverConfigLocation" value="server-config.wsdd"/>
-  <ns45:Property description="The name of the class to use for CQL query structure validation" isFromETC="false" key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
-  <ns45:Property description="The name of the class to use for CQL validation against a domain model" isFromETC="false" key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>
-  <ns45:Property description="" isFromETC="false" key="dataService_validateCqlFlag" value="true"/>
-  <ns45:Property description="" isFromETC="false" key="dataService_validateDomainModelFlag" value="true"/>
-  <ns45:Property description="A comma separated list of class names which implement gov.nih.nci.cagrid.data.cql2.validation.walker.BaseCustomCql2WalkerHandler" isFromETC="false" key="dataService_cql2ValidatorClasses" value=""/>
-  <ns45:Property description="The name of the file containing the class name to QName mapping" isFromETC="true" key="dataService_classMappingsFilename" value="classToQname.xml"/>
- </ns45:ServiceProperties>
+    </ns41:Data>
+   </ns40:ExtensionData>
+  </ns40:Extension>
+ </ns40:Extensions>
+ <ns41:ServiceProperties xmlns:ns41="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns41:Property description="" isFromETC="false" key="queryProcessorClass" value="edu.wustl.catissuecore.cagrid.CQLQueryProcessor"/>
+  <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorClass" value="edu.wustl.catissuecore.cagrid.CQL2QueryProcessor"/>
+  <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationName" value="catissue_cacore"/>
+  <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useLocalApiFlag" value="@USE_LOCAL_API_FLAG@"/>
+  <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationHostName" value="@APPLICATION_HOST@"/>
+  <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationHostPort" value="@APPLICATION_PORT@"/>
+  <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useHttpsUrl" value="@USE_HTTPS_URL@"/>
+  <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationName" value="catissue_cacore"/>
+  <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useLocalApiFlag" value="@USE_LOCAL_API_FLAG@"/>
+  <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationHostName" value="@APPLICATION_HOST@"/>
+  <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationHostPort" value="@APPLICATION_PORT@"/>
+  <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useHttpsUrl" value="@USE_HTTPS_URL@"/>
+  <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useStaticLogin" value="@STATIC_LOGIN_USER@"/>
+  <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useGridIdentityLogin" value="@USE_GRID_IDENTITY_LOGIN@"/>
+  <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_staticLoginPass" value="@STATIC_LOGIN_PASS@"/>
+  <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_staticLoginUser" value="@STATIC_LOGIN_USER@"/>
+  <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useStaticLogin" value="@STATIC_LOGIN_USER@"/>
+  <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useGridIdentityLogin" value="@USE_GRID_IDENTITY_LOGIN@"/>
+  <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_staticLoginPass" value="@STATIC_LOGIN_PASS@"/>
+  <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_staticLoginUser" value="@STATIC_LOGIN_USER@"/>
+  <ns41:Property description="The location of the server-config.wsdd file" isFromETC="true" key="serverConfigLocation" value="server-config.wsdd"/>
+  <ns41:Property description="The name of the class to use for CQL query structure validation" isFromETC="false" key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
+  <ns41:Property description="The name of the class to use for CQL validation against a domain model" isFromETC="false" key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>
+  <ns41:Property description="" isFromETC="false" key="dataService_validateCqlFlag" value="true"/>
+  <ns41:Property description="" isFromETC="false" key="dataService_validateDomainModelFlag" value="true"/>
+  <ns41:Property description="A comma separated list of class names which implement gov.nih.nci.cagrid.data.cql2.validation.walker.BaseCustomCql2WalkerHandler" isFromETC="false" key="dataService_cql2ValidatorClasses" value=""/>
+  <ns41:Property description="The name of the file containing the class name to QName mapping" isFromETC="true" key="dataService_classMappingsFilename" value="classToQname.xml"/>
+ </ns41:ServiceProperties>
 </ns1:ServiceDescription>

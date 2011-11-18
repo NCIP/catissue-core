@@ -56,40 +56,28 @@
       <element name="UpdateRequest">
         <complexType>
           <sequence>
-            <element name="object">
-              <complexType>
-                <sequence>
-                  <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
-                </sequence>
-              </complexType>
-            </element>
+            <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
       <element name="UpdateResponse">
         <complexType>
           <sequence>
-            <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
+            <element name="response" type="xs:anyType" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
       <element name="DisableRequest">
         <complexType>
           <sequence>
-            <element name="object">
-              <complexType>
-                <sequence>
-                  <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
-                </sequence>
-              </complexType>
-            </element>
+            <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
       <element name="DisableResponse">
         <complexType>
           <sequence>
-            <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
+            <element name="response" type="xs:anyType" minOccurs="1" maxOccurs="1" />
           </sequence>
         </complexType>
       </element>
