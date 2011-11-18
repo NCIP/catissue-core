@@ -4,7 +4,7 @@
     <property name="src.dir" value="${basedir}/src/main/java"/>
     <property name="lib.dir" value="${basedir}/ext/dependencies"/>
     <property name="dist.dir" value="${basedir}/dist"/>
-    <property name="xsdFile" value="${basedir}/src/test/resources/clinical_annotation.xsd"/>
+    <property name="xsdFile" value="${basedir}/src/test/resources/withIdentifier/clinical_annotation.xsd"/>
     <property name="xmiFolder" value="${basedir}/src/test/resources/xmi/"/>
     <property name="outputXMLFile" value="${basedir}/src/test/resources/xmi/xmlResult.xml"/>
 
@@ -69,7 +69,7 @@
     <target name="doImportXSD">
         <echo message="Importing XSD: ${xsdFile}, basedir: ${basedir}" />
         <!-- IMPORT XSD -->
-        <java failonerror="false" classname="edu.wustl.catissuecore.IntroduceFacade" fork="yes" dir="${basedir}">
+        <java failonerror="false" classname="edu.wustl.catissuecore.IntroduceFacade" fork="no" dir="${basedir}">
             <classpath><fileset dir="${dist.dir}"><include name="*.jar" /></fileset></classpath>
             <classpath refid="cp" />
             <arg value="${basedir}/../caTissueStaticDataService/"/>
