@@ -503,13 +503,6 @@
      </ns34:MethodSecurity>
      <ns35:Extensions xsi:type="ns35:ExtensionsType" xmlns:ns35="gme://gov.nih.nci.cagrid.introduce/1/Extension"/>
     </ns4:Method>
-    <ns4:Method description="" isImported="false" isProvided="false" name="abcd" xsi:type="ns4:MethodType">
-     <ns4:Inputs>
-      <ns4:Input qName="xsd:anyType" description="" isArray="false" name="object" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-     </ns4:Inputs>
-     <ns4:Output qName="void" description="" isArray="false"/>
-     <ns4:Exceptions/>
-    </ns4:Method>
    </ns4:Methods>
    <ns36:ResourcePropertiesList xsi:type="ns36:ResourcePropertiesListType" xmlns:ns36="gme://gov.nih.nci.cagrid.introduce/1/Resources">
     <ns36:ResourceProperty qName="ns37:DomainModel" fileLocation="catissue_cacore_domainModel.xml" populateFromFile="true" register="true" xsi:type="ns36:ResourcePropertyType" xmlns:ns37="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>

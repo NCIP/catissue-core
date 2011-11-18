@@ -44,10 +44,4 @@ public class Catissue_cacoreProviderImpl{
     return boxedResult;
   }
 
-    public edu.wustl.catissuecore.domain.stubs.AbcdResponse abcd(edu.wustl.catissuecore.domain.stubs.AbcdRequest params) throws RemoteException {
-    edu.wustl.catissuecore.domain.stubs.AbcdResponse boxedResult = new edu.wustl.catissuecore.domain.stubs.AbcdResponse();
-    impl.abcd(params.getObject());
-    return boxedResult;
-  }
-
 }

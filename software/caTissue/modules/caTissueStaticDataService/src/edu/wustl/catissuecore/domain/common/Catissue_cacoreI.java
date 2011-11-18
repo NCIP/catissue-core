@@ -71,7 +71,5 @@ public interface Catissue_cacoreI {
    */
   public java.lang.Object disable(java.lang.Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
 
-  public void abcd(java.lang.Object object) throws RemoteException ;
-
 }
 

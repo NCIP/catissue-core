@@ -268,13 +268,4 @@ public class Catissue_cacoreClient extends Catissue_cacoreClientBase implements 
     }
   }
 
-  public void abcd(java.lang.Object object) throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"abcd");
-    edu.wustl.catissuecore.domain.stubs.AbcdRequest params = new edu.wustl.catissuecore.domain.stubs.AbcdRequest();
-    params.setObject(object);
-    edu.wustl.catissuecore.domain.stubs.AbcdResponse boxedResult = portType.abcd(params);
-    }
-  }
-
 }

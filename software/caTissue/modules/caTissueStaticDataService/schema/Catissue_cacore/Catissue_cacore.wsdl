@@ -81,18 +81,6 @@
           </sequence>
         </complexType>
       </element>
-      <element name="AbcdRequest">
-        <complexType>
-          <sequence>
-            <element name="object" type="xs:anyType" minOccurs="1" maxOccurs="1" />
-          </sequence>
-        </complexType>
-      </element>
-      <element name="AbcdResponse">
-        <complexType>
-          <sequence />
-        </complexType>
-      </element>
       <element name="Catissue_cacoreResourceProperties">
         <complexType>
           <sequence>
@@ -123,12 +111,6 @@
   <message name="DisableResponse">
     <part name="parameters" element="tns:DisableResponse" />
   </message>
-  <message name="AbcdRequest">
-    <part name="parameters" element="tns:AbcdRequest" />
-  </message>
-  <message name="AbcdResponse">
-    <part name="parameters" element="tns:AbcdResponse" />
-  </message>
   <message name="QueryProcessingExceptionFaultMessage">
     <part name="fault" element="ns25:QueryProcessingException" />
   </message>
@@ -152,10 +134,6 @@
       <input message="tns:DisableRequest" wsa:Action="http://domain.catissuecore.wustl.edu/Catissue_cacore/DisableRequest" />
       <output message="tns:DisableResponse" wsa:Action="http://domain.catissuecore.wustl.edu/Catissue_cacore/DisableResponse" />
       <fault name="QueryProcessingException" message="tns:QueryProcessingExceptionFaultMessage" wsa:Action="http://domain.catissuecore.wustl.edu/Catissue_cacore/QueryProcessingExceptionFaultMessage" />
-    </operation>
-    <operation name="abcd">
-      <input message="tns:AbcdRequest" wsa:Action="http://domain.catissuecore.wustl.edu/Catissue_cacore/AbcdRequest" />
-      <output message="tns:AbcdResponse" wsa:Action="http://domain.catissuecore.wustl.edu/Catissue_cacore/AbcdResponse" />
     </operation>
     <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="GetMultipleResourceProperties">
       <wsdl:input name="GetMultipleResourcePropertiesRequest" message="wsrpw:GetMultipleResourcePropertiesRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties" />
