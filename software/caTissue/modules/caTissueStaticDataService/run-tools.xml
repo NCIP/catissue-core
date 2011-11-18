@@ -262,6 +262,13 @@
     <!-- START Service rebuild -->
     <target name="updateService" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths">
 
+        <!--COPY BEANS-->
+        <copy todir="${basedir}/lib">
+            <fileset dir="${basedir}/de_codegen/artifacts/">
+                <include name="*-beans.jar" />
+            </fileset>
+        </copy>
+
         <!-- XSDs IMPORT -->
         <foreach target="importXSDs" param="fullJarFileName" inheritall="true">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
@@ -312,9 +319,11 @@
     <target name="importXSD">
         <basename property="filename" file="${fullFileName}"/>
         <echo message="Processing XSD file: ${filename} "/>
+<!--
         <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="doImportXSD" dir="../DECodeGen/">
             <property name="xsdFile" value="${fullFileName}" />
         </ant>
+-->
     </target>
 
     <target name="processDozer">
@@ -331,7 +340,7 @@
             <arg value="mappings"/>
             <arg value="./temp/${filename}/DozerBeanMapping.xml"/>
             <arg value="./src/DozerBeanMapping.xml"/>
-            <arg value="./src/DozerBeanMapping-result.xml"/>
+            <arg value="./src/DozerBeanMapping.xml"/>
         </java>
 
         <java failonerror="true" classname="edu.wustl.catissuecore.domain.util.DozerMerger" fork="yes">
@@ -342,7 +351,7 @@
             <arg value="properties"/>
             <arg value="./temp/${filename}/genericCustomConverterParentRef.properties"/>
             <arg value="./src/edu/wustl/catissuecore/domain/genericCustomConverterParentRef.properties"/>
-            <arg value="./src/edu/wustl/catissuecore/domain/genericCustomConverterParentRef-result.properties"/>
+            <arg value="./src/edu/wustl/catissuecore/domain/genericCustomConverterParentRef.properties"/>
         </java>
 
         <java failonerror="true" classname="edu.wustl.catissuecore.domain.util.DozerMerger" fork="yes">
@@ -353,7 +362,7 @@
             <arg value="properties"/>
             <arg value="./temp/${filename}/genericCustomConverterSets.properties"/>
             <arg value="./src/edu/wustl/catissuecore/domain/genericCustomConverterSets.properties"/>
-            <arg value="./src/edu/wustl/catissuecore/domain/genericCustomConverterSets-result.properties"/>
+            <arg value="./src/edu/wustl/catissuecore/domain/genericCustomConverterSets.properties"/>
         </java>
 
     </target>
