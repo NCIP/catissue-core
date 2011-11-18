@@ -1,6 +1,6 @@
 package edu.wustl.catissuecore.domain.client;
 
-import clinical_annotation.ws.Chemotherapy;
+//import clinical_annotation.ws.Chemotherapy;
 import edu.wustl.catissuecore.domain.ws.*;
 import edu.wustl.catissuecore.domain.util.UniqueKeyGenerator;
 import edu.wustl.common.domain.ws.AbstractDomainObject;
@@ -42,12 +42,14 @@ public class ClientRunAll {
 
     public static void createChemotherapy() throws RemoteException {
         String key = UniqueKeyGenerator.getKey();
+/*
         Chemotherapy c = new Chemotherapy();
         c.setDose(2.3);
         Chemotherapy cResult = null;
         // cResult = client.insert(c);
         System.out.println(String.format("--> Chemotherapy inserted: %d", cResult.getIdentifier()));
         c.setIdentifier(cResult.getIdentifier());
+*/
     }
 
     /**
