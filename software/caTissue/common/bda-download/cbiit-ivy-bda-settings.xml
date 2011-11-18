@@ -51,6 +51,8 @@ This file is the is the settings file used by IVY.  It is a good starting point 
                 <artifact pattern="https://ncimvn.nci.nih.gov/nexus/content/repositories/thirdparty/[organisation]/[module]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
                 <artifact pattern="https://ncimvn.nci.nih.gov/nexus/content/repositories/thirdparty/[organisation]/[module]/[artifact]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
                 <artifact pattern="https://ncimvn.nci.nih.gov/nexus/content/repositories/public/[organisation]/[module]/[artifact]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+                <ivy pattern="https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/[organisation]/[module]/[revision]/ivy-[revision].xml" />
+                <artifact pattern="https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
             </url>
 
 <!--
