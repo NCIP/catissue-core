@@ -463,9 +463,9 @@
     </ns4:Method>
     <ns4:Method description="update" isImported="false" isProvided="false" name="update" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns30:AbstractDomainObject" description="" isArray="false" name="object" xmlns:ns30="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
+      <ns4:Input qName="xsd:anyType" description="" isArray="false" name="object" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns31:AbstractDomainObject" description="" isArray="false" xmlns:ns31="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
+     <ns4:Output qName="xsd:anyType" description="" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      <ns4:Exceptions>
       <ns4:Exception description="" name="QueryProcessingException" qname="ns32:QueryProcessingException" xmlns:ns32="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
      </ns4:Exceptions>
@@ -484,9 +484,9 @@
     </ns4:Method>
     <ns4:Method description="disable" isImported="false" isProvided="false" name="disable" xsi:type="ns4:MethodType">
      <ns4:Inputs>
-      <ns4:Input qName="ns35:AbstractDomainObject" description="" isArray="false" name="object" xmlns:ns35="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
+      <ns4:Input qName="xsd:anyType" description="" isArray="false" name="object" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      </ns4:Inputs>
-     <ns4:Output qName="ns36:AbstractDomainObject" description="" isArray="false" xmlns:ns36="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
+     <ns4:Output qName="xsd:anyType" description="" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
      <ns4:Exceptions>
       <ns4:Exception description="" name="QueryProcessingException" qname="ns37:QueryProcessingException" xmlns:ns37="http://gov.nih.nci.cagrid.data/DataServiceExceptions"/>
      </ns4:Exceptions>
