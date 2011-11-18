@@ -238,39 +238,46 @@ public class Catissue_cacoreClient extends Catissue_cacoreClientBase implements 
     }
   }
 
-  public edu.wustl.common.domain.ws.AbstractDomainObject insert(edu.wustl.common.domain.ws.AbstractDomainObject object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
+  public java.lang.Object insert(java.lang.Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"insert");
     edu.wustl.catissuecore.domain.stubs.InsertRequest params = new edu.wustl.catissuecore.domain.stubs.InsertRequest();
-    edu.wustl.catissuecore.domain.stubs.InsertRequestObject objectContainer = new edu.wustl.catissuecore.domain.stubs.InsertRequestObject();
-    objectContainer.setAbstractDomainObject(object);
-    params.setObject(objectContainer);
+    params.setObject(object);
     edu.wustl.catissuecore.domain.stubs.InsertResponse boxedResult = portType.insert(params);
-    return boxedResult.getAbstractDomainObject();
+    return boxedResult.getResponse();
     }
   }
 
-  public edu.wustl.common.domain.ws.AbstractDomainObject update(edu.wustl.common.domain.ws.AbstractDomainObject object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
+  public Object update(Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"update");
     edu.wustl.catissuecore.domain.stubs.UpdateRequest params = new edu.wustl.catissuecore.domain.stubs.UpdateRequest();
     edu.wustl.catissuecore.domain.stubs.UpdateRequestObject objectContainer = new edu.wustl.catissuecore.domain.stubs.UpdateRequestObject();
-    objectContainer.setAbstractDomainObject(object);
+    objectContainer.setObject(object);
     params.setObject(objectContainer);
     edu.wustl.catissuecore.domain.stubs.UpdateResponse boxedResult = portType.update(params);
-    return boxedResult.getAbstractDomainObject();
+    return boxedResult.getObject();
     }
   }
 
-  public edu.wustl.common.domain.ws.AbstractDomainObject disable(edu.wustl.common.domain.ws.AbstractDomainObject object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
+  public Object disable(Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"disable");
     edu.wustl.catissuecore.domain.stubs.DisableRequest params = new edu.wustl.catissuecore.domain.stubs.DisableRequest();
     edu.wustl.catissuecore.domain.stubs.DisableRequestObject objectContainer = new edu.wustl.catissuecore.domain.stubs.DisableRequestObject();
-    objectContainer.setAbstractDomainObject(object);
+    objectContainer.setObject(object);
     params.setObject(objectContainer);
     edu.wustl.catissuecore.domain.stubs.DisableResponse boxedResult = portType.disable(params);
-    return boxedResult.getAbstractDomainObject();
+    return boxedResult.getObject();
+    }
+  }
+
+  public void abcd(java.lang.Object object) throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"abcd");
+    edu.wustl.catissuecore.domain.stubs.AbcdRequest params = new edu.wustl.catissuecore.domain.stubs.AbcdRequest();
+    params.setObject(object);
+    edu.wustl.catissuecore.domain.stubs.AbcdResponse boxedResult = portType.abcd(params);
     }
   }
 

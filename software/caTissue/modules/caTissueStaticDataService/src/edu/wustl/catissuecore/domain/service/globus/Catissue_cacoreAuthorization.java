@@ -90,6 +90,10 @@ public class Catissue_cacoreAuthorization implements PDP {
 	public void authorizeDisable(Subject peerSubject, MessageContext context, QName operation) throws AuthorizationException {
 		
 	}
+	   				
+	public void authorizeAbcd(Subject peerSubject, MessageContext context, QName operation) throws AuthorizationException {
+		
+	}
 	   
 	
 	public boolean isPermitted(Subject peerSubject, MessageContext context, QName operation)
@@ -124,6 +128,9 @@ public class Catissue_cacoreAuthorization implements PDP {
 			return true;
 		} else if(operation.getLocalPart().equals("disable")){
 			authorizeDisable(peerSubject, context, operation);
+			return true;
+		} else if(operation.getLocalPart().equals("abcd")){
+			authorizeAbcd(peerSubject, context, operation);
 			return true;
 		} 		
 		return false;

@@ -23,7 +23,7 @@ public class GenericConverter {
     private GenericConverter() {
     }
 
-    public static edu.wustl.common.domain.AbstractDomainObject convert(AbstractDomainObject wsAdo) {
+    public static edu.wustl.common.domain.AbstractDomainObject convert(Object wsAdo) {
 
         String pName = wsAdo.getClass().getPackage().getName();
         String className = wsAdo.getClass().getSimpleName();

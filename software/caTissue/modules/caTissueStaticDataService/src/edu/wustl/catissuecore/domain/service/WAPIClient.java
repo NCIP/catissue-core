@@ -43,8 +43,7 @@ public class WAPIClient {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public AbstractDomainObject updateWsObjectStatus(
-			AbstractDomainObject inputWsAdo) throws ApplicationException {
+	public Object updateWsObjectStatus(Object inputWsAdo) throws ApplicationException {
 		String setActivityStatusMethodName = "setActivityStatus";
 		String disabledValue = "Disabled";
 		Class c = inputWsAdo.getClass();
@@ -69,14 +68,12 @@ public class WAPIClient {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public AbstractDomainObject insertWsObject(AbstractDomainObject inputWsAdo)
-			throws ApplicationException {
+	public Object insertWsObject(Object inputWsAdo) throws ApplicationException {
 		log.debug(">>> insertWsObject");
-		edu.wustl.common.domain.AbstractDomainObject ado = WAPIUtility
-				.convertWsToDomain(inputWsAdo);
+		Object ado = WAPIUtility.convertWsToDomain(inputWsAdo);
 		WAPIUtility.nullifyFieldValue(ado, "setId", "getId", Long.class, null);
 		ado = insert(ado);
-		AbstractDomainObject outputWsAdo = WAPIUtility.convertDomainToWs(ado);
+		Object outputWsAdo = WAPIUtility.convertDomainToWs(ado);
 		return outputWsAdo;
 	}
 
@@ -86,13 +83,12 @@ public class WAPIClient {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public AbstractDomainObject updateWsObject(AbstractDomainObject inputWsAdo)
+	public Object updateWsObject(Object inputWsAdo)
 			throws ApplicationException {
 		log.debug(">>> updateWsObject");
-		edu.wustl.common.domain.AbstractDomainObject ado = WAPIUtility
-				.convertWsToDomain(inputWsAdo);
+		Object ado = WAPIUtility.convertWsToDomain(inputWsAdo);
 		ado = update(ado);
-		AbstractDomainObject outputWsAdo = WAPIUtility.convertDomainToWs(ado);
+		Object outputWsAdo = WAPIUtility.convertDomainToWs(ado);
 		return outputWsAdo;
 	}
 

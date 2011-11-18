@@ -22,7 +22,7 @@
       <ns2:Operation description="" name="getServiceSecurityMetadata">
        <ns2:inputParameterCollection/>
        <ns2:Output qName="ns4:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security">
-        <ns5:UMLClass className="ServiceSecurityMetadata" description="An instance of the Security Service Metadata." id="B1C3A215-A30A-6313-E040-BB89AD434D2E" packageName="gov.nih.nci.cagrid.metadata.security" projectName="caGrid_Metadata_Models" projectVersion="1" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+        <ns5:UMLClass className="ServiceSecurityMetadata" description="An instance of the Security Service Metadata." id="B1FFFB9D-80DF-8E87-E040-BB89AD4331EF" packageName="gov.nih.nci.cagrid.metadata.security" projectName="caGrid_Metadata_Models" projectVersion="1" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
          <ns5:umlAttributeCollection/>
          <ns5:SemanticMetadata conceptCode="C80736" conceptDefinition="A software system providing a public need." conceptName="Software Service" order="2"/>
          <ns5:SemanticMetadata conceptCode="C25669" conceptDefinition="Security; freedom from anxiety or fear." conceptName="Security" order="1"/>
@@ -53,6 +53,15 @@
       </ns2:Operation>
       <ns2:Operation description="insert" name="insert">
        <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="xsd:anyType" dimensionality="1" index="0" isArray="false" isRequired="false" name="object" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="xsd:anyType" dimensionality="1" isArray="false" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="QueryProcessingException"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="update" name="update">
+       <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns10:AbstractDomainObject" dimensionality="1" index="0" isArray="false" isRequired="false" name="object" xmlns:ns10="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
        </ns2:inputParameterCollection>
        <ns2:Output qName="ns11:AbstractDomainObject" dimensionality="1" isArray="false" xmlns:ns11="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
@@ -60,7 +69,7 @@
         <ns2:Fault description="" name="QueryProcessingException"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="update" name="update">
+      <ns2:Operation description="disable" name="disable">
        <ns2:inputParameterCollection>
         <ns2:InputParameter qName="ns12:AbstractDomainObject" dimensionality="1" index="0" isArray="false" isRequired="false" name="object" xmlns:ns12="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
        </ns2:inputParameterCollection>
@@ -69,14 +78,11 @@
         <ns2:Fault description="" name="QueryProcessingException"/>
        </ns2:faultCollection>
       </ns2:Operation>
-      <ns2:Operation description="disable" name="disable">
+      <ns2:Operation description="" name="abcd">
        <ns2:inputParameterCollection>
-        <ns2:InputParameter qName="ns14:AbstractDomainObject" dimensionality="1" index="0" isArray="false" isRequired="false" name="object" xmlns:ns14="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
+        <ns2:InputParameter qName="xsd:anyType" dimensionality="1" index="0" isArray="false" isRequired="false" name="object" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
        </ns2:inputParameterCollection>
-       <ns2:Output qName="ns15:AbstractDomainObject" dimensionality="1" isArray="false" xmlns:ns15="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"/>
-       <ns2:faultCollection>
-        <ns2:Fault description="" name="QueryProcessingException"/>
-       </ns2:faultCollection>
+       <ns2:faultCollection/>
       </ns2:Operation>
      </ns2:operationCollection>
      <ns2:contextPropertyCollection>
@@ -86,16 +92,16 @@
      </ns2:contextPropertyCollection>
     </ns2:ServiceContext>
    </ns2:serviceContextCollection>
-   <ns16:SemanticMetadata conceptCode="C63541" conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services." conceptName="Grid Service" order="0" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
-   <ns17:SemanticMetadata conceptCode="C63544" conceptDefinition="A web service which accepts as input a query targeted at a data resource addressable by the system and returns information to the client in the form of one or more data objects." conceptName="Data Grid Service" order="1" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns14:SemanticMetadata conceptCode="C63541" conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services." conceptName="Grid Service" order="0" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns15:SemanticMetadata conceptCode="C63544" conceptDefinition="A web service which accepts as input a query targeted at a data resource addressable by the system and returns information to the client in the form of one or more data objects." conceptName="Data Grid Service" order="1" xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
-  <ns18:ResearchCenter displayName="" shortName="" xmlns:ns18="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-   <ns18:Address country="" locality="" postalCode="" stateProvince="" street1="" street2=""/>
-   <ns18:pointOfContactCollection>
-    <ns18:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role=""/>
-   </ns18:pointOfContactCollection>
-  </ns18:ResearchCenter>
+  <ns16:ResearchCenter displayName="" shortName="" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns16:Address country="" locality="" postalCode="" stateProvince="" street1="" street2=""/>
+   <ns16:pointOfContactCollection>
+    <ns16:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role=""/>
+   </ns16:pointOfContactCollection>
+  </ns16:ResearchCenter>
  </ns1:hostingResearchCenter>
 </ns1:ServiceMetadata>

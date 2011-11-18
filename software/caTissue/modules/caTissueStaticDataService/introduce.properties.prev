@@ -1,11 +1,11 @@
 #Introduce Properties
-#Tue Nov 15 10:43:29 EST 2011
+#Fri Nov 18 14:21:01 EST 2011
 introduce.skeleton.services.list=Catissue_cacore
 introduce.skeleton.extensions=cagrid_metadata,data
-introduce.skeleton.timestamp=1319823929244
+introduce.skeleton.timestamp=1321371847990
 introduce.skeleton.service.name=Catissue_cacore
 introduce.skeleton.resource.options=main,singleton,identifiable,resourcePropertyManagement
-introduce.skeleton.destination.dir=C\:\\Projects\\caTissue\\caTissueStaticDataService
+introduce.skeleton.destination.dir=C\:\\caTissue\\software\\caTissue\\modules\\caTissueStaticDataService
 introduce.skeleton.namespace.domain=http\://domain.catissuecore.wustl.edu/Catissue_cacore
-introduce.ns.excludes=\ -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop -x gme\://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security -x http\://gov.nih.nci.cagrid.data/DataServiceExceptions -x http\://org.cagrid.dataservice.cql/QueryLanguageSupport -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common -x http\://CQL.caBIG/2/org.cagrid.cql2 -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology -x http\://CQL.caBIG/2/org.cagrid.cql2.results -x gme\://caCORE.caCORE/3.2/edu.wustl.common.domain -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration
 introduce.soap.binding.excludes=\ gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop http\://CQL.caBIG/2/org.cagrid.cql2 gme\://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain http\://CQL.caBIG/2/org.cagrid.cql2.results gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology gme\://caCORE.caCORE/3.2/edu.wustl.common.domain gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration
+introduce.ns.excludes=\ -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop -x gme\://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security -x http\://gov.nih.nci.cagrid.data/DataServiceExceptions -x http\://org.cagrid.dataservice.cql/QueryLanguageSupport -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common -x http\://CQL.caBIG/2/org.cagrid.cql2 -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology -x http\://CQL.caBIG/2/org.cagrid.cql2.results -x gme\://caCORE.caCORE/3.2/edu.wustl.common.domain -x gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration

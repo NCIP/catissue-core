@@ -61,10 +61,9 @@ public class WAPIUtility {
 		}
 	}
 
-	public static AbstractDomainObject convertDomainToWs(
-			edu.wustl.common.domain.AbstractDomainObject ado) {
+	public static Object convertDomainToWs(Object ado) {
 		log.debug(">>> convertDomainToWs: " + ado.getClass().getCanonicalName());
-		AbstractDomainObject wsAdo = null;
+		Object wsAdo = null;
 
 		SpringProxyResolver spr = SpringProxyResolver.getInstance();
 		ado = spr.unenhanceObject(ado);
@@ -80,8 +79,7 @@ public class WAPIUtility {
 		return null;
 	}
 
-	public static edu.wustl.common.domain.AbstractDomainObject convertWsToDomain(
-			AbstractDomainObject wsAdo) {
+	public static Object convertWsToDomain(Object wsAdo) {
 		log.debug(">>> convertWsToDomain: " + wsAdo.getClass().getName());
 		edu.wustl.common.domain.AbstractDomainObject ado = null;
 
@@ -201,22 +199,22 @@ public class WAPIUtility {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public static AbstractDomainObject insertWsObject(
+	public static Object insertWsObject(
 			AbstractDomainObject inputWsAdo) throws ApplicationException {
 		log.debug(">>> insertWsObject");
-		edu.wustl.common.domain.AbstractDomainObject ado = convertWsToDomain(inputWsAdo);
+		Object ado = convertWsToDomain(inputWsAdo);
 		WAPIUtility.nullifyFieldValue(ado, "setId", "getId", Long.class, null);
 		ado = insert(ado);
-		AbstractDomainObject outputWsAdo = convertDomainToWs(ado);
+		Object outputWsAdo = convertDomainToWs(ado);
 		return outputWsAdo;
 	}
 
-	public static AbstractDomainObject updateWsObject(
+	public static Object updateWsObject(
 			AbstractDomainObject inputWsAdo) throws ApplicationException {
 		log.debug(">>> updateWsObject");
-		edu.wustl.common.domain.AbstractDomainObject ado = convertWsToDomain(inputWsAdo);
+		Object ado = convertWsToDomain(inputWsAdo);
 		ado = update(ado);
-		AbstractDomainObject outputWsAdo = convertDomainToWs(ado);
+		Object outputWsAdo = convertDomainToWs(ado);
 		return outputWsAdo;
 	}
 

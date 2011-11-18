@@ -51,7 +51,7 @@ public interface Catissue_cacoreI {
    * @throws QueryProcessingException
    *	
    */
-  public edu.wustl.common.domain.ws.AbstractDomainObject insert(edu.wustl.common.domain.ws.AbstractDomainObject object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
+  public java.lang.Object insert(java.lang.Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
 
   /**
    * update
@@ -60,7 +60,7 @@ public interface Catissue_cacoreI {
    * @throws QueryProcessingException
    *	
    */
-  public edu.wustl.common.domain.ws.AbstractDomainObject update(edu.wustl.common.domain.ws.AbstractDomainObject object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
+  public Object update(Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
 
   /**
    * disable
@@ -69,7 +69,9 @@ public interface Catissue_cacoreI {
    * @throws QueryProcessingException
    *	
    */
-  public edu.wustl.common.domain.ws.AbstractDomainObject disable(edu.wustl.common.domain.ws.AbstractDomainObject object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
+  public Object disable(Object object) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType ;
+
+  public void abcd(java.lang.Object object) throws RemoteException ;
 
 }
 

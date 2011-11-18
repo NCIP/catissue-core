@@ -28,19 +28,25 @@ public class Catissue_cacoreProviderImpl{
 
     public edu.wustl.catissuecore.domain.stubs.InsertResponse insert(edu.wustl.catissuecore.domain.stubs.InsertRequest params) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
     edu.wustl.catissuecore.domain.stubs.InsertResponse boxedResult = new edu.wustl.catissuecore.domain.stubs.InsertResponse();
-    boxedResult.setAbstractDomainObject(impl.insert(params.getObject().getAbstractDomainObject()));
+    boxedResult.setResponse(impl.insert(params.getObject()));
     return boxedResult;
   }
 
     public edu.wustl.catissuecore.domain.stubs.UpdateResponse update(edu.wustl.catissuecore.domain.stubs.UpdateRequest params) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
     edu.wustl.catissuecore.domain.stubs.UpdateResponse boxedResult = new edu.wustl.catissuecore.domain.stubs.UpdateResponse();
-    boxedResult.setAbstractDomainObject(impl.update(params.getObject().getAbstractDomainObject()));
+    boxedResult.setObject(impl.update(params.getObject().getObject()));
     return boxedResult;
   }
 
     public edu.wustl.catissuecore.domain.stubs.DisableResponse disable(edu.wustl.catissuecore.domain.stubs.DisableRequest params) throws RemoteException, gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType {
     edu.wustl.catissuecore.domain.stubs.DisableResponse boxedResult = new edu.wustl.catissuecore.domain.stubs.DisableResponse();
-    boxedResult.setAbstractDomainObject(impl.disable(params.getObject().getAbstractDomainObject()));
+    boxedResult.setObject((impl.disable(params.getObject().getObject())));
+    return boxedResult;
+  }
+
+    public edu.wustl.catissuecore.domain.stubs.AbcdResponse abcd(edu.wustl.catissuecore.domain.stubs.AbcdRequest params) throws RemoteException {
+    edu.wustl.catissuecore.domain.stubs.AbcdResponse boxedResult = new edu.wustl.catissuecore.domain.stubs.AbcdResponse();
+    impl.abcd(params.getObject());
     return boxedResult;
   }
 
