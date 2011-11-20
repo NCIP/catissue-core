@@ -81,7 +81,7 @@ public class WAPIUtility {
 
 	public static Object convertWsToDomain(Object wsAdo) {
 		log.debug(">>> convertWsToDomain: " + wsAdo.getClass().getName());
-		edu.wustl.common.domain.AbstractDomainObject ado = null;
+		Object ado = null;
 
 		ado = GenericConverter.convert(wsAdo);
 
@@ -173,8 +173,7 @@ public class WAPIUtility {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public static AbstractDomainObject updateWsObjectStatus(
-			AbstractDomainObject inputWsAdo) throws ApplicationException {
+	public static AbstractDomainObject updateWsObjectStatus(AbstractDomainObject inputWsAdo) throws ApplicationException {
 		String setActivityStatusMethodName = "setActivityStatus";
 		String disabledValue = "Disabled";
 		Class c = inputWsAdo.getClass();
@@ -184,12 +183,10 @@ public class WAPIUtility {
 			m.invoke(inputWsAdo, disabledValue);
 			return inputWsAdo;
 		} catch (NoSuchMethodException e) {
-			log.debug(c.getName() + " doesn't have "
-					+ setActivityStatusMethodName);
+			log.debug(c.getName() + " doesn't have " + setActivityStatusMethodName);
 			return null;
 		} catch (Exception e) {
-			throw new ApplicationException("Couldn't invoke " + c.getName()
-					+ "." + setActivityStatusMethodName, e);
+			throw new ApplicationException("Couldn't invoke " + c.getName() + "." + setActivityStatusMethodName, e);
 		}
 	}
 
@@ -199,8 +196,7 @@ public class WAPIUtility {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public static Object insertWsObject(
-			AbstractDomainObject inputWsAdo) throws ApplicationException {
+	public static Object insertWsObject(AbstractDomainObject inputWsAdo) throws ApplicationException {
 		log.debug(">>> insertWsObject");
 		Object ado = convertWsToDomain(inputWsAdo);
 		WAPIUtility.nullifyFieldValue(ado, "setId", "getId", Long.class, null);

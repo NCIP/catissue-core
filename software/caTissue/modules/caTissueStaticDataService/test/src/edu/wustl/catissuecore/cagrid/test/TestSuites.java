@@ -17,6 +17,7 @@ public class TestSuites {
             suite.addTestSuite(WAPIUtilityTest.class);
             suite.addTestSuite(OrderDetailsConversionTest.class);
             suite.addTestSuite(SpecimenOrderItemTest.class);
+            suite.addTestSuite(ChemotherapyTest.class);
             return suite;
         }
 
