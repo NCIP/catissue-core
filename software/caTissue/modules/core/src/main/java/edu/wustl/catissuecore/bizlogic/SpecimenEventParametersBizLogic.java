@@ -1,4 +1,5 @@
 /*
+
  * Created on Jul 29, 2005
  *<p>SpecimenEventParametersBizLogic Class</p>
  * This class contains the Biz Logic for all EventParameters Classes.
@@ -120,7 +121,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			{
 				this.insertEvent(eventObjectsList.get(i), dao, sessionDataBean,
 						newSpecimenBizLogic, specimenIds);
-				if(eventObjectsList.get(i) instanceof TransferEventParameters)
+				/*if(eventObjectsList.get(i) instanceof TransferEventParameters)
 				{
 					TransferEventParameters transferEventParameters = (TransferEventParameters) eventObjectsList.get(i);
 					User user= new User();
@@ -138,7 +139,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 							dataValueMap, specimen, oldSpecimenPosition, fromStorageContainer,
 							posDimenOne, posDimenTwo);
 				}
-				else if(eventObjectsList.get(i) instanceof DisposalEventParameters)
+				else */if(eventObjectsList.get(i) instanceof DisposalEventParameters)
 				{
 					DisposalEventParameters disposalEventParameters=(DisposalEventParameters) eventObjectsList.get(i);
 					User user= new User();
@@ -167,7 +168,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	 * @param posDimenOne
 	 * @param posDimenTwo
 	 */
-	public void insertDynamicEventForTransferEvent(SessionDataBean sessionDataBean,
+	/*public void insertDynamicEventForTransferEvent(SessionDataBean sessionDataBean,
 			TransferEventParameters transferEventParameters,
 			Map<BaseAbstractAttributeInterface, Object> dataValueMap, Specimen specimen,
 			SpecimenPosition oldSpecimenPosition, StringBuilder fromStorageContainer,
@@ -287,7 +288,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				exp.printStackTrace();
 			}
 	}
-
+*/
 	/**
 	 * @param sessionDataBean
 	 * @param disposalEventParameters
@@ -577,7 +578,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			}
 			specimen.getSpecimenEventCollection().add(specimenEvent);
 			//specimenEvent.doRoundOff();
-			SpecimenEventParametersUtility.doRoundOff(specimenEvent);
+			//SpecimenEventParametersUtility.doRoundOff(specimenEvent);
 			dao.insert(specimenEvent);
 		}
 		catch (final DAOException daoExp)
@@ -758,7 +759,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				updateDisposalEvent(dao, (DisposalEventParameters) specimenEventParameters);
 			}
 			//specimenEventParameters.doRoundOff();
-			SpecimenEventParametersUtility.doRoundOff(specimenEventParameters);
+			//SpecimenEventParametersUtility.doRoundOff(specimenEventParameters);
 			//Update registration
 			dao.update(specimenEventParameters, oldSpecimenEventParameters);
 		}
@@ -932,7 +933,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(null, "spec.moved.diff.loc", specimen
 						.getLabel());
 			}
-			else if ((fromContainerId != null && parameter.getFromStorageContainer() != null)
+			/*else if ((fromContainerId != null && parameter.getFromStorageContainer() != null)
 					&& !((fromContainerId.equals(parameter.getFromStorageContainer().getId())
 							&& fromPos1.equals(parameter.getFromPositionDimensionOne()) && fromPos2
 							.equals(parameter.getFromPositionDimensionTwo()))))
@@ -940,7 +941,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 				throw this.getBizLogicException(null, "spec.moved.diff.loc", specimen
 						.getLabel());
-			}
+			}*/
 			if (parameter.getToStorageContainer() != null
 					&& parameter.getToStorageContainer().getName() != null)
 			{
@@ -1068,105 +1069,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 		switch (AppUtility.getEventParametersFormId(eventParameter))
 		{
-//		case Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID :
-//			final String storageStatus = ((CheckInCheckOutEventParameter) eventParameter)
-//			.getStorageStatus();
-//			if (!Validator.isEnumeratedValue(Constants.STORAGE_STATUS_ARRAY, storageStatus))
-//			{
-//				throw this.getBizLogicException(null, "events.storageStatus.errMsg", "");
-//			}
-//			break;
-
-//		case Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID :
-//			final String procedure = ((CollectionEventParameters) eventParameter)
-//			.getCollectionProcedure();
-//			final List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
-//					Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
-//			if (!Validator.isEnumeratedValue(procedureList, procedure))
-//			{
-//				throw this.getBizLogicException(null, "events.collectionProcedure.errMsg", "");
-//			}
-//
-//			final String container = ((CollectionEventParameters) eventParameter)
-//			.getContainer();
-//			final List containerList = CDEManager.getCDEManager().getPermissibleValueList(
-//					Constants.CDE_NAME_CONTAINER, null);
-//			if (!Validator.isEnumeratedOrNullValue(containerList, container))
-//			{
-//				throw this.getBizLogicException(null, "events.container.errMsg", "");
-//			}
-//			/**
-//			 * Name : Vijay_Pande
-//			 * Patch ID: 4041_2
-//			 * See also: 1-3
-//			 * Description: Validation for container field.
-//			 */
-//			if (!validator.isValidOption(container))
-//			{
-//				final String message = ApplicationProperties
-//				.getValue("collectioneventparameters.container");
-//				throw this.getBizLogicException(null, "errors.item.required", message);
-//			}
-//			/** -- patch ends here --*/
-//			break;
-
-//		case Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID :
-//			final String embeddingMedium = ((EmbeddedEventParameters) eventParameter)
-//			.getEmbeddingMedium();
-//			final List embeddingMediumList = CDEManager.getCDEManager()
-//			.getPermissibleValueList(Constants.CDE_NAME_EMBEDDING_MEDIUM, null);
-//			if (!Validator.isEnumeratedValue(embeddingMediumList, embeddingMedium))
-//			{
-//				throw this.getBizLogicException(null, "events.embeddingMedium.errMsg", "");
-//			}
-//			break;
-
-//		case Constants.FIXED_EVENT_PARAMETERS_FORM_ID :
-//			final String fixationType = ((FixedEventParameters) eventParameter)
-//			.getFixationType();
-//			final List fixationTypeList = CDEManager.getCDEManager().getPermissibleValueList(
-//					Constants.CDE_NAME_FIXATION_TYPE, null);
-//			if (!Validator.isEnumeratedValue(fixationTypeList, fixationType))
-//			{
-//
-//				throw this.getBizLogicException(null, "events.fixationType.errMsg", "");
-//			}
-//			break;
-
-//		case Constants.FROZEN_EVENT_PARAMETERS_FORM_ID :
-//			final String method = ((FrozenEventParameters) eventParameter).getMethod();
-//			final List methodList = CDEManager.getCDEManager().getPermissibleValueList(
-//					Constants.CDE_NAME_METHOD, null);
-//			if (!Validator.isEnumeratedValue(methodList, method))
-//			{
-//
-//				throw this.getBizLogicException(null, "events.method.errMsg", "");
-//			}
-//			break;
-
-//		case Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID :
-//			final String quality = ((ReceivedEventParameters) eventParameter)
-//			.getReceivedQuality();
-//			final List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
-//					Constants.CDE_NAME_RECEIVED_QUALITY, null);
-//			if (!Validator.isEnumeratedValue(qualityList, quality))
-//			{
-//
-//				throw this.getBizLogicException(null, "events.receivedQuality.errMsg", "");
-//			}
-//			break;
-
-//		case Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID :
-//			final String histQuality = ((TissueSpecimenReviewEventParameters) eventParameter)
-//			.getHistologicalQuality();
-//			final List histologicalQualityList = CDEManager.getCDEManager()
-//			.getPermissibleValueList(Constants.CDE_NAME_HISTOLOGICAL_QUALITY, null);
-//			if (!Validator.isEnumeratedOrNullValue(histologicalQualityList, histQuality))
-//			{
-//
-//				throw this.getBizLogicException(null, "events.histologicalQuality.errMsg", "");
-//			}
-//			break;
 			//Case added for disposal event for bug #15185
 		case Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID :
 			validateDisposalEvent(dao, eventParameter);

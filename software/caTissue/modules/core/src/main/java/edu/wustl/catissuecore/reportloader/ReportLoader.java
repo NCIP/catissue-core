@@ -243,9 +243,6 @@ public class ReportLoader
 			}
 			scg.setCollectionProtocolEvent(collProtocolEvent);
 			scg.setCollectionProtocolRegistration(collProtocolReg);
-			//scg.setSpecimenEventParametersCollection(this.getDefaultEvents(scg));
-			//scg.setName(Constants.REPORT_LOADER_SCG
-					//+ CaCoreAPIService.getSpecimenCollectionGroupLabel(scg));
 			scg.setBarcode(Constants.REPORT_LOADER_SCG);
 		}
 		else
@@ -304,39 +301,6 @@ public class ReportLoader
 		return null;
 	}
 
-	/**
-	 * This method gets Default Events.
-	 * @param specimenCollectionGroup SpecimenCollectionGroup object
-	 * @return defaultEventCollection
-	 * @throws Exception Exception
-	 */
-//	private Collection<SpecimenEventParameters> getDefaultEvents(
-//			SpecimenCollectionGroup specimenCollectionGroup) throws Exception
-//	{
-//		final Collection<SpecimenEventParameters> defaultEventCollection = new HashSet<SpecimenEventParameters>();
-//		final String loginName = CaTIESProperties.getValue(CaTIESConstants.USER_NAME);
-//		final User user = (User) CaCoreAPIService.getObject(User.class, Constants.LOGINNAME,
-//				loginName);
-//
-//		final CollectionEventParameters collectionEvent = (CollectionEventParameters)DomainInstanceFactory.getInstanceFactory(CollectionEventParameters.class).createObject();//new CollectionEventParameters();
-//		collectionEvent.setCollectionProcedure(CaCoreAPIService
-//				.getCaTissueServerProperty(Constants.DEFAULT_COLLECTION_PROCEDURE));
-//		collectionEvent.setContainer(CaCoreAPIService.getCaTissueServerProperty(Constants.DEFAULT_CONTAINER));
-//		collectionEvent.setSpecimenCollectionGroup(specimenCollectionGroup);
-//		collectionEvent.setTimestamp(new Date());
-//		collectionEvent.setUser(user);
-//
-//		final ReceivedEventParameters recievedEvent = (ReceivedEventParameters)DomainInstanceFactory.getInstanceFactory(ReceivedEventParameters.class).createObject();//new ReceivedEventParameters();
-//		recievedEvent.setReceivedQuality(CaCoreAPIService
-//				.getCaTissueServerProperty(Constants.DEFAULT_RECEIVED_QUALITY));
-//		recievedEvent.setSpecimenCollectionGroup(specimenCollectionGroup);
-//		recievedEvent.setTimestamp(new Date());
-//		recievedEvent.setUser(user);
-//
-//		defaultEventCollection.add(collectionEvent);
-//		defaultEventCollection.add(recievedEvent);
-//		return defaultEventCollection;
-//	}
 
 	/**
 	 * This method retrieve And Set SCG.

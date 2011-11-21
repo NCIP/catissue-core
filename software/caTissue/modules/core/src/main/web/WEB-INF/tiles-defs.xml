@@ -446,77 +446,6 @@
 	<definition name=".catissuecore.viewSurgicalPathologyReportDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/ViewSPR.jsp" />
 	</definition>
-	<!-- SpecimenCollectionGroup Parameters -->
-
-	<!-- FrozenEventParameters -->
-	<definition name=".catissuecore.frozenEventParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/FrozenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.frozenEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.frozenEventParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- FrozenEventParameters end -->
-
-	<!-- CheckInCheckOutEventParameters -->
-	<definition name=".catissuecore.checkInCheckOutEventParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/CheckInCheckOutEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.checkInCheckOutEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.checkInCheckOutEventParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- CheckInCheckOut EventParameters end -->
-
-	<!-- ReceivedOutEventParameters -->
-	<definition name=".catissuecore.receivedEventParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/ReceivedEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.receivedEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.receivedEventParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- Received EventParameters end -->
-
-	<!-- FluidSpecimenReviewEventParameters -->
-	<definition name=".catissuecore.fluidSpecimenReviewEventParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/FluidSpecimenReviewEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.fluidSpecimenReviewEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.fluidSpecimenReviewEventParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- FluidSpecimenReviewEventParameters end -->
-
-	<!-- CellSpecimenReviewParameters -->
-	<definition name=".catissuecore.cellSpecimenReviewParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/CellSpecimenReviewParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.cellSpecimenReviewParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.cellSpecimenReviewParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- CellSpecimenReviewParameters end -->
 
 	<definition name=".catissuecore.standardOperatingProceduresDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/DynamicEvent.jsp" />
@@ -529,20 +458,6 @@
 	<definition name=".catissuecore.redirectToSpecimenEventsPage" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/RedirectToSpecimenEventsPage.jsp" />
 	</definition>
-
-	<!-- TissueSpecimenReviewEventParameters -->
-	<definition name=".catissuecore.tissueSpecimenReviewEventParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/TissueSpecimenReviewEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.tissueSpecimenReviewEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.tissueSpecimenReviewEventParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- TissueSpecimenReviewEventParameters end -->
 
 	<!-- DisposalEventParameters -->
 	<definition name=".catissuecore.disposalEventParametersDef" extends=".catissuecore.queryDataViewDef">
@@ -558,34 +473,6 @@
 	</definition>
 	<!-- DisposalEventParameters end -->
 
-	<!-- ThawEventParameters -->
-	<definition name=".catissuecore.thawEventParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/ThawEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.thawEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.thawEventParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- ThawEventParameters end -->
-
-		<!-- collectionEventParameters -->
-	<definition name=".catissuecore.collectionEventParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/CollectionEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.collectionEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.collectionEventParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- collectionEventParameters end -->
-
 	<!-- TransferEventParameters -->
 	<definition name=".catissuecore.transferEventParametersDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/TransferEventParameters.jsp" />
@@ -600,75 +487,8 @@
 	</definition>
 	<!-- transferEventParameters end -->
 
-	<!-- SpunEventParameters -->
-	<definition name=".catissuecore.spunEventParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/SpunEventParameters.jsp" />
-	</definition>
 
-	<definition name=".catissuecore.spunEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.spunEventParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- SpunEventParameters end -->
-	<!-- EmbeddedEventParameters -->
-	<definition name=".catissuecore.embeddedEventParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/EmbeddedEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.embeddedEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.embeddedEventParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- EmbeddedEventParameters end -->
-
-		<!-- fixedEventParameters -->
-	<definition name=".catissuecore.fixedEventParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/FixedEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.fixedEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.fixedEventParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- fixedEventParameters end -->
-
-	<!-- procedureEventParameters -->
-	<definition name=".catissuecore.procedureEventParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/ProcedureEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.procedureEventParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.procedureEventParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- procedureEventParameters end -->
-
-	<!-- MolecularSpecimenReviewParameters -->
-	<definition name=".catissuecore.molecularSpecimenReviewParametersDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/MolecularSpecimenReviewParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.molecularSpecimenReviewParametersAddSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-
-	<definition name=".catissuecore.molecularSpecimenReviewParametersEditSuccessDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/RedirectSpecimenEventParameters.jsp" />
-	</definition>
-	<!-- MolecularSpecimenReviewEventParameters end -->
-
+	
 	<!-- Distribution -->
 	<definition name=".catissuecore.distributionDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Distribution.jsp" />

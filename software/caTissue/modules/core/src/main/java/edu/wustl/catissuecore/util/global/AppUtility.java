@@ -272,34 +272,6 @@ public class AppUtility
 
 	public static int getEventParametersFormId(final SpecimenEventParameters eventParameter)
 	{
-		//		if (eventParameter instanceof CheckInCheckOutEventParameter)
-		//		{
-		//			return Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID;
-		//		}
-		//	    if (eventParameter instanceof CollectionEventParameters)
-		//		{
-		//			return Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID;
-		//		}
-		//		else if (eventParameter instanceof EmbeddedEventParameters)
-		//		{
-		//			return Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID;
-		//		}
-		//		else if (eventParameter instanceof FixedEventParameters)
-		//		{
-		//			return Constants.FIXED_EVENT_PARAMETERS_FORM_ID;
-		//		}
-		//		else if (eventParameter instanceof FrozenEventParameters)
-		//		{
-		//			return Constants.FROZEN_EVENT_PARAMETERS_FORM_ID;
-		//		}
-		//		else if (eventParameter instanceof ReceivedEventParameters)
-		//		{
-		//			return Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID;
-		//		}
-		//		else if (eventParameter instanceof TissueSpecimenReviewEventParameters)
-		//		{
-		//			return Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID;
-		//		}
 		if (eventParameter instanceof TransferEventParameters)
 		{
 			return Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID;

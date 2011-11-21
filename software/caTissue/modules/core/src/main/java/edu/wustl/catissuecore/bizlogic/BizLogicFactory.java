@@ -48,191 +48,177 @@ public class BizLogicFactory implements IFactory
 
 		switch (FORM_ID)
 		{
-			case Constants.FORGOT_PASSWORD_FORM_ID :
-			case Constants.USER_FORM_ID :
-				bizLogic = new UserBizLogic();
-				break;
-			case Constants.APPROVE_USER_FORM_ID :
-				bizLogic = new ApproveUserBizLogic();
-				break;
-			case Constants.REPORTED_PROBLEM_FORM_ID :
-				bizLogic = new ReportedProblemBizLogic();
-				break;
-			case Constants.STORAGE_TYPE_FORM_ID :
-				bizLogic = new StorageTypeBizLogic();
-				break;
-			case Constants.STORAGE_CONTAINER_FORM_ID :
-				bizLogic = new StorageContainerBizLogic();
-				break;
+		case Constants.FORGOT_PASSWORD_FORM_ID :
+		case Constants.USER_FORM_ID :
+			bizLogic = new UserBizLogic();
+			break;
+		case Constants.APPROVE_USER_FORM_ID :
+			bizLogic = new ApproveUserBizLogic();
+			break;
+		case Constants.REPORTED_PROBLEM_FORM_ID :
+			bizLogic = new ReportedProblemBizLogic();
+			break;
+		case Constants.STORAGE_TYPE_FORM_ID :
+			bizLogic = new StorageTypeBizLogic();
+			break;
+		case Constants.STORAGE_CONTAINER_FORM_ID :
+			bizLogic = new StorageContainerBizLogic();
+			break;
 
-			case Constants.SITE_FORM_ID :
-				bizLogic = new SiteBizLogic();
-				break;
-			case Constants.PARTICIPANT_FORM_ID :
-				bizLogic = new ParticipantBizLogic();
-				break;
-
+		case Constants.SITE_FORM_ID :
+			bizLogic = new SiteBizLogic();
+			break;
+		case Constants.PARTICIPANT_FORM_ID :
+			bizLogic = new ParticipantBizLogic();
+			break;
 			// for all event parameters same object will be returned
-			case Constants.FROZEN_EVENT_PARAMETERS_FORM_ID :
-			case Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID :
-			case Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID :
-			case Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID :
-			case Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID :
-			case Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID :
-			case Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID :
-			case Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID :
-			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID :
-			case Constants.THAW_EVENT_PARAMETERS_FORM_ID :
-			case Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID :
-			case Constants.SPUN_EVENT_PARAMETERS_FORM_ID :
-			case Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID :
-			case Constants.FIXED_EVENT_PARAMETERS_FORM_ID :
-			case Constants.PROCEDURE_EVENT_PARAMETERS_FORM_ID :
-				bizLogic = new SpecimenEventParametersBizLogic();
-				break;
+		case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID :
+		case Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID :
+			bizLogic = new SpecimenEventParametersBizLogic();
+			break;
 
-			case Constants.BULK_OPERATIONS_FORM_ID :
-				bizLogic = new BulkOperationsBizlogic();
-				break;
+		case Constants.BULK_OPERATIONS_FORM_ID :
+			bizLogic = new BulkOperationsBizlogic();
+			break;
 
-			case Constants.COLLECTION_PROTOCOL_FORM_ID :
-				bizLogic = new CollectionProtocolBizLogic();
-				break;
-			case Constants.DISTRIBUTIONPROTOCOL_FORM_ID :
-				bizLogic = new DistributionProtocolBizLogic();
-				break;
-			case Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID :
-				bizLogic = new CollectionProtocolRegistrationBizLogic();
-				break;
+		case Constants.COLLECTION_PROTOCOL_FORM_ID :
+			bizLogic = new CollectionProtocolBizLogic();
+			break;
+		case Constants.DISTRIBUTIONPROTOCOL_FORM_ID :
+			bizLogic = new DistributionProtocolBizLogic();
+			break;
+		case Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID :
+			bizLogic = new CollectionProtocolRegistrationBizLogic();
+			break;
 
-			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID :
-				bizLogic = new SpecimenCollectionGroupBizLogic();
-				break;
+		case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID :
+			bizLogic = new SpecimenCollectionGroupBizLogic();
+			break;
 
-			case Constants.NEW_SPECIMEN_FORM_ID :
-				bizLogic = new NewSpecimenBizLogic();
-				break;
+		case Constants.NEW_SPECIMEN_FORM_ID :
+			bizLogic = new NewSpecimenBizLogic();
+			break;
 
-			case Constants.CREATE_SPECIMEN_FORM_ID :
-				bizLogic = new NewSpecimenBizLogic();
-				break;
+		case Constants.CREATE_SPECIMEN_FORM_ID :
+			bizLogic = new NewSpecimenBizLogic();
+			break;
 
-			case Constants.SHOPPING_CART_FORM_ID :
-				bizLogic = new ShoppingCartBizLogic();
-				break;
+		case Constants.SHOPPING_CART_FORM_ID :
+			bizLogic = new ShoppingCartBizLogic();
+			break;
 
-			case Constants.DISTRIBUTION_FORM_ID :
-				bizLogic = new DistributionBizLogic();
-				break;
+		case Constants.DISTRIBUTION_FORM_ID :
+			bizLogic = new DistributionBizLogic();
+			break;
 
-			case Constants.SIMPLE_QUERY_INTERFACE_ID :
-				bizLogic = new QueryBizLogic();
-				break;
+		case Constants.SIMPLE_QUERY_INTERFACE_ID :
+			bizLogic = new QueryBizLogic();
+			break;
 			/*
 			 * case Constants.ADVANCE_QUERY_INTERFACE_ID: bizLogic = new
 			 * AdvanceQueryBizlogic(); break;
 			 */
-			case edu.wustl.common.util.global.Constants.QUERY_INTERFACE_ID :
-				bizLogic = new QueryBizLogic();
-				break;
+		case edu.wustl.common.util.global.Constants.QUERY_INTERFACE_ID :
+			bizLogic = new QueryBizLogic();
+			break;
 
-			case Constants.BIOHAZARD_FORM_ID :
-				bizLogic = new BiohazardBizLogic();
-				break;
+		case Constants.BIOHAZARD_FORM_ID :
+			bizLogic = new BiohazardBizLogic();
+			break;
 
-			case Constants.ALIQUOT_FORM_ID :
-				bizLogic = new NewSpecimenBizLogic();
-				break;
+		case Constants.ALIQUOT_FORM_ID :
+			bizLogic = new NewSpecimenBizLogic();
+			break;
 
-			case Constants.SIMILAR_CONTAINERS_FORM_ID :
-				bizLogic = new SimilarContainerBizLogic();
-				break;
+		case Constants.SIMILAR_CONTAINERS_FORM_ID :
+			bizLogic = new SimilarContainerBizLogic();
+			break;
 
-			case Constants.SPECIMEN_ARRAY_TYPE_FORM_ID :
-				bizLogic = new SpecimenArrayTypeBizLogic();
-				break;
+		case Constants.SPECIMEN_ARRAY_TYPE_FORM_ID :
+			bizLogic = new SpecimenArrayTypeBizLogic();
+			break;
 
-			case Constants.SPECIMEN_ARRAY_FORM_ID :
-				bizLogic = new SpecimenArrayBizLogic();
-				break;
+		case Constants.SPECIMEN_ARRAY_FORM_ID :
+			bizLogic = new SpecimenArrayBizLogic();
+			break;
 
-			case Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID :
-				bizLogic = new SpecimenArrayAliquotsBizLogic();
-				break;
-			case Constants.ASSIGN_PRIVILEGE_FORM_ID :
-				bizLogic = new AssignPrivilegePageBizLogic();
-				break;
+		case Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID :
+			bizLogic = new SpecimenArrayAliquotsBizLogic();
+			break;
+		case Constants.ASSIGN_PRIVILEGE_FORM_ID :
+			bizLogic = new AssignPrivilegePageBizLogic();
+			break;
 			// Added by Ashish
-			case Constants.INSTITUTION_FORM_ID :
-				bizLogic = new InstitutionBizLogic();
-				break;
-			case Constants.DEPARTMENT_FORM_ID :
-				bizLogic = new DepartmentBizLogic();
-				break;
-			case Constants.CANCER_RESEARCH_GROUP_FORM_ID :
-				bizLogic = new CancerResearchBizLogic();
-				break;
-			case Constants.CDE_FORM_ID :
-				bizLogic = new CDEBizLogic();
-				break;
+		case Constants.INSTITUTION_FORM_ID :
+			bizLogic = new InstitutionBizLogic();
+			break;
+		case Constants.DEPARTMENT_FORM_ID :
+			bizLogic = new DepartmentBizLogic();
+			break;
+		case Constants.CANCER_RESEARCH_GROUP_FORM_ID :
+			bizLogic = new CancerResearchBizLogic();
+			break;
+		case Constants.CDE_FORM_ID :
+			bizLogic = new CDEBizLogic();
+			break;
 
-			case Constants.REQUEST_DETAILS_FORM_ID :
-				bizLogic = new OrderBizLogic();
-				break;
-			case Constants.ORDER_PATHOLOGY_FORM_ID :
-				bizLogic = new OrderBizLogic();
-				break;
-			case Constants.NEW_PATHOLOGY_FORM_ID :
-				bizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
-				break;
-			case Constants.ORDER_FORM_ID :
-				bizLogic = new OrderBizLogic();
-				break;
-			case Constants.ORDER_ARRAY_FORM_ID :
-				bizLogic = new OrderBizLogic();
-				break;
+		case Constants.REQUEST_DETAILS_FORM_ID :
+			bizLogic = new OrderBizLogic();
+			break;
+		case Constants.ORDER_PATHOLOGY_FORM_ID :
+			bizLogic = new OrderBizLogic();
+			break;
+		case Constants.NEW_PATHOLOGY_FORM_ID :
+			bizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
+			break;
+		case Constants.ORDER_FORM_ID :
+			bizLogic = new OrderBizLogic();
+			break;
+		case Constants.ORDER_ARRAY_FORM_ID :
+			bizLogic = new OrderBizLogic();
+			break;
 			// Ordering System
-			case Constants.REQUEST_LIST_FILTERATION_FORM_ID :
-				bizLogic = new OrderBizLogic();
-				break;
+		case Constants.REQUEST_LIST_FILTERATION_FORM_ID :
+			bizLogic = new OrderBizLogic();
+			break;
 			// View Surgical Pathology Report
-			case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID :
-				bizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
-				break;
-			case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID :
-				bizLogic = new PathologyReportReviewParameterBizLogic();
-				break;
-			case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID :
-				bizLogic = new QuarantineEventParameterBizLogic();
-				break;
+		case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID :
+			bizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
+			break;
+		case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID :
+			bizLogic = new PathologyReportReviewParameterBizLogic();
+			break;
+		case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID :
+			bizLogic = new QuarantineEventParameterBizLogic();
+			break;
 			/*
 			 * case
 			 * Constants.CATISSUECORE_QUERY_INTERFACE_ID://CatissecoreQueryBizLogic
 			 * bizLogic = new CatissuecoreQueryBizLogic(); break;
 			 */
-			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_FORM_ID :
-				bizLogic = new ShipmentBizLogic();
-				break;
-			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_REQUEST_FORM_ID :
-				bizLogic = new ShipmentRequestBizLogic();
-				break;
-			case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_RECEIVING_FORM_ID :
-				bizLogic = new ShipmentReceivingBizLogic();
-				break;
-			case Constants.SUMMARY_BIZLOGIC_ID :
-				bizLogic = new SummaryBizLogic();
-				break;
-			case Constants.ACTION_APP_FORM_ID :
-				bizLogic = new ActionApplicationBizLogic();
-				break;
-			case Constants.SPP_ID :
-				bizLogic = new SPPBizLogic();
-				break;	
+		case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_FORM_ID :
+			bizLogic = new ShipmentBizLogic();
+			break;
+		case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_REQUEST_FORM_ID :
+			bizLogic = new ShipmentRequestBizLogic();
+			break;
+		case edu.wustl.catissuecore.util.shippingtracking.Constants.SHIPMENT_RECEIVING_FORM_ID :
+			bizLogic = new ShipmentReceivingBizLogic();
+			break;
+		case Constants.SUMMARY_BIZLOGIC_ID :
+			bizLogic = new SummaryBizLogic();
+			break;
+		case Constants.ACTION_APP_FORM_ID :
+			bizLogic = new ActionApplicationBizLogic();
+			break;
+		case Constants.SPP_ID :
+			bizLogic = new SPPBizLogic();
+			break;	
 			// END
-			case Constants.DEFAULT_BIZ_LOGIC :
-			default :
-				bizLogic = new DefaultBizLogic();
-				break;
+		case Constants.DEFAULT_BIZ_LOGIC :
+		default :
+			bizLogic = new DefaultBizLogic();
+			break;
 
 		}
 		return bizLogic;
@@ -314,23 +300,6 @@ public class BizLogicFactory implements IFactory
 		else if (className.equals("edu.wustl.catissuecore.domain.Distribution"))
 		{
 			bizLogic = new DistributionBizLogic();
-		}
-		else if (className.endsWith("EventParameters"))
-		{
-			bizLogic = new SpecimenEventParametersBizLogic();
-		}
-		else if (className.equals("edu.wustl.catissuecore.domain.CellSpecimenReviewParameters"))
-		{
-			bizLogic = new SpecimenEventParametersBizLogic();
-		}
-		else if (className
-				.equals("edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters"))
-		{
-			bizLogic = new SpecimenEventParametersBizLogic();
-		}
-		else if (className.equals("edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter"))
-		{
-			bizLogic = new SpecimenEventParametersBizLogic();
 		}
 		else if (className.equals(Constants.SPECIMEN_ARRAY_TYPE_CLASSNAME))
 		{
@@ -415,7 +384,7 @@ public class BizLogicFactory implements IFactory
 		else if (className
 				.equals("edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry")
 				|| className
-						.equals("edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry")
+				.equals("edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry")
 				|| className.equals("edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry"))
 		{
 			bizLogic = new AnnotationBizLogic();

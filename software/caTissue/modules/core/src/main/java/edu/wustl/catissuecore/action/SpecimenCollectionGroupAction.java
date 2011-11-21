@@ -1105,31 +1105,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				specimenCollectionGroupForm.getId());
 		if (object != null)
 		{
-//			final SpecimenCollectionGroup scg = (SpecimenCollectionGroup) object;
-//			final Collection<SpecimenEventParameters> eventsColl = scg.getSpecimenEventParametersCollection();
-//			CollectionEventParameters collectionEventParameters = null;
-//			ReceivedEventParameters receivedEventParameters = null;
-//			if (eventsColl != null && !eventsColl.isEmpty())
-//			{
-//				final Iterator<SpecimenEventParameters> iter = eventsColl.iterator();
-//				while (iter.hasNext())
-//				{
-//					final Object temp = iter.next();
-//					if (temp instanceof CollectionEventParameters)
-//					{
-//						collectionEventParameters = (CollectionEventParameters) temp;
-//					}
-//					else if (temp instanceof ReceivedEventParameters)
-//					{
-//						receivedEventParameters = (ReceivedEventParameters) temp;
-//					}
-//				}
-//				// Setting the ids
-//				specimenCollectionGroupForm.setCollectionEventId(collectionEventParameters.getId()
-//						.longValue());
-//				specimenCollectionGroupForm.setReceivedEventId(receivedEventParameters.getId()
-//						.longValue());
-//			}
+
 		}
 	}
 

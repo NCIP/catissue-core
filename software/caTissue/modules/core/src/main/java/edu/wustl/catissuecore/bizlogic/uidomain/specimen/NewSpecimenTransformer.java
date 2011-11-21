@@ -116,62 +116,6 @@ public class NewSpecimenTransformer extends SpecimenTransformer<NewSpecimenForm>
 
             domainObject.setBiohazardCollection(bioCollection);
 
-            // Mandar : autoevents 14-july-06 start
-
-            if (uiRepOfDomain.isAddOperation()) {
-//                logger.debug("Setting Collection event in specimen domain object");
-//                // seting collection event values
-//
-//                final CollectionEventParametersForm collectionEvent = new CollectionEventParametersForm();
-//                collectionEvent.setCollectionProcedure(uiRepOfDomain.getCollectionEventCollectionProcedure());
-//                collectionEvent.setComments(uiRepOfDomain.getCollectionEventComments());
-//                collectionEvent.setContainer(uiRepOfDomain.getCollectionEventContainer());
-//                collectionEvent.setTimeInHours(uiRepOfDomain.getCollectionEventTimeInHours());
-//                collectionEvent.setTimeInMinutes(uiRepOfDomain.getCollectionEventTimeInMinutes());
-//                collectionEvent.setDateOfEvent(uiRepOfDomain.getCollectionEventdateOfEvent());
-//                collectionEvent.setUserId(uiRepOfDomain.getCollectionEventUserId());
-//                collectionEvent.setOperation(uiRepOfDomain.getOperation());
-//
-//                // TODO CHECK THIS...
-//                final CollectionEventParameters collectionEventParameters = new CollectionEventParametersTransformer()
-//                        .createDomainObject(collectionEvent);
-//
-//                collectionEventParameters.setSpecimen(domainObject);
-//                //logger.debug("Before specimenEventCollection.size(): "
-//                    //    + domainObject.getSpecimenEventCollection().size());
-//                domainObject.getSpecimenEventCollection().add(collectionEventParameters);
-//                logger.debug("After specimenEventCollection.size(): "
-//                        + domainObject.getSpecimenEventCollection().size());
-//
-//                logger.debug("Setting Received event in specimen domain object");
-//                // setting received event values
-//                final ReceivedEventParametersForm receivedEvent = new ReceivedEventParametersForm();
-//                receivedEvent.setComments(uiRepOfDomain.getReceivedEventComments());
-//                receivedEvent.setDateOfEvent(uiRepOfDomain.getReceivedEventDateOfEvent());
-//                receivedEvent.setReceivedQuality(uiRepOfDomain.getReceivedEventReceivedQuality());
-//                receivedEvent.setUserId(uiRepOfDomain.getReceivedEventUserId());
-//                receivedEvent.setTimeInMinutes(uiRepOfDomain.getReceivedEventTimeInMinutes());
-//                receivedEvent.setTimeInHours(uiRepOfDomain.getReceivedEventTimeInHours());
-//                receivedEvent.setOperation(uiRepOfDomain.getOperation());
-//
-//                // TODO CHECK THIS...
-//                final ReceivedEventParameters receivedEventParameters = new ReceivedEventParametersTransformer()
-//                        .createDomainObject(receivedEvent);
-//                receivedEventParameters.setSpecimen(domainObject);
-
-//                /**
-//                 * Patch ID: 3835_1_4 See also: 1_1 to 1_5 Description
-//                 * :createdOn should be collection event date for new specimen.
-//                 */
-//                domainObject.setCreatedOn(CommonUtilities.parseDate(uiRepOfDomain.getCollectionEventdateOfEvent(),
-//                        CommonServiceLocator.getInstance().getDatePattern()));
-//
-//                logger.debug("Before specimenEventCollection.size(): "
-//                        + domainObject.getSpecimenEventCollection().size());
-//                domainObject.getSpecimenEventCollection().add(receivedEventParameters);
-//                logger.debug("After specimenEventCollection.size(): "
-//                        + domainObject.getSpecimenEventCollection().size());
-            }
 
             if (uiRepOfDomain.isAddOperation())
             {//||(uiRepOfDomain.getOperation().equals("edit")&&uiRepOfDomain.getTransferStatus().equals("transferDone"))) {

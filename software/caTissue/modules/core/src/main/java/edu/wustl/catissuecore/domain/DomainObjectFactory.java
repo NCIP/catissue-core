@@ -83,61 +83,22 @@ public class DomainObjectFactory implements IDomainObjectFactory
 			case Constants.BIOHAZARD_FORM_ID :
 				className = Biohazard.class.getName();
 				break;
-//			case Constants.FROZEN_EVENT_PARAMETERS_FORM_ID :
-//				className = FrozenEventParameters.class.getName();
-//				break;
-//			case Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID :
-//				className = CheckInCheckOutEventParameter.class.getName();
-//				break;
-//			case Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID :
-//				className = ReceivedEventParameters.class.getName();
-//				break;
 			case Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID :
 				className = CollectionProtocolRegistration.class.getName();
 				break;
 			case Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID :
 				className = SpecimenCollectionGroup.class.getName();
 				break;
-//			case Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID :
-//				className = FluidSpecimenReviewEventParameters.class.getName();
-//				break;
 			case Constants.NEW_SPECIMEN_FORM_ID :
 			case Constants.CREATE_SPECIMEN_FORM_ID :
 				className = Specimen.class.getName();
 				break;
-//			case Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID :
-//				className = CellSpecimenReviewParameters.class.getName();
-//				break;
-//			case Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID :
-//				className = TissueSpecimenReviewEventParameters.class.getName();
-//				break;
 			case Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID :
 				className = DisposalEventParameters.class.getName();
 				break;
-//			case Constants.THAW_EVENT_PARAMETERS_FORM_ID :
-//				className = ThawEventParameters.class.getName();
-//				break;
-//			case Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID :
-//				className = MolecularSpecimenReviewParameters.class.getName();
-//				break;
-//			case Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID :
-//				className = CollectionEventParameters.class.getName();
-//				break;
 			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID :
 				className = TransferEventParameters.class.getName();
 				break;
-//			case Constants.SPUN_EVENT_PARAMETERS_FORM_ID :
-//				className = SpunEventParameters.class.getName();
-//				break;
-//			case Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID :
-//				className = EmbeddedEventParameters.class.getName();
-//				break;
-//			case Constants.FIXED_EVENT_PARAMETERS_FORM_ID :
-//				className = FixedEventParameters.class.getName();
-//				break;
-//			case Constants.PROCEDURE_EVENT_PARAMETERS_FORM_ID :
-//				className = ProcedureEventParameters.class.getName();
-//				break;
 			case Constants.DISTRIBUTION_FORM_ID :
 				className = Distribution.class.getName();
 				break;

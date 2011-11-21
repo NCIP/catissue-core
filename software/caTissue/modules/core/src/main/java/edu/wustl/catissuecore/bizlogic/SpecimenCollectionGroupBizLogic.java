@@ -830,29 +830,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			while (scgEventCollIter.hasNext())
 			{
 				final Object scgEventCollObj = scgEventCollIter.next();
-//				if (scgEventCollObj instanceof CollectionEventParameters)
-//				{
-//					final CollectionEventParameters collEventParam = (CollectionEventParameters) scgEventCollObj;
-//					InstanceFactory<CollectionEventParameters> instFact = DomainInstanceFactory
-//							.getInstanceFactory(CollectionEventParameters.class);
-//					final CollectionEventParameters newCollEventParam = instFact
-//							.createClone(collEventParam);
-//					//final CollectionEventParameters newCollEventParam = new CollectionEventParameters(collEventParam);
-//					newCollEventParam.setUser(collEventParam.getUser());
-//					newCollEventParam.setTimestamp(collEventParam.getTimestamp());
-//					newSCGEventColl.add(newCollEventParam);
-//				}
-//				if (scgEventCollObj instanceof ReceivedEventParameters)
-//				{
-//
-//					final ReceivedEventParameters recEventParam = (ReceivedEventParameters) scgEventCollObj;
-//					final ReceivedEventParameters newRecEventParam = (ReceivedEventParameters) DomainInstanceFactory
-//							.getInstanceFactory(ReceivedEventParameters.class).createClone(
-//									recEventParam);//new ReceivedEventParameters(recEventParam);
-//					newRecEventParam.setUser(recEventParam.getUser());
-//					newRecEventParam.setTimestamp(recEventParam.getTimestamp());
-//					newSCGEventColl.add(newRecEventParam);
-//				}
+
 			}
 		}
 		return newSCGEventColl;
@@ -871,41 +849,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			final Iterator scgEventCollIter = scgEventColl.iterator();
 			while (scgEventCollIter.hasNext())
 			{
-//				final Object scgEventCollObj = scgEventCollIter.next();
-//				if (scgEventCollObj instanceof CollectionEventParameters)
-//				{
-//					final CollectionEventParameters collEventParam = (CollectionEventParameters) scgEventCollObj;
-//					if (collEventParam.getUser() == null)
-//					{
-//						collEventParam.setUser(user);
-//					}
-//					if (collEventParam.getCollectionProcedure() != null
-//							&& collEventParam.getCollectionProcedure().equals(""))
-//					{
-//						collEventParam.setCollectionProcedure(Constants.NOT_SPECIFIED);
-//					}
-//					if (collEventParam.getContainer() != null
-//							&& collEventParam.getContainer().equals(""))
-//					{
-//						collEventParam.setContainer(Constants.NOT_SPECIFIED);
-//					}
-//				}
-//				if (scgEventCollObj instanceof ReceivedEventParameters)
-//				{
-//					final ReceivedEventParameters recEventParam = (ReceivedEventParameters) scgEventCollObj;
-//					if (recEventParam.getUser() == null)
-//					{
-//						recEventParam.setUser(user);
-//					}
-//
-//					if (recEventParam.getReceivedQuality() != null
-//							&& recEventParam.getReceivedQuality().equals(""))
-//					{
-//						recEventParam.setReceivedQuality(Constants.NOT_SPECIFIED);
-//
-//					}
-//
-//				}
+
 			}
 		}
 
@@ -924,78 +868,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		String collProcedure = null;
 		String collContainer = null;
 		String recQty = null;
-//		if (event instanceof CollectionEventParameters)
-//		{
-//			final CollectionEventParameters toChangeCEP = (CollectionEventParameters) event;
-//			final CollectionEventParameters newCollectionEventParameters = (CollectionEventParameters) newEvent;
-//			collProcedure = newCollectionEventParameters.getCollectionProcedure();
-//			collContainer = newCollectionEventParameters.getContainer();
-//			if (newCollectionEventParameters.getUser() != null)
-//			{
-//				toChangeCEP.setUser(newCollectionEventParameters.getUser());
-//			}
-//			toChangeCEP.setTimestamp(newCollectionEventParameters.getTimestamp());
-//
-//			if (!StringUtils.isBlank(collProcedure) && !collProcedure.equals(Constants.CP_DEFAULT))
-//			{
-//				toChangeCEP.setCollectionProcedure(newCollectionEventParameters
-//						.getCollectionProcedure());
-//			}
-//			if (newCollectionEventParameters.getComment() != null
-//					&& !newCollectionEventParameters.getComment().equals(""))
-//			{
-//				toChangeCEP.setComment(newCollectionEventParameters.getComment());
-//			}
-//			if (!StringUtils.isBlank(collContainer) && !collContainer.equals(Constants.CP_DEFAULT))
-//			{
-//				toChangeCEP.setContainer(newCollectionEventParameters.getContainer());
-//			}
-//
-//			if (toChangeCEP.getUser() == null)
-//			{
-//				toChangeCEP.setUser(user);
-//			}
-//			if (toChangeCEP.getCollectionProcedure().equals(""))
-//			{
-//				toChangeCEP.setCollectionProcedure((String) DefaultValueManager
-//						.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
-//			}
-//			if (toChangeCEP.getContainer().equals(""))
-//			{
-//				toChangeCEP.setContainer((String) DefaultValueManager
-//						.getDefaultValue(Constants.DEFAULT_CONTAINER));
-//			}
-//		}
-//		else
-//		{
-//			final ReceivedEventParameters toChanageREP = (ReceivedEventParameters) event;
-//			final ReceivedEventParameters newreceivedEventParameters = (ReceivedEventParameters) newEvent;
-//			recQty = newreceivedEventParameters.getReceivedQuality();
-//			if (newreceivedEventParameters.getComment() != null
-//					&& !newreceivedEventParameters.getComment().equals(""))
-//			{
-//				toChanageREP.setComment(newreceivedEventParameters.getComment());
-//			}
-//			if (!StringUtils.isBlank(recQty) && !recQty.equals(Constants.CP_DEFAULT))
-//			{
-//				toChanageREP.setReceivedQuality(newreceivedEventParameters.getReceivedQuality());
-//			}
-//			toChanageREP.setTimestamp(newreceivedEventParameters.getTimestamp());
-//			if (newreceivedEventParameters.getUser() != null)
-//			{
-//				toChanageREP.setUser(newreceivedEventParameters.getUser());
-//			}
-//
-//			if (toChanageREP.getUser() == null)
-//			{
-//				toChanageREP.setUser(user);
-//			}
-//			if (toChanageREP.getReceivedQuality().equals(""))
-//			{
-//				toChanageREP.setReceivedQuality((String) DefaultValueManager
-//						.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
-//			}
-//		}
+
 	}
 
 	/**
@@ -1009,15 +882,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		final Collection specimenEventColl = new HashSet();
 		final User user = instFact.createObject();
 		user.setId(sessionDataBean.getUserId());
-//		final CollectionEventParameters collectionEventParameters = EventsUtil
-//				.populateCollectionEventParameters(user);
-//		collectionEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
-//		specimenEventColl.add(collectionEventParameters);
 
-//		final ReceivedEventParameters receivedEventParameters = EventsUtil
-//				.populateReceivedEventParameters(user);
-//		receivedEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
-//		specimenEventColl.add(receivedEventParameters);
 
 		specimenCollectionGroup.setSpecimenEventParametersCollection(specimenEventColl);
 	}
@@ -1033,26 +898,13 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			SpecimenCollectionGroup oldspecimenCollectionGroup, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-//		CollectionEventParameters scgCollectionEventParameters = null;
-		//ReceivedEventParameters scgReceivedEventParameters = null;
 		if (newEventColl != null && !newEventColl.isEmpty())
 		{
 			final Iterator newEventCollIter = newEventColl.iterator();
 			while (newEventCollIter.hasNext())
 			{
-//				final Object newEventCollObj = newEventCollIter.next();
-//				if (newEventCollObj instanceof CollectionEventParameters)
-//				{
-//					scgCollectionEventParameters = (CollectionEventParameters) newEventCollObj;
-//					continue;
-//				}
-//				else if (newEventCollObj instanceof ReceivedEventParameters)
-//				{
-//					scgReceivedEventParameters = (ReceivedEventParameters) newEventCollObj;
-//				}
 			}
 		}
-		// populateEventsInSpecimens(oldspecimenCollectionGroup,)
 		final Collection<Specimen> specimenColl = oldspecimenCollectionGroup
 				.getSpecimenCollection();
 		if (specimenColl != null && !specimenColl.isEmpty())
@@ -1072,146 +924,14 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					while (eventIter.hasNext())
 					{
 						final Object eventObj = eventIter.next();
-//						if (eventObj instanceof CollectionEventParameters)
-//						{
-//							final CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObj;
-//							final CollectionEventParameters newcollectionEventParameters = this
-//									.populateCollectionEventParameters(
-//											scgCollectionEventParameters, collectionEventParameters);
-//							specimenEventParametersBizLogic.update(newcollectionEventParameters,
-//									collectionEventParameters, sessionDataBean);
-//							continue;
-//						}
-//						else if (eventObj instanceof ReceivedEventParameters)
-//						{
-//							final ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObj;
-//							final ReceivedEventParameters newReceivedEventParameters = this
-//									.populateReceivedEventParameters(receivedEventParameters,
-//											scgReceivedEventParameters);
-//							specimenEventParametersBizLogic.update(newReceivedEventParameters,
-//									receivedEventParameters, sessionDataBean);
-//						}
+
 					}
 				}
 			}
 		}
 	}
 
-	/**
-	 * @param eventObj : eventObj
-	 * @param scgCollectionEventParameters : scgCollectionEventParameters
-	 * @param collectionEventParameters : collectionEventParameters
-	 * @return CollectionEventParameters
-	 */
-//	private CollectionEventParameters populateCollectionEventParameters(
-//			CollectionEventParameters scgCollectionEventParameters,
-//			CollectionEventParameters collectionEventParameters)
-//	{
-//		final String collProcedure = scgCollectionEventParameters.getCollectionProcedure();
-//		final String collContainer = scgCollectionEventParameters.getContainer();
-//		final CollectionEventParameters newcollectionEventParameters = (CollectionEventParameters) DomainInstanceFactory
-//				.getInstanceFactory(CollectionEventParameters.class).createObject();//new CollectionEventParameters();
-//		if (collProcedure != null && !collProcedure.equals("")
-//				&& !collProcedure.equals(Constants.CP_DEFAULT))
-//		{
-//			newcollectionEventParameters.setCollectionProcedure(scgCollectionEventParameters
-//					.getCollectionProcedure());
-//		}
-//		else
-//		{
-//			newcollectionEventParameters.setCollectionProcedure(collectionEventParameters
-//					.getCollectionProcedure());
-//		}
-//
-//		if (collContainer != null && !collContainer.equals("")
-//				&& !collContainer.equals(Constants.CP_DEFAULT))
-//		{
-//			newcollectionEventParameters.setContainer(scgCollectionEventParameters.getContainer());
-//		}
-//		else
-//		{
-//			newcollectionEventParameters.setContainer(collectionEventParameters.getContainer());
-//		}
-//
-//		newcollectionEventParameters.setTimestamp(scgCollectionEventParameters.getTimestamp());
-//
-//		if (scgCollectionEventParameters.getUser() != null
-//				&& !scgCollectionEventParameters.getUser().getId().equals(""))
-//		{
-//			newcollectionEventParameters.setUser(scgCollectionEventParameters.getUser());
-//		}
-//		else
-//		{
-//			newcollectionEventParameters.setUser(collectionEventParameters.getUser());
-//		}
-//
-//		if (scgCollectionEventParameters.getComment() != null
-//				&& !scgCollectionEventParameters.getComment().equals(""))
-//		{
-//			newcollectionEventParameters.setComment(scgCollectionEventParameters.getComment());
-//		}
-//		else
-//		{
-//			newcollectionEventParameters.setComment(collectionEventParameters.getComment());
-//		}
-//
-//		newcollectionEventParameters.setSpecimen(collectionEventParameters.getSpecimen());
-//		newcollectionEventParameters.setSpecimenCollectionGroup(collectionEventParameters
-//				.getSpecimenCollectionGroup());
-//		newcollectionEventParameters.setId(collectionEventParameters.getId());
-//		return newcollectionEventParameters;
-//	}
 
-	/**
-	 * @param receivedEventParameters : receivedEventParameters
-	 * @param scgReceivedEventParameters : scgReceivedEventParameters
-	 * @return ReceivedEventParameters
-	 */
-//	private ReceivedEventParameters populateReceivedEventParameters(
-//			ReceivedEventParameters receivedEventParameters,
-//			ReceivedEventParameters scgReceivedEventParameters)
-//	{
-//		final String recQty = scgReceivedEventParameters.getReceivedQuality();
-//		final ReceivedEventParameters newReceivedEventParameters = new ReceivedEventParameters();
-//		if (recQty != null && !recQty.equals("") && !recQty.equals(Constants.CP_DEFAULT))
-//		{
-//			newReceivedEventParameters.setReceivedQuality(scgReceivedEventParameters
-//					.getReceivedQuality());
-//		}
-//		else
-//		{
-//			newReceivedEventParameters.setReceivedQuality(receivedEventParameters
-//					.getReceivedQuality());
-//		}
-//
-//		newReceivedEventParameters.setTimestamp(scgReceivedEventParameters.getTimestamp());
-//
-//		if (scgReceivedEventParameters.getUser() != null
-//				&& scgReceivedEventParameters.getUser().getId() != -1)
-//		{
-//			newReceivedEventParameters.setUser(scgReceivedEventParameters.getUser());
-//		}
-//		else
-//		{
-//			newReceivedEventParameters.setUser(receivedEventParameters.getUser());
-//		}
-//
-//		newReceivedEventParameters.setId(receivedEventParameters.getId());
-//		if (scgReceivedEventParameters.getComment() != null
-//				&& !scgReceivedEventParameters.getComment().equals(""))
-//		{
-//			newReceivedEventParameters.setComment(scgReceivedEventParameters.getComment());
-//		}
-//		else
-//		{
-//			newReceivedEventParameters.setComment(receivedEventParameters.getComment());
-//		}
-//
-//		newReceivedEventParameters.setSpecimen(receivedEventParameters.getSpecimen());
-//		newReceivedEventParameters.setSpecimenCollectionGroup(receivedEventParameters
-//				.getSpecimenCollectionGroup());
-//		return newReceivedEventParameters;
-//	}
 
 	/**
 	 * @param dao : dao
@@ -2381,6 +2101,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 
 	}
 
+	
+	//delete this method.
 	/**
 	 * @param specimenCollGroup : specimenCollGroup
 	 * @return Collection
@@ -2410,10 +2132,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			{
 				final SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) specimenEventParaColItr
 						.next();
-//				if (specimenEventParameters instanceof CollectionEventParameters)
-//				{
-//					collectionEventParameters.add(specimenEventParameters);
-//				}
 
 			}
 		}
@@ -2456,29 +2174,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			}
 			String receivedDate = "";
 			if (specimenCollectionGroup.getId() != null && specimenCollectionGroup.getId() > 0)
-			{
-
-				final Collection eventsColl = this
-						.getCollectionEventParameters(specimenCollectionGroup);
-
-				if (eventsColl != null && !eventsColl.isEmpty())
-				{
-					receivedDate = "";
-					final Iterator iter = eventsColl.iterator();
-					while (iter.hasNext())
-					{
-//						final CollectionEventParameters collectionEventParameters = (CollectionEventParameters) iter
-//								.next();
-//						eventLastDate = collectionEventParameters.getTimestamp();
-//						// bug no:6526 date format changed to mm-dd-yyyy
-//						receivedDate = edu.wustl.common.util.Utility.parseDateToString(
-//								collectionEventParameters.getTimestamp(), CommonServiceLocator
-//										.getInstance().getDatePattern());
-//						scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": "
-//								+ receivedDate;
-//						break;
-					}
-				}
+			{	
 				scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel;
 				if (scgNodeLabel.equalsIgnoreCase("") && receivedDate.equalsIgnoreCase(""))
 				{

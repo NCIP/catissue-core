@@ -322,50 +322,6 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 						ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus")));
 			}
-			/*
-			 Commented by Virender
-			if ((collectionEventUserId) == -1L)
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection Event's user"));
-			}
-
-			// checks the collectionProcedure
-			if (!validator.isValidOption(this.getCollectionEventCollectionProcedure()))
-			{
-				String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",message));
-			}
-
-			List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
-			if (!Validator.isEnumeratedValue(procedureList, this.getCollectionEventCollectionProcedure()))
-			{
-				String message = ApplicationProperties.getValue("cpbasedentry.collectionprocedure");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",message));
-			}
-			//Container validation
-			if (!validator.isValidOption(this.getCollectionEventContainer()))
-			{
-				String message = ApplicationProperties.getValue("collectioneventparameters.container");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",message));
-			}
-			List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
-			if (!Validator.isEnumeratedValue(containerList, this.getCollectionEventContainer()))
-			{
-				String message = ApplicationProperties.getValue("collectioneventparameters.container");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",message));
-			}
-			if ((receivedEventUserId) == -1L)
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received Event's user"));
-			}
-			List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
-			if (!Validator.isEnumeratedValue(qualityList, this.receivedEventReceivedQuality))
-			{
-				String message = ApplicationProperties.getValue("cpbasedentry.receivedquality");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",message));
-
-			}*/
-
 		}
 		catch (final Exception excp)
 		{

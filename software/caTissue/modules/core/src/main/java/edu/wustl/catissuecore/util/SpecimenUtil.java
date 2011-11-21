@@ -147,19 +147,6 @@ public final class SpecimenUtil
 		if(eventCollection!=null)
 		{
 			Iterator<SpecimenEventParameters> specEveItr = eventCollection.iterator();
-			while(specEveItr.hasNext())
-			{
-				Object specEveParam = specEveItr.next();
-//				if (specEveParam instanceof CollectionEventParameters)
-//				{
-//					CollectionEventParameters collEveParam = (CollectionEventParameters) specEveParam;
-//					//				Date date =
-//					Calendar cal = Calendar.getInstance();
-//					cal.setTime(collEveParam.getTimestamp());
-//					yearOfcoll = cal.get(Calendar.YEAR);
-//
-//				}
-			}
 			valToReplace = yearOfcoll + Constants.DOUBLE_QUOTES;
 		}
 		return valToReplace;

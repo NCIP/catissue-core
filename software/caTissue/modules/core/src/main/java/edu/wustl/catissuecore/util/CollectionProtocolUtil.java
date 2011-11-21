@@ -626,7 +626,7 @@ public class CollectionProtocolUtil
 		{
 			speRequirementBean.setStorageContainerForSpecimen(reqSpecimen.getStorageType());
 		}
-		setSpecimenEventParameters(reqSpecimen,speRequirementBean );
+		//setSpecimenEventParameters(reqSpecimen,speRequirementBean );
 
 		setAliquotAndDerivedColl(reqSpecimen, parentName, speRequirementBean);
 		speRequirementBean.setLabelFormat(reqSpecimen.getLabelFormat());
@@ -827,7 +827,7 @@ public class CollectionProtocolUtil
 	 * @param reqSpecimen the req specimen
 	 * @param specimenRequirementBean the specimen requirement bean
 	 */
-	private  static void setSpecimenEventParameters(SpecimenRequirement reqSpecimen, SpecimenRequirementBean specimenRequirementBean)
+	/*private  static void setSpecimenEventParameters(SpecimenRequirement reqSpecimen, SpecimenRequirementBean specimenRequirementBean)
 	{
 		Collection<SpecimenEventParameters> eventsParametersColl = reqSpecimen.getSpecimenEventCollection();
 		if(eventsParametersColl == null || eventsParametersColl.isEmpty())
@@ -843,42 +843,7 @@ public class CollectionProtocolUtil
 		//		}
 
 	}
-
-	/**
-	 * set setSpeciEevntParams.
-	 *
-	 * @param specimenRequirementBean the specimen requirement bean
-	 * @param iter the iter
-	 */
-	//	private static void setSpecimenEvents(
-	//			SpecimenRequirementBean specimenRequirementBean, Iterator<SpecimenEventParameters> iter)
-	//	{
-	//		Object tempObj = iter.next();
-	//
-	//		if(tempObj instanceof CollectionEventParameters)
-	//		{
-	//			CollectionEventParameters collectionEventParameters = (CollectionEventParameters)tempObj;
-	//			specimenRequirementBean.setCollectionEventId(collectionEventParameters.getId().longValue());
-	//			//this.collectionEventSpecimenId = collectionEventParameters.getSpecimen().getId().longValue();
-	//			specimenRequirementBean.setCollectionEventUserId(
-	//					collectionEventParameters.getUser().getId().longValue());
-	//			specimenRequirementBean.setCollectionEventCollectionProcedure(
-	//					collectionEventParameters.getCollectionProcedure());
-	//
-	//			specimenRequirementBean.setCollectionEventContainer(collectionEventParameters.getContainer());
-	//		}
-	//		else if(tempObj instanceof ReceivedEventParameters)
-	//		{
-	//			ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)tempObj;
-	//
-	//			specimenRequirementBean.setReceivedEventId(receivedEventParameters.getId().longValue());
-	//			specimenRequirementBean.setReceivedEventUserId(
-	//					receivedEventParameters.getUser().getId().longValue());
-	//			specimenRequirementBean.setReceivedEventReceivedQuality(
-	//					receivedEventParameters.getReceivedQuality());
-	//		}
-	//	}
-
+*/
 	/**
 	 * Update session.
 	 *
@@ -1323,10 +1288,10 @@ public class CollectionProtocolUtil
 				reqSpecimen.setCollectionProtocolEvent(cpEvent);
 				reqSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
 				//Collected and received events
-				if(reqSpecimen.getId()==null)
+				/*if(reqSpecimen.getId()==null)
 				{
 					setSpecimenEvents(reqSpecimen, specimenRequirementBean);
-				}
+				}*/
 			}
 			else
 			{
@@ -1334,7 +1299,7 @@ public class CollectionProtocolUtil
 						parentSpecimen.getSpecimenCharacteristics());
 				//bug no. 7489
 				//Collected and received events
-				if(specimenRequirementBean.getCollectionEventContainer()!=null && specimenRequirementBean.getReceivedEventReceivedQuality()!=null)
+				/*if(specimenRequirementBean.getCollectionEventContainer()!=null && specimenRequirementBean.getReceivedEventReceivedQuality()!=null)
 				{
 					if(reqSpecimen.getId()==null)
 					{
@@ -1342,10 +1307,10 @@ public class CollectionProtocolUtil
 					}
 				}
 				else
-				{
+				{*/
 					reqSpecimen.setSpecimenEventCollection(
 							parentSpecimen.getSpecimenEventCollection());
-				}
+				//}
 			}
 			reqSpecimen.setLineage(specimenRequirementBean.getLineage());
 			reqSpecimenCollection.add(reqSpecimen);
@@ -1389,7 +1354,7 @@ public class CollectionProtocolUtil
 	 * @param reqSpecimen the req specimen
 	 * @param specimenRequirementBean the specimen requirement bean
 	 */
-	private static  void setSpecimenEvents(SpecimenRequirement reqSpecimen, SpecimenRequirementBean specimenRequirementBean)
+	/*private static  void setSpecimenEvents(SpecimenRequirement reqSpecimen, SpecimenRequirementBean specimenRequirementBean)
 	{
 		//seting collection event values
 		Collection<SpecimenEventParameters> specimenEventCollection =
@@ -1423,7 +1388,7 @@ public class CollectionProtocolUtil
 		reqSpecimen.setSpecimenEventCollection(specimenEventCollection);
 
 	}
-
+*/
 
 	static Map<String,SpecimenProcessingProcedure> sppMap=new HashMap<String,SpecimenProcessingProcedure>();
 	/**

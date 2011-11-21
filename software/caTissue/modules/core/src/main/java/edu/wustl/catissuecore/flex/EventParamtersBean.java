@@ -45,18 +45,6 @@ public class EventParamtersBean implements Externalizable
 
 	public void copy(SpecimenEventParameters event)
 	{
-//		if (event instanceof CollectionEventParameters)
-//		{
-//			final CollectionEventParameters collEvent = (CollectionEventParameters) event;
-//			this.collectionProcedure = collEvent.getCollectionProcedure();
-//			this.container = collEvent.getContainer();
-//		}
-//		else if (event instanceof ReceivedEventParameters)
-//		{
-//			final ReceivedEventParameters recEvent = (ReceivedEventParameters) event;
-//			this.receivedQuality = recEvent.getReceivedQuality();
-//		}
-		//this.userName = event.getUser().getLoginName();
 		this.userName = event.getUser().getLastName() + ", " + event.getUser().getFirstName();
 		if (event.getComment() != null)
 		{

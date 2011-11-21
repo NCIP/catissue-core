@@ -40,7 +40,25 @@ public class TransferEventParametersTransformer
 
         domainObject.setToStorageContainer(toObj);
 
-        if (uiRepOfDomain.getFromStorageContainerId() == 0) {
+        if (uiRepOfDomain.getFromPosition() !=null && !uiRepOfDomain.getFromPosition().equalsIgnoreCase(Constants.VIRTUALLY_LOCATED)) 
+        {
+        
+        	int colonIndex=uiRepOfDomain.getFromPosition() .indexOf(":");
+    		int posIndex=uiRepOfDomain.getFromPosition() .indexOf("Pos");
+        	int index=uiRepOfDomain.getFromPosition().lastIndexOf("(");
+    		int lastindex=uiRepOfDomain.getFromPosition().lastIndexOf(")");
+    		String[] s=uiRepOfDomain.getFromPosition().substring(index+1,lastindex).split(",");
+    		String stId= uiRepOfDomain.getFromPosition() .substring(colonIndex+1, posIndex).trim();
+    		
+    		 final StorageContainer fromObj = scInstFact.createObject();
+    		 fromObj.setId(Long.valueOf(stId));
+    		 domainObject.setFromStorageContainer(fromObj);
+    		 
+    		domainObject.setFromPositionDimensionOne(Integer.valueOf(s[0]));
+            domainObject.setFromPositionDimensionTwo(Integer.valueOf(s[1]));
+        }
+        
+       /* if (uiRepOfDomain.getFromStorageContainerId() == 0) {
             domainObject.setFromStorageContainer(null);
             domainObject.setFromPositionDimensionOne(null);
             domainObject.setFromPositionDimensionTwo(null);
@@ -52,7 +70,7 @@ public class TransferEventParametersTransformer
             domainObject.setFromPositionDimensionOne(Integer.valueOf(uiRepOfDomain.getFromPositionDimensionOne()));
             domainObject.setFromPositionDimensionTwo(Integer.valueOf(uiRepOfDomain.getFromPositionDimensionTwo()));
         }
-
+*/
         // catch (final Exception excp)
         // {
         // TransferEventParameters.logger.error(excp.getMessage(),excp);

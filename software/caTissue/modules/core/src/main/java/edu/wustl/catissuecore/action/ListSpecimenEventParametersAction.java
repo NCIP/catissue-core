@@ -46,6 +46,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication;
 import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -72,7 +73,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
 
 	/**
-	 * Overrides the execute method of Action class. Initializes the various
+	 * Overrides the execute method of Action class. Initialises the various
 	 * fields in SpecimenEventParameters.jsp Page.
 	 *
 	 * @param mapping
@@ -93,7 +94,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
-	{
+			{
 		saveActionErrors(form, request);
 		// //Gets the value of the operation parameter.
 		// String operation = request.getParameter(Constants.OPERATION);
@@ -226,11 +227,6 @@ public class ListSpecimenEventParametersAction extends SecureAction
 					specimenLabel = specimen.getLabel();
 				}
 				// Setting Specimen Event Parameters' Grid
-
-				// Ashish - 4/6/07 --- Since lazy=true, retriving the events
-				// collection.
-				final Collection<SpecimenEventParameters> specimenEventCollection = this
-						.getSpecimenEventParametersColl(specimenId, bizLogic);
 				final Collection<ActionApplication> dynamicEventCollection = this
 						.getDynamicEventColl(specimenId, bizLogic);
 				/**
@@ -242,10 +238,9 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				 * converted into the List of List, which is used on the UI for
 				 * displaying values form List on the grid.
 				 */
+				final List<Map<String, Object>> gridData = new ArrayList<Map<String, Object>>();
 				if (dynamicEventCollection != null)
 				{
-					final List<Map<String, Object>> gridData = new ArrayList<Map<String, Object>>();
-
 					for (final ActionApplication actionApp : dynamicEventCollection)
 					{
 						final Map<String, Object> rowDataMap = new HashMap<String, Object>();
@@ -263,7 +258,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 							rowDataMap.put(Constants.ID, String.valueOf(actionApp.getId()));
 							rowDataMap.put(Constants.EVENT_NAME,
 									edu.wustl.cab2b.common.util.Utility
-											.getFormattedString(container));
+									.getFormattedString(container));
 
 							// Ashish - 4/6/07 - retrieving User
 							// User user = eventParameters.getUser();
@@ -284,6 +279,39 @@ public class ListSpecimenEventParametersAction extends SecureAction
 							gridData.add(rowDataMap);
 						}
 					}
+				}
+
+				final Collection<SpecimenEventParameters> specimenEventCollection = this
+						.getSpecimenEventParametersColl(specimenId, bizLogic);
+				if (specimenEventCollection != null)
+				{
+					for (final SpecimenEventParameters eventParameters : specimenEventCollection)
+					{
+						final Map<String, Object> rowDataMap = new HashMap<String, Object>();
+						if (eventParameters != null)
+						{
+							final String[] events = EventsUtil.getEvent(eventParameters);
+							rowDataMap.put(Constants.ID, String.valueOf(eventParameters.getId()));
+							rowDataMap.put(Constants.EVENT_NAME, events[0]);
+
+							// Ashish - 4/6/07 - retrieving User
+							// User user = eventParameters.getUser();
+							final User user = this.getUserOfStaticEvent(eventParameters.getId(), bizLogic);
+
+							rowDataMap.put(Constants.USER_NAME, user.getLastName() + ", "
+									+ user.getFirstName());
+
+							// rowDataMap.put(Constants.EVENT_DATE,
+							// Utility.parseDateToString
+							// (eventParameters.getTimestamp(),
+							// Constants.TIMESTAMP_PATTERN)); // Sri: Changed
+							// format for bug #463
+							rowDataMap.put(Constants.EVENT_DATE, eventParameters.getTimestamp());
+							rowDataMap.put(Constants.PAGE_OF, events[1]);// pageOf
+							gridData.add(rowDataMap);
+						}
+					}
+
 
 					final List<List<String>> gridDataList = this.getSortedGridDataList(gridData);
 					final String[] columnList1 = Constants.EVENT_PARAMETERS_COLUMNS;
@@ -298,16 +326,16 @@ public class ListSpecimenEventParametersAction extends SecureAction
 							gridDataList);
 					final Integer identifierFieldIndex = new Integer(0);
 					request.setAttribute("identifierFieldIndex", identifierFieldIndex.intValue());
-				}
-			}
-			if (request.getAttribute(Constants.SPECIMEN_LABEL) == null)
-			{
-				request.setAttribute(Constants.SPECIMEN_LABEL, specimenLabel);
-			}
-			request.setAttribute(Constants.EVENT_PARAMETERS_LIST, new SPPBizLogic()
-					.getAllSPPEventFormNames(dynamicEventMap));
-			request.getSession().setAttribute("dynamicEventMap", dynamicEventMap);
 
+				}
+				if (request.getAttribute(Constants.SPECIMEN_LABEL) == null)
+				{
+					request.setAttribute(Constants.SPECIMEN_LABEL, specimenLabel);
+				}
+				request.setAttribute(Constants.EVENT_PARAMETERS_LIST, new SPPBizLogic()
+				.getAllSPPEventFormNames(dynamicEventMap));
+				request.getSession().setAttribute("dynamicEventMap", dynamicEventMap);
+			}
 		}
 		catch (final Exception e)
 		{
@@ -356,7 +384,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		request.setAttribute(AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID,
 				specimenRecEntryEntityId);
 		return mapping.findForward(request.getParameter(Constants.PAGE_OF));
-	}
+			}
 
 	/**
 	 * @param form
@@ -385,7 +413,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		}
 	}
 
-	
+
 	// Patch ID: Bug#4180_2
 	/**
 	 * This method sorts the List of the Map of grid data chronologically.
@@ -492,6 +520,30 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		final User user = (User) userCollection.get(0);
 		return user;
 	}
+	
+	/**
+	 *
+	 * @param eventId : eventId
+	 * @param bizLogic : bizLogic
+	 * @return User : User
+	 * @throws BizLogicException : BizLogicException
+	 */
+	private User getUserOfStaticEvent(Long eventId, IBizLogic bizLogic) throws BizLogicException
+	{
+		final String[] selectColumnName = {"user"};
+		final String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+		final String[] whereColumnCondition = {"="};
+		final Object[] whereColumnValue = {eventId};
+		final String sourceObjectName = SpecimenEventParameters.class.getName();
+
+		final List userCollection = bizLogic.retrieve(sourceObjectName, selectColumnName,
+				whereColumnName, whereColumnCondition, whereColumnValue,
+				Constants.AND_JOIN_CONDITION);
+
+		final User user = (User) userCollection.get(0);
+		return user;
+	}
+
 
 	/**
 	 *
@@ -505,7 +557,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	 */
 	private Collection<SpecimenEventParameters> getSpecimenEventParametersColl(String specimenId,
 			IBizLogic bizLogic) throws BizLogicException
-	{
+			{
 		final String className = SpecimenEventParameters.class.getName();
 		final String columnName = Constants.COLUMN_NAME_SPECIMEN_ID;
 		final Long columnValue = new Long(specimenId);
@@ -513,7 +565,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				className, columnName, columnValue);
 
 		return specimenEventCollection;
-	}
+			}
 
 	/**
 	 *
@@ -527,7 +579,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	 */
 	private Collection<ActionApplication> getDynamicEventColl(String specimenId, IBizLogic bizLogic)
 			throws BizLogicException
-	{
+			{
 		final String className = ActionApplication.class.getName();
 		final String columnName = Constants.COLUMN_NAME_SPECIMEN_ID;
 		final Long columnValue = new Long(specimenId);
@@ -535,11 +587,11 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				columnName, columnValue);
 
 		return dynamicEventCollection;
-	}
+			}
 
 	private Collection<Container> getContainer(String contId, IBizLogic bizLogic)
 			throws BizLogicException
-	{
+			{
 		final String className = Container.class.getName();
 		final String columnName = "id";
 		final Long columnValue = new Long(contId);
@@ -547,5 +599,5 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				columnValue);
 
 		return containerCollection;
-	}
+			}
 }

@@ -329,25 +329,7 @@ public class CDMSCaTissueIntegrationUtil {
 		}
 	}
 
-	/**
-	 *
-	 * @param scgId
-	 * @return
-	 * @throws BizLogicException
-	 */
-//	private Date getCEPDate(final String scgId) throws BizLogicException {
-//		final StringBuffer eventQuery = new StringBuffer();
-//		final DefaultBizLogic bizLogic = new DefaultBizLogic();
-//		eventQuery.append("select timestamp from ").append(
-//				CollectionEventParameters.class.getName());
-//		eventQuery.append(" where specimenCollectionGroup.id=").append(scgId);
-//		final List dateList = bizLogic.executeQuery(eventQuery.toString());
-//		Date currDate = null;
-//		if (!dateList.isEmpty()) {
-//			currDate = (Date) dateList.get(0);
-//		}
-//		return currDate;
-//	}
+
 
 	/**
 	 *

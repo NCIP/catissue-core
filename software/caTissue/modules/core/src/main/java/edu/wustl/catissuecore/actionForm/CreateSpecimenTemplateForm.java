@@ -1060,61 +1060,6 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 						ApplicationProperties.getValue("specimen.pathologicalStatus")));
 			}
 
-			/*if ((this.collectionEventUserId) == 0L)
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-						"Collection Event's user"));
-			}*/
-
-			// checks the collectionProcedure
-			/*if (!validator.isValidOption(this.getCollectionEventCollectionProcedure()))
-			{
-				final String message = ApplicationProperties
-						.getValue("collectioneventparameters.collectionprocedure");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-						message));
-			}*/
-
-			/*final List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
-					Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
-			if (!Validator.isEnumeratedValue(procedureList, this
-					.getCollectionEventCollectionProcedure()))
-			{
-				final String message = ApplicationProperties
-						.getValue("cpbasedentry.collectionprocedure");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid", message));
-			}*/
-			//Container validation
-			/*if (!validator.isValidOption(this.getCollectionEventContainer()))
-			{
-				final String message = ApplicationProperties
-						.getValue("collectioneventparameters.container");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-						message));
-			}*/
-			/*final List containerList = CDEManager.getCDEManager().getPermissibleValueList(
-					Constants.CDE_NAME_CONTAINER, null);
-			if (!Validator.isEnumeratedValue(containerList, this.getCollectionEventContainer()))
-			{
-				final String message = ApplicationProperties
-						.getValue("collectioneventparameters.container");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid", message));
-			}*/
-			/*if ((this.receivedEventUserId) == 0L)
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-						"Received Event's user"));
-			}*/
-			/*final List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
-					Constants.CDE_NAME_RECEIVED_QUALITY, null);
-			if (!Validator.isEnumeratedValue(qualityList, this.receivedEventReceivedQuality))
-			{
-				final String message = ApplicationProperties
-						.getValue("cpbasedentry.receivedquality");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid", message));
-
-			}*/
-
 			if (this.className.equals(Constants.MOLECULAR))
 			{
 				if (!validator.isDouble(this.concentration, true))

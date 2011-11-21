@@ -608,49 +608,6 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			{
 				final Object tempObj = iter.next();
 				final Calendar calender = Calendar.getInstance();
-//				if (tempObj instanceof CollectionEventParameters)
-//				{
-//					final CollectionEventParameters collectionEventParameters = (CollectionEventParameters) tempObj;
-//					this.collectionEventId = collectionEventParameters.getId().longValue(); // Mandar : CollectionEvent 10-July-06
-//					//this.collectionEventSpecimenId = collectionEventParameters.getSpecimen().getId().longValue();
-//					this.collectionEventUserId = collectionEventParameters.getUser().getId()
-//							.longValue();
-//
-//					calender.setTime(collectionEventParameters.getTimestamp());
-//					this.collectionEventdateOfEvent = CommonUtilities.parseDateToString(
-//							collectionEventParameters.getTimestamp(), CommonServiceLocator
-//									.getInstance().getDatePattern());
-//					this.collectionEventTimeInHours = CommonUtilities.toString(Integer
-//							.toString(calender.get(Calendar.HOUR_OF_DAY)));
-//					this.collectionEventTimeInMinutes = CommonUtilities.toString(Integer
-//							.toString(calender.get(Calendar.MINUTE)));
-//					this.collectionEventCollectionProcedure = collectionEventParameters
-//							.getCollectionProcedure();
-//					this.collectionEventContainer = collectionEventParameters.getContainer();
-//					this.collectionEventComments = CommonUtilities
-//							.toString(collectionEventParameters.getComment());
-//				}
-//				else if (tempObj instanceof ReceivedEventParameters)
-//				{
-//					final ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) tempObj;
-//
-//					calender.setTime(receivedEventParameters.getTimestamp());
-//					this.receivedEventId = receivedEventParameters.getId().longValue();
-//					//	this.receivedEventSpecimenId = receivedEventParameters.getSpecimen().getId().longValue();
-//					this.receivedEventUserId = receivedEventParameters.getUser().getId()
-//							.longValue();
-//					this.receivedEventDateOfEvent = CommonUtilities.parseDateToString(
-//							receivedEventParameters.getTimestamp(), CommonServiceLocator
-//									.getInstance().getDatePattern());
-//					this.receivedEventTimeInHours = CommonUtilities.toString(Integer
-//							.toString(calender.get(Calendar.HOUR_OF_DAY)));
-//					this.receivedEventTimeInMinutes = CommonUtilities.toString(Integer
-//							.toString(calender.get(Calendar.MINUTE)));
-//					this.receivedEventReceivedQuality = receivedEventParameters
-//							.getReceivedQuality();
-//					this.receivedEventComments = CommonUtilities.toString(receivedEventParameters
-//							.getComment());
-//				}
 			}
 		}
 	}

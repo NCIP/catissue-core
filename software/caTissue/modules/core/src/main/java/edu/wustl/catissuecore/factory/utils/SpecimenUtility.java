@@ -54,27 +54,7 @@ public class SpecimenUtility
 		return mSpecimen;
 	}
 
-	/**
-	 * Set DefaultSpecimenEventCollection.
-	 * @param userID Long.
-	 */
-//	public static void setDefaultSpecimenEventCollection(Specimen specimen,Long userID)
-//	{
-//		final Collection<SpecimenEventParameters> specimenEventCollection = new HashSet<SpecimenEventParameters>();
-//		InstanceFactory<User> instFact = DomainInstanceFactory.getInstanceFactory(User.class);
-//		final User user = instFact.createObject();
-//		user.setId(userID);
-//		final CollectionEventParameters collectionEventParameters = EventsUtil
-//		.populateCollectionEventParameters(user);
-//		collectionEventParameters.setSpecimen(specimen);
-//		specimenEventCollection.add(collectionEventParameters);
-//
-//		final ReceivedEventParameters receivedEventParameters = EventsUtil
-//		.populateReceivedEventParameters(user);
-//		receivedEventParameters.setSpecimen(specimen);
-//		specimenEventCollection.add(receivedEventParameters);
-//		specimen.setSpecimenEventCollection(specimenEventCollection);
-//	}
+	
 
 	/**
 	 * Set ConsentTierStatusCollectionFromSCG.
@@ -156,67 +136,9 @@ public class SpecimenUtility
 			{
 				final SpecimenEventParameters eventParam = (SpecimenEventParameters) eventCollItr
 				.next();
-//				if (eventParam instanceof CollectionEventParameters)
-//				{
-//					collProcedure = ((CollectionEventParameters) eventParam).getCollectionProcedure();
-//					collContainer = ((CollectionEventParameters) eventParam).getContainer();
-//					collTimestamp = ((CollectionEventParameters) eventParam).getTimestamp();
-//					collEventUser = ((CollectionEventParameters) eventParam).getUser();
-//				}
-//				if (eventParam instanceof ReceivedEventParameters)
-//				{
-//					recQty = ((ReceivedEventParameters) eventParam).getReceivedQuality();
-//					recTimestamp = ((ReceivedEventParameters) eventParam).getTimestamp();
-//					recEventUser = ((ReceivedEventParameters) eventParam).getUser();
-//				}
+
 			}
 		}
-
-//		final Collection<SpecimenEventParameters> specimenEventCollection = new HashSet<SpecimenEventParameters>();
-//		final Iterator itr = specimenEventColl.iterator();
-//		while (itr.hasNext())
-//		{
-//			final SpecimenEventParameters eventParam = (SpecimenEventParameters) itr.next();
-//			if (eventParam instanceof CollectionEventParameters)
-//			{
-//				final CollectionEventParameters collEventParam = (CollectionEventParameters) eventParam;
-//				if (collEventParam != null)
-//				{
-//					final CollectionEventParameters collectionEventParameters = (CollectionEventParameters) DomainInstanceFactory.getInstanceFactory(CollectionEventParameters.class).createClone(collEventParam);//new CollectionEventParameters(
-//					//collEventParam);
-//					collectionEventParameters.setSpecimen(persistentSpecimen);
-//					collectionEventParameters.setTimestamp(collTimestamp);
-//					collectionEventParameters.setUser(collEventUser);
-//					if (!Constants.CP_DEFAULT.equals(collProcedure))
-//					{
-//						collectionEventParameters.setCollectionProcedure(collProcedure);
-//					}
-//					if (!Constants.CP_DEFAULT.equals(collContainer))
-//					{
-//						collectionEventParameters.setContainer(collContainer);
-//					}
-//					specimenEventCollection.add(collectionEventParameters);
-//				}
-//			}
-//			if (eventParam instanceof ReceivedEventParameters)
-//			{
-//				final ReceivedEventParameters recEventParam = (ReceivedEventParameters) eventParam;
-//				if (recEventParam != null)
-//				{
-//					final ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) DomainInstanceFactory.getInstanceFactory(ReceivedEventParameters.class).createClone(recEventParam);//new ReceivedEventParameters(
-//					//recEventParam);
-//					receivedEventParameters.setSpecimen(persistentSpecimen);
-//					receivedEventParameters.setTimestamp(recTimestamp);
-//					receivedEventParameters.setUser(recEventUser);
-//					if (!Constants.CP_DEFAULT.equals(recQty))
-//					{
-//						receivedEventParameters.setReceivedQuality(recQty);
-//					}
-//					specimenEventCollection.add(receivedEventParameters);
-//				}
-//			}
-//		}
-//		persistentSpecimen.setSpecimenEventCollection(specimenEventCollection);
 	}
 
 

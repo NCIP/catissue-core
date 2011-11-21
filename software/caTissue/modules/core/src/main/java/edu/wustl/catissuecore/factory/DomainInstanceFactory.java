@@ -263,57 +263,15 @@ public class DomainInstanceFactory
 		else if(DistributionProtocol.class.equals(klass)){
 			instanceFactory = DistributionProtocolFactory.getInstance();
 		}
-//		else if(CheckInCheckOutEventParameter.class.equals(klass)){
-//			instanceFactory = CheckInCheckOutEventParameterFactory.getInstance();
-//		}
-//		else if(CollectionEventParameters.class.equals(klass)){
-//			instanceFactory = CollectionEventParametersFactory.getInstance();
-//		}
 		else if(DisposalEventParameters.class.equals(klass)){
 			instanceFactory = DisposalEventParametersFactory.getInstance();
 		}
-//		else if(EmbeddedEventParameters.class.equals(klass)){
-//			instanceFactory = EmbeddedEventParametersFactory.getInstance();
-//		}
-//		else if(FixedEventParameters.class.equals(klass)){
-//			instanceFactory = FixedEventParametersFactory.getInstance();
-//		}
-//		else if(FrozenEventParameters.class.equals(klass)){
-//			instanceFactory = FrozenEventParametersFactory.getInstance();
-//		}
-//		else if(ProcedureEventParameters.class.equals(klass)){
-//			instanceFactory = ProcedureEventParametersFactory.getInstance();
-//		}
-//		else if(ReceivedEventParameters.class.equals(klass)){
-//			instanceFactory = ReceivedEventParametersFactory.getInstance();
-//		}
 		else if(ReturnEventParameters.class.equals(klass)){
 			instanceFactory = ReturnEventParametersFactory.getInstance();
 		}
-//		else if(SpunEventParameters.class.equals(klass)){
-//			instanceFactory = SpunEventParametersFactory.getInstance();
-//		}
-//		else if(ThawEventParameters.class.equals(klass)){
-//			instanceFactory = ThawEventParametersFactory.getInstance();
-//		}
 	    if(TransferEventParameters.class.equals(klass)){
 			instanceFactory = TransferEventParametersFactory.getInstance();
 		}
-		/*else if(ReviewEventParameters.class.equals(klass)){
-			instanceFactory = AbstractReviewEventParametersFactory.getInstance();
-		}*/
-//		else if(CellSpecimenReviewParameters.class.equals(klass)){
-//			instanceFactory = CellSpecimenReviewParametersFactory.getInstance();
-//		}
-//		else if(FluidSpecimenReviewEventParameters.class.equals(klass)){
-//			instanceFactory = FluidSpecimenReviewEventParametersFactory.getInstance();
-//		}
-//		else if(MolecularSpecimenReviewParameters.class.equals(klass)){
-//			instanceFactory = MolecularSpecimenReviewParametersFactory.getInstance();
-//		}
-//		else if(TissueSpecimenReviewEventParameters.class.equals(klass)){
-//			instanceFactory = TissueSpecimenReviewEventParametersFactory.getInstance();
-//		}
 		/**
 		 * caTIES Factories.
 		 */
@@ -388,40 +346,4 @@ public class DomainInstanceFactory
 		}
 		return instanceFactory;
 	}
-
-	/*public InstanceFactory createInstanceFactory(Class<? extends AbstractDomainObject> klass)
-	{
-		InstanceFactory<? extends AbstractDomainObject> instanceFactory = null;
-		try
-		{
-			instanceFactory = (InstanceFactory<? extends AbstractDomainObject>)klass.getConstructors()[0].newInstance();
-		}
-		catch (IllegalArgumentException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (SecurityException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (InstantiationException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IllegalAccessException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (InvocationTargetException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return instanceFactory;
-	}*/
-
 }

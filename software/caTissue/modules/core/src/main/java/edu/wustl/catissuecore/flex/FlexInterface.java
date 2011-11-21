@@ -175,14 +175,6 @@ public class FlexInterface
                                     final User user = (User) list.get(0);
                                     event.setUser(user);
                                 }
-//                                if (event instanceof CollectionEventParameters)
-//                                {
-//                                    collEvBean.copy(event);
-//                                }
-//                                else if (event instanceof ReceivedEventParameters)
-//                                {
-//                                    recEvBean.copy(event);
-//                                }
                             }
                         }
                     }
@@ -1052,16 +1044,7 @@ public class FlexInterface
         if (edu.wustl.catissuecore.util.global.Constants.NEW_SPECIMEN_TYPE
                 .equals(spBean.parentType))
         {
-//            final Set<SpecimenEventParameters> eventSet = new HashSet<SpecimenEventParameters>();
-//            final CollectionEventParameters collectionEvent = this
-//                    .getCollectionEventParameters(spBean.collectionEvent);
-//            eventSet.add(collectionEvent);
-//
-//            final ReceivedEventParameters receEvent = this
-//                    .getReceivedEventParameters(spBean.receivedEvent);
-//            eventSet.add(receEvent);
-//
-//            specimenDataBean.setSpecimenEventCollection(eventSet);
+
         }
         if (spBean.derivedColl != null)
         {
@@ -1509,53 +1492,6 @@ public class FlexInterface
         return null;
 
     }
-
-    /**
-     * Gets the collection event parameters.
-     *
-     * @param collectionEvent the collection event
-     *
-     * @return CollectionEventParameters object
-     *
-     * @throws BizLogicException the biz logic exception
-     */
-//    private CollectionEventParameters getCollectionEventParameters(
-//            EventParamtersBean collectionEvent) throws BizLogicException
-//    {
-//        final CollectionEventParameters event = (CollectionEventParameters)DomainInstanceFactory.getInstanceFactory(CollectionEventParameters.class).createObject();//new CollectionEventParameters();
-//        //setCommomParam(event);
-//        event.setTimestamp(this.getTimeStamp(collectionEvent.eventdDate, collectionEvent.eventHour,
-//                collectionEvent.eventMinute));
-//        event.setCollectionProcedure(collectionEvent.collectionProcedure);
-//        event.setContainer(collectionEvent.container);
-//        event.setComment(collectionEvent.comment);
-//        final User user = this.getUser(collectionEvent.userName);
-//        event.setUser(user);
-//        return event;
-//    }
-
-    /**
-     * Gets the received event parameters.
-     *
-     * @param receivedEvent the received event
-     *
-     * @return ReceivedEventParameters object
-     *
-     * @throws BizLogicException the biz logic exception
-     */
-//    private ReceivedEventParameters getReceivedEventParameters(EventParamtersBean receivedEvent)
-//            throws BizLogicException
-//    {
-//        final ReceivedEventParameters event = (ReceivedEventParameters)DomainInstanceFactory.getInstanceFactory(ReceivedEventParameters.class).createObject();//new ReceivedEventParameters();
-//        event.setTimestamp(this.getTimeStamp(receivedEvent.eventdDate, receivedEvent.eventHour,
-//                receivedEvent.eventMinute));
-//        final User user = this.getUser(receivedEvent.userName);
-//        event.setUser(user);
-//        event.setComment(receivedEvent.comment);
-//        //setCommomParam(event);
-//        event.setReceivedQuality(receivedEvent.receivedQuality);
-//        return event;
-//    }
 
     /**
      * Gets the time stamp.

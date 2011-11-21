@@ -122,111 +122,11 @@ public class SpecimenCollectionGroupTransformer
         /**
          * Setting the consentTier responses for SCG Level. Virender Mehta
          */
-        domainObject.setConsentTierStatusCollection(prepareParticipantResponseCollection(uiRepOfDomain));
-
-        //domainObject.setConsentWithdrawalOption(uiRepOfDomain.getWithdrawlButtonStatus());
-        //domainObject.setApplyChangesTo(uiRepOfDomain.getApplyChangesTo());
-        //domainObject.setStringOfResponseKeys(uiRepOfDomain.getStringOfResponseKeys());
-
-        /**
-         * Name : Ashish Gupta. Reviewer Name : Sachin Lale. Bug ID: 2741 Patch
-         * ID: 2741_3 Description: Populating events in SCG
-         */
-        // Adding Events
-        setEventsFromForm(domainObject, uiRepOfDomain, uiRepOfDomain.getOperation());
-        // Adding events to Specimens
-       /* if (uiRepOfDomain.isApplyEventsToSpecimens()) {
-            domainObject.setApplyEventsToSpecimens(true);
-        }*/
+        domainObject.setConsentTierStatusCollection(prepareParticipantResponseCollection(uiRepOfDomain));     
         domainObject.setOffset(Integer.valueOf(uiRepOfDomain.getOffset()));
     }
 
-    /**
-     * Name : Ashish Gupta. Reviewer Name : Sachin Lale. Bug ID: 2741 Patch ID:
-     * 2741_4 Description: Method to populate Events in SCG.
-     */
-    /**
-     * @param form of SpecimenCollectionGroupForm type.
-     * @param operation of String type. This function populates all events for
-     *            the given scg.
-     */
-    private void setEventsFromForm(SpecimenCollectionGroup domainObject, SpecimenCollectionGroupForm form,
-            String operation) {
-//        CollectionEventParameters collectionEventParameters = null;
-//        ReceivedEventParameters receivedEventParameters = null;
-//        final Collection<SpecimenEventParameters> tempColl = new HashSet<SpecimenEventParameters>();
-//        if (operation.equals(Constants.ADD)) {
-//            collectionEventParameters = (CollectionEventParameters)DomainInstanceFactory.getInstanceFactory(CollectionEventParameters.class).createObject();//new CollectionEventParameters();
-//            receivedEventParameters = (ReceivedEventParameters)DomainInstanceFactory.getInstanceFactory(ReceivedEventParameters.class).createObject();//new ReceivedEventParameters();
-//        } else {
-//            final Iterator<SpecimenEventParameters> iter = domainObject.getSpecimenEventParametersCollection().iterator();
-//            while (iter.hasNext()) {
-//                final Object temp = iter.next();
-//                if (temp instanceof CollectionEventParameters) {
-//                    collectionEventParameters = (CollectionEventParameters) temp;
-//                } else if (temp instanceof ReceivedEventParameters) {
-//                    receivedEventParameters = (ReceivedEventParameters) temp;
-//                }
-//            }
-//            if (form.getCollectionEventId() != 0) {
-//                collectionEventParameters.setId(Long.valueOf(form.getCollectionEventId()));
-//                receivedEventParameters.setId(Long.valueOf(form.getReceivedEventId()));
-//            }
-//        }
-//        // creating new events when there are no events associated with the scg
-//        if (collectionEventParameters == null && receivedEventParameters == null) {
-//            collectionEventParameters = (CollectionEventParameters)DomainInstanceFactory.getInstanceFactory(CollectionEventParameters.class).createObject();//new CollectionEventParameters();
-//            receivedEventParameters = (ReceivedEventParameters)DomainInstanceFactory.getInstanceFactory(ReceivedEventParameters.class).createObject();//new ReceivedEventParameters();
-//        }
-//        setEventParameters(domainObject, collectionEventParameters, receivedEventParameters, form);
-//
-//        tempColl.add(collectionEventParameters);
-//        tempColl.add(receivedEventParameters);
-//        if (operation.equals(Constants.ADD)) {
-//            domainObject.getSpecimenEventParametersCollection().add(collectionEventParameters);
-//            domainObject.getSpecimenEventParametersCollection().add(receivedEventParameters);
-//        } else {
-//            domainObject.setSpecimenEventParametersCollection(tempColl);
-//        }
-    }
-
-    /**
-     * @param collectionEventParameters CollectionEventParameters.
-     * @param receivedEventParameters ReceivedEventParameters.
-     * @param form SpecimenCollectionGroupForm.
-     */
-//    private void setEventParameters(SpecimenCollectionGroup domainObject,
-//            CollectionEventParameters collectionEventParameters, ReceivedEventParameters receivedEventParameters,
-//            SpecimenCollectionGroupForm form) {
-//        collectionEventParameters.setCollectionProcedure(form.getCollectionEventCollectionProcedure());
-//        collectionEventParameters.setComment(form.getCollectionEventComments());
-//        collectionEventParameters.setContainer(form.getCollectionEventContainer());
-//        final Date timestamp = EventsUtil.setTimeStamp(form.getCollectionEventdateOfEvent(), form
-//                .getCollectionEventTimeInHours(), form.getCollectionEventTimeInMinutes());
-//        collectionEventParameters.setTimestamp(timestamp);
-//        User user = null;
-//        InstanceFactory<User> instFact = DomainInstanceFactory.getInstanceFactory(User.class);
-//        if (form.getCollectionEventUserId() != 0) {
-//            user = instFact.createObject();
-//            user.setId(Long.valueOf(form.getCollectionEventUserId()));
-//        }
-//        collectionEventParameters.setUser(user);
-//        collectionEventParameters.setSpecimenCollectionGroup(domainObject);
-//
-//        // Received Events
-//        receivedEventParameters.setComment(form.getReceivedEventComments());
-//        User receivedUser = null;
-//        if (form.getReceivedEventUserId() != 0) {
-//            receivedUser = instFact.createObject();
-//            receivedUser.setId(Long.valueOf(form.getReceivedEventUserId()));
-//        }
-//        receivedEventParameters.setUser(receivedUser);
-//        receivedEventParameters.setReceivedQuality(form.getReceivedEventReceivedQuality());
-//        final Date receivedTimestamp = EventsUtil.setTimeStamp(form.getReceivedEventDateOfEvent(), form
-//                .getReceivedEventTimeInHours(), form.getReceivedEventTimeInMinutes());
-//        receivedEventParameters.setTimestamp(receivedTimestamp);
-//        receivedEventParameters.setSpecimenCollectionGroup(domainObject);
-//    }
+   
 
     /**
      * For Consent Tracking. Setting the Domain Object.
