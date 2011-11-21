@@ -12,6 +12,7 @@ import org.globus.gsi.GlobusCredentialException;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -38,6 +39,15 @@ public class ClientRunAll {
         p.setIdentifier(pResult.getIdentifier());
 */
 
+    }
+
+    public static void createInstitution() throws RemoteException {
+        String key = UniqueKeyGenerator.getKey();
+        Institution i = new Institution();
+        i.setName("i2 " + key);
+        i.setRemoteId(new Date().getTime());
+        Institution iResult = (Institution)client.insert(i);
+        System.out.println(iResult.getIdentifier());
     }
 
     public static void createChemotherapy() throws RemoteException {

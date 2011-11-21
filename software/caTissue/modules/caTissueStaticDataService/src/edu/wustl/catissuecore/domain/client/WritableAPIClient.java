@@ -104,6 +104,10 @@ public class WritableAPIClient extends Catissue_cacoreClient  {
                 ClientRunAll.createChemotherapy();
             }
 
+            if (args[2].equals("CreateInstitution")) {
+                ClientRunAll.createInstitution();
+            }
+
             if (args[2].equals("CreateParticipant")) {
                 ClientRunAll.createParticipantAndCPR();
                 // ClientRunAll.testCreateParticipant();
