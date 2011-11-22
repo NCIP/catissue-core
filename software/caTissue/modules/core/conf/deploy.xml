@@ -5657,7 +5657,7 @@ Thanking You,
 
 	<target name="upgrade_existingEvents_to_sppEvents" description="Upgrades Existing Events To SppEvents">
 
-		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
+		<!--unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		<antcall target="replace_app_dao_prop_file"/>
@@ -5763,7 +5763,7 @@ Thanking You,
 						<include name="**/*.jar" />
 				</fileset>
 			</classpath>
-		</java>
+		</java-->
 	</target>
 
 	<target name="deploy_notification_service">
