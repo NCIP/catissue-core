@@ -1886,13 +1886,15 @@
         <echo message="DEBUG: THIS IS SUPPOSED TO CALL build:all on cacore-sdk-4.2-dozer" />
         <!--<ant antfile="build.xml" dir="${de.temp.dir}/cacoresdk.4.2/example-project/" target="build:all" />-->
         <!-- Copy dozer-artifacts to dataservice -->
-        <available file="${de.temp.dir}/cacoresdk.4.2/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/${entitygroupname}-dozer-files.zip" property="dozerFilesExists"/>
+        <available file="${de.temp.dir}/cacoresdk.4.2/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/${entitygroupname}-dozer-files.jar" property="dozerFilesExists"/>
         <if>
             <equals arg1="true" arg2="${dozerFilesExists}" />
 			<then>
                 <copy todir="../../caGrid_service/caTissueStaticDataService/de_codegen/artifacts" overwrite="true">
                     <fileset dir="${de.temp.dir}/cacoresdk.4.2/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/">
-                        <include name="${entitygroupname}-dozer-files.zip" />
+                        <include name="${entitygroupname}-beans.jar" />
+                        <include name="${entitygroupname}-dozer-files.jar" />
+                        <include name="${entitygroupname}-schema.jar" />
                     </fileset>
                 </copy>
                 <echo message="Dozer files copied for: ${${entitygroupname}}" />
