@@ -356,7 +356,7 @@
 	<target name="init" description="Extrct WAR and copy Configuration files to temp directory">
 		<echo message="Initializing installation..." />
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
-		<unwar src="${caTissue-webapp.dir.dist}/modules/cas/lib/cas.war" dest="${prop.temp.dir}/cas" />
+		<!--<unwar src="${caTissue-webapp.dir.dist}/modules/cas/lib/cas.war" dest="${prop.temp.dir}/cas" />-->
 		<unwar src="${caTissue-webapp.dir.dist}/modules/print_web_service/lib/caTissuePrintWebService.war" dest="${prop.temp.dir}/caTissuePrintWebService" />
 		<unjar src="${prop.temp.dir}/catissuecore/WEB-INF/lib/DynamicExtensions.jar" dest="${prop.temp.dir}/dynamicExtensionsjar" />
 		<unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />
@@ -370,7 +370,7 @@
 		<copy todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" overwrite="true">
 			<fileset dir="${caTissue-webapp.dir.dist}/modules/caTissue/lib/common_lib" />
 		</copy>
-		<copy todir="${prop.temp.dir}/cas/WEB-INF/lib" overwrite="true">
+		<!--<copy todir="${prop.temp.dir}/cas/WEB-INF/lib" overwrite="true">
 			<fileset dir="${caTissue-webapp.dir.dist}/modules/caTissue/lib/common_lib" />
 		</copy>
 		<copy todir="${prop.temp.dir}/cas/WEB-INF/lib" overwrite="true">
@@ -381,7 +381,7 @@
 				<include name="securityManager*.jar"/>
 				<include name="washu-commons*.jar"/>
 			</fileset>
-		</copy>
+		</copy>-->
 		<antcall target="configure_log4j" />
 
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${prop.temp.dir}/tempcsm"/> -->
@@ -425,9 +425,9 @@
 		<copy todir="${prop.temp.dir}/catissuecore/images/uIEnhancementImages" overwrite="true">
 			<fileset dir="${caTissue-webapp.dir.dist}/modules/caTissue/images" />
 		</copy>
-	<copy todir="${prop.temp.dir}/cas/images/uIEnhancementImages" overwrite="true">
+	<!--<copy todir="${prop.temp.dir}/cas/images/uIEnhancementImages" overwrite="true">
 				<fileset dir="${caTissue-webapp.dir.dist}/modules/caTissue/images" />
-			</copy>
+			</copy>-->
 	</target>
 
 	<!--Modify Configuration For MySQL-->
@@ -542,12 +542,12 @@
 
 	<target name="clean_server" description="deletes the WAR file and cache from server, clean-up the server ">
 		<delete file="${jboss.server.url}/deploy/catissuecore.war" />
-		<if>
+		<!--<if>
 			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
 			<then>
 				<delete file="${jboss.server.url}/deploy/cas.war" />
 			</then>
-		</if>
+		</if>-->
 		<delete file="${jboss.home}/server/${jboss.server.name}/deploy/dynamicExtensions.war" />
 		<delete file="${jboss.home}/server/${jboss.server.name}/deploy/caTissuePrintWebService.war" />
 		<delete file="${jboss.home}/server/${jboss.server.name}/deploy/pathologySCG.war" />
@@ -1112,10 +1112,10 @@
 			<if>
 				<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
 				<then>
-					<antcall target="deploy_cas" />
+					<!--<antcall target="deploy_cas" />-->
 				</then>
 			</if>
-			<antcall target="integrate_cas" />
+			<!--<antcall target="integrate_cas" />-->
 			<antcall target="build_war" />
 			<antcall target="jboss_configuration" />
 		    <antcall target="deploy_notification_service" />
@@ -1627,7 +1627,7 @@
 				<include name="properties-service.xml" />
 			</fileset>
 		</copy>
-		<if>
+		<!--<if>
 			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
 			<then>
 				<copy todir="${jboss.server.url}/deploy" overwrite="true">
@@ -1636,7 +1636,7 @@
 					</fileset>
 				</copy>
 			</then>
-		</if>
+		</if>-->
 		<delete file="${jboss.server.url}/lib/hibernate2.jar" />
 	</target>
 
@@ -5248,7 +5248,7 @@ Thanking You,
 		</delete>
 
 
-		<copy file="${prop.temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml"
+		<!--<copy file="${prop.temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml"
 			todir="${prop.temp.dir}/cas/WEB-INF/classes/" overwrite="true" />
 
 		<copy file="${prop.temp.dir}/catissuecore/WEB-INF/lib/washu-commons-1.1.8.jar"
@@ -5258,13 +5258,13 @@ Thanking You,
 				todir="${prop.temp.dir}/cas/WEB-INF/lib/" overwrite="true" />
 
 		<copy file="${prop.temp.dir}/catissuecore/WEB-INF/lib/XmlSchema.jar"
-					todir="${prop.temp.dir}/cas/WEB-INF/lib/" overwrite="true" />
+					todir="${prop.temp.dir}/cas/WEB-INF/lib/" overwrite="true" />-->
 
-		<war destfile="${prop.temp.dir}/cas.war" webxml="${prop.temp.dir}/cas/WEB-INF/web.xml" manifest="${prop.temp.dir}/cas/META-INF/MANIFEST.MF">
+		<!--<war destfile="${prop.temp.dir}/cas.war" webxml="${prop.temp.dir}/cas/WEB-INF/web.xml" manifest="${prop.temp.dir}/cas/META-INF/MANIFEST.MF">
 			<fileset dir="${prop.temp.dir}/cas" includes="**/*"/>
 		</war>
 
-		<copy file="${prop.temp.dir}/cas.war" todir="${caTissue-webapp.dir.dist}/modules/cas/lib" overwrite="true" />
+		<copy file="${prop.temp.dir}/cas.war" todir="${caTissue-webapp.dir.dist}/modules/cas/lib" overwrite="true" />-->
 	</target>
 
 	<target name="integrate_cas" description="Target to integrate cas with the application">

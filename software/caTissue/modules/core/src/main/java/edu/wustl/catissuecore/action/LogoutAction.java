@@ -70,20 +70,20 @@ public class LogoutAction extends BaseAction
         // Redirect to CAS logout page
 
 
-        String casRedirectURL=null;
-        if (request.getRequestURL() != null)
-        {
-            casRedirectURL = getCASLogoutURL(request.getRequestURL().toString());
-        }
+//        String casRedirectURL=null;
+//        if (request.getRequestURL() != null)
+//        {
+//            casRedirectURL = getCASLogoutURL(request.getRequestURL().toString());
+//        }
         ActionForward forwardTo = null;
-        if (casRedirectURL==null)
-        {
+//        if (casRedirectURL==null)
+//        {
             forwardTo = (mapping.findForward(Constants.SUCCESS));
-        }
-        else
-        {
-            response.sendRedirect(casRedirectURL);
-        }
+//        }
+//        else
+//        {
+//            response.sendRedirect(casRedirectURL);
+//        }
 
         return forwardTo;
     }

@@ -14,13 +14,14 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.action.XSSSupportedAction;
 
 /**
  * @author mandar_deshmukh
  *
  * This class is used to redirect the user to the Home / SignIn Page after session is timedOut.
  */
-public class ForwardAction extends BaseAction
+public class ForwardAction extends XSSSupportedAction
 {
 
 	/**
@@ -36,7 +37,7 @@ public class ForwardAction extends BaseAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		return (mapping.findForward(Constants.SUCCESS));

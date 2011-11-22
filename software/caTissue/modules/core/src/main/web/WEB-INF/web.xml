@@ -155,10 +155,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 
 
 
-	<filter-mapping>
+	<!-- <filter-mapping>
 		<filter-name>CASFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
-	</filter-mapping>
+	</filter-mapping> -->
 
 <!-- Filter for CAS configuration finish -->
 

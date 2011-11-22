@@ -2,9 +2,9 @@
 <!--Ant Script for create Build for caTISSUE Core-->
 <project name="caTissue Suite" default="compile" xmlns:ivy="antlib:org.apache.ivy.ant">
 
-	<exec executable="svnversion" outputproperty="dist.revision">
+<!--	<exec executable="svnversion" outputproperty="dist.revision">
        <arg line="-n ."/>
-    </exec>
+    </exec>-->
 
 	<!--define require dir and Properties -->
 	<property name="root.dir" location="${base.dir}/../../.." />
@@ -877,7 +877,7 @@
             <fileset dir="${catissue.modules}/"><include name="NotificationService/**"/></fileset>
         </copy>
 
-        <copy file="${conf.dir}/cas.war" todir="${zip.dir}/modules/cas/lib" overwrite="true" />
+        <!--<copy file="${conf.dir}/cas.war" todir="${zip.dir}/modules/cas/lib" overwrite="true" />-->
 
 		<copy file="${catissue.modules}/caTIES/conf/gate.zip" todir="${zip.dir}/modules/caTIES/lib" overwrite="true" />
 		<copy todir="${zip.dir}/modules/caTIES/conf" overwrite="true">
