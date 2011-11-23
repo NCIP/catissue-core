@@ -23,6 +23,10 @@
 		{
 			specimenId = (String)request.getAttribute(Constants.SPECIMEN_ID);
 		}
+		else if(request.getParameter(Constants.SPECIMEN_ID) != null)
+		{
+			specimenId = (String)request.getParameter(Constants.SPECIMEN_ID);
+		}
 
 		if(request.getAttribute(Globals.ERROR_KEY)!=null)
 		{

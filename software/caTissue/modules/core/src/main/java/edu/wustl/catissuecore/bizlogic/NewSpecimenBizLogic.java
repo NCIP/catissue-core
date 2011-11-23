@@ -1892,8 +1892,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 
 				eventParametersBizLogic.insert(disposalEventParameters, dao, sessionDataBean);
 
-				eventParametersBizLogic.insertDynamicDataForDisposalEvent(sessionDataBean, disposalEventParameters, dataValueMap,
-						specimen);
+				//eventParametersBizLogic.insertDynamicDataForDisposalEvent(sessionDataBean, disposalEventParameters, dataValueMap,
+						//specimen);
 			}
 		} catch (final DAOException daoExp) {
 			LOGGER.error(daoExp.getMessage(), daoExp);

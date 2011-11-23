@@ -16,8 +16,12 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.BulkEventOperationsForm;
+import edu.wustl.catissuecore.bizlogic.bulkOperations.BulkOperationsBizlogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -56,13 +60,13 @@ public class BulkOperationSubmitAction extends BaseAction
 			target = Constants.SUCCESS;
 		}
 		LinkedList<String> specimenIds = getSortedSpecimenIds(request, bulkEventOperationsForm);
-		//try
-		//{
+		try
+		{
 			if (specimenIds != null && specimenIds.size() > 0)
 			{
 				// Insert bulk events
-				//final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				/*final BulkOperationsBizlogic bizlogic = (BulkOperationsBizlogic) factory
+				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final BulkOperationsBizlogic bizlogic = (BulkOperationsBizlogic) factory
 						.getBizLogic(Constants.BULK_OPERATIONS_FORM_ID);
 				bizlogic.insertEvents(bulkEventOperationsForm.getOperation(), this
 						.getSessionData(request), specimenIds,
@@ -70,7 +74,7 @@ public class BulkOperationSubmitAction extends BaseAction
 						bulkEventOperationsForm.getDateOfEvent(), bulkEventOperationsForm
 						.getTimeInHours(), bulkEventOperationsForm.getTimeInMinutes(),
 						bulkEventOperationsForm.getComments(), bulkEventOperationsForm
-								.getEventSpecificData());*/
+								.getEventSpecificData());
 				ActionMessages messages = null;
 				ActionErrors errors = null;
 				if (specimenIds != null && specimenIds.size() > 0)
@@ -98,8 +102,8 @@ public class BulkOperationSubmitAction extends BaseAction
 				this.saveMessages(request, messages);
 				this.saveErrors(request, errors);
 			}
-		//}
-		/*catch (final BizLogicException excp)
+		}
+		catch (final BizLogicException excp)
 		{
 			this.logger.debug(excp.getCustomizedMsg());
 			final ActionErrors errors = new ActionErrors();
@@ -116,7 +120,7 @@ public class BulkOperationSubmitAction extends BaseAction
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
 			this.saveErrors(request, errors);
 			this.logger.error(excp.getCustomizedMsg(),excp);
-		}*/
+		}
 
 		return mapping.findForward(target);
 	}

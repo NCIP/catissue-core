@@ -190,12 +190,11 @@ public final class EventsUtil
 	public static String[] getEvent(SpecimenEventParameters eventParameters)
 	{
 		String[] events = new String[2];
-
-//		else if (eventParameters instanceof DisposalEventParameters)
-//		{
-//			events[0] = "Disposal";
-//			events[1] = "pageOfDisposalEventParameters";
-//		}
+		if (eventParameters instanceof DisposalEventParameters)
+		{
+			events[0] = "Disposal";
+			events[1] = "pageOfDisposalEventParameters";
+		}
 		if (eventParameters instanceof TransferEventParameters)
 		{
 			events[0] = "Transfer";

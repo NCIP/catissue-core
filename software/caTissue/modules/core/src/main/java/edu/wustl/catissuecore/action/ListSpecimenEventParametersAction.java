@@ -90,6 +90,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	 *             servlet exception
 	 * @return value for ActionForward object
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
@@ -250,10 +251,10 @@ public class ListSpecimenEventParametersAction extends SecureAction
 							//		.getEvent(eventParameters);
 							long contId = actionApp.getApplicationRecordEntry().getFormContext()
 									.getContainerId();
-							List contList = AppUtility
+							List<Object> contList = AppUtility
 									.executeSQLQuery("select caption from dyextn_container where identifier="
 											+ contId);
-							String container = (String) ((List) contList.get(0)).get(0);
+							String container = (String) ((List<Object>) contList.get(0)).get(0);
 							//final Object container =bizLogic.retrieve(Container.class.getName(),new Long(contId));
 							rowDataMap.put(Constants.ID, String.valueOf(actionApp.getId()));
 							rowDataMap.put(Constants.EVENT_NAME,
@@ -332,8 +333,16 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				{
 					request.setAttribute(Constants.SPECIMEN_LABEL, specimenLabel);
 				}
-				request.setAttribute(Constants.EVENT_PARAMETERS_LIST, new SPPBizLogic()
-				.getAllSPPEventFormNames(dynamicEventMap));
+				String[] eventNames=new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
+				String[] eventNameArr=new String[eventNames.length+2];
+				for(int i=0;i<eventNames.length;i++)
+				{
+					eventNameArr[i]=eventNames[i];
+				}
+				int len=eventNames.length;
+				eventNameArr[len]="Transfer";
+				eventNameArr[len+1]="Disposal";
+				request.setAttribute(Constants.EVENT_PARAMETERS_LIST,eventNameArr );
 				request.getSession().setAttribute("dynamicEventMap", dynamicEventMap);
 			}
 		}
@@ -520,7 +529,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		final User user = (User) userCollection.get(0);
 		return user;
 	}
-	
+
 	/**
 	 *
 	 * @param eventId : eventId

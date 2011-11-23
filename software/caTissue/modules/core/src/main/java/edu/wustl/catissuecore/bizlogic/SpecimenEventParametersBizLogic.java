@@ -9,24 +9,14 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import edu.common.dynamicextensions.domaininterface.AbstractAttributeInterface;
-import edu.common.dynamicextensions.domaininterface.AttributeInterface;
-import edu.common.dynamicextensions.domaininterface.BaseAbstractAttributeInterface;
-import edu.common.dynamicextensions.domaininterface.EntityInterface;
-import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
-import edu.common.dynamicextensions.processor.ApplyDataEntryFormProcessor;
-import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.Site;
@@ -37,13 +27,9 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
-import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
-import edu.wustl.catissuecore.domain.processingprocedure.DefaultAction;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
-import edu.wustl.catissuecore.factory.utils.SpecimenEventParametersUtility;
-import edu.wustl.catissuecore.upgrade.IntegrateDEData;
+import edu.wustl.catissuecore.uiobject.DisposalEventParametersUIObject;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.Position;
@@ -52,7 +38,6 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
@@ -91,7 +76,17 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	 * storageContainerIds.
 	 */
 	private HashSet<String> storageContainerIds = new HashSet<String>();
-
+	
+	
+	@Override
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
+	throws BizLogicException
+	{
+		DisposalEventParametersUIObject disposalEventParametersUIObject=new DisposalEventParametersUIObject();
+		this.insert(obj,disposalEventParametersUIObject,dao,sessionDataBean);
+	}
+	
+	
 	/**
 	 * Saves the FrozenEventParameters object in the database.
 	 * @param obj The FrozenEventParameters object to be saved.
@@ -100,7 +95,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException throws BizLogicException.
 	 */
 	@Override
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
+	protected void insert(Object obj,Object uiObject, DAO dao, SessionDataBean sessionDataBean)
 	throws BizLogicException
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
@@ -139,7 +134,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 							dataValueMap, specimen, oldSpecimenPosition, fromStorageContainer,
 							posDimenOne, posDimenTwo);
 				}
-				else */if(eventObjectsList.get(i) instanceof DisposalEventParameters)
+				else if(eventObjectsList.get(i) instanceof DisposalEventParameters)
 				{
 					DisposalEventParameters disposalEventParameters=(DisposalEventParameters) eventObjectsList.get(i);
 					User user= new User();
@@ -149,7 +144,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 					insertDynamicDataForDisposalEvent(sessionDataBean, disposalEventParameters,
 							dataValueMap, specimen);
-				}
+				}*/
 			}
 		}
 		else
@@ -295,7 +290,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	 * @param dataValueMap
 	 * @param specimen
 	 */
-	public void insertDynamicDataForDisposalEvent(SessionDataBean sessionDataBean,
+	/*public void insertDynamicDataForDisposalEvent(SessionDataBean sessionDataBean,
 			DisposalEventParameters disposalEventParameters,
 			Map<BaseAbstractAttributeInterface, Object> dataValueMap, Specimen specimen)
 	{
@@ -416,13 +411,13 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 			}catch (Exception exp) {
 				exp.printStackTrace();
-				/**
+				*//**
 				 * required Exception  handling
-				 */
+				 *//*
 //							throw this.getBizLogicException(exp, exp.getErrorKeyName(),
 //									exp.getMsgValues());
 			}
-	}
+	}*/
 
 	/**
 	 * @param obj - Object.
@@ -732,7 +727,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	{
 		super.postInsert(obj, dao, sessionDataBean);
 	}
-
+	
 	/**
 	 * Updates the persistent object in the database.
 	 * @param dao - DAO object
@@ -742,6 +737,23 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException throws BizLogicException
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
+	throws BizLogicException
+	{
+	
+		DisposalEventParametersUIObject disposalEventParametersUIObject=new DisposalEventParametersUIObject();
+		update(dao,obj,oldObj,disposalEventParametersUIObject,sessionDataBean);
+
+	}
+
+	/**
+	 * Updates the persistent object in the database.
+	 * @param dao - DAO object
+	 * @param obj The object to be updated.
+	 * @param oldObj - Object
+	 * @param sessionDataBean The session in which the object is saved.
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	protected void update(DAO dao, Object obj, Object oldObj,Object uiObject, SessionDataBean sessionDataBean)
 	throws BizLogicException
 	{
 		try

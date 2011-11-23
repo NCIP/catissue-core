@@ -3529,21 +3529,10 @@ PUBLIC
 
 			<forward name="pageOfDynamicEvent" path="/DynamicEventSearch.do"/>
 
-			<forward name="pageOfCellSpecimenReviewParameters" path="/CellSpecimenReviewParametersSearch.do"/>
-			<forward name="pageOfCheckInCheckOutEventParameters" path="/CheckInCheckOutEventParametersSearch.do"/>
-			<forward name="pageOfCollectionEventParameters" path="/CollectionEventParametersSearch.do"/>
+
 			<forward name="pageOfDisposalEventParameters" path="/DisposalEventParametersSearch.do"/>
-			<forward name="pageOfEmbeddedEventParameters" path="/EmbeddedEventParametersSearch.do"/>
-			<forward name="pageOfFixedEventParameters" path="/FixedEventParametersSearch.do"/>
-			<forward name="pageOfFluidSpecimenReviewParameters" path="/FluidSpecimenReviewEventParametersSearch.do"/>
-			<forward name="pageOfFrozenEventParameters" path="/FrozenEventParametersSearch.do"/>
-			<forward name="pageOfMolecularSpecimenReviewParameters" path="/MolecularSpecimenReviewParametersSearch.do"/>
-			<forward name="pageOfProcedureEventParameters" path="/ProcedureEventParametersSearch.do"/>
-			<forward name="pageOfReceivedEventParameters" path="/receivedEventParametersSearch.do"/>
-			<forward name="pageOfSpunEventParameters" path="/SpunEventParametersSearch.do"/>
-			<forward name="pageOfThawEventParameters" path="/ThawEventParametersSearch.do"/>
-			<forward name="pageOfTissueSpecimenReviewParameters" path="/TissueSpecimenReviewEventParametersSearch.do"/>
 			<forward name="pageOfTransferEventParameters" path="/TransferEventParametersSearch.do"/>
+			
 			<forward name="pageOfDistribution" path="/DistributionSearchFromMenu.do"/>
 			<forward name="pageOfArrayDistribution" path="/DistributionSearchFromMenu.do"/>
 			<forward name="pageOfSpecimenArrayType" path="/SpecimenArrayTypeSearch.do"/>
