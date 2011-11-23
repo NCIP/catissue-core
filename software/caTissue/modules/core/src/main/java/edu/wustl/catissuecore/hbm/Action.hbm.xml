@@ -19,9 +19,6 @@
 		<property name="uniqueId" type="string" column="UNIQUE_ID"
 			update="true" insert="true" length="50" />
 
-		 <property name="isSkipped" type="boolean" update="true"
-            insert="true" column="IS_SKIPPED"/>
-
 		<many-to-one name="applicationDefaultValue"
 			class="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry"
 			column="ACTION_APP_RECORD_ENTRY_ID" lazy="false" not-null="false"
