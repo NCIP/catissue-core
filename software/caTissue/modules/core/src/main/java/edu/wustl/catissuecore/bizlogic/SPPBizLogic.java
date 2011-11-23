@@ -493,7 +493,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 					.error("edu.wustl.catissuecore.util.global.AppUtility.getAllSPPEventFormNames(Map<String, Long>): actionRecordEntry is NULL!");
 		}
 		Collections.sort(namesOfSPPEvents);
-		String[] eventlist = new String[namesOfSPPEvents.size()-2];
+		String[] eventlist = new String[namesOfSPPEvents.size()];
 		for (int k = 0, l = 0; l < namesOfSPPEvents.size();l++)
 		{
 			if(!"Transfer Event Parameters".equals(namesOfSPPEvents.get(l))
