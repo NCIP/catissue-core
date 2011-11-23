@@ -5987,4 +5987,7 @@ public class Constants
 	/** Specify SYS_UID Type For Key Generation . */
 	public static final String SYS_UID_TYPE = "Specimen";
 
+	public static final String IS_SPP_DATA_ENTRY_DONE = "isSPPDataEntryDone";
+	
+	public static final String DISPLAY_EVENTS_WITH_DEFAULT_VALUES = "displayEventsWithDefaultValues";
 }
