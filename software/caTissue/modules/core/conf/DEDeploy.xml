@@ -1903,7 +1903,7 @@
     </target>
 
 	<target name="unzip_caCORESDKzip" description="unzip caCore SDK zip">
-		<delete dir="${cacoresdk.dir}" />
+		<delete dir="${cacoresdk.dir}" failonerror="false" />
 		<mkdir dir="${cacoresdk.dir}" />
 
 		<if>
