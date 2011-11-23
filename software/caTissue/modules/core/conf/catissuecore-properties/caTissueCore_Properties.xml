@@ -633,6 +633,10 @@
 	</property>
 	<property>
 		<name>cas.logout.url</name>
-		<value>@@cas.logout.url@@/cas/logout</value>
+		<value>@@cas.logout.url@@/logout</value>
+	</property>
+	<property>
+		<name>cas.available</name>
+		<value>@@cas.available@@</value>
 	</property>
 </properties>

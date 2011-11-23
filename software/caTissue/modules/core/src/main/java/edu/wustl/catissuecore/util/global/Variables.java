@@ -48,6 +48,7 @@ public class Variables
 	public static boolean isTemplateBasedLblGeneratorAvl = false;
 	public static boolean isStorageContainerLabelGeneratorAvl = false;
 	public static boolean isSpecimenBarcodeGeneratorAvl = false;
+	public static boolean isCasAvl = false;
 	public static boolean isStorageContainerBarcodeGeneratorAvl = false;
 	public static boolean isSpecimenCollGroupLabelGeneratorAvl = false;
 	public static boolean isSpecimenCollGroupBarcodeGeneratorAvl = false;

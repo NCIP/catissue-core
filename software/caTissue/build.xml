@@ -711,147 +711,6 @@
 		</javadoc>
 	</target>
 
-<!--
-
-	<target name="create_zip_old" depends="createJavaDoc,installable_build_war">
-		<property name="zip.dir" value="${dist.dir}" />
-		<property name="zip.file" value="${base.dir}/caTissue_Suite_v${application.version}_Installable.zip" />
-
-		<copy file="catissuecore.war" todir="${zip.dir}" overwrite="true" />
-		<copy file="${temp.dir}/label_barcode_gen_client.jar" todir="${zip.dir}" overwrite="true" />
-		<copy file="${temp.dir}/printservice_module.jar" todir="${zip.dir}" overwrite="true" />
-		<copy file="${temp.dir}/printservice_client.jar" todir="${zip.dir}" overwrite="true" />
-		<copy file="${web_inf_lib.dir}/PrintCatissueCore_Client.jar" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/caTissuePrintWebService.war" todir="${zip.dir}" overwrite="true" />
-		<copy file="dynamicextensions.zip" todir="${zip.dir}" overwrite="true" />
-		<copy file="clientFormCreator.zip" todir="${zip.dir}" overwrite="true" />
-		<copy file="AdvanceQuery_Installable.zip" todir="${zip.dir}" overwrite="true" />
-		<copy file="bulkoperator.zip" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/bulkOperation.properties" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/Show_Hide_Forms.csv" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/Show_Hide_Forms.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="${temp.dir}/MANIFEST.MF" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/deploy.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/DEDeploy.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/login-config.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/properties-service.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/taggedvalues.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/paths.txt" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/cas.war" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/sync-description.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/sync-description-ctrp.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/sync-description-gridgrouper.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/magetab.idf" todir="${zip.dir}" overwrite="true" />
-		<copy todir="${zip.dir}/custom_impl_lib" overwrite="true">
-			<fileset file="${temp.dir}/Default_label_barcode_gen.jar" />
-			<fileset file="${temp.dir}/label_barcode_gen_client.jar" />
-			<fileset file="${compile.lib.dir}/IDPAuthenticationManager0_0.jar" />
-		</copy>
-		<copy todir="${zip.dir}/idp" overwrite="true">
-			<fileset dir="${conf.dir}/idp" />
-		</copy>
-		<copy todir="${zip.dir}/catissuecore-properties" overwrite="true">
-			<fileset dir="${conf.dir}/catissuecore-properties" />
-		</copy>
-		<copy todir="${zip.dir}/cacore_deployable" overwrite="true">
-			<fileset dir="${catissue.modules}/cacore_deployable" />
-		</copy>
-		<copy file="${conf.dir}/dbunit_temp.xml" todir="${zip.dir}" overwrite="true" />
-		<copy todir="${zip.dir}/lib" overwrite="true">
-			<fileset file="${extra_lib.dir}/ant-contrib.jar" />
-			<fileset file="${web_inf_lib.dir}/mysql-connector-java-5.0.8-bin.jar" />
-			<fileset file="${web_inf_lib.dir}/ojdbc14.jar" />
-			<fileset file="${src_lib.dir}/dom4j-1.6.1.jar" />
-			<fileset file="${src_lib.dir}/j2ee.jar" />
-			<fileset file="${src_lib.dir}/log4j.jar" />
-			<fileset file="${extra_lib.dir}/puretls.jar" />
-			<fileset file="${extra_lib.dir}/cog-jglobus.jar" />
-			<fileset file="${extra_lib.dir}/cryptix32.jar" />
-			<fileset file="${extra_lib.dir}/cryptix-asn1.jar" />
-			<fileset file="${extra_lib.dir}/jce-jdk13-125.jar" />
-			<fileset file="${extra_lib.dir}/cryptix.jar" />
-		</copy>
-		<copy file="${db-common.src.dir}/MySql_DB_Creation.sql" todir="${zip.dir}" overwrite="true" />
-		<copy file="${db-common.src.dir}/Oracle_DB_Creation.sql" todir="${zip.dir}" overwrite="true" />
-		<copy file="${db-common.src.dir}/DBValidate_Suite1.0.sql" todir="${zip.dir}" overwrite="true" />
-		<copy file="${db-common.src.dir}/DBValidate_V1.2.0.1.sql" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/Sample-login-config.xml" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/Sample-properties-service.xml" todir="${zip.dir}" overwrite="true" />
-		<copy todir="${zip.dir}/images" overwrite="true">
-			<fileset file="${catissue.web}/images/InstitutionLogo.gif" />
-		</copy>
-		<copy todir="${zip.dir}/images/uIEnhancementImages" overwrite="true">
-			<fileset file="${catissue.web}/images/uIEnhancementImages/siteman_logo.gif" />
-		</copy>
-		<copy todir="${zip.dir}/catissue_de_integration_client" overwrite="true">
-			<fileset dir="${catissue.java}/catissue_de_integration_client" />
-		</copy>
-		<copy todir="${zip.dir}/catissue_de_integration_client/lib" overwrite="true">
-			<fileset dir="${de_integration_client_lib.dir}" />
-		</copy>
-		<copy todir="${zip.dir}/BulkOperations" overwrite="true">
-			<fileset dir="${catissue.modules}/BulkOperations" />
-		</copy>
-		<copy todir="${zip.dir}/BulkOperations/lib" overwrite="true">
-			<fileset dir="${caTissueSuite_Client_lib.dir}">
-				<include name="*.jar" />
-				<exclude name="AdvanceQuery*.jar" />
-			</fileset>
-		</copy>
-
-		<copy todir="${zip.dir}/BulkOperations/lib" overwrite="true">
-			<fileset dir="${temp-catissue-cacore-lib}">
-				<include name="catissue_cacore-beans.jar" />
-			</fileset>
-		</copy>
-		<copy file="${src.dir}/ApplicationResources.properties" todir="${zip.dir}/BulkOperations/conf" overwrite="true" />
-		<copy todir="${zip.dir}/minimalDataSharing" overwrite="true">
-			<fileset dir="${catissue.java}/minimalDataSharing" />
-		</copy>
-
-		&lt;!&ndash;- caTIES related files  start&ndash;&gt;
-		<copy todir="${zip.dir}/caTIES_conf" overwrite="true"><fileset dir="${catissue.modules}/caTIES/conf" /></copy>
-		<copy file="${conf.dir}/Dataset.dtd" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/JniDeID.dll" todir="${zip.dir}" overwrite="true" />
-		<copy file="${catissue.modules}/caTIES/conf/gate.zip" todir="${zip.dir}" overwrite="true" />
-		<copy file="${conf.dir}/deploycaties.xml" todir="${zip.dir}" overwrite="true" />
-		&lt;!&ndash;- caTIES related files end&ndash;&gt;
-
-		&lt;!&ndash; DE conf files &ndash;&gt;
-		<copy todir="${zip.dir}/DE_conf" overwrite="true" verbose="true">
-			<fileset dir="${catissue.modules}/DE/conf" />
-		</copy>
-
-		&lt;!&ndash; Copying private public migrator directory &ndash;&gt;
-		<copy todir="${zip.dir}/private_public_migrator" overwrite="true">
-			<fileset dir="${catissue.java}/private_public_migrator" />
-		</copy>
-		<copy todir="${zip.dir}/private_public_migrator/lib" overwrite="true">
-			<fileset dir="${private_public_migrator_lib.dir}" />
-		</copy>
-
-		&lt;!&ndash; Copying IISSettings directory &ndash;&gt;
-		<copy todir="${zip.dir}/IISSettings" overwrite="true">
-			<fileset dir="${catissue.modules}/IISSettings" />
-		</copy>
-
-		<antcall target="create_API_client_zip" />
-		<antcall target="create_Struts_Test_zip" />
-		<property name="bo.properties.file" value="${software.dir}/caTissue/test/perl/bulkOperation/bulkoperations.properties" />
-		<property file="${bo.properties.file}" />
-		<echo message="test.framework.dir.path = ${test.framework.dir.path}" />
-		<if>
-			<not>
-				<equals arg1="" arg2="${test.framework.dir.path}" />
-			</not>
-			<then>
-				<antcall target="create_BO_Test_zip">
-				</antcall>
-			</then>
-		</if>
-	</target>
-
--->
 
 	<target name="create_zip" depends="createJavaDoc, installable_build_war">
 		<property name="zip.dir" value="${dist.dir}" />
@@ -877,7 +736,6 @@
             <fileset dir="${catissue.modules}/"><include name="NotificationService/**"/></fileset>
         </copy>
 
-        <!--<copy file="${conf.dir}/cas.war" todir="${zip.dir}/modules/cas/lib" overwrite="true" />-->
 
 		<copy file="${catissue.modules}/caTIES/conf/gate.zip" todir="${zip.dir}/modules/caTIES/lib" overwrite="true" />
 		<copy todir="${zip.dir}/modules/caTIES/conf" overwrite="true">
@@ -932,6 +790,7 @@
 			<fileset file="${extra_lib.dir}/cryptix-asn1.jar" />
 			<fileset file="${extra_lib.dir}/jce-jdk13-125.jar" />
 			<fileset file="${extra_lib.dir}/cryptix.jar" />
+			<fileset file="${bda-utils.dir}/xmltask-1.15.1.jar" />
 		</copy>
 		<copy todir="${zip.dir}/modules/caTissue/conf/catissuecore-properties" overwrite="true">
 			<fileset dir="${conf.dir}/catissuecore-properties" />
@@ -965,14 +824,14 @@
 		</copy>
 
         <!-- caCoreSDK 4.2 -->
-        <if>
+        <!--<if>
             <not>
                 <available file="${target.dir}/dist/${cacore-sdk-4.2-src.file}" />
             </not>
             <then>
                 <get src="${cacore-sdk-4.2-src.url}" dest="${target.dir}/dist/${cacore-sdk-4.2-src.file}" />
             </then>
-        </if>
+        </if>-->
         <copy file="${target.dir}/dist/${cacore-sdk-4.2-src.file}" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 
         <!--caCoreSDK files for dozer-->

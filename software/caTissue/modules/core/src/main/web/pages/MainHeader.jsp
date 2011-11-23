@@ -2,7 +2,8 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
-
+<%@ page import="edu.wustl.common.util.XMLPropertyHandler"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <script src="jss/titli.js"></script>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -39,9 +40,21 @@
 					src="images/uIEnhancementImages/ic_summary.gif" alt="Summary"
 					width="10" height="10" hspace="5" vspace="0" border="0" /><bean:message key="app.summary" /></a></td>
 
+<%
+boolean isCasAvlbl = Variables.isCasAvl;
+String logOutURL ="";
+if(isCasAvlbl)
+{
+	logOutURL = "CasLogout.do";
+}
+else
+{
+	logOutURL = "Logout.do";
+}
+%>
 				<logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
 					<td width="14%" align="right" valign="top"><a
-						href="Logout.do"> <img
+						href="<%=logOutURL%>"> <img
 						src="images/uIEnhancementImages/logout_button1.gif" name="Image1"
 						width="86" height="19" id="Image1"
 						onmouseover="MM_swapImage('Image1','','images/uIEnhancementImages/logout_button.gif',1)"

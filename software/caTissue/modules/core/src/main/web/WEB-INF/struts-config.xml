@@ -1242,9 +1242,13 @@ PUBLIC
 
 		<action path="/Logout"
 			type="edu.wustl.catissuecore.action.LogoutAction">
+			<forward name="success" path="/RedirectHome.do" />
+		</action>
+		
+		<action path="/CasLogout"
+			type="edu.wustl.catissuecore.action.LogoutAction">
 			<forward name="success" path="/Home.do" />
 		</action>
-
         <!-- Login Module Actions End -->
 
         <!-- Participant Actions Begins -->

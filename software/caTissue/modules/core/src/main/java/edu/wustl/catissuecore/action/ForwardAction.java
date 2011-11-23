@@ -21,7 +21,7 @@ import edu.wustl.common.action.XSSSupportedAction;
  *
  * This class is used to redirect the user to the Home / SignIn Page after session is timedOut.
  */
-public class ForwardAction extends XSSSupportedAction
+public class ForwardAction extends BaseAction
 {
 
 	/**
@@ -37,7 +37,7 @@ public class ForwardAction extends XSSSupportedAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		return (mapping.findForward(Constants.SUCCESS));

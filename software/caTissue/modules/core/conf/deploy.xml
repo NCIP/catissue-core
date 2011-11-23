@@ -90,75 +90,9 @@
 			<property name="jboss.server.host.port" value="${jboss.server.hostname}" />
 		</then>
 	</if>
-	<property name="jboss.cas.server.host.port" value="${jboss.server.hostname}:${jboss.server.port}" />
-	<if>
-		<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-		<then>
-			<if>
-				<equals arg1="" arg2="${jboss.server.port}" />
-				<then>
-					<var name="jboss.cas.server.host.port" unset="true"/>
-					<property name="jboss.cas.server.host.port" value="${jboss.server.hostname}" />
-				</then>
-			</if>
-		</then>
-		<else>
-			<if>
-				<equals arg1="" arg2="${cas.jboss.port}" />
-				<then>
-					<var name="jboss.cas.server.host.port" unset="true"/>
-					<property name="jboss.cas.server.host.port" value="${cas.jboss.server.host}" />
-				</then>
-				<else>
-					<var name="jboss.cas.server.host.port" unset="true"/>
-					<property name="jboss.cas.server.host.port" value="${cas.jboss.server.host}:${cas.jboss.port}" />
-				</else>
-			</if>
-		</else>
-	</if>
-	<!--import file="dbunitbuild.xml"/>
-	<target name="dbunit_testcases">
-		<antcall target="RundbUnit" />
-	</target -->
 
 	<!-- Check for required properties -->
 	<target name="assert" description="Check for required properties">
-		<!-- BDA not required <if>
-			<equals arg1="" arg2="${jboss.home.dir}" />
-			<then>
-				<fail message="The property 'jboss.home.dir' can not be empty" />
-			</then>
-			<else>
-				<available file="${jboss.bin.run.jar}" property="isJbossValid"/>
-				<if>
-					<not>
-						<equals arg1="true" arg2="${isJbossValid}" />
-					</not>
-					<then>
-						<fail message="'${jboss.home.dir}' is not valid jboss home. Please set valid path for jboss server." />
-					</then>
-				</if>
-			</else>
-		</if>
-		<if>
-			<equals arg1="" arg2="${jboss.server.name}" />
-			<then>
-				<fail message="The property 'jboss.server.name' can not be empty" />
-			</then>
-		</if>
-
-		<if>
-			<or>
-				<equals arg1="mysql" arg2="${database.type}" />
-				<equals arg1="oracle" arg2="${database.type}" />
-				<equals arg1="mssqlserver" arg2="${database.type}" />
-			</or>
-			<then />
-			<else>
-				<fail message="The value of property 'database.type' must be mysql ,oracle or mssqlserver" />
-			</else>
-		</if>
-	-->
 		<!-- Validation for ORACLE_HOME ,tns name and sqlldr if database is oracle-->
 		<if>
 		<equals arg1="oracle" arg2="${database.type}" />
@@ -282,6 +216,19 @@
 			</then>
 		</if>
 
+		<!-- check for CAS URL -->
+		<if>
+					<equals arg1="true" arg2="${integrate.catissue.with.cas}" />
+					<then>
+						<if>
+							<equals arg1="" arg2="${cas.url}" />
+							<then>
+								<fail message="To integrate caTissue with CAS, the cas.url property need to b filled up." />
+							</then>
+							
+						</if>
+					</then>
+				</if>
 		<!-- Check whether JAVA_HOME environment variable set or not -->
 		<if>
 			<contains string="${env.JAVA_HOME}" substring="env.JAVA_HOME"/>
@@ -356,7 +303,6 @@
 	<target name="init" description="Extrct WAR and copy Configuration files to temp directory">
 		<echo message="Initializing installation..." />
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
-		<!--<unwar src="${caTissue-webapp.dir.dist}/modules/cas/lib/cas.war" dest="${prop.temp.dir}/cas" />-->
 		<unwar src="${caTissue-webapp.dir.dist}/modules/print_web_service/lib/caTissuePrintWebService.war" dest="${prop.temp.dir}/caTissuePrintWebService" />
 		<unjar src="${prop.temp.dir}/catissuecore/WEB-INF/lib/DynamicExtensions.jar" dest="${prop.temp.dir}/dynamicExtensionsjar" />
 		<unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />
@@ -366,22 +312,10 @@
 		<copy todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" overwrite="true">
 					<fileset dir="${caTissue-webapp.dir.dist}/modules/custom_impl_lib" />
 		</copy>
-		<!-- Copying common jars to caTissueCore and CAS web-inf/lib -->
+		<!-- Copying common jars to caTissueCore web-inf/lib -->
 		<copy todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" overwrite="true">
 			<fileset dir="${caTissue-webapp.dir.dist}/modules/caTissue/lib/common_lib" />
 		</copy>
-		<!--<copy todir="${prop.temp.dir}/cas/WEB-INF/lib" overwrite="true">
-			<fileset dir="${caTissue-webapp.dir.dist}/modules/caTissue/lib/common_lib" />
-		</copy>
-		<copy todir="${prop.temp.dir}/cas/WEB-INF/lib" overwrite="true">
-			<fileset dir="${prop.temp.dir}/catissuecore/WEB-INF/lib">
-				<include name="commonpackage*.jar"/>
-				<include name="DAO*.jar"/>
-				<include name="IDPAuthenticationManager*.jar"/>
-				<include name="securityManager*.jar"/>
-				<include name="washu-commons*.jar"/>
-			</fileset>
-		</copy>-->
 		<antcall target="configure_log4j" />
 
 		<!-- <unwar src="${base.dir}/catissuecorecsm.war" dest="${prop.temp.dir}/tempcsm"/> -->
@@ -425,9 +359,6 @@
 		<copy todir="${prop.temp.dir}/catissuecore/images/uIEnhancementImages" overwrite="true">
 			<fileset dir="${caTissue-webapp.dir.dist}/modules/caTissue/images" />
 		</copy>
-	<!--<copy todir="${prop.temp.dir}/cas/images/uIEnhancementImages" overwrite="true">
-				<fileset dir="${caTissue-webapp.dir.dist}/modules/caTissue/images" />
-			</copy>-->
 	</target>
 
 	<!--Modify Configuration For MySQL-->
@@ -542,12 +473,6 @@
 
 	<target name="clean_server" description="deletes the WAR file and cache from server, clean-up the server ">
 		<delete file="${jboss.server.url}/deploy/catissuecore.war" />
-		<!--<if>
-			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-			<then>
-				<delete file="${jboss.server.url}/deploy/cas.war" />
-			</then>
-		</if>-->
 		<delete file="${jboss.home}/server/${jboss.server.name}/deploy/dynamicExtensions.war" />
 		<delete file="${jboss.home}/server/${jboss.server.name}/deploy/caTissuePrintWebService.war" />
 		<delete file="${jboss.home}/server/${jboss.server.name}/deploy/pathologySCG.war" />
@@ -753,8 +678,7 @@
 			<replacefilter token="@@email.admin.support.emailAddress@@" value="${email.admin.support.emailAddress}" />
 			<replacefilter token="@@email.sendEmailFrom.name@@" value="${email.sendEmailFrom.name}" />
 			<replacefilter token="@@email.exception.subject@@" value="${email.exception.subject}" />
-
-			<replacefilter token="@@CasKeystorePath@@" value="${cas.server.keystore.path}" />
+			<replacefilter token="@@cas.available@@" value="${integrate.catissue.with.cas}" />
 
 		<!-- added by Geeta .For eMPI integration -->
 			<replacefilter token="@@empiDBURL@@" value="jdbc:db2://${empi.database.host}:${empi.database.port}/${empi.database.name}" />
@@ -767,39 +691,9 @@
 		</replace>
 
 		<!-- CAS logout url-->
-		<if>
-			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-			<then>
-				<if>
-					<equals arg1="yes" arg2="${jboss.container.secure}" />
-					<then>
 					<replace file="${prop.temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
-						<replacefilter token="@@cas.logout.url@@" value="https://${jboss.cas.server.host.port}" />
+						<replacefilter token="@@cas.logout.url@@" value="${cas.url}" />
 					</replace>
-					</then>
-					<else>
-					<replace file="${prop.temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
-						<replacefilter token="@@cas.logout.url@@" value="http://${jboss.cas.server.host.port}" />
-					</replace>
-					</else>
-				</if>
-			</then>
-			<else>
-				<if>
-					<equals arg1="yes" arg2="${cas.jboss.container.secure}" />
-					<then>
-					<replace file="${prop.temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
-						<replacefilter token="@@cas.logout.url@@" value="https://${jboss.cas.server.host.port}" />
-					</replace>
-					</then>
-					<else>
-					<replace file="${prop.temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
-						<replacefilter token="@@cas.logout.url@@" value="http://${jboss.cas.server.host.port}" />
-					</replace>
-					</else>
-				</if>
-			</else>
-		</if>
 		<antcall target="Configure_Printservice"/>
 		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
 			<fileset dir="${prop.temp.dir}/catissuecore-properties">
@@ -1110,12 +1004,21 @@
 
 
 			<if>
-				<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
+				<equals arg1="true" arg2="${integrate.catissue.with.cas}" />
 				<then>
-					<!--<antcall target="deploy_cas" />-->
+					<antcall target="integrate_cas" />
 				</then>
+				<else>
+					<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
+								<replacetoken>@@CASFilter@@</replacetoken>
+											<replacevalue><![CDATA[
+												<!-- cas is not configured -->
+													]]></replacevalue>
+										</replace>
+				</else>
 			</if>
-			<!--<antcall target="integrate_cas" />-->
+		
+					
 			<antcall target="build_war" />
 			<antcall target="jboss_configuration" />
 		    <antcall target="deploy_notification_service" />
@@ -1627,16 +1530,6 @@
 				<include name="properties-service.xml" />
 			</fileset>
 		</copy>
-		<!--<if>
-			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-			<then>
-				<copy todir="${jboss.server.url}/deploy" overwrite="true">
-					<fileset dir="${caTissue-webapp.dir.dist}/modules/cas/lib">
-						<include name="cas.war" />
-					</fileset>
-				</copy>
-			</then>
-		</if>-->
 		<delete file="${jboss.server.url}/lib/hibernate2.jar" />
 	</target>
 
@@ -5226,153 +5119,31 @@ Thanking You,
 			<antcall target="upgrade_db_maincontainer_data_fixes"/>
 		</target>
 
-	<target name="deploy_cas" description="Target to integrate cas with the application">
-		<echo message="Deploy CAS with the application...." />
-
-		<!--unwar src="${base.dir}/cas.war" dest="${prop.temp.dir}/cas" /-->
-
-		<delete failonerror="false" >
-				<fileset dir="${prop.temp.dir}/cas">
-					<include name="**/WEB-INF/classes/META-INF/persistence.xml" />
-					<include name="**/WEB-INF/lib/lbRuntime.jar" />
-					<include name="**/WEB-INF/lib/xml-api.1.0.2.jar " />
-					<include name="**/WEB-INF/lib/dom4*.jar" />
-					<include name="**/WEB-INF/lib/xmlrpc-2.0.jar" />
-					<include name="**/WEB-INF/lib/xml-apis-1.0.b2.jar" />
-					<include name="**/WEB-INF/lib/xercesImpl.jar" />
-					<include name="**/WEB-INF/lib/xalan*.jar" />
-					<include name="**/WEB-INF/lib/xmlrpc-2.0.jar" />
-					<include name="**/WEB-INF/lib/washu-commons-*.jar" />
-					<include name="**/WEB-INF/lib/jaxrpc.jar" />
-			</fileset>
-		</delete>
-
-
-		<!--<copy file="${prop.temp.dir}/catissuecore/WEB-INF/classes/ApplicationDAOProperties.xml"
-			todir="${prop.temp.dir}/cas/WEB-INF/classes/" overwrite="true" />
-
-		<copy file="${prop.temp.dir}/catissuecore/WEB-INF/lib/washu-commons-1.1.8.jar"
-			todir="${prop.temp.dir}/cas/WEB-INF/lib/" overwrite="true" />
-
-		<copy file="${prop.temp.dir}/catissuecore/WEB-INF/lib/xwork-2.0.1.jar"
-				todir="${prop.temp.dir}/cas/WEB-INF/lib/" overwrite="true" />
-
-		<copy file="${prop.temp.dir}/catissuecore/WEB-INF/lib/XmlSchema.jar"
-					todir="${prop.temp.dir}/cas/WEB-INF/lib/" overwrite="true" />-->
-
-		<!--<war destfile="${prop.temp.dir}/cas.war" webxml="${prop.temp.dir}/cas/WEB-INF/web.xml" manifest="${prop.temp.dir}/cas/META-INF/MANIFEST.MF">
-			<fileset dir="${prop.temp.dir}/cas" includes="**/*"/>
-		</war>
-
-		<copy file="${prop.temp.dir}/cas.war" todir="${caTissue-webapp.dir.dist}/modules/cas/lib" overwrite="true" />-->
-	</target>
 
 	<target name="integrate_cas" description="Target to integrate cas with the application">
 		<echo message="Integrating CAS with the application...." />
-
-		<if>
-			<not>
-				<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-			</not>
-			<then>
-				<property name="jboss.cas.server.host.port" value="${cas.jboss.server.host}:${cas.jboss.port}" />
-			</then>
-		</if>
-		<if>
-			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-			<then>
-				<if>
-					<equals arg1="yes" arg2="${jboss.container.secure}" />
-					<then>
-						<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-login@@" value="https://${jboss.server.host.port}" />
-						</replace>
-					</then>
-					<else>
-						<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-login@@" value="http://${jboss.server.host.port}" />
-						</replace>
-					</else>
-				</if>
-			</then>
-			<else>
-				<if>
-					<equals arg1="yes" arg2="${cas.jboss.container.secure}" />
-					<then>
-						<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-login@@" value="https://${jboss.cas.server.host.port}" />
-						</replace>
-					</then>
-					<else>
-						<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-login@@" value="http://${jboss.cas.server.host.port}" />
-						</replace>
-					</else>
-				</if>
-			</else>
-		</if>
-		<if>
-			<equals arg1="true" arg2="${deploy.cas.on.catissue.jboss}" />
-			<then>
-				<if>
-					<equals arg1="yes" arg2="${jboss.container.secure}" />
-					<then>
-						<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-validateUrl@@" value="https://${jboss.server.host.port}" />
-						</replace>
-					</then>
-					<else>
-						<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-validateUrl@@" value="http://${jboss.server.host.port}" />
-						</replace>
-					</else>
-				</if>
-			</then>
-			<else>
-				<if>
-					<equals arg1="yes" arg2="${cas.jboss.container.secure}" />
-					<then>
-						<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-validateUrl@@" value="https://${jboss.cas.server.host.port}" />
-						</replace>
-					</then>
-					<else>
-						<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-							<replacefilter token="@@cas-server-url-validateUrl@@" value="http://${jboss.cas.server.host.port}" />
-						</replace>
-					</else>
-				</if>
-			</else>
-		</if>
-		<!--<if>
-			<equals arg1="yes" arg2="${cas.jboss.container.secure}" />
-			<then>
-				<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-					<replacefilter token="@@cas-server-url-login@@" value="https://${jboss.cas.server.host.port}" />
-				</replace>
-			</then>
-			<else>
-				<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-					<replacefilter token="@@cas-server-url-login@@" value="http://${jboss.cas.server.host.port}" />
-				</replace>
-			</else>
-		</if>
-		<if>
-			<equals arg1="yes" arg2="${cas.jboss.container.secure}" />
-			<then>
-				<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-					<replacefilter token="@@cas-server-url-validateUrl@@" value="https://${jboss.cas.server.host.port}" />
-				</replace>
-			</then>
-			<else>
-				<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-					<replacefilter token="@@cas-server-url-validateUrl@@" value="http://${jboss.cas.server.host.port}" />
-				</replace>
-			</else>
-		</if>-->
-		<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-			<replacefilter token="@@catissue-cas-login-serverName@@" value="${jboss.server.host.port}" />
-		</replace>
+			<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
+				<replacefilter token="@@cas-server-url-login@@" value="${cas.url}" />
+			</replace>
+			<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
+				<replacefilter token="@@cas-server-url-validateUrl@@" value="${cas.url}" />
+			</replace>
+			<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
+				<replacefilter token="@@catissue-cas-login-serverName@@" value="${jboss.server.host.port}" />
+			</replace>
+		
+					<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
+							<replacetoken>@@CASFilter@@</replacetoken>
+										<replacevalue><![CDATA[
+											<filter-mapping>
+													<filter-name>CASFilter</filter-name>
+													<url-pattern>*.do</url-pattern>
+												</filter-mapping>
+												]]></replacevalue>
+									</replace>
+		
+			
+				
 	</target>
 
 	<!--Target call for both fresh deployment of caTissue-->
