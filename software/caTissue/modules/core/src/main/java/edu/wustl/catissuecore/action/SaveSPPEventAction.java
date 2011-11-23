@@ -190,15 +190,8 @@ public class SaveSPPEventAction extends SecureAction
 			AbstractFormContext formContext = formContextIterator.next();
 			Map<String, Object> staticParameters = formContextParameterMap.get(formContext);
 
-			if(staticParameters.get("isSkipEvent")==null || Boolean.parseBoolean((String) staticParameters.get("isSkipEvent")))
+			if(staticParameters.get("isSkipEvent")!=null && !Boolean.parseBoolean((String) staticParameters.get("isSkipEvent")))
 			{
-				((Action)formContext).setIsSkipped(Boolean.FALSE);
-				defaultBizLogic.update(formContext);
-			}
-			else
-			{
-				((Action)formContext).setIsSkipped(Boolean.TRUE);
-				defaultBizLogic.update(formContext);
 				formContextIterator.remove();
 			}
 		}
