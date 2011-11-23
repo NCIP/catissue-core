@@ -37,45 +37,6 @@ public class DynamicEventAction extends BaseAction
 {
 
 	/**
-	 * This method sets all the common parameters for the Dynamic Event pages.
-	 *
-	 * @param request
-	 *            HttpServletRequest instance in which the data will be set.
-	 * @throws Exception
-	 *             Throws Exception. Helps in handling exceptions at one common
-	 *             point.
-	 */
-	private void setCommonRequestParameters(HttpServletRequest request) throws Exception
-	{
-		// Gets the value of the operation parameter.
-
-		final String operation = request.getParameter(Constants.OPERATION);
-		// Sets the operation attribute to be used in the Add/Edit
-		// FrozenEventParameters Page.
-		request.setAttribute(Constants.OPERATION, operation);
-
-		// Sets the minutesList attribute to be used in the Add/Edit
-		// FrozenEventParameters Page.
-		request.setAttribute("minutesList", Constants.MINUTES_ARRAY);
-
-		// Sets the hourList attribute to be used in the Add/Edit
-		// FrozenEventParameters Page.
-		request.setAttribute("hourList", Constants.HOUR_ARRAY);
-
-		// The id of specimen of this event.
-		final String specimenId = request.getParameter(Constants.SPECIMEN_ID);
-		request.setAttribute(Constants.SPECIMEN_ID, specimenId);
-
-		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final UserBizLogic userBizLogic = (UserBizLogic) factory
-				.getBizLogic(Constants.USER_FORM_ID);
-		final Collection userCollection = userBizLogic.getUsers(operation);
-
-		request.setAttribute(Constants.USERLIST, userCollection);
-
-	}
-
-	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 * @param mapping
 	 *            object of ActionMapping
