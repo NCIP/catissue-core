@@ -37,7 +37,7 @@
 	Long scgEntityId = null;
 	scgEntityId = (Long)request.getAttribute(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID);
 	String id = request.getParameter("id");
-	String specimenIdentifier = request.getParameter("id");
+	String specimenIdentifier = null;//request.getParameter("id");
 	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
