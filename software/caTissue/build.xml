@@ -824,14 +824,14 @@
 		</copy>
 
         <!-- caCoreSDK 4.2 -->
-        <!--<if>
+        <if>
             <not>
                 <available file="${target.dir}/dist/${cacore-sdk-4.2-src.file}" />
             </not>
             <then>
                 <get src="${cacore-sdk-4.2-src.url}" dest="${target.dir}/dist/${cacore-sdk-4.2-src.file}" />
             </then>
-        </if>-->
+        </if>
         <copy file="${target.dir}/dist/${cacore-sdk-4.2-src.file}" todir="${zip.dir}/modules/dynamic_extensions/lib" overwrite="true" />
 
         <!--caCoreSDK files for dozer-->
