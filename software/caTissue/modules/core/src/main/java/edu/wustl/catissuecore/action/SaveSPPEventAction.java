@@ -37,7 +37,6 @@ import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
 import edu.wustl.catissuecore.domain.ISPPBizlogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.processingprocedure.Action;
 import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
 import edu.wustl.catissuecore.processor.SPPEventProcessor;
@@ -251,7 +250,7 @@ public class SaveSPPEventAction extends SecureAction
 				if ((isSCG && sppApplication.getSpp().getName().equals(sppName)) || (!isSCG))
 				{
 					sppDataEntryDone = updateSPPData(request, sppEventProcessor, actionAppBizLogic,
-							sppApplication);
+							sppApplication, sppBizlogicObject, sessionLoginInfo, sppName);
 					break;
 				}
 			}
@@ -282,7 +281,7 @@ public class SaveSPPEventAction extends SecureAction
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public boolean updateSPPData(HttpServletRequest request, SPPEventProcessor sppEventProcessor,
-			final IBizLogic actionAppBizLogic, SpecimenProcessingProcedureApplication sppApplication)
+			final IBizLogic actionAppBizLogic, SpecimenProcessingProcedureApplication sppApplication, final ISPPBizlogic sppBizlogicObject, SessionDataBean sessionLoginInfo, String sppName)
 			throws BizLogicException, ApplicationException, DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, SQLException, FileNotFoundException, IOException
 	{
@@ -295,8 +294,27 @@ public class SaveSPPEventAction extends SecureAction
 						actionApplicationCollection, formContextParameterMap,
 						formContextCollection);
 		//For each from Context collection update DE data
-		sppEventProcessor.insertUpdateDEDataForSPPEvents(request, contextRecordIdMap,
+		Map<AbstractFormContext, Long> recordIdMap = sppEventProcessor.insertUpdateDEDataForSPPEvents(request, contextRecordIdMap,
 				formContextCollection);
+		for(AbstractFormContext context : recordIdMap.keySet())
+		{
+			if(!contextRecordIdMap.containsKey(context))
+			{
+				Map<String, Object> staticParametersList = formContextParameterMap.get(context);
+				
+				ActionApplication actionApplication = sppEventProcessor.associateRecEntryWithActionApp(actionAppBizLogic,
+						sppBizlogicObject, recordIdMap, sppApplication, context,
+						staticParametersList);
+
+				actionApplicationCollection.add(actionApplication);
+				
+				sppBizlogicObject.updateSPPApplication(sppEventProcessor.getSPPByName(sppName), sppApplication, actionApplicationCollection,
+						sessionLoginInfo);
+
+				sppBizlogicObject.update(sppApplication, sessionLoginInfo);
+			}
+			
+		}
 		return true;
 	}
 

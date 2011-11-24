@@ -18,7 +18,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
-import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.processor.SPPEventProcessor;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -60,7 +59,9 @@ public class DisplaySPPEventsAction extends SecureAction
 		String specimenId = request.getParameter(Constants.SPECIMEN_ID);
 		request.setAttribute(Constants.SPECIMEN_ID, specimenId);
 		List<Map<String, Object>> sppEventDataCollection = sppEventProcessor
-				.populateSPPEventsForASpecimen(specimenId);
+				.populateSPPEventsForASpecimen(specimenId, request);
+		//Add SPP events data collection in request scope
+		request.setAttribute(Constants.SPP_EVENTS, sppEventDataCollection);
 
 		Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
 		new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
@@ -68,17 +69,6 @@ public class DisplaySPPEventsAction extends SecureAction
 		{
 			request.getSession().setAttribute("dynamicEventMap", dynamicEventMap);
 		}
-
-		//Add SPP events data collection in request scope
-		request.setAttribute(Constants.SPP_EVENTS, sppEventDataCollection);
-
-		SpecimenProcessingProcedure processingSPP = sppEventProcessor.getSPPBySpecimenId(Long.valueOf(specimenId));
-		if (processingSPP != null)
-		{
-			request.setAttribute("nameOfSelectedSpp", processingSPP.getName());
-			request.setAttribute("selectedSppId", processingSPP.getId());
-		}
-
 		return mapping.findForward(pageOf);
 	}
 

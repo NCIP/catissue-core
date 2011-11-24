@@ -54,12 +54,12 @@ public class DisplaySPPEventsFromDashboardAction extends SecureAction
 		Long sppId = Long.parseLong(request.getParameter("sppId"));
 		edu.wustl.dao.DAO dao = null;
 		dao = edu.wustl.catissuecore.util.global.AppUtility.openDAOSession(null);
-		SpecimenProcessingProcedure processingSPP = (SpecimenProcessingProcedure) dao.retrieveById(SpecimenProcessingProcedure.class.getName(), sppId);; // TODO - Retrieve SPP object based on
+		SpecimenProcessingProcedure processingSPP = (SpecimenProcessingProcedure) dao
+				.retrieveById(SpecimenProcessingProcedure.class.getName(), sppId);; // TODO - Retrieve SPP object based on
 		// spp_id from request.
 
 		request.setAttribute("selectedAll", request.getParameter("selectedAll"));
 		request.setAttribute("sppId", sppId);
-		SPPEventProcessor sppEventProcessor = new SPPEventProcessor();
 		if (request.getParameter("specimenId") != null)
 		{
 			request.setAttribute("specimenId", request.getParameter("specimenId"));
@@ -70,8 +70,10 @@ public class DisplaySPPEventsFromDashboardAction extends SecureAction
 		}
 		request.setAttribute("nameOfSelectedSpp", processingSPP.getName());
 		request.setAttribute("selectedSppId", processingSPP.getId());
-		List<Map<String, Object>> sppEventDataCollection = sppEventProcessor
-				.populateSPPEventsData(processingSPP);
+		List<Map<String, Object>> sppEventDataCollection = new SPPEventProcessor()
+				.populateSPPEventsWithDefaultValue(processingSPP.getActionCollection(), true);
+		request.setAttribute(Constants.SPP_EVENTS, sppEventDataCollection);
+		request.setAttribute(Constants.DISPLAY_EVENTS_WITH_DEFAULT_VALUES, true);
 
 		Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
 		new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
@@ -79,7 +81,6 @@ public class DisplaySPPEventsFromDashboardAction extends SecureAction
 		{
 			request.getSession().setAttribute("dynamicEventMap", dynamicEventMap);
 		}
-		request.setAttribute(Constants.SPP_EVENTS, sppEventDataCollection);
 		return mapping.findForward("pageOfSppData");
 	}
 

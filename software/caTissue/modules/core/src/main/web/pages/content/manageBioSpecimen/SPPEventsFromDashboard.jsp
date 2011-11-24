@@ -11,24 +11,17 @@
 			</td>
 		</tr>
 		<%
-		if(Boolean.parseBoolean((String) request.getAttribute("showSPPHeader")))
+		if(Boolean.parseBoolean((String) request.getAttribute("showSPPHeader")) && !Boolean.parseBoolean((String) request.getAttribute("showSPPDropdown")))
 		{
 		%>
 		<tr class="tr_bg_blue1">
 			<td align="left" class="tr_bg_blue1">
-				<span class="blue_ar_b">&nbsp;SPP Label&nbsp;&nbsp;</span>
+				<span class="blue_ar_b">&nbsp;SPP Name&nbsp;&nbsp;</span>
 				<span class="blue_ar_b" style="font-weight: normal">&nbsp;&nbsp;&nbsp;${requestScope.nameOfSelectedSpp}</span>
 			</td>
 		</tr>
 		<%
 		}
-			if(Boolean.parseBoolean((String) request.getAttribute("showSkipEventCheckBoxes")))
-			{
-			%>
-		<tr>
-			<td class="bottomtd" colspan="3" height="5px"><span id="skipAllEventCheckBox" style="display:block"><input type="checkbox" id="skipAllEvents" name="skipAllEvents" checked="true" onClick="checkUncheckAllCheckBoxes();"/><span class="blue_ar_b">&nbsp;All Events performed</span></span></td>
-		</tr>
-		<%}
 		if(Boolean.parseBoolean((String) request.getAttribute("showSPPDropdown")))
 		{
 		%>
@@ -151,13 +144,31 @@
 				//alert(oDoc.body.scrollHeight);
 				//alert(parent.document.getElementById('cpFrameNew').contentWindow.document.body.scrollHeight);
 				iframeList[j].style.height= outerfrmHt+'px';
-				allFrameHeights = allFrameHeights+ outerfrmHt;
+				//Store height of an iframe in hidden field
+				var showHideFormId = "showHideFormHt_" + iframeList[j].id;
+				if(document.getElementById(showHideFormId) != null)
+				{
+					document.getElementById(showHideFormId).value = outerfrmHt;
+				}
+				
+				var rowId = "showHideCurrentForm_"+iframeList[j].id;
+				if(oDoc.getElementById("isSkipEvent") != null && !oDoc.getElementById("isSkipEvent").checked && oDoc.getElementById(rowId)!= null)
+				{
+					iframeList[j].style.height = "35px"
+					allFrameHeights = allFrameHeights + 35;
+					//oDoc.getElementById(rowId).style.display = "none";
+				}
+				else
+				{
+					allFrameHeights = allFrameHeights+ outerfrmHt;
+				}
 			}
 			if(allFrameHeights != 0)
 			{
 				sppEventDiv.style.height=allFrameHeights+"px";
 			}
 		}
+		
 		document.getElementById('sppForms').style.height = getiframeheight();
 	</script>
 
@@ -177,6 +188,7 @@ if(sppEventDataList!=null && !sppEventDataList.isEmpty())
 		String eventName = sppDataList.get(Constants.CONTAINER_IDENTIFIER).toString();
 		String pageOfStr = sppDataList.get(Constants.PAGE_OF).toString();
 		String caption = sppDataList.get("Caption").toString();
+		boolean isSPPDataEntryDone = (Boolean)sppDataList.get(Constants.IS_SPP_DATA_ENTRY_DONE);
 		String eventDate = null;
 		if(sppDataList.get(Constants.EVENT_DATE)!=null)
 		{
@@ -193,6 +205,12 @@ if(sppEventDataList!=null && !sppEventDataList.isEmpty())
 	formContextIdElement.name ="formContextId";
 	formContextIdElement.value=<%=formContextId%>;
 	sppEventDiv.appendChild(formContextIdElement);
+	
+	var showHideFormHeight = document.createElement("input");
+	showHideFormHeight.id = "showHideFormHt_<%=formContextId%>";
+	showHideFormHeight.type= "hidden";
+	showHideFormHeight.name ="showHideFormHt_<%=formContextId%>";
+	sppEventDiv.appendChild(showHideFormHeight);
 
 	var formIframe = document.createElement("iframe");
 	formIframe.id = formName;
@@ -214,10 +232,8 @@ if(sppEventDataList!=null && !sppEventDataList.isEmpty())
 			url = "SearchObject.do?pageOf=pageOfDynamicEvent&operation=search&hideSubmitButton=true&id="+actionAppId+"&formContextId="+formContextId;
 		}
 
-		if(Boolean.parseBoolean((String) request.getAttribute("showSkipEventCheckBoxes")))
-		{
-			url = url + "&allowToSkipEvents=true";
-		}
+		url = url + "&allowToSkipEvents=true&isSPPDataEntryDone="+isSPPDataEntryDone+"&displayEventsWithDefaultValues="+request.getAttribute("displayEventsWithDefaultValues");
+		
 		if(request.getAttribute(Globals.ERROR_KEY)!=null)
 		{
 			url = url + "&containsErrors=true";

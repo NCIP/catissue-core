@@ -58,9 +58,33 @@ function onIFrameLoad(iframeElement) {
 		parent.document.getElementById('newEventFrame').style.height= outerfrmHt+'px';
 	}
  }
-</script>
 
-<script>
+function showHideCurrentFormDiv(currentFormId, currentElement, formContextId)
+{
+	var currentIframeHt = Math.round(parent.document.getElementById(currentFormId).value);
+	var currentSPPDiv = parent.document.getElementById("sppForms");
+	var currentSPPDivHt = currentSPPDiv.style.height;
+	if(currentSPPDivHt.indexOf("px")!= -1)
+	{
+		currentSPPDivHt = currentSPPDivHt.split("px")[0];
+	}
+	currentSPPDivHt = Math.round(currentSPPDivHt);
+	if(currentElement.checked)
+	{
+		document.getElementById("showHideCurrentForm_"+formContextId).style.display = "block";
+		parent.document.getElementById(formContextId).style.height = currentIframeHt+"px";
+		var tmpHtt = currentSPPDivHt + currentIframeHt - 35;
+		currentSPPDiv.style.height =  tmpHtt+"px";
+	}
+	else
+	{
+		document.getElementById("showHideCurrentForm_"+formContextId).style.display = "none"
+		parent.document.getElementById(formContextId).style.height = "35px";
+		var tmpHt = currentSPPDivHt - currentIframeHt + 35;
+		currentSPPDiv.style.height =  tmpHt+"px";
+	}
+}
+
 function setSkipEventValue(event)
 {
 	event.value=event.checked;
@@ -170,7 +194,6 @@ function submitButton()
 	document.forms[0].action=action;
 
 }
-
 </script>
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
@@ -189,20 +212,45 @@ function submitButton()
 		</tr>
 		<c:choose>
 			<c:when test='${param.allowToSkipEvents == "true"}'>
-				<tr class="tr_bg_blue1">
-				<td  align="left" class="tr_bg_blue1" width="98%"><span class="blue_ar_b"><input align="middle" type="checkbox" id="isSkipEvent" name="isSkipEvent" checked="true" onclick="setSkipEventValue(this)" value="true"/>&nbsp;<bean:message key="eventparameters"/> &quot;${requestScope.formDisplayName}&quot;</span></td>
-				</tr>
+				<c:choose>
+					<c:when test='${param.isSPPDataEntryDone == "true"}'>
+						<c:choose>
+							<c:when test='${param.displayEventsWithDefaultValues == "true"}'>
+								<tr class="tr_bg_blue1">
+									<td  align="left" class="tr_bg_blue1" width="98%"><span class="blue_ar_b"><input align="middle" type="checkbox" id="isSkipEvent" name="isSkipEvent" checked="true" onclick="setSkipEventValue(this)" value="true"/>&nbsp;${requestScope.formDisplayName}</span></td>
+								</tr>
+							</c:when>
+							<c:otherwise>
+								<tr class="tr_bg_blue1">
+									<td  align="left" class="tr_bg_blue1" width="98%"><span class="blue_ar_b"><input align="middle" type="checkbox" name="isSkipEvent" checked="true" disabled="disabled" value="true"/>&nbsp;${requestScope.formDisplayName}</span></td>
+								</tr>
+							</c:otherwise>
+						</c:choose>
+					</c:when>
+					<c:otherwise>
+						<tr class="tr_bg_blue1">
+							<td  align="left" class="tr_bg_blue1" width="98%"><span class="blue_ar_b"><input align="middle" type="checkbox" id="isSkipEvent" name="isSkipEvent" onclick="showHideCurrentFormDiv('showHideFormHt_${param.formContextId}', this, '${param.formContextId}');setSkipEventValue(this)" value="false"/>&nbsp;${requestScope.formDisplayName}</span></td>
+						</tr>
+					</c:otherwise>
+				</c:choose>
 			</c:when>
 			<c:otherwise>
 				<tr class="tr_bg_blue1">
-				 <td align="left" class="tr_bg_blue1" width="98%"><span class="blue_ar_b">&nbsp;<bean:message key="eventparameters"/> &quot;${requestScope.formDisplayName}&quot;</span></td>
+				 <td align="left" class="tr_bg_blue1" width="98%"><span class="blue_ar_b">&nbsp;${requestScope.formDisplayName}</span></td>
 				 </tr>
 			</c:otherwise>
 		</c:choose>
         <tr>
           <td colspan="4" class="showhide1"></td>
         </tr>
-        <tr height="100%">
+		<c:choose>
+			<c:when test='${param.isSPPDataEntryDone == "false"}'>
+				<tr height="100%" id="showHideCurrentForm_${param.formContextId}">
+			</c:when>
+			<c:otherwise>
+				<tr height="100%">
+			</c:otherwise>
+		</c:choose>
           <td colspan="4" class="showhide" height="100%"><table height="100%" width="100%" border="0" cellpadding="3" cellspacing="0">
                 <tr height="10%" >
                   <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
