@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,7 +42,6 @@ import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.ISPPBizlogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
 import edu.wustl.catissuecore.domain.processingprocedure.Action;
@@ -51,8 +49,6 @@ import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.catissuecore.domain.processingprocedure.DefaultAction;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
-import edu.wustl.catissuecore.processingprocedure.ActionApplicationComparator;
-import edu.wustl.catissuecore.processingprocedure.SPPActionComparator;
 import edu.wustl.catissuecore.uiobject.SpecimenWrapper;
 import edu.wustl.catissuecore.upgrade.IntegrateDEData;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -99,7 +95,7 @@ public class SPPEventProcessor
 	 * @throws BizLogicException the biz logic exception
 	 * @throws ApplicationException the application exception
 	 */
-	public List<Map<String, Object>> populateSPPEventsForASpecimen(String specimenId)
+	public List<Map<String, Object>> populateSPPEventsForASpecimen(String specimenId, HttpServletRequest request)
 			throws BizLogicException, ApplicationException
 	{
 		//retrieves specimen object
@@ -107,69 +103,29 @@ public class SPPEventProcessor
 				new Long(specimenId));
 
 		List<Map<String, Object>> sppEventDataCollection = null;
-		if (specimenObject != null)
-		{
-			//Fetch SPPApplication
-			SpecimenProcessingProcedureApplication sppApplication = specimenObject.getProcessingSPPApplication();
-			//If SPPApplication is null than display SPP events with default value.
-			if (sppApplication == null)
-			{
-				sppEventDataCollection = populateSPPEventsBasedOnSpecimenReqd(specimenObject
-						.getSpecimenRequirement());
-			}
-			else
-			//SPP Application is not null, data entry for SPP events has already been done
-			{
-				sppEventDataCollection = populateSPPEventsBasedOnSPPApplication(sppApplication);
-			}
-		}
-		return sppEventDataCollection;
-	}
-
-	/**
-	 * Populate spp events based on specimen reqd.
-	 *
-	 * @param specimenRequirement the specimen requirement
-	 *
-	 * @return the list< map< string, object>>
-	 *
-	 * @throws ApplicationException the application exception
-	 */
-	public List<Map<String, Object>> populateSPPEventsBasedOnSpecimenReqd(
-			SpecimenRequirement specimenRequirement) throws ApplicationException
-	{
-		if (specimenRequirement != null)
+		if (specimenObject != null && specimenObject.getSpecimenRequirement() != null)
 		{
 			//fetch processing SPP from specimen requirement
-			SpecimenProcessingProcedure processingSPP = specimenRequirement.getProcessingSPP();
-			//populate SPP events data for respective SPP
-			return populateSPPEventsData(processingSPP);
-		}
-		return null;
-	}
-
-	/**
-	 * Populate spp events data for spp.
-	 *
-	 * @param processingSPP the processing spp
-	 *
-	 * @return the list< map< string, object>>
-	 *
-	 * @throws ApplicationException the application exception
-	 */
-	public List<Map<String, Object>> populateSPPEventsData(SpecimenProcessingProcedure processingSPP)
-			throws ApplicationException
-	{
-		List<Map<String, Object>> sppEventDataCollection = new ArrayList<Map<String, Object>>();
-		if (processingSPP != null)
-		{
-			//generate dynamicEventMap
-			//			Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
-			//			AppUtility.getAllSPPEventFormNames(dynamicEventMap);
-			//			request.getSession().setAttribute(Constants.DYNAMIC_EVENT_MAP, dynamicEventMap);
-			TreeSet<Action> actionList = new TreeSet<Action>(new SPPActionComparator());
-			actionList.addAll(processingSPP.getActionCollection());
-			sppEventDataCollection = populateSPPEventsWithDefaultValue(actionList);
+			SpecimenProcessingProcedure processingSPP = specimenObject.getSpecimenRequirement().getProcessingSPP();
+			if (processingSPP != null)
+			{
+				request.setAttribute("nameOfSelectedSpp", processingSPP.getName());
+				request.setAttribute("selectedSppId", processingSPP.getId());
+				//Fetch SPPApplication denotes that at least once data entry is performed.
+				SpecimenProcessingProcedureApplication sppApplication = specimenObject.getProcessingSPPApplication();
+				//If SPPApplication is null than display SPP events with default value.
+				if (sppApplication == null)
+				{
+					request.setAttribute(Constants.DISPLAY_EVENTS_WITH_DEFAULT_VALUES, true);
+					//populate SPP events data for respective SPP with default values
+					return populateSPPEventsWithDefaultValue(processingSPP.getActionCollection(), true);
+				}
+				else
+				//SPP Application is not null, data entry for some or all SPP events has already been performed
+				{
+					return populateSPPEventsBasedOnSPPApplication(processingSPP.getActionCollection(), sppApplication);
+				}
+			}
 		}
 		return sppEventDataCollection;
 	}
@@ -184,17 +140,18 @@ public class SPPEventProcessor
 	 * @throws ApplicationException the application exception
 	 */
 	public List<Map<String, Object>> populateSPPEventsWithDefaultValue(
-			Collection<Action> actionCollection) throws ApplicationException
+			Collection<Action> actionCollection, boolean isDataEntryPerformed) throws ApplicationException
 	{
 		List<Map<String, Object>> gridData = new ArrayList<Map<String, Object>>();
 		for (Action sppAction : actionCollection)
 		{
+			//For each form retrieve caption.
 			String containerCaption = getContainerCaption(sppAction.getContainerId());
 
 			//Data entry is not done for respective SPP action,
 			//hence passing actionApplicationId parameter value as 0
 			gridData.add(generateRowDataMap(0L, sppAction.getContainerId(), sppAction.getId(),
-					containerCaption, new Date()));
+					containerCaption, new Date(), isDataEntryPerformed));
 
 		}
 		return gridData;
@@ -209,7 +166,7 @@ public class SPPEventProcessor
 	 *
 	 * @throws ApplicationException the application exception
 	 */
-	public List<Map<String, Object>> populateSPPEventsBasedOnSPPApplication(
+	public List<Map<String, Object>> populateSPPEventsBasedOnSPPApplication(Collection<Action> actionCollection, 
 			SpecimenProcessingProcedureApplication sppApplication) throws ApplicationException
 	{
 		List<Map<String, Object>> sppEventData = new ArrayList<Map<String, Object>>();
@@ -218,13 +175,13 @@ public class SPPEventProcessor
 				.getSppActionApplicationCollection();
 		if (actionApplicationCollection != null)
 		{
-			generatSPPEventData(sppEventData, actionApplicationCollection);
+			generatSPPEventData(sppEventData, actionApplicationCollection, actionCollection);
 		}
 		return sppEventData;
 	}
 
 	/**
-	 * Generate spp event data.
+	 * Generate spp event data for performed event.
 	 *
 	 * @param sppEventData the spp event data
 	 * @param actionApplicationCollection the action application collection
@@ -232,22 +189,37 @@ public class SPPEventProcessor
 	 * @throws ApplicationException the application exception
 	 */
 	private void generatSPPEventData(List<Map<String, Object>> sppEventData,
-			Collection<ActionApplication> actionApplicationCollection) throws ApplicationException
+			Collection<ActionApplication> actionApplicationCollection, Collection<Action> actionCollection) throws ApplicationException
 	{
-		TreeSet<ActionApplication> actionList =
-			new TreeSet<ActionApplication>(new ActionApplicationComparator());
-		actionList.addAll(actionApplicationCollection);
-		//Generate SPP event data by iterating on action application
-		for (ActionApplication actionApplication : actionList)
+		//for each action check is data present, if yes then show that data else show default values
+		for (Action action : actionCollection)
 		{
-			Long containerId = actionApplication.getApplicationRecordEntry().getFormContext()
-					.getContainerId();
-			Long formContextId = actionApplication.getApplicationRecordEntry().getFormContext()
-					.getId();
-			String containerCaption = getContainerCaption(containerId);
-
-			sppEventData.add(generateRowDataMap(actionApplication.getId(), containerId,
-					formContextId, containerCaption, actionApplication.getTimestamp()));
+			boolean isDataPresent = false;
+			
+			//retrieve form caption.
+			String containerCaption = getContainerCaption(action.getContainerId());
+			
+			//Generate SPP event data by iterating on action application
+			for (ActionApplication actionApplication : actionApplicationCollection)
+			{
+				Long formContextId = actionApplication.getApplicationRecordEntry().getFormContext().getId();
+				//if action is present in actionApplication collection than data entry is performed.
+				if(action.getId().equals(formContextId))
+				{
+					isDataPresent = true;
+					sppEventData.add(generateRowDataMap(actionApplication.getId(), action.getContainerId(),
+							formContextId, containerCaption, actionApplication.getTimestamp(), isDataPresent));
+					break;
+				}
+			}
+			//if data does not exist for respective action, then retrieve data with default value
+			if(!isDataPresent)
+			{
+				//Data entry is not done for respective SPP action,
+				//hence passing actionApplicationId parameter value as 0
+				sppEventData.add(generateRowDataMap(0L, action.getContainerId(), action.getId(),
+						containerCaption, new Date(), isDataPresent));
+			}
 		}
 	}
 
@@ -283,7 +255,7 @@ public class SPPEventProcessor
 	 * @return the map< string, object>
 	 */
 	public Map<String, Object> generateRowDataMap(Long actionApplicationId, Long containerId,
-			Long formContextId, String containerCaption, Date eventDate)
+			Long formContextId, String containerCaption, Date eventDate, boolean isSPPDataEntryDone)
 	{
 		Map<String, Object> rowDataMap = new HashMap<String, Object>();
 		rowDataMap.put(Constants.ID, String.valueOf(actionApplicationId));
@@ -293,6 +265,7 @@ public class SPPEventProcessor
 		rowDataMap.put(Constants.PAGE_OF, Constants.PAGE_OF_DYNAMIC_EVENT);
 		rowDataMap.put(Constants.CAPTION, edu.wustl.cab2b.common.util.Utility
 				.getFormattedString(containerCaption));
+		rowDataMap.put(Constants.IS_SPP_DATA_ENTRY_DONE, isSPPDataEntryDone);
 		return rowDataMap;
 	}
 
@@ -326,7 +299,7 @@ public class SPPEventProcessor
 	 *
 	 * @throws BizLogicException the biz logic exception
 	 */
-	private SpecimenProcessingProcedure getSPPByName(final String sppName) throws BizLogicException
+	public SpecimenProcessingProcedure getSPPByName(final String sppName) throws BizLogicException
 	{
 		//Fetch processing SPP
 		SpecimenProcessingProcedure processingSPP = null;
@@ -445,7 +418,7 @@ public class SPPEventProcessor
 	 * @throws ApplicationException the application exception
 	 * @throws DynamicExtensionsCacheException the dynamic extensions cache exception
 	 */
-	private ActionApplication associateRecEntryWithActionApp(final IBizLogic actionAppBizLogic,
+	public ActionApplication associateRecEntryWithActionApp(final IBizLogic actionAppBizLogic,
 			final ISPPBizlogic sppBizlogicObject, Map<AbstractFormContext, Long> contextVsRecordIdMap,
 			SpecimenProcessingProcedureApplication processingSPPApplication, AbstractFormContext formContext,
 			Map<String, Object> staticParameters) throws BizLogicException, ApplicationException, DynamicExtensionsCacheException
@@ -781,16 +754,16 @@ public class SPPEventProcessor
 			Iterator<SpecimenProcessingProcedureApplication> sppAppIter = sppAppCollection.iterator();
 			while (sppAppIter.hasNext())
 			{
-				SpecimenProcessingProcedureApplication sppApp = sppAppIter.next();
-				if (sppName.equalsIgnoreCase(sppApp.getSpp().getName()))
+				SpecimenProcessingProcedureApplication sppApplication = sppAppIter.next();
+				if (sppName.equalsIgnoreCase(sppApplication.getSpp().getName()))
 				{
 					Collection<ActionApplication> actionApplicationCollection = (Collection<ActionApplication>) defaultBizLogic
-							.retrieveAttribute(SpecimenProcessingProcedureApplication.class, new Long(sppApp.getId()),
+							.retrieveAttribute(SpecimenProcessingProcedureApplication.class, new Long(sppApplication.getId()),
 									"elements(sppActionApplicationCollection)");
 					if (actionApplicationCollection != null)
 					{
 						//populate SPP data
-						generatSPPEventData(sppEventDataCollection, actionApplicationCollection);
+						generatSPPEventData(sppEventDataCollection, actionApplicationCollection, sppApplication.getSpp().getActionCollection());
 					}
 					sppDataEntryDone = true;
 					break;
@@ -1023,7 +996,7 @@ public class SPPEventProcessor
 	 *
 	 * @throws ApplicationException the application exception
 	 */
-	public List displayDefaultSPPEventData(HttpServletRequest request,
+	public List<Map<String, Object>> displayDefaultSPPEventData(HttpServletRequest request,
 			SpecimenCollectionGroup scgObject, String sppName ) throws ApplicationException
 	{
 		List<Map<String, Object>> sppEventDataCollection = new ArrayList<Map<String, Object>>();
@@ -1041,7 +1014,8 @@ public class SPPEventProcessor
 			}
 		}
 
-		sppEventDataCollection = populateSPPEventsData(spp);
+		request.setAttribute(Constants.DISPLAY_EVENTS_WITH_DEFAULT_VALUES, true);
+		sppEventDataCollection = populateSPPEventsWithDefaultValue(spp.getActionCollection(), true);
 		Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
 		new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
 		if (request.getSession().getAttribute("dynamicEventMap") == null)
