@@ -5904,6 +5904,7 @@ public class Constants
 	public static final String ACTIVE = "Active";
 
 	public static final String SPP_XSD_FILENAME = "SPP.xsd";
+	public static final String SPP_TEMPLATE_FILENAME = "SPPTemplate.xml";
 
 	public static final String SPP_ENTITY_GRP_ERROR = "Invalid Entity group name";
 

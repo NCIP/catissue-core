@@ -1354,7 +1354,7 @@ alter table catissue_specimen_coll_group add CONSTRAINT `fk_dspr_id` FOREIGN KEY
 alter table catissue_specimen_coll_group add CONSTRAINT `fk_ispr_id` FOREIGN KEY (`ISPR_ID`) REFERENCES `catissue_identified_report` (`IDENTIFIER`);
 
 -- These SQL's are for creating SPP related tables and coresponding changes in the model for SPP
-create table catissue_spp (IDENTIFIER bigint auto_increment, NAME varchar(50) unique, BARCODE varchar(50) unique,  primary key (IDENTIFIER));
+create table catissue_spp (IDENTIFIER bigint auto_increment, NAME varchar(50) unique, BARCODE varchar(50) unique, spp_template_xml blob,  primary key (IDENTIFIER));
 
 create table catissue_abstract_application (IDENTIFIER bigint  NOT NULL AUTO_INCREMENT, REASON_DEVIATION text, TIMESTAMP timestamp, USER_DETAILS bigint, COMMENTS text, primary key (IDENTIFIER), foreign key (USER_DETAILS) references catissue_user (IDENTIFIER));
 

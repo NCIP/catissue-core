@@ -103,7 +103,7 @@ alter table catissue_deidentified_report drop column "SCG_ID"
 /
 
 -- These SQL's are for creating SPP related tables and coresponding changes in the model for SPP
-create table catissue_spp (IDENTIFIER number(19,0), NAME varchar(50) unique, BARCODE varchar(50) unique,  primary key (IDENTIFIER))
+create table catissue_spp (IDENTIFIER number(19,0), NAME varchar(50) unique, BARCODE varchar(50) unique,spp_template_xml CLOB,  primary key (IDENTIFIER))
 /
 create table catissue_abstract_application (IDENTIFIER number(19,0), REASON_DEVIATION varchar(4000), TIMESTAMP timestamp, USER_DETAILS number(19,0), COMMENTS varchar(4000), primary key (IDENTIFIER), foreign key (USER_DETAILS) references catissue_user (IDENTIFIER))
 /
@@ -173,3 +173,4 @@ INSERT INTO CATISSUE_INTERFACE_COLUMN_DATA( IDENTIFIER, TABLE_ID, COLUMN_NAME , 
 INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME, DEFAULT_VIEW_ATTRIBUTE, ATTRIBUTE_ORDER) VALUES ((select RELATIONSHIP_ID FROM CATISSUE_TABLE_RELATION WHERE PARENT_TABLE_ID = (SELECT TABLE_ID FROM CATISSUE_QUERY_TABLE_DATA WHERE TABLE_NAME = 'CATISSUE_SPECIMEN') AND CHILD_TABLE_ID = (SELECT TABLE_ID FROM CATISSUE_QUERY_TABLE_DATA WHERE TABLE_NAME = 'CATISSUE_SPECIMEN')), (SELECT max(IDENTIFIER) FROM CATISSUE_INTERFACE_COLUMN_DATA), 'GSID',1,3)
 /
 -- SQLs to make GSID querieable ends
+/

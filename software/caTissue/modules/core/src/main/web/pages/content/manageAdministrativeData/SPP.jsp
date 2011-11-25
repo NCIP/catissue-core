@@ -24,6 +24,7 @@
 %>
 <body>
 	<script>
+	
 		function saveSPP()
 		{
 			var action = document.forms[0].action + "?setDefaultValue=true";
@@ -34,6 +35,19 @@
 			<%}%>
 			document.forms[0].action =  action;
 			document.forms[0].submit();
+		}
+
+		function downloadSPPXSD()
+		{
+			var action = "SPPTemplateDownlaod.do?requestFor=xsd";
+			mywindow=window.open(action,"Download","width=10,height=10");
+			mywindow.moveTo(0,0);
+		}
+		function downloadSPPXML()
+		{
+			var action = "SPPTemplateDownlaod.do?id=<%=request.getAttribute(Constants.ID)%>&requestFor=template";
+			mywindow=window.open(action,"Download","width=10,height=10");
+			mywindow.moveTo(0,0);
 		}
 	</script>
 <html:form action="<%=formAction%>" enctype="multipart/form-data">
@@ -111,6 +125,13 @@
 								<td align="left" valign="top" width="75%">
 									<input id="file" type="file" name="xmlFileName" value="Browse" size="34">
 									</input>
+									<span>
+									<logic:equal name="operation" value="<%=Constants.EDIT%>">
+
+									<input class="blue_ar_b" type="button" value="Download Current XML" style="width:220" onclick="downloadSPPXML()">
+
+								</logic:equal>
+									</span>
 								</td>
 							</tr>
 						</table>
@@ -134,8 +155,12 @@
 									</html:submit>
 								</td>
 								<td>
-									<input class="blue_ar_b" type="button" value="Save and Set Default Values" style="width:200" onclick="saveSPP()">
+									<input class="blue_ar_b" type="button" value="Save and Set Default Values" style="width:210" onclick="saveSPP()">
 								</td>
+								<td>
+									<input class="blue_ar_b" type="button" value="Download XSD" style="width:200" onclick="downloadSPPXSD()">
+								</td>
+								
 								<td style="width:100%">
 								&nbsp;
 								</td>

@@ -1,8 +1,17 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.sql.Clob;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,8 +24,15 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.upload.FormFile;
+import org.hibernate.Hibernate;
 import org.xml.sax.SAXException;
+
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
+
+import sun.misc.IOUtils;
 
 import edu.common.dynamicextensions.domain.integration.AbstractFormContext;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
@@ -38,10 +54,19 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.global.TitliSearchConstants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.MySQLDAOImpl;
+import edu.wustl.dao.OracleDAOImpl;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 
+/**
+ * @author sri
+ *
+ */
 public class SPPBizLogic extends CatissueDefaultBizLogic
 {
 
@@ -62,7 +87,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	{
 		try
 		{
-			SPPUIObject sppUIObject = (SPPUIObject) uiObject;
+			SPPUIObject sppUIObject = (SPPUIObject) uiObject; 
 			SpecimenProcessingProcedure spp = (SpecimenProcessingProcedure) obj;
 			SPPXMLParser parser = SPPXMLParser.getInstance();
 			FormFile xmlFile = sppUIObject.getXmlFileName();
@@ -85,6 +110,8 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 
 			spp.setActionCollection(actionList);
 			dao.insert(spp);
+			
+			
 		}
 		catch (final DAOException daoExp)
 		{
@@ -136,8 +163,21 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 			this.logger.error(Constants.INVALID_XML_MSG, e);
 			throw this.getBizLogicException(appExp, "", Constants.INVALID_XML_MSG);
 		}
+		catch (ApplicationException e) 
+		{
+			this.logger.error(Constants.INVALID_XML_MSG, e);
+			throw this.getBizLogicException(e, "", "Error while inserting the SPP xml in the db");
+		} 
 	}
-
+	@Override
+	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean,Object uiObject)
+			throws BizLogicException
+	{
+		SPPUIObject sppuiObject = (SPPUIObject)uiObject;
+		SpecimenProcessingProcedure spp = (SpecimenProcessingProcedure)obj;
+		updateXMLTemplateInDB(spp.getId(), sppuiObject.getXmlFileName());
+		
+	}
 	/**
 	 * Updates the persistent object in the database.
 	 * @param dao : dao
@@ -215,6 +255,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 			}
 			sppNewObj.getActionCollection().addAll(newActList);
 			dao.update(sppNewObj, sppOldObj);
+			updateXMLTemplateInDB(sppNewObj.getId(), xmlFile);
 		}
 		catch (final DAOException daoExp)
 		{
@@ -270,6 +311,69 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 			appExp.setCustomizedMsg(Constants.INVALID_XML_MSG);
 			this.logger.error(Constants.INVALID_XML_MSG, e);
 			throw this.getBizLogicException(appExp, "", Constants.INVALID_XML_MSG);
+		} 
+	}
+	
+	/**
+	 * This method will update the caTissue_SPP table with the latest SPP XML Template
+	 * @param id
+	 * @param xmlFile
+	 * @throws BizLogicException 
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws ApplicationException
+	 * @throws DAOException
+	 * @throws SQLException
+	 */
+	private void updateXMLTemplateInDB(
+			final Long id, FormFile xmlFile) throws BizLogicException
+			{
+		JDBCDAO jdbcdao = null;
+		InputStream stream;
+		try {
+			stream = xmlFile.getInputStream();
+		
+		
+		jdbcdao = AppUtility.openJDBCSession();
+		PreparedStatement statement = jdbcdao.getPreparedStatement("update catissue_spp set spp_template_xml=? where identifier=?");
+		
+		BufferedInputStream bis = new BufferedInputStream(stream);
+		//To move it to utility class n make it simpler
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		int result = bis.read();
+		while(result != -1) {
+		  byte b = (byte)result;
+		  buf.write(b);
+		  result = bis.read();
+		}        
+		String res = AppUtility.convertStreamToString(stream);
+		if(jdbcdao instanceof MySQLDAOImpl)
+		{
+			statement.setString(1, res);
+		}
+		else if(jdbcdao instanceof OracleDAOImpl)
+		{
+			StringReader reader = new StringReader(res);
+			statement.setCharacterStream(1, reader, res.length());
+		}
+		
+		statement.setLong(2, id);
+		statement.execute();
+		jdbcdao.commit();
+		} 
+		catch (Exception e) 
+		{
+			this.logger.error("Error while inserting SPP XML in database, Please contact Administrator", e);
+			throw this.getBizLogicException(e, "", "Error while inserting SPP XML in database, Please contact Administrator");
+		} 
+		finally
+		{
+			try {
+				AppUtility.closeDAOSession(jdbcdao);
+			} catch (ApplicationException e) {
+				this.logger.error("Errpr While inserting Template in db", e);
+				throw this.getBizLogicException(e, "", "Errpr While inserting Template in db");
+			}
 		}
 	}
 
@@ -436,14 +540,14 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		List<NameValueBean> sppNameList=new ArrayList<NameValueBean>();
 		sppNameList.add(new NameValueBean(Constants.SELECT_OPTION, Constants.SELECT_OPTION));
 
-		Collection<SpecimenProcessingProcedure> sppCollection=scg.getCollectionProtocolEvent().getSppCollection();
-		Iterator<SpecimenProcessingProcedure> sppIter=sppCollection.iterator();
-		while(sppIter.hasNext())
-		{
-			SpecimenProcessingProcedure spp=sppIter.next();
-			String sppName=spp.getName();
-			sppNameList.add(new NameValueBean(sppName,sppName));
-		}
+////		Collection<SpecimenProcessingProcedure> sppCollection=scg.getCollectionProtocolEvent().getsgetSppCollection();
+//		Iterator<SpecimenProcessingProcedure> sppIter=sppCollection.iterator();
+//		while(sppIter.hasNext())
+//		{
+//			SpecimenProcessingProcedure spp=sppIter.next();
+//			String sppName=spp.getName();
+//			sppNameList.add(new NameValueBean(sppName,sppName));
+//		}
 		return sppNameList;
 	}
 
@@ -593,4 +697,28 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		return eventList;
 	}
 
-}
+	public InputStream getTemplateAsStream(Long id)
+	throws Exception 
+	{
+		InputStream in = null;
+		JDBCDAO jdbcdao = null;
+		try
+		{
+			jdbcdao = AppUtility.openJDBCSession();
+			String query = "select spp_template_xml from catissue_spp where identifier = ?";
+			java.sql.PreparedStatement statement = jdbcdao.getPreparedStatement(query);
+			statement.setLong(1, id);
+			ResultSet rs = statement.executeQuery();
+			
+			 while (rs.next()){
+			 in = rs.getBinaryStream(1);
+			 }
+		}
+		
+		finally
+		{
+			AppUtility.closeJDBCSession(jdbcdao);
+		}
+		return in;
+		}
+	}

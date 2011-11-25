@@ -1897,6 +1897,12 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.SPPDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
+		
+		<action path="/SPPTemplateDownlaod" type="edu.wustl.catissuecore.action.SPPTemplateDownloadAction"
+			validate="false" scope="request" input="/pages/blank.jsp">
+			<forward name="success" path="/pages/blank.jsp" />
+			<forward name="failure" path="/pages/blank.jsp" />
+		</action>
 
 		<action path="/SaveDefaultValueForSPPEvents"
 			type="edu.wustl.catissuecore.action.SaveDefaultValueForSPPEventsAction"

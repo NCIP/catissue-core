@@ -9,9 +9,12 @@
 
 package edu.wustl.catissuecore.util.global;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -4077,4 +4080,18 @@ public class AppUtility
         return localLoginName;
 
     }
+    
+    public static String convertStreamToString(InputStream inputStream) throws IOException
+	{
+		BufferedInputStream bis = new BufferedInputStream(inputStream);
+		//To move it to utility class n make it simpler
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		int result = bis.read();
+		while(result != -1) {
+		  byte b = (byte)result;
+		  buf.write(b);
+		  result = bis.read();
+		}        
+		return  buf.toString();
+	}
 }
