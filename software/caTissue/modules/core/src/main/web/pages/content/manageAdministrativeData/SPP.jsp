@@ -100,7 +100,7 @@
 								<td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
 								</td>
 								<td align="left" class="black_ar" width="25%">
-									<b>SPP Name</b>
+									<b>Name</b>
 								</td>
 								<td align="left" width="74%">
 									<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="name" property="name"/>
@@ -110,7 +110,7 @@
 								<td width="1%" align="center" class="black_ar"><span class="blue_ar_b"></span>
 								</td>
 								<td align="left" class="black_ar" width="25%">
-									<b>SPP Barcode</b>
+									<b>Barcode</b>
 								</td>
 								<td align="left" width="74%">
 									<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="barcode" property="barcode"/>
