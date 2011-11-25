@@ -366,6 +366,11 @@
 				<include name="**/*.ser" />
 			</fileset>
 		</copy>
+		<copy todir="${classes.dir}" overwrite="true">
+			<fileset dir="${resources.dir}/xml">
+				<include name="SPP.xsd"/>
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- Create the Applet JAR Ends-->
