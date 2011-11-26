@@ -3347,11 +3347,13 @@ Thanking You,
 		<antcall target="replace_app_dao_prop_file"/>
 		<unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />
 
-		<copy file="${prop.temp.dir}/dynamicextensions/lib/client/openide-util.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
-
-		<copy file="${prop.temp.dir}/dynamicextensions//lib/client/nbmdr.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
-
-		<copy file="${prop.temp.dir}/dynamicextensions//lib/client/jmiutils.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
+		<copy todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" overwrite="true">
+			<fileset dir="${prop.temp.dir}/dynamicextensions/lib">
+				<include name="openide-util*.jar" />
+				<include name="nbmdr*.jar" />
+				<include name="jmiutils*.jar" />
+			</fileset>
+		</copy>
 
 		<copy file="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/hibernate.cfg.xml" todir="${prop.temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<copy file="${prop.temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${prop.temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />

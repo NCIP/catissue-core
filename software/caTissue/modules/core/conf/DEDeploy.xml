@@ -15,7 +15,7 @@
 	<property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
 	<property name="cacoresdk.dir" value="${tempcacore.dir}/caCoreSDK" />
 	<property name="cacore.dir" value="${tempcacore.dir}/temp_caCORESDK" />
-	<property name="caCORESDK.zip.location" value="${de.temp.dir}/lib/server/caCORESDK.zip" />
+	<property name="caCORESDK.zip.location" value="${de.temp.dir}/lib/caCORESDK.zip" />
 	<property name="dezip.dir" value="${tempcacore.dir}/temp_DE_zip" />
 	<property name="dejar.dir" value="${tempcacore.dir}/temp_DE_jar" />
 	<property name="entity.jar.location" value="${tempcacore.dir}/entity_jar" />
@@ -30,8 +30,8 @@
 	<property name="oracle.sql.dir.DE" value="${de.temp.dir}/db/db-install/Oracle" />
 	<property name="oracle.dbupgrade.sql.dir.DE" value="${de.temp.dir}/db/db-upgrade/Oracle" />
 	<property name="dynamicExtensions.jar.dir.DE" value="${de.temp.dir}/binaries/DynamicExtensionsInterface" />
-	<property name="lib.dir.DE" value="${temp.dir.DE}/../lib/server" />
-	<property name="extra.lib.dir.DE" value="${temp.dir.DE}/../lib/extra" />
+	<property name="lib.dir.DE" value="${temp.dir.DE}/../lib" />
+	<property name="extra.lib.dir.DE" value="${temp.dir.DE}/../lib" />
 
 	<property name="oracle.dialect.string.DE" value="org.hibernate.dialect.Oracle9Dialect" />
 	<property name="mysql.dialect.string.DE" value="org.hibernate.dialect.MySQLDialect" />
@@ -634,11 +634,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -652,11 +652,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -679,13 +679,11 @@
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="../cobertura/coverage.ser" />
 			<classpath>
 				<pathelement location="${base.dir}/classes/" />
-				<fileset dir="${base.dir}/../lib/server">
+				<fileset dir="${base.dir}/../lib">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
-				</fileset>
-				<fileset dir="${base.dir}/../lib/extra">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -704,13 +702,11 @@
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="../cobertura/coverage.ser" />
 			<classpath>
 				<pathelement location="${base.dir}/classes/" />
-				<fileset dir="${base.dir}/../lib/server">
+				<fileset dir="${base.dir}/../lib">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
-				</fileset>
-				<fileset dir="${base.dir}/../lib/extra">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -758,7 +754,7 @@
 			<classpath>
 				<fileset dir="${de.temp.dir}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -797,7 +793,7 @@
 			<classpath>
 				<fileset dir="${de.temp.dir}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -819,7 +815,7 @@
 			<classpath>
 				<fileset dir="${de.temp.dir}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -868,11 +864,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -906,7 +902,7 @@
 			<classpath>
 				<fileset dir="${de.temp.dir}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -937,7 +933,7 @@
 			<classpath>
 				<fileset dir="${de.temp.dir}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -952,11 +948,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -970,11 +966,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -1010,11 +1006,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -1033,13 +1029,11 @@
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="../cobertura/coverage.ser" />
 			<classpath>
 				<pathelement location="${base.dir}/classes/" />
-				<fileset dir="${base.dir}/../lib/server">
+				<fileset dir="${base.dir}/../lib">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
-				</fileset>
-				<fileset dir="${base.dir}/../lib/extra">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<exclude name="uml-1.3*.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -1053,11 +1047,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -1305,7 +1299,7 @@
 			<arg value="${de.zip.location}/conf/auditablemetadataMerged.xml" />
 			<classpath>
 				<pathelement location="${base.dir}/classes/" />
-				<fileset dir="${de.zip.location}/lib/server">
+				<fileset dir="${de.zip.location}/lib">
 					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${de.zip.location}/binaries/DynamicExtensionsInterface">
@@ -1333,7 +1327,7 @@
 			<arg value="true" />
 			<classpath>
 				<pathelement location="${base.dir}/classes/" />
-				<fileset dir="${de.zip.location}/lib/server">
+				<fileset dir="${de.zip.location}/lib">
 					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${de.zip.location}/binaries/DynamicExtensionsInterface">
@@ -1358,11 +1352,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -1394,13 +1388,13 @@
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="../cobertura/coverage.ser" />
 			<classpath>
 				<pathelement location="${base.dir}/classes/" />
-				<fileset dir="${base.dir}/../lib/server">
+				<fileset dir="${base.dir}/../lib">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
-				<fileset dir="${base.dir}/../lib/extra">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+				<fileset dir="${base.dir}/../lib">
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -1434,13 +1428,13 @@
 			<arg value="${include.entitygroup}," />
 			<classpath>
 				<pathelement location="${temp.dir.DE}" />
-				<fileset dir="${de.zip.location}/lib/server">
+				<fileset dir="${de.zip.location}/lib">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
-				<fileset dir="${de.zip.location}/lib/extra">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+				<fileset dir="${de.zip.location}/lib">
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -1464,13 +1458,13 @@
 			<arg value="${xmi.name}" />
 			<classpath>
 				<pathelement location="${temp.dir.DE}" />
-				<fileset dir="${de.zip.location}/lib/server">
+				<fileset dir="${de.zip.location}/lib">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
-				<fileset dir="${de.zip.location}/lib/extra">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+				<fileset dir="${de.zip.location}/lib">
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -1520,13 +1514,13 @@
 					<arg value="${ORM1CfgFile}" />
 					<classpath>
 						<pathelement location="${temp.dir.DE}" />
-						<fileset dir="${de.zip.location}/lib/server">
+						<fileset dir="${de.zip.location}/lib">
 							<include name="*.jar" />
-							<exclude name="uml-1.3.jar" />
+							<exclude name="uml-1.3*.jar" />
 						</fileset>
-						<fileset dir="${de.zip.location}/lib/extra">
-							<include name="jboss-j2ee.jar" />
-							<include name="jta.jar" />
+						<fileset dir="${de.zip.location}/lib">
+							<include name="jboss-j2ee*.jar" />
+							<include name="jta*.jar" />
 						</fileset>
 					</classpath>
 				</java>
@@ -1597,13 +1591,13 @@
 						<arg value="${ORM1CfgFile}" />
 						<classpath>
 							<pathelement location="${temp.dir.DE}" />
-							<fileset dir="${de.zip.location}/lib/server">
+							<fileset dir="${de.zip.location}/lib">
 								<include name="*.jar" />
-								<exclude name="uml-1.3.jar" />
+								<exclude name="uml-1.3*.jar" />
 							</fileset>
-							<fileset dir="${de.zip.location}/lib/extra">
-								<include name="jboss-j2ee.jar" />
-								<include name="jta.jar" />
+							<fileset dir="${de.zip.location}/lib">
+								<include name="jboss-j2ee*.jar" />
+								<include name="jta*.jar" />
 							</fileset>
 						</classpath>
 					</java>
@@ -1690,7 +1684,7 @@
 			<fileset dir="${de.zip.location}/binaries/DynamicExtensionsInterface" >
 				<include name="DynamicExtensions.jar" />
 			</fileset>
-			<fileset dir="${de.zip.location}/lib/server" >
+			<fileset dir="${de.zip.location}/lib" >
 				<include name="jep-2.4.1.jar" />
 				<include name="jaxb*" />
 			</fileset>
@@ -1701,7 +1695,7 @@
 			</fileset>
 		</delete>
 		<copy todir="${cacore.deployable.dir}/${entitygroupname}.war/WEB-INF/lib" overwrite="true" failonerror="false">
-			<fileset dir="${de.zip.location}/lib/server" >
+			<fileset dir="${de.zip.location}/lib" >
 				<include name="washu-commons*" />
 			</fileset>
 		</copy>
@@ -1711,7 +1705,7 @@
 			</fileset>
 		</delete>
 		<copy todir="${cacore.deployable.dir}/${entitygroupname}.war/WEB-INF/lib" overwrite="true" failonerror="false">
-			<fileset dir="${de.zip.location}/lib/server" >
+			<fileset dir="${de.zip.location}/lib" >
 				<include name="commonpackage*" />
 			</fileset>
 		</copy>
@@ -1721,7 +1715,7 @@
 			</fileset>
 		</delete>
 		<copy todir="${cacore.deployable.dir}/${entitygroupname}.war/WEB-INF/lib" overwrite="true" failonerror="false">
-			<fileset dir="${de.zip.location}/lib/server" >
+			<fileset dir="${de.zip.location}/lib" >
 				<include name="DAO*" />
 			</fileset>
 		</copy>
@@ -1788,13 +1782,13 @@
 					<arg value="${caCOREHibernateCfgFile}" />
 					<classpath>
 						<pathelement location="${base.dir}/classes/" />
-						<fileset dir="${base.dir}/../lib/server">
+						<fileset dir="${base.dir}/../lib">
 							<include name="*.jar" />
-							<exclude name="uml-1.3.jar" />
+							<exclude name="uml-1.3*.jar" />
 						</fileset>
-						<fileset dir="${base.dir}/../lib/extra">
-							<include name="jboss-j2ee.jar" />
-							<include name="jta.jar" />
+						<fileset dir="${base.dir}/../lib">
+							<include name="jboss-j2ee*.jar" />
+							<include name="jta*.jar" />
 						</fileset>
 					</classpath>
 				</java>
@@ -1804,20 +1798,20 @@
 					<arg value="${caCOREHibernateCfgFile}" />
 					<classpath>
 						<pathelement location="${base.dir}/classes/" />
-						<fileset dir="${base.dir}/../lib/server">
+						<fileset dir="${base.dir}/../lib">
 							<include name="*.jar" />
-							<exclude name="uml-1.3.jar" />
+							<exclude name="uml-1.3*.jar" />
 						</fileset>
-						<fileset dir="${base.dir}/../lib/extra">
-							<include name="jboss-j2ee.jar" />
-							<include name="jta.jar" />
+						<fileset dir="${base.dir}/../lib">
+							<include name="jboss-j2ee*.jar" />
+							<include name="jta*.jar" />
 						</fileset>
 					</classpath>
 				</java>
 
 				<jar destfile="${entity.jar.location}/${entitygroupname}.jar" basedir="${entity.jar.location}" />
 				<antcall target="generate.xml.for.audit" />
-				<copy todir="${base.dir}/../lib/server/" file="${entity.jar.location}/${entitygroupname}.jar" overwrite="true" />
+				<copy todir="${base.dir}/../lib/" file="${entity.jar.location}/${entitygroupname}.jar" overwrite="true" />
 				<copy todir="tempWar/${entitygroupname}.war/WEB-INF/lib/" file="${entity.jar.location}/${entitygroupname}.jar" overwrite="true" />
 			</then>
 			<else>
@@ -1909,7 +1903,7 @@
 		<if>
 			<equals arg1="True" arg2="${testcases}" />
 			<then>
-				<unzip src="${base.dir}/../lib/server/caCORESDK.zip" dest="${cacoresdk.dir}" overwrite="true" />
+				<unzip src="${base.dir}/../lib/caCORESDK.zip" dest="${cacoresdk.dir}" overwrite="true" />
 			</then>
 			<else>
 				<unzip src="${caCORESDK.zip.location}" dest="${cacoresdk.dir}" overwrite="true" />
@@ -1980,11 +1974,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -2038,11 +2032,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -2058,11 +2052,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -2121,11 +2115,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -2140,11 +2134,11 @@
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${lib.dir.DE}">
 					<include name="*.jar" />
-					<exclude name="uml-1.3.jar" />
+					<exclude name="uml-1.3*.jar" />
 				</fileset>
 				<fileset dir="${extra.lib.dir.DE}">
-					<include name="jboss-j2ee.jar" />
-					<include name="jta.jar" />
+					<include name="jboss-j2ee*.jar" />
+					<include name="jta*.jar" />
 				</fileset>
 			</classpath>
 		</java>
@@ -2221,7 +2215,7 @@
 		<pathelement location="${temp.dir.DE}" />
 		<fileset dir="${lib.dir.DE}">
 			<include name="*.jar" />
-			<exclude name="uml-1.3.jar" />
+			<exclude name="uml-1.3*.jar" />
 		</fileset>
 		<fileset dir="${extra.lib.dir.DE}">
 			<include name="*.jar" />
