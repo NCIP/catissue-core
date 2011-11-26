@@ -3,13 +3,10 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
-import java.sql.Clob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,15 +21,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.upload.FormFile;
-import org.hibernate.Hibernate;
 import org.xml.sax.SAXException;
-
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
-
-import sun.misc.IOUtils;
 
 import edu.common.dynamicextensions.domain.integration.AbstractFormContext;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
@@ -54,14 +44,12 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.global.TitliSearchConstants;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.MySQLDAOImpl;
 import edu.wustl.dao.OracleDAOImpl;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.dao.query.generator.ColumnValueBean;
 
 /**
  * @author sri
