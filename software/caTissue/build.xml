@@ -761,8 +761,8 @@
 			<fileset file="${resources.dir}/csv/SpecimenEvents.csv" />
 		</copy>
 		<copy todir="${zip.dir}/modules/caTissue/resources/csv" overwrite="true">
-					<fileset file="${resources.dir}/SpecimenEvents_PVs.csv" />
-				</copy>
+			<fileset file="${resources.dir}/csv/SpecimenEvents_PVs.csv" />
+		</copy>
 		<copy todir="${zip.dir}/modules/caTissue/resources/xml" overwrite="true">
 			<fileset file="${resources.dir}/xml/StaticModelMetaData.xsd" />
 			<fileset file="${resources.dir}/xml/StaticModelMetaData.xml" />
