@@ -50,6 +50,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.ObjectCloner;
 
 /**
  * @author suhas_khot
@@ -305,15 +306,22 @@ public class SaveSPPEventAction extends SecureAction
 				ActionApplication actionApplication = sppEventProcessor.associateRecEntryWithActionApp(actionAppBizLogic,
 						sppBizlogicObject, recordIdMap, sppApplication, context,
 						staticParametersList);
-
+				if(actionApplication.getId()==null)
+				{
+					actionApplication.setSppApplication(sppApplication);
+					actionAppBizLogic.insert(actionApplication);
+				}
+				
 				actionApplicationCollection.add(actionApplication);
 				
-				sppBizlogicObject.updateSPPApplication(sppEventProcessor.getSPPByName(sppName), sppApplication, actionApplicationCollection,
-						sessionLoginInfo);
+				ObjectCloner cloner = new ObjectCloner();
+				SpecimenProcessingProcedureApplication clonedSPPApplication = cloner.clone(sppApplication);
 
-				sppBizlogicObject.update(sppApplication, sessionLoginInfo);
+				sppApplication.setSpp(sppEventProcessor.getSPPByName(sppName));
+				sppApplication.setSppActionApplicationCollection(actionApplicationCollection);
+				IBizLogic defaultBizLogic = new CatissueDefaultBizLogic();
+				defaultBizLogic.update(sppApplication, clonedSPPApplication, sessionLoginInfo);
 			}
-			
 		}
 		return true;
 	}
