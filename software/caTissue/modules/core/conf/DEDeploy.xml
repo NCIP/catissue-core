@@ -15,7 +15,7 @@
 	<property name="export.dir" value="${tempcacore.dir}/temp_exported_xmi" />
 	<property name="cacoresdk.dir" value="${tempcacore.dir}/caCoreSDK" />
 	<property name="cacore.dir" value="${tempcacore.dir}/temp_caCORESDK" />
-	<property name="caCORESDK.zip.location" value="${de.temp.dir}/lib/caCORESDK.zip" />
+	<property name="caCORESDK.zip.location" value="${de.temp.dir}/lib/caCORESDK-1.0.zip" />
 	<property name="dezip.dir" value="${tempcacore.dir}/temp_DE_zip" />
 	<property name="dejar.dir" value="${tempcacore.dir}/temp_DE_jar" />
 	<property name="entity.jar.location" value="${tempcacore.dir}/entity_jar" />
@@ -1903,7 +1903,7 @@
 		<if>
 			<equals arg1="True" arg2="${testcases}" />
 			<then>
-				<unzip src="${base.dir}/../lib/caCORESDK.zip" dest="${cacoresdk.dir}" overwrite="true" />
+				<unzip src="${base.dir}/../lib/caCORESDK-1.0.zip" dest="${cacoresdk.dir}" overwrite="true" />
 			</then>
 			<else>
 				<unzip src="${caCORESDK.zip.location}" dest="${cacoresdk.dir}" overwrite="true" />
