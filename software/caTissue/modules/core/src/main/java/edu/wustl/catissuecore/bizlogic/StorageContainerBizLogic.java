@@ -996,7 +996,6 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			validatePosition(dao, container, validator);
 			validateStatus(operation, container);
 			validateCPRestriction(dao,container,validator);
-			validateSiteCp(dao, container, validator);
 			StorageContainerUtil.populateSpecimenType(container);
 			return true;
 		}
@@ -1034,31 +1033,30 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		}
 		
 	}
-
-	public void validateSiteCp(DAO dao, StorageContainer container,final Validator validator) throws BizLogicException, DAOException
-	{
-		ISiteBizLogic siteBiz = new SiteBizLogic();
-		Collection siteCpCollection = siteBiz.getRelatedCPs(container.getSite().getId(), dao);
-		Collection<CollectionProtocol> containerCPCollection = container.getCollectionProtocolCollection();
-		if(!containerCPCollection.isEmpty())
-		{
-			boolean isValidCP =true;
-			for(CollectionProtocol cp : containerCPCollection)
-			{
-				if(!siteCpCollection.contains(cp))
-				{
-					isValidCP = false;
-				}
-			}
-			if(!isValidCP)
-			{
-				throw this.getBizLogicException(null, "errors.item.invalid", ApplicationProperties.getValue("storageContainer.collectionProtocolTitle"));
-			}
-		}
-	}
-
 	private void validateCPRestriction(DAO dao, StorageContainer container,final Validator validator) throws BizLogicException, DAOException
 	{
+		Long siteId=null;
+		
+		String hql="";
+		
+		if(container.getLocatedAtPosition()!=null && container.getLocatedAtPosition().getParentContainer()!=null)
+		{
+			hql="select site.id from edu.wustl.catissuecore.domain.StorageContainer where id="+container.getLocatedAtPosition().getParentContainer().getId();
+			
+			List siteIdList = executeQuery(hql);
+			
+			if(!siteIdList.isEmpty() || siteIdList!=null)
+			{
+				siteId=(Long) siteIdList.get(0);
+			}
+			
+		}
+		else if(container.getSite()!=null)
+		{
+			siteId=container.getSite().getId();
+		}
+		Collection siteCpCollection = new SiteBizLogic().getRelatedCPWithOnlyId(siteId);
+		
 		final Collection<CollectionProtocol> collProtocol= container.getCollectionProtocolCollection();
 		if(collProtocol!=null&&!collProtocol.isEmpty())
 		{
@@ -1087,6 +1085,10 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 					throw this.getBizLogicException(null,"errors.item.format",errMsg);
 				}
 				collectionProtocol.setId((Long)list.get(0));
+				if(!siteCpCollection.contains(collectionProtocol))
+				{
+					throw this.getBizLogicException(null, "errors.item.invalid", ApplicationProperties.getValue("storageContainer.collectionProtocolTitle"));
+				}
 			}
 		}
 	}

@@ -413,7 +413,32 @@ public class SiteBizLogic extends CatissueDefaultBizLogic implements ISiteBizLog
 		final String privilegeName = Variables.privilegeDetailsMap.get(Constants.ADD_EDIT_SITE);
 		return privilegeName;
 	}
-
+	public Collection<CollectionProtocol> getRelatedCPWithOnlyId(Long siteId) throws BizLogicException
+	{
+		String hql="";
+		
+		Long cp_id=null;
+		
+		Collection<CollectionProtocol> resultList=new ArrayList<CollectionProtocol>();
+		
+		hql="select collectionProtocolCollection.id from edu.wustl.catissuecore.domain.Site where id="+siteId;
+		
+		List<Long> listOfLong = executeQuery(hql);
+		
+		if(!listOfLong.isEmpty() || listOfLong!=null)
+		{
+			for(Long cpId : listOfLong)
+			{
+				CollectionProtocol collectionObject=new CollectionProtocol();
+				
+				collectionObject.setId(new Long(cpId));
+				
+				resultList.add(collectionObject);
+			}
+		}
+		return resultList;
+	}
+	
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bizlogic.ISiteBizLogic#getRelatedCPs(java.lang.Long, edu.wustl.dao.DAO)
 	 */
