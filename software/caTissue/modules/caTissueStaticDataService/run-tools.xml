@@ -1,9 +1,19 @@
 <project name="run-tools file" basedir="." default="runClient">
      <property name="service.url" value="https://127.0.0.1:9443/wsrf/services/cagrid/Catissue_cacore" />
 
+    <condition property="isUnix" value="true">
+        <or>
+            <os family="unix" />
+            <os family="mac" />
+        </or>
+    </condition>
+    <condition property="isWindows" value="true">
+        <os family="windows" />
+    </condition>
+
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
-            <pathelement location="./lib/ant-contrib.jar"/>
+            <pathelement location="${basedir}/lib/ant-contrib.jar"/>
         </classpath>
     </taskdef>
 
@@ -193,6 +203,16 @@
 
     <!--START   Writable API targets-->
 
+    <target name="CreateChemotherapy" depends="init" description="Run the sample Client">
+        <echo message="Connecting to service: ${service.url}"/>
+        <java failonerror="true" classname="edu.wustl.catissuecore.domain.client.WritableAPIClient" classpathref="run.classpath" fork="yes">
+            <jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}"/>
+            <arg value="-url"/>
+            <arg value="${service.url}"/>
+            <arg value="CreateChemotherapy"/>
+        </java>
+    </target>
+
     <target name="CreateParticipant" depends="init" description="Run the sample Client">
         <echo message="Connecting to service: ${service.url}"/>
         <java failonerror="true" classname="edu.wustl.catissuecore.domain.client.WritableAPIClient" classpathref="run.classpath" fork="yes">
@@ -365,6 +385,22 @@
             <arg value="./src/edu/wustl/catissuecore/domain/genericCustomConverterSets.properties"/>
         </java>
 
+    </target>
+
+    <target name="exUnix" unless="isWindows">
+        <exec dir="../DECodeGen/" executable="execute.sh">
+            <arg value="os"/>
+            <arg value="Unix"/>
+        </exec>
+    </target>
+
+    <target name="ex" unless="isUnix" depends="exUnix">
+        <exec dir="../DECodeGen/" executable="cmd">
+            <arg value="/c"/>
+            <arg value="execute.bat"/>
+            <arg value="os"/>
+            <arg value="Windows"/>
+        </exec>
     </target>
 
     <!-- END -->
