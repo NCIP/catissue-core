@@ -388,7 +388,11 @@
     </target>
 
     <target name="exUnix" unless="isWindows">
-        <exec dir="../DECodeGen/" executable="execute.sh">
+        <exec dir="../DECodeGen/" executable="chmod">
+            <arg value="755"/>
+            <arg value="./execute.sh"/>
+        </exec>
+        <exec dir="../DECodeGen/" executable="./execute.sh">
             <arg value="os"/>
             <arg value="Unix"/>
         </exec>
