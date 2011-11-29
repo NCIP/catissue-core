@@ -290,26 +290,30 @@
         </copy>
 
         <!-- XSDs IMPORT -->
-        <foreach target="importXSDs" param="fullJarFileName" inheritall="true">
+        <foreach target="-importXSDs" param="fullJarFileName" inheritall="true">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
                 <include name="**/*-schema.jar"/>
             </fileset>
         </foreach>
 
         <!-- XMIs MERGE-->
+<!--
         <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="doMergeXMIs" dir="../DECodeGen/">
             <property name="xmiFolder" value="${basedir}/de_codegen/xmi" />
             <property name="outputXMLFile" value="${basedir}/de_codegen/xmi/mergeResult.xml" />
         </ant>
+-->
         <!-- OVERWRITE ./etc/catissue_cacore_domainModel.xml -->
-        <copy file="${basedir}/de_codegen/xmi/mergeResult.xml" tofile="${basedir}/etc/catissue_cacore_domainModel.xml" />
+        <!--<copy file="${basedir}/de_codegen/xmi/mergeResult.xml" tofile="${basedir}/etc/catissue_cacore_domainModel.xml" />-->
 
         <!-- DOZER MERGE -->
-        <foreach target="processDozer" param="fullFileName" inheritall="true">
+<!--
+        <foreach target="-processDozer" param="fullFileName" inheritall="true">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
                 <include name="**/*-dozer-files.jar"/>
             </fileset>
         </foreach>
+-->
 
 <!--
         &lt;!&ndash; CLEAN UP &ndash;&gt;
@@ -325,20 +329,23 @@
 -->
     </target>
 
-    <target name="importXSDs">
+    <target name="-importXSDs">
         <basename property="jarfilename" file="${fullJarFileName}"/>
         <echo message="Processing XSD folder: ${jarfilename} "/>
         <unjar src="${fullJarFileName}" dest="./temp/${jarfilename}" />
-        <foreach target="importXSD" param="fullFileName" inheritall="true">
+        <foreach target="-importXSD" param="fullFileName" inheritall="true">
             <fileset dir="./temp/${jarfilename}" casesensitive="yes">
                 <include name="**/*.xsd"/>
             </fileset>
         </foreach>
     </target>
 
-    <target name="importXSD">
+    <target name="-importXSD">
         <basename property="filename" file="${fullFileName}"/>
         <echo message="Processing XSD file: ${filename} "/>
+        <antcall target="ex">
+            <param name="xsdFile" value="${fullFileName}" />
+        </antcall>
 <!--
         <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="doImportXSD" dir="../DECodeGen/">
             <property name="xsdFile" value="${fullFileName}" />
@@ -346,7 +353,7 @@
 -->
     </target>
 
-    <target name="processDozer">
+    <target name="-processDozer">
         <basename property="filename" file="${fullFileName}"/>
         <echo message="Processing: ${filename} "/>
         <mkdir dir="./temp/${filename}" />
@@ -395,15 +402,18 @@
         <exec dir="../DECodeGen/" executable="./execute.sh">
             <arg value="os"/>
             <arg value="Unix"/>
+            <arg value="${xsdFile}"/>
         </exec>
     </target>
 
     <target name="ex" unless="isUnix" depends="exUnix">
+        <echo message="FILE: ${xsdFile}" />
         <exec dir="../DECodeGen/" executable="cmd">
             <arg value="/c"/>
             <arg value="execute.bat"/>
             <arg value="os"/>
             <arg value="Windows"/>
+            <arg value="${xsdFile}"/>
         </exec>
     </target>
 
