@@ -74,22 +74,6 @@
 			return theHeight;
 		}
 
-		function checkUncheckAllCheckBoxes()
-		{
-			var skipAllEvents = document.getElementById('skipAllEvents').checked;
-			var iframeList = document.getElementsByTagName('iframe');
-			for(j =0;j<iframeList.length;j++)
-			{
-				var containerId= iframeList[j].name
-				var oDoc = iframeList[j].contentWindow || iframeList[j].contentDocument;
-				if (oDoc.document) {
-					oDoc = oDoc.document;
-				}
-				oDoc.getElementById('isSkipEvent').checked= skipAllEvents;
-				oDoc.getElementById('isSkipEvent').value= skipAllEvents;
-			}
-		}
-
 		var globalListSize=0;
 		function calculatePageHtForNonIEBrowser(listsize)
 		{
@@ -152,7 +136,7 @@
 				}
 				
 				var rowId = "showHideCurrentForm_"+iframeList[j].id;
-				if(oDoc.getElementById("isSkipEvent") != null && !oDoc.getElementById("isSkipEvent").checked && oDoc.getElementById(rowId)!= null)
+				if(oDoc.getElementById("eventPerformed") != null && !oDoc.getElementById("eventPerformed").checked && oDoc.getElementById(rowId)!= null)
 				{
 					iframeList[j].style.height = "35px"
 					allFrameHeights = allFrameHeights + 35;
@@ -215,7 +199,8 @@ if(sppEventDataList!=null && !sppEventDataList.isEmpty())
 	var formIframe = document.createElement("iframe");
 	formIframe.id = formName;
 	formIframe.name= formName;
-	formIframe.style.border ="0";
+	formIframe.style.border ="0px";
+	formIframe.frameBorder="0";
 	formIframe.style.width ="100%";
 	formIframe.style.height ="<%=height%>";
 	formIframe.scrolling="no";

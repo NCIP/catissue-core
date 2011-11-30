@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.processingprocedure.Action;
 import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.catissuecore.domain.processingprocedure.DefaultAction;
+import edu.wustl.catissuecore.processor.SPPEventProcessor;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.SpecimenEventsUtility;
@@ -243,7 +244,7 @@ public class DynamicEventAction extends BaseAction
 					Specimen specimen = (Specimen) specimentList.get(0);
 					if(specimen.getProcessingSPPApplication() != null)
 					{
-						for(ActionApplication actionApplication : specimen.getProcessingSPPApplication().getSppActionApplicationCollection())
+						for(ActionApplication actionApplication : new SPPEventProcessor().getFilteredActionApplication(specimen.getProcessingSPPApplication().getSppActionApplicationCollection()))
 						{
 							if(actionApplication.getId().toString().equals(actionApplicationId))
 							{

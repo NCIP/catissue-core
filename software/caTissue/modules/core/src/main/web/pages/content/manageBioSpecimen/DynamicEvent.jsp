@@ -59,7 +59,7 @@ function onIFrameLoad(iframeElement) {
 	}
  }
 
-function showHideCurrentFormDiv(currentFormId, currentElement, formContextId)
+function showHideCurrentFormDiv(currentFormId, currentElement, formContextId, isDataEntryPerformed)
 {
 	var currentIframeHt = Math.round(parent.document.getElementById(currentFormId).value);
 	var currentSPPDiv = parent.document.getElementById("sppForms");
@@ -78,39 +78,49 @@ function showHideCurrentFormDiv(currentFormId, currentElement, formContextId)
 	}
 	else
 	{
-		document.getElementById("showHideCurrentForm_"+formContextId).style.display = "none"
-		parent.document.getElementById(formContextId).style.height = "35px";
-		var tmpHt = currentSPPDivHt - currentIframeHt + 35;
-		currentSPPDiv.style.height =  tmpHt+"px";
+		if(isDataEntryPerformed)
+		{
+			var disableRecord = confirm("Note: This action will be deleted. Click OK to continue.");
+			if(disableRecord)
+			{
+				document.getElementById("showHideCurrentForm_"+formContextId).style.display = "none"
+				parent.document.getElementById(formContextId).style.height = "35px";
+				var tmpHt = currentSPPDivHt - currentIframeHt + 35;
+				currentSPPDiv.style.height =  tmpHt+"px";
+			}
+			else
+			{
+				currentElement.checked ="true";
+			}
+		}
+		else
+		{
+			var disableWarnMsg = confirm("Note: This action will not be recorded. Click OK to continue.");
+			if(disableWarnMsg)
+			{
+				document.getElementById("showHideCurrentForm_"+formContextId).style.display = "none"
+				parent.document.getElementById(formContextId).style.height = "35px";
+				var tmpHt = currentSPPDivHt - currentIframeHt + 35;
+				currentSPPDiv.style.height =  tmpHt+"px";
+			}
+			else
+			{
+				currentElement.checked ="true";
+			}
+		}
+		
 	}
 }
 
 function setSkipEventValue(event)
 {
-	event.value=event.checked;
-	if(!event.checked && parent.document.getElementById("skipAllEvents") != null)
+	if(event.checked)
 	{
-		parent.document.getElementById("skipAllEvents").checked=false;
+		event.value= true;
 	}
-	else if(parent.document.getElementById("skipAllEvents") != null)
+	else
 	{
-		var iframeList = parent.document.getElementsByTagName('iframe');
-		var allCheckBoxesChecked = true;
-		for(j =0;j<iframeList.length;j++)
-		{
-			var oDoc = iframeList[j].contentWindow || iframeList[j].contentDocument;
-			if (oDoc.document) {
-				oDoc = oDoc.document;
-			}
-			if(!oDoc.getElementById('isSkipEvent').checked)
-			{
-				allCheckBoxesChecked = false;
-			}
-		}
-		if(allCheckBoxesChecked)
-		{
-			parent.document.getElementById("skipAllEvents").checked=true;
-		}
+		event.value= false;
 	}
 
 }
@@ -217,19 +227,21 @@ function submitButton()
 						<c:choose>
 							<c:when test='${param.displayEventsWithDefaultValues == "true"}'>
 								<tr class="tr_bg_blue1">
-									<td  align="left" class="tr_bg_blue1" width="98%"><span class="blue_ar_b"><input align="middle" type="checkbox" id="isSkipEvent" name="isSkipEvent" checked="true" onclick="setSkipEventValue(this)" value="true"/>&nbsp;${requestScope.formDisplayName}</span></td>
+									<td  align="left" class="tr_bg_blue1" width="98%"><span class="blue_ar_b"><input align="middle" type="checkbox" id="eventPerformed" name="eventPerformed" checked="true" onclick="showHideCurrentFormDiv('showHideFormHt_${param.formContextId}', this, '${param.formContextId}', false);setSkipEventValue(this)" value="true"/>&nbsp;${requestScope.formDisplayName}</span></td>
 								</tr>
 							</c:when>
 							<c:otherwise>
 								<tr class="tr_bg_blue1">
-									<td  align="left" class="tr_bg_blue1" width="98%"><span class="blue_ar_b"><input align="middle" type="checkbox" name="isSkipEvent" checked="true" disabled="disabled" value="true"/>&nbsp;${requestScope.formDisplayName}</span></td>
+								<!-- disable event whose data entry is performed. -->	
+									<td  align="left" class="tr_bg_blue1" width="98%"><span class="blue_ar_b"><input align="middle" type="checkbox" id="eventPerformed" name="eventPerformed" checked="true" onclick="showHideCurrentFormDiv('showHideFormHt_${param.formContextId}', this, '${param.formContextId}', true);setSkipEventValue(this);" value="true"/>&nbsp;${requestScope.formDisplayName}</span></td>
 								</tr>
 							</c:otherwise>
 						</c:choose>
 					</c:when>
 					<c:otherwise>
+						<!-- SPP data entry not performed. -->	
 						<tr class="tr_bg_blue1">
-							<td  align="left" class="tr_bg_blue1" width="98%"><span class="blue_ar_b"><input align="middle" type="checkbox" id="isSkipEvent" name="isSkipEvent" onclick="showHideCurrentFormDiv('showHideFormHt_${param.formContextId}', this, '${param.formContextId}');setSkipEventValue(this)" value="false"/>&nbsp;${requestScope.formDisplayName}</span></td>
+							<td  align="left" class="tr_bg_blue1" width="98%"><span class="blue_ar_b"><input align="middle" type="checkbox" id="eventPerformed" name="eventPerformed" onclick="showHideCurrentFormDiv('showHideFormHt_${param.formContextId}', this, '${param.formContextId}', false);setSkipEventValue(this);" value="false"/>&nbsp;${requestScope.formDisplayName}</span></td>
 						</tr>
 					</c:otherwise>
 				</c:choose>
@@ -243,14 +255,7 @@ function submitButton()
         <tr>
           <td colspan="4" class="showhide1"></td>
         </tr>
-		<c:choose>
-			<c:when test='${param.isSPPDataEntryDone == "false"}'>
-				<tr height="100%" id="showHideCurrentForm_${param.formContextId}">
-			</c:when>
-			<c:otherwise>
-				<tr height="100%">
-			</c:otherwise>
-		</c:choose>
+		<tr height="100%" id="showHideCurrentForm_${param.formContextId}">
           <td colspan="4" class="showhide" height="100%"><table height="100%" width="100%" border="0" cellpadding="3" cellspacing="0">
                 <tr height="10%" >
                   <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>

@@ -156,7 +156,7 @@ public class SaveDefaultValueForSPPEventsAction extends SecureAction
 		}
 		//validate DE data
 		List<String> listOfError = sppEventProcessor.validateDEData(httpMockrequest,
-				formContextCollection);
+				formContextParameterMap);
 		return listOfError;
 	}
 

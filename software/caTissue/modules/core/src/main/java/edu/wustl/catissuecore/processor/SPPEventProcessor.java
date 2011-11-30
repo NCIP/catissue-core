@@ -171,13 +171,31 @@ public class SPPEventProcessor
 	{
 		List<Map<String, Object>> sppEventData = new ArrayList<Map<String, Object>>();
 		//fetch all SPP Action Applications for the respective SPP Application
-		Collection<ActionApplication> actionApplicationCollection = sppApplication
-				.getSppActionApplicationCollection();
+		Collection<ActionApplication> actionApplicationCollection = getFilteredActionApplication(sppApplication
+				.getSppActionApplicationCollection());
 		if (actionApplicationCollection != null)
 		{
 			generatSPPEventData(sppEventData, actionApplicationCollection, actionCollection);
 		}
 		return sppEventData;
+	}
+	
+	/**
+	 * @param actionApplicationCollection
+	 * @return
+	 */
+	public Collection<ActionApplication> getFilteredActionApplication(Collection<ActionApplication> actionApplicationCollection)
+	{
+		Collection<ActionApplication> filteredActionApplication = new HashSet<ActionApplication>();
+		for(ActionApplication actionApplication : actionApplicationCollection)
+		{
+			if(actionApplication.getApplicationRecordEntry()!=null 
+					&& Constants.ACTIVITY_STATUS_VALUES[1].equals(actionApplication.getApplicationRecordEntry().getActivityStatus()))
+			{
+				filteredActionApplication.add(actionApplication);
+			}
+		}
+		return filteredActionApplication;		
 	}
 
 	/**
@@ -204,7 +222,7 @@ public class SPPEventProcessor
 			{
 				Long formContextId = actionApplication.getApplicationRecordEntry().getFormContext().getId();
 				//if action is present in actionApplication collection than data entry is performed.
-				if(action.getId().equals(formContextId))
+				if(action.getId().equals(formContextId) && Constants.ACTIVITY_STATUS_VALUES[1].equals(actionApplication.getApplicationRecordEntry().getActivityStatus()))
 				{
 					isDataPresent = true;
 					sppEventData.add(generateRowDataMap(actionApplication.getId(), action.getContainerId(),
@@ -475,18 +493,22 @@ public class SPPEventProcessor
 	 * @throws Exception the exception
 	 */
 	public List<String> validateDEData(HttpServletRequest request,
-			Set<AbstractFormContext> formContextCollection) throws Exception
+			Map<AbstractFormContext, Map<String, Object>> formContextParameterMap) throws Exception
 	{
 		List<String> listOfError = new ArrayList<String>();
 		ApplyDataEntryFormProcessor processor = ApplyDataEntryFormProcessor.getInstance();
 		Map<AbstractFormContext, Map<BaseAbstractAttributeInterface, Object>> contextDataValueMap = processor
-				.generateAttributeValueMap(formContextCollection, request);
+				.generateAttributeValueMap(formContextParameterMap.keySet(), request);
 		for (AbstractFormContext formContext : contextDataValueMap.keySet())
 		{
-			ContainerInterface containerInterface = DynamicExtensionsUtility
+			if(formContextParameterMap.get(formContext).get("eventPerformed")!=null 
+					&& Boolean.parseBoolean((String) formContextParameterMap.get(formContext).get("eventPerformed")))
+			{
+				ContainerInterface containerInterface = DynamicExtensionsUtility
 					.getClonedContainerFromCache(formContext.getContainerId().toString());
-			ValidatorUtil.validateEntity(contextDataValueMap.get(formContext), listOfError,
+				ValidatorUtil.validateEntity(contextDataValueMap.get(formContext), listOfError,
 					containerInterface, false);
+			}
 		}
 		if (!listOfError.isEmpty())
 		{
@@ -612,11 +634,15 @@ public class SPPEventProcessor
 		Map<AbstractFormContext, Long> contextRecordIdMap = new HashMap<AbstractFormContext, Long>();
 		for (AbstractFormContext formContext : formContextCollection)
 		{
-			Map<String, Object> staticParametersList = formContextParameterMap.get(formContext);
-			ActionApplication actionApplication = getActionApplForSPPEvent(
-					actionApplicationCollection, formContext.getId());
-			updateActionApplication(actionAppBizLogic, contextRecordIdMap, formContext,
-					staticParametersList, actionApplication);
+			if(formContextParameterMap.get(formContext).get("eventPerformed")!=null 
+					&& Boolean.parseBoolean((String) formContextParameterMap.get(formContext).get("eventPerformed")))
+			{
+				Map<String, Object> staticParametersList = formContextParameterMap.get(formContext);
+				ActionApplication actionApplication = getActionApplForSPPEvent(
+						actionApplicationCollection, formContext.getId());
+				updateActionApplication(actionAppBizLogic, contextRecordIdMap, formContext,
+						staticParametersList, actionApplication);
+			}
 		}
 		return contextRecordIdMap;
 	}
@@ -642,7 +668,8 @@ public class SPPEventProcessor
 			throws ApplicationException, DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, SQLException, BizLogicException
 	{
-		if (actionApplication != null)
+		if (actionApplication != null && Constants.ACTIVITY_STATUS_VALUES[1].equals(actionApplication
+				.getApplicationRecordEntry().getActivityStatus()))
 		{
 			//populate recordId Map for given form ContextCollection
 			Long recordIdentifier = SpecimenEventsUtility.getRecordIdentifier(actionApplication

@@ -37,6 +37,7 @@ import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
 import edu.wustl.catissuecore.domain.ISPPBizlogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
 import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
 import edu.wustl.catissuecore.processor.SPPEventProcessor;
@@ -97,8 +98,6 @@ public class SaveSPPEventAction extends SecureAction
 		formContextParameterMap = sppEventProcessor.populateFormContextParmaterMap(request
 				.getParameterMap());
 
-		updateSPPActionForSkippedEvent();
-
 		formContextCollection.clear();
 		formContextCollection.addAll(formContextParameterMap.keySet());
 
@@ -106,7 +105,7 @@ public class SaveSPPEventAction extends SecureAction
 		boolean isSCG = isSpecimenCollectionGroupObject(request);
 
 		//validate DE data
-		List<String> listOfError = sppEventProcessor.validateDEData(request, formContextCollection);
+		List<String> listOfError = sppEventProcessor.validateDEData(request, formContextParameterMap);
 		//If errorList is empty
 		if (listOfError.isEmpty())
 		{
@@ -190,8 +189,9 @@ public class SaveSPPEventAction extends SecureAction
 			AbstractFormContext formContext = formContextIterator.next();
 			Map<String, Object> staticParameters = formContextParameterMap.get(formContext);
 
-			if(staticParameters.get("isSkipEvent")!=null && !Boolean.parseBoolean((String) staticParameters.get("isSkipEvent")))
+			if(staticParameters.get(Constants.EVENT_PERFORMED)!=null && !Boolean.parseBoolean((String) staticParameters.get(Constants.EVENT_PERFORMED)))
 			{
+				formContextCollection.remove(formContext);
 				formContextIterator.remove();
 			}
 		}
@@ -287,8 +287,8 @@ public class SaveSPPEventAction extends SecureAction
 			DynamicExtensionsApplicationException, SQLException, FileNotFoundException, IOException
 	{
 		//retrieves ActionApplication collection for a given SPPApplication
-		Collection<ActionApplication> actionApplicationCollection = sppApplication
-				.getSppActionApplicationCollection();
+		Collection<ActionApplication> actionApplicationCollection = sppEventProcessor.getFilteredActionApplication(sppApplication
+				.getSppActionApplicationCollection());
 		//Edit case
 		Map<AbstractFormContext, Long> contextRecordIdMap = sppEventProcessor
 				.editActionApplicationCollection(actionAppBizLogic,
@@ -297,30 +297,51 @@ public class SaveSPPEventAction extends SecureAction
 		//For each from Context collection update DE data
 		Map<AbstractFormContext, Long> recordIdMap = sppEventProcessor.insertUpdateDEDataForSPPEvents(request, contextRecordIdMap,
 				formContextCollection);
+		IBizLogic defaultBizLogic = new CatissueDefaultBizLogic();
 		for(AbstractFormContext context : recordIdMap.keySet())
 		{
 			if(!contextRecordIdMap.containsKey(context))
 			{
-				Map<String, Object> staticParametersList = formContextParameterMap.get(context);
-				
-				ActionApplication actionApplication = sppEventProcessor.associateRecEntryWithActionApp(actionAppBizLogic,
-						sppBizlogicObject, recordIdMap, sppApplication, context,
-						staticParametersList);
-				if(actionApplication.getId()==null)
+				if(formContextParameterMap.get(context).get(Constants.EVENT_PERFORMED)!=null 
+					&& !Boolean.parseBoolean((String) formContextParameterMap.get(context).get(Constants.EVENT_PERFORMED)))
 				{
-					actionApplication.setSppApplication(sppApplication);
-					actionAppBizLogic.insert(actionApplication);
+					for (ActionApplication actionApplication : actionApplicationCollection)
+					{
+						if (actionApplication.getApplicationRecordEntry().getFormContext().getId().equals(
+								context.getId()))
+						{
+							ObjectCloner cloner = new ObjectCloner();
+							ActionApplicationRecordEntry clonedActionApplicationRecEntry = cloner.clone(actionApplication.getApplicationRecordEntry());
+							
+							actionApplication.getApplicationRecordEntry().setActivityStatus(Constants.ACTIVITY_STATUS_VALUES[3]);
+							defaultBizLogic.update(actionApplication.getApplicationRecordEntry(), clonedActionApplicationRecEntry, sessionLoginInfo);
+							break;
+							
+						}
+					}
 				}
-				
-				actionApplicationCollection.add(actionApplication);
-				
-				ObjectCloner cloner = new ObjectCloner();
-				SpecimenProcessingProcedureApplication clonedSPPApplication = cloner.clone(sppApplication);
-
-				sppApplication.setSpp(sppEventProcessor.getSPPByName(sppName));
-				sppApplication.setSppActionApplicationCollection(actionApplicationCollection);
-				IBizLogic defaultBizLogic = new CatissueDefaultBizLogic();
-				defaultBizLogic.update(sppApplication, clonedSPPApplication, sessionLoginInfo);
+				else //disable record entry
+				{
+					Map<String, Object> staticParametersList = formContextParameterMap.get(context);
+					
+					ActionApplication actionApplication = sppEventProcessor.associateRecEntryWithActionApp(actionAppBizLogic,
+							sppBizlogicObject, recordIdMap, sppApplication, context,
+							staticParametersList);
+					if(actionApplication.getId()==null)
+					{
+						actionApplication.setSppApplication(sppApplication);
+						actionAppBizLogic.insert(actionApplication);
+					}
+					
+					actionApplicationCollection.add(actionApplication);
+					
+					ObjectCloner cloner = new ObjectCloner();
+					SpecimenProcessingProcedureApplication clonedSPPApplication = cloner.clone(sppApplication);
+	
+					sppApplication.setSpp(sppEventProcessor.getSPPByName(sppName));
+					sppApplication.setSppActionApplicationCollection(actionApplicationCollection);
+					defaultBizLogic.update(sppApplication, clonedSPPApplication, sessionLoginInfo);
+				}
 			}
 		}
 		return true;
@@ -364,6 +385,7 @@ public class SaveSPPEventAction extends SecureAction
 			DynamicExtensionsSystemException, IOException, DynamicExtensionsApplicationException,
 			SQLException, BizLogicException, ApplicationException
 	{
+		updateSPPActionForSkippedEvent();
 		//Insert data for SPP events.
 		Map<AbstractFormContext, Long> contextVsRecordIdMap = sppEventProcessor
 				.insertUpdateDEDataForSPPEvents(request, new HashMap<AbstractFormContext, Long>(),

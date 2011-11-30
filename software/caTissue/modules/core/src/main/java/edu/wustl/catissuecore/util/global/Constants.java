@@ -5991,4 +5991,6 @@ public class Constants
 	public static final String IS_SPP_DATA_ENTRY_DONE = "isSPPDataEntryDone";
 	
 	public static final String DISPLAY_EVENTS_WITH_DEFAULT_VALUES = "displayEventsWithDefaultValues";
+	
+	public static final String EVENT_PERFORMED = "eventPerformed";
 }

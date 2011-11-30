@@ -45,6 +45,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication;
 import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
+import edu.wustl.catissuecore.processor.SPPEventProcessor;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -228,8 +229,8 @@ public class ListSpecimenEventParametersAction extends SecureAction
 					specimenLabel = specimen.getLabel();
 				}
 				// Setting Specimen Event Parameters' Grid
-				final Collection<ActionApplication> dynamicEventCollection = this
-						.getDynamicEventColl(specimenId, bizLogic);
+				final Collection<ActionApplication> dynamicEventCollection = new SPPEventProcessor().getFilteredActionApplication(this
+						.getDynamicEventColl(specimenId, bizLogic));
 				/**
 				 * Name: Chetan Patil Reviewer: Sachin Lale Bug ID: Bug#4180
 				 * Patch ID: Bug#4180_1 Description: The values of event
