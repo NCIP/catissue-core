@@ -68,7 +68,10 @@ public class MultipleXMIsToXMLConverter {
 	public void convert() {
 		FileWriter writer = null;
 		try {
+            System.out.println("Processing files:");
+
 			for (File xmiFile : xmiFiles) {
+                System.out.println("\t" + xmiFile.getAbsolutePath());
 				XMIParser parser = new XMIParser("catissue", "2.0");
 				DomainModel model = null;
 				model = parser.parse(xmiFile, XmiFileType.SDK_40_EA);
@@ -79,6 +82,8 @@ public class MultipleXMIsToXMLConverter {
 					mergeIntoModel(model);
 				}
 			}
+
+            System.out.println("Processing result: " + domainModelFile.getAbsolutePath() + "\n");
 
 			writer = new FileWriter(domainModelFile);
 			MetadataUtils.serializeDomainModel(mergedModel, writer);
