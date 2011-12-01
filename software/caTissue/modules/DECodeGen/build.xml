@@ -35,9 +35,19 @@
         <jar basedir="${target.dir}/classes" destfile="${dist.dir}/de.ds.codegen.jar" />
     </target>
 
-    <target name="all" depends="init, compile, jar, displayUsage"/>
+    <target name="all" depends="init, compile, jar, -displayUsage"/>
 
-    <target name="displayUsage">
+    <target name="-prepareArtifacts">
+        <zip destfile="${basedir}/introduce.artifacts.zip">
+            <fileset dir="./"><include name="schema/**" /></fileset>
+            <fileset dir="./"><include name="extensions/**" /></fileset>
+            <fileset dir="./"><include name="conf/**" /></fileset>
+            <fileset dir="./"><include name="ext/**" /></fileset>
+            <fileset dir="./"><include name="log/**" /></fileset>
+        </zip>
+    </target>
+
+    <target name="-displayUsage">
         <echo message="=================================="/>
         <echo message="  USAGE:"/>
         <echo message="  INVOKE CLASS edu.wustl.catissuecore.IntroduceFacade "/>
@@ -54,7 +64,7 @@
         <echo message="=================================="/>
     </target>
 
-    <target name="doMergeXMIs">
+    <target name="-doMergeXMIs">
         <java failonerror="true" classname="edu.wustl.catissuecore.MultipleXMIsToXMLConverter" fork="yes" dir="${basedir}">
             <classpath><fileset dir="${dist.dir}"><include name="*.jar" /></fileset></classpath>
             <classpath refid="cp" />
