@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BulkOperationMetadata>
+		<BulkOperationClass
+			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+					relationShipType="main" cardinality="1"	roleName="collectionProtocolRegistration" templateName="cprWithMultSCG" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
+			<referenceAssociationCollection
+				className="edu.wustl.catissuecore.domain.CollectionProtocol"
+				relationShipType="association" templateName="cprWithMultSCG" cardinality="1" roleName="collectionProtocol" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
+				<attributeCollection name="id" csvColumnName="CP ID" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+			</referenceAssociationCollection>
+			<referenceAssociationCollection
+				className="edu.wustl.catissuecore.domain.Participant"
+				relationShipType="association" templateName="cprWithMultSCG" cardinality="1" roleName="participant" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
+				<attributeCollection name="id" csvColumnName="Participant ID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+			</referenceAssociationCollection>
+			<attributeCollection name="protocolParticipantIdentifier" csvColumnName="PPI" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+			<attributeCollection name="registrationDate" csvColumnName="Registration Date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
+				<containmentAssociationCollection className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+						relationShipType="containment" cardinality="*"
+						roleName="specimenCollectionGroupCollection" templateName="cprWithMultSCG" maxNoOfRecords="2" parentRoleName="collectionProtocolRegistration" batchSize="10">
+						<referenceAssociationCollection
+							className="edu.wustl.catissuecore.domain.Site"
+							relationShipType="association" cardinality="1" roleName="specimenCollectionSite"
+							templateName="cprWithMultSCG"  maxNoOfRecords="1" parentRoleName="" batchSize="10">
+								<attributeCollection name="id" csvColumnName="Collection Site" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+						</referenceAssociationCollection>
+						<referenceAssociationCollection
+							className="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
+							relationShipType="association" cardinality="1" roleName="collectionProtocolEvent"
+							templateName="cprWithMultSCG" maxNoOfRecords="1" parentRoleName="" batchSize="10">
+							<attributeCollection name="id" csvColumnName="Study Calendar Event Point Label" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
+						</referenceAssociationCollection>
+						
+						<attributeCollection name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+						<attributeCollection name="clinicalStatus" csvColumnName="Clinical Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+						<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+						<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>						
+						<attributeCollection name="name" csvColumnName="SCG Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+						<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+				</containmentAssociationCollection>
+<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>	
+	</BulkOperationClass>
+</BulkOperationMetadata>
