@@ -1,0 +1,56 @@
+<ns1:ServiceDescription introduceVersion="1.3" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+ <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns3:Service name="ServiceWithBdtBulkDataHandler" namespace="http://bdt.cagrid.org/ServiceWithBdtBDT" packageName="org.cagrid.bdt" xsi:type="ns3:ServiceType">
+   <ns41:Methods xsi:type="ns41:MethodsType" xmlns:ns41="gme://gov.nih.nci.cagrid.introduce/1/Methods">
+    <ns41:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns41:MethodType">
+     <ns41:Output qName="ns42:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns42="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+     <ns41:ImportInformation inputMessage="ns43:GetServiceSecurityMetadataRequest" namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" outputMessage="ns43:GetServiceSecurityMetadataResponse" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl" xmlns:ns43="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity"/>
+     <ns41:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
+    </ns41:Method>
+    <ns41:Method isImported="true" isProvided="true" name="CreateEnumeration" xsi:type="ns41:MethodType">
+     <ns41:Inputs/>
+     <ns41:Output qName="ns44:EnumerationResponseContainer" isArray="false" xmlns:ns44="http://gov.nih.nci.cagrid.enumeration/EnumerationResponseContainer"/>
+     <ns41:Exceptions/>
+     <ns41:ImportInformation fromIntroduce="true" inputMessage="ns45:CreateEnumerationRequest" namespace="http://cagrid.nci.nih.gov/BulkDataHandler" outputMessage="ns45:CreateEnumerationResponse" packageName="gov.nih.nci.cagrid.bdt.stubs" portTypeName="BulkDataHandlerPortType" wsdlFile="./BulkDataHandler.wsdl" xmlns:ns45="http://cagrid.nci.nih.gov/BulkDataHandler"/>
+     <ns41:ProviderInformation providerClass="gov.nih.nci.cagrid.bdt.service.globus.BulkDataHandlerProviderImpl"/>
+    </ns41:Method>
+    <ns41:Method isImported="true" isProvided="true" name="Get" xsi:type="ns41:MethodType">
+     <ns41:Inputs>
+      <ns41:Input qName="ns46:Empty" isArray="false" name="empty" xmlns:ns46="http://www.globus.org/transfer"/>
+     </ns41:Inputs>
+     <ns41:Output qName="ns47:AnyXml" isArray="false" xmlns:ns47="http://www.globus.org/transfer"/>
+     <ns41:Exceptions/>
+     <ns41:ImportInformation fromIntroduce="false" inputMessage="ns48:EmptyMessage" namespace="http://www.globus.org/transfer" outputMessage="ns48:AnyXmlMessage" packageName="org.globus.transfer" portTypeName="Resource" wsdlFile="./transfer_port_type.wsdl" xmlns:ns48="http://www.globus.org/transfer"/>
+     <ns41:ProviderInformation providerClass="gov.nih.nci.cagrid.bdt.service.globus.BulkDataHandlerProviderImpl"/>
+    </ns41:Method>
+    <ns41:Method isImported="true" isProvided="true" name="GetGridFTPURLs" xsi:type="ns41:MethodType">
+     <ns41:Inputs/>
+     <ns41:Output qName="xsd:anyURI" isArray="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+     <ns41:Exceptions/>
+     <ns41:ImportInformation fromIntroduce="true" inputMessage="ns49:GetGridFTPURLsRequest" namespace="http://cagrid.nci.nih.gov/BulkDataHandler" outputMessage="ns49:GetGridFTPURLsResponse" packageName="gov.nih.nci.cagrid.bdt.stubs" portTypeName="BulkDataHandlerPortType" wsdlFile="./BulkDataHandler.wsdl" xmlns:ns49="http://cagrid.nci.nih.gov/BulkDataHandler"/>
+     <ns41:ProviderInformation providerClass="gov.nih.nci.cagrid.bdt.service.globus.BulkDataHandlerProviderImpl"/>
+    </ns41:Method>
+    <ns41:Method isImported="true" isProvided="true" name="Destroy" xsi:type="ns41:MethodType">
+     <ns41:Output qName="void" isArray="false"/>
+     <ns41:ImportInformation fromIntroduce="false" inputMessage="ns50:DestroyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns50:DestroyResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ImmediateResourceTermination" wsdlFile="WS-ResourceLifetime.wsdl" xmlns:ns50="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns41:ProviderInformation providerClass="DestroyProvider"/>
+    </ns41:Method>
+    <ns41:Method isImported="true" isProvided="true" name="SetTerminationTime" xsi:type="ns41:MethodType">
+     <ns41:Output qName="void" isArray="false"/>
+     <ns41:ImportInformation fromIntroduce="false" inputMessage="ns51:SetTerminationTimeRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns51:SetTerminationTimeResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ScheduledResourceTermination" wsdlFile="WS-ResourceLifetime.wsdl" xmlns:ns51="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns41:ProviderInformation providerClass="SetTerminationTimeProvider"/>
+    </ns41:Method>
+   </ns41:Methods>
+   <ns52:ResourcePropertiesList xsi:type="ns52:ResourcePropertiesListType" xmlns:ns52="gme://gov.nih.nci.cagrid.introduce/1/Resources"/>
+   <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
+    <ns3:Custom xsi:type="ns3:Custom"/>
+   </ns3:ResourceFrameworkOptions>
+  </ns3:Service>
+ </ns3:Services>
+ <ns53:Extensions xsi:type="ns53:ExtensionsType" xmlns:ns53="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns53:Extension extensionType="SERVICE" name="bdt" version="1.2" xsi:type="ns53:ExtensionType"/>
+  <ns53:Extension extensionType="SERVICE" name="cagrid_wsEnum" version="1.3" xsi:type="ns53:ExtensionType"/>
+ </ns53:Extensions>
+ <ns55:ServiceProperties xmlns:ns55="gme://gov.nih.nci.cagrid.introduce/1/Property">  
+ </ns55:ServiceProperties>
+</ns1:ServiceDescription>

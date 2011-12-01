@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ServiceConfiguration xmlns="http://www.cagrid.org/1/grape-service-configuration"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ServiceGroupDescription>Authentication Service(s)</ServiceGroupDescription>
+    <Services/>
+</ServiceConfiguration>

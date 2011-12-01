@@ -1,0 +1,7 @@
+<ns1:ExtensionDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.4" xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension"
+ extensionType="DISCOVERY">
+ <ns1:DiscoveryExtensionDescription displayName="Create from XMI" name="sdk_discovery">
+  <ns1:DiscoveryPanelExtension>gov.nih.nci.cagrid.introduce.extensions.sdk.discovery.SDKTypeSelectionComponent</ns1:DiscoveryPanelExtension>
+  <ns1:Properties/>
+ </ns1:DiscoveryExtensionDescription>
+</ns1:ExtensionDescription>

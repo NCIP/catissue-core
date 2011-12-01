@@ -1,0 +1,12 @@
+<ns1:ExtensionDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.4"
+ xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension" extensionType="DISCOVERY">
+ <ns1:DiscoveryExtensionDescription displayName="caDSR" name="caDSR-discovery">
+  <ns1:DiscoveryToolsPanelExtension>org.cagrid.cadsr.portal.discovery.CaDSRTypeDiscoveryComponent</ns1:DiscoveryToolsPanelExtension>
+  <ns1:DiscoveryPanelExtension>org.cagrid.cadsr.portal.discovery.CaDSRTypeSelectionComponent</ns1:DiscoveryPanelExtension>
+  <ns1:Properties>
+   <ns1:Property makeGlobal="true" key="GME_URL" displayName="GME Service URL" description="Global Model Exchange URL" value="https://globalmodelexchange.training.cagrid.org:8443/wsrf/services/cagrid/GlobalModelExchange"/>
+   <ns1:Property makeGlobal="true" key="MMS_URL" displayName="MMS Service URL" description="Metadata Model Service (MMS) URL" value="http://mms.training.cagrid.org:8080/wsrf/services/cagrid/MetadataModelService"/>
+   <ns1:Property makeGlobal="true" key="CADSR_DATA_URL" displayName="caDSR Data Service URL" description="Cancer Data Standards Repository (caDSR) Data Service URL" value="http://cadsr-dataservice.nci.nih.gov:80/wsrf/services/cagrid/CaDSRDataService"/>
+  </ns1:Properties>
+ </ns1:DiscoveryExtensionDescription>
+</ns1:ExtensionDescription>

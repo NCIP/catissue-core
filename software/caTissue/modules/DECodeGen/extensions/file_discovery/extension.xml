@@ -1,0 +1,9 @@
+<ns1:ExtensionDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension" extensionType="DISCOVERY" version="1.4">
+ <ns1:DiscoveryExtensionDescription displayName="File System" name="file_discovery">
+  <ns1:DiscoveryToolsPanelExtension></ns1:DiscoveryToolsPanelExtension>
+  <ns1:DiscoveryPanelExtension>gov.nih.nci.cagrid.introduce.portal.modification.discovery.files.FileTypesSelectionComponent</ns1:DiscoveryPanelExtension>
+  <ns1:Properties>
+  </ns1:Properties>
+ </ns1:DiscoveryExtensionDescription>
+</ns1:ExtensionDescription>
