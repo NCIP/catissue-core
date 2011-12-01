@@ -1,9 +1,0 @@
-<ns1:ExtensionDescription extensionType="AUTHORIZATION" version="1.4" xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension">
-	<ns1:AuthorizationExtensionDescription displayName="Common Security Module" name="csm_auth">
-		<ns1:MethodAuthorizationPanel>org.cagrid.csm.authorization.extension.gui.MethodAuthorizationPanel</ns1:MethodAuthorizationPanel>
-		<ns1:ServiceAuthorizationPanel>org.cagrid.csm.authorization.extension.gui.ServiceAuthorizationPanel</ns1:ServiceAuthorizationPanel>
-		<ns1:AuthorizationExtensionManager>org.cagrid.csm.authorization.extension.sync.CSMAuthorizationManager</ns1:AuthorizationExtensionManager>
-		<ns1:Properties>
-		</ns1:Properties>
-	</ns1:AuthorizationExtensionDescription>
-</ns1:ExtensionDescription>

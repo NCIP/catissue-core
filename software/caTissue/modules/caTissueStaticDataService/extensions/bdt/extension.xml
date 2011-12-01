@@ -1,6 +1,0 @@
-<ns1:ExtensionDescription extensionType="SERVICE" version="1.2"
-    xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension">
-    <ns1:ServiceExtensionDescription displayName="Bulk Data Transfer" name="bdt" isDeprecated="true" deprecatedDescription="BDT is no longer supported by caGrid, please migrate to the Transfer extension" shouldBeRemoved="true">
-        <ns1:ServiceExtensionRemover>gov.nih.nci.cagrid.bdt.extension.BDTExtensionRemover</ns1:ServiceExtensionRemover>
-    </ns1:ServiceExtensionDescription>
-</ns1:ExtensionDescription>
