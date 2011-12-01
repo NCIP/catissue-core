@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ServiceConfiguration xmlns="http://www.cagrid.org/1/grape-service-configuration"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ServiceGroupDescription>Dorian</ServiceGroupDescription>
+    <Services>
+        <ServiceDescriptor>
+            <DisplayName>Training</DisplayName>
+            <ServiceURL>https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian</ServiceURL>
+            <ServiceIdentity>/O=caBIG/OU=caGrid/OU=Training/OU=Services/CN=dorian.training.cagrid.org</ServiceIdentity>
+        </ServiceDescriptor>
+    </Services>
+</ServiceConfiguration>

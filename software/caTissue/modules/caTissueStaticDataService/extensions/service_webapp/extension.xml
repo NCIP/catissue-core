@@ -1,0 +1,7 @@
+<ns1:ExtensionDescription extensionType="SERVICE" version="1.4" xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension">
+    <ns1:ServiceExtensionDescription displayName="Service Web Application" name="service_webapp">
+        <ns1:CreationPostProcessor>org.cagrid.services.webapp.extension.WebAppExtensionCreationPostProcessor</ns1:CreationPostProcessor>
+        <ns1:Properties> 
+        </ns1:Properties>
+    </ns1:ServiceExtensionDescription>
+</ns1:ExtensionDescription>

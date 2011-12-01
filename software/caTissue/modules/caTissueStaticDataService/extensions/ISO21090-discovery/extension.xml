@@ -1,0 +1,13 @@
+<ns1:ExtensionDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.4"
+ xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension" extensionType="DISCOVERY">
+ <ns1:DiscoveryExtensionDescription displayName="ISO21090" name="ISO21090-discovery">
+  <ns1:DiscoveryPanelExtension>org.cagrid.iso21090.portal.discovery.ISO21090TypeSelectionComponent</ns1:DiscoveryPanelExtension>
+   <ns1:Properties>
+   	<ns1:Property key="ISO21090_DATATYPES_FILENAME" displayName="ISO 21090 Datatypes Schema Filename" description="The name of the file containing the ISO 21090 datatypes" value="ISO_datatypes_Narrative.xsd"/>
+   	<ns1:Property key="ISO21090_EXTENSION_NAMESPACE" displayName="ISO 21090 Datatypes NCI Extension Namespace" description="The ISO 21090 NCI Extension Namespace" value="uri:iso.org:21090"/>
+   	<ns1:Property key="ISO21090_EXTENSION_PACKAGE" displayName="ISO 21090 Datatypes NCI Extension Java Package" description="The Java package name to use for the ISO 21090 NCI Extension Namespace" value="org.iso._21090"/>
+   	<ns1:Property key="ISO21090_EXTENSION_FILENAME" displayName="ISO 21090 Datatypes NCI Extension Schema Filename" description="The name of the file containing the ISO 21090 datatypes NCI extensions" value="ISO_extensions.xsd"/>
+   	<ns1:Property key="ISO21090_INT_ELEMENT_NAME" displayName="ISO 21090 Datatypes Extension Schema INT Element Name" description="The name of the schema element that has type INT" value="Int"/>
+  </ns1:Properties>
+ </ns1:DiscoveryExtensionDescription>
+</ns1:ExtensionDescription>

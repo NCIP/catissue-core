@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+		excluding Pqv.java, as it does not exist in the ISO 21090 schema and is a java-only localization class
+	-->
+<xsd:schema elementFormDefault="qualified"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:sch="http://www.ascc.net/xml/schematron"
+	targetNamespace="uri:iso.org:21090" xmlns="uri:iso.org:21090"
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="1.0"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	jaxb:extensionBindingPrefixes="xjc">
+	<xsd:annotation>
+		<xsd:appinfo>
+			<jaxb:globalBindings>
+				<xjc:simple />
+			</jaxb:globalBindings>
+		</xsd:appinfo>
+	</xsd:annotation>
+
+	<xsd:include schemaLocation="ISO_datatypes_Narrative.xsd" />
+
+	<xsd:element name="Bl" type="BL" />
+	<xsd:element name="BlNonNull" type="BL.NonNull" />
+	<xsd:element name="St" type="ST" />
+	<xsd:element name="StNt" type="ST.NT" />
+	<xsd:element name="Ii" type="II" />
+	<xsd:element name="Tel" type="TEL" />
+	<xsd:element name="TelPerson" type="TEL.Person" />
+	<xsd:element name="TelUrl" type="TEL.Url" />
+	<xsd:element name="TelPhone" type="TEL.Phone" />
+	<xsd:element name="TelEmail" type="TEL.Email" />
+	<xsd:element name="Ed" type="ED" />
+	<xsd:element name="EdText" type="ED.Text" />
+	<xsd:element name="Cd" type="CD" />
+	<xsd:element name="Sc" type="SC" />
+	<xsd:element name="Int" type="INT" />
+	<xsd:element name="Real" type="REAL" />
+	<xsd:element name="Ts" type="TS" />
+	<xsd:element name="Pq" type="PQ" />
+	<xsd:element name="IvlTs" type="IVL_TS" />
+	<xsd:element name="IvlPq" type="IVL_PQ" />
+	<xsd:element name="IvlReal" type="IVL_REAL" />
+	<xsd:element name="IvlInt" type="IVL_INT" />
+	<xsd:element name="Ad" type="AD" />
+	<xsd:element name="En" type="EN" />
+	<xsd:element name="EnOn" type="EN.ON" />
+	<xsd:element name="EnPn" type="EN.PN" />
+	<xsd:element name="DSetII" type="DSET_II" />
+	<xsd:element name="DSetTel" type="DSET_TEL" />
+	<xsd:element name="DSetCd" type="DSET_CD" />
+	<xsd:element name="DSetAd" type="DSET_AD" />
+</xsd:schema>

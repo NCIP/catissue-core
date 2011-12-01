@@ -1,0 +1,30 @@
+<ns1:ExtensionDescription extensionType="INTRODUCE_GDE" version="1.4" xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Extension">
+	<ns1:IntroduceGDEExtensionDescriptionType displayName="caGrid Creation Viewer" name="cagrid_creation_viewer">
+		<menus xmlns="http://www.cagrid.org/1/grape">
+		   <menu>
+            <title>File</title>
+            <description>File</description>
+            <components>
+                <component>
+                    <title>Create caGrid Service Skeleton</title>
+                    <description>Create caGrid Service Skeleton</description>
+                    <classname>gov.nih.nci.cagrid.introduce.portal.creation.CaBIGCreationViewer</classname>
+                    <icon>/cagrid_creation_viewer/caGrid_small.png</icon>
+                    <showOnToolBar>true</showOnToolBar>
+                    <dimensions>
+                    	<width>600</width>
+                    	<height>500</height>
+                    </dimensions>
+                    <renderOptions>
+                    	<centered>true</centered>
+                    </renderOptions>
+                </component>
+             </components>
+        </menu>
+     </menus>
+     <ns1:Properties>
+     </ns1:Properties>
+	</ns1:IntroduceGDEExtensionDescriptionType>
+	<ns1:UpgradesDescription>
+	</ns1:UpgradesDescription>
+</ns1:ExtensionDescription>

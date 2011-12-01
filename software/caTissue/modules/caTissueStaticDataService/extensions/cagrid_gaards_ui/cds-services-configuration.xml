@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ServiceConfiguration xmlns="http://www.cagrid.org/1/grape-service-configuration"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ServiceGroupDescription>Credential Delegation Service(s)</ServiceGroupDescription>
+    <Services>
+        <ServiceDescriptor>
+            <DisplayName>Training</DisplayName>
+            <ServiceURL>https://cds.training.cagrid.org:8443/wsrf/services/cagrid/CredentialDelegationService</ServiceURL>
+            <ServiceIdentity>/O=caBIG/OU=caGrid/OU=Training/OU=Services/CN=cds.training.cagrid.org</ServiceIdentity>
+        </ServiceDescriptor>
+    </Services>
+</ServiceConfiguration>
