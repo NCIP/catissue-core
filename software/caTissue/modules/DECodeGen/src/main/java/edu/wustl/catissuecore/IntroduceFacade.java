@@ -52,7 +52,9 @@ public final class IntroduceFacade {
 	}
 
 	public void addSchemaTypes(File schemaFile) throws Exception {
-		System.out.println("Adding a schema: " + schemaFile.getAbsolutePath());
+
+        System.out.println("Adding a schema: " + schemaFile.getAbsolutePath());
+        System.out.println("to service: " + serviceDir.getAbsolutePath());
 
 		XSOMParser parser = new XSOMParser();
 		parser.parse(schemaFile);
