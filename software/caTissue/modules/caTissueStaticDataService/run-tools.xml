@@ -1,15 +1,14 @@
 <project name="run-tools file" basedir="." default="runClient">
      <property name="service.url" value="https://127.0.0.1:9443/wsrf/services/cagrid/Catissue_cacore" />
+     <property name="decodegen.dir" value="${basedir}/../DECodeGen" />
 
-    <condition property="isUnix" value="true">
-        <or>
-            <os family="unix" />
-            <os family="mac" />
-        </or>
-    </condition>
-    <condition property="isWindows" value="true">
-        <os family="windows" />
-    </condition>
+    <condition property="isUnix" value="true"><or><os family="unix" /><os family="mac" /></or></condition>
+    <condition property="isWindows" value="true"><os family="windows" /></condition>
+
+    <path id="cp">
+        <fileset dir="${basedir}/ext/dependencies/default/jars"><include name="*.jar"/></fileset>
+        <fileset dir="${basedir}/de_codegen"><include name="*.jar" /></fileset>
+    </path>
 
     <taskdef resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
@@ -26,12 +25,10 @@
         </java>
     </target>
 
-    <target name="runQuery1" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths"
-            description="Run the sample Client">
+    <target name="runQuery1" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths" description="Run the sample Client">
         <property name="runclasspath" refid="run.classpath"/>
         <echo message="Connecting to service: ${service.url}"/>
-        <java failonerror="true" classname="edu.wustl.catissuecore.domain.client.Catissue_cacoreClient"
-              classpathref="run.classpath" fork="yes">
+        <java failonerror="true" classname="edu.wustl.catissuecore.domain.client.Catissue_cacoreClient" classpathref="run.classpath" fork="yes">
             <jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}"/>
             <jvmarg value="-Dsun.lang.ClassLoader.allowArraySyntax=true"/>
             <arg value="-url"/>
@@ -279,32 +276,56 @@
 
     <!--END     Writable API targets-->
 
-    <!-- START Service rebuild -->
-    <target name="updateService" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths">
+    <target name="updateService2" depends="">
 
-        <!--COPY BEANS-->
-        <copy todir="${basedir}/lib">
-            <fileset dir="${basedir}/de_codegen/artifacts/">
-                <include name="*-beans.jar" />
-            </fileset>
-        </copy>
+        <!-- Compile DECodeGen-->
+        <ant inheritAll="false" inheritRefs="false" antfile="${decodegen.dir}/build.xml" target="all" dir="${decodegen.dir}">
+            <property name="basedir" value="${decodegen.dir}" />
+        </ant>
 
-        <!-- XSDs IMPORT -->
-        <foreach target="-importXSDs" param="fullJarFileName" inheritall="true">
+        <!--Bring needed artifacts into the DS -->
+        <copy todir="${basedir}/de_codegen"><fileset dir="${decodegen.dir}/dist"><include name="**/*.jar" /></fileset></copy>
+        <copy todir="${basedir}" file="${decodegen.dir}/introduce.artifacts.zip"></copy>
+        <unzip src="${basedir}/introduce.artifacts.zip" dest="${basedir}" />
+
+        <foreach target="-importXSDs2" param="fullJarFileName" inheritall="false">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
-                <include name="**/*-schema.jar"/>
+                <include name="*-schema.jar"/>
             </fileset>
         </foreach>
 
+    </target>
+
+    <!-- START Service rebuild -->
+    <target name="updateService" depends="checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths">
+
+
         <!-- XMIs MERGE-->
 <!--
-        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="doMergeXMIs" dir="../DECodeGen/">
+        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="-doMergeXMIs" dir="../DECodeGen/">
             <property name="xmiFolder" value="${basedir}/de_codegen/xmi" />
             <property name="outputXMLFile" value="${basedir}/de_codegen/xmi/mergeResult.xml" />
         </ant>
 -->
         <!-- OVERWRITE ./etc/catissue_cacore_domainModel.xml -->
         <!--<copy file="${basedir}/de_codegen/xmi/mergeResult.xml" tofile="${basedir}/etc/catissue_cacore_domainModel.xml" />-->
+
+        <!--COPY BEANS-->
+<!--
+        <copy todir="${basedir}/lib">
+            <fileset dir="${basedir}/de_codegen/artifacts/">
+                <include name="*-beans.jar" />
+            </fileset>
+        </copy>
+-->
+
+        <!-- XSDs IMPORT -->
+        <foreach target="-importXSDs" param="fullJarFileName" inheritall="false">
+            <fileset dir="./de_codegen/artifacts" casesensitive="yes">
+                <include name="*-schema.jar"/>
+            </fileset>
+        </foreach>
+
 
         <!-- DOZER MERGE -->
 <!--
@@ -329,23 +350,60 @@
 -->
     </target>
 
+    <target name="-importXSDs2">
+        <basename property="jarfilename" file="${fullJarFileName}"/>
+        <echo message="Processing XSD folder: ${jarfilename} "/>
+        <unjar src="${fullJarFileName}" dest="./temp/${jarfilename}" />
+        <foreach target="-importXSD2" param="fullFileName" inheritall="true">
+                <fileset dir="./temp/${jarfilename}" casesensitive="yes">
+                <include name="*.xsd"/>
+            </fileset>
+        </foreach>
+    </target>
+
+    <target name="-importXSD2">
+        <basename property="filename" file="${fullFileName}"/>
+        <antcall target="doImportXSD2">
+            <param name="xsdFile" value="${fullFileName}" />
+        </antcall>
+
+<!--
+        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="doImportXSD" dir="../DECodeGen/">
+            <property name="xsdFile" value="${fullFileName}" />
+        </ant>
+-->
+    </target>
+
+    <target name="doImportXSD2">
+        <property name="xsdFile" value="${decodegen.dir}/src/test/resources/withIdentifier/clinical_annotation.xsd"/>
+
+        <!-- IMPORT XSD -->
+        <java failonerror="false" classname="edu.wustl.catissuecore.IntroduceFacade" fork="no">
+            <classpath refid="cp" />
+            <arg value="${basedir}/"/>
+            <arg value="Catissue_cacore"/>
+            <arg value="${xsdFile}"/>
+        </java>
+
+    </target>
+
     <target name="-importXSDs">
         <basename property="jarfilename" file="${fullJarFileName}"/>
         <echo message="Processing XSD folder: ${jarfilename} "/>
         <unjar src="${fullJarFileName}" dest="./temp/${jarfilename}" />
         <foreach target="-importXSD" param="fullFileName" inheritall="true">
-            <fileset dir="./temp/${jarfilename}" casesensitive="yes">
-                <include name="**/*.xsd"/>
+                <fileset dir="./temp/${jarfilename}" casesensitive="yes">
+                <include name="*.xsd"/>
             </fileset>
         </foreach>
     </target>
 
     <target name="-importXSD">
         <basename property="filename" file="${fullFileName}"/>
-        <echo message="Processing XSD file: ${filename} "/>
-        <antcall target="ex">
+        <antcall target="doImportXSD">
             <param name="xsdFile" value="${fullFileName}" />
         </antcall>
+
 <!--
         <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="doImportXSD" dir="../DECodeGen/">
             <property name="xsdFile" value="${fullFileName}" />
@@ -394,6 +452,27 @@
 
     </target>
 
+    <target name="doImportXSD">
+        <property name="xsdFile" value="${decodegen.dir}/src/test/resources/withIdentifier/clinical_annotation.xsd"/>
+
+        <echo message="Importing XSD: ${xsdFile}" />
+
+        <!-- IMPORT XSD -->
+<!--
+        <java failonerror="false" classname="edu.wustl.catissuecore.IntroduceFacade" fork="no">
+            <classpath refid="cp" />
+            <arg value="${basedir}/"/>
+            <arg value="Catissue_cacore"/>
+            <arg value="${xsdFile}"/>
+        </java>
+-->
+
+        <antcall target="ex">
+            <param name="xsdFile" value="${xsdFile}" />
+        </antcall>
+    </target>
+
+
     <target name="exUnix" unless="isWindows">
         <exec dir="../DECodeGen/" executable="chmod">
             <arg value="755"/>
@@ -407,7 +486,6 @@
     </target>
 
     <target name="ex" unless="isUnix" depends="exUnix">
-        <echo message="FILE: ${xsdFile}" />
         <exec dir="../DECodeGen/" executable="cmd">
             <arg value="/c"/>
             <arg value="execute.bat"/>
