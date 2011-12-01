@@ -33,53 +33,64 @@ public class ComboDataBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException
 	 * @throws BizLogicException
 	 */
-	public List<NameValueBean> getClinicalDiagnosisList(String query,boolean showSubset) throws BizLogicException
-	{
+	public List getClinicalDiagnosisList(String query, boolean showSubset)
+			throws BizLogicException {
 		// populating clinical Diagnosis field
-		final List<NameValueBean> clinicalDiagnosisList = new ArrayList<NameValueBean>();
+		final List<NameValueBean> clinicalDiagnosisList = new ArrayList();
+		final String sourceObjectName = PermissibleValueImpl.class.getName();
+		final String[] selectColumnName = { "value" };
 		DAO dao = null;
-		try
-		{
+		try {
 
 			new DefaultBizLogic();
 
 			dao = this.openDAOSession(null);
 
-			String hql = "Select PermissibleValueImpl.value from edu.wustl.common.cde.PermissibleValueImpl PermissibleValueImpl WHERE PermissibleValueImpl.value like lower('%"+query+"%') AND PermissibleValueImpl.cde.publicId = 'Clinical_Diagnosis_PID'";
+			String hql = "Select PermissibleValueImpl.value from edu.wustl.common.cde.PermissibleValueImpl "
+					+ "PermissibleValueImpl WHERE LOWER(PermissibleValueImpl.value) like LOWER('%"
+					+ query
+					+ "%') AND PermissibleValueImpl.cde.publicId = 'Clinical_Diagnosis_PID' "
+					+ "order by PermissibleValueImpl.value desc";
 
-			List<String> dataList = dao.executeQuery(hql);
+			List dataList = dao.executeQuery(hql);
+
+			clinicalDiagnosisList
+					.add(new NameValueBean(Constants.SELECT_OPTION, ""
+							+ Constants.SELECT_OPTION_VALUE));
+			if (showSubset) {
+				clinicalDiagnosisList
+						.add(new NameValueBean(Constants.SHOW_SUBSET + "start",
+								Constants.SHOW_SUBSET));
+			}
+			int cnt = 1;
+			final Iterator<String> iterator = dataList.iterator();
+			while (iterator.hasNext()) {
+				final String clinicaDiagnosisvalue = iterator.next();
+				if (clinicaDiagnosisvalue.toString().toLowerCase().startsWith(
+						query.toLowerCase())) {
+					clinicalDiagnosisList.add(1, new NameValueBean(
+							clinicaDiagnosisvalue, clinicaDiagnosisvalue));
+					cnt++;
+				} else {
+					clinicalDiagnosisList.add(cnt, new NameValueBean(
+							clinicaDiagnosisvalue, clinicaDiagnosisvalue));
+				}
+
+			}
+
+			if (showSubset) {
+				clinicalDiagnosisList.add(new NameValueBean(
+						Constants.SHOW_SUBSET + "end", Constants.SHOW_SUBSET));
+			}
 
 			this.closeDAOSession(dao);
 
-			final Iterator<String> iterator = dataList.iterator();
-
-			clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION, ""
-					+ Constants.SELECT_OPTION_VALUE));
-
-			if(showSubset)
-			{
-				clinicalDiagnosisList.add(new NameValueBean(Constants.SHOW_SUBSET+"start", Constants.SHOW_SUBSET));
-			}
-			while (iterator.hasNext())
-			{
-				final String clinicaDiagnosisvalue = iterator.next();
-				clinicalDiagnosisList.add(new NameValueBean(clinicaDiagnosisvalue,
-						clinicaDiagnosisvalue));
-
-			}
-			if(showSubset)
-			{
-				clinicalDiagnosisList.add(new NameValueBean(Constants.SHOW_SUBSET+"end",Constants.SHOW_SUBSET));
-			}
-		}
-		catch (final DAOException exp)
-		{
-			this.logger.error(exp.getMessage(),exp);
+		} catch (final DAOException exp) {
+			this.logger.error(exp.getMessage(), exp);
 			exp.printStackTrace();
-			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
-		}
-		finally
-		{
+			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp
+					.getMsgValues());
+		} finally {
 			this.closeDAOSession(dao);
 		}
 		return clinicalDiagnosisList;
