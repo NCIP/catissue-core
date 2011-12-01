@@ -1224,6 +1224,14 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		return isCollectedSpecimenExists;
 
 	}
+	
+	@Override
+	protected boolean validate(Object obj, DAO dao, String operation)
+			throws BizLogicException
+	{
+		SpecimenCollectionGroupUIObject uiObject = null;
+		return super.validate(obj, dao, operation, uiObject);
+	}
 
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute
@@ -1234,7 +1242,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException : BizLogicException
 	 * @return boolean
 	 */
-	protected boolean validate(Object obj, DAO dao, String operation) throws BizLogicException
+	@Override
+	protected boolean validate(Object obj, DAO dao, String operation, Object uiObject)
+			throws BizLogicException
 	{
 		try
 		{

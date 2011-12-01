@@ -113,6 +113,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 						<html:hidden property="consentTierCounter"/>
 						<html:hidden property="collectionProtocolId"/>
 						<html:hidden property="participantNameWithProtocolId"/>
+						<html:hidden property="collectionProtocolRegistrationId"/>
 						<html:hidden property="participantName"/>
 						<html:hidden property="collectionProtocolName"/>
 						<html:hidden property="protocolParticipantIdentifier"/>
