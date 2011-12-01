@@ -214,11 +214,6 @@
 			relationShipType="association"
 			roleName="cancerResearchGroup">
 		</referenceAssociationCollection>
-		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.Password"
-			relationShipType="containment"
-			roleName="passwordCollection">
-		</containmentAssociationCollection>
 	</AuditableClass>
 
 	<AuditableClass className="edu.wustl.catissuecore.domain.CollectionProtocol"
@@ -1156,7 +1151,7 @@
 		<attribute name="twoDimensionCapacity" dataType="Integer" />
 	</AuditableClass>
 
-	<AuditableClass className="edu.wustl.catissuecore.domain.Password"
+	<AuditableClass className="edu.wustl.catissuecore.passwordutil.Password"
 		relationShipType="main" roleName="">
 		<attribute name="id" dataType="Long" />
 		<attribute name="password" dataType="String" />

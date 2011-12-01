@@ -31,7 +31,7 @@ import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
-import edu.wustl.catissuecore.domain.Password;
+
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.UserDTO;
@@ -47,6 +47,11 @@ import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+
+import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.passwordutil.Password;
+import edu.wustl.catissuecore.passwordutil.Util;
+
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -207,7 +212,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
             user.setInstitution(institution);
             user.setCancerResearchGroup(cancerResearchGroup);
             final String generatedPassword = PasswordManager.generatePassword();
-
+            final Password password = new Password();
             boolean grouperUser = false ;
             if (!StringUtilities.isBlank(userUIObject.getGrouperUser())) {
             	grouperUser = true;
@@ -245,8 +250,9 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
                 // user.setPassword(csmUser.getPassword());
                 // Add password of user in password table.Updated by Supriya
                 // Dankh
-                InstanceFactory<Password> instFact = DomainInstanceFactory.getInstanceFactory(Password.class);
-                final Password password = instFact.createObject();
+                // comment nhassan
+                /*InstanceFactory<Password> instFact = DomainInstanceFactory.getInstanceFactory(Password.class);
+                final Password password = instFact.createObject();*/
 
                 /**
                  * Start: Change for API Search --- Jitendra 06/10/2006 In Case
@@ -267,11 +273,11 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
                 password.setUser(user);
                 password.setPassword(PasswordManager.encrypt(generatedPassword));
                 password.setUpdateDate(new Date());
-                if(user.getPasswordCollection()==null)
+                /*if(user.getPasswordCollection()==null)
                 {
                 	user.setPasswordCollection(new HashSet<Password>());
-                }
-                user.getPasswordCollection().add(password);
+                }*/
+                //user.getPasswordCollection().add(password);
                 if (grouperUser) {
                 	//auto approve 
                 	user.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
@@ -293,6 +299,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
                 updateUserDetails(user, userRowIdMap);
             }
             dao.insert(user);
+            dao.insert(password);
             if (Constants.PAGE_OF_SIGNUP.equals(userUIObject.getPageOf()))
             {
                 insertUserIDPInformation(user,userUIObject);
@@ -1134,11 +1141,12 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
                 // Set values in password domain object and adds changed
                 // password in Password Collection
                 final Password password = instFact.createClone(pass);//new Password(PasswordManager.encrypt(user.getNewPassword()), user);
-                if(user.getPasswordCollection()==null)
+                /*if(user.getPasswordCollection()==null)
                 {
                 	user.setPasswordCollection(new HashSet<Password>());
-                }
-                user.getPasswordCollection().add(password);
+                }*/
+                dao.insert(password);
+                //user.getPasswordCollection().add(password);
 
             }
 
@@ -1161,7 +1169,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
                 // Set values in password domain object and
                 // adds changed password in Password Collection
                 final Password password =instFact.createClone(pass);// new Password(PasswordManager.encrypt(user.getNewPassword()), user);
-                user.getPasswordCollection().add(password);
+                dao.insert(password);
+                //user.getPasswordCollection().add(password);
                 user.setFirstTimeLogin(Boolean.TRUE);
             }
             else
@@ -1281,7 +1290,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
      *             BizLogic Exception
      */
     private void passwordValidation(final User user, final User oldUser, final String oldPassword,UserUIObject userUIObject)
-            throws PasswordEncryptionException, BizLogicException
+            throws PasswordEncryptionException, ApplicationException
     {
         final int result = validatePassword(oldUser, userUIObject.getNewPassword(), oldPassword);
 
@@ -1885,13 +1894,15 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
      *
      * @throws PasswordEncryptionException
      *             the password encryption exception
+     *             @throws PasswordEncryptionException
+     *             the password encryption exception
      */
     private int validatePassword(final User oldUser, final String newPassword, final String oldPassword)
-            throws PasswordEncryptionException
+            throws PasswordEncryptionException, ApplicationException
     {
-        final List<Password> oldPwdList = new ArrayList<Password>(oldUser.getPasswordCollection());
-        Collections.sort(oldPwdList,new PasswordComparator());
-       //Collections.sort(oldPwdList);
+    	final ArrayList<Password> oldPwdList = Util.getPasswordCollection(oldUser);
+        //Collections.sort(oldPwdList,new PasswordComparator());
+       Collections.sort(oldPwdList);
         if (oldPwdList != null && !oldPwdList.isEmpty())
         {
             // Check new password is equal to last n password if value
@@ -1952,34 +1963,42 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
 	 * @see edu.wustl.catissuecore.bizlogic.IUserBizLogic#checkFirstLoginAndExpiry(edu.wustl.catissuecore.domain.User)
 	 */
     @Override
-	public String checkFirstLoginAndExpiry(final User user)
+	public String checkFirstLoginAndExpiry(final User user) throws ApplicationException
     {
-        final List<Password> passwordList = new ArrayList<Password>(user.getPasswordCollection());
-
-        final boolean firstTimeLogin = getFirstLogin(user);
-        // If user has logged in for the first time, return key of Change
-        // password on first login
-        if (firstTimeLogin)
-        {
-            return "errors.changePassword.changeFirstLogin";
-        }
-        Collections.sort(passwordList,new PasswordComparator());
-       // Collections.sort(passwordList);
-        final Password lastPassword = passwordList.get(0);
-        final Date lastUpdateDate = lastPassword.getUpdateDate();
-
-        final Validator validator = new Validator();
-        // Get difference in days between last password update date and current
-        // date.
-        final long dayDiff = validator.getDateDiff(lastUpdateDate, new Date());
-        final int expireDaysCount = Integer.parseInt(XMLPropertyHandler.getValue("password.expire_after_n_days"));
-        LOGGER.info("expireDaysCount" + expireDaysCount);
-        LOGGER.info("dayDiff" + dayDiff);
-        if (dayDiff > expireDaysCount)
-        {
-            LOGGER.info("returning error change password expire");
-            return "errors.changePassword.expire";
-        }
+    	try
+    	{
+    		final ArrayList<Password> passwordList = new ArrayList(Util.getPasswordCollection(user));
+    	
+    	
+		        final boolean firstTimeLogin = getFirstLogin(user);
+		        // If user has logged in for the first time, return key of Change
+		        // password on first login
+		        if (firstTimeLogin)
+		        {
+		            return "errors.changePassword.changeFirstLogin";
+		        }
+		        //Collections.sort(passwordList,new PasswordComparator());
+		        Collections.sort(passwordList);
+		        final Password lastPassword = passwordList.get(0);
+		        final Date lastUpdateDate = lastPassword.getUpdateDate();
+		
+		        final Validator validator = new Validator();
+		        // Get difference in days between last password update date and current
+		        // date.
+		        final long dayDiff = validator.getDateDiff(lastUpdateDate, new Date());
+		        final int expireDaysCount = Integer.parseInt(XMLPropertyHandler.getValue("password.expire_after_n_days"));
+		        LOGGER.info("expireDaysCount" + expireDaysCount);
+		        LOGGER.info("dayDiff" + dayDiff);
+		        if (dayDiff > expireDaysCount)
+		        {
+		            LOGGER.info("returning error change password expire");
+		            return "errors.changePassword.expire";
+		        }
+		 }
+        catch (final ApplicationException exp)
+		{
+			throw exp;
+		}
         return Constants.SUCCESS;
 
     }

@@ -5,7 +5,9 @@ package edu.wustl.catissuecore.comparator;
 
 import java.util.Comparator;
 
-import edu.wustl.catissuecore.domain.Password;
+import edu.wustl.catissuecore.passwordutil.Password;
+
+
 
 
 /**

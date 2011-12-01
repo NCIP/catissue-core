@@ -38,7 +38,7 @@ import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.OrderItem;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
-import edu.wustl.catissuecore.domain.Password;
+import edu.wustl.catissuecore.passwordutil.Password;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.ReportedProblem;

@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.UserDTO;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
@@ -33,6 +32,8 @@ import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.passwordutil.Password;
+import edu.wustl.catissuecore.passwordutil.Util;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
@@ -228,21 +229,22 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
         {
             csmUser.setPassword(generatedPassword);
         }
-        SecurityManagerFactory.getSecurityManager().createUser(csmUser);
+        SecurityManagerFactory.getSecurityManager().createUser(csmUser); 
         user.setCsmUserId(csmUser.getUserId());
-        decideRole(csmUser, user);        
-
+        decideRole(csmUser, user);
+               
+        
         InstanceFactory<Password> instFact = DomainInstanceFactory.getInstanceFactory(Password.class);
         Password pass=instFact.createObject();
         pass.setUser(user);
         pass.setPassword(PasswordManager.encrypt(generatedPassword));
 
         final Password password = instFact.createClone(pass);//new Password(PasswordManager.encrypt(generatedPassword), user);
-        if(user.getPasswordCollection()==null)
+        /*if(user.getPasswordCollection()==null)
         {
         	user.setPasswordCollection(new HashSet<Password>());
-        }
-        user.getPasswordCollection().add(password);
+        }*/
+        //user.getPasswordCollection().add(password);
         logger.debug("password stored in passwore table");
         final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
         final Set protectionObjects = new HashSet();
@@ -253,6 +255,7 @@ public class ApproveUserBizLogic extends CatissueDefaultBizLogic
         }
         privilegeManager.insertAuthorizationData(getAuthorizationData(user, userRowIdMap), protectionObjects,
                 null, user.getObjectId());
+        dao.insert(password);
         dao.update(user, oldUser);
     }
 

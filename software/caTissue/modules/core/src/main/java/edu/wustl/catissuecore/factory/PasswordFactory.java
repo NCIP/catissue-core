@@ -2,7 +2,7 @@ package edu.wustl.catissuecore.factory;
 
 import java.util.Date;
 
-import edu.wustl.catissuecore.domain.Password;
+import edu.wustl.catissuecore.passwordutil.Password;
 
 
 public class PasswordFactory implements InstanceFactory<Password>

@@ -9,6 +9,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.dao.DAO;
 import edu.wustl.security.beans.SecurityDataBean;
@@ -166,11 +167,12 @@ public interface IUserBizLogic {
 	 *            - user object
 	 *
 	 * @return String
+	 * @throws ApplicationException 
 	 *
 	 * @throws BizLogicException
 	 *             - throws BizLogicException
 	 */
-	public String checkFirstLoginAndExpiry(final User user);
+	public String checkFirstLoginAndExpiry(final User user) throws ApplicationException;
 
 	/**
 	 * This function will check if the user is First time logging.
