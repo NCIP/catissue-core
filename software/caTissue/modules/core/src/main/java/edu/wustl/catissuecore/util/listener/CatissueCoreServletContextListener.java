@@ -206,6 +206,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 					.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
 			cacheManager.addObjectToCache(AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID,
 					scgRecEtyId);
+			final Long sppRecEtyId = edu.common.dynamicextensions.xmi.AnnotationUtil
+				.getEntityId(AnnotationConstants.ENTITY_NAME_ACTION_APP_REC_ENTRY);
+			cacheManager.addObjectToCache(AnnotationConstants.SPP_REC_ENTRY_ENTITY_ID,
+					sppRecEtyId);
 			EntityCache.getInstance();
 			logger.debug("Entity Cache is initialised");
 		}

@@ -135,6 +135,26 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 
 			}
 			
+			function showHideConditions(currentElement)
+			{
+				var cplist = document.getElementById("cpList");
+				var isEnabled = true;
+				<c:forEach items="${annotationForm.systemEntitiesList}" var="current">
+					var currentName = "${current.name}";
+					var currentValue = "${current.value}";
+					if(currentElement.value == currentValue && currentName == 'Specimen Processing Procedure')
+					{
+						cplist.disabled=true;
+						isEnabled = false;
+					}
+					
+				</c:forEach>
+				if(isEnabled)
+				{
+					cplist.disabled=false;
+				}
+			}
+			
 		function initializeGridForGroups(groupsXML)
         {	
 
@@ -181,6 +201,24 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 		</script>
 	</head>
 	<body onload = "initializeAnnotationsForm()">
+	
+	<table summary="" cellpadding="5" cellspacing="0" border="0" width="620" height="80">
+		<tr style="font-family:arial,helvetica,verdana,sans-serif;">
+			<td>
+</td>
+		</tr>
+		<tr style="font-family:arial,helvetica,verdana,sans-serif;">
+	
+	<td>
+<pre><b> Note:</b></pre>
+<pre>
+ 1. Please take backup of the database before add or edit of a Dynamic Extension.
+ 2. You need to restart the caTissue JBoss every time after add or edit of a new Dynamic Extension.
+ 3. Please contact your caTissue system administrator before starting this activity.
+</pre>
+			</td> 
+		</tr>
+	</table>
 	<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 	<html:form styleId='annotationForm' action='/DefineAnnotations'>
 	
@@ -213,7 +251,7 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 					   <bean:message key="anno.Entity"/> 
 					</td>
 					<td class="formField" >
-						<html:select property="selectedStaticEntityId" styleId="optionSelect" styleClass="formFieldSized15" >
+						<html:select property="selectedStaticEntityId" styleId="optionSelect" styleClass="formFieldSized15" onchange="showHideConditions(this)">
 							<html:options collection="systemEntitiesList"  labelProperty="name" property="value"/> 
 					  </html:select>
 					</td>

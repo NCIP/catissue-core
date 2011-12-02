@@ -205,11 +205,14 @@ public class AnnotationUtil
 		{
 			key = AnnotationConstants.SPECIMEN_REC_ENTRY_ENTITY_ID;
 		}
+		else if (abstractRecordEntryName.equals(AnnotationConstants.ENTITY_NAME_ACTION_APP_REC_ENTRY))
+		{
+			key = AnnotationConstants.SPP_REC_ENTRY_ENTITY_ID;
+		}
 		else
 		{
 			key = AnnotationConstants.SCG_REC_ENTRY_ENTITY_ID;
 		}
-
 		return key;
 	}
 

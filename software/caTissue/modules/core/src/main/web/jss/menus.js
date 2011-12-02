@@ -253,16 +253,16 @@ Ext.onReady(function(){
 			{
                 text: 'Local Extensions',
 				tooltip:'Shows Local Extensions',
-                href:'DefineAnnotationsInformationPage.do?operation=add',
+                href:'DefineAnnotations.do?op=add',
                 menu: {        // <-- submenu by nested config object
                     items: [
                         // stick any markup in a menu
                         {
                             text: 'Add',
-                            href:'DefineAnnotationsInformationPage.do?operation=add'
+                            href:'DefineAnnotations.do?op=add'
                         }, {
                             text: 'Edit',
-                            href:'DefineAnnotationsInformationPage.do?operation=edit'
+                            href:'DefineAnnotations.do?op=edit'
                         }
                     ]
                 }

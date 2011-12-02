@@ -15,4 +15,8 @@
 	<displayName>Specimen Collection Group</displayName>
 	<conditionInvoker>edu.wustl.catissuecore.annotations.SCGAnnotationCondition</conditionInvoker>
 	</static-entity>
+	<static-entity>
+	<name>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</name>
+	<displayName>Specimen Processing Procedure</displayName>
+	</static-entity>
 </static-entities>

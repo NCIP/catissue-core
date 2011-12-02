@@ -234,5 +234,6 @@ public class AnnotationConstants
 	public static final String PARTICIPANT_REC_ENTRY_ENTITY_ID = "particiapntRecordEntryEntityId";
 	public static final String SPECIMEN_REC_ENTRY_ENTITY_ID = "specimenRecordEntryEntityId";
 	public static final String SCG_REC_ENTRY_ENTITY_ID = "scgRecordEntryEntityId";
+	public static final String SPP_REC_ENTRY_ENTITY_ID = "sppRecordEntryEntityId";
 
 	}
