@@ -15,6 +15,7 @@
     <target name="init">
         <mkdir dir="${target.dir}/classes" />
         <mkdir dir="${dist.dir}" />
+        <unzip src="${basedir}/introduce.artifacts.zip" dest="${basedir}" />
     </target>
 
     <target name="clean">
