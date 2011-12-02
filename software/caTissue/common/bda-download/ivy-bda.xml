@@ -115,7 +115,7 @@ This is the definition of a virtual module called bda-download that has a depend
    	<dependency org="gov.nih.nci.catissue" name="security-manager" rev="1.1.7.3" conf="app_lib->*"/>
   	<dependency org="gov.nih.nci.catissue" name="simple-query" rev="1.1.9.2.2" conf="app_lib->*"/>
   	<dependency org="gov.nih.nci.catissue" name="keyword-search" rev="1.0" conf="app_lib->*"/>
-  	<dependency org="gov.nih.nci.catissue" name="washu-commons" rev="1.2.1" conf="app_lib->*"/>
+  	<dependency org="gov.nih.nci.catissue" name="washu-commons" rev="1.1.8" conf="app_lib->*"/>
 
     <!-- Dependent jars end here -->
     <dependency org="openqa" name="selenium-server" rev="1.0-beta-1" conf="test-selenium->master"/>
