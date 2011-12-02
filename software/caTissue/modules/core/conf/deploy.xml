@@ -5096,7 +5096,7 @@ Thanking You,
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/tissueSpecimenEvent.sql" />
 			
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/callsToProcedures.sql" />	
-			<!--transaction>call caller();</transaction-->
+			<transaction>call caller();</transaction>
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
