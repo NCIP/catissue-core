@@ -2157,7 +2157,13 @@
 		</antcall>
 		<antcall target="upgrade_existingEvents_to_sppEvents"/>
 		<antcall target="insertPaths"/>
-
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="migrate.events"></antcall>
+			</then>
+		</if>
+	
 
 	</target>
 
@@ -5064,7 +5070,6 @@ Thanking You,
 					</fileset>
 				</classpath>
 			</sql>
-			<antcall target="migrate.events"></antcall>
 		</target>
 	
 	<target name="migrate.events" description="Target for migrating events from static to DE">
@@ -5091,7 +5096,7 @@ Thanking You,
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/tissueSpecimenEvent.sql" />
 			
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/callsToProcedures.sql" />	
-			<transaction>call caller();</transaction>
+			<!--transaction>call caller();</transaction-->
 			<transaction>commit;</transaction>
 			<classpath>
 				<fileset dir="${lib.dir}">
