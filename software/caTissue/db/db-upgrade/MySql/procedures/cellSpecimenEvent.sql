@@ -40,9 +40,10 @@ BEGIN
            cell.NEOPLASTIC_CELLULARITY_PER,
            cell.VIABLE_CELL_PERCENTAGE
       FROM   catissue_cell_spe_review_param cell,
-        catissue_specimen_event_param spec
+        catissue_specimen_event_param spec,
+		catissue_specimen se
 	WHERE
-      cell.identifier = spec.identifier;
+      cell.identifier = spec.identifier  and spec.specimen_id=se.identifier;
      
      
     

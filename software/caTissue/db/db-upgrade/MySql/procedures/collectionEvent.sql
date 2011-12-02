@@ -46,9 +46,10 @@ create procedure   Collection_Event_migrate()
            coll.COLLECTION_PROCEDURE,
            coll.CONTAINER
       from   CATISSUE_COLL_EVENT_PARAM coll,
-             catissue_specimen_event_param spec
+             catissue_specimen_event_param spec,
+			 catissue_specimen se
 	where
-      coll.identifier = spec.identifier;
+      coll.identifier = spec.identifier  and spec.specimen_id=se.identifier;
 
   declare CONTINUE HANDLER for NOT FOUND SET record_not_found = 1; 
 
