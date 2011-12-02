@@ -57,6 +57,9 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
+import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
 import edu.wustl.catissuecore.factory.utils.SpecimenUtility;
@@ -81,6 +84,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
@@ -337,6 +341,198 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		}
 	}
 
+
+	/**
+	 * 
+	 * @param specimenId
+	 * @param bizLogic
+	 * @param creationTimeStamp
+	 * @param dynamicEventsForGrid
+	 * @return
+	 * @throws BizLogicException
+	 */
+	public Collection<ActionApplication> getDynamicEventColl(String specimenId, IBizLogic bizLogic,Date creationTimeStamp, HashSet<ActionApplication> dynamicEventsForGrid,boolean addMyEvents)
+			throws BizLogicException
+			{
+		List<List<Object>> parentIdList=null;
+		Specimen specimen=null;
+		String parentId=null;
+		try 
+		{
+			if(specimenId!=null)
+			{
+				specimen = (Specimen) bizLogic.retrieve("edu.wustl.catissuecore.domain.Specimen", Long.valueOf(specimenId));
+				/**
+				 * Add Adhoc Events.
+				 */
+				Collection<ActionApplication> adhocActionAppColl = (Collection<ActionApplication>) bizLogic	.retrieveAttribute(Specimen.class, new Long(specimenId),
+						"elements(actionApplicationCollection)");
+				if(adhocActionAppColl!=null && !adhocActionAppColl.isEmpty())
+				{
+					if(addMyEvents)
+					{
+						dynamicEventsForGrid.addAll(adhocActionAppColl);
+					}
+					else
+					{
+						dynamicEventsForGrid.addAll(addActionApplicationToGrid(creationTimeStamp,
+								adhocActionAppColl));
+					}
+				}
+				/**
+				 * Add Creation Events of assigned Processing SPP.
+				 */
+				SpecimenProcessingProcedureApplication sppApplication = specimen.getProcessingSPPApplication();
+				if (sppApplication != null)
+				{
+					Collection<ActionApplication> actionApplicationCollection = sppApplication
+							.getSppActionApplicationCollection(); 
+					if(addMyEvents && actionApplicationCollection != null)
+					{
+						dynamicEventsForGrid.addAll(actionApplicationCollection);							
+					}
+					/*else
+					{
+						dynamicEventsForGrid.addAll(addActionApplicationToGrid(creationTimeStamp,
+								actionApplicationCollection));
+					}*/
+
+					/*if(creationTimeStamp!=null)
+					{
+						dynamicEventsForGrid.addAll(addActionApplicationToGrid(creationTimeStamp,
+								actionApplicationCollection));
+					}
+					else
+					{*/
+					/*if (actionApplicationCollection != null)
+						{
+							dynamicEventsForGrid.addAll(actionApplicationCollection);							
+						}*/
+					//}
+				}
+
+				/**
+				 * Add creation Events of SPP application of parent specimen.
+				 */
+				//get parent specimen Id.
+				parentIdList=AppUtility.executeSQLQuery("SELECT PARENT_SPECIMEN_ID FROM CATISSUE_ABSTRACT_SPECIMEN WHERE IDENTIFIER = "+specimenId);
+				if(parentIdList!=null && !parentIdList.isEmpty())
+				{
+					List<Object> idlist=(List<Object>) parentIdList.get(0);
+					if(idlist!=null && !idlist.isEmpty())
+					{
+						parentId=(String) idlist.get(0);
+						if(!parentId.equalsIgnoreCase(""))
+						{
+							/**
+							 * If parent specimen is not null. then get the sppApplication of parent specimen
+							 * and get all creation events of parent specimen till the action order of 
+							 * child specimen's creation event is greater than or equal to the action order of creation events. 
+							 */
+							Specimen parentSpecimen=(Specimen) specimen.getParentSpecimen();
+							if(specimen.getCreationEventAction()!=null)
+							{
+								Action action=(Action) specimen.getCreationEventAction().getApplicationRecordEntry().getFormContext();
+								long actionOrder=action.getActionOrder();
+
+								Collection<ActionApplication> actionCollection=parentSpecimen.getProcessingSPPApplication().getSppActionApplicationCollection();
+								Iterator<ActionApplication> iterator=actionCollection.iterator();
+								while(iterator.hasNext())
+								{
+									ActionApplication actApp=iterator.next();
+									Action specAction=(Action) actApp.getApplicationRecordEntry().getFormContext();
+									if(creationTimeStamp!=null && specAction.getActionOrder()<=actionOrder && !actApp.getTimestamp().after(creationTimeStamp))
+									{
+										dynamicEventsForGrid.add(actApp);
+									}
+								}
+							}
+							specimenId=parentId;
+							/*if(parentSpecimen.getCreationEventAction()!=null)
+							{
+								creationTimeStamp=parentSpecimen.getCreationEventAction().getTimestamp();
+							}
+							else
+							{
+								creationTimeStamp=null;
+							}*/
+							getDynamicEventColl(specimenId,bizLogic,creationTimeStamp,dynamicEventsForGrid,false);
+						}
+						/**
+						 * If parent specimen id is null, then move to specimen collection group.
+						 */
+						else
+						{
+							Collection<SpecimenProcessingProcedureApplication> sppAppCollection = specimen.getSpecimenCollectionGroup().getSppApplicationCollection();
+							if (sppAppCollection != null && !sppAppCollection.isEmpty())
+							{
+								Iterator<SpecimenProcessingProcedureApplication> sppAppIter = sppAppCollection.iterator();
+								while (sppAppIter.hasNext())
+								{
+									SpecimenProcessingProcedureApplication sppApp = sppAppIter.next();
+									Collection<ActionApplication> actionApplicationCollection=sppApp.getSppActionApplicationCollection();
+
+									//Specimen parentSpecimen=(Specimen) specimen.getParentSpecimen();
+									Action action=null;
+									ActionApplication actApp1=specimen.getCreationEventAction();
+									if(actApp1!=null)
+									{
+										action=(Action) actApp1.getApplicationRecordEntry().getFormContext();
+										long actionOrder=action.getActionOrder();
+
+										//Collection<ActionApplication> actionCollection=parentSpecimen.getProcessingSPPApplication().getSppActionApplicationCollection();
+										Iterator<ActionApplication> iterator=actionApplicationCollection.iterator();
+										while(iterator.hasNext())
+										{
+											ActionApplication actApp=iterator.next();
+											Action specAction=(Action) actApp.getApplicationRecordEntry().getFormContext();
+											if(creationTimeStamp!=null && specAction.getActionOrder()<=actionOrder && !actApp.getTimestamp().after(creationTimeStamp))
+											{
+												dynamicEventsForGrid.add(actApp);
+											}
+										}
+									}
+									/*dynamicEventsForGrid.addAll(addActionApplicationToGrid(creationTimeStamp,
+											actionApplicationCollection));
+									 */
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		catch (ApplicationException e)
+		{
+			e.printStackTrace();
+		}
+		return dynamicEventsForGrid;
+			}
+
+	/**
+	 * 
+	 * @param creationTimeStamp
+	 * @param actionApplicationCollection
+	 * @return
+	 */
+	private HashSet<ActionApplication> addActionApplicationToGrid(Date creationTimeStamp,
+			Collection<ActionApplication> actionApplicationCollection) {
+		HashSet<ActionApplication> set=new HashSet<ActionApplication>();
+		Iterator<ActionApplication> actAppIter=actionApplicationCollection.iterator();
+		while(actAppIter.hasNext())
+		{
+			ActionApplication actApp= actAppIter.next();
+			if(creationTimeStamp!=null && !actApp.getTimestamp().after(creationTimeStamp))
+			{
+				set.add(actApp);
+			}
+		}
+		/*if(set.isEmpty())
+		{
+			set.addAll(actionApplicationCollection);
+		}*/
+		return set;
+	}
 	/**
 	 * retrieve Parent Specimen Details From Id.
 	 *
@@ -1870,7 +2066,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			// Set Specimen Domain Object
 			this.createPersistentSpecimenObj(dao, sessionDataBean, specimen,
 					specimenOld, persistentSpecimen);
+			specimen.setCreationEventAction(persistentSpecimen.getCreationEventAction());
 			dao.update(persistentSpecimen, specimenOld);
+
 			this.updateChildAttributes(specimen, specimenOld);
 
 			// Disable functionality
@@ -1893,7 +2091,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				eventParametersBizLogic.insert(disposalEventParameters, dao, sessionDataBean);
 
 				//eventParametersBizLogic.insertDynamicDataForDisposalEvent(sessionDataBean, disposalEventParameters, dataValueMap,
-						//specimen);
+				//specimen);
 			}
 		} catch (final DAOException daoExp) {
 			LOGGER.error(daoExp.getMessage(), daoExp);
@@ -1903,6 +2101,80 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			throw getBizLogicException(null, e.getCustomizedMsg(), e.getCustomizedMsg());
 		} finally {
 			this.storageContainerIds.clear();
+		}
+	}
+
+
+	/**
+	 * 
+	 * @param oldSpecimen
+	 */
+	public void setCreationEventToChildSpecimen(Specimen currentSpecimen)
+	{
+		Action action=currentSpecimen.getSpecimenRequirement().getCreationEvent();
+		if(action!=null)
+		{
+			Specimen parentSpecimen=(Specimen) currentSpecimen.getParentSpecimen();
+			if(parentSpecimen!=null)
+			{
+				SpecimenProcessingProcedureApplication sppApp= parentSpecimen.getProcessingSPPApplication();
+				if(sppApp!=null)
+				{
+					Collection<ActionApplication> sppActApp=sppApp.getSppActionApplicationCollection();
+					Iterator<ActionApplication> sppActAppIter=sppActApp.iterator();
+					while(sppActAppIter.hasNext())
+					{
+						ActionApplication actApp=sppActAppIter.next();
+						Action parentSpecAction=(Action) actApp.getApplicationRecordEntry().getFormContext();
+						if(parentSpecAction.equals(action))
+						{
+							currentSpecimen.setCreationEventAction(actApp);
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				Collection<SpecimenProcessingProcedureApplication> sppAppcoll=currentSpecimen.getSpecimenCollectionGroup().getSppApplicationCollection();
+				Iterator<SpecimenProcessingProcedureApplication> sppAppCollIter=sppAppcoll.iterator();
+				boolean traverseCollection=true;
+				while(sppAppCollIter.hasNext() && traverseCollection)
+				{
+					//if(traverseCollection)
+					//{
+					SpecimenProcessingProcedureApplication sppApp= sppAppCollIter.next();
+					if(sppApp!=null)
+					{
+						Collection<ActionApplication> sppActApp=sppApp.getSppActionApplicationCollection();
+						Iterator<ActionApplication> sppActAppIter=sppActApp.iterator();
+						while(sppActAppIter.hasNext())
+						{
+							ActionApplication actApp=sppActAppIter.next();
+							Action parentSpecAction=(Action) actApp.getApplicationRecordEntry().getFormContext();
+							if(parentSpecAction.equals(action))
+							{
+								/*	DAO dao;
+								try {
+									dao = AppUtility.openDAOSession(null);
+									actApp.setSpecimen(specimen);
+									dao.update(actApp);
+									specimen.setCreationEventAction(actApp);
+									dao.update(specimen);
+								} catch (ApplicationException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}*/
+								//actApp.setSpecimen(specimen);
+								currentSpecimen.setCreationEventAction(actApp);
+								traverseCollection=false;
+								break;
+							}
+						}
+					}
+					//}
+				}
+			}
 		}
 	}
 
@@ -1924,13 +2196,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				transferEventParameters.setFromPositionDimensionOne(Integer.parseInt(specUIObject.getFromPositionDimensionOne()));
 			else
 				transferEventParameters.setFromPositionDimensionOne(null);
-			
+
 			if(!"".equalsIgnoreCase(specUIObject.getFromPositionDimensionTwo()))
 				transferEventParameters.setFromPositionDimensionTwo(Integer.parseInt(specUIObject.getFromPositionDimensionTwo()));
 			else
 				transferEventParameters.setFromPositionDimensionTwo(null);
-			
-			
+
+
 			//transferEventParameters.setFromPositionDimensionTwo(Integer.parseInt(specUIObject.getFromPositionDimensionTwo()));
 			if(specUIObject.getFromStorageContainerId()!=null)
 			{
@@ -1941,7 +2213,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			{
 				transferEventParameters.setFromStorageContainer(null);
 			}
-				
+
 			//				transferEventParameters.setComment(specUIObject.getReasonForTransfer());
 			transferEventParameters.setComment(specUIObject.getReasonForTransfer());
 			transferEventParameters.setToPositionDimensionOne(Integer.parseInt(specUIObject.getPositionDimensionOne()));
@@ -2265,6 +2537,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			this.generateBarCode(persistentSpecimen);
 		}
 		this.setExternalIdentifier(dao, specimen, persistentSpecimen);
+		setCreationEventToChildSpecimen(persistentSpecimen);
+		//persistentSpecimen.setCreationEventAction(specimen.getCreationEventAction());
 	}
 
 	/**
@@ -4698,6 +4972,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					// Bug 11481 E
 					this.updateSpecimenDomainObject(dao, newSpecimen,
 							specimenDO, sessionDataBean);
+					setCreationEventToChildSpecimen(specimenDO);
 					if (specimenDO.getParentSpecimen() != null
 							&& !Constants.COLLECTION_STATUS_COLLECTED
 							.equals(((Specimen) specimenDO
