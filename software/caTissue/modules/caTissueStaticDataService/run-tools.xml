@@ -289,6 +289,7 @@
             <property name="xmiFolder" value="${basedir}/de_codegen/xmi" />
             <property name="outputXMLFile" value="${basedir}/de_codegen/xmi/mergeResult.xml" />
         </ant>
+
         <!-- OVERWRITE ./etc/catissue_cacore_domainModel.xml -->
         <copy file="${basedir}/de_codegen/xmi/mergeResult.xml" tofile="${basedir}/etc/catissue_cacore_domainModel.xml" />
 
@@ -339,12 +340,6 @@
         <antcall target="doImportXSD">
             <param name="xsdFile" value="${fullFileName}" />
         </antcall>
-
-<!--
-        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="doImportXSD" dir="../DECodeGen/">
-            <property name="xsdFile" value="${fullFileName}" />
-        </ant>
--->
     </target>
 
     <target name="-processDozer">
@@ -390,24 +385,11 @@
 
     <target name="doImportXSD">
         <property name="xsdFile" value="${decodegen.dir}/src/test/resources/withIdentifier/clinical_annotation.xsd"/>
-
         <echo message="Importing XSD: ${xsdFile}" />
-
-        <!-- IMPORT XSD -->
-<!--
-        <java failonerror="false" classname="edu.wustl.catissuecore.IntroduceFacade" fork="no">
-            <classpath refid="cp" />
-            <arg value="${basedir}/"/>
-            <arg value="Catissue_cacore"/>
-            <arg value="${xsdFile}"/>
-        </java>
--->
-
         <antcall target="ex">
             <param name="xsdFile" value="${xsdFile}" />
         </antcall>
     </target>
-
 
     <target name="exUnix" unless="isWindows">
         <exec dir="../DECodeGen/" executable="chmod">
