@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -38,13 +40,18 @@ import edu.common.dynamicextensions.domain.userinterface.Container;
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
 import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
 import edu.wustl.catissuecore.processor.SPPEventProcessor;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.EventsUtil;
@@ -52,6 +59,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -72,6 +80,8 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			.getCommonLogger(ListSpecimenEventParametersAction.class);
 
 	Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
+	
+	HashSet<ActionApplication> dynamicEventsForGrid=new HashSet<ActionApplication>();
 
 	/**
 	 * Overrides the execute method of Action class. Initialises the various
@@ -229,8 +239,16 @@ public class ListSpecimenEventParametersAction extends SecureAction
 					specimenLabel = specimen.getLabel();
 				}
 				// Setting Specimen Event Parameters' Grid
-				final Collection<ActionApplication> dynamicEventCollection = new SPPEventProcessor().getFilteredActionApplication(this
-						.getDynamicEventColl(specimenId, bizLogic));
+				ActionApplication actionAppl=specimen.getCreationEventAction();
+				Date timeStamp=null;
+				if(actionAppl!=null)
+				{
+					timeStamp=actionAppl.getTimestamp();
+				}
+				dynamicEventsForGrid.clear();
+				final Collection<ActionApplication> dynamicEventCollection = new NewSpecimenBizLogic().getDynamicEventColl(specimenId, bizLogic, timeStamp,dynamicEventsForGrid,true);
+
+
 				/**
 				 * Name: Chetan Patil Reviewer: Sachin Lale Bug ID: Bug#4180
 				 * Patch ID: Bug#4180_1 Description: The values of event
@@ -577,27 +595,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		return specimenEventCollection;
 			}
 
-	/**
-	 *
-	 * @param specimenId
-	 *            : specimenId
-	 * @param bizLogic
-	 *            : bizLogic
-	 * @return Collection : Collection
-	 * @throws BizLogicException
-	 *             : BizLogicException
-	 */
-	private Collection<ActionApplication> getDynamicEventColl(String specimenId, IBizLogic bizLogic)
-			throws BizLogicException
-			{
-		final String className = ActionApplication.class.getName();
-		final String columnName = Constants.COLUMN_NAME_SPECIMEN_ID;
-		final Long columnValue = new Long(specimenId);
-		final Collection<ActionApplication> dynamicEventCollection = bizLogic.retrieve(className,
-				columnName, columnValue);
-
-		return dynamicEventCollection;
-			}
+	
 
 	private Collection<Container> getContainer(String contId, IBizLogic bizLogic)
 			throws BizLogicException
