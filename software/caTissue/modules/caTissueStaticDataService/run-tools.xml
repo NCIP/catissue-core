@@ -277,7 +277,14 @@
     <!--END     Writable API targets-->
 
     <!-- START Service rebuild -->
-    <target name="updateService" depends="all, checkContribTasksDefined, defineContribTasks, checkGlobus, defineClasspaths">
+    <target name="updateService" depends="all">
+
+        <!-- DOZER MERGE -->
+        <foreach target="-processDozer" param="fullFileName" inheritall="true">
+            <fileset dir="./de_codegen/artifacts" casesensitive="yes">
+                <include name="**/*-dozer-files.jar"/>
+            </fileset>
+        </foreach>
 
         <!-- Compile DECodeGen and prepare artifacts -->
         <ant inheritAll="false" inheritRefs="false" antfile="${decodegen.dir}/build.xml" target="all" dir="${decodegen.dir}">
@@ -304,13 +311,6 @@
         <foreach target="-importXSDs" param="fullJarFileName" inheritall="false">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
                 <include name="*-schema.jar"/>
-            </fileset>
-        </foreach>
-
-        <!-- DOZER MERGE -->
-        <foreach target="-processDozer" param="fullFileName" inheritall="true">
-            <fileset dir="./de_codegen/artifacts" casesensitive="yes">
-                <include name="**/*-dozer-files.jar"/>
             </fileset>
         </foreach>
 
