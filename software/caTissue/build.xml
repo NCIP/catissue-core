@@ -464,7 +464,7 @@
 		</antcall>
 
 		<war destfile="${target.dir}/dist/catissuecore.war" webxml="${catissue.web}/WEB-INF/web.xml" duplicate="preserve" manifest="${temp.dir}/MANIFEST.MF">
-			<fileset dir="${temp.dir}/bulkoperation/src/web">
+			<fileset dir="${temp.dir}/bulkoperation/">
 				<include name="**/pages/**" />
 				<include name="**/jss/**" />
 				<include name="**/css/**" />
