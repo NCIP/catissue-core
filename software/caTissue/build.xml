@@ -408,7 +408,7 @@
 
     <target name="bulkoperation_check_prerequisite" description="Check bulkoperation.zip file exists or not in base directory">
 		<!-- Check bulkoperation.zip file exists or not in base	directory. -->
-		<available file="${base.dir}/bulkoperator.zip" property="file.exists" value="false" />
+		<available file="${target.dir}/dist/bulkoperator.zip" property="file.exists" value="false" />
 		<if>
 			<not>
 				<isset property="file.exists" />
