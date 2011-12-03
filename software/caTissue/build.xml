@@ -408,7 +408,7 @@
 
     <target name="bulkoperation_check_prerequisite" description="Check bulkoperation.zip file exists or not in base directory">
 		<!-- Check bulkoperation.zip file exists or not in base	directory. -->
-		<available file="${target.dir}/dist/bulkoperator.zip" property="file.exists" value="false" />
+		<available file="${base.dir}/bulkoperator.zip" property="file.exists" value="false" />
 		<if>
 			<not>
 				<isset property="file.exists" />
@@ -464,7 +464,7 @@
 		</antcall>
 
 		<war destfile="${target.dir}/dist/catissuecore.war" webxml="${catissue.web}/WEB-INF/web.xml" duplicate="preserve" manifest="${temp.dir}/MANIFEST.MF">
-			<fileset dir="${temp.dir}/bulkoperation/">
+			<fileset dir="${temp.dir}/bulkoperation/src/web">
 				<include name="**/pages/**" />
 				<include name="**/jss/**" />
 				<include name="**/css/**" />
@@ -728,7 +728,7 @@
 		<copy todir="${zip.dir}/modules/bulk_operations/lib" overwrite="true">
 			<fileset dir="${caTissueSuite_Client_lib.dir}">
 				<include name="*.jar" />
-				<exclude name="AdvancedQuery*.jar" />
+				<exclude name="AdvanceQuery*.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true">
@@ -873,7 +873,7 @@
 			<fileset dir="${private_public_migrator_lib.dir}" />
 		</copy>
 
-		<copy file="${target.dir}/dist/AdvancedQuery_Installable.zip" todir="${zip.dir}/modules/query/lib" overwrite="true" />
+		<copy file="${target.dir}/dist/AdvanceQuery_Installable.zip" todir="${zip.dir}/modules/query/lib" overwrite="true" />
 		<copy file="${conf.dir}/taggedvalues.xml" todir="${zip.dir}/modules/query/conf" overwrite="true" />
 		<!--<copy file="${conf.dir}/paths.txt" todir="${zip.dir}/modules/query/conf" overwrite="true" /> -->
 		<copy file="${conf.dir}/paths.txt" todir="${zip.dir}" overwrite="true" />
@@ -924,7 +924,7 @@
 				<include name="commons-lang.jar" />
 				<include name="xercesImpl.jar" />
 
-				<include name="AdvancedQuery.jar" />
+				<include name="AdvanceQuery.jar" />
 				<include name="bulkoperator.jar" />
 				<include name="commonpackage-1.2.w1.jar" />
 				<include name="DAO-1.1.9.5.jar" />
@@ -1317,7 +1317,7 @@
 				<include name="DynamicExtensions*.jar" />
 				<include name="SimpleQuery*.jar" />
 				<include name="securityManager*.jar" />
-				<include name="AdvancedQuery*.jar" />
+				<include name="AdvanceQuery*.jar" />
 				<include name="bulkoperator.jar" />
 			</fileset>
 			<fileset dir="${tempCatissuecore.dir}">
@@ -1332,7 +1332,7 @@
 				<include name="SimpleQuery*.jar" />
 				<include name="DynamicExtensions*.jar" />
 				<include name="securityManager*.jar" />
-				<include name="AdvancedQuery*.jar" />
+				<include name="AdvanceQuery*.jar" />
 			</fileset>
 			<fileset dir="${tempCatissuecore.dir}">
 				<include name="catissuecore.jar" />
@@ -1349,7 +1349,7 @@
 				<include name="DynamicExtensions*.jar" />
 				<include name="SimpleQuery*.jar" />
 				<include name="securityManager*.jar" />
-				<include name="AdvancedQuery*.jar" />
+				<include name="AdvanceQuery*.jar" />
 			</fileset>
 		</copy>
 	</target>
@@ -1520,7 +1520,7 @@
 	<target name="copy" description="Copies the subproject jars and zips to appropriate locations.">
 		<copy todir="${de_integration_client_lib.dir}" overwrite="true">
 			<fileset dir="${compile.lib.dir}">
-				<include name="AdvancedQuery.jar" />
+				<include name="AdvanceQuery.jar" />
 				<include name="commonpackage-*.jar" />
 				<include name="DAO-*.jar" />
 				<include name="DynamicExtensions.jar" />
@@ -1557,7 +1557,7 @@
 				<include name="SimpleQuery-*.jar" />
 				<include name="titli-washu-*.jar" />
 				<include name="washu-commons-*.jar" />
-				<include name="AdvancedQuery.jar" />
+				<include name="AdvanceQuery.jar" />
 				<include name="bulkoperator.jar" />
 				<include name="query*.jar" />
 				<include name="IDPAuthenticationManager0_1.jar" />
@@ -1565,7 +1565,7 @@
 		</copy>
 		<copy todir="${caTissueSuite_Client_lib.dir}" overwrite="true">
 			<fileset dir="${compile.lib.dir}">
-				<include name="AdvancedQuery.jar" />
+				<include name="AdvanceQuery.jar" />
 				<include name="bulkoperator.jar" />
 				<include name="commonpackage-*.jar" />
 				<include name="DAO-*.jar" />
@@ -1581,7 +1581,7 @@
 		</copy>
 		<copy todir="${target.dir}/dist" overwrite="true">
 			<fileset dir="${compile.lib.dir}">
-				<include name="AdvancedQuery_Installable.zip" />
+				<include name="AdvanceQuery_Installable.zip" />
 				<include name="bulkoperator.zip" />
 				<include name="clientFormCreator.zip" />
 				<include name="dynamicextensions.zip" />
@@ -1595,7 +1595,7 @@
 				<include name="DAO*.jar" />
 				<include name="SimpleQuery*.jar" />
 				<include name="securityManager*.jar" />
-				<include name="AdvancedQuery*.jar" />
+				<include name="AdvanceQuery*.jar" />
 				<include name="bulkoperator.jar" />
 				<include name="ParticipantManager*.jar" />
 			</fileset>
@@ -1606,7 +1606,7 @@
 				<include name="DynamicExtensions*.jar" />
 				<include name="SimpleQuery*.jar" />
 				<include name="securityManager*.jar" />
-				<include name="AdvancedQuery*.jar" />
+				<include name="AdvanceQuery*.jar" />
 				<include name="ParticipantManager*.jar" />
 				<include name="titli-washu*.jar" />
 			</fileset>
@@ -1620,7 +1620,7 @@
 				<include name="titli-washu*.jar" />
 			</fileset>
 			<fileset dir="../${software.dir}">
-				<include name="AdvancedQuery_Installable.zip" />
+				<include name="AdvanceQuery_Installable.zip" />
 				<include name="bulkoperator.zip" />
 				<include name="clientFormCreator.zip" />
 				<include name="dynamicextensions.zip" />
