@@ -4273,22 +4273,22 @@ Thanking You,
 	</target>
 	<!-- Query Integration targets start -->
 	<target name="unzip_aq_installable" depends="aq_check_prerequisite" description="unzip the advance query zip">
-		<unzip src="${caTissue-webapp.dir.dist}/modules/query/lib/AdvanceQuery_Installable.zip" dest="${prop.temp.dir}/AdvanceQuery"
+		<unzip src="${caTissue-webapp.dir.dist}/modules/query/lib/AdvancedQuery_Installable.zip" dest="${prop.temp.dir}/AdvanceQuery"
 		overwrite="true" />
 	</target>
-	<target name="aq_check_prerequisite" description="Check AdvanceQueryInstallable.zip file exists or not in base directory">
+	<target name="aq_check_prerequisite" description="Check AdvancedQueryInstallable.zip file exists or not in base directory">
 		<!--
-			Check AdvanceQueryInstallable.zip file exists or not in base
+			Check AdvancedQueryInstallable.zip file exists or not in base
 			directory.
 		-->
-		<available file="${caTissue-webapp.dir.dist}/modules/query/lib/AdvanceQuery_Installable.zip" property="file.exists" value="false" />
+		<available file="${caTissue-webapp.dir.dist}/modules/query/lib/AdvancedQuery_Installable.zip" property="file.exists" value="false" />
 		<if>
 			<not>
 				<isset property="file.exists" />
 			</not>
 			<then>
 				<echo
-					message="AdvanceQuery_Installable.zip file not found. It should be in base directory to deploy Advance Query."
+					message="AdvancedQuery_Installable.zip file not found. It should be in base directory to deploy Advance Query."
 					level="error" />
 			</then>
 		</if>
@@ -4730,7 +4730,7 @@ Thanking You,
 								<fileset dir="@{caTissue-webapp.dir.dist}/modules/bulk_operations/lib/"/>
 								<fileset dir="@{caTissue-webapp.dir.dist}/modules/caTissue/lib">
 									<include name="**/*.jar" />
-									<exclude name="AdvanceQuery*.jar" />
+									<exclude name="AdvancedQuery*.jar" />
 								</fileset>
 							</classpath>
 							<sysproperty key="config.dir" value="modules/bulk_operations/conf" />
@@ -4766,7 +4766,7 @@ Thanking You,
 								<fileset dir="@{caTissue-webapp.dir.dist}/modules/bulk_operations/lib/"/>
 								<fileset dir="@{caTissue-webapp.dir.dist}/modules/caTissue/lib">
 									<include name="*.jar" />
-									<exclude name="AdvanceQuery*.jar" />
+									<exclude name="AdvancedQuery*.jar" />
 								</fileset>
 							</classpath>
 							<sysproperty key="config.dir" value="modules/bulk_operations/conf" />
