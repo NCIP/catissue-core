@@ -528,14 +528,14 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		List<NameValueBean> sppNameList=new ArrayList<NameValueBean>();
 		sppNameList.add(new NameValueBean(Constants.SELECT_OPTION, Constants.SELECT_OPTION));
 
-////		Collection<SpecimenProcessingProcedure> sppCollection=scg.getCollectionProtocolEvent().getsgetSppCollection();
-//		Iterator<SpecimenProcessingProcedure> sppIter=sppCollection.iterator();
-//		while(sppIter.hasNext())
-//		{
-//			SpecimenProcessingProcedure spp=sppIter.next();
-//			String sppName=spp.getName();
-//			sppNameList.add(new NameValueBean(sppName,sppName));
-//		}
+		Collection<SpecimenProcessingProcedure> sppCollection=scg.getCollectionProtocolEvent().getSppCollection();
+		Iterator<SpecimenProcessingProcedure> sppIter=sppCollection.iterator();
+		while(sppIter.hasNext())
+		{
+			SpecimenProcessingProcedure spp=sppIter.next();
+			String sppName=spp.getName();
+			sppNameList.add(new NameValueBean(sppName,sppName));
+		}
 		return sppNameList;
 	}
 
