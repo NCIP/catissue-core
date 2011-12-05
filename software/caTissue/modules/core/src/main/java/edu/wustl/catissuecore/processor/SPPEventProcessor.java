@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -49,6 +50,7 @@ import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.catissuecore.domain.processingprocedure.DefaultAction;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
+import edu.wustl.catissuecore.processingprocedure.SPPActionComparator;
 import edu.wustl.catissuecore.uiobject.SpecimenWrapper;
 import edu.wustl.catissuecore.upgrade.IntegrateDEData;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -123,7 +125,9 @@ public class SPPEventProcessor
 				else
 				//SPP Application is not null, data entry for some or all SPP events has already been performed
 				{
-					return populateSPPEventsBasedOnSPPApplication(processingSPP.getActionCollection(), sppApplication);
+					TreeSet<Action> actionList = new TreeSet<Action>(new SPPActionComparator());
+					actionList.addAll(processingSPP.getActionCollection());
+					return populateSPPEventsBasedOnSPPApplication(actionList, sppApplication);
 				}
 			}
 		}
@@ -143,7 +147,9 @@ public class SPPEventProcessor
 			Collection<Action> actionCollection, boolean isDataEntryPerformed) throws ApplicationException
 	{
 		List<Map<String, Object>> gridData = new ArrayList<Map<String, Object>>();
-		for (Action sppAction : actionCollection)
+		TreeSet<Action> actionList = new TreeSet<Action>(new SPPActionComparator());
+		actionList.addAll(actionCollection);
+		for (Action sppAction : actionList)
 		{
 			//For each form retrieve caption.
 			String containerCaption = getContainerCaption(sppAction.getContainerId());
@@ -209,8 +215,10 @@ public class SPPEventProcessor
 	private void generatSPPEventData(List<Map<String, Object>> sppEventData,
 			Collection<ActionApplication> actionApplicationCollection, Collection<Action> actionCollection) throws ApplicationException
 	{
+		TreeSet<Action> actionList = new TreeSet<Action>(new SPPActionComparator());
+		actionList.addAll(actionCollection);
 		//for each action check is data present, if yes then show that data else show default values
-		for (Action action : actionCollection)
+		for (Action action : actionList)
 		{
 			boolean isDataPresent = false;
 			
