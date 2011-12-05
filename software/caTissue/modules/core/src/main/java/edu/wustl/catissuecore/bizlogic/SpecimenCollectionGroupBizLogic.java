@@ -177,7 +177,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				// check for closed CollectionProtocol
 				this.checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
 				scg.setCollectionProtocolEvent(cpe);
-				if(scg.getName()== null)
+				if(scg.getName()== null || reportLoaderFlag)
 				{
 					this.generateSCGLabel(scg);
 				}
