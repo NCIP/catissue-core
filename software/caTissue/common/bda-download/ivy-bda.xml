@@ -106,18 +106,19 @@ This is the definition of a virtual module called bda-download that has a depend
 
 <!-- START caTissue External Modules -->
     <dependency org="gov.nih.nci.catissue" name="advanced-query" rev="1.3.1" conf="aq->*" transitive="false"/>
+    <dependency org="gov.nih.nci.catissue" name="commons" rev="1.3" conf="app_lib->*" transitive="false"/>
 
-    <dependency org="gov.nih.nci.catissue" name="bulk-operations" rev="2.1" conf="bo->*"/>
+    <dependency org="gov.nih.nci.catissue" name="bulk-operations" rev="2.1" conf="bo->*" transitive="false"/>
     <dependency org="gov.nih.nci.catissue" name="dynamic-extensions" rev="1.5.2" conf="de->*"/>
   	<dependency org="gov.nih.nci.catissue" name="idp-authentication-manager" rev="0_1" conf="idp->*"/>
     <dependency org="gov.nih.nci.catissue" name="participant-manager" rev="1.0" conf="pm->*"/>
-    <dependency org="gov.nih.nci.catissue" name="common-package" rev="1.2.w1" conf="app_lib->*"/>
-  	<dependency org="gov.nih.nci.catissue" name="dao" rev="1.1.9.5.1" conf="app_lib->*"/>
+    <!--<dependency org="gov.nih.nci.catissue" name="common-package" rev="1.2.w1" conf="app_lib->*"/>-->
+  	<!--<dependency org="gov.nih.nci.catissue" name="dao" rev="1.1.9.5.1" conf="app_lib->*"/>-->
   	<dependency org="gov.nih.nci.catissue" name="query" rev="1.0" conf="app_lib->*"/>
    	<dependency org="gov.nih.nci.catissue" name="security-manager" rev="1.1.7.3" conf="app_lib->*"/>
   	<dependency org="gov.nih.nci.catissue" name="simple-query" rev="1.1.9.2.2" conf="app_lib->*"/>
   	<dependency org="gov.nih.nci.catissue" name="keyword-search" rev="1.0" conf="app_lib->*"/>
-  	<dependency org="gov.nih.nci.catissue" name="washu-commons" rev="1.1.8" conf="app_lib->*"/>
+  	<!--<dependency org="gov.nih.nci.catissue" name="washu-commons" rev="1.1.8" conf="app_lib->*"/>-->
 <!-- END caTissue External Modules -->
 
     <!-- Dependent jars end here -->
