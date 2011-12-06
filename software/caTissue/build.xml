@@ -393,7 +393,7 @@
 	</target>
 
     <target name="integrate_bulk_operation" description="Start of Integrating the Bulk Operation Module">
-		<echo>Integrating the Bulk Operation Module</echo>
+		<echo message="Integrating the Bulk Operation Module..." />
 		<antcall target="unzip_bulkoperation_installable" />
 		<ant dir="${basedir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="bulkoperation_integrate_app">
 			<property name="deploy.temp.dir" value="${temp.dir}/bulkoperation" />
@@ -404,6 +404,7 @@
 	</target>
 
 	<target name="unzip_bulkoperation_installable" depends="bulkoperation_check_prerequisite" description="unzip the bulk operation zip">
+        <echo message="Unzipping ${target.dir}/dist/bulkoperator.zip into ${basedir}/bulkoperation..." />
 		<unzip src="${target.dir}/dist/bulkoperator.zip" dest="${basedir}/bulkoperation" overwrite="true" />
 	</target>
 
@@ -465,12 +466,19 @@
 		</antcall>
 
 		<war destfile="${target.dir}/dist/catissuecore.war" webxml="${catissue.web}/WEB-INF/web.xml" duplicate="preserve" manifest="${temp.dir}/MANIFEST.MF">
-			<fileset dir="${temp.dir}/bulkoperation">
+
+			<fileset dir="${temp.dir}/bulkoperation/src/web">
 				<include name="**/pages/**" />
 				<include name="**/jss/**" />
 				<include name="**/css/**" />
 				<exclude name="**/css/catissue_suite.css" />
 			</fileset>
+
+            <fileset dir="${temp.dir}/bulkoperation/src/java">
+                <include name="WEB-INF/struts-config.xml" />
+                <include name="WEB-INF/web.xml" />
+                <include name="WEB-INF/bulkoperation-struts-config.xml" />
+            </fileset>
 
 			<fileset dir="${catissue.web}">
 				<include name="css/**" />
@@ -591,12 +599,6 @@
 				<include name="CDEConfig.xsd" />
 				<include name="ApplicationVersionInfo.txt" />
 				<include name="client-config.wsdd" />
-			</fileset>
-
-			<fileset dir="${temp.dir}/bulkoperation/src/java">
-				<include name="WEB-INF/struts-config.xml" />
-				<include name="WEB-INF/web.xml" />
-				<include name="WEB-INF/bulkoperation-struts-config.xml" />
 			</fileset>
 
 			<!-- change for csm related war -->
