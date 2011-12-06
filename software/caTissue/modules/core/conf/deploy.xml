@@ -704,6 +704,8 @@
 			<fileset dir="${caTissue-webapp.dir.dist}/modules/bulk_operations/conf">
 				<include name="mapping.xml" />
 				<include name="bulkOperation.properties" />
+				<include name="bulkOperatorXMLTemplateRules.xml" />
+				<include name="BulkOperations.xsd" />
 			</fileset>
 		</copy>
 		<copy todir="${jboss.server.url}/deploy" overwrite="true">
