@@ -269,7 +269,7 @@ Ext.onReady(function(){
 									  initialValue="${createSpecimenTemplateForm.processingSPPForSpecimen}"
 									  styleClass="black_ar"
 									  onChange="resetDSforDerive(this)"
-									  size="20"
+									  size="32" 
 									/>
 								</td>
                               </tr>
@@ -435,7 +435,7 @@ String comboDataStorName = "ds_"+rowno;
 								</logic:equal>
   							    <logic:notEqual name="isPersistentValue" value="true">
 								<td class="black_ar" >
-								<input type="text" name="combo_<%=specimenClass%>" id="combo_<%=specimenClass%>" size="8" value='<%=className%>'/>
+								<input type="text" name="combo_<%=specimenClass%>" id="combo_<%=specimenClass%>" size="8" value='<%=className%>' onmouseover="showTip(this.id);"/>
 									<script>
 									Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=specimenClass';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '<%=specimenClass%>',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: 'combo_<%=specimenClass%>'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});combo.on('select',function(){setStudyFormValues(combo.value,'<%=rowno%>');});});
 									</script>
@@ -452,7 +452,7 @@ String comboDataStorName = "ds_"+rowno;
   							    <logic:notEqual name="isPersistentValue" value="true">
 
 	                                <td class="black_ar" >
-									<input type="text" name="combo_<%=specimenType%>" id="combo_<%=specimenType%>" size="8" value='<%=typeclassValue%>'/>
+									<input type="text" name="combo_<%=specimenType%>" id="combo_<%=specimenType%>" size="8" value='<%=typeclassValue%>' onmouseover="showTip(this.id);"/>
 									<script>
 									Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=specimenType';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '<%=specimenType%>',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: 'combo_<%=specimenType%>',fields: ['id_cp'],id: '<%=comboDataStorName%>'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
 									</script>
@@ -471,7 +471,7 @@ String comboDataStorName = "ds_"+rowno;
   							    <logic:notEqual name="isPersistentValue" value="true">
 
 									<td class="black_ar" >
-									<input type="text" name="combo_<%=storageLocation%>" id="combo_<%=storageLocation%>" size="8" value="<%=storageLocationValue%>"/>
+									<input type="text" name="combo_<%=storageLocation%>" id="combo_<%=storageLocation%>" size="8" value="<%=storageLocationValue%>" onmouseover="showTip(this.id);"/>
 										<script>
 									Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=storageLocation';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '<%=storageLocation%>',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: 'combo_<%=storageLocation%>'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
 									</script>
@@ -526,7 +526,7 @@ String comboDataStorName = "ds_"+rowno;
 								
 
 									<td class="black_ar" >
-									 <input type="text" name="combo_<%=creationEvent%>" id="combo_<%=creationEvent%>" size="8" value="<%=creationEventValue%>"/>
+									 <input type="text" name="combo_<%=creationEvent%>" id="combo_<%=creationEvent%>" size="8" value="<%=creationEventValue%>" onmouseover="showTip(this.id);"/>
 										<script>
 										var processingSPPName = "";
 
@@ -544,7 +544,7 @@ String comboDataStorName = "ds_"+rowno;
 								
 
 									<td class="black_ar" >
-									<input type="text" name="combo_<%=processingSPP%>" id="combo_<%=processingSPP%>" size="8" value="<%=processingSPPValue%>"/>
+									<input type="text" name="combo_<%=processingSPP%>" id="combo_<%=processingSPP%>" size="8" value="<%=processingSPPValue%>" onmouseover="showTip(this.id);"/>
 										<script>
 									Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=processingSPP';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '<%=processingSPP%>',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',selectOnFocus:'true',applyTo: 'combo_<%=processingSPP%>'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
 									</script>

@@ -355,7 +355,7 @@ function setStudyFormValues(combobox,rowno)
 
 		nameForCombo = "combo_"+objname;
 		comboDataStorName = "ds_"+rowno;
-		sname = "<input type='text' name='"+nameForCombo+"' id='"+nameForCombo+"' size='6'/>";
+		sname = "<input type='text' name='"+nameForCombo+"' id='"+nameForCombo+"' size='6' onmouseover='showTip(this.id)'/>";
 		
 		
 		spreqtype.innerHTML="" + sname + cell1;
@@ -372,7 +372,7 @@ eval(testCombo);
 		
 		nameForCombo = "combo_"+objname;
 		comboDataStorName = "ds_"+rowno;
-		sname = "<input type='text' name='"+nameForCombo+"' id='"+nameForCombo+"' size='6'/>";
+		sname = "<input type='text' name='"+nameForCombo+"' id='"+nameForCombo+"' size='6'  onmouseover='showTip(this.id)'/>";
 		spreqsubtype.innerHTML="" + sname;
 		var testVar = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_specimenClass)";
 		var testCombo="Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=specimenType&selSpecClass=collectionProtocolId';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '"+objname+"' ,displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: '"+nameForCombo+"',fields: ['id_cp'],id: comboDataStorName});combo.on('expand', function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle('width', '250');combo.innerList.setStyle('width', '250');}else{combo.list.setStyle('width', 'auto');combo.innerList.setStyle('width', 'auto');}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});";
@@ -386,7 +386,7 @@ eval(testCombo);
 
 		nameForCombo = "combo_"+objname;
 		comboDataStorName = "ds_"+rowno;
-		sname = "<input type='text' name='"+nameForCombo+"' id='"+nameForCombo+"' size='6'/>";
+		sname = "<input type='text' name='"+nameForCombo+"' id='"+nameForCombo+"' size='6'  onmouseover='showTip(this.id)'/>";
 		spreqsubtype.innerHTML="" + sname;
 		
 		var testCombo="Ext.onReady(function(){var myUrl= 'ClinincalStatusComboAction.do?requestFor=storageLocation';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: '"+objname+"' ,displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: '"+nameForCombo+"'});combo.on('expand', function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle('width', '250');combo.innerList.setStyle('width', '250');}else{combo.list.setStyle('width', 'auto');combo.innerList.setStyle('width', 'auto');}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});";
@@ -398,7 +398,7 @@ eval(testCombo);
 		sname="";
 		objname = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_quantity)";
 
-		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' maxlength='10' size='3' class='black_ar' id='" + objname + "'>"
+		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' onmouseover='showTip(this.id)' maxlength='10' size='3' class='black_ar' id='" + objname + "'>"
 		sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 
 		spreqqty.innerHTML="" + sname;
@@ -409,7 +409,7 @@ eval(testCombo);
 		sname="";
 		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_concentration)";
 
-		sname="<input type='text' name='" + objname + "' style='text-align:right' value='0' size='3'  maxlength='10' class='black_ar' id='" + objname + "'>"
+		sname="<input type='text' onmouseover='showTip(this.id)' name='" + objname + "' style='text-align:right' value='0' size='3'  maxlength='10' class='black_ar' id='" + objname + "'>"
 		sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 
 		spreqqty.innerHTML="" + sname;
@@ -421,7 +421,7 @@ eval(testCombo);
 		objname ="deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_creationEvent)";
 		nameForCombo = "combo_"+objname;
 		comboDataStorName = "ds_ce_"+rowno;
-		sname = "<input type='text' name='"+nameForCombo+"' id='"+nameForCombo+"' size='6'/>";
+		sname = "<input type='text' name='"+nameForCombo+"' id='"+nameForCombo+"' size='6' onmouseover='showTip(this.id)'/>";
 		spreqqty.innerHTML="" + sname;
 		var processingSPPName = "";
 		
@@ -440,7 +440,7 @@ eval(testCombo);
 		
 		nameForCombo = "combo_"+objname;
 		comboDataStorName = "ds_"+rowno;
-		sname = "<input type='text' name='"+nameForCombo+"' id='"+nameForCombo+"' size='6'/>";
+		sname = "<input type='text' name='"+nameForCombo+"' id='"+nameForCombo+"' size='6' onmouseover='showTip(this.id)'/>";
 		
 		spreqqty.innerHTML="" + sname;
 
