@@ -13,6 +13,8 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -73,6 +75,7 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
@@ -170,7 +173,21 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				scg.setBarcode(null);
 			}
 			this.setCollectionProtocolRegistration(dao, scg, null);
-
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+			
+			Date birthDate=participantBizLogic.getDateOfBirth(scg.getCollectionProtocolRegistration().getParticipant());
+			Long diffday;
+			Double ageDiff;
+			DecimalFormat twoDigitDecimal = new DecimalFormat(Constants.DECIMALFORMAT);
+			if(scg.getEncounterTimestamp()!=null && birthDate!=null && scg.getAgeAtCollection()==null)
+			{
+				diffday=(scg.getEncounterTimestamp().getTime() - birthDate.getTime()) /(24 * 60 * 60 * 1000);
+				ageDiff=Double.valueOf(twoDigitDecimal.format(Double.valueOf(diffday) / (365)));
+				scg.setAgeAtCollection(ageDiff);
+			}
+			
+			
 			if (cpe != null)
 			{
 				//final CollectionProtocolEvent cpe = (CollectionProtocolEvent) collectionProtocolEventObj;
@@ -230,6 +247,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		{
 			//this.LOGGER.error(exp.getLogMessage(), exp);
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
+		} catch (final ParseException e) {
+			// TODO Auto-generated catch block
+			//throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
 
@@ -528,7 +548,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 	throws BizLogicException
 {
-
+		SpecimenCollectionGroupUIObject scguiObject=new SpecimenCollectionGroupUIObject();
+		update(dao,obj,oldObj,scguiObject,sessionDataBean);
 }
 
 	/**
@@ -697,6 +718,23 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			persistentSCG.setClinicalDiagnosis(specimenCollectionGroup.getClinicalDiagnosis());
 			persistentSCG.setClinicalStatus(specimenCollectionGroup.getClinicalStatus());
 			persistentSCG.setName(specimenCollectionGroup.getName());
+			persistentSCG.setEncounterTimestamp(specimenCollectionGroup.getEncounterTimestamp());
+			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+			Date birthDate=participantBizLogic.getDateOfBirth(specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant());
+			Long diffday;
+			Double ageDiff;
+			DecimalFormat twoDigitDecimal = new DecimalFormat(Constants.DECIMALFORMAT);
+			if(specimenCollectionGroup.getAgeAtCollection()!=null)
+			{
+				persistentSCG.setAgeAtCollection(specimenCollectionGroup.getAgeAtCollection());
+			}
+			else if(specimenCollectionGroup.getEncounterTimestamp()!=null && birthDate!=null)
+			{
+				diffday=(specimenCollectionGroup.getEncounterTimestamp().getTime() - birthDate.getTime()) /(24 * 60 * 60 * 1000);
+				ageDiff=Double.valueOf(twoDigitDecimal.format(Double.valueOf(diffday) / (365)));
+				persistentSCG.setAgeAtCollection(ageDiff);
+			}
 			String barCode = specimenCollectionGroup.getBarcode();
 			if ("" != barCode)
 			{
@@ -735,9 +773,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				//this.LOGGER.debug("specimenCollectionGroup.getActivityStatus() "
 				//+ specimenCollectionGroup.getActivityStatus());
 				final Long specimenCollectionGroupIDArr[] = {specimenCollectionGroup.getId()};
-				final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-				final NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) factory
-						.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+				final NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 				bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao,
 						specimenCollectionGroupIDArr);
 			}
@@ -752,6 +788,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		{
 			//this.LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		} catch (ParseException e) {
+			
 		}
 	}
 
@@ -976,7 +1014,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		specimenCollectionGroup.getCollectionProtocolRegistration()
 				.getSpecimenCollectionGroupCollection().add(specimenCollectionGroup);
 	}
-
+	
 	/**
 	 * @param dao : dao
 	 * @param specimenCollectionGroup : specimenCollectionGroup

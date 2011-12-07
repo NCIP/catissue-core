@@ -1,6 +1,11 @@
 package edu.wustl.catissuecore.bizlogic.uidomain;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -17,6 +22,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.InputUIRepOfDomain;
 import edu.wustl.common.bizlogic.UIDomainTransformer;
@@ -39,7 +45,14 @@ public class SpecimenCollectionGroupTransformer
         domainObject.setClinicalDiagnosis(uiRepOfDomain.getClinicalDiagnosis());
         domainObject.setClinicalStatus(uiRepOfDomain.getClinicalStatus());
         domainObject.setActivityStatus(uiRepOfDomain.getActivityStatus());
-
+        if(uiRepOfDomain.getCollectionDate()!=null)
+        {
+        	domainObject.setEncounterTimestamp(EventsUtil.setTimeStamp(uiRepOfDomain.getCollectionDate(), uiRepOfDomain.getTimeInHour(), uiRepOfDomain.getTimeInMinute()));
+        }
+		if(uiRepOfDomain.getAgeAtCollection()!=null && !uiRepOfDomain.getAgeAtCollection().equals(""))
+		{
+			domainObject.setAgeAtCollection(Double.valueOf(uiRepOfDomain.getAgeAtCollection()));
+		}
         InstanceFactory<Site> siteInstFact = DomainInstanceFactory.getInstanceFactory(Site.class);
         domainObject.setSpecimenCollectionSite(siteInstFact.createObject());
 

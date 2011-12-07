@@ -380,12 +380,14 @@ function cal_after_year(id,day, month, year)
  * PENDING: find a way to make the format customable.
  */
 function dtemaj(id,jour, mois, annee){		
+	
 	document.forms[calformname].elements[calformelement].value = formatDate(jour, mois, annee);
 	document.forms[calformname].elements[calformelement].stlayout = new Object();
 	document.forms[calformname].elements[calformelement].stlayout.day = jour;
 	document.forms[calformname].elements[calformelement].stlayout.month = mois;
 	document.forms[calformname].elements[calformelement].stlayout.year = annee;
 	hideCalendar(id);	
+	
 }
 
 
@@ -465,6 +467,8 @@ function hideCalendar(id) {
 		var calendrier = document.getElementById(divId);
 		calendrier.style.visibility="hidden";
 	}
+	// This Code for Trigger the onChange Event IF Specify By User in TLD.
+	document.forms[calformname].elements[calformelement].onchange();
 	
 }
 
@@ -547,3 +551,4 @@ function showElement(elmID)
                   obj.style.visibility = "";
 	}	
 }
+

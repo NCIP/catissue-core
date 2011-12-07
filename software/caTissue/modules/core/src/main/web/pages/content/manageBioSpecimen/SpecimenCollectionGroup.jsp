@@ -7,6 +7,10 @@
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="java.text.SimpleDateFormat"%>
+<%@ page import="java.util.Date"%>
+<%@ page import="java.text.DecimalFormat"%>
+
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
@@ -19,6 +23,53 @@
 <script src="jss/script.js" type="text/javascript"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
+<script type="text/javascript">
+var DateDiff = {
+		inYears: function(diffOfDate) {
+		var num_years = diffOfDate/31536000000;
+	        return num_years;
+	    }
+	}
+function makeJSDateString(dateString)
+{
+	var elementOfDate=dateString.split("-");
+	var makeJSDateString=elementOfDate[0]+"/"+elementOfDate[1]+"/"+elementOfDate[2];	
+	return makeJSDateString;
+}
+function calculateAge()
+{
+	var session_Date_String=document.getElementById("sess_Date").value;
+	var collection_Date_String=document.getElementById("collectionDate").value;
+	if(session_Date_String.length!=0 && session_Date_String!=null)
+	{
+		// Calculate Date Diff
+		var dateString1=makeJSDateString(collection_Date_String);
+		var date1 = new Date(dateString1); 
+		
+		var dateString2=makeJSDateString(session_Date_String);
+		var date2 = new Date(dateString2); 
+		
+		var difference=date1-date2;
+		var no_year=new Number(DateDiff.inYears(difference)).toFixed(2);
+		if(isNaN(no_year))
+		{
+			
+			document.getElementById('ageAtCollection').value="";				
+		}
+		else
+		{
+			
+			document.getElementById('ageAtCollection').value=no_year.toString();
+		}
+			
+	}
+	else
+	{
+		document.getElementById('ageAtCollection').value="";
+	}
+	
+}
+</script>
 <script src="jss/calendarComponent.js" type="text/javascript"></script>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
@@ -652,6 +703,53 @@
  <%
  	}
  %>
+<%
+Date birthDateObject=(Date)request.getAttribute("dob");
+String birthDateString=""; 
+String collectionDateString=""; 
+String showageDiffString="";
+int collectionMinute=0;		
+int collectionHour=0; 		
+Long diffday=new Long(0);   
+Double ageDiff=new Double(0);
+SimpleDateFormat convertDateFormat = new SimpleDateFormat("MM-dd-yyyy");
+DecimalFormat twoDigitDecimal = new DecimalFormat("#.##");
+Date encounterTimeStampDate;
+collectionDateString=form.getCollectionDate();
+if(collectionDateString!=null)
+{
+	if(birthDateObject!=null)
+	{
+		birthDateString=convertDateFormat.format(birthDateObject);
+		encounterTimeStampDate=(Date)convertDateFormat.parse(collectionDateString);		
+		//collectionDateString=convertDateFormat.format(encounterTimeStampDate);
+		diffday=(encounterTimeStampDate.getTime() - birthDateObject.getTime()) /(24 * 60 * 60 * 1000);
+		ageDiff=Double.valueOf(diffday) / (365);
+		showageDiffString=twoDigitDecimal.format(ageDiff).toString();
+		//Date collectionDate=(form.getEncounterTimeStamp());
+		//collectionDateString = convertDateFormat.format(collectionDate);
+		collectionMinute=encounterTimeStampDate.getMinutes();
+		collectionHour=encounterTimeStampDate.getHours();
+		form.setAgeAtCollection(showageDiffString);
+	}
+}
+else
+{
+	Date defaultDate=new java.util.Date();
+	collectionDateString=convertDateFormat.format(defaultDate);
+	collectionMinute=defaultDate.getMinutes();
+	collectionHour=defaultDate.getHours();	
+	if(birthDateObject!=null)
+		{
+			birthDateString=convertDateFormat.format(birthDateObject);
+			diffday=(defaultDate.getTime() - birthDateObject.getTime()) /(24 * 60 * 60 * 1000);
+			ageDiff=Double.valueOf(diffday) / (365);
+			showageDiffString=twoDigitDecimal.format(ageDiff).toString();
+			form.setAgeAtCollection(showageDiffString);
+		}
+		
+}
+%>
 <html:form action="<%=formName%>">
 	<%
 		if(pageView.equals("add"))
@@ -774,3 +872,13 @@
 showPriterTypeLocation();
 </script>
 </body>
+
+
+
+
+
+
+
+
+
+

@@ -17,6 +17,7 @@ package edu.wustl.catissuecore.action;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +40,7 @@ import edu.wustl.bulkoperator.util.BulkOperationException;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
+import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.cdms.integrator.CatissueCdmsIntegrator;
 import edu.wustl.catissuecore.cdms.integrator.CatissueCdmsURLInformationObject;
@@ -76,6 +78,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
@@ -230,6 +233,11 @@ public class SpecimenCollectionGroupAction extends SecureAction
 							.get(0);
 				}
 			}
+			final ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) factory
+					.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+			Date bod=participantBizLogic.getDateOfBirth(collectionProtocolRegistration.getParticipant());
+			System.out.println(bod);
+			request.setAttribute("dob", bod);
 			User witness = null;
 			if (collectionProtocolRegistration.getId() != null)
 			{

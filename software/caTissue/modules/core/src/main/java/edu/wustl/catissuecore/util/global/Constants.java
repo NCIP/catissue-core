@@ -32,7 +32,9 @@ import edu.wustl.common.util.global.Status;
 
 public class Constants
 {
-
+	/** Specify Decimal Format String for Age At Collection. */
+	public static final String DECIMALFORMAT = "#.##";
+	
 	/** Specify SELECT_OPTION. */
 	public static final String SELECT_OPTION = "-- Select --";
 

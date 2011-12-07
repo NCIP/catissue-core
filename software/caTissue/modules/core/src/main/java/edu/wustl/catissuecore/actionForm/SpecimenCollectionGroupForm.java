@@ -10,9 +10,11 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -75,6 +77,46 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	/** The participants medical identifier id. */
 	private long participantsMedicalIdentifierId;
+	
+	private String timeInHour;
+	private String timeInMinute;
+	
+	public String getTimeInHour() {
+		return timeInHour;
+	}
+
+	public void setTimeInHour(String timeInHour) {
+		this.timeInHour = timeInHour;
+	}
+
+	public String getTimeInMinute() {
+		return timeInMinute;
+	}
+
+	public void setTimeInMinute(String timeInMinute) {
+		this.timeInMinute = timeInMinute;
+	}
+
+	/** The Specimen Collection Group Collected Date */
+	private String collectionDate;
+
+	private String ageAtCollection;
+	
+	public String getAgeAtCollection() {
+		return ageAtCollection;
+	}
+
+	public void setAgeAtCollection(String ageAtCollection) {
+		this.ageAtCollection = ageAtCollection;
+	}
+	
+	public String getCollectionDate() {
+		return collectionDate;
+	}
+
+	public void setCollectionDate(String collectionDate) {
+		this.collectionDate = collectionDate;
+	}
 
 	/** The barcode. */
 	private String barcode;
@@ -449,6 +491,21 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 				.getCollectionStatus());
 		this.surgicalPathologyNumber = CommonUtilities.toString(specimenCollectionGroup
 				.getSurgicalPathologyNumber());
+		if(specimenCollectionGroup.getEncounterTimestamp()!=null)
+		{
+			SimpleDateFormat convertDateFormat = new SimpleDateFormat("MM-dd-yyyy");
+			
+			this.setCollectionDate(convertDateFormat.format(specimenCollectionGroup.getEncounterTimestamp()));
+			this.setTimeInHour(String.valueOf(specimenCollectionGroup.getEncounterTimestamp().getHours()));
+			this.setTimeInMinute(String.valueOf(specimenCollectionGroup.getEncounterTimestamp().getMinutes()));
+			
+		
+		}
+		if(specimenCollectionGroup.getAgeAtCollection()!=null)
+		{
+				this.ageAtCollection=specimenCollectionGroup.getAgeAtCollection().toString();
+		}
+		
 		/**
 		* Name: Shital Lawhale
 		* Reviewer Name : Sachin Lale

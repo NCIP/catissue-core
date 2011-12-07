@@ -124,6 +124,9 @@
 
 			<property name="encounterTimestamp" type="timestamp" update="true"
 				insert="true" column="ENCOUNTER_TIMESTAMP" length="50" />
+				
+			<property name="ageAtCollection" type="double" update="true"
+				insert="true" column="AGE_AT_COLLECTION" length="50" />
 
 			<property name="comment" type="string" update="true" insert="true"
 				column="COMMENTS" length="2000" />

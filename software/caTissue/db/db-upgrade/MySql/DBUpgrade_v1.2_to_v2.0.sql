@@ -170,3 +170,21 @@ INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME,
 -- SQLs to make GSID querieable ends
 COMMIT;
 /
+-- Script for Age at Collection
+ALTER TABLE catissue_specimen_coll_group ADD Column AGE_AT_COLLECTION Double(6,2);
+/
+COMMIT;
+/
+	-- SQL Script for Copy the Encounter TimeStamp Data.
+	UPDATE catissue_specimen_coll_group scg
+		JOIN catissue_specimen_event_param sep ON sep.SPECIMEN_COLL_GRP_ID=scg.identifier
+		JOIN catissue_coll_event_param cep ON sep.identifier = cep.identifier
+		JOIN catissue_coll_prot_reg cpr ON scg.COLLECTION_PROTOCOL_REG_ID=cpr.identifier
+		JOIN catissue_participant part ON part.identifier=cpr.PARTICIPANT_ID
+	Set scg.ENCOUNTER_TIMESTAMP=sep.EVENT_TIMESTAMP,scg.AGE_AT_COLLECTION=TRUNCATE(((TO_DAYS(sep.EVENT_TIMESTAMP) - TO_DAYS(part.BIRTH_DATE))/365),2)
+	WHERE
+		sep.EVENT_TIMESTAMP IS NOT NULL
+		AND sep.SPECIMEN_COLL_GRP_ID IS NOT NULL;
+/
+COMMIT;
+/	

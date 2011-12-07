@@ -1,6 +1,7 @@
 <script type="text/javascript" src="jss/ext-base.js"></script>
 <script type="text/javascript" src="jss/ext-all.js"></script>
 <script type="text/javascript" src="jss/combos.js"></script>
+
 <link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <%
@@ -359,8 +360,102 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 							/>
 					</td>
 				</tr>
-				 <tr><td colspan="3" class="bottomtd"></td></tr>
-				<tr>
+					<tr>
+				<!-- Collection Date -->
+
+					<td align="center" nowrap></td>
+					<td align="left" class="black_ar"><bean:message key="specimenCollectionGroup.collectionDate" /></td>
+					<td align="left" class="black_ar">
+					
+					<input type="hidden" id="sess_Date" value="<%=birthDateObject %>">
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+					<ncombo:DateTimeComponent name="collectionDate" 
+									  id="collectionDate"
+ 									  formName="specimenCollectionGroupForm"
+ 									value="<%=collectionDateString %>"			  
+ 									  onChange="calculateAge();"
+ 									  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
+									  styleClass="formFieldSizedAutoSCG"/>
+									  
+									  <span class="grey_ar_s"> <bean:message key="page.dateFormat" /> </span>
+					</td>
+					<td align="center" nowrap></td>
+										<td align="left" nowrap class="black_ar"><bean:message key="specimenCollectionGroup.collectionTime" /></td>
+										<td align="left" class="black_ar">					
+										<span class="black_ar">
+										<autocomplete:AutoCompleteTag property="timeInHour"
+										optionsList = '${requestScope.hourList}'
+										initialValue="<%=collectionHour %>"
+										styleClass="black_ar"
+										staticField="false" size="4" />	&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+										<autocomplete:AutoCompleteTag property="timeInMinute"
+			   							optionsList = '${requestScope.minutesList}'
+			   							initialValue="<%=collectionMinute %>"
+			   							styleClass="black_ar"
+			   								staticField="false" size="4" />
+			   							&nbsp;<bean:message key="eventparameters.timeinminutes"/></span></td>
+			   						</tr>
+							   		
+								 	<tr><td colspan="3" class="bottomtd"></td></tr>
+			   							
+					</logic:equal>
+					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>" >
+					<% System.out.println("Col Date="+form.getCollectionDate()); %>
+					<ncombo:DateTimeComponent name="collectionDate" 
+									  id="collectionDate"
+ 									  formName="specimenCollectionGroupForm"
+ 									  value="<%=collectionDateString %>"
+ 									  onChange="calculateAge();"
+ 									  pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
+									  styleClass="formFieldSizedAutoSCG"/>
+									  <span class="grey_ar_s"> <bean:message key="page.dateFormat" /> </span>
+									  </td>
+									  <td align="center" nowrap></td>
+										<td align="left" nowrap class="black_ar"><bean:message key="specimenCollectionGroup.collectionStatus" />Collection Time</td>
+										<td align="left" class="black_ar">					
+										<span class="black_ar">
+									  <autocomplete:AutoCompleteTag property="timeInHour"
+									optionsList = '${requestScope.hourList}'
+									initialValue="<%=collectionHour %>"
+									styleClass="black_ar"
+									staticField="false" size="4" />	&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+									<autocomplete:AutoCompleteTag property="timeInMinute"
+			   						optionsList = '${requestScope.minutesList}'
+			   						initialValue="<%=collectionMinute %>"
+			   						styleClass="black_ar"
+			   						staticField="false" size="4" />
+			   						&nbsp;<bean:message key="eventparameters.timeinminutes"/>
+									</span>
+								</td>
+					
+					</tr>	
+			   		</logic:notEqual>
+					<tr>
+									<!-- Age At -->
+									<td align="center" nowrap></td>
+									<td align="left" nowrap class="black_ar"><bean:message key="specimenCollectionGroup.ageAtCollection" /></td>
+									<td align="left" class="black_ar">
+									
+									<%
+										
+										if(form.getAgeAtCollection()!=null && !form.getAgeAtCollection().equals(""))
+										{
+											%>
+											<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="ageAtCollection" property="ageAtCollection" value="<%=showageDiffString %>" readonly="true" />
+											<% 
+										}
+										else
+										{
+											
+											%>
+											<html:text styleClass="formFieldSizedSCG" size="30"  maxlength="255" styleId="ageAtCollection" property="ageAtCollection" value="<%=showageDiffString %>"/>
+											<% 
+										}	
+									%> 
+									</td>
+					</tr>
+			   		<tr><td colspan="3" class="bottomtd"></td></tr>	
+				   <tr>
 					<td>&nbsp;</td>
 					<td align="left" class="black_ar_t"><bean:message key="app.comments"/></td>
 					<td colspan="4" align="left" ><html:textarea styleClass="black_ar" rows="3"  cols="73" property="comment"/></td>
@@ -458,3 +553,18 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	<%@ include file="SpecimenCollectionGroupPageButtons.jsp" %>
 	</table>
 	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

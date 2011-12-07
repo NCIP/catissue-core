@@ -485,7 +485,6 @@ CREATE TABLE `catissue_coll_prot_event`
     CONSTRAINT `FK7AE7715948304401` FOREIGN KEY (`COLLECTION_PROTOCOL_ID`) REFERENCES `catissue_collection_protocol` (`IDENTIFIER`),
     CONSTRAINT `FK_PARENT_COLL_PROT_EVENT` FOREIGN KEY (`IDENTIFIER`) REFERENCES `catissue_abs_speci_coll_group` (`IDENTIFIER`)
 );
-
 CREATE TABLE `catissue_specimen_coll_group`
 (
 	`IDENTIFIER` bigint(20) NOT NULL auto_increment,
@@ -500,6 +499,7 @@ CREATE TABLE `catissue_specimen_coll_group`
     `DATE_OFFSET` integer,
     `DSPR_ID` bigint(20),
     `ISPR_ID` bigint(20),
+    `AGE_AT_COLLECTION` Double(6,2),
 	PRIMARY KEY  (`IDENTIFIER`),
     UNIQUE KEY `NAME` (`NAME`),
 	UNIQUE KEY `BARCODE` (`BARCODE`),

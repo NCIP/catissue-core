@@ -12,6 +12,8 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -69,6 +71,7 @@ import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.global.Permissions;
@@ -222,6 +225,17 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 		cpr.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		cprBizLogic.insert(cpr, dao, sessionDataBean);
 		this.cprIdList.add(cpr.getId());
+	}
+	public static Date getDateOfBirth(Participant participant) throws ApplicationException, ParseException
+	{
+		Date birthDate=null; 
+		String hql="select birthDate from edu.wustl.catissuecore.domain.Participant where id="+participant.getId();
+		List resultList=AppUtility.executeQuery(hql);
+		if(!resultList.isEmpty())
+		{
+			birthDate=(Date) resultList.get(0);
+		}
+		return birthDate;
 	}
 	/**
 	 * This method gets called after insert method

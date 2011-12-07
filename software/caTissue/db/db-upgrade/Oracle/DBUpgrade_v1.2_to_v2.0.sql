@@ -174,3 +174,30 @@ INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME,
 /
 -- SQLs to make GSID querieable ends
 /
+-- Changes For SCG Age AT Collection 
+ALTER TABLE catissue_specimen_coll_group ADD (AGE_AT_COLLECTION NUMBER(6,2))
+/
+-- For Update Encounter Time Stamp:
+	UPDATE catissue_specimen_coll_group scg 
+	set ENCOUNTER_TIMESTAMP =
+	(select max(EVENT_TIMESTAMP) from catissue_specimen_event_param sep,
+	catissue_coll_event_param cep
+	where sep.SPECIMEN_COLL_GRP_ID = scg.identifier and
+	sep.identifier = cep.identifier
+	)
+/
+-- For Update Encounter Time Stamp:
+	UPDATE catissue_specimen_coll_group scg
+	set AGE_AT_COLLECTION=
+	(select DECODE(TRUNC(((scg.ENCOUNTER_
+		TIMESTAMP - part.BIRTH_DATE)/365),2),null,'',TRUNC(((scg.ENCOUNTER_TIMESTAMP - part.BIRTH_DATE)/365),2))
+		from catissue_coll_prot_reg cpr ,catissue_participant part
+		where scg.COLLECTION_PROTOCOL_REG_ID=cpr.identifier
+			AND
+		part.identifier=cpr.PARTICIPANT_ID
+		AND
+		part.BIRTH_DATE IS NOT NULL
+		AND
+		scg.ENCOUNTER_TIMESTAMP IS NOT NULL
+	)
+/
