@@ -130,10 +130,11 @@ public class CreateSpecimenAction extends SecureAction
 		 * Patch ID: 3835_1_16 See also: 1_1 to 1_5 Description : CreatedOn date
 		 * by default should be current date.
 		 */
-
-		createForm.setCreatedDate(edu.wustl.common.util.Utility.parseDateToString(Calendar
-				.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
-
+		if(request.getParameter("path") != null || (createForm.getCreatedDate() == null || createForm.getCreatedDate() == ""))
+		{
+			createForm.setCreatedDate(edu.wustl.common.util.Utility.parseDateToString(Calendar
+					.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
+		}
 		String pageOf = null;
 		final String tempPageOf = (String) request.getParameter(PAGE_OF_STRING);
 		if (tempPageOf == null || tempPageOf.equals(""))
