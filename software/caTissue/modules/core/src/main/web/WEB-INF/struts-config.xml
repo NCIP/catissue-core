@@ -116,6 +116,8 @@ PUBLIC
 	    <form-bean name="ctrpInstituionForm" type="edu.wustl.catissuecore.actionForm.CTRPInstitutionForm"/>
 	    <form-bean name="ctrpEntityForm" type="edu.wustl.catissuecore.actionForm.CTRPEntityForm"/>
 	    <form-bean name="displaySPPEventForm" type="edu.wustl.catissuecore.actionForm.DisplaySPPEventForm"/>
+	    <!-- For bug #21548 -->
+	    		<form-bean name="cancerResearchGroupForm" type="edu.wustl.catissuecore.actionForm.CancerResearchGroupForm"/>
 	</form-beans>
 
 	<!-- Global Exception Definitions -->
