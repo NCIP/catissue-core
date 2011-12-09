@@ -933,7 +933,7 @@
 				<include name="DAO-1.1.9.5.jar" />
 				<include name="DynamicExtensions.jar" />
 				<include name="ParticipantManager.jar" />
-				<include name="SimpleQuery-1.1.9.2.2.jar" />
+				<include name="SimpleQuery*.jar" />
 				<include name="washu-commons-1.1.8.jar" />
 			</fileset>
 			<fileset dir="${caTissueSuite_Client_lib.dir}">
