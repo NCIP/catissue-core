@@ -820,7 +820,7 @@
 		<copy todir="${zip.dir}/modules/custom_impl_lib" overwrite="true">
 			<fileset file="${temp.dir}/Default_label_barcode_gen.jar" />
 			<fileset file="${temp.dir}/label_barcode_gen_client.jar" />
-			<fileset file="${compile.lib.dir}/IDPAuthenticationManager0_1.jar" />
+			<fileset file="${compile.lib.dir}/IDPAuthenticationManager*.jar" />
 			<fileset file="${web_inf_lib.dir}/casclient-2.1.1.jar" />
 		</copy>
 
@@ -1563,7 +1563,7 @@
 				<include name="AdvanceQuery.jar" />
 				<include name="bulkoperator.jar" />
 				<include name="query*.jar" />
-				<include name="IDPAuthenticationManager0_1.jar" />
+				<include name="IDPAuthenticationManager*.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${caTissueSuite_Client_lib.dir}" overwrite="true">
