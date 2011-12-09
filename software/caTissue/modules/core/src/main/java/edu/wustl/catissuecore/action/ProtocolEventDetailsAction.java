@@ -114,7 +114,6 @@ public class ProtocolEventDetailsAction extends BaseAction
 		if (operation.equals(Constants.ADD) && pageOf.equals(Constants.PAGE_OF_ADD_NEW_EVENT))
 		{
 			protocolEventDetailsForm.setCollectionProtocolEventkey(Constants.ADD_NEW_EVENT);
-			protocolEventDetailsForm.setStudyCalendarEventPoint(0D);
 			protocolEventDetailsForm.setCollectionPointLabel("");
 			protocolEventDetailsForm.setClinicalStatus((String) DefaultValueManager
 					.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS));

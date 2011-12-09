@@ -600,7 +600,7 @@ public class CollectionProtocolBean implements Serializable
 	 *
 	 * @return studyCalendarEventPoint.
 	 */
-	public Double getStudyCalendarEventPoint()
+	public String getStudyCalendarEventPoint()
 	{
 		return this.studyCalendarEventPoint;
 	}
@@ -640,7 +640,7 @@ public class CollectionProtocolBean implements Serializable
 	 *
 	 * @param studyCalendarEventPoint studyCalendarEventPoint.
 	 */
-	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint)
+	public void setStudyCalendarEventPoint(String studyCalendarEventPoint)
 	{
 		this.studyCalendarEventPoint = studyCalendarEventPoint;
 	}
@@ -655,7 +655,7 @@ public class CollectionProtocolBean implements Serializable
 	private String type;
 
 	/** Defines the relative time point in days. */
-	private Double studyCalendarEventPoint;
+	private String studyCalendarEventPoint;
 
 	/** Parent collection protocol Identifier. */
 	private Long parentCollectionProtocolId;

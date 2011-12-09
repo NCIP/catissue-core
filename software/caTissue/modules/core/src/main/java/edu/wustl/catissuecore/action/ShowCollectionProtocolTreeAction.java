@@ -90,8 +90,15 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 				// {
 				// objectName=Constants.VIEW_SUMMARY
 				// }
-				displayName = collectionProtocolEventBean.getStudyCalenderEventPoint().toString()
+				if(collectionProtocolEventBean.getStudyCalenderEventPoint() != null)
+				{
+					displayName = collectionProtocolEventBean.getStudyCalenderEventPoint().toString()
 						+ " " + collectionProtocolEventBean.getCollectionPointLabel();
+				}
+				else
+				{
+					displayName = collectionProtocolEventBean.getCollectionPointLabel();
+				}
 				parentIdentifier = collectionProtocolBean.getTitle();
 				identifier = collectionProtocolEventBean.getUniqueIdentifier();
 				this.addNode(objectName, displayName, parentIdentifier, identifier, cpName,

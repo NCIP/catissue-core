@@ -22,7 +22,7 @@ public class CollectionProtocolEventBean implements Serializable
 	/**
 	 * studyCalenderEventPoint.
 	 */
-	private Double studyCalenderEventPoint;
+	private String studyCalenderEventPoint;
 	/**
 	 * collectionPointLabel.
 	 */
@@ -83,7 +83,7 @@ public class CollectionProtocolEventBean implements Serializable
 	/**
 	 * @return - studyCalenderEventPoint
 	 */
-	public Double getStudyCalenderEventPoint()
+	public String getStudyCalenderEventPoint()
 	{
 		return this.studyCalenderEventPoint;
 	}
@@ -91,7 +91,7 @@ public class CollectionProtocolEventBean implements Serializable
 	/**
 	 * @param studyCalenderEventPointParam - studyCalenderEventPointParam
 	 */
-	public void setStudyCalenderEventPoint(Double studyCalenderEventPointParam)
+	public void setStudyCalenderEventPoint(String studyCalenderEventPointParam)
 	{
 		this.studyCalenderEventPoint = studyCalenderEventPointParam;
 	}

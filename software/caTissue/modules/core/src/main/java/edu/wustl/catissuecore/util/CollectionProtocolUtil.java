@@ -170,7 +170,10 @@ public class CollectionProtocolUtil
 
 		collectionProtocolBean.setType(collectionProtocol.getType());
 		collectionProtocolBean.setSequenceNumber(collectionProtocol.getSequenceNumber());
-		collectionProtocolBean.setStudyCalendarEventPoint(collectionProtocol.getStudyCalendarEventPoint());
+		if(collectionProtocol.getStudyCalendarEventPoint() != null)
+		{
+			collectionProtocolBean.setStudyCalendarEventPoint(collectionProtocol.getStudyCalendarEventPoint().toString());
+		}
 
 		if(collectionProtocol.getParentCollectionProtocol() != null)
 		{
@@ -348,8 +351,10 @@ public class CollectionProtocolUtil
 			{
 		CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
 		eventBean.setId(collectionProtocolEvent.getId().longValue());
-		eventBean.setStudyCalenderEventPoint(new Double
-				(collectionProtocolEvent.getStudyCalendarEventPoint()));
+		if(collectionProtocolEvent.getStudyCalendarEventPoint() != null)
+		{
+			eventBean.setStudyCalenderEventPoint(collectionProtocolEvent.getStudyCalendarEventPoint().toString());
+		}
 		eventBean.setCollectionPointLabel(collectionProtocolEvent.getCollectionPointLabel());
 		eventBean.setClinicalDiagnosis(collectionProtocolEvent.getClinicalDiagnosis());
 		eventBean.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
@@ -1045,7 +1050,10 @@ public class CollectionProtocolUtil
 
 		collectionProtocol.setType(cpBean.getType());
 		collectionProtocol.setSequenceNumber(cpBean.getSequenceNumber());
-		collectionProtocol.setStudyCalendarEventPoint(cpBean.getStudyCalendarEventPoint());
+		if(!Validator.isEmpty(cpBean.getStudyCalendarEventPoint()))
+		{
+			collectionProtocol.setStudyCalendarEventPoint(Double.valueOf(cpBean.getStudyCalendarEventPoint()));
+		}
 
 		if(cpBean.getParentCollectionProtocolId() != null && cpBean.getParentCollectionProtocolId() != 0 && !"".equals(cpBean.getParentCollectionProtocolId()))
 		{
@@ -1181,7 +1189,10 @@ public class CollectionProtocolUtil
 		CollectionProtocolEvent collectionProtocolEvent = cpeInstFact.createObject();//new CollectionProtocolEvent();
 		collectionProtocolEvent.setClinicalStatus(cpEventBean.getClinicalStatus());
 		collectionProtocolEvent.setCollectionPointLabel(cpEventBean.getCollectionPointLabel());
-		collectionProtocolEvent.setStudyCalendarEventPoint(cpEventBean.getStudyCalenderEventPoint());
+		if(!Validator.isEmpty(cpEventBean.getStudyCalenderEventPoint()))
+		{
+			collectionProtocolEvent.setStudyCalendarEventPoint(Double.valueOf(cpEventBean.getStudyCalenderEventPoint()));
+		}
 		collectionProtocolEvent.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
 		collectionProtocolEvent.setClinicalDiagnosis(cpEventBean.getClinicalDiagnosis());
 

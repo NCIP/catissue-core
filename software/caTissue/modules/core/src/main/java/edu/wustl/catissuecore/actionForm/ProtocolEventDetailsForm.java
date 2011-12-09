@@ -44,7 +44,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 	/**
 	 * Defines the relative time point in days, with respect to the registration date of participant on this protocol, when the specimen should be collected from participant.
 	 */
-	protected Double studyCalendarEventPoint = 1D;
+	protected String studyCalendarEventPoint;
 
 	protected String collectionProtocolEventkey;
 	/**
@@ -123,12 +123,12 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 		this.collectionPointLabel = collectionPointLabel;
 	}
 
-	public Double getStudyCalendarEventPoint()
+	public String getStudyCalendarEventPoint()
 	{
 		return this.studyCalendarEventPoint;
 	}
 
-	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint)
+	public void setStudyCalendarEventPoint(String studyCalendarEventPoint)
 	{
 		this.studyCalendarEventPoint = studyCalendarEventPoint;
 	}
@@ -296,11 +296,15 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 				}
 			}
 
-			final double dblValue = Double.parseDouble(this.studyCalendarEventPoint.toString());
-			if (Double.isNaN(dblValue))
+			if(!Validator.isEmpty(this.studyCalendarEventPoint))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
-						ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
+				final double dblValue = Double.parseDouble(this.studyCalendarEventPoint.toString());
+				if (Double.isNaN(dblValue))
+				{
+					
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",
+							ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
+				}
 			}
 			if (Validator.isEmpty(this.collectionPointLabel.toString()))
 			{

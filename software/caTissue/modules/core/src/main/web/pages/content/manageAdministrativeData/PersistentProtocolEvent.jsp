@@ -66,8 +66,8 @@ Ext.onReady(function(){
 
 				<html:hidden property="labelFormat" />
 				 <tr>
-					<td width="1%" align="center" valign="top" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" />
-					<td width="22%" align="left" class="black_ar"><bean:message key="collectionprotocol.studycalendartitle" />
+					<td width="1%" align="center" valign="top" class="black_ar"></td>
+					<td width="22%" align="left" class="black_ar"><bean:message key="collectionprotocol.studycalendartitle" /></td>
 						<logic:equal name="isPersistent" value="true">
 							<td width="77%" align="left" class="black_ar">
 								<label>

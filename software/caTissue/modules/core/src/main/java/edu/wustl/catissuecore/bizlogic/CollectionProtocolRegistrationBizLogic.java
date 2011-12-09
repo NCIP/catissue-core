@@ -990,18 +990,21 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			final CollectionProtocolEvent collectionProtocolEvent = collectionProtocolEventIterator
 			.next();
 
-			final int tmpCntOfStudyCalEventPnt = collectionProtocolEvent
-			.getStudyCalendarEventPoint().intValue();
-			if (this.cntOfStudyCalEventPnt != 0)
+			if(collectionProtocolEvent.getStudyCalendarEventPoint() != null)
 			{
-				if (tmpCntOfStudyCalEventPnt > this.cntOfStudyCalEventPnt)
+				final int tmpCntOfStudyCalEventPnt = collectionProtocolEvent
+				.getStudyCalendarEventPoint().intValue();
+				if (this.cntOfStudyCalEventPnt != 0)
+				{
+					if (tmpCntOfStudyCalEventPnt > this.cntOfStudyCalEventPnt)
+					{
+						this.cntOfStudyCalEventPnt = tmpCntOfStudyCalEventPnt;
+					}
+				}
+				if (this.cntOfStudyCalEventPnt == 0)
 				{
 					this.cntOfStudyCalEventPnt = tmpCntOfStudyCalEventPnt;
 				}
-			}
-			if (this.cntOfStudyCalEventPnt == 0)
-			{
-				this.cntOfStudyCalEventPnt = tmpCntOfStudyCalEventPnt;
 			}
 
 			/**

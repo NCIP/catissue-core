@@ -2201,8 +2201,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			String collectionPointLabel, List scgList, Date regDate, Integer parentOffset)
 			throws BizLogicException, ClassNotFoundException
 	{
+		String eventPointVal = "";
+		if(eventPoint != null)
+		{
+			eventPointVal = eventPoint.toString();
+		}
 		Date eventLastDate = null;
-		System.out.println("in SCG createTreeNodeForExistngSCG");
 		for (int i = 0; i < scgList.size(); i++)
 		{
 			final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) scgList
@@ -2223,7 +2227,14 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			String receivedDate = "";
 			if (specimenCollectionGroup.getId() != null && specimenCollectionGroup.getId() > 0)
 			{	
-				scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel;
+				if(Validator.isEmpty(eventPointVal))
+				{
+					scgNodeLabel = collectionPointLabel;
+				}
+				else
+				{
+					scgNodeLabel = "T" + eventPointVal + ": " + collectionPointLabel;
+				}
 				if (scgNodeLabel.equalsIgnoreCase("") && receivedDate.equalsIgnoreCase(""))
 				{
 					int noOfDaysToAdd = 0;
@@ -2251,11 +2262,18 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 					receivedDate = edu.wustl.common.util.Utility.parseDateToString(evtDate,
 							CommonServiceLocator.getInstance().getDatePattern());
 					// String toolTipText = scgNodeLabel+ ": "+scgName;//
-					scgNodeLabel = "T" + eventPoint + ": " + collectionPointLabel + ": "
+					if(Validator.isEmpty(eventPointVal))
+					{
+						scgNodeLabel = collectionPointLabel + ": "+ receivedDate;
+					}
+					else
+					{
+						scgNodeLabel = "T" + eventPointVal + ": " + collectionPointLabel + ": "
 							+ receivedDate;
+					}
 				}
 			}
-			final String toolTipText = getToolTipText(eventPoint.toString(), collectionPointLabel,
+			String toolTipText = getToolTipText(eventPointVal, collectionPointLabel,
 					receivedDate);
 
 			// creating SCG node
@@ -2558,8 +2576,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			String receivedDate)
 	{
 		final StringBuffer toolTipText = new StringBuffer();
-		toolTipText.append("Event point : ");
-		toolTipText.append(eventDays);
+		if(!Validator.isEmpty(eventDays))
+		{
+			toolTipText.append("Event point : ");
+			toolTipText.append(eventDays);	
+		}
+		
 		toolTipText.append(";  Collection point label : ");
 		toolTipText.append(collectionPointLabel);
 		if (receivedDate != null&& !receivedDate.equals(""))

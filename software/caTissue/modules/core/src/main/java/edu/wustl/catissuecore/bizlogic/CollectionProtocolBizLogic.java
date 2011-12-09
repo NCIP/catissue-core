@@ -1272,7 +1272,6 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	@Override
 	protected boolean validate(final Object obj, final DAO dao, final String operation) throws BizLogicException
 	{
-
 		// Added by Ashish
 		// setAllValues(obj);
 		// END
@@ -1488,11 +1487,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 					}
 
 					// Added for Api Search
-					if (event.getStudyCalendarEventPoint() == null)
-					{
-						message = ApplicationProperties.getValue("collectionprotocol.studycalendartitle");
-						throw getBizLogicException(null, ERROR_ITEM_REQUIRED, message);
-					}
+//					if (event.getStudyCalendarEventPoint() == null)
+//					{
+//						message = ApplicationProperties.getValue("collectionprotocol.studycalendartitle");
+//						throw getBizLogicException(null, ERROR_ITEM_REQUIRED, message);
+//					}
 					// Added by Vijay for API
 					// testAddCollectionProtocolWithWrongCollectionPointLabel
 					if (Validator.isEmpty(event.getCollectionPointLabel()))

@@ -306,7 +306,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		//Bug #13312
 		this.sequenceNumber = cProtocol.getSequenceNumber();
 		this.type = cProtocol.getType();
-		this.studyCalendarEventPoint = cProtocol.getStudyCalendarEventPoint();
+		this.studyCalendarEventPoint = cProtocol.getStudyCalendarEventPoint().toString();
 
 		//this.consentValues = prepareConsentTierMap(cProtocol.getConsentTierCollection());
 		setRemoteData(cProtocol);
@@ -584,7 +584,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 *
 	 * @return studyCalendarEventPoint.
 	 */
-	public Double getStudyCalendarEventPoint()
+	public String getStudyCalendarEventPoint()
 	{
 		return this.studyCalendarEventPoint;
 	}
@@ -661,7 +661,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 *
 	 * @param studyCalendarEventPoint studyCalendarEventPoint.
 	 */
-	public void setStudyCalendarEventPoint(Double studyCalendarEventPoint)
+	public void setStudyCalendarEventPoint(String studyCalendarEventPoint)
 	{
 		this.studyCalendarEventPoint = studyCalendarEventPoint;
 	}
@@ -677,7 +677,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 
 	/** Defines the relative time point in days. */
-	protected Double studyCalendarEventPoint;
+	protected String studyCalendarEventPoint;
 
 	/** Parent collection protocol Identifier. */
 	protected Long parentCollectionProtocolId;
