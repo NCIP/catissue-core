@@ -3348,7 +3348,91 @@ Thanking You,
 				<include name="**/*" />
 			</fileset>
 		</delete>
+		
+		<property name="xmi.file.path" location="${filename}"/>
+		<available file="${xmi.file.path}" property="is.xmi.present"/>
+		<if>
+			<not>
+			   <isset property="is.xmi.present"/>
+			</not>
+			<then>
+				<property name="new.xmi.file.path" location="../../../${filename}"/>
+				<available file="${new.xmi.file.path}" property="is.newxmi.present"/>
+				<if>
+					<isset property="is.newxmi.present"/>
+					<then>
+						<property name="xmi.file.name" value="${new.xmi.file.path}"/>
+					</then>
+					<else>
+						<property name="xmi.file.name" value="${filename}"/>
+					</else>
+				</if>
+			</then>
+			<else>
+				<property name="xmi.file.name" value="${filename}"/>
+			</else>
+		</if>
+		
+		<property name="container.file.path" location="${mainContainerList}"/>
+		<available file="${container.file.path}" property="is.container.file.present"/>
+		<if>
+			<not>
+			   <isset property="is.container.file.present"/>
+			</not>
+			<then>
+				<property name="new.container.file.path" location="../../../${mainContainerList}"/>
+				<available file="${new.container.file.path}" property="is.new.container.file.present"/>
+				<if>
+					<isset property="is.new.container.file.present"/>
+					<then>
+						<property name="container.file.name" value="${new.container.file.path}"/>
+					</then>
+					<else>
+						<property name="container.file.name" value="${mainContainerList}"/>
+					</else>
+				</if>
+			</then>
+			<else>
+				<property name="container.file.name" value="${mainContainerList}"/>
+			</else>
+		</if>
 
+		<if>
+			<equals arg1="" arg2="${condition}" />
+			<then>
+				<property name="condition.file.name" value="${condition}"/>
+			</then>
+			<else>
+				<property name="condition.file.path" location="${condition}"/>
+				<available file="${condition.file.path}" property="is.condition.file.present"/>
+				<if>
+					<not>
+					   <isset property="is.condition.file.present"/>
+					</not>
+					<then>
+						<property name="new.condition.file.path" location="../../../${condition}"/>
+						<available file="${new.condition.file.path}" property="is.new.condition.file.present"/>
+						<if>
+							<isset property="is.new.condition.file.present"/>
+							<then>
+								<property name="condition.file.name" value="${new.condition.file.path}"/>
+							</then>
+							<else>
+								<property name="condition.file.name" value="${condition}"/>
+							</else>
+						</if>
+					</then>
+					<else>
+						<property name="condition.file.name" value="${condition}"/>
+					</else>
+				</if>
+			</else>
+		</if>
+
+		<echo message="XMI file path : ${xmi.file.name}"/>
+		<echo message="Container file path : ${container.file.name}"/>
+		<echo message="Condition file path : ${condition.file.name}"/>
+		
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
@@ -3421,12 +3505,12 @@ Thanking You,
 		<mkdir dir="${export.dir}" />
 
 				<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true" maxmemory="1024m" failonerror="true">
-					<arg value="${filename}" />
-					<arg value="${mainContainerList}" />
+					<arg value="${xmi.file.name}" />
+					<arg value="${container.file.name}" />
 					<arg value="${package}" />
 					<arg value="${hookentity}" />
 					<arg value="${addQueryPaths}" />
-					<arg value="${condition}" />
+					<arg value="${condition.file.name}" />
 					<arg value="${generate.cacore}" />
 					<arg value="${Application.url}/"/>
 					<arg value="${pv.file.name}/"/>
@@ -3469,7 +3553,7 @@ Thanking You,
 					<property name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
 					<property name="entityGroup.jar.location" value="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
-					<property name="xmi.name" value="${filename}" />
+					<property name="xmi.name" value="${xmi.file.name}" />
 					<property name="jboss.home.dir" value="${jboss.home}" />
 					<property name="default.prifix.war" value="${default.prefix.war}" />
 					<property name="database.type" value="${database.type}" />
@@ -3482,6 +3566,72 @@ Thanking You,
 		<delete failonerror="${delete.failonerror}" dir="${tempcacore.dir}" />
 	</target>
 
+	<property name="categoryFormNamesFile" value=" " />
+	<property name="isPersistMetadataOnly" value=" " />
+	<property name="categoryFileDir" value=" " />
+	<property name="bulkXMLTemplateFile" value="${base.dir}/Participant.xml"/>
+	<property name="mappingXMLFile" value="${base.dir}/bulkoperator/mapping.xml" />
+	<property name="importBulkTemplate" value="" />
+	<target name="create_category.tmp" description="Target used to create the Category">
+		
+		<property name="category.fileDir.path" location="${categoryFileDir}"/>
+		<available file="${category.fileDir.path}" property="is.category.dir.present"/>
+		<if>
+			<not>
+			   <isset property="is.category.dir.present"/>
+			</not>
+			<then>
+				<property name="new.category.filesDir.path" location="../../../${categoryFileDir}"/>
+				<available file="${new.category.filesDir.path}" property="is.new.category.dir.present"/>
+				<if>
+					<isset property="is.new.category.dir.present"/>
+					<then>
+						<property name="category.files.dir.name" value="${new.category.filesDir.path}"/>
+					</then>
+					<else>
+						<property name="category.files.dir.name" value="${categoryFileDir}"/>
+					</else>
+				</if>
+			</then>
+			<else>
+				<property name="category.files.dir.name" value="${categoryFileDir}"/>
+			</else>
+		</if>
+		
+		<property name="formNames.file.path" location="${categoryFormNamesFile}"/>
+		<available file="${formNames.file.path}" property="is.formNames.file.present"/>
+		<if>
+			<not>
+			   <isset property="is.formNames.file.present"/>
+			</not>
+			<then>
+				<property name="new.formName.file.path" location="../../../${categoryFormNamesFile}"/>
+				<available file="${new.formName.file.path}" property="is.new.formName.file.present"/>
+				<if>
+					<isset property="is.new.formName.file.present"/>
+					<then>
+						<property name="formNames.file.name" value="${new.formName.file.path}"/>
+					</then>
+					<else>
+						<property name="formNames.file.name" value="${categoryFormNamesFile}"/>
+					</else>
+				</if>
+			</then>
+			<else>
+				<property name="formNames.file.name" value="${categoryFormNamesFile}"/>
+			</else>
+		</if>
+		
+		<ant antfile="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="create_category">
+			<property name="categoryFileDir" value="${category.files.dir.name}" />
+			<property name="Application.url" value="${Application.url}" />
+			<property name="categoryFormNamesFile" value="${formNames.file.name}" />
+			<property name="isPersistMetadataOnly" value="${isPersistMetadataOnly}" />
+			<property name="bulkXMLTemplateFile" value="${bulkXMLTemplateFile}" />
+			<property name="mappingXMLFile" value="${mappingXMLFile}" />
+			<property name="importBulkTemplate" value="${importBulkTemplate}" />
+		</ant>
+	</target>
 
 	<target name="Associate_forms" description="Associating forms with catissue">
 		<delete quiet="true" includeemptydirs="true">
