@@ -931,7 +931,7 @@
 				<include name="bulkoperator.jar" />
 				<include name="commonpackage-1.2.w1.jar" />
 				<include name="DAO-1.1.9.5.jar" />
-				<include name="DynamicExtensions.jar" />
+				<include name="DynamicExtensions*.jar" />
 				<include name="ParticipantManager.jar" />
 				<include name="SimpleQuery*.jar" />
 				<include name="washu-commons-1.1.8.jar" />
@@ -1526,7 +1526,7 @@
 				<include name="AdvanceQuery.jar" />
 				<include name="commonpackage-*.jar" />
 				<include name="DAO-*.jar" />
-				<include name="DynamicExtensions.jar" />
+				<include name="DynamicExtensions*.jar" />
 				<include name="ParticipantManager.jar" />
 				<include name="SecurityManager*.jar" />
 				<include name="SimpleQuery-*.jar" />
@@ -1538,8 +1538,8 @@
 			<fileset dir="${compile.lib.dir}">
 				<include name="commonpackage-*.jar" />
 				<include name="DAO-*.jar" />
-				<include name="DynamicExtensions.jar" />
-				<include name="ParticipantManager.jar" />
+				<include name="DynamicExtensions*.jar" />
+				<include name="ParticipantManager*.jar" />
 				<include name="SecurityManager*.jar" />
 				<include name="query*.jar" />
 				<include name="SimpleQuery-*.jar" />
@@ -1554,8 +1554,8 @@
 			<fileset dir="${compile.lib.dir}">
 				<include name="commonpackage-*.jar" />
 				<include name="DAO-*.jar" />
-				<include name="DynamicExtensions.jar" />
-				<include name="ParticipantManager.jar" />
+				<include name="DynamicExtensions*.jar" />
+				<include name="ParticipantManager*.jar" />
 				<include name="SecurityManager*.jar" />
 				<include name="SimpleQuery-*.jar" />
 				<include name="titli-washu-*.jar" />
@@ -1579,15 +1579,15 @@
 		</copy>
 		<copy todir="${src_lib.dir}" overwrite="true">
 			<fileset dir="${compile.lib.dir}">
-				<include name="DynamicExtensions.jar" />
+				<include name="DynamicExtensions*.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${target.dir}/dist" overwrite="true">
 			<fileset dir="${compile.lib.dir}">
 				<include name="AdvanceQuery_Installable.zip" />
 				<include name="bulkoperator.zip" />
-				<include name="clientFormCreator.zip" />
-				<include name="dynamicextensions.zip" />
+				<include name="clientFormCreator*.zip" />
+				<include name="dynamicextensions*.zip" />
 			</fileset>
 		</copy>
 	</target>
@@ -1625,8 +1625,8 @@
 			<fileset dir="../${software.dir}">
 				<include name="AdvanceQuery_Installable.zip" />
 				<include name="bulkoperator.zip" />
-				<include name="clientFormCreator.zip" />
-				<include name="dynamicextensions.zip" />
+				<include name="clientFormCreator*.zip" />
+				<include name="dynamicextensions*.zip" />
 			</fileset>
 		</delete>
 	</target>
