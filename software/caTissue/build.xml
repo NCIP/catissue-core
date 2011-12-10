@@ -1319,7 +1319,7 @@
 				<include name="DAO*.jar" />
 				<include name="DynamicExtensions*.jar" />
 				<include name="SimpleQuery*.jar" />
-				<include name="securityManager*.jar" />
+				<include name="SecurityManager*.jar" />
 				<include name="AdvanceQuery*.jar" />
 				<include name="bulkoperator.jar" />
 			</fileset>
@@ -1334,7 +1334,7 @@
 				<include name="DAO*.jar" />
 				<include name="SimpleQuery*.jar" />
 				<include name="DynamicExtensions*.jar" />
-				<include name="securityManager*.jar" />
+				<include name="SecurityManager*.jar" />
 				<include name="AdvanceQuery*.jar" />
 			</fileset>
 			<fileset dir="${tempCatissuecore.dir}">
@@ -1351,7 +1351,7 @@
 				<include name="DAO*.jar" />
 				<include name="DynamicExtensions*.jar" />
 				<include name="SimpleQuery*.jar" />
-				<include name="securityManager*.jar" />
+				<include name="SecurityManager*.jar" />
 				<include name="AdvanceQuery*.jar" />
 			</fileset>
 		</copy>
@@ -1528,7 +1528,7 @@
 				<include name="DAO-*.jar" />
 				<include name="DynamicExtensions.jar" />
 				<include name="ParticipantManager.jar" />
-				<include name="securityManager-*.jar" />
+				<include name="SecurityManager*.jar" />
 				<include name="SimpleQuery-*.jar" />
 				<include name="titli-washu-*.jar" />
 				<include name="washu-commons-*.jar" />
@@ -1540,7 +1540,7 @@
 				<include name="DAO-*.jar" />
 				<include name="DynamicExtensions.jar" />
 				<include name="ParticipantManager.jar" />
-				<include name="securityManager-*.jar" />
+				<include name="SecurityManager*.jar" />
 				<include name="query*.jar" />
 				<include name="SimpleQuery-*.jar" />
 				<include name="titli-washu-*.jar" />
@@ -1556,7 +1556,7 @@
 				<include name="DAO-*.jar" />
 				<include name="DynamicExtensions.jar" />
 				<include name="ParticipantManager.jar" />
-				<include name="securityManager-*.jar" />
+				<include name="SecurityManager*.jar" />
 				<include name="SimpleQuery-*.jar" />
 				<include name="titli-washu-*.jar" />
 				<include name="washu-commons-*.jar" />
@@ -1573,7 +1573,7 @@
 				<include name="commonpackage-*.jar" />
 				<include name="DAO-*.jar" />
 				<include name="ParticipantManager.jar" />
-				<include name="securityManager-*.jar" />
+				<include name="SecurityManager*.jar" />
 				<include name="SimpleQuery-*.jar" />
 			</fileset>
 		</copy>
@@ -1597,7 +1597,7 @@
 				<include name="commonpackage*.jar" />
 				<include name="DAO*.jar" />
 				<include name="SimpleQuery*.jar" />
-				<include name="securityManager*.jar" />
+				<include name="SecurityManager*.jar" />
 				<include name="AdvanceQuery*.jar" />
 				<include name="bulkoperator.jar" />
 				<include name="ParticipantManager*.jar" />
@@ -1608,7 +1608,7 @@
 				<include name="DAO*.jar" />
 				<include name="DynamicExtensions*.jar" />
 				<include name="SimpleQuery*.jar" />
-				<include name="securityManager*.jar" />
+				<include name="SecurityManager*.jar" />
 				<include name="AdvanceQuery*.jar" />
 				<include name="ParticipantManager*.jar" />
 				<include name="titli-washu*.jar" />
@@ -1618,7 +1618,7 @@
 				<include name="DAO*.jar" />
 				<include name="DynamicExtensions*.jar" />
 				<include name="SimpleQuery*.jar" />
-				<include name="securityManager*.jar" />
+				<include name="SecurityManager*.jar" />
 				<include name="ParticipantManager*.jar" />
 				<include name="titli-washu*.jar" />
 			</fileset>
