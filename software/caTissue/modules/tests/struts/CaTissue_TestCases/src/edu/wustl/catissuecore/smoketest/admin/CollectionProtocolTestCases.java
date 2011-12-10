@@ -237,7 +237,7 @@ public class CollectionProtocolTestCases  extends CaTissueSuiteSmokeBaseTest
 
 
 		double StudyCalendarEventPoint = Double.parseDouble(arr[15]);         //17
-		collectionProtocolForm.setStudyCalendarEventPoint(StudyCalendarEventPoint);
+		collectionProtocolForm.setStudyCalendarEventPoint(arr[15]);
 
 		collectionProtocolForm.setUnsignedConsentURLName(arr[16]);
 		//collectionProtocolForm.set
@@ -302,7 +302,7 @@ public class CollectionProtocolTestCases  extends CaTissueSuiteSmokeBaseTest
 
 			protocolEvent = (ProtocolEventDetailsForm)getActionForm();
 
-			protocolEvent.setStudyCalendarEventPoint(Double.parseDouble(arr[10]));
+			protocolEvent.setStudyCalendarEventPoint(arr[10]);
 			protocolEvent.setCollectionPointLabel(arr[11]);
 			protocolEvent.setClinicalDiagnosis(arr[12]);
 			protocolEvent.setClinicalStatus(arr[13]);
