@@ -100,8 +100,8 @@ public final class IntroduceFacade {
 	}
 
     /**
-     * Updates server-config.xsdd file to contains serializer and deserializer information for new inserted types.
-     * @param types Set of types to be added to the mappings list
+     * Updates server-config.wsdd file to contain serializer and deserializer information for new inserted types.
+     * @param types set of types to be added to the mappings list
      * @param targetNamespace target namespace to use for the element's namespaces
      * @param packageName type's package name
      * @return void
