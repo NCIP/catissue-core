@@ -1744,5 +1744,63 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 		}
 
 	}
+	/**
+	 * This method will return the id of the participant whose ppi is as given
+	 * in PPI in the given CP.
+	 * 
+	 * @param cpLabel
+	 *            collection protocol Label.
+	 * @param ppi
+	 *            ppi of the participant.
+	 * @return id of the paticiapnt.
+	 * @throws BizLogicException
+	 *             exception.
+	 */
+	public Long getParticipantIdByPPI(String cpLabel,String ppi) throws ApplicationException
+	{
+		Long participantId = null;
+		if(ppi!=null && cpLabel!=null)
+		{
+			final String hql = "select cpr.participant.id from "
+				+ CollectionProtocolRegistration.class.getName()
+				+ " as cpr where cpr.protocolParticipantIdentifier = "+ppi+" and cpr.collectionProtocol.shortTitle= "+cpLabel+" and cpr.activityStatus <> '"
+				+ Status.ACTIVITY_STATUS_DISABLED.toString()
+				+ "' ";
 
+			final List<Long> list = this.executeQuery(hql);
+			if(list==null || list.isEmpty())
+			{
+				throw new BizLogicException(ErrorKey.getErrorKey("invalid.ppi.participant"), null,
+						ppi+":"+cpLabel);
+			}
+			participantId= list.get(0);
+		}
+
+		return participantId;
+	}
+	/**
+	 * This method will check whether the participant with given id exists or
+	 * not.
+	 * 
+	 * @param participantId
+	 *            participant Id.
+	 * @return true if participant with given id exists.
+	 * @throws BizLogicException
+	 *             exception.
+	 */
+	public boolean isParticipantExists(String participantId) throws BizLogicException
+	{
+		final String hql = "select participant.id from " + Participant.class.getName()
+		+ " as participant where participant.id = " + participantId
+		+ " and participant.activityStatus <> '"
+		+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' ";
+
+		final List<Long> list = this.executeQuery(hql);
+		if (list == null || list.isEmpty())
+		{
+			throw new BizLogicException(ErrorKey.getErrorKey("invalid.id.participant"), null,
+					participantId);
+		}
+		return true;
+	}
 }

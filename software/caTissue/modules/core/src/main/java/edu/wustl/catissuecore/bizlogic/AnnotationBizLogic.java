@@ -11,13 +11,17 @@ package edu.wustl.catissuecore.bizlogic;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import edu.common.dynamicextensions.domain.integration.AbstractRecordEntry;
+import edu.common.dynamicextensions.entitymanager.EntityManager;
+import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsCacheException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.common.dynamicextensions.xmi.AnnotationUtil;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.deintegration.DEIntegration;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -31,13 +35,16 @@ import edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
+import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 
 
 /**
@@ -407,5 +414,152 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 			throw new ApplicationException(errorkey, null, "CaTissue Hook Entity");
 		}
 		return staticObjectType;
+	}
+
+	public NameValueBean getHookEntiyNameValueBean(Long tgtEntityId,
+			String formName) throws DynamicExtensionsSystemException,
+			ApplicationException, DynamicExtensionsApplicationException {
+		EntityManagerInterface entityManager = EntityManager.getInstance();
+		Long participantRecEntryId = AnnotationUtil
+				.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
+		Long specimenRecEntryId = AnnotationUtil
+				.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+		Long scgRecEntryId = AnnotationUtil
+				.getEntityId(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
+		NameValueBean bean = new NameValueBean();
+		if (!entityManager
+				.getAssociationIds(participantRecEntryId, tgtEntityId)
+				.isEmpty()) {
+			bean.setName(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY);
+			bean.setValue(participantRecEntryId);
+		} else if (!entityManager.getAssociationIds(specimenRecEntryId,
+				tgtEntityId).isEmpty()) {
+			bean.setName(AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY);
+			bean.setValue(specimenRecEntryId);
+		} else if (!entityManager.getAssociationIds(scgRecEntryId, tgtEntityId)
+				.isEmpty()) {
+			bean.setName(AnnotationConstants.ENTITY_NAME_SCG_REC_ENTRY);
+			bean.setValue(scgRecEntryId);
+		} else {
+			throw new ApplicationException(ErrorKey
+					.getErrorKeyObject("bo.error.no.hookentity"), null,
+					formName);
+		}
+		return bean;
+	}
+	public Long createHookEntityObject(String dynExtRecordId, String dynEntContainerId,
+			String staticEntityName, String selectedStaticEntityRecordId, String staticEntityId,
+			final SessionDataBean sessionDataBean) throws DynamicExtensionsSystemException, NumberFormatException, DynamicExtensionsApplicationException, ApplicationException
+	{
+
+		AbstractRecordEntry abstractRecordEntry = createRecordEntry(staticEntityName,
+				selectedStaticEntityRecordId);
+		abstractRecordEntry.setActivityStatus("Active");
+		abstractRecordEntry.setModifiedDate(new Date());
+
+		if (sessionDataBean != null)
+		{
+			abstractRecordEntry.setModifiedBy(sessionDataBean.getLastName() + ","
+					+ sessionDataBean.getFirstName());
+		}
+		StudyFormContext studyFormContext = getStudyFormContext(dynEntContainerId);
+		abstractRecordEntry.setFormContext(studyFormContext);
+		abstractRecordEntry = insertAbstractRecordEntry(abstractRecordEntry);
+		Long recordEntryId = abstractRecordEntry.getId();
+
+		associateRecords(Long.valueOf(dynEntContainerId), recordEntryId, Long
+				.valueOf(dynExtRecordId), Long.valueOf(staticEntityId));
+		return recordEntryId;
+	}
+	/**
+	 * It will return the id of the specimen whose label is equal to given specimenLabel.
+	 * @param specimenLabel label of specimen whose id is needed.
+	 * @return id of the specimen.
+	 * @throws ApplicationException
+	 */
+	public Long getSpecimenByLabel(String specimenLabel) throws ApplicationException
+	{
+		Long specimenId = null;
+		if (specimenLabel != null)
+		{
+			final String hql = "select specimen.id from " + Specimen.class.getName()
+					+ " as specimen where specimen.label = "+specimenLabel+" and specimen.activityStatus <> '"
+					+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' ";
+
+			final List<Long> list = this.executeQuery(hql);
+			if (list == null || list.isEmpty())
+			{
+				throw new BizLogicException(ErrorKey.getErrorKey("invalid.label.specimen"), null,
+						specimenLabel);
+
+			}
+			specimenId = list.get(0);
+		}
+		return specimenId;
+	}
+	/**
+	 * It will return the id of the specimen whose barcode is equal to given specimenBarcode.
+	 * @param specimenBarcode barcode of specimen whose id is needed.
+	 * @return id of the specimen.
+	 * @throws ApplicationException
+	 */
+	public Long getSpecimenByBarcode(String specimenBarcode) throws ApplicationException
+	{
+		Long specimenId = null;
+		if (specimenBarcode != null)
+		{
+			final String hql = "select specimen.id from " + Specimen.class.getName()
+					+ " as specimen where specimen.barcode = "+specimenBarcode+" and specimen.activityStatus <> '"
+					+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' ";
+
+			final List<Long> list = this.executeQuery(hql);
+			if (list == null || list.isEmpty())
+			{
+				throw new BizLogicException(ErrorKey.getErrorKey("invalid.barcode.specimen"), null,
+						specimenBarcode);
+			}
+			specimenId = list.get(0);
+		}
+		return specimenId;
+	}
+	/**
+	 * This method will check whether the specimen with given id exists or not.
+	 * @param specimenId specimen Id.
+	 * @return true if specimen with given id exists.
+	 * @throws BizLogicException exception.
+	 */
+	public boolean isSpecimenExists(String specimenId) throws BizLogicException
+	{
+		final String hql = "select specimen.id from " + Specimen.class.getName()
+				+ " as specimen where specimen.id = " + specimenId
+				+ " and specimen.activityStatus <> '" + Status.ACTIVITY_STATUS_DISABLED.toString()
+				+ "' ";
+
+		final List<Long> list = this.executeQuery(hql);
+		if (list == null || list.isEmpty())
+		{
+			throw new BizLogicException(ErrorKey.getErrorKey("invalid.id.specimen"), null,
+					specimenId);
+		}
+		return true;
+	}
+	/**
+	 * This method will find the static entity with which the given form is associated.
+	 * & it will return the name & id of that entity in the nameValueBean.
+	 * @param rootContainerId container id of the form.
+	 * @param formName name of the form.
+	 * @return bean with name as static entity name & value as its entity id.
+	 * @throws DynamicExtensionsSystemException exception.
+	 * @throws ApplicationException
+	 * @throws DynamicExtensionsApplicationException 
+	 */
+	public NameValueBean getHookEntityNameValueBeanForCategory(Long rootContainerId, String formName)
+			throws DynamicExtensionsSystemException, ApplicationException, DynamicExtensionsApplicationException
+	{
+
+		Long tgtEntityId = EntityManager.getInstance().getCategoryRootEntityByContainerId(
+				rootContainerId).getId();
+		NameValueBean bean = getHookEntiyNameValueBean(tgtEntityId, formName);
+		return bean;
 	}
 }

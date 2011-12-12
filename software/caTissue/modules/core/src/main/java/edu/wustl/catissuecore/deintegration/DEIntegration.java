@@ -193,4 +193,9 @@ public class DEIntegration extends edu.common.dynamicextensions.DEIntegration.DE
 		return recordEntryId;
 
 	}*/
+	public Long getRootCategoryContainerIdByName(String categoryName)
+	throws DynamicExtensionsSystemException
+	{
+		return EntityManager.getInstance().getRootCategoryContainerIdByName(categoryName);
+	}
 }

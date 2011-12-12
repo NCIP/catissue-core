@@ -66,6 +66,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.DomainBeanIdentifierComparator;
@@ -79,6 +80,7 @@ import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
@@ -3233,5 +3235,84 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	{
 		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean, this
 				.getReadDeniedPrivilegeName());
+	}
+	/**
+	 * It will return the id of the scg with the given name.
+	 * @param scgName name of the scg.
+	 * @return id of the scg for given name.
+	 * @throws ApplicationException
+	 */
+	public Long getScgIdFromName(String scgName) throws ApplicationException
+	{
+		Long scgId = null;
+		if(scgName!=null)
+		{
+			final String hql = "select scg.id from "
+					+ SpecimenCollectionGroup.class.getName()
+					+ " as scg where scg.name = "+scgName+" and scg.activityStatus <> '"
+					+ Status.ACTIVITY_STATUS_DISABLED.toString()
+					+ "' ";
+
+			final List<Long> list = this.executeQuery(hql);
+			if(list==null || list.isEmpty())
+			{
+				throw new BizLogicException(ErrorKey.getErrorKey("invalid.name.scg"), null,
+						scgName);
+
+			}
+			scgId=list.get(0);
+		}
+		return scgId;
+	}
+	/**
+	 * It will return the id of the scg with the given barcode.
+	 * @param barcode barcode of the scg.
+	 * @return id of the scg.
+	 * @throws ApplicationException
+	 */
+	public Long getScgIdFromBarcode(String barcode) throws ApplicationException
+	{
+		Long scgId =null;
+		if(barcode!=null)
+		{
+		final String hql = "select scg.id from "
+					+ SpecimenCollectionGroup.class.getName()
+					+ " as scg where scg.barcode = "+barcode+" and scg.activityStatus <> '"
+					+ Status.ACTIVITY_STATUS_DISABLED.toString()
+					+ "' ";
+			final List<Long> list = this.executeQuery(hql);
+			if(list==null || list.isEmpty())
+			{
+				throw new BizLogicException(ErrorKey.getErrorKey("invalid.barcode.scg"), null,
+						barcode);
+
+			}
+			scgId=list.get(0);
+		}
+			return scgId;
+	}
+	/**
+	 * This method will check whether the participant with given id exists or not.
+	 * @param scgId participant Id.
+	 * @return true if participant with given id exists.
+	 * @throws BizLogicException exception.
+	 */
+	public boolean isSCGExists(String scgId) throws BizLogicException
+	{
+		final String hql = "select scg.id from "
+			+ SpecimenCollectionGroup.class.getName()
+			+ " as scg where scg.id = "
+			+ scgId
+			+" and scg.activityStatus <> '"
+			+ Status.ACTIVITY_STATUS_DISABLED.toString()
+			+ "' ";
+
+		final List<Long> list = this.executeQuery(hql);
+		if(list==null || list.isEmpty())
+		{
+			 throw new BizLogicException(ErrorKey.getErrorKey("invalid.id.scg"), null,
+					 scgId);
+		}
+		return true;
 	}
 }
