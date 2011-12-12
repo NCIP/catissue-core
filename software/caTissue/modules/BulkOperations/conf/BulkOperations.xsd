@@ -157,7 +157,7 @@
        </xs:appinfo></xs:annotation>
       </xs:attribute>
 	  
-	  <xs:attribute name="roleName" type="xs:string" use="required" >
+	  <xs:attribute name="roleName" type="xs:string" >
        <xs:annotation><xs:appinfo>
 		<xs:javadoc language="en"> 
 			 It is the actual attribute name defined in the caTissue Suite data model.               
