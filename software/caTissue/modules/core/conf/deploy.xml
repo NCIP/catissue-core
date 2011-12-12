@@ -5735,13 +5735,21 @@ Thanking You,
         <echo>About to deploy Notification Grid Service...</echo>
         <echo>Service location: ${notificationservice.dir}</echo>
         <echo>JBoss location: ${jboss.home}</echo>
-
-        <echo>Getting Globus from the Net...</echo>
-        <mkdir dir="${globus.download.dir}"/>
-        <get dest="${globus.download.dir}/globus.zip" src="${globus.download.url}"/>
-        <unzip dest="${globus.download.dir}" src="${globus.download.dir}/globus.zip"></unzip>
-        <property name="globus.location" value="${globus.download.dir}/ws-core-4.0.3"></property>
-        <echo>Globus location now is: ${globus.location}</echo>
+        <if>
+            <not><isset property="env.GLOBUS_LOCATION"/></not>
+            <then>
+                <echo>Getting Globus from the Net...</echo>
+                <mkdir dir="${globus.download.dir}"/>
+                <get dest="${globus.download.dir}/globus.zip" src="${globus.download.url}"/>
+                <unzip dest="${globus.download.dir}" src="${globus.download.dir}/globus.zip"></unzip>
+                <property name="globus.location" value="${globus.download.dir}/ws-core-4.0.3"></property>
+                <echo>Globus location now is: ${globus.location}</echo>
+            </then>
+            <else>
+                <echo message="GLOBUS_LOCATION (${env.GLOBUS_LOCATION}) found."/>
+                <property name="globus.location" value="${env.GLOBUS_LOCATION}" />
+            </else>
+        </if>
 
         <echo>Invoking another Ant build to deploy the service...</echo>
         <ant dir="${notificationservice.dir}" target="deployJBoss" inheritAll="false">
