@@ -1,5 +1,4 @@
 /*
-
  * Created on Jul 29, 2005
  *<p>SpecimenEventParametersBizLogic Class</p>
  * This class contains the Biz Logic for all EventParameters Classes.
@@ -100,7 +99,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	{
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
-		.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+			.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		final List specimenIds = new ArrayList();
 		if (obj instanceof List)
 		{
@@ -116,35 +115,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			{
 				this.insertEvent(eventObjectsList.get(i), dao, sessionDataBean,
 						newSpecimenBizLogic, specimenIds);
-				/*if(eventObjectsList.get(i) instanceof TransferEventParameters)
-				{
-					TransferEventParameters transferEventParameters = (TransferEventParameters) eventObjectsList.get(i);
-					User user= new User();
-					user.setId(sessionDataBean.getUserId());
-					Map<BaseAbstractAttributeInterface, Object> dataValueMap = new HashMap<BaseAbstractAttributeInterface, Object>();
-
-					Specimen specimen = (Specimen) ((SpecimenEventParameters) eventObjectsList.get(i)).getSpecimen();
-					SpecimenPosition oldSpecimenPosition =null;
-					StringBuilder fromStorageContainer = new StringBuilder(transferEventParameters.getFromStorageContainer().getName());
-
-					Integer posDimenOne=transferEventParameters.getFromPositionDimensionOne();
-					Integer posDimenTwo=transferEventParameters.getFromPositionDimensionTwo();
-
-					insertDynamicEventForTransferEvent(sessionDataBean, transferEventParameters,
-							dataValueMap, specimen, oldSpecimenPosition, fromStorageContainer,
-							posDimenOne, posDimenTwo);
-				}
-				else if(eventObjectsList.get(i) instanceof DisposalEventParameters)
-				{
-					DisposalEventParameters disposalEventParameters=(DisposalEventParameters) eventObjectsList.get(i);
-					User user= new User();
-					user.setId(sessionDataBean.getUserId());
-					Map<BaseAbstractAttributeInterface, Object> dataValueMap = new HashMap<BaseAbstractAttributeInterface, Object>();
-					Specimen specimen = (Specimen) ((SpecimenEventParameters) eventObjectsList.get(i)).getSpecimen();
-
-					insertDynamicDataForDisposalEvent(sessionDataBean, disposalEventParameters,
-							dataValueMap, specimen);
-				}*/
 			}
 		}
 		else
@@ -152,272 +122,6 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			this.insertEvent(obj, dao, sessionDataBean, newSpecimenBizLogic, specimenIds);
 		}
 	}
-
-	/**
-	 * @param sessionDataBean
-	 * @param transferEventParameters
-	 * @param dataValueMap
-	 * @param specimen
-	 * @param oldSpecimenPosition
-	 * @param fromStorageContainer
-	 * @param posDimenOne
-	 * @param posDimenTwo
-	 */
-	/*public void insertDynamicEventForTransferEvent(SessionDataBean sessionDataBean,
-			TransferEventParameters transferEventParameters,
-			Map<BaseAbstractAttributeInterface, Object> dataValueMap, Specimen specimen,
-			SpecimenPosition oldSpecimenPosition, StringBuilder fromStorageContainer,
-			Integer posDimenOne, Integer posDimenTwo)
-	{
-		User user;
-		try{
-			EntityInterface dynamicTransferEventParameters = null;
-			dynamicTransferEventParameters= EntityCache.getInstance().getEntityGroupByName("SpecimenEvents").getEntityByName("TransferEventParameters");
-
-			if (dynamicTransferEventParameters.getAttributeCollection() != null)
-			{
-				// Iterate over all the attributes of the DE event object.
-				for (AttributeInterface attribute : dynamicTransferEventParameters.getAttributeCollection())
-				{
-					// Ignore the Id attribute as data won't be inserted for it.
-					if (!attribute.getName().equalsIgnoreCase("id")&& (!attribute.getName().equalsIgnoreCase("fromStorageContainer")) && !attribute
-							.getName().equalsIgnoreCase("toStorageContainer"))
-					{
-						Class UIHostClass =transferEventParameters.getClass();
-						String methodName = "get" + org.apache.commons.lang.StringUtils.capitalise(attribute.getName());
-						java.lang.reflect.Method callableMethod = UIHostClass.getMethod(methodName);
-
-						// Object passed is of static Event.
-						Object methodValue = callableMethod.invoke(transferEventParameters);
-						if(oldSpecimenPosition!= null)
-						{
-							if(attribute.getName().equalsIgnoreCase("fromPositionDimensionOne"))
-							{
-								methodValue = posDimenOne;
-							}
-							else if(attribute.getName().equalsIgnoreCase("fromPositionDimensionTwo"))
-							{
-								methodValue = posDimenTwo;
-							}
-						}
-						// Populate datavalue map with attribute and its value from static event.
-						dataValueMap.put(attribute, methodValue);
-					}
-					else if (attribute.getName().equalsIgnoreCase("fromStorageContainer"))
-					{
-						dataValueMap.put(attribute, fromStorageContainer);
-					}
-					else if (attribute.getName().equalsIgnoreCase("toStorageContainer"))
-					{
-						StringBuilder toStorageContainer2 = new StringBuilder(transferEventParameters
-								.getToStorageContainer().getName());
-						toStorageContainer2.append(':').append("pos(").append(
-								transferEventParameters.getToPositionDimensionOne()).append(',').append(
-								transferEventParameters.getToPositionDimensionTwo()).append(')');
-						toStorageContainer2.toString();
-						dataValueMap.put(attribute, toStorageContainer2);
-					}
-				}
-			}
-
-			Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
-			new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
-			long containerId = dynamicEventMap.get("Transfer Event Parameters");
-
-			// This is required, because of changes in DE for doing data entry.
-			ContainerInterface container = EntityCache.getInstance().getContainerById(
-					containerId);
-
-			// API used in DE for doing data entry.
-			ApplyDataEntryFormProcessor applDataEntryFormProcessor = ApplyDataEntryFormProcessor
-					.getInstance();
-			Long recordIdentifier = Long.valueOf(applDataEntryFormProcessor.insertDataEntryForm(container, dataValueMap, null));
-
-			DefaultAction defaultAction=null;
-			ActionApplicationRecordEntry actionAppRecordEntry=null;
-			actionAppRecordEntry=new ActionApplicationRecordEntry();
-
-			final IBizLogic defaultBizLogic =  new CatissueDefaultBizLogic();
-			List<DefaultAction> defaultActionList=defaultBizLogic.retrieve(DefaultAction.class.getName(),  "containerId", String.valueOf(containerId));
-
-			if(defaultActionList==null ||defaultActionList.isEmpty())
-			{
-				defaultAction=new DefaultAction();
-				defaultAction.setContainerId(containerId);
-				defaultBizLogic.insert(defaultAction);
-			}
-			else
-			{
-				defaultAction=(DefaultAction) defaultActionList.get(0);
-				defaultAction.setContainerId(containerId);
-			}
-			actionAppRecordEntry.setFormContext(defaultAction);
-			actionAppRecordEntry.setActivityStatus("Active");
-
-			ActionApplication  actionApplication= new ActionApplication();
-
-			actionApplication.setTimestamp(Calendar.getInstance().getTime());
-
-			InstanceFactory<User> instFact = DomainInstanceFactory.getInstanceFactory(User.class);
-			  user = instFact.createObject();
-			user= (User) retrieve(User.class.getName(), sessionDataBean.getUserId())  ;
-
-			actionApplication.setPerformedBy(user);
-
-			actionApplication.setSpecimen(specimen);
-			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final IBizLogic actionAppBizLogic = (ActionApplicationBizLogic) factory
-			.getBizLogic(Constants.ACTION_APP_FORM_ID);
-
-			actionAppBizLogic.insert(actionAppRecordEntry);
-			actionAppBizLogic.insert(actionApplication);
-
-			actionApplication.setApplicationRecordEntry(actionAppRecordEntry);
-			actionAppBizLogic.update(actionApplication);
-
-			IntegrateDEData integrateDEData=new IntegrateDEData();
-			integrateDEData.associateRecords(containerId, actionAppRecordEntry.getId(),recordIdentifier);
-
-
-			}catch (Exception exp) {
-				exp.printStackTrace();
-			}
-	}
-*/
-	/**
-	 * @param sessionDataBean
-	 * @param disposalEventParameters
-	 * @param dataValueMap
-	 * @param specimen
-	 */
-	/*public void insertDynamicDataForDisposalEvent(SessionDataBean sessionDataBean,
-			DisposalEventParameters disposalEventParameters,
-			Map<BaseAbstractAttributeInterface, Object> dataValueMap, Specimen specimen)
-	{
-		User user;
-		try{
-			EntityInterface dynamicDisposeEvent = null;
-			dynamicDisposeEvent= EntityCache.getInstance().getEntityGroupByName("SpecimenEvents").getEntityByName("DisposalEventParameters");
-
-			Collection<AttributeInterface> attributes =dynamicDisposeEvent.getAttributeCollection();
-			LinkedList<AbstractAttributeInterface> methods = new LinkedList<AbstractAttributeInterface>();
-
-			Map<String, Object> oldDataValueMap = new HashMap<String, Object>();
-			if (dynamicDisposeEvent.getAttributeCollection() != null)
-			{
-				String hostClassName = dynamicDisposeEvent.getClass().getName();
-				// Iterate over all the attributes of the DE event object.
-				for (AttributeInterface attribute : dynamicDisposeEvent.getAttributeCollection())
-				{
-					// Ignore the Id attribute as data won't be inserted for it.
-					if (!attribute.getName().equalsIgnoreCase("id"))
-					{
-
-						Class hostClass = Class.forName(hostClassName);
-						Class UIHostClass =disposalEventParameters.getClass();
-						String methodName = "get" + org.apache.commons.lang.StringUtils.capitalise(attribute.getName());
-						java.lang.reflect.Method callableMethod = UIHostClass.getMethod(methodName);
-
-						// Object passed is of static Event.
-						Object methodValue = callableMethod.invoke(disposalEventParameters);
-
-						// Populate datavalue map with attribute and its value from static event.
-						dataValueMap.put(attribute, methodValue);
-					}
-				}
-			}
-
-			//Long deId= EntityManager.getInstance().insertData(dynamicDisposeEvent, dataValueMap,
-					//null, new ArrayList<FileQueryBean>(), null);
-
-
-			Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
-			new SPPBizLogic().getAllSPPEventFormNames(dynamicEventMap);
-			long containerId = dynamicEventMap.get("Disposal Event Parameters");
-
-			// This is required, because of changes in DE for doing data entry.
-			ContainerInterface container = EntityCache.getInstance().getContainerById(
-					containerId);
-
-			// API used in DE for doing data entry.
-			ApplyDataEntryFormProcessor applDataEntryFormProcessor = ApplyDataEntryFormProcessor
-					.getInstance();
-			Long recordIdentifier = Long.valueOf(applDataEntryFormProcessor.insertDataEntryForm(container, dataValueMap, null));
-
-
-			DefaultAction defaultAction=null;
-			ActionApplicationRecordEntry actionAppRecordEntry=null;
-			actionAppRecordEntry=new ActionApplicationRecordEntry();
-
-			final IBizLogic defaultBizLogic =  new CatissueDefaultBizLogic();
-			List<DefaultAction> defaultActionList=defaultBizLogic.retrieve(DefaultAction.class.getName(),  "containerId", String.valueOf(containerId));
-
-			if(defaultActionList==null ||defaultActionList.isEmpty())
-			{
-				defaultAction=new DefaultAction();
-				defaultAction.setContainerId(containerId);
-				defaultBizLogic.insert(defaultAction);
-			}
-			else
-			{
-				defaultAction=(DefaultAction) defaultActionList.get(0);
-				defaultAction.setContainerId(containerId);
-			}
-			actionAppRecordEntry.setFormContext(defaultAction);
-			actionAppRecordEntry.setActivityStatus("Active");
-
-			ActionApplication  actionApplication= new ActionApplication();
-			// TO  ask gaurav actionApplication.setReasonDeviation(dynamicEventForm.getReasonDeviation());
-//						final Calendar calendar = Calendar.getInstance();
-//						final Date date = CommonUtilities.parseDate(new Date().toString(), CommonUtilities
-//								.datePattern(new Date().toString()));
-//						calendar.setTime(date);
-//						calendar.set(Calendar.HOUR_OF_DAY, Calendar.HOUR);
-//
-//						calendar.set(Calendar.MINUTE, Calendar.SECOND);
-
-			actionApplication.setTimestamp(Calendar.getInstance().getTime());
-
-			InstanceFactory<User> instFact = DomainInstanceFactory.getInstanceFactory(User.class);
-			  user = instFact.createObject();//new User();
-			user= (User) retrieve(User.class.getName(), sessionDataBean.getUserId())  ;
-			//user.setId(sessionDataBean.getUserId());
-
-			actionApplication.setPerformedBy(user);
-//						Specimen specimen;
-//						specimen = new Specimen();
-//						specimen.setId(new Long(specimenId));
-			actionApplication.setSpecimen(specimen);
-
-			//defaultBizLogic.update(user, user, sessionDataBean);
-
-			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final IBizLogic actionAppBizLogic = (ActionApplicationBizLogic) factory
-			.getBizLogic(Constants.ACTION_APP_FORM_ID);
-
-			actionAppBizLogic.insert(actionAppRecordEntry);
-			actionAppBizLogic.insert(actionApplication);
-
-			actionApplication.setApplicationRecordEntry(actionAppRecordEntry);
-			actionAppBizLogic.update(actionApplication);
-
-			IntegrateDEData integrateDEData=new IntegrateDEData();
-			integrateDEData.associateRecords(containerId, actionAppRecordEntry.getId(),recordIdentifier);
-			//Collection<ActionApplication> actionApplicationCollection=(Collection<ActionApplication>) retrieveAttribute(Specimen.class.getName(), specimen.getId(), "actionApplicationCollection");
-			//actionApplicationCollection.add(actionApplication);
-			//specimen.setActionApplicationCollection(actionApplicationCollection);
-
-			//update(specimen);
-
-			}catch (Exception exp) {
-				exp.printStackTrace();
-				*//**
-				 * required Exception  handling
-				 *//*
-//							throw this.getBizLogicException(exp, exp.getErrorKeyName(),
-//									exp.getMsgValues());
-			}
-	}*/
 
 	/**
 	 * @param obj - Object.
@@ -535,7 +239,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					{
 						// trasfering from virtual location
 						InstanceFactory<SpecimenPosition> instFact = DomainInstanceFactory.getInstanceFactory(SpecimenPosition.class);
-						specimenPosition = instFact.createObject();//new SpecimenPosition();
+						specimenPosition = instFact.createObject();
 						specimenPosition.setSpecimen(specimen);
 						specimen.setSpecimenPosition(specimenPosition);
 					}
@@ -945,7 +649,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(null, "spec.moved.diff.loc", specimen
 						.getLabel());
 			}
-			/*else if ((fromContainerId != null && parameter.getFromStorageContainer() != null)
+			else if ((fromContainerId != null && parameter.getFromStorageContainer() != null)
 					&& !((fromContainerId.equals(parameter.getFromStorageContainer().getId())
 							&& fromPos1.equals(parameter.getFromPositionDimensionOne()) && fromPos2
 							.equals(parameter.getFromPositionDimensionTwo()))))
@@ -953,7 +657,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 				throw this.getBizLogicException(null, "spec.moved.diff.loc", specimen
 						.getLabel());
-			}*/
+			}
 			if (parameter.getToStorageContainer() != null
 					&& parameter.getToStorageContainer().getName() != null)
 			{

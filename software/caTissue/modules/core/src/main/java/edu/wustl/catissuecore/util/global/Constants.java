@@ -2440,8 +2440,8 @@ public class Constants
 			"Received", "Spun", "Thaw", "Tissue Specimen Review", "Transfer"};
 
 	/** The Constant EVENT_PARAMETERS_COLUMNS. */
-	public static final String EVENT_PARAMETERS_COLUMNS[] = {"Identifier", "Event Parameter",
-			"User", "Date / Time", "PageOf"};
+	public static final String EVENT_PARAMETERS_COLUMNS[] = {"SCG / Specimen Label", "Event Parameter", "Date / Time",
+		"User", "PageOf","Identifier"};
 
 	/** The Constant DERIVED_SPECIMEN_COLUMNS. */
 	public static final String DERIVED_SPECIMEN_COLUMNS[] = {"Label", "Class", "Type", "Quantity",
@@ -5995,4 +5995,8 @@ public class Constants
 	public static final String DISPLAY_EVENTS_WITH_DEFAULT_VALUES = "displayEventsWithDefaultValues";
 	
 	public static final String EVENT_PERFORMED = "eventPerformed";
+	
+	public static final String TRANSFER_EVENT="Transfer";
+	
+	public static final String DISPOSAL_EVENT="Disposal";
 }

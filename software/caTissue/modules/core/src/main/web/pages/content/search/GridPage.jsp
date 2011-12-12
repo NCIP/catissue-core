@@ -24,7 +24,7 @@
 				// Patch ID: SpecimenEventSpaceUtilization_2
 				else if(useFunction == "eventParametersGrid") 
 				{
-					document.write("<div id='gridbox' width='100%' height='125px' border='0' style='background-color:#d7d7d7;overflow:hidden'></div>");
+					document.write("<div id='gridbox' width='100%' height='160px' border='0' style='background-color:#d7d7d7;overflow:hidden'></div>");
 				}
 				else if(useFunction == "goToConflictDetails") 
 				{
@@ -104,11 +104,10 @@ function init_grid()
 
 	//document.write("<hr>"+colWidth+"<hr>");
 
-
 	if(useFunction == "eventParametersGrid")
 	{
 		//colWidth = "167,167,167,167,11";
-		colWidth = "10,35,30,25,0";
+		colWidth = "30,30,18,25,0,0";
 	}
 
 	if(useFunction == "goToConflictDetails" )
@@ -118,7 +117,6 @@ function init_grid()
 	
 	//document.write("<hr>"+colWidth+"<hr>");
     mygrid.enableRowsHover(true,'grid_hover')
-
 	if(isWidthInPercent)
 	{
 		mygrid.setInitWidthsP(colWidth);
@@ -141,7 +139,6 @@ function init_grid()
 	// fix for grid display on IE for first time.
 	mygrid.clearAll();
 	*/
-
 	for(var row=0;row<myData.length;row++)
 	{
 		mygrid.addRow(row+1,myData[row],row+1);

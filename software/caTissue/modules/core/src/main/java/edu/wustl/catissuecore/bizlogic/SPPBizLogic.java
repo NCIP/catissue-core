@@ -72,7 +72,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	@Override
 	protected void insert(final Object obj, Object uiObject, final DAO dao,
 			SessionDataBean sessionDataBean) throws BizLogicException
-	{
+			{
 		try
 		{
 			SPPUIObject sppUIObject = (SPPUIObject) uiObject; 
@@ -98,8 +98,8 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 
 			spp.setActionCollection(actionList);
 			dao.insert(spp);
-			
-			
+
+
 		}
 		catch (final DAOException daoExp)
 		{
@@ -156,16 +156,16 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 			this.logger.error(Constants.INVALID_XML_MSG, e);
 			throw this.getBizLogicException(e, "", "Error while inserting the SPP xml in the db");
 		} 
-	}
+			}
 	@Override
 	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean,Object uiObject)
 			throws BizLogicException
-	{
+			{
 		SPPUIObject sppuiObject = (SPPUIObject)uiObject;
 		SpecimenProcessingProcedure spp = (SpecimenProcessingProcedure)obj;
 		updateXMLTemplateInDB(spp.getId(), sppuiObject.getXmlFileName());
-		
-	}
+
+			}
 	/**
 	 * Updates the persistent object in the database.
 	 * @param dao : dao
@@ -180,7 +180,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	@Override
 	protected void update(DAO dao, Object currentObj, Object oldObj, Object uiObject,
 			SessionDataBean sessionDataBean) throws BizLogicException
-	{
+			{
 		try
 		{
 			final SpecimenProcessingProcedure sppOldObj = (SpecimenProcessingProcedure) oldObj;
@@ -300,8 +300,8 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 			this.logger.error(Constants.INVALID_XML_MSG, e);
 			throw this.getBizLogicException(appExp, "", Constants.INVALID_XML_MSG);
 		} 
-	}
-	
+			}
+
 	/**
 	 * This method will update the caTissue_SPP table with the latest SPP XML Template
 	 * @param id
@@ -320,34 +320,34 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		InputStream stream;
 		try {
 			stream = xmlFile.getInputStream();
-		
-		
-		jdbcdao = AppUtility.openJDBCSession();
-		PreparedStatement statement = jdbcdao.getPreparedStatement("update catissue_spp set spp_template_xml=? where identifier=?");
-		
-		BufferedInputStream bis = new BufferedInputStream(stream);
-		//To move it to utility class n make it simpler
-		ByteArrayOutputStream buf = new ByteArrayOutputStream();
-		int result = bis.read();
-		while(result != -1) {
-		  byte b = (byte)result;
-		  buf.write(b);
-		  result = bis.read();
-		}        
-		String res = AppUtility.convertStreamToString(stream);
-		if(jdbcdao instanceof MySQLDAOImpl)
-		{
-			statement.setString(1, res);
-		}
-		else if(jdbcdao instanceof OracleDAOImpl)
-		{
-			StringReader reader = new StringReader(res);
-			statement.setCharacterStream(1, reader, res.length());
-		}
-		
-		statement.setLong(2, id);
-		statement.execute();
-		jdbcdao.commit();
+
+
+			jdbcdao = AppUtility.openJDBCSession();
+			PreparedStatement statement = jdbcdao.getPreparedStatement("update catissue_spp set spp_template_xml=? where identifier=?");
+
+			BufferedInputStream bis = new BufferedInputStream(stream);
+			//To move it to utility class n make it simpler
+			ByteArrayOutputStream buf = new ByteArrayOutputStream();
+			int result = bis.read();
+			while(result != -1) {
+				byte b = (byte)result;
+				buf.write(b);
+				result = bis.read();
+			}        
+			String res = AppUtility.convertStreamToString(stream);
+			if(jdbcdao instanceof MySQLDAOImpl)
+			{
+				statement.setString(1, res);
+			}
+			else if(jdbcdao instanceof OracleDAOImpl)
+			{
+				StringReader reader = new StringReader(res);
+				statement.setCharacterStream(1, reader, res.length());
+			}
+
+			statement.setLong(2, id);
+			statement.execute();
+			jdbcdao.commit();
 		} 
 		catch (Exception e) 
 		{
@@ -363,7 +363,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(e, "", "Errpr While inserting Template in db");
 			}
 		}
-	}
+			}
 
 	/**
 	 * @param sppIdentifier
@@ -477,7 +477,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	 * @throws SQLException
 	 */
 	public Map<Action, Long> generateContextRecordIdMap(SpecimenProcessingProcedure spp) throws ApplicationException,
-			DynamicExtensionsSystemException, DynamicExtensionsApplicationException, SQLException
+	DynamicExtensionsSystemException, DynamicExtensionsApplicationException, SQLException
 	{
 		Map<Action, Long> contextRecordIdMap = new HashMap<Action, Long>();
 		for (Action action : spp.getActionCollection())
@@ -505,7 +505,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	public Map<AbstractFormContext, Long> generateContextRecordIdMap(
 			AbstractFormContext formContext, Action action) throws ApplicationException,
 			DynamicExtensionsSystemException, DynamicExtensionsApplicationException, SQLException
-	{
+			{
 		Map<AbstractFormContext, Long> contextRecordIdMap = new HashMap<AbstractFormContext, Long>();
 		if (action.getApplicationDefaultValue() != null)
 		{
@@ -514,7 +514,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 			contextRecordIdMap.put(formContext, recordIdentifier);
 		}
 		return contextRecordIdMap;
-	}
+			}
 
 	/**
 	 * Gets the sPP name list.
@@ -565,7 +565,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 						.iterator();
 				if (contIter.hasNext())
 				{
-				/*	if(!"TransferEventParameters".equals(associationInterface.getTargetEntity().getName())
+					/*	if(!"TransferEventParameters".equals(associationInterface.getTargetEntity().getName())
 							&& !"DisposalEventParameters".equals(associationInterface.getTargetEntity().getName()))
 					{*/
 					namesOfSPPEvents.add(edu.wustl.cab2b.common.util.Utility
@@ -582,7 +582,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		else
 		{
 			logger
-					.error("edu.wustl.catissuecore.util.global.AppUtility.getAllSPPEventFormNames(Map<String, Long>): actionRecordEntry is NULL!");
+			.error("edu.wustl.catissuecore.util.global.AppUtility.getAllSPPEventFormNames(Map<String, Long>): actionRecordEntry is NULL!");
 		}
 		Collections.sort(namesOfSPPEvents);
 		String[] eventlist = new String[namesOfSPPEvents.size()];
@@ -686,8 +686,8 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	}
 
 	public InputStream getTemplateAsStream(Long id)
-	throws Exception 
-	{
+			throws Exception 
+			{
 		InputStream in = null;
 		JDBCDAO jdbcdao = null;
 		try
@@ -697,16 +697,27 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 			java.sql.PreparedStatement statement = jdbcdao.getPreparedStatement(query);
 			statement.setLong(1, id);
 			ResultSet rs = statement.executeQuery();
-			
-			 while (rs.next()){
-			 in = rs.getBinaryStream(1);
-			 }
+
+			while (rs.next()){
+				in = rs.getBinaryStream(1);
+			}
 		}
-		
+
 		finally
 		{
 			AppUtility.closeJDBCSession(jdbcdao);
 		}
 		return in;
-		}
+			}
+
+	public String getScgNameFromActionApplicationId(long id) throws ApplicationException
+	{
+		String scgName=null;
+		String query="Select scg.name from catissue_specimen_coll_group scg,catissue_spp_application spp_app,catissue_action_application action_app"
+				+" where scg.IDENTIFIER=spp_app.SCG_IDENTIFIER and spp_app.IDENTIFIER=action_app.SPP_APP_IDENTIFIER and action_app.IDENTIFIER="+id;	
+		List scgNameList=AppUtility.executeSQLQuery(query);
+		scgName=(String) ((List) scgNameList.get(0)).get(0);
+		return scgName;
+
 	}
+}

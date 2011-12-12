@@ -1880,69 +1880,6 @@
 							</tr>
 			</logic:equal>
 
-			<!--for  dispose -->
-			<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-							<tr >
-								<td align="center" class="black_ar">&nbsp;
-								 </td>
-								 <td align="left" class="black_ar">&nbsp;
-								 </td>
-								<td align="left" valign="top">
-									<html:checkbox  styleId="dispose" property="dispose" onclick="hidedisposeArea()">
-									</html:checkbox>
-									<span class="black_ar">
-										<label for="dispose">
-											 Dispose Specimen?
-										</label>
-									</span>
-								</td>
-								<td colspan="3"/>
-							</tr>
-
-
-							<tr>
-							<td colspan="6">
-							<div id="disposediv" style="display:none"  >
-							<table widht="100%" border="0" >
-
-							<tr>
-				           		<td align="center" class="black_ar">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								 </td>
-								 <td align="left" class="black_ar">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								 </td>
-								<td class="black_new">
-									<span class="black_ar">
-										<label for="dispose">
-											Activity status
-										</label>
-									</span>
-									<autocomplete:AutoCompleteTag property="disposeStatus"
-										optionsList = "<%=request.getAttribute(Constants.NOTCLOSEDACTIVITYSTATUS)%>"
-										initialValue="<%=form.getDisposeStatus()%>"
-										styleClass="black_ar"
-										size="11"
-										/>
-								</td>
-
-									<td align="left" valign="top" class="black_ar" >
-										<label for="reasonlabel">
-											Reason for Disposal
-										</label>
-									</td>
-
-								<td align="left" valign="top" colspan="1">
-
-
-									<html:textarea styleClass="black_ar_s"  rows="3" cols="30" styleId="comments" property="reason"/>
-								</td>
-
-							</tr>
-							</table>
-							</div>
-							</td>
-							</tr>
-					</logic:equal>
-							<!--for  dispose ends-->
 			<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 				<html:hidden property="collectionStatus"/>
 			</logic:notEqual>
@@ -2168,23 +2105,6 @@
 			</div>
 		</td>
 				<!---<td align="center" class="black_ar">&nbsp;</td>-->
-		<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-		<% if(showContainer!=null&&showContainer.equals("Pending"))
-		{
-			
-		}
-		else{%>
-		<td align="left" valign="top" class="black_ar" colspan="2">
-			<label for="reasonForTransfer">
-				Reason for Transfer
-			</label>
-		</td>
-		<td align="center" class="black_ar">&nbsp;</td>
-		<td align="left" valign="top" colspan="2">
-			<html:textarea styleClass="black_ar_s"  rows="1" cols="40" styleId="reasonForTransfer" property="reasonForTransfer"/>
-		</td>
-		<% }%>
-		</logic:notEqual>
 		</tr>
 
 		<%}%>
@@ -2203,15 +2123,7 @@
 														<bean:message key="specimen.virtualLocation" />
 													</td>
 													<td>
-													<div id="transferButton" >
-													<html:button
-																styleClass="blue_ar_b" property="transferButton"
-																title="Transfer"
-																value="Transfer"
-																onclick="showTransferArea()">
-															</html:button>
-													</div>
-													</td>
+																										</td>
 												</tr>
 													<%
 												}
@@ -2240,53 +2152,12 @@
 																<bean:message key="buttons.map"/>
 															</html:button>
 													</td>
-													<td>
-													<!-- Prachi -->
-													<div id="transferButton" >
-														<table widht="100%" border="0" >
-														<tr>
-														<td>
-															<html:button
-																styleClass="blue_ar_b" property="transferButton"
-																title="Transfer"
-																value="Transfer"
-																onclick="showTransferArea()">
-															</html:button>
-														</td>
-														</tr>
-														</table>
-													</div>
-													</td>
 												</tr>
 											</table>
 											</div>
 										</logic:equal>
 
 														</td>
-															<!-- Prachi -->
-													<!--<td>
-
-													<logic:equal name="transferStatus" value="transferred">
-
-														<table widht="100%" border="0" >
-														<tr>
-															<td align="center" class="black_ar">&nbsp;</td>
-															<td align="left" valign="top" class="black_ar">
-																<label for="reasonForTransfer">
-																	Reason for Transfer
-																</label>
-															</td>
-															<td align="center" class="black_ar">&nbsp;</td>
-															<td align="left" valign="top" colspan="2">
-																<html:textarea styleClass="black_ar_s"  rows="1" cols="40" styleId="reasonForTransfer" property="reasonForTransfer"/>
-															</td>
-														</tr>
-														</table>
-
-														</logic:equal>
-
-													</td>-->
-
 													</tr>
 													<%
 												}

@@ -125,34 +125,8 @@ function onParameterChange(element)
 	var action = "";
 	var iFrame = document.getElementById("newEventFrame");
 
-	if(element.value == "Cell Specimen Review")
-	action = "CellSpecimenReviewParameters.do?operation=add&pageOf=pageOfCellSpecimenReviewParameters";
-	else if(element.value == "Check In Check Out")
-	action = "CheckInCheckOutEventParameters.do?operation=add&pageOf=pageOfCheckInCheckOutEventParameters";
-	else if(element.value == "Collection")
-	action = "CollectionEventParameters.do?operation=add&pageOf=pageOfCollectionEventParameters";
-	else if(element.value == "Disposal")
+	if(element.value == "Disposal")
 	action = "DisposalEventParameters.do?operation=add&pageOf=pageOfDisposalEventParameters";
-	else if(element.value == "Embedded")
-	action = "EmbeddedEventParameters.do?operation=add&pageOf=pageOfEmbeddedEventParameters";
-	else if(element.value == "Fixed")
-	action = "FixedEventParameters.do?operation=add&pageOf=pageOfFixedEventParameters";
-	else if(element.value == "Fluid Specimen Review")
-	action = "FluidSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfFluidSpecimenReviewParameters";
-	else if(element.value == "Frozen")
-	action = "FrozenEventParameters.do?operation=add&pageOf=pageOfFrozenEventParameters";
-	else if(element.value == "Molecular Specimen Review")
-	action = "MolecularSpecimenReviewParameters.do?operation=add&pageOf=pageOfMolecularSpecimenReviewParameters";
-	else if(element.value == "Procedure")
-	action = "ProcedureEventParameters.do?operation=add&pageOf=pageOfProcedureEventParameters";
-	else if(element.value == "Received")
-	action = "ReceivedEventParameters.do?operation=add&pageOf=pageOfReceivedEventParameters";
-	else if(element.value == "Spun")
-	action = "SpunEventParameters.do?operation=add&pageOf=pageOfDynamicEvent&eventName="+element.value;
-	else if(element.value == "Thaw")
-	action = "ThawEventParameters.do?operation=add&pageOf=pageOfThawEventParameters";
-	else if(element.value == "Tissue Specimen Review")
-	action = "TissueSpecimenReviewEventParameters.do?operation=add&pageOf=pageOfTissueSpecimenReviewParameters";
 	else if(element.value == "Transfer")
 	{
 		action = "TransferEventParameters.do?operation=add&pageOf=pageOfTransferEventParameters";
@@ -274,18 +248,27 @@ window.onresize = function() { mdResDetector(); }
 											{
 											var cl = mygrid.cells(id,4);
 											var pageOf = cl.getValue();
-											var c2 = mygrid.cells(id,0);
+											var c2 = mygrid.cells(id,5);
 											var eventId = c2.getValue();
 											var c3 = mygrid.cells(id,1);
 											var eventName = c3.getValue();
+											var creationEvent=document.getElementById('creationId');
+											if(creationEvent !=null)
+											{
+											creationEvent=document.getElementById('creationId').innerHTML;
+											}
+											if(eventName.search(/creationId/i)>0)
+											{
+												eventName=document.getElementById('creationId').innerHTML;
+											}
 											var url = "SearchObject.do?pageOf="+pageOf+"&operation=search&id="+eventId+"&specimenEventParameter="+eventName;
-											if(eventName == 'Disposal Event Parameters' || eventName == 'Transfer Event Parameters')
+											if(eventName == 'Disposal' || eventName == 'Transfer')
 											{
 												url = url + "&hideSubmitButton=true";
 											}
 											var frame = document.getElementById("newEventFrame");
 											frame.src = url;
-											document.getElementById("specimenEventParameter").value=mygrid.cells(id,1).getValue();
+											document.getElementById("specimenEventParameter").value=eventName;
 											}
 											/*
 											to be used when you want to specify another javascript function for row selection.

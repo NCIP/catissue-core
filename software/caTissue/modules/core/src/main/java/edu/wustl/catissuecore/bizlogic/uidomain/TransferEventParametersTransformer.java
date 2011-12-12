@@ -40,22 +40,22 @@ public class TransferEventParametersTransformer
 
         domainObject.setToStorageContainer(toObj);
 
-        if (uiRepOfDomain.getFromPosition() !=null && !uiRepOfDomain.getFromPosition().equalsIgnoreCase(Constants.VIRTUALLY_LOCATED)) 
+        if (uiRepOfDomain.getFromPositionData() !=null && !uiRepOfDomain.getFromPositionData().equalsIgnoreCase("virtual Location")) 
         {
         
-        	int colonIndex=uiRepOfDomain.getFromPosition() .indexOf(":");
-    		int posIndex=uiRepOfDomain.getFromPosition() .indexOf("Pos");
-        	int index=uiRepOfDomain.getFromPosition().lastIndexOf("(");
+        	/*int colonIndex=uiRepOfDomain.getFromPositionData() .indexOf(":");
+    		int posIndex=uiRepOfDomain.getFromPositionData() .indexOf("Pos");
+        	int index=uiRepOfDomain.getFromPositionData().lastIndexOf("(");
     		int lastindex=uiRepOfDomain.getFromPosition().lastIndexOf(")");
     		String[] s=uiRepOfDomain.getFromPosition().substring(index+1,lastindex).split(",");
-    		String stId= uiRepOfDomain.getFromPosition() .substring(colonIndex+1, posIndex).trim();
+    		String stId= uiRepOfDomain.getFromPositionData() .substring(colonIndex+1, posIndex).trim();*/
     		
     		 final StorageContainer fromObj = scInstFact.createObject();
-    		 fromObj.setId(Long.valueOf(stId));
+    		 fromObj.setId(Long.valueOf(uiRepOfDomain.getFromStorageContainerId()));
     		 domainObject.setFromStorageContainer(fromObj);
     		 
-    		domainObject.setFromPositionDimensionOne(Integer.valueOf(s[0]));
-            domainObject.setFromPositionDimensionTwo(Integer.valueOf(s[1]));
+    		domainObject.setFromPositionDimensionOne(Integer.valueOf(uiRepOfDomain.getFromPositionDimensionOne()));
+            domainObject.setFromPositionDimensionTwo(Integer.valueOf(uiRepOfDomain.getFromPositionDimensionTwo()));
         }
         
        /* if (uiRepOfDomain.getFromStorageContainerId() == 0) {

@@ -351,153 +351,91 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 * @return
 	 * @throws BizLogicException
 	 */
-	public Collection<ActionApplication> getDynamicEventColl(String specimenId, IBizLogic bizLogic,Date creationTimeStamp, HashSet<ActionApplication> dynamicEventsForGrid,boolean addMyEvents)
+
+	public Collection<ActionApplication> getDynamicEventColl(Long specimenId, IBizLogic bizLogic,Date creationTimeStamp, HashSet<ActionApplication> dynamicEventsForGrid,Long eventOrder)
 			throws BizLogicException
 			{
-		List<List<Object>> parentIdList=null;
 		Specimen specimen=null;
-		String parentId=null;
+		Long parentId=null;
 		try 
 		{
 			if(specimenId!=null)
 			{
-				specimen = (Specimen) bizLogic.retrieve("edu.wustl.catissuecore.domain.Specimen", Long.valueOf(specimenId));
-				/**
-				 * Add Adhoc Events.
-				 */
-				Collection<ActionApplication> adhocActionAppColl = (Collection<ActionApplication>) bizLogic	.retrieveAttribute(Specimen.class, new Long(specimenId),
-						"elements(actionApplicationCollection)");
-				if(adhocActionAppColl!=null && !adhocActionAppColl.isEmpty())
+				specimen = (Specimen) bizLogic.retrieve(Specimen.class.getName(), Long.valueOf(specimenId));
+				//Add Ad-hoc Events.
+				Collection<ActionApplication> adhocEventColl = (Collection<ActionApplication>) bizLogic	.retrieveAttribute(Specimen.class, new Long(specimenId),"elements(actionApplicationCollection)");
+				if(adhocEventColl!=null && !adhocEventColl.isEmpty())
 				{
-					if(addMyEvents)
+					/**
+					 * If creation time stamp is null that means the  self call.
+					 */
+					if(creationTimeStamp==null)
 					{
-						dynamicEventsForGrid.addAll(adhocActionAppColl);
+						dynamicEventsForGrid.addAll(adhocEventColl);
 					}
 					else
 					{
-						dynamicEventsForGrid.addAll(addActionApplicationToGrid(creationTimeStamp,
-								adhocActionAppColl));
+						//dynamicEventsForGrid.addAll(addEventsToGrid(creationTimeStamp,adhocEventColl));
+						addParentEventsToGrid(creationTimeStamp,dynamicEventsForGrid, eventOrder,adhocEventColl);
 					}
 				}
-				/**
-				 * Add Creation Events of assigned Processing SPP.
-				 */
+				// Add Creation Events of assigned Processing SPP.
 				SpecimenProcessingProcedureApplication sppApplication = specimen.getProcessingSPPApplication();
 				if (sppApplication != null)
 				{
 					Collection<ActionApplication> actionApplicationCollection = sppApplication
 							.getSppActionApplicationCollection(); 
-					if(addMyEvents && actionApplicationCollection != null)
+					if(creationTimeStamp==null && actionApplicationCollection != null)
 					{
-						dynamicEventsForGrid.addAll(actionApplicationCollection);							
-					}
-					/*else
-					{
-						dynamicEventsForGrid.addAll(addActionApplicationToGrid(creationTimeStamp,
-								actionApplicationCollection));
-					}*/
-
-					/*if(creationTimeStamp!=null)
-					{
-						dynamicEventsForGrid.addAll(addActionApplicationToGrid(creationTimeStamp,
-								actionApplicationCollection));
+						dynamicEventsForGrid.addAll(actionApplicationCollection);	
 					}
 					else
-					{*/
-					/*if (actionApplicationCollection != null)
-						{
-							dynamicEventsForGrid.addAll(actionApplicationCollection);							
-						}*/
-					//}
-				}
-
-				/**
-				 * Add creation Events of SPP application of parent specimen.
-				 */
-				//get parent specimen Id.
-				parentIdList=AppUtility.executeSQLQuery("SELECT PARENT_SPECIMEN_ID FROM CATISSUE_ABSTRACT_SPECIMEN WHERE IDENTIFIER = "+specimenId);
-				if(parentIdList!=null && !parentIdList.isEmpty())
-				{
-					List<Object> idlist=(List<Object>) parentIdList.get(0);
-					if(idlist!=null && !idlist.isEmpty())
 					{
-						parentId=(String) idlist.get(0);
-						if(!parentId.equalsIgnoreCase(""))
+						Collection<ActionApplication> parentSpecimenEventCollection=specimen.getProcessingSPPApplication().getSppActionApplicationCollection();
+						addParentEventsToGrid(creationTimeStamp,dynamicEventsForGrid, eventOrder,parentSpecimenEventCollection);
+					}
+				}
+			}
+			ActionApplication creationEvent=specimen.getCreationEventAction();
+			if (creationEvent==null)
+			{
+				// if no creation event do not display any more
+				return dynamicEventsForGrid;
+			}
+
+			// Add creation Events of SPP application of parent specimen.
+			// If parent specimen is not null. then get the sppApplication of parent specimen
+			// and get all creation events of parent specimen till the action order of 
+			// child specimen's creation event is greater than or equal to the action order of creation events.
+
+			parentId=getParentSpecimenId(specimenId);
+			if(parentId!=null) 
+			{
+				Action action=(Action) creationEvent.getApplicationRecordEntry().getFormContext();
+				eventOrder=action.getActionOrder();
+				specimenId=parentId;
+				getDynamicEventColl(specimenId,bizLogic,creationEvent.getTimestamp(),dynamicEventsForGrid,eventOrder);
+			}
+			// If parent specimen id is null, then move to specimen collection group.
+			else
+			{
+				Collection<SpecimenProcessingProcedureApplication> sppAppCollection = specimen.getSpecimenCollectionGroup().getSppApplicationCollection();
+				if (sppAppCollection != null && !sppAppCollection.isEmpty())
+				{
+					Iterator<SpecimenProcessingProcedureApplication> sppAppIter = sppAppCollection.iterator();
+					while (sppAppIter.hasNext())
+					{
+						SpecimenProcessingProcedureApplication sppApp = sppAppIter.next();
+						if(creationEvent.getSppApplication().getSpp().getId() != sppApp.getSpp().getId())
 						{
-							/**
-							 * If parent specimen is not null. then get the sppApplication of parent specimen
-							 * and get all creation events of parent specimen till the action order of 
-							 * child specimen's creation event is greater than or equal to the action order of creation events. 
-							 */
-							Specimen parentSpecimen=(Specimen) specimen.getParentSpecimen();
-							if(specimen.getCreationEventAction()!=null)
-							{
-								Action action=(Action) specimen.getCreationEventAction().getApplicationRecordEntry().getFormContext();
-								long actionOrder=action.getActionOrder();
-
-								Collection<ActionApplication> actionCollection=parentSpecimen.getProcessingSPPApplication().getSppActionApplicationCollection();
-								Iterator<ActionApplication> iterator=actionCollection.iterator();
-								while(iterator.hasNext())
-								{
-									ActionApplication actApp=iterator.next();
-									Action specAction=(Action) actApp.getApplicationRecordEntry().getFormContext();
-									if(creationTimeStamp!=null && specAction.getActionOrder()<=actionOrder && !actApp.getTimestamp().after(creationTimeStamp))
-									{
-										dynamicEventsForGrid.add(actApp);
-									}
-								}
-							}
-							specimenId=parentId;
-							/*if(parentSpecimen.getCreationEventAction()!=null)
-							{
-								creationTimeStamp=parentSpecimen.getCreationEventAction().getTimestamp();
-							}
-							else
-							{
-								creationTimeStamp=null;
-							}*/
-							getDynamicEventColl(specimenId,bizLogic,creationTimeStamp,dynamicEventsForGrid,false);
+							continue; // ignore if not the spp using which the specimen was created
 						}
-						/**
-						 * If parent specimen id is null, then move to specimen collection group.
-						 */
-						else
-						{
-							Collection<SpecimenProcessingProcedureApplication> sppAppCollection = specimen.getSpecimenCollectionGroup().getSppApplicationCollection();
-							if (sppAppCollection != null && !sppAppCollection.isEmpty())
-							{
-								Iterator<SpecimenProcessingProcedureApplication> sppAppIter = sppAppCollection.iterator();
-								while (sppAppIter.hasNext())
-								{
-									SpecimenProcessingProcedureApplication sppApp = sppAppIter.next();
-									Collection<ActionApplication> actionApplicationCollection=sppApp.getSppActionApplicationCollection();
 
-									//Specimen parentSpecimen=(Specimen) specimen.getParentSpecimen();
-									Action action=null;
-									ActionApplication actApp1=specimen.getCreationEventAction();
-									if(actApp1!=null)
-									{
-										action=(Action) actApp1.getApplicationRecordEntry().getFormContext();
-										long actionOrder=action.getActionOrder();
+						Action action =(Action) creationEvent.getApplicationRecordEntry().getFormContext();
+						long actionOrder=action.getActionOrder();
 
-										//Collection<ActionApplication> actionCollection=parentSpecimen.getProcessingSPPApplication().getSppActionApplicationCollection();
-										Iterator<ActionApplication> iterator=actionApplicationCollection.iterator();
-										while(iterator.hasNext())
-										{
-											ActionApplication actApp=iterator.next();
-											Action specAction=(Action) actApp.getApplicationRecordEntry().getFormContext();
-											if(creationTimeStamp!=null && specAction.getActionOrder()<=actionOrder && !actApp.getTimestamp().after(creationTimeStamp))
-											{
-												dynamicEventsForGrid.add(actApp);
-											}
-										}
-									}
-									/*dynamicEventsForGrid.addAll(addActionApplicationToGrid(creationTimeStamp,
-											actionApplicationCollection));
-									 */
-								}
-							}
-						}
+						Collection<ActionApplication> scgEventCollection=sppApp.getSppActionApplicationCollection();
+						addParentEventsToGrid(creationEvent.getTimestamp(),dynamicEventsForGrid, actionOrder,scgEventCollection);
 					}
 				}
 			}
@@ -509,14 +447,61 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		return dynamicEventsForGrid;
 			}
 
+
+	private Long getParentSpecimenId(long childSpecimenId) throws ApplicationException
+	{
+		Long parentId=null;
+		List<List<Object>> parentIdList=null;
+		parentIdList=AppUtility.executeSQLQuery("SELECT PARENT_SPECIMEN_ID FROM CATISSUE_ABSTRACT_SPECIMEN WHERE IDENTIFIER = "+childSpecimenId);
+		if(parentIdList!=null && !parentIdList.isEmpty())
+		{
+			List<Object> idlist=(List<Object>) parentIdList.get(0);
+			if(idlist!=null && !idlist.isEmpty())
+			{
+				String id=(String) idlist.get(0);
+				if(!id.equalsIgnoreCase(""))
+				{
+					parentId=Long.valueOf(id);
+				}
+			}
+		}
+		return parentId;
+	}
+
+	/**
+	 * 
+	 * @param creationTimeStamp
+	 * @param dynamicEventsForGrid
+	 * @param actionOrder
+	 * @param actionAppCollection
+	 */
+	private void addParentEventsToGrid(Date creationTimeStamp,
+			HashSet<ActionApplication> dynamicEventsForGrid, long actionOrder,
+			Collection<ActionApplication> actionAppCollection) {
+		Iterator<ActionApplication> iterator=actionAppCollection.iterator();
+		while(iterator.hasNext())
+		{
+			ActionApplication actApp=iterator.next();
+			//Action specAction=(Action) actApp.getApplicationRecordEntry().getFormContext();
+			if(
+					//creationTimeStamp!=null &&
+					//specAction.getActionOrder()<=actionOrder && 
+					!actApp.getTimestamp().after(creationTimeStamp))
+			{
+				dynamicEventsForGrid.add(actApp);
+			}
+		}
+	}
+
 	/**
 	 * 
 	 * @param creationTimeStamp
 	 * @param actionApplicationCollection
 	 * @return
 	 */
-	private HashSet<ActionApplication> addActionApplicationToGrid(Date creationTimeStamp,
-			Collection<ActionApplication> actionApplicationCollection) {
+/*	private HashSet<ActionApplication> addEventsToGrid(Date creationTimeStamp,
+			Collection<ActionApplication> actionApplicationCollection)
+			{
 		HashSet<ActionApplication> set=new HashSet<ActionApplication>();
 		Iterator<ActionApplication> actAppIter=actionApplicationCollection.iterator();
 		while(actAppIter.hasNext())
@@ -527,12 +512,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				set.add(actApp);
 			}
 		}
-		/*if(set.isEmpty())
-		{
-			set.addAll(actionApplicationCollection);
-		}*/
 		return set;
-	}
+			}*/
+
 	/**
 	 * retrieve Parent Specimen Details From Id.
 	 *
