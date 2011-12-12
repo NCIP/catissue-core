@@ -360,11 +360,22 @@
 		</javac>
 		<copy todir="${classes.dir}" overwrite="true">
 			<fileset dir="${src.dir}">
+				<exclude name="**/ApplicationResources.properties" />
 				<include name="**/*.properties" />
 				<include name="**/*.xml" />
 				<include name="**/*.hbm.xml" />
 				<include name="**/*.ser" />
 			</fileset>
+		</copy>
+		<copy todir="${classes.dir}" overwrite="true" filtering="true">
+			<fileset dir="${src.dir}">
+				<include name="**/ApplicationResources.properties" />
+			</fileset>
+			<filterset>
+				<filter token="INSTITUTION_LOGO_FILENAME" value="${institution.logo.filename}"/>
+				<filter token="INSTITUTION_LOGO_ALT" value="${institution.logo.alt}"/>
+				<filter token="INSTITUTION_LOGO_HREF" value="${institution.logo.href}"/>
+			</filterset>
 		</copy>
 		<copy todir="${classes.dir}" overwrite="true">
 			<fileset dir="${resources.dir}/xml">
