@@ -188,9 +188,7 @@ ALTER TABLE catissue_specimen_coll_group ADD (AGE_AT_COLLECTION NUMBER(6,2))
 /
 -- For Update Encounter Time Stamp:
 	UPDATE catissue_specimen_coll_group scg
-	set AGE_AT_COLLECTION=
-	(select DECODE(TRUNC(((scg.ENCOUNTER_
-		TIMESTAMP - part.BIRTH_DATE)/365),2),null,'',TRUNC(((scg.ENCOUNTER_TIMESTAMP - part.BIRTH_DATE)/365),2))
+	set AGE_AT_COLLECTION=(select round(((scg.ENCOUNTER_TIMESTAMP-part.BIRTH_DATE)/365),0)
 		from catissue_coll_prot_reg cpr ,catissue_participant part
 		where scg.COLLECTION_PROTOCOL_REG_ID=cpr.identifier
 			AND

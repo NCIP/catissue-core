@@ -180,12 +180,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			
 			Date birthDate=participantBizLogic.getDateOfBirth(scg.getCollectionProtocolRegistration().getParticipant());
 			Long diffday;
-			Double ageDiff;
+			Integer ageDiff;
 			DecimalFormat twoDigitDecimal = new DecimalFormat(Constants.DECIMALFORMAT);
 			if(scg.getEncounterTimestamp()!=null && birthDate!=null && scg.getAgeAtCollection()==null)
 			{
 				diffday=(scg.getEncounterTimestamp().getTime() - birthDate.getTime()) /(24 * 60 * 60 * 1000);
-				ageDiff=Double.valueOf(twoDigitDecimal.format(Double.valueOf(diffday) / (365)));
+				ageDiff=Integer.valueOf(twoDigitDecimal.format(Double.valueOf(diffday) / (365)));
 				scg.setAgeAtCollection(ageDiff);
 			}
 			
@@ -574,9 +574,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			final SpecimenCollectionGroup oldspecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
 			// lazy false change
 
-			final Object object = dao.retrieveById(SpecimenCollectionGroup.class.getName(),
+ 			final Object object = dao.retrieveById(SpecimenCollectionGroup.class.getName(),
 					oldspecimenCollectionGroup.getId());
-
+			
 			SpecimenCollectionGroup persistentSCG = null;
 			if (object != null)
 			{
@@ -725,7 +725,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			final ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
 			Date birthDate=participantBizLogic.getDateOfBirth(specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant());
 			Long diffday;
-			Double ageDiff;
+			Integer ageDiff;
 			DecimalFormat twoDigitDecimal = new DecimalFormat(Constants.DECIMALFORMAT);
 			if(specimenCollectionGroup.getAgeAtCollection()!=null)
 			{
@@ -734,7 +734,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			else if(specimenCollectionGroup.getEncounterTimestamp()!=null && birthDate!=null)
 			{
 				diffday=(specimenCollectionGroup.getEncounterTimestamp().getTime() - birthDate.getTime()) /(24 * 60 * 60 * 1000);
-				ageDiff=Double.valueOf(twoDigitDecimal.format(Double.valueOf(diffday) / (365)));
+				ageDiff=Integer.valueOf(twoDigitDecimal.format(Double.valueOf(diffday) / (365)));
 				persistentSCG.setAgeAtCollection(ageDiff);
 			}
 			String barCode = specimenCollectionGroup.getBarcode();
@@ -790,7 +790,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		{
 			//this.LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
-		} catch (ParseException e) {
+		} catch (ParseException parseExp) {
 			
 		}
 	}

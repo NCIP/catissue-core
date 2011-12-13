@@ -51,7 +51,7 @@ public class SpecimenCollectionGroupTransformer
         }
 		if(uiRepOfDomain.getAgeAtCollection()!=null && !uiRepOfDomain.getAgeAtCollection().equals(""))
 		{
-			domainObject.setAgeAtCollection(Double.valueOf(uiRepOfDomain.getAgeAtCollection()));
+			domainObject.setAgeAtCollection(Integer.valueOf(uiRepOfDomain.getAgeAtCollection()));
 		}
         InstanceFactory<Site> siteInstFact = DomainInstanceFactory.getInstanceFactory(Site.class);
         domainObject.setSpecimenCollectionSite(siteInstFact.createObject());

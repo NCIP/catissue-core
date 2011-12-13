@@ -171,7 +171,7 @@ INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME,
 COMMIT;
 /
 -- Script for Age at Collection
-ALTER TABLE catissue_specimen_coll_group ADD Column AGE_AT_COLLECTION Double(6,2);
+ALTER TABLE catissue_specimen_coll_group ADD Column AGE_AT_COLLECTION integer;
 /
 COMMIT;
 /
@@ -181,7 +181,7 @@ COMMIT;
 		JOIN catissue_coll_event_param cep ON sep.identifier = cep.identifier
 		JOIN catissue_coll_prot_reg cpr ON scg.COLLECTION_PROTOCOL_REG_ID=cpr.identifier
 		JOIN catissue_participant part ON part.identifier=cpr.PARTICIPANT_ID
-	Set scg.ENCOUNTER_TIMESTAMP=sep.EVENT_TIMESTAMP,scg.AGE_AT_COLLECTION=TRUNCATE(((TO_DAYS(sep.EVENT_TIMESTAMP) - TO_DAYS(part.BIRTH_DATE))/365),2)
+	Set scg.ENCOUNTER_TIMESTAMP=sep.EVENT_TIMESTAMP,scg.AGE_AT_COLLECTION=ROUND((datediff(scg.ENCOUNTER_TIMESTAMP,part.BIRTH_DATE)/365),0)
 	WHERE
 		sep.EVENT_TIMESTAMP IS NOT NULL
 		AND sep.SPECIMEN_COLL_GRP_ID IS NOT NULL;

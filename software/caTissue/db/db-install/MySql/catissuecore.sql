@@ -499,7 +499,7 @@ CREATE TABLE `catissue_specimen_coll_group`
     `DATE_OFFSET` integer,
     `DSPR_ID` bigint(20),
     `ISPR_ID` bigint(20),
-    `AGE_AT_COLLECTION` Double(6,2),
+    `AGE_AT_COLLECTION` integer,
 	PRIMARY KEY  (`IDENTIFIER`),
     UNIQUE KEY `NAME` (`NAME`),
 	UNIQUE KEY `BARCODE` (`BARCODE`),

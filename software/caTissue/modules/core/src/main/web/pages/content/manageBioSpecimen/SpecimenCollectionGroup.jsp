@@ -26,7 +26,7 @@
 <script type="text/javascript">
 var DateDiff = {
 		inYears: function(diffOfDate) {
-		var num_years = diffOfDate/31536000000;
+		var num_years = parseInt(diffOfDate/31536000000);
 	        return num_years;
 	    }
 	}
@@ -50,7 +50,7 @@ function calculateAge()
 		var date2 = new Date(dateString2); 
 		
 		var difference=date1-date2;
-		var no_year=new Number(DateDiff.inYears(difference)).toFixed(2);
+		var no_year=parseInt(new Number(DateDiff.inYears(difference)).toFixed());
 		if(isNaN(no_year))
 		{
 			
@@ -713,7 +713,7 @@ int collectionHour=0;
 Long diffday=new Long(0);   
 Double ageDiff=new Double(0);
 SimpleDateFormat convertDateFormat = new SimpleDateFormat("MM-dd-yyyy");
-DecimalFormat twoDigitDecimal = new DecimalFormat("#.##");
+DecimalFormat twoDigitDecimal = new DecimalFormat("#");
 Date encounterTimeStampDate;
 collectionDateString=form.getCollectionDate();
 if(collectionDateString!=null)
@@ -872,6 +872,7 @@ else
 showPriterTypeLocation();
 </script>
 </body>
+
 
 
 
