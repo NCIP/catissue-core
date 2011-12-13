@@ -949,10 +949,10 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4
 			<property name="caTissue-webapp.dir.dist" value="${caTissue-webapp.dir.dist}" />
 			<property name="jboss.home" value="${jboss.home}" />
 		</ant>
-		<database-upgrade
+		<!-- <database-upgrade
 			database.changelog.file="${os.temp.dir}/${project.name}/db-upgrade.xml"
 			/>
-		<database-tag/>
+		<database-tag/>-->
 	</target>
 
 	<target name="upgrade:database:tag" description="Tags current state of database with a tag to allow for rollback of database to previous versions." unless="exclude.database"
