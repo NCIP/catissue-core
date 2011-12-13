@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;  
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
@@ -448,7 +448,7 @@ public class CctsIntegrationBizLogic implements ICctsIntegrationBizLogic,
 				.getParticipant() : new Participant();
 		Participant baseCopy = new Participant();
 		try {
-			BeanUtils.copyProperties(baseCopy, base);
+			PropertyUtils.copyProperties(baseCopy, base);    
 			baseCopy.setRaceCollection(new LinkedHashSet());
 			if (base.getRaceCollection() != null)
 				baseCopy.getRaceCollection().addAll(base.getRaceCollection());
