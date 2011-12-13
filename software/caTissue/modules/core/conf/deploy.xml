@@ -3341,6 +3341,7 @@ Thanking You,
 	<property name="condition" value=" " />
 	<property name="package" value=" " />
 	<property name="addQueryPaths" value=" " />
+	<property name="pv.file.name" value="" />
 
 	<target name="import_xmi" description="Import XMI">
 		<delete quiet="true" includeemptydirs="true">
@@ -3513,7 +3514,7 @@ Thanking You,
 					<arg value="${condition.file.name}" />
 					<arg value="${generate.cacore}" />
 					<arg value="${Application.url}/"/>
-					<arg value="${pv.file.name}/"/>
+					<arg value="${pv.file.name}"/>
 					<classpath>
 						<pathelement location="${prop.temp.dir}/catissuecore/WEB-INF/classes" />
 						<fileset dir="${prop.temp.dir}/catissuecore/WEB-INF/lib">
@@ -3572,7 +3573,7 @@ Thanking You,
 	<property name="bulkXMLTemplateFile" value="${base.dir}/Participant.xml"/>
 	<property name="mappingXMLFile" value="${base.dir}/bulkoperator/mapping.xml" />
 	<property name="importBulkTemplate" value="" />
-	<target name="create_category.tmp" description="Target used to create the Category">
+	<target name="create_category" description="Target used to create the Category">
 		
 		<property name="category.fileDir.path" location="${categoryFileDir}"/>
 		<available file="${category.fileDir.path}" property="is.category.dir.present"/>
@@ -3622,15 +3623,92 @@ Thanking You,
 			</else>
 		</if>
 		
-		<ant antfile="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="create_category">
-			<property name="categoryFileDir" value="${category.files.dir.name}" />
-			<property name="Application.url" value="${Application.url}" />
-			<property name="categoryFormNamesFile" value="${formNames.file.name}" />
-			<property name="isPersistMetadataOnly" value="${isPersistMetadataOnly}" />
-			<property name="bulkXMLTemplateFile" value="${bulkXMLTemplateFile}" />
-			<property name="mappingXMLFile" value="${mappingXMLFile}" />
-			<property name="importBulkTemplate" value="${importBulkTemplate}" />
-		</ant>
+		<echo message="Category directory path :: ${category.files.dir.name}"/>
+		<echo message="Category formNames file :: ${formNames.file.name}"/>
+
+		<unzip src="${dynamic.extensions.location}/../../bulk_operations/lib/bulkoperator.zip" dest="bulkoperator" />
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="${dynamic.extensions.location}/clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
+		<copy file="./${de.temp.dir}/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
+		<copy file="${dynamic.extensions.location}/../../bulk_operations/lib/log4j.jar" tofile="${de.temp.dir}/log4j.jar" overwrite="true" />
+		<mkdir dir="./log" />
+		<replace file="./log4j.properties">
+			<replacefilter token="@@jbosshome@@" value="." />
+		</replace>
+		<echo message="Creating Categories" />
+		<java classname="edu.common.dynamicextensions.client.CategoryClient" fork="true" maxmemory="1024M">
+			<arg value="${category.files.dir.name}" />
+			<arg value="${Application.url}" />
+			<arg value="${formNames.file.name}" />
+			<arg value="${isPersistMetadataOnly}" />
+			<arg value="${bulkXMLTemplateFile}"/>
+			<arg value="${mappingXMLFile}"/>
+			<arg value="${importBulkTemplate}"/>
+
+			<classpath>
+				<fileset dir="${de.temp.dir}">
+					<include name="*.jar" />
+					<exclude name="uml-1.3*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+	
+	<property name="pv.dir" value=" " />
+	<target name="import_permissible_values" description="Import permissible values">
+		<echo message="Importing Permissible Values" />
+		
+		<property name="permissibleValues.dir" location="${pv.dir}"/>
+		<available file="${permissibleValues.dir}" property="is.permissibleValues.dir.present"/>
+		<if>
+			<not>
+			   <isset property="is.permissibleValues.dir.present"/>
+			</not>
+			<then>
+				<property name="new.permissibleValues.dir.path" location="../../../${pv.dir}"/>
+				<available file="${new.permissibleValues.dir.path}" property="is.new.permissibleValues.dir.present"/>
+				<if>
+					<isset property="is.new.permissibleValues.dir.present"/>
+					<then>
+						<property name="permissibleValues.dir.name" value="${new.permissibleValues.dir.path}"/>
+					</then>
+					<else>
+						<property name="permissibleValues.dir.name" value="${pv.dir}"/>
+					</else>
+				</if>
+			</then>
+			<else>
+				<property name="permissibleValues.dir.name" value="${pv.dir}"/>
+			</else>
+		</if>
+		<property name="is.category.pv.import" value="false"/>
+		<property name="pv.file" value="${permissibleValuesFile}"/>
+		<echo message="Permissible Values Dir :: ${permissibleValues.dir.name}"/>
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="${dynamic.extensions.location}/clientFormCreator.zip" dest="${de.temp.dir}" overwrite="true" />
+		<copy file="./${de.temp.dir}/log4j.properties.template" tofile="./log4j.properties" overwrite="true" />
+		<copy file="${dynamic.extensions.location}/../../bulk_operations/lib/log4j.jar" tofile="${de.temp.dir}/log4j.jar" overwrite="true" />
+		<mkdir dir="./log" />
+		<replace file="./log4j.properties">
+			<replacefilter token="@@jbosshome@@" value="." />
+		</replace>
+		<java classname="edu.common.dynamicextensions.client.PermissibleValuesClient" fork="true" maxmemory="1024M">
+			<arg value="${permissibleValues.dir.name}" />
+			<arg value="${Application.url}" />
+			<arg value="${pv.file}" />
+			<arg value="${is.category.pv.import}" />
+			<classpath>
+				<fileset dir="${de.temp.dir}">
+					<include name="*.jar" />
+					<exclude name="uml-1.3*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+
+		<delete dir="${base.dir}/tempPVDir" />
+		<delete file="${base.dir}/ImportPVDir.zip" />
 	</target>
 
 	<target name="Associate_forms" description="Associating forms with catissue">
