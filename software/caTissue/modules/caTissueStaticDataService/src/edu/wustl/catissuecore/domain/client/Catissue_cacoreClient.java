@@ -57,6 +57,9 @@ public class Catissue_cacoreClient extends Catissue_cacoreClientBase implements 
     }
 
     @SuppressWarnings("deprecation")
+    /***
+     * -url https://t520:9443/wsrf/services/cagrid/Catissue_cacore ./cqls/Query1.xml
+     */
     public static void main(String[] args) {
 
         System.out.println("Running the Grid Service Client");
