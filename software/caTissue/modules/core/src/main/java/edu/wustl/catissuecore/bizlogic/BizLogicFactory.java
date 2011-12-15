@@ -389,6 +389,10 @@ public class BizLogicFactory implements IFactory
 		{
 			bizLogic = new AnnotationBizLogic();
 		}
+		else if (className.equals("edu.wustl.catissuecore.domain.TransferEventParameters"))
+		{
+			bizLogic = new SpecimenEventParametersBizLogic();
+		}
 		else
 		{
 			bizLogic = new DefaultBizLogic();
