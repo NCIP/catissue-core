@@ -1,6 +1,6 @@
-drop procedure if exists   thaw_call_parameter;
+drop procedure if exists    thaw_call_parameter;
 //
-CREATE  PROCEDURE   thaw_call_parameter()
+CREATE  PROCEDURE    thaw_call_parameter()
 Begin
   DECLARE counter integer default 0;
    DECLARE _stme TEXT;
@@ -34,9 +34,9 @@ Begin
            spec.event_timestamp,
            spec.user_id,
            spec.comments
-      from   catissue_thaw_event_parameters Thaw,
-      catissue_specimen_event_param spec,
-        catissue_specimen se
+      from    catissue_thaw_event_parameters Thaw,
+       catissue_specimen_event_param spec,
+         catissue_specimen se
 	where
       Thaw.identifier = spec.identifier and spec.specimen_id=se.identifier;
      
@@ -63,7 +63,7 @@ Begin
               
   #-----------------------------------calling function---------------------------------------------------------------        
               
-              select   query_for_sin(event_name) into query_text;
+              select    query_for_sin(event_name) into query_text;
               select query_text;
               set @query_text_form := query_text;
               select @query_text_form;
@@ -87,20 +87,20 @@ Begin
       
                        
       #-------------------------------------------------------------------
-      INSERT IGNORE into   dyextn_abstract_record_entry
+      INSERT IGNORE into    dyextn_abstract_record_entry
       (modified_date,activity_status,abstract_form_context_id)
       values (sysdate(),'Active',form_context_id);  
       #-------------------------------------------------------------------   
       select _output2;
-      select max(identifier) into seq_ver from dyextn_abstract_record_entry;
+      select max(identifier) into seq_ver from  dyextn_abstract_record_entry;
       select _output2;
       #-------------------------------------------------------------------     
       
-      INSERT IGNORE into   catissue_action_app_rcd_entry(identifier)values(seq_ver);
+      INSERT IGNORE into    catissue_action_app_rcd_entry(identifier)values(seq_ver);
       select _output2;
       #-------------------------------------------------------------------
   
-      INSERT IGNORE into   catissue_abstract_application
+      INSERT IGNORE into    catissue_abstract_application
           (identifier,timestamp,user_details,comments)
       values(specimen_event_identifier,specimen_timestamp,specimen_event_user_id,specimen_comments);
       select _output2;
@@ -113,7 +113,7 @@ Begin
                             specimen_comments;
        #-------------------------------------------------------------------
        
-      INSERT IGNORE into   catissue_action_application
+      INSERT IGNORE into    catissue_action_application
       (identifier,specimen_id,action_app_record_entry_id)
       values(specimen_event_identifier,specimen_id,seq_ver);
       #-------------------------------------------------------------------
@@ -135,5 +135,5 @@ Begin
     #------------------------------------------------------------------
     
     
-end
+end;
 //

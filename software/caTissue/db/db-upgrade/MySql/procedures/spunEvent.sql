@@ -1,6 +1,6 @@
-drop procedure if exists   spun_Event_migrate;
+drop procedure if exists    spun_Event_migrate;
 //
-create procedure   spun_Event_migrate() 
+create procedure    spun_Event_migrate() 
   
   Begin   
      DECLARE counter integer default 0;
@@ -42,9 +42,9 @@ create procedure   spun_Event_migrate()
            spec.comments,
            coll.GFORCE,
            coll.DURATION_IN_MINUTES
-      from   catissue_spun_event_parameters coll,
-          catissue_specimen_event_param spec,
-        catissue_specimen se
+      from    catissue_spun_event_parameters coll,
+           catissue_specimen_event_param spec,
+         catissue_specimen se
 	where
       coll.identifier = spec.identifier and spec.specimen_id=se.identifier;
       
@@ -67,7 +67,7 @@ create procedure   spun_Event_migrate()
               
   #-----------------------------------calling function---------------------------------------------------------------        
               
-              select   query_formation(event_name) into query_text;
+              select    query_formation(event_name) into query_text;
               select query_text;
               set @query_text_form := query_text;
               select @query_text_form;
@@ -96,20 +96,20 @@ create procedure   spun_Event_migrate()
       End if;
       
       #-------------------------------------------------------------------
-      INSERT IGNORE into   dyextn_abstract_record_entry
+      INSERT IGNORE into    dyextn_abstract_record_entry
       (modified_date,activity_status,abstract_form_context_id)
       values (sysdate(),'Active',form_context_id);  
       #-------------------------------------------------------------------   
       select _output2;
-      select max(identifier) into seq_ver from dyextn_abstract_record_entry;
+      select max(identifier) into seq_ver from  dyextn_abstract_record_entry;
       select seq_ver;
       #-------------------------------------------------------------------     
       
-      INSERT IGNORE into   catissue_action_app_rcd_entry(identifier)values(seq_ver);
+      INSERT IGNORE into    catissue_action_app_rcd_entry(identifier)values(seq_ver);
       #select _output2;
       #-------------------------------------------------------------------
   
-      INSERT IGNORE into   catissue_abstract_application
+      INSERT IGNORE into    catissue_abstract_application
           (identifier,timestamp,user_details,comments)
       values(specimen_event_identifier,specimen_timestamp,specimen_event_user_id,specimen_comments);
       select _output2;
@@ -122,7 +122,7 @@ create procedure   spun_Event_migrate()
                             specimen_comments;
        #-------------------------------------------------------------------
        
-      INSERT IGNORE into   catissue_action_application
+      INSERT IGNORE into    catissue_action_application
       (identifier,specimen_id,action_app_record_entry_id)
       values(specimen_event_identifier,specimen_id,seq_ver);
       #-------------------------------------------------------------------

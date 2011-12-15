@@ -1,6 +1,6 @@
-DROP FUNCTION IF EXISTS   query_formation;
+DROP FUNCTION IF EXISTS query_formation;
 //
-CREATE FUNCTION   query_formation(event_name VARCHAR (255))
+CREATE FUNCTION query_formation(event_name VARCHAR (255))
   RETURNS TEXT
   
   BEGIN
@@ -32,7 +32,7 @@ CREATE FUNCTION   query_formation(event_name VARCHAR (255))
   JOIN dyextn_abstract_metadata meta3 ON meta3.identifier = abAttr1.identifier  
   JOIN DYEXTN_PRIMITIVE_ATTRIBUTE attr1 ON attr1.identifier =  abAttr1.identifier 
   JOIN dyextn_column_properties col1 ON col1.PRIMITIVE_ATTRIBUTE_ID= attr1.identifier  
-  JOIN dyextn_database_properties db2 ON db2.identifier = col1.identifier;
+  JOIN dyextn_database_properties db2 ON db2.identifier = col1.identifier order by AttributeName;
   
   
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET record_not_found = 1;
@@ -88,5 +88,6 @@ CREATE FUNCTION   query_formation(event_name VARCHAR (255))
         
         
         RETURN (@qur);
-     END;   
+     END;
 //
+  

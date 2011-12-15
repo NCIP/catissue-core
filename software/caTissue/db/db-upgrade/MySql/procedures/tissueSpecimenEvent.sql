@@ -1,6 +1,6 @@
-drop procedure if exists   Tissue_Event_migrate;
+drop procedure if exists  Tissue_Event_migrate;
 //
-CREATE  PROCEDURE   Tissue_Event_migrate()
+CREATE  PROCEDURE  Tissue_Event_migrate()
 Begin
   DECLARE counter integer default 0;
    DECLARE _stme TEXT;
@@ -79,7 +79,7 @@ Begin
               
   #-----------------------------------calling function---------------------------------------------------------------        
               
-              select   query_formation_tis(event_name) into query_text;
+              select  query_formation_tis(event_name) into query_text;
               select query_text;
               set @query_text_form := query_text;
               select @query_text_form;
@@ -108,20 +108,20 @@ Begin
       
                        
       #-------------------------------------------------------------------
-      INSERT IGNORE into   dyextn_abstract_record_entry
+      INSERT IGNORE into  dyextn_abstract_record_entry
       (modified_date,activity_status,abstract_form_context_id)
       values (sysdate(),'Active',form_context_id);  
       #-------------------------------------------------------------------   
       select _output2;
-      select max(identifier) into seq_ver from dyextn_abstract_record_entry;
+      select max(identifier) into seq_ver from  dyextn_abstract_record_entry;
       select seq_ver;
       #-------------------------------------------------------------------     
       
-      INSERT IGNORE into   catissue_action_app_rcd_entry(identifier)values(seq_ver);
+      INSERT IGNORE into  catissue_action_app_rcd_entry(identifier)values(seq_ver);
       #select _output2;
       #-------------------------------------------------------------------
   
-      INSERT IGNORE into   catissue_abstract_application
+      INSERT IGNORE into  catissue_abstract_application
           (identifier,timestamp,user_details,comments)
       values(specimen_event_identifier,specimen_timestamp,specimen_event_user_id,specimen_comments);
       select _output2;
@@ -134,7 +134,7 @@ Begin
                             specimen_comments;
        #-------------------------------------------------------------------
        
-      INSERT IGNORE into   catissue_action_application
+      INSERT IGNORE into    catissue_action_application
       (identifier,specimen_id,action_app_record_entry_id)
       values(specimen_event_identifier,specimen_id,seq_ver);
       #-------------------------------------------------------------------
@@ -148,7 +148,7 @@ Begin
    set @tot :=Dyn_tot;
    set @his :=Dyn_his;
    
-   execute stmt using @his,@lym_per,@nec_per,@neo_cell,@tot,@sp_id,@s_seq_var;     
+    execute stmt using @his,@sp_id,@lym_per,@nec_per,@neo_cell,@tot,@s_seq_var;     
      
       
     set counter =counter+1;
@@ -160,5 +160,6 @@ Begin
     close mig_cursor; 
     #------------------------------------------------------------------
     
-end
+    
+end;
 //

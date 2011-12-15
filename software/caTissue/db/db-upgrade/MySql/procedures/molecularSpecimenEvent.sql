@@ -54,9 +54,9 @@ Begin
            mol.ABSORBANCE_AT_260,
            mol.ABSORBANCE_AT_280,
            mol.RATIO_28S_TO_18S
-      from catissue_mol_spe_review_param mol,
-          catissue_specimen_event_param spec,
-        catissue_specimen se
+      from  catissue_mol_spe_review_param mol,
+           catissue_specimen_event_param spec,
+         catissue_specimen se
 	where
       mol.identifier = spec.identifier and spec.specimen_id=se.identifier;
 
@@ -114,20 +114,20 @@ Begin
       
                        
       #-------------------------------------------------------------------
-      INSERT IGNORE into   dyextn_abstract_record_entry
+      INSERT IGNORE into    dyextn_abstract_record_entry
       (modified_date,activity_status,abstract_form_context_id)
       values (sysdate(),'Active',form_context_id);  
       #-------------------------------------------------------------------   
       select _output2;
-      select max(identifier) into seq_ver from dyextn_abstract_record_entry;
+      select max(identifier) into seq_ver from  dyextn_abstract_record_entry;
       select seq_ver;
       #-------------------------------------------------------------------     
       
-      INSERT IGNORE into   catissue_action_app_rcd_entry(identifier)values(seq_ver);
+      INSERT IGNORE into    catissue_action_app_rcd_entry(identifier)values(seq_ver);
       #select _output2;
       #-------------------------------------------------------------------
   
-      INSERT IGNORE into   catissue_abstract_application
+      INSERT IGNORE into    catissue_abstract_application
           (identifier,timestamp,user_details,comments)
       values(specimen_event_identifier,specimen_timestamp,specimen_event_user_id,specimen_comments);
       select _output2;
@@ -140,7 +140,7 @@ Begin
                             specimen_comments;
        #-------------------------------------------------------------------
        
-      INSERT IGNORE into   catissue_action_application
+      INSERT IGNORE into    catissue_action_application
       (identifier,specimen_id,action_app_record_entry_id)
       values(specimen_event_identifier,specimen_id,seq_ver);
       #-------------------------------------------------------------------
@@ -156,7 +156,7 @@ Begin
    set @Ab260 :=dyn_ABSORBANCE_AT_260;
    set @Ab280 :=dyn_ABSORBANCE_AT_280;
    set @ratio :=dyn_RATIO_28S_TO_18S;
-   execute stmt using @Ab260,@Ab280,@img_url,@GEL_NUMBER,@LANE_NUMBER,@qi,@ratio,@sp_id,@s_seq_var;     
+   execute stmt using @Ab260,@Ab280,@img_url,@GEL_NUMBER,@sp_id,@LANE_NUMBER,@qi,@ratio,@s_seq_var;
      
       
     set counter =counter+1;
@@ -169,5 +169,5 @@ Begin
     #------------------------------------------------------------------
     
     
-end
+end;
 //

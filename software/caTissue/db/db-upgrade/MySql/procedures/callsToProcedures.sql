@@ -1,7 +1,9 @@
-drop procedure if exists  caller;
+
+drop procedure if exists   caller;
 //
-create procedure  caller()
+create procedure   caller()
 begin 
+
 call  cell_call_parameter();
 select'done cell_call_parameter';
 call  Collection_Event_migrate();
@@ -28,5 +30,15 @@ call  thaw_call_parameter();
 select'done thaw_call_parameter';
 call  Tissue_Event_migrate();
 select'done Tissue_Event_migrate';
+SET FOREIGN_KEY_CHECKS = 0;
+
+UPDATE CATISSUE_SPECIMEN_EVENT_PARAM
+SET SPECIMEN_ID=NULL,SPECIMEN_COLL_GRP_ID=null
+WHERE
+IDENTIFIER NOT IN
+(SELECT IDENTIFIER FROM CATISSUE_TRANSFER_EVENT_PARAM 
+UNION
+SELECT IDENTIFIER FROM CATISSUE_DISPOSAL_EVENT_PARAM);
+SET FOREIGN_KEY_CHECKS = 1;
 end;
 //
