@@ -2162,8 +2162,14 @@
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<antcall target="migrate.events"></antcall>
+				<antcall target="migrate_events_mysql"></antcall>
 			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="migrate_events_oracle"></antcall>
+				</then>
+			</elseif>
 		</if>
 	
 
@@ -5302,7 +5308,7 @@ Thanking You,
 			</sql>
 		</target>
 	
-	<target name="migrate.events" description="Target for migrating events from static to DE">
+	<target name="migrate_events_mysql" description="Target for migrating events from static to DE">
 		<echo message="Migrating events.." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.server}:${database.port}/${database.name}" userid="${database.user}" password="${database.password}" delimiter="//" delimitertype="row"  keepformat="yes" rdbms="mysql">
 			<transaction src="${dbupgrade.sql.dir}/MySql/functions/query3col.sql" />
@@ -5335,6 +5341,40 @@ Thanking You,
 			</classpath>
 		</sql>
 	</target>
+	
+	<target name="migrate_events_oracle" description="Target for migrating events from static to DE">
+			<echo message="Migrating events.." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.server}:${database.port}:${database.name}" userid="${database.user}" password="${database.password}"  rdbms="oracle" >
+				<transaction src="${dbupgrade.sql.dir}/Oracle/functions/query3col.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/functions/queryfor_sin.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/functions/QueryForm.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/functions/queryformation_mole.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/functions/queryformation_tis.sql" />
+				
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/cellSpecimenEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/collectionEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/embeddedEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/fixedEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/fluidSpecimenEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/frozenEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/checkinCheckoutEvent.sql" />					
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/molecularSpecimenEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/procedureEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/receivedEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/spunEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/thawEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/tissueSpecimenEvent.sql" />
+				
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/callsToProcedures.sql" />	
+				<transaction>call caller();</transaction>
+				<transaction>commit;</transaction>
+				<classpath>
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+			</sql>
+		</target>
 
 	<target name="upgrade_oracle_db_from_v1.2_to_v2.0" description="Upgrading Oracle Database from v1.2 to v2.0">
 			<echo message="Upgrading Oracle Database." />

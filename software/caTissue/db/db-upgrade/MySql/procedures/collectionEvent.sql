@@ -1,43 +1,24 @@
-drop procedure if exists    Collection_Event_migrate;
-//
-create procedure    Collection_Event_migrate() 
-  
-  Begin   
-     DECLARE counter integer default 0;
-   DECLARE _stme TEXT;
-  DECLARE _output2 TEXT default 'success' ;
-  declare record_not_found integer default 0;
-  declare form_context_id integer default 1;
-  declare seq_ver long ;
-  
-  declare specimen_event_identifier integer ;
-  declare specimen_id integer ;
-  declare specimen_event_user_id integer ; 
-  declare specimen_event_param_id integer ;
-  declare specimen_comments varchar(100);
-  declare specimen_timestamp DATE;
-    declare dispo_COLLECTION_PROCEDURE varchar(255);
-    declare dispo_CONTAINER varchar(255);
-    #-----------------------@using parameter-----------------------------
-  declare activitystatus Text;
-  declare sp_id integer;
-  declare des_reason Text default '';
-  declare s_seq_var long default 1;
-  declare COLLECTIONl Text;
-  declare CONT Text;
- 
- declare event_name varchar (100) default 'CollectionEventParameters';
-  #--------------------------------------------------------------------
+create or replace
+procedure Collection_Event_migrate(event_name in varchar2) IS
+     
+     counter  NUMBER (12);
+     form_context_id INTEGER; 
+     seqval NUMBER (12); 
+     specimen_event_identifier INTEGER ;
+     specimen_id INTEGER ;
+     specimen_event_user_id INTEGER ; 
+     specimen_event_param_id INTEGER ;
+     specimen_comments varchar2(255);
+     specimen_timestamp Date;
+     dispo_COLLECTION_PROCEDURE varchar2(255);
+     dispo_CONTAINER varchar2(255);
+     query_text varchar2(1000);
+     query_text_form varchar2(1000);
 
-   declare query_text varchar(255);
-   declare query_text_form varchar(255);
-
-#-----------------------------------------------------------------------
-
-
-
+      v_code  NUMBER;
+      v_errm  VARCHAR2(1000);
       
-   declare mig_cursor cursor   for
+    cursor mig_cursor  IS
     select spec.identifier,
            spec.specimen_id,
            spec.event_timestamp,
@@ -45,17 +26,16 @@ create procedure    Collection_Event_migrate()
            spec.comments,
            coll.COLLECTION_PROCEDURE,
            coll.CONTAINER
-      from    CATISSUE_COLL_EVENT_PARAM coll,
-              catissue_specimen_event_param spec,
-	 catissue_specimen se
+      from CATISSUE_COLL_EVENT_PARAM coll,
+           catissue_specimen_event_param spec,
+	catissue_specimen se
 	where
       coll.identifier = spec.identifier and spec.specimen_id=se.identifier;
 
 
-  declare CONTINUE HANDLER for NOT FOUND SET record_not_found = 1; 
-
+Begin
   
-  #-----------------------------query for form contex id--------------------------------------
+  -----------------------------query for form contex id--------------------------------------
   SELECT formContext.identifier into form_context_id FROM dyextn_abstract_form_context formContext 
               join dyextn_container dcontainer
               on formcontext.container_id = dcontainer.identifier
@@ -69,20 +49,19 @@ create procedure    Collection_Event_migrate()
               on eg.identifier=meta2.identifier
               and eg.identifier  =  ent.ENTITY_GROUP_ID and formContext.Activity_Status='Active';
               
- #-----------------------------------calling function--------------------------------------------------------------- */       
-             select    query_formation(event_name) into query_text;
-              select query_text;
-              set @query_text_form := query_text;
-              select @query_text_form;
-              prepare stmt from @query_text_form;
+ -----------------------------------calling function--------------------------------------------------------------- */       
+              
+              select query_formation_excol(event_name) into query_text from dual;
+             -- DBMS_OUTPUT.PUT_LINE(query_text);
+             -- DBMS_OUTPUT.PUT_LINE(form_context_id);
              
-        set counter :=1;     
-  #------------------------------------------------------------------------------------------------------------------       
+         counter :=1;     
+  ------------------------------------------------------------------------------------------------------------------       
       open mig_cursor;
-    select 'open cursor';
+    
      
           
-     read_loop: LOOP
+      LOOP
       
       
       fetch mig_cursor into specimen_event_identifier,
@@ -92,65 +71,61 @@ create procedure    Collection_Event_migrate()
                             specimen_comments,
                             dispo_COLLECTION_PROCEDURE,
                             dispo_CONTAINER;
+      EXIT WHEN mig_cursor%NOTFOUND;
+      -------------
+      Begin
+      -- DBMS_OUTPUT.PUT_LINE(specimen_event_identifier||'  '||specimen_id||'  '||specimen_timestamp||' '||specimen_event_user_id||' '||specimen_comments||' '||dispo_reason);                 
+      -------------------------------------------------------------------
+      insert into dyextn_abstract_record_entry
+      (IDENTIFIER,modified_date,activity_status,abstract_form_context_id)
+      values (DYEXTN_ABSTRACT_RE_SEQ.NEXTVAL,sysdate,'Active',form_context_id);  
+      --DBMS_OUTPUT.PUT_LINE('1');
+      -------------------------------------------------------------------      
       
-      
-      if record_not_found then LEAVE read_loop;
-      select 'no record';
-      End if;
-      
-      
-         #-------------------------------------------------------------------
-      INSERT IGNORE into    dyextn_abstract_record_entry
-      (modified_date,activity_status,abstract_form_context_id)
-      values (sysdate(),'Active',form_context_id);  
-      #-------------------------------------------------------------------   
-      select _output2;
-      select max(identifier) into seq_ver from  dyextn_abstract_record_entry;
-      select seq_ver;
-      #-------------------------------------------------------------------     
-      
-      INSERT IGNORE into    catissue_action_app_rcd_entry(identifier)values(seq_ver);
-      #select _output2;
-      #-------------------------------------------------------------------
-  
-      INSERT IGNORE into    catissue_abstract_application
-          (identifier,timestamp,user_details,comments)
-      values(specimen_event_identifier,specimen_timestamp,specimen_event_user_id,specimen_comments);
-      select _output2;
-      #----------------------print tha all values ---------------------------------------------
+      insert into catissue_action_app_rcd_entry(identifier)values(DYEXTN_ABSTRACT_RE_SEQ.CURRVAL);
+      --DBMS_OUTPUT.PUT_LINE('2');
+      -----------------------------
+      query_text_form :='insert into CATISSUE_ABSTRACT_APPLICATION(identifier,timestamp,user_details,comments)
+     values(:1, :2, :3, :4)';
+     execute immediate query_text_form using specimen_event_identifier,specimen_timestamp,specimen_event_user_id,specimen_comments;
        
-        select  specimen_event_identifier,
-                            specimen_id,
-                            specimen_timestamp,
-                            specimen_event_user_id,
-                            specimen_comments;
-       #-------------------------------------------------------------------
+      -------------------------------------------------------------------
        
-      INSERT IGNORE into    catissue_action_application
+      insert into catissue_action_application
       (identifier,specimen_id,action_app_record_entry_id)
-      values(specimen_event_identifier,specimen_id,seq_ver);
-      #-------------------------------------------------------------------
-    
-     set @sp_id := specimen_event_identifier;
-     set @activitystatus :='Active';
-    
-     set @s_seq_var :=seq_ver;
-     set @COLLECTIONl:= dispo_COLLECTION_PROCEDURE;
-     set @CONT:=dispo_CONTAINER;
-     
-    
-      execute stmt using @COLLECTIONl,@CONT,@sp_id,@s_seq_var;     
-     
+      values(specimen_event_identifier,specimen_id,DYEXTN_ABSTRACT_RE_SEQ.CURRVAL);
       
-    set counter =counter+1;
-    set _stme=counter;
-    select _stme;
-
-                           
-    end loop;          
-    close mig_cursor; 
-   
-    #------------------------------------------------------------------
+      -------------------------------------------------------------------
+      select DYEXTN_ABSTRACT_RE_SEQ.CURRVAL into seqval from dual;
   
-end;
-//
+      
+    
+    
+      --DBMS_OUTPUT.PUT_LINE(specimen_id||'  '||specimen_event_identifier||'  '||seqval);
+      EXECUTE IMMEDIATE query_text using dispo_COLLECTION_PROCEDURE, dispo_CONTAINER,specimen_event_identifier, seqval; 
+     -- DBMS_OUTPUT.PUT_LINE(query_text_form);
+      --DBMS_OUTPUT.PUT_LINE('5');
+     counter :=counter+1;
+     ---------------------------------------------------------
+     NULL;
+     EXCEPTION WHEN OTHERS THEN
+      v_code := SQLCODE;
+      v_errm := SUBSTR(SQLERRM, 1, 1000);
+      DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter );
+      end;
+      ----------------------------------------------------------
+    end loop; 
+     
+   close mig_cursor; 
+   DBMS_OUTPUT.PUT_LINE(counter);
+    ------------------------------------------------------------------
+   EXCEPTION
+      WHEN DUP_VAL_ON_INDEX THEN
+      rollback;
+      DBMS_OUTPUT.PUT_LINE('Duplicate value on an index');
+    WHEN OTHERS THEN
+      rollback;
+      v_code := SQLCODE;
+      v_errm := SUBSTR(SQLERRM, 1, 1000);
+      DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||counter||v_errm );
+end Collection_Event_migrate;
