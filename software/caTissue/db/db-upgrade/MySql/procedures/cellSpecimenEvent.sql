@@ -1,133 +1,147 @@
-create or replace
-procedure cell_Event_migrate(event_name in varchar2) IS
-     
-     counter  NUMBER (12);
-     form_context_id INTEGER; 
-     seqval NUMBER (12); 
-     specimen_event_identifier INTEGER ;
-     specimen_id INTEGER ;
-     specimen_event_user_id INTEGER ; 
-     specimen_event_param_id INTEGER ;
-     specimen_comments varchar2(255);
-     specimen_timestamp Date;
-     dispo_NEOPLASTIC NUMBER(20,10);
-     dispo_VIABLE_CELL_PERCENTAGE NUMBER(20,10);
-     query_text varchar2(1000);
-     query_text_form varchar2(1000);
+DROP PROCEDURE IF EXISTS    cell_call_parameter;
+//
+CREATE  PROCEDURE    cell_call_parameter()
+BEGIN
+  DECLARE counter INTEGER DEFAULT 0;
+   DECLARE _stme TEXT;
+  DECLARE _output2 TEXT DEFAULT 'success' ;
+  DECLARE record_not_found INTEGER DEFAULT 0;
+  DECLARE form_context_id INTEGER DEFAULT 1;
+  DECLARE seq_ver LONG ;
+  
+  DECLARE specimen_event_identifier INTEGER ;
+  DECLARE specimen_id INTEGER ;
+  DECLARE specimen_event_user_id INTEGER ; 
+  DECLARE specimen_event_param_id INTEGER ;
+  DECLARE specimen_comments VARCHAR(100);
+  DECLARE specimen_timestamp DATE;
+  DECLARE Dyn_col_veriable DOUBLE;
+  DECLARE Dyn_col_veriable1 DOUBLE;
+  DECLARE query_text TEXT;
+  DECLARE query_text_form TEXT;
+  DECLARE event_name VARCHAR (100); 
+  #-----------------------@using parameter-----------------------------
+  DECLARE activitystatus TEXT;
+  DECLARE sp_id INTEGER;
 
-      v_code  NUMBER;
-      v_errm  VARCHAR2(1000);
-      
-    cursor mig_cursor  IS
-    select spec.identifier,
+  DECLARE s_seq_var LONG DEFAULT 1;
+  DECLARE neo DOUBLE;
+  DECLARE via DOUBLE;
+  #--------------------------------------------------------------------
+  
+  
+ #-------------------------------------------------------------------
+  DECLARE mig_cursor  CURSOR FOR 
+    SELECT spec.identifier,
            spec.specimen_id,
            spec.event_timestamp,
            spec.user_id,
            spec.comments,
-           coll.NEOPLASTIC_CELLULARITY_PER,
-           coll.VIABLE_CELL_PERCENTAGE
-      from CATISSUE_CELL_SPE_REVIEW_PARAM coll,
-           catissue_specimen_event_param spec,
-	 catissue_specimen se
+           cell.NEOPLASTIC_CELLULARITY_PER,
+           cell.VIABLE_CELL_PERCENTAGE
+      FROM    catissue_cell_spe_review_param cell,
+         catissue_specimen_event_param spec,
+	  catissue_specimen se
 	where
-      coll.identifier = spec.identifier and spec.specimen_id=se.identifier;
-
-
-Begin
-  
-  -----------------------------query for form contex id--------------------------------------
-  SELECT formContext.identifier into form_context_id FROM dyextn_abstract_form_context formContext 
-              join dyextn_container dcontainer
-              on formcontext.container_id = dcontainer.identifier
-              join dyextn_entity ent
-              on ent.identifier = dcontainer.abstract_entity_id
-              join dyextn_abstract_metadata  meta
-              on meta.name=event_name and meta.identifier = ent.identifier
-              join dyextn_abstract_metadata  meta2
-              on meta2.name = 'SpecimenEvents'
-              join dyextn_entity_group eg
-              on eg.identifier=meta2.identifier
-              and eg.identifier  =  ent.ENTITY_GROUP_ID and formContext.Activity_Status='Active';
-              
- -----------------------------------calling function--------------------------------------------------------------- */       
-              
-              select query_formation_excol(event_name) into query_text from dual;
-             -- DBMS_OUTPUT.PUT_LINE(query_text);
-             -- DBMS_OUTPUT.PUT_LINE(form_context_id);
-             
-         counter :=1;     
-  ------------------------------------------------------------------------------------------------------------------       
-      open mig_cursor;
+      cell.identifier = spec.identifier and spec.specimen_id=se.identifier;
+     
+     
     
+      
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET record_not_found = 1;
+  
+  Set event_name :='CellSpecimenReviewParameters';
+  
+  #-----------------------------query for form contex id--------------------------------------
+  SELECT formContext.identifier INTO form_context_id FROM dyextn_abstract_form_context formContext 
+              JOIN dyextn_container dcontainer
+              ON formcontext.container_id = dcontainer.identifier
+              JOIN dyextn_entity ent
+              ON ent.identifier = dcontainer.abstract_entity_id
+              JOIN dyextn_abstract_metadata  meta
+              ON meta.name= event_name AND meta.identifier = ent.identifier
+              JOIN dyextn_abstract_metadata  meta2
+              ON meta2.name = 'SpecimenEvents'
+              JOIN dyextn_entity_group eg
+              ON eg.identifier=meta2.identifier
+              AND eg.identifier  =  ent.ENTITY_GROUP_ID AND formContext.Activity_Status='Active';
+              
+  #-----------------------------------calling function---------------------------------------------------------------        
+              
+              SELECT    query_formation(event_name) INTO query_text;
+              SELECT query_text;
+              SET @query_text_form := query_text;
+              SELECT @query_text_form;
+              PREPARE stmt FROM @query_text_form;
+              
+  #------------------------------------------------------------------------------------------------------------------       
+      OPEN mig_cursor;
+
      
           
-      LOOP
+      itr: LOOP
       
-      
-      fetch mig_cursor into specimen_event_identifier,
+      FETCH mig_cursor INTO specimen_event_identifier,
                             specimen_id,
                             specimen_timestamp,
                             specimen_event_user_id,
                             specimen_comments,
-                            dispo_NEOPLASTIC,
-                            dispo_VIABLE_CELL_PERCENTAGE;
-      EXIT WHEN mig_cursor%NOTFOUND;
-      Begin
-      -- DBMS_OUTPUT.PUT_LINE(specimen_event_identifier||'  '||specimen_id||'  '||specimen_timestamp||' '||specimen_event_user_id||' '||specimen_comments||' '||dispo_reason);                 
-      -------------------------------------------------------------------
-      insert into dyextn_abstract_record_entry
-      (IDENTIFIER,modified_date,activity_status,abstract_form_context_id)
-      values (DYEXTN_ABSTRACT_RE_SEQ.NEXTVAL,sysdate,'Active',form_context_id);  
-      -------------------------------------------------------------------      
-     
-      insert into catissue_action_app_rcd_entry(identifier)values(DYEXTN_ABSTRACT_RE_SEQ.CURRVAL);
+                            Dyn_col_veriable,
+                            Dyn_col_veriable1;
+      IF record_not_found THEN LEAVE itr;
+      END IF;
       
-      -----------------------------
-    query_text_form :='insert  into CATISSUE_ABSTRACT_APPLICATION(identifier,timestamp,user_details,comments)
-     values(:1, :2, :3, :4)';
-     execute immediate query_text_form using specimen_event_identifier,specimen_timestamp,specimen_event_user_id,specimen_comments;
       
-     
-    
-        
-      -------------------------------------------------------------------
-       
-      insert into  catissue_action_application
-      (identifier,specimen_id,action_app_record_entry_id)
-      values(specimen_event_identifier,specimen_id,DYEXTN_ABSTRACT_RE_SEQ.CURRVAL);
+                       
+      #-------------------------------------------------------------------
+      INSERT IGNORE INTO    dyextn_abstract_record_entry
+      (modified_date,activity_status,abstract_form_context_id)
+      VALUES (SYSDATE(),'Active',form_context_id);  
+      #-------------------------------------------------------------------   
+      SELECT _output2;
+      SELECT MAX(identifier) INTO seq_ver FROM   dyextn_abstract_record_entry;
+      SELECT seq_ver;
+      #-------------------------------------------------------------------     
       
-      -------------------------------------------------------------------
-      select DYEXTN_ABSTRACT_RE_SEQ.CURRVAL into seqval from dual;
+      INSERT IGNORE INTO    catissue_action_app_rcd_entry(identifier)VALUES(seq_ver);
+      #select _output2;
+      #-------------------------------------------------------------------
   
+      INSERT IGNORE INTO    catissue_abstract_application
+          (identifier,TIMESTAMP,user_details,comments)
+      VALUES(specimen_event_identifier,specimen_timestamp,specimen_event_user_id,specimen_comments);
+      SELECT _output2;
+      #----------------------print tha all values ---------------------------------------------
+       
+        SELECT  specimen_event_identifier,
+                            specimen_id,
+                            specimen_timestamp,
+                            specimen_event_user_id,
+                            specimen_comments;
+       #-------------------------------------------------------------------
+       
+      INSERT IGNORE INTO    catissue_action_application
+      (identifier,specimen_id,action_app_record_entry_id)
+      VALUES(specimen_event_identifier,specimen_id,seq_ver);
+      #-------------------------------------------------------------------
       
-    
-    
-     --DBMS_OUTPUT.PUT_LINE(specimen_id||'  '||specimen_event_identifier||'  '||seqval);
-      EXECUTE IMMEDIATE query_text using dispo_NEOPLASTIC,dispo_VIABLE_CELL_PERCENTAGE,specimen_event_identifier, seqval; 
-     -- DBMS_OUTPUT.PUT_LINE(query_text_form);
-    
-     counter :=counter+1;
-     -------------------------------------exception---------------------------------------------
-      NULL;
-     EXCEPTION WHEN OTHERS THEN
-      v_code := SQLCODE;
-      v_errm := SUBSTR(SQLERRM, 1, 1000);
-      DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter );
-      end;
+   SET @sp_id := specimen_event_identifier;
+   SET @activitystatus :='Active';
+   SET @via := Dyn_col_veriable1;
+   SET @neo :=Dyn_col_veriable;
+   SET @s_seq_var :=seq_ver;
+   EXECUTE stmt USING @sp_id,@neo,@via,@s_seq_var;    
      
-     ------------------------------------------------------------------------------------
-    end loop; 
-     
-   close mig_cursor; 
-   DBMS_OUTPUT.PUT_LINE(counter);
-    ------------------------------------------------------------------
-   EXCEPTION
-      WHEN DUP_VAL_ON_INDEX THEN
-      rollback;
-      DBMS_OUTPUT.PUT_LINE('Duplicate value on an index');
-    WHEN OTHERS THEN
-      rollback;
-      v_code := SQLCODE;
-      v_errm := SUBSTR(SQLERRM, 1, 1000);
-      DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter );
-end cell_Event_migrate;
+      
+    SET counter =counter+1;
+    SET _stme=counter;
+    SELECT _stme;
+
+                           
+    END LOOP;          
+    CLOSE mig_cursor; 
+    #------------------------------------------------------------------
+    
+    
+END;
+//

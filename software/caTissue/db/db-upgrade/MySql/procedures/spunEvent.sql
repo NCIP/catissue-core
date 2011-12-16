@@ -1,24 +1,40 @@
-create or replace
-procedure Spun_Event_migrate(event_name in varchar2) IS
-     
-     counter  NUMBER (12);
-     form_context_id INTEGER; 
-     seqval NUMBER (12); 
-     specimen_event_identifier INTEGER ;
-     specimen_id INTEGER ;
-     specimen_event_user_id INTEGER ; 
-     specimen_event_param_id INTEGER ;
-     specimen_comments varchar2(255);
-     specimen_timestamp Date;
-     dispo_GFORCE NUMBER(20,10);
-     dispo_DURATION_IN_MINUTES NUMBER(20,10);
-     query_text varchar2(255);
-     query_text_form varchar2(1000);
+drop procedure if exists    spun_Event_migrate;
+//
+create procedure    spun_Event_migrate() 
+  
+  Begin   
+     DECLARE counter integer default 0;
+   DECLARE _stme TEXT;
+  DECLARE _output2 TEXT default 'success' ;
+  declare record_not_found integer default 0;
+  declare form_context_id integer default 1;
+  declare seq_ver long ;
+  
+  declare specimen_event_identifier integer ;
+  declare specimen_id integer ;
+  declare specimen_event_user_id integer ; 
+  declare specimen_event_param_id integer ;
+  declare specimen_comments varchar(100);
+  declare specimen_timestamp DATE;
+    declare dispo_GFORCE double;
+    declare dispo_DURATION_IN_MINUTES integer;
+    declare query_text varchar(255);
+    declare query_text_form varchar(255);
 
-      v_code  NUMBER;
-      v_errm  VARCHAR2(1000);
+
+ #-----------------------@using parameter-----------------------------
+  declare activitystatus Text;
+  declare sp_id integer;
+  declare des_reason Text default '';
+  declare s_seq_var long default 1;
+  declare gforce double;
+  declare time_dur integer;
+  
+  declare event_name varchar (100) default 'SpunEventParameters';
+  #-------------------------------------------------------------------
+
       
-    cursor mig_cursor  IS
+   declare mig_cursor cursor   for
     select spec.identifier,
            spec.specimen_id,
            spec.event_timestamp,
@@ -26,16 +42,16 @@ procedure Spun_Event_migrate(event_name in varchar2) IS
            spec.comments,
            coll.GFORCE,
            coll.DURATION_IN_MINUTES
-      from CATISSUE_SPUN_EVENT_PARAMETERS coll,
+      from    catissue_spun_event_parameters coll,
            catissue_specimen_event_param spec,
-	 catissue_specimen se
+         catissue_specimen se
 	where
       coll.identifier = spec.identifier and spec.specimen_id=se.identifier;
+      
+  declare CONTINUE HANDLER for NOT FOUND SET record_not_found = 1; 
 
-
-Begin
   
-  -----------------------------query for form contex id--------------------------------------
+  #-----------------------------query for form contex id--------------------------------------
   SELECT formContext.identifier into form_context_id FROM dyextn_abstract_form_context formContext 
               join dyextn_container dcontainer
               on formcontext.container_id = dcontainer.identifier
@@ -49,19 +65,22 @@ Begin
               on eg.identifier=meta2.identifier
               and eg.identifier  =  ent.ENTITY_GROUP_ID and formContext.Activity_Status='Active';
               
- -----------------------------------calling function--------------------------------------------------------------- */       
+  #-----------------------------------calling function---------------------------------------------------------------        
               
-              select query_formation_excol(event_name) into query_text from dual;
-             -- DBMS_OUTPUT.PUT_LINE(query_text);
-             -- DBMS_OUTPUT.PUT_LINE(form_context_id);
-             
-         counter :=1;     
-  ------------------------------------------------------------------------------------------------------------------       
+              select    query_formation(event_name) into query_text;
+              select query_text;
+              set @query_text_form := query_text;
+              select @query_text_form;
+              prepare stmt from @query_text_form;
+              
+  #------------------------------------------------------------------------------------------------------------------       
+        set counter :=1;     
+  #------------------------------------------------------------------------------------------------------------------       
       open mig_cursor;
     
      
           
-      LOOP
+     read_loop: LOOP
       
       
       fetch mig_cursor into specimen_event_identifier,
@@ -71,59 +90,62 @@ Begin
                             specimen_comments,
                             dispo_GFORCE,
                             dispo_DURATION_IN_MINUTES;
-      EXIT WHEN mig_cursor%NOTFOUND;
-      -------------
-      Begin
-      -------------
-      -- DBMS_OUTPUT.PUT_LINE(specimen_event_identifier||'  '||specimen_id||'  '||specimen_timestamp||' '||specimen_event_user_id||' '||specimen_comments||' '||dispo_reason);                 
-      -------------------------------------------------------------------
-      insert into dyextn_abstract_record_entry
-      (IDENTIFIER,modified_date,activity_status,abstract_form_context_id)
-      values (DYEXTN_ABSTRACT_RE_SEQ.NEXTVAL,sysdate,'Active',form_context_id);  
-      -------------------------------------------------------------------      
-     
-      insert into catissue_action_app_rcd_entry(identifier)values(DYEXTN_ABSTRACT_RE_SEQ.CURRVAL);
       
-      -----------------------------
-     query_text_form :='insert  into CATISSUE_ABSTRACT_APPLICATION(identifier,timestamp,user_details,comments)
-     values(:1, :2, :3, :4)';
-     execute immediate query_text_form using specimen_event_identifier,specimen_timestamp,specimen_event_user_id,specimen_comments;
-       
-      -------------------------------------------------------------------
-       
-      insert into  catissue_action_application
-      (identifier,specimen_id,action_app_record_entry_id)
-      values(specimen_event_identifier,specimen_id,DYEXTN_ABSTRACT_RE_SEQ.CURRVAL);
       
-      -------------------------------------------------------------------
-      select DYEXTN_ABSTRACT_RE_SEQ.CURRVAL into seqval from dual;
+      if record_not_found then LEAVE read_loop;
+      End if;
+      
+      #-------------------------------------------------------------------
+      INSERT IGNORE into    dyextn_abstract_record_entry
+      (modified_date,activity_status,abstract_form_context_id)
+      values (sysdate(),'Active',form_context_id);  
+      #-------------------------------------------------------------------   
+      select _output2;
+      select max(identifier) into seq_ver from  dyextn_abstract_record_entry;
+      select seq_ver;
+      #-------------------------------------------------------------------     
+      
+      INSERT IGNORE into    catissue_action_app_rcd_entry(identifier)values(seq_ver);
+      #select _output2;
+      #-------------------------------------------------------------------
   
+      INSERT IGNORE into    catissue_abstract_application
+          (identifier,timestamp,user_details,comments)
+      values(specimen_event_identifier,specimen_timestamp,specimen_event_user_id,specimen_comments);
+      select _output2;
+      #----------------------print tha all values ---------------------------------------------
+       
+        select  specimen_event_identifier,
+                            specimen_id,
+                            specimen_timestamp,
+                            specimen_event_user_id,
+                            specimen_comments;
+       #-------------------------------------------------------------------
+       
+      INSERT IGNORE into    catissue_action_application
+      (identifier,specimen_id,action_app_record_entry_id)
+      values(specimen_event_identifier,specimen_id,seq_ver);
+      #-------------------------------------------------------------------
       
+   set @sp_id := specimen_event_identifier;
+   set @activitystatus :='Active';
+  
+   set @s_seq_var :=seq_ver;
+   set @gforce :=dispo_GFORCE;
+   set @time_dur :=dispo_DURATION_IN_MINUTES;
     
-    
-     --DBMS_OUTPUT.PUT_LINE(specimen_id||'  '||specimen_event_identifier||'  '||seqval);
-      EXECUTE IMMEDIATE query_text using dispo_DURATION_IN_MINUTES,dispo_GFORCE,specimen_event_identifier, seqval; 
-     -- DBMS_OUTPUT.PUT_LINE(query_text_form);
-    
-     counter :=counter+1;
-      NULL;
-     EXCEPTION WHEN OTHERS THEN
-      v_code := SQLCODE;
-      v_errm := SUBSTR(SQLERRM, 1, 1000);
-      DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter );
-      end;
-    end loop; 
      
-   close mig_cursor; 
-   DBMS_OUTPUT.PUT_LINE(counter);
-    ------------------------------------------------------------------
-   EXCEPTION
-      WHEN DUP_VAL_ON_INDEX THEN
-      rollback;
-      DBMS_OUTPUT.PUT_LINE('Duplicate value on an index'||counter);
-    WHEN OTHERS THEN
-      rollback;
-      v_code := SQLCODE;
-      v_errm := SUBSTR(SQLERRM, 1, 1000);
-      DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter );
-end Spun_Event_migrate;
+   execute stmt using @time_dur,@gforce,@sp_id,@s_seq_var;     
+     
+      
+    set counter =counter+1;
+    set _stme=counter;
+    select _stme;
+
+                           
+    end loop;          
+    close mig_cursor; 
+    #------------------------------------------------------------------
+  
+end;
+//
