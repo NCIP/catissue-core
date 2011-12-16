@@ -53,6 +53,7 @@ public class CQL2QueryProcessor extends
 	// general configuration options
 	public static final String PROPERTY_APPLICATION_NAME = "applicationName";
 	public static final String PROPERTY_USE_LOCAL_API = "useLocalApiFlag";
+	public static final String PROPERTY_CATISSUE_APPLICATION_NAME = "catissuecore";
 
 	// remote service configuration properties
 	public static final String PROPERTY_HOST_NAME = "applicationHostName";
@@ -87,16 +88,14 @@ public class CQL2QueryProcessor extends
 		props.setProperty(PROPERTY_HOST_NAME, "");
 		props.setProperty(PROPERTY_HOST_PORT, "");
 		props.setProperty(PROPERTY_HOST_HTTPS, DEFAULT_HOST_HTTPS);
-		props.setProperty(PROPERTY_USE_GRID_IDENTITY_LOGIN,
-				DEFAULT_USE_GRID_IDENTITY_LOGIN);
+		props.setProperty(PROPERTY_USE_GRID_IDENTITY_LOGIN, DEFAULT_USE_GRID_IDENTITY_LOGIN);
 		props.setProperty(PROPERTY_USE_STATIC_LOGIN, DEFAULT_USE_STATIC_LOGIN);
 		props.setProperty(PROPERTY_STATIC_LOGIN_USER, "");
 		props.setProperty(PROPERTY_STATIC_LOGIN_PASS, "");
 		return props;
 	}
 
-	public CQLQueryResults processQuery(CQLQuery query)
-			throws QueryProcessingException {
+	public CQLQueryResults processQuery(CQLQuery query) throws QueryProcessingException {
 		Iterator<CQLResult> resultIter = processQueryAndIterate(query);
 		CQLQueryResults results = new CQLQueryResults();
 		results.setTargetClassname(query.getCQLTargetObject().getClassName());
@@ -114,11 +113,9 @@ public class CQL2QueryProcessor extends
 			}
 		}
 		if (objectResults.size() != 0) {
-			results.setObjectResult(objectResults
-					.toArray(new CQLObjectResult[0]));
+			results.setObjectResult(objectResults.toArray(new CQLObjectResult[0]));
 		} else if (attributeResults.size() != 0) {
-			results.setAttributeResult(attributeResults
-					.toArray(new CQLAttributeResult[0]));
+			results.setAttributeResult(attributeResults.toArray(new CQLAttributeResult[0]));
 		} else {
 			results.setAggregationResult(aggregateResult);
 		}
@@ -460,8 +457,7 @@ public class CQL2QueryProcessor extends
 	}
 
 	private String getStaticLoginPass() {
-		return getConfiguredParameters()
-				.getProperty(PROPERTY_STATIC_LOGIN_PASS);
+		return getConfiguredParameters().getProperty(PROPERTY_STATIC_LOGIN_PASS);
 	}
 
 	private String getRemoteApplicationUrl() {
@@ -475,11 +471,9 @@ public class CQL2QueryProcessor extends
 		url.append(":");
 		url.append(getConfiguredParameters().getProperty(PROPERTY_HOST_PORT));
 		url.append("/");
-		url.append(getConfiguredParameters().getProperty(
-				PROPERTY_APPLICATION_NAME));
+		url.append(PROPERTY_CATISSUE_APPLICATION_NAME);
 		String completedUrl = url.toString();
-		LOG.debug("Application Service remote URL determined to be: "
-				+ completedUrl);
+		LOG.debug("Application Service remote URL determined to be: " + completedUrl);
 		return completedUrl;
 	}
 
