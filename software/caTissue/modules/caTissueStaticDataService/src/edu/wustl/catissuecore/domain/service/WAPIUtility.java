@@ -258,8 +258,7 @@ public class WAPIUtility {
 		return new WAPIClient(Service.getService(username, password));
 
 	}
-	public static WAPIClient getClient(String url, String username, String password)
-			throws Exception {
+	public static WAPIClient getClient(String url, String username, String password) throws Exception {
 		return new WAPIClient(Service.getService(url, username, password));
 
 	}

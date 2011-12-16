@@ -14,7 +14,7 @@
 
 	<bean id="catissue_cacoreInterceptor" class="gov.nih.nci.system.client.proxy.ApplicationServiceProxy" singleton="true">
 		<property name="proxyFactory">
-			<bean class="gov.nih.nci.system.client.proxy.ProxyHelperImpl"/>
+			<bean class="edu.wustl.catissuecore.domain.client.ProxyHelperImpl"/>
 		</property>
 	</bean>
 
@@ -66,7 +66,7 @@
 
 				&lt;bean id=&quot;catissue_cacoreInterceptor&quot; class=&quot;gov.nih.nci.system.client.proxy.ApplicationServiceProxy&quot; singleton=&quot;true&quot;&gt;
 					&lt;property name=&quot;proxyFactory&quot;&gt;
-						&lt;bean class=&quot;gov.nih.nci.system.client.proxy.ProxyHelperImpl&quot;/&gt;
+						&lt;bean class=&quot;edu.wustl.catissuecore.domain.client.ProxyHelperImpl&quot;/&gt;
 					&lt;/property&gt;
 				&lt;/bean&gt;
 
