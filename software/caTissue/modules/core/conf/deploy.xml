@@ -977,6 +977,18 @@
 	           <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
 	        </replace>-->
 		<antcall target="config_jboss_files" />
+		<tstamp>
+			<format property="before_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
+		</tstamp>
+		<echo>before cacore: ${before_cacore}</echo>
+		<antcall target="generate.cacore.for.xmi">
+			<param name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
+			<param name="jboss.home" value="${jboss.home}"/>
+		</antcall>
+		<tstamp>
+			<format property="after_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
+		</tstamp>
+		<echo>after cacore: ${after_cacore}</echo>
 	</target>
 
 		<!--Target for fresh deployment of caTissue application-->
@@ -991,17 +1003,6 @@
 			<antcall target="configure_ctrp_properties"/>
 		    <antcall target="configure_services_properties"/>
 			<antcall target="integrate_bulkoperation_app" />
-			<tstamp>
-				<format property="before_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
-			</tstamp>
-			<echo>before cacore: ${before_cacore}</echo>
-			<antcall target="generate.cacore.for.xmi">
-				<param name="jboss.home" value="${jboss.home}"/>
-			</antcall>
-			<tstamp>
-				<format property="after_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
-			</tstamp>
-			<echo>after cacore: ${after_cacore}</echo>
 			<antcall target="de_integrate_app" />
 
 
@@ -3511,64 +3512,38 @@ Thanking You,
 		<delete failonerror="${delete.failonerror}" dir="${export.dir}" />
 		<mkdir dir="${export.dir}" />
 
-				<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true" maxmemory="1024m" failonerror="true">
-					<arg value="${xmi.file.name}" />
-					<arg value="${container.file.name}" />
-					<arg value="${package}" />
-					<arg value="${hookentity}" />
-					<arg value="${addQueryPaths}" />
-					<arg value="${condition.file.name}" />
-					<arg value="${generate.cacore}" />
-					<arg value="${Application.url}/"/>
-					<arg value="${pv.file.name}"/>
-					<classpath>
-						<pathelement location="${prop.temp.dir}/catissuecore/WEB-INF/classes" />
-						<fileset dir="${prop.temp.dir}/catissuecore/WEB-INF/lib">
-							<include name="*.jar" />
-							<exclude name="uml-1.3.jar" />
-						</fileset>
-						<fileset dir="${lib.dir}">
-								<include name="**/*.jar" />
-						</fileset>
-					</classpath>
-				</java>
-
-
-
-		<if>
-			<equals arg1="${generate.cacore}" arg2="False" casesensitive="false" />
-			<then>
-				<echo message=" " />
-				<echo message="------------------------------------------" />
-				<echo message="Skipping cacore generation for ${filename} entity group " />
-				<echo message="------------------------------------------" />
-				<echo message=" " />
-			</then>
-			<else>
-				<echo message=" " />
-				<echo message="------------------------------------------" />
-				<echo message="Generating cacore for ${filename} entity group " />
-				<echo message="------------------------------------------" />
-				<echo message=" " />
-
-				<!--unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" /-->
-
-				<ant antfile="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="setupClassExecutionEnvironment" />
-
-				<ant antfile="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="export.xmi.and.generate.cacore">
-					<property name="import.xmi" value="True" />
-					<property name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
-					<property name="entityGroup.jar.location" value="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
-					<property name="xmi.name" value="${xmi.file.name}" />
-					<property name="jboss.home.dir" value="${jboss.home}" />
-					<property name="default.prifix.war" value="${default.prefix.war}" />
-					<property name="database.type" value="${database.type}" />
-				</ant>
-
-				<delete failonerror="${delete.failonerror}" file="${caTissue-webapp.dir.dist}/log4j.properties" />
-			</else>
-		</if>
+		<java classname="edu.wustl.catissuecore.annotations.xmi.ImportXmi" fork="true" maxmemory="1024m" failonerror="true">
+			<arg value="${xmi.file.name}" />
+			<arg value="${container.file.name}" />
+			<arg value="${package}" />
+			<arg value="${hookentity}" />
+			<arg value="${addQueryPaths}" />
+			<arg value="${condition.file.name}" />
+			<arg value="${generate.cacore}" />
+			<arg value="${Application.url}/"/>
+			<arg value="${pv.file.name}"/>
+			<classpath>
+				<pathelement location="${prop.temp.dir}/catissuecore/WEB-INF/classes" />
+				<fileset dir="${prop.temp.dir}/catissuecore/WEB-INF/lib">
+					<include name="*.jar" />
+					<exclude name="uml-1.3.jar" />
+				</fileset>
+				<fileset dir="${lib.dir}">
+						<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+		
+		<ant antfile="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="handle.cacore.generation.for.import.xmi">
+			<property name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
+			<property name="entityGroup.jar.location" value="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+			<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
+			<property name="xmi.name" value="${filename}" />
+			<property name="jboss.home.dir" value="${jboss.home}" />
+			<property name="default.prifix.war" value="${default.prefix.war}" />
+			<property name="database.type" value="${database.type}" />
+		</ant>
+		
 		<delete failonerror="${delete.failonerror}" dir="${export.dir}" />
 		<delete failonerror="${delete.failonerror}" dir="${tempcacore.dir}" />
 	</target>
