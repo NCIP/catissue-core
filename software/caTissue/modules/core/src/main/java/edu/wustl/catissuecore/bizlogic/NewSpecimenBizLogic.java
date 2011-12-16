@@ -403,6 +403,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				// if no creation event do not display any more
 				return dynamicEventsForGrid;
 			}
+			if(creationTimeStamp==null && creationEvent!=null)
+			{
+				creationTimeStamp=creationEvent.getTimestamp();
+			}
 
 			// Add creation Events of SPP application of parent specimen.
 			// If parent specimen is not null. then get the sppApplication of parent specimen
@@ -415,7 +419,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				Action action=(Action) creationEvent.getApplicationRecordEntry().getFormContext();
 				eventOrder=action.getActionOrder();
 				specimenId=parentId;
-				getDynamicEventColl(specimenId,bizLogic,creationEvent.getTimestamp(),dynamicEventsForGrid,eventOrder);
+				getDynamicEventColl(specimenId,bizLogic,creationTimeStamp,dynamicEventsForGrid,eventOrder);
 			}
 			// If parent specimen id is null, then move to specimen collection group.
 			else
@@ -436,7 +440,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 						long actionOrder=action.getActionOrder();
 
 						Collection<ActionApplication> scgEventCollection=sppApp.getSppActionApplicationCollection();
-						addParentEventsToGrid(creationEvent.getTimestamp(),dynamicEventsForGrid, actionOrder,scgEventCollection);
+						addParentEventsToGrid(creationTimeStamp,dynamicEventsForGrid, actionOrder,scgEventCollection);
 					}
 				}
 			}
@@ -474,6 +478,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		Long creationEventId=new NewSpecimenBizLogic().setCreationEventIdToChildSpecimen(childSpecimen);
 		if(creationEventId>0)
 		{
+			ActionApplication actionApp=new ActionApplication();
+			actionApp.setId(creationEventId);
+			childSpecimen.setCreationEventAction(actionApp);
+			
 			JDBCDAO jdbcDAO=AppUtility.openJDBCSession();
 			String sql = "update catissue_specimen" +
 					" set ACTION_APPLICATION_ID="+creationEventId.toString()
@@ -1976,6 +1984,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			LOGGER.error(doexp.getMessage(), doexp);
 			throw this.getBizLogicException(doexp, doexp.getErrorKeyName(),
 					doexp.getMsgValues());
+		} catch (ApplicationException e) {
+			LOGGER.error(e.getMessage(), e);
+			throw this.getBizLogicException(e, e.getErrorKeyName(),
+					e.getMsgValues());
 		}
 	}
 
@@ -1990,13 +2002,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 *            DAO object
 	 * @param sessionDataBean
 	 *            The session in which the object is saved
-	 *
-	 * @throws BizLogicException
-	 *             Database related Exception
+	 * @throws ApplicationException 
 	 */
 	private void updateSpecimen(DAO dao, Object obj, Object oldObj,
 			SessionDataBean sessionDataBean, Object uiObject)
-					throws BizLogicException {
+					throws ApplicationException {
 		try {
 			SpecimenUIObject specUIObject = (SpecimenUIObject) uiObject;
 			final Specimen specimen = (Specimen) obj;
@@ -2465,14 +2475,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 *            Persistent Specimen
 	 * @param persistentSpecimen
 	 *            Persistent Specimen
-	 *
-	 * @throws BizLogicException
-	 *             Database related exception
+	 * @throws ApplicationException 
 	 */
 	private void createPersistentSpecimenObj(DAO dao,
 			SessionDataBean sessionDataBean, Specimen specimen,
 			Specimen specimenOld, Specimen persistentSpecimen)
-					throws BizLogicException {
+					throws ApplicationException {
 		persistentSpecimen.setLabel(specimen.getLabel());
 		String barcode = specimen.getBarcode();
 		if (!Validator.isEmpty(barcode)) {
@@ -2520,8 +2528,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			this.generateBarCode(persistentSpecimen);
 		}
 		this.setExternalIdentifier(dao, specimen, persistentSpecimen);
-		setCreationEventIdToChildSpecimen(persistentSpecimen);
-		//persistentSpecimen.setCreationEventAction(specimen.getCreationEventAction());
+		updateCreationEvent(persistentSpecimen);
 	}
 
 	/**
@@ -4564,17 +4571,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 *            current user session information
 	 * @param dao
 	 *            DAO object
-	 *
-	 * @throws BizLogicException
-	 *             If DAO fails to update one or more specimens this function
-	 *             will throw DAOException.
-	 * @throws DAOException
-	 *             : DAOException
+	 * @throws ApplicationException 
 	 */
 	public void updateAnticipatorySpecimens(DAO dao,
 			Collection<AbstractDomainObject> newSpecimenCollection,
-			SessionDataBean sessionDataBean) throws BizLogicException,
-			DAOException {
+			SessionDataBean sessionDataBean) throws ApplicationException {
 		this.updateMultipleSpecimens(dao, newSpecimenCollection,
 				sessionDataBean, true);
 	}
@@ -4750,16 +4751,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 *            Session Details
 	 * @param updateChildrens
 	 *            boolean
-	 *
-	 * @throws BizLogicException
-	 *             Database exception
-	 * @throws DAOException
-	 *             : DAOException
+	 * @throws ApplicationException 
 	 */
 	protected void updateMultipleSpecimens(DAO dao,
 			Collection<AbstractDomainObject> newSpecimenCollection,
 			SessionDataBean sessionDataBean, boolean updateChildrens)
-					throws BizLogicException, DAOException {
+					throws ApplicationException {
 		Iterator<AbstractDomainObject> iterator = newSpecimenCollection
 				.iterator();
 		try {
@@ -4936,13 +4933,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 *            Specimen Object
 	 *
 	 * @return Specimen object
-	 *
-	 * @throws BizLogicException
-	 *             Database exception
+	 * @throws ApplicationException 
 	 */
 	public Specimen updateSingleSpecimen(DAO dao, Specimen newSpecimen,
 			SessionDataBean sessionDataBean, boolean updateChildrens)
-					throws BizLogicException {
+					throws ApplicationException {
 		try {
 			Specimen specimenDO = null;
 			if (this.isAuthorized(dao, newSpecimen, sessionDataBean)) {
@@ -4955,7 +4950,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					// Bug 11481 E
 					this.updateSpecimenDomainObject(dao, newSpecimen,
 							specimenDO, sessionDataBean);
-					setCreationEventIdToChildSpecimen(specimenDO);
+					updateCreationEvent(specimenDO);
 					if (specimenDO.getParentSpecimen() != null
 							&& !Constants.COLLECTION_STATUS_COLLECTED
 							.equals(((Specimen) specimenDO

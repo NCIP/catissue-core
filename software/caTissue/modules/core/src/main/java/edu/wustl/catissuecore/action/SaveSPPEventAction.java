@@ -160,7 +160,9 @@ public class SaveSPPEventAction extends SecureAction
 									"ABS_SPEC.LINEAGE=\'" + 
 									Constants.NEW_SPECIMEN +
 									"\' AND SPECIMEN.ACTIVITY_STATUS=\'" +
-									Constants.ACTIVE+"\'";
+									Constants.ACTIVE+"\'" +
+									" AND " +
+									"SPECIMEN.COLLECTION_STATUS='Collected'";
 							childSpecimenIdList=AppUtility.executeSQLQuery(sql);
 						}
 						else
@@ -172,7 +174,11 @@ public class SaveSPPEventAction extends SecureAction
 									"ABS_SPEC.PARENT_SPECIMEN_ID=" +
 									domainObjectId +
 									" AND " +
-									"SPECIMEN.ACTIVITY_STATUS=\'"+Constants.ACTIVE+"\'";
+									"SPECIMEN.ACTIVITY_STATUS=\'"+
+									Constants.ACTIVE+"\'"
+									+
+									" AND " +
+									"SPECIMEN.COLLECTION_STATUS='Collected'";
 							childSpecimenIdList=AppUtility.executeSQLQuery(sql);
 						}
 						if(childSpecimenIdList!=null && !childSpecimenIdList.isEmpty())
