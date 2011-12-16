@@ -396,7 +396,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					}
 				}
 			}
-			ActionApplication creationEvent=specimen.getCreationEventAction();
+			ActionApplication creationEvent=(ActionApplication) bizLogic.retrieveAttribute(Specimen.class,specimenId,
+					"creationEventAction");
 			if (creationEvent==null)
 			{
 				// if no creation event do not display any more
@@ -426,7 +427,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					while (sppAppIter.hasNext())
 					{
 						SpecimenProcessingProcedureApplication sppApp = sppAppIter.next();
-						if(creationEvent.getSppApplication().getSpp().getId() != sppApp.getSpp().getId())
+						if(!creationEvent.getSppApplication().getSpp().getId().equals(sppApp.getSpp().getId()))
 						{
 							continue; // ignore if not the spp using which the specimen was created
 						}
@@ -468,6 +469,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		return parentId;
 	}
 
+	
+	public void updateCreationEvent(Specimen childSpecimen) throws ApplicationException {
+		Long creationEventId=new NewSpecimenBizLogic().setCreationEventIdToChildSpecimen(childSpecimen);
+		if(creationEventId>0)
+		{
+			JDBCDAO jdbcDAO=AppUtility.openJDBCSession();
+			String sql = "update catissue_specimen" +
+					" set ACTION_APPLICATION_ID="+creationEventId.toString()
+					+" where identifier="+childSpecimen.getId();
+			jdbcDAO.executeUpdate(sql);
+			jdbcDAO.commit();
+			AppUtility.closeJDBCSession(jdbcDAO);
+		}
+	}
 	/**
 	 * 
 	 * @param creationTimeStamp
@@ -1656,7 +1671,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 */
 	private void updateChildAttributes(Object currentObj, Object oldObj)
 			throws BizLogicException {
-		System.out.println("test");
 		JDBCDAO jdbcDao = null;
 		final Specimen currentSpecimen = (Specimen) currentObj;
 		final Specimen oldSpecimen = (Specimen) oldObj;
@@ -2091,8 +2105,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 * 
 	 * @param oldSpecimen
 	 */
-	public void setCreationEventToChildSpecimen(Specimen currentSpecimen)
+	public Long setCreationEventIdToChildSpecimen(Specimen currentSpecimen)
 	{
+		Long id=0L;
 		Action action=currentSpecimen.getSpecimenRequirement().getCreationEvent();
 		if(action!=null)
 		{
@@ -2110,7 +2125,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 						Action parentSpecAction=(Action) actApp.getApplicationRecordEntry().getFormContext();
 						if(parentSpecAction.equals(action))
 						{
-							currentSpecimen.setCreationEventAction(actApp);
+							id=actApp.getId();
 							break;
 						}
 					}
@@ -2123,8 +2138,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				boolean traverseCollection=true;
 				while(sppAppCollIter.hasNext() && traverseCollection)
 				{
-					//if(traverseCollection)
-					//{
 					SpecimenProcessingProcedureApplication sppApp= sppAppCollIter.next();
 					if(sppApp!=null)
 					{
@@ -2136,28 +2149,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 							Action parentSpecAction=(Action) actApp.getApplicationRecordEntry().getFormContext();
 							if(parentSpecAction.equals(action))
 							{
-								/*	DAO dao;
-								try {
-									dao = AppUtility.openDAOSession(null);
-									actApp.setSpecimen(specimen);
-									dao.update(actApp);
-									specimen.setCreationEventAction(actApp);
-									dao.update(specimen);
-								} catch (ApplicationException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}*/
-								//actApp.setSpecimen(specimen);
-								currentSpecimen.setCreationEventAction(actApp);
+								id=actApp.getId();
 								traverseCollection=false;
 								break;
 							}
 						}
 					}
-					//}
 				}
 			}
 		}
+		return id;
 	}
 
 	private void transferSpecimen(DAO dao, SessionDataBean sessionDataBean,
@@ -2519,7 +2520,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			this.generateBarCode(persistentSpecimen);
 		}
 		this.setExternalIdentifier(dao, specimen, persistentSpecimen);
-		setCreationEventToChildSpecimen(persistentSpecimen);
+		setCreationEventIdToChildSpecimen(persistentSpecimen);
 		//persistentSpecimen.setCreationEventAction(specimen.getCreationEventAction());
 	}
 
@@ -4954,7 +4955,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					// Bug 11481 E
 					this.updateSpecimenDomainObject(dao, newSpecimen,
 							specimenDO, sessionDataBean);
-					setCreationEventToChildSpecimen(specimenDO);
+					setCreationEventIdToChildSpecimen(specimenDO);
 					if (specimenDO.getParentSpecimen() != null
 							&& !Constants.COLLECTION_STATUS_COLLECTED
 							.equals(((Specimen) specimenDO

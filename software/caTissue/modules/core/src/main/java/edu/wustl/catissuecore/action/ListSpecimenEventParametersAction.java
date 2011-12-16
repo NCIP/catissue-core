@@ -43,6 +43,7 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication;
@@ -232,7 +233,11 @@ public class ListSpecimenEventParametersAction extends SecureAction
 					specimenLabel = specimen.getLabel();
 				}
 				// Setting Specimen Event Parameters' Grid
-				ActionApplication creationEvent=specimen.getCreationEventAction();
+				//ActionApplication creationEvent=specimen.getCreationEventAction();
+				
+				ActionApplication creationEvent = (ActionApplication) bizLogic.retrieveAttribute(Specimen.class,specimenId,
+						"creationEventAction");
+	
 				dynamicEventsForGrid.clear();
 				final Collection<ActionApplication> dynamicEventCollection = new NewSpecimenBizLogic().getDynamicEventColl(specimenId, bizLogic, null,dynamicEventsForGrid,null);
 

@@ -28,12 +28,16 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+
 import edu.common.dynamicextensions.domain.integration.AbstractFormContext;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.actionForm.DisplaySPPEventForm;
 import edu.wustl.catissuecore.bizlogic.ActionApplicationBizLogic;
 import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.ISPPBizlogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -43,15 +47,20 @@ import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProce
 import edu.wustl.catissuecore.processor.SPPEventProcessor;
 import edu.wustl.catissuecore.uiobject.SpecimenCollectionGroupWrapper;
 import edu.wustl.catissuecore.uiobject.SpecimenWrapper;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.ObjectCloner;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 /**
  * @author suhas_khot
@@ -87,7 +96,7 @@ public class SaveSPPEventAction extends SecureAction
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException, Exception
-	{
+			{
 		String pageOf = "";
 		final SessionDataBean sessionLoginInfo = this.getSessionData(request);
 
@@ -134,6 +143,57 @@ public class SaveSPPEventAction extends SecureAction
 						//Save SPP events
 						performSaveAction(request, sessionLoginInfo, sppEventProcessor, isSCG,
 								sppName, sppBizlogicObject);
+						final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+						final IBizLogic bizLogic = factory.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+						List<List<Object>> childSpecimenIdList=null;
+						Iterator<Object> iter=null;
+						String sql=null;
+						if(isSCG)
+						{
+							sql="SELECT SPECIMEN.IDENTIFIER FROM CATISSUE_SPECIMEN SPECIMEN, CATISSUE_ABSTRACT_SPECIMEN ABS_SPEC " +
+									"WHERE " +
+									"SPECIMEN.IDENTIFIER=ABS_SPEC.IDENTIFIER " +
+									"AND " +
+									"SPECIMEN.SPECIMEN_COLLECTION_GROUP_ID=" + 
+									domainObjectId +
+									" AND " +
+									"ABS_SPEC.LINEAGE=\'" + 
+									Constants.NEW_SPECIMEN +
+									"\' AND SPECIMEN.ACTIVITY_STATUS=\'" +
+									Constants.ACTIVE+"\'";
+							childSpecimenIdList=AppUtility.executeSQLQuery(sql);
+						}
+						else
+						{
+							sql="SELECT SPECIMEN.IDENTIFIER FROM CATISSUE_SPECIMEN SPECIMEN, CATISSUE_ABSTRACT_SPECIMEN ABS_SPEC " +
+									"WHERE " +
+									"SPECIMEN.IDENTIFIER=ABS_SPEC.IDENTIFIER " +
+									"AND " +
+									"ABS_SPEC.PARENT_SPECIMEN_ID=" +
+									domainObjectId +
+									" AND " +
+									"SPECIMEN.ACTIVITY_STATUS=\'"+Constants.ACTIVE+"\'";
+							childSpecimenIdList=AppUtility.executeSQLQuery(sql);
+						}
+						if(childSpecimenIdList!=null && !childSpecimenIdList.isEmpty())
+						{
+						Iterator<List<Object>> childSpecimenIdListIter=childSpecimenIdList.iterator();
+						while(childSpecimenIdListIter.hasNext())
+						{
+							List<Object> idlist=childSpecimenIdListIter.next();
+							if(idlist!=null && !idlist.isEmpty())
+							{
+								iter=idlist.iterator();
+								while(iter.hasNext())
+								{
+									String id=(String) iter.next();
+									Specimen childSpecimen=(Specimen) bizLogic.retrieve(Specimen.class.getName(), new Long(id));
+									new NewSpecimenBizLogic().updateCreationEvent(childSpecimen);		
+								}
+							}
+						}
+						}
+
 					}
 				}
 				catch (BizLogicException e)
@@ -176,7 +236,7 @@ public class SaveSPPEventAction extends SecureAction
 			return mapping.findForward(request.getParameter(Constants.PAGE_OF));
 		}
 		return mapping.findForward(pageOf);
-	}
+			}
 
 	/**
 	 * @throws BizLogicException
@@ -196,6 +256,8 @@ public class SaveSPPEventAction extends SecureAction
 			}
 		}
 	}
+
+	
 
 	/**
 	 * Perform save action.
@@ -219,10 +281,10 @@ public class SaveSPPEventAction extends SecureAction
 	private void performSaveAction(HttpServletRequest request,
 			final SessionDataBean sessionLoginInfo, SPPEventProcessor sppEventProcessor,
 			boolean isSCG, String sppName, ISPPBizlogic sppBizlogicObject)
-			throws FileNotFoundException, DynamicExtensionsSystemException, IOException,
-			DynamicExtensionsApplicationException, SQLException, BizLogicException,
-			ApplicationException
-	{
+					throws FileNotFoundException, DynamicExtensionsSystemException, IOException,
+					DynamicExtensionsApplicationException, SQLException, BizLogicException,
+					ApplicationException
+					{
 		//initialize resources
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final IBizLogic actionAppBizLogic = (ActionApplicationBizLogic) factory
@@ -239,8 +301,8 @@ public class SaveSPPEventAction extends SecureAction
 					sppBizlogicObject);
 		}
 		else
-		//Case 2: Update data for SPP events.
-		//if specimen or scg has SPPApplication collection then data entry has already occurred.
+			//Case 2: Update data for SPP events.
+			//if specimen or scg has SPPApplication collection then data entry has already occurred.
 		{
 			boolean sppDataEntryDone = false;
 			//For SCG multiple SPP are hooked, but for Specimen single SPP is hooked.
@@ -261,7 +323,7 @@ public class SaveSPPEventAction extends SecureAction
 						sppName, sppBizlogicObject);
 			}
 		}
-	}
+					}
 
 	/**
 	 * Update spp data.
@@ -283,9 +345,9 @@ public class SaveSPPEventAction extends SecureAction
 	 */
 	public boolean updateSPPData(HttpServletRequest request, SPPEventProcessor sppEventProcessor,
 			final IBizLogic actionAppBizLogic, SpecimenProcessingProcedureApplication sppApplication, final ISPPBizlogic sppBizlogicObject, SessionDataBean sessionLoginInfo, String sppName)
-			throws BizLogicException, ApplicationException, DynamicExtensionsSystemException,
-			DynamicExtensionsApplicationException, SQLException, FileNotFoundException, IOException
-	{
+					throws BizLogicException, ApplicationException, DynamicExtensionsSystemException,
+					DynamicExtensionsApplicationException, SQLException, FileNotFoundException, IOException
+					{
 		//retrieves ActionApplication collection for a given SPPApplication
 		Collection<ActionApplication> actionApplicationCollection = sppEventProcessor.getFilteredActionApplication(sppApplication
 				.getSppActionApplicationCollection());
@@ -303,7 +365,7 @@ public class SaveSPPEventAction extends SecureAction
 			if(!contextRecordIdMap.containsKey(context))
 			{
 				if(formContextParameterMap.get(context).get(Constants.EVENT_PERFORMED)!=null 
-					&& !Boolean.parseBoolean((String) formContextParameterMap.get(context).get(Constants.EVENT_PERFORMED)))
+						&& !Boolean.parseBoolean((String) formContextParameterMap.get(context).get(Constants.EVENT_PERFORMED)))
 				{
 					for (ActionApplication actionApplication : actionApplicationCollection)
 					{
@@ -312,18 +374,18 @@ public class SaveSPPEventAction extends SecureAction
 						{
 							ObjectCloner cloner = new ObjectCloner();
 							ActionApplicationRecordEntry clonedActionApplicationRecEntry = cloner.clone(actionApplication.getApplicationRecordEntry());
-							
+
 							actionApplication.getApplicationRecordEntry().setActivityStatus(Constants.ACTIVITY_STATUS_VALUES[3]);
 							defaultBizLogic.update(actionApplication.getApplicationRecordEntry(), clonedActionApplicationRecEntry, sessionLoginInfo);
 							break;
-							
+
 						}
 					}
 				}
 				else //disable record entry
 				{
 					Map<String, Object> staticParametersList = formContextParameterMap.get(context);
-					
+
 					ActionApplication actionApplication = sppEventProcessor.associateRecEntryWithActionApp(actionAppBizLogic,
 							sppBizlogicObject, recordIdMap, sppApplication, context,
 							staticParametersList);
@@ -332,12 +394,12 @@ public class SaveSPPEventAction extends SecureAction
 						actionApplication.setSppApplication(sppApplication);
 						actionAppBizLogic.insert(actionApplication);
 					}
-					
+
 					actionApplicationCollection.add(actionApplication);
-					
+
 					ObjectCloner cloner = new ObjectCloner();
 					SpecimenProcessingProcedureApplication clonedSPPApplication = cloner.clone(sppApplication);
-	
+
 					sppApplication.setSpp(sppEventProcessor.getSPPByName(sppName));
 					sppApplication.setSppActionApplicationCollection(actionApplicationCollection);
 					defaultBizLogic.update(sppApplication, clonedSPPApplication, sessionLoginInfo);
@@ -345,7 +407,7 @@ public class SaveSPPEventAction extends SecureAction
 			}
 		}
 		return true;
-	}
+					}
 
 	/**
 	 * Checks if is specimen collection group object.
@@ -384,7 +446,7 @@ public class SaveSPPEventAction extends SecureAction
 			ISPPBizlogic sppBizlogicObject) throws FileNotFoundException,
 			DynamicExtensionsSystemException, IOException, DynamicExtensionsApplicationException,
 			SQLException, BizLogicException, ApplicationException
-	{
+			{
 		updateSPPActionForSkippedEvent();
 		//Insert data for SPP events.
 		Map<AbstractFormContext, Long> contextVsRecordIdMap = sppEventProcessor
@@ -393,7 +455,7 @@ public class SaveSPPEventAction extends SecureAction
 		sppEventProcessor.insertSPPApplication(actionAppBizLogic, sppBizlogicObject,
 				contextVsRecordIdMap, sessionLoginInfo, formContextParameterMap,
 				formContextCollection, sppName);
-	}
+			}
 
 	/**
 	 * Save action message.
@@ -407,7 +469,7 @@ public class SaveSPPEventAction extends SecureAction
 		{
 			ActionMessages messages = new ActionMessages();
 			messages
-					.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("sppEvent.add.successOnly"));
+			.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("sppEvent.add.successOnly"));
 			saveMessages(request, messages);
 		}
 	}
@@ -486,8 +548,8 @@ public class SaveSPPEventAction extends SecureAction
 	 */
 	private ISPPBizlogic getISPPWrapperObject(boolean isSCG,
 			DisplaySPPEventForm displaySPPEventForm, String domainObjectId)
-			throws BizLogicException
-	{
+					throws BizLogicException
+					{
 		ISPPBizlogic sppBizlogicObject;
 		if (isSCG)
 		{
@@ -509,7 +571,7 @@ public class SaveSPPEventAction extends SecureAction
 			sppBizlogicObject.setWrapperObject(specimen);
 		}
 		return sppBizlogicObject;
-	}
+					}
 
 	/**
 	 * Gets the domain object id.
