@@ -1282,10 +1282,6 @@
 		<!-- 2) Copy *.properties, st*.cfg.xml, *.jsp, *.css, *.images, st*-struts-config.xml to respective folders -->
 		<copy todir="${prop.temp.dir}/catissuecore/WEB-INF/classes" overwrite="true">
 			<fileset dir="${prop.temp.dir}/dynamicextensions/WEB-INF/classes">
-				<include name="edu/common/dynamicextensions/**/**.class"/>
-				<include name="edu/wustl/cab2b/**/**.class"/>
-				<include name="edu/wustl/common/**/**.class"/>
-				<include name="edu/wustl/metadata/**/**.class"/>
 	    		<include name="**/hbm/**/*.*"/>
 				<include name="DynamicExtensionsErrorsMessages.properties"/>
 	    		<include name="DynamicExtensionsFileFormats.properties"/>
