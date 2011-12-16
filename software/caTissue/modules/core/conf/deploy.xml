@@ -977,6 +977,11 @@
 	           <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
 	        </replace>-->
 		<antcall target="config_jboss_files" />
+		<!--antcall target="generate:cacore:all" /-->		
+	</target>
+	
+	<!--Generate caCORE for all imported xmis in the system-->
+	<target name="generate:cacore:all">
 		<tstamp>
 			<format property="before_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
 		</tstamp>
@@ -3530,7 +3535,8 @@ Thanking You,
 			</classpath>
 		</java>
 		
-		<ant antfile="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="handle.cacore.generation.for.import.xmi">
+		
+		<!--ant antfile="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="handle.cacore.generation.for.import.xmi">
 			<property name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
 			<property name="entityGroup.jar.location" value="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 			<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
@@ -3541,7 +3547,7 @@ Thanking You,
 		</ant>
 		
 		<delete failonerror="${delete.failonerror}" dir="${export.dir}" />
-		<delete failonerror="${delete.failonerror}" dir="${tempcacore.dir}" />
+		<delete failonerror="${delete.failonerror}" dir="${tempcacore.dir}" /-->
 	</target>
 
 	<property name="categoryFormNamesFile" value=" " />
