@@ -1,11 +1,12 @@
 <!-- dataList and columnList are to be set in the main JSP file -->
-<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXGrid.css"/>
+<link rel="STYLESHEET" type="text/css" href="newDhtmlx/dhtmlxgrid.css"/>
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
-<script  src="dhtml_comp/js/dhtmlXCommon.js"></script>
-<script  src="dhtml_comp/js/dhtmlXGrid.js"></script>		
-<script  src="dhtml_comp/js/dhtmlXGridCell.js"></script>
+<script language="JavaScript"  type="text/javascript" src="newDhtmlx/dhtmlxcommon.js"></script>
+<script  language="JavaScript" type="text/javascript" src="newDhtmlx/dhtmlxgrid.js"></script>
+<script   language="JavaScript" type="text/javascript" src="newDhtmlx/dhtmlxgridcell.js"></script>
+<script  language="JavaScript" type="text/javascript"  src="newDhtmlx/ext/dhtmlxgrid_srnd.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
 <%@ page import="java.util.HashMap,java.util.Map,edu.wustl.common.beans.QueryResultObjectData"%>
@@ -220,7 +221,7 @@ function setEditableChkbox(checkAllPages)
 
 <script>
 	mygrid = new dhtmlXGridObject('gridbox');
-	mygrid.setImagePath("dhtml_comp/imgs/");
+	mygrid.setImagePath("newDhtmlx/imgs/");
 
 	if(useFunction == "participant")
 	{
@@ -231,7 +232,9 @@ function setEditableChkbox(checkAllPages)
 		colDataTypes=colDataTypes.replace(/int/,"ro");
 		columns=","+columns+",";
 		colWidth = colWidth+",100,0";
-		mygrid.setOnCheckHandler(onParticipantClick);
+//		mygrid.setOnCheckHandler(onParticipantClick);
+mygrid.attachEvent("onCheck", function(rId,cInd,state){onParticipantClick(rId,cInd,state)});
+//mygrid.attachEvent("onCheckHandler", function(rId,cInd){alert(rId +","+cInd);});
 		//mygrid.setOnRowDblClickedHandler(useFunction);
 		
 		/*
@@ -287,7 +290,7 @@ function setEditableChkbox(checkAllPages)
 			data = "0<%=Constants.DHTMLXGRID_DELIMETER%>"+myData[row];
 		}
 
-		mygrid.addRow(row+1,data,row+1);
+		mygrid.addRow(row+1,data,row);
 	}
 	
 	for(var row=0;row<myData.length;row++)

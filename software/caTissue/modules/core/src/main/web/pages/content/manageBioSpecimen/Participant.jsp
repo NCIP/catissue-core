@@ -371,7 +371,7 @@ tr#hiddenCombo
 		}
 
 		//this function is called when participant clicks on radiao button
-		function onParticipantClick(participant_id)
+		function onParticipantClick(participant_id,cInd,state)
 		{
 			//mandar for grid
 			var cl = mygrid.cells(participant_id,mygrid.getColumnCount()-1);
@@ -419,7 +419,6 @@ tr#hiddenCombo
 			{
 
 				document.forms[0].action="ParticipantSelect.do?operation=add&id="+document.forms[0].participantId.value;
-				alert(document.forms[0].action);
 				document.forms[0].submit();
 				//window.location.href="ParticipantSelect.do?operation=add&participantId="+document.forms[0].participantId.value+"&submittedFor="+document.forms[0].submittedFor.value+"&forwardTo="+document.forms[0].forwardTo.value;
 			}
