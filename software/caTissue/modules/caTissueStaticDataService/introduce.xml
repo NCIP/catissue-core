@@ -778,12 +778,12 @@
  <ns41:ServiceProperties xmlns:ns41="gme://gov.nih.nci.cagrid.introduce/1/Property">
   <ns41:Property description="" isFromETC="false" key="queryProcessorClass" value="edu.wustl.catissuecore.cagrid.CQLQueryProcessor"/>
   <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorClass" value="edu.wustl.catissuecore.cagrid.CQL2QueryProcessor"/>
-  <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationName" value="catissuecore"/>
+  <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationName" value="catissue_cacore"/>
   <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useLocalApiFlag" value="@USE_LOCAL_API_FLAG@"/>
   <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationHostName" value="@APPLICATION_HOST@"/>
   <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_applicationHostPort" value="@APPLICATION_PORT@"/>
   <ns41:Property description="" isFromETC="false" key="cqlQueryProcessorConfig_useHttpsUrl" value="@USE_HTTPS_URL@"/>
-  <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationName" value="catissuecore"/>
+  <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationName" value="catissue_cacore"/>
   <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_useLocalApiFlag" value="@USE_LOCAL_API_FLAG@"/>
   <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationHostName" value="@APPLICATION_HOST@"/>
   <ns41:Property description="" isFromETC="false" key="cql2QueryProcessorConfig_applicationHostPort" value="@APPLICATION_PORT@"/>
