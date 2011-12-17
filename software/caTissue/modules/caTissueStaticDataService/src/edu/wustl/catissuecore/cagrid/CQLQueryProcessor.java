@@ -37,6 +37,7 @@ public class CQLQueryProcessor extends
 	private static Log LOG = LogFactory.getLog(SDK42QueryProcessor.class);
 
 	// general configuration options
+	public static final String PROPERTY_CATISSUE_APPLICATION_NAME = "catissuecore";
 	public static final String PROPERTY_APPLICATION_NAME = "applicationName";
 	public static final String PROPERTY_USE_LOCAL_API = "useLocalApiFlag";
 
@@ -271,8 +272,7 @@ public class CQLQueryProcessor extends
 		url.append(":");
 		url.append(getConfiguredParameters().getProperty(PROPERTY_HOST_PORT));
 		url.append("/");
-		url.append(getConfiguredParameters().getProperty(
-				PROPERTY_APPLICATION_NAME));
+		url.append(PROPERTY_CATISSUE_APPLICATION_NAME);
 		String completedUrl = url.toString();
 		LOG.debug("Application Service remote URL determined to be: "
 				+ completedUrl);
