@@ -1308,9 +1308,8 @@
 			</classpath>
 		</java>
 		<copy tofile="${host.war.temp}/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" file="${host.war.temp}/WEB-INF/classes/DynamicExtensionsAuditMetadataTemp.xml" overwrite="true"/>
-		
-		<delete file="${host.war.temp}/WEB-INF/classes/DynamicExtensionsAuditMetadataTemp.xml">
-		</delete>
+		<delete file="${host.war.temp}/WEB-INF/classes/DynamicExtensionsAuditMetadataTemp.xml"/>
+
 	</target>
 
 	<target name="generate.xml.for.audit" description="generate the audit metadata xml">
@@ -1551,7 +1550,7 @@
 				=================================	-->
 
 	<target name="handle.cacore.generation.for.deploy.app">
-		<available file="${cacore.deployable.dir}/${entitygroupname}.war" property="cacore.present" />
+		<available file="${cacore.deployable.dir}/${entitygroupname}" property="cacore.present" />
 		<if>
 			<equals arg1="${cacore.present}" arg2="true" />
 			<then>
@@ -1613,10 +1612,7 @@
 		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war">
 		</delete>
 		<zip destfile="${jboss.home.dir}/server/default/deploy/catissuecore.war" >
-			<fileset dir="${host.war.temp}">
-				<include name="**/**/*.*" />
-				<include name="*.*" />
-			</fileset>
+			<fileset dir="${host.war.temp}"/>
 		</zip>
 	</target>
 	<!-- =================================
@@ -1734,19 +1730,20 @@
 
 	</target>
 
-	<property name="caCORE4.2_home" value="${de.temp.dir}/cacoresdk.4.2"></property>
+	<!--this propertiy needs to be updated before generating caCORE to the location of unzipped location of SDK-4.2-src-->
+	<property name="caCORE4.2_home" value="E:/caTISSUE_Suite_v2.0_Installable/modules/dynamic_extensions/lib/SDK-4.2-src"></property>
 	<target name="unzip_caCORESDK.4.2-dozer">
-		<delete dir="${de.temp.dir}/cacoresdk.4.2" />
-		<mkdir dir="${de.temp.dir}/cacoresdk.4.2" />
+		<!--delete dir="${de.temp.dir}/cacoresdk.4.2" />
+		<mkdir dir="${de.temp.dir}/cacoresdk.4.2" /-->
 
 		<!--Step 1: Unzip the default caCoreSDK release--> 
-		<unzip src="../../dynamic_extensions/lib/SDK-4.2-src.zip" dest="${de.temp.dir}/cacoresdk.4.2" overwrite="true" />
+		<!--unzip src="../../dynamic_extensions/lib/SDK-4.2-src.zip" dest="${de.temp.dir}/cacoresdk.4.2" overwrite="true" /-->
 
 		<!--Step 2: Bring the adjusted files to support dozer artifacts generation--> 
-		<unzip src="../../dynamic_extensions/lib/cacore-sdk.4.2-dozer.zip" dest="${de.temp.dir}/cacoresdk.4.2/dozerFiles" overwrite="true" />
+		<!--unzip src="../../dynamic_extensions/lib/cacore-sdk.4.2-dozer.zip" dest="${de.temp.dir}/cacoresdk.4.2/dozerFiles" overwrite="true" />
 		<copy todir="${de.temp.dir}/cacoresdk.4.2/">
 			<fileset dir="${de.temp.dir}/cacoresdk.4.2/dozerFiles" />
-		</copy>
+		</copy-->
 		<!--Step 3: Bring XMI to run the codegen for -->
 		<copy todir="${caCORE4.2_home}/example-project/models" overwrite="true">
 			<fileset dir="${export.dir}">
@@ -1766,8 +1763,7 @@
 			<replacetoken><![CDATA[IDENTITY_GENERATOR_TAG=<generator class="assigned"/>]]></replacetoken>
 				<replacevalue>
 					<![CDATA[IDENTITY_GENERATOR_TAG=<generator class="increment"/>]]>
-				</replacevalue>
-
+			</replacevalue>
 			 
 		</replace>
 
