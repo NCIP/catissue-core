@@ -622,6 +622,7 @@
 				<exclude name="**/WEB-INF/web.xml" />
 				<exclude name="**/WEB-INF/classes/edu/wustl/catissuecore/domain/**" />
 				<exclude name="**/WEB-INF/lib/csmapi.jar" />
+				<exclude name="**/WEB-INF/lib/mysql-connector-java-5.1.5.jar" />
 				<exclude name="**/WEB-INF/lib/dom4*.jar" />
 				<exclude name="**/WEB-INF/lib/jta.jar" />
 				<exclude name="**/WEB-INF/lib/cglib*.jar" />
