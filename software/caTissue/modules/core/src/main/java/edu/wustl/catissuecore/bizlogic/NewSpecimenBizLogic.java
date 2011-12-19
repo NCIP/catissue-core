@@ -473,7 +473,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		return parentId;
 	}
 
-	
+
 	public void updateCreationEvent(Specimen childSpecimen) throws ApplicationException {
 		Long creationEventId=new NewSpecimenBizLogic().setCreationEventIdToChildSpecimen(childSpecimen);
 		if(creationEventId>0)
@@ -481,7 +481,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			ActionApplication actionApp=new ActionApplication();
 			actionApp.setId(creationEventId);
 			childSpecimen.setCreationEventAction(actionApp);
-			
+
 			JDBCDAO jdbcDAO=AppUtility.openJDBCSession();
 			String sql = "update catissue_specimen" +
 					" set ACTION_APPLICATION_ID="+creationEventId.toString()
@@ -522,7 +522,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 * @param actionApplicationCollection
 	 * @return
 	 */
-/*	private HashSet<ActionApplication> addEventsToGrid(Date creationTimeStamp,
+	/*	private HashSet<ActionApplication> addEventsToGrid(Date creationTimeStamp,
 			Collection<ActionApplication> actionApplicationCollection)
 			{
 		HashSet<ActionApplication> set=new HashSet<ActionApplication>();
@@ -2118,37 +2118,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	public Long setCreationEventIdToChildSpecimen(Specimen currentSpecimen)
 	{
 		Long id=0L;
-		Action action=currentSpecimen.getSpecimenRequirement().getCreationEvent();
-		if(action!=null)
+		if(currentSpecimen.getSpecimenRequirement()!=null)
 		{
-			Specimen parentSpecimen=(Specimen) currentSpecimen.getParentSpecimen();
-			if(parentSpecimen!=null)
+			Action action=currentSpecimen.getSpecimenRequirement().getCreationEvent();
+			if(action!=null)
 			{
-				SpecimenProcessingProcedureApplication sppApp= parentSpecimen.getProcessingSPPApplication();
-				if(sppApp!=null)
+				Specimen parentSpecimen=(Specimen) currentSpecimen.getParentSpecimen();
+				if(parentSpecimen!=null)
 				{
-					Collection<ActionApplication> sppActApp=sppApp.getSppActionApplicationCollection();
-					Iterator<ActionApplication> sppActAppIter=sppActApp.iterator();
-					while(sppActAppIter.hasNext())
-					{
-						ActionApplication actApp=sppActAppIter.next();
-						Action parentSpecAction=(Action) actApp.getApplicationRecordEntry().getFormContext();
-						if(parentSpecAction.equals(action))
-						{
-							id=actApp.getId();
-							break;
-						}
-					}
-				}
-			}
-			else
-			{
-				Collection<SpecimenProcessingProcedureApplication> sppAppcoll=currentSpecimen.getSpecimenCollectionGroup().getSppApplicationCollection();
-				Iterator<SpecimenProcessingProcedureApplication> sppAppCollIter=sppAppcoll.iterator();
-				boolean traverseCollection=true;
-				while(sppAppCollIter.hasNext() && traverseCollection)
-				{
-					SpecimenProcessingProcedureApplication sppApp= sppAppCollIter.next();
+					SpecimenProcessingProcedureApplication sppApp= parentSpecimen.getProcessingSPPApplication();
 					if(sppApp!=null)
 					{
 						Collection<ActionApplication> sppActApp=sppApp.getSppActionApplicationCollection();
@@ -2160,8 +2138,33 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 							if(parentSpecAction.equals(action))
 							{
 								id=actApp.getId();
-								traverseCollection=false;
 								break;
+							}
+						}
+					}
+				}
+				else
+				{
+					Collection<SpecimenProcessingProcedureApplication> sppAppcoll=currentSpecimen.getSpecimenCollectionGroup().getSppApplicationCollection();
+					Iterator<SpecimenProcessingProcedureApplication> sppAppCollIter=sppAppcoll.iterator();
+					boolean traverseCollection=true;
+					while(sppAppCollIter.hasNext() && traverseCollection)
+					{
+						SpecimenProcessingProcedureApplication sppApp= sppAppCollIter.next();
+						if(sppApp!=null)
+						{
+							Collection<ActionApplication> sppActApp=sppApp.getSppActionApplicationCollection();
+							Iterator<ActionApplication> sppActAppIter=sppActApp.iterator();
+							while(sppActAppIter.hasNext())
+							{
+								ActionApplication actApp=sppActAppIter.next();
+								Action parentSpecAction=(Action) actApp.getApplicationRecordEntry().getFormContext();
+								if(parentSpecAction.equals(action))
+								{
+									id=actApp.getId();
+									traverseCollection=false;
+									break;
+								}
 							}
 						}
 					}
