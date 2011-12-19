@@ -199,3 +199,5 @@ ALTER TABLE catissue_specimen_coll_group ADD (AGE_AT_COLLECTION NUMBER(6,2))
 		scg.ENCOUNTER_TIMESTAMP IS NOT NULL
 	)
 /
+Alter table QUERY_PARAMETERIZED_QUERY add SHOW_TREE number(1,0) default 0;
+/
