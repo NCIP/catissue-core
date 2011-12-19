@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.action;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -250,4 +251,19 @@ public class CTRPUserAjaxAction extends SecureAction {
 		mainJsonObject.put("row", jsonUserRecords);
 		return mainJsonObject;
 	}
+	
+	public ActionForward checkForXSSViolation(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception, IOException {
+		Object formBeanStack = request.getSession().getAttribute(
+				Constants.FORM_BEAN_STACK);
+		try {
+			return super.checkForXSSViolation(mapping, form, request, response);
+		} finally {
+			request.getSession().setAttribute(Constants.FORM_BEAN_STACK,
+					formBeanStack);
+		} 
+	}
+	
+	
 }
