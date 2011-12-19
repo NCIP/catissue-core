@@ -1270,7 +1270,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			throws BizLogicException
 	{
 		SpecimenCollectionGroupUIObject uiObject = null;
-		return super.validate(obj, dao, operation, uiObject);
+		return validate(obj, dao, operation, uiObject);
 	}
 
 	/**
