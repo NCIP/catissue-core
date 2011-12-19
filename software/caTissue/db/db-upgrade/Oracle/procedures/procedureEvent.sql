@@ -9,7 +9,9 @@ procedure Procedure_Event_migrate(event_name in varchar2) IS
      specimen_event_user_id INTEGER ; 
      specimen_event_param_id INTEGER ;
      specimen_comments varchar2(255);
-     specimen_timestamp Date;
+     specimen_timestamp timestamp;
+		parent_specimen_id Integer;
+		flag Integer;
      dispo_Name varchar2(255);
      dispo_Url varchar2(255);
      query_text varchar2(255);
@@ -25,13 +27,16 @@ procedure Procedure_Event_migrate(event_name in varchar2) IS
            spec.user_id,
            spec.comments,
            coll.Name,
-           coll.Url
+           coll.Url,
+		   absspec.parent_specimen_id
       from CATISSUE_PROCEDURE_EVENT_PARAM coll,
            catissue_specimen_event_param spec,
-	 catissue_specimen se
+        catissue_specimen se,
+        catissue_abstract_specimen absspec
 	where
-      coll.identifier = spec.identifier and spec.specimen_id=se.identifier;
-
+      coll.identifier = spec.identifier 
+      and spec.specimen_id=se.identifier 
+      and absspec.IDENTIFIER = se.identifier ;
 
 Begin
   
@@ -70,8 +75,18 @@ Begin
                             specimen_event_user_id,
                             specimen_comments,
                             dispo_Name,
-                            dispo_Url;
+                            dispo_Url,
+							parent_specimen_id;
       EXIT WHEN mig_cursor%NOTFOUND;
+	  
+	  select count(*) into flag  from 
+        catissue_received_event_param rec,
+        catissue_specimen_event_param spec
+        where 
+        spec.specimen_id =parent_specimen_id
+        and spec.event_timestamp = specimen_timestamp
+        and spec.identifier=rec.identifier ;
+       IF flag=0 THEN 
       begin
       -- DBMS_OUTPUT.PUT_LINE(specimen_event_identifier||'  '||specimen_id||'  '||specimen_timestamp||' '||specimen_event_user_id||' '||specimen_comments||' '||dispo_reason);                 
       -------------------------------------------------------------------
@@ -100,7 +115,7 @@ Begin
     
     
      --DBMS_OUTPUT.PUT_LINE(specimen_id||'  '||specimen_event_identifier||'  '||seqval);
-      EXECUTE IMMEDIATE query_text using dispo_Name,dispo_Url,specimen_event_identifier, seqval; 
+      EXECUTE IMMEDIATE query_text using specimen_event_identifier,dispo_Name,dispo_Url,seqval; 
      -- DBMS_OUTPUT.PUT_LINE(query_text_form);
     
      counter :=counter+1;
@@ -110,6 +125,7 @@ Begin
       v_errm := SUBSTR(SQLERRM, 1, 1000);
       DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter );
       end;
+	  END if;
     end loop; 
      
    close mig_cursor; 

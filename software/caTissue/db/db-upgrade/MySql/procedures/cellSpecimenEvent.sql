@@ -1,9 +1,10 @@
-DROP PROCEDURE IF EXISTS    cell_call_parameter;
+DROP PROCEDURE IF EXISTS   cell_call_parameter;
 //
-CREATE  PROCEDURE    cell_call_parameter()
+CREATE  PROCEDURE   cell_call_parameter()
 BEGIN
   DECLARE counter INTEGER DEFAULT 0;
    DECLARE _stme TEXT;
+   declare flag integer ;
   DECLARE _output2 TEXT DEFAULT 'success' ;
   DECLARE record_not_found INTEGER DEFAULT 0;
   DECLARE form_context_id INTEGER DEFAULT 1;
@@ -14,7 +15,8 @@ BEGIN
   DECLARE specimen_event_user_id INTEGER ; 
   DECLARE specimen_event_param_id INTEGER ;
   DECLARE specimen_comments VARCHAR(100);
-  DECLARE specimen_timestamp DATE;
+  declare parent_specimen_id integer;
+  declare specimen_timestamp timestamp;
   DECLARE Dyn_col_veriable DOUBLE;
   DECLARE Dyn_col_veriable1 DOUBLE;
   DECLARE query_text TEXT;
@@ -38,12 +40,14 @@ BEGIN
            spec.user_id,
            spec.comments,
            cell.NEOPLASTIC_CELLULARITY_PER,
-           cell.VIABLE_CELL_PERCENTAGE
-      FROM    catissue_cell_spe_review_param cell,
-         catissue_specimen_event_param spec,
-	  catissue_specimen se
+           cell.VIABLE_CELL_PERCENTAGE,
+		    absspec.parent_specimen_id
+      FROM   catissue_cell_spe_review_param cell,
+	  catissue_specimen_event_param spec,
+        catissue_specimen se,
+			 catissue_abstract_specimen absspec
 	where
-      cell.identifier = spec.identifier and spec.specimen_id=se.identifier;
+      cell.identifier = spec.identifier and spec.specimen_id=se.identifier and absspec.IDENTIFIER = se.identifier;
      
      
     
@@ -68,7 +72,7 @@ BEGIN
               
   #-----------------------------------calling function---------------------------------------------------------------        
               
-              SELECT    query_formation(event_name) INTO query_text;
+              SELECT   query_formation(event_name) INTO query_text;
               SELECT query_text;
               SET @query_text_form := query_text;
               SELECT @query_text_form;
@@ -87,14 +91,24 @@ BEGIN
                             specimen_event_user_id,
                             specimen_comments,
                             Dyn_col_veriable,
-                            Dyn_col_veriable1;
+                            Dyn_col_veriable1,
+							parent_specimen_id;
       IF record_not_found THEN LEAVE itr;
       END IF;
       
-      
+       #-----------------------------------------------------------------
+      select count(*) into flag  from 
+        catissue_cell_spe_review_param cell,
+        catissue_specimen_event_param spec
+        where 
+        spec.specimen_id =parent_specimen_id
+        and spec.event_timestamp = specimen_timestamp
+        and spec.identifier=cell.identifier ;
+
+       IF (flag=0) THEN 
                        
       #-------------------------------------------------------------------
-      INSERT IGNORE INTO    dyextn_abstract_record_entry
+      INSERT IGNORE INTO   dyextn_abstract_record_entry
       (modified_date,activity_status,abstract_form_context_id)
       VALUES (SYSDATE(),'Active',form_context_id);  
       #-------------------------------------------------------------------   
@@ -103,11 +117,11 @@ BEGIN
       SELECT seq_ver;
       #-------------------------------------------------------------------     
       
-      INSERT IGNORE INTO    catissue_action_app_rcd_entry(identifier)VALUES(seq_ver);
+      INSERT IGNORE INTO   catissue_action_app_rcd_entry(identifier)VALUES(seq_ver);
       #select _output2;
       #-------------------------------------------------------------------
   
-      INSERT IGNORE INTO    catissue_abstract_application
+      INSERT IGNORE INTO   catissue_abstract_application
           (identifier,TIMESTAMP,user_details,comments)
       VALUES(specimen_event_identifier,specimen_timestamp,specimen_event_user_id,specimen_comments);
       SELECT _output2;
@@ -120,7 +134,7 @@ BEGIN
                             specimen_comments;
        #-------------------------------------------------------------------
        
-      INSERT IGNORE INTO    catissue_action_application
+      INSERT IGNORE INTO   catissue_action_application
       (identifier,specimen_id,action_app_record_entry_id)
       VALUES(specimen_event_identifier,specimen_id,seq_ver);
       #-------------------------------------------------------------------
@@ -136,7 +150,7 @@ BEGIN
     SET counter =counter+1;
     SET _stme=counter;
     SELECT _stme;
-
+  end if;
                            
     END LOOP;          
     CLOSE mig_cursor; 

@@ -9,7 +9,9 @@ procedure Spun_Event_migrate(event_name in varchar2) IS
      specimen_event_user_id INTEGER ; 
      specimen_event_param_id INTEGER ;
      specimen_comments varchar2(255);
-     specimen_timestamp Date;
+     	specimen_timestamp timestamp;
+		parent_specimen_id Integer;
+		flag Integer;
      dispo_GFORCE NUMBER(20,10);
      dispo_DURATION_IN_MINUTES NUMBER(20,10);
      query_text varchar2(255);
@@ -25,12 +27,16 @@ procedure Spun_Event_migrate(event_name in varchar2) IS
            spec.user_id,
            spec.comments,
            coll.GFORCE,
-           coll.DURATION_IN_MINUTES
+           coll.DURATION_IN_MINUTES,
+            absspec.parent_specimen_id
       from CATISSUE_SPUN_EVENT_PARAMETERS coll,
            catissue_specimen_event_param spec,
-	 catissue_specimen se
+        catissue_specimen se,
+        catissue_abstract_specimen absspec
 	where
-      coll.identifier = spec.identifier and spec.specimen_id=se.identifier;
+      coll.identifier = spec.identifier 
+      and spec.specimen_id=se.identifier 
+      and absspec.IDENTIFIER = se.identifier ;
 
 
 Begin
@@ -70,9 +76,18 @@ Begin
                             specimen_event_user_id,
                             specimen_comments,
                             dispo_GFORCE,
-                            dispo_DURATION_IN_MINUTES;
+                            dispo_DURATION_IN_MINUTES,
+							parent_specimen_id;
       EXIT WHEN mig_cursor%NOTFOUND;
       -------------
+	  select count(*) into flag  from 
+        catissue_received_event_param rec,
+        catissue_specimen_event_param spec
+        where 
+        spec.specimen_id =parent_specimen_id
+        and spec.event_timestamp = specimen_timestamp
+        and spec.identifier=rec.identifier ;
+       IF flag=0 THEN 
       Begin
       -------------
       -- DBMS_OUTPUT.PUT_LINE(specimen_event_identifier||'  '||specimen_id||'  '||specimen_timestamp||' '||specimen_event_user_id||' '||specimen_comments||' '||dispo_reason);                 
@@ -112,6 +127,7 @@ Begin
       v_errm := SUBSTR(SQLERRM, 1, 1000);
       DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter );
       end;
+	  END IF;
     end loop; 
      
    close mig_cursor; 

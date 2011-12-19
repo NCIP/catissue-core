@@ -125,4 +125,31 @@ Begin
               DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm );
             end;
   commit;
-end;
+ 
+Begin
+ for i IN (select table_name, constraint_name -- then disable all constraints
+from user_constraints
+where status = 'ENABLED')
+loop
+EXECUTE IMMEDIATE 'alter table ' ||i.table_name|| ' disable constraint ' ||i.constraint_name;
+
+end loop i;
+
+UPDATE CATISSUE_SPECIMEN_EVENT_PARAM
+SET SPECIMEN_ID=NULL,SPECIMEN_COLL_GRP_ID=null
+WHERE
+IDENTIFIER NOT IN
+(SELECT IDENTIFIER FROM CATISSUE_TRANSFER_EVENT_PARAM
+UNION
+SELECT IDENTIFIER FROM CATISSUE_DISPOSAL_EVENT_PARAM);
+for i IN (select table_name, constraint_name -- then disable all constraints
+from user_constraints
+where status = 'DISABLED')
+loop
+EXECUTE IMMEDIATE 'alter table ' ||i.table_name|| ' enable constraint ' ||i.constraint_name;
+
+end loop i;
+End;
+
+
+end caller;

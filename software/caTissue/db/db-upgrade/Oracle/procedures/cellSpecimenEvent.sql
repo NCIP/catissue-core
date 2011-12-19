@@ -9,7 +9,10 @@ procedure cell_Event_migrate(event_name in varchar2) IS
      specimen_event_user_id INTEGER ; 
      specimen_event_param_id INTEGER ;
      specimen_comments varchar2(255);
-     specimen_timestamp Date;
+     specimen_timestamp timestamp;
+		parent_specimen_id Integer;
+		flag Integer;
+
      dispo_NEOPLASTIC NUMBER(20,10);
      dispo_VIABLE_CELL_PERCENTAGE NUMBER(20,10);
      query_text varchar2(1000);
@@ -25,13 +28,16 @@ procedure cell_Event_migrate(event_name in varchar2) IS
            spec.user_id,
            spec.comments,
            coll.NEOPLASTIC_CELLULARITY_PER,
-           coll.VIABLE_CELL_PERCENTAGE
+           coll.VIABLE_CELL_PERCENTAGE,
+		    absspec.parent_specimen_id
       from CATISSUE_CELL_SPE_REVIEW_PARAM coll,
-           catissue_specimen_event_param spec,
-	 catissue_specimen se
+          catissue_specimen_event_param spec,
+        catissue_specimen se,
+        catissue_abstract_specimen absspec
 	where
-      coll.identifier = spec.identifier and spec.specimen_id=se.identifier;
-
+      coll.identifier = spec.identifier 
+	  and spec.specimen_id=se.identifier 
+      and absspec.IDENTIFIER = se.identifier ;
 
 Begin
   
@@ -70,8 +76,18 @@ Begin
                             specimen_event_user_id,
                             specimen_comments,
                             dispo_NEOPLASTIC,
-                            dispo_VIABLE_CELL_PERCENTAGE;
+                            dispo_VIABLE_CELL_PERCENTAGE,
+							 parent_specimen_id;
       EXIT WHEN mig_cursor%NOTFOUND;
+	  	   
+	   select count(*) into flag  from 
+        catissue_received_event_param rec,
+        catissue_specimen_event_param spec
+        where 
+        spec.specimen_id =parent_specimen_id
+        and spec.event_timestamp = specimen_timestamp
+        and spec.identifier=rec.identifier ;
+       IF flag=0 THEN 
       Begin
       -- DBMS_OUTPUT.PUT_LINE(specimen_event_identifier||'  '||specimen_id||'  '||specimen_timestamp||' '||specimen_event_user_id||' '||specimen_comments||' '||dispo_reason);                 
       -------------------------------------------------------------------
@@ -103,7 +119,7 @@ Begin
     
     
      --DBMS_OUTPUT.PUT_LINE(specimen_id||'  '||specimen_event_identifier||'  '||seqval);
-      EXECUTE IMMEDIATE query_text using dispo_NEOPLASTIC,dispo_VIABLE_CELL_PERCENTAGE,specimen_event_identifier, seqval; 
+      EXECUTE IMMEDIATE query_text using specimen_event_identifier,dispo_NEOPLASTIC,dispo_VIABLE_CELL_PERCENTAGE, seqval; 
      -- DBMS_OUTPUT.PUT_LINE(query_text_form);
     
      counter :=counter+1;
@@ -114,6 +130,7 @@ Begin
       v_errm := SUBSTR(SQLERRM, 1, 1000);
       DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter );
       end;
+	  end IF;
      
      ------------------------------------------------------------------------------------
     end loop; 

@@ -9,7 +9,9 @@ procedure Tissue_Specimen_Event_migrate(event_name in varchar2) IS
      specimen_event_user_id INTEGER ; 
      specimen_event_param_id INTEGER ;
      specimen_comments varchar2(1000);
-     specimen_timestamp Date;
+     specimen_timestamp timestamp;
+		parent_specimen_id Integer;
+		flag Integer;
      dispo_NEO Number (20);
      dispo_NEC Number(20);
      dispo_LYM Number(20,5);
@@ -31,12 +33,16 @@ procedure Tissue_Specimen_Event_migrate(event_name in varchar2) IS
            Tis.NECROSIS_PERCENTAGE,
            Tis.LYMPHOCYTIC_PERCENTAGE,
            Tis.TOTAL_CELLULARITY_PERCENTAGE,
-           Tis.HISTOLOGICAL_QUALITY
+           Tis.HISTOLOGICAL_QUALITY,
+		   absspec.parent_specimen_id
       from CATISSUE_TIS_SPE_EVENT_PARAM Tis,
-           catissue_specimen_event_param spec,
-	 catissue_specimen se
+        catissue_specimen_event_param spec,
+        catissue_specimen se,
+        catissue_abstract_specimen absspec
 	where
-      Tis.identifier = spec.identifier and spec.specimen_id=se.identifier;
+     Tis.identifier = spec.identifier 
+      and spec.specimen_id=se.identifier 
+      and absspec.IDENTIFIER = se.identifier ;
 
 
 Begin
@@ -66,20 +72,8 @@ Begin
       open mig_cursor;
 
      
-          while counter <=35100 LOOP
-           fetch mig_cursor into specimen_event_identifier,
-                            specimen_id,
-                            specimen_timestamp,
-                            specimen_event_user_id,
-                            specimen_comments,
-                            dispo_NEO,
-                            dispo_NEC, 
-                            dispo_LYM,
-                            dispo_TOT, 
-                            dispo_HIS;
-              
-               counter :=counter+1;
-          End LOOP;
+        
+					
       
       
       LOOP
@@ -94,10 +88,18 @@ Begin
                             dispo_NEC, 
                             dispo_LYM,
                             dispo_TOT, 
-                            dispo_HIS;
+                            dispo_HIS,
+                            parent_specimen_id;
    
       EXIT WHEN mig_cursor%NOTFOUND;
-      
+        select count(*) into flag  from 
+        catissue_received_event_param rec,
+        catissue_specimen_event_param spec
+        where 
+        spec.specimen_id =parent_specimen_id
+        and spec.event_timestamp = specimen_timestamp
+        and spec.identifier=rec.identifier ;
+       IF flag=0 THEN 
        -- 
        Begin
       -------------------------------------------------------------------
@@ -127,7 +129,7 @@ Begin
     
    
     -- DBMS_OUTPUT.PUT_LINE(specimen_id||'  '||specimen_event_identifier||'  '||seqval);
-     EXECUTE IMMEDIATE query_text using  dispo_HIS,dispo_TOT,dispo_NEO,dispo_NEC,dispo_LYM,specimen_event_identifier, seqval; 
+     EXECUTE IMMEDIATE query_text using  dispo_HIS,specimen_event_identifier,dispo_LYM,dispo_NEC,dispo_NEO,dispo_TOT,seqval; 
      -- DBMS_OUTPUT.PUT_LINE('h='||dispo_HIS||' tot= '||dispo_TOT||' neo= '||dispo_NEO||' nec= '||dispo_NEC||' lym= '||dispo_LYM||' id= '||specimen_event_identifier||' seq= '|| seqval);
      --DBMS_OUTPUT.PUT_LINE('dybtbl');
      
@@ -143,6 +145,7 @@ Begin
     DBMS_OUTPUT.PUT_LINE(counter);
    
       end;
+	   end IF;
        End LOOP;
    close mig_cursor; 
     ------------------------------------------------------------------

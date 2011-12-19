@@ -9,7 +9,9 @@ procedure Mol_migrate(event_name in varchar2) IS
      specimen_event_user_id INTEGER ; 
      specimen_event_param_id INTEGER ;
      specimen_comments varchar2(1000);
-     specimen_timestamp Date;
+     specimen_timestamp timestamp;
+		parent_specimen_id Integer;
+		flag Integer;
      dispo_Imgurl Varchar2(1000);
      dispo_QIx Varchar2(1000);
      dispo_Lno Varchar2(1000);
@@ -35,12 +37,16 @@ procedure Mol_migrate(event_name in varchar2) IS
            TRAN.GEL_NUMBER,
            TRAN.ABSORBANCE_AT_260,
            TRAN.ABSORBANCE_AT_280,
-           TRAN.RATIO_28S_TO_18S
+           TRAN.RATIO_28S_TO_18S,
+		    absspec.parent_specimen_id
       from CATISSUE_MOL_SPE_REVIEW_PARAM TRAN,
-           catissue_specimen_event_param spec,
-	 catissue_specimen se
+            catissue_specimen_event_param spec,
+        catissue_specimen se,
+        catissue_abstract_specimen absspec
 	where
-      TRAN.identifier = spec.identifier and spec.specimen_id=se.identifier;
+      TRAN.identifier = spec.identifier 
+      and spec.specimen_id=se.identifier 
+      and absspec.IDENTIFIER = se.identifier ;
 
 
 Begin
@@ -85,8 +91,17 @@ Begin
                             dispo_Gel_no, 
                             dispo_Abs_260,
                             dispo_Abs_280,
-                            dispo_Ratio_28s;
-    EXIT WHEN mig_cursor%NOTFOUND;      
+                            dispo_Ratio_28s,
+							parent_specimen_id;
+    EXIT WHEN mig_cursor%NOTFOUND;
+		 select count(*) into flag  from 
+        catissue_received_event_param rec,
+        catissue_specimen_event_param spec
+        where 
+        spec.specimen_id =parent_specimen_id
+        and spec.event_timestamp = specimen_timestamp
+        and spec.identifier=rec.identifier ;
+       IF flag=0 THEN 
       Begin
       -- DBMS_OUTPUT.PUT_LINE(specimen_event_identifier||'  '||specimen_id||'  '||specimen_timestamp||' '||specimen_event_user_id||' '||specimen_comments||' '||dispo_reason);                 
       -------------------------------------------------------------------
@@ -115,7 +130,7 @@ Begin
     
     
      --DBMS_OUTPUT.PUT_LINE(specimen_id||'  '||specimen_event_identifier||'  '||seqval);
-      EXECUTE IMMEDIATE query_text using dispo_Abs_260,dispo_Ratio_28s,dispo_QIx,dispo_Lno,dispo_Gel_no,dispo_Imgurl,dispo_Abs_280,specimen_event_identifier, seqval; 
+      EXECUTE IMMEDIATE query_text using dispo_Abs_260,dispo_Abs_280,dispo_Imgurl,dispo_Gel_no,specimen_event_identifier,dispo_Lno,dispo_QIx,dispo_Ratio_28s,seqval; 
      -- DBMS_OUTPUT.PUT_LINE(query_text_form);
      
      counter :=counter+1;
@@ -126,6 +141,7 @@ Begin
       v_errm := SUBSTR(SQLERRM, 1, 1000);
       DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter );
       end;
+	  end IF;
      
     end loop;   
     DBMS_OUTPUT.PUT_LINE(counter);

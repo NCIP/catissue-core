@@ -10,8 +10,10 @@ procedure Frozen_migrate_call(event_name in varchar2) IS
      specimen_event_user_id INTEGER ;
      specimen_event_param_id INTEGER ;
      specimen_comments varchar2(255);
-     specimen_timestamp Date;
-     dispo_reason varchar2(255);
+     specimen_timestamp timestamp;
+		parent_specimen_id Integer;
+		flag Integer;
+    dispo_reason varchar2(1000);
      query_text varchar2(1000);
      query_text_form varchar2(1000);
       
@@ -24,12 +26,16 @@ procedure Frozen_migrate_call(event_name in varchar2) IS
            spec.event_timestamp,
            spec.user_id,
            spec.comments,
-           FROZ.method
+           FROZ.method,
+		   absspec.parent_specimen_id
       from CATISSUE_FROZEN_EVENT_PARAM FROZ,
            catissue_specimen_event_param spec,
-   catissue_specimen se
+        catissue_specimen se,
+        catissue_abstract_specimen absspec
 	where
-      FROZ.identifier = spec.identifier and spec.specimen_id=se.identifier;
+      FROZ.identifier = spec.identifier 
+      and spec.specimen_id=se.identifier 
+      and absspec.IDENTIFIER = se.identifier ;
 
 
 Begin
@@ -66,9 +72,19 @@ Begin
                             specimen_timestamp,
                             specimen_event_user_id,
                             specimen_comments,
-                            dispo_reason;
+                            dispo_reason,
+							parent_specimen_id;
   
      EXIT WHEN mig_cursor%NOTFOUND;
+	 
+	 select count(*) into flag  from 
+        catissue_received_event_param rec,
+        catissue_specimen_event_param spec
+        where 
+        spec.specimen_id =parent_specimen_id
+        and spec.event_timestamp = specimen_timestamp
+        and spec.identifier=rec.identifier ;
+       IF flag=0 THEN 
      --------
      Begin
      --------
@@ -98,7 +114,7 @@ Begin
    
    
   
-      EXECUTE IMMEDIATE query_text using dispo_reason, specimen_event_identifier, seqval;
+      EXECUTE IMMEDIATE query_text using  specimen_event_identifier,dispo_reason,seqval;
      -- DBMS_OUTPUT.PUT_LINE(query_text_form);
      NULL;
      EXCEPTION WHEN OTHERS THEN
@@ -106,6 +122,7 @@ Begin
       v_errm := SUBSTR(SQLERRM, 1, 1000);
       DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter );
       end;
+	   end IF;
     end loop;         
    close mig_cursor;
     ------------------------------------------------------------------

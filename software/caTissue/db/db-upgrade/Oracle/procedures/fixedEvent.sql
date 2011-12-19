@@ -9,7 +9,9 @@ procedure Fixed_Event_migrate(event_name in varchar2) IS
      specimen_event_user_id INTEGER ; 
      specimen_event_param_id INTEGER ;
      specimen_comments varchar2(255);
-     specimen_timestamp Date;
+     specimen_timestamp timestamp;
+		parent_specimen_id Integer;
+		flag Integer;
      dispo_FIXATION_TYPE varchar2(255);
      dispo_DUR_min Integer;
      query_text varchar2(1000);
@@ -25,12 +27,16 @@ procedure Fixed_Event_migrate(event_name in varchar2) IS
            spec.user_id,
            spec.comments,
            coll.FIXATION_TYPE,
-           coll.DURATION_IN_MINUTES
+           coll.DURATION_IN_MINUTES,
+		   absspec.parent_specimen_id
        from CATISSUE_FIXED_EVENT_PARAM coll,
-       catissue_specimen_event_param spec,
-	catissue_specimen se
+        catissue_specimen_event_param spec,
+        catissue_specimen se,
+        catissue_abstract_specimen absspec
 	where
-      coll.identifier = spec.identifier and spec.specimen_id=se.identifier;
+      coll.identifier = spec.identifier 
+      and spec.specimen_id=se.identifier 
+      and absspec.IDENTIFIER = se.identifier ;
 
 Begin
   
@@ -69,8 +75,17 @@ Begin
                             specimen_event_user_id,
                             specimen_comments,
                             dispo_FIXATION_TYPE,
-                            dispo_DUR_min;
+                            dispo_DUR_min,
+							parent_specimen_id;
       EXIT WHEN mig_cursor%NOTFOUND;
+	  select count(*) into flag  from 
+        catissue_received_event_param rec,
+        catissue_specimen_event_param spec
+        where 
+        spec.specimen_id =parent_specimen_id
+        and spec.event_timestamp = specimen_timestamp
+        and spec.identifier=rec.identifier ;
+       IF flag=0 THEN 
       --------
       Begin
       --------
@@ -111,6 +126,7 @@ Begin
       v_errm := SUBSTR(SQLERRM, 1, 1000);
       DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter );
       end;
+	  end IF;
      
     end loop; 
      
