@@ -1815,54 +1815,76 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 	public void updateAgeAtCollection(Participant newObject,Participant oldObject) throws BizLogicException
 	{
 		String sql;
-		Date newDOB = newObject.getBirthDate();
-		Date oldDOB = oldObject.getBirthDate();
-		if( !(newDOB==null && oldDOB==null) && ((newDOB == null && oldDOB != null) ||
-			(newDOB != null && oldDOB == null) ||
-			(!newDOB.equals(oldDOB))))
+		if(isToUpdate(newObject.getBirthDate(), oldObject.getBirthDate()))
 		{
 			if (Constants.ORACLE_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
 						Constants.APPLICATION_NAME).getDataBaseType()))
 			{
+				String cprInValue="(";
+				Collection<CollectionProtocolRegistration> cpr_list=newObject.getCollectionProtocolRegistrationCollection();
+				if(cpr_list!=null && !cpr_list.isEmpty())
+				{
+					for (final CollectionProtocolRegistration cpr : cpr_list) {
+						if(cpr!=null)
+						{
+							cprInValue=cprInValue+String.valueOf(cpr.getId())+",";
+						}
+						
+					}
+				}
+				cprInValue=cprInValue+")";
 					//Oracle
-					sql="UPDATE catissue_specimen_coll_group scg " +
-							"set scg.AGE_AT_COLLECTION=(select round(((scg.ENCOUNTER_TIMESTAMP-part.BIRTH_DATE)/365),0) " +
-								"from catissue_coll_prot_reg cpr ,catissue_participant part " +
-									"where scg.COLLECTION_PROTOCOL_REG_ID=cpr.identifier " +
-									"AND part.identifier=cpr.PARTICIPANT_ID " +
-										"AND part.identifier="+newObject.getId()+")";
+				sql="UPDATE catissue_specimen_coll_group scg "+ 
+							"set scg.AGE_AT_COLLECTION=(select round(((scg.ENCOUNTER_TIMESTAMP-part.BIRTH_DATE)/365),0) "+ 
+								" from catissue_coll_prot_reg cpr ,catissue_participant part "+ 
+									" where scg.COLLECTION_PROTOCOL_REG_ID=cpr.IDENTIFIER "+ 
+									" AND part.IDENTIFIER=cpr.PARTICIPANT_ID "+ 
+										" AND part.IDENTIFIER="+newObject.getId()+") "+ 
+										" where scg.COLLECTION_PROTOCOL_REG_ID IN"+cprInValue;
 			}
 			else
 			{
 					//MySQL
-					sql="UPDATE catissue_specimen_coll_group scg " +
-							"set scg.AGE_AT_COLLECTION=(select round((datediff(scg.ENCOUNTER_TIMESTAMP,part.BIRTH_DATE)/365),0) " +
-								"from catissue_coll_prot_reg cpr ,catissue_participant part " +
-									"where scg.COLLECTION_PROTOCOL_REG_ID=cpr.identifier " +
-									"AND part.identifier=cpr.PARTICIPANT_ID " +
-									"AND part.identifier="+newObject.getId()+")";
+				sql="update catissue_specimen_coll_group scg JOIN catissue_coll_prot_reg cpr on scg.COLLECTION_PROTOCOL_REG_ID=cpr.identifier "+
+						" JOIN catissue_participant part ON cpr.PARTICIPANT_ID=part.identifier "+
+						  " set scg.AGE_AT_COLLECTION=round((datediff(scg.ENCOUNTER_TIMESTAMP,part.BIRTH_DATE)/365),0) "+
+						  " where part.identifier="+newObject.getId();
 			}
 			JDBCDAO jdbcdao=null;
 			try 
 			{
-				jdbcdao = AppUtility.openJDBCSession();
-				jdbcdao.executeUpdate(sql);
+						jdbcdao = AppUtility.openJDBCSession();
+						jdbcdao.executeUpdate(sql);
+						jdbcdao.commit();
 			} 
 			catch (ApplicationException e) 
 			{
-				throw this.getBizLogicException(null, "error.update.ageAtCollection", ""); 	
+					throw this.getBizLogicException(null, "error.update.ageAtCollection", ""); 	
 			}
 			finally
-			{
-				try 
 				{
-					AppUtility.closeJDBCSession(jdbcdao);
-				} 
-				catch(ApplicationException e) 
-				{
-					throw this.getBizLogicException(null, "error.update.ageAtCollection", "");
+					try 
+					{
+						AppUtility.closeJDBCSession(jdbcdao);
+					} 
+					catch(ApplicationException e) 
+					{
+						throw this.getBizLogicException(null, "error.update.ageAtCollection", "");
+					}
 				}
 			}
-        }
+	}
+	public boolean isToUpdate(Date newDOB,Date oldDOB)
+	{
+		if( !(newDOB==null && oldDOB==null) && ((newDOB == null && oldDOB != null) ||
+				(newDOB != null && oldDOB == null) ||
+				(!newDOB.equals(oldDOB))))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

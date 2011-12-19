@@ -707,7 +707,7 @@ function calculateAge()
 Date birthDateObject=(Date)request.getAttribute("dob");
 String birthDateString=""; 
 String collectionDateString=""; 
-String showageDiffString="";
+String showageDiffString=form.getAgeAtCollection();
 int collectionMinute=0;		
 int collectionHour=0; 		
 Long diffday=new Long(0);   
@@ -721,16 +721,16 @@ if(collectionDateString!=null)
 	if(birthDateObject!=null)
 	{
 		birthDateString=convertDateFormat.format(birthDateObject);
-		encounterTimeStampDate=(Date)convertDateFormat.parse(collectionDateString);		
-		//collectionDateString=convertDateFormat.format(encounterTimeStampDate);
-		diffday=(encounterTimeStampDate.getTime() - birthDateObject.getTime()) /(24 * 60 * 60 * 1000);
-		ageDiff=Double.valueOf(diffday) / (365);
-		showageDiffString=twoDigitDecimal.format(ageDiff).toString();
-		//Date collectionDate=(form.getEncounterTimeStamp());
-		//collectionDateString = convertDateFormat.format(collectionDate);
-		collectionMinute=encounterTimeStampDate.getMinutes();
-		collectionHour=encounterTimeStampDate.getHours();
-		form.setAgeAtCollection(showageDiffString);
+		if(form.getAgeAtCollection()==null)
+		{
+			encounterTimeStampDate=(Date)convertDateFormat.parse(collectionDateString);		
+			diffday=(encounterTimeStampDate.getTime() - birthDateObject.getTime()) /(24 * 60 * 60 * 1000);
+			ageDiff=Double.valueOf(diffday) / (365);
+			showageDiffString=twoDigitDecimal.format(ageDiff).toString();
+			collectionMinute=encounterTimeStampDate.getMinutes();
+			collectionHour=encounterTimeStampDate.getHours();
+			form.setAgeAtCollection(showageDiffString);
+		}
 	}
 }
 else
@@ -747,7 +747,6 @@ else
 			showageDiffString=twoDigitDecimal.format(ageDiff).toString();
 			form.setAgeAtCollection(showageDiffString);
 		}
-		
 }
 %>
 <html:form action="<%=formName%>">
@@ -872,6 +871,7 @@ else
 showPriterTypeLocation();
 </script>
 </body>
+
 
 
 
