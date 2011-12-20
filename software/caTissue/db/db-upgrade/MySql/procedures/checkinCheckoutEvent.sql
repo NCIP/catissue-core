@@ -8,6 +8,8 @@ Begin
   declare record_not_found integer default 0;
   declare form_context_id integer default 1;
   declare seq_ver long ;
+  declare flag integer ;
+
   
   declare specimen_event_identifier integer ;
   declare specimen_id integer ;
@@ -35,7 +37,7 @@ Begin
            spec.event_timestamp,
            spec.user_id,
            spec.comments,
-           dispo.STORAGE_STATUS
+           dispo.STORAGE_STATUS,
 		   absspec.parent_specimen_id
       from   catissue_in_out_event_param dispo,
       catissue_specimen_event_param spec,
@@ -86,7 +88,7 @@ Begin
                             specimen_event_user_id,
                             specimen_comments,
                             dispo_STORAGE_STATUS,
-						absspec.parent_specimen_id;
+                            parent_specimen_id;
       if record_not_found then LEAVE itr;
       end if;
       

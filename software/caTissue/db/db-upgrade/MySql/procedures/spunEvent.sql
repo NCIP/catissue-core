@@ -9,6 +9,7 @@ create procedure   spun_Event_migrate()
   declare record_not_found integer default 0;
   declare form_context_id integer default 1;
   declare seq_ver long ;
+  declare flag integer ;
   
   declare specimen_event_identifier integer ;
   declare specimen_id integer ;
