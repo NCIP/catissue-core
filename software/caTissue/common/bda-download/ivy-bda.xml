@@ -113,7 +113,7 @@ This is the definition of a virtual module called bda-download that has a depend
     <dependency org="gov.nih.nci.catissue" name="query" rev="1.0-SNAPSHOT" conf="app_lib->*" transitive="false"/>
     <dependency org="gov.nih.nci.catissue" name="keyword-search" rev="1.0-SNAPSHOT" conf="app_lib->*" transitive="false"/>
     <dependency org="gov.nih.nci.catissue" name="security-manager" rev="1.1.7.3-SNAPSHOT" conf="app_lib->*" transitive="false"/>
-    <dependency org="gov.nih.nci.catissue" name="dynamic-extensions" rev="1.5.2.w1-SNAPSHOT" conf="de->*" transitive="false"/>
+    <dependency org="gov.nih.nci.catissue" name="dynamic-extensions" rev="1.5.2.w2.i1-SNAPSHOT" conf="de->*" transitive="false"/>
 
     <dependency org="gov.nih.nci.catissue" name="bulk-operations" rev="2.2" conf="bo->*" transitive="false"/>
 
