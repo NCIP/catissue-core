@@ -133,7 +133,7 @@ function init_grid()
 	mygrid.setSkin("light");
 	mygrid.enableAlterCss("even","uneven");
 	//mygrid.setColAlign("left,left")
-	alert(colTypes);
+	
 	mygrid.setColSorting(colTypes);
 	mygrid.enableMultiselect(true)
 	mygrid.init();
