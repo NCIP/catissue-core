@@ -94,12 +94,12 @@ Begin
       
        #-----------------------------------------------------------------
       select count(*) into flag  from 
-        catissue_received_event_param emb,
+        catissue_frozen_event_param froz,
         catissue_specimen_event_param spec
         where 
         spec.specimen_id =parent_specimen_id
         and spec.event_timestamp = specimen_timestamp
-        and spec.identifier=emb.identifier ;
+        and spec.identifier=froz.identifier ;
 
        IF (flag=0) THEN 
                        
