@@ -718,6 +718,8 @@ Date encounterTimeStampDate;
 collectionDateString=form.getCollectionDate();
 if(collectionDateString!=null)
 {
+	collectionMinute=Integer.valueOf(form.getTimeInMinute());
+	collectionHour=Integer.valueOf(form.getTimeInHour());
 	if(birthDateObject!=null)
 	{
 		birthDateString=convertDateFormat.format(birthDateObject);
@@ -727,9 +729,6 @@ if(collectionDateString!=null)
 			diffday=(encounterTimeStampDate.getTime() - birthDateObject.getTime()) /(24 * 60 * 60 * 1000);
 			ageDiff=Double.valueOf(diffday) / (365);
 			showageDiffString=twoDigitDecimal.format(ageDiff).toString();
-			collectionMinute=encounterTimeStampDate.getMinutes();
-			collectionHour=encounterTimeStampDate.getHours();
-			form.setAgeAtCollection(showageDiffString);
 		}
 	}
 }
@@ -745,7 +744,6 @@ else
 			diffday=(defaultDate.getTime() - birthDateObject.getTime()) /(24 * 60 * 60 * 1000);
 			ageDiff=Double.valueOf(diffday) / (365);
 			showageDiffString=twoDigitDecimal.format(ageDiff).toString();
-			form.setAgeAtCollection(showageDiffString);
 		}
 }
 %>
