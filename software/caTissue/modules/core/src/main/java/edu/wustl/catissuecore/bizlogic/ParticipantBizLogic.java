@@ -12,8 +12,9 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -28,8 +29,6 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
-import com.sleepycat.examples.collections.shipment.entity.Part;
-
 import edu.wustl.catissuecore.dao.GenericDAO;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -38,6 +37,7 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
 import edu.wustl.catissuecore.factory.ParticipantFactory;
@@ -73,7 +73,6 @@ import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.global.Permissions;
@@ -118,6 +117,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 		{
 			//Participant participant = insertParticipant(obj, dao);
 			InstanceFactory<ParticipantMedicalIdentifier> instFact = DomainInstanceFactory.getInstanceFactory(ParticipantMedicalIdentifier.class);
+			handleRecordEntry((Participant)obj, sessionDataBean.getUserName());
 			Participant participant= (Participant) CommonParticipantBizlogic.insert(obj, dao,
 					instFact.createObject());
 			resisterCPR(dao, sessionDataBean, participant);
@@ -127,6 +127,15 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 			logger.error(daoExp.getMessage(), daoExp);
 			throw this
 			.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
 		}
 	}
 	/**
@@ -378,6 +387,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 			final Participant oldParticipant = (Participant) oldObj;
 			setPMI(participant);
 			final CommonParticipantBizlogic comBizLogic = new CommonParticipantBizlogic();
+			handleRecordEntry(participant, sessionDataBean.getUserName());
 			comBizLogic.modifyParticipantObject(dao, sessionDataBean, participant, oldParticipant);
 			updateCPR(dao, sessionDataBean, participant, oldParticipant, uiObject);
 			logger.debug("participant.getActivityStatus() " + participant.getActivityStatus());
@@ -391,6 +401,15 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 			logger.error(daoExp.getMessage(), daoExp);
 			throw this
 			.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
 		}
 	}
 	/**
@@ -1885,6 +1904,29 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 		else
 		{
 			return false;
+		}
+	}
+	
+	private void handleRecordEntry(Participant obj, String userName) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, BizLogicException 
+	{
+		if(obj.getParticipantRecordEntryCollection() != null)
+		{
+				for (ParticipantRecordEntry participantRecordEntry : obj.getParticipantRecordEntryCollection()) 
+				{
+					Method[] methods = participantRecordEntry.getClass().getMethods();
+					for (Method method : methods) 
+					{
+						if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
+						{
+							Object val = method.invoke(participantRecordEntry, (Object[])null);
+							if(val instanceof Set || val instanceof Collection)
+							{
+								AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+								bizLogic.updateRecNtry(userName, participantRecordEntry,val);
+							}
+						}
+					}
+				}
 		}
 	}
 }

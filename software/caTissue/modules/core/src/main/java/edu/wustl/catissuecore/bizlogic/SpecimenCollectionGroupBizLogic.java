@@ -13,6 +13,8 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.hibernate.LazyInitializationException;
@@ -42,6 +45,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
 import edu.wustl.catissuecore.factory.utils.SpecimenUtility;
@@ -76,11 +80,9 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.HibernateDAO;
-import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
@@ -218,6 +220,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			// This check is added if empty values added by UI tnen shud add
 			// default values in parameters
 			this.checkSCGEvents(scg.getSpecimenEventParametersCollection(), sessionDataBean);
+			handleRecordEntry(scg, sessionDataBean.getUserName());
 			dao.insert(scg);
 			/*if (specimenColl != null && !reportLoaderFlag
 					&& scg.getIsToInsertAnticipatorySpecimens())*/
@@ -252,6 +255,35 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		} catch (final ParseException e) {
 			// TODO Auto-generated catch block
 			//throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		} catch (IllegalArgumentException e) {
+			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
+		} catch (IllegalAccessException e) {
+			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
+		} catch (InvocationTargetException e) {
+			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
+		}
+	}
+	
+	private void handleRecordEntry(SpecimenCollectionGroup scg, String userName) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, BizLogicException 
+	{
+		if(scg.getScgRecordEntryCollection() != null)
+		{
+				for (SCGRecordEntry scgRecordEntry: scg.getScgRecordEntryCollection()) 
+				{
+					Method[] methods = scgRecordEntry.getClass().getMethods();
+					for (Method method : methods) 
+					{
+						if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
+						{
+							Object val = method.invoke(scgRecordEntry, (Object[])null);
+							if(val instanceof Set || val instanceof Collection)
+							{
+								AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+								bizLogic.updateRecNtry(userName, scgRecordEntry,val);
+							}
+						}
+					}
+				}
 		}
 	}
 
@@ -721,6 +753,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			persistentSCG.setClinicalStatus(specimenCollectionGroup.getClinicalStatus());
 			persistentSCG.setName(specimenCollectionGroup.getName());
 			persistentSCG.setEncounterTimestamp(specimenCollectionGroup.getEncounterTimestamp());
+			persistentSCG.setScgRecordEntryCollection(specimenCollectionGroup.getScgRecordEntryCollection());
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			final ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
 			Date birthDate=participantBizLogic.getDateOfBirth(specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant());
@@ -752,7 +785,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				persistentSCG.setCollectionProtocolRegistration(specimenCollectionGroup
 						.getCollectionProtocolRegistration());
 			}
-
+			handleRecordEntry(persistentSCG, sessionDataBean.getUserName());
 			dao.update(persistentSCG, oldspecimenCollectionGroup);
 
 			/**
@@ -792,6 +825,15 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		} catch (ParseException parseExp) {
 			
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
 		}
 	}
 

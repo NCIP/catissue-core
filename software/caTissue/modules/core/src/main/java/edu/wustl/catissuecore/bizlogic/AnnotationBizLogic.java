@@ -14,14 +14,18 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import edu.common.dynamicextensions.domain.integration.AbstractRecordEntry;
+import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
+import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsCacheException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
+import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.deintegration.DEIntegration;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -200,6 +204,26 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 
 		return dynEntitiesIdList;
 	}
+	
+	/**
+	* @param fullyQualifiedName e.g edu.wustl.clinportal.domain.Participant
+	* @return
+	*/
+	public static Long getContainerId(String fullyQualifiedName)
+	{
+		String packageName = fullyQualifiedName.substring(0,fullyQualifiedName.lastIndexOf("."));
+		for(EntityGroupInterface entityGroup:EntityCache.getInstance().getEntityGroups())
+		{
+			if(packageName.equals(entityGroup.getTaggedValue("PackageName")))
+			{
+				String name = fullyQualifiedName.substring(fullyQualifiedName.lastIndexOf(".")+1).trim();
+				return ((ContainerInterface)entityGroup.getEntityByName(
+				name)
+				.getContainerCollection().iterator().next()).getId();
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Get Study Form Context.
@@ -219,6 +243,24 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		{
 			return null;
 		}
+	}
+	
+	public void updateRecNtry(String userName, AbstractRecordEntry recordEntry, Object val)
+			throws BizLogicException 
+	{
+		
+		String className = null;
+		if(val instanceof Set)
+			className = ((java.util.Set) val).iterator().next().getClass().getName();
+		else 
+			className = ((Collection) val).iterator().next().getClass().getName();
+		
+		
+		Long id = getContainerId(className);
+		StudyFormContext context = getStudyFormContext(id);//tudyFormContextFactory.getInstance().createObject();
+		recordEntry.setFormContext(context);
+		recordEntry.setModifiedDate(new Date());
+		recordEntry.setModifiedBy(userName);
 	}
 
 	/**

@@ -10,6 +10,8 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -57,6 +59,7 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry;
 import edu.wustl.catissuecore.domain.processingprocedure.Action;
 import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
@@ -248,6 +251,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					pos1, pos2, specUiObject);
 			SpecimenUtility.doRoundOff(specimen);
 			checkLabel(specimen);
+			handleRecordEntry(specimen,sessionDataBean.getUserName());
 			dao.insert(specimen);
 			if (specimen.getSpecimenPosition() != null) {
 				final StringBuffer posBuffer = new StringBuffer();
@@ -266,6 +270,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			LOGGER.error(exp.getMessage(), exp);
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(),
 					exp.getMsgValues());
+		} catch (IllegalArgumentException exp) {
+			LOGGER.error(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, "", Constants.FORM_CONTXT_ERR);	
+		} catch (IllegalAccessException exp) {
+			LOGGER.error(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, "", Constants.FORM_CONTXT_ERR);
+		} catch (InvocationTargetException exp) {
+			LOGGER.error(exp.getMessage(), exp);
+			throw this.getBizLogicException(exp, "", Constants.FORM_CONTXT_ERR);
 		}
 	}
 
@@ -2073,6 +2086,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			this.createPersistentSpecimenObj(dao, sessionDataBean, specimen,
 					specimenOld, persistentSpecimen);
 			specimen.setCreationEventAction(persistentSpecimen.getCreationEventAction());
+			handleRecordEntry(persistentSpecimen, sessionDataBean.getUserName());
 			dao.update(persistentSpecimen, specimenOld);
 
 			this.updateChildAttributes(specimen, specimenOld);
@@ -2103,8 +2117,19 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(),
 					daoExp.getMsgValues());
-		} catch (GSIDException e) {
-			throw getBizLogicException(null, e.getCustomizedMsg(), e.getCustomizedMsg());
+		} catch (GSIDException daoExp) {
+			LOGGER.error(daoExp.getMessage(), daoExp);
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(),
+					daoExp.getMsgValues());
+		} catch (IllegalArgumentException daoExp) {
+			LOGGER.error(daoExp.getMessage(), daoExp);
+			throw this.getBizLogicException(daoExp, "", Constants.FORM_CONTXT_ERR);
+		} catch (IllegalAccessException daoExp) {
+			LOGGER.error(daoExp.getMessage(), daoExp);
+			throw this.getBizLogicException(daoExp, "", Constants.FORM_CONTXT_ERR);
+		} catch (InvocationTargetException daoExp) {
+			LOGGER.error(daoExp.getMessage(), daoExp);
+			throw this.getBizLogicException(daoExp, "", Constants.FORM_CONTXT_ERR);
 		} finally {
 			this.storageContainerIds.clear();
 		}
@@ -2532,6 +2557,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		}
 		this.setExternalIdentifier(dao, specimen, persistentSpecimen);
 		updateCreationEvent(persistentSpecimen);
+		if(specimen.getSpecimenRecordEntryCollection() != null)
+		{
+			persistentSpecimen.setSpecimenRecordEntryCollection(specimen.getSpecimenRecordEntryCollection());
+		}
 	}
 
 	/**
@@ -6292,6 +6321,30 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 
 		}
 		return count;
+	}
+	
+	private void handleRecordEntry(Specimen obj, String userName) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, BizLogicException 
+	{
+		if(obj.getSpecimenRecordEntryCollection() != null)
+		{
+				for (SpecimenRecordEntry specimenRecordEntry : obj.getSpecimenRecordEntryCollection()) 
+				{
+					Method[] methods = specimenRecordEntry.getClass().getMethods();
+					for (Method method : methods) 
+					{
+						if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
+						{
+							Object val = method.invoke(specimenRecordEntry, (Object[])null);
+							if(val instanceof Set || val instanceof Collection)
+							{
+								AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+								bizLogic.updateRecNtry(userName, specimenRecordEntry,
+										val);
+							}
+						}
+					}
+				}
+		}
 	}
 
 }
