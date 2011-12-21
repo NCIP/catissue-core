@@ -3352,6 +3352,7 @@ Thanking You,
 	<property name="pv.file.name" value="" />
 
 	<target name="import_xmi" description="Import XMI">
+        <echo message=">>> IMPORTING XMI (deploy.xml) ..." />
 		<delete quiet="true" includeemptydirs="true">
 			<fileset dir="${prop.temp.dir}/catissuecore">
 				<include name="**/*" />
