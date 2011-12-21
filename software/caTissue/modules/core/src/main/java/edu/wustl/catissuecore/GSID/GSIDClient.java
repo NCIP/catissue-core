@@ -208,7 +208,7 @@ public class GSIDClient {
 			try {
 				identifier = client.registerGSID(suggestedIdentifier,
 						parentIdentifiers);
-				
+				GSIDServiceStatusNotifier.SERVICE_DOWN_FLAG = false;
 			} catch (NamingAuthorityConfigurationFault e) {
 				LOG.error(GSIDConstant.GSID_NAMINGAUTHORITY_CONFIG_ERROR, e);
 				throw new GSIDException(ErrorKey.getErrorKey(ERROR_KEY), e, GSIDConstant.GSID_NAMINGAUTHORITY_CONFIG_ERROR);

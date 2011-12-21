@@ -25,17 +25,26 @@ public class GSIDServiceStatusNotifier {
 	public static String TRIGGER_NAME = "GSIDServiceStatusNotifier";
 	//private static final Log LOG = LogFactory.getLog(GSIDClient.class);
 	private static Logger LOG = Logger.getLogger(GSIDClient.class);
+	
+	public static volatile boolean SERVICE_DOWN_FLAG;
 
 	/**
 	 * send service down message 
 	 */
 	public void sendServiceStatusFailureEmail() {
-		List<String> adminEmails = getAllAdminEmails();
-		EmailHandler emailHandler = new EmailHandler();
-		GSIDClient client = new GSIDClient();
-		String subject = "caTissue GSID Service is Down ";  
-		String body = " caTissue is configured to fetch GSIDs for new biospecimens from "+client.getUrl()+".  The service is currently down.  Please contact the administrator of the GSID service.  You will be notified when the service is again available.  At that time, you will need to utilize the GSID batch fetching tool in caTissue to assign GSIDs to all biospecimens that were created while the service was down.";
-		emailHandler.sendGsIdServiceStatusEmail((String[]) adminEmails.toArray(new String[0]), subject , body );
+		if (!SERVICE_DOWN_FLAG) {
+			List<String> adminEmails = getAllAdminEmails();
+			EmailHandler emailHandler = new EmailHandler();
+			GSIDClient client = new GSIDClient();
+			String subject = "caTissue GSID Service is Down ";
+			String body = " caTissue is configured to fetch GSIDs for new biospecimens from "
+					+ client.getUrl()
+					+ ".  The service is currently down.  Please contact the administrator of the GSID service.  You will be notified when the service is again available.  At that time, you will need to utilize the GSID batch fetching tool in caTissue to assign GSIDs to all biospecimens that were created while the service was down.";
+			emailHandler.sendGsIdServiceStatusEmail(
+					(String[]) adminEmails.toArray(new String[0]), subject,
+					body);
+		}
+		SERVICE_DOWN_FLAG = true;
 		// enable job to run only once ...
 	}
 	
@@ -49,6 +58,7 @@ public class GSIDServiceStatusNotifier {
 		String subject = "caTissue GSID Service is Back Up  ";
 		String body = " caTissue is configured to fetch GSIDs for new biospecimens from "+client.getUrl()+".  The service is now back up.  Please utilize the GSID batch fetching tool in caTissue to assign GSIDs to all biospecimens that were created while the service was down. ";
 		emailHandler.sendGsIdServiceStatusEmail((String[]) adminEmails.toArray(new String[0]), subject , body );
+		SERVICE_DOWN_FLAG = false;
 	}
 	
 	/**
@@ -101,6 +111,7 @@ public class GSIDServiceStatusNotifier {
 			String identifier = "5784d1dd-9373-533e-8086-fd479fbd564e";
 			gsidClient.validateIdentifier(identifier);
 			serviceStatus = true;
+			SERVICE_DOWN_FLAG = false;
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			LOG.error(GSIDConstant.GSID_REGISTER_REMOTE_ERROR, e);
