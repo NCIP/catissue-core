@@ -25,7 +25,7 @@ $j(function(){
 		var speed=600;
 		var noOftimes=4;
 		if(specimen_id == 0){
-			alert ("Plase save the Specimen before assigning Global Specmen Identifier.");
+			alert ("Please save the Specimen before assigning a Global Specimen Identifier.");
 			return false;
 		}
 		if(specimen_id)

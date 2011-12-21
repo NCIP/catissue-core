@@ -3,5 +3,6 @@
 <%@ page import="edu.wustl.catissuecore.GSID.GSIDConstant" %>
 <% 
 String message= (String)request.getAttribute("GSIDMessage");
-out.println(message);
+if (message!=null)
+	out.println(message);
 %>
