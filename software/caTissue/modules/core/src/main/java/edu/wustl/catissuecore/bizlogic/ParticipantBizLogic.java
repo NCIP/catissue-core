@@ -12,6 +12,13 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -296,7 +303,6 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 		final Participant oldparticipant = (Participant) oldObj;
 		final Collection<CollectionProtocolRegistration> oldCPRCollection = oldparticipant
 		.getCollectionProtocolRegistrationCollection();
-		updateAgeAtCollection(participant, oldparticipant);
 		Long cpId;
 		String protPartiId;
 		CollectionProtocolRegistration oldCPRegistration;
@@ -390,6 +396,10 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 			handleRecordEntry(participant, sessionDataBean.getUserName());
 			comBizLogic.modifyParticipantObject(dao, sessionDataBean, participant, oldParticipant);
 			updateCPR(dao, sessionDataBean, participant, oldParticipant, uiObject);
+			if(isToUpdateSCG(participant.getBirthDate(), oldParticipant.getBirthDate()))
+			{
+				new SpecimenCollectionGroupBizLogic().updateAgeAtCollection(dao, participant);
+			}
 			logger.debug("participant.getActivityStatus() " + participant.getActivityStatus());
 			if (participant.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
@@ -401,6 +411,14 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 			logger.error(daoExp.getMessage(), daoExp);
 			throw this
 			.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		} 
+		catch (DAOException e) 
+		{
+			throw this.getBizLogicException(null, "error.update.ageAtCollection", ""); 
+		} catch (IOException e) {
+			throw this.getBizLogicException(null, "error.update.ageAtCollection", "");
+		} catch (ClassNotFoundException e) {
+			throw this.getBizLogicException(null, "error.update.ageAtCollection", "");
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
@@ -1825,75 +1843,8 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 		}
 		return true;
 	}
-	/**
-	 * This method gets called inside post update method.
-	 * @param currentObj The object to be updated.
-	 * @param oldObj The old object.
-	 * @throws BizLogicException throws BizLogicException
-	 * */
-	public void updateAgeAtCollection(Participant newObject,Participant oldObject) throws BizLogicException
-	{
-		String sql;
-		if(isToUpdate(newObject.getBirthDate(), oldObject.getBirthDate()))
-		{
-			if (Constants.ORACLE_DATABASE.equals(DAOConfigFactory.getInstance().getDAOFactory(
-						Constants.APPLICATION_NAME).getDataBaseType()))
-			{
-				String cprInValue="(";
-				Collection<CollectionProtocolRegistration> cpr_list=newObject.getCollectionProtocolRegistrationCollection();
-				if(cpr_list!=null && !cpr_list.isEmpty())
-				{
-					for (final CollectionProtocolRegistration cpr : cpr_list) {
-						if(cpr!=null)
-						{
-							cprInValue=cprInValue+String.valueOf(cpr.getId())+",";
-						}
-						
-					}
-				}
-				cprInValue=cprInValue+")";
-					//Oracle
-				sql="UPDATE catissue_specimen_coll_group scg "+ 
-							"set scg.AGE_AT_COLLECTION=(select round(((scg.ENCOUNTER_TIMESTAMP-part.BIRTH_DATE)/365),0) "+ 
-								" from catissue_coll_prot_reg cpr ,catissue_participant part "+ 
-									" where scg.COLLECTION_PROTOCOL_REG_ID=cpr.IDENTIFIER "+ 
-									" AND part.IDENTIFIER=cpr.PARTICIPANT_ID "+ 
-										" AND part.IDENTIFIER="+newObject.getId()+") "+ 
-										" where scg.COLLECTION_PROTOCOL_REG_ID IN"+cprInValue;
-			}
-			else
-			{
-					//MySQL
-				sql="update catissue_specimen_coll_group scg JOIN catissue_coll_prot_reg cpr on scg.COLLECTION_PROTOCOL_REG_ID=cpr.identifier "+
-						" JOIN catissue_participant part ON cpr.PARTICIPANT_ID=part.identifier "+
-						  " set scg.AGE_AT_COLLECTION=round((datediff(scg.ENCOUNTER_TIMESTAMP,part.BIRTH_DATE)/365),0) "+
-						  " where part.identifier="+newObject.getId();
-			}
-			JDBCDAO jdbcdao=null;
-			try 
-			{
-						jdbcdao = AppUtility.openJDBCSession();
-						jdbcdao.executeUpdate(sql);
-						jdbcdao.commit();
-			} 
-			catch (ApplicationException e) 
-			{
-					throw this.getBizLogicException(null, "error.update.ageAtCollection", ""); 	
-			}
-			finally
-				{
-					try 
-					{
-						AppUtility.closeJDBCSession(jdbcdao);
-					} 
-					catch(ApplicationException e) 
-					{
-						throw this.getBizLogicException(null, "error.update.ageAtCollection", "");
-					}
-				}
-			}
-	}
-	public boolean isToUpdate(Date newDOB,Date oldDOB)
+	
+	public boolean isToUpdateSCG(Date newDOB,Date oldDOB)
 	{
 		if( !(newDOB==null && oldDOB==null) && ((newDOB == null && oldDOB != null) ||
 				(newDOB != null && oldDOB == null) ||

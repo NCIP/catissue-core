@@ -32,6 +32,10 @@ import edu.wustl.common.util.global.Status;
 
 public class Constants
 {
+	/** Specify Time Factor for Age At Collection. */
+	public static final long TIME_FACTOR = 24 * 60 * 60 * 1000L;
+	/** Specify Year Factor for Age At Collection. */
+	public static final int YEAR_FACTOR = 365;
 	/** Specify Decimal Format String for Age At Collection. */
 	public static final String DECIMALFORMAT = "#.##";
 	

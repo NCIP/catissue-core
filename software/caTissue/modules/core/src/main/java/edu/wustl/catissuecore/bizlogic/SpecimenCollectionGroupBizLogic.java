@@ -13,6 +13,13 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
@@ -74,6 +81,7 @@ import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.DomainBeanIdentifierComparator;
+import edu.wustl.common.util.ObjectCloner;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
@@ -183,11 +191,10 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			Date birthDate=participantBizLogic.getDateOfBirth(scg.getCollectionProtocolRegistration().getParticipant());
 			Long diffday;
 			Integer ageDiff;
-			DecimalFormat twoDigitDecimal = new DecimalFormat(Constants.DECIMALFORMAT);
 			if(scg.getEncounterTimestamp()!=null && birthDate!=null && scg.getAgeAtCollection()==null)
 			{
-				diffday=(scg.getEncounterTimestamp().getTime() - birthDate.getTime()) /(24 * 60 * 60 * 1000);
-				ageDiff=Integer.valueOf(twoDigitDecimal.format(Double.valueOf(diffday) / (365)));
+				diffday=(scg.getEncounterTimestamp().getTime() - Math.abs(birthDate.getTime())) / Constants.TIME_FACTOR;
+				ageDiff=Integer.valueOf(String.valueOf((diffday / (Constants.YEAR_FACTOR))));
 				scg.setAgeAtCollection(ageDiff);
 			}
 			
@@ -755,20 +762,20 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			persistentSCG.setEncounterTimestamp(specimenCollectionGroup.getEncounterTimestamp());
 			persistentSCG.setScgRecordEntryCollection(specimenCollectionGroup.getScgRecordEntryCollection());
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
-			Date birthDate=participantBizLogic.getDateOfBirth(specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant());
-			Long diffday;
-			Integer ageDiff;
-			DecimalFormat twoDigitDecimal = new DecimalFormat(Constants.DECIMALFORMAT);
 			if(specimenCollectionGroup.getAgeAtCollection()!=null)
 			{
 				persistentSCG.setAgeAtCollection(specimenCollectionGroup.getAgeAtCollection());
 			}
-			else if(specimenCollectionGroup.getEncounterTimestamp()!=null && birthDate!=null)
+			else if(specimenCollectionGroup.getEncounterTimestamp()!=null)
 			{
-				diffday=(specimenCollectionGroup.getEncounterTimestamp().getTime() - birthDate.getTime()) /(24 * 60 * 60 * 1000);
-				ageDiff=Integer.valueOf(twoDigitDecimal.format(Double.valueOf(diffday) / (365)));
-				persistentSCG.setAgeAtCollection(ageDiff);
+				final ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);				
+				Date birthDate=participantBizLogic.getDateOfBirth(specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant());
+				if (birthDate!=null)
+				{
+					Long diffday=(specimenCollectionGroup.getEncounterTimestamp().getTime() - Math.abs(birthDate.getTime())) / Constants.TIME_FACTOR;
+					Integer ageDiff=Integer.valueOf(String.valueOf((diffday/ (Constants.YEAR_FACTOR))));
+					persistentSCG.setAgeAtCollection(ageDiff);
+				}
 			}
 			String barCode = specimenCollectionGroup.getBarcode();
 			if ("" != barCode)
@@ -3357,4 +3364,42 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		return true;
 	}
+	/**
+	 * This method gets called inside Participant update method.
+	 * @param currentObj The object to be updated.
+	 * @param oldObj The old object.
+	 * @throws BizLogicException throws BizLogicException
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * */
+	public void updateAgeAtCollection(DAO dao,Participant newObject) throws BizLogicException, DAOException, IOException, ClassNotFoundException
+	{
+			String hql="from SpecimenCollectionGroup scg where scg.collectionProtocolRegistration.participant.id="+newObject.getId();
+			
+			Collection<SpecimenCollectionGroup> scgList=  dao.executeQuery(hql);
+			
+						
+			for (SpecimenCollectionGroup specimenCollectionGroup : scgList) 
+			{
+				Date collectionDate=null;
+				
+				SpecimenCollectionGroup  scgOldObject=new ObjectCloner().clone(specimenCollectionGroup);
+
+				Integer newAgeAtCollection=null;
+				
+				if(specimenCollectionGroup.getEncounterTimestamp()!=null && newObject.getBirthDate()!=null)
+				{
+					collectionDate=specimenCollectionGroup.getEncounterTimestamp();
+					
+				     Long difference=(collectionDate.getTime() - Math.abs(newObject.getBirthDate().getTime())) / Constants.TIME_FACTOR;
+					
+					newAgeAtCollection=Integer.valueOf(String.valueOf((difference/ (Constants.YEAR_FACTOR))));
+				}
+				
+				specimenCollectionGroup.setAgeAtCollection(newAgeAtCollection);
+				
+				dao.update(specimenCollectionGroup,scgOldObject);
+				
+			}
+      }
 }
