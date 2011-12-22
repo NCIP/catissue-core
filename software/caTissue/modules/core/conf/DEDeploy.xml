@@ -1776,9 +1776,7 @@
 		<!-- Run caCoreSDK 4.2 code generation -->
 		<echo message="DEBUG: THIS IS SUPPOSED TO CALL build:all on cacore-sdk-4.2-dozer" />
 		<ant antfile="build.xml" dir="${caCORE4.2_home}/example-project/build" target="build:all" inheritAll="false" />
-
-		<!--<ant antfile="build.xml" dir="${de.temp.dir}/cacoresdk.4.2/example-project/" target="build:all" />-->
-		<!-- Copy dozer-artifacts to dataservice -->
+		<!-- Copy artifacts to dataservice -->
 		<available file="${caCORE4.2_home}/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/${entitygroupname}-dozer-files.jar" property="dozerFilesExists"/>
 		<if>
 			<equals arg1="true" arg2="${dozerFilesExists}" />
