@@ -2,6 +2,8 @@
  * author: Srikalyan
  */
 var $j = jQuery.noConflict();
+var gsidSvcDownNotified = false;
+
 jQuery(document).ready(
 		$j(function()
 		{
@@ -53,9 +55,12 @@ $j(function(){
                 		else
             			{
                 			noError=true;
-                			//$j('#gsidErrorLabel').remove();             	
-                        	$j('label[for="globalSpecimenIdentifierValue"]').append("<span id='gsidErrorLabel' style='color:red'> Error: GSID service might be down.</span>");
-                        	$j('#gsidErrorLabel').effect('shake',{distance:10,times:noOftimes},speed);
+                			//$j('#gsidErrorLabel').remove();
+                			if (!gsidSvcDownNotified) {
+                				$j('label[for="globalSpecimenIdentifierValue"]').append("<span id='gsidErrorLabel' style='color:red'> Error: GSID service might be down.</span>");
+                				gsidSvcDownNotified = true;
+                				$j('#gsidErrorLabel').effect('shake',{distance:10,times:noOftimes},speed);
+                			}
             			}
             		}
             	    $j('#overlay').fadeOut('400',function(){
@@ -68,12 +73,16 @@ $j(function(){
             	    
                 },
                 error: function(){   
-                	//$j('#gsidErrorLabel').remove();             	
-                	$j('label[for="globalSpecimenIdentifierValue"]').append("<span id='gsidErrorLabel' style='color:red'> Error: GSID service might be down.</span>");
-                	$j('#gsidErrorLabel').effect('shake',{distance:10,times:noOftimes},speed);
-                	$j('#overlay').fadeOut('400',function(){
-            	    	$j(this).remove();
-                    });
+                	//$j('#gsidErrorLabel').remove();
+                	if (!gsidSvcDownNotified) {
+	                	$j('label[for="globalSpecimenIdentifierValue"]').append("<span id='gsidErrorLabel' style='color:red'> Error: GSID service might be down.</span>");
+	                	gsidSvcDownNotified = true;
+	                	$j('#gsidErrorLabel').effect('shake',{distance:10,times:noOftimes},speed);
+                	}
+	                $j('#overlay').fadeOut('400',function(){
+	            	   	$j(this).remove();
+	                });
+                	
                 }
                 
 			});
