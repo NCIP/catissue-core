@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.action;
 
+import java.rmi.RemoteException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -62,8 +64,14 @@ public class InstitutionEditAction extends SecureAction {
 				if (Constants.REMOTE_OPERATION_SEARCH_LINK
 						.equalsIgnoreCase(remoteOperation)) {
 					Organization[] organizationList = null;
-					organizationList = new COPPAServiceClient()
-							.searchOrganization(institutionForm.getName());
+					try {
+						organizationList = new COPPAServiceClient()
+								.searchOrganization(institutionForm.getName());
+					} catch (RemoteException e) {
+						logger.error(e, e);
+						AppUtility.addErrorMessage(request,
+								"ctrp.error.down");						
+					}
 					if (organizationList != null && organizationList.length > 0) {
 						request.setAttribute("COPPA_MATCH_FOUND", "true");
 						request.getSession().setAttribute(
@@ -80,12 +88,18 @@ public class InstitutionEditAction extends SecureAction {
 					actionfwd = mapping.findForward("pageOfInstitution");
 				} else if (Constants.REMOTE_OPERATION_SYNC
 						.equalsIgnoreCase(remoteOperation)) {
-					Organization remoteOrg = new COPPAServiceClient()
-							.getOrganizationById(institution.getRemoteId()
-									.toString());
-					institutionForm.setName(remoteOrg.getName().getPart()
-							.get(0).getValue());
-					institutionForm.setDirtyEditFlag(false);
+					try {
+						Organization remoteOrg = new COPPAServiceClient()
+								.getOrganizationById(institution.getRemoteId()
+										.toString());
+						institutionForm.setName(remoteOrg.getName().getPart()
+								.get(0).getValue());
+						institutionForm.setDirtyEditFlag(false);
+					} catch (RemoteException e) {
+						logger.error(e, e);
+						AppUtility.addErrorMessage(request,
+								"ctrp.error.down");	
+					}
 				}// end -if syncRemoteChanges
 			}// end -if coppa enabled
 

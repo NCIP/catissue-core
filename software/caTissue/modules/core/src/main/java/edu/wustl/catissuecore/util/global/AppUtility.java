@@ -4039,10 +4039,12 @@ public class AppUtility
 
 	public static void addErrorMessage(HttpServletRequest request, String key)
 	{
-		final ActionErrors errors = new ActionErrors();
+		final String KEY = "org.apache.struts.action.ERROR";
+		final ActionErrors errors = (ActionErrors) (request.getAttribute(KEY) instanceof ActionErrors ? request
+				.getAttribute(KEY) : new ActionErrors());
 		final ActionError error = new ActionError(key);
 		errors.add(ActionErrors.GLOBAL_ERROR, error);
-		request.setAttribute("org.apache.struts.action.ERROR", errors);
+		request.setAttribute(KEY, errors);
 	}
 
 	/**
