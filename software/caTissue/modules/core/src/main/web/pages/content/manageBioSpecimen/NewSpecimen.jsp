@@ -1303,6 +1303,7 @@
 								<html:hidden property="applyChangesTo"/>
 								<html:hidden property="consentTierCounter"/>
 								<html:hidden property="parentSpecimenId"/>
+								<html:hidden property="parentSpecimenGSID"/> 
 								<html:hidden property="onSubmit"/>
 								<html:hidden property="id"/>
 								<html:hidden property="positionInStorageContainer" />
