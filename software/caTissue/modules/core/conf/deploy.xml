@@ -1255,9 +1255,18 @@
 	<target name="de_integrate_app" depends="de_check_prerequisite" if="file.exists" description="Integrating DynamicExtensions application with catissue">
 		<echo message="Integrating DynamicExtensions app ...." />
 		<!--<unzip src="dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />-->
+		<unjar src="${prop.temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${prop.temp.dir}/dynamicextensions/DynamicExtensions" />
+				<replace dir="${prop.temp.dir}/dynamicextensions/DynamicExtensions" >
+							<include name="DynamicExtensionDAO.properties" />
+							<replacefilter token="@@host.app.name@@" value="caTissue Suite" />
+						</replace>
+				<jar destfile="${prop.temp.dir}/dynamicExtensions.jar" basedir="${prop.temp.dir}/dynamicextensions/DynamicExtensions" />
+				<copy file="${prop.temp.dir}/dynamicExtensions.jar" todir="${prop.temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface" overwrite="true" />
 		<unjar src="${prop.temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${prop.temp.dir}/dynamicextensions/WEB-INF/classes" />
+		
 		<copy file="${prop.temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernateWeb.cfg.xml" tofile="${prop.temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
 		<copy file="${prop.temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${prop.temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
+		
 
 		<!-- Inject db specific information to configuration files -->
 		<if>
