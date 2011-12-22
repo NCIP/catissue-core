@@ -1453,18 +1453,20 @@
     					  </td>
  			        	  <td width="34%" align="left" class="black_ar">
 								<!--<html:hidden property="globalSpecimenIdentifer"/>-->
-								<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="globalSpecimenIdentifer" property="globalSpecimenIdentifer" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
-								<label for="globalSpecimenIdentifierValue">
+								<html:text styleClass="black_ar" maxlength="255"  size="30" styleId="globalSpecimenIdentifer" property="globalSpecimenIdentifer" 
+									readonly="<%=form.isParentPresent() && StringUtils.isBlank(form.getParentSpecimenGSID()) %>"
+									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
+								<label for="globalSpecimenIdentifierValue"> 
 								<%
 									GSIDClient gsidClient = new GSIDClient();
-								   boolean buttonEnabled = gsidClient.isAssignButtonEnabled();
+								    boolean buttonEnabled = gsidClient.isAssignButtonEnabled();
 									if(form.isParentPresent())
 									{
 
 										if(StringUtils.isBlank(form.getParentSpecimenGSID()))
 										{
 
-											out.print("Please first assign a GSID for <a class='blue_ar_b' href=\"SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id="+form.getParentSpecimenId()+"\">Parent</a>");
+											out.print("Please first assign a GSID to <a class='blue_ar_b' href=\"SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id="+form.getParentSpecimenId()+"\">Parent</a>");
 										}
 										else
 										{

@@ -2030,23 +2030,38 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			if (GSIDClient.GSID_IS_ENABLED) {
 				GSIDClient client = new GSIDClient();
 				GSIDUtil gsidAgent = new GSIDUtil(client);
-				if (StringUtils.isBlank(specimen.getGlobalSpecimenIdentifier())) {
+				final String newGSID = specimen.getGlobalSpecimenIdentifier();
+				if (StringUtils.isBlank(newGSID)) {
 					// assign id ...
 					gsidAgent.registerSpecimen(specimen,null);
 
-				} else
-					if (!specimen.getGlobalSpecimenIdentifier().equals(specimenOld.getGlobalSpecimenIdentifier())) {
+				} else if (!newGSID.equals(specimenOld
+						.getGlobalSpecimenIdentifier())) {
 
-						// if new one is different from old .. that means user has suggested a new gsid .. so suggest and assign if valid
-						// check if the newly provided id is assigned to some other specimen ..
-						if (!checkIfGsIdExist(specimen.getGlobalSpecimenIdentifier(), specimen.getId(),dao)) {
-							Specimen updatedGsid = gsidAgent.registerSpecimen(specimen,specimen.getGlobalSpecimenIdentifier());
-							suggestedGsid = updatedGsid.getGlobalSpecimenIdentifier();
-						} else {
-							throw getBizLogicException(null, specimen.getGlobalSpecimenIdentifier() + " already assigned , please pick a different GSID", specimen.getGlobalSpecimenIdentifier() + " already assigned , please pick a different GSID");
-						}
-
+					// if new one is different from old .. that means user has
+					// suggested a new gsid .. so suggest and assign if valid
+					// check if the newly provided id is assigned to some other
+					// specimen ..
+					if (!gsidAgent.isValidFormat(newGSID)) {
+						final String errDesc = newGSID
+								+ " is not a valid GSID. Please use the standard 16-byte UUID format.";
+						final BizLogicException ex = getBizLogicException(null,
+								errDesc, errDesc);
+						ex.setCustomizedMsg(errDesc);
+						throw ex;
 					}
+					if (checkIfGsIdExist(newGSID, specimen.getId(), dao)) { 
+						final String errDesc = newGSID
+								+ " already assigned , please pick a different GSID";
+						final BizLogicException ex = getBizLogicException(null,
+								errDesc, errDesc);
+						ex.setCustomizedMsg(errDesc);
+						throw ex;
+					}
+					Specimen updatedGsid = gsidAgent.registerSpecimen(specimen,
+							newGSID);
+					suggestedGsid = updatedGsid.getGlobalSpecimenIdentifier();
+				}
 
 				if (StringUtils.isBlank(specimenOld.getGlobalSpecimenIdentifier())) {
 					// so

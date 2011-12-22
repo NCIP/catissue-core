@@ -5,9 +5,4 @@
         <dir excludes="**/.svn/" name="${catissue.project.home}/software/caTissue/modules/core/out"/>
     </classpath>
 
-    <web>
-        <link target="/">
-            <dir name="${catissue.project.home}/software/caTissue/modules/core/src/main/web"/>
-        </link>
-    </web>
 </application>

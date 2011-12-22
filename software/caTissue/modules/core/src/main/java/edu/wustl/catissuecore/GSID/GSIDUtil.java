@@ -19,6 +19,8 @@ public class GSIDUtil {
 	//private static final Log LOG = LogFactory.getLog(GSIDUtil.class);
 	private static Logger LOG = Logger.getLogger(GSIDClient.class);
 	private GSIDClient gsidClient;
+	
+	public static final String UUID_PATTERN = "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}";
 
 	public GSIDUtil(GSIDClient gsidClient) {
 		this.gsidClient = gsidClient;
@@ -112,5 +114,9 @@ public class GSIDUtil {
 			}
 		}
 		return specimen;
+	}
+
+	public boolean isValidFormat(String newGSID) {
+		return newGSID!=null?newGSID.matches(UUID_PATTERN):false;
 	}
 }
