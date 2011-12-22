@@ -2048,7 +2048,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					// specimen ..
 					if (!gsidAgent.isValidFormat(newGSID)) {
 						final String errDesc = newGSID
-								+ " is not a valid GSID. Please use the standard 16-byte UUID format.";
+								+ " is not a valid GSID. Please use the standard 16-byte UUID format: http://en.wikipedia.org/wiki/Universally_unique_identifier";
 						final BizLogicException ex = getBizLogicException(null,
 								errDesc, errDesc);
 						ex.setCustomizedMsg(errDesc);
