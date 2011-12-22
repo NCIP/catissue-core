@@ -67,8 +67,9 @@ function removeDuplicates(inputArray) {
 function displayColumns() {
 	var allCols = "";
     $j('#sdrfData tr th').each(function(){
-    	allCols = allCols + "XX" + $j(this).html().substring(0,8);
-    });
+    	allCols = (allCols + "XX" + $j(this).html().substring(0,8)).replace(/<|>/,"");
+    });    
+    //alert(allCols);
     $j('#displayColumns').val(allCols);
 }
 
