@@ -865,12 +865,16 @@ color: #000000;
     background: #a7a3a3 url("../images/ajax-loader.gif") no-repeat center;
     width:100%;
     height:100%;
-    position:fixed;
+    position:absolute;
     top:0;
     left:0;
     z-index:4000;
     opacity:0.8;
     display:none;
+    zoom: 1;    
+    filter: alpha(opacity = 80);
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    
 }
 
 /* StyleSheet for Container */
