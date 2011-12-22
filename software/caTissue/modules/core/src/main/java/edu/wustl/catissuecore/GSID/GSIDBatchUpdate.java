@@ -18,13 +18,13 @@ import gov.nih.nci.logging.api.util.StringUtils;
  * @author srikalyan
  */
 public class GSIDBatchUpdate implements Runnable {
-	private static boolean lock = false;
-	private static String currentUser;
-	private static int unassignedSpecimenCount = 0;
-	private static int processedSpecimenCount = 0;
-	private static String lastProcessedLabel;
-	private static boolean error=false;
-	private static Exception lastException;
+	private static volatile boolean lock = false;
+	private static volatile String currentUser;
+	private static volatile int unassignedSpecimenCount = 0;
+	private static volatile int processedSpecimenCount = 0;
+	private static volatile String lastProcessedLabel;
+	private static volatile boolean error=false;
+	private static volatile Exception lastException;
 	private static final Log LOG = LogFactory.getLog(GSIDBatchUpdate.class);
 	
 
@@ -102,17 +102,15 @@ public class GSIDBatchUpdate implements Runnable {
 			currentUser = userName;
 			unassignedSpecimenCount = 0;
 			processedSpecimenCount = 0;
-			lastProcessedLabel="";
-			lastException=null;
-			error=false;
+			lastProcessedLabel = "";
+			lastException = null;
+			error = false;
 			Thread t = new Thread(this);
 			t.start();
-			try
-			{
-			t.sleep(500);
-			}catch(InterruptedException e)
-			{
-				
+			try {
+				t.sleep(500);
+			} catch (InterruptedException e) {
+
 			}
 		}
 	}
@@ -132,12 +130,13 @@ public class GSIDBatchUpdate implements Runnable {
 	/****
 	 * overridden method of the interface. 
 	 */
-	public void run() {		
+	public void run() {
 		try {
 			updateAllSpecimen();
 		} catch (GSIDException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e, e);
+		} finally {
+			lock = false;
 		}
 	}
 
@@ -251,8 +250,7 @@ public class GSIDBatchUpdate implements Runnable {
 				LOG.error(GSIDConstant.GSID_CLOSING_SESSION_ERROR, e1);
 			}
 		}
-		//task finished so release the lock.
-		lock=false;
+		
 	}
 	
 	/*****

@@ -3,11 +3,14 @@ package edu.wustl.catissuecore.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.GSID.GSIDBatchUpdate;
+import edu.wustl.catissuecore.GSID.GSIDServiceStatusNotifier;
 import edu.wustl.catissuecore.actionForm.GSIDBatchUpdateForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -26,6 +29,7 @@ public class GSIDBatchUpdateAction extends SecureAction {
 		GSIDBatchUpdateForm gsidForm=(GSIDBatchUpdateForm)form;
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);		
+		request.setAttribute("GSIDBatchUpdateForm",gsidForm);
 		if(sessionData.isAdmin())
 		{
 			//check if lock exists
@@ -33,16 +37,16 @@ public class GSIDBatchUpdateAction extends SecureAction {
 			{
 				if(gsidForm.isForce())
 				{
-					// no body is running an update so run it.
-					// check if same user is trying to rerun again and get confirmation.
-					if(sessionData.getUserName().equals(GSIDBatchUpdate.getCurrentUser()))
-					{
-						new GSIDBatchUpdate(sessionData.getUserName());
+					if (!new GSIDServiceStatusNotifier().checkServiceStatus()) {
+						ActionErrors actionErrors = new ActionErrors();
+						ActionError actionError = new ActionError("errors.item",
+								"GSID service is down. Please make another attempt once the service is back up.");
+						actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
+						saveErrors(request, actionErrors);
+						return mapping.findForward("failure");
+
 					}
-					else
-					{
-						new GSIDBatchUpdate(sessionData.getUserName());
-					}	
+					new GSIDBatchUpdate(sessionData.getUserName());					
 					gsidForm.setUnassignedSpecimenCount(GSIDBatchUpdate.getUnassignedSpecimenCount()-GSIDBatchUpdate.getProcessedSpecimenCount());
 				}
 				else
@@ -59,7 +63,7 @@ public class GSIDBatchUpdateAction extends SecureAction {
 			gsidForm.setLastProcessedLabel(GSIDBatchUpdate.getLastProcessedLabel());
 			gsidForm.setLocked(GSIDBatchUpdate.isLock());
 			gsidForm.setLastException(GSIDBatchUpdate.getLastException());			
-			request.setAttribute("GSIDBatchUpdateForm",gsidForm);
+			
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		else

@@ -112,10 +112,8 @@ public class GSIDServiceStatusNotifier {
 			gsidClient.validateIdentifier(identifier);
 			serviceStatus = true;
 			SERVICE_DOWN_FLAG = false;
-		} catch (RemoteException e) {
-			e.printStackTrace();
-			LOG.error(GSIDConstant.GSID_REGISTER_REMOTE_ERROR, e);
-			return serviceStatus;
+		} catch (RemoteException e) {			
+			LOG.error(GSIDConstant.GSID_REGISTER_REMOTE_ERROR, e);			
 		}
 		return serviceStatus;
 	}
