@@ -1779,13 +1779,13 @@
 
 		<!--<ant antfile="build.xml" dir="${de.temp.dir}/cacoresdk.4.2/example-project/" target="build:all" />-->
 		<!-- Copy dozer-artifacts to dataservice -->
-		<available file="${caCORE4.2_home}/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/${entitygroupname}-dozer-files.zip" property="dozerFilesExists"/>
+		<available file="${caCORE4.2_home}/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/${entitygroupname}-dozer-files.jar" property="dozerFilesExists"/>
 		<if>
 			<equals arg1="true" arg2="${dozerFilesExists}" />
 			<then>
-				<copy todir="../../caGrid_service/caTissueStaticDataService/de_codegen/artifacts" overwrite="true">
+				<copy todir="../../caGrid_service/caTissueStaticDataService/de_codegen/artifacts" overwrite="true" verbose="true">
 					<fileset dir="${caCORE4.2_home}/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/">
-						<include name="${entitygroupname}-dozer-files.zip" />
+						<include name="${entitygroupname}-dozer-files.jar" />
 					</fileset>
 				</copy>
 				<echo message="Dozer files copied for: ${${entitygroupname}}" />
