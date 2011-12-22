@@ -2034,6 +2034,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				if (StringUtils.isBlank(newGSID)) {
 					try {
 						gsidAgent.registerSpecimen(specimen,null);
+						suggestedGsid = specimen.getGlobalSpecimenIdentifier();
 					} catch (GSIDException e) {
 						LOGGER.error("Unable to assign a GSID due to: "+e.getMessage());
 						LOGGER.warn(e.getMessage(), e);
@@ -2067,6 +2068,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 						Specimen updatedGsid = gsidAgent.registerSpecimen(specimen,
 								newGSID);
 						suggestedGsid = updatedGsid.getGlobalSpecimenIdentifier();
+						if (suggestedGsid!=null && !suggestedGsid.equals(newGSID)) {
+							final String errDesc = newGSID
+									+ " has been used before; please pick a different GSID.";
+							final BizLogicException ex = getBizLogicException(null,
+									errDesc, errDesc);
+							ex.setCustomizedMsg(errDesc);
+							throw ex;							
+						}
 					} catch (GSIDException e) {
 						LOGGER.error("Unable to assign a GSID due to: "+e.getMessage());
 						LOGGER.warn(e.getMessage(), e);
