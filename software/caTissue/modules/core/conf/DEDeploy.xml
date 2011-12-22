@@ -1773,7 +1773,7 @@
 			</replacevalue>
 		</replace>
 
-		<!-- Run caCoreSDK 4.2 for dozer artifacts generation -->
+		<!-- Run caCoreSDK 4.2 code generation -->
 		<echo message="DEBUG: THIS IS SUPPOSED TO CALL build:all on cacore-sdk-4.2-dozer" />
 		<ant antfile="build.xml" dir="${caCORE4.2_home}/example-project/build" target="build:all" inheritAll="false" />
 
@@ -1786,9 +1786,17 @@
 				<copy todir="../../caGrid_service/caTissueStaticDataService/de_codegen/artifacts" overwrite="true" verbose="true">
 					<fileset dir="${caCORE4.2_home}/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/">
 						<include name="${entitygroupname}-dozer-files.jar" />
+						<include name="${entitygroupname}-beans.jar" />
+						<include name="${entitygroupname}-schema.jar" />
 					</fileset>
 				</copy>
-				<echo message="Dozer files copied for: ${${entitygroupname}}" />
+				<echo message="Dozer files archive copied for: ${entitygroupname}" />
+				<copy todir="../../caGrid_service/caTissueStaticDataService/de_codegen/xmi" overwrite="true" verbose="true">
+                    <fileset dir="${export.dir}">
+                        <include name="${entitygroupname}.xmi" />
+                    </fileset>
+				</copy>
+				<echo message="XMI file copied for: ${entitygroupname}" />
 			</then>
 		</if>
 
