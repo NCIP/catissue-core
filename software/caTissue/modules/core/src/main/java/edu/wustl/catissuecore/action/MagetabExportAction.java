@@ -129,10 +129,10 @@ public class MagetabExportAction extends BaseAction
 				int index = Integer.parseInt(rowSN.substring(indexOf));
 				List<String> list = dataList.get(index);
 				specimenIds.add(Long.parseLong(list.get(idColumnIndex)));
-				if (list.get(typeColumnIndex) != null && list.get(typeColumnIndex).toString().equals("DNA")) {
+				if (typeColumnIndex>=0 && typeColumnIndex<list.size() && list.get(typeColumnIndex) != null && list.get(typeColumnIndex).toString().equals("DNA")) {
 					dna = true;
 				}
-				if (list.get(typeColumnIndex) != null && list.get(typeColumnIndex).toString().equals("RNA")) {
+				if (typeColumnIndex>=0 && typeColumnIndex<list.size() && list.get(typeColumnIndex) != null && list.get(typeColumnIndex).toString().equals("RNA")) {
 					rna = true;
 				}
 			}
