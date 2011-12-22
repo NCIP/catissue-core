@@ -1776,7 +1776,7 @@
 
 		<!-- Run caCoreSDK 4.2 for dozer artifacts generation -->
 		<echo message="DEBUG: THIS IS SUPPOSED TO CALL build:all on cacore-sdk-4.2-dozer" />
-		<ant antfile="build.xml" dir="${caCORE4.2_home}/example-project/build" target="dist" />
+		<ant antfile="build.xml" dir="${caCORE4.2_home}/example-project/build" target="build:all" />
 
 		<!--<ant antfile="build.xml" dir="${de.temp.dir}/cacoresdk.4.2/example-project/" target="build:all" />-->
 		<!-- Copy dozer-artifacts to dataservice -->
