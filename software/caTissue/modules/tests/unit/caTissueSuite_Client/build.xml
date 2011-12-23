@@ -53,4 +53,31 @@
 			<report todir="${report.dir}/Html_reports" />
 		</junitreport>
 	</target>
+	<target name="runOrderingJunitTestCases" depends="compile_junit_TestCases">
+		<mkdir dir="${report.dir}" />
+		<mkdir dir="${report.dir}/Html_reports" />
+
+		<junit printsummary="yes" fork="yes" haltonfailure="no">
+			<jvmarg value="-Dsun.lang.ClassLoader.allowArraySyntax=true" />
+			<formatter type="xml" />
+			<classpath>
+				<fileset dir="lib">
+					<include name="**/*.jar" />
+				</fileset>
+				<pathelement path="${conf.dir}" />
+				<pathelement path="${target.dir}" />
+			</classpath>
+			<batchtest todir="${report.dir}">
+				<fileset dir="${target.dir}" includes="**/CaTissueOrderingTestSuite.class" />
+			</batchtest>
+		</junit>
+	</target>
+	<target name="runOrderingNightlyBuild" depends="runOrderingJunitTestCases">
+		<junitreport todir="${report.dir}">
+			<fileset dir="${report.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report todir="${report.dir}/Html_reports" />
+		</junitreport>
+	</target>
 </project>
