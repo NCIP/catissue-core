@@ -545,6 +545,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		EntityInterface actionRecordEntry = entityGroup
 				.getEntityByName("edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry");
 		List<String> namesOfSPPEvents = new ArrayList<String>();
+		namesOfSPPEvents.add(Constants.SELECT_OPTION);
 		if (actionRecordEntry != null)
 		{
 			Collection<AssociationInterface> allAsso = actionRecordEntry.getAllAssociations();

@@ -142,7 +142,7 @@ public class DynamicEventAction extends BaseAction
 		//request.setAttribute(Constants.SPECIMEN_ID, request.getAttribute(Constants.SPECIMEN_ID));
 
 		//request.setAttribute(Constants.PAGE_OF, request.getParameter(Constants.PAGE_OF));
-		request.setAttribute("changeAction", Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION);
+		//request.setAttribute("changeAction", Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_ADD_ACTION);
 		final String operation = request.getParameter(Constants.OPERATION);
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final UserBizLogic userBizLogic = (UserBizLogic) factory

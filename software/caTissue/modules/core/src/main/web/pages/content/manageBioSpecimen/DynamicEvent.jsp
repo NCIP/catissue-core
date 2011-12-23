@@ -309,12 +309,17 @@ function submitButton()
                 </tr>
                 <tr height="15%" >
 					<td align="center" class="black_ar">&nbsp;</td>
-					<td align="left" valign="top" class="black_ar_t">Reason for Deviation</td>
-					<td align="left" colspan="4">
-						<html:textarea styleClass="black_ar" cols="73" rows="2" style="overflow:auto" styleId="comments" property="reasonDeviation" />
+					<td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.reasonfordeviation"/></td>
+					<td align="left">
+						<html:textarea styleClass="black_ar" cols="35" rows="2" style="overflow:auto" styleId="comments" property="reasonDeviation" />
+					</td>
+					<td align="center" class="black_ar">&nbsp;</td>
+					<td align="left" valign="top" class="black_ar_t"><bean:message key="eventparameters.comments"/></td>
+					<td align="left">
+						<html:textarea styleClass="black_ar" cols="35" rows="2" style="overflow:auto" styleId="comments" property="comments" />
 					</td>
                 </tr>
-
+					
 				<tr name="iframetr"><td name="abc" colspan="6" >
                 <iframe id="name1" name="name1" frameborder="0" width="100%" scrolling="no" src='${requestScope.iframeURL}' onload='onIFrameLoad(this);'>
                 </iframe>

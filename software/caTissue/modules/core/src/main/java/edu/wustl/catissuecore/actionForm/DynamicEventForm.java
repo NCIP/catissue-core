@@ -10,6 +10,8 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 
 public class DynamicEventForm extends AbstractActionForm{
+	
+	private static final long serialVersionUID = -251938242638975137L;
 
 	private long userId;
 
@@ -24,6 +26,10 @@ public class DynamicEventForm extends AbstractActionForm{
 
 	/** Date of the Event Parameter. */
 	protected String dateOfEvent;
+	
+	/**Comments for Event Parameter**/
+	protected String comments;
+	
 	private int formId;
 
 	private long recordEntry;
@@ -85,6 +91,7 @@ public class DynamicEventForm extends AbstractActionForm{
 			this.dateOfEvent = CommonUtilities.parseDateToString(actionApp
 					.getTimestamp(), CommonServiceLocator.getInstance().getDatePattern());
 		}
+		this.comments=actionApp.getComments();
 		this.recordEntry=actionApp.getApplicationRecordEntry().getId();
 		this.contId=actionApp.getApplicationRecordEntry().getFormContext().getContainerId();
 	}
@@ -143,6 +150,14 @@ public class DynamicEventForm extends AbstractActionForm{
 
 	public void setRecordIdentifier(long recordIdentifier) {
 		this.recordIdentifier = recordIdentifier;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 
 
