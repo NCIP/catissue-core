@@ -476,14 +476,14 @@ eval(testCombo);
 				if(studyformObj != null)
 				{
 
-			studyformObj.store.proxy.conn.url = "ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName="+element.value;
+			studyformObj.store.proxy.conn.url = "ClinincalStatusComboAction.do?requestFor=specimenEvent&limit=15&start=0&processingSPPName="+element.value;
 			studyformObj.setValue("Not Specified",false) ;
 			studyformObj.store.reload();
 			}
 		}
 			var studyformObj = Ext.getCmp('aliquot_CE');
 
-			studyformObj.store.proxy.conn.url = "ClinincalStatusComboAction.do?requestFor=specimenEvent&processingSPPName="+element.value;
+			studyformObj.store.proxy.conn.url = "ClinincalStatusComboAction.do?requestFor=specimenEvent&limit=15&start=0&processingSPPName="+element.value;
 			studyformObj.setValue("Not Specified",false) ;
 			studyformObj.store.reload();
 		

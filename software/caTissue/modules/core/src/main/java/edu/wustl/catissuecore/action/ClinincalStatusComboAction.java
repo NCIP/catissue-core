@@ -32,10 +32,18 @@ public class ClinincalStatusComboAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 			{
 
-		final String limit = request.getParameter("limit");
-		final String query = request.getParameter("query");
-		final String start = request.getParameter("start");
+		 String limit = request.getParameter("limit");
+		 String query = request.getParameter("query");
+		String start = request.getParameter("start");
 		final String  showOption = request.getParameter("showOption");
+		if(limit.equals(null))
+		{
+			limit="0";
+		}
+		if(start.equals(null))
+		{
+			start="0";
+		}
 		final Integer limitFetch = Integer.parseInt(limit);
 		final Integer startFetch = Integer.parseInt(start);
 		final String requestFor = request.getParameter("requestFor");
@@ -102,8 +110,8 @@ public class ClinincalStatusComboAction extends BaseAction
 				if (iterator.hasNext())
 				{
 					final NameValueBean nameValueBean = (NameValueBean) iterator.next();
-					if (nameValueBean.getName().toLowerCase().contains(query.toLowerCase())
-							|| query == null)
+					if ( query == null 
+							|| nameValueBean.getName().toLowerCase().contains(query.toLowerCase()))
 					{
 						final JSONObject innerJsonObject = new JSONObject();
 						// nameValueBean = (NameValueBean) iterator.next();

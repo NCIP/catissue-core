@@ -24,7 +24,7 @@
 				// Patch ID: SpecimenEventSpaceUtilization_2
 				else if(useFunction == "eventParametersGrid") 
 				{
-					document.write("<div id='gridbox' width='100%' height='125px' border='0' style='background-color:#d7d7d7;overflow:hidden'></div>");
+					document.write("<div id='gridbox' width='100%' height='160px' border='0' style='background-color:#d7d7d7;overflow:hidden'></div>");
 				}
 				else if(useFunction == "goToConflictDetails") 
 				{
@@ -89,14 +89,7 @@
 function init_grid()
 {			
 	var funcName = "rowClick";
-	if(useDefaultRowClickHandler == 1)
-	{
-		funcName = "rowClick";	
-	}
-	else
-	{
-		funcName=useFunction;
-	}
+	
 
 	mygrid = new dhtmlXGridObject('gridbox');
 	mygrid.setImagePath("newDhtmlx/imgs/");
@@ -110,7 +103,7 @@ function init_grid()
 	if(useFunction == "eventParametersGrid")
 	{
 		//colWidth = "167,167,167,167,11";
-		colWidth = "10,35,30,25,0";
+		colWidth = "30,30,18,25,0,0";
 	}
 
 	if(useFunction == "goToConflictDetails" )
@@ -158,7 +151,17 @@ function init_grid()
 	}
 
 	//mygrid.setOnRowSelectHandler(funcName);
-	mygrid.attachEvent("onRowDblClicked", function(rId,cInd){rowClick(rId,cInd)});  
+	if(useDefaultRowClickHandler == 1)
+	{
+		funcName = "rowClick";	
+		mygrid.attachEvent("onRowDblClicked", function(rId,cInd){rowClick(rId,cInd)});
+	}
+	else
+	{
+		funcName=useFunction;
+		mygrid.attachEvent("onRowDblClicked", useFunction);
+	}
+	  
 //	mygrid.setOnRowDblClickedHandler(funcName);
 	// :To hide ID columns by kalpana
 	function getIDColumns()
