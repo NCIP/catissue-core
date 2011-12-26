@@ -10,6 +10,8 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -71,6 +73,7 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
@@ -1900,9 +1903,9 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
     private int validatePassword(final User oldUser, final String newPassword, final String oldPassword)
             throws PasswordEncryptionException, ApplicationException
     {
-    	final ArrayList<Password> oldPwdList = Util.getPasswordCollection(oldUser);
+    	final ArrayList<Password> oldPwdList = getPasswordCollection(oldUser);
         //Collections.sort(oldPwdList,new PasswordComparator());
-       Collections.sort(oldPwdList);
+      // Collections.sort(oldPwdList);
         if (oldPwdList != null && !oldPwdList.isEmpty())
         {
             // Check new password is equal to last n password if value
@@ -1967,7 +1970,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
     {
     	try
     	{
-    		final ArrayList<Password> passwordList = new ArrayList(Util.getPasswordCollection(user));
+    		final ArrayList<Password> passwordList = new ArrayList(getPasswordCollection(user));
     	
     	
 		        final boolean firstTimeLogin = getFirstLogin(user);
@@ -2039,7 +2042,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
 
         boolean isSameFound = false;
         final int loopCount = Math.min(oldPwdList.size(), noOfPwdNotSameAsLastN);
-        for (int i = 0; i < loopCount; i++)
+        for (int i = loopCount; i < 0; i--)
         {
             final Password pasword = oldPwdList.get(i);
             if (newPassword.equals(pasword.getPassword()))
@@ -2809,5 +2812,61 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
 			throw this.getBizLogicException(daoexp, daoexp.getErrorKeyName(),
 					daoexp.getMsgValues());
 		}
+	}
+	
+	public static ArrayList<Password> getPasswordCollection(User user) throws ApplicationException
+	{
+	  
+		ArrayList<Password> passwords=new ArrayList<Password>();
+	    
+	    JDBCDAO jdbcDAO =null;
+	    try
+		{
+	    	
+	    jdbcDAO = AppUtility.openJDBCSession();
+	    final StringBuilder query = new StringBuilder();
+	    Date date ; 
+	    SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+		query.append("select * from catissue_password password ");
+		query.append("where password.USER_ID=?");
+		query.append(" order by password.UPDATE_DATE");
+
+
+
+		ColumnValueBean columnValueBean = new ColumnValueBean(user.getId());
+		List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
+		columnValueBeanList.add(columnValueBean);
+		if (jdbcDAO != null)
+		{
+				final List results = jdbcDAO.executeQuery(query.toString(),null,columnValueBeanList);
+				for (int i = 0; i < results.size(); i++)
+				{  
+					Password password=new Password();
+					final ArrayList<String> columnList = (ArrayList<String>) results.get(i);
+					if ((columnList != null) )
+					{
+						password.setId(Long.parseLong(columnList.get(0)));
+						password.setPassword(columnList.get(1));
+						password.setUpdateDate((Date)formatter.parse(columnList.get(2)));
+						password.setUser(user);
+					}
+					passwords.add(password);
+				}
+			
+		}
+		}
+		catch (final DAOException daoExp)
+		{
+			throw new BizLogicException(daoExp);
+		} catch (ParseException parException) {
+			// TODO Auto-generated catch block
+			//throw new BizLogicException(parException);
+		}
+		finally
+		{
+			if(jdbcDAO!=null)
+			AppUtility.closeJDBCSession(jdbcDAO);
+		} 
+	   return passwords;
 	}
 }
