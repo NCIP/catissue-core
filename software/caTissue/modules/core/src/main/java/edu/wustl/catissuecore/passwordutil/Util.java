@@ -46,56 +46,5 @@ public final class Util
 	{
 		return util;
 	}
-	public static ArrayList<Password> getPasswordCollection(User user) throws ApplicationException
-	{
-	  
-		ArrayList<Password> passwords=new ArrayList<Password>();
-	    
-	    JDBCDAO jdbcDAO =null;
-	    try
-		{
-	    	
-	    jdbcDAO = AppUtility.openJDBCSession();
-	    final StringBuilder query = new StringBuilder();
-	    Date date ; 
-	    SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
-		query.append("select * from catissue_password password ");
-		query.append("where password.USER_ID=?");
-
-		ColumnValueBean columnValueBean = new ColumnValueBean(user.getId());
-		List<ColumnValueBean> columnValueBeanList = new ArrayList<ColumnValueBean>();
-		columnValueBeanList.add(columnValueBean);
-		if (jdbcDAO != null)
-		{
-				final List results = jdbcDAO.executeQuery(query.toString(),null,columnValueBeanList);
-				for (int i = 0; i < results.size(); i++)
-				{  
-					Password password=new Password();
-					final ArrayList<String> columnList = (ArrayList<String>) results.get(i);
-					if ((columnList != null) )
-					{
-						password.setId(Long.parseLong(columnList.get(0)));
-						password.setPassword(columnList.get(1));
-						password.setUpdateDate((Date)formatter.parse(columnList.get(2)));
-						password.setUser(user);
-					}
-					passwords.add(password);
-				}
-			
-		}
-		}
-		catch (final DAOException daoExp)
-		{
-			throw new BizLogicException(daoExp);
-		} catch (ParseException parException) {
-			// TODO Auto-generated catch block
-			//throw new BizLogicException(parException);
-		}
-		finally
-		{
-			if(jdbcDAO!=null)
-			AppUtility.closeJDBCSession(jdbcDAO);
-		} 
-	   return passwords;
-	}
+	
 }
