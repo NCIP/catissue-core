@@ -1456,4 +1456,11 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4
 			<property name="jboss.home" value="${jboss.home}" />
 		</ant>
 	</target>
+	
+	<target name="generate:cacore" depends="common:init:pre">
+		<ant inheritAll="false" inheritRefs="false" antfile="deploy.xml" target="generate:cacore" dir="${caTissue-webapp.dir.dist}/modules/caTissue/conf">
+			<property name="caTissue-webapp.dir.dist" value="${caTissue-webapp.dir.dist}" />
+			<property name="jboss.home" value="${jboss.home}" />
+		</ant>
+	</target>
 </project>

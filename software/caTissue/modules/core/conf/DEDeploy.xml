@@ -38,6 +38,12 @@
 	<property name="db2.dialect.string.DE" value="org.hibernate.dialect.DB2Dialect" />
 	<property name="dynamic.extensions.location" value="."/>
 
+	<!--define require dir and Properties -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="./lib/ant-contrib.jar" />
+		</classpath>
+	</taskdef>
 	<!-- Ant target to clean up the DE entity group wars in the deploy directory -->
 	<target name="clean_entity_group_wars" depends="setupClassExecutionEnvironment"
 		description="clean up the DE entity group wars in the deploy directory">
@@ -1493,42 +1499,32 @@
 		<echo message="Generating caCore for ${entitygroupname}" />
 		<echo message="-----------------------------------------" />
 		<echo message=" " />
-		<available file="${xmi.filename}" property="isExportedFilePresent" />
+		<!--Step1:Generae package names for the model-->
+		<antcall target="generate.package.name">
+			<param name="xmi.name" value="${entity.name}"/>
+		</antcall>
+		<property file="${export.dir}/Package.properties" />
+		<property name="entitygroupname" value="${entity.name}" />
+		<property name="xmi.filename" value="${export.dir}/${entity.name}.xmi" />
+		<property name="version.number" value="1.1" />
 
-		<if>
-			<equals arg1="true" arg2="${isExportedFilePresent}" casesensitive="false" />
-			<then>
-				<echo message="-------------------------------------------------" />
-				<echo message="XMI present hence not exporting XMI for CACORE" />
-				<echo message="-------------------------------------------------" />
-				<echo message=" " />
-			</then>
-			<else>
-				<!--Step1:Generae package names for the model-->
-				<antcall target="generate.package.name"/>
-				<property file="${export.dir}/Package.properties" />
-				<property name="entitygroupname" value="${entity.name}" />
-				<property name="xmi.filename" value="${export.dir}/${entity.name}.xmi" />
-				<property name="version.number" value="1.1" />
-
-				<!--Step1:Generate xmi-->
-				<antcall target="export_xmi">
-					<param name="setup.method.required" value="False" />
-					<param name="groupname" value="${entitygroupname}" />
-					<param name="relative.filename" value="${xmi.filename}" />
-					<param name="version" value="${version.number}" />
-					<param name="hookentity" value="${hook.entity.value}" />
-				</antcall>
-				
-				<!--Clean dir-->
-				<delete>
-					<fileset dir="${export.dir}/">
-						<include name="**/*.txt" />
-						<include name="**/Package.properties" />
-					</fileset>
-				</delete>
-			</else>
-		</if>
+		<!--Step1:Generate xmi-->
+		<antcall target="export_xmi">
+			<param name="setup.method.required" value="False" />
+			<param name="groupname" value="${entitygroupname}" />
+			<param name="relative.filename" value="${xmi.filename}" />
+			<param name="version" value="${version.number}" />
+			<param name="hookentity" value="${hook.entity.value}" />
+		</antcall>
+		
+		<!--Clean dir-->
+		<delete>
+			<fileset dir="${export.dir}/">
+				<include name="**/*.txt" />
+				<include name="**/Package.properties" />
+			</fileset>
+		</delete>
+		
 		<!-- Unzip the host war from the jboss-->
 		<mkdir dir="${host.war.temp}" />
 		<unzip src="${jboss.home.dir}/server/default/deploy/${host.war.name}" dest="${host.war.temp}" overwrite="true"/>
@@ -1540,9 +1536,18 @@
 		<antcall target="regenerate.war"/>
 
 		<delete dir="${export.dir}" />
-
 		
-		
+	</target>
+	
+	<!--creates the host war back up -->
+	<property name="backup.dir" value="backup" ></property>
+	<target name="backup:host:war">
+		<tstamp>
+			<format property="timestamp" pattern="yyyy-MM-dd_hh-mm-ss"/>
+		</tstamp>
+		<mkdir dir = "${base.dir}/{backup.dir}"/>
+		<echo>creating backup at : ${base.dir}/{backup.dir}/${timestamp}_${host.war.name}</echo>
+		<copy file="${jboss.home.dir}/server/default/deploy/${host.war.name}" tofile="${base.dir}/${backup.dir}/${timestamp}_${host.war.name}"/>
 	</target>
 
 	<!--	=================================
@@ -1609,6 +1614,8 @@
          ================================= -->
 
 	<target name="regenerate.war">
+		<antcall target="backup:host:war"></antcall>
+		
 		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war"/>
 		<war destfile="${jboss.home.dir}/server/default/deploy/catissuecore.war"
 			webxml="${host.war.temp}/WEB-INF/web.xml">

@@ -977,7 +977,7 @@
 	           <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
 	        </replace>-->
 		<antcall target="config_jboss_files" />
-		<!--antcall target="generate:cacore:all" /-->		
+		<antcall target="generate:cacore:all" />		
 	</target>
 	
 	<!--Generate caCORE for all imported xmis in the system-->
@@ -3546,21 +3546,41 @@ Thanking You,
 			</classpath>
 		</java>
 		
+		<if>
+			<or>
+				<equals casesensitive="false" arg1="true" arg2="${generate.cacore}" />
+				<equals casesensitive="false"  arg1="yes" arg2="${generate.cacore}" />
+				<equals casesensitive="false"  arg1="y" arg2="${generate.cacore}" />
+				<equals casesensitive="false"  arg1="t" arg2="${generate.cacore}" />
+				<equals casesensitive="false"  arg1="1" arg2="${generate.cacore}" />
+			</or>							
+			
+			<then>
+				<basename property="groupName"  suffix="xmi" file="${filename}"/>
+				<antcall target="generate:cacore">
+					<param name="entity.group.name" value = "${groupName}"/>
+				</antcall>
+			</then>
+		</if>
 		
-		<!--ant antfile="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="handle.cacore.generation.for.import.xmi">
+	</target>
+
+	<!--Generate caCORE for the specified entity group-->
+	<target name="generate:cacore">
+		
+		<ant antfile="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="handle.cacore.generation.for.import.xmi">
 			<property name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
 			<property name="entityGroup.jar.location" value="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 			<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
-			<property name="xmi.name" value="${filename}" />
+			<property name="entity.name" value="${entity.group.name}" />
 			<property name="jboss.home.dir" value="${jboss.home}" />
 			<property name="default.prifix.war" value="${default.prefix.war}" />
 			<property name="database.type" value="${database.type}" />
 		</ant>
-		
 		<delete failonerror="${delete.failonerror}" dir="${export.dir}" />
-		<delete failonerror="${delete.failonerror}" dir="${tempcacore.dir}" /-->
+		<delete failonerror="${delete.failonerror}" dir="${tempcacore.dir}" />
 	</target>
-
+	
 	<property name="categoryFormNamesFile" value=" " />
 	<property name="isPersistMetadataOnly" value=" " />
 	<property name="categoryFileDir" value=" " />
