@@ -22,7 +22,6 @@ import java.io.ObjectOutputStream;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -185,20 +184,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				scg.setBarcode(null);
 			}
 			this.setCollectionProtocolRegistration(dao, scg, null);
-			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
-			
-			Date birthDate=participantBizLogic.getDateOfBirth(scg.getCollectionProtocolRegistration().getParticipant());
-			Long diffday;
-			Integer ageDiff;
-			if(scg.getEncounterTimestamp()!=null && birthDate!=null && scg.getAgeAtCollection()==null)
-			{
-				diffday=(scg.getEncounterTimestamp().getTime() - Math.abs(birthDate.getTime())) / Constants.TIME_FACTOR;
-				ageDiff=Integer.valueOf(String.valueOf((diffday / (Constants.YEAR_FACTOR))));
-				scg.setAgeAtCollection(ageDiff);
-			}
-			
-			
+			setAgeAtCollection(scg);
 			if (cpe != null)
 			{
 				//final CollectionProtocolEvent cpe = (CollectionProtocolEvent) collectionProtocolEventObj;
@@ -772,9 +758,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				Date birthDate=participantBizLogic.getDateOfBirth(specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant());
 				if (birthDate!=null)
 				{
-					Long diffday=(specimenCollectionGroup.getEncounterTimestamp().getTime() - Math.abs(birthDate.getTime())) / Constants.TIME_FACTOR;
-					Integer ageDiff=Integer.valueOf(String.valueOf((diffday/ (Constants.YEAR_FACTOR))));
-					persistentSCG.setAgeAtCollection(ageDiff);
+					Integer newAgeAtCollection = AppUtility.yearsDiff(birthDate, specimenCollectionGroup.getEncounterTimestamp());
+					persistentSCG.setAgeAtCollection(newAgeAtCollection);
 				}
 			}
 			String barCode = specimenCollectionGroup.getBarcode();
@@ -3381,7 +3366,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						
 			for (SpecimenCollectionGroup specimenCollectionGroup : scgList) 
 			{
-				Date collectionDate=null;
 				
 				SpecimenCollectionGroup  scgOldObject=new ObjectCloner().clone(specimenCollectionGroup);
 
@@ -3389,11 +3373,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				
 				if(specimenCollectionGroup.getEncounterTimestamp()!=null && newObject.getBirthDate()!=null)
 				{
-					collectionDate=specimenCollectionGroup.getEncounterTimestamp();
-					
-				     Long difference=(collectionDate.getTime() - Math.abs(newObject.getBirthDate().getTime())) / Constants.TIME_FACTOR;
-					
-					newAgeAtCollection=Integer.valueOf(String.valueOf((difference/ (Constants.YEAR_FACTOR))));
+				      newAgeAtCollection=AppUtility.yearsDiff(newObject.getBirthDate(), specimenCollectionGroup.getEncounterTimestamp());
 				}
 				
 				specimenCollectionGroup.setAgeAtCollection(newAgeAtCollection);
@@ -3402,4 +3382,23 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				
 			}
       }
+	public void setAgeAtCollection(SpecimenCollectionGroup scgObject) throws ApplicationException, ParseException
+	{
+		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+		final ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) factory.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		if(scgObject.getCollectionProtocolRegistration()!=null && scgObject.getCollectionProtocolRegistration().getParticipant()!=null)
+		{
+		    Date birthDate= scgObject.getCollectionProtocolRegistration().getParticipant().getBirthDate();
+		    if(birthDate==null)
+		    {
+			     birthDate=participantBizLogic.getDateOfBirth(scgObject.getCollectionProtocolRegistration().getParticipant());    
+		    }
+		    Integer newAgeAtCollection=null;
+		    if(scgObject.getEncounterTimestamp()!=null && birthDate!=null && scgObject.getAgeAtCollection()==null)
+		    { 
+		    	newAgeAtCollection=AppUtility.yearsDiff(birthDate, scgObject.getEncounterTimestamp());
+			    scgObject.setAgeAtCollection(newAgeAtCollection);
+		    }
+		}
+	}
 }

@@ -4092,4 +4092,15 @@ public class AppUtility
 		}        
 		return  buf.toString();
 	}
+    public static Integer yearsDiff(Date date1,Date date2)
+	{
+    	Calendar calendarDate1 = Calendar.getInstance();  
+		calendarDate1.setTime(date1);  
+		Calendar calendarDate2 = Calendar.getInstance();
+		calendarDate2.setTime(date2);  
+		Integer diff = Integer.valueOf(calendarDate2.get(Calendar.YEAR) - calendarDate1.get(Calendar.YEAR));
+		if (calendarDate2.get(Calendar.DAY_OF_YEAR) < calendarDate1.get(Calendar.DAY_OF_YEAR))  
+			diff--;
+		return diff;
+	}
 }

@@ -706,45 +706,30 @@ function calculateAge()
 <%
 Date birthDateObject=(Date)request.getAttribute("dob");
 String birthDateString=""; 
-String collectionDateString=""; 
+String collectionDateString=form.getCollectionDate();; 
 String showageDiffString=form.getAgeAtCollection();
-int collectionMinute=0;		
-int collectionHour=0; 		
-Long diffday=new Long(0);   
-Double ageDiff=new Double(0);
-SimpleDateFormat convertDateFormat = new SimpleDateFormat("MM-dd-yyyy");
-DecimalFormat twoDigitDecimal = new DecimalFormat("#");
 Date encounterTimeStampDate;
-collectionDateString=form.getCollectionDate();
+int collectionMinute=0;		
+int collectionHour=0; 		   
+SimpleDateFormat convertDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
+
 if(collectionDateString!=null)
 {
 	collectionMinute=Integer.valueOf(form.getTimeInMinute());
 	collectionHour=Integer.valueOf(form.getTimeInHour());
-	if(birthDateObject!=null)
-	{
-		birthDateString=convertDateFormat.format(birthDateObject);
-		if(form.getAgeAtCollection()==null)
-		{
-			encounterTimeStampDate=(Date)convertDateFormat.parse(collectionDateString);		
-			diffday=(encounterTimeStampDate.getTime() - birthDateObject.getTime()) /(24 * 60 * 60 * 1000);
-			ageDiff=Double.valueOf(diffday) / (365);
-			showageDiffString=twoDigitDecimal.format(ageDiff).toString();
-		}
-	}
 }
-else
+else if(operation.equals("add"))
 {
-	Date defaultDate=new java.util.Date();
-	collectionDateString=convertDateFormat.format(defaultDate);
-	collectionMinute=defaultDate.getMinutes();
-	collectionHour=defaultDate.getHours();	
-	if(birthDateObject!=null)
-		{
-			birthDateString=convertDateFormat.format(birthDateObject);
-			diffday=(defaultDate.getTime() - birthDateObject.getTime()) /(24 * 60 * 60 * 1000);
-			ageDiff=Double.valueOf(diffday) / (365);
-			showageDiffString=twoDigitDecimal.format(ageDiff).toString();
-		}
+	  Date defaultDate=new java.util.Date();
+	  collectionDateString=convertDateFormat.format(defaultDate);
+	  collectionMinute=defaultDate.getMinutes();
+	  collectionHour=defaultDate.getHours();
+}
+if(form.getAgeAtCollection()==null && birthDateObject!=null && 	collectionDateString != null)
+{
+	encounterTimeStampDate=(Date)convertDateFormat.parse(collectionDateString);		
+	Integer newAgeAtCollection=AppUtility.yearsDiff(birthDateObject,encounterTimeStampDate);
+	showageDiffString=String.valueOf(newAgeAtCollection);
 }
 %>
 <html:form action="<%=formName%>">

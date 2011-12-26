@@ -45,7 +45,7 @@ public class SpecimenCollectionGroupTransformer
         domainObject.setClinicalDiagnosis(uiRepOfDomain.getClinicalDiagnosis());
         domainObject.setClinicalStatus(uiRepOfDomain.getClinicalStatus());
         domainObject.setActivityStatus(uiRepOfDomain.getActivityStatus());
-        if(uiRepOfDomain.getCollectionDate()!=null)
+        if(uiRepOfDomain.getCollectionDate()!=null && !uiRepOfDomain.getCollectionDate().isEmpty())
         {
         	domainObject.setEncounterTimestamp(EventsUtil.setTimeStamp(uiRepOfDomain.getCollectionDate(), uiRepOfDomain.getTimeInHour(), uiRepOfDomain.getTimeInMinute()));
         }
