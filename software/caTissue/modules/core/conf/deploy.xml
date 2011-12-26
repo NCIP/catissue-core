@@ -1065,7 +1065,7 @@
 	</target>
 
 	<target name="upgrade_db_for_de_single_API">
-		<echo message="Upgrading DB for de_single_API..." />
+		<echo message="Upgrading DB for de_models_single_API..." />
 				<if>
 					<equals arg1="oracle" arg2="${database.type}" />
 					<then>
@@ -1635,6 +1635,7 @@
 		</tstamp>
 		<echo>After DE_Starts: ${DEtime}</echo>
 		<antcall target="insertPaths"/>
+		<antcall target="upgrade_db_for_de_single_API"></antcall>
 		<tstamp>
 			<format property="pathtime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
 		</tstamp>
@@ -2183,7 +2184,7 @@
 			</elseif>
 		</if>
 	
-
+	<antcall target="upgrade_db_for_de_single_API"></antcall>
 	</target>
 
 	<target name="update_static_metadata">
