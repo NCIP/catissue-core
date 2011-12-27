@@ -49,6 +49,6 @@ Protocol Hardware	HP
 Protocol Software	Microarray Suite 5.0
 Protocol Contact
 SDRF File	magetab.sdrf	
-Term Source Name	MO	ICD-O-3 Topography	SNOMED-CT		
-Term Source File	http://mged.sourceforge.net/ontologies/MGEDOntology.owl# 	http://www.who.int/classifications/icd/adaptations/oncology/en/	http://www.nlm.nih.gov/research/umls/Snomed/snomed_main.html
+Term Source Name	MO	ICD-O-3 Topography	SNOMED-CT		NCI Thesaurus
+Term Source File	http://mged.sourceforge.net/ontologies/MGEDOntology.owl# 	http://www.who.int/classifications/icd/adaptations/oncology/en/	http://www.nlm.nih.gov/research/umls/Snomed/snomed_main.html http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#
 Term Source Version	1.1.8			
