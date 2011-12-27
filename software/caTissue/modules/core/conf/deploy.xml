@@ -977,7 +977,7 @@
 	           <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
 	        </replace>-->
 		<antcall target="config_jboss_files" />
-		<antcall target="generate:cacore:all" />		
+		<!--antcall target="generate:cacore:all" /-->		
 	</target>
 	
 	<!--Generate caCORE for all imported xmis in the system-->
@@ -1623,7 +1623,7 @@
 			<param name="package" value="sop"/>
 			<param name="hookentity" value="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" />
 			<param name="addQueryPaths" value="true"/>
-			<param name="generate.cacore" value="true"/>
+			<param name="generate.cacore" value="false"/>
 			<param name="jboss.home" value="${jboss.home}"/>
 			<param name="pv.file.name" value="${resources.dir}/csv/SpecimenEvents_PVs.csv"/>
 		</antcall>
@@ -2165,7 +2165,7 @@
 			<param name="package" value="sop"/>
 			<param name="hookentity" value="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" />
 			<param name="addQueryPaths" value="true"/>
-			<param name="generate.cacore" value="true"/>
+			<param name="generate.cacore" value="false"/>
 			<param name="jboss.home" value="${jboss.home}"/>
 			<param name="pv.file.name" value="${resources.dir}/csv/SpecimenEvents_PVs.csv"/>
 		</antcall>
