@@ -3534,6 +3534,7 @@ Thanking You,
 			<arg value="${generate.cacore}" />
 			<arg value="${Application.url}/"/>
 			<arg value="${pv.file.name}"/>
+			<arg value="${base.dir}/../../.."/>
 			<classpath>
 				<pathelement location="${prop.temp.dir}/catissuecore/WEB-INF/classes" />
 				<fileset dir="${prop.temp.dir}/catissuecore/WEB-INF/lib">

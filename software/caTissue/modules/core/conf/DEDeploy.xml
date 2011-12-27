@@ -1546,7 +1546,7 @@
 			<format property="timestamp" pattern="yyyy-MM-dd_hh-mm-ss"/>
 		</tstamp>
 		<mkdir dir = "${base.dir}/{backup.dir}"/>
-		<echo>creating backup at : ${base.dir}/{backup.dir}/${timestamp}_${host.war.name}</echo>
+		<echo>creating backup at : ${base.dir}/${backup.dir}/${timestamp}_${host.war.name}</echo>
 		<copy file="${jboss.home.dir}/server/default/deploy/${host.war.name}" tofile="${base.dir}/${backup.dir}/${timestamp}_${host.war.name}"/>
 	</target>
 
