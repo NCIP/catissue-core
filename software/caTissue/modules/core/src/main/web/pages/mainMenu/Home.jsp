@@ -1,4 +1,5 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@ page
 	import="edu.wustl.common.util.global.Constants,edu.wustl.common.beans.SessionDataBean"%>
