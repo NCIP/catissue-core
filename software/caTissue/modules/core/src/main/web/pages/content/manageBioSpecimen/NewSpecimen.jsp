@@ -1417,7 +1417,7 @@
 						   		<html:hidden property="specimenCollectionGroupName" styleId="specimenCollectionGroupName"/>
 								<html:hidden property="parentSpecimenName"/>
 								<label for="parentSpecimenId">
-									<%= "<a class='blue_ar_b' href=\"SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id="+form.getParentSpecimenId()+"\">"+form.getParentSpecimenName()+"</a>"%>
+									<%= "<a class='blue_ar_b' href=\"QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&refresh=false&id="+form.getParentSpecimenId()+"\">"+form.getParentSpecimenName()+"</a>"%>
 								</label>
 
  			        	  </td>
@@ -1467,7 +1467,7 @@
 										if(StringUtils.isBlank(form.getParentSpecimenGSID()))
 										{
 
-											out.print("Please first assign a GSID to <a class='blue_ar_b' href=\"SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id="+form.getParentSpecimenId()+"\">Parent</a>");
+											out.print("Please first assign a GSID to <a class='blue_ar_b' href=\"QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&refresh=false&id="+form.getParentSpecimenId()+"\">Parent</a>");
 										}
 										else
 										{
