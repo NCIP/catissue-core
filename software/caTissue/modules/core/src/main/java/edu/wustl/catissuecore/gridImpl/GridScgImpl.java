@@ -18,8 +18,8 @@ public class GridScgImpl extends AbstractGridImpl
 	{
 		setSessionData(sessionData);
 		String query = null;
-		String readDeniedIds = new SPPEventProcessor().getReadDeniedIds(sessionData.getUserName());
-		if(readDeniedIds.length() == 0)
+		String cpIds = new SPPEventProcessor().getCPIds(sessionData);//getReadDeniedIds(sessionData.getUserName());
+		if(cpIds.length() == 0)
 		{
 			query = "select scg.IDENTIFIER,sp.TITLE,scg.NAME,cpr.PROTOCOL_PARTICIPANT_ID," +
 			"cpe.COLLECTION_POINT_LABEL,cp.FIRST_NAME,cp.LAST_NAME " +
@@ -43,7 +43,7 @@ public class GridScgImpl extends AbstractGridImpl
 					"inner join catissue_participant cp on cp.IDENTIFIER = cpr.PARTICIPANT_ID " +
 					"inner join catissue_cpe_spp ccs on ccs.cpe_identifier = scg.COLLECTION_PROTOCOL_EVENT_ID " +
 					"where ccs.spp_identifier="+jsonString +" and scg.COLLECTION_STATUS not in ('Pending','overdue','not collected')" +
-							" and scg.identifier not in (select csapp.scg_identifier from catissue_spp_application csapp where csapp.SCG_IDENTIFIER =scg.IDENTIFIER  and ccs.spp_identifier = csapp.spp_identifier) and sp.IDENTIFIER not in ("+readDeniedIds+")";
+							" and scg.identifier not in (select csapp.scg_identifier from catissue_spp_application csapp where csapp.SCG_IDENTIFIER =scg.IDENTIFIER  and ccs.spp_identifier = csapp.spp_identifier) and sp.IDENTIFIER not in ("+cpIds+")";
 		}
 		return query;
 
@@ -81,12 +81,12 @@ public class GridScgImpl extends AbstractGridImpl
 		String fName =data.get_value("FIRST_NAME");
 		String lName =data.get_value("LAST_NAME");
 		StringBuffer participantName= new StringBuffer();
-		if(sessionData != null && !sessionData.isAdmin())
+		/*if(sessionData != null && !sessionData.isAdmin())
 		{
 			participantName.append("####");
 		}
 		else
-		{
+		{*/
 			if (fName == null && lName == null)
 			{
 				participantName.append("N/A");
@@ -115,7 +115,7 @@ public class GridScgImpl extends AbstractGridImpl
 					}
 				}
 			}
-		}
+		//}
 		data.set_value("FIRST_NAME",participantName.toString());
 	}
 }
