@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.action;
 
+import java.util.List;
+
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import edu.wustl.auth.exception.AuthFileParseException;
 import edu.wustl.auth.exception.AuthenticationException;
 import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.domain.User;
@@ -27,7 +30,9 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.LoginResult;
+import edu.wustl.domain.UserDetails;
 import edu.wustl.migrator.MigrationState;
+import edu.wustl.migrator.util.Utility;
 import edu.wustl.processor.LoginProcessor;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Roles;
@@ -75,11 +80,11 @@ public class LoginAction extends XSSSupportedAction
     public ActionForward executeXSS(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response)
     {
-        String forwardTo = Constants.FAILURE;
+    	ActionForward forwardTo = mapping.findForward(Constants.FAILURE);
         if (form == null)
         {
             LoginAction.LOGGER.debug("Form is Null");
-            forwardTo = Constants.FAILURE;
+            forwardTo = mapping.findForward(Constants.FAILURE);
         }
         else
         {
@@ -90,11 +95,11 @@ public class LoginAction extends XSSSupportedAction
 
                 if (isRequestFromClinportal(request))
                 {
-                    forwardTo = Constants.SUCCESS;
+                    forwardTo = mapping.findForward(Constants.SUCCESS);
                 }
                 else
                 {
-                    forwardTo = processUserLogin(form, request);
+                    forwardTo = processUserLogin(form, request, mapping);
                 }
             }
             catch (final Exception ex)
@@ -102,19 +107,20 @@ public class LoginAction extends XSSSupportedAction
                 LoginAction.LOGGER.error("Exception: " + ex.getMessage(), ex);
                 cleanSession(request);
                 handleError(request, "errors.incorrectLoginIDPassword");
-                forwardTo = Constants.FAILURE;
+                forwardTo = mapping.findForward(Constants.FAILURE);
             }
         }
-        return mapping.findForward(forwardTo);
+        return (forwardTo);
     }
 
-    private String processUserLogin(final ActionForm form, final HttpServletRequest request)
-            throws CatissueException, NamingException, ApplicationException, AuthenticationException
+    private ActionForward processUserLogin(final ActionForm form, final HttpServletRequest request, ActionMapping mapping)
+            throws CatissueException, NamingException, ApplicationException, AuthenticationException, AuthFileParseException
     {
-        String forwardTo;
+        ActionForward forwardTo;
         final LoginForm loginForm = (LoginForm) form;
         final LoginCredentials loginCredentials = new LoginCredentials();
-        loginCredentials.setLoginName(loginForm.getLoginName());
+        final String username = loginForm.getLoginName();
+		loginCredentials.setLoginName(username);
         loginCredentials.setPassword(loginForm.getPassword());
         LoginProcessor.authenticate(loginCredentials);
         final edu.wustl.domain.LoginResult loginResult = CatissueLoginProcessor.processUserLogin(request,
@@ -124,27 +130,28 @@ public class LoginAction extends XSSSupportedAction
         {
             if (MigrationState.NEW_IDP_USER.equals(loginResult.getMigrationState()))
             {
-                forwardTo = setSignUpPageAttributes(request, loginForm);
+                forwardTo = mapping.findForward(setSignUpPageAttributes(request, loginForm));
             }
             else
             {
-                forwardTo = validateUser(request, loginResult);
+                forwardTo = mapping.findForward(validateUser(request, loginResult));
             }
 
             if (!Constants.FAILURE.equals(forwardTo)
                     && MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()))
             {
-                forwardTo = Constants.SUCCESS;
+                forwardTo = mapping.findForward(Constants.SUCCESS);
             }
         }
         else
         {
-            LoginAction.LOGGER.info("User " + loginForm.getLoginName()
+            LoginAction.LOGGER.info("User " + username
                     + " Invalid user. Sending back to the login Page");
+            forwardTo = mapping.findForward(Constants.FAILURE);
             if (MigrationState.MIGRATED.equals(loginResult.getMigrationState())
-                    && loginForm.getLoginName().equals(loginResult.getAppLoginName()))
+                    && username.equals(loginResult.getAppLoginName()))
             {
-                LoginAction.LOGGER.info("User " + loginForm.getLoginName()
+                LoginAction.LOGGER.info("User " + username
                         + " Migrated user. Sending back to the login Page");
                 handleError(request, "app.migrateduser");
             }
@@ -152,11 +159,27 @@ public class LoginAction extends XSSSupportedAction
             {
                 handleError(request, "errors.incorrectLoginIDPassword");
             }
-            forwardTo = Constants.FAILURE;
+            
+			// Grid Grouper Integration: the following has been transferred from
+			// casLoginView.jsp.
+			List idpsList = Utility.getConfiguredIDPNVB(false);
+			if (idpsList.size() > 0) {
+				UserDetails userDetails = LoginProcessor
+						.getUserDetails(username);
+				if (userDetails == null) {
+					if (!LoginProcessor.isUserPresentInApplicationDB(username)) {
+						ActionForward ggForwardTemplate = mapping
+								.findForward("GridGrouperUser");
+						forwardTo = new ActionForward(
+								ggForwardTemplate.getName(),
+								ggForwardTemplate.getPath()+username,
+								ggForwardTemplate.getRedirect(),
+								ggForwardTemplate.getContextRelative());
+					}
+				}
+			}
+            
         }
-
-
-
         return forwardTo;
     }
 

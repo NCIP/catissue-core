@@ -1156,6 +1156,7 @@ PUBLIC
 			<forward name="access_denied" path=".catissuecore.changePasswordDef"/>
 			<forward name="failure" path=".catissuecore.mainTitlePageDef" />
 			<forward name="WashU" path="/SignUp.do?userFrom=WashU&amp;pageOf=pageOfSignUp&amp;operation=add" />
+			<forward name="GridGrouperUser" path="/SignUp.do?userFrom=WashU&amp;pageOf=pageOfSignUp&amp;operation=add&amp;grouperUser=yes&amp;casuser=" redirect="true"/>
 			<forward name="SCG" path="/GotoSCG.do" />
 		</action>
 

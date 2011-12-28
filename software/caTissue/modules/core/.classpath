@@ -212,7 +212,7 @@
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/XmlSchema.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/xsdlib.jar"/>
-	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/IDPAuthenticationManager1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/IDPAuthenticationManager1.0-SNAPSHOT.jar" sourcepath="/catissue-Idp-Auth-Manager"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/limpopo-1.0.7.2.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/SecurityManager-1.1.7.3-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="../../../target/lib/caTissue_lib/web_inf_lib/SimpleQuery-1.2-SNAPSHOT.jar"/>
