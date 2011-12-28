@@ -1734,7 +1734,7 @@
 
 	<!--MySQL Database Creation -->
 	<target name="deploy_db_mysql" description="MySQL Database Creation">
-		<echo message="Initializing MySQL Database for caTissue Suite v1.2. Application..." />
+		<echo message="Initializing MySQL Database for caTissue Suite v2.0 application..." />
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.server}:${database.port}/${database.name}" userid="${database.user}" password="${database.password}">
 			<transaction src="${mysql.sql.dir}/catissuecore.sql" />
 			<transaction src="${mysql.sql.dir}/InitDB_CreateTable.sql" />

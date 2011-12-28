@@ -307,7 +307,7 @@ public class CaCoreAppServicesDelegator {
 
 		for (Object object : list) {
 			/**
-			 * Chech if object is of type AbstractDomainObject if not add it to
+			 * Check if object is of type AbstractDomainObject if not add it to
 			 * final list else check call getActivityStatus of object and check
 			 * if value is Disabled.
 			 */
@@ -328,11 +328,13 @@ public class CaCoreAppServicesDelegator {
 							+ ex.getMessage());
 					result.add(abstractDomainObject);
 				}
+			} else if (object instanceof Number) {
+				result.add(object);
 			} else if (!isUserisAdmin) {
 				throw new Exception(
-						"caTissue doesnot support queries which returns result "
-								+ "list containing instances of classes other than "
-								+ "caTissue domain model");
+						"caTissue does not support queries which return results "
+								+ "containing instances of classes that are not in the "
+								+ "caTissue domain model.");
 			} else {
 				// Add object to list as it is nit caTissue domain objectFor
 				// e.g Admin user queries on get id from domain object
@@ -397,10 +399,16 @@ public class CaCoreAppServicesDelegator {
 					+ objectList.size());
 			for (Object abstractDomainObject : objectList) {
 				Class<?> classObject = abstractDomainObject.getClass();
+				
+				if (abstractDomainObject instanceof Number) {
+					filteredObjects.add(abstractDomainObject);
+					continue;
+				}				
+				
 				String objectName = classObject.getName();
 				Long identifier = (Long) this.getFieldObject(
 						abstractDomainObject, "id");
-
+				
 				if (classObject.getSuperclass().equals(
 						SpecimenEventParameters.class)
 						|| classObject.getSuperclass().equals(
