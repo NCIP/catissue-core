@@ -73,7 +73,7 @@ public class DefaultValueManager
 			}
 			if (defaultValueKey[0].equalsIgnoreCase(Constants.IS_BARCODE_EDITABLE))
 			{
-				logger.error("......barcode.isEditable....." + defaultValue + "default keys : "
+				logger.info("......barcode.isEditable....." + defaultValue + "default keys : "
 						+ defaultValueKey[0]);
 				DefaultValueManager.setDefaultValue(defaultValueKey[0], defaultValue);
 			}
@@ -161,7 +161,7 @@ public class DefaultValueManager
 				else
 				{
 					DefaultValueManager.setDefaultValue(defaultValueKey[0], "");
-					logger.error("Default Value set for '" + defaultValueKey[0]
+					logger.info("Default Value set for '" + defaultValueKey[0]
 							+ "' is not in the CDEList");
 				}
 			}
