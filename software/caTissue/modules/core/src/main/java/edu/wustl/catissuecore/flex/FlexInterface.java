@@ -41,6 +41,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
+import edu.wustl.catissuecore.util.StringComprator;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ParticipantComparator;
 import edu.wustl.catissuecore.util.SpecimenAutoStorageContainer;
@@ -1571,7 +1572,8 @@ public class FlexInterface
                     .getAttribute(Constants.SESSION_DATA);
             final CpBasedViewBizLogic cpBizLogic = new CpBasedViewBizLogic();
             cpColl = cpBizLogic.getCollectionProtocolCollection(sessionDataBean);
-            Collections.sort(cpColl);
+            final StringComprator cpComp=new StringComprator();
+            Collections.sort(cpColl, cpComp);
             //Converting From NameValueBean to CpAndParticipentsBean
             final Iterator itr = cpColl.iterator();
             while (itr.hasNext())
