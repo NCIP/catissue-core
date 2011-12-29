@@ -492,12 +492,12 @@
 	<!--  property for the help page links/icons -->
 	<property>
 		<name>userguide.link</name>
-		<value>https://ncisvn.nci.nih.gov/svn/catissue_persistent/catissuecore/branches/caTISSUE_SUITE_v20_BDA_BRANCH/docs/ReleaseDocs/caTissue_Suite_User_Manual.docx</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/caTissue+Suite+2.0+User%27s+Guide+-+Draft</value>
 	</property>
 
 	<property>
 		<name>technicalguide.link</name>
-		<value>https://ncisvn.nci.nih.gov/svn/catissue_persistent/catissuecore/branches/caTISSUE_SUITE_v20_BDA_BRANCH/docs/ReleaseDocs/caTissueSuite_v2_0_Technical_Guide.doc</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/caTissue+Suite+2.0+Technical+Administration+Guide+-+Draft</value>
 	</property>
 
 	<property>
@@ -512,7 +512,7 @@
 
 	<property>
 		<name>knowledgecenter.link</name>
-		<value>https://cabig-kc.nci.nih.gov/Biospecimen/KC/index.php/Main_Page</value>
+		<value>https://wiki.nci.nih.gov/display/TBPTKC/Tissue-Biospecimen+Banking+and+Technology+Tools+Knowledge+Center</value>
 	</property>
 
 	<property>
