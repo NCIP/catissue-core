@@ -1320,7 +1320,7 @@
 
 	<target name="generate.xml.for.audit" description="generate the audit metadata xml">
 		<property file="${export.dir}/Package.properties" />
-		<propertyregex property="package.name" input="${de.package.name}" regexp="/" replace="." defaultValue="${de.package.name}" />
+		<propertyregex property="packageName" input="${de.package.name}" regexp="/" replace="." defaultValue="${de.package.name}" />
 
 		<delete dir="${tempOrm}"></delete>
 		<mkdir dir="${tempOrm}"/>
@@ -1337,7 +1337,7 @@
 
 
 		<java classname="edu.common.dynamicextensions.util.DEAuditXMLGenerator" fork="true" maxmemory="1024M">
-			<arg value="${de.package.name}/{cacore.package.name}" />
+			<arg value="${packageName}" />
 			<arg value="${cacore.deployable.dir}/${entity.name}/auditablemetadata.xml" />
 			<arg value="true" />
 			<classpath>
@@ -1718,11 +1718,6 @@
          - - - - - - - - - - - - - - - - - -->
 	<target name="generate.cacore" description="Generate caCore">
 
-		<!--antcall target="unzip_caCORESDKzip">
-			<param name="entity.group.name" value="${entitygroupname}" />
-			<param name="entity.package.name" value="${cacore.package.name}" />
-		</antcall-->
-
 		<echo message="-------------------------" />
 		<echo message=" Now creating caCORE war " />
 		<echo message="-------------------------" />
@@ -1842,7 +1837,7 @@
 		<java classname="edu.wustl.metadata.util.CacoreDEMetadataAppender" fork="true" maxmemory="1024M">
 			<arg value="${srcHibernateCfgFile}" />
 			<arg value="${caCOREHibernateCfgFile}" />
-			<arg value="${de.package.name}/${cacore.package.name}" />
+			<arg value="${de.package.name}" />
 						
 			<classpath>
 				<pathelement location="${temp.dir.DE}" />
@@ -1893,9 +1888,9 @@
 		<propertyregex property="package.name" input="${de.package.name}" regexp="/" replace="." defaultValue="${de.package.name}" />
 						
 		<unzip dest="${domain.jar.location}" src="${host.war.temp}/WEB-INF/lib/catissue_cacore-beans.jar"></unzip>
-		<mkdir dir="${domain.jar.location}/${de.package.name}/${cacore.package.name}"/>
-		<copy todir="${domain.jar.location}/${de.package.name}/${cacore.package.name}" overwrite="true">
-			<fileset dir="${tempJar}/${de.package.name}/${cacore.package.name}">
+		<mkdir dir="${domain.jar.location}/${de.package.name}"/>
+		<copy todir="${domain.jar.location}/${de.package.name}" overwrite="true">
+			<fileset dir="${tempJar}/${de.package.name}">
 			</fileset>
 		</copy>
 
@@ -1916,9 +1911,9 @@
 		<propertyregex property="package.name" input="${de.package.name}" regexp="/" replace="." defaultValue="${de.package.name}" />
 		
 		<!--copy hbms to classes folder-->
-		<mkdir dir="${host.war.temp}/WEB-INF/classes/${de.package.name}/${cacore.package.name}"/>
-		<copy todir="${host.war.temp}/WEB-INF/classes/${de.package.name}/${cacore.package.name}" overwrite="true">
-			<fileset dir="${tempOrm}/${de.package.name}/${cacore.package.name}">
+		<mkdir dir="${host.war.temp}/WEB-INF/classes/${de.package.name}"/>
+		<copy todir="${host.war.temp}/WEB-INF/classes/${de.package.name}" overwrite="true">
+			<fileset dir="${tempOrm}/${de.package.name}">
 			</fileset>
 		</copy>
 
