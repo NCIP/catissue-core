@@ -39,6 +39,7 @@
 	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+	boolean isWithinFrame = "pageOfNewSpecimenCPQuery".equalsIgnoreCase(pageOf);
 	boolean isAddNew = false;
 	String signedConsentDate = "";
 	String selectProperty="";
@@ -1417,7 +1418,12 @@
 						   		<html:hidden property="specimenCollectionGroupName" styleId="specimenCollectionGroupName"/>
 								<html:hidden property="parentSpecimenName"/>
 								<label for="parentSpecimenId">
-									<%= "<a class='blue_ar_b' href=\"QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&refresh=false&id="+form.getParentSpecimenId()+"\">"+form.getParentSpecimenName()+"</a>"%>
+									<% if (isWithinFrame) { 
+										out.print("<a class='blue_ar_b' href=\"QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&refresh=false&id="+form.getParentSpecimenId()+"\">"+form.getParentSpecimenName()+"</a>");
+									   } else {
+										out.print("<a class='blue_ar_b' href=\"SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id="+form.getParentSpecimenId()+"\">"+form.getParentSpecimenName()+"</a>");										
+									   }
+									%>
 								</label>
 
  			        	  </td>
@@ -1467,7 +1473,10 @@
 										if(StringUtils.isBlank(form.getParentSpecimenGSID()))
 										{
 
-											out.print("Please first assign a GSID to <a class='blue_ar_b' href=\"QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&refresh=false&id="+form.getParentSpecimenId()+"\">Parent</a>");
+											if (isWithinFrame)
+												out.print("Please first assign a GSID to <a class='blue_ar_b' href=\"QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&operation=edit&refresh=false&id="+form.getParentSpecimenId()+"\">Parent</a>");
+											else
+												out.print("Please first assign a GSID to <a class='blue_ar_b' href=\"SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id="+form.getParentSpecimenId()+"\">Parent</a>");
 										}
 										else
 										{
