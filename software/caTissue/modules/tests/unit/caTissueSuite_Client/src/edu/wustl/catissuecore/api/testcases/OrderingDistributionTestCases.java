@@ -37,8 +37,21 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
     	
     	//Set Distribution Protocol Object to OrderDetails
     	DistributionProtocol distributionProtocol = new DistributionProtocol();
-    	distributionProtocol.setId(2L);
-    	orderDetails.setDistributionProtocol(distributionProtocol); 	
+    	distributionProtocol.setTitle("Distribution Protocol 1");    	
+    	
+    	//Search the Distribution Protocol and set it to Order Details
+    	List<DistributionProtocol> distProtList = searchByExample(DistributionProtocol.class, distributionProtocol);
+    	if(distProtList.size() > 0)
+    	{
+    		DistributionProtocol searchDistProt = new DistributionProtocol();
+    		searchDistProt.setId(distProtList.get(0).getId());    		
+    		orderDetails.setDistributionProtocol(searchDistProt);    		
+    	}
+    	else
+    	{
+    		System.out.println("Error in testCreateOrder! ");
+    		assertFalse(distributionProtocol.getTitle() + " Distribution Protocol not found!", distProtList.size() > 0);
+    	}
     	
     	//Create OrderItem and add Specimen (1) to it
         ExistingSpecimenOrderItem existingSpecimenOrderItem1 = new ExistingSpecimenOrderItem();
@@ -46,10 +59,23 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
         existingSpecimenOrderItem1.setDescription("OI Description " + UniqueKeyGeneratorUtil.getUniqueKey());
         existingSpecimenOrderItem1.setRequestedQuantity(1.0);
         existingSpecimenOrderItem1.setOrderDetails(orderDetails);
-        Specimen specimen1 = new Specimen();
-        specimen1.setId(7L);
-        existingSpecimenOrderItem1.setSpecimen(specimen1);
-
+        
+        //Search the Specimen1 label and set it to Order Details
+        Specimen specimen = new Specimen();
+    	specimen.setLabel("ABCDE");
+    	    	
+    	List<Specimen> specimenList = searchByExample(Specimen.class, specimen);
+    	if(specimenList.size() > 0)
+    	{
+    		Specimen searchSpecimen = new Specimen();
+    		searchSpecimen.setId(specimenList.get(0).getId());    		
+    		existingSpecimenOrderItem1.setSpecimen(searchSpecimen);    		
+    	}
+    	else
+    	{
+    		assertFalse(specimen.getLabel() + " Specimen not found!", specimenList.size() > 0);
+    	}
+        
         //Create OrderItem and add Specimen (2) to it
         ExistingSpecimenOrderItem existingSpecimenOrderItem2 = new ExistingSpecimenOrderItem();
         existingSpecimenOrderItem2.setStatus("New");
@@ -57,9 +83,22 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
         existingSpecimenOrderItem2.setRequestedQuantity(1.0);
         existingSpecimenOrderItem2.setOrderDetails(orderDetails);
         existingSpecimenOrderItem2.setStatus("New");
+
+        //Search the Specimen2 label and set it to Order Details
         Specimen specimen2 = new Specimen();
-        specimen2.setId(8L);
-        existingSpecimenOrderItem2.setSpecimen(specimen2);
+    	specimen2.setLabel("12345");
+    	    	
+    	List<Specimen> specimenList2 = searchByExample(Specimen.class, specimen2);
+    	if(specimenList2.size() > 0)
+    	{
+    		Specimen searchSpecimen = new Specimen();
+    		searchSpecimen.setId(specimenList2.get(0).getId());    		
+    		existingSpecimenOrderItem2.setSpecimen(searchSpecimen);    		
+    	}
+    	else
+    	{
+    		assertFalse(specimen2.getLabel() + " Specimen not found!", specimenList2.size() > 0);
+    	}
         
         //Set OrderItem Collection to Order Details
         Collection orderItemCollection = new HashSet();
@@ -94,9 +133,22 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
         existingSpecimenOrderItem1.setDescription("OI Description " + UniqueKeyGeneratorUtil.getUniqueKey());
         existingSpecimenOrderItem1.setRequestedQuantity(1.0);
         existingSpecimenOrderItem1.setOrderDetails(orderDetails);
-        Specimen specimen1 = new Specimen();
-        specimen1.setId(11L);
-        existingSpecimenOrderItem1.setSpecimen(specimen1);
+
+        //Search the Specimen1 label and set it to Order Details
+        Specimen specimen = new Specimen();
+    	specimen.setLabel("ABCDE");
+    	    	
+    	List<Specimen> specimenList = searchByExample(Specimen.class, specimen);
+    	if(specimenList.size() > 0)
+    	{
+    		Specimen searchSpecimen = new Specimen();
+    		searchSpecimen.setId(specimenList.get(0).getId());    		
+    		existingSpecimenOrderItem1.setSpecimen(searchSpecimen);    		
+    	}
+    	else
+    	{
+    		assertFalse(specimen.getLabel() + " Specimen not found!", specimenList.size() > 0);
+    	}
 
         //Create OrderItem and add Specimen (2) to it
         ExistingSpecimenOrderItem existingSpecimenOrderItem2 = new ExistingSpecimenOrderItem();
@@ -105,9 +157,22 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
         existingSpecimenOrderItem2.setRequestedQuantity(1.0);
         existingSpecimenOrderItem2.setOrderDetails(orderDetails);
         existingSpecimenOrderItem2.setStatus("New");
+        
+        //Search the Specimen2 label and set it to Order Details
         Specimen specimen2 = new Specimen();
-        specimen2.setId(12L);
-        existingSpecimenOrderItem2.setSpecimen(specimen2);
+    	specimen2.setLabel("12345");
+    	    	
+    	List<Specimen> specimenList2 = searchByExample(Specimen.class, specimen2);
+    	if(specimenList2.size() > 0)
+    	{
+    		Specimen searchSpecimen = new Specimen();
+    		searchSpecimen.setId(specimenList2.get(0).getId());    		
+    		existingSpecimenOrderItem2.setSpecimen(searchSpecimen);    		
+    	}
+    	else
+    	{
+    		assertFalse(specimen2.getLabel() + " Specimen not found!", specimenList2.size() > 0);
+    	}
         
         //Set OrderItem Collection to Order Details
         Collection orderItemCollection = new HashSet();
@@ -136,10 +201,22 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
     	orderDetails.setComment("Order Comments " + UniqueKeyGeneratorUtil.getUniqueKey());
     	orderDetails.setStatus("New");
     	
-    	//Set Distribution Protocol Object to OrderDetail
+    	//Set Distribution Protocol Object to OrderDetails
     	DistributionProtocol distributionProtocol = new DistributionProtocol();
-    	distributionProtocol.setId(2L);
-    	orderDetails.setDistributionProtocol(distributionProtocol);
+    	distributionProtocol.setTitle("Distribution Protocol 1");
+    	DistributionProtocol searchDistProt = new DistributionProtocol();
+    	
+    	//Search the Distribution Protocol and set it to Order Details
+    	List<DistributionProtocol> distProtList = searchByExample(DistributionProtocol.class, distributionProtocol);
+    	if(distProtList.size() > 0)
+    	{    		
+    		searchDistProt.setId(distProtList.get(0).getId());    		
+    		orderDetails.setDistributionProtocol(searchDistProt);    		
+    	}
+    	else
+    	{
+    		assertFalse(distributionProtocol.getTitle() + " Distribution Protocol not found!", distProtList.size() > 0);
+    	}
     	
     	//Create OrderItem and add Specimen (1) to it
     	ExistingSpecimenOrderItem existingSpecimenOrderItem1 = new ExistingSpecimenOrderItem();
@@ -147,9 +224,22 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
         existingSpecimenOrderItem1.setDescription("OI Description " + UniqueKeyGeneratorUtil.getUniqueKey());
         existingSpecimenOrderItem1.setRequestedQuantity(1.0);
         existingSpecimenOrderItem1.setOrderDetails(orderDetails);
-        Specimen specimen1 = new Specimen();
-        specimen1.setId(14L);
-        existingSpecimenOrderItem1.setSpecimen(specimen1);
+        
+        //Search the Specimen1 label and set it to Order Details
+        Specimen specimen = new Specimen();
+        Specimen searchSpecimen1 = new Specimen();
+    	specimen.setLabel("ABCDE");
+    	    	
+    	List<Specimen> specimenList = searchByExample(Specimen.class, specimen);
+    	if(specimenList.size() > 0)
+    	{
+    		searchSpecimen1.setId(specimenList.get(0).getId());    		
+    		existingSpecimenOrderItem1.setSpecimen(searchSpecimen1);    		
+    	}
+    	else
+    	{
+    		assertFalse(specimen.getLabel() + " Specimen not found!", specimenList.size() > 0);
+    	}
         
         //Create OrderItem and add Specimen (2) to it
         ExistingSpecimenOrderItem existingSpecimenOrderItem2 = new ExistingSpecimenOrderItem();
@@ -158,9 +248,22 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
         existingSpecimenOrderItem2.setRequestedQuantity(1.0);
         existingSpecimenOrderItem2.setOrderDetails(orderDetails);
         existingSpecimenOrderItem2.setStatus("New");
+        
+        //Search the Specimen2 label and set it to Order Details
         Specimen specimen2 = new Specimen();
-        specimen2.setId(15L);
-        existingSpecimenOrderItem2.setSpecimen(specimen2);
+        Specimen searchSpecimen2 = new Specimen();
+    	specimen2.setLabel("12345");
+    	    	
+    	List<Specimen> specimenList2 = searchByExample(Specimen.class, specimen2);
+    	if(specimenList2.size() > 0)
+    	{
+    		searchSpecimen2.setId(specimenList2.get(0).getId());    		
+    		existingSpecimenOrderItem2.setSpecimen(searchSpecimen2);    		
+    	}
+    	else
+    	{
+    		assertFalse(specimen2.getLabel() + " Specimen not found!", specimenList2.size() > 0);
+    	}
         
         //Set OrderItem Collection to Order Details
         Collection orderItemCollection = new HashSet();
@@ -182,13 +285,26 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
     	distribution.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE
 				.toString());
     	distribution.setOrderDetails(addedOrderDetails);
-    	distribution.setDistributionProtocol(distributionProtocol);    	
+    	distribution.setDistributionProtocol(searchDistProt);    	
     	final Date date = new Date();
 		distribution.setTimestamp(date);
 		distribution.setComment("Distribution Comments " + UniqueKeyGeneratorUtil.getUniqueKey());
-		Site toSite = new Site();
-		toSite.setId(3L);
-		distribution.setToSite(toSite);
+		
+		//Search the Site object and set it to Distribution Protocol Object
+    	Site site = new Site();
+    	site.setName("NIH");    	
+    	
+    	List<Site> siteList = searchByExample(Site.class, site);
+    	if(siteList.size() > 0)
+    	{
+    		Site searchSite = new Site();
+    		searchSite.setId(siteList.get(0).getId());    		
+    		distribution.setToSite(searchSite);    		
+    	}
+    	else
+    	{
+    		assertFalse(site.getName() + " Site not found!", siteList.size() > 0);
+    	}
 		
 		//Add Distribution to OrderDetails Object
 		Collection newDistributionColl = new HashSet();
@@ -197,12 +313,12 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
         
         //Create Distributed Item(1) object and specimen(1) to it
 		DistributedItem distributedItem1 = new DistributedItem();
-        distributedItem1.setSpecimen(specimen1);
+        distributedItem1.setSpecimen(searchSpecimen1);
         distributedItem1.setQuantity(1.0);
         
         //Create Distributed Item(2) object and specimen(2) to it
         DistributedItem distributedItem2 = new DistributedItem();
-        distributedItem2.setSpecimen(specimen2);
+        distributedItem2.setSpecimen(searchSpecimen2);
         distributedItem2.setQuantity(1.0);
         
         //Add DistrbutionItems Collection to Distrbution
@@ -232,78 +348,6 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
         log.debug(">>> DISTRIBUTED ORDER: " + distribution.getId());
         log.debug(">>> DISTRIBUTED ORDER: " + distribution.getActivityStatus());
         System.out.println(">>> DISTRIBUTED ORDER: " + distribution.getId());
-    }
-	
-    /**
-	 * Reject All Pending Orders for a Distribution Protocol
-	 * @throws ApplicationException
-	 */
-    public void testRejectAllPendingOrdersForDP() throws ApplicationException
-    {
-    	//Set DistributionProtocol Object ID for search
-    	DistributionProtocol distributionProtocol = new DistributionProtocol();
-    	distributionProtocol.setId(2L);
-    	    	
-    	//Create OrderDetails object. Set DstributionProtocol object reference and OrderDetails status to 'Pending'.
-    	OrderDetails orderDetails = new OrderDetails();
-    	orderDetails.setDistributionProtocol(distributionProtocol);
-    	orderDetails.setStatus("Pending");   	
-    	
-    	//Search OrderDetails
-    	List<OrderDetails> orderDetailsList = searchByExample(OrderDetails.class, orderDetails);
-    	
-    	log.debug(">>> TOTAL ORDERS FOUND: " + orderDetailsList.size() + "\n");        
-        System.out.println(">>> TOTAL ORDERS FOUND: " + orderDetailsList.size() + "\n");
-    	
-    	//Iterate the OrderDetailsList 
-        Iterator<OrderDetails> iterator = orderDetailsList.iterator();
-    	while(iterator.hasNext())
-    	{
-    		OrderDetails orderDetails2 = iterator.next();
-    		
-    		//Set the OrderDetails status to "Rejected - Inappropriate Request".
-    		orderDetails2.setStatus("Rejected - Inappropriate Request");   		
-    		
-    		//Find the OrderItem Object from the OrderDetails
-    		OrderDetails orderDetails3 = new OrderDetails();
-    		orderDetails3.setId(orderDetails2.getId());
-    		OrderItem orderItem = new OrderItem();
-    		orderItem.setOrderDetails(orderDetails3);
-    		
-    		//Create a new OrderItemsCollection    		
-    		Collection<OrderItem> orderItemsCollection = new HashSet<OrderItem>();
-    		
-    		//Search OrderItem
-    		List<OrderItem> orderItemList = searchByExample(OrderItem.class, orderItem);
-    		
-    		//Iterate over the OrderItem list 
-    		Iterator<OrderItem> iterator2 = orderItemList.iterator();
-    		while(iterator2.hasNext())
-    		{
-    			OrderItem orderItem2 = iterator2.next();
-    			//Set the OrderItem status to "Rejected - Inappropriate Request"
-    			orderItem2.setStatus("Rejected - Inappropriate Request");
-
-    			//Add the OrderItem object to the new OrderItemsCollection 
-    			orderItemsCollection.add(orderItem2);
-    		}
-    		
-    		//Set the OrderItemsCollection to OrderDetails
-    		orderDetails2.setOrderItemCollection(orderItemList);
-    		
-    		//Added for OrderingBizLogic Line 254. To avoid the Invocation Exception
-    		orderDetails2.setDistributionCollection(new HashSet());
-    		
-    		//Update the OrderDetails object
-    		OrderDetails updatedOrder = update(orderDetails2);
-    		
-    		//Output Console
-    		System.out.println(">>> UPDATED ORDER ID: " + updatedOrder.getId());
-    		log.debug(">>> UPDATED ORDER ID: " + updatedOrder.getId());
-    	}    	
-        assertTrue(orderDetailsList.size() > 0);
-        System.out.println(">>> TOTAL ORDERS UPDATED: " + orderDetailsList.size());
-		log.debug(">>> TOTAL ORDERS UPDATED: " + orderDetailsList.size());        
     }
 	
 	/**
@@ -341,15 +385,40 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
         	final Date date = new Date();
     		distribution.setTimestamp(date);
     		distribution.setComment("Distribution Comments " + UniqueKeyGeneratorUtil.getUniqueKey());
-    		Site toSite = new Site();
-    		toSite.setId(3L);
-    		distribution.setToSite(toSite);
+    		
+    		//Search the Site object and set it to Distribution Protocol Object
+        	Site site = new Site();
+        	site.setName("NIH");    	
         	
-    		//Set Distribution Protocol Object to OrderDetails 
+        	List<Site> siteList = searchByExample(Site.class, site);
+        	if(siteList.size() > 0)
+        	{
+        		Site searchSite = new Site();
+        		searchSite.setId(siteList.get(0).getId());    		
+        		distribution.setToSite(searchSite);    		
+        	}
+        	else
+        	{
+        		assertFalse(site.getName() + " Site not found!", siteList.size() > 0);
+        	}
+        	
+    		//Set Distribution Protocol Object to OrderDetails
         	DistributionProtocol distributionProtocol = new DistributionProtocol();
-        	distributionProtocol.setId(2L);        	
-        	distribution.setDistributionProtocol(distributionProtocol);    		
-        	orderDetails2.setDistributionProtocol(distributionProtocol);
+        	distributionProtocol.setTitle("Distribution Protocol 1");    	
+        	
+        	//Search the Distribution Protocol and set it to Order Details
+        	List<DistributionProtocol> distProtList = searchByExample(DistributionProtocol.class, distributionProtocol);
+        	if(distProtList.size() > 0)
+        	{
+        		DistributionProtocol searchDistProt = new DistributionProtocol();
+        		searchDistProt.setId(distProtList.get(0).getId());    		
+        		distribution.setDistributionProtocol(searchDistProt);    		
+            	orderDetails2.setDistributionProtocol(searchDistProt);
+        	}
+        	else
+        	{
+        		assertFalse(distributionProtocol.getTitle() + " Distribution Protocol not found!", distProtList.size() > 0);
+        	}
     		
     		//Created new empty collection for OrderItems and Distribution Items. It is required because the current code has issues with Hibernate Invocation. 
         	Collection<OrderItem> orderItemsCollection = new HashSet<OrderItem>();
@@ -406,14 +475,26 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
 	 */
     public void testQueryDistributionProtocolandItsPendingOrder() throws ApplicationException
     {
-    	//Set Distribution Protocol Object to be found
-    	DistributionProtocol distributionProtocol = new DistributionProtocol();
-    	distributionProtocol.setId(2L);
-    	
     	//Create OrderDetails object. Set Distribution Protocol object and order status to 'Pending'.
-    	OrderDetails orderDetails = new OrderDetails();
-    	orderDetails.setDistributionProtocol(distributionProtocol);
-    	orderDetails.setStatus("Pending");   	
+    	OrderDetails orderDetails = new OrderDetails();    	
+    	orderDetails.setStatus("Pending");
+    	
+    	//Set Distribution Protocol Object to OrderDetails
+    	DistributionProtocol distributionProtocol = new DistributionProtocol();
+    	distributionProtocol.setTitle("Distribution Protocol 1");    	
+    	
+    	//Search the Distribution Protocol and set it to Order Details
+    	List<DistributionProtocol> distProtList = searchByExample(DistributionProtocol.class, distributionProtocol);
+    	if(distProtList.size() > 0)
+    	{
+    		DistributionProtocol searchDistProt = new DistributionProtocol();
+    		searchDistProt.setId(distProtList.get(0).getId());    		
+    		orderDetails.setDistributionProtocol(searchDistProt);
+    	}
+    	else
+    	{
+    		assertFalse(distributionProtocol.getTitle() + " Distribution Protocol not found!", distProtList.size() > 0);
+    	}
     	
     	//Search the OrderDetails
     	List<OrderDetails> orderDetailsList = searchByExample(OrderDetails.class, orderDetails);
@@ -431,8 +512,92 @@ public class OrderingDistributionTestCases extends AbstractCaCoreApiTestCasesWit
     					+ "  >>> ORDER STATUS: " + orderDetails2.getStatus());
     		log.debug(">>> ORDER ID: " + orderDetails2.getId() + "  >>> ORDER NAME: " + orderDetails2.getName()
     					+ "  >>> ORDER STATUS: " + orderDetails2.getStatus());
-    	}    	
+    	}
         assertTrue(orderDetailsList.size() > 0);        
+    }
+    
+    /**
+	 * Reject All Pending Orders for a Distribution Protocol
+	 * @throws ApplicationException
+	 */
+    public void testRejectAllPendingOrdersForDP() throws ApplicationException
+    {
+    	//Create OrderDetails object. Set DstributionProtocol object reference and OrderDetails status to 'Pending'.
+    	OrderDetails orderDetails = new OrderDetails();    	
+    	orderDetails.setStatus("Pending");
+    	
+    	//Set Distribution Protocol Object to OrderDetails
+    	DistributionProtocol distributionProtocol = new DistributionProtocol();
+    	distributionProtocol.setTitle("Distribution Protocol 1");    	
+    	
+    	//Search the Distribution Protocol and set it to Order Details
+    	List<DistributionProtocol> distProtList = searchByExample(DistributionProtocol.class, distributionProtocol);
+    	if(distProtList.size() > 0)
+    	{
+    		DistributionProtocol searchDistProt = new DistributionProtocol();
+    		searchDistProt.setId(distProtList.get(0).getId());    		
+    		orderDetails.setDistributionProtocol(searchDistProt);    		
+    	}
+    	else
+    	{
+    		assertFalse(distributionProtocol.getTitle() + " Distribution Protocol not found!", distProtList.size() > 0);
+    	}
+    	
+    	//Search OrderDetails
+    	List<OrderDetails> orderDetailsList = searchByExample(OrderDetails.class, orderDetails);
+    	
+    	log.debug(">>> TOTAL ORDERS FOUND: " + orderDetailsList.size() + "\n");        
+        System.out.println(">>> TOTAL ORDERS FOUND: " + orderDetailsList.size() + "\n");
+    	
+    	//Iterate the OrderDetailsList 
+        Iterator<OrderDetails> iterator = orderDetailsList.iterator();
+    	while(iterator.hasNext())
+    	{
+    		OrderDetails orderDetails2 = iterator.next();
+    		
+    		//Set the OrderDetails status to "Rejected - Inappropriate Request".
+    		orderDetails2.setStatus("Rejected - Inappropriate Request");   		
+    		
+    		//Find the OrderItem Object from the OrderDetails
+    		OrderDetails orderDetails3 = new OrderDetails();
+    		orderDetails3.setId(orderDetails2.getId());
+    		OrderItem orderItem = new OrderItem();
+    		orderItem.setOrderDetails(orderDetails3);
+    		
+    		//Create a new OrderItemsCollection    		
+    		Collection<OrderItem> orderItemsCollection = new HashSet<OrderItem>();
+    		
+    		//Search OrderItem
+    		List<OrderItem> orderItemList = searchByExample(OrderItem.class, orderItem);
+    		
+    		//Iterate over the OrderItem list 
+    		Iterator<OrderItem> iterator2 = orderItemList.iterator();
+    		while(iterator2.hasNext())
+    		{
+    			OrderItem orderItem2 = iterator2.next();
+    			//Set the OrderItem status to "Rejected - Inappropriate Request"
+    			orderItem2.setStatus("Rejected - Inappropriate Request");
+
+    			//Add the OrderItem object to the new OrderItemsCollection 
+    			orderItemsCollection.add(orderItem2);
+    		}
+    		
+    		//Set the OrderItemsCollection to OrderDetails
+    		orderDetails2.setOrderItemCollection(orderItemList);
+    		
+    		//Added for OrderingBizLogic Line 254. To avoid the Invocation Exception
+    		orderDetails2.setDistributionCollection(new HashSet());
+    		
+    		//Update the OrderDetails object
+    		OrderDetails updatedOrder = update(orderDetails2);
+    		
+    		//Output Console
+    		System.out.println(">>> UPDATED ORDER ID: " + updatedOrder.getId());
+    		log.debug(">>> UPDATED ORDER ID: " + updatedOrder.getId());
+    	}    	
+        assertTrue(orderDetailsList.size() > 0);
+        System.out.println(">>> TOTAL ORDERS UPDATED: " + orderDetailsList.size());
+		log.debug(">>> TOTAL ORDERS UPDATED: " + orderDetailsList.size());        
     }
     
     /**
