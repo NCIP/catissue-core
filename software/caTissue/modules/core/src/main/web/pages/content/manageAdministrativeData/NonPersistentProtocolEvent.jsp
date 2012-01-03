@@ -132,7 +132,7 @@ Ext.onReady(function(){
 					 	  <td align="center" class="black_ar">&nbsp;</td>
 
 						  <td align="left" class="black_ar">
-					  		Specimen Processing Procedure
+					  		<bean:message key="collectionprotocol.specimen.collection.procedure"/>
 					   	  </td>
 
 						  <td align="left" class="black_ar">
