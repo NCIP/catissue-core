@@ -60,6 +60,7 @@ function calculateAge()
 		{
 			
 			document.getElementById('ageAtCollection').value=no_year.toString();
+			document.getElementById('ageAtCollection').readOnly=true;
 		}
 			
 	}
@@ -706,7 +707,7 @@ function calculateAge()
 <%
 Date birthDateObject=(Date)request.getAttribute("dob");
 String birthDateString=""; 
-String collectionDateString=form.getCollectionDate();; 
+String collectionDateString=form.getCollectionDate(); 
 String showageDiffString=form.getAgeAtCollection();
 Date encounterTimeStampDate;
 int collectionMinute=0;		
@@ -730,6 +731,7 @@ if(form.getAgeAtCollection()==null && birthDateObject!=null && 	collectionDateSt
 	encounterTimeStampDate=(Date)convertDateFormat.parse(collectionDateString);		
 	Integer newAgeAtCollection=AppUtility.yearsDiff(birthDateObject,encounterTimeStampDate);
 	showageDiffString=String.valueOf(newAgeAtCollection);
+	form.setAgeAtCollection(showageDiffString);
 }
 %>
 <html:form action="<%=formName%>">
