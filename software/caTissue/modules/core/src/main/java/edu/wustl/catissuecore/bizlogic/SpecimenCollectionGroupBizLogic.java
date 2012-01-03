@@ -14,12 +14,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -61,7 +56,6 @@ import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
 import edu.wustl.catissuecore.uiobject.SpecimenCollectionGroupUIObject;
-import edu.wustl.catissuecore.util.CollectionProtocolEventComparator;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ConsentUtil;
@@ -79,7 +73,6 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.util.DomainBeanIdentifierComparator;
 import edu.wustl.common.util.ObjectCloner;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -184,6 +177,23 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				scg.setBarcode(null);
 			}
 			this.setCollectionProtocolRegistration(dao, scg, null);
+			if(scg.getEncounterTimestamp()==null && scg.getCollectionProtocolRegistration()!=null && scg.getCollectionProtocolEvent().getStudyCalendarEventPoint()!=null)
+			{
+				
+				Date cprRegDate=scg.getCollectionProtocolRegistration().getRegistrationDate();
+				
+				Integer cpePoint=scg.getCollectionProtocolEvent().getStudyCalendarEventPoint().intValue();
+				
+				Date collectionDt=null;
+				
+				if(cpePoint!=null)
+				{
+					collectionDt=AppUtility.getNewDateByAdditionOfDays(cprRegDate,cpePoint);
+					
+					scg.setEncounterTimestamp(collectionDt);
+				}
+				
+			}
 			setAgeAtCollection(scg);
 			if (cpe != null)
 			{
@@ -1966,7 +1976,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		 */
 		final String hql = "select scg.id,scg.name,scg.activityStatus,scg.collectionStatus,scg.offset,"
 				+ "scg.collectionProtocolEvent.id,scg.collectionProtocolEvent.studyCalendarEventPoint,"
-				+ "scg.collectionProtocolEvent.collectionPointLabel from "
+				+ "scg.collectionProtocolEvent.collectionPointLabel,scg.encounterTimestamp from "
 				+ SpecimenCollectionGroup.class.getName()
 				+ " as scg where scg.collectionProtocolRegistration.collectionProtocol.id = "
 				+ cpId.toString()
@@ -1974,7 +1984,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				+ participantId.toString()
 				+ " and scg.activityStatus <> '"
 				+ Status.ACTIVITY_STATUS_DISABLED.toString()
-				+ "' order by scg.collectionProtocolEvent.studyCalendarEventPoint";
+				+ "' order by scg.encounterTimestamp asc";
 
 		final List list = this.executeQuery(hql);
 
@@ -1989,6 +1999,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		 * key = event id and value = CollectionProtocolEvent object with
 		 * respective SCGCollection
 		 */
+		List l_scg=new ArrayList<SpecimenCollectionGroup>();
+		
 		for (int i = 0; i < list.size(); i++)
 		{
 			final Object[] obj1 = (Object[]) list.get(i);
@@ -2007,7 +2019,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			cpe.setId((Long) obj1[5]);
 			cpe.setStudyCalendarEventPoint((Double) obj1[6]);
 			cpe.setCollectionPointLabel((String) obj1[7]);
-
+			scg.setEncounterTimestamp((Date) obj1[8]);
+			l_scg.add(scg);
 			final CollectionProtocolEvent tempCpe = collectionProtocolEventsIdMap.get(cpe.getId());
 
 			if (tempCpe == null)
@@ -2031,29 +2044,14 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		 */
 
 		final List collectionProtocolEvents = new ArrayList(collectionProtocolEventsIdMap.values());
-		final CollectionProtocolEventComparator comparator = new CollectionProtocolEventComparator();
-		Collections.sort(collectionProtocolEvents, comparator);
-
 		/**
 		 * Iterate over CPE obects Get SCGCollection Sort SCG list of the CPE.
 		 * Create XML node
 		 */
-		final Iterator collectionProtocolEventsItr = collectionProtocolEvents.iterator();
 		Date eventLastDate = new Date();
-		while (collectionProtocolEventsItr.hasNext())
+		if (list != null && !list.isEmpty())
 		{
-			final CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) collectionProtocolEventsItr
-					.next();
-			final List scgList = new ArrayList<SpecimenCollectionGroup>(collectionProtocolEvent
-					.getSpecimenCollectionGroupCollection());
-			final DomainBeanIdentifierComparator idComparator = new DomainBeanIdentifierComparator();
-			Collections.sort(scgList, idComparator);
-			if (scgList != null && !scgList.isEmpty())
-			{
-				eventLastDate = this.createTreeNodeForExistngSCG(xmlString, collectionProtocolEvent
-						.getStudyCalendarEventPoint(), collectionProtocolEvent
-						.getCollectionPointLabel(), scgList, regDate, parentOffset);
-			}
+			eventLastDate = this.createTreeNodeForExistngSCG(xmlString, collectionProtocolEvents, l_scg, regDate, parentOffset);
 		}
 		return eventLastDate;
 	}
@@ -2233,96 +2231,110 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException : BizLogicException
 	 * @throws ClassNotFoundException : ClassNotFoundException
 	 */
-	private Date createTreeNodeForExistngSCG(StringBuffer xmlString, Double eventPoint,
-			String collectionPointLabel, List scgList, Date regDate, Integer parentOffset)
+	private Date createTreeNodeForExistngSCG(StringBuffer xmlString,List cpeList,List scgList,Date regDate, Integer parentOffset)
 			throws BizLogicException, ClassNotFoundException
 	{
 		String eventPointVal = "";
-		if(eventPoint != null)
-		{
-			eventPointVal = eventPoint.toString();
-		}
+		
 		Date eventLastDate = null;
-		for (int i = 0; i < scgList.size(); i++)
+		
+		Iterator<SpecimenCollectionGroup> scgIterator=scgList.iterator();
+		
+		while(scgIterator.hasNext())
 		{
-			final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) scgList
-					.get(i);
-
-			String scgNodeLabel = "";
-			// String scgActivityStatus = (String) obj1[2];
-
-			/**
-			 * Name: Vijay Pande Reviewer Name: Aarti Sharma recievedEvent
-			 * related to scg is trieved from db and, proper receivedDate and
-			 * scgNodeLabel are set to set toolTip of the node
-			 */
-			if (specimenCollectionGroup.getOffset() != null)
+			SpecimenCollectionGroup tempScg=(SpecimenCollectionGroup) scgIterator.next();
+			
+			Iterator<CollectionProtocolEvent> cpeIterator=cpeList.iterator();
+			
+			while(cpeIterator.hasNext())
 			{
-				this.addOffset(specimenCollectionGroup.getOffset());
-			}
-			String receivedDate = "";
-			if (specimenCollectionGroup.getId() != null && specimenCollectionGroup.getId() > 0)
-			{	
-				if(Validator.isEmpty(eventPointVal))
+				CollectionProtocolEvent tempCpe=(CollectionProtocolEvent) cpeIterator.next();
+				
+				if(tempScg.getCollectionProtocolEvent().getId().compareTo(tempCpe.getId())==0)
 				{
-					scgNodeLabel = collectionPointLabel;
-				}
-				else
-				{
-					scgNodeLabel = "T" + eventPointVal + ": " + collectionPointLabel;
-				}
-				if (scgNodeLabel.equalsIgnoreCase("") && receivedDate.equalsIgnoreCase(""))
-				{
-					int noOfDaysToAdd = 0;
-					if (eventPoint != null)
-					{
-						noOfDaysToAdd += eventPoint.intValue();
-					}
-					if (this.offsetForCPOrEvent != null)
-					{
-						noOfDaysToAdd += this.offsetForCPOrEvent.intValue();
-					}
-					// This check is beaause event take there anticipated dates
-					// according to there parent and if in parent date already
-					// offset is captured then no need ot take that offeet in
-					// child
-					if (parentOffset != null)
-					{
-						noOfDaysToAdd -= parentOffset.intValue();
-					}
-
-					final Date evtDate = AppUtility.getNewDateByAdditionOfDays(regDate,
-							noOfDaysToAdd);
-					eventLastDate = evtDate;
-					// bug no:6526 date format changed to mm-dd-yyyy
-					receivedDate = edu.wustl.common.util.Utility.parseDateToString(evtDate,
-							CommonServiceLocator.getInstance().getDatePattern());
-					// String toolTipText = scgNodeLabel+ ": "+scgName;//
+				     if(tempCpe.getStudyCalendarEventPoint()!=null)
+				     {
+				    	 eventPointVal = tempCpe.getStudyCalendarEventPoint().toString();
+				     }
+				     
+				     String scgNodeLabel = "";
+				     
+				     if (tempScg.getOffset() != null)
+					 {
+							this.addOffset(tempScg.getOffset());
+					 }
+				     
+				    String receivedDate = "";
+					String collectionDate="";
+					
 					if(Validator.isEmpty(eventPointVal))
 					{
-						scgNodeLabel = collectionPointLabel + ": "+ receivedDate;
+						scgNodeLabel = tempCpe.getCollectionPointLabel();
 					}
 					else
 					{
-						scgNodeLabel = "T" + eventPointVal + ": " + collectionPointLabel + ": "
-							+ receivedDate;
+						scgNodeLabel = "T" + eventPointVal + ": " + tempCpe.getCollectionPointLabel();
 					}
+					if (scgNodeLabel.equalsIgnoreCase("") && receivedDate.equalsIgnoreCase(""))
+					{
+						int noOfDaysToAdd = 0;
+						if (tempCpe.getStudyCalendarEventPoint()!=null)
+						{
+							noOfDaysToAdd += tempCpe.getStudyCalendarEventPoint().intValue();
+						}
+						if (this.offsetForCPOrEvent != null)
+						{
+							noOfDaysToAdd += this.offsetForCPOrEvent.intValue();
+						}
+						// This check is beaause event take there anticipated dates
+						// according to there parent and if in parent date already
+						// offset is captured then no need ot take that offeet in
+						// child
+						if (parentOffset != null)
+						{
+							noOfDaysToAdd -= parentOffset.intValue();
+						}
+
+						final Date evtDate = AppUtility.getNewDateByAdditionOfDays(regDate,
+								noOfDaysToAdd);
+						eventLastDate = evtDate;
+						// bug no:6526 date format changed to mm-dd-yyyy
+						receivedDate = edu.wustl.common.util.Utility.parseDateToString(evtDate,
+								CommonServiceLocator.getInstance().getDatePattern());
+						// String toolTipText = scgNodeLabel+ ": "+scgName;//
+						if(Validator.isEmpty(eventPointVal))
+						{
+							scgNodeLabel = tempCpe.getCollectionPointLabel() + ": "+ receivedDate;
+						}
+						else
+						{
+							scgNodeLabel = "T" + eventPointVal + ": " + tempCpe.getCollectionPointLabel() + ": "
+								+ receivedDate;
+						}
+					}
+					if(tempScg.getEncounterTimestamp()!=null)
+					{
+					      collectionDate=edu.wustl.common.util.Utility.parseDateToString(tempScg.getEncounterTimestamp(),
+							CommonServiceLocator.getInstance().getDatePattern());
+					      scgNodeLabel=scgNodeLabel+" "+collectionDate;
+					}
+					
+					String toolTipText = getToolTipText(eventPointVal, tempCpe.getCollectionPointLabel(),
+							receivedDate);
+
+					// creating SCG node
+					xmlString.append("<node id= \"" + Constants.SPECIMEN_COLLECTION_GROUP + "_"
+							+ tempScg.getId().toString() + "\" " + "name=\"" + scgNodeLabel
+							+ "\" " + "toolTip=\"" + toolTipText + "\" " + "type=\""
+							+ Constants.SPECIMEN_COLLECTION_GROUP + "\" " + "scgCollectionStatus=\""
+							+ tempScg.getCollectionStatus() + "\">");
+
+					// Adding specimen Nodes to SCG tree
+					this.addSpecimenNodesToSCGTree(xmlString, tempScg);
+					xmlString.append("</node>");
+
 				}
 			}
-			String toolTipText = getToolTipText(eventPointVal, collectionPointLabel,
-					receivedDate);
-
-			// creating SCG node
-			xmlString.append("<node id= \"" + Constants.SPECIMEN_COLLECTION_GROUP + "_"
-					+ specimenCollectionGroup.getId().toString() + "\" " + "name=\"" + scgNodeLabel
-					+ "\" " + "toolTip=\"" + toolTipText + "\" " + "type=\""
-					+ Constants.SPECIMEN_COLLECTION_GROUP + "\" " + "scgCollectionStatus=\""
-					+ specimenCollectionGroup.getCollectionStatus() + "\">");
-
-			// Adding specimen Nodes to SCG tree
-			this.addSpecimenNodesToSCGTree(xmlString, specimenCollectionGroup);
-			xmlString.append("</node>");
-
 		}
 		return eventLastDate;
 	}
