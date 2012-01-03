@@ -1,4 +1,6 @@
-#MAGE-TAB Version	1.1
+# MAGE-TAB Version	1.1
+# At this point, this IDF file is entirely static and remains the same for each and every MAGE-TAB export.
+# All tags are templated. 
 
 Investigation Title	caTissue MAGE-Tab import demo
 
