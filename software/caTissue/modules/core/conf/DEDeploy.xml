@@ -1738,7 +1738,7 @@
 	<target name="unzip_caCORESDK.4.2-dozer">
 
         <echo message="Re-creating folder ${de.temp.dir}/cacoresdk.4.2" />
-        <delete dir="${de.temp.dir}/cacoresdk.4.2" />
+        <delete dir="${de.temp.dir}/cacoresdk.4.2" failonerror="false" />
         <mkdir dir="${de.temp.dir}/cacoresdk.4.2" />
 
         <!--Step 1: Unzip the default caCoreSDK release-->
