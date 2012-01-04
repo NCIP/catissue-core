@@ -1120,6 +1120,7 @@
 				<ant antfile="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="export.xmi.and.generate.cacore_for_all">
 					<property name="entityGroup.jar.location" value="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
+					<property name="war.backup.dir" value="${caTissue-webapp.dir.dist}/catissue_war_backup" />
 					<property name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
 					<property name="import.xmi" value="True" />
 				</ant>
@@ -1133,6 +1134,7 @@
 					<property name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
 					<property name="entityGroup.jar.location" value="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 					<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
+					<property name="war.backup.dir" value="${caTissue-webapp.dir.dist}/catissue_war_backup" />
 					<property name="import.xmi" value="False" />
 					<property name="xmi.name" value="${filename}" />
 					<property name="jboss.home.dir" value="${jboss.home}" />
@@ -3584,6 +3586,7 @@ Thanking You,
 			<property name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
 			<property name="entityGroup.jar.location" value="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 			<property name="cacore.deployable.dir" value="${cacaore.deployables}" />
+			<property name="war.backup.dir" value="${caTissue-webapp.dir.dist}/catissue_war_backup" />
 			<property name="entity.name" value="${entity.group.name}" />
 			<property name="jboss.home.dir" value="${jboss.home}" />
 			<property name="default.prifix.war" value="${default.prefix.war}" />
