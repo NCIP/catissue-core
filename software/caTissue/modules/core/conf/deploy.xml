@@ -977,7 +977,7 @@
 	           <replacefilter token="@@PORT@@" value="${jboss.server.port}" />
 	        </replace>-->
 		<antcall target="config_jboss_files" />
-		<!--antcall target="generate:cacore:all" /-->		
+		<antcall target="generate:cacore:all" />		
 	</target>
 	
 	<!--Generate caCORE for all imported xmis in the system-->
