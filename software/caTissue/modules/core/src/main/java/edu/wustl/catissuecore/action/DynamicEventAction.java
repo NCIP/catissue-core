@@ -207,7 +207,7 @@ public class DynamicEventAction extends BaseAction
 			{
 				request.getSession().setAttribute("OverrideCaption", "_" + eventId.toString());
 				iframeURL = "/catissuecore/LoadDataEntryFormAction.do?dataEntryOperation=insertParentData&useApplicationStylesheet=true&showInDiv=false&overrideCSS=true&overrideScroll=true"+(Boolean.parseBoolean(request.getParameter(Constants.CONTAINS_ERROR))?"&containerId=":"&containerIdentifier=")
-						+ eventId.toString() + "&OverrideCaption=" + "_" + eventId.toString();
+						+ eventId.toString() + "&OverrideCaption=" + "_" + eventId.toString()+"&showCalculateDefaultValue=false";
 				if (recordIdentifier != 0)
 				{
 					iframeURL = iframeURL + "&recordIdentifier=" + recordIdentifier;
