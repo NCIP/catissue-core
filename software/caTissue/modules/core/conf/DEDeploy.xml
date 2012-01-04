@@ -24,6 +24,7 @@
 	<property name="mysql.driver.string.DE" value="com.mysql.jdbc.Driver" />
 	<property name="db2.driver.string.DE" value="com.ibm.db2.jcc.DB2Driver" />
 	<property name="db2.sql.dir.DE" value="${de.temp.dir}/db/db-install/db2" />
+	<property name="dbupgrade.sql.dir.DE" value="${de.temp.dir}/db"/>
 	<property name="db2.dbupgrade.sql.dir.DE" value="${de.temp.dir}/db/db-upgrade/db2" />
 	<property name="mysql.sql.dir.DE" value="${de.temp.dir}/db/db-install/MySql" />
 	<property name="mysql.dbupgrade.sql.dir.DE" value="${de.temp.dir}/db/db-upgrade/MySql" />
@@ -399,6 +400,69 @@
 	<target name="upgrade_db_db2_from_DE_1.5.0_to_DE_1.5.1" description="upgrade db db2 from DE 1.5.0 to DE 1.5.1">
 		<antcall target="execute_file_db_db2">
 			<param name="sql.file.name" value="${db2.dbupgrade.sql.dir.DE}/Upgrade_DE_Metadata_DE_1.5.0_to_DE_1.5.1.sql" />
+		</antcall>
+	</target>
+	
+	<target name="upgrade_db_from_DE_1.5.1_to_DE_1.5.2" description="upgrade db db2 from DE 1.5.1 to DE 1.5.2">
+		<delete dir="${de.temp.dir}" failonerror="no" />
+				<mkdir dir="${de.temp.dir}" />
+				<unzip src="${dynamic.extensions.location}/dynamicextensions.zip" dest="${de.temp.dir}">
+				</unzip>
+				<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+					<classpath>
+						<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
+					</classpath>
+				</taskdef>
+				<if>
+					<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
+					<then>
+						<antcall target="upgrade_db_mysql_from_DE_1.5.1_to_DE_1.5.2" />
+					</then>
+					<elseif>
+						<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
+						<then>
+							<antcall target="upgrade_db_oracle_from_DE_1.5.1_to_DE_1.5.2" />
+						</then>
+					</elseif>
+					<elseif>
+						<equals arg1="db2" arg2="${database.type}" casesensitive="false" />
+						<then>
+							<antcall target="upgrade_db_db2_from_DE_1.5.2_to_DE_1.5.2" />
+						</then>
+					</elseif>
+					<else>
+						<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+					</else>
+				</if>
+	</target>
+	
+	<!-- =========================================================
+				target: upgrade_db_mysql_from_DE_1.5.1_to_DE_1.5.2
+				description: upgrade Dynamic Extensions mysql database from version 1.5.1 to 1.5.2
+				============================================================================ -->
+	<target name="upgrade_db_mysql_from_DE_1.5.1_to_DE_1.5.2" description="upgrade db mysql from DE 1.5.1 to DE 1.5.2">
+		<antcall target="execute_file_db_mysql">
+			<param name="sql.file.name" value="${mysql.dbupgrade.sql.dir.DE}/Upgrade_DE_Metadata_DE_1.5.1_to_DE_1.5.2.sql" />
+		</antcall>
+	</target>
+
+	<!-- ==========================================================
+				target: upgrade_db_oracle_from_DE_1.5.1_to_DE_1.5.2
+				description: upgrade Dynamic Extensions oracle database from version 1.5.1 to 1.5.2
+				============================================================================ -->
+	<target name="upgrade_db_oracle_from_DE_1.5.1_to_DE_1.5.1" description="upgrade db oracle from DE 1.5.1 to DE 1.5.2">
+		<antcall target="execute_file_db_oracle">
+			<param name="sql.file.name" value="${oracle.dbupgrade.sql.dir.DE}/Upgrade_DE_Metadata_DE_1.5.1_to_DE_1.5.2.sql" />
+		</antcall>
+	</target>
+
+	<!-- =======================================================
+				target: upgrade_db_db2_from_DE_1.5.1_to_DE_1.5.2
+				description:- upgrade Dynamic Extensions db2 database from version 1.5.1 to 1.5.2
+				================================================================================= -->
+	<target name="upgrade_db_db2_from_DE_1.5.1_to_DE_1.5.2" description="upgrade db db2 from DE 1.5.1 to DE 1.5.2">
+		<antcall target="execute_file_db_db2">
+			<param name="sql.file.name" value="${db2.dbupgrade.sql.dir.DE}/Upgrade_DE_Metadata_DE_1.5.1_to_DE_1.5.2.sql" />
 		</antcall>
 	</target>
 
@@ -1020,6 +1084,55 @@
 				</fileset>
 			</classpath>
 		</java>
+		
+		
+	</target>
+	<target name="updateGroup:cacore:status">
+		<copy file="${mysql.dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" todir="${dbupgrade.sql.dir.DE}" overwrite="true"/>
+		<replace file="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql">
+					<replacefilter token="@@package.name@@" value="${group.name}" />
+				</replace>
+		<echo message="${database.type} jdbc:mysql://${database.server}:${database.port}/${database.name} userid=${database.user} password=${database.password}"/>
+		<if>
+					<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
+					<then>
+						<sql driver="${mysql.driver.string.DE}" url="jdbc:mysql://${database.server}:${database.port}/${database.name}" userid="${database.user}" password="${database.password}" onerror="continue" delimiter="#">
+									<classpath>
+										<fileset dir="${lib.dir.DE}">
+											<include name="*.jar" />
+										</fileset>
+									</classpath>
+									<transaction src="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" />
+								</sql>
+					</then>
+					<elseif>
+						<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
+						<then>
+							<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.server}:${database.port}:${database.name}" userid="${database.user}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+										<classpath>
+											<fileset dir="${lib.dir.DE}">
+												<include name="*.jar" />
+											</fileset>
+										</classpath>
+										<transaction src="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" />
+										<transaction>commit</transaction>
+							</sql>
+						</then>
+					</elseif>
+					<elseif>
+							<equals arg1="db2" arg2="${database.type}" casesensitive="false" />
+								<then>
+									<sql driver="${db2.driver.string.DE}" url="jdbc:db2://${database.server}:${database.port}/${database.name}:currentSchema=${database.schema};" userid="${database.user}" password="${database.password}" onerror="continue" delimiter="#">
+												<classpath>
+													<fileset dir="${lib.dir.DE}">
+														<include name="*.jar" />
+													</fileset>
+												</classpath>
+												<transaction src="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" />
+											</sql>
+								</then>
+					</elseif>
+			</if>
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - -
@@ -1436,12 +1549,11 @@
           target: generate.cacore.for.imported.xmis
          ================================= -->
 	<target name="generate.cacore.for.imported.xmis" description="Generate caCore for imported XMIs">
-
+		
 		<!-- The comma is explicitly given so that if value is empty still it is passed as parameter to java class -->
 		<java failonerror="true" classname="edu.wustl.metadata.util.EntityGroupName" fork="yes" maxmemory="1024m">
 			<arg value="${base.dir}/temp_deaudit_related_files/temp_exported_xmi/" />
-			<arg value="${exclude.entitygroup}," />
-			<arg value="${include.entitygroup}," />
+			<arg value="${regenrate:cacore:all}" />
 			<classpath>
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${de.zip.location}/lib">
@@ -1531,7 +1643,10 @@
 
 		<!--Step: generate caCORE-->
 		<antcall target="generate.cacore" />
-
+		<!-- update the flag for group in database-->
+		<antcall target="updateGroup:cacore:status">
+			<param name = "group.name" value="${entitygroupname}"/>
+		</antcall>
 		<!--Step:replace host appliocation war-->
 		<antcall target="regenerate.war"/>
 
@@ -1555,18 +1670,6 @@
 				=================================	-->
 
 	<target name="handle.cacore.generation.for.deploy.app">
-		<available file="${cacore.deployable.dir}/${entitygroupname}" property="cacore.present" />
-		<if>
-			<equals arg1="${cacore.present}" arg2="true" />
-			<then>
-				<echo message=" " />
-				<echo message="-----------------------------------------" />
-				<echo message="caCore for ${entitygroupname} already generated" />
-				<echo message="Skipping caCore generation for ${entitygroupname}" />
-				<echo message="-----------------------------------------" />
-				<echo message=" " />
-			</then>
-			<else>
 				<antcall target="export_xmi">
 					<param name="setup.method.required" value="False" />
 					<param name="groupname" value="${entitygroupname}" />
@@ -1577,8 +1680,6 @@
 				<!--Step: generate caCORE-->
 				<antcall target="generate.cacore" />
 				
-			</else>
-		</if>
 	</target>
 	<property name="host.war.temp" value="host.war.temp" />
 	<property name="host.war.name" value="catissuecore.war" />
@@ -1738,7 +1839,7 @@
 	<target name="unzip_caCORESDK.4.2-dozer">
 
         <echo message="Re-creating folder ${de.temp.dir}/cacoresdk.4.2" />
-        <delete dir="${de.temp.dir}/cacoresdk.4.2" failonerror="false" />
+        <delete dir="${de.temp.dir}/cacoresdk.4.2" failonerror="false"/>
         <mkdir dir="${de.temp.dir}/cacoresdk.4.2" />
 
         <!--Step 1: Unzip the default caCoreSDK release-->
@@ -1938,14 +2039,14 @@
 				</then>
 			</elseif>
 			<elseif>
-				<equals arg1="edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry" arg2="${hook.entity.name}" casesensitive="false" />
+				<equals arg1="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry" arg2="${hook.entity.name}" casesensitive="false" />
 				<then>
 					<property name="hook.entity.hbm" value="${host.war.temp}/WEB-INF/classes/edu/wustl/catissuecore/hbm/ActionApplicationRecordEntry.hbm.xml"></property>
 				</then>
 			</elseif>
 			
 			<else>
-				<echo message="Unhandled hook entity ${hook.entity.hbm}" level="error" />
+				<echo message="Unhandled hook entity ${hook.entity.name}" level="error" />
 			</else>
 		</if>
 

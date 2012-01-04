@@ -7276,6 +7276,7 @@ CREATE TABLE `dyextn_entity_group` (
   `SHORT_NAME` varchar(255) default NULL,
   `VERSION` varchar(255) default NULL,
   `IS_SYSTEM_GENERATED` tinyint(1) default NULL,
+  `IS_CACORE_GENERATED` tinyint(1) default NULL,
   PRIMARY KEY  (`IDENTIFIER`),
   KEY `FK105DE7A0BC7298A9` (`IDENTIFIER`),
   CONSTRAINT `FK105DE7A0BC7298A9` FOREIGN KEY (`IDENTIFIER`) REFERENCES `dyextn_abstract_metadata` (`IDENTIFIER`)
@@ -7288,7 +7289,7 @@ CREATE TABLE `dyextn_entity_group` (
 
 /*!40000 ALTER TABLE `dyextn_entity_group` DISABLE KEYS */;
 LOCK TABLES `dyextn_entity_group` WRITE;
-INSERT INTO `dyextn_entity_group` VALUES (1,'Catissue Suite','caTissueCore',NULL,1),(1208,'DataListEntityGroup','DataListEntityGroup',NULL,1),(1226,'clinical_annotation','clinical_annotation',NULL,0),(1317,'pathology_specimen','pathology_specimen',NULL,0),(1436,'pathology_scg','pathology_scg',NULL,0);
+INSERT INTO `dyextn_entity_group` VALUES (1,'Catissue Suite','caTissueCore',NULL,1,0),(1208,'DataListEntityGroup','DataListEntityGroup',NULL,1,0),(1226,'clinical_annotation','clinical_annotation',NULL,0,0),(1317,'pathology_specimen','pathology_specimen',NULL,0,0),(1436,'pathology_scg','pathology_scg',NULL,0,0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `dyextn_entity_group` ENABLE KEYS */;
 

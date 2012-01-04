@@ -7177,8 +7177,8 @@ insert into dyextn_entity (IDENTIFIER,DATA_TABLE_STATE,IS_ABSTRACT,PARENT_ENTITY
 
 
 
-insert into dyextn_entity_group (IDENTIFIER,LONG_NAME,SHORT_NAME,VERSION,IS_SYSTEM_GENERATED) values (1,'Catissue Suite','caTissueCore',NULL,1);
-insert into dyextn_entity_group (IDENTIFIER,LONG_NAME,SHORT_NAME,VERSION,IS_SYSTEM_GENERATED) values (1208,'DataListEntityGroup','DataListEntityGroup',NULL,1);
+insert into dyextn_entity_group (IDENTIFIER,LONG_NAME,SHORT_NAME,VERSION,IS_SYSTEM_GENERATED,IS_CACORE_GENERATED) values (1,'Catissue Suite','caTissueCore',NULL,1,0);
+insert into dyextn_entity_group (IDENTIFIER,LONG_NAME,SHORT_NAME,VERSION,IS_SYSTEM_GENERATED,IS_CACORE_GENERATED) values (1208,'DataListEntityGroup','DataListEntityGroup',NULL,1,0);
 
 
 

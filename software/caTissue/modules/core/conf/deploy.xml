@@ -982,6 +982,7 @@
 	
 	<!--Generate caCORE for all imported xmis in the system-->
 	<target name="generate:cacore:all">
+		<echo message="${database.port}"/>
 		<unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />
 		<tstamp>
 			<format property="before_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
@@ -990,6 +991,7 @@
 		<antcall target="generate.cacore.for.xmi">
 			<param name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
 			<param name="jboss.home" value="${jboss.home}"/>
+			<param name="regenrate:cacore:all" value="${regenrate:cacore:all}"/>
 		</antcall>
 		<tstamp>
 			<format property="after_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
@@ -1136,6 +1138,12 @@
 					<property name="jboss.home.dir" value="${jboss.home}" />
 					<property name="default.prifix.war" value="${default.prefix.war}" />
 					<property name="database.type" value="${database.type}" />
+					<property name="regenrate:cacore:all" value="${regenrate:cacore:all}"/>
+					<property name="database.user" value="${database.user}" />
+					<property name="database.password" value="${database.password}" />
+					<property name="database.server" value="${database.server}" />
+					<property name="database.port" value="${database.port}" />
+					<property name="database.name" value="${database.name}" />
 				</ant>
 		</else>
 	</if>
@@ -1788,7 +1796,7 @@
 		<antcall target="upgrade_db_from_DE_1.4.2_to_DE_1.5.0" />
 
 		<antcall target="upgrade_db_from_DE_1.5.0_to_DE_1.5.1" />
-
+		<antcall target="upgrade_db_from_DE_1.5.1_to_DE_1.5.2" />
 
 		<antcall target="upgrade_metadata_for_constraintproperties"/>
 		<antcall target="update_metadata_for_model_changes">
@@ -1944,7 +1952,8 @@
 		<antcall target="upgrade_db_from_DE_1.4.2_to_DE_1.5.0" />
 
 		<antcall target="upgrade_db_from_DE_1.5.0_to_DE_1.5.1" />
-
+		<antcall target="upgrade_db_from_DE_1.5.1_to_DE_1.5.2" />
+		
 		<antcall target="upgrade_metadata_for_constraintproperties"/>
 
 		<antcall target="update_metadata_for_model_changes" >
@@ -2148,7 +2157,8 @@
 		<antcall target="upgrade_db_from_DE_1.4.2_to_DE_1.5.0" />
 
 		<antcall target="upgrade_db_from_DE_1.5.0_to_DE_1.5.1" />
-
+		<antcall target="upgrade_db_from_DE_1.5.1_to_DE_1.5.2" />
+		
 		<antcall target="upgrade.old.schema.task" />
 
 		<antcall target="update_static_metadata"/>

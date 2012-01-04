@@ -7238,8 +7238,8 @@ insert into `dyextn_entity` (`IDENTIFIER`,`DATA_TABLE_STATE`,`IS_ABSTRACT`,`PARE
 
 /*Data for the table `dyextn_entity_group` */
 
-insert into `dyextn_entity_group` (`IDENTIFIER`,`LONG_NAME`,`SHORT_NAME`,`VERSION`,`IS_SYSTEM_GENERATED`) values (1,'Catissue Suite','caTissueCore',NULL,1);
-insert into `dyextn_entity_group` (`IDENTIFIER`,`LONG_NAME`,`SHORT_NAME`,`VERSION`,`IS_SYSTEM_GENERATED`) values (1208,'DataListEntityGroup','DataListEntityGroup',NULL,1);
+insert into `dyextn_entity_group` (`IDENTIFIER`,`LONG_NAME`,`SHORT_NAME`,`VERSION`,`IS_SYSTEM_GENERATED`,`IS_CACORE_GENERATED`) values (1,'Catissue Suite','caTissueCore',NULL,1,0);
+insert into `dyextn_entity_group` (`IDENTIFIER`,`LONG_NAME`,`SHORT_NAME`,`VERSION`,`IS_SYSTEM_GENERATED`,`IS_CACORE_GENERATED`) values (1208,'DataListEntityGroup','DataListEntityGroup',NULL,1,0);
 
 /*Data for the table `dyextn_entity_group_rel` */
 
