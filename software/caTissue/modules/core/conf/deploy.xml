@@ -982,6 +982,7 @@
 	
 	<!--Generate caCORE for all imported xmis in the system-->
 	<target name="generate:cacore:all">
+		<unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />
 		<tstamp>
 			<format property="before_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
 		</tstamp>
@@ -3568,7 +3569,7 @@ Thanking You,
 
 	<!--Generate caCORE for the specified entity group-->
 	<target name="generate:cacore">
-		
+		<unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />
 		<ant antfile="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/DEDeploy.xml" dir="." target="handle.cacore.generation.for.import.xmi">
 			<property name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
 			<property name="entityGroup.jar.location" value="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
