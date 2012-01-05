@@ -5915,6 +5915,8 @@ public class Constants
 	public static final String SPP_ENTITY_GRP_ERROR = "Invalid Entity group name";
 
 	public static final String SPP_EVENT_ERROR = "Invalid event name";
+	
+	public static final String SPP_EVENT_ERROR_MOD = "specified is not present in the system";
 
 	public static final String SPP_EDIT_WARNING = "Existing events cannot be modified or deleted during SPP edit. You are allowed to only add new events.";
 
