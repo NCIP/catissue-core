@@ -101,12 +101,12 @@ public final class SPPXMLParser
 			EntityGroupInterface entityGroup = DynamicExtensionsUtility.getEntityGroupByName(entityGrp);
 			if(entityGroup == null)
 			{
-				throw new DynamicExtensionsSystemException(Constants.SPP_ENTITY_GRP_ERROR+": '"+entityGrp+"'");
+				throw new DynamicExtensionsSystemException("The group name '"+entityGrp+"' specified is not present in the system");
 			}
 			EntityInterface entity = entityGroup.getEntityByName(name);
 			if(entity == null)
 			{
-				throw new DynamicExtensionsSystemException(Constants.SPP_EVENT_ERROR+": '"+name+"'");
+				throw new DynamicExtensionsSystemException("The event name '"+name+"' specified is not present in the system");
 			}
 			Collection<AbstractEntityInterface> containers = entity.getContainerCollection();
 			Iterator<AbstractEntityInterface> itr = containers.iterator();
