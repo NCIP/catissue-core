@@ -195,53 +195,63 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 
 			SPPXMLParser parser = SPPXMLParser.getInstance();
 			FormFile xmlFile = sppUIObj.getXmlFileName();
-			String xmlFileName = xmlFile.getFileName();
-			InputStream inputStream = xmlFile.getInputStream();
-			Set<Action> actionList = parser.parseXML(xmlFileName, inputStream);
-			Set<Action> newActList = new HashSet<Action>();
-			Collection<Action> oldList = sppOldObj.getActionCollection();
-			sppNewObj.setActionCollection(new HashSet<Action>());
-			for (Action action : actionList)
+			if(xmlFile == null || xmlFile.getFileName().isEmpty())
 			{
-				for (Action oldAction : oldList)
-				{
-					if (action.getUniqueId().equals(oldAction.getUniqueId()))
-					{
-						if (!specReqList.isEmpty() || !cpeList.isEmpty())
-						{
-							if (oldAction.getBarcode() != null
-									&& !oldAction.getBarcode().equals(action.getBarcode())
-									|| !oldAction.getActionOrder().equals(action.getActionOrder())
-									|| action.getActivityStatus().equals(Constants.DISABLED))
-							{
-								ApplicationException appExp = new ApplicationException(null, null,
-										Constants.SPP_EDIT_WARNING);
-								appExp.setCustomizedMsg(Constants.SPP_EDIT_WARNING);
-								this.logger.error(Constants.SPP_EDIT_WARNING, appExp);
-								throw this.getBizLogicException(appExp, "",
-										Constants.SPP_EDIT_WARNING);
-							}
-							if (oldAction.getApplicationDefaultValue() != null)
-							{
-								action.setApplicationDefaultValue(oldAction
-										.getApplicationDefaultValue());
-							}
-						}
-						else
-						{
-							if (oldAction.getApplicationDefaultValue() != null)
-							{
-								action.setApplicationDefaultValue(oldAction
-										.getApplicationDefaultValue());
-							}
-						}
-						action.setId(oldAction.getId());
-						break;
-					}
-				}
-				newActList.add(action);
+				sppNewObj.getActionCollection().addAll(sppOldObj.getActionCollection());
 			}
-			sppNewObj.getActionCollection().addAll(newActList);
+			else 
+			{
+				String xmlFileName = xmlFile.getFileName();
+				InputStream inputStream = xmlFile.getInputStream();
+				Set<Action> actionList = parser.parseXML(xmlFileName, inputStream);
+				Set<Action> newActList = new HashSet<Action>();
+				Collection<Action> oldList = sppOldObj.getActionCollection();
+				sppNewObj.setActionCollection(new HashSet<Action>());
+				for (Action action : actionList)
+				{
+					for (Action oldAction : oldList)
+					{
+						if (action.getUniqueId().equals(oldAction.getUniqueId()))
+						{
+							if (!specReqList.isEmpty() || !cpeList.isEmpty())
+							{
+								if (oldAction.getBarcode() != null
+										&& !oldAction.getBarcode().equals(action.getBarcode())
+										|| !oldAction.getActionOrder().equals(action.getActionOrder())
+										|| action.getActivityStatus().equals(Constants.DISABLED))
+								{
+									ApplicationException appExp = new ApplicationException(null, null,
+											Constants.SPP_EDIT_WARNING);
+									appExp.setCustomizedMsg(Constants.SPP_EDIT_WARNING);
+									this.logger.error(Constants.SPP_EDIT_WARNING, appExp);
+									throw this.getBizLogicException(appExp, "",
+											Constants.SPP_EDIT_WARNING);
+								}
+								if (oldAction.getApplicationDefaultValue() != null)
+								{
+									action.setApplicationDefaultValue(oldAction
+											.getApplicationDefaultValue());
+								}
+							}
+							else
+							{
+								if (oldAction.getApplicationDefaultValue() != null)
+								{
+									action.setApplicationDefaultValue(oldAction
+											.getApplicationDefaultValue());
+								}
+							}
+							action.setId(oldAction.getId());
+							break;
+						}
+					}
+					newActList.add(action);
+				}
+				sppNewObj.getActionCollection().addAll(newActList);
+			}
+			
+			
+			
 			dao.update(sppNewObj, sppOldObj);
 			updateXMLTemplateInDB(sppNewObj.getId(), xmlFile);
 		}

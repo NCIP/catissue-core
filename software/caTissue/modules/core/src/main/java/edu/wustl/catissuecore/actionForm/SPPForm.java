@@ -56,33 +56,32 @@ public class SPPForm extends AbstractActionForm
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		final ActionErrors errors = new ActionErrors();
-		final Validator validator = new Validator();
+		final Validator validator = new Validator(); 
 		try
-		{
+		{ 
 			String spChars = "!@#$%^&*()=+\\|{[]}\'\";:/?.>,<`~-";
-			if(Validator.isEmpty(this.name) && xmlFileName.getFileName().isEmpty())
+			if(!xmlFileName.getFileName().isEmpty() && !this.xmlFileName.getFileName().endsWith(".xml"))
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.fields"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.valid.file"));
 			}
-			else
+			if (Validator.isEmpty(this.name))
 			{
-				if (Validator.isEmpty(this.name))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.name.missing"));
-				}
-				else if(validator.containsSpecialCharacters(this.name, spChars))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.spcl.char"));
-				}
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.name.missing"));
+			}
+			else if(validator.containsSpecialCharacters(this.name, spChars))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.spcl.char"));
+			}
+			if(!Validator.isEmpty(request.getParameter("operation")) && "add".equals(request.getParameter("operation")))
+			{
 				if(xmlFileName.getFileName().isEmpty())
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.file"));
 				}
-				else if(!this.xmlFileName.getFileName().endsWith(".xml"))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("spp.error.valid.file"));
-				}
+				
 			}
+			
+			
 		}
 		catch (final Exception excp)
 		{
