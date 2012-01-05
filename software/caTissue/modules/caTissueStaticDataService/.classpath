@@ -122,7 +122,6 @@
 	<classpathentry kind="lib" path="lib/jaxrpc-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2.13.jar"/>
 	<classpathentry kind="lib" path="lib/sdk-client-framework-4.2.jar"/>
 	<classpathentry kind="lib" path="lib/sdk-grid-remoting-4.2.jar"/>
 	<classpathentry kind="lib" path="lib/sdk-security-client-4.2.jar"/>
@@ -135,7 +134,6 @@
 	<classpathentry kind="lib" path="lib/caGrid-gridgrouper-stubs-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/catissuecore.jar"/>
 	<classpathentry kind="lib" path="lib/commonpackage-1.1.8.3.7.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang.jar"/>
 	<classpathentry kind="lib" path="lib/DAO-1.1.9.5.jar"/>
 	<classpathentry kind="lib" path="lib/dozer-5.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/DynamicExtensions.jar"/>
@@ -144,9 +142,6 @@
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="lib" path="lib/ParticipantManager.jar"/>
 	<classpathentry kind="lib" path="lib/SimpleQuery-1.1.9.2.2.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-ext-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-simple-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/spring-2.5.6.jar" sourcepath="C:/Misc/JarSrc/spring-framework-2.5.6/spring-framework-2.5.6.zip"/>
 	<classpathentry kind="lib" path="lib/spring-aop-2.5.6.jar"/>
 	<classpathentry kind="lib" path="lib/spring-aspects-2.5.6.jar"/>
