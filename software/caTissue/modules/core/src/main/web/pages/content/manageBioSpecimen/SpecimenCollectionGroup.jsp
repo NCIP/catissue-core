@@ -68,7 +68,6 @@ function calculateAge()
 	{
 		document.getElementById('ageAtCollection').value="";
 	}
-	
 }
 </script>
 <script src="jss/calendarComponent.js" type="text/javascript"></script>
@@ -120,7 +119,7 @@ function calculateAge()
 
 		}
 
- 	   	}
+ 	}
  		if(operation.equals(Constants.EDIT)|| operation.equals("viewAnnotations"))
  		{
 			editViewButton="buttons."+Constants.VIEW;
@@ -147,23 +146,14 @@ function calculateAge()
  		{
  			idToTree = form.getId();
  		}
- 		String currentReceivedDate = "";
- 		String currentCollectionDate = "";
  		if (form != null)
  		{
-		currentReceivedDate = form.getReceivedEventDateOfEvent();
-		if(currentReceivedDate == null)
-				currentReceivedDate = "";
-		currentCollectionDate = form.getCollectionEventdateOfEvent();
-		if(currentCollectionDate == null)
- 			currentCollectionDate = "";
- 		}
-
- 		String formNameForCal = "specimenCollectionGroupForm";
+		String formNameForCal = "specimenCollectionGroupForm";
  		String numberOfSpecimenCollection = (String)request.getAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
  		if(numberOfSpecimenCollection == null)
- 		{
- 	numberOfSpecimenCollection = "0";
+ 			{
+ 				numberOfSpecimenCollection = "0";
+ 			}
  		}
  %>
 <head>
@@ -339,78 +329,6 @@ function calculateAge()
 		document.forms[0].submit();
 	}
 		var applyToSpecimen;
-		function checkForChanges()
-		{
-			/*var collectionEventdateOfEvent = document.getElementById("collectionEventdateOfEvent").value;
-			var collectionEventUserId = document.getElementById("collectionEventUserId").value;
-			var collectionEventTimeInHours = document.getElementById("displaycollectionEventTimeInHours").value;
-			var collectionEventTimeInMinutes = document.getElementById("displaycollectionEventTimeInMinutes").value;
-			var collectionEventCollectionProcedure = document.getElementById("collectionEventCollectionProcedure").value;
-		    var collectionEventContainer = document.getElementById("collectionEventContainer").value;
-		    var collectionEventComments = document.getElementById("collectionEventComments").value;
-
-			var receivedEventdateOfEvent;
-			var currentReceivedDateForm;
-			var recDate = document.getElementById("receivedEventdateOfEvent");
-			if(recDate != null)
-			{
-				receivedEventdateOfEvent = recDate.value;
-				 currentReceivedDateForm = document.getElementById("currentReceivedDateForm").value;
-			}
-			var receivedEventUserId = document.getElementById("receivedEventUserId").value;
-			var receivedEventTimeInHours = document.getElementById("displayreceivedEventTimeInHours").value;
-			var receivedEventTimeInMinutes = document.getElementById("displayreceivedEventTimeInMinutes").value;
-			var receivedEventReceivedQuality = document.getElementById("receivedEventReceivedQuality").value;
-			var receivedEventComments = document.getElementById("receivedEventComments").value;
-
-			//Values from form
-			var collectionEventdateOfEventForm = document.getElementById("collectionEventdateOfEventForm").value;
-			var collectionEventUserIdForm = document.getElementById("collectionEventUserIdForm").value;
-			var collectionEventTimeInHoursForm = document.getElementById("collectionEventTimeInHoursForm").value;
-			var collectionEventTimeInMinutesForm = document.getElementById("collectionEventTimeInMinutesForm").value;
-			var collectionEventCollectionProcedureForm = document.getElementById("collectionEventCollectionProcedureForm").value;
-			var collectionEventContainerForm = document.getElementById("collectionEventContainerForm").value;
-			var collectionEventCommentsForm = document.getElementById("collectionEventCommentsForm").value;
-
-			var receivedEventUserIdForm = document.getElementById("receivedEventUserIdForm").value;
-
-			var receivedEventTimeInHoursForm = document.getElementById("receivedEventTimeInHoursForm").value;
-			var receivedEventTimeInMinutesForm = document.getElementById("receivedEventTimeInMinutesForm").value;
-			var receivedEventReceivedQualityForm = document.getElementById("receivedEventReceivedQualityForm").value;
-			var receivedEventCommentsForm = document.getElementById("receivedEventCommentsForm").value;
-
-			if(collectionEventUserId == "")
-			  collectionEventUserId = "0";
-
-			if(receivedEventUserId == "")
-			   receivedEventUserId = "0";
-
-			if((collectionEventdateOfEvent != collectionEventdateOfEventForm)
-				|| (collectionEventUserId != collectionEventUserIdForm)
-				|| (collectionEventTimeInHours != collectionEventTimeInHoursForm)
-				|| (collectionEventTimeInMinutes != collectionEventTimeInMinutesForm)
-				|| (collectionEventCollectionProcedure != collectionEventCollectionProcedureForm)
-				|| (collectionEventContainer != collectionEventContainerForm)
-				|| (receivedEventUserId != receivedEventUserIdForm)
-				|| (receivedEventdateOfEvent != currentReceivedDateForm)
-				|| (receivedEventTimeInHours != receivedEventTimeInHoursForm)
-				|| (receivedEventTimeInMinutes != receivedEventTimeInMinutesForm)
-				|| (receivedEventReceivedQuality != receivedEventReceivedQualityForm)
-				|| (collectionEventComments != collectionEventCommentsForm)
-				|| (receivedEventComments != receivedEventCommentsForm))
-			{
-				var appResources = "The collected and received events data that you have entered will be propagated to all specimens under this Specimen Collection Group and override any existing data. Do you want to continue?";
-				var answer = confirm(appResources);
-				if(answer)
-				{
-					applyToSpecimen = 'true';
-				}
-				else
-				{
-					applyToSpecimen = 'false';
-				}
-			}*/
-		}
 		function confirmDisableForSCG(action,formField)
 		{
 			var temp = action+"&applyToSpecimenValue="+applyToSpecimen;
@@ -485,7 +403,7 @@ function calculateAge()
 
 		function initializeSCGForm()
 		{
-			<%if(form!=null)
+			<% if(form!=null)
 			{%>
 			var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
 			//bug id: 4333
@@ -520,9 +438,7 @@ function calculateAge()
 			displayTable="none";
 		}
 
-		//var display=document.getElementById('collectionEvent');
-		//display.style.display=tabSelected;
-
+		
 		var display=document.getElementById('scgTable');
 		display.style.display=tabSelected;
 
@@ -707,7 +623,8 @@ function calculateAge()
 <%
 Date birthDateObject=(Date)request.getAttribute("dob");
 String birthDateString=""; 
-String collectionDateString=form.getCollectionDate(); 
+String collectionDateString=form.getCollectionDate();
+String originalCollectionDate=form.getCollectionDate(); // for offset use
 String showageDiffString=form.getAgeAtCollection();
 Date encounterTimeStampDate;
 int collectionMinute=0;		
@@ -856,15 +773,3 @@ if(form.getAgeAtCollection()==null && birthDateObject!=null && 	collectionDateSt
 showPriterTypeLocation();
 </script>
 </body>
-
-
-
-
-
-
-
-
-
-
-
-

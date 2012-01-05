@@ -50,8 +50,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	if(operation.equals(Constants.EDIT))
 	{
 		confirmDisableFuncName = "confirmDisableForSCG('" + formName +"',document.forms[0].activityStatus)";
-		normalSubmit = "checkForChanges(),"+normalSubmitFunctionName + ","+confirmDisableFuncName;
-		forwardToSubmit = "checkForChanges(),"+ forwardToSubmitFuctionName + ","+confirmDisableFuncName;
+		normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
+		forwardToSubmit =  forwardToSubmitFuctionName + ","+confirmDisableFuncName;
 
 		if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
 		{
@@ -64,7 +64,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	confirmDisableFuncNameForMultipleSpecimen =  "confirmDisableForSCG('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
 		}
 
-		forwardToSubmitForMultipleSpecimen = "checkForChanges(),"+forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
+		forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
 	}
 	else
 	{
@@ -73,29 +73,49 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 		forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
 	}
 %>
-	<%
-		//for Offset change we need Receieved and collected date.So as to change them when any offset is applied.
-			Integer received_Year = new Integer(AppUtility.getYear(currentReceivedDate ));
-			Integer received_Month = new Integer(AppUtility.getMonth(currentReceivedDate ));
-			Integer received_Date = new Integer(AppUtility.getDay(currentReceivedDate ));
-			Integer collection_Year = new Integer(AppUtility.getYear(currentCollectionDate ));
-			Integer collection_Month = new Integer(AppUtility.getMonth(currentCollectionDate ));
-			Integer collection_Day = new Integer(AppUtility.getDay(currentCollectionDate ));
-	%>
 	<script language="javascript">
 	function registrationDateChange(newOffsetObject)
-		 {
+	{
+		
+    	var originalCollectionDate = document.getElementById('originalCollectionDate').value;	
 
-     		var originalcollectedDate= <%=collection_Month.intValue()%> +"/"+<%=collection_Day.intValue()%> +"/"+<%=collection_Year.intValue()%>;
-			var newCollectedDate=dateChange(newOffsetObject,<%=form.getOffset()%>,originalcollectedDate);
-			document.getElementById("collectionEventdateOfEvent").value=newCollectedDate;
+		if(originalCollectionDate.length !=0)
+		{
+				var dyainMili=86400000;
 
+				originalCollectionDate=originalCollectionDate.replace("-","/");
 
-			var originalReceiveddate= <%=received_Month.intValue()%> +"/"+<%=received_Date.intValue()%> +"/"+<%=received_Year.intValue()%>;
-			var newReceivedDate=dateChange(newOffsetObject,<%=form.getOffset()%>,originalReceiveddate);
-			document.getElementById("receivedEventDateOfEvent").value=newReceivedDate;
-		 }
-			</script>
+				originalCollectionDate=originalCollectionDate.replace("-","/");
+				
+				var offset_coll_dt_js=new Date(originalCollectionDate);
+				
+				offset_coll_dt_js=new Date(offset_coll_dt_js.getTime() + dyainMili * newOffsetObject.value);	
+				
+
+				var final_collection_dt="";
+				
+				var day=offset_coll_dt_js.getDate();
+
+				var month=offset_coll_dt_js.getMonth() + 1;
+
+				if(month < 10)
+					final_collection_dt=final_collection_dt+"0"+month+"-";
+				else
+					final_collection_dt=final_collection_dt+month+"-";
+				if(day < 10)
+					final_collection_dt=final_collection_dt+"0"+day+"-";
+				else
+					final_collection_dt=final_collection_dt+day+"-";
+				
+				
+				final_collection_dt=final_collection_dt+offset_coll_dt_js.getFullYear();
+				
+				document.getElementById('collectionDate').value=final_collection_dt;
+				
+				
+		}
+	}
+	</script>
 	<div style="width:100%">
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg" id="">
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
@@ -520,31 +540,9 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			</tr>
 			</table></td>
 			 </tr>
-			<!-- Hidden fields for events
-			/**
- 			* Name : Ashish Gupta
- 			* Reviewer Name : Sachin Lale
- 			* Bug ID: 2741
- 			* Patch ID: 2741_19
- 			* Description: Hidden fields for events
-			*/-->
-			<input type="hidden" id="collectionEventdateOfEventForm" value="<%=currentCollectionDate%>"  />
-			<input type="hidden" id="collectionEventUserIdForm" value="<%=form.getCollectionEventUserId()%>"  />
-			<input type="hidden" id="collectionEventTimeInHoursForm" value="<%=form.getCollectionEventTimeInHours()%>"  />
-			<input type="hidden" id="collectionEventTimeInMinutesForm" value="<%=form.getCollectionEventTimeInMinutes()%>"  />
-			<input type="hidden" id="collectionEventCollectionProcedureForm" value="<%=form.getCollectionEventCollectionProcedure()%>"  />
-			<input type="hidden" id="collectionEventContainerForm" value="<%=form.getCollectionEventContainer()%>"  />
-			<input type="hidden" id="collectionEventCommentsForm" value="<%=form.getCollectionEventComments()%>"  />
-			<html:hidden property="collectionEventId"/>
+			<input type="hidden" id="originalCollectionDate" value="<%=originalCollectionDate%>"  />
+			
 
-			<input type="hidden" id="receivedEventUserIdForm" value="<%=form.getReceivedEventUserId()%>"  />
-			<input type="hidden" id="currentReceivedDateForm" value="<%=currentReceivedDate%>"  />
-			<input type="hidden" id="receivedEventTimeInHoursForm" value="<%=form.getReceivedEventTimeInHours()%>"  />
-			<input type="hidden" id="receivedEventTimeInMinutesForm" value="<%=form.getReceivedEventTimeInMinutes()%>"  />
-			<input type="hidden" id="receivedEventReceivedQualityForm" value="<%=form.getReceivedEventReceivedQuality()%>"  />
-			<input type="hidden" id="receivedEventCommentsForm" value="<%=form.getReceivedEventComments()%>"  />
-			<html:hidden property="receivedEventId"/>
-			<!-- Patch ID: Bug#4227_4 -->
 			<html:hidden styleId="buttonType" property="buttonType"/>
 
 		</tr>
