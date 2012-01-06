@@ -127,7 +127,6 @@
 	<classpathentry kind="lib" path="lib/sdk-security-client-4.2.jar"/>
 	<classpathentry kind="lib" path="lib/sdk-writable-api-client-4.2.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.7.1.jar"/>
-	<classpathentry kind="lib" path="lib/caGrid-CQL-cql.1.0-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-gridgrouper-auth-extension-Service-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-gridgrouper-client-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/caGrid-gridgrouper-common-1.4.jar"/>
