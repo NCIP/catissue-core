@@ -91,7 +91,6 @@
    <ns2:SchemaElement type="SOPApplication" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="./edu.wustl.catissuecore.domain.deintegration.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration.ws" packageName="edu.wustl.catissuecore.domain.deintegration.ws" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="ActionApplicationRecordEntry" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ParticipantRecordEntry" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SCGRecordEntry" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SpecimenRecordEntry" xsi:type="ns2:SchemaElementType"/>
@@ -183,7 +182,6 @@
    <ns2:SchemaElement className="AbstractRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.common.dynamicextensions.domain.integration" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractRecordEntry" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="edu.wustl.catissuecore.domain.deintegration.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" packageName="edu.wustl.catissuecore.domain.deintegration" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement className="ActionApplicationRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.deintegration" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ActionApplicationRecordEntry" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="ParticipantRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.deintegration" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ParticipantRecordEntry" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="SCGRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.deintegration" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SCGRecordEntry" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="SpecimenRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.deintegration" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenRecordEntry" xsi:type="ns2:SchemaElementType"/>
@@ -537,7 +535,7 @@
 
            <ns41:ModelClass selected="true" shortClassName="SpecimenRecordEntry" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns41:ModelClass selected="true" shortClassName="ActionApplicationRecordEntry" targetable="true" xsi:type="ns41:ModelClass"/>
+
 
            <ns41:ModelClass selected="true" shortClassName="ParticipantRecordEntry" targetable="true" xsi:type="ns41:ModelClass"/>
 

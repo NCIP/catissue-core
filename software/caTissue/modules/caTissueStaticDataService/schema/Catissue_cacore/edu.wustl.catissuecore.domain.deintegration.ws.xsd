@@ -46,23 +46,6 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegra
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ActionApplicationRecordEntry" type="ActionApplicationRecordEntry" />
-  <xs:complexType name="ActionApplicationRecordEntry">
-    <xs:complexContent>
-      <xs:extension base="edu.common.dynamicextensions.domain.integration.ws:AbstractRecordEntry">
-        <xs:sequence>
-          <xs:element name="actionApplication" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop.ws:ActionApplication" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-        </xs:sequence>
-        <xs:attribute name="identifier" type="xs:long" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
   <xs:element name="ParticipantRecordEntry" type="ParticipantRecordEntry" />
   <xs:complexType name="ParticipantRecordEntry">
     <xs:complexContent>
