@@ -62,13 +62,6 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="applicationDefaultValue" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.deintegration:ActionApplicationRecordEntry" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
         </xs:sequence>
         <xs:attribute name="actionOrder" type="xs:long" />
         <xs:attribute name="barcode" type="xs:string" />
@@ -86,13 +79,6 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="SOPApplication" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="applicationRecordEntry" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.deintegration:ActionApplicationRecordEntry" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
