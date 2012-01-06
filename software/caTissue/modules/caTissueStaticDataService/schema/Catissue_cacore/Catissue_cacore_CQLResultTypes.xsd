@@ -35,12 +35,12 @@
 		<xs:element ref="ns0:ConceptReferent" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology"/>
 		<xs:element ref="ns0:TextContent" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology"/>
 		<xs:element ref="ns0:DeidentifiedSurgicalPathologyReport" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology"/>
-		<xs:element ref="ns0:SOP" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop"/>
-		<xs:element ref="ns0:AbstractApplication" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop"/>
-		<xs:element ref="ns0:Action" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop"/>
-		<xs:element ref="ns0:ActionApplication" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop"/>
-		<xs:element ref="ns0:SOPApplication" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop"/>
-		<xs:element ref="ns0:DefaultAction" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop"/>
+
+
+
+
+
+
 		<xs:element ref="ns0:BaseShipment" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking"/>
 		<xs:element ref="ns0:Shipment" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking"/>
 		<xs:element ref="ns0:ShipmentRequest" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking"/>
@@ -104,7 +104,7 @@
 		<xs:element ref="ns0:DistributionSpecimenRequirement" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>
 		<xs:element ref="ns0:DerivedSpecimenOrderItem" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>
 		<xs:element ref="ns0:MolecularSpecimenReviewParameters" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>
-		<xs:element ref="ns0:Password" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>
+
 		<xs:element ref="ns0:CancerResearchGroup" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>
 		<xs:element ref="ns0:CheckInCheckOutEventParameter" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>
 		<xs:element ref="ns0:StorageContainer" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>
