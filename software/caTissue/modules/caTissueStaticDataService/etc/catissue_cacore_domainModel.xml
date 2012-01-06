@@ -2304,11 +2304,6 @@
     <ns82:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-9223372035586009895" version="1.0"/>
    </ns82:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ActionApplicationRecordEntry" id="EAID_E185B7E6_092B_472d_A291_D6230D5A4711" packageName="edu.wustl.catissuecore.domain.deintegration" projectName="catissue_cacore" projectVersion="2.0">
-   <ns83:umlAttributeCollection xmlns:ns83="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns83:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-9223372035175283350" version="1.0"/>
-   </ns83:umlAttributeCollection>
-  </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="ParticipantRecordEntry" id="EAID_F17F0943_0AFD_4019_AD46_1AC155B399C6" packageName="edu.wustl.catissuecore.domain.deintegration" projectName="catissue_cacore" projectVersion="2.0">
    <ns84:umlAttributeCollection xmlns:ns84="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns84:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-9223372036816399116" version="1.0"/>
