@@ -1628,7 +1628,7 @@
 			</then>
 		</if>
 
-        <antcall target="import_xmi">
+        <!--<antcall target="import_xmi">
 			<param name="filename" value="${resources.dir}/xmi/SpecimenEvents.xmi"/>
 			<param name="mainContainerList" value="${resources.dir}/csv/SpecimenEvents.csv"/>
 			<param name="package" value="sop"/>
@@ -1637,7 +1637,7 @@
 			<param name="generate.cacore" value="false"/>
 			<param name="jboss.home" value="${jboss.home}"/>
 			<param name="pv.file.name" value="${resources.dir}/csv/SpecimenEvents_PVs.csv"/>
-		</antcall>
+		</antcall>-->
 
 		<antcall target="upgrade_existingEvents_to_sppEvents"/>
 
@@ -2172,7 +2172,7 @@
 				<antcall target="reset_DE_sequences" />
 			</then>
 		</if>
-		<antcall target="import_xmi">
+		<!--<antcall target="import_xmi">
 			<param name="filename" value="${resources.dir}/xmi/SpecimenEvents.xmi"/>
 			<param name="mainContainerList" value="${resources.dir}/csv/SpecimenEvents.csv"/>
 			<param name="package" value="sop"/>
@@ -2181,7 +2181,7 @@
 			<param name="generate.cacore" value="false"/>
 			<param name="jboss.home" value="${jboss.home}"/>
 			<param name="pv.file.name" value="${resources.dir}/csv/SpecimenEvents_PVs.csv"/>
-		</antcall>
+		</antcall>-->
 		<antcall target="upgrade_existingEvents_to_sppEvents"/>
 		<antcall target="insertPaths"/>
 		<if>
