@@ -17,7 +17,7 @@
         <!-- element references to exposed objects -->
 		<xs:element ref="ns0:SCGRecordEntry" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration"/>
 		<xs:element ref="ns0:SpecimenRecordEntry" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration"/>
-		<xs:element ref="ns0:ActionApplicationRecordEntry" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration"/>
+
 		<xs:element ref="ns0:ParticipantRecordEntry" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration"/>
 		<xs:element ref="ns0:AbstractDomainObject" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.common.domain"/>
 		<xs:element ref="ns0:IdentifiedSurgicalPathologyReport" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology"/>
