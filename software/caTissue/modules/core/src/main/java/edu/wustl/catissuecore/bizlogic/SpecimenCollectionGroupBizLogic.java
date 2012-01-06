@@ -34,6 +34,7 @@ import java.util.TreeMap;
 
 import org.hibernate.LazyInitializationException;
 
+import edu.wustl.catissuecore.comparator.ScgIdentifierComprator;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -2048,6 +2049,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		 * Iterate over CPE obects Get SCGCollection Sort SCG list of the CPE.
 		 * Create XML node
 		 */
+		ScgIdentifierComprator scgIdComp=new ScgIdentifierComprator();
+		Collections.sort(l_scg, scgIdComp);
 		Date eventLastDate = new Date();
 		if (list != null && !list.isEmpty())
 		{
@@ -2234,7 +2237,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	private Date createTreeNodeForExistngSCG(StringBuffer xmlString,List cpeList,List scgList,Date regDate, Integer parentOffset)
 			throws BizLogicException, ClassNotFoundException
 	{
-		String eventPointVal = "";
+		
 		
 		Date eventLastDate = null;
 		
@@ -2248,6 +2251,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			
 			while(cpeIterator.hasNext())
 			{
+				String eventPointVal = "";
+				
 				CollectionProtocolEvent tempCpe=(CollectionProtocolEvent) cpeIterator.next();
 				
 				if(tempScg.getCollectionProtocolEvent().getId().compareTo(tempCpe.getId())==0)
