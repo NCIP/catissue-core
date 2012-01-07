@@ -302,14 +302,46 @@
 		<associationTye>ASSOCIATION</associationTye>
 		<roleName>applicationRecordEntry</roleName>
 		<roleNameTable>ActionApplication</roleNameTable>
-		<isSwap>false</isSwap>
+		<isSwap>true</isSwap>
 		<srcAssociationId>ACTION_APP_RECORD_ENTRY_ID</srcAssociationId>
+		<targetAssociationId></targetAssociationId>
+		<maxCardinality>1</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>BI_DIRECTIONAL</direction>
+		<manytomany>false</manytomany>
+	</association>
+	
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</targetEntityName>
+		<associationName>actionApplicationRecord_actionApp</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>actionApplication</roleName>
+		<roleNameTable>ActionApplicationRecordEntry</roleNameTable>
+		<isSwap>true</isSwap>
+		<srcAssociationId>IDENTIFIER</srcAssociationId>
+		<targetAssociationId>ACTION_APP_ID</targetAssociationId>
+		<maxCardinality>1</maxCardinality>
+		<isSystemGenerated>true</isSystemGenerated>
+		<direction>BI_DIRECTIONAL</direction>
+		<manytomany>false</manytomany>
+	</association>
+	
+	<!--  <association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</targetEntityName>
+		<associationName>actionApplicationRecord_actionApp</associationName>
+		<associationTye>ASSOCIATION</associationTye>
+		<roleName>actionApplication</roleName>
+		<roleNameTable>ActionApplicationRecordEntry</roleNameTable>
+		<isSwap>false</isSwap>
+		<srcAssociationId>ACTION_APP_ID</srcAssociationId>
 		<targetAssociationId>IDENTIFIER</targetAssociationId>
 		<maxCardinality>1</maxCardinality>
 		<isSystemGenerated>true</isSystemGenerated>
 		<direction>SRC_DESTINATION</direction>
 		<manytomany>false</manytomany>
-	</association>
+	</association>-->
 
 
 	<association>

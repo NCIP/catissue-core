@@ -8,6 +8,7 @@
 <project name="DynamicExtensionsInstallation">
 
 	<property file="DynamicExtensionsInstall.properties" />
+	<property file="setup.properties" description="This file needs to be provided by the host application, should contain of the paths required for running DE targets"/>
 	<property name="base.dir" value="." />
 	<property name="de.temp.dir" value="${base.dir}/detemp" />
 	<property name="temp.dir.DE" value="${de.temp.dir}/temp" />
@@ -1553,7 +1554,7 @@
 		<!-- The comma is explicitly given so that if value is empty still it is passed as parameter to java class -->
 		<java failonerror="true" classname="edu.wustl.metadata.util.EntityGroupName" fork="yes" maxmemory="1024m">
 			<arg value="${base.dir}/temp_deaudit_related_files/temp_exported_xmi/" />
-			<arg value="${regenrate:cacore:all}" />
+			<arg value="${ignore.status}" />
 			<classpath>
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${de.zip.location}/lib">
@@ -1655,14 +1656,12 @@
 	</target>
 	
 	<!--creates the host war back up -->
-	<property name="backup.dir" value="backup" ></property>
 	<target name="backup:host:war">
 		<tstamp>
 			<format property="timestamp" pattern="yyyy-MM-dd_hh-mm-ss"/>
 		</tstamp>
-		<mkdir dir = "${base.dir}/{backup.dir}"/>
-		<echo>creating backup at : ${base.dir}/${backup.dir}/${timestamp}_${host.war.name}</echo>
-		<copy file="${jboss.home.dir}/server/default/deploy/${host.war.name}" tofile="${base.dir}/${backup.dir}/${timestamp}_${host.war.name}"/>
+		<echo>creating backup at : ${war.backup.dir}/${timestamp}_${host.war.name}</echo>
+		<copy file="${jboss.home.dir}/server/default/deploy/${host.war.name}" tofile="${war.backup.dir}/${timestamp}_${host.war.name}"/>
 	</target>
 
 	<!--	=================================
