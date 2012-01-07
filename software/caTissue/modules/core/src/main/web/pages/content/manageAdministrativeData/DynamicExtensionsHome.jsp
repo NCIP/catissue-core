@@ -17,8 +17,8 @@
     }
 %>
 <html>
-<body >
-	<iframe name = "dynamicExtensionsFrame" scrolling = "auto" id = "dynamicExtensionsFrame" width = "100%" height = "<%=height%>"  src = "<%=dynamicExtensionsURL%>" frameborder="0">
+<body class="black_ar">
+	<iframe class="black_ar" name = "dynamicExtensionsFrame" scrolling = "auto" id = "dynamicExtensionsFrame" width = "100%" height = "<%=height%>"  src = "<%=dynamicExtensionsURL%>" frameborder="0">
 	</iframe>
 </body>
 </html>

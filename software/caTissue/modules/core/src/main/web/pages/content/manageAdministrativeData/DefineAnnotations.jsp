@@ -207,11 +207,11 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 			<td>
 </td>
 		</tr>
-		<tr style="font-family:arial,helvetica,verdana,sans-serif;">
+		<tr class="black_ar">
 	
-	<td>
+	<td class="black_ar">
 <pre><b> Note:</b></pre>
-<pre>
+<pre class="black_ar">
  1. Please take backup of the database before add or edit of a Dynamic Extension.
  2. You need to restart the caTissue JBoss every time after add or edit of a new Dynamic Extension.
  3. Please contact your caTissue system administrator before starting this activity.
@@ -246,7 +246,9 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 				 
 				 <tr>
 		
-					<td class ="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredNotice" colspan="0">
+							<img src="<%=request.getContextPath()%>/images/de/star.gif" alt="Mandatory" hspace="0" vspace="0" />
+							</td>
 					<td class="formRequiredLabel" >
 					   <bean:message key="anno.Entity"/> 
 					</td>
@@ -289,16 +291,16 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 							<tr>
 								<td>
 								<%if (link==null){ %>
-								<html:button styleId="go1btn"  styleClass="actionButton" property = "delete" onclick="submitForm()" >
+								<html:button styleId="go1btn"  styleClass="blue_ar_b" property = "delete" onclick="submitForm()" >
 								  <bean:message key="buttons.submit"/>
 								</html:button>
 								<%} %>
 								<%if (link!=null && link.equals("editCondn")){ %>
-								<html:button   styleClass="actionButton" property = "delete" onclick="editCondition()" >
+								<html:button   styleClass="blue_ar_b" property = "delete" onclick="editCondition()" >
 								  <bean:message key="buttons.submit"/>
 								</html:button>	
 								
-								<html:button   styleClass="actionButton" property = "delete" onclick="javascript:history.go(-1);" >
+								<html:button   styleClass="blue_ar_b" property = "delete" onclick="javascript:history.go(-1);" >
 								  <bean:message key="buttons.cancel"/>
 								</html:button>								
 								<%} %>
