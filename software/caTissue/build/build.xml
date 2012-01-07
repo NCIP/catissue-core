@@ -893,7 +893,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4
 				<property name="csm.database.url" value="jdbc:mysql://${csm.database.host}:${csm.database.port}/${csm.database.name}"/>
 			</case>
 			<default>
-				<fail message="Invalid database type ${database.type}"/>
+				<fail message="Invalid database type ${csm.database.type}"/>
 			</default>
 		</switch>
 

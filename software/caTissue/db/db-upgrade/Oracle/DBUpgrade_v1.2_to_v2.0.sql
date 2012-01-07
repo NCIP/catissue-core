@@ -201,5 +201,7 @@ ALTER TABLE catissue_specimen_coll_group ADD (AGE_AT_COLLECTION NUMBER(6,2))
 /
 Alter table QUERY_PARAMETERIZED_QUERY add SHOW_TREE number(1,0) default 0
 /
+Alter table CATISSUE_SPECIMEN_EVENT_PARAM add ACTIVITY_STATUS varchar2(50) default 'Active'
+/
  Insert into catissue_permissible_value(Identifier,PARENT_IDENTIFIER,VALUE) select (select max(identifier)+1 from catissue_permissible_value), 3,'Buffy Coat' from dual where not exists (select * from catissue_permissible_value where PARENT_IDENTIFIER=3 and (Value like 'Buffy Coat' or Value like 'buffy coat'))
 /

@@ -435,6 +435,7 @@ create table CATISSUE_SPECIMEN_EVENT_PARAM (
    EVENT_TIMESTAMP datetime,
    USER_ID bigint,
    COMMENTS text,
+   ACTIVITY_STATUS varchar(50) default 'Active',
    primary key (IDENTIFIER)
 );
 create table CATISSUE_STOR_TYPE_SPEC_CLASS (

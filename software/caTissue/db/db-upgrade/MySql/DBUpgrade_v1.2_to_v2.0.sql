@@ -188,6 +188,8 @@ COMMIT;
 /
 Alter table QUERY_PARAMETERIZED_QUERY add column SHOW_TREE bit default 0;
 /
+Alter table CATISSUE_SPECIMEN_EVENT_PARAM add column ACTIVITY_STATUS varchar(50) default 'Active';
+/
 Insert into catissue_permissible_value(PARENT_IDENTIFIER,VALUE) select 3,'Buffy Coat' from dual where not exists (select * from catissue_permissible_value where PARENT_IDENTIFIER=3 and Value like 'buffy coat')
 /
 COMMIT;

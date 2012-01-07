@@ -74,6 +74,15 @@
             column="COMMENTS"
             length="500"
         />
+        
+         <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="50"
+        />
 
         <!--
             To add non XDoclet property mappings, create a file named

@@ -2,7 +2,7 @@
  * Created on Jul 29, 2005
  *<p>SpecimenEventParametersBizLogic Class</p>
  * This class contains the Biz Logic for all EventParameters Classes.
- * This will be the class which will be used for datatransactions of the EventParameters.
+ * This will be the class which will be used for data transactions of the EventParameters.
  */
 
 package edu.wustl.catissuecore.bizlogic;
@@ -268,6 +268,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 					{
 						dao.delete(prevPosition);
 					}
+					disposalEventParameters.setActivityStatus(null);
 				}
 
 			}
