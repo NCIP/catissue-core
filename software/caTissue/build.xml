@@ -1245,10 +1245,6 @@
 				<include name="ISpecimenTypeDomain.class" />
 				<include name="CollectionProtocolRegistration.class" />
 			</fileset>
-			<fileset dir="${catissue_cacore-beans-dir}/edu/wustl/catissuecore/domain/deintegration">
-							<include name="ActionApplicationRecordEntry.java" />
-							<include name="ActionApplicationRecordEntry.class" />
-			</fileset>
 			<fileset dir="${catissue_cacore-beans-dir}/edu/wustl/catissuecore/domain/processingprocedure">
 				<include name="ActionApplication.java" />
 				<include name="ActionApplication.class" />
