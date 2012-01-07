@@ -979,24 +979,38 @@
 		<antcall target="config_jboss_files" />
 		<antcall target="generate:cacore:all" />		
 	</target>
-	
+	<target name="init:de"><delete failonerror="${delete.failonerror}" dir="${tempcacore.dir}" />
+		<mkdir dir="${tempcacore.dir}" />
+		
+		<delete failonerror="${delete.failonerror}" dir="${export.dir}" />
+		<mkdir dir="${export.dir}" />
+		
+		<delete failonerror="${delete.failonerror}" file="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/setup.properties" />
+		<mkdir dir="${export.dir}" />
+				
+		<propertyfile  file="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/setup.properties" comment="Weblogic Properties Below">
+			<entry key="temp.dir" value="./tempClinPortal" />
+			<entry key="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
+			<entry key="entityGroup.jar.location" value="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+			<entry key="cacore.deployable.dir" value="${cacaore.deployables}" />
+			<entry key="war.backup.dir" value="${caTissue-webapp.dir.dist}/catissue_war_backup" />
+			<entry key="import.xmi" value="False" />
+			<entry key="xmi.name" value="${filename}" />
+			<entry key="jboss.home.dir" value="${jboss.home}" />
+			<entry key="default.prifix.war" value="${default.prefix.war}" />
+			<entry key="database.type" value="${database.type}" />
+			<entry key="database.user" value="${database.user}" />
+			<entry key="database.password" value="${database.password}" />
+			<entry key="database.server" value="${database.server}" />
+			<entry key="database.port" value="${database.port}" />
+			<entry key="database.name" value="${database.name}" />
+		</propertyfile>		
+
+	</target>
+
 	<!--Generate caCORE for all imported xmis in the system-->
-	<target name="generate:cacore:all">
-		<echo message="${database.port}"/>
-		<unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />
-		<tstamp>
-			<format property="before_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
-		</tstamp>
-		<echo>before cacore: ${before_cacore}</echo>
-		<antcall target="generate.cacore.for.xmi">
-			<param name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
-			<param name="jboss.home" value="${jboss.home}"/>
-			<param name="regenrate:cacore:all" value="${regenrate:cacore:all}"/>
-		</antcall>
-		<tstamp>
-			<format property="after_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
-		</tstamp>
-		<echo>after cacore: ${after_cacore}</echo>
+	<target name="generate:cacore:all" depends="init:de,DynamicExtensionsInstallation.setupClassExecutionEnvironment,DynamicExtensionsInstallation.generate.cacore.for.imported.xmis">
+		<copy file="${host.war.temp}/WEB-INF/lib/catissue_cacore-beans.jar" tofile="${dynamic.extensions.location}/../../bulk_operations/lib/catissue_cacore-beans.jar" overwrite="true" />
 	</target>
 
 		<!--Target for fresh deployment of caTissue application-->
