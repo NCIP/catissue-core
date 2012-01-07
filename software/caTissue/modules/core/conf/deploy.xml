@@ -13,7 +13,7 @@
 	<property environment="env" />
 	<import file="build-properties.xml"/>
 	<import file="dbunit_temp.xml"/>
-
+	<property file="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/setup.properties"/>
 	<property name="delete.failonerror" value="true"/>
 	<property name="base.dir" value="." />
 	<property name="prop.temp.dir" value="${caTissue-webapp.dir.dist}/deploytempCatissuecore" />
