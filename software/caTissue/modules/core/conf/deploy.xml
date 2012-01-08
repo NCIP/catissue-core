@@ -1009,8 +1009,22 @@
 	</target>
 
 	<!--Generate caCORE for all imported xmis in the system-->
-	<target name="generate:cacore:all" depends="init:de,DynamicExtensionsInstallation.setupClassExecutionEnvironment,DynamicExtensionsInstallation.generate.cacore.for.imported.xmis">
-		<copy file="${host.war.temp}/WEB-INF/lib/catissue_cacore-beans.jar" tofile="${dynamic.extensions.location}/../../bulk_operations/lib/catissue_cacore-beans.jar" overwrite="true" />
+	<target name="generate:cacore:all">
+		<echo message="${database.port}"/>
+		<unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />
+		<tstamp>
+			<format property="before_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
+		</tstamp>
+		<echo>before cacore: ${before_cacore}</echo>
+		<antcall target="generate.cacore.for.xmi">
+			<param name="de.zip.location" value="${prop.temp.dir}/dynamicextensions" />
+			<param name="jboss.home" value="${jboss.home}"/>
+		</antcall>
+		<tstamp>
+			<format property="after_cacore" pattern="MM/dd/yyyy hh:mm:ss aa"/>
+		</tstamp>
+		<echo>after cacore: ${after_cacore}</echo>
+		<copy file="host.war.temp/WEB-INF/lib/catissue_cacore-beans.jar" tofile="${dynamic.extensions.location}/../../bulk_operations/lib/catissue_cacore-beans.jar" overwrite="true" />
 	</target>
 
 		<!--Target for fresh deployment of caTissue application-->
