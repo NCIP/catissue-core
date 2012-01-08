@@ -81,14 +81,17 @@ public class SpecimenWrapper implements ISPPBizlogic
 			SpecimenProcessingProcedureApplication processingSPPApplication, String reasonOfDeviation, User user,
 			Date dateOfEvent, ActionApplicationRecordEntry actionAppRecordEntry) throws BizLogicException
 	{
-		ObjectCloner cloner = new ObjectCloner();
-		SpecimenProcessingProcedureApplication clonedSPPApplication = cloner.clone(processingSPPApplication);
-
-		IBizLogic defaultBizLogic = new CatissueDefaultBizLogic();
-		if(processingSPPApplication.getId() == null)
-			defaultBizLogic.insert(processingSPPApplication);
-		else
-			defaultBizLogic.update(processingSPPApplication,clonedSPPApplication,null);
+		if(processingSPPApplication != null)
+		{
+			ObjectCloner cloner = new ObjectCloner();
+			SpecimenProcessingProcedureApplication clonedSPPApplication = cloner.clone(processingSPPApplication);
+	
+			IBizLogic defaultBizLogic = new CatissueDefaultBizLogic();
+			if(processingSPPApplication.getId() == null)
+				defaultBizLogic.insert(processingSPPApplication);
+			else
+				defaultBizLogic.update(processingSPPApplication,clonedSPPApplication,null);
+		}
 		
 		ActionApplication actionApplication = new ActionApplication();
 		actionApplication.setReasonDeviation(reasonOfDeviation);
