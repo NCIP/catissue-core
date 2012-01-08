@@ -327,7 +327,7 @@
 		<many-to-one
 			name="creationEventAction"
 			class="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication"
-			cascade="none"
+			cascade="save-update"
 			outer-join="auto"
 			update="true"
             insert="true"
