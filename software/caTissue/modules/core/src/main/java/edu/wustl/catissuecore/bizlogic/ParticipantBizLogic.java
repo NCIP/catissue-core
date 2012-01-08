@@ -1864,16 +1864,19 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 		{
 				for (ParticipantRecordEntry participantRecordEntry : obj.getParticipantRecordEntryCollection()) 
 				{
-					Method[] methods = participantRecordEntry.getClass().getMethods();
-					for (Method method : methods) 
+					if(participantRecordEntry.getId() == null)
 					{
-						if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
+						Method[] methods = participantRecordEntry.getClass().getMethods();
+						for (Method method : methods) 
 						{
-							Object val = method.invoke(participantRecordEntry, (Object[])null);
-							if(val instanceof Set || val instanceof Collection)
+							if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
 							{
-								AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-								bizLogic.updateRecNtry(userName, participantRecordEntry,val);
+								Object val = method.invoke(participantRecordEntry, (Object[])null);
+								if(val instanceof Set || val instanceof Collection)
+								{
+									AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+									bizLogic.updateRecNtry(userName, participantRecordEntry,val);
+								}
 							}
 						}
 					}

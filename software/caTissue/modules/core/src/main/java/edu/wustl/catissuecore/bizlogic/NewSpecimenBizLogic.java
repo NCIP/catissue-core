@@ -6425,17 +6425,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		{
 				for (SpecimenRecordEntry specimenRecordEntry : obj.getSpecimenRecordEntryCollection()) 
 				{
-					Method[] methods = specimenRecordEntry.getClass().getMethods();
-					for (Method method : methods) 
+					if(specimenRecordEntry.getId() == null)
 					{
-						if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
+						Method[] methods = specimenRecordEntry.getClass().getMethods();
+						for (Method method : methods) 
 						{
-							Object val = method.invoke(specimenRecordEntry, (Object[])null);
-							if(val instanceof Set || val instanceof Collection)
+							if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
 							{
-								AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-								bizLogic.updateRecNtry(userName, specimenRecordEntry,
-										val);
+								Object val = method.invoke(specimenRecordEntry, (Object[])null);
+								if(val instanceof Set || val instanceof Collection)
+								{
+									AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+									bizLogic.updateRecNtry(userName, specimenRecordEntry,
+											val);
+								}
 							}
 						}
 					}
