@@ -26,14 +26,14 @@
 		<joined-subclass name="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication" table="catissue_action_application" lazy="false">
 			<key column="IDENTIFIER" />
 			<!-- Associations mapping for the ActionApplication class -->
-			<many-to-one name="applicationRecordEntry" class="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry" column="ACTION_APP_RECORD_ENTRY_ID" not-null="false" lazy="false" cascade="none"/>
-				<many-to-one name="sppApplication" class="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication" column="SPP_APP_IDENTIFIER"  not-null="false" cascade="all"/>
+			<many-to-one name="applicationRecordEntry" class="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry" column="ACTION_APP_RECORD_ENTRY_ID"  lazy="false" cascade="save-update"/>
+				<many-to-one name="sppApplication" class="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication" column="SPP_APP_IDENTIFIER"  not-null="false" cascade="none"/>
 				<many-to-one name="specimen" class="edu.wustl.catissuecore.domain.Specimen" column="SPECIMEN_ID"  lazy="false" not-null="false" cascade="none"/>
 		</joined-subclass>
 		<joined-subclass name="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication" table="catissue_spp_application" lazy="false">
 			<key column="IDENTIFIER" />
 			<!-- Associations mapping for the SPPApplication class -->
-				<many-to-one name="spp" class="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" column="SPP_IDENTIFIER" not-null="false" cascade="all"/>
+				<many-to-one name="spp" class="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" column="SPP_IDENTIFIER" not-null="false" cascade="none"/>
 			<set name="sppActionApplicationCollection" lazy="false" cascade="all" inverse="false">
 				<cache usage="read-write" />
 				<key column="SPP_APP_IDENTIFIER" not-null="false" />

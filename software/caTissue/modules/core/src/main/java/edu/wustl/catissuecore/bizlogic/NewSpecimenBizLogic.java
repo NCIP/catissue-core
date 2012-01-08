@@ -59,9 +59,11 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
 import edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry;
 import edu.wustl.catissuecore.domain.processingprocedure.Action;
 import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
+import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
@@ -252,6 +254,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			SpecimenUtility.doRoundOff(specimen);
 			checkLabel(specimen);
 			handleRecordEntry(specimen,sessionDataBean.getUserName());
+			handleSPPDataNtry(specimen,sessionDataBean);
 			dao.insert(specimen);
 			if (specimen.getSpecimenPosition() != null) {
 				final StringBuffer posBuffer = new StringBuffer();
@@ -2121,6 +2124,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					specimenOld, persistentSpecimen);
 			specimen.setCreationEventAction(persistentSpecimen.getCreationEventAction());
 			handleRecordEntry(persistentSpecimen, sessionDataBean.getUserName());
+			handleSPPDataNtry(persistentSpecimen,sessionDataBean);
 			dao.update(persistentSpecimen, specimenOld);
 
 			this.updateChildAttributes(specimen, specimenOld);
@@ -2169,6 +2173,63 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		}
 	}
 
+
+	private void handleSPPDataNtry(Specimen persistentSpecimen,SessionDataBean sessionDataBean) throws BizLogicException, IllegalArgumentException, IllegalAccessException, InvocationTargetException 
+	{
+		if(persistentSpecimen.getActionApplicationCollection() != null)
+		{
+			handleActionAppRcdNtry(persistentSpecimen.getActionApplicationCollection(),sessionDataBean,null);
+		}
+		if(persistentSpecimen.getProcessingSPPApplication() != null)
+		{
+			SpecimenProcessingProcedureApplication application = persistentSpecimen.getProcessingSPPApplication();
+			if(application.getSppActionApplicationCollection() != null)
+			{
+				handleActionAppRcdNtry(application.getSppActionApplicationCollection(), sessionDataBean,application.getSpp());
+			}
+		}
+	}
+	private void handleActionAppRcdNtry(Collection<ActionApplication> actionApplicationCollection,SessionDataBean sessionDataBean,
+			SpecimenProcessingProcedure spp) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, BizLogicException
+	{
+			for (ActionApplication actionApp : actionApplicationCollection) 
+			{
+				if(actionApp.getId() == null) 
+				{
+					//if(actionApp.getPerformedBy() = null)
+					User user = new User();
+					user.setId(sessionDataBean.getUserId());
+					actionApp.setPerformedBy(user);
+					ActionApplicationRecordEntry entry = actionApp.getApplicationRecordEntry();
+					if(entry != null)
+					{
+						Method[] methods = entry.getClass().getMethods();
+						for (Method method : methods) 
+						{
+							if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
+							{
+								Object val = method.invoke(entry, (Object[])null);
+								if(val != null && (val instanceof Set || val instanceof Collection))
+								{
+									AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+									if(spp == null)
+									{
+										bizLogic.updateRecNtry(sessionDataBean.getUserName(), entry,
+												val);
+									}
+									else
+									{
+										bizLogic.updateRecNtry(sessionDataBean.getUserName(), entry,
+												val,spp.getId());
+									}
+									
+								}
+							}
+						}
+					}
+				}
+			}
+	}
 
 	/**
 	 * 
@@ -2569,7 +2630,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		persistentSpecimen.setActivityStatus(specimen.getActivityStatus());
 		// persistentSpecimen.setAliqoutMap(specimen.getAliqoutMap());
 		persistentSpecimen.setComment(specimen.getComment());
-		// persistentSpecimen.setDisposeParentSpecimen(specimen.getDisposeParentSpecimen());
 		persistentSpecimen.setLineage(specimen.getLineage());
 		persistentSpecimen.setPathologicalStatus(specimen
 				.getPathologicalStatus());
@@ -2595,6 +2655,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		{
 			persistentSpecimen.setSpecimenRecordEntryCollection(specimen.getSpecimenRecordEntryCollection());
 		}
+		persistentSpecimen.setActionApplicationCollection(specimen.getActionApplicationCollection());
+		persistentSpecimen.setProcessingSPPApplication(specimen.getProcessingSPPApplication());
 	}
 
 	/**

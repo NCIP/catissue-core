@@ -132,9 +132,9 @@
 	 	<set
 			name="actionApplicationCollection"
 			table="catissue_action_application"
-			lazy="true"
+			lazy="false"
 			cascade="save-update"
-			inverse="false"
+			inverse="true"
 		>
 			<cache usage="read-write" />
 			<key column="SPECIMEN_ID" />
@@ -341,7 +341,7 @@
 			cascade="save-update"
 			outer-join="auto"
 			update="true"
-            insert="true"
+			insert="true"
 			column="SPP_APPLICATION_ID"
 			lazy="false"
 		/>
@@ -426,7 +426,7 @@
 		    />
 	    <many-to-one name="collectionProtocolEvent" class="edu.wustl.catissuecore.domain.CollectionProtocolEvent" cascade="none" outer-join="auto" update="true" insert="true" column="COLLECTION_PROTOCOL_EVENT_ID" />
 
-		<many-to-one name="processingSPP" class="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" cascade="none" outer-join="auto" update="true" insert="true" column="SPP_IDENTIFIER"/>
+		<many-to-one name="processingSPP" class="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" cascade="none" outer-join="auto" column="SPP_IDENTIFIER"/>
 
 		<many-to-one name="creationEvent" class="edu.wustl.catissuecore.domain.processingprocedure.Action" cascade="none" outer-join="auto" update="true" insert="true" column="ACTION_IDENTIFIER"/>
 

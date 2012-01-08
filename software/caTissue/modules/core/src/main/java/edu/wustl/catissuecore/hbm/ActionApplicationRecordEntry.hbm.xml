@@ -11,7 +11,7 @@
 
 		<many-to-one name="actionApplication"
 			class="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication" column="ACTION_APP_ID"
-			lazy="false" not-null="false" cascade="all" />
+			lazy="false" not-null="false" cascade="none" />
 
 
 	</joined-subclass>

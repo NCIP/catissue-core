@@ -33,9 +33,11 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StudyFormContext;
+import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
 import edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry;
 import edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry;
 import edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry;
+import edu.wustl.catissuecore.domain.processingprocedure.Action;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
 import edu.wustl.common.beans.NameValueBean;
@@ -48,7 +50,6 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.dao.query.generator.ColumnValueBean;
 
 
 /**
@@ -603,5 +604,52 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 				rootContainerId).getId();
 		NameValueBean bean = getHookEntiyNameValueBean(tgtEntityId, formName);
 		return bean;
+	}
+
+	public void updateRecNtry(String userName,
+			ActionApplicationRecordEntry recordEntry, Object val, Long sppId) throws BizLogicException 
+	{
+		 
+		Long id = getContainerId(getClassName(val)); 
+		Action action = null;  
+//		select c
+//		from Contact c
+//		join c.phones cphones
+//		where c.userAccount.email = :email
+//		  and cphones.formatedNumber = :number
+		String query = "select spp.actionCollection from edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure spp " +
+				" join spp.actionCollection action where spp.id="+sppId+" and" +
+				" action.containerId="+id;
+		
+		List<Action> sfcList = this.executeQuery(query);
+		for (Action action2 : sfcList) 
+		{
+			if(id.equals(action2.getContainerId()))
+			{
+				action = action2;
+				break;
+			}
+		}
+//		this.retrieve(Action.class.getName(),
+//				"containerId", id);
+//		if(sfcList != null)
+//		{
+//			action = sfcList.get(0);
+//		}
+		
+//		StudyFormContext context = getStudyFormContext(id);//tudyFormContextFactory.getInstance().createObject();
+		recordEntry.setFormContext(action);
+		recordEntry.setModifiedDate(new Date());
+		recordEntry.setModifiedBy(userName);
+		
+	}
+
+	private String getClassName(Object val) {
+		String className = null;
+		if(val instanceof Set && !((Set) val).isEmpty())
+			className = ((java.util.Set) val).iterator().next().getClass().getName();
+		else if(val instanceof Collection && !((Collection)val).isEmpty())
+			className = ((Collection) val).iterator().next().getClass().getName();
+		return className;
 	}
 }
