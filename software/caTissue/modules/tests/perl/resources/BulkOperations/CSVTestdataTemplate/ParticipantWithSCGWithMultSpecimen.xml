@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata templateName="ParticipantWithSCGWithMultSpecimen" batchSize="10000">
+<BulkOperationMetadata  >
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.Participant">
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
-			cardinality="*" roleName="collectionProtocolRegistrationCollection">
+			cardinality="*" >
 			<referenceAssociation	className="edu.wustl.catissuecore.domain.CollectionProtocol" roleName="collectionProtocol" >
 				<attribute name="title" csvColumnName="CP Title" />
 			</referenceAssociation>

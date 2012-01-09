@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="editShipment" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.shippingtracking.Shipment"
-		relationShipType="main" cardinality="1"	roleName="shipment" templateName="editShipment" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		 	    >
 
 						
-		<referenceAssociationCollection
+		<referenceAssociation
 			className="edu.wustl.catissuecore.domain.Site"
-			relationShipType="association" cardinality="1" roleName="receiverSite"
-			templateName="editShipment"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
-				<attributeCollection name="id" csvColumnName="ReceiverSite" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-		</referenceAssociationCollection>
+			  roleName="receiverSite"
+			    >
+				<attribute name="id" csvColumnName="ReceiverSite"   />
+		</referenceAssociation>
 		
-		<referenceAssociationCollection
+		<referenceAssociation
 			className="edu.wustl.catissuecore.domain.Site"
-			relationShipType="association" cardinality="1" roleName="senderSite"
-			templateName="editShipment"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
-				<attributeCollection name="id" csvColumnName="SenderSite" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-		</referenceAssociationCollection>
+			  roleName="senderSite"
+			    >
+				<attribute name="id" csvColumnName="SenderSite"   />
+		</referenceAssociation>
 		
-		<referenceAssociationCollection
+		<referenceAssociation
 			className="edu.wustl.catissuecore.domain.StorageContainer"
-			relationShipType="association" cardinality="*" roleName="containerCollection"
-			templateName="editShipment" maxNoOfRecords="1" parentRoleName="" batchSize="5"  >
-				<attributeCollection name="name" csvColumnName="Container Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+			 cardinality="*" roleName="containerCollection"
+			     >
+				<attribute name="name" csvColumnName="Container Name"   />
 
 
 
-		</referenceAssociationCollection>	
+		</referenceAssociation>	
 		
-		<attributeCollection name="sendDate" csvColumnName="Shipping Date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
-		<attributeCollection name="label" csvColumnName="Shipment label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="id" csvColumnName="ID" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>
-		<attributeCollection name="barcode" csvColumnName="Shipment Barcode" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="senderComments" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attribute name="sendDate" csvColumnName="Shipping Date"   />
+		<attribute name="label" csvColumnName="Shipment label"   />
+		<attribute name="id" csvColumnName="ID" updateBasedOn="true"  />
+		<attribute name="barcode" csvColumnName="Shipment Barcode"   />
+		<attribute name="senderComments" csvColumnName="Comments"   />
 	
 		
 

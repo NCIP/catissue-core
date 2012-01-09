@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="editDP" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.DistributionProtocol"
-		relationShipType="main" cardinality="1"	roleName="distributionProtocol" templateName="editDP" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
+		 	    >
 
-		<attributeCollection name="title" csvColumnName="title" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="shortTitle" csvColumnName="shortTitle" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="activityStatus" csvColumnName="activityStatus" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="irbIdentifier" csvColumnName="IRB" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="startDate" csvColumnName="Date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
-		<attributeCollection name="enrollment" csvColumnName="Enrollment" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
-		<attributeCollection name="descriptionURL" csvColumnName="URL" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-    	<attributeCollection name="id" csvColumnName="DP_id" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>
+		<attribute name="title" csvColumnName="title"   />
+		<attribute name="shortTitle" csvColumnName="shortTitle"   />
+		<attribute name="activityStatus" csvColumnName="activityStatus"   />
+		<attribute name="irbIdentifier" csvColumnName="IRB"   />
+		<attribute name="startDate" csvColumnName="Date"   />
+		<attribute name="enrollment" csvColumnName="Enrollment"   />
+		<attribute name="descriptionURL" csvColumnName="URL"   />
+    	<attribute name="id" csvColumnName="DP_id" updateBasedOn="true"  />
 
-	<referenceAssociationCollection className="edu.wustl.catissuecore.domain.User" relationShipType="association" cardinality="1" 
-	    roleName="principalInvestigator" templateName="editDP"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
-		<attributeCollection name="id" csvColumnName="Principal Investigator" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-	</referenceAssociationCollection>
+	<referenceAssociation className="edu.wustl.catissuecore.domain.User"   
+	    roleName="principalInvestigator"     >
+		<attribute name="id" csvColumnName="Principal Investigator"   />
+	</referenceAssociation>
 	
-	<containmentAssociationCollection  className="edu.wustl.catissuecore.domain.DistributionSpecimenRequirement"
-		relationShipType="association" cardinality="*" roleName="distributionSpecimenRequirementCollection" templateName="editDP" maxNoOfRecords="4" parentRoleName="" batchSize="5">
+	<containmentAssociation  className="edu.wustl.catissuecore.domain.DistributionSpecimenRequirement"
+		 cardinality="*" roleName="distributionSpecimenRequirementCollection"  maxNoOfRecords="4"  >
 		
-		<attributeCollection name="specimenClass" csvColumnName="specimenClass" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="specimenType" csvColumnName="specimenType" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="tissueSite" csvColumnName="tissueSite" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="quantity" csvColumnName="quantity" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>
-		<attributeCollection name="pathologyStatus" csvColumnName="pathologyStatus" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-	</containmentAssociationCollection>
+		<attribute name="specimenClass" csvColumnName="specimenClass"   />
+		<attribute name="specimenType" csvColumnName="specimenType"   />
+		<attribute name="tissueSite" csvColumnName="tissueSite"   />
+		<attribute name="quantity" csvColumnName="quantity"   />
+		<attribute name="pathologyStatus" csvColumnName="pathologyStatus"   />
+	</containmentAssociation>
 	
 
 		</BulkOperationClass>

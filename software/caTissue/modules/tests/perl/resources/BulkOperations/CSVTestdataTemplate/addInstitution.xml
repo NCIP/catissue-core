@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="addInstitution" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.Institution"
-		relationShipType="main" templateName="addInstitution"  maxNoOfRecords="1" parentRoleName="" batchSize="5"
-		cardinality="1" roleName="institution">
-		<attributeCollection name="name" csvColumnName="Institution name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		     
+		 >
+		<attribute name="name" csvColumnName="Institution name"   />
 	</BulkOperationClass>
 </BulkOperationMetadata>

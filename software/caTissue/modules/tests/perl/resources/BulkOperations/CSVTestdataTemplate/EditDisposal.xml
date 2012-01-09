@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="CreateDisposalEvent" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.DisposalEventParameters"
-		relationShipType="main" templateName="CreateDisposalEvent"
-		isOneToManyAssociation="false" cardinality="1" roleName="disposalEventParameters" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		 
+		     >
 		
-			<attributeCollection name="activityStatus" csvColumnName="Activity status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-<attributeCollection name="reason" csvColumnName="Reason" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>	
-	<attributeCollection name="id" csvColumnName="id" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>
+			<attribute name="activityStatus" csvColumnName="Activity status"   />
+<attribute name="reason" csvColumnName="Reason"   />	
+	<attribute name="id" csvColumnName="id" updateBasedOn="true"  />
 	</BulkOperationClass>
 </BulkOperationMetadata>
 

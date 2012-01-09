@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="editSAType" batchSize="5">
 	<BulkOperationClass
-	className="edu.wustl.catissuecore.domain.SpecimenArrayType" relationShipType="main" templateName="editSAType"
-    parentRoleName="" maxNoOfRecords="1" batchSize="5" cardinality="1" roleName="specimenArrayType">
+	className="edu.wustl.catissuecore.domain.SpecimenArrayType"  
+        >
 	
-	      <referenceAssociationCollection
+	      <referenceAssociation
 					className="edu.wustl.catissuecore.domain.Capacity"
-					relationShipType="association" templateName="editSAType" cardinality="1" roleName="capacity" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+					   roleName="capacity"   >
 					
-			<attributeCollection name="oneDimensionCapacity" csvColumnName="Dimension One" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
-			<attributeCollection name="twoDimensionCapacity" csvColumnName="Dimension Two" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
+			<attribute name="oneDimensionCapacity" csvColumnName="Dimension One"   />
+			<attribute name="twoDimensionCapacity" csvColumnName="Dimension Two"   />
 			
-		  </referenceAssociationCollection>
+		  </referenceAssociation>
 
-		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
 		
 
     
-	<attributeCollection name="name" csvColumnName="Array Type Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-	<attributeCollection name="specimenClass" csvColumnName="Specimen Class" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-	<attributeCollection name="id" csvColumnName="ID" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>
+	<attribute name="name" csvColumnName="Array Type Name"   />
+	<attribute name="specimenClass" csvColumnName="Specimen Class"   />
+	<attribute name="id" csvColumnName="ID" updateBasedOn="true"  />
 	
-<containmentAssociationCollection className="java.lang.String"						relationShipType="association" templateName="editSAType" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="*" roleName="specimenTypeCollection">
+<containmentAssociation className="java.lang.String"						     cardinality="*" roleName="specimenTypeCollection">
 				
-			<attributeCollection name="specimenTypeCollection" csvColumnName="holdsSpecimenType" updateBasedOn="false" belongsTo="" dataType="java.lang.String" />
+			<attribute name="specimenTypeCollection" csvColumnName="holdsSpecimenType"    />
 
-		</containmentAssociationCollection>
+		</containmentAssociation>
 	</BulkOperationClass>
 </BulkOperationMetadata>
 

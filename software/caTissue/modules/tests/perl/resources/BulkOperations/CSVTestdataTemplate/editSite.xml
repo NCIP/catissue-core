@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="editSite" batchSize="5">
 
-<BulkOperationClass className="edu.wustl.catissuecore.domain.Site" relationShipType="main" templateName="editSite" isOnToManyAssociation="false" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="site">		
+<BulkOperationClass className="edu.wustl.catissuecore.domain.Site"   isOnToManyAssociation="false"     >		
 
-	<referenceAssociationCollection  className="edu.wustl.catissuecore.domain.Address" relationShipType="association" templateName="editSite" isOneToManyAssociation="false" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="address">
+	<referenceAssociation  className="edu.wustl.catissuecore.domain.Address"        roleName="address">
 
-		<attributeCollection name="city" csvColumnName="City" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="country" csvColumnName="Country" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="faxNumber" csvColumnName="Fax Number" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="phoneNumber" csvColumnName="Phone Number" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="state" csvColumnName="State" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="street" csvColumnName="Street" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="zipCode" csvColumnName="Zip Code" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-	</referenceAssociationCollection>
+		<attribute name="city" csvColumnName="City"   />
+		<attribute name="country" csvColumnName="Country"   />
+		<attribute name="faxNumber" csvColumnName="Fax Number"   />
+		<attribute name="phoneNumber" csvColumnName="Phone Number"   />
+		<attribute name="state" csvColumnName="State"   />
+		<attribute name="street" csvColumnName="Street"   />
+		<attribute name="zipCode" csvColumnName="Zip Code"   />
+	</referenceAssociation>
 	
-	<referenceAssociationCollection  className="edu.wustl.catissuecore.domain.User" relationShipType="association" templateName="editSite" maxNoOfRecords="1" parentRoleName="" batchSize="5" isOneToManyAssociation="" cardinality="1" roleName="coordinator">
-		<attributeCollection name="id" csvColumnName="User ID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-	</referenceAssociationCollection>
+	<referenceAssociation  className="edu.wustl.catissuecore.domain.User"      isOneToManyAssociation=""  roleName="coordinator">
+		<attribute name="id" csvColumnName="User ID"   />
+	</referenceAssociation>
 		
-		<attributeCollection name="emailAddress" csvColumnName="Email Address" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="name" csvColumnName="Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="type" csvColumnName="Type" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="id" csvColumnName="ID" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>
+		<attribute name="emailAddress" csvColumnName="Email Address"   />
+		<attribute name="name" csvColumnName="Name"   />
+		<attribute name="type" csvColumnName="Type"   />
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
+		<attribute name="id" csvColumnName="ID" updateBasedOn="true"  />
 </BulkOperationClass>
 </BulkOperationMetadata>
 

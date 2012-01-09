@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="editConsent" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
-		relationShipType="main" cardinality="1"	roleName="collectionProtocolRegistration" templateName="editConsent" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
+		 	    >
 		
 			
-			<attributeCollection name="id" csvColumnName="CPR ID" updateBasedOn="true" belongsTo="" dataType="java.lang.Long"/>
-			<referenceAssociationCollection
+			<attribute name="id" csvColumnName="CPR ID" updateBasedOn="true"  />
+			<referenceAssociation
 				className="edu.wustl.catissuecore.domain.CollectionProtocol"
-				relationShipType="association" templateName="editConsent" cardinality="1" roleName="collectionProtocol" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
-				<attributeCollection name="id" csvColumnName="CP ID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-			</referenceAssociationCollection>
+				   roleName="collectionProtocol"   >
+				<attribute name="id" csvColumnName="CP ID"   />
+			</referenceAssociation>
 		
-		    <referenceAssociationCollection
+		    <referenceAssociation
 				className="edu.wustl.catissuecore.domain.Participant"
-				relationShipType="association" templateName="editConsent" cardinality="1" roleName="Participant" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
-				<attributeCollection name="id" csvColumnName="PID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-			</referenceAssociationCollection>
+				   roleName="Participant"   >
+				<attribute name="id" csvColumnName="PID"   />
+			</referenceAssociation>
 			
-			<referenceAssociationCollection
+			<referenceAssociation
 				className="edu.wustl.catissuecore.domain.ConsentTierResponse"
-				relationShipType="association" templateName="editConsent" cardinality="*" roleName="consentTierResponseCollection" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
-				<attributeCollection name="response" csvColumnName="Consent response" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="id" csvColumnName="Consent Response id" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
-					<containmentAssociationCollection
-						className="edu.wustl.catissuecore.domain.ConsentTier" relationShipType="association"
-						templateName="editConsent" maxNoOfRecords="1" parentRoleName="consentTier" batchSize="5"
-						cardinality="1" roleName="consentTier">
+				  cardinality="*" roleName="consentTierResponseCollection"   >
+				<attribute name="response" csvColumnName="Consent response"   />
+		<attribute name="id" csvColumnName="Consent Response id"   />
+					<containmentAssociation
+						className="edu.wustl.catissuecore.domain.ConsentTier" 
+						  parentRoleName="consentTier" 
+						 roleName="consentTier">
 
-						<attributeCollection name="id" csvColumnName="Consent Statement id" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+						<attribute name="id" csvColumnName="Consent Statement id"   />
 				
-					</containmentAssociationCollection>	
+					</containmentAssociation>	
 					
-			</referenceAssociationCollection>
+			</referenceAssociation>
 			
-			<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+			<attribute name="activityStatus" csvColumnName="Activity Status"   />
 		
 		
 	</BulkOperationClass>

@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="AddNonhumanSpecimen" batchSize="5">
 
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.Specimen"
-		relationShipType="main" cardinality="1" roleName="Specimen"
-		templateName="AddNonhumanSpecimen" maxNoOfRecords="1" parentRoleName="" batchSize="5" containerId="">
+		  
+		    containerId="">
 
-		<attributeCollection name="id" csvColumnName="SpecimenID" updateBasedOn="true" belongsTo="" dataType="java.lang.Long"/>
+		<attribute name="id" csvColumnName="SpecimenID" updateBasedOn="true"  />
 
 		
 		
-		<DEAssociationCollection className="Annotation.SpecimenTests.Testconductedonspecimen" relationShipType="containment" cardinality="1"    	roleName="Testconductedonspecimen" templateName="AddNonhumanSpecimen" maxNoOfRecords="1" parentRoleName="" batchSize="5" containerId="125">
+		<DEAssociationCollection className="Annotation.SpecimenTests.Testconductedonspecimen"      	roleName="Testconductedonspecimen"     containerId="125">
 		
 			
-       <containmentAssociationCollection
+       <containmentAssociation
 			className="Annotation.SpecimenTests.Testconductedonspecimen.TestsPerformed"
-			relationShipType="containment" templateName="AddNonhumanSpecimen" maxNoOfRecords="1" parentRoleName="Testconductedonspecimen" 
-			batchSize="5" cardinality="1" roleName="TestsPerformed">
+			   parentRoleName="Testconductedonspecimen" 
+			  roleName="TestsPerformed">
 			
-			<attributeCollection name="date" csvColumnName="date" updateBasedOn="" belongsTo="" dataType="java.util.Date"/>
-			<attributeCollection name="nameofthetestconducted" csvColumnName="nameOfTestConducted" updateBasedOn="" belongsTo="" dataType="java.lang.String"/>
+			<attribute name="date" csvColumnName="date" updateBasedOn=""  />
+			<attribute name="nameofthetestconducted" csvColumnName="nameOfTestConducted" updateBasedOn=""  />
 		
-		</containmentAssociationCollection>
+		</containmentAssociation>
 	
 </DEAssociationCollection>
 

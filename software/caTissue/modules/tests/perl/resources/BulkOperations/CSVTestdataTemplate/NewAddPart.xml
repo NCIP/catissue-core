@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<BulkOperationMetadata templateName="test" batchSize="5">
+<BulkOperationMetadata templateName="addParticipant" batchSize="5" >
 
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.Participant" >
 		
 		<containmentAssociation className="edu.wustl.catissuecore.domain.Race" 
-		cardinality="*" roleName="raceCollection"  parentRoleName="participant">
+		cardinality="*"   parentRoleName="participant">
 			<attribute name="raceName" csvColumnName="Race" />					
 		</containmentAssociation>		
 		

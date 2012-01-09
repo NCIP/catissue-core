@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="editSCG" batchSize="10">
 
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-		relationShipType="main" isOneToManyAssociation="true" cardinality="1"
-		roleName="specimenCollectionGroup" templateName="editSCG" maxNoOfRecords="1" parentRoleName="" batchSize="10">
-		<referenceAssociationCollection
+		 isOneToManyAssociation="true" 
+		    >
+		<referenceAssociation
 			className="edu.wustl.catissuecore.domain.Site"
-			relationShipType="association" cardinality="1" roleName="specimenCollectionSite"
-			templateName="editSCG" isOneToManyAssociation="false" maxNoOfRecords="1" parentRoleName="" batchSize="10">
-				<attributeCollection name="id" csvColumnName="Collection Site" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-		</referenceAssociationCollection>
-		<attributeCollection name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="clinicalStatus" csvColumnName="Clinical Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="name" csvColumnName="SCG Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="id" csvColumnName="SCG ID" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>
-		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+			  roleName="specimenCollectionSite"
+			    >
+				<attribute name="id" csvColumnName="Collection Site"   />
+		</referenceAssociation>
+		<attribute name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis"   />
+		<attribute name="clinicalStatus" csvColumnName="Clinical Status"   />
+		<attribute name="collectionStatus" csvColumnName="Collection Status"   />
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
+		<attribute name="name" csvColumnName="SCG Name"   />
+		<attribute name="id" csvColumnName="SCG ID" updateBasedOn="true"  />
+		<attribute name="comment" csvColumnName="Comments"   />
 </BulkOperationClass>
 </BulkOperationMetadata>

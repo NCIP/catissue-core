@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="addConsentResponse" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
-		relationShipType="main" cardinality="1"	roleName="collectionProtocolRegistration" templateName="addConsentResponse" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
+		 	    >
 		
 			
-			<attributeCollection name="id" csvColumnName="CPR ID" updateBasedOn="true" belongsTo="" dataType="java.lang.Long"/>
+			<attribute name="id" csvColumnName="CPR ID" updateBasedOn="true"  />
 			
 			
-			<containmentAssociationCollection
+			<containmentAssociation
 				className="edu.wustl.catissuecore.domain.ConsentTierResponse"
-				relationShipType="association" templateName="addConsentResponse" cardinality="*" roleName="consentTierResponseCollection" maxNoOfRecords="10" parentRoleName="" batchSize="10000">
-				<attributeCollection name="response" csvColumnName="Consent response" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-					<referenceAssociationCollection
-						className="edu.wustl.catissuecore.domain.ConsentTier" relationShipType="association"
-						templateName="addConsentResponse" maxNoOfRecords="1" parentRoleName="consentTier" batchSize="5"
-						cardinality="1" roleName="consentTier">
+				  cardinality="*" roleName="consentTierResponseCollection" maxNoOfRecords="10"  >
+				<attribute name="response" csvColumnName="Consent response"   />
+					<referenceAssociation
+						className="edu.wustl.catissuecore.domain.ConsentTier" 
+						  parentRoleName="consentTier" 
+						 roleName="consentTier">
 
-						<attributeCollection name="id" csvColumnName="Consent Statement id" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+						<attribute name="id" csvColumnName="Consent Statement id"   />
 				
-					</referenceAssociationCollection>	
+					</referenceAssociation>	
 					
-			</containmentAssociationCollection>
+			</containmentAssociation>
 			
-			<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+			<attribute name="activityStatus" csvColumnName="Activity Status"   />
 		
 		
 	</BulkOperationClass>

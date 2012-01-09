@@ -1,2 +1,2 @@
-"Name","Site ID","PPID","Collection Status","collectionPointLabel","Clinical Diagnosis","Clinical Status","Activity Status","Collected User ID#1","Collected Comments#1","Procedure#1","Container#1","Collected Date (MM-DD-YYYY HH:MM)#1","Received User ID#1","Received Comments#1","Quality#1","Received Date#1"
-Test_Collection_Protocol_84_85,,,Complete,,,,,,,,,,,,
+"Name","Site ID","PPID","Collection Status","collectionPointLabel","Clinical Diagnosis","Clinical Status","Activity Status"
+"Test_Collection_Protocol_84_85",,,"Complete",,,,

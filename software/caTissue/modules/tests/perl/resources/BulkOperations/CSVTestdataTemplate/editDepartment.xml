@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="editDepartment" batchSize="5">
 
 <BulkOperationClass className="edu.wustl.catissuecore.domain.Department"
-		relationShipType="main" cardinality="1" roleName="department" maxNoOfRecords="1" parentRoleName="" batchSize="5"
-		templateName="editDepartment" isOneToManyAssociation="false">
-		<attributeCollection name="name" csvColumnName="Department Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="id" csvColumnName="ID" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>
+		     
+		 >
+		<attribute name="name" csvColumnName="Department Name"   />
+		<attribute name="id" csvColumnName="ID" updateBasedOn="true"  />
 </BulkOperationClass>
 
 </BulkOperationMetadata>

@@ -1,2 +1,4 @@
-Specimen label ,User ID,Date (MM-DD-YYYY HH:MM),DestinationContainerName,Postion1,Position2
-SP_5,1,01/01/2010,Washu_Test_Storage_Type_2,,,
+"Specimen label ","User ID","DestinationContainerName","Postion1","Position2"
+5,1,"BloodCancerResearch_Shipment Container_1",2,2
+6,1,"BloodCancerResearch_Shipment Container_1",2,3
+7,1,"BloodCancerResearch_Shipment Container_1",2,4

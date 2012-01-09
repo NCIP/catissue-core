@@ -1,34 +1,34 @@
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="CreateAliquot" batchSize="5">
 
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.Aliquot"
-		relationShipType="main" templateName="CreateAliquot"  maxNoOfRecords="1" parentRoleName="" batchSize="5"
-		cardinality="1" roleName="specimen">
+		     
+		 >
 
-		<attributeCollection name="count" csvColumnName="count" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
-		<attributeCollection name="quantityPerAliquot" csvColumnName="quantityPerAliquot" updateBasedOn="false" dataType="java.lang.Double" belongsTo=""/>
+		<attribute name="count" csvColumnName="count"   />
+		<attribute name="quantityPerAliquot" csvColumnName="quantityPerAliquot"   />
 
-		<referenceAssociationCollection
+		<referenceAssociation
 			className="edu.wustl.catissuecore.domain.Specimen"
-			relationShipType="association" templateName="CreateAliquot" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="specimen">
-			<attributeCollection name="label" csvColumnName="label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+			      roleName="specimen">
+			<attribute name="label" csvColumnName="label"   />
 
-		</referenceAssociationCollection>
+		</referenceAssociation>
 
-		<containmentAssociationCollection
+		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.SpecimenPosition"
-			relationShipType="containment" templateName="CreateAliquot" maxNoOfRecords="1" parentRoleName="" batchSize="5"
+			    
 			cardinality="*" roleName="specimenPositionCollection" >
-				<attributeCollection name="positionDimensionOne" csvColumnName="Position one" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
-				<attributeCollection name="positionDimensionTwo" csvColumnName="Position two" updateBasedOn="false" dataType="java.lang.Integer" belongsTo=""/>
-				<referenceAssociationCollection
+				<attribute name="positionDimensionOne" csvColumnName="Position one"   />
+				<attribute name="positionDimensionTwo" csvColumnName="Position two"   />
+				<referenceAssociation
 					className="edu.wustl.catissuecore.domain.StorageContainer"
-					relationShipType="containment" templateName="CreateAliquot" maxNoOfRecords="1" parentRoleName="" batchSize="5"
-					cardinality="1" roleName="storageContainer" >
-						<attributeCollection name="name" csvColumnName="Container name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-				</referenceAssociationCollection>			
-		</containmentAssociationCollection>
+					    
+					 roleName="storageContainer" >
+						<attribute name="name" csvColumnName="Container name"   />
+				</referenceAssociation>			
+		</containmentAssociation>
 
-		<attributeCollection name="aliquotsInSameContainer" csvColumnName="aliquotsInSameContainer" updateBasedOn="false" dataType="java.lang.Boolean" belongsTo=""/>
+		<attribute name="aliquotsInSameContainer" csvColumnName="aliquotsInSameContainer"   />
 
 	</BulkOperationClass>
 

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="AddNonhumanParticipants" batchSize="5">
 
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.Participant"
-		relationShipType="main" cardinality="1" roleName="participant"
-		templateName="AddNonhumanParticipants" maxNoOfRecords="1" parentRoleName="" batchSize="5" containerId="">
+		  
+		    containerId="">
 
-		<attributeCollection name="id" csvColumnName="PatientID" updateBasedOn="true" belongsTo="" dataType="java.lang.Long"/>
+		<attribute name="id" csvColumnName="PatientID" updateBasedOn="true"  />
 
 		
-		<DEAssociationCollection className="Annotation.ParticipantTests.NonHumanParticipant" relationShipType="containment" cardinality="1" roleName="NonHumanParticipant" templateName="AddNonhumanParticipants" maxNoOfRecords="1" parentRoleName="" batchSize="5" containerId="123">
+		<DEAssociationCollection className="Annotation.ParticipantTests.NonHumanParticipant"   roleName="NonHumanParticipant"     containerId="123">
 			
-       <attributeCollection name="bodypart" csvColumnName="Body Part" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
-		<attributeCollection name="celltype" csvColumnName="CellType" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
-		<attributeCollection name="species" csvColumnName="Species" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
-		<attributeCollection name="strain" csvColumnName="Strain" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
+       <attribute name="bodypart" csvColumnName="Body Part"   />
+		<attribute name="celltype" csvColumnName="CellType"   />
+		<attribute name="species" csvColumnName="Species"   />
+		<attribute name="strain" csvColumnName="Strain"   />
 	
 </DEAssociationCollection>
 

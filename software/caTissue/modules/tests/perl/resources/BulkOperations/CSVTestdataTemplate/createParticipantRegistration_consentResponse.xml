@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="createParticipantRegistration123" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.Participant"
-		relationShipType="main" cardinality="1"	roleName="participant" templateName="createParticipantRegistration123" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
-		<containmentAssociationCollection
+		 	    >
+		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
-			relationShipType="containment" cardinality="*" roleName="collectionProtocolRegistrationCollection"
-			templateName="createParticipantRegistration123" maxNoOfRecords="1" parentRoleName="participant" batchSize="10000">
-			<referenceAssociationCollection
+			 cardinality="*" roleName="collectionProtocolRegistrationCollection"
+			  parentRoleName="participant" >
+			<referenceAssociation
 				className="edu.wustl.catissuecore.domain.CollectionProtocol"
-				relationShipType="association" templateName="createParticipantRegistration123" cardinality="1" roleName="collectionProtocol" maxNoOfRecords="1" parentRoleName="" batchSize="10000">
-				<attributeCollection name="title" csvColumnName="CP Title" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-			</referenceAssociationCollection>
-			<referenceAssociationCollection
+				   roleName="collectionProtocol"   >
+				<attribute name="title" csvColumnName="CP Title"   />
+			</referenceAssociation>
+			<referenceAssociation
 				className="edu.wustl.catissuecore.domain.ConsentTierResponse"
-				relationShipType="association" templateName="createParticipantRegistration123" cardinality="*" roleName="consentTierResponseCollection" maxNoOfRecords="20" parentRoleName="" batchSize="10000">
-				<attributeCollection name="response" csvColumnName="Consent response" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-					<containmentAssociationCollection
-						className="edu.wustl.catissuecore.domain.ConsentTier" relationShipType="association"
-						templateName="createParticipantRegistration123" maxNoOfRecords="1" parentRoleName="consentTier" batchSize="5"
-						cardinality="1" roleName="consentTier">
+				  cardinality="*" roleName="consentTierResponseCollection" maxNoOfRecords="20"  >
+				<attribute name="response" csvColumnName="Consent response"   />
+					<containmentAssociation
+						className="edu.wustl.catissuecore.domain.ConsentTier" 
+						  parentRoleName="consentTier" 
+						 roleName="consentTier">
 
-						<attributeCollection name="id" csvColumnName="Consent Statement id" updateBasedOn="false" belongsTo="" dataType="java.lang.Long"/>
+						<attribute name="id" csvColumnName="Consent Statement id"   />
 				
-					</containmentAssociationCollection>	
+					</containmentAssociation>	
 					
-			</referenceAssociationCollection>
-			<referenceAssociationCollection
-					className="edu.wustl.catissuecore.domain.User" relationShipType="association"
-					templateName="createParticipantRegistration123" maxNoOfRecords="1" parentRoleName="" batchSize="5"
-					cardinality="1" roleName="consentWitness">
+			</referenceAssociation>
+			<referenceAssociation
+					className="edu.wustl.catissuecore.domain.User" 
+					   
+					 roleName="consentWitness">
 
-					<attributeCollection name="id" csvColumnName="CONSENT WITNESS(USER ID)" updateBasedOn="false" belongsTo="" format="" dataType="java.lang.Long"/>	
+					<attribute name="id" csvColumnName="CONSENT WITNESS(USER ID)"   format="" />	
 					
-				</referenceAssociationCollection>
-			<attributeCollection name="protocolParticipantIdentifier" csvColumnName="PPI" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-				<attributeCollection name="registrationDate" csvColumnName="Registration Date" updateBasedOn="false" format="MM/dd/yyyy" dataType="java.util.Date" belongsTo=""/>
-		</containmentAssociationCollection>
-		<containmentAssociationCollection
+				</referenceAssociation>
+			<attribute name="protocolParticipantIdentifier" csvColumnName="PPI"   />
+				<attribute name="registrationDate" csvColumnName="Registration Date"  format="MM/dd/yyyy"  />
+		</containmentAssociation>
+		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.Race"
-			relationShipType="containment" cardinality="*" roleName="raceCollection"
-			templateName="createParticipantRegistration123" maxNoOfRecords="2" parentRoleName="participant" batchSize="5">
-			<attributeCollection name="raceName" csvColumnName="race" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		</containmentAssociationCollection>
-		<containmentAssociationCollection
+			 cardinality="*" roleName="raceCollection"
+			 maxNoOfRecords="2" parentRoleName="participant" >
+			<attribute name="raceName" csvColumnName="race"   />
+		</containmentAssociation>
+		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
-			relationShipType="containment" cardinality="*" roleName="participantMedicalIdentifierCollection"
-			templateName="createParticipantRegistration123" maxNoOfRecords="5" parentRoleName="participant" batchSize="5">
-		<referenceAssociationCollection	className="edu.wustl.catissuecore.domain.Site" relationShipType="association"	templateName="createParticipantRegistration123" cardinality="1" roleName="site" maxNoOfRecords="1" parentRoleName="participant" batchSize="5">
-					<attributeCollection name="id" csvColumnName="Site" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>					
-				</referenceAssociationCollection>	
-			<attributeCollection name="medicalRecordNumber" csvColumnName="Medical Record Number" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		</containmentAssociationCollection>
-		<attributeCollection name="birthDate" csvColumnName="Birth Date" updateBasedOn="false" format="MM/dd/yyyy" dataType="java.util.Date" belongsTo=""/>
-		<attributeCollection name="gender" csvColumnName="Gender" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="firstName" csvColumnName="First Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="lastName" csvColumnName="Last Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="ethnicity" csvColumnName="Ethinicity" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="vitalStatus" csvColumnName="Vital Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="sexGenotype" csvColumnName="Sex genotype" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="socialSecurityNumber" csvColumnName="Social Security Number" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+			 cardinality="*" roleName="participantMedicalIdentifierCollection"
+			 maxNoOfRecords="5" parentRoleName="participant" >
+		<referenceAssociation	className="edu.wustl.catissuecore.domain.Site" 	  roleName="site"  parentRoleName="participant" >
+					<attribute name="id" csvColumnName="Site"   />					
+				</referenceAssociation>	
+			<attribute name="medicalRecordNumber" csvColumnName="Medical Record Number"   />
+		</containmentAssociation>
+		<attribute name="birthDate" csvColumnName="Birth Date"  format="MM/dd/yyyy"  />
+		<attribute name="gender" csvColumnName="Gender"   />
+		<attribute name="firstName" csvColumnName="First Name"   />
+		<attribute name="lastName" csvColumnName="Last Name"   />
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
+		<attribute name="ethnicity" csvColumnName="Ethinicity"   />
+		<attribute name="vitalStatus" csvColumnName="Vital Status"   />
+		<attribute name="sexGenotype" csvColumnName="Sex genotype"   />
+		<attribute name="socialSecurityNumber" csvColumnName="Social Security Number"   />
 		
 	</BulkOperationClass>
 </BulkOperationMetadata>

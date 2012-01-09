@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="createSpunEventParameters" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpunEventParameters"
-		relationShipType="main" templateName="createSpunEventParameters"
-		 cardinality="1" roleName="MolecularSpecimenReviewEventParameters"  maxNoOfRecords="1" parentRoleName="MolecularSpecimenReviewEventParameters" batchSize="5">
-		<referenceAssociationCollection
+		 
+		     parentRoleName="MolecularSpecimenReviewEventParameters" >
+		<referenceAssociation
 			className="edu.wustl.catissuecore.domain.User"
-			relationShipType="association" templateName="createSpunEventParameters"
-			isOneToManyAssociation="false" cardinality="1" roleName="user"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
-			<!--	<attributeCollection name="loginName" csvColumnName="User Login Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/> -->
-			<attributeCollection name="id" csvColumnName="User Id" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-		</referenceAssociationCollection>
-		<containmentAssociationCollection
+			 
+			  roleName="user"    >
+			<!--	<attribute name="loginName" csvColumnName="User Login Name"   /> -->
+			<attribute name="id" csvColumnName="User Id"   />
+		</referenceAssociation>
+		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.Specimen"
-			relationShipType="containment" templateName="createSpunEventParameters"
-			isOneToManyAssociation="false" cardinality="1" roleName="specimen"  maxNoOfRecords="1" parentRoleName="FluidSpecimenReviewEventParameters" batchSize="5">
-			<attributeCollection name="label" csvColumnName="Specimen label" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>	
-		</containmentAssociationCollection>
-		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
-		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>				
+			 
+			  roleName="specimen"   parentRoleName="FluidSpecimenReviewEventParameters" >
+			<attribute name="label" csvColumnName="Specimen label"   />	
+		</containmentAssociation>
+		<attribute name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)"   />
+		<attribute name="comment" csvColumnName="Comments"   />				
 	</BulkOperationClass>
 </BulkOperationMetadata>

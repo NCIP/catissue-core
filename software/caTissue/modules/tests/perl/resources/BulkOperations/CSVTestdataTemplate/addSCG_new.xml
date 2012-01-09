@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="addSCG" batchSize="10">
 
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-		relationShipType="main" isOneToManyAssociation="true" cardinality="1"
-		roleName="specimenCollectionGroup" templateName="addSCG" maxNoOfRecords="1" parentRoleName="" batchSize="10">
-		<referenceAssociationCollection
+		 isOneToManyAssociation="true" 
+		    >
+		<referenceAssociation
 			className="edu.wustl.catissuecore.domain.Site"
-			relationShipType="association" cardinality="1" roleName="specimenCollectionSite"
-			templateName="addSCG" isOneToManyAssociation="false" maxNoOfRecords="1" parentRoleName="" batchSize="10">
-				<attributeCollection name="id" csvColumnName="Collection Site" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-		</referenceAssociationCollection>
-		<referenceAssociationCollection
+			  roleName="specimenCollectionSite"
+			    >
+				<attribute name="id" csvColumnName="Collection Site"   />
+		</referenceAssociation>
+		<referenceAssociation
 			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
-			relationShipType="association" cardinality="1" roleName="collectionProtocolRegistration"
-			templateName="addSCG" isOneToManyAssociation="false" maxNoOfRecords="1" parentRoleName="" batchSize="10">
-				<attributeCollection name="protocolParticipantIdentifier" csvColumnName="PPID" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		</referenceAssociationCollection>
-		<referenceAssociationCollection
+			  roleName="collectionProtocolRegistration"
+			    >
+				<attribute name="protocolParticipantIdentifier" csvColumnName="PPID"   />
+		</referenceAssociation>
+		<referenceAssociation
 			className="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
-			relationShipType="association" cardinality="1" roleName="collectionProtocolEvent"
-			templateName="addSCG" isOneToManyAssociation="false" maxNoOfRecords="1" parentRoleName="" batchSize="10">
-			<attributeCollection name="id" csvColumnName="Study Calendar Event Point Label" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-		</referenceAssociationCollection>
+			  roleName="collectionProtocolEvent"
+			    >
+			<attribute name="id" csvColumnName="Study Calendar Event Point Label"   />
+		</referenceAssociation>
 		
-		<attributeCollection name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="clinicalStatus" csvColumnName="Clinical Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attribute name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis"   />
+		<attribute name="clinicalStatus" csvColumnName="Clinical Status"   />
+		<attribute name="collectionStatus" csvColumnName="Collection Status"   />
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
 		
-		<attributeCollection name="name" csvColumnName="SCG Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attribute name="name" csvColumnName="SCG Name"   />
+		<attribute name="comment" csvColumnName="Comments"   />
 </BulkOperationClass>
 </BulkOperationMetadata>

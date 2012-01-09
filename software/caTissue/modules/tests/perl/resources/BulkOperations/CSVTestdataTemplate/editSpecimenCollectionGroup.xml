@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="editSpecimenCollectionGroup" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-		relationShipType="main" cardinality="1"	roleName="specimenCollectionGroup" templateName="editSpecimenCollectionGroup" maxNoOfRecords="1" parentRoleName="" batchSize="5">
+		 	    >
 		
-		<attributeCollection name="name" csvColumnName="SCG Name" updateBasedOn="true" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attribute name="name" csvColumnName="SCG Name" updateBasedOn="true"  />
+		<attribute name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis"   />
 		
-		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
 	</BulkOperationClass>
 </BulkOperationMetadata>

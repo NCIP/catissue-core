@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="editReceivedEventParameters" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.ReceivedEventParameters"
-		relationShipType="main" templateName="editReceivedEventParameters"
-		 cardinality="1" roleName="ReceivedEventParameters"  maxNoOfRecords="1" parentRoleName="ReceivedEventParameters" batchSize="5">
+		 
+		     parentRoleName="ReceivedEventParameters" >
 		
-		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
-		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="receivedQuality" csvColumnName="Received Quality" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="id" csvColumnName="id" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>
+		<attribute name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)"   />
+		<attribute name="comment" csvColumnName="Comments"   />
+		<attribute name="receivedQuality" csvColumnName="Received Quality"   />
+		<attribute name="id" csvColumnName="id" updateBasedOn="true"  />
 	</BulkOperationClass>
 </BulkOperationMetadata>

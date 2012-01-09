@@ -1,57 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="addSpecimenCollectionGroup" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-		relationShipType="main" cardinality="1"	roleName="specimenCollectionGroup" templateName="addSpecimenCollectionGroup" maxNoOfRecords="1" parentRoleName="" batchSize="5">
-		<referenceAssociationCollection
+		 	    >
+		<referenceAssociation
 			className="edu.wustl.catissuecore.domain.Site"
-			relationShipType="association" cardinality="1" roleName="specimenCollectionSite"
-			templateName="addSpecimenCollectionGroup"  maxNoOfRecords="1" parentRoleName="" batchSize="5">
-				<attributeCollection name="id" csvColumnName="Site" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-		</referenceAssociationCollection>
-		<referenceAssociationCollection
+			  roleName="specimenCollectionSite"
+			    >
+				<attribute name="id" csvColumnName="Site"   />
+		</referenceAssociation>
+		<referenceAssociation
 			className="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
-			relationShipType="association" cardinality="1" roleName="collectionProtocolRegistration"
-			templateName="addSpecimenCollectionGroup" maxNoOfRecords="1" parentRoleName="" batchSize="5">
-				<attributeCollection name="id" csvColumnName="ID" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-		</referenceAssociationCollection>
-		<referenceAssociationCollection
+			  roleName="collectionProtocolRegistration"
+			   >
+				<attribute name="id" csvColumnName="ID"   />
+		</referenceAssociation>
+		<referenceAssociation
 			className="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
-			relationShipType="association" cardinality="1" roleName="collectionProtocolEvent"
-			templateName="addSpecimenCollectionGroup" maxNoOfRecords="1" parentRoleName="" batchSize="5">
-			<attributeCollection name="id" csvColumnName="Event" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-		</referenceAssociationCollection>
-<!--		
-		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.CollectionEventParameters"
-			relationShipType="containment" templateName="addSpecimenCollectionGroup"  cardinality="*" roleName="specimenEventParametersCollection" maxNoOfRecords="1" parentRoleName="specimenCollectionGroup" batchSize="5">
-				<referenceAssociationCollection
-				className="edu.wustl.catissuecore.domain.User"
-				relationShipType="association" templateName="addSpecimenCollectionGroup" cardinality="1" roleName="user" maxNoOfRecords="1" parentRoleName="" batchSize="5">
-					<attributeCollection name="id" csvColumnName="Collected User" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-				</referenceAssociationCollection>
-				<attributeCollection name="comment" csvColumnName="Collected Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>								
-				<attributeCollection name="collectionProcedure" csvColumnName="Procedure" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-				<attributeCollection name="container" csvColumnName="Container" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-				<attributeCollection name="timestamp" csvColumnName="Collected Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
-		</containmentAssociationCollection>
-		<containmentAssociationCollection
-			className="edu.wustl.catissuecore.domain.ReceivedEventParameters"
-			relationShipType="containment" templateName="addSpecimenCollectionGroup" maxNoOfRecords="1" parentRoleName="specimenCollectionGroup" batchSize="5"
-			cardinality="*" roleName="specimenEventParametersCollection">
-				<referenceAssociationCollection
-				className="edu.wustl.catissuecore.domain.User"
-				relationShipType="association" templateName="addSpecimenCollectionGroup" 	cardinality="1" roleName="user" maxNoOfRecords="1" parentRoleName="" batchSize="5">
-					<attributeCollection name="id" csvColumnName="Received User Login Name" updateBasedOn="false" dataType="java.lang.Long" belongsTo=""/>
-				</referenceAssociationCollection>
-				<attributeCollection name="comment" csvColumnName="Received Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>								
-				<attributeCollection name="receivedQuality" csvColumnName="Quality" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>				
-				<attributeCollection name="timestamp" csvColumnName="Received Date" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
-
-		</containmentAssociationCollection>
--->
-		<attributeCollection name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="clinicalStatus" csvColumnName="Clinical Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="collectionStatus" csvColumnName="Collection Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
-		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+			  roleName="collectionProtocolEvent"
+			   >
+			<attribute name="id" csvColumnName="Event"   />
+		</referenceAssociation>
+		<attribute name="clinicalDiagnosis" csvColumnName="Clinical Diagnosis"   />
+		<attribute name="clinicalStatus" csvColumnName="Clinical Status"   />
+		<attribute name="collectionStatus" csvColumnName="Collection Status"   />
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
 	</BulkOperationClass>
 </BulkOperationMetadata>

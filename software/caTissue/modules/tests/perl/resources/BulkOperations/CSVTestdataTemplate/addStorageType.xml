@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
-	<BulkOperationClass className="edu.wustl.catissuecore.domain.StorageType" relationShipType="main" templateName="addStorageType" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="storageType">
+<BulkOperationMetadata templateName="addStorageType" batchSize="5">
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.StorageType"       >
 
-		<containmentAssociationCollection className="edu.wustl.catissuecore.domain.Capacity" relationShipType="association" templateName="addStorageType" maxNoOfRecords="1" parentRoleName="" batchSize="5" cardinality="1" roleName="capacity">
-			<attributeCollection name="oneDimensionCapacity" csvColumnName="One Dimension" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>
-			<attributeCollection name="twoDimensionCapacity" csvColumnName="Two Dimension" updateBasedOn="false" belongsTo="" dataType="java.lang.Integer"/>
-		</containmentAssociationCollection>
+		<containmentAssociation className="edu.wustl.catissuecore.domain.Capacity"       roleName="capacity">
+			<attribute name="oneDimensionCapacity" csvColumnName="One Dimension"   />
+			<attribute name="twoDimensionCapacity" csvColumnName="Two Dimension"   />
+		</containmentAssociation>
 
-		<attributeCollection name="activityStatus" csvColumnName="Activity Status" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
-		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
-		<attributeCollection name="name" csvColumnName="Storage Type Name" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
-		<attributeCollection name="oneDimensionLabel" csvColumnName="oneDimensionLabel" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
-		<attributeCollection name="twoDimensionLabel" csvColumnName="twoDimensionLabel" updateBasedOn="false" belongsTo="" dataType="java.lang.String"/>
-		<attributeCollection name="defaultTemperatureInCentigrade" csvColumnName="Temperature" updateBasedOn="false" belongsTo="" dataType="java.lang.Double"/>
+		<attribute name="activityStatus" csvColumnName="Activity Status"   />
+		<attribute name="comment" csvColumnName="Comments"   />
+		<attribute name="name" csvColumnName="Storage Type Name"   />
+		<attribute name="oneDimensionLabel" csvColumnName="oneDimensionLabel"   />
+		<attribute name="twoDimensionLabel" csvColumnName="twoDimensionLabel"   />
+		<attribute name="defaultTemperatureInCentigrade" csvColumnName="Temperature"   />
 
 	</BulkOperationClass>
 </BulkOperationMetadata>

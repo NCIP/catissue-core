@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="editThawEventParameters" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.ThawEventParameters"
-		relationShipType="main" templateName="editThawEventParameters"
-		 cardinality="1" roleName="MolecularSpecimenReviewEventParameters"  maxNoOfRecords="1" parentRoleName="MolecularSpecimenReviewEventParameters" batchSize="5">
+		 
+		     parentRoleName="MolecularSpecimenReviewEventParameters" >
 		
-		<attributeCollection name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)" updateBasedOn="false" dataType="java.util.Date" belongsTo=""/>
-		<attributeCollection name="comment" csvColumnName="Comments" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>		<attributeCollection name="id" csvColumnName="id" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>		
+		<attribute name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)"   />
+		<attribute name="comment" csvColumnName="Comments"   />		<attributeCollection name="id" csvColumnName="id" updateBasedOn="true" dataType="java.lang.Long" belongsTo=""/>		
 	</BulkOperationClass>
 </BulkOperationMetadata>

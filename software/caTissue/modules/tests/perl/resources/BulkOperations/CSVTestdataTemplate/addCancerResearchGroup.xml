@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata>
+<BulkOperationMetadata templateName="addCancerResearchGroup" batchSize="5">
 <BulkOperationClass className="edu.wustl.catissuecore.domain.CancerResearchGroup"
-		relationShipType="main" cardinality="1" roleName="cancerResearchGroup" maxNoOfRecords="1" parentRoleName="" batchSize="5" templateName="addCancerResearchGroup" isOneToManyAssociation="false">
-		<attributeCollection name="name" csvColumnName="Cancer Research Group Name" updateBasedOn="false" dataType="java.lang.String" belongsTo=""/>
+		       >
+		<attribute name="name" csvColumnName="Cancer Research Group Name"   />
 </BulkOperationClass>
 </BulkOperationMetadata>
