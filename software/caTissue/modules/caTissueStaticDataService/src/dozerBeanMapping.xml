@@ -199,9 +199,7 @@
         <class-a>edu.wustl.catissuecore.domain.SpecimenRequirement</class-a>
         <class-b>edu.wustl.catissuecore.domain.ws.SpecimenRequirement</class-b>
         <field><a>id</a><b>identifier</b></field>
-        <field><a>specimenCollection</a><b>specimenCollection.specimen</b></field>
-        <field><a>creationEvent</a><b>creationEvent.action</b></field>
-        <field><a>processingSOP</a><b>processingSOP.SOP</b></field>
+        <field><a>specimenCollection</a><b>specimenCollection.specimen</b></field>                
         <field><a>collectionProtocolEvent</a><b>collectionProtocolEvent.collectionProtocolEvent</b></field>
     </mapping>
 
