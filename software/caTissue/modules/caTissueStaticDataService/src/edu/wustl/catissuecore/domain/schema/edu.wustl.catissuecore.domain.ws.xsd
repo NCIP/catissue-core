@@ -168,13 +168,6 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" eleme
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="passwordCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Password" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="siteCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -1366,25 +1359,6 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" eleme
         <xs:attribute name="laneNumber" type="xs:string" />
         <xs:attribute name="qualityIndex" type="xs:string" />
         <xs:attribute name="ratio28STo18S" type="xs:double" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="Password" type="Password" />
-  <xs:complexType name="Password">
-    <xs:complexContent>
-      <xs:extension base="edu.wustl.common.domain.ws:AbstractDomainObject">
-        <xs:sequence>
-          <xs:element name="user" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="User" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-        </xs:sequence>
-        <xs:attribute name="identifier" type="xs:long" />
-        <xs:attribute name="password" type="xs:string" />
-        <xs:attribute name="updateDate" type="xs:dateTime" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
