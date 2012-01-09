@@ -83,18 +83,6 @@
       <bind-xml name="remoteManagedFlag" node="attribute" />
     </field>
   </class>
-  <class name="edu.wustl.catissuecore.domain.Password" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
-    <map-to xml="Password" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
-    <field name="password" type="string">
-      <bind-xml name="password" node="attribute" />
-    </field>
-    <field name="updateDate" type="java.util.Date">
-      <bind-xml name="updateDate" node="attribute" />
-    </field>
-  </class>
   <class name="edu.wustl.catissuecore.domain.sop.AbstractApplication" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
     <map-to xml="AbstractApplication" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
     <field name="comments" type="string">

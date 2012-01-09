@@ -372,12 +372,6 @@
         <field><a>processingSOPApplication</a><b>processingSOPApplication.SOPApplication</b></field>
     </mapping>
 
-    <mapping>
-        <class-a>edu.wustl.catissuecore.domain.Password</class-a>
-        <class-b>edu.wustl.catissuecore.domain.ws.Password</class-b>
-        <field><a>id</a><b>identifier</b></field>
-        <field><a>user</a><b>user.user</b></field>
-    </mapping>
 
     <mapping>
         <class-a>edu.wustl.catissuecore.domain.SpecimenArray</class-a>

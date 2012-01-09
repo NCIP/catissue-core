@@ -95,21 +95,7 @@
       <bind-xml name="remoteManagedFlag" node="attribute" />
     </field>
   </class>
-  <class name="edu.wustl.catissuecore.domain.Password" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
-    <map-to xml="Password" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
-    <field name="password" type="string">
-      <bind-xml name="password" node="attribute" />
-    </field>
-    <field name="updateDate" type="java.util.Date">
-      <bind-xml name="updateDate" node="attribute" />
-    </field>
-    <field name="user" type="edu.wustl.catissuecore.domain.User" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="User" type="edu.wustl.catissuecore.domain.User" location="user" node="element" />
-    </field>
-  </class>
+  
   <class name="edu.wustl.catissuecore.domain.CollectionProtocolRegistration" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
     <map-to xml="CollectionProtocolRegistration" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
     <field name="activityStatus" type="string">
@@ -319,9 +305,7 @@
     <field name="siteCollection" type="edu.wustl.catissuecore.domain.Site" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
       <bind-xml name="Site" type="edu.wustl.catissuecore.domain.Site" location="siteCollection" node="element" />
     </field>
-    <field name="passwordCollection" type="edu.wustl.catissuecore.domain.Password" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
-      <bind-xml name="Password" type="edu.wustl.catissuecore.domain.Password" location="passwordCollection" node="element" />
-    </field>
+    
     <field name="assignedProtocolCollection" type="edu.wustl.catissuecore.domain.CollectionProtocol" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
       <bind-xml name="CollectionProtocol" type="edu.wustl.catissuecore.domain.CollectionProtocol" location="assignedProtocolCollection" node="element" />
     </field>

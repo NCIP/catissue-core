@@ -48,8 +48,7 @@
    <ns2:SchemaElement type="OrderDetails" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="OrderItem" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Participant" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ParticipantMedicalIdentifier" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Password" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ParticipantMedicalIdentifier" xsi:type="ns2:SchemaElementType"/>   
    <ns2:SchemaElement type="PathologicalCaseOrderItem" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ProcedureEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Race" xsi:type="ns2:SchemaElementType"/>
@@ -694,7 +693,7 @@
 
            <ns41:ModelClass selected="true" shortClassName="MolecularSpecimenReviewParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
-           <ns41:ModelClass selected="true" shortClassName="Password" targetable="true" xsi:type="ns41:ModelClass"/>
+           
 
            <ns41:ModelClass selected="true" shortClassName="CancerResearchGroup" targetable="true" xsi:type="ns41:ModelClass"/>
 

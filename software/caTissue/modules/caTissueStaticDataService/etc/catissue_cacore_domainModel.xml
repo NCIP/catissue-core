@@ -2093,13 +2093,6 @@
     <ns61:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
    </ns61:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Password" id="EAID_B63F2E8B_81AB_485c_B17F_993115FE3453" packageName="edu.wustl.catissuecore.domain" projectName="catissue_cacore" projectVersion="2.0">
-   <ns62:umlAttributeCollection xmlns:ns62="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns62:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372036680465319" version="1.0"/>
-    <ns62:UMLAttribute dataTypeName="java.lang.String" description="A string containing the password of the user." name="password" publicID="-9223372035690258586" version="1.0"/>
-    <ns62:UMLAttribute dataTypeName="java.util.Date" description="Last updated date of the password ." name="updateDate" publicID="-9223372036719171581" version="1.0"/>
-   </ns62:umlAttributeCollection>
-  </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="CancerResearchGroup" id="EAID_B73E004D_DF63_4afa_B58F_4B59351452A3" packageName="edu.wustl.catissuecore.domain" projectName="catissue_cacore" projectVersion="2.0">
    <ns63:umlAttributeCollection xmlns:ns63="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns63:UMLAttribute dataTypeName="java.lang.Boolean" description="Indicates whether the remotely managed entity is locally modified" name="dirtyEditFlag" publicID="-9223372036287099805" version="1.0"/>
