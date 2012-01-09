@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:edu.wustl.catissuecore.domain.deintegration="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" xmlns:edu.wustl.catissuecore.domain="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:edu.wustl.common.domain="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" xmlns:edu.wustl.catissuecore.domain.pathology="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" xmlns:edu.wustl.catissuecore.domain.sop="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" xmlns:edu.common.dynamicextensions.domain.integration="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:edu.wustl.catissuecore.domain.deintegration="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" xmlns:edu.wustl.catissuecore.domain="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:edu.wustl.common.domain="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" xmlns:edu.wustl.catissuecore.domain.pathology="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" xmlns:edu.common.dynamicextensions.domain.integration="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" elementFormDefault="qualified">
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" schemaLocation="edu.wustl.common.domain.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" schemaLocation="edu.wustl.catissuecore.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" schemaLocation="edu.wustl.catissuecore.domain.sop.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" schemaLocation="edu.wustl.catissuecore.domain.pathology.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" schemaLocation="edu.wustl.catissuecore.domain.deintegration.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" schemaLocation="edu.common.dynamicextensions.domain.integration.xsd" />
@@ -215,15 +214,12 @@
         <xs:attribute name="activityStatus" type="xs:string" />
         <xs:attribute name="comments" type="xs:string" />
         <xs:attribute name="csmUserId" type="xs:long" />
-        <xs:attribute name="dirtyEditFlag" type="xs:boolean" />
         <xs:attribute name="emailAddress" type="xs:string" />
         <xs:attribute name="firstName" type="xs:string" />
         <xs:attribute name="firstTimeLogin" type="xs:boolean" />
         <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="lastName" type="xs:string" />
         <xs:attribute name="loginName" type="xs:string" />
-        <xs:attribute name="remoteId" type="xs:long" />
-        <xs:attribute name="remoteManagedFlag" type="xs:boolean" />
         <xs:attribute name="startDate" type="xs:dateTime" />
       </xs:extension>
     </xs:complexContent>
@@ -353,13 +349,10 @@
           </xs:element>
         </xs:sequence>
         <xs:attribute name="activityStatus" type="xs:string" />
-        <xs:attribute name="ctepId" type="xs:string" />
-        <xs:attribute name="dirtyEditFlag" type="xs:boolean" />
+        <xs:attribute name="ctepId" type="xs:string" />        
         <xs:attribute name="emailAddress" type="xs:string" />
         <xs:attribute name="id" type="xs:long" />
-        <xs:attribute name="name" type="xs:string" />
-        <xs:attribute name="remoteId" type="xs:long" />
-        <xs:attribute name="remoteManagedFlag" type="xs:boolean" />
+        <xs:attribute name="name" type="xs:string" />        
         <xs:attribute name="type" type="xs:string" />
       </xs:extension>
     </xs:complexContent>
@@ -538,13 +531,6 @@
     <xs:complexContent>
       <xs:extension base="AbstractSpecimen">
         <xs:sequence>
-          <xs:element name="processingSOP" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop:SOP" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="specimenCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -556,13 +542,6 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="CollectionProtocolEvent" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="creationEvent" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop:Action" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -862,20 +841,6 @@
     <xs:complexContent>
       <xs:extension base="AbstractSpecimen">
         <xs:sequence>
-          <xs:element name="processingSOPApplication" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop:SOPApplication" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="actionApplicationCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop:ActionApplication" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="biohazardCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -894,13 +859,6 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="SpecimenCollectionGroup" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="creationEventAction" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop:ActionApplication" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -976,11 +934,8 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence />
-        <xs:attribute name="dirtyEditFlag" type="xs:boolean" />
         <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="name" type="xs:string" />
-        <xs:attribute name="remoteId" type="xs:long" />
-        <xs:attribute name="remoteManagedFlag" type="xs:boolean" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1180,13 +1135,6 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="actionApplicationCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop:ActionApplication" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="consentTierStatusCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -1212,13 +1160,6 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="Specimen" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="sopApplicationCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop:SOPApplication" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1285,11 +1226,8 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence />
-        <xs:attribute name="dirtyEditFlag" type="xs:boolean" />
         <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="name" type="xs:string" />
-        <xs:attribute name="remoteId" type="xs:long" />
-        <xs:attribute name="remoteManagedFlag" type="xs:boolean" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1388,11 +1326,8 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence />
-        <xs:attribute name="dirtyEditFlag" type="xs:boolean" />
         <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="name" type="xs:string" />
-        <xs:attribute name="remoteId" type="xs:long" />
-        <xs:attribute name="remoteManagedFlag" type="xs:boolean" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1648,9 +1583,6 @@
         </xs:sequence>
         <xs:attribute name="aliquotInSameContainer" type="xs:boolean" />
         <xs:attribute name="consentsWaived" type="xs:boolean" />
-        <xs:attribute name="dirtyEditFlag" type="xs:boolean" />
-        <xs:attribute name="remoteId" type="xs:long" />
-        <xs:attribute name="remoteManagedFlag" type="xs:boolean" />
         <xs:attribute name="sequenceNumber" type="xs:integer" />
         <xs:attribute name="studyCalendarEventPoint" type="xs:double" />
         <xs:attribute name="type" type="xs:string" />
@@ -1717,7 +1649,6 @@
         <xs:attribute name="ethnicity" type="xs:string" />
         <xs:attribute name="firstName" type="xs:string" />
         <xs:attribute name="gender" type="xs:string" />
-        <xs:attribute name="gridId" type="xs:string" />
         <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="lastName" type="xs:string" />
         <xs:attribute name="metaPhoneCode" type="xs:string" />
@@ -1748,14 +1679,7 @@
   <xs:complexType name="CollectionProtocolEvent">
     <xs:complexContent>
       <xs:extension base="AbstractSpecimenCollectionGroup">
-        <xs:sequence>
-          <xs:element name="sopCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop:SOP" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
+        <xs:sequence>          
           <xs:element name="collectionProtocol" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
