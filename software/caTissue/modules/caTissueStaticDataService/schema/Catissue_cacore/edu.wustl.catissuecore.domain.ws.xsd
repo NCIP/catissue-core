@@ -3,13 +3,11 @@
 xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" 
 xmlns:edu.wustl.catissuecore.domain.deintegration.ws="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration.ws" 
 xmlns:edu.wustl.catissuecore.domain.ws="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" 
-xmlns:edu.wustl.catissuecore.domain.sop.ws="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop.ws" 
 xmlns:edu.wustl.catissuecore.domain.pathology.ws="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology.ws" 
 xmlns:edu.common.dynamicextensions.domain.integration.ws="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" 
 xmlns:edu.wustl.common.domain.ws="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws" 
 targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" elementFormDefault="qualified">
-  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws" schemaLocation="edu.wustl.common.domain.ws.xsd" />
-  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop.ws" schemaLocation="edu.wustl.catissuecore.domain.sop.ws.xsd" />
+  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws" schemaLocation="edu.wustl.common.domain.ws.xsd" />  
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology.ws" schemaLocation="edu.wustl.catissuecore.domain.pathology.ws.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration.ws" schemaLocation="edu.wustl.catissuecore.domain.deintegration.ws.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" schemaLocation="edu.common.dynamicextensions.domain.integration.ws.xsd" />
@@ -165,13 +163,6 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" eleme
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="Institution" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="passwordCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Password" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -551,20 +542,6 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" eleme
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="creationEvent" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop.ws:Action" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="processingSOP" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop.ws:SOP" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="collectionProtocolEvent" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -902,13 +879,7 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" eleme
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="actionApplicationCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop.ws:ActionApplication" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
+          
           <xs:element name="biohazardCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -923,20 +894,8 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" eleme
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="creationEventAction" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop.ws:ActionApplication" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="processingSOPApplication" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop.ws:SOPApplication" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
+          
+         
         </xs:sequence>
         <xs:attribute name="activityStatus" type="xs:string" />
         <xs:attribute name="availableQuantity" type="xs:double" />
@@ -1185,13 +1144,7 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" eleme
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="sopApplicationCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop.ws:SOPApplication" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
+         
           <xs:element name="collectionProtocolEvent" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -1199,13 +1152,7 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" eleme
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="actionApplicationCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop.ws:ActionApplication" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
+          
           <xs:element name="collectionProtocolRegistration" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -1366,25 +1313,6 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" eleme
         <xs:attribute name="laneNumber" type="xs:string" />
         <xs:attribute name="qualityIndex" type="xs:string" />
         <xs:attribute name="ratio28STo18S" type="xs:double" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="Password" type="Password" />
-  <xs:complexType name="Password">
-    <xs:complexContent>
-      <xs:extension base="edu.wustl.common.domain.ws:AbstractDomainObject">
-        <xs:sequence>
-          <xs:element name="user" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="User" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-        </xs:sequence>
-        <xs:attribute name="identifier" type="xs:long" />
-        <xs:attribute name="password" type="xs:string" />
-        <xs:attribute name="updateDate" type="xs:dateTime" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1753,13 +1681,7 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" eleme
     <xs:complexContent>
       <xs:extension base="AbstractSpecimenCollectionGroup">
         <xs:sequence>
-          <xs:element name="sopCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.sop.ws:SOP" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
+          
           <xs:element name="collectionProtocol" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
