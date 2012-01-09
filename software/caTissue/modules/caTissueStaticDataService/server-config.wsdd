@@ -22,8 +22,6 @@
 
 <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" encodingStyle="" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" type="ns1:edu.common.dynamicextensions.domain.integration.AbstractRecordEntry" qname="ns2:AbstractRecordEntry" />
 
-
-
 <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" encodingStyle="" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" type="ns1:edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry" qname="ns2:ParticipantRecordEntry" />
 
 <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" encodingStyle="" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" type="ns1:edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry" qname="ns2:SCGRecordEntry" />
@@ -65,7 +63,6 @@
 <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" encodingStyle="" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" type="ns1:edu.wustl.catissuecore.domain.shippingtracking.Shipment" qname="ns2:Shipment" />
 
 <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" encodingStyle="" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" type="ns1:edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest" qname="ns2:ShipmentRequest" />
-
 
 <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" encodingStyle="" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" type="ns1:edu.wustl.catissuecore.domain.AbstractPosition" qname="ns2:AbstractPosition" />
 
@@ -162,8 +159,6 @@
 <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" encodingStyle="" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" type="ns1:edu.wustl.catissuecore.domain.Participant" qname="ns2:Participant" />
 
 <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" encodingStyle="" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" type="ns1:edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier" qname="ns2:ParticipantMedicalIdentifier" />
-
-
 
 <ns3:typeMapping xmlns:ns3="http://xml.apache.org/axis/wsdd/" xmlns:ns1="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" encodingStyle="" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" type="ns1:edu.wustl.catissuecore.domain.PathologicalCaseOrderItem" qname="ns2:PathologicalCaseOrderItem" />
 
@@ -292,7 +287,6 @@
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:MolecularSpecimenRequirement" type="java:edu.wustl.catissuecore.domain.ws.MolecularSpecimenRequirement" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:MolecularSpecimenReviewParameters" type="java:edu.wustl.catissuecore.domain.ws.MolecularSpecimenReviewParameters" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:ParticipantMedicalIdentifier" type="java:edu.wustl.catissuecore.domain.ws.ParticipantMedicalIdentifier" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
-  
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:ProcedureEventParameters" type="java:edu.wustl.catissuecore.domain.ws.ProcedureEventParameters" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:Race" type="java:edu.wustl.catissuecore.domain.ws.Race" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
   <typeMapping xmlns:ns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" qname="ns:ReceivedEventParameters" type="java:edu.wustl.catissuecore.domain.ws.ReceivedEventParameters" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />

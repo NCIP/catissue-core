@@ -48,7 +48,7 @@
    <ns2:SchemaElement type="OrderDetails" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="OrderItem" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Participant" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ParticipantMedicalIdentifier" xsi:type="ns2:SchemaElementType"/>   
+   <ns2:SchemaElement type="ParticipantMedicalIdentifier" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="PathologicalCaseOrderItem" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ProcedureEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Race" xsi:type="ns2:SchemaElementType"/>
@@ -248,7 +248,6 @@
    <ns2:SchemaElement className="OrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="OrderItem" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="Participant" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Participant" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="ParticipantMedicalIdentifier" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ParticipantMedicalIdentifier" xsi:type="ns2:SchemaElementType"/>
-   
    <ns2:SchemaElement className="PathologicalCaseOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="PathologicalCaseOrderItem" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="ProcedureEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ProcedureEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="Race" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Race" xsi:type="ns2:SchemaElementType"/>
@@ -692,8 +691,6 @@
            <ns41:ModelClass selected="true" shortClassName="DerivedSpecimenOrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
            <ns41:ModelClass selected="true" shortClassName="MolecularSpecimenReviewParameters" targetable="true" xsi:type="ns41:ModelClass"/>
-
-           
 
            <ns41:ModelClass selected="true" shortClassName="CancerResearchGroup" targetable="true" xsi:type="ns41:ModelClass"/>
 

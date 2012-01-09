@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://domain.catissuecore.wustl.edu/Catissue_cacore" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns3="http://org.cagrid.dataservice/DataService" xmlns:wns2="http://gov.nih.nci.cagrid.data/DataService" xmlns:wns1="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:wns0="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:ns6="http://domain.catissuecore.wustl.edu/Catissue_cacore/types" xmlns:ns12="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" xmlns:ns5="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology.ws" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" xmlns:ns23="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:ns1="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws" xmlns:ns24="http://org.cagrid.dataservice.cql/QueryLanguageSupport" xmlns:ns18="http://CQL.caBIG/2/org.cagrid.cql2" xmlns:ns13="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:ns10="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" xmlns:ns14="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" xmlns:ns22="http://domain.catissuecore.wustl.edu/Catissue_cacore/CQLResultTypes" xmlns:ns8="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" xmlns:ns11="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" xmlns:ns7="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns25="http://gov.nih.nci.cagrid.data/DataServiceExceptions" xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop.ws" xmlns:ns21="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" xmlns:ns4="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" xmlns:ns19="http://CQL.caBIG/2/org.cagrid.cql2.results" xmlns:ns3="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration.ws" xmlns:ns20="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:ns9="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" name="Catissue_cacore" targetNamespace="http://domain.catissuecore.wustl.edu/Catissue_cacore">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://domain.catissuecore.wustl.edu/Catissue_cacore" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:wsrbfw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" xmlns:wsrpw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wns3="http://org.cagrid.dataservice/DataService" xmlns:wns2="http://gov.nih.nci.cagrid.data/DataService" xmlns:wns1="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" xmlns:wns0="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:ns5="http://domain.catissuecore.wustl.edu/Catissue_cacore/types" xmlns:ns4="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology.ws" xmlns:ns14="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" xmlns:ns21="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" xmlns:ns1="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws" xmlns:ns22="http://org.cagrid.dataservice.cql/QueryLanguageSupport" xmlns:ns16="http://CQL.caBIG/2/org.cagrid.cql2" xmlns:ns11="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:ns9="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" xmlns:ns12="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" xmlns:ns20="http://domain.catissuecore.wustl.edu/Catissue_cacore/CQLResultTypes" xmlns:ns7="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" xmlns:ns10="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" xmlns:ns6="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:ns23="http://gov.nih.nci.cagrid.data/DataServiceExceptions" xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" xmlns:ns19="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" xmlns:ns3="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" xmlns:ns17="http://CQL.caBIG/2/org.cagrid.cql2.results" xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration.ws" xmlns:ns18="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery" xmlns:ns8="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" name="Catissue_cacore" targetNamespace="http://domain.catissuecore.wustl.edu/Catissue_cacore">
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl" />
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl" />
   <import namespace="http://org.cagrid.dataservice/DataService" location="./Cql2DataService.wsdl" />
@@ -14,7 +14,6 @@
     <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://domain.catissuecore.wustl.edu/Catissue_cacore" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
       <import namespace="http://domain.catissuecore.wustl.edu/Catissue_cacore/types" schemaLocation="./Catissue_cacoreTypes.xsd" />
-      <import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" schemaLocation="edu.wustl.catissuecore.domain.sop.xsd" />
       <import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology.ws" schemaLocation="./edu.wustl.catissuecore.domain.pathology.ws.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service" schemaLocation="./xsd/cagrid/types/service/servicemodel.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice" schemaLocation="./xsd/cagrid/types/data/data.xsd" />
@@ -31,7 +30,6 @@
       <import namespace="http://gov.nih.nci.cagrid.data/DataServiceExceptions" schemaLocation="./DataServiceExceptions.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" schemaLocation="./xsd/cagrid/types/caGridMetadata.xsd" />
       <import namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common" schemaLocation="./xsd/cagrid/types/common/common.xsd" />
-      <import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop.ws" schemaLocation="./edu.wustl.catissuecore.domain.sop.ws.xsd" />
       <import namespace="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet" schemaLocation="./1_gov.nih.nci.cagrid.CQLResultSet.xsd" />
       <import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" schemaLocation="./edu.wustl.catissuecore.domain.ws.xsd" />
       <import namespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" schemaLocation="./edu.common.dynamicextensions.domain.integration.ws.xsd" />
@@ -84,9 +82,9 @@
       <element name="Catissue_cacoreResourceProperties">
         <complexType>
           <sequence>
-            <element ref="ns23:DomainModel" />
-            <element ref="ns15:ServiceMetadata" />
-            <element ref="ns24:QueryLanguageSupport" />
+            <element ref="ns21:DomainModel" />
+            <element ref="ns13:ServiceMetadata" />
+            <element ref="ns22:QueryLanguageSupport" />
           </sequence>
         </complexType>
       </element>
@@ -112,7 +110,7 @@
     <part name="parameters" element="tns:DisableResponse" />
   </message>
   <message name="QueryProcessingExceptionFaultMessage">
-    <part name="fault" element="ns25:QueryProcessingException" />
+    <part name="fault" element="ns23:QueryProcessingException" />
   </message>
   <!--============================================================
 

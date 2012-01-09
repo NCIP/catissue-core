@@ -6,7 +6,6 @@
 	<xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" schemaLocation="edu.wustl.catissuecore.domain.deintegration.xsd"/>
 	<xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" schemaLocation="edu.wustl.catissuecore.domain.pathology.xsd"/>
 	<xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" schemaLocation="edu.wustl.catissuecore.domain.shippingtracking.xsd"/>
-	
 	<xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" schemaLocation="edu.wustl.catissuecore.domain.xsd"/>
 	<xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" schemaLocation="edu.wustl.common.domain.xsd"/>
 
@@ -17,7 +16,6 @@
         <!-- element references to exposed objects -->
 		<xs:element ref="ns0:SCGRecordEntry" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration"/>
 		<xs:element ref="ns0:SpecimenRecordEntry" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration"/>
-
 		<xs:element ref="ns0:ParticipantRecordEntry" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration"/>
 		<xs:element ref="ns0:AbstractDomainObject" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.common.domain"/>
 		<xs:element ref="ns0:IdentifiedSurgicalPathologyReport" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology"/>
@@ -35,12 +33,6 @@
 		<xs:element ref="ns0:ConceptReferent" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology"/>
 		<xs:element ref="ns0:TextContent" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology"/>
 		<xs:element ref="ns0:DeidentifiedSurgicalPathologyReport" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology"/>
-
-
-
-
-
-
 		<xs:element ref="ns0:BaseShipment" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking"/>
 		<xs:element ref="ns0:Shipment" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking"/>
 		<xs:element ref="ns0:ShipmentRequest" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking"/>
@@ -104,7 +96,6 @@
 		<xs:element ref="ns0:DistributionSpecimenRequirement" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>
 		<xs:element ref="ns0:DerivedSpecimenOrderItem" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>
 		<xs:element ref="ns0:MolecularSpecimenReviewParameters" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>
-
 		<xs:element ref="ns0:CancerResearchGroup" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>
 		<xs:element ref="ns0:CheckInCheckOutEventParameter" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>
 		<xs:element ref="ns0:StorageContainer" xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"/>

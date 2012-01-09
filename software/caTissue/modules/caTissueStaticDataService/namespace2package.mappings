@@ -9,7 +9,6 @@ http\://gov.nih.nci.cagrid.data/DataService=gov.nih.nci.cagrid.data
 http\://org.cagrid.dataservice/DataService=org.cagrid.dataservice
 
 http\://domain.catissuecore.wustl.edu/Catissue_cacore/types=edu.wustl.catissuecore.domain.stubs.types
-gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop=edu.wustl.catissuecore.domain.sop
 gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology.ws=edu.wustl.catissuecore.domain.pathology.ws
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice=gov.nih.nci.cagrid.metadata.dataservice
@@ -26,7 +25,6 @@ gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.
 http\://gov.nih.nci.cagrid.data/DataServiceExceptions=gov.nih.nci.cagrid.data.faults
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata
 gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common
-gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop.ws=edu.wustl.catissuecore.domain.sop.ws
 http\://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet=gov.nih.nci.cagrid.cqlresultset
 gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws=edu.wustl.catissuecore.domain.ws
 gme\://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws=edu.common.dynamicextensions.domain.integration.ws
@@ -41,10 +39,8 @@ gme\://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration=edu.wustl.c
 
 
 
-
-
-
 http\://CQL.caBIG/2/org.cagrid.cql2.extensionsupport=org.cagrid.cql2.extensionsupport
+
 
 
 
