@@ -615,18 +615,7 @@
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
-  <class name="edu.wustl.catissuecore.domain.sop.SOP" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
-    <map-to xml="SOP" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
-    <field name="barcode" type="string">
-      <bind-xml name="barcode" node="attribute" />
-    </field>
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
-    <field name="name" type="string">
-      <bind-xml name="name" node="attribute" />
-    </field>
-  </class>
+  
   <class name="edu.wustl.catissuecore.domain.SpecimenArrayContent" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
     <map-to xml="SpecimenArrayContent" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
     <field name="concentrationInMicrogramPerMicroliter" type="double">
@@ -840,21 +829,7 @@
   <class name="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport" identity="id" extends="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport">
     <map-to xml="IdentifiedSurgicalPathologyReport" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
   </class>
-  <class name="edu.wustl.catissuecore.domain.sop.Action" identity="id" extends="edu.common.dynamicextensions.domain.integration.AbstractFormContext">
-    <map-to xml="Action" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
-    <field name="actionOrder" type="long">
-      <bind-xml name="actionOrder" node="attribute" />
-    </field>
-    <field name="barcode" type="string">
-      <bind-xml name="barcode" node="attribute" />
-    </field>
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
-    <field name="uniqueId" type="string">
-      <bind-xml name="uniqueId" node="attribute" />
-    </field>
-  </class>
+  
   <class name="edu.wustl.catissuecore.domain.ContainerPosition" identity="id" extends="edu.wustl.catissuecore.domain.AbstractPosition">
     <map-to xml="ContainerPosition" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
   </class>
@@ -1047,12 +1022,7 @@
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
-  <class name="edu.wustl.catissuecore.domain.sop.DefaultAction" identity="id" extends="edu.common.dynamicextensions.domain.integration.AbstractFormContext">
-    <map-to xml="DefaultAction" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
-    <field name="eventName" type="string">
-      <bind-xml name="eventName" node="attribute" />
-    </field>
-  </class>
+  
   <class name="edu.wustl.catissuecore.domain.ReviewEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
     <map-to xml="ReviewEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
   </class>
