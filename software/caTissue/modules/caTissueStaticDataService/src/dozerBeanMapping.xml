@@ -235,8 +235,7 @@
     <mapping>
         <class-a>edu.wustl.catissuecore.domain.CollectionProtocolEvent</class-a>
         <class-b>edu.wustl.catissuecore.domain.ws.CollectionProtocolEvent</class-b>
-        <field><a>id</a><b>identifier</b></field>
-        <field><a>sopCollection</a><b>sopCollection.SOP</b></field>
+        <field><a>id</a><b>identifier</b></field>        
         <field><a>collectionProtocol</a><b>collectionProtocol.collectionProtocol</b></field>
         <field><a>specimenCollectionGroupCollection</a><b>specimenCollectionGroupCollection.specimenCollectionGroup</b></field>
         <field><a>specimenRequirementCollection</a><b>specimenRequirementCollection.specimenRequirement</b></field>
@@ -363,11 +362,10 @@
         <field><a>specimenPosition</a><b>specimenPosition.specimenPosition</b></field>
         <field><a>specimenRecordEntryCollection</a><b>specimenRecordEntryCollection.specimenRecordEntry</b></field>
         <field><a>specimenRequirement</a><b>specimenRequirement.specimenRequirement</b></field>
-        <field><a>actionApplicationCollection</a><b>actionApplicationCollection.actionApplication</b></field>
+        
         <field><a>biohazardCollection</a><b>biohazardCollection.biohazard</b></field>
         <field><a>specimenCollectionGroup</a><b>specimenCollectionGroup.specimenCollectionGroup</b></field>
-        <field><a>creationEventAction</a><b>creationEventAction.ActionApplication</b></field>
-        <field><a>processingSOPApplication</a><b>processingSOPApplication.SOPApplication</b></field>
+        
     </mapping>
 
 
@@ -404,10 +402,9 @@
         <class-a>edu.wustl.catissuecore.domain.SpecimenCollectionGroup</class-a>
         <class-b>edu.wustl.catissuecore.domain.ws.SpecimenCollectionGroup</class-b>
         <field><a>identifiedSurgicalPathologyReport</a><b>identifiedSurgicalPathologyReport.identifiedSurgicalPathologyReport</b></field>
-        <field><a>specimenEventParametersCollection</a><b>specimenEventParametersCollection.specimenEventParameters</b></field>
-        <field><a>sopApplicationCollection</a><b>sopApplicationCollection.sopApplication</b></field>
+        <field><a>specimenEventParametersCollection</a><b>specimenEventParametersCollection.specimenEventParameters</b></field>        
         <field><a>collectionProtocolEvent</a><b>collectionProtocolEvent.collectionProtocolEvent</b></field>
-        <field><a>actionApplicationCollection</a><b>actionApplicationCollection.actionApplication</b></field>
+        
         <field><a>collectionProtocolRegistration</a><b>collectionProtocolRegistration.collectionProtocolRegistration</b></field>
         <field><a>deIdentifiedSurgicalPathologyReport</a><b>deIdentifiedSurgicalPathologyReport.deIdentifiedSurgicalPathologyReport</b></field>
         <field><a>consentTierStatusCollection</a><b>consentTierStatusCollection.consentTierStatus</b></field>
@@ -462,7 +459,7 @@
         <class-b>edu.wustl.catissuecore.domain.ws.User</class-b>
         <field><a>id</a><b>identifier</b></field>
         <field><a>institution</a><b>institution.institution</b></field>
-        <field><a>passwordCollection</a><b>passwordCollection.password</b></field>
+        
         <field><a>siteCollection</a><b>siteCollection.site</b></field>
         <field><a>department</a><b>department.department</b></field>
         <field><a>cancerResearchGroup</a><b>cancerResearchGroup.cancerResearchGroup</b></field>
