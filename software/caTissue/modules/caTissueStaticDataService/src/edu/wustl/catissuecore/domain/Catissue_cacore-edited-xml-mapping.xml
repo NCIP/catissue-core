@@ -84,21 +84,6 @@
     </field>
   </class>
   
-  <class name="edu.wustl.catissuecore.domain.sop.AbstractApplication" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
-    <map-to xml="AbstractApplication" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
-    <field name="comments" type="string">
-      <bind-xml name="comments" node="attribute" />
-    </field>
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
-    <field name="reasonDeviation" type="string">
-      <bind-xml name="reasonDeviation" node="attribute" />
-    </field>
-    <field name="timestamp" type="java.util.Date">
-      <bind-xml name="timestamp" node="attribute" />
-    </field>
-  </class>
   <class name="edu.wustl.catissuecore.domain.CollectionProtocolRegistration" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
     <map-to xml="CollectionProtocolRegistration" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
     <field name="activityStatus" type="string">
@@ -948,9 +933,6 @@
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
-  <class name="edu.wustl.catissuecore.domain.sop.ActionApplication" identity="id" extends="edu.wustl.catissuecore.domain.sop.AbstractApplication">
-    <map-to xml="ActionApplication" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
-  </class>
   <class name="edu.wustl.catissuecore.domain.pathology.TextContent" identity="id" extends="edu.wustl.catissuecore.domain.pathology.ReportContent">
     <map-to xml="TextContent" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
   </class>
@@ -977,9 +959,6 @@
     <field name="temperatureInCentigrade" type="double">
       <bind-xml name="temperatureInCentigrade" node="attribute" />
     </field>
-  </class>
-  <class name="edu.wustl.catissuecore.domain.sop.SOPApplication" identity="id" extends="edu.wustl.catissuecore.domain.sop.AbstractApplication">
-    <map-to xml="SOPApplication" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
   </class>
   <class name="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport" identity="id" extends="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport">
     <map-to xml="DeidentifiedSurgicalPathologyReport" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />

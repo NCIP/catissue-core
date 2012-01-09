@@ -6,7 +6,7 @@
 	<xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" schemaLocation="edu.wustl.catissuecore.domain.deintegration.xsd"/>
 	<xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" schemaLocation="edu.wustl.catissuecore.domain.pathology.xsd"/>
 	<xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" schemaLocation="edu.wustl.catissuecore.domain.shippingtracking.xsd"/>
-	<xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" schemaLocation="edu.wustl.catissuecore.domain.sop.xsd"/>
+	
 	<xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" schemaLocation="edu.wustl.catissuecore.domain.xsd"/>
 	<xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" schemaLocation="edu.wustl.common.domain.xsd"/>
 

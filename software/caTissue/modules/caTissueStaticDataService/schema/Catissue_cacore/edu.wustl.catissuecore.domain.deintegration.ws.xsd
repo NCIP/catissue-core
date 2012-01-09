@@ -4,13 +4,13 @@ xmlns:xs="http://www.w3.org/2001/XMLSchema"
 xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration.ws" 
 xmlns:edu.wustl.catissuecore.domain.deintegration.ws="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration.ws" 
 xmlns:edu.wustl.catissuecore.domain.ws="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" 
-xmlns:edu.wustl.catissuecore.domain.sop.ws="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop.ws" 
+ 
 xmlns:edu.common.dynamicextensions.domain.integration.ws="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" 
 xmlns:edu.wustl.common.domain.ws="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws" 
 targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration.ws" elementFormDefault="qualified">
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws" schemaLocation="edu.wustl.common.domain.ws.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" schemaLocation="edu.wustl.catissuecore.domain.ws.xsd" />
-  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop.ws" schemaLocation="edu.wustl.catissuecore.domain.sop.ws.xsd" />
+  
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" schemaLocation="edu.common.dynamicextensions.domain.integration.ws.xsd" />
   <xs:element name="SCGRecordEntry" type="SCGRecordEntry" />
   <xs:complexType name="SCGRecordEntry">

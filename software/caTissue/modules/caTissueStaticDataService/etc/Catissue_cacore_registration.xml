@@ -31,7 +31,7 @@
 			xmlns:ns25="http://gov.nih.nci.cagrid.data/DataServiceExceptions"
 			xmlns:ns15="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
 			xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"
-			xmlns:ns2="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop.ws"
+			
 			xmlns:ns21="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLResultSet"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
 			xmlns:ns0="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws"
