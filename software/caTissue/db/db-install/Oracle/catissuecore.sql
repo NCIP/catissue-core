@@ -489,7 +489,7 @@ create table CATISSUE_SPECIMEN_COLL_GROUP (
    DATE_OFFSET integer,
    DSPR_ID number(20),
    ISPR_ID number(20),
-   AGE_AT_COLLECTION integer),
+   AGE_AT_COLLECTION integer,
    primary key (IDENTIFIER),
    CONSTRAINT fkDebaf1677e07c4ac FOREIGN KEY( Collection_Protocol_reg_Id ) REFERENCES CATISSUE_COLL_PROT_REG( IdentIfier ),
    CONSTRAINT fk_Parent_spec_coll_Group FOREIGN KEY( IdentIfier ) REFERENCES CATISSUE_ABS_SPECI_COLL_GROUP( IdentIfier )
