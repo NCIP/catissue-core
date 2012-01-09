@@ -110,24 +110,6 @@
       <bind-xml name="User" type="edu.wustl.catissuecore.domain.User" location="user" node="element" />
     </field>
   </class>
-  <class name="edu.wustl.catissuecore.domain.sop.AbstractApplication" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
-    <map-to xml="AbstractApplication" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
-    <field name="comments" type="string">
-      <bind-xml name="comments" node="attribute" />
-    </field>
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
-    <field name="reasonDeviation" type="string">
-      <bind-xml name="reasonDeviation" node="attribute" />
-    </field>
-    <field name="timestamp" type="java.util.Date">
-      <bind-xml name="timestamp" node="attribute" />
-    </field>
-    <field name="performedBy" type="edu.wustl.catissuecore.domain.User" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="User" type="edu.wustl.catissuecore.domain.User" location="performedBy" node="element" />
-    </field>
-  </class>
   <class name="edu.wustl.catissuecore.domain.CollectionProtocolRegistration" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
     <map-to xml="CollectionProtocolRegistration" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
     <field name="activityStatus" type="string">
@@ -857,24 +839,6 @@
       <bind-xml name="id" node="attribute" />
     </field>
   </class>
-  <class name="edu.wustl.catissuecore.domain.sop.SOP" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
-    <map-to xml="SOP" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
-    <field name="barcode" type="string">
-      <bind-xml name="barcode" node="attribute" />
-    </field>
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
-    <field name="name" type="string">
-      <bind-xml name="name" node="attribute" />
-    </field>
-    <field name="actionCollection" type="edu.wustl.catissuecore.domain.sop.Action" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
-      <bind-xml name="Action" type="edu.wustl.catissuecore.domain.sop.Action" location="actionCollection" node="element" />
-    </field>
-    <field name="sopApplicationCollection" type="edu.wustl.catissuecore.domain.sop.SOPApplication" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
-      <bind-xml name="SOPApplication" type="edu.wustl.catissuecore.domain.sop.SOPApplication" location="sopApplicationCollection" node="element" />
-    </field>
-  </class>
   <class name="edu.wustl.catissuecore.domain.SpecimenArrayContent" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
     <map-to xml="SpecimenArrayContent" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
     <field name="concentrationInMicrogramPerMicroliter" type="double">
@@ -1069,17 +1033,11 @@
     <field name="storageType" type="string">
       <bind-xml name="storageType" node="attribute" />
     </field>
-    <field name="processingSOP" type="edu.wustl.catissuecore.domain.sop.SOP" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="SOP" type="edu.wustl.catissuecore.domain.sop.SOP" location="processingSOP" node="element" />
-    </field>
     <field name="specimenCollection" type="edu.wustl.catissuecore.domain.Specimen" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
       <bind-xml name="Specimen" type="edu.wustl.catissuecore.domain.Specimen" location="specimenCollection" node="element" />
     </field>
     <field name="collectionProtocolEvent" type="edu.wustl.catissuecore.domain.CollectionProtocolEvent" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
       <bind-xml name="CollectionProtocolEvent" type="edu.wustl.catissuecore.domain.CollectionProtocolEvent" location="collectionProtocolEvent" node="element" />
-    </field>
-    <field name="creationEvent" type="edu.wustl.catissuecore.domain.sop.Action" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="Action" type="edu.wustl.catissuecore.domain.sop.Action" location="creationEvent" node="element" />
     </field>
   </class>
   <class name="edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest" identity="id" extends="edu.wustl.catissuecore.domain.shippingtracking.BaseShipment">
@@ -1144,9 +1102,6 @@
     <field name="studyCalendarEventPoint" type="double">
       <bind-xml name="studyCalendarEventPoint" node="attribute" />
     </field>
-    <field name="sopCollection" type="edu.wustl.catissuecore.domain.sop.SOP" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
-      <bind-xml name="SOP" type="edu.wustl.catissuecore.domain.sop.SOP" location="sopCollection" node="element" />
-    </field>
     <field name="collectionProtocol" type="edu.wustl.catissuecore.domain.CollectionProtocol" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
       <bind-xml name="CollectionProtocol" type="edu.wustl.catissuecore.domain.CollectionProtocol" location="collectionProtocol" node="element" />
     </field>
@@ -1170,27 +1125,6 @@
     <map-to xml="IdentifiedSurgicalPathologyReport" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
     <field name="deIdentifiedSurgicalPathologyReport" type="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
       <bind-xml name="DeidentifiedSurgicalPathologyReport" type="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport" location="deIdentifiedSurgicalPathologyReport" node="element" />
-    </field>
-  </class>
-  <class name="edu.wustl.catissuecore.domain.sop.Action" identity="id" extends="edu.common.dynamicextensions.domain.integration.AbstractFormContext">
-    <map-to xml="Action" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
-    <field name="actionOrder" type="long">
-      <bind-xml name="actionOrder" node="attribute" />
-    </field>
-    <field name="barcode" type="string">
-      <bind-xml name="barcode" node="attribute" />
-    </field>
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
-    <field name="uniqueId" type="string">
-      <bind-xml name="uniqueId" node="attribute" />
-    </field>
-    <field name="sopCollection" type="edu.wustl.catissuecore.domain.sop.SOP" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
-      <bind-xml name="SOP" type="edu.wustl.catissuecore.domain.sop.SOP" location="sopCollection" node="element" />
-    </field>
-    <field name="applicationDefaultValue" type="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="ActionApplicationRecordEntry" type="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry" location="applicationDefaultValue" node="element" />
     </field>
   </class>
   <class name="edu.wustl.catissuecore.domain.ContainerPosition" identity="id" extends="edu.wustl.catissuecore.domain.AbstractPosition">
@@ -1231,9 +1165,6 @@
     <field name="deIdentifiedSurgicalPathologyReport" type="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
       <bind-xml name="DeidentifiedSurgicalPathologyReport" type="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport" location="deIdentifiedSurgicalPathologyReport" node="element" />
     </field>
-    <field name="actionApplicationCollection" type="edu.wustl.catissuecore.domain.sop.ActionApplication" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
-      <bind-xml name="ActionApplication" type="edu.wustl.catissuecore.domain.sop.ActionApplication" location="actionApplicationCollection" node="element" />
-    </field>
     <field name="consentTierStatusCollection" type="edu.wustl.catissuecore.domain.ConsentTierStatus" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
       <bind-xml name="ConsentTierStatus" type="edu.wustl.catissuecore.domain.ConsentTierStatus" location="consentTierStatusCollection" node="element" />
     </field>
@@ -1246,9 +1177,6 @@
     <field name="specimenCollection" type="edu.wustl.catissuecore.domain.Specimen" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
       <bind-xml name="Specimen" type="edu.wustl.catissuecore.domain.Specimen" location="specimenCollection" node="element" />
     </field>
-    <field name="sopApplicationCollection" type="edu.wustl.catissuecore.domain.sop.SOPApplication" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
-      <bind-xml name="SOPApplication" type="edu.wustl.catissuecore.domain.sop.SOPApplication" location="sopApplicationCollection" node="element" />
-    </field>
     <field name="identifiedSurgicalPathologyReport" type="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
       <bind-xml name="IdentifiedSurgicalPathologyReport" type="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport" location="identifiedSurgicalPathologyReport" node="element" />
     </field>
@@ -1260,9 +1188,6 @@
     <map-to xml="ActionApplicationRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" />
     <field name="id" type="long">
       <bind-xml name="id" node="attribute" />
-    </field>
-    <field name="actionApplication" type="edu.wustl.catissuecore.domain.sop.ActionApplication" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="ActionApplication" type="edu.wustl.catissuecore.domain.sop.ActionApplication" location="actionApplication" node="element" />
     </field>
   </class>
   <class name="edu.wustl.catissuecore.domain.StorageType" identity="id" extends="edu.wustl.catissuecore.domain.ContainerType">
@@ -1337,15 +1262,6 @@
       <bind-xml name="Participant" type="edu.wustl.catissuecore.domain.Participant" location="participant" node="element" />
     </field>
   </class>
-  <class name="edu.wustl.catissuecore.domain.sop.ActionApplication" identity="id" extends="edu.wustl.catissuecore.domain.sop.AbstractApplication">
-    <map-to xml="ActionApplication" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
-    <field name="sopApplication" type="edu.wustl.catissuecore.domain.sop.SOPApplication" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="SOPApplication" type="edu.wustl.catissuecore.domain.sop.SOPApplication" location="sopApplication" node="element" />
-    </field>
-    <field name="applicationRecordEntry" type="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="ActionApplicationRecordEntry" type="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry" location="applicationRecordEntry" node="element" />
-    </field>
-  </class>
   <class name="edu.wustl.catissuecore.domain.pathology.TextContent" identity="id" extends="edu.wustl.catissuecore.domain.pathology.ReportContent">
     <map-to xml="TextContent" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" />
     <field name="reportSectionCollection" type="edu.wustl.catissuecore.domain.pathology.ReportSection" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
@@ -1401,15 +1317,6 @@
     </field>
     <field name="collectionProtocolCollection" type="edu.wustl.catissuecore.domain.CollectionProtocol" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
       <bind-xml name="CollectionProtocol" type="edu.wustl.catissuecore.domain.CollectionProtocol" location="collectionProtocolCollection" node="element" />
-    </field>
-  </class>
-  <class name="edu.wustl.catissuecore.domain.sop.SOPApplication" identity="id" extends="edu.wustl.catissuecore.domain.sop.AbstractApplication">
-    <map-to xml="SOPApplication" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
-    <field name="sopActionApplicationCollection" type="edu.wustl.catissuecore.domain.sop.ActionApplication" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
-      <bind-xml name="ActionApplication" type="edu.wustl.catissuecore.domain.sop.ActionApplication" location="sopActionApplicationCollection" node="element" />
-    </field>
-    <field name="sop" type="edu.wustl.catissuecore.domain.sop.SOP" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="SOP" type="edu.wustl.catissuecore.domain.sop.SOP" location="sop" node="element" />
     </field>
   </class>
   <class name="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport" identity="id" extends="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport">
@@ -1559,12 +1466,6 @@
       <bind-xml name="SpecimenCollectionGroup" type="edu.wustl.catissuecore.domain.SpecimenCollectionGroup" location="specimenCollectionGroup" node="element" />
     </field>
   </class>
-  <class name="edu.wustl.catissuecore.domain.sop.DefaultAction" identity="id" extends="edu.common.dynamicextensions.domain.integration.AbstractFormContext">
-    <map-to xml="DefaultAction" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" />
-    <field name="eventName" type="string">
-      <bind-xml name="eventName" node="attribute" />
-    </field>
-  </class>
   <class name="edu.wustl.catissuecore.domain.ReviewEventParameters" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenEventParameters">
     <map-to xml="ReviewEventParameters" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
   </class>
@@ -1606,12 +1507,6 @@
     <field name="label" type="string">
       <bind-xml name="label" node="attribute" />
     </field>
-    <field name="processingSOPApplication" type="edu.wustl.catissuecore.domain.sop.SOPApplication" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="SOPApplication" type="edu.wustl.catissuecore.domain.sop.SOPApplication" location="processingSOPApplication" node="element" />
-    </field>
-    <field name="actionApplicationCollection" type="edu.wustl.catissuecore.domain.sop.ActionApplication" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
-      <bind-xml name="ActionApplication" type="edu.wustl.catissuecore.domain.sop.ActionApplication" location="actionApplicationCollection" node="element" />
-    </field>
     <field name="biohazardCollection" type="edu.wustl.catissuecore.domain.Biohazard" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
       <bind-xml name="Biohazard" type="edu.wustl.catissuecore.domain.Biohazard" location="biohazardCollection" node="element" />
     </field>
@@ -1620,9 +1515,6 @@
     </field>
     <field name="specimenCollectionGroup" type="edu.wustl.catissuecore.domain.SpecimenCollectionGroup" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
       <bind-xml name="SpecimenCollectionGroup" type="edu.wustl.catissuecore.domain.SpecimenCollectionGroup" location="specimenCollectionGroup" node="element" />
-    </field>
-    <field name="creationEventAction" type="edu.wustl.catissuecore.domain.sop.ActionApplication" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="ActionApplication" type="edu.wustl.catissuecore.domain.sop.ActionApplication" location="creationEventAction" node="element" />
     </field>
     <field name="externalIdentifierCollection" type="edu.wustl.catissuecore.domain.ExternalIdentifier" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
       <bind-xml name="ExternalIdentifier" type="edu.wustl.catissuecore.domain.ExternalIdentifier" location="externalIdentifierCollection" node="element" />

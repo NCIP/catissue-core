@@ -82,14 +82,6 @@
   <ns2:Namespace location="./edu.wustl.common.domain.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws" packageName="edu.wustl.common.domain.ws" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="AbstractDomainObject" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./edu.wustl.catissuecore.domain.sop.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop.ws" packageName="edu.wustl.catissuecore.domain.sop.ws" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="AbstractApplication" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="Action" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ActionApplication" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="DefaultAction" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SOP" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SOPApplication" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
   <ns2:Namespace location="./edu.wustl.catissuecore.domain.deintegration.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration.ws" packageName="edu.wustl.catissuecore.domain.deintegration.ws" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ParticipantRecordEntry" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SCGRecordEntry" xsi:type="ns2:SchemaElementType"/>
@@ -207,14 +199,6 @@
    <ns2:SchemaElement className="BaseShipment" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.shippingtracking" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="BaseShipment" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="Shipment" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.shippingtracking" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Shipment" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement className="ShipmentRequest" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.shippingtracking" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ShipmentRequest" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="edu.wustl.catissuecore.domain.sop.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.sop" packageName="edu.wustl.catissuecore.domain.sop" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement className="AbstractApplication" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.sop" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractApplication" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Action" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.sop" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Action" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ActionApplication" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.sop" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ActionApplication" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="DefaultAction" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.sop" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DefaultAction" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SOP" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.sop" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SOP" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SOPApplication" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.sop" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SOPApplication" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace location="edu.wustl.catissuecore.domain.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" packageName="edu.wustl.catissuecore.domain" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement className="AbstractPosition" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractPosition" xsi:type="ns2:SchemaElementType"/>
@@ -535,8 +519,6 @@
 
            <ns41:ModelClass selected="true" shortClassName="SpecimenRecordEntry" targetable="true" xsi:type="ns41:ModelClass"/>
 
-
-
            <ns41:ModelClass selected="true" shortClassName="ParticipantRecordEntry" targetable="true" xsi:type="ns41:ModelClass"/>
 
       </ns41:ModelPackage>
@@ -576,21 +558,6 @@
            <ns41:ModelClass selected="true" shortClassName="TextContent" targetable="true" xsi:type="ns41:ModelClass"/>
 
            <ns41:ModelClass selected="true" shortClassName="DeidentifiedSurgicalPathologyReport" targetable="true" xsi:type="ns41:ModelClass"/>
-
-      </ns41:ModelPackage>
-
-          <ns41:ModelPackage packageName="edu.wustl.catissuecore.domain.sop" xsi:type="ns41:ModelPackage">
-           <ns41:ModelClass selected="true" shortClassName="SOP" targetable="true" xsi:type="ns41:ModelClass"/>
-
-           <ns41:ModelClass selected="true" shortClassName="AbstractApplication" targetable="true" xsi:type="ns41:ModelClass"/>
-
-           <ns41:ModelClass selected="true" shortClassName="Action" targetable="true" xsi:type="ns41:ModelClass"/>
-
-           <ns41:ModelClass selected="true" shortClassName="ActionApplication" targetable="true" xsi:type="ns41:ModelClass"/>
-
-           <ns41:ModelClass selected="true" shortClassName="SOPApplication" targetable="true" xsi:type="ns41:ModelClass"/>
-
-           <ns41:ModelClass selected="true" shortClassName="DefaultAction" targetable="true" xsi:type="ns41:ModelClass"/>
 
       </ns41:ModelPackage>
 

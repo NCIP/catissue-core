@@ -2309,52 +2309,6 @@
     <ns84:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-9223372036816399116" version="1.0"/>
    </ns84:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SOP" id="EAID_11448B61_6CEB_492e_8011_344B91E6EABE" packageName="edu.wustl.catissuecore.domain.sop" projectName="catissue_cacore" projectVersion="2.0">
-   <ns85:umlAttributeCollection xmlns:ns85="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns85:UMLAttribute dataTypeName="java.lang.String" name="barcode" publicID="-9223372034899607801" version="1.0"/>
-    <ns85:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-9223372034914975916" version="1.0"/>
-    <ns85:UMLAttribute dataTypeName="java.lang.String" name="name" publicID="-9223372036467731731" version="1.0"/>
-   </ns85:umlAttributeCollection>
-  </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="AbstractApplication" id="EAID_5F5CD692_EFD9_4692_8F0C_23378099344F" packageName="edu.wustl.catissuecore.domain.sop" projectName="catissue_cacore" projectVersion="2.0">
-   <ns86:umlAttributeCollection xmlns:ns86="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns86:UMLAttribute dataTypeName="java.lang.String" name="comments" publicID="-9223372036446893452" version="1.0"/>
-    <ns86:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-9223372035538065738" version="1.0"/>
-    <ns86:UMLAttribute dataTypeName="java.lang.String" name="reasonDeviation" publicID="-9223372035597772169" version="1.0"/>
-    <ns86:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="-9223372035338176411" version="1.0"/>
-   </ns86:umlAttributeCollection>
-  </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="Action" id="EAID_656C52AC_3B3B_4ce5_9292_7DEA59C8A06B" packageName="edu.wustl.catissuecore.domain.sop" projectName="catissue_cacore" projectVersion="2.0">
-   <ns87:umlAttributeCollection xmlns:ns87="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns87:UMLAttribute dataTypeName="java.lang.Long" name="actionOrder" publicID="-9223372036156763864" version="1.0"/>
-    <ns87:UMLAttribute dataTypeName="java.lang.String" name="barcode" publicID="-9223372035457697732" version="1.0"/>
-    <ns87:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-9223372034922176120" version="1.0"/>
-    <ns87:UMLAttribute dataTypeName="java.lang.String" name="uniqueId" publicID="-9223372035082907194" version="1.0"/>
-    <ns87:UMLAttribute name="id" publicID="-9223372036783419785" version="1.0"/>
-   </ns87:umlAttributeCollection>
-  </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ActionApplication" id="EAID_66D35F08_55CF_46fa_83BA_680CE26B08A3" packageName="edu.wustl.catissuecore.domain.sop" projectName="catissue_cacore" projectVersion="2.0">
-   <ns88:umlAttributeCollection xmlns:ns88="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns88:UMLAttribute dataTypeName="java.lang.String" name="comments" publicID="-9223372036446893452" version="1.0"/>
-    <ns88:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-9223372035538065738" version="1.0"/>
-    <ns88:UMLAttribute dataTypeName="java.lang.String" name="reasonDeviation" publicID="-9223372035597772169" version="1.0"/>
-    <ns88:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="-9223372035338176411" version="1.0"/>
-   </ns88:umlAttributeCollection>
-  </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SOPApplication" id="EAID_7EA59720_391F_4cf4_BFC9_00F4531F1956" packageName="edu.wustl.catissuecore.domain.sop" projectName="catissue_cacore" projectVersion="2.0">
-   <ns89:umlAttributeCollection xmlns:ns89="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns89:UMLAttribute dataTypeName="java.lang.String" name="comments" publicID="-9223372036446893452" version="1.0"/>
-    <ns89:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-9223372035538065738" version="1.0"/>
-    <ns89:UMLAttribute dataTypeName="java.lang.String" name="reasonDeviation" publicID="-9223372035597772169" version="1.0"/>
-    <ns89:UMLAttribute dataTypeName="java.util.Date" name="timestamp" publicID="-9223372035338176411" version="1.0"/>
-   </ns89:umlAttributeCollection>
-  </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="DefaultAction" id="EAID_9C535EF9_749C_43fe_8A16_754CAB9A52DD" packageName="edu.wustl.catissuecore.domain.sop" projectName="catissue_cacore" projectVersion="2.0">
-   <ns90:umlAttributeCollection xmlns:ns90="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns90:UMLAttribute dataTypeName="java.lang.String" name="eventName" publicID="-9223372034761965371" version="1.0"/>
-    <ns90:UMLAttribute name="id" publicID="-9223372036783419785" version="1.0"/>
-   </ns90:umlAttributeCollection>
-  </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="IdentifiedSurgicalPathologyReport" id="EAID_0C8273D2_F0C8_41d2_BBF0_85296CE74D33" packageName="edu.wustl.catissuecore.domain.pathology" projectName="catissue_cacore" projectVersion="2.0">
    <ns91:umlAttributeCollection xmlns:ns91="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns91:UMLAttribute dataTypeName="java.lang.String" description="Activity status of a pathology report." name="activityStatus" publicID="-9223372035992696594" version="1.0"/>
