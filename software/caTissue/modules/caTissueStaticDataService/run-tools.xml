@@ -321,7 +321,7 @@
             </fileset>
         </delete>
 
-        <delete dir="./temp" />
+        <!-- <delete dir="./temp" /> -->
     </target>
 
     <target name="-importXSDs">
@@ -330,13 +330,14 @@
         <unjar src="${fullJarFileName}" dest="./temp/${jarfilename}" />
         <foreach target="-importXSD" param="fullFileName" inheritall="true">
                 <fileset dir="./temp/${jarfilename}" casesensitive="yes">
-                <include name="*.xsd"/>
-            </fileset>
+                	<include name="gov.nih.nci.dynext*.xsd"/>
+            	</fileset>
         </foreach>
     </target>
 
     <target name="-importXSD">
         <basename property="filename" file="${fullFileName}"/>
+    	<echo message="Processing: ${filename} "/>
         <antcall target="doImportXSD">
             <param name="xsdFile" value="${fullFileName}" />
         </antcall>
