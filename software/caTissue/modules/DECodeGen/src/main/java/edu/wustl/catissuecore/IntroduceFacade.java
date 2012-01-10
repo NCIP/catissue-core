@@ -3,10 +3,6 @@
  */
 package edu.wustl.catissuecore;
 
-import com.sun.xml.xsom.XSComplexType;
-import com.sun.xml.xsom.XSSchema;
-import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.parser.XSOMParser;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.common.XMLUtilities;
 import gov.nih.nci.cagrid.introduce.IntroduceConstants;
@@ -15,16 +11,31 @@ import gov.nih.nci.cagrid.introduce.beans.namespace.NamespaceType;
 import gov.nih.nci.cagrid.introduce.beans.namespace.SchemaElementType;
 import gov.nih.nci.cagrid.introduce.codegen.SyncTools;
 import gov.nih.nci.cagrid.introduce.common.CommonTools;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.jdom.DefaultJDOMFactory;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.*;
+import com.sun.xml.xsom.XSAttributeUse;
+import com.sun.xml.xsom.XSComplexType;
+import com.sun.xml.xsom.XSSchema;
+import com.sun.xml.xsom.XSSchemaSet;
+import com.sun.xml.xsom.parser.XSOMParser;
 
 /**
  * Modifies caGrid service project created by Introduce by:
@@ -41,6 +52,7 @@ public final class IntroduceFacade {
 	private File serviceDir;
 	private String serviceName;
 	private static String serverWsddFile = "server-config.wsdd";
+	private static Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	public IntroduceFacade(File serviceDir, String serviceName) {
 		this.serviceDir = serviceDir;
@@ -53,9 +65,11 @@ public final class IntroduceFacade {
 
 	public void addSchemaTypes(File schemaFile) throws Exception {
 
-        System.out.println("Adding a schema: " + schemaFile.getAbsolutePath());
-        System.out.println("to service: " + serviceDir.getAbsolutePath());
+        log.info("Adding a schema: " + schemaFile.getAbsolutePath());
+        log.info("to service: " + serviceDir.getAbsolutePath());
 
+        preprocessSchema(schemaFile);
+        
 		XSOMParser parser = new XSOMParser();
 		parser.parse(schemaFile);
 		XSSchemaSet set = parser.getResult();
@@ -99,7 +113,31 @@ public final class IntroduceFacade {
 
 	}
 
-    /**
+    private void preprocessSchema(File schemaFile) throws SAXException, IOException {
+    	String schema = FileUtils.readFileToString(schemaFile);
+    	String updatedSchema = schema.replaceAll("<xs:attribute\\s+name=\"(id)\"", "<xs:attribute name=\"identifier\"");
+    	FileUtils.writeStringToFile(schemaFile, updatedSchema);
+    	
+    	/**
+    	XSOMParser parser = new XSOMParser();
+		parser.parse(schemaFile);
+		XSSchemaSet set = parser.getResult();
+		XSSchema schema = set.getSchema(1);
+		
+		Map<String, XSComplexType> typeMap = schema.getComplexTypes();
+		for (String typeName : typeMap.keySet()) {
+			XSComplexType type = typeMap.get(typeName);
+			for (XSAttributeUse attr : type.getAttributeUses()) {
+				if (attr.getDecl().getName().equals("id")) {
+					log.info("Renaming 'id' attribute of type "+type.getName()+" to 'identifier'");
+					attr.getDecl().
+				}
+			}
+		}		
+		**/
+	}
+
+	/**
      * Updates server-config.wsdd file to contain serializer and deserializer information for new inserted types.
      * @param types set of types to be added to the mappings list
      * @param targetNamespace target namespace to use for the element's namespaces
