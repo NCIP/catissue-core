@@ -3619,6 +3619,11 @@ Thanking You,
 			<property name="jboss.home.dir" value="${jboss.home}" />
 			<property name="default.prifix.war" value="${default.prefix.war}" />
 			<property name="database.type" value="${database.type}" />
+			<property name="database.user" value="${database.user}" />
+			<property name="database.password" value="${database.password}" />
+			<property name="database.server" value="${database.server}" />
+			<property name="database.port" value="${database.port}" />
+			<property name="database.name" value="${database.name}" />
 		</ant>
 		<delete failonerror="${delete.failonerror}" dir="${export.dir}" />
 		<delete failonerror="${delete.failonerror}" dir="${tempcacore.dir}" />
