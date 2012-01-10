@@ -278,7 +278,8 @@
 
     <!-- START Service rebuild -->
     <target name="updateService" depends="all">
-
+    	<delete dir="./temp" />
+    	
         <!-- DOZER MERGE -->
         <foreach target="-processDozer" param="fullFileName" inheritall="true">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
@@ -287,9 +288,11 @@
         </foreach>
 
         <!-- Compile DECodeGen and prepare artifacts -->
+	<!--
         <ant inheritAll="false" inheritRefs="false" antfile="${decodegen.dir}/build.xml" target="all" dir="${decodegen.dir}">
             <property name="basedir" value="${decodegen.dir}"/>
         </ant>
+	-->
 
         <!-- XMIs MERGE-->
         <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="-doMergeXMIs" dir="../DECodeGen/">
@@ -321,18 +324,36 @@
             </fileset>
         </delete>
 
-        <!-- <delete dir="./temp" /> -->
+        
     </target>
 
     <target name="-importXSDs">
         <basename property="jarfilename" file="${fullJarFileName}"/>
         <echo message="Processing XSD folder: ${jarfilename} "/>
         <unjar src="${fullJarFileName}" dest="./temp/${jarfilename}" />
+    	
+    	<java failonerror="true" classname="edu.wustl.catissuecore.domain.util.XSDConflictsResolver" fork="yes">
+            <classpath>
+                <fileset dir="build/lib/"><include name="*.jar" /></fileset>
+                <fileset dir="lib/"><include name="*.jar" /></fileset>
+            </classpath>
+            <arg value="./temp/${jarfilename}"/>
+    	</java>        	
+    	
         <foreach target="-importXSD" param="fullFileName" inheritall="true">
                 <fileset dir="./temp/${jarfilename}" casesensitive="yes">
                 	<include name="gov.nih.nci.dynext*.xsd"/>
             	</fileset>
         </foreach>
+    	<!--
+        <foreach target="-importXSD" param="fullFileName" inheritall="true">
+                <fileset dir="./temp/${jarfilename}" casesensitive="yes">
+                	<include name="SCGRecordEntry.xsd"/>
+                	<include name="SpecimenRecordEntry.xsd"/>
+                	<include name="ParticipantRecordEntry.xsd"/>			
+            	</fileset>
+        </foreach>
+        -->
     </target>
 
     <target name="-importXSD">

@@ -16,6 +16,11 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence />
+    <xs:attribute name="id" type="xs:long" />
+    <xs:attribute name="activityStatus" type="xs:string" />
+    <xs:attribute name="modifiedDate" type="xs:dateTime" />
+    <xs:attribute name="modifiedBy" type="xs:string" />
+
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>

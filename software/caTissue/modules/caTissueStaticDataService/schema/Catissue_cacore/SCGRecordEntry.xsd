@@ -12,9 +12,21 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegra
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" schemaLocation="edu.wustl.catissuecore.domain.ws.xsd" />  
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" schemaLocation="edu.common.dynamicextensions.domain.integration.ws.xsd" />
   
-  <xs:include schemaLocation="SCGRecordEntry.xsd"></xs:include>
-  <xs:include schemaLocation="SpecimenRecordEntry.xsd"></xs:include>
-  <xs:include schemaLocation="ParticipantRecordEntry.xsd"></xs:include>
- 
-</xs:schema>
-
+   <xs:element name="SCGRecordEntry" type="SCGRecordEntry" />
+  <xs:complexType name="SCGRecordEntry">
+    <xs:complexContent>
+      <xs:extension base="edu.common.dynamicextensions.domain.integration.ws:AbstractRecordEntry">
+        <xs:sequence>
+          <xs:element name="specimenCollectionGroup" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="edu.wustl.catissuecore.domain.ws:SpecimenCollectionGroup" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  </xs:schema>

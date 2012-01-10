@@ -21,6 +21,10 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.int
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain.ws:AbstractDomainObject">
         <xs:sequence />
+    <xs:attribute name="identifier" type="xs:long" />
+    <xs:attribute name="activityStatus" type="xs:string" />
+    <xs:attribute name="modifiedDate" type="xs:dateTime" />
+    <xs:attribute name="modifiedBy" type="xs:string" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
