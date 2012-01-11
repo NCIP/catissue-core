@@ -94,11 +94,11 @@ public class GenericCollectionConverter {
                         for (Object collectionObject : coll) {
                             newCollection.add(collectionObject);
                         }
+                        String setterMethodName = "s" + methodName.substring(1);
+                        Method setterMethod = klass.getMethod(setterMethodName, Collection.class);
+                        setterMethod.invoke(o, newCollection);                        
                     }
 
-                    String setterMethodName = "s" + methodName.substring(1);
-                    Method setterMethod = klass.getMethod(setterMethodName, Collection.class);
-                    setterMethod.invoke(o, newCollection);
 
                 } catch (ClassNotFoundException e1) {
                     e1.printStackTrace();
@@ -152,7 +152,13 @@ public class GenericCollectionConverter {
                     if (coll != null) {
                         for (Object collectionObject : coll) {
                             log.debug(String.format(">>> Looking for the property %s() in the class %s", setterName, collectionObject.getClass().getCanonicalName()));
-                            Method setter = collectionObject.getClass().getMethod(setterName, o.getClass());
+                            Method setter = null;
+                            try {
+                            	setter = collectionObject.getClass().getMethod(setterName, o.getClass());
+                            } catch (NoSuchMethodException ex) {
+                            	log.warn(setterName+" was not found on "+collectionObject.getClass());
+                            	setter = collectionObject.getClass().getMethod(setterName+"_"+collectionObject.getClass().getSimpleName(), o.getClass());
+							}
                             setter.invoke(collectionObject, o);
                             log.debug(String.format(">>> %s injected into %s", o.getClass(), collectionObject.getClass().getCanonicalName()));
                         }
