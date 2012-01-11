@@ -278,7 +278,7 @@
 
     <!-- START Service rebuild -->
     <target name="updateService" depends="all">
-    	<delete dir="./temp" />
+    	<delete dir="./temp" failonerror="false"/>
     	
         <!-- DOZER MERGE -->
         <foreach target="-processDozer" param="fullFileName" inheritall="true">
