@@ -295,6 +295,9 @@
 	-->
 
         <!-- XMIs MERGE-->
+        <antcall target="-fixArtifacts">
+            <param name="dir" value="${basedir}/de_codegen/xmi" />
+        </antcall>    	
         <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="-doMergeXMIs" dir="../DECodeGen/">
             <property name="xmiFolder" value="${basedir}/de_codegen/xmi" />
             <property name="outputXMLFile" value="${basedir}/de_codegen/xmi/mergeResult.xml" />
@@ -327,16 +330,22 @@
         
     </target>
 
+	<target name="-fixArtifacts">		
+    	<echo>Fixing inconsistent XMIs and other artifacts...</echo>
+    	<replace dir="${dir}" includes="**/*" summary="true" token="ParticipantRecordEntry_Participant" value="ParticipantRecordEntryCollection">
+    	</replace>		
+	</target>
+	
     <target name="-importXSDs">
         <basename property="jarfilename" file="${fullJarFileName}"/>
         <echo message="Processing XSD folder: ${jarfilename} "/>
         <unjar src="${fullJarFileName}" dest="./temp/${jarfilename}" />
     	
-    	<echo>Fixing inconsistent XMIs and other artifacts...</echo>
-    	<replace dir="./temp/${jarfilename}" summary="true" token="ParticipantRecordEntry_Participant" value="ParticipantRecordEntryCollection">
-    	</replace>
-    	
        	<!-- Do various fixes to the schemas. -->
+        <antcall target="-fixArtifacts">
+            <param name="dir" value="./temp/${jarfilename}" />
+        </antcall>   	
+    	
     	<java failonerror="true" classname="edu.wustl.catissuecore.domain.util.XSDConflictsResolver" fork="yes">
             <classpath>
                 <fileset dir="build/lib/"><include name="*.jar" /></fileset>
@@ -376,6 +385,10 @@
         <mkdir dir="./temp/${filename}" />
         <unjar src="${fullFileName}" dest="./temp/${filename}" />
 
+        <antcall target="-fixArtifacts">
+            <param name="dir" value="./temp/${filename}" />
+        </antcall>
+    	
         <java failonerror="true" classname="edu.wustl.catissuecore.domain.util.DozerMerger" fork="yes">
             <classpath>
                 <fileset dir="build/lib/"><include name="*.jar" /></fileset>
