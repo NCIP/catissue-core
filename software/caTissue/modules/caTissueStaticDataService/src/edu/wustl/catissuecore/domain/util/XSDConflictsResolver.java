@@ -99,11 +99,18 @@ public class XSDConflictsResolver {
 				+ newFileName + " before copying to the grid service.");
 		final File newSchemaFile = new File(schemaFile.getParentFile(),
 				newFileName);
+		
+		FileUtils.copyFile(schemaFile, newSchemaFile);
+		
+		/**
 		if (!schemaFile.renameTo(newSchemaFile)) {
 			log.severe("Unable to rename the schema!");
 			throw new IOException("Unable to rename the schema! "
 					+ schemaFile.getAbsolutePath());
 		}
+		**/
+		
+		/**
 		Collection<File> schemas = FileUtils.listFiles(pathToSchemas,
 				new String[] { "xsd" }, false);
 		for (File file : schemas) {
@@ -116,6 +123,7 @@ public class XSDConflictsResolver {
 								schemaFile.getName(), newFileName), null);
 			}
 		}
+		**/
 		
 		log.info("Updating "+newSchemaFile.getName()+" to adjust namespaces to be '.ws'");
 		String schema = FileUtils.readFileToString(newSchemaFile, null);

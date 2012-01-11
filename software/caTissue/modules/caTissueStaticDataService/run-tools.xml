@@ -332,14 +332,15 @@
         <echo message="Processing XSD folder: ${jarfilename} "/>
         <unjar src="${fullJarFileName}" dest="./temp/${jarfilename}" />
     	
-    	<!-- Do various fixes to the schemas. -->
+       	<!-- Do various fixes to the schemas. -->
     	<java failonerror="true" classname="edu.wustl.catissuecore.domain.util.XSDConflictsResolver" fork="yes">
             <classpath>
                 <fileset dir="build/lib/"><include name="*.jar" /></fileset>
                 <fileset dir="lib/"><include name="*.jar" /></fileset>
             </classpath>
             <arg value="./temp/${jarfilename}"/>
-    	</java>        	
+    	</java>
+    	
     	
     	<!-- Import main XSD only. -->
         <foreach target="-importXSD" param="fullFileName" inheritall="true">
