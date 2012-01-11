@@ -149,11 +149,8 @@ public class WAPIUtility {
 					// get Collection elements
 					Collection coll = (Collection) method.invoke(o);
 					if (coll != null) {
-						for (Object collectionObject : coll) {
-							log.debug(">>> Processing element in the collection ...");
-							nullifyFieldValue(collectionObject, setterName,
-									getterName, type, value);
-						}
+						nullifyFieldValue(setterName, getterName, type, value,
+								coll);
 					}
 				}
 
@@ -164,6 +161,22 @@ public class WAPIUtility {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @param setterName
+	 * @param getterName
+	 * @param type
+	 * @param value
+	 * @param coll
+	 */
+	public static void nullifyFieldValue(String setterName, String getterName,
+			Class type, Object value, Collection coll) {
+		for (Object collectionObject : coll) {
+			log.debug(">>> Processing element in the collection ...");
+			nullifyFieldValue(collectionObject, setterName,
+					getterName, type, value);
 		}
 	}
 

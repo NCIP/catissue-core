@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.domain.dozer;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,8 @@ public class GenericEventListener implements DozerEventListener {
 		Object destination = event.getDestinationObject();
 		Object value = event.getDestinationValue();
 		if (value instanceof List) {
+			WAPIUtility.nullifyFieldValue("setId", "getId", Long.class, null,
+					(Collection)value);
 			GenericCollectionConverter.convertCollectionTypes(destination);
 			GenericCollectionConverter.adjustReference(destination);
 		}
