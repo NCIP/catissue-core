@@ -7,19 +7,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
-import com.sun.xml.xsom.XSComplexType;
-import com.sun.xml.xsom.XSSchema;
-import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.parser.XSOMParser;
 
 /**
  * @author Denis G. Krylov
@@ -34,6 +28,15 @@ public class XSDConflictsResolver {
 
 	private static final List<String> types = Arrays.asList("SCGRecordEntry",
 			"SpecimenRecordEntry", "ParticipantRecordEntry");
+	
+	private static final Map<String, String> schemaMap = new HashMap<String, String>();
+	static {
+		schemaMap.put("gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration", "gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration.ws");
+		schemaMap.put("gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration", "gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws");
+		schemaMap.put("gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain", "gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws");		
+		schemaMap.put("edu.wustl.catissuecore.domain.xsd", "edu.wustl.catissuecore.domain.ws.xsd");
+		schemaMap.put("edu.common.dynamicextensions.domain.integration.xsd", "edu.common.dynamicextensions.domain.integration.ws.xsd");
+	}
 
 	public XSDConflictsResolver(String path) {
 		this.pathToSchemas = new File(path);
@@ -113,6 +116,14 @@ public class XSDConflictsResolver {
 								schemaFile.getName(), newFileName), null);
 			}
 		}
+		
+		log.info("Updating "+newSchemaFile.getName()+" to adjust namespaces to be '.ws'");
+		String schema = FileUtils.readFileToString(newSchemaFile, null);
+		for (String key : schemaMap.keySet()) {
+			String repl = schemaMap.get(key);
+			schema = schema.replace('\"'+key+'\"', '\"'+repl+'\"');
+		}
+		FileUtils.writeStringToFile(newSchemaFile, schema, null);
 	}
 
 	/**
