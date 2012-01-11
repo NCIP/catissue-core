@@ -996,13 +996,17 @@ public class CctsIntegrationBizLogic implements ICctsIntegrationBizLogic,
 				&& cpr.getActivityStatus() != null && cpr.getGridId() == null
 				&& !Arrays.equals(oldState, newState)) {
 			Utils.restoreDefaultHttpsURLHandler();
-			if (edu.wustl.common.util.global.Status.ACTIVITY_STATUS_ACTIVE
-					.toString().equalsIgnoreCase(cpr.getActivityStatus())) {
-				// Active registration. Invoke "enrollStudySubject".
-				enrollStudySubject(cpr);
-			} else {
-				// Take the subject off the study.
-				takeSubjectOffStudy(cpr);
+			try {
+				if (edu.wustl.common.util.global.Status.ACTIVITY_STATUS_ACTIVE
+						.toString().equalsIgnoreCase(cpr.getActivityStatus())) {
+					// Active registration. Invoke "enrollStudySubject".
+					enrollStudySubject(cpr);
+				} else {
+					// Take the subject off the study.
+					takeSubjectOffStudy(cpr);
+				}
+			} catch (Exception e) {
+				logger.error(e.getMessage(), e);
 			}
 		}
 	}
