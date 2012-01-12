@@ -34,6 +34,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import edu.common.dynamicextensions.domain.userinterface.Container;
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
@@ -62,7 +64,9 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 
 /**
  * @author renuka_bajpai
@@ -243,7 +247,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 
 				dynamicEventsForGrid.clear();
 				final Collection<ActionApplication> dynamicEventCollection = new NewSpecimenBizLogic()
-						.getDynamicEventColl(specimenId, bizLogic, null, dynamicEventsForGrid, null);
+						.getDynamicEventColl(specimenId, bizLogic, null, dynamicEventsForGrid);
 
 				/**
 				 * Name: Chetan Patil Reviewer: Sachin Lale Bug ID: Bug#4180
@@ -596,19 +600,16 @@ public class ListSpecimenEventParametersAction extends SecureAction
 	 * @param bizLogic
 	 *            : bizLogic
 	 * @return Collection : Collection
-	 * @throws BizLogicException
-	 *             : BizLogicException
+	 * @throws ApplicationException 
 	 */
 	private Collection<SpecimenEventParameters> getSpecimenEventParametersColl(Long specimenId,
-			IBizLogic bizLogic) throws BizLogicException
+			IBizLogic bizLogic) throws ApplicationException
 	{
-		String hql = " from edu.wustl.catissuecore.domain.SpecimenEventParameters as sep where sep.specimen.id="
-				+ specimenId
-				+ " and (sep.activityStatus!='"
-				+ Status.ACTIVITY_STATUS_DISABLED.getStatus() + "' OR sep.activityStatus is null)";
-		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		Collection<SpecimenEventParameters> specimenEventCollection = null;
-		specimenEventCollection = defaultBizLogic.executeQuery(hql);
+		HibernateDAO dao=(HibernateDAO) AppUtility.openDAOSession(null);	
+		Map<String, NamedQueryParam> queryParams = new HashMap<String, NamedQueryParam>();
+		queryParams.put("0", new NamedQueryParam(DBTypes.LONG, specimenId));
+		specimenEventCollection=dao.executeNamedQuery("fetchSpecimenEventParameterCollection", queryParams);
 		return specimenEventCollection;
 	}
 

@@ -368,7 +368,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 * @throws BizLogicException
 	 */
 
-	public Collection<ActionApplication> getDynamicEventColl(Long specimenId, IBizLogic bizLogic,Date creationTimeStamp, HashSet<ActionApplication> dynamicEventsForGrid,Long eventOrder)
+	public Collection<ActionApplication> getDynamicEventColl(Long specimenId, IBizLogic bizLogic,Date creationTimeStamp, HashSet<ActionApplication> dynamicEventsForGrid)
 			throws BizLogicException
 			{
 		Specimen specimen=null;
@@ -391,8 +391,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					}
 					else
 					{
-						//dynamicEventsForGrid.addAll(addEventsToGrid(creationTimeStamp,adhocEventColl));
-						addParentEventsToGrid(creationTimeStamp,dynamicEventsForGrid, eventOrder,adhocEventColl);
+						addParentEventsToGrid(creationTimeStamp,dynamicEventsForGrid,adhocEventColl);
 					}
 				}
 				// Add Creation Events of assigned Processing SPP.
@@ -408,7 +407,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					else
 					{
 						Collection<ActionApplication> parentSpecimenEventCollection=specimen.getProcessingSPPApplication().getSppActionApplicationCollection();
-						addParentEventsToGrid(creationTimeStamp,dynamicEventsForGrid, eventOrder,parentSpecimenEventCollection);
+						addParentEventsToGrid(creationTimeStamp,dynamicEventsForGrid,parentSpecimenEventCollection);
 					}
 				}
 			}
@@ -432,10 +431,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			parentId=getParentSpecimenId(specimenId);
 			if(parentId!=null) 
 			{
-				Action action=(Action) creationEvent.getApplicationRecordEntry().getFormContext();
-				eventOrder=action.getActionOrder();
 				specimenId=parentId;
-				getDynamicEventColl(specimenId,bizLogic,creationTimeStamp,dynamicEventsForGrid,eventOrder);
+				getDynamicEventColl(specimenId,bizLogic,creationTimeStamp,dynamicEventsForGrid);
 			}
 			// If parent specimen id is null, then move to specimen collection group.
 			else
@@ -452,11 +449,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 							continue; // ignore if not the spp using which the specimen was created
 						}
 
-						Action action =(Action) creationEvent.getApplicationRecordEntry().getFormContext();
-						long actionOrder=action.getActionOrder();
-
 						Collection<ActionApplication> scgEventCollection=sppApp.getSppActionApplicationCollection();
-						addParentEventsToGrid(creationTimeStamp,dynamicEventsForGrid, actionOrder,scgEventCollection);
+						addParentEventsToGrid(creationTimeStamp,dynamicEventsForGrid,scgEventCollection);
 					}
 				}
 			}
@@ -515,17 +509,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 * @param actionAppCollection
 	 */
 	private void addParentEventsToGrid(Date creationTimeStamp,
-			HashSet<ActionApplication> dynamicEventsForGrid, long actionOrder,
+			HashSet<ActionApplication> dynamicEventsForGrid,
 			Collection<ActionApplication> actionAppCollection) {
 		Iterator<ActionApplication> iterator=actionAppCollection.iterator();
 		while(iterator.hasNext())
 		{
 			ActionApplication actApp=iterator.next();
-			//Action specAction=(Action) actApp.getApplicationRecordEntry().getFormContext();
-			if(
-					//creationTimeStamp!=null &&
-					//specAction.getActionOrder()<=actionOrder && 
-					!actApp.getTimestamp().after(creationTimeStamp))
+			if(!actApp.getTimestamp().after(creationTimeStamp))
 			{
 				dynamicEventsForGrid.add(actApp);
 			}

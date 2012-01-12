@@ -214,7 +214,7 @@ public class DynamicEventAction extends BaseAction
 			{
 				request.getSession().setAttribute("OverrideCaption", "_" + eventId.toString());
 				iframeURL = "/catissuecore/LoadDataEntryFormAction.do?dataEntryOperation=insertParentData&useApplicationStylesheet=true&showInDiv=false&overrideCSS=true&overrideScroll=true"+(Boolean.parseBoolean(request.getParameter(Constants.CONTAINS_ERROR))?"&containerId=":"&containerIdentifier=")
-						+ eventId.toString() + "&OverrideCaption=" + "_" + eventId.toString()+"&showCalculateDefaultValue=false";
+						+ eventId.toString() + "&OverrideCaption=" + "_" + eventId.toString();
 				if (recordIdentifier != 0)
 				{
 					iframeURL = iframeURL + "&recordIdentifier=" + recordIdentifier;
@@ -310,7 +310,7 @@ public class DynamicEventAction extends BaseAction
 			iframeURL = iframeURL + "&FormContextIdentifier=" + formContxtId;
 		}
 		populateStaticAttributes(request, dynamicEventForm);
-		request.setAttribute("iframeURL", iframeURL);
+		request.setAttribute("iframeURL", iframeURL+"&showCalculateDefaultValue=false");
 		return mapping.findForward((String) request.getAttribute(Constants.PAGE_OF));
 	}
 

@@ -176,5 +176,10 @@
         </joined-subclass>
 
     </class>
+        
+    <query name="fetchSpecimenEventParameterCollection">
+    from edu.wustl.catissuecore.domain.SpecimenEventParameters
+    where specimen.id = ? and (activityStatus is null or activityStatus != 'Disabled' )
+	</query>
 
 </hibernate-mapping>
