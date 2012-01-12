@@ -1,6 +1,11 @@
 package edu.wustl.catissuecore.domain.dozer;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
+import org.springframework.util.ReflectionUtils;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +20,8 @@ public class GenericCollectionConverter {
 
     private GenericCollectionConverter() {
     }
-
+    
+    
     private static final String setsFile = "edu/wustl/catissuecore/domain/genericCustomConverterSets.properties";
     private static final String parentRefFile = "edu/wustl/catissuecore/domain/genericCustomConverterParentRef.properties";
     private static Map<String, Map> collections = new HashMap<String, Map>();
@@ -182,5 +188,13 @@ public class GenericCollectionConverter {
         }
 
     }
+
+	public static void setBackReference(Object value, Object destination) {
+		try {
+			BeanUtils.setProperty(value, destination.getClass().getSimpleName(), destination);
+		} catch (Exception e) {
+			log.warn("Unable to set property "+destination.getClass().getSimpleName()+" on "+value.getClass().getSimpleName());
+		} 
+	}
 
 }

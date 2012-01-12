@@ -35,12 +35,12 @@ public class GenericEventListener implements DozerEventListener {
 					(Collection)value);
 			GenericCollectionConverter.convertCollectionTypes(destination);
 			GenericCollectionConverter.adjustReference(destination);
-		}
-		if (value instanceof Serializable) {
+		} else 
+		if (value instanceof Serializable && !(value instanceof Number) && !(value instanceof Boolean) && !(value instanceof String)) {
 			WAPIUtility.nullifyFieldValue(value, "setId", "getId",
 					Long.class, null);
 			GenericCollectionConverter.convertCollectionTypes(value);
-			GenericCollectionConverter.adjustReference(value);			
+			GenericCollectionConverter.setBackReference(value, destination)		;
 		}
 
 		/*
