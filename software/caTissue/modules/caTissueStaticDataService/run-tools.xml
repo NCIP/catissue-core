@@ -332,8 +332,9 @@
 
 	<target name="-fixArtifacts">		
     	<echo>Fixing inconsistent XMIs and other artifacts...</echo>
-    	<replace dir="${dir}" includes="**/*" summary="true" token="ParticipantRecordEntry_Participant" value="ParticipantRecordEntryCollection">
-    	</replace>		
+    	<replace dir="${dir}" includes="**/*" summary="true" token="ParticipantRecordEntry_Participant" value="ParticipantRecordEntryCollection"/>
+		<replace dir="${dir}" includes="**/*" summary="true" token="SCGRecordEntry_SpecimenCollectionGroup" value="ScgRecordEntryCollection"/>		
+		<replace dir="${dir}" includes="**/*" summary="true" token="SpecimenRecordEntry_Specimen" value="SpecimenRecordEntryCollection"/>
 	</target>
 	
     <target name="-importXSDs">
