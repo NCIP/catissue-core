@@ -36,11 +36,11 @@ public class ClinincalStatusComboAction extends BaseAction
 		 String query = request.getParameter("query");
 		String start = request.getParameter("start");
 		final String  showOption = request.getParameter("showOption");
-		if(limit.equals(null))
+		if(null==limit || limit.equalsIgnoreCase("") || limit.equalsIgnoreCase(" "))
 		{
 			limit="0";
 		}
-		if(start.equals(null))
+		if(null==start || start.equalsIgnoreCase("") || start.equalsIgnoreCase(" "))
 		{
 			start="0";
 		}
