@@ -11,7 +11,7 @@
     -->
 
     <configuration>
-        <stop-on-errors>true</stop-on-errors>
+        <stop-on-errors>false</stop-on-errors>
         <wildcard>true</wildcard>
         <trim-strings>false</trim-strings>
         <bean-factory>edu.wustl.catissuecore.domain.beanfactories.GenericBeanFactory</bean-factory>
@@ -42,11 +42,18 @@
                 String type = umlClass.getName();
 
                 if (transformerUtils.isAssociationEndMany(otherEnd)) {
+                    if (otherEnd.getRoleName() != "") {			
+%>
+    <field><a><%=otherEnd.getRoleName()%></a><b><%=otherEnd.getRoleName()%>.<%=transformerUtils.lowerCase(type)%></b></field> <!-- This END: <%=thisEnd.getLowMultiplicity()+":"+thisEnd.getHighMultiplicity()%>; Other END: <%=otherEnd.getLowMultiplicity()+":"+otherEnd.getHighMultiplicity()%>   -->
+<%
+					}
+                }
+				if (!transformerUtils.isAssociationEndMany(otherEnd)) {
                     if (otherEnd.getRoleName() != "") {
 %>
-    <field><a><%=otherEnd.getRoleName()%></a><b><%=otherEnd.getRoleName()%>.<%=transformerUtils.lowerCase(type)%></b></field>
+    <field><a><%=otherEnd.getRoleName()%></a><b><%=otherEnd.getRoleName()%>.<%=transformerUtils.lowerCase(type)%></b></field> <!-- This END: <%=thisEnd.getLowMultiplicity()+":"+thisEnd.getHighMultiplicity()%>; Other END: <%=otherEnd.getLowMultiplicity()+":"+otherEnd.getHighMultiplicity()%>   --> 
 <%
-                }
+					}
                 }
             }
     }
