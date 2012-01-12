@@ -191,7 +191,8 @@ public class GenericCollectionConverter {
 
 	public static void setBackReference(Object value, Object destination) {
 		try {
-			BeanUtils.setProperty(value, destination.getClass().getSimpleName(), destination);
+			final String name = destination.getClass().getSimpleName();
+			BeanUtils.setProperty(value, name.substring(0, 1).toLowerCase()+name.substring(1), destination);
 		} catch (Exception e) {
 			log.warn("Unable to set property "+destination.getClass().getSimpleName()+" on "+value.getClass().getSimpleName());
 		} 
