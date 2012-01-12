@@ -369,6 +369,9 @@
             	<include name="ParticipantRecordEntry.xsd"/>			
 			</fileset>
     	</copy>
+    	
+    	<antcall target="all"/>   	            
+    	     	
     </target>
 
     <target name="-importXSD">
