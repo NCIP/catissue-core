@@ -9,7 +9,7 @@
     -->
 
     <configuration>
-        <stop-on-errors>true</stop-on-errors>
+        <stop-on-errors>false</stop-on-errors>
         <wildcard>true</wildcard>
         <trim-strings>false</trim-strings>
         <bean-factory>edu.wustl.catissuecore.domain.beanfactories.GenericBeanFactory</bean-factory>

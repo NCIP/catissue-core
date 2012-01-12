@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.domain.dozer;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +35,12 @@ public class GenericEventListener implements DozerEventListener {
 					(Collection)value);
 			GenericCollectionConverter.convertCollectionTypes(destination);
 			GenericCollectionConverter.adjustReference(destination);
+		}
+		if (value instanceof Serializable) {
+			WAPIUtility.nullifyFieldValue(value, "setId", "getId",
+					Long.class, null);
+			GenericCollectionConverter.convertCollectionTypes(value);
+			GenericCollectionConverter.adjustReference(value);			
 		}
 
 		/*
