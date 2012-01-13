@@ -1,2 +1,2 @@
-Specimen label,UserLoginName,Date (MM-DD-YYYY HH:MM),Comments,Fixation Type
-site1,admin@admin.com,10/03/2010,Fixed event test comment,RNALater
+"Label","Activity Status","Event Comments#1","Reason Deviation#1","User ID#1","Duration In Minutes#1#1","Fixation Type#1#1","Activity Entry#1"
+2,"Active","test","reason",1,20,"Compact","Active"
