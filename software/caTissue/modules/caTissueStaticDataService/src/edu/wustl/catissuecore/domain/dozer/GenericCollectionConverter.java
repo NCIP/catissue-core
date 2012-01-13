@@ -129,9 +129,6 @@ public class GenericCollectionConverter {
 
     public static void adjustReference(Object o) {
         String className = o.getClass().getCanonicalName();
-        String simpleClassName = o.getClass().getSimpleName();
-        String setterName = "set" + simpleClassName;
-
         log.debug(">>> Adjust references for class: " + className);
 
         Map<String, String> items = references.get(className);
@@ -156,17 +153,14 @@ public class GenericCollectionConverter {
                     Collection coll = (Collection)method.invoke(o);
 
                     if (coll != null) {
-                        for (Object collectionObject : coll) {
-                            log.debug(String.format(">>> Looking for the property %s() in the class %s", setterName, collectionObject.getClass().getCanonicalName()));
-                            Method setter = null;
-                            try {
-                            	setter = collectionObject.getClass().getMethod(setterName, o.getClass());
-                            } catch (NoSuchMethodException ex) {
-                            	log.warn(setterName+" was not found on "+collectionObject.getClass());
-                            	setter = collectionObject.getClass().getMethod(setterName+"_"+collectionObject.getClass().getSimpleName(), o.getClass());
-							}
-                            setter.invoke(collectionObject, o);
-                            log.debug(String.format(">>> %s injected into %s", o.getClass(), collectionObject.getClass().getCanonicalName()));
+                        for (Object collectionObject : coll) {                            
+                            Method setter = findSetter(collectionObject.getClass(), o, collectionObject);
+                            if (setter==null) {
+                            	log.error("Unable to find a setter for "+o.getClass().getCanonicalName()+" in "+collectionObject.getClass());
+                            } else {
+                            	setter.invoke(collectionObject, o);
+                                log.debug(String.format(">>> %s injected into %s", o.getClass(), collectionObject.getClass().getCanonicalName()));	
+                            }                            
                         }
                     }
 
@@ -188,6 +182,41 @@ public class GenericCollectionConverter {
         }
 
     }
+    
+	private static Method findSetter(Class clazz, Object o, Object collectionObject) {
+		String simpleClassName = o.getClass().getSimpleName();
+		String setterName = "set" + simpleClassName;
+		Method method = ReflectionUtils.findMethod(clazz, setterName,
+				new Class[] { o.getClass() });
+		if (method == null) {
+			log.warn(setterName + " was not found in " + clazz
+					+ ". Looking further...");
+			setterName = setterName + "_" + clazz.getSimpleName();
+			method = ReflectionUtils.findMethod(clazz, setterName,
+					new Class[] { o.getClass() });
+			if (method == null) {
+				log.warn(setterName
+						+ " was not found in "
+						+ clazz
+						+ " either. Looking for any 'set' method that takes a single argument assignable to "
+						+ simpleClassName + "...");
+				for (Method m : ReflectionUtils.getAllDeclaredMethods(clazz)) {
+					if (m.getName().startsWith("set")
+							&& m.getParameterTypes().length == 1
+							&& Void.class.equals(m.getReturnType())) {
+						Class paramType = m.getParameterTypes()[0];
+						if (paramType.isAssignableFrom(o.getClass())) {
+							log.warn("Found our setter: "+m.getName());
+							method = m;
+							break;
+						}
+					}
+				}
+			}
+		}
+		return method;
+
+	}
 
 	public static void setBackReference(Object value, Object destination) {
 		try {
