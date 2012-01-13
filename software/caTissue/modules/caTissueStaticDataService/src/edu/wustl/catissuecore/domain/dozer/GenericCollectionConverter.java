@@ -203,7 +203,7 @@ public class GenericCollectionConverter {
 				for (Method m : ReflectionUtils.getAllDeclaredMethods(clazz)) {
 					if (m.getName().startsWith("set")
 							&& m.getParameterTypes().length == 1
-							&& Void.class.equals(m.getReturnType())) {
+							&& void.class.equals(m.getReturnType())) {
 						Class paramType = m.getParameterTypes()[0];
 						if (paramType.isAssignableFrom(o.getClass())) {
 							log.warn("Found our setter: "+m.getName());
