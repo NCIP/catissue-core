@@ -147,7 +147,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param value the object which is mapped.
 	 */
 
-	public void setRequestFor(String key, Object value)
+	public void setRequestFor(String key, List value)
 	{
 		if (this.isMutable())
 		{
