@@ -2641,12 +2641,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		}
 		this.setExternalIdentifier(dao, specimen, persistentSpecimen);
 		updateCreationEvent(persistentSpecimen);
-		if(specimen.getSpecimenRecordEntryCollection() != null)
-		{
-			persistentSpecimen.setSpecimenRecordEntryCollection(specimen.getSpecimenRecordEntryCollection());
-		}
-		persistentSpecimen.setActionApplicationCollection(specimen.getActionApplicationCollection());
-		persistentSpecimen.setProcessingSPPApplication(specimen.getProcessingSPPApplication());
 	}
 
 	/**
