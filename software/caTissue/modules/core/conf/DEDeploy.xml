@@ -1669,17 +1669,23 @@
 				=================================	-->
 
 	<target name="handle.cacore.generation.for.deploy.app">
-				<antcall target="export_xmi">
-					<param name="setup.method.required" value="False" />
-					<param name="groupname" value="${entitygroupname}" />
-					<param name="relative.filename" value="${xmi.filename}" />
-					<param name="version" value="${version.number}" />
-					<param name="hookentity" value="${hook.entity.value}" />
-				</antcall>
-				<!--Step: generate caCORE-->
-				<antcall target="generate.cacore" />
+		<antcall target="export_xmi">
+			<param name="setup.method.required" value="False" />
+			<param name="groupname" value="${entitygroupname}" />
+			<param name="relative.filename" value="${xmi.filename}" />
+			<param name="version" value="${version.number}" />
+			<param name="hookentity" value="${hook.entity.value}" />
+		</antcall>
+		<!--Step: generate caCORE-->
+		<antcall target="generate.cacore" />
+		
+		<!--Step: Update caCORE satus-->
+		<antcall target="updateGroup:cacore:status">
+			<param name = "group.name" value="${entitygroupname}"/>
+		</antcall>
 				
 	</target>
+	
 	<property name="host.war.temp" value="host.war.temp" />
 	<property name="host.war.name" value="catissuecore.war" />
 	
