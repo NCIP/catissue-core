@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.dozer.DozerEventListener;
 import org.dozer.event.DozerEvent;
+import org.dozer.fieldmap.FieldMap;
 
 import edu.wustl.catissuecore.domain.service.WAPIUtility;
 
@@ -30,11 +31,15 @@ public class GenericEventListener implements DozerEventListener {
 	public void postWritingDestinationValue(DozerEvent event) {
 		Object destination = event.getDestinationObject();
 		Object value = event.getDestinationValue();
+		FieldMap map = event.getFieldMap();
 		if (value instanceof List) {
 			WAPIUtility.nullifyFieldValue("setId", "getId", Long.class, null,
 					(Collection)value);
 			GenericCollectionConverter.convertCollectionTypes(destination);
 			GenericCollectionConverter.adjustReference(destination);
+			
+			map.writeDestValue(destination, new HashSet((List)value));
+			
 		} else 
 		if (value instanceof Serializable && !(value instanceof Number) && !(value instanceof Boolean) && !(value instanceof String)) {
 			WAPIUtility.nullifyFieldValue(value, "setId", "getId",
