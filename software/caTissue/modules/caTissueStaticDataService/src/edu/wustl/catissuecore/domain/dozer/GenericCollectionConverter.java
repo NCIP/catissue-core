@@ -153,15 +153,7 @@ public class GenericCollectionConverter {
                     Collection coll = (Collection)method.invoke(o);
 
                     if (coll != null) {
-                        for (Object collectionObject : coll) {                            
-                            Method setter = findSetter(collectionObject.getClass(), o, collectionObject);
-                            if (setter==null) {
-                            	log.error("Unable to find a setter for "+o.getClass().getCanonicalName()+" in "+collectionObject.getClass());
-                            } else {
-                            	setter.invoke(collectionObject, o);
-                                log.debug(String.format(">>> %s injected into %s", o.getClass(), collectionObject.getClass().getCanonicalName()));	
-                            }                            
-                        }
+                        setBackReferences(o, coll);
                     }
 
                 } catch (ClassNotFoundException e1) {
@@ -182,8 +174,29 @@ public class GenericCollectionConverter {
         }
 
     }
+
+	/**
+	 * @param backRef
+	 * @param c
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	public static void setBackReferences(Object backRef, Collection c)
+			throws IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException {
+		for (Object collectionObject : c) {                            
+		    Method setter = findSetter(collectionObject.getClass(), backRef);
+		    if (setter==null) {
+		    	log.error("Unable to find a setter for "+backRef.getClass().getCanonicalName()+" in "+collectionObject.getClass());
+		    } else {
+		    	setter.invoke(collectionObject, backRef);
+		        log.debug(String.format(">>> %s injected into %s", backRef.getClass(), collectionObject.getClass().getCanonicalName()));	
+		    }                            
+		}
+	}
     
-	private static Method findSetter(Class clazz, Object o, Object collectionObject) {
+	private static Method findSetter(Class clazz, Object o) {
 		String simpleClassName = o.getClass().getSimpleName();
 		String setterName = "set" + simpleClassName;
 		Method method = ReflectionUtils.findMethod(clazz, setterName,
@@ -220,10 +233,12 @@ public class GenericCollectionConverter {
 
 	public static void setBackReference(Object value, Object destination) {
 		try {
-			final String name = destination.getClass().getSimpleName();
-			BeanUtils.setProperty(value, name.substring(0, 1).toLowerCase()+name.substring(1), destination);
+			Method m = findSetter(value.getClass(), destination);
+			m.invoke(value, destination);
+			//final String name = destination.getClass().getSimpleName();
+			//BeanUtils.setProperty(value, name.substring(0, 1).toLowerCase()+name.substring(1), destination);
 		} catch (Exception e) {
-			log.warn("Unable to set property "+destination.getClass().getSimpleName()+" on "+value.getClass().getSimpleName());
+			log.warn("Unable to set property "+destination.getClass().getSimpleName()+" on "+value.getClass().getSimpleName()+" due to "+e.getMessage());
 		} 
 	}
 

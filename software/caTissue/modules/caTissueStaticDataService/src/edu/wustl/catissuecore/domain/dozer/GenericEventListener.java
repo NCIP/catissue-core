@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.domain.dozer;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -34,18 +35,24 @@ public class GenericEventListener implements DozerEventListener {
 		FieldMap map = event.getFieldMap();
 		if (value instanceof List) {
 			WAPIUtility.nullifyFieldValue("setId", "getId", Long.class, null,
-					(Collection)value);
+					(Collection) value);
 			GenericCollectionConverter.convertCollectionTypes(destination);
 			GenericCollectionConverter.adjustReference(destination);
-			
-			map.writeDestValue(destination, new HashSet((List)value));
-			
-		} else 
-		if (value instanceof Serializable && !(value instanceof Number) && !(value instanceof Boolean) && !(value instanceof String)) {
-			WAPIUtility.nullifyFieldValue(value, "setId", "getId",
-					Long.class, null);
+
+			map.writeDestValue(destination, new HashSet((List) value));
+			try {
+				GenericCollectionConverter.setBackReferences(destination,
+						(List) value);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+
+		} else if (value instanceof Serializable && !(value instanceof Number)
+				&& !(value instanceof Boolean) && !(value instanceof String)) {
+			WAPIUtility.nullifyFieldValue(value, "setId", "getId", Long.class,
+					null);
 			GenericCollectionConverter.convertCollectionTypes(value);
-			GenericCollectionConverter.setBackReference(value, destination)		;
+			GenericCollectionConverter.setBackReference(value, destination);
 		}
 
 		/*
