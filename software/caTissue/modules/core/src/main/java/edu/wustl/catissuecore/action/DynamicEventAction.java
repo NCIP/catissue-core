@@ -165,13 +165,13 @@ public class DynamicEventAction extends BaseAction
 			dynamicEventForm.setEventName(eventName);
 
 			eventId=(Long) dynamicEventMap.get(eventName);
-			String query="Select IS_CACORE_GENERATED from dyextn_entity_group where IDENTIFIER = (select ENTITY_GROUP_ID from dyextn_container where IDENTIFIER="+eventId+")";
+			/*String query="Select IS_CACORE_GENERATED from dyextn_entity_group where IDENTIFIER = (select ENTITY_GROUP_ID from dyextn_container where IDENTIFIER="+eventId+")";
 			List result=AppUtility.executeSQLQuery(query);
 			Boolean isCaCoreGenerated=Boolean.parseBoolean(((List) result.get(0)).get(0).toString());
 			if(!isCaCoreGenerated)
 			{
 				request.setAttribute("isCaCoreGenerated", true);
-			}
+			}*/
 			if (Boolean.parseBoolean(request.getParameter("showDefaultValues")))
 			{
 				IBizLogic defaultBizLogic = new CatissueDefaultBizLogic();
