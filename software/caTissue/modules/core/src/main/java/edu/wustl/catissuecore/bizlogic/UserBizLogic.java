@@ -1254,10 +1254,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
                 sessionDataBean.setUserName(csmUser.getLoginName());
             }
 
-            if (!oldUser.getEmailAddress().equals(user.getEmailAddress()))
-            {
-                updateWustlKey(user,userUIObject);
-            }
+           
+   
         }
         catch (final SMException smExp)
         {
@@ -2637,40 +2635,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
         }
     }
 
-    /**
-     * This method will migrate user to WUSTLKey.
-     *
-     * @param user
-     *            Object of USER
-     *
-     * @throws BizLogicException
-     *             Object of BizLogicException
-     */
-    private void updateWustlKey(final User user,UserUIObject userUIObject) throws BizLogicException
-    {
-        try
-        {
-            if (userUIObject.getTargetIdpLoginName() != null)
-            {
-                final String queryStr = "UPDATE CSM_MIGRATE_USER SET LOGIN_NAME=? WHERE WUSTLKEY =?";
-                final List<ColumnValueBean> parameters = new ArrayList<ColumnValueBean>();
-                final ColumnValueBean loginNameBean = new ColumnValueBean(user.getLoginName());
-                final ColumnValueBean wustlKeyNameBean = new ColumnValueBean(userUIObject.getTargetIdpLoginName());
-
-                parameters.add(loginNameBean);
-                parameters.add(wustlKeyNameBean);
-
-                Utility.executeQueryUsingDataSource(queryStr, parameters, true,
-                        edu.wustl.wustlkey.util.global.Constants.APPLICATION_NAME);
-            }
-        }
-        catch (final ApplicationException e)
-        {
-            UserBizLogic.LOGGER.error(e.getMessage(), e);
-            throw new BizLogicException(ErrorKey.getErrorKey("db.update.data.error"), e,
-                    "Error in database operation");
-        }
-    }
+    
 
     /* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bizlogic.IUserBizLogic#getUser(java.lang.String)
