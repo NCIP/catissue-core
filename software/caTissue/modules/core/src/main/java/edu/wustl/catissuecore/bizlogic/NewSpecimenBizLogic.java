@@ -746,18 +746,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 *            the pos1
 	 * @param pos2
 	 *            the pos2
-	 *
-	 * @throws BizLogicException
-	 *             Database related Exception
-	 * @throws DAOException
-	 *             : DAOException User Not Authorized Exception
-	 * @throws SMException
-	 *             : SMException Bug 15392
 	 */
 	private void populateDomainObjectToInsert(final DAO dao,
 			final SessionDataBean sessionDataBean, Specimen specimen,
 			Integer pos1, Integer pos2, SpecimenUIObject specUiObject)
-					throws BizLogicException, DAOException, SMException {
+					throws ApplicationException {
 		this.setSpecimenCreatedOnDate(specimen);
 		this.setSpecimenParent(specimen, dao);
 		// bug no. 4265
@@ -1009,14 +1002,23 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 *
 	 * @param specimen
 	 *            : specimen
+	 * @throws ApplicationException 
+	
+	  
 	 */
-	private void setSpecimenCreatedOnDate(Specimen specimen)
+	private void setSpecimenCreatedOnDate(Specimen specimen) throws ApplicationException 
 	{
-		if (specimen.getCreatedOn() == null)
+		if (specimen.getCreatedOn() == null && specimen.getParentSpecimen()==null) 
 		{
-			specimen.setCreatedOn(Calendar.getInstance().getTime());
+			
+			specimen.setCreatedOn(new SpecimenCollectionGroupBizLogic().encounterDateFromScg(specimen.getSpecimenCollectionGroup()));
+		}
+		else
+		{
+				specimen.setCreatedOn(Calendar.getInstance().getTime());
 		}
 	}
+	
 
 	/**
 	 * Sets the quantity.
@@ -1055,17 +1057,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 *            the pos1
 	 * @param pos2
 	 *            the pos2
-	 *
-	 * @throws BizLogicException
-	 *             Database related exception
-	 * @throws SMException
-	 *             Security related exception
-	 * @throws DAOException
-	 *             : DAOException Bug 15392
+	 * @throws ApplicationException 
 	 */
 	private void insertChildSpecimens(Specimen specimen, DAO dao,
 			SessionDataBean sessionDataBean, Integer pos1, Integer pos2)
-					throws BizLogicException, DAOException, SMException {
+					throws ApplicationException {
 		SpecimenUIObject specUIObject = new SpecimenUIObject();
 		final Collection<AbstractSpecimen> childSpecimenCollection = specimen
 				.getChildSpecimenCollection();

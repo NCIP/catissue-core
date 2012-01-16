@@ -328,7 +328,25 @@ function calculateAge()
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}
-		var applyToSpecimen;
+	var applyToSpecimen;
+	function checkForChanges()
+	{
+		var originalCollectionDate = document.getElementById('originalCollectionDate').value;
+		var uicollectiondate=document.getElementById('collectionDate').value;
+		if(uicollectiondate!=originalCollectionDate)
+		{
+			var appResources = "The updated Collection Date will be propagated to all specimens under this Specimen Collection Group and override any existing data. Do you want to continue?";
+			var answer = confirm(appResources);
+			if(answer)
+			{
+				applyToSpecimen = 'true';
+			}
+			else
+			{
+				applyToSpecimen = 'false';
+			}
+		}
+	}
 		function confirmDisableForSCG(action,formField)
 		{
 			var temp = action+"&applyToSpecimenValue="+applyToSpecimen;

@@ -50,8 +50,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	if(operation.equals(Constants.EDIT))
 	{
 		confirmDisableFuncName = "confirmDisableForSCG('" + formName +"',document.forms[0].activityStatus)";
-		normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
-		forwardToSubmit =  forwardToSubmitFuctionName + ","+confirmDisableFuncName;
+		normalSubmit = "checkForChanges(),"+normalSubmitFunctionName + ","+confirmDisableFuncName;
+		forwardToSubmit = "checkForChanges(),"+forwardToSubmitFuctionName + ","+confirmDisableFuncName;
 
 		if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
 		{
@@ -64,7 +64,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	confirmDisableFuncNameForMultipleSpecimen =  "confirmDisableForSCG('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
 		}
 
-		forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
+		forwardToSubmitForMultipleSpecimen = "checkForChanges(),"+forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
 	}
 	else
 	{
@@ -551,6 +551,7 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 	<%@ include file="SpecimenCollectionGroupPageButtons.jsp" %>
 	</table>
 	</div>
+
 
 
 

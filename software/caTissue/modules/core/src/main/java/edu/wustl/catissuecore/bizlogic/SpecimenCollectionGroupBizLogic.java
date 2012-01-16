@@ -802,7 +802,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			// Populating Events in all specimens
 			if(scgUIObject.isApplyEventsToSpecimens()) //(specimenCollectionGroup.isApplyEventsToSpecimens())
 			{
-				this.updateEvents(copiedSCGEventsColl, oldspecimenCollectionGroup, sessionDataBean);
+				this.updateParentSpecimens(dao,persistentSCG);
 			}
 
 			// Disable the related specimens to this specimen group
@@ -976,45 +976,23 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	}
 
 	/**
-	 * @param newEventColl : newEventColl
-	 * @param oldspecimenCollectionGroup : oldspecimenCollectionGroup
+	 * @param PersistentCollectionGroup : persistent specimenCollectionGroup
 	 * @param dao : dao
 	 * @param sessionDataBean : sessionDataBean
 	 * @throws BizLogicException : BizLogicException
+	 * @throws DAOException 
 	 */
-	private void updateEvents(Collection newEventColl,
-			SpecimenCollectionGroup oldspecimenCollectionGroup, SessionDataBean sessionDataBean)
-			throws BizLogicException
+	private void updateParentSpecimens(DAO dao,SpecimenCollectionGroup newSCG)
+			throws BizLogicException, DAOException
 	{
-		if (newEventColl != null && !newEventColl.isEmpty())
+		Collection<Specimen> specimenCollection=newSCG.getSpecimenCollection();
+		for(Specimen specimenObject:specimenCollection)
 		{
-			final Iterator newEventCollIter = newEventColl.iterator();
-			while (newEventCollIter.hasNext())
+			if(specimenObject.getParentSpecimen()==null)
 			{
-			}
-		}
-		final Collection<Specimen> specimenColl = oldspecimenCollectionGroup
-				.getSpecimenCollection();
-		if (specimenColl != null && !specimenColl.isEmpty())
-		{
-			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final SpecimenEventParametersBizLogic specimenEventParametersBizLogic = (SpecimenEventParametersBizLogic) factory
-					.getBizLogic(Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID);
-			final Iterator<Specimen> iter = specimenColl.iterator();
-			while (iter.hasNext())
-			{
-				final Specimen specimen = (Specimen) iter.next();
-				final Collection<SpecimenEventParameters> eventColl = specimen
-						.getSpecimenEventCollection();
-				if (eventColl != null && !eventColl.isEmpty())
-				{
-					final Iterator eventIter = eventColl.iterator();
-					while (eventIter.hasNext())
-					{
-						final Object eventObj = eventIter.next();
-
-					}
-				}
+				Specimen  oldSpecimen=new ObjectCloner().clone(specimenObject);
+				specimenObject.setCreatedOn(newSCG.getEncounterTimestamp());
+				dao.update(specimenObject, oldSpecimen);
 			}
 		}
 	}
@@ -3397,6 +3375,18 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				}
 				
 				specimenCollectionGroup.setAgeAtCollection(newAgeAtCollection);
+				if(newObject.getCollectionProtocolRegistrationCollection()==null)
+				{
+					final Collection cprCollection = (Collection) this.retrieveAttribute(dao,
+							Participant.class, newObject.getId(),
+							"elements(collectionProtocolRegistrationCollection)");
+					newObject.setCollectionProtocolRegistrationCollection(cprCollection);
+				}
+				System.out.println("ok");
+				final Collection consentTierStatusCollection = (Collection) this.retrieveAttribute(dao,
+						SpecimenCollectionGroup.class, specimenCollectionGroup.getId(),
+						"elements(consentTierStatusCollection)");
+				scgOldObject.setConsentTierStatusCollection(consentTierStatusCollection);
 				
 				dao.update(specimenCollectionGroup,scgOldObject);
 				
@@ -3420,5 +3410,26 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			    scgObject.setAgeAtCollection(newAgeAtCollection);
 		    }
 		}
+	}
+	public Date encounterDateFromScg(SpecimenCollectionGroup scg) throws ApplicationException
+	{
+		Date creationDate=null;
+		if(scg.getEncounterTimestamp()!=null)
+		{
+			creationDate=scg.getEncounterTimestamp();
+		}
+		else
+		{
+			String hql="select encounterTimestamp from edu.wustl.catissuecore.domain.SpecimenCollectionGroup  " +
+					"where id="+scg.getId();
+			List result;
+			
+				result = AppUtility.executeQuery(hql);
+				if(!result.isEmpty() && result!=null)
+				{
+					creationDate=(Date)result.get(0);
+				}
+		}
+		return creationDate;
 	}
 }
