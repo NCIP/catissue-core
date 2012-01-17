@@ -28,7 +28,7 @@ for (UMLClass c:transformerUtils.getAllClasses(model)) {
                 if (transformerUtils.isAssociationEndMany(otherEnd)) {
                     if (otherEnd.getRoleName() != "") {
 %>
-<%=transformerUtils.getFullPackageName(c)%>.<%=c.getName()%>.get<%=transformerUtils.upperCase(otherEnd.getRoleName())%>=true
+<%=transformerUtils.getFullPackageName(c)%>.<%=c.getName()%>.get<%=otherEnd.getRoleName().substring(0, 1).toUpperCase().concat(otherEnd.getRoleName().substring(1))%>=true
 <%
                     }
                 }

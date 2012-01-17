@@ -22,10 +22,10 @@ for (UMLClass c:transformerUtils.getAllClasses(model)) {
                 UMLClass umlClass = (UMLClass)otherEnd.getUMLElement();
                 String type = umlClass.getName();
 
-                if (transformerUtils.isAssociationEndMany(otherEnd)) {
+                if (transformerUtils.isAssociationEndMany(otherEnd)) {        
                     if (otherEnd.getRoleName() != "") {
 %>
-<%=transformerUtils.getFullPackageName(c)%>.<%=c.getName()%>.get<%=transformerUtils.upperCase(otherEnd.getRoleName())%>=java.util.HashSet
+<%=transformerUtils.getFullPackageName(c)%>.<%=c.getName()%>.get<%=otherEnd.getRoleName().substring(0, 1).toUpperCase().concat(otherEnd.getRoleName().substring(1))%>=java.util.HashSet
 <%
                     }
                 }
