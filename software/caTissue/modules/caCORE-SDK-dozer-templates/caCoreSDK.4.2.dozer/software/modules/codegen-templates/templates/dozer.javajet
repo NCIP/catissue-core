@@ -41,17 +41,17 @@
                 UMLClass umlClass = (UMLClass)otherEnd.getUMLElement();
                 String type = umlClass.getName();
 
-                if (transformerUtils.isAssociationEndMany(otherEnd)) {
+                if (transformerUtils.isAssociationEndMany(otherEnd)) {           
                     if (otherEnd.getRoleName() != "") {			
 %>
-    <field><a><%=otherEnd.getRoleName()%></a><b><%=otherEnd.getRoleName()%>.<%=transformerUtils.lowerCase(type)%></b></field> <!-- This END: <%=thisEnd.getLowMultiplicity()+":"+thisEnd.getHighMultiplicity()%>; Other END: <%=otherEnd.getLowMultiplicity()+":"+otherEnd.getHighMultiplicity()%>   -->
+    <field><a><%=otherEnd.getRoleName()%></a><b><%=otherEnd.getRoleName()%>.<%=type.substring(0, 1).toLowerCase().concat(type.substring(1))%></b></field> <!-- This END: <%=thisEnd.getLowMultiplicity()+":"+thisEnd.getHighMultiplicity()%>; Other END: <%=otherEnd.getLowMultiplicity()+":"+otherEnd.getHighMultiplicity()%>   -->
 <%
 					}
                 }
 				if (!transformerUtils.isAssociationEndMany(otherEnd)) {
                     if (otherEnd.getRoleName() != "") {
 %>
-    <field><a><%=otherEnd.getRoleName()%></a><b><%=otherEnd.getRoleName()%>.<%=transformerUtils.lowerCase(type)%></b></field> <!-- This END: <%=thisEnd.getLowMultiplicity()+":"+thisEnd.getHighMultiplicity()%>; Other END: <%=otherEnd.getLowMultiplicity()+":"+otherEnd.getHighMultiplicity()%>   --> 
+    <field><a><%=otherEnd.getRoleName()%></a><b><%=otherEnd.getRoleName()%>.<%=type.substring(0, 1).toLowerCase().concat(type.substring(1))%></b></field> <!-- This END: <%=thisEnd.getLowMultiplicity()+":"+thisEnd.getHighMultiplicity()%>; Other END: <%=otherEnd.getLowMultiplicity()+":"+otherEnd.getHighMultiplicity()%>   --> 
 <%
 					}
                 }
