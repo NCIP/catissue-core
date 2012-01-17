@@ -418,10 +418,14 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				// if no creation event do not display any more
 				return dynamicEventsForGrid;
 			}
-			if(creationTimeStamp==null && creationEvent!=null)
-			{
-				creationTimeStamp=creationEvent.getTimestamp();
-			}
+			
+			
+			//
+			// Use the creation timestamp of current specimen to filter events of
+			// parent specimen or SCG
+			//
+			//
+			creationTimeStamp = creationEvent.getTimestamp();
 
 			// Add creation Events of SPP application of parent specimen.
 			// If parent specimen is not null. then get the sppApplication of parent specimen
