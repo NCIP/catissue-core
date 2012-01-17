@@ -436,13 +436,27 @@
 		ivy:setup:codegen:compile" description="Updates the local ivy repository for all build and test dependencies." />
 
 	<target name="ivy:setup:codegen:runtime" depends="ivy:init">
+		<copy todir="${project.lib.dir}/codegen-runtime">
+			<fileset dir="${common.dir}/lib/codegen-runtime">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+<!--		
 		<ivy:resolve refresh="true" conf="codegen-runtime" />
 		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="codegen-runtime" />
+-->		
 	</target>
 
 	<target name="ivy:setup:codegen:compile" depends="ivy:init">
+		<copy todir="${project.lib.dir}/codegen-compile">
+			<fileset dir="${common.dir}/lib/codegen-compile">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+<!--
 		<ivy:resolve refresh="true" conf="codegen-compile" />
 		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="codegen-compile" />
+-->
 	</target>
 
 	<target name="-compile:application-code" depends="-init, ivy:setup:codegen:compile,-generate-codegen" description="Compiles all subproject code">
@@ -566,7 +580,15 @@
 		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}"/>
 	</target>
 
-	<target name="ivy:publish" description="--> publish this project in the ivy repository">
+	<target name="ivy:publish" description="publish this project in the ivy repository">
+		<tstamp>
+			<format property="now" pattern="yyyyMMddHHmmss" />
+		</tstamp>
+		<property name="version" value="${sdk.version}" />
+	</target>
+
+<!--
+	<target name="ivy:publish" description="publish this project in the ivy repository">
 		<tstamp>
 			<format property="now" pattern="yyyyMMddHHmmss" />
 		</tstamp>
@@ -574,29 +596,57 @@
 		<ivy:publish artifactspattern="${target.module.dir}/${module.name}/lib/[artifact].[ext]" resolver="shared-local-repo"  
 			pubrevision="${version}" status="release" forcedeliver="true" pubdate="${now}" update="true" overwrite="true" />
 	</target>
-	
+-->	
 	<target name="ivy:package-drivers" depends="ivy:init">
+		<copy todir="${project.lib.dir}/drivers">
+			<fileset dir="${common.dir}/lib/drivers">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+<!--	
 		<ivy:resolve refresh="true" conf="drivers" />
 		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="drivers" />
+-->		
 	</target>
 
 	
 	<target name="ivy:package-remote-client" depends="ivy:init,ivy:package-writable-api">
+		<copy todir="${project.lib.dir}/remote-client">
+			<fileset dir="${common.dir}/lib/remote-client">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+<!--
 		<ivy:resolve refresh="true" conf="remote-client" />
 		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="remote-client" />
+-->		
 	</target>
 
 	<target name="ivy:package-local-client" depends="ivy:init,ivy:package-writable-api">
+		<copy todir="${project.lib.dir}/local-client">
+			<fileset dir="${common.dir}/lib/local-client">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+<!--
 		<ivy:resolve refresh="true" conf="local-client" />
 		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="local-client" />
+-->
 	</target>
 
 	<target name="ivy:package-writable-api" depends="ivy:init">
 		<if>
 			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" />
 			<then>
+				<copy todir="${project.lib.dir}/writable-api">
+					<fileset dir="${common.dir}/lib/writable-api">
+						<include name="**/*.*" />
+					</fileset>
+				</copy>
+<!--	
 				<ivy:resolve refresh="true" conf="writable-api" />
 				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="writable-api" />
+-->
 			</then>
 		</if>
 	</target>
@@ -605,8 +655,15 @@
 		<if>
 			<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" />
 			<then>
+				<copy todir="${project.lib.dir}/system-logging">
+					<fileset dir="${common.dir}/lib/system-logging">
+						<include name="**/*.*" />
+					</fileset>
+				</copy>
+<!--
 				<ivy:resolve refresh="true" conf="system-logging" />
 				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="system-logging" />
+-->				
 			</then>
 		</if>
 	</target>
@@ -615,8 +672,15 @@
 		<if>
 			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" />
 			<then>
+				<copy todir="${project.lib.dir}/writable-api-client">
+					<fileset dir="${common.dir}/lib/writable-api-client">
+						<include name="**/*.*" />
+					</fileset>
+				</copy>
+<!--
 				<ivy:resolve refresh="true" conf="writable-api-client" />
 				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="writable-api-client" />
+-->				
 			</then>
 		</if>
 	</target>
@@ -625,8 +689,15 @@
 		<if>
 			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
 			<then>
+				<copy todir="${project.lib.dir}/security-api">
+					<fileset dir="${common.dir}/lib/security-api">
+						<include name="**/*.*" />
+					</fileset>
+				</copy>
+<!--
 				<ivy:resolve refresh="true" conf="security-api" />
 				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="security-api" />
+-->				
 			</then>
 		</if>
 	</target>
@@ -635,8 +706,15 @@
 		<if>
 			<equals arg1="${SECURITY_ENABLED}" arg2="true" />
 			<then>
+				<copy todir="${project.lib.dir}/security-api-client">
+					<fileset dir="${common.dir}/lib/security-api-client">
+						<include name="**/*.*" />
+					</fileset>
+				</copy>
+<!--			
 				<ivy:resolve refresh="true" conf="security-api-client" />
 				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="security-api-client" />
+-->
 			</then>
 		</if>
 	</target>
@@ -645,8 +723,15 @@
 		<if>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
 			<then>
+				<copy todir="${project.lib.dir}/grid-jaas-client">
+					<fileset dir="${common.dir}/lib/grid-jaas-client">
+						<include name="**/*.*" />
+					</fileset>
+				</copy>
+<!--
 				<ivy:resolve refresh="true" conf="grid-jaas-client" />
 				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="grid-jaas-client" />
+-->				
 			</then>
 		</if>
 	</target>
@@ -655,35 +740,77 @@
 		<if>
 			<equals arg1="${GRID_LOGIN_MODULE_ENABLED}" arg2="true" />
 			<then>
+				<copy todir="${project.lib.dir}/grid-jaas">
+					<fileset dir="${common.dir}/lib/grid-jaas">
+						<include name="**/*.*" />
+					</fileset>
+				</copy>
+<!--			
 				<ivy:resolve refresh="true" conf="grid-jaas" />
 				<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="grid-jaas" />
+-->				
 			</then>
 		</if>
 	</target>
 
 	<target name="ivy:package-webapp" depends="ivy:init">
+		<copy todir="${project.lib.dir}/webapp">
+			<fileset dir="${common.dir}/lib/webapp">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+<!--
 		<ivy:resolve refresh="true" conf="webapp" />
 		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="webapp" />
+-->		
 	</target>
 
 	<target name="ivy:package-server-tomcat" depends="ivy:init">
+		<copy todir="${project.lib.dir}/server-tomcat">
+			<fileset dir="${common.dir}/lib/server-tomcat">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+<!--
 		<ivy:resolve refresh="true" conf="server-tomcat" />
 		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="server-tomcat" />
+-->
 	</target>
 
 	<target name="ivy:package-server-jboss" depends="ivy:init">
+		<copy todir="${project.lib.dir}/server-jboss">
+			<fileset dir="${common.dir}/lib/server-jboss">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+<!--		
 		<ivy:resolve refresh="true" conf="server-jboss" />
 		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="server-jboss" />
+-->		
 	</target>
 
 	<target name="ivy:package-ws-client" depends="ivy:init">
+		<copy todir="${project.lib.dir}/ws-client">
+			<fileset dir="${common.dir}/lib/ws-client">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+<!--		
 		<ivy:resolve refresh="true" conf="ws-client" />
 		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="ws-client" />
+-->		
 	</target>
 
 	<target name="ivy:package-grid-login-service" depends="ivy:init">
+		<copy todir="${project.lib.dir}/grid-login-service">
+			<fileset dir="${common.dir}/lib/grid-login-service">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+<!--
 		<ivy:resolve refresh="true" conf="grid-login-service" />
 		<ivy:retrieve pattern="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="grid-login-service" />
+-->		
 	</target>
 
 	<!-- ******************************************************************* -->
