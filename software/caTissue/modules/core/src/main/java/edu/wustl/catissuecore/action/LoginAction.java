@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMessages;
 import edu.wustl.auth.exception.AuthFileParseException;
 import edu.wustl.auth.exception.AuthenticationException;
 import edu.wustl.catissuecore.actionForm.LoginForm;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.factory.utils.UserUtility;
@@ -137,11 +138,6 @@ public class LoginAction extends XSSSupportedAction
                 forwardTo = mapping.findForward(validateUser(request, loginResult));
             }
 
-            if (!Constants.FAILURE.equals(forwardTo)
-                    && MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()))
-            {
-                forwardTo = mapping.findForward(Constants.SUCCESS);
-            }
         }
         else
         {
@@ -289,7 +285,7 @@ public class LoginAction extends XSSSupportedAction
      * @throws CatissueException
      */
     private String performAdminChecks(final HttpServletRequest request, final User validUser,
-            final LoginResult loginResult) throws CatissueException
+            final LoginResult loginResult) throws CatissueException, ApplicationException
     {
         String forwardTo = edu.wustl.wustlkey.util.global.Constants.PAGE_NON_WASHU;
 
@@ -304,19 +300,26 @@ public class LoginAction extends XSSSupportedAction
         {
             forwardTo = handleUserWithNoRole(request, session);
         }
-
-        String result = Constants.SUCCESS;
-        // do not check for first time login and login expiry for wustl key user
-        // and migrated washu users
-        if (isToCheckForPasswordExpiry(loginResult, validRole))
+        else
         {
-            result = CatissueLoginProcessor.isPasswordExpired(validUser);
-        }
-
-        LOGGER.info("Result: " + result);
-        if (!result.equals(Constants.SUCCESS))
-        {
-            forwardTo = handleChangePassword(request, session, sessionData, result);
+	        String result = CatissueLoginProcessor.isPasswordExpired(validUser);
+		    if (result.equals(Constants.SUCCESS))
+	        {
+		    	final UserBizLogic ubizlogic=new UserBizLogic();
+		    	if(ubizlogic.getMigrationStatus(validUser).equals(MigrationState.DO_NOT_MIGRATE.toString()))
+		    	{
+		    		forwardTo=edu.wustl.wustlkey.util.global.Constants.PAGE_NON_WASHU;
+		    	}
+		    	else
+		    	{
+		    		forwardTo = Constants.SUCCESS;
+		    	}
+	        }
+		    else if(!result.equals(Constants.SUCCESS))
+		    {
+		    	forwardTo = handleChangePassword(request, session, sessionData, result);
+		    }
+		    	
         }
 
         LOGGER.info("forwardToPage: " + forwardTo);
@@ -333,14 +336,6 @@ public class LoginAction extends XSSSupportedAction
         request.setAttribute(Constants.PAGE_OF, Constants.PAGE_OF_CHANGE_PASSWORD);
         forwardTo = Constants.ACCESS_DENIED;
         return forwardTo;
-    }
-
-    private boolean isToCheckForPasswordExpiry(final LoginResult loginResult, final String validRole)
-    {
-        return !MigrationState.MIGRATED.equals(loginResult.getMigrationState())
-                && !MigrationState.NEW_IDP_USER.equals(loginResult.getMigrationState())
-                && !MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState())
-                && !(isUserHasRole(validRole));
     }
 
     private boolean isUserHasRole(final String validRole)

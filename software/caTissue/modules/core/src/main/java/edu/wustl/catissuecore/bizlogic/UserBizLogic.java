@@ -80,6 +80,7 @@ import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.UserDetails;
+import edu.wustl.migrator.MigrationState;
 import edu.wustl.migrator.exception.MigratorException;
 import edu.wustl.migrator.util.Utility;
 import edu.wustl.security.beans.SecurityDataBean;
@@ -1960,6 +1961,25 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
         return SUCCESS;
     }
 
+    public String getMigrationStatus(User user) throws ApplicationException
+    {
+    	
+		String sql="select MIGRATION_STATUS from csm_migrate_user where LOGIN_NAME='"+user.getLoginName()+"'";
+		
+		List<List<Object>> migrationList=null;
+		
+		migrationList=AppUtility.executeSQLQuery(sql);
+		if(migrationList!=null && !migrationList.isEmpty())
+		{
+			List<Object> objectList=(List<Object>) migrationList.get(0);
+			if(objectList!=null && !objectList.isEmpty())
+			{
+				return (String) objectList.get(0);
+			}
+	    }
+		return "";
+    }
+    
     /* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bizlogic.IUserBizLogic#checkFirstLoginAndExpiry(edu.wustl.catissuecore.domain.User)
 	 */
@@ -1968,10 +1988,11 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
     {
     	try
     	{
-    		final ArrayList<Password> passwordList = new ArrayList(getPasswordCollection(user));
-    	
-    	
-		        final boolean firstTimeLogin = getFirstLogin(user);
+    		// if user migrated, then no need to check for expiry
+    		if(!getMigrationStatus(user).equals(MigrationState.MIGRATED.toString()))
+    		{
+	    		final ArrayList<Password> passwordList = new ArrayList(getPasswordCollection(user));
+	    		final boolean firstTimeLogin = getFirstLogin(user);
 		        // If user has logged in for the first time, return key of Change
 		        // password on first login
 		        if (firstTimeLogin)
@@ -1979,22 +2000,25 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
 		            return "errors.changePassword.changeFirstLogin";
 		        }
 		        //Collections.sort(passwordList,new PasswordComparator());
-		        Collections.sort(passwordList);
-		        final Password lastPassword = passwordList.get(0);
-		        final Date lastUpdateDate = lastPassword.getUpdateDate();
-		
-		        final Validator validator = new Validator();
-		        // Get difference in days between last password update date and current
-		        // date.
-		        final long dayDiff = validator.getDateDiff(lastUpdateDate, new Date());
-		        final int expireDaysCount = Integer.parseInt(XMLPropertyHandler.getValue("password.expire_after_n_days"));
-		        LOGGER.info("expireDaysCount" + expireDaysCount);
-		        LOGGER.info("dayDiff" + dayDiff);
-		        if (dayDiff > expireDaysCount)
-		        {
-		            LOGGER.info("returning error change password expire");
-		            return "errors.changePassword.expire";
-		        }
+		        
+		        	Collections.sort(passwordList);
+			        final Password lastPassword = passwordList.get(0);
+			        final Date lastUpdateDate = lastPassword.getUpdateDate();
+			
+			        final Validator validator = new Validator();
+			        // Get difference in days between last password update date and current
+			        // date.
+			        final long dayDiff = validator.getDateDiff(lastUpdateDate, new Date());
+			        final int expireDaysCount = Integer.parseInt(XMLPropertyHandler.getValue("password.expire_after_n_days"));
+			        LOGGER.info("expireDaysCount" + expireDaysCount);
+			        LOGGER.info("dayDiff" + dayDiff);
+			        if (dayDiff > expireDaysCount)
+			        {
+			            LOGGER.info("returning error change password expire");
+			            return "errors.changePassword.expire";
+			        }
+	    		}
+		        
 		 }
         catch (final ApplicationException exp)
 		{

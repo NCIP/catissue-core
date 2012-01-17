@@ -1586,7 +1586,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfChangePassword" path=".catissuecore.changePasswordDef" />
 			<forward name="failure" path=".catissuecore.changePasswordDef" />
-			<forward name="access_denied" path="/Home.do" />
+			<forward name="access_denied" path="/ShowMigrationPage.do" />
 		</action>
 
 		<action path="/UpdatePassword"
@@ -1604,7 +1604,7 @@ PUBLIC
 			name="userForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path=".catissuecore.userProfileSuccessDef" />
+			<forward name="success" path="/ShowMigrationPage.do" />
 			<forward name="failure" path="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword" />
 		</action>
 
