@@ -289,9 +289,6 @@
   </class>
   <class name="edu.common.dynamicextensions.domain.integration.AbstractRecordEntry" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
     <map-to xml="AbstractRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" />
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
   </class>
   <class name="edu.common.dynamicextensions.domain.integration.AbstractFormContext" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
     <map-to xml="AbstractFormContext" ns-uri="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" />

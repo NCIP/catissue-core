@@ -39,8 +39,8 @@
         <parameter name="className" value="org.globus.wsrf.impl.security.authentication.wssec.WSSecurityClientHandler" />
       </handler>
     </responseFlow>
-    <parameter name="castorMarshallerMapping" value="edu/wustl/catissuecore/domain/Catissue_cacore-edited-xml-mapping.xml" />
-    <parameter name="castorUnmarshallerMapping" value="edu/wustl/catissuecore/domain/Catissue_cacore-edited-unmarshaller-xml-mapping.xml" />
+    <parameter name="castorMarshallerMapping" value="edu/wustl/catissuecore/domain/Catissue_cacore-xml-mapping.xml" />
+    <parameter name="castorUnmarshallerMapping" value="edu/wustl/catissuecore/domain/Catissue_cacore-unmarshaller-xml-mapping.xml" />
     <parameter name="castorMapping" value="edu/wustl/catissuecore/domain/Catissue_cacore-xml-mapping.xml" />
   </globalConfiguration>
   <transport name="java" pivot="java:org.apache.axis.transport.java.JavaSender" />

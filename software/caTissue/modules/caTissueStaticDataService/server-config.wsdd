@@ -11,8 +11,8 @@
     <parameter name="securityMetadata" value="ETC-PATH/Catissue_cacore-security-metadata.xml" />
     <parameter name="catissue_cacore-etcDirectoryPath" value="ETC-PATH" />
     <parameter name="catissue_cacore-serviceName" value="Catissue_cacore" />
-    <parameter name="castorMarshallerMapping" value="edu/wustl/catissuecore/domain/Catissue_cacore-edited-xml-mapping.xml" />
-    <parameter name="castorUnmarshallerMapping" value="edu/wustl/catissuecore/domain/Catissue_cacore-edited-unmarshaller-xml-mapping.xml" />
+    <parameter name="castorMarshallerMapping" value="edu/wustl/catissuecore/domain/Catissue_cacore-xml-mapping.xml" />
+    <parameter name="castorUnmarshallerMapping" value="edu/wustl/catissuecore/domain/Catissue_cacore-unmarshaller-xml-mapping.xml" />
     <parameter name="castorMapping" value="edu/wustl/catissuecore/domain/Catissue_cacore-xml-mapping.xml" />
     <parameter name="containerSecDesc" value="C:\caGrid\jboss-4.0.5.GA\server\default\deploy\wsrf.war\WEB-INF\etc\globus_wsrf_core\global_security_descriptor.xml" />
   </service>
