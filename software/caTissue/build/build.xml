@@ -2,7 +2,7 @@
 <!-- bda-build-template version 1.7.4 -->
 <!--
 $Id: build.xml 3294 2010-08-31 14:17:31Z saksass $
-$HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4/software/bda-build-template/software/build/build.xml $
+$HeadURL: https://ncisvn.nci.nih.gov/svn/automation/branches/automation-1.7.4/software/bda-build-template/software/build/build.xml $
 -->
 
 <project name="build-bda-template" default="build:all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
@@ -176,7 +176,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4
 	<property name="bda-download.file" value="bda-ivy-2.0.0-build.xml" />
 	<!--
 	<mkdir dir="${bda-download.dir}" />
-	<property name="bda-download.src.url" value="http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-download/${bda-download.file}" />
+	<property name="bda-download.src.url" value="https://ncisvn.nci.nih.gov/svn/automation/trunk/software/bda-download/${bda-download.file}" />
 	<get src="${bda-download.src.url}" dest="${bda-download.dir}/${bda-download.file}" />
 	-->
 	<ant inheritAll="false" inheritRefs="false" antfile="${bda-download.file}" target="retrieve-bda" dir="${bda-download.dir}">

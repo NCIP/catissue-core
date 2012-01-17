@@ -1,6 +1,6 @@
 <!--
 $Id: userInputSpec.xml 1941 2009-08-07 18:35:17Z saksass $
-$HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4/software/bda-build-template/software/build/gui-installer/userInputSpec.xml $
+$HeadURL: https://ncisvn.nci.nih.gov/svn/automation/branches/automation-1.7.4/software/bda-build-template/software/build/gui-installer/userInputSpec.xml $
 
 Guide to this file:
 	First off remember this is a template you will be changing it.  Our test project deploys both an application and a grid component on both Tomcat and JBoss.  You may only support JBoss and have no grid component, at which point you would delete Tomcat and grid related panels.  Or you have have 3 JBoss containers, two apps and one grid.  This would reuqire that you delete tomcat and copy the jboss sections 3 times.

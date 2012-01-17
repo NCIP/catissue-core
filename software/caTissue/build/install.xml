@@ -2,7 +2,7 @@
 <!-- bda-build-template version 1.7.4 -->
 <!--
 $Id: install.xml 3294 2010-08-31 14:17:31Z saksass $
-$HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4/software/bda-build-template/software/build/install.xml $
+$HeadURL: https://ncisvn.nci.nih.gov/svn/automation/branches/automation-1.7.4/software/bda-build-template/software/build/install.xml $
 -->
 
 <project name="caTissue-installer" default="install" basedir="."

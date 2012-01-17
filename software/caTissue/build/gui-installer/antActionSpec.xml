@@ -1,6 +1,6 @@
 <!--
 $Id: antActionSpec.xml 1767 2009-06-24 20:06:18Z saksass $
-$HeadURL: http://gforge.nci.nih.gov/svnroot/automation/branches/automation-1.7.4/software/bda-build-template/software/build/gui-installer/antActionSpec.xml $
+$HeadURL: https://ncisvn.nci.nih.gov/svn/automation/branches/automation-1.7.4/software/bda-build-template/software/build/gui-installer/antActionSpec.xml $
 -->
 <antactions> 
 	<pack name="download_install">

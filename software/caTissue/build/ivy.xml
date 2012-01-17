@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <?xml-stylesheet type="text/xsl"
-                 href="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-xsl/ivy.xsl"?>
+                 href="https://ncisvn.nci.nih.gov/svn/commonlibrary/trunk/ivy-xsl/ivy.xsl"?>
        
 <ivy-module version="1.0">
 	<info organisation="ncicb" module="sdk-utils" status="build"/>
