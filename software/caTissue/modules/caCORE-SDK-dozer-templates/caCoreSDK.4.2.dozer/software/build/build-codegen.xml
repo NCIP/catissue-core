@@ -522,8 +522,15 @@
 	<target name="-package-codegen-artifacts" depends="-package-bean-jar,-package-orm-jar,-package-xml-jar,-package-dozer-jar" description="Prepares distribution files">
 	</target>
 
+        <target name="-copy-custom">
+        	<copy file="${software.dir}/common/lib/sdk-codegen.jar" tofile="${codegen.runtime.lib.dir}/sdk-codegen-${VERSION}.jar"/>
+        	<copy file="${software.dir}/common/lib/sdk-codegen-templates.jar" tofile="${codegen.runtime.lib.dir}/sdk-codegen-templates-${VERSION}.jar"/>
+        	<copy file="${software.dir}/common/lib/sdk-codegen-validator.jar" tofile="${codegen.runtime.lib.dir}/sdk-codegen-validator-${VERSION}.jar"/>
+        	<copy file="${software.dir}/common/lib/sdk-codegen-validator-templates.jar" tofile="${codegen.runtime.lib.dir}/sdk-codegen-validator-templates-${VERSION}.jar"/>
+        </target>
 
-	<target name="-generate-codegen" depends="replacetoken-contents,ivy:setup:codegen,-generate-codegen-validator" description="Runs the Code Generator">
+
+	<target name="-generate-codegen" depends="replacetoken-contents,ivy:setup:codegen,-generate-codegen-validator,-copy-custom" description="Runs the Code Generator">
 		<echo>${ant.project.name}: Running the Code Generator</echo>
 		<fail unless="IDENTITY_GENERATOR_TAG">IDENTITY_GENERATOR property must be set in codegen.properties</fail>
 		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true" >
