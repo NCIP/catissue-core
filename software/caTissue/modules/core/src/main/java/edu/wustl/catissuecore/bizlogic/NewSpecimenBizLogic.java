@@ -1159,6 +1159,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	}
 
 	/**
+	 * 
 	 * Sets the specimen parent.
 	 *
 	 * @param specimen
@@ -2115,7 +2116,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					specimenOld, persistentSpecimen);
 			specimen.setCreationEventAction(persistentSpecimen.getCreationEventAction());
 			handleRecordEntry(persistentSpecimen, sessionDataBean.getUserName());
-			handleSPPDataNtry(persistentSpecimen,sessionDataBean);
+			 
 			dao.update(persistentSpecimen, specimenOld);
 
 			this.updateChildAttributes(specimen, specimenOld);
@@ -2641,7 +2642,142 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			this.generateBarCode(persistentSpecimen);
 		}
 		this.setExternalIdentifier(dao, specimen, persistentSpecimen);
+		try {
+			handleSPPDataNtry(specimen,sessionDataBean);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		this.setActionApplicationCollection(dao,specimen,persistentSpecimen);
 		updateCreationEvent(persistentSpecimen);
+		if(persistentSpecimen.getSpecimenRecordEntryCollection() == null)
+		{
+			persistentSpecimen.setSpecimenRecordEntryCollection(specimen.getSpecimenRecordEntryCollection());
+		}
+//		persistentSpecimen.setActionApplicationCollection(specimen.getActionApplicationCollection());
+//		persistentSpecimen.setProcessingSPPApplication(specimen.getProcessingSPPApplication());
+	}
+
+	private void setActionApplicationCollection(DAO dao, Specimen specimen,
+			Specimen persistentSpecimen) throws BizLogicException {
+		try
+		{
+			updateActionApp(dao, persistentSpecimen, specimen);
+			if(persistentSpecimen.getProcessingSPPApplication() != null && persistentSpecimen.getProcessingSPPApplication().getId() != null 
+					&& specimen.getProcessingSPPApplication() != null && specimen.getProcessingSPPApplication().getId() != null)
+			{
+					updateSpp(dao, persistentSpecimen, specimen);
+			}
+			else if(persistentSpecimen.getProcessingSPPApplication() == null)
+			{
+				persistentSpecimen.setProcessingSPPApplication(specimen.getProcessingSPPApplication());
+			}
+		}
+		catch (final DAOException daoExp) 
+		{
+			LOGGER.error(daoExp.getMessage(), daoExp);
+			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(),
+					daoExp.getMsgValues());
+			}
+		
+	}
+
+	private void updateSpp(DAO dao, Specimen persistentSpecimen,
+			Specimen specimen)
+			throws DAOException {
+		final Collection<ActionApplication> actionAppColl = specimen.getProcessingSPPApplication().getSppActionApplicationCollection();
+		if (actionAppColl != null) {
+			final Iterator<ActionApplication> iterator = actionAppColl
+					.iterator();
+			final Collection<ActionApplication> perstActionAppColl = persistentSpecimen.getProcessingSPPApplication().getSppActionApplicationCollection();
+			while (iterator.hasNext()) {
+				final ActionApplication actionApp = (ActionApplication) iterator
+						.next();
+				updateActionApplications(persistentSpecimen,
+						perstActionAppColl, actionApp,persistentSpecimen.getProcessingSPPApplication());
+			}
+			persistentSpecimen.getProcessingSPPApplication().setSppActionApplicationCollection(perstActionAppColl);
+		}
+	}
+
+	private void updateActionApplications(Specimen persistentSpecimen,
+			final Collection<ActionApplication> perstActionAppColl,
+			final ActionApplication actionApp, SpecimenProcessingProcedureApplication sppApp) {
+		ActionApplication persistActionApp = null;
+		if (actionApp.getId() == null) {
+			if(sppApp != null)
+			actionApp.setSppApplication(sppApp);
+			persistActionApp = actionApp;
+			perstActionAppColl.add(persistActionApp);
+		} 
+		else {
+			persistActionApp = (ActionApplication) this
+					.getCorrespondingOldObject(perstActionAppColl,
+							actionApp.getId());
+			persistActionApp.setAdminuser(actionApp.getAdminuser());
+			
+			if(!actionApp.getApplicationRecordEntry().equals(persistActionApp.getApplicationRecordEntry()))
+			{
+				persistActionApp.setApplicationRecordEntry(actionApp.getApplicationRecordEntry());	
+			}
+			persistActionApp.setComments(actionApp.getComments());
+			persistActionApp.setFacilityId(actionApp.getFacilityId());
+			persistActionApp.setPerformedBy(actionApp.getPerformedBy());
+			persistActionApp.setReasonDeviation(actionApp.getReasonDeviation());
+			persistActionApp.setRoleId(actionApp.getRoleId());
+			persistActionApp.setTimestamp(actionApp.getTimestamp());
+		}
+	}
+
+	private void updateActionApp(DAO dao, Specimen persistentSpecimen,
+			final Specimen specimen)
+			throws DAOException {
+		final Collection<ActionApplication> actionAppColl = specimen
+		.getActionApplicationCollection();
+		if (actionAppColl != null) {
+			final Iterator<ActionApplication> iterator = actionAppColl
+					.iterator();
+			final Collection<ActionApplication> perstExIdColl = persistentSpecimen
+					.getActionApplicationCollection();
+			while (iterator.hasNext()) {
+				final ActionApplication exId = (ActionApplication) iterator
+						.next();
+				updateActionApplications(persistentSpecimen,
+						perstExIdColl, exId,null);
+//				ActionApplication persistExId = null;
+//				if (exId.getId() == null) {
+//					exId.setSpecimen(persistentSpecimen);
+//					persistExId = exId;
+//					perstExIdColl.add(persistExId);
+//				} 
+//				else {
+//					persistExId = (ActionApplication) this
+//							.getCorrespondingOldObject(perstExIdColl,
+//									exId.getId());
+//					if(!exId.getApplicationRecordEntry().equals(persistExId.getApplicationRecordEntry()))
+//					{
+//						persistExId.setApplicationRecordEntry(exId.getApplicationRecordEntry());	
+//					}
+//					persistExId.setAdminuser(exId.getAdminuser());
+////						persistExId.setApplicationRecordEntry(exId.getApplicationRecordEntry());
+//					persistExId.setComments(exId.getComments());
+//					persistExId.setFacilityId(exId.getFacilityId());
+//					persistExId.setPerformedBy(exId.getPerformedBy());
+//					persistExId.setReasonDeviation(exId.getReasonDeviation());
+//					persistExId.setRoleId(exId.getRoleId());
+//					persistExId.setTimestamp(exId.getTimestamp());
+//					persistExId.setSppApplication(exId.getSppApplication());
+//				}
+			}
+			persistentSpecimen
+			.setActionApplicationCollection(perstExIdColl);
+		}
 	}
 
 	/**
@@ -6410,7 +6546,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		{
 				for (SpecimenRecordEntry specimenRecordEntry : obj.getSpecimenRecordEntryCollection()) 
 				{
-					if(specimenRecordEntry.getId() == null)
+					if(specimenRecordEntry.getId() == null) 
 					{
 						Method[] methods = specimenRecordEntry.getClass().getMethods();
 						for (Method method : methods) 

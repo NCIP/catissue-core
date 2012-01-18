@@ -251,17 +251,19 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	{
 		
 		String className = null;
-		if(val instanceof Set)
+		if(val instanceof Set && !((java.util.Set) val).isEmpty())
 			className = ((java.util.Set) val).iterator().next().getClass().getName();
-		else 
+		else if(val instanceof Collection && !((Collection) val).isEmpty())
 			className = ((Collection) val).iterator().next().getClass().getName();
 		
-		
-		Long id = getContainerId(className);
-		StudyFormContext context = getStudyFormContext(id);//tudyFormContextFactory.getInstance().createObject();
-		recordEntry.setFormContext(context);
-		recordEntry.setModifiedDate(new Date());
-		recordEntry.setModifiedBy(userName);
+		if(className != null)
+		{
+			Long id = getContainerId(className);
+			StudyFormContext context = getStudyFormContext(id);//tudyFormContextFactory.getInstance().createObject();
+			recordEntry.setFormContext(context);
+			recordEntry.setModifiedDate(new Date());
+			recordEntry.setModifiedBy(userName);
+		}
 	}
 
 	/**
