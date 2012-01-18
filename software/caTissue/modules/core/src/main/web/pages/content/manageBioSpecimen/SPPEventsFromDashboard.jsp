@@ -36,7 +36,7 @@
 		<%}%>
 		<tr height="100%">
 			<td height="100%">
-				<table width="100%" height="100%" style="overflow:no;" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+				<table width="100%" height="80" style="overflow:no;" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
 					<tr>
 						<td>
 							<div style="overflow:no; height: 100%;float: none" align="left" title="sppForms" id ="sppForms" ></div>
