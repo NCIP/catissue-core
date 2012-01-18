@@ -235,7 +235,7 @@ public class SSOcaTissueCommonLoginUtility
 		    if (result.equals(Constants.SUCCESS))
 	        {
 		    	final UserBizLogic ubizlogic=new UserBizLogic();
-		    	if(MigrationState.DO_NOT_MIGRATE.toString().equals(ubizlogic.getMigrationStatus(validUser)+""))
+		    	if(MigrationState.DO_NOT_MIGRATE.toString().equals(ubizlogic.getMigrationStatus(validUser).equals()))
 		    	{
 		    		forwardTo=edu.wustl.wustlkey.util.global.Constants.PAGE_NON_WASHU;
 		    	}
