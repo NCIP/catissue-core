@@ -413,20 +413,21 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			}
 			ActionApplication creationEvent=(ActionApplication) bizLogic.retrieveAttribute(Specimen.class,specimenId,
 					"creationEventAction");
-			if (creationEvent==null)
-			{
-				// if no creation event do not display any more
-				return dynamicEventsForGrid;
+					
+			if (creationEvent == null) {
+			    //
+				// Bug #21887
+				// If there is no creationEvent specified, use creation date/time to
+				// determine the events of parent specimen applied on this child specimen
+				//
+			    creationTimeStamp = specimen.getCreatedOn();				
+				if (creationTimeStamp == null) {
+				    return dynamicEventsForGrid;
+				}
+			} else {
+			    creationTimeStamp = creationEvent.getTimestamp();
 			}
 			
-			
-			//
-			// Use the creation timestamp of current specimen to filter events of
-			// parent specimen or SCG
-			//
-			//
-			creationTimeStamp = creationEvent.getTimestamp();
-
 			// Add creation Events of SPP application of parent specimen.
 			// If parent specimen is not null. then get the sppApplication of parent specimen
 			// and get all creation events of parent specimen till the action order of 
