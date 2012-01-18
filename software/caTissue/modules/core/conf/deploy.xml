@@ -216,17 +216,19 @@
 			</then>
 		</if>
 
-		<!-- check for SSO URL -->
+		<!-- check for CAS URL -->
 		<if>
-			<equals arg1="" arg2="${sso.url}" />
-			<then/>
-			<else>
-				<equals arg1="" arg2="${sso.classname}" />
-				<then>
-					<fail message="To integrate caTissue with SSO, the sso.url and sso.classname property need to be filled up." />
-				</then>
-			</else>
-		</if>
+					<equals arg1="true" arg2="${integrate.catissue.with.cas}" />
+					<then>
+						<if>
+							<equals arg1="" arg2="${cas.url}" />
+							<then>
+								<fail message="To integrate caTissue with CAS, the cas.url property need to b filled up." />
+							</then>
+							
+						</if>
+					</then>
+				</if>
 		<!-- Check whether JAVA_HOME environment variable set or not -->
 		<if>
 			<contains string="${env.JAVA_HOME}" substring="env.JAVA_HOME"/>
@@ -676,7 +678,8 @@
 			<replacefilter token="@@email.admin.support.emailAddress@@" value="${email.admin.support.emailAddress}" />
 			<replacefilter token="@@email.sendEmailFrom.name@@" value="${email.sendEmailFrom.name}" />
 			<replacefilter token="@@email.exception.subject@@" value="${email.exception.subject}" />
-			
+			<replacefilter token="@@cas.available@@" value="${integrate.catissue.with.cas}" />
+
 		<!-- added by Geeta .For eMPI integration -->
 			<replacefilter token="@@empiDBURL@@" value="jdbc:db2://${empi.database.host}:${empi.database.port}/${empi.database.name}" />
 			<replacefilter token="@@empiDBUserName@@" value="${empi.database.username}" />
@@ -687,17 +690,10 @@
 
 		</replace>
 
-		<!-- SSO URL -->
-		<replace file="${prop.temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
-			<replacefilter token="@@sso.logout.url@@" value="${sso.url}" />
-		</replace>
-		<replace file="${prop.temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
-			<replacefilter token="@@sso.classname@@" value="${sso.classname}" />
-		</replace>
-		<replace file="${prop.temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
-			<replacefilter token="@@sso.url@@" value="${sso.url}" />
-		</replace>
-		
+		<!-- CAS logout url-->
+					<replace file="${prop.temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
+						<replacefilter token="@@cas.logout.url@@" value="${cas.url}" />
+					</replace>
 		<antcall target="Configure_Printservice"/>
 		<copy todir="${jboss.server.url}/catissuecore-properties" overwrite="true">
 			<fileset dir="${prop.temp.dir}/catissuecore-properties">
@@ -1047,18 +1043,17 @@
 
 
 			<if>
-				<equals arg1="" arg2="${sso.url}" />
+				<equals arg1="true" arg2="${integrate.catissue.with.cas}" />
 				<then>
-					<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-					<replacetoken>@@CASFilter@@</replacetoken>
-						<replacevalue><![CDATA[
-							<!-- cas is not configured -->
-								]]>
-						</replacevalue>
-					</replace>					
+					<antcall target="integrate_cas" />
 				</then>
 				<else>
-					<antcall target="integrate_sso" />
+					<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
+								<replacetoken>@@CASFilter@@</replacetoken>
+											<replacevalue><![CDATA[
+												<!-- cas is not configured -->
+													]]></replacevalue>
+										</replace>
 				</else>
 			</if>
 		
@@ -5493,27 +5488,30 @@ Thanking You,
 		</target>
 
 
-	<target name="integrate_sso" description="Target to integrate SSO with the application">
-		<echo message="Integrating SSO with the application...." />
-		<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-			<replacefilter token="@@cas-server-url-login@@" value="${sso.url}" />
-		</replace>
-		<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-			<replacefilter token="@@cas-server-url-validateUrl@@" value="${sso.url}" />
-		</replace>
-		<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-			<replacefilter token="@@catissue-cas-login-serverName@@" value="${jboss.server.host.port}" />
-		</replace>		
-		<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-			<replacetoken>@@CASFilter@@</replacetoken>
-			<replacevalue><![CDATA[
-				<filter-mapping>
-				<filter-name>CASFilter</filter-name>
-				<url-pattern>*.do</url-pattern>
-				</filter-mapping>
-				]]>
-			</replacevalue>
-		</replace>
+	<target name="integrate_cas" description="Target to integrate cas with the application">
+		<echo message="Integrating CAS with the application...." />
+			<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
+				<replacefilter token="@@cas-server-url-login@@" value="${cas.url}" />
+			</replace>
+			<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
+				<replacefilter token="@@cas-server-url-validateUrl@@" value="${cas.url}" />
+			</replace>
+			<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
+				<replacefilter token="@@catissue-cas-login-serverName@@" value="${jboss.server.host.port}" />
+			</replace>
+		
+					<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
+							<replacetoken>@@CASFilter@@</replacetoken>
+										<replacevalue><![CDATA[
+											<filter-mapping>
+													<filter-name>CASFilter</filter-name>
+													<url-pattern>*.do</url-pattern>
+												</filter-mapping>
+												]]></replacevalue>
+									</replace>
+		
+			
+				
 	</target>
 
 	<!--Target call for both fresh deployment of caTissue-->

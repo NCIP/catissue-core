@@ -15,7 +15,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.global.Validator;
 import edu.wustl.dao.JDBCDAO;
 
 /**
@@ -68,22 +67,43 @@ public class LogoutAction extends BaseAction
         AppUtility.closeJDBCSession(jdbcDao);
 
         session.invalidate();
-        // Redirect to SSO logout page
+        // Redirect to CAS logout page
 
-        String ssoRedirectURL = null;
-        if (!Validator.isEmpty(XMLPropertyHandler.getValue("sso.url")))
-        {
-        	ssoRedirectURL = XMLPropertyHandler.getValue("sso.logout.url");
-        }
+
+//        String casRedirectURL=null;
+//        if (request.getRequestURL() != null)
+//        {
+//            casRedirectURL = getCASLogoutURL(request.getRequestURL().toString());
+//        }
         ActionForward forwardTo = null;
-        if (ssoRedirectURL == null)
-        {
+//        if (casRedirectURL==null)
+//        {
             forwardTo = (mapping.findForward(Constants.SUCCESS));
-        }
-        else
-        {
-            response.sendRedirect(ssoRedirectURL);
-        }
+//        }
+//        else
+//        {
+//            response.sendRedirect(casRedirectURL);
+//        }
+
         return forwardTo;
+    }
+
+    /**
+     * This method creates the URL to call CAS Logout and appends a service URL
+     * to the Login page to it.
+     *
+     * @param request
+     * @return CAS logout URL
+     */
+    private String getCASLogoutURL(final String requestURL)
+    {
+        String casRedirectURL=null;
+        final int index = requestURL.indexOf("Logout.do");
+        if(index>=0)
+        {
+            casRedirectURL=XMLPropertyHandler.getValue(Constants.CAS_LOGOUT_URL) + "?service="
+            + URLEncoder.encode(requestURL.substring(0, index)) + "CasLogin.do";
+        }
+        return casRedirectURL;
     }
 }
