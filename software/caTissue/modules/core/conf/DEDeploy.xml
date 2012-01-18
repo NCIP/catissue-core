@@ -1898,7 +1898,7 @@
 						<include name="${entitygroupname}-schema.jar" />
 					</fileset>
 				</copy>
-				<echo message="Dozer files archive copied for: ${entitygroupname}" />
+				<echo message="DEBUG: Dozer files archive copied for: ${entitygroupname}" />
 				<copy todir="../../caGrid_service/caTissueStaticDataService/de_codegen/xmi" overwrite="true" verbose="true">
                     <fileset dir="${export.dir}">
                         <include name="${entitygroupname}.xmi" />
