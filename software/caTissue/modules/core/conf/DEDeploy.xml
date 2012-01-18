@@ -1852,11 +1852,13 @@
 
         <!--Step 2: Bring the adjusted files to support dozer artifacts generation-->
         <unzip src="../../dynamic_extensions/lib/cacore-sdk.4.2-dozer.zip" dest="${de.temp.dir}/cacoresdk.4.2/dozerFiles" overwrite="true" />
-        <copy todir="${de.temp.dir}/cacoresdk.4.2/" verbose="true">
+        <echo message="DEBUG: Bringing Dozer related files into caCoreSDK..." />
+        <copy todir="${de.temp.dir}/cacoresdk.4.2/" verbose="true" overwrite="true">
             <fileset dir="${de.temp.dir}/cacoresdk.4.2/dozerFiles" />
         </copy>
 
         <!--Step 3: Bring XMI to run the codegen for -->
+        <echo message="DEBUG: Bringing XMI files into caCoreSDK..." />
         <copy todir="${caCORE4.2_home}/example-project/models" overwrite="true" verbose="true">
             <fileset dir="${export.dir}">
                 <include name="*.xmi" />
@@ -2075,7 +2077,7 @@
 		<delete dir="${orm.jar.location}"></delete>
 	
 	</target>
-	
+
 	<target name="unzip_caCORESDKzip" description="unzip caCore SDK zip">
 		<delete dir="${cacoresdk.dir}" failonerror="false" />
 		<mkdir dir="${cacoresdk.dir}" />
