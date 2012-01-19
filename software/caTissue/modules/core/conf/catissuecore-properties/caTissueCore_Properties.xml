@@ -639,4 +639,8 @@
 		<name>sso.classname</name>
 		<value>@@sso.classname@@</value>
 	</property>
+	<property>
+		<name>sso.url</name>
+		<value>@@sso.url@@</value>
+	</property>
 </properties>
