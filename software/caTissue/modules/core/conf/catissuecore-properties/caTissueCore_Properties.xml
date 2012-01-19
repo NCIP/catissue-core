@@ -507,7 +507,7 @@
 
 	<property>
 		<name>umlmodel.link</name>
-		<value>https://ncisvn.nci.nih.gov/svn/catissue_persistent/catissuecore/branches/caTISSUE_SUITE_v20_BDA_BRANCH/docs/caTissueSuite_UML_v2.0.zip</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/caTissue+Suite+2.0+UML+Model</value>
 	</property>
 
 	<property>
