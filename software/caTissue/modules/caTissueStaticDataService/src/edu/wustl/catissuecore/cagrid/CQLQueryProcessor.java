@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.cagrid;
 
 import edu.wustl.catissuecore.domain.service.WAPIUtility;
+import edu.wustl.catissuecore.domain.util.CollectionsHandler;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
 import gov.nih.nci.cagrid.cqlquery.QueryModifier;
@@ -24,9 +25,7 @@ import org.globus.wsrf.security.SecurityManager;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author kherm manav.kher@semanticbits.com
@@ -96,8 +95,8 @@ public class CQLQueryProcessor extends
 		}
 	}
 
-	public CQLQueryResults processQuery(CQLQuery cqlQuery)
-			throws MalformedQueryException, QueryProcessingException {
+	public CQLQueryResults processQuery(CQLQuery cqlQuery) throws MalformedQueryException, QueryProcessingException {
+        final Set objectCache = new HashSet();
 		try {
 			cqlQuery = CQLAttributeDefaultPredicateUtil
 					.checkDefaultPredicates(cqlQuery);
@@ -138,6 +137,10 @@ public class CQLQueryProcessor extends
 					+ ex.getMessage();
 			LOG.error(message, ex);
 		}
+
+        for (Object o : rawResults) {
+            CollectionsHandler.handleObject(o, objectCache);
+        }
 
 		CQLQueryResults cqlResults;
 
