@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.cagrid;
 
 import edu.wustl.catissuecore.domain.service.WAPIUtility;
+import edu.wustl.catissuecore.domain.util.CollectionsHandler;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.QueryProcessingException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
@@ -36,12 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.text.DateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author kherm manav.kher@semanticbits.com
@@ -186,15 +182,12 @@ public class CQL2QueryProcessor extends
 		List<Object> rawResults;
 		try {
 			if (isUseGridIdentLogin()) {
-				rawResults = WAPIUtility.getClient(getRemoteApplicationUrl(),
-						getStaticLoginUser(), getStaticLoginPass()).getService()
-						.executeQuery(criteria, getGridId());
+				rawResults = WAPIUtility.getClient(getRemoteApplicationUrl(), getStaticLoginUser(), getStaticLoginPass()).getService().executeQuery(criteria, getGridId());
 			} else {
 				rawResults = sdkService.query(criteria);
 			}
 		} catch (Exception ex) {
-			String message = "Error querying caCORE service: "
-					+ ex.getMessage();
+			String message = "Error querying caCORE service: " + ex.getMessage();
 			LOG.error(message, ex);
 			throw new QueryProcessingException(message, ex);
 		}
@@ -277,8 +270,9 @@ public class CQL2QueryProcessor extends
 		return cqlTranslator;
 	}
 
-	private Iterator<CQLResult> wrapObjectResults(List<Object> rawObjects,
-			final QName targetQName) {
+	private Iterator<CQLResult> wrapObjectResults(List<Object> rawObjects, final QName targetQName) {
+        final Set objectCache = new HashSet();
+
 		final Iterator<Object> rawObjectIter = rawObjects.iterator();
 		Iterator<CQLResult> objectIter = new Iterator<CQLResult>() {
 			public boolean hasNext() {
@@ -292,7 +286,10 @@ public class CQL2QueryProcessor extends
 				AnyNode node;
 				try {
 					InputStream wsdd = getDisposableWsdd();
+
+                    CollectionsHandler.handleObject(rawObject, objectCache);
 					Utils.serializeObject(rawObject, targetQName, writer, wsdd);
+
 					node = AnyNodeHelper.convertStringToAnyNode(writer
 							.getBuffer().toString());
 				} catch (Exception ex) {
