@@ -2712,7 +2712,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		ActionApplication persistActionApp = null;
 		if (actionApp.getId() == null) {
 			if(sppApp != null)
-			actionApp.setSppApplication(sppApp);
+				actionApp.setSppApplication(sppApp);
+			else
+				actionApp.setSpecimen(persistentSpecimen);
 			persistActionApp = actionApp;
 			perstActionAppColl.add(persistActionApp);
 		} 
