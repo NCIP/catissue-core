@@ -626,17 +626,17 @@
 		<value></value>
 	</property>
 
-	<!-- CAS keystore path -->
+	<!-- SSO Details -->
 	<property>
-		<name>cas.keystorePath</name>
-		<value>@@CasKeystorePath@@</value>
+		<name>sso.keystorePath</name>
+		<value>@@SSOKeystorePath@@</value>
 	</property>
 	<property>
-		<name>cas.logout.url</name>
-		<value>@@cas.logout.url@@/logout</value>
+		<name>sso.logout.url</name>
+		<value>@@sso.logout.url@@/logout</value>
 	</property>
 	<property>
-		<name>cas.available</name>
-		<value>@@cas.available@@</value>
+		<name>sso.classname</name>
+		<value>@@sso.classname@@</value>
 	</property>
 </properties>
