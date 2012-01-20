@@ -108,7 +108,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
                     + "user.activityStatus= "
                     + "'"
                     + Status.ACTIVITY_STATUS_ACTIVE.toString()
-                    + "' and user.loginName =" + "'" + loginName + "'";
+                    + "' and UPPER(user.loginName) =" + "'" + loginName.toUpperCase() + "'";
 
             final List UserIds = dao.executeQuery(userIdhql);
             if (UserIds != null && !UserIds.isEmpty())

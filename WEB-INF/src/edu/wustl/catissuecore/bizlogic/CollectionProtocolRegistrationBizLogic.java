@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -1124,19 +1125,17 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					.getSpecimenCollectionGroupCollection();
 			collectionProtocolRegistration
 					.setSpecimenCollectionGroupCollection(specimenCollectionGroupCollection);
-			this.updateConsentResponseForSCG(collectionProtocolRegistration,oldCollectionProtocolRegistration, dao);
-			persistentCPR.setConsentTierResponseCollection(collectionProtocolRegistration
-					.getConsentTierResponseCollection());
-
+			 
+			//persistentCPR.setConsentTierResponseCollection(collectionProtocolRegistration.getConsentTierResponseCollection());
 			setConsetResponseCollection(dao, collectionProtocolRegistration,
 					persistentCPR);
-
-
+			this.updateConsentResponseForSCG(persistentCPR,oldCollectionProtocolRegistration, dao);
 			persistentCPR.setConsentWitness(collectionProtocolRegistration.getConsentWitness());
 			persistentCPR.setConsentSignatureDate(collectionProtocolRegistration
 					.getConsentSignatureDate());
 			persistentCPR.setSignedConsentDocumentURL(collectionProtocolRegistration
 					.getSignedConsentDocumentURL());
+		
 			persistentCPR.setProtocolParticipantIdentifier(collectionProtocolRegistration
 					.getProtocolParticipantIdentifier());
 			persistentCPR.setRegistrationDate(collectionProtocolRegistration.getRegistrationDate());
@@ -1186,7 +1185,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			// Specimen(s) end
 			// Update registration
 			dao.update(persistentCPR,oldCollectionProtocolRegistration);
-
+			
 			// Disable all specimen Collection group under this registration.
 			this.LOGGER.debug("collectionProtocolRegistration.getActivityStatus() "
 					+ collectionProtocolRegistration.getActivityStatus());
@@ -1220,39 +1219,23 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 	}
-
 	private void setConsetResponseCollection(
 			DAO dao,
 			final CollectionProtocolRegistration collectionProtocolRegistration,
 			CollectionProtocolRegistration persistentCPR)
 			throws BizLogicException {
-		try
-		{
-			Collection<ConsentTierResponse> consentTierResponseColl=collectionProtocolRegistration
-			.getConsentTierResponseCollection();
-			if(consentTierResponseColl!=null &&consentTierResponseColl.iterator().hasNext()){
-				/*
-				 *  To check that the collection is lazily initialized
-				 *  iterating the collection is required.
-				 */
-				consentTierResponseColl.iterator().next();
+		
+			Collection<ConsentTierResponse> consentTierResponseCollection=persistentCPR.getConsentTierResponseCollection();
+			Collection<ConsentTierResponse> newConsentTierResponseCollection=collectionProtocolRegistration.getConsentTierResponseCollection();
+			for (ConsentTierResponse newConsentTierResponse : newConsentTierResponseCollection) {
+				 for (ConsentTierResponse consentTierResponse : consentTierResponseCollection) {
+				  if(consentTierResponse.getConsentTier().getId().equals(newConsentTierResponse.getConsentTier().getId())){	 
+					  consentTierResponse.setConsentTier(newConsentTierResponse.getConsentTier());
+				      consentTierResponse.setResponse(newConsentTierResponse.getResponse());
+				  }   
+				}
 			}
-
-			persistentCPR.setConsentTierResponseCollection(collectionProtocolRegistration
-						.getConsentTierResponseCollection());
-
-		}
-		catch (org.hibernate.LazyInitializationException e) {
-			/*
-			 * for #15570
-			 *
-			 */
-			final Collection consentTierResponseCollection = (Collection) this.retrieveAttribute(
-					dao, CollectionProtocolRegistration.class, collectionProtocolRegistration.getId(),
-					"elements(consentTierResponseCollection)");
-			persistentCPR.setConsentTierResponseCollection(consentTierResponseCollection);
-
-		}
+			
 	}
 
 	/**

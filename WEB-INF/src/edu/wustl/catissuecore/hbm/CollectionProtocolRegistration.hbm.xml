@@ -50,7 +50,7 @@
         <set
             name="consentTierResponseCollection"
             table="CATISSUE_CONSENT_TIER_RESPONSE"
-            lazy="true"
+            fetch="join" lazy="false"
             inverse="false"
             cascade="save-update"
             sort="unsorted"

@@ -14,6 +14,8 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.auth.exception.AuthenticationException;
+import edu.wustl.authmanager.IDPAuthManager;
+import edu.wustl.authmanager.factory.AuthManagerFactory;
 import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.CatissueException;
@@ -114,19 +116,43 @@ public class LoginAction extends XSSSupportedAction
         loginCredentials.setLoginName(loginForm.getLoginName());
         loginCredentials.setPassword(loginForm.getPassword());
         LoginProcessor.authenticate(loginCredentials);
-        final edu.wustl.domain.LoginResult loginResult = CatissueLoginProcessor.processUserLogin(request,
+          final edu.wustl.domain.LoginResult loginResult;
+        if(isRequestFromClinportal(request))
+        {
+        	loginResult = new LoginResult();
+        	loginResult.setAppLoginName(loginCredentials.getLoginName());
+        	loginResult.setAuthenticationSuccess(true);
+        	loginResult.setMigrationState(MigrationState.MIGRATED);
+        }
+        else
+        {
+        loginResult = CatissueLoginProcessor.processUserLogin(request,
                 loginCredentials);
+        }
 
         if (loginResult.isAuthenticationSuccess())
         {
             if (MigrationState.NEW_IDP_USER.equals(loginResult.getMigrationState()))
             {
-                forwardTo = setSignUpPageAttributes(request, loginForm);
+            	IDPAuthManager authManager = AuthManagerFactory.getInstance().getAuthManagerInstance(
+            			edu.wustl.wustlkey.util.global.Constants.WUSTL_IDP);
+            	if (authManager.authenticate(loginCredentials))
+                {
+            		forwardTo = setSignUpPageAttributes(request, loginForm);
+                }
+                else
+                {
+                	LoginAction.LOGGER.info("User " + loginForm.getLoginName()
+                            + " Invalid user. Sending back to the login Page");
+        			handleError(request, "errors.incorrectLoginIDPassword");
+                    forwardTo = Constants.FAILURE;
+                }
             }
             else
             {
                 forwardTo = validateUser(request, loginResult);
             }
+
 
             if (!Constants.FAILURE.equals(forwardTo)
                     && MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()))
