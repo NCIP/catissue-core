@@ -155,7 +155,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 				.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
 		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
 		boolean isCasAvl = Boolean.valueOf(XMLPropertyHandler.getValue("cas.available"));
-		Variables.isCasAvl = isCasAvl;
 	}
 
 	/**
