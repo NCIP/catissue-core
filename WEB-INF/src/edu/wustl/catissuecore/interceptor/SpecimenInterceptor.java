@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.interceptor;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import edu.wustl.bulkoperator.util.BulkOperationException;
 import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
@@ -117,8 +119,12 @@ public class SpecimenInterceptor implements InterceptProcessor
 				ParticipantType xmlParticipant = factory.createParticipantType();
 
 				updateJaxbDomainObject(specimen, xmlParticipant);
-				String fileName = TEMP_DIR_LOCATION+File.separator+FILE_NAME_PREFIX+specimen.getId()+Constants.XML_SUFFIX;
+				if(xmlParticipant.getEmpi()==null||"".equals(xmlParticipant.getEmpi()))
+				{
+					return;
+				}
 
+				String fileName = TEMP_DIR_LOCATION+File.separator+FILE_NAME_PREFIX+specimen.getId()+Constants.XML_SUFFIX;
 				marshall(xmlParticipant, fileName);
 				writeMessage(fileName);
 				updateSpecimenCiderMessageLog(specimen,type);
@@ -140,17 +146,18 @@ public class SpecimenInterceptor implements InterceptProcessor
 
 	}
 
-	/*public static void main(String[] args) throws FileNotFoundException, JAXBException, BulkOperationException
+	public static void main(String[] args) throws FileNotFoundException, JAXBException, BulkOperationException
 	{
+		SpecimenInterceptor interceptor = new SpecimenInterceptor();
 		ObjectFactory factory = new ObjectFactory();
-		ParticipantType xmlParticipant = factory.createParticipantType();
+		ParticipantType xmlParticipant = factory.createParticipant();
 
 		xmlParticipant.setEmpi("007");
 
 		String fileName = TEMP_DIR_LOCATION+FILE_NAME_PREFIX+"1"+Constants.XML_SUFFIX;
 
-		marshall(xmlParticipant, fileName);
-	}*/
+		interceptor.marshall(xmlParticipant, fileName);
+	}
 
 	public void marshall(Object participantObj,String fileName) throws JAXBException
 	{
@@ -273,7 +280,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 	private String getParticiapantEmpiId(
 			edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr) throws BizLogicException
 	{
-		String empiId ="007";
+		String empiId =null;
 		if(cpr.getParticipant()==null)
 		{
 			ParticipantBizLogic bizLogic = new ParticipantBizLogic();
@@ -282,7 +289,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 		}
 		else
 		{
-			//cpr.getParticipant().getempiID();
+			empiId = cpr.getParticipant().getEmpiId();
 		}
 		return empiId;
 	}

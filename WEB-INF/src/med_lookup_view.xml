@@ -1,181 +1,92 @@
 <properties>
 	<property>
 		<name>1270</name>
-		<value>Female</value>
+		<value>Female Gender</value>
 	</property>
 	<property>
 		<name>1987</name>
-		<value>Male</value>
+		<value>Male Gender</value>
 	</property>
 	<property>
-		<name>5572</name>
+		<name>08</name>
 		<value>Alton Memorial Hospital</value>
 	</property>
 	<property>
-		<name>2574</name>
+		<name>01</name>
 		<value>Barnes-Jewish Hospital</value>
 	</property>
 	
 	<property>
-		<name>4674</name>
+		<name>03</name>
 		<value>Barnes-Jewish St. Peters Hospital</value>
 	</property>
 	<property>
-		<name>3049</name>
+		<name>04</name>
 		<value>Barnes-Jewish West County Hospital</value>
 	</property>
 	<property>
-		<name>5107</name>
+		<name>09</name>
 		<value>Boone Hospital Center</value>
 	</property>
 	
 	<property>
-		<name>6729</name>
+		<name>62</name>
 		<value>Christian Hospital</value>
 	</property>
 	
 	<property>
-		<name>2572</name>
+		<name>0F</name>
 		<value>Missouri Baptist Hospital - Sullivan</value>
 	</property>
 	
 	<property>
-		<name>3148</name>
+		<name>10</name>
 		<value>Missouri Baptist Medical Center</value>
 	</property>
 	
 	<property>
-		<name>3269</name>
+		<name>11</name>
 		<value>Parkland Health Center</value>
 	</property>
 	
 	<property>
-		<name>160559</name>
+		<name>14</name>
 		<value>Progress West</value>
 	</property>
 	
 	<property>
-		<name>6116</name>
+		<name>61</name>
 		<value>St. Louis Childrens Hospital</value>
 	</property>
-	
+
 	<property>
-		<name>4784</name>
-		<value>Florida</value>
+		<name>63</name>
+		<value>Washington University School of Medicine</value>
 	</property>
-	
+
 	<property>
-		<name>7038</name>
-		<value>Kentucky</value>
-	</property>
-	
-	<property>
-		<name>3358</name>
-		<value>Iowa</value>
-	</property>
-	
-	<property>
-		<name>7175</name>
-		<value>Arizona</value>
-	</property>
-	<property>
-		<name>3223</name>
-		<value>Native American</value>
-	</property>
-	
-	<property>
-		<name>5066</name>
-		<value>Indiana</value>
-	</property>
-	<property>
-		<name>3360</name>
-		<value>Massachusetts</value>
-	</property>
-	
-	<property>
-		<name>6075</name>
-		<value>Connecticut</value>
-	</property>
-	
-	<property>
-		<name>4317</name>
-		<value>Michigan</value>
+		<name>5040</name>
+		<value>Unknown</value>
 	</property>
 	
 	<property>
 		<name>5528</name>
 		<value>Asian</value>
 	</property>
-	
 	<property>
-		<name>3584</name>
-		<value>South Carolina</value>
+		<name>3223</name>
+		<value>American Indian or Alaska native</value>
 	</property>
 	
 	<property>
-		<name>3357</name>
-		<value>Georgia</value>
+		<name>3326</name>
+		<value>Black or African American</value>
 	</property>
-	<property>
-		<name>4785</name>
-		<value>Illinois</value>
-	</property>
-	<property>
-		<name>5886</name>
-		<value>Mississippi</value>
-	</property>
-	
-	<property>
-		<name>2916</name>
-		<value>Unknown</value>
-	</property>
-	
-	
-	<property>
-		<name>5068</name>
-		<value>Tennessee</value>
-	</property>
-	
-	<property>
-		<name>4070</name>
-		<value>Hispanic</value>
-	</property>
-	
-	
-	<property>
-		<name>3356</name>
-		<value>California</value>
-	</property>
-	
-	
-		
-	<property>
-		<name>5040</name>
-		<value>Other</value>
-	</property>
-	
-	<property>
-		<name>6860</name>
-		<value>Texas</value>
-	</property>
-	
+
 	<property>
 		<name>3452</name>
-		<value>Caucasian</value>
+		<value>White</value>
 	</property>
-	
-	
-	<property>
-		<name>3359</name>
-		<value>Louisiana</value>
-	</property>
-	
-	
-	<property>
-		<name>5219</name>
-		<value>Colorado</value>
-	</property>
-	
 	
 	<property>
 		<name>6036</name>
@@ -183,69 +94,8 @@
 	</property>
 	
 	<property>
-		<name>5067</name>
-		<value>Minnesota</value>
-	</property>
-	
-	<property>
-		<name>6485</name>
-		<value>Nevada</value>
-	</property>
-	
-	<property>
-		<name>3361</name>
-		<value>Pennsylvania</value>
-	</property>
-	
-	<property>
-		<name>3582</name>
-		<value>District Of Columbia</value>
-	</property>
-	
-	<property>
-		<name>5885</name>
-		<value>Kansas</value>
-	</property>
-	
-	
-	<property>
-		<name>5885</name>
-		<value>Kansas</value>
-	</property>
-	
-	<property>
-		<name>3362</name>
-		<value>Virginia</value>
-	</property>
-	
-	<property>
-		<name>5736</name>
-		<value>Arkansas</value>
-	</property>
-	
-	<property>
-		<name>4624</name>
-		<value>Oklahoma</value>
-	</property>
-    <property>
-		<name>3326</name>
-		<value>Black</value>
-	</property>
-	
-	 <property>
-		<name>5220</name>
-		<value>Missouri</value>
-	</property>
-	
-	<property>
-		<name>5737</name>
-		<value>Oregon</value>
-	</property>
-	
-	
-	<property>
-		<name>4943</name>
-		<value>New Mexico</value>
+		<name>2916</name>
+		<value>Unknown</value>
 	</property>
 	
 </properties>
