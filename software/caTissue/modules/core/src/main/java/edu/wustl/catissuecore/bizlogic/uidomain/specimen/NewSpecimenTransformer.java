@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
+import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.InputUIRepOfDomain;
 import edu.wustl.common.util.MapDataParser;
@@ -244,7 +245,7 @@ public class NewSpecimenTransformer extends SpecimenTransformer<NewSpecimenForm>
         final MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
         Collection<ConsentBean> beanObjColl = null;
         try {
-            beanObjColl = mapdataParser.generateData(form.getConsentResponseForSpecimenValues());
+            beanObjColl = mapdataParser.generateData(ConsentUtil.updateConsentMap(form.getConsentResponseForSpecimenValues()));
         } catch (final Exception e) {
             // Specimen.logger.error(e.getMessage(),e);
             e.printStackTrace();

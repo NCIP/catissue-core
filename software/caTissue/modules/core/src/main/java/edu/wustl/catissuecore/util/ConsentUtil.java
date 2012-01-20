@@ -944,5 +944,26 @@ public final class ConsentUtil
 		}
 		return witnessName;
 	}
+	
+	public static Map updateConsentMap(Map map)
+	{
+		Map map2 = new HashMap();
+    	Set entries = map.entrySet();
+		Iterator it = entries.iterator();
+		while (it.hasNext())
+		{
+			Map.Entry entry = (Map.Entry)it.next();
+	         String key = (String)entry.getKey(); 
+	         String value = null;
+	         if(entry.getValue() instanceof String[])
+	         {
+	        	 value = ((String[])entry.getValue())[0].toString();
+	         }
+	         else
+	        	 value = (String)entry.getValue();
+	         map2.put(key, value);
+		}
+		return map2;
+	}
 
 }

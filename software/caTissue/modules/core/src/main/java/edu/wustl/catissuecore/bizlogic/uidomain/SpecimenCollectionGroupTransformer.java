@@ -1,11 +1,6 @@
 package edu.wustl.catissuecore.bizlogic.uidomain;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -22,6 +17,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
+import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.InputUIRepOfDomain;
@@ -159,7 +155,7 @@ public class SpecimenCollectionGroupTransformer
         final MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
         Collection beanObjColl = null;
         try {
-            beanObjColl = mapdataParser.generateData(form.getConsentResponseForScgValues());
+            beanObjColl = mapdataParser.generateData(ConsentUtil.updateConsentMap(form.getConsentResponseForScgValues()));
         } catch (final Exception e) {
             // SpecimenCollectionGroup.logger.error(e.getMessage(), e);
             e.printStackTrace();
