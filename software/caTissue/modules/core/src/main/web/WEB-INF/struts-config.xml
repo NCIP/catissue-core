@@ -2511,7 +2511,7 @@ PUBLIC
 	-->
 			<!-- forward name="createMultipleSpecimen" path="/InitMultipleSpecimen.do?operation=add&amp;menuSelected=15" /-->
 			<!--forward name="createMultipleSpecimen" path="/NewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" /-->
-			<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do"/>
+			<forward name="createMultipleSpecimen" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithMenu&amp;parentType=New_Specimen"/>
 		</action>
 
 		<action path="/SpecimenCollectionGroupSearch"
