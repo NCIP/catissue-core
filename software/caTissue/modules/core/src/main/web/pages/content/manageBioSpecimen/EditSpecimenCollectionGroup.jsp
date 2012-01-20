@@ -111,7 +111,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 				final_collection_dt=final_collection_dt+offset_coll_dt_js.getFullYear();
 				
 				document.getElementById('collectionDate').value=final_collection_dt;
-				
+
+				calculateAge();
 				
 		}
 	}
