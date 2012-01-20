@@ -29,7 +29,7 @@ public class CastorMappingMerger {
 
     public static void main(String args[]) {
 
-        args = new String[] {"./temp/pathology_scg-schema.jar/xml-mapping.xml", "./temp/pathology_specimen-schema.jar/xml-mapping.xml", "./CASTOR_MERGED.xml"};
+//        args = new String[] {"./temp/pathology_scg-schema.jar/xml-mapping.xml", "./temp/pathology_specimen-schema.jar/xml-mapping.xml", "./CASTOR_MERGED.xml"};
 //        args = new String[] {"properties", FILES_PATH + "/3.properties", FILES_PATH + "/" + DOZER_SETS_FILENAME, FILES_PATH + "/" + DOZER_SETS_FILENAME + "_results.properties"};
 
         if (args.length < 3) {
