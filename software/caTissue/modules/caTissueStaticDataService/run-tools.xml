@@ -337,7 +337,50 @@
 		<replace dir="${dir}" includes="**/*" summary="true" token="SpecimenRecordEntry_Specimen" value="SpecimenRecordEntryCollection"/>
 		<replace dir="${dir}" includes="**/*" summary="true" token="&lt;a&gt;SpecimenRecordEntryCollectionBaseSolidTissuePathologyAnnotation&lt;/a&gt;" value="&lt;a&gt;SpecimenRecordEntry_SpecimenBaseSolidTissuePathologyAnnotation&lt;/a&gt;"/>
 	</target>
-	
+
+    <target name="mergeCastor">
+        <foreach target="-doMergeCastorMappingXMLs" param="fullJarFileName" inheritall="true">
+            <fileset dir="./de_codegen/artifacts" casesensitive="yes">
+                <include name="*-schema.jar"/>
+            </fileset>
+        </foreach>
+    </target>
+
+    <target name="-doMergeCastorMappingXMLs">
+        <basename property="jarfilename" file="${fullJarFileName}"/>
+        <unjar src="${fullJarFileName}" dest="./temp/${jarfilename}" />
+
+        <property name="fileOne" value="./temp/${jarfilename}/xml-mapping.xml" />
+        <property name="fileTwo" value="./temp/${jarfilename}/unmarshaller-xml-mapping.xml" />
+
+        <available file="${fileOne}" property="fileOne.exists" />
+        <available file="${fileTwo}" property="fileTwo.exists" />
+
+        <echo message="FILE1: ${fileOne}: ${fileOne.exists}" />
+        <echo message="FILE2: ${fileTwo}: ${fileTwo.exists}" />
+
+        <java failonerror="true" classname="edu.wustl.catissuecore.domain.util.CastorMappingMerger" fork="yes" dir="${basedir}">
+            <classpath>
+                <fileset dir="./build/lib/"><include name="*.jar" /></fileset>
+                <fileset dir="./lib/"><include name="*.jar" /></fileset>
+            </classpath>
+            <arg value="${fileOne}"/>
+            <arg value="./src/edu/wustl/catissuecore/domain/Catissue_cacore-xml-mapping.xml"/>
+            <arg value="./src/edu/wustl/catissuecore/domain/Catissue_cacore-xml-mapping.xml"/>
+        </java>
+
+        <java failonerror="true" classname="edu.wustl.catissuecore.domain.util.CastorMappingMerger" fork="yes" dir="${basedir}">
+            <classpath>
+                <fileset dir="./build/lib/"><include name="*.jar" /></fileset>
+                <fileset dir="./lib/"><include name="*.jar" /></fileset>
+            </classpath>
+            <arg value="${fileTwo}"/>
+            <arg value="./src/edu/wustl/catissuecore/domain/Catissue_cacore-unmarshaller-xml-mapping.xml"/>
+            <arg value="./src/edu/wustl/catissuecore/domain/Catissue_cacore-unmarshaller-xml-mapping.xml"/>
+        </java>
+
+    </target>
+
     <target name="-importXSDs">
         <basename property="jarfilename" file="${fullJarFileName}"/>
         <echo message="Processing XSD folder: ${jarfilename} "/>
