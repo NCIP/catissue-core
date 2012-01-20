@@ -49,9 +49,17 @@ public class SpecimenCollectionGroupTransformer
         {
         	domainObject.setEncounterTimestamp(EventsUtil.setTimeStamp(uiRepOfDomain.getCollectionDate(), uiRepOfDomain.getTimeInHour(), uiRepOfDomain.getTimeInMinute()));
         }
+        else
+        {
+        	domainObject.setEncounterTimestamp(null);
+        }
 		if(uiRepOfDomain.getAgeAtCollection()!=null && !uiRepOfDomain.getAgeAtCollection().equals(""))
 		{
 			domainObject.setAgeAtCollection(Integer.valueOf(uiRepOfDomain.getAgeAtCollection()));
+		}
+		else
+		{
+			domainObject.setAgeAtCollection(null);
 		}
         InstanceFactory<Site> siteInstFact = DomainInstanceFactory.getInstanceFactory(Site.class);
         domainObject.setSpecimenCollectionSite(siteInstFact.createObject());
