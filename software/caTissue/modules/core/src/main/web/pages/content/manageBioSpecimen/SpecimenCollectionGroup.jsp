@@ -643,6 +643,8 @@ Date birthDateObject=(Date)request.getAttribute("dob");
 String birthDateString=""; 
 String collectionDateString=form.getCollectionDate();
 String originalCollectionDate=form.getCollectionDate(); // for offset use
+if(originalCollectionDate==null)
+	originalCollectionDate="";
 String showageDiffString=form.getAgeAtCollection();
 Date encounterTimeStampDate;
 int collectionMinute=0;		
