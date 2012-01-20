@@ -2,7 +2,6 @@ package edu.wustl.catissuecore.domain.util;
 
 import org.apache.log4j.Logger;
 import org.apache.xml.resolver.tools.CatalogResolver;
-import org.apache.xml.utils.DefaultErrorHandler;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -10,15 +9,8 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -53,10 +45,13 @@ public class CastorMappingMerger {
     }
 
     private void initializeResolver() {
-        String catalogClasspathLocation = "/edu/wustl/catissuecore/domain/dtd/catalog.xml";
-        String path = CastorMappingMerger.class.getResource(catalogClasspathLocation).getPath();
-        log.debug(">>> CATALOG FILE: " + path);
-        System.setProperty("xml.catalog.files", path);
+        String catalogLocation;
+        catalogLocation = new File("src/edu/wustl/catissuecore/domain/dtd/catalog.xml").getAbsolutePath();
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            catalogLocation = catalogLocation.substring(2);
+        }
+        log.debug(">>> CATALOG FILE: " + catalogLocation);
+        System.setProperty("xml.catalog.files", catalogLocation);
         resolver = new CatalogResolver();
     }
 
