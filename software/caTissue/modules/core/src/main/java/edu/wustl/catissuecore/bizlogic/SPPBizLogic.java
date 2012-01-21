@@ -31,6 +31,7 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
+import edu.common.dynamicextensions.exception.DynamicExtensionsCacheException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -72,7 +73,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	@Override
 	protected void insert(final Object obj, Object uiObject, final DAO dao,
 			SessionDataBean sessionDataBean) throws BizLogicException
-	{
+			{
 		try
 		{
 			SPPUIObject sppUIObject = (SPPUIObject) uiObject; 
@@ -98,8 +99,8 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 
 			spp.setActionCollection(actionList);
 			dao.insert(spp);
-			
-			
+
+
 		}
 		catch (final DAOException daoExp)
 		{
@@ -156,16 +157,16 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 			this.logger.error(Constants.INVALID_XML_MSG, e);
 			throw this.getBizLogicException(e, "", "Error while inserting the SPP xml in the db");
 		} 
-	}
+			}
 	@Override
 	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean,Object uiObject)
 			throws BizLogicException
-	{
+			{
 		SPPUIObject sppuiObject = (SPPUIObject)uiObject;
 		SpecimenProcessingProcedure spp = (SpecimenProcessingProcedure)obj;
 		updateXMLTemplateInDB(spp.getId(), sppuiObject.getXmlFileName());
-		
-	}
+
+			}
 	/**
 	 * Updates the persistent object in the database.
 	 * @param dao : dao
@@ -180,7 +181,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	@Override
 	protected void update(DAO dao, Object currentObj, Object oldObj, Object uiObject,
 			SessionDataBean sessionDataBean) throws BizLogicException
-	{
+			{
 		try
 		{
 			final SpecimenProcessingProcedure sppOldObj = (SpecimenProcessingProcedure) oldObj;
@@ -249,9 +250,9 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 				}
 				sppNewObj.getActionCollection().addAll(newActList);
 			}
-			
-			
-			
+
+
+
 			dao.update(sppNewObj, sppOldObj);
 			updateXMLTemplateInDB(sppNewObj.getId(), xmlFile);
 		}
@@ -310,8 +311,8 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 			this.logger.error(Constants.INVALID_XML_MSG, e);
 			throw this.getBizLogicException(appExp, "", Constants.INVALID_XML_MSG);
 		} 
-	}
-	
+			}
+
 	/**
 	 * This method will update the caTissue_SPP table with the latest SPP XML Template
 	 * @param id
@@ -330,25 +331,25 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		InputStream stream;
 		try {
 			stream = xmlFile.getInputStream();
-		
-		
-		jdbcdao = AppUtility.openJDBCSession();
-		PreparedStatement statement = jdbcdao.getPreparedStatement("update catissue_spp set spp_template_xml=? where identifier=?");
-		
-		String res = AppUtility.convertStreamToString(stream);
-		if(jdbcdao instanceof MySQLDAOImpl)
-		{
-			statement.setString(1, res);
-		}
-		else if(jdbcdao instanceof OracleDAOImpl)
-		{
-			StringReader reader = new StringReader(res);
-			statement.setCharacterStream(1, reader, res.length());
-		}
-		
-		statement.setLong(2, id);
-		statement.execute();
-		jdbcdao.commit();
+
+
+			jdbcdao = AppUtility.openJDBCSession();
+			PreparedStatement statement = jdbcdao.getPreparedStatement("update catissue_spp set spp_template_xml=? where identifier=?");
+
+			String res = AppUtility.convertStreamToString(stream);
+			if(jdbcdao instanceof MySQLDAOImpl)
+			{
+				statement.setString(1, res);
+			}
+			else if(jdbcdao instanceof OracleDAOImpl)
+			{
+				StringReader reader = new StringReader(res);
+				statement.setCharacterStream(1, reader, res.length());
+			}
+
+			statement.setLong(2, id);
+			statement.execute();
+			jdbcdao.commit();
 		} 
 		catch (Exception e) 
 		{
@@ -364,7 +365,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(e, "error.update.spp", "");
 			}
 		}
-	}
+			}
 
 	/**
 	 * @param sppIdentifier
@@ -442,7 +443,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	 *
 	 * @throws BizLogicException the biz logic exception
 	 */
-	public List getAllSPPNames() throws BizLogicException
+	public List<NameValueBean> getAllSPPNames() throws BizLogicException
 	{
 		DAO dao;
 		List<String> dataList = null;
@@ -478,7 +479,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	 * @throws SQLException
 	 */
 	public Map<Action, Long> generateContextRecordIdMap(SpecimenProcessingProcedure spp) throws ApplicationException,
-			DynamicExtensionsSystemException, DynamicExtensionsApplicationException, SQLException
+	DynamicExtensionsSystemException, DynamicExtensionsApplicationException, SQLException
 	{
 		Map<Action, Long> contextRecordIdMap = new HashMap<Action, Long>();
 		for (Action action : spp.getActionCollection())
@@ -506,7 +507,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	public Map<AbstractFormContext, Long> generateContextRecordIdMap(
 			AbstractFormContext formContext, Action action) throws ApplicationException,
 			DynamicExtensionsSystemException, DynamicExtensionsApplicationException, SQLException
-	{
+			{
 		Map<AbstractFormContext, Long> contextRecordIdMap = new HashMap<AbstractFormContext, Long>();
 		if (action.getApplicationDefaultValue() != null)
 		{
@@ -515,7 +516,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 			contextRecordIdMap.put(formContext, recordIdentifier);
 		}
 		return contextRecordIdMap;
-	}
+			}
 
 	/**
 	 * Gets the sPP name list.
@@ -567,7 +568,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 						.iterator();
 				if (contIter.hasNext())
 				{
-				/*	if(!"TransferEventParameters".equals(associationInterface.getTargetEntity().getName())
+					/*	if(!"TransferEventParameters".equals(associationInterface.getTargetEntity().getName())
 							&& !"DisposalEventParameters".equals(associationInterface.getTargetEntity().getName()))
 					{*/
 					namesOfSPPEvents.add(edu.wustl.cab2b.common.util.Utility
@@ -584,7 +585,7 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		else
 		{
 			logger
-					.error("edu.wustl.catissuecore.util.global.AppUtility.getAllSPPEventFormNames(Map<String, Long>): actionRecordEntry is NULL!");
+			.error("edu.wustl.catissuecore.util.global.AppUtility.getAllSPPEventFormNames(Map<String, Long>): actionRecordEntry is NULL!");
 		}
 		Collections.sort(namesOfSPPEvents);
 		String[] eventlist = new String[namesOfSPPEvents.size()];
@@ -609,18 +610,13 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	 * @return the all events for spp
 	 * @throws BizLogicException
 	 */
-	public List getAllEventsForSPP(String sppName) throws BizLogicException
+	public List<NameValueBean> getAllEventsForSPP(String sppName) throws BizLogicException
 	{
-		DAO dao;
 		Collection<Action> dataList = null;
 		List<NameValueBean> sppNameList = new ArrayList<NameValueBean>();
 		try
 		{
-			dao = openDAOSession(null);
-			String hql = "Select actionCollection from edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure where name='"
-					+ sppName + "'";
-			dataList = dao.executeQuery(hql);
-			closeDAOSession(dao);
+			dataList=getAllEventObjectsForSPP(sppName);
 			Iterator<Action> dataListIter = dataList.iterator();
 			while (dataListIter.hasNext())
 			{
@@ -635,13 +631,11 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		}
 		catch (ApplicationException e)
 		{
-			e.printStackTrace();
 			logger.error(e.getMessage(), e);
 			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
 		catch (DynamicExtensionsSystemException e)
 		{
-			e.printStackTrace();
 			this.logger.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, "", e.getLocalizedMessage());
 		}
@@ -649,14 +643,36 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		return sppNameList;
 	}
 
+
+	public List<Action> getAllEventObjectsForSPP(String sppName) throws BizLogicException
+	{
+		DAO dao;
+		List<Action> actionList = null;
+		try
+		{
+			dao = openDAOSession(null);
+			String hql = "Select actionCollection from edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure where name='"
+					+ sppName + "'";
+			actionList = dao.executeQuery(hql);
+			closeDAOSession(dao);
+		}
+		catch (ApplicationException e)
+		{
+			logger.error(e.getMessage(), e);
+			throw getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+		}
+		return actionList;
+	}
+
+
 	/**
 	 * Gets the all event names.
 	 *
 	 * @return the all event names
 	 */
-	public static List getAllEventNames()
+	public static List<NameValueBean> getAllEventNames()
 	{
-		List eventList = new ArrayList();
+		List<NameValueBean> eventList = new ArrayList<NameValueBean>();
 		eventList.add(new NameValueBean(Constants.SELECT_OPTION, Constants.SELECT_OPTION));
 		EntityCache cache = EntityCache.getInstance();
 		EntityGroupInterface entityGroup = cache.getEntityGroupById(1L);
@@ -688,8 +704,8 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	}
 
 	public InputStream getTemplateAsStream(Long id)
-	throws Exception 
-	{
+			throws Exception 
+			{
 		InputStream in = null;
 		JDBCDAO jdbcdao = null;
 		try
@@ -721,5 +737,28 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 		scgName=(String) ((List) scgNameList.get(0)).get(0);
 		return scgName;
 
+	}
+
+	public boolean isCaCoreGenerated(Long eventId) throws DynamicExtensionsCacheException
+	{
+		EntityCache entityCache=EntityCache.getInstance();
+		return entityCache.isCaCoreGenerated(eventId);
+	}
+
+	public boolean isCaCoreGenerated(Collection actionSet) throws DynamicExtensionsCacheException
+	{
+		Iterator actionSetIter=actionSet.iterator();
+		while(actionSetIter.hasNext())
+		{
+			Action action=(Action)actionSetIter.next();
+			if(isCaCoreGenerated(action.getContainerId()) == false)
+			{
+				break;
+			}
+		}
+		if(actionSetIter.hasNext())
+			return false;
+		else
+			return true;
 	}
 }

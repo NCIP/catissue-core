@@ -82,6 +82,13 @@
 							<%@ include file="/pages/content/common/ActionErrors.jsp" %>
 						</td>
 					</tr>
+					<c:choose>
+		<c:when test="${requestScope.isCaCoreGenerated == 'true' || requestScope.isCaCoreGenerated == true}">
+		 <tr>
+          <td colspan="4" class="showhide1"><Strong><bean:message key="cacore.not.generated"/></Strong></td>
+        </tr>
+		</c:when>
+		<c:otherwise>
 					<tr>
 						<td>
 							<div style="overflow:no; height: 100%;float: none" align="left" id ="sppEvents">
@@ -95,6 +102,8 @@
 							<html:hidden styleId="barcode" property="barcode"/>
 						</td>
 					</tr>
+		</c:otherwise>
+		</c:choose>
 				</table>
 			</td>
 		</tr>

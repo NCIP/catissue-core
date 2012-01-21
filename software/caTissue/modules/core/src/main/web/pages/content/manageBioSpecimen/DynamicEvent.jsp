@@ -252,6 +252,13 @@ function submitButton()
 				 </tr>
 			</c:otherwise>
 		</c:choose>
+		<c:choose>
+		<c:when test="${requestScope.isCaCoreGenerated == 'true' || requestScope.isCaCoreGenerated == true}">
+		 <tr>
+          <td colspan="4" class="showhide1"><bean:message key="cacore.not.generated"/></td>
+        </tr>
+		</c:when>
+		<c:otherwise>
         <tr>
           <td colspan="4" class="showhide1"></td>
         </tr>
@@ -334,6 +341,8 @@ function submitButton()
 			   </td>
 			</tr>
 		</c:if>
+		</c:otherwise>
+		</c:choose>
       </table></td>
   </tr>
   	 </html:form>

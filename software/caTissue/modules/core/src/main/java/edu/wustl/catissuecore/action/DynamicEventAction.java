@@ -14,9 +14,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.exception.DynamicExtensionsCacheException;
 import edu.wustl.cab2b.common.util.Utility;
 import edu.wustl.catissuecore.actionForm.DynamicEventForm;
 import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
+import edu.wustl.catissuecore.bizlogic.SPPBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.processingprocedure.Action;
@@ -53,7 +55,7 @@ public class DynamicEventAction extends BaseAction
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{
+			{
 		if (request.getParameter(Constants.REFRESH_EVENT_GRID) != null)
 		{
 			request.setAttribute(Constants.REFRESH_EVENT_GRID, request
@@ -165,13 +167,7 @@ public class DynamicEventAction extends BaseAction
 			dynamicEventForm.setEventName(eventName);
 
 			eventId=(Long) dynamicEventMap.get(eventName);
-			/*String query="Select IS_CACORE_GENERATED from dyextn_entity_group where IDENTIFIER = (select ENTITY_GROUP_ID from dyextn_container where IDENTIFIER="+eventId+")";
-			List result=AppUtility.executeSQLQuery(query);
-			Boolean isCaCoreGenerated=Boolean.parseBoolean(((List) result.get(0)).get(0).toString());
-			if(!isCaCoreGenerated)
-			{
-				request.setAttribute("isCaCoreGenerated", true);
-			}*/
+			checkIsCaCoreGenerated(request, factory, eventId);
 			if (Boolean.parseBoolean(request.getParameter("showDefaultValues")))
 			{
 				IBizLogic defaultBizLogic = new CatissueDefaultBizLogic();
@@ -238,6 +234,7 @@ public class DynamicEventAction extends BaseAction
 					.getRecordEntry(), dynamicEventForm.getContId());
 
 			Long containerId = dynamicEventForm.getContId();
+			checkIsCaCoreGenerated(request, factory, containerId);
 			IBizLogic defaultBizLogic = new CatissueDefaultBizLogic();
 
 			String specimenId = (String) request.getAttribute(Constants.SPECIMEN_ID);
@@ -274,7 +271,7 @@ public class DynamicEventAction extends BaseAction
 			{
 				List<DefaultAction> actionList = defaultBizLogic.retrieve(
 						DefaultAction.class.getName(), Constants.CONTAINER_ID, dynamicEventForm
-								.getContId());
+						.getContId());
 				if (actionList != null && !actionList.isEmpty())
 				{
 					DefaultAction action = (DefaultAction) actionList.get(0);
@@ -312,6 +309,25 @@ public class DynamicEventAction extends BaseAction
 		populateStaticAttributes(request, dynamicEventForm);
 		request.setAttribute("iframeURL", iframeURL+"&showCalculateDefaultValue=false");
 		return mapping.findForward((String) request.getAttribute(Constants.PAGE_OF));
+			}
+
+	private void checkIsCaCoreGenerated(HttpServletRequest request, final IFactory factory,
+			Long containerId)
+	{
+		final SPPBizLogic sppBizLogic = (SPPBizLogic) factory
+				.getBizLogic(Constants.SPP_ID);
+		try
+		{
+			Boolean isCaCoreGenerated=sppBizLogic.isCaCoreGenerated(containerId);
+			if(!isCaCoreGenerated)
+			{
+				request.setAttribute("isCaCoreGenerated", true);
+			}
+		}
+		catch(DynamicExtensionsCacheException e)
+		{
+			request.setAttribute("isCaCoreGenerated", true);
+		}
 	}
 
 	/**

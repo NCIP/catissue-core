@@ -54,6 +54,11 @@ public class DisplayDefaultValuesForSPPEventsAction extends SecureAction
 			TreeSet<Action> actionList = new TreeSet<Action>(new SPPActionComparator());
 			actionList.addAll(spp.getActionCollection());
 			request.setAttribute("actionColl", actionList);
+			Boolean isCaCoreGenerated=sppBizLogic.isCaCoreGenerated(actionList);
+			if(!isCaCoreGenerated)
+			{
+				request.setAttribute("isCaCoreGenerated", true);
+			}
 			return mapping.findForward(Constants.PAGE_OF_DEF_VALUE_FOR_SPP);
 		}
 		return mapping.findForward(Constants.PAGE_OF_SPP);
