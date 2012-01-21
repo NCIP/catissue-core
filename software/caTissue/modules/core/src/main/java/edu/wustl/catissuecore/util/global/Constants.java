@@ -404,6 +404,8 @@ public class Constants
 	//public static final String SEARCHED_ENTITIES_MAP = "searchedEntitiesMap";
 	/** The Constant SUCCESS. */
 	public static final String SUCCESS = "success";
+	/** The Constant HOME. */
+	public static final String HOME = "home";
 
 	/** The Constant FAILURE. */
 	public static final String FAILURE = "failure";

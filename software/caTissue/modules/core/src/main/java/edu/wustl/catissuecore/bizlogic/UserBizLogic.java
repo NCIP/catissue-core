@@ -1961,10 +1961,10 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
         return SUCCESS;
     }
 
-    public String getMigrationStatus(User user) throws ApplicationException
+    public String getMigrationStatus(String loginName) throws ApplicationException
     {
     	
-		String sql="select MIGRATION_STATUS from csm_migrate_user where LOGIN_NAME='"+user.getLoginName()+"'";
+		String sql="select MIGRATION_STATUS from csm_migrate_user where LOGIN_NAME='"+loginName+"'";
 		
 		List<List<Object>> migrationList=null;
 		
@@ -1989,7 +1989,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
     	try
     	{
     		// if user migrated, then no need to check for expiry
-    		if(!getMigrationStatus(user).equals(MigrationState.MIGRATED.toString()))
+    		if(!getMigrationStatus(user.getLoginName()).equals(MigrationState.MIGRATED.toString()))
     		{
 	    		final ArrayList<Password> passwordList = new ArrayList(getPasswordCollection(user));
 	    		final boolean firstTimeLogin = getFirstLogin(user);

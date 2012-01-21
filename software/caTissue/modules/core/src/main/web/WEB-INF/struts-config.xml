@@ -1183,7 +1183,15 @@ PUBLIC
 					name ="migrationForm"
 					validate="false"
 					scope="request">
+		 			<forward name="success" path="/CheckMigration.do" />
+		</action>
+		<action path="/CheckMigration"
+					type="edu.wustl.catissuecore.action.CheckMigrationAction"
+					name ="migrationForm"
+					validate="false"
+					scope="request">
 		 			<forward name="success" path=".catissuecore.wustlkeyDef" />
+		 			<forward name="home" path="/Home.do" />
 		</action>
 
 		<action path="/MigrateUser"
@@ -1605,6 +1613,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path="/ShowMigrationPage.do" />
+			<forward name="home" path="/Home.do" />
 			<forward name="failure" path="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword" />
 		</action>
 

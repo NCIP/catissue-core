@@ -79,7 +79,7 @@ public class SSOcaTissueCommonLoginUtility
             }
 
             if (!Constants.FAILURE.equals(forwardTo)
-                    && MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()))
+                    && MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()) && !Constants.ACCESS_DENIED.equals(loginInfoUtility.getForwardTo()) )
             {
             	loginInfoUtility.setForwardTo(Constants.SUCCESS);
             }
@@ -235,7 +235,7 @@ public class SSOcaTissueCommonLoginUtility
 		    if (result.equals(Constants.SUCCESS))
 	        {
 		    	final UserBizLogic ubizlogic=new UserBizLogic();
-		    	if(MigrationState.DO_NOT_MIGRATE.toString().equals(ubizlogic.getMigrationStatus(validUser)))
+		    	if(MigrationState.DO_NOT_MIGRATE.toString().equals(ubizlogic.getMigrationStatus(validUser.getLoginName())))
 		    	{
 		    		forwardTo=edu.wustl.wustlkey.util.global.Constants.PAGE_NON_WASHU;
 		    	}
