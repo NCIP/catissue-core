@@ -1,429 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <staticMetaData>
-<entities>
-	 <entity>
-		<entityName>edu.wustl.catissuecore.domain.processingprocedure.Action</entityName>
-		<parentEntity>edu.common.dynamicextensions.domain.integration.AbstractFormContext</parentEntity>
-		<tableName>CATISSUE_ACTION</tableName>
-		<isAbstract>false</isAbstract>
+	<entity>
+		<name>edu.wustl.catissuecore.domain.SpecimenCollectionGroup</name>
 		<attribute>
-			 <attributeNames>id</attributeNames>
-			 <tableColumn>IDENTIFIER</tableColumn>
-			 <attributeDataType>Long</attributeDataType>
-			<primaryKey>true</primaryKey>
+			<name>ageAtCollection</name>
 		</attribute>
-
+		<attribute>	
+			<name>encounterTimestamp</name>
+		</attribute>
+	</entity>
+	<entity>
+		<name>edu.wustl.catissuecore.domain.Specimen</name>
 		<attribute>
-			 <attributeNames>barcode</attributeNames>
-			 <tableColumn>BARCODE</tableColumn>
-			 <attributeDataType>String</attributeDataType>
-			<primaryKey>false</primaryKey>
+			<name>globalSpecimenIdentifier</name>
 		</attribute>
-
-		<attribute>
-			 <attributeNames>actionOrder</attributeNames>
-			 <tableColumn>ACTION_ORDER</tableColumn>
-			 <attributeDataType>Long</attributeDataType>
-			<primaryKey>false</primaryKey>
-		</attribute>
-
-		<attribute>
-			<attributeNames>uniqueId</attributeNames>
-			<tableColumn>UNIQUE_ID</tableColumn>
-			<attributeDataType>String</attributeDataType>
-			<primaryKey>false</primaryKey>
-		</attribute>
+	</entity>
+	
+	<entity>
+		<name>edu.wustl.catissuecore.domain.processingprocedure.Action</name>
+		<attribute><name>id</name></attribute>
+		<attribute><name>barcode</name></attribute>
+		<attribute><name>actionOrder</name></attribute>
+		<attribute><name>uniqueId</name></attribute>
 	</entity>
 
 	<entity>
-		<entityName>edu.wustl.catissuecore.domain.processingprocedure.DefaultAction</entityName>
-		<parentEntity>edu.common.dynamicextensions.domain.integration.AbstractFormContext</parentEntity>
-		<tableName>CATISSUE_DEFAULT_ACTION</tableName>
-		<isAbstract>false</isAbstract>
-		<attribute>
-			 <attributeNames>id</attributeNames>
-			 <tableColumn>IDENTIFIER</tableColumn>
-			 <attributeDataType>Long</attributeDataType>
-			<primaryKey>true</primaryKey>
-		</attribute>
+		<name>edu.wustl.catissuecore.domain.processingprocedure.DefaultAction</name>
+		<attribute><name>id</name></attribute>
 	</entity>
 
 	<entity>
-		<entityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</entityName>
-		<parentEntity>edu.common.dynamicextensions.domain.integration.AbstractRecordEntry</parentEntity>
-		<tableName>CATISSUE_ACTION_APP_RCD_ENTRY</tableName>
-		<isAbstract>false</isAbstract>
-		<attribute>
-			<attributeNames>id</attributeNames>
-			<tableColumn>IDENTIFIER</tableColumn>
-			<attributeDataType>Long</attributeDataType>
-			<primaryKey>true</primaryKey>
-		</attribute>
+		<name>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</name>
+		<attribute><name>id</name></attribute>
 	</entity>
-
-
 	<entity>
-		 <entityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</entityName>
-		 <parentEntity></parentEntity>
-		  <tableName>CATISSUE_SPP</tableName>
-		  <isAbstract>false</isAbstract>
-			<attribute>
-				 <attributeNames>id</attributeNames>
-				 <tableColumn>IDENTIFIER</tableColumn>
-				 <attributeDataType>Long</attributeDataType>
-				<primaryKey>true</primaryKey>
-			</attribute>
-			<attribute>
-				 <attributeNames>name</attributeNames>
-				 <tableColumn>NAME</tableColumn>
-				 <attributeDataType>String</attributeDataType>
-				<primaryKey>false</primaryKey>
-			</attribute>
-			<attribute>
-				 <attributeNames>barcode</attributeNames>
-				 <tableColumn>BARCODE</tableColumn>
-				 <attributeDataType>String</attributeDataType>
-				<primaryKey>false</primaryKey>
-			</attribute>
+		<name>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</name>
+		<attribute><name>id</name></attribute><attribute><name>name</name></attribute><attribute><name>barcode</name></attribute>
 	</entity>
 
 	<entity>
-		<entityName>edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication</entityName>
-		<parentEntity></parentEntity>
-		<tableName>CATISSUE_ABSTRACT_APPLICATION</tableName>
-		<isAbstract>true</isAbstract>
-		<attribute>
-			 <attributeNames>id</attributeNames>
-			 <tableColumn>IDENTIFIER</tableColumn>
-			 <attributeDataType>Long</attributeDataType>
-			<primaryKey>true</primaryKey>
-		</attribute>
-		<attribute>
-			 <attributeNames>reasonDeviation</attributeNames>
-			 <tableColumn>REASON_DEVIATION</tableColumn>
-			 <attributeDataType>String</attributeDataType>
-			<primaryKey>false</primaryKey>
-		</attribute>
-		<attribute>
-			<attributeNames>timestamp</attributeNames>
-			 <tableColumn>TIMESTAMP</tableColumn>
-			 <attributeDataType>Date</attributeDataType>
-			<primaryKey>false</primaryKey>
-		</attribute>
-		<attribute>
-			 <attributeNames>comments</attributeNames>
-			 <tableColumn>COMMENTS</tableColumn>
-			 <attributeDataType>String</attributeDataType>
-			<primaryKey>false</primaryKey>
-		</attribute>
+		<name>edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication</name>
+		<attribute><name>id</name></attribute><attribute><name>reasonDeviation</name></attribute><attribute><name>timestamp</name></attribute><attribute><name>comments</name></attribute>
 	</entity>
-
 
 	<entity>
-		 <entityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</entityName>
-		 <parentEntity>edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication</parentEntity>
-		  <tableName>CATISSUE_SPP_APPLICATION</tableName>
-		  <isAbstract>false</isAbstract>
-		  <attribute>
-			 <attributeNames>id</attributeNames>
-			 <tableColumn>IDENTIFIER</tableColumn>
-			 <attributeDataType>Long</attributeDataType>
-			<primaryKey>true</primaryKey>
-		</attribute>
+		<name>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</name>
+		<attribute><name>id</name></attribute>
 	</entity>
-
-
 	<entity>
-		 <entityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</entityName>
-		 <parentEntity>edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication</parentEntity>
-		 <tableName>CATISSUE_ACTION_APPLICATION</tableName>
-		 <isAbstract>false</isAbstract>
-		 <attribute>
-			 <attributeNames>id</attributeNames>
-			 <tableColumn>IDENTIFIER</tableColumn>
-			 <attributeDataType>Long</attributeDataType>
-			<primaryKey>true</primaryKey>
-		</attribute>
+		<name>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</name>
+		<attribute><name>id</name></attribute>
 	</entity>
-</entities>
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.Action</targetEntityName>
+	</association>
 
-<associations>
+
+	<association>
+		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.Action</sourceEntityName>
+		<targetEntityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</targetEntityName>
+	</association>
+
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.CollectionProtocolEvent</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</targetEntityName>
-		<associationName>CPE_SPP_Association</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>sppCollection</roleName>
-		<roleNameTable>collectionProtocolEvent</roleNameTable>
-		<isSwap>false</isSwap>
-		<srcAssociationId></srcAssociationId>
-		<targetAssociationId>CPE_IDENTIFIER</targetAssociationId>
-		<maxCardinality>2</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>SRC_DESTINATION</direction>
-		<manytomany>false</manytomany>
 	</association>
-
-	<association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.Action</targetEntityName>
-		<associationName>CATISSUE_SPP_ACTION</associationName><!-- intermediate  table name for many to many -->
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>sppCollection</roleName>
-		<roleNameTable>actionCollection</roleNameTable>
-		<isSwap>true</isSwap>
-		<srcAssociationId>ACTION_IDENTIFIER</srcAssociationId>
-		<targetAssociationId>SPP_IDENTIFIER</targetAssociationId>
-		<maxCardinality>2</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>BI_DIRECTIONAL</direction>
-		<manytomany>true</manytomany>
-	</association>
-
-	<association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.Action</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</targetEntityName>
-		<associationName>CATISSUE_SPP_ACTION</associationName> <!-- intermediate  table name for many to many -->
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>actionCollection</roleName>
-		<roleNameTable>sppCollection</roleNameTable>
-		<isSwap>false</isSwap>
-		<srcAssociationId>ACTION_IDENTIFIER</srcAssociationId>
-		<targetAssociationId>SPP_IDENTIFIER</targetAssociationId>
-		<maxCardinality>2</maxCardinality>
-		<isSystemGenerated>false</isSystemGenerated>
-		<direction>BI_DIRECTIONAL</direction>
-		<manytomany>true</manytomany>
-	</association>
-
-	<association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.Action</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</targetEntityName>
-		<associationName>actionValue</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>applicationDefaultValue</roleName>
-		<roleNameTable>actionValue</roleNameTable>
-		<isSwap>false</isSwap>
-		<srcAssociationId>ACTION_APP_RECORD_ENTRY_ID</srcAssociationId>
-		<targetAssociationId>IDENTIFIER</targetAssociationId>
-		<maxCardinality>1</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>SRC_DESTINATION</direction>
-		<manytomany>false</manytomany>
-	</association>
-
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.SpecimenRequirement</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.Action</targetEntityName>
-		<associationName>requirementAction</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>creationEvent</roleName>
-		<roleNameTable>specimenRequirement_Action</roleNameTable>
-		<isSwap>false</isSwap>
-		<srcAssociationId>ACTION_IDENTIFIER</srcAssociationId>
-		<targetAssociationId>IDENTIFIER</targetAssociationId>
-		<maxCardinality>1</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>SRC_DESTINATION</direction>
-		<manytomany>false</manytomany>
 	</association>
-
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.SpecimenRequirement</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</targetEntityName>
-		<associationName>specimenRequirement_SPP</associationName> <!-- This name shud b in camel case but can be any name -->
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>processingSPP</roleName><!-- This is target role name as specified in model. This shud b also camelCase -->
-		<roleNameTable>specimenRequirementCollection</roleNameTable> <!-- This is the source role name as specified in model. This shid b in camelCase -->
-		<isSwap>false</isSwap>
-		<srcAssociationId>SPP_IDENTIFIER</srcAssociationId>
-		<targetAssociationId>IDENTIFIER</targetAssociationId>
-		<maxCardinality>1</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>SRC_DESTINATION</direction>
-		<manytomany>false</manytomany>
 	</association>
-
-
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.SpecimenCollectionGroup</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</targetEntityName>
-		<associationName>scg_SPPApplication</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>scgSPP</roleName>
-		<roleNameTable>specimenCollectionGroup</roleNameTable>
-		<isSwap>false</isSwap>
-		<srcAssociationId></srcAssociationId>
-		<targetAssociationId>SCG_IDENTIFIER</targetAssociationId>
-		<maxCardinality>2</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>SRC_DESTINATION</direction>
-		<manytomany>false</manytomany>
 	</association>
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</targetEntityName>
-		<associationName>sppApp_actionApp</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>sppActionApplicationCollection</roleName>
-		<roleNameTable>sppApplication</roleNameTable>
-		<isSwap>true</isSwap>
-		<srcAssociationId>SPP_APP_IDENTIFIER</srcAssociationId>
-		<targetAssociationId></targetAssociationId>
-		<maxCardinality>2</maxCardinality> <!-- one to many  -->
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>BI_DIRECTIONAL</direction>
-		<manytomany>false</manytomany>
 	</association>
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</targetEntityName>
-		<associationName>actionApp_sppApplicationApp</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>sppApplication</roleName>
-		<roleNameTable></roleNameTable>
-		<isSwap>false</isSwap>
-		<srcAssociationId></srcAssociationId>
-		<targetAssociationId>SPP_APP_IDENTIFIER</targetAssociationId>
-		<maxCardinality>1</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>BI_DIRECTIONAL</direction>
-		<manytomany>false</manytomany>
 	</association>
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</targetEntityName>
-		<associationName>actionApp_actionApplicationRecord</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>applicationRecordEntry</roleName>
-		<roleNameTable>ActionApplication</roleNameTable>
-		<isSwap>true</isSwap>
-		<srcAssociationId>ACTION_APP_RECORD_ENTRY_ID</srcAssociationId>
-		<targetAssociationId></targetAssociationId>
-		<maxCardinality>1</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>BI_DIRECTIONAL</direction>
-		<manytomany>false</manytomany>
 	</association>
-	
+
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</targetEntityName>
-		<associationName>actionApplicationRecord_actionApp</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>actionApplication</roleName>
-		<roleNameTable>ActionApplicationRecordEntry</roleNameTable>
-		<isSwap>true</isSwap>
-		<srcAssociationId>IDENTIFIER</srcAssociationId>
-		<targetAssociationId>ACTION_APP_ID</targetAssociationId>
-		<maxCardinality>1</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>BI_DIRECTIONAL</direction>
-		<manytomany>false</manytomany>
 	</association>
-	
-	<!--  <association>
-		<sourceEntityName>edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry</sourceEntityName>
-		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</targetEntityName>
-		<associationName>actionApplicationRecord_actionApp</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>actionApplication</roleName>
-		<roleNameTable>ActionApplicationRecordEntry</roleNameTable>
-		<isSwap>false</isSwap>
-		<srcAssociationId>ACTION_APP_ID</srcAssociationId>
-		<targetAssociationId>IDENTIFIER</targetAssociationId>
-		<maxCardinality>1</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>SRC_DESTINATION</direction>
-		<manytomany>false</manytomany>
-	</association>-->
-
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.Specimen</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</targetEntityName>
-		<associationName>specimen_SPPAppliction</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>processingSPPApplication</roleName>
-		<roleNameTable>Specimen</roleNameTable>
-		<isSwap>false</isSwap>
-		<srcAssociationId>SPP_APPLICATION_ID</srcAssociationId>
-		<targetAssociationId>IDENTIFIER</targetAssociationId>
-		<maxCardinality>1</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>SRC_DESTINATION</direction>
-		<manytomany>false</manytomany>
 	</association>
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.Specimen</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</targetEntityName>
-		<associationName>specimenToActionApplictionCollection</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>actionApplicationCollection</roleName>
-		<roleNameTable>specimen</roleNameTable>
-		<isSwap>true</isSwap>
-		<srcAssociationId>SPECIMEN_ID</srcAssociationId>
-		<targetAssociationId>IDENTIFIER</targetAssociationId>
-		<maxCardinality>2</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>SRC_DESTINATION</direction>
-		<manytomany>false</manytomany>
 	</association>
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</targetEntityName>
-		<associationName>spp_sppApplication</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>sppApplicationCollection</roleName>
-		<roleNameTable>spp</roleNameTable>
-		<isSwap>true</isSwap>
-		<srcAssociationId>SPP_IDENTIFIER</srcAssociationId>
-		<targetAssociationId></targetAssociationId>
-		<maxCardinality>2</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>BI_DIRECTIONAL</direction>
-		<manytomany>false</manytomany>
 	</association>
 
-	 <association>
+	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</targetEntityName>
-		<associationName>spp_sppApplication</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>spp</roleName>
-		<roleNameTable></roleNameTable>
-		<isSwap>false</isSwap>
-		<srcAssociationId>SPP_IDENTIFIER</srcAssociationId>
-		<targetAssociationId></targetAssociationId>
-		<maxCardinality>2</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>BI_DIRECTIONAL</direction>
-		<manytomany>false</manytomany>
 	</association>
 
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.AbstractApplication</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.User</targetEntityName>
-		<associationName>user_abstractApplication</associationName>
-		<associationTye>ASSOCIATION</associationTye>
-		<roleName>userSPPAction</roleName>
-		<roleNameTable>userAbstracApplication</roleNameTable>
-		<isSwap>false</isSwap>
-		<srcAssociationId></srcAssociationId>
-		<targetAssociationId>USER_DETAILS</targetAssociationId>
-		<maxCardinality>2</maxCardinality>
-		<isSystemGenerated>true</isSystemGenerated>
-		<direction>SRC_DESTINATION</direction>
-		<manytomany>false</manytomany>
 	</association>
-
-</associations>
 
 </staticMetaData>

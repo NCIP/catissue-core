@@ -1300,10 +1300,10 @@
 		<echo message="Integrating DynamicExtensions app ...." />
 		<!--<unzip src="dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />-->
 		<unjar src="${prop.temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${prop.temp.dir}/dynamicextensions/DynamicExtensions" />
-				<replace dir="${prop.temp.dir}/dynamicextensions/DynamicExtensions" >
-							<include name="DynamicExtensionDAO.properties" />
-							<replacefilter token="@@host.app.name@@" value="caTissue Suite" />
-						</replace>
+		<replace dir="${prop.temp.dir}/dynamicextensions/DynamicExtensions" >
+			<include name="DynamicExtensionDAO.properties" />
+			<replacefilter token="@@host.app.name@@" value="caTissue Suite" />
+		</replace>
 		<jar destfile="${prop.temp.dir}/DynamicExtensions.jar" basedir="${prop.temp.dir}/dynamicextensions/DynamicExtensions" />
 		<copy file="${prop.temp.dir}/DynamicExtensions.jar" todir="${prop.temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface" overwrite="true" />
 		<unjar src="${prop.temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${prop.temp.dir}/dynamicextensions/WEB-INF/classes" />
@@ -1719,63 +1719,7 @@
 
 		</target>
 
-	<target name="update_static_metadata_for_model_changes_mysql">
-		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-
-		<java classname="edu.wustl.catissuecore.querysuite.metadata.AddStaticMetaData"  fork="true" maxmemory="512m" failonerror="true">
-			<classpath location="${prop.temp.dir}/catissuecore/WEB-INF/classes" />
-			<classpath refid="temp.classpath" />
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="${caTissue-webapp.dir.dist}/modules/caTissue/resources/xml">
-					<include name="StaticModelMetaData.xsd" />
-					<include name="StaticModelMetaData.xml" />
-				</fileset>
-
-			</classpath>
-			<arg value="${database.server}"/>
-			<arg value="${database.port}"/>
-			<arg value="${database.type}"/>
-			<arg value="${database.name}"/>
-			<arg value="${database.user}"/>
-			<arg value="${database.password}"/>
-			<arg value="com.mysql.jdbc.Driver"/>
-			<arg value="${caTissue-webapp.dir.dist}/modules/caTissue/resources/xml"/>
-		</java>
-
-	</target>
-
-	<target name="update_static_metadata_for_model_changes_oracle">
-		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-
-		<java classname="edu.wustl.catissuecore.querysuite.metadata.AddStaticMetaData"  fork="true" maxmemory="512m" failonerror="true">
-			<classpath location="${prop.temp.dir}/catissuecore/WEB-INF/classes" />
-			<classpath refid="temp.classpath" />
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${caTissue-webapp.dir.dist}/modules/caTissue/resources/xml">
-					<include name="StaticModelMetaData.xsd" />
-					<include name="StaticModelMetaData.xml" />
-				</fileset>
-			</classpath>
-			<arg value="${database.server}"/>
-			<arg value="${database.port}"/>
-			<arg value="${database.type}"/>
-			<arg value="${database.name}"/>
-			<arg value="${database.user}"/>
-			<arg value="${database.password}"/>
-			<arg value="${oracle.driver.string}"/>
-			<arg value="${caTissue-webapp.dir.dist}/modules/caTissue/resources/xml"/>
-		</java>
-
-	</target>
-
+	
 	<!--MySQL Database Creation -->
 	<target name="deploy_db_mysql" description="MySQL Database Creation">
 		<echo message="Initializing MySQL Database for caTissue Suite v2.0 application..." />
@@ -2233,27 +2177,102 @@
 	<antcall target="upgrade_db_for_de_single_API"></antcall>
 	</target>
 
-	<target name="update_static_metadata">
+	<target name="setup:environment:for:de">
+		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<antcall target="replace_app_dao_prop_file"/>
+		<unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />
+
+		<copy todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" overwrite="true">
+			<fileset dir="${prop.temp.dir}/dynamicextensions/lib">
+				<include name="openide-util*.jar" />
+				<include name="nbmdr*.jar" />
+				<include name="jmiutils*.jar" />
+			</fileset>
+		</copy>
+
+		<copy file="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/hibernate.cfg.xml" todir="${prop.temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+		<copy file="${prop.temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${prop.temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
+		<copy file="${prop.temp.dir}/dynamicextensions/conf/StaticMetaData.xsd" tofile="${prop.temp.dir}/catissuecore/WEB-INF/classes/StaticMetaData.xsd" overwrite="true" />
+		<copy file="${prop.temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${prop.temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
+
+		<unjar src="${prop.temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${prop.temp.dir}/dynamicextensions/DynamicExtensions" />
+		<replace dir="${prop.temp.dir}/dynamicextensions/DynamicExtensions" >
+			<include name="DynamicExtensionDAO.properties" />
+			<replacefilter token="@@host.app.name@@" value="caTissue Suite" />
+		</replace>
+		<jar destfile="${prop.temp.dir}/DynamicExtensions.jar" basedir="${prop.temp.dir}/dynamicextensions/DynamicExtensions" />
+		<copy file="${prop.temp.dir}/DynamicExtensions.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
+		
+		<echo message="Concatenating the Application Resource Properties file" />
+		<concat destfile="${prop.temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties" append="true">
+			<fileset file="${prop.temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties" />
+		</concat>
+		<copy file="${prop.temp.dir}/dynamicextensions/WEB-INF/classes/ApplicationResources.properties" todir="${prop.temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+		<!--<echo>Configuring logger ...</echo>
+		<antcall target="configure_log4j" />-->
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
-				<antcall target="update_static_metadata_for_model_changes_mysql">
-				</antcall>
+				<replace dir="${prop.temp.dir}/catissuecore/WEB-INF/classes">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+					<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+					<replacefilter token="@@URL@@" value="jdbc:mysql://${database.server}:${database.port}/${database.name}" />
+				</replace>
 			</then>
 			<elseif>
 				<equals arg1="oracle" arg2="${database.type}" />
 				<then>
-					<antcall target="update_static_metadata_for_model_changes_oracle">
-					</antcall>
-					<echo message="Not supported for oracle"/>
+					<replace dir="${prop.temp.dir}/catissuecore/WEB-INF/classes">
+						<include name="*.cfg.xml" />
+						<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+						<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+						<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.server}:${database.port}:${database.name}" />
+					</replace>
 				</then>
 			</elseif>
-			<else>
-				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-			</else>
+			<elseif>
+				<equals arg1="mssqlserver" arg2="${database.type}"/>
+				<then>
+					<replace dir="${prop.temp.dir}/catissuecore/WEB-INF/classes">
+						<include name="*.cfg.xml" />
+						<replacefilter token="@@DIALECT@@" value="${mssqlserver.dialect.string}"/>
+						<replacefilter token="@@DRIVER@@" value="${mssqlserver.driver.string}"/>
+						<replacefilter token="@@URL@@" value="jdbc:sqlserver://${database.server}:${database.port};databaseName=${database.name};" />
+					</replace>
+				</then>
+			</elseif>
 		</if>
+		<replace dir="${prop.temp.dir}/catissuecore/WEB-INF/classes">
+			<include name="*.cfg.xml" />
+			<replacefilter token="@@DATABASE_USERNAME@@" value="${database.user}" />
+			<replacefilter token="${token.database.password}" value="${database.password}" />
+		</replace>
 	</target>
-
+	
+	<target name="update_static_metadata" depends="setup:environment:for:de">
+		<java classname="edu.common.dynamicextensions.importer.xml.XMLImporter" fork="true" maxmemory="1024m" failonerror="true">
+			<arg value="${caTissue-webapp.dir.dist}/modules/caTissue/resources/xml/StaticModelMetadata.xml" />
+			<arg value="Catissue Suite" />
+			<classpath>
+				<pathelement location="${prop.temp.dir}/catissuecore/WEB-INF/classes" />
+				<fileset dir="${prop.temp.dir}/catissuecore/WEB-INF/lib">
+					<include name="*.jar" />
+					<exclude name="uml-1.3.jar" />
+					<exclude name="xercseImpl.jar" />
+					<exclude name="scrubber-runtime.jar" />
+					<exclude name="commons-beanutils.jar" />
+					
+				</fileset>
+				<fileset dir="${lib.dir}">
+						<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+	
 	<target name="upgrade_db_from_v1.1_to_p4" description="Target for Application and Database Upgrade from caTissue v1.1 to p4">
 	<echo message="Upgrading Database v1.1 to v1.1p4" />
 	   <if>
