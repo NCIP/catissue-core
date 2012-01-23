@@ -13,9 +13,11 @@ import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
 import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.util.ObjectCloner;
 
 public class SpecimenWrapper implements ISPPBizlogic
@@ -71,6 +73,8 @@ public class SpecimenWrapper implements ISPPBizlogic
 		//update specimen object
 		Specimen newSpecimen = (Specimen) defaultBizLogic.retrieve(Specimen.class.getName(),
 				this.specimen.getId());
+		ActionApplication creationEvent = (ActionApplication)AbstractFactoryConfig.getInstance().getBizLogicFactory().getBizLogic(Constants.DEFAULT_BIZ_LOGIC) .retrieveAttribute(Specimen.class.getName(), newSpecimen.getId(), "creationEventAction");
+		newSpecimen.setCreationEventAction(creationEvent);
 		newSpecimen.setProcessingSPPApplication(processingSPPApplication);
 		defaultBizLogic.update(newSpecimen, this.specimen, sessionLoginInfo);
 
