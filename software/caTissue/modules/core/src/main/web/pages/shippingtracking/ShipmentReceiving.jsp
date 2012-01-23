@@ -210,8 +210,9 @@ function setCPId()
 			var spId=tag[0];
 			var spClass=tag[1];
 			var cpId=tag[2];
+			
             var e1=document.getElementById("mapButton_"+controlRowNumber);
-
+			
 			e1.onclick=function(){
 				var storageContainer = 'selectedContainerName_'+spId.value;
 				frameUrl='ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=selectedContainerName_'+spId+'&pos1=position1_'+spId+'&pos2=position2_'+spId+'&containerId=containerId_'+spId+'&holdSpecimenClass='+spClass+'&holdCollectionProtocol='+cpId;
@@ -972,15 +973,18 @@ function onParentContainerSelectChange(selectedOption,containerId)
 																												function mapButtonClicked_<bean:write name="containerItem" property="id"/>()
 																												 {	
 																												    var platform = navigator.platform.toLowerCase();
-																													if (platform.indexOf("m)
+																													var selectedContainerNameContValue=document.forms[0].selectedContainerNameCont_<bean:write name="containerItem" property="id"/>.value;
+																													var contPosition1Value=document.forms[0].contPosition1_<bean:write name="containerItem" property="id"/>.value;
+																													var contPosition2Value=document.forms[0].contPosition2_<bean:write name="containerItem" property="id"/>.value;
+																													if (platform.indexOf("m"))
 																													 {
-																													   	StorageMapWindowShipReceive('<%=frameUrlCont%>','name',screen.width,screen.height,'no','<%=contSelectedContainerId%>');
+																													    StorageMapWindowShipReceive('<%=frameUrlCont%>','name',screen.width,screen.height,'no','<%=contSelectedContainerId%>',selectedContainerNameContValue,contPosition1Value,contPosition2Value);
 																													 }
 																													else
 																													 {
-																													   	StorageMapWindowShipReceive('<%=frameUrlCont%>','name','800','600','no','<%=contSelectedContainerId%>');
+																													   	StorageMapWindowShipReceive('<%=frameUrlCont%>','name','800','600','no','<%=contSelectedContainerId%>',selectedContainerNameContValue,contPosition1Value,contPosition2Value);
 																													  }
-																												}
+																												}																																																						
 																											</script>																											
 																										</td>
 																				</tr>

@@ -118,16 +118,16 @@ function selectAllCheckBox(selectAllChkBoxName,chkBoxNameInEachRow)
 
 //To be used on Shipment Receiving page
 var winNew = null;
-function StorageMapWindowShipReceive(mypage,myname,w,h,scroll,containerNameControlId)
+function StorageMapWindowShipReceive(mypage,myname,w,h,scroll,containerNameControlId,selectedContainerNameContValue,contPosition1Value,contPosition2Value)
 {
 			LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
 			TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
 			// Sri: Added position one and two as parameters
             // with format positionOne:positionTwo
 			mypage=mypage+"1" + 
-					"&storageToBeSelected="+ document.forms[0].customListBox_1_0.value +  //parentContainerId.value +
-					"&position=" + document.forms[0].customListBox_1_1.value +   //positionDimensionOne.value + 
-					":" + document.forms[0].customListBox_1_2.value;
+					"&storageToBeSelected="+ selectedContainerNameContValue +  //parentContainerId.value +
+					"&position=" + contPosition1Value +   //positionDimensionOne.value + 
+					":" + contPosition2Value;
 					
 		   var storageContainer = document.getElementById(containerNameControlId).value;
 		   mypage+="&storageContainerName="+storageContainer;		
