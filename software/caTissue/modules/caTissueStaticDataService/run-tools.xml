@@ -313,6 +313,13 @@
             </fileset>
         </copy>
 
+        <!-- MERGE CASTOR MAPPINGS -->
+        <foreach target="-doMergeCastorMappingXMLs" param="fullJarFileName" inheritall="true">
+            <fileset dir="./de_codegen/artifacts" casesensitive="yes">
+                <include name="*-schema.jar"/>
+            </fileset>
+        </foreach>
+
         <!-- XSDs IMPORT -->
         <foreach target="-importXSDs" param="fullJarFileName" inheritall="false">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
@@ -338,6 +345,7 @@
 		<replace dir="${dir}" includes="**/*" summary="true" token="&lt;a&gt;SpecimenRecordEntryCollectionBaseSolidTissuePathologyAnnotation&lt;/a&gt;" value="&lt;a&gt;SpecimenRecordEntry_SpecimenBaseSolidTissuePathologyAnnotation&lt;/a&gt;"/>
 	</target>
 
+<!--
     <target name="mergeCastor">
         <foreach target="-doMergeCastorMappingXMLs" param="fullJarFileName" inheritall="true">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
@@ -345,6 +353,7 @@
             </fileset>
         </foreach>
     </target>
+-->
 
     <target name="-doMergeCastorMappingXMLs">
         <basename property="jarfilename" file="${fullJarFileName}"/>
