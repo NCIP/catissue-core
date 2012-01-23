@@ -23,7 +23,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 {
 
 	/** Current label. */
-	protected transient Long currentLabel;
+	protected transient String currentLabel;
 
 	/**
 	 * Default Constructor.
@@ -33,7 +33,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	public DefaultSpecimenLabelGenerator() throws ApplicationException
 	{
 
-		this.init();
+		//this.init();
 		// TODO Auto-generated catch block
 	}
 
@@ -46,7 +46,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 *
 	 * @throws ApplicationException Application Exception
 	 */
-	protected void init() throws ApplicationException
+	/*protected void init() throws ApplicationException
 	{
 		String databaseConstant;
 
@@ -76,7 +76,7 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 		this.currentLabel = AppUtility.getLastAvailableValue(sql.toString());
 
 	}
-
+*/
 	/**
 	 * Sets the next available aliquot specimenlabel.
 	 *
@@ -127,11 +127,12 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 *
 	 * @param parentObject parent obj
 	 * @param specimenObject specimen obj
+	 * @throws ApplicationException 
 	 */
 	synchronized void setNextAvailableDeriveSpecimenlabel(Specimen parentObject,
-			Specimen specimenObject)
+			Specimen specimenObject) 
 	{
-		this.currentLabel = this.currentLabel + 1;
+		//this.currentLabel = this.currentLabel + 1;
 		specimenObject.setLabel(this.currentLabel.toString());
 	}
 
@@ -141,8 +142,10 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 * @param obj Specimen object
 	 *
 	 * @throws LabelGenException the label gen exception
+	 * @throws ApplicationException 
+	 * @throws NumberFormatException 
 	 */
-	public synchronized void setLabel(Object obj) throws LabelGenException
+	public synchronized void setLabel(Object obj) throws LabelGenException, NumberFormatException
 	{
 
 		final Specimen objSpecimen = (Specimen) obj;
@@ -157,7 +160,15 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 			throw new LabelGenException("Specimen status is not "+Constants.COLLECTION_STATUS_COLLECTED);
 		}
 
-		setSpecimenLabel(objSpecimen, parentSpecimen);
+		try 
+		{
+					setSpecimenLabel(objSpecimen, parentSpecimen);
+					
+		} 
+		catch (ApplicationException e) 
+		{
+			
+		}
 
 		if (objSpecimen.getChildSpecimenCollection()!=null && objSpecimen.getChildSpecimenCollection().size() > 0)
 		{
@@ -189,22 +200,28 @@ public class DefaultSpecimenLabelGenerator implements LabelGenerator
 	 *
 	 * @param objSpecimen the obj specimen
 	 * @param parentSpecimen the parent specimen
+	 * @throws ApplicationException 
+	 * @throws NumberFormatException 
 	 */
-	private void setSpecimenLabel(final Specimen objSpecimen, final Specimen parentSpecimen)
+	private void setSpecimenLabel(final Specimen objSpecimen, final Specimen parentSpecimen) throws NumberFormatException, ApplicationException
 	{
-		if (objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
+		
+		
+		if (objSpecimen.getLineage().equals(Constants.NEW_SPECIMEN) || objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
 		{
-			this.currentLabel++;
+			//this.currentLabel++;
+			this.currentLabel=new LabelTokenForId().getTokenValue(objSpecimen);
 			objSpecimen.setLabel(this.currentLabel.toString());
 		}
 		else if (objSpecimen.getLineage().equals(Constants.ALIQUOT))
 		{
 			this.setNextAvailableAliquotSpecimenlabel(parentSpecimen, objSpecimen);
 		}
-		else if (objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
+		/*else if (objSpecimen.getLineage().equals(Constants.DERIVED_SPECIMEN))
 		{
-			this.setNextAvailableDeriveSpecimenlabel(parentSpecimen, objSpecimen);
-		}
+			//this.setNextAvailableDeriveSpecimenlabel(parentSpecimen, objSpecimen);
+			objSpecimen.setLabel(this.currentLabel.toString());
+		}*/
 	}
 
 	/**

@@ -49,7 +49,7 @@ public class DefaultSpecimenLabelGeneratorForWashu extends DefaultSpecimenLabelG
 	{
 		try
 		{
-			this.init();
+			//this.init();
 			final String sql = "select MAX(identifier) from CATISSUE_SPECIMEN";
 			this.tmpLabel = AppUtility.getLastAvailableValue(sql);
 		}

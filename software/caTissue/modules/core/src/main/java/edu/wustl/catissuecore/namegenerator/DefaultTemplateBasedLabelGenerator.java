@@ -393,7 +393,7 @@ public class DefaultTemplateBasedLabelGenerator extends DefaultSpecimenLabelGene
 	synchronized void setNextAvailableDeriveSpecimenlabel(Specimen parentObject,
 			Specimen specimenObject)
 	{
-		this.currentLabel = this.currentLabel + 1;
+		//this.currentLabel = new LabelTokenForId().getTokenValue(specimenObject);
 		specimenObject.setLabel(this.currentLabel.toString());
 	}
 

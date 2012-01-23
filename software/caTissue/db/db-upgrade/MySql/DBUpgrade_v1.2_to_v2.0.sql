@@ -193,4 +193,44 @@ Alter table CATISSUE_SPECIMEN_EVENT_PARAM add column ACTIVITY_STATUS varchar(50)
 Insert into catissue_permissible_value(PARENT_IDENTIFIER,VALUE) select 3,'Buffy Coat' from dual where not exists (select * from catissue_permissible_value where PARENT_IDENTIFIER=3 and Value like 'buffy coat')
 /
 COMMIT;
-/	
+/
+drop procedure if exists   update_SYS_UID;
+/
+CREATE PROCEDURE update_SYS_UID()
+
+BEGIN
+
+DECLARE maxLabelSpecimen integer;
+ 
+DECLARE sys_uid_counter integer;
+ 
+DECLARE ident INT;
+
+  set ident=1;
+ 
+  select max(cast(LABEL as SIGNED))+1  into maxLabelSpecimen from catissue_specimen;
+
+  select IFNULL(max(cast(KEY_SEQUENCE_ID as SIGNED)),0) into sys_uid_counter from key_seq_generator where KEY_VALUE='SYS_UID';
+  
+  Select cast(IFNULL(max(identifier),0) as SIGNED) into ident from key_seq_generator;
+  
+  Set ident=ident + 1;
+  
+  IF (sys_uid_counter=0) THEN
+ 
+      INSERT INTO key_seq_generator VALUES(ident,'SYS_UID',cast(maxLabelSpecimen as char),'Specimen');
+  
+  ELSE
+  
+     IF (sys_uid_counter < maxLabelSpecimen) THEN
+   
+      update key_seq_generator set KEY_SEQUENCE_ID=cast(maxLabelSpecimen as char) where KEY_VALUE='SYS_UID';
+  
+  END IF;
+
+END IF;
+
+END;
+/
+CALL update_SYS_UID();
+/
