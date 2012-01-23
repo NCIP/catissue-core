@@ -23,11 +23,10 @@ public class XSDConflictsResolver {
 
 	private File pathToSchemas;
 
-	private static final Logger log = Logger
-			.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private static final Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-	private static final List<String> types = Arrays.asList("SCGRecordEntry",
-			"SpecimenRecordEntry", "ParticipantRecordEntry");
+	private static final List<String> types = Arrays.asList("SCGRecordEntry", "SpecimenRecordEntry",
+            "ParticipantRecordEntry", "ActionApplicationRecordEntry");
 	
 	private static final Map<String, String> schemaMap = new HashMap<String, String>();
 	static {
@@ -43,10 +42,8 @@ public class XSDConflictsResolver {
 	}
 
 	public void resolve() throws SAXException, IOException {
-		log.info("Resolving XML Schema conflicts: "
-				+ pathToSchemas.getAbsolutePath());
-		Collection<File> schemas = FileUtils.listFiles(pathToSchemas,
-				new String[] { "xsd" }, false);
+		log.info("Resolving XML Schema conflicts: " + pathToSchemas.getAbsolutePath());
+		Collection<File> schemas = FileUtils.listFiles(pathToSchemas, new String[] { "xsd" }, false);
 		for (File schemaFile : schemas) {
 			String schema = FileUtils.readFileToString(schemaFile, null);
 			for (String type: types) {

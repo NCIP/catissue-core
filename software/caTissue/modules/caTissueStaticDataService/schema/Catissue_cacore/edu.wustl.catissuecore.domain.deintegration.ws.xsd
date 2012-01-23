@@ -15,6 +15,7 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegra
   <xs:include schemaLocation="SCGRecordEntry.xsd"></xs:include>
   <xs:include schemaLocation="SpecimenRecordEntry.xsd"></xs:include>
   <xs:include schemaLocation="ParticipantRecordEntry.xsd"></xs:include>
- 
+  <xs:include schemaLocation="ActionApplicationRecordEntry.xsd"></xs:include>
+
 </xs:schema>
 
