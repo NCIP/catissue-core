@@ -2254,7 +2254,7 @@
 	
 	<target name="update_static_metadata" depends="setup:environment:for:de">
 		<java classname="edu.common.dynamicextensions.importer.xml.XMLImporter" fork="true" maxmemory="1024m" failonerror="true">
-			<arg value="${caTissue-webapp.dir.dist}/modules/caTissue/resources/xml/StaticModelMetadata.xml" />
+			<arg value="${caTissue-webapp.dir.dist}/modules/caTissue/resources/xml/StaticModelMetaData.xml" />
 			<arg value="Catissue Suite" />
 			<classpath>
 				<pathelement location="${prop.temp.dir}/catissuecore/WEB-INF/classes" />
