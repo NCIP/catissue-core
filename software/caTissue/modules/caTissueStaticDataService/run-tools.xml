@@ -421,6 +421,7 @@
             	<include name="SCGRecordEntry.xsd"/>
             	<include name="SpecimenRecordEntry.xsd"/>
             	<include name="ParticipantRecordEntry.xsd"/>			
+            	<include name="ActionApplicationRecordEntry.xsd"/>
 			</fileset>
     	</copy>
     	
