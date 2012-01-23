@@ -1353,7 +1353,6 @@
 		<attribute name="id" dataType="Long" />
 		<attribute name="actionOrder" dataType="Long" />
 		<attribute name="barcode" dataType="String" />
-		<attribute name="isSkipped" dataType="Boolean" />
 		<attribute name="uniqueId" dataType="String" />
 
 		<referenceAssociationCollection
