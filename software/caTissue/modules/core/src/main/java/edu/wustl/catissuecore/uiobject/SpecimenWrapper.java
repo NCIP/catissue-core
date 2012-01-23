@@ -83,7 +83,7 @@ public class SpecimenWrapper implements ISPPBizlogic
 	@Override
 	public ActionApplication insertActionApplication(IBizLogic actionAppBizLogic,
 			SpecimenProcessingProcedureApplication processingSPPApplication, String reasonOfDeviation, User user,
-			Date dateOfEvent, ActionApplicationRecordEntry actionAppRecordEntry) throws BizLogicException
+			Date dateOfEvent,String comments, ActionApplicationRecordEntry actionAppRecordEntry) throws BizLogicException
 	{
 		if(processingSPPApplication != null)
 		{
@@ -103,6 +103,7 @@ public class SpecimenWrapper implements ISPPBizlogic
 		actionApplication.setSppApplication(processingSPPApplication);
 		actionApplication.setSpecimen(this.specimen);
 		actionApplication.setPerformedBy(user);
+		actionApplication.setComments(comments);
 		actionApplication.setApplicationRecordEntry(actionAppRecordEntry);
 		actionAppBizLogic.insert(actionApplication);
 		return actionApplication;

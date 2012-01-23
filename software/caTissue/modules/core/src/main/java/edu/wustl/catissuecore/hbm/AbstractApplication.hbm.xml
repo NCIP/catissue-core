@@ -11,7 +11,7 @@
 		<!-- Attributes mapping for the AbstractApplication class -->
 		<property name="reasonDeviation" type="string" column="REASON_DEVIATION"/>
 		<property name="timestamp" type="java.util.Date" column="TIMESTAMP"/>
-		<property name="comments" type="string" column="COMMENTS" length="4000" />
+		<property name="comments" type="string" column="COMMENTS" length="4000" insert="true" update="true"/>
 		<!--<one-to-one name="user" class="edu.wustl.catissuecore.domain.User" cascade="none" constrained="false" property-ref="applicationCollection" />
 		 --><many-to-one
             name="performedBy"

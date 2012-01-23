@@ -71,13 +71,14 @@ public class SpecimenCollectionGroupWrapper implements ISPPBizlogic
 	@Override
 	public ActionApplication insertActionApplication(IBizLogic actionAppBizLogic,
 			SpecimenProcessingProcedureApplication processingSPPApplication, String reasonOfDeviation, User user,
-			Date dateOfEvent, ActionApplicationRecordEntry actionAppRecordEntry) throws BizLogicException
+			Date dateOfEvent,String comments, ActionApplicationRecordEntry actionAppRecordEntry) throws BizLogicException
 	{
 		ActionApplication actionApplication = new ActionApplication();
 		actionApplication.setReasonDeviation(reasonOfDeviation);
 		actionApplication.setTimestamp((dateOfEvent != null) ? dateOfEvent : new Date());
 		actionApplication.setSpecimen(null);
 		actionApplication.setPerformedBy(user);
+		actionApplication.setComments(comments);
 		actionApplication.setApplicationRecordEntry(actionAppRecordEntry);
 		return actionApplication;
 	}

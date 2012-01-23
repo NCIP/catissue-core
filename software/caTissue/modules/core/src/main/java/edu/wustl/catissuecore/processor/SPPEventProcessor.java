@@ -458,7 +458,8 @@ public class SPPEventProcessor
 		Date dateOfEvent = populateTimeStamp(staticParameters);
 		ActionApplication actionApplication = sppBizlogicObject.insertActionApplication(actionAppBizLogic,
 				processingSPPApplication, staticParameters.get(Constants.REASON_DEVIATION)
-						.toString(), getUser(userId), dateOfEvent, actionAppRecordEntry);
+						.toString(), getUser(userId), dateOfEvent,staticParameters.get(Constants.COMMENTS)
+						.toString(), actionAppRecordEntry);
 
 		IntegrateDEData integrateDEData = new IntegrateDEData();
 		integrateDEData.associateRecords(formContext.getContainerId(),
@@ -559,12 +560,13 @@ public class SPPEventProcessor
 		if (Constants.TRUE.equals(request.getParameter("selectedAll")))
 		{
 			String sppId = request.getParameter("sppId");
-			List idList;
-			if(isSCG)
+			String typeObject=(String)request.getParameter("typeObject");
+			List idList = null;
+			if(Constants.SPECIMEN_COLLECTION_GROUP.equalsIgnoreCase(typeObject))
 			{
 				idList = sppBizlogic.getScgsIdBySPPID(Long.parseLong(sppId));
 			}
-			else
+			else if(Constants.SPECIMEN.equalsIgnoreCase(typeObject))
 			{
 				idList = sppBizlogic.getSpecimensIdBySPPID(Long.parseLong(sppId));
 			}
@@ -686,6 +688,7 @@ public class SPPEventProcessor
 			//Update actionApplication for static data
 			actionApplication.setReasonDeviation(staticParametersList.get(
 					Constants.REASON_DEVIATION).toString());
+			actionApplication.setComments(staticParametersList.get(Constants.COMMENTS).toString());
 			Date dateOfEvent = populateTimeStamp(staticParametersList);
 			actionApplication.setTimestamp(dateOfEvent);
 			actionAppBizLogic.update(actionApplication);

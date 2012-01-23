@@ -367,6 +367,7 @@ public class DynamicEventAction extends BaseAction
 			dynamicEventForm.setUserId(Long.valueOf((String)formContextParameterMap.get(Constants.USER_ID)));
 			dynamicEventForm.setDateOfEvent((String) formContextParameterMap.get(Constants.DATE_OF_EVENT));
 			dynamicEventForm.setReasonDeviation((String) formContextParameterMap.get(Constants.REASON_DEVIATION));
+			dynamicEventForm.setReasonDeviation((String) formContextParameterMap.get(Constants.COMMENTS));
 			request.getSession().removeAttribute(sessionMapName);
 			request.getSession().removeAttribute(Constants.DYN_EVENT_FORM);
 		}

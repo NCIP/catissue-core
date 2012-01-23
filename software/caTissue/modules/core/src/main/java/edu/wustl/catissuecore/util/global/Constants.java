@@ -5950,6 +5950,8 @@ public class Constants
 	public static final String USER_ID = "userId";
 
 	public static final String REASON_DEVIATION = "reasonDeviation";
+	
+	public static final String COMMENTS = "comments";
 
 	public static final String PAGE_OF_SPP_DEFAULT_VALUE = "pageOfSPPDefaultValue";
 
