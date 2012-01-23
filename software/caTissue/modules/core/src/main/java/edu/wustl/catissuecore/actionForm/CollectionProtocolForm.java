@@ -306,7 +306,10 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		//Bug #13312
 		this.sequenceNumber = cProtocol.getSequenceNumber();
 		this.type = cProtocol.getType();
-		this.studyCalendarEventPoint = cProtocol.getStudyCalendarEventPoint().toString();
+		if(cProtocol.getStudyCalendarEventPoint()!=null)
+		{
+			this.studyCalendarEventPoint = cProtocol.getStudyCalendarEventPoint().toString();
+		}
 
 		//this.consentValues = prepareConsentTierMap(cProtocol.getConsentTierCollection());
 		setRemoteData(cProtocol);
