@@ -73,8 +73,8 @@ public class SpecimenWrapper implements ISPPBizlogic
 		//update specimen object
 		Specimen newSpecimen = (Specimen) defaultBizLogic.retrieve(Specimen.class.getName(),
 				this.specimen.getId());
-		ActionApplication creationEvent = (ActionApplication)AbstractFactoryConfig.getInstance().getBizLogicFactory().getBizLogic(Constants.DEFAULT_BIZ_LOGIC) .retrieveAttribute(Specimen.class.getName(), newSpecimen.getId(), "creationEventAction");
-		newSpecimen.setCreationEventAction(creationEvent);
+//		ActionApplication creationEvent = (ActionApplication)AbstractFactoryConfig.getInstance().getBizLogicFactory().getBizLogic(Constants.DEFAULT_BIZ_LOGIC) .retrieveAttribute(Specimen.class.getName(), newSpecimen.getId(), "creationEventAction");
+//		newSpecimen.setCreationEventAction(creationEvent);
 		newSpecimen.setProcessingSPPApplication(processingSPPApplication);
 		defaultBizLogic.update(newSpecimen, this.specimen, sessionLoginInfo);
 
