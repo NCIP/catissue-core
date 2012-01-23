@@ -755,6 +755,7 @@
             <fileset dir="${catissue.modules}/"><include name="caTissueDEDataService/**"/></fileset>
             <fileset dir="${catissue.modules}/"><include name="caTissueStaticDataService/**"/></fileset>
             <fileset dir="${catissue.modules}/"><include name="NotificationService/**"/></fileset>
+            <fileset dir="${catissue.modules}/"><include name="DECodeGen/**"/></fileset>
         </copy>
 
 
