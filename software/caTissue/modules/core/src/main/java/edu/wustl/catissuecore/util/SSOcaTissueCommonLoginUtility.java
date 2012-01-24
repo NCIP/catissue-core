@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.util;
 
+import java.util.List;
+
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -9,6 +11,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import edu.wustl.auth.exception.AuthFileParseException;
 import edu.wustl.auth.exception.AuthenticationException;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
@@ -22,7 +25,9 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.LoginResult;
+import edu.wustl.domain.UserDetails;
 import edu.wustl.migrator.MigrationState;
+import edu.wustl.migrator.util.Utility;
 import edu.wustl.processor.LoginProcessor;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Roles;
@@ -79,28 +84,60 @@ public class SSOcaTissueCommonLoginUtility
             }
 
             if (!Constants.FAILURE.equals(forwardTo)
-                    && MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()) && !Constants.ACCESS_DENIED.equals(loginInfoUtility.getForwardTo()) )
+                    && MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()))
             {
             	loginInfoUtility.setForwardTo(Constants.SUCCESS);
             }
         }
         else
         {
-            SSOcaTissueCommonLoginUtility.LOGGER.info("User " + loginName
-                    + " Invalid user. Sending back to the login Page");
-            if (MigrationState.MIGRATED.equals(loginResult.getMigrationState())
-                    && loginName.equals(loginResult.getAppLoginName()))
-            {
-                SSOcaTissueCommonLoginUtility.LOGGER.info("User " + loginName
-                        + " Migrated user. Sending back to the login Page");
-                loginInfoUtility.setActionErrors(handleError(request, "app.migrateduser"));
-            }
-            else
-            {
-                handleError(request, "errors.incorrectLoginIDPassword");
-                loginInfoUtility.setActionErrors(handleError(request, "app.migrateduser"));
-            }
-            loginInfoUtility.setForwardTo(Constants.FAILURE);
+        	// Grid Grouper Integration: the following has been transferred from
+			// casLoginView.jsp.
+            String userName = loginResult.getAppLoginName();
+            try {
+			List idpsList = Utility.getConfiguredIDPNVB(false);
+			if (idpsList.size() > 0) {
+				UserDetails userDetails;
+				
+					userDetails = LoginProcessor
+							.getUserDetails(userName);
+				
+				if (userDetails == null) {
+					if (!LoginProcessor.isUserPresentInApplicationDB(userName)) {
+						loginInfoUtility.setForwardTo("GridGrouperUser");
+					}
+				}
+			}
+			} catch (AuthenticationException e) {
+				// TODO Auto-generated catch block
+				LOGGER.info(e);
+				throw new CatissueException(e);
+			} catch (AuthFileParseException e) {
+				// TODO Auto-generated catch block
+				LOGGER.info(e);
+				throw new CatissueException(e);
+			}
+			
+			if(loginInfoUtility.getForwardTo()!=null && !loginInfoUtility.getForwardTo().equals("GridGrouperUser"))
+			{
+	            SSOcaTissueCommonLoginUtility.LOGGER.info("User " + loginName
+	                    + " Invalid user. Sending back to the login Page");
+	            if (MigrationState.MIGRATED.equals(loginResult.getMigrationState())
+	                    && loginName.equals(loginResult.getAppLoginName()))
+	            {
+	                SSOcaTissueCommonLoginUtility.LOGGER.info("User " + loginName
+	                        + " Migrated user. Sending back to the login Page");
+	                loginInfoUtility.setActionErrors(handleError(request, "app.migrateduser"));
+	            }
+	            else
+	            {
+	                handleError(request, "errors.incorrectLoginIDPassword");
+	                loginInfoUtility.setActionErrors(handleError(request, "app.migrateduser"));
+	            }
+	            loginInfoUtility.setForwardTo(Constants.FAILURE);
+			}
+            
+         
         }
         return loginInfoUtility;
     }

@@ -105,10 +105,32 @@ public class LoginAction extends XSSSupportedAction
                 cleanSession(request);
                 handleError(request, "errors.incorrectLoginIDPassword");
                 forwardTo = Constants.FAILURE;
+                infoUtility.setForwardTo(forwardTo);
             }
         }
-        return mapping.findForward(infoUtility.getForwardTo());
+        
+        return getActionForward(mapping, form, infoUtility);
     }
+
+	private ActionForward getActionForward(final ActionMapping mapping,
+			final ActionForm form, CommonLoginInfoUtility infoUtility) {
+		ActionForward actionForward = null;
+        if(infoUtility.getForwardTo().equals("GridGrouperUser"))
+        {
+        	ActionForward ggForwardTemplate = mapping
+			.findForward("GridGrouperUser");
+        	actionForward = new ActionForward(
+			ggForwardTemplate.getName(),
+			ggForwardTemplate.getPath()+((LoginForm)form).getLoginName(),
+			ggForwardTemplate.getRedirect(),
+			ggForwardTemplate.getContextRelative());
+        }
+        else
+        {
+        	actionForward = mapping.findForward(infoUtility.getForwardTo());
+        }
+        return actionForward;
+	}
     
     private boolean isRequestFromClinportal(final HttpServletRequest request)
     {
