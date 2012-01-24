@@ -3,10 +3,10 @@ function query_formation(event_name in varchar2)
   RETURN varchar2 AS 
   
   
-          qur varchar2(1000);
-           attrib_name varchar (20);
-          tbl_name varchar (20);
-          col_name varchar2 (4000);
+         tbl_name varchar2(2000);
+         col_name varchar2(4000);
+         attrib_name varchar2(2000);
+         qur varchar2(1000);
 
            
           accpt_col_name varchar2(100);
@@ -88,4 +88,4 @@ function query_formation(event_name in varchar2)
         
         return qur;
      end query_formation ;   
-  
+  /
