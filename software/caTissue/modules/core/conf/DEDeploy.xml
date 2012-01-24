@@ -1554,7 +1554,7 @@
 		<!-- The comma is explicitly given so that if value is empty still it is passed as parameter to java class -->
 		<java failonerror="true" classname="edu.wustl.metadata.util.EntityGroupName" fork="yes" maxmemory="1024m">
 			<arg value="${base.dir}/temp_deaudit_related_files/temp_exported_xmi/" />
-			<arg value="${ignore.status}" />
+			<arg value="true" />
 			<classpath>
 				<pathelement location="${temp.dir.DE}" />
 				<fileset dir="${de.zip.location}/lib">
