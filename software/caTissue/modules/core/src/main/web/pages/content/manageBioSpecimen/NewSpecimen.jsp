@@ -1851,7 +1851,7 @@
 						}
 					%>
 									<html:text styleClass="black_ar" maxlength="10"  size="10" styleId="concentration" property="concentration" style="text-align:right"
-							     		readonly="<%=readOnlyForAll%>" disabled="false"/>
+							     		readonly="<%=readOnlyForAll%>"/>
 										<bean:message key="specimen.concentrationUnit"/>
 								</td>
 							</tr>

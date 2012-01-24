@@ -181,7 +181,6 @@
 			var unit = document.getElementById("unitSpan");
 			var unit1 = document.getElementById("unitSpan1");
 			var unitSpecimen = "";
-			document.forms[0].concentration.disabled = true;
 			var subType = document.getElementById("type");
 			subType.disabled = false;
 
@@ -189,25 +188,31 @@
 			{
 				unitSpecimen = "<%=Constants.UNIT_GM%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
+				var newAttr = document.createAttribute("readonly");
+			    document.getElementById("concentration").setAttributeNode(newAttr);
 				typeChange(TissueArray);
 			}
 			else if(element.value == "Fluid")
 			{
 				unitSpecimen = "<%=Constants.UNIT_ML%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_ML%>";
+				var newAttr = document.createAttribute("readonly");
+			    document.getElementById("concentration").setAttributeNode(newAttr);
 				typeChange(FluidArray);
 			}
 			else if(element.value == "Cell")
 			{
 				unitSpecimen = "<%=Constants.UNIT_CC%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
+				var newAttr = document.createAttribute("readonly");
+			    document.getElementById("concentration").setAttributeNode(newAttr);
 				typeChange(CellArray);
 			}
 			else if(element.value == "Molecular")
 			{
 				unitSpecimen = "<%=Constants.UNIT_MG%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_MG%>";
-				document.forms[0].concentration.disabled = false;
+				document.forms[0].concentration.removeAttribute("readonly",0);
 				typeChange(MolecularArray);
 			}
 			if(unit!=null)
