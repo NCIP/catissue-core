@@ -5388,39 +5388,48 @@ Thanking You,
 			</sql>
 		</target>
 	
-	<target name="migrate_events_mysql" description="Target for migrating events from static to DE">
-		<echo message="Migrating events.." />
-		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.server}:${database.port}/${database.name}" userid="${database.user}" password="${database.password}" delimiter="//" delimitertype="row"  keepformat="yes" rdbms="mysql">
-			<transaction src="${dbupgrade.sql.dir}/MySql/functions/query3col.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/functions/queryfor_sin.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/functions/QueryForm.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/functions/queryformation_mole.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/functions/queryformation_tis.sql" />
-			
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/cellSpecimenEvent.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/collectionEvent.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/embeddedEvent.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/fixedEvent.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/fluidSpecimenEvent.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/frozenEvent.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/checkinCheckoutEvent.sql" />					
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/molecularSpecimenEvent.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/procedureEvent.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/receivedEvent.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/spunEvent.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/thawEvent.sql" />
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/tissueSpecimenEvent.sql" />
-			
-			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/callsToProcedures.sql" />	
-			<transaction>call caller();</transaction>
-			<transaction>commit;</transaction>
+	<target name="migrate_events_oracle" description="Target for migrating events from static to DE">
+			<echo message="Migrating events.." />
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.server}:${database.port}:${database.name}" userid="${database.user}" password="${database.password}"  rdbms="oracle" delimiter="/" >
+				<transaction src="${dbupgrade.sql.dir}/Oracle/functions/query3col.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/functions/queryfor_sin.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/functions/QueryForm.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/functions/queryformation_mole.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/functions/queryformation_tis.sql" />
+				
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/cellSpecimenEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/collectionEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/embeddedEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/fixedEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/fluidSpecimenEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/frozenEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/checkinCheckoutEvent.sql" />					
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/molecularSpecimenEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/procedureEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/receivedEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/spunEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/thawEvent.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/tissueSpecimenEvent.sql" />
+				
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/callsToProcedures.sql" />	
+				
+				
+				<classpath>
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+				
+			</sql>
+			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.server}:${database.port}:${database.name}" userid="${database.user}" password="${database.password}"  rdbms="oracle"  >
 			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-		</sql>
-	</target>
+					<fileset dir="${lib.dir}">
+						<include name="*.jar" />
+					</fileset>
+				</classpath>
+				call caller();
+			</sql>
+		</target>
 	
 	<target name="migrate_events_oracle" description="Target for migrating events from static to DE">
 			<echo message="Migrating events.." />
