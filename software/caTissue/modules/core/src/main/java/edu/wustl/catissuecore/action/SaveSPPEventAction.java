@@ -111,7 +111,11 @@ public class SaveSPPEventAction extends SecureAction
 		formContextCollection.addAll(formContextParameterMap.keySet());
 
 		//check is SPP processing has to be done for SCG
-		boolean isSCG = isSpecimenCollectionGroupObject(request);
+		boolean isSCG = false;
+		if(Constants.SPECIMEN_COLLECTION_GROUP.equals(request.getParameter("typeObject")))
+		{
+			isSCG=true;
+		}
 
 		//validate DE data
 		List<String> listOfError = sppEventProcessor.validateDEData(request, formContextParameterMap);
@@ -155,7 +159,7 @@ public class SaveSPPEventAction extends SecureAction
 									"SPECIMEN.IDENTIFIER=ABS_SPEC.IDENTIFIER " +
 									"AND " +
 									"SPECIMEN.SPECIMEN_COLLECTION_GROUP_ID=" + 
-									domainObjectId +
+									domainObjectIdArr[cnt] +
 									" AND " +
 									"ABS_SPEC.LINEAGE=\'" + 
 									Constants.NEW_SPECIMEN +
@@ -172,7 +176,7 @@ public class SaveSPPEventAction extends SecureAction
 									"SPECIMEN.IDENTIFIER=ABS_SPEC.IDENTIFIER " +
 									"AND " +
 									"ABS_SPEC.PARENT_SPECIMEN_ID=" +
-									domainObjectId +
+									domainObjectIdArr[cnt] +
 									" AND " +
 									"SPECIMEN.ACTIVITY_STATUS=\'"+
 									Constants.ACTIVE+"\'"
@@ -183,23 +187,22 @@ public class SaveSPPEventAction extends SecureAction
 						}
 						if(childSpecimenIdList!=null && !childSpecimenIdList.isEmpty())
 						{
-						Iterator<List<Object>> childSpecimenIdListIter=childSpecimenIdList.iterator();
-						while(childSpecimenIdListIter.hasNext())
-						{
-							List<Object> idlist=childSpecimenIdListIter.next();
-							if(idlist!=null && !idlist.isEmpty())
+							Iterator<List<Object>> childSpecimenIdListIter=childSpecimenIdList.iterator();
+							while(childSpecimenIdListIter.hasNext())
 							{
-								iter=idlist.iterator();
-								while(iter.hasNext())
+								List<Object> idlist=childSpecimenIdListIter.next();
+								if(idlist!=null && !idlist.isEmpty())
 								{
-									String id=(String) iter.next();
-									Specimen childSpecimen=(Specimen) bizLogic.retrieve(Specimen.class.getName(), new Long(id));
-									new NewSpecimenBizLogic().updateCreationEvent(childSpecimen);		
+									iter=idlist.iterator();
+									while(iter.hasNext())
+									{
+										String id=(String) iter.next();
+										Specimen childSpecimen=(Specimen) bizLogic.retrieve(Specimen.class.getName(), new Long(id));
+										new NewSpecimenBizLogic().updateCreationEvent(childSpecimen);		
+									}
 								}
 							}
 						}
-						}
-
 					}
 				}
 				catch (BizLogicException e)
@@ -263,7 +266,7 @@ public class SaveSPPEventAction extends SecureAction
 		}
 	}
 
-	
+
 
 	/**
 	 * Perform save action.
@@ -572,6 +575,11 @@ public class SaveSPPEventAction extends SecureAction
 			//Fetch Specimen object
 			Specimen specimen = (Specimen) defaultBizLogic.retrieve(Specimen.class.getName(), Long
 					.valueOf(domainObjectId));
+			final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+			final IBizLogic bizLogic = factory.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+			ActionApplication creationEvent = (ActionApplication) bizLogic.retrieveAttribute(
+					Specimen.class, Long.valueOf(domainObjectId), "creationEventAction");
+			specimen.setCreationEventAction(creationEvent);
 			//create specimen collection group wrapper object
 			sppBizlogicObject = new SpecimenWrapper();
 			sppBizlogicObject.setWrapperObject(specimen);
