@@ -332,6 +332,9 @@
             <fileset dir="./de_codegen/artifacts">
                 <include name="*.jar" />
             </fileset>
+            <fileset dir="./de_codegen/xmi">
+                <include name="*.xmi" />
+            </fileset>
         </delete>
 
         
