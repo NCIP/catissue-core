@@ -68,6 +68,7 @@ public class DisplaySPPEventsFromDashboardAction extends SecureAction
 		{
 			request.setAttribute("scgId", request.getParameter("scgId"));
 		}
+		request.setAttribute("typeObject", request.getParameter("typeObject"));
 		request.setAttribute("nameOfSelectedSpp", processingSPP.getName());
 		request.setAttribute("selectedSppId", processingSPP.getId());
 		List<Map<String, Object>> sppEventDataCollection = new SPPEventProcessor()

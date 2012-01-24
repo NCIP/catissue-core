@@ -74,22 +74,22 @@ request.setAttribute("showSkipEventCheckBoxes","true");
 <script>
 	function submitSPPEvents()
 	{
-
+		var action="";
 		<%
 		String IdentifierStr="";
 		if(request.getAttribute(Constants.SPECIMEN_ID)!=null){
 			IdentifierStr = (String)request.getAttribute(Constants.SPECIMEN_ID);
 		%>
-			var action="SaveSPPEventAction.do?pageOf=pageOfUtilizeSppofSpecimen&operation=insertDEData&specimenId="+"<%=IdentifierStr%>"+"&selectedAll="+${requestScope.selectedAll}+"&sppId="+${requestScope.sppId};
+			action="SaveSPPEventAction.do?pageOf=pageOfUtilizeSppofSpecimen&operation=insertDEData&specimenId="+"<%=IdentifierStr%>"+"&selectedAll="+${requestScope.selectedAll}+"&sppId="+${requestScope.sppId}+"&typeObject=<%=request.getAttribute("typeObject")%>";
 		<%
 		}else{
 			IdentifierStr = (String)request.getAttribute("scgId");
 		%>
-			var action="SaveSPPEventAction.do?pageOf=pageOfUtilizeSppOfScg&operation=insertDEData&scgId="+"<%=IdentifierStr%>"+"&sppName=<%=request.getAttribute("nameOfSelectedSpp")%>"+"&selectedAll="+${requestScope.selectedAll}+"&sppId="+${requestScope.sppId};
+			action="SaveSPPEventAction.do?pageOf=pageOfUtilizeSppOfScg&operation=insertDEData&scgId="+"<%=IdentifierStr%>"+"&sppName=<%=request.getAttribute("nameOfSelectedSpp")%>"+"&selectedAll="+${requestScope.selectedAll}+"&sppId="+${requestScope.sppId}+"&typeObject=<%=request.getAttribute("typeObject")%>";
 		<%
 		}
 		%>
-
+		
 		var search = 'Control';
 		var search1 = 'comboControl';
 		var iframeList = document.getElementsByTagName('iframe');

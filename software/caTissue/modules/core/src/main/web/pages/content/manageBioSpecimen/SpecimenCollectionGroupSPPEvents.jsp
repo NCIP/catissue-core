@@ -101,7 +101,7 @@
 	function submitSPPEvents()
 	{
 		var scgId = <%=id%>;
-		var action="SaveSPPEventAction.do?operation=insertDEData&isSCG=true&id="+scgId+"&pageOf=pageOfSCG";
+		var action="SaveSPPEventAction.do?operation=insertDEData&isSCG=true&id="+scgId+"&pageOf=pageOfSCG&typeObject=SpecimenCollectionGroup";
 
 		var search = 'Control';
 		var search1 = 'comboControl';

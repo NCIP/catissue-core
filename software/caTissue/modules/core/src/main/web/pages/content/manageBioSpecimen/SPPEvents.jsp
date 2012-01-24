@@ -30,6 +30,7 @@
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 String specimenIdentifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
+String typeObject = (String)request.getAttribute("typeObject");
 if(specimenIdentifier == null || specimenIdentifier.equals("0"))
 	specimenIdentifier = (String)request.getParameter(Constants.SPECIMEN_ID);
 
@@ -89,7 +90,7 @@ request.setAttribute("showSPPHeader","true");
 	function submitSPPEvents()
 	{
 		var specimenId = "<%=specimenIdentifier%>";
-		var action="SaveSPPEventAction.do?pageOf=<%=pageOf%>&operation=insertDEData&specimenId="+specimenId;
+		var action="SaveSPPEventAction.do?pageOf=<%=pageOf%>&operation=insertDEData&specimenId="+specimenId+"&typeObject=Specimen";
 
 		var search = 'Control';
 		var search1 = 'comboControl';

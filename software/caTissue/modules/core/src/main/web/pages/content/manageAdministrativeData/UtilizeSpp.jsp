@@ -283,10 +283,10 @@ function onSubmit(){
 	}
 	var url = ""
 	<logic:equal name="operation" value="scg">
-		url = "DisplaySPPEventsFromDashboardAction.do?pageOf=pageOfDynamicEvent&scgId="+selecedValue+"&selectedAll="+selectedAll+"&sppId="+selectedComboValue;
+		url = "DisplaySPPEventsFromDashboardAction.do?pageOf=pageOfDynamicEvent&typeObject=SpecimenCollectionGroup&scgId="+selecedValue+"&selectedAll="+selectedAll+"&sppId="+selectedComboValue;
 	</logic:equal>
 	<logic:equal name="operation" value="specimen">
-		url = "DisplaySPPEventsFromDashboardAction.do?pageOf=pageOfDynamicEvent&specimenId="+selecedValue+"&selectedAll="+selectedAll+"&sppId="+selectedComboValue;
+		url = "DisplaySPPEventsFromDashboardAction.do?pageOf=pageOfDynamicEvent&typeObject=Specimen&specimenId="+selecedValue+"&selectedAll="+selectedAll+"&sppId="+selectedComboValue;
 	</logic:equal>
 	location.href  = url;
 }
