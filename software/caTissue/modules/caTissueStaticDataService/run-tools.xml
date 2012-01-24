@@ -334,6 +334,7 @@
             </fileset>
             <fileset dir="./de_codegen/xmi">
                 <include name="*.xmi" />
+                <include name="*.xml" />
             </fileset>
         </delete>
 
