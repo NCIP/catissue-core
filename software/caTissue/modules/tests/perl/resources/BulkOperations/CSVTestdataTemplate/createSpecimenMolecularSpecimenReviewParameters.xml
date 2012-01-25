@@ -67,6 +67,8 @@
 			<discriminatorCollection name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimen"/>
 			<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimen"/>
 			<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimen"/>
+			
+			</attribute>
 	<attribute name="specimenType" csvColumnName="Type"   />
 		<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />
 		<attribute name="availableQuantity" csvColumnName="Available Quantity"   />

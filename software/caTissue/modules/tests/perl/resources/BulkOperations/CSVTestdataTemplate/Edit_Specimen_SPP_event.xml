@@ -6,6 +6,11 @@
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication"
 			 roleName="processingSPPApplication" parentRoleName="specimen">
+			 <referenceAssociation
+								className="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure"
+								roleName="spp" parentRoleName="SpecimenProcessingProcedureApplication">
+								<attribute name="id" csvColumnName="SPPID" />
+				</referenceAssociation>
 				
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication" cardinality="*"
