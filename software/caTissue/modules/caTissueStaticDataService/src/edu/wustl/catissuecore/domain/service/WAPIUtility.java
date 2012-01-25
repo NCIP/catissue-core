@@ -5,7 +5,6 @@ import edu.wustl.catissuecore.domain.converter.GenericConverter;
 import edu.wustl.catissuecore.domain.dozer.SpringProxyResolver;
 import edu.wustl.catissuecore.domain.util.PropertiesLoader;
 import edu.wustl.catissuecore.domain.util.Service;
-import edu.wustl.common.domain.ws.AbstractDomainObject;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.SDKQuery;
 import gov.nih.nci.system.query.SDKQueryResult;
@@ -186,7 +185,7 @@ public class WAPIUtility {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public static AbstractDomainObject updateWsObjectStatus(AbstractDomainObject inputWsAdo) throws ApplicationException {
+	public static Object updateWsObjectStatus(Object inputWsAdo) throws ApplicationException {
 		String setActivityStatusMethodName = "setActivityStatus";
 		String disabledValue = "Disabled";
 		Class c = inputWsAdo.getClass();
@@ -209,7 +208,7 @@ public class WAPIUtility {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public static Object insertWsObject(AbstractDomainObject inputWsAdo) throws ApplicationException {
+	public static Object insertWsObject(Object inputWsAdo) throws ApplicationException {
 		log.debug(">>> insertWsObject");
 		Object ado = convertWsToDomain(inputWsAdo);
 		WAPIUtility.nullifyFieldValue(ado, "setId", "getId", Long.class, null);
@@ -218,8 +217,7 @@ public class WAPIUtility {
 		return outputWsAdo;
 	}
 
-	public static Object updateWsObject(
-			AbstractDomainObject inputWsAdo) throws ApplicationException {
+	public static Object updateWsObject(Object inputWsAdo) throws ApplicationException {
 		log.debug(">>> updateWsObject");
 		Object ado = convertWsToDomain(inputWsAdo);
 		ado = update(ado);

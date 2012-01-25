@@ -8,7 +8,6 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Logger;
 
 import edu.wustl.catissuecore.cacore.CaTissueWritableAppService;
-import edu.wustl.common.domain.ws.AbstractDomainObject;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.SDKQuery;
 import gov.nih.nci.system.query.SDKQueryResult;
