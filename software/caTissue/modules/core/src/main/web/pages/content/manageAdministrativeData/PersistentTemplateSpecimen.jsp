@@ -4,7 +4,12 @@
 <link rel="stylesheet" type="text/css" href="css/clinicalstudyext-all.css" />
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-<script>var imgsrc="images/de/";</script>
+<script>var imgsrc="images/de/";
+window.onload = function() {
+	document.getElementById('aliquot').style.display='none';
+	document.getElementById('derive_specimen').style.display='none';
+	}
+	</script>
 <script language="JavaScript" type="text/javascript" src="javascripts/de/scr.js"></script>
 <script language="JavaScript" type="text/javascript" src="javascripts/de/combobox.js"></script>
 <script language="JavaScript" type="text/javascript" src="javascripts/de/ajax.js"></script>
@@ -313,7 +318,7 @@ Ext.onReady(function(){
 					  </td>
                      </tr>
                        <td colspan="2" class="showhide1">
-							<div id="derive_specimen" style="display:none" >
+							<div id="derive_specimen" >
 								<table width="100%" border="0" cellspacing="0" cellpadding="4">
 									<tr>
                               <td width="2%" class="tableheading"><span class="black_ar_b">
@@ -604,7 +609,7 @@ String comboDataStorName = "ds_"+rowno;
                  </tr>
                  <tr>
                     <td colspan="2" align="left" class="showhide1">
-						<div id="aliquot" style="display:none" >
+						<div id="aliquot">
 							<table width="100%" border="0" cellspacing="0" cellpadding="4">
 								<tr>
 									<td width="10%" class="black_ar" >

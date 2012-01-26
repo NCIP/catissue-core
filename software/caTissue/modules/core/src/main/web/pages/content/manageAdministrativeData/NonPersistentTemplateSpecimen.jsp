@@ -15,7 +15,12 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.bizlogic.SPPBizLogic"%>
 <%@ page import="java.util.*"%>
-<script>var imgsrc="images/de/";</script>
+<script>var imgsrc="images/de/";
+window.onload = function() {
+	document.getElementById('aliquot').style.display='none';
+	document.getElementById('derive_specimen').style.display='none';
+	}
+	</script>
 <script language="JavaScript" type="text/javascript" src="javascripts/de/scr.js"></script>
 <script language="JavaScript" type="text/javascript" src="javascripts/de/combobox.js"></script>
 <script language="JavaScript" type="text/javascript" src="javascripts/de/ajax.js"></script>
@@ -242,7 +247,7 @@ Ext.onReady(function(){
 					  </td>
                      </tr>
                        <td colspan="2" class="showhide1">
-							<div id="derive_specimen" style="display:none" >
+							<div id="derive_specimen">
 								<table width="100%" border="0" cellspacing="0" cellpadding="4">
 								<%
 								if(Variables.isTemplateBasedLblGeneratorAvl)
@@ -470,7 +475,7 @@ Ext.onReady(function(){
                  </tr>
                  <tr>
                     <td colspan="2" align="left" class="showhide1">
-						<div id="aliquot" style="display:none" >
+						<div id="aliquot">
 							<table width="100%" border="0" cellspacing="0" cellpadding="4">
 									<%
 									String storageLoc = form.getStorageLocationForAliquotSpecimen();
