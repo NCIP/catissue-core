@@ -7193,7 +7193,7 @@ This is manifested as a resource property in the grid.</xs:documentation>
                   xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing">
     <soapenv:Body>
         <DisableRequest xmlns="http://domain.catissuecore.wustl.edu/Catissue_cacore">
-            <object identifier="2" 
+            <object identifier="1" 
                     xsi:type="ns1:Participant" 
 		    xmlns:ns1="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws">
                 <ns1:collectionProtocolRegistrationCollection>
@@ -7519,23 +7519,22 @@ xmlns:ann="gme://caCORE.caCORE/3.2/gov.nih.nci.dynext.clinical_annotation"
 <soapenv:Body>
       <InsertRequest xmlns="http://domain.catissuecore.wustl.edu/Catissue_cacore">
          <object activityStatus="Active" 
-firstName="Steven" 
+firstName="Alan" 
 identifier="0" 
-lastName="Pink" 
+lastName="Rose" 
 xsi:type="ns1:Participant" 
 >
 
 <!-- Collections-->
 
                 <ns1:raceCollection>
-                    <ns1:Race identifier="0" raceName="Unknown"/>
                     <ns1:Race identifier="0" raceName="White"/>
                 </ns1:raceCollection>
 
 		<ns1:participantRecordEntryCollection>
 		    <ann:participantRecordEntry>
 			<ann:alcoholHealthAnnotationCollection>
-				<ann:alcoholHealthAnnotation drinksPerWeek="7" yearsAgentFree="2"/>
+				<ann:alcoholHealthAnnotation drinksPerWeek="17" yearsAgentFree="20"/>
 			</ann:alcoholHealthAnnotationCollection>
 		    </ann:participantRecordEntry>
 		</ns1:participantRecordEntryCollection>
@@ -7698,13 +7697,13 @@ xmlns:org="http://CQL.caBIG/2/org.cagrid.cql2">
          <dat:query>
             <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/2/org.cagrid.cql2">
                <ns1:CQLTargetObject className="edu.wustl.catissuecore.domain.Participant"/>
-
+<!--
                <ns1:AssociationPopulationSpecification>
                   <ns1:NamedAssociationList>
                      <ns1:NamedAssociation endName="participantMedicalIdentifierCollection"/>
                   </ns1:NamedAssociationList>
                </ns1:AssociationPopulationSpecification>
-
+-->
 
             </ns1:CQLQuery>
          </dat:query>
@@ -7782,18 +7781,18 @@ xmlns:gov="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
                     aliquotInSameContainer="false"
                     consentsWaived="false"
                     dirtyEditFlag="false"
-                    identifier="1"
-                    remoteId="111"
+                    identifier="2"
+                    remoteId="222"
                     remoteManagedFlag="false"
-                    title="CP-01-Update-16"
-                    shortTitle="CP-01-Update-16"
+                    title="CP-02"
+                    shortTitle="CP-02"
                     startDate="2011-12-09T02:07:57.627Z"
                     studyCalendarEventPoint="0.0"
                     xsi:type="ns1:CollectionProtocol"
                     xmlns:ns1="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws">
 
                 <ns1:principalInvestigator>
-                    <ns1:User csmUserId="0" dirtyEditFlag="false" firstTimeLogin="false" identifier="1" remoteId="0" remoteManagedFlag="false"/>
+                    <ns1:User csmUserId="0" dirtyEditFlag="false" firstTimeLogin="false" identifier="2" remoteId="0" remoteManagedFlag="false"/>
                 </ns1:principalInvestigator>
 
             </object>
@@ -7811,9 +7810,9 @@ xmlns:ann="gme://caCORE.caCORE/3.2/gov.nih.nci.dynext.clinical_annotation"
 <soapenv:Body>
       <UpdateRequest xmlns="http://domain.catissuecore.wustl.edu/Catissue_cacore">
             <object 
-firstName="Steven2" 
+firstName="Alan" 
 identifier="3" 
-lastName="Pink2" 
+lastName="Rose" 
 activityStatus="Active"
                     xsi:type="ns1:Participant" 
 		    xmlns:ns1="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws">
@@ -7823,21 +7822,22 @@ activityStatus="Active"
                 </ns1:collectionProtocolRegistrationCollection>
 
 <!-- Collections-->
+<!--
                 <ns1:raceCollection>
                     <ns1:Race identifier="7" raceName="Unknown"/>
                     <ns1:Race identifier="6" raceName="White"/>
                 </ns1:raceCollection>
-
+-->
 
 		<ns1:participantRecordEntryCollection>
 		    <ann:participantRecordEntry>
 			<ann:alcoholHealthAnnotationCollection>
 				<ann:alcoholHealthAnnotation 
-drinksPerWeek="1" 
-yearsAgentFree="1"
-otherAgent="ABC"
+drinksPerWeek="10" 
+yearsAgentFree="10"
+otherAgent="XYZ"
 identifier="3" 
-activityStatus="Inactive"/>
+activityStatus="Active"/>
 			</ann:alcoholHealthAnnotationCollection>
 		    </ann:participantRecordEntry>
 		</ns1:participantRecordEntryCollection>
