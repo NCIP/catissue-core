@@ -1517,30 +1517,7 @@
       <bind-xml name="string" type="string" location="specimenTypeCollection" node="element" />
     </field>
   </class>
-  <class name="edu.wustl.catissuecore.domain.SpecimenRequirement" identity="id" extends="edu.wustl.catissuecore.domain.AbstractSpecimen">
-    <map-to xml="SpecimenRequirement" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
-    <field name="labelFormat" type="string">
-      <bind-xml name="labelFormat" node="attribute" />
-    </field>
-    <field name="storageType" type="string">
-      <bind-xml name="storageType" node="attribute" />
-    </field>
-    <field name="processingSPP" type="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="SpecimenProcessingProcedure" type="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" location="processingSPP" node="element" />
-    </field>
-    <field name="creationEvent" type="edu.wustl.catissuecore.domain.processingprocedure.Action" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="Action" type="edu.wustl.catissuecore.domain.processingprocedure.Action" location="creationEvent" node="element" />
-    </field>
-    <field name="collectionProtocolEvent" type="edu.wustl.catissuecore.domain.CollectionProtocolEvent" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
-      <bind-xml name="CollectionProtocolEvent" type="edu.wustl.catissuecore.domain.CollectionProtocolEvent" location="collectionProtocolEvent" node="element" />
-    </field>
-    <field name="specimenCollection" type="edu.wustl.catissuecore.domain.Specimen" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
-      <bind-xml name="Specimen" type="edu.wustl.catissuecore.domain.Specimen" location="specimenCollection" node="element" />
-    </field>
-  </class>
+
   <class name="edu.wustl.catissuecore.domain.DistributionProtocol" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenProtocol">
     <map-to xml="DistributionProtocol" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
     <field name="collectionProtocolCollection" type="edu.wustl.catissuecore.domain.CollectionProtocol" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
@@ -1562,6 +1539,32 @@
       <bind-xml name="SurgicalPathologyReport" type="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport" location="surgicalPathologyReport" node="element" />
     </field>
   </class>
+
+    <class name="edu.wustl.catissuecore.domain.SpecimenRequirement" identity="id" extends="edu.wustl.catissuecore.domain.AbstractSpecimen">
+      <map-to xml="SpecimenRequirement" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
+      <field name="id" type="long">
+        <bind-xml name="id" node="attribute" />
+      </field>
+      <field name="labelFormat" type="string">
+        <bind-xml name="labelFormat" node="attribute" />
+      </field>
+      <field name="storageType" type="string">
+        <bind-xml name="storageType" node="attribute" />
+      </field>
+      <field name="processingSPP" type="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
+        <bind-xml name="SpecimenProcessingProcedure" type="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure" location="processingSPP" node="element" />
+      </field>
+      <field name="creationEvent" type="edu.wustl.catissuecore.domain.processingprocedure.Action" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
+        <bind-xml name="Action" type="edu.wustl.catissuecore.domain.processingprocedure.Action" location="creationEvent" node="element" />
+      </field>
+      <field name="collectionProtocolEvent" type="edu.wustl.catissuecore.domain.CollectionProtocolEvent" handler="gov.nih.nci.system.client.util.xml.CastorDomainObjectFieldHandler">
+        <bind-xml name="CollectionProtocolEvent" type="edu.wustl.catissuecore.domain.CollectionProtocolEvent" location="collectionProtocolEvent" node="element" />
+      </field>
+      <field name="specimenCollection" type="edu.wustl.catissuecore.domain.Specimen" collection="collection" handler="gov.nih.nci.system.client.util.xml.CastorCollectionFieldHandler">
+        <bind-xml name="Specimen" type="edu.wustl.catissuecore.domain.Specimen" location="specimenCollection" node="element" />
+      </field>
+    </class>
+
   <class name="edu.wustl.catissuecore.domain.TissueSpecimenRequirement" identity="id" extends="edu.wustl.catissuecore.domain.SpecimenRequirement">
     <map-to xml="TissueSpecimenRequirement" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
   </class>
