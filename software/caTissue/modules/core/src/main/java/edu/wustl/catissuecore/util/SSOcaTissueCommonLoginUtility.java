@@ -68,7 +68,6 @@ public class SSOcaTissueCommonLoginUtility
     public CommonLoginInfoUtility processUserAuthorization(LoginCredentials loginCredentials, String loginName,
     		HttpServletRequest request) throws NamingException, ApplicationException, CatissueException    
     {
-    	String forwardTo = null;
     	CommonLoginInfoUtility loginInfoUtility = new CommonLoginInfoUtility();
     	final edu.wustl.domain.LoginResult loginResult = CatissueLoginProcessor.processUserLogin(request,
                 loginCredentials);
@@ -83,8 +82,8 @@ public class SSOcaTissueCommonLoginUtility
                 loginInfoUtility = validateUser(request, loginResult);
             }
 
-            if (!Constants.FAILURE.equals(forwardTo)
-                    && MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()))
+            if (MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()) && 
+                    !Constants.ACCESS_DENIED.equals(loginInfoUtility.getForwardTo()))
             {
             	loginInfoUtility.setForwardTo(Constants.SUCCESS);
             }

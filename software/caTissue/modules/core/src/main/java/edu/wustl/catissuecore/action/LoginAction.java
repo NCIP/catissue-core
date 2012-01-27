@@ -62,7 +62,7 @@ public class LoginAction extends XSSSupportedAction
             final HttpServletRequest request, final HttpServletResponse response)
     {
         String forwardTo = Constants.FAILURE;
-        CommonLoginInfoUtility infoUtility = null;
+        CommonLoginInfoUtility infoUtility = new CommonLoginInfoUtility();
         if (form == null)
         {
             LoginAction.LOGGER.debug("Form is Null");
