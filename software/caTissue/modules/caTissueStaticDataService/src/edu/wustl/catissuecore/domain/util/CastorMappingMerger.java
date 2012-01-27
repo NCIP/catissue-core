@@ -104,7 +104,7 @@ public class CastorMappingMerger {
     private Element mergeElements(Element ... elements) {
         if (elements.length < 2) throw new IllegalArgumentException("Pass at least 2 elements to be merged");
 
-        Map<String, Element> fields = new HashMap<String, Element>();
+        Map<String, Element> fields = new LinkedHashMap<String, Element>();
 
         // ELEMENT ANALYSIS
         for (Element e : elements) {
@@ -174,7 +174,7 @@ public class CastorMappingMerger {
 
     public void doMerge() {
 
-        Map<String, Element> m = new HashMap<String, Element>();
+        Map<String, Element> m = new LinkedHashMap<String, Element>();
 
         Document fileA = readXML(src1File);
         Document fileB = readXML(src2File);
