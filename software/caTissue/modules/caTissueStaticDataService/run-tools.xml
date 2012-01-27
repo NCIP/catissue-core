@@ -331,6 +331,7 @@
                 <include name="*.jar" />
             </fileset>
             <fileset dir="./de_codegen/xmi">
+                <exclude name="caTissueCore_v2.0.xmi" />
                 <include name="*.xmi" />
                 <include name="*.xml" />
             </fileset>
