@@ -288,11 +288,9 @@
         </foreach>
 
         <!-- Compile DECodeGen and prepare artifacts -->
-	<!--
         <ant inheritAll="false" inheritRefs="false" antfile="${decodegen.dir}/build.xml" target="all" dir="${decodegen.dir}">
             <property name="basedir" value="${decodegen.dir}"/>
         </ant>
-	-->
 
         <!-- XMIs MERGE-->
         <antcall target="-fixArtifacts">
