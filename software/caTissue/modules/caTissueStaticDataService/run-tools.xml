@@ -345,11 +345,17 @@
 
 	<target name="-fixArtifacts">		
     	<echo>Fixing inconsistent XMIs and other artifacts...</echo>
+
+        <!-- CASTOR -->
     	<replace dir="${dir}" includes="**/*" summary="true" token="ParticipantRecordEntry_Participant" value="ParticipantRecordEntryCollection"/>
 		<replace dir="${dir}" includes="**/*" summary="true" token="SCGRecordEntry_SpecimenCollectionGroup" value="ScgRecordEntryCollection"/>		
 		<replace dir="${dir}" includes="**/*" summary="true" token="SpecimenRecordEntry_Specimen" value="SpecimenRecordEntryCollection"/>
-		<replace dir="${dir}" includes="**/*" summary="true" token="&lt;a&gt;SpecimenRecordEntryCollectionBaseSolidTissuePathologyAnnotation&lt;/a&gt;" value="&lt;a&gt;SpecimenRecordEntry_SpecimenBaseSolidTissuePathologyAnnotation&lt;/a&gt;"/>
 		<replace dir="${dir}" includes="**/*" summary="true" token="name=&quot;SpecimenRecordEntryCollectionBaseSolidTissuePathologyAnnotation" value="name=&quot;SpecimenRecordEntry_SpecimenBaseSolidTissuePathologyAnnotation"/>
+
+        <!-- DOZER -->
+        <replace dir="${dir}" includes="**/*" summary="true" token="&lt;a&gt;SpecimenRecordEntryCollectionBaseSolidTissuePathologyAnnotation&lt;/a&gt;" value="&lt;a&gt;SpecimenRecordEntry_SpecimenBaseSolidTissuePathologyAnnotation&lt;/a&gt;"/>
+        <replace dir="${dir}" includes="**/*" summary="true" token="&lt;b&gt;SpecimenRecordEntryCollectionBaseSolidTissuePathologyAnnotation.specimenRecordEntry&lt;/b&gt;" value="&lt;b&gt;specimenRecordEntry_SpecimenBaseSolidTissuePathologyAnnotation.specimenRecordEntry&lt;/b&gt;"/>
+
 	</target>
 
 <!--

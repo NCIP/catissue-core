@@ -27,6 +27,8 @@ public class CastorMappingMerger {
     private String destFile;
     private static EntityResolver resolver;
 
+    private static String exceptionalCaseElement = "edu.common.dynamicextensions.domain.integration.AbstractRecordEntry";
+
     public static void main(String args[]) {
 
 //        args = new String[] {"./temp/pathology_scg-schema.jar/xml-mapping.xml", "./temp/pathology_specimen-schema.jar/xml-mapping.xml", "./CASTOR_MERGED.xml"};
@@ -131,6 +133,14 @@ public class CastorMappingMerger {
                     String fieldName = child.getAttribute("name").getValue();
                     String fieldType = child.getAttribute("type").getValue();
                     String lookupName = childName + ":" + fieldName;
+
+                    // ToDo UGLYING UGLY UGLIER
+                    // HANDLING EXCEPTIONAL CASE WHICH IS SUPPOSED TO BE FIXED IN XMI
+                    if (e.getAttribute("name").getValue().equals(exceptionalCaseElement) && fieldName.equals("id")) {
+                        System.out.println(">>> SKIPPING: " + e + "|" + fieldName);
+                        continue;
+                    }
+
                     Element element = fields.get(lookupName);
 
                     if (element != null && !element.getAttribute("type").getValue().equals(fieldType)) {
