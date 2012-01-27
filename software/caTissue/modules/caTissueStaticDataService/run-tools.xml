@@ -349,6 +349,7 @@
 		<replace dir="${dir}" includes="**/*" summary="true" token="SCGRecordEntry_SpecimenCollectionGroup" value="ScgRecordEntryCollection"/>		
 		<replace dir="${dir}" includes="**/*" summary="true" token="SpecimenRecordEntry_Specimen" value="SpecimenRecordEntryCollection"/>
 		<replace dir="${dir}" includes="**/*" summary="true" token="&lt;a&gt;SpecimenRecordEntryCollectionBaseSolidTissuePathologyAnnotation&lt;/a&gt;" value="&lt;a&gt;SpecimenRecordEntry_SpecimenBaseSolidTissuePathologyAnnotation&lt;/a&gt;"/>
+		<replace dir="${dir}" includes="**/*" summary="true" token="name=&quot;SpecimenRecordEntryCollectionBaseSolidTissuePathologyAnnotation" value="name=&quot;SpecimenRecordEntry_SpecimenBaseSolidTissuePathologyAnnotation"/>
 	</target>
 
 <!--
