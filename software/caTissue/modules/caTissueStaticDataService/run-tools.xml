@@ -305,11 +305,13 @@
         <copy file="${basedir}/de_codegen/xmi/mergeResult.xml" tofile="${basedir}/etc/catissue_cacore_domainModel.xml" />
 
         <!--COPY BEANS-->
+<!--
         <copy todir="${basedir}/lib">
             <fileset dir="${basedir}/de_codegen/artifacts/">
                 <include name="*-beans.jar" />
             </fileset>
         </copy>
+-->
 
         <!-- MERGE CASTOR MAPPINGS -->
         <foreach target="-doMergeCastorMappingXMLs" param="fullJarFileName" inheritall="true">
