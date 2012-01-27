@@ -172,6 +172,11 @@ public class CastorMappingMerger {
         }
     }
 
+    /**
+     * It is important to feed the files in a specific order.
+     * Merger will take the first file and will add the other elements from other files to it.
+     * @see https://bugzilla.wustl.edu/bugzilla/show_bug.cgi?id=22165
+      */
     public void doMerge() {
 
         Map<String, Element> m = new LinkedHashMap<String, Element>();

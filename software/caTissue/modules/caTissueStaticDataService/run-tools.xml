@@ -373,13 +373,18 @@
         <echo message="FILE1: ${fileOne}: ${fileOne.exists}" />
         <echo message="FILE2: ${fileTwo}: ${fileTwo.exists}" />
 
+        <!--
+            THE ORDER OF THE XML MAPPING FILES IS IMPORTANT, THAT's WHY ORIGINAL CASTOR FILE WILL GO FIRST
+            SEE: edu.wustl.catissuecore.domain.util.CastorMappingMerger#doMerge
+            SEE: https://bugzilla.wustl.edu/bugzilla/show_bug.cgi?id=22165
+        -->
         <java failonerror="true" classname="edu.wustl.catissuecore.domain.util.CastorMappingMerger" fork="yes" dir="${basedir}">
             <classpath>
                 <fileset dir="./build/lib/"><include name="*.jar" /></fileset>
                 <fileset dir="./lib/"><include name="*.jar" /></fileset>
             </classpath>
-            <arg value="${fileOne}"/>
             <arg value="./src/edu/wustl/catissuecore/domain/Catissue_cacore-xml-mapping.xml"/>
+            <arg value="${fileOne}"/>
             <arg value="./src/edu/wustl/catissuecore/domain/Catissue_cacore-xml-mapping.xml"/>
         </java>
 
@@ -388,8 +393,8 @@
                 <fileset dir="./build/lib/"><include name="*.jar" /></fileset>
                 <fileset dir="./lib/"><include name="*.jar" /></fileset>
             </classpath>
-            <arg value="${fileTwo}"/>
             <arg value="./src/edu/wustl/catissuecore/domain/Catissue_cacore-unmarshaller-xml-mapping.xml"/>
+            <arg value="${fileTwo}"/>
             <arg value="./src/edu/wustl/catissuecore/domain/Catissue_cacore-unmarshaller-xml-mapping.xml"/>
         </java>
 
