@@ -295,7 +295,8 @@
         <!-- XMIs MERGE-->
         <antcall target="-fixArtifacts">
             <param name="dir" value="${basedir}/de_codegen/xmi" />
-        </antcall>    	
+        </antcall>
+
         <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="-doMergeXMIs" dir="../DECodeGen/">
             <property name="xmiFolder" value="${basedir}/de_codegen/xmi" />
             <property name="outputXMLFile" value="${basedir}/de_codegen/xmi/mergeResult.xml" />
@@ -363,6 +364,10 @@
     <target name="-doMergeCastorMappingXMLs">
         <basename property="jarfilename" file="${fullJarFileName}"/>
         <unjar src="${fullJarFileName}" dest="./temp/${jarfilename}" />
+
+        <antcall target="-fixArtifacts">
+            <param name="dir" value="./temp/${jarfilename}" />
+        </antcall>
 
         <property name="fileOne" value="./temp/${jarfilename}/xml-mapping.xml" />
         <property name="fileTwo" value="./temp/${jarfilename}/unmarshaller-xml-mapping.xml" />
