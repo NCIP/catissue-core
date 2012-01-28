@@ -610,6 +610,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		Map<String, NamedQueryParam> queryParams = new HashMap<String, NamedQueryParam>();
 		queryParams.put("0", new NamedQueryParam(DBTypes.LONG, specimenId));
 		specimenEventCollection=dao.executeNamedQuery("fetchSpecimenEventParameterCollection", queryParams);
+		AppUtility.closeDAOSession(dao);
 		return specimenEventCollection;
 	}
 
