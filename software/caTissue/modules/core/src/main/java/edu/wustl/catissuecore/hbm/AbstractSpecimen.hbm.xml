@@ -329,8 +329,8 @@
 			class="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication"
 			cascade="none"
 			outer-join="auto"
-			update="true"
-            insert="true"
+			update="false"
+            insert="false"
 			column="ACTION_APPLICATION_ID"
 			lazy="false"
 		/>
