@@ -448,20 +448,23 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			// If parent specimen id is null, then move to specimen collection group.
 			else
 			{
-				Collection<SpecimenProcessingProcedureApplication> sppAppCollection = specimen.getSpecimenCollectionGroup().getSppApplicationCollection();
-				if (sppAppCollection != null && !sppAppCollection.isEmpty())
+				if(creationEvent!=null)
 				{
-					Iterator<SpecimenProcessingProcedureApplication> sppAppIter = sppAppCollection.iterator();
-					while (sppAppIter.hasNext())
+					Collection<SpecimenProcessingProcedureApplication> sppAppCollection = specimen.getSpecimenCollectionGroup().getSppApplicationCollection();
+					if (sppAppCollection != null && !sppAppCollection.isEmpty())
 					{
-						SpecimenProcessingProcedureApplication sppApp = sppAppIter.next();
-						if(!creationEvent.getSppApplication().getSpp().getId().equals(sppApp.getSpp().getId()))
+						Iterator<SpecimenProcessingProcedureApplication> sppAppIter = sppAppCollection.iterator();
+						while (sppAppIter.hasNext())
 						{
-							continue; // ignore if not the spp using which the specimen was created
-						}
+							SpecimenProcessingProcedureApplication sppApp = sppAppIter.next();
+							if(!creationEvent.getSppApplication().getSpp().getId().equals(sppApp.getSpp().getId()))
+							{
+								continue; // ignore if not the spp using which the specimen was created
+							}
 
-						Collection<ActionApplication> scgEventCollection=sppApp.getSppActionApplicationCollection();
-						addParentEventsToGrid(specimen.getSpecimenCollectionGroup().getName(),creationTimeStamp,dynamicEventsForGrid,scgEventCollection);
+							Collection<ActionApplication> scgEventCollection=sppApp.getSppActionApplicationCollection();
+							addParentEventsToGrid(specimen.getSpecimenCollectionGroup().getName(),creationTimeStamp,dynamicEventsForGrid,scgEventCollection);
+						}
 					}
 				}
 			}
