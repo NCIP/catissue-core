@@ -415,7 +415,7 @@ public class SPPEventProcessor
 		ISPPBizlogic sppBizlogicObject = new SpecimenWrapper();
 		sppBizlogicObject.setWrapperObject(specimen);
 
-		Collection<ActionApplication> actionApplicationCollection = new HashSet<ActionApplication>();
+		Collection<ActionApplication> actionApplicationCollection = specimen.getActionApplicationCollection();
 		for (AbstractFormContext formContext : formContextCollection)
 		{
 			Map<String, Object> staticParameters = formContextParameterMap.get(formContext);
@@ -426,6 +426,9 @@ public class SPPEventProcessor
 
 			actionApplicationCollection.add(actionApplication);
 		}
+		final IBizLogic bizLogic = new CatissueDefaultBizLogic();
+		Specimen oldSpecimen=(Specimen) bizLogic.retrieve(Specimen.class.getName(), specimen.getId());
+		bizLogic.update(specimen, oldSpecimen, sessionLoginInfo);
 	}
 
 	/**

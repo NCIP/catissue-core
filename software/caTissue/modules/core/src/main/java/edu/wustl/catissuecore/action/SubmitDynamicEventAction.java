@@ -173,7 +173,6 @@ public class SubmitDynamicEventAction extends BaseAction
 		Specimen specimen = (Specimen) specimenList.get(0);
 		specimen.setId(Long.valueOf(request.getParameter("specimenId")));
 
-		actionApplication.setSpecimen(specimen);
 		actionApplication.setPerformedBy(user);
 		actionApplication.setApplicationRecordEntry(actionAppRecordEntry);
 

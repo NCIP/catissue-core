@@ -28,7 +28,6 @@
 			<!-- Associations mapping for the ActionApplication class -->
 			<many-to-one name="applicationRecordEntry" class="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry" column="ACTION_APP_RECORD_ENTRY_ID"  lazy="false" cascade="save-update"/>
 				<many-to-one name="sppApplication" class="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication" column="SPP_APP_IDENTIFIER"  not-null="false" cascade="none"/>
-				<many-to-one name="specimen" class="edu.wustl.catissuecore.domain.Specimen" column="SPECIMEN_ID"  lazy="false" not-null="false" cascade="none"/>
 		</joined-subclass>
 		<joined-subclass name="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication" table="catissue_spp_application" lazy="false">
 			<key column="IDENTIFIER" />

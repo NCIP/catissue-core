@@ -134,7 +134,7 @@
 			table="catissue_action_application"
 			lazy="false"
 			cascade="save-update"
-			inverse="true"
+			inverse="false"
 		>
 			<cache usage="read-write" />
 			<key column="SPECIMEN_ID" />

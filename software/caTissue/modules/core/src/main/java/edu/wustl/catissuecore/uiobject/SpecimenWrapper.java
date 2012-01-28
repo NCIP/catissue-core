@@ -101,7 +101,6 @@ public class SpecimenWrapper implements ISPPBizlogic
 		actionApplication.setReasonDeviation(reasonOfDeviation);
 		actionApplication.setTimestamp((dateOfEvent != null) ? dateOfEvent : new Date());
 		actionApplication.setSppApplication(processingSPPApplication);
-		actionApplication.setSpecimen(this.specimen);
 		actionApplication.setPerformedBy(user);
 		actionApplication.setComments(comments);
 		actionApplication.setApplicationRecordEntry(actionAppRecordEntry);

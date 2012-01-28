@@ -76,7 +76,6 @@ public class SpecimenCollectionGroupWrapper implements ISPPBizlogic
 		ActionApplication actionApplication = new ActionApplication();
 		actionApplication.setReasonDeviation(reasonOfDeviation);
 		actionApplication.setTimestamp((dateOfEvent != null) ? dateOfEvent : new Date());
-		actionApplication.setSpecimen(null);
 		actionApplication.setPerformedBy(user);
 		actionApplication.setComments(comments);
 		actionApplication.setApplicationRecordEntry(actionAppRecordEntry);

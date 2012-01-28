@@ -21,9 +21,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -34,8 +35,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.hibernate.Query;
-import org.hibernate.Session;
 
 import edu.common.dynamicextensions.domain.userinterface.Container;
 import edu.common.dynamicextensions.xmi.AnnotationUtil;
@@ -54,7 +53,6 @@ import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
@@ -62,7 +60,6 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
-import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.query.generator.DBTypes;
@@ -82,7 +79,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 
 	Map<String, Long> dynamicEventMap = new HashMap<String, Long>();
 
-	HashSet<ActionApplication> dynamicEventsForGrid = new HashSet<ActionApplication>();
+	HashMap<String, Collection<ActionApplication>> dynamicEventsForGrid = new HashMap<String, Collection<ActionApplication>>();
 
 	/**
 	 * Overrides the execute method of Action class. Initialises the various
@@ -246,7 +243,7 @@ public class ListSpecimenEventParametersAction extends SecureAction
 						Specimen.class, specimenId, "creationEventAction");
 
 				dynamicEventsForGrid.clear();
-				final Collection<ActionApplication> dynamicEventCollection = new NewSpecimenBizLogic()
+				final Map<String, Collection<ActionApplication>> gridDynamicEventMap = new NewSpecimenBizLogic()
 						.getDynamicEventColl(specimenId, bizLogic, null, dynamicEventsForGrid);
 
 				/**
@@ -259,57 +256,60 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				 * displaying values form List on the grid.
 				 */
 				final List<Map<String, Object>> gridData = new ArrayList<Map<String, Object>>();
-				if (dynamicEventCollection != null)
+				if (gridDynamicEventMap != null)
 				{
-					for (final ActionApplication actionApp : dynamicEventCollection)
+					Set<String> keySet = gridDynamicEventMap.keySet();
+					Iterator<String> keySetIter = keySet.iterator();
+					while (keySetIter.hasNext())
 					{
-						final Map<String, Object> rowDataMap = new HashMap<String, Object>();
-						if (actionApp != null
-								&& !actionApp.getApplicationRecordEntry().getActivityStatus()
-										.equalsIgnoreCase(Constants.DISABLED))
+						String labelName = keySetIter.next();
+						Collection<ActionApplication> actionApplicationCollection = gridDynamicEventMap
+								.get(labelName);
+						Iterator<ActionApplication> actionAppCollIter = actionApplicationCollection
+								.iterator();
+
+						while (actionAppCollIter.hasNext())
 						{
-							//final String[] events = EventsUtil
-							//		.getEvent(eventParameters);
-							long contId = actionApp.getApplicationRecordEntry().getFormContext()
-									.getContainerId();
-							List<Object> contList = AppUtility
-									.executeSQLQuery("select caption from dyextn_container where identifier="
-											+ contId);
-							String container = (String) ((List<Object>) contList.get(0)).get(0);
-							//final Object container =bizLogic.retrieve(Container.class.getName(),new Long(contId));
-							if (actionApp.getSpecimen() != null)
+							ActionApplication actionApp = actionAppCollIter.next();
+							if (actionApp != null
+									&& !actionApp.getApplicationRecordEntry().getActivityStatus()
+											.equalsIgnoreCase(Constants.DISABLED))
 							{
-								rowDataMap.put(Constants.SPECIMEN_LABEL,
-										String.valueOf(actionApp.getSpecimen().getLabel()));
+								final Map<String, Object> rowDataMap = new HashMap<String, Object>();
+								//final String[] events = EventsUtil
+								//		.getEvent(eventParameters);
+								long contId = actionApp.getApplicationRecordEntry()
+										.getFormContext().getContainerId();
+								List<Object> contList = AppUtility
+										.executeSQLQuery("select caption from dyextn_container where identifier="
+												+ contId);
+								String container = (String) ((List<Object>) contList.get(0)).get(0);
+								//final Object container =bizLogic.retrieve(Container.class.getName(),new Long(contId));
+								rowDataMap.put(Constants.SPECIMEN_LABEL, labelName);
+								rowDataMap.put(Constants.EVENT_NAME,
+										edu.wustl.cab2b.common.util.Utility
+												.getFormattedString(container));
+
+								// Ashish - 4/6/07 - retrieving User
+								// User user = eventParameters.getUser();
+
+								rowDataMap.put(Constants.EVENT_DATE, actionApp.getTimestamp());
+
+								final User user = this.getUser(actionApp.getId(), bizLogic);
+
+								rowDataMap.put(Constants.USER_NAME, user.getLastName() + "&#44; "
+										+ user.getFirstName());
+
+								rowDataMap.put(Constants.PAGE_OF, "pageOfDynamicEvent");// pageOf
+								rowDataMap.put(Constants.SPECIMEN_ID,
+										request.getAttribute(Constants.SPECIMEN_ID));// pageOf
+								rowDataMap.put(Constants.ID, String.valueOf(actionApp.getId()));
+								if (creationEvent != null && actionApp.equals(creationEvent))
+								{
+									highLightCreationEvent(rowDataMap);
+								}
+								gridData.add(rowDataMap);
 							}
-							else
-							{
-								rowDataMap.put(Constants.SPECIMEN_LABEL, new SPPBizLogic()
-										.getScgNameFromActionApplicationId(actionApp.getId()));
-							}
-							rowDataMap.put(Constants.EVENT_NAME,
-									edu.wustl.cab2b.common.util.Utility
-											.getFormattedString(container));
-
-							// Ashish - 4/6/07 - retrieving User
-							// User user = eventParameters.getUser();
-
-							rowDataMap.put(Constants.EVENT_DATE, actionApp.getTimestamp());
-
-							final User user = this.getUser(actionApp.getId(), bizLogic);
-
-							rowDataMap.put(Constants.USER_NAME, user.getLastName() + "&#44; "
-									+ user.getFirstName());
-
-							rowDataMap.put(Constants.PAGE_OF, "pageOfDynamicEvent");// pageOf
-							rowDataMap.put(Constants.SPECIMEN_ID,
-									request.getAttribute(Constants.SPECIMEN_ID));// pageOf
-							rowDataMap.put(Constants.ID, String.valueOf(actionApp.getId()));
-							if (creationEvent != null && actionApp.equals(creationEvent))
-							{
-								highLightCreationEvent(rowDataMap);
-							}
-							gridData.add(rowDataMap);
 						}
 					}
 				}
@@ -606,10 +606,11 @@ public class ListSpecimenEventParametersAction extends SecureAction
 			IBizLogic bizLogic) throws ApplicationException
 	{
 		Collection<SpecimenEventParameters> specimenEventCollection = null;
-		HibernateDAO dao=(HibernateDAO) AppUtility.openDAOSession(null);	
+		HibernateDAO dao = (HibernateDAO) AppUtility.openDAOSession(null);
 		Map<String, NamedQueryParam> queryParams = new HashMap<String, NamedQueryParam>();
 		queryParams.put("0", new NamedQueryParam(DBTypes.LONG, specimenId));
-		specimenEventCollection=dao.executeNamedQuery("fetchSpecimenEventParameterCollection", queryParams);
+		specimenEventCollection = dao.executeNamedQuery("fetchSpecimenEventParameterCollection",
+				queryParams);
 		AppUtility.closeDAOSession(dao);
 		return specimenEventCollection;
 	}

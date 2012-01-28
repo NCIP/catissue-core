@@ -32,7 +32,7 @@ public class GridSpecimenImpl extends AbstractGridImpl
 					"inner join catissue_participant participant on participant.IDENTIFIER = cpr.PARTICIPANT_ID " +
 					"inner join catissue_cp_req_specimen cprs on cprs.identifier = cs.REQ_SPECIMEN_ID  " +
 					"inner join catissue_abstract_specimen cas on cas.IDENTIFIER = cs.IDENTIFIER " +
-					"where cprs.SPP_IDENTIFIER ="+jsonString+"  and cs.COLLECTION_STATUS ='Collected' and cs.activity_status='Active' and cs.identifier not in (select caa.SPECIMEN_ID from catissue_action_application  caa where caa.SPECIMEN_ID= cs.identifier)";
+					"where cprs.SPP_IDENTIFIER ="+jsonString+"  and cs.COLLECTION_STATUS ='Collected' and cs.activity_status='Active' and cs.identifier not in (select caa.SPECIMEN_ID from catissue_action_application  caa where caa.spp_app_identifier = cs.spp_application_id)";
 		}
 		else
 		{
@@ -46,7 +46,7 @@ public class GridSpecimenImpl extends AbstractGridImpl
 			"inner join catissue_participant participant on participant.IDENTIFIER = cpr.PARTICIPANT_ID " +
 			"inner join catissue_cp_req_specimen cprs on cprs.identifier = cs.REQ_SPECIMEN_ID  " +
 			"inner join catissue_abstract_specimen cas on cas.IDENTIFIER = cs.IDENTIFIER " +
-			"where cprs.SPP_IDENTIFIER ="+jsonString+"  and cs.COLLECTION_STATUS ='Collected' and cs.activity_status='Active' and cs.identifier not in (select caa.SPECIMEN_ID from catissue_action_application  caa where caa.SPECIMEN_ID= cs.identifier)" +
+			"where cprs.SPP_IDENTIFIER ="+jsonString+"  and cs.COLLECTION_STATUS ='Collected' and cs.activity_status='Active' and cs.identifier not in (select caa.SPECIMEN_ID from catissue_action_application  caa where caa.spp_app_identifier = cs.spp_application_id)" +
 					"and sp.identifier not in ("+cpIds+")";
 		}
 		return query;

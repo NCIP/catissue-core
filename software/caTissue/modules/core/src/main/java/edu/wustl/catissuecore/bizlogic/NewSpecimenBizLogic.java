@@ -368,7 +368,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 * @throws BizLogicException
 	 */
 
-	public Collection<ActionApplication> getDynamicEventColl(Long specimenId, IBizLogic bizLogic,Date creationTimeStamp, HashSet<ActionApplication> dynamicEventsForGrid)
+	public Map<String,Collection<ActionApplication>> getDynamicEventColl(Long specimenId, IBizLogic bizLogic,Date creationTimeStamp, HashMap<String, Collection<ActionApplication>> dynamicEventsForGrid)
 			throws BizLogicException
 			{
 		Specimen specimen=null;
@@ -379,7 +379,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			{
 				specimen = (Specimen) bizLogic.retrieve(Specimen.class.getName(), Long.valueOf(specimenId));
 				//Add Ad-hoc Events.
-				Collection<ActionApplication> adhocEventColl = (Collection<ActionApplication>) bizLogic	.retrieveAttribute(Specimen.class, new Long(specimenId),"elements(actionApplicationCollection)");
+				Collection<ActionApplication> adhocEventColl = specimen.getActionApplicationCollection();//(Collection<ActionApplication>) bizLogic	.retrieveAttribute(Specimen.class, new Long(specimenId),"elements(actionApplicationCollection)");
 				if(adhocEventColl!=null && !adhocEventColl.isEmpty())
 				{
 					/**
@@ -387,11 +387,11 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					 */
 					if(creationTimeStamp==null)
 					{
-						dynamicEventsForGrid.addAll(adhocEventColl);
+						dynamicEventsForGrid.put(specimen.getLabel(),adhocEventColl);
 					}
 					else
 					{
-						addParentEventsToGrid(creationTimeStamp,dynamicEventsForGrid,adhocEventColl);
+						addParentEventsToGrid(specimen.getLabel(),creationTimeStamp,dynamicEventsForGrid,adhocEventColl);
 					}
 				}
 				// Add Creation Events of assigned Processing SPP.
@@ -400,34 +400,40 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				{
 					Collection<ActionApplication> actionApplicationCollection = sppApplication
 							.getSppActionApplicationCollection(); 
+					Collection<ActionApplication> actionAppColl=new ArrayList<ActionApplication>();
 					if(creationTimeStamp==null && actionApplicationCollection != null)
 					{
-						dynamicEventsForGrid.addAll(actionApplicationCollection);	
+						if(dynamicEventsForGrid.containsKey(specimen.getLabel()))
+						{
+							actionAppColl=dynamicEventsForGrid.get(specimen.getLabel());
+						}
+						actionAppColl.addAll(actionApplicationCollection);
+						dynamicEventsForGrid.put(specimen.getLabel(),actionAppColl);	
 					}
 					else
 					{
 						Collection<ActionApplication> parentSpecimenEventCollection=specimen.getProcessingSPPApplication().getSppActionApplicationCollection();
-						addParentEventsToGrid(creationTimeStamp,dynamicEventsForGrid,parentSpecimenEventCollection);
+						addParentEventsToGrid(specimen.getLabel(),creationTimeStamp,dynamicEventsForGrid,parentSpecimenEventCollection);
 					}
 				}
 			}
 			ActionApplication creationEvent=(ActionApplication) bizLogic.retrieveAttribute(Specimen.class,specimenId,
 					"creationEventAction");
-					
+
 			if (creationEvent == null) {
-			    //
+				//
 				// Bug #21887
 				// If there is no creationEvent specified, use creation date/time to
 				// determine the events of parent specimen applied on this child specimen
 				//
-			    creationTimeStamp = specimen.getCreatedOn();				
+				creationTimeStamp = specimen.getCreatedOn();				
 				if (creationTimeStamp == null) {
-				    return dynamicEventsForGrid;
+					return dynamicEventsForGrid;
 				}
 			} else {
-			    creationTimeStamp = creationEvent.getTimestamp();
+				creationTimeStamp = creationEvent.getTimestamp();
 			}
-			
+
 			// Add creation Events of SPP application of parent specimen.
 			// If parent specimen is not null. then get the sppApplication of parent specimen
 			// and get all creation events of parent specimen till the action order of 
@@ -455,7 +461,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 						}
 
 						Collection<ActionApplication> scgEventCollection=sppApp.getSppActionApplicationCollection();
-						addParentEventsToGrid(creationTimeStamp,dynamicEventsForGrid,scgEventCollection);
+						addParentEventsToGrid(specimen.getSpecimenCollectionGroup().getName(),creationTimeStamp,dynamicEventsForGrid,scgEventCollection);
 					}
 				}
 			}
@@ -513,16 +519,28 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 * @param actionOrder
 	 * @param actionAppCollection
 	 */
-	private void addParentEventsToGrid(Date creationTimeStamp,
-			HashSet<ActionApplication> dynamicEventsForGrid,
-			Collection<ActionApplication> actionAppCollection) {
+	private void addParentEventsToGrid(String specimenLabel,Date creationTimeStamp,
+			HashMap<String,Collection<ActionApplication>> dynamicEventsForGrid,
+			Collection<ActionApplication> actionAppCollection) 
+	{
+		Collection<ActionApplication> actionAppColl=null;
 		Iterator<ActionApplication> iterator=actionAppCollection.iterator();
 		while(iterator.hasNext())
 		{
 			ActionApplication actApp=iterator.next();
 			if(!actApp.getTimestamp().after(creationTimeStamp))
 			{
-				dynamicEventsForGrid.add(actApp);
+				if(dynamicEventsForGrid.containsKey(specimenLabel))
+				{
+					actionAppColl=dynamicEventsForGrid.get(specimenLabel);
+					actionAppColl.add(actApp);
+				}
+				else
+				{
+					actionAppColl=new ArrayList<ActionApplication>();
+					actionAppColl.add(actApp);
+					dynamicEventsForGrid.put(specimenLabel,(Collection<ActionApplication>) actionAppColl);
+				}
 			}
 		}
 	}
@@ -1008,22 +1026,22 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	 * @param specimen
 	 *            : specimen
 	 * @throws ApplicationException 
-	
-	  
+
+
 	 */
 	private void setSpecimenCreatedOnDate(Specimen specimen) throws ApplicationException 
 	{
 		if (specimen.getCreatedOn() == null && specimen.getParentSpecimen()==null) 
 		{
-			
+
 			specimen.setCreatedOn(new SpecimenCollectionGroupBizLogic().encounterDateFromScg(specimen.getSpecimenCollectionGroup()));
 		}
 		else
 		{
-				specimen.setCreatedOn(Calendar.getInstance().getTime());
+			specimen.setCreatedOn(Calendar.getInstance().getTime());
 		}
 	}
-	
+
 
 	/**
 	 * Sets the quantity.
@@ -2116,7 +2134,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					specimenOld, persistentSpecimen);
 			specimen.setCreationEventAction(persistentSpecimen.getCreationEventAction());
 			handleRecordEntry(persistentSpecimen, sessionDataBean.getUserName());
-			 
+
 			dao.update(persistentSpecimen, specimenOld);
 
 			this.updateChildAttributes(specimen, specimenOld);
@@ -2183,45 +2201,45 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	}
 	private void handleActionAppRcdNtry(Collection<ActionApplication> actionApplicationCollection,SessionDataBean sessionDataBean,
 			SpecimenProcessingProcedure spp) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, BizLogicException
-	{
-			for (ActionApplication actionApp : actionApplicationCollection) 
 			{
-				if(actionApp.getId() == null) 
+		for (ActionApplication actionApp : actionApplicationCollection) 
+		{
+			if(actionApp.getId() == null) 
+			{
+				//if(actionApp.getPerformedBy() = null)
+				User user = new User();
+				user.setId(sessionDataBean.getUserId());
+				actionApp.setPerformedBy(user);
+				ActionApplicationRecordEntry entry = actionApp.getApplicationRecordEntry();
+				if(entry != null)
 				{
-					//if(actionApp.getPerformedBy() = null)
-					User user = new User();
-					user.setId(sessionDataBean.getUserId());
-					actionApp.setPerformedBy(user);
-					ActionApplicationRecordEntry entry = actionApp.getApplicationRecordEntry();
-					if(entry != null)
+					Method[] methods = entry.getClass().getMethods();
+					for (Method method : methods) 
 					{
-						Method[] methods = entry.getClass().getMethods();
-						for (Method method : methods) 
+						if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
 						{
-							if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
+							Object val = method.invoke(entry, (Object[])null);
+							if(val != null && (val instanceof Set || val instanceof Collection))
 							{
-								Object val = method.invoke(entry, (Object[])null);
-								if(val != null && (val instanceof Set || val instanceof Collection))
+								AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+								if(spp == null)
 								{
-									AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-									if(spp == null)
-									{
-										bizLogic.updateRecNtry(sessionDataBean.getUserName(), entry,
-												val);
-									}
-									else
-									{
-										bizLogic.updateRecNtry(sessionDataBean.getUserName(), entry,
-												val,spp.getId());
-									}
-									
+									bizLogic.updateRecNtry(sessionDataBean.getUserName(), entry,
+											val);
 								}
+								else
+								{
+									bizLogic.updateRecNtry(sessionDataBean.getUserName(), entry,
+											val,spp.getId());
+								}
+
 							}
 						}
 					}
 				}
 			}
-	}
+		}
+			}
 
 	/**
 	 * 
@@ -2660,8 +2678,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		{
 			persistentSpecimen.setSpecimenRecordEntryCollection(specimen.getSpecimenRecordEntryCollection());
 		}
-//		persistentSpecimen.setActionApplicationCollection(specimen.getActionApplicationCollection());
-//		persistentSpecimen.setProcessingSPPApplication(specimen.getProcessingSPPApplication());
+		//		persistentSpecimen.setActionApplicationCollection(specimen.getActionApplicationCollection());
+		//		persistentSpecimen.setProcessingSPPApplication(specimen.getProcessingSPPApplication());
 	}
 
 	private void setActionApplicationCollection(DAO dao, Specimen specimen,
@@ -2672,7 +2690,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			if(persistentSpecimen.getProcessingSPPApplication() != null && persistentSpecimen.getProcessingSPPApplication().getId() != null 
 					&& specimen.getProcessingSPPApplication() != null && specimen.getProcessingSPPApplication().getId() != null)
 			{
-					updateSpp(dao, persistentSpecimen, specimen);
+				updateSpp(dao, persistentSpecimen, specimen);
 			}
 			else if(persistentSpecimen.getProcessingSPPApplication() == null)
 			{
@@ -2684,13 +2702,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			LOGGER.error(daoExp.getMessage(), daoExp);
 			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(),
 					daoExp.getMsgValues());
-			}
-		
+		}
+
 	}
 
 	private void updateSpp(DAO dao, Specimen persistentSpecimen,
 			Specimen specimen)
-			throws DAOException {
+					throws DAOException {
 		final Collection<ActionApplication> actionAppColl = specimen.getProcessingSPPApplication().getSppActionApplicationCollection();
 		if (actionAppColl != null) {
 			final Iterator<ActionApplication> iterator = actionAppColl
@@ -2711,10 +2729,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			final ActionApplication actionApp, SpecimenProcessingProcedureApplication sppApp) {
 		ActionApplication persistActionApp = null;
 		if (actionApp.getId() == null) {
-			if(sppApp != null)
+			/*if(sppApp != null)
 				actionApp.setSppApplication(sppApp);
 			else
-				actionApp.setSpecimen(persistentSpecimen);
+				actionApp.setSpecimen(persistentSpecimen);*/	
 			persistActionApp = actionApp;
 			perstActionAppColl.add(persistActionApp);
 		} 
@@ -2723,7 +2741,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					.getCorrespondingOldObject(perstActionAppColl,
 							actionApp.getId());
 			persistActionApp.setAdminuser(actionApp.getAdminuser());
-			
+
 			if(!actionApp.getApplicationRecordEntry().equals(persistActionApp.getApplicationRecordEntry()))
 			{
 				persistActionApp.setApplicationRecordEntry(actionApp.getApplicationRecordEntry());	
@@ -2739,9 +2757,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 
 	private void updateActionApp(DAO dao, Specimen persistentSpecimen,
 			final Specimen specimen)
-			throws DAOException {
+					throws DAOException {
 		final Collection<ActionApplication> actionAppColl = specimen
-		.getActionApplicationCollection();
+				.getActionApplicationCollection();
 		if (actionAppColl != null) {
 			final Iterator<ActionApplication> iterator = actionAppColl
 					.iterator();
@@ -2752,30 +2770,30 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 						.next();
 				updateActionApplications(persistentSpecimen,
 						perstExIdColl, exId,null);
-//				ActionApplication persistExId = null;
-//				if (exId.getId() == null) {
-//					exId.setSpecimen(persistentSpecimen);
-//					persistExId = exId;
-//					perstExIdColl.add(persistExId);
-//				} 
-//				else {
-//					persistExId = (ActionApplication) this
-//							.getCorrespondingOldObject(perstExIdColl,
-//									exId.getId());
-//					if(!exId.getApplicationRecordEntry().equals(persistExId.getApplicationRecordEntry()))
-//					{
-//						persistExId.setApplicationRecordEntry(exId.getApplicationRecordEntry());	
-//					}
-//					persistExId.setAdminuser(exId.getAdminuser());
-////						persistExId.setApplicationRecordEntry(exId.getApplicationRecordEntry());
-//					persistExId.setComments(exId.getComments());
-//					persistExId.setFacilityId(exId.getFacilityId());
-//					persistExId.setPerformedBy(exId.getPerformedBy());
-//					persistExId.setReasonDeviation(exId.getReasonDeviation());
-//					persistExId.setRoleId(exId.getRoleId());
-//					persistExId.setTimestamp(exId.getTimestamp());
-//					persistExId.setSppApplication(exId.getSppApplication());
-//				}
+				//				ActionApplication persistExId = null;
+				//				if (exId.getId() == null) {
+				//					exId.setSpecimen(persistentSpecimen);
+				//					persistExId = exId;
+				//					perstExIdColl.add(persistExId);
+				//				} 
+				//				else {
+				//					persistExId = (ActionApplication) this
+				//							.getCorrespondingOldObject(perstExIdColl,
+				//									exId.getId());
+				//					if(!exId.getApplicationRecordEntry().equals(persistExId.getApplicationRecordEntry()))
+				//					{
+				//						persistExId.setApplicationRecordEntry(exId.getApplicationRecordEntry());	
+				//					}
+				//					persistExId.setAdminuser(exId.getAdminuser());
+				////						persistExId.setApplicationRecordEntry(exId.getApplicationRecordEntry());
+				//					persistExId.setComments(exId.getComments());
+				//					persistExId.setFacilityId(exId.getFacilityId());
+				//					persistExId.setPerformedBy(exId.getPerformedBy());
+				//					persistExId.setReasonDeviation(exId.getReasonDeviation());
+				//					persistExId.setRoleId(exId.getRoleId());
+				//					persistExId.setTimestamp(exId.getTimestamp());
+				//					persistExId.setSppApplication(exId.getSppApplication());
+				//				}
 			}
 			persistentSpecimen
 			.setActionApplicationCollection(perstExIdColl);
@@ -6541,31 +6559,31 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		}
 		return count;
 	}
-	
+
 	private void handleRecordEntry(Specimen obj, String userName) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, BizLogicException 
 	{
 		if(obj.getSpecimenRecordEntryCollection() != null)
 		{
-				for (SpecimenRecordEntry specimenRecordEntry : obj.getSpecimenRecordEntryCollection()) 
+			for (SpecimenRecordEntry specimenRecordEntry : obj.getSpecimenRecordEntryCollection()) 
+			{
+				if(specimenRecordEntry.getId() == null) 
 				{
-					if(specimenRecordEntry.getId() == null) 
+					Method[] methods = specimenRecordEntry.getClass().getMethods();
+					for (Method method : methods) 
 					{
-						Method[] methods = specimenRecordEntry.getClass().getMethods();
-						for (Method method : methods) 
+						if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
 						{
-							if(method.getName().startsWith("get") && !method.getName().equals("getClass"))
+							Object val = method.invoke(specimenRecordEntry, (Object[])null);
+							if(val instanceof Set || val instanceof Collection)
 							{
-								Object val = method.invoke(specimenRecordEntry, (Object[])null);
-								if(val instanceof Set || val instanceof Collection)
-								{
-									AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-									bizLogic.updateRecNtry(userName, specimenRecordEntry,
-											val);
-								}
+								AnnotationBizLogic bizLogic = new AnnotationBizLogic();
+								bizLogic.updateRecNtry(userName, specimenRecordEntry,
+										val);
 							}
 						}
 					}
 				}
+			}
 		}
 	}
 

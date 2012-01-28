@@ -59,7 +59,7 @@ public class ActionApplication extends AbstractApplication implements Serializab
 	}
 
 
-	private Specimen specimen;
+	/*private Specimen specimen;
 
 	public Specimen getSpecimen() {
 		return specimen;
@@ -67,7 +67,7 @@ public class ActionApplication extends AbstractApplication implements Serializab
 	public void setSpecimen(Specimen specimen) {
 		this.specimen = specimen;
 	}
-	/**
+*/	/**
 	* Compares <code>obj</code> to it self and returns true if they both are same
 	*
 	* @param obj
