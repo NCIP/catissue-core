@@ -285,7 +285,7 @@ window.onresize = function() { mdResDetector(); }
 							</table>
 						<% } else
 						{
-						title = "No Specimen Event Paremeters are available for Identifier : " + specimenIdentifier;
+						title = "There are no Events recorded for this Specimen.";
 						%>
 					<tr>
 						<td align="left" colspan="3"class="showhide">
