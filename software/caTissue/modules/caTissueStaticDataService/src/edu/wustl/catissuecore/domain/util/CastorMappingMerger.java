@@ -27,7 +27,7 @@ public class CastorMappingMerger {
     private String destFile;
     private static EntityResolver resolver;
 
-    private static String exceptionalCaseElement = "edu.common.dynamicextensions.domain.integration.AbstractRecordEntry";
+//    private static String exceptionalCaseElement = "edu.common.dynamicextensions.domain.integration.AbstractRecordEntry";
 
     public static void main(String args[]) {
 
