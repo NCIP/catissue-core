@@ -1463,4 +1463,12 @@ $HeadURL: https://ncisvn.nci.nih.gov/svn/automation/branches/automation-1.7.4/so
 			<property name="jboss.home" value="${jboss.home}" />
 		</ant>
 	</target>
+	
+	<target name="update_static_metadata" depends="common:init:pre">
+			<ant inheritAll="false" inheritRefs="false" antfile="deploy.xml" target="update_static_metadata" dir="${caTissue-webapp.dir.dist}/modules/caTissue/conf">
+				<property name="env.GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}"/>
+				<property name="caTissue-webapp.dir.dist" value="${caTissue-webapp.dir.dist}" />
+				<property name="jboss.home" value="${jboss.home}" />
+			</ant>
+	</target>
 </project>
