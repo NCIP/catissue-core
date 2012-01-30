@@ -1064,6 +1064,19 @@
 			</if>		
 					
 			<antcall target="build_war" />
+			<if>
+				<equals arg1="mysql" arg2="${csm.database.type}" />
+				<then>
+						<antcall target="mysql_csm_config_with_idp"/>
+				</then>
+				<elseif>
+						<equals arg1="oracle" arg2="${csm.database.type}" />
+				<then>
+						<antcall target="oracle_csm_config_with_idp"/>
+				</then>
+				</elseif>
+			</if>
+				 	
 			<antcall target="jboss_configuration" />
 		    <antcall target="deploy_notification_service" />
 			<antcall target="send_mail" />
@@ -5546,20 +5559,7 @@ Thanking You,
 
 	<!--Target call for both fresh deployment of caTissue-->
 	<target name="deploy_app" depends="deploy_app_catissue">
-			<if>
-				<equals arg1="mysql" arg2="${csm.database.type}" />
-			<then>
-					<antcall target="mysql_csm_config_with_idp"/>
-			</then>
-			<elseif>
-					<equals arg1="oracle" arg2="${csm.database.type}" />
-			<then>
-					<antcall target="oracle_csm_config_with_idp"/>
-			</then>
-			</elseif>
-			</if>
-		 	<antcall target="jboss_configuration" />
-		</target>
+	</target>
 
 
 		 <target name="mysql_csm_config_with_idp" >
