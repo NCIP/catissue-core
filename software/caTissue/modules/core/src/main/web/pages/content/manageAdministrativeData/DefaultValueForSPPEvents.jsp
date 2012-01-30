@@ -172,7 +172,7 @@ for(Action action : actionCollection)
 {
 	Long formContextId = action.getId();
 	Long containerId = action.getContainerId();
-	String iframeURL="/catissuecore/LoadDataEntryFormAction.do?dataEntryOperation=edit&useApplicationStylesheet=true&showInDiv=false&"+containerIdString+"="+containerId+ "&FormContextIdentifier="+formContextId;
+	String iframeURL="/catissuecore/LoadDataEntryFormAction.do?dataEntryOperation=edit&showCalculateDefaultValue=false&useApplicationStylesheet=true&showInDiv=false&"+containerIdString+"="+containerId+ "&FormContextIdentifier="+formContextId;
 	request.getSession().setAttribute("mandatory_Message", "false");
 	if(!contextRecordIdMap.isEmpty() && contextRecordIdMap.get(action) !=null)
 	{
