@@ -289,6 +289,9 @@
   </class>
   <class name="edu.common.dynamicextensions.domain.integration.AbstractRecordEntry" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
     <map-to xml="AbstractRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" />
+      <field name="id" type="long">
+        <bind-xml name="id" node="attribute" />
+      </field>
   </class>
   <class name="edu.common.dynamicextensions.domain.integration.AbstractFormContext" identity="id" extends="edu.wustl.common.domain.AbstractDomainObject">
     <map-to xml="AbstractFormContext" ns-uri="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" />
@@ -1135,9 +1138,6 @@
   </class>
   <class name="edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry" identity="id" extends="edu.common.dynamicextensions.domain.integration.AbstractRecordEntry">
     <map-to xml="ParticipantRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" />
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
     <field name="participant" type="edu.wustl.catissuecore.domain.Participant">
       <bind-xml name="Participant" type="edu.wustl.catissuecore.domain.Participant" location="participant" node="element" />
     </field>
@@ -1219,9 +1219,6 @@
   </class>
   <class name="edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry" identity="id" extends="edu.common.dynamicextensions.domain.integration.AbstractRecordEntry">
     <map-to xml="SCGRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" />
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
     <field name="specimenCollectionGroup" type="edu.wustl.catissuecore.domain.SpecimenCollectionGroup">
       <bind-xml name="SpecimenCollectionGroup" type="edu.wustl.catissuecore.domain.SpecimenCollectionGroup" location="specimenCollectionGroup" node="element" />
     </field>
@@ -1270,9 +1267,6 @@
   </class>
   <class name="edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry" identity="id" extends="edu.common.dynamicextensions.domain.integration.AbstractRecordEntry">
     <map-to xml="SpecimenRecordEntry" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" />
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
     <field name="specimen" type="edu.wustl.catissuecore.domain.Specimen">
       <bind-xml name="Specimen" type="edu.wustl.catissuecore.domain.Specimen" location="specimen" node="element" />
     </field>
