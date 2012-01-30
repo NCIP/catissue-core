@@ -136,10 +136,12 @@ public class CastorMappingMerger {
 
                     // ToDo UGLYING UGLY UGLIER
                     // HANDLING EXCEPTIONAL CASE WHICH IS SUPPOSED TO BE FIXED IN XMI
+/*
                     if (e.getAttribute("name").getValue().equals(exceptionalCaseElement) && fieldName.equals("id")) {
                         System.out.println(">>> SKIPPING: " + e + "|" + fieldName);
                         continue;
                     }
+*/
 
                     Element element = fields.get(lookupName);
 
