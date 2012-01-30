@@ -1272,22 +1272,36 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 				}
 				catch (final DAOException e)
 				{
-					this.logger.error(e.getMessage(), e);
-					e.printStackTrace() ;
+					logger.error(e.getMessage(), e);
 				}
 				final Collection<CollectionProtocol> cpCollection = user
 				.getAssignedProtocolCollection();
 				if (cpCollection != null && !cpCollection.isEmpty())
 				{
-					for (final CollectionProtocol cp : cpCollection)
+					Participant participant = (Participant)domainObject;
+					if(participant.getCollectionProtocolRegistrationCollection()!=null )
 					{
-						if (privilegeCache.hasPrivilege(CollectionProtocol.class.getName() + "_"
-								+ cp.getId(), privilegeName))
+						Long cpId=0l;
+						for (CollectionProtocolRegistration cpr : participant.getCollectionProtocolRegistrationCollection()) 
 						{
-							isAuthorized = true;
-							break;
+							cpId = cpr.getId();
+							if (privilegeCache.hasPrivilege(CollectionProtocol.class.getName() + "_"
+									+ cpId, privilegeName))
+							{
+								isAuthorized = true;
+								break;
+							}
 						}
 					}
+//					for (final CollectionProtocol cp : cpCollection)
+//					{
+//						if (privilegeCache.hasPrivilege(CollectionProtocol.class.getName() + "_"
+//								+ cp.getId(), privilegeName))
+//						{
+//							isAuthorized = true;
+//							break;
+//						}
+//					}
 					if (!isAuthorized)
 					{
 						isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(privilegeName,

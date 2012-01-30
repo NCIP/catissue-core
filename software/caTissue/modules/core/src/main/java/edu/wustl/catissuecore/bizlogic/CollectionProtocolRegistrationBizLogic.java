@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
 import edu.wustl.catissuecore.factory.utils.SpecimenCollectionGroupUtility;
@@ -77,8 +78,11 @@ import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.AuditException;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
+import edu.wustl.security.privilege.PrivilegeCache;
+import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
  * UserHDAO is used to add user information into the database using Hibernate.
@@ -150,7 +154,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			validateCPR(dao, collectionProtocolRegistration,
 					objCollectionProtocol, ppi);
 			Participant participant = null;
-			if (collectionProtocolRegistration.getParticipant().getId() == null)
+			if (collectionProtocolRegistration.getParticipant() == null)
 			{
 				participant = this.addDummyParticipant(dao);
 				/*final Object participantObj = dao.retrieveById(Participant.class.getName(),
@@ -160,10 +164,14 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					participant = (Participant) participantObj;
 				}*/
 			}
+			else if(collectionProtocolRegistration.getParticipant().getId() == null)
+			{
+				dao.insert(collectionProtocolRegistration.getParticipant());
+				participant = collectionProtocolRegistration.getParticipant();
+			}
 			else
 			{
 				participant = collectionProtocolRegistration.getParticipant();
-
 			}
 
 			collectionProtocolRegistration.setParticipant(participant);
@@ -2510,5 +2518,243 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	public void setParticipantBizLogic(IParticipantBizLogic participantBizLogic) {
 		this.participantBizLogic = participantBizLogic;
 	}
+	
+	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean)
+	throws BizLogicException
+	{
+		return isAuthorized( dao,  domainObject,  sessionDataBean,null);
+	}
+	
+	protected String getPrivilegeKey(Object domainObject)
+	{
+		return "REGISTRATION";
+	}
+	
+	public boolean isAuthorized(DAO dao, Object domainObject, SessionDataBean sessionDataBean,Object uiObject)
+	throws BizLogicException
+	{
+		
+		boolean isAuthorized = false;//new ParticipantBizLogic().isAuthorized(dao, domainObject, sessionDataBean, uiObject);
+		try
+		{
+			if (sessionDataBean != null && sessionDataBean.isAdmin())
+			{
+				return true;
+			}
+
+			final String privilegeName = this.getPrivilegeName(domainObject);
+			final String protEltName = this.getObjectId(dao, domainObject);
+			final PrivilegeCache privilegeCache = PrivilegeManager.getInstance().getPrivilegeCache(
+					sessionDataBean.getUserName());
+
+			if (protEltName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
+			{
+				User user = null;
+				try
+				{
+					user = (User) dao.retrieveById(User.class.getName(), sessionDataBean
+							.getUserId());
+				}
+				catch (final DAOException e)
+				{
+					LOGGER.error(e.getMessage(), e);
+					e.printStackTrace() ;
+				}
+				final Collection<CollectionProtocol> cpCollection = user
+				.getAssignedProtocolCollection();
+				Long cpId = 0L;
+				if (cpCollection != null && !cpCollection.isEmpty())
+				{
+					CollectionProtocolRegistration cpr = (CollectionProtocolRegistration)domainObject;
+					if(cpr.getCollectionProtocol() != null)
+					{
+						cpId = cpr.getCollectionProtocol().getId();
+					}
+					if(cpId != 0)
+					{
+						if (privilegeCache.hasPrivilege(CollectionProtocol.class.getName() + "_"
+								+ cpId, privilegeName))
+						{
+							isAuthorized = true;
+//							break;
+						}
+					}
+					else
+					{
+//						for (final CollectionProtocol cp : cpCollection)
+//						{
+//							if (privilegeCache.hasPrivilege(CollectionProtocol.class.getName() + "_"
+//									+ cp.getId(), privilegeName))
+//							{
+//								isAuthorized = true;
+//								break;
+//							}
+//						}
+						if (!isAuthorized)
+						{
+							isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(privilegeName,
+									sessionDataBean, null);
+						}
+					}
+				}
+				else
+				{
+					isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(privilegeName,
+							sessionDataBean, null);
+				}
+			}
+			else
+			{
+				final String[] prArray = protEltName.split("_");
+				final String baseObjectId = prArray[0];
+				String objId = "";
+				for (int i = 1; i < prArray.length; i++)
+				{
+					objId = baseObjectId + "_" + prArray[i];
+					isAuthorized = privilegeCache.hasPrivilege(objId, privilegeName);
+					if (!isAuthorized)
+					{
+						break;
+					}
+				}
+
+			}
+
+			if (isAuthorized)
+			{
+				return isAuthorized;
+			}
+			else
+				// Check for ALL CURRENT & FUTURE CASE
+			{
+				if (!protEltName.equals(Constants.ADD_GLOBAL_PARTICIPANT))
+				{
+					final String protEltNames[] = protEltName.split("_");
+
+					final Long cpId = Long.valueOf(protEltNames[1]);
+					final Set<Long> cpIdSet = new UserBizLogic().getRelatedCPIds(sessionDataBean
+							.getUserId(), false);
+
+					if (cpIdSet.contains(cpId))
+					{
+						//bug 11611 and 11659
+						throw AppUtility.getUserNotAuthorizedException(privilegeName,
+								protEltName, domainObject.getClass().getSimpleName());
+					}
+					isAuthorized = AppUtility.checkForAllCurrentAndFutureCPs(privilegeName,
+							sessionDataBean, protEltNames[1]);
+				}
+			}
+			if (!isAuthorized)
+			{
+				//bug 11611 and 11659
+				throw AppUtility.getUserNotAuthorizedException(privilegeName,
+						protEltName, domainObject.getClass().getSimpleName());
+			}
+		}
+		catch (final SMException e1)
+		{
+			LOGGER.error(e1.getMessage(), e1);
+			e1.printStackTrace();
+		}
+		return isAuthorized;
+	}
+	
+	public String getObjectId(DAO dao, Object domainObject) throws BizLogicException
+	{
+		final String objectId = Constants.ADD_GLOBAL_PARTICIPANT;
+
+		if (domainObject instanceof Participant)
+		{
+			final Participant participant = (Participant) domainObject;
+			final Collection<CollectionProtocolRegistration> cprCollection = participant
+			.getCollectionProtocolRegistrationCollection();
+			if (cprCollection != null && cprCollection.isEmpty())
+			{
+				return objectId;
+			}
+
+			else
+			{
+				final StringBuffer stringBuffer = new StringBuffer();
+				boolean isNewCPRPresent = false;
+
+				if (cprCollection != null && !cprCollection.isEmpty())
+				{
+					stringBuffer.append(Constants.COLLECTION_PROTOCOL_CLASS_NAME);
+					for (final CollectionProtocolRegistration cpr : cprCollection)
+					{
+						if (cpr.getId() == null)
+						{
+							if (cpr.getCollectionProtocol() == null)
+							{
+								return objectId;
+							}
+							checkForCollectionProtocolIdentifier(dao, cpr);
+							stringBuffer.append("_").append(cpr.getCollectionProtocol().getId());
+							isNewCPRPresent = true;
+						}
+					}
+				}
+				if (isNewCPRPresent)
+				{
+					return stringBuffer.toString();
+				}
+			}
+		}
+		return objectId;
+	}
+	
+	private void checkForCollectionProtocolIdentifier(
+			DAO dao,
+			final CollectionProtocolRegistration cprID)
+	throws BizLogicException
+	{
+		try
+		{
+			final String cpTitle = cprID.
+			getCollectionProtocol().getTitle();
+			final String sourceObjectName = CollectionProtocol.class.getName();
+			final String[] selectColumnName = {"id","activityStatus"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			if(cprID.getCollectionProtocol().getId() != null)
+			{
+				queryWhereClause.addCondition(new EqualClause("id", cprID.getCollectionProtocol().getId()));
+			}
+			else if(cpTitle != null)
+			{
+				queryWhereClause.addCondition(new EqualClause("title", cpTitle));
+			}
+			final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			if (!list.isEmpty())
+			{
+				Object objCP[] = (Object[])list.get(0);
+				cprID.getCollectionProtocol().setId((Long)objCP[0]);
+				cprID.getCollectionProtocol().setActivityStatus((String)objCP[1]);
+				if(Constants.DISABLE.equals(cprID.getCollectionProtocol().getActivityStatus()))
+				{
+					throw this.getBizLogicException(null, "cp.disabled", "");
+				}
+			}
+			else
+			{
+				throw this.getBizLogicException(null, "cp.nt.found", "");
+			}
+			final IFactory factory = AbstractFactoryConfig.getInstance()
+			.getBizLogicFactory();
+			final ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) factory
+			.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+			final Collection consentTierCollection = (Collection) participantBizLogic.retrieveAttribute(CollectionProtocol.class.getName(),
+					cprID.getCollectionProtocol().getId(), "elements(consentTierCollection)");
+			cprID.getCollectionProtocol().setConsentTierCollection(consentTierCollection);
+		}
+		catch (DAOException e)
+		{
+			throw this.getBizLogicException(null, "cp.nt.found", "");
+		}
+	}
+
+
+
 
 }
