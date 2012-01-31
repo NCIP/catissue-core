@@ -1109,7 +1109,7 @@
 					<elseif>
 						<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
 						<then>
-							<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.server}:${database.port}:${database.name}" userid="${database.user}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+							<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.server}:${database.port}:${database.name}" userid="${database.user}" password="${database.password}" onerror="continue"  keepformat="yes" rdbms="oracle">
 										<classpath>
 											<fileset dir="${lib.dir.DE}">
 												<include name="*.jar" />
