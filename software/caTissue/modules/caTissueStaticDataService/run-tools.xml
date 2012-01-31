@@ -475,9 +475,9 @@
                 <fileset dir="lib/"><include name="*.jar" /></fileset>
             </classpath>
             <arg value="mappings"/>
-            <arg value="./temp/${filename}/DozerBeanMapping.xml"/>
-            <arg value="./src/DozerBeanMapping.xml"/>
-            <arg value="./src/DozerBeanMapping.xml"/>
+            <arg value="./temp/${filename}/dozerBeanMapping.xml"/>
+            <arg value="./src/dozerBeanMapping.xml"/>
+            <arg value="./src/dozerBeanMapping.xml"/>
         </java>
 
         <java failonerror="true" classname="edu.wustl.catissuecore.domain.util.DozerMerger" fork="yes">
