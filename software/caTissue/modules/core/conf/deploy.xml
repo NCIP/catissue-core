@@ -5537,10 +5537,10 @@ Thanking You,
 	<target name="integrate_sso" description="Target to integrate SSO with the application">
 		<echo message="Integrating SSO with the application...." />
 		<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-			<replacefilter token="@@cas-server-url-login@@" value="${cas.url}" />
+			<replacefilter token="@@cas-server-url-login@@" value="${sso.url}" />
 		</replace>
 		<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
-			<replacefilter token="@@cas-server-url-validateUrl@@" value="${cas.url}" />
+			<replacefilter token="@@cas-server-url-validateUrl@@" value="${sso.url}" />
 		</replace>
 		<replace file="${prop.temp.dir}/catissuecore/WEB-INF/web.xml">
 			<replacefilter token="@@catissue-cas-login-serverName@@" value="${jboss.server.host.port}" />
