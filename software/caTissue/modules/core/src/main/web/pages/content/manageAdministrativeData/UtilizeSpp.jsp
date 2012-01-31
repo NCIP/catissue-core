@@ -159,6 +159,7 @@ function onComboChange(asd){
 	 gridQString = "LoadGridServlet?paramJson=1&gridType=scg";//save query string to global variable (see step 5 for details)
 	 mygrid.enableSmartRendering(true,10);
 	 mygrid.loadXML(gridQString+"&connector=true&dhx_sort[1]=des");
+	 dhtmlxError.catchError("LoadXML",function(type,name,errorData){});
 	 mygrid.attachEvent("onXLE", function(grid_obj,count){
 		onSelectAll(document.getElementById("selectallcheck"));
 	 });
@@ -244,6 +245,7 @@ function onComboChange(asd){
 	 gridQString = "LoadGridServlet?paramJson=1&gridType=specimen";//save query string to global variable (see step 5 for details)
 	 mygrid.enableSmartRendering(true,10);
 	 mygrid.loadXML(gridQString+"&connector=true&dhx_sort[1]=des");
+	 dhtmlxError.catchError("LoadXML",function(type,name,errorData){});
 	  mygrid.attachEvent("onXLE", function(grid_obj,count){
 		onSelectAll(document.getElementById("selectallcheck"));
 	 });
