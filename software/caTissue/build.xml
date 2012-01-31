@@ -950,7 +950,7 @@
 				<include name="DynamicExtensions*.jar" />
 				<include name="ParticipantManager.jar" />
 				<include name="SimpleQuery*.jar" />
-				<include name="washu-commons-1.1.8.jar" />
+				<include name="washu-commons*.jar" />
 			</fileset>
 			<fileset dir="${caTissueSuite_Client_lib.dir}">
 				<include name="catissuecore.jar" />
