@@ -206,11 +206,27 @@ DECLARE sys_uid_counter integer;
  
 DECLARE ident INT;
 
+DECLARE SPECIMEN_TMP INT;
+
+DECLARE KEY_SEQUENCE_ID_TMP INT;
+
   set ident=1;
  
-  select max(cast(LABEL as SIGNED))+1  into maxLabelSpecimen from catissue_specimen;
+  select LABEL into SPECIMEN_TMP from catissue_specimen;
+  
+  IF (SPECIMEN_TMP is null) THEN
+	set maxLabelSpecimen=0;
+  ELSE  
+    select IFNULL(max(cast(KEY_SEQUENCE_ID as SIGNED)),0)+1 into sys_uid_counter from key_seq_generator where KEY_VALUE='SYS_UID';
+  END IF;
 
-  select IFNULL(max(cast(KEY_SEQUENCE_ID as SIGNED)),0) into sys_uid_counter from key_seq_generator where KEY_VALUE='SYS_UID';
+  select KEY_SEQUENCE_ID into KEY_SEQUENCE_ID_TMP from key_seq_generator where KEY_VALUE='SYS_UID';
+  
+  IF (KEY_SEQUENCE_ID_TMP is null) THEN
+	set sys_uid_counter=0;
+  ELSE  
+    select IFNULL(max(cast(KEY_SEQUENCE_ID as SIGNED)),0) into sys_uid_counter from key_seq_generator where KEY_VALUE='SYS_UID';
+  END IF;
   
   Select cast(IFNULL(max(identifier),0) as SIGNED) into ident from key_seq_generator;
   
