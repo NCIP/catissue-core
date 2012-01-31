@@ -960,7 +960,12 @@ public final class ConsentUtil
 	        	 value = ((String[])entry.getValue())[0].toString();
 	         }
 	         else
+	         {
+	        	 if(entry.getValue() instanceof Long)
+	        		 value = String.valueOf(entry.getValue());
+	        	 else
 	        	 value = (String)entry.getValue();
+	         }
 	         map2.put(key, value);
 		}
 		return map2;

@@ -527,6 +527,7 @@ public class NewSpecimenAction extends SecureAction
 				session.setAttribute(Constants.SPECIMEN_LIST, specimenDetails);
 				session.setAttribute(Constants.COLUMNLIST, columnList);
 			}
+			specimenForm.setConsentResponseForSpecimenValues(ConsentUtil.updateConsentMap(specimenForm.getConsentResponseForSpecimenValues()));
 			List specimenResponseList = new ArrayList();
 			specimenResponseList = AppUtility.responceList(operation);
 			request.setAttribute(Constants.SPECIMEN_RESPONSELIST, specimenResponseList);
