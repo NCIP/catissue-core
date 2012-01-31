@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata templateName="CreateSpecimen" batchSize="5">
-	<BulkOperationClass className="edu.wustl.catissuecore.domain.Specimen"
+<BulkOperationMetadata templateName="CreateMolecularSpecimen" batchSize="5">
+	<BulkOperationClass className="edu.wustl.catissuecore.domain.MolecularSpecimen"
 		     
 		 >
 		<referenceAssociation
@@ -37,9 +37,8 @@
 		<attribute name="collectionStatus" csvColumnName="Collection Status"   />
 		<attribute name="specimenClass" csvColumnName="Specimen Class"   >
 
-			<discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimen"/>
-			<discriminatorCollection name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimen"/>
-			<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimen"/>
+			<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimen"/>
+		
 
 		</attribute>
 		<attribute name="specimenType" csvColumnName="Type"   />
@@ -47,5 +46,6 @@
 		<attribute name="availableQuantity" csvColumnName="Available Quantity"   />
 		<attribute name="lineage" csvColumnName="Lineage"   />
 		<attribute name="pathologicalStatus" csvColumnName="Pathological Status"   />
-		</BulkOperationClass>
+		<attribute name="concentrationInMicrogramPerMicroliter" csvColumnName="Concentration"/>
+	</BulkOperationClass>
 </BulkOperationMetadata>
