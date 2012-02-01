@@ -115,8 +115,10 @@ public class DynamicEventAddAction extends BaseAction
 
 			request.setAttribute(Constants.SPECIMEN_ID, specimenId);
 
+			// common validate APIs are used between SPP page and Events page. "eventPerformed" parameter needs to be added to the map
+			// in order to validate.
+			formContextParameterMap.get(formContextParameterMap.keySet().iterator().next()).put(Constants.EVENT_PERFORMED, Boolean.TRUE.toString());
 			//validate DE data
-			formContextParameterMap.get(formContextParameterMap.keySet().iterator().next()).put("eventPerformed", "true");
 			List<String> listOfError = sppEventProcessor.validateDEData(request, formContextParameterMap);
 			if (listOfError.isEmpty())
 			{
