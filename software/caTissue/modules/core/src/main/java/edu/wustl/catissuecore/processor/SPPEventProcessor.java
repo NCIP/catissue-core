@@ -513,8 +513,8 @@ public class SPPEventProcessor
 				.generateAttributeValueMap(formContextParameterMap.keySet(), request);
 		for (AbstractFormContext formContext : contextDataValueMap.keySet())
 		{
-			if(formContextParameterMap.get(formContext).get("eventPerformed")!=null 
-					&& Boolean.parseBoolean((String) formContextParameterMap.get(formContext).get("eventPerformed")))
+			if(formContextParameterMap.get(formContext).get(Constants.EVENT_PERFORMED)!=null 
+					&& Boolean.parseBoolean((String) formContextParameterMap.get(formContext).get(Constants.EVENT_PERFORMED)))
 			{
 				ContainerInterface containerInterface = DynamicExtensionsUtility
 					.getClonedContainerFromCache(formContext.getContainerId().toString());
@@ -647,8 +647,8 @@ public class SPPEventProcessor
 		Map<AbstractFormContext, Long> contextRecordIdMap = new HashMap<AbstractFormContext, Long>();
 		for (AbstractFormContext formContext : formContextCollection)
 		{
-			if(formContextParameterMap.get(formContext).get("eventPerformed")!=null 
-					&& Boolean.parseBoolean((String) formContextParameterMap.get(formContext).get("eventPerformed")))
+			if(formContextParameterMap.get(formContext).get(Constants.EVENT_PERFORMED)!=null 
+					&& Boolean.parseBoolean((String) formContextParameterMap.get(formContext).get(Constants.EVENT_PERFORMED)))
 			{
 				Map<String, Object> staticParametersList = formContextParameterMap.get(formContext);
 				ActionApplication actionApplication = getActionApplForSPPEvent(
