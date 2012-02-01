@@ -250,3 +250,10 @@ END;
 /
 CALL update_SYS_UID();
 /
+update dyextn_abstract_metadata source join dyextn_attribute attr on
+source.identifier = attr.entiy_id join dyextn_association assoc on assoc.identifier  = attr.identifier
+join dyextn_abstract_metadata target on target.identifier = assoc.target_entity_id and 
+source.name ='edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry' and target.name='edu.wustl.catissuecore.domain.Participant' join dyextn_abstract_metadata meta on 
+meta.identifier= assoc.identifier
+set meta.name='participantRecordEntryCollection';
+/
