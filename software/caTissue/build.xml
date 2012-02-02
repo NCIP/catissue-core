@@ -957,7 +957,7 @@
 				<include name="catissue_cacore-schema.jar" />
 				<include name="jaxen-1.1.1.jar" />
 				<include name="sdk-security-client-4.2.jar" />
-				<include name="spring-2.0.2.jar" />
+				<include name="spring-2.5.6.jar" />
 			</fileset>
 			<fileset dir="${common.lib.dir}">
 				<include name="acegi-security-1.0.4.jar" />
