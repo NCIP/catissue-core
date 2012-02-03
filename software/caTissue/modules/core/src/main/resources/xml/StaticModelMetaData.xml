@@ -51,59 +51,6 @@
 		<name>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</name>
 		<attribute><name>id</name></attribute>
 	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter</name>
-	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.CollectionEventParameters</name>
-	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.EmbeddedEventParameters</name>
-	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.FixedEventParameters</name>
-	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters</name>
-	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.FrozenEventParameters</name>
-	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.ProcedureEventParameters</name>
-	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.ReceivedEventParameters</name>
-	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.SpunEventParameters</name>
-	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.ThawEventParameters</name>
-	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters</name>
-	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.CellSpecimenReviewParameters</name>
-	</entity>
-	<entity>
-		<activityStatus>Disabled</activityStatus>
-		<name>edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters</name>
-	</entity>
-	
 	<association>
 		<sourceEntityName>edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure</sourceEntityName>
 		<targetEntityName>edu.wustl.catissuecore.domain.processingprocedure.Action</targetEntityName>
