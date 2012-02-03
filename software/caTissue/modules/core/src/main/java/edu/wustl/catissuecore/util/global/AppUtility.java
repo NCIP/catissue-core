@@ -1520,7 +1520,11 @@ public class AppUtility
 	public static Date getNewDateByAdditionOfDays(final Date date, final int daysToBeAdded)
 	{
 		final Calendar calendar = new GregorianCalendar();
+		int hours=calendar.get(Calendar.HOUR_OF_DAY);
+		int mins=calendar.get(Calendar.MINUTE);
 		calendar.setTime(date);
+		calendar.set(Calendar.HOUR_OF_DAY,hours);
+		calendar.set(Calendar.MINUTE,mins);
 		calendar.add(calendar.DAY_OF_MONTH, daysToBeAdded);
 		return calendar.getTime();
 	}
@@ -4098,9 +4102,9 @@ public class AppUtility
 		calendarDate1.setTime(date1);  
 		Calendar calendarDate2 = Calendar.getInstance();
 		calendarDate2.setTime(date2);  
-		Integer diff = Integer.valueOf(calendarDate2.get(Calendar.YEAR) - calendarDate1.get(Calendar.YEAR));
+		int diff = calendarDate2.get(Calendar.YEAR) - calendarDate1.get(Calendar.YEAR);
 		if (calendarDate2.get(Calendar.DAY_OF_YEAR) < calendarDate1.get(Calendar.DAY_OF_YEAR))  
 			diff--;
-		return diff;
+		return Integer.valueOf(diff);
 	}
 }
