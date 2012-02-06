@@ -212,17 +212,17 @@ DECLARE KEY_SEQUENCE_ID_TMP INT;
 
   set ident=1;
  
-  select LABEL into SPECIMEN_TMP from catissue_specimen;
+  select max(LABEL) into SPECIMEN_TMP from catissue_specimen;
   
-  IF (SPECIMEN_TMP is null) THEN
+  IF ISNULL(SPECIMEN_TMP) THEN
 	set maxLabelSpecimen=0;
   ELSE  
-    select IFNULL(max(cast(KEY_SEQUENCE_ID as SIGNED)),0)+1 into sys_uid_counter from key_seq_generator where KEY_VALUE='SYS_UID';
+    select IFNULL(max(cast(KEY_SEQUENCE_ID as SIGNED)),0)+1 into maxLabelSpecimen from key_seq_generator where KEY_VALUE='SYS_UID';
   END IF;
 
   select KEY_SEQUENCE_ID into KEY_SEQUENCE_ID_TMP from key_seq_generator where KEY_VALUE='SYS_UID';
   
-  IF (KEY_SEQUENCE_ID_TMP is null) THEN
+  IF ISNULL(KEY_SEQUENCE_ID_TMP) THEN
 	set sys_uid_counter=0;
   ELSE  
     select IFNULL(max(cast(KEY_SEQUENCE_ID as SIGNED)),0) into sys_uid_counter from key_seq_generator where KEY_VALUE='SYS_UID';
