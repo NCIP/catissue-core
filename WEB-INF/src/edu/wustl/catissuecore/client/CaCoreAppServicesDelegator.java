@@ -155,11 +155,11 @@ public class CaCoreAppServicesDelegator
 			this.checkNullObject(domainObject, "Domain Object");
 			final IBizLogic bizLogic = this.getBizLogic(domainObject.getClass().getName());
 			bizLogic.insert(domainObject, this.getSessionDataBean(userName), 0);
-			this.LOGGER.info(" Domain Object has been successfully inserted " + domainObject);
+			LOGGER.info(" Domain Object has been successfully inserted " + domainObject);
 		}
 		catch (final Exception e)
 		{
-			this.LOGGER.error("Delegate Add-->" + e.getMessage(), e);
+			LOGGER.error("Delegate Add-->" + e.getMessage(), e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -204,11 +204,11 @@ public class CaCoreAppServicesDelegator
 			bizLogic.update(abstractDomainObject, abstractDomainOld, 0, this
 					.getSessionDataBean(userName));
 
-			this.LOGGER.info(" Domain Object has been successfully updated " + domainObject);
+			LOGGER.info(" Domain Object has been successfully updated " + domainObject);
 		}
 		catch (final Exception e)
 		{
-			this.LOGGER.error("Delegate Edit" + e.getMessage(), e);
+			LOGGER.error("Delegate Edit" + e.getMessage(), e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -300,7 +300,7 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final SMException ex)
 		{
-			this.LOGGER.error("Review Role not found!" + ex.getMessage(), ex);
+			LOGGER.error("Review Role not found!" + ex.getMessage(), ex);
 			ex.printStackTrace();
 		}
 		return isUserisAdmin;
@@ -372,7 +372,7 @@ public class CaCoreAppServicesDelegator
 				catch (final Exception ex)
 				{
 					// Exception occured if Domain Oject is not having ActivityStatus field
-					this.LOGGER.error("in CaCoreAppServicesDelegator" + ex.getMessage());
+					LOGGER.error("in CaCoreAppServicesDelegator" + ex.getMessage());
 					ex.printStackTrace();
 					result.add(abstractDomainObject);
 				}
@@ -530,7 +530,7 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final Exception exp)
 		{
-			this.LOGGER.error(exp.getMessage(), exp);
+			LOGGER.error(exp.getMessage(), exp);
 			exp.printStackTrace();
 			throw exp;
 		}
@@ -723,7 +723,7 @@ public class CaCoreAppServicesDelegator
 	{
 		Object childObject = null;
 		fieldName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-		this.LOGGER.debug("Method Name***********************" + fieldName);
+		LOGGER.debug("Method Name***********************" + fieldName);
 
 		try
 		{
@@ -731,17 +731,17 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final NoSuchMethodException noMetExp)
 		{
-			this.LOGGER.error(noMetExp.getMessage(), noMetExp);
+			LOGGER.error(noMetExp.getMessage(), noMetExp);
 			noMetExp.printStackTrace();
 		}
 		catch (final IllegalAccessException illAccExp)
 		{
-			this.LOGGER.error(illAccExp.getMessage(), illAccExp);
+			LOGGER.error(illAccExp.getMessage(), illAccExp);
 			illAccExp.printStackTrace();
 		}
 		catch (final InvocationTargetException invoTarExp)
 		{
-			this.LOGGER.error(invoTarExp.getMessage(), invoTarExp);
+			LOGGER.error(invoTarExp.getMessage(), invoTarExp);
 			invoTarExp.printStackTrace();
 		}
 
@@ -878,7 +878,7 @@ public class CaCoreAppServicesDelegator
 		{
 			DefaultSCGLabelGenerator defaultSCGLabelGenerator = new DefaultSCGLabelGenerator();
 			defaultSCGLabelGenerator.getLabel(obj);
-			specimenCollectionGroupLableGenerator = (LabelGenerator) defaultSCGLabelGenerator;
+			specimenCollectionGroupLableGenerator = defaultSCGLabelGenerator;
 		}
 		return specimenCollectionGroupLableGenerator.getLabel(obj);
 	}
@@ -1035,7 +1035,7 @@ public class CaCoreAppServicesDelegator
 						+ "(IDENTIFIER,IP_ADDRESS,EVENT_TIMESTAMP,USER_ID ,COMMENTS) "
 						+ "values ('" + number + "','" + ipAddr + "',to_date('" + timeStamp
 						+ "','yyyy-mm-dd HH24:MI:SS'),'" + userId + "','" + comments + "')";
-				this.LOGGER.info("sqlForAuditLog:" + sqlForAudiEvent);
+				LOGGER.info("sqlForAuditLog:" + sqlForAudiEvent);
 				jdbcDAO.executeUpdate(sqlForAudiEvent);
 
 				long queryNo = 1;
@@ -1089,7 +1089,7 @@ public class CaCoreAppServicesDelegator
 				osw.close();
 				outputStream.close();
 				jdbcDAO.commit();
-				this.LOGGER.info("sqlForQueryLog:" + sqlForQueryLog);
+				LOGGER.info("sqlForQueryLog:" + sqlForQueryLog);
 			}
 			else
 			{
@@ -1119,14 +1119,14 @@ public class CaCoreAppServicesDelegator
 				final String sqlForQueryLog = "insert into catissue_audit_event_query_log"
 						+ "(QUERY_DETAILS,AUDIT_EVENT_ID) values ('" + sqlQuery1 + "','" + number
 						+ "')";
-				this.LOGGER.debug("sqlForQueryLog:" + sqlForQueryLog);
+				LOGGER.debug("sqlForQueryLog:" + sqlForQueryLog);
 				jdbcDAO.executeUpdate(sqlForQueryLog);
 				jdbcDAO.commit();
 			}
 		}
 		catch (final Exception e)
 		{
-			this.LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 			throw new Exception(e.getMessage());
 		}
@@ -1228,7 +1228,7 @@ public class CaCoreAppServicesDelegator
 		}
 		catch (final ClassCastException e)
 		{
-			this.LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 			e.printStackTrace();
 			returnList = rows;
 		}
@@ -1265,11 +1265,11 @@ public class CaCoreAppServicesDelegator
 			this.checkNullObject(domainObject, "Domain Object");
 			final ParticipantBizLogic participantBizLogic = new ParticipantBizLogic();
 			participantBizLogic.registerParticipant(domainObject, cpid, userName);
-			this.LOGGER.info(" Domain Object has been successfully registered " + domainObject);
+			LOGGER.info(" Domain Object has been successfully registered " + domainObject);
 		}
 		catch (final Exception e)
 		{
-			this.LOGGER.error("Delegate Add-->" + e.getMessage(), e);
+			LOGGER.error("Delegate Add-->" + e.getMessage(), e);
 			e.printStackTrace();
 			throw e;
 		}
@@ -1295,7 +1295,7 @@ public class CaCoreAppServicesDelegator
 		Participant participant = (Participant) domainObject;
 
 		matchingObjects = ParticipantManagerUtility.findMatchedParticipants(
-				(Participant) domainObject, null, cpIdSet);
+				(Participant) domainObject, null, cpIdSet,null);
 		return matchingObjects;
 	}
 

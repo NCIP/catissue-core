@@ -80,7 +80,7 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 			if (specimenCollectionGroupId.equals("0"))
 			{
 				final ActionErrors actionErrors = new ActionErrors();
-				final ActionError error = new ActionError("access.execute.action.denied");
+				final ActionError error = new ActionError(Constants.ACCESS_DENIED_MSG);
 				actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
 				this.saveErrors(request, actionErrors);
 

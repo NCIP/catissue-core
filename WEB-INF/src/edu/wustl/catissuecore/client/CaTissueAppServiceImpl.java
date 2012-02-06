@@ -150,12 +150,10 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	 * @return List of Objects
 	 * @throws Exception Exception
 	 */
-	@Override
-	protected Long hookStaticDynExtObject(Object hookInformationObject)
+	protected List<Object> hookStaticDynExtObj(Object hookInformationObject,Long dynExtObjectId)
 			throws DynamicExtensionsSystemException, ApplicationException
 	{
 		HookingInformation hookInformation = (HookingInformation) hookInformationObject;
-		Long dynExtObjectId = hookInformation.getDynamicExtensionObjectId();
 		Long containerId;
 		NameValueBean hookEntityBean;
 		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
@@ -186,7 +184,14 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 				hookEntityBean.getName(), selectedStaticEntityRecordId.toString(), hookEntityBean
 						.getValue(), hookInformation.getSessionDataBean());
 
-		return recordEntryId;
+		return null;
+	}
+
+	@Override
+	protected Long hookStaticDynExtObject(Object arg0) throws Exception
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**
@@ -393,7 +398,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	 * @throws Exception Exception
 	 */
 	@Override
-	public Long insertData(final String categoryName, final Map<String, Object> dataValue)
+	public Long insertData(final String categoryName, final Map<String, Object> dataValue,Object hookInformationObject)
 			throws ApplicationException, DynamicExtensionsSystemException,
 			DynamicExtensionsApplicationException, ParseException
 	{
@@ -422,6 +427,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 			recordIdentifier = categoryManager.getEntityRecordIdByRootCategoryEntityRecordId(
 					categoryRecordId, categoryInterface.getRootCategoryElement()
 							.getTableProperties().getName());
+			hookStaticDynExtObj(hookInformationObject, recordIdentifier);
 		}
 		else
 		{
@@ -450,4 +456,5 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 		}
 		throw new DynamicExtensionsApplicationException(buffer.toString());
 	}
+
 }

@@ -1177,7 +1177,7 @@ public class UserForm extends AbstractActionForm
         {
             final Boolean isPasswordChanged = (Boolean) request.getSession().getAttribute(
                     Constants.PASSWORD_CHANGE_IN_SESSION);
-            result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, isPasswordChanged);
+            result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword);
         }
 
         if (result != PasswordManager.SUCCESS)
@@ -1281,8 +1281,7 @@ public class UserForm extends AbstractActionForm
             // new password,old password,user name
             final Boolean isPasswordChanged = (Boolean) request.getSession().getAttribute(
                     Constants.PASSWORD_CHANGE_IN_SESSION);
-            final int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword,
-                    isPasswordChanged);
+            final int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword);
 
             if (result != PasswordManager.SUCCESS)
             {

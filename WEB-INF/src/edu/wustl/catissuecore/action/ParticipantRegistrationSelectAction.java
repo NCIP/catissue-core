@@ -45,6 +45,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IDomainObjectFactory;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.lookup.DefaultLookupResult;
+import edu.wustl.common.participant.bizlogic.CommonParticipantBizlogic;
 import edu.wustl.common.participant.bizlogic.EMPIParticipantRegistrationBizLogic;
 import edu.wustl.common.participant.utility.ParticipantManagerUtility;
 import edu.wustl.common.util.global.Status;
@@ -349,7 +350,11 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 			participant.setCollectionProtocolRegistrationCollection(new HashSet());
 
 			updatePartiAfterEMPIIDGenetation(participant, participantEMPI);
-			participantForm.setAllValues(participantEMPI);
+
+			CommonParticipantBizlogic partBizLogic = new CommonParticipantBizlogic();
+			partBizLogic.updateParticipantFromEmpi(participant,participantEMPI);
+
+			participantForm.setAllValues(participant);
 
 			if (participantEMPI.getParticipantMedicalIdentifierCollection().isEmpty())
 			{

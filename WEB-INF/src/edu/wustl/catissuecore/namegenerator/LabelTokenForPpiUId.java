@@ -43,7 +43,7 @@ public class LabelTokenForPpiUId implements LabelTokens
 		long ctr = 0;
 		try
 		{
-			ctr = KeySequenceGeneratorUtil.getNextUniqeId(key, type);
+			ctr = Long.parseLong(KeySequenceGeneratorUtil.getNextUniqeId(key, type));
 		}
 		catch (DAOException e1)
 		{

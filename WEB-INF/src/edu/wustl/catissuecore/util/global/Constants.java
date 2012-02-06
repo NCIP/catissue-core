@@ -5819,4 +5819,7 @@ public class Constants
 	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
 
 	public static final String CLICKED_ROW_SELECTED = "clickedRowSelected";
+
+	public static final String ACCESS_DENIED_MSG = "access.execute.action.denied";
+	public static final String REDIRECT_HOME = "/Home.do";
 }

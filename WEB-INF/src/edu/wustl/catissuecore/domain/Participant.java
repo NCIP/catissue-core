@@ -37,13 +37,14 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.participant.domain.IParticipant;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.ObjectCloner;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
  * An individual from whom a specimen is collected.
- * 
+ *
  * @hibernate.class table="CATISSUE_PARTICIPANT"
  * @author aniruddha_phadnis
  * @author gautam_shetty
@@ -164,7 +165,7 @@ public class Participant extends AbstractDomainObject
 
 	public String getMetaPhoneCode()
 	{
-		return this.metaPhoneCode;
+		return metaPhoneCode;
 	}
 
 	public void setMetaPhoneCode(String metaPhoneCode)
@@ -182,7 +183,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Parameterized Constructor.
-	 * 
+	 *
 	 * @param form
 	 *            AbstractActionForm.
 	 * @throws AssignDataException
@@ -196,26 +197,26 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Copy Constructor.
-	 * 
+	 *
 	 * @param participant
 	 *            Participant object
 	 */
 	public Participant(final Participant participant)
 	{
 		super();
-		this.id = Long.valueOf(participant.getId().longValue());
-		this.lastName = participant.getLastName();
-		this.firstName = participant.getFirstName();
-		this.middleName = participant.getMiddleName();
-		this.birthDate = participant.getBirthDate();
-		this.gender = participant.getGender();
-		this.sexGenotype = participant.getSexGenotype();
-		this.ethnicity = participant.getEthnicity();
-		this.socialSecurityNumber = participant.getSocialSecurityNumber();
-		this.activityStatus = participant.getActivityStatus();
-		this.deathDate = participant.getDeathDate();
-		this.vitalStatus = participant.getVitalStatus();
-		this.collectionProtocolRegistrationCollection = null;
+		id = Long.valueOf(participant.getId().longValue());
+		lastName = participant.getLastName();
+		firstName = participant.getFirstName();
+		middleName = participant.getMiddleName();
+		birthDate = participant.getBirthDate();
+		gender = participant.getGender();
+		sexGenotype = participant.getSexGenotype();
+		ethnicity = participant.getEthnicity();
+		socialSecurityNumber = participant.getSocialSecurityNumber();
+		activityStatus = participant.getActivityStatus();
+		deathDate = participant.getDeathDate();
+		vitalStatus = participant.getVitalStatus();
+		collectionProtocolRegistrationCollection = null;
 		final Collection<Race> raceCollection = new ArrayList<Race>();
 		final Iterator<Race> raceItr = participant.getRaceCollection().iterator();
 		while (raceItr.hasNext())
@@ -238,13 +239,13 @@ public class Participant extends AbstractDomainObject
 				pmi.setParticipant(this);
 				pmiCollection.add(pmi);
 			}
-			this.participantMedicalIdentifierCollection = pmiCollection;
+			participantMedicalIdentifierCollection = pmiCollection;
 		}
 	}
 
 	/**
 	 * Returns System generated unique id.
-	 * 
+	 *
 	 * @return Long System generated unique id.
 	 * @see #setId(Long)
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
@@ -255,12 +256,12 @@ public class Participant extends AbstractDomainObject
 	@Override
 	public Long getId()
 	{
-		return this.id;
+		return id;
 	}
 
 	/**
 	 * Sets system generated unique id.
-	 * 
+	 *
 	 * @param identifier
 	 *            System generated unique id.
 	 * @see #getId()
@@ -268,12 +269,12 @@ public class Participant extends AbstractDomainObject
 	@Override
 	public void setId(Long identifier)
 	{
-		this.id = identifier;
+		id = identifier;
 	}
 
 	/**
 	 * Returns the last name of the Participant.
-	 * 
+	 *
 	 * @return String representing the last name of the Participant.
 	 * @see #setLastName(String)
 	 * @hibernate.property name="lastName" type="string" column="LAST_NAME"
@@ -281,12 +282,12 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getLastName()
 	{
-		return this.lastName;
+		return lastName;
 	}
 
 	/**
 	 * Sets the last name of the Participant.
-	 * 
+	 *
 	 * @param lastName
 	 *            Last Name of the Participant.
 	 * @see #getLastName()
@@ -298,7 +299,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the first name of the Participant.
-	 * 
+	 *
 	 * @return String representing the first name of the Participant.
 	 * @see #setFirstName(String)
 	 * @hibernate.property name="firstName" type="string" column="FIRST_NAME"
@@ -306,12 +307,12 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getFirstName()
 	{
-		return this.firstName;
+		return firstName;
 	}
 
 	/**
 	 * Sets the first name of the Participant.
-	 * 
+	 *
 	 * @param firstName
 	 *            String representing the first name of the Participant.
 	 * @see #getFirstName()
@@ -323,7 +324,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the middle name of the Participant.
-	 * 
+	 *
 	 * @return String representing the middle name of the Participant.
 	 * @see #setMiddleName(String)
 	 * @hibernate.property name="middleName" type="string" column="MIDDLE_NAME"
@@ -331,12 +332,12 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getMiddleName()
 	{
-		return this.middleName;
+		return middleName;
 	}
 
 	/**
 	 * Sets the middle name of the Participant.
-	 * 
+	 *
 	 * @param middleName
 	 *            String representing the middle name of the Participant.
 	 * @see #getMiddleName()
@@ -348,19 +349,19 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the date of birth of the Participant.
-	 * 
+	 *
 	 * @return String representing the middle name of the Participant.
 	 * @see #setBirthDate(String)
 	 * @hibernate.property name="birthDate" column="BIRTH_DATE" type="date"
 	 */
 	public Date getBirthDate()
 	{
-		return this.birthDate;
+		return birthDate;
 	}
 
 	/**
 	 * Sets the date of birth of the Participant.
-	 * 
+	 *
 	 * @param birthDate
 	 *            String representing the date of birth of the Participant.
 	 * @see #getDateOfBirth()
@@ -372,7 +373,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the gender of a participant.
-	 * 
+	 *
 	 * @return String representing the gender of a participant.
 	 * @see #setGender(String)
 	 * @hibernate.property name="gender" type="string" column="GENDER"
@@ -380,12 +381,12 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getGender()
 	{
-		return this.gender;
+		return gender;
 	}
 
 	/**
 	 * Sets the gender of a participant.
-	 * 
+	 *
 	 * @param gender
 	 *            the gender of a participant.
 	 * @see #getGender()
@@ -397,7 +398,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the genotype of a participant.
-	 * 
+	 *
 	 * @return String representing the genotype of a participant.
 	 * @see #setSexGenotype(String)
 	 * @hibernate.property name="sexGenotype" type="string" column="GENOTYPE"
@@ -405,12 +406,12 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getSexGenotype()
 	{
-		return this.sexGenotype;
+		return sexGenotype;
 	}
 
 	/**
 	 * Sets the genotype of a participant.
-	 * 
+	 *
 	 * @param sexGenotype
 	 *            the genotype of a participant.
 	 * @see #getSexGenotype()
@@ -451,7 +452,7 @@ public class Participant extends AbstractDomainObject
 	 */
 	public Collection getRaceCollection()
 	{
-		return this.raceCollection;
+		return raceCollection;
 	}
 
 	/**
@@ -465,7 +466,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the ethnicity of the Participant.
-	 * 
+	 *
 	 * @return Ethnicity of the Participant.
 	 * @see #setEthnicity(String)
 	 * @hibernate.property name="ethnicity" type="string" column="ETHNICITY"
@@ -473,12 +474,12 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getEthnicity()
 	{
-		return this.ethnicity;
+		return ethnicity;
 	}
 
 	/**
 	 * Sets the ethnicity of the Participant.
-	 * 
+	 *
 	 * @param ethnicity
 	 *            Ethnicity of the Participant.
 	 * @see #getEthnicity()
@@ -490,7 +491,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the Social Security Number of the Participant.
-	 * 
+	 *
 	 * @return String representing the Social Security Number of the
 	 *         Participant.
 	 * @see #setSocialSecurityNumber(String)
@@ -500,12 +501,12 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getSocialSecurityNumber()
 	{
-		return this.socialSecurityNumber;
+		return socialSecurityNumber;
 	}
 
 	/**
 	 * Sets the Social Security Number of the Participant.
-	 * 
+	 *
 	 * @param socialSecurityNumber
 	 *            - String representing the Social Security Number of the
 	 *            Participant.
@@ -518,7 +519,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the activity status of the participant.
-	 * 
+	 *
 	 * @hibernate.property name="activityStatus" type="string"
 	 *                     column="ACTIVITY_STATUS" length="50"
 	 * @return Returns the activity status of the participant.
@@ -526,12 +527,12 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getActivityStatus()
 	{
-		return this.activityStatus;
+		return activityStatus;
 	}
 
 	/**
 	 * Sets the activity status of the participant.
-	 * 
+	 *
 	 * @param activityStatus
 	 *            activity status of the participant.
 	 * @see #getActivityStatus()
@@ -543,19 +544,19 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the date of death of the Participant.
-	 * 
+	 *
 	 * @return Date representing the death date of the Participant.
 	 * @see #setDeathDate(Date)
 	 * @hibernate.property name="deathDate" column="DEATH_DATE" type="date"
 	 */
 	public Date getDeathDate()
 	{
-		return this.deathDate;
+		return deathDate;
 	}
 
 	/**
 	 * Sets the date of birth of the Participant.
-	 * 
+	 *
 	 * @param deathDate
 	 *            The deathDate to set.
 	 */
@@ -566,7 +567,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns the vital status of the participant.
-	 * 
+	 *
 	 * @return Returns the vital status of the participant.
 	 * @see #setVitalStatus(String)
 	 * @hibernate.property name="vitalStatus" type="string"
@@ -574,12 +575,12 @@ public class Participant extends AbstractDomainObject
 	 */
 	public String getVitalStatus()
 	{
-		return this.vitalStatus;
+		return vitalStatus;
 	}
 
 	/**
 	 * Sets the vital status of the Participant.
-	 * 
+	 *
 	 * @param vitalStatus
 	 *            The vitalStatus to set.
 	 */
@@ -591,55 +592,54 @@ public class Participant extends AbstractDomainObject
 	/**
 	 * Returns collection of medical identifiers associated with this
 	 * participant.
-	 * 
+	 *
 	 * @return collection of medical identifiers of this participant.
 	 * @hibernate.set name="participantMedicalIdentifierCollection"
 	 *                table="CATISSUE_PART_MEDICAL_ID" cascade="none"
 	 *                inverse="true" lazy="false"
 	 * @hibernate.collection-key column="PARTICIPANT_ID"
-	 * @hibernate.collection-one-to-many 
+	 * @hibernate.collection-one-to-many
 	 *                                   class="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
 	 * @see setParticipantMedicalIdentifierCollection(Collection)
 	 */
 	public Collection getParticipantMedicalIdentifierCollection()
 	{
-		return this.participantMedicalIdentifierCollection;
+		return participantMedicalIdentifierCollection;
 	}
 
 	/**
 	 * Sets the collection of medical identifiers of this participant.
-	 * 
+	 *
 	 * @param participantMedicalIdentifierCollection
 	 *            collection of medical identifiers of this participant.
 	 * @see #getParticipantMedicalIdentifierCollection()
 	 */
-	public void setParticipantMedicalIdentifierCollection(
-			Collection participantMedicalIdentifierCollection)
+	public void setParticipantMedicalIdentifierCollection(Collection partiMediIdColn)
 	{
-		this.participantMedicalIdentifierCollection = participantMedicalIdentifierCollection;
+		participantMedicalIdentifierCollection = partiMediIdColn;
 	}
 
 	/**
 	 * Returns collection of collection protocol registrations of this
 	 * participant.
-	 * 
+	 *
 	 * @return collection of collection protocol registrations of this
 	 *         participant.
 	 * @hibernate.set name="collectionProtocolRegistrationCollection"
 	 *                table="CATISSUE_COLL_PROT_REG"
 	 * @hibernate.collection-key column="PARTICIPANT_ID"
-	 * @hibernate.collection-one-to-many 
+	 * @hibernate.collection-one-to-many
 	 *                                   class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
 	 * @see setCollectionProtocolRegistrationCollection(Collection)
 	 */
 	public Collection<CollectionProtocolRegistration> getCollectionProtocolRegistrationCollection()
 	{
-		return this.collectionProtocolRegistrationCollection;
+		return collectionProtocolRegistrationCollection;
 	}
 
 	/**
 	 * Sets the collection protocol registrations of this participant.
-	 * 
+	 *
 	 * @param collectionProtocolRegistrationCollection
 	 *            - Collection of collection protocol registrations of this
 	 *            participant.
@@ -662,7 +662,7 @@ public class Participant extends AbstractDomainObject
 	// }
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public Collection<ParticipantRecordEntry> getParticipantRecordEntryCollection()
@@ -671,7 +671,7 @@ public class Participant extends AbstractDomainObject
 	}
 
 	/**
-	 * 
+	 *
 	 * @param participantRecordEntryCollection
 	 */
 	public void setParticipantRecordEntryCollection(
@@ -683,7 +683,7 @@ public class Participant extends AbstractDomainObject
 	/**
 	 * This function Copies the data from a StorageTypeForm object to a
 	 * StorageType object.
-	 * 
+	 *
 	 * @param abstractForm
 	 *            - A StorageTypeForm object containing the information about
 	 *            the StorageType.
@@ -699,45 +699,45 @@ public class Participant extends AbstractDomainObject
 			final ParticipantForm form = (ParticipantForm) abstractForm;
 			final Validator validator = new Validator();
 
-			this.activityStatus = form.getActivityStatus();
-			this.firstName = form.getFirstName();
-			this.middleName = form.getMiddleName();
-			this.lastName = form.getLastName();
+			activityStatus = form.getActivityStatus();
+			firstName = form.getFirstName();
+			middleName = form.getMiddleName();
+			lastName = form.getLastName();
 
 			empiId = form.getEmpiId();
 			empiIdStatus = form.getEmpiIdStatus();
 			if (validator.isValidOption(form.getGender()))
 			{
-				this.gender = form.getGender();
+				gender = form.getGender();
 			}
 			else
 			{
-				this.gender = nullString;
+				gender = nullString;
 			}
 
 			if (validator.isValidOption(form.getGenotype()))
 			{
-				this.sexGenotype = form.getGenotype();
+				sexGenotype = form.getGenotype();
 			}
 			else
 			{
-				this.sexGenotype = nullString;
+				sexGenotype = nullString;
 			}
 
 			if (validator.isValidOption(form.getEthnicity()))
 			{
-				this.ethnicity = form.getEthnicity();
+				ethnicity = form.getEthnicity();
 			}
 			else
 			{
-				this.ethnicity = nullString;
+				ethnicity = nullString;
 			}
 
 			// if(validator.isValidOption(form.getRace()) )
 			// this.race = form.getRace();
 			// else
 			// this.race = null;
-			this.raceCollection.clear();
+			raceCollection.clear();
 			final String[] raceTypes = form.getRaceTypes();
 			if (raceTypes != null)
 			{
@@ -748,7 +748,7 @@ public class Participant extends AbstractDomainObject
 						final Race race = new Race();
 						race.setRaceName(raceTypes[i]);
 						race.setParticipant(this);
-						this.raceCollection.add(race);
+						raceCollection.add(race);
 					}
 
 				}
@@ -761,46 +761,46 @@ public class Participant extends AbstractDomainObject
 			if (!Validator.isEmpty(socialSecurityNumberTemp)
 					&& validator.isValidSSN(socialSecurityNumberTemp))
 			{
-				this.socialSecurityNumber = socialSecurityNumberTemp;
+				socialSecurityNumber = socialSecurityNumberTemp;
 			}
 			else
 			{
-				this.socialSecurityNumber = nullString;
+				socialSecurityNumber = nullString;
 			}
 
-			this.birthDate = CommonUtilities.parseDate(form.getBirthDate(), CommonUtilities
+			birthDate = CommonUtilities.parseDate(form.getBirthDate(), CommonUtilities
 					.datePattern(form.getBirthDate()));
 
-			this.deathDate = CommonUtilities.parseDate(form.getDeathDate(), CommonUtilities
+			deathDate = CommonUtilities.parseDate(form.getDeathDate(), CommonUtilities
 					.datePattern(form.getDeathDate()));
 
 			if (validator.isValidOption(form.getVitalStatus()))
 			{
-				this.vitalStatus = form.getVitalStatus();
+				vitalStatus = form.getVitalStatus();
 			}
 			else
 			{
-				this.vitalStatus = nullString;
+				vitalStatus = nullString;
 			}
 
-			this.participantMedicalIdentifierCollection.clear();
+			participantMedicalIdentifierCollection.clear();
 			final Map map = form.getValues();
 			logger.debug("Map " + map);
 			final MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-			this.participantMedicalIdentifierCollection = parser.generateData(map);
+			participantMedicalIdentifierCollection = parser.generateData(map);
 
 			// Collection Protocol Registration of the participant
 			// (Abhishek Mehta)
-			this.collectionProtocolRegistrationCollection.clear();
+			collectionProtocolRegistrationCollection.clear();
 			final Map mapCollectionProtocolRegistrationCollection = form
 					.getCollectionProtocolRegistrationValues();
 			logger.debug("Map " + map);
 			final MapDataParser parserCollectionProtocolRegistrationCollection = new MapDataParser(
 					"edu.wustl.catissuecore.domain");
-			this.collectionProtocolRegistrationCollection = parserCollectionProtocolRegistrationCollection
+			collectionProtocolRegistrationCollection = parserCollectionProtocolRegistrationCollection
 					.generateData(mapCollectionProtocolRegistrationCollection);
 			logger.debug("ParticipantMedicalIdentifierCollection "
-					+ this.participantMedicalIdentifierCollection);
+					+ participantMedicalIdentifierCollection);
 
 			this.setConsentsResponseToCollectionProtocolRegistration(form);
 		}
@@ -816,7 +816,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Setting Consent Response for the collection protocol.
-	 * 
+	 *
 	 * @param form
 	 *            ParticipantForm.
 	 * @throws Exception
@@ -828,7 +828,7 @@ public class Participant extends AbstractDomainObject
 		logger.debug(":: participant id  :" + form.getId());
 		final Collection<ConsentResponseBean> consentResponseBeanCollection = form
 				.getConsentResponseBeanCollection();
-		final Iterator itr = this.collectionProtocolRegistrationCollection.iterator();
+		final Iterator itr = collectionProtocolRegistrationCollection.iterator();
 		while (itr.hasNext())
 		{
 			final CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) itr
@@ -839,7 +839,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Set Consent Response for given collection protocol.
-	 * 
+	 *
 	 * @param collectionProtocolRegistration
 	 *            CollectionProtocolRegistration.
 	 * @param consentResponseBeanCollection
@@ -915,7 +915,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Preparing consent response collection from entered response.
-	 * 
+	 *
 	 * @param consentResponse
 	 *            Collection.
 	 * @param isResponse
@@ -951,7 +951,7 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Consent List for given collection protocol.
-	 * 
+	 *
 	 * @param collectionProtocolID
 	 *            String.
 	 * @return Collection.
@@ -974,12 +974,12 @@ public class Participant extends AbstractDomainObject
 
 	/**
 	 * Returns message label to display on success add or edit.
-	 * 
+	 *
 	 * @return String.
 	 */
 	public String getMessageLabel()
 	{
-		return AppUtility.getlLabel(this.lastName, this.firstName);
+		return AppUtility.getlLabel(lastName, firstName);
 	}
 
 	// /**
@@ -1028,5 +1028,47 @@ public class Participant extends AbstractDomainObject
 	{
 		this.gridValueSelected = gridValueSelected;
 	}
+
+	public Participant clone()
+	{
+		return new ObjectCloner().clone(this);
+	}
+
+	public Integer getBirthYear()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection getEthnicityCollection()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getParticipantCode()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setBirthYear(Integer arg0)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setEthnicityCollection(Collection arg0)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setParticipantCode(String arg0)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
 
 }

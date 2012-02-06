@@ -11,6 +11,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.participant.client.IParticipantManager;
+import edu.wustl.common.participant.utility.Constants;
 import edu.wustl.common.participant.utility.ParticipantManagerUtility;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
@@ -196,6 +197,44 @@ public class CaTissueParticipantManagerServiceImpl implements IParticipantManage
 		String query = " SELECT CP.IS_EMPI_ENABLE FROM CATISSUE_COLLECTION_PROTOCOL CP JOIN  CATISSUE_COLL_PROT_REG CPR  "
 				+ " ON CP.IDENTIFIER = CPR.COLLECTION_PROTOCOL_ID WHERE CPR.PARTICIPANT_ID=?";
 		return query;
+	}
+
+	public String getParticipantCodeQuery(Set<Long> arg0)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getClinicalStudyNamesQuery()
+	{
+		return   "SELECT SHORT_TITLE FROM CATISSUE_COLL_PROT_REG CPR JOIN CATISSUE_SPECIMEN_PROTOCOL CSP ON CPR.COLLECTION_PROTOCOL_ID=CSP.IDENTIFIER WHERE PARTICIPANT_ID=?";
+	}
+
+
+	public String getProcessedMatchedParticipantQuery(Long userId)
+	{
+		String query = " select temp, SEARCHED_PARTICIPANT_ID, INITCAP(LAST_NAME),INITCAP(FIRST_NAME), CREATION_DATE, NO_OF_MATCHED_PARTICIPANTS," +
+				" substr(SYS_CONNECT_BY_PATH(SHORT_TITLE, ';'),2) as SHORT_TITLE from "
+				+ " (SELECT CSNAME.SHORT_TITLE,0 as temp,"
+				+ " PARTIMAPPING.SEARCHED_PARTICIPANT_ID,PARTI.LAST_NAME,PARTI.FIRST_NAME,"
+				+ " to_char(CREATION_DATE,'" + Constants.DATE_FORMAT + "') as CREATION_DATE,"
+				+ " PARTIMAPPING.NO_OF_MATCHED_PARTICIPANTS,"
+				+ " count(*) OVER (partition by PARTIMAPPING.SEARCHED_PARTICIPANT_ID) CNT1,"
+				+ " ROW_NUMBER() OVER(partition by PARTIMAPPING.SEARCHED_PARTICIPANT_ID ORDER BY CSNAME.SHORT_TITLE) SEQ1"
+				+ " FROM  MATCHED_PARTICIPANT_MAPPING PARTIMAPPING JOIN CATISSUE_PARTICIPANT PARTI "
+				+ " ON PARTI.IDENTIFIER=PARTIMAPPING.SEARCHED_PARTICIPANT_ID  JOIN EMPI_PARTICIPANT_USER_MAPPING "
+				+ " ON PARTIMAPPING.SEARCHED_PARTICIPANT_ID=EMPI_PARTICIPANT_USER_MAPPING.PARTICIPANT_ID ,"
+				+ " ( SELECT SHORT_TITLE,PARTICIPANT_ID FROM CATISSUE_COLL_PROT_REG CSR JOIN CATISSUE_SPECIMEN_PROTOCOL CSP "
+				+ " ON CSR.COLLECTION_PROTOCOL_ID=CSP.IDENTIFIER) CSNAME "
+				+ " WHERE EMPI_PARTICIPANT_USER_MAPPING.USER_ID="
+				+ userId
+				+ "  AND PARTIMAPPING.NO_OF_MATCHED_PARTICIPANTS!= -1"
+				+ "  and CSNAME.PARTICIPANT_ID=PARTIMAPPING.SEARCHED_PARTICIPANT_ID ) where SEQ1=CNT1 start with SEQ1=1 connect by prior SEQ1+1=SEQ1 " +
+						" and prior SEARCHED_PARTICIPANT_ID=SEARCHED_PARTICIPANT_ID "
+				+ " ORDER BY CREATION_DATE ";
+
+		return query;
+
 	}
 
 }

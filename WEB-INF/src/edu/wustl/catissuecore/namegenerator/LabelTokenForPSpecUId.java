@@ -50,7 +50,7 @@ public class LabelTokenForPSpecUId implements LabelTokens
 			String type = "ParentSequenceNumber";
 			try
 			{
-				parentSeqCtr = KeySequenceGeneratorUtil.getNextUniqeId(key, type);
+				parentSeqCtr =  Long.parseLong(KeySequenceGeneratorUtil.getNextUniqeId(key, type));
 			}
 			catch (DAOException e1)
 			{

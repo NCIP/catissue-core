@@ -78,7 +78,7 @@ public class DomainObjectListAction extends SecureAction
 		if (!sessionDataBean.isAdmin() && !(abstractForm instanceof UserForm))
 		{
 			final ActionErrors errors = new ActionErrors();
-			final ActionError error = new ActionError("access.execute.action.denied");
+			final ActionError error = new ActionError(Constants.ACCESS_DENIED_MSG);
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
 			this.saveErrors(request, errors);
 

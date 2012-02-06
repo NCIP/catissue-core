@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.bizlogic.shippingtracking.BaseShipmentBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentBizLogic;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentRequestBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -40,7 +41,7 @@ public class ShowDashboardAction extends SecureAction
 	private static final String INCOMING_SHIP_PAGE_NUM = "incomingShipCurrentPageNo";
 	private static final String OUTGOING_SHIP_PAGE_NUM = "outgoingShipCurrentPageNo";
 	private static final String REQUEST_SENT_PAGE_NUM = "reqSentCurrentPageNo";
-	
+
 
 	/**
 	 * action method for shipment add/edit.
@@ -82,8 +83,8 @@ public class ShowDashboardAction extends SecureAction
 				{
 					logger.debug("user is not authorized for the operation");
 					throw new UserNotAuthorizedException(ErrorKey
-							.getErrorKey("access.execute.action.denied"), null,
-							"user is not authorized for the operation");					
+							.getErrorKey(Constants.ACCESS_DENIED_MSG), null,
+							"user is not authorized for the operation");
 				}
 				else
 				{
@@ -237,7 +238,7 @@ public class ShowDashboardAction extends SecureAction
 		int numOfRecords = 1;
 		if (recordsPerPage == null)
 		{
-			numOfRecords = 5;			
+			numOfRecords = 5;
 		}
 		else
 		{
@@ -350,7 +351,7 @@ public class ShowDashboardAction extends SecureAction
 	}
 
 	/**
-	 * 
+	 *
 	 * @param currentPageNo - current Page No
 	 * @param recordsPerPage - records Per Page
 	 * @return Integer array with values as startIndex,numOfRecords,currentPageNo
@@ -498,7 +499,7 @@ public class ShowDashboardAction extends SecureAction
 	 * This method is used to calculate total number of records
 	 * @param bizLogic - BaseShipmentBizLogic object
 	 * @param loggedInUserSiteId - site id
-	 * @param recordsPerPage - records per page 
+	 * @param recordsPerPage - records per page
 	 * @param columnNames - columns names
 	 * @return Total number of records
 	 * @throws BizLogicException - BizLogicException

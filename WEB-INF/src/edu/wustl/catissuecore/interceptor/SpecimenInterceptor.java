@@ -116,8 +116,8 @@ public class SpecimenInterceptor implements InterceptProcessor
 			{
 
 				ObjectFactory factory = new ObjectFactory();
-				ParticipantType xmlParticipant = factory.createParticipantType();
-
+				//ParticipantType xmlParticipant = factory.createParticipantType();
+				ParticipantType xmlParticipant = factory.createParticipant();
 				updateJaxbDomainObject(specimen, xmlParticipant);
 				if(xmlParticipant.getEmpi()==null||"".equals(xmlParticipant.getEmpi()))
 				{
