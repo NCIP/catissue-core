@@ -68,6 +68,7 @@ the Stinger project lead at eric.sheridan@owasp.org
 		<exclude>/catissuecore/CreateCategoryAction.do*</exclude>
 		<exclude>/catissuecore/ImportPVAction.do*</exclude>
 		<exclude>/catissuecore/ConsentVerification.do</exclude>
+		<exclude>/catissuecore/BulkMatchingFileUpload.do*</exclude>
 		<exclude>.*.jss</exclude>
 		<exclude>.*.css</exclude>
 	</exclude-set>

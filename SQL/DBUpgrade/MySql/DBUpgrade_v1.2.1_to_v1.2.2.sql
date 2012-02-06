@@ -60,3 +60,25 @@ create table PARTICIPANT_EMPI_ID_MAPPING (
 );
 
 alter table participant_empi_id_mapping add column TEMPMRNDATE datetime;
+
+
+alter table CATISSUE_PERMISSIBLE_VALUE add SORTORDER bigint(20);
+
+update CATISSUE_PERMISSIBLE_VALUE set SORTORDER = 1 where VALUE='White' and PUBLIC_ID='Race_PID';
+
+update CATISSUE_PERMISSIBLE_VALUE set SORTORDER = 2 where VALUE='Black or African American' and PUBLIC_ID='Race_PID';
+
+update CATISSUE_PERMISSIBLE_VALUE set SORTORDER = 3 where VALUE='American Indian or Alaska Native' and PUBLIC_ID='Race_PID';
+
+update CATISSUE_PERMISSIBLE_VALUE set SORTORDER = 4 where VALUE='Asian' and PUBLIC_ID='Race_PID';
+
+update CATISSUE_PERMISSIBLE_VALUE set SORTORDER = 5 where VALUE='Native Hawaiian or Other Pacific Islander' and PUBLIC_ID='Race_PID';
+
+update CATISSUE_PERMISSIBLE_VALUE set SORTORDER = 6 where VALUE='Not Reported' and PUBLIC_ID='Race_PID';
+
+update CATISSUE_PERMISSIBLE_VALUE set SORTORDER = 7 where VALUE='Other' and PUBLIC_ID='Race_PID';
+
+update CATISSUE_PERMISSIBLE_VALUE set SORTORDER = 8 where VALUE='Unknown' and PUBLIC_ID='Race_PID';
+
+alter table CATISSUE_MATCHED_PARTICIPANT add ORDER_NO bigint(20);
+commit;

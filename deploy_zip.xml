@@ -53,7 +53,8 @@
 	<property name="oracle.dao.prop.filename" value="OracleDAOProperties.xml" />
 	<property name="oracle.dao.datasource.prop.filename" value="OracleDataSourceDAOProperties.xml"/>
 	<property name="mysql.dao.datasource.prop.filename" value="MysqlDataSourceDAOProperties.xml"/>
-
+	<property name="db2.driver.string" value="com.ibm.db2.jcc.DB2Driver" />
+	
 	<var name="databaseurl" value="" />
 	<import file="./modules/dynamic_extensions/conf/DEDeploy.xml" />
 	<import file="./modules/caTIES/conf/deploycaties.xml" />
@@ -712,6 +713,10 @@
 			<!--<replacefilter token="@@CiderInBoundQueue@@" value="${cider.inbound.queue}" />-->
 			<replacefilter token="@@CiderOutBoundQueue@@" value="${cider.outbound.queue}" />
 				
+			<replacefilter token="@@InBoundQueue@@" value="${empi.inBoundQueue}" />
+			<replacefilter token="@@OutBoundQueue@@" value="${empi.outBoundQueue}" /> 
+			<replacefilter token="@@MergeMessageQueue@@" value="${empi.mergeMessageQueue}" /> 
+			
 		</replace>
 		
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCdmsIntegration.properties">
@@ -4889,71 +4894,73 @@ Thanking You,
 	
 	<property name="entityNameOrFile" value=" " />
 	<target name="generate.bo.template.entity" description="Generate template File For De Entities">
-		<delete quiet="true" includeemptydirs="true">
-				<fileset dir="${temp.dir}/catissuecore">
-					<include name="**/*" />
-				</fileset>
-			</delete>
-			<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
-			<antcall target="replace_app_dao_prop_file"/>
-			<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
-			<copy file="${base.dir}/modules/dynamic_extensions/conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-			<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
-			<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
-	
-			
-			<if>
-				<equals arg1="mysql" arg2="${database.type}" />
-				<then>
-					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-						<include name="*.cfg.xml" />
-						<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
-						<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
-						<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
-					</replace>
-				</then>
-				<elseif>
-					<equals arg1="oracle" arg2="${database.type}" />
+			<delete quiet="true" includeemptydirs="true">
+					<fileset dir="${temp.dir}/catissuecore">
+						<include name="**/*" />
+					</fileset>
+				</delete>
+				<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+				<antcall target="replace_app_dao_prop_file"/>
+				<unzip src="${base.dir}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${temp.dir}/dynamicextensions" overwrite="true" />
+				<copy file="${base.dir}/modules/dynamic_extensions/conf/hibernate.cfg.xml" todir="${temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
+				<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsHibernate.cfg.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml" overwrite="true" />
+				<copy file="${temp.dir}/dynamicextensions/conf/DynamicExtensionsAuditMetadata.xml" tofile="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsAuditMetadata.xml" overwrite="true" />
+
+				
+				<if>
+					<equals arg1="mysql" arg2="${database.type}" />
 					<then>
 						<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
 							<include name="*.cfg.xml" />
-							<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
-							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
-							<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+							<replacefilter token="@@DIALECT@@" value="${mysql.dialect.string}" />
+							<replacefilter token="@@DRIVER@@" value="com.mysql.jdbc.Driver" />
+							<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
 						</replace>
 					</then>
-				</elseif>
-			</if>
-			<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
-				<include name="*.cfg.xml" />
-				<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
-				<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
-			</replace>
-		<copy file="${base.dir}/modules/bulk_operations/conf/log4j.properties" todir="${base.dir}" overwrite="true"/>
-		<java classname="edu.wustl.catissuecore.util.BOTemplateGeneratorClient" fork="true" maxmemory="1024M" failonerror="true">
-			<arg value="entity"/>
-			<arg value="${entityNameOrFile}" />
-			<arg value="${mappingXMLFile}" />
-	
-				<classpath>
-					<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
-					<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
-						<include name="*.jar" />
-						<exclude name="uml-1.3.jar" />
-					</fileset>
-					<fileset dir="${lib.dir}">
+					<elseif>
+						<equals arg1="oracle" arg2="${database.type}" />
+						<then>
+							<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+								<include name="*.cfg.xml" />
+								<replacefilter token="@@DIALECT@@" value="${oracle.dialect.string}" />
+								<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}" />
+								<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+							</replace>
+						</then>
+					</elseif>
+				</if>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes">
+					<include name="*.cfg.xml" />
+					<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}" />
+					<replacefilter token="@@DATABASE_PASSWORD@@" value="${database.password}" />
+				</replace>
+			<copy file="${base.dir}/modules/bulk_operations/conf/log4j.properties" todir="${base.dir}" overwrite="true"/>
+			<java classname="edu.wustl.catissuecore.util.BOTemplateGeneratorClient" fork="true" maxmemory="1024M" failonerror="true">
+				<arg value="entity"/>
+				<arg value="${entityNameOrFile}" />
+				<arg value="${mappingXMLFile}" />
+
+					<classpath>
+						<pathelement location="${temp.dir}/catissuecore/WEB-INF/classes" />
+						<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
 							<include name="*.jar" />
-					</fileset>
-				</classpath>
-			<sysproperty key="static.template.dir" value="${base.dir}/modules/bulk_operations/conf" />
-			</java>
-			<move todir="${base.dir}/modules/bulk_operations/log" overwrite="true">
-					<fileset dir="${base.dir}">
-						<include name="bulkoperator*.log*" />
-					</fileset>
-				</move>
-			<delete file="${base.dir}/log4j.properties"></delete>
-	</target>
+							<exclude name="uml-1.3.jar" />
+						</fileset>
+						<fileset dir="${lib.dir}">
+								<include name="*.jar" />
+						</fileset>
+					</classpath>
+				<sysproperty key="static.template.dir" value="${base.dir}/modules/bulk_operations/conf" />
+				</java>
+				<move todir="${base.dir}/modules/bulk_operations/log" overwrite="true">
+						<fileset dir="${base.dir}">
+							<include name="bulkoperator*.log*" />
+						</fileset>
+					</move>
+				<delete file="${base.dir}/log4j.properties"></delete>
+			</target>
+			
+			
 	<target name="createEMPIAdminUser_oracle">
 		<sql driver="${oracle.driver.string}"
 			url="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}"

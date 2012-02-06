@@ -327,11 +327,12 @@
 
 		<echo>Integrating the  Bulk Operation Module</echo>
 		<antcall target="unzip_bulkoperation_installable" />
-		<ant dir="${base.dir}/bulkoperation" inheritAll="false" antfile="bulkoperationintegration.xml" target="bulkoperation_integrate_app">
-			<property name="deploy.temp.dir" value="${basedir}"/>
-			<property name="config.dir" value="${basedir}/catissuecore-properties"/>
-			<property name="bulkoperation.base.dir" value="${basedir}/bulkoperation" />
-		</ant>
+		<ant  inheritAll="false" antfile="build.xml" target="bulkoperation_integrate_app">
+					<property name="deploy.temp.dir" value="${basedir}"/>
+											<property name="config.dir" value="${basedir}/catissuecore-properties"/>
+											<property name="bulkoperation.base.dir" value="${basedir}/bulkoperation" />
+				</ant>
+		
 		<!--Copying bulkOperation.properties file-->
 		<copy todir="${basedir}/catissuecore-properties" overwrite="true">
 			<fileset dir="${basedir}">
@@ -415,6 +416,7 @@
 				<include name="images/**" />
 				<include name="jss/**" />
 				<include name="dhtml_comp/**" />
+				<include name="dhtmlx_suite/**" />
 				<include name="pages/**" />
 				<include name="flexclient/**" />
 				<include name="runtime/**" />
@@ -1585,4 +1587,73 @@
 	            </else>
 	        </if>
 	    </target>
+	
+	<target name="bulkoperation_integrate_app" description="deploys the Bulk Operation module">
+				<property name="suite.struts.config.file" value="struts-config.xml" />
+					<property name="suite.hibernate.config.file" value="hibernate.cfg.xml" />
+					<property name="suite.tiles.def.file" value="tiles-defs.xml" />
+				<!--Copying css files -->
+				<copy todir="${deploy.temp.dir}/css" overwrite="false">
+					<fileset file="${bulkoperation.base.dir}/css/bulkOperator.css" />
+				</copy>
+
+				<!--Copying jss files -->
+				<copy todir="${deploy.temp.dir}/jss" overwrite="false">
+					<fileset file="${bulkoperation.base.dir}/jss/bulkOperatorAjax.js" />
+					<fileset file="${bulkoperation.base.dir}/jss/bulkOperatorScripts.js" />
+				</copy>
+
+				<!--Copying struts config and tiles defs files -->
+				<copy todir="${deploy.temp.dir}/WEB-INF" overwrite="true">
+					<fileset file="${bulkoperation.base.dir}/bulkoperation-struts-config.xml" />
+					<fileset file="${bulkoperation.base.dir}/bulkoperation-tiles-defs.xml" />
+				</copy>
+		<copy file="${deploy.temp.dir}/WEB-INF/classes/BulkOperations.properties" todir="${deploy.temp.dir}/bulkoperation" overwrite="true" />
+					<property file="${deploy.temp.dir}/bulkoperation/BulkOperations.properties" />
+						<replace dir="${bulkoperation.base.dir}/pages/" propertyfile="bulkoperation/BulkOperations.properties">
+							<include name="JobGridDashboard.jsp" />
+							<replacefilter token="@@dhtml_dir@@" value="${dhtmlPath}" />
+						</replace>
+
+				<!--Copying JSP Pages -->
+				<copy todir="${deploy.temp.dir}/pages/content/manageBioSpecimen/bulkOperations" overwrite="true">
+					<fileset file="${bulkoperation.base.dir}/pages/BulkOperation.jsp" />
+					<fileset file="${bulkoperation.base.dir}/pages/JobGridDashboard.jsp" />
+					<fileset file="${bulkoperation.base.dir}/pages/BulkTemplate.jsp" />
+				</copy>
+				<!--
+					Inject "/WEB-INF/bulkoperator-tiles-defs.xml" entry in suite
+					struts-config.xml
+				-->
+				<replace file="${deploy.temp.dir}/WEB-INF/${suite.struts.config.file}">
+					<replacefilter token="/WEB-INF/${suite.tiles.def.file}, /WEB-INF/bulkoperation-struts-config.xml" value="/WEB-INF/${suite.tiles.def.file}" />
+					<replacefilter token="/WEB-INF/${suite.tiles.def.file}" value="/WEB-INF/${suite.tiles.def.file}, /WEB-INF/bulkoperation-tiles-defs.xml" />
+				</replace>
+
+				<!-- Inject advancequery-struts-config.xml entry in suite web.xml -->
+				<replace file="${deploy.temp.dir}/WEB-INF/web.xml">
+					<replacefilter token="/WEB-INF/${suite.struts.config.file}, /WEB-INF/bulkoperation-struts-config.xml" value="/WEB-INF/${suite.struts.config.file}" />
+					<replacefilter token="/WEB-INF/${suite.struts.config.file}" value="/WEB-INF/${suite.struts.config.file}, /WEB-INF/bulkoperation-struts-config.xml" />
+				</replace>
+
+				<!--
+					Concatenating the AppplicationResource.properties file from
+					Bulk Opeartion to Suite AppplicationResource.properties file
+				-->
+				<echo message="Concatenating the Application Resources Properties file" />
+				<concat destfile="${deploy.temp.dir}/WEB-INF/classes/ApplicationResources.properties" append="true" fixlastline="true">
+					<fileset file="${bulkoperation.base.dir}/ApplicationResources.properties" />
+				</concat>
+
+				<!--Copying mapping.xml file-->
+				<copy todir="${config.dir}" overwrite="true">
+					<fileset dir="${bulkoperation.base.dir}">
+						<include name="mapping.xml" />
+						<include name="bulkOperatorXMLTemplateRules.xml" />
+						<include name="BulkOperations.xsd" />
+					</fileset>
+					
+				</copy>
+
+			</target>
 </project>

@@ -1277,5 +1277,9 @@
 		<definition name=".catissuecore.wustlkeyDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/WustlKey/MigrateUser.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.bulkParticipantMatch" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/bulkParticipantMatch.jsp" />
+	</definition>
 
 </tiles-definitions>

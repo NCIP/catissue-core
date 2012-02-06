@@ -43,7 +43,7 @@
 	<property name="oracle.lib" value="ojdbc14.jar" />
 	<property name="mssqlserver.lib" value="sqljdbc.jar" />
 
-	<property name="catissue.struts.config.file" value="struts-config.xml" />
+	<property name="catissue.struts.config.file" value="struts-config.xml" />	
 	<property name="catissue.hibernate.config.file" value="hibernate.cfg.xml" />
 	<property name="catissue.tiles.def.file" value="tiles-defs.xml" />
 
@@ -722,6 +722,10 @@
 						<replacefilter token="@@CiderWMQPort@@" value="${cider.wmq.port}" />
 						<!--<replacefilter token="@@CiderInBoundQueue@@" value="${cider.inbound.queue}" />-->
 						<replacefilter token="@@CiderOutBoundQueue@@" value="${cider.outbound.queue}" />
+			
+			<replacefilter token="@@InBoundQueue@@" value="${empi.inBoundQueue}" />
+						<replacefilter token="@@OutBoundQueue@@" value="${empi.outBoundQueue}" /> 
+						<replacefilter token="@@MergeMessageQueue@@" value="${empi.mergeMessageQueue}" /> 
 		</replace>
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCdmsIntegration.properties">
 			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />

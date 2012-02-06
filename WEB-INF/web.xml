@@ -304,6 +304,18 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<filter-name>NoActionFilter</filter-name>
 		<url-pattern>/CreateCategoryAction.do</url-pattern>
 	</filter-mapping>
+	
+	<filter>
+		<filter-name>BulkEmpiFilter</filter-name>
+		<filter-class>edu.wustl.catissuecore.util.global.BulkEMPIFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>BulkEmpiFilter</filter-name>
+		<url-pattern>/BulkEmpiGeneration.do</url-pattern>
+	</filter-mapping>
+
+		
 <!-- 
 
 	<filter>

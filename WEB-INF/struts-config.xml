@@ -147,6 +147,10 @@ PUBLIC
 		<!-- end of shipping tracking form beans-->
 		<form-bean name="migrationForm"
 			type="edu.wustl.migrator.actionform.MigrationForm" />
+			
+			
+			<form-bean name="bulkParticipantMatchForm"
+			type="edu.wustl.bulkoperator.bulkmatching.action.BulkParticipantMatchForm" />
 	</form-beans>
 
 	<!-- Global Exception Definitions -->
@@ -5723,6 +5727,33 @@ PUBLIC
 			<forward name="success" path="/MatchedParticipantSearch.do" />
 			<forward name="ProcessMatchedParticipants" path="/ProcessMatchedParticipants.do" />
 		</action>
+		
+		<!--  bulk empi operations -->
+  		<action path="/BulkEmpiGeneration" type="edu.wustl.bulkoperator.bulkmatching.action.BulkParticipantMatchAction"
+		   name="bulkParticipantMatchForm" validate="false" scope="request">
+		   <forward name="success" path=".catissuecore.bulkParticipantMatch" />
+		</action>
+		
+		<action path="/BulkMatchingFileUpload" type="edu.wustl.bulkoperator.bulkmatching.action.ParticipantMatchingFileUploadAction"
+			name="bulkParticipantMatchForm" scope="request" validate="true">
+			<forward name="success" path="/BulkEmpiGeneration.do"/>
+		</action>
+		<action path="/BulkMatchingGridAction" type="edu.wustl.bulkoperator.bulkmatching.action.BulkParticipantMatchGridAction"
+			 scope="request" validate="false">
+		</action>
+		
+		<action path="/BulkMatchingGridDashboardAction" type="edu.wustl.bulkoperator.bulkmatching.action.ShowParticipantMatchJobGridAction"
+			 scope="request" validate="false">
+			 <forward name="success" path="/pages/content/manageAdministrativeData/BulkJobDashboard.jsp" />
+		</action>
+		
+		<action path="/MatchingReportDownload"
+			type="edu.wustl.bulkoperator.bulkmatching.action.DownloadMatchingReportAction"
+			validate="false" input="/pages/blank.jsp" scope="request" >
+			<forward name="success" path="/pages/blank.jsp" />
+			<forward name="failure" path="/pages/blank.jsp" />
+		</action>
+		<!--  bulk empi operations ends -->
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
@@ -5733,7 +5764,7 @@ PUBLIC
 
 	<plug-in className="org.apache.struts.tiles.TilesPlugin">
 		<set-property property="definitions-config"
-			value="/WEB-INF/tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/ShippingTracking-tiles-defs.xml" />
+			value="/WEB-INF/tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/bulkoperation-tiles-defs.xml, /WEB-INF/ShippingTracking-tiles-defs.xml" />
 		<set-property property="moduleAware" value="true" />
 		<set-property property="definitions-parser-validate"
 			value="true" />
