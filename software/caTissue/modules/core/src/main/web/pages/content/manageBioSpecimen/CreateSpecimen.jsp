@@ -433,8 +433,19 @@
 											</span>
 										</td>
 										<td align="left">&nbsp;</td>
-										<td align="left">&nbsp;</td>
-										<td align="left">&nbsp;</td>
+										<td align="left" class="black_ar"><bean:message key="eventparameters.time"/></td>
+			<td align="left"><span class="black_ar">
+								<autocomplete:AutoCompleteTag property="timeInHours"
+									optionsList = "<%=Constants.HOUR_ARRAY%>"
+									initialValue="<%=form.getTimeInHours()%>"
+									styleClass="black_ar"
+									staticField="false" size="4" />	&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+								<autocomplete:AutoCompleteTag property="timeInMins"
+								   optionsList = "<%=Constants.MINUTES_ARRAY%>"
+								   initialValue="<%=form.getTimeInMins()%>"
+								   styleClass="black_ar"
+								   staticField="false" size="4" />
+								   &nbsp;<bean:message key="eventparameters.timeinminutes"/></span></td>
 									</tr>
 									<logic:notEqual name="multipleSpecimen" value="1">	<!-- to verify for valid case 2 -->
 									<tr height="33">

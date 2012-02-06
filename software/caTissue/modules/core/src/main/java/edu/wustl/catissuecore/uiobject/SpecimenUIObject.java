@@ -372,5 +372,30 @@ public class SpecimenUIObject implements UIObject
 		this.parentSpecimenId = parentSpecimenId;
 	}
 
+	private String timeInHours;
+	private String timeInMins;
+	
+	public String getTimeInHours()
+	{
+		return timeInHours;
+	}
+
+	
+	public void setTimeInHours(String timeInHours)
+	{
+		this.timeInHours = timeInHours;
+	}
+
+	
+	public String getTimeInMins()
+	{
+		return timeInMins;
+	}
+
+	
+	public void setTimeInMins(String timeInMins)
+	{
+		this.timeInMins = timeInMins;
+	}
 
 }

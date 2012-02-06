@@ -262,7 +262,7 @@
 
 		<property
             name="createdOn"
-            type="date"
+            type="timestamp"
             update="true"
             insert="true"
             column="CREATED_ON_DATE"

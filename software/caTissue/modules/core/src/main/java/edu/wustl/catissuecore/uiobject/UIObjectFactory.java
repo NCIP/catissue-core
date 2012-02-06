@@ -153,6 +153,8 @@ public class UIObjectFactory implements IUIObjectFactory
 		scgUIObject.setApplyEventsToSpecimens(form.isApplyEventsToSpecimens());
 		scgUIObject.setApplyChangesTo(form.getApplyChangesTo());
 		scgUIObject.setConsentWithdrawalOption(form.getWithdrawlButtonStatus());
+		scgUIObject.setTimeInHour(form.getTimeInHour());
+		scgUIObject.setTimeInMinute(form.getTimeInMinute());
 		if (Constants.TRUE.equals(form.getRestrictSCGCheckbox()))
 		{
 			scgUIObject.setIsCPBasedSpecimenEntryChecked(Boolean.TRUE);
@@ -213,6 +215,8 @@ public class UIObjectFactory implements IUIObjectFactory
 		specimenUIObject.setReasonForTransfer(form.getReasonForTransfer());
 		specimenUIObject.setFromPositionDimensionOne(form.getFromPositionDimensionOne());
 		specimenUIObject.setFromPositionDimensionTwo(form.getFromPositionDimensionTwo());
+		specimenUIObject.setTimeInHours(form.getTimeInHours());
+		specimenUIObject.setTimeInMins(form.getTimeInMins());
 		if(form.getFromStorageContainerId()!=null&&!form.getFromStorageContainerId().equals(""))
 		{
 			specimenUIObject.setFromStorageContainerId(form.getFromStorageContainerId());
@@ -247,6 +251,8 @@ public class UIObjectFactory implements IUIObjectFactory
 	private UIObject createSpecimenUIObject(CreateSpecimenForm form)
 	{
 		SpecimenUIObject specimenUIObject = new SpecimenUIObject();
+		specimenUIObject.setTimeInHours(form.getTimeInHours());
+		specimenUIObject.setTimeInMins(form.getTimeInMins());
 		specimenUIObject.setDisposeParentSpecimen(form.getDisposeParentSpecimen());
 		return specimenUIObject;
 	}
@@ -254,6 +260,8 @@ public class UIObjectFactory implements IUIObjectFactory
 	private UIObject createAliquotUIObject(AliquotForm form)
 	{
 		SpecimenUIObject specimenUIObject = new SpecimenUIObject();
+		specimenUIObject.setTimeInHours(form.getTimeInHours());
+		specimenUIObject.setTimeInMins(form.getTimeInMins());
 		specimenUIObject.setDisposeParentSpecimen(form.getDisposeParentSpecimen());
 		return specimenUIObject;
 	}

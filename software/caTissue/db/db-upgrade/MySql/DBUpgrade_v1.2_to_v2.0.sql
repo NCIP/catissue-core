@@ -257,3 +257,5 @@ source.name ='edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry
 meta.identifier= assoc.identifier
 set meta.name='participantRecordEntryCollection';
 /
+Alter table catissue_specimen change CREATED_ON_DATE CREATED_ON_DATE datetime;
+/

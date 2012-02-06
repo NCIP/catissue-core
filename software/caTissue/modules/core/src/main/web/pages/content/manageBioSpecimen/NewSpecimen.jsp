@@ -1785,27 +1785,30 @@
 										/>
 						        </td>
 				</logic:equal>
-
-
+				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+				<html:hidden property="collectionStatus"/>
+				</logic:notEqual>
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-								<td align="center" class="black_ar">&nbsp;
+				<td align="center" class="black_ar">
+									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
 								</td>
-								<td align="left" class="black_ar">
-									<label for="createdDate">
-										<bean:message key="specimen.createdDate"/>
+				                <td align="left" class="black_ar">
+									<label for="collectionStatus">
+									<bean:message key="specimenCollectionGroup.collectionStatus" />
+
 									</label>
 								</td>
-								<td class="black_ar" >
-									<ncombo:DateTimeComponent name="createdDate" id="createdDate"
-			  							formName="newSpecimenForm"
-			  							pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
-			  							value='${requestScope.createdDate}'
-			  							styleClass="black_ar"/>
-										<span class="grey_ar_s">
-									<bean:message key="page.dateFormat" /></span>&nbsp;
+								<td class="black_new">
+									<autocomplete:AutoCompleteTag property="collectionStatus"
+										optionsList = "<%=request.getAttribute(Constants.COLLECTIONSTATUSLIST)%>"
+										initialValue="<%=form.getCollectionStatus()%>" onChange="<%=strCheckStatus%>"
+										styleClass="black_ar"
+										size="25"
+										/>
 								</td>
-				</logic:equal>
-							</tr>
+
+						</logic:equal>		
+</tr>
 							<tr>
 								<td align="center" class="black_ar">
 				<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">
@@ -1891,57 +1894,44 @@
 								</td>
 							</tr>
 			</logic:equal>
+			<tr>
 
-			<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-				<html:hidden property="collectionStatus"/>
-			</logic:notEqual>
-			<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-							<tr>
-								<td align="center" class="black_ar">
-									<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
-								</td>
-				                <td align="left" class="black_ar">
-									<label for="collectionStatus">
-									<bean:message key="specimenCollectionGroup.collectionStatus" />
-
-									</label>
-								</td>
-								<td class="black_new">
-									<autocomplete:AutoCompleteTag property="collectionStatus"
-										optionsList = "<%=request.getAttribute(Constants.COLLECTIONSTATUSLIST)%>"
-										initialValue="<%=form.getCollectionStatus()%>" onChange="<%=strCheckStatus%>"
-										styleClass="black_ar"
-										size="27"
-										/>
-								</td>
-
-								<td align="center" class="black_ar">
-									&nbsp;
-								</td>
-				                <td align="left" class="black_ar">
-									<label for="activityStatus">
-										<bean:message key="participant.activityStatus" />
-									</label>
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+								<td align="center" class="black_ar">&nbsp;
 								</td>
 								<td align="left" class="black_ar">
-								<logic:equal name="newSpecimenForm" property="activityStatus"
-									value="<%=Status.ACTIVITY_STATUS_CLOSED.toString()%>">
-										<autocomplete:AutoCompleteTag property="activityStatus"
-										  optionsList = '${requestScope.specimenActivityStatus}'
-										  onChange=''
-										  initialValue='<%=form.getActivityStatus()%>'
-										  styleClass="black_ar" size="25"/>
-								</logic:equal>
-								<logic:notEqual name="newSpecimenForm" property="activityStatus"
-									value="<%=Status.ACTIVITY_STATUS_CLOSED.toString()%>">
-									<label for="activityStatus">
-										<%=form.getActivityStatus()%>
+									<label for="createdDate">
+										<bean:message key="specimen.createdDate"/>
 									</label>
-									<html:hidden property="activityStatus"/>
-								</logic:notEqual>
 								</td>
+								<td class="black_ar" >
+									<ncombo:DateTimeComponent name="createdDate" id="createdDate"
+			  							formName="newSpecimenForm"
+			  							pattern="<%=CommonServiceLocator.getInstance().getDatePattern()%>"
+			  							value='${requestScope.createdDate}'
+			  							styleClass="black_ar"/>
+										<span class="grey_ar_s">
+									<bean:message key="page.dateFormat" /></span>&nbsp;
+								</td>
+								<td align="center" class="black_ar">&nbsp;</td>
+									  <td align="left" class="black_ar" width="8%"><bean:message key="eventparameters.time"/></td>
+									  <td align="left"><span class="black_ar">
+								<autocomplete:AutoCompleteTag property="timeInHours"
+									optionsList = '${requestScope.hourList}'
+									initialValue="<%=form.getTimeInHours()%>"
+									styleClass="black_ar"
+									staticField="false" size="4" />	&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+								<autocomplete:AutoCompleteTag property="timeInMins"
+								   optionsList = '${requestScope.minutesList}'
+								   initialValue="<%=form.getTimeInMins()%>"
+								   styleClass="black_ar"
+								   staticField="false" size="4" />
+								   &nbsp;<bean:message key="eventparameters.timeinminutes"/></span></td>
+									</logic:equal>
+              
+               
 							</tr>
-						</logic:equal>
+
 							<tr>
 								<td width="1%" align="center">
 								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
@@ -1956,6 +1946,7 @@
 									   	<bean:message key="specimen.positionInStorageContainer"/>
 								   </label>
 								</td>
+								
 								<%
 										boolean readOnly=true;
 										if(operation.equals(Constants.ADD))
@@ -2056,7 +2047,8 @@
 										<script language="JavaScript" type="text/javascript" src="jss/jquery/jquery-ui-1.8.10.custom.min.js"></script>
 										<script language="JavaScript" type="text/javascript" src="jss/jquery/gsid/updateSpecimen.js"></script>
 									</logic:equal>
-								<td colspan="4" >
+									
+								<td colspan="1" >
 					<!-------Select Box Begins----->
 
 								<table border="0" cellpadding="3" cellspacing="0" width="100%">
@@ -2069,6 +2061,7 @@
 
 								<% if( operation.equals("add") || (transferStatus != null && transferStatus.equals("transferred")) || (showContainer!=null&&showContainer.equals("Pending")))
 						{%>
+						
 								<tr >
 							<td width="20%">
 									<html:select property="stContSelection" styleClass="black_new"
@@ -2094,6 +2087,7 @@
 														noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
 														</tr>
 														</table>
+														
 			</div>
 			<div  id="manualDiv" style="<%=manualDisplayStyle%>"">
 				<table cellpadding="0" cellspacing="0" border="0" >
@@ -2115,8 +2109,12 @@
 						</tr>
 					</table>
 			</div>
+			
 		</td>
 				<!---<td align="center" class="black_ar">&nbsp;</td>-->
+				
+				
+				
 		</tr>
 
 		<%}%>
@@ -2168,8 +2166,10 @@
 											</table>
 											</div>
 										</logic:equal>
+										
 
 														</td>
+														
 													</tr>
 													<%
 												}
@@ -2181,6 +2181,33 @@
 
 									</table>
 											</td>
+											<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+							<td align="center" class="black_ar">
+									&nbsp;
+								</td>
+				                <td align="left" class="black_ar">
+									<label for="activityStatus">
+										<bean:message key="participant.activityStatus" />
+									</label>
+								</td>
+								<td align="left" class="black_ar">
+								<logic:equal name="newSpecimenForm" property="activityStatus"
+									value="<%=Status.ACTIVITY_STATUS_CLOSED.toString()%>">
+										<autocomplete:AutoCompleteTag property="activityStatus"
+										  optionsList = '${requestScope.specimenActivityStatus}'
+										  onChange=''
+										  initialValue='<%=form.getActivityStatus()%>'
+										  styleClass="black_ar" size="25"/>
+								</logic:equal>
+								<logic:notEqual name="newSpecimenForm" property="activityStatus"
+									value="<%=Status.ACTIVITY_STATUS_CLOSED.toString()%>">
+									<label for="activityStatus">
+										<%=form.getActivityStatus()%>
+									</label>
+									<html:hidden property="activityStatus"/>
+								</logic:notEqual>
+								</td>
+						</logic:equal>
 											</tr>
 
 									<%//System.out.println("End of tag in jsp");%>
@@ -2192,6 +2219,7 @@
 											<bean:message key="container.maxView"/>
 									</td>
 								</tr>
+								
 								</logic:equal>
 
 								<tr>

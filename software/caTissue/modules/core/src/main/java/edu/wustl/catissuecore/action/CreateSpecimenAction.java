@@ -17,6 +17,7 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -470,10 +471,18 @@ public class CreateSpecimenAction extends SecureAction
 				createForm.setStorageContainer("");
 				createForm.setBarcode(null);
 				map.clear();
+				
 				createForm.setExternalIdentifier(map);
 				createForm.setExIdCounter(1);
 				createForm.setVirtuallyLocated(false);
 				createForm.setStContSelection(1);
+				String date=edu.wustl.common.util.Utility.parseDateToString(new Date(), CommonServiceLocator.getInstance().getDatePattern());
+				
+				createForm.setCreatedDate(date);
+				Calendar cal=Calendar.getInstance();
+				cal.setTime(new Date());
+				createForm.setTimeInHours(String.valueOf(cal.get(cal.HOUR_OF_DAY)));
+				createForm.setTimeInMins(String.valueOf(cal.get(cal.MINUTE)));
 				// containerMap =
 				// getContainerMap(createForm.getParentSpecimenId(), createForm
 				// .getClassName(), dao, scbizLogic,exceedingMaxLimit,request);

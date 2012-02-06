@@ -398,7 +398,7 @@
 	</td>
 </tr>
 <td align="left" class="showhide1">
-	<table width="100%" border="0" cellspacing="0" cellpadding="3">
+	<table width="100%" border="0" cellspacing="0" cellpadding="2">
 	<tr>
                 <td class="noneditable">
 				<label for="type">
@@ -487,7 +487,7 @@
 		<bean:message key="specimen.createdDate"/>
 	  </label>
 	 </td>
-	<td class="black_ar" colspan="3" >
+	<td class="black_ar" colspan="0" >
 	<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
 		<tr>
 			<td class="black_ar" >
@@ -501,10 +501,23 @@
 				<bean:message key="page.dateFormat" />
 					</span>
 			</td>
-		</tr>
+			</tr>
 	</table>
 	</td>
-</tr>
+	<td align="left" class="black_ar"><bean:message key="eventparameters.time"/></td>
+			<td align="left"><span class="black_ar">
+								<autocomplete:AutoCompleteTag property="timeInHours"
+									optionsList = '${requestScope.hourList}'
+									initialValue="<%=form.getTimeInHours() %>"
+									styleClass="black_ar"
+									staticField="false" size="4" />	&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;&nbsp;
+								<autocomplete:AutoCompleteTag property="timeInMins"
+								   optionsList = '${requestScope.minutesList}'
+								   initialValue="<%=form.getTimeInMins() %>"
+								   styleClass="black_ar"
+								   staticField="false" size="4" />
+								   &nbsp;<bean:message key="eventparameters.timeinminutes"/></span></td>
+	 </tr>
 </table>
 </td>
 </tr>

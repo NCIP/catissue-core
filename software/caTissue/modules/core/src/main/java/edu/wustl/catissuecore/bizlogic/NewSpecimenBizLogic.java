@@ -777,7 +777,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			final SessionDataBean sessionDataBean, Specimen specimen,
 			Integer pos1, Integer pos2, SpecimenUIObject specUiObject)
 					throws ApplicationException {
-		this.setSpecimenCreatedOnDate(specimen);
+		this.setSpecimenCreatedOnDate(specimen,specUiObject);
 		this.setSpecimenParent(specimen, dao);
 		// bug no. 4265
 		if (specimen.getLineage() != null
@@ -1032,12 +1032,20 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 
 
 	 */
-	private void setSpecimenCreatedOnDate(Specimen specimen) throws ApplicationException 
+	private void setSpecimenCreatedOnDate(Specimen specimen,SpecimenUIObject uiObject) throws ApplicationException 
 	{
 		if (specimen.getCreatedOn() == null && specimen.getParentSpecimen()==null) 
 		{
 
 			specimen.setCreatedOn(new SpecimenCollectionGroupBizLogic().encounterDateFromScg(specimen.getSpecimenCollectionGroup()));
+		}
+		else if(null!=uiObject.getTimeInHours() && null!=uiObject.getTimeInMins())
+		{
+			Calendar cal=Calendar.getInstance();
+			cal.setTime(specimen.getCreatedOn());
+			cal.set(Calendar.HOUR_OF_DAY, Integer.valueOf(uiObject.getTimeInHours()));
+			cal.set(Calendar.MINUTE, Integer.valueOf(uiObject.getTimeInMins()));
+			specimen.setCreatedOn(cal.getTime());
 		}
 		else
 		{
@@ -1996,13 +2004,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 						specimenUIObject.setParentChanged(true);
 					}
 				}
-				try {
-					specimen.setCreatedOn(CommonUtilities.parseDate(
-							specimenUIObject.getCreatedOn(),
-							CommonServiceLocator.getInstance().getDatePattern()));
-				} catch (ParseException e) {
+				//try {
+					specimen.setCreatedOn(//CommonUtilities.parseDate(
+							EventsUtil.setTimeStamp(specimenUIObject.getCreatedOn(),specimenUIObject.getTimeInHours(),specimenUIObject.getTimeInMins()));
+							//CommonServiceLocator.getInstance().getDatePattern()));
+				/*} catch (ParseException e) {
 					e.printStackTrace();
-				}
+				}*/
 
 				this.updateSpecimen(dao, obj, oldObj, sessionDataBean, uiObject);
 			} else {

@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,7 +43,6 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.logging.api.util.StringUtils;
 
 /**
  * SpecimenForm Class is used to encapsulate all the request parameters passed
@@ -665,6 +665,12 @@ public class SpecimenForm extends AbstractActionForm
 		 */
 		this.createdDate = CommonUtilities.parseDateToString(specimen.getCreatedOn(),
 				CommonServiceLocator.getInstance().getDatePattern());
+		
+		Calendar calendar = Calendar.getInstance(); // creates a new calendar instance
+		calendar.setTime(specimen.getCreatedOn());   // assigns calendar to given date 
+		
+		this.timeInHours=String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+		this.timeInMins=String.valueOf(calendar.get(Calendar.MINUTE));
 
 		if (specimen.getIsAvailable() != null)
 		{
@@ -804,7 +810,7 @@ public class SpecimenForm extends AbstractActionForm
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * @return error ActionErrors instance
-	 * @param mapping Actionmapping instance
+	 * @param mapping ActionMapping instance
 	 * @param request HttpServletRequest instance
 	 */
 	@Override
@@ -823,7 +829,7 @@ public class SpecimenForm extends AbstractActionForm
 				     * See also: 1_1 to 1_5
 				     * Description : Validated the createdOn date field.
 				     */
-				if (!Validator.isEmpty(this.createdDate))
+				/*if (!Validator.isEmpty(this.createdDate))
 				{
 
 					final String errorKeyForCreatedDate = validator.validateDate(this.createdDate,
@@ -834,8 +840,7 @@ public class SpecimenForm extends AbstractActionForm
 								errorKeyForCreatedDate, ApplicationProperties
 										.getValue("specimen.createdDate")));
 					}
-				}
-
+				}*/
 				//Changed by falguni
 //				if (!edu.wustl.catissuecore.util.global.Variables.isSpecimenLabelGeneratorAvl
 
@@ -1313,5 +1318,31 @@ public class SpecimenForm extends AbstractActionForm
 	{
 		// TODO Auto-generated method stub
 
+	}
+	String timeInHours;
+	String timeInMins;
+
+	
+	public String getTimeInHours()
+	{
+		return timeInHours;
+	}
+
+	
+	public void setTimeInHours(String timeInHours)
+	{
+		this.timeInHours = timeInHours;
+	}
+
+	
+	public String getTimeInMins()
+	{
+		return timeInMins;
+	}
+
+	
+	public void setTimeInMins(String timeInMins)
+	{
+		this.timeInMins = timeInMins;
 	}
 }

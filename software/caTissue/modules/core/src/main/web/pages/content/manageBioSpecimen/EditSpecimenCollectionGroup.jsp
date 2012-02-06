@@ -542,6 +542,8 @@ String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms
 			</table></td>
 			 </tr>
 			<input type="hidden" id="originalCollectionDate" value="<%=originalCollectionDate%>"  />
+			<input type="hidden" id="originalTimeInMinute" value="<%=originalTimeInMinute%>"  />
+			<input type="hidden" id="originalTimeInHour" value="<%=originalTimeInHour%>" />
 			
 
 			<html:hidden styleId="buttonType" property="buttonType"/>

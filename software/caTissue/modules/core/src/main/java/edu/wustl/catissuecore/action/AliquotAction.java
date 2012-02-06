@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -123,6 +124,10 @@ public class AliquotAction extends SecureAction
 		{
 			((AliquotForm) form).setCreatedDate(Utility.parseDateToString(Calendar.getInstance()
 					.getTime(), CommonServiceLocator.getInstance().getDatePattern()));
+			Calendar cal=Calendar.getInstance();
+			cal.setTime(new Date());
+			((AliquotForm) form).setTimeInHours(String.valueOf(cal.get(cal.HOUR_OF_DAY)));
+			((AliquotForm) form).setTimeInMins(String.valueOf(cal.get(cal.MINUTE)));
 		}
 
 		return this.invokeMethod(methodName, mapping, form, request, response);
@@ -670,7 +675,7 @@ public class AliquotAction extends SecureAction
 					aliquotForm.setAvailableQuantity(Utility.toString(map
 							.get(Constants.SPECIMEN_TYPE_QUANTITY)));
 					aliquotForm.setConcentration(Utility.toString(map.get("concentration")));
-
+					
 					aliquotForm.setAliquotMap(map);
 				}
 
@@ -834,6 +839,9 @@ public class AliquotAction extends SecureAction
 				aliquotForm.setGenerateLabel(false);
 			}
 //			aliquotForm.setGenerateLabel(SpecimenUtil.isLblGenOnForCP(parentLabelFormat, deriveLabelFormat, aliqLabelFormat, Constants.ALIQUOT));
+			request.setAttribute("minutesList", Constants.MINUTES_ARRAY);
+			request.setAttribute("hourList", Constants.HOUR_ARRAY);
+
 			return mapping.findForward(pageOf);
 		}
 		catch (final DAOException daoException)

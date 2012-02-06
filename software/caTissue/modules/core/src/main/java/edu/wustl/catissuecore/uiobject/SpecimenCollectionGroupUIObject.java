@@ -43,37 +43,6 @@ public class SpecimenCollectionGroupUIObject implements UIObject {
 	private Boolean isCPBasedSpecimenEntryChecked=Boolean.TRUE;
 
 	/**
-	 * isToInsertAnticipatorySpecimens added for new migration tool.
-	 */
-	//private Boolean isToInsertAnticipatorySpecimens=Boolean.TRUE;
-
-	/**
-	 * To apply changes to specimen based on consent status changes. Default
-	 * empty.
-	 *//*
-	private String stringOfResponseKeys="";
-*/
-	/**
-	 * Get IsToInsertAnticipatorySpecimens value.
-	 *
-	 * @return the isToInsertAnticipatorySpecimens
-	 */
-//	public Boolean getIsToInsertAnticipatorySpecimens() {
-//		return isToInsertAnticipatorySpecimens;
-//	}
-//
-//	/**
-//	 * Set IsToInsertAnticipatorySpecimens value.
-//	 *
-//	 * @param isToInsertAnticipatorySpecimens
-//	 *            the isToInsertAnticipatorySpecimens to set
-//	 */
-//	public void setIsToInsertAnticipatorySpecimens(
-//			Boolean isToInsertAnticipatorySpecimens) {
-//		this.isToInsertAnticipatorySpecimens = isToInsertAnticipatorySpecimens;
-//	}
-
-	/**
 	 * @return the isCPBasedSpecimenEntryChecked
 	 */
 	public Boolean getIsCPBasedSpecimenEntryChecked() {
@@ -122,23 +91,23 @@ public class SpecimenCollectionGroupUIObject implements UIObject {
 	public void setApplyChangesTo(String applyChangesTo) {
 		this.applyChangesTo = applyChangesTo;
 	}
+	
+	private String timeInHour;
+	private String timeInMinute;
+	
+	public String getTimeInHour() {
+		return timeInHour;
+	}
 
-	/**
-	 * Get String Of ResponseKeys.
-	 *
-	 * @return of String type.
-	 */
-	/*public String getStringOfResponseKeys() {
-		return this.stringOfResponseKeys;
-	}*/
+	public void setTimeInHour(String timeInHour) {
+		this.timeInHour = timeInHour;
+	}
 
-	/**
-	 * Set String Of ResponseKeys.
-	 *
-	 * @param stringOfResponseKeys
-	 *            of String type.
-	 */
-	/*public void setStringOfResponseKeys(String stringOfResponseKeys) {
-		this.stringOfResponseKeys = stringOfResponseKeys;
-	}*/
+	public String getTimeInMinute() {
+		return timeInMinute;
+	}
+
+	public void setTimeInMinute(String timeInMinute) {
+		this.timeInMinute = timeInMinute;
+	}
 }

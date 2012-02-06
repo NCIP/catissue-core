@@ -333,9 +333,16 @@ function calculateAge()
 	{
 		var originalCollectionDate = document.getElementById('originalCollectionDate').value;
 		var uicollectiondate=document.getElementById('collectionDate').value;
-		if(uicollectiondate!=originalCollectionDate)
+		
+		var originalTimeInMinute = document.getElementById('originalTimeInMinute').value;
+		var uiTimeInMinute=document.getElementById('timeInMinute').value;
+		
+		var originalTimeInHour = document.getElementById('originalTimeInHour').value;
+		var uiTimeInHour=document.getElementById('timeInHour').value;
+		
+		if(uicollectiondate!=originalCollectionDate || originalTimeInHour!=uiTimeInHour || originalTimeInMinute!=uiTimeInMinute)
 		{
-			var appResources = "The updated Collection Date will be propagated to all specimens under this Specimen Collection Group and override any existing data. Do you want to continue?";
+			var appResources = "The updated Collection Date and Time will be propagated to all specimens under this Specimen Collection Group and override any existing data. Do you want to continue?";
 			var answer = confirm(appResources);
 			if(answer)
 			{
@@ -645,6 +652,15 @@ String collectionDateString=form.getCollectionDate();
 String originalCollectionDate=form.getCollectionDate(); // for offset use
 if(originalCollectionDate==null)
 	originalCollectionDate="";
+	
+String originalTimeInMinute=form.getTimeInMinute(); 
+if(originalTimeInMinute==null)
+	originalTimeInMinute="";
+
+	String originalTimeInHour=form.getTimeInHour();
+if(originalTimeInHour==null)
+	originalTimeInHour="";
+
 String showageDiffString=form.getAgeAtCollection();
 Date encounterTimeStampDate;
 int collectionMinute=0;		

@@ -524,7 +524,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 			  * See also: 1_1 to 1_5
 			  * Description : Validated createdOn date field from form bean
 			  */
-			if (!Validator.isEmpty(this.createdDate))
+			/*if (!Validator.isEmpty(this.createdDate))
 			{
 
 				final String errorKeyForCreatedDate = validator
@@ -534,7 +534,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForCreatedDate,
 							ApplicationProperties.getValue("specimen.createdDate")));
 				}
-			}
+			}*/
 
 			final Iterator keyIterator = this.aliquotMap.keySet().iterator();
 
@@ -829,4 +829,31 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 	{
 		// TODO Auto-generated method stub
 	}
+	String timeInHours;
+	String timeInMins;
+
+	
+	public String getTimeInHours()
+	{
+		return timeInHours;
+	}
+
+	
+	public void setTimeInHours(String timeInHours)
+	{
+		this.timeInHours = timeInHours;
+	}
+
+	
+	public String getTimeInMins()
+	{
+		return timeInMins;
+	}
+
+	
+	public void setTimeInMins(String timeInMins)
+	{
+		this.timeInMins = timeInMins;
+	}
+	
 }

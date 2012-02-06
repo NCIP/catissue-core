@@ -8,12 +8,11 @@ import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.InputUIRepOfDomain;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 
 @InputUIRepOfDomain(CreateSpecimenForm.class)
@@ -47,8 +46,9 @@ public class CreateSpecimenTransformer extends SpecimenTransformer<CreateSpecime
              * Patch ID: 3835_1_5 See also: 1_1 to 1_5 Description : Set
              * createdOn date for derived specimen .
              */
-            domainObject.setCreatedOn(CommonUtilities.parseDate(uiRepOfDomain.getCreatedDate(), CommonServiceLocator
-                    .getInstance().getDatePattern()));
+           // Date date=CommonUtilities.parseDate(uiRepOfDomain.getCreatedDate(), CommonServiceLocator
+                    //.getInstance().getDatePattern());
+            domainObject.setCreatedOn(EventsUtil.setTimeStamp(uiRepOfDomain.getCreatedDate(),uiRepOfDomain.getTimeInHours(),uiRepOfDomain.getTimeInMins()));
 
             if (uiRepOfDomain.isAddOperation()) {
                 domainObject.setIsAvailable(Boolean.TRUE);

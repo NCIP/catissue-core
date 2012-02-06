@@ -674,7 +674,7 @@ CREATE TABLE `CATISSUE_SPECIMEN`
 	 `SPECIMEN_COLLECTION_GROUP_ID` bigint(20) default NULL,
 	 `REQ_SPECIMEN_ID` bigint(20) default NULL,
      `AVAILABLE_QUANTITY` double default NULL,
-     `CREATED_ON_DATE` date default NULL,
+     `CREATED_ON_DATE` datetime default NULL,
      `COLLECTION_STATUS` varchar(50) default NULL,
      PRIMARY KEY  (`IDENTIFIER`),
      UNIQUE KEY `LABEL` (`LABEL`),
