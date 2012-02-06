@@ -24,7 +24,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.CommonServiceLocator;
@@ -526,9 +525,10 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 	{
 		super.delete(obj);
 		this.refreshTitliSearchIndex(TitliSearchConstants.TITLI_DELETE_OPERATION, obj);
+
 	}
 
-	protected List executeQuery(String query,List<ColumnValueBean> columnValueBean) throws ApplicationException
+	/*public List executeQuery(String query,List<ColumnValueBean> columnValueBean) throws BizLogicException
 	{
 		DAO dao =null;
 		List results = null;
@@ -539,13 +539,13 @@ public class CatissueDefaultBizLogic extends DefaultBizLogic
 		}
 		catch (DAOException daoExp)
 		{
-			new ApplicationException(ErrorKey.getErrorKey(daoExp.getErrorKeyName()), daoExp, daoExp.getMsgValues());
+			new BizLogicException(ErrorKey.getErrorKey(daoExp.getErrorKeyName()), daoExp, daoExp.getMsgValues());
 		}
 		finally
 		{
 			AppUtility.closeDAOSession(dao);
 		}
 		return results;
-	}
+	}*/
 
 }
