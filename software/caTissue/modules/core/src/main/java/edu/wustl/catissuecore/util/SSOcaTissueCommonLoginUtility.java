@@ -434,7 +434,7 @@ public class SSOcaTissueCommonLoginUtility
     private ActionErrors handleError(final HttpServletRequest request, final String errorKey)
     {
         final ActionErrors errors = new ActionErrors();
-        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid","Username, Passowrd"));
+        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid","Username, Password"));
         // Report any errors we have discovered
         return errors;        
     }
