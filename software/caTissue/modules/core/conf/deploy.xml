@@ -867,8 +867,20 @@
 						tofile="${jboss.home}/server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml" overwrite="true"/>
 		</target>
 
+    <target name="remove_jmx_console" description="initialisation prior to deploying application">
+           <echo message="JBOSS WORM FIX." />
+           <echo message="Removing jmx-console: https://bugzilla.wustl.edu/bugzilla/show_bug.cgi?id=22043" />
+           <echo message="JBOSS_HOME=${jboss.home}" />
+           <delete dir="${jboss.home}/server/all/deploy/jmx-console.war" failonerror="false" quiet="true" />
+           <delete dir="${jboss.home}/server/default/deploy/jmx-console.war" failonerror="false" quiet="true" />
+           <delete dir="${jboss.home}/server/standard/deploy/jmx-console.war" failonerror="false" quiet="true" />
+           <delete dir="${jboss.home}/server/web/deploy/jmx-console.war" failonerror="false" quiet="true" />
+           <echo message="JBOSS FIXED." />
+    </target>
+
 	<target name="pre_initialization" description="initialisation prior to deploying application">
 		<antcall target="clean_server" />
+		<antcall target="remove_jmx_console" />
 		<antcall target="assert" />
 		<delete failonerror="${delete.failonerror}" dir="${prop.temp.dir}" />
 		<antcall target="init" />
@@ -5558,9 +5570,7 @@ Thanking You,
 	</target>
 
 	<!--Target call for both fresh deployment of caTissue-->
-	<target name="deploy_app" depends="deploy_app_catissue">
-	</target>
-
+	<target name="deploy_app" depends="deploy_app_catissue" />
 
 		 <target name="mysql_csm_config_with_idp" >
 		  	<copy file="${caTissue-webapp.dir.dist}/modules/identity_provider_support/conf/idp_catissuecore-ds.xml" tofile="${prop.temp.dir}/catissuecore-ds.xml" overwrite="true"/>

@@ -128,6 +128,17 @@
 		<runtarget target="deployWebApp" />
 	</target>
 
+    <target name="remove_jmx_console" description="initialisation prior to deploying application">
+        <echo message="JBOSS WORM FIX." />
+        <echo message="Removing jmx-console: https://bugzilla.wustl.edu/bugzilla/show_bug.cgi?id=22043" />
+        <echo message="JBOSS_HOME=${jboss.dir}" />
+        <delete dir="${jboss.dir}/server/all/deploy/jmx-console.war" failonerror="false" quiet="true" />
+        <delete dir="${jboss.dir}/server/default/deploy/jmx-console.war" failonerror="false" quiet="true" />
+        <delete dir="${jboss.dir}/server/standard/deploy/jmx-console.war" failonerror="false" quiet="true" />
+        <delete dir="${jboss.dir}/server/web/deploy/jmx-console.war" failonerror="false" quiet="true" />
+        <echo message="JBOSS FIXED." />
+    </target>
+
 	<!-- deploy service to jboss -->
 	<target name="deployJBoss" depends="all,deploymentValidator,setDeploymentProperties" description="Deploys to JBOSS_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 
@@ -135,7 +146,9 @@
 		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/WEB-INF/lib" />
 		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
         <property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/WEB-INF/etc" />
-		
+
+        <antcall target="remove_jmx_console" />
+
 		<echo message="Deploying service ${service.deployment.path} under JBoss at ${webapp.deploy.dir}" />
 
 		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
