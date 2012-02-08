@@ -10,9 +10,9 @@ public class CalendarEventPointLabelTransformer extends AbstractCharacteristicTr
 	
 	@Override
 	public String getCharacteristicValue(Specimen specimen) {
-		// TODO Auto-generated method stub
-		return specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getStudyCalendarEventPoint().toString()  + " " +
-		specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getCollectionPointLabel();
+        Double scep = specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getStudyCalendarEventPoint();
+        String cplabel = specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getCollectionPointLabel();
+        return (scep != null ? (scep.toString() + " " + cplabel) : cplabel);
 	}
 	
 	@Override
