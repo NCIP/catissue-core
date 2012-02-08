@@ -125,6 +125,8 @@
 
 		<!-- bulk Operations-->
 		<mapping resource="edu/wustl/bulkoperator/hbm/JobDetails.hbm.xml"/>
+
+		<mapping resource="edu/wustl/bulkoperator/hbm/MatchingJobDetails.hbm.xml"/>		
 		
 		<!-- caTissue-cider integration -->
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenCiderMessage.hbm.xml"/>
