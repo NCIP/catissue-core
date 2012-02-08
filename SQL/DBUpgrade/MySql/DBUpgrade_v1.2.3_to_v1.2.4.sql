@@ -14,8 +14,9 @@ primary key (IDENTIFIER)
 alter table catissue_collection_protocol add column IS_EMPI_ENABLE boolean;
 
 update catissue_collection_protocol set IS_EMPI_ENABLE = false; 
-alter table catissue_participant add column EMPI_ID varchar(50);
+--alter table catissue_participant add column EMPI_ID varchar(50);
 alter table catissue_participant add column EMPI_ID_STATUS varchar(50);
+
 
 CREATE TABLE MATCHED_PARTICIPANT_MAPPING(
    SEARCHED_PARTICIPANT_ID bigint NOT NULL,
@@ -81,4 +82,23 @@ update CATISSUE_PERMISSIBLE_VALUE set SORTORDER = 7 where VALUE='Other' and PUBL
 update CATISSUE_PERMISSIBLE_VALUE set SORTORDER = 8 where VALUE='Unknown' and PUBLIC_ID='Race_PID';
 
 alter table CATISSUE_MATCHED_PARTICIPANT add ORDER_NO bigint(20);
+
+ CREATE TABLE MATCHING_JOB_DETAILS
+   (	IDENTIFIER bigint(20), 
+	JOB_NAME VARCHAR(255 BYTE), 
+	JOB_STATUS VARCHAR(50 BYTE), 
+	TOTAL_RECORDS_COUNT bigint(20), 
+	FAILED_RECORDS_COUNT bigint(20), 
+	TIME_TAKEN bigint(20), 
+	LOG_FILE blob, 
+	JOB_STARTED_BY bigint(20), 
+	START_TIME datetime, 
+	CURRENT_RECORDS_PROCESSED bigint(20), 
+	LOG_FILE_NAME VARCHAR(1024 BYTE), 
+	JOB_TYPE VARCHAR(100 BYTE), 
+	THRESHHOLD bigint(20),
+	primary key (IDENTIFIER)
+   ) ;
+
 commit;
+

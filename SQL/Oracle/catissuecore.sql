@@ -288,6 +288,7 @@ create table CATISSUE_PARTICIPANT (
    ACTIVITY_STATUS varchar(50),
    DEATH_DATE date,
    VITAL_STATUS varchar(50),
+   EMPI_ID varchar2(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_CHAR (
