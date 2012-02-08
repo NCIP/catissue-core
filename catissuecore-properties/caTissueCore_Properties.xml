@@ -659,17 +659,18 @@
 	</property>
 	<property>
 		<name>InBoundQueue</name>
-		<value>BD.OUTBOUND.CLINPORTAL.EMPI</value>
+		<value>@@InBoundQueue@@</value>
 	</property>
 	<property>
 		<name>OutBoundQueue</name>
-		<value>BD.REGISTRATION.INBOUNDHL7</value>
+		<value>@@OutBoundQueue@@</value>
 	</property>
 
 	<property>
 		<name>MergeMessageQueue</name>
-		<value>BD.CLINPORTAL.MERGES</value>
+		<value>@@MergeMessageQueue@@</value>
 	</property>
+
 
 	<property>
 		<name>HL7ListenerAdminUser</name>
