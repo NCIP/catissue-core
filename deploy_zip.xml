@@ -1710,7 +1710,7 @@
 					</classpath>
 			</sql>
 		<antcall target="update_metadata_for_model_changes_mysql_post_P5" />
-		<antcall target="upgrade_db_from_v1.2.1_to_1.2.2_mysql"/>
+		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_mysql"/>
 		<!--<delete dir="${temp.dir}" />-->
 	</target>
 
@@ -1869,7 +1869,7 @@
 			</classpath>
 		</sql>
 		<antcall target="update_metadata_for_model_changes_oracle_post_P5" />
-		<antcall target="upgrade_db_from_v1.2.1_to_1.2.2_oracle"/>
+		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_oracle"/>
 		<!--<delete dir="${temp.dir}" />-->
 	</target>
 
@@ -1977,8 +1977,8 @@
 	</target>
 
 
-	<!--Target for Application and Database Upgrade from Suite p5.1 to Suite 1.2.1-->
-	<target name="upgrade_all" depends="assert, upgrade_db, upgrade_app" description="Target for Application and Database Upgrade from vp5.1  to V1.2.1">
+	<!--Target for Application and Database Upgrade from Suite v1.2.3 to Suite 1.2.4-->
+	<target name="upgrade_all" depends="assert, upgrade_db, upgrade_app" description="Target for Application and Database Upgrade from v1.2.3  to V1.2.4">
 	</target>
 
 	<!--Target for Application and Database Upgrade from caTissueCore v1.2.2  to Suite 1.1-->
@@ -2037,10 +2037,10 @@
 	</target>-->
 
 
-	<!--Target for Database Upgrade from Suite p5.1 to Suite 1.2.1-->
-	<target name="upgrade_db" description="Upgrading Database vp5.1 to v1.2.1">
-		<echo message="Upgrading Database vp5.1 to v1.2.1" />
-		<antcall target="upgrade_p5.1_to_1.2.1"/>
+	<!--Target for Database Upgrade from Suite 1.2.3 to Suite 1.2.4-->
+	<target name="upgrade_db" description="Upgrading Database v1.2.3 to v1.2.4">
+		<echo message="Upgrading Database v1.2.3 to v1.2.4" />
+		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
 	</target>
 	
 	<target name="upgrade_db_from_v1.1.p1 to v1.1.p2" description="Upgrading Database from v1.1.p1 to v1.1.p2">
@@ -4379,17 +4379,17 @@ Thanking You,
 		<echo message="Upgrading oracle database for all changes required for v1.2" />
 	</target>
 	
-	<target name="upgrade_db_from_v1.2.1_to_1.2.2" description="Upgrading database for all changes required for v1.2">
+	<target name="upgrade_db_from_v1.2.3_to_1.2.4" description="Upgrading database for all changes required for v1.2">
 			<echo message="Upgrading Database" />
 			<if>
 				<equals arg1="mysql" arg2="${database.type}" />
 				<then>
-					<antcall target="upgrade_db_from_v1.2.1_to_1.2.2_mysql" />
+					<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_mysql" />
 				</then>
 				<elseif>
 					<equals arg1="oracle" arg2="${database.type}" />
 					<then>
-						<antcall target="upgrade_db_from_v1.2.1_to_1.2.2_oracle" />
+						<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_oracle" />
 					</then>
 				</elseif>
 				<else>
@@ -4398,10 +4398,10 @@ Thanking You,
 			</if>
 		</target>
 
-		<target name="upgrade_db_from_v1.2.1_to_1.2.2_mysql" description="Upgrading mysql database for all changes required for v1.2 ">
+		<target name="upgrade_db_from_v1.2.3_to_1.2.4_mysql" description="Upgrading mysql database for all changes required for v1.2 ">
 			<echo message="Upgrading MySQL Database." />
 			<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" >
-				<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.2.1_to_v1.2.2.sql" />
+				<transaction src="${dbupgrade.sql.dir}/MySql/DBUpgrade_v1.2.3_to_v1.2.4.sql" />
 				<transaction>commit;</transaction>
 				<classpath>
 					<fileset dir="${lib.dir}">
@@ -4412,10 +4412,10 @@ Thanking You,
 			<echo message="Upgrading mysql database for all changes required for v1.2" />
 		</target>
 
-		<target name="upgrade_db_from_v1.2.1_to_1.2.2_oracle" description="Upgrading oracle database for all changes required for v1.2">
+		<target name="upgrade_db_from_v1.2.3_to_1.2.4_oracle" description="Upgrading oracle database for all changes required for v1.2">
 			<echo message="Upgrading Oracle Database."/>
 			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
-				<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_v1.2.1_to_v1.2.2.sql" />
+				<transaction src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_v1.2.3_to_v1.2.4.sql" />
 				<transaction>commit;</transaction>
 				<classpath>
 					<fileset dir="${lib.dir}">
