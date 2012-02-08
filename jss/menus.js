@@ -14,7 +14,7 @@ Ext.onReady(function(){
 		this.el.dom.qtip = this.tooltip;
 		}
 	};
-
+	
 	// end Here
 
 
@@ -259,6 +259,11 @@ Ext.onReady(function(){
                 text: 'Conflicting SPRs',
 				tooltip:'Shows Conflicting Surgical Pathology Reports',
                 href:'ConflictView.do?pageNum=1'
+            },
+            {
+                text: 'Bulk EMPI Operations',
+				tooltip:'Bulk EMPI Opearations',
+				href:'BulkEmpiGeneration.do?'
             }
 		]
     });
