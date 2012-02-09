@@ -4824,7 +4824,7 @@ Thanking You,
 	</target>
 	
 	<property name="categoryNameOrFile" value=" " />
-	<property name="mappingXMLFile" value="${base.dir}/modules/caTissue/conf/catissuecore-properties/mapping.xml" />
+	<property name="mappingXMLFile" value="${base.dir}/modules/bulk_operations/conf/mapping.xml" />
 	<target name="generate.bo.template" description="Generate template File For De Categories">
 		<delete quiet="true" includeemptydirs="true">
 				<fileset dir="${temp.dir}/catissuecore">

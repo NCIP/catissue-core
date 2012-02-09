@@ -4702,7 +4702,7 @@ Thanking You,
 		       generate.bo.template
 	     ================================= -->
 	<property name="categoryNameOrFile" value=" " />
-	<property name="mappingXMLFile" value="${base.dir}/tempbulkoperator/mapping.xml" />
+	<property name="mappingXMLFile" value="./BulkOperations/conf/mapping.xml" />
 	<target name="generate.bo.template" description="Creates the XML and CSV template required for bulk operation.">
 		<unzip dest="${base.dir}/tempbulkoperator" src="${base.dir}/bulkoperator.zip" />
 		<delete quiet="true" includeemptydirs="true">
@@ -4768,7 +4768,7 @@ Thanking You,
 	
 	
 	<property name="entityNameOrFile" value=" " />
-		<property name="mappingXMLFile" value="${base.dir}/tempbulkoperator/mapping.xml" />
+		<property name="mappingXMLFile" value="./BulkOperations/conf/mapping.xml" />
 		<target name="generate.bo.template.entity" description="Creates the XML and CSV template required for bulk operation.">
 			<unzip dest="${base.dir}/tempbulkoperator" src="${base.dir}/bulkoperator.zip" />
 			<delete quiet="true" includeemptydirs="true">
