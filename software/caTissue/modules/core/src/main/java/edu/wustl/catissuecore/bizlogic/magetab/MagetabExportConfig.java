@@ -8,7 +8,21 @@ import java.util.List;
 import java.util.Map;
 
 public class MagetabExportConfig {
-	private static Map<String, String> materialTypesMap = new HashMap<String, String>() {{	
+	public static final String MGED = "MO";
+
+    public static final String ICD_O_3_TOPOGRAPHY = "ICD-O-3 Topography";
+
+    public static final String SNOMED_CT = "SNOMED-CT";
+
+    public static final String NCI_THESAURUS = "NCI Thesaurus";
+
+    private static Map<String, String> materialTypesMap = new HashMap<String, String>() {
+	    /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
+    {	
 		//any fluid is organism part.
 		put("fluid","organism_part");
 		//any tissue is organism part.
@@ -111,31 +125,30 @@ public class MagetabExportConfig {
 	}
 
 	private void initTransformers() {
-		transformers = new LinkedHashMap<String, Transformer>();
-		
-//		addTransformer(new NameTransformer());
+		transformers = new LinkedHashMap<String, Transformer>();		
+
 		addTransformer(new ProviderTransformer());
-		addTransformer(new RaceTransformer());
-		addTransformer(new EthnicityTransformer());
+		addTransformer(new RaceTransformer(new CharacteristicTransformerConfig(getTermSources().get(NCI_THESAURUS))));
+		addTransformer(new EthnicityTransformer(new CharacteristicTransformerConfig(getTermSources().get(NCI_THESAURUS))));
 		addTransformer(new SexTransformer(
-				new CharacteristicTransformerConfig(getTermSources().get("MO"))));
+				new CharacteristicTransformerConfig(getTermSources().get(NCI_THESAURUS))));
 		addTransformer(new AgeTransformer(
-				new CharacteristicTransformerConfig(null)));
+				new CharacteristicTransformerConfig(getTermSources().get(NCI_THESAURUS))));
 		
 		addTransformer(new DiseaseStateTransformer(
-				new CharacteristicTransformerConfig(getTermSources().get("SNOMED-CT"))));
+				new CharacteristicTransformerConfig(getTermSources().get(SNOMED_CT))));
 		addTransformer(new PathologicalStatusTransformer(
-				new CharacteristicTransformerConfig(null)));
+				new CharacteristicTransformerConfig(getTermSources().get(NCI_THESAURUS))));
 		
 		addTransformer(new ExternalIdTransformer());
 		addTransformer(new GsIdTransformer());
 		addTransformer(new LabelTransformer());
 		addTransformer(new OrganismPartTransformer(
-				new CharacteristicTransformerConfig(getTermSources().get("ICD-O-3 Topography"))));
+				new CharacteristicTransformerConfig(getTermSources().get(ICD_O_3_TOPOGRAPHY))));
 	
 		addTransformer(new MaterialTypeTransformer(
 				new MaterialTypeTransformerConfig(
-						getTermSources().get("MO"), materialTypesMap,knownMolecularTypes)));
+						getTermSources().get(MGED), materialTypesMap,knownMolecularTypes)));
 		
 		//addTransformer(new MaterialTypeTransformer());
 		addTransformer(new SpecimenTypeTransformer(
@@ -143,7 +156,9 @@ public class MagetabExportConfig {
 		addTransformer(new DescriptionTransformer());
 		addTransformer(new CollectionProtocolTransformer());
 		addTransformer(new PatientProtocolIdTransformer());
-		addTransformer(new ClinicalStatusTransformer());
+        addTransformer(new ClinicalStatusTransformer(
+                new CharacteristicTransformerConfig(getTermSources().get(
+                        NCI_THESAURUS))));
 		addTransformer(new CalendarEventPointLabelTransformer());
 
 	}
@@ -154,9 +169,10 @@ public class MagetabExportConfig {
 	
 	private void initTermSources() {
 		termSources = new LinkedHashMap<String, TermSource>();
-		termSources.put("MO", new TermSource("MO", "http://mged.sourceforge.net/ontologies/MGEDOntology1.1.8.daml", "1.1.8"));
-		termSources.put("ICD-O-3 Topography", new TermSource("ICD-O-3 Topography", "", ""));
-		termSources.put("SNOMED-CT", new TermSource("SNOMED-CT", "", ""));
+		termSources.put(MGED, new TermSource(MGED, "http://mged.sourceforge.net/ontologies/MGEDOntology1.1.8.daml", "1.1.8"));
+		termSources.put(ICD_O_3_TOPOGRAPHY, new TermSource(ICD_O_3_TOPOGRAPHY, "http://www.who.int/classifications/icd/adaptations/oncology/en/", "3"));
+		termSources.put(SNOMED_CT, new TermSource(SNOMED_CT, "http://www.nlm.nih.gov/research/umls/Snomed/snomed_main.html", "07-2009"));
+		termSources.put(NCI_THESAURUS, new TermSource(NCI_THESAURUS, "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#", "11.09d"));
 	}
 	
 	private void initSourceTransformers() {

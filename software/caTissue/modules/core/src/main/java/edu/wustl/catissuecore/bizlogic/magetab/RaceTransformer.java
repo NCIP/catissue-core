@@ -2,14 +2,13 @@ package edu.wustl.catissuecore.bizlogic.magetab;
 
 import java.util.Collection;
 
-import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.AbstractSDRFNode;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Specimen;
 
 public class RaceTransformer extends AbstractCharacteristicTransformer {
 
-	public RaceTransformer() {
-		super("Race", "Race", "Race");
+	public RaceTransformer(CharacteristicTransformerConfig characteristicTransformerConfig) {
+		super("Race", "Race", "Race",characteristicTransformerConfig);
 	}
 
 	@Override

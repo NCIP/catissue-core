@@ -4,8 +4,8 @@ import edu.wustl.catissuecore.domain.Specimen;
 
 public class EthnicityTransformer extends AbstractCharacteristicTransformer {
 
-	public EthnicityTransformer() {
-		super("Ethnicity", "Ethnicity","Ethnicity");
+	public EthnicityTransformer(CharacteristicTransformerConfig characteristicTransformerConfig) {
+		super("Ethnicity", "Ethnicity","Ethnicity", characteristicTransformerConfig);
 	}
 	
 	@Override

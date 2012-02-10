@@ -6,10 +6,13 @@ import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SampleNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.SourceNode;
 import uk.ac.ebi.arrayexpress2.magetab.datamodel.sdrf.node.attribute.CharacteristicsAttribute;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.common.util.logger.Logger;
 
 public abstract class AbstractCharacteristicTransformer extends AbstractTransformer {
 	
-	private CharacteristicTransformerConfig config;
+    private transient final Logger logger = Logger.getCommonLogger(AbstractCharacteristicTransformer.class);
+    
+    private CharacteristicTransformerConfig config;
 	
 	public AbstractCharacteristicTransformer(String name, String userFriendlyName, String localName, CharacteristicTransformerConfig config) {
 		super(name, userFriendlyName, localName);
@@ -47,7 +50,7 @@ public abstract class AbstractCharacteristicTransformer extends AbstractTransfor
 		} else if (sdrfNode instanceof ExtractNode) {
 			((ExtractNode)sdrfNode).characteristics.add(charAttr);
 		} else {
-			//TODO:log it
+		    logger.error("Unknown node type: "+sdrfNode);
 		}
 	}
 

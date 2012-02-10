@@ -4,8 +4,8 @@ import edu.wustl.catissuecore.domain.Specimen;
 
 public class ClinicalStatusTransformer extends AbstractCharacteristicTransformer {
 
-	public ClinicalStatusTransformer() {
-		super("Clinical Status", "Clinical Status", "Clinical Status");
+	public ClinicalStatusTransformer(CharacteristicTransformerConfig characteristicTransformerConfig) {
+		super("Clinical Status", "Clinical Status", "Clinical Status", characteristicTransformerConfig);
 	}
 	
 	@Override

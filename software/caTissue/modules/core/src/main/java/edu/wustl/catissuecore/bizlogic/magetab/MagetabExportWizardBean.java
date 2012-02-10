@@ -173,28 +173,6 @@ public class MagetabExportWizardBean {
 		}
 	}
 	
-	private void populateSampleTransformersSelectionsIfNull() {
-		MagetabExportBizLogic bizLogic = new MagetabExportBizLogic();
-		MagetabExportConfig config = bizLogic.getDefaultConfig();
-		Map<String, Transformer> availableTransformers = config.getTransformers();
-		//List<String> sourceTransformers = config.getSourceTransformers();
-		List<String> sampleTransformers = config.getSampleTransformers();
-		//List<String> extractTransformers = config.getExtractTransformers();
-		
-		for (Transformer transformer : availableTransformers.values()) {
-			TransformerSelections transformerSelections = new TransformerSelections(
-					transformer.getName(),
-					transformer.getUserFriendlyName(),
-					transformer.getLocalName(),
-					false,
-					sampleTransformers.contains(transformer.getName()),
-					false,
-					transformer.isMageTabSpec());			
-			transformersSelections.put(transformer.getName(), transformerSelections);
-		}
-	}
-	
-	
 	public enum State {
 		NEW,
 		READY,
@@ -218,9 +196,6 @@ public class MagetabExportWizardBean {
 			return specimenChains;
 		}
 
-//		public void setSpecimenChains(List<List<Specimen>> specimenChains) {
-//			this.specimenChains = specimenChains;
-//		}
 
 		public Set<Integer> getChainSelections() {
 			if (	chainSelections == null ||
@@ -240,9 +215,6 @@ public class MagetabExportWizardBean {
 			return maxChainLength;
 		}
 
-//		public void setMaxChainLength(int maxChainLength) {
-//			this.maxChainLength = maxChainLength;
-//		}
 
 		private void initSelections() {
 			logger.debug("The extaction type is "+defaultExtractType +" and the chain selection size is "+specimenChains.size());
@@ -279,52 +251,5 @@ public class MagetabExportWizardBean {
 		this.rna = rna;
 	}
 	
-//	public class SseTableRow {
-//		private Specimen selectedSpecimen;
-//		private List<Specimen> possibleSources;
-//		private int sourceSelection;
-//		private int sampleSelection;
-//		private Specimen extract;
-//		
-//		public Specimen getSelectedSpecimen() {
-//			return selectedSpecimen;
-//		}
-//		
-//		public void setSelectedSpecimen(Specimen selectedSpecimen) {
-//			this.selectedSpecimen = selectedSpecimen;
-//		}
-//		
-//		public List<Specimen> getPossibleSources() {
-//			return possibleSources;
-//		}
-//		
-//		public void setPossibleSources(List<Specimen> possibleSources) {
-//			this.possibleSources = possibleSources;
-//		}
-//		
-//		public int getSourceSelection() {
-//			return sourceSelection;
-//		}
-//		
-//		public void setSourceSelection(int sourceSelection) {
-//			this.sourceSelection = sourceSelection;
-//		}
-//		
-//		public int getSampleSelection() {
-//			return sampleSelection;
-//		}
-//		
-//		public void setSampleSelection(int sampleSelection) {
-//			this.sampleSelection = sampleSelection;
-//		}
-//		
-//		public Specimen getExtract() {
-//			return extract;
-//		}
-//		
-//		public void setExtract(Specimen extract) {
-//			this.extract = extract;
-//		}
-//	}
 
 }
