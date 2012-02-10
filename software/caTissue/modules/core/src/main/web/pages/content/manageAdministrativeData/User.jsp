@@ -25,6 +25,10 @@
 <script type="text/javascript" src="jss/modal.js"></script>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="css/userext-all.css" />
+
+<script language="JavaScript" type="text/javascript" src="jss/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/ext-all.js"></script>
+
 <script language="JavaScript" type="text/javascript"
 	src="jss/caTissueSuite.js"></script>
 	<script language="JavaScript" type="text/javascript"
