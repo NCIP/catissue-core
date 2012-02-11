@@ -2064,7 +2064,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
 
         boolean isSameFound = false;
         final int loopCount = Math.min(oldPwdList.size(), noOfPwdNotSameAsLastN);
-        for (int i = loopCount; i < 0; i--)
+        for (int i = 0; i < loopCount; i++)
         {
             final Password pasword = oldPwdList.get(i);
             if (newPassword.equals(pasword.getPassword()))
@@ -2818,7 +2818,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic implements IUserBizLog
 	    SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
 		query.append("select * from catissue_password password ");
 		query.append("where password.USER_ID=?");
-		query.append(" order by password.UPDATE_DATE");
+		query.append(" order by password.identifier DESC");
 
 
 
