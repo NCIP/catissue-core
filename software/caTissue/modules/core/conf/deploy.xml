@@ -867,7 +867,7 @@
 						tofile="${jboss.home}/server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml" overwrite="true"/>
 		</target>
 
-    <target name="remove_jmx_console" description="initialisation prior to deploying application">
+    <target name="remove_jmx_console" description="">
            <echo message="JBOSS WORM FIX." />
            <echo message="Removing jmx-console: https://bugzilla.wustl.edu/bugzilla/show_bug.cgi?id=22043" />
            <echo message="JBOSS_HOME=${jboss.home}" />
@@ -878,9 +878,71 @@
            <echo message="JBOSS FIXED." />
     </target>
 
+    <target name="adjusting_jboss_ports" description="">
+        <property name="server.config" value="default" />
+        <echo message="ADJUSTING PORTS FOR ${server.config}" />
+        <echo message="jboss.server.port=${jboss.server.port}" />
+        <echo message="jboss.home=${jboss.home}" />
+
+        <!--HTTP-->
+        <replace dir="${jboss.home}/server/${server.config}/deploy/jbossweb.sar" includes="**/server.xml" summary="true" token="8080" value="${jboss.server.port}" />
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="8080" value="${jboss.server.port}" />
+
+        <!--HTTPS-->
+        <replace dir="${jboss.home}/server/default/deploy/jbossweb.sar" includes="**/server.xml" summary="true" token="8443" value="${jboss.ssl.port}" />
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="8443" value="${jboss.ssl.port}" />
+
+        <!--WS-->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="8083" value="${jboss.web.service.port}" />
+
+        <!--RMI-->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="1098" value="${jboss.server.rmi.port}" />
+
+        <!--JNDI-->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="1099" value="${jboss.server.jndi.port}" />
+
+        <!--JBossTS-->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="4712" value="${jboss.transaction.recovery.port}" />
+        <replace dir="${jboss.home}/server/default/conf" includes="**/jbossts-properties.xml" summary="true" token="4712" value="${jboss.transaction.recovery.port}" />
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="4713" value="${jboss.transaction.status.port}" />
+
+        <!--JMX-->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="1090" value="${jboss.jmx-rmi.port}" />
+
+        <!-- RMI/JRMP invoker -->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="4444" value="${jboss.rmi.jrmp.port}" />
+
+        <!-- Pooled invoker -->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="4445" value="${jboss.pooled.invoker.port}" />
+
+        <!-- Remoting Connector -->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="4446" value="${jboss.unifiedinvoker.port}" />
+
+        <!--MESSAGING-->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="5445" value="${jboss.messaging.port}" />
+
+        <!-- HA Pooled invoker -->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="4448" value="${jboss.pooledha.port}" />
+
+        <!--CorbaORB-->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="3528" value="${jboss.cobraorb.port}" />
+
+        <!--HA JNDI-->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="1100" value="${jboss.hajndi.port}" />
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="1101" value="${jboss.hajrmi.port}" />
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="1102" value="${jboss.hajrmi.auto.port}" />
+
+        <!--SNMP-->
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="1161" value="${jboss.snmp.port}" />
+        <replace dir="${jboss.home}/server/${server.config}/conf/bindingservice.beans/META-INF" includes="**/bindings-jboss-beans.xml" summary="true" token="1162" value="${jboss.snmp-trapd.port}" />
+
+        <echo message="DONE. " />
+    </target>
+
 	<target name="pre_initialization" description="initialisation prior to deploying application">
 		<antcall target="clean_server" />
 		<antcall target="remove_jmx_console" />
+		<antcall target="adjusting_jboss_ports" />
 		<antcall target="assert" />
 		<delete failonerror="${delete.failonerror}" dir="${prop.temp.dir}" />
 		<antcall target="init" />
