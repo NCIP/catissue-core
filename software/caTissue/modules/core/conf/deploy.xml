@@ -3227,14 +3227,14 @@
 			<message>
 Dear caTissueSuite Administrator,
 
-	This is to validate that caTissueSuite application has been installed at
+This is to validate that caTissueSuite application has been installed at
 the following location: ${jboss.home.dir}
 
-	To complete the deployment, you have to now perform the post installation
+To complete the deployment, you have to now perform the post installation
 steps described in section "Post Installation Configuration" in the deployment
-guide (caTissueSuite v1.1.p5 Deployment Guide.doc).
+guide.
 
-	Once you have completed deployment, you should be able to login with the following
+Once you have completed deployment, you should be able to login with the following
 details:
 URL: ${protocol}://${jbossServerHost}:${jboss.server.port}/catissuecore
 Username:${first.admin.emailAddress}
