@@ -152,7 +152,7 @@ public class MagetabExportConfig {
 		
 		//addTransformer(new MaterialTypeTransformer());
 		addTransformer(new SpecimenTypeTransformer(
-				new CharacteristicTransformerConfig(null)));	
+				new CharacteristicTransformerConfig(getTermSources().get(NCI_THESAURUS))));	
 		addTransformer(new DescriptionTransformer());
 		addTransformer(new CollectionProtocolTransformer());
 		addTransformer(new PatientProtocolIdTransformer());
