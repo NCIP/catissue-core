@@ -50,7 +50,7 @@ function onIFrameLoad(iframeElement) {
 	{
 		decontrols =1;
 	}
-	var frmHeight = (decontrols * 40)+5;
+	var frmHeight = (decontrols * 40)+35;
 	var outerfrmHt = frmHeight+230;
 	iframeElement.style.height= frmHeight+'px';
 	if(parent.document.getElementById('newEventFrame') != null)
