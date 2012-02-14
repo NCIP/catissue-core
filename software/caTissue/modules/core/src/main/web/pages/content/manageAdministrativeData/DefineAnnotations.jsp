@@ -213,7 +213,10 @@ var myData = [<%int i;%><%for (i=0;i<(groupList.size()-1);i++){%>
 <pre><b> Note:</b></pre>
 <pre class="black_ar">
  1. Please take backup of the database before add or edit of a Dynamic Extension.
- 2. You need to restart the caTissue JBoss every time after add or edit of a new Dynamic Extension.
+ 2. After add or edit of a new Dynamic Extension following steps needs to be performed. 
+	2.1 Stop JBoss 
+	2.2 Execute ant target "ant generate:cacore:all" from the installable 
+	2.3 Start JBoss 	
  3. Please contact your caTissue system administrator before starting this activity.
 </pre>
 			</td> 
