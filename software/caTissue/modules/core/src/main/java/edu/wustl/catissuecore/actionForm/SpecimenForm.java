@@ -667,10 +667,14 @@ public class SpecimenForm extends AbstractActionForm
 				CommonServiceLocator.getInstance().getDatePattern());
 		
 		Calendar calendar = Calendar.getInstance(); // creates a new calendar instance
-		calendar.setTime(specimen.getCreatedOn());   // assigns calendar to given date 
+		if(!createdDate.equalsIgnoreCase(""))
+		{
+			calendar.setTime(specimen.getCreatedOn());   // assigns calendar to given date 
+			this.timeInHours=String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+			this.timeInMins=String.valueOf(calendar.get(Calendar.MINUTE));
+		}
 		
-		this.timeInHours=String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-		this.timeInMins=String.valueOf(calendar.get(Calendar.MINUTE));
+	
 
 		if (specimen.getIsAvailable() != null)
 		{
