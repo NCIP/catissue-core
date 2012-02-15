@@ -1089,51 +1089,62 @@
 		
 	</target>
 	<target name="updateGroup:cacore:status">
-		<copy file="${mysql.dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" todir="${dbupgrade.sql.dir.DE}" overwrite="true"/>
-		<replace file="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql">
-					<replacefilter token="@@package.name@@" value="${group.name}" />
-				</replace>
 		<echo message="${database.type} jdbc:mysql://${database.server}:${database.port}/${database.name} userid=${database.user} password=${database.password}"/>
 		<if>
-					<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
-					<then>
-						<sql driver="${mysql.driver.string.DE}" url="jdbc:mysql://${database.server}:${database.port}/${database.name}" userid="${database.user}" password="${database.password}" onerror="continue" delimiter="#">
-									<classpath>
-										<fileset dir="${lib.dir.DE}">
-											<include name="*.jar" />
-										</fileset>
-									</classpath>
-									<transaction src="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" />
-								</sql>
-					</then>
-					<elseif>
-						<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
-						<then>
-							<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.server}:${database.port}:${database.name}" userid="${database.user}" password="${database.password}" onerror="continue"  keepformat="yes" rdbms="oracle">
-										<classpath>
-											<fileset dir="${lib.dir.DE}">
-												<include name="*.jar" />
-											</fileset>
-										</classpath>
-										<transaction src="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" />
-										<transaction>commit</transaction>
-							</sql>
-						</then>
-					</elseif>
-					<elseif>
-							<equals arg1="db2" arg2="${database.type}" casesensitive="false" />
-								<then>
-									<sql driver="${db2.driver.string.DE}" url="jdbc:db2://${database.server}:${database.port}/${database.name}:currentSchema=${database.schema};" userid="${database.user}" password="${database.password}" onerror="continue" delimiter="#">
-												<classpath>
-													<fileset dir="${lib.dir.DE}">
-														<include name="*.jar" />
-													</fileset>
-												</classpath>
-												<transaction src="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" />
-											</sql>
-								</then>
-					</elseif>
-			</if>
+			<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
+			<then>
+				<copy file="${mysql.dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" todir="${dbupgrade.sql.dir.DE}" overwrite="true"/>
+				<replace file="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql">
+					<replacefilter token="@@package.name@@" value="${group.name}" />
+				</replace>
+				
+				<sql driver="${mysql.driver.string.DE}" url="jdbc:mysql://${database.server}:${database.port}/${database.name}" userid="${database.user}" password="${database.password}" onerror="continue" delimiter="#">
+					<classpath>
+						<fileset dir="${lib.dir.DE}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+					<transaction src="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" />
+				</sql>
+			</then>
+			<elseif>
+				
+				<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<copy file="${oracle.dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" todir="${dbupgrade.sql.dir.DE}" overwrite="true"/>
+					<replace file="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql">
+						<replacefilter token="@@package.name@@" value="${group.name}" />
+					</replace>
+					<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.server}:${database.port}:${database.name}" userid="${database.user}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+						<classpath>
+							<fileset dir="${lib.dir.DE}">
+								<include name="*.jar" />
+							</fileset>
+						</classpath>
+						<transaction src="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" />
+						<transaction>commit</transaction>
+					</sql>
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="db2" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<copy file="${db2.dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" todir="${dbupgrade.sql.dir.DE}" overwrite="true"/>
+					<replace file="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql">
+						<replacefilter token="@@package.name@@" value="${group.name}" />
+					</replace>
+					
+					<sql driver="${db2.driver.string.DE}" url="jdbc:db2://${database.server}:${database.port}/${database.name}:currentSchema=${database.schema};" userid="${database.user}" password="${database.password}" onerror="continue" delimiter="#">
+						<classpath>
+							<fileset dir="${lib.dir.DE}">
+								<include name="*.jar" />
+							</fileset>
+						</classpath>
+						<transaction src="${dbupgrade.sql.dir.DE}/updateGroup_cacore_status.sql" />
+					</sql>
+				</then>
+			</elseif>
+		</if>
 	</target>
 
 	<!-- - - - - - - - - - - - - - - - - -
