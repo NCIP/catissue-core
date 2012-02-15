@@ -30,7 +30,8 @@ call  thaw_call_parameter();
 select'done thaw_call_parameter';
 call  Tissue_Event_migrate();
 select'done Tissue_Event_migrate';
-
+call SPP_Event_migrate();
+select'done SPP migrate';
 UPDATE CATISSUE_SPECIMEN_EVENT_PARAM
 SET SPECIMEN_ID=NULL,SPECIMEN_COLL_GRP_ID=null
 WHERE

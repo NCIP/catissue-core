@@ -125,6 +125,16 @@ Begin
               DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm );
             end;
   commit;
+  
+  Begin
+ SPP_EVENT_MIGRATE();
+ NULL;
+              EXCEPTION WHEN OTHERS THEN
+              v_code := SQLCODE;
+              v_errm := SUBSTR(SQLERRM, 1, 1000);
+              DBMS_OUTPUT.PUT_LINE('exception occer in SPP_EVENT_MIGRATE ''Error code ' || v_code ||' '||v_errm );
+            end;
+  commit;
  
 Begin
  for i IN (select table_name, constraint_name -- then disable all constraints

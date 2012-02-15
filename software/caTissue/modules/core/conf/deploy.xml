@@ -5497,7 +5497,7 @@ Thanking You,
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/spunEvent.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/thawEvent.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/tissueSpecimenEvent.sql" />
-			
+			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/migrate_sppEvents.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/callsToProcedures.sql" />	
 			<transaction>call caller();</transaction>
 			<transaction>commit;</transaction>
@@ -5531,7 +5531,7 @@ Thanking You,
 				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/spunEvent.sql" />
 				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/thawEvent.sql" />
 				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/tissueSpecimenEvent.sql" />
-				
+				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/migrate_sppEvents.sql" />
 				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/callsToProcedures.sql" />	
 				
 				
