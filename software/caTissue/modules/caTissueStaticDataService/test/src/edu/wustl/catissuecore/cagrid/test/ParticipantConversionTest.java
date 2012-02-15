@@ -55,7 +55,7 @@ public class ParticipantConversionTest extends BaseConversionTest {
         edu.wustl.catissuecore.domain.Race race = null;
 
         race = (edu.wustl.catissuecore.domain.Race)races[0];
-        assertEquals("White", race.getRaceName());
+        assertEquals("Asian", race.getRaceName());
         assertNotNull(race.getParticipant());
         assertSame(d, race.getParticipant());
 
@@ -65,7 +65,7 @@ public class ParticipantConversionTest extends BaseConversionTest {
         assertSame(d, race.getParticipant());
 
         race = (edu.wustl.catissuecore.domain.Race)races[2];
-        assertEquals("Asian", race.getRaceName());
+        assertEquals("White", race.getRaceName());
         assertNotNull(race.getParticipant());
         assertSame(d, race.getParticipant());
 
