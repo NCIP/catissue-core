@@ -1,188 +1,338 @@
-create or replace
-PROCEDURE SPP_EVENT_MIGRATE AS
-	
+CREATE OR replace PROCEDURE Spp_event_migrate 
+AS 
+  coll_event_name      VARCHAR (100) := 'CollectionEventParameters'; 
+  rec_event_name       VARCHAR (100) := 'ReceivedEventParameters'; 
+  coll_query_text      VARCHAR(1000); 
+  coll_query_text_form VARCHAR(1000); 
+  rec_query_text       VARCHAR(1000); 
+  rec_query_text_form  VARCHAR(1000); 
+  counter              INTEGER; 
+  stme                 INTEGER; 
+  -----------------------@using parameter----------------------------- 
+  activitystatus       VARCHAR(1000); 
+  sp_id                INTEGER; 
+  des_reason           VARCHAR(1000); 
+  s_seq_var            INTEGER; 
+  collectionl          VARCHAR(1000); 
+  cont                 VARCHAR(1000); 
+  -------------------------------------------------------------------- 
+  specreq_id           INTEGER; 
+  cpe_id               INTEGER; 
+  coll_event_id        INTEGER := 0; 
+  rec_event_id         INTEGER := 0; 
+  flag                 INTEGER; 
+  spp_name             VARCHAR(100); 
+  record_not_found     INTEGER; 
+  coll_container_id    INTEGER; 
+  rec_container_id     INTEGER; 
+  max_id               INTEGER; 
+  id_for_spp           INTEGER; 
+  spp_id               INTEGER; 
+  spp_de_id            INTEGER; 
+  collection_procedure VARCHAR(200); 
+  container            VARCHAR(200); 
+  received_quality     VARCHAR(200); 
+  rec_entry_id         INTEGER; 
+  comments             VARCHAR(2000); 
+  event_timestamp      TIMESTAMP; 
+  event_user_id        INTEGER; 
+  v_code               NUMBER; 
+  v_errm               VARCHAR2(64); 
+  -------------------------DECLARE CURSOR---------------------------------------------- 
+  CURSOR spp_mig_cursor IS 
+    SELECT cpe.identifier, 
+           specreq.identifier 
+    FROM   catissue_coll_prot_event cpe, 
+           catissue_cp_req_specimen specreq 
+    WHERE  specreq.collection_protocol_event_id = cpe.identifier; 
+BEGIN 
+  -----------------------------------calling function for collection event---------------------------------------------------------------         
+  SELECT Query_formation(coll_event_name) 
+  INTO   coll_query_text 
+  FROM   dual; 
 
-	coll_event_name varchar (100) := 'CollectionEventParameters';
-	rec_event_name varchar (100) := 'ReceivedEventParameters';
-	 coll_query_text varchar(1000);
-   coll_query_text_form varchar(1000);
-   rec_query_text varchar(1000);
-   rec_query_text_form varchar(1000);
-    counter integer;
- stme integer;
+  -----------------------------------calling function for received event---------------------------------------------------------------         
+  SELECT Query_formation(rec_event_name) 
+  INTO   rec_query_text 
+  FROM   dual; 
 
-  -----------------------@using parameter-----------------------------
-   activitystatus varchar(1000);
-   sp_id integer;
-   des_reason varchar(1000);
-   s_seq_var integer;
-   COLLECTIONl varchar(1000);
-   CONT varchar(1000);
-  --------------------------------------------------------------------
-    specReq_ID integer;
-    cpe_ID integer;
-    coll_event_id integer :=0;
-    rec_event_id integer :=0;
-    flag integer ;
-    spp_name varchar(100);
-    record_not_found integer;
-    coll_container_id integer;
-    rec_container_id integer;
-    max_id integer;
-    id_for_spp integer;
-    spp_id integer;
-    spp_de_id  integer;
-    COLLECTION_PROCEDURE varchar(200);
-    CONTAINER varchar(200);
-    RECEIVED_QUALITY varchar(200);
-    rec_entry_id integer;
-    comments varchar(2000);
-    event_timestamp timestamp;
-    event_user_id integer;
-    v_code  NUMBER; 
-v_errm  VARCHAR2(64);
-    -------------------------DECLARE CURSOR----------------------------------------------
-      
-   cursor spp_mig_cursor IS
-    select cpe.identifier, specReq.identifier  
-    from catissue_coll_prot_event cpe, catissue_cp_req_specimen specReq
-	where specReq.COLLECTION_PROTOCOL_EVENT_ID = cpe.identifier;
-	
-    BEGIN
-	    -----------------------------------calling function for collection event---------------------------------------------------------------        
-              
-              select  query_formation_excol(coll_event_name) into coll_query_text from dual;
-              
+  OPEN spp_mig_cursor; 
 
------------------------------------calling function for received event---------------------------------------------------------------        
-              
-              select   query_formation(rec_event_name) into rec_query_text from dual;
-              
-               open spp_mig_cursor;
-               loop
-               
-               fetch spp_mig_cursor into cpe_ID, specReq_ID;
-                EXIT WHEN  spp_mig_cursor%NOTFOUND;
-      -------------
-      -------Insert entry into caTissue_SPP table
-	
-	select CATISSUE_SPP_SEQ.NEXTVAL into spp_id from dual;
-        select CONCAT('migrated_spp_',spp_id) into spp_name from dual;
-	insert into catissue_spp(IDENTIFIER,NAME,BARCODE) values(spp_id,spp_name,null);
-	
-	-------getting the collection events
-       select identifier into coll_event_id from catissue_coll_event_param where identifier in
-	( select identifier from CATISSUE_SPECIMEN_EVENT_PARAM where specimen_id in (
-	select identifier from catissue_cp_req_specimen where identifier = specReq_ID));
+  LOOP 
+      FETCH spp_mig_cursor INTO cpe_id, specreq_id; 
 
-----selecting the container Id for collection event
+      EXIT WHEN spp_mig_cursor%notfound; 
 
-       IF (coll_event_id != 0) THEN 
-       begin
-       select con.identifier into coll_container_id from dyextn_container con, dyextn_entity ent where con.caption like 'CollectionEventParameters' 
-       and con.abstract_entity_id=ent.identifier and ent.entity_group_id in 
-	    (select identifier from dyextn_entity_group where Long_name like 'SpecimenEvents');
-	
-----Insert entry in abstract Form context for collecion events
-			      
-          Insert into dyextn_abstract_form_context(IDENTIFIER,FORM_LABEL,CONTAINER_ID,HIDE_FORM,ACTIVITY_STATUS) 
-          values(DYEXTN_ABSTRACT_FRM_CTXT_SEQ.NEXTVAL,null,coll_container_id,0,'Active');
-	
------Insert default values for Collection event
+      ------------- 
+      -------Insert entry into caTissue_SPP table 
+      SELECT catissue_spp_seq.nextval 
+      INTO   spp_id 
+      FROM   dual; 
 
-             INSERT into dyextn_abstract_record_entry (IDENTIFIER,modified_date,activity_status,abstract_form_context_id)
-             values (DYEXTN_ABSTRACT_RE_SEQ.NEXTVAL,sysdate(),'Active',DYEXTN_ABSTRACT_FRM_CTXT_SEQ.CURRVAL);  
-      
-            INSERT into catissue_action_app_rcd_entry(identifier)values(DYEXTN_ABSTRACT_RE_SEQ.CURRVAL);
-      
-            INSERT into catissue_action(IDENTIFIER,BARCODE,ACTION_ORDER,ACTION_APP_RECORD_ENTRY_ID,SPP_IDENTIFIER,UNIQUE_ID,IS_SKIPPED) 
-            values(DYEXTN_ABSTRACT_FRM_CTXT_SEQ.CURRVAL,null,1,DYEXTN_ABSTRACT_RE_SEQ.CURRVAL,spp_id,1,0);
-	
-           select coll.COLLECTION_PROCEDURE,coll.CONTAINER,event.comments,event.user_id, event.event_timestamp into 
-           COLLECTION_PROCEDURE,CONTAINER,comments,event_user_id,event_timestamp 
-            from catissue_coll_event_param coll, CATISSUE_SPECIMEN_EVENT_PARAM event 
-            where event.specimen_id = specReq_ID and coll.identifier =event.identifier;
-	
-        select DYEXTN_ABSTRACT_RE_SEQ.CURRVAL into rec_entry_id from dual;
-      	select CATISSUE_ABS_APPL_SEQ.NEXTVAL into max_id from dual;
-      
-      coll_query_text_form :='insert into CATISSUE_ABSTRACT_APPLICATION(identifier,timestamp,user_details,comments)
-     values(:1, :2, :3, :4)';
-     execute immediate coll_query_text_form using 
-     max_id,event_timestamp,event_user_id,comments;
-      
-      INSERT into catissue_action_application (identifier,action_app_record_entry_id)
-      values(max_id,rec_entry_id);
-      
-      
-      EXECUTE IMMEDIATE coll_query_text using 
-      COLLECTION_PROCEDURE, CONTAINER,max_id, rec_entry_id;
-      NULL; 
-        EXCEPTION WHEN OTHERS THEN 
-        v_code := SQLCODE; 
-        v_errm := SUBSTR(SQLERRM, 1, 1000);
-        DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter ); 
-        end; 
-      End if;
-      
-      --getting the recieved events
-              select identifier into rec_event_id from catissue_received_event_param where identifier in
-              ( select identifier from CATISSUE_SPECIMEN_EVENT_PARAM where specimen_id in (
-            	select identifier from catissue_cp_req_specimen where identifier = specReq_ID));
-	
--------selecting the container Id for Recieved event
-	       IF (rec_event_id != 0) THEN 
-         begin
-             select con.identifier into rec_container_id from dyextn_container con, dyextn_entity ent where con.caption like 'ReceivedEventParameters' 
-             and con.abstract_entity_id=ent.identifier and ent.entity_group_id in 
-             (select identifier from dyextn_entity_group where Long_name like 'SpecimenEvents');
-		
-------Insert entry in abstract Form context for Recieved event
-			      
-      Insert into dyextn_abstract_form_context(IDENTIFIER,FORM_LABEL,CONTAINER_ID,HIDE_FORM,ACTIVITY_STATUS) 
-      values(DYEXTN_ABSTRACT_FRM_CTXT_SEQ.NEXTVAL,null,rec_container_id,0,'Active');
-      select DYEXTN_ABSTRACT_FRM_CTXT_SEQ.CURRVAL into spp_de_id from dual;
-	
--------Insert default values for Received event
-	    INSERT into dyextn_abstract_record_entry (IDENTIFIER,modified_date,activity_status,abstract_form_context_id)
-      values (DYEXTN_ABSTRACT_RE_SEQ.NEXTVAL,sysdate(),'Active',spp_de_id);
-      
-      select DYEXTN_ABSTRACT_RE_SEQ.CURRVAL into rec_entry_id from dual;
-      
-      
-      INSERT into   catissue_action_app_rcd_entry(identifier)values(rec_entry_id);
-      INSERT into catissue_action(IDENTIFIER,BARCODE,ACTION_ORDER,ACTION_APP_RECORD_ENTRY_ID,SPP_IDENTIFIER,UNIQUE_ID,IS_SKIPPED) 
-	    values(spp_de_id,null,1,rec_entry_id,spp_id,2,0);
-      
-      select rec.RECEIVED_QUALITY,event.comments,event.user_id, event.event_timestamp into 
-      RECEIVED_QUALITY,comments,event_user_id,event_timestamp 
-      from catissue_received_event_param rec, CATISSUE_SPECIMEN_EVENT_PARAM event 
-      where event.specimen_id = specReq_ID and rec.identifier =event.identifier;
-	
-        select CATISSUE_ABS_APPL_SEQ.NEXTVAL into max_id from dual;
-        rec_query_text_form :='insert into CATISSUE_ABSTRACT_APPLICATION(identifier,timestamp,user_details,comments)
-        values(:1, :2, :3, :4)';
-        execute immediate rec_query_text_form using 
-        max_id,event_timestamp,event_user_id,comments;
-      
-       INSERT  into   catissue_action_application
-       (identifier,action_app_record_entry_id)
-       values(max_id,rec_entry_id);
+      SELECT Concat('migrated_spp_', spp_id) 
+      INTO   spp_name 
+      FROM   dual; 
 
-	update catissue_cp_req_specimen set spp_identifier = spp_id where identifier = specReq_ID;
-      
-	EXECUTE IMMEDIATE rec_query_text using RECEIVED_QUALITY,max_id,rec_entry_id;
-	commit;
-   NULL; 
-        EXCEPTION WHEN OTHERS THEN 
-        v_code := SQLCODE; 
-        v_errm := SUBSTR(SQLERRM, 1, 1000);
-        DBMS_OUTPUT.PUT_LINE('exception occer''Error code ' || v_code ||' '||v_errm||' '||counter ); 
-        end;
-        END IF;
-  
-  end loop;
-close spp_mig_cursor;
-      
-      
-END SPP_EVENT_MIGRATE;
+      INSERT INTO catissue_spp 
+                  (identifier, 
+                   NAME, 
+                   barcode) 
+      VALUES     (spp_id, 
+                  spp_name, 
+                  NULL); 
+
+      -------getting the collection events 
+      SELECT identifier 
+      INTO   coll_event_id 
+      FROM   catissue_coll_event_param 
+      WHERE  identifier IN (SELECT identifier 
+                            FROM   catissue_specimen_event_param 
+                            WHERE  specimen_id IN (SELECT identifier 
+                                                   FROM 
+                                   catissue_cp_req_specimen 
+                                                   WHERE 
+                                   identifier = specreq_id) 
+                           ); 
+
+      ----selecting the container Id for collection event 
+      IF ( coll_event_id != 0 ) THEN 
+        BEGIN 
+            SELECT con.identifier 
+            INTO   coll_container_id 
+            FROM   dyextn_container con, 
+                   dyextn_entity ent 
+            WHERE  con.caption LIKE 'CollectionEventParameters' 
+                   AND con.abstract_entity_id = ent.identifier 
+                   AND ent.entity_group_id IN (SELECT identifier 
+                                               FROM   dyextn_entity_group 
+                                               WHERE 
+                       long_name LIKE 'SpecimenEvents') 
+            ; 
+
+            ----Insert entry in abstract Form context for collecion events 
+            INSERT INTO dyextn_abstract_form_context 
+                        (identifier, 
+                         form_label, 
+                         container_id, 
+                         hide_form, 
+                         activity_status) 
+            VALUES     (dyextn_abstract_frm_ctxt_seq.nextval, 
+                        NULL, 
+                        coll_container_id, 
+                        0, 
+                        'Active'); 
+
+            -----Insert default values for Collection event 
+            INSERT INTO dyextn_abstract_record_entry 
+                        (identifier, 
+                         modified_date, 
+                         activity_status, 
+                         abstract_form_context_id) 
+            VALUES      (dyextn_abstract_re_seq.nextval, 
+                         SYSDATE(), 
+                         'Active', 
+                         dyextn_abstract_frm_ctxt_seq.currval); 
+
+            INSERT INTO catissue_action_app_rcd_entry 
+                        (identifier) 
+            VALUES     (dyextn_abstract_re_seq.currval); 
+
+            INSERT INTO catissue_action 
+                        (identifier, 
+                         barcode, 
+                         action_order, 
+                         action_app_record_entry_id, 
+                         spp_identifier, 
+                         unique_id, 
+                         is_skipped) 
+            VALUES     (dyextn_abstract_frm_ctxt_seq.currval, 
+                        NULL, 
+                        1, 
+                        dyextn_abstract_re_seq.currval, 
+                        spp_id, 
+                        1, 
+                        0); 
+
+            SELECT coll.collection_procedure, 
+                   coll.container, 
+                   event.comments, 
+                   event.user_id, 
+                   event.event_timestamp 
+            INTO   collection_procedure, container, comments, event_user_id, 
+                   event_timestamp 
+            FROM   catissue_coll_event_param coll, 
+                   catissue_specimen_event_param event 
+            WHERE  event.specimen_id = specreq_id 
+                   AND coll.identifier = event.identifier; 
+
+            SELECT dyextn_abstract_re_seq.currval 
+            INTO   rec_entry_id 
+            FROM   dual; 
+
+            SELECT catissue_abs_appl_seq.nextval 
+            INTO   max_id 
+            FROM   dual; 
+
+            coll_query_text_form := 'insert into CATISSUE_ABSTRACT_APPLICATION(identifier,timestamp,user_details,comments)      values(:1, :2, :3, :4)'; 
+
+            EXECUTE IMMEDIATE coll_query_text_form 
+            USING max_id, event_timestamp, event_user_id, comments; 
+
+            INSERT INTO catissue_action_application 
+                        (identifier, 
+                         action_app_record_entry_id) 
+            VALUES     (max_id, 
+                        rec_entry_id); 
+
+            EXECUTE IMMEDIATE coll_query_text 
+            USING collection_procedure, container, max_id, rec_entry_id; 
+
+            NULL; 
+        EXCEPTION 
+            WHEN OTHERS THEN 
+              v_code := SQLCODE; 
+
+              v_errm := Substr(sqlerrm, 1, 1000); 
+
+              dbms_output.Put_line('exception occer''Error code ' 
+                                   || v_code 
+                                   ||' ' 
+                                   ||v_errm 
+                                   ||' ' 
+                                   ||counter); 
+        END; 
+      END IF; 
+
+      --getting the recieved events 
+      SELECT identifier 
+      INTO   rec_event_id 
+      FROM   catissue_received_event_param 
+      WHERE  identifier IN (SELECT identifier 
+                            FROM   catissue_specimen_event_param 
+                            WHERE  specimen_id IN (SELECT identifier 
+                                                   FROM 
+                                   catissue_cp_req_specimen 
+                                                   WHERE 
+                                   identifier = specreq_id) 
+                           ); 
+
+      -------selecting the container Id for Recieved event 
+      IF ( rec_event_id != 0 ) THEN 
+        BEGIN 
+            SELECT con.identifier 
+            INTO   rec_container_id 
+            FROM   dyextn_container con, 
+                   dyextn_entity ent 
+            WHERE  con.caption LIKE 'ReceivedEventParameters' 
+                   AND con.abstract_entity_id = ent.identifier 
+                   AND ent.entity_group_id IN (SELECT identifier 
+                                               FROM   dyextn_entity_group 
+                                               WHERE 
+                       long_name LIKE 'SpecimenEvents') 
+            ; 
+
+            ------Insert entry in abstract Form context for Recieved event 
+            INSERT INTO dyextn_abstract_form_context 
+                        (identifier, 
+                         form_label, 
+                         container_id, 
+                         hide_form, 
+                         activity_status) 
+            VALUES     (dyextn_abstract_frm_ctxt_seq.nextval, 
+                        NULL, 
+                        rec_container_id, 
+                        0, 
+                        'Active'); 
+
+            SELECT dyextn_abstract_frm_ctxt_seq.currval 
+            INTO   spp_de_id 
+            FROM   dual; 
+
+            -------Insert default values for Received event 
+            INSERT INTO dyextn_abstract_record_entry 
+                        (identifier, 
+                         modified_date, 
+                         activity_status, 
+                         abstract_form_context_id) 
+            VALUES      (dyextn_abstract_re_seq.nextval, 
+                         SYSDATE(), 
+                         'Active', 
+                         spp_de_id); 
+
+            SELECT dyextn_abstract_re_seq.currval 
+            INTO   rec_entry_id 
+            FROM   dual; 
+
+            INSERT INTO catissue_action_app_rcd_entry 
+                        (identifier) 
+            VALUES     (rec_entry_id); 
+
+            INSERT INTO catissue_action 
+                        (identifier, 
+                         barcode, 
+                         action_order, 
+                         action_app_record_entry_id, 
+                         spp_identifier, 
+                         unique_id, 
+                         is_skipped) 
+            VALUES     (spp_de_id, 
+                        NULL, 
+                        1, 
+                        rec_entry_id, 
+                        spp_id, 
+                        2, 
+                        0); 
+
+            SELECT rec.received_quality, 
+                   event.comments, 
+                   event.user_id, 
+                   event.event_timestamp 
+            INTO   received_quality, comments, event_user_id, event_timestamp 
+            FROM   catissue_received_event_param rec, 
+                   catissue_specimen_event_param event 
+            WHERE  event.specimen_id = specreq_id 
+                   AND rec.identifier = event.identifier; 
+
+            SELECT catissue_abs_appl_seq.nextval 
+            INTO   max_id 
+            FROM   dual; 
+
+            rec_query_text_form := 'insert into CATISSUE_ABSTRACT_APPLICATION(identifier,timestamp,user_details,comments)         values(:1, :2, :3, :4)'; 
+
+            EXECUTE IMMEDIATE rec_query_text_form 
+            USING max_id, event_timestamp, event_user_id, comments; 
+
+            INSERT INTO catissue_action_application 
+                        (identifier, 
+                         action_app_record_entry_id) 
+            VALUES     (max_id, 
+                        rec_entry_id); 
+
+            UPDATE catissue_cp_req_specimen 
+            SET    spp_identifier = spp_id 
+            WHERE  identifier = specreq_id; 
+
+            EXECUTE IMMEDIATE rec_query_text 
+            USING max_id,received_quality, rec_entry_id; 
+
+            COMMIT; 
+
+            NULL; 
+        EXCEPTION 
+            WHEN OTHERS THEN 
+              v_code := SQLCODE; 
+
+              v_errm := Substr(sqlerrm, 1, 1000); 
+
+              dbms_output.Put_line('exception occer''Error code ' 
+                                   || v_code 
+                                   ||' ' 
+                                   ||v_errm 
+                                   ||' ' 
+                                   ||counter); 
+        END; 
+      END IF; 
+  END LOOP; 
+
+  CLOSE spp_mig_cursor; 
+END spp_event_migrate; 

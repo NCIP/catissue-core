@@ -272,11 +272,19 @@ public class DynamicEventAction extends BaseAction
 				List<DefaultAction> actionList = defaultBizLogic.retrieve(
 						DefaultAction.class.getName(), Constants.CONTAINER_ID, dynamicEventForm
 						.getContId());
+				DefaultAction action=null;
 				if (actionList != null && !actionList.isEmpty())
 				{
-					DefaultAction action = (DefaultAction) actionList.get(0);
+					action = (DefaultAction) actionList.get(0);
 					request.setAttribute("formContextId", action.getId());
 				}
+				else
+				{
+					action=new DefaultAction();
+					action.setContainerId(dynamicEventForm.getContId());
+					defaultBizLogic.insert(action);
+				}
+				request.setAttribute("formContextId",action.getId());
 			}
 
 			dynamicEventForm.setRecordIdentifier(recordIdentifier);

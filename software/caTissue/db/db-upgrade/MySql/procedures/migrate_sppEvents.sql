@@ -60,7 +60,7 @@ DECLARE _stme integer default 0;
 
 #-----------------------------------calling function for received event---------------------------------------------------------------        
               
-              select   query_formation_col(rec_event_name) into rec_query_text;
+              select   query_formation(rec_event_name) into rec_query_text;
               select rec_query_text;
               set @rec_query_text_form := rec_query_text;
               select @rec_query_text_form;

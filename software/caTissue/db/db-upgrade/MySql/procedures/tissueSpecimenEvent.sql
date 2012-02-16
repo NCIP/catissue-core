@@ -83,7 +83,7 @@ Begin
               
   #-----------------------------------calling function---------------------------------------------------------------        
               
-              select   query_formation_tis(event_name) into query_text;
+              select   query_formation(event_name) into query_text;
               select query_text;
               set @query_text_form := query_text;
               select @query_text_form;
