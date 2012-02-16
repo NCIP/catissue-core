@@ -278,15 +278,15 @@ table#browserDetailsContainer {
 			<tr>
 				<td class="black_ar"><img
 					src="images/uIEnhancementImages/logo_ie.gif"
-					alt="Internet Explorer 6.0" width="16" height="16" hspace="3"
+					alt="Internet Explorer 9.0" width="16" height="16" hspace="3"
 					vspace="3" align="absmiddle" /><bean:message
 					key="app.certified.ie" /><br />
 				<img src="images/uIEnhancementImages/logo_firefox.gif"
-					alt="Mozilla Firefox-2.0.0.3 " width="16" height="16" hspace="3"
+					alt="Mozilla Firefox-10.0.1 " width="16" height="16" hspace="3"
 					vspace="3" align="absmiddle" /><bean:message
 					key="app.certified.mozilla" /> <br />
 				<img src="images/uIEnhancementImages/logo_safari.gif"
-					alt="Mac Safari 2.0.3 " width="16" height="16" hspace="3"
+					alt="Mac Safari 5.1.2 " width="16" height="16" hspace="3"
 					vspace="3" align="absmiddle" /><bean:message
 					key="app.certified.mac" /></td>
 			</tr>
