@@ -79,6 +79,7 @@ import edu.wustl.catissuecore.uiobject.SpecimenUIObject;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.catissuecore.util.HookEntityUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.Position;
@@ -105,6 +106,7 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
@@ -254,7 +256,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			SpecimenUtility.doRoundOff(specimen);
 			checkLabel(specimen);
 			handleRecordEntry(specimen,sessionDataBean.getUserName());
-			handleSPPDataNtry(specimen,sessionDataBean);
+			HookEntityUtil.handleSPPDataNtry(specimen,sessionDataBean);
 			dao.insert(specimen);
 			if (specimen.getSpecimenPosition() != null) {
 				final StringBuffer posBuffer = new StringBuffer();
@@ -461,7 +463,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 							{
 								continue; // ignore if not the spp using which the specimen was created
 							}
-
+	
 							Collection<ActionApplication> scgEventCollection=sppApp.getSppActionApplicationCollection();
 							addParentEventsToGrid(specimen.getSpecimenCollectionGroup().getName(),creationTimeStamp,dynamicEventsForGrid,scgEventCollection);
 						}
@@ -2235,12 +2237,12 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 								AnnotationBizLogic bizLogic = new AnnotationBizLogic();
 								if(spp == null)
 								{
-									bizLogic.updateRecNtry(sessionDataBean.getUserName(), entry,
+									HookEntityUtil.updateRecNtry(sessionDataBean.getUserName(), entry,
 											val);
 								}
 								else
 								{
-									bizLogic.updateRecNtry(sessionDataBean.getUserName(), entry,
+									HookEntityUtil.updateRecNtry(sessionDataBean.getUserName(), entry,
 											val,spp.getId());
 								}
 
@@ -2672,7 +2674,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		}
 		this.setExternalIdentifier(dao, specimen, persistentSpecimen);
 		try {
-			handleSPPDataNtry(specimen,sessionDataBean);
+			HookEntityUtil.handleSPPDataNtry(specimen,sessionDataBean);
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -6587,8 +6589,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 							Object val = method.invoke(specimenRecordEntry, (Object[])null);
 							if(val instanceof Set || val instanceof Collection)
 							{
-								AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-								bizLogic.updateRecNtry(userName, specimenRecordEntry,
+								HookEntityUtil.updateRecNtry(userName, specimenRecordEntry,
 										val);
 							}
 						}

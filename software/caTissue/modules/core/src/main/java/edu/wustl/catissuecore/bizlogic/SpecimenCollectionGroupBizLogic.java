@@ -60,6 +60,7 @@ import edu.wustl.catissuecore.uiobject.SpecimenCollectionGroupUIObject;
 import edu.wustl.catissuecore.util.CollectionProtocolSeqComprator;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.ConsentUtil;
+import edu.wustl.catissuecore.util.HookEntityUtil;
 import edu.wustl.catissuecore.util.SpecimenComparator;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -225,6 +226,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			// default values in parameters
 			this.checkSCGEvents(scg.getSpecimenEventParametersCollection(), sessionDataBean);
 			handleRecordEntry(scg, sessionDataBean.getUserName());
+			HookEntityUtil.handleScgSppDataEntry(scg,sessionDataBean);
 			dao.insert(scg);
 			/*if (specimenColl != null && !reportLoaderFlag
 					&& scg.getIsToInsertAnticipatorySpecimens())*/
@@ -284,8 +286,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 								Object val = method.invoke(scgRecordEntry, (Object[])null);
 								if(val instanceof Set || val instanceof Collection)
 								{
-									AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-									bizLogic.updateRecNtry(userName, scgRecordEntry,val);
+									HookEntityUtil.updateRecNtry(userName, scgRecordEntry,val);
 								}
 							}
 						}
@@ -293,6 +294,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				}
 		}
 	}
+
 
 	/**
 	 * @param specimenCollectionGroup : specimenCollectionGroup
@@ -760,7 +762,9 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			persistentSCG.setClinicalStatus(specimenCollectionGroup.getClinicalStatus());
 			persistentSCG.setName(specimenCollectionGroup.getName());
 			persistentSCG.setEncounterTimestamp(specimenCollectionGroup.getEncounterTimestamp());
-			persistentSCG.setScgRecordEntryCollection(specimenCollectionGroup.getScgRecordEntryCollection());
+			HookEntityUtil.updateSCGRecordEntry(specimenCollectionGroup, persistentSCG);
+//			setRecordEntry(specimenCollectionGroup, persistentSCG);
+//			persistentSCG.setScgRecordEntryCollection(specimenCollectionGroup.getScgRecordEntryCollection());
 			IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 			if(specimenCollectionGroup.getAgeAtCollection()!=null)
 			{
@@ -792,6 +796,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 						.getCollectionProtocolRegistration());
 			}
 			handleRecordEntry(persistentSCG, sessionDataBean.getUserName());
+			HookEntityUtil.handleScgSppDataEntry(specimenCollectionGroup, sessionDataBean);
+			HookEntityUtil.updateScgSpp(specimenCollectionGroup, persistentSCG);
 			dao.update(persistentSCG, oldspecimenCollectionGroup);
 
 			/**
@@ -842,6 +848,12 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(e, "", Constants.FORM_CONTXT_ERR);
 		}
 	}
+
+	
+
+
+
+
 
 	/**
 	 * @param dao

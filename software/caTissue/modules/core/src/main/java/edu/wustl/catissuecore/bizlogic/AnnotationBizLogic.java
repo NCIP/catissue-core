@@ -106,25 +106,6 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 	}
 
 
-	/**
-	 * This method called to delete deleteAnnotationRecords.
-	 * @param containerId : containerId.
-	 * @param recordIdList : recordIdList.
-	 * @throws BizLogicException : BizLogicException.
-	 */
-	/*public void deleteAnnotationRecords(Long containerId, List<Long> recordIdList)
-			throws BizLogicException
-	{
-		final EntityManagerInterface entityManagerInterface = EntityManager.getInstance();
-		try
-		{
-			entityManagerInterface.deleteRecords(containerId, recordIdList);
-		}
-		catch (final Exception e)
-		{
-			AnnotationBizLogic.logger.error(e.getMessage(), e);
-		}
-	}*/
 
 	/**
 	 * Deletes an object from the database.
@@ -246,25 +227,6 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 	
-	public void updateRecNtry(String userName, AbstractRecordEntry recordEntry, Object val)
-			throws BizLogicException 
-	{
-		
-		String className = null;
-		if(val instanceof Set && !((java.util.Set) val).isEmpty())
-			className = ((java.util.Set) val).iterator().next().getClass().getName();
-		else if(val instanceof Collection && !((Collection) val).isEmpty())
-			className = ((Collection) val).iterator().next().getClass().getName();
-		
-		if(className != null)
-		{
-			Long id = getContainerId(className);
-			StudyFormContext context = getStudyFormContext(id);//tudyFormContextFactory.getInstance().createObject();
-			recordEntry.setFormContext(context);
-			recordEntry.setModifiedDate(new Date());
-			recordEntry.setModifiedBy(userName);
-		}
-	}
 
 	/**
 	 * this method returns DynamicRecord From association id.
@@ -306,29 +268,6 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		integrate.associateRecords(containerId, staticEntyRecId, dynaEntyRecId, staticEntityId, null);
 	}
 
-	/**
-	 *
-	 * @param request
-	 * @param dynExtRecordId
-	 * @param dynEntContainerId
-	 * @return
-	 * @throws DynamicExtensionsSystemException
-	 * @throws DynamicExtensionsApplicationException
-	 * @throws ApplicationException
-	 */
-	/*public Long getRecordEntryId(HttpServletRequest request, String dynExtRecordId,
-			String dynEntContainerId) throws DynamicExtensionsSystemException,
-			DynamicExtensionsApplicationException, ApplicationException
-	{
-		String staticEntityId = (String) request.getSession().getAttribute(
-				AnnotationConstants.SELECTED_STATIC_ENTITYID);
-
-		DEIntegration integrate = new DEIntegration();
-		Long recordEntryId = integrate.getHookEntityRecordId(staticEntityId, dynEntContainerId,
-				dynExtRecordId);
-
-		return recordEntryId;
-	}*/
 	/**
 	 * Create Record Entry.
 	 * @param staticEntityName String
@@ -608,50 +547,5 @@ public class AnnotationBizLogic extends CatissueDefaultBizLogic
 		return bean;
 	}
 
-	public void updateRecNtry(String userName,
-			ActionApplicationRecordEntry recordEntry, Object val, Long sppId) throws BizLogicException 
-	{
-		 
-		Long id = getContainerId(getClassName(val)); 
-		Action action = null;  
-//		select c
-//		from Contact c
-//		join c.phones cphones
-//		where c.userAccount.email = :email
-//		  and cphones.formatedNumber = :number
-		String query = "select spp.actionCollection from edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure spp " +
-				" join spp.actionCollection action where spp.id="+sppId+" and" +
-				" action.containerId="+id;
-		
-		List<Action> sfcList = this.executeQuery(query);
-		for (Action action2 : sfcList) 
-		{
-			if(id.equals(action2.getContainerId()))
-			{
-				action = action2;
-				break;
-			}
-		}
-//		this.retrieve(Action.class.getName(),
-//				"containerId", id);
-//		if(sfcList != null)
-//		{
-//			action = sfcList.get(0);
-//		}
-		
-//		StudyFormContext context = getStudyFormContext(id);//tudyFormContextFactory.getInstance().createObject();
-		recordEntry.setFormContext(action);
-		recordEntry.setModifiedDate(new Date());
-		recordEntry.setModifiedBy(userName);
-		
-	}
 
-	private String getClassName(Object val) {
-		String className = null;
-		if(val instanceof Set && !((Set) val).isEmpty())
-			className = ((java.util.Set) val).iterator().next().getClass().getName();
-		else if(val instanceof Collection && !((Collection)val).isEmpty())
-			className = ((Collection) val).iterator().next().getClass().getName();
-		return className;
-	}
 }

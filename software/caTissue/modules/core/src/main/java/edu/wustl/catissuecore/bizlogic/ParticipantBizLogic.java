@@ -50,6 +50,7 @@ import edu.wustl.catissuecore.factory.InstanceFactory;
 import edu.wustl.catissuecore.factory.ParticipantFactory;
 import edu.wustl.catissuecore.uiobject.ParticipantUIObject;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.HookEntityUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
@@ -1888,8 +1889,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic implements IPar
 								Object val = method.invoke(participantRecordEntry, (Object[])null);
 								if(val instanceof Set || val instanceof Collection)
 								{
-									AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-									bizLogic.updateRecNtry(userName, participantRecordEntry,val);
+									HookEntityUtil.updateRecNtry(userName, participantRecordEntry,val);
 								}
 							}
 						}
