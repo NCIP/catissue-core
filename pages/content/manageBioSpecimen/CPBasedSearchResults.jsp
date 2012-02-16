@@ -88,7 +88,7 @@ function hideCursor(){
 <!-- Mandar : 25Nov08  -->
 		<TABLE border=1 width="100%" height="100%" cellpadding="0" cellspacing="0">
 		<TR>
-			<TD width="27%" valign="top" height="100%" id='sideMenuTd' style="display: block; height: 100%;">
+			<TD valign="top" height="100%" id='sideMenuTd' style="display: block; height: 100%;">
 		<div id="SearchLeftPart" style=" width:100%;height:100%; overflow:none;">
 				<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>&URLCollectionProtocolId=<%=URLCollectionProtocolId%>&URLParticipantId=<%=URLParticipantId%>&URLScgId=<%=URLScgId%>&URLCollectionEventId=<%=URLCollectionEventId%>" scrolling="no" frameborder="0" width="100%" height="<%= frame3Ysize %>">
 						Your Browser doesn't support IFrames.
