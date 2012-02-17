@@ -2,7 +2,6 @@ package edu.wustl.catissuecore.testcase.bizlogic;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -11,12 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.MolecularSpecimenRequirement;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -28,9 +25,6 @@ import edu.wustl.catissuecore.factory.utils.SpecimenUtility;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
-import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
-import edu.wustl.catissuecore.util.EventsUtil;
-import edu.wustl.common.exception.AssignDataException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 
@@ -355,7 +349,7 @@ public class AddAnticipatedSCGInParticipant extends CaTissueSuiteBaseTest {
 	private void setEventParameters(SpecimenCollectionGroup sprObj) {
 		System.out.println("Inside setEventParameters for SCG");
 		Collection specimenEventParametersCollection = new HashSet();
-		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		/*CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		collectionEventParameters.setCollectionProcedure("Not Specified");
 		collectionEventParameters.setComment("");
@@ -384,7 +378,7 @@ public class AddAnticipatedSCGInParticipant extends CaTissueSuiteBaseTest {
 		receivedEventParameters.setSpecimenCollectionGroup(sprObj);
 		specimenEventParametersCollection.add(collectionEventParameters);
 		specimenEventParametersCollection.add(receivedEventParameters);
-		sprObj
+*/		sprObj
 		.setSpecimenEventParametersCollection(specimenEventParametersCollection);
 	}
 
@@ -398,7 +392,7 @@ public class AddAnticipatedSCGInParticipant extends CaTissueSuiteBaseTest {
 		String collDate = excel[row][6];
 
 		Collection<SpecimenEventParameters> specimenEventCollection = new LinkedHashSet<SpecimenEventParameters>();
-		CollectionEventParameters collectionEvent = null;
+		/*CollectionEventParameters collectionEvent = null;
 		ReceivedEventParameters receivedEvent = null;
 
 		Collection evColl = specimen.getSpecimenEventCollection();
@@ -503,7 +497,7 @@ public class AddAnticipatedSCGInParticipant extends CaTissueSuiteBaseTest {
 					// ReceivedEventParameters) spEvPar;
 				}
 			}
-		}
+		}*/
 
 	}
 

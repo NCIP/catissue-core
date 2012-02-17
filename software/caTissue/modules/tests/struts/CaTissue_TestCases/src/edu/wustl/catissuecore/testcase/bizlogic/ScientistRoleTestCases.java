@@ -1,18 +1,11 @@
 package edu.wustl.catissuecore.testcase.bizlogic;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -21,6 +14,10 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationService;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 public class ScientistRoleTestCases extends CaTissueBaseTestCase
 {
@@ -464,7 +461,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 		/**
 		 * Test search for ReceivedEventParameters and test for PHI data
 		 */
-		public void testSearchReceivedEventParameters()
+		/*public void testSearchReceivedEventParameters()
 		{
 			try
 			{
@@ -488,11 +485,11 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 				e.printStackTrace();
 				assertFalse(e.getMessage(), true);
 			}
-		}
+		}*/
 		/**
 		 * Test search for CollectionEventParameters and test for PHI data
 		 */
-		public void testSearchCollectionEventParameters()
+	/*	public void testSearchCollectionEventParameters()
 		{
 			try
 			{
@@ -516,11 +513,11 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 				e.printStackTrace();
 				assertFalse(e.getMessage(), true);
 			}
-		}
+		}*/
 		/**
 		 * Test search for PathologyReportReviewParameter and test for PHI data
 		 */
-		public void testsearchMoleEventparam()
+		/*public void testsearchMoleEventparam()
 		{
 			try
 			{
@@ -545,7 +542,7 @@ public class ScientistRoleTestCases extends CaTissueBaseTestCase
 				assertFalse(e.getMessage(), true);
 			}
 		}
-
+*/
 		/**
 		 * Test search for DeidentifiedSurgicalPathologyReport and test for PHI data
 		 */

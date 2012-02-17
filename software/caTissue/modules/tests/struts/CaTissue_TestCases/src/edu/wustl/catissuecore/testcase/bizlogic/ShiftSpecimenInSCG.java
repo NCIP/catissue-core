@@ -8,33 +8,25 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.MolecularSpecimenRequirement;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.factory.utils.SpecimenCollectionGroupUtility;
 import edu.wustl.catissuecore.factory.utils.SpecimenUtility;
-import edu.wustl.catissuecore.namegenerator.LabelGenerator;
-import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.exception.AssignDataException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 public class ShiftSpecimenInSCG extends CaTissueSuiteBaseTest {
@@ -573,6 +565,7 @@ public class ShiftSpecimenInSCG extends CaTissueSuiteBaseTest {
 			CollectionProtocolRegistration collectionProtocolRegistration,
 			String[][] excel) throws Exception {
 		String collDate = excel[rowNo][12];
+		Collection specimenEventParametersCollection = new HashSet();
 		// System.out.println("in setEventParametersAndSite colldate is "+
 		// collDate);
 		Date timestamp = EventsUtil.setTimeStamp(collDate, "15", "45");
@@ -581,11 +574,11 @@ public class ShiftSpecimenInSCG extends CaTissueSuiteBaseTest {
 		// scgName);
 		SpecimenCollectionGroup scgBaseLine = searchSCG(
 				collectionProtocolRegistration, scgName);
-		CollectionEventParameters collectionEventBase = null;
+		/*CollectionEventParameters collectionEventBase = null;
 		ReceivedEventParameters receivedEventBase = null;
 		HQLCriteria hqlcri = null;
 		Collection<SpecimenEventParameters> eventList = new ArrayList();
-		Collection specimenEventParametersCollection = new HashSet();
+		
 		scgObj.setSpecimenCollectionSite(scgBaseLine
 				.getSpecimenCollectionSite());
 
@@ -606,9 +599,9 @@ public class ShiftSpecimenInSCG extends CaTissueSuiteBaseTest {
 			} else if (spEvPar instanceof ReceivedEventParameters) {
 				receivedEventBase = (ReceivedEventParameters) spEvPar;
 			}
-		}
+		}*/
 
-		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		/*CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		collectionEventParameters.setCollectionProcedure(collectionEventBase
 				.getCollectionProcedure());
@@ -638,7 +631,7 @@ public class ShiftSpecimenInSCG extends CaTissueSuiteBaseTest {
 		specimenEventParametersCollection.add(collectionEventParameters);
 		specimenEventParametersCollection.add(receivedEventParameters);
 		// System.out.println("setting events");
-		scgObj
+*/		scgObj
 				.setSpecimenEventParametersCollection(specimenEventParametersCollection);
 		// System.out.println("set");
 	}

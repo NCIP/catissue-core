@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.smoketest.admin;
 
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
-import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.smoketest.CaTissueSuiteSmokeBaseTest;
 import edu.wustl.testframework.util.DataObject;
 

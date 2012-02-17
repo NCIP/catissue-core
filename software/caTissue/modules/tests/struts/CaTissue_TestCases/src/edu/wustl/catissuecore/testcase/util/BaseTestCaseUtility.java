@@ -23,7 +23,6 @@ import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -43,7 +42,6 @@ import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Race;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -61,16 +59,10 @@ import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyRepo
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
-import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.utils.SpecimenCollectionGroupUtility;
 import edu.wustl.catissuecore.factory.utils.SpecimenUtility;
-import edu.wustl.catissuecore.namegenerator.LabelGenerator;
-import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
-import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
-import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.Utility;
@@ -638,7 +630,7 @@ public class BaseTestCaseUtility {
 	{
 		System.out.println("Inside Event Parameters");
 		Collection specimenEventParametersCollection = new HashSet();
-		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		/*CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		collectionEventParameters.setCollectionProcedure("Not Specified");
 		collectionEventParameters.setComment("");
@@ -660,7 +652,7 @@ public class BaseTestCaseUtility {
 		receivedEventParameters.setTimestamp(receivedTimestamp);
 		receivedEventParameters.setSpecimenCollectionGroup(sprObj);
 		specimenEventParametersCollection.add(collectionEventParameters);
-		specimenEventParametersCollection.add(receivedEventParameters);
+		specimenEventParametersCollection.add(receivedEventParameters);*/
 		sprObj.setSpecimenEventParametersCollection(specimenEventParametersCollection);
 
 		return sprObj;
@@ -901,7 +893,7 @@ public class BaseTestCaseUtility {
 		Capacity capacity = new Capacity();
 
 		storageTypeObj.setName("st" + UniqueKeyGeneratorUtil.getUniqueKey());
-		storageTypeObj.setDefaultTempratureInCentigrade(new Double(-30));
+		storageTypeObj.setDefaultTemperatureInCentigrade(new Double(-30));
 		storageTypeObj.setOneDimensionLabel("label 1");
 		storageTypeObj.setTwoDimensionLabel("label 2");
 
@@ -929,7 +921,7 @@ public class BaseTestCaseUtility {
 		Capacity capacity = new Capacity();
 
 		storageTypeObj.setName("st" + UniqueKeyGeneratorUtil.getUniqueKey());
-		storageTypeObj.setDefaultTempratureInCentigrade(new Double(-30));
+		storageTypeObj.setDefaultTemperatureInCentigrade(new Double(-30));
 		storageTypeObj.setOneDimensionLabel("label 1");
 		storageTypeObj.setTwoDimensionLabel("label 2");
 
@@ -956,7 +948,7 @@ public class BaseTestCaseUtility {
 	{
 		Capacity capacity = updateStorageType.getCapacity();
 
-		updateStorageType.setDefaultTempratureInCentigrade(new Double(30));//-30
+		updateStorageType.setDefaultTemperatureInCentigrade(new Double(30));//-30
 		updateStorageType.setOneDimensionLabel("Label-1"); //label 1
 		updateStorageType.setTwoDimensionLabel("Label-2"); //label 2
 
@@ -1078,7 +1070,7 @@ public class BaseTestCaseUtility {
 
 		Integer conts = new Integer(1);
 //		storageContainer.setNoOfContainers(conts);
-		storageContainer.setTempratureInCentigrade(new Double(-30));
+		storageContainer.setTemperatureInCentigrade(new Double(-30));
 		storageContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
 		Capacity capacity = new Capacity();
@@ -1135,7 +1127,7 @@ public class BaseTestCaseUtility {
 
 		Integer conts = new Integer(1);
 //		storageContainer.setNoOfContainers(conts);
-		storageContainer.setTempratureInCentigrade(new Double(-30));
+		storageContainer.setTemperatureInCentigrade(new Double(-30));
 		storageContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
 		Capacity capacity = new Capacity();
@@ -1161,7 +1153,7 @@ public class BaseTestCaseUtility {
 
 		storageContainer.setSite(site);
 
-		storageContainer.setTempratureInCentigrade(new Double(30)); //-30
+		storageContainer.setTemperatureInCentigrade(new Double(30)); //-30
 		storageContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
 		Capacity capacity = storageContainer.getCapacity();
@@ -1375,7 +1367,7 @@ public class BaseTestCaseUtility {
 
 		System.out.println("Setting parameters");
 
-		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		/*CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		collectionEventParameters.setComment("");
 		collectionEventParameters.setSpecimen(ts);
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
@@ -1415,10 +1407,10 @@ public class BaseTestCaseUtility {
 		receivedEventParameters.setReceivedQuality("Acceptable");
 		receivedEventParameters.setComment("fdfd");
 		receivedEventParameters.setSpecimen(ts);
-
+*/
 		Collection specimenEventCollection = new HashSet();
-		specimenEventCollection.add(collectionEventParameters);
-		specimenEventCollection.add(receivedEventParameters);
+	/*	specimenEventCollection.add(collectionEventParameters);
+		specimenEventCollection.add(receivedEventParameters);*/
 		ts.setSpecimenEventCollection(specimenEventCollection);
 
 		return ts;
@@ -1465,7 +1457,7 @@ public class BaseTestCaseUtility {
 //		externalIdentifierCollection.add(externalIdentifier);
 //		molecularSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
 
-		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		/*CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		collectionEventParameters.setComment("comments");
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
@@ -1501,10 +1493,10 @@ public class BaseTestCaseUtility {
 		receivedEventParameters.setReceivedQuality("acceptable");
 		receivedEventParameters.setComment("received");
 		receivedEventParameters.setReceivedQuality("Cauterized");
-
+*/
 		Collection specimenEventCollection = new HashSet();
-		specimenEventCollection.add(collectionEventParameters);
-		specimenEventCollection.add(receivedEventParameters);
+		/*specimenEventCollection.add(collectionEventParameters);
+		specimenEventCollection.add(receivedEventParameters);*/
 		molecularSpecimen.setSpecimenEventCollection(specimenEventCollection);
 
 		return molecularSpecimen;
@@ -1550,7 +1542,7 @@ public class BaseTestCaseUtility {
 //		externalIdentifierCollection.add(externalIdentifier);
 //		molecularSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
 
-		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		/*CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		collectionEventParameters.setComment("comments");
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
@@ -1586,10 +1578,10 @@ public class BaseTestCaseUtility {
 		receivedEventParameters.setReceivedQuality("acceptable");
 		receivedEventParameters.setComment("received");
 		receivedEventParameters.setReceivedQuality("Cauterized");
-
+*/
 		Collection specimenEventCollection = new HashSet();
-		specimenEventCollection.add(collectionEventParameters);
-		specimenEventCollection.add(receivedEventParameters);
+		/*specimenEventCollection.add(collectionEventParameters);
+		specimenEventCollection.add(receivedEventParameters);*/
 		cellSpecimen.setSpecimenEventCollection(specimenEventCollection);
 
 		return cellSpecimen;
@@ -1638,7 +1630,7 @@ public class BaseTestCaseUtility {
 //		externalIdentifierCollection.add(externalIdentifier);
 //		molecularSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
 
-		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		/*CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		collectionEventParameters.setComment("comments");
 		//User user = (User)TestCaseUtility.getObjectMap(User.class);
 		User user = new User();
@@ -1673,11 +1665,11 @@ public class BaseTestCaseUtility {
 		}
 		receivedEventParameters.setReceivedQuality("acceptable");
 		receivedEventParameters.setComment("received");
-		receivedEventParameters.setReceivedQuality("Cauterized");
+		receivedEventParameters.setReceivedQuality("Cauterized");*/
 
 		Collection specimenEventCollection = new HashSet();
-		specimenEventCollection.add(collectionEventParameters);
-		specimenEventCollection.add(receivedEventParameters);
+		/*specimenEventCollection.add(collectionEventParameters);
+		specimenEventCollection.add(receivedEventParameters);*/
 		cellSpecimen.setSpecimenEventCollection(specimenEventCollection);
 
 		return cellSpecimen;

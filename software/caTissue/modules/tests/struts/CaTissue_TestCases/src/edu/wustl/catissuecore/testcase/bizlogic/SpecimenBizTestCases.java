@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.testcase.bizlogic;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1013,7 +1012,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		newConStatusCol.add(consentStatus3);
 
 		scg.setConsentTierStatusCollection(newConStatusCol);
-		scg.setConsentWithdrawalOption("Return");
+		//scg.setConsentWithdrawalOption("Return");
 		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(
 				collectionProtocolRegistration.getCollectionProtocol().getId());
 		scg.getCollectionProtocolRegistration().setParticipant(participant);
@@ -1166,7 +1165,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		newConStatusCol.add(consentStatus3);
 
 		scg.setConsentTierStatusCollection(newConStatusCol);
-		scg.setConsentWithdrawalOption("Discard");
+		//scg.setConsentWithdrawalOption("Discard");
 		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(
 				collectionProtocolRegistration.getCollectionProtocol().getId());
 		scg.getCollectionProtocolRegistration().setParticipant(participant);
@@ -1814,7 +1813,7 @@ public class SpecimenBizTestCases extends CaTissueSuiteBaseTest
 		scg.setConsentTierStatusCollection(newConStatusCol);
 
 		scg.setConsentTierStatusCollection(newConStatusCol);
-		scg.setConsentWithdrawalOption("Discard");
+	//	scg.setConsentWithdrawalOption("Discard");
 		scg.getCollectionProtocolRegistration().getCollectionProtocol().setId(
 				scg.getCollectionProtocolRegistration().getCollectionProtocol().getId());
 		scg.getCollectionProtocolRegistration().setParticipant(scg.getCollectionProtocolRegistration().getParticipant());

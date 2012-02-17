@@ -140,7 +140,7 @@ public class DisableFunctionalityTestCases extends CaTissueSuiteBaseTest {
 
             Integer conts = new Integer(2);
 //            parentContainer.setNoOfContainers(conts);
-            parentContainer.setTempratureInCentigrade(new Double(-30));
+            parentContainer.setTemperatureInCentigrade(new Double(-30));
             parentContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
             Capacity capacity = new Capacity();

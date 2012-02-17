@@ -1,44 +1,12 @@
 package edu.wustl.catissuecore.testcase.bizlogic;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import edu.wustl.catissuecore.domain.Capacity;
-import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
-import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
-import edu.wustl.catissuecore.domain.DisposalEventParameters;
-import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
-import edu.wustl.catissuecore.domain.FixedEventParameters;
-import edu.wustl.catissuecore.domain.FluidSpecimen;
-import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domain.FrozenEventParameters;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
-import edu.wustl.catissuecore.domain.ProcedureEventParameters;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenPosition;
-import edu.wustl.catissuecore.domain.SpunEventParameters;
-import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.ThawEventParameters;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
-import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domain.TransferEventParameters;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.util.global.Status;
 
 public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 {
 	/**
 	 * Negative test case : Test case for decreasing capacity of already filled Storage Container.
-	 */
+	 *//*
 	public void testDecreseCapacityOfFullContainer()
 	{
 		try
@@ -108,9 +76,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for Transfer Specimen Position from one position to another.
-	 */
+	 *//*
 	public void testTransferPositionOFSpecimen()
 	{
 		try
@@ -161,10 +129,10 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Negative test case: Test case for Transfer Specimen Position from one position to another
 	 * Occupied container.
-	 */
+	 *//*
 	public void testTransferSpecimenToOccupiedLocation()
 	{
 		try
@@ -225,9 +193,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for Insert Dispose Specimen Event.
-	 */
+	 *//*
 	public void testInsertDisposeSpecimenEvent()
 	{
 		try
@@ -280,9 +248,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for update Dispose Specimen Event from closed to disabled activity status.
-	 */
+	 *//*
 	public void testUpdateDisposeSpecimenEventFromClosedToDisabled()
 	{
 		try
@@ -338,9 +306,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for Insert Dispose Specimen Event.
-	 */
+	 *//*
 	public void testUpdateDisposeSpecimenEvent()
 	{
 		try
@@ -365,9 +333,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for Insert Dispose Specimen Event.
-	 */
+	 *//*
 	public void testInsertCellSpecimenReviewEvent()
 	{
 		try
@@ -412,9 +380,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating Cell Specimen Review Parameters.
-	 */
+	 *//*
 	public void testUpdateCellSpecimenReviewParameters()
 	{
 		try
@@ -440,9 +408,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for Insert Check In Check Out Event.
-	 */
+	 *//*
 	public void testInsertCheckInCheckOutEvent()
 	{
 		try
@@ -486,9 +454,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating Check In Check Out Event.
-	 */
+	 *//*
 	public void testUpdateCheckInCheckOutEvent()
 	{
 		try
@@ -513,9 +481,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for Insert Collection Event.
-	 */
+	 *//*
 	public void testInsertCollectionEvent()
 	{
 		try
@@ -560,9 +528,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating Collection event.
-	 */
+	 *//*
 	public void testUpdateCollectionEvent()
 	{
 		try
@@ -588,9 +556,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for Insert Embedded Event.
-	 */
+	 *//*
 	public void testInsertEmbeddedEvent()
 	{
 		try
@@ -634,9 +602,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating Check In Check Out Event.
-	 */
+	 *//*
 	public void testUpdateEmbeddedEvent()
 	{
 		try
@@ -661,9 +629,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for Insert Fixed Event.
-	 */
+	 *//*
 	public void testInsertFixedEvent()
 	{
 		try
@@ -707,9 +675,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating Update Fixed Event.
-	 */
+	 *//*
 	public void testUpdateFixedEvent()
 	{
 		try
@@ -734,9 +702,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for Insert Fluid Specimen Review Event.
-	 */
+	 *//*
 	public void testInsertFluidSpecimenReview()
 	{
 		try
@@ -782,9 +750,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating fluid SpecimenReview Event Parameters.
-	 */
+	 *//*
 	public void testUpdateFluidSpecimenReviewEventParameters()
 	{
 		try
@@ -830,9 +798,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for Insert Frozen Specimen Review event.
-	 */
+	 *//*
 	public void testInsertFrozenSpecimenReviewEvent()
 	{
 		try
@@ -878,9 +846,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating Frozen SpecimenReviewEventParameters.
-	 */
+	 *//*
 	public void testUpdateFrozenSpecimenReviewEventParameters()
 	{
 		try
@@ -925,9 +893,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 *  Test case for Insert Spun Event.
-	 */
+	 *//*
 	public void testInsertSpunSpecimenEvent()
 	{
 		try
@@ -973,9 +941,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating Spun Event.
-	 */
+	 *//*
 	public void testUpdatetestInsertSpunSpecimenEvent()
 	{
 		try
@@ -1020,9 +988,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 *  Test case for Insert Thaw Event.
-	 */
+	 *//*
 	public void testInsertThawSpecimenEvent()
 	{
 		try
@@ -1067,9 +1035,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating Thaw Event.
-	 */
+	 *//*
 	public void testUpdateThawSpecimenEvent()
 	{
 		try
@@ -1114,9 +1082,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 *  Test case for Insert TissueSpecimenReview Event.
-	 */
+	 *//*
 	public void testInsertTissueSpecimenReviewEvent()
 	{
 		try
@@ -1161,9 +1129,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating TissueSpecimenReview Event.
-	 */
+	 *//*
 	public void testUpdateTissueSpecimenReviewEvent()
 	{
 		try
@@ -1208,9 +1176,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 *  Test case for Insert ReceivedSpecimen Event.
-	 */
+	 *//*
 	public void testInsertReceivedSpecimenEvent()
 	{
 		try
@@ -1256,9 +1224,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating ReceivedSpecimen Event.
-	 */
+	 *//*
 	public void testUpdateReceivedSpecimenEvent()
 	{
 		try
@@ -1304,9 +1272,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 *  Test case for Insert ProcedureSpecimen Event.
-	 */
+	 *//*
 	public void testInsertProcedureSpecimenEvent()
 	{
 		try
@@ -1353,9 +1321,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating ProcedureSpecimen Event.
-	 */
+	 *//*
 	public void testUpdateProcedureSpecimenEvent()
 	{
 		try
@@ -1400,9 +1368,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 *  Test case for Insert MolecularSpecimenReviewParameters Event.
-	 */
+	 *//*
 	public void testInsertMolecularSpecimenReviewEvent()
 	{
 		try
@@ -1448,9 +1416,9 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 		}
 	}
 
-	/**
+	*//**
 	 * Test case for updating MolecularSpecimenReviewParameters Event.
-	 */
+	 *//*
 	public void testUpdateMolecularSpecimenReviewEvent()
 	{
 		try
@@ -1494,5 +1462,5 @@ public class SpecimenEventBizTestCases extends CaTissueSuiteBaseTest
 			e.printStackTrace();
 			assertFalse(e.getMessage(), true);
 		}
-	}
+	}*/
 }

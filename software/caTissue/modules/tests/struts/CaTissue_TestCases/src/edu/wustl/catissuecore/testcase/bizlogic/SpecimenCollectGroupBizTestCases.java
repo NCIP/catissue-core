@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -15,7 +14,6 @@ import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -373,7 +371,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 	{
 		System.out.println("Inside Event Parameters");
 		Collection specimenEventParametersCollection = new HashSet();
-		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		/*CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		collectionEventParameters.setCollectionProcedure("Not Specified");
 		collectionEventParameters.setComment("");
@@ -395,7 +393,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		receivedEventParameters.setTimestamp(receivedTimestamp);		
 		receivedEventParameters.setSpecimenCollectionGroup(sprObj);
 		specimenEventParametersCollection.add(collectionEventParameters);
-		specimenEventParametersCollection.add(receivedEventParameters);
+		specimenEventParametersCollection.add(receivedEventParameters);*/
 		sprObj.setSpecimenEventParametersCollection(specimenEventParametersCollection);
 	}
 	
@@ -478,7 +476,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		String scgName="scg added through api"+UniqueKeyGeneratorUtil.getUniqueKey();
 		specimenCollectionGroup.setName(scgName);
 		
-		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		/*CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		
 		collectionEventParameters.setUser(user);
 		collectionEventParameters.setTimestamp(new Date(00,02,04));
@@ -493,12 +491,12 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 		receivedEventParameters.setReceivedQuality("Acceptable");
 		receivedEventParameters.setTimestamp(new Date(00,02,04));
 		receivedEventParameters.setUser(user);
-		receivedEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
+		receivedEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);*/
 
 		//COLLECTION OF SPCIMEN EVENT PARAMETERS COLLECTION
 		Collection<SpecimenEventParameters> specimenEventParamsColl = new HashSet<SpecimenEventParameters>();
-		specimenEventParamsColl.add(collectionEventParameters);
-		specimenEventParamsColl.add(receivedEventParameters);
+		/*specimenEventParamsColl.add(collectionEventParameters);
+		specimenEventParamsColl.add(receivedEventParameters);*/
 		specimenCollectionGroup.setSpecimenEventParametersCollection(specimenEventParamsColl);
 		
 		//specimenCollectionGroup = (SpecimenCollectionGroup) BaseTestCaseUtility.setEventParameters(specimenCollectionGroup);
@@ -507,7 +505,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 			SpecimenCollectionGroup	specimenCollectionGroup1 = (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroup);
 			
 			Iterator iter=specimenCollectionGroup1.getSpecimenEventParametersCollection().iterator();
-			while(iter.hasNext())
+		/*	while(iter.hasNext())
 			{
 				SpecimenEventParameters parameters=(SpecimenEventParameters) iter.next();
 				if(parameters instanceof ReceivedEventParameters)
@@ -541,7 +539,7 @@ public class SpecimenCollectGroupBizTestCases extends CaTissueSuiteBaseTest
 						System.out.println("Collection event parameter not retained");
 					}
 				}
-			}
+			}*/
 			if(!specimenCollectionGroup1.getName().equals(specimenCollectionGroup.getName()))
 			{
 				count++;

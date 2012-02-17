@@ -1,13 +1,10 @@
 package edu.wustl.catissuecore.smoketest.biospecimen;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
 
 import edu.wustl.catissuecore.actionForm.CPSearchForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
@@ -18,8 +15,8 @@ import edu.wustl.catissuecore.bean.GenericSpecimenVO;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.smoketest.CaTissueSuiteSmokeBaseTest;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.testframework.util.DataObject;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
+import edu.wustl.testframework.util.DataObject;
 
 public class SpecimenCollectionGroupTestCase extends CaTissueSuiteSmokeBaseTest{
 

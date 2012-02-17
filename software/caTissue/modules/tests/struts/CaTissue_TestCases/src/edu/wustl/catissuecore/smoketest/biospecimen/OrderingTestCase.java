@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm;
@@ -14,7 +11,6 @@ import edu.wustl.catissuecore.actionForm.OrderForm;
 import edu.wustl.catissuecore.actionForm.OrderSpecimenForm;
 import edu.wustl.catissuecore.smoketest.CaTissueSuiteSmokeBaseTest;
 import edu.wustl.testframework.util.DataObject;
-import edu.wustl.catissuecore.util.global.Constants;
 
 
 public class OrderingTestCase extends CaTissueSuiteSmokeBaseTest

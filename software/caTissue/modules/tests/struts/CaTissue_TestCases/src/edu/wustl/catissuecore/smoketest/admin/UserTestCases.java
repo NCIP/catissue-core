@@ -1,22 +1,10 @@
 package edu.wustl.catissuecore.smoketest.admin;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
-import edu.emory.mathcs.backport.java.util.LinkedList;
 import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
-import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.catissuecore.actionForm.SummaryForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
-import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.smoketest.CaTissueSuiteSmokeBaseTest;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 import edu.wustl.testframework.util.DataObject;
 

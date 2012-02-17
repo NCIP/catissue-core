@@ -1,11 +1,5 @@
 package edu.wustl.catissuecore.smoketest.util;
 
-import java.util.List;
-
-import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.util.global.AppUtility;
-import edu.wustl.common.beans.SessionDataBean;
 
 
 public class CaTissueApplicationService

@@ -117,7 +117,7 @@ public class StorageContainerTestCases extends CaTissueSuiteBaseTest
 		storageType.setId(form.getId());
 		storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 		storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
-		storageType.setDefaultTempratureInCentigrade(Double.parseDouble(form
+		storageType.setDefaultTemperatureInCentigrade(Double.parseDouble(form
 				.getDefaultTemperature()));
 
 		Capacity capacity = new Capacity();

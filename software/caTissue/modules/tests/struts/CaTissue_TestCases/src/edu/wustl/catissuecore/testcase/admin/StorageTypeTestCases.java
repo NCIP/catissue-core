@@ -51,7 +51,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		storageType.setId(form.getId());
 		storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 		storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
-		storageType.setDefaultTempratureInCentigrade(Double.parseDouble(form
+		storageType.setDefaultTemperatureInCentigrade(Double.parseDouble(form
 				.getDefaultTemperature()));
 
 		Capacity capacity = new Capacity();
@@ -121,7 +121,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		storageType.setId(form.getId());
 		storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 		storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
-		storageType.setDefaultTempratureInCentigrade(Double.parseDouble(form
+		storageType.setDefaultTemperatureInCentigrade(Double.parseDouble(form
 				.getDefaultTemperature()));
 
 		Capacity capacity = new Capacity();
@@ -157,7 +157,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		storageType.setId(form.getId());
 		storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 		storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
-		storageType.setDefaultTempratureInCentigrade(Double.parseDouble(form
+		storageType.setDefaultTemperatureInCentigrade(Double.parseDouble(form
 				.getDefaultTemperature()));
 
 		Capacity capacity = new Capacity();
@@ -193,7 +193,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		storageType.setId(form.getId());
 		storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 		storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
-		storageType.setDefaultTempratureInCentigrade(Double.parseDouble(form
+		storageType.setDefaultTemperatureInCentigrade(Double.parseDouble(form
 				.getDefaultTemperature()));
 
 		Capacity capacity = new Capacity();
@@ -229,7 +229,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		storageType.setId(form.getId());
 		storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 		storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
-		storageType.setDefaultTempratureInCentigrade(Double.parseDouble(form
+		storageType.setDefaultTemperatureInCentigrade(Double.parseDouble(form
 				.getDefaultTemperature()));
 
 		Capacity capacity = new Capacity();
@@ -265,7 +265,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		storageType.setId(form.getId());
 		storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 		storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
-		storageType.setDefaultTempratureInCentigrade(Double.parseDouble(form
+		storageType.setDefaultTemperatureInCentigrade(Double.parseDouble(form
 				.getDefaultTemperature()));
 
 		Capacity capacity = new Capacity();
@@ -358,7 +358,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		storageType.setId(form.getId());
 		storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 		storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
-		storageType.setDefaultTempratureInCentigrade(Double.parseDouble(form
+		storageType.setDefaultTemperatureInCentigrade(Double.parseDouble(form
 				.getDefaultTemperature()));
 
 		Capacity capacity = new Capacity();
@@ -402,7 +402,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		System.out.println("form2.getActivityStatus(): "+form2.getActivityStatus());
 		storageType2.setOneDimensionLabel(form2.getOneDimensionLabel());
 		storageType2.setTwoDimensionLabel(form2.getTwoDimensionLabel());
-		storageType2.setDefaultTempratureInCentigrade(Double.parseDouble(form2
+		storageType2.setDefaultTemperatureInCentigrade(Double.parseDouble(form2
 				.getDefaultTemperature()));
 
 		Capacity capacity2 = new Capacity();
@@ -522,7 +522,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		System.out.println("form2.getActivityStatus(): "+form2.getActivityStatus());
 		storageType2.setOneDimensionLabel(form2.getOneDimensionLabel());
 		storageType2.setTwoDimensionLabel(form2.getTwoDimensionLabel());
-		storageType2.setDefaultTempratureInCentigrade(Double.parseDouble(form2
+		storageType2.setDefaultTemperatureInCentigrade(Double.parseDouble(form2
 				.getDefaultTemperature()));
 
 		Capacity capacity2 = new Capacity();
@@ -588,7 +588,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		System.out.println("form2.getActivityStatus(): "+form2.getActivityStatus());
 		storageType2.setOneDimensionLabel(form2.getOneDimensionLabel());
 		storageType2.setTwoDimensionLabel(form2.getTwoDimensionLabel());
-		storageType2.setDefaultTempratureInCentigrade(Double.parseDouble(form2
+		storageType2.setDefaultTemperatureInCentigrade(Double.parseDouble(form2
 				.getDefaultTemperature()));
 
 		Capacity capacity2 = new Capacity();
@@ -648,7 +648,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		storageType2.setId(form.getId());
 		storageType2.setOneDimensionLabel(form.getOneDimensionLabel());
 		storageType2.setTwoDimensionLabel(form.getTwoDimensionLabel());
-		storageType2.setDefaultTempratureInCentigrade(Double.parseDouble(form
+		storageType2.setDefaultTemperatureInCentigrade(Double.parseDouble(form
 				.getDefaultTemperature()));
 
 		Capacity capacity = new Capacity();
@@ -841,7 +841,7 @@ public class StorageTypeTestCases extends CaTissueSuiteBaseTest
 		storageType.setId(form.getId());
 		storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 		storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
-		storageType.setDefaultTempratureInCentigrade(Double.parseDouble(form
+		storageType.setDefaultTemperatureInCentigrade(Double.parseDouble(form
 				.getDefaultTemperature()));
 
 		Capacity capacity = new Capacity();

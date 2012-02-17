@@ -10,12 +10,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.FluidSpecimenRequirement;
 import edu.wustl.catissuecore.domain.MolecularSpecimenRequirement;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
@@ -669,14 +667,14 @@ public class CollectionProtocolEdit extends CaTissueSuiteBaseTest implements jav
 				while (itr.hasNext()) {
 					SpecimenEventParameters spEvPar = (SpecimenEventParameters) itr
 							.next();
-					if (spEvPar instanceof CollectionEventParameters) {
+					/*if (spEvPar instanceof CollectionEventParameters) {
 						// System.out.println("after setSpecimenEvents "+
 						// ((CollectionEventParameters)
 						// spEvPar).getCollectionProcedure());
 						// System.out.println("after setSpecimenEvents "+
 						// ((CollectionEventParameters)
 						// spEvPar).getContainer());
-					}
+					}*/
 				}
 			}
 			if (ExcelCp[row][11] != null)
@@ -718,7 +716,7 @@ public class CollectionProtocolEdit extends CaTissueSuiteBaseTest implements jav
 			// specReq.setStorageContainer(null);
 		}
 		specReq.setStorageType(storageType);
-		specReq.setActivityStatus(Constants.DISABLED);
+		//specReq.setActivityStatus(Constants.DISABLED);
 		// System.out.println("createspecimen end");
 
 		return specReq;
@@ -728,7 +726,7 @@ public class CollectionProtocolEdit extends CaTissueSuiteBaseTest implements jav
 			String ExcelCp[][], int row) throws Exception {
 		// seting collection event values
 		Collection<SpecimenEventParameters> specimenEventCollection = new LinkedHashSet<SpecimenEventParameters>();
-		CollectionEventParameters collectionEvent = null;
+	/*	CollectionEventParameters collectionEvent = null;
 		ReceivedEventParameters receivedEvent = null;
 
 		String collectionProcedure = null;
@@ -810,7 +808,7 @@ public class CollectionProtocolEdit extends CaTissueSuiteBaseTest implements jav
 			receivedEvent.setId(null);
 		}
 		receivedEvent.setSpecimen(specReq);
-		specimenEventCollection.add(receivedEvent);
+		specimenEventCollection.add(receivedEvent);*/
 		specReq.setSpecimenEventCollection(specimenEventCollection);
 	}
 

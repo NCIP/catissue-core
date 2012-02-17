@@ -17,15 +17,12 @@ import edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
@@ -37,13 +34,13 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
+import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 import edu.wustl.catissuecore.testcase.util.RequestParameterUtility;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
 import edu.wustl.catissuecore.testcase.util.UniqueKeyGeneratorUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.testcase.util.CaTissueSuiteTestUtil;
 
 
 public class ScientistTestCases  extends CaTissueSuiteBaseTest
@@ -768,7 +765,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 			/**
 			 * Test search for ReceivedEventParameters and test for PHI data
 			 */
-			public void testCaGridQueryReceivedEventParameters()
+		/*	public void testCaGridQueryReceivedEventParameters()
 			{
 				try
 				{
@@ -796,11 +793,11 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 					e.printStackTrace();
 					assertFalse(e.getMessage(), true);
 				}
-			}
+			}*/
 			/**
 			 * Test search for CollectionEventParameters and test for PHI data
 			 */
-			public void testCaGridQueryCollectionEventParameters()
+		/*	public void testCaGridQueryCollectionEventParameters()
 			{
 				try
 				{
@@ -828,11 +825,11 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 					e.printStackTrace();
 					assertFalse(e.getMessage(), true);
 				}
-			}
+			}*/
 			/**
 			 * Test search for PathologyReportReviewParameter and test for PHI data
 			 */
-			public void testCaGridQueryMoleEventparam()
+			/*public void testCaGridQueryMoleEventparam()
 			{
 				try
 				{
@@ -861,7 +858,7 @@ public class ScientistTestCases  extends CaTissueSuiteBaseTest
 					assertFalse(e.getMessage(), true);
 				}
 			}
-
+*/
 			/**
 			 * Test search for DeidentifiedSurgicalPathologyReport and test for PHI data
 			 */

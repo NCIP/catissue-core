@@ -1,31 +1,22 @@
 package edu.wustl.catissuecore.smoketest.biospecimen;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import edu.wustl.catissuecore.action.UpdateBulkSpecimensAction;
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.CPSearchForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
-import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
-import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
-import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.smoketest.CaTissueSuiteSmokeBaseTest;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 import edu.wustl.testframework.util.DataObject;
 

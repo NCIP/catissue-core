@@ -6,25 +6,12 @@ import java.util.HashSet;
 import edu.wustl.catissuecore.actionForm.DisposalEventParametersForm;
 import edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm;
 import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
-import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
-import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
-import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
-import edu.wustl.catissuecore.domain.FixedEventParameters;
-import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domain.FrozenEventParameters;
-import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
-import edu.wustl.catissuecore.domain.ProcedureEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
-import edu.wustl.catissuecore.domain.SpunEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.domain.ThawEventParameters;
-import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.testcase.CaTissueSuiteBaseTest;
 import edu.wustl.catissuecore.testcase.util.TestCaseUtility;
-import edu.wustl.catissuecore.util.global.Constants;
 
 
 public class SpecimenEventsTestcases  extends CaTissueSuiteBaseTest

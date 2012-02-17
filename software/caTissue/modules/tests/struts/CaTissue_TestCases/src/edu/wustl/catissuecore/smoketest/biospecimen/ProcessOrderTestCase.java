@@ -3,8 +3,6 @@ package edu.wustl.catissuecore.smoketest.biospecimen;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
-import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.actionForm.RequestDetailsForm;
 import edu.wustl.catissuecore.actionForm.RequestListFilterationForm;
 import edu.wustl.catissuecore.smoketest.CaTissueSuiteSmokeBaseTest;

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.ConsentResponseForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
-import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.smoketest.CaTissueSuiteSmokeBaseTest;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 import edu.wustl.testframework.util.DataObject;

@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.smoketest.admin;
 
 import edu.wustl.catissuecore.actionForm.SiteForm;
-import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.smoketest.CaTissueSuiteSmokeBaseTest;
 import edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm;
 import edu.wustl.testframework.util.DataObject;

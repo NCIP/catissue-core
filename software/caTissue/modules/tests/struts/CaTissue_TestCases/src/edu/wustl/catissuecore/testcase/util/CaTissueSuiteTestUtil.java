@@ -1,9 +1,7 @@
 package edu.wustl.catissuecore.testcase.util;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,9 +11,6 @@ import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
 
 import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.flex.FlexInterface;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.global.CommonServiceLocator;
