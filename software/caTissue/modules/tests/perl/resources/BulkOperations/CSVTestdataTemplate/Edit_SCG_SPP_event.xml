@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata templateName="CreateSCGWithSPPEventSpun" batchSize="5">
+<BulkOperationMetadata templateName="CreateSCGWithSPPEventSpun1" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup" >
 		
 		
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication" cardinality="*"
 			 roleName="sppApplicationCollection" parentRoleName="specimenCollectionGroup">
-				
+				<referenceAssociation
+								className="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure"
+								roleName="spp" parentRoleName="SpecimenProcessingProcedureApplication">
+								<attribute name="id" csvColumnName="SPPID" />
+				</referenceAssociation>
 		<containmentAssociation
 			className="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication" cardinality="*"
 			 roleName="sppActionApplicationCollection" parentRoleName="sppApplication">
