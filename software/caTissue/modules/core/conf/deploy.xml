@@ -5088,31 +5088,7 @@ Thanking You,
 		<!--	</else>
 			</if> -->
 	</target>
-	<target name="upgrade_saved_queries" description="Upgrading saved queries....">
-          <echo message="Upgrading saved queries...."/>
-          <unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore"/>
-		  <copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-		  <copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-          <copy file="${caTissue-webapp.dir.dist}/modules/caTissue/conf/catissuecore-properties/ApplicationSecurityConfig.xml" todir="${prop.temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
-          <antcall target="replacecfgfiles" />
-		  <antcall target="replaceQuerycfgfile" />
-          <replace dir="${prop.temp.dir}/catissuecore/WEB-INF/classes">
-                <include name="ApplicationSecurityConfig.xml" />
-                <replacefilter token="@@hibernate-config-file@@" value="${prop.temp.dir}/catissuecore/WEB-INF/classes/QueryHibernate.cfg.xml" />
-          </replace>
-          <java classname="edu.wustl.query.upgrade.UpgradeSavedQueries" fork="true" maxmemory="1024M">
-                <classpath location="${prop.temp.dir}/catissuecore/WEB-INF/classes" />
-                <classpath refid="temp.classpath" />
-                <classpath>
-                      <fileset dir="${lib.dir}">
-                            <include name="*.jar" />
-                      </fileset>
-                </classpath>
-                <arg value="${prop.temp.dir}/catissuecore/WEB-INF/classes/ApplicationSecurityConfig.xml"/>
-          		<arg value="${saved.query.owner}"/>
-          </java>
-		<delete failonerror="${delete.failonerror}" dir="${prop.temp.dir}" />
-    </target>
+	
 
 	<macrodef name="add_bulk_operation_template" description="This macro adds the bulk operation XML and CSV template in the database">
 			<attribute name="operationName"/>
@@ -5698,7 +5674,6 @@ Thanking You,
 					</fileset>
 				</classpath>
 		</sql>
-		<antcall target="upgrade_saved_queries"></antcall>
 	</target>
 
 	<!-- CCTS Integration -->
