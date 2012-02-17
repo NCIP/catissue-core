@@ -217,7 +217,7 @@ DECLARE KEY_SEQUENCE_ID_TMP INT;
   IF ISNULL(SPECIMEN_TMP) THEN
 	set maxLabelSpecimen=0;
   ELSE  
-    select IFNULL(max(cast(KEY_SEQUENCE_ID as SIGNED)),0)+1 into maxLabelSpecimen from key_seq_generator where KEY_VALUE='SYS_UID';
+    select IFNULL(max(cast(LABEL as SIGNED)),0)+1 into maxLabelSpecimen from catissue_specimen;
   END IF;
 
   select KEY_SEQUENCE_ID into KEY_SEQUENCE_ID_TMP from key_seq_generator where KEY_VALUE='SYS_UID';
