@@ -1249,14 +1249,6 @@
 				<include name="ISpecimenTypeDomain.class" />
 				<include name="CollectionProtocolRegistration.class" />
 			</fileset>
-			<fileset dir="${catissue_cacore-beans-dir}/edu/wustl/catissuecore/domain/processingprocedure">
-				<include name="ActionApplication.java" />
-				<include name="ActionApplication.class" />
-				<!--include name="AbstractApplication.java" />
-				<include name="AbstractApplication.class" />
-				<include name="DefaultAction.java" />
-				<include name="DefaultAction.class" /-->
-			</fileset>
 		</delete>
 
 		<delete file="${temp-catissue-cacore-lib}/catissue_cacore-beans.jar" />
