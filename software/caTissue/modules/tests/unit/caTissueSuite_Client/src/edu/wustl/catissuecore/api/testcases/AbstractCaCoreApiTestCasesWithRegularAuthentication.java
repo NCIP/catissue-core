@@ -3,14 +3,12 @@
  */
 package edu.wustl.catissuecore.api.testcases;
 
-import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
-import gov.nih.nci.system.applicationservice.ApplicationException;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
-import java.util.Collection;
-import java.util.List;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
+import gov.nih.nci.system.applicationservice.ApplicationException;
 
 /**
  * @author ganesh_naikwade

@@ -1,9 +1,14 @@
 package edu.wustl.catissuecore.api.testcases;
 
-import edu.wustl.catissuecore.domain.*;
+import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.NewSpecimenOrderItem;
+import edu.wustl.catissuecore.domain.OrderDetails;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenOrderItem;
+import edu.wustl.catissuecore.domain.User;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;

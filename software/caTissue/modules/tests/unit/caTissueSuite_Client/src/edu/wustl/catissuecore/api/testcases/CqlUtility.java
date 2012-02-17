@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.api.testcases;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReviewEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -72,20 +71,6 @@ public class CqlUtility {
 		return createTargetQuery(TissueSpecimen.class, group);
 	}
 
-//	public static CQLQuery getMolecularSpecimensWithFrozenEvent() {
-//		CQLAttribute attribute = createAttribute("id", null,
-//				CQLPredicate.IS_NOT_NULL);
-//		CQLAssociation association = createAssociation(
-//				FrozenEventParameters.class, "specimenEventCollection");
-//		association.setAttribute(attribute);
-//
-//		CQLAttribute targetAttribute = createAttribute("id", null,
-//				CQLPredicate.IS_NOT_NULL);
-//		CQLGroup group = createGroup(CQLLogicalOperator.AND, targetAttribute,
-//				association);
-//
-//		return createTargetQuery(MolecularSpecimen.class, group);
-//	}
 
 	public static CQLQuery getSpecimenMalePPI(String ppi) {
 		CQLAssociation association3 = createAssociationWithIDNotNullandOtherAttribute(
@@ -119,21 +104,6 @@ public class CqlUtility {
 		return createTargetQuery(Specimen.class, group1);
 	}
 
-//	public static CQLQuery getSpecimenNeedleBiopsy() {
-//		CQLAttribute attribute = createAttribute("id", null,
-//				CQLPredicate.IS_NOT_NULL);
-//		CQLAssociation association1 = createAssociationWithIDNotNullandOtherAttribute(
-//				CollectionEventParameters.class, "specimenEventCollection",
-//				"collectionProcedure", "%Needle Core Biopsy%",
-//				CQLPredicate.LIKE, CQLLogicalOperator.AND);
-//		CQLAssociation association2 = createAssociationWithIDNotNullandOtherAttribute(
-//				CollectionProtocol.class, "collectionProtocol", "title",
-//				"%Prostate%", CQLPredicate.LIKE, CQLLogicalOperator.AND);
-//
-//		CQLGroup group = createGroup(CQLLogicalOperator.AND, attribute,
-//				association1, association2);
-//		return createTargetQuery(Specimen.class, group);
-//	}
 
 	private static CQLQuery createTargetQuery(Class<?> klass, Object... objects) {
 		CQLObject target = new CQLObject();

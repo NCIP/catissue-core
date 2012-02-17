@@ -1,20 +1,28 @@
 package edu.wustl.catissuecore.api.testcases;
 
-import java.text.ParseException;
-import java.util.*;
-
-import edu.wustl.catissuecore.domain.*;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry;
+import edu.wustl.common.lookup.DefaultLookupResult;
+import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.SDKQuery;
 import gov.nih.nci.system.query.SDKQueryResult;
 import gov.nih.nci.system.query.example.InsertExampleQuery;
 import gov.nih.nci.system.query.example.SearchExampleQuery;
-import org.apache.commons.lang.StringUtils;
 
-import edu.wustl.common.lookup.DefaultLookupResult;
-import gov.nih.nci.system.applicationservice.ApplicationException;
-import edu.common.dynamicextensions.domain.integration.AbstractRecordEntry;
-import org.springframework.web.servlet.theme.FixedThemeResolver;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * @author Ion C. Olaru
@@ -25,44 +33,6 @@ public class AdminTestCases extends AbstractCaCoreApiTestCasesWithRegularAuthent
 		super();
 	}
 
-    /**
-     * Creates a new CollectionProtocolRegistration for a new Participant and saves the CPR.
-     * */
-/*
-    public void testAddCPRAndNewParticipant() throws ApplicationException {
-        Participant p = BaseTestCaseUtility.initParticipant();
-        CollectionProtocol cp = getCollectionProtocolByShortTitle(PropertiesLoader.getCPShortTitleForAddParticipantWithCPR());
-        CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
-        cpr.setCollectionProtocol(cp);
-        cpr.setProtocolParticipantIdentifier("PPI" + UniqueKeyGeneratorUtil.getUniqueKey());
-        cpr.setActivityStatus("Active");
-        cpr.setParticipant(p);
-        Object o = insert(cpr);
-        assertNotNull(o);
-    }
-*/
-
-/*
-    public void testAddParticipantNewCP() throws ApplicationException {
-        Participant participant = BaseTestCaseUtility.initParticipant();
-        CollectionProtocol cp = new CollectionProtocol();
-        cp.setShortTitle("Test Collection Protocol");
-        cp.setTitle("Test Collection Protocol");
-        cp.setStartDate(new Date());
-        cp.setPrincipalInvestigator(new User());
-        cp = insert(cp);
-        System.out.println(cp.getId());
-        CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
-        List<CollectionProtocolRegistration> cprc = new ArrayList<CollectionProtocolRegistration>();
-        cprc.add(cpr);
-        cpr.setCollectionProtocol(cp);
-        cpr.setParticipant(participant);
-        participant.setCollectionProtocolRegistrationCollection(cprc);
-        participant = insert(participant);
-        assertNotNull(participant.getId());
-    }
-
-*/
     public void testAddInstitution() throws ApplicationException {
         Institution i = new Institution();
         i.setName("Some Inst. Name - 01" + UniqueKeyGeneratorUtil.getUniqueKey());

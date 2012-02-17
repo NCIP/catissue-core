@@ -19,7 +19,7 @@
 		<javac destdir="${target.dir}" includes="**/*.java" includeAntRuntime="false" target="1.6">
 			<src path="${src.dir}" />
 			<classpath>
-				<fileset dir="lib">
+				<fileset dir="${lib.dir}">
 					<include name="**/*.jar" />
 				</fileset>
 				<pathelement path="${conf.dir}" />
@@ -34,7 +34,7 @@
 			<jvmarg value="-Dsun.lang.ClassLoader.allowArraySyntax=true" />
 			<formatter type="xml" />
 			<classpath>
-				<fileset dir="lib">
+				<fileset dir="${lib.dir}">
 					<include name="**/*.jar" />
 				</fileset>
 				<pathelement path="${conf.dir}" />
@@ -61,7 +61,7 @@
 			<jvmarg value="-Dsun.lang.ClassLoader.allowArraySyntax=true" />
 			<formatter type="xml" />
 			<classpath>
-				<fileset dir="lib">
+				<fileset dir="${lib.dir}">
 					<include name="**/*.jar" />
 				</fileset>
 				<pathelement path="${conf.dir}" />

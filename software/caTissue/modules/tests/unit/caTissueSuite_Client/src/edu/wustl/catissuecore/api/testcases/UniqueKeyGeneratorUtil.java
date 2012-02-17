@@ -10,11 +10,6 @@ import java.util.Date;
 public class UniqueKeyGeneratorUtil {
 	private static Date date;
 	
-/*	public static void main(String[] args) {
-		Date date = new Date();
-		System.out.println(" Time zone :: " + date.getTime());
-	}
-*/	
 	/**
 	 * gets unique key for name,barcode etc...
 	 * @return string
