@@ -10844,6 +10844,29 @@ xmlns:org="http://CQL.caBIG/2/org.cagrid.cql2">
          </dat:query>
       </dat:ExecuteQueryRequest>
    </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="QueryAllParticipantsByRace"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://sbhost07-vm05.semanticbits.com:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+xmlns:dat="http://org.cagrid.dataservice/DataService" 
+xmlns:org="http://CQL.caBIG/2/org.cagrid.cql2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dat:ExecuteQueryRequest>
+         <dat:query>
+            <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/2/org.cagrid.cql2">
+               <ns1:CQLTargetObject className="edu.wustl.catissuecore.domain.Participant">
+
+     <ns1:CQLAttribute name="id">
+      <ns1:BinaryPredicate>EQUAL_TO</ns1:BinaryPredicate>
+      <ns1:AttributeValue>
+       <ns1:LongValue>5</ns1:LongValue>
+      </ns1:AttributeValue>
+     </ns1:CQLAttribute>
+
+		</ns1:CQLTargetObject>
+            </ns1:CQLQuery>
+         </dat:query>
+      </dat:ExecuteQueryRequest>
+   </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties" name="QueryResourceProperties" bindingOperationName="QueryResourceProperties" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://sbhost07-vm05.semanticbits.com:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsrf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd">
    <soapenv:Header/>
    <soapenv:Body>
