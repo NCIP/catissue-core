@@ -1,8 +1,6 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -408,8 +406,8 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	 */
 	public List getScgsIdBySPPID(Long sppId) throws ApplicationException
 	{
-		String query = "select scg.identifier from CATISSUE_SPECIMEN_COLL_GROUP as scg "
-				+ "inner join catissue_cpe_spp as ccs on ccs.cpe_identifier = scg.COLLECTION_PROTOCOL_EVENT_ID "
+		String query = "select scg.identifier from CATISSUE_SPECIMEN_COLL_GROUP scg "
+				+ "inner join catissue_cpe_spp ccs on ccs.cpe_identifier = scg.COLLECTION_PROTOCOL_EVENT_ID "
 				+ "where ccs.spp_identifier=" + sppId
 				+ " and scg.COLLECTION_STATUS not in ('Pending','overdue','not collected') ";
 		List idList = AppUtility.executeSQLQuery(query);
@@ -426,12 +424,12 @@ public class SPPBizLogic extends CatissueDefaultBizLogic
 	public List getSpecimensIdBySPPID(Long sppId) throws ApplicationException
 	{
 
-		String query = "select cs.identifier from catissue_specimen as cs "
+		String query = "select cs.identifier from catissue_specimen cs "
 				+ "inner join catissue_cp_req_specimen cprs on cprs.identifier = cs.REQ_SPECIMEN_ID "
 				+ "where cprs.SPP_IDENTIFIER = "
 				+ sppId
 				+ " and cs.COLLECTION_STATUS ='Collected' "
-				+ "and cs.identifier not in (select caa.SPECIMEN_ID from catissue_action_application as caa where caa.SPECIMEN_ID= cs.identifier)";
+				+ "and cs.identifier not in (select caa.SPECIMEN_ID from catissue_action_application caa where caa.SPECIMEN_ID= cs.identifier)";
 		List idList = AppUtility.executeSQLQuery(query);
 		return idList;
 	}
