@@ -1279,9 +1279,6 @@
     <field name="barcode" type="string">
       <bind-xml name="barcode" node="attribute" />
     </field>
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
     <field name="uniqueId" type="string">
       <bind-xml name="uniqueId" node="attribute" />
     </field>
@@ -1375,9 +1372,6 @@
   </class>
   <class name="edu.wustl.catissuecore.domain.StudyFormContext" identity="id" extends="edu.common.dynamicextensions.domain.integration.AbstractFormContext">
     <map-to xml="StudyFormContext" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" />
-    <field name="id" type="long">
-      <bind-xml name="id" node="attribute" />
-    </field>
     <field name="noOfEntries" type="integer">
       <bind-xml name="noOfEntries" node="attribute" />
     </field>
