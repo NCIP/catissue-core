@@ -749,5 +749,9 @@
 		<name>CiderOutBoundQueue</name>
 		<value>@@CiderOutBoundQueue@@</value>
 	</property>
+	<property>
+		<name>BulkEmpiSleepTime</name>
+		<value>3000</value>
+	</property>
 	
 </properties>
