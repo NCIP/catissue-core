@@ -126,6 +126,7 @@ public class SpecimenDataBackloader
 		{
 			closeJDBCSession(dao);
 		}
+			LOGGER.info("Specimen data backload completed successfully.");
 		return specimenIdList;
 	}
 
@@ -141,6 +142,6 @@ public class SpecimenDataBackloader
 		}
 		SpecimenDataBackloader dataSender = new SpecimenDataBackloader();
 		dataSender.sendOldSpeciemnDataToCider(cpShortTitle);
-		System.out.println("end");
+
 	}
 }
