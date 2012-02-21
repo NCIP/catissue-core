@@ -172,8 +172,9 @@ public final class SpecimenWmqProcessor
 	 * @param fileName name of file whose contents should be sent in queue
 	 * @throws JMSException
 	 */
-	public void writeMessageToQueue(final String fileName) throws JMSException
+	public boolean writeMessageToQueue(final String fileName) throws JMSException
 	{
+		boolean isSuccess  = false;
 		if(isEnabled)
 		{
 			final TextMessage outMessage = session.createTextMessage();
@@ -188,8 +189,9 @@ public final class SpecimenWmqProcessor
 
 			queueSender.send(outMessage);
 			queueSender.close();
+			isSuccess = true;
 		}
-
+		return isSuccess;
 	}
 
 	/**

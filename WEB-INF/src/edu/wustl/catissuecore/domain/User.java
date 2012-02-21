@@ -972,8 +972,16 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 
 	public Boolean getAdminuser()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		  boolean adminUser;
+		 if (Constants.ADMIN_USER.equalsIgnoreCase(getRoleId()))
+	      {
+	           adminUser = true;
+	      }
+	        else
+	        {
+	            adminUser = false;
+	        }
+	        return adminUser;
 	}
 
 	public void setAdminuser(Boolean arg0)

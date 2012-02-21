@@ -126,8 +126,10 @@ public class SpecimenInterceptor implements InterceptProcessor
 
 				String fileName = TEMP_DIR_LOCATION+File.separator+FILE_NAME_PREFIX+specimen.getId()+Constants.XML_SUFFIX;
 				marshall(xmlParticipant, fileName);
-				writeMessage(fileName);
-				updateSpecimenCiderMessageLog(specimen,type);
+				if(writeMessage(fileName))
+				{
+					updateSpecimenCiderMessageLog(specimen,type);
+				}
 
 			}catch (JAXBException e) {
 				throw new InterceptProcessorException("001",objId,e,ApplicationProperties.getValue("error.interceptor.specimen.message",objId.toString()));
@@ -185,9 +187,9 @@ public class SpecimenInterceptor implements InterceptProcessor
 	 * @param fileName name of the file whose contents should be sent on queue.
 	 * @throws JMSException exception in queue handling.
 	 */
-	private void writeMessage(String fileName) throws JMSException
+	private boolean writeMessage(String fileName) throws JMSException
 	{
-		SpecimenWmqProcessor.getInstance().writeMessageToQueue(fileName);
+		return SpecimenWmqProcessor.getInstance().writeMessageToQueue(fileName);
 
 
 	}
