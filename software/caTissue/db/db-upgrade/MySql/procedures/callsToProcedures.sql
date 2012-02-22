@@ -30,6 +30,8 @@ call  thaw_call_parameter();
 select'done thaw_call_parameter';
 call  Tissue_Event_migrate();
 select'done Tissue_Event_migrate';
+call Create_spp_events();
+select'done creating SPP events';
 call SPP_Event_migrate();
 select'done SPP migrate';
 UPDATE CATISSUE_SPECIMEN_EVENT_PARAM

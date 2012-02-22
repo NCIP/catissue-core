@@ -5468,6 +5468,7 @@ Thanking You,
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/spunEvent.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/thawEvent.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/tissueSpecimenEvent.sql" />
+			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/createSPPEvents.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/migrate_sppEvents.sql" />
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/callsToProcedures.sql" />	
 			<transaction>call caller();</transaction>
