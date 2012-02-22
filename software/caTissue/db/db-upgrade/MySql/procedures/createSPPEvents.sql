@@ -162,7 +162,7 @@ DECLARE _stme integer default 0;
       
       INSERT IGNORE into   catissue_action_app_rcd_entry(identifier)values(rec_entry_id);
       Insert IGNORE into catissue_action(IDENTIFIER,BARCODE,ACTION_ORDER,ACTION_APP_RECORD_ENTRY_ID,SPP_IDENTIFIER,UNIQUE_ID,IS_SKIPPED) 
-	values(spp_de_id,null,1,rec_entry_id,spp_id,2,0);
+	values(spp_de_id,null,2,rec_entry_id,spp_id,2,0);
       
       
 	
