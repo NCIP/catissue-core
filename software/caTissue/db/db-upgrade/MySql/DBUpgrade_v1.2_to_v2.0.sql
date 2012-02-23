@@ -90,7 +90,7 @@ DROP PROCEDURE caCORE_UpgradeProc;
 /
 
 -- These SQL's are for creating SPP related tables and coresponding changes in the model for SPP
-create table catissue_spp (IDENTIFIER bigint auto_increment, NAME varchar(50) unique, BARCODE varchar(50) unique,spp_template_xml blob,  primary key (IDENTIFIER));
+create table catissue_spp (IDENTIFIER bigint auto_increment, NAME varchar(150) unique, BARCODE varchar(50) unique,spp_template_xml blob,  primary key (IDENTIFIER));
 /
 
 create table catissue_abstract_application (IDENTIFIER bigint NOT NULL AUTO_INCREMENT, REASON_DEVIATION text, TIMESTAMP timestamp, USER_DETAILS bigint, COMMENTS text, primary key (IDENTIFIER), foreign key (USER_DETAILS) references catissue_user (IDENTIFIER));
@@ -212,7 +212,7 @@ DECLARE KEY_SEQUENCE_ID_TMP INT;
 
   set ident=1;
  
-  select max(LABEL) into SPECIMEN_TMP from catissue_specimen;
+  select max(cast(LABEL as SIGNED)) into SPECIMEN_TMP from catissue_specimen;
   
   IF ISNULL(SPECIMEN_TMP) THEN
 	set maxLabelSpecimen=0;

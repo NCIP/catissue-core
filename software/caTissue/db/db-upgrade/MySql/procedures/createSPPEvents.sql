@@ -89,7 +89,7 @@ DECLARE _stme integer default 0;
 	SELECT 'Hello World3!';
 	select IFNULL(max(cast(identifier as SIGNED)),0)+1 into max_id from catissue_spp;
 	select max_id;
-	select CONCAT('migrated_spp_',max_id) into spp_name from dual;
+	select CONCAT(COLLECTION_PROCEDURE,'_',CONTAINER,'_',RECEIVED_QUALITY,'_',max_id) into spp_name from dual;
 	insert into catissue_spp(IDENTIFIER,NAME,BARCODE) values(max_id,spp_name,null);
 	
 

@@ -62,8 +62,7 @@ BEGIN
       SELECT catissue_spp_seq.nextval 
       INTO   spp_iden 
       FROM   dual; 
-
-      SELECT Concat('migrated_spp_', spp_iden) 
+	  SELECT COLL_PROCEDURE||'_'||coll_CONTAINER||'_'||REC_QUALITY||'_'||spp_iden
       INTO   spp_name 
       FROM   dual; 
 

@@ -103,7 +103,7 @@ alter table catissue_deidentified_report drop column "SCG_ID"
 /
 
 -- These SQL's are for creating SPP related tables and coresponding changes in the model for SPP
-create table catissue_spp (IDENTIFIER number(19,0), NAME varchar(50) unique, BARCODE varchar(50) unique,spp_template_xml CLOB,  primary key (IDENTIFIER))
+create table catissue_spp (IDENTIFIER number(19,0), NAME varchar(150) unique, BARCODE varchar(50) unique,spp_template_xml CLOB,  primary key (IDENTIFIER))
 /
 create table catissue_abstract_application (IDENTIFIER number(19,0), REASON_DEVIATION varchar(4000), TIMESTAMP timestamp, USER_DETAILS number(19,0), COMMENTS varchar(4000), primary key (IDENTIFIER), foreign key (USER_DETAILS) references catissue_user (IDENTIFIER))
 /
