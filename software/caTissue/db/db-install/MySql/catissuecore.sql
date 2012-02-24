@@ -449,7 +449,7 @@ create table CATISSUE_COLL_PROT_REG (
    IDENTIFIER bigint not null auto_increment,
    PROTOCOL_PARTICIPANT_ID varchar(255),
    REGISTRATION_DATE date,
-   PARTICIPANT_ID bigint,
+   PARTICIPANT_ID bigint NOT NULL,
    COLLECTION_PROTOCOL_ID bigint,
    ACTIVITY_STATUS varchar(50),
    CONSENT_SIGN_DATE datetime,

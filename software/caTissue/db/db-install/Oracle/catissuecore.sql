@@ -406,7 +406,7 @@ create table CATISSUE_COLL_PROT_REG (
    IDENTIFIER number(19,0) not null ,
    PROTOCOL_PARTICIPANT_ID varchar(255),
    REGISTRATION_DATE date,
-   PARTICIPANT_ID number(19,0),
+   PARTICIPANT_ID number(19,0) not null,
    COLLECTION_PROTOCOL_ID number(19,0),
    ACTIVITY_STATUS varchar(50),
    CONSENT_SIGN_DATE date,
