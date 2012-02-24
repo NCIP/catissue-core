@@ -27,8 +27,8 @@ public class SPPTemplateDownloadAction extends SecureAction
 		String requestFor = request.getParameter("requestFor");
 		if("xsd".equals(requestFor))
 		{
-			InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(Constants.SPP_XSD_FILENAME);
-			sendFileToClient(in, response, Constants.SPP_XSD_FILENAME);
+			InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(Constants.SPP_XSD_ZIP_FILENAME);
+			sendFileToClient(in, response, Constants.SPP_XSD_ZIP_FILENAME);
 		}
 		else if("template".equals(requestFor))
 		{

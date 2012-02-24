@@ -365,6 +365,7 @@
 				<include name="**/*.xml" />
 				<include name="**/*.hbm.xml" />
 				<include name="**/*.ser" />
+				<include name="SPP_xsd.zip" />
 			</fileset>
 		</copy>
 		<copy todir="${classes.dir}" overwrite="true" filtering="true">
