@@ -7,15 +7,15 @@ IS
   specimen_id               INTEGER; 
   specimen_event_user_id    INTEGER; 
   specimen_event_param_id   INTEGER; 
-  specimen_comments         VARCHAR2(255); 
+  specimen_comments         VARCHAR2(2000); 
   specimen_timestamp        TIMESTAMP; 
   parent_specimen_id        INTEGER; 
   flag                      INTEGER; 
-  cell_count                NUMBER(25, 5); 
-  query_text                VARCHAR2(1000); 
-  query_text_form           VARCHAR2(1000); 
-  v_code                    NUMBER; 
-  v_errm                    VARCHAR2(64); 
+  cell_count                NUMBER(30, 5); 
+  query_text                VARCHAR2(2000); 
+  query_text_form           VARCHAR2(2000); 
+  v_code                    INTEGER; 
+  v_errm                    VARCHAR2(2000); 
   CURSOR mig_cursor IS 
     SELECT spec.identifier, 
            spec.specimen_id, 

@@ -121,15 +121,13 @@ BEGIN
                          action_order, 
                          action_app_record_entry_id, 
                          spp_identifier, 
-                         unique_id, 
-                         is_skipped) 
+                         unique_id) 
             VALUES     (dyextn_abstract_frm_ctxt_seq.currval, 
                         NULL, 
                         1, 
                         dyextn_abstract_re_seq.currval, 
                         spp_iden, 
-                        1, 
-                        0); 
+                        1); 
 
 			select CATISSUE_SPEC_EVENT_PARAM_SEQ.nextval into max_id from dual;
             EXECUTE IMMEDIATE coll_query_text 
@@ -191,15 +189,13 @@ BEGIN
                          action_order, 
                          action_app_record_entry_id, 
                          spp_identifier, 
-                         unique_id, 
-                         is_skipped) 
+                         unique_id) 
             VALUES     (spp_de_id, 
                         NULL, 
                         2, 
                         rec_entry_id, 
                         spp_iden, 
-                        2, 
-                        0); 
+                        2); 
 
 
             SELECT CATISSUE_SPEC_EVENT_PARAM_SEQ.nextval 

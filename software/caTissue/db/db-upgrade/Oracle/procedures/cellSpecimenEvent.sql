@@ -1,23 +1,23 @@
 create or replace
 PROCEDURE Cell_event_migrate(event_name in varchar2)
 IS 
-  counter                      NUMBER (12); 
+  counter                      NUMBER (25); 
   form_context_id              INTEGER; 
-  seqval                       NUMBER (12); 
+  seqval                       NUMBER (25); 
   specimen_event_identifier    INTEGER; 
   specimen_id                  INTEGER; 
   specimen_event_user_id       INTEGER; 
   specimen_event_param_id      INTEGER; 
-  specimen_comments            VARCHAR2(255); 
+  specimen_comments            VARCHAR2(2000); 
   specimen_timestamp           TIMESTAMP; 
   parent_specimen_id           INTEGER; 
   flag                         INTEGER; 
-  dispo_neoplastic             NUMBER(20, 10); 
-  dispo_viable_cell_percentage NUMBER(20, 10); 
-  query_text                   VARCHAR2(1000); 
-  query_text_form              VARCHAR2(1000); 
+  dispo_neoplastic             NUMBER(25, 10); 
+  dispo_viable_cell_percentage NUMBER(25, 10); 
+  query_text                   VARCHAR2(2000); 
+  query_text_form              VARCHAR2(2000); 
   v_code                       NUMBER; 
-  v_errm                       VARCHAR2(1000); 
+  v_errm                       VARCHAR2(2000); 
   CURSOR mig_cursor IS 
     SELECT spec.identifier, 
            spec.specimen_id, 

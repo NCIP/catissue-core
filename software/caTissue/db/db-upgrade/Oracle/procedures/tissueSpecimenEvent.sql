@@ -3,24 +3,24 @@ PROCEDURE Tissue_specimen_event_migrate(event_name in varchar2)
 IS 
   counter                   INTEGER; 
   form_context_id           INTEGER; 
-  seqval                    NUMBER(15); 
+  seqval                    NUMBER(25); 
   specimen_event_identifier INTEGER; 
   specimen_id               INTEGER; 
   specimen_event_user_id    INTEGER; 
   specimen_event_param_id   INTEGER; 
-  specimen_comments         VARCHAR2(1000); 
+  specimen_comments         VARCHAR2(2000); 
   specimen_timestamp        TIMESTAMP; 
   parent_specimen_id        INTEGER; 
   flag                      INTEGER; 
-  dispo_neo                 NUMBER (20); 
-  dispo_nec                 NUMBER(20); 
-  dispo_lym                 NUMBER(20, 5); 
-  dispo_tot                 NUMBER(20, 5); 
+  dispo_neo                 NUMBER(25); 
+  dispo_nec                 NUMBER(25); 
+  dispo_lym                 NUMBER(25, 5); 
+  dispo_tot                 NUMBER(25, 5); 
   dispo_his                 VARCHAR2(255); 
-  query_text                VARCHAR2(1000); 
-  query_text_form           VARCHAR2(1000); 
+  query_text                VARCHAR2(2000); 
+  query_text_form           VARCHAR2(2000); 
   v_code                    NUMBER; 
-  v_errm                    VARCHAR2(1000); 
+  v_errm                    VARCHAR2(2000); 
   CURSOR mig_cursor IS 
     SELECT spec.identifier, 
            spec.specimen_id, 

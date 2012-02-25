@@ -2,26 +2,26 @@ CREATE OR replace PROCEDURE Mol_migrate(event_name in varchar2)
 IS 
   counter                   INTEGER; 
   form_context_id           INTEGER; 
-  seqval                    NUMBER(15); 
+  seqval                    NUMBER(25); 
   specimen_event_identifier INTEGER; 
   specimen_id               INTEGER; 
   specimen_event_user_id    INTEGER; 
   specimen_event_param_id   INTEGER; 
-  specimen_comments         VARCHAR2(1000); 
+  specimen_comments         VARCHAR2(2000); 
   specimen_timestamp        TIMESTAMP; 
   parent_specimen_id        INTEGER; 
   flag                      INTEGER; 
-  dispo_imgurl              VARCHAR2(1000); 
-  dispo_qix                 VARCHAR2(1000); 
-  dispo_lno                 VARCHAR2(1000); 
-  dispo_gel_no              NUMBER(20); 
-  dispo_abs_260             NUMBER(20); 
-  dispo_abs_280             NUMBER (20); 
-  dispo_ratio_28s           NUMBER (20); 
+  dispo_imgurl              VARCHAR2(2000); 
+  dispo_qix                 VARCHAR2(2000); 
+  dispo_lno                 VARCHAR2(2000); 
+  dispo_gel_no              NUMBER(25); 
+  dispo_abs_260             NUMBER(25); 
+  dispo_abs_280             NUMBER (25); 
+  dispo_ratio_28s           NUMBER (25); 
   query_text                VARCHAR2(2000); 
   query_text_form           VARCHAR2(2000); 
-  v_code                    NUMBER; 
-  v_errm                    VARCHAR2(1000); 
+  v_code                    NUMBER(25); 
+  v_errm                    VARCHAR2(2000); 
   CURSOR mig_cursor IS 
     SELECT spec.identifier, 
            spec.specimen_id, 
