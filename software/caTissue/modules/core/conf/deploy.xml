@@ -5452,6 +5452,11 @@ Thanking You,
 	
 	<target name="migrate_events_mysql" description="Target for migrating events from static to DE">
 		<echo message="Migrating events.." />
+		<property name="file:enter" value="${dbupgrade.sql.dir}/Common/SPPTemplate.xml" />
+		<replace file="${dbupgrade.sql.dir}/MySql/DB_upgrade_spp.sql">
+					<replacefilter token="@@template@@" value="${file:enter}" />
+					<replacefilter token="\" value="/" />
+				</replace>
 		<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.server}:${database.port}/${database.name}" userid="${database.user}" password="${database.password}" delimiter="//" delimitertype="row"  keepformat="yes" rdbms="mysql">
 			<transaction src="${dbupgrade.sql.dir}/MySql/functions/queryformation.sql" />
 			
@@ -5473,6 +5478,7 @@ Thanking You,
 			<transaction src="${dbupgrade.sql.dir}/MySql/procedures/callsToProcedures.sql" />	
 			<transaction>call caller();</transaction>
 			<transaction>commit;</transaction>
+			<transaction src="${dbupgrade.sql.dir}/MySql/DB_upgrade_spp.sql"/>
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
@@ -5502,8 +5508,7 @@ Thanking You,
 				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/createSPPEvents.sql" />
 				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/migrate_sppEvents.sql" />
 				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/callsToProcedures.sql" />	
-				
-				
+				<transaction src="${dbupgrade.sql.dir}/Oracle/DB_upgrade_spp.sql" />
 				<classpath>
 					<fileset dir="${lib.dir}">
 						<include name="*.jar" />
