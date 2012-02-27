@@ -5489,6 +5489,11 @@ Thanking You,
 	
 	<target name="migrate_events_oracle" description="Target for migrating events from static to DE">
 			<echo message="Migrating events.." />
+		<property name="file:enter" value="${dbupgrade.sql.dir}" />
+				<replace file="${dbupgrade.sql.dir}/Oracle/DB_upgrade_spp.sql">
+							<replacefilter token="@@template@@" value="${dbupgrade.sql.dir}/Common" />
+							<replacefilter token="\" value="/" />
+						</replace>
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.server}:${database.port}:${database.name}" userid="${database.user}" password="${database.password}"  rdbms="oracle" delimiter="/" >
 				<transaction src="${dbupgrade.sql.dir}/Oracle/functions/queryformation.sql" />
 				
@@ -5508,7 +5513,6 @@ Thanking You,
 				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/createSPPEvents.sql" />
 				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/migrate_sppEvents.sql" />
 				<transaction src="${dbupgrade.sql.dir}/Oracle/procedures/callsToProcedures.sql" />	
-				<transaction src="${dbupgrade.sql.dir}/Oracle/DB_upgrade_spp.sql" />
 				<classpath>
 					<fileset dir="${lib.dir}">
 						<include name="*.jar" />
@@ -5523,6 +5527,14 @@ Thanking You,
 					</fileset>
 				</classpath>
 				call caller();
+			</sql>
+		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.server}:${database.port}:${database.name}" userid="${database.user}" password="${database.password}"  rdbms="oracle" delimiter="/" >
+						<transaction src="${dbupgrade.sql.dir}/Oracle/DB_upgrade_spp.sql" />
+			<classpath>
+								<fileset dir="${lib.dir}">
+									<include name="*.jar" />
+								</fileset>
+							</classpath>
 			</sql>
 		</target>
 

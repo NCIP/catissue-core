@@ -1,4 +1,4 @@
-drop table temp_spp_events;
+drop table temp_spp_events
 /
-commit;
+commit
 /
