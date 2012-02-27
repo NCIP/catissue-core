@@ -688,7 +688,7 @@ the reason to keep track of the state of the selectDefault element (previously c
 	
    // if((event.x == undefined) |/*event.y - parseInt(this.update.style.top)<0|event.y - parseInt(this.update.style.top)>0  |*/event.x - parseInt(this.update.style.left)<0 |(event.x - parseInt(this.update.style.left)) > parseInt(this.update.style.width) | (event.y - parseInt(this.update.style.top)) > parseInt(this.update.style.height)) 
       
-	  this.hideTimeout = setTimeout(this.hide.bind(this), 250); 
+	  this.hideTimeout = setTimeout(this.hide.bind(this), 2500); 
        // setTimeout(this.hide.bind(this), 250); 
 		this.hasFocus = false; 
 		this.active = false;
