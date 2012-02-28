@@ -119,12 +119,17 @@ public class CollectionsHandler {
             Method readMethod = pd.getReadMethod();
             log.debug(">>> GETTER: " + readMethod);
             Object getterResult = readMethod.invoke(o);
-            // DO NOT REMOVE THE NEXT LINE
-            log.debug(">>> getterResult: " + getterResult);
+
+            // DO NOT REMOVE THE NEXT LINE, SINCE IT HAS TO BE CALLED IN ORDER TO TRIGGER THE LAZY EXCEPTION IF THE CASE
+            getterResult.toString();
+//            log.debug(">>> getterResult: " + getterResult);
+
+            // IF o IS A LAZY COLLECTION WE TRIGGER THE EXCEPTION BY CALLING "getSize()" ON IT
             if (invokeSize) {
                 Method sizeMethod = getterResult.getClass().getMethod("size");
                 sizeMethod.invoke(getterResult);
             }
+
             return getterResult;
         } catch (Throwable e) {
             Method writeMethod = pd.getWriteMethod();
