@@ -124,7 +124,7 @@ public class CollectionsHandler {
             getterResult.toString();
 //            log.debug(">>> getterResult: " + getterResult);
 
-            // IF o IS A LAZY COLLECTION WE TRIGGER THE EXCEPTION BY CALLING "getSize()" ON IT
+            // IF o IS A LAZY COLLECTION WE TRIGGER THE EXCEPTION BY CALLING "size()" ON IT
             if (invokeSize) {
                 Method sizeMethod = getterResult.getClass().getMethod("size");
                 sizeMethod.invoke(getterResult);
