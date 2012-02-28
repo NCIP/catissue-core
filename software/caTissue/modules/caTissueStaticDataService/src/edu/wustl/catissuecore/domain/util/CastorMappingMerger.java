@@ -63,7 +63,7 @@ public class CastorMappingMerger {
         destFile = args[2];
     }
 
-    private static Document readXML(String file) {
+    public static Document readXML(String file) {
         log.debug(">>> Reading file: " + file);
         Document xml = null;
         SAXBuilder saxBuilder = new SAXBuilder(false);
@@ -172,7 +172,7 @@ public class CastorMappingMerger {
         return e;
     }
 
-    private void readElements(Element rootElement, Map<String, Element> m) {
+    public void readElements(Element rootElement, Map<String, Element> m) {
         List<Element> childrenA = getChildElements(rootElement);
         for (Element e: childrenA) {
             String key = e.getAttribute("name").getValue();
