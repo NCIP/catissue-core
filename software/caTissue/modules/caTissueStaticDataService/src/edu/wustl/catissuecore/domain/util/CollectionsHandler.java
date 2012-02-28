@@ -119,6 +119,8 @@ public class CollectionsHandler {
             Method readMethod = pd.getReadMethod();
             log.debug(">>> GETTER: " + readMethod);
             Object getterResult = readMethod.invoke(o);
+            // DO NOT REMOVE THE NEXT LINE
+            log.debug(">>> getterResult: " + getterResult);
             if (invokeSize) {
                 Method sizeMethod = getterResult.getClass().getMethod("size");
                 sizeMethod.invoke(getterResult);
@@ -128,8 +130,13 @@ public class CollectionsHandler {
             Method writeMethod = pd.getWriteMethod();
             try {
                 log.debug(">>> SETTER: " + writeMethod);
-                if (isSet(f.getType())) writeMethod.invoke(o, new java.util.HashSet());
-                else writeMethod.invoke(o, new java.util.ArrayList());
+                if (isCollection(f.getType())) {
+                    if (isSet(f.getType())) writeMethod.invoke(o, new java.util.HashSet());
+                    else writeMethod.invoke(o, new java.util.ArrayList());
+                } else {
+                    Class returnedType = pd.getReadMethod().getReturnType();
+                    writeMethod.invoke(o, returnedType.newInstance());
+                }
             } catch (Exception e1) {
                 throw new RuntimeException(String.format("Exception on invoking method '%s' on class '%s'.", f.getName(), o.getClass()), e1);
             }
