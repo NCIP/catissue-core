@@ -144,7 +144,7 @@
 				}
 			}
 			var divHeight = decontrols * 35;
-			var frmHeight = (decontrols * 40)+20;
+			var frmHeight = (decontrols * 40)+60;
 			iframeList[j].style.height= frmHeight+'px';
 			allFrameHeights = allFrameHeights+ frmHeight;
 		}
