@@ -140,10 +140,12 @@ public class CollectionsHandler {
                     else writeMethod.invoke(o, new java.util.ArrayList());
                 } else {
                     Class returnedType = pd.getReadMethod().getReturnType();
-                    writeMethod.invoke(o, returnedType.newInstance());
+                    ReflectionUtils.invokeMethod(writeMethod, o, new Object[] {null});
+//                    writeMethod.invoke(o, returnedType.newInstance());
                 }
             } catch (Exception e1) {
-                throw new RuntimeException(String.format("Exception on invoking method '%s' on class '%s'.", f.getName(), o.getClass()), e1);
+                log.debug(String.format("Exception on invoking method '%s' on class '%s', you may be trying to instantiate an abstract class or an interface. ", f.getName(), o.getClass()));
+                throw new RuntimeException(String.format("Exception on invoking method '%s' on class '%s', you may be trying to instantiate an abstract class or an interface. ", f.getName(), o.getClass()), e1);
             }
         }
         return null;
