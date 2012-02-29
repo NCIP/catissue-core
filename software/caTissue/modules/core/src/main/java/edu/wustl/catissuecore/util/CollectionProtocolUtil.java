@@ -1486,7 +1486,7 @@ public class CollectionProtocolUtil
 				DAO dao =null;
 				try {
 					dao = AppUtility.openDAOSession(null);
-					String hql = "from edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure where name='"+sppWithEvent[0]+"'";
+					String hql = "from edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure where name='"+sppWithEvent[0].trim()+"'";
 					sppList = dao.executeQuery(hql);
 					if(sppList!=null && !sppList.isEmpty())
 					{
