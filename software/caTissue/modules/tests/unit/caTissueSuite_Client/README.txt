@@ -39,5 +39,6 @@ Link: http://gforge.nci.nih.gov/docman/index.php?group_id=689&selected_doc_group
 SVN Tags
 ========================================
 
+P.S: Currently SingleAPITestCases are commented. To run these test cases kindly add events classes to build path and execute.
 
 Thank you for using caTissue Suite Client.

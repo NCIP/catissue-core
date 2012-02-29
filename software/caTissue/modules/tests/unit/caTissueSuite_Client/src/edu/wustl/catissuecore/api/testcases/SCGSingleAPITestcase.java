@@ -9,15 +9,15 @@ import edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry;
 import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
-import gov.nih.nci.dynext.sop.ProcedureEventParameters;
-import gov.nih.nci.dynext.sop.SpunEventParameters;
+//import gov.nih.nci.dynext.sop.ProcedureEventParameters;
+//import gov.nih.nci.dynext.sop.SpunEventParameters;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 public class SCGSingleAPITestcase extends AbstractCaCoreApiTestCasesWithRegularAuthentication
 {
 	
-	public void testScgUpdateWithSPPData()
+	/*public void testScgUpdateWithSPPData()
 	{
 		try
 		{
@@ -107,5 +107,5 @@ public class SCGSingleAPITestcase extends AbstractCaCoreApiTestCasesWithRegularA
 		
 		
 		
-	}
+	}*/
 }

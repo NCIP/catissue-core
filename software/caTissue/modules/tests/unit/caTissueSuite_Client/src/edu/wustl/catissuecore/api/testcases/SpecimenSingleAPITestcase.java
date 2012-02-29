@@ -7,9 +7,9 @@ import edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry;
 import edu.wustl.catissuecore.domain.processingprocedure.ActionApplication;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure;
 import edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedureApplication;
-import gov.nih.nci.dynext.pathology_specimen.ProstateSpecimenPathologyAnnotation;
-import gov.nih.nci.dynext.sop.EmbeddedEventParameters;
-import gov.nih.nci.dynext.sop.FrozenEventParameters;
+//import gov.nih.nci.dynext.pathology_specimen.ProstateSpecimenPathologyAnnotation;
+//import gov.nih.nci.dynext.sop.EmbeddedEventParameters;
+//import gov.nih.nci.dynext.sop.FrozenEventParameters;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
@@ -21,7 +21,7 @@ import java.util.Set;
 public class SpecimenSingleAPITestcase extends AbstractCaCoreApiTestCasesWithRegularAuthentication
 {
 
-	public void testInsertDEData()
+	/*public void testInsertDEData()
 	{
 //		Use case 1: Create new DE data for existing specimen
 		Specimen existingSpecimen = new Specimen();
@@ -264,5 +264,5 @@ public class SpecimenSingleAPITestcase extends AbstractCaCoreApiTestCasesWithReg
 		specimen = specColl.iterator().next();
 		
 		return specimen;
-	}
+	}*/
 }
