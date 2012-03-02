@@ -1907,6 +1907,7 @@
 						<include name="${entitygroupname}-dozer-files.jar" />
 						<include name="${entitygroupname}-beans.jar" />
 						<include name="${entitygroupname}-schema.jar" />
+						<include name="${entitygroupname}-orm.jar" />
 					</fileset>
 				</copy>
 				<echo message="DEBUG: Dozer files archive copied for: ${entitygroupname}" />
