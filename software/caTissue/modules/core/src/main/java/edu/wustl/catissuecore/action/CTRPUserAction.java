@@ -5,6 +5,7 @@ import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -68,16 +69,19 @@ public class CTRPUserAction extends BaseAction {
 					+ request.getAttribute(name));
 		}
 
-		String emailAddress = request.getParameter("emailAddress");
+        String emailAddress = StringUtils.isBlank(request
+                .getParameter("emailAddress")) ? "" : request
+                .getParameter("emailAddress");
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
 		System.out.println("Form Variables:" + ctrpEntityForm.getEmailAddress()
 				+ ":" + ctrpEntityForm.getFirstName() + ":"
 				+ ctrpEntityForm.getLastName());
-		if (AppUtility.isNotEmpty(ctrpEntityForm.getEmailAddress())) {
+		if (StringUtils.isNotBlank(ctrpEntityForm.getEmailAddress())) {
 			//Use email address from search form
 			emailAddress = ctrpEntityForm.getEmailAddress();
 		}
+		emailAddress = StringUtils.trim(emailAddress);
 		User searchUser = new User();
 		// searchUser.setEmailAddress(ctrpEntityForm.getEntityName());
 		searchUser.setEmailAddress(emailAddress);

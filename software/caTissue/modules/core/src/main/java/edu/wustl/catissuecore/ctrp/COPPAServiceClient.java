@@ -217,8 +217,13 @@ public class COPPAServiceClient {
 		logger.debug(CTRPConstants.CTRP_PO_PERSON_SERVICE_URL_KEY + ":"
 				+ personServiceURL);
 
-		Person[] results = new PersonClient(personServiceURL,
-				getGlobusCredential()).query(searchPerson, limit);
+        Person[] results = new Person[0];
+        try {
+            results = new PersonClient(personServiceURL, getGlobusCredential())
+                    .query(searchPerson, limit);
+        } catch (Exception e) {
+            logger.error(e, e);
+        }
 
 		if (results != null) {
 			for (Person person : results) {
