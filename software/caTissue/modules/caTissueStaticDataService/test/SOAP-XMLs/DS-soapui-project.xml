@@ -10522,7 +10522,7 @@ xsi:type="ns1:Participant"
                 <ns1:raceCollection>
                     <ns1:Race identifier="0" raceName="White"/>
                 </ns1:raceCollection>
-<!--
+
 		<ns1:participantRecordEntryCollection>
 		    <ann:participantRecordEntry>
 			<ann:alcoholHealthAnnotationCollection>
@@ -10530,7 +10530,7 @@ xsi:type="ns1:Participant"
 			</ann:alcoholHealthAnnotationCollection>
 		    </ann:participantRecordEntry>
 		</ns1:participantRecordEntryCollection>
--->
+
          </object>
       </InsertRequest>
    </soapenv:Body>
@@ -10768,13 +10768,13 @@ xmlns:gov="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
          </dat:query>
       </dat:ExecuteQueryRequest>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="CountCollectionProtocols"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://sbhost07-vm05.semanticbits.com:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dat="http://gov.nih.nci.cagrid.data/DataService" xmlns:gov="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="CountCollectionProtocols"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://john-vdell:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dat="http://gov.nih.nci.cagrid.data/DataService" xmlns:gov="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
    <soapenv:Header/>
    <soapenv:Body>
       <dat:QueryRequest>
          <dat:cqlQuery>
             <CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
-	       <Target name="edu.wustl.catissuecore.domain.CollectionProtocol"/>
+	       <Target name="edu.wustl.catissuecore.domain.MolecularSpecimen"/>
                <QueryModifier countOnly="true">
                   <DistinctAttribute>id</DistinctAttribute>
                </QueryModifier>
@@ -10836,29 +10836,6 @@ xmlns:org="http://CQL.caBIG/2/org.cagrid.cql2">
          </dat:query>
       </dat:ExecuteQueryRequest>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="QueryAllParticipantsByRace"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://sbhost07-vm05.semanticbits.com:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
-xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
-xmlns:dat="http://org.cagrid.dataservice/DataService" 
-xmlns:org="http://CQL.caBIG/2/org.cagrid.cql2">
-   <soapenv:Header/>
-   <soapenv:Body>
-      <dat:ExecuteQueryRequest>
-         <dat:query>
-            <ns1:CQLQuery xmlns:ns1="http://CQL.caBIG/2/org.cagrid.cql2">
-               <ns1:CQLTargetObject className="edu.wustl.catissuecore.domain.Participant">
-
-     <ns1:CQLAttribute name="id">
-      <ns1:BinaryPredicate>EQUAL_TO</ns1:BinaryPredicate>
-      <ns1:AttributeValue>
-       <ns1:LongValue>5</ns1:LongValue>
-      </ns1:AttributeValue>
-     </ns1:CQLAttribute>
-
-		</ns1:CQLTargetObject>
-            </ns1:CQLQuery>
-         </dat:query>
-      </dat:ExecuteQueryRequest>
-   </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="Copy of getAllSites"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://sbhost07-vm05.semanticbits.com:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
 xmlns:dat="http://org.cagrid.dataservice/DataService" 
@@ -10898,7 +10875,7 @@ xmlns:cql2="http://CQL.caBIG/2/org.cagrid.cql2">
   </ns1:Group>
  </ns1:Target>
  <ns1:QueryModifier countOnly="true"/>
-</ns1:CQLQuery>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="queryParticipantWithAPredicateOnDE"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://catissuesvc.wustl.edu:443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+</ns1:CQLQuery>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="queryParticipantWithAPredicateOnDE"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://john-vdell:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
 xmlns:dat="http://org.cagrid.dataservice/DataService">
    <soapenv:Header/>
@@ -10927,13 +10904,14 @@ xmlns:dat="http://org.cagrid.dataservice/DataService">
 
     </cql2:CQLTargetObject>
 
-<!--
+
    <cql2:AssociationPopulationSpecification>
 	  <cql2:NamedAssociationList>
-		 <cql2:NamedAssociation endName="ParticipantRecordEntryCollection"/>
+		 <cql2:NamedAssociation endName="participantRecordEntryCollection">
+		 </cql2:NamedAssociation>
 	  </cql2:NamedAssociationList>
    </cql2:AssociationPopulationSpecification>
--->
+
 
 </cql2:CQLQuery>
 
