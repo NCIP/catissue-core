@@ -47,7 +47,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.exception.BizLogicException;
@@ -104,7 +103,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			if (specimenDomainCollection != null && !specimenDomainCollection.isEmpty())
 			{
 				final Iterator<Specimen> spcItr = specimenDomainCollection.iterator();
-				final Date timeStamp = this.getTimeStamp(spcItr.next());
+				final Date timeStamp = new Date();
 				this.setCreatedOnDate(specimenDomainCollection, timeStamp);
 				bizLogic.update(specimenDomainCollection, specimenDomainCollection, 0,
 						sessionDataBean);
@@ -822,39 +821,4 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			LOGGER.error(e.getMessage(),e);
 		}
 	}
-
-	/**
-	 * Gets the time stamp.
-	 *
-	 * @param specimen : specimen
-	 *
-	 * @return Date : Date
-	 */
-	private Date getTimeStamp(Specimen specimen)
-	{
-		Date timeStamp = null;
-		try
-		{
-			final String query = "select collectionEventParameters.timestamp"
-					+ " from edu.wustl.catissuecore.domain.CollectionEventParameters"
-					+ " as collectionEventParameters where "
-					+ " collectionEventParameters.specimenCollectionGroup.id"
-					+ " = (select specimen.specimenCollectionGroup.id"
-					+ " from edu.wustl.catissuecore.domain.Specimen as" + " specimen where "
-					+ "specimen.id = " + specimen.getId() + ")";
-
-			final List<Date> list = new DefaultBizLogic().executeQuery(query);
-			final Iterator<Date> itr = list.iterator();
-			while (itr.hasNext())
-			{
-				timeStamp = itr.next();
-			}
-		}
-		catch (final Exception e)
-		{
-			LOGGER.error(e.getMessage(),e);
-		}
-		return timeStamp;
-	}
-
 }
