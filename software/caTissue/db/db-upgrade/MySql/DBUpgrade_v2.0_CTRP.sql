@@ -85,65 +85,12 @@ VALUES (
 		);
 	 	 
 -- Search Grid changes for Institution entity		 
-INSERT INTO `catissue_interface_column_data` ( `TABLE_ID`, `COLUMN_NAME`, `ATTRIBUTE_TYPE`) VALUES
- ( (select  cqtd.TABLE_ID from catissue_query_table_data cqtd	 where cqtd.ALIAS_NAME = 'Institution'), 'REMOTE_MANAGED_FLAG', 'tinyint');
 
- INSERT INTO `catissue_search_display_data` ( `RELATIONSHIP_ID`, `COL_ID`, `DISPLAY_NAME`, `DEFAULT_VIEW_ATTRIBUTE`, `ATTRIBUTE_ORDER`) 
-VALUES (
-			( select relationData.RELATIONSHIP_ID from CATISSUE_TABLE_RELATION relationData, CATISSUE_QUERY_TABLE_DATA tableData
-				where relationData.PARENT_TABLE_ID = tableData.TABLE_ID
-				and relationData.CHILD_TABLE_ID =  tableData.TABLE_ID
-				and tableData.ALIAS_NAME = 'Institution'
-			), 
-			(SELECT  columnData.IDENTIFIER
-				 FROM CATISSUE_INTERFACE_COLUMN_DATA columnData,  CATISSUE_TABLE_RELATION relationData,  CATISSUE_QUERY_TABLE_DATA tableData
-				 where relationData.CHILD_TABLE_ID = columnData.TABLE_ID 
-				 and  relationData.PARENT_TABLE_ID = tableData.TABLE_ID
-				 and relationData.CHILD_TABLE_ID =  tableData.TABLE_ID
-				 and tableData.ALIAS_NAME = 'Institution'
-				 and  columnData.COLUMN_NAME = 'REMOTE_MANAGED_FLAG'
-			), 
-			'RemoteManagedFlag', 
-			1, 
-			(SELECT  max(displayData.ATTRIBUTE_ORDER)+1
-				 FROM CATISSUE_INTERFACE_COLUMN_DATA columnData,  CATISSUE_TABLE_RELATION relationData,  CATISSUE_QUERY_TABLE_DATA tableData,  CATISSUE_SEARCH_DISPLAY_DATA displayData  
-				 where relationData.CHILD_TABLE_ID = columnData.TABLE_ID 
-				 and  relationData.PARENT_TABLE_ID = tableData.TABLE_ID 
-				 and  relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID 
-				 and  columnData.IDENTIFIER = displayData.COL_ID 
-				 and tableData.ALIAS_NAME = 'Institution'
-			)
-		);
+
+ 
 	 	 
-INSERT INTO `catissue_interface_column_data` ( `TABLE_ID`, `COLUMN_NAME`, `ATTRIBUTE_TYPE`) VALUES
- ( (select  cqtd.TABLE_ID from catissue_query_table_data cqtd	 where cqtd.ALIAS_NAME = 'Institution'), 'DIRTY_EDIT_FLAG', 'tinyint');
 
- INSERT INTO `catissue_search_display_data` ( `RELATIONSHIP_ID`, `COL_ID`, `DISPLAY_NAME`, `DEFAULT_VIEW_ATTRIBUTE`, `ATTRIBUTE_ORDER`) 
-VALUES (
-			( select relationData.RELATIONSHIP_ID from CATISSUE_TABLE_RELATION relationData, CATISSUE_QUERY_TABLE_DATA tableData
-				where relationData.PARENT_TABLE_ID = tableData.TABLE_ID
-				and relationData.CHILD_TABLE_ID =  tableData.TABLE_ID
-				and tableData.ALIAS_NAME = 'Institution'
-			), 
-			(SELECT  columnData.IDENTIFIER
-				 FROM CATISSUE_INTERFACE_COLUMN_DATA columnData,  CATISSUE_TABLE_RELATION relationData,  CATISSUE_QUERY_TABLE_DATA tableData
-				 where relationData.CHILD_TABLE_ID = columnData.TABLE_ID 
-				 and  relationData.PARENT_TABLE_ID = tableData.TABLE_ID
-				 and relationData.CHILD_TABLE_ID =  tableData.TABLE_ID
-				 and tableData.ALIAS_NAME = 'Institution'
-				 and  columnData.COLUMN_NAME = 'DIRTY_EDIT_FLAG'
-			), 
-			'DirtyEditFlag', 
-			1, 
-			(SELECT  max(displayData.ATTRIBUTE_ORDER)+1
-				 FROM CATISSUE_INTERFACE_COLUMN_DATA columnData,  CATISSUE_TABLE_RELATION relationData,  CATISSUE_QUERY_TABLE_DATA tableData,  CATISSUE_SEARCH_DISPLAY_DATA displayData  
-				 where relationData.CHILD_TABLE_ID = columnData.TABLE_ID 
-				 and  relationData.PARENT_TABLE_ID = tableData.TABLE_ID 
-				 and  relationData.RELATIONSHIP_ID = displayData.RELATIONSHIP_ID 
-				 and  columnData.IDENTIFIER = displayData.COL_ID 
-				 and tableData.ALIAS_NAME = 'Institution'
-			)
-		);
+
 
 -- Search Grid changes for CollectionProtocol entity
 INSERT INTO `catissue_interface_column_data` ( `TABLE_ID`, `COLUMN_NAME`, `ATTRIBUTE_TYPE`) VALUES
