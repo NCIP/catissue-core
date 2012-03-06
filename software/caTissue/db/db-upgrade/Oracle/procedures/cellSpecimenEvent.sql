@@ -113,7 +113,7 @@ INTO   seqval
 FROM   dual; 
 
 EXECUTE IMMEDIATE query_text 
-USING dispo_neoplastic,specimen_event_identifier,  dispo_viable_cell_percentage, 
+USING specimen_event_identifier,dispo_neoplastic,  dispo_viable_cell_percentage, 
 seqval; 
 
 counter := counter + 1; 
