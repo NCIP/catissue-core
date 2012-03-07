@@ -132,7 +132,7 @@ This is the definition of a virtual module called bda-download that has a depend
 
 
 
-      <dependency org="com.oracle" name="ojdbc5" rev="11.2.0.1.0" conf="web-inf->*" />
+      <dependency org="com.oracle" name="ojdbc5" rev="11.2.0.1.0" conf="common_lib->*" />
 
     <exclude org="gov.nih.nci.catissue" artifact="spring*" ext="jar"/>
     <exclude org="gov.nih.nci.catissue" artifact="activation*" ext="jar"/>
