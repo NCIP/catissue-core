@@ -346,12 +346,15 @@ $HeadURL: https://ncisvn.nci.nih.gov/svn/automation/branches/automation-1.7.4/so
 
 	<target name="build:caTissue-webapp" depends="init, build:caTissue-api" description="Call webapp sub-projects build target to produce artifiacts">
 		<!-- setting the property in the ant call overrides the property in the sub-project allowing the artifact to be produced where needed -->
+
 		<ant inheritAll="false" inheritRefs="false" antfile="${caTissue-webapp.build.file}" target="${caTissue-webapp.build.target}" dir="${caTissue-webapp.base.dir}">
 			<property name="dist.dir" value="${caTissue-webapp.dir.dist}" />
 			<property name="db-common.src.dir" value="${db-common.src.dir}" />
 			<property name="env.GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}"/>
 			<property name="commonlibrary.dir" value="${commonlibrary.dir}"/>
 			<property name="local.cbiit-ivy-repo.dir" value="${local.cbiit-ivy-repo.dir}"/>
+			<!--<property name="oracle.ojdbc_driver.version" value="${oracle.ojdbc_driver.version}"/>-->
+
 			<!-- Pass in env property file, used by jar-signing -->
 			<property name="envpropertyfile" value="${properties.file.location}"/>
 			<!-- Need absolution location, relative path would fail in sub-project since file would not exist -->

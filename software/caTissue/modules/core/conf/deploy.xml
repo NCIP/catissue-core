@@ -44,7 +44,7 @@
 	<!-- end -->
 
 	<property name="mysql.lib" value="mysql-connector-java-5.0.8-bin.jar" />
-	<property name="oracle.lib" value="ojdbc14.jar" />
+	<property name="oracle.lib" value="${oracle.ojdbc_driver.version}.jar" />
 	<property name="mssqlserver.lib" value="sqljdbc.jar" />
 
 	<property name="catissue.struts.config.file" value="struts-config.xml" />
@@ -624,7 +624,7 @@
 			<include name="junit-4.1.jar" />-->
 			<include name="mockobjects-core-0.09.jar" />
 			<include name="mysql-connector-java-5.0.8-bin.jar" />
-			<include name="ojdbc14.jar" />
+			<include name="${oracle.ojdbc_driver.version}.jar" />
 			<include name="openide-util.jar" />
 			<include name="acrobat-core.jar" />
 			<!-- removed to work printwebservice -->
@@ -2266,7 +2266,7 @@
 	<target name="setup:environment:for:de">
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		<antcall target="replace_app_dao_prop_file"/>
 		<unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />
 
@@ -2610,7 +2610,7 @@
 	<target name="update_metadata_for_model_changes" description="DE Metadata Upgradation">
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore"/>
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		<delete failonerror="${delete.failonerror}" file="${prop.temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
 		<antcall target="replacecfgfiles"></antcall>
 		<if>
@@ -2779,7 +2779,7 @@
 	<target name="update_metadata_for_model_changes_oracle_post_P5" description="Updating DE Metadata for model changes (oracle).....">
 			<echo message="Updating DE Metadata for model changes (oracle) post P5....." />
 				<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore"/>
-				<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+				<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 				<delete failonerror="${delete.failonerror}" file="${prop.temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
 			<java classname="edu.wustl.catissuecore.querysuite.metadata.UpdateQueryMetadata"  fork="true" maxmemory="512m" failonerror="true">
 				<classpath location="${prop.temp.dir}/catissuecore/WEB-INF/classes" />
@@ -2823,7 +2823,7 @@
 	<target name="upgrade_de_integration_restructure_metadata" description="Start : DE Integration Restructure for p5 ">
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore"/>
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -3023,7 +3023,7 @@
 	<target name="Export_Clinical_diagnosis_oracle" description="Exporting data of Clinical diagnosis ... for Oracle">
 		<echo message="Exporting data of Clinical diagnosis ..." />
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore"/>
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		<java classname="edu.wustl.common.util.impexp.AutomateImport" fork="true">
 			<classpath refid="temp.classpath" />
 			<arg value="${database.server}"/>
@@ -3047,7 +3047,7 @@
 	<target name="CAModel_import_data" description="Importing CA model data">
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore"/>
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		<delete failonerror="${delete.failonerror}" file="${prop.temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -3115,7 +3115,7 @@
 	<target name="CAModel_export_data" description="Data export for CAModel">
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore"/>
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		<delete failonerror="${delete.failonerror}" file="${prop.temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -3159,7 +3159,7 @@
 	 		<mkdir dir="${prop.temp.dir}" />
 			<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore"/>
 			<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-			<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+			<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 			<delete failonerror="${delete.failonerror}" file="${prop.temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
 			<if>
 				<equals arg1="mysql" arg2="${database.type}" />
@@ -3282,7 +3282,7 @@ Thanking You,
 	<target name="firstUser_oracle" description="Inserting the first user mentioned in the install.properties file For Oracle">
 		<echo message="Encoding Password..."/>
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore"/>
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		<java classname="edu.wustl.common.util.global.PasswordManager" fork="true">
 
 			<classpath refid="temp.classpath" />
@@ -3605,7 +3605,7 @@ Thanking You,
 		
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		<antcall target="replace_app_dao_prop_file"/>
 		<unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />
 
@@ -3891,7 +3891,7 @@ Thanking You,
 
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 
 		<!-- Inject db-util.properties entry in catissue -> db-util.properties -->
 		<replace file="${prop.temp.dir}/catissuecore/WEB-INF/classes/dbutil.properties">
@@ -4596,7 +4596,7 @@ Thanking You,
 
 				<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="@{tempKeywordSearch}" />
 				<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="@{tempKeywordSearch}/WEB-INF/lib" />
-				<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="@{tempKeywordSearch}/WEB-INF/lib" />
+				<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="@{tempKeywordSearch}/WEB-INF/lib" />
 				<antcall target="configure_keyword_search" >
 					<param name="tempPath" value="@{tempKeywordSearch}/WEB-INF/classes" />
 					<param name="mysqlDriver" value="@{mysql.driver}" />
@@ -4705,7 +4705,7 @@ Thanking You,
 		</delete>
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 
 		<copy file="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/hibernate.cfg.xml" todir="${prop.temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
 		<copy file="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/conf/DynamicExtensionsHibernate.cfg.xml" todir="${prop.temp.dir}/catissuecore/WEB-INF/classes" overwrite="true" />
@@ -4842,7 +4842,7 @@ Thanking You,
 		</delete>
 		<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore" />
 		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+		<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		<unzip src="${caTissue-webapp.dir.dist}/modules/dynamic_extensions/lib/dynamicextensions.zip" dest="${prop.temp.dir}/dynamicextensions" overwrite="true" />
 		<unjar src="${prop.temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" dest="${prop.temp.dir}/catissuecore/WEB-INF/classes" overwrite="true"/>
 		<copy file="${prop.temp.dir}/dynamicextensions/binaries/DynamicExtensionsInterface/DynamicExtensions.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" overwrite="true" />
@@ -4988,7 +4988,7 @@ Thanking You,
 	<target name="update_metaPhone_data_for_participant" description="update metaPhone data for participant">
 				<unwar src="${caTissue-webapp.dir.dist}/modules/caTissue/lib/catissuecore.war" dest="${prop.temp.dir}/catissuecore"/>
 				<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/mysql-connector-java-5.0.8-bin.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
-				<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/ojdbc14.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
+				<copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${prop.temp.dir}/catissuecore/WEB-INF/lib" />
 		 	    <delete failonerror="${delete.failonerror}" file="${prop.temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
 				<if>
 					<equals arg1="mysql" arg2="${database.type}" />

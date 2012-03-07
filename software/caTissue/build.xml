@@ -570,7 +570,7 @@
 				<exclude name="jdom-1.1.jar" />
 				<exclude name="mobius_common_client-1.1.jar" />
 				<exclude name="mysql-connector-java-5.0.8-bin.jar" />
-				<exclude name="ojdbc14.jar" />
+				<exclude name="${oracle.ojdbc_driver.version}.jar" />
 				<exclude name="wsrf_core.jar" />
 				<exclude name="wsrf_core_stubs.jar" />
 			</lib>
@@ -809,7 +809,7 @@
 			<fileset file="${src_lib.dir}/j2ee.jar" />
 			<fileset file="${src_lib.dir}/log4j.jar" />
 			<fileset file="${common.lib.dir}/mysql-connector-java-5.0.8-bin.jar" />
-			<fileset file="${common.lib.dir}/ojdbc14.jar" />
+			<fileset file="${common.lib.dir}/${oracle.ojdbc_driver.version}.jar" />
 			<fileset file="${extra_lib.dir}/puretls.jar" />
 			<fileset file="${extra_lib.dir}/cog-jglobus.jar" />
 			<fileset file="${extra_lib.dir}/cryptix32.jar" />
