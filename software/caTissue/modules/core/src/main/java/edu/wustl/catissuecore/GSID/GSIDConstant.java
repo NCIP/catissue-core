@@ -9,7 +9,7 @@ public interface GSIDConstant {
 	public final String GSID_IS_ENABLED_KEY="gsid.isEnabled";
 	public final String GSID_USER_NAME_KEY="gsid.userName";
 	public final String GSID_PASSWORD_KEY="gsid.password";
-	//public final String GSID_DORIAN_URL_KEY="gsid.dorianURL";
+	public final String GSID_AUTH_URL_KEY="gsid.authenticationServiceURL";
 	public final String GSID_SERVICE_URL_KEY="gsid.serviceURL";
 	public final String GSID_REGISTER_APP_NAME="gsid.registerSite.applicationName";
 	public final String GSID_REGISTER_APP_URL="gsid.registerSite.applicationURL";

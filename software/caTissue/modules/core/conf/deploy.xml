@@ -3411,7 +3411,7 @@ Thanking You,
 		<replace dir="${gsid.propsFolder}" propertyFile="${catissue.deploy.config.file}">
 			<include name="gsid.properties"  />
 			<replacefilter token="@@gsid.isEnabled@@" value="${gsid.isEnabled}"/>
-			<!--<replacefilter token="@@gsid.dorianURL@@" value="${gsid.dorianURL}"/> -->
+			<replacefilter token="@@gsid.authenticationServiceURL@@" value="${gsid.authenticationServiceURL}"/>
 			<replacefilter token="@@gsid.serviceURL@@" value="${gsid.serviceURL}"/> 
 			<replacefilter token="@@gsid.assignEnabled@@" value="${gsid.assignEnabled}"/>
 			<replacefilter token="@@gsid.userName@@" value="${gsid.userName}"/>
@@ -3437,7 +3437,7 @@ Thanking You,
 		<replace dir="${gridgrouper.propsFolder}" propertyFile="${catissue.deploy.config.file}">
 			<include name="gridgrouper.properties"  />
 			<replacefilter token="@@gridgrouper.isEnabled@@" value="${gridgrouper.isEnabled}"/>
-			<!--<replacefilter token="@@gridgrouper.dorianURL@@" value="${gridgrouper.dorianURL}"/>
+			<replacefilter token="@@gridgrouper.authenticationServiceURL@@" value="${gridgrouper.authenticationServiceURL}"/>
 			<replacefilter token="@@gridgrouper.serviceURL@@" value="${gridgrouper.serviceURL}"/>-->
 			<replacefilter token="@@gridgrouper.userName@@" value="${gridgrouper.userName}"/>
 			<replacefilter token="@@gridgrouper.password@@" value="${gridgrouper.password}"/>
@@ -3466,7 +3466,7 @@ Thanking You,
 			<include name="ctrp.properties"  />
 			<replacefilter token="@@ctrp.isEnabled@@" value="${ctrp.isEnabled}"/>
 			<replacefilter token="@@ctrp.dorian.targetGridEnv@@" value="${target.grid}"/>
-			<!--<replacefilter token="@@ctrp.dorian.loginURL@@" value="${ctrp.dorian.loginURL}"/>-->
+			<replacefilter token="@@ctrp.authenticationServiceURL@@" value="${ctrp.authenticationServiceURL}"/>
 			<!--<replacefilter token="@@ctrp.dorian.syncDescFile@@" value="${jboss.server.url}/catissuecore-properties/sync-description-ctrp.xml"/>-->
 			<replacefilter token="@@ctrp.userName@@" value="${ctrp.userName}"/>
 			<replacefilter token="@@ctrp.password@@" value="${ctrp.password}"/>

@@ -49,13 +49,18 @@ public class GridGrouperUtil {
 		String password = defaultProps.getProperty(GridGrouperConstant.GG_PASSWORD_KEY);
 		String dorianUrl = serviceUrls.getProperty("cagrid.master.dorian.service.url");
 		String gridGrouperUrl = serviceUrls.getProperty("cagrid.master.gridgrouper.service.url");
+		String authServiceURL = defaultProps.getProperty(GridGrouperConstant.GG_AUTH_URL_KEY);
+		if (org.apache.commons.lang.StringUtils.isBlank(authServiceURL)) {
+		    authServiceURL = dorianUrl;
+		}
 		
 		if (!StringUtils.isBlank(userName)
 				&& !StringUtils.isBlank(password)
 				&& !StringUtils.isBlank(dorianUrl)
 				&& !StringUtils.isBlank(gridGrouperUrl)) {
 				try {
-					globusCredentials = GridAuthenticationClient.authenticate(dorianUrl, dorianUrl, userName, password);
+				    globusCredentials = GridAuthenticationClient.authenticate(
+                        dorianUrl, authServiceURL, userName, password);
 				} catch (Exception e) {
 					LOG.error(GridGrouperConstant.GLOBUS_INIT_ERROR, e);
 				}

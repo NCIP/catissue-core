@@ -25,8 +25,8 @@ import org.globus.gsi.GlobusCredential;
 public class GSIDClient {
 	private static final String USER_NAME;
 	private static final String USER_PASSWORD;
-	//private static final String DORIAN_URL;
 	private static final String GSID_URL;
+	private static final String AUTH_URL;
 	public static final boolean GSID_IS_ENABLED;
 	private static final String REGISTER_APP_NAME;
 	private static final String REGISTER_APP_URL;
@@ -61,6 +61,7 @@ public class GSIDClient {
 			USER_PASSWORD = null;
 			//DORIAN_URL = null;
 			GSID_URL = null;
+			AUTH_URL = null;
 			GSID_IS_ENABLED = false;
 			REGISTER_APP_NAME = null;
 			REGISTER_APP_URL = null;
@@ -86,6 +87,7 @@ public class GSIDClient {
 				USER_PASSWORD = null;
 				//DORIAN_URL = null;
 				GSID_URL = null;
+				AUTH_URL = null;
 				GSID_IS_ENABLED = false;
 				REGISTER_APP_NAME = null;
 				REGISTER_APP_URL = null;
@@ -107,6 +109,8 @@ public class GSIDClient {
 					//	.getProperty(GSIDConstant.GSID_DORIAN_URL_KEY);
 				GSID_URL = defaultProps
 						.getProperty(GSIDConstant.GSID_SERVICE_URL_KEY);
+				AUTH_URL = defaultProps
+                        .getProperty(GSIDConstant.GSID_AUTH_URL_KEY);				
 				REGISTER_APP_NAME = defaultProps
 						.getProperty(GSIDConstant.GSID_REGISTER_APP_NAME);
 				REGISTER_APP_URL = defaultProps
@@ -264,8 +268,8 @@ public class GSIDClient {
 		Properties serviceUrls = GridPropertyFileReader.serviceUrls();
 
 		String dorianUrl = serviceUrls.getProperty("cagrid.master.dorian.service.url");
-		
-		
+        String authServiceURL = org.apache.commons.lang.StringUtils
+                .isBlank(AUTH_URL) ? dorianUrl : AUTH_URL;		
 		
 		if (!StringUtils.isBlank(USER_NAME)
 				&& !StringUtils.isBlank(USER_PASSWORD)
@@ -274,7 +278,7 @@ public class GSIDClient {
 				try {
 					//installRootCertsAndSync();
 					globusCredentials = GridAuthenticationClient.authenticate(
-							dorianUrl, dorianUrl, USER_NAME, USER_PASSWORD);
+							dorianUrl, authServiceURL, USER_NAME, USER_PASSWORD);
 				} catch (Exception e) {
 					LOG.error(GSIDConstant.GLOBUS_INIT_ERROR, e);
 				}

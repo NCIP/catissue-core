@@ -63,12 +63,12 @@ public class COPPAServiceClient {
 				.getProperty(CTRPConstants.CTRP_USER_NAME_KEY);
 		String userPassword = CTRPPropertyHandler
 				.getProperty(CTRPConstants.CTRP_PASSWORD_KEY);
+		String authURL = CTRPPropertyHandler
+                .getProperty(CTRPConstants.CTRP_AUTH_URL_PROP_NAME);
 		logger.debug(CTRPConstants.CTRP_USER_NAME_KEY + ":" + userLogin);
-		
-
 
 		GlobusCredential credential = CTRPGlobusCredentialCache.getCredential(
-				userLogin, userPassword);
+				userLogin, userPassword, authURL);
 		return credential;
 	}
 

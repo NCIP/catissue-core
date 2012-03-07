@@ -9,7 +9,7 @@ public interface GridGrouperConstant {
 	public final String GG_IS_ENABLED_KEY="gridgrouper.isEnabled";
 	public final String GG_USER_NAME_KEY="gridgrouper.userName";
 	public final String GG_PASSWORD_KEY="gridgrouper.password";
-	//public final String GG_DORIAN_URL_KEY="gridgrouper.dorianURL";
+	public final String GG_AUTH_URL_KEY="gridgrouper.authenticationServiceURL";
 	//public final String GG_SERVICE_URL_KEY="gridgrouper.serviceURL";
 	//public final String GG_SYNC_DESC_FIlE_KEY="gridgrouper.synDescriptionFileLocation";
 	public final String GG_TARGET_GRID="gridgrouper.target.grid";
