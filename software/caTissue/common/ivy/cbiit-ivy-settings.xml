@@ -56,6 +56,11 @@ This file is the is the settings file used by IVY.  It is a good starting point 
                 <artifact pattern="https://ncimvn.nci.nih.gov/nexus/content/repositories/snapshots/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
             </url>
 
+            <url name="MAVENSEARCH" m2compatible="true">
+                <artifact pattern="http://www.mvnsearch.org/maven2/[organisation]/[module]/[revision]/[module]-[revision].[ext]" />
+            </url>
+
+
 			<!-- <url name="cbiit-ivy-repo">
 
 				<artifact pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />

@@ -130,6 +130,10 @@ This is the definition of a virtual module called bda-download that has a depend
     <dependency org="ncicb" name="bda-utils" rev="${bda.version}" changing="true" conf="runtime"/>
     <dependency org="uk.ac.ebi.arrayexpress2" name="limpopo" rev="1.0.7.2" conf="limpopo->*"/>
 
+
+
+      <dependency org="com.oracle" name="ojdbc5" rev="11.2.0.1.0" conf="web-inf->*" />
+
     <exclude org="gov.nih.nci.catissue" artifact="spring*" ext="jar"/>
     <exclude org="gov.nih.nci.catissue" artifact="activation*" ext="jar"/>
     <exclude org="gov.nih.nci.catissue" artifact="wss4j*" ext="jar"/>
