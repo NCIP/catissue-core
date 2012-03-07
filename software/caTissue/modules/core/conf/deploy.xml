@@ -3437,8 +3437,7 @@ Thanking You,
 		<replace dir="${gridgrouper.propsFolder}" propertyFile="${catissue.deploy.config.file}">
 			<include name="gridgrouper.properties"  />
 			<replacefilter token="@@gridgrouper.isEnabled@@" value="${gridgrouper.isEnabled}"/>
-			<replacefilter token="@@gridgrouper.authenticationServiceURL@@" value="${gridgrouper.authenticationServiceURL}"/>
-			<replacefilter token="@@gridgrouper.serviceURL@@" value="${gridgrouper.serviceURL}"/>-->
+			<replacefilter token="@@gridgrouper.authenticationServiceURL@@" value="${gridgrouper.authenticationServiceURL}"/>			
 			<replacefilter token="@@gridgrouper.userName@@" value="${gridgrouper.userName}"/>
 			<replacefilter token="@@gridgrouper.password@@" value="${gridgrouper.password}"/>
 			<replacefilter token="@@gridgrouper.stems@@" value="${gridgrouper.stems}"/>
