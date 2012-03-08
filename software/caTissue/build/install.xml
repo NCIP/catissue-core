@@ -243,7 +243,7 @@ $HeadURL: https://ncisvn.nci.nih.gov/svn/automation/branches/automation-1.7.4/so
 		<switch value="${database.type}">
 			<case value="oracle">
 				<property name="database.dialect" value="org.hibernate.dialect.OracleDialect"/>
-				<property name="database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar"/>
+				<property name="database.driver.file" value="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar"/>
 				<property name="database.driver" value="oracle.jdbc.driver.OracleDriver"/>
 				<property name="database.schema" value="${database.user}"/>
 			</case>
@@ -267,7 +267,7 @@ $HeadURL: https://ncisvn.nci.nih.gov/svn/automation/branches/automation-1.7.4/so
 		<switch value="${csm.database.type}">
 		<case value="oracle">
 			<property name="csm.database.dialect" value="org.hibernate.dialect.OracleDialect"/>
-			<property name="csm.database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.3.0.jar"/>
+			<property name="csm.database.driver.file" value="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar"/>
 			<property name="csm.database.driver" value="oracle.jdbc.driver.OracleDriver"/>
 			<property name="csm.database.schema" value="${csm.database.username}"/>
 			<property name="csm.database.url" value="jdbc:oracle:thin:@${csm.database.host}:${csm.database.port}:${csm.database.name}"/>
