@@ -640,6 +640,7 @@
 			<include name="cryptix.jar" />
 			<include name="jce-jdk13-125.jar" />
 			<include name="saaj-api.jar" />
+			<include name="ojdbc*.jar" />
 
 		</fileset>
 
