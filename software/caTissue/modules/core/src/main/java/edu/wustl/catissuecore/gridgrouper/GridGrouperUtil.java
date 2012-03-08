@@ -30,18 +30,19 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.log4j.Logger;
 import org.globus.gsi.GlobusCredential;
 
-public class GridGrouperUtil {
+public final class GridGrouperUtil {
 
 	private static GlobusCredential globusCredentials = null;
 	private static GridGrouperClient client = null;
 	private static Logger LOG = Logger.getLogger(GridGrouperUtil.class);
+	private static final ThreadLocal<Exception> syncExceptionHolder = new ThreadLocal<Exception>();
 	
 	/**************************************
 	 * This method is used to intialize the client if client is null and update
 	 * the client if globus credential's life time is near to expire. The
 	 * threshold is managed using GG_TIMEOUT_LIMIT in GridGrouperConstant interface.
 	 */
-	public static void syncClient() {
+	public synchronized static void syncClient() {
 		Properties defaultProps = GridPropertyFileReader.configuredProperties();
 		Properties serviceUrls = GridPropertyFileReader.serviceUrls();
 		
@@ -59,18 +60,23 @@ public class GridGrouperUtil {
 				&& !StringUtils.isBlank(dorianUrl)
 				&& !StringUtils.isBlank(gridGrouperUrl)) {
 				try {
+				    globusCredentials = null;
+				    syncExceptionHolder.remove();
 				    globusCredentials = GridAuthenticationClient.authenticate(
                         dorianUrl, authServiceURL, userName, password);
 				} catch (Exception e) {
 					LOG.error(GridGrouperConstant.GLOBUS_INIT_ERROR, e);
+					syncExceptionHolder.set(e);
 				}
 				if (globusCredentials != null) {
 					try {
 						client = new GridGrouperClient(gridGrouperUrl,globusCredentials);
 					} catch (MalformedURIException e) {
 						LOG.error(GridGrouperConstant.GG_URL_ERROR, e);
+						syncExceptionHolder.set(e);
 					} catch (RemoteException e) {
 						LOG.error(GridGrouperConstant.GG_REMOTE_ERROR, e);
+						syncExceptionHolder.set(e);
 					}
 				}
 		}
@@ -79,19 +85,25 @@ public class GridGrouperUtil {
 	
 	public static GroupDescriptor[] getGroups(String stemName) throws Exception {
 		syncClient();
-		GroupDescriptor[] groups = client.getChildGroups(getStemIdentifier(stemName));
+        GroupDescriptor[] groups = client != null ? client
+                .getChildGroups(getStemIdentifier(stemName))
+                : new GroupDescriptor[0];
 		return groups;
 	}
 	
 	public static boolean isMemberOfGroup(String member , String groupName) throws GridGrouperRuntimeFault, GroupNotFoundFault, RemoteException  {
 		syncClient();
-		return client.isMemberOf(getGroupIdentifier(groupName), member, MemberFilter.All);
+        return client != null ? client.isMemberOf(
+                getGroupIdentifier(groupName), member, MemberFilter.All)
+                : false;
 
 	}
 	
 	public static MemberDescriptor[] getMembers(String groupName) throws Exception {
 		syncClient();
-		MemberDescriptor[] members = client.getMembers(getGroupIdentifier(groupName), MemberFilter.All);
+        MemberDescriptor[] members = client != null ? client.getMembers(
+                getGroupIdentifier(groupName), MemberFilter.All)
+                : new MemberDescriptor[0];
 		return members;
 	}
 	
@@ -106,11 +118,12 @@ public class GridGrouperUtil {
 		return id;
 	}
 	public static GroupDescriptor getGroupByIdentifier(GroupIdentifier groupIdentifier) throws GridGrouperRuntimeFault, GroupNotFoundFault, RemoteException {
-		return client.getGroup(groupIdentifier);
+        return client != null ? client.getGroup(groupIdentifier) : null;
 	}
 	public static GroupDescriptor[] getUserGroups(String  memberIdentity) throws  RemoteException {
 		syncClient();
-		GroupDescriptor[] groups = client.getMembersGroups(memberIdentity, MembershipType.Any);
+        GroupDescriptor[] groups = client != null ? client.getMembersGroups(
+                memberIdentity, MembershipType.Any) : new GroupDescriptor[0];
 		return groups;
 	}
 	
@@ -185,8 +198,6 @@ public class GridGrouperUtil {
 				if (GridGrouperUtil.isMemberOfGroup(memberIdentity, groupName))  filteredUserGroups.put(groupName, groupsFromDB.get(groupName));
 			} catch (GroupNotFoundFault gnf) {
 				LOG.error("Grid Group not found in grid grouper : " + groupName);
-				// group doesnt exist anymore in grid grouper that means this group is gone from grid group.
-				
 			}
 		}
 		return filteredUserGroups;
@@ -287,31 +298,24 @@ public class GridGrouperUtil {
 		if (members !=null) {
     		for (int j=0 ;j<members.length; j++) {
     			MemberDescriptor member = members[j];
-    			//member.
-    			//System.out.println("--" + member.getSubjectId());
     		}
 		}
 		
-		//GridGrouperUtil.sync2();
-		//GlobusCredential credentials = GridGrouperUtil.authenticate(GridGrouperUtil.USER_NAME, GridGrouperUtil.USER_PASSWORD);
-		//System.out.println(credentials.getIdentity());
-		/*
-		Map<String, List<String>> gridGrouperMap = GridGrouperUtil.getStemAndGroups();
-		for(String stem : gridGrouperMap.keySet()){
-			for(String group : gridGrouperMap.get(stem)){
-				System.out.println(group);
-				MemberDescriptor [] members = GridGrouperUtil.getMembers(group);
-	    		if (members !=null) {
-	        		for (int j=0 ;j<members.length; j++) {
-	        			MemberDescriptor member = members[j];
-	        			//member.
-	        			System.out.println("--" + member.getSubjectId());
-	        		}
-	    		}
-			}
-		}*/
-		//System.out.println(GridGrouperUtil.isUserPresentInGridGrouper("lewis.j.frey"));
-		//System.out.println(GridGrouperUtil.isIdentityPresentInGridGrouper("jdoe01"));
-		//System.out.println(GridGrouperUtil.isUserPresentInGridGrouper("/O=caBIG/OU=caGrid/OU=Training/OU=National Cancer Institute/CN=akkalas"));
 	}
+	
+    /**
+     * {@link #syncClient()} will not throw any exceptions. If you need to
+     * obtain the exception that occurred last during {@link #syncClient()}
+     * call, use this method.
+     * 
+     * @return
+     */
+	public static Exception getLastSyncException() {
+	    return syncExceptionHolder.get();
+	}
+	
+	public static void clearLastSyncException() {
+        syncExceptionHolder.remove();
+    }
+	
 }

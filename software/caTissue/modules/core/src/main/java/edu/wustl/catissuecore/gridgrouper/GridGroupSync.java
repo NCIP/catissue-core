@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 
 import edu.wustl.catissuecore.domain.CPGridGrouperPrivilege;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.ErrorKey;
@@ -35,12 +36,27 @@ public class GridGroupSync {
         sync (userList);		
 	}
 	
-	public void syncAllMigratedUsers() throws Exception {
-		final List<List<String>> userList = getMigratedUsers(null);
-        sync (userList);
+    public void syncAllMigratedUsers() throws Exception {
+        try {
+            GridGrouperUtil.clearLastSyncException();
+            final List<List<String>> userList = getMigratedUsers(null);
+            sync(userList);
+            if (GridGrouperUtil.getLastSyncException() != null) {
+                throw GridGrouperUtil.getLastSyncException();
+            }
+        } catch (Exception e) {
+            sendNotificationEmail(e);
+            throw e;
+        }
         
 	}
-	private void sync(List<List<String>> userList) throws Exception {
+	
+    private void sendNotificationEmail(Exception e) {
+        EmailHandler emailHandler = new EmailHandler();
+        emailHandler.sendGridGrouperFailureEmail(e);
+    }
+
+    private void sync(List<List<String>> userList) throws Exception {
         if (userList == null) {
         	return;
         }

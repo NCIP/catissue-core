@@ -9,7 +9,12 @@
 
 package edu.wustl.catissuecore.util;
 
+import java.util.Date;
+
 import javax.mail.MessagingException;
+
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.User;
@@ -504,6 +509,29 @@ public class EmailHandler
 		
 	}
 	
-
+    /**
+     * Requirement caTissue-v20-110: caTissue MUST notify administrators of
+     * issues synchronizing.
+     * 
+     * @param e
+     */
+    public void sendGridGrouperFailureEmail(Exception e) {
+        String date = DateFormatUtils.format(new Date(),
+                DateFormatUtils.ISO_DATETIME_FORMAT.getPattern());
+        String body = "Dear Administrator, \r\n\r\nThis is to inform you that Grid Grouper synchronization attempt was triggered "
+                + "at "
+                + date
+                + " according to the schedule, but failed due to an error. The details are provided below. Next synchronization is scheduled to "
+                + "run again in 24 hours. However, you can manually invoke the synchronization at any time by logging in with your administrator account "
+                + "and visiting the following URL: http(s)://[catissue host]:[port]/catissuecore/Sync.do (e.g. http://catissuesuitea.wustl.edu/catissuecore/Sync.do)."
+                + "\r\n\r\nHere is more information about the error:\r\n\r\n"
+                + ExceptionUtils.getFullStackTrace(e) + "\r\n\r\n";
+        try {
+            sendEmailToAdministrator("Grid Grouper Synchronization Failure "
+                    + date, body);
+        } catch (Exception e1) {
+            logger.error(e1.getMessage(), e1);
+        }
+    }
 
 }
