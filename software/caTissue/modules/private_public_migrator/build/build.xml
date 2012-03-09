@@ -248,7 +248,7 @@
                     <replacefilter token="@@USER_NAME@@" value="${stagingDBUserName}"/>
                     <replacefilter token="@@PASSWORD@@" value="${stagingDBPassword}"/>
                 </replace>
-                <replace file="${baseDir}/ApplicationDAOProperties.xml">
+                <replace file="${baseDir}/src/main/resources/ApplicationDAOProperties.xml">
                     <replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}"/>
                 </replace>
                 <copy file="${baseDir}/conf/drop_staging_db_mysql.sql" todir="${baseDir}/db" overwrite="true"/>
