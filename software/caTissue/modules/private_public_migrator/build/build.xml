@@ -2,11 +2,11 @@
 
 <!--Ant Script for caTIES-->
 
-<project name="Private_Public">
+<project name="Private_Public" basedir="../">
 
     <property file="privatePublic.properties"/>
-    <property name="libDir" value="c:/caTissue/software/target/lib/caTissue_lib/private_public_migrator_lib"/>
-    <property name="baseDir" value=".."/>
+    <property name="libDir" value="${basedir}/../../../target/lib/caTissue_lib/private_public_migrator_lib"/>
+    <property name="baseDir" value="${basedir}"/>
     <property name="classesDir" value="${baseDir}/target/classes"/>
 
     <!--define require dir and Properties -->
@@ -48,6 +48,7 @@
     </target>
 
     <target name="generate_command_file" depends="replaceToken">
+
         <copy file="${baseDir}/conf/commands.properties" todir="${baseDir}" overwrite="true"/>
         <if>
             <equals arg1="${databaseType}" arg2="oracle"/>
@@ -66,14 +67,12 @@
                     <equals arg1="${privateDBTablespace}" arg2="${privateDBIndexTablespace}"/>
                     <then>
                         <replace file="${baseDir}/commands.properties">
-                            <replacefilter token="@@TABLESPACE@@"
-                                           value=" remap_tablespace=${privateDBTablespace}:users "/>
+                            <replacefilter token="@@TABLESPACE@@" value=" remap_tablespace=${privateDBTablespace}:users "/>
                         </replace>
                     </then>
                     <else>
                         <replace file="${baseDir}/commands.properties">
-                            <replacefilter token="@@TABLESPACE@@"
-                                           value=" remap_tablespace=${privateDBTablespace}:users remap_tablespace=${privateDBIndexTablespace}:users "/>
+                            <replacefilter token="@@TABLESPACE@@" value=" remap_tablespace=${privateDBTablespace}:users remap_tablespace=${privateDBIndexTablespace}:users "/>
                         </replace>
                     </else>
                 </if>
@@ -175,15 +174,15 @@
             </then>
         </if>
     </target>
+
     <path id="cp1">
-        <fileset dir="${baseDir}/lib">
+        <fileset dir="${libDir}">
             <include name="**/*.jar"/>
         </fileset>
     </path>
 
     <target name="migrate" depends="compile">
-        <java classname="edu.wustl.catissuecore.privatepublicmigrator.PrivateToPublicMigrator" maxmemory="1024m"
-              fork="true">
+        <java classname="edu.wustl.catissuecore.privatepublicmigrator.PrivateToPublicMigrator" maxmemory="1024m" fork="true">
             <classpath>
                 <pathelement location="${classesDir}"/>
                 <pathelement location="."/>
@@ -231,14 +230,14 @@
     </target>
 
     <target name="replaceToken">
-        <copy file="./conf/hibernate.cfg.xml" todir="${classesDir}" overwrite="true"/>
-        <copy file="./conf/DynamicExtensionsHibernate.cfg.xml" todir="${classesDir}" overwrite="true"/>
-        <copy file="./conf/MySQLDAOProperties.xml" todir="${classesDir}" overwrite="true"/>
-        <copy file="./conf/OracleDAOProperties.xml" todir="${classesDir}" overwrite="true"/>
+        <copy file="${baseDir}/conf/hibernate.cfg.xml" todir="${classesDir}" overwrite="true"/>
+        <copy file="${baseDir}/conf/DynamicExtensionsHibernate.cfg.xml" todir="${classesDir}" overwrite="true"/>
+        <copy file="${baseDir}/conf/MySQLDAOProperties.xml" todir="${classesDir}" overwrite="true"/>
+        <copy file="${baseDir}/conf/OracleDAOProperties.xml" todir="${classesDir}" overwrite="true"/>
 
-        <copy file="./conf/OracleDataSourceDAOProperties.xml" todir="${classesDir}" overwrite="true"/>
-        <copy file="./conf/ApplicationResources.properties" todir="${classesDir}" overwrite="true"/>
-        <copy file="./conf/DynamicExtensionDAO.properties" todir="${classesDir}" overwrite="true"/>
+        <copy file="${baseDir}/conf/OracleDataSourceDAOProperties.xml" todir="${classesDir}" overwrite="true"/>
+        <copy file="${baseDir}/conf/ApplicationResources.properties" todir="${classesDir}" overwrite="true"/>
+        <copy file="${baseDir}/conf/DynamicExtensionDAO.properties" todir="${classesDir}" overwrite="true"/>
         <if>
             <equals arg1="${databaseType}" arg2="mysql"/>
             <then>
