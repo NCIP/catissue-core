@@ -1,10 +1,10 @@
 <!-- dataList and columnList are to be set in the main JSP file -->
-<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXGrid.css"/>
+<link rel="STYLESHEET" type="text/css" href="newDhtmlx/dhtmlxgrid.css"/>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
-<script  src="dhtml_comp/js/dhtmlXCommon.js"></script>
-<script  src="dhtml_comp/js/dhtmlXGrid.js"></script>		
-<script  src="dhtml_comp/js/dhtmlXGridCell.js"></script>	
-<script  src="dhtml_comp/js/dhtmlXGrid_mcol.js"></script>	
+<script language="JavaScript"  type="text/javascript" src="newDhtmlx/dhtmlxcommon.js"></script>
+<script  language="JavaScript" type="text/javascript" src="newDhtmlx/dhtmlxgrid.js"></script>
+<script   language="JavaScript" type="text/javascript" src="newDhtmlx/dhtmlxgridcell.js"></script>
+<script  language="JavaScript" type="text/javascript"  src="newDhtmlx/ext/dhtmlxgrid_srnd.js"></script>
 <script>
 	var myData =${requestScope.myData};
 	var columns =${requestScope.columns};
@@ -24,7 +24,7 @@
 				// Patch ID: SpecimenEventSpaceUtilization_2
 				else if(useFunction == "eventParametersGrid") 
 				{
-					document.write("<div id='gridbox' width='100%' height='125px' border='0' style='background-color:#d7d7d7;overflow:hidden'></div>");
+					document.write("<div id='gridbox' width='100%' height='160px' border='0' style='background-color:#d7d7d7;overflow:hidden'></div>");
 				}
 				else if(useFunction == "goToConflictDetails") 
 				{
@@ -61,11 +61,13 @@
 		return 1;
 	}
 	
-	function rowClick(id)
+	function rowClick(id,colid)
 	{
-		var colid ='${requestScope.identifierFieldIndex}';
+		
+		colid ='${requestScope.identifierFieldIndex}';
 		var cl = mygrid.cells(id,colid);
 		var searchId = cl.getValue();
+		
 		var url = "SearchObject.do?pageOf=${requestScope.pageOf}&operation=search&id="+searchId;
 		var hiddenColumnNumbers= getIDColumn();
 		var pageOf="${requestScope.pageOf}";
@@ -87,17 +89,10 @@
 function init_grid()
 {			
 	var funcName = "rowClick";
-	if(useDefaultRowClickHandler == 1)
-	{
-		funcName = "rowClick";	
-	}
-	else
-	{
-		funcName=useFunction;
-	}
+	
 
 	mygrid = new dhtmlXGridObject('gridbox');
-	mygrid.setImagePath("dhtml_comp/imgs/");
+	mygrid.setImagePath("newDhtmlx/imgs/");
 	mygrid.setHeader(columns);
 	mygrid.setEditable("FALSE");
 	mygrid.enableAutoHeigth(false);
@@ -108,7 +103,7 @@ function init_grid()
 	if(useFunction == "eventParametersGrid")
 	{
 		//colWidth = "167,167,167,167,11";
-		colWidth = "10,35,30,25,0";
+		colWidth = "30,30,18,25,0,0";
 	}
 
 	if(useFunction == "goToConflictDetails" )
@@ -131,8 +126,9 @@ function init_grid()
 	mygrid.setSkin("light");
 	mygrid.enableAlterCss("even","uneven");
 	//mygrid.setColAlign("left,left")
+	
 	mygrid.setColSorting(colTypes);
-	//mygrid.enableMultiselect(true)
+	mygrid.enableMultiselect(true)
 	mygrid.init();
 
 	/*
@@ -144,7 +140,7 @@ function init_grid()
 
 	for(var row=0;row<myData.length;row++)
 	{
-		mygrid.addRow(row+1,myData[row],row+1);
+		mygrid.addRow(row+1,myData[row],row);
 	}
 
 	//useFunction == "eventParametersGrid" || 
@@ -155,8 +151,18 @@ function init_grid()
 	}
 
 	//mygrid.setOnRowSelectHandler(funcName);
-	mygrid.setOnRowDblClickedHandler(funcName);
-	// :To hide ID columns by kalpana
+	if(useDefaultRowClickHandler == 1)
+	{
+		funcName = "rowClick";	
+		mygrid.attachEvent("onRowDblClicked", function(rId,cInd){rowClick(rId,cInd)});
+	}
+	else
+	{
+		funcName=useFunction;
+		mygrid.attachEvent("onRowDblClicked", useFunction);
+	}
+	  
+//	mygrid.setOnRowDblClickedHandler(funcName);
 	function getIDColumns()
 		{
 			var hiddenColumnNumbers = new Array();

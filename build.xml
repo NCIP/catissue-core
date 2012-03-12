@@ -416,6 +416,7 @@
 				<include name="images/**" />
 				<include name="jss/**" />
 				<include name="dhtml_comp/**" />
+				<include name="newDhtmlx/**" />
 				<include name="dhtmlx_suite/**" />
 				<include name="pages/**" />
 				<include name="flexclient/**" />
