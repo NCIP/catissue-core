@@ -692,7 +692,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			persistentSCG.setClinicalStatus(specimenCollectionGroup.getClinicalStatus());
 			persistentSCG.setName(specimenCollectionGroup.getName());
 			persistentSCG.setBarcode(specimenCollectionGroup.getBarcode());
-			setConsetTierStatus(dao, specimenCollectionGroup, persistentSCG);
+			setConsetTierStatus(specimenCollectionGroup, persistentSCG);
 
 			// change by pathik
 			if (!specimenCollectionGroup.getCollectionProtocolRegistration().getId().equals(0L)
@@ -752,36 +752,20 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @param persistentSCG
 	 * @throws BizLogicException
 	 */
-	private void setConsetTierStatus(DAO dao,
+	private void setConsetTierStatus(
 			final SpecimenCollectionGroup specimenCollectionGroup,
 			SpecimenCollectionGroup persistentSCG) throws BizLogicException {
-		try
-		{
-			Collection<ConsentTierStatus> consentColl=specimenCollectionGroup
-			.getConsentTierStatusCollection();
-			if(consentColl!=null && consentColl.iterator().hasNext()){
-				/*
-				 *  To check that the collection is lazily initialized
-				 *  iterating the collection is required.
-				 */
-				consentColl.iterator().next();
+			Collection<ConsentTierStatus> consentColl=specimenCollectionGroup.getConsentTierStatusCollection();
+			Collection<ConsentTierStatus> persistConsentTierStatusCollection=persistentSCG.getConsentTierStatusCollection();
+			for (ConsentTierStatus consentTierStatus : consentColl) {
+				for (ConsentTierStatus persistConsentTierStatus : persistConsentTierStatusCollection) {
+					if(persistConsentTierStatus.getConsentTier().getId().equals(consentTierStatus.getConsentTier().getId()))
+					{
+						persistConsentTierStatus.setStatus(consentTierStatus.getStatus());
+					}
+				}
 			}
 
-				persistentSCG.setConsentTierStatusCollection(specimenCollectionGroup
-						.getConsentTierStatusCollection());
-
-		}
-		catch (org.hibernate.LazyInitializationException e) {
-			/*
-			 * for #15570
-			 *
-			 */
-			final Collection consentTierStatusCollection = (Collection) this.retrieveAttribute(
-					dao, SpecimenCollectionGroup.class, specimenCollectionGroup.getId(),
-					"elements(consentTierStatusCollection)");
-				persistentSCG.setConsentTierStatusCollection(consentTierStatusCollection);
-
-		}
 	}
 
 	/**

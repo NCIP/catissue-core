@@ -136,8 +136,8 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			}
 			else
 			{
-				participant = collectionProtocolRegistration.getParticipant();
-
+				participant =(Participant) dao.retrieveById(collectionProtocolRegistration.getParticipant().getClass().getName(), collectionProtocolRegistration.getParticipant().getId());
+				participant.getCollectionProtocolRegistrationCollection().add(collectionProtocolRegistration);
 			}
 
 			collectionProtocolRegistration.setParticipant(participant);

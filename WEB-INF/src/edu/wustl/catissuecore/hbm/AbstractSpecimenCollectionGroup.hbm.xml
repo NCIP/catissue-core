@@ -179,7 +179,7 @@
 	        <set
 	            name="consentTierStatusCollection"
 	            table="CATISSUE_CONSENT_TIER_STATUS"
-	            lazy="true"
+	            lazy="false"
 	            inverse="false"
 	            cascade="save-update"
 	            sort="unsorted"

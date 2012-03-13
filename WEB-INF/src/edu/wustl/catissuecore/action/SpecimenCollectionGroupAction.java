@@ -317,10 +317,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 									specimenCollectionGroup.getId(),
 									"elements(collectionProtocolRegistration.consentTierResponseCollection)");
 
-					consentResponseStatuslevel = dao.retrieveAttribute(
-							SpecimenCollectionGroup.class, "id", specimenCollectionGroup.getId(),
-							"elements(consentTierStatusCollection)");
-
+					consentResponseStatuslevel =new ArrayList(specimenCollectionGroup.getConsentTierStatusCollection());
 					final String scgResponsekey = "_specimenCollectionGroupLevelResponse";
 					final String scgResponseIDkey = "_specimenCollectionGroupLevelResponseID";
 					final Map tempMap = ConsentUtil.prepareSCGResponseMap(
