@@ -984,7 +984,9 @@
           <root url="jar://$MODULE_DIR$/lib/caGrid-sdk4xCQL2-processor-1.4.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/lib/caGrid-sdk4xCQL2-processor-1.4.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
