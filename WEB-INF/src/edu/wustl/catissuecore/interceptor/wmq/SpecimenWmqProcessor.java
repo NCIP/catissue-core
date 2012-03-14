@@ -184,7 +184,7 @@ public final class SpecimenWmqProcessor
 				LOGGER.info("Contents to Queue are written from file :" + fileName);
 				outMessage.setText(fileContents.toString());
 			}
-			final Queue senderQueue = session.createQueue(senderQueueName);
+			final Queue senderQueue = session.createQueue(senderQueueName+"?targetClient=1");
 			final QueueSender queueSender = session.createSender(senderQueue);
 
 			queueSender.send(outMessage);
@@ -212,7 +212,7 @@ public final class SpecimenWmqProcessor
 			while ((line = input.readLine()) != null)
 			{
 				contents.append(line);
-				contents.append(System.getProperty("line.separator"));
+				//contents.append(System.getProperty("line.separator"));
 			}
 		}
 		catch (IOException e)

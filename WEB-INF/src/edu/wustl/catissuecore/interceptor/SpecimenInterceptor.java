@@ -33,24 +33,22 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.cider.jaxb.domain.CollectionEventType;
 import edu.wustl.cider.jaxb.domain.CollectionProtocolRegistrationType;
 import edu.wustl.cider.jaxb.domain.CollectionProtocolType;
-import edu.wustl.cider.jaxb.domain.CoordinatorType;
 import edu.wustl.cider.jaxb.domain.ObjectFactory;
 import edu.wustl.cider.jaxb.domain.ParticipantType;
-import edu.wustl.cider.jaxb.domain.PrincipalInvestigatorType;
 import edu.wustl.cider.jaxb.domain.SCGCollectionType;
 import edu.wustl.cider.jaxb.domain.SiteType;
 import edu.wustl.cider.jaxb.domain.SpecimenCharacteristicsType;
 import edu.wustl.cider.jaxb.domain.SpecimenCollectionGroupType;
 import edu.wustl.cider.jaxb.domain.SpecimenCollectionType;
 import edu.wustl.cider.jaxb.domain.SpecimenEventsType;
+import edu.wustl.cider.jaxb.domain.SpecimenMessage;
 import edu.wustl.cider.jaxb.domain.SpecimenPositionType;
 import edu.wustl.cider.jaxb.domain.SpecimenType;
 import edu.wustl.cider.jaxb.domain.StorageContainerType;
+import edu.wustl.cider.jaxb.domain.UserType;
 import edu.wustl.cider.jaxb.domain.impl.CollectionEventTypeImpl;
 import edu.wustl.cider.jaxb.domain.impl.CollectionProtocolRegistrationTypeImpl;
 import edu.wustl.cider.jaxb.domain.impl.CollectionProtocolTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.CoordinatorTypeImpl;
-import edu.wustl.cider.jaxb.domain.impl.PrincipalInvestigatorTypeImpl;
 import edu.wustl.cider.jaxb.domain.impl.SCGCollectionTypeImpl;
 import edu.wustl.cider.jaxb.domain.impl.SiteTypeImpl;
 import edu.wustl.cider.jaxb.domain.impl.SpecimenCharacteristicsTypeImpl;
@@ -60,6 +58,7 @@ import edu.wustl.cider.jaxb.domain.impl.SpecimenEventsTypeImpl;
 import edu.wustl.cider.jaxb.domain.impl.SpecimenPositionTypeImpl;
 import edu.wustl.cider.jaxb.domain.impl.SpecimenTypeImpl;
 import edu.wustl.cider.jaxb.domain.impl.StorageContainerTypeImpl;
+import edu.wustl.cider.jaxb.domain.impl.UserTypeImpl;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -116,19 +115,23 @@ public class SpecimenInterceptor implements InterceptProcessor
 			{
 
 				ObjectFactory factory = new ObjectFactory();
-				//ParticipantType xmlParticipant = factory.createParticipantType();
-				ParticipantType xmlParticipant = factory.createParticipant();
+				ParticipantType xmlParticipant = factory.createParticipantType();
 				updateJaxbDomainObject(specimen, xmlParticipant);
-				if(xmlParticipant.getEmpi()==null||"".equals(xmlParticipant.getEmpi()))
+				if(xmlParticipant.getEmpi()==null||"".equals(xmlParticipant.getEmpi().trim()))
 				{
 					return;
 				}
+				final SpecimenMessage specimenMessage = factory.createSpecimenMessage();
+				Calendar calendar = Calendar.getInstance();
+
+				specimenMessage.setMessageTimeStamp(calendar);
+				specimenMessage.setParticipant(xmlParticipant);
 
 				String fileName = TEMP_DIR_LOCATION+File.separator+FILE_NAME_PREFIX+specimen.getId()+Constants.XML_SUFFIX;
-				marshall(xmlParticipant, fileName);
+				marshall(specimenMessage, fileName);
 				if(writeMessage(fileName))
 				{
-					updateSpecimenCiderMessageLog(specimen,type);
+					updateSpecimenCiderMessageLog(specimen,type,calendar.getTime());
 				}
 
 			}catch (JAXBException e) {
@@ -152,13 +155,20 @@ public class SpecimenInterceptor implements InterceptProcessor
 	{
 		SpecimenInterceptor interceptor = new SpecimenInterceptor();
 		ObjectFactory factory = new ObjectFactory();
-		ParticipantType xmlParticipant = factory.createParticipant();
+
+		ParticipantType xmlParticipant = factory.createParticipantType();
 
 		xmlParticipant.setEmpi("007");
+		final SpecimenMessage specimenMessage = factory.createSpecimenMessage();
+		Calendar calendar = Calendar.getInstance();
+
+		specimenMessage.setMessageTimeStamp(calendar);
+		specimenMessage.setParticipant(xmlParticipant);
+
 
 		String fileName = TEMP_DIR_LOCATION+FILE_NAME_PREFIX+"1"+Constants.XML_SUFFIX;
 
-		interceptor.marshall(xmlParticipant, fileName);
+		interceptor.marshall(specimenMessage, fileName);
 	}
 
 	public void marshall(Object participantObj,String fileName) throws JAXBException
@@ -170,7 +180,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 
 	}
 
-	private void updateSpecimenCiderMessageLog(Specimen specimen, eventType type) throws BizLogicException
+	private void updateSpecimenCiderMessageLog(Specimen specimen, eventType type,Date timestamp) throws BizLogicException
 	{
 		// TODO Auto-generated method stub
 		SpecimenCiderMessage ciderMessage = new SpecimenCiderMessage();
@@ -207,10 +217,14 @@ public class SpecimenInterceptor implements InterceptProcessor
 		SpecimenCollectionGroup scg = getScgFromId(specimen.getSpecimenCollectionGroup());
 		CollectionProtocolRegistrationType xmlCPR = new CollectionProtocolRegistrationTypeImpl();
 		CollectionProtocolRegistration cpr = scg.getCollectionProtocolRegistration();
-		updateObjectForCollectionProtocol(xmlCPR, cpr);
+		boolean isCpEmpiEnabled = updateObjectForCollectionProtocol(xmlCPR, cpr);
 		SpecimenCollectionGroupType xmlScg = updateObjectForScg(xmlCPR,scg);
 		updateObjectForSpecimen(xmlScg,specimen);
-		xmlParticiapant.setEmpi(getParticiapantEmpiId(cpr));//cpr.getParticipant().getEMpi();
+		if(isCpEmpiEnabled)
+		 {
+			xmlParticiapant.setEmpi(getParticiapantEmpiId(cpr));//cpr.getParticipant().getEMpi();
+		}
+
 		xmlParticiapant.setCollectionProtocolRegistration(xmlCPR);
 
 	}
@@ -229,7 +243,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 		xmlSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
 		xmlSpecimen.setQuantity(specimen.getAvailableQuantity());
 		xmlSpecimen.setIsAvailable(specimen.getIsAvailable());
-
+		xmlSpecimen.setActivityStatus(specimen.getActivityStatus());
 		// add specimen characterastics
 		SpecimenCharacteristicsType xmlCharacterastics = new SpecimenCharacteristicsTypeImpl();
 		xmlCharacterastics.setTissueSite(specimen.getSpecimenCharacteristics().getTissueSite());
@@ -296,9 +310,10 @@ public class SpecimenInterceptor implements InterceptProcessor
 		return empiId;
 	}
 
-	private void updateObjectForCollectionProtocol(CollectionProtocolRegistrationType xmlCPR,
+	private boolean updateObjectForCollectionProtocol(CollectionProtocolRegistrationType xmlCPR,
 			CollectionProtocolRegistration cpr) throws BizLogicException
 	{
+		boolean isUpdated = false;
 		CollectionProtocolType xmlCp = new CollectionProtocolTypeImpl();
 		CollectionProtocol collectionProtocol = cpr.getCollectionProtocol();
 		if(collectionProtocol.getPrincipalInvestigator()==null)
@@ -307,16 +322,22 @@ public class SpecimenInterceptor implements InterceptProcessor
 			collectionProtocol = bizlogic.retrieveB(CollectionProtocol.class.getName(),collectionProtocol.getId());
 		}
 		xmlCp.setTitle(collectionProtocol.getTitle());
-
+		//if participant is having empi but registered in CP whose empi is not enabled then data should not be sent to cider
+		if(collectionProtocol.getIsEMPIEnabled())
+		{
+			isUpdated = true;
+		}
 		// create PI
 		User principalInvestigator = collectionProtocol.getPrincipalInvestigator();
-		PrincipalInvestigatorType xmlPi = new PrincipalInvestigatorTypeImpl();
+		UserType xmlPi = new UserTypeImpl();
 		xmlPi.setFirstName(principalInvestigator.getFirstName());
 		xmlPi.setLastName(principalInvestigator.getLastName());
 		xmlPi.setEmail(principalInvestigator.getEmailAddress());
 
 		xmlCp.setPrincipalInvestigator(xmlPi);
 		xmlCPR.setCollectionProtocol(xmlCp);
+		return isUpdated;
+
 	}
 
 	private void updateXmlObjectForCollectionDate(Specimen specimen,
@@ -358,7 +379,7 @@ public class SpecimenInterceptor implements InterceptProcessor
 			SiteType xmlSite = new SiteTypeImpl();
 			xmlSite.setName(storageSite.getName());
 
-			CoordinatorType xmlCordinator = new CoordinatorTypeImpl();
+			UserType xmlCordinator = new UserTypeImpl();
 			xmlCordinator.setEmail(siteCoordinator.getEmailAddress());
 			xmlCordinator.setFirstName(siteCoordinator.getFirstName());
 			xmlCordinator.setLastName(siteCoordinator.getLastName());
