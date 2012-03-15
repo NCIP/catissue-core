@@ -12,38 +12,48 @@
 <%@ page
 	import="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <head>
+
+<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
+<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
+
+
 <SCRIPT LANGUAGE="JavaScript">
 	var search1='`';
 </script>
 <script src="jss/script.js" type="text/javascript"></script>
-<script language="JavaScript" type="text/javascript"
-	src="jss/javaScript.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="jss/caTissueSuite.js"></script>
-<script src="jss/calendarComponent.js" language="JavaScript"
-	type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
+<script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
 
 
 <script>var imgsrc="images/de/";</script>
-<script language="JavaScript" type="text/javascript"
-	src="javascripts/de/prototype.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="javascripts/de/scr.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="javascripts/de/combobox.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="jss/ext-base.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="jss/ext-all.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="javascripts/de/ajax.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="/jss/multiselectUsingCombo.js"></script>
-<LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/prototype.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/scr.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/combobox.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
+<script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
+<LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-<link rel="stylesheet" type="text/css"
-	href="css/clinicalstudyext-all.css" />
+<link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
 
 <%
 	String selectText = "--Select--";
@@ -53,13 +63,200 @@
 
 
 <script>
-Ext.onReady(function(){var myUrl= 'ClinicalDiagnosisData.do?';var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: myUrl}),reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, [{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});var combo = new Ext.form.ComboBox({store: ds,hiddenName: 'CB_coord',displayField:'excerpt',valueField: 'id',typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'coord'});combo.on("expand", function() {if(Ext.isIE || Ext.isIE7){combo.list.setStyle("width", "250");combo.innerList.setStyle("width", "250");}else{combo.list.setStyle("width", "auto");combo.innerList.setStyle("width", "auto");}}, {single: true});ds.on('load',function(){if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(combo.getRawValue().toLowerCase())) {combo.typeAheadDelay=50;} else {combo.typeAheadDelay=60000}});});
-</script>
+Ext.onReady(function(){
+var commonActionURL = 'CatissueCommonAjaxAction.do?';
 
-<script>
+// Defining Cinical Diagnosis Combobox
+var diagnosisDS = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: commonActionURL}),
+				baseParams:{type:'getClinicalDiagnosisValues'},
+				reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, 
+				[{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});
+				
+var diagnosisCombo = new Ext.form.ComboBox({
+			store: diagnosisDS,hiddenName: 'CB_coord',displayField:'excerpt',valueField: 'id',
+			typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',
+			mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,
+			cls:Ext.isIE?'forIe':'',
+			emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'coord'});
+			
+diagnosisCombo.on("expand", function() {
+			if(Ext.isIE || Ext.isIE7){diagnosisCombo.list.setStyle("width", "250");diagnosisCombo.innerList.setStyle("width", "250");}
+			else{diagnosisCombo.list.setStyle("width", "auto");diagnosisCombo.innerList.setStyle("width", "auto");}}, {single: true});
+diagnosisDS.on('load',function(){
+			if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(diagnosisCombo.getRawValue().toLowerCase())) {diagnosisCombo.typeAheadDelay=50;} 
+			else {diagnosisCombo.typeAheadDelay=60000}});
+// Defining Cinical Diagnosis Combobox defined 
+
+// Defining Coordinator Combobox
+
+
+var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: commonActionURL }),
+				baseParams:{type:'getUserListAsJSon'},
+				reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, 
+				[{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});
+				
+var coordinatorCombo = new Ext.form.ComboBox({
+			store: ds,hiddenName: 'CB_pcoordinatorIds',displayField:'excerpt',valueField: 'id',
+			typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',
+			cls:Ext.isIE?'forIe':'',
+			mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,
+			emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'pcoordinatorIds'});
+			
+coordinatorCombo.on("expand", function() {
+			if(Ext.isIE || Ext.isIE7){coordinatorCombo.list.setStyle("width", "250");coordinatorCombo.innerList.setStyle("width", "250");}
+			else{coordinatorCombo.list.setStyle("width", "auto");coordinatorCombo.innerList.setStyle("width", "auto");}}, {single: true});
+ds.on('load',function(){
+			if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(coordinatorCombo.getRawValue().toLowerCase())) {coordinatorCombo.typeAheadDelay=50;} 
+			else {coordinatorCombo.typeAheadDelay=60000}});
+			
+});			
+			
+// Defining Coordinator Combobox done :) 			
+
+//declaring DHTMLX Drop Down controls required variables
+var investigatorDropDownInfo, piGrid, parentProtocolDropDownInfo, ppGrid;
+var piGridVisible = false, ppGridVisible = false;
 
 if('${requestScope.tabSel}'=="consentTab"){
 	window.onload=consentPage;
+}
+
+//will be called whenever a participant is selected from the participant grid/dropdown
+function investigatorOnRowSelect(id,ind)
+{	
+	document.getElementsByName('principalInvestigatorId')[0].value = id;
+	document.getElementById(investigatorDropDownInfo['dropDownId']).value = piGrid.cellById(id,ind).getValue();
+	//document.getElementById("waitingImage").style.display = "block";
+	hideGrid(investigatorDropDownInfo['gridDiv']);
+	piGridVisible = false;
+}
+
+function parentProtocolOnRowSelect(id,ind)
+{	
+	document.getElementsByName('parentCollectionProtocolId')[0].value = id;
+	document.getElementById(parentProtocolDropDownInfo['dropDownId']).value = ppGrid.cellById(id,ind).getValue();
+	//document.getElementById("waitingImage").style.display = "block";
+	hideGrid(parentProtocolDropDownInfo['gridDiv']);
+	ppGridVisible = false;
+}
+
+//This will select option on the basis of left , right, up 0r down key press
+function keyNavigationCall(event, gridDivId)
+{
+	if(gridDivId == investigatorDropDownInfo['gridDiv'])
+	{
+		keyNavigation(event,investigatorDropDownInfo,piGrid,piGridVisible);
+	}
+	if(gridDivId == parentProtocolDropDownInfo['gridDiv'])
+	{
+		keyNavigation(event,parentProtocolDropDownInfo,ppGrid,ppGridVisible);
+	}
+}
+
+//This called on every key up event on DHTMLX drop down control
+function autoCompleteControlCall(event,gridContainerDiv,dropDownId)
+{
+	var gridDivObject ;
+	if(event.keyCode != 13){
+		if(document.getElementById(dropDownId).value=="")
+		{
+			if(gridContainerDiv == investigatorDropDownInfo['gridDiv'])
+			{
+				gridDivObject = piGrid;
+				piGridVisible = false;
+				document.getElementsByName('principalInvestigatorId')[0].value = "";
+			}
+			if(gridContainerDiv == parentProtocolDropDownInfo['gridDiv'])
+			{
+				gridDivObject = ppGrid;
+				ppGridVisible = false;
+				document.getElementsByName('parentCollectionProtocolId')[0].value = "";
+			}
+		}
+		else
+		{
+			if(gridContainerDiv == investigatorDropDownInfo['gridDiv'])
+			{
+				piGridVisible = true;
+				gridDivObject = piGrid;
+			}
+			if(gridContainerDiv == parentProtocolDropDownInfo['gridDiv'])
+			{
+				ppGridVisible = true;
+				gridDivObject = ppGrid;
+			}
+		}
+		autoCompleteControl(gridContainerDiv,dropDownId,gridDivObject);
+	}
+}
+
+function showHideParentProtocolGrid(e,gridDivId, dropDownId)
+{		
+		setValue(e,gridDivId, dropDownId);
+		if(ppGridVisible)
+		{
+			hideGrid(gridDivId);
+			ppGridVisible = false;
+		}
+		else 
+		 {	
+			showGrid(gridDivId,dropDownId);
+			ppGridVisible = true;
+			ppGrid.load(parentProtocolDropDownInfo['actionToDo'], "");
+		 }
+}
+
+function setValue(e,gridDivId, dropDownId)
+{
+		document.getElementById(dropDownId).focus();
+		//piText = document.getElementById(dropDownId).value;
+		//document.getElementById(dropDownId).value = "";
+		//autoCompleteControl(gridDivId,dropDownId,piGrid);
+		noEventPropogation(e);
+		//document.getElementById(dropDownId).value =piText ;
+}
+function showHideprincipleInvestigatorGrid(e,gridDivId, dropDownId)
+{		
+		setValue(e,gridDivId, dropDownId);
+		if(piGridVisible)
+		{
+			hideGrid(gridDivId);
+			piGridVisible = false;
+		}
+		else 
+		 {	
+			showGrid(gridDivId,dropDownId);
+			piGridVisible = true;
+			piGrid.load(investigatorDropDownInfo['actionToDo'],"");
+		 }
+		 
+		
+}
+
+
+function onInvestigatorListReady()
+	{
+		var principalInvestigatorsId = '${collectionProtocolForm.principalInvestigatorId}';
+		if(principalInvestigatorsId != "" && principalInvestigatorsId != 0 && principalInvestigatorsId != null)
+			investigatorOnRowSelect(principalInvestigatorsId,0);
+	}
+	
+function onParentProtocolListReady()
+	{
+		var parentProtocolId = '${collectionProtocolForm.parentCollectionProtocolId}';
+		if(parentProtocolId != "" && parentProtocolId != 0 && parentProtocolId != null)
+			parentProtocolOnRowSelect(parentProtocolId,0);
+	}	
+
+function doOnLoad()
+{
+	//Drop Down components information
+	investigatorDropDownInfo = {gridObj:"principleInvestigatorGrid", gridDiv:"principleInvestigator", dropDownId:"principleInvestigatorDropDown", pagingArea:"principleInvestigatorPagingArea", infoArea:"principleInvestigatorInfoArea", onOptionSelect:"investigatorOnRowSelect", actionToDo:"CatissueCommonAjaxAction.do?type=allUserList", callBackAction:onInvestigatorListReady};
+	parentProtocolDropDownInfo = {gridObj:"parentProtocolGrid", gridDiv:"parentProtocol", dropDownId:"parentProtocolDropDown", pagingArea:"ppPagingArea", infoArea:"ppInfoArea", onOptionSelect:parentProtocolOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllCPList", callBackAction:onParentProtocolListReady};
+	// initialising grid
+	piGrid = initDropDownGrid(investigatorDropDownInfo); //initialize DropDown control for priciple Investigator
+	ppGrid = initDropDownGrid(parentProtocolDropDownInfo); //initialize DropDown control for priciple Investigator
+	enableDisableParentProtocol('${collectionProtocolForm.type}');
 }
 
 function defineEvents()
@@ -74,21 +271,43 @@ function updateCPTree()
   window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
 }
 
-
+function enableDisableParentProtocol(associationType)
+{
+	var imgObj = document.getElementById("ppDropDownId");
+	
+	
+	if(associationType == 'Parent')
+	{
+		document.getElementsByName("parentCollectionProtocolId")[0].value = "";
+		document.getElementById("parentProtocolDropDown").value="";
+		document.getElementById("parentProtocolMendatorySymbol").innerHTML = "&nbsp;";
+		document.getElementById("parentProtocolDropDown").setAttribute("disabled",true);
+		imgObj.onclick =function (e) {};
+		hideGrid(parentProtocolDropDownInfo['gridDiv']);
+		piGridVisible = false;
+	}	
+	else
+	{
+		document.getElementById("parentProtocolMendatorySymbol").innerHTML = "<image src='images/uIEnhancementImages/star.gif' alt='Mandatory'>";
+		document.getElementById("parentProtocolDropDown").removeAttribute("disabled");
+		imgObj.onclick =function (e) {showHideParentProtocolGrid(e,'parentProtocol','parentProtocolDropDown');};
+	}
+}
 </script>
 
 <style>
 div#d1 {
 	display: none;
-}
+ }
 
 div#d999 {
 	display: none;
-}
+ }
 </style>
 </head>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <LINK href="css/calanderComponent.css" type="text/css" rel="stylesheet">
+<body onload="doOnLoad();">
 <html:form action='${requestScope.formName}'
 	styleId="CollectionProtocolForm">
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -125,46 +344,136 @@ div#d999 {
 				<html:hidden property="redirectTo" />
 
 				<html:hidden property="sequenceNumber" />
-				<html:hidden property="type" />
+				<!-- html:hidden property="type" /-->
 				<html:hidden property="studyCalendarEventPoint" />
-				<html:hidden property="parentCollectionProtocolId" />
-
-				<script>
-						//alert(document.getElementById('generateLabel').value);
-					</script>
+				<!-- html:hidden property="parentCollectionProtocolId"  /-->
 				<tr>
 					<td width="1%" align="center" class="black_ar"><img
 						src="images/uIEnhancementImages/star.gif" alt="Mandatory"
 						width="6" height="6" hspace="0" vspace="0" /></td>
-					<td width="30%" align="left" class="black_ar"><bean:message
-						key="collectionprotocol.principalinvestigator" /></td>
-					<td width="69%" align="left"><label><html:select
-						property="principalInvestigatorId" styleClass="formFieldSizedNew"
-						styleId="principalInvestigatorId" size="1"
-						onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-						<html:options collection='${requestScope.userListforJSP}'
-							labelProperty="name" property="value" />
-					</html:select>&nbsp;<html:link href="#" styleId="newUser" styleClass="view"
-						onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=collectionProtocol&addNewFor=principalInvestigator')">
-						<bean:message key="buttons.addNew" />
-					</html:link></label></td>
+					<td width="30%" align="left" class="black_ar" ><bean:message
+						key="collectionprotocol.typeofassiciation" /></td>
+					<td width="69%" align="left" class="black_ar">
+						<logic:iterate id="associationTypeValue" collection="<%=request.getAttribute(Constants.CP_ASSOCIATION_TYPE_LIST)%>">								
+							<c:if test="${collectionProtocolForm.type == associationTypeValue}">
+								<div style="float:left;"><input type="radio" value="${associationTypeValue}"  onclick="enableDisableParentProtocol(this.value);" name="type"  checked="true"><bean:write name="associationTypeValue"/>&nbsp;</input></div>
+							</c:if>
+							<c:if test="${collectionProtocolForm.type != associationTypeValue}">
+							 <div style="float:left;"><input type="radio" value="${associationTypeValue}"  onclick="enableDisableParentProtocol(this.value);" name="type" ><bean:write name="associationTypeValue"/>&nbsp;</input></div>
+							 </c:if>
+						</logic:iterate>
+					</td>
 				</tr>
+				
+
+				
+				<tr>
+					<td width="1%" align="center" class="black_ar"><span id="parentProtocolMendatorySymbol"></span></td>
+					<td width="30%" align="left" class="black_ar" ><bean:message
+						key="collectionprotocol.parentcollectionprotocol" /></td>
+					<td width="69%" align="left" class="black_ar">
+						<html:hidden property="parentCollectionProtocolId"  />
+						<div>
+							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
+								<tr>
+									<td align="left" width="88%" height="100%" >
+										<div id="ppDropDownIddiv" class="x-form-field-wrap " >
+											<input id="parentProtocolDropDown"
+													onkeydown="keyNavigationCall(event,'parentProtocol');"
+													onKeyUp="autoCompleteControlCall(event,'parentProtocol','parentProtocolDropDown');"
+													onClick="noEventPropogation(event)"
+													autocomplete="off"
+													size="20"
+													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="ppDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
+												
+												src="images/uIEnhancementImages/s.gif"/>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+									<div id="parentProtocol" style="z-index: 100;"
+										onClick="noEventPropogation(event);">
+									<div id="parentProtocolGrid" style="height: 200px;"
+										onClick="noEventPropogation(event)"></div>
+									<div id="ppPagingArea" onClick="noEventPropogation(event)"></div>
+									<div id="ppInfoArea" onClick="noEventPropogation(event)"></div>
+									</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+				
+				<tr>
+					<td width="1%" align="center" class="black_ar"><img
+						src="images/uIEnhancementImages/star.gif" alt="Mandatory"
+						width="6" height="6" hspace="0" vspace="0" /></td>
+					<td width="30%" align="left" class="black_ar" ><bean:message
+						key="collectionprotocol.principalinvestigator" /></td>
+					<td width="69%" align="left" class="black_ar">
+						<html:hidden property="principalInvestigatorId"  />
+						<div>
+							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
+								<tr>
+									<td align="left" width="88%" height="100%" >
+										<div id="piDropDownIddiv" class="x-form-field-wrap" >
+											<input id="principleInvestigatorDropDown"
+													onkeydown="keyNavigationCall(event,'principleInvestigator');"
+													onKeyUp="autoCompleteControlCall(event,'principleInvestigator','principleInvestigatorDropDown');"
+													onClick="noEventPropogation(event)"
+													autocomplete="off"
+													size="20"
+													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="piDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
+												onclick="showHideprincipleInvestigatorGrid(event,'principleInvestigator','principleInvestigatorDropDown');"
+												src="images/uIEnhancementImages/s.gif"/>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+									<div id="principleInvestigator" style="z-index: 100"
+										onClick="noEventPropogation(event)">
+									<div id="principleInvestigatorGrid" style="height: 40px;"
+										onClick="noEventPropogation(event)"></div>
+									<div id="principleInvestigatorPagingArea" onClick="noEventPropogation(event)"></div>
+									<div id="principleInvestigatorInfoArea" onClick="noEventPropogation(event)"></div>
+									</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+					
 				<tr>
 					<td align="center" class="black_ar">&nbsp;</td>
 					<td align="left" valign="top" class="black_ar"><label
-						for="coordinatorIds"><bean:message
+						for="cpcoordinatorIds"><bean:message
 						key="collectionprotocol.protocolcoordinator" /></label></td>
-					<td align="left"><label><html:select
-						property="coordinatorIds" styleClass="formFieldSizedNew"
-						styleId="coordinatorIds" size="4" multiple="true"
-						onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-						<html:options collection='${requestScope.userListforJSP}'
-							labelProperty="name" property="value" />
-					</html:select>&nbsp;<html:link href="#" styleId="newUser" styleClass="view"
-						onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=protocolCoordinator&forwardTo=collectionProtocol&addNewFor=protocolCoordinator')">
-						<bean:message key="buttons.addNew" />
-					</html:link></label></td>
+					<td align="left">
+						<table width="100%" cellspacing="0" cellpadding="0">
+							<tr> <td width="57%">
+								<mCombo:multiSelectUsingCombo
+								identifier="pcoordinatorIds" size="20" styleClass="black_ar_new"
+								addNewActionStyleClass="black_ar_new"
+								addButtonOnClick="moveOptions('pcoordinatorIds','coordinatorIds', 'add')"
+								removeButtonOnClick="moveOptions('coordinatorIds','pcoordinatorIds', 'edit')"
+								selectIdentifier="coordinatorIds"
+								collection="<%=(List)request.getAttribute("selectedCPCoordinatorIds")%>"
+								numRows="4" />	</td> 
+								<td width="43%">
+								<label>&nbsp;<html:link href="#" styleId="newUser" styleClass="view"
+								onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=collectionProtocol&addNewFor=principalInvestigator')">
+								<bean:message key="buttons.addNew" /></html:link></label>
+								</td>
+							</tr>
+						</table>	
+					</td>
 				</tr>
+				
+				
 				<tr>
 					<td align="center" class="black_ar"><img
 						src="images/uIEnhancementImages/star.gif" alt="Mandatory"
@@ -258,10 +567,16 @@ div#d999 {
 						<td align="center" class="black_ar">&nbsp;</td>
 						<td align="left" class="black_ar"><bean:message
 							key="site.activityStatus" /></td>
-						<td align="left" class="black_ar"><autocomplete:AutoCompleteTag
-							property="activityStatus" optionsList='${activityStatusList}'
-							initialValue='${collectionProtocolForm.activityStatus}'
-							styleClass="black_ar" size="27" onChange='${strCheckStatus}' /></td>
+						<td align="left" class="black_ar" >
+						<logic:iterate id="activityStatusValue" collection="<%=request.getAttribute("activityStatusList")%>" offset="1">								
+							<c:if test="${collectionProtocolForm.activityStatus == activityStatusValue}">
+								<div style="float:left;"><input type="radio" value="${activityStatusValue}" valign="middle" onclick='${strCheckStatus}' name="activityStatus"  checked="true">&nbsp;<bean:write name="activityStatusValue"/>&nbsp;</input></div>
+							</c:if>
+							<c:if test="${collectionProtocolForm.activityStatus != activityStatusValue}">
+							 <div style="float:left;"><input type="radio" value="${activityStatusValue}" valign="middle" onclick='${strCheckStatus}' name="activityStatus" >&nbsp;<bean:write name="activityStatusValue"/>&nbsp;</input></div>
+							 </c:if>
+						</logic:iterate>
+						</td>
 					</tr>
 				</logic:equal>
 				<tr>
@@ -277,6 +592,7 @@ div#d999 {
 						for="consentWaived">&nbsp;<bean:message
 						key="consent.consentwaivedno" /></label></td>
 				</tr>
+				
 				<tr>
 
 					<td align="center" class="black_ar">&nbsp;</td>
@@ -361,4 +677,5 @@ if(document.getElementById("errorRow")!=null && document.getElementById("errorRo
 	  window.top.document.getElementById("errorRow").innerHTML = "";
 }
 </script>
+</body>
 

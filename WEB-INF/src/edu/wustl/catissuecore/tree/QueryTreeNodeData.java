@@ -36,6 +36,11 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	 * Specify object Name.
 	 */
 	private String objectName;
+	
+	/**
+	 * Type of the object like Specimen, Aliquote, Derivative etc.
+	 */
+	private String objectType;
 
 	/**
 	 * This will be Containe the actual name display label of the node.
@@ -134,6 +139,20 @@ public class QueryTreeNodeData implements QueryTreeNode, Serializable
 	public void setObjectName(String objectName)
 	{
 		this.objectName = objectName;
+	}
+	
+	/**
+	 * @return
+	 */
+	public String getObjectType() {
+		return this.objectType;
+	}
+
+	/**
+	 * @param objectType
+	 */
+	public void setObjectType(String objectType) {
+		this.objectType = objectType;
 	}
 
 	/**

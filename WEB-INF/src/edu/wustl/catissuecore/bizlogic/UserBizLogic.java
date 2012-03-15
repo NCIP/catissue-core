@@ -1272,6 +1272,66 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	 */
 	public Vector getUsers(final String operation) throws BizLogicException
 	{
+		final List users = getActiveUserList(operation);
+
+		final Vector nameValuePairs = new Vector();
+		nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION, String
+				.valueOf(Constants.SELECT_OPTION_VALUE)));
+
+		// If the list of users retrieved is not empty.
+		if (!users.isEmpty())
+		{
+			// Creating name value beans.
+			for (int i = 0; i < users.size(); i++)
+			{
+				// Changes made to optimize the query to get only required
+				// fields data
+				final Object[] userData = (Object[]) users.get(i);
+				final NameValueBean nameValueBean = new NameValueBean();
+				nameValueBean.setName(userData[1] + ", " + userData[2]);
+				nameValueBean.setValue(userData[0]);
+				nameValuePairs.add(nameValueBean);
+			}
+		}
+		Collections.sort(nameValuePairs);
+		return nameValuePairs;
+	}
+	
+	/**
+	 * This function returns Name-Value list of all active Clinportal Application Users.
+	 * @param operation type of operation add/edit
+	 * @return list of Users as NameValueBean List
+	 * @throws BizLogicException
+	 */
+	public List<NameValueBean> getUsersNameValueList(final String operation) throws BizLogicException
+	{
+		final List users = getActiveUserList(operation);
+		// If the list of users retrieved is not empty.
+		List<NameValueBean> nameValuePairs = new ArrayList<NameValueBean>();
+		if (!users.isEmpty())
+		{
+			// Creating name value beans.
+			for (int i = 0; i < users.size(); i++)
+			{
+				final Object[] userData = (Object[]) users.get(i);
+				final NameValueBean nameValueBean = new NameValueBean();
+				nameValueBean.setName(userData[1] + ", " + userData[2]);
+				nameValueBean.setValue(userData[0]);
+				nameValuePairs.add(nameValueBean);
+			}
+		}
+		Collections.sort(nameValuePairs);
+		return nameValuePairs;
+	}
+
+	/**
+	 * This returns list of all the active users of Clinportal Application.
+	 * @param operation type of operation
+	 * @return list of Users
+	 * @throws BizLogicException
+	 */
+	private List getActiveUserList(final String operation)
+			throws BizLogicException {
 		final String sourceObjectName = User.class.getName();
 		// Get only the fields required
 		final String[] selectColumnName = { Constants.SYSTEM_IDENTIFIER, Constants.LASTNAME, Constants.FIRSTNAME };
@@ -1303,29 +1363,10 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		// Retrieve the users whose activity status is not disabled.
 		final List users = this.retrieve(sourceObjectName, selectColumnName, whereColumnName,
 				whereColumnCondition, whereColumnValue, joinCondition);
-
-		final Vector nameValuePairs = new Vector();
-		nameValuePairs.add(new NameValueBean(Constants.SELECT_OPTION, String
-				.valueOf(Constants.SELECT_OPTION_VALUE)));
-
-		// If the list of users retrieved is not empty.
-		if (!users.isEmpty())
-		{
-			// Creating name value beans.
-			for (int i = 0; i < users.size(); i++)
-			{
-				// Changes made to optimize the query to get only required
-				// fields data
-				final Object[] userData = (Object[]) users.get(i);
-				final NameValueBean nameValueBean = new NameValueBean();
-				nameValueBean.setName(userData[1] + ", " + userData[2]);
-				nameValueBean.setValue(userData[0]);
-				nameValuePairs.add(nameValueBean);
-			}
-		}
-		Collections.sort(nameValuePairs);
-		return nameValuePairs;
+		return users;
 	}
+	
+
 
 	/**
 	 * Returns the list of NameValueBeans with name as "LastName,Firstname" and

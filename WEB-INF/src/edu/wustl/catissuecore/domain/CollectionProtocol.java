@@ -365,6 +365,14 @@ public class CollectionProtocol extends SpecimenProtocol
 			this.siteCollection.clear();
 			this.collectionProtocolEventCollection.clear();
 			this.clinicalDiagnosisCollection.clear();
+			
+			this.setType(cpForm.getType());
+			if(Long.valueOf(cpForm.getParentCollectionProtocolId())!= -1L) //for complex protocol creation
+			{
+				CollectionProtocol parentCP = new CollectionProtocol();
+				parentCP.setId(Long.valueOf(cpForm.getParentCollectionProtocolId()));
+				this.setParentCollectionProtocol(parentCP);
+			}
 
 			/**For Clinical Diagnosis Subset **/
 			final String[] clinicalDiagnosisArr = cpForm.getProtocolCoordinatorIds();

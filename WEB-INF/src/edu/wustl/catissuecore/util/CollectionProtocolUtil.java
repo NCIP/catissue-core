@@ -147,6 +147,7 @@ public class CollectionProtocolUtil
 		coordinatorIds = getProtocolCordnateIds(collectionProtocol, coordinatorIds);
 
 		collectionProtocolBean.setCoordinatorIds(coordinatorIds);
+		collectionProtocolBean.setCoordinatorCollection(collectionProtocol.getCoordinatorCollection());
 
 		/**For Clinical Diagnosis subset **/
 		collectionProtocolBean.setClinicalDiagnosis(getClinicalDiagnosis(collectionProtocol));

@@ -2,10 +2,12 @@
 package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.util.global.Status;
 
 // TODO: Auto-generated Javadoc
@@ -25,6 +27,8 @@ public class CollectionProtocolBean implements Serializable
 
 	/** protocolCoordinatorIds. */
 	private long[] coordinatorIds;
+	
+	private Collection<User> coordinatorCollection;
 
 	/** principalInvestigatorId. */
 	private long principalInvestigatorId;
@@ -210,6 +214,22 @@ public class CollectionProtocolBean implements Serializable
 	public void setCoordinatorIds(long[] coordinatorIdsParam)
 	{
 		this.coordinatorIds = coordinatorIdsParam;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public Collection<User> getCoordinatorCollection() {
+		return coordinatorCollection;
+	}
+
+	/**
+	 * 
+	 * @param coordinatorCollection
+	 */
+	public void setCoordinatorCollection(Collection<User> coordinatorCollection) {
+		this.coordinatorCollection = coordinatorCollection;
 	}
 
 	/**

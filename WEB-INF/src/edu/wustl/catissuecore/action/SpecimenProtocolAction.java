@@ -16,7 +16,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -93,8 +92,15 @@ public class SpecimenProtocolAction extends SecureAction
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final UserBizLogic userBizLogic = (UserBizLogic) factory
 				.getBizLogic(Constants.USER_FORM_ID);
-		final Collection userCollection = userBizLogic.getUsers(operation);
-		request.setAttribute(Constants.USERLIST, userCollection);
+		final List<NameValueBean> userCollection = userBizLogic.getUsersNameValueList(operation);
+		final List<NameValueBean> userList = new ArrayList<NameValueBean>();
+		for(NameValueBean nvb : userCollection)
+		{
+			nvb.setValue(nvb.getValue().toString());
+			userList.add(nvb);
+		}
+		//userList.add(0,new NameValueBean(Constants.SELECT_OPTION,Long.valueOf(Constants.SELECT_OPTION_VALUE)));
+		request.setAttribute(Constants.USERLIST, userList);
 		this.logger.debug("1");
 		// get the Specimen class and type from the cde
 		final List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(

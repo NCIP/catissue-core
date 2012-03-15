@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.util.global;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,6 +27,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -35,12 +37,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.domain.Category;
@@ -152,6 +158,99 @@ public class AppUtility {
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
 	private static Logger logger = Logger.getCommonLogger(AppUtility.class);
+	
+	/**
+	 * Write list as j son.
+	 *
+	 * @param objList the obj list
+	 * @param request the request
+	 * @param response the response
+	 *
+	 * @throws ApplicationException the application exception
+	 */
+	public static void writeListAsJSon(List<NameValueBean> objList, HttpServletRequest request,
+			HttpServletResponse response) throws ApplicationException
+	{
+		try
+		{
+			//response.flushBuffer();
+			PrintWriter out = response.getWriter();
+			out.write(createJson(request, objList));
+		}
+		catch (Exception ex)
+		{
+			throw new ApplicationException(null, ex, "Exception while writing List as JSon Object.");
+		}
+	}
+	
+	/**
+	 * @param request
+	 * @param beans
+	 * @return
+	 * @throws JSONException
+	 */
+	public static String createJson(HttpServletRequest request, List<NameValueBean> beans)
+			throws JSONException
+	{
+		String limit = request.getParameter("limit");
+		String query = request.getParameter("query") == null ? "" : request.getParameter("query");
+		String start = request.getParameter("start");
+
+		Integer limitFetch = Integer.parseInt(limit);
+		Integer startFetch = Integer.parseInt(start);
+
+		JSONArray jsonArray = new JSONArray();
+		JSONObject mainJsonObject = new JSONObject();
+
+		Integer total = limitFetch + startFetch;
+		List<NameValueBean> querySpecificNVBeans = new ArrayList<NameValueBean>();
+		populateQuerySpecificNameValueBeansList(
+				querySpecificNVBeans, beans, query);
+		mainJsonObject.put("totalCount", querySpecificNVBeans.size());
+
+		for (int i = startFetch; i < total && i < querySpecificNVBeans.size(); i++)
+		{
+			JSONObject jsonObject = new JSONObject();
+			Locale locale = CommonServiceLocator.getInstance().getDefaultLocale();
+
+			if (query == null
+					|| querySpecificNVBeans.get(i).getName().toLowerCase(locale).contains(
+							query.toLowerCase(locale)) || query.length() == 0)
+			{
+				jsonObject.put("id", querySpecificNVBeans.get(i).getValue());
+				jsonObject.put("field", querySpecificNVBeans.get(i).getName());
+				jsonArray.put(jsonObject);
+			}
+		}
+
+		mainJsonObject.put("row", jsonArray);
+
+		return mainJsonObject.toString();
+	}
+	
+	/**
+	 * This method populates name value beans list as per query,
+	 * i.e. word typed into the auto-complete drop-down text field.
+	 * @param querySpecificNVBeans
+	 * @param users
+	 * @param query
+	 */
+	private static void populateQuerySpecificNameValueBeansList(List<NameValueBean> querySpecificNVBeans,
+			List users, String query)
+	{
+		Locale locale = CommonServiceLocator.getInstance().getDefaultLocale();
+
+		for (Object obj : users)
+		{
+			NameValueBean nvb = (NameValueBean) obj;
+
+			if (nvb.getName().toLowerCase(locale).contains(query.toLowerCase(locale)))
+			{
+				querySpecificNVBeans.add(nvb);
+			}
+		}
+	}
+	
 
 	public static Set getSpecimenClassCDE() {
 		final CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(
@@ -159,6 +258,7 @@ public class AppUtility {
 		final Set setPV = specimenClassCDE.getPermissibleValues();
 		return setPV;
 	}
+	
 
 	/* Method returns the storage position list */
 	public static List getStoragePositionTypeList() {

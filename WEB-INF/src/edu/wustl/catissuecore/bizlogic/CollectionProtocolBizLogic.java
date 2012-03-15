@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
@@ -1864,6 +1865,26 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
             returnList.add(new String(Constants.ALL));
         }
         return returnList;
+    }
+    /**
+     * This function returns Name-Value pair list of all the available Collection Protocols
+     * @return list of Collectin Protocol as NameValueBean list
+     * @throws ApplicationException
+     */
+    public List<NameValueBean> getAllCPNameValueBeanList() throws ApplicationException
+    {
+    	String hql = "select cp.id, cp.title from edu.wustl.catissuecore.domain.CollectionProtocol as cp" +
+    			" where  cp.activityStatus ='"+ Status.ACTIVITY_STATUS_ACTIVE.toString()+"' order by cp.title";
+		final List cpList = AppUtility.executeQuery(hql);
+		
+        final List<NameValueBean> returnList = new ArrayList<NameValueBean>();
+        for (int i=0; i<cpList.size();i++)
+        {
+        	Object[] obj = (Object[])cpList.get(i);
+        	NameValueBean cpBean = new NameValueBean(obj[1].toString(),obj[0]);
+        	returnList.add(cpBean);
+		}
+    	return returnList;
     }
 
     /**

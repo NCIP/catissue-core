@@ -35,7 +35,9 @@ import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -138,7 +140,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		{
 			this.initCollectionProtocolPage(request, form, pageOf, mapping);
 		}
-		if ("add".equals(operation) && invokeFunction == null && !condition1) //bug 18481
+		if (Constants.ADD.equals(operation) && invokeFunction == null && !condition1) //bug 18481
 		{
 			this.initCleanSession(request);
 		}
@@ -167,6 +169,13 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			collectionProtocolForm.setStartDate(CommonUtilities.parseDateToString(Calendar
 					.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 		}
+		//collectionProtocolForm.setType((collectionProtocolForm.getType() == null || "".equals(collectionProtocolForm.getType()))? "Parent" : collectionProtocolForm.getType());
+		boolean hasParent = false;
+		if(collectionProtocolForm.getType() == null || !Constants.CP_TYPE_PARENT.equals(collectionProtocolForm.getType()))
+			{
+				hasParent = true;
+			}
+		request.setAttribute("hasParent",hasParent);
 		// Name of delete button clicked
 		final String button = request.getParameter("button");
 
@@ -279,7 +288,12 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 				.getMonth(collectionProtocolEndDate));
 		final Integer collectionProtocolEndDateDay = Integer.valueOf(CommonUtilities
 				.getDay(collectionProtocolEndDate));
-
+		
+		CollectionProtocolBizLogic cpBizLogic = new CollectionProtocolBizLogic();
+		List<NameValueBean> cpList = cpBizLogic.getAllCPNameValueBeanList();
+		//cpList.add(0,new NameValueBean(Constants.SELECT_OPTION,Long.valueOf(Constants.SELECT_OPTION_VALUE)));
+		
+		request.setAttribute(Constants.CP_LIST, cpList);
 		request.setAttribute("collectionProtocolYear", collectionProtocolYear);
 		request.setAttribute("collectionProtocolDay", collectionProtocolDay);
 		request.setAttribute("collectionProtocolMonth", collectionProtocolMonth);
@@ -306,6 +320,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		final String fieldWidth = Utility.getColumnWidth(CollectionProtocol.class, "title");
 		final String deleteAction = "deleteObject('" + formName + "','" + Constants.ADMINISTRATIVE
 				+ "')";
+		request.setAttribute(Constants.CP_ASSOCIATION_TYPE_LIST,Constants.CP_ASSOCIATION_TYPE_VALUES);
 		request.setAttribute("pageOf", pageOf);
 		request.setAttribute("operation", operation);
 		request.setAttribute("edit", Constants.EDIT);
@@ -325,6 +340,10 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		request.setAttribute("pathologyStatusList", pathologyStatusList);
 		request.setAttribute("predefinedConsentsList", predefinedConsentsList);
 		request.setAttribute("title", title);
+		/*UserBizLogic userBizLogic = new UserBizLogic();
+		final Collection userCollection = userBizLogic.getUsers(operation);
+		//userCollection.add(new NameValueBean(Constants.SELECT_OPTION,Long.valueOf(Constants.SELECT_OPTION_VALUE)));
+		request.setAttribute(Constants.USERLIST, userCollection);*/
 		request.setAttribute("userListforJSP", Constants.USERLIST);
 		CollectionProtocolUtil.updateClinicalDiagnosis(request, cpBean);
 		return mapping.findForward(pageOf);
@@ -398,12 +417,28 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		final HttpSession session = request.getSession();
 		final CollectionProtocolBean collectionProtocolBean = (CollectionProtocolBean) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
+		collectionProtocolForm.setParentCollectionProtocolId(collectionProtocolBean.getParentCollectionProtocolId());
+		collectionProtocolForm.setParentCollectionProtocol(collectionProtocolBean.getParentCollectionProtocol());
 		collectionProtocolForm.setPrincipalInvestigatorId(collectionProtocolBean
 				.getPrincipalInvestigatorId());
 		collectionProtocolForm.setCoordinatorIds(collectionProtocolBean.getCoordinatorIds());
+		Collection coordinatorList = collectionProtocolBean.getCoordinatorCollection();
+		Iterator iterator = coordinatorList.iterator();
+		List<NameValueBean> selectedCoordinatorsList = new ArrayList<NameValueBean>();
+		while (iterator.hasNext())
+		{
+			User user = (User) iterator.next();
+			NameValueBean nvb = new NameValueBean();
+			nvb.setName(user.getLastName() + "' " + user.getFirstName());
+			nvb.setValue(user.getId().toString());
+			selectedCoordinatorsList.add(nvb);
+		}
+		
+		request.setAttribute("selectedCPCoordinatorIds", selectedCoordinatorsList);
 		/**For Clinical Diagnosis Subset  **/
 		collectionProtocolForm.setProtocolCoordinatorIds(collectionProtocolBean
 				.getClinicalDiagnosis());
+		//CollectionProtocolUtil.updateCoordinatorIds(request, collectionProtocolBean);
 		CollectionProtocolUtil.updateClinicalDiagnosis(request, collectionProtocolBean);
 
 		collectionProtocolForm.setTitle(collectionProtocolBean.getTitle());

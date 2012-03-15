@@ -1002,6 +1002,11 @@ public class Constants
 
 	/** The Constant MAP_COLLECTION_PROTOCOL_LIST. */
 	public static final String MAP_COLLECTION_PROTOCOL_LIST = "collectionProtocolList";
+	
+	/** The list of Collection Protocols Association Types with Another CP*/
+	public static final String[] CP_ASSOCIATION_TYPE_VALUES = {"Parent", "Phase", "Arm", "Cycle"};
+	
+	public static final String CP_ASSOCIATION_TYPE_LIST = "associationTypeList";
 
 	/** The Constant MAP_SPECIMEN_CLASS_LIST. */
 	public static final String MAP_SPECIMEN_CLASS_LIST = "specimenClassList";
@@ -2124,7 +2129,10 @@ public class Constants
 
 	/** The Constant DEFAULT_ROLE. */
 	public static final String DEFAULT_ROLE = "Default role";
-
+	
+	/** The Constant DEFAULT_ASSOCIATION_TYPE for Collection Protocol*/
+	public static final String DEFAULT_ASSOCIATION_TYPE = "Parent";
+	
 	/** The Constant PAGE_OF_ASSIGN_PRIVILEGE. */
 	public static final String PAGE_OF_ASSIGN_PRIVILEGE = "pageOfAssignPrivilegePage";
 
@@ -4851,7 +4859,7 @@ public class Constants
 
 	//For enhanced CP
 	/** The Constant PARENT_CP_TYPE. */
-	public static final String PARENT_CP_TYPE = "Parent";
+	public static final String CP_TYPE_PARENT = "Parent";
 
 	/** The Constant ARM_CP_TYPE. */
 	public static final String ARM_CP_TYPE = "Arm";
@@ -5822,4 +5830,24 @@ public class Constants
 
 	public static final String ACCESS_DENIED_MSG = "access.execute.action.denied";
 	public static final String REDIRECT_HOME = "/Home.do";
+	
+	//Constants for creating a standard xml file for dhtmlx grid
+	public static final String XML_START = "<?xml version='1.0' encoding='utf-8' ?>";
+	public static final String XML_ROWS = "<rows>";
+	public static final String XML_ROWS_TOTAL_COUNT = "<rows total_count='";
+	public static final String XML_ROWS_TOTAL_COUNT_START = "total_count='";
+	public static final String XML_ROWS_END = "</rows>";
+	public static final String XML_ROW_ID_START = "<row id='";
+	public static final String XML_TAG_END = "'>";
+	public static final String XML_ROW_END = "</row>";
+	public static final String XML_CELL_START = "<cell>";
+	public static final String XML_CELL_END = "</cell>";
+	public static final String XML_CDATA_START = "<![CDATA[";
+	public static final String XML_CDATA_END = "]]>"; 
+	public static final String CONTENT_TYPE_XML = "text/xml";
+	
+	public static final String DHTMLX_CONNECTOR_ERROR = "dhtmlx.connector.error";
+	public static final String GRID_SETUP_PROP_FILE = "gridsetup.properties";
+	
+	public static final String CP_COORDINATOR_IDS = "coordinatorIds";
 }

@@ -39,25 +39,16 @@
 </head>
 
 <body>
-<table border="0" cellpadding="0" cellspacing="0">
-
-
+<table border="0"  width="100%">
 	<tr>	
-		 <td class="formLabelAllBorder"  style="background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;border-right:1px solid #61a1e3;border-top:1px solid #61a1e3;" colspan="2" width="170">
-			<b>Collection Protocol Details :</b>
-		</td>
-		<td align="left" colspan="2">
-		  <tr>
-			<td align="left" colspan="2">
-			<div id="treeboxbox_tree"
-				style="width: 180px; height: 410px; background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;	border-right:1px solid #61a1e3;	border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;" />
-			</td>
-		  </tr>
+		<td align="left" colspan="2" >
+			<div id="treeboxbox_tree" scrolling="no"
+				style="width: 100%; height: 410px; background-color: #ffffff;overflow:auto;" />
 		</td>
 	</tr>
 </table>
 
-<script language="javascript">
+<script language="javascript"><!--
 			//This function is called when any of the node is selected in tree 
 			function tonclick(id)
 			{
@@ -115,20 +106,22 @@
 						String nodeId = data.getObjectName() + "_"+id;
 						String img = "Specimen.GIF";
 						
-						String diaplayName = data.getDisplayName();
+						String name = data.getObjectType();
+						
+						/* String name = data.getDisplayName(); 
 						String name=null;
-						StringTokenizer stringTokenizer =new StringTokenizer(diaplayName, "_");
+						StringTokenizer stringTokenizer =new StringTokenizer(objectType, "_");
 						if(stringTokenizer!=null)
 						{	
 							while(stringTokenizer.hasMoreTokens())
 							{
 								name = stringTokenizer.nextToken();
 							}
-						}
+						} */
 						
-						if(name.startsWith("S"))
+						if(name.startsWith("N"))
 						{
-							img = "Specimen.GIF";
+							img = "Participant.GIF";
 						}
 						else if(name.startsWith("A"))
 						{
@@ -198,6 +191,6 @@
 			<%	}
 			   }
 			%>	
-	</script>
+	--></script>
 </body>
 </html>

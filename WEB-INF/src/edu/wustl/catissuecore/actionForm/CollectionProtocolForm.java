@@ -26,6 +26,8 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 // TODO: Auto-generated Javadoc
@@ -286,6 +288,11 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		//Bug #13312
 		this.sequenceNumber = cProtocol.getSequenceNumber();
 		this.type = cProtocol.getType();
+		if(cProtocol.getParentCollectionProtocol() != null)
+		{
+			this.parentCollectionProtocol = cProtocol.getParentCollectionProtocol();
+			this.parentCollectionProtocolId = cProtocol.getParentCollectionProtocol().getId();
+		}	
 		this.studyCalendarEventPoint = cProtocol.getStudyCalendarEventPoint();
 		//this.consentValues = prepareConsentTierMap(cProtocol.getConsentTierCollection());
 	}
@@ -348,6 +355,14 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						break;
 					}
 				}
+			}
+			
+			
+			
+			if(!Constants.CP_TYPE_PARENT.equals(this.type) && (this.parentCollectionProtocolId == 0 || "".equals(this.parentCollectionProtocolId)))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("errors.parent.protocol.required")));
 			}
 
 			LOGGER.debug("Protocol Coordinators : " + this.coordinatorIds);
@@ -662,7 +677,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	protected Integer sequenceNumber;
 
 	/** Collection Protocol type - Arm, Cycle, Phase. */
-	protected String type;
+	protected String type = Constants.CP_TYPE_PARENT;
 
 	/** Defines the relative time point in days. */
 	protected Double studyCalendarEventPoint;
