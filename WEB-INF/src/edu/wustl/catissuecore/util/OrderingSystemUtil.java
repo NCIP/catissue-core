@@ -197,7 +197,7 @@ public final class OrderingSystemUtil
 			requestViewBean.setEmail("");
 		}
 		requestViewBean.setRequestedDate(CommonUtilities.parseDateToString(
-				order.getRequestedDate(), CommonServiceLocator.getInstance().getDatePattern()));
+				order.getRequestedDate(), CommonServiceLocator.getInstance().getTimeStampPattern()));
 		return requestViewBean;
 	}
 

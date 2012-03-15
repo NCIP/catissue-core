@@ -973,25 +973,9 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			 */
 			final String[] selectColName = null;
 
-			if (!requestStatusSelected.trim().equalsIgnoreCase("All"))
-			{
 				final List whereColValues = new ArrayList();
-				whereColValues.add(new String("All"));
-
-				// Object [] whereColumnValues = {whereColValues.toArray()};
-
-				final QueryWhereClause queryWhereClause = new QueryWhereClause(OrderDetails.class
-						.getName());
-				queryWhereClause.addCondition(new INClause("status", whereColValues.toArray()));
-				orderListFromDB = dao.retrieve(OrderDetails.class.getName(), selectColName,
-						queryWhereClause);
-
-			}
-			else
-			{
-				final List whereColValues = new ArrayList();
-				whereColValues.add(new String("Pending"));
 				whereColValues.add(new String("New"));
+				whereColValues.add(new String("Pending"));
 
 				final QueryWhereClause queryWhereClause = new QueryWhereClause(OrderDetails.class
 						.getName());
@@ -1001,7 +985,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 				orderListFromDB = dao.retrieve(OrderDetails.class.getName(), selectColName,
 						queryWhereClause);
 
-			}
+//			}
 
 			final Iterator orderListFromDBIterator = orderListFromDB.iterator();
 			while (orderListFromDBIterator.hasNext())
@@ -1052,7 +1036,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		boolean isValidToDistribute = false;
 
 		final Iterator orderItemColItr = orderItemCollection.iterator();
-		while (orderItemColItr.hasNext())
+		if (orderItemColItr.hasNext())
 		{
 			final OrderItem orderItem = (OrderItem) orderItemColItr.next();
 			if (orderItem instanceof ExistingSpecimenOrderItem)
@@ -1072,7 +1056,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 								.getSpecimenPosition().getStorageContainer().getSite().getId()))
 						{
 							isValidToDistribute = true;
-							break;
+//							break;
 						}
 					}
 				}
@@ -1089,7 +1073,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					if (siteIdsList.contains(storageContainer.getSite().getId()))
 					{
 						isValidToDistribute = true;
-						break;
+//						break;
 					}
 				}
 			}
@@ -1111,7 +1095,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 						if (siteIdsList.contains(siteId))
 						{
 							isValidToDistribute = true;
-							break;
+//							break;
 						}
 					}
 				}
@@ -1208,7 +1192,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		{
 			final Iterator orderItemColItr = orderItemCollection.iterator();
 
-			while (orderItemColItr.hasNext())
+			if (orderItemColItr.hasNext())
 			{
 				final OrderItem orderItem = (OrderItem) orderItemColItr.next();
 				if (orderItem instanceof PathologicalCaseOrderItem)
@@ -1238,7 +1222,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 						if (isAuthorized)
 						{
 							hasDistributionPrivilege = true;
-							break;
+//							break;
 						}
 					}
 				}
@@ -2062,6 +2046,27 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			LOGGER.error(e.getMessage(), e);
 		}
 		return hasDistributionPrivilege;
+	}
+	
+	public int getOrderCount(String status)
+	{
+		int count = 0;
+		try
+		{
+			String sql = "select count(*) from catissue_order where status like '"+status +"'";
+			List result = AppUtility.executeSQLQuery(sql);
+			if(result != null)
+			{
+				List innnerResult = (List)result.get(0);
+				count = Integer.valueOf(innnerResult.get(0).toString());
+			}
+
+		}
+		catch (ApplicationException e) 
+		{
+			e.printStackTrace();
+		} 
+		return count;
 	}
 
 }

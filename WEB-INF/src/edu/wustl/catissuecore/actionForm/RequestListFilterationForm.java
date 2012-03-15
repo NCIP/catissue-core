@@ -37,7 +37,7 @@ public class RequestListFilterationForm extends AbstractActionForm
 	/**
 	 * The parameter to filter the requests.
 	 */
-	private String requestStatusSelected = "All";
+	private String requestStatusSelected = "New";
 
 	/**
 	 * @return requestStatusSelected The parameter to filter the requests.
