@@ -90,8 +90,8 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 				// {
 				// objectName=Constants.VIEW_SUMMARY
 				// }
-				displayName = collectionProtocolEventBean.getStudyCalenderEventPoint().toString()
-						+ " " + collectionProtocolEventBean.getCollectionPointLabel();
+				displayName = collectionProtocolEventBean.getCollectionPointLabel()
+						+ " (" + collectionProtocolEventBean.getStudyCalenderEventPoint().toString() +" days)";
 				parentIdentifier = collectionProtocolBean.getTitle();
 				identifier = collectionProtocolEventBean.getUniqueIdentifier();
 				this.addNode(objectName, displayName, parentIdentifier, identifier, cpName,
@@ -147,7 +147,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 		// }
 		final String identifier = specimenRequirementBean.getUniqueIdentifier();
 
-		String displayName = specimenRequirementBean.getClassName()+"_"+specimenRequirementBean.getType();
+		String displayName = specimenRequirementBean.getClassName()+" ("+specimenRequirementBean.getType()+")";
 			//Constants.SPECIMEN + "_"+ specimenRequirementBean.getUniqueIdentifier();
 		
 		this.addNode(objectName, displayName, parentIdentifier, identifier, parentObjectname,
@@ -165,7 +165,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 				final SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) aliquotsCollectionItr
 						.next();
 
-				displayName = specimenRequirementBean1.getClassName()+"_"+specimenRequirementBean1.getType();//Constants.ALIQUOT + specimenRequirementBean1.getUniqueIdentifier();
+				displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";//Constants.ALIQUOT + specimenRequirementBean1.getUniqueIdentifier();
 				this.createSpecimenNode(parentObjectname, parentIdentifier,
 						specimenRequirementBean1, treeData, operation);
 			}
@@ -182,7 +182,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 				final SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) deriveSpecimenCollectionItr
 						.next();
 
-				displayName = specimenRequirementBean1.getClassName()+"_"+specimenRequirementBean1.getType();
+				displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";
 				//Constants.DERIVED_SPECIMEN+ specimenRequirementBean1.getUniqueIdentifier();
 				this.createSpecimenNode(parentObjectname, parentIdentifier,
 						specimenRequirementBean1, treeData, operation);
