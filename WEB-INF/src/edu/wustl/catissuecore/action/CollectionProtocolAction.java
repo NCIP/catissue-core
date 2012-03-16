@@ -169,7 +169,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			collectionProtocolForm.setStartDate(CommonUtilities.parseDateToString(Calendar
 					.getInstance().getTime(), CommonServiceLocator.getInstance().getDatePattern()));
 		}
-		//collectionProtocolForm.setType((collectionProtocolForm.getType() == null || "".equals(collectionProtocolForm.getType()))? "Parent" : collectionProtocolForm.getType());
+		collectionProtocolForm.setType((collectionProtocolForm.getType() == null || "".equals(collectionProtocolForm.getType()))? Constants.CP_TYPE_PARENT : collectionProtocolForm.getType());
 		boolean hasParent = false;
 		if(collectionProtocolForm.getType() == null || !Constants.CP_TYPE_PARENT.equals(collectionProtocolForm.getType()))
 			{
@@ -429,7 +429,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		{
 			User user = (User) iterator.next();
 			NameValueBean nvb = new NameValueBean();
-			nvb.setName(user.getLastName() + "' " + user.getFirstName());
+			nvb.setName(user.getLastName() + ", " + user.getFirstName());
 			nvb.setValue(user.getId().toString());
 			selectedCoordinatorsList.add(nvb);
 		}
