@@ -109,8 +109,11 @@ public class WritableAPIClient extends Catissue_cacoreClient  {
             }
 
             if (args[2].equals("CreateParticipant")) {
+                ClientRunAll.testCreateParticipant();
+            }
+
+            if (args[2].equals("CreateParticipantAndCPR")) {
                 ClientRunAll.createParticipantAndCPR();
-                // ClientRunAll.testCreateParticipant();
             }
 
             if (args[2].equals("CreateSpecimen")) {

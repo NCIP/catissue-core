@@ -32,13 +32,9 @@ public class ClientRunAll {
         p.setFirstName("Alexander");
         p.setLastName("Nevsky");
 
-        Object pResult = client.insert(p);
-        System.out.println(pResult.getClass());
-/*
+        Participant pResult = (Participant)client.insert(p);
         System.out.println(String.format("--> Participant inserted: %d", pResult.getIdentifier()));
         p.setIdentifier(pResult.getIdentifier());
-*/
-
     }
 
     public static void createInstitution() throws RemoteException {
