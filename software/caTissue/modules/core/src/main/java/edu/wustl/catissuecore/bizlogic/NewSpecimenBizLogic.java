@@ -4146,12 +4146,13 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		if (!Validator.isEnumeratedValue(specimenClassList, specimenClass)) {
 			throw this.getBizLogicException(null, "protocol.class.errMsg", "");
 		}
-
+		
 		if (!Validator.isEnumeratedValue(
 				AppUtility.getSpecimenTypes(specimenClass),
 				specimen.getSpecimenType())) {
 			throw this.getBizLogicException(null, "protocol.type.errMsg", "");
 		}
+		specimen.setSpecimenClass(specimenClass);
 		/*
 		 * bug # 7594 if (operation.equals(Constants.EDIT)) { if
 		 * (specimen.getCollectionStatus() != null &&
