@@ -702,5 +702,26 @@ public class CollectionProtocolBean implements Serializable
 	{
 		this.isEMPIEnable = isEMPIEnable;
 	}
+	
+	/**
+	 * Ashraf: JSON value for dashboard item
+	 */
+	private String dashboardLabelJsonValue;
+
+	/**
+	 * @return the dashboardLabelJsonValue
+	 */
+	public String getDashboardLabelJsonValue()
+	{
+		return dashboardLabelJsonValue;
+	}
+
+	/**
+	 * @param dashboardLabelJsonValue the dashboardLabelJsonValue to set
+	 */
+	public void setDashboardLabelJsonValue(String dashboardLabelJsonValue)
+	{
+		this.dashboardLabelJsonValue = dashboardLabelJsonValue;
+	}
 
 }
