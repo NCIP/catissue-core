@@ -29,6 +29,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
@@ -51,6 +53,8 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
+import edu.wustl.labelSQLApp.domain.LabelSQLAssociation;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -472,6 +476,9 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		collectionProtocolForm.setParentCollectionProtocolId(collectionProtocolBean
 				.getParentCollectionProtocolId());
 		collectionProtocolForm.setIsEMPIEnable(collectionProtocolBean.getIsEMPIEnable());
+		collectionProtocolForm
+				.setDashboardLabelJsonValue(populateDashboardLabelJsonValue(collectionProtocolBean
+						.getIdentifier()));
 		return mapping.findForward(pageOf);
 	}
 
@@ -488,4 +495,49 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		session.removeAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 	}
+	
+	/**
+	 * Creates JSON for CP Dashboard items from domain objects
+	 * @param cpId
+	 * @return
+	 */
+	private String populateDashboardLabelJsonValue(Long cpId)
+	{
+		String dashboardLabelJsonValue;
+		JSONObject mainJsonObject = new JSONObject();
+		JSONArray innerDataArray = new JSONArray();
+		try
+		{
+			//Retrieving associations from CPId
+			List<LabelSQLAssociation> labelSQLAssociations = new LabelSQLAssociationBizlogic()
+					.getLabelSQLAssocCollectionByCPId(cpId);
+
+			if (labelSQLAssociations.size() != 0)
+			{
+				//Putting the JSON values from the objects
+				for (LabelSQLAssociation labelSQLAssociation : labelSQLAssociations)
+				{
+					JSONObject innerJsonObject = new JSONObject();
+
+					innerJsonObject.put("assocId", labelSQLAssociation.getId());
+					innerJsonObject.put("seqOrder", labelSQLAssociation.getSeqOrder());
+					innerJsonObject.put("labelId", labelSQLAssociation.getLabelSQL().getId());
+					innerJsonObject.put("userDefinedLabel", labelSQLAssociation
+							.getUserDefinedLabel());
+					innerDataArray.put(innerJsonObject);
+
+				}
+			}
+			mainJsonObject.put("row", innerDataArray);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+
+		dashboardLabelJsonValue = mainJsonObject.toString();
+		Logger.out.info("JSON string for CP Dashboard: " + dashboardLabelJsonValue);
+		return dashboardLabelJsonValue;
+	}
+
 }
