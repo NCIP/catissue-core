@@ -130,6 +130,12 @@
 		
 		<!-- caTissue-cider integration -->
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenCiderMessage.hbm.xml"/>
+		
+		<!-- CP Dashboard-->
+		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQL.hbm.xml" />
+		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQLAssociation.hbm.xml" />
+		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQL_HQL.hbm.xml" />
+		
     </session-factory>
 
 </hibernate-configuration>
