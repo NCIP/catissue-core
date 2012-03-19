@@ -433,6 +433,25 @@
 			<many-to-many column="STUDY_FORM_CONTEXT_ID"
 				class="edu.wustl.catissuecore.domain.StudyFormContext" />
 		</set>
+		
+		<set
+            name="labelSQLAssociationCollection"
+            table="LABELSQLASSOC"
+            lazy="false"
+            inverse="false"
+			cascade="all"
+            order-by="SEQ_ORDER"
+        >
+
+              <key
+                  column="CPID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.labelSQLApp.domain.LabelSQLAssociation"
+              />
+        </set>
+		
         </joined-subclass>
 
         <joined-subclass
