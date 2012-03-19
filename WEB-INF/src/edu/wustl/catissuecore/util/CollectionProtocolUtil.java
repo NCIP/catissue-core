@@ -20,6 +20,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionErrors;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
@@ -61,6 +63,8 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.labelSQLApp.domain.LabelSQL;
+import edu.wustl.labelSQLApp.domain.LabelSQLAssociation;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -999,7 +1003,10 @@ public class CollectionProtocolUtil
 			collectionProtocol.setParentCollectionProtocol(getParentCollectionProtocol(cpBean
 					.getParentCollectionProtocolId()));
 		}
-
+		
+		//Ashraf: creating association collection from CP dashboard JSON string 
+		collectionProtocol.setLabelSQLAssociationCollection(populateLabelSQLAssocColl(cpBean
+				.getDashboardLabelJsonValue(), collectionProtocol));
 		return collectionProtocol;
 	}
 
@@ -1504,6 +1511,92 @@ public class CollectionProtocolUtil
 			}
 		}
 		return collectionProtocolId;
+	}
+
+	/**
+	 * Converts the JSON string to for dashboard items to LableSQLAssociationCollection object
+	 * @param dashboardLabelJsonValue
+	 * @param cp
+	 * @return
+	 * @throws Exception
+	 */
+	public static Collection<LabelSQLAssociation> populateLabelSQLAssocColl(
+			String dashboardLabelJsonValue, CollectionProtocol cp) throws Exception
+	{
+
+		JSONObject gridJson = new JSONObject(dashboardLabelJsonValue);
+		JSONArray innerArray = gridJson.getJSONArray("row");
+		Collection<LabelSQLAssociation> labelSQLAssociationCollection = cp
+				.getLabelSQLAssociationCollection();//retrieve labelSQL associations from CP
+
+		List<LabelSQLAssociation> labelSQLAssociationList = new ArrayList<LabelSQLAssociation>();
+		for (int i = 0; i < innerArray.length(); i++)
+		{
+			JSONObject rowObject = innerArray.getJSONObject(i);
+			LabelSQLAssociation labelSQLAssociation = new LabelSQLAssociation();
+
+			if (!"".equals(rowObject.get("assocId")))
+			{
+				labelSQLAssociation.setId(rowObject.getLong("assocId"));
+			}
+
+			LabelSQL labelSQL = new LabelSQL();
+			labelSQL.setId(rowObject.getLong("labelId"));
+			labelSQLAssociation.setLabelSQL(labelSQL);
+
+			String userDefinedLabel = trim(rowObject.getString("userDefinedLabel"));
+			//if none value defined for userdefinedlabel then assign null to it
+			if("".equals(userDefinedLabel))
+			{
+				userDefinedLabel=null;
+			}
+			labelSQLAssociation.setUserDefinedLabel(userDefinedLabel);
+			labelSQLAssociation.setLabelSQLCollectionProtocol(cp.getId());
+			
+			labelSQLAssociation.setSeqOrder(rowObject.getInt("seqOrder"));
+			labelSQLAssociationList.add(labelSQLAssociation);
+
+		}
+		
+		if (!labelSQLAssociationList.isEmpty())
+		{
+			if (labelSQLAssociationCollection != null)//check if collection contains items
+			{
+				Iterator iter = labelSQLAssociationCollection.iterator();
+				while (iter.hasNext())
+				{
+					iter.next();
+					iter.remove();//Removing the items from collection
+				}
+			}
+			else
+			{
+				//collection is empty hence creating new linkedhashset
+				labelSQLAssociationCollection = new LinkedHashSet<LabelSQLAssociation>();
+			}
+
+			labelSQLAssociationCollection.addAll(labelSQLAssociationList);//putting all values from association list
+		}
+		return labelSQLAssociationCollection;
+
+	}
+
+	/**
+	 * Trim.
+	 *
+	 * @param strValue the str value
+	 *
+	 * @return the string
+	 */
+	public static String trim(String strValue)
+	{
+		/*String returnValue = null;
+		if (strValue != null)
+		
+		{
+			returnValue = strValue.trim();
+		}*/
+		return ((strValue == null) ? null : strValue.trim());
 	}
 
 }
