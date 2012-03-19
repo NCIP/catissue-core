@@ -305,6 +305,7 @@ div#d999 {
  }
 </style>
 </head>
+<body onload="doCPDashboardInitGrid();">
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <LINK href="css/calanderComponent.css" type="text/css" rel="stylesheet">
 <body onload="doOnLoad();">
@@ -328,6 +329,7 @@ div#d999 {
 						src="images/uIEnhancementImages/cp_privileges1.gif"
 						alt="Privileges" width="94" height="20" border="0"
 						onclick="showAssignPrivilegePage('${requestScope.operation}')"></a></td>
+					<td height="20" width="1%" onclick="defineDashboardItems()" id="defineDashboardItemsTab"><a href="#" ><img src="images/uIEnhancementImages/configure_dashboard1.gif" id="defineDashboardItemsTabImage" alt="defineCPDashboardItemsTab" height="20"/></a></td>
 					<td width="85%" valign="bottom" class="cp_tabbg">&nbsp;</td>
 				</tr>
 			</table>
@@ -666,6 +668,7 @@ div#d999 {
 
 
 			<%@ include file="/pages/content/ConsentTracking/DefineConsent.jsp"%>
+			<%@ include file="/pages/content/manageAdministrativeData/ConfigureCPDashboard.jsp" %>
 			</td>
 		</tr>
 	</table>
