@@ -15,6 +15,7 @@ package edu.wustl.catissuecore.actionForm;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -29,6 +33,8 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
+import edu.wustl.labelSQLApp.domain.LabelSQLAssociation;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -80,6 +86,12 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 	/** The site ids. */
 	protected long[] siteIds;
+	
+	/**
+	 * Ashraf: JSON value for dashboard item
+	 */
+	private String dashboardLabelJsonValue;
+
 
 	/** Name: Amol Pujari */
 	/** empi  */
@@ -747,5 +759,22 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		return this.sequenceNumber;
 	}
+
+	/**
+	 * @return the dashboardLabelJsonValue
+	 */
+	public String getDashboardLabelJsonValue()
+	{
+		return dashboardLabelJsonValue;
+	}
+
+	/**
+	 * @param dashboardLabelJsonValue the dashboardLabelJsonValue to set
+	 */
+	public void setDashboardLabelJsonValue(String dashboardLabelJsonValue)
+	{
+		this.dashboardLabelJsonValue = dashboardLabelJsonValue;
+	}
+
 
 }
