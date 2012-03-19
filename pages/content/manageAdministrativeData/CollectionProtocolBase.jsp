@@ -55,6 +55,10 @@
 
 	function saveCP()
 	{
+		if(window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'] != null)
+		{
+			window.frames['SpecimenRequirementView'].setCSLevelFormData();//save the data in dashboard items grid
+		}
 		selectAllClinicalDiagnosis();
 		var isSaveCollectionProtocol = false;
 		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
