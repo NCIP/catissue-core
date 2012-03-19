@@ -30,6 +30,7 @@ import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.KeyComparator;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.labelSQLApp.domain.LabelSQLAssociation;
 
 /**
  * A set of written procedures that describe how a biospecimen is prospectively
@@ -140,6 +141,11 @@ public class CollectionProtocol extends SpecimenProtocol
 	protected Collection<Site> siteCollection = new HashSet<Site>();
 
 	protected Collection<StudyFormContext> studyFormContextCollection = new HashSet<StudyFormContext>();
+	
+	/**
+	 * Ashraf: CP Dashboard item association collection
+	 */
+	protected Collection<LabelSQLAssociation> labelSQLAssociationCollection;
 
 	/**
 	 * @return the unsignedConsentDocumentURL
@@ -809,4 +815,20 @@ public class CollectionProtocol extends SpecimenProtocol
 		this.clinicalDiagnosisCollection = clinicalDiagnosisCollection;
 	}
 
+	/**
+	 * @return the labelSQLAssociationCollection
+	 */
+	public Collection<LabelSQLAssociation> getLabelSQLAssociationCollection()
+	{
+		return labelSQLAssociationCollection;
+	}
+
+	/**
+	 * @param labelSQLAssociationCollection the labelSQLAssociationCollection to set
+	 */
+	public void setLabelSQLAssociationCollection(
+			Collection<LabelSQLAssociation> labelSQLAssociationCollection)
+	{
+		this.labelSQLAssociationCollection = labelSQLAssociationCollection;
+	}
 }
