@@ -108,6 +108,7 @@ public class DefineEventsAction extends BaseAction
 		cpBean.setType(cpForm.getType());
 		cpBean.setSequenceNumber(cpForm.getSequenceNumber());
 		cpBean.setParentCollectionProtocolId(cpForm.getParentCollectionProtocolId());
+		cpBean.setDashboardLabelJsonValue(cpForm.getDashboardLabelJsonValue());
 
 	}
 
