@@ -147,7 +147,10 @@ PUBLIC
 		<!-- end of shipping tracking form beans-->
 		<form-bean name="migrationForm"
 			type="edu.wustl.migrator.actionform.MigrationForm" />
-			
+		
+		<!-- CP Dashboard : Ashraf -->
+		<form-bean name="cpDashboardForm" type="edu.wustl.labelSQLApp.form.CPDashboardForm" />
+		<!-- end of CP Dashboard-->		
 			
 			<form-bean name="bulkParticipantMatchForm"
 			type="edu.wustl.bulkoperator.bulkmatching.action.BulkParticipantMatchForm" />
@@ -5759,6 +5762,26 @@ PUBLIC
 			<forward name="failure" path="/pages/blank.jsp" />
 		</action>
 		<!--  bulk empi operations ends -->
+		
+		<!-- Added for CP Dashboard : Ashraf-->
+		<action path="/CPDashboardAction" type="edu.wustl.labelSQLApp.action.CPDashboardAction"
+			name="cpDashboardForm" validate="true" scope="request">
+			<forward name="success" path="/pages/labelSQLApp/CPDashboard.jsp" />
+		</action>
+		
+		<action path="/AjaxSearchCPLabel"
+			type="edu.wustl.catissuecore.action.CPLabelAjaxSearchAction"
+			name="CollectionProtocolForm" validate="false" scope="request">
+			<forward name="success" path="/AjaxSearchCPLabel.do" />
+		</action>
+		
+		<action path="/QueryResultAjaxAction"
+			type="edu.wustl.labelSQLApp.action.QueryResultAjaxAction"
+			name="CollectionProtocolForm" validate="false" scope="request">
+			<forward name="success" path="/QueryResultAjaxAction.do" />
+		</action>
+		<!-- end of CP Dashboard -->
+		
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />
