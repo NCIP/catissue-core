@@ -184,9 +184,9 @@
 		}
 	};
 
-	function clearFrame()
+	function clearFrame(cpId)
     {
-        window.parent.frames[1].location = "blankScreenAction.do";
+        window.parent.frames[1].location = "CPDashboardAction.do?"+"&cpSearchCpId="+cpId;
     }
  </script>
 
