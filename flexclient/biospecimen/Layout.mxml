@@ -571,11 +571,15 @@
   	public function onCpChange():void
 	{
 		refreshCP();
+		var selectedCp : NameValueBean = new NameValueBean();
+		selectedCp =  cpCombo as NameValueBean;
+		var cpId :String = selectedCp.value;
+		
 		spDetailsLabel.text = title;
-		var url : URLRequest = new URLRequest("javascript: clearFrame()");
+		var url : URLRequest = new URLRequest("javascript: clearFrame('"+ cpId + "')");
 		navigateToURL(url,"_self");
 	}
-
+	
 	public function refreshCP():void
 	{
 	    var selectedCp : NameValueBean = new NameValueBean();
