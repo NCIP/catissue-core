@@ -307,8 +307,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					final SpecimenCollectionGroup specimenCollectionGroup = AppUtility.getSCGObj(
 							scgID, dao);
 					// List added for grid
-					final List specimenDetails = new ArrayList();
-					this.getSpecimenDetails(specimenCollectionGroup, specimenDetails, dao);
+//					final List specimenDetails = new ArrayList();
+//					this.getSpecimenDetails(specimenCollectionGroup, specimenDetails, dao);
 					final List columnList = ConsentUtil.columnNames();
 					// Resolved Lazy
 					// Collection consentResponse =
@@ -335,7 +335,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					specimenCollectionGroupForm.setConsentTierCounter(participantResponseList
 							.size());
 					final HttpSession session = request.getSession();
-					session.setAttribute(Constants.SPECIMEN_LIST, specimenDetails);
+//					session.setAttribute(Constants.SPECIMEN_LIST, specimenDetails);
 					session.setAttribute(Constants.COLUMNLIST, columnList);
 				}
 			}
