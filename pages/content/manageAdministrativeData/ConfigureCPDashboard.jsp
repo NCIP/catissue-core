@@ -1,13 +1,9 @@
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxgrid.css">
 <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/skins/dhtmlxgrid_dhx_skyblue.css">
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxcombo.css">
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
+
 <script src="dhtmlx_suite/gridexcells/dhtmlxgrid_excell_combo.js"></script>
 <script src="dhtmlx_suite/ext/dhtmlxgrid_srnd.js"></script>
-<script src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
 <script src="jss/configureCPDashboard.js"></script>
 
 <html:hidden property="dashboardLabelJsonValue" styleId="dashboardLabelJsonValue" />
