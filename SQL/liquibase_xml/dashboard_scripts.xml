@@ -32,7 +32,7 @@
 			</column>
 		</createTable>
 		
-		<addAutoIncrement tableName="LABELSQL" columnName="IDENTIFIER" columnDataType="${int.type}"/>
+		
 	
 		<!-- CREATE TABLE LABELSQLASSOC -->
 		<createTable tableName="LABELSQLASSOC">
@@ -49,7 +49,7 @@
 			<column name="SEQ_ORDER" type="${smallint.type}"/>	
 		</createTable>
 		
-		<addAutoIncrement tableName="LABELSQLASSOC" columnName="IDENTIFIER" columnDataType="${int.type}"/>
+		
 		
 		<!-- FOREIGN KEY FOR CPID-->
 		<addForeignKeyConstraint constraintName="FK_CP"
@@ -62,6 +62,15 @@
 			referencedTableName="LABELSQL" referencedColumnNames="IDENTIFIER" />
 
 		
+			
+	</changeSet>
+	
+	<changeSet id="2" author="catissue" dbms="mysql">
+		<addAutoIncrement tableName="LABELSQL" columnName="IDENTIFIER" columnDataType="${int.type}"/>
+		<addAutoIncrement tableName="LABELSQLASSOC" columnName="IDENTIFIER" columnDataType="${int.type}"/>
+	</changeSet>
+	
+	<changeSet id="3" author="catissue" dbms="oracle">
 		<!-- CREATE SEQUENCE FOR LABELSQL_IDENTIFIER_SEQ -->
 		<createSequence sequenceName="LABELSQL_IDENTIFIER_SEQ"
 			startValue="1" incrementBy="1" minValue="1" ordered="true" />
@@ -69,7 +78,7 @@
 		<!-- CREATE SEQUENCE FOR labelsqlassoc_identifier_seq -->
 		<createSequence sequenceName="LABELSQLASSOC_IDENTIFIER_SEQ"
 			startValue="1" incrementBy="1" minValue="1" ordered="true" />
-			
+		
 	</changeSet>
-
+	
 </databaseChangeLog>         
