@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<property name="text.type" value="varchar" dbms="mysql" />
+	<property name="text.type" value="varchar2" dbms="oracle" />
+
+	<property name="boolean.type" value="bit(1)" dbms="mysql" />
+	<property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+	<property name="int.type" value="bigint(20)" dbms="mysql" />
+	<property name="int.type" value="number(19,0)" dbms="oracle" />
+
+	<!-- ALTER TABLE CATISSUE_COLL_PROT_EVENT -->
+	<changeSet id="1" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_COLL_PROT_EVENT">
+			<column name="DEFAULT_SITE_ID" type="${int.type}" />
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+
+</databaseChangeLog>         
