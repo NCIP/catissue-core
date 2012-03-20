@@ -1716,6 +1716,7 @@
 			</sql>
 		<antcall target="update_metadata_for_model_changes_mysql_post_P5" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_mysql"/>
+		<antcall target="add_labelsql_tables_for_cp_dashboard_mysql" />
 	</target>
 	<target name="insert_entity_group_metadata_mysql" description="insert entity group metadata for mysql">
 		<echo message="Inserting entity group metadata for Mysql" />
@@ -1869,6 +1870,7 @@
 		</sql>
 		<antcall target="update_metadata_for_model_changes_oracle_post_P5" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_oracle"/>
+		<antcall target="add_labelsql_tables_for_cp_dashboard" />
 	</target>
 
 	<target name="reset_sequences" description="Resetting the sequences...">
@@ -4934,5 +4936,16 @@ Thanking You,
 		</delete>
 		<delete file="${mysql.sql.dir}/clinportal_createEMPIAdminUser1.sql">
 		</delete>
+	</target>
+	
+	<!--Ashraf: Target for creating CP dashboard tables -->
+	<target name="add_labelsql_tables_for_cp_dashboard">
+		<echo message="Creating lablesql tables for CS dashboard" />
+		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/dashboard_scripts.xml" driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+	</target>
+	
+	<target name="add_labelsql_tables_for_cp_dashboard_mysql">
+		<echo message="Creating lablesql tables for CS dashboard for mysql" />		
+		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/dashboard_scripts.xml" driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	</target>
 </project>
