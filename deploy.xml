@@ -97,6 +97,24 @@
 			</if>
 		</else>
 	</if>
+	
+	<echo message="Setting Global DRIVER and URL Property" />
+	<if>
+		<equals arg1="mysql" arg2="${database.type}" />
+		<then>
+			<property name ="final.database.driver" value="${mysql.driver.string}"/>
+			<property name="final.database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+		</then>
+
+		<elseif>
+			<equals arg1="oracle" arg2="${database.type}" />
+			<then>
+				<property name ="final.database.driver" value="${oracle.driver.string}"/>
+				<property name="final.database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+			</then>
+		</elseif>
+	</if>
+				
 	<!--import file="dbunitbuild.xml"/>
 	<target name="dbunit_testcases">
 		<antcall target="RundbUnit" />
@@ -819,6 +837,25 @@
 		<antcall target="CopyCAModelWars"/>
 	</target>
 
+	<path id="liquibaseClasspath">
+		<fileset dir="${lib.dir}" includes="*.jar" />
+	</path>
+	<taskdef resource="liquibasetasks.properties">
+		<classpath>
+			<pathelement location="${lib.dir}/liquibase.jar" />
+		</classpath>
+	</taskdef>
+
+	<target name="upgrade_db_to_plus_v10">
+		<echo message="Upgrading DataBase with URL ${final.database.url}" />	
+		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v10.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+	</target>
+	<target name="liquibase_upgrade_target">
+		<echo message="Upgrading DB using Liquibase Targets"/>
+		<antcall target="upgrade_db_to_plus_v10"/>
+		
+	</target>
+	
 	<!--Target call for both fresh deployment and database creation-->
 	<target name="deploy_all" description="Target call for both fresh deployment and database creation">
 		<antcall target="assert" />
@@ -1636,6 +1673,7 @@
 							<format property="pathtime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
 						</tstamp>
 						<echo>After Insert paths: ${pathtime}</echo>
+		<antcall target="liquibase_upgrade_target"/>
 	</target>
 
 	<!--MySQL Database Creation -->
@@ -1661,7 +1699,9 @@
 				</fileset>
 			</classpath>
 		</sql>
-
+		<!--Ashraf: Created LabelSQL(CP Dashboard Tables)-->
+		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
+		
 		<antcall target="integrate_bulk_operation_mysql" />
 
 		<antcall target="unzip_aq_installable" />
@@ -1716,7 +1756,6 @@
 			</sql>
 		<antcall target="update_metadata_for_model_changes_mysql_post_P5" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_mysql"/>
-		<antcall target="add_labelsql_tables_for_cp_dashboard_mysql" />
 	</target>
 	<target name="insert_entity_group_metadata_mysql" description="insert entity group metadata for mysql">
 		<echo message="Inserting entity group metadata for Mysql" />
@@ -1795,6 +1834,9 @@
 			</classpath>
 		</sql>
 
+		<!--Ashraf: Created LabelSQL(CP Dashboard Tables)-->
+		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
+		
 		<antcall target="integrate_bulk_operation_oracle"/>
 
 		<antcall target="unzip_aq_installable" />
@@ -1870,7 +1912,6 @@
 		</sql>
 		<antcall target="update_metadata_for_model_changes_oracle_post_P5" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_oracle"/>
-		<antcall target="add_labelsql_tables_for_cp_dashboard" />
 	</target>
 
 	<target name="reset_sequences" description="Resetting the sequences...">
@@ -2041,6 +2082,7 @@
 	<target name="upgrade_db" description="Upgrading Database vp5.1 to v1.2.1">
 		<echo message="Upgrading Database v1.2.3 to v1.2.4" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
+		<antcall target="liquibase_upgrade_target"/>
 	</target>
 
 	<target name="upgrade_db_from_v1.1.p1 to v1.1.p2" description="Upgrading Database from v1.1.p1 to v1.1.p2">
@@ -4939,13 +4981,9 @@ Thanking You,
 	</target>
 	
 	<!--Ashraf: Target for creating CP dashboard tables -->
-	<target name="add_labelsql_tables_for_cp_dashboard">
-		<echo message="Creating lablesql tables for CS dashboard" />
-		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/dashboard_scripts.xml" driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
-	</target>
 	
-	<target name="add_labelsql_tables_for_cp_dashboard_mysql">
+	<target name="add_labelsql_tables_for_cp_dashboard">
 		<echo message="Creating lablesql tables for CS dashboard for mysql" />		
-		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/dashboard_scripts.xml" driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/dashboard_scripts.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	</target>
 </project>
