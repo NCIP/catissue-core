@@ -305,10 +305,9 @@ div#d999 {
  }
 </style>
 </head>
-<body onload="doCPDashboardInitGrid();">
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <LINK href="css/calanderComponent.css" type="text/css" rel="stylesheet">
-<body onload="doOnLoad();">
+<body onload="doOnLoad();doCPDashboardInitGrid();">
 <html:form action='${requestScope.formName}'
 	styleId="CollectionProtocolForm">
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
