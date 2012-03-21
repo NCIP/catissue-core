@@ -849,11 +849,11 @@
 	<target name="upgrade_db_to_plus_v10">
 		<echo message="Upgrading DataBase with URL ${final.database.url}" />	
 		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v10.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
 	</target>
 	<target name="liquibase_upgrade_target">
 		<echo message="Upgrading DB using Liquibase Targets"/>
 		<antcall target="upgrade_db_to_plus_v10"/>
-		
 	</target>
 	
 	<!--Target call for both fresh deployment and database creation-->
