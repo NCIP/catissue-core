@@ -33,6 +33,10 @@
 	{
 
 		selectAllClinicalDiagnosis();
+		if(window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'] != null)
+		{
+			window.frames['SpecimenRequirementView'].setCSLevelFormData();//save the data in dashboard items grid
+		}
 		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
 		if(formId!=null)
 		{
