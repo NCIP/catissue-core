@@ -505,21 +505,44 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 			String valueField, String[] activityStatusArr, boolean isToExcludeDisabled)
 			throws BizLogicException
 	{
-		String[] whereColumnName = null;
-		String[] whereColumnCondition = null;
-		final String joinCondition = Constants.AND_JOIN_CONDITION;
-		final String separatorBetweenFields = ", ";
-
-		whereColumnName = new String[]{"activityStatus", "type"};
-		whereColumnCondition = new String[]{"not in", "="};
+		String[] whereColumnName = new String[]{"activityStatus", "type"};
+		String[]  whereColumnCondition = new String[]{"not in", "="};
 		// whereColumnCondition = new String[]{"in"};
 		final Object[] whereColumnValue = {activityStatusArr, Constants.REPOSITORY};
+		
+		return getSiteList(whereColumnName,whereColumnCondition,whereColumnValue,sourceObjectName, displayNameFields, valueField,
+				activityStatusArr, isToExcludeDisabled);
+
+	}
+
+	private List getSiteList(String[] whereColumnName,String[] whereColumnCondition,Object[] whereColumnValue,
+			String sourceObjectName,
+			String[] displayNameFields, String valueField,
+			String[] activityStatusArr, boolean isToExcludeDisabled)
+			throws BizLogicException 
+	{
+	
+		final String joinCondition = Constants.AND_JOIN_CONDITION;
+		final String separatorBetweenFields = ", ";
 
 		return this.getList(sourceObjectName, displayNameFields, valueField, whereColumnName,
 				whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields,
 				isToExcludeDisabled);
-
 	}
+	
+	public List getAllSiteList(String sourceObjectName,
+			String[] displayNameFields, String valueField,
+			String[] activityStatusArr, boolean isToExcludeDisabled)
+			throws BizLogicException 
+	{
+		String[] whereColumnName = new String[]{"activityStatus"};
+		String[]  whereColumnCondition = new String[]{"not in"};
+		final Object[] whereColumnValue = {activityStatusArr};
+		
+		return getSiteList(whereColumnName,whereColumnCondition,whereColumnValue,sourceObjectName, displayNameFields, valueField,
+				activityStatusArr, isToExcludeDisabled);		
+	}
+	
 	/**
 	 * @param dao - DAO object.
 	 * @param container - StorageContainer object.

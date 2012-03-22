@@ -96,6 +96,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 		else if (operation.equals(Constants.ADD) && pageOf.equals(Constants.PAGE_OF_ADD_NEW_EVENT))
 		{
 			protocolEventDetailsForm.setCollectionProtocolEventkey(Constants.ADD_NEW_EVENT);
+			protocolEventDetailsForm.setDefaultSiteId(0L);
 			protocolEventDetailsForm.setStudyCalendarEventPoint(0D);
 			protocolEventDetailsForm.setCollectionPointLabel("");
 			protocolEventDetailsForm.setClinicalStatus((String) DefaultValueManager
@@ -216,6 +217,8 @@ public class ProtocolEventDetailsAction extends BaseAction
 		protocolEventDetailsForm.setCollectionProtocolEventkey(collectionProtocolEventKey);
 
 		protocolEventDetailsForm.setLabelFormat(collectionProtocolEventBean.getLabelFormat());
+		if(collectionProtocolEventBean.getDefaultSiteId() != null)
+			protocolEventDetailsForm.setDefaultSiteId(collectionProtocolEventBean.getDefaultSiteId());
 
 	}
 

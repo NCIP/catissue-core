@@ -23,6 +23,23 @@
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
+<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
 
 
 <%
@@ -46,6 +63,8 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script src="jss/caTissueSuite.js" language="JavaScript" type="text/javascript"></script>
 <script language="JavaScript">
+var siteDropDownInfo, dsGrid, clinicalStatusDropDownInfo, csGrid;
+var dsGridVisible = false, csGridVisible = false;
 
 function specimenRequirements()
 {
@@ -85,10 +104,91 @@ function consentPage()
 }
 window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=${requestScope.operation}";
 
+
+
+function siteOnRowSelect(id,ind)
+{	
+	rowSelectEvent('defaultSiteId',id,ind,siteDropDownInfo,dsGrid);
+	dsGridVisible = false;
+}
+
+
+//This will select option on the basis of left , right, up 0r down key press
+function keyNavigationCall(event, gridDivId)
+{
+	if(gridDivId == siteDropDownInfo['gridDiv'])
+	{
+		keyNavigation(event,siteDropDownInfo,dsGrid,dsGridVisible);
+	}
+}
+
+//This called on every key up event on DHTMLX drop down control
+function autoCompleteControlCall(event,gridContainerDiv,dropDownId)
+{
+	var gridDivObject ;
+	// Avoid when user press arrow keys or enter button
+	if(event.keyCode != 13 && event.keyCode != 37 && event.keyCode != 38 && event.keyCode != 39 && event.keyCode != 40){
+		if(document.getElementById(dropDownId).value=="")
+		{
+			if(gridContainerDiv == siteDropDownInfo['gridDiv'])
+			{
+				gridDivObject = dsGrid;
+				dsGridVisible = false;
+				document.getElementsByName('defaultSiteId')[0].value = "";
+			}
+		}
+		else
+		{
+			if(gridContainerDiv == siteDropDownInfo['gridDiv'])
+			{
+				dsGridVisible = true;
+				gridDivObject = dsGrid;
+			}
+		}
+		autoCompleteControl(gridContainerDiv,dropDownId,gridDivObject);
+	}
+}
+
+//show hide Site Grid
+function showHideSiteGrid(e,gridDivId, dropDownId)
+{		
+		setFocus(e, dropDownId);
+		if(dsGridVisible)
+		{
+			hideGrid(gridDivId);
+			dsGridVisible = false;
+		}
+		else 
+		 {	
+			showGrid(gridDivId,dropDownId);
+			dsGridVisible = true;
+			dsGrid.load(siteDropDownInfo['actionToDo'], "");
+		 }
+}
+
+function setFocus(e, dropDownId)
+{
+		document.getElementById(dropDownId).focus();
+		noEventPropogation(e);
+}
+
+//On grid load
+function onSiteListReady()
+	{
+		var defaultSiteId = '${protocolEventDetailsForm.defaultSiteId}';
+		if(defaultSiteId != "" && defaultSiteId != -1 && defaultSiteId != null)
+			siteOnRowSelect(defaultSiteId,0);
+	}
+function doOnLoad()
+{
+	siteDropDownInfo = {gridObj:"defaultSiteGrid", gridDiv:"defaultSite", dropDownId:"defaultSiteDropDown", pagingArea:"dsPagingArea", infoArea:"dsInfoArea", onOptionSelect:siteOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllSiteList", callBackAction:onSiteListReady};
+	// initialising grid
+	dsGrid = initDropDownGrid(siteDropDownInfo); //initialize DropDown control for priciple Investigator
+}
 </script>
 </head>
 
-
+<body onload="doOnLoad()">
 <html:form action="SaveProtocolEvents.do?pageOf=defineEvents&operation=add" styleId="protocolEventDetailsForm">
 	<logic:equal name="isParticipantReg" value="true">
 		<%@ include file="/pages/content/manageAdministrativeData/PersistentProtocolEvent.jsp" %>
@@ -101,3 +201,4 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
 <script>
 window.top.document.getElementById("errorRow").innerHTML = "";
 </script>
+</body>

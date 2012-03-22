@@ -71,7 +71,46 @@
 								  size="27"/>
 							</td>
 					 </tr>
-
+					 
+					<tr>
+					<td width="1%" align="center" class="black_ar">&nbsp;</td>
+					<td width="30%" align="left" class="black_ar" ><bean:message
+						key="specimenCollectionGroup.defaultsite" /></td>
+					<td width="69%" align="left" class="black_ar">
+						<html:hidden property="defaultSiteId"/>
+						<div>
+							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
+								<tr>
+									<td align="left" width="88%" height="100%" >
+										<div id="dsDropDownIddiv" class="x-form-field-wrap " >
+											<input id="defaultSiteDropDown"
+													onkeydown="keyNavigationCall(event,'defaultSite');"
+													onKeyUp="autoCompleteControlCall(event,'defaultSite','defaultSiteDropDown');"
+													onClick="noEventPropogation(event)"
+													autocomplete="off"
+													size="31"
+													class="black_ar_new x-form-text x-form-field x-form-focus"/>
+													<img id="dsDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
+													onclick="showHideSiteGrid(event,'defaultSite','defaultSiteDropDown');"												
+												src="images/uIEnhancementImages/s.gif"/>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+									<div id="defaultSite" style="z-index: 100;"
+										onClick="noEventPropogation(event);">
+									<div id="defaultSiteGrid" style="height: 200px;"
+										onClick="noEventPropogation(event)"></div>
+									<div id="dsPagingArea" onClick="noEventPropogation(event)"></div>
+									<div id="dsInfoArea" onClick="noEventPropogation(event)"></div>
+									</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
 					  <tr>
                         <td align="center">&nbsp;</td>
                         <td>&nbsp;</td>

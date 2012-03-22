@@ -128,6 +128,16 @@
             insert="true"
             column="COLLECTION_PROTOCOL_ID"
         />
+         <many-to-one
+            name="defaultSite"
+            class="edu.wustl.catissuecore.domain.Site"
+            cascade="none"
+            
+            update="true"
+            insert="true"
+            lazy="false"
+            column="DEFAULT_SITE_ID"
+        />
 
 	        <set
 	            name="specimenCollectionGroupCollection"

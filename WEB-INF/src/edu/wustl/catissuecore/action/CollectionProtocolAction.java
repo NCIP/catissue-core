@@ -427,15 +427,18 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 				.getPrincipalInvestigatorId());
 		collectionProtocolForm.setCoordinatorIds(collectionProtocolBean.getCoordinatorIds());
 		Collection coordinatorList = collectionProtocolBean.getCoordinatorCollection();
-		Iterator iterator = coordinatorList.iterator();
 		List<NameValueBean> selectedCoordinatorsList = new ArrayList<NameValueBean>();
-		while (iterator.hasNext())
+		if(coordinatorList != null)
 		{
-			User user = (User) iterator.next();
-			NameValueBean nvb = new NameValueBean();
-			nvb.setName(user.getLastName() + ", " + user.getFirstName());
-			nvb.setValue(user.getId().toString());
-			selectedCoordinatorsList.add(nvb);
+			Iterator iterator = coordinatorList.iterator();
+			while (iterator.hasNext())
+			{
+				User user = (User) iterator.next();
+				NameValueBean nvb = new NameValueBean();
+				nvb.setName(AppUtility.populateDisplayName(user.getFirstName(),user.getLastName()));
+				nvb.setValue(user.getId().toString());
+				selectedCoordinatorsList.add(nvb);
+			}
 		}
 		
 		request.setAttribute("selectedCPCoordinatorIds", selectedCoordinatorsList);

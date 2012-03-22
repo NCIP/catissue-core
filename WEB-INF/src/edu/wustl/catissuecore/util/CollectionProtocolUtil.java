@@ -52,6 +52,7 @@ import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
@@ -348,6 +349,8 @@ public class CollectionProtocolUtil
 				.getSpecimenRequirementCollection(), eventBean.getUniqueIdentifier()));
 
 		eventBean.setLabelFormat(collectionProtocolEvent.getLabelFormat());
+		if(collectionProtocolEvent.getDefaultSite() != null)
+			eventBean.setDefaultSiteId(collectionProtocolEvent.getDefaultSite().getId());
 
 		return eventBean;
 	}
@@ -1022,20 +1025,8 @@ public class CollectionProtocolUtil
 	public static CollectionProtocol getParentCollectionProtocol(Long parentCollectionProtocolId)
 			throws ApplicationException
 	{
-		CollectionProtocol collectionProtocol = null;
-		DAO dao = null;
-		try
-		{
-			dao = AppUtility.openDAOSession(null);
-			collectionProtocol = (CollectionProtocol) dao.retrieveById(CollectionProtocol.class
-					.getName(), parentCollectionProtocolId);
-
-		}
-		finally
-		{
-			AppUtility.closeDAOSession(dao);
-		}
-
+		CollectionProtocol collectionProtocol = (CollectionProtocol)getObject(CollectionProtocol.class
+				.getName(), parentCollectionProtocolId); 
 		return collectionProtocol;
 	}
 
@@ -1126,9 +1117,10 @@ public class CollectionProtocolUtil
 	 * @param cpEventBean the cp event bean
 	 *
 	 * @return CollectionProtocolEvent domain object.
+	 * @throws ApplicationException 
 	 */
 	private static CollectionProtocolEvent getCollectionProtocolEvent(
-			CollectionProtocolEventBean cpEventBean)
+			CollectionProtocolEventBean cpEventBean) throws ApplicationException
 	{
 
 		CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();
@@ -1146,7 +1138,12 @@ public class CollectionProtocolUtil
 		{
 			collectionProtocolEvent.setId(Long.valueOf(cpEventBean.getId()));
 		}
-
+		
+		if(cpEventBean.getDefaultSiteId() != null && cpEventBean.getDefaultSiteId() != 0)
+		{	
+			Site defaultSite = (Site) getObject(Site.class.getName(), cpEventBean.getDefaultSiteId());			//defaultSite.setId(cpEventBean.getDefaultSiteId());
+			collectionProtocolEvent.setDefaultSite(defaultSite);
+		}	
 		Collection specimenCollection = null;
 		Map specimenMap = cpEventBean.getSpecimenRequirementbeanMap();
 
@@ -1160,6 +1157,24 @@ public class CollectionProtocolUtil
 		collectionProtocolEvent.setLabelFormat(cpEventBean.getLabelFormat());
 
 		return collectionProtocolEvent;
+	}
+	
+	private static AbstractDomainObject getObject(String className,long identifier) throws ApplicationException
+	{
+		AbstractDomainObject domainObj = null;
+		DAO dao = null;
+		try
+		{
+			dao = AppUtility.openDAOSession(null);
+			domainObj = (AbstractDomainObject) dao.retrieveById(Site.class
+					.getName(), identifier);
+
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
+		return domainObj;
 	}
 
 	/**

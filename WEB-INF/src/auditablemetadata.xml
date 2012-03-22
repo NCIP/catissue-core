@@ -273,6 +273,11 @@
 			relationShipType="containment"
 			roleName="specimenRequirementCollection">
 		</containmentAssociationCollection>
+		<referenceAssociationCollection
+			className="edu.wustl.catissuecore.domain.Site"
+			relationShipType="association"
+			roleName="defaultSite">
+		</referenceAssociationCollection>
 	</AuditableClass>
 
 

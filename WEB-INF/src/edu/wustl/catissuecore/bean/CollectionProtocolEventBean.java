@@ -56,6 +56,10 @@ public class CollectionProtocolEventBean implements Serializable
 	 */
 	private String receivedEventComments;
 	/**
+	 * defaultCollectionSite
+	 */
+	private Long defaultSiteId;
+	/**
 	 * specimenRequirementbeanMap.
 	 */
 	private Map<String, GenericSpecimen> specimenRequirementbeanMap = 
@@ -323,5 +327,13 @@ public class CollectionProtocolEventBean implements Serializable
 	public void setLabelFormat(String labelFormat)
 	{
 		this.labelFormat = labelFormat;
+	}
+
+	public Long getDefaultSiteId() {
+		return defaultSiteId;
+	}
+
+	public void setDefaultSiteId(long defaultSiteId) {
+		this.defaultSiteId = defaultSiteId ;
 	}
 }

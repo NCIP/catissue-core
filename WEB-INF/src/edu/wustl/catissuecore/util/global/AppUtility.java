@@ -3792,4 +3792,37 @@ public class AppUtility {
 		}
 		return props;
 	}
+	/**
+	 * This function populates Display Name as per the First and Last name provided.
+	 * @param firstName
+	 * @param lastName
+	 * @return displayName
+	 */
+	public static String populateDisplayName(String firstName, String lastName)
+	{
+		String displayName ="";
+		String fName = "";
+		String lName = "";
+		if (firstName != null)
+		{
+			fName = firstName;
+		}
+		if (lastName != null)
+		{
+			lName = lastName;
+		}
+		if (!fName.equals("") && !lName.equals(""))
+		{
+			displayName =lName + ", " + fName;
+		}
+		else if (lName.equals("") && !fName.equals(""))
+		{
+			displayName = fName;
+		}
+		else if (fName.equals("") && !lName.equals(""))
+		{
+			displayName = lName ;
+		}
+		return displayName;
+	}
 }

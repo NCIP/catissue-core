@@ -73,6 +73,11 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	 * For SCG labeling,this will be exposed through API and not in the model.
 	 */
 	private String labelFormat;
+	
+	/**
+	 * default collection site
+	 */
+	private Site defaultSite;
 
 	/**
 	 * Returns the id.
@@ -304,5 +309,13 @@ public class CollectionProtocolEvent extends AbstractSpecimenCollectionGroup
 	public void setLabelFormat(String labelFormat)
 	{
 		this.labelFormat = labelFormat;
+	}
+
+	public Site getDefaultSite() {
+		return defaultSite;
+	}
+
+	public void setDefaultSite(Site defaultSite) {
+		this.defaultSite = defaultSite;
 	}
 }

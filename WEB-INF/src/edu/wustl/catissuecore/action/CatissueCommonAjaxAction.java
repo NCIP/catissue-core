@@ -94,7 +94,7 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 	}
 	
 	public ActionForward getAllSiteList(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws ApplicationException
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
 	{
 		final String[] siteDisplayField = {"name"};
 		final String valueField = "id";
@@ -103,8 +103,19 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 				Status.ACTIVITY_STATUS_CLOSED.toString()};
 		
 		final SiteBizLogic siteBizlog = new SiteBizLogic();
-		final List siteResultList = siteBizlog.getRepositorySiteList(Site.class.getName(),
+		final List<NameValueBean> siteResultList = siteBizlog.getAllSiteList(Site.class.getName(),
 				siteDisplayField, valueField, activityStatusArray, false);
+		StringBuffer responseString = new StringBuffer(Constants.XML_START);
+		NameValueBean selectBean = new NameValueBean("-- Select --",Long.valueOf(-1));
+		siteResultList.remove(siteResultList.indexOf(selectBean));
+		responseString.append(Constants.XML_ROWS);
+		for (NameValueBean nvb : siteResultList)
+		{
+			responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()), nvb.getName()));
+		}
+		responseString.append(Constants.XML_ROWS_END);
+		response.setContentType(Constants.CONTENT_TYPE_XML);
+		response.getWriter().write(responseString.toString());
 		return null;
 	}
 	

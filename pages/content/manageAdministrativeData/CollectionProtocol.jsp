@@ -285,12 +285,16 @@ function enableDisableParentProtocol(associationType)
 		imgObj.onclick =function (e) {};
 		hideGrid(parentProtocolDropDownInfo['gridDiv']);
 		piGridVisible = false;
+		document.getElementById("studyCalendarEventPoint").setAttribute("disabled",true);
+		document.getElementById("sequenceNumber").setAttribute("disabled",true);
 	}	
 	else
 	{
 		document.getElementById("parentProtocolMendatorySymbol").innerHTML = "<image src='images/uIEnhancementImages/star.gif' alt='Mandatory'>";
 		document.getElementById("parentProtocolDropDown").removeAttribute("disabled");
 		imgObj.onclick =function (e) {showHideParentProtocolGrid(e,'parentProtocol','parentProtocolDropDown');};
+		document.getElementById("studyCalendarEventPoint").removeAttribute("disabled",true);
+		document.getElementById("sequenceNumber").removeAttribute("disabled",true);
 	}
 }
 </script>
@@ -344,10 +348,10 @@ div#d999 {
 				<html:hidden property="id" />
 				<html:hidden property="redirectTo" />
 
-				<html:hidden property="sequenceNumber" />
+				
 				<!-- html:hidden property="type" /-->
-				<html:hidden property="studyCalendarEventPoint" />
-				<!-- html:hidden property="parentCollectionProtocolId"  /-->
+				
+				
 				<tr>
 					<td width="1%" align="center" class="black_ar"><img
 						src="images/uIEnhancementImages/star.gif" alt="Mandatory"
@@ -404,6 +408,31 @@ div#d999 {
 								</tr>
 							</table>
 						</div>
+					</td>
+				</tr>
+				
+					<tr>
+					<td width="1%" align="center" class="black_ar">&nbsp;</td>
+					<td width="30%" align="left" class="black_ar" ><bean:message
+						key="collectionprotocol.studyCalEventPoint" /></td>
+					<td width="69%" align="left" class="black_ar">
+						<table width="100%" cellpadding="0" cellspacing="0">
+							<tr>
+								<td width="31%" align="left" class="black_ar" >
+									<html:text styleClass="black_ar"
+									maxlength="50" size="20" styleId="studyCalendarEventPoint"
+									property="studyCalendarEventPoint" readonly='${requestScope.hasParent}' />
+								</td>
+								<td width="1%" align="left" class="black_ar">&nbsp;</td>
+								<td width="23%" align="left" class="black_ar" ><bean:message
+									key="collectionprotocol.sequence.number" /></td>
+								<td  width="45%" align="left" class="black_ar" >
+									<html:text styleClass="black_ar"
+									maxlength="50" size="20" styleId="sequenceNumber"
+									property="sequenceNumber" readonly='${requestScope.hasParent}' />
+								</td>
+							</tr>
+						</table>		
 					</td>
 				</tr>
 				

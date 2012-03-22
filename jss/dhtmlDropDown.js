@@ -107,6 +107,13 @@ function showGrid(gridContainingDiv,dropDownId)
 	//piGrid.clearAndLoad("ParticipantConnector.do?gridFor=" + pGridInfo['gridDiv'] + "&csId=" +csId , pGridCallBack);
 }
 
+function rowSelectEvent(property,selectedRowId,index,infoObj, gridObject)
+{
+	document.getElementsByName(property)[0].value = selectedRowId;
+	document.getElementById(infoObj['dropDownId']).value = gridObject.cellById(selectedRowId,index).getValue();
+	//document.getElementById("waitingImage").style.display = "block";
+	hideGrid(infoObj['gridDiv']);
+}
 
 //Stop event propogation.
 function noEventPropogation(e)

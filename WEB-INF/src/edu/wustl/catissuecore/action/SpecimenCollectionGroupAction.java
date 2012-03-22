@@ -393,6 +393,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 			{
 				cPEObject = dao.retrieveById(CollectionProtocolEvent.class.getName(),
 						specimenCollectionGroupForm.getCollectionProtocolEventId());
+				if(((CollectionProtocolEvent)cPEObject).getDefaultSite() != null && specimenCollectionGroupForm.getSiteId()== 0){
+					
+					specimenCollectionGroupForm.setSiteId(((CollectionProtocolEvent)cPEObject).getDefaultSite().getId());
+				}
 			}
 
 			// The values of restrict checkbox and the number of specimen must alos
@@ -544,6 +548,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 						{
 							cPEObject = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
 									specimenCollectionGroupForm.getCollectionProtocolEventId());
+							if(((CollectionProtocolEvent)cPEObject).getDefaultSite() != null && specimenCollectionGroupForm.getSiteId()== 0){
+								
+								specimenCollectionGroupForm.setSiteId(((CollectionProtocolEvent)cPEObject).getDefaultSite().getId());
+							}
 						}
 						if (isOnChange && cPEObject != null)
 						{
@@ -613,32 +621,8 @@ public class SpecimenCollectionGroupAction extends SecureAction
 					{
 
 						final Participant participant = (Participant) participantObject;
-						String firstName = "";
-						String lastName = "";
-						if (participant.getFirstName() != null)
-						{
-							firstName = participant.getFirstName();
-						}
-						if (participant.getLastName() != null)
-						{
-							lastName = participant.getLastName();
-						}
-						if (!firstName.equals("") && !lastName.equals(""))
-						{
-							specimenCollectionGroupForm.setParticipantName(lastName + ", "
-									+ firstName);
-						}
-						else if (lastName.equals("") && !firstName.equals(""))
-						{
-							specimenCollectionGroupForm.setParticipantName(participant
-									.getFirstName());
-						}
-						else if (firstName.equals("") && !lastName.equals(""))
-						{
-							specimenCollectionGroupForm.setParticipantName(participant
-									.getLastName());
-						}
-
+						specimenCollectionGroupForm.setParticipantName(AppUtility.populateDisplayName(participant.getFirstName(), 
+								participant.getLastName()));
 					}
 					/** For Migration End **/
 					/**
@@ -709,6 +693,10 @@ public class SpecimenCollectionGroupAction extends SecureAction
 				{
 					cPEObject = dao.retrieveById(CollectionProtocolEvent.class.getName(),
 							specimenCollectionGroupForm.getCollectionProtocolEventId());
+					if(((CollectionProtocolEvent)cPEObject).getDefaultSite() != null && specimenCollectionGroupForm.getSiteId()== 0){
+						
+						specimenCollectionGroupForm.setSiteId(((CollectionProtocolEvent)cPEObject).getDefaultSite().getId());
+					}
 				}
 				if (cPEObject != null)
 				{
@@ -734,14 +722,26 @@ public class SpecimenCollectionGroupAction extends SecureAction
 
 			final Object cPObject = dao.retrieveById(CollectionProtocol.class.getName(),
 					specimenCollectionGroupForm.getCollectionProtocolId());
-
+			List<NameValueBean> eventSiteMapList = new ArrayList<NameValueBean>();
 			if (cPObject != null)
 			{
 				final CollectionProtocol collectionProtocol = (CollectionProtocol) cPObject;
 				collectionProtocolTitle = collectionProtocol.getTitle();
 				collectionProtocolName = collectionProtocol.getShortTitle();
 				specimenCollectionGroupForm.setCollectionProtocolName(collectionProtocolName);
+				if(collectionProtocol.getCollectionProtocolEventCollection()!= null)
+				{
+					Iterator<CollectionProtocolEvent> iter =  collectionProtocol.getCollectionProtocolEventCollection().iterator();
+					
+					while(iter.hasNext())
+					{
+						CollectionProtocolEvent evnt = iter.next();
+						if(evnt.getDefaultSite()!=null)
+								eventSiteMapList.add(new NameValueBean(evnt.getId(),evnt.getDefaultSite().getId()));
+					}
+				}
 			}
+			request.setAttribute("eventSiteMapList", eventSiteMapList);
 
 			final long groupParticipantId = specimenCollectionGroupForm.getParticipantId();
 			// check if the reset name link was clicked

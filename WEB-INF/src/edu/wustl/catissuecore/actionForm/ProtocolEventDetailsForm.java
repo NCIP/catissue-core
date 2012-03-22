@@ -62,6 +62,7 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 	private long receivedEventUserId;
 	private String receivedEventReceivedQuality;
 	private String receivedEventComments = "";
+	private long defaultSiteId; // Default collection site for the event
 
 	@Override
 	public int getFormId()
@@ -393,6 +394,14 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 	public void setLabelFormat(String labelFormat)
 	{
 		this.labelFormat = labelFormat;
+	}
+
+	public long getDefaultSiteId() {
+		return defaultSiteId;
+	}
+
+	public void setDefaultSiteId(long defaultSiteId) {
+		this.defaultSiteId = defaultSiteId;
 	}
 
 }

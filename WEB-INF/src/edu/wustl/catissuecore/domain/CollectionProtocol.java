@@ -456,6 +456,8 @@ public class CollectionProtocol extends SpecimenProtocol
 
 			this.consentsWaived = new Boolean(cpForm.isConsentWaived());
 			this.isEMPIEnabled = new Boolean(cpForm.getIsEMPIEnable());
+			this.studyCalendarEventPoint = cpForm.getStudyCalendarEventPoint();
+			this.sequenceNumber = cpForm.getSequenceNumber();
 			//			this.setIsEMPIEnable(cpForm.getIsEMPIEnable());
 		}
 		catch (final Exception excp)
