@@ -1166,8 +1166,7 @@ public class CollectionProtocolUtil
 		try
 		{
 			dao = AppUtility.openDAOSession(null);
-			domainObj = (AbstractDomainObject) dao.retrieveById(Site.class
-					.getName(), identifier);
+			domainObj = (AbstractDomainObject) dao.retrieveById(className, identifier);
 
 		}
 		finally
