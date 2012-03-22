@@ -32,7 +32,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.hibernate.FetchMode;
 import org.hibernate.LazyInitializationException;
+import org.hibernate.criterion.Restrictions;
 
 import edu.wustl.catissuecore.comparator.ScgIdentifierComprator;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -85,6 +87,7 @@ import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
@@ -486,8 +489,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException
 	 *             If fails to retrieveById any of the required entity.
 	 */
-	public SpecimenCollectionGroup getSCGFromId(Long scgId, SessionDataBean bean,
-			boolean retrieveAssociates, DAO dao) throws BizLogicException
+	public SpecimenCollectionGroup getSCGFromId(Long scgId, SessionDataBean bean,DAO dao) throws BizLogicException
 	{
 		try
 		{
@@ -498,10 +500,26 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 				throw this.getBizLogicException(null, "failed.find.scg", scgId.toString());
 			}
 			final SpecimenCollectionGroup specCollGroup = (SpecimenCollectionGroup) object;
-			if (retrieveAssociates)
-			{
-				this.retreiveAssociates(scgId, specCollGroup);
-			}
+	    	ColumnValueBean expression = new ColumnValueBean(Restrictions.eq("specimenCollectionGroup.id", scgId));
+	    	List<ColumnValueBean> expList = new ArrayList<ColumnValueBean>();
+	    	expList.add(expression);
+	    	
+	    	ColumnValueBean creationEvnt = new ColumnValueBean(FetchMode.SELECT);
+	    	creationEvnt.setColumnName("creationEventAction");
+	    	
+	    	ColumnValueBean actionAppColl = new ColumnValueBean(FetchMode.SELECT);
+	    	actionAppColl.setColumnName("actionApplicationCollection");
+	    	
+	    	ColumnValueBean specRecEntryColl = new ColumnValueBean(FetchMode.SELECT);
+	    	specRecEntryColl.setColumnName("specimenRecordEntryCollection");
+	    	
+	    	List<ColumnValueBean> fetchModes = new ArrayList<ColumnValueBean>();
+	    	fetchModes.add(specRecEntryColl);
+	    	fetchModes.add(actionAppColl);
+	    	fetchModes.add(creationEvnt);
+	    	
+	    	List list =  ((HibernateDAO)dao).executeCrieteriaQuery(Specimen.class.getName(), fetchModes, expList);
+			specCollGroup.setSpecimenCollection(list);
 			return specCollGroup;
 		}
 		catch (final DAOException exception)

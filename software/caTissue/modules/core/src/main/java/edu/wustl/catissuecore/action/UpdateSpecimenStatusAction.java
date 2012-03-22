@@ -780,8 +780,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	{
 
 		final SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
-		final SpecimenCollectionGroup objSCG = bizLogic.getSCGFromId(scgId, sessionDataBean, true,
-				dao);
+		final SpecimenCollectionGroup objSCG = bizLogic.getSCGFromId(scgId, sessionDataBean,dao);
 		final HashSet<Specimen> specimenCollection = new HashSet<Specimen>(objSCG.getSpecimenCollection());
 
 		return specimenCollection;

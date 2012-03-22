@@ -130,7 +130,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			final SpecimenCollectionGroupBizLogic scgBizLogic = new SpecimenCollectionGroupBizLogic();
 			session.setAttribute(Constants.SCGFORM, specimenCollectionGroupForm.getId());
 			final SpecimenCollectionGroup specimencollectionGroup = scgBizLogic.getSCGFromId(identifier,
-					sessionDataBean, true, dao);
+					sessionDataBean, dao);
 			if (specimencollectionGroup.getActivityStatus().equalsIgnoreCase(
 					Status.ACTIVITY_STATUS_DISABLED.toString()))
 			{
