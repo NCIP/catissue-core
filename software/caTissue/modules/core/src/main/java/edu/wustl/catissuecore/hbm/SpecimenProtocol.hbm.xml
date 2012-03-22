@@ -541,5 +541,10 @@
        </joined-subclass>
 
     </class>
+    
+     <query name="fetchDistributionProtocolIdByName">
+     select distProt.id from edu.wustl.catissuecore.domain.DistributionProtocol as distProt where distProt.title = ?
+	</query>
+    
 
 </hibernate-mapping>

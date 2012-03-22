@@ -479,7 +479,11 @@ function checkQuantityforAll(count)
        <td align="left" class=" bottomtd"><%@ include file="/pages/content/common/ActionErrors.jsp" %>
 		</td>
         </tr>
+		<tr class="messagetexterror"><td><bean:message key='requiredfield.message'/></td>
+</tr>
+
         <tr>
+		
           <td align="left" class="tr_bg_blue1"><span class="blue_ar_b">&nbsp;<bean:message key="requestdetails.name" />
 		</span></td>
         </tr>
@@ -488,11 +492,18 @@ function checkQuantityforAll(count)
   			<jsp:useBean id="requestDetailsForm" class="edu.wustl.catissuecore.actionForm.RequestDetailsForm" scope="request"/>
 			<% session.setAttribute("REQUEST_DETAILS_FORM",requestDetailsForm);%>
 
-          <td align="left" class="showhide"><table width="100%" border="0" cellspacing="0" cellpadding="3" >
+          <td align="left" class="showhide">
+		  <table width="100%" border="0" cellspacing="0" cellpadding="3" >
 
  				<logic:equal name="requestDetailsForm" property="isDirectDistribution" value="true">
 				<tr>
-					<td class="noneditable"><span class="noneditable"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory"  /></span>
+				<td width="1%" align="center" class="black_ar">
+							<span class="blue_ar_b">
+								&nbsp;
+							</span>
+				</td>
+
+					<td class="noneditable"><span class="noneditable"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span>
 						<strong>
 						<bean:message key='requestlist.dataTabel.OrderName.label'/>
 						</strong>
@@ -503,7 +514,12 @@ function checkQuantityforAll(count)
 
   				</tr>
 				<tr>
-					<td class="noneditable"><span class="noneditable"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory"  /></span>
+				<td width="1%" align="center" class="black_ar">
+							<span class="blue_ar_b">
+								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+							</span>
+						  </td>
+					<td class="noneditable"><span class="noneditable">
                 	<strong>
 						<bean:message key='requestlist.dataTabel.DistributionProtocol.label'/>
 					</strong>
@@ -526,7 +542,11 @@ function checkQuantityforAll(count)
 				</tr>
 
  				<tr>
-
+						  <td width="1%" align="center" class="black_ar">
+							<span class="blue_ar_b">
+								&nbsp;
+							</span>
+						  </td>
 						<td width="17%" class="noneditable"><strong>
 								<bean:message key='requestdetails.header.label.RequestorName'/>
 							</strong>
@@ -550,6 +570,12 @@ function checkQuantityforAll(count)
 
 				<logic:notEqual  name="requestDetailsForm" property="isDirectDistribution" value="true">
 				<tr>
+				<td width="1%" align="center" class="black_ar">
+							<span class="blue_ar_b">
+								&nbsp;
+							</span>
+						  </td>
+
 					<td class="noneditable">
 						<strong>
 						<bean:message key='requestlist.dataTabel.OrderName.label'/>
@@ -561,6 +587,12 @@ function checkQuantityforAll(count)
 					</td>
 				</tr>
 				<tr>
+				<td width="1%" align="center" class="black_ar">
+							<span class="blue_ar_b">
+								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+							</span>
+						  </td>
+
 					<td class="noneditable">
                 		<strong>
 						<bean:message key='requestlist.dataTabel.DistributionProtocol.label'/>
@@ -578,6 +610,11 @@ function checkQuantityforAll(count)
 				</tr>
 
 				<tr>
+<td width="1%" align="center" class="black_ar">
+							<span class="blue_ar_b">
+								&nbsp;
+							</span>
+				</td>
 
 						<td width="17%" class="noneditable"><strong>
 								<bean:message key='requestdetails.header.label.RequestorName'/>
@@ -599,6 +636,12 @@ function checkQuantityforAll(count)
 				</logic:notEqual>
 
            <tr>
+		   <td width="1%" align="center" class="black_ar">
+							<span class="blue_ar_b">
+								&nbsp;
+							</span>
+				</td>
+
                 <td class="noneditable"><strong>
 								<bean:message key='requestlist.dataTabel.label.RequestDate'/>
 							</strong></td>
@@ -610,6 +653,12 @@ function checkQuantityforAll(count)
               </tr>
 
 			<tr >
+<td width="1%" align="center" class="black_ar">
+							<span class="blue_ar_b">
+								<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
+							</span>
+						  </td>
+
 
 					<td class="noneditable"><strong>
 							<bean:message key='requestlist.dataTabel.label.Site'/>
@@ -623,7 +672,13 @@ function checkQuantityforAll(count)
 
 			</tr>
 			<tr>
- 					<td valign="top" class="noneditable"><strong>&nbsp;<br />
+<td width="1%" align="center" class="black_ar">
+							<span class="blue_ar_b">
+								&nbsp;
+							</span>
+				</td>
+
+			<td valign="top" class="noneditable"><strong>&nbsp;<br />
                   
  						<bean:message key="requestdetails.header.label.Comments" />
 	 				<strong></td>
@@ -724,7 +779,7 @@ function checkQuantityforAll(count)
 								</td>
 				              </tr>
 				              <tr>
-								<td width="15%" class="subtd" >
+								<td width="11%" class="subtd" >
 									<bean:message key='requestdetails.datatable.label.RequestItem'/>
 								</td>
 								<td class="subtd" width="12%">

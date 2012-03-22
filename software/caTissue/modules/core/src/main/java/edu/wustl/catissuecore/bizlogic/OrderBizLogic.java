@@ -15,9 +15,11 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -74,7 +76,9 @@ import edu.wustl.dao.condition.INClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.DBTypes;
 import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.privilege.PrivilegeCache;
@@ -1293,19 +1297,19 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 */
 	public DistributionProtocol retrieveDistributionProtocol(String distributionProtId)
 	{
-		DAO dao = null;
+		HibernateDAO dao=null;
 		try
 		{
-			dao = this.openDAOSession(null);
+			dao = (HibernateDAO) AppUtility.openDAOSession(null);
 			DistributionProtocol distributionProtocol=null;
 				if(distributionProtId.lastIndexOf('(')!= -1)
 				{
 					distributionProtId = distributionProtId.substring(0,distributionProtId.lastIndexOf("("));
 				}
-				final String cprHQL = "select distProt.id"
-					+ " from edu.wustl.catissuecore.domain.DistributionProtocol as distProt" +
-							" where distProt.title = '"+distributionProtId+"'";
-				final List dataList = AppUtility.executeQuery(cprHQL);
+				Map<String, NamedQueryParam> queryParams = new HashMap<String, NamedQueryParam>();
+				queryParams.put("0", new NamedQueryParam(DBTypes.STRING, distributionProtId));
+				
+				final List dataList = dao.executeNamedQuery("fetchDistributionProtocolIdByName",queryParams);
 				if(!dataList.isEmpty())
 				{
 					distributionProtId = dataList.get(0).toString();
