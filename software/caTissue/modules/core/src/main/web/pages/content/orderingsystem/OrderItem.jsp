@@ -448,7 +448,7 @@ String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 								property="className"
 								optionsList="<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
 								initialValue="<%=form.getClassName()%>"
-								onChange="onTypeChange(this);resetVirtualLocated()"
+								onChange="onTypeChangeOrderDetailsPage(this);resetVirtualLocated()"
 								readOnly="false" styleClass="black_ar" size="20" /></td>
 							<!-- get specimen type list-->
 

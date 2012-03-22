@@ -225,6 +225,66 @@
 			}
 			subType.value="";
 		}
+		
+		
+		
+		
+		function onTypeChangeOrderDetailsPage(element)
+		{
+			//bug 17352- Changes to check the previously selected value and current value.
+			// If both the values are same, the type dropdown will not be re-loaded.
+			var initialValue = document.getElementById("initialClassValue");
+			if(initialValue != null && initialValue.value==element.value)
+			{
+				document.getElementById("initialClassValue").value = element.value;
+				return;
+			}
+			else if(initialValue != null)
+			{
+				document.getElementById("initialClassValue").value = element.value;
+			}
+			var unit = document.getElementById("unitSpan");
+			var unit1 = document.getElementById("unitSpan1");
+			var unitSpecimen = "";
+			var subType = document.getElementById("type");
+			subType.disabled = false;
+
+			if(element.value == "Tissue")
+			{
+				unitSpecimen = "<%=Constants.UNIT_GM%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
+				typeChange(TissueArray);
+			}
+			else if(element.value == "Fluid")
+			{
+				unitSpecimen = "<%=Constants.UNIT_ML%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_ML%>";
+				typeChange(FluidArray);
+			}
+			else if(element.value == "Cell")
+			{
+				unitSpecimen = "<%=Constants.UNIT_CC%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
+				typeChange(CellArray);
+			}
+			else if(element.value == "Molecular")
+			{
+				unitSpecimen = "<%=Constants.UNIT_MG%>";
+				document.forms[0].unit.value = "<%=Constants.UNIT_MG%>";
+				document.forms[0].concentration.removeAttribute("readonly",0);
+				typeChange(MolecularArray);
+			}
+			if(unit!=null)
+			{
+				unit.innerHTML = unitSpecimen;
+			}
+			if(unit1!=null)
+			{
+				unit1.innerHTML = unitSpecimen;
+			}
+			subType.value="";
+		}
+
 
 // biohazard selection
 
