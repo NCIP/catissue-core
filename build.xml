@@ -853,6 +853,7 @@
 			<fileset file="${base.dir}/WEB-INF/lib/ParticipantManager*.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/washu-commons*.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/securityManager*.jar" />
+			<fileset file="${base.dir}/lib/liquibase.jar" />
 		</copy>
 		<copy todir="${zip.dir}/modules/caTissue/conf/catissuecore-properties" overwrite="true">
 			<fileset dir="${base.dir}/catissuecore-properties" />
