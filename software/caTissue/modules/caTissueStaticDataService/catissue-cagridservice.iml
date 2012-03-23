@@ -175,7 +175,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.6" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="addressing-1.0.jar">
@@ -1533,6 +1533,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="serviceLib" level="project" />
   </component>
 </module>
 
