@@ -806,7 +806,8 @@
 			<fileset file="${base.dir}/WEB-INF/lib/hibernate3.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/opencsv-1.8.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/struts.jar" />
-			<fileset file="${base.dir}/extra_lib/xerces.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/commons-beanutils-1.8.3-1.0.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/commons-digester3-3.0-1.0.jar" />
 		</copy>
 		<copy file="bulkOperation.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
 		<copy file="BulkOperations/conf/log4j.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
