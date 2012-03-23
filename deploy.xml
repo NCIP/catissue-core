@@ -849,7 +849,6 @@
 	<target name="upgrade_db_to_plus_v10">
 		<echo message="Upgrading DataBase with URL ${final.database.url}" />	
 		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v10.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
-		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
 	</target>
 	<target name="liquibase_upgrade_target">
 		<echo message="Upgrading DB using Liquibase Targets"/>
@@ -2083,6 +2082,7 @@
 		<echo message="Upgrading Database v1.2.3 to v1.2.4" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
 		<antcall target="liquibase_upgrade_target"/>
+		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
 	</target>
 
 	<target name="upgrade_db_from_v1.1.p1 to v1.1.p2" description="Upgrading Database from v1.1.p1 to v1.1.p2">

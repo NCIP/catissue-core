@@ -813,7 +813,26 @@
 	<target name="deploy_ca_model_war" description="deploy the ca_model_war">
 		<antcall target="CopyCAModelWars"/>
 	</target>
+	
+	<!-- Common database upgrade targets for catissueplus which run in both Fresh DB creation and upgrade_db.-->
+	<path id="liquibaseClasspath">
+		<fileset dir="${lib.dir}" includes="*.jar" />
+	</path>
+	<taskdef resource="liquibasetasks.properties">
+		<classpath>
+			<pathelement location="${lib.dir}/liquibase.jar" />
+		</classpath>
+	</taskdef>
 
+	<target name="upgrade_db_to_plus_v10">
+		<echo message="Upgrading DataBase with URL ${final.database.url}" />	
+		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/DBUpgrade_v10.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+	</target>
+	<target name="liquibase_upgrade_target">
+		<echo message="Upgrading DB using Liquibase Targets"/>
+		<antcall target="upgrade_db_to_plus_v10"/>
+	</target>
+	
 	<!--Target call for both fresh deployment and database creation-->
 	<target name="deploy_all" description="Target call for both fresh deployment and database creation">
 		<antcall target="assert" />
@@ -1624,7 +1643,7 @@
 			<format property="pathtime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
 		</tstamp>
 		<echo>After Insert paths: ${pathtime}</echo>
-
+		<antcall target="liquibase_upgrade_target"/>
 		<antcall target="deleteFiles"/>
 
 		<!--<delete dir="${de.temp.dir}" />
@@ -1654,7 +1673,9 @@
 				</fileset>
 			</classpath>
 		</sql>
-
+		
+		<!--Ashraf: Created LabelSQL(CP Dashboard Tables)-->
+		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
 		<antcall target="integrate_bulk_operation_mysql" />
 
 		<antcall target="unzip_aq_installable" />
@@ -1791,7 +1812,8 @@
 				</fileset>
 			</classpath>
 		</sql>
-
+		<!--Ashraf: Created LabelSQL(CP Dashboard Tables)-->
+		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
 		<unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 
 		<antcall target="integrate_bulk_operation_oracle"/>
@@ -2041,6 +2063,8 @@
 	<target name="upgrade_db" description="Upgrading Database v1.2.3 to v1.2.4">
 		<echo message="Upgrading Database v1.2.3 to v1.2.4" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
+		<antcall target="liquibase_upgrade_target"/>
+		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
 	</target>
 	
 	<target name="upgrade_db_from_v1.1.p1 to v1.1.p2" description="Upgrading Database from v1.1.p1 to v1.1.p2">
@@ -5146,6 +5170,12 @@ Thanking You,
 					<sysproperty key="app.propertiesFile" value="./catissuecore-properties/caTissueCore_Properties.xml" />	
 				</java>
 					
+	</target>
+	<!--Ashraf: Target for creating CP dashboard tables -->
+		
+	<target name="add_labelsql_tables_for_cp_dashboard">
+		<echo message="Creating lablesql tables for CS dashboard for mysql" />		
+		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/dashboard_scripts.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	</target>
 	
 	
