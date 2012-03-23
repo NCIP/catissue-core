@@ -341,6 +341,6 @@ table#browserDetailsContainer {
 			height="1" /></td>
 	</tr>
 	<tr>
-		<td colspan="5" align="center" valign="top" class ="black_ar">caTissue Plus is Open Source and Enhanced version of caTissue Suite v1.2 developed by Krishagni Solutions, India.  For more details, visit <a href="http://catissueplus.krishagni.com">http://catissueplus.krishagni.com</a> or mail us at catissueplus@krishagni.com.</td>
+		<td colspan="5" align="center" valign="top" class ="black_ar">caTissue Plus is an open source project with many new features and improvements over caTissue Suite v1.2.  For more details, visit <a href="http://catissueplus.krishagni.com">http://catissueplus.krishagni.com</a> or mail us at catissueplus@krishagni.com.</td>
 	</tr>
 </table>
