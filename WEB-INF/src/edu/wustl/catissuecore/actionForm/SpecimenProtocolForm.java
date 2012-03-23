@@ -379,7 +379,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 							|| this.getOperation().equals(Constants.EDIT) || this.getOperation()
 							.equals("AssignPrivilegePage")))
 			{
-				if (this.principalInvestigatorId == -1)
+				if (this.principalInvestigatorId == 0)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 							ApplicationProperties

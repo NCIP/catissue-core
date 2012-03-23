@@ -356,7 +356,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		{
 
 			//Check for PI can not be coordinator of the protocol.
-			if (this.coordinatorIds != null && this.principalInvestigatorId != -1)
+			if (this.coordinatorIds != null && this.principalInvestigatorId != 0)
 			{
 				for (final long protocolCoordinatorId : this.coordinatorIds)
 				{
