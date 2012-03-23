@@ -132,6 +132,8 @@ public class SpecimenInterceptor implements InterceptProcessor
 				if(writeMessage(fileName))
 				{
 					updateSpecimenCiderMessageLog(specimen,type,calendar.getTime());
+					File message = new File(fileName);
+					message.delete();
 				}
 
 			}catch (JAXBException e) {
