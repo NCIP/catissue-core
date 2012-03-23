@@ -6,11 +6,7 @@
 <logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 	<table border="0" cellspacing="0" cellpadding="0">
 		<tr>
-			<td align="right"><img
-				border="0" src="images/uIEnhancementImages/institution_logo.gif"
-				alt="Siteman Cancer Center" width="198" height="54" vspace="5" /><img
-				border="0" src="images/uIEnhancementImages/or_dot.gif"  alt="Divider line" width="1"
-				height="50" hspace="10" vspace="5" /><a
+			<td align="right"><a
 				href="<bean:message key="cabig.url" />"><img border="0"
 				src="images/uIEnhancementImages/cabig_logo.jpg" alt="caBIG"
 				width="182" height="62" /></a></td>
