@@ -18,6 +18,7 @@ import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
 import titli.model.util.TitliResultGroup;
+import edu.wustl.bulkoperator.util.BulkEMPIOperationsUtility;
 import edu.wustl.bulkoperator.util.BulkOperationUtility;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
@@ -110,7 +111,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			logApplnInfo();
 			DefaultValueManager.validateAndInitDefaultValueMap();
 			BulkOperationUtility.changeBulkOperationStatusToFailed();
-			// TODO  change status of bulk empi jobs as well.
+			BulkEMPIOperationsUtility.changeBulkOperationStatusToFailed();
 			initCiderIntegration();
 			logger.info("Initialization complete");
 		}
