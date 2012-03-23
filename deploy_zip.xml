@@ -97,6 +97,23 @@
 			</if>
 		</else>
 	</if>
+	
+	<echo message="Setting Global DRIVER and URL Property" />
+	<if>
+		<equals arg1="mysql" arg2="${database.type}" />
+		<then>
+			<property name ="final.database.driver" value="${mysql.driver.string}"/>
+			<property name="final.database.url" value="jdbc:mysql://${database.host}:${database.port}/${database.name}" />
+		</then>
+
+		<elseif>
+			<equals arg1="oracle" arg2="${database.type}" />
+			<then>
+				<property name ="final.database.driver" value="${oracle.driver.string}"/>
+				<property name="final.database.url" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+			</then>
+		</elseif>
+	</if>
 
 	<!-- Check for required properties -->
 	<target name="assert" description="Check for required properties">
