@@ -39,12 +39,8 @@
 			<column name="IDENTIFIER" type="${int.type}">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
-			<column name="CPID" type="${int.type}">
-				<constraints primaryKey="true" nullable="false" />
-			</column>
-			<column name="LABELSQLID" type="${int.type}">
-				<constraints primaryKey="true" nullable="false" />
-			</column>
+			<column name="CPID" type="${int.type}"/>
+			<column name="LABELSQLID" type="${int.type}"/>
 			<column name="USER_DEFINED_LABEL" type="${text.type}(255)"/>
 			<column name="SEQ_ORDER" type="${smallint.type}"/>	
 		</createTable>
