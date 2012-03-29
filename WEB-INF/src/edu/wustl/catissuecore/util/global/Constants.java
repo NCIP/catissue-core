@@ -399,7 +399,9 @@ public class Constants
 	//public static final String SEARCHED_ENTITIES_MAP = "searchedEntitiesMap";
 	/** The Constant SUCCESS. */
 	public static final String SUCCESS = "success";
-
+	
+	public static final String JSON_CONTENT_TYPE = "text/html";
+	
 	/** The Constant FAILURE. */
 	public static final String FAILURE = "failure";
 
@@ -4339,6 +4341,7 @@ public class Constants
 
 	/** The Constant REQUEST_FOR. */
 	public static final String REQUEST_FOR = "requestFor";
+	public static final String GRID_DATA = "gridData";
 
 	/** The Constant REPORT_ACTION. */
 	public static final String REPORT_ACTION = "reportAction";
@@ -5827,6 +5830,8 @@ public class Constants
 	public static final String DATE_PATTERN_MM_DD_YYYY = "MM-dd-yyyy";
 
 	public static final String CLICKED_ROW_SELECTED = "clickedRowSelected";
+	public static final String JSON_DATA_ROW  = "rows";
+	public static final String JSON_DATA_COLUMN  = "data";
 
 	public static final String ACCESS_DENIED_MSG = "access.execute.action.denied";
 	public static final String REDIRECT_HOME = "/Home.do";
@@ -5850,8 +5855,4 @@ public class Constants
 	public static final String GRID_SETUP_PROP_FILE = "gridsetup.properties";
 	
 	public static final String CP_COORDINATOR_IDS = "coordinatorIds";
-		public static final String LABELLING_SCHEME_ALPHABETS="ALPHABETS";
-	public static final String LABELLING_SCHEME_NUMBERS="NUMBERS";
-	public static final String CREATE_DUPLICATE_EVENT = "createDuplicateEvent";
-	public static final String CREATE_DUPLICATE_SPECIMEN = "createDuplicateSpecimen";
 }

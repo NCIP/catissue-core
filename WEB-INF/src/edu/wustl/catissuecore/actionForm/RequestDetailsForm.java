@@ -143,10 +143,10 @@ public class RequestDetailsForm extends AbstractActionForm
 
 	public void setRequestFor(String key, Object value)
 	{
-		if (this.isMutable())
-		{
+//		if (this.isMutable())
+//		{
 			this.requestForDropDownMap.put(key, value);
-		}
+//		}
 	}
 
 	/**
@@ -247,10 +247,10 @@ public class RequestDetailsForm extends AbstractActionForm
 
 	public void setValue(String key, Object value)
 	{
-		if (this.isMutable())
-		{
+//		if (this.isMutable())
+//		{
 			this.values.put(key, value);
-		}
+//		}
 	}
 
 	/**
@@ -301,7 +301,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @throws BizLogicException BizLogic Exception
 	 */
 	public void setAllValuesForOrder(AbstractDomainObject abstractDomain,
-			HttpServletRequest request, DAO dao) throws BizLogicException
+			HttpServletRequest request) throws BizLogicException
 	{
 		int requestDetailsBeanCounter = 0;
 		int existingArrayBeanCounter = 0;
@@ -346,87 +346,87 @@ public class RequestDetailsForm extends AbstractActionForm
 			String selectedSpecimenQuantityUnit = "";
 			String selectedSpecimenQuantity = "";
 
-			if (((orderItem instanceof ExistingSpecimenOrderItem)
-					|| (orderItem instanceof DerivedSpecimenOrderItem) || (orderItem instanceof PathologicalCaseOrderItem)))
-			{
-				final SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) orderItem;
-				if (specimenOrderItem.getNewSpecimenArrayOrderItem() == null)
-				{
+//			if (((orderItem instanceof ExistingSpecimenOrderItem)
+//					|| (orderItem instanceof DerivedSpecimenOrderItem) || (orderItem instanceof PathologicalCaseOrderItem)))
+//			{
+//				final SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) orderItem;
+//				if (specimenOrderItem.getNewSpecimenArrayOrderItem() == null)
+//				{
 					assignStatus = "RequestDetailsBean:" + requestDetailsBeanCounter
 							+ "_assignedStatus";
 					description = "RequestDetailsBean:" + requestDetailsBeanCounter
 							+ "_description";
 					requestedQty = "RequestDetailsBean:" + requestDetailsBeanCounter
 							+ "_requestedQty";
-
+//
 					orderItemId = "RequestDetailsBean:" + requestDetailsBeanCounter
 							+ "_orderItemId";
-
-					requestedItem = "RequestDetailsBean:" + requestDetailsBeanCounter
-							+ "_requestedItem";
-					availableQty = "RequestDetailsBean:" + requestDetailsBeanCounter
-							+ "_availableQty";
-					specimenClass = "RequestDetailsBean:" + requestDetailsBeanCounter
-							+ "_className";
-					specimenType = "RequestDetailsBean:" + requestDetailsBeanCounter + "_type";
-
-					requestFor = "RequestDetailsBean:" + requestDetailsBeanCounter + "_requestFor";
-					specimenId = "RequestDetailsBean:" + requestDetailsBeanCounter + "_specimenId";
-					consentVerificationkey = "RequestDetailsBean:" + requestDetailsBeanCounter
-							+ "_consentVerificationkey";
-					canDistributeKey = "RequestDetailsBean:" + requestDetailsBeanCounter
-							+ "_canDistribute";
-
-					rowStatuskey = "RequestDetailsBean:" + requestDetailsBeanCounter
-							+ "_rowStatuskey";
-
+//
+//					requestedItem = "RequestDetailsBean:" + requestDetailsBeanCounter
+//							+ "_requestedItem";
+//					availableQty = "RequestDetailsBean:" + requestDetailsBeanCounter
+//							+ "_availableQty";
+//					specimenClass = "RequestDetailsBean:" + requestDetailsBeanCounter
+//							+ "_className";
+//					specimenType = "RequestDetailsBean:" + requestDetailsBeanCounter + "_type";
+//
+//					requestFor = "RequestDetailsBean:" + requestDetailsBeanCounter + "_requestFor";
+//					specimenId = "RequestDetailsBean:" + requestDetailsBeanCounter + "_specimenId";
+//					consentVerificationkey = "RequestDetailsBean:" + requestDetailsBeanCounter
+//							+ "_consentVerificationkey";
+//					canDistributeKey = "RequestDetailsBean:" + requestDetailsBeanCounter
+//							+ "_canDistribute";
+//
+//					rowStatuskey = "RequestDetailsBean:" + requestDetailsBeanCounter
+//							+ "_rowStatuskey";
+//
 					assignQty = "RequestDetailsBean:" + requestDetailsBeanCounter + "_assignedQty";
-					instanceOf = "RequestDetailsBean:" + requestDetailsBeanCounter + "_instanceOf";
+//					instanceOf = "RequestDetailsBean:" + requestDetailsBeanCounter + "_instanceOf";
 					distributedItemId = "RequestDetailsBean:" + requestDetailsBeanCounter
 							+ "_distributedItemId";
-					specimenCollGrpId = "RequestDetailsBean:" + requestDetailsBeanCounter
-							+ "_specimenCollGroupId";
-					specimenList = "RequestForDropDownList:" + requestDetailsBeanCounter;
-
-					actualSpecimenClass = "RequestDetailsBean:" + requestDetailsBeanCounter
-							+ "_actualSpecimenClass";
-					actualSpecimenType = "RequestDetailsBean:" + requestDetailsBeanCounter
-							+ "_actualSpecimenType";
-					selectedSpecimenTypeKey = "RequestDetailsBean:" + requestDetailsBeanCounter
-							+ "_selectedSpecimenType";
-					selectedSpecimenQuantityUnit = "RequestDetailsBean:"
-							+ requestDetailsBeanCounter + "_specimenQuantityUnit";
-					selectedSpecimenQuantity = "RequestDetailsBean:" + requestDetailsBeanCounter
-							+ "_selectedSpecimenQuantity";
-
-					this.populateValuesMap(orderItem, requestedItem, availableQty, specimenClass,
-							specimenType, requestFor, specimenId, assignQty, instanceOf,
-							specimenList, specimenCollGrpId, totalSpecimenListInRequestForDropDown,
-							actualSpecimenClass, actualSpecimenType, assignStatus,
-							consentVerificationkey, canDistributeKey, rowStatuskey,
-							selectedSpecimenTypeKey, selectedSpecimenQuantityUnit,
-							selectedSpecimenQuantity, dao);
+//					specimenCollGrpId = "RequestDetailsBean:" + requestDetailsBeanCounter
+//							+ "_specimenCollGroupId";
+//					specimenList = "RequestForDropDownList:" + requestDetailsBeanCounter;
+//
+//					actualSpecimenClass = "RequestDetailsBean:" + requestDetailsBeanCounter
+//							+ "_actualSpecimenClass";
+//					actualSpecimenType = "RequestDetailsBean:" + requestDetailsBeanCounter
+//							+ "_actualSpecimenType";
+//					selectedSpecimenTypeKey = "RequestDetailsBean:" + requestDetailsBeanCounter
+//							+ "_selectedSpecimenType";
+//					selectedSpecimenQuantityUnit = "RequestDetailsBean:"
+//							+ requestDetailsBeanCounter + "_specimenQuantityUnit";
+//					selectedSpecimenQuantity = "RequestDetailsBean:" + requestDetailsBeanCounter
+//							+ "_selectedSpecimenQuantity";
+//
+//					this.populateValuesMap(orderItem, requestedItem, availableQty, specimenClass,
+//							specimenType, requestFor, specimenId, assignQty, instanceOf,
+//							specimenList, specimenCollGrpId, totalSpecimenListInRequestForDropDown,
+//							actualSpecimenClass, actualSpecimenType, assignStatus,
+//							consentVerificationkey, canDistributeKey, rowStatuskey,
+//							selectedSpecimenTypeKey, selectedSpecimenQuantityUnit,
+//							selectedSpecimenQuantity);
 					requestDetailsBeanCounter++;
-				}
-				else
-				{
-
-					List defineArrayContentsList = null;
-					if (definedArrayMap.get(specimenOrderItem.getNewSpecimenArrayOrderItem()) == null)
-					{
-						defineArrayContentsList = new ArrayList();
-					}
-					else
-					{
-						defineArrayContentsList = (List) definedArrayMap.get(specimenOrderItem
-								.getNewSpecimenArrayOrderItem());
-					}
-					defineArrayContentsList.add(specimenOrderItem);
-					definedArrayMap.put(specimenOrderItem.getNewSpecimenArrayOrderItem(),
-							defineArrayContentsList);
-				}
-			}
-			else if (orderItem instanceof ExistingSpecimenArrayOrderItem)
+//				}
+//				else
+//				{
+//
+//					List defineArrayContentsList = null;
+//					if (definedArrayMap.get(specimenOrderItem.getNewSpecimenArrayOrderItem()) == null)
+//					{
+//						defineArrayContentsList = new ArrayList();
+//					}
+//					else
+//					{
+//						defineArrayContentsList = (List) definedArrayMap.get(specimenOrderItem
+//								.getNewSpecimenArrayOrderItem());
+//					}
+//					defineArrayContentsList.add(specimenOrderItem);
+//					definedArrayMap.put(specimenOrderItem.getNewSpecimenArrayOrderItem(),
+//							defineArrayContentsList);
+//				}
+//			}
+			if (orderItem instanceof ExistingSpecimenArrayOrderItem)
 			{
 				assignStatus = "ExistingArrayDetailsBean:" + existingArrayBeanCounter
 						+ "_assignedStatus";
@@ -471,7 +471,7 @@ public class RequestDetailsForm extends AbstractActionForm
 		if (definedArrayMap.size() > 0)
 		{
 			this.makeValuesMapForDefinedArray(definedArrayMap,
-					totalSpecimenListInRequestForDropDown, dao);
+					totalSpecimenListInRequestForDropDown);
 		}
 		request.getSession().removeAttribute("finalSpecimenList");
 		request.getSession().setAttribute("finalSpecimenList",
@@ -483,7 +483,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @throws BizLogicException 
 	 */
 	private void makeValuesMapForDefinedArray(Map definedArrayMap,
-			List totalSpecimenListInRequestForDropDown, DAO dao) throws BizLogicException
+			List totalSpecimenListInRequestForDropDown) throws BizLogicException
 	{
 		final Set keySet = definedArrayMap.keySet();
 		final Iterator iter = keySet.iterator();
@@ -494,7 +494,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			final NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) iter
 					.next();
 			this.makeKeysForNewSpecimenArrayOrderItem(arrayRequestBeanCounter,
-					newSpecimenArrayOrderItem, dao);
+					newSpecimenArrayOrderItem);
 			final List specimenOrderItemList = (List) definedArrayMap
 					.get(newSpecimenArrayOrderItem);
 
@@ -508,7 +508,7 @@ public class RequestDetailsForm extends AbstractActionForm
 				final SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) specimenItemListIter
 						.next();
 				this.makeKeysForDefinedArrayContents(arrayDetailsBeanCounter, specimenOrderItem,
-						totalSpecimenListInRequestForDropDown, dao);
+						totalSpecimenListInRequestForDropDown);
 				arrayDetailsBeanCounter++;
 			}
 			arrayRequestBeanCounter++;
@@ -520,7 +520,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param newSpecimenArrayOrderItem
 	 */
 	private void makeKeysForNewSpecimenArrayOrderItem(int arrayRequestBeanCounter,
-			NewSpecimenArrayOrderItem newSpecimenArrayOrderItem, DAO dao)
+			NewSpecimenArrayOrderItem newSpecimenArrayOrderItem)
 	{
 		final String assignStatus = "DefinedArrayRequestBean:" + arrayRequestBeanCounter
 				+ "_assignedStatus";
@@ -584,7 +584,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @throws BizLogicException BizLogic Exception
 	 */
 	private void makeKeysForDefinedArrayContents(int arrayDetailsBeanCounter,
-			SpecimenOrderItem specimenOrderItem, List totalSpecimenListInRequestForDropDown, DAO dao)
+			SpecimenOrderItem specimenOrderItem, List totalSpecimenListInRequestForDropDown)
 			throws BizLogicException
 	{
 		final String assignStatus = "DefinedArrayDetailsBean:" + arrayDetailsBeanCounter
@@ -625,7 +625,7 @@ public class RequestDetailsForm extends AbstractActionForm
 		this.populateValuesMap(specimenOrderItem, requestedItem, availableQty, specimenClass,
 				specimenType, requestFor, specimenId, assignQty, instanceOf, specimenList,
 				specimenCollGrpId, totalSpecimenListInRequestForDropDown, actualSpecimenClass,
-				actualSpecimenType, assignStatus, "", "", "", "", "", "", dao);
+				actualSpecimenType, assignStatus, "", "", "", "", "", "");
 		this.putCommonValuesInValuesMap(specimenOrderItem, assignStatus, description, requestedQty,
 				assignQty, orderItemId, "");
 	}
@@ -681,7 +681,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			List totalSpecimenListInRequestForDropDown, String actualSpecimenClass,
 			String actualSpecimenType, String assignStatus, String consentVerificationkey,
 			String canDistributeKey, String rowStatuskey, String selectedSpecimenTypeKey,
-			String selectedSpecimenQuantityUnit, String selectedSpecimenQuantity, DAO dao)
+			String selectedSpecimenQuantityUnit, String selectedSpecimenQuantity)
 			throws BizLogicException
 	{
 		if (orderItem instanceof ExistingSpecimenOrderItem)

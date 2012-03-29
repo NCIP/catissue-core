@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 
 import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.bean.RequestViewBean;
+import edu.wustl.catissuecore.bean.SpecimenOrderBean;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
@@ -493,7 +494,61 @@ public final class OrderingSystemUtil
 		}
 		return specimenQuantityUnit;
 	}
+	
+	public static String getUnit(SpecimenOrderBean specimen)
+	{
+		String specimenQuantityUnit = "";
+		if (specimen.getSpecimenClass().equals("Tissue"))
+		{
+			specimenQuantityUnit = getTissueSpecUnit(specimen);
+		}
+		else if (specimen.getSpecimenClass().equals("Fluid"))
+		{
+			specimenQuantityUnit = Constants.UNIT_ML;
+		}
+		else if (specimen.getSpecimenClass().equals("Cell"))
+		{
+			specimenQuantityUnit = Constants.UNIT_CC;
+		}
+		else if (specimen.getSpecimenClass().equals("Molecular"))
+		{
+			specimenQuantityUnit = Constants.UNIT_MG;
+		}
+		return specimenQuantityUnit;
+	}
 
+	private static String getTissueSpecUnit(SpecimenOrderBean specimen)
+	{
+		String specimenQuantityUnit = "";
+		if (specimen.getSpecimenType().equals(Constants.FROZEN_TISSUE_SLIDE)
+				|| specimen.getSpecimenType().equals(Constants.FIXED_TISSUE_BLOCK)
+				|| specimen.getSpecimenType().equals(Constants.FROZEN_TISSUE_BLOCK)
+				|| specimen.getSpecimenType().equals(Constants.NOT_SPECIFIED)
+				|| specimen.getSpecimenType().equals(Constants.FIXED_TISSUE_SLIDE))
+		{
+			specimenQuantityUnit = Constants.UNIT_CN;
+
+		}
+		else
+		{
+			specimenQuantityUnit = setSpecimenQuantityUnit(specimen);
+		}
+		return specimenQuantityUnit;
+	}
+
+	private static String setSpecimenQuantityUnit(SpecimenOrderBean specimen)
+	{
+		String specimenQuantityUnit;
+		if (specimen.getSpecimenType().equals(Constants.MICRODISSECTED))
+		{
+			specimenQuantityUnit = Constants.UNIT_CL;
+		}
+		else
+		{
+			specimenQuantityUnit = Constants.UNIT_GM;
+		}
+		return specimenQuantityUnit;
+	}
 	/**
 	 * method returns specimenQuantityUnit for Particular specimen type.
 	 * @param specimen

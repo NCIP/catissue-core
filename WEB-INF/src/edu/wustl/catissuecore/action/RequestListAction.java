@@ -66,9 +66,9 @@ public class RequestListAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final RequestListFilterationForm requestListForm = (RequestListFilterationForm) form;
-		String requestFor = request.getParameter("requestFor");
+		String requestFor = request.getParameter(Constants.REQUEST_FOR);
 
-		if(!Validator.isEmpty(requestFor) && requestFor.equals("gridData"))
+		if(!Validator.isEmpty(requestFor) && requestFor.equals(Constants.GRID_DATA))
 		{
 				setGridData(requestListForm, request, response);
 				
@@ -84,7 +84,7 @@ public class RequestListAction extends SecureAction
 		
 		request.setAttribute("columns", AppUtility.getcolumns(columnList));
 		setNumberOfRequests(requestListForm);
-		return mapping.findForward("success");
+		return mapping.findForward(Constants.SUCCESS);
 	}
 
 
@@ -115,12 +115,12 @@ public class RequestListAction extends SecureAction
 				dataArray.put(bean.getRequestedBy());
 				dataArray.put(bean.getRequestedDate());
 				dataArray.put(bean.getStatus());
-				jsonObject.put("data", dataArray);
-				jsonObject.put("id", i++);
+				jsonObject.put(Constants.JSON_DATA_COLUMN, dataArray);
+				jsonObject.put(Constants.ID, i++);
 				jsonDataRow.put(jsonObject);
 			}
-			mainJsonRow.put("rows", jsonDataRow);
-			response.setContentType("json");
+			mainJsonRow.put(Constants.JSON_DATA_ROW, jsonDataRow);
+			response.setContentType(Constants.JSON_CONTENT_TYPE);
 			response.getWriter().write(mainJsonRow.toString());
 		}
 	}
@@ -144,8 +144,8 @@ public class RequestListAction extends SecureAction
 
 		int newStatus = 0, pendingStatus = 0;
 		OrderBizLogic bizLogic = new OrderBizLogic();
-		newStatus = bizLogic.getOrderCount("New");
-		pendingStatus = bizLogic.getOrderCount("Pending");
+		newStatus = bizLogic.getOrderCount(Constants.ORDER_REQUEST_STATUS_NEW);
+		pendingStatus = bizLogic.getOrderCount(Constants.ORDER_STATUS_PENDING);
 		requestListFilterationForm.setNewRequests(newStatus);
 		requestListFilterationForm.setPendingRequests(pendingStatus);
 
