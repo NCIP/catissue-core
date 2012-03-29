@@ -99,7 +99,7 @@ var coordinatorCombo = new Ext.form.ComboBox({
 			store: ds,hiddenName: 'CB_pcoordinatorIds',displayField:'excerpt',valueField: 'id',
 			typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',
 			cls:Ext.isIE?'forIe':'',
-			mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,
+			mode: 'remote',triggerAction: 'all',minChars : 1,queryDelay:500,lazyInit:true,
 			emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'pcoordinatorIds'});
 			
 coordinatorCombo.on("expand", function() {
