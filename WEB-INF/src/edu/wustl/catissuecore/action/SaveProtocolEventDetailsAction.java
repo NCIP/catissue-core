@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,8 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ProtocolEventDetailsForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
+import edu.wustl.catissuecore.bean.GenericSpecimen;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.dao.exception.DAOException;
@@ -56,6 +59,13 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 		{
 			collectionProtocolEventMap = new LinkedHashMap();
 		}
+		final String  isCreateDuplicateEvent = request.getParameter(Constants.CREATE_DUPLICATE_EVENT);
+		String ollectionProtocolEventkey = protocolEventDetailsForm.getCollectionProtocolEventkey();
+		if(Constants.TRUE.equals(isCreateDuplicateEvent))
+		{	
+			protocolEventDetailsForm.setCollectionProtocolEventkey(Constants.ADD_NEW_EVENT);
+			protocolEventDetailsForm.setCollectionPointLabel("");
+		}
 		if (protocolEventDetailsForm.getCollectionProtocolEventkey()
 				.equals(Constants.ADD_NEW_EVENT))
 		{
@@ -73,6 +83,15 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 			collectionProtocolEventBean.setUniqueIdentifier(Constants.UNIQUE_IDENTIFIER_FOR_EVENTS
 					+ (eventmapSize));
 			this.setCollectionProtocolBean(collectionProtocolEventBean, protocolEventDetailsForm);
+			if(Constants.TRUE.equals(isCreateDuplicateEvent))
+			{
+				CollectionProtocolEventBean speBean = (CollectionProtocolEventBean) collectionProtocolEventMap.get(ollectionProtocolEventkey);
+				LinkedList<GenericSpecimen> specimenList = new LinkedList<GenericSpecimen>();
+				specimenList = (LinkedList<GenericSpecimen>) CollectionProtocolUtil.getSpecimenList(speBean.getSpecimenRequirementbeanMap().values());
+				
+				String uniqueIdentifier =collectionProtocolEventBean.getUniqueIdentifier();
+				collectionProtocolEventBean.setSpecimenRequirementbeanMap(CollectionProtocolUtil.getSpecimenRequirementMap(uniqueIdentifier,specimenList));
+			}
 			collectionProtocolEventMap.put(collectionProtocolEventBean.getUniqueIdentifier(),
 					collectionProtocolEventBean);
 		}

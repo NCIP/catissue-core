@@ -280,6 +280,13 @@ if(form != null)
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}
+	function createDuplicateSpecimens()
+	{
+		var action ="SaveSpecimenRequirements.do?pageOf=specimenRequirement&redirectTo=defineEvents&key="+"<%=mapKey%>"+"&operation=add&isPersistent=${requestScope.isPersistent}&"+"<%=Constants.CREATE_DUPLICATE_SPECIMEN%>"+"=true";
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}
+	
 	function addNewEvent()
 	{
 			window.parent.frames['CPTreeView'].location="ProtocolEventsDetails.do?pageOf=newEvent";

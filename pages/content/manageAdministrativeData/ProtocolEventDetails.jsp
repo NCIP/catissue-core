@@ -73,6 +73,13 @@ function specimenRequirements()
 	document.forms[0].submit();
 }
 
+function createDuplicateEvent()
+{
+	var action ="SaveProtocolEvents.do?pageOf=defineEvents&operation=add&"+"<%=Constants.CREATE_DUPLICATE_EVENT%>"+"=true";
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}
+
 function deleteEvent()
 {
 	var answer = confirm ("Are you sure want to delete event?")
@@ -176,7 +183,7 @@ function setFocus(e, dropDownId)
 function onSiteListReady()
 	{
 		var defaultSiteId = '${protocolEventDetailsForm.defaultSiteId}';
-		if(defaultSiteId != "" && defaultSiteId != -1 && defaultSiteId != null)
+		if(defaultSiteId != "" && defaultSiteId != 0 && defaultSiteId != null)
 			siteOnRowSelect(defaultSiteId,0);
 	}
 function doOnLoad()
@@ -184,6 +191,9 @@ function doOnLoad()
 	siteDropDownInfo = {gridObj:"defaultSiteGrid", gridDiv:"defaultSite", dropDownId:"defaultSiteDropDown", pagingArea:"dsPagingArea", infoArea:"dsInfoArea", onOptionSelect:siteOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllSiteList", callBackAction:onSiteListReady};
 	// initialising grid
 	dsGrid = initDropDownGrid(siteDropDownInfo); //initialize DropDown control for priciple Investigator
+	//If user creating Duplicate event
+	if('${requestScope.setFocus}'=="true")
+			document.getElementById("collectionPointLabel").focus();
 }
 </script>
 </head>

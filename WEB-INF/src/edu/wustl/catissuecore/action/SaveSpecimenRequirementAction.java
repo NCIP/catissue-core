@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,6 +48,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			.getCommonLogger(SaveSpecimenRequirementAction.class);
 
 	private static String isPersistent = null;
+	private String createDuplicateSpecimen = "false";
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
@@ -68,15 +70,25 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		final String operation = request.getParameter(Constants.OPERATION);
 		final String eventKey = request.getParameter(Constants.EVENT_KEY);
 		final String nodeId = "New_" + eventKey;
+		final StringTokenizer st = new StringTokenizer(eventKey, "_");
+		String eventSelected = "";
+		String specimenSelected = "";
+		if (st.countTokens() == 2)
+		{
+			eventSelected = st.nextToken();
+			specimenSelected = st.nextToken();
+		}
+		
 		session.setAttribute(Constants.TREE_NODE_ID, nodeId);
 		isPersistent = request.getParameter("isPersistent");
 		request.setAttribute("isPersistent", isPersistent);
+		createDuplicateSpecimen = (String) request.getParameter(Constants.CREATE_DUPLICATE_SPECIMEN);
 		if (operation.equals(Constants.ADD))
 		{
 			final Map collectionProtocolEventMap = (Map) session
 					.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 			final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
-					.get(eventKey);
+					.get((Constants.TRUE.equals(createDuplicateSpecimen) ? eventSelected : eventKey));
 			final Integer totalNoOfSpecimen = collectionProtocolEventBean
 					.getSpecimenRequirementbeanMap().size();
 			final SpecimenRequirementBean specimenRequirementBean = this.createSpecimenBean(
@@ -104,6 +116,8 @@ public class SaveSpecimenRequirementAction extends BaseAction
 				target = Constants.FAILURE;
 			}
 		}
+		if (Constants.TRUE.equals(createDuplicateSpecimen) || !"".equals(eventSelected))
+			session.setAttribute("listKey", eventSelected);
 		return mapping.findForward(target);
 	}
 
@@ -185,6 +199,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			Integer totalNoOfSpecimen)
 	{
 		final SpecimenRequirementBean specimenRequirementBean = new SpecimenRequirementBean();
+		if(Constants.TRUE.equals(createDuplicateSpecimen))
+		{	
+			specimenRequirementBean.setId(-1L);
+		}	
 		specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier);
 		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
 				+ Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN + totalNoOfSpecimen);
@@ -370,6 +388,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 					specimenRequirementBean.setId(deriveSpecimenBean.getId());
 				}
 			}
+			if(Constants.TRUE.equals(createDuplicateSpecimen))
+			{	
+				specimenRequirementBean.setId(-1L);
+			}	
 			deriveSpecimenMap.put(specimenRequirementBean.getUniqueIdentifier(),
 					specimenRequirementBean);
 			deriveSpecimenCount = deriveSpecimenCount + 1;

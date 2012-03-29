@@ -76,7 +76,19 @@ public class ProtocolEventDetailsAction extends BaseAction
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		long collectionEventUserId = 0;
 		collectionEventUserId = AppUtility.setUserInForm(request, operation);
-		selectedNode = protocolEventDetailsForm.getCollectionPointLabel() + "class_" + eventKey;
+		String redirectTo = request.getParameter("redirectTo");
+		
+		if(Constants.TRUE.equals(request.getParameter(Constants.CREATE_DUPLICATE_EVENT)))
+		{	
+			protocolEventDetailsForm.setCollectionPointLabel("");
+			request.setAttribute("setFocus",Constants.TRUE);
+		}
+		if("defineEvents".equals(redirectTo))//flow from specimen requirement add/edit page
+			selectedNode = protocolEventDetailsForm.getCollectionPointLabel() + "class_" + (String)session.getAttribute("listKey");
+		else
+			selectedNode = protocolEventDetailsForm.getCollectionPointLabel() + "class_" + eventKey;
+		
+		
 		if (key == null || "New".equals(checkForSpecimen))
 		{
 			session.setAttribute(Constants.TREE_NODE_ID, selectedNode);

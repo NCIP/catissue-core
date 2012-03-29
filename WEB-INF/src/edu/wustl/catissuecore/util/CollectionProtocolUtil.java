@@ -1612,5 +1612,129 @@ public class CollectionProtocolUtil
 		}*/
 		return ((strValue == null) ? null : strValue.trim());
 	}
+	
+	public static  LinkedList<GenericSpecimen> getSpecimenList(Collection<GenericSpecimen> specimenColl)
+	{
+		final LinkedList<GenericSpecimen> specimenList = new LinkedList<GenericSpecimen>();
+		if (!specimenColl.isEmpty())
+		{
+			specimenList.addAll(specimenColl);
+		}
+		return specimenList;
+	}
+	
+	public static SpecimenRequirementBean duplicateSpeccimenRequirementBean(SpecimenRequirementBean oldBean, String uniqueIdentifier, int index)
+	{
+		final SpecimenRequirementBean specimenRequirementBean = new SpecimenRequirementBean();
+		if(oldBean.getLineage().equals(Constants.NEW_SPECIMEN))
+		{
+			specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier);
+			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
+					+ Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN + index);
+			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier
+					+ Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN + index);
+		}else if(oldBean.getLineage().equals(Constants.ALIQUOT)){
+			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
+					+ Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT + index);
+			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier
+					+ Constants.UNIQUE_IDENTIFIER_FOR_ALIQUOT + index);
+			
+		}else if(oldBean.getLineage().equals(Constants.DERIVED_SPECIMEN)){
+			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
+					+ Constants.UNIQUE_IDENTIFIER_FOR_DERIVE + index);
+			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_"
+					+ uniqueIdentifier + Constants.UNIQUE_IDENTIFIER_FOR_DERIVE
+					+ index);
+		}
+		setSessionDataBean(specimenRequirementBean,oldBean);
+		specimenRequirementBean.setLineage(oldBean.getLineage());
+		// Aliquot
+		specimenRequirementBean.setNoOfAliquots(oldBean.getNoOfAliquots());
+		specimenRequirementBean.setLabelFormat(oldBean.getLabelFormat());
+		specimenRequirementBean.setLabelFormatForAliquot(oldBean.getLabelFormatForAliquot());
+		specimenRequirementBean.setQuantityPerAliquot(oldBean.getQuantityPerAliquot());
+		specimenRequirementBean.setStorageContainerForAliquotSpecimem(oldBean.getStorageContainerForAliquotSpecimem());
+		specimenRequirementBean.setNoOfDeriveSpecimen(oldBean.getNoOfDeriveSpecimen());
+		specimenRequirementBean.setDeriveSpecimen(oldBean.getDeriveSpecimen());
+		return specimenRequirementBean;
+	}
+	
+	private static void setSessionDataBean(SpecimenRequirementBean newSpecimenRequirementBean,
+			SpecimenRequirementBean oldSpecimenRequirementBean)
+	{
+		newSpecimenRequirementBean.setClassName(oldSpecimenRequirementBean.getClassName());
+		newSpecimenRequirementBean.setType(oldSpecimenRequirementBean.getType());
+		newSpecimenRequirementBean.setTissueSide(oldSpecimenRequirementBean.getTissueSide());
+		newSpecimenRequirementBean.setTissueSite(oldSpecimenRequirementBean.getTissueSite());
+		newSpecimenRequirementBean.setPathologicalStatus(oldSpecimenRequirementBean
+				.getPathologicalStatus());
+		newSpecimenRequirementBean.setConcentration(oldSpecimenRequirementBean.getConcentration());
+		newSpecimenRequirementBean.setQuantity(oldSpecimenRequirementBean.getQuantity());
+		newSpecimenRequirementBean.setStorageContainerForSpecimen(oldSpecimenRequirementBean.getStorageContainerForSpecimen());
+		// Collected and received events
+		newSpecimenRequirementBean.setCollectionEventUserId(oldSpecimenRequirementBean
+				.getCollectionEventUserId());
+		newSpecimenRequirementBean.setReceivedEventUserId(oldSpecimenRequirementBean
+				.getReceivedEventUserId());
+		newSpecimenRequirementBean.setCollectionEventContainer(oldSpecimenRequirementBean
+				.getCollectionEventContainer());
+		newSpecimenRequirementBean.setReceivedEventReceivedQuality(oldSpecimenRequirementBean
+				.getReceivedEventReceivedQuality());
+		newSpecimenRequirementBean.setCollectionEventCollectionProcedure(oldSpecimenRequirementBean
+				.getCollectionEventCollectionProcedure());
+	}
+	
+	public static LinkedHashMap<String, GenericSpecimen> getSpecimenRequirementMap(String uniqueIdentifier,
+			LinkedList<GenericSpecimen> specimenList) {
+		LinkedHashMap<String, GenericSpecimen> specimenMap = new LinkedHashMap<String, GenericSpecimen>();
+		if(specimenList!= null)
+		{	
+			//Iterator<String> keyIterator = keySet.iterator();
+			
+			Iterator<GenericSpecimen> specIterator = specimenList.iterator();
+			int specCounter = 0;
+			int aliquoteCounter = 1;
+			int derivativeCounter = 1;
+			while(specIterator.hasNext())
+			{	SpecimenRequirementBean oldSpecimen = (SpecimenRequirementBean)specIterator.next();
+				SpecimenRequirementBean specimen = new SpecimenRequirementBean(); 
+				 
+				if(oldSpecimen.getLineage().equals(Constants.NEW_SPECIMEN))
+				{
+					specimen = 	CollectionProtocolUtil
+					.duplicateSpeccimenRequirementBean(oldSpecimen, uniqueIdentifier, specCounter);
+					specCounter ++;
+				}else if(oldSpecimen.getLineage().equals(Constants.ALIQUOT)){
+					specimen = 	CollectionProtocolUtil
+					.duplicateSpeccimenRequirementBean(oldSpecimen, uniqueIdentifier, aliquoteCounter);
+					aliquoteCounter++;
+				}else {
+					specimen = 	CollectionProtocolUtil
+					.duplicateSpeccimenRequirementBean(oldSpecimen, uniqueIdentifier, derivativeCounter);
+					derivativeCounter++;
+				}
+				specimen.setContainerId(null);
+				if(specimen.getParentSpecimen()!=null)
+				{	
+					specimen.getParentSpecimen().setId(0L);
+				}	
+				if(oldSpecimen.getAliquotSpecimenCollection()!=null && !oldSpecimen.getAliquotSpecimenCollection().isEmpty())
+				{
+					final LinkedList<GenericSpecimen> aliquoteList = CollectionProtocolUtil.getSpecimenList(oldSpecimen.getAliquotSpecimenCollection().values());
+					LinkedHashMap<String, GenericSpecimen> aliqMap = getSpecimenRequirementMap(specimen.getUniqueIdentifier(),aliquoteList);
+					specimen.setAliquotSpecimenCollection(aliqMap);
+				}
+				if(oldSpecimen.getDeriveSpecimenCollection()!=null && !oldSpecimen.getDeriveSpecimenCollection().isEmpty())
+				{
+					final LinkedList<GenericSpecimen> derivativeList = CollectionProtocolUtil.getSpecimenList(oldSpecimen.getDeriveSpecimenCollection().values());
+					LinkedHashMap<String, GenericSpecimen> derivMap = getSpecimenRequirementMap(specimen.getUniqueIdentifier(),derivativeList);
+					specimen.setDeriveSpecimenCollection(derivMap);
+				}
+				specimenMap.put(specimen.getUniqueIdentifier(), specimen);
+				
+			}
+		}
+		return specimenMap;
+	}
 
 }

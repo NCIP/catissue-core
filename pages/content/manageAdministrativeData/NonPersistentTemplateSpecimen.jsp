@@ -517,6 +517,14 @@
 								<bean:message key="cpbasedentry.savespecimenrequirements"/>
 								</html:button>
 							<logic:equal name="operation" value="edit">
+										<% if("New".equals(form.getLineage()))
+										    {
+										%>	
+											&nbsp;|
+											<html:button styleClass="blue_ar_b" property="submitPage" onclick="createDuplicateSpecimens()">
+													<bean:message key="cpbasedentry.createduplicatespecimen"/>
+											</html:button>
+										<% } %>
 								&nbsp;|
 								<html:button styleClass="blue_ar_b" property="submitPage" onclick="deleteEvent()">
 										<bean:message key="buttons.delete"/>

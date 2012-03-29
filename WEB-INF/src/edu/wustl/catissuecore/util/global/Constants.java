@@ -5850,6 +5850,8 @@ public class Constants
 	public static final String GRID_SETUP_PROP_FILE = "gridsetup.properties";
 	
 	public static final String CP_COORDINATOR_IDS = "coordinatorIds";
-	public static final String LABELLING_SCHEME_ALPHABETS="ALPHABETS";
+		public static final String LABELLING_SCHEME_ALPHABETS="ALPHABETS";
 	public static final String LABELLING_SCHEME_NUMBERS="NUMBERS";
+	public static final String CREATE_DUPLICATE_EVENT = "createDuplicateEvent";
+	public static final String CREATE_DUPLICATE_SPECIMEN = "createDuplicateSpecimen";
 }

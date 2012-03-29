@@ -406,7 +406,10 @@
 		<antcall target="copydeletedjars" >
 			<param name="deleteFromDir" value="${temp.dir}/catissuecorecsm"/>
 		</antcall>
-
+		<replace dir="${base.dir}/WEB-INF/classes"  propertyfile="caTissueInstall.properties">
+			<include name ="ApplicationResources.properties"/>
+			<replacefilter token="@@application.environment@@" value="${application.environment}"/>
+		</replace>
 		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml"
 			duplicate="preserve" manifest="${base.dir}/MANIFEST.MF" >
 
