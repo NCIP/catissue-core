@@ -717,6 +717,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			persistentobject.setStartNo(newObject.getStartNo());
 			persistentobject.setStorageType(newObject.getStorageType());
 			persistentobject.setTempratureInCentigrade(newObject.getTempratureInCentigrade());
+			persistentobject.setOneDimensionLabellingScheme(newObject.getOneDimensionLabellingScheme());
+			persistentobject.setTwoDimensionLabellingScheme(newObject.getTwoDimensionLabellingScheme());
 		}
 		catch (final ApplicationException exp)
 		{

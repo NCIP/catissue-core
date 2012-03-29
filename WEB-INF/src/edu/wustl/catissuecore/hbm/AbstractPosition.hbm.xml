@@ -43,6 +43,23 @@
             column="POSITION_DIMENSION_TWO"
             length="30"
         />
+        <property
+            name="positionDimensionOneString"
+            type="string"
+            update="true"
+            insert="true"
+            column="POSITION_DIMENSION_ONE_STRING"
+            length="50"
+        />
+        
+         <property
+            name="positionDimensionTwoString"
+            type="string"
+            update="true"
+            insert="true"
+            column="POSITION_DIMENSION_TWO_STRING"
+            length="50"
+        />
         
           <joined-subclass
 	    name="edu.wustl.catissuecore.domain.SpecimenPosition"

@@ -79,6 +79,12 @@ public final class GenericSpecimenVO implements GenericSpecimen
 
 	/** The position dimension two. */
 	private String positionDimensionTwo;
+	
+	/** The position dimension one String. */
+	private String positionDimensionOneString;
+
+	/** The position dimension two String. */
+	private String positionDimensionTwoString;
 
 	/** The container id. */
 	private String containerId;
@@ -578,6 +584,34 @@ public final class GenericSpecimenVO implements GenericSpecimen
 	public void setParentSpecimen(Specimen parentSpecimen) {
 		// TODO Auto-generated method stub
 
+	}
+
+
+	
+	public String getPositionDimensionOneString()
+	{
+		return positionDimensionOneString;
+	}
+
+
+	
+	public void setPositionDimensionOneString(String positionDimensionOneString)
+	{
+		this.positionDimensionOneString = positionDimensionOneString;
+	}
+
+
+	
+	public String getPositionDimensionTwoString()
+	{
+		return positionDimensionTwoString;
+	}
+
+
+	
+	public void setPositionDimensionTwoString(String positionDimensionTwoString)
+	{
+		this.positionDimensionTwoString = positionDimensionTwoString;
 	}
 
 }

@@ -299,6 +299,35 @@ public interface GenericSpecimen extends Serializable
 	 * @param positionDimensionTwo the new position dimension two
 	 */
 	public void setPositionDimensionTwo(String positionDimensionTwo);
+	
+	/**
+	 * Gets the position dimension one string.
+	 *
+	 * @return the position dimension one string
+	 */
+	public String getPositionDimensionOneString();
+
+	/**
+	 * Sets the position dimension one string.
+	 *
+	 * @param positionDimensionOne the new position dimension one string
+	 */
+	public void setPositionDimensionOneString(String positionDimensionOneString);
+
+	/**
+	 * Gets the position dimension two string.
+	 *
+	 * @return the position dimension two string
+	 */
+	public String getPositionDimensionTwoString();
+
+	/**
+	 * Sets the position dimension two string.
+	 *
+	 * @param positionDimensionTwo the new position dimension two string
+	 */
+	public void setPositionDimensionTwoString(String positionDimensionTwoString);
+
 
 	/**
 	 * Gets the container id.

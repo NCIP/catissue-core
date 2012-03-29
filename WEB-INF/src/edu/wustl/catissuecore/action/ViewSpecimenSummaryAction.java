@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.util.SpecimenDetailsTagUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.XSSSupportedAction;
@@ -443,8 +444,31 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 				.getStorageContainerForSpecimen());
 		// Mandar : 6August08 ------- end
 		derivedSessionVO.setSelectedContainerName(derivedFormVO.getSelectedContainerName());
-		derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOne());
-		derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwo());
+		derivedSessionVO.setPositionDimensionOneString(derivedFormVO.getPositionDimensionOneString());
+		derivedSessionVO.setPositionDimensionTwoString(derivedFormVO.getPositionDimensionTwoString());
+		List labellingSchemesList=null;
+		if(derivedSessionVO.getSelectedContainerName()!=null && !derivedSessionVO.getSelectedContainerName().equalsIgnoreCase(""))
+		{
+			labellingSchemesList=StorageContainerUtil.getLabellingSchemeByContainerName(derivedSessionVO.getSelectedContainerName());
+			String oneDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(0);
+			String twoDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(1);
+			if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS))
+			{
+				derivedSessionVO.setPositionDimensionOne(AppUtility.excelColumnAlphabetToNum(derivedFormVO.getPositionDimensionOneString()).toString());
+			}
+			else
+			{
+				derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOneString());
+			}
+			if(twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS))
+			{
+				derivedSessionVO.setPositionDimensionTwo(AppUtility.excelColumnAlphabetToNum(derivedFormVO.getPositionDimensionTwoString()).toString());
+			}
+			else
+			{
+				derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwoString());
+			}
+		}
 		derivedSessionVO.setQuantity(derivedFormVO.getQuantity());
 		derivedSessionVO.setConcentration(derivedFormVO.getConcentration());
 		derivedSessionVO.setFormSpecimenVo(derivedFormVO);

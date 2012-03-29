@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -452,8 +453,9 @@ public class CreateAliquotAction extends BaseAction
 
 				if (!"".equals(posDim1) && !"".equals(posDim2))
 				{
-					specPos.setPositionDimensionOne(Integer.valueOf(posDim1));
-					specPos.setPositionDimensionTwo(Integer.valueOf(posDim2));
+					specPos.setPositionDimensionOneString(posDim1);
+					specPos.setPositionDimensionTwoString(posDim2);
+					StorageContainerUtil.setContainerPositions(containername, posDim1, posDim2, specPos);
 					sContainer.setId(storageContainerId);
 				}
 				sContainer.setName(containername);

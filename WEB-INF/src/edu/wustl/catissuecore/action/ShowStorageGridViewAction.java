@@ -161,8 +161,14 @@ public class ShowStorageGridViewAction extends BaseAction
 			{
 				twoDimLabel = " ";
 			}
+			String oneDimLabellingScheme=storageContainer.getOneDimensionLabellingScheme();
+			String twoDimLabellingScheme=storageContainer.getTwoDimensionLabellingScheme();
 			request.setAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL, oneDimLabel);
 			request.setAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL, twoDimLabel);
+			
+			request.setAttribute("oneDimLabellingScheme", oneDimLabellingScheme);
+			request.setAttribute("twoDimLabellingScheme", twoDimLabellingScheme);
+			
 			storageContainerGridObject.setId(storageContainer.getId().longValue());
 			storageContainerGridObject.setType(storageType.getName());
 			storageContainerGridObject.setName(storageContainer.getName());
@@ -175,6 +181,8 @@ public class ShowStorageGridViewAction extends BaseAction
 			storageContainerGridObject.setOneDimensionCapacity(oneDimensionCapacity);
 			storageContainerGridObject.setTwoDimensionCapacity(storageContainer.getCapacity()
 					.getTwoDimensionCapacity());
+			storageContainerGridObject.setOneDimensionLabellingScheme(storageContainer.getOneDimensionLabellingScheme());
+			storageContainerGridObject.setTwoDimensionLabellingScheme(storageContainer.getTwoDimensionLabellingScheme());
 
 			fullStatus = new int[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
 					.intValue() + 1];

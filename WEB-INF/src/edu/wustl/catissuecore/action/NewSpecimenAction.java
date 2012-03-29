@@ -761,8 +761,10 @@ public class NewSpecimenAction extends SecureAction
 						parentContainerName = container.getName();
 
 					}
-					final Integer pos1 = Integer.valueOf(specimenForm.getPositionDimensionOne());
-					final Integer pos2 = Integer.valueOf(specimenForm.getPositionDimensionTwo());
+					//final Integer pos1 = Integer.valueOf(specimenForm.getPositionDimensionOne());
+					//final Integer pos2 = Integer.valueOf(specimenForm.getPositionDimensionTwo());
+					final String pos1 = specimenForm.getPositionDimensionOneString();
+					final String pos2 = specimenForm.getPositionDimensionTwoString();
 
 					final List pos2List = new ArrayList();
 					pos2List.add(new NameValueBean(pos2, pos2));
@@ -780,12 +782,12 @@ public class NewSpecimenAction extends SecureAction
 					if (specimenForm.getPositionDimensionOne() != null
 							&& !specimenForm.getPositionDimensionOne().equals("-1"))
 					{
-						startingPoints[1] = specimenForm.getPositionDimensionOne();
+						startingPoints[1] = specimenForm.getPositionDimensionOneString();
 					}
 					if (specimenForm.getPositionDimensionTwo() != null
 							&& !specimenForm.getPositionDimensionTwo().equals("-1"))
 					{
-						startingPoints[2] = specimenForm.getPositionDimensionTwo();
+						startingPoints[2] = specimenForm.getPositionDimensionTwoString();
 					}
 				}
 				initialValues = new Vector();

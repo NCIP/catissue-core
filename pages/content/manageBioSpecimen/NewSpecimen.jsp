@@ -1871,10 +1871,10 @@
 															<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName" readonly= "true"/>
 														</td>
 							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true" style="text-align:right"/>
+															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionOne" property="positionDimensionOneString" readonly= "true" style="text-align:right"/>
 											</td>
 							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true" style="text-align:right"/>
+															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionTwo" property="positionDimensionTwoString" readonly= "true" style="text-align:right"/>
 													</td>
 							<td class="groupelements">
 															<html:button styleClass="black_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">

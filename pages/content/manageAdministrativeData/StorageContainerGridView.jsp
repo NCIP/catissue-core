@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject,edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 <script language="JavaScript" type="text/javascript"
 	src="jss/caTissueSuite.js"></script>
@@ -15,6 +15,8 @@
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 String [][] childContainerName = (String [][])request.getAttribute(Constants.CHILD_CONTAINER_NAME);
+String oneDimLabellingScheme = (String)request.getAttribute("oneDimLabellingScheme");
+String twoDimLabellingScheme = (String)request.getAttribute("twoDimLabellingScheme");
 %>
 function setParentWindowValue(elementName,elementValue)
 {
@@ -408,13 +410,36 @@ function refresh_tree(nodeId)
                         if(storageContainerGridObject.getTwoDimensionCapacity().intValue() == 1)
                         {
                             %>
-    							<td align="center"  class="subtd"><%=i%></td>
+    					<td align="center"  class="subtd">
+							<%
+							if(twoDimLabellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_ALPHABETS))
+							{%>
+							<%=edu.wustl.catissuecore.util.global.AppUtility.numToExcelColumnAlphabet(i)%>
+							<%}
+							else
+							{%>
+								<%=i%>
+							<%}
+							%>
+							</td>
     						<%
                         }
                         else
                         {
 					%>
-								<td align="center"  class="subtd"><%=i%></td>
+								<td align="center"  class="subtd">
+						<%
+						if(twoDimLabellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_ALPHABETS))
+							{%>
+							<%=edu.wustl.catissuecore.util.global.AppUtility.numToExcelColumnAlphabet(i)%>
+							<%}
+							else
+							{%>
+								<%=i%>
+							<%}
+							%>
+						
+						</td>
 					<%}}%>				
 						</tr>	
 					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getOneDimensionCapacity().intValue()+1;i++){%>
@@ -431,7 +456,18 @@ function refresh_tree(nodeId)
                         	if(i!=storageContainerGridObject.getOneDimensionCapacity().intValue()+1) 
                             {
 						%>
-							<td align="center" class="subtd"><%=i%></td>
+							<td align="center" class="subtd">
+							<%
+							if(oneDimLabellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_ALPHABETS))
+							{%>
+							<%=edu.wustl.catissuecore.util.global.AppUtility.numToExcelColumnAlphabet(i)%>
+							<%}
+							else
+							{%>
+								<%=i%>
+							<%}
+							%>
+							</td>
 					   <% 
                             }
 					   
@@ -444,7 +480,19 @@ function refresh_tree(nodeId)
                         if(j ==1)
                         {
                         %>   
-                            <td  align="center">&nbsp;</td>
+                            <td align="center" class="subtd">
+							<%
+							if(oneDimLabellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_ALPHABETS))
+							{%>
+							<%=edu.wustl.catissuecore.util.global.AppUtility.numToExcelColumnAlphabet(i)%>
+							<%}
+							else
+							{%>
+								<%=i%>
+							<%}
+							%>
+							</td>
+
        					<%
                             
                         }
@@ -540,8 +588,8 @@ function refresh_tree(nodeId)
 							{
 								setParentWindowContainer = "javascript:setTextBoxValue('" + containerId + "','"+  storageContainerGridObject.getId() + "');" + 
 															"javascript:setTextBoxValue('" + selectedContainerName + "','"+  storageContainerGridObject.getName() + "');" + 
-															"javascript:setTextBoxValue('" + pos1 + "','"+  i + "');" + 
-															"javascript:setTextBoxValue('" + pos2 + "','"+  j + "');" +
+															"javascript:setTextBoxValue('" + pos1 + "','"+  AppUtility.getPostionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i) + "');" + 
+															"javascript:setTextBoxValue('" + pos2 + "','"+  AppUtility.getPostionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j) + "');" +
 															"javascript:setParentWindowValue('positionInStorageContainer','"+ storageContainerGridObject.getType() + " : " + storageContainerGridObject.getId() + " Pos (" + i + "," + j + ")');" ;								
 								
 								setParentWindowContainer = setParentWindowContainer + "javascript:closeFramedWindow()";
@@ -552,9 +600,9 @@ function refresh_tree(nodeId)
 								+ storageContainerGridObject.getId() + "');"+"javascript:setTextBoxValue('" + containerStyle + "','"
 								+ storageContainerGridObject.getName() + "');"
 								+"javascript:setTextBoxValue('" + xDimStyleId + "','"
-								+ i + "');"
+								+ AppUtility.getPostionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i) + "');"
 								+ "javascript:setTextBoxValue('" + yDimStyleId + "','"
-								+ j + "');closeFramedWindow()";
+								+ AppUtility.getPostionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j) + "');closeFramedWindow()";
 							}							
 							else
 							{

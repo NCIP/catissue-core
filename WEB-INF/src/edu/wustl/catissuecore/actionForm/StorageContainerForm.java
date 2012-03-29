@@ -160,6 +160,29 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	/** List of Specimen Types that Storage Type can hold. */
 	private String[] holdsMolSpType;
 
+	private String oneDimensionLabellingScheme=Constants.LABELLING_SCHEME_NUMBERS;
+	private String twoDimensionLabellingScheme=Constants.LABELLING_SCHEME_NUMBERS;	
+	
+	public String getOneDimensionLabellingScheme()
+	{
+		return oneDimensionLabellingScheme;
+	}
+
+	public void setOneDimensionLabellingScheme(String oneDimensionLabellingScheme)
+	{
+		this.oneDimensionLabellingScheme = oneDimensionLabellingScheme;
+	}
+	
+	public String getTwoDimensionLabellingScheme()
+	{
+		return twoDimensionLabellingScheme;
+	}
+	
+	public void setTwoDimensionLabellingScheme(String twoDimensionLabellingScheme)
+	{
+		this.twoDimensionLabellingScheme = twoDimensionLabellingScheme;
+	}
+	
 	/**
 	 * Gets the holds tissue sp type.
 	 *
@@ -331,6 +354,8 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 		this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
 		this.twoDimensionLabel = CommonUtilities.toString(container.getStorageType()
 				.getTwoDimensionLabel());
+		this.oneDimensionLabellingScheme=container.getOneDimensionLabellingScheme();
+		this.twoDimensionLabellingScheme=container.getTwoDimensionLabellingScheme();
 
 		if (container.getNoOfContainers() != null)
 		{

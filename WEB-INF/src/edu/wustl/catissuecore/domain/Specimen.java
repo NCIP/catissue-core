@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
-import edu.upmc.opi.caBIG.caTIES.client.vr.utils.App;
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
@@ -29,6 +29,8 @@ import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.SearchUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
@@ -41,7 +43,6 @@ import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.util.global.AppUtility;
 
 
 /**
@@ -730,10 +731,10 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 										.getStorageContainer());
 
 								this.specimenPosition.storageContainer.setId(stContainerId);
-								this.specimenPosition.positionDimensionOne = Integer.valueOf(form
-										.getPositionDimensionOne());
-								this.specimenPosition.positionDimensionTwo = Integer.valueOf(form
-										.getPositionDimensionTwo());
+								this.specimenPosition.positionDimensionOne =Integer.valueOf(AppUtility.excelColumnAlphabetToNum(form
+										.getPositionDimensionOne()).toString());
+								this.specimenPosition.positionDimensionTwo = Integer.valueOf(AppUtility.excelColumnAlphabetToNum(form
+										.getPositionDimensionTwo()).toString());
 								this.specimenPosition.specimen = this;
 							}
 							else if (form.getStContSelection() == 3)
@@ -753,10 +754,9 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 									}*/
 									this.specimenPosition.storageContainer.setName(form
 											.getSelectedContainerName());
-									this.specimenPosition.positionDimensionOne = Integer
-											.valueOf(form.getPos1());
-									this.specimenPosition.positionDimensionTwo = Integer
-											.valueOf(form.getPos2());
+									this.specimenPosition.positionDimensionOneString=form.getPos1();
+									this.specimenPosition.positionDimensionTwoString=form.getPos2();
+									StorageContainerUtil.setContainerPositions(form.getSelectedContainerName(), form.getPos1(), form.getPos2(), specimenPosition);
 									this.specimenPosition.specimen = this;
 								}
 								// bug 11479 S
@@ -775,10 +775,9 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						{
 							this.specimenPosition.storageContainer.setName(form
 									.getSelectedContainerName());
-							this.specimenPosition.positionDimensionOne = Integer.valueOf(form
-									.getPositionDimensionOne());
-							this.specimenPosition.positionDimensionTwo = Integer.valueOf(form
-									.getPositionDimensionTwo());
+							this.specimenPosition.positionDimensionOneString =form.getPositionDimensionOneString();
+							this.specimenPosition.positionDimensionTwoString =form.getPositionDimensionTwoString();
+							StorageContainerUtil.setContainerPositions(form.getSelectedContainerName(), form.getPositionDimensionOneString(), form.getPositionDimensionTwoString(), specimenPosition);
 							this.specimenPosition.specimen = this;
 						}
 					}
@@ -923,10 +922,10 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		{
 			final long containerId = Long.parseLong(form.getStorageContainer());
 			this.specimenPosition.storageContainer.setId(containerId);
-			this.specimenPosition.positionDimensionOne = Integer.valueOf(form
-					.getPositionDimensionOne());
-			this.specimenPosition.positionDimensionTwo = Integer.valueOf(form
-					.getPositionDimensionTwo());
+			this.specimenPosition.positionDimensionOne =Integer.valueOf( AppUtility.excelColumnAlphabetToNum(String.valueOf(form
+					.getPositionDimensionOne())).toString());
+			this.specimenPosition.positionDimensionTwo =Integer.valueOf( AppUtility.excelColumnAlphabetToNum(String.valueOf(form
+					.getPositionDimensionTwo())).toString());
 			this.specimenPosition.specimen = this;
 
 		}
@@ -936,8 +935,9 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 			if (form.getPos1() != null && !form.getPos1().trim().equals("")
 					&& form.getPos2() != null && !form.getPos2().trim().equals(""))
 			{
-				this.specimenPosition.positionDimensionOne = Integer.valueOf(form.getPos1());
-				this.specimenPosition.positionDimensionTwo = Integer.valueOf(form.getPos2());
+				this.specimenPosition.positionDimensionOneString =form.getPos1();
+				this.specimenPosition.positionDimensionTwoString =form.getPos2();
+				StorageContainerUtil.setContainerPositions(form.getSelectedContainerName(), form.getPos1(), form.getPos2(),specimenPosition);
 				this.specimenPosition.specimen = this;
 			}
 
@@ -962,8 +962,11 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 		{
 			Specimen.logger.error(e.getMessage(),e);
 		}
-		final Iterator iter = beanObjColl.iterator();
 		final Collection consentResponseColl = new HashSet();
+		
+		if(beanObjColl!=null)
+		{
+		final Iterator iter = beanObjColl.iterator();
 		while (iter.hasNext())
 		{
 			final ConsentBean consentBean = (ConsentBean) iter.next();
@@ -980,6 +983,7 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 			consentTier.setId(Long.valueOf(consentBean.getConsentTierID()));
 			consentTierstatus.setConsentTier(consentTier);
 			consentResponseColl.add(consentTierstatus);
+		}
 		}
 		return consentResponseColl;
 	}

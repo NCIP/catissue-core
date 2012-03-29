@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.Status;
 /**
  * Storage Container Bean Class.
@@ -130,6 +131,30 @@ public class StorageContainerBean implements Serializable
 	 * Identifier.
 	 */
 	private long id;
+	
+	private String oneDimensionLabellingScheme=Constants.LABELLING_SCHEME_NUMBERS;
+	private String twoDimensionLabellingScheme=Constants.LABELLING_SCHEME_NUMBERS;	
+	
+	public String getOneDimensionLabellingScheme()
+	{
+		return oneDimensionLabellingScheme;
+	}
+
+	public void setOneDimensionLabellingScheme(String oneDimensionLabellingScheme)
+	{
+		this.oneDimensionLabellingScheme = oneDimensionLabellingScheme;
+	}
+	
+	public String getTwoDimensionLabellingScheme()
+	{
+		return twoDimensionLabellingScheme;
+	}
+	
+	public void setTwoDimensionLabellingScheme(String twoDimensionLabellingScheme)
+	{
+		this.twoDimensionLabellingScheme = twoDimensionLabellingScheme;
+	}
+
 
 	/**
 	 * Returns an id which refers to the type of the storage.

@@ -255,6 +255,12 @@ public class StorageContainerAction extends SecureAction
 			request.setAttribute("parentContainerTypeList", parentContainerTypeList);
 			request.setAttribute("parentContainerSelected", storageContainerForm
 					.getParentContainerSelected());
+			final List<NameValueBean> labellingSchemeList =new ArrayList<NameValueBean>();
+			NameValueBean nvb1=new NameValueBean(Constants.LABELLING_SCHEME_NUMBERS, Constants.LABELLING_SCHEME_NUMBERS);
+			NameValueBean nvb=new NameValueBean(Constants.LABELLING_SCHEME_ALPHABETS, Constants.LABELLING_SCHEME_ALPHABETS); 
+			labellingSchemeList.add(nvb);
+			labellingSchemeList.add(nvb1);
+			request.setAttribute("labellingSchemeList", labellingSchemeList);
 			session.removeAttribute(Constants.STORAGE_CONTAINER_SESSION_BEAN);
 			session.removeAttribute("isPageFromStorageType");
 			AppUtility.setDefaultPrinterTypeLocation(storageContainerForm);
@@ -790,6 +796,8 @@ public class StorageContainerAction extends SecureAction
 				.getParentContainerSelected());
 		// 12064 S
 		storageContainerForm.setActivityStatus(storageContainerBean.getActivityStatus());
+		storageContainerForm.setOneDimensionLabellingScheme(storageContainerBean.getOneDimensionLabellingScheme());
+		storageContainerForm.setTwoDimensionLabellingScheme(storageContainerBean.getTwoDimensionLabellingScheme());
 		storageContainerForm.setIsFull(storageContainerBean.getIsFull());
 		// 12064 E
 	}

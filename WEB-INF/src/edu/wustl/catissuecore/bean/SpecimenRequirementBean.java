@@ -1096,4 +1096,28 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 	}
 
+	public String getPositionDimensionOneString()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setPositionDimensionOneString(String positionDimensionOneString)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getPositionDimensionTwoString()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setPositionDimensionTwoString(String positionDimensionTwoString)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

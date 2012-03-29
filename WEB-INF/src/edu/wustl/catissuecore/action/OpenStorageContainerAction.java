@@ -109,6 +109,8 @@ public class OpenStorageContainerAction extends BaseAction
 			//12064 S
 			storageContainerBean.setActivityStatus(storageContainerForm.getActivityStatus());
 			storageContainerBean.setIsFull(storageContainerForm.getIsFull());
+			storageContainerBean.setOneDimensionLabellingScheme(storageContainerForm.getOneDimensionLabellingScheme());
+			storageContainerBean.setTwoDimensionLabellingScheme(storageContainerForm.getTwoDimensionLabellingScheme());
 			//12064 E
 		}
 		if ("pageOfStorageType".equals(pageOf))

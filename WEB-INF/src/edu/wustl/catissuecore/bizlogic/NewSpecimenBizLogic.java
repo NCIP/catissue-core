@@ -4774,6 +4774,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					.getPositionDimensionOne());
 			specPos.setPositionDimensionTwo(specimenVO.getSpecimenPosition()
 					.getPositionDimensionTwo());
+			specPos.setPositionDimensionOneString(specimenVO.getSpecimenPosition().getPositionDimensionOneString());
+			specPos.setPositionDimensionTwoString(specimenVO.getSpecimenPosition().getPositionDimensionTwoString());
 			specPos.setSpecimen(specimenDO);
 			specPos.setStorageContainer(storageContainer);
 		}

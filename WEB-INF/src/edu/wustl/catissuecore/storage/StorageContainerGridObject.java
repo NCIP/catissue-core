@@ -7,6 +7,8 @@
 
 package edu.wustl.catissuecore.storage;
 
+import edu.wustl.catissuecore.util.global.Constants;
+
 /**
  * @author gautam_shetty
  *
@@ -25,6 +27,29 @@ public class StorageContainerGridObject
 	private Integer twoDimensionCapacity;
 
 	private String name;
+	
+	private String oneDimensionLabellingScheme=Constants.LABELLING_SCHEME_NUMBERS;
+	private String twoDimensionLabellingScheme=Constants.LABELLING_SCHEME_NUMBERS;	
+	
+	public String getOneDimensionLabellingScheme()
+	{
+		return oneDimensionLabellingScheme;
+	}
+
+	public void setOneDimensionLabellingScheme(String oneDimensionLabellingScheme)
+	{
+		this.oneDimensionLabellingScheme = oneDimensionLabellingScheme;
+	}
+	
+	public String getTwoDimensionLabellingScheme()
+	{
+		return twoDimensionLabellingScheme;
+	}
+	public void setTwoDimensionLabellingScheme(String twoDimensionLabellingScheme)
+	{
+		this.twoDimensionLabellingScheme = twoDimensionLabellingScheme;
+	}
+
 
 	/**
 	 * @return Returns the oneDimensionCapacity.

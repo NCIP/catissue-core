@@ -738,8 +738,10 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 			SpecimenCollectionGroup.logger.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
-		final Iterator iter = beanObjColl.iterator();
 		final Collection consentResponseColl = new HashSet();
+		if(beanObjColl!=null)
+		{
+		final Iterator iter = beanObjColl.iterator();
 		while (iter.hasNext())
 		{
 			final ConsentBean consentBean = (ConsentBean) iter.next();
@@ -757,6 +759,7 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 			consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
 			consentTierstatus.setConsentTier(consentTier);
 			consentResponseColl.add(consentTierstatus);
+		}
 		}
 		return consentResponseColl;
 	}

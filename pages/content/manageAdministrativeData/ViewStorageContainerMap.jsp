@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject,edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -18,6 +18,8 @@
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 String [][] childContainerName = (String [][])request.getAttribute(Constants.CHILD_CONTAINER_NAME);
+String oneDimLabellingScheme = (String)request.getAttribute("oneDimLabellingScheme");
+String twoDimLabellingScheme = (String)request.getAttribute("twoDimLabellingScheme");
 %>
 function setParentWindowValue(elementName,elementValue)
 {
@@ -415,7 +417,18 @@ function containerInfoTab()
                         if(storageContainerGridObject.getTwoDimensionCapacity().intValue() == 1)
                         {
                             %>
-    						<td align="center"  class="subtd"><%=i%></td>
+    						<td align="center"  class="subtd">
+							<%
+							if(twoDimLabellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_ALPHABETS))
+							{%>
+							<%=edu.wustl.catissuecore.util.global.AppUtility.numToExcelColumnAlphabet(i)%>
+							<%}
+							else
+							{%>
+								<%=i%>
+							<%}
+							%>
+							</td>
     						
     						
     					    <%
@@ -423,7 +436,19 @@ function containerInfoTab()
                         else
                         {
 					%>
-						<td align="center"  class="subtd"><%=i%></td>
+						<td align="center"  class="subtd">
+						<%
+						if(twoDimLabellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_ALPHABETS))
+							{%>
+							<%=edu.wustl.catissuecore.util.global.AppUtility.numToExcelColumnAlphabet(i)%>
+							<%}
+							else
+							{%>
+								<%=i%>
+							<%}
+							%>
+						
+						</td>
 					<%}}%>				
 						</tr>	
 					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getOneDimensionCapacity().intValue()+1;i++){%>
@@ -440,7 +465,18 @@ function containerInfoTab()
                         	if(i!=storageContainerGridObject.getOneDimensionCapacity().intValue()+1) 
                             {
 						%>
-							<td align="center" class="subtd"><%=i%></td>
+							<td align="center" class="subtd">
+							<%
+							if(oneDimLabellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_ALPHABETS))
+							{%>
+							<%=edu.wustl.catissuecore.util.global.AppUtility.numToExcelColumnAlphabet(i)%>
+							<%}
+							else
+							{%>
+								<%=i%>
+							<%}
+							%>
+							</td>
 					   <% 
                             }
 					   

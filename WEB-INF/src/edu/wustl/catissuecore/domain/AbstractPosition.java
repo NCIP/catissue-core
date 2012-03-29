@@ -25,9 +25,40 @@ public abstract class AbstractPosition extends AbstractDomainObject implements S
 	 */
 	protected Integer positionDimensionTwo;
 	/**
+	 * It is the dimension one of the storage container to store values in string.
+	 */
+	protected String positionDimensionOneString;
+	/**
+	 * It is the dimension two of the storage container to store values in string.
+	 */
+	protected String positionDimensionTwoString;
+	/**
 	 * It is the identifier of the storage container.
 	 */
 	protected Long id;
+	
+	public String getPositionDimensionOneString()
+	{
+		return positionDimensionOneString;
+	}
+
+	
+	public void setPositionDimensionOneString(String positionDimensionOneString)
+	{
+		this.positionDimensionOneString = positionDimensionOneString;
+	}
+
+	
+	public String getPositionDimensionTwoString()
+	{
+		return positionDimensionTwoString;
+	}
+
+	
+	public void setPositionDimensionTwoString(String positionDimensionTwoString)
+	{
+		this.positionDimensionTwoString = positionDimensionTwoString;
+	}
 
 	/**
 	 * @return the id

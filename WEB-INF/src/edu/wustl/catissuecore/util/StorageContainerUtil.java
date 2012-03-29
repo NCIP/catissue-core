@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
@@ -385,7 +386,10 @@ public final class StorageContainerUtil
 
 		final boolean[][] availablePosistions = getAvailablePositionsForContainer(containerId,
 				dimX, dimY, dao);
-
+		DefaultBizLogic bizlogic=new DefaultBizLogic();
+		StorageContainer container=(StorageContainer) bizlogic.retrieve(StorageContainer.class.getName(), Long.valueOf(containerId));
+		String oneDimensionLabellingScheme=container.getOneDimensionLabellingScheme();
+		String twoDimensionLabellingScheme=container.getTwoDimensionLabellingScheme();
 		for (int x = 1; x < availablePosistions.length; x++)
 		{
 
@@ -395,7 +399,15 @@ public final class StorageContainerUtil
 			{
 				if (availablePosistions[x][y])
 				{
-					list.add(new NameValueBean(new Integer(y), new Integer(y)));
+					if(twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS))
+					{
+						list.add(new NameValueBean(new String(AppUtility.numToExcelColumnAlphabet(y)), new String(AppUtility.numToExcelColumnAlphabet(y))));
+					}
+					else
+					{
+						list.add(new NameValueBean(new Integer(y), new Integer(y)));
+					}
+					//list.add(new NameValueBean(AppUtility.numToExcelColumnAlphabet(new Integer(y)), AppUtility.numToExcelColumnAlphabet(new Integer(y))));
 					count++;
 				}
 			}
@@ -403,7 +415,16 @@ public final class StorageContainerUtil
 			if (!list.isEmpty())
 			{
 				final Integer xObj = new Integer(x);
-				final NameValueBean nvb = new NameValueBean(xObj, xObj);
+				NameValueBean nvb = null;
+				if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS))
+				{
+					nvb=new NameValueBean(new String(AppUtility.numToExcelColumnAlphabet(xObj)), new String(AppUtility.numToExcelColumnAlphabet(xObj)));
+				}
+				else
+				{
+					nvb=new NameValueBean(xObj, xObj);
+				}
+				//final NameValueBean nvb = new NameValueBean(AppUtility.numToExcelColumnAlphabet(xObj), AppUtility.numToExcelColumnAlphabet(xObj));
 				map.put(nvb, list);
 			}
 		}
@@ -972,17 +993,17 @@ public final class StorageContainerUtil
 		{
 			storageValue.append(containerName);
 			storageValue.append(':');
-			storageValue.append(containerPos1);
+			storageValue.append(AppUtility.numToExcelColumnAlphabet(containerPos1));
 			storageValue.append(" ,");
-			storageValue.append(containerPos2);
+			storageValue.append(AppUtility.numToExcelColumnAlphabet(containerPos2));
 		}
 		else if (containerID != null)
 		{
 			storageValue.append(containerID);
 			storageValue.append(':');
-			storageValue.append(containerPos1);
+			storageValue.append(AppUtility.numToExcelColumnAlphabet(containerPos1));
 			storageValue.append(" ,");
-			storageValue.append(containerPos2);
+			storageValue.append(AppUtility.numToExcelColumnAlphabet(containerPos2));
 		}
 		return storageValue.toString();
 	}
@@ -2702,5 +2723,45 @@ public final class StorageContainerUtil
 		{
 			spType.addAll(AppUtility.getAllTissueSpType());
 		}
+	}
+	
+	public static void setContainerPositions(String containerName, String pos1String, String pos2String,SpecimenPosition specimenPosition)
+	{
+		List labellingSchemesList=null;
+		labellingSchemesList = getLabellingSchemeByContainerName(containerName);
+		String oneDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(0);
+		String twoDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(1);
+		if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS))
+		{
+			specimenPosition.setPositionDimensionOne(Integer.valueOf(AppUtility.excelColumnAlphabetToNum(pos1String).toString()));
+		}
+		else
+		{
+			specimenPosition.setPositionDimensionOne(Integer.valueOf(pos1String));
+		}
+		if(twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS))
+		{
+			specimenPosition.setPositionDimensionTwo(Integer.valueOf(AppUtility.excelColumnAlphabetToNum(pos2String).toString()));
+		}
+		else
+		{
+			specimenPosition.setPositionDimensionTwo(Integer.valueOf(pos2String));
+		}
+		
+	}
+
+	public static List getLabellingSchemeByContainerName(String containerName)
+	{
+		List labellingSchemesList=null;
+		try
+		{
+			labellingSchemesList = AppUtility.executeSQLQuery("SELECT ONE_DIMENSION_LABELLING_SCHEME,TWO_DIMENSION_LABELLING_SCHEME FROM CATISSUE_STORAGE_CONTAINER ST,CATISSUE_CONTAINER CONT WHERE ST.IDENTIFIER=CONT.IDENTIFIER AND NAME='"+containerName+"'");
+		}
+		catch (ApplicationException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return labellingSchemesList;
 	}
 }

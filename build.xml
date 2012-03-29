@@ -217,7 +217,7 @@
 
 	<!-- Compile all files, generated and hand-written -->
 	<target name="compile" depends="init">
-		<javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false" debug="yes" target="1.5">
+		<javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false" debug="yes" target="1.6">
 			<src path="${src.dir}" />
 			<classpath>
 				<fileset dir="${lib.dir}">

@@ -344,6 +344,23 @@
             column="TEMPERATURE"
             length="30"
         />
+        
+        <property
+            name="oneDimensionLabellingScheme"
+            type="string"
+            update="true"
+            insert="true"
+            column="one_Dimension_Labelling_Scheme"
+            length="30"
+        />
+        <property
+            name="twoDimensionLabellingScheme"
+            type="string"
+            update="true"
+            insert="true"
+            column="two_Dimension_Labelling_Scheme"
+            length="30"
+        />
 
         <many-to-one
             name="storageType"

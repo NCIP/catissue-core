@@ -170,6 +170,8 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 
 		this.setStorageType(oldContainer.getStorageType());
 		this.setTempratureInCentigrade(oldContainer.getTempratureInCentigrade());
+		this.setOneDimensionLabellingScheme(oldContainer.getOneDimensionLabellingScheme());
+		this.setTwoDimensionLabellingScheme(oldContainer.getTwoDimensionLabellingScheme());
 		this.setCollectionProtocolCollection(oldContainer.getCollectionProtocolCollection());
 		this.setHoldsStorageTypeCollection(oldContainer.getHoldsStorageTypeCollection());
 		this.setHoldsSpecimenClassCollection(oldContainer.getHoldsSpecimenClassCollection());
@@ -406,6 +408,30 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 	{
 		this.storageType = storageType;
 	}
+	
+	private String oneDimensionLabellingScheme;
+	private String twoDimensionLabellingScheme;
+	
+	public String getOneDimensionLabellingScheme()
+	{
+		return oneDimensionLabellingScheme;
+	}
+
+	public void setOneDimensionLabellingScheme(String oneDimensionLabellingScheme)
+	{
+		this.oneDimensionLabellingScheme = oneDimensionLabellingScheme;
+	}
+	
+	public String getTwoDimensionLabellingScheme()
+	{
+		return twoDimensionLabellingScheme;
+	}
+	
+	public void setTwoDimensionLabellingScheme(String twoDimensionLabelllingScheme)
+	{
+		this.twoDimensionLabellingScheme = twoDimensionLabelllingScheme;
+	}
+
 
 	/**
 	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
@@ -446,6 +472,9 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 			}
 			this.capacity.setOneDimensionCapacity(new Integer(form.getOneDimensionCapacity()));
 			this.capacity.setTwoDimensionCapacity(new Integer(form.getTwoDimensionCapacity()));
+			
+			this.oneDimensionLabellingScheme=form.getOneDimensionLabellingScheme();
+			this.twoDimensionLabellingScheme=form.getTwoDimensionLabellingScheme();
 			if (!form.isAddOperation())
 			{
 				//Previously Container was in a site
@@ -551,9 +580,9 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 						{
 							this.locatedAtPosition = new ContainerPosition();
 						}
-						this.locatedAtPosition.setPositionDimensionOne(new Integer(form.getPos1()
+						this.locatedAtPosition.setPositionDimensionOne(Integer.valueOf(form.getPos1()
 								.trim()));
-						this.locatedAtPosition.setPositionDimensionTwo(new Integer(form.getPos2()
+						this.locatedAtPosition.setPositionDimensionTwo(Integer.valueOf(form.getPos2()
 								.trim()));
 						this.locatedAtPosition.occupiedContainer = this;
 					}

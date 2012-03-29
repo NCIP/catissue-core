@@ -1153,10 +1153,10 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			str = new String[10];
 			str[0] = elementNamePrefix + "selectedContainerName";
 			str[1] = this.getFormattedValue(specimen.getSelectedContainerName());
-			str[2] = elementNamePrefix + "positionDimensionOne";
-			str[3] = this.getFormattedValue(specimen.getPositionDimensionOne());
-			str[4] = elementNamePrefix + "positionDimensionTwo";
-			str[5] = this.getFormattedValue(specimen.getPositionDimensionTwo());
+			str[2] = elementNamePrefix + "positionDimensionOneString";
+			str[3] = this.getFormattedValue(specimen.getPositionDimensionOneString());
+			str[4] = elementNamePrefix + "positionDimensionTwoString";
+			str[5] = this.getFormattedValue(specimen.getPositionDimensionTwoString());
 			str[6] = elementNamePrefix + "containerId";
 			str[7] = this.getFormattedValue(specimen.getContainerId());
 			str[8] = elementNamePrefix + "storageContainerForSpecimen";
@@ -1405,13 +1405,13 @@ public class SpecimenDetailsNewFormat extends TagSupport
 
 		final String containerId = "containerId_" + specimenId;
 		final String selectedContainerName = "selectedContainerName_" + specimenId;
-		final String positionDimensionOne = "positionDimensionOne_" + specimenId;
-		final String positionDimensionTwo = "positionDimensionTwo_" + specimenId;
+		final String positionDimensionOneString = "positionDimensionOneString_" + specimenId;
+		final String positionDimensionTwoString = "positionDimensionTwoString_" + specimenId;
 		final String specimenClassName = (String) specimenClass;
 		final String specimenTypeName = (String) specimenType;
 		final String cpId = this.getFormattedValue(collectionProtocolId);
 		final String functionCall = "showMap('" + selectedContainerName + "','"
-				+ positionDimensionOne + "','" + positionDimensionTwo + "','" + containerId + "','"
+				+ positionDimensionOneString + "','" + positionDimensionTwoString + "','" + containerId + "','"
 				+ specimenClassName + "','" + specimenTypeName + "','"+ cpId + "')";
 		final int scSize = 17 + this.xtra;
 		final String sid = specimen.getUniqueIdentifier();
@@ -1462,12 +1462,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		stringBuffer.append(TD_CLOSE);
 		stringBuffer.append(TD_OPEN);
 		stringBuffer.append("<input type=\"text\" name=\"" + nameValue[2] + "\" value=\"" + nameValue[3]
-				+ "\" size=\"2\" class=\"black_ar_md\" id=\"" + positionDimensionOne + "\" "
+				+ "\" size=\"2\" class=\"black_ar_md\" id=\"" + positionDimensionOneString + "\" "
 				+ isDisabled + " >");
 		stringBuffer.append(TD_CLOSE);
 		stringBuffer.append(TD_OPEN);
 		stringBuffer.append("<input type=\"text\" name=\"" + nameValue[4] + "\" value=\"" + nameValue[5]
-				+ "\" size=\"2\" class=\"black_ar_md\" id=\"" + positionDimensionTwo + "\" "
+				+ "\" size=\"2\" class=\"black_ar_md\" id=\"" + positionDimensionTwoString + "\" "
 				+ isDisabled + " >");
 		stringBuffer.append(TD_CLOSE);
 		stringBuffer.append(TD_OPEN);

@@ -21,5 +21,33 @@
 		</addColumn>
 		<rollback></rollback>
 	</changeSet>
+	
+	<!-- ALTER TABLE CATISSUE_ABSTRACT_POSITION -->
+	<changeSet id="2" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_ABSTRACT_POSITION">
+			<column name="POSITION_DIMENSION_ONE_STRING" type="${text.type}(50)" />
+			<column name="POSITION_DIMENSION_TWO_STRING" type="${text.type}(50)" />
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+
+
+<!-- ALTER TABLE CATISSUE_STORAGE_CONTAINER -->
+	<changeSet id="3" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_STORAGE_CONTAINER">
+			<column name="ONE_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="NUMBERS"/>
+			<column name="TWO_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="NUMBERS"/>
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+	
+	<changeSet id="4" author="catissuecore" runOnChange="true">
+		<update tableName="CATISSUE_ABSTRACT_POSITION">
+		<column name="POSITION_DIMENSION_ONE_STRING" valueComputed="POSITION_DIMENSION_ONE"/>
+		<column name="POSITION_DIMENSION_TWO_STRING" valueComputed="POSITION_DIMENSION_TWO"/>
+		</update>
+		<rollback></rollback>
+	</changeSet>
+	
 
 </databaseChangeLog>         

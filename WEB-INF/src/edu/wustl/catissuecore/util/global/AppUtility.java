@@ -3825,4 +3825,46 @@ public class AppUtility {
 		}
 		return displayName;
 	}
+	
+	public static String numToExcelColumnAlphabet(int columnNumber)
+	{
+        int i;
+        String columnName = "";     
+        int modulo;     
+        while (columnNumber > 0)     
+        {        
+            modulo = (columnNumber - 1) % 26;         
+            i = 65 + modulo;
+            columnName = new Character((char)i).toString() + columnName;        
+            columnNumber = (int)((columnNumber - modulo) / 26);    
+        }       
+        return columnName; 
+	}
+	
+	public static Long excelColumnAlphabetToNum(String name)
+	{
+		  Long number = 0L;
+		    int pow = 1;
+		    for (int i = name.length() - 1; i >= 0; i--)
+		    {
+		        number += (name.charAt(i) - 'A' + 1) * pow;
+		        pow *= 26;
+		    }
+		    return number;
+	}
+	
+	public static String getPostionValue(String labellingScheme, int position)
+	{
+		String positionVal="";
+		if(labellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_NUMBERS))
+		{
+			positionVal= String.valueOf(position);
+		}
+		else
+		{
+			positionVal=numToExcelColumnAlphabet(Integer.valueOf(position));
+		}
+		return positionVal;
+	}
+	
 }

@@ -456,10 +456,12 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			LOGGER.info("-----------Container while getting from domain--:" + container);
 			specimenDataBean.setContainerId(String.valueOf(container.getId()));
 			specimenDataBean.setSelectedContainerName(container.getName());
-			specimenDataBean.setPositionDimensionOne(String.valueOf(specimen.getSpecimenPosition()
-					.getPositionDimensionOne()));
-			specimenDataBean.setPositionDimensionTwo(String.valueOf(specimen.getSpecimenPosition()
-					.getPositionDimensionTwo()));
+			specimenDataBean.setPositionDimensionOneString(specimen.getSpecimenPosition()
+					.getPositionDimensionOneString());
+			specimenDataBean.setPositionDimensionTwoString(specimen.getSpecimenPosition()
+					.getPositionDimensionTwoString());
+			specimenDataBean.setPositionDimensionOne(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionOne()));
+			specimenDataBean.setPositionDimensionTwo(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionTwo()));
 			specimenDataBean.setStorageContainerForSpecimen("Auto");
 		}
 		// Mandar : 18Aug08 to check for virtual specimens which are collected

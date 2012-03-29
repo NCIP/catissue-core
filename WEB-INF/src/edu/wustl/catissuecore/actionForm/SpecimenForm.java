@@ -115,6 +115,16 @@ public class SpecimenForm extends AbstractActionForm
 	 * Reference to dimensional position two of the specimen in Storage Container.
 	 */
 	protected String positionDimensionTwo;
+	
+	/**
+	 * Reference to dimensional position one string of the specimen in Storage Container.
+	 */
+	protected String positionDimensionOneString;
+
+	/**
+	 * Reference to dimensional position two string of the specimen in Storage Container.
+	 */
+	protected String positionDimensionTwoString;
 
 	/**
 	 * Barcode assigned to the specimen.
@@ -333,6 +343,34 @@ public class SpecimenForm extends AbstractActionForm
 	{
 		this.positionDimensionTwo = positionDimensionTwo;
 	}
+
+	
+	public String getPositionDimensionOneString()
+	{
+		return positionDimensionOneString;
+	}
+
+
+	
+	public void setPositionDimensionOneString(String positionDimensionOneString)
+	{
+		this.positionDimensionOneString = positionDimensionOneString;
+	}
+
+
+	
+	public String getPositionDimensionTwoString()
+	{
+		return positionDimensionTwoString;
+	}
+
+
+	
+	public void setPositionDimensionTwoString(String positionDimensionTwoString)
+	{
+		this.positionDimensionTwoString = positionDimensionTwoString;
+	}
+
 
 	/**
 	 * Returns the barcode of this specimen.
@@ -588,9 +626,14 @@ public class SpecimenForm extends AbstractActionForm
 					.getPositionDimensionOne());
 			this.positionDimensionTwo = String.valueOf(specimen.getSpecimenPosition()
 					.getPositionDimensionTwo());
+			this.positionDimensionOneString = specimen.getSpecimenPosition()
+					.getPositionDimensionOneString();
+			this.positionDimensionTwoString = specimen.getSpecimenPosition()
+					.getPositionDimensionTwoString();
+
 			this.positionInStorageContainer = container.getStorageType().getName() + " : "
-					+ container.getId() + " Pos(" + this.positionDimensionOne + ","
-					+ this.positionDimensionTwo + ")";
+					+ container.getId() + " Pos(" + this.positionDimensionOneString + ","
+					+ this.positionDimensionTwoString + ")";
 			this.setStContSelection(2);
 		}
 		//Bug 12374 and 12662
@@ -1014,12 +1057,12 @@ public class SpecimenForm extends AbstractActionForm
 					}
 					index++;
 				}
-				final boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
+				/*final boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
 				if (flag)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("specimen.positionInStorageContainer")));
-				}
+				}*/
 			}
 		}
 		catch (final Exception excp)
