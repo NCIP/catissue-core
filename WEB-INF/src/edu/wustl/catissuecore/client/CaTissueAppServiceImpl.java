@@ -205,8 +205,14 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	private Long getSelectedStaticEntityRecordId(NameValueBean hookEntityBean,
 			HookingInformation hookInformation) throws ApplicationException
 	{
-		String cpLabel = (String) hookInformation.getDataHookingInformation().get(
-				BulkOperationConstants.COLLECTION_PROTOCOL_LABEL);
+		String cpLabel=null;
+		if(hookInformation.getDataHookingInformation().get(
+				BulkOperationConstants.COLLECTION_PROTOCOL_LABEL)!=null)
+		{
+			cpLabel = (String) hookInformation.getDataHookingInformation().get(
+					BulkOperationConstants.COLLECTION_PROTOCOL_LABEL);
+		}
+		
 		Long selectedEntityId = null;
 
 		if (hookEntityBean.getName().equals(AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY))
@@ -234,10 +240,17 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	private Long getSpecimenIdForHooking(HookingInformation hookInformation)
 			throws ApplicationException
 	{
-		Long selectedEntityId = (Long) hookInformation.getDataHookingInformation().get(
-				BulkOperationConstants.SPECIMEN_ID);
+		Long selectedEntityId =null;
 		AnnotationBizLogic bizLogic = new AnnotationBizLogic();
-		if (selectedEntityId == null)
+		if(hookInformation.getDataHookingInformation().get(
+				BulkOperationConstants.SPECIMEN_ID)!=null && !"".equals(hookInformation.getDataHookingInformation().get(
+						BulkOperationConstants.SPECIMEN_ID)))
+		{	
+			selectedEntityId = Long.valueOf(hookInformation.getDataHookingInformation().get(
+					BulkOperationConstants.SPECIMEN_ID).toString());
+			bizLogic.isSpecimenExists(selectedEntityId.toString());
+		}
+		else
 		{
 			String specimenLabel = (String) hookInformation.getDataHookingInformation().get(
 					BulkOperationConstants.SPECIMEN_LABEL);
@@ -261,10 +274,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 						null, null);
 			}
 		}
-		else
-		{
-			bizLogic.isSpecimenExists(selectedEntityId.toString());
-		}
+		
 		return selectedEntityId;
 	}
 
@@ -276,10 +286,17 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	 */
 	private Long getSCGIdforHooking(HookingInformation hookInformation) throws ApplicationException
 	{
-		Long selectedEntityId = (Long) hookInformation.getDataHookingInformation().get(
-				BulkOperationConstants.SCG_ID);
+		Long selectedEntityId=null;
 		SpecimenCollectionGroupBizLogic bizLogic = new SpecimenCollectionGroupBizLogic();
-		if (selectedEntityId == null)
+		if(hookInformation.getDataHookingInformation().get(
+				BulkOperationConstants.SCG_ID)!=null && !"".equals(hookInformation.getDataHookingInformation().get(
+						BulkOperationConstants.SCG_ID)))
+		{	
+			selectedEntityId = Long.valueOf(hookInformation.getDataHookingInformation().get(
+					BulkOperationConstants.SCG_ID).toString());
+			bizLogic.isSCGExists(selectedEntityId.toString());
+		}
+		else 
 		{
 			String scgLabel = (String) hookInformation.getDataHookingInformation().get(
 					BulkOperationConstants.SCG_NAME);
@@ -303,10 +320,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 						null);
 			}
 		}
-		else
-		{
-			bizLogic.isSCGExists(selectedEntityId.toString());
-		}
+		
 		return selectedEntityId;
 	}
 
@@ -319,14 +333,27 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	private Long getParticipantIdForHooking(HookingInformation hookInformation, String cpLabel)
 			throws ApplicationException
 	{
-		Long selectedEntityId;
+		Long selectedEntityId=null;
 		ParticipantBizLogic bizLogic = new ParticipantBizLogic();
-		selectedEntityId = (Long) hookInformation.getDataHookingInformation().get(
-				BulkOperationConstants.PARTICIPANT_ID);
-		String ppi = (String) hookInformation.getDataHookingInformation().get(
-				BulkOperationConstants.PPI);
-		if (selectedEntityId == null)
+		if(hookInformation.getDataHookingInformation().get(
+				BulkOperationConstants.PARTICIPANT_ID)!=null && !"".equals(hookInformation.getDataHookingInformation().get(
+						BulkOperationConstants.PARTICIPANT_ID)))
+		{	
+			selectedEntityId = Long.valueOf(hookInformation.getDataHookingInformation().get(
+					BulkOperationConstants.PARTICIPANT_ID).toString());
+			bizLogic.isParticipantExists(selectedEntityId.toString());
+		}
+		else 
 		{
+			if(hookInformation.getDataHookingInformation().get(
+					BulkOperationConstants.PPI)==null || "".equals(hookInformation.getDataHookingInformation().get(
+							BulkOperationConstants.PPI)))
+			{
+				throw new BizLogicException(ErrorKey.getErrorKey("invalid.param.bo.participant"),
+						null, null);
+			}
+			String ppi = (String) hookInformation.getDataHookingInformation().get(
+					BulkOperationConstants.PPI);
 			selectedEntityId = bizLogic.getParticipantIdByPPI(cpLabel, ppi);
 			if (selectedEntityId == null)
 			{
@@ -334,10 +361,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 						null, null);
 			}
 		}
-		else
-		{
-			bizLogic.isParticipantExists(selectedEntityId.toString());
-		}
+		
 		return selectedEntityId;
 	}
 
@@ -349,7 +373,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 	 * @throws Exception Exception
 	 */
 	public Long insertDEObject(String entityGroupName, String entityName,
-			final Map<String, Object> dataValue) throws Exception
+			final Map<String, Object> dataValue,Object hookInformationObject) throws Exception
 	{
 		Long recordIdentifier = null;
 		CategoryManager.getInstance();
@@ -385,6 +409,7 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 		{
 			updateErrorMessages(errorList);
 		}
+		hookStaticDynExtObj(hookInformationObject, recordIdentifier);
 		//TODO pass sessionDataBean instead of null, so that it gets audited.
 		return recordIdentifier;
 	}
@@ -456,5 +481,4 @@ public class CaTissueAppServiceImpl extends AbstractBulkOperationAppService
 		}
 		throw new DynamicExtensionsApplicationException(buffer.toString());
 	}
-
 }
