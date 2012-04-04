@@ -238,24 +238,46 @@ create table temp_spp_events (collection_procedure varchar(200), container varch
 create sequence CATISSUE_temp_SPP_SEQ
 /
 
+CREATE GLOBAL TEMPORARY TABLE temp_events (
+    sr_id     NUMBER(19, 0), 
+    procedure VARCHAR2(50), 
+    container VARCHAR2 (50), 
+    quality     VARCHAR2 (255), 
+    PRIMARY KEY(sr_id))
+/
+
+INSERT INTO temp_events (sr_id, procedure, container)
+(
+SELECT
+    distinct specreq.identifier,coll.collection_procedure,coll.container
+FROM
+    catissue_coll_event_param coll,
+    catissue_specimen_event_param event_param,
+    catissue_cp_req_specimen specreq,
+    catissue_coll_prot_event cpe
+WHERE
+    coll.identifier = event_param.identifier and
+    specreq.identifier = event_param.specimen_id and
+    specreq.collection_protocol_event_id = cpe.identifier
+)
+/
+
 insert into temp_spp_events(collection_procedure,container,received_quality)
 (
-SELECT  distinct coll.collection_procedure,coll.container,rec.received_quality FROM   
-catissue_coll_event_param coll, catissue_received_event_param rec 
-      WHERE  coll.identifier IN (SELECT identifier 
-                            FROM   catissue_specimen_event_param 
-                            WHERE  specimen_id IN 
-(SELECT identifier FROM catissue_cp_req_specimen WHERE 
-                                   identifier in(SELECT specreq.identifier as SREQ_ID
-    FROM   catissue_coll_prot_event cpe, 
-           catissue_cp_req_specimen specreq 
-    WHERE  specreq.collection_protocol_event_id = cpe.identifier)) 
-                           )and rec.identifier IN (SELECT identifier 
-                            FROM   catissue_specimen_event_param 
-                            WHERE  specimen_id IN 
-(SELECT identifier FROM catissue_cp_req_specimen WHERE 
-                                   identifier in(SELECT specreq.identifier as SREQ_ID
-    FROM   catissue_coll_prot_event cpe, 
-           catissue_cp_req_specimen specreq 
-    WHERE  specreq.collection_protocol_event_id = cpe.identifier))))
+SELECT 
+    temp_events.procedure, temp_events.container, rec.received_quality
+FROM
+    temp_events temp_events,
+    catissue_received_event_param rec,    
+    catissue_specimen_event_param event_param,
+    catissue_cp_req_specimen specreq,
+    catissue_coll_prot_event cpe
+WHERE
+    temp_events.sr_id = specreq.identifier and
+    specreq.collection_protocol_event_id = cpe.identifier and
+    specreq.identifier = event_param.specimen_id and        
+    rec.identifier = event_param.identifier)
+/
+
+DROP TABLE temp_events
 /
