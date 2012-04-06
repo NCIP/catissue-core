@@ -7,7 +7,7 @@
 <script src="jss/configureCPDashboard.js"></script>
 
 <html:hidden property="dashboardLabelJsonValue" styleId="dashboardLabelJsonValue" />
-<table style="display:none;" cellpadding="5" cellspacing="0" border="0" class="contentPage" height="385" width="100%" id="defineDashboardItemsTable">
+<table  cellpadding="5" cellspacing="0" border="0" class="contentPage" height="385" width="100%" id="defineDashboardItemsTable">
 	<tbody height="100%">
 		<tr height="100%">
 			<td>

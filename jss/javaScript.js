@@ -961,6 +961,20 @@ function trimByAutoTagAndSetIdInForm(object) {
 
 }
 
+//This function sets display Value for the Autocomplete control as per the id set
+function setDisplayValueById(object) {
+
+	
+	var valuesList = window["valuesInListOf" + "display"+object.id];
+	//alert(object.id + " " + valuesList);
+	var idsList = window["idsInListOf" + "display"+object.id];
+	//alert(object.id + " " + idsList);
+	var index = idsList.indexOf(object.value);
+	var idObject = document.getElementById("display"+object.id);  // 7 for "display"
+	idObject.value = valuesList[index];
+	// alert(idObject.id + idObject.value);
+ }
+
 // /** Name : Vijay_Pande
 // * Reviewer : Santosh_Chandak
 // * Bug ID: Improve_Space_Usability_On_Specimen_Page

@@ -14,7 +14,7 @@
 -->						
 
 <%-- Main table Start --%>
-	<table style="display:none;"  width="100%" border="0" cellpadding="3" cellspacing="0" id="consentTierTable">
+	<table   width="100%" border="0" cellpadding="3" cellspacing="0" id="consentTierTable">
         <tr><td width="24%" align="left" class="black_ar">&nbsp;&nbsp;&nbsp;<bean:message key="consent.unsignedformurl" /></td>
             <td width="76%" align="left" valign="top"><label><html:text styleClass="black_ar" maxlength="50" size="42" styleId="unsignedConsentURLName" property="unsignedConsentURLName"/></label></td>
         </tr>    

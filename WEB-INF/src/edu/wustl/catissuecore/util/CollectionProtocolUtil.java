@@ -1007,7 +1007,11 @@ public class CollectionProtocolUtil
 					.getParentCollectionProtocolId()));
 		}
 		
-		//Ashraf: creating association collection from CP dashboard JSON string 
+		//Ashraf: creating association collection from CP dashboard JSON string
+		if(cpBean.getDashboardLabelJsonValue() == null)
+		{
+			cpBean.setDashboardLabelJsonValue("{\"row\":[]}");
+		}
 		collectionProtocol.setLabelSQLAssociationCollection(populateLabelSQLAssocColl(cpBean
 				.getDashboardLabelJsonValue(), collectionProtocol));
 		return collectionProtocol;

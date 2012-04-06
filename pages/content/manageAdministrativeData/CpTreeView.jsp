@@ -42,8 +42,8 @@
 <table border="0"  width="100%">
 	<tr>	
 		<td align="left" colspan="2" >
-			<div id="treeboxbox_tree" scrolling="no"
-				style="width: 100%; height: 410px; background-color: #ffffff;overflow:auto;" />
+			<div id="treeboxbox_tree" scrolling="auto"
+				style="width: 100%; height: 100%; background-color: #ffffff;overflow:auto;" />
 		</td>
 	</tr>
 </table>
@@ -147,6 +147,9 @@
 					tree.setItemText("<%=nodeId%>","<%=data.getDisplayName()%>","<%=tooltipText%>");
 			<%	
 					}
+			%>
+					tree.closeAllItems("0");
+			<%
 				}
 			%>
 			
@@ -169,25 +172,25 @@
 						if(str.indexOf(e1)>0 && str2.indexOf(e1)>0)
 						{
 							tree.selectItem("<%=clickedNode%>",false);
-							tree.openItem("<%=nodeId%>");
+							tree.openAllItems("<%=nodeId%>");
 						}
 						else
 						{
 							tree.selectItem("<%=clickedNode%>",false);
-							tree.openItem(parentId);
+							tree.openAllItems(parentId);
 						}
 					}
 					else
 					{
 						tree.selectItem("<%=clickedNode%>",false);
-						tree.openItem("<%=clickedNode%>");
+						tree.openAllItems("<%=clickedNode%>");
 					}
 			<% } else 
 				{
 			%>
 				
 					tree.selectItem("<%=nodeId%>",false);
-					tree.openItem("<%=nodeId%>");
+					tree.openAllItems("<%=nodeId%>");
 			<%	}
 			   }
 			%>	

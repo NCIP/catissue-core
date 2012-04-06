@@ -13,6 +13,7 @@
 <script language="JavaScript" type="text/javascript" src="de/jss/ext-all.js"></script>
 <script language="JavaScript" type="text/javascript" src="de/jss/combos.js"></script>
 <script language="JavaScript" type="text/javascript" src="de/jss/ajax.js"></script>
+<script src="jss/configureCPDashboard.js"></script>
 
 <script src="jss/javaScript.js" type="text/javascript"></script>
 <script>
@@ -58,57 +59,76 @@
 	}
 
 	function saveCP()
-	{
-		if(window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'] != null)
+	{	
+		//var cpDetailsForm = window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'];
+		var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
+		var eventDetailsForm = window.frames['SpecimenRequirementView'].document.getElementById('protocolEventDetailsForm');
+		var specimenDetailsForm = window.frames['SpecimenRequirementView'].document.getElementById('createSpecimenTemplateForm');
+		var formObject , action, operation;
+		
+		if( cpDetailsForm != null)
 		{
 			window.frames['SpecimenRequirementView'].setCSLevelFormData();//save the data in dashboard items grid
 		}
 		selectAllClinicalDiagnosis();
 		var isSaveCollectionProtocol = false;
-		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
-		if(formId!=null)
+		formObject = cpDetailsForm;
+		
+		if(formObject!=null )
 		{
-			var action="SaveCollectionProtocol.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}&refreshWholePage=true";
+			operation = cpDetailsForm.elements['operation'];
+			action="SaveCollectionProtocol.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}&refreshWholePage=true";
+			if (operation != null && operation.value == 'edit')
+			{
+				formObject.target = '_top';
+				
+			}	
+			/*else
+			{
+				action="SubmitCollectionProtocol.do?operation=${requestScope.operation}";
+				formObject.target = '_top';
+			}*/	
             isSaveCollectionProtocol = true;
 		}
 		else
 		{
-			var formId=window.frames['SpecimenRequirementView'].document.getElementById('protocolEventDetailsForm');
-			if(formId==null)
+			formObject=eventDetailsForm;
+			if(formObject==null)
 			{
-				var formId=window.frames['SpecimenRequirementView'].document.getElementById('createSpecimenTemplateForm');
+				formObject=specimenDetailsForm;
 			}
-			var action="SubmitCollectionProtocol.do?operation=${requestScope.operation}";
-			formId.target = '_top';
+			action="SubmitCollectionProtocol.do?operation=${requestScope.operation}";
+			formObject.target = '_top';
 		}
-
-		if(window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'] != null && window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['pageOf'] != null)
+		
+		/*if(cpDetailsForm != null && cpDetailsForm.elements['pageOf'] != null)
 		{
-			var pageOf=window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['pageOf'].value;
+			var pageOf=cpDetailsForm.elements['pageOf'].value;
 			if(pageOf == 'pageOfAssignPrivilegePage')
 			{
-				formId.target = '_top';
+				formObject.target = '_top';
 			}
-		}
-
-		if(window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'] != null && window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['operation'] != null)
+		}*/
+		
+		if(cpDetailsForm != null && cpDetailsForm.elements['operation'] != null)
 		{
-           	if(pageOf=window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['pageOf'] == null)
+           	/*if(pageOf=cpDetailsForm.elements['pageOf'] == null)
 			{
 
-				var operation=window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'].elements['operation'].value;
+				var operation=cpDetailsForm.elements['operation'].value;
 				if(operation == 'edit')
 				{
-					formId.target = '_top';
+					formObject.target = '_top';
 				}
-			}
-			if(isSaveCollectionProtocol == true && formId.target!='_top')
+			}*/
+			if(isSaveCollectionProtocol == true && formObject.target!='_top')
 			{
 				 action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=${requestScope.operation}&refreshWholePage=false";
 			}
 		}
-      	formId.action=action;
-        formId.submit();
+		alert(action);
+      	formObject.action=action;
+        formObject.submit();
 	}
 
     function submitCP()
@@ -179,7 +199,7 @@
         </tr>
 
        		<tr>
-				<td width="20%"  valign="top" style="border-left:1px solid #61a1e3;	 border-right:1px solid #61a1e3;border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3; ">
+				<td width="20%" height="100%" valign="top" style="border-left:1px solid #61a1e3;	 border-right:1px solid #61a1e3;border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3; ">
 					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView"  height="450" >
 							<bean:message key="errors.browser.not.supports.iframe"/>
 					</iframe>

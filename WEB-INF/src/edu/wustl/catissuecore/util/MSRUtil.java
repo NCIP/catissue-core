@@ -40,7 +40,11 @@ public class MSRUtil {
 	{
 			final AssignPrivilegePageBizLogic apBizLogic=getAssignPrivilegePageBizLogic();
 			final HttpSession session=request.getSession();
-			final String pageOf = (String) request.getParameter(Constants.PAGE_OF);
+			String pageOf = (String) request.getParameter(Constants.PAGE_OF);
+			if(Constants.PAGE_OF_COLLECTION_PROTOCOL.equals(pageOf))
+			{
+				pageOf = Constants.PAGE_OF_ASSIGN_PRIVILEGE;
+			}
 			List<String[]> list=null;
 			List<NameValueBean> actionList=null;
 			Map<String, SiteUserRolePrivilegeBean> map = null;
@@ -265,7 +269,7 @@ public class MSRUtil {
 		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
 		
 		//if (!(Constants.PAGE_OF_USER).equals(pageOf)&& (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null))
-		if (pageOf!=null && (Constants.PAGE_OF_ASSIGN_PRIVILEGE).equals(pageOf)&& (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null))
+		if (pageOf!=null && ((Constants.PAGE_OF_ASSIGN_PRIVILEGE).equals(pageOf) || Constants.PAGE_OF_COLLECTION_PROTOCOL.equals(pageOf))&& (session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null))
 		{
 			rowIdBeanMap = (Map<String, SiteUserRolePrivilegeBean>) session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP);
 			temp=Constants.ROW_ID_OBJECT_BEAN_MAP;
@@ -310,7 +314,7 @@ public class MSRUtil {
 		
 		Map<String, SiteUserRolePrivilegeBean> rowIdBeanMap= new HashMap<String, SiteUserRolePrivilegeBean>();
 		
-		if (pageOf!=null && ! pageOf.equals("") && (Constants.PAGE_OF_ASSIGN_PRIVILEGE).equals(pageOf))
+		if (pageOf!=null && ! pageOf.equals("") && (Constants.PAGE_OF_ASSIGN_PRIVILEGE).equals(pageOf) || Constants.PAGE_OF_COLLECTION_PROTOCOL.equals(pageOf))
 		{
 			if(session.getAttribute(Constants.ROW_ID_OBJECT_BEAN_MAP) != null)
 			{

@@ -39,6 +39,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
+import edu.wustl.catissuecore.util.MSRUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
@@ -296,6 +297,19 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		CollectionProtocolBizLogic cpBizLogic = new CollectionProtocolBizLogic();
 		List<NameValueBean> cpList = cpBizLogic.getAllCPNameValueBeanList();
 		//cpList.add(0,new NameValueBean(Constants.SELECT_OPTION,Long.valueOf(Constants.SELECT_OPTION_VALUE)));
+		
+		final MSRUtil msrUtil = new MSRUtil();
+		final String cpOperation = request.getParameter("cpOperation");
+		
+		request.setAttribute("cpOperation", cpOperation);
+		if ("AssignPrivilegePage".equals(cpOperation) || cpOperation == null)
+		{
+			msrUtil.onFirstTimeLoad(mapping, request);
+		}
+		else
+		{
+			msrUtil.setAJAXResponse(request, response, cpOperation);
+		}
 		
 		request.setAttribute(Constants.CP_LIST, cpList);
 		request.setAttribute("collectionProtocolYear", collectionProtocolYear);

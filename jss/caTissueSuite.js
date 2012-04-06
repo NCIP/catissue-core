@@ -185,7 +185,7 @@ function sendRequestsWithData(url, data, cpOperation, pageOf) {
 						deselectAllOptsOfSelBox(eleOfSiteSelBox);
 
 						if (pageOf != null
-								&& pageOf == "pageOfAssignPrivilegePage") {
+								&& (pageOf == "pageOfAssignPrivilegePage" || pageOf == "pageOfCollectionProtocol")) {
 							clearSelBoxList(eleOfUserSelBox);
 						} else if (pageOf != null) {
 							deselectAllOptsOfSelBox(eleOfCPSelBox);
@@ -298,7 +298,7 @@ function sendRequestsWithData(url, data, cpOperation, pageOf) {
 							}
 
 							if (pageOf != null
-									&& pageOf == "pageOfAssignPrivilegePage") {
+									&& (pageOf == "pageOfAssignPrivilegePage" || pageOf == "pageOfCollectionProtocol")) {
 								var userName = jsonResponse.locations[i].userName;
 								addOrUpdateRowToTable(opt, tableId, rowId,
 										roleName, userName, sites, actions,
@@ -330,7 +330,7 @@ function addOrUpdateRowToTable(opt, tableId, rowId, roleName, tempName, sites,
 	rows = tb.rows;
 	var noOfRows = rows.length;
 
-	if (pageOf != null && pageOf == "pageOfAssignPrivilegePage") {
+	if (pageOf != null && (pageOf == "pageOfAssignPrivilegePage" || pageOf == "pageOfCollectionProtocol")) {
 		var tempStringSize = 45;
 	} else if (pageOf != null) {
 		var tempStringSize = 60;
@@ -531,7 +531,8 @@ function deleteCheckedRows(operation, tableId, deleteButtonId) {
 	}
 
 	enableDeleteButton(tableId, deleteButtonId);
-
+	if(pageOf=="pageOfCollectionProtocol")
+		pageOf=="pageOfAssignPrivilegePage"
 	var url = "ShowAssignPrivilegePage.do?pageOf=" + pageOf;
 	var data = "cpOperation=" + cpOperation + "&deletedRowsArray="
 			+ deletedRowsArray + "&operation=" + operation;
@@ -1086,7 +1087,7 @@ function getUserPrivilegeSummary(operation) {
 	selectedRoleIds = getSelElementsList(roleListCtrl);
 	selectedActionIds = getSelElementsList(actionListCtrl);
 
-	if (pageOf != null && pageOf == "pageOfAssignPrivilegePage") {
+	if (pageOf != null && (pageOf == "pageOfAssignPrivilegePage"|| pageOf == "pageOfCollectionProtocol")) {
 		chkBoxObj = document.getElementById("customizeChkId");
 		if (chkBoxObj.checked == true) {
 			isCustChecked = true;
@@ -1142,7 +1143,7 @@ function validateMethodForPriv(pageOf, selectedSiteIds, selectedRoleIds,
 	var errorFlagForRole = false;
 	var flagForSite = false;
 
-	if (pageOf != null && pageOf == "pageOfAssignPrivilegePage") {
+	if (pageOf != null && (pageOf == "pageOfAssignPrivilegePage" || pageOf == "pageOfCollectionProtocol")) {
 		chkBoxObj = document.getElementById("customizeChkId");
 
 		if (selectedSiteIds.length == '0') {

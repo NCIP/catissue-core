@@ -45,75 +45,11 @@ function updateCPTree()
 	List actionList = (List) request.getAttribute(Constants.ACTIONLIST);
 %>
 
-<body>
-<script type="text/javascript" src="jss/wz_tooltip.js"></script>
-<script type="text/javascript" src="jss/queryModule.js"></script>
 
-<html:form
-	action="DefineEvents.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}"
-	styleId="CollectionProtocolForm">
+
+
 	<table summary="" cellpadding="0" cellspacing="0" border="0"
 		style="padding-left:0;padding-right:0;" width="100%">
-		<html:hidden property="shortTitle" />
-		<html:hidden property="startDate" />
-		<html:hidden property="title" />
-		<html:hidden property="principalInvestigatorId" />
-    	<html:hidden property="irbID" />
-
-    	<html:hidden property="specimenLabelFormat" />
-    	<html:hidden property="derivativeLabelFormat" />
-    	<html:hidden property="aliquotLabelFormat" />
-		<html:hidden property="descriptionURL" />
-		<html:hidden property="enrollment" />
-		<html:hidden property="endDate" />
-		<html:hidden property="coordinatorIds" />
-		<html:hidden property="outerCounter" />
-		<html:hidden property="aliqoutInSameContainer" />
-		<html:hidden property="unsignedConsentURLName" />
-		<html:hidden property="consentTierCounter" />
-		<html:hidden property="consentWaived" />
-		<html:hidden property="pageOf" />
-
-		<html:hidden property="sequenceNumber" />
-		<html:hidden property="type" />
-		<html:hidden property="studyCalendarEventPoint" />
-		<html:hidden property="parentCollectionProtocolId" />
-
-		<logic:notEqual name="noOfConsents" value="0">
-			<c:forEach var="counter" begin="0"
-				end='${requestScope.noOfConsents -1}' step="1">
-				<html:hidden
-					property="consentValue(ConsentBean:${counter}_statement)" />
-				<html:hidden
-					property="consentValue(ConsentBean:${counter}_consentTierID)" />
-			</c:forEach>
-		</logic:notEqual>
-
-
-
-		<tr>
-			<td valign="bottom" colspan="2">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="10%" valign="bottom" id="collectionProtocolTab"><a
-						href="CollectionProtocol.do?pageOf=pageOfCollectionProtocol&invokeFunction=invokeFunction&operation=${requestScope.operation}">
-					<img src="images/uIEnhancementImages/cp_details1.gif"
-						alt="Collection Protocol Details" width="174" height="20"
-						border="0" /></a></td>
-					<td width="10%" valign="bottom" id="consentTab"><a
-						href="CollectionProtocol.do?pageOf=pageOfCollectionProtocol&invokeFunction=invokeFunction&operation=${requestScope.operation}&tabSel=consentTab"><img
-						src="images/uIEnhancementImages/cp_consents1.gif" alt="Consents"
-						width="94" height="20" border="0" /></a></td>
-					<td width="10%" valign="bottom" id="consentTab"><a> <img
-						src="images/uIEnhancementImages/cp_privileges.gif"
-						alt="Privileges" width="94" height="20" border="0"
-						onclick="showAssignPrivilegePage()"></a></td>
-					<td width="100%" valign="bottom" class="cp_tabbg">&nbsp;</td>
-				</tr>
-			</table>
-			</td>
-		</tr>
-
 		<tr>
 			<td colspan="2" class="cp_tabtable">
 			<table summary="" cellpadding="0" cellspacing="0" border="0"
@@ -286,11 +222,7 @@ function updateCPTree()
 					<td colspan="2" align="left" class="bottomtd"></td>
 
 				</tr>
-				<tr>
-				  <td  colspan="2" width="50%" align="center" class="black_ar_new" style="display:none">
-					<html:select property="protocolCoordinatorIds" styleId="protocolCoordinatorIds" size="4" multiple="true" style="width:170"><html:options collection="selectedCoordinators" labelProperty="name" property="value"/></html:select>
-		          </td>
-				</tr>
+				
 
 				<tr class="td_color_F7F7F7">
 
@@ -402,6 +334,7 @@ function updateCPTree()
 			</td>
 		</tr>
 	</table>
-</html:form>
-</body>
+	
+
+
 

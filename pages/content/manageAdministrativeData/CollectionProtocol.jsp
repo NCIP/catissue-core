@@ -15,17 +15,20 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <head>
 
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtabbar.css">
 <link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
 <link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+
 <script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
 <script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtmlx_suite/js/dhtmlxtabbar.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
@@ -116,9 +119,11 @@ ds.on('load',function(){
 //declaring DHTMLX Drop Down controls required variables
 var investigatorDropDownInfo, piGrid, parentProtocolDropDownInfo, ppGrid;
 var piGridVisible = false, ppGridVisible = false;
+var tabbar;
 
 if('${requestScope.tabSel}'=="consentTab"){
 	window.onload=consentPage;
+	tabbar.setTabActive("consentTab");
 }
 
 //will be called whenever a participant is selected from the participant grid/dropdown
@@ -257,6 +262,31 @@ function doOnLoad()
 	piGrid = initDropDownGrid(investigatorDropDownInfo); //initialize DropDown control for priciple Investigator
 	ppGrid = initDropDownGrid(parentProtocolDropDownInfo); //initialize DropDown control for priciple Investigator
 	enableDisableParentProtocol('${collectionProtocolForm.type}');
+	
+	//initializing tab buttons
+	tabbar = new dhtmlXTabBar("tabbar_div", "top");
+	tabbar.setSkin('dhx_skyblue');
+	tabbar.setImagePath("dhtmlx_suite/imgs/");
+	
+	
+	tabbar.addTab("collectionProtocolTab", "Collection Protocol Details", "170px");
+	tabbar.addTab("consentTab", "Consents", "100px");
+	tabbar.addTab("privilege", "Previlege", "100px");
+	tabbar.addTab("defineDashboardItemsTab", "Configure Dashboard", "130px");
+	
+	
+	tabbar.setContent("collectionProtocolTab","collectionProtocolContentDiv");
+	tabbar.setContent("consentTab","consentDiv");
+	tabbar.setContent("privilege","previlegDiv");
+	tabbar.setContent("defineDashboardItemsTab","dashbordDiv");
+	var url = "DefineEvents.do?pageOf=pageOfAssignPrivilegePage&cpOperation=AssignPrivilegePage&operation=${requestScope.operation}";
+
+	if('${requestScope.tabSel}'=='consentTab') 
+		tabbar.setTabActive("consentTab");	
+	else if (('${requestScope.tabSel}'=='defineDashboardItemsTab') )
+		tabbar.setTabActive("defineDashboardItemsTab");	
+	else
+		tabbar.setTabActive("collectionProtocolTab");
 }
 
 function defineEvents()
@@ -312,6 +342,8 @@ div#d999 {
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <LINK href="css/calanderComponent.css" type="text/css" rel="stylesheet">
 <body onload="doOnLoad();doCPDashboardInitGrid();">
+<script language="JavaScript" type="text/javascript"	src="jss/wz_tooltip.js"></script>
+
 <html:form action='${requestScope.formName}'
 	styleId="CollectionProtocolForm">
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -319,27 +351,19 @@ div#d999 {
 			<td><%@ include file="/pages/content/common/ActionErrors.jsp"%>
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td valign="bottom" id="collectionProtocolTab"
-						onclick="collectionProtocolPage()"><img
-						src="images/uIEnhancementImages/cp_details.gif"
-						alt="Collection Protocol Details" width="174" height="20" /><a
-						href="#"></a></td>
-					<td valign="bottom" onclick="consentPage()" id="consentTab"><a
-						href="#"><img
-						src="images/uIEnhancementImages/cp_consents1.gif" alt="Consents"
-						width="94" height="20" border="0" /></a></td>
-					<td valign="bottom"><a href="#"><img
-						src="images/uIEnhancementImages/cp_privileges1.gif"
-						alt="Privileges" width="94" height="20" border="0"
-						onclick="showAssignPrivilegePage('${requestScope.operation}')"></a></td>
-					<td height="20" width="1%" onclick="defineDashboardItems()" id="defineDashboardItemsTab"><a href="#" ><img src="images/uIEnhancementImages/configure_dashboard1.gif" id="defineDashboardItemsTabImage" alt="defineCPDashboardItemsTab" height="20"/></a></td>
-					<td width="85%" valign="bottom" class="cp_tabbg">&nbsp;</td>
+					<td width="100%" >
+						<div id="tabbar_div" style="width:auto;height:600px;"/>
+					</td>
 				</tr>
 			</table>
 			</td>
 		</tr>
+		</table>
+		
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 		<tr>
 			<td class="cp_tabtable" colspan="6"><br>
+			<div id="collectionProtocolContentDiv">
 			<table width="100%" border="0" cellpadding="3" cellspacing="0"
 				id="table1">
 				<html:hidden property="operation" />
@@ -347,6 +371,7 @@ div#d999 {
 				<html:hidden property="onSubmit" />
 				<html:hidden property="id" />
 				<html:hidden property="redirectTo" />
+				<html:hidden property="pageOf" />
 
 				
 				<!-- html:hidden property="type" /-->
@@ -692,14 +717,20 @@ div#d999 {
 					<td colspan="3" />
 				</tr>
 			</table>
-
-
-
-			<%@ include file="/pages/content/ConsentTracking/DefineConsent.jsp"%>
-			<%@ include file="/pages/content/manageAdministrativeData/ConfigureCPDashboard.jsp" %>
+			</div>
+			<div id="consentDiv">
+				<%@ include file="/pages/content/ConsentTracking/DefineConsent.jsp"%>
+			</div>	
+			<div id="dashbordDiv">
+				<%@ include file="/pages/content/manageAdministrativeData/ConfigureCPDashboard.jsp" %>
+			</div>	
+			<div id="previlegDiv">
+				<%@ include file="/pages/content/manageAdministrativeData/ShowAssignPriviledge.jsp" %>
+			</div>
 			</td>
 		</tr>
-	</table>
+</table>
+	</div>
 </html:form>
 
 <script>
