@@ -126,7 +126,7 @@
 				 action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=${requestScope.operation}&refreshWholePage=false";
 			}
 		}
-		alert(action);
+		
       	formObject.action=action;
         formObject.submit();
 	}
