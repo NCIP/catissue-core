@@ -556,13 +556,30 @@ function addConsentTier() {
 	}
 	var createCheckBox = createRow.insertCell(0);
 	var createTextArea = createRow.insertCell(1);
-	var iCount = rowCount - 1;
+	var iCount = 0;
+	
 	var consentName = "consentValue(ConsentBean:" + iCount + "_statement)";
 	var consentKey = "consentValue(ConsentBean:" + iCount + "_consentTierID)";
+	if(rowCount > 1) // means has atleast one consent 
+	{
+		
+		for(i=1;i<rowCount;)
+		{	
+			var key = "consentValue(ConsentBean:" + (iCount) + "_consentTierID)";
+			//alert("iCount = " + iCount + "; key = " + key + "; "+ document.getElementsByName(key)[0]);
+			if(document.getElementsByName(key)[0] != null)
+			{
+				i++;
+			}
+			iCount++;
+		}
+		consentKey = "consentValue(ConsentBean:" + (iCount) + "_consentTierID)";
+		consentName = "consentValue(ConsentBean:" + (iCount) + "_statement)";
+	}	
 	createCheckBox.className = "black_ar";
 	createCheckBox.setAttribute('align', 'center');
 	createTextArea.className = "black_ar";
-	var sname = "<input type='hidden' id='" + consentKey + "'>";
+	var sname = "<input type='hidden' id='" + consentKey + "' name='" + consentKey + "'>";
 	createCheckBox.innerHTML = "<input type='checkbox' class='black_ar' name='consentcheckBoxs'id='check"
 			+ iCount + "'>";
 	createTextArea.innerHTML = sname
