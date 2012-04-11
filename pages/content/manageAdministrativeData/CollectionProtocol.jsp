@@ -271,7 +271,7 @@ function doOnLoad()
 	
 	tabbar.addTab("collectionProtocolTab", "Collection Protocol Details", "170px");
 	tabbar.addTab("consentTab", "Consents", "100px");
-	tabbar.addTab("privilege", "Previlege", "100px");
+	tabbar.addTab("privilege", "Privileges", "100px");
 	tabbar.addTab("defineDashboardItemsTab", "Configure Dashboard", "130px");
 	
 	
