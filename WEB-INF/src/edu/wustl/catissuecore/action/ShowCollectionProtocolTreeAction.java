@@ -54,9 +54,10 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 		final Map collectionProtocolEventMap = (Map) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 		final String operation = request.getParameter(Constants.OPERATION);
-		//request.setAttribute(Constants.ERROR_PAGE_FOR_CP, request.getParameter(Constants.ERROR_PAGE_FOR_CP));
+		request.setAttribute(Constants.ERROR_PAGE_FOR_CP, request.getParameter(Constants.ERROR_PAGE_FOR_CP));
 		
 		final Vector<QueryTreeNodeData> treeData = new Vector<QueryTreeNodeData>();
+		
 		String cpName = null;
 		String displayName = null;
 		String parentIdentifier = null;
