@@ -24,16 +24,28 @@
 		{
 			for (i = clinicalDiag.options.length-1; i >= 0; i--)
 			{
-
 				clinicalDiag.options[i].selected=true;
 			}
 		}
 	 }
 
+	 function selectAllCoordinators()
+	 {
+		 var cpCoordiantors = window.frames['SpecimenRequirementView'].document.getElementById('coordinatorIds');
+			if (cpCoordiantors != null)
+			{
+				for (i = cpCoordiantors.options.length-1; i >= 0; i--)
+				{
+					cpCoordiantors.options[i].selected=true;
+				}
+			}
+	}
+
 	function openEventPage()
 	{
-
+		var action = "";
 		selectAllClinicalDiagnosis();
+		selectAllCoordinators();
 		if(window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'] != null)
 		{
 			window.frames['SpecimenRequirementView'].setCSLevelFormData();//save the data in dashboard items grid
@@ -41,16 +53,16 @@
 		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
 		if(formId!=null)
 		{
-		    var action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=add";
+		    action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=add";
 		}
 		else
 		{
 			formId=window.frames['SpecimenRequirementView'].document.getElementById('protocolEventDetailsForm');
-			var action = "SaveProtocolEvents.do?pageOf=newEvent&operation=add";
+			action = "SaveProtocolEvents.do?pageOf=newEvent&operation=add";
 			if(formId==null)
 			{
-				var formId=window.frames['SpecimenRequirementView'].document.getElementById('createSpecimenTemplateForm');
-				var action = "CreateSpecimenTemplate.do?pageOf=newEvent&operation=add";
+				formId=window.frames['SpecimenRequirementView'].document.getElementById('createSpecimenTemplateForm');
+				action = "CreateSpecimenTemplate.do?pageOf=newEvent&operation=add";
 			}
 		}
 	    formId.action=action;
@@ -71,24 +83,16 @@
 			window.frames['SpecimenRequirementView'].setCSLevelFormData();//save the data in dashboard items grid
 		}
 		selectAllClinicalDiagnosis();
+		selectAllCoordinators();
 		var isSaveCollectionProtocol = false;
 		formObject = cpDetailsForm;
 		
 		if(formObject!=null )
 		{
-			operation = cpDetailsForm.elements['operation'];
+			operation = formObject.elements['operation'];
 			action="SaveCollectionProtocol.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}&refreshWholePage=true";
-			if (operation != null && operation.value == 'edit')
-			{
-				formObject.target = '_top';
-				
-			}	
-			/*else
-			{
-				action="SubmitCollectionProtocol.do?operation=${requestScope.operation}";
-				formObject.target = '_top';
-			}*/	
-            isSaveCollectionProtocol = true;
+			formObject.target = '_top';
+			isSaveCollectionProtocol = true;
 		}
 		else
 		{
@@ -101,32 +105,7 @@
 			formObject.target = '_top';
 		}
 		
-		/*if(cpDetailsForm != null && cpDetailsForm.elements['pageOf'] != null)
-		{
-			var pageOf=cpDetailsForm.elements['pageOf'].value;
-			if(pageOf == 'pageOfAssignPrivilegePage')
-			{
-				formObject.target = '_top';
-			}
-		}*/
-		
-		if(cpDetailsForm != null && cpDetailsForm.elements['operation'] != null)
-		{
-           	/*if(pageOf=cpDetailsForm.elements['pageOf'] == null)
-			{
-
-				var operation=cpDetailsForm.elements['operation'].value;
-				if(operation == 'edit')
-				{
-					formObject.target = '_top';
-				}
-			}*/
-			if(isSaveCollectionProtocol == true && formObject.target!='_top')
-			{
-				 action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=${requestScope.operation}&refreshWholePage=false";
-			}
-		}
-		
+		//alert(formObject.target + " " + action);
       	formObject.action=action;
         formObject.submit();
 	}
@@ -200,7 +179,7 @@
 
        		<tr>
 				<td width="20%" height="100%" valign="top" style="border-left:1px solid #61a1e3;	 border-right:1px solid #61a1e3;border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3; ">
-					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView"  height="450" >
+					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}&isErrorPage=${requestScope.isErrorPage}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView"  height="450" >
 							<bean:message key="errors.browser.not.supports.iframe"/>
 					</iframe>
 				</td>
@@ -211,7 +190,7 @@
 								</iframe>
 							</logic:equal>
 							 <logic:equal name="operation" value="edit">
-								<iframe name="SpecimenRequirementView"	src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" marginwidth="0" frameborder="0" width="100%" height="450" >
+								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" marginwidth="0" frameborder="0" width="100%" height="450" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 							 </logic:equal>

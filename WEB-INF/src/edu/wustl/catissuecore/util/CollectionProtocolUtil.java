@@ -913,18 +913,19 @@ public class CollectionProtocolUtil
 
 		LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = (LinkedHashMap) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-		if (cpEventMap == null)
+		//requirement - making event as an optional one while creating CP --- Santosh G		
+		/*if (cpEventMap == null)
 		{
 			throw AppUtility.getApplicationException(null, "event.req", "");
-		}
+		}*/
 		CollectionProtocol collectionProtocol = createCollectionProtocolDomainObject(collectionProtocolBean);
 		
 		Collection collectionProtocolEventList = new LinkedHashSet();
 
-		Collection collectionProtocolEventBeanColl = cpEventMap.values();
-		if (collectionProtocolEventBeanColl != null)
+		Collection collectionProtocolEventBeanColl =  new LinkedHashSet();//cpEventMap.values();
+		if (cpEventMap != null)
 		{
-
+			collectionProtocolEventBeanColl =  cpEventMap.values();
 			Iterator cpEventIterator = collectionProtocolEventBeanColl.iterator();
 
 			while (cpEventIterator.hasNext())

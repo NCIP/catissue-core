@@ -1685,7 +1685,7 @@ PUBLIC
 
 		<action path="/SaveCollectionProtocol" type="edu.wustl.catissuecore.action.DefineEventsAction"
 			name="collectionProtocolForm" scope="request" validate="true"
-			input="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=collectionProtocol&amp;isErrorPage=true&amp;refreshWholePage=false">
+			input="/OpenCollectionProtocol.do?pageOf=collectionProtocol&amp;isErrorPage=true&amp;refreshWholePage=false">
 			<forward name="submitSpecimen" path="/SubmitCollectionProtocol.do" />
 			<forward name="pageOfCollectionProtocolPage"
 				path="/CollectionProtocol.do?pageOf=pageOfCollectionProtocol" />

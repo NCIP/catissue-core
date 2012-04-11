@@ -97,18 +97,7 @@ function submitAllEvents()
 	document.forms[0].action = action;
 	document.forms[0].submit();
 }
-function collectionProtocolPage()
-{
-	var action ="CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage";
-	document.forms[0].action = action;
-	document.forms[0].submit();
-}
-function consentPage()
-{
-	var action ="CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&invokeFunction=initCollectionProtocolPage&tab=consentTab";
-	document.forms[0].action = action;
-	document.forms[0].submit();
-}
+
 window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=${requestScope.operation}";
 
 

@@ -85,6 +85,10 @@ public class ProtocolEventDetailsAction extends BaseAction
 		}
 		if("defineEvents".equals(redirectTo))//flow from specimen requirement add/edit page
 			selectedNode = protocolEventDetailsForm.getCollectionPointLabel() + "class_" + (String)session.getAttribute("listKey");
+		else if(Constants.ERROR.equals(pageOf))
+		{
+			selectedNode = (String) request.getSession().getAttribute(Constants.CLICKED_NODE);
+		}
 		else
 			selectedNode = protocolEventDetailsForm.getCollectionPointLabel() + "class_" + eventKey;
 		

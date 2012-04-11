@@ -74,7 +74,10 @@
 				}
 				else if(alias == "cpName")
 				{
-					window.parent.frames['SpecimenRequirementView'].location="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp";
+					if('${requestScope.isErrorPage}'=='true')
+						window.parent.location="OpenCollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp";
+					else
+						window.parent.frames['SpecimenRequirementView'].location="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp";
 				}
 				
 				else
@@ -165,6 +168,7 @@
 						var str="<%=clickedNode%>";
 						var i = str.indexOf('_');
 						var alias =str.substring(0,i);
+						var parentId = str;
 						if(alias == "New")
 					{
 						var str2="<%=nodeId%>";
