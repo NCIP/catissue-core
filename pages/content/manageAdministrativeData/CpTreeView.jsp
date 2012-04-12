@@ -39,7 +39,7 @@
 </head>
 
 <body>
-<table border="0"  width="100%">
+<table border="0"  width="100%" height="100%">
 	<tr>	
 		<td align="left" colspan="2" >
 			<div id="treeboxbox_tree" scrolling="auto"
