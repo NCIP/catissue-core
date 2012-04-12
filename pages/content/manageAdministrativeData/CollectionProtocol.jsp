@@ -315,16 +315,18 @@ function enableDisableParentProtocol(associationType)
 		imgObj.onclick =function (e) {};
 		hideGrid(parentProtocolDropDownInfo['gridDiv']);
 		piGridVisible = false;
-		document.getElementById("studyCalendarEventPoint").setAttribute("disabled",true);
-		document.getElementById("sequenceNumber").setAttribute("disabled",true);
+		document.getElementById("studyCalendarEventPoint").value="";
+		document.getElementById("sequenceNumber").value="";
+		document.getElementById("studyCalendarEventPoint").setAttribute("readOnly",true);
+		document.getElementById("sequenceNumber").setAttribute("readOnly",true);
 	}	
 	else
 	{
 		document.getElementById("parentProtocolMendatorySymbol").innerHTML = "<image src='images/uIEnhancementImages/star.gif' alt='Mandatory'>";
 		document.getElementById("parentProtocolDropDown").removeAttribute("disabled");
 		imgObj.onclick =function (e) {showHideParentProtocolGrid(e,'parentProtocol','parentProtocolDropDown');};
-		document.getElementById("studyCalendarEventPoint").removeAttribute("disabled",true);
-		document.getElementById("sequenceNumber").removeAttribute("disabled",true);
+		document.getElementById("studyCalendarEventPoint").removeAttribute("readOnly");
+		document.getElementById("sequenceNumber").removeAttribute("readOnly");
 	}
 }
 </script>
