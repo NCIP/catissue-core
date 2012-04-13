@@ -32,14 +32,14 @@
 		 	<logic:equal name="isParticipantReg" value="true">
 			<td width="4%" align="center" class="tableheading">
 			<label>
-			<input type=checkbox class="black_ar" name="selectAll" onclick="checkAll(this)" disabled="disabled"/>
+			<input type="checkbox" class="black_ar" name="selectAll" onclick="checkAll(this)" disabled="disabled"/>
 			</label>
 			</td>
 			</logic:equal>
 			
 			<logic:notEqual name="isParticipantReg" value="true"><td width="4%" align="center" class="tableheading">
 			<label>
-				<input type=checkbox name="selectAll" class="black_ar" onclick="checkAll(this)"/>
+				<input type="checkbox" name="selectAll" class="black_ar" onclick="checkAll(this)"/>
 			</label>
 			</td>
 			</logic:notEqual>
@@ -91,6 +91,5 @@
       	<html:button property="removeButton" styleClass="blue_ar_b" onclick="deleteSelected()" value="Delete"/>
 	</td>
     </tr>
-  </form>
-</table>
+  </table>
 <%-- Main table End --%>
