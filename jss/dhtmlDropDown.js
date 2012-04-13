@@ -44,7 +44,7 @@ function initDropDownGrid(gridDropDownInfo)
 //The below method takes the key code and accordingly handles the condition the left and right arrow keys will change the page and up and down keys will 
 //select the values in the grid
 
-function keyNavigation(evnt,gridDropDownInfo, gridObj, isGridVisible)
+function keyNavigation(evnt,gridDropDownInfo, gridObj,isGridVisible)
 {
 	if(isGridVisible)
 	{
@@ -75,21 +75,27 @@ function keyNavigation(evnt,gridDropDownInfo, gridObj, isGridVisible)
 	}
 }
 
-function autoCompleteControl(gridContainerDiv,dropDownId,gridObj)
+function autoCompleteControl(event,gridDropDownInfo,gridObj)
 { 
-	if(document.getElementById(dropDownId).value=="")
+	if(event.keyCode != 13)
 	{
-		hideGrid(gridContainerDiv);
-		gridInit=0;
-	}
-	else
-	{
-		if(gridOn==0)
+		if(document.getElementById(gridDropDownInfo['dropDownId']).value=="")
 		{
-			showGrid(gridContainerDiv,dropDownId);
+			document.getElementsByName(gridDropDownInfo['propertyId']).value = "";
+			hideGrid(gridDropDownInfo['gridDiv']);
+			gridDropDownInfo['visibilityStatusVariable'] = false;
+			gridInit=0;
 		}
-		gridObj.filterBy(0,document.getElementById(dropDownId).value);
-	}
+		else
+		{
+			if(gridOn==0)
+			{
+				showGrid(gridDropDownInfo['gridDiv'],gridDropDownInfo['dropDownId']);
+				gridDropDownInfo['visibilityStatusVariable'] = true;
+			}
+			gridObj.filterBy(0,document.getElementById(gridDropDownInfo['dropDownId']).value);
+		}
+	}	
 }
 
 function hideGrid(gridContDiv1)
@@ -107,12 +113,30 @@ function showGrid(gridContainingDiv,dropDownId)
 	//piGrid.clearAndLoad("ParticipantConnector.do?gridFor=" + pGridInfo['gridDiv'] + "&csId=" +csId , pGridCallBack);
 }
 
+function showHideGrid(e,dropDownInfoObject,gridObject)
+{
+		setValue(e,dropDownInfoObject['gridDiv'], dropDownInfoObject['dropDownId']);
+		//alert(dropDownInfoObject['visibilityStatusVariable']);
+		if(dropDownInfoObject['visibilityStatusVariable'])
+		{
+			hideGrid(dropDownInfoObject['gridDiv']);
+			dropDownInfoObject['visibilityStatusVariable'] = false;
+		}
+		else 
+		 {	
+			showGrid(dropDownInfoObject['gridDiv'],dropDownInfoObject['dropDownId']);
+			dropDownInfoObject['visibilityStatusVariable'] = true;
+			gridObject.load(dropDownInfoObject['actionToDo'],"");
+		 }
+} 
+
 function rowSelectEvent(property,selectedRowId,index,infoObj, gridObject)
 {
-	document.getElementsByName(property)[0].value = selectedRowId;
+	document.getElementsByName(infoObj['propertyId'])[0].value = selectedRowId;
 	document.getElementById(infoObj['dropDownId']).value = gridObject.cellById(selectedRowId,index).getValue();
 	//document.getElementById("waitingImage").style.display = "block";
 	hideGrid(infoObj['gridDiv']);
+	infoObj['visibilityStatusVariable'] = false;
 }
 
 //Stop event propogation.
@@ -126,5 +150,15 @@ function noEventPropogation(e)
 	{
 		e.stopPropagation();
 	}
+}
+
+function setValue(e,gridDivId, dropDownId)
+{
+		document.getElementById(dropDownId).focus();
+		//piText = document.getElementById(dropDownId).value;
+		//document.getElementById(dropDownId).value = "";
+		//autoCompleteControl(gridDivId,dropDownId,piGrid);
+		noEventPropogation(e);
+		//document.getElementById(dropDownId).value =piText ;
 }
 

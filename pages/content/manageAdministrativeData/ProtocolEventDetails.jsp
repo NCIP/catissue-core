@@ -110,57 +110,11 @@ function siteOnRowSelect(id,ind)
 
 
 //This will select option on the basis of left , right, up 0r down key press
-function keyNavigationCall(event, gridDivId)
+function keyNavigationCall(event, gridDropDownInfo,gridObj)
 {
-	if(gridDivId == siteDropDownInfo['gridDiv'])
-	{
-		keyNavigation(event,siteDropDownInfo,dsGrid,dsGridVisible);
-	}
+	keyNavigation(event,gridDropDownInfo,gridObj,gridDropDownInfo['visibilityStatusVariable']);
 }
 
-//This called on every key up event on DHTMLX drop down control
-function autoCompleteControlCall(event,gridContainerDiv,dropDownId)
-{
-	var gridDivObject ;
-	// Avoid when user press arrow keys or enter button
-	if(event.keyCode != 13 && event.keyCode != 37 && event.keyCode != 38 && event.keyCode != 39 && event.keyCode != 40){
-		if(document.getElementById(dropDownId).value=="")
-		{
-			if(gridContainerDiv == siteDropDownInfo['gridDiv'])
-			{
-				gridDivObject = dsGrid;
-				dsGridVisible = false;
-				document.getElementsByName('defaultSiteId')[0].value = "";
-			}
-		}
-		else
-		{
-			if(gridContainerDiv == siteDropDownInfo['gridDiv'])
-			{
-				dsGridVisible = true;
-				gridDivObject = dsGrid;
-			}
-		}
-		autoCompleteControl(gridContainerDiv,dropDownId,gridDivObject);
-	}
-}
-
-//show hide Site Grid
-function showHideSiteGrid(e,gridDivId, dropDownId)
-{		
-		setFocus(e, dropDownId);
-		if(dsGridVisible)
-		{
-			hideGrid(gridDivId);
-			dsGridVisible = false;
-		}
-		else 
-		 {	
-			showGrid(gridDivId,dropDownId);
-			dsGridVisible = true;
-			dsGrid.load(siteDropDownInfo['actionToDo'], "");
-		 }
-}
 
 function setFocus(e, dropDownId)
 {
@@ -177,7 +131,7 @@ function onSiteListReady()
 	}
 function doOnLoad()
 {
-	siteDropDownInfo = {gridObj:"defaultSiteGrid", gridDiv:"defaultSite", dropDownId:"defaultSiteDropDown", pagingArea:"dsPagingArea", infoArea:"dsInfoArea", onOptionSelect:siteOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllSiteList", callBackAction:onSiteListReady};
+	siteDropDownInfo = {propertyId:'defaultSiteId',gridObj:"defaultSiteGrid", gridDiv:"defaultSite", dropDownId:"defaultSiteDropDown", pagingArea:"dsPagingArea", infoArea:"dsInfoArea", onOptionSelect:siteOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllSiteList", callBackAction:onSiteListReady};
 	// initialising grid
 	dsGrid = initDropDownGrid(siteDropDownInfo); //initialize DropDown control for priciple Investigator
 	//If user creating Duplicate event

@@ -84,14 +84,14 @@
 									<td align="left" width="88%" height="100%" >
 										<div id="dsDropDownIddiv" class="x-form-field-wrap " >
 											<input id="defaultSiteDropDown"
-													onkeydown="keyNavigationCall(event,'defaultSite');"
-													onKeyUp="autoCompleteControlCall(event,'defaultSite','defaultSiteDropDown');"
+													onkeydown="keyNavigationCall(event,siteDropDownInfo,dsGrid);"
+													onKeyUp="autoCompleteControl(event,siteDropDownInfo,dsGrid);"
 													onClick="noEventPropogation(event)"
 													autocomplete="off"
 													size="31"
 													class="black_ar_new x-form-text x-form-field x-form-focus"/>
 													<img id="dsDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
-													onclick="showHideSiteGrid(event,'defaultSite','defaultSiteDropDown');"												
+													onclick="showHideGrid(event,siteDropDownInfo,dsGrid);"												
 												src="images/uIEnhancementImages/s.gif"/>
 										</div>
 									</td>

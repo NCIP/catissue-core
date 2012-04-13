@@ -129,113 +129,46 @@ if('${requestScope.tabSel}'=="consentTab"){
 //will be called whenever a participant is selected from the participant grid/dropdown
 function investigatorOnRowSelect(id,ind)
 {	
-	document.getElementsByName('principalInvestigatorId')[0].value = id;
+	document.getElementsByName(investigatorDropDownInfo['propertyId'])[0].value = id;
 	document.getElementById(investigatorDropDownInfo['dropDownId']).value = piGrid.cellById(id,ind).getValue();
 	//document.getElementById("waitingImage").style.display = "block";
 	hideGrid(investigatorDropDownInfo['gridDiv']);
-	piGridVisible = false;
+	investigatorDropDownInfo['visibilityStatusVariable'] = false;
+	//alert(investigatorDropDownInfo['visibilityStatusVariable']);
 }
 
 function parentProtocolOnRowSelect(id,ind)
 {	
-	document.getElementsByName('parentCollectionProtocolId')[0].value = id;
+	document.getElementsByName(parentProtocolDropDownInfo['propertyId'])[0].value = id;
 	document.getElementById(parentProtocolDropDownInfo['dropDownId']).value = ppGrid.cellById(id,ind).getValue();
 	//document.getElementById("waitingImage").style.display = "block";
 	hideGrid(parentProtocolDropDownInfo['gridDiv']);
-	ppGridVisible = false;
+	parentProtocolDropDownInfo['visibilityStatusVariable'] = false;
 }
 
 //This will select option on the basis of left , right, up 0r down key press
-function keyNavigationCall(event, gridDivId)
+function keyNavigationCall(event, gridDropDownInfo, gridObj)
 {
-	if(gridDivId == investigatorDropDownInfo['gridDiv'])
-	{
-		keyNavigation(event,investigatorDropDownInfo,piGrid,piGridVisible);
-	}
-	if(gridDivId == parentProtocolDropDownInfo['gridDiv'])
-	{
-		keyNavigation(event,parentProtocolDropDownInfo,ppGrid,ppGridVisible);
-	}
+	keyNavigation(event,gridDropDownInfo,gridObj,gridDropDownInfo['visibilityStatusVariable']);
 }
 
 //This called on every key up event on DHTMLX drop down control
-function autoCompleteControlCall(event,gridContainerDiv,dropDownId)
+//function autoCompleteControlCall(event,gridContainerDiv,dropDownId)
+function autoCompleteControlCall(event,gridDropDownInfo,gridObj)
 {
-	var gridDivObject ;
-	if(event.keyCode != 13){
-		if(document.getElementById(dropDownId).value=="")
+	if(event.keyCode != 13)
+	{
+		if(document.getElementById(gridDropDownInfo['dropDownId']).value=="")
 		{
-			if(gridContainerDiv == investigatorDropDownInfo['gridDiv'])
-			{
-				gridDivObject = piGrid;
-				piGridVisible = false;
-				document.getElementsByName('principalInvestigatorId')[0].value = "";
-			}
-			if(gridContainerDiv == parentProtocolDropDownInfo['gridDiv'])
-			{
-				gridDivObject = ppGrid;
-				ppGridVisible = false;
-				document.getElementsByName('parentCollectionProtocolId')[0].value = "";
-			}
+			gridDropDownInfo['visibilityStatusVariable'] = false;
+			document.getElementsByName(gridDropDownInfo['propertyId']).value = "";
 		}
 		else
 		{
-			if(gridContainerDiv == investigatorDropDownInfo['gridDiv'])
-			{
-				piGridVisible = true;
-				gridDivObject = piGrid;
-			}
-			if(gridContainerDiv == parentProtocolDropDownInfo['gridDiv'])
-			{
-				ppGridVisible = true;
-				gridDivObject = ppGrid;
-			}
+			gridDropDownInfo['visibilityStatusVariable'] = true;
 		}
-		autoCompleteControl(gridContainerDiv,dropDownId,gridDivObject);
+		autoCompleteControl(gridDropDownInfo['gridDiv'],gridDropDownInfo['dropDownId'],gridObj);
 	}
-}
-
-function showHideParentProtocolGrid(e,gridDivId, dropDownId)
-{		
-		setValue(e,gridDivId, dropDownId);
-		if(ppGridVisible)
-		{
-			hideGrid(gridDivId);
-			ppGridVisible = false;
-		}
-		else 
-		 {	
-			showGrid(gridDivId,dropDownId);
-			ppGridVisible = true;
-			ppGrid.load(parentProtocolDropDownInfo['actionToDo'], "");
-		 }
-}
-
-function setValue(e,gridDivId, dropDownId)
-{
-		document.getElementById(dropDownId).focus();
-		//piText = document.getElementById(dropDownId).value;
-		//document.getElementById(dropDownId).value = "";
-		//autoCompleteControl(gridDivId,dropDownId,piGrid);
-		noEventPropogation(e);
-		//document.getElementById(dropDownId).value =piText ;
-}
-function showHideprincipleInvestigatorGrid(e,gridDivId, dropDownId)
-{		
-		setValue(e,gridDivId, dropDownId);
-		if(piGridVisible)
-		{
-			hideGrid(gridDivId);
-			piGridVisible = false;
-		}
-		else 
-		 {	
-			showGrid(gridDivId,dropDownId);
-			piGridVisible = true;
-			piGrid.load(investigatorDropDownInfo['actionToDo'],"");
-		 }
-		 
-		
 }
 
 
@@ -256,8 +189,8 @@ function onParentProtocolListReady()
 function doOnLoad()
 {
 	//Drop Down components information
-	investigatorDropDownInfo = {gridObj:"principleInvestigatorGrid", gridDiv:"principleInvestigator", dropDownId:"principleInvestigatorDropDown", pagingArea:"principleInvestigatorPagingArea", infoArea:"principleInvestigatorInfoArea", onOptionSelect:"investigatorOnRowSelect", actionToDo:"CatissueCommonAjaxAction.do?type=allUserList", callBackAction:onInvestigatorListReady};
-	parentProtocolDropDownInfo = {gridObj:"parentProtocolGrid", gridDiv:"parentProtocol", dropDownId:"parentProtocolDropDown", pagingArea:"ppPagingArea", infoArea:"ppInfoArea", onOptionSelect:parentProtocolOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllCPList", callBackAction:onParentProtocolListReady};
+	investigatorDropDownInfo = {propertyId:'principalInvestigatorId',gridObj:"principleInvestigatorGrid", gridDiv:"principleInvestigator", dropDownId:"principleInvestigatorDropDown", pagingArea:"principleInvestigatorPagingArea", infoArea:"principleInvestigatorInfoArea", onOptionSelect:investigatorOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=allUserList", callBackAction:onInvestigatorListReady, visibilityStatusVariable:piGridVisible};
+	parentProtocolDropDownInfo = {propertyId:'parentCollectionProtocolId',gridObj:"parentProtocolGrid", gridDiv:"parentProtocol", dropDownId:"parentProtocolDropDown", pagingArea:"ppPagingArea", infoArea:"ppInfoArea", onOptionSelect:parentProtocolOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllCPList", callBackAction:onParentProtocolListReady, visibilityStatusVariable:ppGridVisible};
 	// initialising grid
 	piGrid = initDropDownGrid(investigatorDropDownInfo); //initialize DropDown control for priciple Investigator
 	ppGrid = initDropDownGrid(parentProtocolDropDownInfo); //initialize DropDown control for priciple Investigator
@@ -315,18 +248,18 @@ function enableDisableParentProtocol(associationType)
 		imgObj.onclick =function (e) {};
 		hideGrid(parentProtocolDropDownInfo['gridDiv']);
 		piGridVisible = false;
-		document.getElementById("studyCalendarEventPoint").value="";
-		document.getElementById("sequenceNumber").value="";
-		document.getElementById("studyCalendarEventPoint").setAttribute("readOnly",true);
-		document.getElementById("sequenceNumber").setAttribute("readOnly",true);
+		document.getElementById("studyCalendarEventPoint").setAttribute("disabled",true);
+		document.getElementById("sequenceNumber").setAttribute("disabled",true);
 	}	
 	else
 	{
 		document.getElementById("parentProtocolMendatorySymbol").innerHTML = "<image src='images/uIEnhancementImages/star.gif' alt='Mandatory'>";
 		document.getElementById("parentProtocolDropDown").removeAttribute("disabled");
-		imgObj.onclick =function (e) {showHideParentProtocolGrid(e,'parentProtocol','parentProtocolDropDown');};
-		document.getElementById("studyCalendarEventPoint").removeAttribute("readOnly");
-		document.getElementById("sequenceNumber").removeAttribute("readOnly");
+		//imgObj.onclick =function (e) {showHideParentProtocolGrid(e,'parentProtocol','parentProtocolDropDown');};
+		imgObj.onclick =function (e) {showHideGrid(e,parentProtocolDropDownInfo,ppGrid);};
+		
+		document.getElementById("studyCalendarEventPoint").removeAttribute("disabled",true);
+		document.getElementById("sequenceNumber").removeAttribute("disabled",true);
 	}
 }
 </script>
@@ -411,8 +344,8 @@ div#d999 {
 									<td align="left" width="88%" height="100%" >
 										<div id="ppDropDownIddiv" class="x-form-field-wrap " >
 											<input id="parentProtocolDropDown"
-													onkeydown="keyNavigationCall(event,'parentProtocol');"
-													onKeyUp="autoCompleteControlCall(event,'parentProtocol','parentProtocolDropDown');"
+													onkeydown="keyNavigationCall(event,parentProtocolDropDownInfo,ppGrid);"
+													onKeyUp="autoCompleteControl(event,parentProtocolDropDownInfo,ppGrid);"
 													onClick="noEventPropogation(event)"
 													autocomplete="off"
 													size="20"
@@ -477,13 +410,13 @@ div#d999 {
 									<td align="left" width="88%" height="100%" >
 										<div id="piDropDownIddiv" class="x-form-field-wrap" >
 											<input id="principleInvestigatorDropDown"
-													onkeydown="keyNavigationCall(event,'principleInvestigator');"
-													onKeyUp="autoCompleteControlCall(event,'principleInvestigator','principleInvestigatorDropDown');"
+													onkeydown="keyNavigationCall(event,investigatorDropDownInfo,piGrid);"
+													onKeyUp="autoCompleteControl(event,investigatorDropDownInfo,piGrid);"
 													onClick="noEventPropogation(event)"
 													autocomplete="off"
 													size="20"
 													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="piDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
-												onclick="showHideprincipleInvestigatorGrid(event,'principleInvestigator','principleInvestigatorDropDown');"
+												onclick="showHideGrid(event,investigatorDropDownInfo,piGrid);"
 												src="images/uIEnhancementImages/s.gif"/>
 										</div>
 									</td>
