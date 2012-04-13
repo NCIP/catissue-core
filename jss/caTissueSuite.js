@@ -546,7 +546,6 @@ function deleteCheckedRows(operation, tableId, deleteButtonId) {
 function addConsentTier() {
 	var val = parseInt(document.forms[0].consentTierCounter.value);
 	val = val + 1;
-	document.forms[0].consentTierCounter.value = val;
 	var rowCount = document.getElementById('innertable').rows.length;
 	var createRow = document.getElementById('innertable').insertRow(1);
 	if (rowCount % 2 == 0) {
@@ -585,6 +584,7 @@ function addConsentTier() {
 	createTextArea.innerHTML = sname
 			+ "<textarea rows='2' class='black_ar' value='2'style='width:90%;' name="
 			+ consentName + "></textarea>";
+	document.forms[0].consentTierCounter.value = val;
 }
 
 // On selecting Select All CheckBox all the associted check box wiil be selected
