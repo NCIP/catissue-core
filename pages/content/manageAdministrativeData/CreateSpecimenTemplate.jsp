@@ -302,6 +302,9 @@ if(form != null)
 <head>
 <script src="jss/script.js" type="text/javascript"></script>
 <link rel="STYLESHEET" type="text/css" href="css/catissue_suite.css">
+<style>
+	img{border:0;}; /* this needs to be fix in commonpackage's Tag.properties file where border=1 is set*/
+</style>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/caTissueSuite.js"></script>
 <script language="JavaScript">
