@@ -265,7 +265,7 @@ WHERE
 insert into temp_spp_events(collection_procedure,container,received_quality)
 (
 SELECT 
-    temp_events.procedure, temp_events.container, rec.received_quality
+    distinct temp_events.procedure, temp_events.container, rec.received_quality
 FROM
     temp_events temp_events,
     catissue_received_event_param rec,    
