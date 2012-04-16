@@ -159,6 +159,8 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 	{
 		List<NameValueBean> csNameValueBeanList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_CLINICAL_STATUS, null);
+		NameValueBean selectBean = new NameValueBean("-- Select --",Long.valueOf(-1));
+		csNameValueBeanList.remove(csNameValueBeanList.indexOf(selectBean));
 		StringBuffer responseString = new StringBuffer(Constants.XML_START);
 		responseString.append(Constants.XML_ROWS);
 		for (NameValueBean nvb : csNameValueBeanList)
