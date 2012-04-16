@@ -318,14 +318,14 @@
 
     // Displayed "Today" date format
 
-    //var scwDateDisplayFormat = 'dd-mm-yy';     // e.g. 'MMM-DD-YYYY' for the US
-    var scwDateDisplayFormat = 'MM-DD-YYYY';     // e.g. 'MMM-DD-YYYY' for the US
-    
+    //var scwDateDisplayFormat = 'dd-mm-yy';     // e.g. 'DD-MM-YYYY' for the UK
+    var scwDateDisplayFormat = 'DD-MM-YYYY';     // e.g. 'DD-MM-YYYY' for the UK
+
 
     // Output date format
 
-    //var scwDateOutputFormat  = 'DD MMM, YYYY'; // e.g. 'MMM-DD-YYYY' for the US
-    var scwDateOutputFormat  = 'MM-DD-YYYY'; // e.g. 'MMM-DD-YYYY' for the US
+    //var scwDateOutputFormat  = 'DD MMM, YYYY'; // e.g. 'DD-MM-YYYY' for the UK
+    var scwDateOutputFormat  = 'DD-MM-YYYY'; // e.g. 'DD-MM-YYYY' for the UK
 
 
     // Note: The delimiters used should be in scwArrDelimiters.
@@ -744,14 +744,14 @@
 // ****************************************************************************
 
     function showCal(scwEle,scwSourceEvent) {scwShow(scwEle,scwSourceEvent);};
-    
+
     function setDateFormat(pattern){
-   	 	 scwDateDisplayFormat = pattern;    
-    	 scwDateOutputFormat = pattern; 
+   	 	 scwDateDisplayFormat = pattern;
+    	 scwDateOutputFormat = pattern;
 	}
-	
+
     function scwShow(scwEle,scwSourceEvent)
-    { 
+    {
     	if (!scwSourceEvent) {scwSourceEvent = window.event;}
 
          var scwSourceEle = (scwSourceEvent.target)
@@ -1097,16 +1097,16 @@
 
          var offsetTop =parseInt(scwEle.offsetTop ,10) + parseInt(scwEle.offsetHeight,10),
              offsetLeft=parseInt(scwEle.offsetLeft,10);
-		
+
          if (!window.opera)
-             { 
+             {
 			 while (scwEle != null && scwEle.tagName!='BODY' && scwEle.tagName!='HTML')
                  {offsetTop -=parseInt(scwEle.scrollTop, 10);
                   offsetLeft-=parseInt(scwEle.scrollLeft,10);
                   scwEle=scwEle.parentNode;
-				  
+
 				  //alert ("parentNode = " + scwEle);
-				  
+
                  }
               scwEle=scwTargetEle;
              }
