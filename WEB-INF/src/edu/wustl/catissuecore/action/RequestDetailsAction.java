@@ -29,6 +29,7 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionErrors;
@@ -37,6 +38,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.wustl.catissuecore.actionForm.RequestDetailsForm;
 import edu.wustl.catissuecore.bean.DefinedArrayDetailsBean;
@@ -75,9 +79,11 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.dao.util.HibernateMetaData;
 import edu.wustl.security.manager.SecurityManagerFactory;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -112,6 +118,17 @@ public class RequestDetailsAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 			{
+		String splvar = request.getParameter("splvar");
+		if(splvar != null)
+		{
+			HttpSession session = request.getSession();
+			
+			JSONObject mainJsonRow = new JSONObject();
+			mainJsonRow = (JSONObject)session.getAttribute("jsonData");
+			response.setContentType(Constants.JSON_CONTENT_TYPE);
+			response.getWriter().write(mainJsonRow.toString());
+			return null;
+		}
 		final RequestDetailsForm requestDetailsForm = (RequestDetailsForm) form;
 		// The request Id on which the user has clicked
 		String requestId = "";
@@ -201,6 +218,9 @@ public class RequestDetailsAction extends BaseAction
 			return null;
 		}
 
+		List newStatList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_REQUESTED_ITEMS_STATUS, null);
+		request.setAttribute("newStatList", newStatList);
 		// order items status to display
 		final List requestedItemsStatusList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_REQUESTED_ITEMS_STATUS, null);
@@ -209,6 +229,8 @@ public class RequestDetailsAction extends BaseAction
 		requestedItemsStatusList.remove(0);
 		requestedItemsStatusList.add(0, new NameValueBean(ApplicationProperties
 				.getValue("orderingSystem.details.distributionStatus"), "-1"));
+		requestedItemsStatusList.add(new NameValueBean("Distributed And Close(Special)", "Distributed And Close(Special)"));
+		
 		request.setAttribute(Constants.REQUESTED_ITEMS_STATUS_LIST, requestedItemsStatusList);
 
 		// Setting the Site List
@@ -241,9 +263,16 @@ public class RequestDetailsAction extends BaseAction
 		// For orderitems in defined array, "Ready for array preparation" status
 		// is present instead of "Distribute"
 		request.setAttribute(Constants.ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY, tempList);
-
+		JSONArray jsonDataRow = new JSONArray();
+		JSONObject mainJsonRow = new JSONObject();
 		// The order items list corresponding to the request Id
-		this.getRequestDetailsList(orderDetails, requestDetailsForm, request);
+		JDBCDAO jdbcdao = AppUtility.openJDBCSession();
+		this.getRequestDetailsList(orderDetails, requestDetailsForm, request,jsonDataRow,jdbcdao);
+		AppUtility.closeJDBCSession(jdbcdao);
+		mainJsonRow.put(Constants.JSON_DATA_ROW, jsonDataRow);
+		HttpSession session = request.getSession();
+		session.setAttribute("jsonData", mainJsonRow);
+		request.setAttribute("jsonData", mainJsonRow);
 		AppUtility.closeDAOSession(dao);
 		if (request.getParameter(Constants.TAB_INDEX_ID) != null)
 		{
@@ -335,11 +364,13 @@ public class RequestDetailsAction extends BaseAction
 	 *            RequestDetailsForm object
 	 * @param request
 	 *            HttpServletRequest object
+	 * @param jsonDataRow 
+	 * @param dao 
 	 * @param response : response
 	 * @throws Exception : Exception
 	 */
 	private void getRequestDetailsList(OrderDetails orderDetails, RequestDetailsForm requestDetailsForm,
-			HttpServletRequest request) throws Exception
+			HttpServletRequest request, JSONArray jsonDataRow, DAO dao) throws Exception
 			{
 		// 	fetching the order object corresponding to obtained id.
 
@@ -400,7 +431,7 @@ public class RequestDetailsAction extends BaseAction
 							
 							requestDetailsList = this
 							.populateRequestDetailsListForSpecimenOrderItems(orderItem,
-									request, requestDetailsList,definedArrayMap,requestDetailsBeanCounter,requestDetailsForm);
+									request, requestDetailsList,definedArrayMap,requestDetailsBeanCounter,requestDetailsForm,jsonDataRow,dao);
 						}
 						// In case of Defined Array
 						if (orderItem instanceof NewSpecimenArrayOrderItem)
@@ -453,7 +484,7 @@ public class RequestDetailsAction extends BaseAction
 			}
 			else
 			{
-				this.populateRequestForMap(requestDetailsForm, orderDetails);
+				this.populateRequestForMap(requestDetailsForm, orderDetails,jsonDataRow,dao);
 			}
 
 		}
@@ -494,11 +525,13 @@ public class RequestDetailsAction extends BaseAction
 	 * Need to change this method ... to remove all the DB retrieves.
 	 * @param requestDetailsForm : requestDetailsForm
 	 * @param orderDetails : orderDetails
+	 * @param jsonDataRow 
+	 * @param dao 
 	 * @throws DAOException : DAOException
 	 * @throws BizLogicException BizLogic Exception
 	 */
 	private void populateRequestForMap(RequestDetailsForm requestDetailsForm,
-			OrderDetails orderDetails) throws DAOException, BizLogicException
+			OrderDetails orderDetails, JSONArray jsonDataRow, DAO dao) throws DAOException, BizLogicException
 			{
 		final Map valuesMap = requestDetailsForm.getValues();
 		final Set keySet = valuesMap.keySet();
@@ -526,17 +559,6 @@ public class RequestDetailsAction extends BaseAction
 				{
 					List allSpecimen = new ArrayList();
 					final DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
-					/*
-					 * Collection childrenSpecimenList =
-					 * OrderingSystemUtil.getAllChildrenSpecimen(
-					 * derivedSpecimenOrderItem
-					 * .getParentSpecimen().getChildSpecimenCollection());
-					 * finalChildrenSpecimenList =
-					 * OrderingSystemUtil.getChildrenSpecimenForClassAndType
-					 * (childrenSpecimenList,
-					 * derivedSpecimenOrderItem.getSpecimenClass(),
-					 * derivedSpecimenOrderItem.getSpecimenType());
-					 */
 
 					allSpecimen = OrderingSystemUtil.getAllSpecimen(derivedSpecimenOrderItem
 							.getParentSpecimen());
@@ -561,13 +583,23 @@ public class RequestDetailsAction extends BaseAction
 				{
 					List allSpecimen = new ArrayList();
 					final ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) orderItem;
+					SpecimenOrderBean specimenOrderBean = null;
+					try {
+						specimenOrderBean = getSpecimenOrderBean(existingSpecimenOrderItem,dao);
+					} catch (ApplicationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					allSpecimen = OrderingSystemUtil.getAllSpecimen(existingSpecimenOrderItem
 							.getSpecimen());
 					final SpecimenComparator comparator = new SpecimenComparator();
 					Collections.sort(allSpecimen, comparator);
-					allSpecimensToDisplay = OrderingSystemUtil.getNameValueBeanList(allSpecimen,
-							existingSpecimenOrderItem.getSpecimen());
+					allSpecimensToDisplay = specimenOrderBean.getChildSpecimens();
 					requestForMap.put("RequestForDropDownList:" + rowNumber, allSpecimensToDisplay);
+					
+					populateJsonObj(jsonDataRow, rowNumber,
+							existingSpecimenOrderItem, specimenOrderBean);
+
 				}
 
 				if (orderItem instanceof PathologicalCaseOrderItem)
@@ -597,6 +629,31 @@ public class RequestDetailsAction extends BaseAction
 		requestDetailsForm.setRequestForDropDownMap(requestForMap);
 			}
 
+	private void populateJsonObj(JSONArray jsonDataRow, String rowNumber,
+			final ExistingSpecimenOrderItem existingSpecimenOrderItem,
+			SpecimenOrderBean specimenOrderBean) {
+		JSONObject jsonObject = new JSONObject();
+		JSONArray dataArray = new JSONArray();
+		dataArray.put(specimenOrderBean.getLabel());
+		dataArray.put(specimenOrderBean.getSpecimenClass());
+		dataArray.put(specimenOrderBean.getSpecimenType());
+		dataArray.put(specimenOrderBean.getAvailableQty());
+		dataArray.put(String.valueOf(existingSpecimenOrderItem.getRequestedQuantity()));
+		
+		List	requestedItemsStatusList = OrderingSystemUtil
+		.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
+		dataArray.put(((NameValueBean)requestedItemsStatusList.get(0)).getName());
+		dataArray.put(specimenOrderBean.getId());
+		try {
+			jsonObject.put(Constants.JSON_DATA_COLUMN, dataArray);
+		jsonObject.put(Constants.ID, rowNumber);
+		
+		jsonDataRow.put(jsonObject);
+		} catch (JSONException e) {
+			LOGGER.error("Error While populating the JSON obj for the Grid",e);
+		}
+	}
+
 	/**
 	 * @param str : str
 	 * @return String : String
@@ -617,11 +674,13 @@ public class RequestDetailsAction extends BaseAction
 	 * @param definedArrayMap 
 	 * @param requestDetailsBeanCounter 
 	 * @param requestDetailsForm 
+	 * @param jsonDataRow 
+	 * @param dao 
 	 * @return List : List
 	 * @throws ApplicationException 
 	 */
 	private List populateRequestDetailsListForSpecimenOrderItems(OrderItem orderItem,
-			HttpServletRequest request, List requestDetailsList, Map definedArrayMap, int requestDetailsBeanCounter, RequestDetailsForm requestDetailsForm) throws ApplicationException
+			HttpServletRequest request, List requestDetailsList, Map definedArrayMap, int requestDetailsBeanCounter, RequestDetailsForm requestDetailsForm, JSONArray jsonDataRow, DAO dao) throws ApplicationException
 			{
 		// The row number to update available quantity on selecting the required
 		// specimen from 'request for' drop down.
@@ -710,7 +769,7 @@ public class RequestDetailsAction extends BaseAction
 			if (orderItem instanceof ExistingSpecimenOrderItem)
 			{
 				final ExistingSpecimenOrderItem existingSpecimenorderItem = (ExistingSpecimenOrderItem) orderItem;
-				SpecimenOrderBean specimenOrderBean = getSpecimenOrderBean(existingSpecimenorderItem);
+				SpecimenOrderBean specimenOrderBean = getSpecimenOrderBean(existingSpecimenorderItem,dao);
 				
 				requestDetailsBean = this.populateRequestDetailsBeanForExistingSpecimen(
 						requestDetailsBean, existingSpecimenorderItem,specimenOrderBean);
@@ -721,7 +780,7 @@ public class RequestDetailsAction extends BaseAction
 						actualSpecimenClass, actualSpecimenType, assignStatus,
 						consentVerificationkey, canDistributeKey, rowStatuskey,
 						selectedSpecimenTypeKey, selectedSpecimenQuantityUnit,
-						selectedSpecimenQuantity,requestDetailsForm,specimenOrderBean);
+						selectedSpecimenQuantity,requestDetailsForm,specimenOrderBean,jsonDataRow,requestDetailsBeanCounter);
 				finalSpecimenListId++;
 			}
 			else if (orderItem instanceof DerivedSpecimenOrderItem)
@@ -762,18 +821,22 @@ public class RequestDetailsAction extends BaseAction
 		return requestDetailsList;
 			}
 
-	private SpecimenOrderBean getSpecimenOrderBean(final ExistingSpecimenOrderItem existingSpecimenorderItem)
+	private SpecimenOrderBean getSpecimenOrderBean(final ExistingSpecimenOrderItem existingSpecimenorderItem, DAO dao)
 			throws ApplicationException 
 			{
+		System.out.println();
 		SpecimenOrderBean bean = new SpecimenOrderBean(); 
 		String sql = "select abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY " +
 				"from " +
 				"catissue_abstract_specimen abs, catissue_specimen spec where " +
 				"spec.identifier=abs.identifier and abs.identifier in" +
 				"( select specimen_id from catissue_existing_sp_ord_item" +
-				" cat where cat.identifier="+ existingSpecimenorderItem.getId()+")";
-		
-		List list = AppUtility.executeSQLQuery(sql);
+				" cat where cat.identifier=? )";
+		ColumnValueBean bean2 = new ColumnValueBean(existingSpecimenorderItem.getId());
+		List attr = new ArrayList();
+		attr.add(bean2);
+		//List list = dao.executeQuery(sql);
+		List list = dao.executeQuery(sql,attr);
 		List inrList = new ArrayList();
 		if(list != null && !list.isEmpty())
 		{
@@ -789,7 +852,7 @@ public class RequestDetailsAction extends BaseAction
 		}
 		
 		String consentSQL="select count(*) from catissue_consent_tier_status where specimen_id= "+bean.getId();
-		list = AppUtility.executeSQLQuery(consentSQL);
+		list = dao.executeQuery(consentSQL);
 		inrList = (List)list.get(0);
 		if(Long.valueOf((String)inrList.get(0)) > 0)
 		{
@@ -800,23 +863,23 @@ public class RequestDetailsAction extends BaseAction
 		
 		String childSQL = "select child.identifier,spec.label from catissue_abstract_specimen child,catissue_specimen spec where "+ 
 				"spec.identifier=child.identifier and child.PARENT_SPECIMEN_ID = "+bean.getId();
-		list = AppUtility.executeSQLQuery(childSQL);
+//		list = dao.executeQuery(sql);
 		
-		if(list != null && !list.isEmpty())
-		{
-			inrList = (List)list.get(0);
-			if(inrList != null)
-			{
-				List list2 = bean.getChildSpecimens();
-				for (Object object : list) 
-				{
-					inrList = (List)object;
-					
-					list2.add(new NameValueBean(inrList.get(1),inrList.get(0)));
-				}
-				bean.setChildSpecimens(list2);
-			}
-		}
+//		if(list != null && !list.isEmpty())
+//		{
+//			inrList = (List)list.get(0);
+//			if(inrList != null)
+//			{
+//				List list2 = bean.getChildSpecimens();
+//				for (Object object : list) 
+//				{
+//					inrList = (List)object;
+//					
+//					list2.add(new NameValueBean(inrList.get(1),inrList.get(0)));
+//				}
+//				bean.setChildSpecimens(list2);
+//			}
+//		}
 		
 		return bean;
 	}
@@ -828,17 +891,15 @@ public class RequestDetailsAction extends BaseAction
 			List totalSpecimenListInRequestForDropDown, String actualSpecimenClass,
 			String actualSpecimenType, String assignStatus, String consentVerificationkey,
 			String canDistributeKey, String rowStatuskey, String selectedSpecimenTypeKey,
-			String selectedSpecimenQuantityUnit, String selectedSpecimenQuantity, RequestDetailsForm requestDetailsForm, SpecimenOrderBean specimenOrderBean)
+			String selectedSpecimenQuantityUnit, String selectedSpecimenQuantity, RequestDetailsForm requestDetailsForm, SpecimenOrderBean specimenOrderBean, JSONArray jsonDataRow, int finalSpecimenListId)
 			throws BizLogicException
 	{
 		if (orderItem instanceof ExistingSpecimenOrderItem)
 		{
 
 			ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) orderItem;
-			//			OrderBizLogic orderBizLogic = (OrderBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
 			existingSpecimenOrderItem = (ExistingSpecimenOrderItem) HibernateMetaData
 					.getProxyObjectImpl(existingSpecimenOrderItem);
-			//orderBizLogic.getSpecimen(existingSpecimenOrderItem.getSpecimen().getId(),dao);			
 			requestDetailsForm.setValue(requestedItem, specimenOrderBean.getLabel());
 			requestDetailsForm.setValue(availableQty, specimenOrderBean.getAvailableQty());
 			requestDetailsForm.setValue(specimenClass, specimenOrderBean.getSpecimenClass());
@@ -867,7 +928,6 @@ public class RequestDetailsAction extends BaseAction
 			{
 				requestDetailsForm.setValue(consentVerificationkey, Constants.NO_CONSENTS);
 			}
-			//values.put(consentVerificationkey, "No Consents");
 			//Fix me second condition added by vaishali
 			if (existingSpecimenOrderItem.getDistributedItem() != null
 					&& existingSpecimenOrderItem.getDistributedItem().getQuantity() != null)
@@ -899,14 +959,11 @@ public class RequestDetailsAction extends BaseAction
 			requestDetailsForm.setValue(selectedSpecimenQuantityUnit, OrderingSystemUtil
 					.getUnit(specimenOrderBean));
 
-//			List allSpecimen = new ArrayList();
-//			allSpecimen = OrderingSystemUtil
-//					.getAllSpecimen(existingSpecimenOrderItem.getSpecimen());
-//			final SpecimenComparator comparator = new SpecimenComparator();
-//			Collections.sort(allSpecimen, comparator);
 			final List childrenSpecimenListToDisplay = specimenOrderBean.getChildSpecimens();
 			requestDetailsForm.setRequestFor(specimenList, childrenSpecimenListToDisplay);
-
+			String rowNumber = String.valueOf((finalSpecimenListId+1));
+			populateJsonObj(jsonDataRow, rowNumber,
+					existingSpecimenOrderItem, specimenOrderBean);
 		}
 		else if (orderItem instanceof DerivedSpecimenOrderItem)
 		{
@@ -1002,7 +1059,6 @@ public class RequestDetailsAction extends BaseAction
 			requestDetailsForm.setValue(specimenType, derivedSpecimenOrderItem.getSpecimenType());
 			requestDetailsForm.setValue(specimenId, derivedSpecimenOrderItem.getParentSpecimen().getId()
 					.toString());
-			//	values.put(consentVerificationkey, "View");
 			requestDetailsForm.setValue(instanceOf, "Derived");
 
 			//fix me second condition added by vaishali
@@ -1404,53 +1460,6 @@ public class RequestDetailsAction extends BaseAction
 		return requestViewBean;
 	}
 
-	/**
-	 * @param id
-	 * @return
-	 * @throws BizLogicException
-	 */
-	/*
-	 * private Specimen getSpecimenFromDB(String id) throws BizLogicException {
-	 * IFactory factory =
-	 * AbstractFactoryConfig.getInstance().getBizLogicFactory();
-	 * NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) factory
-	 * .getBizLogic(Constants.NEW_SPECIMEN_FORM_ID); Object object =
-	 * newSpecimenBizLogic.retrieve(Specimen.class.getName(), new Long(id));
-	 * return (Specimen) object; }
-	 */
-
-	/**
-	 * @param id
-	 * @return
-	 * @throws BizLogicException
-	 * @throws NumberFormatException
-	 * @throws DAOException
-	 */
-	/*
-	 * private SpecimenCollectionGroup getSpecimenCollGrpFromDB(String id)
-	 * throws BizLogicException { IFactory factory =
-	 * AbstractFactoryConfig.getInstance().getBizLogicFactory();
-	 * SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic =
-	 * (SpecimenCollectionGroupBizLogic) factory
-	 * .getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID); Object object
-	 * = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class
-	 * .getName(), new Long(id)); return (SpecimenCollectionGroup) object; }
-	 */
-
-	/**
-	 * @param id
-	 * @return
-	 * @throws BizLogicException
-	 */
-	/*
-	 * private OrderItem getOrderItemFromDB(String id) throws BizLogicException
-	 * { IFactory factory =
-	 * AbstractFactoryConfig.getInstance().getBizLogicFactory(); OrderBizLogic
-	 * orderBizLogic = (OrderBizLogic) factory
-	 * .getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID); Object object =
-	 * orderBizLogic.retrieve(OrderItem.class.getName(), new Long(id)); return
-	 * (OrderItem) object; }
-	 */
 
 	/**
 	 * @return List : List of site objects.
@@ -1490,8 +1499,6 @@ public class RequestDetailsAction extends BaseAction
 		.setSpecimenId(specimenOrderBean.getId());
 
 		final List childrenSpecimenListToDisplay = specimenOrderBean.getChildSpecimens();
-//			OrderingSystemUtil
-//		.getNameValueBean(existingSpecimenorderItem.getSpecimen());
 		requestDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 
 		requestDetailsBean.setInstanceOf("Existing");
@@ -1564,15 +1571,11 @@ public class RequestDetailsAction extends BaseAction
 		request.getSession().removeAttribute("finalSpecimenList" + finalSpecimenListId);
 		// To display the available quantity of the selected specimen from
 		// RequestFor dropdown.
-		// request.getSession().setAttribute("finalSpecimenList"+
-		// finalSpecimenListId, finalChildrenSpecimenList);
 
 		final List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
 				finalChildrenSpecimenList, null);
 
 		// setting requestFor list in request
-		// request.setAttribute(Constants.REQUEST_FOR_LIST,
-		// childrenSpecimenListToDisplay);
 
 		requestDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 		requestDetailsBean.setSpecimenId(specimenId.toString());
@@ -1584,14 +1587,6 @@ public class RequestDetailsAction extends BaseAction
 		requestDetailsBean.setAvailableQty("NA");
 		requestDetailsBean.setSelectedSpecimenType("NA");
 
-		/*
-		 * if (childrenSpecimenListToDisplay.size() > 1) {
-		 * requestDetailsBean.setAvailableQty(((Specimen)
-		 * finalChildrenSpecimenList.get(1)).getAvailableQuantity().toString());
-		 * } else {
-		 * requestDetailsBean.setAvailableQty("NA");//derivedSpecimenorderItem
-		 * .getSpecimen().getAvailableQuantity().getValue().toString() }
-		 */
 		// Assigned Quantity
 		if (derivedSpecimenorderItem.getDistributedItem() != null)
 		{
@@ -1657,8 +1652,6 @@ public class RequestDetailsAction extends BaseAction
 		request.getSession().removeAttribute("finalSpecimenList" + finalSpecimenListId);
 		// To display the available quantity of the selected specimen from
 		// RequestFor dropdown.
-		// request.getSession().setAttribute("finalSpecimenList"+
-		// finalSpecimenListId, totalChildrenSpecimenColl);
 		final List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
 				totalChildrenSpecimenColl, null);
 		requestDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
@@ -1677,12 +1670,6 @@ public class RequestDetailsAction extends BaseAction
 				.toString());
 		// Displaying the quantity of the first specimen in the request for drop
 		// down.
-		/*
-		 * if (childrenSpecimenListToDisplay.size() != 0) {
-		 * requestDetailsBean.setAvailableQty(((Specimen)
-		 * totalChildrenSpecimenColl.get(0)).getAvailableQuantity().toString());
-		 * } else { requestDetailsBean.setAvailableQty("-"); }
-		 */
 		// Assigned Quantity
 		if (pathologicalCaseOrderItem.getDistributedItem() != null)
 		{

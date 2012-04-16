@@ -13,6 +13,14 @@
 
 <head>
 <%
+List storing = (List)request.getAttribute("newStatList");
+String statusValue = "";
+for (Object object : storing) 
+		{
+				NameValueBean bean = (NameValueBean)object;
+				statusValue+=bean.getName()+",";
+				
+		}
 List requestDetailsList = new ArrayList();
 if(request.getAttribute(Constants.REQUEST_DETAILS_LIST) != null )
 	requestDetailsList = (List) request.getAttribute(Constants.REQUEST_DETAILS_LIST);	
@@ -610,8 +618,11 @@ function checkQuantityforAll(count)
 				<table width="100%" border="0" cellpadding="0" cellspacing="0">
               <tr>
                 <td width="13%" style="border-bottom:1px solid #61a1e3" >&nbsp;</td>
+				<td width="6%" valign="bottom" id="gridRequestTab" onclick="gotoGridViewTab()">
+							<img src="images/uIEnhancementImages/tab_speciment_GridR2_user.png" alt="Specimen Grid View" width="124" height="20" />
+						</td>
                 <td width="6%" valign="bottom" onclick="gotoSpecimenRequestTab()" id="specimenRequestTab" >
-							<img src="images/uIEnhancementImages/tab_specimentR2_user.gif" alt="Specimen Request" width="124" height="20" />
+							<img src="images/uIEnhancementImages/tab_specimentR2_user1.gif" alt="Specimen Request" width="124" height="20" />
 						</td>
 			            <td width="6%" valign="bottom" onClick="gotoArrayRequestTab()" id="arrayRequestTab" >
 							<img src="images/uIEnhancementImages/tab_arrayR2_user1.gif" alt="Array Request" width="101" height="20" />
@@ -622,16 +633,9 @@ function checkQuantityforAll(count)
         </tr>
 
 		  <tr >
-          <td colspan="4"><table width="100%" border="0" cellpadding="3" cellspacing="0">
+          <td colspan="5"><table width="100%" border="0" cellpadding="3" cellspacing="0">
               <tr>
-                <td colspan="3" align="left" class="showhide" style="border-bottom:1px solid #e3e2e2 "><table width="100%" border="0" cellspacing="0" cellpadding="4">
-                    
-					<tr>
-						<td >
-					<div id="specimenDataTab">
-						<table border="0" width="100%" cellpadding="3" cellspacing="0">
-						<tr>
-						<td colspan="11" align="right" valign="top">
+						<td colspan="3" align="right" valign="top">
 							<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
 								
 							<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
@@ -639,6 +643,20 @@ function checkQuantityforAll(count)
 							                    </a>
 						</td>
 					</tr>
+			  <tr>
+                <td colspan="3" align="left" class="showhide" style="border-bottom:1px solid #e3e2e2 "><table width="100%" border="0" cellspacing="0" cellpadding="4">
+                    <tr>
+			<td colspan="7" width="100%">
+			<div id="gridView">
+			<%@ include file="/pages/content/orderingsystem/SpecimenOrderGrid.jsp" %>
+			</div>
+            </td>
+			</tr>
+					<tr>
+						<td >
+					<div id="specimenDataTab" style="display:none">
+						<table border="0" width="100%" cellpadding="3" cellspacing="0" >
+						
 					<tr>
 						<td class="bottomtd" colspan="11"></td>
 					</tr>
