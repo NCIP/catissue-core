@@ -6,30 +6,30 @@
 	function onDate(operatorListId,formNameAndDateFieldId,isSecondDateField)
 	{
 	var dateCombo = document.getElementById(operatorListId);
-	
+
 	if(dateCombo.options[dateCombo.selectedIndex].value != "Any")
 	{
 		if(!isSecondDateField)
 		{
-			show_calendar(formNameAndDateFieldId,null,null,'MM-DD-YYYY')
+			show_calendar(formNameAndDateFieldId,null,null,'DD-MM-YYYY')
 		}
 		else
 		{
 			if(dateCombo.options[dateCombo.selectedIndex].value == "Between" || dateCombo.options[dateCombo.selectedIndex].value == "Not Between")
 			{
-				show_calendar(formNameAndDateFieldId,null,null,'MM-DD-YYYY');
+				show_calendar(formNameAndDateFieldId,null,null,'DD-MM-YYYY');
 			}
 		}
 	}
 	}
-	
+
 	var addedNodes = "";
 	var isFirtHit = true;
 	function treeNodeClicked(id)
 	{
 		if(id.indexOf('_NULL') == -1)
 		{
-			var aa = id.split("::");		
+			var aa = id.split("::");
 			var nodes = addedNodes.split(",");
 			var isNodeAdded = false;
 			if(nodes != "")
@@ -45,17 +45,17 @@
 			}
 			if(!isNodeAdded)
 			{
-				
-				var request = newXMLHTTPReq();			
+
+				var request = newXMLHTTPReq();
 				var actionURL;
-				var handlerFunction = getReadyStateHandler(request,showChildNodes,true);	
-				request.onreadystatechange = handlerFunction;				
-				actionURL = "nodeId=" + id;				
+				var handlerFunction = getReadyStateHandler(request,showChildNodes,true);
+				request.onreadystatechange = handlerFunction;
+				actionURL = "nodeId=" + id;
 				var url = "BuildQueryOutputTree.do";
 				<!-- Open connection to servlet -->
-				request.open("POST",url,true);	
-				request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-				request.send(actionURL);	
+				request.open("POST",url,true);
+				request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+				request.send(actionURL);
 				addedNodes = addedNodes + ","+id;
 			}
 		}
@@ -64,7 +64,7 @@
 		{
 			//alert(isFirtHit);
 		  buildSpreadsheet(id);
-		  
+
 		}
 		isFirtHit = false;
 	}
@@ -113,7 +113,7 @@
 				if (start == -1)
 				{
 					trees[i1].setItemText(nodeId,displayName,displayName);
-					
+
 				}
 				else
 				{
@@ -122,7 +122,7 @@
 					end = end + 0;
 					var name = displayName.substring(start, end);
 					trees[i1].setItemText(nodeId,displayName,name);
-					
+
 				}
 			}
 		}
@@ -131,12 +131,12 @@
 	{
 		tree[treeNum].deleteChildItems(id);
 		addedNodes = "";
-	}	
+	}
 	function showSpreadsheetData(columnDataStr)
 	{
 		var columnData = columnDataStr.split("&");
-		var columns = columnData[0];	
-		var data = columnData[1];	
+		var columns = columnData[0];
+		var data = columnData[1];
 		var columnNames = columns.split(",");
 		var width ="";
 		var colDataTypes1 = ""
@@ -155,8 +155,8 @@
 				width = width + "180,"
 				colDataTypes1 = colDataTypes1 + "ro,";
 				colTypes1 = colTypes1 +"str,";
-			}		
-		}		
+			}
+		}
 		mygrid.clearAll();
 		mygrid.setHeader(columns);
 		mygrid.setInitWidths(width);
@@ -179,11 +179,11 @@
 				}
 				mygrid.addRow(row+1,data,row+1);
 			}
-		}	
+		}
 	}
 
 	function expand()
-	{			
+	{
 		switchObj = document.getElementById('image');
 		dataObj = document.getElementById('collapsableTable');
         var td1 = document.getElementById('td1');
@@ -193,16 +193,16 @@
 	    //var advancedSearchHeaderTd = document.forms[0].elements['advancedSearchHeaderTd'];
 		var advancedSearchHeaderTd = document.getElementById('advancedSearchHeaderTd');
 		var imageContainer = document.getElementById('imageContainer');
-        
-		 	   
+
+
 	   if(dataObj.style.display != 'none') //Clicked on - image
 		{
 			advancedSearchHeaderTd.style.borderBottom = "1px solid #000000";
             imageContainer.style.borderBottom = "1px solid #000000";
-			dataObj.style.display = 'none';				
+			dataObj.style.display = 'none';
 			switchObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" hspace="3" vspace="3"/>';
 			if(navigator.appName == "Microsoft Internet Explorer")
-			{					
+			{
 				resultSetDivObj.height = "530";
 			}
 			else
@@ -216,7 +216,7 @@
             advancedSearchHeaderTd.style.borderBottom = "0";
 			imageContainer.style.borderBottom = "0";
 			if(navigator.appName == "Microsoft Internet Explorer")
-			{					
+			{
 				dataObj.style.display = 'block';
 				td1.style.display = 'block';
 				td2.style.display = 'block';
@@ -234,7 +234,7 @@
 			switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" hspace="3" vspace="3"/>';
 		}
 	}
-	
+
 	function operatorChanged(rowId,dataType)
 	{
 		var textBoxId = rowId+"_textBox1";
@@ -253,10 +253,10 @@
 		else if(document.layers)
 		{
 			var op = document.getElementById(opId).value;
-		} 
+		}
 		else if(document.forms[0].name=='saveQueryForm')
 		{
-            var op = document.forms['saveQueryForm'].elements[opId].value;    
+            var op = document.forms['saveQueryForm'].elements[opId].value;
 		}
 		else if(document.forms[0].name=='fetchQueryForm')
 		{
@@ -265,7 +265,7 @@
 		else
 		{
 			op = document.forms['categorySearchForm'].elements[opId].value;
-		}	
+		}
 		if(op == "Is Null" || op== "Is Not Null")
 		{
 			document.getElementById(textBoxId0).value = "";
@@ -273,11 +273,11 @@
 			if(dataType == "true")
 			{
 				document.getElementById(calendarId0).disabled = true;
-			}	
-		} 	
+			}
+		}
 		if(op == "In" || op== "Not In")
 		{
-			
+
 		}
 		else
 		{
@@ -285,12 +285,12 @@
 			if(dataType == "true")
 			{
 				document.getElementById(calendarId0).disabled = false;
-			}	
+			}
 		}
 		if(op == "Is Null" || op== "Is Not Null")
 		{
 			document.getElementById(textBoxId0).disabled= true;
-		} 
+		}
 		else
 		{
 			if(document.getElementById(textBoxId0))
@@ -300,16 +300,16 @@
 		}
 		if(op == "Between")
 		{
-			if(document.all) 
+			if(document.all)
 			{
 				document.getElementById(textBoxId0).value = "";
-				document.getElementById(textBoxId).style.display="block";		
+				document.getElementById(textBoxId).style.display="block";
 				if(dataType == "true")
 				{
-					document.getElementById(calendarId1).style.display="block";		
+					document.getElementById(calendarId1).style.display="block";
 				}
-			} 
-			else if(document.layers) 
+			}
+			else if(document.layers)
 			{
 				document.elements[textBoxId0].value = "";
 				document.elements[textBoxId].visibility="visible";
@@ -324,16 +324,16 @@
 					var calId = document.getElementById(calendarId1);
 					calId.style.display="block";
 				}
-			}	
+			}
 		}
 		else if(op == "In" || op== "Not In")
 		{
 			if(document.all)
 			{
-				document.getElementById(textBoxId).style.display="none";		
+				document.getElementById(textBoxId).style.display="none";
 				if(dataType == "true")
 				{
-					document.getElementById(calendarId1).style.display="none";	
+					document.getElementById(calendarId1).style.display="none";
 				}
 			}
 			else if(document.layers)
@@ -352,22 +352,22 @@
 					var calId = document.getElementById(calendarId1);
 					calId.style.display="none";
 				}
-			}	
-		}	
-		else 
+			}
+		}
+		else
 		{
-			if(document.all) 
+			if(document.all)
 			{
-				document.getElementById(textBoxId).style.display="none";		
+				document.getElementById(textBoxId).style.display="none";
 				if(dataType == "true")
 				{
-					document.getElementById(calendarId1).style.display="none";	
+					document.getElementById(calendarId1).style.display="none";
 				}
 			}
 			else if(document.layers)
 			{
 				document.elements[textBoxId].visibility="none";
-			} 
+			}
 			else
 			{
 				var textBoxId1 = document.getElementById(textBoxId);
@@ -377,7 +377,7 @@
 					var calId = document.getElementById(calendarId1);
 					calId.style.display="none";
 				}
-			}	
+			}
 		}
 	}
 	function expandCollapseDag()
@@ -388,32 +388,32 @@
 		if (!e) var e = window.event
 		if (e.keyCode) code = e.keyCode;
 		else if (e.which) code = e.which;
-		
+
 		if(code == 13)
 		{
 			var platform = navigator.platform.toLowerCase();
 			if (platform.indexOf("mac") == -1)
-			{						
+			{
 				document.getElementById('searchButton').focus();
-			}	
-		} 
+			}
+		}
 		else return true;
-		
+
 	}
-	function retriveSearchedEntities(url,nameOfFormToPost,currentPage, key) 
+	function retriveSearchedEntities(url,nameOfFormToPost,currentPage, key)
 	{
-		waitCursor();		
-		
-		var request = newXMLHTTPReq();		
+		waitCursor();
+
+		var request = newXMLHTTPReq();
 		var textFieldValue = document.forms[0].textField.value;
 		var classCheckStatus = document.forms[0].classChecked.checked;
 		var attributeCheckStatus = document.forms[0].attributeChecked.checked;
 		var permissibleValuesCheckStatus = document.forms[0].permissibleValuesChecked.checked;
 		var includeDescriptionCheckedStatus = document.forms[0].includeDescriptionChecked.checked;
-		
+
 		var radioCheckStatus;
 		var actionURL;
-		
+
 		// Bug #5131: Setting 'text' mode as default
 		radioCheckStatus="text_radioButton";
 		/*
@@ -434,9 +434,9 @@
 			var handlerFunction = getReadyStateHandler(request,showEntityListOnDefineViewPage,true);
 		}
 		request.onreadystatechange = handlerFunction;
-				
-		
-		if(!(classCheckStatus || attributeCheckStatus || permissibleValuesCheckStatus) ) 
+
+
+		if(!(classCheckStatus || attributeCheckStatus || permissibleValuesCheckStatus) )
 		{
 			alert("Please choose at least one option for metadata search from advanced options ");
 			onResponseUpdate(" ");
@@ -453,8 +453,8 @@
 		}
 		else
 		{
-			request.open("POST",url,true);	
-			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+			request.open("POST",url,true);
+			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 			request.send(actionURL);
 		}
 	}
@@ -464,41 +464,41 @@
 		if(text.indexOf("No result found") != -1)
 		{
 			element.innerHTML =text;
-		} 
+		}
 		else
 		{
 			var listOfEntities = text.split(";");
 			var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="1">';
 			for(i=1; i<listOfEntities.length; i++)
 			{
-				var e = listOfEntities[i];			
-				var nameIdDescription = e.split("|");		
+				var e = listOfEntities[i];
+				var nameIdDescription = e.split("|");
 				var name = nameIdDescription[0];
-				var id = nameIdDescription[1];				
+				var id = nameIdDescription[1];
 				var description = nameIdDescription[2];
-				var functionCall = "addNodeToView('"+id+"')";		
+				var functionCall = "addNodeToView('"+id+"')";
 				var entityName = "<font color=#0000CC>"+name +"</font>";
-				var tooltipFunction = "Tip('"+description+"', WIDTH, 200)";				
+				var tooltipFunction = "Tip('"+description+"', WIDTH, 200)";
 				row = row+'<tr><td><a  class="entityLink" onmouseover="'+tooltipFunction+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
-				
+
 			}
-			row = row+'</table>';		
+			row = row+'</table>';
 			element.innerHTML =row;
 		}
 		hideCursor();
 	}
-	
+
 	function onResponseUpdate(text)
 	{
-		
+
 		var element = document.getElementById('resultSet');
 		if(text.indexOf("No result found") != -1)
 		{
 			element.innerHTML =text;
-		} 
+		}
 		else
 		{
-		
+
 			var listOfEntities = text.split(";");
 			var length = listOfEntities.length;
 			var temp = listOfEntities[length-1].split("*&*");
@@ -506,46 +506,46 @@
 			var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="1">';
 			for(i=1; i<listOfEntities.length; i++)
 			{
-				var e = listOfEntities[i];			
-				var nameIdDescription = e.split("|");		
+				var e = listOfEntities[i];
+				var nameIdDescription = e.split("|");
 				var name = nameIdDescription[0];
-				var id = nameIdDescription[1];				
+				var id = nameIdDescription[1];
 				var description = nameIdDescription[2];
-				var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+id+"')";		
+				var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+id+"')";
 				var entityName = "<font color=#0000CC>"+name +"</font>";
-				var tooltipFunction = "Tip('"+description+"', WIDTH, 200)";				
+				var tooltipFunction = "Tip('"+description+"', WIDTH, 200)";
 				row = row+'<tr><td ><a  class="entityLink"  onmouseover="'+tooltipFunction+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
-			}			
-			row = row+'</table>';		
+			}
+			row = row+'</table>';
 			element.innerHTML =row;
-			
+
 			if (key != null && key == 13 && listOfEntities.length == 2)
 			{
-				var e = listOfEntities[1];	
-				var nameIdDescription = e.split("|");	
-				var id = nameIdDescription[1];		
-				retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm', id);	
+				var e = listOfEntities[1];
+				var nameIdDescription = e.split("|");
+				var id = nameIdDescription[1];
+				retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm', id);
 			}
 		}
 		hideCursor();
 	}
-	function retriveEntityInformation(url,nameOfFormToPost,entityName) 
-	{	
+	function retriveEntityInformation(url,nameOfFormToPost,entityName)
+	{
 		waitCursor();
-		var request = newXMLHTTPReq();			
+		var request = newXMLHTTPReq();
 		var actionURL;
-		var handlerFunction = getReadyStateHandler(request,showEntityInformation,true);	
-		request.onreadystatechange = handlerFunction;	
-		actionURL = "entityName=" + entityName;				
-		request.open("POST",url,true);	
-		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-		request.send(actionURL);		
-	} 
+		var handlerFunction = getReadyStateHandler(request,showEntityInformation,true);
+		request.onreadystatechange = handlerFunction;
+		actionURL = "entityName=" + entityName;
+		request.open("POST",url,true);
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		request.send(actionURL);
+	}
 	function showEntityInformation(text)
-	{	
+	{
 		var row = document.getElementById('validationMessagesRow');
-		row.innerHTML = "";	
-		row.style.display = 'none';		
+		row.innerHTML = "";
+		row.style.display = 'none';
 		var element = document.getElementById('addLimits');
 		var addLimitsButtonElement = document.getElementById('AddLimitsButtonRow');
 		if(text.indexOf("####") != -1)
@@ -555,7 +555,7 @@
 			//addLimitsButtonElement.height = "30";
 			addLimitsButtonElement.innerHTML = htmlArray[0];
 			element.innerHTML =htmlArray[1];
-		} else 
+		} else
 		{
 			element.innerHTML = "";
 			addLimitsButtonElement.innerHTML = text;
@@ -575,17 +575,17 @@
 		  var tQchkBoxId = i+"_checkbox";
 		  var tQchkBox = document.getElementById(tQchkBoxId).checked;
            if(tQchkBox==true)
-					 
+
 			{
-			
-		 	  
+
+
 		   var isTimestamp = document.getElementById(isTimestampFielsId).value;
-		
-		  		   
+
+
 	       var tQop = document.getElementById(tQpId).value;
 	       var tQtextbox = document.getElementById(tQtextboxId).value;
-		 
-           
+
+
 	       strToCreateTQObject = strToCreateTQObject+"@#condition#@"+i+"##"+tQop+"##"+tQtextbox;
 		   if(isTimestamp == 'false')
 		    {
@@ -594,14 +594,14 @@
 			       var tQunit = document.getElementById(tQunitId).value;
 				   strToCreateTQObject = strToCreateTQObject + "##"+tQunit;
 				}
-			  
+
 		    }
 	     }
 		}
-	
+
 		return strToCreateTQObject;
 	}
-	
+
 	function createQueryStringForSavedQuery(nameOfFormToPost, entityName , attributesList,callingFrom)
 	{
 		waitCursor();
@@ -613,10 +613,10 @@
 			var textBoxId = attribute[i]+"_textBox";
 			var textBoxId1 = attribute[i]+"_textBox1";
 			var enumBox = attribute[i]+"_enumeratedvaluescombobox";
-			
+
 			//var radioButtonFalse = attribute[i]+"_radioButton_false";
 			if(navigator.appName == "Microsoft Internet Explorer")
-			{					
+			{
 				var op = document.getElementById(opId).value;
 				if(document.getElementById(enumBox))
 				{
@@ -628,14 +628,14 @@
 				var op = document.forms[nameOfFormToPost].elements[opId].value;
 				if(document.forms[nameOfFormToPost].elements[enumBox])
 				{
-					enumValue = document.forms[nameOfFormToPost].elements[enumBox].value;	
+					enumValue = document.forms[nameOfFormToPost].elements[enumBox].value;
 				}
-			}		
+			}
 			if(op != "Between")
 			{
 				if (document.getElementById(textBoxId))
 				{
-					textId = document.getElementById(textBoxId).value;		
+					textId = document.getElementById(textBoxId).value;
 					/*if(textId != "")
 					{*/
 						if(op == "In" || op =="Not In")
@@ -653,7 +653,7 @@
 								strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + " " +";";
 							else
 								strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + valString +";";
-						} else 
+						} else
 						{
 							if(textId == "")
 								strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + " " +";";
@@ -671,7 +671,7 @@
 				{
 					if(document.forms[nameOfFormToPost].elements[enumBox])
 						var ob = document.forms[nameOfFormToPost].elements[enumBox];
-				}	
+				}
 
 				if(ob)
 				{
@@ -717,7 +717,7 @@
 				 	 var row = document.getElementById('validationMessagesRow');
 				 	 row.innerHTML = "";
 					}
-					
+
 				}
 			}
 			if(op == "Between")
@@ -728,7 +728,7 @@
 				}
 				if (document.getElementById(textBoxId))
 				{
-					textId = document.getElementById(textBoxId).value;		
+					textId = document.getElementById(textBoxId).value;
 				}
 				if(textId != "" && textId1 == "")
 				{
@@ -752,14 +752,14 @@
 				strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op +";";
 			}
 		}
-		
+
            return strToCreateQueyObject;
 	}
-	
+
 	 function createQueryString(nameOfFormToPost, entityName , attributesList,callingFrom)
         {
          waitCursor();
-	
+
 		var strToCreateQueyObject ="";
 		var attribute = attributesList.split(";");
 		for(i=1; i<attribute.length; i++)
@@ -768,10 +768,10 @@
 			var textBoxId = attribute[i]+"_textBox";
 			var textBoxId1 = attribute[i]+"_textBox1";
 			var enumBox = attribute[i]+"_enumeratedvaluescombobox";
-			
+
 			//var radioButtonFalse = attribute[i]+"_radioButton_false";
 			if(navigator.appName == "Microsoft Internet Explorer")
-			{					
+			{
 				var op = document.getElementById(opId).value;
 				if(document.getElementById(enumBox))
 				{
@@ -783,14 +783,14 @@
 				var op = document.forms[nameOfFormToPost].elements[opId].value;
 				if(document.forms[nameOfFormToPost].elements[enumBox])
 				{
-					enumValue = document.forms[nameOfFormToPost].elements[enumBox].value;	
+					enumValue = document.forms[nameOfFormToPost].elements[enumBox].value;
 				}
-			}		
+			}
 			if(op != "Between")
 			{
 				if (document.getElementById(textBoxId))
 				{
-					textId = document.getElementById(textBoxId).value;		
+					textId = document.getElementById(textBoxId).value;
 					if(textId != "")
 					{
 						if(op == "In" || op =="Not In")
@@ -805,7 +805,7 @@
 								}
 							}
 							strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + valString +";";
-						} else 
+						} else
 						{
 							strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +";";
 						}
@@ -820,7 +820,7 @@
 				{
 					if(document.forms[nameOfFormToPost].elements[enumBox])
 						var ob = document.forms[nameOfFormToPost].elements[enumBox];
-				}	
+				}
 
 				if(ob)
 				{
@@ -858,7 +858,7 @@
 				 	 var row = document.getElementById('validationMessagesRow');
 				 	 row.innerHTML = "";
 					}
-					
+
 				}
 			}
 			if(op == "Between")
@@ -869,7 +869,7 @@
 				}
 				if (document.getElementById(textBoxId))
 				{
-					textId = document.getElementById(textBoxId).value;		
+					textId = document.getElementById(textBoxId).value;
 				}
 				if(textId != "" && textId1 == "")
 				{
@@ -889,12 +889,12 @@
 				strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op +";";
 			}
 		}
-  
-           return strToCreateQueyObject;
-          
-         } 
 
-	function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributesList) 
+           return strToCreateQueyObject;
+
+         }
+
+	function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributesList)
 	{
         var strToCreateQueyObject = createQueryString(nameOfFormToPost, entityName , attributesList,'addLimit');
  		if(navigator.appName == "Microsoft Internet Explorer")
@@ -903,24 +903,24 @@
 			{
 				var isEditLimit = document.getElementById('TopAddLimitButton').value;
 			}
-			else 
+			else
 			{
 				var isEditLimit = document.getElementById('BottomAddLimitButton').value;
 			}
-	
+
 		}else
 		{
 		if(isTopButton)
 			{
 				var isEditLimit = document.forms[nameOfFormToPost].elements["TopAddLimitButton"].value;
 			}
-			else 
+			else
 			{
 				var isEditLimit = document.forms[nameOfFormToPost].elements["BottomAddLimitButton"].value;
 			}
 		}
 		if(isEditLimit == 'Add Limit')
-		{	
+		{
 			//document.applets[0].addExpression(strToCreateQueyObject,entityName);
 			addLimit(strToCreateQueyObject,entityName);
 		}
@@ -928,11 +928,11 @@
 		{
 			//document.applets[0].editExpression(strToCreateQueyObject,entityName);
 			editLimits(strToCreateQueyObject,entityName);
-			
+
 		}
 			hideCursor();
 	}
-	
+
 	function viewSearchResults()
 	{
         waitCursor();
@@ -960,7 +960,7 @@
 		{
 			showValidationMessages(errorMessage);
 		}
-      */  
+      */
 	}
 	function showValidationMessages(text)
 	{
@@ -974,35 +974,35 @@
 		{
 			if(document.all)
 			{
-				document.getElementById("validationMessagesRow").style.display="none";		
-			} 
-			else if(document.layers) 
+				document.getElementById("validationMessagesRow").style.display="none";
+			}
+			else if(document.layers)
 			{
 				document.elements['validationMessagesRow'].visibility="none";
 			}
-			else 
+			else
 			{
-				row.style.display = 'none';		
-			}	
+				row.style.display = 'none';
+			}
 		}
 		else
 		{
 			row.style.display = 'block';
 			row.innerHTML = text;
-		}	
+		}
 	}
 	function showErrorPage()
 	{
 		document.forms['categorySearchForm'].action='ViewSearchResultsJSPAction.do';
 		document.forms['categorySearchForm'].nextOperation.value = "showErrorPage";
-		document.forms['categorySearchForm'].submit();	
+		document.forms['categorySearchForm'].submit();
 	}
 	function showViewSearchResultsJsp()
 	{
 		document.forms['categorySearchForm'].action='ViewSearchResultsJSPAction.do';
-		document.forms['categorySearchForm'].submit();			
+		document.forms['categorySearchForm'].submit();
 	}
-	
+
 	function produceSavedQuery()
 	{
 		var totalentities = document.getElementById("totalentities").value;
@@ -1011,23 +1011,23 @@
 		var numberOfEntities = totalentities.split(";");
         var strquery='';
         var count = numberOfEntities.length;
-         
+
     	for(i=0;i<count-1 ;i++)
 		{
 			var entityName = numberOfEntities[i];
 			var attributesListComponent = numberOfEntities[i]+"_attributeList";
 			var attributesList = document.getElementById(attributesListComponent).value;
-			var checkboxes = attributesList.split(";"); 
-			
+			var checkboxes = attributesList.split(";");
+
 			for(j=1;j<checkboxes.length;j++)
 			{
         		var comp = checkboxes[j]+'_checkbox';
 				var val = document.getElementById(comp).checked;
 				if(val==true)
-					strquery = strquery + checkboxes[j] +";" ;                             
+					strquery = strquery + checkboxes[j] +";" ;
             }
-		} 
-		
+		}
+
 		var strvalu = document.getElementById('queryString');
         strvalu.value =  strquery;
         var entityName="";
@@ -1040,15 +1040,15 @@
 			document.getElementById('strToFormTQ').value = buildTQstr;
 		}
         document.getElementById('conditionList').value = buildquerystr;
-		
+
         // Save query
         document.getElementById('saveQueryForm').submit();
 	}
-	
+
 	function ExecuteSavedQuery()
 	{
 		  showWaitPage();
-		
+
 	   	  var entityName="";
 		  var frmName = document.forms[0].name;
           var list = document.getElementById('attributesList').value;
@@ -1063,7 +1063,7 @@
 		   }
 		  document.forms[0].submit();
     }
-    
+
     function createQueryStringForExcecuteSavedTQ (nameOfFormToPost,totalCFCount)
 	{
       	var strToCreateTQObject = "";
@@ -1075,12 +1075,12 @@
 		  var tQunitId = i+"_combobox1";
 		  var isTimestamp = document.getElementById(isTimestampFielsId).value;
 
-		  		   
+
 	       var tQop = document.getElementById(tQpId).value;
-		   
+
 	       var tQtextbox = document.getElementById(tQtextboxId).value;
-		 
-           
+
+
 	       strToCreateTQObject = strToCreateTQObject+"@#condition#@"+i+"##"+tQop+"##"+tQtextbox;
 		   if(isTimestamp == 'false')
 		    {
@@ -1090,13 +1090,13 @@
 				  strToCreateTQObject = strToCreateTQObject + "##"+tQunit;
 				}
 
-			  
+
 		    }
 	     }
 
 		return strToCreateTQObject;
 	}
-	
+
 	function enableDisplayField(frm, textfield)
 	{
 	   var fieldName = textfield+'_displayName';
@@ -1106,7 +1106,7 @@
           else
             document.getElementById(fieldName).disabled=true;
 	}
-	
+
  	function saveQuerySubmitForm(frm,action)
  	{
  	  if(action=='preview')
@@ -1115,7 +1115,7 @@
  	    frm.submit();
  	  }
  	  else
- 	  { 
+ 	  {
  	    frm.action="/saveQuery.do";
  	  }
  	}
@@ -1124,7 +1124,7 @@
 		if(action=='next')
 		{
 			callFlexMethod();
-						
+
 			if(interfaceObj.isDAGEmpty())
 			{
 				//showValidationMessages("<li><font color='red'>Graph must have atleast one node.</font></li>")
@@ -1150,14 +1150,14 @@
 		    	NewWindow(url,'name','870','600','yes');
 		    }
 			hideCursor();
-		/*	var request = newXMLHTTPReq();			
+		/*	var request = newXMLHTTPReq();
 			var actionURL;
-			var handlerFunction = getReadyStateHandler(request,showAlertBox,true);	
-			request.onreadystatechange = handlerFunction;				
+			var handlerFunction = getReadyStateHandler(request,showAlertBox,true);
+			request.onreadystatechange = handlerFunction;
 			var url = "LoadSaveQueryPage.do?isAjax=true";
-			request.open("POST",url,true);	
-			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-			request.send(actionURL);	*/	
+			request.open("POST",url,true);
+			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			request.send(actionURL);	*/
 		}
 	}
 	function showAlertBox(text)
@@ -1181,14 +1181,14 @@
 		}
 	}
 
-	
+
 	function defineSearchResultsView()
 	{
 		waitCursor();
 		document.forms['categorySearchForm'].action='DefineSearchResultsView.do';
 		document.forms['categorySearchForm'].submit();
 		hideCursor();
-						
+
 	}
 	function showAddLimitsPage()
 	{
@@ -1233,9 +1233,9 @@
 	var radio="";
 	var toggleRadio ="";
 	function resetOptionButton(id,currentObj)
-	{ 
-		
-		//variable radio keeps track of which radio button is selected (True/False) and 
+	{
+
+		//variable radio keeps track of which radio button is selected (True/False) and
 		// variable toggleRadio maintains the status of the radiobutton clicked (selected/not selected)
 		if (id != radio) // if previous object and current object are not same
 		{
@@ -1248,11 +1248,11 @@
 			toggleRadio = "true";			//set toggleRadio to radio button status
 		}
 		else							//if toggleRadio == "true" i.e. if radiobutton is selected
-		{			
+		{
 			currentObj.checked = false;		// deselect it
 			toggleRadio = "false";			//set toggleRadio to radio button status
-		}		
-		
+		}
+
 	}
 
 	function radioButtonSelected(element)
@@ -1269,7 +1269,7 @@
 			  	    document.forms[0].includeDescriptionChecked.checked = false;
 					document.forms[0].includeDescriptionChecked.disabled = true;
 				}
-				else		
+				else
 					  document.forms[0].includeDescriptionChecked.disabled = false;
 		}
 	}
@@ -1292,7 +1292,7 @@ function permissibleValuesSelected(element)
 			}
 		}
   }
-  
+
 //---Flex Call
 var interfaceObj;
 
@@ -1300,7 +1300,7 @@ var interfaceObj;
 	{
 		if(navigator.appName.indexOf("Microsoft") != -1)
 		{
-			interfaceObj = window["DAG"];				
+			interfaceObj = window["DAG"];
 		}
 		else
 		{
@@ -1310,7 +1310,7 @@ var interfaceObj;
 
 var jsReady = false;
 
-// ——- functions called by ActionScript ——-
+// ï¿½ï¿½- functions called by ActionScript ï¿½ï¿½-
 // called to check if the page has initialized and JavaScript is available
 	function isReady()
 	{
@@ -1324,41 +1324,41 @@ var jsReady = false;
 	}
 
 	function addLimit(strToCreateQueyObject,entityName)
-	{	
+	{
 		callFlexMethod();
 		interfaceObj.createNode(strToCreateQueyObject,entityName);
 	}
 
 	function editLimits(strToCreateQueyObject,entityName)
-	{	
+	{
 		callFlexMethod();
 		interfaceObj.editLimit(strToCreateQueyObject,entityName);
 	}
-	
+
 	window.onload=function(){
 		pageInit();
 	}
-	
+
 	 function search()
 	 {
 		 callFlexMethod();
 		 interfaceObj.searchResult();
 	 }
-	
+
 	function addNodeToView(nodesStr)
-	{	
+	{
 		callFlexMethod();
 		interfaceObj.addNodeToView(nodesStr);
 	}
-	
+
 	/*This function is called form QueryListView.jsp. It invokes the FetchAndExecuteQueryAction*/
 	function executeQuery(queryId)
 	{
 		showWaitPage();
 		document.getElementById('queryId').value=queryId;
 		document.forms[0].submit();
-	} 
-	
+	}
+
 	/*This function is called form QueryListView.jsp. Pops up for confirmation while deleting the query*/
 	function deleteQueryPopup(queryId, popupMessage)
 	{
@@ -1368,15 +1368,15 @@ var jsReady = false;
 			deleteQuery(queryId);
 		}
 
-	} 
-	
+	}
+
 	function deleteQuery(queryId)
 	{
 		action="DeleteQuery.do?queryId="+queryId;
 		document.forms[0].action = action;
 		document.forms[0].submit();
-	}  
-	
+	}
+
 	function openDecisionMakingPage()
 	{
 		action="OpenDecisionMakingPage.do";
@@ -1384,33 +1384,33 @@ var jsReady = false;
 		document.forms[0].submit();
 	}
 	function proceedClicked()
-	{		
+	{
 		var radioObj = document.forms[0].options;
 		var option = "";
 		var radioLength = radioObj.length;
-		
-		for(var i = 0; i < radioLength; i++) 
+
+		for(var i = 0; i < radioLength; i++)
 		{
 			if(radioObj[i].checked)
 			{
 				option =  radioObj[i].value;
 			}
-		}		
+		}
 		if(option == "")
 		{
 			alert("Please select the option to proceed");
 		}
 		else if(option == 'redefineQuery')
 		{
-			onRedefineQueryOption();			
+			onRedefineQueryOption();
 		}
 		else
 		{
 			showWaitPage();
-			document.forms[0].submit();			
+			document.forms[0].submit();
 		}
-	}	
-	
+	}
+
 	function onRedefineQueryOption()
 	{
 		waitCursor();
@@ -1424,35 +1424,35 @@ var jsReady = false;
 	}
 	function showMainObjectNotPresentMessage()
 	{
-		var request = newXMLHTTPReq();			
+		var request = newXMLHTTPReq();
 		var actionURL;
-		var handlerFunction = getReadyStateHandler(request,showValidationMessages,true);	
-		request.onreadystatechange = handlerFunction;				
+		var handlerFunction = getReadyStateHandler(request,showValidationMessages,true);
+		request.onreadystatechange = handlerFunction;
 		var url = "QueryMessageAction.do";
 		<!-- Open connection to servlet -->
-		request.open("POST",url,true);	
-		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-		request.send(actionURL);	
+		request.open("POST",url,true);
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		request.send(actionURL);
 	}
-	
+
 	function validateQuery(text)
-	{	
+	{
 		if (text != "save")
 		{
 			showWaitPage();
 		}
-		var request = newXMLHTTPReq();			
-		var handlerFunction = getReadyStateHandler(request,displayValidationMessage,true);	
-		request.onreadystatechange = handlerFunction;			
-		var actionURL = "buttonClicked=" + text;		
+		var request = newXMLHTTPReq();
+		var handlerFunction = getReadyStateHandler(request,displayValidationMessage,true);
+		request.onreadystatechange = handlerFunction;
+		var actionURL = "buttonClicked=" + text;
 		var url = "ValidateQuery.do";
-		request.open("POST",url,true);	
-		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-		request.send(actionURL);		
+		request.open("POST",url,true);
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		request.send(actionURL);
 	}
 
 	function displayValidationMessage(text)
-	{		
+	{
 		if (text == "save")
 		{
 			saveClientQueryToServer('save');
@@ -1463,20 +1463,20 @@ var jsReady = false;
 			{
 				//showValidationMessages("We are searching for your query. Please wait...");
 				viewSearchResults();
-			}			
-			else 
+			}
+			else
 			{
 				if(text != "")
-				{		
+				{
 					showValidationMessages(text);
-				}		
+				}
 			}
 		}
 	}
 
 	var myWindow;
 	function showWaitPage()
-	{			
+	{
 		var popupContent = "<table width='400' height='200' border='0' align='center' cellpadding='0' cellspacing='0' bgcolor='#FFFFFF'><tr><td height='85' align='center' valign='top'><img src='images/loading_bg.jpg' alt='Query Search' width='400' height='85' /></td></tr><tr><td align='center' valign='top'><img src='images/loading.gif' alt='Loading...' width='50' height='50' vspace='5' /></td></tr></table>";
 		myWindow=window.open('','','left=400,top=400,width=420,height=200,modal=yes');
 		myWindow.document.write(popupContent);
