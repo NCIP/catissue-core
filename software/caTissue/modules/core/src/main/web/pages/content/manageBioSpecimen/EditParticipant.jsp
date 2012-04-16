@@ -352,7 +352,7 @@ function participantRegRow(subdivtag)
 								onchange="intOnly(this);"
 								onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartB');"
 								style="text-align:right" /> - <html:text styleClass="black_ar"
-								size="2" maxlength="2" styleId="socialSecurityNumberPartB"
+								size="3" maxlength="3" styleId="socialSecurityNumberPartB"
 								property="socialSecurityNumberPartB"
 								readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);"
 								onchange="intOnly(this);"
