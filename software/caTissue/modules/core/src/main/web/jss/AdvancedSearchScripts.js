@@ -13,14 +13,14 @@ function onDate(operatorListId,formNameAndDateFieldId,isSecondDateField,event)
 		if(!isSecondDateField)
 		{
 //			show_calendar(formNameAndDateFieldId,null,null,'MM-DD-YYYY')
-			showCalendar(id,2006,8,21,'MM-dd-yyyy',fnm,id,event,1900,2020);
+			showCalendar(id,2006,8,21,'dd-MM-yyyy',fnm,id,event,1900,2020);
 		}
 		else
 		{
 			if(dateCombo.options[dateCombo.selectedIndex].value == "Between" || dateCombo.options[dateCombo.selectedIndex].value == "Not Between")
 			{
 //				show_calendar(formNameAndDateFieldId,null,null,'MM-DD-YYYY');
-				showCalendar(id,2006,8,21,'MM-dd-yyyy',fnm,id,event,1900,2020);
+				showCalendar(id,2006,8,21,'dd-MM-yyyy',fnm,id,event,1900,2020);
 
 			}
 		}
@@ -35,7 +35,7 @@ function onOperatorChange(operatorListId,valueFieldId)
 {
 	var opCombo  = document.getElementById(operatorListId);
 	var valField = document.getElementById(valueFieldId);
-	
+
 	if(opCombo.options[opCombo.selectedIndex].value == "Any")
 	{
 		if(valField.type == "text")
@@ -65,7 +65,7 @@ function onDateOperatorChange(element,dateFiled1,dateFiled2)
 {
 	var dateTxt1  = document.getElementById(dateFiled1);
 	var dateTxt2  = document.getElementById(dateFiled2);
-	
+
 	if(element.value == "Between" || element.value == "Not Between")
 	{
 		dateTxt1.disabled = false;
