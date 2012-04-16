@@ -552,7 +552,7 @@
 
 	<property>
 		<name>dateFormat</name>
-		<value>MM-dd-yyyy</value>
+		<value>dd-MM-yyyy</value>
 	</property>
 
 	<property>
