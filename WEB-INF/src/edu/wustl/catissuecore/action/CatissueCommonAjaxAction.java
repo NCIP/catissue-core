@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
@@ -44,7 +45,7 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		responseString.append(Constants.XML_ROWS);
 		for (NameValueBean nvb : userList)
 		{
-			responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()), nvb.getName()));
+			responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()),null, nvb.getName()));
 		}
 		responseString.append(Constants.XML_ROWS_END);
 		response.setContentType(Constants.CONTENT_TYPE_XML);
@@ -52,10 +53,17 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		return null;
 	}
 
-	private String addRowToResponseXML(Long identifier, String name)
+	/**
+	 * This function returns result in xml fromat to populate DHTMLX DropDown combo box.
+	 * @param identifier if list is of (String,Long) type pass long value as row id
+	 * @param stringValue if list is of (String,String) type pass String value as row id
+	 * @param name - this is a display name in DropDown
+	 * @return
+	 */
+	private String addRowToResponseXML(Long identifier,String stringValue, String name)
 	{
 		StringBuffer responseString = new StringBuffer(Constants.XML_ROW_ID_START);
-		responseString.append(identifier).append(Constants.XML_TAG_END).append(Constants.XML_CELL_START).append(
+		responseString.append((identifier==null?stringValue:identifier)).append(Constants.XML_TAG_END).append(Constants.XML_CELL_START).append(
 						Constants.XML_CDATA_START).append(name).append(
 						Constants.XML_CDATA_END).append(Constants.XML_CELL_END).append(Constants.XML_ROW_END);
 		return responseString.toString();
@@ -111,7 +119,7 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		responseString.append(Constants.XML_ROWS);
 		for (NameValueBean nvb : siteResultList)
 		{
-			responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()), nvb.getName()));
+			responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()),null, nvb.getName()));
 		}
 		responseString.append(Constants.XML_ROWS_END);
 		response.setContentType(Constants.CONTENT_TYPE_XML);
@@ -138,7 +146,24 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		responseString.append(Constants.XML_ROWS);
 		for (NameValueBean nvb : cpList)
 		{
-			responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()), nvb.getName()));
+			responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()),null, nvb.getName()));
+		}
+		responseString.append(Constants.XML_ROWS_END);
+		response.setContentType(Constants.CONTENT_TYPE_XML);
+		response.getWriter().write(responseString.toString());
+		return null;
+	}
+	
+	public ActionForward getClinicalStatusList(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+		List<NameValueBean> csNameValueBeanList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_CLINICAL_STATUS, null);
+		StringBuffer responseString = new StringBuffer(Constants.XML_START);
+		responseString.append(Constants.XML_ROWS);
+		for (NameValueBean nvb : csNameValueBeanList)
+		{
+			responseString.append(this.addRowToResponseXML(null,nvb.getValue(), nvb.getName()));
 		}
 		responseString.append(Constants.XML_ROWS_END);
 		response.setContentType(Constants.CONTENT_TYPE_XML);

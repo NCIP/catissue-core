@@ -104,7 +104,13 @@ window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=sp
 
 function siteOnRowSelect(id,ind)
 {	
-	rowSelectEvent('defaultSiteId',id,ind,siteDropDownInfo,dsGrid);
+	rowSelectEvent(id,ind,siteDropDownInfo,dsGrid);
+	dsGridVisible = false;
+}
+
+function clinicalStatusOnRowSelect(id,ind)
+{	
+	rowSelectEvent(id,ind,clinicalStatusDropDownInfo,csGrid);
 	dsGridVisible = false;
 }
 
@@ -129,11 +135,24 @@ function onSiteListReady()
 		if(defaultSiteId != "" && defaultSiteId != 0 && defaultSiteId != null)
 			siteOnRowSelect(defaultSiteId,0);
 	}
+	
+function onClinicalStatusListReady()
+	{
+		var clinicalStatus = '${protocolEventDetailsForm.clinicalStatus}';
+		if(clinicalStatus != "" && clinicalStatus != null)
+		{
+			clinicalStatusOnRowSelect(clinicalStatus,0);
+		}	
+	}
+	
 function doOnLoad()
 {
-	siteDropDownInfo = {propertyId:'defaultSiteId',gridObj:"defaultSiteGrid", gridDiv:"defaultSite", dropDownId:"defaultSiteDropDown", pagingArea:"dsPagingArea", infoArea:"dsInfoArea", onOptionSelect:siteOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllSiteList", callBackAction:onSiteListReady};
+	siteDropDownInfo = {propertyId:'defaultSiteId',gridObj:"defaultSiteGrid", gridDiv:"defaultSite", dropDownId:"defaultSiteDropDown", pagingArea:"dsPagingArea", infoArea:"dsInfoArea", onOptionSelect:siteOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllSiteList", callBackAction:onSiteListReady,visibilityStatusVariable:dsGridVisible};
+	clinicalStatusDropDownInfo = {propertyId:'clinicalStatus',gridObj:"clinicalStatusGrid", gridDiv:"clinicalStatusDiv", dropDownId:"clinicalStatusDropDown", pagingArea:"csPagingArea", infoArea:"csInfoArea", onOptionSelect:clinicalStatusOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getClinicalStatusList", callBackAction:onClinicalStatusListReady,visibilityStatusVariable:csGridVisible};
+	
 	// initialising grid
-	dsGrid = initDropDownGrid(siteDropDownInfo); //initialize DropDown control for priciple Investigator
+	dsGrid = initDropDownGrid(siteDropDownInfo); //initialize DropDown control for Site List
+	csGrid = initDropDownGrid(clinicalStatusDropDownInfo); //initialize DropDown control for Clinical Status List
 	//If user creating Duplicate event
 	if('${requestScope.setFocus}'=="true")
 			document.getElementById("collectionPointLabel").focus();

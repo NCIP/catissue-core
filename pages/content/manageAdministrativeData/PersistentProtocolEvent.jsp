@@ -85,11 +85,40 @@
 								</td>
 							</logic:equal>
 							<logic:notEqual name="isPersistent" value="true">
-								<td align="left" class="black_ar"><autocomplete:AutoCompleteTag property="clinicalStatus"
-									  optionsList = "<%=request.getAttribute(Constants.CLINICAL_STATUS_LIST)%>"
-									  initialValue="<%=form.getClinicalStatus()%>"
-									  styleClass="black_ar"
-									  size="27"/>
+								<td align="left" class="black_ar">
+								<html:hidden property="clinicalStatus"/>
+						<div>
+							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
+								<tr>
+									<td align="left" width="88%" height="100%" >
+										<div id="csDropDownIddiv" class="x-form-field-wrap " >
+											<input id="clinicalStatusDropDown"
+													onkeydown="keyNavigationCall(event,clinicalStatusDropDownInfo,csGrid);"
+													onKeyUp="autoCompleteControl(event,clinicalStatusDropDownInfo,csGrid);"
+													onClick="noEventPropogation(event)"
+													autocomplete="off"
+													size="31"
+													class="black_ar_new x-form-text x-form-field x-form-focus"/>
+													<img id="csDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
+													onclick="showHideGrid(event,clinicalStatusDropDownInfo,csGrid);"												
+												src="images/uIEnhancementImages/s.gif"/>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+									<div id="clinicalStatusDiv" style="z-index: 100;"
+										onClick="noEventPropogation(event);">
+									<div id="clinicalStatusGrid" style="height: 200px;"
+										onClick="noEventPropogation(event)"></div>
+									<div id="csPagingArea" onClick="noEventPropogation(event)"></div>
+									<div id="csInfoArea" onClick="noEventPropogation(event)"></div>
+									</div>
+								</td>
+								</tr>
+							</table>
+						</div>
+								
 								</td>
 							</logic:notEqual>
 		              </tr>

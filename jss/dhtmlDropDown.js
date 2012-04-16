@@ -130,7 +130,7 @@ function showHideGrid(e,dropDownInfoObject,gridObject)
 		 }
 } 
 
-function rowSelectEvent(property,selectedRowId,index,infoObj, gridObject)
+function rowSelectEvent(selectedRowId,index,infoObj, gridObject)
 {
 	document.getElementsByName(infoObj['propertyId'])[0].value = selectedRowId;
 	document.getElementById(infoObj['dropDownId']).value = gridObject.cellById(selectedRowId,index).getValue();

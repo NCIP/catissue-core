@@ -129,21 +129,12 @@ if('${requestScope.tabSel}'=="consentTab"){
 //will be called whenever a participant is selected from the participant grid/dropdown
 function investigatorOnRowSelect(id,ind)
 {	
-	document.getElementsByName(investigatorDropDownInfo['propertyId'])[0].value = id;
-	document.getElementById(investigatorDropDownInfo['dropDownId']).value = piGrid.cellById(id,ind).getValue();
-	//document.getElementById("waitingImage").style.display = "block";
-	hideGrid(investigatorDropDownInfo['gridDiv']);
-	investigatorDropDownInfo['visibilityStatusVariable'] = false;
-	//alert(investigatorDropDownInfo['visibilityStatusVariable']);
+	rowSelectEvent(id,ind,investigatorDropDownInfo,piGrid);
 }
 
 function parentProtocolOnRowSelect(id,ind)
 {	
-	document.getElementsByName(parentProtocolDropDownInfo['propertyId'])[0].value = id;
-	document.getElementById(parentProtocolDropDownInfo['dropDownId']).value = ppGrid.cellById(id,ind).getValue();
-	//document.getElementById("waitingImage").style.display = "block";
-	hideGrid(parentProtocolDropDownInfo['gridDiv']);
-	parentProtocolDropDownInfo['visibilityStatusVariable'] = false;
+	rowSelectEvent(id,ind,parentProtocolDropDownInfo,ppGrid);
 }
 
 //This will select option on the basis of left , right, up 0r down key press

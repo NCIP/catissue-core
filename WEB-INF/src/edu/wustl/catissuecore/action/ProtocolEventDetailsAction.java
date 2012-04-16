@@ -138,13 +138,12 @@ public class ProtocolEventDetailsAction extends BaseAction
 			protocolEventDetailsForm.setCollectionProtocolEventkey(key);
 		}
 		request.setAttribute("clinicalDiagnosis", protocolEventDetailsForm.getClinicalDiagnosis());
-		final List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_CLINICAL_STATUS, null);
+		//final List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList( Constants.CDE_NAME_CLINICAL_STATUS, null);
 		// removed as value not in cache
 		// List clinicalDiagnosisList =
 		// CDEManager.getCDEManager().getPermissibleValueList
 		// (Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
-		request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
+		//request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
 		// removed as value not in cache and chnaged default to empty
 		// request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST,
 		// clinicalDiagnosisList);
