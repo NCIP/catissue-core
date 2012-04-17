@@ -219,6 +219,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
      <servlet-name>LoadGridServlet</servlet-name>
      <servlet-class>edu.wustl.catissuecore.action.LoadGridServlet</servlet-class>
    </servlet>
+   
+    	<servlet>
+     <servlet-name>ContainerExportServlet</servlet-name>
+     <servlet-class>edu.wustl.catissuecore.action.ContainerExportServlet</servlet-class>
+   </servlet>
 
 <!-- FLEX Configuration START-->
 
@@ -318,6 +323,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	@@servlet@@
 
  <!-- Standard Action Servlet Mapping -->
+ <servlet-mapping>
+ <servlet-name>ContainerExportServlet</servlet-name>
+ <url-pattern>/ContainerExportServlet</url-pattern>
+ </servlet-mapping>
  
  <servlet-mapping>
      <servlet-name>LoadGridServlet</servlet-name>

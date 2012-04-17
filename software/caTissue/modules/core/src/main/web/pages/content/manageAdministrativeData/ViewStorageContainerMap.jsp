@@ -5,19 +5,29 @@
 <%@ page import="java.util.*"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<head>
 <script language="JavaScript" type="text/javascript"
 	src="jss/caTissueSuite.js"></script>
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
+<script language="JavaScript" type="text/javascript"src="newDhtmlx/dhtmlxcommon.js"></script>
+	<script  language="JavaScript" type="text/javascript"src="newDhtmlx/dhtmlxgrid.js"></script> 
+	<script language="JavaScript" type="text/javascript" src="newDhtmlx/dhtmlxgridcell.js"></script> 
+	<link rel="STYLESHEET" type="text/css" href="newDhtmlx/dhtmlxgrid.css">
+	<script language="JavaScript" type="text/javascript" src='newDhtmlx/dhtmlxgrid_export.js'></script>
+</head>
 <%
 	String siteName = (String) request.getAttribute("siteName");   
 %>
+
+
 <script>
 
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 String [][] childContainerName = (String [][])request.getAttribute(Constants.CHILD_CONTAINER_NAME);
+String storageContainerIdentifier = (String) request.getAttribute("storageContainerIdentifier");
 %>
 function setParentWindowValue(elementName,elementValue)
 {
@@ -80,6 +90,7 @@ function containerInfoTab()
 			window.parent.frames['StorageContainerView'].location="SearchObject.do?pageOf=pageOfTreeSC&operation=search&id=${requestScope.storageContainerIdentifier}";
 		}
 }	
+
 </script>
 
 <%
@@ -169,12 +180,64 @@ function containerInfoTab()
    }
 
 %>
+<script>
+function exportContainer(fileType)
+{
+var outerdata = "<outerdata>";
+outerdata += "<row><label font='boldOblique'>Container details</label> <text>  </text></row>";
+outerdata += "<row><label>Container name: </label> <text><%=request.getAttribute("containerName")%></text></row>";
+outerdata += "<row><label>Container hierarchy: </label> <text><%=request.getAttribute("hierarchy")%></text></row>";
+outerdata += "<row><label>  </label> <text>   </text></row>";
+outerdata += "<row><label font='boldOblique'>Storage Container Restrictions </label> <text>  </text></row>";
+<%
+String text = "";
+for(int colcnt=0;colcnt<collectionProtocolList.size();colcnt++)
+			{
+				String data =(String) collectionProtocolList.get(colcnt );
+				text += data + " ";
+			}
+%>
+outerdata += "<row><label>Collection Protocol: </label> <text><%=text%> </text></row>"
+
+<%	
+	text = "";
+	for(int colcnt=0;colcnt<specimenClassList.size();colcnt++)
+	{
+		String data =(String) specimenClassList.get(colcnt );
+		text += data + " ";
+
+	}
+%>
+outerdata += "<row><label>Specimen Class: </label> <text><%=text%> </text></row>"
+
+<%	
+	text = "";
+	for(int colcnt=0;colcnt<specimenTypeList.size();colcnt++)
+	{
+		String data =(String) specimenTypeList.get(colcnt );
+		text += data + " ";
+		if(colcnt >=10)
+		{
+			break;
+		}
+	}
+%>
+
+outerdata += "<row><label>Specimen Type: </label> <text><%=text%> </text></row>";
+outerdata += "<row><label>  </label> <text>  </text></row>";
+outerdata += "<row><label  font='boldOblique'>Dimension label: </label> <text>  </text></row>";
+outerdata += "<row><label>Dimension Label1 (Row): </label> <text> <%=request.getAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL)%></text></row>";
+outerdata += "<row><label>Dimension Label2 (Column): </label> <text> <%=request.getAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL)%></text></row></outerdata>";
+grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerName")%>&filetype='+fileType+'&id=<%=storageContainerIdentifier%>', 'color',"","","",outerdata)
+//document.getElementById("containerExportFrame").src="ContainerExportServlet?filetype=pdf&id=<%=storageContainerIdentifier%>";
+}
+</script>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
 
 
 <!-- target of anchor to skip menus -->
-<table summary="" cellpadding="0" cellspacing="0" border="0"  width="100%">
+<table summary="" id="containerGridTable" cellpadding="0" cellspacing="0" border="0"  width="100%">
 <%
 	//System.out.println("CP No. : " +collectionProtocolList.size());
 	//System.out.println("SC No. : " +specimenClassList.size());
@@ -194,6 +257,8 @@ function containerInfoTab()
               </table>
 			 </td>
           </tr>
+		  
+		
 	
 	<tr>
 	 <td width="5" valign="bottom">&nbsp;</td>
@@ -207,7 +272,13 @@ function containerInfoTab()
 		colspanForCPLabel = collectionProtocolList.size();
     else 
 	    colspanForCPLabel = specimenClassList.size();
-%>                 
+%>         
+	<tr>
+          <td  align="left" class="tr_bg_blue1">
+		  <!--input type="button" value="Export To PDF" class = "black_ar" onclick="exportContainer('pdf')"/-->
+		  <input type="button" value="Export To CSV" class = "black_ar" onclick="exportContainer('csv')"/>
+		  </td>
+          </tr>        
 		<tr>
           <td  align="left" class="tr_bg_blue1"><span class="blue_ar_b"> Storage Container Restrictions</span></td>
           </tr>
@@ -390,6 +461,8 @@ function containerInfoTab()
 							</td>
 						</tr>
 					</tr>
+				
+					
 				</tr>
 			</table>
 						</td>
@@ -398,204 +471,107 @@ function containerInfoTab()
 			   <tr>
                 <td class="bottomtd" colspan="2"></td>
               </tr>
-			  <tr>
+			  
+			  
+				  
+				  
+				  
 		
-		<td  width="5"class="black_ar_t" >&nbsp;</td>
-		<td class="black_ar" ><b>&nbsp;<%=verTempTwo%>&rarr;</b></td>
-		 
-	</tr>
-				<tr>
-					<td width="5" class="black_ar_t" align="center"><b><%=verTempOne%>&darr;<b></td>
-					<td class="black_ar_t">
-					<table  border="0" cellspacing="1" cellpadding="3">
-						  	<tr><td width="5%">&nbsp;</td>	
-					<% 
-					    String pageOfSpecimen=(String)request.getAttribute(Constants.CONTENT_OF_CONTAINNER);
-						for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getTwoDimensionCapacity().intValue();i++){
-                        if(storageContainerGridObject.getTwoDimensionCapacity().intValue() == 1)
-                        {
-                            %>
-    						<td align="center"  class="subtd"><%=i%></td>
-    						
-    						
-    					    <%
-                        }
-                        else
-                        {
-					%>
-						<td align="center"  class="subtd"><%=i%></td>
-					<%}}%>				
-						</tr>	
-					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getOneDimensionCapacity().intValue()+1;i++){%>
-						<tr>
-						<%
-	                        
-							if(i == 1)
-							{
-						%>
-						   
-						   
-						<%
-							}
-                        	if(i!=storageContainerGridObject.getOneDimensionCapacity().intValue()+1) 
-                            {
-						%>
-							<td align="center" class="subtd"><%=i%></td>
-					   <% 
-                            }
-					   
-					for (int j = Constants.STORAGE_CONTAINER_FIRST_COLUMN;j<=storageContainerGridObject.getTwoDimensionCapacity().intValue()+1;j++)
-                    {
-					                    
-                    if(i == storageContainerGridObject.getOneDimensionCapacity().intValue()+1)
-                    {
-                        if(j ==1)
-                        {
-                        %>   
-                            <td  align="center">&nbsp;</td>
-       					<%
-                            
-                        }
-                        else
-                        {
-                         %>   
-                            <td  align="center" >&nbsp;</td>
-       					<%  
-                        }
-                    
-                        
-                    }
-                    else 
-                    {
-                        if(j ==storageContainerGridObject.getTwoDimensionCapacity().intValue()+1)
-                        {
-                            %>   
-                            <td  align="center" >&nbsp;</td>
-       						<% 
-                        }
-                        else
-                        {
-                       
-						if (fullStatus[i][j] != 0)
-						{
-							String openStorageContainer = null;
-							if (pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
-							{
-								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerIds[i][j]
-                    			+ "&" + Constants.PAGE_OF + "=" + pageOf;
-							}
-							else
-							{
-								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerIds[i][j]
-                    			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType
-								+ "&" + Constants.PAGE_OF + "=" + pageOf;
-							}
-							if (fullStatus[i][j] == 1)
-							{
-								 String containerName = childContainerType[i][j];
-								 int containerNameSize=childContainerType[i][j].length();
-								 if(containerNameSize >= 20)
-									 containerName = containerName.substring(11,20)+"...";
-								 else
-									 containerName =containerName.substring(11,containerNameSize);
-							%>
-							<!--;refresh_tree('<%=childContainerName[i][j]%>')-->
-							<td  align="center" class="tabletdformap" noWrap="true"><a href="<%=openStorageContainer%>" onclick="containerChanged()" class="view" onmouseover="Tip(' <%=childContainerType[i][j]%>')"><img src="images/uIEnhancementImages/used_container.gif" alt="Unused" width="32" height="32" border="0" ><br><%=containerName%></a></td>
-					   	  <%}
-							else{
-
-								String containerName =childContainerType[i][j];
-								 int containerNameSize=childContainerType[i][j].length();
-								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN))
-									{
-									 if(containerNameSize >= 20)
-										 containerName = containerName.substring(11,20)+"...";
-									 else
-										 containerName =containerName.substring(11,containerNameSize);
-									}
-									if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN_ARRAY))
-									{
-										if(containerNameSize >= 18)
-										 containerName = containerName.substring(8,18)+"...";
-									 else
-										 containerName =containerName.substring(8,containerNameSize);
-									}
-
-							%>
-							<td  align="center" class="tabletdformap" noWrap="true"><%
-							
-								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN))
-								{%>
-								<a  class="view" href="QuerySpecimenSearch.do?<%=Constants.PAGE_OF%>=pageOfNewSpecimenCPQuery&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>" onmouseover="Tip('<%=childContainerType[i][j]%>')" ><img src="images/uIEnhancementImages/specimen.gif" alt="Unused" width="32" height="32"  border="0"><br><%=containerName%><!--: <%=childContainerIds[i][j]%> -->
-								</a>
-								
-								<%}
-								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN_ARRAY))
-								{%>
-								<a class="view" href="QuerySpecimenArraySearch.do?<%=Constants.PAGE_OF%>=pageOfSpecimenArray&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%> " onmouseover="Tip('<%=childContainerType[i][j]%>')" ><img src="images/uIEnhancementImages/specimen_array.gif" alt="Unused" width="32" height="32"  border="0"><br><%=containerName%><!--: <%=childContainerIds[i][j]%> -->
-								</a>
-								</td>
-								<% }
-								}%>
-						<%}
-						else
-						{
-							String setParentWindowContainer = null;
-							if (pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)) 
-							{
-								setParentWindowContainer = "javascript:" + specimenCallBackFunction + "('" + specimenMapKey + "' , '" + storageContainerGridObject.getId() + "' , '" + storageContainerGridObject.getName() + 
-								"' , '" + i + "' , '" + j + "' );closeFramedWindow()" ;
-							} 							
-							else if (pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
-							{
-								setParentWindowContainer = "javascript:setTextBoxValue('" + containerId + "','"+  storageContainerGridObject.getId() + "');" + 
-															"javascript:setTextBoxValue('" + selectedContainerName + "','"+  storageContainerGridObject.getName() + "');" + 
-															"javascript:setTextBoxValue('" + pos1 + "','"+  i + "');" + 
-															"javascript:setTextBoxValue('" + pos2 + "','"+  j + "');" +
-															"javascript:setParentWindowValue('positionInStorageContainer','"+ storageContainerGridObject.getType() + " : " + storageContainerGridObject.getId() + " Pos (" + i + "," + j + ")');" ;								
-								
-								setParentWindowContainer = setParentWindowContainer + "javascript:closeFramedWindow()";
-							}	
-							else if (pageOf.equals(Constants.PAGE_OF_ALIQUOT))
-							{
-								setParentWindowContainer = "javascript:setTextBoxValue('" + containerStyleId + "','"
-								+ storageContainerGridObject.getId() + "');"+"javascript:setTextBoxValue('" + containerStyle + "','"
-								+ storageContainerGridObject.getName() + "');"
-								+"javascript:setTextBoxValue('" + xDimStyleId + "','"
-								+ i + "');"
-								+ "javascript:setTextBoxValue('" + yDimStyleId + "','"
-								+ j + "');closeFramedWindow()";
-							}							
-							else
-							{
-								setParentWindowContainer = "javascript:setParentWindowValue('positionInParentContainer','"
-															+ storageContainerGridObject.getType() + " : " 
-															+ storageContainerGridObject.getId()
-															+ " Pos (" + i + "," + j + ")');"
-															+ "javascript:setTextBoxValue('" + containerStyleId + "','"
-															+ storageContainerGridObject.getId() + "');"+"javascript:setTextBoxValue('" + xDimStyleId + "','"
-															+ i + "');"
-															+ "javascript:setTextBoxValue('" + yDimStyleId + "','"
-															+ j + "');"
-															+ "javascript:setParentWindowValue('startNumber','"
-															+ startNumber.intValue() + "');closeFramedWindow()";
-							}
-						%>
-						<td align="center" class="tabletdformap" width="150" noWrap="true" ><img src="images/uIEnhancementImages/empty_container.gif" alt="Unused" width="32" height="32" border="0" onmouseover="Tip('Unused')"></td>
-					  <%}%>
-					<%}}}%>
-					  </tr>
-					<%}%>
-					
-					</table>
-					</td>
-				</tr>
+		<tr>
+			<td width="100%" height="100%" >
+			<!--div id="menuObj"></div-->
+				<div id="containerGrid"></div>
+			</td>
+		</tr>		
 		</table>
 		</td>
 	</tr>
 </table>
+<iframe id = "containerExportFrame" width = "0%" height = "0%" frameborder="0">
+	</iframe>
+	
+<script>
+/*
+mygrid = new dhtmlXGridObject('gridbox');
+mygrid.setImagePath("dhtml_comp/imgs/"); 
+mygrid.setHeader("1,2,3,4,5,6,7,8,9,10,11");
+mygrid.setInitWidths("20,20,20,20,20,20,20,20,20,20,20"); 
+mygrid.setColAlign("right,left,left,right,left,left,right,left,left,right,left");
+mygrid.setColTypes("dyn,ed,ed");
+mygrid.setColSorting("int,str,str");
+mygrid.init();
+mygrid.setSkin("dhx_skyblue");
+mygrid.load("../common/data.json", "json");
+*/
+var grid = new dhtmlXGridObject("containerGrid");
+function loadGrid()
+{
+//var grid = new dhtmlXGridObject("containerGrid");
+var headerString = "<%=request.getAttribute("gridHeader")%>";
+var headerStringArray = headerString.split(",");
+
+var columnWidth;
+if(headerStringArray.length>10){
+	columnWidth = 80;
+}else{
+	columnWidth = (100/headerStringArray.length);
+}
+var widthString = "";
+var alignString = "";
+var colType = "";
+var colSorting = "na";
+for(var cnt= 0 ;cnt< headerStringArray.length;cnt++){
+	widthString += columnWidth;
+	alignString += "center";
+	colType += "ro";
+	colSorting += "no";
+	if(cnt<headerStringArray.length-1){
+		widthString += ",";
+		alignString += ",";
+		colType += ",";
+		colSorting += ",";
+	}
+}
+
+//grid.setImagePath("dhtml_comp/imgs/"); 
+grid.setHeader(headerString); 
+if(headerStringArray.length>10){
+grid.setInitWidths(widthString);
+}else{
+grid.setInitWidthsP(widthString);
+} 
+
+grid.setColAlign(alignString);
+//grid.setAwaitedRowHeight(25);
+grid.setColTypes(colType); 
+grid.setColSorting(colSorting) ;
+grid.setSkin("light");
+grid.enableAlterCss("even","uneven");
+grid.enableRowsHover(true,'grid_hover');
+grid.enableAutoHeight(true);
+grid.attachEvent("onXLE", function(grid_obj,count){});
+//grid.setOnRowDblClickedHandler(selectLabel);
+var myObject = eval('( <%=(StringBuffer) request.getAttribute("gridJson")%> )');
+
+/*
+var menu = new dhtmlXMenuObject("menuObj");
+menu.addNewSibling(null, "export", "Export", false);
+menu.addNewChild("export", 0, "pdf", "Pdf", false, "");
+*/
+
+grid.enableAlterCss("even","uneven");
+grid.init();
+
+grid.parse(myObject,"json");
+}
+document.body.onload = function(){
+loadGrid();
+      //alert("LOADED!");
+  }
+
+//document.getElementByTag("Body");
+
+</script>
 <%!
 // method to return the rowspan value for the cell.
 private int getRowSpan(List dataList, int columnNumber)

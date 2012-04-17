@@ -991,3 +991,10 @@ input.actionButton{ /* optional style for form and action buttons */
 	/*font-size: .75em;*/
 	color: #333333;
 }
+
+.even{
+   height:32;
+   }
+.uneven{
+   height:32;
+   }	
