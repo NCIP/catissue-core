@@ -56,7 +56,7 @@ BEGIN
                                    catissue_cp_req_specimen 
                                                    WHERE 
                                    identifier = specreq_id) 
-                           ); 
+                           ) and  rownum<=1; 
 
       ----selecting the container Id for collection event 
 
@@ -65,7 +65,8 @@ BEGIN
             FROM   catissue_coll_event_param coll, 
                    catissue_specimen_event_param event 
             WHERE  event.specimen_id = specreq_id 
-                   AND coll.identifier = event.identifier; 
+                   AND coll.identifier = event.identifier
+                   AND  rownum<=1; 
 
 
 
@@ -74,7 +75,8 @@ BEGIN
             FROM   catissue_received_event_param rec, 
                    catissue_specimen_event_param event 
             WHERE  event.specimen_id = specreq_id 
-                   AND rec.identifier = event.identifier; 
+                   AND rec.identifier = event.identifier
+                   AND  rownum<=1; 
 
 			select spp.spp_id into spp_iden from temp_spp_events spp where spp.collection_procedure like COLL_PROCEDURE 
 	and spp.container like coll_CONTAINER and spp.received_quality like REC_QUALITY;

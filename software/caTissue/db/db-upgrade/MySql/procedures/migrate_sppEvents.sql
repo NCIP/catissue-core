@@ -59,7 +59,7 @@ DECLARE _stme integer default 0;
 #--getting the collection events
        select identifier into coll_event_id from catissue_coll_event_param where identifier in
 	( select identifier from CATISSUE_SPECIMEN_EVENT_PARAM where specimen_id in (
-	select identifier from catissue_cp_req_specimen where identifier = specReq_ID));
+	select identifier from catissue_cp_req_specimen where identifier = specReq_ID)) limit 1;
 
 	
 #-- Insert default values for Collection event
