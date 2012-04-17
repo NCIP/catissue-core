@@ -57,9 +57,19 @@ DECLARE _stme integer default 0;
 #--Insert entry into caTissue_SPP table
 	SELECT 'Hello World3!';
 #--getting the collection events
-       select identifier into coll_event_id from catissue_coll_event_param where identifier in
+
+select count(*) into flag from catissue_coll_event_param where identifier in
+	( select identifier from CATISSUE_SPECIMEN_EVENT_PARAM where specimen_id in (
+	select identifier from catissue_cp_req_specimen where identifier = specReq_ID));
+		
+	SELECT 'Hello World1!';
+       IF (flag != 0) THEN 
+       SELECT 'Hello World2!';
+       
+     select identifier into coll_event_id from catissue_coll_event_param where identifier in
 	( select identifier from CATISSUE_SPECIMEN_EVENT_PARAM where specimen_id in (
 	select identifier from catissue_cp_req_specimen where identifier = specReq_ID)) limit 1;
+
 
 	
 #-- Insert default values for Collection event
