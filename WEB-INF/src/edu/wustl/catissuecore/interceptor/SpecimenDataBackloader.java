@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.interceptor;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.TimerTask;
 
@@ -28,13 +29,12 @@ public class SpecimenDataBackloader extends TimerTask
 
 	private static final Logger LOGGER = Logger.getCommonLogger(SpecimenDataBackloader.class);
 
-	private static final String SPECIMEN_ID_QUERY = "(select specimen.identifier from catissue_specimen specimen "
+	private static final String SPECIMEN_ID_QUERY = " select specimen.identifier from catissue_specimen specimen "
 			+"join catissue_specimen_coll_group scg on  scg.identifier = specimen.specimen_collection_group_id and specimen.collection_status = 'Collected' and specimen.activity_status not like 'Disabled' "
 			+"join  catissue_coll_prot_reg cpr on cpr.identifier = scg.collection_protocol_reg_id "
 			+"join catissue_collection_protocol cp on cp.identifier = cpr.collection_protocol_id and cp.is_empi_enable = 1 "
-			+"join catissue_participant participant on participant.identifier = cpr.participant_id and participant.empi_id is not null)"
-			+ " minus "
-			+ " select specimen_id from catissue_specimen_message_log ";
+			+"join catissue_participant participant on participant.identifier = cpr.participant_id and participant.empi_id is not null"
+			+ " where specimen.identifier not in (select specimen_id from catissue_specimen_message_log )";
 	/**
 	 * This method called to get JDBCDAO instance.
 	 * @return JDBCDAO instance.
@@ -127,4 +127,6 @@ public class SpecimenDataBackloader extends TimerTask
 		// TODO Auto-generated method stub
 		sendOldSpeciemnDataToCider();
 	}
+
+
 }
