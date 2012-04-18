@@ -1,6 +1,6 @@
 <ns1:ServiceDescription introduceVersion="1.4" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns2:Namespace location="./edu.wustl.catissuecore.domain.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" packageName="edu.wustl.catissuecore.domain.ws" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace generateStubs="true" location="./edu.wustl.catissuecore.domain.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" packageName="edu.wustl.catissuecore.domain.ws" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="AbstractPosition" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="AbstractSpecimen" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="AbstractSpecimenCollectionGroup" xsi:type="ns2:SchemaElementType"/>
@@ -10,10 +10,7 @@
    <ns2:SchemaElement type="Capacity" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CellSpecimen" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CellSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CellSpecimenReviewParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CheckInCheckOutEventParameter" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ClinicalDiagnosis" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="CollectionEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CollectionProtocol" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CollectionProtocolEvent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CollectionProtocolRegistration" xsi:type="ns2:SchemaElementType"/>
@@ -30,19 +27,14 @@
    <ns2:SchemaElement type="Distribution" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DistributionProtocol" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="DistributionSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="EmbeddedEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ExistingSpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ExistingSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ExternalIdentifier" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FixedEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="FluidSpecimen" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="FluidSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FluidSpecimenReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="FrozenEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Institution" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="MolecularSpecimen" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="MolecularSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="MolecularSpecimenReviewParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="NewSpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="NewSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="OrderDetails" xsi:type="ns2:SchemaElementType"/>
@@ -50,9 +42,7 @@
    <ns2:SchemaElement type="Participant" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ParticipantMedicalIdentifier" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="PathologicalCaseOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ProcedureEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Race" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ReceivedEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Site" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Specimen" xsi:type="ns2:SchemaElementType"/>
@@ -67,30 +57,26 @@
    <ns2:SchemaElement type="SpecimenPosition" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SpecimenProtocol" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="SpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpunEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StorageContainer" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StorageType" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StudyFormContext" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="ThawEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TissueSpecimen" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TissueSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="TissueSpecimenReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TransferEventParameters" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="User" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./edu.wustl.common.domain.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws" packageName="edu.wustl.common.domain.ws" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace generateStubs="true" location="./edu.wustl.common.domain.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws" packageName="edu.wustl.common.domain.ws" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="AbstractDomainObject" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./edu.wustl.catissuecore.domain.deintegration.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration.ws" packageName="edu.wustl.catissuecore.domain.deintegration.ws" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="ParticipantRecordEntry" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SCGRecordEntry" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="SpecimenRecordEntry" xsi:type="ns2:SchemaElementType"/>
+  <ns2:Namespace generateStubs="true" location="./edu.wustl.catissuecore.domain.processingprocedure.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.processingprocedure.ws" packageName="edu.wustl.catissuecore.domain.processingprocedure.ws" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="AbstractApplication" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Action" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ActionApplication" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="DefaultAction" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SpecimenProcessingProcedure" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SpecimenProcessingProcedureApplication" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./edu.common.dynamicextensions.domain.integration.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" packageName="edu.common.dynamicextensions.domain.integration.ws" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="AbstractFormContext" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement type="AbstractRecordEntry" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="./edu.wustl.catissuecore.domain.pathology.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology.ws" packageName="edu.wustl.catissuecore.domain.pathology.ws" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace generateStubs="true" location="./edu.wustl.catissuecore.domain.pathology.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology.ws" packageName="edu.wustl.catissuecore.domain.pathology.ws" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="BinaryContent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Concept" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ConceptReferent" xsi:type="ns2:SchemaElementType"/>
@@ -106,6 +92,129 @@
    <ns2:SchemaElement type="SurgicalPathologyReport" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="TextContent" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="XMLContent" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="true" location="./edu.wustl.catissuecore.domain.deintegration.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration.ws" packageName="edu.wustl.catissuecore.domain.deintegration.ws" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="ActionApplicationRecordEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ParticipantRecordEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SCGRecordEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="SpecimenRecordEntry" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="true" location="./edu.common.dynamicextensions.domain.integration.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" packageName="edu.common.dynamicextensions.domain.integration.ws" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="AbstractFormContext" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="AbstractRecordEntry" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="true" location="./edu.wustl.catissuecore.domain.shippingtracking.ws.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking.ws" packageName="edu.wustl.catissuecore.domain.shippingtracking.ws" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="BaseShipment" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Shipment" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ShipmentRequest" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./edu.wustl.catissuecore.domain.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" packageName="edu.wustl.catissuecore.domain" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="AbstractPosition" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractPosition" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="AbstractSpecimen" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractSpecimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="AbstractSpecimenCollectionGroup" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractSpecimenCollectionGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Address" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Address" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Biohazard" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Biohazard" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CancerResearchGroup" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CancerResearchGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Capacity" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Capacity" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CellSpecimen" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CellSpecimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CellSpecimenRequirement" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CellSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ClinicalDiagnosis" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ClinicalDiagnosis" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CollectionProtocol" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CollectionProtocol" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CollectionProtocolEvent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CollectionProtocolEvent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="CollectionProtocolRegistration" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CollectionProtocolRegistration" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ConsentTier" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ConsentTier" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ConsentTierResponse" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ConsentTierResponse" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ConsentTierStatus" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ConsentTierStatus" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Container" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Container" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ContainerPosition" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ContainerPosition" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ContainerType" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ContainerType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ContainerType" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Department" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DerivedSpecimenOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DerivedSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DisposalEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DisposalEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DistributedItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DistributedItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Distribution" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Distribution" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DistributionProtocol" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DistributionProtocol" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DistributionSpecimenRequirement" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DistributionSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ExistingSpecimenArrayOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ExistingSpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ExistingSpecimenOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ExistingSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ExternalIdentifier" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ExternalIdentifier" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="FluidSpecimen" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="FluidSpecimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="FluidSpecimenRequirement" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="FluidSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Institution" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Institution" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="MolecularSpecimen" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="MolecularSpecimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="MolecularSpecimenRequirement" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="MolecularSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="NewSpecimenArrayOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="NewSpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="NewSpecimenOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="NewSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="OrderDetails" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="OrderDetails" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="OrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="OrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Participant" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Participant" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ParticipantMedicalIdentifier" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ParticipantMedicalIdentifier" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="PathologicalCaseOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="PathologicalCaseOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Race" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Race" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ReviewEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Site" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Site" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Specimen" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Specimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenArray" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenArray" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenArrayContent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenArrayContent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenArrayOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenArrayType" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenArrayType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenCharacteristics" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenCharacteristics" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenCollectionGroup" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenCollectionGroup" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenPosition" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenPosition" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenProtocol" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenProtocol" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenRequirement" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="StorageContainer" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="StorageContainer" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="StorageType" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="StorageType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="StudyFormContext" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="StudyFormContext" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TissueSpecimen" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="TissueSpecimen" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TissueSpecimenRequirement" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="TissueSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TransferEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="TransferEventParameters" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="User" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="User" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./edu.wustl.common.domain.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" packageName="edu.wustl.common.domain" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="AbstractDomainObject" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractDomainObject" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./edu.wustl.catissuecore.domain.processingprocedure.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.processingprocedure" packageName="edu.wustl.catissuecore.domain.processingprocedure" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="AbstractApplication" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractApplication" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Action" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Action" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ActionApplication" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ActionApplication" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DefaultAction" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DefaultAction" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenProcessingProcedure" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenProcessingProcedure" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenProcessingProcedureApplication" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenProcessingProcedureApplication" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./edu.wustl.catissuecore.domain.pathology.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" packageName="edu.wustl.catissuecore.domain.pathology" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="BinaryContent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="BinaryContent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Concept" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Concept" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ConceptReferent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ConceptReferent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ConceptReferentClassification" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ConceptReferentClassification" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="DeidentifiedSurgicalPathologyReport" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DeidentifiedSurgicalPathologyReport" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="IdentifiedSurgicalPathologyReport" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="IdentifiedSurgicalPathologyReport" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="PathologyReportReviewParameter" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="PathologyReportReviewParameter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="QuarantineEventParameter" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="QuarantineEventParameter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ReportContent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ReportContent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ReportLoaderQueue" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ReportLoaderQueue" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ReportSection" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ReportSection" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SemanticType" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SemanticType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SurgicalPathologyReport" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SurgicalPathologyReport" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="TextContent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="TextContent" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="XMLContent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="XMLContent" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./edu.wustl.catissuecore.domain.deintegration.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" packageName="edu.wustl.catissuecore.domain.deintegration" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="ActionApplicationRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ActionApplicationRecordEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ParticipantRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ParticipantRecordEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SCGRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SCGRecordEntry" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="SpecimenRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenRecordEntry" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./edu.common.dynamicextensions.domain.integration.xsd" namespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" packageName="edu.common.dynamicextensions.domain.integration" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="AbstractFormContext" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractFormContext" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="AbstractRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractRecordEntry" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./edu.wustl.catissuecore.domain.shippingtracking.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" packageName="edu.wustl.catissuecore.domain.shippingtracking" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement className="BaseShipment" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="BaseShipment" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="Shipment" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Shipment" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="ShipmentRequest" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ShipmentRequest" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="" namespace="http://www.w3.org/2001/XMLSchema" packageName="" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anySimpleType" xsi:type="ns2:SchemaElementType"/>
@@ -155,11 +264,11 @@
    <ns2:SchemaElement type="unsignedLong" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="unsignedShort" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./Catissue_cacoreTypes.xsd" namespace="http://domain.catissuecore.wustl.edu/Catissue_cacore/types" packageName="edu.wustl.catissuecore.domain.stubs.types" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace generateStubs="true" location="./Catissue_cacoreTypes.xsd" namespace="http://domain.catissuecore.wustl.edu/Catissue_cacore/types" packageName="edu.wustl.catissuecore.domain.stubs.types" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="Catissue_cacoreReference" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/security/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="CommunicationMechanism" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement className="" deserializer="" serializer="" type="CommunicationMechanism" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="CommunicationStyle" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GSISecureConversation" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="GSISecureMessage" xsi:type="ns2:SchemaElementType"/>
@@ -167,118 +276,6 @@
    <ns2:SchemaElement type="None" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="edu.common.dynamicextensions.domain.integration.xsd" namespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" packageName="edu.common.dynamicextensions.domain.integration" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement className="AbstractFormContext" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.common.dynamicextensions.domain.integration" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractFormContext" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="AbstractRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.common.dynamicextensions.domain.integration" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractRecordEntry" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="edu.wustl.catissuecore.domain.deintegration.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" packageName="edu.wustl.catissuecore.domain.deintegration" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement className="ParticipantRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.deintegration" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ParticipantRecordEntry" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SCGRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.deintegration" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SCGRecordEntry" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenRecordEntry" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.deintegration" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenRecordEntry" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="edu.wustl.catissuecore.domain.pathology.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" packageName="edu.wustl.catissuecore.domain.pathology" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement className="BinaryContent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="BinaryContent" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Concept" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Concept" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ConceptReferent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ConceptReferent" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ConceptReferentClassification" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ConceptReferentClassification" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="DeidentifiedSurgicalPathologyReport" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DeidentifiedSurgicalPathologyReport" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="IdentifiedSurgicalPathologyReport" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="IdentifiedSurgicalPathologyReport" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="PathologyReportReviewParameter" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="PathologyReportReviewParameter" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="QuarantineEventParameter" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="QuarantineEventParameter" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ReportContent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ReportContent" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ReportLoaderQueue" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ReportLoaderQueue" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ReportSection" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ReportSection" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SemanticType" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SemanticType" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SurgicalPathologyReport" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SurgicalPathologyReport" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="TextContent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="TextContent" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="XMLContent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.pathology" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="XMLContent" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="edu.wustl.catissuecore.domain.shippingtracking.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" packageName="edu.wustl.catissuecore.domain.shippingtracking" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement className="BaseShipment" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.shippingtracking" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="BaseShipment" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Shipment" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.shippingtracking" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Shipment" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ShipmentRequest" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain.shippingtracking" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ShipmentRequest" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="edu.wustl.catissuecore.domain.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" packageName="edu.wustl.catissuecore.domain" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement className="AbstractPosition" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractPosition" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="AbstractSpecimen" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractSpecimen" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="AbstractSpecimenCollectionGroup" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractSpecimenCollectionGroup" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Address" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Address" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Biohazard" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Biohazard" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="CancerResearchGroup" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CancerResearchGroup" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Capacity" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Capacity" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="CellSpecimen" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CellSpecimen" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="CellSpecimenRequirement" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CellSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="CellSpecimenReviewParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CellSpecimenReviewParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="CheckInCheckOutEventParameter" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CheckInCheckOutEventParameter" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ClinicalDiagnosis" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ClinicalDiagnosis" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="CollectionEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CollectionEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="CollectionProtocol" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CollectionProtocol" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="CollectionProtocolEvent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CollectionProtocolEvent" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="CollectionProtocolRegistration" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="CollectionProtocolRegistration" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ConsentTier" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ConsentTier" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ConsentTierResponse" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ConsentTierResponse" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ConsentTierStatus" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ConsentTierStatus" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Container" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Container" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ContainerPosition" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ContainerPosition" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ContainerType" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ContainerType" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Department" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Department" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="DerivedSpecimenOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DerivedSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="DisposalEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DisposalEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="DistributedItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DistributedItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Distribution" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Distribution" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="DistributionProtocol" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DistributionProtocol" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="DistributionSpecimenRequirement" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="DistributionSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="EmbeddedEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="EmbeddedEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ExistingSpecimenArrayOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ExistingSpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ExistingSpecimenOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ExistingSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ExternalIdentifier" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ExternalIdentifier" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="FixedEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="FixedEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="FluidSpecimen" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="FluidSpecimen" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="FluidSpecimenRequirement" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="FluidSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="FluidSpecimenReviewEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="FluidSpecimenReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="FrozenEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="FrozenEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Institution" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Institution" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="MolecularSpecimen" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="MolecularSpecimen" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="MolecularSpecimenRequirement" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="MolecularSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="MolecularSpecimenReviewParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="MolecularSpecimenReviewParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="NewSpecimenArrayOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="NewSpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="NewSpecimenOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="NewSpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="OrderDetails" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="OrderDetails" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="OrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="OrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Participant" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Participant" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ParticipantMedicalIdentifier" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ParticipantMedicalIdentifier" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="PathologicalCaseOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="PathologicalCaseOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ProcedureEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ProcedureEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Race" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Race" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ReceivedEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ReceivedEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ReviewEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Site" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Site" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="Specimen" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="Specimen" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenArray" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenArray" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenArrayContent" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenArrayContent" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenArrayOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenArrayOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenArrayType" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenArrayType" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenCharacteristics" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenCharacteristics" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenCollectionGroup" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenCollectionGroup" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenOrderItem" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenOrderItem" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenPosition" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenPosition" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenProtocol" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenProtocol" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpecimenRequirement" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="SpunEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="SpunEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="StorageContainer" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="StorageContainer" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="StorageType" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="StorageType" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="StudyFormContext" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="StudyFormContext" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="ThawEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="ThawEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="TissueSpecimen" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="TissueSpecimen" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="TissueSpecimenRequirement" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="TissueSpecimenRequirement" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="TissueSpecimenReviewEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="TissueSpecimenReviewEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="TransferEventParameters" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="TransferEventParameters" xsi:type="ns2:SchemaElementType"/>
-   <ns2:SchemaElement className="User" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.catissuecore.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="User" xsi:type="ns2:SchemaElementType"/>
-  </ns2:Namespace>
-  <ns2:Namespace location="edu.wustl.common.domain.xsd" namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" packageName="edu.wustl.common.domain" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement className="AbstractDomainObject" deserializer="org.cagrid.data.sdkquery42.encoding.SDK42DeserializerFactory" packageName="edu.wustl.common.domain" serializer="org.cagrid.data.sdkquery42.encoding.SDK42SerializerFactory" type="AbstractDomainObject" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/caGridMetadata.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata" packageName="gov.nih.nci.cagrid.metadata" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="ServiceMetadata" xsi:type="ns2:SchemaElementType"/>
@@ -485,8 +482,8 @@
     </ns4:Method>
    </ns4:Methods>
    <ns36:ResourcePropertiesList xsi:type="ns36:ResourcePropertiesListType" xmlns:ns36="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns36:ResourceProperty qName="ns37:DomainModel" fileLocation="catissue_cacore_domainModel.xml" populateFromFile="true" register="true" xsi:type="ns36:ResourcePropertyType" xmlns:ns37="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
-    <ns36:ResourceProperty qName="ns38:ServiceMetadata" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns36:ResourcePropertyType" xmlns:ns38="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
+    <ns36:ResourceProperty qName="ns37:DomainModel" description="" fileLocation="catissue_cacore_domainModel.xml" populateFromFile="true" register="true" xsi:type="ns36:ResourcePropertyType" xmlns:ns37="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice"/>
+    <ns36:ResourceProperty qName="ns38:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns36:ResourcePropertyType" xmlns:ns38="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
     <ns36:ResourceProperty qName="ns39:QueryLanguageSupport" description="Describes the level of support for CQL versions" populateFromFile="false" register="true" xsi:type="ns36:ResourcePropertyType" xmlns:ns39="http://org.cagrid.dataservice.cql/QueryLanguageSupport"/>
    </ns36:ResourcePropertiesList>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
@@ -516,7 +513,7 @@
 
 
                  <ns41:ModelInformation source="preBuilt" xsi:type="ns41:ModelInformation">
-                  <ns43:UMLProjectIdentifer identifier="catissue_cacore" version="2.0" xsi:type="ns43:UMLProjectIdentifer" xmlns:ns43="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
+                  <ns43:UMLProjectIdentifer identifier="catissue" version="2.0" xsi:type="ns43:UMLProjectIdentifer" xmlns:ns43="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"/>
 
 
 
@@ -526,6 +523,10 @@
 
 
                    <ns41:ModelClass selected="true" shortClassName="SpecimenRecordEntry" targetable="true" xsi:type="ns41:ModelClass"/>
+
+
+
+                   <ns41:ModelClass selected="true" shortClassName="ActionApplicationRecordEntry" targetable="true" xsi:type="ns41:ModelClass"/>
 
 
 
@@ -642,10 +643,6 @@
 
 
                   <ns41:ModelPackage packageName="edu.wustl.catissuecore.domain" xsi:type="ns41:ModelPackage">
-                   <ns41:ModelClass selected="true" shortClassName="ReceivedEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
                    <ns41:ModelClass selected="true" shortClassName="ClinicalDiagnosis" targetable="true" xsi:type="ns41:ModelClass"/>
 
 
@@ -702,10 +699,6 @@
 
 
 
-                   <ns41:ModelClass selected="true" shortClassName="FrozenEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
                    <ns41:ModelClass selected="true" shortClassName="FluidSpecimen" targetable="true" xsi:type="ns41:ModelClass"/>
 
 
@@ -726,19 +719,7 @@
 
 
 
-                   <ns41:ModelClass selected="true" shortClassName="TissueSpecimenReviewEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
                    <ns41:ModelClass selected="true" shortClassName="SpecimenArray" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
-                   <ns41:ModelClass selected="true" shortClassName="FluidSpecimenReviewEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
-                   <ns41:ModelClass selected="true" shortClassName="SpunEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
 
 
@@ -775,14 +756,6 @@
 
 
                    <ns41:ModelClass selected="true" shortClassName="SpecimenArrayType" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
-                   <ns41:ModelClass selected="true" shortClassName="CellSpecimenReviewParameters" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
-                   <ns41:ModelClass selected="true" shortClassName="ProcedureEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
 
 
@@ -854,10 +827,6 @@
 
 
 
-                   <ns41:ModelClass selected="true" shortClassName="ThawEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
                    <ns41:ModelClass selected="true" shortClassName="NewSpecimenOrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
 
@@ -870,15 +839,7 @@
 
 
 
-                   <ns41:ModelClass selected="true" shortClassName="MolecularSpecimenReviewParameters" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
                    <ns41:ModelClass selected="true" shortClassName="CancerResearchGroup" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
-                   <ns41:ModelClass selected="true" shortClassName="CheckInCheckOutEventParameter" targetable="true" xsi:type="ns41:ModelClass"/>
 
 
 
@@ -894,19 +855,11 @@
 
 
 
-                   <ns41:ModelClass selected="true" shortClassName="FixedEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
                    <ns41:ModelClass selected="true" shortClassName="SpecimenOrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
 
 
 
                    <ns41:ModelClass selected="true" shortClassName="MolecularSpecimenRequirement" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
-                   <ns41:ModelClass selected="true" shortClassName="CollectionEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
 
 
@@ -919,10 +872,6 @@
 
 
                    <ns41:ModelClass selected="true" shortClassName="DisposalEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
-
-
-
-                   <ns41:ModelClass selected="true" shortClassName="EmbeddedEventParameters" targetable="true" xsi:type="ns41:ModelClass"/>
 
 
 
@@ -943,6 +892,35 @@
 
 
                    <ns41:ModelClass selected="true" shortClassName="ExistingSpecimenArrayOrderItem" targetable="true" xsi:type="ns41:ModelClass"/>
+
+
+
+      </ns41:ModelPackage>
+
+
+
+                  <ns41:ModelPackage packageName="edu.wustl.catissuecore.domain.processingprocedure" xsi:type="ns41:ModelPackage">
+                   <ns41:ModelClass selected="true" shortClassName="SpecimenProcessingProcedure" targetable="true" xsi:type="ns41:ModelClass"/>
+
+
+
+                   <ns41:ModelClass selected="true" shortClassName="AbstractApplication" targetable="true" xsi:type="ns41:ModelClass"/>
+
+
+
+                   <ns41:ModelClass selected="true" shortClassName="Action" targetable="true" xsi:type="ns41:ModelClass"/>
+
+
+
+                   <ns41:ModelClass selected="true" shortClassName="ActionApplication" targetable="true" xsi:type="ns41:ModelClass"/>
+
+
+
+                   <ns41:ModelClass selected="true" shortClassName="SpecimenProcessingProcedureApplication" targetable="true" xsi:type="ns41:ModelClass"/>
+
+
+
+                   <ns41:ModelClass selected="true" shortClassName="DefaultAction" targetable="true" xsi:type="ns41:ModelClass"/>
 
 
 

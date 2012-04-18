@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:edu.wustl.catissuecore.domain.deintegration="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" xmlns:edu.wustl.catissuecore.domain="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:edu.wustl.common.domain="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" xmlns:edu.wustl.catissuecore.domain.pathology="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" xmlns:edu.common.dynamicextensions.domain.integration="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" 
+xmlns:edu.wustl.catissuecore.domain.deintegration="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" 
+xmlns:edu.wustl.catissuecore.domain="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" 
+xmlns:edu.wustl.common.domain="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" 
+xmlns:edu.wustl.catissuecore.domain.processingprocedure="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.processingprocedure" 
+xmlns:edu.wustl.catissuecore.domain.pathology="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" 
+xmlns:edu.common.dynamicextensions.domain.integration="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" 
+targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" elementFormDefault="qualified">
+
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" schemaLocation="edu.wustl.common.domain.xsd" />
-  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" schemaLocation="edu.wustl.catissuecore.domain.xsd" />
+  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.processingprocedure" schemaLocation="edu.wustl.catissuecore.domain.processingprocedure.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.pathology" schemaLocation="edu.wustl.catissuecore.domain.pathology.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegration" schemaLocation="edu.wustl.catissuecore.domain.deintegration.xsd" />
+  <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" schemaLocation="edu.wustl.catissuecore.domain.shippingtracking.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration" schemaLocation="edu.common.dynamicextensions.domain.integration.xsd" />
-  <xs:element name="ReceivedEventParameters" type="ReceivedEventParameters" />
-  <xs:complexType name="ReceivedEventParameters">
-    <xs:complexContent>
-      <xs:extension base="SpecimenEventParameters">
-        <xs:sequence />
-        <xs:attribute name="receivedQuality" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+  
   <xs:element name="ClinicalDiagnosis" type="ClinicalDiagnosis" />
   <xs:complexType name="ClinicalDiagnosis">
     <xs:complexContent>
@@ -37,17 +39,17 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
-          <xs:element name="distributedItem" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="DistributedItem" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="orderDetails" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="OrderDetails" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="distributedItem" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="DistributedItem" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -117,7 +119,6 @@
             </xs:complexType>
           </xs:element>
         </xs:sequence>
-        <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="noOfEntries" type="xs:integer" />
       </xs:extension>
     </xs:complexContent>
@@ -154,6 +155,20 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
+          <xs:element name="siteCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="Site" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="cancerResearchGroup" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="CancerResearchGroup" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="collectionProtocolCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -168,24 +183,10 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="department" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Department" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="address" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="Address" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="siteCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Site" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -196,10 +197,10 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="cancerResearchGroup" minOccurs="0" maxOccurs="1">
+          <xs:element name="department" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="CancerResearchGroup" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="Department" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -207,12 +208,15 @@
         <xs:attribute name="activityStatus" type="xs:string" />
         <xs:attribute name="comments" type="xs:string" />
         <xs:attribute name="csmUserId" type="xs:long" />
+        <xs:attribute name="dirtyEditFlag" type="xs:boolean" />
         <xs:attribute name="emailAddress" type="xs:string" />
         <xs:attribute name="firstName" type="xs:string" />
         <xs:attribute name="firstTimeLogin" type="xs:boolean" />
         <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="lastName" type="xs:string" />
         <xs:attribute name="loginName" type="xs:string" />
+        <xs:attribute name="remoteId" type="xs:long" />
+        <xs:attribute name="remoteManagedFlag" type="xs:boolean" />
         <xs:attribute name="startDate" type="xs:dateTime" />
       </xs:extension>
     </xs:complexContent>
@@ -247,17 +251,17 @@
     <xs:complexContent>
       <xs:extension base="SpecimenArrayOrderItem">
         <xs:sequence>
-          <xs:element name="specimenArrayType" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="SpecimenArrayType" minOccurs="0" maxOccurs="0" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="specimenOrderItemCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="SpecimenOrderItem" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="specimenArrayType" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="SpecimenArrayType" minOccurs="0" maxOccurs="0" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -305,13 +309,6 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
-          <xs:element name="abstractSpecimenCollectionGroupCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="AbstractSpecimenCollectionGroup" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="assignedSiteUserCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -319,10 +316,10 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="collectionProtocolCollection" minOccurs="0" maxOccurs="1">
+          <xs:element name="abstractSpecimenCollectionGroupCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="CollectionProtocol" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="AbstractSpecimenCollectionGroup" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -330,6 +327,13 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="Address" minOccurs="0" maxOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="collectionProtocolCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="CollectionProtocol" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -342,20 +346,14 @@
           </xs:element>
         </xs:sequence>
         <xs:attribute name="activityStatus" type="xs:string" />
-        <xs:attribute name="ctepId" type="xs:string" />        
+        <xs:attribute name="ctepId" type="xs:string" />
+        <xs:attribute name="dirtyEditFlag" type="xs:boolean" />
         <xs:attribute name="emailAddress" type="xs:string" />
         <xs:attribute name="id" type="xs:long" />
-        <xs:attribute name="name" type="xs:string" />        
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="remoteId" type="xs:long" />
+        <xs:attribute name="remoteManagedFlag" type="xs:boolean" />
         <xs:attribute name="type" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="FrozenEventParameters" type="FrozenEventParameters" />
-  <xs:complexType name="FrozenEventParameters">
-    <xs:complexContent>
-      <xs:extension base="SpecimenEventParameters">
-        <xs:sequence />
-        <xs:attribute name="method" type="xs:string" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -392,10 +390,10 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
-          <xs:element name="distributionCollection" minOccurs="0" maxOccurs="1">
+          <xs:element name="orderItemCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="Distribution" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="OrderItem" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -406,10 +404,10 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="orderItemCollection" minOccurs="0" maxOccurs="1">
+          <xs:element name="distributionCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="OrderItem" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="Distribution" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -427,14 +425,14 @@
     <xs:complexContent>
       <xs:extension base="SpecimenEventParameters">
         <xs:sequence>
-          <xs:element name="fromStorageContainer" minOccurs="0" maxOccurs="1">
+          <xs:element name="toStorageContainer" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="StorageContainer" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="toStorageContainer" minOccurs="0" maxOccurs="1">
+          <xs:element name="fromStorageContainer" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="StorageContainer" minOccurs="0" maxOccurs="1" />
@@ -449,35 +447,22 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="TissueSpecimenReviewEventParameters" type="TissueSpecimenReviewEventParameters" />
-  <xs:complexType name="TissueSpecimenReviewEventParameters">
-    <xs:complexContent>
-      <xs:extension base="ReviewEventParameters">
-        <xs:sequence />
-        <xs:attribute name="histologicalQuality" type="xs:string" />
-        <xs:attribute name="lymphocyticPercentage" type="xs:double" />
-        <xs:attribute name="necrosisPercentage" type="xs:double" />
-        <xs:attribute name="neoplasticCellularityPercentage" type="xs:double" />
-        <xs:attribute name="totalCellularityPercentage" type="xs:double" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
   <xs:element name="SpecimenArray" type="SpecimenArray" />
   <xs:complexType name="SpecimenArray">
     <xs:complexContent>
       <xs:extension base="Container">
         <xs:sequence>
+          <xs:element name="specimenArrayType" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="SpecimenArrayType" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="createdBy" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="User" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="newSpecimenArrayOrderItemCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="NewSpecimenArrayOrderItem" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -488,34 +473,15 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="specimenArrayType" minOccurs="0" maxOccurs="1">
+          <xs:element name="newSpecimenArrayOrderItemCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="SpecimenArrayType" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="NewSpecimenArrayOrderItem" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
         <xs:attribute name="available" type="xs:boolean" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="FluidSpecimenReviewEventParameters" type="FluidSpecimenReviewEventParameters" />
-  <xs:complexType name="FluidSpecimenReviewEventParameters">
-    <xs:complexContent>
-      <xs:extension base="ReviewEventParameters">
-        <xs:sequence />
-        <xs:attribute name="cellCount" type="xs:double" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="SpunEventParameters" type="SpunEventParameters" />
-  <xs:complexType name="SpunEventParameters">
-    <xs:complexContent>
-      <xs:extension base="SpecimenEventParameters">
-        <xs:sequence />
-        <xs:attribute name="durationInMinutes" type="xs:integer" />
-        <xs:attribute name="gravityForce" type="xs:double" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -531,6 +497,20 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
+          <xs:element name="processingSPP" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="edu.wustl.catissuecore.domain.processingprocedure:SpecimenProcessingProcedure" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="creationEvent" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="edu.wustl.catissuecore.domain.processingprocedure:Action" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="collectionProtocolEvent" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -539,7 +519,6 @@
             </xs:complexType>
           </xs:element>
         </xs:sequence>
-        <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="labelFormat" type="xs:string" />
         <xs:attribute name="storageType" type="xs:string" />
       </xs:extension>
@@ -619,17 +598,17 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
-          <xs:element name="irbSite" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Site" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="principalInvestigator" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="User" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="irbSite" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="Site" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -661,6 +640,13 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
+          <xs:element name="participant" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="Participant" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="collectionProtocol" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -679,13 +665,6 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="SpecimenCollectionGroup" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="participant" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Participant" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -716,17 +695,17 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
-          <xs:element name="specimenArray" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="SpecimenArray" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="distribution" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="Distribution" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="specimenArray" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="SpecimenArray" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -757,26 +736,6 @@
           </xs:element>
         </xs:sequence>
         <xs:attribute name="specimenClass" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="CellSpecimenReviewParameters" type="CellSpecimenReviewParameters" />
-  <xs:complexType name="CellSpecimenReviewParameters">
-    <xs:complexContent>
-      <xs:extension base="ReviewEventParameters">
-        <xs:sequence />
-        <xs:attribute name="neoplasticCellularityPercentage" type="xs:double" />
-        <xs:attribute name="viableCellPercentage" type="xs:double" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ProcedureEventParameters" type="ProcedureEventParameters" />
-  <xs:complexType name="ProcedureEventParameters">
-    <xs:complexContent>
-      <xs:extension base="SpecimenEventParameters">
-        <xs:sequence />
-        <xs:attribute name="name" type="xs:string" />
-        <xs:attribute name="url" type="xs:string" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -834,24 +793,10 @@
     <xs:complexContent>
       <xs:extension base="AbstractSpecimen">
         <xs:sequence>
-          <xs:element name="biohazardCollection" minOccurs="0" maxOccurs="1">
+          <xs:element name="specimenRequirement" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="Biohazard" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="specimenRecordEntryCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.deintegration:SpecimenRecordEntry" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="specimenCollectionGroup" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="SpecimenCollectionGroup" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="SpecimenRequirement" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -862,17 +807,24 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="specimenPosition" minOccurs="0" maxOccurs="1">
+          <xs:element name="creationEventAction" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="SpecimenPosition" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="edu.wustl.catissuecore.domain.processingprocedure:ActionApplication" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="specimenRequirement" minOccurs="0" maxOccurs="1">
+          <xs:element name="processingSPPApplication" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="SpecimenRequirement" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="edu.wustl.catissuecore.domain.processingprocedure:SpecimenProcessingProcedureApplication" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="specimenRecordEntryCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="edu.wustl.catissuecore.domain.deintegration:SpecimenRecordEntry" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -880,6 +832,34 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="ConsentTierStatus" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="actionApplicationCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="edu.wustl.catissuecore.domain.processingprocedure:ActionApplication" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="biohazardCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="Biohazard" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="specimenPosition" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="SpecimenPosition" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="specimenCollectionGroup" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="SpecimenCollectionGroup" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -927,8 +907,11 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence />
+        <xs:attribute name="dirtyEditFlag" type="xs:boolean" />
         <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="remoteId" type="xs:long" />
+        <xs:attribute name="remoteManagedFlag" type="xs:boolean" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -937,10 +920,10 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
-          <xs:element name="distributedItemCollection" minOccurs="0" maxOccurs="1">
+          <xs:element name="distributionProtocol" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="DistributedItem" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="DistributionProtocol" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -965,10 +948,10 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="distributionProtocol" minOccurs="0" maxOccurs="1">
+          <xs:element name="distributedItemCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="DistributionProtocol" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="DistributedItem" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1029,6 +1012,13 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
+          <xs:element name="capacity" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="Capacity" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="locatedAtPosition" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -1040,13 +1030,6 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="ContainerPosition" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="capacity" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Capacity" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1079,17 +1062,17 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="holdsStorageTypeCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="StorageType" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="holdsSpecimenArrayTypeCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="SpecimenArrayType" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="holdsStorageTypeCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="StorageType" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1114,6 +1097,41 @@
     <xs:complexContent>
       <xs:extension base="AbstractSpecimenCollectionGroup">
         <xs:sequence>
+          <xs:element name="actionApplicationCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="edu.wustl.catissuecore.domain.processingprocedure:ActionApplication" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="collectionProtocolRegistration" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="CollectionProtocolRegistration" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="scgRecordEntryCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="edu.wustl.catissuecore.domain.deintegration:SCGRecordEntry" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="consentTierStatusCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="ConsentTierStatus" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="collectionProtocolEvent" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="CollectionProtocolEvent" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="specimenEventParametersCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -1128,24 +1146,17 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="consentTierStatusCollection" minOccurs="0" maxOccurs="1">
+          <xs:element name="identifiedSurgicalPathologyReport" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="ConsentTierStatus" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="edu.wustl.catissuecore.domain.pathology:IdentifiedSurgicalPathologyReport" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="scgRecordEntryCollection" minOccurs="0" maxOccurs="1">
+          <xs:element name="sppApplicationCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.deintegration:SCGRecordEntry" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="collectionProtocolEvent" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="CollectionProtocolEvent" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="edu.wustl.catissuecore.domain.processingprocedure:SpecimenProcessingProcedureApplication" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1156,25 +1167,13 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="identifiedSurgicalPathologyReport" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.pathology:IdentifiedSurgicalPathologyReport" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="collectionProtocolRegistration" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="CollectionProtocolRegistration" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
         </xs:sequence>
+        <xs:attribute name="ageAtCollection" type="xs:integer" />
         <xs:attribute name="barcode" type="xs:string" />
         <xs:attribute name="collectionStatus" type="xs:string" />
         <xs:attribute name="comment" type="xs:string" />
         <xs:attribute name="encounterTimestamp" type="xs:dateTime" />
+        <xs:attribute name="isToInsertAnticipatorySpecimens" type="xs:boolean" />
         <xs:attribute name="name" type="xs:string" />
         <xs:attribute name="offset" type="xs:integer" />
         <xs:attribute name="surgicalPathologyNumber" type="xs:string" />
@@ -1186,10 +1185,10 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
-          <xs:element name="specimenCollectionGroup" minOccurs="0" maxOccurs="1">
+          <xs:element name="specimen" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="SpecimenCollectionGroup" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="AbstractSpecimen" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1200,14 +1199,15 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="specimen" minOccurs="0" maxOccurs="1">
+          <xs:element name="specimenCollectionGroup" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="AbstractSpecimen" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="SpecimenCollectionGroup" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
         </xs:sequence>
+        <xs:attribute name="activityStatus" type="xs:string" />
         <xs:attribute name="comment" type="xs:string" />
         <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="timestamp" type="xs:dateTime" />
@@ -1219,16 +1219,11 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence />
+        <xs:attribute name="dirtyEditFlag" type="xs:boolean" />
         <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="name" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ThawEventParameters" type="ThawEventParameters" />
-  <xs:complexType name="ThawEventParameters">
-    <xs:complexContent>
-      <xs:extension base="SpecimenEventParameters">
-        <xs:sequence />
+        <xs:attribute name="remoteId" type="xs:long" />
+        <xs:attribute name="remoteManagedFlag" type="xs:boolean" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1280,38 +1275,16 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="MolecularSpecimenReviewParameters" type="MolecularSpecimenReviewParameters" />
-  <xs:complexType name="MolecularSpecimenReviewParameters">
-    <xs:complexContent>
-      <xs:extension base="ReviewEventParameters">
-        <xs:sequence />
-        <xs:attribute name="absorbanceAt260" type="xs:double" />
-        <xs:attribute name="absorbanceAt280" type="xs:double" />
-        <xs:attribute name="gelImageURL" type="xs:string" />
-        <xs:attribute name="gelNumber" type="xs:integer" />
-        <xs:attribute name="laneNumber" type="xs:string" />
-        <xs:attribute name="qualityIndex" type="xs:string" />
-        <xs:attribute name="ratio28STo18S" type="xs:double" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
   <xs:element name="CancerResearchGroup" type="CancerResearchGroup" />
   <xs:complexType name="CancerResearchGroup">
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence />
+        <xs:attribute name="dirtyEditFlag" type="xs:boolean" />
         <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="name" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="CheckInCheckOutEventParameter" type="CheckInCheckOutEventParameter" />
-  <xs:complexType name="CheckInCheckOutEventParameter">
-    <xs:complexContent>
-      <xs:extension base="SpecimenEventParameters">
-        <xs:sequence />
-        <xs:attribute name="id" type="xs:long" />
-        <xs:attribute name="storageStatus" type="xs:string" />
+        <xs:attribute name="remoteId" type="xs:long" />
+        <xs:attribute name="remoteManagedFlag" type="xs:boolean" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1334,6 +1307,27 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
+          <xs:element name="holdsSpecimenArrayTypeCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="SpecimenArrayType" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="holdsStorageTypeCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="StorageType" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="storageType" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="StorageType" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="specimenPositionCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -1345,27 +1339,6 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="Site" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="storageType" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="StorageType" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="holdsStorageTypeCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="StorageType" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="holdsSpecimenArrayTypeCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="SpecimenArrayType" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1407,16 +1380,6 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="FixedEventParameters" type="FixedEventParameters" />
-  <xs:complexType name="FixedEventParameters">
-    <xs:complexContent>
-      <xs:extension base="SpecimenEventParameters">
-        <xs:sequence />
-        <xs:attribute name="durationInMinutes" type="xs:integer" />
-        <xs:attribute name="fixationType" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
   <xs:element name="SpecimenOrderItem" type="SpecimenOrderItem" />
   <xs:complexType name="SpecimenOrderItem">
     <xs:complexContent>
@@ -1439,16 +1402,6 @@
       <xs:extension base="SpecimenRequirement">
         <xs:sequence />
         <xs:attribute name="concentrationInMicrogramPerMicroliter" type="xs:double" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="CollectionEventParameters" type="CollectionEventParameters" />
-  <xs:complexType name="CollectionEventParameters">
-    <xs:complexContent>
-      <xs:extension base="SpecimenEventParameters">
-        <xs:sequence />
-        <xs:attribute name="collectionProcedure" type="xs:string" />
-        <xs:attribute name="container" type="xs:string" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1484,24 +1437,10 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="collectionProtocolRegistrationCollection" minOccurs="0" maxOccurs="1">
+          <xs:element name="consentTierCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="CollectionProtocolRegistration" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="coordinatorCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="User" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="collectionProtocolEventCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="CollectionProtocolEvent" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="ConsentTier" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1509,6 +1448,34 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="DistributionProtocol" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="studyFormContextCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="StudyFormContext" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="assignedProtocolUserCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="User" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="collectionProtocolRegistrationCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="CollectionProtocolRegistration" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="collectionProtocolEventCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="CollectionProtocolEvent" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -1526,7 +1493,7 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="assignedProtocolUserCollection" minOccurs="0" maxOccurs="1">
+          <xs:element name="coordinatorCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="User" minOccurs="0" maxOccurs="unbounded" />
@@ -1540,23 +1507,12 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="studyFormContextCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="StudyFormContext" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="consentTierCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="ConsentTier" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
         </xs:sequence>
         <xs:attribute name="aliquotInSameContainer" type="xs:boolean" />
         <xs:attribute name="consentsWaived" type="xs:boolean" />
+        <xs:attribute name="dirtyEditFlag" type="xs:boolean" />
+        <xs:attribute name="remoteId" type="xs:long" />
+        <xs:attribute name="remoteManagedFlag" type="xs:boolean" />
         <xs:attribute name="sequenceNumber" type="xs:integer" />
         <xs:attribute name="studyCalendarEventPoint" type="xs:double" />
         <xs:attribute name="type" type="xs:string" />
@@ -1569,17 +1525,7 @@
     <xs:complexContent>
       <xs:extension base="SpecimenEventParameters">
         <xs:sequence />
-        <xs:attribute name="activityStatus" type="xs:string" />
         <xs:attribute name="reason" type="xs:string" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="EmbeddedEventParameters" type="EmbeddedEventParameters" />
-  <xs:complexType name="EmbeddedEventParameters">
-    <xs:complexContent>
-      <xs:extension base="SpecimenEventParameters">
-        <xs:sequence />
-        <xs:attribute name="embeddingMedium" type="xs:string" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1588,20 +1534,6 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
-          <xs:element name="participantMedicalIdentifierCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="ParticipantMedicalIdentifier" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="raceCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="Race" minOccurs="0" maxOccurs="unbounded" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="participantRecordEntryCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -1616,6 +1548,20 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
+          <xs:element name="raceCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="Race" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="participantMedicalIdentifierCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="ParticipantMedicalIdentifier" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="activityStatus" type="xs:string" />
         <xs:attribute name="birthDate" type="xs:dateTime" />
@@ -1623,6 +1569,7 @@
         <xs:attribute name="ethnicity" type="xs:string" />
         <xs:attribute name="firstName" type="xs:string" />
         <xs:attribute name="gender" type="xs:string" />
+        <xs:attribute name="gridId" type="xs:string" />
         <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="lastName" type="xs:string" />
         <xs:attribute name="metaPhoneCode" type="xs:string" />
@@ -1653,14 +1600,7 @@
   <xs:complexType name="CollectionProtocolEvent">
     <xs:complexContent>
       <xs:extension base="AbstractSpecimenCollectionGroup">
-        <xs:sequence>          
-          <xs:element name="collectionProtocol" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="CollectionProtocol" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
+        <xs:sequence>
           <xs:element name="specimenCollectionGroupCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -1675,9 +1615,22 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
+          <xs:element name="collectionProtocol" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="CollectionProtocol" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="sppCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="edu.wustl.catissuecore.domain.processingprocedure:SpecimenProcessingProcedure" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
         </xs:sequence>
         <xs:attribute name="collectionPointLabel" type="xs:string" />
-        <xs:attribute name="id" type="xs:long" />
         <xs:attribute name="labelFormat" type="xs:string" />
         <xs:attribute name="studyCalendarEventPoint" type="xs:double" />
       </xs:extension>
@@ -1688,6 +1641,13 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
+          <xs:element name="specimenEventCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="SpecimenEventParameters" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
           <xs:element name="childSpecimenCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -1706,13 +1666,6 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="SpecimenCharacteristics" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="specimenEventCollection" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="SpecimenEventParameters" minOccurs="0" maxOccurs="unbounded" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>

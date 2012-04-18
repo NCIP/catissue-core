@@ -30,7 +30,7 @@ public class ClientRunAll {
         Participant p = new Participant();
         p.setActivityStatus("Active");
         p.setFirstName("Alexander");
-        p.setLastName("Nevsky");
+        p.setLastName("Pushkin");
 
         Participant pResult = (Participant)client.insert(p);
         System.out.println(String.format("--> Participant inserted: %d", pResult.getIdentifier()));

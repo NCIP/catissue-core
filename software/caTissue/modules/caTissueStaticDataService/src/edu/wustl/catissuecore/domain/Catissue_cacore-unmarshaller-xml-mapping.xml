@@ -1,6 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN" "http://www.castor.org/mapping.dtd">
-
 <mapping>
   <class name="edu.wustl.common.domain.AbstractDomainObject">
     <map-to xml="AbstractDomainObject" ns-uri="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" />
@@ -1632,4 +1629,3 @@
     </field>
   </class>
 </mapping>
-

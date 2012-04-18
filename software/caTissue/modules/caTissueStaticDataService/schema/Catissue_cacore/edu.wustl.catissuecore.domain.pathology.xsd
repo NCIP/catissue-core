@@ -163,17 +163,17 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
-          <xs:element name="specimenCollectionGroup" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain:SpecimenCollectionGroup" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="participantCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="edu.wustl.catissuecore.domain:Participant" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="specimenCollectionGroup" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="edu.wustl.catissuecore.domain:SpecimenCollectionGroup" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -194,10 +194,10 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
-          <xs:element name="binaryContent" minOccurs="0" maxOccurs="1">
+          <xs:element name="specimenCollectionGroup" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="BinaryContent" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="edu.wustl.catissuecore.domain:SpecimenCollectionGroup" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -208,10 +208,17 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="specimenCollectionGroup" minOccurs="0" maxOccurs="1">
+          <xs:element name="reportSource" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain:SpecimenCollectionGroup" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="edu.wustl.catissuecore.domain:Site" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="binaryContent" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="BinaryContent" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -226,13 +233,6 @@
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="TextContent" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="reportSource" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain:Site" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -276,17 +276,17 @@
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
-          <xs:element name="deIdentifiedSurgicalPathologyReport" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="DeidentifiedSurgicalPathologyReport" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="conceptReferentClassification" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="ConceptReferentClassification" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="deIdentifiedSurgicalPathologyReport" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="DeidentifiedSurgicalPathologyReport" minOccurs="0" maxOccurs="1" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>

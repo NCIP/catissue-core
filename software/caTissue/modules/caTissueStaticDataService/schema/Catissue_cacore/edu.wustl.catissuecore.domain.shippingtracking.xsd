@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" xmlns:edu.wustl.catissuecore.domain="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" xmlns:edu.wustl.common.domain="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking"
+           xmlns:edu.wustl.catissuecore.domain="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain"
+           xmlns:edu.wustl.common.domain="gme://caCORE.caCORE/3.2/edu.wustl.common.domain"
+           targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.shippingtracking"
+           elementFormDefault="qualified">
+
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" schemaLocation="edu.wustl.common.domain.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain" schemaLocation="edu.wustl.catissuecore.domain.xsd" />
+
   <xs:element name="BaseShipment" type="BaseShipment" />
   <xs:complexType name="BaseShipment">
     <xs:complexContent>
       <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence>
-          <xs:element name="senderSite" minOccurs="0" maxOccurs="1">
+          <xs:element name="receiverSite" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="edu.wustl.catissuecore.domain:Site" minOccurs="0" maxOccurs="1" />
@@ -21,13 +28,6 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="senderContactPerson" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain:User" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
           <xs:element name="containerCollection" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
@@ -35,7 +35,14 @@
               </xs:sequence>
             </xs:complexType>
           </xs:element>
-          <xs:element name="receiverSite" minOccurs="0" maxOccurs="1">
+          <xs:element name="senderContactPerson" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="edu.wustl.catissuecore.domain:User" minOccurs="0" maxOccurs="1" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="senderSite" minOccurs="0" maxOccurs="1">
             <xs:complexType>
               <xs:sequence>
                 <xs:element ref="edu.wustl.catissuecore.domain:Site" minOccurs="0" maxOccurs="1" />

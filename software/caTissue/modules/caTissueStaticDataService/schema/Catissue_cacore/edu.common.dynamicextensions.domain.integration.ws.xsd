@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema 
-xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-xmlns="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" 
-xmlns:edu.wustl.catissuecore.domain.ws="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" 
-xmlns:edu.wustl.common.domain.ws="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws" 
-targetNamespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws"
+           xmlns:edu.wustl.catissuecore.domain="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws"
+           xmlns:edu.wustl.common.domain="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws"
+           targetNamespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" elementFormDefault="qualified">
+
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain.ws" schemaLocation="edu.wustl.common.domain.ws.xsd" />
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" schemaLocation="edu.wustl.catissuecore.domain.ws.xsd" />
+
   <xs:element name="AbstractFormContext" type="AbstractFormContext" />
   <xs:complexType name="AbstractFormContext">
     <xs:complexContent>
-      <xs:extension base="edu.wustl.common.domain.ws:AbstractDomainObject">
+      <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence />
         <xs:attribute name="identifier" type="xs:long" />
       </xs:extension>
@@ -19,12 +20,9 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.int
   <xs:element name="AbstractRecordEntry" type="AbstractRecordEntry" />
   <xs:complexType name="AbstractRecordEntry">
     <xs:complexContent>
-      <xs:extension base="edu.wustl.common.domain.ws:AbstractDomainObject">
+      <xs:extension base="edu.wustl.common.domain:AbstractDomainObject">
         <xs:sequence />
-    <xs:attribute name="identifier" type="xs:long" />
-    <xs:attribute name="activityStatus" type="xs:string" />
-    <xs:attribute name="modifiedDate" type="xs:dateTime" />
-    <xs:attribute name="modifiedBy" type="xs:string" />
+        <xs:attribute name="identifier" type="xs:long" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>

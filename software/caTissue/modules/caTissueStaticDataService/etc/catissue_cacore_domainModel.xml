@@ -1474,14 +1474,6 @@
   <ns1:UMLClass allowableAsTarget="true" className="AbstractRecordEntry" id="00588d02-3438-4941-8f12-24653c8bb891" packageName="edu.common.dynamicextensions.domain.integration" projectName="catissue" projectVersion="2.0">
    <ns3:umlAttributeCollection xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ReceivedEventParameters" id="94ba89b1-cb9f-417f-85ad-2d0c276bf6ce" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns4:umlAttributeCollection xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns4:UMLAttribute dataTypeName="java.lang.String" description="Grossly evaluated quality of the received specimen." name="receivedQuality" publicID="-9223372034906452841" version="1.0"/>
-    <ns4:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns4:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns4:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns4:umlAttributeCollection>
-  </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="ClinicalDiagnosis" id="7fc3e5c7-ed53-4f84-8799-e50baccc1527" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
    <ns5:umlAttributeCollection xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns5:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035260158302" version="1.0"/>
@@ -1613,14 +1605,6 @@
     <ns18:UMLAttribute dataTypeName="java.lang.String" description="Function of the site (e.g. Collection site, repository, or laboratory)." name="type" publicID="-9223372034754441340" version="1.0"/>
    </ns18:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="FrozenEventParameters" id="23d10799-9456-4ccc-8ba3-6cfa870f9c88" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns19:umlAttributeCollection xmlns:ns19="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns19:UMLAttribute dataTypeName="java.lang.String" description="Method applied on specimen to freeze it." name="method" publicID="-9223372035451573940" version="1.0"/>
-    <ns19:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns19:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns19:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns19:umlAttributeCollection>
-  </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="FluidSpecimen" id="7b4460e3-b71a-4c3d-ac33-8945e5b31d0b" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
    <ns20:umlAttributeCollection xmlns:ns20="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns20:UMLAttribute dataTypeName="java.lang.String" description="Defines whether this Specimen record can be queried (Active). or not queried (Inactive) by any actor." name="activityStatus" publicID="-9223372036399495918" version="1.0"/>
@@ -1687,18 +1671,6 @@
     <ns24:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
    </ns24:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="TissueSpecimenReviewEventParameters" id="626bfaff-307d-4c9f-954c-bc26cc869ecb" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns25:umlAttributeCollection xmlns:ns25="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns25:UMLAttribute dataTypeName="java.lang.String" description="Histological Quality of the specimen." name="histologicalQuality" publicID="-9223372036665363344" version="1.0"/>
-    <ns25:UMLAttribute dataTypeName="java.lang.Double" description="Percentage of histologically evident lymphocytes in the tissue specimen." name="lymphocyticPercentage" publicID="-9223372034953162749" version="1.0"/>
-    <ns25:UMLAttribute dataTypeName="java.lang.Double" description="Percentage of specimen that is histologically necrotic." name="necrosisPercentage" publicID="-9223372036154597605" version="1.0"/>
-    <ns25:UMLAttribute dataTypeName="java.lang.Double" description="Percentage of histologically evident neoplastic cells present in the tissue specimen." name="neoplasticCellularityPercentage" publicID="-9223372035840625500" version="1.0"/>
-    <ns25:UMLAttribute dataTypeName="java.lang.Double" description="Percentage of total cellularity of the specimen. Note that TOTCELL-NEOCELL-LYMPHCELL= % cellularity of other stromal, etc. cell types. Also Note that 100-TOTCELL-NECROSIS= % of tissue containing a cellular material." name="totalCellularityPercentage" publicID="-9223372035933933505" version="1.0"/>
-    <ns25:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns25:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns25:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns25:umlAttributeCollection>
-  </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="SpecimenArray" id="be1b1511-41d5-4739-b4d3-5abc1f92370d" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
    <ns26:umlAttributeCollection xmlns:ns26="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns26:UMLAttribute dataTypeName="java.lang.Boolean" description="available." name="available" publicID="-9223372036516396835" version="1.0"/>
@@ -1709,23 +1681,6 @@
     <ns26:UMLAttribute dataTypeName="java.lang.Long" description="id." name="id" publicID="-9223372036052512367" version="1.0"/>
     <ns26:UMLAttribute dataTypeName="java.lang.String" description="name." name="name" publicID="-9223372036546741264" version="1.0"/>
    </ns26:umlAttributeCollection>
-  </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="FluidSpecimenReviewEventParameters" id="aa3ec7c7-3908-4e08-8097-80b4f62b8268" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns27:umlAttributeCollection xmlns:ns27="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns27:UMLAttribute dataTypeName="java.lang.Double" description="Cell Count." name="cellCount" publicID="-9223372035943427384" version="1.0"/>
-    <ns27:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns27:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns27:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns27:umlAttributeCollection>
-  </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="SpunEventParameters" id="c2137c32-88e4-4591-b698-0c61cda3369d" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns28:umlAttributeCollection xmlns:ns28="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns28:UMLAttribute dataTypeName="java.lang.Integer" description="Duration for which specimen is spun." name="durationInMinutes" publicID="-9223372036548374246" version="1.0"/>
-    <ns28:UMLAttribute dataTypeName="java.lang.Double" description="Rotational force applied to specimen." name="gravityForce" publicID="-9223372035174275809" version="1.0"/>
-    <ns28:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns28:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns28:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns28:umlAttributeCollection>
   </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="SpecimenRequirement" id="5f9e48c5-f2af-485c-b1ba-006927eb329c" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
    <ns29:umlAttributeCollection xmlns:ns29="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
@@ -1822,24 +1777,6 @@
     <ns37:UMLAttribute dataTypeName="java.lang.String" description="oneDimensionLabel." name="oneDimensionLabel" publicID="-9223372036776803096" version="1.0"/>
     <ns37:UMLAttribute dataTypeName="java.lang.String" description="twoDimensionLabel." name="twoDimensionLabel" publicID="-9223372036070704072" version="1.0"/>
    </ns37:umlAttributeCollection>
-  </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="CellSpecimenReviewParameters" id="86311829-1d48-4fba-839e-df258b9cafe2" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns38:umlAttributeCollection xmlns:ns38="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns38:UMLAttribute dataTypeName="java.lang.Double" description="Percentage of histologically evident neoplastic cells present in the specimen." name="neoplasticCellularityPercentage" publicID="-9223372035168737807" version="1.0"/>
-    <ns38:UMLAttribute dataTypeName="java.lang.Double" description="Percentage of viable cells in the specimen." name="viableCellPercentage" publicID="-9223372035897622888" version="1.0"/>
-    <ns38:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns38:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns38:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns38:umlAttributeCollection>
-  </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ProcedureEventParameters" id="adb46054-1d7d-4909-ad51-2953d28e7a6b" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns39:umlAttributeCollection xmlns:ns39="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns39:UMLAttribute dataTypeName="java.lang.String" description="Name of the customized procedure." name="name" publicID="-9223372036467642967" version="1.0"/>
-    <ns39:UMLAttribute dataTypeName="java.lang.String" description="URL to the document that describes detail information of customized process." name="url" publicID="-9223372035772478619" version="1.0"/>
-    <ns39:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns39:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns39:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns39:umlAttributeCollection>
   </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="ConsentTierStatus" id="0d0f237c-a816-497f-b038-b7ab38234b29" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
    <ns40:umlAttributeCollection xmlns:ns40="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
@@ -2032,13 +1969,6 @@
     <ns56:UMLAttribute dataTypeName="java.lang.Boolean" description="Indicates whether the entity is remotely managed entity" name="remoteManagedFlag" publicID="-9223372035875699652" version="1.0"/>
    </ns56:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="ThawEventParameters" id="5a2c6a46-6348-4733-997b-122dab0d55f9" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns57:umlAttributeCollection xmlns:ns57="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns57:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns57:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns57:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns57:umlAttributeCollection>
-  </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="NewSpecimenOrderItem" id="3a22888a-e993-41f8-8180-1dc8630a89e3" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
    <ns58:umlAttributeCollection xmlns:ns58="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns58:UMLAttribute dataTypeName="java.lang.String" description="String containing the specimen class of the new/derived specimens." name="specimenClass" publicID="-9223372035422759061" version="1.0"/>
@@ -2069,20 +1999,6 @@
     <ns60:UMLAttribute dataTypeName="java.lang.String" description="String containing the status of order." name="status" publicID="-9223372035775652521" version="1.0"/>
    </ns60:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="MolecularSpecimenReviewParameters" id="9c6d0853-953f-4599-8bef-7ed7796c56b6" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns61:umlAttributeCollection xmlns:ns61="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns61:UMLAttribute dataTypeName="java.lang.Double" description="Absorbance of the specimen at 260 nanometers." name="absorbanceAt260" publicID="-9223372035366939285" version="1.0"/>
-    <ns61:UMLAttribute dataTypeName="java.lang.Double" description="Absorbance of the specimen at 280 nanometers." name="absorbanceAt280" publicID="-9223372035270018560" version="1.0"/>
-    <ns61:UMLAttribute dataTypeName="java.lang.String" description="A reference to the location of an electrophoretic gel image of the specimen." name="gelImageURL" publicID="-9223372036463205061" version="1.0"/>
-    <ns61:UMLAttribute dataTypeName="java.lang.Integer" description="A number corresponding to the gel on which the specimen was analyzed for QA purposes." name="gelNumber" publicID="-9223372034829506923" version="1.0"/>
-    <ns61:UMLAttribute dataTypeName="java.lang.String" description="The lane number within the electrophoretic gel image that corresponds to the specimen." name="laneNumber" publicID="-9223372036062033558" version="1.0"/>
-    <ns61:UMLAttribute dataTypeName="java.lang.String" description="A normalized quality score that indicates the integrity of the specimen." name="qualityIndex" publicID="-9223372035415115320" version="1.0"/>
-    <ns61:UMLAttribute dataTypeName="java.lang.Double" description="A unitless ratio of the&#xA0;full-length 28S to 18S&#xA0;ribosomal RNA mass that is detected in a mammalian cellular RNA sample." name="ratio28STo18S" publicID="-9223372034753690670" version="1.0"/>
-    <ns61:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns61:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns61:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns61:umlAttributeCollection>
-  </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="CancerResearchGroup" id="31a3673b-4069-4c99-ba91-c72bd1600b6c" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
    <ns62:umlAttributeCollection xmlns:ns62="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns62:UMLAttribute dataTypeName="java.lang.Boolean" description="Indicates whether the remotely managed entity is locally modified" name="dirtyEditFlag" publicID="-9223372036287099805" version="1.0"/>
@@ -2091,15 +2007,6 @@
     <ns62:UMLAttribute dataTypeName="java.lang.Long" description="Identifier of the entity in remote system" name="remoteId" publicID="-9223372034890712952" version="1.0"/>
     <ns62:UMLAttribute dataTypeName="java.lang.Boolean" description="Indicates whether the entity is remotely managed entity" name="remoteManagedFlag" publicID="-9223372034845647981" version="1.0"/>
    </ns62:umlAttributeCollection>
-  </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="CheckInCheckOutEventParameter" id="0edfb252-ba64-40a4-a37a-a17f64d4ca35" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns63:umlAttributeCollection xmlns:ns63="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns63:UMLAttribute dataTypeName="java.lang.Long" name="id" publicID="-9223372036098716677" version="1.0"/>
-    <ns63:UMLAttribute dataTypeName="java.lang.String" description="Type of the movement e.g. Check-in or Check-out." name="storageStatus" publicID="-9223372036595087887" version="1.0"/>
-    <ns63:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns63:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns63:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns63:umlAttributeCollection>
   </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="StorageContainer" id="780edaae-d832-4d97-bc50-508e43b51729" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
    <ns64:umlAttributeCollection xmlns:ns64="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
@@ -2127,15 +2034,6 @@
     <ns66:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
    </ns66:umlAttributeCollection>
   </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="FixedEventParameters" id="cdeaa6dc-3099-4037-b61f-233ac20d4fd2" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns67:umlAttributeCollection xmlns:ns67="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns67:UMLAttribute dataTypeName="java.lang.Integer" description="Duration, measured in minutes, for which fixation is performed on specimen." name="durationInMinutes" publicID="-9223372035403680284" version="1.0"/>
-    <ns67:UMLAttribute dataTypeName="java.lang.String" description="Type of the fixation." name="fixationType" publicID="-9223372034981377178" version="1.0"/>
-    <ns67:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns67:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns67:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns67:umlAttributeCollection>
-  </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="SpecimenOrderItem" id="eea8146e-d366-47cb-8445-890a572390a7" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
    <ns68:umlAttributeCollection xmlns:ns68="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
     <ns68:UMLAttribute dataTypeName="java.lang.String" description="String containing the description of ordered specimens." name="description" publicID="-9223372036260600271" version="1.0"/>
@@ -2157,15 +2055,6 @@
     <ns69:UMLAttribute dataTypeName="java.lang.String" description="specimenClass - Tissue, Molecular,Fluid and Cell." name="specimenClass" publicID="-9223372036124391887" version="1.0"/>
     <ns69:UMLAttribute dataTypeName="java.lang.String" description="specimenType - Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc." name="specimenType" publicID="-9223372035807485048" version="1.0"/>
    </ns69:umlAttributeCollection>
-  </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="CollectionEventParameters" id="9fe098f9-a81d-4d59-8268-fca702b5310e" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns70:umlAttributeCollection xmlns:ns70="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns70:UMLAttribute dataTypeName="java.lang.String" description="Method of specimen collection from participant (e.g. needle biopsy, central venous line, bone marrow aspiration)" name="collectionProcedure" publicID="-9223372034885130125" version="1.0"/>
-    <ns70:UMLAttribute dataTypeName="java.lang.String" description="Container type in which specimen is collected (e.g. clot tube, KEDTA, ACD, sterile specimen cup)" name="container" publicID="-9223372035617777918" version="1.0"/>
-    <ns70:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns70:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns70:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns70:umlAttributeCollection>
   </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="Biohazard" id="374923d0-b030-46a9-84a1-774541504830" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
    <ns71:umlAttributeCollection xmlns:ns71="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
@@ -2208,14 +2097,6 @@
     <ns73:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
     <ns73:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
    </ns73:umlAttributeCollection>
-  </ns1:UMLClass>
-  <ns1:UMLClass allowableAsTarget="true" className="EmbeddedEventParameters" id="d822a2bc-ac76-4041-83bf-7bc6e2907642" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
-   <ns74:umlAttributeCollection xmlns:ns74="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-    <ns74:UMLAttribute dataTypeName="java.lang.String" description="Type of medium in which specimen is embedded." name="embeddingMedium" publicID="-9223372036664679617" version="1.0"/>
-    <ns74:UMLAttribute dataTypeName="java.lang.String" description="Text comment on event." name="comment" publicID="-9223372035310547300" version="1.0"/>
-    <ns74:UMLAttribute dataTypeName="java.lang.Long" description="System generated unique id." name="id" publicID="-9223372035462646990" version="1.0"/>
-    <ns74:UMLAttribute dataTypeName="java.util.Date" description="Date and time of the event." name="timestamp" publicID="-9223372035997334493" version="1.0"/>
-   </ns74:umlAttributeCollection>
   </ns1:UMLClass>
   <ns1:UMLClass allowableAsTarget="true" className="Participant" id="efe4c3d5-2486-48fb-b680-c376da2533a7" packageName="edu.wustl.catissuecore.domain" projectName="catissue" projectVersion="2.0">
    <ns75:umlAttributeCollection xmlns:ns75="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
