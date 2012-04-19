@@ -56,6 +56,8 @@ public class StorageContainerFactory implements InstanceFactory<StorageContainer
 
 		sc.setStorageType(obj.getStorageType());
 		sc.setTemperatureInCentigrade(obj.getTemperatureInCentigrade());
+		sc.setOneDimensionLabellingScheme(obj.getOneDimensionLabellingScheme());
+		sc.setTwoDimensionLabellingScheme(obj.getTwoDimensionLabellingScheme());
 		sc.setCollectionProtocolCollection(obj.getCollectionProtocolCollection());
 		sc.setHoldsStorageTypeCollection(obj.getHoldsStorageTypeCollection());
 		sc.setHoldsSpecimenClassCollection(obj.getHoldsSpecimenClassCollection());

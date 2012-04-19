@@ -256,6 +256,8 @@ public class StorageContainerAction extends SecureAction
 			request.setAttribute("parentContainerTypeList", parentContainerTypeList);
 			request.setAttribute("parentContainerSelected", storageContainerForm
 					.getParentContainerSelected());
+			request.setAttribute("labellingSchemeList", StorageContainerUtil.getLabellingSchemeOptions());
+
 			session.removeAttribute(Constants.STORAGE_CONTAINER_SESSION_BEAN);
 			session.removeAttribute("isPageFromStorageType");
 			AppUtility.setDefaultPrinterTypeLocation(storageContainerForm);
@@ -494,6 +496,9 @@ public class StorageContainerAction extends SecureAction
 				storageContainerForm.setOneDimensionLabel(type.getOneDimensionLabel());
 				storageContainerForm.setTwoDimensionLabel(CommonUtilities.toString(type
 						.getTwoDimensionLabel()));
+				storageContainerForm.setOneDimensionLabellingScheme(type.getOneDimensionLabellingScheme());
+				storageContainerForm.setTwoDimensionLabellingScheme(type.getTwoDimensionLabellingScheme());
+
 				storageContainerForm.setTypeName(type.getName());
 
 				if (type.getHoldsSpecimenClassCollection().size() > 0)
@@ -791,6 +796,8 @@ public class StorageContainerAction extends SecureAction
 				.getParentContainerSelected());
 		// 12064 S
 		storageContainerForm.setActivityStatus(storageContainerBean.getActivityStatus());
+		storageContainerForm.setOneDimensionLabellingScheme(storageContainerBean.getOneDimensionLabellingScheme());
+		storageContainerForm.setTwoDimensionLabellingScheme(storageContainerBean.getTwoDimensionLabellingScheme());
 		storageContainerForm.setIsFull(storageContainerBean.getIsFull());
 		// 12064 E
 	}

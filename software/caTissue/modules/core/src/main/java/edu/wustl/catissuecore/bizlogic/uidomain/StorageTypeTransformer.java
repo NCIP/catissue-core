@@ -33,6 +33,8 @@ public class StorageTypeTransformer extends ContainerTypeTransformer<StorageType
             setTemp(domainObject, uiRepOfDomain);
             domainObject.setOneDimensionLabel(uiRepOfDomain.getOneDimensionLabel());
             domainObject.setTwoDimensionLabel(uiRepOfDomain.getTwoDimensionLabel());
+            domainObject.setOneDimensionLabellingScheme(uiRepOfDomain.getOneDimensionLabellingScheme());
+            domainObject.setTwoDimensionLabellingScheme(uiRepOfDomain.getTwoDimensionLabellingScheme());
             if (SearchUtil.isNullobject(domainObject.getCapacity())) {
                 domainObject.setCapacity((Capacity)DomainInstanceFactory.getInstanceFactory(Capacity.class).createObject());//new Capacity()
             }

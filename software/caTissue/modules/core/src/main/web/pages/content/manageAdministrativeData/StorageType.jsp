@@ -242,6 +242,15 @@
 				  &nbsp;&nbsp;&nbsp;&nbsp;
 				  <html:text styleClass="black_ar"  maxlength="10"  size="20" styleId="twoDimensionCapacity" property="twoDimensionCapacity" onkeyup="capacityChanged(this)" style="text-align:right" /></td>
                 </tr>
+                <tr>
+                        <td width="1%" align="center" valign="top" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></td>
+						 <td  align="left" valign="top" class="black_ar"><label for="Dimension One labelling scheme" onmouseover="Tip('Dimension One labelling scheme')">Dimension One labelling scheme</label>
+						 <td><html:select  styleClass="formFieldSizedNew" property="oneDimensionLabellingScheme" size="1"><html:options collection="labellingSchemeList"labelProperty="name" property="value"  /></html:select></td>
+						 <td width="1%" align="center" valign="top" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" />
+						<label for="Dimension Two labelling scheme" onmouseover="Tip('Dimension Two labelling scheme')">Dimension Two labelling scheme</label>
+						 <td><html:select  styleClass="formFieldSizedNew" property="twoDimensionLabellingScheme" size="1"><html:options collection="labellingSchemeList"labelProperty="name" property="value"  /></html:select></td>
+						 </tr>
+					
 				<tr><td>&nbsp;</td></tr>
                 <tr>
 

@@ -101,6 +101,29 @@ public class StorageTypeForm extends AbstractActionForm implements ISpecimenType
 	 * List of Molecular Specimen Types that Storage Type can hold.
 	 */
 	private String[] holdsMolSpType;
+	
+	private String oneDimensionLabellingScheme;
+	private String twoDimensionLabellingScheme;
+		
+	public String getOneDimensionLabellingScheme()
+	{
+		return oneDimensionLabellingScheme;
+	}
+	
+	public void setOneDimensionLabellingScheme(String oneDimensionLabellingScheme)
+	{
+		this.oneDimensionLabellingScheme = oneDimensionLabellingScheme;
+	}
+	
+	public String getTwoDimensionLabellingScheme()
+	{
+		return twoDimensionLabellingScheme;
+	}
+	
+	public void setTwoDimensionLabellingScheme(String twoDimensionLabellingScheme)
+	{
+		this.twoDimensionLabellingScheme = twoDimensionLabellingScheme;
+	}
 	/**
 	 * @return holdsTissueSpType
 	 */
@@ -192,6 +215,8 @@ public class StorageTypeForm extends AbstractActionForm implements ISpecimenType
 		this.twoDimensionCapacity = storageType.getCapacity().getTwoDimensionCapacity().intValue();
 		this.oneDimensionLabel = storageType.getOneDimensionLabel();
 		this.twoDimensionLabel = storageType.getTwoDimensionLabel();
+		this.oneDimensionLabellingScheme = storageType.getOneDimensionLabellingScheme();
+		this.twoDimensionLabellingScheme = storageType.getTwoDimensionLabellingScheme();
 		final Collection<StorageType> storageTypeCollection = storageType.getHoldsStorageTypeCollection();
 		if (storageTypeCollection != null)
 		{

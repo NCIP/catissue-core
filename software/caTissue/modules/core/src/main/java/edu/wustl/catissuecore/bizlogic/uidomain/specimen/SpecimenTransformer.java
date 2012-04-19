@@ -10,9 +10,9 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.actionForm.IValueObject;
-import edu.wustl.common.exception.AssignDataException;
 import gov.nih.nci.logging.api.util.StringUtils;
 
 public abstract class SpecimenTransformer<U extends SpecimenForm> extends AbstractSpecimenTransformer<U, Specimen> {
@@ -69,7 +69,7 @@ public abstract class SpecimenTransformer<U extends SpecimenForm> extends Abstra
 			if (Constants.DOUBLE_QUOTES.equals(uiRepOfDomain.getConcentration())) {
 				// TODO
 				// MolecularSpecimen.logger.debug("Concentration is " +
-						// uiRepOfDomain.getConcentration());
+				// uiRepOfDomain.getConcentration());
 			} else {
 				((MolecularSpecimen) domainObject).setConcentrationInMicrogramPerMicroliter(new Double(uiRepOfDomain
 						.getConcentration()));
@@ -100,36 +100,29 @@ public abstract class SpecimenTransformer<U extends SpecimenForm> extends Abstra
 			InstanceFactory<StorageContainer> scInstFact = DomainInstanceFactory.getInstanceFactory(StorageContainer.class);
 			domainObject.getSpecimenPosition().setStorageContainer(scInstFact.createObject());
 		}
-		if (form.getStContSelection() == 1) {
-			// domainObject.storageContainer = null;
+		if (form.getStContSelection() == 1)
+		{
 			domainObject.setSpecimenPosition(null);
 		}
-		if (form.getStContSelection() == 2) {
-			final long stContainerId = Long.parseLong(form.getStorageContainer());
-			domainObject.getSpecimenPosition().getStorageContainer().setId(stContainerId);
-			/*
-			 * if (domainObject.specimenPosition == null) {
-			 * domainObject.specimenPosition = new SpecimenPosition(); }
-			 */
-			domainObject.getSpecimenPosition().setPositionDimensionOne(Integer.valueOf(form.getPositionDimensionOne()));
-			domainObject.getSpecimenPosition().setPositionDimensionTwo(Integer.valueOf(form.getPositionDimensionTwo()));
+		if (form.getStContSelection() == 2)
+		{
+			final long containerId = Long.parseLong(form.getStorageContainer());
+			domainObject.getSpecimenPosition().getStorageContainer().setId(containerId);
+			domainObject.getSpecimenPosition().setPositionDimensionOne(Integer.valueOf( AppUtility.excelColumnAlphabetToNum(String.valueOf(form
+					.getPositionDimensionOne())).toString()));
+			domainObject.getSpecimenPosition().setPositionDimensionTwo(Integer.valueOf( AppUtility.excelColumnAlphabetToNum(String.valueOf(form
+					.getPositionDimensionTwo())).toString()));
 			domainObject.getSpecimenPosition().setSpecimen(domainObject);
 
-			// domainObject.specimenPosition.storageContainer =
-			// domainObject.storageContainer;
-		} else if (form.getStContSelection() == 3) {
+		}
+		else if (form.getStContSelection() == 3)
+		{
 			domainObject.getSpecimenPosition().getStorageContainer().setName(form.getSelectedContainerName());
-			if (form.getPos1() != null && !form.getPos1().trim().equals("") && form.getPos2() != null
-					&& !form.getPos2().trim().equals("")) {
-				/*
-				 * if (domainObject.specimenPosition == null) {
-				 * domainObject.specimenPosition = new SpecimenPosition();s}
-				 */
-				domainObject.getSpecimenPosition().setPositionDimensionOne(Integer.valueOf(form.getPos1()));
-				domainObject.getSpecimenPosition().setPositionDimensionTwo(Integer.valueOf(form.getPos2()));
+			if (form.getPos1() != null && !form.getPos1().trim().equals("")
+					&& form.getPos2() != null && !form.getPos2().trim().equals(""))
+			{				
+				StorageContainerUtil.setContainerPositions(form.getSelectedContainerName(), form.getPos1(), form.getPos2(),domainObject.getSpecimenPosition());
 				domainObject.getSpecimenPosition().setSpecimen(domainObject);
-				// domainObject.specimenPosition.storageContainer
-				// = domainObject.storageContainer;
 			}
 
 		}

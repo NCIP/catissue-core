@@ -123,6 +123,8 @@ public class StorageTypeAction extends SecureAction
 		}
 		setRequestParameters(request, storageTypeForm, operation);
 		final AbstractActionForm aForm = (AbstractActionForm) form;
+		
+		request.setAttribute("labellingSchemeList", StorageContainerUtil.getLabellingSchemeOptions());
 		if (reqPath != null && aForm != null)
 		{
 			aForm.setRedirectTo(reqPath);

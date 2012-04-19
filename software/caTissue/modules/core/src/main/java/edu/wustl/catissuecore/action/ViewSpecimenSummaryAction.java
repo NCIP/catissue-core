@@ -1,6 +1,8 @@
 
 package edu.wustl.catissuecore.action;
 
+
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -445,6 +447,43 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 		derivedSessionVO.setSelectedContainerName(derivedFormVO.getSelectedContainerName());
 		derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOne());
 		derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwo());
+		List labellingSchemesList=null;
+		if(derivedSessionVO.getSelectedContainerName()!=null && !derivedSessionVO.getSelectedContainerName().equalsIgnoreCase(""))
+		{
+			labellingSchemesList=StorageContainerUtil.getLabellingSchemeByContainerName(derivedSessionVO.getSelectedContainerName());
+			String oneDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(0);
+			String twoDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(1);
+			if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) || 
+					oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE))
+			{
+				derivedSessionVO.setPositionDimensionOne(AppUtility.excelColumnAlphabetToNum(derivedFormVO.getPositionDimensionOne()).toString());
+			}
+			else if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN))
+			{
+				derivedSessionVO.setPositionDimensionOne(AppUtility.romanToInteger(derivedFormVO.getPositionDimensionOne().toUpperCase()).toString());
+			}
+			else
+			{
+				/*derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOneString());*/
+				derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOne());
+			}
+			if(twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) ||
+					twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE))
+			{
+				/*derivedSessionVO.setPositionDimensionTwo(AppUtility.excelColumnAlphabetToNum(derivedFormVO.getPositionDimensionTwoString()).toString());*/
+				derivedSessionVO.setPositionDimensionTwo(AppUtility.excelColumnAlphabetToNum(derivedFormVO.getPositionDimensionTwo()).toString());
+			}
+			else if(twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN))
+			{
+				/*derivedSessionVO.setPositionDimensionTwo(AppUtility.romanToInteger(derivedFormVO.getPositionDimensionTwoString().toUpperCase()).toString());*/
+				derivedSessionVO.setPositionDimensionTwo(AppUtility.romanToInteger(derivedFormVO.getPositionDimensionTwo().toUpperCase()).toString());
+			}
+			else
+			{
+				/*derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwoString());*/
+				derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwo());
+			}
+		}
 		derivedSessionVO.setQuantity(derivedFormVO.getQuantity());
 		derivedSessionVO.setConcentration(derivedFormVO.getConcentration());
 		derivedSessionVO.setFormSpecimenVo(derivedFormVO);

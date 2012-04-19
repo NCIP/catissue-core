@@ -166,8 +166,14 @@ public class ShowStorageGridViewAction extends BaseAction
 			{
 				twoDimLabel = " ";
 			}
+			String oneDimLabellingScheme=storageContainer.getOneDimensionLabellingScheme();
+			String twoDimLabellingScheme=storageContainer.getTwoDimensionLabellingScheme();
 			request.setAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL, oneDimLabel);
 			request.setAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL, twoDimLabel);
+			
+			request.setAttribute("oneDimLabellingScheme", oneDimLabellingScheme);
+			request.setAttribute("twoDimLabellingScheme", twoDimLabellingScheme);
+			
 			storageContainerGridObject.setId(storageContainer.getId().longValue());
 			storageContainerGridObject.setType(storageType.getName());
 			storageContainerGridObject.setName(storageContainer.getName());
@@ -175,6 +181,10 @@ public class ShowStorageGridViewAction extends BaseAction
 					.getOneDimensionCapacity();
 			final Integer twoDimensionCapacity = storageContainer.getCapacity()
 					.getTwoDimensionCapacity();
+			String oneDimensionLabellingScheme=storageContainer.getOneDimensionLabellingScheme();
+			String twoDimensionLabellingScheme=storageContainer.getTwoDimensionLabellingScheme();
+			storageContainerGridObject.setOneDimensionLabellingScheme(oneDimensionLabellingScheme);
+			storageContainerGridObject.setTwoDimensionLabellingScheme(twoDimensionLabellingScheme);
 			childContainerIds = new int[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
 					.intValue() + 1];
 			storageContainerGridObject.setOneDimensionCapacity(oneDimensionCapacity);
@@ -267,7 +277,7 @@ public class ShowStorageGridViewAction extends BaseAction
 						
 						jsonMidleString.append("\""+twoDimLabel+"_"+j+"\"");
 					}else if(j==0){
-						jsonMidleString.append("\""+i+"\"");
+						jsonMidleString.append("\""+AppUtility.getPositionValue(oneDimensionLabellingScheme, i)+"\"");
 						
 					} else{
 						String value = "";
@@ -362,7 +372,7 @@ public class ShowStorageGridViewAction extends BaseAction
 			}
 			
 			for(int i =0; i <twoDimensionCapacity ;i++){
-				headerString += (i+1);
+				headerString += (AppUtility.getPositionValue(twoDimensionLabellingScheme, i+1));;
 				if(i<(twoDimensionCapacity-1)){
 					headerString += ",";
 				}

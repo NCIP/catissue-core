@@ -131,6 +131,28 @@ public class StorageContainerBean implements Serializable
 	 */
 	private long id;
 
+	private String oneDimensionLabellingScheme;
+	private String twoDimensionLabellingScheme;	
+	
+	public String getOneDimensionLabellingScheme()
+	{
+		return oneDimensionLabellingScheme;
+	}
+
+	public void setOneDimensionLabellingScheme(String oneDimensionLabellingScheme)
+	{
+		this.oneDimensionLabellingScheme = oneDimensionLabellingScheme;
+	}
+	
+	public String getTwoDimensionLabellingScheme()
+	{
+		return twoDimensionLabellingScheme;
+	}
+	
+	public void setTwoDimensionLabellingScheme(String twoDimensionLabellingScheme)
+	{
+		this.twoDimensionLabellingScheme = twoDimensionLabellingScheme;
+	}
 	/**
 	 * Returns an id which refers to the type of the storage.
 	 * @return An id which refers to the type of the storage.

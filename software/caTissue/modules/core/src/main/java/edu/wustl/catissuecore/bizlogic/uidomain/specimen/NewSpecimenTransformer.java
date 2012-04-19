@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
 import edu.wustl.catissuecore.util.ConsentUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.InputUIRepOfDomain;
 import edu.wustl.common.util.MapDataParser;
@@ -62,34 +63,6 @@ public class NewSpecimenTransformer extends SpecimenTransformer<NewSpecimenForm>
             } else {
                 domainObject.setIsAvailable(Boolean.valueOf(uiRepOfDomain.isAvailable()));
             }
-
-            // in case of edit
-           /* if (!uiRepOfDomain.isAddOperation()) {
-                // specimen is a new specimen
-                if (domainObject.getParentSpecimen() == null) {
-                    final String parentSpecimenId = uiRepOfDomain.getParentSpecimenId();
-                    // specimen created from another specimen
-                    if (parentSpecimenId != null && !parentSpecimenId.trim().equals("")
-                            && Long.parseLong(parentSpecimenId) > 0) {
-                        domainObject.setParentChanged(true);
-                    }
-                } else
-                // specimen created from another specimen
-                {
-                    if (!((Specimen) domainObject.getParentSpecimen()).getLabel().equalsIgnoreCase(
-                            uiRepOfDomain.getParentSpecimenName())) {
-                        domainObject.setParentChanged(true);
-                    }
-                }
-                *//**
-                 * Patch ID: 3835_1_3 See also: 1_1 to 1_5 Description : Set
-                 * createdOn date in edit mode for new specimen
-                 *//*
-                domainObject.setCreatedOn(CommonUtilities.parseDate(uiRepOfDomain.getCreatedDate(),
-                        CommonServiceLocator.getInstance().getDatePattern()));
-            }*/
-
-           // logger.debug("isParentChanged " + domainObject.isParentChanged());
 
             // Setting the SpecimenCharacteristics
             domainObject.setPathologicalStatus(uiRepOfDomain.getPathologicalStatus());
@@ -162,10 +135,7 @@ public class NewSpecimenTransformer extends SpecimenTransformer<NewSpecimenForm>
                              */
                             domainObject.getSpecimenPosition().getStorageContainer().setName(
                                     uiRepOfDomain.getSelectedContainerName());
-                            domainObject.getSpecimenPosition().setPositionDimensionOne(
-                                    Integer.valueOf(uiRepOfDomain.getPos1()));
-                            domainObject.getSpecimenPosition().setPositionDimensionTwo(
-                                    Integer.valueOf(uiRepOfDomain.getPos2()));
+                            StorageContainerUtil.setContainerPositions(uiRepOfDomain.getSelectedContainerName(), uiRepOfDomain.getPos1(), uiRepOfDomain.getPos2(), domainObject.getSpecimenPosition());
                             domainObject.getSpecimenPosition().setSpecimen(domainObject);
                         }
                         // bug 11479 S
@@ -180,9 +150,10 @@ public class NewSpecimenTransformer extends SpecimenTransformer<NewSpecimenForm>
                     domainObject.getSpecimenPosition().getStorageContainer().setName(
                             uiRepOfDomain.getSelectedContainerName());
                     domainObject.getSpecimenPosition().setPositionDimensionOne(
-                            Integer.valueOf(uiRepOfDomain.getPositionDimensionOne()));
+                            Integer.valueOf(uiRepOfDomain.getPos1()));
                     domainObject.getSpecimenPosition().setPositionDimensionTwo(
-                            Integer.valueOf(uiRepOfDomain.getPositionDimensionTwo()));
+                            Integer.valueOf(uiRepOfDomain.getPos2()));
+                    StorageContainerUtil.setContainerPositions(uiRepOfDomain.getSelectedContainerName(), uiRepOfDomain.getPositionDimensionOne(), uiRepOfDomain.getPositionDimensionTwo(), domainObject.getSpecimenPosition());
                     domainObject.getSpecimenPosition().setSpecimen(domainObject);
                 }
             }

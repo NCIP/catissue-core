@@ -26,6 +26,29 @@ public class StorageContainerGridObject
 
 	private String name;
 
+
+	private String oneDimensionLabellingScheme;
+	private String twoDimensionLabellingScheme;	
+	
+	public String getOneDimensionLabellingScheme()
+	{
+		return oneDimensionLabellingScheme;
+	}
+
+	public void setOneDimensionLabellingScheme(String oneDimensionLabellingScheme)
+	{
+		this.oneDimensionLabellingScheme = oneDimensionLabellingScheme;
+	}
+	
+	public String getTwoDimensionLabellingScheme()
+	{
+		return twoDimensionLabellingScheme;
+	}
+	public void setTwoDimensionLabellingScheme(String twoDimensionLabellingScheme)
+	{
+		this.twoDimensionLabellingScheme = twoDimensionLabellingScheme;
+	}
+	
 	/**
 	 * @return Returns the oneDimensionCapacity.
 	 */

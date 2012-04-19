@@ -687,10 +687,10 @@ public class SpecimenForm extends AbstractActionForm
 			logger.info("-----------Container while getting from domain--:" + container);
 			this.storageContainer = String.valueOf(container.getId());
 			this.selectedContainerName = container.getName();
-			this.positionDimensionOne = String.valueOf(specimen.getSpecimenPosition()
+			this.positionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,1,specimen.getSpecimenPosition()
 					.getPositionDimensionOne());
-			this.positionDimensionTwo = String.valueOf(specimen.getSpecimenPosition()
-					.getPositionDimensionTwo());
+			this.positionDimensionTwo =StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,2,specimen.getSpecimenPosition()
+					.getPositionDimensionTwo());		
 			this.positionInStorageContainer = container.getStorageType().getName() + " : "
 					+ container.getId() + " Pos(" + this.positionDimensionOne + ","
 					+ this.positionDimensionTwo + ")";
@@ -1072,12 +1072,12 @@ public class SpecimenForm extends AbstractActionForm
 					}
 					index++;
 				}
-				final boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
+				/*final boolean flag = StorageContainerUtil.checkPos1AndPos2(this.pos1, this.pos2);
 				if (flag)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("specimen.positionInStorageContainer")));
-				}
+				}*/
 			}
 		}
 		catch (final Exception excp)

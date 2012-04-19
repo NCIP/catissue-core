@@ -805,8 +805,8 @@ public class NewSpecimenAction extends SecureAction
 						parentContainerName = container.getName();
 
 					}
-					final Integer pos1 = Integer.valueOf(specimenForm.getPositionDimensionOne());
-					final Integer pos2 = Integer.valueOf(specimenForm.getPositionDimensionTwo());
+					final String pos1 = specimenForm.getPositionDimensionOne();
+					final String pos2 = specimenForm.getPositionDimensionTwo();
 
 					final List<NameValueBean> pos2List = new ArrayList<NameValueBean>();
 					pos2List.add(new NameValueBean(pos2, pos2));

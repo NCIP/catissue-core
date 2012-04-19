@@ -3104,6 +3104,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				}
 				specPos.setSpecimen(specimen);
 				specPos.setStorageContainer(storageContainerObj);
+				StorageContainerUtil.setContainerPositionAsString(specPos.getStorageContainer().getName(), specPos.getPositionDimensionOne(), specPos.getPositionDimensionTwo(), specPos);
 				specimen.setSpecimenPosition(specPos);
 
 				// bug 8294
@@ -4369,7 +4370,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			if (specimen.getSpecimenPosition() != null
 					&& specimen.getSpecimenPosition().getStorageContainer() != null
 					&& (specimen.getSpecimenPosition().getStorageContainer()
-							.getId() == null && specimen.getSpecimenPosition()
+							.getId() == null && 
+					specimen.getSpecimenPosition()
 							.getStorageContainer().getName() == null)) {
 				final String message = ApplicationProperties
 						.getValue("specimen.storageContainer");

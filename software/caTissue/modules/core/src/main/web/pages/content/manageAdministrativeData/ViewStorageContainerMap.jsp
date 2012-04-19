@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject,edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -27,6 +27,8 @@
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 String [][] childContainerName = (String [][])request.getAttribute(Constants.CHILD_CONTAINER_NAME);
+String oneDimLabellingScheme = (String)request.getAttribute("oneDimLabellingScheme");
+String twoDimLabellingScheme = (String)request.getAttribute("twoDimLabellingScheme");
 String storageContainerIdentifier = (String) request.getAttribute("storageContainerIdentifier");
 %>
 function setParentWindowValue(elementName,elementValue)
@@ -477,11 +479,18 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 				  
 				  
 		
-		<tr>
-			<td width="100%" height="100%" >
-			<!--div id="menuObj"></div-->
+		<td  width="5"class="black_ar_t" >&nbsp;</td>
+		<td class="black_ar" ><b>&nbsp;<%=verTempTwo%>&rarr;</b></td>
+		 
+	</tr>
+				<tr>
+					<td width="5" class="black_ar_t" align="center"><b><%=verTempOne%>&darr;<b></td>
+					<td width="100%" height="100%" >
 				<div id="containerGrid"></div>
 			</td>
+				</tr>
+		<tr>
+			
 		</tr>		
 		</table>
 		</td>
@@ -491,18 +500,6 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 	</iframe>
 	
 <script>
-/*
-mygrid = new dhtmlXGridObject('gridbox');
-mygrid.setImagePath("dhtml_comp/imgs/"); 
-mygrid.setHeader("1,2,3,4,5,6,7,8,9,10,11");
-mygrid.setInitWidths("20,20,20,20,20,20,20,20,20,20,20"); 
-mygrid.setColAlign("right,left,left,right,left,left,right,left,left,right,left");
-mygrid.setColTypes("dyn,ed,ed");
-mygrid.setColSorting("int,str,str");
-mygrid.init();
-mygrid.setSkin("dhx_skyblue");
-mygrid.load("../common/data.json", "json");
-*/
 var grid = new dhtmlXGridObject("containerGrid");
 function loadGrid()
 {

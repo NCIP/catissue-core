@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -469,6 +470,7 @@ public class CreateAliquotAction extends BaseAction
 				{
 					specPos.setPositionDimensionOne(Integer.valueOf(posDim1));
 					specPos.setPositionDimensionTwo(Integer.valueOf(posDim2));
+					StorageContainerUtil.setContainerPositions(containername, posDim1, posDim2, specPos);
 					sContainer.setId(storageContainerId);
 				}
 				sContainer.setName(containername);

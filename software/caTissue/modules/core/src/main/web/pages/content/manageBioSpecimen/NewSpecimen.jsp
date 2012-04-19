@@ -2036,9 +2036,9 @@
 
 									%>
 
-									<%=ScriptGenerator.getJSForOutermostDataTable()%>
+									<%//=ScriptGenerator.getJSForOutermostDataTable()%>
 									<%//System.out.println("after getJSForOutermostDataTable in specimen jsp");%>
-									<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
+									<%//=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 									<%//System.out.println("after getJSEquivalentFor in specimen jsp");%>
 
 									<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>

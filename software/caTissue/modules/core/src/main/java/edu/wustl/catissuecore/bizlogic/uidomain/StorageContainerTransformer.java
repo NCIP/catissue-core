@@ -62,62 +62,8 @@ public class StorageContainerTransformer implements UIDomainTransformer<StorageC
             }
             domainObject.getCapacity().setOneDimensionCapacity(new Integer(uiRepOfDomain.getOneDimensionCapacity()));
             domainObject.getCapacity().setTwoDimensionCapacity(new Integer(uiRepOfDomain.getTwoDimensionCapacity()));
-            /*if (!uiRepOfDomain.isAddOperation()) {
-                // Previously Container was in a site
-                if (domainObject.getLocatedAtPosition() != null
-                        && domainObject.getLocatedAtPosition().getParentContainer() == null) {
-                    if (uiRepOfDomain.getStContSelection() == 1) {
-                        // Put domainObject in another container
-                        if (uiRepOfDomain.getParentContainerId() > 0) {
-                            domainObject.setParentChanged(true);
-                        }
-                    } else {
-                        if (!uiRepOfDomain.getContainerId().equals("0")) {
-                            domainObject.setParentChanged(true);
-                        }
-                    }
-                } else
-                // in another container
-                {
-                    if (uiRepOfDomain.getStContSelection() == 1) {
-                        if (domainObject.getLocatedAtPosition() != null
-                                && domainObject.getLocatedAtPosition().getParentContainer() != null
-                                && domainObject.getLocatedAtPosition().getParentContainer().getId().longValue() != uiRepOfDomain
-                                        .getParentContainerId()) {
-                            domainObject.setParentChanged(true);
-                        }
-                    } else if (domainObject.getLocatedAtPosition() != null
-                            && domainObject.getLocatedAtPosition().getParentContainer() != null
-                            && domainObject.getLocatedAtPosition().getParentContainer().getId().equals(
-                                    uiRepOfDomain.getContainerId())) {
-                        domainObject.setParentChanged(true);
-                    }
-
-                    // code to check if the position of the container is changed
-
-                    if (uiRepOfDomain.getStContSelection() == 1) {
-                        if ((domainObject.getLocatedAtPosition() != null && domainObject.getLocatedAtPosition()
-                                .getPositionDimensionOne().intValue() != uiRepOfDomain.getPositionDimensionOne())
-                                || (domainObject.getLocatedAtPosition() != null && domainObject.getLocatedAtPosition()
-                                        .getPositionDimensionTwo().intValue() != uiRepOfDomain
-                                        .getPositionDimensionOne())) {
-                            domainObject.setPositionChanged(true);
-                        }
-                    } else {
-                        if (domainObject.getLocatedAtPosition() != null
-                                && domainObject.getLocatedAtPosition().getPositionDimensionOne().equals(
-                                        uiRepOfDomain.getPos1())
-                                || domainObject.getLocatedAtPosition().getPositionDimensionTwo().equals(
-                                        uiRepOfDomain.getPos2())) {
-                            domainObject.setPositionChanged(true);
-                        }
-                    }
-
-                }
-            }*/
-
-            // logger.debug("isParentChanged " +
-            // domainObject.getIsParentChanged());
+            domainObject.setOneDimensionLabellingScheme(uiRepOfDomain.getOneDimensionLabellingScheme());
+            domainObject.setTwoDimensionLabellingScheme(uiRepOfDomain.getTwoDimensionLabellingScheme());
             InstanceFactory<StorageContainer> scInstFact = DomainInstanceFactory.getInstanceFactory(StorageContainer.class);
             if (!Constants.SITE.equals(uiRepOfDomain.getParentContainerSelected())) {
                 if (domainObject.getLocatedAtPosition() == null) {
