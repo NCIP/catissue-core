@@ -1153,6 +1153,10 @@
 	<definition name=".catissuecore.gsidBatchUpdateDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/gsid/gsidBatchUpdateNotification.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.gsidDisabled" extends=".catissuecore.homePageDef">
+        <put name="content" value="/pages/content/gsid/GsidDisabled.jsp" />
+    </definition>	
 
 	<!-- MAGE-TAB Export Wizard -->
 	<definition name=".catissuecore.magetabExportWizardDef" path="/pages/content/magetab/magetabExportWizard.jsp">

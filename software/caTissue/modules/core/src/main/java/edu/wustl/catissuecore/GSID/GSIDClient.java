@@ -37,7 +37,6 @@ public class GSIDClient {
 	private static final String REGISTER_ORGANIZATION;
 	//private static final String GSID_SYNC_DESC_FILE;
 	private static final String GSID_TARGET_GRID;
-	private static final String JBOSS_HOME;
 	private static GlobusCredential globusCredentials = null;
 	private static IdentifiersNAServiceClient client = null;
 	private static final boolean GSID_ASSIGN_BUTTON_ENABLED;
@@ -72,7 +71,6 @@ public class GSIDClient {
 			REGISTER_ORGANIZATION = null;
 			//GSID_SYNC_DESC_FILE = null;
 			GSID_TARGET_GRID=null;
-			JBOSS_HOME=null;
 			GSID_ASSIGN_BUTTON_ENABLED=false;
 		} else {
 			try {
@@ -98,7 +96,6 @@ public class GSIDClient {
 				REGISTER_ORGANIZATION = null;
 				//GSID_SYNC_DESC_FILE=null;
 				GSID_TARGET_GRID=null;
-				JBOSS_HOME=null;
 				GSID_ASSIGN_BUTTON_ENABLED=false;
 			} else {
 				USER_NAME = defaultProps
@@ -127,7 +124,7 @@ public class GSIDClient {
 						.getProperty(GSIDConstant.GSID_REGISTER_ORGANIZATION);
 				//GSID_SYNC_DESC_FILE=defaultProps.getProperty(GSIDConstant.GSID_SYNC_DESC_FIlE_KEY);
 				GSID_TARGET_GRID=defaultProps.getProperty(GSIDConstant.GSID_TARGET_GRID);
-				JBOSS_HOME=defaultProps.getProperty(GSIDConstant.JBOSS_HOME);
+				defaultProps.getProperty(GSIDConstant.JBOSS_HOME);
 				GSID_IS_ENABLED = Boolean.valueOf(
 						defaultProps
 								.getProperty(GSIDConstant.GSID_IS_ENABLED_KEY))

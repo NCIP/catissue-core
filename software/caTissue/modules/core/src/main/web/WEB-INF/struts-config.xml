@@ -5550,6 +5550,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.gsidBatchUpdateDef" />
 			<forward name="failure" path=".catissuecore.gsidBatchUpdateDef" />
+			<forward name="disabled" path=".catissuecore.gsidDisabled" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 

@@ -10,13 +10,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.GSID.GSIDBatchUpdate;
+import edu.wustl.catissuecore.GSID.GSIDClient;
 import edu.wustl.catissuecore.GSID.GSIDServiceStatusNotifier;
 import edu.wustl.catissuecore.actionForm.GSIDBatchUpdateForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.logging.api.util.StringUtils;
 
 public class GSIDBatchUpdateAction extends SecureAction {
 
@@ -30,6 +30,16 @@ public class GSIDBatchUpdateAction extends SecureAction {
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);		
 		request.setAttribute("GSIDBatchUpdateForm",gsidForm);
+		
+		if (!GSIDClient.GSID_IS_ENABLED) {
+		    ActionErrors actionErrors = new ActionErrors();
+            ActionError actionError = new ActionError("errors.item",
+                    "GSID is disabled.");
+            actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
+            saveErrors(request, actionErrors);
+            return mapping.findForward("disabled");		     
+		}
+		
 		if(sessionData.isAdmin())
 		{
 			//check if lock exists
