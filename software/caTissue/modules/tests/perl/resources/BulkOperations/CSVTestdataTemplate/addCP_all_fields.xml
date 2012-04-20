@@ -42,21 +42,21 @@
 			<attribute name="collectionPointLabel" csvColumnName="CPL"/>
 			<attribute name="clinicalStatus" csvColumnName="CS"/>		
 			<attribute name="activityStatus" csvColumnName="ActivityStatus"/>
-                        
-   <containmentAssociation 
-       className="edu.wustl.catissuecore.domain.SpecimenProcessingProcedure"  cardinality="*" roleName="specimenProcessingProcedureCollection" maxNoOfRecords="5" parentRoleName="collectionProtocolEvent">
-                 <attribute name="name" csvColumnName="SpecimenProcessingProcedure"/>	        
-          </containmentAssociation>
+                         <containmentAssociation 
+       className="edu.wustl.catissuecore.domain.processingprocedure.SpecimenProcessingProcedure"  cardinality="*" roleName="sppCollection">
+                 <attribute name="name" csvColumnName="Spp"/>	        
+          </containmentAssociation> 
+  
 			<containmentAssociation
 				className="edu.wustl.catissuecore.domain.SpecimenRequirement"
 				   cardinality="*" roleName="specimenRequirementCollection" maxNoOfRecords="2" parentRoleName="collectionProtocolEvent" >
 
 				<attribute name="specimenClass" csvColumnName="Specimen Class">
 
-					<discriminator name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimenRequirement"/>
-					<discriminator name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimenRequirement"/>
-					<discriminator name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimenRequirement"/>
-					<discriminator name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimenRequirement"/>
+					<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimenRequirement"/>
+					<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimenRequirement"/>
+					<discriminatorCollection name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimenRequirement"/>
+					<discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimenRequirement"/>
 
 				</attribute>
                                  
