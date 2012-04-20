@@ -12,7 +12,7 @@
    </referenceAssociation>
 			
     <referenceAssociation className="edu.wustl.catissuecore.domain.SpecimenArrayContent"    maxNoOfRecords="4"  cardinality="*" roleName="specimenArrayContentCollection">
-		<referenceAssociation className="edu.wustl.catissuecore.domain.Specimen"    maxNoOfRecords="4"   roleName="specimen">
+		<referenceAssociation className="edu.wustl.catissuecore.domain.Specimen"    maxNoOfRecords="1"   roleName="specimen">
 		<!--<attribute name="label" csvColumnName="Specimen_Label"  	/>-->
 		<attribute name="barcode" csvColumnName="Specimen_Barcode"   />
     	</referenceAssociation>
