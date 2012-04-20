@@ -14,7 +14,7 @@
 			<attribute name="protocolParticipantIdentifier" csvColumnName="PPI"   />
 			<attribute name="registrationDate" csvColumnName="Registration Date"   />
 				<containmentAssociation className="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-						 isOneToManyAssociation="true" cardinality="*"
+						  cardinality="*"
 						roleName="specimenCollectionGroupCollection"   parentRoleName="collectionProtocolRegistration" >
 						<referenceAssociation
 							className="edu.wustl.catissuecore.domain.Site"
@@ -29,10 +29,10 @@
 							<attribute name="id" csvColumnName="Study Calendar Event Point Label"   />
 						</referenceAssociation>
 						<containmentAssociation className="edu.wustl.catissuecore.domain.TissueSpecimen"
-						 isOneToManyAssociation="true" cardinality="*"
+						  cardinality="*"
 						roleName="specimenCollection"   parentRoleName="specimenCollectionGroup" >
 							<containmentAssociation className="edu.wustl.catissuecore.domain.SpecimenCharacteristics"
-							 isOneToManyAssociation="true" 
+							  
 							roleName="specimenCharacteristics"    >
 								<attribute name="tissueSide" csvColumnName="Tissue Side"   />
 								<attribute name="tissueSite" csvColumnName="Tissue Site"   />
