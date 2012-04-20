@@ -585,7 +585,8 @@
 
 	<target name="execute_file_db_oracle" description="execute the DynamicExtensions sql script for oracle">
 		<echo message="upgrading the DB For DynamicExtensions" />
-		<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
+		<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" 
+			userid="${database.username}" password="${database.password}" onerror="continue" rdbms="oracle">
 			<transaction src="${sql.file.name}" />
 			<transaction>commit;</transaction>
 			<classpath>
@@ -1907,7 +1908,6 @@
 						<include name="${entitygroupname}-dozer-files.jar" />
 						<include name="${entitygroupname}-beans.jar" />
 						<include name="${entitygroupname}-schema.jar" />
-						<include name="${entitygroupname}-orm.jar" />
 					</fileset>
 				</copy>
 				<echo message="DEBUG: Dozer files archive copied for: ${entitygroupname}" />
@@ -2376,20 +2376,20 @@
 			<replacetoken>&lt;/web-app&gt;</replacetoken>
 			<replacevalue>
 				<![CDATA[
-				    	 <servlet>
-				<servlet-name>UpdateCache</servlet-name>
-				<servlet-class>edu.common.dynamicextensions.ui.webui.action.UpdateCache</servlet-class>
-			</servlet>
-			<servlet-mapping>
-				<servlet-name>UpdateCache</servlet-name>
-				<url-pattern>/UpdateCache</url-pattern>
-			</servlet-mapping>
-
-		</web-app>
+			    	 <servlet>
+						<servlet-name>UpdateCache</servlet-name>
+						<servlet-class>edu.common.dynamicextensions.ui.webui.action.UpdateCache</servlet-class>
+					</servlet>
+					<servlet-mapping>
+						<servlet-name>UpdateCache</servlet-name>
+						<url-pattern>/UpdateCache</url-pattern>
+					</servlet-mapping>
+		
+					</web-app>
 				 ]]>
 			</replacevalue>
-</replace>
-</target>
+		</replace>
+	</target>
 
 
 <!-- =================================
@@ -2418,4 +2418,48 @@
 </java>
 </target>
 
+	<target name="fix:dumplicate:class:name">
+		<delete dir="${de.temp.dir}" failonerror="no" />
+		<mkdir dir="${de.temp.dir}" />
+		<unzip src="${dynamic.extensions.location}/dynamicextensions.zip" dest="${de.temp.dir}">
+		</unzip>
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+			<classpath>
+				<pathelement location="${extra.lib.dir.DE}/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" casesensitive="false" />
+			<then>
+				<sql driver="${mysql.driver.string.DE}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="mysql">
+					<transaction src="${mysql.dbupgrade.sql.dir.DE}/fixDuplicateClassNames.sql" />
+					<transaction>commit;</transaction>
+					<classpath>
+						<fileset dir="${lib.dir.DE}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+				</sql>
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" casesensitive="false" />
+				<then>
+					<sql driver="${oracle.driver.string.DE}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" onerror="continue" delimiter="/" delimitertype="row" keepformat="yes" rdbms="oracle">
+						<classpath>
+							<fileset dir="${lib.dir.DE}">
+								<include name="*.jar" />
+							</fileset>
+						</classpath>
+						<transaction src="${oracle.dbupgrade.sql.dir.DE}/fixDuplicateClassNames.sql" />
+					</sql>
+				</then>
+			</elseif>
+			
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
+	
+	</target>
+			
 </project>

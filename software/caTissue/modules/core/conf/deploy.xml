@@ -1703,7 +1703,7 @@
 				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
 			</else>
 		</if>
-
+		<antcall target="fix:dumplicate:class:name"/>
 		<antcall target="firstUser" />
 
 		<!-- shippingtracking db -->

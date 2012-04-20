@@ -1471,4 +1471,11 @@ $HeadURL: https://ncisvn.nci.nih.gov/svn/automation/branches/automation-1.7.4/so
 				<property name="jboss.home" value="${jboss.home}" />
 			</ant>
 	</target>
+	
+	<target name="fix:dumplicate:class:name">
+		<ant inheritAll="false" inheritRefs="false" antfile="deploy.xml" target="fix:dumplicate:class:name" dir="${caTissue-webapp.dir.dist}/modules/caTissue/conf">
+			<property name="caTissue-webapp.dir.dist" value="${caTissue-webapp.dir.dist}" />
+		</ant>
+	</target>
+	
 </project>
