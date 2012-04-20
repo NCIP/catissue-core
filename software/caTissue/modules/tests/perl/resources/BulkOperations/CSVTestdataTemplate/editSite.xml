@@ -2,7 +2,7 @@
 
 <BulkOperationMetadata templateName="editSite" batchSize="5">
 
-<BulkOperationClass className="edu.wustl.catissuecore.domain.Site"   isOnToManyAssociation="false"     >		
+<BulkOperationClass className="edu.wustl.catissuecore.domain.Site"     >		
 
 	<referenceAssociation  className="edu.wustl.catissuecore.domain.Address"        roleName="address">
 
@@ -15,7 +15,7 @@
 		<attribute name="zipCode" csvColumnName="Zip Code"   />
 	</referenceAssociation>
 	
-	<referenceAssociation  className="edu.wustl.catissuecore.domain.User"      isOneToManyAssociation=""  roleName="coordinator">
+	<referenceAssociation  className="edu.wustl.catissuecore.domain.User"     roleName="coordinator">
 		<attribute name="id" csvColumnName="User ID"   />
 	</referenceAssociation>
 		

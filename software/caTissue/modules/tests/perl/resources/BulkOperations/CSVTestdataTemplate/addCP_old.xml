@@ -39,7 +39,7 @@
 				className="edu.wustl.catissuecore.domain.SpecimenRequirement"
 				   cardinality="*" roleName="specimenRequirementCollection" maxNoOfRecords="2" parentRoleName="collectionProtocolEvent" >
 
-				<attribute name="specimenClass" csvColumnName="Specimen Class"    >
+				<attribute name="specimenClass" csvColumnName="Specimen Class"   >
 
 					<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimenRequirement"/>
 					<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimenRequirement"/>
@@ -51,7 +51,7 @@
 				<attribute name="specimenType" csvColumnName="Specimen Type"   />
 				<attribute name="storageType" csvColumnName="Storage Location"   />
 				<attribute name="pathologicalStatus" csvColumnName="Pathological Status"   />
-				<attribute name="concentrationInMicrogramPerMicroliter" csvColumnName="Concentration"   belongsTo="edu.wustl.catissuecore.domain.MolecularSpecimen"/>
+				<!--<attribute name="concentrationInMicrogramPerMicroliter" csvColumnName="Concentration" /> -->
 				<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />
 				<attribute name="lineage" csvColumnName="Lineage"   />
 
