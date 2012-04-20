@@ -225,6 +225,18 @@ public class Fixtures {
         dp.setTitle("Some Title " + UniqueKeyGenerator.getKey());
         dp.setShortTitle("Some Title" + UniqueKeyGenerator.getKey());
 
+        DistributionSpecimenRequirement requirement = new DistributionSpecimenRequirement();
+        //requirement.setDistributionProtocol(dp);
+        requirement.setPathologyStatus("Malignant");
+        requirement.setQuantity(new Double(3.5));
+        requirement.setSpecimenClass("Cell");
+        requirement.setSpecimenType("Slide");
+        requirement.setTissueSite("Appendix");
+
+        //DistributionSpecimenRequirementDistributionProtocol dpSpecimenReq = new DistributionSpecimenRequirementDistributionProtocol(dp);
+       // requirement.setDistributionProtocol(dpSpecimenReq);
+        final DistributionSpecimenRequirement[] distributionSpecimenRequirementArray = new DistributionSpecimenRequirement[]{requirement};
+		dp.setDistributionSpecimenRequirementCollection(new DistributionProtocolDistributionSpecimenRequirementCollection(distributionSpecimenRequirementArray));
         return dp;
     }
 
