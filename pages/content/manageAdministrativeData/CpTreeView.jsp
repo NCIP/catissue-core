@@ -49,6 +49,14 @@
 </table>
 
 <script language="javascript"><!--
+
+			function setGlobalNodeKeys(id)
+			{	
+				var str=id;
+				var i = str.indexOf('_');
+				var uniqId = str.substring(i+1);
+				window.parent.setKeys(id,uniqId,tree.getParentId(id));
+			}
 			//This function is called when any of the node is selected in tree 
 			function tonclick(id)
 			{
@@ -62,8 +70,8 @@
 					i = uniqId.lastIndexOf('_');
 					uniqId = uniqId.substring(i+1);
 				}		
-				
-			   if(alias == "New")
+				setGlobalNodeKeys(id);
+				if(alias == "New")
 				{
 					window.parent.frames['SpecimenRequirementView'].location="CreateSpecimenTemplate.do?operation=edit&pageOf=specimenRequirement&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>";
 				}
@@ -189,12 +197,14 @@
 						tree.selectItem("<%=clickedNode%>",false);
 						tree.openAllItems("<%=clickedNode%>");
 					}
+						setGlobalNodeKeys("<%=clickedNode%>");
 			<% } else 
 				{
 			%>
 				
 					tree.selectItem("<%=nodeId%>",false);
 					tree.openAllItems("<%=nodeId%>");
+					setGlobalNodeKeys("<%=nodeId%>");
 			<%	}
 			   }
 			%>	

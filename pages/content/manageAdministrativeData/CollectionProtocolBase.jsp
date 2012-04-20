@@ -17,6 +17,15 @@
 
 <script src="jss/javaScript.js" type="text/javascript"></script>
 <script>
+	var selectedNodeId, key, parentId;
+	//This function calls whenever we select a node from CP tree view
+	function setKeys(nodeId, nodeKey,nodesParentId )
+	{
+	  selectedNodeId = nodeId;
+	  key = nodeKey;
+	  parentId = nodesParentId;
+	 // alert(selectedNodeId +"; " + key +"; " +parentId);
+	}
 	function selectAllClinicalDiagnosis()
 	{
 	 	var clinicalDiag = window.frames['SpecimenRequirementView'].document.getElementById('protocolCoordinatorIds');

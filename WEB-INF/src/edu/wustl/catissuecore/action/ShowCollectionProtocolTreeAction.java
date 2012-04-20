@@ -123,7 +123,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 		final String clickedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
 		request.setAttribute(Constants.OPERATION, operation);
 		request.setAttribute(Constants.TREE_DATA, treeData);
-		request.getSession().setAttribute(Constants.TREE_NODE_ID, nodeId);
+		//request.getSession().setAttribute(Constants.TREE_NODE_ID, nodeId);
 		request.getSession().setAttribute(Constants.CLICKED_NODE, clickedNode);
 
 		return mapping.findForward(Constants.SUCCESS);
@@ -132,8 +132,8 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 	/**
 	 * This is a recursive method for getting node data.
 	 *
-	 * @param parentObjectname : parentObjectname
-	 * @param parentIdentifier : parentIdentifier
+	 * @param parentObjectname : parentObjectname "EventsCPL"+"class"
+	 * @param parentIdentifier : parentIdentifier unique identifier of Event
 	 * @param specimenRequirementBean : specimenRequirementBean
 	 * @param treeData : treeData
 	 * @param operation : operation

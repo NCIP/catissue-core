@@ -69,7 +69,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		final HttpSession session = request.getSession();
 		final String operation = request.getParameter(Constants.OPERATION);
 		final String eventKey = request.getParameter(Constants.EVENT_KEY);
-		final String nodeId = "New_" + eventKey;
+		final String nodeId = (String)session.getAttribute(Constants.TREE_NODE_ID);
 		final StringTokenizer st = new StringTokenizer(eventKey, "_");
 		String eventSelected = "";
 		String specimenSelected = "";
@@ -79,7 +79,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			specimenSelected = st.nextToken();
 		}
 		
-		session.setAttribute(Constants.TREE_NODE_ID, nodeId);
+		//session.setAttribute(Constants.TREE_NODE_ID, nodeId);
 		isPersistent = request.getParameter("isPersistent");
 		request.setAttribute("isPersistent", isPersistent);
 		createDuplicateSpecimen = (String) request.getParameter(Constants.CREATE_DUPLICATE_SPECIMEN);

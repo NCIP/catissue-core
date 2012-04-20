@@ -75,10 +75,18 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		// Gets the value of the operation parameter.
 		final String operation = request.getParameter(Constants.OPERATION);
 		final String pageOf = request.getParameter("pageOf");
-		final String selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
+		String selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
 		// This will give node id when flow is from Specimen Tree View.
 		String mapkey = request.getParameter("key");
-		final String nodeId = request.getParameter(Constants.TREE_NODE_ID);
+		String nodeId = selectedNode;
+		final String nodeDeleted = request.getParameter("nodeDeleted");
+		if("true".equals(nodeDeleted))
+		{
+			mapkey = (String) session.getAttribute(Constants.PARENT_NODE_ID);
+		}else
+		{	
+			nodeId = request.getParameter(Constants.TREE_NODE_ID);
+		}
 		if (mapkey != null && selectedNode != null && !selectedNode.contains(mapkey))
 		{
 			session.setAttribute(Constants.TREE_NODE_ID, nodeId);

@@ -54,11 +54,13 @@ public class DeleteNodeFromCPAction extends BaseAction
 			collectionProtocolEventMap = (LinkedHashMap) session
 					.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 		}
-
+		String eventMapKey = null;
+		String parentReqMapKey = null;
+		String forwardTo = null;
 		if ("specimenRequirement".equals(request.getParameter("pageOf")))
 		{
 			final String collectionProtocolEventKey = request.getParameter(Constants.EVENT_KEY);
-			String eventMapKey = null;
+			
 			final StringTokenizer st = new StringTokenizer(collectionProtocolEventKey, "_");
 			if (st.hasMoreTokens())
 			{
@@ -66,25 +68,63 @@ public class DeleteNodeFromCPAction extends BaseAction
 			}
 			final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
 					.get(eventMapKey);
-			final Map specimenReqMap = collectionProtocolEventBean.getSpecimenRequirementbeanMap();
+			Map specimenReqMap = collectionProtocolEventBean.getSpecimenRequirementbeanMap();
+			String parentNodeId = (String)request.getParameter("parentNodeId");
 			if (specimenReqMap.containsKey(collectionProtocolEventKey))
 			{
 				specimenReqMap.remove(collectionProtocolEventKey);
+				//parentReqMapKey = parentNodeId.substring((parentNodeId.indexOf("_")+1));
+				parentReqMapKey = eventMapKey;
+				forwardTo = Constants.PAGE_OF_DEFINE_EVENTS;
 			}
 			else
 			{
-				final String parentReqMapKey = eventMapKey + "_" + st.nextToken();
-				final char specimenType = this.getSpecimenType(collectionProtocolEventKey);
+				parentReqMapKey = parentNodeId.substring((parentNodeId.indexOf("_")+1));
+				char specimenTypeInitial = this.getSpecimenType(collectionProtocolEventKey);
+				String mapKey=null;
+				final StringTokenizer strtkn = new StringTokenizer(collectionProtocolEventKey, "_");
+				final int tokenCount = strtkn.countTokens(); 
+				if( tokenCount > 3)
+				{
+					mapKey = strtkn.nextToken() +"_"+ strtkn.nextToken();
+					int keyCount = 2;
+					String specimenType = null;
+					while(strtkn.hasMoreTokens())
+					{	
+						specimenType = strtkn.nextToken();
+						specimenTypeInitial =specimenType.charAt(0); 
+						if(keyCount <tokenCount-1)
+						{
+							SpecimenRequirementBean spReqBean  = (SpecimenRequirementBean) specimenReqMap.get(mapKey);
+							if('A'==specimenTypeInitial)
+							{
+								specimenReqMap = spReqBean.getAliquotSpecimenCollection();
+							}
+							else{
+								specimenReqMap = spReqBean.getDeriveSpecimenCollection();
+							}
+							mapKey = mapKey + "_" + specimenType;
+							keyCount++;
+						}	
+					}	
+				}
+				//final char specimenType = this.getSpecimenType(collectionProtocolEventKey);
 				this.removeChildSpecimen(specimenReqMap, parentReqMapKey,
-						collectionProtocolEventKey, st, specimenType);
+						collectionProtocolEventKey, st, specimenTypeInitial);
+				forwardTo = Constants.PAGE_OF_SPECIMEN_REQUIREMENT;
 			}
+			request.getSession().setAttribute(Constants.PARENT_NODE_ID,parentReqMapKey );
+			request.getSession().setAttribute(Constants.TREE_NODE_ID,parentNodeId );
+			request.getSession().setAttribute("listKey",eventMapKey );
 		}
 		else
 		{
-			final String mapkey = protocolEventDetailsForm.getCollectionProtocolEventkey();
-			collectionProtocolEventMap.remove(mapkey);
+			
+			eventMapKey = protocolEventDetailsForm.getCollectionProtocolEventkey();
+			collectionProtocolEventMap.remove(eventMapKey);
+			forwardTo = Constants.SUCCESS;
 		}
-		return mapping.findForward(Constants.SUCCESS);
+		return mapping.findForward(forwardTo);
 	}
 
 	/**

@@ -5576,6 +5576,12 @@ PUBLIC
 		<action path="/DeleteNodeFromCP"
 			type="edu.wustl.catissuecore.action.DeleteNodeFromCPAction" name="protocolEventDetailsForm"
 			validate="false">
+			<forward name="defineEvents"
+				path="/ProtocolEventsDetails.do?operation=edit&amp;pageOf=defineEvents" />
+			<forward name="specimenRequirement"
+				path="/CreateSpecimenTemplate.do?operation=edit&amp;pageOf=specimenRequirement" />
+			<forward name="pageOfCollectionProtocol"
+				path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;invokeFunction=cp" />		
 			<forward name="success"
 				path="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=collectionProtocol" />
 		</action>

@@ -86,7 +86,7 @@ function deleteEvent()
 	if(answer)
 	{
 		document.forms[0].target = '_top';
-		var action ="DeleteNodeFromCP.do?pageOf=cpEvent&operation=edit";
+		var action ="DeleteNodeFromCP.do?pageOf=cpEvent&operation=edit&nodeId="+window.parent.selectedNodeId+"&key="+window.parent.key;
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}

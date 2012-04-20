@@ -268,8 +268,8 @@ if(form != null)
 		var answer = confirm ("Are you sure want to delete specimen?")
 		if(answer)
 		{
-			document.forms[0].target = '_top';
-			var action ="DeleteNodeFromCP.do?pageOf=specimenRequirement&key="+"<%=mapKey%>"+"&operation=edit";
+			//document.forms[0].target = '_top';
+			var action ="DeleteNodeFromCP.do?pageOf=specimenRequirement&operation=edit&nodeDeleted=true&nodeId="+window.parent.selectedNodeId+"&key="+window.parent.key+"&parentNodeId="+window.parent.parentId;
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}

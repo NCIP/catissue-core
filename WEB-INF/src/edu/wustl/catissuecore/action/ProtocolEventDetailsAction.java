@@ -52,8 +52,22 @@ public class ProtocolEventDetailsAction extends BaseAction
 		final HttpSession session = request.getSession();
 
 		// Event Key when flow is form Specimen Requirement Page
-		final String key = request.getParameter(Constants.EVENT_KEY);
+		String key = request.getParameter(Constants.EVENT_KEY);
 		String eventKey = null;
+		String selectedNode = null;
+		final String nodeDeleted = request.getParameter("nodeDeleted");
+		if("true".equals(nodeDeleted))
+		{
+			key = (String) session.getAttribute(Constants.PARENT_NODE_ID);
+			selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
+		}else
+		{
+			selectedNode = (String) request.getParameter(Constants.TREE_NODE_ID);
+			if(selectedNode == null)
+				selectedNode = (String)session.getAttribute(Constants.TREE_NODE_ID); 
+			session.setAttribute(Constants.TREE_NODE_ID, selectedNode);
+		}	
+
 		if (key == null)
 		{
 			eventKey = (String) session.getAttribute(Constants.NEW_EVENT_KEY);
@@ -62,7 +76,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 		{
 			eventKey = key;
 		}
-		String selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
+		//String selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
 		String checkForSpecimen = null;
 		if (selectedNode != null)
 		{
