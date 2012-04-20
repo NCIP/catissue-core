@@ -13,7 +13,6 @@ import gov.nih.nci.cagrid.metadata.dataservice.UMLAssociationEdge;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLClassReference;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLGeneralization;
-import gov.nih.nci.cagrid.metadata.xmi.XMIParser;
 import gov.nih.nci.cagrid.metadata.xmi.XmiFileType;
 
 import java.io.File;
