@@ -26,12 +26,19 @@ public class CastorMappingMerger {
     private String src2File;
     private String destFile;
     private static EntityResolver resolver;
+    Properties staticClasses;
 
 //    private static String exceptionalCaseElement = "edu.common.dynamicextensions.domain.integration.AbstractRecordEntry";
 
     public static void main(String args[]) {
 
-//        args = new String[] {"./temp/pathology_scg-schema.jar/xml-mapping.xml", "./temp/pathology_specimen-schema.jar/xml-mapping.xml", "./CASTOR_MERGED.xml"};
+/*
+        args = new String[] {
+            "./castorTest/STATIC-xml-mapping-test.xml",
+            "./castorTest/pathology_specimen-xml-mapping-test.xml",
+            "./castorTest/CASTOR_MERGED.xml"
+        };
+*/
 //        args = new String[] {"properties", FILES_PATH + "/3.properties", FILES_PATH + "/" + DOZER_SETS_FILENAME, FILES_PATH + "/" + DOZER_SETS_FILENAME + "_results.properties"};
 
         if (args.length < 3) {
@@ -42,8 +49,19 @@ public class CastorMappingMerger {
         CastorMappingMerger m = new CastorMappingMerger();
         m.readArguments(args);
         m.initializeResolver();
+        m.loadStaticDEIntegrationClassList();
         m.doMerge();
 
+    }
+
+    private void loadStaticDEIntegrationClassList() {
+        staticClasses = new Properties();
+        try {
+            staticClasses.load(CastorMappingMerger.class.getClassLoader().getResourceAsStream("edu/wustl/catissuecore/domain/util/static_de_integration_classes.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException("Can't read Static DE Integration classes.");
+        }
+        log.debug(">>> Found properties: " + staticClasses.size());
     }
 
     private void initializeResolver() {
@@ -172,11 +190,26 @@ public class CastorMappingMerger {
         return e;
     }
 
+    /**
+     * Reads all class nodes from the XML and add it to one Map,
+     * if Map already contains this class, then all children of this
+     * class are merged with the existing ones.
+     *
+     * Classes from Static model are skipped.
+     * @param rootElement
+     * @param m Map that holds the elements.
+     */
     public void readElements(Element rootElement, Map<String, Element> m) {
         List<Element> childrenA = getChildElements(rootElement);
         for (Element e: childrenA) {
             String key = e.getAttribute("name").getValue();
             if (m.containsKey(key)) {
+                // If this is a class that belongs to the DE static model we have to skip it.
+                if (staticClasses.containsKey(key)) {
+                    log.debug("Skipping: " + key);
+                    continue;
+                }
+
                 m.put(key, mergeElements(m.get(key), e));
             } else {
                 m.put(key, e);
@@ -187,7 +220,7 @@ public class CastorMappingMerger {
     /**
      * It is important to feed the files in a specific order.
      * Merger will take the first file and will add the other elements from other files to it.
-     * @see https://bugzilla.wustl.edu/bugzilla/show_bug.cgi?id=22165
+     * @see "https://bugzilla.wustl.edu/bugzilla/show_bug.cgi?id=22165"
       */
     public void doMerge() {
 
