@@ -507,7 +507,6 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 ,Test Add Specimen Order (Blank Distribution Protocol),admin@admin.com,Test123,order_BlankDP.csv,order.xml,order,success,,Ordering and Distribution,Biospecimen Request,
 ,Test Create_Order_Specimen_Aliquots_Admin,admin@admin.com,Test123,order_aliquot.csv,order.xml,order,success,,Ordering and Distribution,Biospecimen Request,
 ,Test Create_Order_Specimen_Derivative_Admin,admin@admin.com,Test123,order_derivative.csv,order.xml,order,success,,Ordering and Distribution,Biospecimen Request,
-,Test Edit Storage Container (as Site Admin),admin1@washu.com,Test123,editParentContainer_admin.csv,editContainer.xml,editParentContainer,success,,Admin,Storage Container,
 ,Test Edit Storage Container (capacity),admin@admin.com,Test123,editParentContainer_capacity.csv,editContainer.xml,editParentContainer,success,,Admin,Storage Container,
 ,Test Edit Storage Container (add CP restriction),admin@admin.com,Test123,editParentContainer_CP.csv,editContainer.xml,editParentContainer,success,,Admin,Storage Container,
 ,Test Edit Storage Container (add Specimen restriction),admin@admin.com,Test123,editParentContainer_specClass.csv,editContainer.xml,editParentContainer,success,,Admin,Storage Container,
