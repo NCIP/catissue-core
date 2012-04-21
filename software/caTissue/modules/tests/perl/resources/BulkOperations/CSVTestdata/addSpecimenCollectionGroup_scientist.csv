@@ -1,2 +1,2 @@
-Site ID,PPID,Collection Status,collectionPointLabel,Clinical Diagnosis,Clinical Status,Activity Status
-1,1_1,Complete,1,Not Specified,Not Specified,Active
+SCG Name,Site ID,CP Title,PPID,Collection Status,collectionPointLabel,Clinical Diagnosis,Clinical Status,Activity Status,Create Anticipated Specimen
+,21,WashuCP,21_21,Complete,pre,Not Specified,Not Specified,Active,NO
