@@ -171,7 +171,7 @@ public class DozerMerger {
         for (Element e : elements) {
             Element classA = getFirstClassAElement(e);
             Element classB = getFirstClassBElement(e);
-            System.out.println(">>> ELEMENT A => B " + classA.getText() + " => " + classB.getText());
+//            System.out.println(">>> ELEMENT A => B " + classA.getText() + " => " + classB.getText());
 
             for (Object childObject : e.getChildren()) {
                 Element child = (Element)childObject;
@@ -184,7 +184,7 @@ public class DozerMerger {
                 if (childName.equals("field")) {
 
                     String childSubName = getFirstElementByNodeName(child, "a").getText();
-                    System.out.println(">>> CHILD: " + childSubName);
+//                    System.out.println(">>> CHILD: " + childSubName);
 
                     Element element = fields.get(childSubName);
                     if (element == null) {
@@ -209,18 +209,20 @@ public class DozerMerger {
     }
 
     public void readElements(Element rootElement, Map<String, Element> m) {
+        System.out.println("");
         List<Element> childrenA = getChildElements(rootElement);
         for (Element e: childrenA) {
-            System.out.println("Found element: " + e.getName());
+//            System.out.println("Found element: " + e.getName());
             if (e.getName().equals("configuration")) {
                 m.put("configuration", e);
             } else if (e.getName().equals("mapping")) {
                 Element classA = getFirstClassAElement(e);
                 String key = classA.getText();
+                System.out.println("Found: " + key);
                 if (m.containsKey(classA.getText())) {
                     // If this is a class that belongs to the DE static model we have to skip it.
                     if (staticClasses.containsKey(key)) {
-                        System.out.println("Skipping: " + key);
+                        System.out.println("Skipping...");
                         continue;
                     }
                     m.put(key, mergeElements(m.get(key), e));
@@ -248,14 +250,14 @@ public class DozerMerger {
         children.clear();
 
         for (Map.Entry s: m.entrySet()) {
-            System.out.println(">>> ADDING: " + s.getValue());
+//            System.out.println(">>> ADDING: " + s.getValue());
             Element che = (Element)s.getValue();
             che.detach();
             children.add(che);
         }
 
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
-        System.out.println("Writing results to file: " + destFile);
+        System.out.println("\nWriting results to file: " + destFile);
         try {
             out.output(e, new FileOutputStream(destFile));
         } catch (IOException e1) {
