@@ -23,6 +23,7 @@ public class DozerMerger {
     private String src1File;
     private String src2File;
     private String destFile;
+    Properties staticClasses;
 
 /*
     private static String DOZER_MAPPINGS_XPATH = "/mappings/mapping";
@@ -38,13 +39,23 @@ public class DozerMerger {
         args = new String[] {"properties", FILES_PATH + "/3.properties", FILES_PATH + "/" + DOZER_SETS_FILENAME, FILES_PATH + "/" + DOZER_SETS_FILENAME + "_results.properties"};
 */
 
+/*
+        args = new String[] {
+            "mappings",
+            "/SB/caTissue/LatestDEArtifacts/STATIC-Mapping.xml",
+            "/SB/caTissue/LatestDEArtifacts/SOP-Mapping.xml",
+            "/SB/caTissue/LatestDEArtifacts/results.xml"
+        };
+*/
+
         if (args.length < 4) {
-            System.out.println("Usage: java DozerMerger [mapping | properties] SOURCE_FILE1 SOURCE_FILE2 DESTINATION_FILE");
+            System.out.println("Usage: java DozerMerger [mappings | properties] SOURCE_FILE1 SOURCE_FILE2 DESTINATION_FILE");
             System.exit(0);
         }
 
         DozerMerger dm = new DozerMerger();
         dm.readArguments(args);
+        dm.loadStaticDEIntegrationClassList();
 
         if (dm.operation.equals("mappings")) {
             dm.doMappings();
@@ -53,6 +64,16 @@ public class DozerMerger {
         if (dm.operation.equals("properties")) {
             dm.mergeProperties();
         }
+    }
+
+    private void loadStaticDEIntegrationClassList() {
+        staticClasses = new Properties();
+        try {
+            staticClasses.load(CastorMappingMerger.class.getClassLoader().getResourceAsStream("edu/wustl/catissuecore/domain/util/static_de_integration_classes.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException("Can't read Static DE Integration classes.");
+        }
+        System.out.println(">>> Found properties: " + staticClasses.size());
     }
 
     public void mergeProperties() {
@@ -105,16 +126,111 @@ public class DozerMerger {
         return xml;
     }
 
-    private Element getFirstClassAElement(Element element) {
+    private Element getFirstElementByNodeName(Element element, String nodeName) {
         List chs = element.getChildren();
         for (Object o : chs) {
             if (o.getClass() != org.jdom.Element.class) continue;
             Element e = (Element)o;
-            if (e.getName().equals("class-a")) {
+            if (e.getName().equals(nodeName)) {
                 return e;
             }
         }
         return null;
+    }
+
+    private Element getFirstClassAElement(Element element) {
+        return getFirstElementByNodeName(element, "class-a");
+    }
+
+    private Element getFirstClassBElement(Element element) {
+        return getFirstElementByNodeName(element, "class-b");
+    }
+
+    private List<Element> getChildElements(Element element) {
+        List chs = element.getChildren();
+        List<Element> children = new ArrayList<Element>();
+        for (Object o : chs) {
+            if (o.getClass() != Element.class) continue;
+            Element e = (Element)o;
+            children.add(e);
+        }
+        return children;
+    }
+
+    /**
+     * Takes two or more "mapping" nodes and merge all "field" elements.
+     * @param elements List of "mapping" Nodes to do the merge for
+     * @return Resulted "mapping" Node.
+     */
+    private Element mergeElements(Element ... elements) {
+        if (elements.length < 2) throw new IllegalArgumentException("Pass at least 2 elements to be merged");
+
+        Map<String, Element> fields = new LinkedHashMap<String, Element>();
+
+        // ELEMENT ANALYSIS
+        for (Element e : elements) {
+            Element classA = getFirstClassAElement(e);
+            Element classB = getFirstClassBElement(e);
+            System.out.println(">>> ELEMENT A => B " + classA.getText() + " => " + classB.getText());
+
+            for (Object childObject : e.getChildren()) {
+                Element child = (Element)childObject;
+                if (child.getName().equals("class-a") || child.getName().equals("class-b")) {
+                    fields.put(child.getName(), child);
+                    continue;
+                }
+
+                String childName = child.getName();
+                if (childName.equals("field")) {
+
+                    String childSubName = getFirstElementByNodeName(child, "a").getText();
+                    System.out.println(">>> CHILD: " + childSubName);
+
+                    Element element = fields.get(childSubName);
+                    if (element == null) {
+                        fields.put(childSubName, child);
+                    }
+                }
+            }
+        }
+
+        // COMBINING THE CHILDREN
+        Element e = elements[0];
+        List children = e.getChildren();
+        children.clear();
+
+        for (Map.Entry<String, Element> s: fields.entrySet()) {
+            Element chE = s.getValue();
+//            System.out.println(">>> ADDING: " + getFirstElementByNodeName(chE, "a").getText());
+            chE.detach();
+            children.add(chE);
+        }
+        return e;
+    }
+
+    public void readElements(Element rootElement, Map<String, Element> m) {
+        List<Element> childrenA = getChildElements(rootElement);
+        for (Element e: childrenA) {
+            System.out.println("Found element: " + e.getName());
+            if (e.getName().equals("configuration")) {
+                m.put("configuration", e);
+            } else if (e.getName().equals("mapping")) {
+                Element classA = getFirstClassAElement(e);
+                String key = classA.getText();
+                if (m.containsKey(classA.getText())) {
+                    // If this is a class that belongs to the DE static model we have to skip it.
+                    if (staticClasses.containsKey(key)) {
+                        System.out.println("Skipping: " + key);
+                        continue;
+                    }
+                    m.put(key, mergeElements(m.get(key), e));
+                } else {
+                    m.put(key, e);
+                }
+            } else {
+                throw new RuntimeException("Unknown Dozer Node.");
+            }
+        }
     }
 
     public void doMappings() {
@@ -122,39 +238,30 @@ public class DozerMerger {
         Document fileA = readXML(src1File);
         Document fileB = readXML(src2File);
 
-        try {
-            List<Element> list1 = fileA.getRootElement().getChildren();
-            List<Element> list2 = fileB.getRootElement().getChildren();
+        Map<String, Element> m = new LinkedHashMap<String, Element>();
 
-            for (Element e : list2) {
-                if (e.getName().equals("mapping")) {
-                    Element ch0 = getFirstClassAElement(e);
-                    set.add(ch0.getText());
-                }
-            }
+        readElements(fileA.getRootElement(), m);
+        readElements(fileB.getRootElement(), m);
 
-            System.out.println("Existing <mapping>: " + set.size());
+        Element e = fileA.getRootElement();
+        List children = e.getChildren();
+        children.clear();
 
-            for (Element e : list1) {
-                Element clonedE = (Element)e.clone();
-                if (clonedE.getName().equals("mapping")) {
-                    Element ch0 = getFirstClassAElement(clonedE);
-                    if (ch0 != null && set.add(ch0.getText())) {
-                        list2.add(clonedE);
-                        System.out.println("Added <" + ch0.getText() + "> to the list.");
-                    }
-                }
-            }
-
-            System.out.println("Total <mapping> elements now: " + set.size());
-            XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
-            System.out.println("Writing results to file: " + destFile);
-            out.output(fileB, new FileOutputStream(destFile));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't write to file. " + e.getMessage());
+        for (Map.Entry s: m.entrySet()) {
+            System.out.println(">>> ADDING: " + s.getValue());
+            Element che = (Element)s.getValue();
+            che.detach();
+            children.add(che);
         }
+
+        XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
+        System.out.println("Writing results to file: " + destFile);
+        try {
+            out.output(e, new FileOutputStream(destFile));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
     }
 
 }
