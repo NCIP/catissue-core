@@ -273,7 +273,7 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 24785,AddCP(Blank PI field),admin@admin.com,Test123,addCP_Blank_PI.csv,addCP.xml,CreateCollectionProtocol,failure,Principal Investigator is required.,Bulk Operation,Admin
 24787,AddCP(Wrong Date format),admin@admin.com,Test123,addCP_wrong_dateFormat.csv,addCP.xml,CreateCollectionProtocol,failure, Please enter valid value for Date field.,Bulk Operation,Admin
 #Failing due to bug 19407 24788,AddCP(with Clinical Diagnosis subset),admin@admin.com,Test123,addCP_CD_subset.csv,addCP_all_fields.xml,CreateCollectionProtocol,success,,Bulk Operation,Admin
-24789,AddCP(no CD subset),admin@admin.com,Test123,addCP_without_CD_subset.csv,addCP_all_fields.xml,CreateCollectionProtocol,success,,Bulk Operation,Admin
+#24789,AddCP(no CD subset),admin@admin.com,Test123,addCP_without_CD_subset.csv,addCP_all_fields.xml,CreateCollectionProtocol,success,,Bulk Operation,Admin
 24790,AddCP(no Consents),admin@admin.com,Test123,addCP_without_Consents.csv,addCP_all_fields.xml,CreateCollectionProtocol,success,,Bulk Operation,Admin
 #Failing due to bug 19407 24791,EditCP(for Consents based on Title),admin@admin.com,Test123,editCP_Consents_basedOnTitle.csv,EditCP_TitleBased.xml,EditCollectionProtocol,success,,Bulk Operation,Admin
 24792,AddCP(with Multiple Coordinators),admin@admin.com,Test123,addCP_multiple_Coordinators.csv,addCP_all_fields.xml,CreateCollectionProtocol,success,,Bulk Operation,Admin
@@ -437,7 +437,7 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 #Failing due to bug 19911 24950,Add Array (blank Specimen),super@super.com,Test123,addSA_blankSpecimen.csv,addSA.xml,addSA,Failure,,Bulk Operation,Specimen Array
 24951,Add Array (invalid Specimen),super@super.com,Test123,addSA_invalidSpecimen.csv,addSA.xml,addSA,Failure, Error! Specimen with label Mspec_40 does not exist.,Bulk Operation,Specimen Array
 24952,Add Array(No access to add specimen),super@super.com,Test123,addSA_specimenfromdiffsite.csv,addSA.xml,addSA,Failure, Access denied to add/edit SpecimenArray. User does not have Association  privilege on Site.,Bulk Operation,Specimen Array
-24953,Add Array (invalid quantity),tech@bjc.com,Test123,addSA_invalidQuantity.csv,addSA.xml,addSA,Failure, Please enter valid value for Quantity#1 field.,Bulk Operation,Specimen Array
+#24953,Add Array (invalid quantity),tech@bjc.com,Test123,addSA_invalidQuantity.csv,addSA.xml,addSA,Failure, Please enter valid value for Quantity#1 field.,Bulk Operation,Specimen Array
 24954,Add Array (blank quantity),tech@bjc.com,Test123,addSA_blankQuantity.csv,addSA.xml,addSA,Failure, Please enter quantity for Molecular Specimen ----> MSpecimen_4,Bulk Operation,Specimen Array
 24955,Add Array (No access to add specimen),tech@bjc.com,Test123,addSA_quantityGreaterthanAvailable.csv,addSA.xml,addSA,Failure, Quantity 13.0 should be less than current Distributed Quantity 0.56 of specimen :: MSpecimen_4,Bulk Operation,Specimen Array
 #Failing due to bug 19854 24956,Add Array (invalid Concentration),tech@bjc.com,Test123,addSA_invalidConcentration.csv,addSA.xml,addSA,Failure,,Bulk Operation,Specimen Array
