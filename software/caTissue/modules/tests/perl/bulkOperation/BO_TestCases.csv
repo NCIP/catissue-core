@@ -106,7 +106,7 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 24545,Add Parent Container (As Site supervisor) ,supervisor@wustl.edu,Bjc123,addParentContainer_supervisor.csv,addParentContainer.xml,CreateParentContainer,Failure, Access denied to add/edit StorageContainer. User does not have Storage Administration  privilege on Site.,Bulk Operation,Admin
 24546,Add Child Container (As Site supervisor) ,supervisor@wustl.edu,Bjc123,addChildContainer_supervisor.csv,addChildContainer.xml,CreateChildContainer,Failure,Access denied to add/edit StorageContainer. User does not have Storage Administration  privilege on Site.,Bulk Operation,Admin
 24547,AddCP Registration (As Site supervisor) ,supervisor@wustl.edu,Bjc123,createParticipantRegistration_supervisor.csv,createParticipantRegistration.xml,createParticipantRegistration,Success,,Bulk Operation,Participant
-24548,Add SCG (As Site supervisor) ,supv@supv.com,Test1234,createSCG_by_CP_Title_PPID.csv,createSCG_by_CP_Title_PPID.xml,CreateSpecimenCollectionGroup,Success,,Bulk Operation,Specimen Collection Group
+#24548,Add SCG (As Site supervisor) ,supv@supv.com,Test1234,createSCG_by_CP_Title_PPID.csv,createSCG_by_CP_Title_PPID.xml,CreateSpecimenCollectionGroup,Success,,Bulk Operation,Specimen Collection Group
 24549,Add Aliquots (As Site supervisor) ,supervisor@wustl.edu,Bjc123,createAliquot_supervisor.csv,createAliquot.xml,CreateAliquot,Success,,Bulk Operation,Specimen
 24550,Add Derivatives (As Site supervisor) ,supervisor@wustl.edu,Bjc123,createDerivative_supervisor.csv,createDerivative.xml,createDerivative,Success,,Bulk Operation,Specimen
 #event test case 24551,Add Collection Event(As Site supervisor) ,supervisor@wustl.edu,Bjc123,CollectionEventParameters_supervisor.csv,CollectionEventParameters.xml,createCollectionEventParameters,success,,Bulk Operation,Specimen
@@ -571,7 +571,7 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 #25101,Create CPR with SCG and Single Specimen,dmp@dmp.com,Test1234,ParticipantWithSCGWithSpecimen.csv,ParticipantWithSCGWithSpecimen.xml,ParticipantWithSCGWithSpecimen,success,,Bulk Operation,Specimen
 25102,Create Participant Registration with SCG ,dmp@dmp.com,Test1234,ParticipantWithSCGWithNoSpecimen.csv,ParticipantWithSCGWithNoSpecimen.xml,ParticipantWithSCGWithNoSpecimen,success,,Bulk Operation,Specimen Collection Group
 25103,Create SCG and Single  Specimen,dmp@dmp.com,Test1234,CreateNewSCGWithSpecimen.csv,CreateNewSCGWithSpecimen.xml,NewSCGWithSpecimen1,success,,Bulk Operation,Specimen
-25104,Create CPR with SCG and Multiple Specimens,dmp@dmp.com,Test1234,ParticipantWithSCGWithMultSpecimen.csv,ParticipantWithSCGWithMultSpecimen.xml,ParticipantWithSCGWithMultSpecimen,success,,Bulk Operation,Specimen
+#25104,Create CPR with SCG and Multiple Specimens,dmp@dmp.com,Test1234,ParticipantWithSCGWithMultSpecimen.csv,ParticipantWithSCGWithMultSpecimen.xml,ParticipantWithSCGWithMultSpecimen,success,,Bulk Operation,Specimen
 25105,Create Participant Registration with Multiple SCG ,dmp@dmp.com,Test1234,MultScgWithNo_specimen.csv,MultScgWithNo_specimen.xml,MultSCGWithNoSpecimen,success,,Bulk Operation,Specimen Collection Group
 25106,Create SCG and Multiple  Specimens,dmp@dmp.com,Test1234,CreateScgWithMultipleSpecimen.csv,CreateScgWithMultipleSpecimen.xml,NewSCGWithMultSpecimen1,success,,Bulk Operation,Specimen
 25107,Add participant consent response based on CPRID ,dmp@dmp.com,Test1234,addParticipantConsentResponse.csv,addParticipantConsentResponse.xml,addConsentResponse,success,,Bulk Operation,Participant
@@ -589,10 +589,10 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 25119,Add CPR With SCG Multiple Specimen,dmp@dmp.com,Test1234,MultSpecimenWithNoParticipant.csv,MultSpecimenWithNoParticipant.xml,MultSpecimenWithNoParticipant,Success,,Bulk Operation,Specimen
 25120,Add CPR with SCG and Specimen,dmp@dmp.com,Test1234,CreateRegistrationWithSCGAndSpecimen_cpid.csv,cprWithSCGSpecimen.xml,cprWithSCGSpecimen1,Success,,Bulk Operation,Specimen
 25121,SCG with CP Title and PPID,dmp@dmp.com,Test1234,createSCG_by_CP_Title_PPID.csv,createSCG_by_CP_Title_PPID.xml,CreateSpecimenCollectionGroup,success,,Bulk Operation,Specimen Collection Group
-26355,Test Add SCG With Age At Collection,dmp@dmp.com,Test1234,addSCGWithAgeAtCollection.csv,addSCGWithAgeAtCollection.xml,addSCG,Success,,Biospecimen,Specimen Collection Group
-26351,Test BO report rerun,dmp@dmp.com,Test1234,addParticipant_BO_report.csv,NewAddPart.xml,addParticipant,Success,,BulkOperation,BO Rerun
-26463,Test Edit SCG With Age At Collection,dmp@dmp.com,Test1234,editSCGWithAgeAtCollection.csv,editSCGWithAgeAtCollection.xml,editSCG,Success,,Biospecimen,Specimen Collection Group
-26500,Test Add Specimen With Fixed Event ,dmp@dmp.com,Test1234,createSpecimenFixedEventParameters.csv,createSpecimenFixedEventParameters.xml,createSpecimenFixedEventParameters,,,,
+#CSV not found 26355,Test Add SCG With Age At Collection,dmp@dmp.com,Test1234,addSCGWithAgeAtCollection.csv,addSCGWithAgeAtCollection.xml,addSCG,Success,,Biospecimen,Specimen Collection Group
+#CSV not found 26351,Test BO report rerun,dmp@dmp.com,Test1234,addParticipant_BO_report.csv,NewAddPart.xml,addParticipant,Success,,BulkOperation,BO Rerun
+#CSV not found 26463,Test Edit SCG With Age At Collection,dmp@dmp.com,Test1234,editSCGWithAgeAtCollection.csv,editSCGWithAgeAtCollection.xml,editSCG,Success,,Biospecimen,Specimen Collection Group
+#CSV not found 26500,Test Add Specimen With Fixed Event ,dmp@dmp.com,Test1234,createSpecimenFixedEventParameters.csv,createSpecimenFixedEventParameters.xml,createSpecimenFixedEventParameters,,,,
 26500,Test Add Specimen With CheckInCheckOut Event ,dmp@dmp.com,Test1234,createSpecimenCheckInCheckOutEventParameter.csv,createSpecimenCheckInCheckOutEventParameter.xml,createSpecimenCheckInCheckOutEventParameter,,,,
 26500,Test Add Specimen With Collection Event ,dmp@dmp.com,Test1234,createSpecimenCollectionEventParameters.csv,createSpecimenCollectionEventParameters.xml,createSpecimenCollectionEventParameters,,,,
 26500,Test Add Specimen With Embedded Event ,dmp@dmp.com,Test1234,createSpecimenEmbeddedEventParameters.csv,createSpecimenEmbeddedEventParameters.xml,createSpecimenEmbeddedEventParameters,,,,
