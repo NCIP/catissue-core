@@ -106,7 +106,7 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 24545,Add Parent Container (As Site supervisor) ,supervisor@wustl.edu,Bjc123,addParentContainer_supervisor.csv,addParentContainer.xml,CreateParentContainer,Failure, Access denied to add/edit StorageContainer. User does not have Storage Administration  privilege on Site.,Bulk Operation,Admin
 24546,Add Child Container (As Site supervisor) ,supervisor@wustl.edu,Bjc123,addChildContainer_supervisor.csv,addChildContainer.xml,CreateChildContainer,Failure,Access denied to add/edit StorageContainer. User does not have Storage Administration  privilege on Site.,Bulk Operation,Admin
 24547,AddCP Registration (As Site supervisor) ,supervisor@wustl.edu,Bjc123,createParticipantRegistration_supervisor.csv,createParticipantRegistration.xml,createParticipantRegistration,Success,,Bulk Operation,Participant
-24548,Add SCG (As Site supervisor) ,supv@supv.com,Test1234,addSpecimenCollectionGroup_supervisor.csv,createSCG_by_CP_Title_PPID.xml,CreateSpecimenCollectionGroup,Success,,Bulk Operation,Specimen Collection Group
+24548,Add SCG (As Site supervisor) ,supv@supv.com,Test1234,createSCG_by_CP_Title_PPID.csv,createSCG_by_CP_Title_PPID.xml,CreateSpecimenCollectionGroup,Success,,Bulk Operation,Specimen Collection Group
 24549,Add Aliquots (As Site supervisor) ,supervisor@wustl.edu,Bjc123,createAliquot_supervisor.csv,createAliquot.xml,CreateAliquot,Success,,Bulk Operation,Specimen
 24550,Add Derivatives (As Site supervisor) ,supervisor@wustl.edu,Bjc123,createDerivative_supervisor.csv,createDerivative.xml,createDerivative,Success,,Bulk Operation,Specimen
 #event test case 24551,Add Collection Event(As Site supervisor) ,supervisor@wustl.edu,Bjc123,CollectionEventParameters_supervisor.csv,CollectionEventParameters.xml,createCollectionEventParameters,success,,Bulk Operation,Specimen
@@ -416,10 +416,10 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 24929,Add Array (Tissue by Administrator),admin1@admin.com,Test1234,addSA_admin.csv,addSA.xml,addSA,success,,Bulk Operation,Specimen Array
 24930,Add Array (Fluid by Supervisor),super@super.com,Test123,addSA_super.csv,addSA.xml,addSA,success,,Bulk Operation,Specimen Array
 24931,Add Array (Molecular by Technician),tech@bjc.com,Test123,addSA_tech.csv,addSA.xml,addSA,success,,Bulk Operation,Specimen Array
-24932,Add Tissue Array(Supervisor using Speci barcode),super@super.com,Test123,addSA_superBarcode.csv,addSA_barcode.xml,addSA,success,,Bulk Operation,Specimen Array
-24933,Add Molecular Array(Admin using specimen barcode),admin1@admin.com,Test1234,addSA_adminBarcode.csv,addSA_barcode.xml,addSA,success,,Bulk Operation,Specimen Array
-24934,Add Cell Array(Technician using Specimen barcode),tech@bjc.com,Test123,addSA_techBarcode.csv,addSA_barcode.xml,addSA,success,,Bulk Operation,Specimen Array
-24935,Add Array(Fluid by Super Admin using barcode),admin@admin.com,Test123,addSA_SABarcode.csv,addSA_barcode.xml,addSA,success,,Bulk Operation,Specimen Array
+24932,Add Tissue Array(Supervisor using Speci barcode),super@super.com,Test123,addSA_superBarcode.csv,addSA_barcode.xml,addSA_UsingSpecimenBarcode,success,,Bulk Operation,Specimen Array
+24933,Add Molecular Array(Admin using specimen barcode),admin1@admin.com,Test1234,addSA_adminBarcode.csv,addSA_barcode.xml,addSA_UsingSpecimenBarcode,success,,Bulk Operation,Specimen Array
+24934,Add Cell Array(Technician using Specimen barcode),tech@bjc.com,Test123,addSA_techBarcode.csv,addSA_barcode.xml,addSA_UsingSpecimenBarcode,success,,Bulk Operation,Specimen Array
+24935,Add Array(Fluid by Super Admin using barcode),admin@admin.com,Test123,addSA_SABarcode.csv,addSA_barcode.xml,addSA_UsingSpecimenBarcode,success,,Bulk Operation,Specimen Array
 24936,Add Array (Tissue by Scientist),scientist@sci.com,Test123,addSA_sciTissue.csv,addSA.xml,addSA,Failure, Access denied to add/edit SpecimenArray. User does not have Association  privilege on Site.,Bulk Operation,Specimen Array
 24937,Add Array (Cell by Scientist),scientist@sci.com,Test123,addSA_sciCell.csv,addSA.xml,addSA,Failure, Access denied to add/edit SpecimenArray. User does not have Association  privilege on Site.,Bulk Operation,Specimen Array
 24938,Add Array (Fluid by Scientist),scientist@sci.com,Test123,addSA_sciFluid.csv,addSA.xml,addSA,Failure, Access denied to add/edit SpecimenArray. User does not have Association  privilege on Site.,Bulk Operation,Specimen Array
