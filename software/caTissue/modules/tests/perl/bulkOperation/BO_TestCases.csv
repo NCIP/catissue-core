@@ -22,8 +22,8 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 #event test case 24397,Create Spun Event,admin@admin.com,Test123,SpunEventParameters.csv,SpunEventParameters.xml,createSpunEventParameters,success,,Bulk Operation,Specimen
 #event test case 24398,Create Thaw Event,admin@admin.com,Test123,ThawEventParameters.csv,ThawEventParameters.xml,createThawEventParameters,success,,Bulk Operation,Specimen
 #event test case 24399,Create Procedure Event,admin@admin.com,Test123,ProcedureEventParameters.csv,ProcedureEventParameters.xml,createProcedureEventParameters,success,,Bulk Operation,Specimen
-24400,Upenn Form - Non Human Participant,admin@admin.com,Test123,AddNonHumanParticipant.csv,NonHumanParticipants.xml,AddNonhumanParticipants,success,,Bulk Operation,Participant
-24401,Upenn Form - Non Human Specimen,admin@admin.com,Test123,AddNonHumanSpecimen.csv,NonHumanSpecimen.xml,AddNonhumanSpecimen,success,,Bulk Operation,Specimen
+#24400,Upenn Form - Non Human Participant,admin@admin.com,Test123,AddNonHumanParticipant.csv,NonHumanParticipants.xml,AddNonhumanParticipants,success,,Bulk Operation,Participant
+#24401,Upenn Form - Non Human Specimen,admin@admin.com,Test123,AddNonHumanSpecimen.csv,NonHumanSpecimen.xml,AddNonhumanSpecimen,success,,Bulk Operation,Specimen
 24402,Create Participant Registration,admin@admin.com,Test123,createParticipantRegistration.csv,createParticipantRegistration.xml,createParticipantRegistration,success,,Bulk Operation,Participant
 24403,Create Specimen,admin@admin.com,Test123,createSpecimen.csv,createSpecimen.xml,CreateSpecimen,success,,Bulk Operation,Specimen
 24404,Create Aliquot,admin@admin.com,Test123,createAliquot.csv,createAliquot.xml,CreateAliquot,success,,Bulk Operation,Specimen
@@ -507,7 +507,7 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 25037,Add Specimen Order (Blank Distribution Protocol),admin@admin.com,Test123,order_BlankDP.csv,order.xml,order,success,,Bulk Operation,Ordering and Distribution
 25038,Create_Order_Specimen_Aliquots_Admin,admin@admin.com,Test123,order_aliquot.csv,order.xml,order,success,,Bulk Operation,Ordering and Distribution
 25039,Create_Order_Specimen_Derivative_Admin,admin@admin.com,Test123,order_derivative.csv,order.xml,order,success,,Bulk Operation,Ordering and Distribution
-#25040,Edit Storage Container (as Site Admin),admin1@washu.com,Test123,editParentContainer_admin.csv,editContainer.xml,editParentContainer,success,,Bulk Operation,Admin
+25040,Edit Storage Container (as Site Admin),admin1@washu.com,Test123,editParentContainer_admin.csv,editContainer.xml,editParentContainer,success,,Bulk Operation,Admin
 25041,Edit Storage Container (capacity),admin@admin.com,Test123,editParentContainer_capacity.csv,editContainer.xml,editParentContainer,success,,Bulk Operation,Admin
 25042,Edit Storage Container (add CP restriction),admin@admin.com,Test123,editParentContainer_CP.csv,editContainer.xml,editParentContainer,success,,Bulk Operation,Admin
 25043,Edit Storage Container (add Specimen restriction),admin@admin.com,Test123,editParentContainer_specClass.csv,editContainer.xml,editParentContainer,success,,Bulk Operation,Admin
@@ -570,7 +570,7 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 25100,Add Child Container (Specimen Class Fluid),admin@admin.com,Test123,addChildContainer_fluid.csv,addChildContainer.xml,CreateChildContainer,success,,Bulk Operation,Admin
 25101,Create CPR with SCG and Single Specimen,dmp@dmp.com,Test1234,ParticipantWithSCGWithSpecimen.csv,ParticipantWithSCGWithSpecimen.xml,ParticipantWithSCGWithSpecimen,success,,Bulk Operation,Specimen
 25102,Create Participant Registration with SCG ,dmp@dmp.com,Test1234,ParticipantWithSCGWithNoSpecimen.csv,ParticipantWithSCGWithNoSpecimen.xml,ParticipantWithSCGWithNoSpecimen,success,,Bulk Operation,Specimen Collection Group
-25103,Create SCG and Single  Specimen,dmp@dmp.com,Test1234,CreateNewSCGWithSpecimen.csv,CreateNewSCGWithSpecimen.xml,NewSCGWithSpecimen,success,,Bulk Operation,Specimen
+25103,Create SCG and Single  Specimen,dmp@dmp.com,Test1234,CreateNewSCGWithSpecimen.csv,CreateNewSCGWithSpecimen.xml,NewSCGWithSpecimen1,success,,Bulk Operation,Specimen
 25104,Create CPR with SCG and Multiple Specimens,dmp@dmp.com,Test1234,ParticipantWithSCGWithMultSpecimen.csv,ParticipantWithSCGWithMultSpecimen.xml,ParticipantWithSCGWithMultSpecimen,success,,Bulk Operation,Specimen
 25105,Create Participant Registration with Multiple SCG ,dmp@dmp.com,Test1234,MultScgWithNo_specimen.csv,MultScgWithNo_specimen.xml,MultSCGWithNoSpecimen,success,,Bulk Operation,Specimen Collection Group
 25106,Create SCG and Multiple  Specimens,dmp@dmp.com,Test1234,CreateScgWithMultipleSpecimen.csv,CreateScgWithMultipleSpecimen.xml,NewSCGWithMultSpecimen1,success,,Bulk Operation,Specimen
