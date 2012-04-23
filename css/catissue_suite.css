@@ -136,6 +136,14 @@ body {
 	margin:0px;
 }
 
+.messagetextwarning {
+	font-family:Verdana;
+	font-size:11px;
+	color: blue;
+	vertical-align:middle;
+	margin:0px;
+}
+
 .messagehighlight {
 	border-bottom:1px solid #ea6c15;
 	border-top:1px solid #ea6c15;

@@ -77,6 +77,7 @@ import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
@@ -118,6 +119,7 @@ public class RequestDetailsAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 			{
+		
 		String splvar = request.getParameter("splvar");
 		if(splvar != null)
 		{
@@ -129,6 +131,12 @@ public class RequestDetailsAction extends BaseAction
 			response.getWriter().write(mainJsonRow.toString());
 			return null;
 		}
+		String selectedTab = request.getParameter("selectedTab");
+		if(Validator.isEmpty(selectedTab))
+		{
+			selectedTab = "SimpleViewTab";
+		}
+		request.setAttribute("selectedTab", selectedTab);
 		final RequestDetailsForm requestDetailsForm = (RequestDetailsForm) form;
 		// The request Id on which the user has clicked
 		String requestId = "";
@@ -220,18 +228,21 @@ public class RequestDetailsAction extends BaseAction
 
 		List newStatList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_REQUESTED_ITEMS_STATUS, null);
+		newStatList .remove(0);
 		request.setAttribute("newStatList", newStatList);
 		// order items status to display
 		final List requestedItemsStatusList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_REQUESTED_ITEMS_STATUS, null);
 		// removing the --select-- from the list and adding --select Status for
 		// all-- to the list
-		requestedItemsStatusList.remove(0);
-		requestedItemsStatusList.add(0, new NameValueBean(ApplicationProperties
-				.getValue("orderingSystem.details.distributionStatus"), "-1"));
+		
 		requestedItemsStatusList.add(new NameValueBean("Distributed And Close(Special)", "Distributed And Close(Special)"));
 		
 		request.setAttribute(Constants.REQUESTED_ITEMS_STATUS_LIST, requestedItemsStatusList);
+		Collections.sort(requestedItemsStatusList);
+		requestedItemsStatusList.remove(0);
+		requestedItemsStatusList.add(0, new NameValueBean(ApplicationProperties
+				.getValue("orderingSystem.details.distributionStatus"), "-1"));
 
 		// Setting the Site List
 		final List siteList = this.getSiteListToDisplay();
@@ -643,7 +654,7 @@ public class RequestDetailsAction extends BaseAction
 		List	requestedItemsStatusList = OrderingSystemUtil
 		.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
 		dataArray.put(((NameValueBean)requestedItemsStatusList.get(0)).getName());
-		dataArray.put(specimenOrderBean.getId());
+		dataArray.put("");
 		try {
 			jsonObject.put(Constants.JSON_DATA_COLUMN, dataArray);
 		jsonObject.put(Constants.ID, rowNumber);
