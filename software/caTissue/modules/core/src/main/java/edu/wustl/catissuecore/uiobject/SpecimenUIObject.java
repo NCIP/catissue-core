@@ -398,4 +398,31 @@ public class SpecimenUIObject implements UIObject
 		this.timeInMins = timeInMins;
 	}
 
+	boolean isPositionChanged=Boolean.FALSE;
+	boolean isTransferred=Boolean.FALSE;
+
+	
+	public boolean getIsPositionChanged()
+	{
+		return isPositionChanged;
+	}
+
+	
+	public void setPositionChanged(boolean isPositionChanged)
+	{
+		this.isPositionChanged = isPositionChanged;
+	}
+
+	
+	public boolean getIsTransferred()
+	{
+		return isTransferred;
+	}
+
+	
+	public void setTransferred(boolean isTransferred)
+	{
+		this.isTransferred = isTransferred;
+	}
+
 }

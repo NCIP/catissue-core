@@ -350,8 +350,14 @@ public class ShowStorageGridViewAction extends BaseAction
 								}
 								}
 						}else{
-							value = "<img src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td>";
-							//value = "";
+							//value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(1,1)\\\\\" src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";							//value = "";
+						  value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(\\\'selectedContainerName\\\',\\\'"+storageContainerGridObject.getName()+"\\\');\\ " 
+							+"setTextBoxValue(\\\'positionDimensionOne\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
+							+"setTextBoxValue(\\\'positionDimensionTwo\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ "
+							+"closeFramedWindow()\\\\\" "
+						  		+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+
+
 						}
 							
 						jsonMidleString.append("\""+value+"\"");

@@ -158,6 +158,38 @@
 		}
 </script>
 <script language="JavaScript">
+
+ function makePositionsEditAble()
+ {
+	 var selectedContainerName=document.getElementById("selectedContainerName");
+	 var positionDimensionOne=document.getElementById("positionDimensionOne");
+	 var positionDimensionTwo=document.getElementById("positionDimensionTwo");
+	 var containerMap=document.getElementById("containerMap");
+	 selectedContainerName.readOnly=false;
+	 positionDimensionOne.readOnly=false;
+	 positionDimensionTwo.readOnly=false;
+	 containerMap.disabled=false;
+ }
+ 
+ function setPositionChangeFlag()
+ {
+	makePositionsEditAble();
+	var isTransferred=document.getElementById("isTransferred");
+	var isPositionChanged=document.getElementById("isPositionChanged");
+	isTransferred.value=false;
+	isPositionChanged.value=true;
+ }
+ 
+ function setTransferSpecimenFlag()
+ {
+	makePositionsEditAble();
+	var isTransferred=document.getElementById("isTransferred");
+	var isPositionChanged=document.getElementById("isPositionChanged");
+	isTransferred.value=true;
+	isPositionChanged.value=false;
+}
+
+ 
 	function hidedisposeArea()
 	{
 		// alert("hidedisposeArea"+document.getElementById('dispose'));
@@ -1288,6 +1320,10 @@
 								<html:hidden property="fromPositionDimensionOne" value="<%=fromPositionDimensionOne%>"/>
 								<html:hidden property="fromPositionDimensionTwo" value="<%=fromPositionDimensionTwo%>"/>
 								<html:hidden property="fromStorageContainerId" value="<%=fromStorageContainer%>"/>
+								
+								<html:hidden property="isPositionChanged" styleId="isPositionChanged"/>
+								<html:hidden property="isTransferred" styleId="isTransferred"/>
+								
 								<%
 								if(form.getForwardTo().equalsIgnoreCase("orderDetails"))
 								{%>
@@ -2158,10 +2194,16 @@
 															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true" style="text-align:right"/>
 													</td>
 							<td class="groupelements">
-															<html:button styleClass="black_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
+															<html:button styleClass="black_ar" styleId="containerMap" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
 																<bean:message key="buttons.map"/>
 															</html:button>
 													</td>
+																		<td class="groupelements">
+							<input type="button" name="CorrectPosition" value="Correct"   onclick="setPositionChangeFlag()" styleClass="blue_ar_b"/>
+							</td>
+							<td class="groupelements">
+							<input type="button" name="TransferPositionButton" value="Transfer"   onclick="setTransferSpecimenFlag()" styleClass="blue_ar_b"/>
+							</td>
 												</tr>
 											</table>
 											</div>

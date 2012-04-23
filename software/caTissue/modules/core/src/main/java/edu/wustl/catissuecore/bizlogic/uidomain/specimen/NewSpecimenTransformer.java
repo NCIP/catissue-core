@@ -149,10 +149,8 @@ public class NewSpecimenTransformer extends SpecimenTransformer<NewSpecimenForm>
                 } else {
                     domainObject.getSpecimenPosition().getStorageContainer().setName(
                             uiRepOfDomain.getSelectedContainerName());
-                    domainObject.getSpecimenPosition().setPositionDimensionOne(
-                            Integer.valueOf(uiRepOfDomain.getPos1()));
-                    domainObject.getSpecimenPosition().setPositionDimensionTwo(
-                            Integer.valueOf(uiRepOfDomain.getPos2()));
+                    domainObject.getSpecimenPosition().setPositionDimensionOneString(uiRepOfDomain.getPositionDimensionOne());
+                    domainObject.getSpecimenPosition().setPositionDimensionTwoString(uiRepOfDomain.getPositionDimensionTwo());
                     StorageContainerUtil.setContainerPositions(uiRepOfDomain.getSelectedContainerName(), uiRepOfDomain.getPositionDimensionOne(), uiRepOfDomain.getPositionDimensionTwo(), domainObject.getSpecimenPosition());
                     domainObject.getSpecimenPosition().setSpecimen(domainObject);
                 }

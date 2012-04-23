@@ -2843,5 +2843,15 @@ public final class StorageContainerUtil
 		position=AppUtility.getPositionValue(dimensionLabellingScheme, pos);
 		return position;
 	}
+	
+	public static Integer convertSpecimenPositionsToInteger(String containerName, int labellingDimension,String pos)
+	{
+		Integer position;
+		List labellingSchemesList=null;
+		labellingSchemesList = getLabellingSchemeByContainerName(containerName);
+		String dimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(labellingDimension-1);
+		position=AppUtility.getPositionValueInInteger(dimensionLabellingScheme, pos);
+		return position;
+	}
 
 }

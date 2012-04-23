@@ -14,7 +14,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -75,6 +74,7 @@ import edu.wustl.catissuecore.namegenerator.LabelGenException;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
+import edu.wustl.catissuecore.uiobject.DisposalEventParametersUIObject;
 import edu.wustl.catissuecore.uiobject.SpecimenUIObject;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.ConsentUtil;
@@ -101,12 +101,10 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
@@ -2147,16 +2145,23 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 					specimenOld, persistentSpecimen);
 			specimen.setCreationEventAction(persistentSpecimen.getCreationEventAction());
 			handleRecordEntry(persistentSpecimen, sessionDataBean.getUserName());
-
+	
 			dao.update(persistentSpecimen, specimenOld);
-
+			
 			this.updateChildAttributes(specimen, specimenOld);
 
 			// Disable functionality
 			this.disableSpecimen(dao, specimen, persistentSpecimen,
 					specUIObject);
+			if(specUIObject.getIsTransferred())
+			{
 			transferSpecimen(dao, sessionDataBean, specUIObject, specimen,
 					oldSpecimenPosition);
+			}
+			else if(specUIObject.getIsPositionChanged())
+			{
+				updateSpecimenPosition(dao,sessionDataBean,specUIObject,specimen,oldSpecimenPosition);
+			}
 			if(specUIObject.isDispose()&&!specimen.getActivityStatus().equals(specUIObject.getDisposeStatus()))
 			{
 				Map<BaseAbstractAttributeInterface, Object> dataValueMap = new HashMap<BaseAbstractAttributeInterface, Object>();
@@ -2197,7 +2202,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 	}
 
 
-	private void handleSPPDataNtry(Specimen persistentSpecimen,SessionDataBean sessionDataBean) throws BizLogicException, IllegalArgumentException, IllegalAccessException, InvocationTargetException 
+		private void handleSPPDataNtry(Specimen persistentSpecimen,SessionDataBean sessionDataBean) throws BizLogicException, IllegalArgumentException, IllegalAccessException, InvocationTargetException 
 	{
 		if(persistentSpecimen.getActionApplicationCollection() != null)
 		{
@@ -2317,19 +2322,65 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		return id;
 	}
 
+	
+	private void updateSpecimenPosition(DAO dao, SessionDataBean sessionDataBean,
+			SpecimenUIObject specUIObject, Specimen specimen, SpecimenPosition oldSpecimenPosition) throws BizLogicException
+	{
+		
+		SpecimenEventParametersBizLogic spEventParametersBizLogic= new SpecimenEventParametersBizLogic();
+		TransferEventParameters transferEventParameters = new TransferEventParameters();
+		User user= new User();
+		user.setId(sessionDataBean.getUserId());
+		transferEventParameters.setUser(user);
+		StorageContainer fromStorageContainer = new StorageContainer();
+
+		transferEventParameters.setSpecimen(specimen);
+		if(!"".equalsIgnoreCase(specUIObject.getFromPositionDimensionOne()))
+			transferEventParameters.setFromPositionDimensionOne(Integer.parseInt(specUIObject.getFromPositionDimensionOne()));
+		else
+			transferEventParameters.setFromPositionDimensionOne(null);
+
+		if(!"".equalsIgnoreCase(specUIObject.getFromPositionDimensionTwo()))
+			transferEventParameters.setFromPositionDimensionTwo(Integer.parseInt(specUIObject.getFromPositionDimensionTwo()));
+		else
+			transferEventParameters.setFromPositionDimensionTwo(null);
+
+		if(specUIObject.getFromStorageContainerId()!=null)
+		{
+			fromStorageContainer.setId(Long.parseLong(specUIObject.getFromStorageContainerId()));
+			transferEventParameters.setFromStorageContainer(fromStorageContainer);
+		}
+		else
+		{
+			transferEventParameters.setFromStorageContainer(null);
+		}
+
+		transferEventParameters.setComment(specUIObject.getReasonForTransfer());
+		transferEventParameters.setToPositionDimensionOne(specimen.getSpecimenPosition().getPositionDimensionOne());
+		transferEventParameters.setToPositionDimensionTwo(specimen.getSpecimenPosition().getPositionDimensionTwo());
+		StorageContainer toStorageContainer = new StorageContainer();
+		toStorageContainer.setId(specimen.getSpecimenPosition().getStorageContainer().getId());
+		transferEventParameters.setToStorageContainer(toStorageContainer);
+		transferEventParameters.setTimestamp(new Date());
+		DisposalEventParametersUIObject uiObject=new DisposalEventParametersUIObject();
+		uiObject.setCreateEvent(false);
+		spEventParametersBizLogic.insert(transferEventParameters, (Object)uiObject, dao, sessionDataBean);
+
+	}
+
+
+	
 	private void transferSpecimen(DAO dao, SessionDataBean sessionDataBean,
 			SpecimenUIObject specUIObject, final Specimen specimen,
 			SpecimenPosition oldSpecimenPosition) throws BizLogicException {
-		if("transferDone".equalsIgnoreCase(specUIObject.getTransferStatus()))
-		{
-			Map<BaseAbstractAttributeInterface, Object> dataValueMap = new HashMap<BaseAbstractAttributeInterface, Object>();
+
 			SpecimenEventParametersBizLogic spEventParametersBizLogic= new SpecimenEventParametersBizLogic();
 			TransferEventParameters transferEventParameters = new TransferEventParameters();
 			User user= new User();
 			user.setId(sessionDataBean.getUserId());
 			transferEventParameters.setUser(user);
 			StorageContainer fromStorageContainer = new StorageContainer();
-			//fromStorageContainer.setId(Long.parseLong(specUIObject.getFromStorageContainerId()));
+
 			transferEventParameters.setSpecimen(specimen);
 			if(!"".equalsIgnoreCase(specUIObject.getFromPositionDimensionOne()))
 				transferEventParameters.setFromPositionDimensionOne(Integer.parseInt(specUIObject.getFromPositionDimensionOne()));
@@ -2341,8 +2392,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 			else
 				transferEventParameters.setFromPositionDimensionTwo(null);
 
-
-			//transferEventParameters.setFromPositionDimensionTwo(Integer.parseInt(specUIObject.getFromPositionDimensionTwo()));
 			if(specUIObject.getFromStorageContainerId()!=null)
 			{
 				fromStorageContainer.setId(Long.parseLong(specUIObject.getFromStorageContainerId()));
@@ -2353,50 +2402,15 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				transferEventParameters.setFromStorageContainer(null);
 			}
 
-			//				transferEventParameters.setComment(specUIObject.getReasonForTransfer());
 			transferEventParameters.setComment(specUIObject.getReasonForTransfer());
-			transferEventParameters.setToPositionDimensionOne(Integer.parseInt(specUIObject.getPositionDimensionOne()));
-			transferEventParameters.setToPositionDimensionTwo(Integer.parseInt(specUIObject.getPositionDimensionTwo()));
+			transferEventParameters.setToPositionDimensionOne(specimen.getSpecimenPosition().getPositionDimensionOne());
+			transferEventParameters.setToPositionDimensionTwo(specimen.getSpecimenPosition().getPositionDimensionTwo());
 			StorageContainer toStorageContainer = new StorageContainer();
-			toStorageContainer.setId(Long.parseLong(specUIObject.getStorageContainer()));
+			toStorageContainer.setId(specimen.getSpecimenPosition().getStorageContainer().getId());
 			transferEventParameters.setToStorageContainer(toStorageContainer);
 			transferEventParameters.setTimestamp(new Date());
-			/*StringBuilder fromStorageContainer;
-			Integer posDimenOne=null;
-			Integer posDimenTwo=null;
-			if (oldSpecimenPosition == null)
-			{
-				fromStorageContainer = new StringBuilder("virtual Location");
-			}
-			else
-			{
-				fromStorageContainer = new StringBuilder(oldSpecimenPosition
-						.getStorageContainer().getName());
-				posDimenOne = oldSpecimenPosition
-						.getPositionDimensionOne();
-				posDimenTwo = oldSpecimenPosition
-						.getPositionDimensionTwo();
-				fromStorageContainer.append(':').append("pos(").append(posDimenOne).append(',').append(
-						posDimenTwo).append(')');
-			}
-			fromStorageContainer.toString();
-			try
-			{
-				toStorageContainer.setId(Long.parseLong(specUIObject.getStorageContainer()));
-			}
-			catch (NumberFormatException e) {
-				toStorageContainer.setName(specUIObject.getStorageContainer());
-			}
-			transferEventParameters.setToStorageContainer(toStorageContainer);*/
-
 			spEventParametersBizLogic.insert(transferEventParameters, dao, sessionDataBean);
-
-			/*spEventParametersBizLogic.insertDynamicEventForTransferEvent(sessionDataBean, transferEventParameters, dataValueMap,
-					specimen, oldSpecimenPosition, fromStorageContainer, posDimenOne,
-					posDimenTwo);*/
-
 		}
-	}
 
 
 	private boolean checkIfGsIdExist(String gsId, Long specimenId, DAO dao) {
@@ -2572,19 +2586,6 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 				&& Validator.isEmpty(specimen.getLabel())) {
 			throw this.getBizLogicException(null, "label.mandatory", "");
 		}
-		if(!"transferDone".equalsIgnoreCase(specUIObject.getTransferStatus()))
-		{
-			if (this.isStoragePositionChanged(specimenOld, specimen)) {
-				if (Constants.COLLECTION_STATUS_PENDING.equals(specimenOld
-						.getCollectionStatus())
-						&& Constants.COLLECTION_STATUS_PENDING.equals(specimen
-								.getCollectionStatus())
-								&& specimen.getSpecimenPosition() != null) {
-					throw this.getBizLogicException(null, "status.collected", "");
-				}
-				throw this.getBizLogicException(null, "position.nt.changed", "");
-			}
-		}
 		if (!specimenOld.getLineage().equals(specimen.getLineage())) {
 			throw this.getBizLogicException(null, "lineage.nt.changed", "");
 		}
@@ -2660,6 +2661,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic {
 		persistentSpecimen.setCollectionStatus(specimen.getCollectionStatus());
 		persistentSpecimen.setConsentTierStatusCollection(specimen
 				.getConsentTierStatusCollection());
+		
 		Double conc = 0D;
 		if (Constants.MOLECULAR.equals(specimen.getSpecimenClass())) {
 			conc = ((MolecularSpecimen) specimen)

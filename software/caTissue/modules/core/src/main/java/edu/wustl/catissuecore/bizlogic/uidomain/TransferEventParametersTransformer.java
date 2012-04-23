@@ -5,6 +5,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.InputUIRepOfDomain;
 
@@ -32,8 +33,8 @@ public class TransferEventParametersTransformer
             if (uiRepOfDomain.getPos1() != null && !uiRepOfDomain.getPos1().trim().equals(Constants.DOUBLE_QUOTES)
                     && uiRepOfDomain.getPos2() != null
                     && !uiRepOfDomain.getPos2().trim().equals(Constants.DOUBLE_QUOTES)) {
-                domainObject.setToPositionDimensionOne(Integer.valueOf(uiRepOfDomain.getPos1()));
-                domainObject.setToPositionDimensionTwo(Integer.valueOf(uiRepOfDomain.getPos2()));
+                domainObject.setToPositionDimensionOne(StorageContainerUtil.convertSpecimenPositionsToInteger(uiRepOfDomain.getSelectedContainerName(),1,uiRepOfDomain.getPos1()));
+                domainObject.setToPositionDimensionTwo(StorageContainerUtil.convertSpecimenPositionsToInteger(uiRepOfDomain.getSelectedContainerName(),2,uiRepOfDomain.getPos2()));
             }
             toObj.setName(uiRepOfDomain.getSelectedContainerName());
         }

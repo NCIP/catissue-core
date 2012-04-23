@@ -26,4 +26,18 @@ public class DisposalEventParametersUIObject implements UIObject
 	{
 		this.activityStatus = activityStatus;
 	}
+	
+	protected boolean createEvent=Boolean.TRUE;
+
+	
+	public boolean getCreateEvent()
+	{
+		return createEvent;
+	}
+
+	
+	public void setCreateEvent(boolean createEvent)
+	{
+		this.createEvent = createEvent;
+	}
 }

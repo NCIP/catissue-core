@@ -245,6 +245,8 @@ public class UIObjectFactory implements IUIObjectFactory
 		specimenUIObject.setDispose(form.isDispose());
 		specimenUIObject.setDisposeStatus(form.getDisposeStatus());
 		specimenUIObject.setReason(form.getReason());
+		specimenUIObject.setPositionChanged(form.getIsPositionChanged());
+		specimenUIObject.setTransferred(form.getIsTransferred());
 		return specimenUIObject;
 	}
 

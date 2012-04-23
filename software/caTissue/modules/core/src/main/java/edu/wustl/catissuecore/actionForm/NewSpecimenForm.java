@@ -28,7 +28,6 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -1976,5 +1975,35 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData, IP
 	{
 		this.printerType = printerType;
 	}
+	
+	boolean isPositionChanged=Boolean.FALSE;
+	boolean isTransferred=Boolean.FALSE;
 
+	
+	public boolean getIsPositionChanged()
+	{
+		return isPositionChanged;
+	}
+
+	
+	public void setIsPositionChanged(boolean isPositionChanged)
+	{
+		this.isPositionChanged = isPositionChanged;
+	}
+
+	
+	public boolean getIsTransferred()
+	{
+		return isTransferred;
+	}
+
+	
+	public void setIsTransferred(boolean isTransferred)
+	{
+		this.isTransferred = isTransferred;
+	}
+
+	
+	
+	
 }

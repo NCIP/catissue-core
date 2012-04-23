@@ -201,9 +201,9 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 					parentContainerName = container.getName();
 
 				}
-				final Integer pos1 = new Integer(transferEventParametersForm
+				final String pos1 = new String(transferEventParametersForm
 						.getPositionDimensionOne());
-				final Integer pos2 = new Integer(transferEventParametersForm
+				final String pos2 = new String(transferEventParametersForm
 						.getPositionDimensionTwo());
 
 				final List pos2List = new ArrayList();

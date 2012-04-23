@@ -4162,6 +4162,25 @@ public class AppUtility
 		return positionVal;
 	}
 	
+	public static Integer getPositionValueInInteger(String labellingScheme, String position)
+	{
+		int positionVal=-1;
+		if(labellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_NUMBERS))
+		{
+			positionVal= Integer.valueOf(position);
+		}
+		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE)
+			|| (labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE)))
+		{
+			positionVal=excelColumnAlphabetToNum(position.toUpperCase());
+		}
+		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN))
+		{
+			positionVal=romanToInteger(position);
+		}
+		return positionVal;
+	}
+	
 	public static String binaryToRoman(int binary) {
 		if (binary <= 0 || binary >= 4000) {
 			throw new NumberFormatException("Value outside roman numeral range.");
