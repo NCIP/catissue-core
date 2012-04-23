@@ -1,6 +1,7 @@
 var request,url;var pageDisplayed=1;function gotoCreateArrayPage(arrayRowCounter,rowCounter){var id="defineArrayName_"+arrayRowCounter;var arrayName=document.getElementById(id).value;var queryString="?array="+arrayName+"&operation=add&id=&arrayRowCounter="+arrayRowCounter+"&rowCounter="+rowCounter;var action="InitCreateDefineArray.do"+queryString;document.forms[0].action=action;document.forms[0].submit()}
-function submitPage(){
-
+function submitPage()
+{
+setGridValuesToForm();
 document.forms[0].submit()
 }
 

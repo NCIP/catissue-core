@@ -8,9 +8,7 @@
 <%@ page import="edu.wustl.common.util.XMLPropertyHandler"%>
 <%@ page import="java.text.MessageFormat"%>
 
-<link rel="STYLESHEET" type="text/css" href="css/dhtmlxtabbar.css" />
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-<link rel="stylesheet" type="text/css" href="css/CascadeMenu.css" />
 <link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 
 <script src="jss/script.js" type="text/javascript"></script>
