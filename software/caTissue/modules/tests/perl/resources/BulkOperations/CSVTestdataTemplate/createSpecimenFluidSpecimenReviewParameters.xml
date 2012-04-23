@@ -42,8 +42,8 @@
 				parentRoleName="actionApplication" roleName="applicationRecordEntry">	
 				<attribute name="activityStatus" csvColumnName="Activity Entry"/>
 			<containmentAssociation
-			className="gov.nih.nci.dynext.sop.FluidSpecimenReviewParameters" cardinality="*"
-			parentRoleName="actionApplicationRecordEntry_FluidSpecimenReviewParameters" roleName="fluidSpecimenReviewParametersCollection">
+			className="gov.nih.nci.dynext.sop.FluidSpecimenReviewEventParameters" cardinality="*"
+			parentRoleName="actionApplicationRecordEntry_FluidSpecimenReviewEventParameters" roleName="fluidSpecimenReviewEventParametersCollection">
 			<attribute name="cellCount" csvColumnName="Cell Count"/>
 			</containmentAssociation>				
 			</containmentAssociation>
