@@ -42,8 +42,8 @@
 				parentRoleName="actionApplication" roleName="applicationRecordEntry">	
 				<attribute name="activityStatus" csvColumnName="Activity Entry"/>
 			<containmentAssociation
-			className="gov.nih.nci.dynext.sop.TissueSpecimenReviewParameters" cardinality="*"
-			parentRoleName="actionApplicationRecordEntry_TissueSpecimenReviewParameters" roleName="tissueSpecimenReviewParametersCollection">
+			className="gov.nih.nci.dynext.sop.TissueSpecimenReviewEventParameters" cardinality="*"
+			parentRoleName="actionApplicationRecordEntry_TissueSpecimenReviewEventParameters" roleName="tissueSpecimenReviewEventParametersCollection">
 			<attribute name="lymphocyticPercentage" csvColumnName="Lymphocytic Percentage"/>
 			<attribute name="necrosisPercentage" csvColumnName="Necrosis Percentage"/>
 			<attribute name="histologicalQuality" csvColumnName="Histological Quality"/>
