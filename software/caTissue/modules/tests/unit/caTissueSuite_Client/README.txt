@@ -1,13 +1,14 @@
 caTissue Suite v2.0 Client
 ======================================
 Deployment, User and Technical Guide available at
-http://gforge.nci.nih.gov/docman/index.php?group_id=689&selected_doc_group_id=6035&language_id=1
+https://wiki.nci.nih.gov/display/caTissuedoc/caTissue+Suite+2.0+Documentation+and+Training
 For more information, visit the Tissue/Biospecimen Banking and Technology 
 Tools Knowledge Center website: https://cabig-kc.nci.nih.gov/Biospecimen/KC/index.php/Main_Page
 
 Prerequisites:
 =======================================
 Certified Client OS: Windows Microsoft Windows XP Professional Version 2002 Service Pack 2,
+Windows Microsoft Windows 7
 Linux Red Hat 9 or Red Hat Enterprise ES/AS 2.1 or higher
 Build tool: Ant 1.7
 Java: JDK 1.6
@@ -32,12 +33,10 @@ Main Page: https://cabig-kc.nci.nih.gov/Biospecimen/KC/index.php/Main_Page
 Discussion Forum: https://cabig-kc.nci.nih.gov/Biospecimen/forums/
 Contact: tbpt_kc_support@mga.wustl.edu
 
-Release Notes:
-======================================
-Link: http://gforge.nci.nih.gov/docman/index.php?group_id=689&selected_doc_group_id=6154&language_id=1
 
-SVN Tags
+SVN info
 ========================================
+https://ncisvn.nci.nih.gov/svn/catissue/catissuecore/trunk/
 
 P.S: Currently SingleAPITestCases are commented. To run these test cases kindly add events classes to build path and execute.
 
