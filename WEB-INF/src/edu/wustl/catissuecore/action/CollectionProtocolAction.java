@@ -99,8 +99,9 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		super.executeSecureAction(mapping, form, request, response);
 		// pageOf required for Advance Search Object View.
 		final String tabSel = request.getParameter("tabSel");
+		final String nodeDeleted = request.getParameter("nodeDeleted");
 		String nodeId = request.getParameter(Constants.TREE_NODE_ID);
-		if(nodeId!=null)
+		if(nodeId!=null && !Constants.TRUE.equals(nodeDeleted))
 			request.getSession().setAttribute(Constants.TREE_NODE_ID,nodeId);
 		request.setAttribute("tabSel", tabSel);
 		final List<NameValueBean> clinicalDiagnosis = new ArrayList<NameValueBean>();

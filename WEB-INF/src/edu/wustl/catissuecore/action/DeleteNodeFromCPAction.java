@@ -57,6 +57,7 @@ public class DeleteNodeFromCPAction extends BaseAction
 		String eventMapKey = null;
 		String parentReqMapKey = null;
 		String forwardTo = null;
+		String parentNodeId = (String)request.getParameter("parentNodeId");
 		if ("specimenRequirement".equals(request.getParameter("pageOf")))
 		{
 			final String collectionProtocolEventKey = request.getParameter(Constants.EVENT_KEY);
@@ -69,7 +70,6 @@ public class DeleteNodeFromCPAction extends BaseAction
 			final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
 					.get(eventMapKey);
 			Map specimenReqMap = collectionProtocolEventBean.getSpecimenRequirementbeanMap();
-			String parentNodeId = (String)request.getParameter("parentNodeId");
 			if (specimenReqMap.containsKey(collectionProtocolEventKey))
 			{
 				specimenReqMap.remove(collectionProtocolEventKey);
@@ -122,7 +122,8 @@ public class DeleteNodeFromCPAction extends BaseAction
 			
 			eventMapKey = protocolEventDetailsForm.getCollectionProtocolEventkey();
 			collectionProtocolEventMap.remove(eventMapKey);
-			forwardTo = Constants.SUCCESS;
+			forwardTo = Constants.PAGE_OF_COLLECTION_PROTOCOL;
+			request.getSession().setAttribute(Constants.TREE_NODE_ID,parentNodeId );
 		}
 		return mapping.findForward(forwardTo);
 	}
