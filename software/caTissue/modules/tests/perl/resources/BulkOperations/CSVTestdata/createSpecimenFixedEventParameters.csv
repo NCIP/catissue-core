@@ -1,0 +1,2 @@
+SCG name,Label,Barcode,Created On,Activity Status,Comment,Is Available,Collection Status,Specimen Class,Type,Tissue Site,Tissue Side,Initial Quantity,Available Quantity,Lineage,Pathological Status,Container name,Position one,Position two,Event Comments#1,Reason Deviation#1,User ID#1,Duration In Minutes#1#1,Fixation Type#1#1,Activity Entry#1
+WashuCP_21_25,BO_Specimen1,11121,1/8/2012,Active,hi test,TRUE,Collected,Fluid,Bile,Not Specified,Not Specified,2,2,New,Not Specified,,,,comments,no reason,1,12,Compact,Active
