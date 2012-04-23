@@ -68,16 +68,18 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		final CreateSpecimenTemplateForm createSpecimenTemplateForm = (CreateSpecimenTemplateForm) form;
 		final HttpSession session = request.getSession();
 		final String operation = request.getParameter(Constants.OPERATION);
-		final String eventKey = request.getParameter(Constants.EVENT_KEY);
-		final String nodeId = (String)session.getAttribute(Constants.TREE_NODE_ID);
-		final StringTokenizer st = new StringTokenizer(eventKey, "_");
-		String eventSelected = "";
-		String specimenSelected = "";
-		if (st.countTokens() == 2)
+		String mapKey = request.getParameter(Constants.EVENT_KEY);
+		final String parentNodeId = request.getParameter(Constants.PARENT_NODE_ID);
+		//final StringTokenizer st = new StringTokenizer(mapKey, "_");
+		String eventSelected = null;
+		if(Constants.ADD.equals(operation) && !Constants.TRUE.equals(createDuplicateSpecimen))
+			eventSelected = mapKey;
+		else	
+			eventSelected = parentNodeId.substring(parentNodeId.indexOf('_')+1,parentNodeId.indexOf('_')+3);
+		/*if (st.hasMoreTokens())
 		{
 			eventSelected = st.nextToken();
-			specimenSelected = st.nextToken();
-		}
+		}*/
 		
 		//session.setAttribute(Constants.TREE_NODE_ID, nodeId);
 		isPersistent = request.getParameter("isPersistent");
@@ -88,7 +90,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			final Map collectionProtocolEventMap = (Map) session
 					.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
 			final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
-					.get((Constants.TRUE.equals(createDuplicateSpecimen) ? eventSelected : eventKey));
+					.get((Constants.TRUE.equals(createDuplicateSpecimen) ? eventSelected : mapKey));
 			final Integer totalNoOfSpecimen = collectionProtocolEventBean
 					.getSpecimenRequirementbeanMap().size();
 			final SpecimenRequirementBean specimenRequirementBean = this.createSpecimenBean(
@@ -98,12 +100,21 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			{
 				collectionProtocolEventBean.addSpecimenRequirementBean(specimenRequirementBean);
 			}
+			if(Constants.TRUE.equals(createDuplicateSpecimen))
+			{
+				request.getSession().setAttribute(Constants.TREE_NODE_ID, Constants.NEW_SPECIMEN + "_"+ specimenRequirementBean.getUniqueIdentifier());
+				request.getSession().setAttribute("key", specimenRequirementBean.getUniqueIdentifier());
+			}
+			
 		}
 		if (operation.equals(Constants.EDIT))
 		{
 			try
 			{
 				this.initCreateSpecimenTemplateForm(createSpecimenTemplateForm, request);
+				request.getSession().setAttribute(Constants.TREE_NODE_ID, parentNodeId);
+				mapKey = parentNodeId.substring(parentNodeId.indexOf('_')+1);
+				request.getSession().setAttribute("key",mapKey);
 			}
 			catch (final Exception e)
 			{
@@ -116,8 +127,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 				target = Constants.FAILURE;
 			}
 		}
-		if (Constants.TRUE.equals(createDuplicateSpecimen) || !"".equals(eventSelected))
-			session.setAttribute("listKey", eventSelected);
+		session.setAttribute("listKey", eventSelected);
 		return mapping.findForward(target);
 	}
 

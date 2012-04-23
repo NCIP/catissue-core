@@ -50,63 +50,64 @@ public class ProtocolEventDetailsAction extends BaseAction
 		final ProtocolEventDetailsForm protocolEventDetailsForm = (ProtocolEventDetailsForm) form;
 		final String operation = request.getParameter(Constants.OPERATION);
 		final HttpSession session = request.getSession();
-
-		// Event Key when flow is form Specimen Requirement Page
-		String key = request.getParameter(Constants.EVENT_KEY);
-		String eventKey = null;
+		String key = null;
+		//String eventKey = null;
+		
 		String selectedNode = null;
+		final String nodeClicked = request.getParameter("nodeClicked");
 		final String nodeDeleted = request.getParameter("nodeDeleted");
-		if("true".equals(nodeDeleted))
+		final String duplicateEvent = request.getParameter(Constants.CREATE_DUPLICATE_EVENT);
+		final String redirectTo = request.getParameter("redirectTo");
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		
+		if(Constants.TRUE.equals(duplicateEvent))
+		{	
+			protocolEventDetailsForm.setCollectionPointLabel("");
+			request.setAttribute("setFocus",Constants.TRUE);
+		}
+
+		if(Constants.TRUE.equals(nodeClicked))
+		{
+			key = request.getParameter(Constants.EVENT_KEY);
+			selectedNode = request.getParameter(Constants.TREE_NODE_ID);
+			
+		}else if(Constants.TRUE.equals(nodeDeleted))
 		{
 			key = (String) session.getAttribute(Constants.PARENT_NODE_ID);
 			selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
-		}else
+		}else if(Constants.PAGE_OF_DEFINE_EVENTS.equals(redirectTo) || Constants.ERROR
+				.equals(pageOf))
 		{
-			selectedNode = (String) request.getParameter(Constants.TREE_NODE_ID);
-			if(selectedNode == null)
-				selectedNode = (String)session.getAttribute(Constants.TREE_NODE_ID); 
-			session.setAttribute(Constants.TREE_NODE_ID, selectedNode);
+			selectedNode = (String)session.getAttribute(Constants.TREE_NODE_ID); 
+		}
+		if(selectedNode==null){
+			selectedNode = protocolEventDetailsForm.getCollectionPointLabel() + "class_" + (String)session.getAttribute("listKey");
 		}	
 
-		if (key == null)
+		/*if (key == null)
 		{
 			eventKey = (String) session.getAttribute(Constants.NEW_EVENT_KEY);
 		}
 		else
 		{
 			eventKey = key;
-		}
+		}*/
 		//String selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
 		String checkForSpecimen = null;
 		if (selectedNode != null)
 		{
 			checkForSpecimen = selectedNode.substring(0, 3);
 		}
-		if (key != null && selectedNode != null && !selectedNode.contains(eventKey))
+		/*if (key != null && selectedNode != null && !selectedNode.contains(eventKey))
 		{
 			final String nodeId = request.getParameter(Constants.TREE_NODE_ID);
 			session.setAttribute(Constants.TREE_NODE_ID, nodeId);
-		}
-		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		}*/
+		
 		long collectionEventUserId = 0;
 		collectionEventUserId = AppUtility.setUserInForm(request, operation);
-		String redirectTo = request.getParameter("redirectTo");
 		
-		if(Constants.TRUE.equals(request.getParameter(Constants.CREATE_DUPLICATE_EVENT)))
-		{	
-			protocolEventDetailsForm.setCollectionPointLabel("");
-			request.setAttribute("setFocus",Constants.TRUE);
-		}
-		if("defineEvents".equals(redirectTo))//flow from specimen requirement add/edit page
-			selectedNode = protocolEventDetailsForm.getCollectionPointLabel() + "class_" + (String)session.getAttribute("listKey");
-		else if(Constants.ERROR.equals(pageOf))
-		{
-			selectedNode = (String) request.getSession().getAttribute(Constants.CLICKED_NODE);
-		}
-		else
-			selectedNode = protocolEventDetailsForm.getCollectionPointLabel() + "class_" + eventKey;
-		
-		
+		session.setAttribute(Constants.TREE_NODE_ID, selectedNode);
 		if (key == null || "New".equals(checkForSpecimen))
 		{
 			session.setAttribute(Constants.TREE_NODE_ID, selectedNode);
@@ -182,7 +183,7 @@ public class ProtocolEventDetailsAction extends BaseAction
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN);
 		request.setAttribute("isParticipantReg", collectionProtocolBean.isParticiapantReg());
 		request.setAttribute("opr", collectionProtocolBean.getOperation());
-		return (mapping.findForward(Constants.SUCCESS));
+		return mapping.findForward(Constants.SUCCESS);
 	}
 
 	/**

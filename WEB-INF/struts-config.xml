@@ -1685,7 +1685,7 @@ PUBLIC
 
 		<action path="/SaveCollectionProtocol" type="edu.wustl.catissuecore.action.DefineEventsAction"
 			name="collectionProtocolForm" scope="request" validate="true"
-			input="/OpenCollectionProtocol.do?pageOf=collectionProtocol&amp;isErrorPage=true&amp;refreshWholePage=false">
+			input="/CollectionProtocol.do?pageOf=pageOfCollectionProtocol&amp;isErrorPage=true&amp;refreshWholePage=false">
 			<forward name="submitSpecimen" path="/SubmitCollectionProtocol.do" />
 			<forward name="pageOfCollectionProtocolPage"
 				path="/CollectionProtocol.do?pageOf=pageOfCollectionProtocol" />
@@ -5349,7 +5349,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.SaveSpecimenRequirementAction"
 			name="createSpecimenTemplateForm" validate="true"
 			input="/CreateSpecimenTemplate.do?pageOf=error">
-			<forward name="success" path="/CreateSpecimenTemplate.do?operation=add" />
+			<forward name="success" path="/CreateSpecimenTemplate.do?operation=edit" />
 			<forward name="failure" path="/CreateSpecimenTemplate.do?pageOf=error" />
 		</action>
 
@@ -5474,19 +5474,19 @@ PUBLIC
 		<action path="/SubmitCollectionProtocol" type="edu.wustl.catissuecore.action.SubmitCPAction"
 			name="collectionProtocolForm" validate="false" scope="request">
 			<forward name="success"
-				path="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=collectionProtocol" />
+				path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;invokeFunction=cp" />
 			<forward name="updateCP" path="/UpdateCollectionProtocol.do" />
 			<forward name="failure"
-				path="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=collectionProtocol" />
+				path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;isErrorPage=true" />
 		</action>
 
 		<action path="/UpdateCollectionProtocol"
 			type="edu.wustl.catissuecore.action.UpdateCollectionProtocolAction"
 			name="viewSpecimenSummaryForm" validate="false" scope="request">
 			<forward name="success"
-				path="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=collectionProtocol" />
+				path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;invokeFunction=cp" />
 			<forward name="failure"
-				path="/OpenCollectionProtocol.do?operation=edit&amp;pageOf=collectionProtocol" />
+				path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;isErrorPage=true" />
 			<forward name="disabled" path="/ManageAdministrativeData.do" />
 		</action>
 

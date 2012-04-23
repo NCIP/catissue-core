@@ -73,24 +73,24 @@
 				setGlobalNodeKeys(id);
 				if(alias == "New")
 				{
-					window.parent.frames['SpecimenRequirementView'].location="CreateSpecimenTemplate.do?operation=edit&pageOf=specimenRequirement&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>";
+					window.parent.frames['SpecimenRequirementView'].location="CreateSpecimenTemplate.do?operation=edit&pageOf=specimenRequirement&nodeClicked=true&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>"+"&parentNodeId="+window.parent.parentId;
 				}
 				else if(alias == "ViewSummary")
 				{
 				
-					window.parent.frames['SpecimenRequirementView'].location="GenericSpecimenSummary.do?Event_Id="+uniqId+"&nodeId="+id;
+					window.parent.frames['SpecimenRequirementView'].location="GenericSpecimenSummary.do?Event_Id="+uniqId+"&nodeId="+id+"&parentNodeId="+window.parent.parentId;
 				}
 				else if(alias == "cpName")
 				{
 					if('${requestScope.isErrorPage}'=='true')
-						window.parent.location="OpenCollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp";
+						window.parent.location="OpenCollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp&nodeClicked=true";
 					else
-						window.parent.frames['SpecimenRequirementView'].location="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp";
+						window.parent.frames['SpecimenRequirementView'].location="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp&nodeClicked=true";
 				}
 				
 				else
 				{
-					window.parent.frames['SpecimenRequirementView'].location="ProtocolEventsDetails.do?operation=edit&pageOf=defineEvents&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>";
+					window.parent.frames['SpecimenRequirementView'].location="ProtocolEventsDetails.do?operation=edit&pageOf=defineEvents&nodeClicked=true&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>"+"&parentNodeId="+window.parent.parentId;;
 				}
 			}; 
 									

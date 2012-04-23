@@ -276,13 +276,13 @@ if(form != null)
 	}
 	function saveSpecimens()
 	{
-		var action ="SaveSpecimenRequirements.do?pageOf=specimenRequirement&redirectTo=defineEvents&key="+"<%=mapKey%>"+"&operation="+"<%=operation%>"+"&isPersistent=${requestScope.isPersistent}";
+		var action ="SaveSpecimenRequirements.do?pageOf=specimenRequirement&key=<%=mapKey%>&operation=<%=operation%>&isPersistent=${requestScope.isPersistent}&parentNodeId="+window.parent.parentId;
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}
 	function createDuplicateSpecimens()
 	{
-		var action ="SaveSpecimenRequirements.do?pageOf=specimenRequirement&redirectTo=defineEvents&key="+"<%=mapKey%>"+"&operation=add&isPersistent=${requestScope.isPersistent}&"+"<%=Constants.CREATE_DUPLICATE_SPECIMEN%>"+"=true";
+		var action ="SaveSpecimenRequirements.do?pageOf=specimenRequirement&key=<%=mapKey%>&operation=add&isPersistent=${requestScope.isPersistent}&<%=Constants.CREATE_DUPLICATE_SPECIMEN%>=true&parentNodeId="+window.parent.parentId;
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}

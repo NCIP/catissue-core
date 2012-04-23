@@ -67,9 +67,9 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 		{
 
 			cpName = Constants.OBJECTNAME_FOR_CP;
-			displayName = collectionProtocolBean.getShortTitle();
+			displayName = collectionProtocolBean.getTitle();
 			parentIdentifier = Constants.ZERO_ID;
-			identifier = collectionProtocolBean.getShortTitle();
+			identifier = collectionProtocolBean.getTitle();
 			this.addNode(cpName, displayName, parentIdentifier, identifier, "", treeData,"");
 
 		}

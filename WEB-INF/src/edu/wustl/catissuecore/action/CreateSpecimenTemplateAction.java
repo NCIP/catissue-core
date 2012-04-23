@@ -74,27 +74,42 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		final HttpSession session = request.getSession();
 		// Gets the value of the operation parameter.
 		final String operation = request.getParameter(Constants.OPERATION);
-		final String pageOf = request.getParameter("pageOf");
+		final String pageOf = request.getParameter(Constants.PAGE_OF);
+		final String nodeClicked = request.getParameter("nodeClicked");
+		final String nodeDeleted = request.getParameter("nodeDeleted");
+		final String duplicateSpecimen = request.getParameter(Constants.CREATE_DUPLICATE_SPECIMEN);
+		String mapkey = request.getParameter("key");
 		String selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
 		// This will give node id when flow is from Specimen Tree View.
-		String mapkey = request.getParameter("key");
-		String nodeId = selectedNode;
-		final String nodeDeleted = request.getParameter("nodeDeleted");
-		if("true".equals(nodeDeleted))
+		
+		
+		if(Constants.TRUE.equals(nodeClicked))
+		{
+			mapkey = request.getParameter(Constants.EVENT_KEY);
+			selectedNode = request.getParameter(Constants.TREE_NODE_ID);
+			
+		}else if(Constants.TRUE.equals(nodeDeleted))
 		{
 			mapkey = (String) session.getAttribute(Constants.PARENT_NODE_ID);
-		}else
-		{	
-			nodeId = request.getParameter(Constants.TREE_NODE_ID);
+			selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
+		}else if(Constants.ERROR.equals(pageOf))
+		{
+			selectedNode = (String)session.getAttribute(Constants.TREE_NODE_ID); 
+		}else if (Constants.TRUE.equals(duplicateSpecimen)|| Constants.EDIT.equals(operation))
+		{
+			selectedNode = (String)session.getAttribute(Constants.TREE_NODE_ID);
+			mapkey = (String)session.getAttribute("key");
 		}
-		if (mapkey != null && selectedNode != null && !selectedNode.contains(mapkey))
+		
+		session.setAttribute(Constants.TREE_NODE_ID, selectedNode);
+		/*if (nodeId != null && mapkey != null && selectedNode != null && !selectedNode.contains(mapkey))
 		{
 			session.setAttribute(Constants.TREE_NODE_ID, nodeId);
 		}
 		else
 		{
 			session.setAttribute(Constants.TREE_NODE_ID, selectedNode);
-		}
+		}*/
 		if (pageOf != null && pageOf.equalsIgnoreCase(ERROR_STRING))
 		{
 			// Bug 11567 S
@@ -110,7 +125,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		// This will give Event key, Under that event Specimens are collected
 		// when flow is from Define event Page.
 
-		final String key = (String) session.getAttribute("listKey");
+		final String key = selectedNode.substring(selectedNode.indexOf('_')+1,selectedNode.indexOf('_')+3);
 
 		final List specimenTypeList = AppUtility.getListFromCDE(Constants.CDE_NAME_SPECIMEN_TYPE);
 		final List tissueSiteList = new ArrayList();
@@ -129,7 +144,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		final Map subTypeMap = AppUtility.getSpecimenTypeMap();
 		specimenClassList = AppUtility.getSpecimenClassList();
 		if (operation.equals("add") && pageOf != null && !pageOf.equals(ERROR_STRING)
-				&& !pageOf.equals("delete"))
+				&& !pageOf.equals("delete") && !Constants.TRUE.equals(duplicateSpecimen))
 		{
 			// Setting the default values
 			this.clearFormOnAddSpecimenRequirement(createSpecimenTemplateForm);
@@ -221,12 +236,13 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		request.setAttribute("key", key);
 		// Node Key
 		request.setAttribute("mapkey", mapkey);
-		if (nodeId != null)
+		/*if (nodeId != null)
 		{
 			session.setAttribute(Constants.TREE_NODE_ID, nodeId);
-		}
+		}*/
 		this.setUserInForm(request, operation, createSpecimenTemplateForm);
-		if (Constants.EDIT.equals(operation) && !ERROR_STRING.equals(pageOf) && !"delete".equals(pageOf))
+		final String redirectTo = request.getParameter("redirectTo");
+		if (Constants.EDIT.equals(operation) && !ERROR_STRING.equals(pageOf) && !"delete".equals(pageOf) && selectedNode.startsWith("New"))
 		{
 				this.initCreateSpecimenTemplateForm(createSpecimenTemplateForm, mapkey, request);
 		}
@@ -246,9 +262,9 @@ public class CreateSpecimenTemplateAction extends BaseAction
 			return mapping.findForward(Constants.SUCCESS);
 		}
 
-		final String redirectTo = request.getParameter("redirectTo");
+		
 
-		if (redirectTo != null && redirectTo.equals("defineEvents"))
+		if (!selectedNode.startsWith("New") && Constants.EDIT.equals(operation))
 		{
 			return mapping.findForward("defineEvents");
 		}

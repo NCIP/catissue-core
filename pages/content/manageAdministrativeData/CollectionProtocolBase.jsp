@@ -100,7 +100,7 @@
 		{
 			operation = formObject.elements['operation'];
 			action="SaveCollectionProtocol.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}&refreshWholePage=true";
-			formObject.target = '_top';
+			//formObject.target = '_top';
 			isSaveCollectionProtocol = true;
 		}
 		else
@@ -111,7 +111,7 @@
 				formObject=specimenDetailsForm;
 			}
 			action="SubmitCollectionProtocol.do?operation=${requestScope.operation}";
-			formObject.target = '_top';
+			//formObject.target = '_top';
 		}
 		
 		//alert(formObject.target + " " + action);

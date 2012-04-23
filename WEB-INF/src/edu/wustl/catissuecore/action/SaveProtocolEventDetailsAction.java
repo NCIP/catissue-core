@@ -112,7 +112,8 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 		// request.setAttribute("listKey", listKey);
 		session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP,
 				collectionProtocolEventMap);
-		return (mapping.findForward(pageOf));
+		request.setAttribute(Constants.OPERATION, request.getParameter(Constants.OPERATION));
+		return mapping.findForward(pageOf);
 	}
 
 	/**

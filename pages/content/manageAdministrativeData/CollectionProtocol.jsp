@@ -253,6 +253,8 @@ function enableDisableParentProtocol(associationType)
 		document.getElementById("sequenceNumber").removeAttribute("disabled",true);
 	}
 }
+
+window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}&isErrorPage=${requestScope.isErrorPage}";
 </script>
 
 <style>
