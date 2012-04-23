@@ -57,10 +57,11 @@
 		<attribute name="isAvailable" csvColumnName="Is Available"   />
 		<attribute name="collectionStatus" csvColumnName="Collection Status"   />
 		<attribute name="specimenClass" csvColumnName="Specimen Class"   >
-<discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimen"/>
+			<discriminatorCollection name="Tissue" value="edu.wustl.catissuecore.domain.TissueSpecimen"/>
 			<discriminatorCollection name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimen"/>
 			<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimen"/>
 			<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimen"/>
+			
 </attribute>
 	</BulkOperationClass>
 </BulkOperationMetadata>
