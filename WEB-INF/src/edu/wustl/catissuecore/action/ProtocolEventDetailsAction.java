@@ -57,7 +57,6 @@ public class ProtocolEventDetailsAction extends BaseAction
 		final String nodeClicked = request.getParameter("nodeClicked");
 		final String nodeDeleted = request.getParameter("nodeDeleted");
 		final String duplicateEvent = request.getParameter(Constants.CREATE_DUPLICATE_EVENT);
-		final String redirectTo = request.getParameter("redirectTo");
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		
 		if(Constants.TRUE.equals(duplicateEvent))
@@ -66,44 +65,25 @@ public class ProtocolEventDetailsAction extends BaseAction
 			request.setAttribute("setFocus",Constants.TRUE);
 		}
 
+		//Event selected from CP Tree view
 		if(Constants.TRUE.equals(nodeClicked))
 		{
 			key = request.getParameter(Constants.EVENT_KEY);
 			selectedNode = request.getParameter(Constants.TREE_NODE_ID);
 			
-		}else if(Constants.TRUE.equals(nodeDeleted))
+		}else if(Constants.TRUE.equals(nodeDeleted))  //Event node deleted from CP Tree View
 		{
 			key = (String) session.getAttribute(Constants.PARENT_NODE_ID);
 			selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
-		}else if(Constants.PAGE_OF_DEFINE_EVENTS.equals(redirectTo) || Constants.ERROR
-				.equals(pageOf))
+		}else 
 		{
 			selectedNode = (String)session.getAttribute(Constants.TREE_NODE_ID); 
 		}
-		if(selectedNode==null){
-			selectedNode = protocolEventDetailsForm.getCollectionPointLabel() + "class_" + (String)session.getAttribute("listKey");
-		}	
-
-		/*if (key == null)
-		{
-			eventKey = (String) session.getAttribute(Constants.NEW_EVENT_KEY);
-		}
-		else
-		{
-			eventKey = key;
-		}*/
-		//String selectedNode = (String) session.getAttribute(Constants.TREE_NODE_ID);
 		String checkForSpecimen = null;
 		if (selectedNode != null)
 		{
 			checkForSpecimen = selectedNode.substring(0, 3);
 		}
-		/*if (key != null && selectedNode != null && !selectedNode.contains(eventKey))
-		{
-			final String nodeId = request.getParameter(Constants.TREE_NODE_ID);
-			session.setAttribute(Constants.TREE_NODE_ID, nodeId);
-		}*/
-		
 		long collectionEventUserId = 0;
 		collectionEventUserId = AppUtility.setUserInForm(request, operation);
 		

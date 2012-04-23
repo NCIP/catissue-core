@@ -85,7 +85,7 @@
 					if('${requestScope.isErrorPage}'=='true')
 						window.parent.location="OpenCollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp&nodeClicked=true";
 					else
-						window.parent.frames['SpecimenRequirementView'].location="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp&nodeClicked=true";
+						window.parent.frames['SpecimenRequirementView'].location="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp&nodeClicked=true&nodeId="+id;
 				}
 				
 				else
