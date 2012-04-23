@@ -22,8 +22,6 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 #event test case 24397,Create Spun Event,admin@admin.com,Test123,SpunEventParameters.csv,SpunEventParameters.xml,createSpunEventParameters,success,,Bulk Operation,Specimen
 #event test case 24398,Create Thaw Event,admin@admin.com,Test123,ThawEventParameters.csv,ThawEventParameters.xml,createThawEventParameters,success,,Bulk Operation,Specimen
 #event test case 24399,Create Procedure Event,admin@admin.com,Test123,ProcedureEventParameters.csv,ProcedureEventParameters.xml,createProcedureEventParameters,success,,Bulk Operation,Specimen
-#24400,Upenn Form - Non Human Participant,admin@admin.com,Test123,AddNonHumanParticipant.csv,NonHumanParticipants.xml,AddNonhumanParticipants,success,,Bulk Operation,Participant
-#24401,Upenn Form - Non Human Specimen,admin@admin.com,Test123,AddNonHumanSpecimen.csv,NonHumanSpecimen.xml,AddNonhumanSpecimen,success,,Bulk Operation,Specimen
 24402,Create Participant Registration,admin@admin.com,Test123,createParticipantRegistration.csv,createParticipantRegistration.xml,createParticipantRegistration,success,,Bulk Operation,Participant
 24403,Create Specimen,admin@admin.com,Test123,createSpecimen.csv,createSpecimen.xml,CreateSpecimen,success,,Bulk Operation,Specimen
 24404,Create Aliquot,admin@admin.com,Test123,createAliquot.csv,createAliquot.xml,CreateAliquot,success,,Bulk Operation,Specimen
@@ -592,7 +590,7 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 #CSV not found 26355,Test Add SCG With Age At Collection,dmp@dmp.com,Test1234,addSCGWithAgeAtCollection.csv,addSCGWithAgeAtCollection.xml,addSCG,Success,,Biospecimen,Specimen Collection Group
 #CSV not found 26351,Test BO report rerun,dmp@dmp.com,Test1234,addParticipant_BO_report.csv,NewAddPart.xml,addParticipant,Success,,BulkOperation,BO Rerun
 #CSV not found 26463,Test Edit SCG With Age At Collection,dmp@dmp.com,Test1234,editSCGWithAgeAtCollection.csv,editSCGWithAgeAtCollection.xml,editSCG,Success,,Biospecimen,Specimen Collection Group
-#CSV not found 26500,Test Add Specimen With Fixed Event ,dmp@dmp.com,Test1234,createSpecimenFixedEventParameters.csv,createSpecimenFixedEventParameters.xml,createSpecimenFixedEventParameters,,,,
+,Test Add Specimen With Fixed Event ,dmp@dmp.com,Test1234,createSpecimenFixedEventParameters.csv,createSpecimenFixedEventParameters.xml,createSpecimenFixedEventParameters,,,,
 26500,Test Add Specimen With CheckInCheckOut Event ,dmp@dmp.com,Test1234,createSpecimenCheckInCheckOutEventParameter.csv,createSpecimenCheckInCheckOutEventParameter.xml,createSpecimenCheckInCheckOutEventParameter,,,,
 26500,Test Add Specimen With Collection Event ,dmp@dmp.com,Test1234,createSpecimenCollectionEventParameters.csv,createSpecimenCollectionEventParameters.xml,createSpecimenCollectionEventParameters,,,,
 26500,Test Add Specimen With Embedded Event ,dmp@dmp.com,Test1234,createSpecimenEmbeddedEventParameters.csv,createSpecimenEmbeddedEventParameters.xml,createSpecimenEmbeddedEventParameters,,,,
