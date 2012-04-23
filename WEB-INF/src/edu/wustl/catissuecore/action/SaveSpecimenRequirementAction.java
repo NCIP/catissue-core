@@ -70,9 +70,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		final String operation = request.getParameter(Constants.OPERATION);
 		String mapKey = request.getParameter(Constants.EVENT_KEY);
 		final String parentNodeId = request.getParameter(Constants.PARENT_NODE_ID);
+		final String nodeId = request.getParameter(Constants.TREE_NODE_ID);
 		//final StringTokenizer st = new StringTokenizer(mapKey, "_");
 		String eventSelected = null;
-		if(Constants.ADD.equals(operation) && !Constants.TRUE.equals(createDuplicateSpecimen))
+		if(nodeId != null && !nodeId.startsWith(Constants.NEW_SPECIMEN))
 			eventSelected = mapKey;
 		else	
 			eventSelected = parentNodeId.substring(parentNodeId.indexOf('_')+1,parentNodeId.indexOf('_')+3);
