@@ -196,7 +196,7 @@
 
                 <tr>
                   <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
-                  <td align="left" class="black_ar"><label for="type">
+                  <td width="19%" align="left" class="black_ar"><label for="type">
 														<bean:message key="storageType.type"/>
 									    			</label></td>
                   <td colspan="3" align="left">
@@ -223,7 +223,7 @@
                   <label for="oneDimensionCapacity">
 						<bean:message key="storageType.oneDimensionCapacity"/>
 		   		  </label>
-				  &nbsp;&nbsp;&nbsp;&nbsp;
+				  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<html:text styleClass="black_ar"  maxlength="10"  size="20" styleId="oneDimensionCapacity" property="oneDimensionCapacity" style="text-align:right"/></td>
 				</tr>
 				 <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></td>
@@ -239,16 +239,16 @@
 				  <label for="twoDimensionCapacity">
 						<bean:message key="storageType.twoDimensionCapacity"/>
 				  </label>
-				  &nbsp;&nbsp;&nbsp;&nbsp;
+				  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				  <html:text styleClass="black_ar"  maxlength="10"  size="20" styleId="twoDimensionCapacity" property="twoDimensionCapacity" onkeyup="capacityChanged(this)" style="text-align:right" /></td>
                 </tr>
-                <tr>
+                <tr class="black_ar">
                         <td width="1%" align="center" valign="top" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" /></td>
 						 <td  align="left" valign="top" class="black_ar"><label for="Dimension One labelling scheme" onmouseover="Tip('Dimension One labelling scheme')">Dimension One labelling scheme</label>
-						 <td><html:select  styleClass="formFieldSizedNew" property="oneDimensionLabellingScheme" size="1"><html:options collection="labellingSchemeList"labelProperty="name" property="value"  /></html:select></td>
-						 <td width="1%" align="center" valign="top" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="3" />
+						 <td class="black_ar"><html:select  styleClass="formFieldSizedNew" property="oneDimensionLabellingScheme" size="1" style="width:145px"><html:options collection="labellingSchemeList"labelProperty="name" property="value"  /></html:select>
+						  &nbsp;&nbsp;&nbsp;&nbsp;<img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" />
 						<label for="Dimension Two labelling scheme" onmouseover="Tip('Dimension Two labelling scheme')">Dimension Two labelling scheme</label>
-						 <td><html:select  styleClass="formFieldSizedNew" property="twoDimensionLabellingScheme" size="1"><html:options collection="labellingSchemeList"labelProperty="name" property="value"  /></html:select></td>
+						 &nbsp;&nbsp;&nbsp;&nbsp;<html:select  styleClass="formFieldSizedNew" property="twoDimensionLabellingScheme" size="1" style="width:145px"><html:options collection="labellingSchemeList"labelProperty="name" property="value"  /></html:select></td>
 						 </tr>
 					
 				<tr><td>&nbsp;</td></tr>
