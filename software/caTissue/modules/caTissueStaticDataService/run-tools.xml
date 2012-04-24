@@ -278,6 +278,11 @@
 
     <!-- START Service rebuild -->
     <target name="updateService" depends="all">
+
+        <tstamp><format property="install.time" pattern="yyyy-MM-dd_HH-mm"/></tstamp>
+        <mkdir dir="./logs" />
+        <record name="./logs/updateService-${install.time}.log" action="start" />
+
     	<delete dir="./temp" failonerror="false"/>
     	
         <!-- DOZER MERGE -->
