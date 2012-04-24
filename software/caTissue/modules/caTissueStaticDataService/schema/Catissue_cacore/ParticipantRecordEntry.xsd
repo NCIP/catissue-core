@@ -12,23 +12,21 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegra
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" schemaLocation="edu.wustl.catissuecore.domain.ws.xsd" />  
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" schemaLocation="edu.common.dynamicextensions.domain.integration.ws.xsd" />
 
- <xs:element name="ParticipantRecordEntry" type="ParticipantRecordEntry" />
-  <xs:complexType name="ParticipantRecordEntry">
-    <xs:complexContent>
-      <xs:extension base="edu.common.dynamicextensions.domain.integration.ws:AbstractRecordEntry">
-        <xs:sequence>
-          <xs:element name="participant" minOccurs="0" maxOccurs="1">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element ref="edu.wustl.catissuecore.domain.ws:Participant" minOccurs="0" maxOccurs="1" />
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-        </xs:sequence>
-        
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
+    <xs:element name="ParticipantRecordEntry" type="ParticipantRecordEntry" />
+      <xs:complexType name="ParticipantRecordEntry">
+        <xs:complexContent>
+          <xs:extension base="edu.common.dynamicextensions.domain.integration.ws:AbstractRecordEntry">
+            <xs:sequence>
+              <xs:element name="participant" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element ref="edu.wustl.catissuecore.domain.ws:Participant" minOccurs="0" maxOccurs="1" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
 
-  
   </xs:schema>

@@ -12,7 +12,7 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegra
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.ws" schemaLocation="edu.wustl.catissuecore.domain.ws.xsd" />  
   <xs:import namespace="gme://caCORE.caCORE/3.2/edu.common.dynamicextensions.domain.integration.ws" schemaLocation="edu.common.dynamicextensions.domain.integration.ws.xsd" />
   
-   <xs:element name="SCGRecordEntry" type="SCGRecordEntry" />
+  <xs:element name="SCGRecordEntry" type="SCGRecordEntry" />
   <xs:complexType name="SCGRecordEntry">
     <xs:complexContent>
       <xs:extension base="edu.common.dynamicextensions.domain.integration.ws:AbstractRecordEntry">
@@ -25,8 +25,8 @@ targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.catissuecore.domain.deintegra
             </xs:complexType>
           </xs:element>
         </xs:sequence>
-        
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+
   </xs:schema>
