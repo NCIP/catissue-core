@@ -2020,6 +2020,11 @@
 		
 		<delete file="${host.war.temp}/WEB-INF/lib/catissue_cacore-beans.jar"></delete>
 		<jar destfile="${host.war.temp}/WEB-INF/lib/catissue_cacore-beans.jar" basedir="${domain.jar.location}" />
+
+        <!-- A copy of this file goes to caTissueDataService-->
+        <echo message="DEBUG: UPDATING catissue_cacore-beans.jar FOR THE Service." />
+        <copy file="${host.war.temp}/WEB-INF/lib/catissue_cacore-beans.jar" todir="../../caGrid_service/caTissueStaticDataService/lib" overwrite="true" verbose="true" />
+
 		<delete dir="${domain.jar.location}"></delete>
 	</target>
 	
