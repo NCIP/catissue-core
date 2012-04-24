@@ -468,4 +468,13 @@
         <field><a>collectionProtocolCollection</a><b>collectionProtocolCollection.collectionProtocol</b></field>
     </mapping>
 
+
+    <mapping>
+        <class-a>edu.wustl.catissuecore.domain.processingprocedure.ActionApplication</class-a>
+        <class-b>edu.wustl.catissuecore.domain.processingprocedure.ws.ActionApplication</class-b>
+        <field><a>id</a><b>identifier</b></field>
+        <field><a>sppApplication</a><b>sppApplication.specimenProcessingProcedureApplication</b></field> <!-- This END: 0:-1; Other END: 1:1   -->
+        <field><a>applicationRecordEntry</a><b>applicationRecordEntry.actionApplicationRecordEntry</b></field> <!-- This END: 1:1; Other END: 1:1   -->
+    </mapping>
+
 </mappings>
