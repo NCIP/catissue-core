@@ -32,7 +32,13 @@
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect" />
 	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect" />
 	<property name="mssqlserver.dialect.string" value="org.hibernate.dialect.SQLServerDialect" />
-
+	
+	<!--Vivek:define require dir and Properties for BO-->
+	<property name="bulkoperation.csv.dir" value="${base.dir}/modules/bulk_operations_upload" />
+	<property name="bulkoperation.parameters.csv.file" value="load_bulkoperations_list.csv" />
+	<property name="bo.csv.dir" value="${base.dir}/modules/bulk_operations_upload/csv"/>
+	<property name="bo.xml.dir" value="${base.dir}/modules/bulk_operations_upload/xml"/>
+	
 	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
 	<property name="mssqlserver.driver.string" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
@@ -879,7 +885,8 @@
 						         />
 						    </tstamp>
 						    <echo>after deploy_app: ${time_deploy_app_after}</echo>
-
+		<antcall target="load_bulk_operator_templates" />							
+	
 		<antcall target="server_security" />
 
 		<!-- Configure the IIS properties, if configure.IIS.properties is 'true'. -->
@@ -4173,6 +4180,55 @@ Thanking You,
 		</move>
 	</target>
 
+	
+	<loadfile property="file" srcFile="${bulkoperation.csv.dir}/${bulkoperation.parameters.csv.file}"/> 
+	<target name="load_bulk_operator_templates">	
+		<echo message="---------------------------------------" />
+		<echo message="Loading Bulk Operator Templates in bulk" />
+		<echo message="---------------------------------------" />		
+		
+		<for param="line" list="${file}" delimiter="${line.separator}">
+			<sequential>
+				<propertyregex property="arg1"
+					input="@{line}"
+					regexp="(.*?),(.*?),(.*?\.csv),(.*?\.xml)"
+					select="\1"
+					casesensitive="false" 
+					override = "true"/>
+				<propertyregex property="arg2"
+					input="@{line}"
+					regexp="(.*?),(.*?),(.*?\.csv),(.*?\.xml)"
+					select="\2"
+					casesensitive="false" 
+					override = "true"/>
+				<propertyregex property="arg3"
+					input="@{line}"
+					regexp="(.*?),(.*?),(.*?\.csv),(.*?\.xml)"
+					select="\3"
+					casesensitive="false" 
+					override = "true"/>
+				<propertyregex property="arg4"
+					input="@{line}"
+					regexp="(.*?),(.*?),(.*?\.csv),(.*?\.xml)"
+					select="\4"
+					casesensitive="false" 
+					override = "true"/>					
+				
+				<antcall target="add_bulk_operation_template">
+					<param name="operationName" value="${arg1}"/>
+					<param name="dropdownName" value="${arg2}"/>
+					<param name="csvFile" value="${bo.csv.dir}/${arg3}"/>
+					<param name="xmlFile" value="${bo.xml.dir}/${arg4}"/>
+				</antcall>
+			</sequential>
+		</for>
+		
+		<echo message="---------------------------------------------------" />
+		<echo message="Finished Loading of Bulk Operator Templates in bulk" />
+		<echo message="---------------------------------------------------" />		
+
+	</target>
+	
 	<property name="operationName" value="" />
 	<property name="csvFile" value="" />
 	<property name="url" value="" />
