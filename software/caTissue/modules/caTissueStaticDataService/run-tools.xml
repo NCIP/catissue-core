@@ -5,6 +5,10 @@
     <condition property="isUnix" value="true"><or><os family="unix" /><os family="mac" /></or></condition>
     <condition property="isWindows" value="true"><os family="windows" /></condition>
 
+    <tstamp><format property="install.time" pattern="yyyy-MM-dd_HH-mm"/></tstamp>
+    <mkdir dir="./logs" />
+    <record name="./logs/updateService-${install.time}.log" action="start" />
+
     <path id="cp">
         <fileset dir="${basedir}/ext/dependencies/default/jars"><include name="*.jar"/></fileset>
         <fileset dir="${basedir}/de_codegen"><include name="*.jar" /></fileset>
