@@ -2,7 +2,7 @@
 <CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
 <Target name="edu.wustl.catissuecore.domain.MolecularSpecimen">
 	<Group logicRelation="AND">
-		<Attribute name="id"  predicate="IS_NOT_NULL"/>
+        <Attribute name="id" predicate="IS_NOT_NULL" value="" />
 		<Attribute name="specimenType" predicate="EQUAL_TO" value="DNA"/>
 		<Attribute name="pathologicalStatus" value="Malignant" predicate="EQUAL_TO"/>
 		<Association roleName="specimenCharacteristics" name="edu.wustl.catissuecore.domain.SpecimenCharacteristics">
@@ -10,13 +10,13 @@
 		</Association>
 		<Association roleName="specimenCollectionGroup" name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup">	
 			<Group logicRelation="AND">
-				<Attribute name="id"  predicate="IS_NOT_NULL"/>			
+                <Attribute name="id" predicate="IS_NOT_NULL" value="" />
 				<Association roleName="collectionProtocolRegistration" name="edu.wustl.catissuecore.domain.CollectionProtocolRegistration">	
 					<Group logicRelation="AND">
-						<Attribute name="id"  predicate="IS_NOT_NULL"/>
+                        <Attribute name="id" predicate="IS_NOT_NULL" value="" />
 						<Association roleName="participant" name="edu.wustl.catissuecore.domain.Participant">
 							<Group logicRelation="AND">
-								<Attribute name="id"  predicate="IS_NOT_NULL"/>
+                                <Attribute name="id" predicate="IS_NOT_NULL" value="" />
 								<Association roleName="raceCollection" name="edu.wustl.catissuecore.domain.Race">
 									<Attribute name="raceName" value="%Black%" predicate="LIKE"/>
 								</Association>
@@ -24,7 +24,7 @@
 						</Association>
 						<Association roleName="collectionProtocol" name="edu.wustl.catissuecore.domain.CollectionProtocol">
 							<Group logicRelation="AND">
-								<Attribute name="id"  predicate="IS_NOT_NULL"/>
+                                <Attribute name="id" predicate="IS_NOT_NULL" value="" />
 								<Attribute name="title" value="%Prostate%" predicate="LIKE"/>
 							</Group>
 						</Association>

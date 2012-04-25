@@ -2,18 +2,25 @@
 <CQLQuery xmlns="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
 <Target name="edu.wustl.catissuecore.domain.TissueSpecimen">
 	<Group logicRelation="AND">
-		<Association roleName="specimenEventCollection" name="edu.wustl.catissuecore.domain.CollectionEventParameters">	
-			<Group logicRelation="AND">
-				<Attribute name="id"  predicate="IS_NOT_NULL"/>
-				<Attribute name="collectionProcedure" value="Lavage" predicate="EQUAL_TO"/>
-			</Group>
-		</Association>	
-		<Association roleName="specimenEventCollection" name="edu.wustl.catissuecore.domain.ReceivedEventParameters">	
-			<Group logicRelation="AND">
-				<Attribute name="id"  predicate="IS_NOT_NULL"/>
-				<Attribute name="receivedQuality" value="Unacceptable, Not Specified" predicate="EQUAL_TO"/>
-			</Group>
-		</Association>	
+
+        <Association roleName="actionApplicationCollection" name="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication">
+            <Association roleName="applicationRecordEntry" name="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry">
+                <Association roleName="CollectionEventParametersCollection" name="gov.nih.nci.dynext.sop.CollectionEventParameters">
+                    <Attribute name="id"  predicate="IS_NOT_NULL" value="" />
+       				<Attribute name="collectionProcedure" value="Lavage" predicate="EQUAL_TO" />
+                </Association>
+            </Association>
+        </Association>
+
+        <Association roleName="actionApplicationCollection" name="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication">
+            <Association roleName="applicationRecordEntry" name="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry">
+                <Association roleName="ReceivedEventParametersCollection" name="gov.nih.nci.dynext.sop.ReceivedEventParameters">
+                    <Attribute name="id"  predicate="IS_NOT_NULL" value="" />
+       				<Attribute name="receivedQuality" value="Unacceptable, Not Specified" predicate="EQUAL_TO" />
+                </Association>
+            </Association>
+        </Association>
+
 	</Group>
  </Target>
   </CQLQuery>
