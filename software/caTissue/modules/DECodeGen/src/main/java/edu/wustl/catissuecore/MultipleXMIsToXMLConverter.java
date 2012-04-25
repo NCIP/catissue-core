@@ -70,6 +70,7 @@ public class MultipleXMIsToXMLConverter {
             System.out.println("Processing files:");
 
 			for (File xmiFile : xmiFiles) {
+                idToIdMap.clear();
                 System.out.println("\t" + xmiFile.getAbsolutePath());
 				XMIParser parser = new XMIParser("catissue", "2.0");
 				DomainModel model = null;
