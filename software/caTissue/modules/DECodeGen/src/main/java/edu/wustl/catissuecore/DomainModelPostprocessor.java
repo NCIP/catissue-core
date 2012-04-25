@@ -37,9 +37,19 @@ public class DomainModelPostprocessor {
 	private Map<String, String> hookEntities = new HashMap<String, String>();
 	private Set<String> abstractEntities = new HashSet<String>();
 	private Set<String> staticPackages = new HashSet<String>();
+	private String projectLongName;
+	private String projectShortName;
+	private String projectVersion;
+	private String projectDescription;
 
-	public DomainModelPostprocessor(Map<String, String> hookEntities,
+	public DomainModelPostprocessor(String projectLongName,
+			String projectShortName, String projectVersion,
+			String projectDescription, Map<String, String> hookEntities,
 			Set<String> abstractEntities, Set<String> staticPackages) {
+		this.projectLongName = projectLongName;
+		this.projectShortName = projectShortName;
+		this.projectVersion = projectVersion;
+		this.projectDescription = projectDescription;
 		this.hookEntities = hookEntities;
 		this.abstractEntities = abstractEntities;
 		this.staticPackages = staticPackages;
@@ -48,11 +58,20 @@ public class DomainModelPostprocessor {
 	void process(Element root) throws Exception {
 
 		XPathFactory xFact = XPathFactory.newInstance();
-		XPathExpression getUmlClasses = xFact.newXPath().compile("//*[local-name()='UMLClass']");
-		XPathExpression getUmlAtts = xFact.newXPath().compile("*[local-name()='umlAttributeCollection']/*[local-name()='UMLAttribute']");
-		XPathExpression hasNonIdUmlAtts = xFact.newXPath().compile("count(*[local-name()='umlAttributeCollection']/*[local-name()='UMLAttribute' and not(@id)]) > 1");
-		XPathExpression getUmlAttsCollEl = xFact.newXPath().compile("*[local-name()='umlAttributeCollection']");
-        XPathExpression getInvalidAttEls = xFact.newXPath().compile("//*[local-name()='UMLAttribute' and not(@dataTypeName)]");
+		XPathExpression getUmlClasses = xFact.newXPath().compile(
+				"//*[local-name()='UMLClass']");
+		XPathExpression getUmlAtts = xFact
+				.newXPath()
+				.compile(
+						"*[local-name()='umlAttributeCollection']/*[local-name()='UMLAttribute']");
+		XPathExpression hasNonIdUmlAtts = xFact
+				.newXPath()
+				.compile(
+						"count(*[local-name()='umlAttributeCollection']/*[local-name()='UMLAttribute' and not(@id)]) > 1");
+		XPathExpression getUmlAttsCollEl = xFact.newXPath().compile(
+				"*[local-name()='umlAttributeCollection']");
+		XPathExpression getInvalidAttEls = xFact.newXPath().compile(
+				"//*[local-name()='UMLAttribute' and not(@dataTypeName)]");
 
 		// Find duplicate class ids and duplicate classes
 
@@ -88,7 +107,8 @@ public class DomainModelPostprocessor {
 			if (classIdsMap.containsKey(id)) {
 				Element otherEl = classIdsMap.get(id);
 				String otherElFqn = getFullyQualifiedName(otherEl);
-				throw new Exception(elFqn + " shares and id with " + otherElFqn + ": " + id);
+				throw new Exception(elFqn + " shares and id with " + otherElFqn
+						+ ": " + id);
 			}
 
 			fqnSetMap.put(elFqn, el);
@@ -123,7 +143,8 @@ public class DomainModelPostprocessor {
 				}
 
 				// Merge UMLAttribute element
-				NodeList attEls = (NodeList) getUmlAtts.evaluate(umlClassEl, XPathConstants.NODESET);
+				NodeList attEls = (NodeList) getUmlAtts.evaluate(umlClassEl,
+						XPathConstants.NODESET);
 				for (int i = 0; i < attEls.getLength(); i++) {
 					Element attEl = (Element) attEls.item(i);
 					String attName = attEl.getAttribute("name");
@@ -133,7 +154,8 @@ public class DomainModelPostprocessor {
 					}
 					attSet.add(attName);
 
-					Element umlAttsCollEl = (Element) getUmlAttsCollEl.evaluate(targetUmlClassEl, XPathConstants.NODE);
+					Element umlAttsCollEl = (Element) getUmlAttsCollEl
+							.evaluate(targetUmlClassEl, XPathConstants.NODE);
 
 					umlAttsCollEl.appendChild(detach(attEl));
 				}
@@ -146,8 +168,10 @@ public class DomainModelPostprocessor {
 						+ "*[local-name()='UMLAssociationEdge']/"
 						+ "*[local-name()='UMLClassReference' and @refid='"
 						+ umlClassEl.getAttribute("id") + "']";
-				XPathExpression getAssocRefElsExp = xFact.newXPath().compile(accocRefElsStr);
-				NodeList assocRefEls = (NodeList) getAssocRefElsExp.evaluate(umlClassEl, XPathConstants.NODESET);
+				XPathExpression getAssocRefElsExp = xFact.newXPath().compile(
+						accocRefElsStr);
+				NodeList assocRefEls = (NodeList) getAssocRefElsExp.evaluate(
+						umlClassEl, XPathConstants.NODESET);
 				for (int i = 0; i < assocRefEls.getLength(); i++) {
 					Element refEl = (Element) assocRefEls.item(i);
 					refEl.setAttribute("refid", targetUmlClassId);
@@ -157,8 +181,10 @@ public class DomainModelPostprocessor {
 				String genElsStr = "//*[local-name()='UMLGeneralization' and "
 						+ "./*[local-name()='subClassReference' and @refid='"
 						+ umlClassEl.getAttribute("id") + "']]";
-				XPathExpression getGenElsExp = xFact.newXPath().compile(genElsStr);
-				NodeList genEls = (NodeList) getGenElsExp.evaluate(umlClassEl, XPathConstants.NODESET);
+				XPathExpression getGenElsExp = xFact.newXPath().compile(
+						genElsStr);
+				NodeList genEls = (NodeList) getGenElsExp.evaluate(umlClassEl,
+						XPathConstants.NODESET);
 				for (int i = 0; i < genEls.getLength(); i++) {
 					Element genEl = (Element) genEls.item(i);
 					detach(genEl);
@@ -174,14 +200,17 @@ public class DomainModelPostprocessor {
 			String checkGenElsStr = "count(//*[local-name()='UMLGeneralization' and "
 					+ "./*[local-name()='superClassReference' and @refid='"
 					+ abstractEl.getAttribute("id") + "']]) > 0";
-			XPathExpression checkGenElsExp = xFact.newXPath().compile(checkGenElsStr);
-			if (!(Boolean) checkGenElsExp.evaluate(abstractEl, XPathConstants.BOOLEAN)) {
+			XPathExpression checkGenElsExp = xFact.newXPath().compile(
+					checkGenElsStr);
+			if (!(Boolean) checkGenElsExp.evaluate(abstractEl,
+					XPathConstants.BOOLEAN)) {
 				detach(abstractEl);
 			}
 		}
 
 		// Remove invalid attributes elements
-		NodeList invalidAttEls = (NodeList) getInvalidAttEls.evaluate(root, XPathConstants.NODESET);
+		NodeList invalidAttEls = (NodeList) getInvalidAttEls.evaluate(root,
+				XPathConstants.NODESET);
 		for (int i = 0; i < invalidAttEls.getLength(); i++) {
 			detach((Element) invalidAttEls.item(i));
 		}
@@ -191,19 +220,62 @@ public class DomainModelPostprocessor {
 		sb.append("//*[local-name()='UMLClass' and ");
 		for (Iterator<String> i = this.staticPackages.iterator(); i.hasNext();) {
 			String staticPackageName = i.next();
-			sb.append(" not(@packageName='").append(staticPackageName).append("')");
-			if(i.hasNext()){
+			sb.append(" not(@packageName='").append(staticPackageName)
+					.append("')");
+			if (i.hasNext()) {
 				sb.append(" and");
 			}
 		}
 		sb.append("]");
-		XPathExpression getNonStaticModelUmlClassEls = xFact.newXPath().compile(sb.toString());
-		NodeList umlClassEls = (NodeList) getNonStaticModelUmlClassEls.evaluate(root, XPathConstants.NODESET);
+		XPathExpression getNonStaticModelUmlClassEls = xFact.newXPath()
+				.compile(sb.toString());
+		NodeList umlClassEls = (NodeList) getNonStaticModelUmlClassEls
+				.evaluate(root, XPathConstants.NODESET);
 		for (int i = 0; i < umlClassEls.getLength(); i++) {
 			Element umlClassEl = (Element) umlClassEls.item(i);
 			umlClassEl.setAttribute("allowableAsTarget", "false");
 		}
 
+		// Set project info
+		root.setAttribute("projectLongName", this.projectLongName);
+		root.setAttribute("projectShortName", this.projectShortName);
+		root.setAttribute("projectVersion", this.projectVersion);
+		root.setAttribute("projectDescription", this.projectDescription);
+
+		// Add missing roleName attributes on UMLAssociation elements
+		setAttribute(xFact,
+				"//*[local-name()='UMLAssociationEdge' and not(@roleName)]",
+				"roleName", "", root);
+
+		// Add missing description attribute to UMLClass and UMLAttribute
+		// elements
+		setAttribute(xFact, "//*[(local-name()='UMLClass' or "
+				+ "local-name()='UMLAttribute') and " + "not(@description)]",
+				"description", "", root);
+
+		// Add missing conceptDefition, conceptName, and conceptCode attributes
+		// to SemanticMetadata elements
+		setAttribute(
+				xFact,
+				"//*[local-name()='SemanticMetadata' and not(@conceptDefinition)]",
+				"conceptDefinition", "", root);
+		setAttribute(xFact,
+				"//*[local-name()='SemanticMetadata' and not(@conceptName)]",
+				"conceptName", "", root);
+		setAttribute(xFact,
+				"//*[local-name()='SemanticMetadata' and not(@conceptCode)]",
+				"conceptCode", "", root);
+	}
+
+	private void setAttribute(XPathFactory xFact, String exp, String attName,
+			String attValue, Element ctx) throws Exception {
+		XPathExpression xpath = xFact.newXPath().compile(exp);
+		NodeList assocEls = (NodeList) xpath.evaluate(ctx,
+				XPathConstants.NODESET);
+		for (int i = 0; i < assocEls.getLength(); i++) {
+			Element assocEl = (Element) assocEls.item(i);
+			assocEl.setAttribute(attName, attValue);
+		}
 	}
 
 	private Element detach(Element childEl) {
@@ -212,11 +284,13 @@ public class DomainModelPostprocessor {
 	}
 
 	private boolean isHookEntity(String elFqn) {
-		return this.hookEntities.containsKey(elFqn) || this.hookEntities.containsValue(elFqn);
+		return this.hookEntities.containsKey(elFqn)
+				|| this.hookEntities.containsValue(elFqn);
 	}
 
 	private String getFullyQualifiedName(Element el) {
-		return el.getAttribute("packageName") + "." + el.getAttribute("className");
+		return el.getAttribute("packageName") + "."
+				+ el.getAttribute("className");
 	}
 
 	public static void main(String[] args) {
@@ -233,25 +307,37 @@ public class DomainModelPostprocessor {
 			Document doc = db.parse(new File(inPath));
 
 			Map<String, String> hookEntities = new HashMap<String, String>();
-			hookEntities.put("edu.wustl.catissuecore.domain.Participant", "edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry");
-			hookEntities.put("edu.wustl.catissuecore.domain.Specimen", "edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry");
-			hookEntities.put("edu.wustl.catissuecore.domain.SpecimenCollectionGroup", "edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry");
-			hookEntities.put("edu.wustl.catissuecore.domain.processingprocedure.ActionApplication", "edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry");
+			hookEntities
+					.put("edu.wustl.catissuecore.domain.Participant",
+							"edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry");
+			hookEntities
+					.put("edu.wustl.catissuecore.domain.Specimen",
+							"edu.wustl.catissuecore.domain.deintegration.SpecimenRecordEntry");
+			hookEntities
+					.put("edu.wustl.catissuecore.domain.SpecimenCollectionGroup",
+							"edu.wustl.catissuecore.domain.deintegration.SCGRecordEntry");
+			hookEntities
+					.put("edu.wustl.catissuecore.domain.processingprocedure.ActionApplication",
+							"edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry");
 
 			Set<String> abstractEntities = new HashSet<String>();
-			abstractEntities.add("edu.common.dynamicextensions.domain.integration.AbstractRecordEntry");
+			abstractEntities
+					.add("edu.common.dynamicextensions.domain.integration.AbstractRecordEntry");
 
 			Set<String> staticPackages = new HashSet<String>();
 			staticPackages.add("edu.wustl.catissuecore.domain");
-			staticPackages.add("edu.wustl.catissuecore.domain.processingprocedure");
+			staticPackages
+					.add("edu.wustl.catissuecore.domain.processingprocedure");
 
-			DomainModelPostprocessor dmp = new DomainModelPostprocessor(hookEntities, abstractEntities, staticPackages);
+			DomainModelPostprocessor dmp = new DomainModelPostprocessor(
+					"catissue", "catissue", "2.0", "catissue", hookEntities,
+					abstractEntities, staticPackages);
 			dmp.process(doc.getDocumentElement());
 
 			Source source = new DOMSource(doc);
-			File outFile = new File(outPath);
-			Result result = new StreamResult(outFile);
-			Transformer xformer = TransformerFactory.newInstance().newTransformer();
+			Result result = new StreamResult(outPath);
+			Transformer xformer = TransformerFactory.newInstance()
+					.newTransformer();
 			xformer.transform(source, result);
 		} catch (Exception ex) {
 			ex.printStackTrace();
