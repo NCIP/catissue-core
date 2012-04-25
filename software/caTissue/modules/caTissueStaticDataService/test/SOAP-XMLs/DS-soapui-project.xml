@@ -10634,7 +10634,7 @@ xsi:type="ns1:Participant"
             </object>
         </InsertRequest>
     </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://domain.catissuecore.wustl.edu/Catissue_cacore/InsertRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="InsertCollectionProtocol"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://sbhost07-vm05.semanticbits.com:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://domain.catissuecore.wustl.edu/Catissue_cacore/InsertRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="InsertCollectionProtocol"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://john-vdell:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing">
     <soapenv:Header>
@@ -10876,7 +10876,7 @@ xmlns:org="http://CQL.caBIG/2/org.cagrid.cql2">
          </dat:query>
       </dat:ExecuteQueryRequest>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="Copy of getAllSites"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://sbhost07-vm05.semanticbits.com:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="Copy of getAllSites"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://john-vdell:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
 xmlns:dat="http://org.cagrid.dataservice/DataService" 
 xmlns:cql2="http://CQL.caBIG/2/org.cagrid.cql2">
@@ -10967,6 +10967,47 @@ xmlns:dat="http://org.cagrid.dataservice/DataService">
 
          </dat:query>
       </dat:ExecuteQueryRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="Query2"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://john-vdell:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+xmlns:dat="http://gov.nih.nci.cagrid.data/DataService" 
+xmlns:gov="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dat:QueryRequest>
+         <dat:cqlQuery>
+            <gov:CQLQuery>
+	 	<gov:Target name="edu.wustl.catissuecore.domain.FluidSpecimen"></gov:Target>
+            </gov:CQLQuery>
+         </dat:cqlQuery>
+      </dat:QueryRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call><con:call name="Query2_DE"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://john-vdell:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope 
+xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+xmlns:dat="http://gov.nih.nci.cagrid.data/DataService" 
+xmlns:gov="http://CQL.caBIG/1/gov.nih.nci.cagrid.CQLQuery">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dat:QueryRequest>
+         <dat:cqlQuery>
+            <gov:CQLQuery>
+
+<gov:Target name="edu.wustl.catissuecore.domain.FluidSpecimen">
+<gov:Group logicRelation="AND">
+<gov:Association roleName="actionApplicationCollection" name="edu.wustl.catissuecore.domain.processingprocedure.ActionApplication">
+<gov:Association roleName="applicationRecordEntry" name="edu.wustl.catissuecore.domain.deintegration.ActionApplicationRecordEntry">
+<gov:Association roleName="ThawEventParametersCollection" name="gov.nih.nci.dynext.sop.ThawEventParameters">
+	<gov:Attribute name="id" predicate="IS_NOT_NULL" value=""/>
+</gov:Association>
+</gov:Association>
+</gov:Association>
+<gov:Attribute name="id" predicate="IS_NOT_NULL" value=""/>
+</gov:Group>
+</gov:Target>
+
+            </gov:CQLQuery>
+         </dat:cqlQuery>
+      </dat:QueryRequest>
    </soapenv:Body>
 </soapenv:Envelope>]]></con:request><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://data.cagrid.nci.nih.gov/DataService/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties" name="QueryResourceProperties" bindingOperationName="QueryResourceProperties" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://sbhost07-vm05.semanticbits.com:9443/wsrf/services/cagrid/Catissue_cacore</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsrf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd">
    <soapenv:Header/>
