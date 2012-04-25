@@ -1908,6 +1908,7 @@
 						<include name="${entitygroupname}-dozer-files.jar" />
 						<include name="${entitygroupname}-beans.jar" />
 						<include name="${entitygroupname}-schema.jar" />
+						<include name="${entitygroupname}-orm.jar" />
 					</fileset>
 				</copy>
 				<echo message="DEBUG: Dozer files archive copied for: ${entitygroupname}" />
@@ -1973,8 +1974,11 @@
 		</java>
 		
 		<!-- Remove model hibernate.cfg.xml -->
-		<delete file="${caCOREHibernateCfgFile}">
-		</delete>
+		<delete file="${caCOREHibernateCfgFile}"></delete>
+
+        <!-- Copy updated hibernate.cfg.xml to DataService -->
+        <echo message="DEBUG: COPY hibernate.cfg.xml to DataService " />
+        <copy file="${srcHibernateCfgFile}" todir="../../caGrid_service/caTissueStaticDataService/de_codegen" />
 
 		<!-- Update orm jar-->
 		
@@ -1983,11 +1987,9 @@
 			<param name="jar.location" value ="${tempOrm}"/>
 		</antcall>
 		
-		<delete dir="${cacore.deployable.dir}/${entitygroupname}" failonerror="false">
-		</delete>
+		<delete dir="${cacore.deployable.dir}/${entitygroupname}" failonerror="false"></delete>
 		<mkdir dir="${cacore.deployable.dir}/${entitygroupname}" />
 
-		
 		<!-- Update beans jar-->
 		<unzip dest="${tempJar}" src="${caCORE4.2_home}/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/${entitygroupname}-beans.jar"></unzip>
 		
@@ -1996,8 +1998,6 @@
 			<param name="jar.location" value ="${tempJar}"/>
 		</antcall>
 
-				
-							
 	</target>
 
 	<!--This target is used for cleasning the jar. Default implementation is empty as the domain classes can be 
@@ -2038,9 +2038,15 @@
 		<!--copy hbms to classes folder-->
 		<mkdir dir="${host.war.temp}/WEB-INF/classes/${de.package.name}"/>
 		<copy todir="${host.war.temp}/WEB-INF/classes/${de.package.name}" overwrite="true">
-			<fileset dir="${tempOrm}/${de.package.name}">
-			</fileset>
+			<fileset dir="${tempOrm}/${de.package.name}"></fileset>
 		</copy>
+
+        <!-- Copy hbms to DataService -->
+        <echo message="DEBUG: COPY hbm files to DataService " />
+        <mkdir dir="../../caGrid_service/caTissueStaticDataService/de_codegen/hbms" />
+        <copy todir="../../caGrid_service/caTissueStaticDataService/de_codegen/hbms/${de.package.name}" overwrite="true">
+            <fileset dir="${tempOrm}/${de.package.name}"></fileset>
+        </copy>
 
 		<!--Merge AbstractRecordEntry.hbm with hookentity.hbm-->
 		<unzip dest="${orm.jar.location}" src="${host.war.temp}/WEB-INF/lib/catissue_cacore-orm.jar"></unzip>
@@ -2074,7 +2080,6 @@
 			</else>
 		</if>
 
-
 		<java classname="edu.common.dynamicextensions.util.global.MergeRecordEntryHbm" fork="true" maxmemory="1024M">
 			<arg value="${AbstractRecordEntry.hbm}" />
 			<arg value="${hook.entity.hbm}" />
@@ -2090,9 +2095,12 @@
 				</fileset>
 			</classpath>
 		</java>
-		
+
+        <!--COPY MERGED AbstractRecordEntry.hbm to DataService -->
+        <echo message="DEBUG: COPY ${hook.entity.hbm} to DataService" />
+        <mkdir dir="../../caGrid_service/caTissueStaticDataService/de_codegen/hbms/edu/wustl/catissuecore/hbm/deintegration" />
+        <copy file="${hook.entity.hbm}" todir="../../caGrid_service/caTissueStaticDataService/de_codegen/hbms/edu/wustl/catissuecore/hbm/deintegration/" overwrite="true" />
 		<delete dir="${orm.jar.location}"></delete>
-	
 	</target>
 
 	<target name="unzip_caCORESDKzip" description="unzip caCore SDK zip">
