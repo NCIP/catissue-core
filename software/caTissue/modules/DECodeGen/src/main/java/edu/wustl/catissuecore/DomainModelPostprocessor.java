@@ -118,12 +118,34 @@ public class DomainModelPostprocessor {
 		// Process the hook entities
 		for (Entry<String, String> entry : this.hookEntities.entrySet()) {
 
-			// Delete static entities from DE models
 			String hookFqn = entry.getKey();
-			for (Element umlClassEl : dupFqnMap.get(hookFqn)) {
 
+			// Get valid static entity
+			String packageName = hookFqn.substring(0, hookFqn.lastIndexOf("."));
+			String className = hookFqn.substring(hookFqn.lastIndexOf(".") + 1);
+			Element staticUmlClassEl = getElement(
+					xFact,
+					"//*[local-name()='UMLClass' and @packageName='"
+							+ packageName
+							+ "' and @className='"
+							+ className
+							+ "' and count(*[local-name()='umlAttributeCollection']/"
+							+ "*[local-name()='UMLAttribute' and not(@id)]) > 1]",
+					root);
+			if (staticUmlClassEl == null) {
+				throw new Exception("Couldn't local static hook entity: "
+						+ hookFqn);
+			}
+
+			for (Element umlClassEl : dupFqnMap.get(hookFqn)) {
 				if (!(Boolean) hasNonIdUmlAtts.evaluate(umlClassEl,
 						XPathConstants.BOOLEAN)) {
+					// Merge the associations of static entities from DE models
+					// with associations of static entities from static model
+					mergeUMLAssociations(xFact, root,
+							staticUmlClassEl.getAttribute("id"),
+							umlClassEl.getAttribute("id"));
+					// Delete static entities from DE models
 					detach(umlClassEl);
 				}
 			}
@@ -161,21 +183,9 @@ public class DomainModelPostprocessor {
 				}
 
 				// Merge UMLAssociation elements
-				String targetUmlClassId = targetUmlClassEl.getAttribute("id");
-				String accocRefElsStr = "//*[local-name()='UMLAssociation']/"
-						+ "*[local-name()='sourceUMLAssociationEdge' or "
-						+ "local-name()='targetUMLAssociationEdge']/"
-						+ "*[local-name()='UMLAssociationEdge']/"
-						+ "*[local-name()='UMLClassReference' and @refid='"
-						+ umlClassEl.getAttribute("id") + "']";
-				XPathExpression getAssocRefElsExp = xFact.newXPath().compile(
-						accocRefElsStr);
-				NodeList assocRefEls = (NodeList) getAssocRefElsExp.evaluate(
-						umlClassEl, XPathConstants.NODESET);
-				for (int i = 0; i < assocRefEls.getLength(); i++) {
-					Element refEl = (Element) assocRefEls.item(i);
-					refEl.setAttribute("refid", targetUmlClassId);
-				}
+				mergeUMLAssociations(xFact, root,
+						targetUmlClassEl.getAttribute("id"),
+						umlClassEl.getAttribute("id"));
 
 				// Remove generalizations
 				String genElsStr = "//*[local-name()='UMLGeneralization' and "
@@ -183,7 +193,7 @@ public class DomainModelPostprocessor {
 						+ umlClassEl.getAttribute("id") + "']]";
 				XPathExpression getGenElsExp = xFact.newXPath().compile(
 						genElsStr);
-				NodeList genEls = (NodeList) getGenElsExp.evaluate(umlClassEl,
+				NodeList genEls = (NodeList) getGenElsExp.evaluate(root,
 						XPathConstants.NODESET);
 				for (int i = 0; i < genEls.getLength(); i++) {
 					Element genEl = (Element) genEls.item(i);
@@ -202,8 +212,8 @@ public class DomainModelPostprocessor {
 					+ abstractEl.getAttribute("id") + "']]) > 0";
 			XPathExpression checkGenElsExp = xFact.newXPath().compile(
 					checkGenElsStr);
-			if (!(Boolean) checkGenElsExp.evaluate(abstractEl,
-					XPathConstants.BOOLEAN)) {
+			if (!(Boolean) checkGenElsExp
+					.evaluate(root, XPathConstants.BOOLEAN)) {
 				detach(abstractEl);
 			}
 		}
@@ -265,6 +275,52 @@ public class DomainModelPostprocessor {
 		setAttribute(xFact,
 				"//*[local-name()='SemanticMetadata' and not(@conceptCode)]",
 				"conceptCode", "", root);
+
+		// Check for invalid references
+		NodeList refEls = getElements(xFact,
+				"//*[local-name()='UMLClassReference' "
+						+ "or local-name()='superClassReference' "
+						+ "or local-name()='subClassReference']", root);
+		for (int i = 0; i < refEls.getLength(); i++) {
+			Element refEl = (Element) refEls.item(i);
+			String refid = refEl.getAttribute("refid");
+			NodeList classEls = getElements(xFact,
+					"//*[local-name()='UMLClass' and @id='" + refid + "']",
+					root);
+			if (classEls.getLength() == 0) {
+				throw new Exception("No UMLClass for refid " + refid);
+			}
+		}
+	}
+
+	private Element getElement(XPathFactory xFact, String exp, Element ctx)
+			throws Exception {
+		XPathExpression xpath = xFact.newXPath().compile(exp);
+		return (Element) xpath.evaluate(ctx, XPathConstants.NODE);
+	}
+
+	private void mergeUMLAssociations(XPathFactory xFact, Element root,
+			String targetUmlClassId, String umlClassId) throws Exception {
+		String accocRefElsStr = "//*[local-name()='UMLAssociation']/"
+				+ "*[local-name()='sourceUMLAssociationEdge' or "
+				+ "local-name()='targetUMLAssociationEdge']/"
+				+ "*[local-name()='UMLAssociationEdge']/"
+				+ "*[local-name()='UMLClassReference' and @refid='"
+				+ umlClassId + "']";
+		XPathExpression getAssocRefElsExp = xFact.newXPath().compile(
+				accocRefElsStr);
+		NodeList assocRefEls = (NodeList) getAssocRefElsExp.evaluate(root,
+				XPathConstants.NODESET);
+		for (int i = 0; i < assocRefEls.getLength(); i++) {
+			Element refEl = (Element) assocRefEls.item(i);
+			refEl.setAttribute("refid", targetUmlClassId);
+		}
+	}
+
+	private NodeList getElements(XPathFactory xFact, String exp, Element ctx)
+			throws Exception {
+		XPathExpression xpath = xFact.newXPath().compile(exp);
+		return (NodeList) xpath.evaluate(ctx, XPathConstants.NODESET);
 	}
 
 	private void setAttribute(XPathFactory xFact, String exp, String attName,
