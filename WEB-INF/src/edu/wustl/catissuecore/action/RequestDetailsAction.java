@@ -547,7 +547,9 @@ public class RequestDetailsAction extends BaseAction
 		final Map valuesMap = requestDetailsForm.getValues();
 		final Set keySet = valuesMap.keySet();
 		final Iterator iter = keySet.iterator();
+		
 		final Map requestForMap = new HashMap();
+		int row = 0;
 		while (iter.hasNext())
 		{
 			String rowNumber = "";
@@ -556,6 +558,7 @@ public class RequestDetailsAction extends BaseAction
 
 			if (key.endsWith("orderItemId"))
 			{
+				
 				List allSpecimensToDisplay = new ArrayList();
 				rowNumber = this.getRowNumber(key);
 				// Fetching the order item id
@@ -608,8 +611,8 @@ public class RequestDetailsAction extends BaseAction
 					allSpecimensToDisplay = specimenOrderBean.getChildSpecimens();
 					requestForMap.put("RequestForDropDownList:" + rowNumber, allSpecimensToDisplay);
 					
-					populateJsonObj(jsonDataRow, rowNumber,
-							existingSpecimenOrderItem, specimenOrderBean);
+					populateJsonObj(jsonDataRow, String.valueOf(row),
+							existingSpecimenOrderItem, specimenOrderBean,valuesMap);
 
 				}
 
@@ -634,6 +637,7 @@ public class RequestDetailsAction extends BaseAction
 								allSpecimensToDisplay);
 					}
 				}
+				row++;
 
 			}
 		}
@@ -642,22 +646,40 @@ public class RequestDetailsAction extends BaseAction
 
 	private void populateJsonObj(JSONArray jsonDataRow, String rowNumber,
 			final ExistingSpecimenOrderItem existingSpecimenOrderItem,
-			SpecimenOrderBean specimenOrderBean) {
-		JSONObject jsonObject = new JSONObject();
+			SpecimenOrderBean specimenOrderBean, Map valuesMap) {
 		JSONArray dataArray = new JSONArray();
-		dataArray.put(specimenOrderBean.getLabel());
-		dataArray.put(specimenOrderBean.getSpecimenClass());
-		dataArray.put(specimenOrderBean.getSpecimenType());
-		dataArray.put(specimenOrderBean.getAvailableQty());
-		dataArray.put(String.valueOf(existingSpecimenOrderItem.getRequestedQuantity()));
+		JSONObject jsonObject = new JSONObject();
+		int row = Integer.valueOf(rowNumber);
+		if(valuesMap == null)
+		{
+			dataArray.put(specimenOrderBean.getLabel());
+			dataArray.put(specimenOrderBean.getSpecimenClass());
+			dataArray.put(specimenOrderBean.getSpecimenType());
+			dataArray.put(specimenOrderBean.getAvailableQty());
+			dataArray.put(String.valueOf(existingSpecimenOrderItem.getRequestedQuantity()));
+			List requestedItemsStatusList = OrderingSystemUtil
+			.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
+			dataArray.put(existingSpecimenOrderItem.getStatus());
+		}
+		else
+		{
+			dataArray.put(valuesMap.get("RequestDetailsBean:"+rowNumber+"_requestedItem"));
+			dataArray.put(valuesMap.get("RequestDetailsBean:"+rowNumber+"_className"));
+			dataArray.put(valuesMap.get("RequestDetailsBean:"+rowNumber+"_selectedSpecimenType"));
+			dataArray.put(valuesMap.get("RequestDetailsBean:"+rowNumber+"_availableQty"));
+			dataArray.put(valuesMap.get("RequestDetailsBean:"+rowNumber+"_requestedQty"));
+			dataArray.put(valuesMap.get("RequestDetailsBean:"+rowNumber+"_assignedStatus"));
+			row++;
+			
+		}
 		
-		List	requestedItemsStatusList = OrderingSystemUtil
-		.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
-		dataArray.put(((NameValueBean)requestedItemsStatusList.get(0)).getName());
+		
+		
 		dataArray.put("");
 		try {
+			
 			jsonObject.put(Constants.JSON_DATA_COLUMN, dataArray);
-		jsonObject.put(Constants.ID, rowNumber);
+		jsonObject.put(Constants.ID, String.valueOf(row));
 		
 		jsonDataRow.put(jsonObject);
 		} catch (JSONException e) {
@@ -974,7 +996,7 @@ public class RequestDetailsAction extends BaseAction
 			requestDetailsForm.setRequestFor(specimenList, childrenSpecimenListToDisplay);
 			String rowNumber = String.valueOf((finalSpecimenListId+1));
 			populateJsonObj(jsonDataRow, rowNumber,
-					existingSpecimenOrderItem, specimenOrderBean);
+					existingSpecimenOrderItem, specimenOrderBean,null);
 		}
 		else if (orderItem instanceof DerivedSpecimenOrderItem)
 		{
