@@ -74,6 +74,13 @@
             <arg value="-o"/>
             <arg value="${outputXMLFile}"/>
         </java>
+
+        <echo message="input: ${outputXMLFile} output: ${outputFixedXMLFile}" />
+        <java failonerror="true" classname="edu.wustl.catissuecore.DomainModelPostprocessor" fork="yes" dir="${basedir}">
+            <classpath><fileset dir="${dist.dir}"><include name="*.jar" /></fileset></classpath>
+            <arg value="${outputXMLFile}"/>
+            <arg value="${outputFixedXMLFile}"/>
+        </java>
     </target>
 
     <!-- This target gets called on every XSD needed to be imported into DataService -->
@@ -89,4 +96,11 @@
         </java>
     </target>
 
+    <target name="-pp">
+        <java failonerror="true" classname="edu.wustl.catissuecore.DomainModelPostprocessor" fork="yes" dir="${basedir}">
+            <classpath><fileset dir="${dist.dir}"><include name="*.jar" /></fileset></classpath>
+            <arg value="/temp/xmi/result.xml"/>
+            <arg value="/temp/xmi/ZZ.xml"/>
+        </java>
+    </target>
 </project>

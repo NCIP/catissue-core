@@ -305,10 +305,11 @@
         <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="-doMergeXMIs" dir="../DECodeGen/">
             <property name="xmiFolder" value="${basedir}/de_codegen/xmi" />
             <property name="outputXMLFile" value="${basedir}/de_codegen/xmi/mergeResult.xml" />
+            <property name="outputFixedXMLFile" value="${basedir}/de_codegen/xmi/fixedDomainModel.xml" />
         </ant>
 
         <!-- OVERWRITE ./etc/catissue_cacore_domainModel.xml -->
-        <copy file="${basedir}/de_codegen/xmi/mergeResult.xml" tofile="${basedir}/etc/catissue_cacore_domainModel.xml" />
+        <copy file="${basedir}/de_codegen/xmi/fixedDomainModel.xml" tofile="${basedir}/etc/catissue_cacore_domainModel.xml" />
 
         <!--COPY BEANS-->
 <!--
@@ -537,6 +538,14 @@
             <arg value="Windows"/>
             <arg value="${xsdFile}"/>
         </exec>
+    </target>
+
+    <target name="-testJ">
+        <ant inheritAll="false" inheritRefs="false" antfile="../DECodeGen/build.xml" target="-doMergeXMIs" dir="../DECodeGen/">
+            <property name="xmiFolder" value="/temp/xmi/" />
+            <property name="outputXMLFile" value="/temp/xmi/result.xml" />
+            <property name="outputFixedXMLFile" value="/temp/xmi/ZZZ.xml" />
+        </ant>
     </target>
 
     <!-- END -->
