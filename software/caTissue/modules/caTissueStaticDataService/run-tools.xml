@@ -220,6 +220,16 @@
         </java>
     </target>
 
+    <target name="CreateParticipantAndCPR" depends="init" description="Run the sample Client">
+        <echo message="Connecting to service: ${service.url}"/>
+        <java failonerror="true" classname="edu.wustl.catissuecore.domain.client.WritableAPIClient" classpathref="run.classpath" fork="yes">
+            <jvmarg value="-DGLOBUS_LOCATION=${ext.globus.dir}"/>
+            <arg value="-url"/>
+            <arg value="${service.url}"/>
+            <arg value="CreateParticipantAndCPR"/>
+        </java>
+    </target>
+
     <target name="CreateSpecimen" depends="init" description="Run the sample Client">
         <echo message="Connecting to service: ${service.url}"/>
         <java failonerror="true" classname="edu.wustl.catissuecore.domain.client.WritableAPIClient" classpathref="run.classpath" fork="yes">
