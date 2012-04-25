@@ -24,7 +24,7 @@
 <html>
 <tiles:importAttribute />
 <head>
-<title><bean:message key="app.name"/> <bean:message key="app.version"/></title>
+<title><bean:message key="display.app.name"/> <bean:message key="app.version"/></title>
 
 <!--Jitendra -->
 <script language="JavaScript">
