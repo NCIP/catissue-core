@@ -286,8 +286,23 @@
 
     <!--END     Writable API targets-->
 
+    <target name="-mergeORMFiles">
+        <property name="tempFolder" value="./temp/ormTemp/" />
+        <property name="ormFile" value="./lib/catissue_cacore-orm.jar" />
+        <mkdir dir="${tempFolder}" />
+        <unzip src="./lib/catissue_cacore-orm.jar" dest="${tempFolder}" />
+        <copy todir="${tempFolder}" overwrite="true" verbose="true">
+            <fileset dir="./de_codegen/hbms">
+                <include name="**/*.*" />
+            </fileset>
+        </copy>
+        <jar basedir="${tempFolder}" destfile="${ormFile}" />
+    </target>
+
     <!-- START Service rebuild -->
     <target name="updateService" depends="all">
+
+        <antcall target="-mergeORMFiles" />
 
         <tstamp><format property="install.time" pattern="yyyy-MM-dd_HH-mm"/></tstamp>
         <mkdir dir="./logs" />
