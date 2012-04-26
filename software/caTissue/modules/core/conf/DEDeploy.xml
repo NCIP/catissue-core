@@ -1978,7 +1978,8 @@
 
         <!-- Copy updated hibernate.cfg.xml to DataService -->
         <echo message="DEBUG: COPY hibernate.cfg.xml to DataService " />
-        <copy file="${srcHibernateCfgFile}" todir="../../caGrid_service/caTissueStaticDataService/de_codegen" />
+        <mkdir dir="../../caGrid_service/caTissueStaticDataService/de_codegen/hbms" />
+        <copy file="${srcHibernateCfgFile}" todir="../../caGrid_service/caTissueStaticDataService/de_codegen/hbms" />
 
 		<!-- Update orm jar-->
 		
