@@ -47,11 +47,29 @@ public class CreateOrder extends TestBase {
         return od;
     }
 
+    /**
+     * Create an order using a derived specimen order item.
+     * @throws Exception
+     */
+    public void testCreateOrderWithDerivedSpecimenOrderItem() throws Exception {
+        OrderDetails od = Fixtures.createOrderWithDerivedSpecimenOrderItem();
+        od = (OrderDetails)client.insert(od);
+    }
+    
+    /** 
+     * Create an order using a specimen order item.
+     * @throws Exception
+     */
+    public void testCreateOrderDetailsWithSOI() throws Exception {
+        OrderDetails od = Fixtures.createOrderDetailsWithSOI();
+        od = (OrderDetails)client.insert(od);
+    }
+    
     public OrderDetails order(List<Specimen> specimens) throws QueryProcessingExceptionType, RemoteException {
         // Insert a new Distribution Protocol
-        DistributionProtocol dp = Fixtures.createDistributionProtocol();
-        dp = (DistributionProtocol)client.insert(dp);
-        System.out.println("--> Distribution Protocol inserted: " + dp.getIdentifier());
+        //DistributionProtocol dp = Fixtures.createDistributionProtocol();
+        //dp = (DistributionProtocol)client.insert(dp);
+        //System.out.println("--> Distribution Protocol inserted: " + dp.getIdentifier());
 
         ExistingSpecimenOrderItem[] items = new ExistingSpecimenOrderItem[specimens.size()];
         for (int i=0; i< items.length; ++i) {
@@ -65,7 +83,17 @@ public class CreateOrder extends TestBase {
         }
         
         // Insert an order
-        OrderDetails od = createOrder(dp);
+        OrderDetails od = new OrderDetails();
+        od.setComment("Comments: Grid client test.");
+        od.setName("Order name XYZ");
+        od.setStatus("New");
+        od.setRequestedDate(Calendar.getInstance());
+        
+        od.setOrderItemCollection(new OrderDetailsOrderItemCollection());
+
+        //od.setDistributionProtocol(new OrderDetailsDistributionProtocol());
+        //od.getDistributionProtocol().setDistributionProtocol(Fixtures.createDistributionProtocol());
+        
         od.getOrderItemCollection().setOrderItem(items);
 
         od = (OrderDetails)client.insert(od);
@@ -141,4 +169,6 @@ public class CreateOrder extends TestBase {
         
         
     }
+
+
 }

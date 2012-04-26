@@ -39,7 +39,7 @@ import junit.framework.TestCase;
 
 public abstract class TestBase extends TestCase {
 
-    String url = "https://sbhost07-vm05.semanticbits.com:9443/wsrf/services/cagrid/Catissue_cacore";
+    String url = "https://catissuesvc.wustl.edu:443/wsrf/services/cagrid/Catissue_cacore";
     protected Catissue_cacoreClient client;
     GlobusCredential cred;
     CQLQuery query;

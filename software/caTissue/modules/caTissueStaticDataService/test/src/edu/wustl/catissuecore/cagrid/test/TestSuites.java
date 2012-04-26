@@ -1,4 +1,9 @@
 package edu.wustl.catissuecore.cagrid.test;
+import edu.yale.med.krauthammerlab.catissuecore.cagrid.test.CreateOrder;
+import edu.yale.med.krauthammerlab.catissuecore.cagrid.test.DeserializationTest;
+import edu.yale.med.krauthammerlab.catissuecore.cagrid.test.PopulatedAssociation;
+import edu.yale.med.krauthammerlab.catissuecore.cagrid.test.RetrieveParticipant;
+import edu.yale.med.krauthammerlab.catissuecore.cagrid.test.RetrieveSpecimen;
 import junit.framework.Test;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
@@ -11,13 +16,19 @@ public class TestSuites {
 
     public static Test suite() {
             TestSuite suite = new TestSuite();
-            suite.addTestSuite(ParticipantConversionTest.class);
-            suite.addTestSuite(CollectionProtocolConversionTest.class);
-            suite.addTestSuite(CollectionProtocolRegistrationConversionTest.class);
-            suite.addTestSuite(WAPIUtilityTest.class);
-            suite.addTestSuite(OrderDetailsConversionTest.class);
-            suite.addTestSuite(SpecimenOrderItemTest.class);
-            suite.addTestSuite(ChemotherapyTest.class);
+            //suite.addTestSuite(ParticipantConversionTest.class);
+            //suite.addTestSuite(CollectionProtocolConversionTest.class);
+            //suite.addTestSuite(CollectionProtocolRegistrationConversionTest.class);
+            //suite.addTestSuite(WAPIUtilityTest.class);
+            //suite.addTestSuite(OrderDetailsConversionTest.class);
+            //suite.addTestSuite(SpecimenOrderItemTest.class);
+            //suite.addTestSuite(ChemotherapyTest.class);
+
+            //suite.addTestSuite(RetrieveParticipant.class);
+            //suite.addTestSuite(RetrieveSpecimen.class);
+            //suite.addTestSuite(DeserializationTest.class);
+            suite.addTestSuite(CreateOrder.class);
+            //suite.addTestSuite(PopulatedAssociation.class);
             return suite;
         }
 

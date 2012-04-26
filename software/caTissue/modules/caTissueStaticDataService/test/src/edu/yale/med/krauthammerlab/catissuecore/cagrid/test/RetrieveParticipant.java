@@ -22,6 +22,11 @@ public class RetrieveParticipant extends TestCase {
     CQLQuery query;
     String cqlFileName = "cqls/Query205.xml";
 
+    /**
+     * Test that a participant, collection protocol, and registration can be created via the WAPI 
+     * and the participant can be retrieved.
+     * @throws Throwable
+     */
     public void testRetrieveParticipant() throws Throwable {
 
         CQLQueryResults result = client.executeQuery(query);

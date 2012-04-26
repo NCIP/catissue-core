@@ -1,5 +1,6 @@
 <project name="run-tools file" basedir="." default="runClient">
-     <property name="service.url" value="https://localhost:9443/wsrf/services/cagrid/Catissue_cacore" />
+	<property name="service.url" value="https://catissuesvc.wustl.edu/wsrf/services/cagrid/Catissue_cacore" />
+	<!--<property name="service.url" value="https://sbhost07-vm05.semanticbits.com:9443/wsrf/services/cagrid/Catissue_cacore" />-->
      <property name="decodegen.dir" value="${basedir}/../DECodeGen" />
 
     <condition property="isUnix" value="true"><or><os family="unix" /><os family="mac" /></or></condition>
