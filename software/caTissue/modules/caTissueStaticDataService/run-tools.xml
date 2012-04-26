@@ -304,14 +304,15 @@
     <!-- START Service rebuild -->
     <target name="updateService" depends="all">
 
-        <antcall target="-mergeORMFiles" />
-
         <tstamp><format property="install.time" pattern="yyyy-MM-dd_HH-mm"/></tstamp>
         <mkdir dir="./logs" />
         <record name="./logs/updateService-${install.time}.log" action="start" />
 
     	<delete dir="./temp" failonerror="false"/>
-    	
+    	<mkdir dir="./temp" />
+
+        <antcall target="-mergeORMFiles" />
+
         <!-- DOZER MERGE -->
         <foreach target="-processDozer" param="fullFileName" inheritall="true">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
