@@ -744,6 +744,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 					.getDisplayName());
 		}
 		storageContainer.setName(specimenVO.getSelectedContainerName());
+		StorageContainerUtil.setContainerPositionAsString(specimenVO.getSelectedContainerName(), specPos.getPositionDimensionOne(), specPos.getPositionDimensionTwo(), specPos);
 		// specimen.setStorageContainer(storageContainer);
 	}
 

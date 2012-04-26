@@ -382,6 +382,7 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 						.getSpecimenPosition().getPositionDimensionTwo()));
 			}
 			specimenDataBean.setLabel(specimen.getLabel());
+			specimenDataBean.setId(specimen.getId());
 			final LinkedHashMap<String, GenericSpecimen> derivesMap = specimenDataBean
 					.getDeriveSpecimenCollection();
 			final Collection derivesCollection = derivesMap.values();

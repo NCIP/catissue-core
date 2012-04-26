@@ -4155,9 +4155,13 @@ public class AppUtility
 		{
 			positionVal=numToExcelColumnAlphabet(Integer.valueOf(position));
 		}
-		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN))
+		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE))
 		{
 			positionVal=binaryToRoman(Integer.valueOf(position));
+		}
+		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE))
+		{
+			positionVal=binaryToRoman(Integer.valueOf(position)).toLowerCase();
 		}
 		return positionVal;
 	}
@@ -4174,7 +4178,8 @@ public class AppUtility
 		{
 			positionVal=excelColumnAlphabetToNum(position.toUpperCase());
 		}
-		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN))
+		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)
+				|| (labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE)))
 		{
 			positionVal=romanToInteger(position);
 		}

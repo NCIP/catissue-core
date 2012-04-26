@@ -86,7 +86,7 @@ public class ShowStorageGridViewAction extends BaseAction
 	@Override
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{
+			{
 		String target = Constants.SUCCESS;
 		String id = request.getParameter(Constants.SYSTEM_IDENTIFIER);
 		if (id == null)
@@ -97,7 +97,7 @@ public class ShowStorageGridViewAction extends BaseAction
 				id = "0";
 			}
 		}
-		
+
 		request.setAttribute("storageContainerIdentifier", id);
 		String contentOfContainer = null;
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
@@ -149,7 +149,7 @@ public class ShowStorageGridViewAction extends BaseAction
 			final Site site = (Site) bizLogic.retrieveAttribute(StorageContainer.class.getName(),
 					storageContainer.getId(), "site");// container.getSite();
 			request.setAttribute("siteName", site.getName());
-			
+
 			request.setAttribute("hierarchy",getHierarchy(storageContainer));
 			final StorageType storageType = (StorageType) bizLogic.retrieveAttribute(
 					StorageContainer.class.getName(), storageContainer.getId(), "storageType");// storageContainer
@@ -170,10 +170,10 @@ public class ShowStorageGridViewAction extends BaseAction
 			String twoDimLabellingScheme=storageContainer.getTwoDimensionLabellingScheme();
 			request.setAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL, oneDimLabel);
 			request.setAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL, twoDimLabel);
-			
+
 			request.setAttribute("oneDimLabellingScheme", oneDimLabellingScheme);
 			request.setAttribute("twoDimLabellingScheme", twoDimLabellingScheme);
-			
+
 			storageContainerGridObject.setId(storageContainer.getId().longValue());
 			storageContainerGridObject.setType(storageType.getName());
 			storageContainerGridObject.setName(storageContainer.getName());
@@ -186,17 +186,17 @@ public class ShowStorageGridViewAction extends BaseAction
 			storageContainerGridObject.setOneDimensionLabellingScheme(oneDimensionLabellingScheme);
 			storageContainerGridObject.setTwoDimensionLabellingScheme(twoDimensionLabellingScheme);
 			childContainerIds = new int[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
-					.intValue() + 1];
+			                                                                 .intValue() + 1];
 			storageContainerGridObject.setOneDimensionCapacity(oneDimensionCapacity);
 			storageContainerGridObject.setTwoDimensionCapacity(storageContainer.getCapacity()
 					.getTwoDimensionCapacity());
 
 			fullStatus = new int[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
-					.intValue() + 1];
+			                                                          .intValue() + 1];
 			childContainerType = new String[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
-					.intValue() + 1];
+			                                                                     .intValue() + 1];
 			childContainerName = new String[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
-					.intValue() + 1];
+			                                                                     .intValue() + 1];
 			final Collection children = StorageContainerUtil.getContainerChildren(storageContainer.getId());
 			if (children != null)
 			{
@@ -216,12 +216,12 @@ public class ShowStorageGridViewAction extends BaseAction
 
 						fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 1;
 						childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo
-								.intValue()] = childStorageContainer.getId().intValue();
+						                                                   .intValue()] = childStorageContainer.getId().intValue();
 						childContainerType[positionDimensionOne.intValue()][positionDimensionTwo
-								.intValue()] = Constants.CONTAINER_LABEL_CONTAINER_MAP
-								+ childStorageContainer.getName();
+						                                                    .intValue()] = Constants.CONTAINER_LABEL_CONTAINER_MAP
+						                                                    + childStorageContainer.getName();
 						childContainerName[positionDimensionOne.intValue()][positionDimensionTwo
-								.intValue()] = childStorageContainer.getName();
+						                                                    .intValue()] = childStorageContainer.getName();
 					}
 				}
 			}
@@ -239,7 +239,7 @@ public class ShowStorageGridViewAction extends BaseAction
 					whereColumnCondition, whereColumnValue, joinCondition);
 
 			String[][] childContainerLable = new String[oneDimensionCapacity.intValue() + 1][twoDimensionCapacity
-								                                             					.intValue() + 1];
+			                                                                                 .intValue() + 1];
 			if (list != null)
 			{
 				final Iterator iterator = list.iterator();
@@ -255,17 +255,17 @@ public class ShowStorageGridViewAction extends BaseAction
 
 					fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
 					childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo
-							.intValue()] = specimenID.intValue();
+					                                                   .intValue()] = specimenID.intValue();
 					childContainerType[positionDimensionOne.intValue()][positionDimensionTwo
-							.intValue()] = Constants.SPECIMEN_LABEL_CONTAINER_MAP + specimenLable;
+					                                                    .intValue()] = Constants.SPECIMEN_LABEL_CONTAINER_MAP + specimenLable;
 					contentOfContainer = Constants.ALIAS_SPECIMEN;
 					childContainerLable[positionDimensionOne.intValue()][positionDimensionTwo
-											      							.intValue()] = specimenLable;
+					                                                     .intValue()] = specimenLable;
 				}
 			}
-			
-			
-			
+
+
+
 			StringBuffer jsonMidleString =  new StringBuffer();
 			String headerString = " ,";
 			for(int i=1;i<oneDimensionCapacity+1;i++){
@@ -274,11 +274,11 @@ public class ShowStorageGridViewAction extends BaseAction
 					if(i==0&&j==0){
 						jsonMidleString.append("\"\"");
 					}else if(i==0){
-						
+
 						jsonMidleString.append("\""+twoDimLabel+"_"+j+"\"");
 					}else if(j==0){
 						jsonMidleString.append("\""+AppUtility.getPositionValue(oneDimensionLabellingScheme, i)+"\"");
-						
+
 					} else{
 						String value = "";
 						if (fullStatus[i][j] != 0)
@@ -287,8 +287,8 @@ public class ShowStorageGridViewAction extends BaseAction
 							if (pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
 							{
 								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerIds[i][j]
-                    			+ "&" + Constants.PAGE_OF + "=" + pageOf;
+										+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerIds[i][j]
+												+ "&" + Constants.PAGE_OF + "=" + pageOf;
 							}
 							else
 							{
@@ -298,96 +298,135 @@ public class ShowStorageGridViewAction extends BaseAction
 									storageContainerType1 = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
 								}
 								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerIds[i][j]
-                    			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType1
-								+ "&" + Constants.PAGE_OF + "=" + pageOf;
+										+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerIds[i][j]
+												+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType1
+												+ "&" + Constants.PAGE_OF + "=" + pageOf;
 							}
 							if (fullStatus[i][j] == 1)
 							{
-								 String containerName = childContainerType[i][j];
-								 int containerNameSize=childContainerType[i][j].length();
-								 if(containerNameSize >= 20)
-									 containerName = containerName.substring(11,containerNameSize);
-								 else
-									 containerName =containerName.substring(11,containerNameSize);
-								 value = "<a href=\\\\\""+openStorageContainer+"\\\\\" onclick=\\\\\"containerChanged()\\\\\" class=\\\\\"view\\\\\" onmouseover=\\\\\"Tip(\\\' "+childContainerType[i][j]+"\\\')\\\\\">"+containerName+"</a>";
-								 //value = "<a href=\\\""+openStorageContainer+"\\\" onclick=\\\"containerChanged()\\\" class=\\\"view\\\" onmouseover=\\\"Tip(\\\' "+childContainerType[i][j]+"\\\')\"><img src=\\\"images/uIEnhancementImages/used_container.gif\\\" alt=\\\"Unused\\\" width=\\\"32\\\" height=\\\"32\\\" border=\\\"0\\\" ><br>"+containerName+"</a>";
+								String containerName = childContainerType[i][j];
+								int containerNameSize=childContainerType[i][j].length();
+								if(containerNameSize >= 20)
+									containerName = containerName.substring(11,containerNameSize);
+								else
+									containerName =containerName.substring(11,containerNameSize);
+								value = "<a href=\\\\\""+openStorageContainer+"\\\\\" onclick=\\\\\"containerChanged()\\\\\" class=\\\\\"view\\\\\" onmouseover=\\\\\"Tip(\\\' "+childContainerType[i][j]+"\\\')\\\\\">"+containerName+"</a>";
+								//value = "<a href=\\\""+openStorageContainer+"\\\" onclick=\\\"containerChanged()\\\" class=\\\"view\\\" onmouseover=\\\"Tip(\\\' "+childContainerType[i][j]+"\\\')\"><img src=\\\"images/uIEnhancementImages/used_container.gif\\\" alt=\\\"Unused\\\" width=\\\"32\\\" height=\\\"32\\\" border=\\\"0\\\" ><br>"+containerName+"</a>";
 								// value = containerName;
 							}
 							else{
 
 								String containerName =childContainerType[i][j];
-								 int containerNameSize=childContainerType[i][j].length();
+								int containerNameSize=childContainerType[i][j].length();
 								if(contentOfContainer!=null && contentOfContainer.equals(Constants.ALIAS_SPECIMEN))
-									{
-									 if(containerNameSize >= 20)
-										 containerName = containerName.substring(11,containerNameSize);
-									 else
-										 containerName =containerName.substring(11,containerNameSize);
-									}
-									if(contentOfContainer!=null && contentOfContainer.equals(Constants.ALIAS_SPECIMEN_ARRAY))
-									{
-										if(containerNameSize >= 18)
-										 containerName = containerName.substring(8,18)+"...";
-									 else
-										 containerName =containerName.substring(8,containerNameSize);
-									}
-
-									if(contentOfContainer!=null && contentOfContainer.equals(Constants.ALIAS_SPECIMEN))
 								{
-								
-										value = "<a  class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenSearch.do?"+Constants.PAGE_OF+"=pageOfNewSpecimenCPQuery&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+"\\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" >"+containerName+"	</a>";
-										//value = "<a  class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenSearch.do?"+Constants.PAGE_OF+"=pageOfNewSpecimenCPQuery&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+"\\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" ><img src=\\\\\"images/uIEnhancementImages/specimen.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\"  border=\\\\\"0\\\\\"><br>"+containerName+"	</a>";
-										//value = containerName;
-								
+									if(containerNameSize >= 20)
+										containerName = containerName.substring(11,containerNameSize);
+									else
+										containerName =containerName.substring(11,containerNameSize);
+								}
+								if(contentOfContainer!=null && contentOfContainer.equals(Constants.ALIAS_SPECIMEN_ARRAY))
+								{
+									if(containerNameSize >= 18)
+										containerName = containerName.substring(8,18)+"...";
+									else
+										containerName =containerName.substring(8,containerNameSize);
+								}
+
+								if(contentOfContainer!=null && contentOfContainer.equals(Constants.ALIAS_SPECIMEN))
+								{
+
+									value = "<a  class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenSearch.do?"+Constants.PAGE_OF+"=pageOfNewSpecimenCPQuery&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+"\\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" >"+containerName+"	</a>";
+									//value = "<a  class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenSearch.do?"+Constants.PAGE_OF+"=pageOfNewSpecimenCPQuery&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+"\\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" ><img src=\\\\\"images/uIEnhancementImages/specimen.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\"  border=\\\\\"0\\\\\"><br>"+containerName+"	</a>";
+									//value = containerName;
+
 								}
 								if(contentOfContainer!=null && contentOfContainer.equals(Constants.ALIAS_SPECIMEN_ARRAY))
 								{
 									value = "<a class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenArraySearch.do?"+Constants.PAGE_OF+"=pageOfSpecimenArray&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+" \\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" >"+containerName+" </a>";
 									//value = "<a class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenArraySearch.do?"+Constants.PAGE_OF+"=pageOfSpecimenArray&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+" \\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" ><img src=\\\\\"images/uIEnhancementImages/specimen_array.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\"  border=\\\\\"0\\\\\"><br>"+containerName+" </a>";
 									//value = containerName;
+
+								}
 								
-								}
-								}
-						}else{
-							//value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(1,1)\\\\\" src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";							//value = "";
-						  value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(\\\'selectedContainerName\\\',\\\'"+storageContainerGridObject.getName()+"\\\');\\ " 
-							+"setTextBoxValue(\\\'positionDimensionOne\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
-							+"setTextBoxValue(\\\'positionDimensionTwo\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ "
-							+"closeFramedWindow()\\\\\" "
-						  		+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+							}
+						}
+						else{
+							HttpSession session=request.getSession();
+							String containerStyle = (String)session.getAttribute(Constants.CONTAINER_STYLE);
+							String xDimStyleId = (String)session.getAttribute(Constants.XDIM_STYLEID);
+							String yDimStyleId = (String)session.getAttribute(Constants.YDIM_STYLEID);
+							String specimenMapKey = (String) session.getAttribute(Constants.SPECIMEN_ATTRIBUTE_KEY);
+							String specimenCallBackFunction =  (String) session.getAttribute(Constants.SPECIMEN_CALL_BACK_FUNCTION);
+							String selectedContainerName= (String) session.getAttribute(Constants.SELECTED_CONTAINER_NAME);
+							String pos1= (String) session.getAttribute(Constants.POS1);
+						    String pos2= (String)session.getAttribute(Constants.POS2);
+							if (pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)) 
+							{
+								value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\""+specimenCallBackFunction+"(\\\'"+specimenMapKey+"\\\',\\\'"+storageContainerGridObject.getId()+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\' " 
+										+",\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ "
+										+"closeFramedWindow()\\\\\" "
+										+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+							}
+							else if (pageOf.equals(Constants.PAGE_OF_SPECIMEN))
+							{
+								//value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(1,1)\\\\\" src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";							//value = "";
+								value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(\\\'"+selectedContainerName+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\');\\ " 
+										+"setTextBoxValue(\\\'"+pos1+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
+										+"setTextBoxValue(\\\'"+pos2+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ "
+										+"closeFramedWindow()\\\\\" "
+										+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+							}
+							else if(pageOf.equals(Constants.PAGE_OF_ALIQUOT))
+							{
+								value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(\\\'"+containerStyle+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\');\\ " 
+										+"setTextBoxValue(\\\'"+xDimStyleId+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
+										+"setTextBoxValue(\\\'"+yDimStyleId+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ "
+										+"closeFramedWindow()\\\\\" "
+									  		+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+
+							}
+							else
+							{
+								value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(\\\'"+containerStyle+"\\\',\\\'"+storageContainerGridObject.getId()+"\\\');\\ " 
+										+"setTextBoxValue(\\\'"+xDimStyleId+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
+										+"setTextBoxValue(\\\'"+yDimStyleId+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ "
+										+"closeFramedWindow()\\\\\" "
+									  		+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+
+							}
 
 
 						}
-							
+
 						jsonMidleString.append("\""+value+"\"");
-						
+
 					}
 					if(j<twoDimensionCapacity){
 						jsonMidleString.append(",");
-						
-						
+
+
 					}
 				}
 				jsonMidleString.append("]}");
 				if(i<twoDimensionCapacity){
 					jsonMidleString.append(",");
 				}
-				
-				
+
+
 			}
-			
+
 			for(int i =0; i <twoDimensionCapacity ;i++){
 				headerString += (AppUtility.getPositionValue(twoDimensionLabellingScheme, i+1));;
 				if(i<(twoDimensionCapacity-1)){
 					headerString += ",";
 				}
-				
+
 			}
-			
-			
+
+
 			StringBuffer jsonStringBuffer = new StringBuffer();
-			
+
 			String jsonStart = "{rows:[";
 			String jsonEnd = "]}";
 			jsonStringBuffer.append(jsonStart);
@@ -395,7 +434,7 @@ public class ShowStorageGridViewAction extends BaseAction
 			jsonStringBuffer.append(jsonEnd);
 			request.setAttribute("gridJson", jsonStringBuffer);
 			request.setAttribute("gridHeader",headerString);
-			
+
 			// Showing Specimen Arrays in the Container map.
 			sourceObjectName = SpecimenArray.class.getName();
 
@@ -420,10 +459,10 @@ public class ShowStorageGridViewAction extends BaseAction
 
 					fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
 					childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo
-							.intValue()] = specimenID.intValue();
+					                                                   .intValue()] = specimenID.intValue();
 					childContainerType[positionDimensionOne.intValue()][positionDimensionTwo
-							.intValue()] = Constants.SPECIMEN_ARRAY_LABEL_CONTAINER_MAP
-							+ specimenArrayLable;
+					                                                    .intValue()] = Constants.SPECIMEN_ARRAY_LABEL_CONTAINER_MAP
+					                                                    + specimenArrayLable;
 					contentOfContainer = Constants.ALIAS_SPECIMEN_ARRAY;
 
 				}
@@ -451,7 +490,7 @@ public class ShowStorageGridViewAction extends BaseAction
 		request.setAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT, storageContainerGridObject);
 
 		// Mandar : 29aug06 : to set collectionprotocol titles
-		
+
 		final List collectionProtocolList = CollectionProtocolBizLogic.getCollectionProtocolList(id);
 		request.setAttribute(Constants.MAP_COLLECTION_PROTOCOL_LIST, collectionProtocolList);
 
@@ -477,8 +516,8 @@ public class ShowStorageGridViewAction extends BaseAction
 		request.setAttribute(Constants.MAP_SPECIMEN_CLASS_LIST, spClassList);
 		request.setAttribute(Constants.MAP_SPECIMEN_TYPE_LIST, specimenTypeList);
 		return mapping.findForward(target);
-	}
-	
+			}
+
 	private String getHierarchy(StorageContainer storageContainer){
 		StorageContainer st1 = storageContainer;
 		List<String> strList = new ArrayList<String>();
@@ -513,8 +552,8 @@ public class ShowStorageGridViewAction extends BaseAction
 	 */
 	private void setEnablePageAttributeIfRequired(HttpServletRequest request,
 			StorageContainer storageContainer)
-			throws BizLogicException
-	{
+					throws BizLogicException
+					{
 		boolean enablePage = true;
 		String activityStatus = request.getParameter(Status.ACTIVITY_STATUS.toString());
 		if (activityStatus == null)
@@ -608,5 +647,5 @@ public class ShowStorageGridViewAction extends BaseAction
 		{
 			request.setAttribute(Constants.ENABLE_STORAGE_CONTAINER_GRID_PAGE, Constants.TRUE);
 		}
-	}
+					}
 }

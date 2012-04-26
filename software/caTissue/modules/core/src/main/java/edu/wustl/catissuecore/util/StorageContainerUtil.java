@@ -2725,7 +2725,8 @@ public final class StorageContainerUtil
 		{
 			specimenPosition.setPositionDimensionOne(Integer.valueOf(AppUtility.excelColumnAlphabetToNum(pos1String.toUpperCase()).toString()));
 		}
-		else if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN))
+		else if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE) || 
+				oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE))
 		{
 			specimenPosition.setPositionDimensionOne(Integer.valueOf(AppUtility.romanToInteger(pos1String.toUpperCase()).toString()));
 		}
@@ -2738,7 +2739,44 @@ public final class StorageContainerUtil
 		{
 			specimenPosition.setPositionDimensionTwo(Integer.valueOf(AppUtility.excelColumnAlphabetToNum(pos2String.toUpperCase()).toString()));
 		}
-		else if(twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN))
+		else if(twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE) ||
+				twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE))
+		{
+			specimenPosition.setPositionDimensionTwo(Integer.valueOf(AppUtility.romanToInteger(pos2String.toUpperCase()).toString()));
+		}
+		else
+		{
+			specimenPosition.setPositionDimensionTwo(Integer.valueOf(pos2String));
+		}
+	}
+	
+	public static void setContainerPositionForAutoOption(String containerId, String pos1String, String pos2String,SpecimenPosition specimenPosition)
+	{
+		List labellingSchemesList=null;
+		labellingSchemesList = getLabellingSchemeByContainerId(containerId);
+		String oneDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(0);
+		String twoDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(1);
+		if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) || 
+				oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE))
+		{
+			specimenPosition.setPositionDimensionOne(Integer.valueOf(AppUtility.excelColumnAlphabetToNum(pos1String.toUpperCase()).toString()));
+		}
+		else if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)
+				 || oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE))
+		{
+			specimenPosition.setPositionDimensionOne(Integer.valueOf(AppUtility.romanToInteger(pos1String.toUpperCase()).toString()));
+		}
+		else
+		{
+			specimenPosition.setPositionDimensionOne(Integer.valueOf(pos1String));
+		}
+		if(twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) ||
+				twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE))
+		{
+			specimenPosition.setPositionDimensionTwo(Integer.valueOf(AppUtility.excelColumnAlphabetToNum(pos2String.toUpperCase()).toString()));
+		}
+		else if(twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)
+				|| twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE))
 		{
 			specimenPosition.setPositionDimensionTwo(Integer.valueOf(AppUtility.romanToInteger(pos2String.toUpperCase()).toString()));
 		}
@@ -2748,6 +2786,7 @@ public final class StorageContainerUtil
 		}
 		
 	}
+
 	
 	public static void setContainerPositionAsString(String containerName, Integer pos1String, Integer pos2String,SpecimenPosition specimenPosition)
 	{
@@ -2763,9 +2802,13 @@ public final class StorageContainerUtil
 		{
 			specimenPosition.setPositionDimensionOneString(AppUtility.numToExcelColumnAlphabet(pos1String).toUpperCase());
 		}
-		else if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN))
+		else if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE))
 		{
 			specimenPosition.setPositionDimensionOneString(AppUtility.binaryToRoman(pos1String).toUpperCase());
+		}
+		else if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE))
+		{
+			specimenPosition.setPositionDimensionOneString(AppUtility.binaryToRoman(pos1String).toLowerCase());
 		}
 		else
 		{
@@ -2779,9 +2822,13 @@ public final class StorageContainerUtil
 		{
 			specimenPosition.setPositionDimensionTwoString(AppUtility.numToExcelColumnAlphabet(pos2String).toUpperCase());
 		}
-		else if(twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN))
+		else if(twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE))
 		{
 			specimenPosition.setPositionDimensionTwoString(AppUtility.binaryToRoman(pos2String).toUpperCase());
+		}
+		else if(twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE))
+		{
+			specimenPosition.setPositionDimensionTwoString(AppUtility.binaryToRoman(pos2String).toLowerCase());
 		}
 		else
 		{
@@ -2826,11 +2873,14 @@ public final class StorageContainerUtil
 		NameValueBean numberBean=new NameValueBean(Constants.LABELLING_SCHEME_NUMBERS, Constants.LABELLING_SCHEME_NUMBERS);
 		NameValueBean upperCaseBean=new NameValueBean(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE, Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE); 
 		NameValueBean lowerCaseBean=new NameValueBean(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE, Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE);
-		NameValueBean romanBean=new NameValueBean(Constants.LABELLING_SCHEME_ROMAN, Constants.LABELLING_SCHEME_ROMAN);
+		NameValueBean romanUpperCaseBean=new NameValueBean(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE, Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE);
+		NameValueBean romanLowerCaseBean=new NameValueBean(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE, Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE);
 		labellingSchemeList.add(numberBean);
 		labellingSchemeList.add(upperCaseBean);
 		labellingSchemeList.add(lowerCaseBean);
-		labellingSchemeList.add(romanBean);
+		labellingSchemeList.add(romanUpperCaseBean);
+		labellingSchemeList.add(romanLowerCaseBean);
+		
 		return labellingSchemeList;
 	}
 	

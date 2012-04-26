@@ -52,6 +52,7 @@
 	String appendingPath = "/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
 	String currentReceivedDate = "";
 	String currentCollectionDate = "";
+	String positionInStorageContainer=(String)request.getAttribute("positionInStorageContainer");
 
 	String staticEntityName=null;
 	staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_REC_ENTRY;
@@ -161,9 +162,13 @@
 
  function makePositionsEditAble()
  {
+	 var containerPositionDiv=document.getElementById("containerPositionDiv");
+	 var positionInStorageContainerDiv=document.getElementById("positionInStorageContainerDiv");
+	 containerPositionDiv.style.display="block";
+	 positionInStorageContainerDiv.style.display="none";
 	 var selectedContainerName=document.getElementById("selectedContainerName");
-	 var positionDimensionOne=document.getElementById("positionDimensionOne");
-	 var positionDimensionTwo=document.getElementById("positionDimensionTwo");
+	 var positionDimensionOne=document.getElementById("pos1");
+	 var positionDimensionTwo=document.getElementById("pos2");
 	 var containerMap=document.getElementById("containerMap");
 	 selectedContainerName.readOnly=false;
 	 positionDimensionOne.readOnly=false;
@@ -178,6 +183,10 @@
 	var isPositionChanged=document.getElementById("isPositionChanged");
 	isTransferred.value=false;
 	isPositionChanged.value=true;
+	var correctButton=document.getElementById("correctButton");
+	var transferButton=document.getElementById("transferButton");
+	correctButton.disabled=true;
+	transferButton.disabled=false;
  }
  
  function setTransferSpecimenFlag()
@@ -187,6 +196,10 @@
 	var isPositionChanged=document.getElementById("isPositionChanged");
 	isTransferred.value=true;
 	isPositionChanged.value=false;
+	var transferButton=document.getElementById("transferButton");
+	var correctButton=document.getElementById("correctButton");
+	correctButton.disabled=false;
+	transferButton.disabled=true;
 }
 
  
@@ -1417,7 +1430,7 @@
 								<bean:message key="newSpecimen.groupName"/>
 							</label>
 						  </td>
-						  <td width="34%" align="left" class="black_ar">
+						  <td width="32%" align="left" class="black_ar">
 							<html:hidden property="specimenCollectionGroupName" styleId="specimenCollectionGroupName"/>
 								<label for="specimenCollectionGroupName">
 									<%=form.getSpecimenCollectionGroupName()%>
@@ -2011,7 +2024,7 @@
 										String rowNumber = "1";
 										String styClass = "formFieldSized5";
 										String tdStyleClass = "customFormField";
-										String onChange = "onCustomListBoxChange(this)";
+										String onChange = "onCustomListBoxChangeForContainer(this)";
 										String className = form.getClassName();
 										String sptype = form.getType();
 
@@ -2072,10 +2085,10 @@
 
 									%>
 
-									<%//=ScriptGenerator.getJSForOutermostDataTable()%>
-									<%//System.out.println("after getJSForOutermostDataTable in specimen jsp");%>
-									<%//=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
-									<%//System.out.println("after getJSEquivalentFor in specimen jsp");%>
+									<%=ScriptGenerator.getJSForOutermostDataTable()%>
+									<%System.out.println("after getJSForOutermostDataTable in specimen jsp");%>
+									<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
+									<%System.out.println("after getJSEquivalentFor in specimen jsp");%>
 
 									<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 									<logic:equal name="newSpecimenForm" property="gsidPresent" value="true">
@@ -2084,7 +2097,7 @@
 										<script language="JavaScript" type="text/javascript" src="jss/jquery/gsid/updateSpecimen.js"></script>
 									</logic:equal>
 									
-								<td colspan="1" >
+								<td colspan="4" >
 					<!-------Select Box Begins----->
 
 								<table border="0" cellpadding="3" cellspacing="0" width="100%">
@@ -2177,32 +2190,43 @@
 												{
 													%>
 													<tr>
-														<td colspan="1">
+														<td colspan="4">
 
 					<logic:equal name="transferStatus" value="">
 												<!--div that is not getting popuulated -->
 												<div id="fromlocationdiv" display="display:block">														<div id="fromlocationdiv" display="display:block">
-														<table cellpadding="0" cellspacing="0" border="0" >
+														<table cellpadding="0" cellspacing="0" border="0" width="100%">
 						<tr>
+						
+						<td class="black_ar" width="30%">
+														<div id="positionInStorageContainerDiv" style="display:block">
+														<%=positionInStorageContainer%>
+														</div>
+													
+							<div id="containerPositionDiv" style="display:none">
+							<table border="0" width="100%">
+							<tr>
 							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="25" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName" readonly= "true"/>
+															<html:text styleClass="black_ar"  size="15" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName" readonly= "true"/>
 														</td>
 							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true" style="text-align:right"/>
+															<html:text styleClass="black_ar"  size="2" styleId="pos1" property="positionDimensionOne" readonly= "true" style="text-align:right"/>
 											</td>
 							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true" style="text-align:right"/>
+															<html:text styleClass="black_ar"  size="2" styleId="pos2" property="positionDimensionTwo" readonly= "true" style="text-align:right"/>
 													</td>
 							<td class="groupelements">
 															<html:button styleClass="black_ar" styleId="containerMap" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
 																<bean:message key="buttons.map"/>
 															</html:button>
 													</td>
-																		<td class="groupelements">
-							<input type="button" name="CorrectPosition" value="Correct"   onclick="setPositionChangeFlag()" styleClass="blue_ar_b"/>
-							</td>
-							<td class="groupelements">
-							<input type="button" name="TransferPositionButton" value="Transfer"   onclick="setTransferSpecimenFlag()" styleClass="blue_ar_b"/>
+													</tr>
+													</table>
+													</div></td>
+																		<td align="left">
+							<input type="button" id="correctButton" name="CorrectPosition" value="Correct"   onclick="setPositionChangeFlag()" styleClass="blue_ar_b"/>
+							
+							<input type="button" id="transferButton" name="TransferPositionButton" value="Transfer"   onclick="setTransferSpecimenFlag()" styleClass="blue_ar_b"/>
 							</td>
 												</tr>
 											</table>
@@ -2223,6 +2247,8 @@
 
 									</table>
 											</td>
+											</tr>
+											<tr>
 											<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 							<td align="center" class="black_ar">
 									&nbsp;

@@ -534,6 +534,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForCreatedDate,
 							ApplicationProperties.getValue("specimen.createdDate")));
 				}
+			
 			}*/
 
 			final Iterator keyIterator = this.aliquotMap.keySet().iterator();
@@ -599,7 +600,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 										.getValue("specimen.label")));
 					}
 				}
-				else if (key.indexOf("_positionDimension") != -1 && !isLocErrAdded)
+				/*else if (key.indexOf("_positionDimension") != -1 && !isLocErrAdded)
 				{
 					final String value = (String) this.aliquotMap.get(key);
 					if (value != null && !value.trim().equals("") && !validator.isDouble(value))
@@ -610,7 +611,7 @@ public class AliquotForm extends AbstractActionForm implements IPrinterTypeLocat
 										.getValue("specimen.positionInStorageContainer")));
 						break;
 					}
-				}
+				}*/
 			}
 		}
 

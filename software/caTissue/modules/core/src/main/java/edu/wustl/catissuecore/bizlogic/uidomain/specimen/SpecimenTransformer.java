@@ -108,11 +108,13 @@ public abstract class SpecimenTransformer<U extends SpecimenForm> extends Abstra
 		{
 			final long containerId = Long.parseLong(form.getStorageContainer());
 			domainObject.getSpecimenPosition().getStorageContainer().setId(containerId);
-			domainObject.getSpecimenPosition().setPositionDimensionOne(Integer.valueOf( AppUtility.excelColumnAlphabetToNum(String.valueOf(form
-					.getPositionDimensionOne())).toString()));
-			domainObject.getSpecimenPosition().setPositionDimensionTwo(Integer.valueOf( AppUtility.excelColumnAlphabetToNum(String.valueOf(form
-					.getPositionDimensionTwo())).toString()));
+			StorageContainerUtil.setContainerPositionForAutoOption(form.getStorageContainer(), form.getPositionDimensionOne(), form.getPositionDimensionTwo(),domainObject.getSpecimenPosition());
 			domainObject.getSpecimenPosition().setSpecimen(domainObject);
+			//domainObject.getSpecimenPosition().setPositionDimensionOne(Integer.valueOf( AppUtility.excelColumnAlphabetToNum(String.valueOf(form
+				//	.getPositionDimensionOne())).toString()));
+			//domainObject.getSpecimenPosition().setPositionDimensionTwo(Integer.valueOf( AppUtility.excelColumnAlphabetToNum(String.valueOf(form
+					//.getPositionDimensionTwo())).toString()));
+			//domainObject.getSpecimenPosition().setSpecimen(domainObject);
 
 		}
 		else if (form.getStContSelection() == 3)

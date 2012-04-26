@@ -6012,8 +6012,9 @@ public class Constants
 	public static final String DISPOSAL_EVENT="Disposal";
 	public static final String FORM_CONTXT_ERR="Error while setting Form context";
 	
-	public static final String LABELLING_SCHEME_ALPHABETS_UPPER_CASE="Upper Case";
-	public static final String LABELLING_SCHEME_ALPHABETS_LOWER_CASE="Lower Case";
-	public static final String LABELLING_SCHEME_ROMAN="Roman";
+	public static final String LABELLING_SCHEME_ALPHABETS_UPPER_CASE="Alphabets Upper Case";
+	public static final String LABELLING_SCHEME_ALPHABETS_LOWER_CASE="Alphabets Lower Case";
+	public static final String LABELLING_SCHEME_ROMAN_UPPER_CASE="Roman Upper Case";
+	public static final String LABELLING_SCHEME_ROMAN_LOWER_CASE="Roman Lower Case";
 	public static final String LABELLING_SCHEME_NUMBERS="Numbers";
 }

@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionErrors;
 
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDetailsInfo;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -1154,9 +1155,24 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			str[0] = elementNamePrefix + "selectedContainerName";
 			str[1] = this.getFormattedValue(specimen.getSelectedContainerName());
 			str[2] = elementNamePrefix + "positionDimensionOne";
-			str[3] = this.getFormattedValue(specimen.getPositionDimensionOne());
+			Long specimenId=specimen.getId();
+			if(!specimenId.equals(-1L) && specimen.getPositionDimensionOne()!=null && !"".equals(specimen.getPositionDimensionOne()) && !"null".equals(specimen.getPositionDimensionOne()))
+			{
+				str[3] = this.getFormattedValue(StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSelectedContainerName(),1,Integer.valueOf(specimen.getPositionDimensionOne())));
+			}
+			else
+			{
+				str[3] = this.getFormattedValue(specimen.getPositionDimensionOne());
+			}
 			str[4] = elementNamePrefix + "positionDimensionTwo";
-			str[5] = this.getFormattedValue(specimen.getPositionDimensionTwo());
+			if(!specimenId.equals(-1L) && specimen.getPositionDimensionTwo()!=null  && !"".equals(specimen.getPositionDimensionTwo()) && !"null".equals(specimen.getPositionDimensionTwo()))
+			{
+				str[5] = this.getFormattedValue(StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSelectedContainerName(),2,Integer.valueOf(specimen.getPositionDimensionTwo())));
+			}
+			else
+			{
+				str[5] = this.getFormattedValue(specimen.getPositionDimensionTwo());
+			}
 			str[6] = elementNamePrefix + "containerId";
 			str[7] = this.getFormattedValue(specimen.getContainerId());
 			str[8] = elementNamePrefix + "storageContainerForSpecimen";

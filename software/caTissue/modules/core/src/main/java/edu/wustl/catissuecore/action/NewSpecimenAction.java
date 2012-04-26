@@ -909,6 +909,13 @@ public class NewSpecimenAction extends SecureAction
 						}
 //					}
 				}
+				if(specimenForm.getPositionInStorageContainer()!=null)
+				{
+					specimenForm.setPositionInStorageContainer(specimenForm.getSelectedContainerName() + " : "
+							 + " Pos(" + specimenForm.getPositionDimensionOne() + ","
+							+ specimenForm.getPositionDimensionTwo() + ")");
+				}
+				request.setAttribute("positionInStorageContainer", specimenForm.getPositionInStorageContainer());
 			}
 			request.setAttribute("initValues", initialValues);
 			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
