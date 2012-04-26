@@ -287,6 +287,7 @@
     <!--END     Writable API targets-->
 
     <target name="-mergeORMFiles">
+        <echo message="Updating ORM files..." />
         <property name="tempFolder" value="./temp/ormTemp/" />
         <property name="ormFile" value="./lib/catissue_cacore-orm.jar" />
         <mkdir dir="${tempFolder}" />
@@ -297,6 +298,7 @@
             </fileset>
         </copy>
         <jar basedir="${tempFolder}" destfile="${ormFile}" />
+        <echo message="Updating ORM files...DONE." />
     </target>
 
     <!-- START Service rebuild -->
