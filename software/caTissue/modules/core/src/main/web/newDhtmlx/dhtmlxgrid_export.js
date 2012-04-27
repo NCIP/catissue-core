@@ -73,16 +73,19 @@ dhtmlXGridObject.prototype.toPDF=function(url,mode,header,footer,rows,appendData
 
 	var win = window.open("", "_blank");
 	win.document.open();
-	win.document.write("<html><body>");
-	win.document.write('<form id="myform" method="post" action="'+url+'" accept-charset="utf-8" enctype="text/html"><input type="hidden" name="grid_xml" id="grid_xml"/> </form>');
+	win.document.write('<html><body>');
+	win.document.write('<form id="myform"  method="post" action="'+url+'" accept-charset="utf-8" enctype="application/x-www-form-urlencoded"><input type="hidden" name="grid_xml" id="grid_xml"/>  </form>');
 	// as long dash in post converts to some special symbols we need to convert it to simple dash by replacing using unicode \u2013
 	//win.document.getElementById("grid_xml").value = encodeURIComponent(appendData+"\n"+xml_top(mode).replace("\u2013", "-") + xml_body() + xml_end());
+	win.document.write('</body></html>');
+	
 	win.document.getElementById("grid_xml").value = encodeURIComponent("<gridxml>"+appendData+xml_top(mode).replace("\u2013", "-") + xml_body() + xml_end()+"</gridxml>");
-	win.document.write("</body></html>");
 	win.document.getElementById("myform").submit();
 	win.document.close();
 	grid = null;
+
 };
+
 dhtmlXGridObject.prototype._serialiseExportConfig=function(spans){
 	var out = "<head>";
 

@@ -205,6 +205,9 @@ outerdata += "<row><label>Collection Protocol: </label> <text><%=text%> </text><
 	text = "";
 	for(int colcnt=0;colcnt<specimenClassList.size();colcnt++)
 	{
+		if(colcnt!=0){
+			text += ","; 
+		}
 		String data =(String) specimenClassList.get(colcnt );
 		text += data + " ";
 
@@ -216,12 +219,15 @@ outerdata += "<row><label>Specimen Class: </label> <text><%=text%> </text></row>
 	text = "";
 	for(int colcnt=0;colcnt<specimenTypeList.size();colcnt++)
 	{
+		if(colcnt!=0){
+			text += ","; 
+		}
 		String data =(String) specimenTypeList.get(colcnt );
 		text += data + " ";
-		if(colcnt >=10)
+		/*if(colcnt >=10)
 		{
 			break;
-		}
+		}*/
 	}
 %>
 
