@@ -87,6 +87,7 @@ $HeadURL: https://ncisvn.nci.nih.gov/svn/automation/branches/automation-1.7.4/so
 	<!-- Grid related properties -->
 
     <copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/${oracle.ojdbc_driver.version}.jar" todir="${caTissue-webapp.dir.dist}/bda-utils" verbose="true" overwrite="true" failonerror="false" />
+    <copy file="${caTissue-webapp.dir.dist}/modules/caTissue/lib/common_lib/${oracle.ojdbc_driver.version}.jar" todir="${caTissue-webapp.dir.dist}/bda-utils" verbose="true" overwrite="true" failonerror="false" />
 
 	<!-- Paths -->
 	<path id="bda-utils.classpath">
