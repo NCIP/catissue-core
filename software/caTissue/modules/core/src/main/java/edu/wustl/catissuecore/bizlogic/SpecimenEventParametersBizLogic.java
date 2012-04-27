@@ -241,14 +241,18 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						// trasfering from virtual location
 						InstanceFactory<SpecimenPosition> instFact = DomainInstanceFactory.getInstanceFactory(SpecimenPosition.class);
 						specimenPosition = instFact.createObject();
-						specimenPosition.setSpecimen(specimen);
-						specimen.setSpecimenPosition(specimenPosition);
+						
 					}
 					specimenPosition.setStorageContainer(storageContainerObj);
 					specimenPosition.setPositionDimensionOne(transferEvent
 							.getToPositionDimensionOne());
 					specimenPosition.setPositionDimensionTwo(transferEvent
 							.getToPositionDimensionTwo());
+					StorageContainerUtil.setContainerPositionAsString(storageContainerObj.getName(), transferEvent
+							.getToPositionDimensionOne(), transferEvent
+							.getToPositionDimensionTwo(), specimenPosition);
+					specimenPosition.setSpecimen(specimen);
+					specimen.setSpecimenPosition(specimenPosition);
 					dao.update(specimen,null);
 					transferEvent.setToStorageContainer(storageContainerObj);
 				}

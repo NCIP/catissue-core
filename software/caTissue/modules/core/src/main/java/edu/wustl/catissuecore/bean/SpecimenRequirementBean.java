@@ -1139,4 +1139,18 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 	}
 
+	@Override
+	public String getCollectionStatus()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setCollectionStatus(String collectionStatus)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

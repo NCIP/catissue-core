@@ -419,6 +419,9 @@ public interface GenericSpecimen extends Serializable
 	public String getCreationEventForSpecimen();
 
 	public String getProcessingSPPForSpecimen();
+	
+	public String getCollectionStatus();
+	public void setCollectionStatus(String collectionStatus);
 	/*
 		public String getUniqueIdentifier();
 		public String getDisplayName();

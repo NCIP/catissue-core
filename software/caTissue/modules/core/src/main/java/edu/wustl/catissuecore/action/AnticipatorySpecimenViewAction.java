@@ -423,6 +423,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		specimenDataBean.setDisplayName(specimen.getLabel());
 		specimenDataBean.setPathologicalStatus(specimen.getPathologicalStatus());
 		specimenDataBean.setId(specimen.getId().longValue());
+		specimenDataBean.setCollectionStatus(specimen.getCollectionStatus());
 		specimenDataBean.setParentName(parentName);
 		if (specimen.getInitialQuantity() != null)
 		{

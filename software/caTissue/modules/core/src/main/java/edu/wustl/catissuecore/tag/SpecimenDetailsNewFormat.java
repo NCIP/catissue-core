@@ -1155,8 +1155,8 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			str[0] = elementNamePrefix + "selectedContainerName";
 			str[1] = this.getFormattedValue(specimen.getSelectedContainerName());
 			str[2] = elementNamePrefix + "positionDimensionOne";
-			Long specimenId=specimen.getId();
-			if(!specimenId.equals(-1L) && specimen.getPositionDimensionOne()!=null && !"".equals(specimen.getPositionDimensionOne()) && !"null".equals(specimen.getPositionDimensionOne()))
+			String collectionStatus=specimen.getCollectionStatus();			
+			if("Collected".equals(collectionStatus) && specimen.getPositionDimensionOne()!=null && !"".equals(specimen.getPositionDimensionOne()) && !"null".equals(specimen.getPositionDimensionOne()))
 			{
 				str[3] = this.getFormattedValue(StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSelectedContainerName(),1,Integer.valueOf(specimen.getPositionDimensionOne())));
 			}
@@ -1165,7 +1165,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 				str[3] = this.getFormattedValue(specimen.getPositionDimensionOne());
 			}
 			str[4] = elementNamePrefix + "positionDimensionTwo";
-			if(!specimenId.equals(-1L) && specimen.getPositionDimensionTwo()!=null  && !"".equals(specimen.getPositionDimensionTwo()) && !"null".equals(specimen.getPositionDimensionTwo()))
+			if("Collected".equals(collectionStatus) && specimen.getPositionDimensionTwo()!=null  && !"".equals(specimen.getPositionDimensionTwo()) && !"null".equals(specimen.getPositionDimensionTwo()))
 			{
 				str[5] = this.getFormattedValue(StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSelectedContainerName(),2,Integer.valueOf(specimen.getPositionDimensionTwo())));
 			}

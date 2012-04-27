@@ -1356,7 +1356,6 @@
 								<html:hidden property="parentSpecimenGSID"/> 
 								<html:hidden property="onSubmit"/>
 								<html:hidden property="id"/>
-								<html:hidden property="positionInStorageContainer" />
 								<html:hidden property="parentPresent" />
 								<html:hidden property="specimenCollectionGroupId"/>
 								<html:hidden property="checkedButton"/>
@@ -2186,7 +2185,7 @@
 												</tr>
 													<%
 												}
-												else
+												else if(positionInStorageContainer!=null)
 												{
 													%>
 													<tr>
@@ -2239,6 +2238,45 @@
 													</tr>
 													<%
 												}
+												else
+												{%>
+												<tr>
+														<td colspan="6">
+
+					<logic:equal name="transferStatus" value="">
+												<!--div that is not getting popuulated -->
+												<table cellpadding="0" cellspacing="0" border="0" width="100%">
+						<tr>
+<td>						
+							<table border="0" width="30%">
+							<tr>
+							<td class="groupelements">
+															<html:text styleClass="black_ar"  size="15" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName" readonly= "true"/>
+														</td>
+							<td class="groupelements">
+															<html:text styleClass="black_ar"  size="2" styleId="pos1" property="positionDimensionOne" readonly= "true" style="text-align:right"/>
+											</td>
+							<td class="groupelements">
+															<html:text styleClass="black_ar"  size="2" styleId="pos2" property="positionDimensionTwo" readonly= "true" style="text-align:right"/>
+													</td>
+							<td class="groupelements">
+															<html:button styleClass="black_ar" styleId="containerMap" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
+																<bean:message key="buttons.map"/>
+															</html:button>
+													</td>
+													</tr>
+													</table>
+													</td>
+													</tr>
+											</table>
+							
+										</logic:equal>
+										
+
+														</td>
+														
+													</tr>
+											<%	}
 										}%>
 
 											</logic:notEqual>

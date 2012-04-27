@@ -909,11 +909,15 @@ public class NewSpecimenAction extends SecureAction
 						}
 //					}
 				}
-				if(specimenForm.getPositionInStorageContainer()!=null)
+				if((specimenForm.getPositionInStorageContainer()!=null && ("Collected".equals(specimenForm.getCollectionStatus())
+						|| "Overdue".equals(specimenForm.getCollectionStatus()))))
 				{
-					specimenForm.setPositionInStorageContainer(specimenForm.getSelectedContainerName() + " : "
-							 + " Pos(" + specimenForm.getPositionDimensionOne() + ","
-							+ specimenForm.getPositionDimensionTwo() + ")");
+					if(specimenForm.getPositionInStorageContainer()==null || "".equals(specimenForm.getPositionInStorageContainer()))
+					{
+						specimenForm.setPositionInStorageContainer(specimenForm.getSelectedContainerName() + " : "
+								+ " Pos(" + specimenForm.getPositionDimensionOne() + ","
+								+ specimenForm.getPositionDimensionTwo() + ")");
+					}
 				}
 				request.setAttribute("positionInStorageContainer", specimenForm.getPositionInStorageContainer());
 			}

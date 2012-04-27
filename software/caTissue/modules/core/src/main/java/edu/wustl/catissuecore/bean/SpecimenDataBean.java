@@ -129,6 +129,8 @@ public class SpecimenDataBean implements GenericSpecimen
 
 	/** The container id. */
 	private String processingSPP;
+	
+	private String collectionStatus;
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#isGenerateLabel()
@@ -856,6 +858,21 @@ public class SpecimenDataBean implements GenericSpecimen
 	public void setProcessingSPPForSpecimen(String processingSPP) {
 		this.processingSPP=processingSPP;
 
+	}
+
+
+	@Override
+	public String getCollectionStatus()
+	{
+		// TODO Auto-generated method stub
+		return collectionStatus;
+	}
+
+
+	@Override
+	public void setCollectionStatus(String collectionStatus)
+	{
+		this.collectionStatus=collectionStatus;
 	}
 
 	/* override methods finish */

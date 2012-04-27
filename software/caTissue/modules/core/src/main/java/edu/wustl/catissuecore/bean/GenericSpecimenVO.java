@@ -103,6 +103,8 @@ public final class GenericSpecimenVO implements GenericSpecimen
 
 	/** The generate label. */
 	private boolean generateLabel = false;
+	
+	private String collectionStatus;
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#isGenerateLabel()
@@ -606,6 +608,22 @@ public final class GenericSpecimenVO implements GenericSpecimen
 	public void setProcessingSPPForSpecimen(String processing) {
 		// TODO Auto-generated method stub
 
+	}
+
+
+	@Override
+	public String getCollectionStatus()
+	{
+		// TODO Auto-generated method stub
+		return collectionStatus;
+	}
+
+
+	@Override
+	public void setCollectionStatus(String collectionStatus)
+	{
+		this.collectionStatus=collectionStatus;
+		
 	}
 
 }
