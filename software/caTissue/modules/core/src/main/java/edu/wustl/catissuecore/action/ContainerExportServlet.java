@@ -58,6 +58,7 @@ public class ContainerExportServlet  extends HttpServlet{
 	{
 		String fileType = request.getParameter("filetype");
 		request.setCharacterEncoding("UTF-8");
+		
 		String xml = request.getParameter("grid_xml");
 		xml = URLDecoder.decode(xml, "UTF-8");
 		String fileName =  request.getParameter("filename");
@@ -67,6 +68,7 @@ public class ContainerExportServlet  extends HttpServlet{
 			response.setHeader("Content-Disposition", "attachment; filename=\"" +fileName + ".pdf\";");
 			(new PDFWriter()).generate(xml, response);
 		}else if(fileType.equals("csv")){
+			fileName =  "\""+fileName+".csv\"";
 			CSVWriter writer = new CSVWriter();
 			writer.generate(xml,fileName, response);
 		} else if(fileType.equals("excel")){
