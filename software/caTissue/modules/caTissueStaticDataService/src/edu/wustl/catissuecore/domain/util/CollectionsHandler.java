@@ -66,9 +66,14 @@ public class CollectionsHandler {
 
     public static boolean isJavaType(Class c) {
         if (c.isPrimitive()) return true;
-        if (c == null || c.getPackage() == null) return true;
         if (c.getPackage().getName().equals("java.lang")) return true;
         if (c.getPackage().getName().equals("java.util")) return true;
+        return false;
+    }
+
+    public static boolean toSkip(Class c) {
+        if (c == null || c.getPackage() == null) return true;
+        if (isJavaType(c)) return true;
         return false;
     }
 
@@ -96,7 +101,7 @@ public class CollectionsHandler {
                 log.debug(">>> COLLECTION RECEIVED: " + f.getName());
                 handleCollection(c, objectCache);
             } else {
-                if (!isJavaType(f.getType())) {
+                if (!toSkip(f.getType())) {
                     log.debug(">>> NOW PROCESSING: " + f.getName() + " OF TYPE " + f.getType());
                     // Handle the other fields that may have their own Collections fields
                     handleObject(doInvokeGetter(f, o, false), objectCache);
