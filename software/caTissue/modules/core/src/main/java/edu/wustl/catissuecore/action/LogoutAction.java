@@ -69,11 +69,13 @@ public class LogoutAction extends BaseAction
 
         session.invalidate();
         // Redirect to SSO logout page
-
         String ssoRedirectURL = null;
         if (!Validator.isEmpty(XMLPropertyHandler.getValue("sso.url")))
         {
-        	ssoRedirectURL = XMLPropertyHandler.getValue("sso.logout.url");
+        	String requestURL= request.getRequestURL().toString();
+        	final int index = requestURL.indexOf("CasLogout");
+        	String as = "?service="+ URLEncoder.encode(requestURL.substring(0, index)) + "CasLogin.do";
+        	ssoRedirectURL = XMLPropertyHandler.getValue("sso.logout.url")+as;
         }
         ActionForward forwardTo = null;
         if (ssoRedirectURL == null)

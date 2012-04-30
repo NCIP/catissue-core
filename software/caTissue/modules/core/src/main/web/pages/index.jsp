@@ -1,18 +1,18 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%
-boolean isCasAvlbl =Variables.isCasAvl;
+	String parentUrl = null;
+
+boolean isCasAvlbl = Variables.isCasAvl;
 if(isCasAvlbl)
 {
-%>
-	<jsp:forward page="/Home.do" />
-
-<%
+	parentUrl = "top.window.location.href='CasLogin.do'";
 }
 else
 {
-%>
-	<jsp:forward page="/RedirectHome.do" />
-<%
+	parentUrl = "top.window.location.href='RedirectHome.do'";
 }
+
+	
 %>
 
+<body onload="<%=parentUrl%>" />

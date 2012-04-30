@@ -52,6 +52,7 @@ import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
@@ -154,7 +155,11 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		final int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler
 				.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
 		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
-		boolean isCasAvl = Boolean.valueOf(XMLPropertyHandler.getValue("cas.available"));
+		String ssoRedirectURL = XMLPropertyHandler.getValue("sso.url");
+		if(!Validator.isEmpty(ssoRedirectURL))
+		{
+			Variables.isCasAvl = true;
+		}
 	}
 
 	/**
