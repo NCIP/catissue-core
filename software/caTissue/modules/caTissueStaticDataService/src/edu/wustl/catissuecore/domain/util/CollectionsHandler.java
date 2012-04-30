@@ -66,6 +66,7 @@ public class CollectionsHandler {
 
     public static boolean isJavaType(Class c) {
         if (c.isPrimitive()) return true;
+        if (c == null || c.getPackage() == null) return true;
         if (c.getPackage().getName().equals("java.lang")) return true;
         if (c.getPackage().getName().equals("java.util")) return true;
         return false;
