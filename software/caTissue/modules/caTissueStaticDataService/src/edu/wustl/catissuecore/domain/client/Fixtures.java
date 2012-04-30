@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author Ion C. Olaru
@@ -153,6 +154,7 @@ public class Fixtures {
         s.setIdentifier(3941);
 
         OrderDetails od = createOrderDetails();
+        od.setName(UUID.randomUUID().toString()+" Fixture Test.");
         od.setOrderItemCollection(new OrderDetailsOrderItemCollection());
 
         DerivedSpecimenOrderItem[] items = new DerivedSpecimenOrderItem[1];
@@ -181,6 +183,7 @@ public class Fixtures {
     public static OrderDetails createOrderDetailsWithSOI() {
 
         OrderDetails od = createOrderDetails();
+        od.setName(UUID.randomUUID().toString()+" Fixture Test.");
         od.setOrderItemCollection(new OrderDetailsOrderItemCollection());
         OrderItem[] items = new OrderItem[3];
         od.getOrderItemCollection().setOrderItem(items);
