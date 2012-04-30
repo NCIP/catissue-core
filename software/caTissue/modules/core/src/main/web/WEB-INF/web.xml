@@ -94,10 +94,6 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 
 	<filter-mapping>
 		<filter-name>NoActionFilter</filter-name>
-		<url-pattern>/Sync.do</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>NoActionFilter</filter-name>
 		<url-pattern>/SignUp.do</url-pattern>
 	</filter-mapping>
 	<filter-mapping>

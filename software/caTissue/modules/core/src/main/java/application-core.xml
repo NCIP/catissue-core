@@ -159,10 +159,9 @@
 
 	<bean id="gridGroupSyncTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
 		<property name="jobDetail" ref="gridGroupSyncJobDetail" />
-		<property name="repeatInterval" value="86400000" /> <!-- every 24hrs 24*60*60000-> 60000 = 1 min -->
+		<property name="repeatInterval" value="${gridGroupSync.repeatInterval}" />
 		<property name="repeatCount" value="-1" />
-		<property name="misfireInstructionName"
-			value="MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT" />
+		<property name="misfireInstructionName" value="MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT" />
 	</bean>
 
 	<bean id="gridGroupSyncJobDetail"

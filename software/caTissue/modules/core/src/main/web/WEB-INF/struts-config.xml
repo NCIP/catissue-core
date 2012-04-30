@@ -133,8 +133,6 @@ PUBLIC
 
 	<action-mappings>
 		
-		<action path="/Sync" type="edu.wustl.catissuecore.gridgrouper.GridGroupSyncAction" />
-		
 		<action path="/TitliInitialiseSearch"
 			type="edu.wustl.catissuecore.action.TitliInitialiseSearchAction"
 			name="titliSearchForm"
@@ -678,7 +676,8 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.searchCategory"/>
-		</action>-->
+		</action>
+-->
 
 		<!--<action path="/ValidateQuery"
 			type="edu.wustl.catissuecore.action.querysuite.ValidateQueryAction"
@@ -694,7 +693,8 @@ PUBLIC
             validate="false"
             scope="request">
             <forward name="success" path="/pages/content/search/querysuite/SavedQueryConditionPage.jsp"/>
-        </action>-->
+        </action>
+-->
 
        	<!-- <action path="/SaveQueryAction"
 			type="edu.wustl.catissuecore.action.querysuite.SaveQueryAction"
@@ -712,7 +712,8 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.queryViewPageDef"/>
 			<forward name="failure" path=".catissuecore.errorPageDef"/>
-		</action>-->
+		</action>
+-->
 
 		<!-- <action path="/ExecuteQueryAction"
 			type="edu.wustl.catissuecore.action.querysuite.ExecuteQueryAction"
@@ -722,7 +723,8 @@ PUBLIC
 			<forward name="success" path=".catissuecore.viewSearchResults"/>
 			<forward name="failure" path="/RetrieveQueryAction.do"/>
 			<forward name="InvalidValues" path="/FetchQuery.do"/>
-		</action>-->
+		</action>
+-->
 
 		<!-- <action path="/DeleteQuery"
 			type="edu.wustl.catissuecore.action.querysuite.DeleteQueryAction"
@@ -730,7 +732,8 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/RetrieveQueryAction.do"/>
 			<forward name="failure" path="/RetrieveQueryAction.do"/>
-		</action>-->
+		</action>
+-->
 
 		<!-- <action path="/FetchQuery"
 			type="edu.wustl.catissuecore.action.querysuite.FetchQueryAction"
@@ -740,7 +743,8 @@ PUBLIC
 			<forward name="success" path=".catissuecore.collectQueryParameter"/>
 			<forward name="failure" path="/RetrieveQueryAction.do"/>
 			<forward name="executeQuery" path="/ExecuteQueryAction.do"/>
-		</action>-->
+		</action>
+-->
 
 		<!-- <action path="/loadDefineSearchRules"
 			type="edu.wustl.catissuecore.action.querysuite.LoadDefineSearchRulesAction"
@@ -748,7 +752,8 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.searchCategory"/>
-		</action>-->
+		</action>
+-->
 
 
 		<!--<action path="/ViewSearchResultsJSPAction"
@@ -783,7 +788,8 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>
-		</action>-->
+		</action>
+-->
 
 		<!--<action path="/ShowGrid"
 			type="edu.wustl.catissuecore.action.querysuite.ShowGridAction"
@@ -807,7 +813,8 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.defineQueryResultsView"/>
-		</action>-->
+		</action>
+-->
 
 		<!-- <action path="/ConfigureGridView"
 			type="edu.wustl.catissuecore.action.querysuite.ConfigureGridViewAction"
@@ -815,7 +822,8 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef"/>
-		</action>-->
+		</action>
+-->
 
 		<action path="/ViewCart"
 			type="edu.wustl.catissuecore.action.ViewCartAction"
@@ -911,7 +919,8 @@ PUBLIC
 			name="viewSpecimenSummaryForm"
 			validate="false"
 			scope="request">
-			<!-- bug 11829 - previously it show AnticipatorySpecimens.jsp page without menubar-->
+			<!-- bug 11829 - previously it show AnticipatorySpecimens.jsp page without menubar
+-->
 			<forward name="success" path=".catissuecore.viewSpecimenSummary" />
 			<forward name="multipleSpWithMenu" path=".catissuecore.viewSpecimenSummary" />
 			<!-- bug 12656 -->
@@ -963,14 +972,17 @@ PUBLIC
 		 <action path="/PathFinderAction"
 			type="edu.wustl.catissuecore.action.querysuite.PathFinderAction"
 			parameter="method">
-		</action>-->
+		</action>
+-->
 
 		<!-- <action path="/getDagViewDataAction"
 			type="edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction"
 			parameter="method">
-		</action>-->
+		</action>
+-->
 
-		<!-- Action code : Query Module changes for pagination starts : 20/07/2007-->
+		<!-- Action code : Query Module changes for pagination starts : 20/07/2007
+-->
 
 		<!--<action path="/QueryTreeView"
 			type="edu.wustl.catissuecore.action.querysuite.QueryTreeViewAction">
@@ -981,7 +993,8 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.querysuite.QueryGridViewAction">
 			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 		</action>  -->
-		<!-- Action code : Query Module changes for pagination ends : 20/07/2007-->
+		<!-- Action code : Query Module changes for pagination ends : 20/07/2007
+-->
 
 		<!-- Action code : Query Module Ends : 06/11/06 -->
 		<!-- caTIES start-->
@@ -1446,7 +1459,8 @@ PUBLIC
 			name="institutionForm"
 			validate="false"
 			scope="request">
-			<!-- <forward name="pageOfInstitution" path="/pages/content/manageAdministrativeData/Institution.jsp" />-->
+			<!-- <forward name="pageOfInstitution" path="/pages/content/manageAdministrativeData/Institution.jsp" />
+-->
 			<forward name="pageOfInstitution" path=".catissuecore.institutionDef" />
 			<forward name="pageOfPopUpInstitution" path="/pages/content/manageAdministrativeData/PopUpInstitution.jsp" />
 			<forward name="failure" path=".catissuecore.institutionDef" />
@@ -1669,7 +1683,8 @@ PUBLIC
 			name="departmentForm"
 			validate="false"
 			scope="request">
-          <!-- <forward name="pageOfDepartment" path="/pages/content/manageAdministrativeData/Department.jsp" />-->
+          <!-- <forward name="pageOfDepartment" path="/pages/content/manageAdministrativeData/Department.jsp" />
+-->
 			<forward name="pageOfDepartment" path=".catissuecore.departmentDef" />
 			<forward name="pageOfPopUpDepartment" path="/pages/content/manageAdministrativeData/PopUpDepartment.jsp" />
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchDepartmentDef" />
@@ -1729,7 +1744,8 @@ PUBLIC
 			name="cancerResearchGroupForm"
 			validate="false"
 			scope="request">
-			 <!-- <forward name="pageOfCancerResearchGroup" path="/pages/content/manageAdministrativeData/CancerResearchGroup.jsp" />-->
+			 <!-- <forward name="pageOfCancerResearchGroup" path="/pages/content/manageAdministrativeData/CancerResearchGroup.jsp" />
+-->
 			<forward name="pageOfCancerResearchGroup" path=".catissuecore.cancerResearchGroupDef" />
 			<forward name="pageOfPopUpCancerResearchGroup" path="/pages/content/manageAdministrativeData/PopUpCRG.jsp" />
 			<forward name="failure" path=".catissuecore.cancerResearchGroupDef" />
@@ -1799,7 +1815,8 @@ PUBLIC
 			<forward name="pageOfCollectionProtocol" path="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
 			<forward name="pageOfCollectionProtocolQuery" path=".catissuecore.collectionProtocolEditDef" />
 			<forward name="failure" path=".catissuecore.collectionProtocolDef" />
-			<!-- forward name="access_denied" path="/ManageAdministrativeData.do" />-->
+			<!-- forward name="access_denied" path="/ManageAdministrativeData.do" />
+-->
 			<forward name="access_denied" path="/ManageBioSpecimenAccessDeniedCPBased.do" />
 		</action>
 
@@ -2703,7 +2720,8 @@ PUBLIC
 			<forward name="addSpecimenToCart" path="/AddSpecimenToCart.do?pageOf=pageOfNewSpecimen" />
 			<forward name="CPQueryPrintSpecimenEdit" path="/CPQueryPrintSpecimenEdit.do"/>
 			<forward name="deriveMultiple" path="/MultipleSpecimenFlexInitAction.do?operation=add&amp;pageOf=pageOfMultipleSpWithMenu&amp;parentType=Derived_Specimen"/>
-		    <!-- added separate mappings for "Add to my list" from specimen edit and cp based view-->
+		    <!-- added separate mappings for "Add to my list" from specimen edit and cp based view
+-->
 		    <forward name="addSpecimenToCartForwardtoAliquot" path="/AddSpecimenToCart.do?pageOf=pageOfCreateAliquotSpecimenEdit" />
 		    <forward name="addSpecimenToCartForwardtoDerive" path="/AddSpecimenToCart.do?pageOf=createNewDerivative" />
 		    <forward name="addSpecimenToCartForwardtoCpChild" path="/AddSpecimenToCart.do?pageOf=cpChildSubmit" />
@@ -3217,7 +3235,8 @@ PUBLIC
 			<forward name="arraySuccess" path="/ArrayDistributionReport.do" />
 			<forward name="failure" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 
-<!--			<forward name="success" path="/DistributionSearch.do?pageOf=pageOfDistribution" />-->
+<!--			<forward name="success" path="/DistributionSearch.do?pageOf=pageOfDistribution" />
+-->
 		</action>
 
 		<action path="/DistributionEdit"
@@ -3507,7 +3526,8 @@ PUBLIC
 		<action path="/Data"
 			type="edu.wustl.catissuecore.action.TreeDataAction">
 		</action>
-<!-- StorageContainerTreeAction added for DHTMLX tree grid view of storage container-->
+<!-- StorageContainerTreeAction added for DHTMLX tree grid view of storage container
+-->
 		<action path="/StorageContainerTree"
 			type="edu.wustl.catissuecore.action.StorageContainerTreeAction">
 			<forward name="success" path=".catissuecore.queryResultsTreeViewNodeDef" />
@@ -3792,7 +3812,8 @@ PUBLIC
 			<forward name="pageOfAssignPrivileges" path=".catissuecore.assignPrivilegesDef" />
 			<forward name="failure" path="/AssignPrivilegesPage.do?pageOf=pageOfAssignPrivilegesPage" />
 			<forward name="access_denied" path="/Home.do" />
-		</action>-->
+		</action>
+-->
 		<!-- Assign Privileges Actions Ends -->
 
 		<!-- Advance Query Interface Action Begins -->
@@ -3810,7 +3831,8 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.defaultSearchDef" />
-		</action>-->
+		</action>
+-->
 
 		<!--<action path="/ParticipantAdvanceSearch"
 			type="edu.wustl.catissuecore.action.ParticipantSearchAction"
@@ -3846,7 +3868,8 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfCollectionProtocolAdvanceSearch" path=".catissuecore.collectionProtocolSearchDef" />
 			<forward name="access_denied" path="/Home.do" />
-		</action>-->
+		</action>
+-->
 
 		<!--<action path="/AdvanceQueryView"
 			type="edu.wustl.catissuecore.action.AdvanceQueryView"
@@ -3919,7 +3942,8 @@ PUBLIC
 			<forward name="success" path="/ShowFramedPage.do?pageOf=pageOfQueryResults" />
 			<forward name="failure" path="/AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface" />
 			<forward name="noResults" path="/AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface&amp;operation=redefine" />
-		</action>-->
+		</action>
+-->
 
 		<action path="/ConfigureAdvanceSearchView"
 			type="edu.wustl.catissuecore.action.ConfigureResultViewAction"
@@ -3945,7 +3969,8 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/DataView.do" />
 			<forward name="failure" path=".catissuecore.commonErrorDetailsDef" />
-		</action>-->
+		</action>
+-->
 
 		<!-- Advance Query Interface Actions Ends -->
 
@@ -4420,7 +4445,8 @@ PUBLIC
 		<forward name="failure" path=".catissuecore.initMultipleSpecimenDef" />
 	</action>
 
-	<!-- Mandar Deshmukh : 07Nov06 entry for MultipleSpecimen Storage Location-->
+	<!-- Mandar Deshmukh : 07Nov06 entry for MultipleSpecimen Storage Location
+-->
 	<action path="/MultipleSpecimenStorageLocation"
 		type="edu.wustl.catissuecore.action.MultipleSpecimenStorageLocationAction"
 		name="multipleSpecimenStorageLocationForm"
@@ -4752,7 +4778,8 @@ PUBLIC
 		scope="request">
 		<forward name="success" path="/AnticipatorySpecimenView.do" />
 	<!--  commented by pratha
-	<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />-->
+	<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
+-->
 		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 		<!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->
 <!--		<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			-->
@@ -4997,7 +5024,8 @@ PUBLIC
 		<forward name="failure" path=".catissuecore.initMultipleSpecimenCPQueryDef" />
 	</action>
 
-	<!-- Mandar Deshmukh : 07Nov06 entry for MultipleSpecimen Storage Location-->
+	<!-- Mandar Deshmukh : 07Nov06 entry for MultipleSpecimen Storage Location
+-->
 	<action path="/CPQueryMultipleSpecimenStorageLocation"
 		type="edu.wustl.catissuecore.action.MultipleSpecimenStorageLocationAction"
 		name="multipleSpecimenStorageLocationForm"
@@ -5209,7 +5237,8 @@ PUBLIC
 					<forward name="success" path="/pages/SpecimenSummary.jsp" />
 					<forward name="bulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do" />
 					<forward name="pageOfbulkUpdateSpecimens"  path="/bulkUpdateSpecimens.do?pageOf=multipleSpWithMenu" />
-					<!-- bug 11829 - previously it show AnticipatorySpecimens.jsp page without menubar-->
+					<!-- bug 11829 - previously it show AnticipatorySpecimens.jsp page without menubar
+-->
 					<!-- Bug 12140 S -->
 					<!--<forward name="anticipatory" path=".catissuecore.viewSpecimenSummary" />-->
 					<forward name="anticipatory" path="/pages/AnticipatorySpecimens.jsp" />
