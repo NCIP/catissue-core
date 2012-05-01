@@ -21,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.data.sdkquery42.processor.CQLAttributeDefaultPredicateUtil;
 import org.cagrid.data.sdkquery42.processor.SDK42QueryProcessor;
 import org.globus.wsrf.security.SecurityManager;
+import org.springframework.util.CollectionUtils;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -138,8 +139,10 @@ public class CQLQueryProcessor extends
 			LOG.error(message, ex);
 		}
 
-        for (Object o : rawResults) {
-            CollectionsHandler.handleObject(o, objectCache);
+        if (!CollectionUtils.isEmpty(rawResults)) {
+            for (Object o : rawResults) {
+                CollectionsHandler.handleObject(o, objectCache);
+            }
         }
 
 		CQLQueryResults cqlResults;
