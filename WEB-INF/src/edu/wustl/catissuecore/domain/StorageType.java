@@ -198,8 +198,11 @@ public class StorageType extends ContainerType implements ISpecimenTypeDomain
 			this.id = Long.valueOf(storageTypeForm.getId());
 			this.name = storageTypeForm.getType().trim();
 			setTemp(storageTypeForm);
+			System.out.println("hello");
 			this.oneDimensionLabel = storageTypeForm.getOneDimensionLabel();
 			this.twoDimensionLabel = storageTypeForm.getTwoDimensionLabel();
+			this.setOneDimensionLabellingScheme(storageTypeForm.getOneDimensionLabellingScheme());
+			this.setTwoDimensionLabellingScheme(storageTypeForm.getTwoDimensionLabellingScheme());
 			if (SearchUtil.isNullobject(this.capacity))
 			{
 				this.capacity = new Capacity();

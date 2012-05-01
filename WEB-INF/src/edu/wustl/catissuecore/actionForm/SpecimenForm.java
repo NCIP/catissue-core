@@ -117,16 +117,6 @@ public class SpecimenForm extends AbstractActionForm
 	protected String positionDimensionTwo;
 	
 	/**
-	 * Reference to dimensional position one string of the specimen in Storage Container.
-	 */
-	protected String positionDimensionOneString;
-
-	/**
-	 * Reference to dimensional position two string of the specimen in Storage Container.
-	 */
-	protected String positionDimensionTwoString;
-
-	/**
 	 * Barcode assigned to the specimen.
 	 */
 	protected String barcode;
@@ -343,34 +333,6 @@ public class SpecimenForm extends AbstractActionForm
 	{
 		this.positionDimensionTwo = positionDimensionTwo;
 	}
-
-	
-	public String getPositionDimensionOneString()
-	{
-		return positionDimensionOneString;
-	}
-
-
-	
-	public void setPositionDimensionOneString(String positionDimensionOneString)
-	{
-		this.positionDimensionOneString = positionDimensionOneString;
-	}
-
-
-	
-	public String getPositionDimensionTwoString()
-	{
-		return positionDimensionTwoString;
-	}
-
-
-	
-	public void setPositionDimensionTwoString(String positionDimensionTwoString)
-	{
-		this.positionDimensionTwoString = positionDimensionTwoString;
-	}
-
 
 	/**
 	 * Returns the barcode of this specimen.
@@ -622,18 +584,13 @@ public class SpecimenForm extends AbstractActionForm
 			logger.info("-----------Container while getting from domain--:" + container);
 			this.storageContainer = String.valueOf(container.getId());
 			this.selectedContainerName = container.getName();
-			this.positionDimensionOne = String.valueOf(specimen.getSpecimenPosition()
+			this.positionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,1,specimen.getSpecimenPosition()
 					.getPositionDimensionOne());
-			this.positionDimensionTwo = String.valueOf(specimen.getSpecimenPosition()
+			this.positionDimensionTwo = StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,2,specimen.getSpecimenPosition()
 					.getPositionDimensionTwo());
-			this.positionDimensionOneString = specimen.getSpecimenPosition()
-					.getPositionDimensionOneString();
-			this.positionDimensionTwoString = specimen.getSpecimenPosition()
-					.getPositionDimensionTwoString();
-
-			this.positionInStorageContainer = container.getStorageType().getName() + " : "
-					+ container.getId() + " Pos(" + this.positionDimensionOneString + ","
-					+ this.positionDimensionTwoString + ")";
+			this.positionInStorageContainer =container.getName()+ " : "// container.getStorageType().getName() + " : "
+					+ container.getId() + " Pos(" + this.positionDimensionOne + ","
+					+ this.positionDimensionTwo + ")";
 			this.setStContSelection(2);
 		}
 		//Bug 12374 and 12662

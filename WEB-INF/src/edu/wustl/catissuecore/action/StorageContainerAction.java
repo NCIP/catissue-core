@@ -255,12 +255,7 @@ public class StorageContainerAction extends SecureAction
 			request.setAttribute("parentContainerTypeList", parentContainerTypeList);
 			request.setAttribute("parentContainerSelected", storageContainerForm
 					.getParentContainerSelected());
-			final List<NameValueBean> labellingSchemeList =new ArrayList<NameValueBean>();
-			NameValueBean nvb1=new NameValueBean(Constants.LABELLING_SCHEME_NUMBERS, Constants.LABELLING_SCHEME_NUMBERS);
-			NameValueBean nvb=new NameValueBean(Constants.LABELLING_SCHEME_ALPHABETS, Constants.LABELLING_SCHEME_ALPHABETS); 
-			labellingSchemeList.add(nvb);
-			labellingSchemeList.add(nvb1);
-			request.setAttribute("labellingSchemeList", labellingSchemeList);
+			request.setAttribute("labellingSchemeList", StorageContainerUtil.getLabellingSchemeOptions());
 			session.removeAttribute(Constants.STORAGE_CONTAINER_SESSION_BEAN);
 			session.removeAttribute("isPageFromStorageType");
 			AppUtility.setDefaultPrinterTypeLocation(storageContainerForm);
@@ -500,7 +495,9 @@ public class StorageContainerAction extends SecureAction
 				storageContainerForm.setTwoDimensionLabel(CommonUtilities.toString(type
 						.getTwoDimensionLabel()));
 				storageContainerForm.setTypeName(type.getName());
-
+				storageContainerForm.setOneDimensionLabellingScheme(type.getOneDimensionLabellingScheme());
+				storageContainerForm.setTwoDimensionLabellingScheme(type.getTwoDimensionLabellingScheme());
+				
 				if (type.getHoldsSpecimenClassCollection().size() > 0)
 				{
 					storageContainerForm.setSpecimenOrArrayType("Specimen");

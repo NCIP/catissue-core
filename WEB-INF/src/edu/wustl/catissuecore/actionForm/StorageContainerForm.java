@@ -182,7 +182,6 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	{
 		this.twoDimensionLabellingScheme = twoDimensionLabellingScheme;
 	}
-	
 	/**
 	 * Gets the holds tissue sp type.
 	 *

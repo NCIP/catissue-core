@@ -3,11 +3,21 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject,edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
+<%@ page language="java" isELIgnored="false"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<head>
 <script language="JavaScript" type="text/javascript"
 	src="jss/caTissueSuite.js"></script>
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
+<script language="JavaScript" type="text/javascript"src="newDhtmlx/dhtmlxcommon.js"></script>
+	<script  language="JavaScript" type="text/javascript"src="newDhtmlx/dhtmlxgrid.js"></script> 
+	<script language="JavaScript" type="text/javascript" src="newDhtmlx/dhtmlxgridcell.js"></script> 
+	<link rel="STYLESHEET" type="text/css" href="newDhtmlx/dhtmlxgrid.css">
+	<script language="JavaScript" type="text/javascript" src='newDhtmlx/dhtmlxgrid_export.js'></script>
+</head>
+
 <%
 	String siteName = (String) request.getAttribute("siteName");   
 %>
@@ -17,6 +27,7 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 String [][] childContainerName = (String [][])request.getAttribute(Constants.CHILD_CONTAINER_NAME);
 String oneDimLabellingScheme = (String)request.getAttribute("oneDimLabellingScheme");
 String twoDimLabellingScheme = (String)request.getAttribute("twoDimLabellingScheme");
+String storageContainerIdentifier = (String) request.getAttribute("storageContainerIdentifier");
 %>
 function setParentWindowValue(elementName,elementValue)
 {
@@ -52,22 +63,32 @@ function setTextBoxValue(elementId,elementValue)
 
 function closeFramedWindow()
 {
-	var eventFlag = parent.opener.document.getElementById('eventOnSelectedContainerNameObj');
-	if(eventFlag!=null||eventFlag!=undefined)
-	{
-		var parentContainerObj = parent.opener.document.getElementById('selectedContainerName');
-		if(parentContainerObj!=null)
-		{
-			parentContainerObj.onchange();
-		}
-	
-	}
 	top.window.close();
 }
+
 function refresh_tree(nodeId)
 {	
-	window.parent.<%=Constants.APPLET_VIEW_FRAME%>.location="<%=Constants.STORAGE_CONTAINER_TREE_ACTION%>?<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>="+nodeId;
+	window.parent.frames["SCTreeView"].location="<%=Constants.STORAGE_CONTAINER_TREE_ACTION%>?<%=Constants.PAGE_OF%>=<%=pageOf%>&<%=Constants.RELOAD%>=true&<%=Constants.TREE_NODE_ID%>="+nodeId;
 }
+
+function containerChanged()
+{
+	window.parent.containerChangedTrue();	
+}
+function containerInfoTab()
+{	 
+	  var isContainerChanged=window.parent.isChanged();
+	  if(isContainerChanged == 'no')
+		{
+		   
+			window.parent.frames['StorageContainerView'].location="StorageContainer.do?operation=edit&pageOf=pageOfStorageContainer&containerIdentifier=${requestScope.storageContainerIdentifier}";
+		}
+     else
+		{
+			
+			window.parent.frames['StorageContainerView'].location="SearchObject.do?pageOf=pageOfTreeSC&operation=search&id=${requestScope.storageContainerIdentifier}";
+		}
+}	
 
 
 </script>
@@ -161,7 +182,7 @@ function refresh_tree(nodeId)
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
 </br>
 <!-- target of anchor to skip menus -->
-<table summary="" cellpadding="0" cellspacing="0" border="0"  width="100%" >
+<table summary="" id="containerGridTable" cellpadding="0" cellspacing="0" border="0"  width="100%" >
 <%
 	//System.out.println("CP No. : " +collectionProtocolList.size());
 	//System.out.println("SC No. : " +specimenClassList.size());
@@ -395,251 +416,90 @@ function refresh_tree(nodeId)
 	</tr>
 	<tr>
 		<td   width="5" class="black_ar_t" align="center"><b><%=verTempOne%><b></td>
-		<td class="black_ar_t">
-		<table summary="" cellpadding="0" cellspacing="1" border="0" >
-				 
-				<tr>
-					<td colspan="2">
-					<table  border="0" cellspacing="1" cellpadding="3">
-					<tr><td>&nbsp;</td>	
-						<td >&nbsp;</td>	
-						
-					<%
-						String pageOfSpecimen=(String)request.getAttribute(Constants.CONTENT_OF_CONTAINNER);
-						for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getTwoDimensionCapacity().intValue();i++){
-                        if(storageContainerGridObject.getTwoDimensionCapacity().intValue() == 1)
-                        {
-                            %>
-    					<td align="center"  class="subtd">
-							<%
-							if(twoDimLabellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_ALPHABETS))
-							{%>
-							<%=edu.wustl.catissuecore.util.global.AppUtility.numToExcelColumnAlphabet(i)%>
-							<%}
-							else
-							{%>
-								<%=i%>
-							<%}
-							%>
-							</td>
-    						<%
-                        }
-                        else
-                        {
-					%>
-								<td align="center"  class="subtd">
-						<%
-						if(twoDimLabellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_ALPHABETS))
-							{%>
-							<%=edu.wustl.catissuecore.util.global.AppUtility.numToExcelColumnAlphabet(i)%>
-							<%}
-							else
-							{%>
-								<%=i%>
-							<%}
-							%>
-						
-						</td>
-					<%}}%>				
-						</tr>	
-					<% for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=storageContainerGridObject.getOneDimensionCapacity().intValue()+1;i++){%>
-						<tr>
-						<%
-	                        
-							if(i == 1)
-							{
-						%>
-						  
-						   <td   rowspan="<%=rowSpanValue%>" width="5"class="black_ar_t"></td>
-						<%
-							}
-                        	if(i!=storageContainerGridObject.getOneDimensionCapacity().intValue()+1) 
-                            {
-						%>
-							<td align="center" class="subtd">
-							<%
-							if(oneDimLabellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_ALPHABETS))
-							{%>
-							<%=edu.wustl.catissuecore.util.global.AppUtility.numToExcelColumnAlphabet(i)%>
-							<%}
-							else
-							{%>
-								<%=i%>
-							<%}
-							%>
-							</td>
-					   <% 
-                            }
-					   
-					for (int j = Constants.STORAGE_CONTAINER_FIRST_COLUMN;j<=storageContainerGridObject.getTwoDimensionCapacity().intValue()+1;j++)
-                    {
-					 // Default cell boundary
-                    
-                    if(i == storageContainerGridObject.getOneDimensionCapacity().intValue()+1)
-                    {
-                        if(j ==1)
-                        {
-                        %>   
-                            <td align="center" class="subtd">
-							<%
-							if(oneDimLabellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_ALPHABETS))
-							{%>
-							<%=edu.wustl.catissuecore.util.global.AppUtility.numToExcelColumnAlphabet(i)%>
-							<%}
-							else
-							{%>
-								<%=i%>
-							<%}
-							%>
-							</td>
-
-       					<%
-                            
-                        }
-                        else
-                        {
-                         %>   
-                             <td  align="center" >&nbsp;</td>
-       					<%  
-                        }
-                    
-                        
-                    }
-                    else 
-                    {
-                        if(j ==storageContainerGridObject.getTwoDimensionCapacity().intValue()+1)
-                        {
-                            %>   
-                              <td  align="center" >&nbsp;</td>
-       						<% 
-                        }
-                        else
-                        {
-                       
-					
-						if (fullStatus[i][j] != 0)
-						{
-							String openStorageContainer = null;
-							if (pageOf.equals(Constants.PAGE_OF_SPECIMEN))
-							{
-								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerIds[i][j]
-                    			+ "&" + Constants.PAGE_OF + "=" + pageOf;
-							}
-							else
-							{
-								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerIds[i][j]
-                    			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType
-								+ "&" + Constants.PAGE_OF + "=" + pageOf;
-							}
-							if (fullStatus[i][j] == 1)
-							{
-								String containerName = childContainerType[i][j];
-								 int containerNameSize=childContainerType[i][j].length();
-								 if(containerNameSize >= 20)
-									 containerName = containerName.substring(11,20)+"...";
-								 else
-									 containerName =containerName.substring(11,containerNameSize);
-							%>
-							<td  class="tabletdformap" noWrap align="center"><a class="view"href="<%=openStorageContainer%>" onclick="javaScript:refresh_tree('<%=childContainerName[i][j]%>')" onmouseover="Tip(' <%=childContainerType[i][j]%>')"> <img src="images/uIEnhancementImages/used_container.gif" alt="Unused" width="32" height="32"  border="0"><br><%=containerName%><!-- : <%=childContainerIds[i][j]%> --></a></td>
-					   	  <%}
-							else{
-								String containerName =childContainerType[i][j];
-								 int containerNameSize=childContainerType[i][j].length();
-								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN))
-									{
-									 if(containerNameSize >= 20)
-										 containerName = containerName.substring(11,20)+"...";
-									 else
-										 containerName =containerName.substring(11,containerNameSize);
-									}
-									if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN_ARRAY))
-									{
-										if(containerNameSize >= 18)
-										 containerName = containerName.substring(8,18)+"...";
-									 else
-										 containerName =containerName.substring(8,containerNameSize);
-									}
-								
-							%>
-							<td  align="center" width="120" class="tabletdformap" noWrap="true"><%
-							
-								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN))
-								{%>
-								<a class="view" href="QuerySpecimenSearch.do?<%=Constants.PAGE_OF%>=pageOfNewSpecimenCPQuery&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>" onmouseover="Tip('<%=childContainerType[i][j]%>')"><img src="images/uIEnhancementImages/specimen.gif" alt="Unused" width="32" height="32"  border="0"><br><%=containerName%><!--: <%=childContainerIds[i][j]%> --></a>
-								<%}
-								if(pageOfSpecimen!=null && pageOfSpecimen.equals(Constants.ALIAS_SPECIMEN_ARRAY))
-								{%>
-								<a class="view" href="QuerySpecimenArraySearch.do?<%=Constants.PAGE_OF%>=pageOfSpecimenArray&<%=Constants.SYSTEM_IDENTIFIER%>=<%=childContainerIds[i][j]%>" onmouseover="Tip('<%=childContainerType[i][j]%>')"><img src="images/uIEnhancementImages/specimen_array.gif" alt="Unused" width="32" height="32"  border="0"><br><%=containerName%><!--: <%=childContainerIds[i][j]%> --></a>
-								</td>
-								<% }
-								}%>
-						<%}
-						else
-						{
-							String setParentWindowContainer = null;
-							if (pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)) 
-							{
-								setParentWindowContainer = "javascript:" + specimenCallBackFunction + "('" + specimenMapKey + "' , '" + storageContainerGridObject.getId() + "' , '" + storageContainerGridObject.getName() + 
-								"' , '" + i + "' , '" + j + "' );closeFramedWindow()" ;
-							} 							
-							else if (pageOf.equals(Constants.PAGE_OF_SPECIMEN))
-							{
-								setParentWindowContainer = "javascript:setTextBoxValue('" + containerId + "','"+  storageContainerGridObject.getId() + "');" + 
-															"javascript:setTextBoxValue('" + selectedContainerName + "','"+  storageContainerGridObject.getName() + "');" + 
-															"javascript:setTextBoxValue('" + pos1 + "','"+  AppUtility.getPostionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i) + "');" + 
-															"javascript:setTextBoxValue('" + pos2 + "','"+  AppUtility.getPostionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j) + "');" +
-															"javascript:setParentWindowValue('positionInStorageContainer','"+ storageContainerGridObject.getType() + " : " + storageContainerGridObject.getId() + " Pos (" + i + "," + j + ")');" ;								
-								
-								setParentWindowContainer = setParentWindowContainer + "javascript:closeFramedWindow()";
-							}	
-							else if (pageOf.equals(Constants.PAGE_OF_ALIQUOT))
-							{
-								setParentWindowContainer = "javascript:setTextBoxValue('" + containerStyleId + "','"
-								+ storageContainerGridObject.getId() + "');"+"javascript:setTextBoxValue('" + containerStyle + "','"
-								+ storageContainerGridObject.getName() + "');"
-								+"javascript:setTextBoxValue('" + xDimStyleId + "','"
-								+ AppUtility.getPostionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i) + "');"
-								+ "javascript:setTextBoxValue('" + yDimStyleId + "','"
-								+ AppUtility.getPostionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j) + "');closeFramedWindow()";
-							}							
-							else
-							{
-								setParentWindowContainer = "javascript:setParentWindowValue('positionInParentContainer','"
-															+ storageContainerGridObject.getType() + " : " 
-															+ storageContainerGridObject.getId()
-															+ " Pos (" + i + "," + j + ")');"
-															+ "javascript:setTextBoxValue('" + containerStyleId + "','"
-															+ storageContainerGridObject.getId() + "');"+"javascript:setTextBoxValue('" + xDimStyleId + "','"
-															+ i + "');"
-															+ "javascript:setTextBoxValue('" + yDimStyleId + "','"
-															+ j + "');"
-															+ "javascript:setParentWindowValue('startNumber','"
-															+ startNumber.intValue() + "');closeFramedWindow()";
-							}
-						%>
-						<td align="center" class="tabletdformap" width="150" noWrap="true" onmouseover="Tip('Unused')">
-							<%if (enablePage){%>
-						 	<a href="<%=setParentWindowContainer%>" onmouseover="Tip('Unused')">
-						 		<img src="images/uIEnhancementImages/empty_container.gif" alt="Unused" width="32" height="32" border="0">
-							</a>
-							<%}else{%>
-								<img src="images/uIEnhancementImages/empty_container.gif" alt="Unused" width="32" height="32" border="0" onmouseover="Tip('Unused')">
-							<%}%>
-						</td>
-					  <%}%>
-					<%}}}%>
-					  </tr>
-					<%}%>
-					
-					</table>
-					</td>
+		<td width="100%" height="100%" >
+				<div id="containerGrid"></div>
+			</td>
 				</tr>
+		<tr>
+			
+		</tr>		
 		</table>
 		</td>
 	</tr>
 </table>
+<iframe id = "containerExportFrame" width = "0%" height = "0%" frameborder="0">
+	</iframe>
+	
+<script>
+var grid = new dhtmlXGridObject("containerGrid");
+function loadGrid()
+{
+//var grid = new dhtmlXGridObject("containerGrid");
+var headerString = "<%=request.getAttribute("gridHeader")%>";
+var headerStringArray = headerString.split(",");
+
+var columnWidth;
+if(headerStringArray.length>10){
+	columnWidth = 80;
+}else{
+	columnWidth = (100/headerStringArray.length);
+}
+var widthString = "";
+var alignString = "";
+var colType = "";
+var colSorting = "na";
+for(var cnt= 0 ;cnt< headerStringArray.length;cnt++){
+	widthString += columnWidth;
+	alignString += "center";
+	colType += "ro";
+	colSorting += "no";
+	if(cnt<headerStringArray.length-1){
+		widthString += ",";
+		alignString += ",";
+		colType += ",";
+		colSorting += ",";
+	}
+}
+
+//grid.setImagePath("dhtml_comp/imgs/"); 
+grid.setHeader(headerString); 
+if(headerStringArray.length>10){
+grid.setInitWidths(widthString);
+}else{
+grid.setInitWidthsP(widthString);
+} 
+
+grid.setColAlign(alignString);
+//grid.setAwaitedRowHeight(25);
+grid.setColTypes(colType); 
+grid.setColSorting(colSorting) ;
+grid.setSkin("light");
+grid.enableAlterCss("even","uneven");
+grid.enableRowsHover(true,'grid_hover');
+grid.enableAutoHeight(true);
+grid.attachEvent("onXLE", function(grid_obj,count){});
+//grid.setOnRowDblClickedHandler(selectLabel);
+var myObject = eval('( <%=(StringBuffer) request.getAttribute("gridJson")%> )');
+
+/*
+var menu = new dhtmlXMenuObject("menuObj");
+menu.addNewSibling(null, "export", "Export", false);
+menu.addNewChild("export", 0, "pdf", "Pdf", false, "");
+*/
+
+grid.enableAlterCss("even","uneven");
+grid.init();
+
+grid.parse(myObject,"json");
+}
+document.body.onload = function(){
+loadGrid();
+      //alert("LOADED!");
+  }
+
+//document.getElementByTag("Body");
+
+</script>
 <%!
 // method to return the rowspan value for the cell.
 private int getRowSpan(List dataList, int columnNumber)

@@ -5855,8 +5855,11 @@ public class Constants
 	public static final String GRID_SETUP_PROP_FILE = "gridsetup.properties";
 	
 	public static final String CP_COORDINATOR_IDS = "coordinatorIds";
-	public static final String LABELLING_SCHEME_ALPHABETS="ALPHABETS";
-	public static final String LABELLING_SCHEME_NUMBERS="NUMBERS";
+	public static final String LABELLING_SCHEME_ALPHABETS_UPPER_CASE="Alphabets Upper Case";
+	public static final String LABELLING_SCHEME_ALPHABETS_LOWER_CASE="Alphabets Lower Case";
+	public static final String LABELLING_SCHEME_ROMAN_UPPER_CASE="Roman Upper Case";
+	public static final String LABELLING_SCHEME_ROMAN_LOWER_CASE="Roman Lower Case";
+	public static final String LABELLING_SCHEME_NUMBERS="Numbers";
 	 public static final String CREATE_DUPLICATE_EVENT = "createDuplicateEvent";
 	 public static final String CREATE_DUPLICATE_SPECIMEN = "createDuplicateSpecimen";
 	 public static final String PARENT_NODE_ID = "parentNodeId";

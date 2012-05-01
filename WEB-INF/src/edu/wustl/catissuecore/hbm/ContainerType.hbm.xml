@@ -64,6 +64,24 @@
             length="255"
         />
 
+ <property
+            name="oneDimensionLabellingScheme"
+            type="string"
+            update="true"
+            insert="true"
+            column="ONE_DIMENSION_LABELLING_SCHEME"
+            length="255"
+        />
+
+        <property
+            name="twoDimensionLabellingScheme"
+            type="string"
+            update="true"
+            insert="true"
+            column="TWO_DIMENSION_LABELLING_SCHEME"
+            length="255"
+        />
+
         <property
             name="comment"
             type="string"

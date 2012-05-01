@@ -62,14 +62,14 @@ window.onload = function() { setFrameHeight('treeboxbox_tree', 1.0,slope);}
 window.onresize = function() { setFrameHeight('treeboxbox_tree', 1.0,slope); }
 
 </script>
-<table border="0" cellpadding="0" cellspacing="0">
+<table border="0" cellpadding="0" cellspacing="0" width = "100%" height = "100%">
 			<tr>	
-				<td class="formLabelAllBorder" colspan="2" width="170">
+				<td class="formLabelAllBorder" colspan="2" width="95%">
 				</td>
 			</tr>	
 			<tr>
-				<td align="left" colspan="2">
-					<div id="treeboxbox_tree" style="width: 230px; height: 380px; background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;	border-right:1px solid #61a1e3;	border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;"/>
+				<td align="left" colspan="2" width="100%">
+					<div id="treeboxbox_tree" style="width: 95%; height: 100%; background-color: #ffffff; border: 1px solid Silver; overflow: auto;border-left:1px solid #61a1e3;	border-right:1px solid #61a1e3;	border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;"/>
 				</td>
 			</tr>
 			<tr>

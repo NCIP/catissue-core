@@ -677,8 +677,6 @@ public class UpdateSpecimenStatusAction extends BaseAction
 	{
 		final String pos1 = specimenVO.getPositionDimensionOne();
 		final String pos2 = specimenVO.getPositionDimensionTwo();
-		final String pos1String = specimenVO.getPositionDimensionOneString();
-		final String pos2String = specimenVO.getPositionDimensionTwoString();
 
 		if (!specimenVO.getCheckedSpecimen())
 		{
@@ -698,7 +696,6 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			try
 			{
 				specPos.setPositionDimensionOne(Integer.valueOf(pos1));
-				specPos.setPositionDimensionOneString(pos1String);
 			}
 			catch (final NumberFormatException exception)
 			{
@@ -711,7 +708,6 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			try
 			{
 				specPos.setPositionDimensionTwo(Integer.valueOf(pos2));
-				specPos.setPositionDimensionTwoString(pos2String);
 			}
 			catch (final NumberFormatException exception)
 			{
@@ -742,6 +738,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 					.getDisplayName());
 		}
 		storageContainer.setName(specimenVO.getSelectedContainerName());
+		StorageContainerUtil.setContainerPositionAsString(specimenVO.getSelectedContainerName(), specPos.getPositionDimensionOne(), specPos.getPositionDimensionTwo(), specPos);
 		// specimen.setStorageContainer(storageContainer);
 	}
 

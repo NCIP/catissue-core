@@ -453,9 +453,18 @@ public class CreateAliquotAction extends BaseAction
 
 				if (!"".equals(posDim1) && !"".equals(posDim2))
 				{
-					specPos.setPositionDimensionOneString(posDim1);
-					specPos.setPositionDimensionTwoString(posDim2);
-					StorageContainerUtil.setContainerPositions(containername, posDim1, posDim2, specPos);
+					if(containerId!=null)
+					{
+						specPos.setPositionDimensionOneString(posDim1);
+						specPos.setPositionDimensionTwoString(posDim2);
+						StorageContainerUtil.setContainerPositionForAutoOption(containerId, posDim1, posDim2, specPos);
+					}
+					else
+					{
+						specPos.setPositionDimensionOneString(posDim1);
+						specPos.setPositionDimensionTwoString(posDim2);
+						StorageContainerUtil.setContainerPositions(containername, posDim1, posDim2, specPos);
+					}
 					sContainer.setId(storageContainerId);
 				}
 				sContainer.setName(containername);

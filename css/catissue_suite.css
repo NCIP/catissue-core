@@ -259,6 +259,35 @@ A.view:hover{
 	text-decoration: none;
 }
 
+A.viewprom:link{
+	font-family: verdana;
+	font-size: 12px;
+	color: #054a8f;
+	text-decoration:underline;
+	font-weight: bold;
+}
+A.viewprom:visited{
+	font-family: verdana;
+	font-size: 12px;
+	color: #054a8f;
+	text-decoration:underline;
+	font-weight: bold;
+}
+A.viewprom:active{
+	font-family: verdana;
+	font-size: 12px;
+	color: #054a8f;
+	text-decoration:underline;
+	font-weight: bold;
+}
+A.viewprom:hover{
+	font-family: verdana;
+	font-size: 12px;
+	color: #054a8f;
+	text-decoration:underline;
+	font-weight: bold;
+}
+
 A.viewhelp:link{
 	text-decoration:underline;
 	font-family: verdana;
@@ -812,3 +841,163 @@ color: #000000;
 }
 
 .forIe{ top : 0px !important; /*margin:0px 0px !important;*/ }
+
+.user_msg {
+	font-weight: bold;
+	margin: 5px 5px 5px 5px;
+	padding: 10px 5px 10px 5px;
+	vertical-align: middle;
+}
+
+.min_len_250 {
+	width: 200px;
+}
+
+.important_red {
+	font-weight: bold;
+	color: red;
+}
+
+.alert_text_link {
+	font-size: 0.8em !important;
+}
+
+/* for gsid */
+#overlay
+{
+    background: #a7a3a3 url("../images/ajax-loader.gif") no-repeat center;
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:4000;
+    opacity:0.8;
+    display:none;
+    zoom: 1;    
+    filter: alpha(opacity = 80);
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    
+}
+
+/* StyleSheet for Container */
+
+.formMessage{ /* for messages above the form */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+  padding-left:0.5em;
+}
+
+.font_red {
+	font-family: "Times New Roman", Times, serif;
+	font-size: 0.9em;
+	color: #FF0000;
+}
+
+.font_gr_s {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 0.95em;
+	color: #666666;
+}
+
+.td_color_6e81a6 {
+	background-color: #EEF5FB;
+	color: #074180;
+    font-family: verdana;
+    font-size: 12px;
+    font-weight: bold;
+}
+.td_color_6e81a6_big {
+	background-color: white;
+	color: #074180;
+    font-family: verdana;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.formRequiredLabel_withoutBorder{ /* for the required form labels */
+	color: #171717;
+    font-family: verdana;
+    font-size: 11px;
+    margin: 0;
+    vertical-align: middle;
+	width:15%
+}
+
+.notes{ /* for the form control notes */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  font-weight:bold;
+  background-color:#ffffff; /* constant: light gray */
+  color:#000000; /* constant: black */
+  text-align:left;
+}
+
+.formRequiredNotice_withoutBorder{ /* for the asterisk cell */
+ font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;
+}
+
+.formField_withoutBorder{ /* for the cell that contains the form elements */
+ 	font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;
+}
+
+.formFieldContainer_withoutBorder{ /* for the Container as a field during Containment */
+ font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;
+
+}
+
+.formLabel_withoutBorder{ /* for the non-required form labels */
+
+  font-family: verdana;
+	font-size: 11px;
+	color: #171717;
+	vertical-align:middle;
+	margin:0px;
+}
+.font_bl_nor {
+	font-family: Arial, Helvetica, sans-serif;
+	/*font-size: .8em;*/
+	color: #333333;
+}
+input.actionButton{ /* optional style for form and action buttons */
+   font-family:arial,helvetica,verdana,sans-serif;
+   font-size:0.8em;
+   text-align:center;
+  vertical-align:middle;
+  color:#00000;
+  padding:0.1em;
+   background-color:#E1E1E1;
+   border:1px solid;
+   border-top-color:#646464;
+   border-left-color:#646464;
+   border-right-color:#1E1E1E;
+   border-bottom-color:#1E1E1E;
+   filter:progid:DXImageTransform.Microsoft.Gradient
+    (GradientType=0,StartColorStr='#f0f0f0',EndColorStr='#bebebe');
+}
+
+.font_bl_s {
+	font-family: Arial, Helvetica, sans-serif;
+	/*font-size: .75em;*/
+	color: #333333;
+}
+
+.even{
+   height:32;
+   }
+.uneven{
+   height:32;
+   }	

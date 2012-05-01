@@ -157,6 +157,12 @@ public class AppUtility {
 	static {
 		LoggerConfig.configureLogger(System.getProperty("user.dir"));
 	}
+	
+	private static final String[] RCODE = {"M", "CM", "D", "CD", "C", "XC", "L",
+		"XL", "X", "IX", "V", "IV", "I"};
+	private static final int[]    BVAL  = {1000, 900, 500, 400,  100,   90,  50,
+		40,   10,    9,   5,   4,    1};
+
 	private static Logger logger = Logger.getCommonLogger(AppUtility.class);
 	
 	/**
@@ -3841,9 +3847,9 @@ public class AppUtility {
         return columnName; 
 	}
 	
-	public static Long excelColumnAlphabetToNum(String name)
+	public static Integer excelColumnAlphabetToNum(String name)
 	{
-		  Long number = 0L;
+		Integer number = 0;
 		    int pow = 1;
 		    for (int i = name.length() - 1; i >= 0; i--)
 		    {
@@ -3853,18 +3859,147 @@ public class AppUtility {
 		    return number;
 	}
 	
-	public static String getPostionValue(String labellingScheme, int position)
+	public static String getPositionValue(String labellingScheme, int position)
 	{
 		String positionVal="";
 		if(labellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_NUMBERS))
 		{
 			positionVal= String.valueOf(position);
 		}
-		else
+		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE))
+		{
+			positionVal=numToExcelColumnAlphabet(Integer.valueOf(position)).toLowerCase();
+		}
+		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE))
 		{
 			positionVal=numToExcelColumnAlphabet(Integer.valueOf(position));
+		}
+		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE))
+		{
+			positionVal=binaryToRoman(Integer.valueOf(position));
+		}
+		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE))
+		{
+			positionVal=binaryToRoman(Integer.valueOf(position)).toLowerCase();
 		}
 		return positionVal;
 	}
 	
+	public static Integer getPositionValueInInteger(String labellingScheme, String position)
+	{
+		int positionVal=-1;
+		if(labellingScheme.equalsIgnoreCase(Constants.LABELLING_SCHEME_NUMBERS))
+		{
+			positionVal= Integer.valueOf(position);
+		}
+		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE)
+			|| (labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE)))
+		{
+			positionVal=excelColumnAlphabetToNum(position.toUpperCase());
+		}
+		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)
+				|| (labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE)))
+		{
+			positionVal=romanToInteger(position);
+		}
+		return positionVal;
+	}
+	
+	public static String binaryToRoman(int binary) {
+		if (binary <= 0 || binary >= 4000) {
+			throw new NumberFormatException("Value outside roman numeral range.");
+		}
+		String roman = "";         // Roman notation will be accumualated here.
+
+		// Loop from biggest value to smallest, successively subtracting,
+		// from the binary value while adding to the roman representation.
+		for (int i = 0; i < RCODE.length; i++) {
+			while (binary >= BVAL[i]) {
+				binary -= BVAL[i];
+				roman  += RCODE[i];
+			}
+		}
+		return roman;
+	}  
+	
+	public static Integer romanToInteger(String number)
+	{
+		int decimal = 0;
+		String romanNumeral = number.toUpperCase();
+		int x = 0;
+		do {
+			char convertToDecimal = number.charAt(x);
+			switch (convertToDecimal) {
+				case 'M':
+					decimal += 1000;
+					break;
+
+				case 'D':
+					decimal += 500;
+					break;
+
+				case 'C':
+					decimal += 100;
+					if(x < romanNumeral.length() - 1){
+						switch(romanNumeral.charAt(x + 1))
+								{
+									case 'M':
+										decimal += 800;
+										x++;
+										break;
+									case 'D':
+										decimal += 300;
+										x++;
+										break;
+								}
+					}
+					break;
+
+				case 'L':
+					decimal += 50;
+					break;
+
+				case 'X':
+					decimal += 10;
+					if(x < romanNumeral.length() - 1){
+						switch(romanNumeral.charAt(x + 1))
+								{
+									case 'L':
+										decimal += 30;
+										x++;
+										break;
+									case 'C':
+										decimal += 80;
+										x++;
+										break;
+								}
+					}
+
+					break;
+
+				case 'V':
+					decimal += 5;
+					break;
+
+				case 'I':
+					decimal += 1;
+					if(x < romanNumeral.length() - 1){
+						switch(romanNumeral.charAt(x + 1))
+								{
+									case 'X':
+										decimal += 8;
+										x++;
+										break;
+									case 'V':
+										decimal += 3;
+										x++;
+										break;
+								}
+					}
+					break;
+			}
+			x++;
+		} while (x < romanNumeral.length());
+		return decimal;
+	}
 }

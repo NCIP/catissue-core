@@ -421,6 +421,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		specimenDataBean.setPathologicalStatus(specimen.getPathologicalStatus());
 		specimenDataBean.setId(specimen.getId().longValue());
 		specimenDataBean.setParentName(parentName);
+		specimenDataBean.setCollectionStatus(specimen.getCollectionStatus());
 		if (specimen.getInitialQuantity() != null)
 		{
 			specimenDataBean.setQuantity(specimen.getInitialQuantity().toString());
@@ -456,10 +457,6 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			LOGGER.info("-----------Container while getting from domain--:" + container);
 			specimenDataBean.setContainerId(String.valueOf(container.getId()));
 			specimenDataBean.setSelectedContainerName(container.getName());
-			specimenDataBean.setPositionDimensionOneString(specimen.getSpecimenPosition()
-					.getPositionDimensionOneString());
-			specimenDataBean.setPositionDimensionTwoString(specimen.getSpecimenPosition()
-					.getPositionDimensionTwoString());
 			specimenDataBean.setPositionDimensionOne(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionOne()));
 			specimenDataBean.setPositionDimensionTwo(String.valueOf(specimen.getSpecimenPosition().getPositionDimensionTwo()));
 			specimenDataBean.setStorageContainerForSpecimen("Auto");

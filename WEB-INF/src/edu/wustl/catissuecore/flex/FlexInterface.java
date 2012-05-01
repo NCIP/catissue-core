@@ -16,9 +16,6 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import edu.emory.mathcs.backport.java.util.Collections;
-import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
-import edu.wustl.cab2b.client.ui.query.IClientQueryBuilderInterface;
-import edu.wustl.cab2b.client.ui.query.IPathFinder;
 import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDataBean;
@@ -57,19 +54,9 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
-import edu.wustl.common.query.impl.CommonPathFinder;
-import edu.wustl.common.querysuite.metadata.path.IPath;
-import edu.wustl.common.querysuite.metadata.path.Path;
-import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.query.flex.dag.CustomFormulaNode;
-import edu.wustl.query.flex.dag.DAGConstant;
-import edu.wustl.query.flex.dag.DAGNode;
-import edu.wustl.query.flex.dag.DAGPanel;
-import edu.wustl.query.flex.dag.DAGPath;
-import edu.wustl.query.flex.dag.SingleNodeCustomFormulaNode;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -39,12 +39,6 @@ public class SpecimenDataBean implements GenericSpecimen
 	/** Reference to dimensional position two of the specimen in Storage Container. */
 	protected String positionDimensionTwo = "";
 
-	/** Reference to dimensional position one string of the specimen in Storage Container. */
-	protected String positionDimensionOneString = "";
-
-	/** Reference to dimensional position two string of the specimen in Storage Container. */
-	protected String positionDimensionTwoString = "";
-
 	/** Barcode assigned to the specimen. */
 	protected String barCode;
 
@@ -409,27 +403,6 @@ public class SpecimenDataBean implements GenericSpecimen
 	}
 	
 	/**
-	 * Gets the position dimension one string.
-	 *
-	 * @return Returns the positionDimensionOne string.
-	 */
-	public String getPositionDimensionOneString()
-	{
-		return String.valueOf(this.positionDimensionOneString);
-	}
-
-	/**
-	 * Gets the position dimension two string.
-	 *
-	 * @return Returns the positionDimensionTwo string.
-	 */
-	public String getPositionDimensionTwoString()
-	{
-		return String.valueOf(this.positionDimensionTwoString);
-	}
-
-
-	/**
 	 * Gets the specimen collection group.
 	 *
 	 * @return Returns the specimenCollectionGroup.
@@ -735,25 +708,6 @@ public class SpecimenDataBean implements GenericSpecimen
 
 		this.positionDimensionTwo = positionDimensionTwo;
 	}
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#setPositionDimensionOneString(java.lang.String)
-	 */
-	public void setPositionDimensionOneString(String positionDimensionOneString)
-	{
-
-		this.positionDimensionOne = positionDimensionOneString;
-
-	}
-
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#setPositionDimensionTwoString(java.lang.String)
-	 */
-	public void setPositionDimensionTwoString(String positionDimensionTwoString)
-	{
-
-		this.positionDimensionTwo = positionDimensionTwoString;
-	}
-
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#setQuantity(java.lang.String)
@@ -875,6 +829,23 @@ public class SpecimenDataBean implements GenericSpecimen
 		this.printSpecimen = printSpecimen;
 	}
 
+	private String collectionStatus;
+	
+	@Override
+	public String getCollectionStatus()
+	{
+		// TODO Auto-generated method stub
+		return collectionStatus;
+	}
+
+
+	@Override
+	public void setCollectionStatus(String collectionStatus)
+	{
+		this.collectionStatus=collectionStatus;
+	}
+
+	
 	/* override methods finish */
 
 }

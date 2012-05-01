@@ -63,8 +63,19 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 		<servlet-name>ResponseServlet</servlet-name>
 		<servlet-class>edu.wustl.common.struts.ResponseServlet</servlet-class>
 	</servlet>
+	
+		<servlet>
+     <servlet-name>ContainerExportServlet</servlet-name>
+     <servlet-class>edu.wustl.catissuecore.action.ContainerExportServlet</servlet-class>
+   </servlet>
 
 	<!-- Standard Action Servlet Mapping -->
+
+	 <servlet-mapping>
+ <servlet-name>ContainerExportServlet</servlet-name>
+ <url-pattern>/ContainerExportServlet</url-pattern>
+ </servlet-mapping>
+ 
 	<servlet-mapping>
 		<servlet-name>action</servlet-name>
 		<url-pattern>*.do</url-pattern>

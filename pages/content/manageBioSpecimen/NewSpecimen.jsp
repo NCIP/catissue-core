@@ -1715,7 +1715,7 @@
 										String rowNumber = "1";
 										String styClass = "formFieldSized5";
 										String tdStyleClass = "customFormField";
-										String onChange = "onCustomListBoxChange(this)";
+										String onChange = "onCustomListBoxChangeForContainer(this)";
 										String className = form.getClassName();
 										String sptype = form.getType();
 
@@ -1852,7 +1852,7 @@
 										}
 										else{%>
 												<%
-												if((newSpecimenForm.getStContSelection()==1)&&(newSpecimenForm.getStorageContainer().equals("")||newSpecimenForm.getStorageContainer().equals("-1"))&&newSpecimenForm.getCollectionStatus().equals("Collected"))
+												if((newSpecimenForm.getStContSelection()==1)&&(newSpecimenForm.getStorageContainer().equals("")||newSpecimenForm.getStorageContainer().equals("-1"))&&(newSpecimenForm.getCollectionStatus().equals("Collected") || newSpecimenForm.getCollectionStatus().equals("Complete")))
 												{%>
 												<tr>
 														<td class="black_ar" colspan="2">
@@ -1871,10 +1871,10 @@
 															<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName" readonly= "true"/>
 														</td>
 							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionOne" property="positionDimensionOneString" readonly= "true" style="text-align:right"/>
+															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true" style="text-align:right"/>
 											</td>
 							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionTwo" property="positionDimensionTwoString" readonly= "true" style="text-align:right"/>
+															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true" style="text-align:right"/>
 													</td>
 							<td class="groupelements">
 															<html:button styleClass="black_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">

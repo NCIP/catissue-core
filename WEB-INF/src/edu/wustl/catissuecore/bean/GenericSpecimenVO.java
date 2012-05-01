@@ -80,12 +80,6 @@ public final class GenericSpecimenVO implements GenericSpecimen
 	/** The position dimension two. */
 	private String positionDimensionTwo;
 	
-	/** The position dimension one String. */
-	private String positionDimensionOneString;
-
-	/** The position dimension two String. */
-	private String positionDimensionTwoString;
-
 	/** The container id. */
 	private String containerId;
 
@@ -585,33 +579,21 @@ public final class GenericSpecimenVO implements GenericSpecimen
 		// TODO Auto-generated method stub
 
 	}
-
-
+	private String collectionStatus;
 	
-	public String getPositionDimensionOneString()
+	@Override
+	public String getCollectionStatus()
 	{
-		return positionDimensionOneString;
+		// TODO Auto-generated method stub
+		return collectionStatus;
 	}
 
 
-	
-	public void setPositionDimensionOneString(String positionDimensionOneString)
+	@Override
+	public void setCollectionStatus(String collectionStatus)
 	{
-		this.positionDimensionOneString = positionDimensionOneString;
-	}
-
-
-	
-	public String getPositionDimensionTwoString()
-	{
-		return positionDimensionTwoString;
-	}
-
-
-	
-	public void setPositionDimensionTwoString(String positionDimensionTwoString)
-	{
-		this.positionDimensionTwoString = positionDimensionTwoString;
+		this.collectionStatus=collectionStatus;
+		
 	}
 
 }

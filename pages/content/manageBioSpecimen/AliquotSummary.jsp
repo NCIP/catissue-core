@@ -261,8 +261,8 @@
 					<bean:define id="sc" name="position" property="storageContainer"/>
 					<bean:write name="sc" property="name"/> &nbsp;
 					
-					<bean:write name="position" property="positionDimensionOne"/> &nbsp;
-					<bean:write name="position" property="positionDimensionTwo"/>
+					<bean:write name="position" property="positionDimensionOneString"/> &nbsp;
+					<bean:write name="position" property="positionDimensionTwoString"/>
 				</logic:notEmpty>
 			</logic:notEmpty>
 			</td>
