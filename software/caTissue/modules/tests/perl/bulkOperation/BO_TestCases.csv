@@ -588,18 +588,17 @@ TMT ID,TestSummary,username,password,csvname,templateName,operation,Expected Res
 25120,Add CPR with SCG and Specimen,dmp@dmp.com,Test1234,CreateRegistrationWithSCGAndSpecimen_cpid.csv,cprWithSCGSpecimen.xml,cprWithSCGSpecimen1,Success,,Bulk Operation,Specimen
 25121,SCG with CP Title and PPID,dmp@dmp.com,Test1234,createSCG_by_CP_Title_PPID.csv,createSCG_by_CP_Title_PPID.xml,CreateSpecimenCollectionGroup,success,,Bulk Operation,Specimen Collection Group
 #CSV not found 26355,Test Add SCG With Age At Collection,dmp@dmp.com,Test1234,addSCGWithAgeAtCollection.csv,addSCGWithAgeAtCollection.xml,addSCG,Success,,Biospecimen,Specimen Collection Group
-#CSV not found 26351,Test BO report rerun,dmp@dmp.com,Test1234,addParticipant_BO_report.csv,NewAddPart.xml,addParticipant,Success,,BulkOperation,BO Rerun
 #CSV not found 26463,Test Edit SCG With Age At Collection,dmp@dmp.com,Test1234,editSCGWithAgeAtCollection.csv,editSCGWithAgeAtCollection.xml,editSCG,Success,,Biospecimen,Specimen Collection Group
-,Test Add Specimen With Fixed Event ,dmp@dmp.com,Test1234,createSpecimenFixedEventParameters.csv,createSpecimenFixedEventParameters.xml,createSpecimenFixedEventParameters,,,,
-26500,Test Add Specimen With CheckInCheckOut Event ,dmp@dmp.com,Test1234,createSpecimenCheckInCheckOutEventParameter.csv,createSpecimenCheckInCheckOutEventParameter.xml,createSpecimenCheckInCheckOutEventParameter,,,,
-26500,Test Add Specimen With Collection Event ,dmp@dmp.com,Test1234,createSpecimenCollectionEventParameters.csv,createSpecimenCollectionEventParameters.xml,createSpecimenCollectionEventParameters,,,,
-26500,Test Add Specimen With Embedded Event ,dmp@dmp.com,Test1234,createSpecimenEmbeddedEventParameters.csv,createSpecimenEmbeddedEventParameters.xml,createSpecimenEmbeddedEventParameters,,,,
-26500,Test Add Specimen With Frozen Event ,dmp@dmp.com,Test1234,createSpecimenFrozenEventParameters.csv,createSpecimenFrozenEventParameters.xml,createSpecimenFrozenEventParameters,,,,
-26500,Test Add Specimen With Procedure Event ,dmp@dmp.com,Test1234,createSpecimenProcedureEventParameters.csv,createSpecimenProcedureEventParameters.xml,createSpecimenProcedureEventParameters,,,,
-26500,Test Add Specimen With Received Event ,dmp@dmp.com,Test1234,createSpecimenReceivedEventParameters.csv,createSpecimenReceivedEventParameters.xml,createSpecimenReceivedEventParameters,,,,
-26500,Test Add Specimen With Spun Event ,dmp@dmp.com,Test1234,createSpecimenSpunEventParameters.csv,createSpecimenSpunEventParameters.xml,createSpecimenSpunEventParameters,,,,
-26500,Test Add Specimen With Thaw Event ,dmp@dmp.com,Test1234,createSpecimenThawEventParameters.csv,createSpecimenThawEventParameters.xml,createSpecimenThawEventParameters,,,,
-#26500,Test Add Specimen With Tissue Review Event ,dmp@dmp.com,Test1234,createSpecimenTissueSpecimenReviewParameters.csv,createSpecimenTissueSpecimenReviewParameters.xml,createSpecimenTissueReviewParameters,,,,
-#26500,Test Add Specimen With Cell Review Event ,dmp@dmp.com,Test1234,createSpecimenCellSpecimenReviewParameters.csv,createSpecimenCellSpecimenReviewParameters.xml,createSpecimenCellReviewParameters,,,,
-#26500,Test Add Specimen With Fluid Review Event ,dmp@dmp.com,Test1234,createSpecimenFluidSpecimenReviewParameters.csv,createSpecimenFluidSpecimenReviewParameters.xml,createSpecimenFluidReviewParameters,,,,
-26500,Test Add Specimen With Molecular Review Event ,dmp@dmp.com,Test1234,createSpecimenMolecularSpecimenReviewParameters.csv,createSpecimenMolecularSpecimenReviewParameters.xml,createSpecimenMolecularReviewParameters,,,,
+,Test Add Specimen With Fixed Event ,dmp@dmp.com,Test1234,createSpecimenFixedEventParameters.csv,createSpecimenFixedEventParameters.xml,createSpecimenFixedEventParameters,Success,,,
+26500,Test Add Specimen With CheckInCheckOut Event ,dmp@dmp.com,Test1234,createSpecimenCheckInCheckOutEventParameter.csv,createSpecimenCheckInCheckOutEventParameter.xml,createSpecimenCheckInCheckOutEventParameter,Success,,,
+26500,Test Add Specimen With Collection Event ,dmp@dmp.com,Test1234,createSpecimenCollectionEventParameters.csv,createSpecimenCollectionEventParameters.xml,createSpecimenCollectionEventParameters,Success,,,
+26500,Test Add Specimen With Embedded Event ,dmp@dmp.com,Test1234,createSpecimenEmbeddedEventParameters.csv,createSpecimenEmbeddedEventParameters.xml,createSpecimenEmbeddedEventParameters,Success,,,
+26500,Test Add Specimen With Frozen Event ,dmp@dmp.com,Test1234,createSpecimenFrozenEventParameters.csv,createSpecimenFrozenEventParameters.xml,createSpecimenFrozenEventParameters,Success,,,
+26500,Test Add Specimen With Procedure Event ,dmp@dmp.com,Test1234,createSpecimenProcedureEventParameters.csv,createSpecimenProcedureEventParameters.xml,createSpecimenProcedureEventParameters,Success,,,
+26500,Test Add Specimen With Received Event ,dmp@dmp.com,Test1234,createSpecimenReceivedEventParameters.csv,createSpecimenReceivedEventParameters.xml,createSpecimenReceivedEventParameters,Success,,,
+26500,Test Add Specimen With Spun Event ,dmp@dmp.com,Test1234,createSpecimenSpunEventParameters.csv,createSpecimenSpunEventParameters.xml,createSpecimenSpunEventParameters,Success,,,
+26500,Test Add Specimen With Thaw Event ,dmp@dmp.com,Test1234,createSpecimenThawEventParameters.csv,createSpecimenThawEventParameters.xml,createSpecimenThawEventParameters,Success,,,
+26500,Test Add Specimen With Tissue Review Event ,dmp@dmp.com,Test1234,createSpecimenTissueSpecimenReviewParameters.csv,createSpecimenTissueSpecimenReviewParameters.xml,createSpecimenTissueReviewParameters,Success,,,
+26500,Test Add Specimen With Cell Review Event ,dmp@dmp.com,Test1234,createSpecimenCellSpecimenReviewParameters.csv,createSpecimenCellSpecimenReviewParameters.xml,createSpecimenCellReviewParameters,Success,,,
+26500,Test Add Specimen With Fluid Review Event ,dmp@dmp.com,Test1234,createSpecimenFluidSpecimenReviewParameters.csv,createSpecimenFluidSpecimenReviewParameters.xml,createSpecimenFluidReviewParameters,Success,,,
+26500,Test Add Specimen With Molecular Review Event ,dmp@dmp.com,Test1234,createSpecimenMolecularSpecimenReviewParameters.csv,createSpecimenMolecularSpecimenReviewParameters.xml,createSpecimenMolecularReviewParameters,Success,,,
