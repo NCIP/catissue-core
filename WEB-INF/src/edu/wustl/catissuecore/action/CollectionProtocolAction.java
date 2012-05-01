@@ -64,6 +64,7 @@ import edu.wustl.labelSQLApp.domain.LabelSQLAssociation;
  *
  * @author Mandar Deshmukh
  */
+
 public class CollectionProtocolAction extends SpecimenProtocolAction
 {
 
