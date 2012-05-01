@@ -52,6 +52,7 @@
 
 	function openEventPage()
 	{
+		window.frames['CPTreeView'].saveTreeState();
 		var action = "";
 		selectAllClinicalDiagnosis();
 		selectAllCoordinators();
@@ -81,6 +82,9 @@
 
 	function saveCP()
 	{	
+	
+		window.frames['CPTreeView'].saveTreeState();
+		
 		//var cpDetailsForm = window.frames['SpecimenRequirementView'].document.forms['CollectionProtocolForm'];
 		var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
 		var eventDetailsForm = window.frames['SpecimenRequirementView'].document.getElementById('protocolEventDetailsForm');

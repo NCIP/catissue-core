@@ -25,16 +25,12 @@
 
 %>
 <head>
-<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <title>DHTML Tree samples. dhtmlXTree - Action handlers</title>
-<link rel="STYLESHEET" type="text/css"
-	href="dhtml_comp/css/dhtmlXTree.css">
-<script language="JavaScript" type="text/javascript"
-	src="dhtml_comp/js/dhtmXTreeCommon.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="dhtml_comp/js/dhtmlXTree.js"></script>
-<script language="JavaScript" type="text/javascript"
-	src="jss/javaScript.js"></script>
+<link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxtree.css">
+<script  src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script  src="dhtmlx_suite/js/dhtmlxtree.js"></script>    
+<script  src="dhtmlx_suite/ext/dhtmlxtree_xw.js"></script> 
+<script src="jss/javaScript.js" language="JavaScript" type="text/javascript"	></script>
 <script src="jss/caTissueSuite.js" language="JavaScript" type="text/javascript"></script>
 </head>
 
@@ -48,7 +44,7 @@
 	</tr>
 </table>
 
-<script language="javascript"><!--
+<script language="javascript">
 
 			function setGlobalNodeKeys(id)
 			{	
@@ -57,9 +53,20 @@
 				var uniqId = str.substring(i+1);
 				window.parent.setKeys(id,uniqId,tree.getParentId(id));
 			}
+			
+			function saveTreeState()
+			{
+				tree.saveOpenStates(); //it saves tree's state in cookies.
+			}
+			
+			function reloadTreeState()
+			{
+				tree.loadOpenStates(); //it resets tree state as per the state saved in cookies.
+			}
 			//This function is called when any of the node is selected in tree 
 			function tonclick(id)
 			{
+				saveTreeState();
 		        var str=id;		
 				var name = tree.getItemText(id);
 				var i = str.indexOf('_');
@@ -154,12 +161,13 @@
 			%>
 
 					tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>",0,"<%=img%>","<%=img%>","<%=img%>","");
+					tree.setIconSize("10px","10px","<%=nodeId%>");
 					tree.setUserData("<%=nodeId%>","<%=nodeId%>","<%=data%>");	
 					tree.setItemText("<%=nodeId%>","<%=data.getDisplayName()%>","<%=tooltipText%>");
 			<%	
 					}
 			%>
-					tree.closeAllItems("0");
+					//tree.closeAllItems("0");
 			<%
 				}
 			%>
@@ -208,6 +216,8 @@
 			<%	}
 			   }
 			%>	
-	--></script>
+			
+	reloadTreeState();
+</script>
 </body>
 </html>

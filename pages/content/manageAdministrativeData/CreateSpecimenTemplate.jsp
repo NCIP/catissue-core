@@ -265,6 +265,7 @@ if(form != null)
 
 	function deleteEvent()
 	{
+		window.parent.frames['CPTreeView'].saveTreeState();
 		var answer = confirm ("Are you sure want to delete specimen?")
 		if(answer)
 		{
@@ -276,19 +277,21 @@ if(form != null)
 	}
 	function saveSpecimens()
 	{
+		window.parent.frames['CPTreeView'].saveTreeState();
 		var action ="SaveSpecimenRequirements.do?pageOf=specimenRequirement&key=<%=mapKey%>&operation=<%=operation%>&isPersistent=${requestScope.isPersistent}&parentNodeId="+window.parent.parentId+"&nodeId="+window.parent.selectedNodeId;
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}
 	function createDuplicateSpecimens()
 	{
+		window.parent.frames['CPTreeView'].saveTreeState();
 		var action ="SaveSpecimenRequirements.do?pageOf=specimenRequirement&key=<%=mapKey%>&operation=add&isPersistent=${requestScope.isPersistent}&<%=Constants.CREATE_DUPLICATE_SPECIMEN%>=true&parentNodeId="+window.parent.parentId+"&nodeId="+window.parent.selectedNodeId;
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}
 	
 	function addNewEvent()
-	{
+	{		window.parent.frames['CPTreeView'].saveTreeState();
 			window.parent.frames['CPTreeView'].location="ProtocolEventsDetails.do?pageOf=newEvent";
 	}
 

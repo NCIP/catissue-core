@@ -68,6 +68,7 @@ var dsGridVisible = false, csGridVisible = false;
 
 function specimenRequirements()
 {
+	window.parent.frames['CPTreeView'].saveTreeState();
 	var action ="SaveProtocolEvents.do?pageOf=specimenRequirement&operation=add";
 	document.forms[0].action = action;
 	document.forms[0].submit();
@@ -75,6 +76,7 @@ function specimenRequirements()
 
 function createDuplicateEvent()
 {
+	window.parent.frames['CPTreeView'].saveTreeState();
 	var action ="SaveProtocolEvents.do?pageOf=defineEvents&operation=add&"+"<%=Constants.CREATE_DUPLICATE_EVENT%>"+"=true";
 	document.forms[0].action = action;
 	document.forms[0].submit();
@@ -82,6 +84,7 @@ function createDuplicateEvent()
 
 function deleteEvent()
 {
+	window.parent.frames['CPTreeView'].saveTreeState();
 	var answer = confirm ("Are you sure want to delete event?")
 	if(answer)
 	{
@@ -93,6 +96,7 @@ function deleteEvent()
 }
 function submitAllEvents()
 {
+	window.parent.frames['CPTreeView'].saveTreeState();
 	var action = "SaveProtocolEvents.do?pageOf=defineEvents&operation=add";
 	document.forms[0].action = action;
 	document.forms[0].submit();
