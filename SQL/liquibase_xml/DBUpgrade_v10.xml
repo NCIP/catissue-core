@@ -49,5 +49,13 @@
 		<rollback></rollback>
 	</changeSet>
 	
+	<changeSet id="5" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_CONTAINER_TYPE">
+			<column name="ONE_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="NUMBERS"/>
+			<column name="TWO_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="NUMBERS"/>
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+	
 
 </databaseChangeLog>         
