@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.cagrid;
 
 import edu.wustl.catissuecore.domain.service.WAPIUtility;
+import edu.wustl.catissuecore.domain.util.CQLWriter;
 import edu.wustl.catissuecore.domain.util.CollectionsHandler;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.cqlquery.CQLQuery;
@@ -97,6 +98,9 @@ public class CQLQueryProcessor extends
 	}
 
 	public CQLQueryResults processQuery(CQLQuery cqlQuery) throws MalformedQueryException, QueryProcessingException {
+
+        CQLWriter.writeCQL(cqlQuery);
+
         final Set objectCache = new HashSet();
 		try {
 			cqlQuery = CQLAttributeDefaultPredicateUtil
