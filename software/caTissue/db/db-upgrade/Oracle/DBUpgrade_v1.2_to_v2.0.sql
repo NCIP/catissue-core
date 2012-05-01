@@ -281,3 +281,5 @@ WHERE
 
 DROP TABLE temp_events
 /
+ALTER TABLE catissue_disposal_event_param MODIFY (REASON varchar2(2000))
+/
