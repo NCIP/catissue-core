@@ -57,6 +57,7 @@ import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
 import edu.wustl.labelSQLApp.domain.LabelSQLAssociation;
 
+
 // TODO: Auto-generated Javadoc
 /**
  * This class initializes the fields in the CollectionProtocol Add/Edit webpage.
