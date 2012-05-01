@@ -239,8 +239,10 @@ function enableDisableParentProtocol(associationType)
 		imgObj.onclick =function (e) {};
 		hideGrid(parentProtocolDropDownInfo['gridDiv']);
 		piGridVisible = false;
-		document.getElementById("studyCalendarEventPoint").setAttribute("disabled",true);
-		document.getElementById("sequenceNumber").setAttribute("disabled",true);
+		document.getElementById("studyCalendarEventPoint").setAttribute("readOnly",true);
+		document.getElementById("sequenceNumber").setAttribute("readOnly",true);
+		document.getElementById("studyCalendarEventPoint").value="";
+		document.getElementById("sequenceNumber").value="";
 	}	
 	else
 	{
@@ -249,8 +251,8 @@ function enableDisableParentProtocol(associationType)
 		//imgObj.onclick =function (e) {showHideParentProtocolGrid(e,'parentProtocol','parentProtocolDropDown');};
 		imgObj.onclick =function (e) {showHideGrid(e,parentProtocolDropDownInfo,ppGrid);};
 		
-		document.getElementById("studyCalendarEventPoint").removeAttribute("disabled",true);
-		document.getElementById("sequenceNumber").removeAttribute("disabled",true);
+		document.getElementById("studyCalendarEventPoint").removeAttribute("readOnly");
+		document.getElementById("sequenceNumber").removeAttribute("readOnly");
 	}
 }
 
@@ -332,7 +334,7 @@ div#d999 {
 					<td width="69%" align="left" class="black_ar">
 						<html:hidden property="parentCollectionProtocolId"  />
 						<div>
-							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
+							<table border="0" width="28%" id="outerTable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td align="left" width="88%" height="100%" >
 										<div id="ppDropDownIddiv" class="x-form-field-wrap " >
@@ -398,7 +400,7 @@ div#d999 {
 					<td width="69%" align="left" class="black_ar">
 						<html:hidden property="principalInvestigatorId"  />
 						<div>
-							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
+							<table border="0" width="28%" id="outerTable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td align="left" width="88%" height="100%" >
 										<div id="piDropDownIddiv" class="x-form-field-wrap" >
@@ -408,7 +410,7 @@ div#d999 {
 													onClick="noEventPropogation(event)"
 													autocomplete="off"
 													size="20"
-													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="piDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
+													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="piDropDownId" style="top : 0px !important; align:left;" class="x-form-trigger x-form-arrow-trigger" 
 												onclick="showHideGrid(event,investigatorDropDownInfo,piGrid);"
 												src="images/uIEnhancementImages/s.gif"/>
 										</div>
