@@ -256,7 +256,11 @@ function enableDisableParentProtocol(associationType)
 	}
 }
 
+if("<%=request.getParameter("nodeClicked")%>"!= 'true')
+{
 window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}&isErrorPage=${requestScope.isErrorPage}";
+}
+
 </script>
 
 <style>

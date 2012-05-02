@@ -102,9 +102,11 @@ function submitAllEvents()
 	document.forms[0].submit();
 }
 
+
+if("<%=request.getParameter("nodeClicked")%>"!= 'true')
+{
 window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=${requestScope.operation}";
-
-
+}
 
 function siteOnRowSelect(id,ind)
 {	

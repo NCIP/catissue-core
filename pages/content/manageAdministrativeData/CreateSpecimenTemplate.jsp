@@ -443,7 +443,11 @@ if(form != null)
 		spreqqty.innerHTML="" + sname;
 <%}%>
 	}
-	window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>&operation=${requestScope.operation}";
+	
+	if("<%=request.getParameter("nodeClicked")%>"!= 'true')
+	{
+		window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>&operation=${requestScope.operation}";
+	}
 </script>
 
 </head>
