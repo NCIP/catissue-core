@@ -42,15 +42,6 @@ public class GSIDUpdateSpecimenAction extends SecureAction {
         return dao;
     }
 
-/*
-    public String getObjectName(AbstractActionForm abstractForm) throws ApplicationException {
-
-   		IDomainObjectFactory iDomainObjectFactory = getIDomainObjectFactory();
-   		return iDomainObjectFactory.getDomainObjectName(abstractForm.getFormId());
-   	}
-*/
-
-
 	@Override
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		try {
@@ -64,23 +55,9 @@ public class GSIDUpdateSpecimenAction extends SecureAction {
                 long identifier = Integer.parseInt(request.getParameter("id"));
                 Object object = dao.retrieveById(className, identifier);
 
-/*
-                AbstractActionForm abstractForm = (AbstractActionForm)form;
-                abstractForm.setOperation("");
-           		AbstractDomainObject abstractDomain = null;
-*/
-
                 NewSpecimenBizLogic bizLogic = new NewSpecimenBizLogic();
-//                NewSpecimenForm abstractForm = new edu.wustl.catissuecore.actionForm.NewSpecimenForm();
-//                abstractForm.setId(identifier);
-//                abstractForm.setOperation("");
-
                 boolean isAuthorized;
 
-/*
-                AbstractDomainObject formSpecimen = bizLogic.populateDomainObject("edu.wustl.catissuecore.domain.Specimen", identifier, abstractForm);
-                DAO dao = getHibernateDao(CommonServiceLocator.getInstance().getAppName(), sessionDataBean);
-*/
                 isAuthorized = bizLogic.isAuthorized(dao, object, sessionDataBean);
                 System.out.println(">>> isAuthorized:" + isAuthorized);
 
