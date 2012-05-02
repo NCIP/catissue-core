@@ -252,7 +252,6 @@ function enableDisableParentProtocol(associationType)
 {
 	var imgObj = document.getElementById("ppDropDownId");
 	
-	
 	if(associationType == 'Parent')
 	{
 		document.getElementsByName("parentCollectionProtocolId")[0].value = "";
@@ -266,6 +265,8 @@ function enableDisableParentProtocol(associationType)
 		document.getElementById("sequenceNumber").setAttribute("readOnly",true);
 		document.getElementById("studyCalendarEventPoint").value="";
 		document.getElementById("sequenceNumber").value="";
+		document.getElementById("parentProtocolRow").style.display = 'none';
+		document.getElementById("ScepAndSequenceNumberRow").style.display = 'none';
 	}	
 	else
 	{
@@ -276,6 +277,8 @@ function enableDisableParentProtocol(associationType)
 		
 		document.getElementById("studyCalendarEventPoint").removeAttribute("readOnly");
 		document.getElementById("sequenceNumber").removeAttribute("readOnly");
+		document.getElementById("parentProtocolRow").style.display = '';
+		document.getElementById("ScepAndSequenceNumberRow").style.display = '';
 	}
 }
 
