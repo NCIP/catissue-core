@@ -138,19 +138,15 @@ else
 								style="padding-left: 0.2em; * padding-left: 5px; font-size: 1em; font-family: verdana;">
 							${labelQueryResult.key}</td>
 
-							<td valign="center" height='20' width="15%" align="right"
+							<td valign="center" height='20' width="40%" align="left"
 								style="padding-left: 0.2em; * padding-left: 5px; font-size: 1em; font-family: verdana;">
 							<label id='${labelQueryResult.value}'><img
 								src="images/bluespinner.gif" id='img${labelQueryResult.value}'
 								alt="Loading" width="18" height="15" align="absmiddle" /> <script>
 										getResults(${labelQueryResult.value})
 									</script></td>
-							<td width="5%" />
 						</c:otherwise>
 						</c:choose>
-
-
-
 					</tr>
 				</c:forEach>
 			</table>
