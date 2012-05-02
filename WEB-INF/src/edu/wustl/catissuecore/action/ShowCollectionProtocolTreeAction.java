@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolBean;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.tree.QueryTreeNodeData;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
@@ -70,7 +71,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 			displayName = collectionProtocolBean.getTitle();
 			parentIdentifier = Constants.ZERO_ID;
 			identifier = collectionProtocolBean.getTitle();
-			this.addNode(cpName, displayName, parentIdentifier, identifier, "", treeData,"");
+			AppUtility.addNode(cpName, displayName, parentIdentifier, identifier, "", treeData,"");
 
 		}
 
@@ -96,7 +97,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 						+ " (" + collectionProtocolEventBean.getStudyCalenderEventPoint().toString() +" days)";
 				parentIdentifier = collectionProtocolBean.getTitle();
 				identifier = collectionProtocolEventBean.getUniqueIdentifier();
-				this.addNode(objectName, displayName, parentIdentifier, identifier, cpName,
+				AppUtility.addNode(objectName, displayName, parentIdentifier, identifier, cpName,
 						treeData, "");
 				nodeId = objectName + "_" + identifier;
 				final Map SpecimenRequirementMap = collectionProtocolEventBean
@@ -112,7 +113,7 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 					{
 						final SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean) specimenRequirementBeanCollectionItr
 								.next();
-						this.createSpecimenNode(objectName, identifier, specimenRequirementBean,
+						AppUtility.createSpecimenNode(objectName, identifier, specimenRequirementBean,
 								treeData, operation);
 					}
 				}
@@ -129,93 +130,5 @@ public class ShowCollectionProtocolTreeAction extends BaseAction
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
-	/**
-	 * This is a recursive method for getting node data.
-	 *
-	 * @param parentObjectname : parentObjectname "EventsCPL"+"class"
-	 * @param parentIdentifier : parentIdentifier unique identifier of Event
-	 * @param specimenRequirementBean : specimenRequirementBean
-	 * @param treeData : treeData
-	 * @param operation : operation
-	 * @return String : String
-	 */
-	private String createSpecimenNode(String parentObjectname, String parentIdentifier,
-			SpecimenRequirementBean specimenRequirementBean, Vector treeData, String operation)
-	{
-		final String objectName = Constants.NEW_SPECIMEN;
-		// if(operation!=null && operation.equals(Constants.VIEW_SUMMARY))
-		// {
-		// objectName=Constants.VIEW_SUMMARY;
-		// }
-		final String identifier = specimenRequirementBean.getUniqueIdentifier();
-
-		String displayName = specimenRequirementBean.getClassName()+" ("+specimenRequirementBean.getType()+")";
-			//Constants.SPECIMEN + "_"+ specimenRequirementBean.getUniqueIdentifier();
-		
-		this.addNode(objectName, displayName, parentIdentifier, identifier, parentObjectname,
-				treeData, specimenRequirementBean.getLineage());
-
-		if (specimenRequirementBean.getAliquotSpecimenCollection() != null
-				&& !specimenRequirementBean.getAliquotSpecimenCollection().isEmpty())
-		{
-			final Map aliquotsCollection = specimenRequirementBean.getAliquotSpecimenCollection();
-			final Iterator aliquotsCollectionItr = aliquotsCollection.values().iterator();
-			parentIdentifier = identifier;
-			parentObjectname = objectName;
-			while (aliquotsCollectionItr.hasNext())
-			{
-				final SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) aliquotsCollectionItr
-						.next();
-
-				displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";//Constants.ALIQUOT + specimenRequirementBean1.getUniqueIdentifier();
-				this.createSpecimenNode(parentObjectname, parentIdentifier,
-						specimenRequirementBean1, treeData, operation);
-			}
-		}
-		if (specimenRequirementBean.getDeriveSpecimenCollection() != null
-				&& !specimenRequirementBean.getDeriveSpecimenCollection().isEmpty())
-		{
-			final Map deriveSpecimenMap = specimenRequirementBean.getDeriveSpecimenCollection();
-			final Iterator deriveSpecimenCollectionItr = deriveSpecimenMap.values().iterator();
-			parentIdentifier = identifier;
-			parentObjectname = objectName;
-			while (deriveSpecimenCollectionItr.hasNext())
-			{
-				final SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) deriveSpecimenCollectionItr
-						.next();
-
-				displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";
-				//Constants.DERIVED_SPECIMEN+ specimenRequirementBean1.getUniqueIdentifier();
-				this.createSpecimenNode(parentObjectname, parentIdentifier,
-						specimenRequirementBean1, treeData, operation);
-
-			}
-		}
-		return "New_" + identifier;
-	}
-
-	/**
-	 * Description : This is a common method is for adding node.
-	 *
-	 * @param objectName : objectName
-	 * @param displayName : displayName
-	 * @param parentIdentifier : parentIdentifier
-	 * @param identifier : identifier
-	 * @param parentObjectname : parentObjectname
-	 * @param treeData : treeData
-	 */
-	private void addNode(String objectName, String displayName, String parentIdentifier,
-			String identifier, String parentObjectname, Vector<QueryTreeNodeData> treeData, String objectType)
-	{
-		final QueryTreeNodeData treeNode = new QueryTreeNodeData();
-		treeNode.setParentIdentifier(parentIdentifier);
-		treeNode.setIdentifier(identifier);
-		treeNode.setObjectName(objectName);
-		treeNode.setObjectType(objectType);
-		treeNode.setDisplayName(displayName);
-		treeNode.setParentObjectName(parentObjectname);
-		treeNode.setToolTipText(displayName);
-		treeData.add(treeNode);
-	}
-
+	
 }

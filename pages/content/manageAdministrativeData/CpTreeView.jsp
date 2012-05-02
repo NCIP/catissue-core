@@ -45,13 +45,18 @@
 </table>
 
 <script language="javascript">
-
-			function setGlobalNodeKeys(id)
+	var deletingNodeIndex="", preNodeId="";	
+			function setGlobalNodeKeys(id,selectItem)
 			{	
 				var str=id;
 				var i = str.indexOf('_');
 				var uniqId = str.substring(i+1);
 				window.parent.setKeys(id,uniqId,tree.getParentId(id));
+				if(selectItem == true)
+				{
+					tree.selectItem(id,false);
+					tree.openItem(id);
+				}
 			}
 			
 			function saveTreeState()
@@ -77,7 +82,7 @@
 					i = uniqId.lastIndexOf('_');
 					uniqId = uniqId.substring(i+1);
 				}		
-				setGlobalNodeKeys(id);
+				setGlobalNodeKeys(id,false);
 				if(alias == "New")
 				{
 					window.parent.frames['SpecimenRequirementView'].location="CreateSpecimenTemplate.do?operation=edit&pageOf=specimenRequirement&nodeClicked=true&key="+uniqId+"&nodeId="+id+"&operationType=<%=operationType%>"+"&parentNodeId="+window.parent.parentId;
@@ -117,25 +122,20 @@
 						String tooltipText = data.getToolTipText();
 						String parentId = "0";	
 						String id = data.getIdentifier().toString();
-						if(!data.getParentIdentifier().equals("0"))
-						{
-							parentId = data.getParentObjectName() + "_"+ data.getParentIdentifier().toString();		
-						}
 						String nodeId = data.getObjectName() + "_"+id;
+						if(data.getParentIdentifier().equals("0"))
+						{ %>
+							window.parent.cpNodeId = "<%=nodeId%>";
+						<%	
+						}
+						else
+						{
+							parentId = data.getParentObjectName() + "_"+ data.getParentIdentifier().toString();
+						}
+						
 						String img = "Specimen.GIF";
 						
 						String name = data.getObjectType();
-						
-						/* String name = data.getDisplayName(); 
-						String name=null;
-						StringTokenizer stringTokenizer =new StringTokenizer(objectType, "_");
-						if(stringTokenizer!=null)
-						{	
-							while(stringTokenizer.hasMoreTokens())
-							{
-								name = stringTokenizer.nextToken();
-							}
-						} */
 						
 						if(name.startsWith("N"))
 						{
@@ -167,7 +167,7 @@
 			<%	
 					}
 			%>
-					//tree.closeAllItems("0");
+					tree.closeAllItems("0");
 			<%
 				}
 			%>
@@ -205,19 +205,56 @@
 						tree.selectItem("<%=clickedNode%>",false);
 						tree.openAllItems("<%=clickedNode%>");
 					}
-						setGlobalNodeKeys("<%=clickedNode%>");
+						setGlobalNodeKeys("<%=clickedNode%>",false);
 			<% } else 
 				{
 			%>
 				
 					tree.selectItem("<%=nodeId%>",false);
 					tree.openAllItems("<%=nodeId%>");
-					setGlobalNodeKeys("<%=nodeId%>");
+					setGlobalNodeKeys("<%=nodeId%>",false);
 			<%	}
 			   }
 			%>	
 			
-	reloadTreeState();
-</script>
+			//This function will call on deleting any node from tree
+			//This function will also call on upadation of Event and Specimen Requirement
+			function deleteCPTreeNode(nodeId,selectParentNode)
+			{
+				//needed to keep track of deleting nodes index
+				deletingNodeIndex = tree.getIndexById(nodeId);
+				var parentId = tree.getParentId(nodeId);
+				if(deletingNodeIndex == 0 && tree.hasChildren(parentId) >1)
+					preNodeId = tree.getItemIdByIndex(parentId,(deletingNodeIndex+1));	
+					
+				if(deletingNodeIndex >0)
+					preNodeId = tree.getItemIdByIndex(parentId,(deletingNodeIndex-1));	
+					
+				tree.deleteItem(nodeId,selectParentNode);
+			}
+			
+			//this function will call when we will add an event or specimen requirement
+			//This function will also call on upadation of Event and Specimen Requirement
+			function addCPTreeNode(parentId,nodeId,displayName,img)
+			{	
+				tree.insertNewChild(parentId,nodeId,displayName,0,img,img,img,'');
+				tree.setIconSize("10px","10px",nodeId);
+				tree.setItemText(nodeId,displayName,displayName);
+				//alert(preNodeId);
+				//when we save move item to its original position
+				if(deletingNodeIndex == 0)
+				{
+					tree.moveItem(nodeId, 'item_sibling', preNodeId);
+				}
+				if(deletingNodeIndex > 0)
+				{
+					tree.moveItem(nodeId, 'item_sibling_next', preNodeId);
+				}
+				deletingNodeIndex ="";
+				preNodeId= "";
+			}
+
+	reloadTreeState();			
+	</script>
 </body>
 </html>

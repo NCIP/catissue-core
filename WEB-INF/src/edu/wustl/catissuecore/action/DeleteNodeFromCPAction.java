@@ -48,6 +48,7 @@ public class DeleteNodeFromCPAction extends BaseAction
 	{
 		final ProtocolEventDetailsForm protocolEventDetailsForm = (ProtocolEventDetailsForm) form;
 		final HttpSession session = request.getSession();
+		final String nodeId = request.getParameter(Constants.TREE_NODE_ID);
 		Map collectionProtocolEventMap = null;
 		if (session.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP) != null)
 		{
@@ -125,6 +126,7 @@ public class DeleteNodeFromCPAction extends BaseAction
 			forwardTo = Constants.PAGE_OF_COLLECTION_PROTOCOL;
 			request.getSession().setAttribute(Constants.TREE_NODE_ID,parentNodeId );
 		}
+		request.setAttribute("deleteNode", nodeId);
 		return mapping.findForward(forwardTo);
 	}
 

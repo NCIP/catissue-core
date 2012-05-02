@@ -8,6 +8,7 @@
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
+<%@ page import="edu.wustl.catissuecore.tree.QueryTreeNodeData"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm"%>
 <%@ page import="edu.wustl.catissuecore.bean.CollectionProtocolBean"%>
@@ -444,14 +445,54 @@ if(form != null)
 <%}%>
 	}
 	
-	if("<%=request.getParameter("nodeClicked")%>"!= 'true')
+	function updateCpTree()
 	{
-		window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>&operation=${requestScope.operation}";
+		
+		if('${requestScope.deleteNode}' != "")
+		{
+			window.parent.frames['CPTreeView'].deleteCPTreeNode('${requestScope.deleteNode}',false)
+			window.parent.frames['CPTreeView'].setGlobalNodeKeys("<%=request.getSession().getAttribute("nodeId")%>",true);
+		}
+		/*else
+		{	
+			window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&key=<%=mapKey%>&operation=${requestScope.operation}";
+		}*/
+	<%
+		Vector treeData = (Vector)request.getAttribute("nodeAdded");
+		if(treeData != null && treeData.size() != 0)
+		{
+			Iterator itr  = treeData.iterator();
+			while(itr.hasNext())
+			{
+				QueryTreeNodeData data = (QueryTreeNodeData) itr.next();
+				String objectType = data.getObjectType();
+				String nodeId = data.getObjectName()+ "_" + data.getIdentifier().toString();
+				String img = null;
+				String parentId = data.getParentObjectName() + "_"+ data.getParentIdentifier().toString();
+				if(objectType.startsWith("N")) 	{
+					img = "Participant.GIF";
+				} else if(objectType.startsWith("A"))
+				{
+					img = "aliquot_specimen.gif";
+				} else if(objectType.startsWith("D"))
+				{
+					img = "derived_specimen.gif";
+				} else	{
+					img = "cp_event.gif";
+				}
+			%>
+					window.parent.frames['CPTreeView'].addCPTreeNode("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>","<%=img%>");
+			<%
+			}
+		}
+		%>	
+	var selectedNodeId = "<%=(String)request.getSession().getAttribute("nodeId")%>";
+	window.parent.frames['CPTreeView'].setGlobalNodeKeys(selectedNodeId,true);	
 	}
 </script>
 
 </head>
-<body>
+<body onload="updateCpTree();">
 
 <html:form action="CreateSpecimenTemplate.do" styleId = "createSpecimenTemplateForm">
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">

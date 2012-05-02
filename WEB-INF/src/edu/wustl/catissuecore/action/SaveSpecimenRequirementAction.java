@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +27,9 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.DeriveSpecimenBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
+import edu.wustl.catissuecore.tree.QueryTreeNodeData;
 import edu.wustl.catissuecore.util.IdComparator;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.MapDataParser;
@@ -71,27 +74,28 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		String mapKey = request.getParameter(Constants.EVENT_KEY);
 		final String parentNodeId = request.getParameter(Constants.PARENT_NODE_ID);
 		final String nodeId = request.getParameter(Constants.TREE_NODE_ID);
+		final Vector<QueryTreeNodeData> treeData = new Vector<QueryTreeNodeData>();
+		String objectName = null;
+		String parentId = null;
 		//final StringTokenizer st = new StringTokenizer(mapKey, "_");
 		String eventSelected = null;
 		if(nodeId != null && !nodeId.startsWith(Constants.NEW_SPECIMEN))
 			eventSelected = mapKey;
 		else	
 			eventSelected = parentNodeId.substring(parentNodeId.indexOf('_')+1,parentNodeId.indexOf('_')+3);
-		/*if (st.hasMoreTokens())
-		{
-			eventSelected = st.nextToken();
-		}*/
-		
-		//session.setAttribute(Constants.TREE_NODE_ID, nodeId);
+
 		isPersistent = request.getParameter("isPersistent");
 		request.setAttribute("isPersistent", isPersistent);
 		createDuplicateSpecimen = (String) request.getParameter(Constants.CREATE_DUPLICATE_SPECIMEN);
+		
+		final Map collectionProtocolEventMap = (Map) session
+		.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
+		final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
+		.get((Constants.TRUE.equals(createDuplicateSpecimen) ? eventSelected : mapKey));
+		
 		if (operation.equals(Constants.ADD))
 		{
-			final Map collectionProtocolEventMap = (Map) session
-					.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-			final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
-					.get((Constants.TRUE.equals(createDuplicateSpecimen) ? eventSelected : mapKey));
+			
 			final Integer totalNoOfSpecimen = collectionProtocolEventBean
 					.getSpecimenRequirementbeanMap().size();
 			final SpecimenRequirementBean specimenRequirementBean = this.createSpecimenBean(
@@ -100,6 +104,20 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			if (specimenRequirementBean != null)
 			{
 				collectionProtocolEventBean.addSpecimenRequirementBean(specimenRequirementBean);
+
+				//to create CP Tree node
+				objectName = collectionProtocolEventBean.getCollectionPointLabel()
+				+ Constants.CLASS;
+				if(parentNodeId != null && parentNodeId.startsWith("cpName"))
+				{
+					parentId = collectionProtocolEventBean.getUniqueIdentifier();  
+				}
+				else{
+					parentId = parentNodeId.substring(parentNodeId.indexOf('_')+1);
+				}
+				AppUtility.createSpecimenNode(objectName, parentId, specimenRequirementBean,
+						treeData, operation);
+				request.setAttribute("nodeAdded", treeData);
 			}
 			if(Constants.TRUE.equals(createDuplicateSpecimen))
 			{
@@ -116,6 +134,28 @@ public class SaveSpecimenRequirementAction extends BaseAction
 				request.getSession().setAttribute(Constants.TREE_NODE_ID, parentNodeId);
 				mapKey = parentNodeId.substring(parentNodeId.indexOf('_')+1);
 				request.getSession().setAttribute("key",mapKey);
+				
+				//delete old tree node
+				request.setAttribute("deleteNode", nodeId);
+				
+				//add node
+				
+				final HttpSession sessionObject = request.getSession();
+				final SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean) sessionObject
+						.getAttribute(Constants.EDIT_SPECIMEN_REQUIREMENT_BEAN);
+				if(parentNodeId.startsWith("New"))
+				{
+					objectName = Constants.NEW_SPECIMEN;
+					parentId = parentNodeId.substring(parentNodeId.indexOf('_')+1);
+				}else{
+					objectName  = parentNodeId.substring(0,parentNodeId.indexOf('_')); 
+					parentId = parentNodeId.substring(parentNodeId.indexOf('_')+1,parentNodeId.indexOf('_')+3);
+				}
+				
+				AppUtility.createSpecimenNode(objectName, parentId, specimenRequirementBean,
+						treeData, operation);
+				request.setAttribute("nodeAdded", treeData);
+				
 			}
 			catch (final Exception e)
 			{

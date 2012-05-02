@@ -17,7 +17,7 @@
 
 <script src="jss/javaScript.js" type="text/javascript"></script>
 <script>
-	var selectedNodeId, key, parentId;
+	var selectedNodeId, key, parentId,cpNodeId;
 	//This function calls whenever we select a node from CP tree view
 	function setKeys(nodeId, nodeKey,nodesParentId )
 	{
@@ -103,7 +103,7 @@
 		if(formObject!=null )
 		{
 			operation = formObject.elements['operation'];
-			action="SaveCollectionProtocol.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}&refreshWholePage=true";
+			action="SaveCollectionProtocol.do?Event_Id=dummyId&pageOf=submitSpecimen&operation=${requestScope.operation}&refreshWholePage=true&cpNodeId="+window.parent.cpNodeId;
 			//formObject.target = '_top';
 			isSaveCollectionProtocol = true;
 		}

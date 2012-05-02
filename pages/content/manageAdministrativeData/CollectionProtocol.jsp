@@ -6,6 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
 <%@ page import="java.util.List"%>
+<%@ page import="org.apache.struts.action.ActionMessages"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -211,6 +212,28 @@ function doOnLoad()
 		tabbar.setTabActive("defineDashboardItemsTab");	
 	else
 		tabbar.setTabActive("collectionProtocolTab");
+		
+	if('${requestScope.deleteNode}' != "")
+	{
+		window.parent.frames['CPTreeView'].deleteCPTreeNode('${requestScope.deleteNode}',false)
+	}
+
+	<%
+	String nodeToBeSelected = (String)request.getSession().getAttribute("nodeId");
+	if(nodeToBeSelected!= null && nodeToBeSelected.startsWith("cpName")){
+	%>
+		window.parent.frames['CPTreeView'].setGlobalNodeKeys("<%=request.getSession().getAttribute("nodeId")%>",true);
+	<%}
+	else {
+	%>
+		window.parent.frames['CPTreeView'].setGlobalNodeKeys("<%=request.getSession().getAttribute("nodeId")%>",false);
+	<%}%>
+	
+	if("<%=request.getParameter("nodeClicked")%>" != 'true' )
+	{
+	  window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}&isErrorPage=${requestScope.isErrorPage}";
+	}
+	
 }
 
 function defineEvents()
@@ -254,11 +277,6 @@ function enableDisableParentProtocol(associationType)
 		document.getElementById("studyCalendarEventPoint").removeAttribute("readOnly");
 		document.getElementById("sequenceNumber").removeAttribute("readOnly");
 	}
-}
-
-if("<%=request.getParameter("nodeClicked")%>"!= 'true')
-{
-window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}&isErrorPage=${requestScope.isErrorPage}";
 }
 
 </script>

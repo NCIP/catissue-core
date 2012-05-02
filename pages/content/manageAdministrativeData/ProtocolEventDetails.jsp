@@ -8,6 +8,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.actionForm.ProtocolEventDetailsForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.tree.QueryTreeNodeData"%>
 <%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete" %>
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
@@ -69,7 +70,7 @@ var dsGridVisible = false, csGridVisible = false;
 function specimenRequirements()
 {
 	window.parent.frames['CPTreeView'].saveTreeState();
-	var action ="SaveProtocolEvents.do?pageOf=specimenRequirement&operation=add";
+	var action ="SaveProtocolEvents.do?pageOf=specimenRequirement&operation=add&parentNodeId="+window.parent.cpNodeId;
 	document.forms[0].action = action;
 	document.forms[0].submit();
 }
@@ -77,7 +78,7 @@ function specimenRequirements()
 function createDuplicateEvent()
 {
 	window.parent.frames['CPTreeView'].saveTreeState();
-	var action ="SaveProtocolEvents.do?pageOf=defineEvents&operation=add&"+"<%=Constants.CREATE_DUPLICATE_EVENT%>"+"=true";
+	var action ="SaveProtocolEvents.do?pageOf=defineEvents&operation=add&"+"<%=Constants.CREATE_DUPLICATE_EVENT%>"+"=true&parentNodeId="+window.parent.cpNodeId;
 	document.forms[0].action = action;
 	document.forms[0].submit();
 }
@@ -97,16 +98,11 @@ function deleteEvent()
 function submitAllEvents()
 {
 	window.parent.frames['CPTreeView'].saveTreeState();
-	var action = "SaveProtocolEvents.do?pageOf=defineEvents&operation=add";
+	var action = "SaveProtocolEvents.do?pageOf=defineEvents&operation=add&parentNodeId="+window.parent.cpNodeId+"&nodeId="+window.parent.selectedNodeId;
 	document.forms[0].action = action;
 	document.forms[0].submit();
 }
 
-
-if("<%=request.getParameter("nodeClicked")%>"!= 'true')
-{
-window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=${requestScope.operation}";
-}
 
 function siteOnRowSelect(id,ind)
 {	
@@ -160,8 +156,50 @@ function doOnLoad()
 	dsGrid = initDropDownGrid(siteDropDownInfo); //initialize DropDown control for Site List
 	csGrid = initDropDownGrid(clinicalStatusDropDownInfo); //initialize DropDown control for Clinical Status List
 	//If user creating Duplicate event
-	if('${requestScope.setFocus}'=="true")
-			document.getElementById("collectionPointLabel").focus();
+	if('${requestScope.setFocus}'=="true"){
+			document.getElementById("collectionPointLabel").focus();}
+	
+	if('${requestScope.deleteNode}' != "")
+	{
+		window.parent.frames['CPTreeView'].deleteCPTreeNode('${requestScope.deleteNode}',false)
+		window.parent.frames['CPTreeView'].setGlobalNodeKeys("<%=request.getSession().getAttribute("nodeId")%>",true);
+	}
+	/*else
+	{
+		window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=${requestScope.operation}";
+	}*/
+	<%
+		Vector treeData = (Vector)request.getAttribute("nodeAdded");
+		if(treeData != null && treeData.size() != 0)
+		{
+			Iterator itr  = treeData.iterator();
+			while(itr.hasNext())
+			{
+				QueryTreeNodeData data = (QueryTreeNodeData) itr.next();
+				String objectType = data.getObjectType();
+				String nodeId = data.getObjectName()+ "_" + data.getIdentifier().toString();
+				String img = null;
+				String parentId = data.getParentObjectName() + "_"+ data.getParentIdentifier().toString();
+				if(objectType.startsWith("N")) 	{
+					img = "Participant.GIF";
+				} else if(objectType.startsWith("A"))
+				{
+					img = "aliquot_specimen.gif";
+				} else if(objectType.startsWith("D"))
+				{
+					img = "derived_specimen.gif";
+				} else	{
+					img = "cp_event.gif";
+				}
+			%>
+					window.parent.frames['CPTreeView'].addCPTreeNode("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>","<%=img%>");
+			<%
+			}
+		}
+		%>
+		
+	var selectedNodeId = "<%=(String)request.getSession().getAttribute("nodeId")%>";
+	window.parent.frames['CPTreeView'].setGlobalNodeKeys(selectedNodeId,true);	
 }
 </script>
 </head>

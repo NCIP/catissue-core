@@ -57,6 +57,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.actionForm.IPrinterTypeLocation;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
@@ -89,6 +90,7 @@ import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.dto.CollectionProtocolDTO;
 import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
+import edu.wustl.catissuecore.tree.QueryTreeNodeData;
 import edu.wustl.catissuecore.tree.StorageContainerTreeNode;
 import edu.wustl.catissuecore.util.CSMValidator;
 import edu.wustl.catissuecore.util.EventsUtil;
@@ -3905,7 +3907,7 @@ public class AppUtility {
 		return positionVal;
 	}
 	
-	public static String binaryToRoman(int binary) {
+		public static String binaryToRoman(int binary) {
 		if (binary <= 0 || binary >= 4000) {
 			throw new NumberFormatException("Value outside roman numeral range.");
 		}
@@ -4002,4 +4004,94 @@ public class AppUtility {
 		} while (x < romanNumeral.length());
 		return decimal;
 	}
+	
+	/**
+	 * Description : This is a common method is for adding node.
+	 *
+	 * @param objectName : objectName
+	 * @param displayName : displayName
+	 * @param parentIdentifier : parentIdentifier
+	 * @param identifier : identifier
+	 * @param parentObjectname : parentObjectname
+	 * @param treeData : treeData
+	 */
+	public static void addNode(String objectName, String displayName, String parentIdentifier,
+			String identifier, String parentObjectname, Vector<QueryTreeNodeData> treeData, String objectType)
+	{
+		final QueryTreeNodeData treeNode = new QueryTreeNodeData();
+		treeNode.setParentIdentifier(parentIdentifier);
+		treeNode.setIdentifier(identifier);
+		treeNode.setObjectName(objectName);
+		treeNode.setObjectType(objectType);
+		treeNode.setDisplayName(displayName);
+		treeNode.setParentObjectName(parentObjectname);
+		treeNode.setToolTipText(displayName);
+		treeData.add(treeNode);
+	}
+	
+	/**
+	 * This is a recursive method for getting node data.
+	 *
+	 * @param parentObjectname : parentObjectname "EventsCPL"+"class"
+	 * @param parentIdentifier : parentIdentifier unique identifier of Event
+	 * @param specimenRequirementBean : specimenRequirementBean
+	 * @param treeData : treeData
+	 * @param operation : operation
+	 * @return String : String
+	 */
+	public static String createSpecimenNode(String parentObjectname, String parentIdentifier,
+			SpecimenRequirementBean specimenRequirementBean, Vector treeData, String operation)
+	{
+		final String objectName = Constants.NEW_SPECIMEN;
+		// if(operation!=null && operation.equals(Constants.VIEW_SUMMARY))
+		// {
+		// objectName=Constants.VIEW_SUMMARY;
+		// }
+		final String identifier = specimenRequirementBean.getUniqueIdentifier();
+
+		String displayName = specimenRequirementBean.getClassName()+" ("+specimenRequirementBean.getType()+")";
+			//Constants.SPECIMEN + "_"+ specimenRequirementBean.getUniqueIdentifier();
+		
+		AppUtility.addNode(objectName, displayName, parentIdentifier, identifier, parentObjectname,
+				treeData, specimenRequirementBean.getLineage());
+
+		if (specimenRequirementBean.getAliquotSpecimenCollection() != null
+				&& !specimenRequirementBean.getAliquotSpecimenCollection().isEmpty())
+		{
+			final Map aliquotsCollection = specimenRequirementBean.getAliquotSpecimenCollection();
+			final Iterator aliquotsCollectionItr = aliquotsCollection.values().iterator();
+			parentIdentifier = identifier;
+			parentObjectname = objectName;
+			while (aliquotsCollectionItr.hasNext())
+			{
+				final SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) aliquotsCollectionItr
+						.next();
+
+				displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";//Constants.ALIQUOT + specimenRequirementBean1.getUniqueIdentifier();
+				createSpecimenNode(parentObjectname, parentIdentifier,
+						specimenRequirementBean1, treeData, operation);
+			}
+		}
+		if (specimenRequirementBean.getDeriveSpecimenCollection() != null
+				&& !specimenRequirementBean.getDeriveSpecimenCollection().isEmpty())
+		{
+			final Map deriveSpecimenMap = specimenRequirementBean.getDeriveSpecimenCollection();
+			final Iterator deriveSpecimenCollectionItr = deriveSpecimenMap.values().iterator();
+			parentIdentifier = identifier;
+			parentObjectname = objectName;
+			while (deriveSpecimenCollectionItr.hasNext())
+			{
+				final SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) deriveSpecimenCollectionItr
+						.next();
+
+				displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";
+				//Constants.DERIVED_SPECIMEN+ specimenRequirementBean1.getUniqueIdentifier();
+				createSpecimenNode(parentObjectname, parentIdentifier,
+						specimenRequirementBean1, treeData, operation);
+
+			}
+		}
+		return "New_" + identifier;
+	}
+	
 }
