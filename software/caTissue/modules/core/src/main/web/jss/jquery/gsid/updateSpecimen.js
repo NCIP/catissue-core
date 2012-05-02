@@ -45,7 +45,7 @@ $j(function(){
                 	if(html)
             		{     
                 		var noError;
-                		if($j.trim(html)!='GSID service might be down')
+                		if($j.trim(html)!='GSID service might be down' && $j.trim(html).substring(0, 6) != "ERROR:")
             			{
                 			$j('#updateGSID').remove();   
                 			//$j('#updateGSID').attr('disabled', 'disabled');	
@@ -57,15 +57,17 @@ $j(function(){
                 			noError=true;
                 			//$j('#gsidErrorLabel').remove();
                 			if (!gsidSvcDownNotified) {
-                				$j('label[for="globalSpecimenIdentifierValue"]').append("<span id='gsidErrorLabel' style='color:red'> Error: GSID service might be down.</span>");
+                				$j('label[for="globalSpecimenIdentifierValue"]').append("<span id='gsidErrorLabel' style='color:red'> " + html + "</span>");
                 				gsidSvcDownNotified = true;
                 				$j('#gsidErrorLabel').effect('shake',{distance:10,times:noOftimes},speed);
                 			}
             			}
             		}
-            	    $j('#overlay').fadeOut('400',function(){
+
+                    $j('#overlay').fadeOut('400',function(){
             	    	$j(this).remove();
-                    });            
+                    });
+
             	    if(!noError)
             	    {
             	    	$j('label[for="globalSpecimenIdentifierValue"]').css('color','green').effect('pulsate',{times:noOftimes},speed);

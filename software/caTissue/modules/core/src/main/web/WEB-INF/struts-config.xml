@@ -3585,9 +3585,7 @@ PUBLIC
 			<forward name="pageOfCollectionProtocolForTitli" path="/RetrieveCollectionProtocol.do"/>
 		</action>
 
-		<action path="/SimpleSearchEdit"
-		    type="edu.wustl.catissuecore.action.SimpleSearchEditAction"
-			scope="request">
+		<action path="/SimpleSearchEdit" type="edu.wustl.catissuecore.action.SimpleSearchEditAction" scope="request">
 			<forward name="pageOfBioHazard" path="/BiohazardSearch.do"/>
 			<forward name="pageOfCancerResearchGroup" path="/CancerResearchGroupSearch.do"/>
 			<forward name="pageOfCollectionProtocol" path="/CollectionProtocolSearch.do"/>
@@ -5589,10 +5587,7 @@ PUBLIC
 			<forward name="success" path="/pages/content/gsid/BatchUpdateStatus.jsp" />
 		</action>
 
-		<action path="/updateSpecimensGSID"
-			type="edu.wustl.catissuecore.action.GSIDUpdateSpecimenAction"
-			validate="false"
-			scope="request">
+		<action path="/updateSpecimensGSID" type="edu.wustl.catissuecore.action.GSIDUpdateSpecimenAction" validate="false" scope="request">
 			<forward name="success" path="/pages/content/gsid/gsidSpecimenUpdateNotification.jsp" />
 		</action>
 
