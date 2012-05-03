@@ -566,7 +566,7 @@ grid.init();
 
 grid.parse(myObject,"json");
 }
-document.body.onload = function(){
+window.onload = function(){
 loadGrid();
       //alert("LOADED!");
   }
