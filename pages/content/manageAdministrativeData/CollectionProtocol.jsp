@@ -352,7 +352,7 @@ div#d999 {
 				
 
 				
-				<tr>
+				<tr id="parentProtocolRow">
 					<td width="1%" align="center" class="black_ar"><span id="parentProtocolMendatorySymbol"></span></td>
 					<td width="30%" align="left" class="black_ar" ><bean:message
 						key="collectionprotocol.parentcollectionprotocol" /></td>
@@ -391,7 +391,7 @@ div#d999 {
 					</td>
 				</tr>
 				
-					<tr>
+				<tr id="ScepAndSequenceNumberRow">
 					<td width="1%" align="center" class="black_ar">&nbsp;</td>
 					<td width="30%" align="left" class="black_ar" ><bean:message
 						key="collectionprotocol.studyCalEventPoint" /></td>
