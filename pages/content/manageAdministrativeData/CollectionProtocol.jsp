@@ -368,7 +368,7 @@ div#d999 {
 													onKeyUp="autoCompleteControl(event,parentProtocolDropDownInfo,ppGrid);"
 													onClick="noEventPropogation(event)"
 													autocomplete="off"
-													size="20"
+													size="18"
 													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="ppDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
 												
 												src="images/uIEnhancementImages/s.gif"/>
@@ -400,7 +400,7 @@ div#d999 {
 							<tr>
 								<td width="31%" align="left" class="black_ar" >
 									<html:text styleClass="black_ar"
-									maxlength="50" size="20" styleId="studyCalendarEventPoint"
+									maxlength="50" size="18" styleId="studyCalendarEventPoint"
 									property="studyCalendarEventPoint" readonly='${requestScope.hasParent}' />
 								</td>
 								<td width="1%" align="left" class="black_ar">&nbsp;</td>
@@ -434,7 +434,7 @@ div#d999 {
 													onKeyUp="autoCompleteControl(event,investigatorDropDownInfo,piGrid);"
 													onClick="noEventPropogation(event)"
 													autocomplete="off"
-													size="20"
+													size="18"
 													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="piDropDownId" style="top : 0px !important; align:left;" class="x-form-trigger x-form-arrow-trigger" 
 												onclick="showHideGrid(event,investigatorDropDownInfo,piGrid);"
 												src="images/uIEnhancementImages/s.gif"/>
@@ -466,7 +466,7 @@ div#d999 {
 						<table width="100%" cellspacing="0" cellpadding="0">
 							<tr> <td width="57%">
 								<mCombo:multiSelectUsingCombo
-								identifier="pcoordinatorIds" size="20" styleClass="black_ar_new"
+								identifier="pcoordinatorIds" size="18" styleClass="black_ar_new"
 								addNewActionStyleClass="black_ar_new"
 								addButtonOnClick="moveOptions('pcoordinatorIds','coordinatorIds', 'add')"
 								removeButtonOnClick="moveOptions('coordinatorIds','pcoordinatorIds', 'edit')"
@@ -611,7 +611,7 @@ div#d999 {
 						key="specimenCollectionGroup.clinicalDiagnosis" /></td>
 
 					<td align="left" class="black_ar"><mCombo:multiSelectUsingCombo
-						identifier="coord" size="20" styleClass="black_ar_new"
+						identifier="coord" size="18" styleClass="black_ar_new"
 						addNewActionStyleClass="black_ar_new"
 						addButtonOnClick="moveOptions('coord','protocolCoordinatorIds', 'add')"
 						removeButtonOnClick="moveOptions('protocolCoordinatorIds','coord', 'edit')"
