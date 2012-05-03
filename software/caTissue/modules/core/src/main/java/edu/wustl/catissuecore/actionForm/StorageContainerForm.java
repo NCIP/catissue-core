@@ -128,10 +128,10 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	private String isFull = "False";
 
 	/** Position for dimension 1. */
-	private int positionDimensionOne;
+	private String positionDimensionOne;
 
 	/** Position for dimension 2. */
-	private int positionDimensionTwo;
+	private String positionDimensionTwo;
 
 	/** site name for particular parent container. */
 	private String siteForParentContainer;
@@ -332,10 +332,10 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 				//Sri: Fix for bug #
 
-				this.positionDimensionOne = container.getLocatedAtPosition()
-						.getPositionDimensionOne().intValue();
-				this.positionDimensionTwo = container.getLocatedAtPosition()
-						.getPositionDimensionTwo().intValue();
+				this.positionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToString(container.getName(),1,container.getLocatedAtPosition()
+						.getPositionDimensionOne().intValue());
+				this.positionDimensionTwo = StorageContainerUtil.convertSpecimenPositionsToString(container.getName(),2,container.getLocatedAtPosition()
+						.getPositionDimensionTwo().intValue());
 			}
 
 			this.siteName = parentContainer.getSite().getName();
@@ -956,7 +956,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 *
 	 * @return Returns the positionDimensionOne.
 	 */
-	public int getPositionDimensionOne()
+	public String getPositionDimensionOne()
 	{
 		return this.positionDimensionOne;
 	}
@@ -966,7 +966,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 *
 	 * @param positionDimensionOne The positionDimensionOne to set.
 	 */
-	public void setPositionDimensionOne(int positionDimensionOne)
+	public void setPositionDimensionOne(String positionDimensionOne)
 	{
 		this.positionDimensionOne = positionDimensionOne;
 	}
@@ -976,7 +976,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 *
 	 * @return Returns the positionDimensionTwo.
 	 */
-	public int getPositionDimensionTwo()
+	public String getPositionDimensionTwo()
 	{
 		return this.positionDimensionTwo;
 	}
@@ -986,7 +986,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 	 *
 	 * @param positionDimensionTwo The positionDimensionTwo to set.
 	 */
-	public void setPositionDimensionTwo(int positionDimensionTwo)
+	public void setPositionDimensionTwo(String positionDimensionTwo)
 	{
 		this.positionDimensionTwo = positionDimensionTwo;
 	}
@@ -1178,7 +1178,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			{
 				if ("Auto".equals(this.parentContainerSelected))
 				{
-					if (!validator.isNumeric(String.valueOf(this.positionDimensionOne), 1)
+					/*if (!validator.isNumeric(String.valueOf(this.positionDimensionOne), 1)
 							|| !validator.isNumeric(String.valueOf(this.positionDimensionTwo), 1)
 							|| !validator.isNumeric(String.valueOf(this.parentContainerId), 1))
 					{
@@ -1186,18 +1186,18 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 								.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 										"errors.item.format", ApplicationProperties
 												.getValue("storageContainer.parentContainer")));
-					}
+					}*/
 				}
 				else
 				{
-					this.checkPositionForParent(errors);
+					//this.checkPositionForParent(errors);
 				}
 
 			}
 			else if (this.parentContainerSelected.equals("Manual") && this.noOfContainers >= 1)
 			{
 
-				this.checkPositionForParent(errors);
+				//this.checkPositionForParent(errors);
 			}
 			this.checkValidNumber(String.valueOf(this.noOfContainers),
 					"storageContainer.noOfContainers", errors, validator);

@@ -471,12 +471,12 @@ public class StorageContainerBean implements Serializable
 	/**
 	 * Positon for dimension 1.
 	 */
-	private int positionDimensionOne;
+	private String positionDimensionOne;
 
 	/**
 	 * Position for dimension 2.
 	 */
-	private int positionDimensionTwo;
+	private String positionDimensionTwo;
 
 	/**
 	 * site name for particular parent container.
@@ -709,7 +709,7 @@ public class StorageContainerBean implements Serializable
 	/**
 	 * @return Returns the positionDimensionTwo.
 	 */
-	public int getPositionDimensionTwo()
+	public String getPositionDimensionTwo()
 	{
 		return this.positionDimensionTwo;
 	}
@@ -717,7 +717,7 @@ public class StorageContainerBean implements Serializable
 	/**
 	 * @param positionDimensionTwo The positionDimensionTwo to set.
 	 */
-	public void setPositionDimensionTwo(int positionDimensionTwo)
+	public void setPositionDimensionTwo(String positionDimensionTwo)
 	{
 		this.positionDimensionTwo = positionDimensionTwo;
 	}
@@ -829,7 +829,7 @@ public class StorageContainerBean implements Serializable
 	/**
 	 * @return Returns the positionDimensionOne.
 	 */
-	public int getPositionDimensionOne()
+	public String getPositionDimensionOne()
 	{
 		return this.positionDimensionOne;
 	}
@@ -837,7 +837,7 @@ public class StorageContainerBean implements Serializable
 	/**
 	 * @param positionDimensionOne The positionDimensionOne to set.
 	 */
-	public void setPositionDimensionOne(int positionDimensionOne)
+	public void setPositionDimensionOne(String positionDimensionOne)
 	{
 		this.positionDimensionOne = positionDimensionOne;
 	}

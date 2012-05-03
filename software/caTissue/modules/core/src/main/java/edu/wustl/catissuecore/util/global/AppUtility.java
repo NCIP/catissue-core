@@ -4181,7 +4181,7 @@ public class AppUtility
 		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)
 				|| (labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE)))
 		{
-			positionVal=romanToInteger(position);
+			positionVal=romanToInteger(position.toUpperCase());
 		}
 		return positionVal;
 	}

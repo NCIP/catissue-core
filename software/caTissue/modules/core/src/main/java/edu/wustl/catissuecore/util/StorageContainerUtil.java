@@ -856,12 +856,14 @@ public final class StorageContainerUtil
 		{
 			startingPoints[0] = specimenArrayForm.getStorageContainer();
 		}
-		if (specimenArrayForm.getPositionDimensionOne() != -1)
+		//if (specimenArrayForm.getPositionDimensionOne() != -1)
+		if (specimenArrayForm.getPositionDimensionOne() != null && !"".equals(specimenArrayForm.getPositionDimensionOne()))
 		{
 			startingPoints[1] = String.valueOf(specimenArrayForm.getPositionDimensionOne());
 		}
 
-		if (specimenArrayForm.getPositionDimensionTwo() != -1)
+		//if (specimenArrayForm.getPositionDimensionTwo() != -1)
+		if (specimenArrayForm.getPositionDimensionTwo() != null && !"".equals(specimenArrayForm.getPositionDimensionTwo()))
 		{
 			startingPoints[2] = String.valueOf(specimenArrayForm.getPositionDimensionTwo());
 		}
@@ -1003,12 +1005,12 @@ public final class StorageContainerUtil
 	 * @param dao - dao
 	 * @throws BizLogicException - BizLogicException
 	 */
-	public static void addAllocatedPositionToMap(TreeMap containerMap, long containerId, int xPos,
-			int yPos, DAO dao) throws BizLogicException
+	public static void addAllocatedPositionToMap(TreeMap containerMap, long containerId, String xPos,
+			String yPos, DAO dao) throws BizLogicException
 			{
 		//bug 14826
 		long relevanceCnt = 1;
-		if ((containerId != 0) && (xPos != 0) && (yPos != 0))
+		if ((containerId != 0) && (xPos != null  && !"".equals(xPos)) && (yPos != null && !"".equals(yPos)))//(xPos != 0) && (yPos != 0))
 		{
 			List parentContainerNameList;
 			try
@@ -2899,6 +2901,16 @@ public final class StorageContainerUtil
 		Integer position;
 		List labellingSchemesList=null;
 		labellingSchemesList = getLabellingSchemeByContainerName(containerName);
+		String dimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(labellingDimension-1);
+		position=AppUtility.getPositionValueInInteger(dimensionLabellingScheme, pos);
+		return position;
+	}
+	
+	public static Integer convertPositionsToIntegerUsingContId(String containerId, int labellingDimension,String pos)
+	{
+		Integer position;
+		List labellingSchemesList=null;
+		labellingSchemesList = getLabellingSchemeByContainerId(containerId);
 		String dimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(labellingDimension-1);
 		position=AppUtility.getPositionValueInInteger(dimensionLabellingScheme, pos);
 		return position;

@@ -496,11 +496,10 @@ public class StorageContainerAction extends SecureAction
 				storageContainerForm.setOneDimensionLabel(type.getOneDimensionLabel());
 				storageContainerForm.setTwoDimensionLabel(CommonUtilities.toString(type
 						.getTwoDimensionLabel()));
+				storageContainerForm.setTypeName(type.getName());
 				storageContainerForm.setOneDimensionLabellingScheme(type.getOneDimensionLabellingScheme());
 				storageContainerForm.setTwoDimensionLabellingScheme(type.getTwoDimensionLabellingScheme());
-
-				storageContainerForm.setTypeName(type.getName());
-
+				
 				if (type.getHoldsSpecimenClassCollection().size() > 0)
 				{
 					storageContainerForm.setSpecimenOrArrayType("Specimen");
@@ -641,15 +640,17 @@ public class StorageContainerAction extends SecureAction
 					startingPoints[0] = new Long(storageContainerForm.getParentContainerId())
 							.toString();
 				}
-				if (storageContainerForm.getPositionDimensionOne() != -1)
+				//if (storageContainerForm.getPositionDimensionOne() != -1)
+				
+				System.out.println("hello");
+				if (storageContainerForm.getPositionDimensionOne()!=null && !"".equals(storageContainerForm.getPositionDimensionOne()))
 				{
-					startingPoints[1] = new Integer(storageContainerForm.getPositionDimensionOne())
-							.toString();
+					startingPoints[1] = storageContainerForm.getPositionDimensionOne();
 				}
-				if (storageContainerForm.getPositionDimensionTwo() != -1)
+				//if (storageContainerForm.getPositionDimensionTwo() != -1)
+				if (storageContainerForm.getPositionDimensionTwo()!=null && !"".equals(storageContainerForm.getPositionDimensionTwo()))
 				{
-					startingPoints[2] = new Integer(storageContainerForm.getPositionDimensionTwo())
-							.toString();
+					startingPoints[2] = storageContainerForm.getPositionDimensionTwo();
 				}
 
 				initialValues = new Vector<String[]>();

@@ -76,11 +76,13 @@ public class StorageContainerTransformer implements UIDomainTransformer<StorageC
                     domainObject.getLocatedAtPosition().setParentContainer(scInstFact.createObject());
                     domainObject.getLocatedAtPosition().getParentContainer().setId(
                             new Long(uiRepOfDomain.getParentContainerId()));
-
-                    domainObject.getLocatedAtPosition().setPositionDimensionOne(
-                            new Integer(uiRepOfDomain.getPositionDimensionOne()));
-                    domainObject.getLocatedAtPosition().setPositionDimensionTwo(
-                            new Integer(uiRepOfDomain.getPositionDimensionTwo()));
+                    
+                    domainObject.getLocatedAtPosition().setPositionDimensionOne(StorageContainerUtil.convertPositionsToIntegerUsingContId(String.valueOf(uiRepOfDomain.getParentContainerId()),1,uiRepOfDomain.getPositionDimensionOne().trim()));
+                            //new Integer(uiRepOfDomain.getPositionDimensionOne()));
+                    domainObject.getLocatedAtPosition().setPositionDimensionOneString(uiRepOfDomain.getPositionDimensionOne());
+                    domainObject.getLocatedAtPosition().setPositionDimensionTwoString(uiRepOfDomain.getPositionDimensionTwo());
+                    domainObject.getLocatedAtPosition().setPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(String.valueOf(uiRepOfDomain.getParentContainerId()),2,uiRepOfDomain.getPositionDimensionTwo().trim()));
+                            //new Integer(uiRepOfDomain.getPositionDimensionTwo()));
                     domainObject.getLocatedAtPosition().setOccupiedContainer(domainObject);
                 } else {
                     domainObject.getLocatedAtPosition().setParentContainer(scInstFact.createObject());
@@ -98,10 +100,12 @@ public class StorageContainerTransformer implements UIDomainTransformer<StorageC
                         	domainObject.setLocatedAtPosition(instFact.createObject());
                             //domainObject.setLocatedAtPosition(new ContainerPosition());
                         }
-                        domainObject.getLocatedAtPosition().setPositionDimensionOne(
-                                new Integer(uiRepOfDomain.getPos1().trim()));
-                        domainObject.getLocatedAtPosition().setPositionDimensionTwo(
-                                new Integer(uiRepOfDomain.getPos2().trim()));
+                        domainObject.getLocatedAtPosition().setPositionDimensionOne(StorageContainerUtil.convertSpecimenPositionsToInteger(uiRepOfDomain.getSelectedContainerName(),1,uiRepOfDomain.getPos1().trim()));
+                                //new Integer(uiRepOfDomain.getPos1().trim()));
+                        domainObject.getLocatedAtPosition().setPositionDimensionOneString(uiRepOfDomain.getPos1().trim());
+                        domainObject.getLocatedAtPosition().setPositionDimensionTwo(StorageContainerUtil.convertSpecimenPositionsToInteger(uiRepOfDomain.getSelectedContainerName(),2,uiRepOfDomain.getPos2().trim()));
+                                //new Integer(uiRepOfDomain.getPos2().trim()));
+                        domainObject.getLocatedAtPosition().setPositionDimensionTwoString(uiRepOfDomain.getPos2().trim());
                         domainObject.getLocatedAtPosition().setOccupiedContainer(domainObject);
                     }
                 }
