@@ -127,7 +127,7 @@ create table CATISSUE_COLL_DISTRIBUTION_REL (
 );
 create table CATISSUE_DISPOSAL_EVENT_PARAM (
    IDENTIFIER number(19,0) not null,
-   REASON varchar(255),
+   REASON varchar(2000),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_REQUIREMENT (
