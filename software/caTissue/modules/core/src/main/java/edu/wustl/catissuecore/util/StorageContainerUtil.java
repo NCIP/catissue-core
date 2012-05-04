@@ -2373,7 +2373,7 @@ public final class StorageContainerUtil
 			final Collection<String> specimenClassTypeCollection = container.getHoldsSpecimenClassCollection();
 			final Collection<String> specimenTypeCollection = container.getHoldsSpecimenTypeCollection();
 			Collection<String> spType = new HashSet<String>();
-			if(specimenClassTypeCollection != null || !specimenClassTypeCollection.isEmpty())
+			if(specimenClassTypeCollection != null && !specimenClassTypeCollection.isEmpty())
 			{
 				final Iterator<String> itrSpClass = specimenClassTypeCollection.iterator();
 				while (itrSpClass.hasNext())

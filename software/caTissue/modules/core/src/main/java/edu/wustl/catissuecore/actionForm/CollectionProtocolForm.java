@@ -42,6 +42,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
+	
+	private static final String VALIDATED_KEY = CollectionProtocolForm.class.getName()+".VALIDATED_KEY";
 
 	/** logger Logger - Generic logger. */
 	private static final Logger LOGGER = Logger.getCommonLogger(CollectionProtocolForm.class);
@@ -356,6 +358,11 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		LOGGER.debug("OPERATION : ----- : " + this.getOperation());
+		
+		if (request.getAttribute(VALIDATED_KEY)!=null) {
+		    return new ActionErrors();
+		}
+		
 		ActionErrors errors = super.validate(mapping, request);
 		//		Validator validator = new Validator();
 		try
@@ -384,6 +391,18 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			//logger.debug(excp);
 			errors = new ActionErrors();
 		}
+		
+		// See https://bugzilla.wustl.edu/bugzilla/show_bug.cgi?id=22806.
+		// Setting a flag to avoid multiple validations of the same form.
+		// SaveCollectionProtocol forwards to DefineEvents in case this validation fails,
+		// which in turn repeats validation and again forwards to CollectionProtocol.do,
+		// which should only be opened within a frame. We suppress multiple validation so that
+		// DefineEvents does not see these action errors and properly displays a multi-frame window.
+        if (errors != null && !errors.isEmpty()
+                && "/SaveCollectionProtocol".equals(mapping.getPath())) {
+            request.setAttribute(VALIDATED_KEY, true);
+        }
+		
 		return errors;
 	}
 

@@ -126,15 +126,15 @@
 							}
 						}
 						
-						if(name.startsWith("S"))
+						if(name!=null && name.startsWith("S"))
 						{
 							img = "Specimen.GIF";
 						}
-						else if(name.startsWith("A"))
+						else if(name!=null && name.startsWith("A"))
 						{
 							img = "aliquot_specimen.gif";
 						}
-						else if(name.startsWith("D"))
+						else if(name!=null && name.startsWith("D"))
 						{
 							img = "derived_specimen.gif";
 						}
