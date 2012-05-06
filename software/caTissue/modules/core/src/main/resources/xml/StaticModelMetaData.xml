@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <staticMetaData>
 	<entity>
+		<name>edu.wustl.catissuecore.domain.StorageContainer</name>
+		<attribute>
+			<name>oneDimensionLabellingScheme</name>
+		</attribute>
+		<attribute>	
+			<name>twoDimensionLabellingScheme</name>
+		</attribute>
+	</entity>
+	
+	<entity>
+		<name>edu.wustl.catissuecore.domain.ContainerType</name>
+		<attribute>
+			<name>oneDimensionLabellingScheme</name>
+		</attribute>
+		<attribute>	
+			<name>twoDimensionLabellingScheme</name>
+		</attribute>
+	</entity>
+	
+	<entity>
+		<name>edu.wustl.catissuecore.domain.AbstractPosition</name>
+		<attribute>
+			<name>positionDimensionOneString</name>
+		</attribute>
+		<attribute>	
+			<name>positionDimensionTwoString</name>
+		</attribute>
+	</entity>
+	
+	<entity>
 		<name>edu.wustl.catissuecore.domain.SpecimenCollectionGroup</name>
 		<attribute>
 			<name>ageAtCollection</name>
@@ -102,36 +132,6 @@
 	<entity>
 		<activityStatus>Disabled</activityStatus>
 		<name>edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters</name>
-	</entity>
-	
-	<entity>
-		<name>edu.wustl.catissuecore.domain.StorageContainer</name>
-		<attribute>
-			<name>oneDimensionLabellingScheme</name>
-		</attribute>
-		<attribute>	
-			<name>twoDimensionLabellingScheme</name>
-		</attribute>
-	</entity>
-	
-	<entity>
-		<name>edu.wustl.catissuecore.domain.ContainerType</name>
-		<attribute>
-			<name>oneDimensionLabellingScheme</name>
-		</attribute>
-		<attribute>	
-			<name>twoDimensionLabellingScheme</name>
-		</attribute>
-	</entity>
-	
-	<entity>
-		<name>edu.wustl.catissuecore.domain.AbstractPosition</name>
-		<attribute>
-			<name>positionDimensionOneString</name>
-		</attribute>
-		<attribute>	
-			<name>positionDimensionTwoString</name>
-		</attribute>
 	</entity>
 	
 	<association>
