@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import edu.wustl.catissuecore.actionForm.BulkEventOperationsForm;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.common.exception.ApplicationException;
 
 /**
@@ -25,6 +26,8 @@ public class BulkTransferEventsAction extends BulkOperationAction
 	protected void fillFormData(BulkEventOperationsForm eventParametersForm, List specimenRow,
 			String specimenId, HttpServletRequest request) throws ApplicationException
 	{
+		System.out.println("hello");
+		
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_CLASS", specimenRow.get(2)
 				.toString());
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_LABEL", specimenRow.get(1)
@@ -37,7 +40,8 @@ public class BulkTransferEventsAction extends BulkOperationAction
 		else
 		{
 			eventParametersForm.setFieldValue("ID_" + specimenId + "_FROMLOC", specimenRow.get(3)
-					+ " (" + specimenRow.get(4) + "," + specimenRow.get(5) + ")");
+					+ " (" + StorageContainerUtil.convertSpecimenPositionsToString(specimenRow.get(3).toString(), 1, Integer.valueOf(specimenRow.get(4).toString()))
+					+ "," + StorageContainerUtil.convertSpecimenPositionsToString(specimenRow.get(3).toString(), 2, Integer.valueOf(specimenRow.get(5).toString())) + ")");
 		}
 
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_FROMLOCID", specimenRow.get(6)

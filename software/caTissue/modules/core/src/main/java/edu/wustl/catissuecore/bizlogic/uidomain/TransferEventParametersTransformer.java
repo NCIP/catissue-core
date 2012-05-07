@@ -26,8 +26,8 @@ public class TransferEventParametersTransformer
         InstanceFactory<StorageContainer> scInstFact = DomainInstanceFactory.getInstanceFactory(StorageContainer.class);
         final StorageContainer toObj = scInstFact.createObject();//new StorageContainer();
         if (uiRepOfDomain.getStContSelection() == 1) {
-            domainObject.setToPositionDimensionOne(Integer.valueOf(uiRepOfDomain.getPositionDimensionOne()));
-            domainObject.setToPositionDimensionTwo(Integer.valueOf(uiRepOfDomain.getPositionDimensionTwo()));
+          	domainObject.setToPositionDimensionOne(StorageContainerUtil.convertPositionsToIntegerUsingContId(uiRepOfDomain.getStorageContainer(), 1, uiRepOfDomain.getPositionDimensionOne()));
+            domainObject.setToPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(uiRepOfDomain.getStorageContainer(), 2, uiRepOfDomain.getPositionDimensionTwo()));
             toObj.setId(Long.valueOf(uiRepOfDomain.getStorageContainer()));
         } else {
             if (uiRepOfDomain.getPos1() != null && !uiRepOfDomain.getPos1().trim().equals(Constants.DOUBLE_QUOTES)
@@ -55,8 +55,8 @@ public class TransferEventParametersTransformer
     		 fromObj.setId(Long.valueOf(uiRepOfDomain.getFromStorageContainerId()));
     		 domainObject.setFromStorageContainer(fromObj);
     		 
-    		domainObject.setFromPositionDimensionOne(Integer.valueOf(uiRepOfDomain.getFromPositionDimensionOne()));
-            domainObject.setFromPositionDimensionTwo(Integer.valueOf(uiRepOfDomain.getFromPositionDimensionTwo()));
+    		domainObject.setFromPositionDimensionOne(StorageContainerUtil.convertPositionsToIntegerUsingContId(uiRepOfDomain.getStorageContainer(), 1, uiRepOfDomain.getFromPositionDimensionOne()));
+            domainObject.setFromPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(uiRepOfDomain.getStorageContainer(), 2, uiRepOfDomain.getFromPositionDimensionTwo()));
         }
         
        /* if (uiRepOfDomain.getFromStorageContainerId() == 0) {

@@ -1007,6 +1007,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			validatePosition(dao, container, validator);
 			validateStatus(operation, container);
 			validateCPRestriction(dao,container,validator);
+			validateLabellingSchemes(dao,container);
 			StorageContainerUtil.populateSpecimenType(container);
 			return true;
 		}
@@ -1018,6 +1019,26 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 
 	}
 	
+	private void validateLabellingSchemes(DAO dao, StorageContainer container) throws BizLogicException
+	{
+		if(container.getId()!=null)
+		{
+			boolean isContainerEmpty=StorageContainerUtil.isContainerEmpty(dao, container);
+			if(!isContainerEmpty)
+			{
+				List labellingList=StorageContainerUtil.getLabellingSchemeByContainerId(container.getId().toString());
+				String oneDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(0);
+				String twoDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(1);
+
+				if(!oneDimensionLabellingScheme.equals(container.getOneDimensionLabellingScheme()) 
+						|| !twoDimensionLabellingScheme.equals(container.getTwoDimensionLabellingScheme()))
+				{
+					throw this.getBizLogicException(null, "storageContainer.labellingScheme.errMsg", container.getName());
+				}
+			}
+		}
+	}
+
 	private void validateStCapacity(StorageContainer container) throws BizLogicException
 	{
 		final Capacity capacityObj= container.getCapacity();

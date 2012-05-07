@@ -140,10 +140,10 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 										&& specimen.getSpecimenPosition().getPositionDimensionOne() != null
 										&& specimen.getSpecimenPosition().getPositionDimensionTwo() != null)
 								{
-									positionOne = specimen.getSpecimenPosition()
-											.getPositionDimensionOne().toString();
-									positionTwo = specimen.getSpecimenPosition()
-											.getPositionDimensionTwo().toString();
+									positionOne = StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSpecimenPosition().getStorageContainer().getName(), 1, specimen.getSpecimenPosition()
+											.getPositionDimensionOne());
+									positionTwo = StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSpecimenPosition().getStorageContainer().getName(), 2, specimen.getSpecimenPosition()
+											.getPositionDimensionTwo());
 									// StorageContainer container =
 									// specimen.getStorageContainer();
 									storageContainerID = stContainer.getId().toString();

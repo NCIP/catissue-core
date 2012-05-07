@@ -641,8 +641,6 @@ public class StorageContainerAction extends SecureAction
 							.toString();
 				}
 				//if (storageContainerForm.getPositionDimensionOne() != -1)
-				
-				System.out.println("hello");
 				if (storageContainerForm.getPositionDimensionOne()!=null && !"".equals(storageContainerForm.getPositionDimensionOne()))
 				{
 					startingPoints[1] = storageContainerForm.getPositionDimensionOne();
@@ -755,6 +753,7 @@ public class StorageContainerAction extends SecureAction
 		storageContainerForm.setCollectionIds(storageContainerBean.getCollectionIds());
 		storageContainerForm.setContainerId(storageContainerBean.getContainerId());
 		storageContainerForm.setContainerName(storageContainerBean.getContainerName());
+		storageContainerForm.setSelectedContainerName(storageContainerBean.getContainerName());
 		storageContainerForm.setDefaultTemperature(storageContainerBean.getDefaultTemperature());
 		storageContainerForm.setHoldsSpecimenArrTypeIds(storageContainerBean
 				.getHoldsSpecimenArrTypeIds());
