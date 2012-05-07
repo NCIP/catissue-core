@@ -638,15 +638,13 @@ public class StorageContainerAction extends SecureAction
 					startingPoints[0] = new Long(storageContainerForm.getParentContainerId())
 							.toString();
 				}
-				if (storageContainerForm.getPositionDimensionOne() != -1)
+				if (storageContainerForm.getPositionDimensionOne()!=null && !"".equals(storageContainerForm.getPositionDimensionOne()))
 				{
-					startingPoints[1] = new Integer(storageContainerForm.getPositionDimensionOne())
-							.toString();
+					startingPoints[1] = storageContainerForm.getPositionDimensionOne();
 				}
-				if (storageContainerForm.getPositionDimensionTwo() != -1)
+				if (storageContainerForm.getPositionDimensionTwo()!=null && !"".equals(storageContainerForm.getPositionDimensionTwo()))
 				{
-					startingPoints[2] = new Integer(storageContainerForm.getPositionDimensionTwo())
-							.toString();
+					startingPoints[2] = storageContainerForm.getPositionDimensionTwo();
 				}
 
 				initialValues = new Vector();

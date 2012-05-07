@@ -238,6 +238,9 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 							.getToPositionDimensionOne());
 					specimenPosition.setPositionDimensionTwo(transferEvent
 							.getToPositionDimensionTwo());
+					StorageContainerUtil.setContainerPositionAsString(storageContainerObj.getName(), transferEvent
+							.getToPositionDimensionOne(), transferEvent
+							.getToPositionDimensionTwo(), specimenPosition);
 					dao.update(specimen,null);
 					transferEvent.setToStorageContainer(storageContainerObj);
 				}

@@ -86,6 +86,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			int posOneCapacity = 1, posTwoCapacity = 1;
 			int posDimOne = Constants.STORAGE_CONTAINER_FIRST_ROW, posDimTwo
 			= Constants.STORAGE_CONTAINER_FIRST_COLUMN;
+			String posDimOneString = null,posDimTwoString = null;
 			boolean[][] fullStatus = null;
 			final int noOfContainers = container.getNoOfContainers().intValue();
 			if (container.getLocatedAtPosition() != null
@@ -122,6 +123,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 						getStorageContainerFullStatus(dao, parentContainer,children);
 						posDimOne = cntPos.getPositionDimensionOne().intValue();
 						posDimTwo = cntPos.getPositionDimensionTwo().intValue();
+						posDimOneString=cntPos.getPositionDimensionOneString();
+						posDimTwoString=cntPos.getPositionDimensionTwoString();
 						container.setLocatedAtPosition(cntPos);
 					}
 				}
@@ -137,7 +140,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			stBiz.loadStorageType(dao, container);
 			for (int i = 0; i < noOfContainers; i++)
 			{
-				final StorageContainer cont = setContainerPos(container, posDimOne, posDimTwo);
+				final StorageContainer cont = setContainerPos(container, posDimOne, posDimTwo, posDimOneString, posDimTwoString);
 				logger.debug("Collection protocol size:"
 						+ container.getCollectionProtocolCollection().size());
 				setLabelAndBarcode(dao, container, cont);
@@ -292,7 +295,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	 * @return StorageContainer
 	 */
 	private StorageContainer setContainerPos(final StorageContainer container,
-			final int posDimOne, final int posDimTwo)
+			final int posDimOne, final int posDimTwo, String posDimOneString, String posDimTwoString)
 	{
 		final StorageContainer cont = new StorageContainer(container);
 		if (cont.getLocatedAtPosition() != null
@@ -300,7 +303,9 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		{
 			final ContainerPosition cntPos = cont.getLocatedAtPosition();
 			cntPos.setPositionDimensionOne(Integer.valueOf(posDimOne));
+			cntPos.setPositionDimensionOneString(posDimOneString);
 			cntPos.setPositionDimensionTwo(Integer.valueOf(posDimTwo));
+			cntPos.setPositionDimensionTwoString(posDimTwoString);
 			cntPos.setOccupiedContainer(cont);
 			cont.setLocatedAtPosition(cntPos);
 		}
@@ -743,8 +748,12 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			}
 			cntPos.setPositionDimensionOne(newObject.getLocatedAtPosition()
 					.getPositionDimensionOne());
+			cntPos.setPositionDimensionOneString(newObject.getLocatedAtPosition()
+					.getPositionDimensionOneString());
 			cntPos.setPositionDimensionTwo(newObject.getLocatedAtPosition()
 					.getPositionDimensionTwo());
+			cntPos.setPositionDimensionTwoString(newObject.getLocatedAtPosition()
+					.getPositionDimensionTwoString());
 			cntPos.setParentContainer(newObject.getLocatedAtPosition().getParentContainer());
 			cntPos.setOccupiedContainer(persistentobject);
 		}

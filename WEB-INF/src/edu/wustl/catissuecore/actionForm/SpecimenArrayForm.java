@@ -288,9 +288,9 @@ public class SpecimenArrayForm extends ContainerForm
 				if (specimenArray != null && specimenArray.getLocatedAtPosition() != null)
 				{
 					this.positionDimensionOne = specimenArray.getLocatedAtPosition()
-							.getPositionDimensionOne().intValue();
+							.getPositionDimensionOne().toString();//intValue();
 					this.positionDimensionTwo = specimenArray.getLocatedAtPosition()
-							.getPositionDimensionTwo().intValue();
+							.getPositionDimensionTwo().toString();//intValue();
 				}
 			}
 			else

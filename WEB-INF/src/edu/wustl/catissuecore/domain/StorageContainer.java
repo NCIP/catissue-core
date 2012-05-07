@@ -522,10 +522,9 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 	
 					if (form.getStContSelection() == 1)
 					{
-						if ((this.locatedAtPosition != null && this.locatedAtPosition.positionDimensionOne
-								.intValue() != form.getPositionDimensionOne())
-								|| (this.locatedAtPosition != null && this.locatedAtPosition.positionDimensionTwo
-										.intValue() != form.getPositionDimensionOne()))
+						if ((this.locatedAtPosition != null && !this.locatedAtPosition.positionDimensionOne.toString().equals(
+								 form.getPositionDimensionOne()))
+								|| (this.locatedAtPosition != null && !this.locatedAtPosition.positionDimensionTwo.toString().equals(form.getPositionDimensionOne())))
 						{
 							this.positionChanged = true;
 						}
@@ -555,11 +554,17 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 	
 					this.locatedAtPosition.parentContainer = new StorageContainer();
 					this.locatedAtPosition.parentContainer.setId(new Long(form.getParentContainerId()));
+					
+					this.locatedAtPosition.setPositionDimensionOne(StorageContainerUtil.convertPositionsToIntegerUsingContId(String.valueOf(form.getParentContainerId()),1,form.getPositionDimensionOne().trim()));
+					this.locatedAtPosition.setPositionDimensionOneString(form.getPositionDimensionOne());
+					this.locatedAtPosition.setPositionDimensionTwoString(form.getPositionDimensionTwo());
+					this.locatedAtPosition.setPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(String.valueOf(form.getParentContainerId()),2,form.getPositionDimensionTwo().trim()));
+            
 	
-					this.locatedAtPosition.setPositionDimensionOne(new Integer(form
+					/*this.locatedAtPosition.setPositionDimensionOne(new Integer(form
 							.getPositionDimensionOne()));
 					this.locatedAtPosition.setPositionDimensionTwo(new Integer(form
-							.getPositionDimensionTwo()));
+							.getPositionDimensionTwo()));*/
 					this.locatedAtPosition.occupiedContainer = this;
 				}
 				else
@@ -580,10 +585,14 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 						{
 							this.locatedAtPosition = new ContainerPosition();
 						}
-						this.locatedAtPosition.setPositionDimensionOne(Integer.valueOf(form.getPos1()
+						this.locatedAtPosition.setPositionDimensionOne(StorageContainerUtil.convertSpecimenPositionsToInteger(form.getSelectedContainerName(),1,form.getPos1().trim()));
+                        this.locatedAtPosition.setPositionDimensionOneString(form.getPos1().trim());
+						this.locatedAtPosition.setPositionDimensionTwo(StorageContainerUtil.convertSpecimenPositionsToInteger(form.getSelectedContainerName(),2,form.getPos2().trim()));
+						this.locatedAtPosition.setPositionDimensionTwoString(form.getPos2().trim());
+						/*this.locatedAtPosition.setPositionDimensionOne(Integer.valueOf(form.getPos1()
 								.trim()));
 						this.locatedAtPosition.setPositionDimensionTwo(Integer.valueOf(form.getPos2()
-								.trim()));
+								.trim()));*/
 						this.locatedAtPosition.occupiedContainer = this;
 					}
 				}

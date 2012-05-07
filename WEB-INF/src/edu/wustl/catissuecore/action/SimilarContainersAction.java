@@ -301,10 +301,10 @@ public class SimilarContainersAction extends SecureAction
 							}
 						}
 
-						similarContainersForm.setPositionDimensionOne(Integer
-								.parseInt(similarContainersForm.getPos1()));
-						similarContainersForm.setPositionDimensionTwo(Integer
-								.parseInt(similarContainersForm.getPos2()));
+						similarContainersForm.setPositionDimensionOne(similarContainersForm.getPos1());//Integer
+								//.parseInt(similarContainersForm.getPos1()));
+						similarContainersForm.setPositionDimensionTwo(similarContainersForm.getPos2());//Integer
+								//.parseInt(similarContainersForm.getPos2()));
 					}
 					else
 					{
@@ -394,10 +394,10 @@ public class SimilarContainersAction extends SecureAction
 					final String[] startingPoints = new String[3];
 
 					startingPoints[0] = Long.toString(similarContainersForm.getParentContainerId());
-					startingPoints[1] = Integer.toString(similarContainersForm
-							.getPositionDimensionOne());
-					startingPoints[2] = Integer.toString(similarContainersForm
-							.getPositionDimensionTwo());
+					startingPoints[1] = similarContainersForm
+							.getPositionDimensionOne();
+					startingPoints[2] = similarContainersForm
+							.getPositionDimensionTwo();
 
 					if (similarContainersForm.getParentContainerId() != 0l)
 					{

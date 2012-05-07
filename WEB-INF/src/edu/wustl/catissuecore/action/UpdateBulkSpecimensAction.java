@@ -375,9 +375,9 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 					&& (specimen.getSpecimenPosition().getPositionDimensionTwo() != null))
 			{
 				specimenDataBean.setPositionDimensionOne(String.valueOf(specimen
-						.getSpecimenPosition().getPositionDimensionOne()));
+						.getSpecimenPosition().getPositionDimensionOneString()));
 				specimenDataBean.setPositionDimensionTwo(String.valueOf(specimen
-						.getSpecimenPosition().getPositionDimensionTwo()));
+						.getSpecimenPosition().getPositionDimensionTwoString()));
 			}
 			specimenDataBean.setLabel(specimen.getLabel());
 			final LinkedHashMap<String, GenericSpecimen> derivesMap = specimenDataBean
@@ -394,9 +394,9 @@ public class UpdateBulkSpecimensAction extends UpdateSpecimenStatusAction
 						&& (deriveSpec.getSpecimenPosition().getPositionDimensionTwo() != null))
 				{
 					deriveSpecimenDataBean.setPositionDimensionOne(String.valueOf(deriveSpec
-							.getSpecimenPosition().getPositionDimensionOne()));
+							.getSpecimenPosition().getPositionDimensionOneString()));
 					deriveSpecimenDataBean.setPositionDimensionTwo(String.valueOf(deriveSpec
-							.getSpecimenPosition().getPositionDimensionTwo()));
+							.getSpecimenPosition().getPositionDimensionTwoString()));
 				}
 				deriveSpecimenDataBean.setParentSpecimen((Specimen)deriveSpec.getParentSpecimen());
 				deriveSpecimenDataBean.setLabel(deriveSpec.getLabel());

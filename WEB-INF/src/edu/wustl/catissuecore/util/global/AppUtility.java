@@ -3855,7 +3855,7 @@ public class AppUtility {
 		    int pow = 1;
 		    for (int i = name.length() - 1; i >= 0; i--)
 		    {
-		        number += (name.charAt(i) - 'A' + 1) * pow;
+		        number += (name.toUpperCase().charAt(i) - 'A' + 1) * pow;
 		        pow *= 26;
 		    }
 		    return number;
@@ -3902,12 +3902,12 @@ public class AppUtility {
 		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)
 				|| (labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE)))
 		{
-			positionVal=romanToInteger(position);
+			positionVal=romanToInteger(position.toUpperCase());
 		}
 		return positionVal;
 	}
 	
-		public static String binaryToRoman(int binary) {
+	public static String binaryToRoman(int binary) {
 		if (binary <= 0 || binary >= 4000) {
 			throw new NumberFormatException("Value outside roman numeral range.");
 		}
