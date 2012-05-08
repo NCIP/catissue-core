@@ -146,6 +146,7 @@ public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 						.valueOf(eventSpecificData.get("ID_" + specimenId + "_FROMLOCPOS1")));
 				transferEventParameters.setFromPositionDimensionTwo(Integer
 						.valueOf(eventSpecificData.get("ID_" + specimenId + "_FROMLOCPOS2")));
+				fromContainer.setName(eventSpecificData.get("ID_" + specimenId + "_FROMLOC"));
 				transferEventParameters.setFromStorageContainer(fromContainer);
 			}
 

@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
@@ -233,8 +234,8 @@ public class TransferEventParameters extends SpecimenEventParameters
 			final StorageContainer toObj = new StorageContainer();
 			if (form.getStContSelection() == 1)
 			{
-				this.toPositionDimensionOne = Integer.valueOf(form.getPositionDimensionOne());
-				this.toPositionDimensionTwo = Integer.valueOf(form.getPositionDimensionTwo());
+				this.toPositionDimensionOne = StorageContainerUtil.convertPositionsToIntegerUsingContId(form.getStorageContainer(), 1, form.getPositionDimensionOne());
+				this.toPositionDimensionTwo = StorageContainerUtil.convertPositionsToIntegerUsingContId(form.getStorageContainer(), 2, form.getPositionDimensionTwo());
 				toObj.setId(Long.valueOf(form.getStorageContainer()));
 			}
 			else
@@ -244,8 +245,8 @@ public class TransferEventParameters extends SpecimenEventParameters
 						&& form.getPos2() != null
 						&& !form.getPos2().trim().equals(Constants.DOUBLE_QUOTES))
 				{
-					this.toPositionDimensionOne = Integer.valueOf(form.getPos1());
-					this.toPositionDimensionTwo = Integer.valueOf(form.getPos2());
+					this.toPositionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getSelectedContainerName(),1,form.getPos2());
+					this.toPositionDimensionTwo = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getSelectedContainerName(),2,form.getPos2());
 				}
 				toObj.setName(form.getSelectedContainerName());
 			}
@@ -264,8 +265,8 @@ public class TransferEventParameters extends SpecimenEventParameters
 				fromObj.setId(Long.valueOf(form.getFromStorageContainerId()));
 				this.fromStorageContainer = fromObj;
 
-				this.fromPositionDimensionOne = Integer.valueOf(form.getFromPositionDimensionOne());
-				this.fromPositionDimensionTwo = Integer.valueOf(form.getFromPositionDimensionTwo());
+				this.fromPositionDimensionOne = StorageContainerUtil.convertPositionsToIntegerUsingContId(String.valueOf(form.getFromStorageContainerId()), 1, form.getFromPositionDimensionOne());
+				this.fromPositionDimensionTwo = StorageContainerUtil.convertPositionsToIntegerUsingContId(String.valueOf(form.getFromStorageContainerId()), 2, form.getFromPositionDimensionTwo());
 			}
 			super.setAllValues(form);
 		}

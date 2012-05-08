@@ -519,12 +519,18 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 					}
 	
 					// code to check if the position of the container is changed
+					String positionDimensionOne=null,positionDimensionTwo=null;
+					if(locatedAtPosition!=null)
+					{
+						positionDimensionOne=StorageContainerUtil.convertSpecimenPositionsToString(locatedAtPosition.getParentContainer().getName(), 1, this.locatedAtPosition.positionDimensionOne);
+						positionDimensionTwo=StorageContainerUtil.convertSpecimenPositionsToString(locatedAtPosition.getParentContainer().getName(), 2, this.locatedAtPosition.positionDimensionTwo);
+					}
 	
 					if (form.getStContSelection() == 1)
 					{
-						if ((this.locatedAtPosition != null && !this.locatedAtPosition.positionDimensionOne.toString().equals(
+						if ((this.locatedAtPosition != null && !positionDimensionOne.equals(
 								 form.getPositionDimensionOne()))
-								|| (this.locatedAtPosition != null && !this.locatedAtPosition.positionDimensionTwo.toString().equals(form.getPositionDimensionOne())))
+								|| (this.locatedAtPosition != null && !positionDimensionTwo.equals(form.getPositionDimensionTwo())))
 						{
 							this.positionChanged = true;
 						}
@@ -532,8 +538,8 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 					else
 					{
 						if (this.locatedAtPosition != null
-								&& this.locatedAtPosition.positionDimensionOne.equals(form.getPos1())
-								|| this.locatedAtPosition.positionDimensionTwo.equals(form.getPos2()))
+								&& positionDimensionOne.equals(form.getPos1())
+								|| positionDimensionTwo.equals(form.getPos2()))
 						{
 							this.positionChanged = true;
 						}
