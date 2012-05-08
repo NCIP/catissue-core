@@ -753,7 +753,7 @@ public class StorageContainerAction extends SecureAction
 		storageContainerForm.setCollectionIds(storageContainerBean.getCollectionIds());
 		storageContainerForm.setContainerId(storageContainerBean.getContainerId());
 		storageContainerForm.setContainerName(storageContainerBean.getContainerName());
-		storageContainerForm.setSelectedContainerName(storageContainerBean.getContainerName());
+		//storageContainerForm.setSelectedContainerName(storageContainerBean.getContainerName());
 		storageContainerForm.setDefaultTemperature(storageContainerBean.getDefaultTemperature());
 		storageContainerForm.setHoldsSpecimenArrTypeIds(storageContainerBean
 				.getHoldsSpecimenArrTypeIds());

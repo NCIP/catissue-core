@@ -55,8 +55,8 @@ public class TransferEventParametersTransformer
     		 fromObj.setId(Long.valueOf(uiRepOfDomain.getFromStorageContainerId()));
     		 domainObject.setFromStorageContainer(fromObj);
     		 
-    		domainObject.setFromPositionDimensionOne(StorageContainerUtil.convertPositionsToIntegerUsingContId(uiRepOfDomain.getStorageContainer(), 1, uiRepOfDomain.getFromPositionDimensionOne()));
-            domainObject.setFromPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(uiRepOfDomain.getStorageContainer(), 2, uiRepOfDomain.getFromPositionDimensionTwo()));
+       		 domainObject.setFromPositionDimensionOne(StorageContainerUtil.convertPositionsToIntegerUsingContId(String.valueOf(uiRepOfDomain.getFromStorageContainerId()), 1, uiRepOfDomain.getFromPositionDimensionOne()));
+             domainObject.setFromPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(String.valueOf(uiRepOfDomain.getFromStorageContainerId()), 2, uiRepOfDomain.getFromPositionDimensionTwo()));
         }
         
        /* if (uiRepOfDomain.getFromStorageContainerId() == 0) {

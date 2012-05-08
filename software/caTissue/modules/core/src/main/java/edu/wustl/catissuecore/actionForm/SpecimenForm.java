@@ -692,7 +692,8 @@ public class SpecimenForm extends AbstractActionForm
 			this.positionDimensionTwo =StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,2,specimen.getSpecimenPosition()
 					.getPositionDimensionTwo());		
 			this.positionInStorageContainer =container.getName() + " : " //container.getStorageType().getName() + " : "
-					+ container.getId() + " Pos(" + this.positionDimensionOne + ","
+					//+ container.getId()
+					+ " Pos(" + this.positionDimensionOne + ","
 					+ this.positionDimensionTwo + ")";
 			this.setStContSelection(2);
 		}

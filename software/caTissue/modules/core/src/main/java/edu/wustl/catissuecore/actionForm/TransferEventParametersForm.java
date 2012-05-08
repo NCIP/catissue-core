@@ -243,7 +243,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 						.getFromPositionDimensionTwo().toString();//intValue();
 				this.fromPosition = transferEventParametersObject.getFromStorageContainer().getName()
 						+ " : "
-						+ this.fromStorageContainerId
+						//+ this.fromStorageContainerId
 						+ " Pos("
 						+ StorageContainerUtil.convertSpecimenPositionsToString(transferEventParametersObject.getFromStorageContainer().getName(),1,Integer.valueOf(this.fromPositionDimensionOne))
 						+ "," 
@@ -268,7 +268,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			this.positionInStorageContainer = transferEventParametersObject.getToStorageContainer()
 					.getStorageType().getName()
 					+ " : "
-					+ this.storageContainer
+					//+ this.storageContainer
 					+ " Pos("
 					+ this.positionDimensionOne
 					+ ","
@@ -277,7 +277,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			{
 				this.fromPosition = transferEventParametersObject.getFromStorageContainer().getName()
 						+ " : "
-						+ this.fromStorageContainerId
+						//+ this.fromStorageContainerId
 						+ " Pos("
 						+ StorageContainerUtil.convertSpecimenPositionsToString(transferEventParametersObject.getFromStorageContainer().getName(),1,Integer.valueOf(this.fromPositionDimensionOne))
 						+ "," 
