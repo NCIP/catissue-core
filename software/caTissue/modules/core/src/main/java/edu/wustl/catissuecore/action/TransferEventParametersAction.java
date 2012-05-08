@@ -89,8 +89,8 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		final String getJSForOutermostDataTable = ScriptGenerator.getJSForOutermostDataTable();
 		request.setAttribute("getJSForOutermostDataTable", getJSForOutermostDataTable);
 
-		System.out.println("************" + getJSForOutermostDataTable);
-
+		//System.out.println("************" + getJSForOutermostDataTable);
+		
 		request.setAttribute("posOne", Constants.POS_ONE);
 		request.setAttribute("posTwo", Constants.POS_TWO);
 		request.setAttribute("storContId", Constants.STORAGE_CONTAINER_ID);
@@ -285,8 +285,8 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				rowNumber);
 		request.setAttribute("getJSEquivalentFor", getJSEquivalentFor);
 
-		System.out.println("###########################" + containerMap);
-		System.out.println("###########################" + getJSEquivalentFor);
+		//System.out.println("###########################" + containerMap);
+		//System.out.println("###########################" + getJSEquivalentFor);
 
 		// boolean buttonDisabled = true;
 

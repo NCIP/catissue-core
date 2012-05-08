@@ -26,8 +26,6 @@ public class BulkTransferEventsAction extends BulkOperationAction
 	protected void fillFormData(BulkEventOperationsForm eventParametersForm, List specimenRow,
 			String specimenId, HttpServletRequest request) throws ApplicationException
 	{
-		System.out.println("hello");
-		
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_CLASS", specimenRow.get(2)
 				.toString());
 		eventParametersForm.setFieldValue("ID_" + specimenId + "_LABEL", specimenRow.get(1)
