@@ -1018,6 +1018,14 @@ PUBLIC
 			<forward name="ViewAll" path=".catissuecore.ViewAllOrderingConsentsDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
+		
+		<action path="/ViewAllConsents"
+			type="edu.wustl.catissuecore.action.ShowAllConsentAction" name="distributionForm"
+			validate="false" scope="request">
+			<forward name="popup" path=".catissuecore.OrderingConsentsDef" />
+			<forward name="ViewAll" path=".catissuecore.ViewAllOrderingConsentsDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		</action>
 		<!-- end -->
 
 		<action path="/ReviewRequests" name="viewSurgicalPathologyReportForm"
@@ -3582,6 +3590,18 @@ PUBLIC
 			validate="false" scope="request">
 			<forward name="pageOfSimpleQueryInterface"
 				path="/ConfigureSimpleSearchView.do?pageOf=pageOfSimpleQueryInterface" />
+			<forward name="failure" path="/SimpleQueryInterface.do" />
+		</action>
+		
+		<action path="/ViewSearchResult"
+			type="edu.wustl.catissuecore.action.SearchResultViewAction" name="simpleQueryInterfaceForm"
+			validate="false" scope="request">
+			<forward name="success"
+				path=".catissuecore.viewSearchResultPageDef" />
+			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
+			<forward name="access_denied_admin" path="/ManageAdministrativeData.do" />
+			<forward name="access_denied_biospecimen" path="/ManageBioSpecimen.do" />
+			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 			<forward name="failure" path="/SimpleQueryInterface.do" />
 		</action>
 

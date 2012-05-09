@@ -39,8 +39,9 @@
 	var assignStat = document.getElementById('select_'+row);
 		if(id.value == ("Distributed And Close(Special)"))
 		{
-			var avlQty = mygrid.cellById(row+1,3).getValue();
-			var reqQty = mygrid.cellById(row+1,4).getValue();
+		//alert(Number(gridReqQty));
+			var avlQty = Number(mygrid.cellById(row+1,3).getValue());
+			var reqQty = Number(mygrid.cellById(row+1,4).getValue());
 			//alert('avlQty '+avlQty+'     reqQty  '+reqQty);
 			if(avlQty == reqQty)
 			{
@@ -162,8 +163,10 @@ function qtyChange(stage,rId,cInd,nValue,oValue)
 //alert(stage);
 	if(cInd == 4 && stage == 2)
 	{
-		var avlQty = mygrid.cellById(rId,3).getValue();
-		if(nValue > avlQty)
+	
+		var avlQty = Number(mygrid.cellById(rId,3).getValue());
+		var reqQty = Number(nValue);
+		if(reqQty > avlQty)
 		{
 			alert('Requested quantity cannot be greater than available quantity');
 //			alert(mygrid.cellById(rId,4).getValue());
@@ -253,6 +256,7 @@ alert(rid);
 							String selectedSpecimenType="value(RequestDetailsBean:"+i+"_selectedSpecimenType)";
 							String selectedSpecimenQuantity="value(RequestDetailsBean:"+i+"_selectedSpecimenQuantity)";
 							String requestedItem = "value(RequestDetailsBean:"+i+"_requestedItem)";
+							String requestedItemId = "requestedItemId"+i;
 							String requestedQty = "value(RequestDetailsBean:"+i+"_requestedQty)";
 							String availableQty = "value(RequestDetailsBean:"+i+"_availableQty)";
 							String spClass = "value(RequestDetailsBean:"+i+"_className)";
@@ -275,6 +279,7 @@ alert(rid);
 							//added for consent page:	
 							String showNewConsentPageFunction = "showNewConsentPage("+requestDetailsBeanObj.getSpecimenId()+")";
 							boolean disableRow = false;
+							
 							if(((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)) || (((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 							&& (!((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_distributedItemId"))).trim().equals("")))
 							{
@@ -318,8 +323,8 @@ alert(rid);
 								<html:hidden name="requestDetailsForm" property="<%= specimenCollGroupId %>" />
 				<%			}
 			    %>	<!-- Html hidden variables for all static fields -->	 
-								
-								 <html:hidden name="requestDetailsForm" property="<%= requestedItem %>" />	
+								<input type="hidden" id="<%=requestDetailsForm.getValue("RequestDetailsBean:"+i+"_requestedItem")%>" name="<%=requestDetailsForm.getValue("RequestDetailsBean:"+i+"_requestedItem")%>" value="<%=i%>">
+								 <html:hidden name="requestDetailsForm" property="<%= requestedItem %>" styleId="<%=requestedItemId%>"/>	
 								 <html:hidden name="requestDetailsForm" property="<%= requestedQty %>" styleId="<%=requestedQtyId%>" />	
 								 <html:hidden name="requestDetailsForm" property="<%= availableQty %>" />	
 								 <html:hidden name="requestDetailsForm" property="<%= spClass %>" />	

@@ -660,6 +660,7 @@ public class RequestDetailsAction extends BaseAction
 			List requestedItemsStatusList = OrderingSystemUtil
 			.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
 			dataArray.put(existingSpecimenOrderItem.getStatus());
+			dataArray.put(existingSpecimenOrderItem.getDescription());
 		}
 		else
 		{
@@ -669,13 +670,14 @@ public class RequestDetailsAction extends BaseAction
 			dataArray.put(valuesMap.get("RequestDetailsBean:"+rowNumber+"_availableQty"));
 			dataArray.put(valuesMap.get("RequestDetailsBean:"+rowNumber+"_requestedQty"));
 			dataArray.put(valuesMap.get("RequestDetailsBean:"+rowNumber+"_assignedStatus"));
+			dataArray.put(valuesMap.get("RequestDetailsBean:"+rowNumber+"_description"));
 			row++;
 			
 		}
 		
 		
 		
-		dataArray.put("");
+		//dataArray.put("");
 		try {
 			
 			jsonObject.put(Constants.JSON_DATA_COLUMN, dataArray);

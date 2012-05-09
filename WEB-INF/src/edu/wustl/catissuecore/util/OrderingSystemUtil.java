@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -25,21 +26,27 @@ import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.bean.SpecimenOrderBean;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenOrderItem;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.dao.DAO;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.dao.util.HibernateMetaData;
 
 public final class OrderingSystemUtil
@@ -632,5 +639,77 @@ public final class OrderingSystemUtil
 			}
 		}
 		return defineArraysList;
+	}
+	
+	public static Specimen getListOfSpecimen(Long specimenId) throws ApplicationException 
+	{
+		Specimen specimen = new Specimen();
+		specimen.setId(specimenId);
+		DAO dao = null;
+		try
+		{
+			dao = AppUtility.openDAOSession(null);
+			
+			ColumnValueBean bean = new ColumnValueBean(specimenId);
+			List<ColumnValueBean> columnBeanList = new ArrayList<ColumnValueBean>();
+			columnBeanList.add(bean);
+			String specimenConsentHql = "select sp.consentTierStatusCollection from" +
+			" edu.wustl.catissuecore.domain.Specimen as sp where sp.id = ?";
+			String cprHql = "select specimen.specimenCollectionGroup.collectionProtocolRegistration.id, " +
+					"specimen.specimenCollectionGroup.collectionProtocolRegistration.consentSignatureDate," +
+					"specimen.specimenCollectionGroup.collectionProtocolRegistration.signedConsentDocumentURL," +
+					"specimen.specimenCollectionGroup.collectionProtocolRegistration.consentWitness.id," +
+					"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id," +
+					"specimen.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.consentsWaived from " +
+					"edu.wustl.catissuecore.domain.Specimen as specimen where specimen.id = ?";
+			
+			
+			List cprAttrList = dao.executeQuery(cprHql,columnBeanList);
+			
+			
+			SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+			User user = new User();
+			CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+			CollectionProtocol cp = new CollectionProtocol();
+			Object[] obj2 = (Object[])cprAttrList.get(0);
+			cpr.setId(Long.valueOf(String.valueOf(obj2[0])));
+			cp.setConsentsWaived(Boolean.FALSE);
+			if(obj2[1] != null)
+			{
+				cpr.setConsentSignatureDate((Date)(obj2[1]));
+			}
+			if(obj2[2] != null)
+			{
+				cpr.setSignedConsentDocumentURL(String.valueOf(obj2[2]));
+			}
+			if(obj2[3] != null)
+			{
+				user.setId(Long.valueOf(String.valueOf(obj2[3])));
+			}
+			if(obj2[4] != null)
+			{
+				cp.setId(Long.valueOf(String.valueOf(obj2[4])));
+			}
+			if(obj2[5] != null)
+			{
+				cp.setConsentsWaived(Boolean.valueOf(String.valueOf(obj2[5])));
+			}
+			cpr.setConsentWitness(user);
+			
+			cpr.setCollectionProtocol(cp);
+			scg.setCollectionProtocolRegistration(cpr);
+			specimen.setSpecimenCollectionGroup(scg);
+			if(!cp.getConsentsWaived())
+			{
+				List spConsentList = dao.executeQuery(specimenConsentHql,columnBeanList);
+				specimen.setConsentTierStatusCollection(spConsentList);
+			}
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
+		
+		return specimen;
 	}
 }

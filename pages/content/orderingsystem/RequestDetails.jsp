@@ -219,11 +219,22 @@ if(gridStat != '' && gridStat != null && gridStat == 'grid')
 			var reqQty = document.getElementById("requestedQtyId"+row);
 		
 			var comments = document.getElementById("descriptionId"+row);
-			
+			//alert(mygrid.cellById(row+1,5).getValue());
 				var desc = mygrid.cellById(row+1,6).getValue();
 				var gridReqQty = mygrid.cellById(row+1,4).getValue();
+				
 				comments.value=desc;
 				reqQty.value=gridReqQty;
+				
+	var canDistribute = "value(RequestDetailsBean:"+row+"_canDistribute)";
+	var assignStat = document.getElementById('select_'+row);
+	assignStat.value=mygrid.cellById(row+1,5).getValue();
+	document.getElementById(canDistribute).value="true";
+		//mygrid.cellById(row,5).setValue(id.value);
+		//alert(mygrid.cellById(row,5).getAttribute('status'));
+		//combo.put(temp[row],temp[row]);
+	
+	checkQuantity(row);
 		}
 	}
 }
@@ -252,17 +263,18 @@ function showAllSpecimen(count)
 		
 		var status = document.getElementById(consentVerificationkey).value;
 	
-		if(status=="<%=Constants.VIEW_CONSENTS%>"||status=="<%=Constants.VERIFIED%>" && statusValue!="disable")
+		if(status=="<%=Constants.VIEW_CONSENTS%>"||status=="<%=Constants.VERIFIED%>" ||status=="Waived" && statusValue!="disable")
 		{
 			//var specimenkey= "value(RequestDetailsBean:"+i+"_specimenId)";
 			//var specimenObj= document.getElementById(specimenkey);
 
 			var id = "requestFor"+i;
         	var specimenIdentifier = document.getElementById(id).value;
-			
+			var specimenLabel = document.getElementById('requestedItemId'+i).value;
 			if(specimenIdentifier != "#") 
 			{
-			  speciemnIdValue= speciemnIdValue+specimenIdentifier;
+			
+			  speciemnIdValue= speciemnIdValue+specimenIdentifier+","+specimenLabel;
 			  labelIndexCount=labelIndexCount+i;
             } 
 			
@@ -271,7 +283,8 @@ function showAllSpecimen(count)
 				speciemnIdValue=speciemnIdValue+"|";
 				labelIndexCount=labelIndexCount+"|";
 			}
-			if(status=="<%=Constants.VERIFIED%>")
+			
+			if(status=="<%=Constants.VERIFIED%>" || status=="Waived")
 			{
 				verifiedRows=verifiedRows+(i-iCount)+",";
 			}
@@ -296,10 +309,11 @@ function showAllSpecimen(count)
 		}
 		else
 		{
-			var url= 'ConsentVerification.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+count+'&speciemnIdValue='+speciemnIdValue+'&labelIndexCount='+labelIndexCount;
+			var url= 'ViewAllConsents.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+count+'&speciemnIdValue='+speciemnIdValue+'&labelIndexCount='+labelIndexCount;
+			//var url= 'ConsentVerification.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+count+'&speciemnIdValue='+speciemnIdValue+'&labelIndexCount='+labelIndexCount;
 			
 			//model window popup
-			allConsentWindow=dhtmlmodal.open('Institution', 'iframe', url,'Consent Form', 'width=600px,height=300px,center=1,resize=0,scrolling=1')
+			allConsentWindow=dhtmlmodal.open('Institution', 'iframe', url,'Consent Form', 'width=800px,height=350px,center=1,resize=0,scrolling=1')
 			allConsentWindow.onclose=function()
 		  { 
 				return true;

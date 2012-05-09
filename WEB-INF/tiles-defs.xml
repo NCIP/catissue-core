@@ -274,6 +274,10 @@
 	<definition name=".catissuecore.editSearchPageDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/search/SimpleQueryInterface.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.viewSearchResultPageDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/search/ViewResults.jsp" />
+	</definition>
 
 	<definition name=".catissuecore.editSearchResultsFrameDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/DataViewFrame.jsp" />

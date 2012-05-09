@@ -19,15 +19,43 @@
 			<script src="jss/script.js" type="text/javascript"></script>
 			<script src="jss/overlib_mini.js" type="text/javascript"></script>
 			<script language="JavaScript">
+			String.prototype.trim = function() 
+			{
+				return this.replace(/^\s+|\s+$/g, "");
+			};
+
 			function cancelWindow()
 			{
+			
+				updateWaivedStatus();
 			  parent.allConsentWindow.hide();
+			}
+			function updateWaivedStatus()
+			{
+			
+				<%
+				List consentWvdList = (List)request.getAttribute("consentWaivedList");
+				Iterator iterator = consentWvdList.iterator();
+				while(iterator.hasNext())
+				{
+					String spLbl =(String) iterator.next();
+					%>
+					var indexval = window.parent.document.getElementById("<%=spLbl%>").value;
+					
+					var labelStatus="labelStatus"+indexval;
+					var consentVerificationkey = "value(RequestDetailsBean:"+indexval+"_consentVerificationkey)";
+					var parentId=window.parent.document.getElementById(labelStatus);
+													
+					parentId.innerHTML="Waived"+"<input type='hidden' name='" + consentVerificationkey + "' value='Waived' id='" + consentVerificationkey + "'/>";
+				<%								
+				}
+				%>
 			}
 			//This function will check if the verifyCheck box is checked or not
 			function submitAllResponses()
 				{
 			
-					
+					updateWaivedStatus();
 					var barcodelabelStatus;
 					var parentId;
 					var rowCount;
@@ -36,41 +64,60 @@
 						String index="";
 						String noOfRows = (String)request.getParameter("noOfRows");
 						String labelIndexValues = (String)request.getAttribute("labelIndexCount");
+					
 						StringTokenizer stringTokenForIndex = new StringTokenizer(labelIndexValues,"|");
 						int rowCount = Integer.parseInt(noOfRows);
+				
 						List mapSize = (List)request.getAttribute("listOfMap");
 						if(mapSize.size()!=0)
 					    {
 														
 						int i=0;
-						while(stringTokenForIndex.hasMoreTokens()) 
+						List listOfStringArrays = (List)request.getAttribute("listOfStringArray");
+						
+						for(int counter=0;counter<mapSize.size();counter++)
 						{
-							index=stringTokenForIndex.nextToken();	
+							String[] specAttributes=(String[])listOfStringArrays.get(counter);				
+							
+							String barLabel=specAttributes[4];
+							
 					%>
 						var checkboxKey="verifyAllCheckBox"+<%=i%>;
 						var checkboxInstance=document.getElementById(checkboxKey);
-						var indexval="<%=index%>";		
-								
-						var labelStatus="labelStatus"+indexval;
-						consentVerificationkey = "value(RequestDetailsBean:"+indexval+"_consentVerificationkey)";
-						var parentId=window.parent.document.getElementById(labelStatus);
-						var rowstatus= "value(RequestDetailsBean:"+indexval+"_rowStatuskey)";
-						var statusValue = window.parent.document.getElementById(rowstatus).value;
-															
-						if(statusValue!="disable")
-						{
-								
-								if(checkboxInstance.checked) 
-								{
-									parentId.innerHTML="Verified"+"<input type='hidden' name='" + consentVerificationkey + "' value='Verified' id='" + consentVerificationkey + "'/>";
-								}
-								else
-								{
-									parentId.innerHTML="View"+"<input type='hidden' name='" + consentVerificationkey + "' value='View' id='" + consentVerificationkey + "'/>";
-								}
-						 }
-							
 						
+						var specLabels = document.getElementById('specLabel'+<%=i%>).value;	
+						var split =specLabels.split(',');
+						//alert(split);
+						
+						//alert(split.length);
+						for(var ctr=0;ctr<split.length;ctr++)
+						{
+						//alert(split[ctr]+"a");
+						//alert(window.parent.document.getElementById('129').value);
+						var str = split[ctr].trim();
+							var indexval = window.parent.document.getElementById(str).value;
+														
+							//alert(indexval);
+							var labelStatus="labelStatus"+indexval;
+							consentVerificationkey = "value(RequestDetailsBean:"+indexval+"_consentVerificationkey)";
+							var parentId=window.parent.document.getElementById(labelStatus);
+							var rowstatus= "value(RequestDetailsBean:"+indexval+"_rowStatuskey)";
+							var statusValue = window.parent.document.getElementById(rowstatus).value;
+															
+							if(statusValue!="disable")
+							{
+									
+									if(checkboxInstance.checked) 
+									{
+										parentId.innerHTML="Verified"+"<input type='hidden' name='" + consentVerificationkey + "' value='Verified' id='" + consentVerificationkey + "'/>";
+									}
+									else
+									{
+										parentId.innerHTML="View"+"<input type='hidden' name='" + consentVerificationkey + "' value='View' id='" + consentVerificationkey + "'/>";
+									}
+							 }
+							
+						}
 						<%
 							i=i+1;
 						}
@@ -89,14 +136,21 @@
 			<tr>
 			<td>
 			<table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+			
+							
 			<tr>
 			<td>
-			<div style="height:250px; background-color: #ffffff;overflow: auto;">
+			<% List listOfMap = (List)request.getAttribute("listOfMap");
+			if(listOfMap.size() > 0)
+			{
+			%>
+			<div style="height:270px; background-color: #ffffff;overflow: auto;">
 		<!--	<div width="600px" height="100" style="height:50px;oveflow:auto;display:block" id="consent">-->
 			
 			<table width="100%" border="0" cellpadding="3" cellspacing="0" id="table4" >
 			  	<%
 				String verifiedRows=request.getParameter("verifiedRows");
+			  	List consentWaivedList = (List)request.getAttribute("consentWaivedList");
 				StringTokenizer stringToken = new StringTokenizer(verifiedRows,",");
 				List verifiedList=new ArrayList();
 				while (stringToken.hasMoreTokens()) 
@@ -104,9 +158,9 @@
 					String rowNo=stringToken.nextToken();
 					verifiedList.add(rowNo);
 				}
-				System.out.println(verifiedList.size());
+				
 				List listOfStringArray = (List)request.getAttribute("listOfStringArray");
-				List listOfMap = (List)request.getAttribute("listOfMap");
+				
 				for(int counter=0;counter<listOfMap.size();counter++)
 				{
 					String[] specimenAttributes=(String[])listOfStringArray.get(counter);				
@@ -127,10 +181,11 @@
 				<tr>
 					<td class="showhide">
 						<table cellpadding="3" cellspacing="0" border="0" width="100%" id="table5">
+							
 							<tr>
 								<td class="noneditable" width="35%">
-									&nbsp;&nbsp;&nbsp;
-									<bean:message key="consent.barcodelable"/>
+									&nbsp;&nbsp;&nbsp;<span style="word-wrap: break-word;" >
+									<bean:message key="consent.barcodelable"/></span>
 								</td>
 								<td class="noneditable" >
 									<label>
@@ -247,11 +302,7 @@
 									</div>	
 								</td>
 								<%--Title (Participant response) --%>										
-								<td  class="tableheading">
-									<div align="left">
-										<bean:message key="collectionprotocolregistration.participantResponses" />
-									<div>	
-								</td>
+								
 								<td class="tableheading">
 									<div align="left">
 										<bean:message key="consent.responsestatus" />
@@ -267,12 +318,12 @@
 							{
 								 String idKey="ConsentBean:"+iCounter+"_consentTierID";
 								 String statementKey="ConsentBean:"+iCounter+"_statement";
-								 String responseKey="ConsentBean:"+iCounter+"_participantResponse";
-								 String participantResponceIdKey="ConsentBean:"+iCounter+"_participantResponseID";
+								 //String responseKey="ConsentBean:"+iCounter+"_participantResponse";
+								// String participantResponceIdKey="ConsentBean:"+iCounter+"_participantResponseID";
 								 String specimenResponsekey  = "ConsentBean:"+iCounter+"_specimenLevelResponse";
 								 String specimenResponseIDkey ="ConsentBean:"+iCounter+"_specimenLevelResponseID";
 								 String consentDisplay=(String)map.get(statementKey);
-								 String responseDisplay=(String)map.get(responseKey);
+								 //String responseDisplay=(String)map.get(responseKey);
 								 String specimenResponseDisplay=(String)map.get(specimenResponsekey);
 								 
 							%>
@@ -290,9 +341,7 @@
 								<td class='${pageScope.style}' width="31%">
 									<%=consentDisplay%>
 								</td>
-								<td align="left" class='${pageScope.style}'>
-									<%=responseDisplay%>
-								</td>
+								
 								<td align="left" class='${pageScope.style}'>
 									 <%=specimenResponseDisplay%>
 								</td>
@@ -304,6 +353,7 @@
 							<tr>
 							<%
 								String checkboxID="verifyAllCheckBox"+counter;
+								String hiddenID="specLabel"+counter;
 								if(verifiedList.size()!=0)
 								{
 									String iCount=""+counter;
@@ -321,8 +371,8 @@
 									}
 									%>
 									<td class="tabrightmostcell">
-											<input type="checkbox" name="verifyAllCheckBox" id="<%=checkboxID%>" <%=status%>
-											 />
+				<input type="checkbox" name="verifyAllCheckBox" id="<%=checkboxID%>" <%=status%>/>
+				<input type="hidden" name="hiddenID" id="<%=hiddenID%>" value="<%=barcodeLabel%>"/>
 									</td>
 
 							<%
@@ -332,12 +382,13 @@
 							%>
 								
 										<td class="tabrightmostcell">
+										<input type="hidden" name="hiddenID" id="<%=hiddenID%>" value="<%=barcodeLabel%>"/>
 											<input type="checkbox" name="verifyAllCheckBox" id="<%=checkboxID%>"/>
 										</td>
 							<%
 								}
 							%>
-								<td class="black_ar" colspan="3">
+								<td class="black_ar " colspan="3">
 									<label><b><bean:message key="consent.verificationmessage" /><b></label>
 								</td>
 							</tr>
@@ -357,12 +408,37 @@
 				</table>
 				
 				</div>
+				<%
+				}%>
 				</td>
+				</tr>
+				<tr>
+								<td class="black_ar tabletd1">
+								<%
+				List consentWvdListsss = (List)request.getAttribute("consentWaivedList");
+				Iterator iterators = consentWvdList.iterator();
+				StringBuilder builder = new StringBuilder(100);
+				int i=0;
+				while(iterators.hasNext())
+				{
+					if(i>0)
+					builder.append(",");
+					builder.append(iterators.next());
+					i++;
+				}
+					
+					%>
+					<label><b>consent waived for specimens:<label><b> <%=builder.toString()%>
+								</td>
+								
+							</tr>
+				<tr>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td class="buttonbg" align="left" >
 						<input type="button" name="doneButton" class="blue_ar_b" value="Ok" onclick="submitAllResponses()"/>
-						</td>
+					</td>
 				</tr>
 			
 			</table>
