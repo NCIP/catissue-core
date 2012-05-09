@@ -254,10 +254,13 @@ else
 	<td class="messagetexterror" colspan="2">Your selection has no chains.</td>
 </tr>
 <%
-counter=1;
+    request.setAttribute("noChain", Boolean.TRUE);
+    counter=1;
 }
+
 if(counter==0)
 {
+    request.setAttribute("noChain", Boolean.TRUE);
 %>
 <tr>
 	<td width="20px" valign="top">

@@ -177,15 +177,17 @@ function submitOperation(operation)
 				boolean disable=false;
 				if(currentPage==2)
 				{
-					MagetabExportWizardBean.SseTable sseTable = wizardBean.getSseTable();					
-					Set<Integer> chainSelections = sseTable.getChainSelections();
-					if(chainSelections.size()==0)
-					{
+                    MagetabExportWizardBean.SseTable sseTable = wizardBean.getSseTable();
+                    Set<Integer> chainSelections = sseTable.getChainSelections();
+					if(chainSelections.size()==0) {
 						disable=true;
 					}
 				}
-				if(!disable)
+
+                boolean hideNext = (request.getAttribute("noChain") != null && Boolean.valueOf(request.getAttribute("noChain").toString()));
+				if (!hideNext && !disable)
 				{
+                    request.removeAttribute("noChain");
 		%>			
 			<html:button property="btn" styleClass="blue_ar_b" onclick="submitOperation('Forward' )">
 				<bean:message key="magetab.next"/>	
