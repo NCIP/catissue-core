@@ -54,7 +54,7 @@ function submitOperation(operation)
 		
 		var numberOfCheckBoxes = 0;
 		var numberOfCheckBoxesUnchecked = 0;
-		$j('#sdrfData tr th input[type="checkBox"]').each(function(){
+		$j('#sdrfData tr th input[type="checkbox"]').each(function(){
 			numberOfCheckBoxes++;
 			var id= $j(this).attr('id');
 			var formElement = "form."+id+".checked";
@@ -69,7 +69,7 @@ function submitOperation(operation)
 			return true;
 		}
 		
-		$j('#sdrfData tr th input[type="checkBox"]').each(function(){
+		$j('#sdrfData tr th input[type="checkbox"]').each(function(){
 			
 			var id= $j(this).attr('id');
 			var formElement = "form."+id+".checked";

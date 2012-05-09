@@ -24,30 +24,31 @@ int counter=0;
 
 <script type="text/javascript">
 
-function checkIfAllNA(columnPosition){
-    var allNA=false;
+function checkIfAllNA(columnPosition) {
+    var allNA = false;
     var ct1 = 0
     var ct2 = 0;
-    $j('#sdrfData tr td:nth-child('+columnPosition+')').each(function(){
-         var content=$j(this).html();  
-         ct1++;
-         if(content.trim()=='&nbsp;N/A'){           
+    $j('#sdrfData tr td:nth-child(' + columnPosition + ')').each(function () {
+        var content = $j(this).html();
+        ct1++;
+        if (jQuery.trim(content) == '&nbsp;N/A') {
             ct2++;
-         }
-    }); 
+        }
+    });
     if (ct1 == ct2) {
-    	allNA =true;
+        allNA = true;
     }
     return allNA;
 }
-function removeColumn(columnPosition){
-	//alert (columnPosition);
-     $j('#sdrfData tr th:nth-child('+columnPosition+')').each(function(){
-         $j(this).remove();
+
+function removeColumn(columnPosition) {
+    //alert (columnPosition);
+    $j('#sdrfData tr th:nth-child(' + columnPosition + ')').each(function () {
+        $j(this).remove();
     });
-    $j('#sdrfData tr td:nth-child('+columnPosition+')').each(function(){
-         $j(this).remove();
-    });   
+    $j('#sdrfData tr td:nth-child(' + columnPosition + ')').each(function () {
+        $j(this).remove();
+    });
 }
 
 function removeDuplicates(inputArray) {
@@ -75,16 +76,16 @@ function displayColumns() {
 
 $j(function(){
     var caArrayCompatible="true";
-    
-	if($j('input[type="checkbox"]').length>0){
-		if($j('input[type="checkbox"]:checked').length==0)		
-			$j('input[type="button"][value="Next"]').attr('disabled', 'disabled');	
-            }
-            else{
-                //no chains so disable the next button.
-                $j('input[type="button"][value="Next"]').attr('disabled', 'disabled');
-            }
-         if(caArrayCompatible&&$j('#sdrfData tr').length>0){
+
+    if ($j('input[type="checkbox"]').length > 0) {
+        if ($j('input[type="checkbox"]:checked').length == 0)
+            $j('input[type="button"][value="Next"]').attr('disabled', 'disabled');
+    } else {
+        //no chains so disable the next button.
+        $j('input[type="button"][value="Next"]').attr('disabled', 'disabled');
+    }
+
+    if(caArrayCompatible&&$j('#sdrfData tr').length>0){
              //alert('compatible');
              //now search the table if it has any sample column which is N/A.
              var listOfColumnsIn= new Array();
@@ -92,7 +93,7 @@ $j(function(){
              $j('#sdrfData tr td').each(function(){
                var content=$j(this).html();
                var index=0;
-               if(content.trim()=='&nbsp;N/A'){
+               if(jQuery.trim(content)=='&nbsp;N/A'){
                     var column = $j(this).parent().children().index(this); 
                     listOfColumnsIn.push(column);
                }
