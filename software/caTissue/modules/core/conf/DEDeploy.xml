@@ -1912,7 +1912,7 @@
                 <mkdir dir="${tempFolder}" />
                 <unzip src="${baseFolder}/${entitygroupname}-schema.jar" dest="${tempFolder}" />
                 <touch file="${tempFolder}/info.properties" />
-                <propertyfile file="${tempFolder}/info.properties" comment="DE package: ${package.name}"><entry  key="packagename" value="${package.name}"/></propertyfile>
+                <propertyfile file="${tempFolder}/info.properties" comment="DE package: ${package.name}"><entry key="packagename" value="${package.name}"/></propertyfile>
                 <echo message="DEBUG: DE-package-name stored: ${package.name}" />
                 <zip destfile="${baseFolder}/${entitygroupname}-schema.jar"><fileset dir="${tempFolder}"><include name="**/*" /></fileset></zip>
 
