@@ -1914,9 +1914,7 @@
                 <touch file="${tempFolder}/info.properties" />
                 <propertyfile file="${tempFolder}/info.properties" comment="DE package: ${package.name}"><entry  key="packagename" value="${package.name}"/></propertyfile>
                 <echo message="DEBUG: DE-package-name stored: ${package.name}" />
-                <zip dest="${baseFolder}/${entitygroupname}-schema.jar">
-                    <fileset dir="${tempFolder}"><include name="**/*" /></fileset>
-                </zip>
+                <zip destfile="${baseFolder}/${entitygroupname}-schema.jar"><fileset dir="${tempFolder}"><include name="**/*" /></fileset></zip>
 
                 <echo message="DEBUG: COPY Artifacts to DataService." />
 				<copy todir="../../caGrid_service/caTissueStaticDataService/de_codegen/artifacts" overwrite="true" verbose="true">
