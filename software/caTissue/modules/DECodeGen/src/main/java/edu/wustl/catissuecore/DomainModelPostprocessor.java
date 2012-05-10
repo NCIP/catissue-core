@@ -77,7 +77,8 @@ public class DomainModelPostprocessor {
 
 		Map<String, Element> classIdsMap = new HashMap<String, Element>();
 		Map<String, Element> fqnSetMap = new HashMap<String, Element>();
-		Map<String, List<Element>> dupFqnMap = new HashMap<String, List<Element>>();
+		Map<String, List<Element>> dupHookFqnMap = new HashMap<String, List<Element>>();
+		Map<String, List<Element>> dupDEFqnMap = new HashMap<String, List<Element>>();
 		List<Element> abstractEls = new ArrayList<Element>();
 
 		NodeList nodes = (NodeList) getUmlClasses.evaluate(root,
@@ -89,17 +90,26 @@ public class DomainModelPostprocessor {
 			if (fqnSetMap.containsKey(elFqn)) {
 				Element dupEl = fqnSetMap.get(elFqn);
 				if (isHookEntity(elFqn)) {
-					List<Element> dupEls = dupFqnMap.get(elFqn);
+					List<Element> dupEls = dupHookFqnMap.get(elFqn);
 					if (dupEls == null) {
 						dupEls = new ArrayList<Element>();
-						dupFqnMap.put(elFqn, dupEls);
+						dupHookFqnMap.put(elFqn, dupEls);
 						dupEls.add(dupEl);
 					}
 					dupEls.add(el);
 				} else if (this.abstractEntities.contains(elFqn)) {
 					abstractEls.add(el);
 				} else {
-					throw new Exception(elFqn + " is duplicated");
+					// It must be a duplicated DE class
+					// In this case, we'll want to delete the one that has only
+					// a single id attribute
+					List<Element> dupEls = dupDEFqnMap.get(elFqn);
+					if (dupEls == null) {
+						dupEls = new ArrayList<Element>();
+						dupDEFqnMap.put(elFqn, dupEls);
+						dupEls.add(dupEl);
+					}
+					dupEls.add(el);
 				}
 			}
 
@@ -113,6 +123,21 @@ public class DomainModelPostprocessor {
 
 			fqnSetMap.put(elFqn, el);
 			classIdsMap.put(id, el);
+		}
+
+		// Delete duplicate, non-hook, DE model entities
+		for (Entry<String, List<Element>> entry : dupDEFqnMap.entrySet()) {
+			for (Element dupEl : entry.getValue()) {
+				if (!(Boolean) hasNonIdUmlAtts.evaluate(dupEl,
+						XPathConstants.BOOLEAN)) { // i.e. it has only an id
+													// attribute
+
+					// then, delete it and everything that references it
+					String umlClassId = dupEl.getAttribute("id");
+					deleteElements(getAssocEls(xFact, umlClassId, root));
+					detach(dupEl);
+				}
+			}
 		}
 
 		// Process the hook entities
@@ -137,7 +162,7 @@ public class DomainModelPostprocessor {
 						+ hookFqn);
 			}
 
-			for (Element umlClassEl : dupFqnMap.get(hookFqn)) {
+			for (Element umlClassEl : dupHookFqnMap.get(hookFqn)) {
 				if (!(Boolean) hasNonIdUmlAtts.evaluate(umlClassEl,
 						XPathConstants.BOOLEAN)) {
 					// Merge the associations of static entities from DE models
@@ -155,7 +180,7 @@ public class DomainModelPostprocessor {
 			// Merge elements
 			Set<String> attSet = new HashSet<String>();
 			Element targetUmlClassEl = null;
-			List<Element> umlClassEls = dupFqnMap.get(hookREFqn);
+			List<Element> umlClassEls = dupHookFqnMap.get(hookREFqn);
 
 			for (Element umlClassEl : umlClassEls) {
 
@@ -171,8 +196,8 @@ public class DomainModelPostprocessor {
 					Element attEl = (Element) attEls.item(i);
 					String attName = attEl.getAttribute("name");
 					if (attSet.contains(attName)) {
-						throw new Exception(hookFqn
-								+ " already contains attribute " + attName);
+						// We can ignore this attribute.
+						continue;
 					}
 					attSet.add(attName);
 
@@ -246,6 +271,16 @@ public class DomainModelPostprocessor {
 			umlClassEl.setAttribute("allowableAsTarget", "false");
 		}
 
+		// Remove associations where both sides have no role name
+		deleteElements(getElements(
+				xFact,
+				"//*[local-name()='UMLAssociation' and ./"
+						+ "*[local-name()='sourceUMLAssociationEdge']/"
+						+ "*[local-name()='UMLAssociationEdge' and not(@roleName)] and"
+						+ "*[local-name()='targetUMLAssociationEdge']/"
+						+ "*[local-name()='UMLAssociationEdge' and not(@roleName)]"
+						+ "]", root));
+
 		// Set project info
 		root.setAttribute("projectLongName", this.projectLongName);
 		root.setAttribute("projectShortName", this.projectShortName);
@@ -293,6 +328,12 @@ public class DomainModelPostprocessor {
 		}
 	}
 
+	private void deleteElements(NodeList els) {
+		for (int i = 0; i < els.getLength(); i++) {
+			detach((Element) els.item(i));
+		}
+	}
+
 	private Element getElement(XPathFactory xFact, String exp, Element ctx)
 			throws Exception {
 		XPathExpression xpath = xFact.newXPath().compile(exp);
@@ -301,20 +342,22 @@ public class DomainModelPostprocessor {
 
 	private void mergeUMLAssociations(XPathFactory xFact, Element root,
 			String targetUmlClassId, String umlClassId) throws Exception {
-		String accocRefElsStr = "//*[local-name()='UMLAssociation']/"
+		NodeList assocRefEls = getAssocEls(xFact, umlClassId, root);
+		for (int i = 0; i < assocRefEls.getLength(); i++) {
+			Element refEl = (Element) assocRefEls.item(i);
+			refEl.setAttribute("refid", targetUmlClassId);
+		}
+	}
+
+	private NodeList getAssocEls(XPathFactory xFact, String umlClassId,
+			Element ctx) throws Exception {
+		String assocRefElsStr = "//*[local-name()='UMLAssociation']/"
 				+ "*[local-name()='sourceUMLAssociationEdge' or "
 				+ "local-name()='targetUMLAssociationEdge']/"
 				+ "*[local-name()='UMLAssociationEdge']/"
 				+ "*[local-name()='UMLClassReference' and @refid='"
 				+ umlClassId + "']";
-		XPathExpression getAssocRefElsExp = xFact.newXPath().compile(
-				accocRefElsStr);
-		NodeList assocRefEls = (NodeList) getAssocRefElsExp.evaluate(root,
-				XPathConstants.NODESET);
-		for (int i = 0; i < assocRefEls.getLength(); i++) {
-			Element refEl = (Element) assocRefEls.item(i);
-			refEl.setAttribute("refid", targetUmlClassId);
-		}
+		return getElements(xFact, assocRefElsStr, ctx);
 	}
 
 	private NodeList getElements(XPathFactory xFact, String exp, Element ctx)
