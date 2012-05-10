@@ -1903,6 +1903,9 @@
 		<if>
 			<equals arg1="true" arg2="${dozerFilesExists}" />
 			<then>
+                <echo message="DEBUG: Preserving DE-package-name: ${de.package.name}" />
+                <property file="../../caGrid_service/caTissueStaticDataService/de_codegen/${de.package.name}.properties" name="${de.package.name}" value="1" />
+
 				<copy todir="../../caGrid_service/caTissueStaticDataService/de_codegen/artifacts" overwrite="true" verbose="true">
 					<fileset dir="${caCORE4.2_home}/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/">
 						<include name="${entitygroupname}-dozer-files.jar" />
