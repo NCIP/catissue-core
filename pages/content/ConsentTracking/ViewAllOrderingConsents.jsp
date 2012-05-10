@@ -422,13 +422,14 @@
 				while(iterators.hasNext())
 				{
 					if(i>0)
-					builder.append(",");
+					builder.append(", ");
 					builder.append(iterators.next());
 					i++;
 				}
 					
 					%>
-					<label><b>consent waived for specimens:<label><b> <%=builder.toString()%>
+					<label><b>consent waived for specimens:</b></label><span style="word-wrap: break-word;" >
+					<%=builder.toString()%></span>
 								</td>
 								
 							</tr>
