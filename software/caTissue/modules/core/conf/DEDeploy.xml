@@ -1905,7 +1905,6 @@
 			<then>
                 <echo message="DEBUG: Preserving DE-package-name: ${de.package.name}" />
                 <propertyregex property="package.name" input="${de.package.name}" regexp="/" replace="." defaultValue="${de.package.name}" />
-                <property file="../../caGrid_service/caTissueStaticDataService/de_codegen/${de.package.name}.properties" name="${de.package.name}" value="1" />
 
                 <echo message="DEBUG: Store the DE package name inside the schema folder." />
                 <property name="baseFolder" value="${caCORE4.2_home}/example-project/target/dist/exploded/output/${entitygroupname}/codegen/target/" />
@@ -1913,8 +1912,7 @@
                 <mkdir dir="${tempFolder}" />
                 <unzip src="${baseFolder}/${entitygroupname}-schema.jar" dest="${tempFolder}" />
                 <touch file="${tempFolder}/info.properties" />
-
-                <property file="${tempFolder}/info.properties" name="packagename" value="${package.name}" />
+                <propertyfile file="${tempFolder}/info.properties" comment="DE package: ${package.name}"><entry  key="packagename" value="${package.name}"/></propertyfile>
                 <echo message="DEBUG: DE-package-name stored: ${package.name}" />
                 <zip dest="${baseFolder}/${entitygroupname}-schema.jar">
                     <fileset dir="${tempFolder}"><include name="**/*" /></fileset>
