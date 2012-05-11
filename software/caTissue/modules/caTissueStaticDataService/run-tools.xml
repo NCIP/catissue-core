@@ -356,6 +356,16 @@
             </fileset>
         </foreach>
 
+        <echo message="DEBUG: Creating XSD Storage... :)" />
+        <mkdir dir="./temp/XSDStorage" />
+
+        <!-- Copy all main XSDs to a Storage -->
+        <foreach target="-synchronizeXSDs" param="fullJarFileName" inheritall="false">
+            <fileset dir="./de_codegen/artifacts" casesensitive="yes">
+                <include name="*-schema.jar"/>
+            </fileset>
+        </foreach>
+
         <!-- XSDs IMPORT -->
         <foreach target="-importXSDs" param="fullJarFileName" inheritall="false">
             <fileset dir="./de_codegen/artifacts" casesensitive="yes">
@@ -364,6 +374,7 @@
         </foreach>
 
         <!-- CLEAN UP -->
+        <!--
         <delete>
             <fileset dir="./de_codegen/artifacts">
                 <include name="*.jar" />
@@ -374,11 +385,11 @@
                 <include name="*.xml" />
             </fileset>
         </delete>
+        -->
 
-        
     </target>
 
-	<target name="-fixArtifacts">		
+	<target name="-fixArtifacts">
     	<echo>Fixing inconsistent XMIs and other artifacts...</echo>
 
         <!-- CASTOR -->
@@ -447,6 +458,15 @@
 
     </target>
 
+    <target name="-synchronizeXSDs">
+        <basename property="jarfilename" file="${fullJarFileName}"/>
+        <echo message="Sending new XSDs to the storage: ${jarfilename} "/>
+        <unjar src="${fullJarFileName}" dest="./temp/${jarfilename}" />
+        <property file="./temp/${jarfilename}/info.properties" />
+        <echo message="DEBUG: Copy main XSD to Storage:" />
+        <copy file="./temp/${jarfilename}/${packagename}.xsd" todir="./temp/XSDStorage" overwrite="true" verbose="true" />
+    </target>
+
     <target name="-importXSDs">
         <basename property="jarfilename" file="${fullJarFileName}"/>
         <echo message="Processing XSD folder: ${jarfilename} "/>
@@ -465,14 +485,21 @@
             <arg value="./temp/${jarfilename}"/>
     	</java>
     	
-    	
-    	<!-- Import main XSD only. -->
+
         <property file="./temp/${jarfilename}/info.properties" />
+
+        <!-- BEFORE RUNNING THE IMPORT we have to sync all DE XSDs with the storage and schema folder -->
+        <foreach target="-bringSecondaryXSDsFromStorage" param="fullFileName" inheritall="true">
+            <fileset dir="./temp/${jarfilename}" casesensitive="yes">
+                <include name="gov.nih.nci.dynext*.xsd" />
+                <exclude name="${packagename}.xsd" />
+            </fileset>
+        </foreach>
+
         <echo message="DEBUG: Importing main XSD: ${packagename}" />
         <foreach target="-importXSD" param="fullFileName" inheritall="true">
             <fileset dir="./temp/${jarfilename}" casesensitive="yes">
                 <include name="gov.nih.nci.dynext*.xsd"/>
-                <!--<include name="${packagename}.xsd"/>-->
             </fileset>
         </foreach>
 
@@ -490,6 +517,28 @@
     	
     	<antcall target="all"/>
     	     	
+    </target>
+
+    <target name="-bringSecondaryXSDsFromStorage">
+        <basename property="filename" file="${fullFileName}" />
+        <echo message="DEBUG: Storage or Schema Sync: ${filename}" />
+        <if>
+            <and><available file="./temp/XSDStorage/${filename}" property="fileIsInStorage" /></and>
+            <then>
+                <echo message="DEBUG: File found in Storage" />
+                <dirname property="dir" file="${fullFileName}"/>
+                <copy file="./temp/XSDStorage/${filename}" todir="${dir}" verbose="true" overwrite="true"/>
+            </then>
+        </if>
+        <if>
+            <and><available file="./schema/Catissue_cacore/${filename}" property="fileIsInSchemaFolder" /></and>
+            <then>
+                <echo message="DEBUG: File found in Schema Folder" />
+                <dirname property="dir" file="${fullFileName}"/>
+                <copy file="./schema/Catissue_cacore/${filename}" todir="${dir}" verbose="true" overwrite="true"/>
+            </then>
+        </if>
+        <echo message="DONE." />
     </target>
 
     <target name="-importXSD">
