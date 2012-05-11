@@ -467,12 +467,18 @@
     	
     	
     	<!-- Import main XSD only. -->
+        <property file="./temp/${jarfilename}/info.properties" />
+        <echo message="DEBUG: Importing main XSD: ${packagename}" />
         <foreach target="-importXSD" param="fullFileName" inheritall="true">
-                <fileset dir="./temp/${jarfilename}" casesensitive="yes">
-                	<include name="gov.nih.nci.dynext*.xsd"/>
-            	</fileset>
+            <fileset dir="./temp/${jarfilename}" casesensitive="yes">
+                <include name="gov.nih.nci.dynext*.xsd"/>
+                <!--<include name="${packagename}.xsd"/>-->
+            </fileset>
         </foreach>
-    	
+
+        <!--COPY Other files - DO NOT OVERWRITE -->
+        <!--<copy overwrite="false" verbose="true">-->
+
     	<copy todir="./schema/Catissue_cacore" overwrite="true" verbose="true">
     		<fileset dir="./temp/${jarfilename}" casesensitive="yes">
             	<include name="SCGRecordEntry.xsd"/>
@@ -482,7 +488,7 @@
 			</fileset>
     	</copy>
     	
-    	<antcall target="all"/>   	            
+    	<antcall target="all"/>
     	     	
     </target>
 
