@@ -554,7 +554,7 @@
             </else>
         </if>
 
-        <property file="./temp/imported_xsds.properties" name="${filename}" />
+        <property file="./temp/imported_xsds.properties" />
         <echo message="DEBUG: Is file ${filename} already imported ? ${${filename}}" />
 
         <if>
