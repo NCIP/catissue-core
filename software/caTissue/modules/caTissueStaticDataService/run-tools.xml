@@ -555,7 +555,7 @@
         </if>
 
         <property file="./temp/imported_xsds.properties" />
-        <propertycopy name="FileImportedValue" from="${filename}" />
+        <propertycopy name="FileImportedValue" from="${filename}" silent="true" />
         <echo message="DEBUG: Is file ${filename} already imported ? ${FileImportedValue}" />
 
         <if>
