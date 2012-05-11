@@ -528,6 +528,7 @@
                 <echo message="DEBUG: File found in Storage" />
                 <dirname property="dir" file="${fullFileName}"/>
                 <copy file="./temp/XSDStorage/${filename}" todir="${dir}" verbose="true" overwrite="true"/>
+                <copy file="./temp/XSDStorage/${filename}" todir="./schema/Catissue_cacore/" verbose="true" overwrite="true"/>
             </then>
         </if>
         <if>
@@ -536,6 +537,7 @@
                 <echo message="DEBUG: File found in Schema Folder" />
                 <dirname property="dir" file="${fullFileName}"/>
                 <copy file="./schema/Catissue_cacore/${filename}" todir="${dir}" verbose="true" overwrite="true"/>
+                <copy file="./schema/Catissue_cacore/${filename}" todir="./schema/Catissue_cacore/" verbose="true" overwrite="true"/>
             </then>
         </if>
         <echo message="DONE." />
