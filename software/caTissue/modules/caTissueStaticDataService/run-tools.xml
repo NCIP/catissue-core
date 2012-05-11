@@ -545,10 +545,34 @@
 
     <target name="-importXSD">
         <basename property="filename" file="${fullFileName}"/>
-    	<echo message="Processing: ${filename} "/>
-        <antcall target="doImportXSD">
-            <param name="xsdFile" value="${fullFileName}" />
-        </antcall>
+    	<echo message="DEBUG: XSD Import analysis for ${filename} "/>
+
+        <if>
+            <and><available file="./temp/imported_xsds.properties"  /></and>
+            <else>
+                <touch file="./temp/imported_xsds.properties" verbose="true" />
+            </else>
+        </if>
+
+        <property file="./temp/imported_xsds.properties" name="${filename}" />
+        <echo message="DEBUG: Is file ${filename} already imported ? ${${filename}}" />
+
+        <if>
+            <equals arg1="${${filename}}" arg2="true" />
+            <then>
+                <echo message="DEBUG: It is imported. SKIPPING..." />
+            </then>
+            <else>
+                <echo message="DEBUG: It is NOT imported. IMPORTING..." />
+                <propertyfile file="./temp/imported_xsds.properties" comment="List of imported XSD files">
+                    <entry key="${filename}" value="true" />
+                </propertyfile>
+                <antcall target="doImportXSD">
+                    <param name="xsdFile" value="${fullFileName}" />
+                </antcall>
+            </else>
+        </if>
+
     </target>
 
     <target name="-processDozer">
