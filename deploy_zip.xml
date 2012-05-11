@@ -33,11 +33,15 @@
 	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect" />
 	<property name="mssqlserver.dialect.string" value="org.hibernate.dialect.SQLServerDialect" />
 	
-	<!--Vivek:define require dir and Properties for BO-->
+	<!--Vivek:define require dir and properties for BO-->
 	<property name="bulkoperation.csv.dir" value="${base.dir}/modules/bulk_operations_upload" />
 	<property name="bulkoperation.parameters.csv.file" value="load_bulkoperations_list.csv" />
 	<property name="bo.csv.dir" value="${base.dir}/modules/bulk_operations_upload/csv"/>
 	<property name="bo.xml.dir" value="${base.dir}/modules/bulk_operations_upload/xml"/>
+	
+	<!--Vivek:define require dir and properties for inserting dashboard queries-->
+	<property name="dashboard.csv.dir" value="${base.dir}/modules/insert_dashboard_queries" />
+	<property name="dashboard.parameters.csv.file" value="dashboard_sqls.csv" />
 	
 	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
@@ -885,7 +889,8 @@
 						         />
 						    </tstamp>
 						    <echo>after deploy_app: ${time_deploy_app_after}</echo>
-		<antcall target="load_bulk_operator_templates" />							
+		<antcall target="load_bulk_operator_templates" />		
+		<antcall target="insert_dashboard_queries" />
 	
 		<antcall target="server_security" />
 
@@ -4227,6 +4232,67 @@ Thanking You,
 		<echo message="Finished Loading of Bulk Operator Templates in bulk" />
 		<echo message="---------------------------------------------------" />		
 
+	</target>
+	
+	<!--Vivek: target to insert dashboard queries-->
+	<loadfile property="query_file" srcFile="${dashboard.csv.dir}/${dashboard.parameters.csv.file}"/> 
+	<target name="insert_dashboard_queries">	
+		<echo message="------------------------------" />
+		<echo message="Inserting dashboard queries..." />
+		<echo message="------------------------------" />
+		<for param="line" list="${query_file}" delimiter="${line.separator}">
+			<sequential>
+						<propertyregex property="arg1"
+							input="@{line}"
+							regexp="(.+?),(.+)"
+							select="\1"
+							casesensitive="false" 
+							override = "true"/>
+						<propertyregex property="arg2"
+							input="@{line}"
+							regexp="(.+?),(.+)"
+							select="\2"
+							casesensitive="false" 
+							override = "true"/>
+				<if>	
+					<equals arg1="mysql" arg2="${database.type}" />
+						<then>
+							<sql driver="${mysql.driver.string}" 
+							url="jdbc:mysql://${database.host}:${database.port}/${database.name}" 
+							userid="${database.username}" 
+							password="${database.password}">
+							<classpath>
+								<fileset dir="${lib.dir}">
+									<include name="*.jar" />
+								</fileset>
+							</classpath>
+							insert into labelsql values(NULL,'${arg1}','${arg2}');
+							</sql>	
+						</then>
+						
+					<elseif >
+					<equals arg1="oracle" arg2="${database.type}" />
+						<then>					
+							<sql driver="${oracle.driver.string}"
+							url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+							userid="${database.username}"
+							password="${database.password}"
+							rdbms="oracle">
+							<classpath>
+								<fileset dir="${lib.dir}">
+									<include name="*.jar" />
+								</fileset>
+							</classpath>
+							insert into labelsql values(LABELSQL_IDENTIFIER_SEQ.NEXTVAL,'${arg1}','${arg2}');
+							</sql>
+						</then>
+					</elseif>
+				</if>		
+			</sequential>
+		</for>
+		<echo message="---------------------------------------" />
+		<echo message="Inserting dashboard queries finished..." />
+		<echo message="---------------------------------------" />
 	</target>
 	
 	<property name="operationName" value="" />
