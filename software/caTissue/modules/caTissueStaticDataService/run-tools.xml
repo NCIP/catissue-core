@@ -555,10 +555,11 @@
         </if>
 
         <property file="./temp/imported_xsds.properties" />
-        <echo message="DEBUG: Is file ${filename} already imported ? ${${filename}}" />
+        <propertycopy name="FileImportedValue" from="${filename}" />
+        <echo message="DEBUG: Is file ${filename} already imported ? ${FileImportedValue}" />
 
         <if>
-            <equals arg1="${${filename}}" arg2="true" />
+            <equals arg1="${FileImportedValue}" arg2="true" />
             <then>
                 <echo message="DEBUG: It is imported. SKIPPING..." />
             </then>
