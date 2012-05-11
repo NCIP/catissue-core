@@ -18,6 +18,7 @@
 <script src="jss/javaScript.js" type="text/javascript"></script>
 <script>
 	var selectedNodeId, key, parentId,cpNodeId;
+	var firstTimeLoad = true;
 	//This function calls whenever we select a node from CP tree view
 	function setKeys(nodeId, nodeKey,nodesParentId )
 	{
@@ -63,7 +64,11 @@
 		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
 		if(formId!=null)
 		{
-		    action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=add";
+			action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=add";
+			if(firstTimeLoad==true && '${requestScope.operation}'=='add'){
+			   action = action + "&addCpNode=true";
+			   firstTimeLoad = false;
+		    } 
 		}
 		else
 		{

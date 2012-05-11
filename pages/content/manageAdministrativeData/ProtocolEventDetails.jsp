@@ -149,6 +149,11 @@ function onClinicalStatusListReady()
 	
 function doOnLoad()
 {
+	if("<%=request.getParameter("addCpNode")%>" == 'true' )
+	{
+	  window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
+	}
+	
 	if('${protocolEventDetailsForm.studyCalendarEventPoint}' == 0.0)
 	{
 		document.getElementById("studyCalendarEventPoint").value = 0;
