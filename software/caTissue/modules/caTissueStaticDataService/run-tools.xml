@@ -374,7 +374,6 @@
         </foreach>
 
         <!-- CLEAN UP -->
-        <!--
         <delete>
             <fileset dir="./de_codegen/artifacts">
                 <include name="*.jar" />
@@ -384,8 +383,11 @@
                 <include name="*.xmi" />
                 <include name="*.xml" />
             </fileset>
+            <fileset dir="./temp">
+                <include name="**/*.*" />
+                <exclude name="imported_xsds.properties" />
+            </fileset>
         </delete>
-        -->
 
     </target>
 
