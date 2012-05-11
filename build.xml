@@ -829,6 +829,11 @@
 			<fileset dir="${base.dir}/bulk_operations_upload" />
 		</copy>
 		
+		<!--Vivek: <copy dir="insert_dashboard_queries" todir="${zip.dir}/modules/" overwrite="true" />-->
+		<copy todir="${zip.dir}/modules/insert_dashboard_queries" overwrite="true">
+			<fileset dir="${base.dir}/insert_dashboard_queries" />
+		</copy>
+		
 		<!--<copy file="cas.war" todir="${zip.dir}/modules/CAS/lib" overwrite="true" />-->
 
 		<copy file="gate.zip" todir="${zip.dir}/modules/caTIES/lib" overwrite="true" />
