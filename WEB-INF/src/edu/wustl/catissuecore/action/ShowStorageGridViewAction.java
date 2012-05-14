@@ -338,16 +338,13 @@ public class ShowStorageGridViewAction extends BaseAction
 									value = "<a  class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenSearch.do?"+Constants.PAGE_OF+"=pageOfNewSpecimenCPQuery&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+"\\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" >"+containerName+"	</a>";
 									//value = "<a  class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenSearch.do?"+Constants.PAGE_OF+"=pageOfNewSpecimenCPQuery&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+"\\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" ><img src=\\\\\"images/uIEnhancementImages/specimen.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\"  border=\\\\\"0\\\\\"><br>"+containerName+"	</a>";
 									//value = containerName;
-
 								}
 								if(contentOfContainer!=null && contentOfContainer.equals(Constants.ALIAS_SPECIMEN_ARRAY))
 								{
 									value = "<a class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenArraySearch.do?"+Constants.PAGE_OF+"=pageOfSpecimenArray&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+" \\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" >"+containerName+" </a>";
 									//value = "<a class=\\\\\"view\\\\\" href=\\\\\"QuerySpecimenArraySearch.do?"+Constants.PAGE_OF+"=pageOfSpecimenArray&"+Constants.SYSTEM_IDENTIFIER+"="+childContainerIds[i][j]+" \\\\\" onmouseover=\\\\\"Tip(\\\'"+childContainerType[i][j]+"\\\')\\\\\" ><img src=\\\\\"images/uIEnhancementImages/specimen_array.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\"  border=\\\\\"0\\\\\"><br>"+containerName+" </a>";
 									//value = containerName;
-
 								}
-								
 							}
 						}
 						else{
@@ -392,7 +389,6 @@ public class ShowStorageGridViewAction extends BaseAction
 										+"setTextBoxValue(\\\'"+yDimStyleId+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ "
 										+"closeFramedWindow()\\\\\" "
 									  		+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
-
 							}
 
 
@@ -408,7 +404,7 @@ public class ShowStorageGridViewAction extends BaseAction
 					}
 				}
 				jsonMidleString.append("]}");
-				if(i<twoDimensionCapacity){
+				if(i<oneDimensionCapacity){
 					jsonMidleString.append(",");
 				}
 
