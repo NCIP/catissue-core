@@ -409,7 +409,7 @@ public class ShowStorageGridViewAction extends BaseAction
 					}
 				}
 				jsonMidleString.append("]}");
-				if(i<twoDimensionCapacity){
+				if(i<oneDimensionCapacity){
 					jsonMidleString.append(",");
 				}
 
