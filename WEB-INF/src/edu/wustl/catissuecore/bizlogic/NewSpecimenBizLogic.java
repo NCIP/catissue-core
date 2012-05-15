@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import krishagni.catissueplus.mobile.dto.SpecimenDTO;
+
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
@@ -5628,6 +5630,81 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return count;
 	}
+
+	
+	public SpecimenDTO getSpecimenDTOFromLabel(DAO dao, String label) throws DAOException,
+	BizLogicException
+	{
+		SpecimenDTO specimenDTO = new SpecimenDTO();
+		String column = "label";
+		
+		final String sourceObjectName = Specimen.class.getName();
+		System.out.println("");
+		final String[] selectColumnName = {
+				"activityStatus",
+				"specimenCollectionGroup.collectionProtocolEvent.collectionProtocol.shortTitle",
+				"specimenCollectionGroup.collectionProtocolRegistration.participant.firstName",
+				"specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier",
+				"specimenCollectionGroup.collectionProtocolEvent.studyCalendarEventPoint",
+				"specimenClass", "specimenType", "specimenCharacteristics.tissueSite",
+				"specimenCharacteristics.tissueSide", "pathologicalStatus", "availableQuantity",
+				"specimenPosition.storageContainer.name",
+				"specimenPosition.positionDimensionOne",
+				"specimenPosition.positionDimensionTwo"};
+		
+		final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+		queryWhereClause.addCondition(new EqualClause(column, label));
+		
+		final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+		
+		
+		if (!list.isEmpty())
+		{
+			if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(((Object[]) list.get(0))[0]))
+			{
+				throw this.getBizLogicException(null, "error.object.disabled", Constants.SPECIMEN);
+			}
+			else
+			{
+				final Object[] valArr = (Object[]) list.get(0);
+				if (valArr != null)
+				{
+					specimenDTO = getSpecimenDTOObject(valArr);
+				}
+		
+			}
+		
+		}
+		else
+		{
+			throw this.getBizLogicException(null, "invalid.label.barcode", label);
+		}
+		
+		return specimenDTO;
+		
+		}
+		
+		private SpecimenDTO getSpecimenDTOObject(final Object[] valArr)
+		{
+			SpecimenDTO specimenDTO = new SpecimenDTO();
+			
+			specimenDTO.setCpShortTitle((String) valArr[1]);
+			specimenDTO.setParticipantName((String) valArr[2]);
+			specimenDTO.setProtocol_participant_id((String) valArr[3]);
+			specimenDTO.setEventPoint((Double) valArr[4]);
+			specimenDTO.setSpecimenClass((String) valArr[5]);
+			specimenDTO.setSpecimenType((String) valArr[6]);
+			specimenDTO.setTissueSite((String) valArr[7]);
+			specimenDTO.setTissueSide((String) valArr[8]);
+			specimenDTO.setPathologicalStatus((String) valArr[9]);
+			specimenDTO.setAvailableQuantity((Double) valArr[10]);
+			specimenDTO.setContainerName((String) valArr[11]);
+			specimenDTO.setPositionDimensionOneString(valArr[12]+"");
+			specimenDTO.setPositionDimensionTwoString(valArr[13]+"");
+			
+			return specimenDTO;
+		}
+
 
 
 }

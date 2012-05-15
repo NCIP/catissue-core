@@ -68,12 +68,40 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
      <servlet-name>ContainerExportServlet</servlet-name>
      <servlet-class>edu.wustl.catissuecore.action.ContainerExportServlet</servlet-class>
    </servlet>
+    <servlet>
+     <servlet-name>AppLogin</servlet-name>
+     <servlet-class>krishagni.catissueplus.mobile.servlet.Login</servlet-class>
+   </servlet>
+    <servlet>
+     <servlet-name>ViewSpecimenDetail</servlet-name>
+     <servlet-class>krishagni.catissueplus.mobile.servlet.ViewSpecimenDetail</servlet-class>
+   </servlet>
+  
+     <servlet>
+     <servlet-name>AppLogout</servlet-name>
+     <servlet-class>krishagni.catissueplus.mobile.servlet.Logout</servlet-class>
+   </servlet>
 
 	<!-- Standard Action Servlet Mapping -->
 
 	 <servlet-mapping>
  <servlet-name>ContainerExportServlet</servlet-name>
  <url-pattern>/ContainerExportServlet</url-pattern>
+ </servlet-mapping>
+ 
+  <servlet-mapping>
+ <servlet-name>AppLogin</servlet-name>
+ <url-pattern>/AppLogin</url-pattern>
+ </servlet-mapping>
+ 
+   <servlet-mapping>
+     <servlet-name>ViewSpecimenDetail</servlet-name>
+     <url-pattern>/ViewSpecimenDetail</url-pattern>
+ </servlet-mapping>
+ 
+ <servlet-mapping>
+ <servlet-name>AppLogout</servlet-name>
+ <url-pattern>/AppLogout</url-pattern>
  </servlet-mapping>
  
 	<servlet-mapping>
