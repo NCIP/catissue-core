@@ -392,11 +392,7 @@
 									<label><b><bean:message key="consent.verificationmessage" /><b></label>
 								</td>
 							</tr>
-							<tr>
-								<td>
-									&nbsp;
-								</td>
-							</tr>
+							
 						</table>	
 						<%-- Inner table that will show Consents--%>
 					</td>	
@@ -427,9 +423,12 @@
 					i++;
 				}
 					
+					if(i>0)
+					{
 					%>
-					<label><b>consent waived for specimens:</b></label><span style="word-wrap: break-word;" >
+					<label><b>Consent waived for specimens:</b></label><span style="word-wrap: break-word;" >
 					<%=builder.toString()%></span>
+					<%}%>
 								</td>
 								
 							</tr>

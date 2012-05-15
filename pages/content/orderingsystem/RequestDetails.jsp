@@ -493,11 +493,11 @@ function checkQuantityforAll(count)
 	}
 
 	/*** code using ajax  ***/	
-
+//window.onload="loadTab();init_grid()";
 
 </script>
 </head>  
-<body>
+<body onload="loadTab();init_grid();">
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 
 <html:form action="<%=form_action%>">
@@ -688,7 +688,7 @@ function checkQuantityforAll(count)
 				<tr>
 					<td width="100%" >
 					<table border="0" width="100%"><tr><td>
-						<div id="tabbar_div" align="center" style="width:auto;height:350px;overflow:auto;"/>
+						<div id="tabbar_div" align="left" style="width:auto;height:350px;overflow:auto;"/>
 						</td>
 						</tr></table>
 						<table width="100%">
@@ -760,6 +760,8 @@ function checkQuantityforAll(count)
 </html:form>
 </body>
 <script>
+function loadTab()
+{
 tabbar = new dhtmlXTabBar("tabbar_div", "top");
 	tabbar.setSkin('dhx_skyblue');
 	tabbar.setImagePath("dhtmlx_suite/imgs/");
@@ -808,5 +810,7 @@ tabbar = new dhtmlXTabBar("tabbar_div", "top");
 	}
     return true;
 });
+}
+
 </script>
 <!----------------------------------------------->	
