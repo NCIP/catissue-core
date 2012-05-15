@@ -154,7 +154,7 @@ function doOnLoad()
 	  window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?operation=${requestScope.operation}";
 	}
 	
-	if('${protocolEventDetailsForm.studyCalendarEventPoint}' == 0.0)
+	if('${protocolEventDetailsForm.studyCalendarEventPoint}' == 0.0 && '${requestScope.isPersistent}' != 'true')
 	{
 		document.getElementById("studyCalendarEventPoint").value = 0;
 	}
@@ -163,7 +163,11 @@ function doOnLoad()
 	
 	// initialising grid
 	dsGrid = initDropDownGrid(siteDropDownInfo); //initialize DropDown control for Site List
-	csGrid = initDropDownGrid(clinicalStatusDropDownInfo); //initialize DropDown control for Clinical Status List
+	if('${requestScope.isPersistent}'!='true')
+	{
+		csGrid = initDropDownGrid(clinicalStatusDropDownInfo); //initialize DropDown control for Clinical Status List
+	}
+	
 	//If user creating Duplicate event
 	if('${requestScope.setFocus}'=="true"){
 			document.getElementById("collectionPointLabel").focus();}
@@ -173,10 +177,7 @@ function doOnLoad()
 		window.parent.frames['CPTreeView'].deleteCPTreeNode('${requestScope.deleteNode}',false)
 		window.parent.frames['CPTreeView'].setGlobalNodeKeys("<%=request.getSession().getAttribute("nodeId")%>",true);
 	}
-	/*else
-	{
-		window.parent.frames['CPTreeView'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=${requestScope.operation}";
-	}*/
+	
 	<%
 		Vector treeData = (Vector)request.getAttribute("nodeAdded");
 		if(treeData != null && treeData.size() != 0)
