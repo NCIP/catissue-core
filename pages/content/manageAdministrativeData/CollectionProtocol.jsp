@@ -367,7 +367,7 @@ div#d999 {
 							<table border="0" width="28%" id="outerTable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td align="left" width="88%" height="100%" >
-										<div id="ppDropDownIddiv" class="x-form-field-wrap " >
+										<div id="ppDropDownIddiv" class="x-form-field-wrap " style="width:137px;">
 											<input id="parentProtocolDropDown"
 													onkeydown="keyNavigationCall(event,parentProtocolDropDownInfo,ppGrid);"
 													onKeyUp="autoCompleteControl(event,parentProtocolDropDownInfo,ppGrid);"
@@ -433,17 +433,12 @@ div#d999 {
 							<table border="0" width="28%" id="outerTable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td align="left" width="88%" height="100%" >
-										<div id="piDropDownIddiv" class="x-form-field-wrap" >
+										<div id="piDropDownIddiv" class="x-form-field-wrap" style="width:137px;">
 											<input id="principleInvestigatorDropDown"
 													onkeydown="keyNavigationCall(event,investigatorDropDownInfo,piGrid);"
 													onKeyUp="autoCompleteControl(event,investigatorDropDownInfo,piGrid);"
 													onClick="noEventPropogation(event)"
-													autocomplete="off"
-													size="18"
-													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="piDropDownId" style="top : 0px !important; align:left;" class="x-form-trigger x-form-arrow-trigger" 
-												onclick="showHideGrid(event,investigatorDropDownInfo,piGrid);"
-												src="images/uIEnhancementImages/s.gif"/>
-										</div>
+													autocomplete="off"	size="18" class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="piDropDownId" style="top:0px !important;" class="x-form-trigger x-form-arrow-trigger" onclick="showHideGrid(event,investigatorDropDownInfo,piGrid);" src="images/uIEnhancementImages/s.gif"/></div>
 									</td>
 								</tr>
 								<tr>
