@@ -302,6 +302,55 @@
         <echo message="Updating ORM files...DONE." />
     </target>
 
+    <target name="-processBeans">
+        <basename property="filename" file="${fullFileName}"/>
+        <echo message="Processing bean file: ${filename} "/>
+        <propertyregex property="schemaFile" input="${filename}" regexp="-beans" replace="-schema" />
+        <propertyregex property="schemaFileFullName" input="${fullFileName}" regexp="-beans" replace="-schema" />
+        <echo message="The schemafile is: ${schemaFile}" />
+        <echo message="The schemafileFullName is: ${schemaFileFullName}" />
+        <mkdir dir="./temp/beanTempOrm/${schemaFile}" />
+        <unjar src="${fullFileName}" dest="./temp/beanTempBeans/${filename}" />
+        <unjar src="${schemaFileFullName}" dest="./temp/beanTempOrm/${schemaFile}" />
+        <available file="${schemaFileFullName}" property="file.exists" />
+        <echo message="File Exists: ${file.exists}" />
+        <property file="./temp/beanTempOrm/${schemaFile}/info.properties" />
+        <echo message="Package is: ${packagename}" />
+        <propertyregex property="filesLocation" input="${packagename}" regexp="\." replace="/" />
+        <property name="fromLocation" value="./temp/beanTempBeans/${filename}/${filesLocation}" />
+        <property name="toLocation" value="./temp/beanTemp/${filesLocation}" />
+        <echo message="COPY beans FROM: ${fromLocation} TO ${toLocation}" />
+        <copy todir="${toLocation}" overwrite="true" verbose="false">
+            <fileset dir="${fromLocation}">
+                <include name="**/*.*" />
+            </fileset>
+        </copy>
+        <copy todir="./temp/beanTemp/edu/wustl/catissuecore/domain/deintegration/" overwrite="true" verbose="true">
+            <fileset dir="./temp/beanTempBeans/${filename}/edu/wustl/catissuecore/domain/deintegration/">
+                <include name="**/*.*" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="-mergeBeanFiles">
+        <echo message="Updating Bean files..." />
+        <property name="beanFile" value="./lib/catissue_cacore-beans.jar" />
+
+        <mkdir dir="./temp/beanTemp/" />
+        <mkdir dir="./temp/beanTempBeans/" />
+        <mkdir dir="./temp/beanTempOrm/" />
+
+        <unzip src="${beanFile}" dest="./temp/beanTemp/" />
+
+        <foreach target="-processBeans" param="fullFileName" inheritall="true">
+            <fileset dir="./de_codegen/artifacts" casesensitive="yes">
+                <include name="**/*-beans.jar"/>
+            </fileset>
+        </foreach>
+        <jar basedir="./temp/beanTemp/" destfile="${beanFile}" />
+        <echo message="Updating Bean files...DONE." />
+    </target>
+
     <!-- START Service rebuild -->
     <target name="updateService" depends="all">
 
@@ -312,6 +361,7 @@
     	<delete dir="./temp" failonerror="false"/>
     	<mkdir dir="./temp" />
 
+        <antcall target="-mergeBeanFiles" />
         <antcall target="-mergeORMFiles" />
 
         <!-- DOZER MERGE -->
