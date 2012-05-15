@@ -434,7 +434,7 @@
                 <include name="*.xml" />
             </fileset>
             <fileset dir="./temp">
-                <include name="**/*.*" />
+                <include name="**/*" />
                 <exclude name="imported_xsds.properties" />
             </fileset>
         </delete>
