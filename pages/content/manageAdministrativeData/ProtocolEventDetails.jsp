@@ -163,10 +163,7 @@ function doOnLoad()
 	
 	// initialising grid
 	dsGrid = initDropDownGrid(siteDropDownInfo); //initialize DropDown control for Site List
-	if('${requestScope.isPersistent}'!='true')
-	{
-		csGrid = initDropDownGrid(clinicalStatusDropDownInfo); //initialize DropDown control for Clinical Status List
-	}
+	csGrid = initDropDownGrid(clinicalStatusDropDownInfo); //initialize DropDown control for Clinical Status List
 	
 	//If user creating Duplicate event
 	if('${requestScope.setFocus}'=="true"){
