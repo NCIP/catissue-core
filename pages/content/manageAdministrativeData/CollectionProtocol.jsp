@@ -458,13 +458,15 @@ div#d999 {
 				</tr>
 					
 				<tr>
-					<td align="center" class="black_ar">&nbsp;</td>
-					<td align="left" valign="top" class="black_ar"><label
+					<td align="center" class="black_ar" width="1%">&nbsp;</td>
+					<td align="left" valign="top" class="black_ar" width="30%"><label
 						for="cpcoordinatorIds"><bean:message
 						key="collectionprotocol.protocolcoordinator" /></label></td>
-					<td align="left">
-						<table width="100%" cellspacing="0" cellpadding="0">
-							<tr> <td width="57%">
+					<td  class="black_ar" width="69%">
+						<div style="width:100%;">
+					   <table width="100%" cellpadding="0">
+						  <tr>
+							<td class="black_ar" align="left"  width="57%">
 								<mCombo:multiSelectUsingCombo
 								identifier="pcoordinatorIds" size="18" styleClass="black_ar_new"
 								addNewActionStyleClass="black_ar_new"
@@ -472,14 +474,14 @@ div#d999 {
 								removeButtonOnClick="moveOptions('coordinatorIds','pcoordinatorIds', 'edit')"
 								selectIdentifier="coordinatorIds"
 								collection="<%=(List)request.getAttribute("selectedCPCoordinatorIds")%>"
-								numRows="4" />	</td> 
-								<td width="43%">
-								<label>&nbsp;<html:link href="#" styleId="newUser" styleClass="view"
-								onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=collectionProtocol&addNewFor=principalInvestigator')">
+								numRows="4" />
+							</td>
+							<td><label><html:link href="#" styleId="newUser" styleClass="view"	onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=collectionProtocol&addNewFor=principalInvestigator')">
 								<bean:message key="buttons.addNew" /></html:link></label>
-								</td>
-							</tr>
-						</table>	
+							</td>
+						  </tr>
+						</table>
+						</div>
 					</td>
 				</tr>
 				
