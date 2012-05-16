@@ -960,8 +960,8 @@
   <ns41:Property description="The location of the server-config.wsdd file" isFromETC="true" key="serverConfigLocation" value="server-config.wsdd"/>
   <ns41:Property description="The name of the class to use for CQL query structure validation" isFromETC="false" key="dataService_cqlValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.ObjectWalkingCQLValidator"/>
   <ns41:Property description="The name of the class to use for CQL validation against a domain model" isFromETC="false" key="dataService_domainModelValidatorClass" value="gov.nih.nci.cagrid.data.cql.validation.DomainModelValidator"/>
-  <ns41:Property description="" isFromETC="false" key="dataService_validateCqlFlag" value="true"/>
-  <ns41:Property description="" isFromETC="false" key="dataService_validateDomainModelFlag" value="true"/>
+  <ns41:Property description="" isFromETC="false" key="dataService_validateCqlFlag" value="false"/>
+  <ns41:Property description="" isFromETC="false" key="dataService_validateDomainModelFlag" value="false"/>
   <ns41:Property description="A comma separated list of class names which implement gov.nih.nci.cagrid.data.cql2.validation.walker.BaseCustomCql2WalkerHandler" isFromETC="false" key="dataService_cql2ValidatorClasses" value=""/>
   <ns41:Property description="The name of the file containing the class name to QName mapping" isFromETC="true" key="dataService_classMappingsFilename" value="classToQname.xml"/>
  </ns41:ServiceProperties>
