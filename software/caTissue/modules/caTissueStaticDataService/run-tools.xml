@@ -293,7 +293,7 @@
         <property name="ormFile" value="./lib/catissue_cacore-orm.jar" />
         <mkdir dir="${tempFolder}" />
         <unzip src="./lib/catissue_cacore-orm.jar" dest="${tempFolder}" />
-        <copy todir="${tempFolder}" overwrite="true" verbose="true">
+        <copy todir="${tempFolder}" overwrite="true" verbose="false">
             <fileset dir="./de_codegen/hbms">
                 <include name="**/*.*" />
             </fileset>
@@ -415,6 +415,10 @@
                 <include name="*-schema.jar"/>
             </fileset>
         </foreach>
+
+        <!-- replace "id" to "identifier "-->
+        <echo message="DEBUG: Replacing 'id' to 'identifier'" />
+        <replace dir="./temp/XSDStorage" includes="**/*.xsd" summary="true" token="xs:attribute name=&quot;id&quot;" value="xs:attribute name=&quot;identifier&quot;" />
 
         <!-- XSDs IMPORT -->
         <foreach target="-importXSDs" param="fullJarFileName" inheritall="false">
