@@ -175,7 +175,7 @@
 <tr>
 	<td>
 
-      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
 
         <tr>
           <td colspan="2" align="left" class="bottomtd">
@@ -196,8 +196,8 @@
         </tr>
 
        		<tr>
-				<td width="20%" height="100%" valign="top" style="border-left:1px solid #61a1e3;	 border-right:1px solid #61a1e3;border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3; ">
-					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}&isErrorPage=${requestScope.isErrorPage}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView"  height="450" >
+				<td width="21%" height="448px" valign="top" style="border-left:1px solid #61a1e3; border-right:1px solid #61a1e3;border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;">
+					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}&isErrorPage=${requestScope.isErrorPage}"  frameborder="0" width="100%" name="CPTreeView"  height="448" >
 							<bean:message key="errors.browser.not.supports.iframe"/>
 					</iframe>
 				</td>

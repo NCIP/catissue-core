@@ -35,14 +35,8 @@
 </head>
 
 <body>
-<table border="0"  width="100%" height="100%">
-	<tr>	
-		<td align="left" colspan="2" >
-			<div id="treeboxbox_tree" scrolling="auto"
-				style="width: 100%; height: 100%; background-color: #ffffff;overflow:auto;" />
-		</td>
-	</tr>
-</table>
+<div id="treeboxbox_tree" 	style="width: 100%; height: 100%;background-color: #ffffff;overflow:auto;">
+
 
 <script language="javascript">
 	var deletingNodeIndex="", preNodeId="";	
