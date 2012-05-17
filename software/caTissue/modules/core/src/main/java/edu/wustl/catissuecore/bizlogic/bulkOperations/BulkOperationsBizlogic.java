@@ -154,9 +154,18 @@ public class BulkOperationsBizlogic extends SpecimenEventParametersBizLogic
 
 			toContainer =scInstFact.createObject();// new StorageContainer();
 			toContainer.setName(eventSpecificData.get("ID_" + specimenId + "_TOSCLABEL"));
+			if(null==toContainer.getName() || "".equals(toContainer.getName()))
+			{
+				throw this.getBizLogicException( null,
+						"invalid.container.name", null );
+			}
+			String pos1="",pos2="";
+			if(eventSpecificData.get("ID_"+specimenId+"_TOSCPOS1")!=null && eventSpecificData.get("ID_"+specimenId+"_TOSCPOS2")!=null && !eventSpecificData.get("ID_"+specimenId+"_TOSCPOS1").toString().trim().equals( "" ) && !eventSpecificData.get("ID_"+specimenId+"_TOSCPOS2").trim().equals( "" ))
+			{
 			//bug 14417 start
-			String pos1 = StorageContainerUtil.convertSpecimenPositionsToInteger(eventSpecificData.get("ID_" + specimenId + "_TOSCLABEL"), 1, eventSpecificData.get("ID_"+specimenId+"_TOSCPOS1")).toString();
-			String pos2 = StorageContainerUtil.convertSpecimenPositionsToInteger(eventSpecificData.get("ID_" + specimenId + "_TOSCLABEL"), 2, eventSpecificData.get("ID_"+specimenId+"_TOSCPOS2")).toString();
+			 pos1 = StorageContainerUtil.convertSpecimenPositionsToInteger(eventSpecificData.get("ID_" + specimenId + "_TOSCLABEL"), 1, eventSpecificData.get("ID_"+specimenId+"_TOSCPOS1")).toString();
+			 pos2 = StorageContainerUtil.convertSpecimenPositionsToInteger(eventSpecificData.get("ID_" + specimenId + "_TOSCLABEL"), 2, eventSpecificData.get("ID_"+specimenId+"_TOSCPOS2")).toString();
+			}
 			if(pos1!=null && pos2!=null && !pos1.trim().equals( "" ) && !pos2.trim().equals( "" ))
 			{
 				//bug 15083 start
