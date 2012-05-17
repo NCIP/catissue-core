@@ -969,7 +969,7 @@
 				<include name="hibernate3.jar" />
 			</fileset>
 		</copy>
-		<zip destfile="${APIclientzip.file}" basedir="${APIclientzip.dir}" />
+		<zip destfile="${APIclientzip.file}" basedir="${APIclientzip.dir}/caTissueSuite_Client" />
 		<delete dir="${APIclientzip.dir}" />
 	</target>
 
