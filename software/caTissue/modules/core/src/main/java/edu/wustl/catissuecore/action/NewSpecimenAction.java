@@ -78,14 +78,12 @@ import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
-import gov.nih.nci.logging.api.util.StringUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -368,8 +366,8 @@ public class NewSpecimenAction extends SecureAction
 			{
 				initialSignedConsentDateValue = Constants.NULL;
 			}
-			final List<CollectionProtocolRegistration> cprObjectList = new ArrayList<CollectionProtocolRegistration>();
-			cprObjectList.add(collectionProtocolRegistration);
+//			final List<CollectionProtocolRegistration> cprObjectList = new ArrayList<CollectionProtocolRegistration>();
+//			cprObjectList.add(collectionProtocolRegistration);
 			/*
 			 * SessionDataBean sessionDataBean = (SessionDataBean)
 			 * request.getSession().getAttribute( Constants.SESSION_DATA);
@@ -486,21 +484,26 @@ public class NewSpecimenAction extends SecureAction
 			}
 			else
 			{
-				String specimenID = null;
-				specimenID = String.valueOf(specimenForm.getId());
-				// List added for grid
+
+//				// List added for grid
 				final List specimenDetails = new ArrayList();
-
-				final Specimen specimen = bizLogic.getSpecimen(specimenID, specimenDetails,
-						sessionData, dao);
-				if (specimen != null && !StringUtils.isBlank(specimen.getGlobalSpecimenIdentifier())) {
-					specimenForm.setGlobalSpecimenIdentifer(specimen.getGlobalSpecimenIdentifier());
+				final List specimenDetailList = new ArrayList();
+				specimenDetailList.add(specimenForm.getLabel());
+				specimenDetailList.add(specimenForm.getType());
+				if (specimenForm.getStContSelection() == Constants.STORAGE_TYPE_POSITION_VIRTUAL_VALUE) {
+					specimenDetailList.add(Constants.VIRTUALLY_LOCATED);
+				} else {
+					if (specimenForm.getStorageContainer() != null) {
+						final String storageLocation = specimenForm.getSelectedContainerName()
+								+ ": X-Axis-"
+								+ specimenForm.getPositionDimensionOne()
+								+ ", Y-Axis-"
+								+ specimenForm.getPositionDimensionTwo();
+						specimenDetailList.add(storageLocation);
+					}
 				}
-
-				if(specimen != null && specimen.getIsAvailable() != null)
-				{
-					specimenForm.setAvailable(specimen.getIsAvailable());
-				}
+				specimenDetailList.add(specimenForm.getClass());
+				specimenDetails.add(specimenDetailList);
 				// Added by Falguni=To set Specimen label in Form.
 				/*
 				 * Bug id = 11480Resolved by : Himanshu Aseeja
@@ -511,11 +514,11 @@ public class NewSpecimenAction extends SecureAction
 						+ " from edu.wustl.catissuecore.domain.SpecimenCollectionGroup as scg,"
 						+ " edu.wustl.catissuecore.domain.Specimen as spec "
 						+ " where spec.specimenCollectionGroup.id=scg.id and spec.id="
-						+ specimen.getId();
+						+ specimenForm.getId();
 				final Collection consentResponse = dao.executeQuery(consentResponseHql);
 
 				final List consentResponseStatuslevel = dao.retrieveAttribute(Specimen.class, "id",
-						specimen.getId(), "elements(consentTierStatusCollection)");
+						specimenForm.getId(), "elements(consentTierStatusCollection)");
 				final String specimenResponse = "_specimenLevelResponse";
 				final String specimenResponseId = "_specimenLevelResponseID";
 				final Map<String, Comparable> tempMap = ConsentUtil.prepareSCGResponseMap(consentResponseStatuslevel,
@@ -523,7 +526,7 @@ public class NewSpecimenAction extends SecureAction
 				specimenForm.setConsentResponseForSpecimenValues(tempMap);
 				specimenForm.setConsentTierCounter(participantResponseList.size());
 				final HttpSession session = request.getSession();
-				request.setAttribute("showContainer", specimen.getCollectionStatus());
+				request.setAttribute("showContainer", specimenForm.getCollectionStatus());
 				session.setAttribute(Constants.SPECIMEN_LIST, specimenDetails);
 				session.setAttribute(Constants.COLUMNLIST, columnList);
 			}
@@ -842,17 +845,9 @@ public class NewSpecimenAction extends SecureAction
 				if ((showContainer == null || showContainer.equals("Pending")) && (specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP || specimenForm
 						.getStContSelection() == 2))
 				{
-//					if ((specimenForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP || specimenForm
-//							.getStContSelection() == 2))
-//					{
 
-						final List spCollGroupList = this.getSpCollGroupList(specimenForm
-								.getSpecimenCollectionGroupName(), dao);
 
-						if (spCollGroupList != null && !spCollGroupList.isEmpty())
-						{
-
-							final long cpId = ((Long) spCollGroupList.get(0)).longValue();
+							final long cpId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
 							final String spClass = specimenForm.getClassName();
 							final String spType = specimenForm.getType();
 							LOGGER.info("cpId :" + cpId + "spClass:" + spClass);
@@ -910,7 +905,7 @@ public class NewSpecimenAction extends SecureAction
 						}
 //					}
 				}
-			}
+//			}
 			request.setAttribute("initValues", initialValues);
 			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
