@@ -58,7 +58,7 @@ public class PopulatedAssociation extends TestBase {
             System.out.println(e.getName());
         }
         assertTrue("Specimen IDs match",Long.parseLong(specElement.getAttributeValue("id")) == specimen.getIdentifier());
-        Element scgElement = objectResult.getChild("specimenCollectionGroup",specElement.getNamespace());
+        Element scgElement = specElement.getChild("specimenCollectionGroup",specElement.getNamespace());
         assertTrue("Has SCG association",scgElement != null);
         scgElement = scgElement.getChild("SpecimenCollectionGroup",specElement.getNamespace());
         assertTrue("Has Specimen Collection Group",scgElement != null);

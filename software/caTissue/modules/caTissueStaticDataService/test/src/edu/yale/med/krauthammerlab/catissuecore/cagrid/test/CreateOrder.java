@@ -31,6 +31,8 @@ import edu.wustl.catissuecore.domain.ws.TissueSpecimen;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
 public class CreateOrder extends TestBase {
+    
+    //TODO: Order based on a list of SCG IDs
 
     public static OrderDetails createOrder(DistributionProtocol dp) {
         OrderDetails od = new OrderDetails();
@@ -51,10 +53,10 @@ public class CreateOrder extends TestBase {
      * Create an order using a derived specimen order item.
      * @throws Exception
      */
-    public void testCreateOrderWithDerivedSpecimenOrderItem() throws Exception {
-        OrderDetails od = Fixtures.createOrderWithDerivedSpecimenOrderItem();
-        od = (OrderDetails)client.insert(od);
-    }
+//    public void testCreateOrderWithDerivedSpecimenOrderItem() throws Exception {
+//        OrderDetails od = Fixtures.createOrderWithDerivedSpecimenOrderItem();
+//        od = (OrderDetails)client.insert(od);
+//    }
     
     /** 
      * Create an order using a specimen order item.

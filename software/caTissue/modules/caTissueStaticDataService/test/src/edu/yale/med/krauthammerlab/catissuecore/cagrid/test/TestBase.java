@@ -4,6 +4,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.rmi.RemoteException;
 
+import java.math.BigInteger;
+
 import org.cagrid.cql2.AttributeValue;
 import org.cagrid.cql2.BinaryPredicate;
 import org.cagrid.cql2.CQLAttribute;
@@ -33,6 +35,8 @@ import edu.wustl.catissuecore.domain.ws.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.ws.SpecimenCollectionGroupCollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ws.SpecimenCollectionGroupCollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ws.SpecimenSpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.ws.StorageContainer;
+import edu.wustl.catissuecore.domain.ws.*;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.data.DataServiceConstants;
 import junit.framework.TestCase;
@@ -87,6 +91,23 @@ public abstract class TestBase extends TestCase {
            return scg;
        }
 
+    protected StorageContainer makeContainer(long typeId, long siteId) throws RemoteException {
+        StorageContainer container = new StorageContainer();
+        container.setStorageType(new StorageContainerStorageType());
+        container.getStorageType().setStorageType(new StorageType());
+        container.getStorageType().getStorageType().setIdentifier(typeId);
+        container.setSite(new StorageContainerSite());
+        container.getSite().setSite(new Site());
+        container.getSite().getSite().setIdentifier(siteId);
+        container.setCapacity(new ContainerCapacity());
+        container.getCapacity().setCapacity(new Capacity());
+        container.getCapacity().getCapacity().setOneDimensionCapacity(BigInteger.ONE);
+        container.getCapacity().getCapacity().setTwoDimensionCapacity(BigInteger.ONE);
+        container.setActivityStatus("Active");
+        container = (StorageContainer)client.insert(container);
+        return container;
+    }
+    
     /**
         * This method inserts specimen using the container's ID created in the edu.wustl.wapi.client.ClientRunAll#createParticipantAndCPR()
      * @throws IllegalAccessException 
@@ -109,6 +130,15 @@ public abstract class TestBase extends TestCase {
                    s.setInitialQuantity(10.0);
                    s.setAvailableQuantity(10.0);
                    s.setIsAvailable(true);
+                   s.setActivityStatus("Active");
+                   
+                   
+//                   s.setSpecimenPosition(new SpecimenSpecimenPosition());
+//                   s.getSpecimenPosition().setSpecimenPosition(new SpecimenPosition());
+//                   s.getSpecimenPosition().getSpecimenPosition().setStorageContainer(new SpecimenPositionStorageContainer());
+//                   s.getSpecimenPosition().getSpecimenPosition().getStorageContainer().setStorageContainer(makeContainer(7,1));
+//                   s.getSpecimenPosition().getSpecimenPosition().setPositionDimensionOne(BigInteger.valueOf(1));
+//                   s.getSpecimenPosition().getSpecimenPosition().setPositionDimensionTwo(BigInteger.valueOf(1));
             
                    // specimen characteristics
                    s.setSpecimenCharacteristics(new AbstractSpecimenSpecimenCharacteristics());
@@ -119,6 +149,7 @@ public abstract class TestBase extends TestCase {
                    // collections
                    s.setSpecimenCollectionGroup(new SpecimenSpecimenCollectionGroup());
                    s.getSpecimenCollectionGroup().setSpecimenCollectionGroup(scg);
+                   s.setActivityStatus("Active");
             
                    Specimen sResult = (Specimen)client.insert(s);
                    s.setIdentifier(sResult.getIdentifier());
