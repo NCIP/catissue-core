@@ -514,6 +514,13 @@ public class CreateSpecimenAction extends SecureAction
 		}
 		this.setPageData(request, createForm);
 		request.setAttribute("createdDate", createForm.getCreatedDate());
+		
+		// Set current time for new specimens
+		Calendar cal=Calendar.getInstance();
+		cal.setTime(new Date());
+		createForm.setTimeInHours(String.valueOf(cal.get(cal.HOUR_OF_DAY)));
+		createForm.setTimeInMins(String.valueOf(cal.get(cal.MINUTE)));
+		
 		final List dataList = (List) request
 				.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
 		final List columnList = new ArrayList();
