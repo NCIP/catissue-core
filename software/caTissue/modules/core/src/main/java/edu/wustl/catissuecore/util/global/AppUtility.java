@@ -47,6 +47,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.hibernate.FetchMode;
+import org.hibernate.criterion.Restrictions;
 
 import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.domain.Category;
@@ -120,6 +122,7 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
@@ -1614,14 +1617,37 @@ public class AppUtility
 	public static SpecimenCollectionGroup getSCGObj(final String scg_id, final DAO dao)
 			throws ApplicationException
 	{
-		final Object object = dao.retrieveById(SpecimenCollectionGroup.class.getName(), Long
-				.valueOf(scg_id));
 		SpecimenCollectionGroup specimenCollectionGroupObject = null;
-		if (object != null)
+		if(!Validator.isEmpty(scg_id))
 		{
-			specimenCollectionGroupObject = (SpecimenCollectionGroup) object;
+			ColumnValueBean expression = new ColumnValueBean(Restrictions.eq("id", Long.valueOf(scg_id)));
+			List<ColumnValueBean> expList = new ArrayList<ColumnValueBean>();
+			expList.add(expression);
+			
+			ColumnValueBean actionAppColl = new ColumnValueBean(FetchMode.SELECT);
+			actionAppColl.setColumnName("actionApplicationCollection");
+			
+			ColumnValueBean sppAppColl = new ColumnValueBean(FetchMode.SELECT);
+			sppAppColl.setColumnName("sppApplicationCollection");
+			
+			
+			ColumnValueBean scgRecEntryColl = new ColumnValueBean(FetchMode.SELECT);
+			scgRecEntryColl.setColumnName("scgRecordEntryCollection");
+			
+			List<ColumnValueBean> fetchModes = new ArrayList<ColumnValueBean>();
+			fetchModes.add(scgRecEntryColl);
+			fetchModes.add(sppAppColl);
+			fetchModes.add(sppAppColl);
+			
+			List list =  ((HibernateDAO)dao).executeCrieteriaQuery(SpecimenCollectionGroup.class.getName(), fetchModes, expList);
+			
+			if (list != null && list.size() > 0)
+			{
+				specimenCollectionGroupObject = (SpecimenCollectionGroup) list.get(0);
+			}
 		}
 		return specimenCollectionGroupObject;
+
 	}
 
 	/**
