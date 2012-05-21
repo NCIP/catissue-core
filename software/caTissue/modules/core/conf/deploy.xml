@@ -81,7 +81,48 @@
 			<property name="catissue.deploy.config.file" value="${caTissue-webapp.dir.dist}/upgrade.properties"></property>
 		</else>
 	</if>
-
+	  
+	<condition property="ext-host-cond-is-true">
+	    <and>
+	      <not>
+	        <equals arg1="" arg2="${jboss.external.http.host}" />
+	      </not>
+	      <not>
+	        <equals arg1="" arg2="${jboss.external.http.port}" />
+	      </not>
+	    </and>
+	</condition>
+	
+	<condition property="ext-port-cond-is-true">
+		    <and>
+		      <not>
+		        <equals arg1="" arg2="${jboss.external.http.host}" />
+		      </not>
+		      
+		        <equals arg1="" arg2="${jboss.external.http.port}" />
+		    </and>
+	</condition>
+	
+	<condition property="extssl-host-cond-is-true">
+		    <and>
+		      <not>
+		        <equals arg1="" arg2="${jboss.external.ssl.host}" />
+		      </not>
+		      <not>
+		        <equals arg1="" arg2="${jboss.external.ssl.port}" />
+		      </not>
+		    </and>
+		</condition>
+		
+		<condition property="extssl-port-cond-is-true">
+			    <and>
+			      <not>
+			        <equals arg1="" arg2="${jboss.external.http.host}" />
+			      </not>
+			      
+			        <equals arg1="" arg2="${jboss.external.http.port}" />
+			    </and>
+		</condition>
 	<property name="jboss.server.host.port" value="${jboss.server.hostname}:${jboss.server.port}" />
 	<if>
 		<equals arg1="" arg2="${jboss.server.port}" />
@@ -89,7 +130,40 @@
 			<var name="jboss.server.host.port" unset="true"/>
 			<property name="jboss.server.host.port" value="${jboss.server.hostname}" />
 		</then>
+		<elseif>
+					<equals arg1="true" arg2="${ext-host-cond-is-true}" />
+				
+				<then>
+					<var name="jboss.server.host.port" unset="true"/>
+					<property name="jboss.server.host.port" value="${jboss.external.http.host}:${jboss.external.http.port}" />
+				</then>
+		</elseif>
+		
+		<elseif>
+						<equals arg1="true" arg2="${ext-port-cond-is-true}" />
+					<then>
+						<var name="jboss.server.host.port" unset="true"/>
+						<property name="jboss.server.host.port" value="${jboss.external.http.host}" />
+					</then>		
+					
+		</elseif>
+		<elseif>
+			<equals arg1="true" arg2="${extssl-host-cond-is-true}" />
+			<then>
+				<var name="jboss.server.host.port" unset="true"/>
+				<property name="jboss.server.host.port" value="${jboss.external.ssl.host}:${jboss.external.ssl.port}" />
+			</then>
+		</elseif>
+		<elseif>
+				<equals arg1="true" arg2="${extssl-port-cond-is-true}" />
+			<then>
+				<var name="jboss.server.host.port" unset="true"/>
+				<property name="jboss.server.host.port" value="${jboss.external.ssl.host}" />
+			</then>		
+		</elseif>
+		
 	</if>
+	
 
 	<!-- Check for required properties -->
 	<target name="assert" description="Check for required properties">
