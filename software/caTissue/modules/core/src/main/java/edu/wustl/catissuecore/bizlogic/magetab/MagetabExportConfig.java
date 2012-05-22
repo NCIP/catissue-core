@@ -17,30 +17,30 @@ public class MagetabExportConfig {
     public static final String NCI_THESAURUS = "NCI Thesaurus";
 
     private static Map<String, String> materialTypesMap = new HashMap<String, String>() {
-	    /**
-         * 
+        /**
+         *
          */
         private static final long serialVersionUID = 1L;
 
-    {	
-		//any fluid is organism part.
-		put("fluid","organism_part");
-		//any tissue is organism part.
-		put("tissue", "organism_part");
-		//any cell is cell.
-		put("cell", "cell");		
-		// specific molecular types
-		put("dna/molecular", "DNA");
-		put("rna, cytoplasmic/molecular", "cytoplasmic_RNA");
-		put("whole genome amplified dna/molecular", "genomic_DNA");
-		put("rna, nuclear/molecular", "nuclear_RNA");
-		put("rna, poly-a enriched/molecular", "polyA_RNA");
-		put("protein/molecular", "protein");
-		// non specific molecular type
-		put("molecular","molecular_mixture");
-		
-		
-	}};
+        {
+            //any fluid is organism part.
+            put("fluid", "organism_part");
+            //any tissue is organism part.
+            put("tissue", "organism_part");
+            //any cell is cell.
+            put("cell", "cell");
+            // specific molecular types
+            put("dna/molecular", "DNA");
+            put("rna, cytoplasmic/molecular", "cytoplasmic_RNA");
+            put("whole genome amplified dna/molecular", "genomic_DNA");
+            put("rna, nuclear/molecular", "nuclear_RNA");
+            put("rna, poly-a enriched/molecular", "polyA_RNA");
+            put("protein/molecular", "protein");
+            // non specific molecular type
+            put("molecular", "molecular_mixture");
+            put("rna/molecular", "total_RNA");
+        }
+    };
 	
 	private static List<String> knownMolecularTypes=Arrays.asList(
 			"dna",
@@ -48,7 +48,8 @@ public class MagetabExportConfig {
 			"whole genome amplified dna",
 			"rna, nuclear",
 			"rna, poly-a enriched",
-			"protein"
+			"protein",
+            "rna"
 			);
 
 	private Map<String, Transformer> transformers;
