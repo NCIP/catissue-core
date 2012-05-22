@@ -222,7 +222,10 @@
 		<property name="ivy.dep.file" value="${common.dir}/bda-download/ivy-bda.xml" />
 		<ivy:settings file="${ivy.settings.file}" />
 	</target>
-	<target name="retrieve-ivy-files" depends="ivy-settings" description="Updates the local ivy repository">
+
+    <target name="retrieve-ivy-files" depends="ivy-settings" description="Updates the local ivy repository">
+        <echo message="Cleaning up existing Folder containing External Modules artifacts ..." />
+        <delete dir="${caTissue_lib.dir}/compile_lib" failonerror="false" verbose="true" />
 		<antcall target="retrieve-limpopo-ivy-files" />
 		<antcall target="retrieve-subproject-jars-zips" />
 		<antcall target="retrieve-aq" />
@@ -1555,7 +1558,10 @@
 				<include name="sdk-*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${web_inf_lib.dir}" overwrite="true">
+
+
+        <removeExternalModulesJars dir="${web_inf_lib.dir}" />
+        <copy todir="${web_inf_lib.dir}" overwrite="true">
 			<fileset dir="${compile.lib.dir}">
 				<include name="commonpackage-*.jar" />
 				<include name="DAO-*.jar" />
@@ -1571,6 +1577,7 @@
 				<include name="IDPAuthenticationManager*.jar" />
 			</fileset>
 		</copy>
+
 		<copy todir="${caTissueSuite_Client_lib.dir}" overwrite="true">
 			<fileset dir="${compile.lib.dir}">
 				<include name="AdvanceQuery.jar" />
@@ -1635,6 +1642,30 @@
 			</fileset>
 		</delete>
 	</target>
+
+    <!-- Use this macro whenever you want to replace old External Modules Jars with the new ones, in case there is a new release. -->
+    <macrodef name="removeExternalModulesJars">
+        <attribute name="dir" />
+        <sequential>
+            <echo message="DEBUG: Deleting old jars from '@{dir}'..." />
+            <delete verbose="true" failonerror="false">
+                <fileset dir="@{dir}">
+                    <include name="commonpackage-*.jar" />
+                    <include name="DAO-*.jar" />
+                    <include name="DynamicExtensions*.jar" />
+                    <include name="ParticipantManager*.jar" />
+                    <include name="SecurityManager*.jar" />
+                    <include name="SimpleQuery-*.jar" />
+                    <include name="titli-washu-*.jar" />
+                    <include name="washu-commons-*.jar" />
+                    <include name="AdvanceQuery.jar" />
+                    <include name="bulkoperator.jar" />
+                    <include name="query*.jar" />
+                    <include name="IDPAuthenticationManager*.jar" />
+                </fileset>
+            </delete>
+        </sequential>
+    </macrodef>
 
     <target name="test">
         <echo message="ROOT: ${root.dir}" />
