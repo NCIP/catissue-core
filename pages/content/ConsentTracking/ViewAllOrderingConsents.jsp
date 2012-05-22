@@ -60,6 +60,7 @@
 					var parentId;
 					var rowCount;
 					var verificationStatusKey;
+					var consentVerifiedRows="";
 					<%
 						String index="";
 						String noOfRows = (String)request.getParameter("noOfRows");
@@ -82,9 +83,17 @@
 							String barLabel=specAttributes[4];
 							
 					%>
+					
 						var checkboxKey="verifyAllCheckBox"+<%=i%>;
 						var checkboxInstance=document.getElementById(checkboxKey);
-						
+						if(checkboxInstance.checked)
+						{
+							if(consentVerifiedRows.length ==0)
+							consentVerifiedRows=<%=i%>;
+							else
+							consentVerifiedRows=consentVerifiedRows+","+<%=i%>;
+						}
+						//alert(consentVerifiedRows);
 						var specLabels = document.getElementById('specLabel'+<%=i%>).value;	
 						var split =specLabels.split(',');
 						//alert(split);
@@ -121,10 +130,14 @@
 						<%
 							i=i+1;
 						}
+						
 					
 					}
 				%>
-					
+				//alert(window.parent.document.getElementById("consentVerifiedRows").value);
+					window.parent.document.getElementById("consentVerifiedRows").value=consentVerifiedRows;
+					//alert(window.parent.document.getElementById("consentVerifiedRows").value);
+						//consentVerifiedRows
 					parent.allConsentWindow.hide();
 				}
 			</script>

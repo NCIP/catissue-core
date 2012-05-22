@@ -72,7 +72,7 @@ public class ShowAllConsentAction extends BaseAction
 		
 			if (specimenConsents != null && specimenConsents.equalsIgnoreCase(Constants.YES))
 			{
-				final String speciemnIdValue = request.getParameter("speciemnIdValue");// barcodelabel
+				final String speciemnIdValue = (String)request.getSession().getAttribute("speciemnIdValue");//request.getParameter("speciemnIdValue");// barcodelabel
 				this.labelIndexCount = request.getParameter("labelIndexCount");
 				final StringTokenizer stringToken = new StringTokenizer(speciemnIdValue, "|");
 				// StringTokenizer stringTokenForIndex = new

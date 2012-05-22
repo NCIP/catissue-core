@@ -320,6 +320,7 @@ alert(rid);
 								<html:hidden name="requestDetailsForm" property="<%= specimenCollGroupId %>" />
 				<%			}
 			    %>	<!-- Html hidden variables for all static fields -->	 
+							<input type="hidden" id="consentVerifiedRows" name="consentVerifiedRows"/>
 								<input type="hidden" id="<%=requestDetailsForm.getValue("RequestDetailsBean:"+i+"_requestedItem")%>" name="<%=requestDetailsForm.getValue("RequestDetailsBean:"+i+"_requestedItem")%>" value="<%=i%>">
 								 <html:hidden name="requestDetailsForm" property="<%= requestedItem %>" styleId="<%=requestedItemId%>"/>	
 								 <html:hidden name="requestDetailsForm" property="<%= requestedQty %>" styleId="<%=requestedQtyId%>" />	

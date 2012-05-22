@@ -309,9 +309,11 @@ function showAllSpecimen(count)
 		}
 		else
 		{
-			var url= 'ViewAllConsents.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+count+'&speciemnIdValue='+speciemnIdValue+'&labelIndexCount='+labelIndexCount;
-			//var url= 'ConsentVerification.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+count+'&speciemnIdValue='+speciemnIdValue+'&labelIndexCount='+labelIndexCount;
+			var consentVerifiedRows = document.getElementById('consentVerifiedRows').value;
+			var url= 'ViewAllConsents.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+consentVerifiedRows+'&noOfRows='+count+'&labelIndexCount='+labelIndexCount;
 			
+			//alert("verifiedRows  : "+consentVerifiedRows);
+			//alert(consentVerifiedRows.length);
 			//model window popup
 			allConsentWindow=dhtmlmodal.open('Institution', 'iframe', url,'Consent Form', 'width=800px,height=350px,center=1,resize=0,scrolling=1')
 			allConsentWindow.onclose=function()

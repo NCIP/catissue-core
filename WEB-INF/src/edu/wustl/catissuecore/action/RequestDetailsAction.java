@@ -100,6 +100,7 @@ public class RequestDetailsAction extends BaseAction
 	 */
 
 	private static final Logger LOGGER = Logger.getCommonLogger(RequestDetailsAction.class);
+	private StringBuilder speciemnIdValue; 
 
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
@@ -431,7 +432,7 @@ public class RequestDetailsAction extends BaseAction
 					// Sorting by Order.Id
 					Collections.sort(orderItemsList, new IdComparator());
 					final ListIterator<OrderItem> iter = orderItemsList.listIterator();
-					
+					speciemnIdValue = new StringBuilder(500);
 					while (iter.hasNext())
 					{
 						orderItem = iter.next();
@@ -466,6 +467,8 @@ public class RequestDetailsAction extends BaseAction
 						}
 						requestDetailsBeanCounter++;
 					}// End while
+					request.getSession().removeAttribute("speciemnIdValue");
+					request.getSession().setAttribute("speciemnIdValue", speciemnIdValue.toString());
 				}
 				// Call to populateItemStatusList() when order items present in
 				// OrderList
@@ -898,23 +901,6 @@ public class RequestDetailsAction extends BaseAction
 		
 		String childSQL = "select child.identifier,spec.label from catissue_abstract_specimen child,catissue_specimen spec where "+ 
 				"spec.identifier=child.identifier and child.PARENT_SPECIMEN_ID = "+bean.getId();
-//		list = dao.executeQuery(sql);
-		
-//		if(list != null && !list.isEmpty())
-//		{
-//			inrList = (List)list.get(0);
-//			if(inrList != null)
-//			{
-//				List list2 = bean.getChildSpecimens();
-//				for (Object object : list) 
-//				{
-//					inrList = (List)object;
-//					
-//					list2.add(new NameValueBean(inrList.get(1),inrList.get(0)));
-//				}
-//				bean.setChildSpecimens(list2);
-//			}
-//		}
 		
 		return bean;
 	}
@@ -958,6 +944,11 @@ public class RequestDetailsAction extends BaseAction
 			if (specimenOrderBean.isConsentAvl())
 			{
 				requestDetailsForm.setValue(consentVerificationkey, Constants.VIEW_CONSENTS);
+				speciemnIdValue.append(specimenOrderBean.getId());
+				speciemnIdValue.append(",");
+				speciemnIdValue.append(specimenOrderBean.getLabel());
+				speciemnIdValue.append("|");
+				
 			}
 			else
 			{
