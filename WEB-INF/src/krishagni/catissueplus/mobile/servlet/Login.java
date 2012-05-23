@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.domain.LoginResult;
+import edu.wustl.processor.LoginProcessor;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Roles;
 import edu.wustl.security.privilege.PrivilegeManager;
@@ -53,9 +54,12 @@ public class Login  extends HttpServlet{
 			
 	        loginCredentials.setLoginName( request.getParameter("loginName"));
 	        loginCredentials.setPassword( request.getParameter("password"));
+	        cleanSession(request);
 	        LoginResult loginResult;
 	    	 loginResult = CatissueLoginProcessor.processUserLogin(request,
 	                 loginCredentials);
+	    	 LoginProcessor.authenticate(loginCredentials);
+
 	    	 
 	    	  if (loginResult.isAuthenticationSuccess())
 	          {
@@ -258,8 +262,22 @@ public class Login  extends HttpServlet{
         }
     }
 
+    /**
+     * This method will clean session.
+     *
+     * @param request
+     *            object of HttpServletRequest
+     */
+   
 
-
+    private void cleanSession(final HttpServletRequest request)
+    {
+        final HttpSession prevSession = request.getSession();
+        if (prevSession != null)
+        {
+            prevSession.invalidate();
+        }
+    }
 
 
 }
