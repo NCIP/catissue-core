@@ -481,7 +481,7 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 			   <tr>
                 <td class="bottomtd" colspan="2"></td>
               </tr>
-			  
+			  <tr>
 			  
 				  
 				  
