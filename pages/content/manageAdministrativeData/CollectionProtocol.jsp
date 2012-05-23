@@ -67,53 +67,7 @@
 
 
 <script>
-Ext.onReady(function(){
-var commonActionURL = 'CatissueCommonAjaxAction.do?';
-
-// Defining Cinical Diagnosis Combobox
-var diagnosisDS = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: commonActionURL}),
-				baseParams:{type:'getClinicalDiagnosisValues'},
-				reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, 
-				[{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});
-				
-var diagnosisCombo = new Ext.form.ComboBox({
-			store: diagnosisDS,hiddenName: 'CB_coord',displayField:'excerpt',valueField: 'id',
-			typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',
-			mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,
-			cls:Ext.isIE?'forIe':'',
-			emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'coord'});
 			
-diagnosisCombo.on("expand", function() {
-			if(Ext.isIE || Ext.isIE7){diagnosisCombo.list.setStyle("width", "250");diagnosisCombo.innerList.setStyle("width", "250");}
-			else{diagnosisCombo.list.setStyle("width", "auto");diagnosisCombo.innerList.setStyle("width", "auto");}}, {single: true});
-diagnosisDS.on('load',function(){
-			if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(diagnosisCombo.getRawValue().toLowerCase())) {diagnosisCombo.typeAheadDelay=50;} 
-			else {diagnosisCombo.typeAheadDelay=60000}});
-// Defining Cinical Diagnosis Combobox defined 
-
-// Defining Coordinator Combobox
-
-
-var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: commonActionURL }),
-				baseParams:{type:'getUserListAsJSon'},
-				reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, 
-				[{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});
-				
-var coordinatorCombo = new Ext.form.ComboBox({
-			store: ds,hiddenName: 'CB_pcoordinatorIds',displayField:'excerpt',valueField: 'id',
-			typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',
-			cls:Ext.isIE?'forIe':'',
-			mode: 'remote',triggerAction: 'all',minChars : 1,queryDelay:500,lazyInit:true,
-			emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'pcoordinatorIds'});
-			
-coordinatorCombo.on("expand", function() {
-			if(Ext.isIE || Ext.isIE7){coordinatorCombo.list.setStyle("width", "250");coordinatorCombo.innerList.setStyle("width", "250");}
-			else{coordinatorCombo.list.setStyle("width", "auto");coordinatorCombo.innerList.setStyle("width", "auto");}}, {single: true});
-ds.on('load',function(){
-			if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(coordinatorCombo.getRawValue().toLowerCase())) {coordinatorCombo.typeAheadDelay=50;} 
-			else {coordinatorCombo.typeAheadDelay=60000}});
-			
-});			
 			
 // Defining Coordinator Combobox done :) 			
 
@@ -445,7 +399,7 @@ div#d999 {
 									<td>
 									<div id="principleInvestigator" style="z-index: 100"
 										onClick="noEventPropogation(event)">
-									<div id="principleInvestigatorGrid" style="height: 40px;"
+									<div id="principleInvestigatorGrid" style="height: 100px;"
 										onClick="noEventPropogation(event)"></div>
 									<div id="principleInvestigatorPagingArea" onClick="noEventPropogation(event)"></div>
 									<div id="principleInvestigatorInfoArea" onClick="noEventPropogation(event)"></div>
@@ -691,6 +645,53 @@ div#d999 {
 </html:form>
 
 <script>
+Ext.onReady(function(){
+var commonActionURL = 'CatissueCommonAjaxAction.do?';
+
+// Defining Cinical Diagnosis Combobox
+var diagnosisDS = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: commonActionURL}),
+				baseParams:{type:'getClinicalDiagnosisValues'},
+				reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, 
+				[{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});
+				
+var diagnosisCombo = new Ext.form.ComboBox({
+			store: diagnosisDS,hiddenName: 'CB_coord',displayField:'excerpt',valueField: 'id',
+			typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',
+			mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,
+			cls:Ext.isIE?'forIe':'',
+			emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'coord'});
+			
+diagnosisCombo.on("expand", function() {
+			if(Ext.isIE || Ext.isIE7){diagnosisCombo.list.setStyle("width", "250");diagnosisCombo.innerList.setStyle("width", "250");}
+			else{diagnosisCombo.list.setStyle("width", "auto");diagnosisCombo.innerList.setStyle("width", "auto");}}, {single: true});
+diagnosisDS.on('load',function(){
+			if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(diagnosisCombo.getRawValue().toLowerCase())) {diagnosisCombo.typeAheadDelay=50;} 
+			else {diagnosisCombo.typeAheadDelay=60000}});
+// Defining Cinical Diagnosis Combobox defined 
+
+// Defining Coordinator Combobox
+
+
+var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: commonActionURL }),
+				baseParams:{type:'getUserListAsJSon'},
+				reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, 
+				[{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});
+				
+var coordinatorCombo = new Ext.form.ComboBox({
+			store: ds,hiddenName: 'CB_pcoordinatorIds',displayField:'excerpt',valueField: 'id',
+			typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',
+			cls:Ext.isIE?'forIe':'',
+			mode: 'remote',triggerAction: 'all',minChars : 1,queryDelay:500,lazyInit:true,
+			emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'pcoordinatorIds'});
+			
+coordinatorCombo.on("expand", function() {
+			if(Ext.isIE || Ext.isIE7){coordinatorCombo.list.setStyle("width", "250");coordinatorCombo.innerList.setStyle("width", "250");}
+			else{coordinatorCombo.list.setStyle("width", "auto");coordinatorCombo.innerList.setStyle("width", "auto");}}, {single: true});
+ds.on('load',function(){
+			if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(coordinatorCombo.getRawValue().toLowerCase())) {coordinatorCombo.typeAheadDelay=50;} 
+			else {coordinatorCombo.typeAheadDelay=60000}});
+			
+});
 if(document.getElementById("errorRow")!=null && document.getElementById("errorRow").innerHTML.trim()!="")
 {
 	  window.top.document.getElementById("errorRow").innerHTML = "";
