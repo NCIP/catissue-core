@@ -91,7 +91,7 @@ function containerInfoTab()
 			
 			window.parent.frames['StorageContainerView'].location="SearchObject.do?pageOf=pageOfTreeSC&operation=search&id=${requestScope.storageContainerIdentifier}";
 		}
-}
+}	
 
 </script>
 
@@ -195,6 +195,9 @@ outerdata += "<row><label font='boldOblique'>Storage Container Restrictions </la
 String text = "";
 for(int colcnt=0;colcnt<collectionProtocolList.size();colcnt++)
 			{
+				if(colcnt!=0){
+					text += "\\\",\\\""; 
+				}
 				String data =(String) collectionProtocolList.get(colcnt );
 				text += data + " ";
 			}
@@ -206,7 +209,7 @@ outerdata += "<row><label>Collection Protocol: </label> <text><%=text%> </text><
 	for(int colcnt=0;colcnt<specimenClassList.size();colcnt++)
 	{
 		if(colcnt!=0){
-			text += ","; 
+			text += "\\\",\\\""; 
 		}
 		String data =(String) specimenClassList.get(colcnt );
 		text += data + " ";
@@ -220,7 +223,7 @@ outerdata += "<row><label>Specimen Class: </label> <text><%=text%> </text></row>
 	for(int colcnt=0;colcnt<specimenTypeList.size();colcnt++)
 	{
 		if(colcnt!=0){
-			text += ","; 
+			text += "\\\",\\\""; 
 		}
 		String data =(String) specimenTypeList.get(colcnt );
 		text += data + " ";
@@ -264,6 +267,8 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
               </table>
 			 </td>
           </tr>
+		  
+		
 	
 	<tr>
 	 <td width="5" valign="bottom">&nbsp;</td>
@@ -277,13 +282,13 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 		colspanForCPLabel = collectionProtocolList.size();
     else 
 	    colspanForCPLabel = specimenClassList.size();
-%>      
+%>         
 	<tr>
           <td  align="left" class="tr_bg_blue1">
 		  <!--input type="button" value="Export To PDF" class = "black_ar" onclick="exportContainer('pdf')"/-->
 		  <input type="button" value="Export To CSV" class = "black_ar" onclick="exportContainer('csv')"/>
 		  </td>
-          </tr>                   
+          </tr>        
 		<tr>
           <td  align="left" class="tr_bg_blue1"><span class="blue_ar_b"> Storage Container Restrictions</span></td>
           </tr>
@@ -466,6 +471,8 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
 							</td>
 						</tr>
 					</tr>
+				
+					
 				</tr>
 			</table>
 						</td>
@@ -475,6 +482,10 @@ grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerNa
                 <td class="bottomtd" colspan="2"></td>
               </tr>
 			  <tr>
+			  
+				  
+				  
+				  
 		
 		<td  width="5"class="black_ar_t" >&nbsp;</td>
 		<td class="black_ar" ><b>&nbsp;<%=verTempTwo%>&rarr;</b></td>
@@ -558,7 +569,7 @@ grid.init();
 
 grid.parse(myObject,"json");
 }
-document.body.onload = function(){
+window.onload = function(){
 loadGrid();
       //alert("LOADED!");
   }
