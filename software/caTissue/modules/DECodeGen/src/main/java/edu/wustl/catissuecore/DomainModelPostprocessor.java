@@ -2,7 +2,7 @@ package edu.wustl.catissuecore;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +34,7 @@ import org.w3c.dom.NodeList;
  */
 public class DomainModelPostprocessor {
 
-	private Map<String, String> hookEntities = new HashMap<String, String>();
+	private Map<String, String> hookEntities = new TreeMap<String, String>();
 	private Set<String> abstractEntities = new HashSet<String>();
 	private Set<String> staticPackages = new HashSet<String>();
 	private String projectLongName;
@@ -75,10 +75,10 @@ public class DomainModelPostprocessor {
 
 		// Find duplicate class ids and duplicate classes
 
-		Map<String, Element> classIdsMap = new HashMap<String, Element>();
-		Map<String, Element> fqnSetMap = new HashMap<String, Element>();
-		Map<String, List<Element>> dupHookFqnMap = new HashMap<String, List<Element>>();
-		Map<String, List<Element>> dupDEFqnMap = new HashMap<String, List<Element>>();
+		Map<String, Element> classIdsMap = new TreeMap<String, Element>();
+		Map<String, Element> fqnSetMap = new TreeMap<String, Element>();
+		Map<String, List<Element>> dupHookFqnMap = new TreeMap<String, List<Element>>();
+		Map<String, List<Element>> dupDEFqnMap = new TreeMap<String, List<Element>>();
 		List<Element> abstractEls = new ArrayList<Element>();
 
 		NodeList nodes = (NodeList) getUmlClasses.evaluate(root,
@@ -405,7 +405,7 @@ public class DomainModelPostprocessor {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc = db.parse(new File(inPath));
 
-			Map<String, String> hookEntities = new HashMap<String, String>();
+			Map<String, String> hookEntities = new TreeMap<String, String>();
 			hookEntities
 					.put("edu.wustl.catissuecore.domain.Participant",
 							"edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry");
