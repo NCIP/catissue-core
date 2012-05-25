@@ -406,17 +406,18 @@ public class MSRUtil {
 	 * @throws CSException
 	 * @throws IOException
 	 */
-	private void removeGridPrivilegeMethod(HttpServletRequest request, HttpServletResponse response) throws BizLogicException, JSONException, CSException, IOException {
+	@SuppressWarnings("unchecked")
+    private void removeGridPrivilegeMethod(HttpServletRequest request, HttpServletResponse response) throws BizLogicException, JSONException, CSException, IOException {
 		final HttpSession session = request.getSession();
-		final String pageOf = (String) request.getParameter(Constants.PAGE_OF);
 		final String deletedItems = (String) request.getParameter(Constants.SELECTED_GRID_GROUPER_DELETION_ITEMS);
 		List<CPGridGrouperPrivilege> gridPrivilegeList = new ArrayList<CPGridGrouperPrivilege>();
 		if(session.getAttribute(Constants.GRID_ROW_ID_OBJECT_BEAN_MAP)!=null){
-			gridPrivilegeList = (List)session.getAttribute(Constants.GRID_ROW_ID_OBJECT_BEAN_MAP);
+			gridPrivilegeList = (List<CPGridGrouperPrivilege>)session.getAttribute(Constants.GRID_ROW_ID_OBJECT_BEAN_MAP);
 		}
 		List<NameValueBean> items = new ArrayList<NameValueBean>();
 		for(String deletedItem : deletedItems.split(",")){
-			items.add(new NameValueBean(deletedItem.split(":")[0], deletedItem.split(":")[1]));
+		    int index = deletedItem.lastIndexOf(":");			
+            items.add(new NameValueBean(deletedItem.substring(0, index), deletedItem.substring(index+1)));
 		}
 		for(NameValueBean nv : items){
 			for(CPGridGrouperPrivilege gridP : gridPrivilegeList){

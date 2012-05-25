@@ -484,7 +484,7 @@ function enableGridDelete(){
 
 					<td height="25" colspan="2" align="left" class="tr_bg_blue1"><span
 						class="blue_ar_b">&nbsp; <bean:message
-						key="assignPrivileges.gridPrivilegeDetails" />---</span></td>
+						key="assignPrivileges.gridPrivilegeDetails" /></span></td>
 				</tr>
 				<tr class="td_color_F7F7F7">
 					<td colspan="2" align="left" class="toptd"></td>
