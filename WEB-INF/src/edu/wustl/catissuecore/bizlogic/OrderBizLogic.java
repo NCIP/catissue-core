@@ -995,17 +995,23 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			while (orderListFromDBIterator.hasNext())
 			{
 				final OrderDetails orderDetails = (OrderDetails) orderListFromDBIterator.next();
-				final boolean hasDributionPrivilegeOnSite = this.isOrderItemValidTodistribute(
-						orderDetails.getOrderItemCollection(), siteIdsList);
-				final SessionDataBean sdb = new SessionDataBean();
-				sdb.setUserId(userId);
-				sdb.setUserName(userName);
-				final boolean hasDistributionPrivilegeOnCp = this.checkDistributionPrivilegeOnCP(
-						user, privilegeCache, orderDetails.getOrderItemCollection(), sdb);
-				if (this.isSuperAdmin(user) || hasDributionPrivilegeOnSite
-						|| hasDistributionPrivilegeOnCp)
+				if(this.isSuperAdmin(user))
 				{
 					orderList.add(orderDetails);
+				}
+				else
+				{
+					final boolean hasDributionPrivilegeOnSite = this.isOrderItemValidTodistribute(
+							orderDetails.getOrderItemCollection(), siteIdsList);
+					final SessionDataBean sdb = new SessionDataBean();
+					sdb.setUserId(userId);
+					sdb.setUserName(userName);
+					final boolean hasDistributionPrivilegeOnCp = this.checkDistributionPrivilegeOnCP(
+							user, privilegeCache, orderDetails.getOrderItemCollection(), sdb);
+					if (hasDributionPrivilegeOnSite || hasDistributionPrivilegeOnCp)
+					{
+						orderList.add(orderDetails);
+					}
 				}
 			}
 			requestViewBeanList = (List) this.populateRequestViewBeanList(orderList);
