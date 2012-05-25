@@ -9,7 +9,7 @@
 
     	<property name="show_sql">false</property>
     	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
-	      <property name="connection.datasource">java:/catissuecore</property>
+	     <property name="connection.datasource">java:/catissuecore</property>
         <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>
     	<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
@@ -135,7 +135,8 @@
 		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQL.hbm.xml" />
 		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQLAssociation.hbm.xml" />
 		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQL_HQL.hbm.xml" />
-		
+		<mapping resource="edu/wustl/common/queryFolder/hbm/Tag.hbm.xml"/>
+		<mapping resource="edu/wustl/common/queryFolder/hbm/AssignTag.hbm.xml"/> 
     </session-factory>
 
 </hibernate-configuration>
