@@ -434,7 +434,8 @@ public class NewSpecimenAction extends SecureAction
 				if (errors == null)
 				{
 					final String scgDropDown = request.getParameter(Constants.SCG_DROPDOWN);
-					if (scgDropDown == null || scgDropDown.equalsIgnoreCase(Constants.TRUE))
+					//if (scgDropDown == null || scgDropDown.equalsIgnoreCase(Constants.TRUE))
+					
 					{
 						final Collection consentResponseStatuslevel = (Collection) dao
 								.retrieveAttribute((Class) SpecimenCollectionGroup.class, "id",
