@@ -113,8 +113,8 @@ function popupWindow(nofConsentTiers)
 		
 		<%if(pageOf.equals("pageOfConsent"))
 			{%>
-		isPageConsent = true;
 		alert("Consent status updated, register participant to save the changes.");
+		isPageConsent = true;
 		document.forms[0].action = "ConsentSubmit.do";
 		var selfDocFormName = self.document.forms[0].name;
 		self.document.forms[0].submit();
