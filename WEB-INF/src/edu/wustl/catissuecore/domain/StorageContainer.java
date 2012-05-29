@@ -48,7 +48,7 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 	/**
 	 * specimenPositionCollection.
 	 */
-	private Collection<SpecimenPosition> specimenPositionCollection;
+	private Collection<SpecimenPosition> specimenPositionCollection= new HashSet<SpecimenPosition>();
 
 	/**
 	 * tempratureInCentigrade.
@@ -555,7 +555,7 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 				{
 					this.locatedAtPosition = new ContainerPosition();
 				}
-				if ("Auto".equals(form.getParentContainerSelected()))
+				if ("Auto".equals(form.getParentContainerSelected()) && Integer.valueOf(this.noOfContainers).equals(1))
 				{
 	
 					this.locatedAtPosition.parentContainer = new StorageContainer();
@@ -573,7 +573,7 @@ public class StorageContainer extends Container implements IActivityStatus, ISpe
 							.getPositionDimensionTwo()));*/
 					this.locatedAtPosition.occupiedContainer = this;
 				}
-				else
+				else if("Manual".equals(form.getParentContainerSelected()) && Integer.valueOf(this.noOfContainers).equals(1))
 				{
 					this.locatedAtPosition.parentContainer = new StorageContainer();
 					if (form.getContainerId() != null && !form.getContainerId().trim().equals(""))
