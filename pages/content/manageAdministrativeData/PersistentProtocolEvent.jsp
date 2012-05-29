@@ -172,6 +172,9 @@
 						<td class="buttonbg" colspan="3">
 							<html:button styleClass="blue_ar_b" property="submitPage" onclick="specimenRequirements()">
 								<bean:message key="cpbasedentry.addspecimenrequirements"/>
+							</html:button>&nbsp;|
+							<html:button styleClass="blue_ar_b" property="submitPage" onclick="createDuplicateEvent()">
+								<bean:message key="cpbasedentry.createduplicateevent"/>
 							</html:button>
 						</td>
 					</logic:equal>
