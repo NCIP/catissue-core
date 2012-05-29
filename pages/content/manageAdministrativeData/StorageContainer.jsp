@@ -590,7 +590,8 @@ function onEditChange()
 }
 function vieMapTabSelected(){
  window.parent.tabSelected("viewmapTab");
- var activityStatus= window.parent.getActivityStatus();
+ //var activityStatus= window.parent.getActivityStatus();
+ var activityStatus= document.getElementById("activityStatus").value;
  var action= "OpenStorageContainer.do?<%=Constants.SYSTEM_IDENTIFIER%>=${requestScope.storageContainerIdentifier}&<%=Constants.PAGE_OF%>=viewMapTab&<%=Status.ACTIVITY_STATUS.toString()%>="+activityStatus+"";
 	document.forms[0].action=action;
 	document.forms[0].submit();
