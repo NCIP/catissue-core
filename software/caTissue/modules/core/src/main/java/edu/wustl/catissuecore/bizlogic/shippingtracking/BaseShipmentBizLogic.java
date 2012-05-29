@@ -1219,52 +1219,60 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		try
-		{
-			if (!( obj instanceof BaseShipment ))
-			{
+		
+		this.update(dao, obj, oldObj, null, sessionDataBean);
+	}
+
+	protected void update(DAO dao, Object obj, Object oldObj,Object uiObject,
+			SessionDataBean sessionDataBean) throws BizLogicException {
+		try {
+			if (!(obj instanceof BaseShipment)) {
 				throw new BizLogicException(
-						ErrorKey.getErrorKey( "errors.invalid.object.passed" ) , null , "" );
-				//throw new DAOException(ApplicationProperties.getValue("errors.invalid.object.passed"));
+						ErrorKey.getErrorKey("errors.invalid.object.passed"),
+						null, "");
+				// throw new
+				// DAOException(ApplicationProperties.getValue("errors.invalid.object.passed"));
 			}
 			final BaseShipment shipment = (BaseShipment) obj;
 			final BaseShipment oldShipment = (BaseShipment) oldObj;
 			final Long userId = sessionDataBean.getUserId();
-			this.updateShipmentSystemProperties( shipment, oldShipment );
-			this.setShipmentContactPersons( dao, shipment, userId );
-			this.setShipmentSites( dao, shipment );
+			this.updateShipmentSystemProperties(shipment, oldShipment);
+			this.setShipmentContactPersons(dao, shipment, userId);
+			this.setShipmentSites(dao, shipment);
 			// Ravi : changes : start
-			final List < SpecimenPosition > specimenPositionList = new ArrayList < SpecimenPosition >();
-			final List < ContainerPosition > containerPositionList = new ArrayList < ContainerPosition >();
-			final StorageContainer container = this.saveOrUpdateContainer( shipment
-					.getContainerCollection(), dao, sessionDataBean,
-					edu.wustl.common.util.global.Constants.EDIT, specimenPositionList );
-			final Collection < StorageContainer > containerCollection = this
-					.updateContainerDetails( shipment.getContainerCollection(), dao,
-							sessionDataBean, true, containerPositionList );
-			if (container != null)
-			{
-				containerCollection.add( container );
+			final List<SpecimenPosition> specimenPositionList = new ArrayList<SpecimenPosition>();
+			final List<ContainerPosition> containerPositionList = new ArrayList<ContainerPosition>();
+			final StorageContainer container = this.saveOrUpdateContainer(
+					shipment.getContainerCollection(), dao, sessionDataBean,
+					edu.wustl.common.util.global.Constants.EDIT,
+					specimenPositionList);
+			final Collection<StorageContainer> containerCollection = this
+					.updateContainerDetails(shipment.getContainerCollection(),
+							dao, sessionDataBean, true, containerPositionList);
+			if (container != null) {
+				containerCollection.add(container);
 			}
 			shipment.getContainerCollection().clear();
-			shipment.getContainerCollection().addAll( containerCollection );
-			this.validateContainerInShipment( oldShipment, shipment );// bug 11410
-			dao.update( shipment,oldShipment );
+			shipment.getContainerCollection().addAll(containerCollection);
+			this.validateContainerInShipment(oldShipment, shipment);// bug 11410
+			dao.update(shipment, oldShipment);
 			// Add mailing functionality
-			final boolean mailStatus = this.sendNotification( shipment, sessionDataBean );
-			if (!mailStatus)
-			{
-				logger.debug( "failed to send email..." );
+			final boolean mailStatus = this.sendNotification(shipment,
+					sessionDataBean);
+			if (!mailStatus) {
+				logger.debug("failed to send email...");
 			}
-		}
-		catch (final DAOException daoException)
-		{
-			BaseShipmentBizLogic.logger.error( daoException.getMessage(), daoException );
-			//daoException.printStackTrace();
-			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),null,daoException.getMessage());
-			throw this.getBizLogicException( daoException, daoException.getErrorKeyName(),
-					daoException.getMsgValues() );
-			//throw new DAOException(bizLogicException.getMessage());
+		} catch (final DAOException daoException) {
+			BaseShipmentBizLogic.logger.error(daoException.getMessage(),
+					daoException);
+			// daoException.printStackTrace();
+			// throw new
+			// BizLogicException(ErrorKey.getErrorKey("dao.error"),null,daoException.getMessage());
+			throw this
+					.getBizLogicException(daoException,
+							daoException.getErrorKeyName(),
+							daoException.getMsgValues());
+			// throw new DAOException(bizLogicException.getMessage());
 		}
 	}
 

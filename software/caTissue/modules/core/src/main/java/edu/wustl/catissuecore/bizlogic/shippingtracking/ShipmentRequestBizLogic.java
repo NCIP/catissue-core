@@ -37,7 +37,9 @@ import edu.wustl.common.util.global.CommonConstants;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.util.StatementData;
 
 /**
  * Manipulate ShipmentRequest information into the database using Hibernate.
@@ -370,7 +372,7 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 
 			// Do not update site of containers included in the shipment request
 			final Collection < Specimen > specimenCollection = this.updateSpecimenCollection(
-					shipmentRequest.getSpecimenCollection(), dao );
+					shipmentRequest, dao,null );
 
 			if(shipmentRequest.getSpecimenCollection()==null)
 			{
@@ -427,15 +429,16 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 
 	/**
 	 * updates specimen collection.
-	 * @param specimenCollection to be updated.
+	 * @param shipmentRequest to be updated.
 	 * @param dao the object of DAO class.
 	 * @return collection of specimen.
 	 * @throws DAOException if some database operation fails.
 
 	 */
 	private Collection < Specimen > updateSpecimenCollection(
-			final Collection < Specimen > specimenCollection, final DAO dao) throws DAOException
+			final ShipmentRequest shipmentRequest, final DAO dao, Object oldObj) throws DAOException
 	{
+		Collection < Specimen > specimenCollection = shipmentRequest.getSpecimenCollection();
 		// Collection to return which will contain the container objects retirved from the DB
 		final Collection < Specimen > specimenObjColl = new HashSet < Specimen >();
 		//StorageContainerBizLogic containerBizLogic=new StorageContainerBizLogic();
@@ -456,6 +459,29 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 							Constants.SPECIMEN_PROPERTY_LABEL );
 				}
 				//Add statements for storage type too
+				JDBCDAO jdbcdao = null;
+				try
+				{
+					if(oldObj != null)
+					{
+						jdbcdao = AppUtility.openJDBCSession();
+						StatementData statementData = jdbcdao.executeUpdate("delete from CATISSUE_SPECI_SHIPMNT_REQ_REL where SHIPMENT_REQ_ID ="+shipmentRequest.getId() +
+								" and SPECIMEN_ID="+specimen.getId());
+						jdbcdao.commit();
+					}
+				}
+				catch(ApplicationException exp)
+				{
+				}
+				finally
+				{
+					try{
+					AppUtility.closeJDBCSession(jdbcdao);
+					}catch(ApplicationException exp)
+					{
+						
+					}
+				}
 				specimenObjColl.add( specimen );
 			}
 		}
@@ -814,52 +840,66 @@ public class ShipmentRequestBizLogic extends BaseShipmentBizLogic
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws BizLogicException
 	{
-		try
-		{
-			if (!( obj instanceof ShipmentRequest ))
-			{
-				//throw new DAOException(ApplicationProperties.getValue("errors.invalid.object.passed"));
+		ShipmentRequestUIObject uiObject = new ShipmentRequestUIObject();
+		this.update(dao, obj, oldObj, uiObject, sessionDataBean);
+	}
+	
+	protected void update(DAO dao, Object obj, Object oldObj,Object uiObject,
+			SessionDataBean sessionDataBean) throws BizLogicException {
+		try {
+			if (!(obj instanceof ShipmentRequest)) {
+				// throw new
+				// DAOException(ApplicationProperties.getValue("errors.invalid.object.passed"));
 				throw new BizLogicException(
-						ErrorKey.getErrorKey( "errors.invalid.object.passed" ) , null ,
-						"object is not instance of ShipmentRequest class" );
+						ErrorKey.getErrorKey("errors.invalid.object.passed"),
+						null, "object is not instance of ShipmentRequest class");
 			}
 			final ShipmentRequest shipmentRequest = (ShipmentRequest) obj;
-			//Do not update site of containers included in the shipment request
-			final Collection < StorageContainer > containerCollection = this
-					.updateContainerDetails( shipmentRequest.getContainerCollection(), dao,
-							sessionDataBean, false, null );
-			//Set the collection containing the container objects to the shipment object
+			// Do not update site of containers included in the shipment request
+			final Collection<StorageContainer> containerCollection = this
+					.updateContainerDetails(
+							shipmentRequest.getContainerCollection(), dao,
+							sessionDataBean, false, null);
+			// Set the collection containing the container objects to the
+			// shipment object
 			shipmentRequest.getContainerCollection().clear();
-			shipmentRequest.getContainerCollection().addAll( containerCollection );
-			//			Do not update site of containers included in the shipment request
-			final Collection < Specimen > specimenCollection = this.updateSpecimenCollection(
-					shipmentRequest.getSpecimenCollection(), dao );
-			//Set the collection containing the container objects to the shipment object
+			shipmentRequest.getContainerCollection()
+					.addAll(containerCollection);
+			// Do not update site of containers included in the shipment request
+			final Collection<Specimen> specimenCollection = this
+					.updateSpecimenCollection(
+							shipmentRequest, dao,oldObj);
+			// Set the collection containing the container objects to the
+			// shipment object
 			shipmentRequest.getSpecimenCollection().clear();
-			shipmentRequest.getSpecimenCollection().addAll( specimenCollection );
-			//bug 12557
-			if (oldObj != null)
-			{
-				this.updateShipmentSystemProperties( shipmentRequest, (ShipmentRequest) oldObj );
+			shipmentRequest.getSpecimenCollection().addAll(specimenCollection);
+			// bug 12557
+			if (oldObj != null) {
+				this.updateShipmentSystemProperties(shipmentRequest,
+						(ShipmentRequest) oldObj);
 			}
-			this.setShipmentContactPersons( dao, shipmentRequest, sessionDataBean.getUserId() );
-			this.setShipmentSites( dao, shipmentRequest );
-			dao.update( shipmentRequest,oldObj );
-			//Add mailing functionality
-			final boolean mailStatus = this.sendNotification( shipmentRequest, sessionDataBean );
-			if (!mailStatus)
-			{
-				logger.debug( "failed to send email" );
-				//				logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),new BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,"mail sending failed"));
+			this.setShipmentContactPersons(dao, shipmentRequest,
+					sessionDataBean.getUserId());
+			this.setShipmentSites(dao, shipmentRequest);
+			dao.update(shipmentRequest, oldObj);
+			// Add mailing functionality
+			final boolean mailStatus = this.sendNotification(shipmentRequest,
+					sessionDataBean);
+			if (!mailStatus) {
+				logger.debug("failed to send email");
+				// logger.debug(ApplicationProperties.getValue("errors.mail.sending.failed"),new
+				// BizLogicException(ErrorKey.getErrorKey("errors.mail.sending.failed"),null,"mail sending failed"));
 			}
-		}
-		catch (final DAOException daoException)
-		{
-			ShipmentRequestBizLogic.logger.error( daoException.getMessage(), daoException );
-			//throw new DAOException(bizLogicException.getMessage());
-			//throw new BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,daoException.getMessage());
-			throw this.getBizLogicException( daoException, daoException.getErrorKeyName(),
-					daoException.getMsgValues() );
+		} catch (final DAOException daoException) {
+			ShipmentRequestBizLogic.logger.error(daoException.getMessage(),
+					daoException);
+			// throw new DAOException(bizLogicException.getMessage());
+			// throw new
+			// BizLogicException(ErrorKey.getErrorKey("dao.error"),daoException,daoException.getMessage());
+			throw this
+					.getBizLogicException(daoException,
+							daoException.getErrorKeyName(),
+							daoException.getMsgValues());
 		}
 	}
 
