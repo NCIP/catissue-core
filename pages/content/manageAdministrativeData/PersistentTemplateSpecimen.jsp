@@ -678,8 +678,17 @@
 								<html:button styleClass="blue_ar_b" property="submitPage" onclick="saveSpecimens()"	>
 								<bean:message key="cpbasedentry.savespecimenrequirements"/>
 								</html:button>
-								<logic:equal name="isPersistent" value="true">
+								<logic:equal name="isPersistent" value="true">									
+									<% if("New".equals(form.getLineage()))
+										    {
+										%>	
+											&nbsp;|
+											<html:button styleClass="blue_ar_b" property="submitPage" onclick="createDuplicateSpecimens()">
+													<bean:message key="cpbasedentry.createduplicatespecimen"/>
+											</html:button>
+									<% } else	{%>
 									&nbsp;
+									<% } %>
 								</logic:equal>
 								<logic:notEqual name="isPersistent" value="true">
 									<logic:equal name="operation" value="edit">
