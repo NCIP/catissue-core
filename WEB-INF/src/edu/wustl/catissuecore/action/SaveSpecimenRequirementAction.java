@@ -79,10 +79,11 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		String parentId = null;
 		//final StringTokenizer st = new StringTokenizer(mapKey, "_");
 		String eventSelected = null;
+		
 		if(nodeId != null && !nodeId.startsWith(Constants.NEW_SPECIMEN))
 			eventSelected = mapKey;
 		else	
-			eventSelected = parentNodeId.substring(parentNodeId.indexOf('_')+1,parentNodeId.indexOf('_')+3);
+			eventSelected = parentNodeId.substring(parentNodeId.lastIndexOf('_')+1,parentNodeId.length());
 
 		isPersistent = request.getParameter("isPersistent");
 		request.setAttribute("isPersistent", isPersistent);
@@ -113,7 +114,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 					parentId = collectionProtocolEventBean.getUniqueIdentifier();  
 				}
 				else{
-					parentId = parentNodeId.substring(parentNodeId.indexOf('_')+1);
+					parentId = parentNodeId.substring(parentNodeId.lastIndexOf('_')+1);
 				}
 				AppUtility.createSpecimenNode(objectName, parentId, specimenRequirementBean,
 						treeData, operation);
