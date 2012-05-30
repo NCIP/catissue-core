@@ -1710,7 +1710,7 @@ public class CollectionProtocolUtil
 	}
 
 	public static LinkedHashMap<String, GenericSpecimen> getSpecimenRequirementMap(
-			String uniqueIdentifier, LinkedList<GenericSpecimen> specimenList)
+			String uniqueIdentifier, LinkedList<GenericSpecimen> specimenList,int specCounter)
 	{
 		LinkedHashMap<String, GenericSpecimen> specimenMap = new LinkedHashMap<String, GenericSpecimen>();
 		if (specimenList != null)
@@ -1718,7 +1718,6 @@ public class CollectionProtocolUtil
 			//Iterator<String> keyIterator = keySet.iterator();
 
 			Iterator<GenericSpecimen> specIterator = specimenList.iterator();
-			int specCounter = 0;
 			int aliquoteCounter = 1;
 			int derivativeCounter = 1;
 			while (specIterator.hasNext())
@@ -1755,7 +1754,7 @@ public class CollectionProtocolUtil
 					final LinkedList<GenericSpecimen> aliquoteList = CollectionProtocolUtil
 							.getSpecimenList(oldSpecimen.getAliquotSpecimenCollection().values());
 					LinkedHashMap<String, GenericSpecimen> aliqMap = getSpecimenRequirementMap(
-							specimen.getUniqueIdentifier(), aliquoteList);
+							specimen.getUniqueIdentifier(), aliquoteList,0);
 					specimen.setAliquotSpecimenCollection(aliqMap);
 				}
 				if (oldSpecimen.getDeriveSpecimenCollection() != null
@@ -1764,7 +1763,7 @@ public class CollectionProtocolUtil
 					final LinkedList<GenericSpecimen> derivativeList = CollectionProtocolUtil
 							.getSpecimenList(oldSpecimen.getDeriveSpecimenCollection().values());
 					LinkedHashMap<String, GenericSpecimen> derivMap = getSpecimenRequirementMap(
-							specimen.getUniqueIdentifier(), derivativeList);
+							specimen.getUniqueIdentifier(), derivativeList,0);
 					specimen.setDeriveSpecimenCollection(derivMap);
 				}
 				specimenMap.put(specimen.getUniqueIdentifier(), specimen);

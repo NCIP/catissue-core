@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +25,10 @@ import org.apache.struts.action.ActionMessages;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.DeriveSpecimenBean;
+import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.tree.QueryTreeNodeData;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -79,7 +80,6 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		String parentId = null;
 		//final StringTokenizer st = new StringTokenizer(mapKey, "_");
 		String eventSelected = null;
-		
 		if(nodeId != null && !nodeId.startsWith(Constants.NEW_SPECIMEN))
 			eventSelected = mapKey;
 		else	
@@ -99,9 +99,23 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			
 			final Integer totalNoOfSpecimen = collectionProtocolEventBean
 					.getSpecimenRequirementbeanMap().size();
-			final SpecimenRequirementBean specimenRequirementBean = this.createSpecimenBean(
+			
+			SpecimenRequirementBean specimenRequirementBean=null;
+			
+			if(Constants.TRUE.equals(createDuplicateSpecimen))
+			{
+				LinkedList<GenericSpecimen> specimens=new LinkedList<GenericSpecimen>();
+				specimens.add(collectionProtocolEventBean.getSpecimenRequirementbeanMap().get(nodeId.substring(nodeId.indexOf("_")+1)));
+				LinkedHashMap<String, GenericSpecimen> specimenRequirementBeans=CollectionProtocolUtil.getSpecimenRequirementMap(collectionProtocolEventBean.getUniqueIdentifier(),specimens,collectionProtocolEventBean.getSpecimenRequirementbeanMap().size());
+				specimenRequirementBean=(SpecimenRequirementBean)specimenRequirementBeans.values().toArray()[0];
+				collectionProtocolEventBean.getSpecimenRequirementbeanMap().put(specimenRequirementBean.getUniqueIdentifier(), specimenRequirementBean);
+			}
+			else
+			{
+				specimenRequirementBean = this.createSpecimenBean(
 					createSpecimenTemplateForm, collectionProtocolEventBean.getUniqueIdentifier(),
 					totalNoOfSpecimen);
+			}	
 			if (specimenRequirementBean != null)
 			{
 				collectionProtocolEventBean.addSpecimenRequirementBean(specimenRequirementBean);
@@ -282,6 +296,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm
 				.getNoOfDeriveSpecimen());
 		specimenRequirementBean.setDeriveSpecimen(createSpecimenTemplateForm.deriveSpecimenMap());
+			
 		return specimenRequirementBean;
 	}
 

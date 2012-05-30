@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentRequestBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -324,6 +325,7 @@ public class ShipmentReceivingForm extends ShipmentForm
 	@Override
 	protected void populateShipmentContentsDetails(BaseShipment shipment)
 	{
+		ShipmentRequestBizLogic shipmentRequestBizLogic=new ShipmentRequestBizLogic();
 		if (shipment.getContainerCollection() != null)
 		{
 			final Iterator<StorageContainer> containerIterator = shipment.getContainerCollection()
