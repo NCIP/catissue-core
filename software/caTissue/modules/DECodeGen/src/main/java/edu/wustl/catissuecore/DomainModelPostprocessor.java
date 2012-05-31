@@ -78,8 +78,8 @@ public class DomainModelPostprocessor {
 		Map<String, List<Element>> dupDEFqnMap = new TreeMap<String, List<Element>>();
 		List<Element> abstractEls = new ArrayList<Element>();
 
-        // AbstractRecordEntry to keep
-        Element _AREToKeep = null;
+		// AbstractRecordEntry to keep
+		Element areToKeep = null;
 
 		NodeList nodes = (NodeList) getUmlClasses.evaluate(root,
 				XPathConstants.NODESET);
@@ -121,9 +121,12 @@ public class DomainModelPostprocessor {
 						+ ": " + id);
 			}
 
-            if (_AREToKeep == null && abstractEntities.contains(elFqn)) {
-                _AREToKeep = el;
-            }
+			if (areToKeep == null
+					&& abstractEntities.contains(elFqn)
+					&& (Boolean) hasNonIdUmlAtts.evaluate(el,
+							XPathConstants.BOOLEAN)) {
+				areToKeep = el;
+			}
 
 			fqnSetMap.put(elFqn, el);
 			classIdsMap.put(id, el);
@@ -234,20 +237,26 @@ public class DomainModelPostprocessor {
 			}
 		}
 
-        // Keep only 1 AbstractRecordEntry node
-        // and reuse its id for all other elements referring to instances of other AbstractRecordEntry nodes
+		// Keep only 1 AbstractRecordEntry node
+		// and reuse its id for all other elements referring to instances of
+		// other AbstractRecordEntry nodes
 		for (Element abstractEl : abstractEls) {
-            String _nodesWithRefId = String.format("//*[@refid='%s']", abstractEl.getAttribute("id"));
-            XPathExpression _xpathExp = xFact.newXPath().compile(_nodesWithRefId);
-            NodeList refs = (NodeList) _xpathExp.evaluate(root, XPathConstants.NODESET);
+			String nodesWithRefId = String.format("//*[@refid='%s']",
+					abstractEl.getAttribute("id"));
+			XPathExpression xpathExp = xFact.newXPath().compile(
+					nodesWithRefId);
+			NodeList refs = (NodeList) xpathExp.evaluate(root,
+					XPathConstants.NODESET);
 
-            // Replace the 'refid' attribute of the found Nodes
-            // with the `id` attribute value of the one of the preserved Element stored in _AREToKeep var
-            for (int i = 0; i < refs.getLength(); i++) {
-                Node n = refs.item(i);
-                NamedNodeMap attrMap = n.getAttributes();
-                attrMap.getNamedItem("refid").setNodeValue(_AREToKeep.getAttribute("id"));
-            }
+			// Replace the 'refid' attribute of the found Nodes
+			// with the 'id' attribute value of the one of the preserved Element
+			// stored in areToKeep var
+			for (int i = 0; i < refs.getLength(); i++) {
+				Node n = refs.item(i);
+				NamedNodeMap attrMap = n.getAttributes();
+				attrMap.getNamedItem("refid").setNodeValue(
+						areToKeep.getAttribute("id"));
+			}
 		}
 
 		// Remove superclasses with no subclasses
