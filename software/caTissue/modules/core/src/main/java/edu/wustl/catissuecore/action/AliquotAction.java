@@ -571,6 +571,8 @@ public class AliquotAction extends SecureAction
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 					request.setAttribute(Constants.PAGE_OF, Constants.PAGE_OF_CREATE_ALIQUOT);
 					this.setPageData(request, pageOf, aliquotForm);
+					request.setAttribute("minutesList", Constants.MINUTES_ARRAY);
+					request.setAttribute("hourList", Constants.HOUR_ARRAY);
 					return mapping.findForward(Constants.PAGE_OF_CREATE_ALIQUOT);
 
 				}
