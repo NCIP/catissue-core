@@ -63,6 +63,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
@@ -540,9 +541,41 @@ public class SPPEventProcessor
 						+ formContext.getId(), valueMapStack);
 			}
 		}
-		return listOfError;
+		return listOfError; 
 	}
 
+	
+	/**
+	 * @param listOfError
+	 */
+	public List<String> validateStaticData(Map<AbstractFormContext, Map<String, Object>> formContextParameterMap)
+	{
+		List<String> listOfError = new ArrayList<String>();
+		//validate staticData
+		final Validator validator = new Validator();
+		for (AbstractFormContext formContext :formContextParameterMap.keySet())
+		{
+			String dateOfEvent = (String) formContextParameterMap.get(formContext).get("dateOfEvent");
+			String timeInMinutes = (String) formContextParameterMap.get(formContext).get("timeInMinutes");
+			String timeInHours = (String) formContextParameterMap.get(formContext).get("displaytimeInHours");
+			if (!validator.checkDate(dateOfEvent))
+			{
+				listOfError.add("Date of event is not valid.");
+			}
+
+			if (!validator.isNumeric(timeInMinutes, 0))
+			{
+				listOfError.add("Time in minutes of event is not valid.");
+			}
+
+			if (!validator.isNumeric(timeInHours, 0))
+			{
+				listOfError.add("Time in hours of event is not valid.");
+			}
+		}
+		return listOfError;
+	}
+	
 	/**
 	 * Gets the specimen or scg id array.
 	 *

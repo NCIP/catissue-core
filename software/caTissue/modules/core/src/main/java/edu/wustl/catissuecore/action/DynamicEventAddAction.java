@@ -120,6 +120,7 @@ public class DynamicEventAddAction extends BaseAction
 			formContextParameterMap.get(formContextParameterMap.keySet().iterator().next()).put(Constants.EVENT_PERFORMED, Boolean.TRUE.toString());
 			//validate DE data
 			List<String> listOfError = sppEventProcessor.validateDEData(request, formContextParameterMap);
+			listOfError.addAll(sppEventProcessor.validateStaticData(formContextParameterMap));
 			if (listOfError.isEmpty())
 			{
 				for (int cnt = 0; cnt < specimenIdArr.length; cnt++)

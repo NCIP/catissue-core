@@ -28,9 +28,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.Statement;
-
 import edu.common.dynamicextensions.domain.integration.AbstractFormContext;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
@@ -51,16 +48,12 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.ObjectCloner;
-import edu.wustl.dao.HibernateDAO;
-import edu.wustl.dao.JDBCDAO;
-import edu.wustl.dao.daofactory.DAOConfigFactory;
 
 /**
  * @author suhas_khot
@@ -119,6 +112,8 @@ public class SaveSPPEventAction extends SecureAction
 
 		//validate DE data
 		List<String> listOfError = sppEventProcessor.validateDEData(request, formContextParameterMap);
+		//validate staticData
+		listOfError.addAll(sppEventProcessor.validateStaticData(formContextParameterMap));
 		//If errorList is empty
 		if (listOfError.isEmpty())
 		{
