@@ -2094,6 +2094,7 @@
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
 		<antcall target="liquibase_upgrade_target"/>
 		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
+		<antcall target="insert_dashboard_queries"/>
 	</target>
 	
 	<target name="upgrade_db_from_v1.1.p1 to v1.1.p2" description="Upgrading Database from v1.1.p1 to v1.1.p2">
