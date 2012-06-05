@@ -141,11 +141,16 @@
 	   }
        else{
 	    saveCP();
-   }
-
+   }	
+  }
+  function resizeIframe()
+  {
+	var totalHeight=window.top.document.body.offsetHeight;
+	document.getElementById('SpecimenRequirementView').style.height=totalHeight*66/100;
+	document.getElementById('CPTreeView').style.height=totalHeight*66/100;
   }
 </script>
-
+<body onload='resizeIframe()'>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
  <tr>
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
@@ -196,19 +201,19 @@
         </tr>
 
        		<tr>
-				<td width="21%" height="448px" valign="top" style="border-left:1px solid #61a1e3; border-right:1px solid #61a1e3;border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;">
-					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}&isErrorPage=${requestScope.isErrorPage}"  frameborder="0" width="100%" name="CPTreeView"  height="448" >
+				<td width="21%" valign="top" style="border-left:1px solid #61a1e3; border-right:1px solid #61a1e3;border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;">
+					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}&isErrorPage=${requestScope.isErrorPage}"  frameborder="0" width="100%" name="CPTreeView" >
 							<bean:message key="errors.browser.not.supports.iframe"/>
 					</iframe>
 				</td>
 							 <td width="80%" valign="top" >
 							 <logic:equal name="operation" value="add">
-								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&isErrorPage=${requestScope.isErrorPage}" marginwidth="0" scrolling="auto" frameborder="0" width="100%" height="450" >
+								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&isErrorPage=${requestScope.isErrorPage}" marginwidth="0" scrolling="auto" frameborder="0" width="100%" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 							</logic:equal>
 							 <logic:equal name="operation" value="edit">
-								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" marginwidth="0" frameborder="0" width="100%" height="450" >
+								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" marginwidth="0" frameborder="0" width="100%">
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 							 </logic:equal>
@@ -235,3 +240,4 @@
 	</td>
  </tr>
 </table>
+</body>
