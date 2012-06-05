@@ -93,6 +93,15 @@
             column="FIRST_TIME_LOGIN"
         />
 
+		<property
+            name="forgotPasswordToken"
+            type="string"
+            update="true"
+            insert="true"
+            column="FORGOT_PASSWORD_TOKEN"
+            length="255"
+        />
+        
         <many-to-one
             name="department"
             class="edu.wustl.catissuecore.domain.Department"

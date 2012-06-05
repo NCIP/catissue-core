@@ -37,7 +37,7 @@
             
               <tr>
                 <td width="1%" align="center" class="black_ar"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0" /></td>
-                <td width="16%" align="left" class="black_ar"><bean:message key="user.emailAddress"/></td>
+                <td width="16%" align="left" class="black_ar"><bean:message key="app.UserID"/></td>
                 <td width="83%" align="left" valign="middle"><label><span class="black_ar">
                   <html:text styleClass="black_ar" size="30" styleId="emailAddress" property="emailAddress"/>
                   </span></label>                  </tr>

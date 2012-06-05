@@ -90,14 +90,14 @@ public class ForgotPasswordForm extends AbstractActionForm
 		if (Validator.isEmpty(this.emailAddress))
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-					ApplicationProperties.getValue("user.emailAddress")));
+					ApplicationProperties.getValue("app.UserID")));
 		}
 		else
 		{
 			if (!validator.isValidEmailAddress(this.emailAddress))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
-						ApplicationProperties.getValue("user.emailAddress")));
+						ApplicationProperties.getValue("app.UserID")));
 			}
 		}
 

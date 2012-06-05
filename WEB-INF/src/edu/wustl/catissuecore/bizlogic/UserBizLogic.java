@@ -55,6 +55,7 @@ import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.common.util.global.UniqueIDGenerator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
@@ -1016,7 +1017,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		final User oldUser = (User) oldObj;
 
 		boolean isLoginUserUpdate = false;
-		if (oldUser.getLoginName().equals(sessionDataBean.getUserName()))
+		if (sessionDataBean!=null && oldUser.getLoginName().equals(sessionDataBean.getUserName()))
 		{
 			isLoginUserUpdate = true;
 		}
@@ -1092,6 +1093,24 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				user.getPasswordCollection().add(password);
 
 			}
+			if ("pageOfResetPassword".equals(user.getPageOf()))
+			{
+				// Added for Password validation by Supriya Dankh.
+
+				final Validator validator = new Validator();
+				if (!validator.isEmpty(user.getNewPassword()))
+				{
+					passwordValidation(user, oldUser, null);
+				}
+				csmUser.setPassword(user.getNewPassword());
+
+				// Set values in password domain object and adds changed
+				// password in Password Collection
+				final Password password = new Password(PasswordManager.encrypt(user.getNewPassword()), user);
+				user.getPasswordCollection().add(password);
+
+			}
+
 
 			// Bug-1516: Jitendra Administartor should be able to edit the
 			// password
@@ -1496,8 +1515,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 					// Send the login details email to the user.
 					boolean emailStatus = false;
-
-					emailStatus = emailHandler.sendLoginDetailsEmail(user, null);
+					String userToken=UniqueIDGenerator.getUniqueID();
+					emailStatus = emailHandler.sendForgotPasswordEmail(user, userToken);
 
 					if (emailStatus)
 					{
@@ -1507,10 +1526,10 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 						 * user changes his password on login Note --> We can
 						 * not use CommonAddEditAction to update as the user has
 						 * not still logged in and user authorisation will fail.
-						 * So writing saperate code for update.
+						 * So writing separate code for update.
 						 */
 
-						user.setFirstTimeLogin(Boolean.TRUE);
+						user.setForgotPasswordToken(userToken);
 						dao = openDAOSession(sessionData);
 						dao.update(user);
 						dao.commit();
@@ -2526,7 +2545,8 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 			}
 		}
-		if (user.getPageOf().equalsIgnoreCase("pageOfChangePassword"))
+		if ("pageOfChangePassword".equalsIgnoreCase(user.getPageOf()) 
+				|| "pageOfResetPassword".equalsIgnoreCase(user.getPageOf()))
 		{
 			return true;
 		}
@@ -2535,7 +2555,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		 * DAOException
 		 * (ApplicationProperties.getValue("user.cannotEditOwnPrivileges")); }
 		 */
-		if (user.getPageOf().equalsIgnoreCase("pageOfSignUp"))
+		if ("pageOfSignUp".equalsIgnoreCase(user.getPageOf()))
 		{
 			return true;
 		}
@@ -2707,9 +2727,52 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		{
 			result = true;
 		}
-
 		return result;
+	}
+	
+	
+	public void updatePasswordUsingToken(String resetPasswordToken,String newPassword,String pageOf) throws BizLogicException
+	{
+		User oldUser = getUserBasedonUserToken(resetPasswordToken);
+		User user = oldUser;
+		user.setNewPassword(newPassword);
+		user.setForgotPasswordToken(null);
+		user.setPageOf(pageOf);
+		update(user, oldUser, null);
 
+	}
+	
+	public User getUserBasedonUserToken(final String userToken) throws BizLogicException
+	{
+		User validUser = null;
+		final String getActiveUser = "from " + User.class.getName() + " user where " + "user.activityStatus= "
+		+ "'" + Status.ACTIVITY_STATUS_ACTIVE.toString() + "' and user.userToken =" + "'" + userToken
+		+ "'";
+		final DefaultBizLogic bizlogic = new DefaultBizLogic();
+		final List<User> users = bizlogic.executeQuery(getActiveUser);
+		if (users != null && !users.isEmpty())
+		{
+			validUser = users.get(0);
+		}
+		return validUser;
+		
+	}
+
+	public boolean isPasswordTokenValid(String resetPasswordToken) throws ApplicationException
+	{
+		boolean isValid=false;
+		String query="select count(*) from catissue_user where forgot_password_token='"+resetPasswordToken+"'";
+		
+		List resultList=AppUtility.executeSQLQuery(query);
+		if(resultList!=null && resultList.size()>0)
+		{
+			ArrayList arr= (ArrayList) resultList.get(0);
+			if(Integer.valueOf((String) arr.get(0))>0)
+			{
+				isValid=true;
+			}
+		}
+		return isValid;
 	}
 
 }

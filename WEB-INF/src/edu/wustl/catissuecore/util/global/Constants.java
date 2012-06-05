@@ -1161,6 +1161,9 @@ public class Constants
 	/** The Constant UPDATE_PASSWORD_ACTION. */
 	public static final String UPDATE_PASSWORD_ACTION = "UpdatePassword.do";
 
+	/** The Constant FORGOT_PASSWORD_ACTION. */
+	public static final String FORGOT_PASSWORD_ACTION = "ForgotPassword.do";
+
 	/** The Constant OPEN_PAGE_IN_CPFRAME. */
 	public static final String OPEN_PAGE_IN_CPFRAME = "openInCPFrame";
 
@@ -5863,4 +5866,9 @@ public class Constants
 	 public static final String CREATE_DUPLICATE_EVENT = "createDuplicateEvent";
 	 public static final String CREATE_DUPLICATE_SPECIMEN = "createDuplicateSpecimen";
 	 public static final String PARENT_NODE_ID = "parentNodeId";
+	 public static final String HELP_URL_KEY="helpURLKey";
+	 public static final String RESET_PASSWORD_TOKEN="resetPasswordToken";
+	 public static final String FORGOT_PASSWORD_ENABLED="forgot.password.enabled";
+	 public static final String PAGE_OF_RESET_PASSWORD="pageOfResetPassword";
+	 public static final String PASSWORD_TOKEN_NOT_EXISTS="password.token.not.exist";
 }

@@ -161,13 +161,13 @@ table#browserDetailsContainer {
 									<tr>
 										<td class="black_ar"><bean:message key="app.UserID" /></td>
 										<td><html:text styleClass="black_ar" property="loginName"
-											size="20" /></td>
+											size="25" /></td>
 									</tr>
 									<tr>
 										<td class="black_ar"><bean:message key="app.password" />
 										</td>
 										<td><html:password styleClass="black_ar"
-											property="password" size="20" /></td>
+											property="password" size="25" /></td>
 									</tr>
 									<tr>
 										<td>&nbsp;</td>
@@ -195,8 +195,16 @@ table#browserDetailsContainer {
 													class="view"><bean:message key="app.signup" /></a></td>
 												<%
 												    }
+													if (Boolean.parseBoolean(XMLPropertyHandler
+																			.getValue(Constants.FORGOT_PASSWORD_ENABLED))) {
 												%>
-
+													<td><img src="images/uIEnhancementImages/or_dot.gif"
+													alt="Divider line" width="1" height="15" hspace="5" /></td>
+													<td colspan="2" align="right"><a
+													href="ForgotPassword.do"
+													class="view"><bean:message
+											key="app.requestPassword" /></td>
+											<% }%>
 											</tr>
 										</table>
 										</td>
@@ -204,10 +212,6 @@ table#browserDetailsContainer {
 									<tr>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
-										<!-- <td align="left" valign="middle"><a
-											href="ForgotPassword.do" class="view"><bean:message
-											key="app.requestPassword" /> </a></td>
-										 -->
 									</tr>
 								</table>
 							</html:form>

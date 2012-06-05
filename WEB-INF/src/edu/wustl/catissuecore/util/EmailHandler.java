@@ -227,6 +227,40 @@ public class EmailHandler
         return emailStatus;
     }
 
+    
+    public boolean sendForgotPasswordEmail(final User user, final String userToken) throws ApplicationException
+    {
+        boolean emailStatus = false;
+
+        try
+        {
+            final String subject = ApplicationProperties
+								.getValue("loginDetails.email.subject");
+
+			String body = "Hi,\n";
+	
+			final gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManagerFactory.getSecurityManager().getUserById(user.getCsmUserId().toString());
+			
+			body="You asked to reset your password. To do so, please click this link:"
+				   +"\n\n\t "+CommonServiceLocator.getInstance().getAppURL()+"/ResetPassword.do?operation=edit&pageOf=pageOfResetPassword&resetPasswordToken="+userToken
+				   +"\n\tThis will let you change your password to something new. If you didn't ask for this, don't worry, we'll keep your password safe."
+				   + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
+			
+			System.out.println(CommonServiceLocator.getInstance().getAppURL()+"/ResetPassword.do?operation=edit&pageOf=pageOfResetPassword&resetPasswordToken="+userToken);
+
+			emailStatus = sendEmailToUser(user.getEmailAddress(), subject, body);
+			logEmailStatus(user, emailStatus);
+        }
+        catch(final SMException smExp)
+        {
+        	logger.error(smExp.getMessage(), smExp);
+            throw AppUtility.getApplicationException(smExp,smExp.getErrorKeyAsString(),  smExp.getMessage());
+        }
+ 
+        return emailStatus;
+    }
+
+
 	/**
 	 * method logs email status
 	 * @param user

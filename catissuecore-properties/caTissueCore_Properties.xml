@@ -754,4 +754,9 @@
 		<value>3000</value>
 	</property>
 	
+		<!-- Forgot Password Configuration -->
+	<property>
+		<name>forgot.password.enabled</name>
+		<value>@@Forgot-Password-Enabled@@</value>
+	</property>
 </properties>

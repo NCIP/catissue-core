@@ -193,6 +193,20 @@ public class User extends AbstractDomainObject implements Serializable, IActivit
 		this.targetPassword = targetPassword;
 	}
 
+	private String forgotPasswordToken;
+	
+	
+	public String getForgotPasswordToken()
+	{
+		return forgotPasswordToken;
+	}
+
+	
+	public void setForgotPasswordToken(String forgotPasswordToken)
+	{
+		this.forgotPasswordToken = forgotPasswordToken;
+	}
+
 	/**
 	 * Initialize a new User instance. Note: Hibernate invokes this constructor
 	 * through reflection API.

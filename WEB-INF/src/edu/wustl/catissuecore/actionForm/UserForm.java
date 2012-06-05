@@ -992,6 +992,21 @@ public class UserForm extends AbstractActionForm
                     chkNwOdPwds(errors, validator);
                     chkNOPwds1(request, errors, validator);
                 }
+                else  if (getPageOf().equals("pageOfResetPassword"))
+                {
+                    chkEmpty(errors, validator, "user.newPassword", newPassword);
+                    chkEmpty(errors, validator, "user.confirmNewPassword", confirmNewPassword);
+                    chkNwOdPwds(errors, validator);
+                    int result = PasswordManager.SUCCESS;
+                    result = PasswordManager.validatePasswordOnFormBean(newPassword, null);
+
+	                if (result != PasswordManager.SUCCESS)
+	                {
+	                    final String errorMessage = PasswordManager.getErrorMessage(result);
+	                    logger.debug("error from Password validate " + errorMessage);
+	                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
+	                }
+                }
                 else
                 {
                     setRedirectValue(validator);

@@ -76,6 +76,20 @@
 		<put name="content" value="/pages/content/home/ChangePassword.jsp" />
 	</definition>
 
+	<definition name=".catissuecore.resetPasswordDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/home/ResetPassword.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.resetPasswordSuccessDef" extends=".catissuecore.homePageDef">
+
+		<put name="content" value="/pages/content/common/success.jsp" />
+	</definition>
+	
+	
+	<!-- definition name=".catissuecore.ForgotPasswordDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/home/ForgotPassword.jsp" />
+	</definition-->
+	
 	<definition name=".catissuecore.userProfileSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>

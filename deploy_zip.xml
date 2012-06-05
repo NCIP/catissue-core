@@ -696,6 +696,7 @@
 		</copy>
 
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
+			<replacefilter token="@@Forgot-Password-Enabled@@" value="${forgot.password.enabled}" />
 			<replacefilter token="@@ADMIN-EMAILADDRESS@@" value="${email.administrative.emailAddress}" />
 			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
 			<replacefilter token="@@MAILSERVER-EMAILADDRESS@@" value="${email.mailServer}" />
