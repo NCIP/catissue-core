@@ -286,7 +286,7 @@ if(form != null)
 	function createDuplicateSpecimens()
 	{
 		window.parent.frames['CPTreeView'].saveTreeState();
-		var action ="SaveSpecimenRequirements.do?pageOf=specimenRequirement&key=<%=mapKey%>&operation=add&isPersistent=${requestScope.isPersistent}&<%=Constants.CREATE_DUPLICATE_SPECIMEN%>=true&parentNodeId="+window.parent.parentId+"&nodeId="+window.parent.selectedNodeId;
+		var action ="DuplicateSpecimenRequirementAction.do?pageOf=specimenRequirement&key=<%=mapKey%>&operation=add&isPersistent=${requestScope.isPersistent}&<%=Constants.CREATE_DUPLICATE_SPECIMEN%>=true&parentNodeId="+window.parent.parentId+"&nodeId="+window.parent.selectedNodeId;
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}

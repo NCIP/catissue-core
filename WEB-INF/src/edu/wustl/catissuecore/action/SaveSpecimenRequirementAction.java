@@ -52,7 +52,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			.getCommonLogger(SaveSpecimenRequirementAction.class);
 
 	private static String isPersistent = null;
-	private String createDuplicateSpecimen = "false";
+	
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
@@ -87,12 +87,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 
 		isPersistent = request.getParameter("isPersistent");
 		request.setAttribute("isPersistent", isPersistent);
-		createDuplicateSpecimen = (String) request.getParameter(Constants.CREATE_DUPLICATE_SPECIMEN);
-		
+				
 		final Map collectionProtocolEventMap = (Map) session
 		.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-		final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
-		.get((Constants.TRUE.equals(createDuplicateSpecimen) ? eventSelected : mapKey));
+		final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap.get(mapKey);
 		
 		if (operation.equals(Constants.ADD))
 		{
@@ -100,22 +98,10 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			final Integer totalNoOfSpecimen = collectionProtocolEventBean
 					.getSpecimenRequirementbeanMap().size();
 			
-			SpecimenRequirementBean specimenRequirementBean=null;
-			
-			if(Constants.TRUE.equals(createDuplicateSpecimen))
-			{
-				LinkedList<GenericSpecimen> specimens=new LinkedList<GenericSpecimen>();
-				specimens.add(collectionProtocolEventBean.getSpecimenRequirementbeanMap().get(nodeId.substring(nodeId.indexOf("_")+1)));
-				LinkedHashMap<String, GenericSpecimen> specimenRequirementBeans=CollectionProtocolUtil.getSpecimenRequirementMap(collectionProtocolEventBean.getUniqueIdentifier(),specimens,collectionProtocolEventBean.getSpecimenRequirementbeanMap().size());
-				specimenRequirementBean=(SpecimenRequirementBean)specimenRequirementBeans.values().toArray()[0];
-				collectionProtocolEventBean.getSpecimenRequirementbeanMap().put(specimenRequirementBean.getUniqueIdentifier(), specimenRequirementBean);
-			}
-			else
-			{
-				specimenRequirementBean = this.createSpecimenBean(
+			SpecimenRequirementBean specimenRequirementBean = this.createSpecimenBean(
 					createSpecimenTemplateForm, collectionProtocolEventBean.getUniqueIdentifier(),
 					totalNoOfSpecimen);
-			}	
+
 			if (specimenRequirementBean != null)
 			{
 				collectionProtocolEventBean.addSpecimenRequirementBean(specimenRequirementBean);
@@ -133,11 +119,6 @@ public class SaveSpecimenRequirementAction extends BaseAction
 				AppUtility.createSpecimenNode(objectName, parentId, specimenRequirementBean,
 						treeData, operation);
 				request.setAttribute("nodeAdded", treeData);
-			}
-			if(Constants.TRUE.equals(createDuplicateSpecimen))
-			{
-				request.getSession().setAttribute(Constants.TREE_NODE_ID, Constants.NEW_SPECIMEN + "_"+ specimenRequirementBean.getUniqueIdentifier());
-				request.getSession().setAttribute("key", specimenRequirementBean.getUniqueIdentifier());
 			}
 			
 		}
@@ -265,10 +246,6 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			Integer totalNoOfSpecimen)
 	{
 		final SpecimenRequirementBean specimenRequirementBean = new SpecimenRequirementBean();
-		if(Constants.TRUE.equals(createDuplicateSpecimen))
-		{	
-			specimenRequirementBean.setId(-1L);
-		}	
 		specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier);
 		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
 				+ Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN + totalNoOfSpecimen);
@@ -455,10 +432,6 @@ public class SaveSpecimenRequirementAction extends BaseAction
 					specimenRequirementBean.setId(deriveSpecimenBean.getId());
 				}
 			}
-			if(Constants.TRUE.equals(createDuplicateSpecimen))
-			{	
-				specimenRequirementBean.setId(-1L);
-			}	
 			deriveSpecimenMap.put(specimenRequirementBean.getUniqueIdentifier(),
 					specimenRequirementBean);
 			deriveSpecimenCount = deriveSpecimenCount + 1;
