@@ -2077,8 +2077,8 @@
 	</target>
 
 
-	<!--Target for Database Upgrade from Suite p5.1 to Suite 1.2.1-->
-	<target name="upgrade_db" description="Upgrading Database vp5.1 to v1.2.1">
+	<!--Target for Database Upgrade from Suite 1.2.3 to Suite 1.2.1-->
+	<target name="upgrade_db" description="Upgrading Database v1.2.3 to v1.2.1">
 		<echo message="Upgrading Database v1.2.3 to v1.2.4" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
 		<antcall target="liquibase_upgrade_target"/>
@@ -4979,6 +4979,7 @@ Thanking You,
 		<delete file="${mysql.sql.dir}/clinportal_createEMPIAdminUser1.sql">
 		</delete>
 	</target>
+
 	
 	<!--Ashraf: Target for creating CP dashboard tables -->
 	

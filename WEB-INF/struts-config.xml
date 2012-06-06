@@ -5796,6 +5796,7 @@ PUBLIC
 			<forward name="failure" path="/pages/blank.jsp" />
 		</action>
 		<!--  bulk empi operations ends -->
+
 		
 		<!-- Added for CP Dashboard : Ashraf-->
 		<action path="/CPDashboardAction" type="edu.wustl.labelSQLApp.action.CPDashboardAction"
@@ -5816,6 +5817,15 @@ PUBLIC
 		</action>
 		<!-- end of CP Dashboard -->
 		
+
+		
+		<action path="/BulkLogin" type="edu.wustl.catissuecore.action.LoginAction"
+		   name="loginForm" validate="false" scope="request">
+			<forward name="pageOfNonWashU" path="/BulkHandler.do?fromAction=login"/>
+			<forward name="failure" path="/BulkHandler.do?fromAction=login"/>
+			<forward name="success" path="/BulkHandler.do?fromAction=login"/>
+		</action>
+
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

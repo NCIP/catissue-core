@@ -5230,6 +5230,7 @@ Thanking You,
 		</delete>
 	</target>
 	
+
 	
 	<property name="${cp.shortTitle}"  value=" " />
 		<target name="specimen_data_backload" description="sends specimen data to cider for newly enabled empi collection protocols">
@@ -5317,6 +5318,5 @@ Thanking You,
 		<echo message="Creating lablesql tables for CS dashboard for mysql" />		
 		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/dashboard_scripts.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	</target>
-	
 	
 </project>

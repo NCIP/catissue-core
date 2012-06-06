@@ -1,7 +1,9 @@
 package edu.wustl.catissuecore.interceptor;
 
 import java.util.ArrayList;
+
 import java.util.List;
+import java.util.TimerTask;
 
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
@@ -18,7 +20,7 @@ import edu.wustl.dao.interceptor.SaveUpdateInterceptThread.eventType;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 
 
-public class SpecimenDataBackloader
+public class SpecimenDataBackloader extends TimerTask
 {
 	static
 	{
@@ -27,12 +29,12 @@ public class SpecimenDataBackloader
 
 	private static final Logger LOGGER = Logger.getCommonLogger(SpecimenDataBackloader.class);
 
-	private static final String SPECIMEN_ID_QUERY = "select specimen.identifier from catissue_specimen specimen "
-			+"join catissue_specimen_coll_group scg on  scg.identifier = specimen.specimen_collection_group_id and specimen.collection_status = 'Collected' "
+	private static final String SPECIMEN_ID_QUERY = " select specimen.identifier from catissue_specimen specimen "
+			+"join catissue_specimen_coll_group scg on  scg.identifier = specimen.specimen_collection_group_id and specimen.collection_status = 'Collected' and specimen.activity_status not like 'Disabled' "
 			+"join  catissue_coll_prot_reg cpr on cpr.identifier = scg.collection_protocol_reg_id "
 			+"join catissue_collection_protocol cp on cp.identifier = cpr.collection_protocol_id and cp.is_empi_enable = 1 "
-			+"join catissue_specimen_protocol sp on sp.identifier = cp.identifier and sp.short_title like ? "
-			+"join catissue_participant participant on participant.identifier = cpr.participant_id and participant.empi_id is not null";
+			+"join catissue_participant participant on participant.identifier = cpr.participant_id and participant.empi_id is not null"
+			+ " where specimen.identifier not in (select specimen_id from catissue_specimen_message_log )";
 	/**
 	 * This method called to get JDBCDAO instance.
 	 * @return JDBCDAO instance.
@@ -66,7 +68,7 @@ public class SpecimenDataBackloader
 	}
 
 
-	public void sendOldSpeciemnDataToCider(String cpShortTitle)
+	public void sendOldSpeciemnDataToCider()
 	{
 		final String path = System.getProperty("app.propertiesFile");
 		try
@@ -75,7 +77,7 @@ public class SpecimenDataBackloader
 			LOGGER.info("sysout WMQ initialazation in progress");
 			SpecimenWmqProcessor.getInstance();
 			//fetch all the specimens which are in collected state
-			List<Long> specimenIdList = getSpecimenIdentifiersList(cpShortTitle);
+			List<Long> specimenIdList = getSpecimenIdentifiersList();
 			final DefaultBizLogic bizLogic = new DefaultBizLogic();
 
 			LOGGER.info("Number of Specimen's in backLoad " + specimenIdList.size());
@@ -96,26 +98,15 @@ public class SpecimenDataBackloader
 
 	}
 
-	private List<Long> getSpecimenIdentifiersList(String cpShortTitle) throws DAOException
+	private List<Long> getSpecimenIdentifiersList() throws DAOException
 	{
-		String shortTitle;
 		final List<Long> specimenIdList = new ArrayList<Long>();
-		if(cpShortTitle!=null && !"".equals(cpShortTitle))
-		{
-			shortTitle = cpShortTitle;
-
-		}
-		else
-		{
-			shortTitle="%";
-		}
 		JDBCDAO  dao = null;
 		try
 		{
 			dao = openJDBCSession();
 		List<ColumnValueBean> colValueBeanList = new ArrayList<ColumnValueBean>();
-		colValueBeanList.add(new ColumnValueBean("SHORT_TITLE", shortTitle));
-		System.out.println("short title : "+shortTitle);
+		//colValueBeanList.add(new ColumnValueBean("SHORT_TITLE", shortTitle));
 		final List<List<String>> resultList = dao.executeQuery(SPECIMEN_ID_QUERY, colValueBeanList);
 			for(List<String> recordList : resultList)
 			{
@@ -130,21 +121,12 @@ public class SpecimenDataBackloader
 		return specimenIdList;
 	}
 
-	public static void main(String[] args)
+	@Override
+	public void run()
 	{
-	//	System.setProperty("app.propertiesDir", "./catissuecore-properties");
-
-		//System.setProperty("app.propertiesFile", "./catissuecore-properties/caTissueCore_Properties.xml");
-		String cpShortTitle = null;
-		if(args.length>=1 && !"".equals(args[0].trim()))
-		{
-			cpShortTitle = args[0];
-		}
-		SpecimenDataBackloader dataSender = new SpecimenDataBackloader();
-		dataSender.sendOldSpeciemnDataToCider(cpShortTitle);
-
+		// TODO Auto-generated method stub
+		sendOldSpeciemnDataToCider();
 	}
-
 
 
 }
