@@ -310,7 +310,8 @@ function showAllSpecimen(count)
 		else
 		{
 			var consentVerifiedRows = document.getElementById('consentVerifiedRows').value;
-			var url= 'ViewAllConsents.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+consentVerifiedRows+'&noOfRows='+count+'&labelIndexCount='+labelIndexCount;
+			var orderId = document.getElementById('id').value;
+			var url= 'ViewAllConsents.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+consentVerifiedRows+'&noOfRows='+count+'&labelIndexCount='+labelIndexCount+'&orderId='+orderId;
 			
 			//alert("verifiedRows  : "+consentVerifiedRows);
 			//alert(consentVerifiedRows.length);
@@ -679,10 +680,16 @@ function checkQuantityforAll(count)
 			
 						<td colspan="3" align="right" valign="top">
 							<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
-								
+								<logic:notEqual name="selectedTab" value="AdvancedViewTab">
 							<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
 													<bean:message key="requestdetails.link.ViewAllConsents" />
-							                    </a>
+													</a>
+							  </logic:notEqual>                  
+							  <logic:equal name="selectedTab" value="AdvancedViewTab">
+							<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
+													<bean:message key="requestdetails.link.ViewAllConsents" />
+													</a>
+							  </logic:equal>
 						</td>
 					
 			</tr>
@@ -738,7 +745,7 @@ function checkQuantityforAll(count)
 			  String distributionProtocol = ((RequestViewBean)request.getAttribute(Constants.REQUEST_HEADER_OBJECT)).getDistributionProtocolId(); 
 			  String orderName = ((RequestViewBean)request.getAttribute(Constants.REQUEST_HEADER_OBJECT)).getOrderName();
 		%>
-						<html:hidden name="requestDetailsForm" property="id" />
+						<html:hidden name="requestDetailsForm" property="id" styleId="id"/>
 						<html:hidden name="requestDetailsForm" property="operation" value="<%= operationUpdate %>"/>
 						<html:hidden name="requestDetailsForm" property="distributionProtocolId" value="<%= distributionProtocol %>"/>	
 						<html:hidden name="requestDetailsForm" property="orderName" styleId="orderName" value="<%= orderName %>"/>					

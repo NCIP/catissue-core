@@ -784,6 +784,24 @@ PUBLIC
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
 			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
 		</action>
+		
+		<action path="/BulkSpecimenCart" type="edu.wustl.catissuecore.action.BulkSpecimenCartAction"
+			name="advanceSearchForm" validate="false" scope="request">
+			<forward name="success" path=".catissuecore.shoppingCartDef" />
+			<forward name="requestToOrder" path="/RequestToOrder.do" />
+			<forward name="requestToDistribute" path="/RequestToDistribute.do" />
+			<forward name="bulkTransfers" path="/BulkTransferEvents.do?menuSelected=15" />
+			<forward name="bulkDisposals" path="/BulkDisposalEvents.do?menuSelected=15" />
+			<forward name="createShipmentRequest"
+				path="/ProcessMyListCreateShipmentRequest.do?menuSelected=15" />
+			<forward name="createShipment"
+				path="/ProcessMyListCreateShipment.do?menuSelected=15" />
+			<forward name="editMultipleSp"
+				path="/MultipleSpecimenFlexInitAction.do?operation=edit" />
+			<forward name="printLabels" path="/PrintSpecimensFromListView.do" />
+			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
+			<forward name="access_denied" path=".catissuecore.searchHomeDef" />
+		</action>
 
 		<action path="/PrintSpecimensFromListView" type="edu.wustl.catissuecore.action.PrintAction"
 			name="advanceSearchForm" scope="request">
@@ -1024,6 +1042,7 @@ PUBLIC
 			validate="false" scope="request">
 			<forward name="popup" path=".catissuecore.OrderingConsentsDef" />
 			<forward name="ViewAll" path=".catissuecore.ViewAllOrderingConsentsDef" />
+			<forward name="noConsent" path=".catissuecore.noOrderingConsentsDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		<!-- end -->

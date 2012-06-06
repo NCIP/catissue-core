@@ -278,9 +278,8 @@ public class RequestDetailsAction extends BaseAction
 		JSONArray jsonDataRow = new JSONArray();
 		JSONObject mainJsonRow = new JSONObject();
 		// The order items list corresponding to the request Id
-		JDBCDAO jdbcdao = AppUtility.openJDBCSession();
-		this.getRequestDetailsList(orderDetails, requestDetailsForm, request,jsonDataRow,jdbcdao);
-		AppUtility.closeJDBCSession(jdbcdao);
+		
+		this.getRequestDetailsList(orderDetails, requestDetailsForm, request,jsonDataRow);
 		mainJsonRow.put(Constants.JSON_DATA_ROW, jsonDataRow);
 		HttpSession session = request.getSession();
 		session.setAttribute("jsonData", mainJsonRow);
@@ -382,14 +381,15 @@ public class RequestDetailsAction extends BaseAction
 	 * @throws Exception : Exception
 	 */
 	private void getRequestDetailsList(OrderDetails orderDetails, RequestDetailsForm requestDetailsForm,
-			HttpServletRequest request, JSONArray jsonDataRow, DAO dao) throws Exception
+			HttpServletRequest request, JSONArray jsonDataRow) throws Exception
 			{
 		// 	fetching the order object corresponding to obtained id.
 
 		final long startTime = System.currentTimeMillis();
-
+		JDBCDAO dao = null;
 		try
 		{
+			dao = AppUtility.openJDBCSession();
 			request.setAttribute("orderDetailsForDP",orderDetails);
 			// The request details corresponding to the request Id
 			RequestViewBean requestListBean = null;
@@ -433,6 +433,7 @@ public class RequestDetailsAction extends BaseAction
 					Collections.sort(orderItemsList, new IdComparator());
 					final ListIterator<OrderItem> iter = orderItemsList.listIterator();
 					speciemnIdValue = new StringBuilder(500);
+					Map<Long, SpecimenOrderBean> specOrederMap = OrderingSystemUtil.getSpecItemDetails(orderDetails.getId(),dao);
 					while (iter.hasNext())
 					{
 						orderItem = iter.next();
@@ -443,7 +444,7 @@ public class RequestDetailsAction extends BaseAction
 							
 							requestDetailsList = this
 							.populateRequestDetailsListForSpecimenOrderItems(orderItem,
-									request, requestDetailsList,definedArrayMap,requestDetailsBeanCounter,requestDetailsForm,jsonDataRow,dao);
+									request, requestDetailsList,definedArrayMap,requestDetailsBeanCounter,requestDetailsForm,jsonDataRow,specOrederMap);
 						}
 						// In case of Defined Array
 						if (orderItem instanceof NewSpecimenArrayOrderItem)
@@ -492,7 +493,7 @@ public class RequestDetailsAction extends BaseAction
 				}
 
 				final long endTime = System.currentTimeMillis();
-				System.out.println("Execute time of getRequestDetailsList :"
+				System.out.println("After perf changes the Execute time of getRequestDetailsList :"
 						+ (endTime - startTime));
 
 			}
@@ -507,6 +508,10 @@ public class RequestDetailsAction extends BaseAction
 		{
 			LOGGER.error(e.getMessage(), e);
 
+		}
+		finally
+		{
+			AppUtility.closeJDBCSession(dao);
 		}
 	}
 
@@ -553,6 +558,7 @@ public class RequestDetailsAction extends BaseAction
 		
 		final Map requestForMap = new HashMap();
 		int row = 0;
+		Map<Long, SpecimenOrderBean> specOrderMap = OrderingSystemUtil.getSpecItemDetails(orderDetails.getId(),(JDBCDAO)dao);
 		while (iter.hasNext())
 		{
 			String rowNumber = "";
@@ -601,12 +607,7 @@ public class RequestDetailsAction extends BaseAction
 					List allSpecimen = new ArrayList();
 					final ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem) orderItem;
 					SpecimenOrderBean specimenOrderBean = null;
-					try {
-						specimenOrderBean = getSpecimenOrderBean(existingSpecimenOrderItem,dao);
-					} catch (ApplicationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+						specimenOrderBean = specOrderMap.get(existingSpecimenOrderItem.getId());
 					allSpecimen = OrderingSystemUtil.getAllSpecimen(existingSpecimenOrderItem
 							.getSpecimen());
 					final SpecimenComparator comparator = new SpecimenComparator();
@@ -713,12 +714,12 @@ public class RequestDetailsAction extends BaseAction
 	 * @param requestDetailsBeanCounter 
 	 * @param requestDetailsForm 
 	 * @param jsonDataRow 
-	 * @param dao 
+	 * @param specOrderMap 
 	 * @return List : List
 	 * @throws ApplicationException 
 	 */
 	private List populateRequestDetailsListForSpecimenOrderItems(OrderItem orderItem,
-			HttpServletRequest request, List requestDetailsList, Map definedArrayMap, int requestDetailsBeanCounter, RequestDetailsForm requestDetailsForm, JSONArray jsonDataRow, DAO dao) throws ApplicationException
+			HttpServletRequest request, List requestDetailsList, Map definedArrayMap, int requestDetailsBeanCounter, RequestDetailsForm requestDetailsForm, JSONArray jsonDataRow, Map<Long, SpecimenOrderBean> specOrderMap) throws ApplicationException
 			{
 		// The row number to update available quantity on selecting the required
 		// specimen from 'request for' drop down.
@@ -807,7 +808,7 @@ public class RequestDetailsAction extends BaseAction
 			if (orderItem instanceof ExistingSpecimenOrderItem)
 			{
 				final ExistingSpecimenOrderItem existingSpecimenorderItem = (ExistingSpecimenOrderItem) orderItem;
-				SpecimenOrderBean specimenOrderBean = getSpecimenOrderBean(existingSpecimenorderItem,dao);
+				SpecimenOrderBean specimenOrderBean = specOrderMap.get(existingSpecimenorderItem.getId());
 				
 				requestDetailsBean = this.populateRequestDetailsBeanForExistingSpecimen(
 						requestDetailsBean, existingSpecimenorderItem,specimenOrderBean);
@@ -859,51 +860,7 @@ public class RequestDetailsAction extends BaseAction
 		return requestDetailsList;
 			}
 
-	private SpecimenOrderBean getSpecimenOrderBean(final ExistingSpecimenOrderItem existingSpecimenorderItem, DAO dao)
-			throws ApplicationException 
-			{
-		System.out.println();
-		SpecimenOrderBean bean = new SpecimenOrderBean(); 
-		String sql = "select abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY " +
-				"from " +
-				"catissue_abstract_specimen abs, catissue_specimen spec where " +
-				"spec.identifier=abs.identifier and abs.identifier in" +
-				"( select specimen_id from catissue_existing_sp_ord_item" +
-				" cat where cat.identifier=? )";
-		ColumnValueBean bean2 = new ColumnValueBean(existingSpecimenorderItem.getId());
-		List attr = new ArrayList();
-		attr.add(bean2);
-		//List list = dao.executeQuery(sql);
-		List list = dao.executeQuery(sql,attr);
-		List inrList = new ArrayList();
-		if(list != null && !list.isEmpty())
-		{
-			inrList = (List)list.get(0);
-			bean.setId((String)inrList.get(0));
-			bean.setSpecimenClass((String)inrList.get(1));
-			bean.setSpecimenType((String)inrList.get(2));
-			bean.setLabel((String)inrList.get(3));
-			bean.setAvailableQty((String)inrList.get(4));
-			List list3 = new ArrayList<NameValueBean>();
-			list3.add(new NameValueBean(bean.getLabel(),bean.getId()));
-			bean.setChildSpecimens(list3);
-		}
-		
-		String consentSQL="select count(*) from catissue_consent_tier_status where specimen_id= "+bean.getId();
-		list = dao.executeQuery(consentSQL);
-		inrList = (List)list.get(0);
-		if(Long.valueOf((String)inrList.get(0)) > 0)
-		{
-			bean.setConsentAvl(true);
-		}
-		else
-			bean.setConsentAvl(false);
-		
-		String childSQL = "select child.identifier,spec.label from catissue_abstract_specimen child,catissue_specimen spec where "+ 
-				"spec.identifier=child.identifier and child.PARENT_SPECIMEN_ID = "+bean.getId();
-		
-		return bean;
-	}
+	
 
 	
 	private void populateValuesMap(OrderItem orderItem, String requestedItem, String availableQty,
