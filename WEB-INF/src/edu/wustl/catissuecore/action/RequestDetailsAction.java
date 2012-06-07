@@ -900,7 +900,8 @@ public class RequestDetailsAction extends BaseAction
 			}
 			if (specimenOrderBean.isConsentAvl())
 			{
-				requestDetailsForm.setValue(consentVerificationkey, Constants.VIEW_CONSENTS);
+//				requestDetailsForm.setValue(consentVerificationkey, Constants.VIEW_CONSENTS);
+				requestDetailsForm.setValue(consentVerificationkey, Constants.NO_CONSENTS);
 				speciemnIdValue.append(specimenOrderBean.getId());
 				speciemnIdValue.append(",");
 				speciemnIdValue.append(specimenOrderBean.getLabel());

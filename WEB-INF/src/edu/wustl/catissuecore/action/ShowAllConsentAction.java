@@ -97,21 +97,24 @@ public class ShowAllConsentAction extends BaseAction
 						
 	//					final Specimen specimen = OrderingSystemUtil.getListOfSpecimen(specMap,specimenId);
 						final Specimen specimen = specMap.get(specimenId);
-						specimen.setLabel(arr[1]);
-						if(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getConsentsWaived())
+						if(specimen != null)
 						{
-							consentWaivedList.add(specimen.getLabel());
-						}
-						else
-						{
-							String key = createMapKey(specimen,consentMap);
-							if(consentMap.containsKey(key))
+							specimen.setLabel(arr[1]);
+							if(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getConsentsWaived())
 							{
-								updateConsentMap(consentMap,key,specimen.getLabel());
+								consentWaivedList.add(specimen.getLabel());
 							}
 							else
 							{
-								this.showConsents(dForm, specimen, request,consentMap);						
+								String key = createMapKey(specimen,consentMap);
+								if(consentMap.containsKey(key))
+								{
+									updateConsentMap(consentMap,key,specimen.getLabel());
+								}
+								else
+								{
+									this.showConsents(dForm, specimen, request,consentMap);						
+								}
 							}
 						}
 					}

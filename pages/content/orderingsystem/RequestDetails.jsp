@@ -263,8 +263,8 @@ function showAllSpecimen(count)
 		
 		var status = document.getElementById(consentVerificationkey).value;
 	
-		if(status=="<%=Constants.VIEW_CONSENTS%>"||status=="<%=Constants.VERIFIED%>" ||status=="Waived" && statusValue!="disable")
-		{
+		//if(status=="<%=Constants.VIEW_CONSENTS%>"||status=="<%=Constants.VERIFIED%>" ||status=="Waived" && statusValue!="disable")
+		//{
 			//var specimenkey= "value(RequestDetailsBean:"+i+"_specimenId)";
 			//var specimenObj= document.getElementById(specimenkey);
 
@@ -289,11 +289,11 @@ function showAllSpecimen(count)
 				verifiedRows=verifiedRows+(i-iCount)+",";
 			}
 
-		}
-		else
-		{
-			iCount=iCount+1;
-		}
+		//}
+		//else
+		//{
+			//iCount=iCount+1;
+		//}
 	
 	}
 
