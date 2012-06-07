@@ -121,7 +121,7 @@ public class WritableAPIClient extends Catissue_cacoreClient  {
                     System.out.println("Please pass the CollectionProtocolEvent Id as -D CPE=#");
                     System.out.println("Please pass the CollectionProtocolRegistration Id as -D CPR=#");
                     System.out.println("Please pass the Specimen Container Id as -D SC=#");
-                    System.out.println("Please pass the Speciemn Characteristics Id as -D SCHAR=#");
+                    System.out.println("Please pass the Specimen Characteristics Id as -D SCHAR=#");
                 } else {
                     cpeId = (Integer.parseInt(args[3]));
                     cprId = (Integer.parseInt(args[4]));
@@ -131,7 +131,7 @@ public class WritableAPIClient extends Catissue_cacoreClient  {
                 System.out.println("Collection Protocol Event Id: " + cpeId);
                 System.out.println("Collection Protocol Registration Id: " + cprId);
                 System.out.println("Specimen Container Id: " + scId);
-                System.out.println("Speciemn Characteristics Id: " + sCharId);
+                System.out.println("Specimen Characteristics Id: " + sCharId);
 
                 ClientRunAll.createSpecimenCollectionGroupWithSpecimens(cpeId, cprId, scId, sCharId);
             }
