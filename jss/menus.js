@@ -473,9 +473,14 @@ Ext.onReady(function(){
 		},
 		{	text:'Help',
 			menu: helpMenu
+		},'->',		
+		{	
+			text: '<img src="images/help.png"/>',
+			href:'#',
+			handler: getHelpURL,
+			//tooltip:'help'
 		}
 		);
-
 
     // functions to display feedback
 

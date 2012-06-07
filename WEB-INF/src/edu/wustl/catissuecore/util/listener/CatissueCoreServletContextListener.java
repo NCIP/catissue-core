@@ -41,6 +41,7 @@ import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.EmailHandler;
+import edu.wustl.catissuecore.util.HelpXMLPropertyHandler;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -230,6 +231,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		final int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler
 				.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
 		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
+		HelpXMLPropertyHandler.init(CommonServiceLocator.getInstance().getPropDirPath()
+				+ File.separator+"help_links.xml");
 	}
 
 	/**

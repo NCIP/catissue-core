@@ -12,7 +12,7 @@
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ page language="java" isELIgnored="false"%>
-
+<%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ include file="/pages/content/common/EventAction.jsp" %>
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -27,6 +27,20 @@
 .active-column-1 {width:200px}
 </style>
 <%
+String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+%>
+<script>
+function updateHelpURL()
+	{
+		var URL="";
+		if("pageOfListSpecimenEventParametersCPQuery"=="<%=pageOf%>")
+		{
+			URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm")%>";
+		}
+		return URL;
+	}
+</script>
+<%
 String[] columnList1 = Constants.EVENT_PARAMETERS_COLUMNS;
 List columnList = new ArrayList();
 for(int i=0;i<columnList1.length;i++)
@@ -36,7 +50,7 @@ for(int i=0;i<columnList1.length;i++)
 String title = null;
 List dataList = (List) request.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
 String label=(String)request.getAttribute(Constants.SPECIMEN_LABEL);
-String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+//String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 Integer identifierFieldIndex = new Integer(0);
 String specimenIdentifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
 if(specimenIdentifier == null || specimenIdentifier.equals("0"))

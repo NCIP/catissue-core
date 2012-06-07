@@ -15,6 +15,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page language="java" isELIgnored="false"%>
+<%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <script src="jss/script.js" type="text/javascript"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
@@ -23,10 +24,24 @@
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <%
+String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+%>
+<script>
+function updateHelpURL()
+	{
+		var URL="";
+		if("pageOfSpecimenCollectionGroupCPQuery"=="<%=pageOf%>")
+		{
+			URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm")%>";
+		}
+		return URL;
+	}
+</script>
+<%
  	String operation = (String)request.getAttribute(Constants.OPERATION);
 	String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
 	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
-	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+	//String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	String signedConsentDate = "";
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 	String warning_unsaved_data = ApplicationProperties.getValue("unsaved.data.warning");

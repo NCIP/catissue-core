@@ -6,6 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties"%>
 <%@ page import="edu.wustl.common.util.XMLPropertyHandler"%>
+<%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ page import="java.text.MessageFormat"%>
 
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
@@ -25,7 +26,16 @@
 <tiles:importAttribute />
 <head>
 <title><bean:message key="display.app.name"/> <bean:message key="app.version"/></title>
-
+	<%
+	String URLKey=(String)request.getAttribute("helpURLKey");
+	String pageOf=(String)request.getAttribute("pageOf");
+	String view=(String)request.getAttribute("view");
+	String helpURL=null;
+	if(null!=URLKey)
+	{
+		helpURL=HelpXMLPropertyHandler.getValue(URLKey);
+	}
+	%>
 <!--Jitendra -->
 <script language="JavaScript">
 		var timeOut;
@@ -156,12 +166,38 @@
 			var frameUrl = "<%=XMLPropertyHandler.getValue("userguide.link")%>";
 			NewWindow(frameUrl,'name');
 		}
+		
+		function getHelpURL()
+		{
+			var URL;
+			<%if(null!=helpURL) 
+			{
+				if(null==pageOf && null!=view && "cpBasedView".equals(view))
+				{%>
+					URL=document.getElementById('cpFrameNew').contentWindow.updateHelpURL();
+				<%}
+				else if(!"".equals(helpURL))
+				{%>
+					URL="<%=helpURL%>";
+				<%}
+			}%>
+			if(URL!="")
+			{
+				window.open(URL,'_blank');
+			}			
+		}
 	</script>
+	
+
 <!--Jitendra -->
 
 <!-- Mandar 11-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
-<SCRIPT>var imgsrc="images/";</SCRIPT>
+
+<SCRIPT>var imgsrc="images/";
+
+</SCRIPT>
+
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 
@@ -174,25 +210,25 @@
 </head>
 <body onclick="detectApplicationUsageActivity()" onkeydown="detectApplicationUsageActivity()">
 <table width="100%" height="99%" border="0" cellspacing="0" cellpadding="0">
-	<tr height="10%">
+	<tr height="8%" valign="top" >
 		<td>
 		<table width="100%" border="0" cellpadding="0" cellspacing="0"
 			bgcolor="#FFFFFF">
 			<tr>
-				<td width="20%" rowspan="2" style="border-top:4px solid #558dc0;"><tiles:insert
+				<td width="30%" rowspan="2" style="border-top:4px solid #558dc0;"><tiles:insert
 					attribute="applicationheader">
 				</tiles:insert></td>
 				<td valign="top"><tiles:insert attribute="header"></tiles:insert></td>
 			</tr>
 			<tr>
-				<td width="80%" align="right" valign="top"><tiles:insert
+				<td width="70%" align="right" valign="top"><tiles:insert
 					attribute="mainmenu">
 				</tiles:insert></td>
 			</tr>
 		</table>
 		</td>
 	</tr>
-	<tr height="90%">
+	<tr height="88%">
 		<td>
 		<!--
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" height="475">

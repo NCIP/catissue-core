@@ -4,6 +4,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 
 <%@ page import="java.util.List,java.util.Iterator"%>
+<%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ParticipantForm"%>
@@ -30,6 +31,9 @@
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
+<%
+String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+%>
 
 <style>
 .active-column-0 {width:30px}
@@ -58,7 +62,7 @@ tr#hiddenCombo
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
-		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+		//String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		String staticEntityName=null;
 		staticEntityName = AnnotationConstants.ENTITY_NAME_PARTICIPANT_REC_ENTRY;
 		//Falguni:Performance Enhancement.
@@ -191,7 +195,6 @@ tr#hiddenCombo
 			}
 		}
 	</script>
-
 	<%
 			String participantIdentifier="0";
 			List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
@@ -206,7 +209,8 @@ tr#hiddenCombo
 		%>
 
 	<script language="JavaScript">
-		//function to insert a row in the inner block
+	
+	//function to insert a row in the inner block
 		function insRow(subdivtag)
 		{
 			var val = parseInt(document.forms[0].valueCounter.value);
@@ -681,9 +685,28 @@ tr#hiddenCombo
 	 {
 		top.frames["cpAndParticipantView"].refreshCpParticipants(<%=participantId%>);
 	 }
+
 	</script>
 
 	<%}
 	%>
 
 	</html:form>
+<script>
+function updateHelpURL()
+	{
+		var URL="";
+		if("pageOfParticipantCPQuery"=="<%=pageOf%>")
+		{
+			if("viewAnnotations"=="<%=pageView%>")
+			{
+				URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm")%>";
+			}
+			else
+			{
+				URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.ParticipantForm")%>";
+			}
+		}
+		return URL;
+	}
+</script>

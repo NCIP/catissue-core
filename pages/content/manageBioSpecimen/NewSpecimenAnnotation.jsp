@@ -8,6 +8,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 <script src="runtime/lib/grid.js"></script>
@@ -21,8 +22,19 @@
 .active-column-1 {width:200px}
 </style>
 <%
+String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+%>
+<script>
+function updateHelpURL()
+	{
+		var URL="";
+		URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm")%>";
+		return URL;
+	}
+</script>
+<%
 	String title = null;
-	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+	//String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	if(pageOf == null)
 	    pageOf =(String)request.getParameter(Constants.PAGE_OF);
 	    

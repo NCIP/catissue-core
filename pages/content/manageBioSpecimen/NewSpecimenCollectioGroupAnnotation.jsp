@@ -12,11 +12,21 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 
 <%@ page import="java.util.*"%>
-
+<%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
-
+<%
+String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+%>
+<script>
+function updateHelpURL()
+	{
+		var URL="";
+		URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm")%>";
+		return URL;
+	}
+</script>
 
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Bug Id: 4159
@@ -32,7 +42,7 @@
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
-		String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+		//String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		if(pageOf == null)
 			pageOf =(String)request.getParameter(Constants.PAGE_OF);
 		String signedConsentDate = "";

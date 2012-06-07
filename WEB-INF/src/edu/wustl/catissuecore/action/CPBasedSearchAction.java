@@ -57,6 +57,7 @@ public class CPBasedSearchAction extends SecureAction
 		// {
 		// request.removeAttribute("Access");
 		// }
+		request.setAttribute("view","cpBasedView");
 		return mapping.findForward("success");
 
 	}

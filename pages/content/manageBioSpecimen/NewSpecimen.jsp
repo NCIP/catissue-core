@@ -18,7 +18,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
-
+<%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
@@ -26,7 +26,20 @@
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-
+<%
+String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+%>
+<script>
+function updateHelpURL()
+	{
+		var URL="";
+		if("pageOfNewSpecimenCPQuery"=="<%=pageOf%>")
+		{
+			URL="<%=HelpXMLPropertyHandler.getValue("edu.wustl.catissuecore.actionForm.NewSpecimenForm")%>";
+		}
+		return URL;
+	}
+</script>
 <%
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
@@ -35,7 +48,7 @@
 	String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
 	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-	String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+	//String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	boolean isAddNew = false;
 	String signedConsentDate = "";
 	String selectProperty="";
