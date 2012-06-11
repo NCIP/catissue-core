@@ -5393,7 +5393,7 @@ PUBLIC
 		</action>
 		
 		<action path="/DuplicateSpecimenRequirementAction"
-			type="edu.wustl.catissuecore.action.SaveSpecimenRequirementAction"
+			type="edu.wustl.catissuecore.action.DuplicateSpecimenRequirementAction"
 			name="createSpecimenTemplateForm" validate="true"
 			input="/CreateSpecimenTemplate.do?pageOf=error">
 			<forward name="success" path="/CreateSpecimenTemplate.do?operation=edit" />
