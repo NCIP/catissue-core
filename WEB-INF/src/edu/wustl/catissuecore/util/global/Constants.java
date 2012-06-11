@@ -5863,4 +5863,5 @@ public class Constants
 	 public static final String CREATE_DUPLICATE_EVENT = "createDuplicateEvent";
 	 public static final String CREATE_DUPLICATE_SPECIMEN = "createDuplicateSpecimen";
 	 public static final String PARENT_NODE_ID = "parentNodeId";
+	 public static final String EMPI_ENABLED="empi.Enabled";
 }

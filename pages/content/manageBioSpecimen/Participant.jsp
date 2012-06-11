@@ -2,7 +2,6 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
-
 <%@ page import="java.util.List,java.util.Iterator"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
@@ -13,6 +12,8 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.global.CommonServiceLocator"%>
+<%@ page import="edu.wustl.common.util.XMLPropertyHandler"%>
+
 
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
  
@@ -157,7 +158,7 @@ tr#hiddenCombo
 				+ submittedFor + "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1] + "')";
 		
 
-		if (pageView.equals("edit"))
+		if (pageView.equals("edit") && "true".equals(XMLPropertyHandler.getValue(Constants.EMPI_ENABLED)))
 		{
 %>
 		<logic:equal name="participantForm" property="empiIdStatus"

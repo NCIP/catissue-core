@@ -709,28 +709,13 @@
 			<replacefilter token="@@integrationEnabled@@" value="${clinportal.integrationEnabled}" />
 			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />
 			<replacefilter token="@@CdmsKeyStorePath@@" value="" />
-
 			<replacefilter token="@@use.email.commonpackage.config@@" value="${use.email.commonpackage.config}" />
 			<replacefilter token="@@email.sendEmailTo.emailAddress@@" value="${email.sendEmailTo.emailAddress}" />
 			<replacefilter token="@@email.admin.support.emailAddress@@" value="${email.admin.support.emailAddress}" />
 			<replacefilter token="@@email.sendEmailFrom.name@@" value="${email.sendEmailFrom.name}" />
 			<replacefilter token="@@email.exception.subject@@" value="${email.exception.subject}" />
-
-			<replacefilter token="@@CasKeystorePath@@" value="${cas.server.keystore.path}" />
 			
-			<!-- added by Amol .For eMPI integration -->
-				<replacefilter token="@@empiDBURL@@" value="jdbc:db2://${empi.database.host}:${empi.database.port}/${empi.database.name}" />
-				<replacefilter token="@@empiDBUserName@@" value="${empi.database.username}" />
-				<replacefilter token="@@empiDBUserPassword@@" value="${empi.database.password}" />
-				<replacefilter token="@@empiDBDriverName@@" value="${db2.driver.string}" />
-				<replacefilter token="@@empiDBSchema@@" value="${empi.database.schema}" />
-				
-				<replacefilter token="@@WMQServerName@@" value="${wmq.server.name}" />
-				<replacefilter token="@@WMQMGRName@@" value="${wmq.mgr.name}" />
-				<replacefilter token="@@WMQChannel@@" value="${wmq.channel}" />
-				<replacefilter token="@@WMQPort@@" value="${wmq.port}" />
-				<replacefilter token="@@HL7ListenerAdminUser@@" value="${hl7.listener.admin.user}" />
-			<!-- END -->
+			<replacefilter token="@@CasKeystorePath@@" value="${cas.server.keystore.path}" />
 			
 			<replacefilter token="@@CiderWMQEnabled@@" value="${cider.integration.enabled}" />
 			<replacefilter token="@@CiderWMQServerName@@" value="${cider.wmq.server.name}" />
@@ -739,12 +724,30 @@
 			<replacefilter token="@@CiderWMQPort@@" value="${cider.wmq.port}" />
 			<!--<replacefilter token="@@CiderInBoundQueue@@" value="${cider.inbound.queue}" />-->
 			<replacefilter token="@@CiderOutBoundQueue@@" value="${cider.outbound.queue}" />
-				
-			<replacefilter token="@@InBoundQueue@@" value="${empi.inBoundQueue}" />
-			<replacefilter token="@@OutBoundQueue@@" value="${empi.outBoundQueue}" /> 
-			<replacefilter token="@@MergeMessageQueue@@" value="${empi.mergeMessageQueue}" /> 
-			
 		</replace>
+		<!-- Add values to properties if EMPI feature is enabled-->
+		<if>
+			<equals arg1="true" arg2="${empi.enabled}" />
+				<then>
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@InBoundQueue@@" value="${empi.inBoundQueue}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@OutBoundQueue@@" value="${empi.outBoundQueue}" /> 
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@MergeMessageQueue@@" value="${empi.mergeMessageQueue}" /> 
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiEnabled@@" value="${empi.enabled}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiDBURL@@" value="jdbc:db2://${empi.database.host}:${empi.database.port}/${empi.database.name}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiDBUserName@@" value="${empi.database.username}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiDBUserPassword@@" value="${empi.database.password}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiDBDriverName@@" value="${db2.driver.string}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiDBSchema@@" value="${empi.database.schema}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@WMQServerName@@" value="${wmq.server.name}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@WMQMGRName@@" value="${wmq.mgr.name}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@WMQChannel@@" value="${wmq.channel}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@WMQPort@@" value="${wmq.port}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@HL7ListenerAdminUser@@" value="${hl7.listener.admin.user}" />
+				</then>
+				<else>
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiEnabled@@" value="false" />
+				</else>
+		</if>
 		
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCdmsIntegration.properties">
 			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />

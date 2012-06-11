@@ -111,8 +111,14 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			logApplnInfo();
 			DefaultValueManager.validateAndInitDefaultValueMap();
 			BulkOperationUtility.changeBulkOperationStatusToFailed();
-			BulkEMPIOperationsUtility.changeBulkOperationStatusToFailed();
 			initCiderIntegration();
+			QueryCoreServletContextListenerUtil.contextInitialized(sce, "java:/query");
+			if(XMLPropertyHandler.getValue(Constants.EMPI_ENABLED).equalsIgnoreCase("true"))
+			{
+				BulkEMPIOperationsUtility.changeBulkOperationStatusToFailed();
+				// eMPI integration initialization
+				initeMPI();
+			}
 			logger.info("Initialization complete");
 		}
 		catch (final Exception e)
@@ -121,10 +127,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 					+e.getMessage(),e);
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 		}
-		QueryCoreServletContextListenerUtil.contextInitialized(sce, "java:/query");
-
-		// eMPI integration initialization
-		initeMPI();
 	}
 
 	private void initCiderIntegration()

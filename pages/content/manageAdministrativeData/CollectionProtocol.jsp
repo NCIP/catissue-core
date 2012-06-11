@@ -1,3 +1,4 @@
+<%@page import="edu.wustl.common.util.XMLPropertyHandler"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
@@ -545,6 +546,7 @@ div#d999 {
 						</td>
 					</tr>
 				</logic:equal>
+				<%if("true".equals(XMLPropertyHandler.getValue(Constants.EMPI_ENABLED))){ %>
 				<tr>
 					<td width="1%" align="center" class="black_ar">&nbsp</td>
 					<td width="16%" align="left" class="black_ar"><label
@@ -558,6 +560,7 @@ div#d999 {
 						for="consentWaived">&nbsp;<bean:message
 						key="consent.consentwaivedno" /></label></td>
 				</tr>
+				<%}%>
 				
 				<tr>
 
