@@ -170,17 +170,17 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 										.getValue("specimenArrayAliquots.label")));
 					}
 				}
-				else if (key.indexOf("_positionDimension") != -1)
+				/*else if (key.indexOf("_positionDimension") != -1)
 				{
 					final String value = (String) this.specimenArrayAliquotMap.get(key);
-					if (value != null && !value.trim().equals("") && !validator.isDouble(value))
+					if (value != null && !value.trim().equals("") s&& !validator.isDouble(value))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties
 										.getValue("specimen.positionInStorageContainer")));
 						break;
 					}
-				}
+				}*/
 			}
 		}
 
