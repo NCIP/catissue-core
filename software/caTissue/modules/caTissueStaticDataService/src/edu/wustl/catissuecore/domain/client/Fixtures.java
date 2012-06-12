@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.domain.client;
 import edu.wustl.catissuecore.domain.deintegration.ws.*;
 import edu.wustl.catissuecore.domain.ws.*;
 import edu.wustl.catissuecore.domain.util.UniqueKeyGenerator;
+import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
 import java.rmi.RemoteException;
 import java.util.Calendar;
@@ -148,7 +149,7 @@ public class Fixtures {
         return od;
     }
 
-    public static OrderDetails createOrderWithDerivedSpecimenOrderItem() {
+    public static OrderDetails createOrderWithDerivedSpecimenOrderItem(Catissue_cacoreClient client) throws QueryProcessingExceptionType, RemoteException {
 
         Specimen s = new Specimen();
         s.setIdentifier(3941);
@@ -171,8 +172,13 @@ public class Fixtures {
         item0.setDescription("Desc OrderItem 0");
         item0.setRequestedQuantity(0.1);
         item0.setNewSpecimenArrayOrderItem(new SpecimenOrderItemNewSpecimenArrayOrderItem());
-        item0.getNewSpecimenArrayOrderItem().setNewSpecimenArrayOrderItem(new NewSpecimenArrayOrderItem());
-        item0.getNewSpecimenArrayOrderItem().getNewSpecimenArrayOrderItem().setName("Specimen Array OI Name");
+        final NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = new NewSpecimenArrayOrderItem();
+        newSpecimenArrayOrderItem.setName("Specimen Array OI Name");
+        if (client != null) {
+            NewSpecimenArrayOrderItem saoi = (NewSpecimenArrayOrderItem) client.insert(newSpecimenArrayOrderItem);
+            newSpecimenArrayOrderItem.setIdentifier(saoi.getIdentifier());
+        }
+        item0.getNewSpecimenArrayOrderItem().setNewSpecimenArrayOrderItem(newSpecimenArrayOrderItem);
         item0.setParentSpecimen(new DerivedSpecimenOrderItemParentSpecimen());
         item0.getParentSpecimen().setSpecimen(s);
         items[0] = item0;
@@ -196,21 +202,21 @@ public class Fixtures {
         items[0] = item0;
         //items[0].setIdentifier(1);
         item0.setStatus("New");
-        item0.setDescription("Desc OrderItem 0");
+        item0.setDescription(UUID.randomUUID().toString()+"Desc OrderItem 0");
         item0.setRequestedQuantity(0.1);
 
         SpecimenOrderItem item1 = new SpecimenOrderItem();
         items[1] = item1;
         //items[1].setIdentifier(2);
         item1.setStatus("New");
-        item1.setDescription("Desc SpecimenOrderItem 1");
+        item1.setDescription(UUID.randomUUID().toString()+"Desc SpecimenOrderItem 1");
         item1.setRequestedQuantity(0.2);
 
         SpecimenOrderItem item2 = new SpecimenOrderItem();
         items[2] = item2;
         // items[2].setIdentifier(3);
         item2.setStatus("New");
-        item2.setDescription("Desc SpecimenOrderItem 2");
+        item2.setDescription(UUID.randomUUID().toString()+"Desc SpecimenOrderItem 2");
         item2.setRequestedQuantity(0.5);
 
         return od;
@@ -309,7 +315,7 @@ public class Fixtures {
         cpe.setClinicalStatus("Not Specified");
         cpe.setActivityStatus("Active");
         cpe.setStudyCalendarEventPoint(5.0);
-        cpe.setCollectionPointLabel("CPE - point label");
+        cpe.setCollectionPointLabel("CP LBL2");
         cpe.setLabelFormat("%CP_DEFAULT%");
 
         cp.setCollectionProtocolEventCollection(new CollectionProtocolCollectionProtocolEventCollection());

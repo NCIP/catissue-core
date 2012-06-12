@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 import org.cagrid.cql2.AttributeValue;
 import org.cagrid.cql2.BinaryPredicate;
@@ -27,6 +28,7 @@ import edu.wustl.catissuecore.domain.ws.OrderDetailsDistributionProtocol;
 import edu.wustl.catissuecore.domain.ws.OrderDetailsOrderItemCollection;
 import edu.wustl.catissuecore.domain.ws.Specimen;
 import edu.wustl.catissuecore.domain.ws.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.ws.StorageContainer;
 import edu.wustl.catissuecore.domain.ws.TissueSpecimen;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
@@ -37,7 +39,7 @@ public class CreateOrder extends TestBase {
     public static OrderDetails createOrder(DistributionProtocol dp) {
         OrderDetails od = new OrderDetails();
         od.setComment("Comments: Grid client test.");
-        od.setName("Order name XYZ");
+        od.setName("Order name "+UUID.randomUUID().toString());
         od.setStatus("New");
         od.setRequestedDate(Calendar.getInstance());
         
@@ -53,10 +55,10 @@ public class CreateOrder extends TestBase {
      * Create an order using a derived specimen order item.
      * @throws Exception
      */
-//    public void testCreateOrderWithDerivedSpecimenOrderItem() throws Exception {
-//        OrderDetails od = Fixtures.createOrderWithDerivedSpecimenOrderItem();
-//        od = (OrderDetails)client.insert(od);
-//    }
+    public void testCreateOrderWithDerivedSpecimenOrderItem() throws Exception {
+        OrderDetails od = Fixtures.createOrderWithDerivedSpecimenOrderItem(client);
+        od = (OrderDetails)client.insert(od);
+    }
     
     /** 
      * Create an order using a specimen order item.
@@ -154,12 +156,14 @@ public class CreateOrder extends TestBase {
     public void testCreateOrder() throws Exception {
         CollectionProtocolRegistration reg = createParticipantAndCPR();
         SpecimenCollectionGroup scg = createSpecimenCollectionGroup(reg);
-
+        StorageContainer container = createStorageContainer(reg, scg);
+        container.setIdentifier(((StorageContainer)client.insert(container)).getIdentifier());
+        
         List<Specimen> specimens = new ArrayList<Specimen>();
-        specimens.add(insertSpecimen(scg,MolecularSpecimen.class,"Molecular","DNA"));
-        specimens.add(insertSpecimen(scg,FluidSpecimen.class,"Fluid","Whole Blood"));
-        specimens.add(insertSpecimen(scg,CellSpecimen.class,"Cell","Cryopreserved Cells"));
-        specimens.add(insertSpecimen(scg,TissueSpecimen.class,"Tissue","Frozen Tissue"));
+        specimens.add(insertSpecimen(scg,container,MolecularSpecimen.class,"Molecular","DNA"));
+        specimens.add(insertSpecimen(scg,container,FluidSpecimen.class,"Fluid","Whole Blood"));
+        specimens.add(insertSpecimen(scg,container,CellSpecimen.class,"Cell","Cryopreserved Cells"));
+        specimens.add(insertSpecimen(scg,container,TissueSpecimen.class,"Tissue","Frozen Tissue"));
 
         OrderDetails od = order(specimens);
         

@@ -2,7 +2,9 @@ package edu.wustl.catissuecore.cagrid.test;
 import edu.wustl.catissuecore.domain.ws.OrderDetails;
 import edu.wustl.catissuecore.domain.client.Fixtures;
 import edu.wustl.catissuecore.domain.service.WAPIUtility;
+import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
+import java.rmi.RemoteException;
 import java.util.HashSet;
 
 /**
@@ -31,8 +33,8 @@ public class OrderDetailsConversionTest extends BaseConversionTest {
         edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem oi = (edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem)array[0];
     }
 
-    public void testWsToDomainOrderWithDerivedSOI() {
-        OrderDetails ws = Fixtures.createOrderWithDerivedSpecimenOrderItem();
+    public void testWsToDomainOrderWithDerivedSOI() throws QueryProcessingExceptionType, RemoteException {
+        OrderDetails ws = Fixtures.createOrderWithDerivedSpecimenOrderItem(null);
         edu.wustl.catissuecore.domain.OrderDetails d = (edu.wustl.catissuecore.domain.OrderDetails)WAPIUtility.convertWsToDomain(ws);
         assertEquals("Comments: WS Java client.", d.getComment());
         assertEquals(1, d.getOrderItemCollection().size());
