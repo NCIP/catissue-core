@@ -108,8 +108,10 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				String barcode = (String) aliquotMap.get(barcodeKey);
 
 				final String containerId = (String) aliquotMap.get(containerIdKey);
-				final String posDim1 =  (String)aliquotMap.get(posDim1Key);
-				final String posDim2 =  (String)aliquotMap.get(posDim2Key);
+				final String posDim1String=(String)aliquotMap.get(posDim1Key);
+				final String posDim2String=(String)aliquotMap.get(posDim2Key);
+				final String posDim1 =  StorageContainerUtil.convertPositionsToIntegerUsingContId(containerId, 1, posDim1String).toString();
+				final String posDim2 =  StorageContainerUtil.convertPositionsToIntegerUsingContId(containerId, 2, posDim2String).toString();
 				// Create an object of Specimen Subclass
 				InstanceFactory<SpecimenArray> instFact = DomainInstanceFactory.getInstanceFactory(SpecimenArray.class);
 				final SpecimenArray aliquotSpecimenArray = instFact.createObject();//new SpecimenArray();
@@ -214,6 +216,8 @@ public class SpecimenArrayAliquotsBizLogic extends CatissueDefaultBizLogic
 				{
 					cntPos.setPositionDimensionOne(new Integer(posDim1));
 					cntPos.setPositionDimensionTwo(new Integer(posDim2));
+					cntPos.setPositionDimensionOneString(posDim1String);
+					cntPos.setPositionDimensionTwoString(posDim2String);
 					cntPos.setOccupiedContainer(aliquotSpecimenArray);
 					cntPos.setParentContainer(storageContainerObj);
 				}

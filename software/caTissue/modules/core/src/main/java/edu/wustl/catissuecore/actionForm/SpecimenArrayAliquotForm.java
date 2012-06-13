@@ -170,7 +170,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 										.getValue("specimenArrayAliquots.label")));
 					}
 				}
-				else if (key.indexOf("_positionDimension") != -1)
+				/*else if (key.indexOf("_positionDimension") != -1)
 				{
 					final String value = (String) this.specimenArrayAliquotMap.get(key);
 					if (value != null && !value.trim().equals("") && !validator.isDouble(value))
@@ -180,7 +180,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 										.getValue("specimen.positionInStorageContainer")));
 						break;
 					}
-				}
+				}*/
 			}
 		}
 

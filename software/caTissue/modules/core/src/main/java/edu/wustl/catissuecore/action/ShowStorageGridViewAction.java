@@ -264,6 +264,37 @@ public class ShowStorageGridViewAction extends BaseAction
 				}
 			}
 
+			// Showing Specimen Arrays in the Container map.
+			sourceObjectName = SpecimenArray.class.getName();
+
+			selectColumnName[1] = "locatedAtPosition.positionDimensionOne";
+			selectColumnName[2] = "locatedAtPosition.positionDimensionTwo";
+			selectColumnName[3] = "name";
+			whereColumnName[0] = "locatedAtPosition.parentContainer.id";
+			list = specimenBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
+					whereColumnCondition, whereColumnValue, joinCondition);
+
+			if (list != null)
+			{
+				final Iterator iterator = list.iterator();
+				while (iterator.hasNext())
+				{
+					final Object[] obj = (Object[]) iterator.next();
+					final Long specimenID = (Long) obj[0];
+					final Integer positionDimensionOne = (Integer) obj[1];
+					final Integer positionDimensionTwo = (Integer) obj[2];
+					final String specimenArrayLable = obj[3].toString();
+
+					fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
+					childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo
+					                                                   .intValue()] = specimenID.intValue();
+					childContainerType[positionDimensionOne.intValue()][positionDimensionTwo
+					                                                    .intValue()] = Constants.SPECIMEN_ARRAY_LABEL_CONTAINER_MAP
+					                                                    + specimenArrayLable;
+					contentOfContainer = Constants.ALIAS_SPECIMEN_ARRAY;
+
+				}
+			}
 
 
 			StringBuffer jsonMidleString =  new StringBuffer();

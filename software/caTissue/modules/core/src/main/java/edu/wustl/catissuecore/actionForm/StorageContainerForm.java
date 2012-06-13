@@ -327,15 +327,15 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 			{
 				this.positionInParentContainer = parentContainer.getStorageType().getName() + " : "
 						+ parentContainer.getId() + " Pos("
-						+ container.getLocatedAtPosition().getPositionDimensionOne() + ","
-						+ container.getLocatedAtPosition().getPositionDimensionTwo() + ")";
+						+ container.getLocatedAtPosition().getPositionDimensionOneString() + ","
+						+ container.getLocatedAtPosition().getPositionDimensionTwoString() + ")";
 
 				//Sri: Fix for bug #
 
-				this.positionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToString(container.getName(),1,container.getLocatedAtPosition()
-						.getPositionDimensionOne().intValue());
-				this.positionDimensionTwo = StorageContainerUtil.convertSpecimenPositionsToString(container.getName(),2,container.getLocatedAtPosition()
-						.getPositionDimensionTwo().intValue());
+				this.positionDimensionOne = container.getLocatedAtPosition().getPositionDimensionOneString();/*StorageContainerUtil.convertSpecimenPositionsToString(container.getName(),1,container.getLocatedAtPosition()
+										.getPositionDimensionOne().intValue());*/
+				this.positionDimensionTwo = container.getLocatedAtPosition().getPositionDimensionTwoString();/*StorageContainerUtil.convertSpecimenPositionsToString(container.getName(),2,container.getLocatedAtPosition()
+									.getPositionDimensionTwo().intValue());*/
 			}
 
 			this.siteName = parentContainer.getSite().getName();
@@ -1284,7 +1284,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 						final String radioButonKey = "radio_" + i;
 						final String containerIdKey = containerPrefixKey + i + "_parentContainerId";
-						//String containerNameKey = containerPrefixKey + i + "_StorageContainer_name";
+						String containerNameKey = containerPrefixKey + i + "_StorageContainer_name";
 						final String posDim1Key = containerPrefixKey + i + "_positionDimensionOne";
 						final String posDim2Key = containerPrefixKey + i + "_positionDimensionTwo";
 
@@ -1308,11 +1308,14 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 						}
 						else
 						{
-							final String positionDimensionOne = (String) this
+							String positionDimensionOne = (String) this
 									.getSimilarContainerMapValue(posDim1Key + "_fromMap");
-							final String positionDimensionTwo = (String) this
+							String positionDimensionTwo = (String) this
 									.getSimilarContainerMapValue(posDim2Key + "_fromMap");
-
+							String containerNameFromMap= (String) this.getSimilarContainerMapValue(containerNameKey + "_fromMap");
+							positionDimensionOne=StorageContainerUtil.convertSpecimenPositionsToInteger(containerNameFromMap, 1, positionDimensionOne).toString();
+							positionDimensionTwo=StorageContainerUtil.convertSpecimenPositionsToInteger(containerNameFromMap, 2, positionDimensionTwo).toString();
+													
 							if (positionDimensionOne != null
 									&& !positionDimensionOne.trim().equals("")
 									&& !validator.isDouble(positionDimensionOne)

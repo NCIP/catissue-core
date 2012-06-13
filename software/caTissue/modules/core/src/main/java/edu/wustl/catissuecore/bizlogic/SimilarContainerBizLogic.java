@@ -137,10 +137,13 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 					StorageContainer parentContainer = null;
 					final String parentId = (String) simMap
 					.get(simContPrefix + "parentContainerId");
-					final String posOne = (String) simMap.get(simContPrefix
-							+ "positionDimensionOne");
-					final String posTwo = (String) simMap.get(simContPrefix
-							+ "positionDimensionTwo");
+					String positionDimensionOneString = (String) simMap.get(simContPrefix
+ 							+ "positionDimensionOne");
+					String positionDimensionTwoString = (String) simMap.get(simContPrefix
+ 							+ "positionDimensionTwo");
+					String posOne,posTwo;
+					posOne=StorageContainerUtil.convertPositionsToIntegerUsingContId(parentId, 1, positionDimensionOneString).toString();
+					posTwo=StorageContainerUtil.convertPositionsToIntegerUsingContId(parentId, 2, positionDimensionTwoString).toString();
 
 					final Object object = dao.retrieveById(StorageContainer.class.getName(),
 							new Long(parentId));
@@ -167,6 +170,8 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 
 					cntPos.setPositionDimensionOne(new Integer(posOne));
 					cntPos.setPositionDimensionTwo(new Integer(posTwo));
+					cntPos.setPositionDimensionOneString(positionDimensionOneString);
+					cntPos.setPositionDimensionTwoString(positionDimensionTwoString);
 					cntPos.setOccupiedContainer(cont);
 					cntPos.setParentContainer(parentContainer);
 					cont.setLocatedAtPosition(cntPos);
@@ -288,8 +293,10 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic
 
 					final ContainerPosition cntPos = cont.getLocatedAtPosition();
 
-					cntPos.setPositionDimensionOne(new Integer(posOne));
-					cntPos.setPositionDimensionTwo(new Integer(posTwo));
+					cntPos.setPositionDimensionOne(StorageContainerUtil.convertPositionsToIntegerUsingContId(parentId, 1, posOne));
+					cntPos.setPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(parentId, 2, posTwo));
+					cntPos.setPositionDimensionOneString(posOne);
+					cntPos.setPositionDimensionTwoString(posTwo);
 					cntPos.setOccupiedContainer(cont);
 					cntPos.setParentContainer(parentContainer);
 

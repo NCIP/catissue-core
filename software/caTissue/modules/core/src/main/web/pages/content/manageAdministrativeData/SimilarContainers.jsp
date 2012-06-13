@@ -424,6 +424,8 @@
   			<html:hidden property="submittedFor" value=""/>
 			<html:hidden property="forwardTo" value=""/>
 			<html:hidden property="nextForwardTo" />
+			<html:hidden property="oneDimensionLabellingScheme"/>
+			<html:hidden property="twoDimensionLabellingScheme"/>
 
 
 			<html:hidden property="similarContainerMapValue(checkedButton)" value="<%=checkButtonStatus%>"/>

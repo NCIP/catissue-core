@@ -298,7 +298,16 @@ public class ProtocolEventDetailsForm extends AbstractActionForm
 
 			if(!Validator.isEmpty(this.studyCalendarEventPoint))
 			{
-				final double dblValue = Double.parseDouble(this.studyCalendarEventPoint.toString());
+				double dblValue=0L;
+				try
+				{
+					dblValue = Double.parseDouble(this.studyCalendarEventPoint.toString());
+				}
+				catch(NumberFormatException e)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+							ApplicationProperties.getValue("collectionprotocol.studycalendartitle")));
+				}
 				if (Double.isNaN(dblValue))
 				{
 					

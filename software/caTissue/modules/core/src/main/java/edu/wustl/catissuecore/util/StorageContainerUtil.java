@@ -638,7 +638,7 @@ public final class StorageContainerUtil
 				&& similarContainerMap.get(radioButonKey).equals("2"))
 		{
 			containerName = (String) similarContainerMap.get(containerNameKey + "_fromMap");
-			if(containerName.trim().equals( "" ))
+			if(null!=containerName && "".equals(containerName.trim()))
 			{
 				final String message = ApplicationProperties.getValue("specimen.storageContainer");
 				throw AppUtility.getApplicationException(null, "errors.invalid",

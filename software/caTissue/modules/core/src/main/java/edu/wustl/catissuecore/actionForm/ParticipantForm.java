@@ -251,7 +251,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 		this.setActivityStatus(participant.getActivityStatus());
 		this.ethnicity = participant.getEthnicity();
 		this.deathDate = CommonUtilities.parseDateToString(participant.getDeathDate(),
-				CommonServiceLocator.getInstance().getDatePattern());;
+				CommonServiceLocator.getInstance().getDatePattern());
 		this.vitalStatus = participant.getVitalStatus();
 
 		//Populating the map with the participant medical identifiers data

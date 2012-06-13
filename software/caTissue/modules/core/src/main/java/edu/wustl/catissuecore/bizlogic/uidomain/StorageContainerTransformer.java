@@ -71,7 +71,7 @@ public class StorageContainerTransformer implements UIDomainTransformer<StorageC
                 	domainObject.setLocatedAtPosition(instFact.createObject());
                 	//domainObject.setLocatedAtPosition(new ContainerPosition());
                 }
-                if ("Auto".equals(uiRepOfDomain.getParentContainerSelected())) {
+                if ("Auto".equals(uiRepOfDomain.getParentContainerSelected()) && Integer.valueOf(uiRepOfDomain.getNoOfContainers()).equals(1)) {
 
                     domainObject.getLocatedAtPosition().setParentContainer(scInstFact.createObject());
                     domainObject.getLocatedAtPosition().getParentContainer().setId(
@@ -84,7 +84,8 @@ public class StorageContainerTransformer implements UIDomainTransformer<StorageC
                     domainObject.getLocatedAtPosition().setPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(String.valueOf(uiRepOfDomain.getParentContainerId()),2,uiRepOfDomain.getPositionDimensionTwo().trim()));
                             //new Integer(uiRepOfDomain.getPositionDimensionTwo()));
                     domainObject.getLocatedAtPosition().setOccupiedContainer(domainObject);
-                } else {
+                } else if("Manual".equals(uiRepOfDomain.getParentContainerSelected()) && Integer.valueOf(uiRepOfDomain.getNoOfContainers()).equals(1))
+                {
                     domainObject.getLocatedAtPosition().setParentContainer(scInstFact.createObject());
                     if (uiRepOfDomain.getContainerId() != null && !uiRepOfDomain.getContainerId().trim().equals("")) {
                         domainObject.getLocatedAtPosition().getParentContainer().setId(

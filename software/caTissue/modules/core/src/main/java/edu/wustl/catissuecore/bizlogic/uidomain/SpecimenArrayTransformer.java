@@ -13,6 +13,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.factory.DomainInstanceFactory;
 import edu.wustl.catissuecore.factory.InstanceFactory;
 import edu.wustl.catissuecore.util.SearchUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.InputUIRepOfDomain;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -67,13 +68,13 @@ public class SpecimenArrayTransformer extends AbstractSpecimenArrayTransformer<S
         if (uiRepOfDomain.getStContSelection() == 1) {
             domainObject.getLocatedAtPosition().getParentContainer().setId(
                     Long.valueOf(uiRepOfDomain.getStorageContainer()));
-
-            domainObject.getLocatedAtPosition().setPositionDimensionOne(
-                    Integer.valueOf(uiRepOfDomain.getPositionDimensionOne()));
-            domainObject.getLocatedAtPosition().setPositionDimensionTwo(
-                    Integer.valueOf(uiRepOfDomain.getPositionDimensionTwo()));
+            
+            domainObject.getLocatedAtPosition().setPositionDimensionOneString(uiRepOfDomain.getPositionDimensionOne());
+            domainObject.getLocatedAtPosition().setPositionDimensionOneString(uiRepOfDomain.getPositionDimensionTwo());
+            domainObject.getLocatedAtPosition().setPositionDimensionOne(StorageContainerUtil.convertPositionsToIntegerUsingContId(uiRepOfDomain.getStorageContainer(), 1, uiRepOfDomain.getPositionDimensionOne()));
+            domainObject.getLocatedAtPosition().setPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(uiRepOfDomain.getStorageContainer(), 2, uiRepOfDomain.getPositionDimensionTwo()));
             domainObject.getLocatedAtPosition().setOccupiedContainer(domainObject);
-
+            
         } else {
 /*        	String containerId = uiRepOfDomain.getContainerId();
         	if("".equals(containerId) || containerId == null)
@@ -84,8 +85,10 @@ public class SpecimenArrayTransformer extends AbstractSpecimenArrayTransformer<S
             domainObject.getLocatedAtPosition().getParentContainer().setName(uiRepOfDomain.getSelectedContainerName());
             if (uiRepOfDomain.getPos1() != null && !uiRepOfDomain.getPos1().trim().equals(Constants.DOUBLE_QUOTES)
                     && uiRepOfDomain.getPos2() != null && !uiRepOfDomain.getPos2().trim().equals("")) {
-                domainObject.getLocatedAtPosition().setPositionDimensionOne(Integer.valueOf(uiRepOfDomain.getPos1()));
-                domainObject.getLocatedAtPosition().setPositionDimensionTwo(Integer.valueOf(uiRepOfDomain.getPos2()));
+            	 domainObject.getLocatedAtPosition().setPositionDimensionOneString(uiRepOfDomain.getPositionDimensionOne());
+                 domainObject.getLocatedAtPosition().setPositionDimensionOneString(uiRepOfDomain.getPositionDimensionTwo());
+                 domainObject.getLocatedAtPosition().setPositionDimensionOne(StorageContainerUtil.convertPositionsToIntegerUsingContId(uiRepOfDomain.getStorageContainer(), 1, uiRepOfDomain.getPos1()));
+                 domainObject.getLocatedAtPosition().setPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(uiRepOfDomain.getStorageContainer(), 2, uiRepOfDomain.getPos2()));
                 domainObject.getLocatedAtPosition().setOccupiedContainer(domainObject);
             }
         }
