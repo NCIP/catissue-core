@@ -89,7 +89,7 @@ public class CreateOrder extends TestBase {
         // Insert an order
         OrderDetails od = new OrderDetails();
         od.setComment("Comments: Grid client test.");
-        od.setName("Order name XYZ");
+        od.setName("Order name "+UUID.randomUUID().toString());
         od.setStatus("New");
         od.setRequestedDate(Calendar.getInstance());
         
@@ -157,7 +157,6 @@ public class CreateOrder extends TestBase {
         CollectionProtocolRegistration reg = createParticipantAndCPR();
         SpecimenCollectionGroup scg = createSpecimenCollectionGroup(reg);
         StorageContainer container = createStorageContainer(reg, scg);
-        container.setIdentifier(((StorageContainer)client.insert(container)).getIdentifier());
         
         List<Specimen> specimens = new ArrayList<Specimen>();
         specimens.add(insertSpecimen(scg,container,MolecularSpecimen.class,"Molecular","DNA"));

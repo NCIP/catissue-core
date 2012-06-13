@@ -12,6 +12,7 @@ import org.cagrid.cql2.CQLQuery;
 import org.cagrid.cql2.CQLTargetObject;
 import org.cagrid.cql2.results.CQLQueryResults;
 import org.jdom.Element;
+import org.springframework.util.Assert;
 
 import edu.wustl.catissuecore.domain.client.ClientRunAll;
 import edu.wustl.catissuecore.domain.client.Fixtures;
@@ -37,7 +38,7 @@ public class CreateStorageContainer extends TestBase {
      * @throws Exception
      */
     public void testCreateStorageContainer() throws Exception {
-        StorageContainer container = makeContainer(3, 1);
+        Assert.notNull(makeContainer(3, 1));
     }
     
 

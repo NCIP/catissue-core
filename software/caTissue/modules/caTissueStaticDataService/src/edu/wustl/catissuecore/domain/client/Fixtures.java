@@ -152,7 +152,7 @@ public class Fixtures {
     public static OrderDetails createOrderWithDerivedSpecimenOrderItem(Catissue_cacoreClient client) throws QueryProcessingExceptionType, RemoteException {
 
         Specimen s = new Specimen();
-        s.setIdentifier(3941);
+        s.setIdentifier(1);
 
         OrderDetails od = createOrderDetails();
         od.setName(UUID.randomUUID().toString()+" Fixture Test.");
@@ -172,8 +172,9 @@ public class Fixtures {
         item0.setDescription("Desc OrderItem 0");
         item0.setRequestedQuantity(0.1);
         item0.setNewSpecimenArrayOrderItem(new SpecimenOrderItemNewSpecimenArrayOrderItem());
+
         final NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = new NewSpecimenArrayOrderItem();
-        newSpecimenArrayOrderItem.setName("Specimen Array OI Name");
+        newSpecimenArrayOrderItem.setName("Specimen Array OI Name "+UUID.randomUUID().toString());
         if (client != null) {
             NewSpecimenArrayOrderItem saoi = (NewSpecimenArrayOrderItem) client.insert(newSpecimenArrayOrderItem);
             newSpecimenArrayOrderItem.setIdentifier(saoi.getIdentifier());
@@ -315,7 +316,7 @@ public class Fixtures {
         cpe.setClinicalStatus("Not Specified");
         cpe.setActivityStatus("Active");
         cpe.setStudyCalendarEventPoint(5.0);
-        cpe.setCollectionPointLabel("CP LBL2");
+        cpe.setCollectionPointLabel("CP LBL2 "+UUID.randomUUID().toString());
         cpe.setLabelFormat("%CP_DEFAULT%");
 
         cp.setCollectionProtocolEventCollection(new CollectionProtocolCollectionProtocolEventCollection());
