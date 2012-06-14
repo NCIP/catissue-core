@@ -112,7 +112,22 @@ public class CreateOrder extends TestBase {
         return q;
     }
 
-    /** 
+    protected CQLQuery createContainerQuery(StorageContainer sc) {
+        CQLQuery q = new CQLQuery();
+        CQLTargetObject targetObject = new CQLTargetObject();
+        targetObject.setClassName("edu.wustl.catissuecore.domain.StorageContainer");
+        CQLAttribute att = new CQLAttribute();
+        att.setBinaryPredicate(BinaryPredicate.EQUAL_TO);
+        att.setName("id");
+        AttributeValue val = new AttributeValue();
+        val.setLongValue(sc.getIdentifier());
+        att.setAttributeValue(val);
+        targetObject.setCQLAttribute(att);
+        q.setCQLTargetObject(targetObject);
+        return q;
+    }
+
+    /**
       * Create a simple distribution protocol.
       */
     public void testCreateDistributionProtocol() throws Exception {
@@ -171,9 +186,22 @@ public class CreateOrder extends TestBase {
             storageContainer.setSite(scSite );
 
             storageContainer.setIdentifier(((StorageContainer)client.insert(storageContainer)).getIdentifier());
-            storageContainer.setName("In Transit_Shipment Container_"+storageContainer.getIdentifier());
-            System.out.println("---> Storage Container inserted:" + storageContainer.getIdentifier());
+            storageContainer.setName("In Transit_Shipment Container_" + (storageContainer.getIdentifier() -1 ));
+            System.out.println("--> Storage Container inserted:" + storageContainer.getIdentifier());
 
+            // retrieving the Container from caTissue to get its name
+            CQLQuery q = createContainerQuery(storageContainer);
+            CQLQueryResults results = client.executeQuery(q);
+            assertTrue(results.getObjectResult().length == 1);
+            Element e = null;
+            try {
+                e = this.getResultsElement(results);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                fail("SOMETHING BAD HAPPENED.");
+            }
+            Element containerXML = (Element)e.getChildren().get(0);
+            storageContainer.setName(containerXML.getAttribute("name").getValue());
             return storageContainer;
         }
     /**
@@ -197,8 +225,7 @@ public class CreateOrder extends TestBase {
         CQLQueryResults results = client.executeQuery(q);
         assertTrue(results.getObjectResult().length == 1);
         Element e = this.getResultsElement(results);
-        
-        
+
     }
 
 
