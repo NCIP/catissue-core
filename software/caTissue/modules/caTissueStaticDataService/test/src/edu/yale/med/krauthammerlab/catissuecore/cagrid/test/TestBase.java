@@ -98,9 +98,8 @@ public abstract class TestBase extends TestCase {
         return container;
     }
 
-    protected Specimen insertSpecimen(SpecimenCollectionGroup scg, Class type,
-            String specimenClass, String specimenType) throws RemoteException,
-            InstantiationException, IllegalAccessException {
+    protected Specimen insertSpecimen(SpecimenCollectionGroup scg, Class type, String specimenClass, String specimenType)
+            throws RemoteException, InstantiationException, IllegalAccessException {
         return insertSpecimen(scg, null, type, specimenClass, specimenType);
     }
 
@@ -149,7 +148,7 @@ public abstract class TestBase extends TestCase {
         s.setSpecimenCollectionGroup(new SpecimenSpecimenCollectionGroup());
         s.getSpecimenCollectionGroup().setSpecimenCollectionGroup(scg);
         s.setActivityStatus("Active");
-        
+
         if (container != null) {
             // position
             SpecimenPosition pos = new SpecimenPosition();
@@ -158,15 +157,16 @@ public abstract class TestBase extends TestCase {
             SpecimenPositionStorageContainer storageContainer = new SpecimenPositionStorageContainer();
 
             storageContainer.setStorageContainer(container);
-            
+
             pos.setStorageContainer(storageContainer);
-            final SpecimenPositionSpecimen specimen = new SpecimenPositionSpecimen();                   
+            final SpecimenPositionSpecimen specimen = new SpecimenPositionSpecimen();
             pos.setSpecimen(specimen);
-            
-            SpecimenSpecimenPosition specimenPosition = new SpecimenSpecimenPosition();   
+
+            SpecimenSpecimenPosition specimenPosition = new SpecimenSpecimenPosition();
             specimenPosition.setSpecimenPosition(pos);
-            s.setSpecimenPosition(specimenPosition); 
+            s.setSpecimenPosition(specimenPosition);
         }
+
         Specimen sResult = (Specimen) client.insert(s);
         s.setIdentifier(sResult.getIdentifier());
         s.setGlobalSpecimenIdentifier(sResult.getGlobalSpecimenIdentifier());

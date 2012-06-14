@@ -1,11 +1,13 @@
 package edu.yale.med.krauthammerlab.catissuecore.cagrid.test;
 
+import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import edu.wustl.catissuecore.domain.ws.*;
 import org.cagrid.cql2.AttributeValue;
 import org.cagrid.cql2.BinaryPredicate;
 import org.cagrid.cql2.CQLAttribute;
@@ -16,20 +18,6 @@ import org.jdom.Element;
 
 import edu.wustl.catissuecore.domain.client.ClientRunAll;
 import edu.wustl.catissuecore.domain.client.Fixtures;
-import edu.wustl.catissuecore.domain.ws.CellSpecimen;
-import edu.wustl.catissuecore.domain.ws.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.ws.DistributionProtocol;
-import edu.wustl.catissuecore.domain.ws.ExistingSpecimenOrderItem;
-import edu.wustl.catissuecore.domain.ws.ExistingSpecimenOrderItemSpecimen;
-import edu.wustl.catissuecore.domain.ws.FluidSpecimen;
-import edu.wustl.catissuecore.domain.ws.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.ws.OrderDetails;
-import edu.wustl.catissuecore.domain.ws.OrderDetailsDistributionProtocol;
-import edu.wustl.catissuecore.domain.ws.OrderDetailsOrderItemCollection;
-import edu.wustl.catissuecore.domain.ws.Specimen;
-import edu.wustl.catissuecore.domain.ws.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.ws.StorageContainer;
-import edu.wustl.catissuecore.domain.ws.TissueSpecimen;
 import gov.nih.nci.cagrid.data.faults.QueryProcessingExceptionType;
 
 public class CreateOrder extends TestBase {
@@ -150,7 +138,44 @@ public class CreateOrder extends TestBase {
         assertTrue(results.getObjectResult().length == 1);
     }
 
-    /** 
+    public StorageContainer createStorageContainer(CollectionProtocolRegistration reg, SpecimenCollectionGroup scg) throws QueryProcessingExceptionType, RemoteException {
+            StorageContainer storageContainer = new StorageContainer();
+            storageContainer.setActivityStatus("Active");
+            final String uuid = UUID.randomUUID().toString();
+            storageContainer.setBarcode(uuid);
+
+            ContainerCapacity capacity = new ContainerCapacity();
+            Capacity capacityValue = new Capacity();
+            capacityValue.setOneDimensionCapacity(BigInteger.valueOf(1000));
+            capacityValue.setTwoDimensionCapacity(BigInteger.valueOf(1000));
+            capacity.setCapacity(capacityValue );
+            storageContainer.setCapacity(capacity );
+
+            StorageContainerCollectionProtocolCollection collectionProtocolCollection = new StorageContainerCollectionProtocolCollection();
+            collectionProtocolCollection.setCollectionProtocol(new CollectionProtocol[]{reg.getCollectionProtocol().getCollectionProtocol()});
+            storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+
+            storageContainer.setComment(uuid);
+            storageContainer.setName(uuid);
+
+            StorageContainerStorageType storageType = new StorageContainerStorageType();
+            StorageType type = new StorageType();
+            type.setIdentifier(3);
+            storageType.setStorageType(type );
+            storageContainer.setStorageType(storageType );
+
+            StorageContainerSite scSite = new StorageContainerSite();
+            Site site = new Site();
+            site.setIdentifier(1);
+            scSite.setSite(site );
+            storageContainer.setSite(scSite );
+
+            storageContainer.setIdentifier(((StorageContainer)client.insert(storageContainer)).getIdentifier());
+            storageContainer.setName("In Transit_Shipment Container_"+storageContainer.getIdentifier());
+
+            return storageContainer;
+        }
+    /**
      * Create an order for one of each class of specimens with a simple distribution protocol.
      */
     public void testCreateOrder() throws Exception {

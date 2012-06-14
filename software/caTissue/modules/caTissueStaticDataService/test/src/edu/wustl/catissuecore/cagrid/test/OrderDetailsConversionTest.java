@@ -45,7 +45,7 @@ public class OrderDetailsConversionTest extends BaseConversionTest {
         assertEquals("Tissue", oi.getSpecimenClass());
         assertEquals("DNA", oi.getSpecimenType());
         assertNotNull(oi.getParentSpecimen());
-        assertEquals("Specimen Array OI Name", oi.getNewSpecimenArrayOrderItem().getName());
+        assertTrue(oi.getNewSpecimenArrayOrderItem().getName().startsWith("Specimen Array OI Name"));
     }
 
     @Override
