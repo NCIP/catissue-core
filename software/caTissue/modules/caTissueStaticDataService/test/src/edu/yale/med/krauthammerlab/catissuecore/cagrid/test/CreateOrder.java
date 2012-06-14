@@ -172,6 +172,7 @@ public class CreateOrder extends TestBase {
 
             storageContainer.setIdentifier(((StorageContainer)client.insert(storageContainer)).getIdentifier());
             storageContainer.setName("In Transit_Shipment Container_"+storageContainer.getIdentifier());
+            System.out.println("---> Storage Container inserted:" + storageContainer.getIdentifier());
 
             return storageContainer;
         }
