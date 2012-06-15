@@ -266,7 +266,7 @@ function setCPId()
 		document.getElementById("manualDiv").style.display="none";
 	}
 
-	function mapButtonClickedOnReceiveShipment(frameUrl,name,selectedContControlId)
+	function mapButtonClickedOnReceiveShipment(name,selectedContControlId,frameUrl)
 	{
 		var storageContainer = selectedContControlId.value;
 		frameUrl+="&storageContainerName="+storageContainer;
