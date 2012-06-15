@@ -5179,13 +5179,12 @@ Thanking You,
 							<arg value="@{csvFile}" />
 							<arg value="@{xmlFile}" />
 							<classpath>
-								<fileset dir="@{caTissue-webapp.dir.dist}/modules/bulk_operations/lib/">
-									<include name="**/*.jar" />
-									<exclude name="DynamicExtensions*.jar" />
-								</fileset>
 								<fileset dir="@{caTissue-webapp.dir.dist}/modules/caTissue/lib">
 									<include name="**/*.jar" />
 									<exclude name="AdvanceQuery*.jar" />
+								</fileset>
+								<fileset dir="@{caTissue-webapp.dir.dist}/modules/bulk_operations/lib/">
+									<include name="**/*.jar" />
 								</fileset>
 							</classpath>
 							<sysproperty key="config.dir" value="modules/bulk_operations/conf" />
