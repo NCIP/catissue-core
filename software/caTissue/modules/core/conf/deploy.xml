@@ -5179,6 +5179,9 @@ Thanking You,
 							<arg value="@{csvFile}" />
 							<arg value="@{xmlFile}" />
 							<classpath>
+								<fileset dir="@{caTissue-webapp.dir.dist}/modules/bulk_operations/lib/">
+									<include name="bulkoperator*.jar" />
+								</fileset>
 								<fileset dir="@{caTissue-webapp.dir.dist}/modules/caTissue/lib">
 									<include name="**/*.jar" />
 									<exclude name="AdvanceQuery*.jar" />
