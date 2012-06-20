@@ -289,7 +289,7 @@ dyextn_constraintkey_prop cnstrKeyProp on cnstrKeyProp.identifier = column_prop.
  dyextn_constraint_properties cnstr_prop on cnstrKeyProp.src_constraint_key_id = cnstr_prop.identifier join  
 (select association.identifier from dyextn_association association, dyextn_attribute attribute  where association.Target_Entity_id in (select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.SpecimenCollectionGroup')
 and attribute.Entiy_id in ( select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport')
-and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id );
+and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id )
 /
 update dyextn_database_properties set name = 'ISPR_ID' where identifier in ( 
 select column_prop.identifier from dyextn_column_properties column_prop join 
@@ -297,7 +297,7 @@ dyextn_constraintkey_prop cnstrKeyProp on cnstrKeyProp.identifier = column_prop.
  dyextn_constraint_properties cnstr_prop on cnstrKeyProp.tgt_constraint_key_id = cnstr_prop.identifier join  
 (select association.identifier from dyextn_association association, dyextn_attribute attribute  where association.Target_Entity_id in (select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport')
 and attribute.Entiy_id in ( select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.SpecimenCollectionGroup')
-and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id);
+and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id)
 /
 update dyextn_database_properties set name = 'DSPR_ID' where identifier in ( 
 select column_prop.identifier from dyextn_column_properties column_prop join 
@@ -305,7 +305,7 @@ dyextn_constraintkey_prop cnstrKeyProp on cnstrKeyProp.identifier = column_prop.
  dyextn_constraint_properties cnstr_prop on cnstrKeyProp.src_constraint_key_id = cnstr_prop.identifier join  
 (select association.identifier from dyextn_association association, dyextn_attribute attribute  where association.Target_Entity_id in (select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.SpecimenCollectionGroup')
 and attribute.Entiy_id in ( select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport')
-and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id );
+and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id )
 /
 update dyextn_database_properties set name = 'DSPR_ID' where identifier in ( 
 select column_prop.identifier from dyextn_column_properties column_prop join 
@@ -313,31 +313,31 @@ dyextn_constraintkey_prop cnstrKeyProp on cnstrKeyProp.identifier = column_prop.
  dyextn_constraint_properties cnstr_prop on cnstrKeyProp.tgt_constraint_key_id = cnstr_prop.identifier join  
 (select association.identifier from dyextn_association association, dyextn_attribute attribute  where association.Target_Entity_id in (select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport')
 and attribute.Entiy_id in ( select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.SpecimenCollectionGroup')
-and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id);
+and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id)
 /
 update dyextn_constraintkey_prop  set TGT_CONSTRAINT_KEY_ID = SRC_CONSTRAINT_KEY_ID , SRC_CONSTRAINT_KEY_ID = null where SRC_CONSTRAINT_KEY_ID in (
 select cnstr_prop.identifier from dyextn_constraint_properties cnstr_prop  join  
 (select association.identifier from dyextn_association association, dyextn_attribute attribute  where association.Target_Entity_id in (select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.SpecimenCollectionGroup')
 and attribute.Entiy_id in ( select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport')
-and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id );
+and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id )
 /
 update dyextn_constraintkey_prop  set TGT_CONSTRAINT_KEY_ID = SRC_CONSTRAINT_KEY_ID , SRC_CONSTRAINT_KEY_ID = null where SRC_CONSTRAINT_KEY_ID in (
 select cnstr_prop.identifier from dyextn_constraint_properties cnstr_prop  join  
 (select association.identifier from dyextn_association association, dyextn_attribute attribute  where association.Target_Entity_id in (select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.SpecimenCollectionGroup')
 and attribute.Entiy_id in ( select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport')
-and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id );
+and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id )
 /
 update dyextn_constraintkey_prop  set SRC_CONSTRAINT_KEY_ID = TGT_CONSTRAINT_KEY_ID , TGT_CONSTRAINT_KEY_ID = null where TGT_CONSTRAINT_KEY_ID in (
 select cnstr_prop.identifier from dyextn_constraint_properties cnstr_prop  join  
 (select association.identifier from dyextn_association association, dyextn_attribute attribute  where association.Target_Entity_id in (select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport')
 and attribute.Entiy_id in ( select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.SpecimenCollectionGroup')
-and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id );
+and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id )
 /
 update dyextn_constraintkey_prop  set SRC_CONSTRAINT_KEY_ID = TGT_CONSTRAINT_KEY_ID , TGT_CONSTRAINT_KEY_ID = null where TGT_CONSTRAINT_KEY_ID in (
 select cnstr_prop.identifier from dyextn_constraint_properties cnstr_prop  join  
 (select association.identifier from dyextn_association association, dyextn_attribute attribute  where association.Target_Entity_id in (select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport')
 and attribute.Entiy_id in ( select identifier from DYEXTN_ABSTRACT_METADATA where name like 'edu.wustl.catissuecore.domain.SpecimenCollectionGroup')
-and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id );
+and attribute.identifier = association.identifier) associationid on associationid.identifier = cnstr_prop.association_id )
 /
-commit;
+commit
 /
