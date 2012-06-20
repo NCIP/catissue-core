@@ -162,13 +162,19 @@ IDENTIFIER NOT IN
 (SELECT IDENTIFIER FROM CATISSUE_TRANSFER_EVENT_PARAM
 UNION
 SELECT IDENTIFIER FROM CATISSUE_DISPOSAL_EVENT_PARAM);
-for i IN (select table_name, constraint_name -- then disable all constraints
+for i IN (select table_name, constraint_name
 from user_constraints
-where status = 'DISABLED')
+where status = 'DISABLED' and CONSTRAINT_TYPE = 'P')
 loop
 EXECUTE IMMEDIATE 'alter table ' ||i.table_name|| ' enable constraint ' ||i.constraint_name;
-
 end loop i;
+
+for j IN (select table_name, constraint_name
+from user_constraints
+where status = 'DISABLED' and CONSTRAINT_TYPE != 'P')
+loop
+EXECUTE IMMEDIATE 'alter table ' ||j.table_name|| ' enable constraint ' ||j.constraint_name;
+end loop j;
 End;
 
 
