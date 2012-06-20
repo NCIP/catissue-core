@@ -341,6 +341,6 @@ table#browserDetailsContainer {
 			height="1" /></td>
 	</tr>
 	<tr>
-		<td colspan="5" align="center" valign="top" class ="black_ar">caTissue Plus is an open source project with many new features and improvements over caTissue Suite v1.2. For more details, visit <a href="http://www.catissueplus.org">www.catissueplus.org</a> or mail us at catissueplus@krishagni.com.</td>
+		<td colspan="5" align="center" valign="top" class ="black_ar">caTissue Plus is an open source project with many new features and improvements over caTissue Suite v1.2. For more details, visit <a href="http://www.catissueplus.org">www.catissueplus.org</a> or mail us at <a href="mailto:catissueplus@krishagni.com">catissueplus@krishagni.com</a>.</td>
 	</tr>
 </table>
