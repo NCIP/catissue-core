@@ -4270,7 +4270,7 @@ Thanking You,
 									<include name="*.jar" />
 								</fileset>
 							</classpath>
-							insert into labelsql values(NULL,'${arg1}','${arg2}');
+							insert into labelsql values(NULL,'${arg1}',${arg2});
 							</sql>	
 						</then>
 						
@@ -4287,7 +4287,7 @@ Thanking You,
 									<include name="*.jar" />
 								</fileset>
 							</classpath>
-							insert into labelsql values(LABELSQL_IDENTIFIER_SEQ.NEXTVAL,'${arg1}','${arg2}');
+							insert into labelsql values(LABELSQL_IDENTIFIER_SEQ.NEXTVAL,'${arg1}',${arg2});
 							</sql>
 						</then>
 					</elseif>
