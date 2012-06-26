@@ -4093,5 +4093,14 @@ public class AppUtility {
 		}
 		return "New_" + identifier;
 	}
+
+	public static List getObjDetails(long id) throws ApplicationException 
+	{
+		String sql = "select sp.label, sp.identifier from catissue_specimen sp where sp.identifier=? ";
+		ColumnValueBean bean = new ColumnValueBean(id);
+		List<ColumnValueBean> valueBeanList = new ArrayList<ColumnValueBean>();
+		valueBeanList.add(bean);
+		return AppUtility.executeSQLQuery(sql, valueBeanList);
+	}
 	
 }

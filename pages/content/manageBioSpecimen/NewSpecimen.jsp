@@ -24,6 +24,23 @@
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script src="jss/script.js"></script>
 <script src="jss/calendarComponent.js"></script>
+<script type="text/javascript" src="jss/tag-popup.js"></script>
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlXGrid.css" />
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlx.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
+
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <%

@@ -68,6 +68,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
      <servlet-name>ContainerExportServlet</servlet-name>
      <servlet-class>edu.wustl.catissuecore.action.ContainerExportServlet</servlet-class>
    </servlet>
+   <servlet>
+     <servlet-name>LoadGridServlet</servlet-name>
+     <servlet-class>edu.wustl.catissuecore.action.LoadGridServlet</servlet-class>
+   </servlet>
     <servlet>
      <servlet-name>AppLogin</servlet-name>
      <servlet-class>krishagni.catissueplus.mobile.servlet.Login</servlet-class>
@@ -88,7 +92,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  <servlet-name>ContainerExportServlet</servlet-name>
  <url-pattern>/ContainerExportServlet</url-pattern>
  </servlet-mapping>
- 
+ 	<servlet-mapping>
+	     <servlet-name>LoadGridServlet</servlet-name>
+	     <url-pattern>/LoadGridServlet</url-pattern>
+  	</servlet-mapping>
   <servlet-mapping>
  <servlet-name>AppLogin</servlet-name>
  <url-pattern>/AppLogin</url-pattern>

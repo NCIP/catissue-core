@@ -13,6 +13,12 @@
 
 	<property name="int.type" value="bigint(20)" dbms="mysql" />
 	<property name="int.type" value="number(19,0)" dbms="oracle" />
+	
+	<property name="smallint.type" value="int" dbms="mysql" />
+	<property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+	<property name="date.type" value="date" dbms="oracle" />
+	<property name="timestamp.type" value="timestamp" dbms="oracle" />
 
 	<!-- ALTER TABLE CATISSUE_USER -->
 	<changeSet id="1" author="catissuecore" runOnChange="true">
@@ -20,6 +26,55 @@
 			<column name="FORGOT_PASSWORD_TOKEN" type="${text.type}(255)" />
 		</addColumn>
 		<rollback></rollback>
+	</changeSet>
+	
+	<changeSet id="2" author="catissue" runOnChange="true">
+
+		<createTable tableName="TAG">
+			<column name="TAG_ID" type="${int.type}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="TAG_LABEL" type="${text.type}(255)">
+				<constraints unique="true" nullable="false" />
+			</column>
+			<column name="USER_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+
+
+
+		<createTable tableName="ASSIGNTAG">
+			<column name="ID" type="${int.type}">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="TAG_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="OBJ_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="OBJ_TYPE" type="${text.type}(255)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+
+		<addForeignKeyConstraint constraintName="FK_ASSIGNTAG_TAG_ID"
+			baseTableName="ASSIGNTAG" baseColumnNames="TAG_ID"
+			referencedTableName="TAG" referencedColumnNames="TAG_ID" />
+
+		<addForeignKeyConstraint constraintName="FK_TAG_USER_ID"
+			baseTableName="TAG" baseColumnNames="USER_ID" referencedTableName="CATISSUE_USER"
+			referencedColumnNames="IDENTIFIER" />
+
+
+
+		<addUniqueConstraint constraintName="S_T_UNIQUE_KEY"
+			tableName="ASSIGNTAG" columnNames="TAG_ID,OBJ_ID" />
+
+
 	</changeSet>
 	
 </databaseChangeLog>         

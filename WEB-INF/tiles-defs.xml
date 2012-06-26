@@ -841,6 +841,9 @@
 	<definition name=".catissuecore.shoppingCartDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/querysuite/QueryShoppingCart.jsp" />
 	</definition>
+	<definition name=".catissuecore.specimenShoppingCartDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/querysuite/SpecimenQueryShoppingCart.jsp" />
+	</definition>
 	<!-- ShoppingCart -->
 
 	<!-- ASSIGN PRIVILEGES -->

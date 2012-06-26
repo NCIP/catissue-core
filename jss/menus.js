@@ -421,6 +421,11 @@ Ext.onReady(function(){
                 text: 'My List View',
 				tooltip:'My List View',
                 href:'ViewCart.do?operation=view'
+            },
+            {
+                text: 'Specimen List View',
+				tooltip:'Specimen List View',
+                href:'ViewSpecimenList.do?operation=view'
             }
         ]
     });
@@ -477,7 +482,7 @@ Ext.onReady(function(){
 		{	
 			text: '<img src="images/help.png"/>',
 			href:'#',
-			handler: getHelpURL,
+			handler: handleMenu,
 			//tooltip:'help'
 		}
 		);

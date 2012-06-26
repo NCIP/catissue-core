@@ -135,6 +135,9 @@
 		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQL.hbm.xml" />
 		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQLAssociation.hbm.xml" />
 		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQL_HQL.hbm.xml" />
+		<mapping resource="edu/wustl/common/queryFolder/hbm/Tag.hbm.xml" />
+		<mapping resource="edu/wustl/common/queryFolder/hbm/AssignTag.hbm.xml" />
+		
 		
     </session-factory>
 

@@ -73,7 +73,92 @@
 				onclick="onAddToCart()">
 				<bean:message key="buttons.addToCart"/>
 		</html:button> 
+		<%
+ 						String	organizeTarget = "ajaxTreeGridInitCall('popupDeleteMessage','popupFolderDeleteMessage')";
+ %>
+						| <input type="button" value="Add To Specimen List"
+							onclick="<%=organizeTarget%> " class="blue_ar_c">
 		</td>
 	</tr>
 </table>
 <!-- action buttons end -->
+<div id="blanket" style="display: none;"></div>
+<div id="popUpDiv" style="display: none; top: 100px; left: 210.5px;">
+
+					<a onclick="popup('popUpDiv')"><img style="float: right;"
+						height='23' width='24' src='images/close_button.gif'
+						border='0'> </a>
+					<table class=" manage tags" width="100%" cellspacing="0"
+						cellpadding="5" border="0">
+
+						<tbody>
+							<tr valign="center" height="35" bgcolor="#d5e8ff">
+								<td width="28%" align="left"
+									style="font-size: .82em; font-family: verdana;">
+									<p>
+										&nbsp&nbsp&nbsp&nbsp<b> Specimen Lists</b>
+									</p>
+								</td>
+							</tr>
+					</table>
+
+
+					<div id="treegridbox"
+						style="width: 530px; height: 237px; background-color: white;"></div>
+
+
+
+
+					<p>
+						&nbsp&nbsp&nbsp<label width="28%" align="left"
+							style="font-size: .82em; font-family: verdana;"><b> List Name
+								: </b> </label> <input type="text" id="newTagName" name="newTagName"
+							size="20" onclick="this.value='';" maxlength="50" /><br>
+					</p>
+					<p>
+						<%
+						String specId = String.valueOf(form.getId());
+ String	assignTarget = "ajaxAssignTagFunctionCall('AssignTagAction.do','popupAssignMessage','popupAssignConditionMessage','"+specId+"')";
+ %>
+						<input type="button" value="ASSIGN" onclick="<%=assignTarget%> "
+							onkeydown="<%=assignTarget%> " class="btn3">
+					</p>
+				</div>
+			</div>
+			<script>
+			var popupmygrid;
+function doInItTreeGrid()
+{
+	popupmygrid = new dhtmlXGridObject('treegridbox');
+	popupmygrid.selMultiRows = true;
+	popupmygrid.imgURL = "dhtmlx_suite/dhtml_pop/imgs/";
+	popupmygrid.setHeader(",<div style='text-align:center;'>My Specimen Lists</div>,");
+	//popupmygrid.setNoHeader(true);
+	popupmygrid.setInitWidths("25,*,40");
+	popupmygrid.setColAlign("left,left,left");
+	popupmygrid.setColTypes("txt,tree,txt");
+	popupmygrid.setColSorting("str,str,str");
+	popupmygrid.attachEvent("onRowSelect", doOnTreeGridRowSelected);
+	popupmygrid.setEditable(false);
+	popupmygrid.init();
+	//popupmygrid.setOnOpenHandler(expand);
+	popupmygrid.setSkin("dhx_skyblue");
+	doInitParseTree();
+	//	alert(popupmygrid.getTree(1));
+}
+function doOnTreeGridRowSelected(rId)
+{
+	ajaxTreeGridRowSelectCall(rId); 
+}
+ function expand(id,mode)
+ {
+ alert('ddd');
+ alert(id);
+ }
+function doInitParseTree()
+{
+	popupmygrid.loadXML("TreeTagAction.do");
+
+}
+
+			</script>
