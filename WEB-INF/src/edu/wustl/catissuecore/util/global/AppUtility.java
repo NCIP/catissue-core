@@ -1282,7 +1282,7 @@ public class AppUtility {
 						final QueryOutputSpreadsheetBizLogic queryBizLogic = new QueryOutputSpreadsheetBizLogic();
 						final Map<Integer, Integer> fileTypeIndexMainEntityIndexMap = queryBizLogic
 								.updateSpreadSheetColumnList(columnsList,
-										queryResultObjectDataBeanMap);
+										queryResultObjectDataBeanMap,false);
 						// QueryOutputSpreadsheetBizLogic.updateDataList(paginationDataList,
 						// fileTypeIndexMainEntityIndexMap);
 						final Map exportMetataDataMap = QueryOutputSpreadsheetBizLogic
