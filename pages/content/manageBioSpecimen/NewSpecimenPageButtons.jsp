@@ -149,12 +149,10 @@ function doInItTreeGrid()
 function doOnTreeGridRowSelected(rId)
 {
 	ajaxTreeGridRowSelectCall(rId); 
+	//alert('sss');
+	//popupmygrid.expandAll();
 }
- function expand(id,mode)
- {
- alert('ddd');
- alert(id);
- }
+ 
 function doInitParseTree()
 {
 	popupmygrid.loadXML("TreeTagAction.do");

@@ -134,16 +134,17 @@ else
 		}
 	}*/
 	queryChkBoxString = id;
+	//alert(queryChkBoxString);
 	if (queryChkBoxString=='')
 	{
 		alert(msg1);
-		alert('ffff');
+		//alert('ffff');
 		 
  	}
 	else if(chkBoxString==''&&tagName=='')
  	{
-		alert(msg);
-		 alert('ffff23');
+		alert("Please select existing list or give the name for the new list");
+		 //alert('ffff23');
 	}
 	else if((queryChkBoxString!=''&& chkBoxString!='')||(queryChkBoxString!=''&& tagName!=''))
  	{
@@ -313,7 +314,9 @@ popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img sr
  			}
 		}
  	
-	 }	 
+	 }
+	 //alert('hhh');
+popupmygrid.expandAll();	 
 }
 //Ajax function to get Count of Queries Inside the Folder 
 function ajaxDeleteCall(tagId) {
@@ -352,7 +355,7 @@ return;
 		 var count;
 		 
  		 childCount=popupmygrid.hasChildren(tagID);
-		 alert(childCount);
+		 //alert(childCount);
 	 if(childCount==0)
 		{
 		 childCount=arrObj.childCount;
