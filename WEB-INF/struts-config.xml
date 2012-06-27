@@ -1782,6 +1782,11 @@ PUBLIC
 				path="/CollectionProtocol.do?operation=edit&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
+		
+		<action path="/ExportCollectionProtocol" type="edu.wustl.catissuecore.action.ExportCollectionProtocolAction"
+		   validate="false" scope="request">		   
+		</action>
+		
 		<!-- CollectionProtocol Actions Ends-->
 
 		<!-- DistributionProtocol Actions Begins-->

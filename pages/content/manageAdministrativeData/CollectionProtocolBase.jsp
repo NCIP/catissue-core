@@ -139,6 +139,13 @@
    }
 
   }
+  function exportCP()
+  {
+    var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
+	var action="ExportCollectionProtocol.do?title="+cpDetailsForm.title.value;	
+	mywindow = window.open(action, "Download", "width=10,height=10");
+	mywindow.moveTo(0,0);
+  }
 </script>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
@@ -223,7 +230,11 @@
 
 					 <html:button styleClass="blue_ar_b" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()">
 					</html:button>
-
+					<logic:equal parameter="operation"	value='edit'>
+					&nbsp;|&nbsp;
+					<html:button styleClass="blue_ar_b" property="forwardPage" value="Export Collection Protocol" onclick="exportCP()">
+					</html:button>	
+					</logic:equal>
 				   </td>
 				</tr>
 				</table>
