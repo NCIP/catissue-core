@@ -107,10 +107,20 @@ public class CreateAliquotAction extends BaseAction
 		// Convert Specimen HashSet to List
 		List<AbstractDomainObject> specimenList = new LinkedList<AbstractDomainObject>();
 		specimenList.addAll(specimenColl);
+		
 		if(insertAliquotSpecimen)
 		{
+			StringBuffer buffer = new StringBuffer(30);
+			for (AbstractDomainObject abstractDomainObject : specimenList) 
+			{
+				buffer.append(abstractDomainObject.getId());
+				buffer.append(",");
+			}
+			request.setAttribute("popUpSpecList", buffer.toString());
+			request.setAttribute("IsToShowButton", Boolean.TRUE);
 			setAliquotform(request, aliquotForm, parentSpecimen, specimenList);
 		}
+		
 		final String fromPrintAction = request.getParameter(Constants.FROM_PRINT_ACTION);
 		// mapping.findforward
 		return this.getFindForward(mapping, request, aliquotForm, fromPrintAction,

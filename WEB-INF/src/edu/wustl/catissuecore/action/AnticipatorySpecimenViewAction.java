@@ -142,12 +142,12 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			if (isFromSpecimenEditPage)
 			{
 				final Collection scgSpecimenList = specimencollectionGroup.getSpecimenCollection();
-				this.getSpcimensToShowOnSummary(specimenId, scgSpecimenList, session,
+				this.getSpcimensToShowOnSummary(specimenId, scgSpecimenList, request,
 						autoStorageContainer, dao);
 			}
 			else
 			{
-				this.addSCGSpecimensToSession(session, specimencollectionGroup,
+				this.addSCGSpecimensToSession(request, specimencollectionGroup,
 						autoStorageContainer, dao);
 			}
 			request.setAttribute("RequestType",
@@ -177,11 +177,12 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	 * @throws DAOException : DAOException
 	 * @throws BizLogicException : BizLogicException
 	 */
-	private void addSCGSpecimensToSession(HttpSession session,
+	private void addSCGSpecimensToSession(HttpServletRequest request,
 			SpecimenCollectionGroup specimencollectionGroup,
 			SpecimenAutoStorageContainer autoStorageContainer, DAO dao) throws DAOException,
 			BizLogicException
 	{
+		final HttpSession session = request.getSession();
 		final LinkedHashMap<String, CollectionProtocolEventBean> cpEventMap = new LinkedHashMap<String, CollectionProtocolEventBean>();
 
 		final CollectionProtocolEventBean eventBean = new CollectionProtocolEventBean();
@@ -204,9 +205,12 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 
 		final Iterator itr2 = specimenList.iterator();
 		final NewSpecimenBizLogic specBizLogic = new NewSpecimenBizLogic();
+		StringBuffer buffer = new StringBuffer(20);
 		while (itr2.hasNext())
 		{
 			final Specimen specimen = (Specimen) itr2.next();
+			buffer.append(specimen.getId());
+			buffer.append(",");
 			if (specimen.getChildSpecimenCollection() != null)
 			{
 				final long lastAliquotNo = specBizLogic.getTotalNoOfAliquotSpecimen(specimen
@@ -217,7 +221,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 				this.setLabelInSpecimen(specimen.getId(), childList, lastAliquotNo);
 			}
 		}
-
+		request.setAttribute("popUpSpecList", buffer.toString());
+		request.setAttribute("IsToShowButton", Boolean.TRUE);
 		eventBean.setSpecimenRequirementbeanMap(this.getSpecimensMap(specimenList, this.cpId,
 				autoStorageContainer));
 		// eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(
@@ -636,9 +641,10 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 	 * @throws BizLogicException : BizLogicException
 	 */
 	private void getSpcimensToShowOnSummary(long specimenId, Collection scgSpecimenList,
-			HttpSession session, SpecimenAutoStorageContainer autoStorageContainer, DAO dao)
+			HttpServletRequest request, SpecimenAutoStorageContainer autoStorageContainer, DAO dao)
 			throws DAOException, BizLogicException
 	{
+		final HttpSession session = request.getSession();
 		final List<Specimen> specimenList = new ArrayList<Specimen>();
 		// Collection scgSpecimenList =
 		// specimencollectionGroup.getSpecimenCollection();

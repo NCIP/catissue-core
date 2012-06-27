@@ -11,6 +11,23 @@
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.domain.Specimen"%>
+<script type="text/javascript" src="jss/tag-popup.js"></script>
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlXGrid.css" />
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlx.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
+
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" >
 		//Set last refresh time
@@ -277,7 +294,7 @@
           <td class=" bottomtd"></td>
         </tr>
         <tr>
-          <td colspan="2" class="buttonbg">
+          <td class="buttonbg">
 			<html:hidden property="submittedFor" value=""/>				
 					<html:hidden property="forwardTo" value=""/>					
 					<html:hidden property="noOfAliquots"/>					
@@ -294,10 +311,103 @@
 							value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>"
 							onclick="<%=addMoreSubmit%>">
 						</html:button>
-					</td>
+						<logic:equal name="IsToShowButton" value="true">
+					&nbsp;|&nbsp;
+					<%
+ 						String	organizeTarget = "ajaxTreeGridInitCall('popupDeleteMessage','popupFolderDeleteMessage')";
+ %>
+					<html:button
+							styleClass="blue_ar_b" property="Add To Specimen List"
+							title="Add To Specimen List"
+							value="Add To Specimen List"
+							onclick="<%=organizeTarget%>">
+						</html:button>
+					</logic:equal>
+				</td>
 				</tr>
     </table></td>
   </tr>
+  <script>
+			
+		</script>
 </table>
 </html:form>
 <!----------------------------------------------------------------------------------------->
+<div id="blanket" style="display: none;"></div>
+<div id="popUpDiv" style="display: none; top: 100px; left: 210.5px;">
+
+					<a onclick="popup('popUpDiv')"><img style="float: right;"
+						height='23' width='24' src='images/close_button.gif'
+						border='0'> </a>
+					<table class=" manage tags" width="100%" cellspacing="0"
+						cellpadding="5" border="0">
+
+						<tbody>
+							<tr valign="center" height="35" bgcolor="#d5e8ff">
+								<td width="28%" align="left"
+									style="font-size: .82em; font-family: verdana;">
+									<p>
+										&nbsp&nbsp&nbsp&nbsp<b> Specimen Lists</b>
+									</p>
+								</td>
+							</tr>
+					</table>
+
+
+					<div id="treegridbox"
+						style="width: 530px; height: 237px; background-color: white;"></div>
+
+
+
+
+					<p>
+						&nbsp&nbsp&nbsp<label width="28%" align="left"
+							style="font-size: .82em; font-family: verdana;"><b> List Name
+								: </b> </label> <input type="text" id="newTagName" name="newTagName"
+							size="20" onclick="this.value='';" maxlength="50" /><br>
+					</p>
+					<p>
+						<%
+						String specId = (String)request.getAttribute("popUpSpecList");
+ String	assignTarget = "ajaxAssignTagFunctionCall('AssignTagAction.do','popupAssignMessage','popupAssignConditionMessage','"+specId+"')";
+ %>
+						<input type="button" value="ASSIGN" onclick="<%=assignTarget%> "
+							onkeydown="<%=assignTarget%> " class="btn3">
+					</p>
+				</div>
+			</div>
+			<script>
+			var popupmygrid;
+function doInItTreeGrid()
+{
+	popupmygrid = new dhtmlXGridObject('treegridbox');
+	popupmygrid.selMultiRows = true;
+	popupmygrid.imgURL = "dhtmlx_suite/dhtml_pop/imgs/";
+	popupmygrid.setHeader(",<div style='text-align:center;'>My Specimen Lists</div>,");
+	//popupmygrid.setNoHeader(true);
+	popupmygrid.setInitWidths("25,*,40");
+	popupmygrid.setColAlign("left,left,left");
+	popupmygrid.setColTypes("txt,tree,txt");
+	popupmygrid.setColSorting("str,str,str");
+	popupmygrid.attachEvent("onRowSelect", doOnTreeGridRowSelected);
+	popupmygrid.setEditable(false);
+	popupmygrid.init();
+	//popupmygrid.setOnOpenHandler(expand);
+	popupmygrid.setSkin("dhx_skyblue");
+	doInitParseTree();
+	//	alert(popupmygrid.getTree(1));
+}
+function doOnTreeGridRowSelected(rId)
+{
+	ajaxTreeGridRowSelectCall(rId); 
+	//alert('sss');
+	//popupmygrid.expandAll();
+}
+ 
+function doInitParseTree()
+{
+	popupmygrid.loadXML("TreeTagAction.do");
+
+}
+
+			</script>
