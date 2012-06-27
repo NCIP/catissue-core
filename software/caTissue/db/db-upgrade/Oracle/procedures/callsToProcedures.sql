@@ -151,7 +151,7 @@ Begin
 from user_constraints
 where status = 'ENABLED')
 loop
-EXECUTE IMMEDIATE 'alter table ' ||i.table_name|| ' disable constraint ' ||i.constraint_name;
+EXECUTE IMMEDIATE 'alter table "' ||i.table_name|| '" disable constraint ' ||i.constraint_name|| ' cascade';
 
 end loop i;
 
@@ -166,14 +166,14 @@ for i IN (select table_name, constraint_name
 from user_constraints
 where status = 'DISABLED' and CONSTRAINT_TYPE = 'P')
 loop
-EXECUTE IMMEDIATE 'alter table ' ||i.table_name|| ' enable constraint ' ||i.constraint_name;
+EXECUTE IMMEDIATE 'alter table "' ||i.table_name|| '" enable constraint ' ||i.constraint_name;
 end loop i;
 
 for j IN (select table_name, constraint_name
 from user_constraints
 where status = 'DISABLED' and CONSTRAINT_TYPE != 'P')
 loop
-EXECUTE IMMEDIATE 'alter table ' ||j.table_name|| ' enable constraint ' ||j.constraint_name;
+EXECUTE IMMEDIATE 'alter table "' ||j.table_name|| '" enable constraint ' ||j.constraint_name;
 end loop j;
 End;
 
