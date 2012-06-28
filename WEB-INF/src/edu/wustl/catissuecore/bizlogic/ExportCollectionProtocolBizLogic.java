@@ -222,8 +222,8 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
     		
     		eventsCount++;
 		}
-    	headerString.replace(headerString.length()-1, headerString.length(), "");
-    	valueString.replace(headerString.length()-1, headerString.length(), "");
+    	headerString=headerString.replace(headerString.lastIndexOf(","), headerString.lastIndexOf(",")+1, "");
+    	valueString=valueString.replace(valueString.lastIndexOf(","), valueString.lastIndexOf(",")+1, "");
     	return headerString.append("\n").append(valueString);//writeCSVFile(collectionProtocol.getShortTitle(),headerString,valueString);
     }
     private String getDateAsString(Date date)
