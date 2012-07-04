@@ -5910,6 +5910,7 @@ public class Constants
 	public static final String SPP_ADD_ERROR_MSG = "Cannot create SPP as activity of an event cannot be Disabled while adding a new SPP. It should either be 'Add' or left blank";
 
 	public static final String ACTIVE = "Active";
+	public static final String ACTIVITY_STATUS_LOCKED = "Locked";
 
 	public static final String SPP_XSD_FILENAME = "SPP.xsd";
 	public static final String SPP_TEMPLATE_FILENAME = "SPPTemplate.xml";

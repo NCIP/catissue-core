@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.NamingException;
@@ -18,11 +19,13 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.factory.utils.UserUtility;
 import edu.wustl.catissuecore.processor.CatissueLoginProcessor;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.LoginResult;
 import edu.wustl.domain.UserDetails;
@@ -103,7 +106,7 @@ public class SSOcaTissueCommonLoginUtility
 				
 				if (userDetails == null) {
 					if (!LoginProcessor.isUserPresentInApplicationDB(userName)) {
-						loginInfoUtility.setForwardTo("GridGrouperUser");
+						loginInfoUtility.setForwardTo("failure");
 					}
 				}
 			}
@@ -130,8 +133,15 @@ public class SSOcaTissueCommonLoginUtility
 	            }
 	            else
 	            {
-	                handleError(request, "errors.incorrectLoginIDPassword");
-	                loginInfoUtility.setActionErrors(handleError(request, "app.migrateduser"));
+	            	if(isStatusLocked(loginName))
+	            	{
+	                    loginInfoUtility.setActionErrors(handleErrors(request,"error.account.locked", "")); 
+	            	}
+	            	else
+	            	{
+//	            		handleError(request,"", "errors.incorrectLoginIDPassword");
+	            		loginInfoUtility.setActionErrors(handleErrors(request,"errors.invalid", "username or password."));
+	            	}
 	            }
 	            loginInfoUtility.setForwardTo(Constants.FAILURE);
 			}
@@ -140,6 +150,29 @@ public class SSOcaTissueCommonLoginUtility
         }
         return loginInfoUtility;
     }
+
+	private ActionErrors handleErrors(HttpServletRequest request,
+			String string, String string2) {
+		final ActionErrors errors = new ActionErrors();
+        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(string,string2));
+        // Report any errors we have discovered
+        return errors;
+	}
+
+	public static Boolean isStatusLocked(String loginName) throws ApplicationException 
+	{
+		String sql = "select login_name from catissue_user where login_name =? and activity_status='Locked'";
+		ColumnValueBean bean = new ColumnValueBean(loginName);
+		List<ColumnValueBean> beanList = new ArrayList<ColumnValueBean>();
+		beanList.add(bean);
+		Boolean isAccountLocked = Boolean.FALSE;
+		List list = AppUtility.executeSQLQuery(sql,beanList);
+		if(list != null && list.size() > 0)
+		{
+			isAccountLocked = Boolean.TRUE;
+		}
+		return isAccountLocked;
+	}
 
     private boolean isRequestFromClinportal(final HttpServletRequest request)
     {
@@ -430,11 +463,12 @@ public class SSOcaTissueCommonLoginUtility
      *            : request
      * @param errorKey
      *            : errorKey
+     * @param error 
      */
     private ActionErrors handleError(final HttpServletRequest request, final String errorKey)
     {
         final ActionErrors errors = new ActionErrors();
-        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid","Username, Password"));
+        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid","username or password"));
         // Report any errors we have discovered
         return errors;        
     }

@@ -259,17 +259,11 @@ function authenticateToGrid()
 									</logic:iterate>
 									</div>
 								</td>
-								<td align="left"><logic:equal name="idpSelection"
-									value="yes">
-									<input type="radio" name="idpSelection" value="yes" checked onclick="disableIdpDetails(false)"/>
-								</logic:equal> <logic:notEqual name="idpSelection" value="yes">
+								<td align="left">
 									<input type="radio" name="idpSelection" value="yes" onclick="disableIdpDetails(false)"/>
-								</logic:notEqual> <span class="black_ar"><bean:message key="user.yes"/></span> &nbsp; <logic:equal
-									name="idpSelection" value="no">
+								<span class="black_ar"><bean:message key="user.yes"/></span> &nbsp;
 									<input type="radio" name="idpSelection" value="no" checked onclick="disableIdpDetails(true)"/>
-								</logic:equal> <logic:notEqual name="idpSelection" value="no">
-									<input type="radio" name="idpSelection" value="no" onclick="disableIdpDetails(true)"/>
-								</logic:notEqual><span class="black_ar" /><bean:message key="user.no"/></span></td>
+								<span class="black_ar" /><bean:message key="user.no"/></span>
 							</tr>
 							<tr>
 								<td colspan="3" class="bottomtd"></td>
@@ -530,16 +524,9 @@ function authenticateToGrid()
 </table>
 </body>
 <script>
-<logic:equal name="idpSelection" value="no">
-	disableIdpDetails(true);
-</logic:equal>
-<logic:equal name="idpSelection" value="yes">
-	disableIdpDetails(false);
+
 	showHide('idpDetails');
-</logic:equal>
-<logic:equal name="grouperUser" value="yes">
-	disableIdpSelection();
-</logic:equal>
+
 function disableIdpSelection()
 {
 	var setObj=document.getElementsByName('idpSelection');//radio buttons set to abject array

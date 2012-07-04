@@ -154,6 +154,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		new File(path);
 		final int maximumTreeNodeLimit = Integer.parseInt(XMLPropertyHandler
 				.getValue(Constants.MAXIMUM_TREE_NODE_LIMIT));
+		
+		Variables.invalidLoginAttemptsAllowed = Integer.parseInt(XMLPropertyHandler
+				.getValue("invalid.login.attempts.allowed"));
 		Variables.maximumTreeNodeLimit = maximumTreeNodeLimit;
 		String ssoRedirectURL = XMLPropertyHandler.getValue("sso.url");
 		if(!Validator.isEmpty(ssoRedirectURL))

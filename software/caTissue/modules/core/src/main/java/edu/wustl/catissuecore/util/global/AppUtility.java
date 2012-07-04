@@ -130,6 +130,7 @@ import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.dao.util.StatementData;
 import edu.wustl.query.beans.QueryResultObjectDataBean;
 import edu.wustl.query.bizlogic.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.query.executor.AbstractQueryExecutor;
@@ -4132,5 +4133,15 @@ public class AppUtility
 		if (calendarDate2.get(Calendar.DAY_OF_YEAR) < calendarDate1.get(Calendar.DAY_OF_YEAR))  
 			diff--;
 		return Integer.valueOf(diff);
+	}
+
+	public static void executeUpdateQuery(String sqll,
+			List<ColumnValueBean> beanList) throws ApplicationException {
+		final JDBCDAO jdbcDAO = openJDBCSession();
+		StatementData data = jdbcDAO.executeUpdate(sqll,beanList);
+		jdbcDAO.commit();
+		closeJDBCSession(jdbcDAO);
+		
+		
 	}
 }

@@ -43,6 +43,7 @@ public class Variables
 	public static String applicationCvsTag = new String();
 	public static String applicationAdditionInfo = new String();
 	public static int maximumTreeNodeLimit;
+	public static int invalidLoginAttemptsAllowed;
 	public static int maximumTreeNodeLimitForChildNode;
 	public static boolean isSpecimenLabelGeneratorAvl = false;
 	public static boolean isTemplateBasedLblGeneratorAvl = false;

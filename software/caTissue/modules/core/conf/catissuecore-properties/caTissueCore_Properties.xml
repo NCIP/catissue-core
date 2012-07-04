@@ -643,4 +643,8 @@
 		<name>sso.url</name>
 		<value>@@sso.url@@</value>
 	</property>
+	<property>
+		<name>invalid.login.attempts.allowed</name>
+		<value>@@invalid.login.attempts.allowed@@</value>
+	</property>
 </properties>

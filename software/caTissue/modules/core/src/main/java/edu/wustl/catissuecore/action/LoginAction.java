@@ -11,6 +11,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.LoginForm;
+import edu.wustl.catissuecore.exception.CatissueException;
+import edu.wustl.catissuecore.processor.CatissueLoginProcessor;
 import edu.wustl.catissuecore.util.CommonLoginInfoUtility;
 import edu.wustl.catissuecore.util.SSOcaTissueCommonLoginUtility;
 import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
@@ -105,6 +107,10 @@ public class LoginAction extends XSSSupportedAction
                 cleanSession(request);
                 handleError(request, "errors.incorrectLoginIDPassword");
                 forwardTo = Constants.FAILURE;
+                try{
+                CatissueLoginProcessor.auditLogin(null, ((LoginForm)form).getLoginName(), request);
+                }catch(CatissueException e)
+                {LoginAction.LOGGER.error("Exception while auditing: " + e.getMessage(), e);}
                 infoUtility.setForwardTo(forwardTo);
             }
         }
@@ -165,7 +171,7 @@ public class LoginAction extends XSSSupportedAction
     private void handleError(final HttpServletRequest request, final String errorKey)
     {
         final ActionErrors errors = new ActionErrors();
-        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid","Username, Password"));
+        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid","username or password"));
         // Report any errors we have discovered
         if (!errors.isEmpty())
         {

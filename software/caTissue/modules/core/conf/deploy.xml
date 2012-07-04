@@ -762,6 +762,8 @@
 			<replacefilter token="@@empiDBDriverName@@" value="${db2.driver.string}" />
 			<replacefilter token="@@empiDBSchema@@" value="${empi.database.schema}" />
 		<!-- END -->
+			<replacefilter token="@@invalid.login.attempts.allowed@@" value="${invalid.login.attempts.allowed}" />
+		
 
 		</replace>
 

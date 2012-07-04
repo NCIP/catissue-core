@@ -46,6 +46,7 @@ import edu.wustl.catissuecore.multiRepository.bean.SiteUserRolePrivilegeBean;
 import edu.wustl.catissuecore.uiobject.UserUIObject;
 import edu.wustl.catissuecore.util.CaTissuePrivilegeUtility;
 import edu.wustl.catissuecore.util.MSRUtil;
+import edu.wustl.catissuecore.util.SSOcaTissueCommonLoginUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.action.SecureAction;
@@ -384,8 +385,19 @@ public class UserAction extends SecureAction
 		// and the user page is of administrative tab.
 		if (operation.equals(Constants.EDIT) && pageOf.equals(Constants.PAGE_OF_USER_ADMIN))
 		{
-			// String activityStatusList = Constants.ACTIVITYSTATUSLIST;
-			request.setAttribute("activityStatusList", Constants.USER_ACTIVITY_STATUS_VALUES);
+			
+			if(!Validator.isEmpty(userForm.getActivityStatus()) && (userForm.getActivityStatus().equals(Constants.ACTIVITY_STATUS_LOCKED)||
+					SSOcaTissueCommonLoginUtility.isStatusLocked(userForm.getEmailAddress())))
+			{
+				String[] activity_status = {Constants.SELECT_OPTION, Constants.ACTIVE, "Closed",Constants.ACTIVITY_STATUS_LOCKED};
+				request.setAttribute("activityStatusList", activity_status);
+			}
+			else
+			{
+				String[] activity_status = Constants.USER_ACTIVITY_STATUS_VALUES;
+				request.setAttribute("activityStatusList", activity_status);
+			}
+			
 		}
 
 		// Populate the role dropdown if the page is of approve user or

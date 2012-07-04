@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.processor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.CatissueException;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.domain.LoginDetails;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
@@ -19,6 +22,7 @@ import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.LoginResult;
 import edu.wustl.processor.LoginProcessor;
@@ -131,7 +135,9 @@ public final class CatissueLoginProcessor extends LoginProcessor
             }
 
             (dao).auditLoginEvents(isLoginSuccessful, loginDetails);
+            
             dao.commit();
+            checkInvalidAttempts(isLoginSuccessful,loginName);
         }
         catch (final ApplicationException exception)
         {
@@ -144,7 +150,51 @@ public final class CatissueLoginProcessor extends LoginProcessor
         }
     }
 
-    /**
+    private static void checkInvalidAttempts(boolean isLoginSuccessful,String loginName) throws ApplicationException 
+    {
+    	if(!isLoginSuccessful && Variables.invalidLoginAttemptsAllowed > 0)
+    	{
+	    		if(getInvalidLoginAttempts(loginName) >= 5)
+	    		{
+	    			String sqll = "update catissue_user set activity_status='Locked' where login_name=?";
+	    			List<ColumnValueBean> beanList = new ArrayList<ColumnValueBean>();
+	    			ColumnValueBean userIdBean = new ColumnValueBean(loginName);
+	    	    	beanList.add(userIdBean);
+	    	    	AppUtility.executeUpdateQuery(sqll, beanList);
+	    		}
+    	}
+	}
+
+	public static int getInvalidLoginAttempts(String loginName)
+			throws ApplicationException {
+		String sql = "select is_login_successful from catissue_login_audit_event_log log, catissue_user user "+
+		" where log.user_login_id=user.identifier and user.login_name=? and user.activity_status='Active' order by login_timestamp desc limit ?";
+		ColumnValueBean userIdBean = new ColumnValueBean(loginName);
+		ColumnValueBean limitBean = new ColumnValueBean(Variables.invalidLoginAttemptsAllowed);
+		List<ColumnValueBean> beansList = new ArrayList<ColumnValueBean>();
+		beansList.add(userIdBean);
+		beansList.add(limitBean); 
+		List list = AppUtility.executeSQLQuery(sql, beansList);
+		Boolean loginAttempt = Boolean.FALSE;
+		int loginAttemptCtr = 0;
+		if(list != null && list.size() > 0)
+		{
+			for (Object object : list) 
+			{
+				List list1 = (List)object;
+				loginAttempt = Boolean.valueOf(list1.get(0).toString());
+				if(!loginAttempt)
+				{
+					loginAttemptCtr++;
+				}
+				else 
+					break;
+			}
+		}
+		return loginAttemptCtr;
+	}
+
+	/**
      * This private method closes the hibernate session.
      *
      * @param dao
