@@ -1757,6 +1757,7 @@
 			</sql>
 		<antcall target="update_metadata_for_model_changes_mysql_post_P5" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_mysql"/>
+		<antcall target="upgrade_db_for_empi_id__mysql"/>
 	</target>
 	<target name="insert_entity_group_metadata_mysql" description="insert entity group metadata for mysql">
 		<echo message="Inserting entity group metadata for Mysql" />
@@ -1913,6 +1914,7 @@
 		</sql>
 		<antcall target="update_metadata_for_model_changes_oracle_post_P5" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_oracle"/>
+		<antcall target="upgrade_db_for_empi_id_oracle"/>
 	</target>
 
 	<target name="reset_sequences" description="Resetting the sequences...">
@@ -4400,7 +4402,19 @@ Thanking You,
 		</sql>
 		<echo message="Upgrading mysql database for all changes required for v1.2" />
 	</target>
-
+	<target name="upgrade_db_for_empi_id__mysql" description="Upgrading mysql database for all changes required for v1.2 ">
+					<echo message="Upgrading MySQL Database." />
+					<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+						<transaction src="${dbupgrade.sql.dir}/MySql/alter_participant_empi_id.sql" />
+						<transaction>commit;</transaction>
+						<classpath>
+							<fileset dir="${lib.dir}">
+								<include name="*.jar" />
+							</fileset>
+						</classpath>
+					</sql>
+					<echo message="Upgrading mysql database for all changes required for v1.2" />
+	</target>
 	<target name="upgrade_db_from_v1.2.3_to_1.2.4_oracle" description="Upgrading oracle database for all changes required for v1.2.2">
 		<echo message="Upgrading Oracle Database."/>
 		<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
@@ -4414,6 +4428,20 @@ Thanking You,
 		</sql>
 		<echo message="Upgrading oracle database for all changes required for v1.2" />
 	</target>
+	<target name="upgrade_db_for_empi_id_oracle" description="Upgrading oracle database for all changes required for v1.2">
+					<echo message="Upgrading Oracle Database."/>
+					<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" onerror="continue">
+						<transaction src="${dbupgrade.sql.dir}/Oracle/alter_participant_empi_id.sql" />
+						<transaction>commit;</transaction>
+						<classpath>
+							<fileset dir="${lib.dir}">
+								<include name="*.jar" />
+							</fileset>
+						</classpath>
+					</sql>
+					<echo message="Upgrading oracle database for all changes required for v1.2" />
+				</target>
+
 
 			<target name="upgrade_db_for_v1.2_mysql" description="Upgrading mysql database for all changes required for v1.2 ">
 				<echo message="Upgrading MySQL Database." />
