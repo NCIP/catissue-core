@@ -16,7 +16,6 @@ alter table catissue_collection_protocol add IS_EMPI_ENABLE  number(1,0);
 update catissue_collection_protocol set IS_EMPI_ENABLE ='0';
 
 alter table CATISSUE_PARTICIPANT add EMPI_ID_STATUS varchar2(50);
-alter table catissue_participant add EMPI_ID varchar2(50);
 
 CREATE SEQUENCE  MATCHING_JOB_DETAILS_SEQ NOCACHE;
 
