@@ -4,14 +4,24 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link href="css/errorpage.css" rel="stylesheet" type="text/css" />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 <title>Insert title here</title>
 </head>
-<body>
-<div style="padding: 10px 10px 20px 20px;">
-<div class="error">
-The input contained special characters that are not acceptable by the application. Please correct the input for the required fields and try again.
-</div>
-</div>
-</body>
+	<body>
+		<div style="padding: 10px 10px 20px 20px;">
+			<div class="messagetexterror">
+				<table width="100%" border="0">
+					<tr>
+						<td align="right">
+							<img src="images/warning.png" height="20" width="20"/>
+						</td>
+						<td class="messagetexterror">
+							The input contains some characters that are considered as dangerous from the application security point of view. </br>	
+							Please review the input values again or contact the administrator for help.
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</body>
 </html>

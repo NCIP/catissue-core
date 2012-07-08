@@ -1175,5 +1175,11 @@
 		<put name="wizardPage" value="/pages/content/magetab/wizardPage3.jsp" />
 	</definition>
 	<!-- MAGE-TAB Export Wizard -->
+	
+	<definition name=".catissuecore.xssViolations" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/common/XssViolationMessage.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.xssViolationsCpBasedView" path="/pages/content/common/XssViolationMessage.jsp" />
 
 </tiles-definitions>

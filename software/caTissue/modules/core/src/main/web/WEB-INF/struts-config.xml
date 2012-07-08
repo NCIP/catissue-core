@@ -5524,9 +5524,10 @@ PUBLIC
 		</action>
 
 		<!-- For XSS violation -->
-		<action path="/XssViolation"
-			type="org.apache.struts.actions.ForwardAction"
-			parameter="/pages/content/common/XssViolationMessage.jsp" >
+		<action path="/XssViolation" type="edu.wustl.catissuecore.action.XSSViolationAction"
+			validate="false" scope="request">
+			<forward name="generic" path=".catissuecore.xssViolations"/>
+			<forward name="cpbasedview" path=".catissuecore.xssViolationsCpBasedView"/>
 		</action>
 
 		<!-- Bulk Operation Begins -->
