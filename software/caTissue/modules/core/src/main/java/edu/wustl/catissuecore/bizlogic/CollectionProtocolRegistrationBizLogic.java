@@ -860,7 +860,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				if(scg!=null)
 				{
 					scg.setCollectionProtocolRegistration(cpr);
-					if(scgBizLogic.validate(scg, dao, Constants.ADD))
+					if(scg.getId() == null && scgBizLogic.validate(scg, dao, Constants.ADD))
 					{
 						scgBizLogic.insert(scg, dao, sessionDataBean);
 					}	
