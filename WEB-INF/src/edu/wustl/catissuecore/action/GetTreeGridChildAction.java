@@ -16,9 +16,9 @@ import org.json.JSONObject;
 import edu.wustl.catissuecore.bizlogic.CatissueDefaultBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.queryFolder.beans.AssignTag;
+/*import edu.wustl.common.queryFolder.beans.AssignTag;
 import edu.wustl.common.queryFolder.beans.Tag;
-import edu.wustl.common.queryFolder.bizlogic.TagBizLogic;
+import edu.wustl.common.queryFolder.bizlogic.TagBizLogic;*/
 import edu.wustl.query.util.global.AQConstants;
 
 public class GetTreeGridChildAction extends BaseAction
@@ -29,7 +29,7 @@ public class GetTreeGridChildAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception 
 	{
 		String tagIds = (String) request.getParameter("tagId");
-
+/*
 		CatissueDefaultBizLogic bizLogic = new CatissueDefaultBizLogic();
 		long tagId = Long.parseLong(tagIds);
 		TagBizLogic tagBizLogic = new TagBizLogic();
@@ -55,7 +55,7 @@ public class GetTreeGridChildAction extends BaseAction
 		arrayObj.put("childCount", childCount);
 		response.flushBuffer();
 		PrintWriter out = response.getWriter();
-		out.write(arrayObj.toString());
+		out.write(arrayObj.toString());*/
 		return null;
 	}
 
