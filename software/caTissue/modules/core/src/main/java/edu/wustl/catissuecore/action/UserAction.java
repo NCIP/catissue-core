@@ -390,6 +390,7 @@ public class UserAction extends SecureAction
 					SSOcaTissueCommonLoginUtility.isStatusLocked(userForm.getEmailAddress())))
 			{
 				String[] activity_status = {Constants.SELECT_OPTION, Constants.ACTIVE, "Closed",Constants.ACTIVITY_STATUS_LOCKED};
+				userForm.setActivityStatus(Constants.ACTIVITY_STATUS_LOCKED);
 				request.setAttribute("activityStatusList", activity_status);
 			}
 			else

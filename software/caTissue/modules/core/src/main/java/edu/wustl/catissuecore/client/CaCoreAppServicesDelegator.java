@@ -29,6 +29,7 @@ import java.util.Set;
 import javax.naming.directory.InvalidAttributesException;
 
 import oracle.sql.CLOB;
+import edu.wustl.auth.exception.AuthenticationException;
 import edu.wustl.catissuecore.bizlogic.IParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.cdms.integrator.CatissueCdmsURLInformationObject;
@@ -50,6 +51,8 @@ import edu.wustl.catissuecore.factory.utils.UserUtility;
 import edu.wustl.catissuecore.namegenerator.DefaultSCGLabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
+import edu.wustl.catissuecore.processor.CatissueLoginProcessor;
+import edu.wustl.catissuecore.util.SSOcaTissueCommonLoginUtility;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
@@ -64,8 +67,10 @@ import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.participant.utility.ParticipantManagerUtility;
 import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
@@ -122,9 +127,28 @@ public class CaCoreAppServicesDelegator {
 	public Boolean authenticate(final String userName, String password) throws Exception {
 		final User validUser = AppUtility.getUser(userName);
 		Boolean authenticated = false;
-		if (validUser != null) {
-			// password = PasswordManager.encrypt(password);
-			authenticated = SecurityManagerFactory.getSecurityManager().login(userName, password);
+		String message = "";
+		try
+		{
+			if (validUser != null ) 
+			{
+				authenticated = SecurityManagerFactory.getSecurityManager().login(userName, password);
+				message = CatissueLoginProcessor.auditLogin(authenticated, userName, "API User");
+			}
+			if(SSOcaTissueCommonLoginUtility.isStatusLocked(userName))
+        	{
+                throw new AuthenticationException(ApplicationProperties.getValue("error.account.locked"));
+        	}
+		} 
+		catch(SMException exp)
+		{
+			message = CatissueLoginProcessor.auditLogin(authenticated, userName, "API User");
+			if(Validator.isEmpty(message))
+			{
+				throw new AuthenticationException(exp);
+			}
+			else
+				throw new AuthenticationException(message);
 		}
 		return authenticated;
 	}

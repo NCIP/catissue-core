@@ -16,6 +16,7 @@ import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
@@ -76,7 +77,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
         }
         finally
         {
-            auditLogin(loginResult, loginCredentials.getLoginName(), request);
+            auditLogin(loginResult.isAuthenticationSuccess(), loginCredentials.getLoginName(), request.getRemoteAddr());
         }
 
         return loginResult;
@@ -95,10 +96,11 @@ public final class CatissueLoginProcessor extends LoginProcessor
      * @throws CatissueException
      *             the catissue exception
      */
-    public static void auditLogin(final LoginResult loginResult, final String loginName,
-            final HttpServletRequest request) throws CatissueException
+    public static String auditLogin(boolean isLoginSuccessful, final String loginName,
+            final String remoteAddress) throws CatissueException
     {
         HibernateDAO dao = null;
+        String message = "";
         try
         {
             dao = (HibernateDAO) DAOConfigFactory.getInstance().getDAOFactory(
@@ -122,22 +124,25 @@ public final class CatissueLoginProcessor extends LoginProcessor
                 csmUserId = (Long) obj[1];
             }
 
-            final LoginDetails loginDetails = new LoginDetails(userId, csmUserId, request.getRemoteAddr());
+            final LoginDetails loginDetails = new LoginDetails(userId, csmUserId, remoteAddress);
 
-            boolean isLoginSuccessful;
-            if (loginResult == null)
-            {
-                isLoginSuccessful = false;
-            }
-            else
-            {
-                isLoginSuccessful = loginResult.isAuthenticationSuccess();
-            }
+//            boolean isLoginSuccessful;
+//            if (loginResult == null)
+//            {
+//                isLoginSuccessful = false;
+//            }
+//            else
+//            {
+//                isLoginSuccessful = loginResult.isAuthenticationSuccess();
+//            }
 
             (dao).auditLoginEvents(isLoginSuccessful, loginDetails);
             
             dao.commit();
-            checkInvalidAttempts(isLoginSuccessful,loginName);
+            if(lockAccount(isLoginSuccessful,loginName))
+            {
+            	message = ApplicationProperties.getValue("error.account.locked");
+            }
         }
         catch (final ApplicationException exception)
         {
@@ -148,21 +153,25 @@ public final class CatissueLoginProcessor extends LoginProcessor
         {
             closeHibernateSession(dao);
         }
+        return message;
     }
 
-    private static void checkInvalidAttempts(boolean isLoginSuccessful,String loginName) throws ApplicationException 
+    private static Boolean lockAccount(boolean isLoginSuccessful,String loginName) throws ApplicationException 
     {
+    	boolean accountLocked = Boolean.FALSE;
     	if(!isLoginSuccessful && Variables.invalidLoginAttemptsAllowed > 0)
     	{
-	    		if(getInvalidLoginAttempts(loginName) >= 5)
+	    		if(getInvalidLoginAttempts(loginName) >= Variables.invalidLoginAttemptsAllowed )
 	    		{
 	    			String sqll = "update catissue_user set activity_status='Locked' where login_name=?";
 	    			List<ColumnValueBean> beanList = new ArrayList<ColumnValueBean>();
 	    			ColumnValueBean userIdBean = new ColumnValueBean(loginName);
 	    	    	beanList.add(userIdBean);
 	    	    	AppUtility.executeUpdateQuery(sqll, beanList);
+	    	    	accountLocked = Boolean.TRUE;
 	    		}
     	}
+    	return accountLocked;
 	}
 
 	public static int getInvalidLoginAttempts(String loginName)

@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.util.SSOcaTissueCommonLoginUtility;
 import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.XSSSupportedAction;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.domain.LoginCredentials;
 
@@ -103,14 +104,19 @@ public class LoginAction extends XSSSupportedAction
             }
             catch (final Exception ex)
             {
+            	String message = "";
+            	try{
+            		message = CatissueLoginProcessor.auditLogin(false, ((LoginForm)form).getLoginName(), request.getRemoteAddr());
+                    }catch(CatissueException e)
+                    {LoginAction.LOGGER.error("Exception while auditing: " + e.getMessage(), e);}
                 LoginAction.LOGGER.error("Exception: " + ex.getMessage(), ex);
                 cleanSession(request);
-                handleError(request, "errors.incorrectLoginIDPassword");
-                forwardTo = Constants.FAILURE;
-                try{
-                CatissueLoginProcessor.auditLogin(null, ((LoginForm)form).getLoginName(), request);
-                }catch(CatissueException e)
-                {LoginAction.LOGGER.error("Exception while auditing: " + e.getMessage(), e);}
+                if(Validator.isEmpty(message))
+                	handleError(request, "errors.invalid","username or password");
+                else
+                	handleError(request, "error.account.locked","");
+                forwardTo = Constants.FAILURE; 
+                
                 infoUtility.setForwardTo(forwardTo);
             }
         }
@@ -168,10 +174,10 @@ public class LoginAction extends XSSSupportedAction
      * @param errorKey
      *            : errorKey
      */
-    private void handleError(final HttpServletRequest request, final String errorKey)
+    private void handleError(final HttpServletRequest request, final String errorKey,String errorMsg)
     {
         final ActionErrors errors = new ActionErrors();
-        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid","username or password"));
+        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,errorMsg));
         // Report any errors we have discovered
         if (!errors.isEmpty())
         {
