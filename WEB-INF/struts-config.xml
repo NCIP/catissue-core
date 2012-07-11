@@ -311,6 +311,12 @@ PUBLIC
 			validate="false" scope="request">
 			<forward name="success" path=".catissuecore.requestDetailsDef" />
 		</action>
+		
+		<action path="/AdvanceRequestDetails"
+			type="edu.wustl.catissuecore.action.AdvacneReqDetailsAction" name="requestDetailsForm"
+			validate="false" scope="request">
+			<forward name="success" path=".catissuecore.advanceRequestDetailsDef" />
+		</action>
 
 		<action path="/ArrayRequests"
 			type="edu.wustl.catissuecore.action.RequestDetailsAction" name="requestDetailsForm"
@@ -1033,7 +1039,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.ConsentVerificationAction" name="distributionForm"
 			validate="false" scope="request">
 			<forward name="popup" path=".catissuecore.OrderingConsentsDef" />
-			<forward name="ViewAll" path=".catissuecore.ViewAllOrderingConsentsDef" />
+			<forward name="ViewAll" path=".catissuecore.ViewAllAdvOrderingConsentsDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		

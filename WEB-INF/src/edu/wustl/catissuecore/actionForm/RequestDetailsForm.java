@@ -372,8 +372,8 @@ public class RequestDetailsForm extends AbstractActionForm
 //
 //					requestFor = "RequestDetailsBean:" + requestDetailsBeanCounter + "_requestFor";
 //					specimenId = "RequestDetailsBean:" + requestDetailsBeanCounter + "_specimenId";
-//					consentVerificationkey = "RequestDetailsBean:" + requestDetailsBeanCounter
-//							+ "_consentVerificationkey";
+					consentVerificationkey = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_consentVerificationkey";
 //					canDistributeKey = "RequestDetailsBean:" + requestDetailsBeanCounter
 //							+ "_canDistribute";
 //
@@ -386,7 +386,7 @@ public class RequestDetailsForm extends AbstractActionForm
 							+ "_distributedItemId";
 //					specimenCollGrpId = "RequestDetailsBean:" + requestDetailsBeanCounter
 //							+ "_specimenCollGroupId";
-//					specimenList = "RequestForDropDownList:" + requestDetailsBeanCounter;
+					specimenList = "RequestForDropDownList:" + requestDetailsBeanCounter;
 //
 //					actualSpecimenClass = "RequestDetailsBean:" + requestDetailsBeanCounter
 //							+ "_actualSpecimenClass";
@@ -399,13 +399,13 @@ public class RequestDetailsForm extends AbstractActionForm
 //					selectedSpecimenQuantity = "RequestDetailsBean:" + requestDetailsBeanCounter
 //							+ "_selectedSpecimenQuantity";
 //
-//					this.populateValuesMap(orderItem, requestedItem, availableQty, specimenClass,
-//							specimenType, requestFor, specimenId, assignQty, instanceOf,
-//							specimenList, specimenCollGrpId, totalSpecimenListInRequestForDropDown,
-//							actualSpecimenClass, actualSpecimenType, assignStatus,
-//							consentVerificationkey, canDistributeKey, rowStatuskey,
-//							selectedSpecimenTypeKey, selectedSpecimenQuantityUnit,
-//							selectedSpecimenQuantity);
+					this.populateValuesMap(orderItem, requestedItem, availableQty, specimenClass,
+							specimenType, requestFor, specimenId, assignQty, instanceOf,
+							specimenList, specimenCollGrpId, totalSpecimenListInRequestForDropDown,
+							actualSpecimenClass, actualSpecimenType, assignStatus,
+							consentVerificationkey, canDistributeKey, rowStatuskey,
+							selectedSpecimenTypeKey, selectedSpecimenQuantityUnit,
+							selectedSpecimenQuantity);
 					requestDetailsBeanCounter++;
 //				}
 //				else
@@ -771,7 +771,6 @@ public class RequestDetailsForm extends AbstractActionForm
 			final List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(
 					allSpecimen, existingSpecimenOrderItem.getSpecimen());
 			this.requestForDropDownMap.put(specimenList, childrenSpecimenListToDisplay);
-
 		}
 		else if (orderItem instanceof DerivedSpecimenOrderItem)
 		{
@@ -875,7 +874,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			this.values.put(specimenType, derivedSpecimenOrderItem.getSpecimenType());
 			this.values.put(specimenId, derivedSpecimenOrderItem.getParentSpecimen().getId()
 					.toString());
-			//	values.put(consentVerificationkey, "View");
+//				values.put(consentVerificationkey, "View");
 			this.values.put(instanceOf, "Derived");
 
 			//fix me second condition added by vaishali
