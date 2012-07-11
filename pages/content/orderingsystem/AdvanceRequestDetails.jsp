@@ -25,7 +25,7 @@ if(requestDetailsList!=null && requestDetailsList.size()>0 )
  count=requestDetailsList.size();	
 }
 String checkQuantityforAll = "checkQuantityforAll("+count+")";
-String form_action = Constants.SUBMIT_REQUEST_DETAILS_ACTION+"?submittedFor=ForwardTo&noOfRecords="+count;
+String form_action = "SubmitAdvRequestDetails.do?submittedFor=ForwardTo&noOfRecords="+count;
 %>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>

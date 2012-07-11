@@ -900,8 +900,14 @@ public class RequestDetailsAction extends BaseAction
 			}
 			if (specimenOrderBean.isConsentAvl())
 			{
-//				requestDetailsForm.setValue(consentVerificationkey, Constants.VIEW_CONSENTS);
-				requestDetailsForm.setValue(consentVerificationkey, Constants.NO_CONSENTS);
+				if(specimenOrderBean.isConsentWaived())
+				{
+					requestDetailsForm.setValue(consentVerificationkey, Constants.WAIVED_CONSENTS);
+				}
+				else
+				requestDetailsForm.setValue(consentVerificationkey, Constants.VIEW_CONSENTS);
+				
+//				requestDetailsForm.setValue(consentVerificationkey, Constants.NO_CONSENTS);
 				speciemnIdValue.append(specimenOrderBean.getId());
 				speciemnIdValue.append(",");
 				speciemnIdValue.append(specimenOrderBean.getLabel());
@@ -1489,8 +1495,10 @@ public class RequestDetailsAction extends BaseAction
 
 		if (specimenOrderBean.isConsentAvl())
 		{
-			
-			requestDetailsBean.setConsentVerificationkey(Constants.VIEW_CONSENTS);
+			if(specimenOrderBean.isConsentWaived())
+				requestDetailsBean.setConsentVerificationkey(Constants.VIEW_CONSENTS);
+			else
+				requestDetailsBean.setConsentVerificationkey(Constants.WAIVED_CONSENTS);
 		}
 		else
 		{

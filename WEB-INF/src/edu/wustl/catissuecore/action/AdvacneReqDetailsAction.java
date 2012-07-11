@@ -115,7 +115,7 @@ public class AdvacneReqDetailsAction extends BaseAction
 		String selectedTab = request.getParameter("selectedTab");
 		if(Validator.isEmpty(selectedTab))
 		{
-			selectedTab = "SimpleViewTab";
+			selectedTab = "AdvancedViewTab";
 		}
 		request.setAttribute("selectedTab", selectedTab);
 

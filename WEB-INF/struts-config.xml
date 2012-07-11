@@ -353,6 +353,15 @@ PUBLIC
 			<forward name="specimenArrayDistributionReport" path="/ArrayDistributionReport.do" />
 			<forward name="failure" path="/RequestDetails.do" />
 		</action>
+		
+		<action path="/SubmitAdvRequestDetails" type="edu.wustl.common.action.CommonAddEditAction"
+			name="requestDetailsForm" validate="true" scope="request" input="/AdvanceRequestDetails.do?selectedTab=AdvancedViewTab">
+			<forward name="success"
+				path="/AdvanceRequestDetails.do?pageNum=1&amp;menuSelected=17" />
+			<forward name="specimenDistributionReport" path="/DistributionReport.do" />
+			<forward name="specimenArrayDistributionReport" path="/ArrayDistributionReport.do" />
+			<forward name="failure" path="/AdvanceRequestDetails.do" />
+		</action>
 
 		<action path="/UpdateQuantity"
 			type="edu.wustl.catissuecore.action.UpdateAvailableQuantity" scope="request">
