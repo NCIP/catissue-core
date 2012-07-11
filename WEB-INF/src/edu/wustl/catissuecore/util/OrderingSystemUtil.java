@@ -784,8 +784,32 @@ public final class OrderingSystemUtil
 				specBean.setSpecimenType((String) obj.get(3));
 				specBean.setLabel((String) obj.get(4));
 				specBean.setAvailableQty((String) obj.get(5));
-				specBean.setConsentAvl(true);
+				specBean.setConsentAvl(false);
 				map.put(key,specBean);
+			}
+		}
+		String secSql = "select cat.identifier,cp.consents_waived " +
+				" from catissue_abstract_specimen abs,catissue_specimen spec, catissue_specimen_coll_group scg, " +
+				" catissue_coll_prot_reg cpr, catissue_collection_protocol cp, " +
+				" catissue_consent_tier_status cts,catissue_existing_sp_ord_item cat,catissue_order_item cot,catissue_consent_tier ct " +
+				" where cts.specimen_id=cat.specimen_id and " +
+				" cat.identifier=cot.identifier and order_id=? " +
+				" and spec.identifier=abs.identifier and abs.identifier =cat.specimen_id " +
+				" and spec.specimen_collection_group_id=scg.identifier " +
+				" and cpr.identifier=scg.collection_protocol_reg_id " +
+				" and cp.identifier=cpr.collection_protocol_id and ct.identifier = cts.consent_tier_id";
+		// List list = dao.executeQuery(sql);
+		List conRespList = dao.executeQuery(sql, attrList);
+		if(conRespList != null && conRespList.size() > 0)
+		{
+			for (Object object : conRespList)
+			{
+				List obj = (List)object;
+				Long key = Long.valueOf((String)obj.get(0));
+				SpecimenOrderBean sBean = map.get(key);
+				sBean.setConsentAvl(true);
+				boolean consentWaived = Boolean.valueOf((String)obj.get(0));
+				sBean.setConsentWaived(consentWaived);
 			}
 		}
 		return map;

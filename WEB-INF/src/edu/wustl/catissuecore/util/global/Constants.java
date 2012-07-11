@@ -167,7 +167,7 @@ public class Constants
 
 	/** The Constant COMPLETE. */
 	public static final String COMPLETE = "Complete";
-
+	public static final String WAIVED_CONSENTS ="Waived";
 	/** The Constant VIEW_CONSENTS. */
 	public static final String VIEW_CONSENTS = "View";
 
