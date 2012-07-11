@@ -799,7 +799,7 @@ public final class OrderingSystemUtil
 				" and cpr.identifier=scg.collection_protocol_reg_id " +
 				" and cp.identifier=cpr.collection_protocol_id and ct.identifier = cts.consent_tier_id";
 		// List list = dao.executeQuery(sql);
-		List conRespList = dao.executeQuery(sql, attrList);
+		List conRespList = dao.executeQuery(secSql, attrList);
 		if(conRespList != null && conRespList.size() > 0)
 		{
 			for (Object object : conRespList)
@@ -808,7 +808,7 @@ public final class OrderingSystemUtil
 				Long key = Long.valueOf((String)obj.get(0));
 				SpecimenOrderBean sBean = map.get(key);
 				sBean.setConsentAvl(true);
-				boolean consentWaived = Boolean.valueOf((String)obj.get(0));
+				boolean consentWaived = Boolean.valueOf((String)obj.get(1));
 				sBean.setConsentWaived(consentWaived);
 			}
 		}
