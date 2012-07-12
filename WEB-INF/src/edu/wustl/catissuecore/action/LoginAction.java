@@ -155,7 +155,7 @@ public class LoginAction extends XSSSupportedAction
 
 
             if (!Constants.FAILURE.equals(forwardTo)
-                    && MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()))
+                    && MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState()) && !"access_denied".equals(forwardTo))
             {
                 forwardTo = Constants.SUCCESS;
             }
@@ -339,7 +339,6 @@ public class LoginAction extends XSSSupportedAction
     {
         return !MigrationState.MIGRATED.equals(loginResult.getMigrationState())
                 && !MigrationState.NEW_IDP_USER.equals(loginResult.getMigrationState())
-                && !MigrationState.TO_BE_MIGRATED.equals(loginResult.getMigrationState())
                 && !(isUserHasRole(validRole));
     }
 

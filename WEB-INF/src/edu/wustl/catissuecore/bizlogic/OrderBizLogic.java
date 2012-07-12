@@ -308,7 +308,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 						}
 						else if (oldorderItem instanceof NewSpecimenArrayOrderItem)
 						{
-							final SpecimenArray specimenArray = (SpecimenArray) this
+							final SpecimenArray specimenArray = this
 									.getSpecimenArray(oldorderItem.getId(), dao);
 							final NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) oldorderItem;
 							newSpecimenArrayOrderItem.setSpecimenArray(specimenArray);
@@ -397,7 +397,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 										while (finalChildrenSpecimenCollectionIterator.hasNext())
 										{
 											totalChildrenSpecimenColl
-													.add((Specimen) (finalChildrenSpecimenCollectionIterator
+													.add((finalChildrenSpecimenCollectionIterator
 															.next()));
 										}
 									}
@@ -778,7 +778,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 				{
 					if(((SpecimenOrderItem) oldOrderItem).getNewSpecimenArrayOrderItem() == null)
 					{
-					  this.orderStatusNew++;
+					  orderStatusNew++;
 					}
 				}
 
@@ -796,7 +796,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 				if ((oldOrderItem instanceof SpecimenArrayOrderItem)
 						|| ((SpecimenOrderItem) oldOrderItem).getNewSpecimenArrayOrderItem() == null)
 				{
-					this.orderStatusCompleted++;
+					orderStatusCompleted++;
 				}
 			}
 			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(
@@ -806,7 +806,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					|| oldOrderItem.getStatus().trim().equalsIgnoreCase(
 							Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION))
 			{
-				this.orderStatusPending++;
+				orderStatusPending++;
 			}
 			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(
 					Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST)
@@ -818,7 +818,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 				if ((oldOrderItem instanceof SpecimenArrayOrderItem)
 						|| ((SpecimenOrderItem) oldOrderItem).getNewSpecimenArrayOrderItem() == null)
 				{
-					this.orderStatusRejected++;
+					orderStatusRejected++;
 				}
 			}
 		}
@@ -833,16 +833,16 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 	 */
 	private OrderDetails updateOrderStatus(OrderDetails orderNew, Collection oldOrderItemSet)
 	{
-		if (this.orderStatusNew == oldOrderItemSet.size())
+		if (orderStatusNew == oldOrderItemSet.size())
 		{
 			orderNew.setStatus(Constants.ORDER_STATUS_NEW);
 		}
-		else if (this.orderStatusRejected == oldOrderItemSet.size())
+		else if (orderStatusRejected == oldOrderItemSet.size())
 		{
 			orderNew.setStatus(Constants.ORDER_STATUS_REJECTED);
 		}
-		else if ((this.orderStatusCompleted == oldOrderItemSet.size())
-				|| ((this.orderStatusCompleted + this.orderStatusRejected) == oldOrderItemSet
+		else if ((orderStatusCompleted == oldOrderItemSet.size())
+				|| ((orderStatusCompleted + orderStatusRejected) == oldOrderItemSet
 						.size()))
 		{
 			orderNew.setStatus(Constants.ORDER_STATUS_COMPLETED);
@@ -963,7 +963,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(userName);
 
 			final User user = this.getUser(dao, userId);
-			final List siteIdsList = (List) this.getUserSitesWithDistributionPrev(user,
+			final List siteIdsList = this.getUserSitesWithDistributionPrev(user,
 					privilegeCache);
 
 			List orderListFromDB = null;
@@ -1014,7 +1014,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 					}
 				}
 			}
-			requestViewBeanList = (List) this.populateRequestViewBeanList(orderList);
+			requestViewBeanList = this.populateRequestViewBeanList(orderList);
 
 		}
 		catch (final SMException e)
@@ -1092,7 +1092,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 				final DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem) orderItem;
 				if (derivedSpecimenOrderItem.getParentSpecimen() != null)
 				{
-					final SpecimenPosition specimenPosition = (SpecimenPosition) derivedSpecimenOrderItem
+					final SpecimenPosition specimenPosition = derivedSpecimenOrderItem
 							.getParentSpecimen().getSpecimenPosition();
 					if (specimenPosition != null
 							&& !(derivedSpecimenOrderItem.getStatus().equals(
@@ -1100,7 +1100,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 									.getStatus().equals(
 											Constants.ORDER_REQUEST_STATUS_DISTRIBUTED_AND_CLOSE)))
 					{
-						final Long siteId = (Long) specimenPosition.getStorageContainer().getSite()
+						final Long siteId = specimenPosition.getStorageContainer().getSite()
 								.getId();
 						if (siteIdsList.contains(siteId))
 						{
@@ -1139,7 +1139,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
-		return (List) siteCollWithDistriPri;
+		return siteCollWithDistriPri;
 	}
 
 	/**
@@ -1208,7 +1208,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 				if (orderItem instanceof PathologicalCaseOrderItem)
 				{
 					final PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem) orderItem;
-					final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) pathologicalCaseOrderItem
+					final SpecimenCollectionGroup specimenCollectionGroup = pathologicalCaseOrderItem
 							.getSpecimenCollectionGroup();
 					if (specimenCollectionGroup != null
 							&& !(pathologicalCaseOrderItem.getStatus().equals(
@@ -1273,7 +1273,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 		final List siteCollWithDistriPri = new ArrayList();
 		this.getSiteIds(privilegeCache, siteCollWithDistriPri, user);
 
-		return (List) siteCollWithDistriPri;
+		return siteCollWithDistriPri;
 
 	}
 
@@ -1675,7 +1675,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 				.getName(), specimenArray.getId());
 		final SpecimenArray newSpecimenArray = oldSpecimenArray;
 		newSpecimenArray.setActivityStatus("Closed");
-		specimenArrayBizLogic.update(newSpecimenArray, oldSpecimenArray, sessionDataBean);
+		specimenArrayBizLogic.update(dao,newSpecimenArray, oldSpecimenArray, sessionDataBean);
 
 	}
 
@@ -1775,7 +1775,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 
 			newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) dao.retrieveById(
 					NewSpecimenArrayOrderItem.class.getName(), newSpecimenArrayId);
-			newSpecimenArrayOrderItem.setSpecimenArray((SpecimenArray) this.getSpecimenArray(
+			newSpecimenArrayOrderItem.setSpecimenArray(this.getSpecimenArray(
 					newSpecimenArrayOrderItem.getId(), dao));
 
 		}
@@ -1808,7 +1808,7 @@ public class OrderBizLogic extends CatissueDefaultBizLogic
 			dao = this.openDAOSession(null);
 			specimenOrderItem = (SpecimenOrderItem) dao.retrieveById(SpecimenOrderItem.class
 					.getName(), specimenOrderItemId);
-			final NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem) specimenOrderItem
+			final NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = specimenOrderItem
 					.getNewSpecimenArrayOrderItem();
 			specimenOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayOrderItem);
 
