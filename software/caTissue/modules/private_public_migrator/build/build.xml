@@ -4,8 +4,8 @@
 
 <project name="Private_Public" basedir="../">
 
-    <property file="privatePublic.properties"/>
-    <property name="libDir" value="${basedir}/../../../target/lib/caTissue_lib/private_public_migrator_lib"/>
+    <property file="./build/privatePublic.properties"/>
+    <property name="libDir" value="${basedir}/lib"/>
     <property name="baseDir" value="${basedir}"/>
     <property name="classesDir" value="${baseDir}/target/classes"/>
 
@@ -29,7 +29,7 @@
     <property name="create.oracle.staging.db" value="impdp ${stagingSystemUserName}/${stagingSystemPassword}@${stagingDBName} remap_schema=${privateDBUserName}:${stagingDBUserName} directory=data_pump_dir dumpfile=catissue_${TODAY}.dmp logfile=imp parallel=4 transform=oid:n @@TABLESPACE@@"/>
     <property name="create.oracle.private.dump" value="expdp ${stagingSystemUserName}/${stagingSystemPassword}@${stagingDBName} schemas=${privateDBUserName} directory=data_pump_dir dumpfile=catissue_${TODAY}.dmp logfile=catissueexp.log"/>
 
-    <property name="drop.mysql.staging.db" value="cmd /c mysql -u ${stagingDBUserName} -p${stagingDBPassword} -h ${stagingDBHost} -P ${stagingDBPort} &lt;${baseDir}/db/drop_staging_db_mysql.sql"/>
+    <property name="drop.mysql.staging.db" value="cmd /c mysql -u ${stagingDBUserName} -p${stagingDBPassword} -h ${stagingDBHost} -P ${stagingDBPort} &lt;../db/drop_staging_db_mysql.sql"/>
     <property name="create.mysql.staging.db" value="cmd /c mysql -u ${stagingDBUserName} -p${stagingDBPassword} -h ${stagingDBHost} -P ${stagingDBPort} ${stagingDBName}&lt;privatedump_${TODAY}.sql"/>
     <property name="create.mysql.private.dump" value="cmd /c mysqldump -u ${privateDBUserName} -p${privateDBPassword} -h ${privateDBHost} -P ${privateDBPort} ${privateDBName}&gt;privatedump_${TODAY}.sql"/>
 
@@ -38,9 +38,9 @@
     <property name="create.oracle.public.dump" value="exp ${stagingSystemUserName}/${stagingSystemPassword}@${stagingDBName} owner=${stagingDBUserName} file=public_${TODAY}.dmp"/>
     <property name="configure.masking" value="${privateDBUserName}/${privateDBPassword}@${privateDBName}"/>
 
-    <property name="drop.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} -P ${publicDBPort} &lt;${baseDir}/db/drop_public_db_mysql.sql"/>
+    <property name="drop.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} -P ${publicDBPort} &lt;../db/drop_public_db_mysql.sql"/>
     <property name="create.mysql.public.db" value="cmd /c mysql -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} -P ${publicDBPort} ${publicDBName}&lt;publicdump_${TODAY}.sql"/>
-    <property name="create.mysql.public.dump" value="cmd /c mysqldump -u ${publicDBUserName} -p${publicDBPassword} -h ${publicDBHost} -P ${publicDBPort} ${publicDBName}&gt;publicdump_${TODAY}.sql"/>
+    <property name="create.mysql.public.dump" value="cmd /c mysqldump -u ${stagingDBUserName} -p${stagingDBPassword} -h ${stagingDBHost} -P ${stagingDBPort} ${stagingDBName}&gt;publicdump_${TODAY}.sql"/>
 
 
     <target name="init">
@@ -178,6 +178,7 @@
     <path id="cp1">
         <fileset dir="${libDir}">
             <include name="**/*.jar"/>
+			<exclude name="AdvanceQuery.jar"/>
         </fileset>
     </path>
 
@@ -238,6 +239,9 @@
         <copy file="${baseDir}/conf/OracleDataSourceDAOProperties.xml" todir="${classesDir}" overwrite="true"/>
         <copy file="${baseDir}/conf/ApplicationResources.properties" todir="${classesDir}" overwrite="true"/>
         <copy file="${baseDir}/conf/DynamicExtensionDAO.properties" todir="${classesDir}" overwrite="true"/>
+		<copy file="${baseDir}/src/main/resources/ApplicationDAOProperties.xml" todir="${classesDir}" overwrite="true"/>
+		<copy file="${baseDir}/src/main/resources/dbutil.properties" todir="${classesDir}" overwrite="true"/>
+		
         <if>
             <equals arg1="${databaseType}" arg2="mysql"/>
             <then>
@@ -248,18 +252,15 @@
                     <replacefilter token="@@USER_NAME@@" value="${stagingDBUserName}"/>
                     <replacefilter token="@@PASSWORD@@" value="${stagingDBPassword}"/>
                 </replace>
-                <replace file="${baseDir}/src/main/resources/ApplicationDAOProperties.xml">
+                <replace file="${classesDir}/ApplicationDAOProperties.xml">
                     <replacefilter token="${oracle.dao.prop.filename}" value="${mysql.dao.prop.filename}"/>
                 </replace>
                 <copy file="${baseDir}/conf/drop_staging_db_mysql.sql" todir="${baseDir}/db" overwrite="true"/>
                 <copy file="${baseDir}/conf/drop_public_db_mysql.sql" todir="${baseDir}/db" overwrite="true"/>
             </then>
         </if>
-
-
         <if>
             <equals arg1="${databaseType}" arg2="oracle"/>
-
             <then>
                 <replace dir="${classesDir}">
                     <replacefilter token="org.hibernate.dialect.MySQLDialect"
@@ -270,7 +271,7 @@
                     <replacefilter token="@@USER_NAME@@" value="${stagingDBUserName}"/>
                     <replacefilter token="@@PASSWORD@@" value="${stagingDBPassword}"/>
                 </replace>
-                <replace file="${baseDir}/ApplicationDAOProperties.xml">
+                <replace file="${classesDir}/ApplicationDAOProperties.xml">
                     <replacefilter token="${mysql.dao.prop.filename}" value="${oracle.dao.prop.filename}"/>
                 </replace>
                 <copy file="${baseDir}/conf/drop_staging_db_oracle.sql" todir="${baseDir}/db" overwrite="true"/>
