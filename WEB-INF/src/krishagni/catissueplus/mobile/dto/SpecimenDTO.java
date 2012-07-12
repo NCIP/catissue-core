@@ -31,8 +31,18 @@ public class SpecimenDTO
 	private String positionDimensionOneString;
 
 	private String positionDimensionTwoString;
+	
+	private String label;
 
 	
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
 	/**
 	 * @return the cpShortTitle
 	 */

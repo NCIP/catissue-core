@@ -5871,4 +5871,13 @@ public class Constants
 	 public static final String FORGOT_PASSWORD_ENABLED="forgot.password.enabled";
 	 public static final String PAGE_OF_RESET_PASSWORD="pageOfResetPassword";
 	 public static final String PASSWORD_TOKEN_NOT_EXISTS="password.token.not.exist";
+	 
+	 
+	 //Error message String For Mobile
+	 
+	 public static final String INVALID_ALIQUOT_QUANTITY = "Invalid Aliquot Quantity";
+	 public static final String INSUFFICIENT_AVAILABLE_QUANTITY = "The system cannot distribute available quantity among the aliquots due to insufficient amount. ";
+	 public static final String INSUFFICIEN_STORAGE_LOCATION = "The system cannot store all the aliquots in the same container at this time due to insufficient number of storage locations.";
+	 public static final String SUCCESS_MSG_ALIQUOT_CREATION = "Aliquots created successfully";
+	 
 }

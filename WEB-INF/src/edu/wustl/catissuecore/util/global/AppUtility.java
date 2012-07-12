@@ -449,7 +449,19 @@ public class AppUtility {
 		}
 		return "";
 	}
+	public static Specimen getSpecimenByClassName(final String className){
+		if(Constants.CELL.equals(className)){
+			return new CellSpecimen();
+		}else if(Constants.MOLECULAR.equals(className)){
+			return new MolecularSpecimen();
+		}else if (Constants.FLUID.equals(className)){
+			return new FluidSpecimen();
+		} else if( Constants.TISSUE.equals(className)){
+			return new TissueSpecimen();
+		}
+		return new Specimen();
 
+	}
 	// Aniruddha : Added for enhancement - Specimen Aliquoting
 	/**
 	 * Returns the particular specimen object as per the specimen class.

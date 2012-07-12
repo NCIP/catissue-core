@@ -72,15 +72,36 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
      <servlet-name>LoadGridServlet</servlet-name>
      <servlet-class>edu.wustl.catissuecore.action.LoadGridServlet</servlet-class>
    </servlet>
+   
+    <servlet>
+     <servlet-name>TransferSpecimenAliquots</servlet-name>
+     <servlet-class>krishagni.catissueplus.mobile.servlet.TransferSpecimenAliquots</servlet-class>
+   </servlet>
+   
     <servlet>
      <servlet-name>AppLogin</servlet-name>
      <servlet-class>krishagni.catissueplus.mobile.servlet.Login</servlet-class>
    </servlet>
+      <servlet>
+     <servlet-name>CatissueMobileAppCommonServlet</servlet-name>
+     <servlet-class>krishagni.catissueplus.mobile.servlet.CatissueMobileAppCommonServlet</servlet-class>
+   </servlet>
+    
     <servlet>
      <servlet-name>ViewSpecimenDetail</servlet-name>
      <servlet-class>krishagni.catissueplus.mobile.servlet.ViewSpecimenDetail</servlet-class>
    </servlet>
   
+    <servlet>
+     <servlet-name>CreateAliquot</servlet-name>
+     <servlet-class>krishagni.catissueplus.mobile.servlet.CreateAliquot</servlet-class>
+   </servlet>
+   
+   <servlet>
+     <servlet-name>StorageContainerDetail</servlet-name>
+     <servlet-class>krishagni.catissueplus.mobile.servlet.StorageContainerDetail</servlet-class>
+   </servlet>
+   
      <servlet>
      <servlet-name>AppLogout</servlet-name>
      <servlet-class>krishagni.catissueplus.mobile.servlet.Logout</servlet-class>
@@ -96,6 +117,27 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	     <servlet-name>LoadGridServlet</servlet-name>
 	     <url-pattern>/LoadGridServlet</url-pattern>
   	</servlet-mapping>
+	  <servlet-mapping>
+ <servlet-name>TransferSpecimenAliquots</servlet-name>
+ <url-pattern>/TransferSpecimenAliquots</url-pattern>
+ </servlet-mapping>
+ 
+  <servlet-mapping>
+ <servlet-name>CatissueMobileAppCommonServlet</servlet-name>
+ <url-pattern>/CatissueMobileAppCommonServlet</url-pattern>
+ </servlet-mapping>
+ 
+   <servlet-mapping>
+ <servlet-name>CreateAliquot</servlet-name>
+ <url-pattern>/CreateAliquot</url-pattern>
+ </servlet-mapping>
+ 
+     <servlet-mapping>
+ <servlet-name>StorageContainerDetail</servlet-name>
+ <url-pattern>/StorageContainerDetail</url-pattern>
+ </servlet-mapping>
+ 
+ 
   <servlet-mapping>
  <servlet-name>AppLogin</servlet-name>
  <url-pattern>/AppLogin</url-pattern>

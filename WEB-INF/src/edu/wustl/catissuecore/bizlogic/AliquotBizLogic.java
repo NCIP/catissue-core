@@ -2,23 +2,40 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+
+import krishagni.catissueplus.mobile.dto.AliquotsDetailsDTO;
+
 
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Aliquot;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -26,15 +43,28 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.query.util.querysuite.DAOUtil;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * This class is added for Bulk Operations.
  * @author sagar_baldwa
  *
  */
+/**
+ * @author mosin
+ *
+ */
+/**
+ * @author mosin
+ *
+ */
+/**
+ * @author mosin
+ *
+ */
 public class AliquotBizLogic extends CatissueDefaultBizLogic
 {
-
 	/**
 	 * logger instance of the class.
 	 */
@@ -48,7 +78,9 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException BizLogicException.
 	 */
 	@Override
-	protected void insert(final Object obj, final DAO dao, SessionDataBean sessionDataBean)
+	
+	 protected void insert(final Object obj, final DAO dao, SessionDataBean sessionDataBean)
+	 
 			throws BizLogicException
 	{
 		try
@@ -285,7 +317,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 	 * @param aliquot Aliquot.
 	 * @param dao DAO.
 	 * @param specimenPosition SpecimenPosition.
-	 * @throws BizLogicException BizLogicException.
+	 o* @throws BizLogicException BizLogicException.
 	 * @throws DAOException DAOException.
 	 */
 	private void validateSpecimenPosition(Aliquot aliquot, DAO dao,
@@ -464,5 +496,304 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			specimen = (Specimen) specimenList.get(0);
 		}
 		aliquot.setSpecimen(specimen);
+	}
+	
+	
+	/**
+	 * Validate availableQuantity against quantity per aliquot 
+	 * @param aliquotDetailObj
+	 * @param availableQuantity
+	 * @throws ApplicationException
+	 */
+	private void validateQuantity(AliquotsDetailsDTO aliquotDetailObj,double availableQuantity) throws ApplicationException{
+		double qtyPerAlq = aliquotDetailObj.getQuantityPerAliquot();
+		int count = aliquotDetailObj.getNoOfAliquots();
+		if((qtyPerAlq*count) > availableQuantity)
+		{
+			throw new ApplicationException(null,null,  Constants.INSUFFICIENT_AVAILABLE_QUANTITY);
+		}
+		
+	}
+	
+	
+	/**
+	 * Calculate quantity per aliquot
+	 * @param aliquotDetailObj
+	 * @param availableQuantity
+	 * @param isDouble
+	 * @throws ApplicationException
+	 */
+	private void distributeAvailableQuantity(AliquotsDetailsDTO aliquotDetailObj,Double availableQuantity ,boolean isDouble) throws ApplicationException{
+		final int aliquotCount = aliquotDetailObj.getNoOfAliquots();
+		Double distributedQuantity;
+		if (isDouble)
+		{
+			// Bug no 560
+			if (availableQuantity < 0)
+			{
+				throw new ApplicationException(null,null,  Constants.INSUFFICIENT_AVAILABLE_QUANTITY);
+			}
+			double dQuantity;
+			if (aliquotDetailObj.getQuantityPerAliquot() == null
+					|| aliquotDetailObj.getQuantityPerAliquot() == 0)
+			{
+				final BigDecimal bgAvailTemp = new BigDecimal(availableQuantity);
+				final BigDecimal bgCntTemp = new BigDecimal(aliquotCount);
+				final BigDecimal bgAvail = bgAvailTemp.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+				final BigDecimal bgCnt = bgCntTemp.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+				final BigDecimal bgQuantity = bgAvail.divide(bgCnt, 2, BigDecimal.ROUND_FLOOR);
+				dQuantity = bgQuantity.doubleValue();
+				availableQuantity = availableQuantity - (dQuantity * aliquotCount);
+				availableQuantity = AppUtility.roundOff(availableQuantity, Constants.QUANTITY_PRECISION);
+
+			}else
+			{
+				dQuantity = aliquotDetailObj.getQuantityPerAliquot();
+				availableQuantity = availableQuantity - (dQuantity * aliquotCount);
+				availableQuantity = AppUtility.roundOff(availableQuantity, Constants.QUANTITY_PRECISION);
+			}
+			distributedQuantity = dQuantity;
+
+			if (availableQuantity < 0)
+			{
+				throw new ApplicationException(null,null,  Constants.INSUFFICIENT_AVAILABLE_QUANTITY);
+			}
+
+			aliquotDetailObj.setAvailableQuantity(availableQuantity);
+			
+		}else
+		{
+			Integer availableQuantityInt= availableQuantity.intValue();
+			if (availableQuantityInt < 0)
+			{
+
+				throw new ApplicationException(null,null,  Constants.INSUFFICIENT_AVAILABLE_QUANTITY);
+			}
+			Integer iQauntity = (int) (availableQuantityInt / aliquotCount);
+
+			if (aliquotDetailObj.getQuantityPerAliquot() == null
+					|| aliquotDetailObj.getQuantityPerAliquot() == 0)
+			{
+				iQauntity = (int) (availableQuantityInt / aliquotCount);
+			}
+			else
+			{
+				iQauntity = aliquotDetailObj.getQuantityPerAliquot().intValue();
+			}
+
+			distributedQuantity = iQauntity.doubleValue();
+			availableQuantityInt = availableQuantityInt - (iQauntity * aliquotCount);
+
+			if (availableQuantityInt < 0)
+			{
+
+				throw new ApplicationException(null,null,  Constants.INSUFFICIENT_AVAILABLE_QUANTITY);
+			}
+
+			aliquotDetailObj.setAvailableQuantity(availableQuantityInt.doubleValue());
+		}
+		aliquotDetailObj.setQuantityPerAliquot(distributedQuantity);
+		
+	}
+	
+	/**
+	 * Calculate Parent availabel quantity
+	 * @param intialAvailabelQuantity
+	 * @param aliquotSpecimenList
+	 * @return
+	 */
+	public double calculateAvailableQunatity(Double intialAvailabelQuantity,List aliquotSpecimenList){
+		for(int i = 0; i< aliquotSpecimenList.size(); i++)
+		{
+			intialAvailabelQuantity = intialAvailabelQuantity + ((Specimen)aliquotSpecimenList.get(i)).getAvailableQuantity();
+		}
+		
+		return intialAvailabelQuantity;
+	}
+	
+	/**
+	 * Get Specimen Position List as per number of aliquots
+	 * @param aliquotDetailObj
+	 * @param sessionDataBean
+	 * @param dao
+	 * @return
+	 * @throws ApplicationException
+	 */
+	private List<SpecimenPosition> GetSpecimenPositionList(AliquotsDetailsDTO aliquotDetailObj, SessionDataBean sessionDataBean,DAO dao)
+	throws ApplicationException{
+		StorageContainerBizLogic scBiz = new StorageContainerBizLogic();
+		StorageContainer strCont = scBiz.getStorageContainerFromName(dao,aliquotDetailObj.getContainerName());
+		scBiz.validateContainerAccess(dao, strCont, sessionDataBean);
+		StorageContainerForSpecimenBizLogic scfsBiz = new StorageContainerForSpecimenBizLogic();
+		
+		//Fetch list of available position from container.
+		return scfsBiz.getAvailablePositionFromContainerForSpecimen(aliquotDetailObj.getContainerName(), aliquotDetailObj.getStartingStoragePositionX()
+				, aliquotDetailObj.getStartingStoragePositionY(), aliquotDetailObj.getNoOfAliquots(), dao); // get from container biz logic (container name, pos1, pos2, count)
+		
+	}
+	
+	
+	/**
+	 * @param updateSpecimenAliquotCollection
+	 * @param dao
+	 * @throws ApplicationException
+	 */
+	private void updateCpBasedAliquot(Collection<AbstractDomainObject> updateSpecimenAliquotCollection,DAO dao)  throws ApplicationException{
+		Iterator<AbstractDomainObject> ite = updateSpecimenAliquotCollection.iterator();
+		while(ite.hasNext()){
+			dao.update(ite.next());
+		}
+	}
+	
+	/**
+	 * Set Aliquot Deatial Details
+	 * @param aliquotSpecimen
+	 * @param parentSpecimen
+	 * @param aliquotDetailObj
+	 * @param spePositionObj
+	 */
+	private void setAliquotSpecimenDetail(Specimen aliquotSpecimen,Specimen parentSpecimen,AliquotsDetailsDTO aliquotDetailObj,SpecimenPosition spePositionObj){
+		aliquotSpecimen.setInitialQuantity(aliquotDetailObj.getQuantityPerAliquot());
+		aliquotSpecimen.setAvailableQuantity(aliquotDetailObj.getQuantityPerAliquot());
+		spePositionObj.setSpecimen(aliquotSpecimen);
+		aliquotSpecimen.setSpecimenPosition(spePositionObj);
+		if(aliquotSpecimen  instanceof MolecularSpecimen ){
+			((MolecularSpecimen) aliquotSpecimen).setConcentrationInMicrogramPerMicroliter(((MolecularSpecimen)parentSpecimen).getConcentrationInMicrogramPerMicroliter());
+		}
+		aliquotSpecimen.setCreatedOn(aliquotDetailObj.getCreatedDate());
+		aliquotSpecimen.setLineage(Constants.ALIQUOT);
+		aliquotSpecimen.setIsAvailable(Boolean.TRUE);
+		aliquotSpecimen.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.toString());
+		aliquotSpecimen.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
+		
+	}
+	
+	/**
+	 * It create aliquot and sets inherited properties from parent specimen 
+	 * @param parentSpecimen
+	 * @return Specimen
+	 */
+	private Specimen createAliquotSpecimen(Specimen parentSpecimen){
+		Specimen aliquotSpecimen = AppUtility.getSpecimen(parentSpecimen);
+		aliquotSpecimen.setSpecimenClass(parentSpecimen.getClassName());
+		aliquotSpecimen.setSpecimenType(parentSpecimen.getSpecimenType());
+		aliquotSpecimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
+		aliquotSpecimen.setParentSpecimen(parentSpecimen);
+		aliquotSpecimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
+		aliquotSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
+		return aliquotSpecimen;
+	}
+	
+
+	/**
+	 * This api create aliquots
+	 * @param aliquotDetailObj
+	 * @param sessionDataBean
+	 * @throws ApplicationException 
+	 */
+	public void createAliquotSpecimen(AliquotsDetailsDTO aliquotDetailObj, SessionDataBean sessionDataBean) throws ApplicationException{
+		Specimen parentSpecimen = new Specimen();
+		parentSpecimen.setLabel(aliquotDetailObj.getParentSpecimenLabel());
+		NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
+		DAO dao = AppUtility.openDAOSession(sessionDataBean);
+		
+		try{
+			specimenBizLogic.isAuthorized(dao, parentSpecimen, sessionDataBean);
+			parentSpecimen = specimenBizLogic.getSpecimenDetailForAliquots(dao, aliquotDetailObj.getParentSpecimenLabel());
+			validateQuantity(aliquotDetailObj,parentSpecimen.getAvailableQuantity());
+		    distributeAvailableQuantity(aliquotDetailObj,parentSpecimen.getAvailableQuantity(),AppUtility.isQuantityDouble(parentSpecimen.getClassName(), parentSpecimen.getSpecimenType()));
+			List <SpecimenPosition> specPosList = GetSpecimenPositionList(aliquotDetailObj,sessionDataBean,dao);
+			
+			final Collection<AbstractDomainObject> specimenCollection = new LinkedHashSet<AbstractDomainObject>();
+			for (int i = 0; i < aliquotDetailObj.getNoOfAliquots(); i++)
+			{
+				final Specimen aliquotSpecimen = createAliquotSpecimen(parentSpecimen);
+				aliquotSpecimen.setDisposeParentSpecimen(aliquotDetailObj.isDisposeParentCheck());
+				setAliquotSpecimenDetail(aliquotSpecimen,parentSpecimen,aliquotDetailObj,specPosList.get(i));
+				specimenCollection.add(aliquotSpecimen);
+			}
+			specimenBizLogic.insert(specimenCollection, sessionDataBean, 0, false);
+			specimenBizLogic.disposeParentSpecimen(sessionDataBean, specimenCollection,
+					Constants.SPECIMEN_DISPOSAL_REASON);
+			this.updateParentSpecimen(parentSpecimen, aliquotDetailObj.getAvailableQuantity(), dao);
+			
+		}catch(ApplicationException exp){
+			throw new BizLogicException(null, exp, exp.getMsgValues());
+		}
+		finally{
+			dao.closeSession();
+		}
+	}
+	
+	/**
+	 * This api create aliquots based on cp
+	 * It first fetches all pending aliquots of specimen and marked those as collected and updates is available quantity
+	 * @param aliquotDetailObj
+	 * @param sessionDataBean
+	 * @throws ApplicationException 
+	 */
+	public void createAliquotSpecimenBasedOnCp(AliquotsDetailsDTO aliquotDetailObj, SessionDataBean sessionDataBean) throws ApplicationException{
+		Specimen parentSpecimen = new Specimen();
+		parentSpecimen.setLabel(aliquotDetailObj.getParentSpecimenLabel());
+		NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
+		DAO dao = AppUtility.openDAOSession(sessionDataBean);
+		
+		try{
+			
+			specimenBizLogic.isAuthorized(dao, parentSpecimen, sessionDataBean);
+			parentSpecimen = specimenBizLogic.getSpecimenDetailForAliquots(dao, aliquotDetailObj.getParentSpecimenLabel());
+			//Fetch list of pending aliquots.
+			List aliquotSpecimenList = specimenBizLogic.getListOfPendingAliquotSpecimen(parentSpecimen.getId(),dao);
+			
+			// validate if there are enuff pending aliquots to be created
+			
+			//Calculate available quantity by ading aliquot available quantity
+			Double availableQuantity = parentSpecimen.getAvailableQuantity();
+			//Validate Available Quantity.
+			validateQuantity(aliquotDetailObj,availableQuantity);
+			
+			//Calculate quantity per aliquot
+			distributeAvailableQuantity(aliquotDetailObj,availableQuantity,AppUtility.isQuantityDouble(parentSpecimen.getClassName(), parentSpecimen.getSpecimenType()));
+						
+			//Fetch list of available position from container.
+			List <SpecimenPosition> specPosList = GetSpecimenPositionList(aliquotDetailObj,sessionDataBean,dao);
+			
+			final Collection<AbstractDomainObject> newSpecimenAliquotCollection = new LinkedHashSet<AbstractDomainObject>();
+			final Collection<AbstractDomainObject> updateSpecimenAliquotCollection = new LinkedHashSet<AbstractDomainObject>();
+			long lastChildNo = specimenBizLogic.getTotalNoOfAliquotSpecimen(parentSpecimen.getId(), dao);
+			int cnt = aliquotDetailObj.getNoOfAliquots() < aliquotSpecimenList.size() ? aliquotDetailObj.getNoOfAliquots() : aliquotSpecimenList.size();
+			for (int i = 0; i < cnt; i++)
+			{
+				Specimen aliquotSpecimen = (Specimen) aliquotSpecimenList.get(i);
+				aliquotSpecimen.setLabel(parentSpecimen.getLabel() + "_"+ (++lastChildNo));
+				setAliquotSpecimenDetail(aliquotSpecimen,parentSpecimen,aliquotDetailObj,specPosList.get(i));
+				updateSpecimenAliquotCollection.add(aliquotSpecimen);
+				
+			}
+			for (int i = 0; i < aliquotDetailObj.getNoOfAliquots()-updateSpecimenAliquotCollection.size(); i++)
+			{
+				Specimen aliquotSpecimen = createAliquotSpecimen(parentSpecimen);
+				
+				aliquotSpecimen.setLabel(parentSpecimen.getLabel() + "_"+ (++lastChildNo));
+				setAliquotSpecimenDetail(aliquotSpecimen,parentSpecimen,aliquotDetailObj,specPosList.get(i));
+				newSpecimenAliquotCollection.add(aliquotSpecimen);
+				
+			}
+			this.updateCpBasedAliquot(updateSpecimenAliquotCollection,dao);
+			specimenBizLogic.insert(newSpecimenAliquotCollection, sessionDataBean, 0, false);
+			this.updateParentSpecimen(parentSpecimen, aliquotDetailObj.getAvailableQuantity(), dao);
+			if(aliquotDetailObj.isDisposeParentCheck()){
+				specimenBizLogic.disposeSpecimen(sessionDataBean,
+						parentSpecimen, Constants.SPECIMEN_DISPOSAL_REASON);
+			}
+			
+			dao.commit();
+			
+		}catch(ApplicationException exp){
+			throw new BizLogicException(null, exp, exp.getMsgValues());
+		}
+		finally{
+			dao.closeSession();
+		}
 	}
 }

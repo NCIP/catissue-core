@@ -1,9 +1,15 @@
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import edu.wustl.catissuecore.domain.SpecimenPosition;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
@@ -11,6 +17,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import krishagni.catissueplus.mobile.dto.StoragePositionDTO;
 
 
 public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizLogic
@@ -57,6 +64,135 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 	}
 	
 	/**
+	 * This Api return list of available continues specimenPositon as per specimenCount
+	 * @param containerName
+	 * @param pos1
+	 * @param pos2
+	 * @param specimenCount
+	 * @param dao
+	 * @return
+	 * @throws BizLogicException
+	 */
+	public List<SpecimenPosition> getAvailablePositionFromContainerForSpecimen(String containerName,String pos1,String pos2,int specimenCount,DAO dao) throws BizLogicException{
+		List<SpecimenPosition> posList = new ArrayList<SpecimenPosition>();
+		String query = getStorageContainerFromNameForSpecimenQuery(containerName);
+		final String[] queries = {query};
+		try
+		{	
+			final List<?> containerList = this.getStorageContainerList(null,queries);
+			Iterator<?> itr = containerList.iterator();
+			if(itr.hasNext()){
+				final ArrayList<?> container = (ArrayList<?>) itr.next();
+				Long containerId = Long.parseLong(container.get(0).toString());
+				int positionDimensionOne = Integer.parseInt(container.get(2).toString());
+				int positionDimensionTwo = Integer.parseInt(container.get(3).toString());
+				final boolean[][] storagePositions = StorageContainerUtil. getAvailablePositionsForContainer(containerId.toString(),
+						positionDimensionOne+1, positionDimensionTwo+1, dao);
+				List labellingList=StorageContainerUtil.getLabellingSchemeByContainerId(containerId.toString());
+				String oneDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(0);
+				String twoDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(1);
+				Integer pos1Integer = "".equals(pos1) || pos1 == null ?1: AppUtility.getPositionValueInInteger(oneDimensionLabellingScheme, pos1);
+				Integer pos2Integer = "".equals(pos2) || pos2 == null ?1:AppUtility.getPositionValueInInteger(twoDimensionLabellingScheme, pos2);
+				
+				boolean isfirstIteration = true;
+				boolean isRequiredPositionAvaliable = false;
+				List<int[]> positionList = new ArrayList<int[]>();
+				for(int i = pos1Integer; i< storagePositions.length;i++){
+					for(int j=1;j<storagePositions[i].length;j++){
+						if(i==pos1Integer && isfirstIteration){
+							j = pos2Integer;
+						}
+						isfirstIteration = false;
+						if(storagePositions[i][j]){
+							int[] posArr = {i,j};
+							positionList.add(posArr);
+							if(positionList.size()== specimenCount){
+								isRequiredPositionAvaliable= true;
+								break;
+							}
+						}else{
+							positionList.clear();
+						}
+					}
+					if(isRequiredPositionAvaliable){
+						break;
+					}
+					
+				}
+				posList = createSpecimenPositionList(positionList,containerId);
+			}
+			
+		}
+		catch (final ApplicationException daoExp)
+		{
+			logger.error(daoExp.getMessage(), daoExp);
+			final ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
+			throw new BizLogicException(errorKey, daoExp, daoExp.getMsgValues());
+		}
+		if(posList.isEmpty()){
+			throw new BizLogicException(null, null, "Insuficient StoragePosition");
+		}
+		return posList;
+	}
+	
+	public StoragePositionDTO[][] getPositionDetailsFromContainer(String containerName,DAO dao)  throws BizLogicException{
+		List<SpecimenPosition> posList = new ArrayList<SpecimenPosition>();
+		String query = getStorageContainerFromNameForSpecimenQuery(containerName);
+		final String[] queries = {query};
+		StoragePositionDTO[][] storagePositions = null;
+		try
+		{	
+			final List<?> containerList = this.getStorageContainerList(null,queries);
+			Iterator<?> itr = containerList.iterator();
+			if(itr.hasNext()){
+				final ArrayList<?> container = (ArrayList<?>) itr.next();
+				Long containerId = Long.parseLong(container.get(0).toString());
+				int positionDimensionOne = Integer.parseInt(container.get(2).toString());
+				int positionDimensionTwo = Integer.parseInt(container.get(3).toString());
+				storagePositions = StorageContainerUtil.getPositionDetailFormContainer(containerId.toString(),
+						positionDimensionOne+1, positionDimensionTwo+1, dao);
+			}
+		}catch (final ApplicationException daoExp)
+		{
+			logger.error(daoExp.getMessage(), daoExp);
+			final ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
+			throw new BizLogicException(errorKey, daoExp, daoExp.getMsgValues());
+		}
+		return storagePositions;
+	}
+	
+	public  List<SpecimenPosition> createSpecimenPositionList(List<int[]> positionList,Long containerId){
+		List<SpecimenPosition> posList = new ArrayList<SpecimenPosition>();
+		for(int i=0;i<positionList.size();i++){
+			int[] posArr = positionList.get(i);
+			StorageContainer sContainer = new StorageContainer();
+			SpecimenPosition specimenPosition= new SpecimenPosition();
+			specimenPosition.setPositionDimensionOne(posArr[0]);
+			specimenPosition.setPositionDimensionTwo(posArr[1]);
+			sContainer.setId(containerId);
+			specimenPosition.setStorageContainer(sContainer);
+			posList.add(specimenPosition);
+		}
+		return posList;
+	}
+	
+	public TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>>  getAvilablePositionsFromContainer(final String containerName,final DAO dao) throws BizLogicException{
+		try
+		{
+			String query =this.getStorageContainerFromNameForSpecimenQuery(containerName);
+			final String[] queries = {query};
+			final List<?> containerList = this.getStorageContainerList(null,queries);
+			return (TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>>)
+			this.getAllocDetailsForContainers(containerList, dao);
+		}
+		catch (final ApplicationException daoExp)
+		{
+			logger.error(daoExp.getMessage(), daoExp);
+			final ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
+			throw new BizLogicException(errorKey, daoExp, daoExp.getMsgValues());
+		}
+	}
+	/**
 	 * Gets the query array for Specimen Storage Containers
 	 * @param cpId
 	 * @param spClass
@@ -88,6 +224,24 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 		final String query9 = this.createSCQuery(parameterList,	null, null, null);
 		
 		return new String[]{query0, query1, query2, query3, query4, query5, query6, query7, query8, query9};
+	}
+	
+	protected String getStorageContainerFromNameForSpecimenQuery(String containerName){
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT VIEW1.IDENTIFIER,VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY,VIEW1.TWO_DIMENSION_CAPACITY,VIEW1.CAPACITY-COUNT(*)  AVAILABLE_SLOTS ");
+		query.append(" FROM ( SELECT D.IDENTIFIER,D.NAME,F.ONE_DIMENSION_CAPACITY, F.TWO_DIMENSION_CAPACITY, (F.ONE_DIMENSION_CAPACITY * F.TWO_DIMENSION_CAPACITY)  CAPACITY ");
+		query.append("FROM CATISSUE_CAPACITY F JOIN CATISSUE_CONTAINER D  ON F.IDENTIFIER = D.CAPACITY_ID ");
+		query.append("  LEFT OUTER JOIN CATISSUE_SPECIMEN_POSITION K ON D.IDENTIFIER = K.CONTAINER_ID ");
+		query.append("  LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER C ON D.IDENTIFIER = C.IDENTIFIER "); 
+		query.append(" LEFT OUTER JOIN CATISSUE_SITE L ON C.SITE_ID = L.IDENTIFIER ");
+		query.append(" WHERE D.NAME = '"+containerName+"'" );
+		query.append(") VIEW1  ");
+		query.append(" GROUP BY IDENTIFIER, VIEW1.NAME, ");
+		query.append(" VIEW1.ONE_DIMENSION_CAPACITY, ");
+		query.append(" VIEW1.TWO_DIMENSION_CAPACITY, ");
+		query.append(" VIEW1.CAPACITY ");
+		
+		return query.toString();
 	}
 
 	/**

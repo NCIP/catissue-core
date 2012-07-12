@@ -11,7 +11,10 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -26,12 +29,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import krishagni.catissueplus.mobile.dto.SpecimenDTO;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.TaskTimeCalculater;
+import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
@@ -5470,6 +5477,30 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		return aliquotChildCount;
 	}
 
+	public synchronized List getListOfPendingAliquotSpecimen(Long specId, DAO dao)
+			throws BizLogicException
+	{
+		List aliquotList = new ArrayList();
+		try
+		{
+			final String[] selectColumnName = {};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(Specimen.class.getName());
+			queryWhereClause.addCondition(new EqualClause("parentSpecimen.id", specId));
+			queryWhereClause.andOpr();
+			queryWhereClause.addCondition(new EqualClause("lineage", "Aliquot"));
+			queryWhereClause.andOpr();
+			queryWhereClause.addCondition(new EqualClause("collectionStatus", Constants.COLLECTION_STATUS_PENDING));
+			aliquotList = dao.retrieve(Specimen.class.getName(),selectColumnName,queryWhereClause);
+			
+
+		}
+		catch (final DAOException e)
+		{
+			this.LOGGER.error(e.getMessage(),e);
+			throw new BizLogicException(e);
+		}
+		return aliquotList;
+	}
 	/**
 	 * Gets the cp id.
 	 *
@@ -5650,7 +5681,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				"specimenCharacteristics.tissueSide", "pathologicalStatus", "availableQuantity",
 				"specimenPosition.storageContainer.name",
 				"specimenPosition.positionDimensionOne",
-				"specimenPosition.positionDimensionTwo"};
+				"specimenPosition.positionDimensionTwo","specimenCollectionGroup.id,id,label,barcode,"};
 		
 		final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 		queryWhereClause.addCondition(new EqualClause(column, label));
@@ -5706,5 +5737,112 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 
 
+		public Specimen getSpecimenDetailForAliquots(DAO dao, String label) throws DAOException,
+		BizLogicException
+		{
+			String column = "label";
+			String sourceObjectName = Specimen.class.getName();
+			String[] selectColumnName = {
+					"activityStatus","specimenCollectionGroup.id","id","label","barcode","specimenClass",
+					"specimenType","pathologicalStatus","specimenCharacteristics.tissueSite","specimenCharacteristics.tissueSide",
+					"availableQuantity"
+			};
+			QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			queryWhereClause.addCondition(new EqualClause(column, label));
+			List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+			Map<String,String> map = new HashMap<String,String>();
+			Specimen specimen = new Specimen();
+			if (!list.isEmpty())
+			{
+				if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(((Object[]) list.get(0))[0]))
+				{
+					throw this.getBizLogicException(null, "error.object.disabled", Constants.SPECIMEN);
+				}
+				else
+				{
+					final Object[] valArr = (Object[]) list.get(0);
+					if (valArr != null)
+					{
+						//specimenDTO = getSpecimenDTOObject(valArr);
+						specimen = AppUtility.getSpecimenByClassName(valArr[5].toString());
+						SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+						scg.setId(Long.parseLong(valArr[1].toString()));
+						specimen.setSpecimenCollectionGroup(scg);
+						specimen.setId(Long.parseLong(valArr[2].toString()));
+						specimen.setLabel(valArr[3].toString());
+						specimen.setBarcode(valArr[4].toString());
+						specimen.setSpecimenClass(valArr[5].toString());
+						specimen.setSpecimenType(valArr[6].toString());
+						specimen.setPathologicalStatus(valArr[7].toString());
+						SpecimenCharacteristics specimenChar = new SpecimenCharacteristics();
+						specimenChar.setTissueSite(valArr[8].toString());
+						specimenChar.setTissueSide(valArr[9].toString());
+						specimen.setSpecimenCharacteristics(specimenChar);
+						specimen.setAvailableQuantity(Double.parseDouble(valArr[10].toString()));
+						if (specimen instanceof MolecularSpecimen)
+						{
+							String[] molSpcColumnName = {"concentrationInMicrogramPerMicroliter"};
+							String molSpcObjectName = MolecularSpecimen.class.getName();
+							queryWhereClause = new QueryWhereClause(molSpcObjectName);
+							queryWhereClause.addCondition(new EqualClause("id", valArr[2]));
+						
+							list = dao.retrieve(molSpcObjectName, molSpcColumnName,  queryWhereClause);
+							if(!list.isEmpty())
+								((MolecularSpecimen) specimen).setConcentrationInMicrogramPerMicroliter((Double) list.get(0));
+							
+						}
+						
+					}
+			
+				}
+			
+			}
+			return specimen;
+			
+		}
+		
+	/**
+		 * Insert aliquot specimen.
+		 *
+		 * @param request : request
+		 * @param sessionDataBean : sessionDataBean
+		 * @param specimenCollection : specimenCollection
+		 *
+		 * @return boolean : boolean
+		 *
+		 * @throws UserNotAuthorizedException : UserNotAuthorizedException
+		 */
+		public boolean insertAliquotSpecimen(SessionDataBean sessionDataBean, Collection<AbstractDomainObject> specimenCollection)
+				throws UserNotAuthorizedException,BizLogicException,DAOException
+		{
+				new NewSpecimenBizLogic().insert(specimenCollection, sessionDataBean, 0, false);
+				this.disposeParentSpecimen(sessionDataBean, specimenCollection,
+						Constants.SPECIMEN_DISPOSAL_REASON);
+				return true;
+		}
+
+		/**
+		 * Dispose parent specimen.
+		 *
+		 * @param sessionDataBean : sessionDataBean
+		 * @param specimenCollection : specimenCollection
+		 * @param specimenDisposeReason : specimenDisposeReason
+		 *
+		 * @throws DAOException : DAOException
+		 * @throws UserNotAuthorizedException : UserNotAuthorizedException
+		 * @throws BizLogicException : BizLogicException
+		 */
+		public void disposeParentSpecimen(SessionDataBean sessionDataBean,
+				Collection<AbstractDomainObject> specimenCollection, String specimenDisposeReason)
+				throws DAOException, UserNotAuthorizedException, BizLogicException
+		{
+			final Iterator<AbstractDomainObject> spItr = specimenCollection.iterator();
+			final Specimen specimen = (Specimen) spItr.next();
+			if (specimen != null && specimen.getDisposeParentSpecimen())
+			{
+				this.disposeSpecimen(sessionDataBean,
+						specimen.getParentSpecimen(), specimenDisposeReason);
+			}
+		}
 
 }

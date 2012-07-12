@@ -41,6 +41,7 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
@@ -1235,38 +1236,12 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				final List list = (List) domainObject;
 				for (final Object domainObject2 : list)
 				{
-					if (domainObject2 instanceof TransferEventParameters)
-					{
-						this.checkPrivilegeOnDestinationSite(dao, domainObject2, sessionDataBean);
-					}
-					protectionElementName = this.getObjectId(dao, domainObject2);
-					this.checkPrivilegeOnSourceSite(dao, domainObject2, sessionDataBean);
-					privilegeName = this.getPrivilegeName(domainObject2);
-					validOperation = AppUtility.checkPrivilegeOnCP(domainObject2,
-							protectionElementName, privilegeName, sessionDataBean);
-					if (!validOperation)
-					{
-						isAuthorized = false;
-						break;
-					}
-					else
-					{
-						isAuthorized = true;
-					}
+					isAuthorized = checkPrivilegeOnCp(dao,domainObject2,sessionDataBean);
 				}
 			}
 			else
 			{
-				// Handle for SERIAL CHECKS, whether user has access to source site or not
-				if (domainObject instanceof TransferEventParameters)
-				{
-					this.checkPrivilegeOnDestinationSite(dao, domainObject, sessionDataBean);
-				}
-				this.checkPrivilegeOnSourceSite(dao, domainObject, sessionDataBean);
-				privilegeName = this.getPrivilegeName(domainObject);
-				protectionElementName = this.getObjectId(dao, domainObject);
-				isAuthorized = AppUtility.checkPrivilegeOnCP(domainObject, protectionElementName,
-						privilegeName, sessionDataBean);
+				isAuthorized = checkPrivilegeOnCp(dao,domainObject,sessionDataBean);
 			}
 		}
 		catch (final ApplicationException daoExp)
@@ -1275,14 +1250,31 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			throw this
 					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
+		return isAuthorized;
+
+	}
+	
+//Extracted Common code from isAuthorized method
+	
+	private boolean checkPrivilegeOnCp(DAO dao,Object domainObject,SessionDataBean sessionDataBean) throws ApplicationException{
+		if (domainObject instanceof TransferEventParameters)
+		{
+			this.checkPrivilegeOnDestinationSite(dao, domainObject, sessionDataBean);
+		}
+		this.checkPrivilegeOnSourceSite(dao, domainObject, sessionDataBean);
+		String privilegeName = this.getPrivilegeName(domainObject);
+		String protectionElementName = this.getObjectId(dao, domainObject);
+		boolean  isAuthorized = AppUtility.checkPrivilegeOnCP(domainObject, protectionElementName,
+				privilegeName, sessionDataBean);
 		if (!isAuthorized)
 		{
 			throw AppUtility.getUserNotAuthorizedException(privilegeName, protectionElementName,
 					domainObject.getClass().getSimpleName()); //bug 11611 and 11659
 		}
-		return isAuthorized;
 
+		return isAuthorized;
 	}
+	
 
 	/**
 	 * @param dao : DAO object.
@@ -1405,6 +1397,60 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			this.LOGGER.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
+
+	}
+	
+	public String specimenEventTransferFromMobile(SessionDataBean sessionDataBean,String specimenLabel,String containerName,int pos1,int pos2) throws BizLogicException, DAOException{
+		DAO dao = null;
+		String msg = "";
+		try{
+			String sourceObjectName = StorageContainer.class.getName();
+			final DefaultBizLogic bizLogic = new DefaultBizLogic();
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+			String column = "name";
+			dao = AppUtility.openDAOSession(sessionDataBean);
+			queryWhereClause.addCondition(new EqualClause(column, containerName));
+			List<StorageContainer> storageContainerList =  dao.retrieve(sourceObjectName, column, containerName);
+			List<Specimen> specimenList =  dao.retrieve(Specimen.class.getName(), "label", specimenLabel);
+			if(specimenList!=null && !specimenList.isEmpty() && storageContainerList!=null && !storageContainerList.isEmpty()){
+				Specimen specimen = specimenList.get(0);
+				TransferEventParameters transferEventParameters = new TransferEventParameters();
+				transferEventParameters.setFromPositionDimensionOne(specimen.getSpecimenPosition().getPositionDimensionOne());
+				transferEventParameters.setFromPositionDimensionTwo(specimen.getSpecimenPosition().getPositionDimensionTwo());
+				transferEventParameters.setFromStorageContainer(specimen.getSpecimenPosition().getStorageContainer());
+				transferEventParameters.setSpecimen(specimen);
+				transferEventParameters.setToPositionDimensionOne(pos1);
+				transferEventParameters.setToPositionDimensionTwo(pos2);
+				transferEventParameters.setToStorageContainer(storageContainerList.get(0));
+				User user = new User();
+				user.setId(sessionDataBean.getUserId());
+				transferEventParameters.setUser(user);
+				if(isAuthorized(dao,transferEventParameters,sessionDataBean)){
+					boolean validate = validateSingleTransferEvent(transferEventParameters,dao,"add",pos1,pos2);
+					if(validate){
+						insert(transferEventParameters, dao,  sessionDataBean);
+						dao.commit();
+						msg = "Specimen transfered successfully.";
+					}
+				}else{
+					msg = "You do not have permission to transfered specimen.";
+				}
+			}else{
+				msg = "Specimen or Container does not exist";
+			}
+			
+		}catch (final ApplicationException exp){
+			final ErrorKey errorKey = ErrorKey.getErrorKey(exp.getErrorKeyName());
+			throw new BizLogicException(errorKey, exp, exp.getMsgValues());
+		}
+		finally {
+	        if(dao!=null){
+	        	dao.closeSession();
+	        }
+	    }
+		return msg;
+
+		
 
 	}
 }

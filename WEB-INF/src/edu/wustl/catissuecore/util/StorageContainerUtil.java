@@ -50,6 +50,8 @@ import edu.wustl.dao.condition.NullClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
+import krishagni.catissueplus.mobile.dto.SpecimenDTO;
+import krishagni.catissueplus.mobile.dto.StoragePositionDTO;
 
 public final class StorageContainerUtil
 {
@@ -293,6 +295,43 @@ public final class StorageContainerUtil
 		}
 		return position;
 	}
+	
+//	import krishagni.catissueplus.mobile.dto.StoragePositionDTO;
+	
+	
+	public static StoragePositionDTO[][] getPositionDetailFormContainer(String containerId, int dimX, int dimY,
+			DAO dao) throws BizLogicException
+	{
+		final StoragePositionDTO[][] positions = new StoragePositionDTO[dimX][dimY];
+		try
+		{
+
+			final String[] selectColumnName = new String[]{"positionDimensionOne",
+					"positionDimensionTwo"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(SpecimenPosition.class
+					.getName());
+			queryWhereClause.addCondition(new EqualClause("storageContainer.id", containerId));
+			final List list = dao.executeQuery("select positionDimensionOne,positionDimensionTwo,specimen.id,specimen.label,specimen.specimenCollectionGroup.collectionProtocolEvent.collectionProtocol.shortTitle," +
+					"specimen.specimenType,specimen.availableQuantity from "+SpecimenPosition.class.getName()+" where storageContainer.id="+containerId);
+			setPositions(positions, list,true);
+			final QueryWhereClause queryWhereClause2 = new QueryWhereClause(ContainerPosition.class
+					.getName());
+			queryWhereClause2.addCondition(new EqualClause("parentContainer.id", containerId));
+			final List list2 = dao.executeQuery("select positionDimensionOne,positionDimensionTwo,occupiedContainer.id,occupiedContainer.name from "+ContainerPosition.class.getName()+" where parentContainer.id="+containerId);
+			setPositions(positions, list2,false);
+		}
+		catch (final DAOException daoEx)
+		{
+			logger.error(daoEx.getMessage(),daoEx);
+
+			throw new BizLogicException(daoEx);
+		}
+		return positions;
+	}
+
+	
+	
+	
 	/**
 	 * This functions returns a double dimensional boolean array which tells the
 	 * availablity of storage positions of particular container. True -
@@ -341,6 +380,43 @@ public final class StorageContainerUtil
 		}
 		return positions;
 	}
+	/**
+	 * @param positions - boolean array of position.
+	 * @param list - list of objects
+	 */
+	private static void setPositions(StoragePositionDTO[][] positions, List resultSet,boolean isListOfSpecimen)
+	{
+		if (resultSet != null)
+		{
+			int countX, countY;
+			for (int i = 0; i < resultSet.size(); i++)
+			{
+				final Object[] columnList = (Object[]) resultSet.get(i);
+				if ((columnList != null) && columnList.length!=0)
+				{
+					countX = (Integer) columnList[0];
+					countY = (Integer) columnList[1];
+					StoragePositionDTO dtoObj = new StoragePositionDTO();
+					dtoObj.setPosx(countX);
+					dtoObj.setPosy(countY);
+					if(isListOfSpecimen){
+						SpecimenDTO specimenDTO = new SpecimenDTO();
+						specimenDTO.setLabel((String) columnList[3]);
+						specimenDTO.setCpShortTitle((String) columnList[4]);
+						specimenDTO.setSpecimenType((String) columnList[5]);
+						specimenDTO.setAvailableQuantity((Double)columnList[6]);
+						dtoObj.setSpecimenDTO(specimenDTO);
+					
+					}else{
+						dtoObj.setChildContainerId((Long) columnList[2]);
+						dtoObj.setChildContainerLabel((String) columnList[3]);
+					}
+					positions[countX][countY] = dtoObj;
+				}
+			}
+		}
+	}
+	
 	/**
 	 * @param positions - boolean array of position.
 	 * @param list - list of objects

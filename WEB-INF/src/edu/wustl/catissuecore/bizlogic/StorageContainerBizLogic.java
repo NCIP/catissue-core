@@ -12,9 +12,12 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import edu.wustl.catissuecore.domain.Capacity;
@@ -29,12 +32,14 @@ import edu.wustl.catissuecore.namegenerator.LabelGenException;
 import edu.wustl.catissuecore.namegenerator.LabelGenerator;
 import edu.wustl.catissuecore.namegenerator.LabelGeneratorFactory;
 import edu.wustl.catissuecore.namegenerator.NameGeneratorException;
+import edu.wustl.catissuecore.tree.StorageContainerTreeNode;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.Position;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
@@ -44,9 +49,11 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.manager.SecurityManagerFactory;
 
@@ -865,6 +872,38 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
 		}
 	}
+	
+	/**
+	 * @param dao - DAO object.
+	 * @param container - StorageContainer object
+	 * @param sessionDataBean - SessionDataBean object
+	 * @return boolean value
+	 * @throws BizLogicException throws BizLogicException
+	 */
+	public boolean validateContainerAccess(DAO dao, StorageContainer container,
+			SessionDataBean sessionDataBean) throws BizLogicException
+	{
+		boolean flag = true;
+		logger.debug("validateContainerAccess..................");
+		if (sessionDataBean != null && sessionDataBean.isAdmin())
+		{
+			return flag;
+		}
+		final Long userId = sessionDataBean.getUserId();
+		Site site = null;
+		Set<Long> loggedInUserSiteIdSet = null;
+		site = new SiteBizLogic().getSite(dao, container.getId());
+		loggedInUserSiteIdSet = new UserBizLogic().getRelatedSiteIds(userId);
+		if (loggedInUserSiteIdSet != null && loggedInUserSiteIdSet.contains(Long.valueOf(site.getId())))
+		{
+			return flag;
+		}
+		else
+		{
+			throw this.getBizLogicException(null, "access.use.object.denied", "");
+		}
+	}
+	
 	/**
 	 * @param dao DAO object
 	 * @param specimen Specimen Object
@@ -1504,4 +1543,98 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		}
 		disabledConts.add(containerDetails);
 	}
+	
+	public StorageContainer getStorageContainerFromName(DAO dao,String label) throws BizLogicException{
+		StorageContainer storageContainer = null;
+		try{
+			String sourceObjectName = StorageContainer.class.getName();
+			String column = "name";
+			List<StorageContainer> storageContainerList = dao.retrieve(sourceObjectName, column, label);
+			if(storageContainerList!=null && !storageContainerList.isEmpty()){
+				storageContainer = storageContainerList.get(0);
+			}
+			
+		}catch (final ApplicationException exp)
+		{
+			logger.error(exp.getMessage(), exp);
+			final ErrorKey errorKey = ErrorKey.getErrorKey(exp.getErrorKeyName());
+			throw new BizLogicException(errorKey, exp, exp.getMsgValues());
+		}
+
+		return storageContainer;
+	}
+	
+	
+	/**
+	 * @param identifier
+	 *            Identifier of the container or site node.
+	 * @param nodeName
+	 *            Name of the site or container
+	 * @param parentId
+	 *            parent identifier of the selected node
+	 * @return conNodeList This List contains all the containers
+	 * @throws ApplicationException
+	 * @Description This method will retrieve all the containers under the
+	 *              selected node
+	 */
+	public Map<Long,String> getStorageContainers() throws ApplicationException
+	{
+		JDBCDAO dao = null;
+		Map<Long,String> map = new HashMap<Long,String>();
+		try
+		{
+			dao = AppUtility.openJDBCSession();
+			List resultList = new ArrayList();
+			final String sql = this.createSql();
+			resultList = dao.executeQuery(sql);
+			
+			final Iterator iterator = resultList.iterator();
+			
+			while (iterator.hasNext())
+			{
+				final List rowList = (List) iterator.next();
+				map.put( Long.valueOf((String) rowList.get(0)),(String) rowList.get(1));
+				
+
+			}
+			
+		}
+		catch (final DAOException daoExp)
+		{
+			this.logger.error(daoExp.getMessage(), daoExp);
+			daoExp.printStackTrace();
+			throw this
+					.getBizLogicException(daoExp, daoExp.getErrorKeyName(), daoExp.getMsgValues());
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch (final DAOException e)
+			{
+				this.logger.error(e.getMessage(), e);
+				e.printStackTrace();
+			}
+		}
+		return map;
+	}
+
+	
+	private String createSql()
+	{
+		final String sql = "SELECT cn.IDENTIFIER, cn.name, cn.activity_status "
+				+ "FROM CATISSUE_CONTAINER cn join CATISSUE_STORAGE_CONTAINER sc ON sc.IDENTIFIER=cn.IDENTIFIER "
+				+ " where cn.ACTIVITY_STATUS!='Disabled'"
+				+ " ORDER BY cn.IDENTIFIER ";
+
+		return sql;
+	}
+	
+	
+	
+	
+	
+	
 }
