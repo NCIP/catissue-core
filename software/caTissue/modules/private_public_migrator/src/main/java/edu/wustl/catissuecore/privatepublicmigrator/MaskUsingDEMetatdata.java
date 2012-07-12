@@ -63,7 +63,7 @@ public class MaskUsingDEMetatdata
 			System.out.println("No Of entities:" + totalNoOfEntities);
 
 			final Configuration cfg = new Configuration();
-			final File file = new File(".//classes//hibernate.cfg.xml");
+			final File file = new File(".//target//classes//hibernate.cfg.xml");
 			final File file1 = new File(file.getAbsolutePath());
 			System.out.println(file.getAbsolutePath());
 			cfg.configure(file1);
@@ -126,6 +126,10 @@ public class MaskUsingDEMetatdata
 			this.executeQuery(sqlString, session);
 
 			// sql String to delete ReportQueue table
+			sqlString = "SET foreign_key_checks = 0";
+			this.executeQuery(sqlString, session);
+			
+			// sql String to delete ReportQueue table
 			sqlString = "truncate table CATISSUE_REPORT_PARTICIP_REL";
 			this.executeQuery(sqlString, session);
 
@@ -156,6 +160,10 @@ public class MaskUsingDEMetatdata
 			this.executeQuery(sqlString, session);
 
 			sqlString = "truncate table catissue_audit_event";
+			this.executeQuery(sqlString, session);
+			
+			// sql String to delete ReportQueue table
+			sqlString = "SET foreign_key_checks = 1";
 			this.executeQuery(sqlString, session);
 
 			// Enable constraints on audit tables.
