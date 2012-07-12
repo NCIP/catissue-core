@@ -5,6 +5,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="java.util.Map"%>
+<%@ page import="java.util.HashMap"%>
 <%@ page import="java.util.List"%>
 <%@ page import="java.lang.Integer"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
@@ -851,7 +852,13 @@ function onParentContainerSelectChange(selectedOption,containerId)
 																	
 																	<%=ScriptGenerator.getJSForOutermostDataTable()%>
 																	<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
-																							
+																	
+																	<%
+																		if(dataMap == null)
+																		{
+																			dataMap = new HashMap();	
+																		}
+																	%>																	
 																	<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 									
 																	<c:set var="contStLocName">containerDetails(containerStorageLocation_<bean:write name="containerItem" property="id"/>)</c:set>
