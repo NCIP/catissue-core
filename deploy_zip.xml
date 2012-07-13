@@ -5355,48 +5355,46 @@ Thanking You,
 		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/dashboard_scripts.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	</target>
 		<target name="addEMPIMetadata" description="Add EMPI meatadata">
-		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar" />
-		<antcall target="replacecfgfiles"></antcall>
-		<property name="db.driver.class" value="" />
-		<if>
-			<equals arg1="mysql" arg2="${database.type}" />
-			<then>
-				<var name="db.driver.class" unset="true"/>
-				<property name="db.driver.class" value="${mysql.driver.string}" />
-				<echo message="Updating eMPI Metadata for mysql....." />
-			</then>
-			<elseif>
-				<equals arg1="oracle" arg2="${database.type}" />
-				<then>
-					<var name="db.driver.class" unset="true"/>
-					<property name="db.driver.class" value="${oracle.driver.string}" />
-					<echo message="Updating eMPI Metadata for oraacle...." />
-				</then>
-			</elseif>
-			<else>
-				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
-			</else>
-		</if>
-		<echo message="Database Driver class : ${db.driver.class}"></echo>
-		
-		<java classname="edu.wustl.catissuecore.querysuite.metadata.AddEMPIMetaData" fork="true" maxmemory="1024M" failonerror="true">
-			<classpath location="${temp.dir}/catissuecore/WEB-INF/classes" />
-			<classpath refid="temp.classpath" />
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-			</classpath>
-			<arg value="${database.host}"/>
-			<arg value="${database.port}"/>
-			<arg value="${database.type}"/>
-			<arg value="${database.name}"/>
-			<arg value="${database.username}"/>
-			<arg value="${database.password}"/>
-			<arg value="${db.driver.class}"/>
-		</java>
-				
-		<delete dir="${temp.dir}" />
-	</target>
+            <unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+            <delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar"/>
+            <antcall target="replacecfgfiles"/>
+            <property name="db.driver.class" value=""/>
+            <if>
+                    <equals arg1="mysql" arg2="${database.type}"/>
+                    <then>
+                            <var name="db.driver.class" unset="true"/>
+                            <property name="db.driver.class" value="${mysql.driver.string}"/>
+                            <echo message="Updating eMPI Metadata for mysql....."/>
+                    </then>
+                    <elseif>
+                            <equals arg1="oracle" arg2="${database.type}"/>
+                            <then>
+                                    <var name="db.driver.class" unset="true"/>
+                                    <property name="db.driver.class" value="${oracle.driver.string}"/>
+                                    <echo message="Updating eMPI Metadata for oraacle...."/>
+                            </then>
+                    </elseif>
+                    <else>
+                            <echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error"/>
+                    </else>
+            </if>
+            <echo message="Database Driver class : ${db.driver.class}"/>
+            <java classname="edu.wustl.catissuecore.querysuite.metadata.AddEMPIMetaData" fork="true" maxmemory="1024M" failonerror="true">
+                    <classpath location="${temp.dir}/catissuecore/WEB-INF/classes"/>
+                    <classpath refid="temp.classpath"/>
+                    <classpath>
+                            <fileset dir="${lib.dir}">
+                                    <include name="*.jar"/>
+                            </fileset>
+                    </classpath>
+                    <arg value="${database.host}"/>
+                    <arg value="${database.port}"/>
+                    <arg value="${database.type}"/>
+                    <arg value="${database.name}"/>
+                    <arg value="${database.username}"/>
+                    <arg value="${database.password}"/>
+                    <arg value="${db.driver.class}"/>
+            </java>
+            <delete dir="${temp.dir}"/>
+    </target>
 </project>
