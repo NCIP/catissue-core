@@ -4108,7 +4108,8 @@ public class AppUtility {
 
 	public static List getObjDetails(long id) throws ApplicationException 
 	{
-		String sql = "select sp.label, sp.identifier from catissue_specimen sp where sp.identifier=? ";
+		String sql = "select  item.identifier, sp.label from catissue_specimen sp, catissue_spec_tag_items item " +
+				" where sp.identifier = item.obj_id and item.tag_id=? ";
 		ColumnValueBean bean = new ColumnValueBean(id);
 		List<ColumnValueBean> valueBeanList = new ArrayList<ColumnValueBean>();
 		valueBeanList.add(bean);

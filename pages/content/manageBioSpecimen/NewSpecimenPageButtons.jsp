@@ -74,7 +74,7 @@
 				<bean:message key="buttons.addToCart"/>
 		</html:button> 
 		<%
- 						String	organizeTarget = "ajaxTreeGridInitCall('popupDeleteMessage','popupFolderDeleteMessage')";
+ 						String	organizeTarget = "ajaxTreeGridInitCall('Are you sure to delete selected specimen?','Are you sure to delete selected list?')";
  %>
 						| <input type="button" value="Add To Specimen List"
 							onclick="<%=organizeTarget%> " class="blue_ar_c">
@@ -118,7 +118,7 @@
 					<p>
 						<%
 						String specId = String.valueOf(form.getId());
- String	assignTarget = "ajaxAssignTagFunctionCall('AssignTagAction.do','popupAssignMessage','popupAssignConditionMessage','"+specId+"')";
+ String	assignTarget = "ajaxAssignTagFunctionCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specId+"','popupAssignMessage','popupAssignConditionMessage','"+specId+"')";
  %>
 						<input type="button" value="ASSIGN" onclick="<%=assignTarget%> "
 							onkeydown="<%=assignTarget%> " class="btn3">
@@ -155,7 +155,7 @@ function doOnTreeGridRowSelected(rId)
  
 function doInitParseTree()
 {
-	popupmygrid.loadXML("TreeTagAction.do");
+	popupmygrid.loadXML("TreeTagAction.do?entityTag=SpecimenListTag");
 
 }
 

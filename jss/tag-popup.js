@@ -107,7 +107,8 @@ else
 	var queryChkBoxString = new String();
 	var i;
 	
-	url = url+'?id='+id;
+	url = url;
+	
 	xmlHttpobj.open("POST", url, true);
 	xmlHttpobj.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded");
@@ -137,7 +138,7 @@ else
 	//alert(queryChkBoxString);
 	if (queryChkBoxString=='')
 	{
-		alert(msg1);
+		alert("No Specimen Selected");
 		//alert('ffff');
 		 
  	}
@@ -154,7 +155,7 @@ else
 			 queryCheckBoxAr[i].checked = false;
 			}
 		}*/
-xmlHttpobj.send("&chkBoxString=" + chkBoxString + "&queryChkBoxString="
+xmlHttpobj.send("&tagChkBoxString=" + chkBoxString + "&queryChkBoxString="
 			+ queryChkBoxString + "&tagName=" + tagName);
 	}
 	else if((queryChkBoxString!=''&& chkBoxString!=''&& tagName!=''))
@@ -165,7 +166,7 @@ xmlHttpobj.send("&chkBoxString=" + chkBoxString + "&queryChkBoxString="
 			 queryCheckBoxAr[i].checked = false;
 			}
 		}*/
-xmlHttpobj.send("&chkBoxString=" + chkBoxString + "&queryChkBoxString="
+xmlHttpobj.send("&tagChkBoxString=" + chkBoxString + "&queryChkBoxString="
 			+ queryChkBoxString + "&tagName=" + tagName);
 	}
 
@@ -183,7 +184,7 @@ function assignQueryFunction() {
 function ajaxTreeGridInitCall(msg,msg1) {
 queryDeleteMsg=msg;
 folderDeleteMsg=msg1;
-var url = "TreeTagAction.do";
+var url = "TreeTagAction.do?entityTag=SpecimenListTag";
 if (window.XMLHttpRequest)
   { 
   xmlHttpobj=new XMLHttpRequest();
@@ -209,7 +210,7 @@ function ajaxTagDeleteCall(tagId,msg) {
  var childCount=popupmygrid.hasChildren(tagId);
 folderDeleteMsg = folderDeleteMsg.replace('{0}',1);
 folderDeleteMsg = folderDeleteMsg.replace(/\d+/g,childCount); 
-var url = "TagDeleteAction.do";
+var url = "TagDeleteAction.do?entityTag=SpecimenListTag";
 var answer = confirm (folderDeleteMsg)
 if (answer)
  {
@@ -240,10 +241,11 @@ function doOnDelete()
 }
 //Ajax Function for Delete Queries in Folders  of TreeGrid 
 function ajaxObjDeleteCall(assignId) {
+
 var answer = confirm (queryDeleteMsg)
 if (answer)
  {
-var url = "ObjDeleteAction.do";
+var url = "TagItemDeleteAction.do?entityTagItem=SpecimenListTagItem";
 	if (window.XMLHttpRequest)
   { 
   xmlHttpobj=new XMLHttpRequest();
@@ -257,7 +259,7 @@ else
 			"application/x-www-form-urlencoded");
   
 	xmlHttpobj.onreadystatechange =doOnObjDelete;
-	xmlHttpobj.send("&assignId=" +assignId +"&tagId="+tagID );
+	xmlHttpobj.send("&tagItemId=" +assignId +"&tagId="+assignId );
 
  }}
 function doOnObjDelete()
@@ -272,7 +274,7 @@ var tagID;
 //Ajax Function for Selection of rows in  TreeGrid Add Child By lazyLoad 
 
 function ajaxTreeGridRowSelectCall(tagId) {
-	var url = "GetTreeGridChildAction.do";
+	var url = "GetTreeGridChildAction.do?entityTag=SpecimenListTag";
 	if (window.XMLHttpRequest)
   { 
   xmlHttpobj=new XMLHttpRequest();
@@ -320,7 +322,7 @@ popupmygrid.expandAll();
 }
 //Ajax function to get Count of Queries Inside the Folder 
 function ajaxDeleteCall(tagId) {
-	var url = "GetTreeGridChildAction.do";
+	var url = "TagDeleteAction.do?entityTag=SpecimenListTag";
 	if (window.XMLHttpRequest)
   { 
   xmlHttpobj=new XMLHttpRequest();

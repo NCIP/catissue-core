@@ -369,7 +369,7 @@
 					<p>
 						<%
 						String specId = (String)request.getAttribute("popUpSpecList");
- String	assignTarget = "ajaxAssignTagFunctionCall('AssignTagAction.do','popupAssignMessage','popupAssignConditionMessage','"+specId+"')";
+ String	assignTarget = "ajaxAssignTagFunctionCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specId+"','popupAssignMessage','popupAssignConditionMessage','"+specId+"')";
  %>
 						<input type="button" value="ASSIGN" onclick="<%=assignTarget%> "
 							onkeydown="<%=assignTarget%> " class="btn3">
@@ -406,7 +406,7 @@ function doOnTreeGridRowSelected(rId)
  
 function doInitParseTree()
 {
-	popupmygrid.loadXML("TreeTagAction.do");
+	popupmygrid.loadXML("TreeTagAction.do?entityTag=SpecimenListTag");
 
 }
 

@@ -140,6 +140,9 @@
 			<mapping resource="QueryTag.hbm.xml" />
 		<mapping resource="QueryTagItem.hbm.xml" />
 		
+		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenListTagItem.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenListTag.hbm.xml"/>
+		
     </session-factory>
 
 </hibernate-configuration>
