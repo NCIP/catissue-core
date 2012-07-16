@@ -331,7 +331,7 @@ function authenticateToGrid()
 									styleClass="black_ar" maxlength="255" size="30"
 									styleId="targetPassword" property="targetPassword"
 									readonly='${requestScope.readOnlyEmail}' />
-									<logic:equal name="grouperUser" value="yes">
+									<logic:equal name="grouperUsers" value="yes">
 									<div id="ajaxButton">
 										<html:button styleClass="blue_ar_b" property="auth" value="Test Login" onclick="authenticateToGrid()" />
 									</div>

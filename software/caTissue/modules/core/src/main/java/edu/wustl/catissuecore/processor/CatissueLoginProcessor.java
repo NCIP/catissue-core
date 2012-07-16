@@ -161,7 +161,9 @@ public final class CatissueLoginProcessor extends LoginProcessor
     	boolean accountLocked = Boolean.FALSE;
     	if(!isLoginSuccessful && Variables.invalidLoginAttemptsAllowed > 0)
     	{
-	    		if(getInvalidLoginAttempts(loginName) >= Variables.invalidLoginAttemptsAllowed )
+    		int doubleAttempts = Variables.invalidLoginAttemptsAllowed*2;
+    		int invalidAttempts = getInvalidLoginAttempts(loginName);
+	    		if(invalidAttempts == Variables.invalidLoginAttemptsAllowed || invalidAttempts == doubleAttempts)
 	    		{
 	    			String sqll = "update catissue_user set activity_status='Locked' where login_name=?";
 	    			List<ColumnValueBean> beanList = new ArrayList<ColumnValueBean>();
@@ -174,12 +176,28 @@ public final class CatissueLoginProcessor extends LoginProcessor
     	return accountLocked;
 	}
 
+
 	public static int getInvalidLoginAttempts(String loginName)
 			throws ApplicationException {
-		String sql = "select is_login_successful from catissue_login_audit_event_log log, catissue_user user "+
-		" where log.user_login_id=user.identifier and user.login_name=? and user.activity_status='Active' order by login_timestamp desc limit ?";
+		String sql;
+		final String databaseType = DAOConfigFactory.getInstance()
+		.getDAOFactory(CommonServiceLocator.getInstance()
+				.getAppName()).getDataBaseType();
+		if (databaseType.equals(Constants.ORACLE_DATABASE)) {
+//			sql = "select is_login_successful from (select is_login_successful,row_number() over (order by login_timestamp desc) r from catissue_login_audit_event_log log, catissue_user user1 where log.user_login_id=user1.identifier " +
+//			" and user1.login_name like ? and user1.activity_status='Active'  ) where r between 1 and ?";
+			sql="SELECT IS_LOGIN_SUCCESSFUL,LOGIN_TIMESTAMP from(SELECT LOGIN_TIMESTAMP,IS_LOGIN_SUCCESSFUL from catissue_login_audit_event_log log1, " +
+					" catissue_user user1 WHERE LOG1.USER_LOGIN_ID=USER1.IDENTIFIER AND USER1.LOGIN_NAME=? AND " +
+					" USER1.ACTIVITY_STATUS='Active' ORDER BY LOG1.LOGIN_TIMESTAMP DESC) where ROWNUM <=? ORDER BY rownum";
+		}
+		else 
+		{
+			sql = "select is_login_successful from catissue_login_audit_event_log log, catissue_user user "+
+			" where log.user_login_id=user.identifier and user.login_name like ? and user.activity_status='Active' order by login_timestamp desc limit ?";
+		}
+		int doubleAttempts = Variables.invalidLoginAttemptsAllowed*2;
 		ColumnValueBean userIdBean = new ColumnValueBean(loginName);
-		ColumnValueBean limitBean = new ColumnValueBean(Variables.invalidLoginAttemptsAllowed);
+		ColumnValueBean limitBean = new ColumnValueBean(doubleAttempts);
 		List<ColumnValueBean> beansList = new ArrayList<ColumnValueBean>();
 		beansList.add(userIdBean);
 		beansList.add(limitBean); 
@@ -191,8 +209,9 @@ public final class CatissueLoginProcessor extends LoginProcessor
 			for (Object object : list) 
 			{
 				List list1 = (List)object;
-				loginAttempt = Boolean.valueOf(list1.get(0).toString());
-				if(!loginAttempt)
+				String atmpt = list1.get(0).toString();
+				loginAttempt = Boolean.valueOf(atmpt);
+				if(!loginAttempt && !"1".equals(atmpt))
 				{
 					loginAttemptCtr++;
 				}
