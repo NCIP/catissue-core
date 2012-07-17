@@ -161,9 +161,9 @@ public final class CatissueLoginProcessor extends LoginProcessor
     	boolean accountLocked = Boolean.FALSE;
     	if(!isLoginSuccessful && Variables.invalidLoginAttemptsAllowed > 0)
     	{
-    		int doubleAttempts = Variables.invalidLoginAttemptsAllowed*2;
+//    		int doubleAttempts = Variables.invalidLoginAttemptsAllowed;
     		int invalidAttempts = getInvalidLoginAttempts(loginName);
-	    		if(invalidAttempts == Variables.invalidLoginAttemptsAllowed || invalidAttempts == doubleAttempts)
+	    		if(invalidAttempts == Variables.invalidLoginAttemptsAllowed)
 	    		{
 	    			String sqll = "update catissue_user set activity_status='Locked' where login_name=?";
 	    			List<ColumnValueBean> beanList = new ArrayList<ColumnValueBean>();
@@ -195,7 +195,7 @@ public final class CatissueLoginProcessor extends LoginProcessor
 			sql = "select is_login_successful from catissue_login_audit_event_log log, catissue_user user "+
 			" where log.user_login_id=user.identifier and user.login_name like ? and user.activity_status='Active' order by login_timestamp desc limit ?";
 		}
-		int doubleAttempts = Variables.invalidLoginAttemptsAllowed*2;
+		int doubleAttempts = Variables.invalidLoginAttemptsAllowed;
 		ColumnValueBean userIdBean = new ColumnValueBean(loginName);
 		ColumnValueBean limitBean = new ColumnValueBean(doubleAttempts);
 		List<ColumnValueBean> beansList = new ArrayList<ColumnValueBean>();
