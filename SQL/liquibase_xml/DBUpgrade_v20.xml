@@ -30,8 +30,8 @@
 	
 	<changeSet id="2" author="catissue" runOnChange="true">
 
-		<createTable tableName="TAG">
-			<column name="TAG_ID" type="${int.type}">
+		<createTable tableName="catissue_specimenlist_tags">
+			<column name="IDENTIFIER" type="${int.type}">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 			<column name="TAG_LABEL" type="${text.type}(255)">
@@ -45,17 +45,14 @@
 
 
 
-		<createTable tableName="ASSIGNTAG">
-			<column name="ID" type="${int.type}">
+		<createTable tableName="catissue_spec_tag_items">
+			<column name="IDENTIFIER" type="${int.type}">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 			<column name="TAG_ID" type="${int.type}">
 				<constraints nullable="false" />
 			</column>
 			<column name="OBJ_ID" type="${int.type}">
-				<constraints nullable="false" />
-			</column>
-			<column name="OBJ_TYPE" type="${text.type}(255)">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
