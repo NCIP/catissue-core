@@ -924,7 +924,10 @@
 		<delete dir="${APIclientzip.dir}" />
 		<mkdir dir="${APIclientzip.dir}" />
 		<copy todir="${APIclientzip.dir}/caTissueSuite_Client" overwrite="true">
-			<fileset dir="${catissue.test}/unit/caTissueSuite_Client" />
+			<fileset dir="${catissue.test}/unit/caTissueSuite_Client">
+				<exclude name=".classpath"/>
+				<exclude name=".project"/>
+			</fileset>
 		</copy>
 		<delete dir="${APIclientzip.dir}/caTissueSuite_Client/nightly_build_report" />
 		<copy todir="${APIclientzip.dir}/caTissueSuite_Client/lib" overwrite="true">
