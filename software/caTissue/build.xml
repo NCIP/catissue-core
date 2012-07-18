@@ -949,6 +949,7 @@
 				<include name="log4j.jar" />
 				<include name="commons-lang.jar" />
 				<include name="xercesImpl.jar" />
+				<include name="caGrid-IdentifiersNAService-stubs-1.4-dev.jar" />
 
 				<include name="AdvanceQuery.jar" />
 				<include name="bulkoperator.jar" />
@@ -958,6 +959,9 @@
 				<include name="ParticipantManager.jar" />
 				<include name="SimpleQuery*.jar" />
 				<include name="washu-commons*.jar" />
+			</fileset>
+			<fileset dir="${common.lib.dir}">
+				<include name="wsrf_core_stubs.jar" />
 			</fileset>
 			<fileset dir="${caTissueSuite_Client_lib.dir}">
 				<include name="catissuecore.jar" />
@@ -1318,7 +1322,9 @@
 				<include name="**/edu/wustl/catissuecore/cdms/integrator/**" />
 				<include name="**/edu/wustl/catissuecore/factory/**" />
 				<include name="**/edu/wustl/catissuecore/cacore/**" />
-
+				<include name="**/edu/wustl/catissuecore/GSID/**" />
+				<include name="**/edu/wustl/catissuecore/passwordutil/**" />
+				
 				<exclude name="**/CVS*" />
 				<exclude name="**/java.policy.applet*" />
 			</fileset>
@@ -1333,6 +1339,11 @@
 				<include name="SecurityManager*.jar" />
 				<include name="AdvanceQuery*.jar" />
 				<include name="bulkoperator.jar" />
+				<include name="caGrid-IdentifiersNAService-stubs-1.4-dev.jar" />
+				
+			</fileset>
+			<fileset dir="${common.lib.dir}">
+				<include name="wsrf_core_stubs.jar" />
 			</fileset>
 			<fileset dir="${tempCatissuecore.dir}">
 				<include name="catissuecore.jar" />

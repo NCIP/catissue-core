@@ -1413,30 +1413,30 @@ public class CollectionProtocolUtil
 	 */
 	private static SpecimenRequirement getSpecimenDomainObject(SpecimenRequirementBean specimenRequirementBean)
 	{
-		NewSpecimenForm form = new NewSpecimenForm();
-		form.setClassName(specimenRequirementBean.getClassName());
+//		NewSpecimenForm form = new NewSpecimenForm();
+		String specimenClass = specimenRequirementBean.getClassName();
 		SpecimenRequirement reqSpecimen=null;
 		try
 		{
-			if(form.getClassName().equals("Tissue"))
+			if(specimenClass.equals("Tissue"))
 			{
 				InstanceFactory<TissueSpecimenRequirement> instFact = DomainInstanceFactory.getInstanceFactory(TissueSpecimenRequirement.class);
 				reqSpecimen = instFact.createObject();
 				//reqSpecimen = new TissueSpecimenRequirement();
 			}
-			else if(form.getClassName().equals("Fluid"))
+			else if(specimenClass.equals("Fluid"))
 			{
 				InstanceFactory<FluidSpecimenRequirement> instFact = DomainInstanceFactory.getInstanceFactory(FluidSpecimenRequirement.class);
 				reqSpecimen = instFact.createObject();
 				//reqSpecimen = new FluidSpecimenRequirement();
 			}
-			else if(form.getClassName().equals("Cell"))
+			else if(specimenClass.equals("Cell"))
 			{
 				InstanceFactory<CellSpecimenRequirement> instFact = DomainInstanceFactory.getInstanceFactory(CellSpecimenRequirement.class);
 				reqSpecimen = instFact.createObject();//new CellSpecimenRequirement();
 
 			}
-			else if(form.getClassName().equals("Molecular"))
+			else if(specimenClass.equals("Molecular"))
 			{
 				InstanceFactory<MolecularSpecimenRequirement> instFact = DomainInstanceFactory.getInstanceFactory(MolecularSpecimenRequirement.class);
 				reqSpecimen = instFact.createObject();
