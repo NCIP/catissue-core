@@ -97,10 +97,11 @@
 		function onNormalSubmit()
 		{
 			var checked = document.forms[0].aliCheckedButton.checked;
+			var actionToCall='${requestScope.actionToCall}'+"&pageOf=pageOfCreateDerivative";
 			if(checked)
 			{
 				setSubmitted('ForwardTo','${requestScope.printAction}','pageOfCreateAliquot');
-				confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
+				confirmDisable(actionToCall,document.forms[0].activityStatus);
 			}
 			else
 			{
@@ -113,7 +114,7 @@
 			    {
 				   setSubmitted('ForwardTo','${requestScope.printAction}','newSpecimenEdit');
 			     }
-				confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
+				confirmDisable(actionToCall,document.forms[0].activityStatus);
 			}
 		}
 
@@ -121,6 +122,7 @@
 		{
 
 			var printFlag = document.getElementById("printCheckbox");
+			var actionToCall='${requestScope.actionToCall}'+"&pageOf=pageOfCreateDerivative";
 			if(printFlag.checked)
 		    {
 				setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartAndPrint','pageOfNewSpecimen');
@@ -130,7 +132,7 @@
                // setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartForwardtoDerive','success');
             	setSubmittedFor("ForwardTo","addSpecimenToCart");
             }
-			confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
+			confirmDisable(actionToCall,document.forms[0].activityStatus);
 
 		}
 

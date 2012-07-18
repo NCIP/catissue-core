@@ -386,7 +386,7 @@
 					<%actionToCall = "NewSpecimenAdd.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 					{
-					  	actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
+					  	actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION+"?pageOf=pageOfNewSpecimenCPQuery";
 						forwardToValue = "CPQueryPrintSpecimenAdd";
 					}%>
 
@@ -409,7 +409,7 @@
 					forwardToValue = "PrintSpecimenEdit";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 					{
-						actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+						actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION+"?pageOf=pageOfNewSpecimenCPQuery";
                         forwardToValue = "CPQueryPrintSpecimenEdit";
 
 					}%>
@@ -447,7 +447,7 @@
 						forwardToValue = "PrintSpecimenEdit";
 						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 						{
-							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION+"?pageOf=pageOfNewSpecimenCPQuery";
 							cpChildSubmitAction = "CPQueryPrintSpecimenEdit";//Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
 
 						}%>
@@ -476,7 +476,7 @@
 						forwardToValue = "PrintSpecimenAdd";
 						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 						{
-							actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
+							actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION+"?pageOf=pageOfNewSpecimenCPQuery";
 							forwardToValue = "CPQueryPrintSpecimenAdd";
 						}%>
 
@@ -491,7 +491,14 @@
 
 						if(document.forms[0].nextForwardTo.value!=null)
 						{
-						 confirmDisable('<%=actionToCall%>'+"?nextForwardTo="+document.forms[0].nextForwardTo.value,document.forms[0].activityStatus);
+							if('<%=actionToCall%>'.indexOf('?')==-1)
+							{
+								confirmDisable('<%=actionToCall%>'+"?nextForwardTo="+document.forms[0].nextForwardTo.value,document.forms[0].activityStatus);
+							}
+							else
+							{
+								confirmDisable('<%=actionToCall%>'+"&nextForwardTo="+document.forms[0].nextForwardTo.value,document.forms[0].activityStatus);
+							}
 						}
 						else
 						{
@@ -506,7 +513,7 @@
 						forwardToValue = "PrintSpecimenEdit";
 						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 						{
-							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION+"?pageOf=pageOfNewSpecimenCPQuery";
 							forwardToValue = "CPQueryPrintSpecimenEdit";
 						}%>
 						if(temp == "orderDetails")
@@ -1173,7 +1180,7 @@
 		<%
 		if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 		{
-			actionToCall1 = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+			actionToCall1 = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION+"?pageOf=pageOfNewSpecimenCPQuery";
 		}%>
 		confirmDisable('<%=actionToCall1%>',document.forms[0].activityStatus);
 	}

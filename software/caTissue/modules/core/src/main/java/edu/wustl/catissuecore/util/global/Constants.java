@@ -5999,6 +5999,7 @@ public class Constants
 
 	/** Specify SYS_UID Key For Key Generation . */
 	public static final String SYS_UID_KEY = "SYS_UID";
+	
 	/** Specify SYS_UID Type For Key Generation . */
 	public static final String SYS_UID_TYPE = "Specimen";
 
@@ -6011,5 +6012,14 @@ public class Constants
 	public static final String TRANSFER_EVENT="Transfer";
 	
 	public static final String DISPOSAL_EVENT="Disposal";
+	
 	public static final String FORM_CONTXT_ERR="Error while setting Form context";
+	
+	public static final String PAGE_OF_COLLECTION_PROTOCOL_QUERY="pageOfCollectionProtocolQuery";
+	
+	public static final String DEFINE_EVENTS_PAGE="pageOfDefineEvents";
+	
+	public static final String PAGE_OF_CREATE_DERIVATIVE="pageOfCreateDerivative";
+	
+	public static final String PAGE_OF_SPECIMEN_SUMMARY="specimenSummaryPage";
 }

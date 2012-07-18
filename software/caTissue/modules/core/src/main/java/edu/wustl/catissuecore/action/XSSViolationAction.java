@@ -35,7 +35,16 @@ public class XSSViolationAction extends BaseAction
 		String target = "generic";
 		if (Constants.PAGE_OF_PARTICIPANT_CP_QUERY.equals(request.getParameter(Constants.PAGE_OF))
 				|| Constants.PAGE_OF_SPECIMEN_CP_QUERY.equals(request.getParameter(Constants.PAGE_OF))
-				||Constants.PAGE_OF_SCG_CP_QUERY.equals(request.getParameter(Constants.PAGE_OF)))
+				||Constants.PAGE_OF_SCG_CP_QUERY.equals(request.getParameter(Constants.PAGE_OF))
+				||Constants.PAGE_OF_COLLECTION_PROTOCOL_QUERY.equals(request.getParameter(Constants.PAGE_OF))
+				||Constants.DEFINE_EVENTS_PAGE.equals(request.getParameter(Constants.PAGE_OF))
+				||Constants.PAGE_OF_DEFINE_EVENTS.equals(request.getParameter(Constants.PAGE_OF))
+				||Constants.PAGE_OF_SPECIMEN_REQUIREMENT.equals(request.getParameter(Constants.PAGE_OF))
+				||Constants.ERROR.equals(request.getParameter(Constants.PAGE_OF))
+				||Constants.PAGE_OF_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGE_OF))
+				||Constants.PAGE_OF_CREATE_DERIVATIVE.equals(request.getParameter(Constants.PAGE_OF))
+				||Constants.PAGE_OF_MULTIPLE_SPECIMEN_WITHOUT_MENU.equals(request.getParameter(Constants.PAGE_OF))
+				||Constants.PAGE_OF_SPECIMEN_SUMMARY.equals(request.getParameter(Constants.PAGE_OF)))
 		{
 			target="cpbasedview";
 		}
