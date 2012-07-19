@@ -76,7 +76,7 @@ public class LoadGridServlet extends ConnectorServlet
 "AbstractSpecimen1.INITIAL_QUANTITY  Init_Quantity , Specimen1.AVAILABLE_QUANTITY  Avl_Quantity , " +
 "Specimen1.AVAILABLE  Available , Specimen1.CREATED_ON_DATE  Created_On , Specimen1.IDENTIFIER  Identifier "+ 
 " FROM  CATISSUE_SPECIMEN_CHAR SpecimenCharacteristics1 , CATISSUE_ABSTRACT_SPECIMEN AbstractSpecimen1 , " +
-"CATISSUE_EXTERNAL_IDENTIFIER ExternalIdentifier1 , CATISSUE_SPECIMEN Specimen1 , assigntag atg "+  
+"CATISSUE_EXTERNAL_IDENTIFIER ExternalIdentifier1 , CATISSUE_SPECIMEN Specimen1 , catissue_spec_tag_items atg "+  
 " WHERE SpecimenCharacteristics1.IDENTIFIER   =  AbstractSpecimen1.SPECIMEN_CHARACTERISTICS_ID  AND " +
 "Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID  AND AbstractSpecimen1.IDENTIFIER   =  " +
 "Specimen1.IDENTIFIER  AND Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID   AND atg.tag_id="+aliasName+" and " +
