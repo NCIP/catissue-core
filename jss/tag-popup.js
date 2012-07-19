@@ -1,4 +1,8 @@
 //Functions for Popup
+var count;
+  var tCount=300;
+var tagCount;
+count=tCount;
 function toggle(div_id) {
 	var el = document.getElementById(div_id);
 	if ( el.style.display == 'none' ) {	el.style.display = 'block';}
@@ -301,17 +305,18 @@ else
 		 var tree=xmlHttpobj.responseText;
 		 arrObj = eval('(' +tree+ ')');	 
 		 var objLength=arrObj.treeData.length;
-		 var count;
+		 //count = objLength;
+		 var icount;
 		 
  		 childCount=popupmygrid.hasChildren(tagID);
 	 if(childCount==0)
 		{
 		 childCount=arrObj.childCount;
- 		for(count=0;count<objLength;count++)
+ 		for(icount=0;icount<objLength;icount++)
  			{
-			var assignId=arrObj.treeData[count].id;
+			var assignId=arrObj.treeData[icount].id;
 			 		
-popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img src='images/delete.gif' width='12' height='12' id='assignId' onclick='ajaxObjDeleteCall("+assignId+")'/>"],(new Date()).valueOf(),tagID);
+popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[icount].name,"<img src='images/advQuery/delete.gif' width='12' height='12' id='assignId' onclick='ajaxObjDeleteCall("+assignId+")'/>"],(new Date()).valueOf(),tagID);
 	pause(10);
  			}
 		}
@@ -365,7 +370,7 @@ return;
  			{
 			var assignId=arrObj.treeData[count].id;
 			 		
-popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img src='images/delete.gif' width='12' height='12' id='assignId' onclick='ajaxObjDeleteCall('"+assignId+"','"+assignId+"')'/>"],0,tagID);
+popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img src='images/advQuery/delete.gif' width='12' height='12' id='assignId' onclick='ajaxObjDeleteCall('"+assignId+"','"+assignId+"')'/>"],0,tagID);
  	pause(10);			}
 		}
 //ajaxTagDeleteCall(tagID);	

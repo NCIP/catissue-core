@@ -19,10 +19,12 @@ dhtmlXGridObject.prototype._updateTGRState=function(z){
 
 
 dhtmlXGridObject.prototype.doExpand=function(obj){  
-	this.editStop();
+ 	this.editStop();
     var row = obj.parentNode.parentNode.parentNode;
 	var r=this._h2.get[row.idd];
+ 	ajaxTreeGridRowSelectCall(row.idd);
 	if (!this.callEvent("onOpen",[row.idd,(r.state=="plus"?-1:1)])) return;
+ 
     if(r.state=="plus")
       this.expandKids(row)
     else
@@ -447,13 +449,20 @@ eXcell_tree.prototype = new eXcell;
 		
         for(var i=0;i<row.level;i++)
         	html.push(_tgc.spacer);
-        
+     
        //if has children
         if(row.has_kids){
         	html.push(_tgc.plus);
         	row.state="plus"
         	}
-        else
+	else if(count>0 && row.level==0)
+	{
+        	html.push(_tgc.plus);
+        	row.state="plus"
+		count--;
+		 
+        	}
+        else 
         	html.push(_tgc.imst+row.state+".gif"+_tgc.imact);
                         
 		html.push(_tgc.imsti);

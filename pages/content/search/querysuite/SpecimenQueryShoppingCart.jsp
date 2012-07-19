@@ -103,7 +103,7 @@ function reloadGrid(obj)
 //alert(obj.value);
 
 	mygrid.clearAll(); 
-	mygrid.loadXML("LoadGridServlet?ppi="+obj.value);	
+	mygrid.loadXML("LoadGridServlet?reqParam="+obj.value);	
 }
 function updateHiddenFields()
 	{
@@ -121,7 +121,7 @@ function updateHiddenFields()
 			for(i=0;i<cb.size();i++)
 			{
 			//alert(cb[i]+"   cb[i]");
-				var cl = mygrid.cells(cb[i],11).getValue();
+				var cl = mygrid.cells(cb[i],9).getValue();
 				//alert("cl   "+cl);
 				//alert(specIds);
 				if(specIds.length >0)
@@ -411,8 +411,8 @@ function checkAll(element)
 	var state=element.checked;
 	rowCount = mygrid.getRowsNum();
 	var chkName="";
-	var hidendiv = document.getElementById('hiddenTab');
-	var createRow = document.getElementById('hiddenTab').insertRow(0);
+	//var hidendiv = document.getElementById('hiddenTab');
+	//var createRow = document.getElementById('hiddenTab').insertRow(0);
 	for(i=1;i<=rowCount;i++)
 	{
 	
@@ -422,7 +422,7 @@ function checkAll(element)
 		var cl = mygrid.cells(i,0);
 		
 		var ids = i-1;
-		var crtdCell = createRow.insertCell(ids);
+		//var crtdCell = createRow.insertCell(ids);
 		if(cl.isCheckbox())
 		{
 			cl.setChecked(state);
@@ -441,32 +441,28 @@ function loadSpecimenGrid()
 
 	mygrid = new dhtmlXGridObject("specimenGrid");
 	mygrid.setImagePath("dhtmlx_suite/imgs/");
-	mygrid.setInitWidthsP("5,11,11,,,11,11,11,11,11,,,,,11,,");
+	//CHKBOX,SCG_NAME,Label,Barcode,Parent_Specimen_Id,Class,Type,Avl_Quantity,Lineage,Identifier
+	mygrid.setInitWidthsP("5,15,15,,15,15,,15,15,");
 	mygrid.setEditable(true);
 	mygrid.setSkin("light");
 	mygrid.enableAutoHeight(true);
-	mygrid.setColSorting(",str,str,str,str,str,str,str,str,str,str,str,str,str,str,str,str,str");
-	mygrid.setHeader(",Barcode,Label,,,SCG_ID,Class,Type,Lineage,Parent Label,,,,,Quantity,,");
+	mygrid.setColSorting(",str,str,str,str,str,str,str,str,str");
+	mygrid.setHeader(",Scg_Name,Label(Barcode),,Parent Label,Class(Type),,Quantity,Lineage,");
 	
-	mygrid.attachHeader(",,#connector_text_filter,,,,,,#connector_text_filter,,,,,,,,,,,");
-	mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro");
-	mygrid.enableSmartRendering(true,10);
-	//mygrid.enableTooltips(",true,true,true,true,true,true,true,true,true,true,true,");
+	mygrid.attachHeader(",,#connector_text_filter,,,#connector_text_filter,,,,");
+	mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,ro,ro");
+	mygrid.enableSmartRendering(true,15);
+	//mygrid.enableTooltips(",true,true,true,true,true,true,true,true,true");
 	mygrid.enableRowsHover(true,'grid_hover')
 	mygrid.init();
 	//mygrid.addRow(1,",3/23,,,1.0,Tissue(Fixed Tissue),Not Specified,Not Specified,New,2.0,Collected,2141",1);
 	//mygrid.addRow(2,",3_1/24,,3,1.0,Tissue(Fixed Tissue),Not Specified,Not Specified,New,2.0,Collected,2142",2);
 	var tagVal = document.getElementById('tagName').value;
 	//alert(tagVal);
-	mygrid.loadXML("LoadGridServlet?ppi="+tagVal);	
+	mygrid.loadXML("LoadGridServlet?reqParam="+tagVal);	
 	mygrid.setColumnHidden(3,true);
-	mygrid.setColumnHidden(4,true);
-	mygrid.setColumnHidden(10,true);
-	mygrid.setColumnHidden(11,true);
-	mygrid.setColumnHidden(12,true);
-	mygrid.setColumnHidden(13,true);
-	mygrid.setColumnHidden(15,true);
-	mygrid.setColumnHidden(16,true);
+	mygrid.setColumnHidden(6,true);
+	mygrid.setColumnHidden(9,true);
 	
 }
 	</script>

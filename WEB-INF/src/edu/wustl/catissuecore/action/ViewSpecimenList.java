@@ -78,7 +78,7 @@ public class ViewSpecimenList extends QueryShoppingCartAction
 
 	private void getLabels(HttpServletRequest request) throws ApplicationException 
 	{
-		String sql = "select * from tag where user_id = ?";
+		String sql = "select * from catissue_specimenlist_tags where user_id = ?";
 		
 		SessionDataBean sessionData = (SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 		
