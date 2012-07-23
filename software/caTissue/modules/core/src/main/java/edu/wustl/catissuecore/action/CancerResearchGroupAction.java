@@ -26,7 +26,7 @@ import edu.wustl.common.action.SecureAction;
  * @author Mandar Deshmukh
  */
 
-public class CancerResearchGroupAction extends SecureAction
+public class CancerResearchGroupAction extends CatissueBaseAction
 {
 
 	/**
@@ -40,7 +40,7 @@ public class CancerResearchGroupAction extends SecureAction
 	 * @return ActionForward : ActionForward
 	 * */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//Gets the value of the operation parameter.

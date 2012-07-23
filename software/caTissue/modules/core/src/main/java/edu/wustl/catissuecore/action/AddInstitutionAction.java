@@ -24,7 +24,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author renuka_bajpai
  */
-public class AddInstitutionAction extends CommonAddEditAction
+public class AddInstitutionAction extends CatissueAddEditAction
 {
 
 	/**
@@ -42,7 +42,7 @@ public class AddInstitutionAction extends CommonAddEditAction
 	 * @return ActionForward
 	 */
 	@Override
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final String institutionName = request.getParameter(Constants.INSTITUTION_NAME);
@@ -54,7 +54,7 @@ public class AddInstitutionAction extends CommonAddEditAction
 		institutionForm.setOperation(Constants.ADD);
 		institutionForm.setName(institutionName);
 
-		final ActionForward forward = super.executeXSS(mapping, institutionForm, request, response);
+		final ActionForward forward = super.executeSecureAction(mapping, institutionForm, request, response);
 
 		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{

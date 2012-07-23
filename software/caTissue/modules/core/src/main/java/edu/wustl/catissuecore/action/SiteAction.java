@@ -39,7 +39,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * @author aniruddha_phadnis
  */
-public class SiteAction extends SecureAction
+public class SiteAction extends CatissueBaseAction
 {
 
 	/**
@@ -62,7 +62,7 @@ public class SiteAction extends SecureAction
 	 *             generic exception
 	 */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final SiteForm siteForm = (SiteForm) form;

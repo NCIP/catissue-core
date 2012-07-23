@@ -28,7 +28,7 @@ import edu.wustl.common.cde.CDEManager;
  * @author renuka_bajpai
  *
  */
-public class BiohazardAction extends SecureAction
+public class BiohazardAction extends CatissueBaseAction
 {
 
 	/**
@@ -42,7 +42,7 @@ public class BiohazardAction extends SecureAction
 	 * @return ActionForward : ActionForward
 	 * */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//Gets the value of the operation parameter.

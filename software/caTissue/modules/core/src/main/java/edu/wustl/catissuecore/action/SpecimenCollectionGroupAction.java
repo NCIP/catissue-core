@@ -90,7 +90,7 @@ import edu.wustl.dao.exception.DAOException;
  *
  * @author ajay_sharma
  */
-public class SpecimenCollectionGroupAction extends SecureAction
+public class SpecimenCollectionGroupAction extends CatissueBaseAction
 {
 
 	/** logger. */
@@ -109,7 +109,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 *
 	 * @throws Exception : Exception
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping, final ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, final ActionForm form,
 			final HttpServletRequest request, final HttpServletResponse response) throws Exception
 	{
 		DAO dao = null;

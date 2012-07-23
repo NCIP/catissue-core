@@ -74,7 +74,7 @@ import edu.wustl.dao.DAO;
  *
  * @author gautam_shetty
  */
-public class ParticipantAction extends SecureAction
+public class ParticipantAction extends CatissueBaseAction
 {
 
 	/** logger. */
@@ -94,7 +94,7 @@ public class ParticipantAction extends SecureAction
 	 * @throws Exception generic exception
 	 */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 			{
 

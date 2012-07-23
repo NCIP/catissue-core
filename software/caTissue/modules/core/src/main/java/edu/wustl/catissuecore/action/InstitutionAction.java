@@ -56,7 +56,7 @@ public class InstitutionAction extends SecureAction {
 			HttpServletResponse response) throws Exception {
 		// Gets the value of the operation parameter.
 		final String operation = request.getParameter(Constants.OPERATION);
-
+saveToken(request);
 		request.setAttribute("operationAdd", Constants.ADD);
 		request.setAttribute("operationEdit", Constants.EDIT);
 

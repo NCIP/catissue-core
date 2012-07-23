@@ -26,7 +26,7 @@ import edu.wustl.common.action.SecureAction;
  * @author Mandar Deshmukh
  */
 
-public class DepartmentAction extends SecureAction
+public class DepartmentAction extends CatissueBaseAction
 {
 
 	/**
@@ -44,7 +44,7 @@ public class DepartmentAction extends SecureAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//Gets the value of the operation parameter.
@@ -53,7 +53,7 @@ public class DepartmentAction extends SecureAction
 		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
 		departmentForm.setOperation(operation);
 		departmentForm.setSubmittedFor(submittedFor);
-
+		saveToken(request);
 		String formName;
 		boolean readOnlyValue;
 		if (operation.equals(Constants.EDIT))

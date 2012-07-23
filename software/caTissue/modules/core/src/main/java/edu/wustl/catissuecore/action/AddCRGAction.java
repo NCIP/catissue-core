@@ -23,7 +23,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author renuka_bajpai
  */
-public class AddCRGAction extends CommonAddEditAction
+public class AddCRGAction extends CatissueAddEditAction
 {
 
 	/**
@@ -41,7 +41,7 @@ public class AddCRGAction extends CommonAddEditAction
 	 * @return ActionForward
 	 */
 	@Override
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final String crgName = request.getParameter(Constants.CRG_NAME);
@@ -53,7 +53,7 @@ public class AddCRGAction extends CommonAddEditAction
 		crgForm.setOperation(Constants.ADD);
 		crgForm.setName(crgName);
 
-		final ActionForward forward = super.executeXSS(mapping, crgForm, request, response);
+		final ActionForward forward = super.executeSecureAction(mapping, crgForm, request, response);
 
 		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{

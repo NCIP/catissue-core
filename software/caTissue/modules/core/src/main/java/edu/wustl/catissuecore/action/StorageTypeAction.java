@@ -41,7 +41,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author renuka_bajpai
  */
-public class StorageTypeAction extends SecureAction
+public class StorageTypeAction extends CatissueBaseAction
 {
 
 	/**
@@ -63,7 +63,7 @@ public class StorageTypeAction extends SecureAction
 	 * @throws Exception : obj of Exception
 	 * @return ActionForward : ActionForward
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final StorageTypeForm storageTypeForm = (StorageTypeForm) form;

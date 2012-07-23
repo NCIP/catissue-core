@@ -15,7 +15,7 @@ public class CreateSPPAction extends CommonAddEditAction
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.CommonAddEditAction#executeXSS(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		return null;

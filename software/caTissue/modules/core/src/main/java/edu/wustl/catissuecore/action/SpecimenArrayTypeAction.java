@@ -32,7 +32,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author Ashwin Gupta
  */
-public class SpecimenArrayTypeAction extends SecureAction
+public class SpecimenArrayTypeAction extends CatissueBaseAction
 {
 
 	/**
@@ -63,7 +63,7 @@ public class SpecimenArrayTypeAction extends SecureAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm actionForm,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm actionForm,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// SpecimenArrayTypeForm specimenArrayTypeForm = (SpecimenArrayTypeForm)

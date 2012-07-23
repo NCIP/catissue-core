@@ -111,7 +111,7 @@ public class RequestDetailsAction extends BaseAction
 		// The request Id on which the user has clicked
 		String requestId = "";
 		String orderDetailsId = "";
-
+saveToken(request);
 		if (request.getParameter("id") != null && !request.getParameter("id").equals("0"))
 		{
 			orderDetailsId = request.getParameter("id");

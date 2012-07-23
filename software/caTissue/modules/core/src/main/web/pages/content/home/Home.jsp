@@ -186,14 +186,14 @@ table#browserDetailsContainer {
 																			.getValue(Constants.IDP_ENABLED))) {
 												%>
 												<td><a
-													href="SignUp.do?operation=add&pageOf=pageOfSignUp&;grouperUser=yes"
+													href="SignUp.do?operation=add&pageOf=pageOfSignUp"
 													class="view"><bean:message key="app.signup" /></a></td>
 												<%
 												    } else {
 												%>
 
 												<td><a
-													href="SignUp.do?operation=add&amp;pageOf=pageOfSignUp&amp;grouperUser=yes"
+													href="SignUp.do?operation=add&amp;pageOf=pageOfSignUp"
 													class="view"><bean:message key="app.signup" /></a></td>
 												<%
 												    }

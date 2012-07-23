@@ -43,7 +43,7 @@ public class ProcessShipmentReceivedAction extends CommonAddEditAction
 	 * @return forward mapping.
 	 */
 	@Override
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)throws Exception
 	{
 		final CommonEdtAction commonEditAction = new CommonEdtAction();

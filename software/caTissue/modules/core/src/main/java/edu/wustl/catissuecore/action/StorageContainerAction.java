@@ -61,7 +61,7 @@ import edu.wustl.dao.exception.DAOException;
 /**
  * @author renuka_bajpai
  */
-public class StorageContainerAction extends SecureAction
+public class StorageContainerAction extends CatissueBaseAction
 {
 
 	/**
@@ -83,7 +83,7 @@ public class StorageContainerAction extends SecureAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final SessionDataBean sessionDataBean = this.getSessionData(request);

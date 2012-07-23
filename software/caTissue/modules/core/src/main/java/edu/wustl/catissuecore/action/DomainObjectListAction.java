@@ -66,7 +66,6 @@ public class DomainObjectListAction extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		List list = null, showList = null;
-
 		final AbstractActionForm abstractForm = (AbstractActionForm) form;
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final IBizLogic bizLogic = factory.getBizLogic(abstractForm.getFormId());

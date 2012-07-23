@@ -8,6 +8,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.action.CatissueBaseAction;
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentRequestForm;
 import edu.wustl.catissuecore.bizlogic.shippingtracking.ShipmentRequestBizLogic;
 import edu.wustl.catissuecore.domain.shippingtracking.ShipmentRequest;
@@ -20,7 +21,7 @@ import edu.wustl.common.factory.IFactory;
 /**
  * this class implements the action for processing the shipment requests.
  */
-public abstract class ProcessShipmentRequestsAction extends SecureAction
+public abstract class ProcessShipmentRequestsAction extends CatissueBaseAction
 {
 
 	/**
@@ -46,7 +47,7 @@ public abstract class ProcessShipmentRequestsAction extends SecureAction
 	 * @throws Exception if some problem occurs.
 	 */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String forwardTo = "";

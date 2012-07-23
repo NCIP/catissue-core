@@ -49,7 +49,7 @@ public class SimilarContainerAddAction extends CommonAddEditAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final StorageContainerForm storageContainerForm = (StorageContainerForm) form;

@@ -44,6 +44,10 @@ public class InstitutionAddAction extends SecureAction {
 		BaseAddEditAction addAction;
 		ActionForward actionfwd;
 		try {
+			if ( !isTokenValid(request) ) {
+		        return mapping.findForward("failure");
+		    }
+			resetToken(request);
 			boolean coppaMatchFound = false;
 			final InstitutionForm institutionForm = (InstitutionForm) form;
 //			String remoteOperation = institutionForm.getRemoteOperation();

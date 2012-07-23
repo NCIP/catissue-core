@@ -12,14 +12,14 @@ import edu.wustl.catissuecore.actionForm.SPPForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 
-public class SPPAction extends SecureAction
+public class SPPAction extends CatissueBaseAction
 {
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#executeSecureAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		boolean setDefaultValue = Boolean.parseBoolean(request

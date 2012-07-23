@@ -54,7 +54,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * @author Mandar Deshmukh
  */
-public class SpecimenProtocolAction extends SecureAction
+public class SpecimenProtocolAction extends CatissueBaseAction
 {
 
 	/**
@@ -77,7 +77,7 @@ public class SpecimenProtocolAction extends SecureAction
 	 */
 
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// Gets the value of the operation parameter.

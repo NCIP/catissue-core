@@ -52,15 +52,26 @@ public class UserAddEditAction extends XSSSupportedAction
 		ActionForward actionfwd;
 		try
 		{
-			if (abstractForm.isAddOperation())
+			if ( !isTokenValid(request) ) 
 			{
-				addEditAction = new UserAddAction();
-			}
+				actionfwd = mapping.findForward(Constants.FAILURE);
+				ActionErrors actionErrors = new ActionErrors();
+				ActionError actionError = new ActionError("errors.item","Invalid request for add/edit operaton");
+				actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
+				saveErrors(request, actionErrors);
+		    }
 			else
 			{
-				addEditAction = new CommonEdtAction();
+				if (abstractForm.isAddOperation())
+				{
+					addEditAction = new UserAddAction();
+				}
+				else
+				{
+					addEditAction = new CommonEdtAction();
+				}
+				actionfwd = addEditAction.executeXSS(mapping, abstractForm, request, response);
 			}
-			actionfwd = addEditAction.executeXSS(mapping, abstractForm, request, response);
 		}
 		catch (ApplicationException applicationException)
 		{

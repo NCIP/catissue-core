@@ -23,7 +23,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author renuka_bajpai
  */
-public class AddDepartmentAction extends CommonAddEditAction
+public class AddDepartmentAction extends CatissueAddEditAction
 {
 
 	/**
@@ -41,7 +41,7 @@ public class AddDepartmentAction extends CommonAddEditAction
 	 * @return ActionForward
 	 */
 	@Override
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final String departmentName = request.getParameter(Constants.DEPARTMENT_NAME);
@@ -57,7 +57,7 @@ public class AddDepartmentAction extends CommonAddEditAction
 		departmentForm.setName(departmentName);
 
 		// Saving the department to the Database using COmmonAddEditAction
-		final ActionForward forward = super.executeXSS(mapping, departmentForm, request, response);
+		final ActionForward forward = super.executeSecureAction(mapping, departmentForm, request, response);
 		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
 			responseString = AppUtility.getResponseString(request, responseString);
