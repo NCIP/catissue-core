@@ -57,21 +57,24 @@
 			</column>
 		</createTable>
 
+<addForeignKeyConstraint constraintName="FK_SPECLIST_TAGITEM_TAG_ID"
+			baseTableName="catissue_spec_tag_items" baseColumnNames="TAG_ID"
+			referencedTableName="catissue_specimenlist_tags" referencedColumnNames="IDENTIFIER" />
 
-		<addForeignKeyConstraint constraintName="FK_ASSIGNTAG_TAG_ID"
-			baseTableName="ASSIGNTAG" baseColumnNames="TAG_ID"
-			referencedTableName="TAG" referencedColumnNames="TAG_ID" />
-
-		<addForeignKeyConstraint constraintName="FK_TAG_USER_ID"
-			baseTableName="TAG" baseColumnNames="USER_ID" referencedTableName="CATISSUE_USER"
+		<addForeignKeyConstraint constraintName="FK_SPECLIST_USER_ID"
+			baseTableName="catissue_specimenlist_tags" baseColumnNames="USER_ID" 					referencedTableName="CATISSUE_USER"
 			referencedColumnNames="IDENTIFIER" />
 
+	        <addForeignKeyConstraint constraintName="FK_SPECLIST_OBJ_ID"
+			baseTableName="catissue_spec_tag_items" baseColumnNames="OBJ_ID" 					referencedTableName="catissue_abstract_specimen"
+			referencedColumnNames="IDENTIFIER" />
 
+		<addUniqueConstraint constraintName="SPECLIST_TAGID_UNIQUE_KEY"
+			tableName="catissue_spec_tag_items" columnNames="TAG_ID,OBJ_ID" />
 
-		<addUniqueConstraint constraintName="S_T_UNIQUE_KEY"
-			tableName="ASSIGNTAG" columnNames="TAG_ID,OBJ_ID" />
-
-
+		<addUniqueConstraint constraintName="SPECLIST_TAGLABEL_UNIQUE_KEY"
+			tableName="catissue_specimenlist_tags" columnNames="TAG_LABEL,USER_ID" />
+			
 	</changeSet>
 	
 </databaseChangeLog>         
