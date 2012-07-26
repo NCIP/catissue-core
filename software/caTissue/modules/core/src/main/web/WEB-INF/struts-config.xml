@@ -1612,7 +1612,7 @@ PUBLIC
 		</action>
 
 		<action path="/UpdatePassword"
-			type="edu.wustl.common.action.CommonAddEditAction"
+			type="edu.wustl.catissuecore.action.CatissueAddEditAction"
 			name="userForm"
 			validate="true"
 			input="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword"
