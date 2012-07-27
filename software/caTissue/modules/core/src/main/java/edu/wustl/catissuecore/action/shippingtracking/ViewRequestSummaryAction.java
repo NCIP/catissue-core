@@ -58,6 +58,14 @@ public class ViewRequestSummaryAction extends SecureAction
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
+		if ( !isTokenValid(request) ) {
+			ActionErrors actionErrors = new ActionErrors();
+			ActionError actionError = new ActionError("errors.item","Invalid request for add/edit operation");
+			actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
+			saveErrors(request, actionErrors);
+	        return mapping.findForward("failure");
+	    }
+		resetToken(request);
 		String target = edu.wustl.catissuecore.util.global.Constants.SUCCESS;
 		String operationToPerform = request
 				.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);

@@ -56,7 +56,7 @@ public class UserAddEditAction extends XSSSupportedAction
 			{
 				actionfwd = mapping.findForward(Constants.FAILURE);
 				ActionErrors actionErrors = new ActionErrors();
-				ActionError actionError = new ActionError("errors.item","Invalid request for add/edit operaton");
+				ActionError actionError = new ActionError("errors.item","Invalid request for add/edit operation");
 				actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
 				saveErrors(request, actionErrors);
 		    }

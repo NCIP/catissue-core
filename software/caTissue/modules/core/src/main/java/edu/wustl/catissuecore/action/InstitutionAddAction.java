@@ -46,7 +46,7 @@ public class InstitutionAddAction extends SecureAction {
 		try {
 			if ( !isTokenValid(request) ) {
 				ActionErrors actionErrors = new ActionErrors();
-				ActionError actionError = new ActionError("errors.item","Invalid request for add/edit operaton");
+				ActionError actionError = new ActionError("errors.item","Invalid request for add/edit operation");
 				actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
 				saveErrors(request, actionErrors);
 		        return mapping.findForward("failure");

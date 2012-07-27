@@ -64,6 +64,14 @@ public class SaveDraftShipmentRequestAction extends SecureAction
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		if ( !isTokenValid(request) ) {
+			ActionErrors actionErrors = new ActionErrors();
+			ActionError actionError = new ActionError("errors.item","Invalid request for add/edit operation");
+			actionErrors.add(ActionErrors.GLOBAL_ERROR, actionError);
+			saveErrors(request, actionErrors);
+	        return mapping.findForward("failure");
+	    }
+		resetToken(request);
 		String target = edu.wustl.catissuecore.util.global.Constants.SUCCESS;
 		String operation = request
 				.getParameter(edu.wustl.catissuecore.util.global.Constants.OPERATION);
