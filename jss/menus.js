@@ -482,7 +482,7 @@ Ext.onReady(function(){
 		{	
 			text: '<img src="images/help.png"/>',
 			href:'#',
-			handler: handleMenu,
+			handler: getHelpURL
 			//tooltip:'help'
 		}
 		);
