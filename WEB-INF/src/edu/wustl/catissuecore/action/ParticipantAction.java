@@ -447,19 +447,7 @@ public class ParticipantAction extends SecureAction {
 			// empi enable
 			// if any one of the CP has enabled empi then csEMPIStatus is set to
 			// true
-			for (int i = 1; i <= count; i++) {
-				final String collectionProtocolTitle = "CollectionProtocolRegistration:"
-						+ i + "_CollectionProtocol_id";
-				if (mapCPR.get(collectionProtocolTitle) != null) {
-
-					csEMPIStatus = ParticipantUtil.isEMPIEnable(Long
-							.valueOf((String) mapCPR
-									.get(collectionProtocolTitle)));
-					if (csEMPIStatus == true) {
-						break;
-					}
-				}
-			}
+			csEMPIStatus = ParticipantUtil.isEMPIEnable(participantForm.getCpId());
 			if (Constants.TRUE.equals(String.valueOf(csEMPIStatus))) {
 				setEMPIIdStatus(participantForm, request);
 				request.setAttribute("csEMPIStatus", String

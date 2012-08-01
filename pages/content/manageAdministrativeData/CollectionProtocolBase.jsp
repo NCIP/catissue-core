@@ -18,6 +18,7 @@
 <script src="jss/javaScript.js" type="text/javascript"></script>
 <script>
 	var selectedNodeId, key, parentId,cpNodeId;
+	var firstTimeLoad = true;
 	//This function calls whenever we select a node from CP tree view
 	function setKeys(nodeId, nodeKey,nodesParentId )
 	{
@@ -63,7 +64,11 @@
 		var formId=window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
 		if(formId!=null)
 		{
-		    action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=add";
+			action="DefineEvents.do?pageOf=pageOfDefineEvents&operation=add";
+			if(firstTimeLoad==true && '${requestScope.operation}'=='add'){
+			   action = action + "&addCpNode=true";
+			   firstTimeLoad = false;
+		    } 
 		}
 		else
 		{
@@ -137,8 +142,8 @@
        else{
 	    saveCP();
    }
-
   }
+
   function exportCP()
   {
     var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');
@@ -146,8 +151,16 @@
 	mywindow = window.open(action, "Download", "width=10,height=10");
 	mywindow.moveTo(0,0);
   }
-</script>
 
+  function resizeIframe()
+  {
+	var totalHeight=window.top.document.body.offsetHeight;
+	document.getElementById('SpecimenRequirementView').style.height=totalHeight*66/100;
+	document.getElementById('CPTreeView').style.height=totalHeight*66/100;
+  }
+
+</script>
+<body onload='resizeIframe()'>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
  <tr>
     <td class="td_color_bfdcf3"><table border="0" cellpadding="0" cellspacing="0">
@@ -177,7 +190,7 @@
 <tr>
 	<td>
 
-      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
+      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
 
         <tr>
           <td colspan="2" align="left" class="bottomtd">
@@ -198,19 +211,19 @@
         </tr>
 
        		<tr>
-				<td width="20%" height="100%" valign="top" style="border-left:1px solid #61a1e3;	 border-right:1px solid #61a1e3;border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3; ">
-					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}&isErrorPage=${requestScope.isErrorPage}" scrolling="auto" frameborder="0" width="100%" name="CPTreeView"  height="450" >
+				<td width="21%" valign="top" style="border-left:1px solid #61a1e3; border-right:1px solid #61a1e3;border-bottom:1px solid #61a1e3;border-top:1px solid #61a1e3;">
+					<iframe id="CPTreeView" src="ShowCollectionProtocol.do?operation=${requestScope.operation}&isErrorPage=${requestScope.isErrorPage}"  frameborder="0" width="100%" name="CPTreeView" >
 							<bean:message key="errors.browser.not.supports.iframe"/>
 					</iframe>
 				</td>
 							 <td width="80%" valign="top" >
 							 <logic:equal name="operation" value="add">
-								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&isErrorPage=${requestScope.isErrorPage}" marginwidth="0" scrolling="auto" frameborder="0" width="100%" height="450" >
+								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol&isErrorPage=${requestScope.isErrorPage}" marginwidth="0" scrolling="auto" frameborder="0" width="100%" >
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 							</logic:equal>
 							 <logic:equal name="operation" value="edit">
-								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" marginwidth="0" frameborder="0" width="100%" height="450" >
+								<iframe name="SpecimenRequirementView"	id="SpecimenRequirementView" src="CollectionProtocol.do?operation=edit&pageOf=pageOfCollectionProtocol&invokeFunction=cp" scrolling="auto" marginwidth="0" frameborder="0" width="100%">
 									<bean:message key="errors.browser.not.supports.iframe"/>
 								</iframe>
 							 </logic:equal>
@@ -241,3 +254,4 @@
 	</td>
  </tr>
 </table>
+</body>

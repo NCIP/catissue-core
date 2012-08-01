@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ page language="java" isELIgnored="false"%>
 <%@ page
-	import="edu.wustl.common.util.global.Constants,edu.wustl.common.beans.SessionDataBean"%>
+	import="edu.wustl.common.util.global.Constants,edu.wustl.common.beans.SessionDataBean,edu.wustl.common.util.XMLPropertyHandler"%>
 
 <%
 	
@@ -10,7 +10,8 @@
 	Long userId=0L;
 	if(session.getAttribute(Constants.SESSION_DATA) != null) 
 		userId = sessionData.getUserId();
-
+	
+	String isEMPIEnabled=XMLPropertyHandler.getValue(edu.wustl.catissuecore.util.global.Constants.EMPI_ENABLED);
 %>
 
 <head>
@@ -26,6 +27,7 @@
 function editUserProfile(item){
 	document.location.href = "UserProfileEdit.do?pageOf=pageOfUserProfile";
 }
+var empiEnabled="<%=isEMPIEnabled%>";
 </script>
 
 </head>

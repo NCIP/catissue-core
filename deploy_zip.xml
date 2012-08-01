@@ -33,11 +33,15 @@
 	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect" />
 	<property name="mssqlserver.dialect.string" value="org.hibernate.dialect.SQLServerDialect" />
 	
-	<!--Vivek:define require dir and Properties for BO-->
+	<!--Vivek:define require dir and properties for BO-->
 	<property name="bulkoperation.csv.dir" value="${base.dir}/modules/bulk_operations_upload" />
 	<property name="bulkoperation.parameters.csv.file" value="load_bulkoperations_list.csv" />
 	<property name="bo.csv.dir" value="${base.dir}/modules/bulk_operations_upload/csv"/>
 	<property name="bo.xml.dir" value="${base.dir}/modules/bulk_operations_upload/xml"/>
+	
+	<!--Vivek:define require dir and properties for inserting dashboard queries-->
+	<property name="dashboard.csv.dir" value="${base.dir}/modules/insert_dashboard_queries" />
+	<property name="dashboard.parameters.csv.file" value="dashboard_sqls.csv" />
 	
 	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver" />
 	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver" />
@@ -706,28 +710,13 @@
 			<replacefilter token="@@integrationEnabled@@" value="${clinportal.integrationEnabled}" />
 			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />
 			<replacefilter token="@@CdmsKeyStorePath@@" value="" />
-
 			<replacefilter token="@@use.email.commonpackage.config@@" value="${use.email.commonpackage.config}" />
 			<replacefilter token="@@email.sendEmailTo.emailAddress@@" value="${email.sendEmailTo.emailAddress}" />
 			<replacefilter token="@@email.admin.support.emailAddress@@" value="${email.admin.support.emailAddress}" />
 			<replacefilter token="@@email.sendEmailFrom.name@@" value="${email.sendEmailFrom.name}" />
 			<replacefilter token="@@email.exception.subject@@" value="${email.exception.subject}" />
-
-			<replacefilter token="@@CasKeystorePath@@" value="${cas.server.keystore.path}" />
 			
-			<!-- added by Amol .For eMPI integration -->
-				<replacefilter token="@@empiDBURL@@" value="jdbc:db2://${empi.database.host}:${empi.database.port}/${empi.database.name}" />
-				<replacefilter token="@@empiDBUserName@@" value="${empi.database.username}" />
-				<replacefilter token="@@empiDBUserPassword@@" value="${empi.database.password}" />
-				<replacefilter token="@@empiDBDriverName@@" value="${db2.driver.string}" />
-				<replacefilter token="@@empiDBSchema@@" value="${empi.database.schema}" />
-				
-				<replacefilter token="@@WMQServerName@@" value="${wmq.server.name}" />
-				<replacefilter token="@@WMQMGRName@@" value="${wmq.mgr.name}" />
-				<replacefilter token="@@WMQChannel@@" value="${wmq.channel}" />
-				<replacefilter token="@@WMQPort@@" value="${wmq.port}" />
-				<replacefilter token="@@HL7ListenerAdminUser@@" value="${hl7.listener.admin.user}" />
-			<!-- END -->
+			<replacefilter token="@@CasKeystorePath@@" value="${cas.server.keystore.path}" />
 			
 			<replacefilter token="@@CiderWMQEnabled@@" value="${cider.integration.enabled}" />
 			<replacefilter token="@@CiderWMQServerName@@" value="${cider.wmq.server.name}" />
@@ -736,12 +725,30 @@
 			<replacefilter token="@@CiderWMQPort@@" value="${cider.wmq.port}" />
 			<!--<replacefilter token="@@CiderInBoundQueue@@" value="${cider.inbound.queue}" />-->
 			<replacefilter token="@@CiderOutBoundQueue@@" value="${cider.outbound.queue}" />
-				
-			<replacefilter token="@@InBoundQueue@@" value="${empi.inBoundQueue}" />
-			<replacefilter token="@@OutBoundQueue@@" value="${empi.outBoundQueue}" /> 
-			<replacefilter token="@@MergeMessageQueue@@" value="${empi.mergeMessageQueue}" /> 
-			
 		</replace>
+		<!-- Add values to properties if EMPI feature is enabled-->
+		<if>
+			<equals arg1="true" arg2="${empi.enabled}" />
+				<then>
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@InBoundQueue@@" value="${empi.inBoundQueue}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@OutBoundQueue@@" value="${empi.outBoundQueue}" /> 
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@MergeMessageQueue@@" value="${empi.mergeMessageQueue}" /> 
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiEnabled@@" value="${empi.enabled}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiDBURL@@" value="jdbc:db2://${empi.database.host}:${empi.database.port}/${empi.database.name}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiDBUserName@@" value="${empi.database.username}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiDBUserPassword@@" value="${empi.database.password}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiDBDriverName@@" value="${db2.driver.string}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiDBSchema@@" value="${empi.database.schema}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@WMQServerName@@" value="${wmq.server.name}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@WMQMGRName@@" value="${wmq.mgr.name}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@WMQChannel@@" value="${wmq.channel}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@WMQPort@@" value="${wmq.port}" />
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@HL7ListenerAdminUser@@" value="${hl7.listener.admin.user}" />
+				</then>
+				<else>
+					<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml" token="@@empiEnabled@@" value="false" />
+				</else>
+		</if>
 		
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCdmsIntegration.properties">
 			<replacefilter token="@@CdmsURL@@" value="${clinportal.url}" />
@@ -891,7 +898,8 @@
 						         />
 						    </tstamp>
 						    <echo>after deploy_app: ${time_deploy_app_after}</echo>
-		<antcall target="load_bulk_operator_templates" />							
+		<antcall target="load_bulk_operator_templates" />		
+		<antcall target="insert_dashboard_queries" />
 	
 		<antcall target="server_security" />
 
@@ -1674,6 +1682,7 @@
 		</tstamp>
 		<echo>After Insert paths: ${pathtime}</echo>
 		<antcall target="liquibase_upgrade_target"/>
+		<antcall target="addEMPIMetadata"></antcall>
 		<antcall target="deleteFiles"/>
 
 		<!--<delete dir="${de.temp.dir}" />
@@ -1762,6 +1771,7 @@
 			</sql>
 		<antcall target="update_metadata_for_model_changes_mysql_post_P5" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_mysql"/>
+		<antcall target="upgrade_db_for_empi_id__mysql"/>
 		<!--<delete dir="${temp.dir}" />-->
 	</target>
 
@@ -1922,6 +1932,7 @@
 		</sql>
 		<antcall target="update_metadata_for_model_changes_oracle_post_P5" />
 		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4_oracle"/>
+		<antcall target="upgrade_db_for_empi_id_oracle"/>
 		<!--<delete dir="${temp.dir}" />-->
 	</target>
 
@@ -2091,12 +2102,41 @@
 
 	<!--Target for Database Upgrade from Suite 1.2.3 to Suite 1.2.4-->
 	<target name="upgrade_db" description="Upgrading Database v1.2.3 to v1.2.4">
-		<echo message="Upgrading Database v1.2.3 to v1.2.4" />
-		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
+	
+		<if>
+		<equals arg1="true" arg2="${empi.enabled}" />
+		<then>
+			<echo message="Upgrading Database v1.2.3 to v1.2.4" />
+			<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
+			<antcall target="upgrade_db_v1.2.4 to v1.2.5"/>
+		</then>		
+		</if>
+
 		<antcall target="liquibase_upgrade_target"/>
 		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
+		<antcall target="insert_dashboard_queries"/>
+		
+		<if>
+			<equals arg1="mysql" arg2="${database.type}" />
+			<then>
+				<antcall target="upgrade_db_for_empi_id__mysql" />
+			</then>
+			<elseif>
+				<equals arg1="oracle" arg2="${database.type}" />
+				<then>
+					<antcall target="upgrade_db_for_empi_id_oracle" />
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+			</else>
+		</if>
 	</target>
-	
+	 
+	<target name="upgrade_db_v1.2.4 to v1.2.5" description="Upgrading Database v1.2.3 to v1.2.4">
+		<echo message="Upgrading Database v1.2.4 to v1.2.5" />
+		<antcall target="addEMPIMetadata"></antcall>
+	</target>	 
 	<target name="upgrade_db_from_v1.1.p1 to v1.1.p2" description="Upgrading Database from v1.1.p1 to v1.1.p2">
 		<echo message="Upgrading Database v1.1.p1 to v1.1.p2" />
 		<if>
@@ -4235,6 +4275,67 @@ Thanking You,
 
 	</target>
 	
+	<!--Vivek: target to insert dashboard queries-->
+	<loadfile property="query_file" srcFile="${dashboard.csv.dir}/${dashboard.parameters.csv.file}"/> 
+	<target name="insert_dashboard_queries">	
+		<echo message="------------------------------" />
+		<echo message="Inserting dashboard queries..." />
+		<echo message="------------------------------" />
+		<for param="line" list="${query_file}" delimiter="${line.separator}">
+			<sequential>
+						<propertyregex property="arg1"
+							input="@{line}"
+							regexp="(.+?),(.+)"
+							select="\1"
+							casesensitive="false" 
+							override = "true"/>
+						<propertyregex property="arg2"
+							input="@{line}"
+							regexp="(.+?),(.+)"
+							select="\2"
+							casesensitive="false" 
+							override = "true"/>
+				<if>	
+					<equals arg1="mysql" arg2="${database.type}" />
+						<then>
+							<sql driver="${mysql.driver.string}" 
+							url="jdbc:mysql://${database.host}:${database.port}/${database.name}" 
+							userid="${database.username}" 
+							password="${database.password}">
+							<classpath>
+								<fileset dir="${lib.dir}">
+									<include name="*.jar" />
+								</fileset>
+							</classpath>
+							insert into labelsql values(NULL,'${arg1}',${arg2});
+							</sql>	
+						</then>
+						
+					<elseif >
+					<equals arg1="oracle" arg2="${database.type}" />
+						<then>					
+							<sql driver="${oracle.driver.string}"
+							url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+							userid="${database.username}"
+							password="${database.password}"
+							rdbms="oracle">
+							<classpath>
+								<fileset dir="${lib.dir}">
+									<include name="*.jar" />
+								</fileset>
+							</classpath>
+							insert into labelsql values(LABELSQL_IDENTIFIER_SEQ.NEXTVAL,'${arg1}',${arg2});
+							</sql>
+						</then>
+					</elseif>
+				</if>		
+			</sequential>
+		</for>
+		<echo message="---------------------------------------" />
+		<echo message="Inserting dashboard queries finished..." />
+		<echo message="---------------------------------------" />
+	</target>
+	
 	<property name="operationName" value="" />
 	<property name="csvFile" value="" />
 	<property name="url" value="" />
@@ -4514,7 +4615,19 @@ Thanking You,
 			</sql>
 			<echo message="Upgrading mysql database for all changes required for v1.2" />
 		</target>
-
+		<target name="upgrade_db_for_empi_id__mysql" description="Upgrading mysql database for all changes required for v1.2 ">
+				<echo message="Upgrading MySQL Database." />
+				<sql driver="${mysql.driver.string}" url="jdbc:mysql://${database.host}:${database.port}/${database.name}" userid="${database.username}" password="${database.password}" onerror="continue">
+					<transaction src="${dbupgrade.sql.dir}/MySql/alter_participant_empi_id.sql" />
+					<transaction>commit;</transaction>
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+				</sql>
+				<echo message="Upgrading mysql database for all changes required for v1.2" />
+			</target>
 		<target name="upgrade_db_from_v1.2.3_to_1.2.4_oracle" description="Upgrading oracle database for all changes required for v1.2">
 			<echo message="Upgrading Oracle Database."/>
 			<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle">
@@ -4528,6 +4641,19 @@ Thanking You,
 			</sql>
 			<echo message="Upgrading oracle database for all changes required for v1.2" />
 		</target>
+		<target name="upgrade_db_for_empi_id_oracle" description="Upgrading oracle database for all changes required for v1.2">
+				<echo message="Upgrading Oracle Database."/>
+				<sql driver="${oracle.driver.string}" url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" userid="${database.username}" password="${database.password}" rdbms="oracle" onerror="continue">
+					<transaction src="${dbupgrade.sql.dir}/Oracle/alter_participant_empi_id.sql" />
+					<transaction>commit;</transaction>
+					<classpath>
+						<fileset dir="${lib.dir}">
+							<include name="*.jar" />
+						</fileset>
+					</classpath>
+				</sql>
+				<echo message="Upgrading oracle database for all changes required for v1.2" />
+			</target>
 
 	<target name="upgrade_db_from_v1.1_to_v1.2" description="Target for Application and Database Upgrade from caTissue v1.1 to v1.2">
 		<echo message="Upgrading Database v1.1 to v1.2" />
@@ -5169,6 +5295,7 @@ Thanking You,
 		</delete>
 	</target>
 	
+
 	
 	<property name="${cp.shortTitle}"  value=" " />
 		<target name="specimen_data_backload" description="sends specimen data to cider for newly enabled empi collection protocols">
@@ -5256,6 +5383,47 @@ Thanking You,
 		<echo message="Creating lablesql tables for CS dashboard for mysql" />		
 		<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/dashboard_scripts.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
 	</target>
-	
-	
+		<target name="addEMPIMetadata" description="Add EMPI meatadata">
+            <unwar src="${base.dir}/modules/caTissue/lib/catissuecore.war" dest="${temp.dir}/catissuecore" />
+            <delete file="${temp.dir}/catissuecore/WEB-INF/lib/mmtxProject.jar"/>
+            <antcall target="replacecfgfiles"/>
+            <property name="db.driver.class" value=""/>
+            <if>
+                    <equals arg1="mysql" arg2="${database.type}"/>
+                    <then>
+                            <var name="db.driver.class" unset="true"/>
+                            <property name="db.driver.class" value="${mysql.driver.string}"/>
+                            <echo message="Updating eMPI Metadata for mysql....."/>
+                    </then>
+                    <elseif>
+                            <equals arg1="oracle" arg2="${database.type}"/>
+                            <then>
+                                    <var name="db.driver.class" unset="true"/>
+                                    <property name="db.driver.class" value="${oracle.driver.string}"/>
+                                    <echo message="Updating eMPI Metadata for oraacle...."/>
+                            </then>
+                    </elseif>
+                    <else>
+                            <echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error"/>
+                    </else>
+            </if>
+            <echo message="Database Driver class : ${db.driver.class}"/>
+            <java classname="edu.wustl.catissuecore.querysuite.metadata.AddEMPIMetaData" fork="true" maxmemory="1024M" failonerror="true">
+                    <classpath location="${temp.dir}/catissuecore/WEB-INF/classes"/>
+                    <classpath refid="temp.classpath"/>
+                    <classpath>
+                            <fileset dir="${lib.dir}">
+                                    <include name="*.jar"/>
+                            </fileset>
+                    </classpath>
+                    <arg value="${database.host}"/>
+                    <arg value="${database.port}"/>
+                    <arg value="${database.type}"/>
+                    <arg value="${database.name}"/>
+                    <arg value="${database.username}"/>
+                    <arg value="${database.password}"/>
+                    <arg value="${db.driver.class}"/>
+            </java>
+            <delete dir="${temp.dir}"/>
+    </target>
 </project>

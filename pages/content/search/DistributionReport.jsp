@@ -243,12 +243,13 @@
 						key="buttons.selectAll" /> </span>
 			</td>
 			<td colspan="<%=(columnNames.length-1)%>" align="right" nowrap >
-
+			<%if(request.getAttribute("hideDefinedViewButton") == null)
+			{%>
 						<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
 						<a href="#" onclick="changeActionOnConfig()" class="view">
 						<span class="view">
 						<bean:message  key="buttons.configure" /></span></a>
-
+			<%}%>
 					</span></td>
 		</tr>
 

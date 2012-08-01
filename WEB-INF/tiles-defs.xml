@@ -1063,6 +1063,11 @@
 <definition name=".catissuecore.ViewAllOrderingConsentsDef" path="/pages/content/ConsentTracking/ViewAllOrderingConsents.jsp">
 </definition>
 
+<definition name=".catissuecore.ViewAllAdvOrderingConsentsDef" path="/pages/content/ConsentTracking/ViewAllAdvOrderingConsents.jsp">
+</definition>
+
+<definition name=".catissuecore.noOrderingConsentsDef" path="/pages/content/ConsentTracking/NoConsentMessage.jsp">
+</definition>
 <!--end-->
 
 <!--Orderering System-->
@@ -1102,6 +1107,10 @@
 
 	<definition name=".catissuecore.requestDetailsDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/orderingsystem/RequestDetails.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.advanceRequestDetailsDef" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/orderingsystem/AdvanceRequestDetails.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.arrayRequestsDef" extends=".catissuecore.homePageDef">

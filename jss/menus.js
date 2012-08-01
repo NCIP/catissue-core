@@ -259,14 +259,24 @@ Ext.onReady(function(){
                 text: 'Conflicting SPRs',
 				tooltip:'Shows Conflicting Surgical Pathology Reports',
                 href:'ConflictView.do?pageNum=1'
-            },
-            {
-                text: 'Bulk EMPI Operations',
-				tooltip:'Bulk EMPI Opearations',
-				href:'BulkEmpiGeneration.do?'
             }
 		]
     });
+    
+    
+			// Add this item to menu if EMPI is enabled	
+			if(empiEnabled=='true')
+			{
+				var boItem=new Ext.menu.Item({
+							text: 'Bulk EMPI Operations',
+							tooltip:'Bulk EMPI Opearations',
+							href:'BulkEmpiGeneration.do?'
+						});
+			
+				var item = menu.add(boItem);
+			}			
+			
+			
             // For Bio Specimen Data
 
     var menu_bio = new Ext.menu.Menu({
@@ -292,30 +302,6 @@ Ext.onReady(function(){
                             text: 'Edit',
                             href:'SimpleQueryInterface.do?pageOf=pageOfParticipant&aliasName=Participant'
                         }
-                    ]
-                }
-            },
-            {
-                text: 'Process Messages',
-				tooltip:'Process Messages',
-				href:'ProcessMatchedParticipants.do?pageOf=pageOfMatchedParticipant&identifierFieldIndex=0',
-                menu: {        // <-- submenu by nested config object
-                    items: [
-                        // stick any markup in a menu
-                       {
-                            text: 'Registration',
-                            href:'ProcessMatchedParticipants.do?pageOf=pageOfMatchedParticipant&identifierFieldIndex=0'
-                        }
-                       /*{
-                    	   // Auto load messages menu
-                    	   text: 'Load Clinical Data',
-                   		   href:'FetchXmlMessages.do'
-                       },
-                       {
-                    	   //Administrator message queue menu
-                    	   text: 'Admin Messages Queue',
-                   		   href:'FetchAdminQueueMessages.do'
-                       }*/
                     ]
                 }
             },
@@ -397,6 +383,26 @@ Ext.onReady(function(){
             }
         ]
     });
+    
+	
+    if(empiEnabled=='true')
+    {
+    	var processMessageItem=new Ext.menu.Item({
+							text: 'Process Messages',
+							tooltip:'Process Messages',
+							href:'ProcessMatchedParticipants.do?pageOf=pageOfMatchedParticipant&identifierFieldIndex=0',
+							menu: {        // <-- submenu by nested config object
+								items: [
+									// stick any markup in a menu
+								   {
+										text: 'Registration',
+										href:'ProcessMatchedParticipants.do?pageOf=pageOfMatchedParticipant&identifierFieldIndex=0'
+								   }
+								]
+							}
+						});
+		var item = menu_bio.add(processMessageItem);
+    }
             // For Search link
 
     var menu_search = new Ext.menu.Menu({

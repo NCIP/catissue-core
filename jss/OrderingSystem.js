@@ -5,6 +5,11 @@ setGridValuesToForm();
 document.forms[0].submit()
 }
 
+function submitAdvPage()
+{
+document.forms[0].submit()
+}
+
 function updateAllStatus(){
 var selectNext=document.getElementById("nextStatusId");
 if(selectNext.value == ("Distributed And Close(Special)"))

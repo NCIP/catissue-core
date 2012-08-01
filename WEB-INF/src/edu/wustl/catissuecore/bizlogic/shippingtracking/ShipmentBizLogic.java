@@ -115,7 +115,7 @@ public class ShipmentBizLogic extends BaseShipmentBizLogic
 			shipment.getContainerCollection().clear();
 			shipment.getContainerCollection().addAll( containerCollection );
 
-			//this.getSpecimenPositionCollection( containerCollection );
+			this.getSpecimenPositionCollection( containerCollection );
 		}
 		catch (final BizLogicException bizLogicException)
 		{

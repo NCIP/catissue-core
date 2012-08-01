@@ -814,6 +814,9 @@
 			<fileset file="${base.dir}/WEB-INF/lib/struts.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/commons-beanutils-1.8.3-1.0.jar" />
 			<fileset file="${base.dir}/WEB-INF/lib/commons-digester3-3.0-1.0.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/xerces*.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/commons-digester*.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/commons-beanutils*.jar" />
 		</copy>
 		<copy file="bulkOperation.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
 		<copy file="BulkOperations/conf/log4j.properties" todir="${zip.dir}/modules/bulk_operations/conf" overwrite="true" />
@@ -832,6 +835,11 @@
 			<fileset dir="${base.dir}/bulk_operations_upload" />
 		</copy>
 
+		<!--Vivek: <copy dir="insert_dashboard_queries" todir="${zip.dir}/modules/" overwrite="true" />-->
+		<copy todir="${zip.dir}/modules/insert_dashboard_queries" overwrite="true">
+			<fileset dir="${base.dir}/insert_dashboard_queries" />
+		</copy>
+		
 		<!--<copy file="cas.war" todir="${zip.dir}/modules/CAS/lib" overwrite="true" />-->
 
 		<copy file="gate.zip" todir="${zip.dir}/modules/caTIES/lib" overwrite="true" />

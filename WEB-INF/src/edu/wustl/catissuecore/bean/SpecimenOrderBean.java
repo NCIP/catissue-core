@@ -58,5 +58,12 @@ public class SpecimenOrderBean implements Serializable
 	private String id;
 	private boolean consentAvl;
 	private List<NameValueBean> childSpecimens;
+	private boolean consentWaived;
+	public boolean isConsentWaived() {
+		return consentWaived;
+	}
+	public void setConsentWaived(boolean consentWaived) {
+		this.consentWaived = consentWaived;
+	}
 	
 }

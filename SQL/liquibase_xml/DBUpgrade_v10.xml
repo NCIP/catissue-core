@@ -35,8 +35,8 @@
 <!-- ALTER TABLE CATISSUE_STORAGE_CONTAINER -->
 	<changeSet id="3" author="catissuecore" runOnChange="true">
 		<addColumn tableName="CATISSUE_STORAGE_CONTAINER">
-			<column name="ONE_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="NUMBERS"/>
-			<column name="TWO_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="NUMBERS"/>
+			<column name="ONE_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="Numbers"/>
+			<column name="TWO_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="Numbers"/>
 		</addColumn>
 		<rollback></rollback>
 	</changeSet>
@@ -51,8 +51,8 @@
 	
 	<changeSet id="5" author="catissuecore" runOnChange="true">
 		<addColumn tableName="CATISSUE_CONTAINER_TYPE">
-			<column name="ONE_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="NUMBERS"/>
-			<column name="TWO_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="NUMBERS"/>
+			<column name="ONE_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="Numbers"/>
+			<column name="TWO_DIMENSION_LABELLING_SCHEME" type="${text.type}(50)" defaultValue="Numbers"/>
 		</addColumn>
 		<rollback></rollback>
 	</changeSet>

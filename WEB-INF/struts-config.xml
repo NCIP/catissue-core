@@ -316,6 +316,12 @@ PUBLIC
 			validate="false" scope="request">
 			<forward name="success" path=".catissuecore.requestDetailsDef" />
 		</action>
+		
+		<action path="/AdvanceRequestDetails"
+			type="edu.wustl.catissuecore.action.AdvacneReqDetailsAction" name="requestDetailsForm"
+			validate="false" scope="request">
+			<forward name="success" path=".catissuecore.advanceRequestDetailsDef" />
+		</action>
 
 		<action path="/ArrayRequests"
 			type="edu.wustl.catissuecore.action.RequestDetailsAction" name="requestDetailsForm"
@@ -351,6 +357,15 @@ PUBLIC
 			<forward name="specimenDistributionReport" path="/DistributionReport.do" />
 			<forward name="specimenArrayDistributionReport" path="/ArrayDistributionReport.do" />
 			<forward name="failure" path="/RequestDetails.do" />
+		</action>
+		
+		<action path="/SubmitAdvRequestDetails" type="edu.wustl.common.action.CommonAddEditAction"
+			name="requestDetailsForm" validate="true" scope="request" input="/AdvanceRequestDetails.do?selectedTab=AdvancedViewTab">
+			<forward name="success"
+				path="/AdvanceRequestDetails.do?pageNum=1&amp;menuSelected=17" />
+			<forward name="specimenDistributionReport" path="/DistributionReport.do" />
+			<forward name="specimenArrayDistributionReport" path="/ArrayDistributionReport.do" />
+			<forward name="failure" path="/AdvanceRequestDetails.do" />
 		</action>
 
 		<action path="/UpdateQuantity"
@@ -1044,7 +1059,7 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.ConsentVerificationAction" name="distributionForm"
 			validate="false" scope="request">
 			<forward name="popup" path=".catissuecore.OrderingConsentsDef" />
-			<forward name="ViewAll" path=".catissuecore.ViewAllOrderingConsentsDef" />
+			<forward name="ViewAll" path=".catissuecore.ViewAllAdvOrderingConsentsDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
@@ -1053,6 +1068,7 @@ PUBLIC
 			validate="false" scope="request">
 			<forward name="popup" path=".catissuecore.OrderingConsentsDef" />
 			<forward name="ViewAll" path=".catissuecore.ViewAllOrderingConsentsDef" />
+			<forward name="noConsent" path=".catissuecore.noOrderingConsentsDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		<!-- end -->
@@ -5422,7 +5438,15 @@ PUBLIC
 			<forward name="success" path="/CreateSpecimenTemplate.do?operation=edit" />
 			<forward name="failure" path="/CreateSpecimenTemplate.do?pageOf=error" />
 		</action>
-
+		
+		<action path="/DuplicateSpecimenRequirementAction"
+			type="edu.wustl.catissuecore.action.DuplicateSpecimenRequirementAction"
+			name="createSpecimenTemplateForm" validate="true"
+			input="/CreateSpecimenTemplate.do?pageOf=error">
+			<forward name="success" path="/CreateSpecimenTemplate.do?operation=edit" />
+			<forward name="failure" path="/CreateSpecimenTemplate.do?pageOf=error" />
+		</action>
+		
 		<action path="/CreateSpecimenTemplate"
 			type="edu.wustl.catissuecore.action.CreateSpecimenTemplateAction"
 			name="createSpecimenTemplateForm" validate="false">
@@ -5838,12 +5862,16 @@ PUBLIC
 			<forward name="failure" path="/pages/blank.jsp" />
 		</action>
 		<!--  bulk empi operations ends -->
+<<<<<<< .working
 		<action path="/GetTreeGridChildAction" type="edu.wustl.common.tags.action.GetTreeGridChildAction"
 			 scope="request" validate="false">
 		</action>
 		<action path="/TagItemDeleteAction" type="edu.wustl.common.tags.action.TagItemDeleteAction"
 			 scope="request" validate="false">
 		</action>
+=======
+
+>>>>>>> .merge-right.r29305
 		
 		<action path="/AssignTagAction" type="edu.wustl.common.tags.action.AssignTagAction"
 			 scope="request" validate="false">
@@ -5871,6 +5899,15 @@ PUBLIC
 		</action>
 		<!-- end of CP Dashboard -->
 		
+
+		
+		<action path="/BulkLogin" type="edu.wustl.catissuecore.action.LoginAction"
+		   name="loginForm" validate="false" scope="request">
+			<forward name="pageOfNonWashU" path="/BulkHandler.do?fromAction=login"/>
+			<forward name="failure" path="/BulkHandler.do?fromAction=login"/>
+			<forward name="success" path="/BulkHandler.do?fromAction=login"/>
+		</action>
+
 	</action-mappings>
 
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

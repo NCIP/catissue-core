@@ -145,7 +145,8 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		request.setAttribute(Constants.COLUMN_NAMES_LIST, columnNames);
 		request.setAttribute(Constants.DISTRIBUTED_ITEMS_DATA, listOfData);
 		request.setAttribute(Constants.SPECIMEN_COLUMN_NAMES_LIST, specimenColumnNames);
-
+		request.setAttribute("hideDefinedViewButton", "true");
+		
 		this.setSelectedMenuRequestAttribute(request);
 		return mapping.findForward("Success");
 	}

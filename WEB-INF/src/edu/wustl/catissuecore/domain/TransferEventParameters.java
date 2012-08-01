@@ -245,7 +245,7 @@ public class TransferEventParameters extends SpecimenEventParameters
 						&& form.getPos2() != null
 						&& !form.getPos2().trim().equals(Constants.DOUBLE_QUOTES))
 				{
-					this.toPositionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getSelectedContainerName(),1,form.getPos2());
+					this.toPositionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getSelectedContainerName(),1,form.getPos1());
 					this.toPositionDimensionTwo = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getSelectedContainerName(),2,form.getPos2());
 				}
 				toObj.setName(form.getSelectedContainerName());

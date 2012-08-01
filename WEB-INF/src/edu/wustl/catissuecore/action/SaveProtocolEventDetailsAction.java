@@ -105,7 +105,7 @@ public class SaveProtocolEventDetailsAction extends BaseAction
 				specimenList = (LinkedList<GenericSpecimen>) CollectionProtocolUtil.getSpecimenList(speBean.getSpecimenRequirementbeanMap().values());
 				
 				String uniqueIdentifier =collectionProtocolEventBean.getUniqueIdentifier();
-				collectionProtocolEventBean.setSpecimenRequirementbeanMap(CollectionProtocolUtil.getSpecimenRequirementMap(uniqueIdentifier,specimenList));
+				collectionProtocolEventBean.setSpecimenRequirementbeanMap(CollectionProtocolUtil.getSpecimenRequirementMap(uniqueIdentifier,specimenList,0));
 			}
 			collectionProtocolEventMap.put(collectionProtocolEventBean.getUniqueIdentifier(),
 					collectionProtocolEventBean);

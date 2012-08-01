@@ -167,7 +167,7 @@ public class Constants
 
 	/** The Constant COMPLETE. */
 	public static final String COMPLETE = "Complete";
-
+	public static final String WAIVED_CONSENTS ="Waived";
 	/** The Constant VIEW_CONSENTS. */
 	public static final String VIEW_CONSENTS = "View";
 
@@ -5866,6 +5866,7 @@ public class Constants
 	 public static final String CREATE_DUPLICATE_EVENT = "createDuplicateEvent";
 	 public static final String CREATE_DUPLICATE_SPECIMEN = "createDuplicateSpecimen";
 	 public static final String PARENT_NODE_ID = "parentNodeId";
+
 	 public static final String HELP_URL_KEY="helpURLKey";
 	 public static final String RESET_PASSWORD_TOKEN="resetPasswordToken";
 	 public static final String FORGOT_PASSWORD_ENABLED="forgot.password.enabled";
@@ -5880,4 +5881,7 @@ public class Constants
 	 public static final String INSUFFICIEN_STORAGE_LOCATION = "The system cannot store all the aliquots in the same container at this time due to insufficient number of storage locations.";
 	 public static final String SUCCESS_MSG_ALIQUOT_CREATION = "Aliquots created successfully";
 	 
+
+	 public static final String EMPI_ENABLED="empi.Enabled";
+
 }

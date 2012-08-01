@@ -67,6 +67,7 @@ public class ContainerExportServlet  extends HttpServlet{
 			response.setHeader("Content-Disposition", "attachment; filename=\"" +fileName + ".pdf\";");
 			(new PDFWriter()).generate(xml, response);
 		}else if(fileType.equals("csv")){
+			fileName =  "\""+fileName+".csv\"";
 			CSVWriter writer = new CSVWriter();
 			writer.generate(xml,fileName, response);
 		} else if(fileType.equals("excel")){

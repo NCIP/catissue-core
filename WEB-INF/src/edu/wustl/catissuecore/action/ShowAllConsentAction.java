@@ -66,13 +66,18 @@ public class ShowAllConsentAction extends BaseAction
 		final DistributionForm dForm = (DistributionForm) form;
 
 		// Show Consents for Specimen
-		final String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS); 
+		final String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS);
+		Long orderId = 0l;
+		if(!Validator.isEmpty(request.getParameter("orderId")))
+		{
+			orderId = Long.valueOf(String.valueOf(request.getParameter("orderId")));
+		}
 		Long specimenId = null;
 		List consentWaivedList = new ArrayList();
 		
 			if (specimenConsents != null && specimenConsents.equalsIgnoreCase(Constants.YES))
 			{
-				final String speciemnIdValue = request.getParameter("speciemnIdValue");// barcodelabel
+				final String speciemnIdValue = (String)request.getSession().getAttribute("speciemnIdValue");//request.getParameter("speciemnIdValue");// barcodelabel
 				this.labelIndexCount = request.getParameter("labelIndexCount");
 				final StringTokenizer stringToken = new StringTokenizer(speciemnIdValue, "|");
 				// StringTokenizer stringTokenForIndex = new
@@ -80,40 +85,50 @@ public class ShowAllConsentAction extends BaseAction
 				this.listOfMap = new ArrayList();
 				this.listOfStringArray = new ArrayList();
 				Map<String, ConsentDisplayBean> consentMap = new HashMap<String, ConsentDisplayBean>();
-				
-				while (stringToken.hasMoreTokens())
+				Map<Long, Specimen> specMap = OrderingSystemUtil.populateSpecimenMap(orderId);
+				String forwardTo = "noConsent";
+				if(!specMap.isEmpty())
 				{
-					String[] arr = stringToken.nextToken().split(",");
-					specimenId = Long.parseLong(arr[0]);
+					forwardTo = Constants.VIEWAll;
+					while (stringToken.hasMoreTokens())
+					{
+						String[] arr = stringToken.nextToken().split(",");
+						specimenId = Long.parseLong(arr[0]);
+						
+	//					final Specimen specimen = OrderingSystemUtil.getListOfSpecimen(specMap,specimenId);
+						final Specimen specimen = specMap.get(specimenId);
+						if(specimen != null)
+						{
+							specimen.setLabel(arr[1]);
+							if(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getConsentsWaived())
+							{
+								consentWaivedList.add(specimen.getLabel());
+							}
+							else
+							{
+								String key = createMapKey(specimen,consentMap);
+								if(consentMap.containsKey(key))
+								{
+									updateConsentMap(consentMap,key,specimen.getLabel());
+								}
+								else
+								{
+									this.showConsents(dForm, specimen, request,consentMap);						
+								}
+							}
+						}
+					}
+					populateListOfMap(consentMap);
 					
-					final Specimen specimen = OrderingSystemUtil.getListOfSpecimen(specimenId);
-					specimen.setLabel(arr[1]);
-					if(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getConsentsWaived())
-					{
-						consentWaivedList.add(specimen.getLabel());
-					}
-					else
-					{
-						String key = createMapKey(specimen,consentMap);
-						if(consentMap.containsKey(key))
-						{
-							updateConsentMap(consentMap,key,specimen.getLabel());
-						}
-						else
-						{
-							this.showConsents(dForm, specimen, request,consentMap);						
-						}
-					}
 				}
-				populateListOfMap(consentMap);
 				request.setAttribute("consentWaivedList",consentWaivedList);
 				request.setAttribute("listOfStringArray", this.listOfStringArray);
 				request.setAttribute("listOfMap", this.listOfMap);
 				request.setAttribute("labelIndexCount", this.labelIndexCount);
 				request.setAttribute("speciemnIdValue", speciemnIdValue);
-				return mapping.findForward(Constants.VIEWAll);// ViewAll
+				return mapping.findForward(forwardTo);// ViewAll
+				
 			}
-
 		// Consent Tracking
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
 		request.setAttribute(Constants.PAGE_OF, pageOf);
@@ -178,44 +193,10 @@ public class ShowAllConsentAction extends BaseAction
 
 		final CollectionProtocolRegistration collectionProtocolRegistration = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
 
-		if (collectionProtocolRegistration.getConsentSignatureDate() == null)
-		{
-			initialSignedConsentDateValue = Constants.NULL;
-		}
 
-		if (collectionProtocolRegistration.getSignedConsentDocumentURL() == null)
-		{
-			initialURLValue = Constants.NULL;
-		}
-		initialWitnessValue = Constants.NULL;
-		String witnessName = null;
-		if (collectionProtocolRegistration.getConsentWitness() != null && collectionProtocolRegistration.getConsentWitness().getId() != null)
-		{
-			witnessName = ConsentUtil.getWitnessName(bizLogic, initialWitnessValue,
-					collectionProtocolRegistration);
-		}
 
-		// Getting WitnessName,Consent Date,Signed Url using
-		// collectionProtocolRegistration object
-		
-		final String consentDate = ConsentUtil.getConsentDate(initialSignedConsentDateValue,
-				collectionProtocolRegistration);
-		final String signedConsentURL = ConsentUtil.getSignedConsentURL(initialURLValue, collectionProtocolRegistration);
 
-		// Setting WitnessName,ConsentDate and Signed Consent Url
-		dForm.setWitnessName(witnessName);
-		dForm.setConsentDate(consentDate);
-		dForm.setSignedConsentUrl(signedConsentURL);
 
-		// Getting ConsentResponse collection for CPR level
-		// Resolved lazy ---
-		// collectionProtocolRegistration.getConsentTierResponseCollection();
-//		final Collection participantResponseCollection = (Collection) bizLogic.retrieveAttribute(
-//				CollectionProtocolRegistration.class.getName(), collectionProtocolRegistration
-//						.getId(), "elements(consentTierResponseCollection)");
-		// Getting ConsentResponse collection for Specimen level
-		// Resolved lazy --- specimen.getConsentTierStatusCollection();
-//		final Collection specimenLevelResponseCollection = specimen.getConsentTierStatusCollection();
 		// Prepare Map and iterate both Collections
 		StringBuilder key = new StringBuilder(100);
 		final Map tempMap = this.prepareConsentMap(specimen,key);
@@ -231,21 +212,19 @@ public class ShowAllConsentAction extends BaseAction
 //					&& !(specimen.getActivityStatus().equalsIgnoreCase(Constants.DISABLED)))// disabled
 			{
 				final String[] barcodeLabelAttribute = new String[5];
-				barcodeLabelAttribute[0] = witnessName;
-				barcodeLabelAttribute[1] = consentDate;
-				barcodeLabelAttribute[2] = signedConsentURL;
+//				barcodeLabelAttribute[0] = witnessName;
+//				barcodeLabelAttribute[1] = consentDate;
+//				barcodeLabelAttribute[2] = signedConsentURL;
 				barcodeLabelAttribute[3] = Integer.toString(this.consentTierCounter);
 				barcodeLabelAttribute[4] = specimen.getLabel();
 				ConsentDisplayBean bean = new ConsentDisplayBean();
-				bean.setWitnessName(witnessName);
-				bean.setConsentDate(consentDate);
-				bean.setSignedConsentURL(signedConsentURL);
+//				bean.setWitnessName(witnessName);
+//				bean.setConsentDate(consentDate);
+//				bean.setSignedConsentURL(signedConsentURL);
 				bean.setConsentTierCounter(Integer.toString(this.consentTierCounter));
 				bean.setConsentMap(tempMap);
 				bean.setSpecimenLabel(specimen.getLabel());
 				consentMap.put(key.toString(), bean);
-//				this.listOfMap.add(tempMap);
-//				this.listOfStringArray.add(barcodeLabelAttribute);
 			}
 
 		}

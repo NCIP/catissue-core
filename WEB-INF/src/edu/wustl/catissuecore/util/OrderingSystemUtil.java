@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,9 @@ import edu.wustl.catissuecore.bean.SpecimenOrderBean;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
+import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -46,6 +50,8 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.dao.util.HibernateMetaData;
 
@@ -711,5 +717,258 @@ public final class OrderingSystemUtil
 		}
 		
 		return specimen;
+	}
+	
+	public static SpecimenOrderBean getSpecimenOrderBean(
+			final ExistingSpecimenOrderItem existingSpecimenorderItem, DAO dao)
+			throws ApplicationException {
+		SpecimenOrderBean bean = new SpecimenOrderBean();
+//		String sql = "select abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY "
+//				+ "from "
+//				+ "catissue_abstract_specimen abs, catissue_specimen spec where "
+//				+ "spec.identifier=abs.identifier and abs.identifier ="
+//				+ "( select specimen_id from catissue_existing_sp_ord_item"
+//				+ " cat where cat.identifier=? )";
+		String sql = "select abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY " +
+		" from catissue_abstract_specimen abs " +
+		" join catissue_specimen spec on spec.identifier=abs.identifier " +
+		" join catissue_existing_sp_ord_item cat on abs.identifier = cat.specimen_id " +
+		" where cat.identifier=?";
+		ColumnValueBean bean2 = new ColumnValueBean(
+				existingSpecimenorderItem.getId());
+		List attr = new ArrayList();
+		attr.add(bean2);
+		// List list = dao.executeQuery(sql);
+		List list = dao.executeQuery(sql, attr);
+		List inrList = new ArrayList();
+		if (list != null && !list.isEmpty()) {
+			inrList = (List) list.get(0);
+			bean.setId((String) inrList.get(0));
+			bean.setSpecimenClass((String) inrList.get(1));
+			bean.setSpecimenType((String) inrList.get(2));
+			bean.setLabel((String) inrList.get(3));
+			bean.setAvailableQty((String) inrList.get(4));
+			List list3 = new ArrayList<NameValueBean>();
+			list3.add(new NameValueBean(bean.getLabel(), bean.getId()));
+			bean.setChildSpecimens(list3);
+		}
+
+			bean.setConsentAvl(true);
+
+
+		return bean;
+	}
+	
+	public static Map<Long, SpecimenOrderBean> getSpecItemDetails(Long orderDetId, JDBCDAO dao) throws DAOException
+	{
+		Map<Long, SpecimenOrderBean> map = new HashMap<Long, SpecimenOrderBean>();
+		String sql ="select cat.identifier,abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY " +
+				" from catissue_abstract_specimen abs, catissue_specimen spec, catissue_existing_sp_ord_item cat,catissue_order_item cot where " +
+				" spec.identifier=abs.identifier and abs.identifier =cat.specimen_id and " +
+				" cat.identifier=cot.identifier and order_id=?";
+		ColumnValueBean bean = new ColumnValueBean(orderDetId);
+		List attrList = new ArrayList();
+		attrList.add(bean);
+		// List list = dao.executeQuery(sql);
+		List list = dao.executeQuery(sql, attrList);
+		if(list != null && list.size() > 0)
+		{
+			for (Object object : list) 
+			{
+				SpecimenOrderBean specBean = new SpecimenOrderBean();
+				
+				List obj = (List)object;
+				Long key = Long.valueOf((String)obj.get(0));
+				specBean.setId((String)obj.get(1));
+				specBean.setSpecimenClass((String) obj.get(2));
+				specBean.setSpecimenType((String) obj.get(3));
+				specBean.setLabel((String) obj.get(4));
+				specBean.setAvailableQty((String) obj.get(5));
+				specBean.setConsentAvl(false);
+				map.put(key,specBean);
+			}
+		}
+		String secSql = "select cat.identifier,cp.consents_waived " +
+				" from catissue_abstract_specimen abs,catissue_specimen spec, catissue_specimen_coll_group scg, " +
+				" catissue_coll_prot_reg cpr, catissue_collection_protocol cp, " +
+				" catissue_consent_tier_status cts,catissue_existing_sp_ord_item cat,catissue_order_item cot,catissue_consent_tier ct " +
+				" where cts.specimen_id=cat.specimen_id and " +
+				" cat.identifier=cot.identifier and order_id=? " +
+				" and spec.identifier=abs.identifier and abs.identifier =cat.specimen_id " +
+				" and spec.specimen_collection_group_id=scg.identifier " +
+				" and cpr.identifier=scg.collection_protocol_reg_id " +
+				" and cp.identifier=cpr.collection_protocol_id and ct.identifier = cts.consent_tier_id";
+		// List list = dao.executeQuery(sql);
+		List conRespList = dao.executeQuery(secSql, attrList);
+		if(conRespList != null && conRespList.size() > 0)
+		{
+			for (Object object : conRespList)
+			{
+				List obj = (List)object;
+				Long key = Long.valueOf((String)obj.get(0));
+				SpecimenOrderBean sBean = map.get(key);
+				sBean.setConsentAvl(true);
+				boolean consentWaived = Boolean.valueOf((String)obj.get(1));
+				sBean.setConsentWaived(consentWaived);
+			}
+		}
+		return map;
+	}
+
+	public static Map<Long, Specimen> populateSpecimenMap(Long orderId) throws ApplicationException 
+	{
+		JDBCDAO jdbcdao = null;
+		Map<Long, Specimen> specMap = new HashMap<Long, Specimen>();
+		try
+		{
+			jdbcdao = AppUtility.openJDBCSession();
+//			String consentSql="select cts.specimen_id,cts.identifier, cts.consent_tier_id,cts.status " +
+//					" from catissue_consent_tier_status cts,catissue_existing_sp_ord_item cat,catissue_order_item cot " +
+//					" where cts.specimen_id=cat.specimen_id and " +
+//					" cat.identifier=cot.identifier and order_id=?";
+			String consentSql = "select cts.specimen_id,cts.identifier, cts.consent_tier_id,cts.status,cp.consents_waived, " +
+					" cpr.collection_protocol_id, cpr.identifier, ct.statement " +
+					" from catissue_specimen spec, catissue_specimen_coll_group scg," +
+					" catissue_coll_prot_reg cpr, catissue_collection_protocol cp," +
+					" catissue_consent_tier_status cts,catissue_existing_sp_ord_item cat,catissue_order_item cot,catissue_consent_tier ct " +
+					" where cts.specimen_id=cat.specimen_id and " +
+					" cat.identifier=cot.identifier and order_id=? " +
+					" and spec.identifier=cat.specimen_id " +
+					" and spec.specimen_collection_group_id=scg.identifier " +
+					" and cpr.identifier=scg.collection_protocol_reg_id " +
+					" and cp.identifier=cpr.collection_protocol_id and ct.identifier = cts.consent_tier_id";
+			
+			ColumnValueBean bean = new ColumnValueBean(orderId);
+			List<ColumnValueBean> list = new ArrayList<ColumnValueBean>();
+			list.add(bean);
+			List resultList = jdbcdao.executeQuery(consentSql, list);
+			specMap = setListInMap(resultList);
+			
+//			if(!specMap.isEmpty())
+//			{
+//				String cprSql = "select spec.identifier, cpr.identifier,cpr.consent_sign_date,cpr.consent_doc_url,cpr.consent_witness,cpr.collection_protocol_id,cp.consents_waived " +
+//						" from catissue_specimen spec, catissue_specimen_coll_group scg, catissue_coll_prot_reg cpr, catissue_collection_protocol cp, " +
+//						" catissue_existing_sp_ord_item cat,catissue_order_item cot " +
+//						" where spec.identifier=cat.specimen_id and " +
+//						" cat.identifier=cot.identifier and order_id=? " +
+//						" and spec.specimen_collection_group_id=scg.identifier " +
+//						" and cpr.identifier=scg.collection_protocol_reg_id " +
+//						" and cp.identifier=cpr.collection_protocol_id ";
+//				
+//				List cprResultList = jdbcdao.executeQuery(cprSql, list);
+//				
+//				updateSpecimenMap(specMap,cprResultList);
+//			}
+		}
+		finally
+		{
+			AppUtility.closeJDBCSession(jdbcdao);
+		}
+		return specMap;
+	}
+
+	private static void updateSpecimenMap(Map<Long, Specimen> specMap,List cprResultList) 
+	{
+		Long specId;
+		for (Object object : cprResultList) 
+		{
+			List rstLst = (List)object;
+			specId = Long.valueOf(rstLst.get(0).toString());
+			Specimen specimen = specMap.get(specId);
+			
+			SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+			User user = new User();
+			CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+			CollectionProtocol cp = new CollectionProtocol();
+			
+			cpr.setId(Long.valueOf(String.valueOf(rstLst.get(1))));
+			cp.setConsentsWaived(Boolean.FALSE);
+			if(rstLst.get(2) != null)
+			{
+//				cpr.setConsentSignatureDate(new Date(rstLst.get(2).toString()));
+			}
+			if(rstLst.get(3) != null)
+			{
+				cpr.setSignedConsentDocumentURL(String.valueOf(rstLst.get(3)));
+			}
+			if(rstLst.get(4) != null)
+			{
+//				user.setId(Long.valueOf(String.valueOf(rstLst.get(4))));
+			}
+			if(rstLst.get(5) != null)
+			{
+				cp.setId(Long.valueOf(String.valueOf(rstLst.get(5))));
+			}
+			if(rstLst.get(6) != null)
+			{
+				cp.setConsentsWaived(Boolean.valueOf(String.valueOf(rstLst.get(6))));
+			}
+			cpr.setConsentWitness(user);
+			
+			cpr.setCollectionProtocol(cp);
+			scg.setCollectionProtocolRegistration(cpr);
+			specimen.setSpecimenCollectionGroup(scg);
+			if(cp.getConsentsWaived())
+			{
+				specimen.getConsentTierStatusCollection().clear();
+			}
+		}
+		
+	}
+
+	private static Map<Long, Specimen> setListInMap(List resultList) 
+	{
+		Map<Long, Specimen> specMap = new HashMap<Long, Specimen>();
+		if(resultList != null && resultList.size() > 0)
+		{
+			Long specimenID;
+			for (Object object : resultList) 
+			{
+				ConsentTierStatus status = new ConsentTierStatus();
+				ConsentTier consentTier = new ConsentTier();
+				
+				List row = (List)object;
+				specimenID = Long.valueOf(row.get(0).toString());
+				consentTier.setId(Long.valueOf(row.get(2).toString()));
+				consentTier.setStatement(String.valueOf(row.get(7)));
+				status.setConsentTier(consentTier);
+				status.setStatus(row.get(3).toString());
+				status.setId(Long.valueOf(row.get(1).toString()));
+				
+				List<ConsentTierStatus> list = new ArrayList<ConsentTierStatus>();
+				list.add(status);
+				if(specMap.containsKey(specimenID))
+				{
+					specMap.get(specimenID).getConsentTierStatusCollection().add(status);
+				}
+				else
+				{
+					Specimen specimen = new Specimen();
+					specimen.setId(specimenID);
+					specimen.setConsentTierStatusCollection(list);
+					specMap.put(specimenID, specimen);
+					SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+					CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+					CollectionProtocol cp = new CollectionProtocol();
+					cp.setId(Long.valueOf(String.valueOf(row.get(5))));
+					cpr.setId(Long.valueOf(String.valueOf(row.get(6))));
+					cp.setConsentsWaived(Boolean.FALSE);
+					if(row.get(4) != null)
+					{
+						cp.setConsentsWaived(Boolean.valueOf(String.valueOf(row.get(4))));
+					}
+					
+					cpr.setCollectionProtocol(cp);
+					scg.setCollectionProtocolRegistration(cpr);
+					specimen.setSpecimenCollectionGroup(scg);
+					if(cp.getConsentsWaived())
+					{
+						specimen.getConsentTierStatusCollection().clear();
+					}
+					
+				}
+			}
+		}
+		return specMap;
 	}
 }

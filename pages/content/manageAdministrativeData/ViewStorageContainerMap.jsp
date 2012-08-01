@@ -238,7 +238,7 @@ outerdata += "<row><label>Specimen Type: </label> <text><%=text%> </text></row>"
 outerdata += "<row><label>  </label> <text>  </text></row>";
 outerdata += "<row><label>Dimension Label1 (Row): </label> <text> <%=request.getAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL)%></text></row>";
 outerdata += "<row><label>Dimension Label2 (Column): </label> <text> <%=request.getAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL)%></text></row></outerdata>";
-grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerName")%>&filetype='+fileType+'&id=<%=storageContainerIdentifier%>', 'color',"","","",outerdata)
+grid.toPDF('ContainerExportServlet?filename=<%=request.getAttribute("containerName")%>&filetype='+fileType+'&id=<%=storageContainerIdentifier%>', 'color',"","","",outerdata,'containerExportFrame')
 //document.getElementById("containerExportFrame").src="ContainerExportServlet?filetype=pdf&id=<%=storageContainerIdentifier%>";
 }
 </script>

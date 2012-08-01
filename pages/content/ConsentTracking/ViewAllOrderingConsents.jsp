@@ -14,7 +14,7 @@
 			
 <html>
 	<head>
-		<title>caTissue Core v 1.1</title>
+		<title></title>
 			<link rel="stylesheet" type="text/css" href="css/catissue_suite.css" />
 			<script src="jss/script.js" type="text/javascript"></script>
 			<script src="jss/overlib_mini.js" type="text/javascript"></script>
@@ -35,21 +35,24 @@
 			
 				<%
 				List consentWvdList = (List)request.getAttribute("consentWaivedList");
-				Iterator iterator = consentWvdList.iterator();
-				while(iterator.hasNext())
+				if(consentWvdList != null)
 				{
-					String spLbl =(String) iterator.next();
-					%>
-					var indexval = window.parent.document.getElementById("<%=spLbl%>").value;
-					
-					var labelStatus="labelStatus"+indexval;
-					var consentVerificationkey = "value(RequestDetailsBean:"+indexval+"_consentVerificationkey)";
-					var parentId=window.parent.document.getElementById(labelStatus);
-													
-					parentId.innerHTML="Waived"+"<input type='hidden' name='" + consentVerificationkey + "' value='Waived' id='" + consentVerificationkey + "'/>";
-				<%								
+					Iterator iterator = consentWvdList.iterator();
+					while(iterator.hasNext())
+					{
+						String spLbl =(String) iterator.next();
+						%>
+						var indexval = window.parent.document.getElementById("<%=spLbl%>").value;
+						
+						var labelStatus="labelStatus"+indexval;
+						var consentVerificationkey = "value(RequestDetailsBean:"+indexval+"_consentVerificationkey)";
+						var parentId=window.parent.document.getElementById(labelStatus);
+														
+						parentId.innerHTML="Waived"+"<input type='hidden' name='" + consentVerificationkey + "' value='Waived' id='" + consentVerificationkey + "'/>";
+					<%								
+					}
 				}
-				%>
+					%>
 			}
 			//This function will check if the verifyCheck box is checked or not
 			function submitAllResponses()
@@ -60,6 +63,7 @@
 					var parentId;
 					var rowCount;
 					var verificationStatusKey;
+					var consentVerifiedRows="";
 					<%
 						String index="";
 						String noOfRows = (String)request.getParameter("noOfRows");
@@ -82,9 +86,17 @@
 							String barLabel=specAttributes[4];
 							
 					%>
+					
 						var checkboxKey="verifyAllCheckBox"+<%=i%>;
 						var checkboxInstance=document.getElementById(checkboxKey);
-						
+						if(checkboxInstance.checked)
+						{
+							if(consentVerifiedRows.length ==0)
+							consentVerifiedRows=<%=i%>;
+							else
+							consentVerifiedRows=consentVerifiedRows+","+<%=i%>;
+						}
+						//alert(consentVerifiedRows);
 						var specLabels = document.getElementById('specLabel'+<%=i%>).value;	
 						var split =specLabels.split(',');
 						//alert(split);
@@ -121,10 +133,14 @@
 						<%
 							i=i+1;
 						}
+						
 					
 					}
 				%>
-					
+				//alert(window.parent.document.getElementById("consentVerifiedRows").value);
+					window.parent.document.getElementById("consentVerifiedRows").value=consentVerifiedRows;
+					//alert(window.parent.document.getElementById("consentVerifiedRows").value);
+						//consentVerifiedRows
 					parent.allConsentWindow.hide();
 				}
 			</script>
@@ -164,9 +180,9 @@
 				for(int counter=0;counter<listOfMap.size();counter++)
 				{
 					String[] specimenAttributes=(String[])listOfStringArray.get(counter);				
-					String witnessName=specimenAttributes[0];
-					String consentDate=specimenAttributes[1];		
-					String signedUrl=specimenAttributes[2];
+					//String witnessName=specimenAttributes[0];
+					//String consentDate=specimenAttributes[1];		
+					//String signedUrl=specimenAttributes[2];
 					int consentTierCounter=Integer.parseInt(specimenAttributes[3]);
 					String barcodeLabel=specimenAttributes[4];
 					Map map =(Map)listOfMap.get(counter);
@@ -207,80 +223,6 @@
 							   </td>
 							</tr>
 							
-							<tr>
-								<td class="noneditable" width="35%">
-									&nbsp;&nbsp;&nbsp;
-									<bean:message key="collectionprotocolregistration.signedurlconsent"/>
-								</td>
-								<td class="noneditable" >
-									<label>
-										<%
-											if(signedUrl==null||signedUrl.equals(""))
-											{
-										%>
-											&nbsp;
-										<%
-											}
-											else
-											{
-										%>		
-											<%=signedUrl%>
-										<%
-											}
-										%>	
-									</label>
-							   </td>
-							</tr>
-							<%--Get Witness Name --%>						
-							<tr>
-								<td class="noneditable">
-									&nbsp;&nbsp;&nbsp;
-									<bean:message key="collectionprotocolregistration.witnessname"/>
-								</td>	
-								<td class="noneditable">
-									<label >
-										<%
-											if(witnessName==null||witnessName.equals(""))
-											{
-										%>
-												&nbsp;
-										<%
-											}
-											else
-											{
-										%>		
-												<%=witnessName%>
-										<%
-											}
-										%>
-									</label>
-								</td>
-							</tr>
-							<%--Get Consent Date --%>														
-							<tr>
-								<td class="noneditable">
-									&nbsp;&nbsp;&nbsp;
-									<bean:message key="collectionprotocolregistration.consentdate"/>
-								</td>		
-								<td class="noneditable">
-									<label>
-										<%
-											if(consentDate==null||consentDate.equals(""))
-											{
-										%>
-												&nbsp;
-										<%
-											}
-										else
-											{
-										%>		
-												<%=consentDate%>
-										<%
-											}
-										%>
-									</label>
-								</td>
-							</tr>
 						</table>
 					</td>
 				</tr>			
@@ -392,11 +334,7 @@
 									<label><b><bean:message key="consent.verificationmessage" /><b></label>
 								</td>
 							</tr>
-							<tr>
-								<td>
-									&nbsp;
-								</td>
-							</tr>
+							
 						</table>	
 						<%-- Inner table that will show Consents--%>
 					</td>	
@@ -416,9 +354,12 @@
 								<td class="black_ar tabletd1">
 								<%
 				List consentWvdListsss = (List)request.getAttribute("consentWaivedList");
+				int i=0;
+				if(consentWvdListsss != null)
+				{
 				Iterator iterators = consentWvdList.iterator();
 				StringBuilder builder = new StringBuilder(100);
-				int i=0;
+				
 				while(iterators.hasNext())
 				{
 					if(i>0)
@@ -427,9 +368,17 @@
 					i++;
 				}
 					
+					if(i>0)
+					{
 					%>
-					<label><b>consent waived for specimens:</b></label><span style="word-wrap: break-word;" >
+					<label><b>Consent waived for specimens:</b></label><span style="word-wrap: break-word;" >
 					<%=builder.toString()%></span>
+					<%}
+				}	
+					if(listOfMap.size() <= 0 && i<=0)
+					{%>
+					<label><b>No Consents Available</b></label><span style="word-wrap: break-word;" >
+					<%}%>
 								</td>
 								
 							</tr>

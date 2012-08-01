@@ -10,6 +10,7 @@ import edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.util.SearchUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
@@ -270,11 +271,11 @@ public class SpecimenArray extends Container
 				{
 					this.locatedAtPosition.parentContainer.setId(Long.valueOf(specimenArrayForm
 							.getStorageContainer()));
-
-					this.locatedAtPosition.positionDimensionOne = Integer.valueOf(specimenArrayForm
-							.getPositionDimensionOne());
-					this.locatedAtPosition.positionDimensionTwo = Integer.valueOf(specimenArrayForm
-							.getPositionDimensionTwo());
+					
+					this.locatedAtPosition.setPositionDimensionOneString(specimenArrayForm.getPositionDimensionOne());
+					this.locatedAtPosition.setPositionDimensionTwoString(specimenArrayForm.getPositionDimensionTwo());
+					this.locatedAtPosition.positionDimensionOne = StorageContainerUtil.convertPositionsToIntegerUsingContId(specimenArrayForm.getStorageContainer(), 1, specimenArrayForm.getPositionDimensionOne());
+					this.locatedAtPosition.positionDimensionTwo = StorageContainerUtil.convertPositionsToIntegerUsingContId(specimenArrayForm.getStorageContainer(), 2, specimenArrayForm.getPositionDimensionTwo());
 					this.locatedAtPosition.occupiedContainer = this;
 
 				}
@@ -287,10 +288,10 @@ public class SpecimenArray extends Container
 							&& specimenArrayForm.getPos2() != null
 							&& !specimenArrayForm.getPos2().trim().equals(""))
 					{
-						this.locatedAtPosition.positionDimensionOne = Integer
-								.valueOf(specimenArrayForm.getPos1());
-						this.locatedAtPosition.positionDimensionTwo = Integer
-								.valueOf(specimenArrayForm.getPos2());
+						this.locatedAtPosition.setPositionDimensionOneString(specimenArrayForm.getPos1());
+						this.locatedAtPosition.setPositionDimensionTwoString(specimenArrayForm.getPos2());
+						this.locatedAtPosition.positionDimensionOne =StorageContainerUtil.convertSpecimenPositionsToInteger(specimenArrayForm.getSelectedContainerName(), 1, specimenArrayForm.getPos1()); 
+						this.locatedAtPosition.positionDimensionTwo = StorageContainerUtil.convertSpecimenPositionsToInteger(specimenArrayForm.getSelectedContainerName(), 2, specimenArrayForm.getPos2());
 						this.locatedAtPosition.occupiedContainer = this;
 					}
 				}

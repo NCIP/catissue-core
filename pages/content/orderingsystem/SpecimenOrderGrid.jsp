@@ -84,9 +84,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2">
+		<td colspan="2" width="100%">
 			<script>	
-					document.write("<div id='gridbox' width='100%' height='300px' style='background-color:#d7d7d7;overflow:hidden'></div>");
+					document.write("<div id='gridbox' width='100%' height='400px' style='background-color:#d7d7d7;overflow:hidden'></div>");
 					document.write("<div id='csPagingArea'></div>");
 					document.write("<div id='csInfoArea'></div>");    
 			</script>
@@ -107,7 +107,7 @@ function init_grid()
 	mygrid.setEditable("true");
 	mygrid.enableAutoHeigth(false);
 	//mygrid.enablePaging(true, 15, 5, csPagingArea, true, csInfoArea);
-    mygrid.setPagingSkin("bricks");
+    //mygrid.setPagingSkin("bricks");
 
     mygrid.enableRowsHover(true,'grid_hover')
 	mygrid.setInitWidthsP("20,10,10,10,10,20,*");
@@ -117,10 +117,7 @@ function init_grid()
 	
 	mygrid.setColSorting("str,str,str,str,str,str,str");
 	mygrid.enableMultiselect(true);
-	//mygrid.enableValidation(true,true);
-	//mygrid.load(columns, "json");
-	//mygrid.setColValidators(",,,,ValidNumeric,");
-	//mygrid.cells(1,5).setAttribute("validate","ValidNumeric");
+	
 	
 	
 	mygrid.init();
@@ -156,7 +153,7 @@ mygrid.enableEditEvents(true);
 	setComboValues();
 }
 
-window.onload=init_grid;
+//window.onload=init_grid;
 
 function qtyChange(stage,rId,cInd,nValue,oValue)
 {
@@ -323,6 +320,7 @@ alert(rid);
 								<html:hidden name="requestDetailsForm" property="<%= specimenCollGroupId %>" />
 				<%			}
 			    %>	<!-- Html hidden variables for all static fields -->	 
+							<input type="hidden" id="consentVerifiedRows" name="consentVerifiedRows"/>
 								<input type="hidden" id="<%=requestDetailsForm.getValue("RequestDetailsBean:"+i+"_requestedItem")%>" name="<%=requestDetailsForm.getValue("RequestDetailsBean:"+i+"_requestedItem")%>" value="<%=i%>">
 								 <html:hidden name="requestDetailsForm" property="<%= requestedItem %>" styleId="<%=requestedItemId%>"/>	
 								 <html:hidden name="requestDetailsForm" property="<%= requestedQty %>" styleId="<%=requestedQtyId%>" />	

@@ -70,7 +70,7 @@
 							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td align="left" width="88%" height="100%" >
-										<div id="csDropDownIddiv" class="x-form-field-wrap " >
+										<div id="csDropDownIddiv" class="x-form-field-wrap " style="width:202px;">
 											<input id="clinicalStatusDropDown"
 													onkeydown="keyNavigationCall(event,clinicalStatusDropDownInfo,csGrid);"
 													onKeyUp="autoCompleteControl(event,clinicalStatusDropDownInfo,csGrid);"
@@ -110,15 +110,14 @@
 							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td align="left" width="88%" height="100%" >
-										<div id="dsDropDownIddiv" class="x-form-field-wrap " >
+										<div id="dsDropDownIddiv" class="x-form-field-wrap " style="width:202px;">
 											<input id="defaultSiteDropDown"
 													onkeydown="keyNavigationCall(event,siteDropDownInfo,dsGrid);"
 													onKeyUp="autoCompleteControl(event,siteDropDownInfo,dsGrid);"
 													onClick="noEventPropogation(event)"
 													autocomplete="off"
 													size="31"
-													class="black_ar_new x-form-text x-form-field x-form-focus"/>
-													<img id="dsDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
+													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="dsDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
 													onclick="showHideGrid(event,siteDropDownInfo,dsGrid);"												
 												src="images/uIEnhancementImages/s.gif"/>
 										</div>

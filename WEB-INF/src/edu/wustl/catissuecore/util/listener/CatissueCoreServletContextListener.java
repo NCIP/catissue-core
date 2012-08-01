@@ -8,6 +8,7 @@ package edu.wustl.catissuecore.util.listener;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
 
 import javax.jms.JMSException;
 import javax.mail.MessagingException;
@@ -17,6 +18,7 @@ import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
 import titli.model.util.TitliResultGroup;
+import edu.wustl.bulkoperator.util.BulkEMPIOperationsUtility;
 import edu.wustl.bulkoperator.util.BulkOperationUtility;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
@@ -37,6 +39,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.interceptor.SpecimenDataBackloader;
 import edu.wustl.catissuecore.interceptor.wmq.SpecimenWmqProcessor;
 import edu.wustl.catissuecore.namegenerator.LabelAndBarcodeGeneratorInitializer;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
@@ -62,6 +65,7 @@ import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.util.DAOUtility;
 import edu.wustl.query.util.listener.QueryCoreServletContextListenerUtil;
 import edu.wustl.simplequery.bizlogic.QueryBizLogic;
 
@@ -80,7 +84,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 	 * DATASOURCE_JNDI_NAME.
 	 */
 	private static final String JNDI_NAME = "java:/catissuecore";
-	
+
 	//class level instance to access methods for registering and unregistering queues
 	private final ParticipantManagerUtility participantManagerUtility = new ParticipantManagerUtility();
 
@@ -108,8 +112,14 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			logApplnInfo();
 			DefaultValueManager.validateAndInitDefaultValueMap();
 			BulkOperationUtility.changeBulkOperationStatusToFailed();
-			
 			initCiderIntegration();
+			QueryCoreServletContextListenerUtil.contextInitialized(sce, "java:/query");
+			if(XMLPropertyHandler.getValue(Constants.EMPI_ENABLED).equalsIgnoreCase("true"))
+			{
+				BulkEMPIOperationsUtility.changeBulkOperationStatusToFailed();
+				// eMPI integration initialization
+				initeMPI();
+			}
 			logger.info("Initialization complete");
 		}
 		catch (final Exception e)
@@ -118,10 +128,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 					+e.getMessage(),e);
 			throw new RuntimeException(e.getLocalizedMessage(), e);
 		}
-		QueryCoreServletContextListenerUtil.contextInitialized(sce, "java:/query");
-		
-		// eMPI integration initialization
-		initeMPI();
 	}
 
 	private void initCiderIntegration()
@@ -129,6 +135,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		if(XMLPropertyHandler.getValue("CiderWmqEnabled").equalsIgnoreCase("true"))
 		{
 			SpecimenWmqProcessor.getInstance();
+			Timer dataBackloader = new Timer(true);
+			dataBackloader.scheduleAtFixedRate(new SpecimenDataBackloader(), DAOUtility.getStartTimeForTodaysDate("23:30"),(24*60*60*1000) );
 		}
 	}
 
@@ -173,7 +181,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		}
 
 	}
-	
+
 	private void checkEMPIAdminUser() throws ApplicationException, MessagingException
 	{
 		String eMPIAdminUName = XMLPropertyHandler.getValue(Constants.HL7_LISTENER_ADMIN_USER);
@@ -189,7 +197,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			emailHandlrObj.sendEMPIAdminUserClosedEmail(validUser);
 		}
 	}
-	
+
 	/**
 	 * Initialize caTissue default properties.
 	 * @throws ClassNotFoundException ClassNotFoundException

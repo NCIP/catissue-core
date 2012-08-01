@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.ShippingTrackingUtility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -220,8 +221,19 @@ public class Shipment extends BaseShipment
 						//pos1 and pos2 will be "" in case of manual option selection on shipment receiving page.
 						if (pos1 != null && pos2 != null && !pos2.trim().equals(""))
 						{
-							spPosition.setPositionDimensionOne(Integer.parseInt(pos1));
-							spPosition.setPositionDimensionTwo(Integer.parseInt(pos2));							
+							
+							spPosition.setPositionDimensionOneString(pos1);
+							spPosition.setPositionDimensionTwoString(pos2);
+							if(storageLocationSelection.trim().equals("2"))
+							{
+								spPosition.setPositionDimensionOne(StorageContainerUtil.convertPositionsToIntegerUsingContId(spPosContainer.getId().toString(), 1, pos1));
+								spPosition.setPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(spPosContainer.getId().toString(), 2, pos2));
+							}
+							else if(storageLocationSelection.trim().equals("3"))
+							{
+								spPosition.setPositionDimensionOne(StorageContainerUtil.convertSpecimenPositionsToInteger(spPosContainer.getName(), 1, pos1));
+								spPosition.setPositionDimensionTwo(StorageContainerUtil.convertSpecimenPositionsToInteger(spPosContainer.getName(), 2, pos2));
+							}
 						}
 						else // if 0 was not set then it will show positions from in transit container 
 						{

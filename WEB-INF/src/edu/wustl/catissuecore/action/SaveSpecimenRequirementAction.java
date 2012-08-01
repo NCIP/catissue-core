@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +25,10 @@ import org.apache.struts.action.ActionMessages;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenTemplateForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.DeriveSpecimenBean;
+import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.tree.QueryTreeNodeData;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -51,7 +52,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			.getCommonLogger(SaveSpecimenRequirementAction.class);
 
 	private static String isPersistent = null;
-	private String createDuplicateSpecimen = "false";
+	
 	/**
 	 * Overrides the executeSecureAction method of SecureAction class.
 	 *
@@ -82,25 +83,25 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		if(nodeId != null && !nodeId.startsWith(Constants.NEW_SPECIMEN))
 			eventSelected = mapKey;
 		else	
-			eventSelected = parentNodeId.substring(parentNodeId.indexOf('_')+1,parentNodeId.indexOf('_')+3);
+			eventSelected = parentNodeId.substring(parentNodeId.lastIndexOf('_')+1,parentNodeId.length());
 
 		isPersistent = request.getParameter("isPersistent");
 		request.setAttribute("isPersistent", isPersistent);
-		createDuplicateSpecimen = (String) request.getParameter(Constants.CREATE_DUPLICATE_SPECIMEN);
-		
+				
 		final Map collectionProtocolEventMap = (Map) session
 		.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-		final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
-		.get((Constants.TRUE.equals(createDuplicateSpecimen) ? eventSelected : mapKey));
+		final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap.get(mapKey);
 		
 		if (operation.equals(Constants.ADD))
 		{
 			
 			final Integer totalNoOfSpecimen = collectionProtocolEventBean
 					.getSpecimenRequirementbeanMap().size();
-			final SpecimenRequirementBean specimenRequirementBean = this.createSpecimenBean(
+			
+			SpecimenRequirementBean specimenRequirementBean = this.createSpecimenBean(
 					createSpecimenTemplateForm, collectionProtocolEventBean.getUniqueIdentifier(),
 					totalNoOfSpecimen);
+
 			if (specimenRequirementBean != null)
 			{
 				collectionProtocolEventBean.addSpecimenRequirementBean(specimenRequirementBean);
@@ -113,16 +114,11 @@ public class SaveSpecimenRequirementAction extends BaseAction
 					parentId = collectionProtocolEventBean.getUniqueIdentifier();  
 				}
 				else{
-					parentId = parentNodeId.substring(parentNodeId.indexOf('_')+1);
+					parentId = parentNodeId.substring(parentNodeId.lastIndexOf('_')+1);
 				}
 				AppUtility.createSpecimenNode(objectName, parentId, specimenRequirementBean,
 						treeData, operation);
 				request.setAttribute("nodeAdded", treeData);
-			}
-			if(Constants.TRUE.equals(createDuplicateSpecimen))
-			{
-				request.getSession().setAttribute(Constants.TREE_NODE_ID, Constants.NEW_SPECIMEN + "_"+ specimenRequirementBean.getUniqueIdentifier());
-				request.getSession().setAttribute("key", specimenRequirementBean.getUniqueIdentifier());
 			}
 			
 		}
@@ -250,10 +246,6 @@ public class SaveSpecimenRequirementAction extends BaseAction
 			Integer totalNoOfSpecimen)
 	{
 		final SpecimenRequirementBean specimenRequirementBean = new SpecimenRequirementBean();
-		if(Constants.TRUE.equals(createDuplicateSpecimen))
-		{	
-			specimenRequirementBean.setId(-1L);
-		}	
 		specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier);
 		specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
 				+ Constants.UNIQUE_IDENTIFIER_FOR_NEW_SPECIMEN + totalNoOfSpecimen);
@@ -281,6 +273,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm
 				.getNoOfDeriveSpecimen());
 		specimenRequirementBean.setDeriveSpecimen(createSpecimenTemplateForm.deriveSpecimenMap());
+			
 		return specimenRequirementBean;
 	}
 
@@ -439,10 +432,6 @@ public class SaveSpecimenRequirementAction extends BaseAction
 					specimenRequirementBean.setId(deriveSpecimenBean.getId());
 				}
 			}
-			if(Constants.TRUE.equals(createDuplicateSpecimen))
-			{	
-				specimenRequirementBean.setId(-1L);
-			}	
 			deriveSpecimenMap.put(specimenRequirementBean.getUniqueIdentifier(),
 					specimenRequirementBean);
 			deriveSpecimenCount = deriveSpecimenCount + 1;

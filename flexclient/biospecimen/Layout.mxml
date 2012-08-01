@@ -606,14 +606,6 @@
 	    var bean : NameValueBean = new NameValueBean();
 		pCollection = pevent.result as ArrayCollection;
 //		pCombo.dataProvider = pCollection;
-		if(pCollection.length==1)
-		{
-			var selectedP : NameValueBean = pCollection[0] as NameValueBean;
-			Sp.inputArea.text = selectedP.name;
-			spCombo=selectedP;
-			onParticipantClick();
-		}
-
 	}
 	/*
 	  Event Handler for Temp Collection

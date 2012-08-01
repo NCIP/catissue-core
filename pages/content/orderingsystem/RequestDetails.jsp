@@ -263,8 +263,8 @@ function showAllSpecimen(count)
 		
 		var status = document.getElementById(consentVerificationkey).value;
 	
-		if(status=="<%=Constants.VIEW_CONSENTS%>"||status=="<%=Constants.VERIFIED%>" ||status=="Waived" && statusValue!="disable")
-		{
+		//if(status=="<%=Constants.VIEW_CONSENTS%>"||status=="<%=Constants.VERIFIED%>" ||status=="Waived" && statusValue!="disable")
+		//{
 			//var specimenkey= "value(RequestDetailsBean:"+i+"_specimenId)";
 			//var specimenObj= document.getElementById(specimenkey);
 
@@ -289,11 +289,11 @@ function showAllSpecimen(count)
 				verifiedRows=verifiedRows+(i-iCount)+",";
 			}
 
-		}
-		else
-		{
-			iCount=iCount+1;
-		}
+		//}
+		//else
+		//{
+			//iCount=iCount+1;
+		//}
 	
 	}
 
@@ -309,9 +309,12 @@ function showAllSpecimen(count)
 		}
 		else
 		{
-			var url= 'ViewAllConsents.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+count+'&speciemnIdValue='+speciemnIdValue+'&labelIndexCount='+labelIndexCount;
-			//var url= 'ConsentVerification.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+count+'&speciemnIdValue='+speciemnIdValue+'&labelIndexCount='+labelIndexCount;
+			var consentVerifiedRows = document.getElementById('consentVerifiedRows').value;
+			var orderId = document.getElementById('id').value;
+			var url= 'ViewAllConsents.do?operation=&pageOf=pageOfOrdering&specimenConsents=yes&verifiedRows='+consentVerifiedRows+'&noOfRows='+count+'&labelIndexCount='+labelIndexCount+'&orderId='+orderId;
 			
+			//alert("verifiedRows  : "+consentVerifiedRows);
+			//alert(consentVerifiedRows.length);
 			//model window popup
 			allConsentWindow=dhtmlmodal.open('Institution', 'iframe', url,'Consent Form', 'width=800px,height=350px,center=1,resize=0,scrolling=1')
 			allConsentWindow.onclose=function()
@@ -493,11 +496,11 @@ function checkQuantityforAll(count)
 	}
 
 	/*** code using ajax  ***/	
-
+//window.onload="loadTab();init_grid()";
 
 </script>
 </head>  
-<body>
+<body onload="loadTab();init_grid();">
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 
 <html:form action="<%=form_action%>">
@@ -677,10 +680,16 @@ function checkQuantityforAll(count)
 			
 						<td colspan="3" align="right" valign="top">
 							<img src="images/uIEnhancementImages/viewall_icon.gif" alt="View All" />
-								
+								<logic:notEqual name="selectedTab" value="AdvancedViewTab">
 							<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
 													<bean:message key="requestdetails.link.ViewAllConsents" />
-							                    </a>
+													</a>
+							  </logic:notEqual>                  
+							  <logic:equal name="selectedTab" value="AdvancedViewTab">
+							<a href="javascript:showAllSpecimen('<%=count%>')" class="view" >
+													<bean:message key="requestdetails.link.ViewAllConsents" />
+													</a>
+							  </logic:equal>
 						</td>
 					
 			</tr>
@@ -688,7 +697,7 @@ function checkQuantityforAll(count)
 				<tr>
 					<td width="100%" >
 					<table border="0" width="100%"><tr><td>
-						<div id="tabbar_div" align="center" style="width:auto;height:350px;overflow:auto;"/>
+						<div id="tabbar_div" align="left" style="width:auto;height:350px;overflow:auto;"/>
 						</td>
 						</tr></table>
 						<table width="100%">
@@ -736,7 +745,7 @@ function checkQuantityforAll(count)
 			  String distributionProtocol = ((RequestViewBean)request.getAttribute(Constants.REQUEST_HEADER_OBJECT)).getDistributionProtocolId(); 
 			  String orderName = ((RequestViewBean)request.getAttribute(Constants.REQUEST_HEADER_OBJECT)).getOrderName();
 		%>
-						<html:hidden name="requestDetailsForm" property="id" />
+						<html:hidden name="requestDetailsForm" property="id" styleId="id"/>
 						<html:hidden name="requestDetailsForm" property="operation" value="<%= operationUpdate %>"/>
 						<html:hidden name="requestDetailsForm" property="distributionProtocolId" value="<%= distributionProtocol %>"/>	
 						<html:hidden name="requestDetailsForm" property="orderName" styleId="orderName" value="<%= orderName %>"/>					
@@ -760,6 +769,13 @@ function checkQuantityforAll(count)
 </html:form>
 </body>
 <script>
+function loadTab()
+{
+if(selectedTab == 'AdvancedViewTab')
+{
+	document.forms[0].action='AdvanceRequestDetails.do?selectedTab=AdvancedViewTab&id=<bean:write name="requestDetailsForm" property="id" scope="request"/>';
+	document.forms[0].submit();
+}
 tabbar = new dhtmlXTabBar("tabbar_div", "top");
 	tabbar.setSkin('dhx_skyblue');
 	tabbar.setImagePath("dhtmlx_suite/imgs/");
@@ -785,7 +801,7 @@ tabbar = new dhtmlXTabBar("tabbar_div", "top");
 		answer= confirm("By clicking on this tab you will lose all the changes you have made, click ok to continue");
 		if(answer)
 		{//alert('<bean:write name="requestDetailsForm" property="id" scope="request"/>');
-			document.forms[0].action='RequestDetails.do?selectedTab=AdvancedViewTab&id=<bean:write name="requestDetailsForm" property="id" scope="request"/>';
+			document.forms[0].action='AdvanceRequestDetails.do?selectedTab=AdvancedViewTab&id=<bean:write name="requestDetailsForm" property="id" scope="request"/>';
 			document.forms[0].submit();
 		}
 		else
@@ -808,5 +824,7 @@ tabbar = new dhtmlXTabBar("tabbar_div", "top");
 	}
     return true;
 });
+}
+
 </script>
 <!----------------------------------------------->	

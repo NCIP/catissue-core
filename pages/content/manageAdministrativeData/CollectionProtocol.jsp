@@ -1,3 +1,4 @@
+<%@page import="edu.wustl.common.util.XMLPropertyHandler"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
@@ -67,53 +68,7 @@
 
 
 <script>
-Ext.onReady(function(){
-var commonActionURL = 'CatissueCommonAjaxAction.do?';
-
-// Defining Cinical Diagnosis Combobox
-var diagnosisDS = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: commonActionURL}),
-				baseParams:{type:'getClinicalDiagnosisValues'},
-				reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, 
-				[{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});
-				
-var diagnosisCombo = new Ext.form.ComboBox({
-			store: diagnosisDS,hiddenName: 'CB_coord',displayField:'excerpt',valueField: 'id',
-			typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',
-			mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,
-			cls:Ext.isIE?'forIe':'',
-			emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'coord'});
 			
-diagnosisCombo.on("expand", function() {
-			if(Ext.isIE || Ext.isIE7){diagnosisCombo.list.setStyle("width", "250");diagnosisCombo.innerList.setStyle("width", "250");}
-			else{diagnosisCombo.list.setStyle("width", "auto");diagnosisCombo.innerList.setStyle("width", "auto");}}, {single: true});
-diagnosisDS.on('load',function(){
-			if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(diagnosisCombo.getRawValue().toLowerCase())) {diagnosisCombo.typeAheadDelay=50;} 
-			else {diagnosisCombo.typeAheadDelay=60000}});
-// Defining Cinical Diagnosis Combobox defined 
-
-// Defining Coordinator Combobox
-
-
-var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: commonActionURL }),
-				baseParams:{type:'getUserListAsJSon'},
-				reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, 
-				[{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});
-				
-var coordinatorCombo = new Ext.form.ComboBox({
-			store: ds,hiddenName: 'CB_pcoordinatorIds',displayField:'excerpt',valueField: 'id',
-			typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',
-			cls:Ext.isIE?'forIe':'',
-			mode: 'remote',triggerAction: 'all',minChars : 1,queryDelay:500,lazyInit:true,
-			emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'pcoordinatorIds'});
-			
-coordinatorCombo.on("expand", function() {
-			if(Ext.isIE || Ext.isIE7){coordinatorCombo.list.setStyle("width", "250");coordinatorCombo.innerList.setStyle("width", "250");}
-			else{coordinatorCombo.list.setStyle("width", "auto");coordinatorCombo.innerList.setStyle("width", "auto");}}, {single: true});
-ds.on('load',function(){
-			if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(coordinatorCombo.getRawValue().toLowerCase())) {coordinatorCombo.typeAheadDelay=50;} 
-			else {coordinatorCombo.typeAheadDelay=60000}});
-			
-});			
 			
 // Defining Coordinator Combobox done :) 			
 
@@ -180,6 +135,11 @@ function onParentProtocolListReady()
 
 function doOnLoad()
 {
+	if("<%=request.getParameter("isErrorPage")%>"=='true' && '${requestScope.operation}'=='add')
+	{
+		window.parent.firstTimeLoad = true; //this require to create cp node when user directly click on Add Event button
+	}
+	
 	//Drop Down components information
 	investigatorDropDownInfo = {propertyId:'principalInvestigatorId',gridObj:"principleInvestigatorGrid", gridDiv:"principleInvestigator", dropDownId:"principleInvestigatorDropDown", pagingArea:"principleInvestigatorPagingArea", infoArea:"principleInvestigatorInfoArea", onOptionSelect:investigatorOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=allUserList", callBackAction:onInvestigatorListReady, visibilityStatusVariable:piGridVisible};
 	parentProtocolDropDownInfo = {propertyId:'parentCollectionProtocolId',gridObj:"parentProtocolGrid", gridDiv:"parentProtocol", dropDownId:"parentProtocolDropDown", pagingArea:"ppPagingArea", infoArea:"ppInfoArea", onOptionSelect:parentProtocolOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllCPList", callBackAction:onParentProtocolListReady, visibilityStatusVariable:ppGridVisible};
@@ -362,7 +322,7 @@ div#d999 {
 							<table border="0" width="28%" id="outerTable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td align="left" width="88%" height="100%" >
-										<div id="ppDropDownIddiv" class="x-form-field-wrap " >
+										<div id="ppDropDownIddiv" class="x-form-field-wrap " style="width:137px;">
 											<input id="parentProtocolDropDown"
 													onkeydown="keyNavigationCall(event,parentProtocolDropDownInfo,ppGrid);"
 													onKeyUp="autoCompleteControl(event,parentProtocolDropDownInfo,ppGrid);"
@@ -428,24 +388,19 @@ div#d999 {
 							<table border="0" width="28%" id="outerTable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td align="left" width="88%" height="100%" >
-										<div id="piDropDownIddiv" class="x-form-field-wrap" >
+										<div id="piDropDownIddiv" class="x-form-field-wrap" style="width:137px;">
 											<input id="principleInvestigatorDropDown"
 													onkeydown="keyNavigationCall(event,investigatorDropDownInfo,piGrid);"
 													onKeyUp="autoCompleteControl(event,investigatorDropDownInfo,piGrid);"
 													onClick="noEventPropogation(event)"
-													autocomplete="off"
-													size="18"
-													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="piDropDownId" style="top : 0px !important; align:left;" class="x-form-trigger x-form-arrow-trigger" 
-												onclick="showHideGrid(event,investigatorDropDownInfo,piGrid);"
-												src="images/uIEnhancementImages/s.gif"/>
-										</div>
+													autocomplete="off"	size="18" class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="piDropDownId" style="top:0px !important;" class="x-form-trigger x-form-arrow-trigger" onclick="showHideGrid(event,investigatorDropDownInfo,piGrid);" src="images/uIEnhancementImages/s.gif"/></div>
 									</td>
 								</tr>
 								<tr>
 									<td>
 									<div id="principleInvestigator" style="z-index: 100"
 										onClick="noEventPropogation(event)">
-									<div id="principleInvestigatorGrid" style="height: 40px;"
+									<div id="principleInvestigatorGrid" style="height: 100px;"
 										onClick="noEventPropogation(event)"></div>
 									<div id="principleInvestigatorPagingArea" onClick="noEventPropogation(event)"></div>
 									<div id="principleInvestigatorInfoArea" onClick="noEventPropogation(event)"></div>
@@ -458,13 +413,15 @@ div#d999 {
 				</tr>
 					
 				<tr>
-					<td align="center" class="black_ar">&nbsp;</td>
-					<td align="left" valign="top" class="black_ar"><label
+					<td align="center" class="black_ar" width="1%">&nbsp;</td>
+					<td align="left" valign="top" class="black_ar" width="30%"><label
 						for="cpcoordinatorIds"><bean:message
 						key="collectionprotocol.protocolcoordinator" /></label></td>
-					<td align="left">
-						<table width="100%" cellspacing="0" cellpadding="0">
-							<tr> <td width="57%">
+					<td  class="black_ar" width="69%">
+						<div style="width:100%;">
+					   <table width="100%" cellpadding="0">
+						  <tr>
+							<td class="black_ar" align="left"  width="57%">
 								<mCombo:multiSelectUsingCombo
 								identifier="pcoordinatorIds" size="18" styleClass="black_ar_new"
 								addNewActionStyleClass="black_ar_new"
@@ -472,14 +429,14 @@ div#d999 {
 								removeButtonOnClick="moveOptions('coordinatorIds','pcoordinatorIds', 'edit')"
 								selectIdentifier="coordinatorIds"
 								collection="<%=(List)request.getAttribute("selectedCPCoordinatorIds")%>"
-								numRows="4" />	</td> 
-								<td width="43%">
-								<label>&nbsp;<html:link href="#" styleId="newUser" styleClass="view"
-								onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=collectionProtocol&addNewFor=principalInvestigator')">
+								numRows="4" />
+							</td>
+							<td><label><html:link href="#" styleId="newUser" styleClass="view"	onclick="addNewAction('CollectionProtocolAddNew.do?addNewForwardTo=principalInvestigator&forwardTo=collectionProtocol&addNewFor=principalInvestigator')">
 								<bean:message key="buttons.addNew" /></html:link></label>
-								</td>
-							</tr>
-						</table>	
+							</td>
+						  </tr>
+						</table>
+						</div>
 					</td>
 				</tr>
 				
@@ -589,6 +546,7 @@ div#d999 {
 						</td>
 					</tr>
 				</logic:equal>
+				<%if("true".equals(XMLPropertyHandler.getValue(Constants.EMPI_ENABLED))){ %>
 				<tr>
 					<td width="1%" align="center" class="black_ar">&nbsp</td>
 					<td width="16%" align="left" class="black_ar"><label
@@ -602,6 +560,7 @@ div#d999 {
 						for="consentWaived">&nbsp;<bean:message
 						key="consent.consentwaivedno" /></label></td>
 				</tr>
+				<%}%>
 				
 				<tr>
 
@@ -689,6 +648,53 @@ div#d999 {
 </html:form>
 
 <script>
+Ext.onReady(function(){
+var commonActionURL = 'CatissueCommonAjaxAction.do?';
+
+// Defining Cinical Diagnosis Combobox
+var diagnosisDS = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: commonActionURL}),
+				baseParams:{type:'getClinicalDiagnosisValues'},
+				reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, 
+				[{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});
+				
+var diagnosisCombo = new Ext.form.ComboBox({
+			store: diagnosisDS,hiddenName: 'CB_coord',displayField:'excerpt',valueField: 'id',
+			typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',
+			mode: 'remote',triggerAction: 'all',minChars : 3,queryDelay:500,lazyInit:true,
+			cls:Ext.isIE?'forIe':'',
+			emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'coord'});
+			
+diagnosisCombo.on("expand", function() {
+			if(Ext.isIE || Ext.isIE7){diagnosisCombo.list.setStyle("width", "250");diagnosisCombo.innerList.setStyle("width", "250");}
+			else{diagnosisCombo.list.setStyle("width", "auto");diagnosisCombo.innerList.setStyle("width", "auto");}}, {single: true});
+diagnosisDS.on('load',function(){
+			if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(diagnosisCombo.getRawValue().toLowerCase())) {diagnosisCombo.typeAheadDelay=50;} 
+			else {diagnosisCombo.typeAheadDelay=60000}});
+// Defining Cinical Diagnosis Combobox defined 
+
+// Defining Coordinator Combobox
+
+
+var ds = new Ext.data.Store({proxy: new Ext.data.HttpProxy({url: commonActionURL }),
+				baseParams:{type:'getUserListAsJSon'},
+				reader: new Ext.data.JsonReader({root: 'row',totalProperty: 'totalCount',id: 'id'}, 
+				[{name: 'id', mapping: 'id'},{name: 'excerpt', mapping: 'field'}])});
+				
+var coordinatorCombo = new Ext.form.ComboBox({
+			store: ds,hiddenName: 'CB_pcoordinatorIds',displayField:'excerpt',valueField: 'id',
+			typeAhead: 'false',pageSize:15,forceSelection: 'true',queryParam : 'query',
+			cls:Ext.isIE?'forIe':'',
+			mode: 'remote',triggerAction: 'all',minChars : 1,queryDelay:500,lazyInit:true,
+			emptyText:'--Select--',valueNotFoundText:'',selectOnFocus:'true',applyTo: 'pcoordinatorIds'});
+			
+coordinatorCombo.on("expand", function() {
+			if(Ext.isIE || Ext.isIE7){coordinatorCombo.list.setStyle("width", "250");coordinatorCombo.innerList.setStyle("width", "250");}
+			else{coordinatorCombo.list.setStyle("width", "auto");coordinatorCombo.innerList.setStyle("width", "auto");}}, {single: true});
+ds.on('load',function(){
+			if (this.getAt(0) != null && this.getAt(0).get('excerpt').toLowerCase().startsWith(coordinatorCombo.getRawValue().toLowerCase())) {coordinatorCombo.typeAheadDelay=50;} 
+			else {coordinatorCombo.typeAheadDelay=60000}});
+			
+});
 if(document.getElementById("errorRow")!=null && document.getElementById("errorRow").innerHTML.trim()!="")
 {
 	  window.top.document.getElementById("errorRow").innerHTML = "";

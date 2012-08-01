@@ -691,7 +691,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		{
 			specPos = new SpecimenPosition();
 		}
-		if (pos1 != null)
+		if (pos1 != null && !"".equals(pos1))
 		{
 			try
 			{
@@ -703,7 +703,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 				specPos.setPositionDimensionOne(null);
 			}
 		}
-		if (pos2 != null)
+		if (pos2 != null && !"".equals(pos1))
 		{
 			try
 			{
@@ -738,7 +738,10 @@ public class UpdateSpecimenStatusAction extends BaseAction
 					.getDisplayName());
 		}
 		storageContainer.setName(specimenVO.getSelectedContainerName());
-		StorageContainerUtil.setContainerPositionAsString(specimenVO.getSelectedContainerName(), specPos.getPositionDimensionOne(), specPos.getPositionDimensionTwo(), specPos);
+		if(null !=specPos.getPositionDimensionOne() && null!=specPos.getPositionDimensionTwo())
+		{
+			StorageContainerUtil.setContainerPositionAsString(specimenVO.getSelectedContainerName(), specPos.getPositionDimensionOne(), specPos.getPositionDimensionTwo(), specPos);
+		}
 		// specimen.setStorageContainer(storageContainer);
 	}
 

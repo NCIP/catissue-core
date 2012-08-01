@@ -434,7 +434,8 @@ public class NewSpecimenAction extends SecureAction
 				if (errors == null)
 				{
 					final String scgDropDown = request.getParameter(Constants.SCG_DROPDOWN);
-					if (scgDropDown == null || scgDropDown.equalsIgnoreCase(Constants.TRUE))
+					//if (scgDropDown == null || scgDropDown.equalsIgnoreCase(Constants.TRUE))
+					
 					{
 						final Collection consentResponseStatuslevel = (Collection) dao
 								.retrieveAttribute((Class) SpecimenCollectionGroup.class, "id",
@@ -638,6 +639,7 @@ public class NewSpecimenAction extends SecureAction
 			if (operation.equals(Constants.ADD))
 			{
 				populateEventsFromScg(specimenCollectionGroup, specimenForm);
+				specimenForm.setCollectionStatus(Constants.COLLECTION_STATUS_COLLECTED);
 			}
 			final Object scgForm = request.getAttribute("scgForm");
 			if (scgForm == null)
@@ -1525,9 +1527,24 @@ public class NewSpecimenAction extends SecureAction
 
 		specimenForm.setCollectionEventUserId(scgCollEventParam.getUser().getId()
 				.longValue());
-		specimenForm.setCollectionEventCollectionProcedure(scgCollEventParam
-				.getCollectionProcedure());
-		specimenForm.setCollectionEventContainer(scgCollEventParam.getContainer());
+		if(scgCollEventParam.getCollectionProcedure() != null && Constants.CP_DEFAULT.equals(scgCollEventParam.getCollectionProcedure()))
+		{
+			specimenForm.setCollectionEventCollectionProcedure(Constants.SELECT_OPTION);
+		}
+		else
+		{
+			specimenForm.setCollectionEventCollectionProcedure(scgCollEventParam.getCollectionProcedure());
+		}
+		
+		if(scgCollEventParam.getContainer() != null && Constants.CP_DEFAULT.equals(scgCollEventParam.getContainer()))
+		{
+			specimenForm.setCollectionEventContainer(Constants.SELECT_OPTION);
+		}
+		else
+		{
+			specimenForm.setCollectionEventContainer(scgCollEventParam.getContainer());
+		}		
+		
 		specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(
 				scgCollEventParam.getTimestamp(), CommonServiceLocator.getInstance()
 						.getDatePattern()));
@@ -1552,8 +1569,15 @@ public class NewSpecimenAction extends SecureAction
 
 		specimenForm.setReceivedEventUserId(scgReceivedEventParam.getUser().getId()
 				.longValue());
-		specimenForm.setReceivedEventReceivedQuality(scgReceivedEventParam
+		if(scgReceivedEventParam.getReceivedQuality() != null && Constants.CP_DEFAULT.equals(scgReceivedEventParam.getReceivedQuality()))
+		{
+			specimenForm.setReceivedEventReceivedQuality(Constants.SELECT_OPTION);
+		}
+		else
+		{
+			specimenForm.setReceivedEventReceivedQuality(scgReceivedEventParam
 				.getReceivedQuality());
+		}
 		specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(
 				scgReceivedEventParam.getTimestamp(), CommonServiceLocator
 						.getInstance().getDatePattern()));

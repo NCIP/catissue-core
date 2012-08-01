@@ -614,6 +614,10 @@
 
 <!--  Added for EMPI integration -->
 	<property>
+		<name>empi.Enabled</name>
+		<value>@@empiEnabled@@</value>
+	</property>
+	<property>
 		<name>empi.DBURL</name>
 		<value>@@empiDBURL@@</value>
 	</property>
@@ -754,9 +758,17 @@
 		<value>3000</value>
 	</property>
 	
+
 		<!-- Forgot Password Configuration -->
 	<property>
 		<name>forgot.password.enabled</name>
 		<value>@@Forgot-Password-Enabled@@</value>
 	</property>
+
+	<!-- Forgot Password Configuration -->
+	<property>
+		<name>forgot.password.enabled</name>
+		<value>@@Forgot-Password-Enabled@@</value>
+	</property>
+
 </properties>
