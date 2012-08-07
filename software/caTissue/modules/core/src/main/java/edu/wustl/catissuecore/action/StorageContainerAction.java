@@ -61,7 +61,7 @@ import edu.wustl.dao.exception.DAOException;
 /**
  * @author renuka_bajpai
  */
-public class StorageContainerAction extends CatissueBaseAction
+public class StorageContainerAction extends SecureAction
 {
 
 	/**
@@ -83,9 +83,21 @@ public class StorageContainerAction extends CatissueBaseAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		if(!"true".equals(request.getParameter("ajaxRequest")))
+		{
+			if ( isTokenValid(request) ) 
+			{
+				resetToken(request);
+				saveToken(request);
+			}
+			else
+			{
+				saveToken(request);
+			}
+		}
 		final SessionDataBean sessionDataBean = this.getSessionData(request);
 		final DAO dao = AppUtility.openDAOSession(sessionDataBean);
 		try
@@ -794,5 +806,7 @@ public class StorageContainerAction extends CatissueBaseAction
 		storageContainerForm.setIsFull(storageContainerBean.getIsFull());
 		// 12064 E
 	}
+
+	
 
 }

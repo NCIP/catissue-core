@@ -301,7 +301,7 @@
 					   }
 				    }
 			}
-			request.open("POST","StorageContainer.do",true);
+			request.open("POST","StorageContainer.do?ajaxRequest=true",true);
             request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
             request.send(data);
 		}
