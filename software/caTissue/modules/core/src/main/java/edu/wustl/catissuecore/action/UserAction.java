@@ -153,7 +153,7 @@ public class UserAction extends SecureAction
 			msrUtil.setResponse(response, list);
 			return mapping.findForward(null);
 		}
-		
+		saveToken(request);
 		// Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
 		String pageOf = request.getParameter(Constants.PAGE_OF);

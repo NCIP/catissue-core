@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.util.SSOcaTissueCommonLoginUtility;
 import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.XSSSupportedAction;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.domain.LoginCredentials;
@@ -64,6 +65,8 @@ public class LoginAction extends XSSSupportedAction
     public ActionForward executeXSS(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response)
     {
+    	String referer=request.getHeader("referer");
+    	boolean invalidRequest=false;
         String forwardTo = Constants.FAILURE;
         CommonLoginInfoUtility infoUtility = new CommonLoginInfoUtility();
         if (form == null)
@@ -77,6 +80,13 @@ public class LoginAction extends XSSSupportedAction
             {
                 cleanSession(request);
                 LoginAction.LOGGER.info("Inside Login Action, Just before validation");
+                String logInURL=CommonServiceLocator.getInstance().getAppURL()+"/Login.do";
+                String logOutURL=CommonServiceLocator.getInstance().getAppURL()+"/Logout.do";
+                if(!logOutURL.equals(referer) && !logInURL.equals(referer))
+                {
+                	invalidRequest=true;
+                	throw new Exception();
+                }
 
                 if (isRequestFromClinportal(request))
                 {
@@ -111,7 +121,9 @@ public class LoginAction extends XSSSupportedAction
                     {LoginAction.LOGGER.error("Exception while auditing: " + e.getMessage(), e);}
                 LoginAction.LOGGER.error("Exception: " + ex.getMessage(), ex);
                 cleanSession(request);
-                if(Validator.isEmpty(message))
+                if(invalidRequest)
+                	handleError(request, "errors.invalid","Request");
+                else if(Validator.isEmpty(message))
                 	handleError(request, "errors.invalid","username or password");
                 else
                 	handleError(request, "error.account.locked","");
