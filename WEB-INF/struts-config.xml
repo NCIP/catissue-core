@@ -5862,16 +5862,12 @@ PUBLIC
 			<forward name="failure" path="/pages/blank.jsp" />
 		</action>
 		<!--  bulk empi operations ends -->
-<<<<<<< .working
 		<action path="/GetTreeGridChildAction" type="edu.wustl.common.tags.action.GetTreeGridChildAction"
 			 scope="request" validate="false">
 		</action>
 		<action path="/TagItemDeleteAction" type="edu.wustl.common.tags.action.TagItemDeleteAction"
 			 scope="request" validate="false">
 		</action>
-=======
-
->>>>>>> .merge-right.r29305
 		
 		<action path="/AssignTagAction" type="edu.wustl.common.tags.action.AssignTagAction"
 			 scope="request" validate="false">
