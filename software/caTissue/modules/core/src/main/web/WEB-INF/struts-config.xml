@@ -375,7 +375,7 @@ PUBLIC
 		</action>
 
 		<action path="/specToDistribute"
-			type="edu.wustl.common.action.CommonAddEditAction"
+			type="edu.wustl.catissuecore.action.CatissueAddEditAction"
 			name="OrderSpecimenForm"
 			validate="false"
 			scope="request">
