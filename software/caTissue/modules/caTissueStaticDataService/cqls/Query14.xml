@@ -1,0 +1,19 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dat="http://org.cagrid.dataservice/DataService" xmlns:org="http://CQL.caBIG/2/org.cagrid.cql2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dat:ExecuteQueryRequest>
+         <dat:query>
+            <org:CQLQuery>
+               <org:CQLTargetObject className="edu.wustl.catissuecore.domain.MolecularSpecimen">
+                  <org:CQLAttribute name="id">
+                     <org:BinaryPredicate>EQUAL_TO</org:BinaryPredicate>
+                     <org:AttributeValue>
+                        <org:LongValue>117</org:LongValue>
+                     </org:AttributeValue>
+                  </org:CQLAttribute>
+               </org:CQLTargetObject>
+            </org:CQLQuery>
+         </dat:query>
+      </dat:ExecuteQueryRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

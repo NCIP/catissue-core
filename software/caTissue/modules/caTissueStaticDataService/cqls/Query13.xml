@@ -1,0 +1,19 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dat="http://org.cagrid.dataservice/DataService" xmlns:org="http://CQL.caBIG/2/org.cagrid.cql2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dat:ExecuteQueryRequest>
+         <dat:query>
+            <cql2:CQLQuery xmlns:cql2="http://CQL.caBIG/2/org.cagrid.cql2">
+               <cql2:CQLTargetObject className="edu.wustl.catissuecore.domain.CollectionProtocol">
+                  <cql2:CQLAttribute name="id">
+                     <cql2:BinaryPredicate>EQUAL_TO</cql2:BinaryPredicate>
+                     <cql2:AttributeValue>
+                        <cql2:LongValue>1</cql2:LongValue>
+                     </cql2:AttributeValue>
+                  </cql2:CQLAttribute>
+               </cql2:CQLTargetObject>
+            </cql2:CQLQuery>
+         </dat:query>
+      </dat:ExecuteQueryRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
