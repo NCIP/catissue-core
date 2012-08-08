@@ -136,14 +136,9 @@
 		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQLAssociation.hbm.xml" />
 		<mapping resource="edu/wustl/labelSQLApp/hbm/LabelSQL_HQL.hbm.xml" />
 
-	<!-- 	<mapping resource="edu/wustl/common/queryFolder/hbm/Tag.hbm.xml" />
-		<mapping resource="edu/wustl/common/queryFolder/hbm/AssignTag.hbm.xml" /> -->
 			<mapping resource="QueryTag.hbm.xml" />
 		<mapping resource="QueryTagItem.hbm.xml" />
 		
-
-		<mapping resource="edu/wustl/common/queryFolder/hbm/Tag.hbm.xml"/>
-		<mapping resource="edu/wustl/common/queryFolder/hbm/AssignTag.hbm.xml"/> 
 
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenListTagItem.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenListTag.hbm.xml"/>
