@@ -86,7 +86,8 @@ public class LoginAction extends XSSSupportedAction
         		}
                 String logInURL=CommonServiceLocator.getInstance().getAppURL()+"/Login.do";
                 String logOutURL=CommonServiceLocator.getInstance().getAppURL()+"/Logout.do";
-                if(!logOutURL.equals(referer) && !logInURL.equals(referer))
+                String reDirectHomeURL=CommonServiceLocator.getInstance().getAppURL()+"/RedirectHome.do";
+                if(!logOutURL.equals(referer) && !logInURL.equals(referer) && !reDirectHomeURL.equals(referer))
                 {
                 	invalidRequest=true;
                 	throw new Exception();
