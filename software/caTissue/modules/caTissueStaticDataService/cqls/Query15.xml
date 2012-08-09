@@ -1,8 +1,3 @@
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dat="http://org.cagrid.dataservice/DataService" xmlns:org="http://CQL.caBIG/2/org.cagrid.cql2">
-   <soapenv:Header/>
-   <soapenv:Body>
-      <dat:ExecuteQueryRequest>
-         <dat:query>
             <cql2:CQLQuery xmlns:cql2="http://CQL.caBIG/2/org.cagrid.cql2">
                <cql2:CQLTargetObject className="edu.wustl.catissuecore.domain.Participant">
                   <cql2:CQLAttribute name="id">
@@ -13,7 +8,3 @@
                   </cql2:CQLAttribute>
                </cql2:CQLTargetObject>
             </cql2:CQLQuery>
-         </dat:query>
-      </dat:ExecuteQueryRequest>
-   </soapenv:Body>
-</soapenv:Envelope>
