@@ -80,6 +80,10 @@ public class LoginAction extends XSSSupportedAction
             {
                 cleanSession(request);
                 LoginAction.LOGGER.info("Inside Login Action, Just before validation");
+                if(request.getRequestURL()!=null)
+        		{
+        			CommonServiceLocator.getInstance().setAppURL(request.getRequestURL().toString());
+        		}
                 String logInURL=CommonServiceLocator.getInstance().getAppURL()+"/Login.do";
                 String logOutURL=CommonServiceLocator.getInstance().getAppURL()+"/Logout.do";
                 if(!logOutURL.equals(referer) && !logInURL.equals(referer))
