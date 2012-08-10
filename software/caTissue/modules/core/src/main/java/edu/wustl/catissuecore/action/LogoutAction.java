@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -56,17 +58,30 @@ public class LogoutAction extends BaseAction
     public ActionForward executeAction(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) throws Exception
     {
+    	String invalidRequest=(String)request.getParameter("invalidRequest");
+    	if(invalidRequest!=null && "true".equals(invalidRequest))
+    	{
+    		final ActionErrors errors = new ActionErrors();
+    		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid","Request"));
+    		// Report any errors we have discovered
+    		if (!errors.isEmpty())
+    		{
+    			saveErrors(request, errors);
+    		}
+    	}
         final HttpSession session = request.getSession();
 
         // Delete Advance Query table if exists
         final SessionDataBean sessionData = getSessionData(request);
-        // Advance Query table name with userID attached
-        final String tempTableName = Constants.QUERY_RESULTS_TABLE + "_" + sessionData.getUserId();
+        if(sessionData!=null)
+        {
+        	// Advance Query table name with userID attached
+        	final String tempTableName = Constants.QUERY_RESULTS_TABLE + "_" + sessionData.getUserId();
 
-        final JDBCDAO jdbcDao = AppUtility.openJDBCSession();
-        jdbcDao.deleteTable(tempTableName);
-        AppUtility.closeJDBCSession(jdbcDao);
-
+        	final JDBCDAO jdbcDao = AppUtility.openJDBCSession();
+        	jdbcDao.deleteTable(tempTableName);
+        	AppUtility.closeJDBCSession(jdbcDao);
+        }
         session.invalidate();
         // Redirect to SSO logout page
         String ssoRedirectURL = null;

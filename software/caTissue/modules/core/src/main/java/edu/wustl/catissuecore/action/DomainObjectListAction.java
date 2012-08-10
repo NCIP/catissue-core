@@ -43,7 +43,7 @@ import edu.wustl.common.util.XMLPropertyHandler;
  *
  * @author gautam_shetty
  */
-public class DomainObjectListAction extends SecureAction
+public class DomainObjectListAction extends CatissueBaseAction//SecureAction
 {
 
 	/**
@@ -62,7 +62,7 @@ public class DomainObjectListAction extends SecureAction
 	 * @return value for ActionForward object
 	 */
 	@Override
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction /*executeSecureAction*/(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		List list = null, showList = null;

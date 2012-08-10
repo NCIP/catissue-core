@@ -65,8 +65,6 @@ public class LoginAction extends XSSSupportedAction
     public ActionForward executeXSS(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response)
     {
-    	String referer=request.getHeader("referer");
-    	boolean invalidRequest=false;
         String forwardTo = Constants.FAILURE;
         CommonLoginInfoUtility infoUtility = new CommonLoginInfoUtility();
         if (form == null)
@@ -80,21 +78,6 @@ public class LoginAction extends XSSSupportedAction
             {
                 cleanSession(request);
                 LoginAction.LOGGER.info("Inside Login Action, Just before validation");
-                if(request.getRequestURL()!=null)
-        		{
-        			CommonServiceLocator.getInstance().setAppURL(request.getRequestURL().toString());
-        		}
-                String logInURL=CommonServiceLocator.getInstance().getAppURL()+"/Login.do";
-                String logOutURL=CommonServiceLocator.getInstance().getAppURL()+"/Logout.do";
-                String reDirectHomeURL=CommonServiceLocator.getInstance().getAppURL()+"/RedirectHome.do";
-                if(!logOutURL.equals(referer) && !logInURL.equals(referer) && !reDirectHomeURL.equals(referer))
-                {
-                	invalidRequest=true;
-                	System.out.println("BO test case failing here"+reDirectHomeURL);
-                	System.out.println("BO test case failing here"+referer);
-                	throw new Exception();
-                }
-
                 if (isRequestFromClinportal(request))
                 {
                     forwardTo = Constants.SUCCESS;
@@ -128,9 +111,7 @@ public class LoginAction extends XSSSupportedAction
                     {LoginAction.LOGGER.error("Exception while auditing: " + e.getMessage(), e);}
                 LoginAction.LOGGER.error("Exception: " + ex.getMessage(), ex);
                 cleanSession(request);
-                if(invalidRequest)
-                	handleError(request, "errors.invalid","Request");
-                else if(Validator.isEmpty(message))
+                if(Validator.isEmpty(message))
                 	handleError(request, "errors.invalid","username or password");
                 else
                 	handleError(request, "error.account.locked","");
