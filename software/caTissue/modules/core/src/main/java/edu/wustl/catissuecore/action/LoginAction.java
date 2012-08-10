@@ -90,6 +90,8 @@ public class LoginAction extends XSSSupportedAction
                 if(!logOutURL.equals(referer) && !logInURL.equals(referer) && !reDirectHomeURL.equals(referer))
                 {
                 	invalidRequest=true;
+                	System.out.println("BO test case failing here"+reDirectHomeURL);
+                	System.out.println("BO test case failing here"+referer);
                 	throw new Exception();
                 }
 
