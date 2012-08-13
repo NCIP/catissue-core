@@ -2,11 +2,19 @@ var request,url;var pageDisplayed=1;function gotoCreateArrayPage(arrayRowCounter
 function submitPage()
 {
 setGridValuesToForm();
+
+var action = document.forms[0].action;
+action = action+"&arrTabId="+arrTabId;
+document.forms[0].action=action;
 document.forms[0].submit()
 }
 
 function submitAdvPage()
 {
+
+var action = document.forms[0].action;
+action = action+"&arrTabId="+arrTabId;
+document.forms[0].action=action;
 document.forms[0].submit()
 }
 

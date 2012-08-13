@@ -58,6 +58,7 @@ String form_action = "SubmitAdvRequestDetails.do?submittedFor=ForwardTo&noOfReco
 <script language="javascript">
 var newWindow;
 var selectedTab = '${requestScope.selectedTab}';
+var arrTabId='';
 function changeCreateButtonStatus(noOfItems,arrayRowCounter,assignStatusArraycount)
 {
 	var buttonCreateArrayId = "buttonCreateArrayId"+arrayRowCounter;
@@ -202,6 +203,9 @@ function showNewPage(action)
 function submitAndNotify()
 {
 	document.getElementById("mailNotification").value= "true";
+	var action = document.forms[0].action;
+	action = action+"&arrTabId="+arrTabId;
+	document.forms[0].action=action;
 	document.forms[0].submit();
 }
 
@@ -1186,11 +1190,12 @@ tabbar = new dhtmlXTabBar("tabbar_div", "top");
 	tabbar.setContent("ArrayRequestTab","ArrayRequestDiv");
 	
 	//alert('${requestScope.selectedTab}');
-	tabbar.setTabActive('${requestScope.selectedTab}');
+	tabbar.setTabActive('${requestScope.arrTabId}');
 	var answer;
 	tabbar.attachEvent("onSelect", function(id,last_id) {
 	if(id == 'AdvancedViewTab' && (selectedTab =='SimpleViewTab' || last_id == 'SimpleViewTab'))
 	{
+	arrTabId = id;
 		answer= confirm("By clicking on this tab you will lose all the changes you have made, click ok to continue");
 		if(answer)
 		{//alert('<bean:write name="requestDetailsForm" property="id" scope="request"/>');
@@ -1204,6 +1209,7 @@ tabbar = new dhtmlXTabBar("tabbar_div", "top");
 	}
 	else if(id == 'SimpleViewTab' && (selectedTab =='AdvancedViewTab' || last_id == 'AdvancedViewTab'))
 	{
+	arrTabId = id;
 		answer= confirm("By clicking on this tab you will lose all the changes you have made, click ok to continue");
 		if(answer)
 		{//alert('<bean:write name="requestDetailsForm" property="id" scope="request"/>');
@@ -1215,6 +1221,7 @@ tabbar = new dhtmlXTabBar("tabbar_div", "top");
 			return false;
 		}
 	}
+	arrTabId = id;
     return true;
 });
 }

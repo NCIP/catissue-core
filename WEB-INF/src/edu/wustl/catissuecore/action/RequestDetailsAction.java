@@ -133,11 +133,15 @@ public class RequestDetailsAction extends BaseAction
 			return null;
 		}
 		String selectedTab = request.getParameter("selectedTab");
+		String arrTabId = request.getParameter("arrTabId"); 
 		if(Validator.isEmpty(selectedTab))
 		{
-			selectedTab = "SimpleViewTab";
+			selectedTab = "SimpleViewTab"; 
 		}
+		if(Validator.isEmpty(arrTabId))
+			arrTabId=selectedTab;
 		request.setAttribute("selectedTab", selectedTab);
+		request.setAttribute("arrTabId", arrTabId);
 		final RequestDetailsForm requestDetailsForm = (RequestDetailsForm) form;
 		// The request Id on which the user has clicked
 		String requestId = "";

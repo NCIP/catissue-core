@@ -346,12 +346,12 @@ public class RequestDetailsForm extends AbstractActionForm
 			String selectedSpecimenQuantityUnit = "";
 			String selectedSpecimenQuantity = "";
 
-//			if (((orderItem instanceof ExistingSpecimenOrderItem)
-//					|| (orderItem instanceof DerivedSpecimenOrderItem) || (orderItem instanceof PathologicalCaseOrderItem)))
-//			{
-//				final SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) orderItem;
-//				if (specimenOrderItem.getNewSpecimenArrayOrderItem() == null)
-//				{
+			if (((orderItem instanceof ExistingSpecimenOrderItem)
+					|| (orderItem instanceof DerivedSpecimenOrderItem) || (orderItem instanceof PathologicalCaseOrderItem)))
+			{
+				final SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem) orderItem;
+				if (specimenOrderItem.getNewSpecimenArrayOrderItem() == null)
+				{
 					assignStatus = "RequestDetailsBean:" + requestDetailsBeanCounter
 							+ "_assignedStatus";
 					description = "RequestDetailsBean:" + requestDetailsBeanCounter
@@ -407,25 +407,25 @@ public class RequestDetailsForm extends AbstractActionForm
 							selectedSpecimenTypeKey, selectedSpecimenQuantityUnit,
 							selectedSpecimenQuantity);
 					requestDetailsBeanCounter++;
-//				}
-//				else
-//				{
-//
-//					List defineArrayContentsList = null;
-//					if (definedArrayMap.get(specimenOrderItem.getNewSpecimenArrayOrderItem()) == null)
-//					{
-//						defineArrayContentsList = new ArrayList();
-//					}
-//					else
-//					{
-//						defineArrayContentsList = (List) definedArrayMap.get(specimenOrderItem
-//								.getNewSpecimenArrayOrderItem());
-//					}
-//					defineArrayContentsList.add(specimenOrderItem);
-//					definedArrayMap.put(specimenOrderItem.getNewSpecimenArrayOrderItem(),
-//							defineArrayContentsList);
-//				}
-//			}
+				}
+				else
+				{
+
+					List defineArrayContentsList = null;
+					if (definedArrayMap.get(specimenOrderItem.getNewSpecimenArrayOrderItem()) == null)
+					{
+						defineArrayContentsList = new ArrayList();
+					}
+					else
+					{
+						defineArrayContentsList = (List) definedArrayMap.get(specimenOrderItem
+								.getNewSpecimenArrayOrderItem());
+					}
+					defineArrayContentsList.add(specimenOrderItem);
+					definedArrayMap.put(specimenOrderItem.getNewSpecimenArrayOrderItem(),
+							defineArrayContentsList);
+				}
+			}
 			if (orderItem instanceof ExistingSpecimenArrayOrderItem)
 			{
 				assignStatus = "ExistingArrayDetailsBean:" + existingArrayBeanCounter
