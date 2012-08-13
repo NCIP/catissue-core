@@ -6,6 +6,8 @@
 			 roleName="actionApplicationCollection" parentRoleName="specimen">
 				<attribute name="comments" csvColumnName="Event Comments" />
 				<attribute name="reasonDeviation" csvColumnName="Reason Deviation" />
+								<attribute name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)"   />
+
 				<referenceAssociation
 								className="edu.wustl.catissuecore.domain.User"
 								roleName="performedBy" parentRoleName="applicationCollection">
