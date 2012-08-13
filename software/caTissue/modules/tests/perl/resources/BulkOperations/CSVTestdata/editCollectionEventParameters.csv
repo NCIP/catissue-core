@@ -1,2 +1,2 @@
-Specimen label ,User Login Name,Date (MM-DD-YYYY HH:MM),Comments,collection Procedure,container,id
-2,admin@admin.com,02/01/2010,,Lavage,CPT,110
+Label,Activity Status,Event Comments#1,Reason Deviation#1,Date (MM-DD-YYYY HH:MM)#1,User ID#1,Activity Entry#1,Collection Procedure#1#1,Container#1#1
+1342_1,Active,Test,Test,8/8/2012 10:10,1,Active,Indwelling Catheter,ACD Vacutainer

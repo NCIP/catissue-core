@@ -1,2 +1,2 @@
-Specimen label,User Id,Date (MM-DD-YYYY HH:MM),Comments,id,Gravity,Duration Min
-SP_1,1,02/01/2010,Spun Event test comment,2402,98,4
+Label,Activity Status,Event Comments#1,Reason Deviation#1,Date (MM-DD-YYYY HH:MM)#1,User ID#1,Activity Entry#1,Duration In Minutes#1#1,Gravity Force#1#1
+1342_1,Active,Test,Test,8/8/2012,1,Active,10,10
