@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata templateName="CreateChildContainer" batchSize="5">
+<BulkOperationMetadata templateName="ChildContainerSpecimenTypeRestriction" batchSize="5">
 	<BulkOperationClass className="edu.wustl.catissuecore.domain.StorageContainer"       >
 
 		<referenceAssociation className="edu.wustl.catissuecore.domain.StorageType"       roleName="storageType">
@@ -34,7 +34,7 @@
 		<attribute name="name" csvColumnName="container name"   />
 		<!--<attribute name="noOfContainers" csvColumnName="No Of Containers"   />-->
 
-		<containmentAssociation className="java.lang.String"	  maxNoOfRecords="2"   cardinality="*" roleName="holdsSpecimenClassCollection">
+		<containmentAssociation className="java.lang.String"						  maxNoOfRecords="2"   cardinality="*" roleName="holdsSpecimenClassCollection">
 				
 			<attribute name="holdsSpecimenClassCollection" csvColumnName="holdsSpecimenClass"    />
 
@@ -44,7 +44,6 @@
 			<attribute name="holdsSpecimenTypeCollection" csvColumnName="holdsSpecimenType"    />
 
 		</containmentAssociation>
-
 		<containmentAssociation className="edu.wustl.catissuecore.domain.StorageType"   maxNoOfRecords="2"  
 		 cardinality="*" roleName="holdsStorageTypeCollection">
 
