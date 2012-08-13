@@ -42,7 +42,7 @@ import edu.wustl.common.util.global.CommonUtilities;
 /**
  * @author renuka_bajpai
  */
-public class SubCollectionProtocolRegistrationAction extends SecureAction
+public class SubCollectionProtocolRegistrationAction extends CatissueBaseAction
 {
 
 	/**
@@ -60,7 +60,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 
