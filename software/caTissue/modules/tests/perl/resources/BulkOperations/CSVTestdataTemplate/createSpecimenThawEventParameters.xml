@@ -32,6 +32,7 @@
 			 roleName="actionApplicationCollection" parentRoleName="specimen">
 				<attribute name="comments" csvColumnName="Event Comments" />
 				<attribute name="reasonDeviation" csvColumnName="Reason Deviation" />
+								<attribute name="timestamp" csvColumnName="Date (MM-DD-YYYY HH:MM)"   />
 				<referenceAssociation
 								className="edu.wustl.catissuecore.domain.User"
 								roleName="performedBy" parentRoleName="applicationCollection">
@@ -60,7 +61,7 @@
 			<discriminatorCollection name="Fluid" value="edu.wustl.catissuecore.domain.FluidSpecimen"/>
 			<discriminatorCollection name="Molecular" value="edu.wustl.catissuecore.domain.MolecularSpecimen"/>
 			<discriminatorCollection name="Cell" value="edu.wustl.catissuecore.domain.CellSpecimen"/>
-			</attribute>
+	</attribute>
 		<attribute name="specimenType" csvColumnName="Type"   />
 		<attribute name="initialQuantity" csvColumnName="Initial Quantity"   />
 		<attribute name="availableQuantity" csvColumnName="Available Quantity"   />
