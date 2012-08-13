@@ -447,7 +447,7 @@ function loadSpecimenGrid()
 	mygrid.setSkin("light");
 	mygrid.enableAutoHeight(true);
 	mygrid.setColSorting(",str,str,str,str,str,str,str,str,str");
-	mygrid.setHeader(",Scg_Name,Label(Barcode),,Parent Label,Class(Type),,Quantity,Lineage,");
+	mygrid.setHeader(",Scg_Name,Label (Barcode),,Parent Label,Class (Type),,Quantity,Lineage,");
 	
 	mygrid.attachHeader(",,#connector_text_filter,,,#connector_text_filter,,,,");
 	mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,ro,ro");
@@ -502,7 +502,7 @@ function loadSpecimenGrid()
       </tr>
       
 	  <tr>
-        <td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;Specimen List &nbsp;</span></td>
+        <!--<td colspan="2" align="left" class="tr_bg_blue1"><span class="blue_ar_b"> &nbsp;Specimen List &nbsp;</span></td>-->
       </tr>
      
       <tr>
@@ -519,10 +519,9 @@ function loadSpecimenGrid()
 		</tr>
 		<!--  **************  Code for New Grid  *********************** -->	
 		<tr>
-			<td class="black_ar">
-				<label><b>Specimen List:<b></label>
-			</td>
-			<td>
+			<td class="black_ar" colspan="2">
+				<label><b>Select a list to view:<b></label>
+			
 				<select name="specimenLists" size="1" class="formFieldSizedNew" onChange="reloadGrid(this)" id="tagName">
 				<%
 					List<NameValueBean> labelList =  (List)request.getAttribute("dropDownList");
@@ -538,7 +537,7 @@ function loadSpecimenGrid()
 %>
 				</select>
 				
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="     Delete List      " />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="    Delete List     " />
 			</td>
 		</tr>
 		<tr>
@@ -546,9 +545,16 @@ function loadSpecimenGrid()
 			</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="left" class="black_ar">
+			<td colspan="2">
+			<table><tr>
+				<td align="left" class="black_ar" >
 					<input type='checkbox' name='checkAll1' id='checkAll1' property="" onClick='checkAll(this)'>
-				<bean:message key="buttons.checkAll" />
+					</td>
+					<td valign="middle" class="black_ar" align="left">
+				<span valign="middle"><bean:message key="buttons.checkAll" /></span>
+				</td>
+				</tr>
+				</table>
 				</td>
 			</tr>
 			<tr>

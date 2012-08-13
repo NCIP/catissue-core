@@ -88,7 +88,7 @@ public class GridSpecimenImpl extends AbstractGridImpl
 		if(!Validator.isEmpty(barcode))
 		{
 			if(!Validator.isEmpty(specimenLabel))
-			specimenNameString.append("(");
+			specimenNameString.append(" (");
 			specimenNameString.append(barcode);
 			specimenNameString.append(")");
 		}
@@ -101,7 +101,7 @@ public class GridSpecimenImpl extends AbstractGridImpl
 		classNameStr.append(specimenClass);
 		if(!Validator.isEmpty(specimenType))
 		{
-			classNameStr.append("(");
+			classNameStr.append(" (");
 			classNameStr.append(specimenType);
 			classNameStr.append(")");
 		}
