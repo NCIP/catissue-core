@@ -647,4 +647,8 @@
 		<name>invalid.login.attempts.allowed</name>
 		<value>@@invalid.login.attempts.allowed@@</value>
 	</property>
+	<property>
+		<name>load.balancer.url</name>
+		<value>@@load.balancer.url@@</value>
+	</property>
 </properties>
