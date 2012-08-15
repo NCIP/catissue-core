@@ -763,6 +763,7 @@
 			<replacefilter token="@@empiDBSchema@@" value="${empi.database.schema}" />
 		<!-- END -->
 			<replacefilter token="@@invalid.login.attempts.allowed@@" value="${invalid.login.attempts.allowed}" />
+			<replacefilter token="@@load.balancer.url@@" value="${load.balancer.url}" />
 		
 
 		</replace>
