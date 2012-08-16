@@ -362,15 +362,15 @@ public class RequestDetailsForm extends AbstractActionForm
 					orderItemId = "RequestDetailsBean:" + requestDetailsBeanCounter
 							+ "_orderItemId";
 //
-//					requestedItem = "RequestDetailsBean:" + requestDetailsBeanCounter
-//							+ "_requestedItem";
-//					availableQty = "RequestDetailsBean:" + requestDetailsBeanCounter
-//							+ "_availableQty";
+					requestedItem = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_requestedItem";
+					availableQty = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_availableQty";
 //					specimenClass = "RequestDetailsBean:" + requestDetailsBeanCounter
 //							+ "_className";
 //					specimenType = "RequestDetailsBean:" + requestDetailsBeanCounter + "_type";
 //
-//					requestFor = "RequestDetailsBean:" + requestDetailsBeanCounter + "_requestFor";
+					requestFor = "RequestDetailsBean:" + requestDetailsBeanCounter + "_requestFor";
 //					specimenId = "RequestDetailsBean:" + requestDetailsBeanCounter + "_specimenId";
 					consentVerificationkey = "RequestDetailsBean:" + requestDetailsBeanCounter
 							+ "_consentVerificationkey";
@@ -381,17 +381,17 @@ public class RequestDetailsForm extends AbstractActionForm
 //							+ "_rowStatuskey";
 //
 					assignQty = "RequestDetailsBean:" + requestDetailsBeanCounter + "_assignedQty";
-//					instanceOf = "RequestDetailsBean:" + requestDetailsBeanCounter + "_instanceOf";
+					instanceOf = "RequestDetailsBean:" + requestDetailsBeanCounter + "_instanceOf"; 
 					distributedItemId = "RequestDetailsBean:" + requestDetailsBeanCounter
-							+ "_distributedItemId";
+							+ "_distributedItemId"; 
 //					specimenCollGrpId = "RequestDetailsBean:" + requestDetailsBeanCounter
 //							+ "_specimenCollGroupId";
 					specimenList = "RequestForDropDownList:" + requestDetailsBeanCounter;
 //
-//					actualSpecimenClass = "RequestDetailsBean:" + requestDetailsBeanCounter
-//							+ "_actualSpecimenClass";
-//					actualSpecimenType = "RequestDetailsBean:" + requestDetailsBeanCounter
-//							+ "_actualSpecimenType";
+					actualSpecimenClass = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_actualSpecimenClass";
+					actualSpecimenType = "RequestDetailsBean:" + requestDetailsBeanCounter
+							+ "_actualSpecimenType";
 //					selectedSpecimenTypeKey = "RequestDetailsBean:" + requestDetailsBeanCounter
 //							+ "_selectedSpecimenType";
 //					selectedSpecimenQuantityUnit = "RequestDetailsBean:"
@@ -850,8 +850,9 @@ public class RequestDetailsForm extends AbstractActionForm
 			}
 			else
 			{
-				this.values.put(requestFor, "#");
+//				this.values.put(requestFor, "#");
 			}
+			this.values.put(requestFor, derivedSpecimenOrderItem.getParentSpecimen().getId());
 
 			if (derivedSpecimenOrderItem.getStatus().equals(
 					Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
