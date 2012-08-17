@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -27,6 +28,7 @@ import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Race;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenObjectFactory;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
@@ -560,6 +562,28 @@ public class BaseTestCaseUtility {
 			CancerResearchGroup cancerResearchGroup) {
 		cancerResearchGroup.setName("crgName"
 				+ UniqueKeyGeneratorUtil.getUniqueKey());
+	}
+	
+	public static SpecimenArrayType initSpecimenSpecimenArrayType()
+	{
+		SpecimenArrayType specimenArrayType = new SpecimenArrayType();
+		specimenArrayType.setName("sat" + UniqueKeyGeneratorUtil.getUniqueKey());
+		specimenArrayType.setSpecimenClass("Tissue");
+
+		Collection specimenTypeCollection = new HashSet();
+		specimenTypeCollection.add("Frozen Tissue Block");
+		specimenTypeCollection.add("Fixed Tissue");
+		specimenTypeCollection.add("Fixed Tissue Block");
+		specimenTypeCollection.add("Fixed Tissue Slide");
+		specimenTypeCollection.add("Fresh Tissue");
+		specimenArrayType.setSpecimenTypeCollection(specimenTypeCollection);
+
+		specimenArrayType.setComment("");
+		Capacity capacity = new Capacity();
+		capacity.setOneDimensionCapacity(new Integer(4));
+		capacity.setTwoDimensionCapacity(new Integer(4));
+		specimenArrayType.setCapacity(capacity);
+		return specimenArrayType;
 	}
 
 }

@@ -1,5 +1,8 @@
 package edu.wustl.catissuecore.api.testcases;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -8,8 +11,12 @@ import org.hibernate.criterion.Property;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 
 public class ScientistAsNonPIorPCTestCases extends AbstractCaCoreApiTestCasesWithRegularAuthentication {
@@ -111,4 +118,114 @@ public class ScientistAsNonPIorPCTestCases extends AbstractCaCoreApiTestCasesWit
 							+ ppi + " having masked PHI data.", true);
 		}
 	}
+	
+	public void testParticipantWithScientistLogin() throws ApplicationException {
+		Participant participant = new Participant();
+		participant.setFirstName("John");
+
+		List<Participant> result = null;
+		try {
+			log.info("searching domain object");
+			result = searchByExample(Participant.class, participant);
+			log.info("result  "+result);
+			if(result!=null && result.size()>0)
+			{
+				log.info("Scientist able to search participant by name");
+				throw new ApplicationException();
+			}
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			assertFalse("Scientist able to search participants", true);
+		}
+		
+	}
+	
+	public void testParticipantScientistLoginForGivenPMI() throws ApplicationException {
+		Participant participant = new Participant();
+		ParticipantMedicalIdentifier pmi=new ParticipantMedicalIdentifier();
+		pmi.setMedicalRecordNumber("123");
+		
+		Site site=new Site();
+		site.setName("In Transit");
+		pmi.setSite(site);
+		Collection<ParticipantMedicalIdentifier> pmiCollection =new HashSet<ParticipantMedicalIdentifier>();
+		pmiCollection.add(pmi);
+		participant.setParticipantMedicalIdentifierCollection(pmiCollection);
+
+		List<Participant> result = null;
+		try {
+			log.info("searching domain object");
+			result = searchByExample(Participant.class, participant);
+			if(result!=null && result.size()>0)
+			{
+				log.info("Scientist able to search participant by given PMI");
+				throw new ApplicationException();
+			}
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			assertFalse("Scientist able to search participants", true);
+		}
+	}
+	
+	public void testSpecimenArrayContentWithScientistLogin()
+	{
+		try
+		{
+			SpecimenArrayContent sac = new SpecimenArrayContent();
+			sac.setId(new Long(1));
+			List sacCollection = searchByExample(SpecimenArrayContent.class,sac);
+			System.out.println("Total SpecimenArrayContent Count:"+sacCollection.size());
+			Iterator itr = sacCollection.iterator();
+			while(itr.hasNext())
+			{
+				SpecimenArrayContent spe = (SpecimenArrayContent)itr.next();
+				if(spe.getSpecimen().getCreatedOn()!=null)
+				{
+					fail("SpecimenArrayContent ->Specimen PHI data is visible to scientist");
+				}
+				System.out.println("SpecimenArrayContent->Specimen Created on :"+spe.getSpecimen().getCreatedOn());
+			}
+		}
+		 catch(Exception e)
+		 {
+			 System.out
+					.println("ScientistRoleTestCases.testSpecimenArrayContentWithScientistLogin()"+e.getMessage());
+			 e.printStackTrace();
+			 assertFalse("Test failed. to search SpecimenArrayContent", true);
+		 }
+	}
+	
+	/**
+	  * Search  CPR and check if PHI data is visible
+	  *
+	  */
+	  public void testSearchProtocolRegistrationWithScientistLogin()
+	  {
+		try
+		{
+			CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
+			cpr.setId(new Long(1));
+			List cprList = searchByExample(CollectionProtocolRegistration.class, cpr);
+			System.out.println("Size : "+cprList.size());
+			for(int i=0;i<cprList.size();i++)
+			{
+				CollectionProtocolRegistration returnedReg = (CollectionProtocolRegistration)cprList.get(i);
+				if(returnedReg.getRegistrationDate()!=null||returnedReg.getSignedConsentDocumentURL()!=null||
+						returnedReg.getConsentSignatureDate()!=null)
+				{
+					fail("CollectionProtocolRegistration PHI data is visible to scientist");
+				}
+				 System.out.println("CPR->RegistrationDate :"+ returnedReg.getRegistrationDate());
+			     System.out.println("CPR->ConsentSignatureDate :"+ returnedReg.getConsentSignatureDate());
+			     System.out.println("CPR->SignedConsentDocumentURL:"+ returnedReg.getSignedConsentDocumentURL());
+			}
+		 }
+		 catch(Exception e){
+			 System.out
+					.println("ScientistRoleTestCases.testSearchProtocolRegistrationWithScientistLogin() "+e.getMessage());
+		     Logger.out.error(e.getMessage(),e);
+			 e.printStackTrace();
+			 assertFalse("Test failed. to search SpecimenCollectionGroup", true);
+		 }
+	  }
 }

@@ -145,4 +145,24 @@ public class PropertiesLoader {
         return properties.getProperty("grid.password");
     }
 
+    public static String getCaseSensitiveBarcodeForContainer()
+	{
+		return properties.getProperty("caseSensitive.container.barcode");
+	}
+    
+	public static String getParentContainerName()
+	{
+		return properties.getProperty("parent.container.name");
+	}
+
+	public static Integer getPositionDimensionOneInParentContainer()
+	{
+		return Integer.valueOf(properties.getProperty("position.DimensionOne.in.parent.container"));
+	}
+	
+	public static Integer getPositionDimensionTwoInParentContainer()
+	{
+		return Integer.valueOf(properties.getProperty("position.DimensionTwo.in.parent.container"));
+	}
+
 }

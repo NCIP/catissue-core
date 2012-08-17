@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.api.testcases;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.Participant;
-
 import gov.nih.nci.system.applicationservice.ApplicationException;
 
 public class ScientistAsPITestCases extends AbstractCaCoreApiTestCasesWithRegularAuthentication {

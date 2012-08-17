@@ -1,9 +1,11 @@
 package edu.wustl.catissuecore.api.testcases;
 
-import edu.wustl.catissuecore.domain.*;
-
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 
 /**
  * @author Ion C. Olaru

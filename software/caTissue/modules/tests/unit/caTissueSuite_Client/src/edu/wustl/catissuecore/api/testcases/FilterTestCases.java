@@ -1,12 +1,12 @@
 package edu.wustl.catissuecore.api.testcases;
 
-import java.util.List;
-
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.hibernate.HQLCriteria;
+
+import java.util.List;
 
 public class FilterTestCases extends AbstractCaCoreApiTestCasesWithRegularAuthentication {
 

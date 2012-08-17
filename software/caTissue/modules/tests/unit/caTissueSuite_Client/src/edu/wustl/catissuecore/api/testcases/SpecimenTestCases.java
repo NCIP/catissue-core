@@ -1,6 +1,11 @@
 package edu.wustl.catissuecore.api.testcases;
 
-import edu.wustl.catissuecore.domain.*;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 
 import java.util.HashSet;

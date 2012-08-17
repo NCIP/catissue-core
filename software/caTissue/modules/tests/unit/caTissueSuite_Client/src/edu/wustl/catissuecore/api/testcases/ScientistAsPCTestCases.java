@@ -1,8 +1,8 @@
 package edu.wustl.catissuecore.api.testcases;
 
-import java.util.List;
-
 import gov.nih.nci.system.applicationservice.ApplicationException;
+
+import java.util.List;
 
 public class ScientistAsPCTestCases extends AbstractCaCoreApiTestCasesWithRegularAuthentication {
 

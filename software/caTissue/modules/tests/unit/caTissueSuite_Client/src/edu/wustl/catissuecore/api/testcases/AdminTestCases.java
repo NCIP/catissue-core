@@ -1,14 +1,21 @@
 package edu.wustl.catissuecore.api.testcases;
 
+import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenArray;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry;
 import edu.wustl.common.lookup.DefaultLookupResult;
+import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.query.SDKQuery;
 import gov.nih.nci.system.query.SDKQueryResult;
@@ -185,12 +192,33 @@ public class AdminTestCases extends AbstractCaCoreApiTestCasesWithRegularAuthent
 		}
 	}
 
-	public void testMatchingParticipant() {
+public void testMatchingParticipant() throws ApplicationException {
+		
+		Participant p1 = new Participant();
+		p1.setLastName("Micheal");
+		p1.setFirstName("Johnson");
+		p1.setActivityStatus("Active");
+		p1.setGender("Male Gender");
+		p1.setVitalStatus("Alive");
+		p1 = insert(p1);
+		
+		
 		Participant participant = new Participant();
-		participant.setFirstName(PropertiesLoader.getFirstNameForMatchingParticipant());
+		//participant.setFirstName(PropertiesLoader.getFirstNameForMatchingParticipant());
+		participant.setLastName("Micheal");
+		participant.setFirstName("Johnson");
+		participant.setActivityStatus("Active");
+		participant.setGender("Male Gender");
+		participant.setVitalStatus("Alive");
 
 		try {
 			List<Object> resultList = getApplicationService().getParticipantMatchingObects(participant);
+			log.info("list size :: "+resultList.size());
+			if(resultList!=null && resultList.isEmpty())
+			{
+				log.info("list is Empty");
+				throw new ApplicationException();
+			}
 
 			for (Object object : resultList) {
 				if (object instanceof Participant || object instanceof DefaultLookupResult) {
@@ -198,6 +226,12 @@ public class AdminTestCases extends AbstractCaCoreApiTestCasesWithRegularAuthent
 					if (object instanceof DefaultLookupResult) {
 						DefaultLookupResult d = (DefaultLookupResult) object;
 						result = (Participant) d.getObject();
+						log.info("Matching Participant Info :: ");
+						log.info("First Name   :: "+result.getFirstName());
+						log.info("Last Name    :: "+result.getLastName());
+						log.info("Vital Status :: "+result.getVitalStatus());
+						log.info("Gender       :: "+result.getGender());
+						
 					} else {
 						result = (Participant) object;
 					}
@@ -211,27 +245,6 @@ public class AdminTestCases extends AbstractCaCoreApiTestCasesWithRegularAuthent
 		} catch (Exception e) {
 			e.printStackTrace();
 			assertFalse("Failed to retrieve matching participants having first name value as " + PropertiesLoader.getFirstNameForMatchingParticipant(), true);
-		}
-	}
-
-	public void testSearchParticipantByExample() {
-		String gender = PropertiesLoader.getGenderForSearchParticipantByExample();
-		Participant participant = new Participant();
-		participant.setGender(gender);
-
-		List<Participant> result = null;
-		try {
-			result = searchByExample(Participant.class, participant);
-
-			for (Participant p : result) {
-				if (!gender.equals(p.getGender())) {
-					assertFalse("Failed to retrieve matching participants having gender value as " + PropertiesLoader.getGenderForSearchParticipantByExample(), true);
-					break;
-				}
-			}
-		} catch (ApplicationException e) {
-			e.printStackTrace();
-			assertFalse("Failed to retrieve matching participants having gender value as " + PropertiesLoader.getGenderForSearchParticipantByExample(), true);
 		}
 	}
 
@@ -306,4 +319,217 @@ public class AdminTestCases extends AbstractCaCoreApiTestCasesWithRegularAuthent
 
         System.out.println(">>> CP Inserted: " + cp.getId());
     }
+    
+    public void testSearchParticipantByExample() throws ApplicationException {
+    	String key = UniqueKeyGeneratorUtil.getUniqueKey();
+		Participant pat = new Participant();
+		pat.setLastName("Malkovich"+key);
+		pat.setFirstName("John"+key);
+		pat.setActivityStatus("Active");
+		pat.setGender("Male Gender");
+		pat = insert(pat);
+
+		String gender = PropertiesLoader.getGenderForSearchParticipantByExample();
+		Participant participant = new Participant();
+		participant.setGender(gender);
+
+		List<Participant> result = null;
+		try {
+			result = searchByExample(Participant.class, participant);
+			if(result!=null && result.size()<1)
+			{
+				throw new ApplicationException();
+			}
+			for (Participant p : result) {
+				if (!gender.equals(p.getGender())) {
+					assertFalse("Failed to retrieve matching participants having gender value as " + PropertiesLoader.getGenderForSearchParticipantByExample(), true);
+					break;
+				}
+			}
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			assertFalse("Failed to retrieve matching participants having gender value as " + PropertiesLoader.getGenderForSearchParticipantByExample(), true);
+		}
+	}
+    
+    public void testSearchStorageType() throws ApplicationException
+	{
+		StorageType storagetype = new StorageType();
+		storagetype.setDefaultTemperatureInCentigrade(-80.0);
+		storagetype.setName("Type"+UniqueKeyGeneratorUtil.getUniqueKey());
+		Capacity capacity=new Capacity();
+		capacity.setOneDimensionCapacity(10);
+		capacity.setTwoDimensionCapacity(10);
+		storagetype.setCapacity(capacity);
+		storagetype.setOneDimensionLabel("Rows");
+		storagetype.setTwoDimensionLabel("Columns");
+		storagetype=insert(storagetype);
+
+    	log.info(" searching domain object");
+    	StorageType type=new StorageType();
+    	type.setId(storagetype.getId());
+
+         try {
+        	 List resultList = searchByExample(StorageType.class,type);
+        		 StorageType storageType= (StorageType) resultList.get(0);
+        		 log.info(" Domain Object is successfully Found ---->  :: " + storageType.getName());
+          } 
+          catch (Exception e) {
+           	e.printStackTrace();
+           	assertFalse("Does not find Domain Object", true);
+
+          }
+	}
+    
+    public void testSearchStorageContainer() throws ApplicationException
+	{
+    	log.info(" searching domain object");
+    	StorageContainer container=new StorageContainer();
+    	container.setId(new Long(1));
+
+         try {
+        	 List resultList = searchByExample(StorageContainer.class,container);
+        	 StorageContainer containerFromResult= (StorageContainer) resultList.get(0);
+        		 log.info(" Domain Object is successfully Found ---->  :: " + containerFromResult.getName());
+          } 
+          catch (Exception e) {
+           	log.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Does not find Domain Object", true);
+
+          }
+	}
+    
+    public void testSearchStorageContainerWithCaseSensitiveBarcode() throws ApplicationException
+	{
+		StorageContainer st=new StorageContainer();
+
+		Capacity capacity=new Capacity();
+		capacity.setOneDimensionCapacity(10);
+		capacity.setTwoDimensionCapacity(10);
+		st.setCapacity(capacity);
+
+		StorageType sType=new StorageType();
+		sType.setId(new Long(3));
+		st.setStorageType(sType);
+
+		Site site=new Site();
+		site.setId(new Long(1));
+		st.setSite(site);
+
+		st.setActivityStatus("Active");
+		st.setFull(false);
+
+		st.setBarcode(PropertiesLoader.getCaseSensitiveBarcodeForContainer());
+		st=insert(st);
+
+
+		boolean found=false;
+    	log.info(" searching domain object");
+    	StorageContainer container=new StorageContainer();
+    	container.setBarcode(PropertiesLoader.getCaseSensitiveBarcodeForContainer());
+
+         try {
+        	 List resultList = searchByExample(StorageContainer.class,container);
+        	 for (int i = 0; i < resultList.size(); i++)
+			{
+        		 StorageContainer containerFromResult= (StorageContainer) resultList.get(i);
+        		 if(container.getBarcode().equals(containerFromResult.getBarcode()))
+        		 {
+        			 log.info(" Domain Object is successfully Found with given barcode ---->  :: " + containerFromResult.getBarcode());
+        			 found=true;
+        			 break;
+        		 }
+			}
+        	 if(!found)
+        	 {
+        		 throw new Exception("Storage Container not available with given barcode.");
+        	 }
+          } 
+          catch (Exception e) {
+           	log.error(e.getMessage(),e);
+           	e.printStackTrace();
+           	assertFalse("Does not find Domain Object", true);
+
+          }
+	}
+    
+    public void testSearchSpecimenArrayType() throws ApplicationException
+	{
+		SpecimenArrayType specimenArrayType=new SpecimenArrayType();
+		specimenArrayType=BaseTestCaseUtility.initSpecimenSpecimenArrayType();
+		specimenArrayType=insert(specimenArrayType);
+		log.info("Domain object successfully inserted "+specimenArrayType.getName());
+		
+		log.info(" searching domain object");
+		SpecimenArrayType specArrayType=new SpecimenArrayType();
+		specArrayType.setName(specimenArrayType.getName());
+
+		try {
+			List resultList = searchByExample(SpecimenArrayType.class,specArrayType);
+			SpecimenArrayType specArrayTypeFromResult= (SpecimenArrayType) resultList.get(0);
+			log.info(" Domain Object is successfully Found with given barcode ---->  :: " + specArrayTypeFromResult.getName());
+		} 
+		catch (Exception e) {
+			log.error(e.getMessage(),e);
+			e.printStackTrace();
+			assertFalse("Does not find Domain Object", true);
+
+		}
+	}
+    
+    /**
+	 * Search Container which is located at given position of parent container
+	 *
+	 */
+	public void testSearchStorageContainerLocatedAtPosition()
+	{
+			try
+			{
+				StorageContainer parentContainer=new StorageContainer();
+				parentContainer.setName(PropertiesLoader.getParentContainerName());
+				StorageContainer containerToFind = new StorageContainer();
+				containerToFind.setId(parentContainer.getId());
+
+				ContainerPosition conPosition = new ContainerPosition();
+				conPosition.setPositionDimensionOne(PropertiesLoader.getPositionDimensionOneInParentContainer());
+				conPosition.setPositionDimensionTwo(PropertiesLoader.getPositionDimensionTwoInParentContainer());
+				conPosition.setParentContainer(parentContainer);
+
+				List result = searchByExample(ContainerPosition.class, conPosition);
+				log.info(result);
+				if(result.size()>1||result.size()<1)
+				{
+					assertFalse("Could not find Storage Container Object", true);
+				}
+				assertTrue("Storage Container successfully found. Size:" +result.size(), true);
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e.getMessage(),e);
+				System.out
+						.println("StorageContainerTestCases.testSearchStorageContainerLocatedAtPosition()");
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+				assertFalse("Could not find Storage Container Object", true);
+			}
+	}
+	
+	public void testSearchSpecimenArray()
+	{
+		SpecimenArray specArray=new SpecimenArray();
+		specArray.setId(new Long(1));
+
+		try {
+			List resultList = searchByExample(SpecimenArray.class,specArray);
+			SpecimenArray specArrayFromResult= (SpecimenArray) resultList.get(0);
+			log.info(" Domain Object is successfully Found ---->  :: " + specArrayFromResult.getName());
+		} 
+		catch (Exception e) {
+			log.error(e.getMessage(),e);
+			e.printStackTrace();
+			assertFalse("Does not find Domain Object", true);
+
+		}
+	}
 }
