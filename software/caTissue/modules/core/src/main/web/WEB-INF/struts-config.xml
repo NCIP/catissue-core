@@ -571,7 +571,7 @@ PUBLIC
 
 
 	<action path="/InsertOrderItems"
-		type="edu.wustl.common.action.CommonAddEditAction"
+		type="edu.wustl.catissuecore.action.CatissueAddEditAction"
 		name="OrderSpecimenForm"
 		validate="false"
 		scope="request">
@@ -580,7 +580,7 @@ PUBLIC
 	</action>
 
 	<action path="/InsertOrderArrayItems"
-		type="edu.wustl.common.action.CommonAddEditAction"
+		type="edu.wustl.catissuecore.action.CatissueAddEditAction"
 		name="orderBiospecimenArrayForm"
 		validate="false"
 		scope="request">
