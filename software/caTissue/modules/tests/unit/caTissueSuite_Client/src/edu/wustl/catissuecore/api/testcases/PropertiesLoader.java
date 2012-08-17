@@ -144,6 +144,11 @@ public class PropertiesLoader {
     public static String getGridPassword() {
         return properties.getProperty("grid.password");
     }
+    
+    public static String getSCGID() {
+        return properties.getProperty("scg.id");
+    }
+    
 
     public static String getCaseSensitiveBarcodeForContainer()
 	{

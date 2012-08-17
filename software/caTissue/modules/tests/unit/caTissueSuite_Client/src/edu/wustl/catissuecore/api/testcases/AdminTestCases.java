@@ -1,8 +1,13 @@
 package edu.wustl.catissuecore.api.testcases;
 
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.ContainerPosition;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Participant;
@@ -12,8 +17,15 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.deintegration.ParticipantRecordEntry;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.ReportSection;
+import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationException;
@@ -28,6 +40,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Property;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -248,6 +264,27 @@ public void testMatchingParticipant() throws ApplicationException {
 		}
 	}
 
+	public void testSearchParticipantByExample() {
+		String gender = PropertiesLoader.getGenderForSearchParticipantByExample();
+		Participant participant = new Participant();
+		participant.setGender(gender);
+
+		List<Participant> result = null;
+		try {
+			result = searchByExample(Participant.class, participant);
+
+			for (Participant p : result) {
+				if (!gender.equals(p.getGender())) {
+					assertFalse("Failed to retrieve matching participants having gender value as " + PropertiesLoader.getGenderForSearchParticipantByExample(), true);
+					break;
+				}
+			}
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			assertFalse("Failed to retrieve matching participants having gender value as " + PropertiesLoader.getGenderForSearchParticipantByExample(), true);
+		}
+	}
+
 	private CollectionProtocol getCollectionProtocolByShortTitle(String shortTitle) throws ApplicationException {
 		CollectionProtocol cp = new CollectionProtocol();
 		cp.setShortTitle(shortTitle);
@@ -309,6 +346,7 @@ public void testMatchingParticipant() throws ApplicationException {
         cp.setTitle("CP Title - " + key);
         cp.setShortTitle("CP Short Title - " + key);
         cp.setStartDate(new Date());
+        cp.setConsentsWaived(true);
 
         User user = getUserByLoginName(PropertiesLoader.getAdminUsername());
 
@@ -320,37 +358,364 @@ public void testMatchingParticipant() throws ApplicationException {
         System.out.println(">>> CP Inserted: " + cp.getId());
     }
     
-    public void testSearchParticipantByExample() throws ApplicationException {
-    	String key = UniqueKeyGeneratorUtil.getUniqueKey();
-		Participant pat = new Participant();
-		pat.setLastName("Malkovich"+key);
-		pat.setFirstName("John"+key);
-		pat.setActivityStatus("Active");
-		pat.setGender("Male Gender");
-		pat = insert(pat);
-
-		String gender = PropertiesLoader.getGenderForSearchParticipantByExample();
-		Participant participant = new Participant();
-		participant.setGender(gender);
-
-		List<Participant> result = null;
-		try {
-			result = searchByExample(Participant.class, participant);
-			if(result!=null && result.size()<1)
-			{
-				throw new ApplicationException();
+    public void testSearchSpecimenWithBarcode()
+    {
+    	try{
+    		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+        	scg.setId(Long.valueOf(PropertiesLoader.getSCGID()));
+            scg = searchById(SpecimenCollectionGroup.class,scg);
+    	Specimen specimenObj = (Specimen) BaseTestCaseUtility.initTissueSpecimen();
+    	specimenObj.setSpecimenCollectionGroup(scg);
+    	specimenObj = insert(specimenObj);
+    	String barcode =  specimenObj.getBarcode();
+    	Specimen specimen = new Specimen();
+//    	String barcode = PropertiesLoader.getProperty("admin.specimen.barcode");
+    	specimen.setBarcode(barcode);
+    	
+    	List<Specimen> spList = searchByExample(Specimen.class, specimen);
+    	if(spList != null)
+    	{
+    		assertEquals(1, spList.size());
+    		for (Specimen specimen2 : spList) 
+    		{
+    			assertEquals(barcode, specimen2.getBarcode());
 			}
-			for (Participant p : result) {
-				if (!gender.equals(p.getGender())) {
-					assertFalse("Failed to retrieve matching participants having gender value as " + PropertiesLoader.getGenderForSearchParticipantByExample(), true);
+    		
+    	}
+    	else
+    		assertFalse(
+					"Failed to retrieve Specimens with barcode :"+ barcode,
+					true);
+    	} catch (ApplicationException e) {
+			e.printStackTrace();
+			assertFalse(
+					"Failed to retrieve Fuild Specimens for condition of id not null",
+					true);
+		}
+    	
+    	
+    }
+    
+    public void testSearchTissueSpecimen()
+    {
+    	DetachedCriteria criteria = DetachedCriteria.forClass(TissueSpecimen.class);
+		criteria.add(Property.forName("id").isNotNull());
+
+		List<Object> result = null;
+		try {
+			result = getApplicationService().query(criteria);
+
+			boolean failed = false;
+			for (Object o : result) {
+				if (!(o instanceof TissueSpecimen)) {
+					failed = true;
 					break;
 				}
 			}
+
+			if (failed || result.size() < 1) {
+				assertFalse(
+						"Failed to retrieve Fuild Specimens for condition of id not null",
+						true);
+			}
 		} catch (ApplicationException e) {
 			e.printStackTrace();
-			assertFalse("Failed to retrieve matching participants having gender value as " + PropertiesLoader.getGenderForSearchParticipantByExample(), true);
+			assertFalse(
+					"Failed to retrieve Fuild Specimens for condition of id not null",
+					true);
 		}
-	}
+    	
+    }
+    
+    public void testSearchSpecimen()
+    {
+    	try{
+    	SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+    	scg.setId(Long.valueOf(PropertiesLoader.getSCGID()));
+        scg = searchById(SpecimenCollectionGroup.class,scg);
+        System.out.println(scg);
+    	Specimen specimenObj = (Specimen) BaseTestCaseUtility.initTissueSpecimen();
+    	specimenObj.setSpecimenCollectionGroup(scg);
+    	specimenObj = insert(specimenObj);
+    	String label = specimenObj.getLabel();
+		
+    	DetachedCriteria criteria = DetachedCriteria.forClass(TissueSpecimen.class);
+		criteria.add(Property.forName("id").isNotNull());
+
+		List<Object> result = null;
+		
+			result = getApplicationService().query(criteria);
+
+			boolean failed = false;
+			for (Object o : result) {
+				System.out.println(o.getClass());
+				if (!(o instanceof TissueSpecimen)) {
+					failed = true;
+					break;
+				}
+			}
+
+			if (failed || result.size() < 1) {
+				assertFalse(
+						"Failed to retrieve Fuild Specimens for condition of id not null",
+						true);
+			}
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			assertFalse(
+					"Failed to retrieve Fuild Specimens for condition of id not null",
+					true);
+		}
+    	
+    }
+    
+    public void testSearchSpecimenCollectionGroup()
+    {
+    	try {
+        	SpecimenCollectionGroup scga = new SpecimenCollectionGroup();
+        	scga.setId(Long.valueOf(PropertiesLoader.getSCGID()));
+            scga = searchById(SpecimenCollectionGroup.class,scga);
+            System.out.println(scga);
+        
+    	SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+    	String scgName = scga.getName();
+    	scg.setName(scgName);
+    	
+    	List<SpecimenCollectionGroup> spList = searchByExample(SpecimenCollectionGroup.class, scg);
+    	if(spList != null)
+    	{
+    		assertEquals(1, spList.size());
+    		for (SpecimenCollectionGroup specimen2 : spList) 
+    		{
+    			assertEquals(scgName, specimen2.getName());
+			}
+    		
+    	}
+    	else
+    		assertFalse(
+					"Failed to retrieve SCG with name :"+scgName,
+					true);
+    	} catch (ApplicationException e) {
+			e.printStackTrace();
+			assertFalse(
+					"Failed to retrieve Fuild Specimens for condition of id not null",
+					true);
+		}
+    	
+    }
+    
+    public void testSearchScgWithBarcode()
+    {
+    	try {
+        	SpecimenCollectionGroup scga = new SpecimenCollectionGroup();
+        	scga.setId(Long.valueOf(PropertiesLoader.getSCGID()));
+            scga = searchById(SpecimenCollectionGroup.class,scga);
+            System.out.println(scga);
+
+    	SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+    	String barcode = scga.getBarcode();//PropertiesLoader.getProperty("admin.scg.barcode");
+    	scg.setBarcode(barcode);
+    	
+    	List<SpecimenCollectionGroup> spList = searchByExample(SpecimenCollectionGroup.class, scg);
+    	if(spList != null)
+    	{
+    		assertEquals(1, spList.size());
+    		for (SpecimenCollectionGroup specimen2 : spList) 
+    		{
+    			assertEquals(barcode, specimen2.getBarcode());
+			}
+    		
+    	}
+    	else
+    		assertFalse(
+					"Failed to retrieve SCG with barcode : "+barcode,
+					true);
+    	} catch (ApplicationException e) {
+			e.printStackTrace();
+			assertFalse(
+					"Failed to retrieve Fuild Specimens for condition of id not null",
+					true);
+		}
+    	
+    }
+    
+    public void testInsertSpecimen()
+    {
+    	try {
+        	SpecimenCollectionGroup scga = new SpecimenCollectionGroup();
+        	scga.setId(Long.valueOf(PropertiesLoader.getSCGID()));
+            scga = searchById(SpecimenCollectionGroup.class,scga);
+            System.out.println(scga);
+        	
+        Specimen fSp = (Specimen)BaseTestCaseUtility.initFluidSpecimen();
+        fSp.setSpecimenCollectionGroup(scga);
+        Specimen tSp = (Specimen)BaseTestCaseUtility.initTissueSpecimen();
+        tSp.setSpecimenCollectionGroup(scga);
+        Specimen cSp = (Specimen)BaseTestCaseUtility.initCellSpecimen();
+        cSp.setSpecimenCollectionGroup(scga);
+        Specimen mSp = (Specimen)BaseTestCaseUtility.initMolecularSpecimen();
+        mSp.setSpecimenCollectionGroup(scga);
+        insert(fSp);
+        insert(tSp);
+        insert(cSp);
+        insert(mSp);
+    	} catch (ApplicationException e) {
+			e.printStackTrace();
+			assertFalse(
+					"Failed to retrieve Fuild Specimens for condition of id not null",
+					true);
+		}
+    }
+    
+    public void testSearchInstitution() throws Exception {
+    	Institution institution = new Institution();
+    	institution.setId(1L);
+        SDKQuery sQuery = new SearchExampleQuery(institution);
+        SDKQueryResult result = applicationService.executeQuery(sQuery);
+        Collection c = result.getCollectionResult();
+        assertEquals(1, c.size());
+    }
+    public void testSearchDepartmet() throws Exception {
+    	Department department = new Department();
+    	department.setId(1L);
+        SDKQuery sQuery = new SearchExampleQuery(department);
+        SDKQueryResult result = applicationService.executeQuery(sQuery);
+        Collection c = result.getCollectionResult();
+        assertEquals(1, c.size());
+    }
+    public void testSearchCancerResearchGrp() throws Exception {
+    	CancerResearchGroup crg = new CancerResearchGroup();
+    	crg.setId(1L);
+        SDKQuery sQuery = new SearchExampleQuery(crg);
+        SDKQueryResult result = applicationService.executeQuery(sQuery);
+        Collection c = result.getCollectionResult();
+        assertEquals(1, c.size());
+    }
+    public void testSearchUser() throws Exception {
+    	User user = new User();
+    	user.setId(1L);
+        SDKQuery sQuery = new SearchExampleQuery(user);
+        SDKQueryResult result = applicationService.executeQuery(sQuery);
+        Collection c = result.getCollectionResult();
+        assertEquals(1, c.size());
+    }
+    public void testSearchSite() throws Exception {
+    	Site site = new Site();
+    	site.setId(1L);
+        SDKQuery sQuery = new SearchExampleQuery(site);
+        SDKQueryResult result = applicationService.executeQuery(sQuery);
+        Collection c = result.getCollectionResult();
+        assertEquals(1, c.size());
+    }
+    public void testSearchCollectionProtocol() throws Exception {
+    	CollectionProtocol collectionProtocol = new CollectionProtocol();
+    	collectionProtocol.setId(1L);
+        SDKQuery sQuery = new SearchExampleQuery(collectionProtocol);
+        SDKQueryResult result = applicationService.executeQuery(sQuery);
+        Collection c = result.getCollectionResult();
+        assertEquals(1, c.size());
+    }
+    public void testCollectionProtocolWithConsentWaived() throws Exception {
+    	CollectionProtocol collectionProtocol = new CollectionProtocol();
+    	collectionProtocol.setConsentsWaived(true);
+        SDKQuery sQuery = new SearchExampleQuery(collectionProtocol);
+        SDKQueryResult result = applicationService.executeQuery(sQuery);
+        Collection c = result.getCollectionResult();
+        assertEquals(1, c.size());
+    }
+    public void testSearchDistributionProtocol() throws Exception {
+    	DistributionProtocol distributionProtocol = new DistributionProtocol();
+    	distributionProtocol.setId(1L);
+        SDKQuery sQuery = new SearchExampleQuery(distributionProtocol);
+        SDKQueryResult result = applicationService.executeQuery(sQuery);
+        Collection c = result.getCollectionResult();
+        assertEquals(1, c.size());
+    }
+    
+    public void testSearchDeidentifiedSurgicalPathologyReport() throws Exception 
+    {
+        DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport=new DeidentifiedSurgicalPathologyReport();
+        
+        IdentifiedSurgicalPathologyReport spr = new IdentifiedSurgicalPathologyReport();
+        SDKQuery sQuery = new SearchExampleQuery(spr);
+        SDKQueryResult result = applicationService.executeQuery(sQuery);
+        Collection c = result.getCollectionResult();
+        
+        IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=(IdentifiedSurgicalPathologyReport)c.iterator().next();
+        deidentifiedSurgicalPathologyReport.setIsFlagForReview(new Boolean(false));
+        deidentifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.PENDING_FOR_XML);
+        deidentifiedSurgicalPathologyReport.setActivityStatus("Active");
+        deidentifiedSurgicalPathologyReport.setSpecimenCollectionGroup(identifiedSurgicalPathologyReport.getSpecimenCollectionGroup());
+
+        TextContent textContent = new TextContent();
+        String data="Report is de-identified \n"+identifiedSurgicalPathologyReport.getTextContent().getData();
+        textContent.setData(data);
+        textContent.setSurgicalPathologyReport(deidentifiedSurgicalPathologyReport);
+
+        deidentifiedSurgicalPathologyReport.setTextContent(textContent);
+        DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport1=insert(deidentifiedSurgicalPathologyReport);
+        identifiedSurgicalPathologyReport.setDeIdentifiedSurgicalPathologyReport(deIdentifiedSurgicalPathologyReport1);
+        identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) update(identifiedSurgicalPathologyReport);
+//        spr = new DeidentifiedSurgicalPathologyReport();
+        DeidentifiedSurgicalPathologyReport spr1 = new DeidentifiedSurgicalPathologyReport();
+        sQuery = new SearchExampleQuery(spr1);
+        result = applicationService.executeQuery(sQuery);
+        c = result.getCollectionResult();
+        assertEquals(1, c.size());
+    }
+    
+    public void testSearchIdentifiedSurgicalPathologyReport() throws Exception 
+    {
+        IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport=new IdentifiedSurgicalPathologyReport();
+        identifiedSurgicalPathologyReport.setActivityStatus("Active");
+        identifiedSurgicalPathologyReport.setCollectionDateTime(new Date());
+        identifiedSurgicalPathologyReport.setIsFlagForReview(new Boolean(false));
+        identifiedSurgicalPathologyReport.setReportStatus(CaTIESConstants.PENDING_FOR_DEID);
+//        identifiedSurgicalPathologyReport.setReportSource((Site)BizTestCaseUtility.getObjectMap(Site.class));
+        TextContent textContent=new TextContent();
+        String data="[FINAL DIAGNOSIS]\n" +
+                "This is the Final Diagnosis Text" +
+                "\n\n[GROSS DESCRIPTION]" +
+                "The specimen is received unfixed labeled hernia sac and consists of a soft, pink to yellow segment of fibrous and fatty tissue measuring 7.5cm in length x 3.2 x 0.9cm with a partly defined lumen.  Representative tissue submitted labeled 1A.";
+
+        textContent.setData(data);
+        textContent.setSurgicalPathologyReport(identifiedSurgicalPathologyReport);
+        Set reportSectionCollection=new HashSet();
+        ReportSection reportSection1=new ReportSection();
+        reportSection1.setName("GDT");
+        reportSection1.setDocumentFragment("The specimen is received unfixed labeled hernia sac and consists of a soft, pink to yellow segment of fibrous and fatty tissue measuring 7.5cm in length x 3.2 x 0.9cm with a partly defined lumen.  Representative tissue submitted labeled 1A.");
+        reportSection1.setTextContent(textContent);
+
+        ReportSection reportSection2=new ReportSection();
+        reportSection2.setName("FIN");
+        reportSection2.setDocumentFragment("This is the Final Diagnosis Text");
+        reportSection2.setTextContent(textContent);
+
+        reportSectionCollection.add(reportSection1);
+        reportSectionCollection.add(reportSection2);
+
+        textContent.setReportSectionCollection(reportSectionCollection);
+
+        identifiedSurgicalPathologyReport.setTextContent(textContent);
+        
+        SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+        specimenCollectionGroup.setId(1L);
+        SDKQuery sQuery = new SearchExampleQuery(specimenCollectionGroup);
+        SDKQueryResult result = applicationService.executeQuery(sQuery);
+        Collection c = result.getCollectionResult();
+        
+        specimenCollectionGroup =(SpecimenCollectionGroup)c.iterator().next(); 
+        specimenCollectionGroup.setSurgicalPathologyNumber("SPN"+UniqueKeyGeneratorUtil.getUniqueKey());
+        identifiedSurgicalPathologyReport.setSpecimenCollectionGroup(specimenCollectionGroup);
+        specimenCollectionGroup=update(specimenCollectionGroup);
+        identifiedSurgicalPathologyReport=insert(identifiedSurgicalPathologyReport);
+        
+        IdentifiedSurgicalPathologyReport spr = new IdentifiedSurgicalPathologyReport();
+        sQuery = new SearchExampleQuery(spr);
+        result = applicationService.executeQuery(sQuery);
+        c = result.getCollectionResult();
+        assertEquals(1, c.size());
+    }
     
     public void testSearchStorageType() throws ApplicationException
 	{
@@ -532,4 +897,5 @@ public void testMatchingParticipant() throws ApplicationException {
 
 		}
 	}
+    
 }

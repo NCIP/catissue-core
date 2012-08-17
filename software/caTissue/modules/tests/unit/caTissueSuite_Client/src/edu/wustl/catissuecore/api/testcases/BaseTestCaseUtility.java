@@ -9,6 +9,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
+
+import edu.wustl.catissuecore.domain.CellSpecimen;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
@@ -585,5 +592,341 @@ public class BaseTestCaseUtility {
 		specimenArrayType.setCapacity(capacity);
 		return specimenArrayType;
 	}
+
+	public static Specimen initTissueSpecimen()
+	{
+		System.out.println("Inside tissuespecimen");
+		TissueSpecimen ts= new TissueSpecimen();
+		ts.setSpecimenClass("Tissue");
+		ts.setLabel("TissueSpecimen_"+UniqueKeyGeneratorUtil.getUniqueKey());
+		ts.setActivityStatus("Active");
+		ts.setCollectionStatus("Pending");
+		System.out.println("Inside Type");
+		ts.setBarcode("Barcode_"+UniqueKeyGeneratorUtil.getUniqueKey());
+		ts.setSpecimenType("Fixed Tissue Block");
+		ts.setPathologicalStatus("Malignant");
+
+		SpecimenCharacteristics specimenCharacteristics =  new SpecimenCharacteristics();
+
+		specimenCharacteristics.setTissueSide("Left");
+		specimenCharacteristics.setTissueSite("Placenta");
+		ts.setSpecimenCharacteristics(specimenCharacteristics);
+
+		System.out.println("setting Qunatity");
+		Double quantity = new Double(10.0);
+		ts.setInitialQuantity(quantity);
+		ts.setAvailableQuantity(quantity);
+		ts.setIsAvailable(new Boolean(true));
+
+		System.out.println("Setting parameters");
+
+	/*	CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		collectionEventParameters.setComment("");
+		collectionEventParameters.setSpecimen(ts);
+		//User user = (User)TestCaseUtility.getObjectMap(User.class);
+		User user = new User();
+		user.setId(new Long(1));
+		collectionEventParameters.setUser(user);
+		try
+		{
+			collectionEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+
+		}
+		catch (ParseException e1)
+		{
+			System.out.println("exception in APIDemo");
+			e1.printStackTrace();
+		}
+
+		collectionEventParameters.setContainer("No Additive Vacutainer");
+		collectionEventParameters.setCollectionProcedure("Needle Core Biopsy");
+
+
+		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		receivedEventParameters.setUser(user);
+		try
+		{
+			System.out.println("--- Start ---- 10");
+			receivedEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+		}
+		catch (ParseException e)
+		{
+			System.out.println("APIDemo");
+			e.printStackTrace();
+		}
+
+		receivedEventParameters.setReceivedQuality("Acceptable");
+		receivedEventParameters.setComment("fdfd");
+		receivedEventParameters.setSpecimen(ts);
+*/
+		Collection specimenEventCollection = new HashSet();
+		/*specimenEventCollection.add(collectionEventParameters);
+		specimenEventCollection.add(receivedEventParameters);*/
+		ts.setSpecimenEventCollection(specimenEventCollection);
+
+		return ts;
+	}
+
+	public static Specimen initMolecularSpecimen()
+	{
+		MolecularSpecimen molecularSpecimen = new MolecularSpecimen();
+
+
+		molecularSpecimen.setLabel("Molecular Specimen"+UniqueKeyGeneratorUtil.getUniqueKey());
+		molecularSpecimen.setBarcode("MolSpecBarcode"+UniqueKeyGeneratorUtil.getUniqueKey());
+		molecularSpecimen.setSpecimenType("DNA");
+		molecularSpecimen.setIsAvailable(new Boolean(true));
+		molecularSpecimen.setActivityStatus("Active");
+		molecularSpecimen.setCollectionStatus("Pending");
+		molecularSpecimen.setSpecimenClass("Molecular");
+
+		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+		specimenCharacteristics.setTissueSide("Left");
+		specimenCharacteristics.setTissueSite("Placenta");
+		molecularSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
+
+		molecularSpecimen.setPathologicalStatus("Malignant");
+
+		Double quantity = new Double(10.0);
+		molecularSpecimen.setInitialQuantity(quantity);
+		molecularSpecimen.setAvailableQuantity(quantity);
+		// modified code here. chnged funcion name to setInitialQuantity(quantity) from setQuantity(quantity)
+
+		molecularSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
+		molecularSpecimen.setComment("");
+		// Is virtually located
+//		molecularSpecimen.setStorageContainer(null);
+
+//		molecularSpecimen.setPositionDimensionOne(null);
+//		molecularSpecimen.setPositionDimensionTwo(null);
+
+		molecularSpecimen.setSpecimenPosition(null);
+//		Collection externalIdentifierCollection = new HashSet();
+//		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
+//		externalIdentifier.setName("Specimen 1 ext id");
+//		externalIdentifier.setValue("11");
+//		externalIdentifierCollection.add(externalIdentifier);
+//		molecularSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
+
+	/*	CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		collectionEventParameters.setComment("comments");
+		//User user = (User)TestCaseUtility.getObjectMap(User.class);
+		User user = new User();
+		user.setId(new Long(1));
+		collectionEventParameters.setSpecimen(molecularSpecimen);
+
+		collectionEventParameters.setUser(user);
+		try
+		{
+			collectionEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+		}
+		catch (ParseException e1)
+		{
+			e1.printStackTrace();
+		}
+		collectionEventParameters.setContainer("No Additive Vacutainer");
+		collectionEventParameters.setCollectionProcedure("Needle Core Biopsy");
+
+		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		receivedEventParameters.setUser(user);
+		receivedEventParameters.setSpecimen(molecularSpecimen);
+
+		try
+		{
+			receivedEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+		receivedEventParameters.setReceivedQuality("acceptable");
+		receivedEventParameters.setComment("received");
+		receivedEventParameters.setReceivedQuality("Cauterized");
+*/
+		Collection specimenEventCollection = new HashSet();
+		/*specimenEventCollection.add(collectionEventParameters);
+		specimenEventCollection.add(receivedEventParameters);*/
+		molecularSpecimen.setSpecimenEventCollection(specimenEventCollection);
+
+		return molecularSpecimen;
+}
+
+	public static Specimen initCellSpecimen()
+	{
+		CellSpecimen cellSpecimen = new CellSpecimen();
+
+		cellSpecimen.setSpecimenClass("Cell");
+		cellSpecimen.setLabel("Cell Specimen"+UniqueKeyGeneratorUtil.getUniqueKey());
+		cellSpecimen.setBarcode("CellSpecBarcode"+UniqueKeyGeneratorUtil.getUniqueKey());
+		cellSpecimen.setSpecimenType("Fixed Cell Block");
+		cellSpecimen.setIsAvailable(new Boolean(true));
+		cellSpecimen.setActivityStatus("Active");
+		cellSpecimen.setCollectionStatus("Pending");
+
+		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+		specimenCharacteristics.setTissueSide("Left");
+		specimenCharacteristics.setTissueSite("Placenta");
+		cellSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
+
+		cellSpecimen.setPathologicalStatus("Malignant");
+
+		Double quantity = new Double(10.0);
+		cellSpecimen.setInitialQuantity(quantity);
+		cellSpecimen.setAvailableQuantity(quantity);
+		// modified code here. chnged funcion name to setInitialQuantity(quantity) from setQuantity(quantity)
+
+		//cellSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
+		cellSpecimen.setComment("");
+		// Is virtually located
+//		cellSpecimen.setStorageContainer(null);
+		cellSpecimen.setSpecimenPosition(null);
+//		cellSpecimen.setPositionDimensionOne(null);
+//		cellSpecimen.setPositionDimensionTwo(null);
+//
+
+//		Collection externalIdentifierCollection = new HashSet();
+//		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
+//		externalIdentifier.setName("Specimen 1 ext id");
+//		externalIdentifier.setValue("11");
+//		externalIdentifierCollection.add(externalIdentifier);
+//		molecularSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
+
+		/*CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		collectionEventParameters.setComment("comments");
+		//User user = (User)TestCaseUtility.getObjectMap(User.class);
+		User user = new User();
+		user.setId(new Long(1));
+		collectionEventParameters.setSpecimen(cellSpecimen);
+
+		collectionEventParameters.setUser(user);
+		try
+		{
+			collectionEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+		}
+		catch (ParseException e1)
+		{
+			e1.printStackTrace();
+		}
+		collectionEventParameters.setContainer("No Additive Vacutainer");
+		collectionEventParameters.setCollectionProcedure("Needle Core Biopsy");
+
+		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		receivedEventParameters.setUser(user);
+		receivedEventParameters.setSpecimen(cellSpecimen);
+
+		try
+		{
+			receivedEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+		receivedEventParameters.setReceivedQuality("acceptable");
+		receivedEventParameters.setComment("received");
+		receivedEventParameters.setReceivedQuality("Cauterized");*/
+
+		Collection specimenEventCollection = new HashSet();
+		/*specimenEventCollection.add(collectionEventParameters);
+		specimenEventCollection.add(receivedEventParameters);*/
+		cellSpecimen.setSpecimenEventCollection(specimenEventCollection);
+
+		return cellSpecimen;
+}
+	public static Specimen initFluidSpecimen()
+	{
+		FluidSpecimen cellSpecimen = new FluidSpecimen();
+
+//		SpecimenCollectionGroup scg = (SpecimenCollectionGroup)TestCaseUtility.getObjectMap(SpecimenCollectionGroup.class);
+//
+
+//		molecularSpecimen.setSpecimenCollectionGroup(scg);
+		cellSpecimen.setSpecimenClass("Fluid");
+		cellSpecimen.setLabel("Fluid Specimen"+UniqueKeyGeneratorUtil.getUniqueKey());
+		cellSpecimen.setBarcode("FluidSpecBarcode"+UniqueKeyGeneratorUtil.getUniqueKey());
+		cellSpecimen.setSpecimenType("Amniotic Fluid");
+		cellSpecimen.setIsAvailable(new Boolean(true));
+		cellSpecimen.setActivityStatus("Active");
+		cellSpecimen.setCollectionStatus("Pending");
+
+		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+		specimenCharacteristics.setTissueSide("Left");
+		specimenCharacteristics.setTissueSite("Placenta");
+		cellSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
+
+		cellSpecimen.setPathologicalStatus("Malignant");
+
+		Double quantity = new Double(10.0);
+		cellSpecimen.setInitialQuantity(quantity);
+		cellSpecimen.setAvailableQuantity(quantity);
+		// modified code here. chnged funcion name to setInitialQuantity(quantity) from setQuantity(quantity)
+
+		//cellSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
+		cellSpecimen.setComment("");
+		// Is virtually located
+//		cellSpecimen.setStorageContainer(null);
+		cellSpecimen.setSpecimenPosition(null);
+//		cellSpecimen.setPositionDimensionOne(null);
+//		cellSpecimen.setPositionDimensionTwo(null);
+
+
+//		Collection externalIdentifierCollection = new HashSet();
+//		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
+//		externalIdentifier.setName("Specimen 1 ext id");
+//		externalIdentifier.setValue("11");
+//		externalIdentifierCollection.add(externalIdentifier);
+//		molecularSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
+
+		/*CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		collectionEventParameters.setComment("comments");
+		//User user = (User)TestCaseUtility.getObjectMap(User.class);
+		User user = new User();
+		user.setId(new Long(1));
+		collectionEventParameters.setSpecimen(cellSpecimen);
+
+		collectionEventParameters.setUser(user);
+		try
+		{
+			collectionEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+		}
+		catch (ParseException e1)
+		{
+			e1.printStackTrace();
+		}
+		collectionEventParameters.setContainer("No Additive Vacutainer");
+		collectionEventParameters.setCollectionProcedure("Needle Core Biopsy");
+
+		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		receivedEventParameters.setUser(user);
+		receivedEventParameters.setSpecimen(cellSpecimen);
+
+		try
+		{
+			receivedEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+		receivedEventParameters.setReceivedQuality("acceptable");
+		receivedEventParameters.setComment("received");
+		receivedEventParameters.setReceivedQuality("Cauterized");*/
+
+		Collection specimenEventCollection = new HashSet();
+		/*specimenEventCollection.add(collectionEventParameters);
+		specimenEventCollection.add(receivedEventParameters);*/
+		cellSpecimen.setSpecimenEventCollection(specimenEventCollection);
+
+		return cellSpecimen;
+}
+
 
 }
