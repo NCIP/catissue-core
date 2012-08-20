@@ -17,6 +17,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.exception.DAOException;
 import krishagni.catissueplus.mobile.dto.StoragePositionDTO;
 
 
@@ -44,13 +45,13 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 	 */
 	public TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>> 
 			getAllocatedContainerMapForSpecimen(final List<Object> parameterList, 
-			final SessionDataBean sessionData, final DAO dao)
+			final SessionDataBean sessionData, final DAO dao,String contName)
 			throws BizLogicException
 	{
 		try
 		{
 			parameterList.add(sessionData);
-			final String[] queries = this.getStorageContainerForSpecimenQuery(parameterList);
+			final String[] queries = this.getStorageContainerForSpecimenQuery(parameterList,contName);
 			final List<?> containerList = this.getStorageContainerList(null,queries);
 			return (TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>>)
 			this.getAllocDetailsForContainers(containerList, dao);
@@ -62,8 +63,49 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 			throw new BizLogicException(errorKey, daoExp, daoExp.getMsgValues());
 		}
 	}
-	
+
 	/**
+	 * @param parameterList - consists of cpId, specimen class
+	 * @param sessionData - SessionDataBean object
+	 * @param jdbcDAO - JDBCDAO object
+	 * @return TreeMap of Allocated Containers
+	 * @throws BizLogicException throws BizLogicException
+	 * @throws DAOException throws DAOException
+	 */
+	public TreeMap	getAutoAllocatedContainerListForSpecimen(final List<Object> parameterList, 
+			final SessionDataBean sessionData, final DAO dao,String contName)
+			throws BizLogicException
+	{
+		try
+		{
+			parameterList.add(sessionData);
+			final String[] queries = this.getStorageContainerForSpecimenQuery(parameterList,contName);
+			final List<?> containerList = this.getStorageContainerList(null,queries);
+			Map containerNameListForAutoOption=null;
+			if(containerList!=null && !containerList.isEmpty())
+			{
+				containerNameListForAutoOption=new TreeMap();
+				java.util.Iterator<?> listIter=containerList.iterator();
+				while(listIter.hasNext())
+				{
+					ArrayList contInfoList=(ArrayList) listIter.next();
+					NameValueBean nvb=new NameValueBean();
+					nvb.setName(contInfoList.get(1));
+					nvb.setValue(contInfoList.get(0));
+					containerNameListForAutoOption.put(nvb,nvb);
+				}
+			}
+			return (TreeMap) containerNameListForAutoOption;
+		}
+		catch (final ApplicationException daoExp)
+		{
+			logger.error(daoExp.getMessage(), daoExp);
+			final ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
+			throw new BizLogicException(errorKey, daoExp, daoExp.getMsgValues());
+		}
+	}
+
+/**
 	 * This Api return list of available continues specimenPositon as per specimenCount
 	 * @param containerName
 	 * @param pos1
@@ -161,6 +203,7 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 		return storagePositions;
 	}
 	
+	
 	public  List<SpecimenPosition> createSpecimenPositionList(List<int[]> positionList,Long containerId){
 		List<SpecimenPosition> posList = new ArrayList<SpecimenPosition>();
 		for(int i=0;i<positionList.size();i++){
@@ -175,23 +218,7 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 		}
 		return posList;
 	}
-	
-	public TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>>  getAvilablePositionsFromContainer(final String containerName,final DAO dao) throws BizLogicException{
-		try
-		{
-			String query =this.getStorageContainerFromNameForSpecimenQuery(containerName);
-			final String[] queries = {query};
-			final List<?> containerList = this.getStorageContainerList(null,queries);
-			return (TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>>)
-			this.getAllocDetailsForContainers(containerList, dao);
-		}
-		catch (final ApplicationException daoExp)
-		{
-			logger.error(daoExp.getMessage(), daoExp);
-			final ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
-			throw new BizLogicException(errorKey, daoExp, daoExp.getMsgValues());
-		}
-	}
+
 	/**
 	 * Gets the query array for Specimen Storage Containers
 	 * @param cpId
@@ -200,28 +227,28 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 	 * @param sessionData
 	 * @return
 	 */
-	protected String[] getStorageContainerForSpecimenQuery(final List<Object> parameterList)
+	protected String[] getStorageContainerForSpecimenQuery(final List<Object> parameterList,String contName)
 	{
 		// Containers allowing Only this CP, Only this Specimen Class and only this Specimen Type
-		final String query0 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
+		final String query0 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ,contName);
 		// Containers only this CP restriction and just this Specimen Class and any specimen type
-		final String query1 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ);
+		final String query1 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ,contName);
 		// Containers allowing Only this CP but other Specimen Classes and SpecimenType also
-		final String query2 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_NONUNQ,IS_SPTYPE_NONUNQ);
+		final String query2 = this.createSCQuery(parameterList, IS_CP_UNQ, IS_SPCLASS_NONUNQ,IS_SPTYPE_NONUNQ,contName);
 		// Containers allowing Other CPs also but just this Specimen Class and Specimen Type
-		final String query3 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
+		final String query3 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ,contName);
 		// Containers allowing any CP just this Specimen Class and any specimen type
-		final String query4 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ);
+		final String query4 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ,contName);
 		// Containers allowing Others CPs also, other Specimen Classes and Specimen Type too
-		final String query5 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_NONUNQ,IS_SPTYPE_NONUNQ);
+		final String query5 = this.createSCQuery(parameterList, IS_CP_NONUNQ, IS_SPCLASS_NONUNQ,IS_SPTYPE_NONUNQ,contName);
 		// Containers no CP restriction and just this Specimen Class and Specimen Type
-		final String query6 = this.getNoCPRestrictionQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ);
+		final String query6 = this.getNoCPRestrictionQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_UNQ,contName);
 		// Containers no CP restriction and just this Specimen Class and any specimen type
-		final String query7 = this.getNoCPRestrictionQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ);
+		final String query7 = this.getNoCPRestrictionQuery(parameterList, null, IS_SPCLASS_UNQ,IS_SPTYPE_NONUNQ,contName);
 		//Containers with no CP restrictions, other Specimen Classes and Specimen Type too
-		final String query8 = this.getNoCPRestrictionQuery(parameterList, null, IS_SPCLASS_NONUNQ, IS_SPTYPE_NONUNQ);
+		final String query8 = this.getNoCPRestrictionQuery(parameterList, null, IS_SPCLASS_NONUNQ, IS_SPTYPE_NONUNQ,contName);
 		//Containers allowing any CP,any Specimen Class and any Specimen Type
-		final String query9 = this.createSCQuery(parameterList,	null, null, null);
+		final String query9 = this.createSCQuery(parameterList,	null, null, null, contName);
 		
 		return new String[]{query0, query1, query2, query3, query4, query5, query6, query7, query8, query9};
 	}
@@ -255,7 +282,7 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 	 * @return query string
 	 */
 	private String createSCQuery(final List<Object> parameterList,
-			final Boolean isCPUnique, final Boolean isSPClassUnique,final Boolean isSPTypeUnique)
+			final Boolean isCPUnique, final Boolean isSPClassUnique,final Boolean isSPTypeUnique,String contName)
 	{
 		final long cpId = (Long)parameterList.get(0);
 		final String spClass = (String)parameterList.get(1);
@@ -320,6 +347,13 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 			scQuery.append(" AND ");
 		}
 		scQuery.append("  L.ACTIVITY_STATUS = 'Active' AND D.ACTIVITY_STATUS='Active' AND D.CONT_FULL=0 "); //Added cont_full condition by Preeti
+		if(contName!=null && !contName.equals(""))
+		{
+			scQuery.append(" AND ");
+			scQuery.append(" D.NAME Like '%");
+			scQuery.append(contName);
+			scQuery.append("%' ");
+		}
 		scQuery.append(") VIEW1  ");
 		scQuery.append(" GROUP BY IDENTIFIER, VIEW1.NAME, ");
 		scQuery.append(" VIEW1.ONE_DIMENSION_CAPACITY, ");
@@ -461,7 +495,7 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 	 * 
 	 */
 	private String getNoCPRestrictionQuery(final List<Object> parameterList,
-			final Boolean isCPUnique, final Boolean isSPClassUnique,final Boolean isSPTypeUnique)
+			final Boolean isCPUnique, final Boolean isSPClassUnique,final Boolean isSPTypeUnique,String contName)
 	{
 		final String spClass = (String)parameterList.get(1);
 		final String spType = (String)parameterList.get(3);
@@ -487,6 +521,14 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 			adminQuery.append(userId);
 			adminQuery.append(" ) ");
 		}
+		StringBuffer contNameQuery=new StringBuffer();
+		if(contName!=null && !contName.equals(""))
+		{
+			contNameQuery.append(" AND ");
+			contNameQuery.append(" d.NAME Like '%");
+			contNameQuery.append(contName);
+			contNameQuery.append("%' ");
+		}
 		scQuery.append("SELECT identifier,name,one_dimension_capacity,two_dimension_capacity,available_slots FROM " +
 				"(SELECT  storage_container_id,count(*) AS lord FROM catissue_stor_cont_spec_type GROUP BY storage_container_id " +
 				"HAVING count(*) "+spTypeCount+" 1) cscspt, " +
@@ -504,7 +546,7 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 				"AND b.specimen_class = '" +spClass+"'" +
 				"AND spt.specimen_type = '" +spType+"'" + adminQuery.toString() +
 				"AND l.activity_status = 'Active' " +
-				"AND d.activity_status = 'Active' AND d.cont_full = 0 " +
+				"AND d.activity_status = 'Active' AND d.cont_full = 0 " + contNameQuery.toString() +
 				"GROUP BY d.identifier, d.NAME, f.one_dimension_capacity," +
 				"f.two_dimension_capacity,(f.one_dimension_capacity * f.two_dimension_capacity)) view1 " +
 				"WHERE  cscspt.storage_container_id = view1.identifier AND cscpc.storage_container_id = view1.identifier " +

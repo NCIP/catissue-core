@@ -29,7 +29,13 @@ public class StorageContainerGridObject
 	private String name;
 	
 	private String oneDimensionLabellingScheme=Constants.LABELLING_SCHEME_NUMBERS;
-	private String twoDimensionLabellingScheme=Constants.LABELLING_SCHEME_NUMBERS;	
+	private String twoDimensionLabellingScheme=Constants.LABELLING_SCHEME_NUMBERS;
+	
+	private String oneDimensionLabel;
+	
+	private String twoDimensionLabel;
+	
+	private boolean[][] availablePositions; 
 	
 	public String getOneDimensionLabellingScheme()
 	{
@@ -126,5 +132,39 @@ public class StorageContainerGridObject
 	public String getName()
 	{
 		return this.name;
+	}
+	
+	public String getOneDimensionLabel()
+	{
+		return oneDimensionLabel;
+	}
+
+	
+	public void setOneDimensionLabel(String oneDimensionLabel)
+	{
+		this.oneDimensionLabel = oneDimensionLabel;
+	}
+
+	
+	public String getTwoDimensionLabel()
+	{
+		return twoDimensionLabel;
+	}
+	
+	public void setTwoDimensionLabel(String twoDimensionLabel)
+	{
+		this.twoDimensionLabel = twoDimensionLabel;
+	}
+
+	
+	public boolean[][] getAvailablePositions()
+	{
+		return availablePositions;
+	}
+
+	
+	public void setAvailablePositions(boolean[][] availablePositions)
+	{
+		this.availablePositions = availablePositions;
 	}
 }

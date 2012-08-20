@@ -499,7 +499,7 @@ public class FlexInterface
 				i++;
 
 			}
-			speicmenAutoStorageCont.setCollectionProtocolSpecimenStoragePositions(sdb);
+			speicmenAutoStorageCont.setCollectionProtocolSpecimenStoragePositions(sdb,null);
 			this.session.setAttribute(
 					edu.wustl.catissuecore.util.global.Constants.SPECIMEN_LIST_SESSION_MAP,
 					viewSpecimenMap);
@@ -556,7 +556,7 @@ public class FlexInterface
 	 *
 	 * @return String
 	 */
-	public String editSpecimen(List<SpecimenBean> spBeanList)
+	public String editSpecimen(List<SpecimenBean> spBeanList,String contName)
 	{
 		if(isToInitializeSession)
 		{
@@ -676,7 +676,7 @@ public class FlexInterface
 		{
 			final SessionDataBean sdb = (SessionDataBean) this.session
 					.getAttribute(Constants.SESSION_DATA);
-			speicmenAutoStorageCont.setCollectionProtocolSpecimenStoragePositions(sdb);
+			speicmenAutoStorageCont.setCollectionProtocolSpecimenStoragePositions(sdb,contName);
 		}
 		catch (final ApplicationException e)
 		{

@@ -1071,7 +1071,8 @@ function openPopupWindow(frameUrl,name)
 
 function mapButtonClickedOnNewSpecimen(frameUrl,name)
 {
-   	var storageContainer = document.getElementById('selectedContainerName').value;
+   	//var storageContainer = document.getElementById('selectedContainerName').value;
+	var storageContainer =document.getElementById("storageContainerDropDown").value;
 	frameUrl+="&storageContainerName="+storageContainer;
 	openPopupWindow(frameUrl,name);
 }

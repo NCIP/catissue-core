@@ -327,6 +327,7 @@ public class SpecimenDataBean implements GenericSpecimen
 	 *
 	 * @return Returns the lineage.
 	 */
+	@Override
 	public String getLineage()
 	{
 		return this.lineage;
@@ -845,6 +846,22 @@ public class SpecimenDataBean implements GenericSpecimen
 		this.collectionStatus=collectionStatus;
 	}
 
+	private Long parentId;
+
+	@Override
+	public Long getParentId()
+	{
+		// TODO Auto-generated method stub
+		return parentId;
+	}
+
+
+	@Override
+	public void setParentId(Long parentId)
+	{
+		// TODO Auto-generated method stub
+		this.parentId=parentId;
+	}
 	
 	/* override methods finish */
 

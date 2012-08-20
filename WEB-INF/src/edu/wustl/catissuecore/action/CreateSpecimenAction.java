@@ -97,7 +97,7 @@ public class CreateSpecimenAction extends SecureAction
 		final CreateSpecimenForm createForm = (CreateSpecimenForm) form;
 
 		final List<NameValueBean> strgPosList = AppUtility.getStoragePositionTypeList();
-
+		final String contName=request.getParameter(Constants.CONTAINER_NAME);
 		request.setAttribute("storageList", strgPosList);
 		// List of keys used in map of ActionForm
 		final List key = new ArrayList();
@@ -311,7 +311,7 @@ public class CreateSpecimenAction extends SecureAction
 								containerMap = scbizLogic.
 								getAllocatedContainerMapForSpecimen
 								(AppUtility.setparameterList(cpId,spClass,0,spType),
-								sessionData, dao);
+								sessionData, dao,contName);
 								ActionErrors errors = (ActionErrors) request
 										.getAttribute(Globals.ERROR_KEY);
 								if (containerMap.isEmpty())

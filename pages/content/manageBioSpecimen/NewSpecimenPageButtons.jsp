@@ -17,7 +17,7 @@
 				styleClass="blue_ar_b" property="submitButton"
 				title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
 				value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>"
-				onclick="onDeriveSubmit()">
+				onclick="updateStorageContainerValue();onDeriveSubmit()">
 			</html:button>
 		 <%	
 			}
@@ -29,7 +29,7 @@
 					styleClass="blue_ar_b" property="submitButton"
 					title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
 					value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>"
-					onclick="onDeriveSubmit()">
+					onclick="updateStorageContainerValue();onDeriveSubmit()">
 				</html:button>
 		 <%
 			}
@@ -149,10 +149,12 @@ function doInItTreeGrid()
 function doOnTreeGridRowSelected(rId)
 {
 	ajaxTreeGridRowSelectCall(rId); 
-	//alert('sss');
-	//popupmygrid.expandAll();
 }
- 
+ function expand(id,mode)
+ {
+ alert('ddd');
+ alert(id);
+ }
 function doInitParseTree()
 {
 	popupmygrid.loadXML("TreeTagAction.do?entityTag=SpecimenListTag");

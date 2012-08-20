@@ -4116,4 +4116,19 @@ public class AppUtility {
 		return AppUtility.executeSQLQuery(sql, valueBeanList);
 	}
 	
+	public static List convertMapToList(Map map)
+	{
+		List list=new ArrayList();
+		Set keySet = map.keySet();
+		if(keySet!=null)
+		{
+			Iterator itr = keySet.iterator();
+			while(itr.hasNext())
+			{
+				list.add(map.get(itr.next()));
+			}
+		}
+		return list;
+	}
+	
 }

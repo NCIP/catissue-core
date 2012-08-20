@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -52,6 +53,7 @@ public class StorageContainerAjaxAction extends SecureAction
 		Map containerMap = new TreeMap();
 		final StorageContainerForSpecimenBizLogic bizLogic = new StorageContainerForSpecimenBizLogic();
 		final SessionDataBean sessionDataBean = this.getSessionData(request);
+		final String contName=request.getParameter(Constants.CONTAINER_NAME);
 		// Uncommented due to addition of 'auto' functionality.
 		// Bug 14263
 		if (sessionDataBean != null)
@@ -92,7 +94,7 @@ public class StorageContainerAjaxAction extends SecureAction
 						if(stContSelection.equals("2"))
 						{
 							List<Object> parameterList = AppUtility.setparameterList(Long.valueOf(collectionProtocolId).longValue(),spClass,0,spType);
-							containerMap = bizLogic.getAllocatedContainerMapForSpecimen(parameterList, sessionDataBean, dao);
+							containerMap = bizLogic.getAllocatedContainerMapForSpecimen(parameterList, sessionDataBean, dao,contName);
 							this.setContainerStorageInformation(containerMap, request,specimenLocMap);
 							this.setSpecimenStorageInformation(containerMap, request, specimenLocMap);
 							createResponseData(containerMap, response, specimenId, specimenLocMap,rowNumber);

@@ -1,7 +1,9 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,15 +16,18 @@ import org.apache.struts.actions.DispatchAction;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.Status;
+import edu.wustl.dao.DAO;
 
 public class CatissueCommonAjaxAction extends DispatchAction{
 	
@@ -96,7 +101,7 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 	{
 		String query = request.getParameter("query");
 		ComboDataBizLogic comboDataBizObj = new ComboDataBizLogic();
-		List diagnosisList = comboDataBizObj.getClinicalDiagnosisList(query,false);
+		List<NameValueBean> diagnosisList = comboDataBizObj.getClinicalDiagnosisList(query,false);
 		AppUtility.writeListAsJSon(diagnosisList, request, response);
 		return null;
 	}
@@ -127,6 +132,48 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		return null;
 	}
 	
+	public ActionForward getStorageContainerList(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+		List <NameValueBean>containerList=new ArrayList();
+		String contName=request.getParameter(Constants.CONTAINER_NAME);
+		String stContSelection=request.getParameter("stContSelection");
+		if(contName!=null || (null!=stContSelection && Integer.valueOf(2).equals(Integer.valueOf(stContSelection))))
+		{
+			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
+					.getAttribute(Constants.SESSION_DATA);
+			DAO dao = AppUtility.openDAOSession(sessionData);
+			long cpId=0;
+			if(!"".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL)))
+			{
+				cpId=Long.parseLong(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL));
+			}
+			String spType=request.getParameter("specimenType");
+			String spClass=request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
+			
+			
+			StorageContainerForSpecimenBizLogic bizLogic=new StorageContainerForSpecimenBizLogic();
+			TreeMap treeMap=bizLogic.getAutoAllocatedContainerListForSpecimen(AppUtility.setparameterList(cpId,spClass,0,spType), sessionData, dao, contName);
+			if(treeMap!=null)
+			{
+				containerList=AppUtility.convertMapToList(treeMap);
+			}
+		}
+		StringBuffer responseString = new StringBuffer(Constants.XML_START);
+		NameValueBean virtualBean = new NameValueBean("Virtual",Long.valueOf(-1));
+		//containerList.remove(containerList.indexOf(selectBean));
+		responseString.append(Constants.XML_ROWS);
+		for (NameValueBean nvb : containerList)
+		{
+			responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()),null, nvb.getName()));
+		}
+		responseString.append(this.addRowToResponseXML(Long.valueOf(virtualBean.getValue()),null, virtualBean.getName()));
+		responseString.append(Constants.XML_ROWS_END);
+		response.setContentType(Constants.CONTENT_TYPE_XML);
+		response.getWriter().write(responseString.toString());
+		return null;
+	}
+
 	/**
 	 * This function returns list of all active collection protocols
 	 * @param mapping

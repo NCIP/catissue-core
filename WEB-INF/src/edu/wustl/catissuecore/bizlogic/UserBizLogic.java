@@ -2746,7 +2746,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 	{
 		User validUser = null;
 		final String getActiveUser = "from " + User.class.getName() + " user where " + "user.activityStatus= "
-		+ "'" + Status.ACTIVITY_STATUS_ACTIVE.toString() + "' and user.userToken =" + "'" + userToken
+		+ "'" + Status.ACTIVITY_STATUS_ACTIVE.toString() + "' and user.forgotPasswordToken =" + "'" + userToken
 		+ "'";
 		final DefaultBizLogic bizlogic = new DefaultBizLogic();
 		final List<User> users = bizlogic.executeQuery(getActiveUser);

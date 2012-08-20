@@ -651,7 +651,8 @@ public class UpdateSpecimenStatusAction extends BaseAction
 			// Mandar : 25July08: ------- end ------------
 		}
 
-		if ("Virtual".equals(specimenVO.getStorageContainerForSpecimen()))
+		if ("Virtual".equals(specimenVO.getStorageContainerForSpecimen())
+				||"Virtual".equals(specimenVO.getSelectedContainerName()))
 		{
 			// specimen.setStorageContainer(null);
 			specimen.setSpecimenPosition(null);
@@ -738,11 +739,38 @@ public class UpdateSpecimenStatusAction extends BaseAction
 					.getDisplayName());
 		}
 		storageContainer.setName(specimenVO.getSelectedContainerName());
-		if(null !=specPos.getPositionDimensionOne() && null!=specPos.getPositionDimensionTwo())
+		if(!"Virtual".equals(storageContainer.getName())
+				||"Virtual".equals(specimenVO.getSelectedContainerName()))
 		{
 			StorageContainerUtil.setContainerPositionAsString(specimenVO.getSelectedContainerName(), specPos.getPositionDimensionOne(), specPos.getPositionDimensionTwo(), specPos);
 		}
-		// specimen.setStorageContainer(storageContainer);
+		/*if(!"Virtual".equals(storageContainer.getName()) && ("".equals(pos1) || "".equals(pos2)))
+		{
+			if(null==storageContainer.getId())
+			{
+				List idList=AppUtility.executeSQLQuery("Select identifier from catissue_container where name like '"+storageContainer.getName()+"'");
+				Long id=Long.valueOf((String) ((ArrayList)idList.get(0)).get(0));
+				storageContainer.setId(id);
+			}
+			
+			DAO dao=AppUtility.openDAOSession(null);
+			Position position;
+			try
+			{
+				position = StorageContainerUtil
+				.getFirstAvailablePositionsInContainer(storageContainer, new HashSet<String>(), dao, null, null);
+			}
+			catch (ApplicationException e)
+			{
+				this.LOGGER.error(e.getMessage(), e);
+				throw new
+				BizLogicException(e.getErrorKey(),e,e.getMsgValues());
+			}
+			specPos.setPositionDimensionOne(position.getXPos());
+			specPos.setPositionDimensionTwo(position.getYPos());
+			StorageContainerUtil.setContainerPositionAsString(storageContainer.getName(), specPos.getPositionDimensionOne(), specPos.getPositionDimensionTwo(), specPos);
+		}
+*/		// specimen.setStorageContainer(storageContainer);
 	}
 
 	/**

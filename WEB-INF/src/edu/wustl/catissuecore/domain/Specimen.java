@@ -721,28 +721,29 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 							this.specimenPosition = new SpecimenPosition();
 							this.specimenPosition.storageContainer = new StorageContainer();
 
-							if (form.getStContSelection() == 1)
+							if (form.isVirtuallyLocated())
 							{
 								this.specimenPosition = null;
 							}
-							if (form.getStContSelection() == 2)
-							{
-								final long stContainerId = Long.parseLong(form
-										.getStorageContainer());
+							if (!form.isVirtuallyLocated())//if (form.getStContSelection() == 2)
+							{/*
+								final long stContainerId = Long.parseLong(form.getSelectedContainerName());
+										//.getStorageContainer());
 
 								this.specimenPosition.storageContainer.setId(stContainerId);
-								this.specimenPosition.setPositionDimensionOneString(form.getPositionDimensionOne());
-								this.specimenPosition.setPositionDimensionTwoString(form.getPositionDimensionTwo());
-								StorageContainerUtil.setContainerPositionForAutoOption(form.getStorageContainer(), form.getPositionDimensionOne(), form.getPositionDimensionTwo(),this.specimenPosition);
-								/*this.specimenPosition.positionDimensionOne =Integer.valueOf(AppUtility.excelColumnAlphabetToNum(form
+								this.specimenPosition.setPositionDimensionOneString(form.getPos1());//getPositionDimensionOne());
+								this.specimenPosition.setPositionDimensionTwoString(form.getPos2());//getPositionDimensionTwo());
+								//StorageContainerUtil.setContainerPositionForAutoOption(form.getStorageContainer(), form.getPositionDimensionOne(), form.getPositionDimensionTwo(),this.specimenPosition);
+								StorageContainerUtil.setContainerPositionForAutoOption(form.getSelectedContainerName(), form.getPos1(), form.getPos2(),this.specimenPosition);
+								this.specimenPosition.positionDimensionOne =Integer.valueOf(AppUtility.excelColumnAlphabetToNum(form
 										.getPositionDimensionOne()).toString());
 								this.specimenPosition.positionDimensionTwo = Integer.valueOf(AppUtility.excelColumnAlphabetToNum(form
-										.getPositionDimensionTwo()).toString());*/
+										.getPositionDimensionTwo()).toString());
 								this.specimenPosition.specimen = this;
 							}
 							else if (form.getStContSelection() == 3)
 							{
-
+*/
 								if (form.getPos1() != null && !form.getPos1().trim().equals("")
 										&& form.getPos2() != null
 										&& !form.getPos2().trim().equals(""))
@@ -909,11 +910,12 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 			this.specimenPosition = new SpecimenPosition();
 			this.specimenPosition.storageContainer = new StorageContainer();
 		}
-		if (form.getStContSelection() == 1)
-		{
-			this.specimenPosition = null;
-		}
-		if (form.getStContSelection() == 2)
+		if (!form.isVirtuallyLocated())
+		//if (form.getStContSelection() == 1)
+		//{
+		//	this.specimenPosition = null;
+		//}
+		//if (form.getStContSelection() == 2)
 		{
 			final long containerId = Long.parseLong(form.getStorageContainer());
 			this.specimenPosition.storageContainer.setId(containerId);

@@ -1426,15 +1426,27 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		final String specimenClassName = (String) specimenClass;
 		final String specimenTypeName = (String) specimenType;
 		final String cpId = this.getFormattedValue(collectionProtocolId);
-		final String functionCall = "showMap('" + selectedContainerName + "','"
+		
+		final String sid = specimen.getUniqueIdentifier();
+		final String storageContainer="storageContainer_"+specimenId;
+		final String storageContainerDropDown="storageContainerDropDown_"+specimenId;
+		final String storageContainerPagingArea="storageContainerPagingArea_"+specimenId;
+		final String storageContainerInfoArea="storageContainerInfoArea_"+specimenId;
+		final String storageContainerGrid="storageContainerGrid_"+specimenId;
+		final String scDropDownId="scDropDownId_"+specimenId;
+		final String scDropDownIddiv="scDropDownIddiv_"+specimenId;
+		final String containerDropDownInfo="containerDropDownInfo_"+specimenId;
+		final String gridDivObject="gridDivObject_"+specimenId;
+		final String scGrid="scGrid_"+specimenId;
+		final String scGridVisible="scGridVisible_"+specimenId;
+		final String functionCall = "showMap('" + storageContainerDropDown + "','" + selectedContainerName + "','"
 				+ positionDimensionOne + "','" + positionDimensionTwo + "','" + containerId + "','"
 				+ specimenClassName + "','" + specimenTypeName + "','"+ cpId + "')";
-		final int scSize = 17 + this.xtra;
-		final String sid = specimen.getUniqueIdentifier();
+		
 		String isDisabled = "";
 
-		stringBuffer.append("<table style=\"font-size:1em\" size=\"100%\">");
-		stringBuffer.append(TR_OPEN);
+					stringBuffer.append("<table style=\"font-size:1em\" size=\"100%\">");
+					/*stringBuffer.append(TR_OPEN);
 		stringBuffer.append(TD_OPEN);
 		stringBuffer.append("");
 
@@ -1444,12 +1456,16 @@ public class SpecimenDetailsNewFormat extends TagSupport
 
 		if ("Virtual".equals(specimen.getStorageContainerForSpecimen()))
 		{
-			stringBuffer.append("<option value=\"Virtual\" selected=\"selected\">Virtual</option>");
-			isDisabled = "disabled='disabled'";
+			//stringBuffer.append("<option value=\"Virtual\" selected=\"selected\">Virtual</option>");
+			//isDisabled = "disabled='disabled'";
+			stringBuffer.append("<input type=\"checkbox\" styleId=\"virtualCheckbox\" property=\"virtuallyLocated\" checked=\"checked\" onclick=\"showStorageContDropDown()\">"
+					+" <span class=\"black_ar\"> Virtual </span> </html:checkbox>");
 		}
 		else
 		{
-			stringBuffer.append("<option value=\"Virtual\">Virtual</option>");
+			//stringBuffer.append("<option value=\"Virtual\">Virtual</option>");
+			stringBuffer.append("<input type=\"checkbox\" styleId=\"virtualCheckbox\" property=\"virtuallyLocated\" checked=\"checked\" onclick=\"showStorageContDropDown()\">"
+					+" <span class=\"black_ar\"> Virtual </span> </html:checkbox>");
 		}
 		if ("Auto".equals(specimen.getStorageContainerForSpecimen()))
 		{
@@ -1471,12 +1487,49 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		stringBuffer.append(TD_CLOSE);
 
 		stringBuffer.append(TD_OPEN);
-		stringBuffer.append("<input type=\"text\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
-				+ "\" size=\"" + scSize
-				+ "\" class=\"black_ar_md\" onmouseover=\" showTip(this.id)\"  id=\""
-				+ selectedContainerName + "\" " + isDisabled + " >");
-		stringBuffer.append(TD_CLOSE);
+		stringBuffer.append(TD_CLOSE);*/
+
 		stringBuffer.append(TD_OPEN);
+		stringBuffer.append(
+				"<td width=\"55%\" align=\"left\" class=\"black_ar\">"
+				+"<input type=\"hidden\" name=\""+selectedContainerName+"\" id=\"selectedContainerName\" value=\"\"/>"
+				+"<div>"
+				+	"<table border=\"0\" width=\"29%\" id=\"outerTable2\" cellspacing=\"0\" cellpadding=\"0\">"
+				+	"	<tr>"
+				+	"		<td align=\"left\" width=\"88%\" height=\"100%\" >"
+				+	"			<div id=\""+scDropDownIddiv+"\" class=\"x-form-field-wrap\" >"
+				+	"				<input id=\""+storageContainerDropDown+"\""
+				+   "						name=\"" + nameValue[0] +"\" "
+				+	"						onkeydown=\"keyNavigation(event,"+containerDropDownInfo+","+scGrid+","+scGridVisible+");\""
+				+   "						onKeyUp=\"autoCompleteControl(event,"+containerDropDownInfo+","+scGrid+");\""
+				+	"						onClick=\"noEventPropogation(event)\""
+				+	"						autocomplete=\"off\""
+				+	"						size=\"30\""
+				+	"						class=\"black_ar_new x-form-text x-form-field x-form-focus\"/><img id=\""+scDropDownId+"\" style=\"top : 0px !important;\" class=\"x-form-trigger x-form-arrow-trigger\"" 
+				+	"					onclick=\"showHideStorageContainerGrid(event,"+storageContainer+","+storageContainerDropDown+","+scGridVisible+","+containerDropDownInfo+","+scGrid+");\""
+				+	"					src=\"images/uIEnhancementImages/s.gif\"/>"
+				+	"			</div>"
+				+	"		</td>"
+				+	"	</tr>"
+				+	"	<tr>"
+				+	"		<td>"
+				+	"		<div id=\""+storageContainer+"\" style=\"z-index: 100\""
+				+	"			onClick=\"noEventPropogation(event)\">"
+				+	"		<div id=\""+storageContainerGrid+"\" style=\"height: 40px;\""
+				+	"			onClick=\"noEventPropogation(event)\"></div>"
+				+	"		<div id=\""+storageContainerPagingArea+"\" onClick=\"noEventPropogation(event)\"></div>"
+				+	"		<div id=\""+storageContainerInfoArea+"\" onClick=\"noEventPropogation(event)\"></div>"
+				+	"		</div>"
+				+	"		</td>"
+				+	"	</tr>"
+				+	"</table>"
+			+"</td>");
+/*		stringBuffer.append("<input type=\"hidden\" name=\"" + nameValue[0] + "\" value=\"" + nameValue[1]
+				+ "\"  id=\""
+				+ storageContainerDropDown + "\" >");
+*/		stringBuffer.append(TD_CLOSE);
+		stringBuffer.append(TD_OPEN);
+		stringBuffer.append("<td style=\"padding-left:25\">");
 		stringBuffer.append("<input type=\"text\" name=\"" + nameValue[2] + "\" value=\"" + nameValue[3]
 				+ "\" size=\"2\" class=\"black_ar_md\" id=\"" + positionDimensionOne + "\" "
 				+ isDisabled + " >");
@@ -1638,6 +1691,18 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		{
 			stringBuffer.append("<input type=\"hidden\" name=\"" + element[0] + "\" value=\"" + element[1]
 					+ "\" id=\"" + element[0] + "\">");
+			if(element[0].contains("className"))//.equals(arg[1]))
+			{
+				String[] arg1=nameValue[3];
+				stringBuffer.append("<input type=\"hidden\" name=\"className_S_" + arg1[1] + "\" value=\"" + element[1]
+						+ "\" id=\"className_S_" + arg1[1] + "\">");
+			}
+			if(element[0].contains("type"))//.equals(arg[1]))
+			{
+				String[] arg1=nameValue[3];
+				stringBuffer.append("<input type=\"hidden\" name=\"type_S_" + arg1[1] + "\" value=\"" + element[1]
+						+ "\" id=\"type_S_" + arg1[1] + "\">");
+			}
 		}
 
 		if (isTextRow)

@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -234,5 +235,23 @@ public final class SpecimenUtil
 			isGenerateLabel = SpecimenUtil.isLblGenOnForCP(pLabelFormat, derLabelFormat, aliqLabelFormat, lineage);
 		}
 		return isGenerateLabel;
+	}
+	
+	public static String getLineageSubString(GenericSpecimen gs)
+	{
+		String lineage=gs.getLineage();
+		if(lineage.equals("NewSpecimen"))
+		{
+			lineage="S";
+		}
+		else if(lineage.equals("Aliquot"))
+		{
+			lineage="Aliquot"+gs.getParentSpecimen().getId();
+		}
+		else if(lineage.equals("Dervied"))
+		{
+			lineage="Dervied"+gs.getParentSpecimen().getId();
+		}
+		return lineage;
 	}
 }

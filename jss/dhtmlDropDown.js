@@ -11,9 +11,9 @@ function initDropDownGrid(gridDropDownInfo)
 		gridObj.setHeader(" ");
 		gridObj.setInitWidths("*");
 		gridObj.setColAlign("left");
-		gridObj.setColSorting("connector");
+		gridObj.setColSorting("server");
 		gridObj.setSkin("drop");
-		gridObj.enablePaging(true, 500, 5, gridDropDownInfo['pagingArea'], true, gridDropDownInfo['infoArea']);
+		gridObj.enablePaging(true, 500, 0, gridDropDownInfo['pagingArea'], true, gridDropDownInfo['infoArea']);
 		gridObj.setPagingSkin("bricks");
 		
 		gridObj.enableRowsHover(true, "gridHover");
@@ -25,7 +25,8 @@ function initDropDownGrid(gridDropDownInfo)
 		
 		//if the row is selected by arrow keys and if we move the mouse over 
 		//the grid rows then the previously selected rows remains selected
-		gridObj.attachEvent("onMouseOver", function(id,ind){gridObj.selectRowById(id, false, true , false);});
+		gridObj.attachEvent("onMouseOver", function(id,ind){ gridObj.selectRowById(id, false, true , false);
+		});
 		
 		//whenever the page is changed the focus is lost from the text box due 
 		//to which the arrow keys won't respond since we are handling key press event on the text box
@@ -77,13 +78,13 @@ function keyNavigation(evnt,gridDropDownInfo, gridObj,isGridVisible)
 
 function autoCompleteControl(event,gridDropDownInfo,gridObj)
 { 
-	if(event.keyCode != 13)
+	if(event.keyCode != 13 && event.keyCode != 39 && event.keyCode != 37 )
 	{
 		if(document.getElementById(gridDropDownInfo['dropDownId']).value=="")
 		{
 			document.getElementsByName(gridDropDownInfo['propertyId']).value = "";
-			hideGrid(gridDropDownInfo['gridDiv']);
-			gridDropDownInfo['visibilityStatusVariable'] = false;
+			//hideGrid(gridDropDownInfo['gridDiv']);
+			//gridDropDownInfo['visibilityStatusVariable'] = false;
 			gridInit=0;
 		}
 		else
@@ -93,8 +94,10 @@ function autoCompleteControl(event,gridDropDownInfo,gridObj)
 				showGrid(gridDropDownInfo['gridDiv'],gridDropDownInfo['dropDownId']);
 				gridDropDownInfo['visibilityStatusVariable'] = true;
 			}
-			gridObj.filterBy(0,document.getElementById(gridDropDownInfo['dropDownId']).value);
 		}
+		//gridObj.loadXML(gridDropDownInfo['actionToDo']+"&containerName="+document.getElementById(gridDropDownInfo['dropDownId']).value,gridDropDownInfo['callBackAction']);
+		gridObj.clearAndLoad(gridDropDownInfo['actionToDo']+"&containerName="+document.getElementById(gridDropDownInfo['dropDownId']).value, gridDropDownInfo['callBackAction']);
+		//gridObj.filterBy(0,document.getElementById(gridDropDownInfo['dropDownId']).value);
 	}	
 }
 
@@ -105,7 +108,7 @@ function hideGrid(gridContDiv1)
 }
 
 function showGrid(gridContainingDiv,dropDownId)
-{
+{	
 	document.getElementById(gridContainingDiv).style.display = "block";
 	document.getElementById(gridContainingDiv).style.position = "absolute";
 	document.getElementById(gridContainingDiv).style.top = document.getElementById(dropDownId).style.top + document.getElementById(dropDownId).style.height;
@@ -114,7 +117,7 @@ function showGrid(gridContainingDiv,dropDownId)
 }
 
 function showHideGrid(e,dropDownInfoObject,gridObject)
-{
+{		
 		setValue(e,dropDownInfoObject['gridDiv'], dropDownInfoObject['dropDownId']);
 		//alert(dropDownInfoObject['visibilityStatusVariable']);
 		if(dropDownInfoObject['visibilityStatusVariable'])
@@ -126,7 +129,8 @@ function showHideGrid(e,dropDownInfoObject,gridObject)
 		 {	
 			showGrid(dropDownInfoObject['gridDiv'],dropDownInfoObject['dropDownId']);
 			dropDownInfoObject['visibilityStatusVariable'] = true;
-			gridObject.load(dropDownInfoObject['actionToDo'],"");
+			//gridObject.load(dropDownInfoObject['actionToDo'],"");
+			gridObject.filterBy(0,"");
 		 }
 } 
 
@@ -155,10 +159,6 @@ function noEventPropogation(e)
 function setValue(e,gridDivId, dropDownId)
 {
 		document.getElementById(dropDownId).focus();
-		//piText = document.getElementById(dropDownId).value;
-		//document.getElementById(dropDownId).value = "";
-		//autoCompleteControl(gridDivId,dropDownId,piGrid);
 		noEventPropogation(e);
-		//document.getElementById(dropDownId).value =piText ;
 }
 

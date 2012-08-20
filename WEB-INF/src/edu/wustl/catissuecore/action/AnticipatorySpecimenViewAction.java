@@ -106,6 +106,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			boolean isFromSpecimenEditPage = false;
 			final SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) form;
 			final HttpSession session = request.getSession();
+			final String contName=request.getParameter(Constants.CONTAINER_NAME);
 			Long identifier = specimenCollectionGroupForm.getId();
 			Long specimenId = null;
 			final SpecimenAutoStorageContainer autoStorageContainer = new SpecimenAutoStorageContainer();
@@ -154,7 +155,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 					ViewSpecimenSummaryForm.REQUEST_TYPE_ANTICIPAT_SPECIMENS);
 			autoStorageContainer.setCollectionProtocol(this.cpId);
 
-			autoStorageContainer.setSpecimenStoragePositions(sessionDataBean);
+			autoStorageContainer.setSpecimenStoragePositions(sessionDataBean,contName);
 			if (request.getParameter("target") != null)
 			{
 				target = request.getParameter("target");
@@ -427,6 +428,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		specimenDataBean.setId(specimen.getId().longValue());
 		specimenDataBean.setParentName(parentName);
 		specimenDataBean.setCollectionStatus(specimen.getCollectionStatus());
+		specimenDataBean.setLineage(specimen.getLineage());
 		if (specimen.getInitialQuantity() != null)
 		{
 			specimenDataBean.setQuantity(specimen.getInitialQuantity().toString());
@@ -487,6 +489,10 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		else
 		{
 		    specimenDataBean.setGenerateLabel(Variables.isSpecimenLabelGeneratorAvl);// || isGenLabel(specimen));
+		}
+		if(!Constants.NEW_SPECIMEN.equals(specimen.getLineage()))
+		{
+			specimenDataBean.setParentId(specimen.getParentSpecimen().getId());
 		}
 		return specimenDataBean;
 	}

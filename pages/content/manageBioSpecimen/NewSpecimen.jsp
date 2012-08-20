@@ -21,9 +21,53 @@
 <%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
+<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
+<script src="jss/script.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
+<script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
+<script>var imgsrc="images/de/";</script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/prototype.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/scr.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/combobox.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
+<script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
+<LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+
+
+
+
+
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script src="jss/script.js"></script>
 <script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+
 <script type="text/javascript" src="jss/tag-popup.js"></script>
 <link rel="STYLESHEET" type="text/css"
 	href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
@@ -41,11 +85,20 @@
 
 <link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
 
-<SCRIPT>var imgsrc="images/";</SCRIPT>
-<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
-%>
+List<String[]> initValueForContainer = (List<String[]>)request.getAttribute("initValues");
+String[] containerValues=initValueForContainer.get(0);
+String containerName=containerValues[0];
+String pos1=containerValues[1];
+String pos2=containerValues[2];
+String collectionProtocolId ="";
+		if (request.getAttribute(Constants.COLLECTION_PROTOCOL_ID)==null)
+			collectionProtocolId="";
+		else
+		 collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
+
+	%>
 <script>
 function updateHelpURL()
 	{
@@ -56,6 +109,9 @@ function updateHelpURL()
 		}
 		return URL;
 	}
+	
+	
+	
 </script>
 <%
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
@@ -150,6 +206,14 @@ function updateHelpURL()
 	}
 
 	String formNameForCal = "newSpecimenForm";
+	
+	
+		String className = form.getClassName();
+		String sptype = form.getType();
+			if (className==null)
+				className="";
+				
+		String frameUrl="";
 
 %>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
@@ -178,8 +242,156 @@ function updateHelpURL()
 				window.parent.lastRefreshTime = new Date().getTime();
 			}
 		}
+		
+		
 </script>
 <script language="JavaScript">
+//declaring DHTMLX Drop Down controls required variables
+var containerDropDownInfo, scGrid;
+var scGridVisible = false;
+
+
+function initWindow()
+{
+    dhxWins = new dhtmlXWindows();
+    dhxWins.enableAutoViewport(true);
+    dhxWins.setImagePath("dhtmlx_suite/imgs/");
+    dhxWins.setSkin("dhx_skyblue");
+}
+
+
+
+function loadDHTMLXWindow()
+{
+	var w = 400;
+    var h = 400;
+    var x = (screen.width / 2) - (w / 2);
+    var y = 0;
+    dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
+	var storageContainer =document.getElementById("storageContainerDropDown").value;
+    var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1=pos1&pos2=pos2&&containerName="+storageContainer;
+    dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
+    dhxWins.window("containerPositionPopUp").button("park").hide();
+    dhxWins.window("containerPositionPopUp").button("minmax1").hide();
+    dhxWins.window("containerPositionPopUp").allowResize();
+	dhxWins.window("containerPositionPopUp").setModal(true);
+    dhxWins.window("containerPositionPopUp").setText("Container Positions");    //it's the title for the popup
+}
+function showPopUp() 
+{
+	var storageContainer =document.getElementById("storageContainerDropDown").value;
+    if(storageContainer!="")
+	{
+		loadDHTMLXWindow();
+	}
+	else
+	{
+	<%
+		 frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=storageContainerDropDown&pos1=pos1&pos2=pos2&containerId=containerId"
+											+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
+											+ "&" + Constants.CAN_HOLD_SPECIMEN_TYPE+"="+sptype
+											+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
+	%>
+	mapButtonClickedOnNewSpecimen('<%=frameUrl%>','newSpecimenPage');
+	}
+}
+
+//will be called whenever a participant is selected from the participant grid/dropdown
+function containerOnRowSelect(id,ind)
+{	
+	document.getElementsByName('selectedContainerName')[0].value = id;
+	document.getElementById(containerDropDownInfo['dropDownId']).value = scGrid.cellById(id,ind).getValue();
+	hideGrid(containerDropDownInfo['gridDiv']);
+	scGridVisible = false;
+}
+
+
+
+var gridDivObject ;
+
+
+function loadGrid()
+{
+//alert(containerDropDownInfo['actionToDo']+"&containerName="+document.getElementById("storageContainerDropDown").value);
+//alert(containerDropDownInfo['callBackAction']);
+gridDivObject.load(containerDropDownInfo['actionToDo']+"&containerName="+document.getElementById("storageContainerDropDown").value, containerDropDownInfo['callBackAction']);
+}
+
+
+
+function setValue(e,gridDivId, dropDownId)
+{
+		document.getElementById(dropDownId).focus();
+		noEventPropogation(e);
+}
+
+function showHideStorageContainerGrid(e,gridDivId, dropDownId)
+{		
+		setValue(e,gridDivId, dropDownId);
+		if(scGridVisible)
+		{
+			hideGrid(gridDivId);
+			scGridVisible = false;
+		}
+		else 
+		 {	
+			showGrid(gridDivId,dropDownId);
+			scGridVisible = true;
+			scGrid.load(containerDropDownInfo['actionToDo'],"");
+		 }
+}
+
+
+function onContainerListReady()
+	{
+		var containerName = '${newSpecimenForm.selectedContainerName}';
+		if(containerName != "" && containerName != 0 && containerName != null)
+			containerOnRowSelect(containerName,0);
+	}
+	
+
+
+function doOnLoad()
+{
+var className=document.getElementById("className").value;
+var sptype=document.getElementById("type").value;
+var collectionProtocolId="<%=collectionProtocolId%>";
+var containerName=document.getElementById("storageContainerDropDown").value;
+var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
++className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId+"&stContSelection="+"<%=form.getStContSelection()%>";
+
+	//Drop Down components information
+	containerDropDownInfo = {gridObj:"storageContainerGrid", gridDiv:"storageContainer", dropDownId:"storageContainerDropDown", pagingArea:"storageContainerPagingArea", infoArea:"storageContainerInfoArea", onOptionSelect:"containerOnRowSelect", actionToDo:url, callBackAction:onContainerListReady};
+	// initialising grid
+	scGrid = initDropDownGrid(containerDropDownInfo,5,0); 
+}
+
+
+function getStorageContainers()
+{
+    var name = document.getElementById("selectedContainer").value;
+	alert(name);
+    var request = newXMLHTTPReq();
+	if(request == null)
+    {
+		alert ("Your browser does not support AJAX!");
+		return;
+	}
+	var handlerFunction = getReadyStateHandler(request,true);
+    request.onreadystatechange = handlerFunction;
+	var param = "containerName="+name;
+    var url = "StorageContainerAjaxAction.do?containerName="+name;
+ 	request.open("POST",url,true);
+	
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+	request.send(param);
+	return false;
+
+}
+
+
+
+
 	function deleteExternalIdentifiers()
 	{
 	<%if(!pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
@@ -240,6 +452,36 @@ function updateHelpURL()
 				countForAliquot.style.display="block";
 			}
 		}
+
+function showStorageContDropDown()
+	{
+	var manualDiv=document.getElementById("manualDiv");
+	var stCont=document.getElementById("storageContainerDropDown");
+	var pos1=document.getElementById("pos1");
+	var pos2=document.getElementById("pos2");
+		if(document.getElementById('virtualCheckbox').checked == true)
+		{
+			stCont.value = '';
+			pos1.value = '';
+			pos2.value = '';
+			manualDiv.style.display = 'none';
+		}
+		else
+		{
+		document.getElementById('virtualCheckbox').value=false;
+		onCollOrClassChange();
+		
+		}
+	}
+
+
+function showPositionTextBoxes()
+{
+document.forms[0].pos1.style.display="block";
+document.forms[0].pos2.style.display="block";
+document.forms[0].pos1.disabled = false;
+document.forms[0].pos2.disabled = false;
+}
 
 
 	function onDeriveSubmit()
@@ -494,7 +736,7 @@ function updateHelpURL()
 		function onCollOrClassChange(element)
 		{
 			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupName");
-
+			var manualDiv = document.getElementById("manualDiv");
 			var classNameElement = document.getElementById("className").value;
 			classNameElement = trim(classNameElement);
 			var classSet = false;
@@ -531,8 +773,10 @@ function updateHelpURL()
 					String forwardTo = form.getForwardTo();
 				%>
 				var action = "<%=actionOnCollOrClassChange%>"+"&value="+value;
-				document.forms[0].action = action + "&onCollOrClassChange=true"+"&forwardTo="+"<%=forwardTo%>";
-				document.forms[0].submit();
+				manualDiv.style.display = 'block';
+				doOnLoad();
+				//document.forms[0].action = action + "&onCollOrClassChange=true"+"&forwardTo="+"<%=forwardTo%>";
+				//document.forms[0].submit();
 
 			}
 		}
@@ -563,9 +807,11 @@ function updateHelpURL()
 		//FUNCTION CALLED FOR RESETTING THE SELECT BOX TO VIRTUAL
 		function resetVirtualLocated()
 		{
-			document.getElementById("stContSelection").value=1;
-			document.getElementById("autoDiv").style.display="none";
 			document.getElementById("manualDiv").style.display="none";
+			document.getElementById("virtualCheckbox").checked=true;
+			//document.getElementById("stContSelection").value=1;
+			//document.getElementById("autoDiv").style.display="none";
+			//document.getElementById("manualDiv").style.display="none";
 		}
 		/**
  			* Name : Ashish Gupta
@@ -1038,11 +1284,26 @@ function updateHelpURL()
 		}%>
 		confirmDisable('<%=actionToCall1%>',document.forms[0].activityStatus);
 	}
+	
+	function hideStorageContainerDiv()
+	{
+		var manualDiv=document.getElementById("manualDiv");
+		manualDiv.style.display = 'none';
+	}
+	function loadContainerValues()
+	{
+	<% if(!form.isVirtuallyLocated())
+	{
+	%>
+	doOnLoad();
+	<%}%>
+	}
+	
 	</script>
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 	<link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
 </head>
-<body onload="showConsent()">
+<body onload="initWindow();loadContainerValues();showConsents();setContainerValues();">
 <%
 		int exIdRows=1;
 		int bhRows=1;
@@ -1121,7 +1382,8 @@ function updateHelpURL()
 								<html:hidden property="forwardTo" value=""/>
 							  <%} %>
 							  <html:hidden property="generateLabel"/>
-								<html:hidden property="virtuallyLocated"/>
+							  <html:hidden property="virtuallyLocated" styleId="virtuallyLocated"/>
+	
 								<html:hidden property="containerId" styleId="containerId"/>
 								<html:hidden property="withdrawlButtonStatus"/>
 								<html:hidden property="stringOfResponseKeys"/>
@@ -1731,42 +1993,26 @@ function updateHelpURL()
 										labelNames = Constants.STORAGE_CONTAINER_LABEL;
 										String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
 							            String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"};
-										//String[] initValues = new String[3];
-										//initValues[0] = form.getStorageContainer();
-										//initValues[1] = form.getPositionDimensionOne();
-										//initValues[2] = form.getPositionDimensionTwo();
-										String[] initValues = new String[3];
-										List initValuesList = (List)request.getAttribute("initValues");
-										if(initValuesList != null)
-										{
-											initValues = (String[])initValuesList.get(0);
-										}
-
+										
+										
+										List containerList=(List)request.getAttribute("containerList");
 										String rowNumber = "1";
 										String styClass = "formFieldSized5";
 										String tdStyleClass = "customFormField";
-										String onChange = "onCustomListBoxChangeForContainer(this)";
-										String className = form.getClassName();
-										String sptype = form.getType();
-
-										String collectionProtocolId =null;
-										if (request.getAttribute(Constants.COLLECTION_PROTOCOL_ID)==null)
-											collectionProtocolId="";
-										else
-											collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
-										if (className==null)
-											className="";
-										String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
-											+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
-											+ "&" + Constants.CAN_HOLD_SPECIMEN_TYPE+"="+sptype
-											+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
+										String onChange = "onCustomListBoxChange(this)";
 
 										/**
 		                  				* bug ID: 4225
 		                 				* Patch id: 4225_2
 		                  				* Description : Passing a different name to the popup window
 		                 				 */
+										 String forward_to_action = form.getForwardTo();
+										 
+										frameUrl="ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&amp;forwardTo=gridView&amp;pos1=pos1&amp;pos2=pos2";
 										String buttonOnClicked = "mapButtonClickedOnNewSpecimen('"+frameUrl+"','newSpecimenPage')";
+										//getContainerPositions();
+										System.out.println(buttonOnClicked);
+										//String buttonOnClicked = "mapButtonClickedOnNewSpecimen('"+frameUrl+"','newSpecimenPage')";
 
 										//"javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false";
 										//javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false";
@@ -1778,37 +2024,29 @@ function updateHelpURL()
 										{
 											disabled = true;
 										}
-										 int radioSelected = form.getStContSelection();
+										boolean isVirtuallyLocated = form.isVirtuallyLocated();
 										boolean dropDownDisable = false;
 										boolean textBoxDisable = false;
 										String autoDisplayStyle= null;
 										String manualDisplayStyle=null;
-										if(radioSelected == 1)
+										if(isVirtuallyLocated)
 										{
 											dropDownDisable = true;
 											textBoxDisable = true;
-											autoDisplayStyle = "display:none";
 											manualDisplayStyle = "display:none";
 										}
-										else if(radioSelected == 2)
-										{
-											textBoxDisable = true;
-											autoDisplayStyle = "display:block";
-											manualDisplayStyle = "display:none";
-										}
-										else if(radioSelected == 3)
+										else
 										{
 											dropDownDisable = true;
-											autoDisplayStyle = "display:none";
 											manualDisplayStyle = "display:block";
 										}
 
 
 									%>
 
-									<%=ScriptGenerator.getJSForOutermostDataTable()%>
+									<%//ScriptGenerator.getJSForOutermostDataTable()%>
 									<%//System.out.println("after getJSForOutermostDataTable in specimen jsp");%>
-									<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
+									<%//ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 									<%//System.out.println("after getJSEquivalentFor in specimen jsp");%>
 
 									<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
@@ -1826,51 +2064,69 @@ function updateHelpURL()
 								<% if( operation.equals("add") || (showContainer!=null&&showContainer.equals("Pending")))
 						{%>
 								<tr >
-							<td width="20%">
-									<html:select property="stContSelection" styleClass="black_new"
-											styleId="stContSelection" size="1"	onmouseover="showTip(this.id)"
-											onmouseout="hideTip(this.id)" onchange="onStorageRadioClickInSpecimen(this)">
-											<html:options collection="storageList"
-														labelProperty="name" property="value" />
-									</html:select>
-								</td>
-								<td width="80%" >
-			<div  id="autoDiv" Style="<%=autoDisplayStyle%>">
-									<ncombo:nlevelcombo dataMap="<%=dataMap%>"
-														attributeNames="<%=attrNames%>"
-														tdStyleClassArray="<%=tdStyleClassArray%>"
-														initialValues="<%=initValues%>"
-														styleClass = "black_new"
-														tdStyleClass = "black_new"
-														labelNames="<%=labelNames%>"
-														rowNumber="<%=rowNumber%>"
-														onChange = "<%=onChange%>"
-														formLabelStyle="nComboGroup"
-														disabled = "<%=dropDownDisable%>"
-														noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
-														</tr>
-														</table>
-			</div>
-			<div  id="manualDiv" style="<%=manualDisplayStyle%>"">
-				<table cellpadding="0" cellspacing="0" border="0" >
+							<!--td width="10%">
+									<html:checkbox styleId="virtualCheckbox" property="virtuallyLocated" value="" onclick="showStorageContDropDown()">
+														<span class="black_ar">
+															Virtual
+														</span>
+									</html:checkbox>
+								</td-->
+								<td width="100%" >
+			<div  id="manualDiv" style="<%=manualDisplayStyle%>">
+											<table cellpadding="0" cellspacing="0" border="0" >
 						<tr>
-							<td class="groupelements">
-								<html:text styleClass="black_ar"  size="20" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
+							<td class="groupelements" size="48">
+								
+								<td width="50%" align="left" class="black_ar">
+						<html:hidden property="selectedContainerName" styleId="selectedContainerName" />
+						<div>
+							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
+								<tr>
+									<td align="left" width="88%" height="100%" >
+										<div id="scDropDownIddiv" class="x-form-field-wrap" >
+											<input id="storageContainerDropDown"
+													onkeydown="keyNavigation(event,containerDropDownInfo,scGrid,scGridVisible);"
+													onKeyUp="autoCompleteControl(event,containerDropDownInfo,scGrid);"
+													onClick="noEventPropogation(event)"
+													autocomplete="off"
+													size="30"
+													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="scDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
+												onclick="showHideStorageContainerGrid(event,'storageContainer','storageContainerDropDown');"
+												src="images/uIEnhancementImages/s.gif"/>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+									<div id="storageContainer" style="z-index: 100"
+										onClick="noEventPropogation(event)">
+									<div id="storageContainerGrid" style="height: 40px;"
+										onClick="noEventPropogation(event)"></div>
+									<div id="storageContainerPagingArea" onClick="noEventPropogation(event)"></div>
+									<div id="storageContainerInfoArea" onClick="noEventPropogation(event)"></div>
+									</div>
+									</td>
+								</tr>
+							</table>
+					</td>
+					</td>
+
+							</td>
+							<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td class="groupelements"  width="10%">
+								<html:text styleClass="black_ar"  size="2" styleId="pos1" property="pos1"  disabled= "false" style="display:block"/>
+							</td>
+							<td class="groupelements" width="10%">
+								<html:text styleClass="black_ar"  size="2" styleId="pos2" property="pos2" disabled= "false" style="display:block"/>
 							</td>
 							<td class="groupelements">
-								<html:text styleClass="black_ar"  size="2" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
-							</td>
-							<td class="groupelements">
-								<html:text styleClass="black_ar"  size="2" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
-							</td>
-							<td class="groupelements">
-								<html:button styleClass="black_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
+								<html:button styleClass="black_ar" property="containerMap" onclick="showPopUp()">
 											<bean:message key="buttons.map"/>
 								</html:button>
 							</td>
 						</tr>
 					</table>
-			</div>
+					</div>
 		</td>
 		</tr>
 
@@ -1901,10 +2157,10 @@ function updateHelpURL()
 															<html:text styleClass="black_ar"  size="30" styleId="selectedContainerName" onmouseover="showTip(this.id)" property="selectedContainerName" readonly= "true"/>
 														</td>
 							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true" style="text-align:right"/>
+															<html:text styleClass="black_ar"  size="2" styleId="pos1" property="pos1" readonly= "true" style="text-align:right"/>
 											</td>
 							<td class="groupelements">
-															<html:text styleClass="black_ar"  size="2" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true" style="text-align:right"/>
+															<html:text styleClass="black_ar"  size="2" styleId="pos2" property="pos2" readonly= "true" style="text-align:right"/>
 													</td>
 							<td class="groupelements">
 															<html:button styleClass="black_ar" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
@@ -2111,5 +2367,23 @@ function updateHelpURL()
 </html:form>
 <script language="JavaScript" type="text/javascript">
 showPriterTypeLocation();
+function updateStorageContainerValue()
+	{
+		var containerName=document.getElementById(containerDropDownInfo['dropDownId']).value;
+		document.getElementById("selectedContainerName").value=containerName;
+		if('Virtual'==containerName)
+		{
+			document.getElementById("virtuallyLocated").value='true';
+		}
+	}
+	
+function setContainerValues()
+{
+<%if(!"".equalsIgnoreCase(containerName)) {%>
+	document.getElementById(containerDropDownInfo['dropDownId']).value='<%=containerName%>';
+	document.getElementById("pos1").value='<%=pos1%>';
+	document.getElementById("pos2").value='<%=pos2%>';
+<%}%>	
+}
 </script>
 </body>

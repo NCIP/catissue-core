@@ -232,12 +232,12 @@ public class TransferEventParameters extends SpecimenEventParameters
 		{
 			final TransferEventParametersForm form = (TransferEventParametersForm) abstractForm;
 			final StorageContainer toObj = new StorageContainer();
-			if (form.getStContSelection() == 1)
-			{
-				this.toPositionDimensionOne = StorageContainerUtil.convertPositionsToIntegerUsingContId(form.getStorageContainer(), 1, form.getPositionDimensionOne());
-				this.toPositionDimensionTwo = StorageContainerUtil.convertPositionsToIntegerUsingContId(form.getStorageContainer(), 2, form.getPositionDimensionTwo());
-				toObj.setId(Long.valueOf(form.getStorageContainer()));
-			}
+			/*if (form.getStContSelection() == 1)
+			{*/
+				this.toPositionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getStorageContainer(), 1, form.getPos1());
+				this.toPositionDimensionTwo = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getStorageContainer(), 2, form.getPos2());
+				toObj.setName(form.getStorageContainer());
+			/*}
 			else
 			{
 				if (form.getPos1() != null
@@ -245,11 +245,11 @@ public class TransferEventParameters extends SpecimenEventParameters
 						&& form.getPos2() != null
 						&& !form.getPos2().trim().equals(Constants.DOUBLE_QUOTES))
 				{
-					this.toPositionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getSelectedContainerName(),1,form.getPos1());
+					this.toPositionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getSelectedContainerName(),1,form.getPos2());
 					this.toPositionDimensionTwo = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getSelectedContainerName(),2,form.getPos2());
 				}
 				toObj.setName(form.getSelectedContainerName());
-			}
+			}*/
 
 			this.toStorageContainer = toObj;
 

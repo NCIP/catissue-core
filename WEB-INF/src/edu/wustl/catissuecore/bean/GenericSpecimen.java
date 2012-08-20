@@ -431,4 +431,9 @@ public interface GenericSpecimen extends Serializable
 		public LinkedHashMap<String, GenericSpecimen> getAliquotSpecimenCollection();
 		public LinkedHashMap<String, GenericSpecimen> getDeriveSpecimenCollection();
 	*/
+
+	public String getLineage();
+	public void setLineage(String lineage);
+	public Long getParentId();
+	public void setParentId(Long parentId);
 }

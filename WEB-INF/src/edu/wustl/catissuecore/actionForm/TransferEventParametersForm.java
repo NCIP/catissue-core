@@ -262,8 +262,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			
 			this.positionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,1,transferEventParametersObject.getToPositionDimensionOne());
 			this.positionDimensionTwo =StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,2,transferEventParametersObject.getToPositionDimensionTwo());
-			this.storageContainer = transferEventParametersObject.getToStorageContainer().getId()
-					.toString();
+			this.storageContainer = transferEventParametersObject.getToStorageContainer().getName();
 
 			
 
@@ -316,9 +315,9 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 
 			if (this.stContSelection == 1)
 			{
-				if (Validator.isEmpty(this.positionDimensionOne)
+				if (/*Validator.isEmpty(this.positionDimensionOne)
 						|| Validator.isEmpty(this.positionDimensionTwo)
-						|| Validator.isEmpty(this.storageContainer))
+						|| */Validator.isEmpty(this.storageContainer))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("transfereventparameters.toposition")));

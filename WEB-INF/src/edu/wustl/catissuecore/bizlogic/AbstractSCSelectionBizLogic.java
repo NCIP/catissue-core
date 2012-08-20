@@ -59,6 +59,26 @@ public abstract class AbstractSCSelectionBizLogic
 		}
 		return containerMap;
 	}
+	
+	public Map<NameValueBean, Map<NameValueBean, List<NameValueBean>>>
+	getAllocDetailsForGivenContainer(String containerId,String containerName,Integer positionDimensionOne,Integer positionDimensionTwo, final DAO dao) throws BizLogicException
+	{
+		
+		final Map<NameValueBean, Map<NameValueBean, List<NameValueBean>>> containerMap = 
+			new TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>>(new NameValueBeanRelevanceComparator());
+		long relevance = 1;
+		final Map<NameValueBean, List<NameValueBean>> positionMap = 
+				StorageContainerUtil.getAvailablePositionMapForContainer(containerId, 0, positionDimensionOne,
+						positionDimensionTwo, dao);
+			if (!positionMap.isEmpty())
+			{
+				final NameValueBean nvb = new NameValueBean(containerName, containerId,
+						relevance);
+				containerMap.put(nvb, positionMap);
+			}
+	return containerMap;
+	}
+	
 	/**
 	 * Returns a list of storage containers. Each index corresponds to the entry:<br>
 	 * 		[id, name, one_dimension_capacity, two_dimension_capacity ...]

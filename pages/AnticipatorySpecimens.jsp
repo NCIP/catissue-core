@@ -14,32 +14,98 @@
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
 <%@ page language="java" isELIgnored="false"%>
 <% ViewSpecimenSummaryForm form = (ViewSpecimenSummaryForm)request.getAttribute("viewSpecimenSummaryForm");
+List<GenericSpecimen> specimenList=form.getSpecimenList();
+List<GenericSpecimen> aliquotList=form.getAliquotList();
+List<GenericSpecimen> derivedList=form.getDerivedList();
 String clinicalDataEntryURL = null;
 if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 {
 	clinicalDataEntryURL = request.getParameter("clinicalDataEntryURL");
 }
 %>
+<%!public String getLineageSubString(GenericSpecimen gs3)
+{
+			String lineage=gs3.getLineage();
+			if(lineage.equals("New"))
+			{
+				lineage="S";
+			}
+			else if(lineage.equals("Aliquot"))
+			{
+				lineage="Aliquot"+gs3.getParentId();
+			}
+			else if(lineage.equals("Derived"))
+			{
+				lineage="Derived"+gs3.getParentId();
+			}
+			return lineage;
+}
+%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-<script type="text/javascript" src="jss/tag-popup.js"></script>
-<link rel="STYLESHEET" type="text/css"
-	href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
-<link rel="STYLESHEET" type="text/css"
-	href="dhtmlx_suite/dhtml_pop/css/dhtmlXGrid.css" />
-<link rel="STYLESHEET" type="text/css"
-	href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlx.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
+<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script src="jss/script.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
+<script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
+<script>var imgsrc="images/de/";</script>
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
+<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script src="jss/script.js" type="text/javascript"></script>
+
+<script src="jss/script.js"></script>
+<script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/prototype.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/scr.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/combobox.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
+<script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
+<LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
 
 
-<link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
 <script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
@@ -47,6 +113,68 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 <script language="JavaScript" type="text/javascript" src="jss/antiSpecAjax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
 <script src="jss/ajax.js" type="text/javascript"></script>
+
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
+<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
+<script src="jss/script.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
+<script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
+<script>var imgsrc="images/de/";</script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/prototype.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/scr.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/combobox.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
+<script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
+<LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+
+
+
+
+<script src="jss/script.js"></script>
+<script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+
+
+
+
+
 
 <script language="JavaScript">
 var clinDataEntryURL = "<%=clinicalDataEntryURL%>";
@@ -111,7 +239,7 @@ function getCountByType(type)
 		if(fid.indexOf(type+"[")>=0)
 			count = count+1;
 	}
-
+alert(count);
 	return count;
 }
 function getElement(name)
@@ -174,7 +302,33 @@ function updateField(type,i,isDis,valueToSet)
 				}
 			}
 		}
+		
+		
+function initWindow()
+{
+//alert("initializing DHTMLX window");
+    dhxWins = new dhtmlXWindows();
+    dhxWins.enableAutoViewport(true);
+    dhxWins.setImagePath("dhtmlx_suite/imgs/");
+    dhxWins.setSkin("dhx_skyblue");
+}
 
+function loadDHTMLXWindow(storageContainerDropDown,positionDimensionOne,positionDimensionTwo)
+{
+	var w = 400;
+    var h = 400;
+    var x = (screen.width / 2) - (w / 2);
+    var y = 0;
+    dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
+	var storageContainer =document.getElementById(storageContainerDropDown).value;
+    var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1="+positionDimensionOne+"&pos2="+positionDimensionTwo+"&containerName="+storageContainer;
+    dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
+    dhxWins.window("containerPositionPopUp").button("park").hide();
+    dhxWins.window("containerPositionPopUp").button("minmax1").hide();
+    dhxWins.window("containerPositionPopUp").allowResize();
+	dhxWins.window("containerPositionPopUp").setModal(true);
+    dhxWins.window("containerPositionPopUp").setText("Container Positions");    //it's the title for the popup
+}
 
 
 		function saveCollectionProtocol()
@@ -184,21 +338,30 @@ function updateField(type,i,isDis,valueToSet)
 				document.forms[0].submit();
 		}
 
-		function showMap(selectedContainerName,positionDimensionOne,positionDimensionTwo,containerId,specimenClassName,spType,cpId)
+		function showMap(storageContainerDropDown,selectedContainerName,positionDimensionOne,positionDimensionTwo,containerId,specimenClassName,spType,cpId)
 		{
-			frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&"+
-				"selectedContainerName=" + selectedContainerName +
-				"&pos1=" + positionDimensionOne +
-				"&pos2=" + positionDimensionTwo +
-				"&containerId=" +containerId +
-				"&${requestScope.CAN_HOLD_SPECIMEN_CLASS}="+specimenClassName +
-				"&${requestScope.CAN_HOLD_SPECIMEN_TYPE}="+spType +
-				"&${requestScope.CAN_HOLD_COLLECTION_PROTOCOL}=" + cpId;
+			var storageContainer =document.getElementById(storageContainerDropDown).value;
+			if(storageContainer!="")
+			{
+				loadDHTMLXWindow(storageContainerDropDown,positionDimensionOne,positionDimensionTwo);
+			}
+			else
+			{
+				var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&"+
+					"selectedContainerName=" + storageContainerDropDown +
+					"&pos1=" + positionDimensionOne +
+					"&pos2=" + positionDimensionTwo +
+					"&containerId=" +containerId +
+					"&${requestScope.CAN_HOLD_SPECIMEN_CLASS}="+specimenClassName +
+					"&${requestScope.CAN_HOLD_SPECIMEN_TYPE}="+spType +
+					"&${requestScope.CAN_HOLD_COLLECTION_PROTOCOL}=" + cpId;
+					frameUrl+="&storageContainerName="+storageContainer;
+					openPopupWindow(frameUrl,'newSpecimenPage');
+			}
+			//var storageContainer = document.getElementById(selectedContainerName).value;
+			
 
-			var storageContainer = document.getElementById(selectedContainerName).value;
-			frameUrl+="&storageContainerName="+storageContainer;
-
-			openPopupWindow(frameUrl,'newSpecimenPage');
+			
 			//mapButtonClickedOnSpecimen(frameUrl,'newSpecimenPage');
 		}
 		//bug 11169 start
@@ -492,9 +655,256 @@ function updateSCDetails(msg)
 	t3.disabled = false;
 
 }
+
+<%
+
+String collectionProtocolId ="";
+if (request.getAttribute(Constants.COLLECTION_PROTOCOL_ID)==null)
+	collectionProtocolId="";
+else
+ collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
+
+	 %>
+//declaring DHTMLX Drop Down controls required variables
+<%if(specimenList!=null)
+	{
+		//Iterator<GenericSpecimen> iter=specimenList.Iterator();
+		for(int i=0;i<specimenList.size();i++)
+		{
+			GenericSpecimen gs1=specimenList.get(i);
+			String lineage=getLineageSubString(gs1);
+	%>
+var containerDropDownInfo_S_<%=gs1.getId()%>, scGrid_S_<%=gs1.getId()%>;
+var scGridVisible_S_<%=gs1.getId()%> = false;
+var gridDivObject_S_<%=gs1.getId()%> ;
+<%}}%>
+<%if(aliquotList!=null)
+	{
+		//Iterator<GenericSpecimen> iter=aliquotList.Iterator();
+		for(int i=0;i<aliquotList.size();i++)
+		{
+			GenericSpecimen gs1=aliquotList.get(i);
+			String lineage=getLineageSubString(gs1);
+	%>
+var containerDropDownInfo_<%=lineage%>_<%=gs1.getId()%>, scGrid_<%=lineage%>_<%=gs1.getId()%>;
+var scGridVisible_<%=lineage%>_<%=gs1.getId()%> = false;
+var gridDivObject_<%=lineage%>_<%=gs1.getId()%> ;
+<%}}%>
+<%if(derivedList!=null)
+	{
+		//Iterator<GenericSpecimen> iter=derivedList.Iterator();
+		for(int i=0;i<derivedList.size();i++)
+		{
+			GenericSpecimen gs1=derivedList.get(i);
+			String lineage=getLineageSubString(gs1);
+	%>
+var containerDropDownInfo_<%=lineage%>_<%=gs1.getId()%>, scGrid_<%=lineage%>_<%=gs1.getId()%>;
+var scGridVisible_<%=lineage%>_<%=gs1.getId()%> = false;
+var gridDivObject_<%=lineage%>_<%=gs1.getId()%> ;
+<%}}%>
+
+function showHideStorageContainerGrid(e,gridDivId, dropDownId,scGridVisible,containerDropDownInfo,scGrid)
+{		
+		setValue(e,containerDropDownInfo['gridDiv'], containerDropDownInfo['dropDownId']);
+		if(containerDropDownInfo['visibilityStatusVariable'])
+		{
+			hideGrid(containerDropDownInfo['gridDiv']);
+			containerDropDownInfo['visibilityStatusVariable'] = false;
+		}
+		else 
+		 {	
+			showGrid(containerDropDownInfo['gridDiv'],containerDropDownInfo['dropDownId']);
+			containerDropDownInfo['visibilityStatusVariable'] = true;
+			var containerName=document.getElementById(containerDropDownInfo['dropDownId']);
+			if(null== containerName)
+			{
+				containerName="";
+			}
+			scGrid.load(containerDropDownInfo['actionToDo'],"");
+			//scGrid.clearAndLoad(containerDropDownInfo['actionToDo']+"&containerName="+document.getElementById(containerDropDownInfo['dropDownId']).value, containerDropDownInfo['callBackAction']);
+		 }
+}
+
+function doOnLoad()
+{
+
+	<%if(specimenList!=null)
+	{
+		//Iterator<GenericSpecimen> iter=specimenList.Iterator();
+		for(int i=0;i<specimenList.size();i++)
+		{
+			GenericSpecimen gs=specimenList.get(i);
+			String lineage=getLineageSubString(gs);
+			if("Pending".equals(gs.getCollectionStatus()))
+			{
+	%>
+		var className<%=gs.getId()%>=document.getElementById("className_S_<%=gs.getId()%>").value;
+		var sptype<%=gs.getId()%>=document.getElementById("type_S_<%=gs.getId()%>").value;
+		var collectionProtocolId="<%=collectionProtocolId%>";
+		var containerName=document.getElementById("storageContainerDropDown_S_<%=gs.getId()%>").value;
+		var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
+		+className<%=gs.getId()%>+"&specimenType="+sptype<%=gs.getId()%>+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId;
+
+		//Drop Down components information
+		containerDropDownInfo_S_<%=gs.getId()%> = {gridObj:"storageContainerGrid_S_<%=gs.getId()%>", gridDiv:"storageContainer_S_<%=gs.getId()%>", dropDownId:"storageContainerDropDown_S_<%=gs.getId()%>", pagingArea:"storageContainerPagingArea_S_<%=gs.getId()%>", infoArea:"storageContainerInfoArea_S_<%=gs.getId()%>", onOptionSelect:
+		function (id,ind)
+		{
+			document.getElementsByName('selectedContainerName_S_<%=gs.getId()%>')[0].value = containerName;
+			document.getElementById(containerDropDownInfo_S_<%=gs.getId()%>['dropDownId']).value = scGrid_S_<%=gs.getId()%>.cellById(id,ind).getValue();
+			hideGrid(containerDropDownInfo_S_<%=gs.getId()%>['gridDiv']);
+			scGridVisible_S_<%=gs.getId()%> = false;
+		}
+		, actionToDo:url, callBackAction:
+		function(){
+					var containerName= document.getElementsByName('selectedContainerName_S_<%=gs.getId()%>')[0].value;
+					if(containerName != "" && containerName != 0 && containerName != null)
+					{
+						document.getElementsByName('selectedContainerName_S_<%=gs.getId()%>')[0].value = containerName;
+						document.getElementById(containerDropDownInfo_S_<%=gs.getId()%>['dropDownId']).value = scGrid_S_<%=gs.getId()%>.cellById(containerName,0).getValue();
+						hideGrid(containerDropDownInfo_S_<%=gs.getId()%>['gridDiv']);
+						scGridVisible_S_<%=gs.getId()%> = false;
+					}
+				}
+			, visibilityStatusVariable:scGridVisible_S_<%=gs.getId()%>};
+		// initialising grid
+		scGrid_S_<%=gs.getId()%> = initDropDownGrid(containerDropDownInfo_S_<%=gs.getId()%>,5,0); 
+	<%}}}%>
+	
+	
+	//aliquot list
+	<%if(aliquotList!=null)
+	{
+		//Iterator<GenericSpecimen> iter=aliquotList.Iterator();
+		for(int i=0;i<aliquotList.size();i++)
+		{
+			GenericSpecimen gs=aliquotList.get(i);
+			String lineage=getLineageSubString(gs);
+			if("Pending".equals(gs.getCollectionStatus()))
+			{
+	%>
+		var className<%=gs.getId()%>=document.getElementById("className_S_<%=gs.getId()%>").value;
+		var sptype<%=gs.getId()%>=document.getElementById("type_S_<%=gs.getId()%>").value;
+		var collectionProtocolId="<%=collectionProtocolId%>";
+		var containerName=document.getElementById("storageContainerDropDown_<%=lineage%>_<%=gs.getId()%>").value;
+		var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
+		+className<%=gs.getId()%>+"&specimenType="+sptype<%=gs.getId()%>+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId;
+
+		//Drop Down components information
+		containerDropDownInfo_<%=lineage%>_<%=gs.getId()%> = {gridObj:"storageContainerGrid_<%=lineage%>_<%=gs.getId()%>", gridDiv:"storageContainer_<%=lineage%>_<%=gs.getId()%>", dropDownId:"storageContainerDropDown_<%=lineage%>_<%=gs.getId()%>", pagingArea:"storageContainerPagingArea_<%=lineage%>_<%=gs.getId()%>", infoArea:"storageContainerInfoArea_<%=lineage%>_<%=gs.getId()%>", onOptionSelect:
+		function (id,ind)
+		{
+			document.getElementsByName('selectedContainerName_<%=lineage%>_<%=gs.getId()%>')[0].value = containerName;
+			document.getElementById(containerDropDownInfo_<%=lineage%>_<%=gs.getId()%>['dropDownId']).value = scGrid_<%=lineage%>_<%=gs.getId()%>.cellById(id,ind).getValue();
+			hideGrid(containerDropDownInfo_<%=lineage%>_<%=gs.getId()%>['gridDiv']);
+			scGridVisible_<%=lineage%>_<%=gs.getId()%> = false;
+		}
+		, actionToDo:url, callBackAction:
+		function(){
+					var containerName= document.getElementsByName('selectedContainerName_<%=lineage%>_<%=gs.getId()%>')[0].value;
+					if(containerName != "" && containerName != 0 && containerName != null)
+					{
+						document.getElementsByName('selectedContainerName_<%=lineage%>_<%=gs.getId()%>')[0].value = containerName;
+						document.getElementById(containerDropDownInfo_<%=lineage%>_<%=gs.getId()%>['dropDownId']).value = scGrid_<%=lineage%>_<%=gs.getId()%>.cellById(containerName,0).getValue();
+						hideGrid(containerDropDownInfo_<%=lineage%>_<%=gs.getId()%>['gridDiv']);
+						scGridVisible_<%=lineage%>_<%=gs.getId()%> = false;
+					}
+				}
+			, visibilityStatusVariable:scGridVisible_<%=lineage%>_<%=gs.getId()%>};
+		// initialising grid
+		scGrid_<%=lineage%>_<%=gs.getId()%> = initDropDownGrid(containerDropDownInfo_<%=lineage%>_<%=gs.getId()%>,5,0); 
+	<%}}}%>
+	
+	<%if(derivedList!=null)
+	{
+		//Iterator<GenericSpecimen> iter=derivedList.Iterator();
+		for(int i=0;i<derivedList.size();i++)
+		{
+			GenericSpecimen gs=derivedList.get(i);
+			String lineage=getLineageSubString(gs);
+			if("Pending".equals(gs.getCollectionStatus()))
+			{
+	%>
+		var className<%=gs.getId()%>=document.getElementById("className_S_<%=gs.getId()%>").value;
+		var sptype<%=gs.getId()%>=document.getElementById("type_S_<%=gs.getId()%>").value;
+		var collectionProtocolId="<%=collectionProtocolId%>";
+		var containerName=document.getElementById("storageContainerDropDown_<%=lineage%>_<%=gs.getId()%>").value;
+		var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
+		+className<%=gs.getId()%>+"&specimenType="+sptype<%=gs.getId()%>+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId;
+
+		//Drop Down components information
+		containerDropDownInfo_<%=lineage%>_<%=gs.getId()%> = {gridObj:"storageContainerGrid_<%=lineage%>_<%=gs.getId()%>", gridDiv:"storageContainer_<%=lineage%>_<%=gs.getId()%>", dropDownId:"storageContainerDropDown_<%=lineage%>_<%=gs.getId()%>", pagingArea:"storageContainerPagingArea_<%=lineage%>_<%=gs.getId()%>", infoArea:"storageContainerInfoArea_<%=lineage%>_<%=gs.getId()%>", onOptionSelect:
+		function (id,ind)
+		{
+			document.getElementsByName('selectedContainerName_<%=lineage%>_<%=gs.getId()%>')[0].value = containerName;
+			document.getElementById(containerDropDownInfo_<%=lineage%>_<%=gs.getId()%>['dropDownId']).value = scGrid_<%=lineage%>_<%=gs.getId()%>.cellById(id,ind).getValue();
+			hideGrid(containerDropDownInfo_<%=lineage%>_<%=gs.getId()%>['gridDiv']);
+			scGridVisible_<%=lineage%>_<%=gs.getId()%> = false;
+		}
+		, actionToDo:url, callBackAction:
+		function(){
+					var containerName= document.getElementsByName('selectedContainerName_<%=lineage%>_<%=gs.getId()%>')[0].value;
+					if(containerName != "" && containerName != 0 && containerName != null)
+					{
+						document.getElementsByName('selectedContainerName_<%=lineage%>_<%=gs.getId()%>')[0].value = containerName;
+						document.getElementById(containerDropDownInfo_S_<%=gs.getId()%>['dropDownId']).value = scGrid_<%=lineage%>_<%=gs.getId()%>.cellById(containerName,0).getValue();
+						hideGrid(containerDropDownInfo_<%=lineage%>_<%=gs.getId()%>['gridDiv']);
+						scGridVisible_<%=lineage%>_<%=gs.getId()%> = false;
+					}
+				}
+			, visibilityStatusVariable:scGridVisible_<%=lineage%>_<%=gs.getId()%>};
+		// initialising grid
+		scGrid_<%=lineage%>_<%=gs.getId()%> = initDropDownGrid(containerDropDownInfo_<%=lineage%>_<%=gs.getId()%>,5,0); 
+	<%}}}%>
+}
+
+function setContainerValues()
+{
+<%if(specimenList!=null)
+	{
+		for(int i=0;i<specimenList.size();i++)
+		{
+			GenericSpecimen gs2=specimenList.get(i);
+			String lineage=getLineageSubString(gs2);
+			if(null!=gs2.getSelectedContainerName() && !"".equalsIgnoreCase(gs2.getSelectedContainerName()) && !"Collected".equals(gs2.getCollectionStatus())) 
+			{%>
+				document.getElementById(containerDropDownInfo_S_<%=gs2.getId()%>['dropDownId']).value='<%=gs2.getSelectedContainerName()%>';
+				document.getElementById("positionDimensionOne_S_<%=gs2.getId()%>").value='<%=gs2.getPositionDimensionOne()%>';
+				document.getElementById("positionDimensionTwo_S_<%=gs2.getId()%>").value='<%=gs2.getPositionDimensionTwo()%>';
+<%}}}%>	
+
+<%if(aliquotList!=null)
+	{
+		for(int i=0;i<aliquotList.size();i++)
+		{
+			GenericSpecimen gs2=aliquotList.get(i);
+			String lineage=getLineageSubString(gs2);
+			if(null!=gs2.getSelectedContainerName() && !"".equalsIgnoreCase(gs2.getSelectedContainerName()) && !"Collected".equals(gs2.getCollectionStatus())) 
+			{%>
+				document.getElementById(containerDropDownInfo_<%=lineage%>_<%=gs2.getId()%>['dropDownId']).value='<%=gs2.getSelectedContainerName()%>';
+				document.getElementById("positionDimensionOne_<%=lineage%>_<%=gs2.getId()%>").value='<%=gs2.getPositionDimensionOne()%>';
+				document.getElementById("positionDimensionTwo_<%=lineage%>_<%=gs2.getId()%>").value='<%=gs2.getPositionDimensionTwo()%>';
+<%}}}%>	
+
+<%if(derivedList!=null)
+	{
+		for(int i=0;i<derivedList.size();i++)
+		{
+			GenericSpecimen gs2=derivedList.get(i);
+			String lineage=getLineageSubString(gs2);
+			if(null!=gs2.getSelectedContainerName() && !"".equalsIgnoreCase(gs2.getSelectedContainerName()) && !"Collected".equals(gs2.getCollectionStatus())) 
+			{%>
+				document.getElementById(containerDropDownInfo_<%=lineage%>_<%=gs2.getId()%>['dropDownId']).value='<%=gs2.getSelectedContainerName()%>';
+				document.getElementById("positionDimensionOne_<%=lineage%>_<%=gs2.getId()%>").value='<%=gs2.getPositionDimensionOne()%>';
+				document.getElementById("positionDimensionTwo_<%=lineage%>_<%=gs2.getId()%>").value='<%=gs2.getPositionDimensionTwo()%>';
+<%}}}%>	
+}
+
+	
+
+
 </script>
 </head>
-<body onload="UpdateCheckBoxStatus()">
+<body onload="doOnLoad();initWindow();UpdateCheckBoxStatus();setContainerValues()">
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script language="javascript" type="text/javascript">
 	${requestScope.refreshTree}
@@ -797,9 +1207,6 @@ String lbl = "Apply first to all";
 							</logic:equal>
 					</tr>
 				</table>
-				<script>
-			
-		</script>
 			</tr>
 		</table>
 	<div id="divForHiddenChild"></div>

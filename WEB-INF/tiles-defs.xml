@@ -815,6 +815,10 @@
 	<definition name=".catissuecore.storageLocationMapViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/ViewStorageContainerMap.jsp" />
 	</definition>
+	
+	<definition name=".catissuecore.storagePositionGridViewDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/StoragePositionGrid.jsp" />
+	</definition>
 
 	<definition name=".catissuecore.participantEditDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />

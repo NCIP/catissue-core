@@ -46,12 +46,14 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.dao.util.HibernateMetaData;
 
 /**
@@ -87,7 +89,11 @@ public class ShowStorageGridViewAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String target = Constants.SUCCESS;
+		String target=request.getParameter(Constants.FORWARD_TO);
+		if(target == null)
+		{
+		target = Constants.SUCCESS;
+		}
 		String id = request.getParameter(Constants.SYSTEM_IDENTIFIER);
 		if (id == null)
 		{
@@ -97,10 +103,19 @@ public class ShowStorageGridViewAction extends BaseAction
 				id = "0";
 			}
 		}
+		if(id.equalsIgnoreCase("0"))
+		{
+			String scName=request.getParameter("storageContainerName");
+			ColumnValueBean cvb=new ColumnValueBean(Constants.NAME, scName);
+			DefaultBizLogic bizLogic=new DefaultBizLogic();
+			List contList= bizLogic.retrieve(StorageContainer.class.getName(), cvb);
+			StorageContainer sc= (StorageContainer)contList.get(0);
+			id=sc.getId().toString();
+		}
 		request.setAttribute("storageContainerIdentifier", id);
 		String contentOfContainer = null;
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
-		if (pageOf.equals(Constants.PAGE_OF_STORAGE_CONTAINER))
+		if (Constants.PAGE_OF_STORAGE_CONTAINER.equals(pageOf))
 		{
 			target = Constants.PAGE_OF_STORAGE_CONTAINER;
 		}
@@ -386,16 +401,17 @@ public class ShowStorageGridViewAction extends BaseAction
 							String specimenMapKey = (String) session.getAttribute(Constants.SPECIMEN_ATTRIBUTE_KEY);
 							String specimenCallBackFunction =  (String) session.getAttribute(Constants.SPECIMEN_CALL_BACK_FUNCTION);
 							String selectedContainerName= (String) session.getAttribute(Constants.SELECTED_CONTAINER_NAME);
-							String pos1= (String) session.getAttribute(Constants.POS1);
-						    String pos2= (String)session.getAttribute(Constants.POS2);
-							if (pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN)) 
+							String pos1=(String) session.getAttribute(Constants.POS1);
+						    String pos2=(String)session.getAttribute(Constants.POS2);
+						    
+							if (Constants.PAGE_OF_MULTIPLE_SPECIMEN.equals(pageOf)) 
 							{
 								value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\""+specimenCallBackFunction+"(\\\'"+specimenMapKey+"\\\',\\\'"+storageContainerGridObject.getId()+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\' " 
 										+",\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ "
 										+"closeFramedWindow()\\\\\" "
 										+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
 							}
-							else if (pageOf.equals(Constants.PAGE_OF_SPECIMEN))
+							else if (Constants.PAGE_OF_SPECIMEN.equals(pageOf))
 							{
 								//value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(1,1)\\\\\" src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";							//value = "";
 								value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(\\\'"+selectedContainerName+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\');\\ " 
@@ -404,7 +420,7 @@ public class ShowStorageGridViewAction extends BaseAction
 										+"closeFramedWindow()\\\\\" "
 										+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
 							}
-							else if(pageOf.equals(Constants.PAGE_OF_ALIQUOT))
+							else if(Constants.PAGE_OF_ALIQUOT.equals(pageOf))
 							{
 								value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(\\\'"+containerStyle+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\');\\ " 
 										+"setTextBoxValue(\\\'"+xDimStyleId+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
@@ -496,7 +512,7 @@ public class ShowStorageGridViewAction extends BaseAction
 		}
 
 		request.setAttribute(Constants.CONTENT_OF_CONTAINNER, contentOfContainer);
-		if (pageOf.equals(Constants.PAGE_OF_STORAGE_LOCATION))
+		if (Constants.PAGE_OF_STORAGE_LOCATION.equals(pageOf))
 		{
 			final String storageContainerType = request
 					.getParameter(Constants.STORAGE_CONTAINER_TYPE);

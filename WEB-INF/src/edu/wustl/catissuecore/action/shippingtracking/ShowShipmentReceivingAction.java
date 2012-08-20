@@ -60,7 +60,8 @@ public class ShowShipmentReceivingAction extends SecureAction
 			shipmentId = Long.parseLong(request
 					.getParameter(edu.wustl.catissuecore.util.global.Constants.SYSTEM_IDENTIFIER));
 		}
-
+		final String contName=request.getParameter(edu.wustl.catissuecore.util.global.Constants.CONTAINER_NAME);
+		
 		final ShipmentReceivingForm shipmentReceivingForm = (ShipmentReceivingForm) form;
 		Shipment shipment = null;
 		// Get the Shipment details.
@@ -128,7 +129,7 @@ public class ShowShipmentReceivingAction extends SecureAction
 								if(request.getAttribute( "org.apache.struts.action.ERROR" )!= null) 
 								{
 									List<Object> parameterList = AppUtility.setparameterList(Long.valueOf(cpId).longValue(),spClass,0,spType);
-									containerMap = bizLogic.getAllocatedContainerMapForSpecimen( parameterList,sessionDataBean, dao );
+									containerMap = bizLogic.getAllocatedContainerMapForSpecimen( parameterList,sessionDataBean, dao,contName);
 									String containerId = map.get( "containerId_"+specimenId ).toString();
 									String pos1 = map.get( "pos1_"+specimenId ).toString();
 									String pos2 = map.get( "pos2_"+specimenId ).toString();

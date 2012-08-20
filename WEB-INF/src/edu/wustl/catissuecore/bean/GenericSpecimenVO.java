@@ -103,6 +103,8 @@ public final class GenericSpecimenVO implements GenericSpecimen
 
 	/** The generate label. */
 	private boolean generateLabel = false;
+	
+	private String lineage;
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.bean.GenericSpecimen#isGenerateLabel()
@@ -596,4 +598,31 @@ public final class GenericSpecimenVO implements GenericSpecimen
 		
 	}
 
+	@Override
+	public String getLineage()
+	{
+		return lineage;
+	}
+	
+	public void setLineage(String lineage)
+	{
+		this.lineage=lineage;
+	}
+	
+	private Long parentId;
+
+	
+	public Long getParentId()
+	{
+		return parentId;
+	}
+
+
+	
+	public void setParentId(Long parentId)
+	{
+		this.parentId = parentId;
+	}
+
+	
 }

@@ -73,7 +73,8 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		final StorageContainerForSpecimenBizLogic scbizLogic = new StorageContainerForSpecimenBizLogic();
 		TreeMap containerMap = new TreeMap();
 		final String exceedingMaxLimit = "false";
-		List initialValues = null;
+		String stContName = null;
+		List<String[]> initialValues = new ArrayList<String[]>();
 
 		final String operation = (String) request.getAttribute(Constants.OPERATION);
 		String formName = null;
@@ -169,15 +170,42 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 						final String className = specimen.getClassName();
 						final String typeName = specimen.getSpecimenType();
 
+						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId);
+						request.setAttribute(Constants.CLASS_NAME, className);
+						request.setAttribute(Constants.TYPE, typeName);
+						
 						this.logger.info("COllection Protocol Id :" + cpId);
 						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
 						request.setAttribute(Constants.SPECIMEN_CLASS_NAME, className);
 						this.logger.info("Spcimen Class:" + className);
+						final String contName=request.getParameter(Constants.CONTAINER_NAME);
 						containerMap = scbizLogic.
-						getAllocatedContainerMapForSpecimen(
-						AppUtility.setparameterList(cpId,className,0,typeName), sessionData, dao);
-						initialValues = this.setInitialValue(request, transferEventParametersForm,
-								containerMap);
+								getAutoAllocatedContainerListForSpecimen(
+						AppUtility.setparameterList(cpId,className,0,typeName), sessionData, dao,contName);
+						stContName =StorageContainerUtil
+								.checkForInitialValuesForDisplay(containerMap);// this.setInitialValue(request, transferEventParametersForm,
+								//containerMap);
+						StorageContainer stCont=StorageContainerUtil.getFirstAvailablePositionInContainerByContainerName(stContName,dao);
+						final String[] startingPoints1 = new String[3];
+						startingPoints1[0] =stContName;
+						//Position position=StorageContainerUtil.getFirstAvailablePositionInContainerByContainerName(stContName,dao);
+						//startingPoints1[1] = StorageContainerUtil.convertSpecimenPositionsToString(stContName, 1, position.getXPos());
+						//startingPoints1[2] = StorageContainerUtil.convertSpecimenPositionsToString(stContName, 2, position.getYPos());
+						startingPoints1[1]="";
+						startingPoints1[2]="";
+						
+						final List positionList= StorageContainerUtil.getAvailablePositionListForContainer(String
+								.valueOf(stCont.getId()), 0, Integer.parseInt(String
+								.valueOf(stCont.getCapacity().getOneDimensionCapacity())),
+								Integer.parseInt(String.valueOf(stCont.getCapacity().getTwoDimensionCapacity())), dao);
+					if(positionList!=null && !positionList.isEmpty())
+					{
+						String[] values=((String) positionList.get(0)).split(",");
+						startingPoints1[1]=StorageContainerUtil.convertSpecimenPositionsToString(stContName, 1,Integer.valueOf(values[0]));
+						startingPoints1[2]=StorageContainerUtil.convertSpecimenPositionsToString(stContName, 2,Integer.valueOf(values[1]));
+					}
+						initialValues = new ArrayList<String[]>();
+						initialValues.add(startingPoints1);
 					}
 					catch (final DAOException daoException)
 					{
@@ -190,28 +218,28 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 			else
 			{
 
-				final Integer id = new Integer(transferEventParametersForm.getStorageContainer());
-				String parentContainerName = "";
+				//final Integer id = new Integer(transferEventParametersForm.getStorageContainer());
+				String parentContainerName =transferEventParametersForm.getStorageContainer();
 
-				final Object object = dao.retrieveById(StorageContainer.class.getName(), new Long(
+				/*final Object object = dao.retrieveById(StorageContainer.class.getName(), new Long(
 						transferEventParametersForm.getStorageContainer()));
 				if (object != null)
 				{
 					final StorageContainer container = (StorageContainer) object;
 					parentContainerName = container.getName();
 
-				}
+				}*/
 				final String pos1 = new String(transferEventParametersForm
 						.getPositionDimensionOne());
 				final String pos2 = new String(transferEventParametersForm
 						.getPositionDimensionTwo());
 
-				final List pos2List = new ArrayList();
+				/*final List pos2List = new ArrayList();
 				pos2List.add(new NameValueBean(pos2, pos2));
 
 				final Map pos1Map = new TreeMap();
 				pos1Map.put(new NameValueBean(pos1, pos1), pos2List);
-				containerMap.put(new NameValueBean(parentContainerName, id), pos1Map);
+				containerMap.put(new NameValueBean(parentContainerName, id), pos1Map);*/
 
 				final String[] startingPoints = new String[]{"-1", "-1", "-1"};
 				if (transferEventParametersForm.getStorageContainer() != null
@@ -261,14 +289,14 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		final String[] tdStyleClassArray = {"formFieldSized15", "customFormField",
 				"customFormField"};
 		request.setAttribute("tdStyleClassArray", tdStyleClassArray);
-		String[] initValues = new String[3];
-		final List initValuesList = (List) request.getAttribute("initValues");
+		//String[] initValues = new String[3];
+		/*final List initValuesList = (List) request.getAttribute("initValues");
 		if (initValuesList != null)
 		{
 			initValues = (String[]) initValuesList.get(0);
-		}
+		}*/
 
-		request.setAttribute("initValues", initValues);
+		request.setAttribute("initValues", initialValues);
 
 		final String rowNumber = "1";
 		final String styClass = "formFieldSized5";

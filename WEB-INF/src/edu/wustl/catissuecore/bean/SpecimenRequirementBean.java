@@ -357,6 +357,7 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 	 *
 	 * @param lineage the new lineage
 	 */
+	@Override
 	public void setLineage(String lineage)
 	{
 		this.lineage = lineage;
@@ -1105,6 +1106,20 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 	@Override
 	public void setCollectionStatus(String collectionStatus)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Long getParentId()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setParentId(Long id)
 	{
 		// TODO Auto-generated method stub
 		

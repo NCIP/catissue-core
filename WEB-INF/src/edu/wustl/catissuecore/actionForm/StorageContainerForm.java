@@ -332,7 +332,7 @@ public class StorageContainerForm extends AbstractActionForm implements IPrinter
 
 				//Sri: Fix for bug #
 
-				this.positionDimensionOne = container.getLocatedAtPosition().getPositionDimensionOneString();/*StorageContainerUtil.convertSpecimenPositionsToString(container.getName(),1,container.getLocatedAtPosition()
+				this.positionDimensionOne =container.getLocatedAtPosition().getPositionDimensionOneString(); /*StorageContainerUtil.convertSpecimenPositionsToString(container.getName(),1,container.getLocatedAtPosition()
 						.getPositionDimensionOne().intValue());*/
 				this.positionDimensionTwo = container.getLocatedAtPosition().getPositionDimensionTwoString();/*StorageContainerUtil.convertSpecimenPositionsToString(container.getName(),2,container.getLocatedAtPosition()
 						.getPositionDimensionTwo().intValue());*/
