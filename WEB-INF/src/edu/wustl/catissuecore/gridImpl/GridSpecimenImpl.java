@@ -18,7 +18,8 @@ public class GridSpecimenImpl extends AbstractGridImpl
 "case when scg.NAME is null then '' else scg.NAME end as SCG_NAME , "+
 "case when Specimen1.LABEL  is null then '' else Specimen1.LABEL end as Label ,"+ 
 "case when Specimen1.BARCODE  is null then '' else Specimen1.BARCODE end as Barcode ,"+ 
-"case when AbstractSpecimen1.PARENT_SPECIMEN_ID is null then '' else AbstractSpecimen1.PARENT_SPECIMEN_ID end as Parent_Specimen_Id ,"+ 
+"CASE WHEN (select label from catissue_Specimen where identifier=AbstractSpecimen1.parent_specimen_id) IS NULL THEN '' "+
+"ELSE  (select label from catissue_Specimen where identifier=AbstractSpecimen1.parent_specimen_id) END as ParentLabel,"+ 
 "case when AbstractSpecimen1.SPECIMEN_CLASS  is null then '' else AbstractSpecimen1.SPECIMEN_CLASS end as Class , "+
 "case when AbstractSpecimen1.SPECIMEN_TYPE is null then '' else  AbstractSpecimen1.SPECIMEN_TYPE end as Type , "+
 "case when Specimen1.AVAILABLE_QUANTITY  is null then '' else Specimen1.AVAILABLE_QUANTITY end as Avl_Quantity ,"+ 
@@ -32,6 +33,9 @@ public class GridSpecimenImpl extends AbstractGridImpl
 "( ( Specimen1.IDENTIFIER  =atg.obj_id  )   AND UPPER(Specimen1.ACTIVITY_STATUS ) != UPPER('Disabled')  ) "+
 " ORDER BY Specimen1.IDENTIFIER ,SpecimenCharacteristics1.IDENTIFIER ,ExternalIdentifier1.IDENTIFIER , "+
 " AbstractSpecimen1.IDENTIFIER "; 
+		
+		
+
 		setSessionData(sessionData);
 //		String query = "select 0 as CHKBOX, " +
 //		"case when catissue_specimen.BARCODE is null then '' else catissue_specimen.BARCODE end as BARCODE, " +
@@ -73,7 +77,7 @@ public class GridSpecimenImpl extends AbstractGridImpl
 	 */
 	public String getTableColumnString() throws BizLogicException
 	{
-		String gridColumns = "CHKBOX,SCG_NAME,Label,Barcode,Parent_Specimen_Id,Class,Type,Avl_Quantity,Lineage,Identifier";
+		String gridColumns = "CHKBOX,SCG_NAME,Label,Barcode,ParentLabel,Class,Type,Avl_Quantity,Lineage,Identifier";
 		return gridColumns;
 	}
 	
@@ -106,5 +110,9 @@ public class GridSpecimenImpl extends AbstractGridImpl
 			classNameStr.append(")");
 		}
 		data.set_value("Class",classNameStr.toString());
+		
+		String pLabel = data.get_value("ParentLabel");
+		if(Validator.isEmpty(pLabel))
+			data.set_value("ParentLabel","");
 	}
 }

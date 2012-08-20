@@ -45,6 +45,22 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
+<script type="text/javascript" src="jss/tag-popup.js"></script>
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlXGrid.css" />
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlx.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
 <link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
 <script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
@@ -239,7 +255,7 @@ function getCountByType(type)
 		if(fid.indexOf(type+"[")>=0)
 			count = count+1;
 	}
-alert(count);
+
 	return count;
 }
 function getElement(name)
@@ -1199,7 +1215,7 @@ String lbl = "Apply first to all";
 						<td>|&nbsp;<input class="blue_ar_b" type="button"  id="addToCart"
 							value="Add To My List" onclick="onAddToCart()" /></td>
 							<%
- 						String	organizeTarget = "ajaxTreeGridInitCall('popupDeleteMessage','popupFolderDeleteMessage')";
+ 						String	organizeTarget = "ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem')";
  %>
  <logic:equal name="IsToShowButton" value="true">
 						<td>|&nbsp;<input class="blue_ar_b" type="button"  id="addToCart"
@@ -1253,16 +1269,40 @@ displayPrinterTypeLocation();
 					<p>
 						<%
 						String specId = (String)request.getAttribute("popUpSpecList");
- String	assignTarget = "ajaxAssignTagFunctionCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specId+"','popupAssignMessage','popupAssignConditionMessage','"+specId+"')";
+ String	assignTarget = "giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specId+"','Select at least one existing list or create a new list.','No query has been selected to assign.','"+specId+"')";
  %>
 						<input type="button" value="ASSIGN" onclick="<%=assignTarget%> "
 							onkeydown="<%=assignTarget%> " class="btn3">
+														<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked/>
 					</p>
 				</div>
 			</div>
 			<script>
+function doInitGrid()
+{
+	grid = new dhtmlXGridObject('mygrid_container');
+	grid.setImagePath("deploytempCatissuecore/AdvanceQuery/dhtml/imgs/");
+ 	grid.setHeader("My Specimen Lists");
+ 	grid.setInitWidths("175");
+ 	grid.setColAlign("left");
+ 	grid.setSkin("dhx_skyblue");
+ 	grid.setEditable(false);
+   	grid.attachEvent("onRowSelect", doOnRowSelected);
+ 	grid.init();
+ 	grid .load ("TagGridInItAction.do");
+}
+function doOnRowSelected(rId)
+{
+	submitTagName(rId);	 
+}	
+function giveCall(url,msg,msg1,id)
+{
+	
+	document.getElementById('objCheckbox').value=id;
+	ajaxAssignTagFunctionCall(url,msg,msg1);
+}
 			var popupmygrid;
-function doInItTreeGrid()
+function doInItTreeGrid1()
 {
 	popupmygrid = new dhtmlXGridObject('treegridbox');
 	popupmygrid.selMultiRows = true;
@@ -1281,7 +1321,7 @@ function doInItTreeGrid()
 	doInitParseTree();
 	//	alert(popupmygrid.getTree(1));
 }
-function doOnTreeGridRowSelected(rId)
+function doOnTreeGridRowSelectedaaaa(rId)
 {
 	ajaxTreeGridRowSelectCall(rId); 
 	//alert('sss');
