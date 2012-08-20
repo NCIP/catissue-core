@@ -15,6 +15,7 @@ public class CaTissueTestSuite {
 		suite.addTestSuite(ScientistWithReadDeniedTestCases.class);
 		suite.addTestSuite(FilterTestCases.class);
 		suite.addTestSuite(GridAuthenticationTestCases.class);
+		suite.addTestSuite(ComplexCollectionProtocolTestCases.class);
 
 		return suite;
 	}
