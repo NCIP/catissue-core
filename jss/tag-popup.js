@@ -57,14 +57,46 @@ function popup(windowname) {
 }
 //---------------------------popup fuctions End---------------------------
 
+//---------------------------Tree Grid Function---------------------------
+function doOnTreeGridRowSelected(rId)
+{
+	ajaxTreeGridRowSelectCall(rId); 
+}
+var popupmygrid;
+function doInItTreeGrid()
+{
+	popupmygrid = new dhtmlXGridObject('treegridbox');
+	popupmygrid.selMultiRows = true;
+	popupmygrid.imgURL = "deploytempCatissuecore/AdvanceQuery/dhtml/imgs/";
+	popupmygrid.setHeader(",<div style='text-align:center;'>My Folders</div>,");
+	//popupmygrid.setNoHeader(true);
+	popupmygrid.setInitWidths("25,*,40");
+	popupmygrid.setColAlign("left,left,left");
+	popupmygrid.setColTypes("txt,tree,txt");
+	popupmygrid.setColSorting("str,str,str");
+	popupmygrid.attachEvent("onRowSelect", doOnTreeGridRowSelected);
+	popupmygrid.setEditable(false);
+	popupmygrid.init();
+	popupmygrid.setSkin("dhx_skyblue");
+	doInitParseTree();
+}
+ 
+function doInitParseTree()
+{
+	popupmygrid.loadXML("TreeGridInItAction.do?entityTag="+entityTag);
 
-//Ajax Function for Initialize Grid and open Popup
+}
+//---------------------------Tree Grid Function End-----------------------
+//Ajax Function for Initialize Grid and open Pop up
 var queryDeleteMsg=null;
 var folderDeleteMsg=null;
+//entityTag name is the name u have to set On Jsp that is similar to entity-name from hbm file.
+var entityTag;
+var entityTagItem;
 var xmlHttpobj = false;
 function ajaxPopupFunctionCall() {
 
-var url = "TagAction.do";
+var url = "TagGridInItAction.do";
  if (window.XMLHttpRequest)
   { 
   xmlHttpobj=new XMLHttpRequest();
@@ -91,13 +123,13 @@ function submitTheForm(theNewAction,btn) {
 	theForm.action = theNewAction;
 	theForm.submit();
 }
-//Function called onclick of foldar in Grid of "left" div  
+//Function called on click of folder in Grid of "left" div  
 function submitTagName(tagId) {
 	document.forms['saveQueryForm'].action = "TagClickAction.do?tagId=" + tagId;
 	document.forms['saveQueryForm'].submit();
 }
-//Ajax Function for Assign Query to folder (Assign Button on Popup) 
-function ajaxAssignTagFunctionCall(url,msg,msg1,id) 
+//Ajax Function for Assign Query to folder (Assign Button on Pop up) 
+function ajaxAssignTagFunctionCall(url,msg,msg1) 
 {
 if (window.XMLHttpRequest)
   { 
@@ -107,88 +139,86 @@ else
   { 
   xmlHttpobj=new ActiveXObject("Microsoft.XMLHTTP");
   }
-	var chkBoxString = new String();
-	var queryChkBoxString = new String();
+	var tagChkBoxString = new String();
+	var objChkBoxString = new String();
 	var i;
-	
-	url = url;
-	
 	xmlHttpobj.open("POST", url, true);
 	xmlHttpobj.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded");
 	
-	var chkBoxAr = document.getElementsByName("tagCheckbox");
-	//var queryCheckBoxAr = document.getElementById("id");
-	
+	var tagChkBoxAr = document.getElementsByName("tagCheckbox");
+	var objCheckBoxAr = document.getElementsByName("objCheckbox");
 	var tagName = document.getElementById('newTagName').value;
 	document.getElementById('newTagName').value ='';
 
 
-	for (i = 0; i < chkBoxAr.length; i++) {
-		if (chkBoxAr[i].checked == true) {
-			chkBoxString = chkBoxAr[i].value + "," + chkBoxString;
-			chkBoxAr[i].checked = false;
+	for (i = 0; i < tagChkBoxAr.length; i++) {
+		if (tagChkBoxAr[i].checked == true) {
+			tagChkBoxString = tagChkBoxAr[i].value + "," + tagChkBoxString;
+			tagChkBoxAr[i].checked = false;
+			
 		}
 
 	}
-	/*for (i = 0; i < queryCheckBoxAr.length; i++) {
-		if (queryCheckBoxAr[i].checked == true) {
-			queryChkBoxString = queryCheckBoxAr[i].value + ","
-					+ queryChkBoxString;
+	
+	for (i = 0; i < objCheckBoxAr.length; i++) {
+		if (objCheckBoxAr[i].checked == true) {
+			objChkBoxString = objCheckBoxAr[i].value + ","
+					+ objChkBoxString;
 			 
 		}
-	}*/
-	queryChkBoxString = id;
-	//alert(queryChkBoxString);
-	if (queryChkBoxString=='')
+	}
+	
+	if (objChkBoxString=='')
 	{
-		alert("No Specimen Selected");
-		//alert('ffff');
+		alert(msg1);
 		 
  	}
-	else if(chkBoxString==''&&tagName=='')
+	else if(tagChkBoxString==''&&tagName=='')
  	{
-		alert("Please select existing list or give the name for the new list");
-		 //alert('ffff23');
+		alert(msg);
+		 
 	}
-	else if((queryChkBoxString!=''&& chkBoxString!='')||(queryChkBoxString!=''&& tagName!=''))
+	else if((objChkBoxString!=''&& tagChkBoxString!='')||(objChkBoxString!=''&& tagName!=''))
  	{
-		 xmlHttpobj.onreadystatechange =assignQueryFunction;
-		/*for (i = 0; i < queryCheckBoxAr.length; i++) {
-		if (queryCheckBoxAr[i].checked == true) {
-			 queryCheckBoxAr[i].checked = false;
+		 xmlHttpobj.onreadystatechange =assignTagItemFunction;
+		for (i = 0; i < objCheckBoxAr.length; i++) {
+		if (objCheckBoxAr[i].checked == true) {
+			 objCheckBoxAr[i].checked = false;
 			}
-		}*/
-xmlHttpobj.send("&tagChkBoxString=" + chkBoxString + "&queryChkBoxString="
-			+ queryChkBoxString + "&tagName=" + tagName);
+		}
+xmlHttpobj.send("&tagChkBoxString=" + tagChkBoxString + "&objChkBoxString="
+			+ objChkBoxString + "&tagName=" + tagName +"&entityTag="+ entityTag+"&entityTagItem="+ entityTagItem);
 	}
-	else if((queryChkBoxString!=''&& chkBoxString!=''&& tagName!=''))
+	else if((queryChkBoxString!=''&& tagChkBoxString!=''&& tagName!=''))
 	{
-		 xmlHttpobj.onreadystatechange =assignQueryFunction;
-		/*for (i = 0; i < queryCheckBoxAr.length; i++) {
-		if (queryCheckBoxAr[i].checked == true) {
-			 queryCheckBoxAr[i].checked = false;
+		 xmlHttpobj.onreadystatechange =assignTagItemFunction;
+		for (i = 0; i < objCheckBoxAr.length; i++) {
+		if (objCheckBoxAr[i].checked == true) {
+			 objCheckBoxAr[i].checked = false;
 			}
-		}*/
-xmlHttpobj.send("&tagChkBoxString=" + chkBoxString + "&queryChkBoxString="
-			+ queryChkBoxString + "&tagName=" + tagName);
+		}
+xmlHttpobj.send("&tagChkBoxString=" + tagChkBoxString + "&objChkBoxString="
+			+ objChkBoxString + "&tagName=" + tagName +"&entityTag="+ entityTag+"&entityTagItem="+ entityTagItem);
 	}
 
  	
 
 }
-function assignQueryFunction() {
+function assignTagItemFunction() {
 		if (xmlHttpobj.readyState == 4) {
-			//doInitGrid();	
+			doInitGrid();	
 			popup('popUpDiv');
-			//doInItTreeGrid();		
+			doInItTreeGrid();		
 }
 }
 //Ajax Function for Initialize TreeGrid
-function ajaxTreeGridInitCall(msg,msg1) {
+function ajaxTreeGridInitCall(msg,msg1,entityTagName,entityTagItemName) {
 queryDeleteMsg=msg;
 folderDeleteMsg=msg1;
-var url = "TreeTagAction.do?entityTag=SpecimenListTag";
+entityTag=entityTagName;
+entityTagItem=entityTagItemName;
+var url = "TreeGridInItAction.do";
 if (window.XMLHttpRequest)
   { 
   xmlHttpobj=new XMLHttpRequest();
@@ -201,20 +231,20 @@ else
 		xmlHttpobj.setRequestHeader("Content-Type",
 				"application/x-www-form-urlencoded");
 		xmlHttpobj.onreadystatechange = showTreeMessage;
-	 	xmlHttpobj.send(null);
+	 	xmlHttpobj.send("&entityTag=" +entityTag);
 } 
 function showTreeMessage() {
 	if (xmlHttpobj.readyState == 4) {
-	 doInItTreeGrid();
+	doInItTreeGrid();
 	 popup('popUpDiv');
-}
+	}
 } 
 //Ajax Function for Delete Folders of TreeGrid 
 function ajaxTagDeleteCall(tagId,msg) {
  var childCount=popupmygrid.hasChildren(tagId);
 folderDeleteMsg = folderDeleteMsg.replace('{0}',1);
 folderDeleteMsg = folderDeleteMsg.replace(/\d+/g,childCount); 
-var url = "TagDeleteAction.do?entityTag=SpecimenListTag";
+var url = "TagDeleteAction.do";
 var answer = confirm (folderDeleteMsg)
 if (answer)
  {
@@ -231,7 +261,7 @@ else
 	xmlHttpobj.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded");
 	xmlHttpobj.onreadystatechange =doOnDelete ;
-	xmlHttpobj.send("&tagId=" +tagId );
+	xmlHttpobj.send("&tagId=" +tagId +"&entityTag=" +entityTag);
 }}
 function doOnDelete()
 {  
@@ -239,17 +269,16 @@ function doOnDelete()
 	 {
  var selId = popupmygrid.getSelectedId()
         popupmygrid.deleteRow(selId);
-//	grid.deleteRow(selId);
+	grid.deleteRow(selId);
       	}
  
 }
 //Ajax Function for Delete Queries in Folders  of TreeGrid 
-function ajaxObjDeleteCall(assignId) {
-
+function ajaxObjDeleteCall(tagItemId) {
 var answer = confirm (queryDeleteMsg)
 if (answer)
  {
-var url = "TagItemDeleteAction.do?entityTagItem=SpecimenListTagItem";
+var url = "TagItemDeleteAction.do";
 	if (window.XMLHttpRequest)
   { 
   xmlHttpobj=new XMLHttpRequest();
@@ -263,7 +292,8 @@ else
 			"application/x-www-form-urlencoded");
   
 	xmlHttpobj.onreadystatechange =doOnObjDelete;
-	xmlHttpobj.send("&tagItemId=" +assignId +"&tagId="+assignId );
+	
+	xmlHttpobj.send("&tagItemId=" +tagItemId  +"&entityTagItem=" +entityTagItem);
 
  }}
 function doOnObjDelete()
@@ -278,7 +308,7 @@ var tagID;
 //Ajax Function for Selection of rows in  TreeGrid Add Child By lazyLoad 
 
 function ajaxTreeGridRowSelectCall(tagId) {
-	var url = "GetTreeGridChildAction.do?entityTag=SpecimenListTag";
+	var url = "GetTreeGridChildAction.do";
 	if (window.XMLHttpRequest)
   { 
   xmlHttpobj=new XMLHttpRequest();
@@ -293,7 +323,7 @@ else
 			"application/x-www-form-urlencoded");
 	 
 	xmlHttpobj.onreadystatechange =getJsonObj;
-	xmlHttpobj.send("&tagId=" +tagId);
+	xmlHttpobj.send("&tagId=" +tagId +"&entityTag=" +entityTag);
  }
  //function for Adding Child by LazyLoad
  var childCount;
@@ -305,29 +335,26 @@ else
 		 var tree=xmlHttpobj.responseText;
 		 arrObj = eval('(' +tree+ ')');	 
 		 var objLength=arrObj.treeData.length;
-		 //count = objLength;
-		 var icount;
+		 var count;
 		 
  		 childCount=popupmygrid.hasChildren(tagID);
 	 if(childCount==0)
 		{
 		 childCount=arrObj.childCount;
- 		for(icount=0;icount<objLength;icount++)
+ 		for(count=0;count<objLength;count++)
  			{
-			var assignId=arrObj.treeData[icount].id;
+			var tagItemId=arrObj.treeData[count].id;
 			 		
-popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[icount].name,"<img src='images/advQuery/delete.gif' width='12' height='12' id='assignId' onclick='ajaxObjDeleteCall("+assignId+")'/>"],(new Date()).valueOf(),tagID);
+popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img src='images/advQuery/delete.gif' width='12' height='12' id='tagItemId' onclick='ajaxObjDeleteCall("+tagItemId+")'/>"],(new Date()).valueOf(),tagID);
 	pause(10);
  			}
 		}
  	
-	 }
-	 //alert('hhh');
-popupmygrid.expandAll();	 
+	 }	 
 }
 //Ajax function to get Count of Queries Inside the Folder 
 function ajaxDeleteCall(tagId) {
-	var url = "TagDeleteAction.do?entityTag=SpecimenListTag";
+	var url = "GetTreeGridChildAction.do";
 	if (window.XMLHttpRequest)
   { 
   xmlHttpobj=new XMLHttpRequest();
@@ -341,16 +368,16 @@ else
 	xmlHttpobj.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded");
 	xmlHttpobj.onreadystatechange =getJsonDeleteObj;
-	xmlHttpobj.send("&tagId=" +tagId);
+	xmlHttpobj.send("&tagId=" +tagId+"&entityTag=" +entityTag);
  }
  function pause(numberMillis) {
-var now = new Date();
-var exitTime = now.getTime() + numberMillis;
-while (true) {
-now = new Date();
-if (now.getTime() > exitTime)
-return;
-}
+	var now = new Date();
+	var exitTime = now.getTime() + numberMillis;
+	while (true) {
+	now = new Date();
+	if (now.getTime() > exitTime)
+	return;
+	}
 }
  function getJsonDeleteObj()
  {
@@ -362,17 +389,15 @@ return;
 		 var count;
 		 
  		 childCount=popupmygrid.hasChildren(tagID);
-		 //alert(childCount);
 	 if(childCount==0)
 		{
 		 childCount=arrObj.childCount;
  		for(count=0;count<objLength;count++)
  			{
-			var assignId=arrObj.treeData[count].id;
+			var tagItemId=arrObj.treeData[count].id;
 			 		
-popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img src='images/advQuery/delete.gif' width='12' height='12' id='assignId' onclick='ajaxObjDeleteCall('"+assignId+"','"+assignId+"')'/>"],0,tagID);
+popupmygrid.addRow((new Date()).valueOf(),[,arrObj.treeData[count].name,"<img src='images/advQuery/delete.gif' width='12' height='12' id='tagItemId' onclick='ajaxObjDeleteCall('"+tagItemId+"','"+popupFolderDeleteMessage+"')'/>"],0,tagID);
  	pause(10);			}
 		}
-//ajaxTagDeleteCall(tagID);	
-}	
+ajaxTagDeleteCall(tagID);	}	
 }
