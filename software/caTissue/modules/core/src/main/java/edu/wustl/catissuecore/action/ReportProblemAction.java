@@ -74,7 +74,7 @@ public class ReportProblemAction extends XSSSupportedAction
 		//Sets the operation attribute to be used in the Add/Edit Problem Page.
 		request.setAttribute(Constants.OPERATION, operation);
 
-		if (operation.equals(Constants.EDIT))
+		if (Constants.EDIT.equals(operation))
 		{
 			final Long prevIdentifier = (Long) request.getAttribute(Constants.PREVIOUS_PAGE);
 			request.setAttribute(Constants.PREVIOUS_PAGE, prevIdentifier);
