@@ -136,6 +136,7 @@ public class InstitutionAddAction extends SecureAction {
 
 			actionfwd = mapping.findForward("failure");
 		}
+		saveToken(request);
 		return actionfwd;
 
 	}
