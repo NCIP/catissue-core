@@ -67,8 +67,8 @@ function doInItTreeGrid()
 {
 	popupmygrid = new dhtmlXGridObject('treegridbox');
 	popupmygrid.selMultiRows = true;
-	popupmygrid.imgURL = "deploytempCatissuecore/AdvanceQuery/dhtml/imgs/";
-	popupmygrid.setHeader(",<div style='text-align:center;'>My Folders</div>,");
+	popupmygrid.imgURL = "dhtmlx_suite/dhtml_pop/imgs/";
+	popupmygrid.setHeader(",<div style='text-align:center;'></div>,");
 	//popupmygrid.setNoHeader(true);
 	popupmygrid.setInitWidths("25,*,40");
 	popupmygrid.setColAlign("left,left,left");
@@ -207,9 +207,9 @@ xmlHttpobj.send("&tagChkBoxString=" + tagChkBoxString + "&objChkBoxString="
 }
 function assignTagItemFunction() {
 		if (xmlHttpobj.readyState == 4) {
-			doInitGrid();	
+			//doInitGrid();	
 			popup('popUpDiv');
-			doInItTreeGrid();		
+			//doInItTreeGrid();		
 }
 }
 //Ajax Function for Initialize TreeGrid

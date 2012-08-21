@@ -118,12 +118,12 @@
 					<p>
 						<%
 						String specId = String.valueOf(form.getId());
- String	assignTarget = "giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specId+"','Select at least one existing list or create a new list.','No query has been selected to assign.','"+specId+"')";
+ String	assignTarget = "giveCall('AssignTagAction.do?entityTag=SpecimenListTag&entityTagItem=SpecimenListTagItem&objChkBoxString="+specId+"','Select at least one existing list or create a new list.','No specimen has been selected to assign.','"+specId+"')";
  %>
 						<input type="button" value="ASSIGN" onclick="<%=assignTarget%> "
 							onkeydown="<%=assignTarget%> " class="btn3">
 							
-							<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked>Spurs<br>
+							<input type="checkbox" name="objCheckbox"  id="objCheckbox" style="display:none" value="team" checked>
 					</p>
 				</div>
 			</div>
@@ -132,7 +132,7 @@
 function doInitGrid()
 {
 	grid = new dhtmlXGridObject('mygrid_container');
-	grid.setImagePath("deploytempCatissuecore/AdvanceQuery/dhtml/imgs/");
+	grid.setImagePath("dhtmlx_suite/dhtml_pop/imgs/");
  	grid.setHeader("My Specimen Lists");
  	grid.setInitWidths("175");
  	grid.setColAlign("left");
@@ -176,6 +176,8 @@ function doInItTreeGrid1()
 function doOnTreeGridRowSelectedaa(rId)
 {
 	ajaxTreeGridRowSelectCall(rId); 
+	//alert('sss');
+	//popupmygrid.expandAll();
 }
  function expand(id,mode)
  {
