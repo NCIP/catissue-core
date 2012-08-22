@@ -65,7 +65,7 @@ import edu.wustl.dao.exception.DAOException;
  *
  * @author aniruddha_phadnis
  */
-public class CreateSpecimenAction extends SecureAction
+public class CreateSpecimenAction extends CatissueBaseAction
 {
 
 	/** The Constant LOGGER. */
@@ -92,7 +92,7 @@ public class CreateSpecimenAction extends SecureAction
 	 *
 	 * @throws Exception generic exception
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final CreateSpecimenForm createForm = (CreateSpecimenForm) form;
