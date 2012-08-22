@@ -442,14 +442,14 @@ function loadSpecimenGrid()
 	mygrid = new dhtmlXGridObject("specimenGrid");
 	mygrid.setImagePath("dhtmlx_suite/imgs/");
 	//CHKBOX,SCG_NAME,Label,Barcode,Parent_Specimen_Id,Class,Type,Avl_Quantity,Lineage,Identifier
-	mygrid.setInitWidthsP("5,15,15,,15,15,,15,15,");
+	mygrid.setInitWidthsP("5,20,15,,15,15,,15,15,");
 	mygrid.setEditable(true);
 	mygrid.setSkin("light");
 	mygrid.enableAutoHeight(true);
 	mygrid.setColSorting(",str,str,str,str,str,str,str,str,str");
-	mygrid.setHeader(",Scg_Name,Label (Barcode),,Parent Label,Class (Type),,Quantity,Lineage,");
+	mygrid.setHeader(",Specimen Collection Group Name,Label (Barcode),,Parent Label,Class (Type),,Quantity,Lineage,");
 	
-	mygrid.attachHeader(",,#connector_text_filter,,,#connector_text_filter,,,,");
+	mygrid.attachHeader(",,#text_filter,,,#text_filter,,,#select_filter,");
 	mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,ro,ro");
 	mygrid.enableSmartRendering(true,15);
 	//mygrid.enableTooltips(",true,true,true,true,true,true,true,true,true");
