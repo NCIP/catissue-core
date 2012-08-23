@@ -409,6 +409,7 @@ public class CreateSpecimenTemplateAction extends BaseAction
 
 		createSpecimenTemplateForm.setLabelFormat(null);
 		createSpecimenTemplateForm.setLabelFormatForAliquot(null);
+		createSpecimenTemplateForm.setSpecimenReqTitle(Constants.DOUBLE_QUOTES);
 	}
 
 	/**
@@ -445,8 +446,9 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		// Derive
 		setDerivative(createSpecimenTemplateForm, specimenRequirementBean);
 		createSpecimenTemplateForm.setLabelFormat(specimenRequirementBean.getLabelFormat());
-
 		createSpecimenTemplateForm.setLabelFormatForAliquot(specimenRequirementBean.getLabelFormatForAliquot());
+		createSpecimenTemplateForm.setSpecimenReqTitle(specimenRequirementBean.getSpecimenRequirementLabel());
+		
 
 		setLabelProperties(createSpecimenTemplateForm, specimenRequirementBean);
 	}
