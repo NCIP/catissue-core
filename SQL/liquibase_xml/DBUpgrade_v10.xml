@@ -57,5 +57,12 @@
 		<rollback></rollback>
 	</changeSet>
 	
+	<changeSet id="6" author="catissuecore" runOnChange="true">
+		<addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+			<column name="SPEC_REQ_LABEL" type="${text.type}(255)"/>
+		</addColumn>
+		<rollback></rollback>
+	</changeSet>
+	
 
 </databaseChangeLog>         

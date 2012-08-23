@@ -372,6 +372,14 @@
             column="LABELFORMAT"
             length="255"
         />
+        <property
+            name="specimenRequirementLabel"
+            type="string"
+            update="true"
+            insert="true"
+            column="SPEC_REQ_LABEL"
+            length="255"
+        />
 
 		<property
 	            name="storageType"

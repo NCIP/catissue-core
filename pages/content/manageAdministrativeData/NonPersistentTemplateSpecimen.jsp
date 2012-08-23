@@ -1,4 +1,6 @@
- <tr>
+ 
+ 
+         <tr>
               <td class="cp_tabtable">
                   <br>
                   <table width="100%" border="0" cellpadding="3" cellspacing="0" bgcolor="#FFFFFF">
@@ -6,6 +8,13 @@
 	                  <tr>
                       <td colspan="3" align="left">
 					  <table width="100%" border="0" cellpadding="3" cellspacing="0">
+		               <tr>
+		                 <td align="center" class="black_ar"><span class="blue_ar_b"></span></td>
+                         <td align="left" class="black_ar"><bean:message key="cpbasedentry.specimenReqTitle"/></td>
+                         <td align="left" class="black_ar">
+									<html:text styleClass="black_ar" size="30" styleId="specimenLabel" maxlength="255" property="specimenReqTitle"/>
+						  </td>
+						</tr> 
 		                <tr>
 			               <td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
 						   <td width="22%" align="left" class="black_ar"><bean:message key="specimen.type"/> </td>

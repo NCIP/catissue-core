@@ -559,6 +559,7 @@ public class CollectionProtocolUtil
 		speRequirementBean.setClassName(reqSpecimen.getClassName());
 		speRequirementBean.setType(reqSpecimen.getSpecimenType());
 		speRequirementBean.setId(reqSpecimen.getId().longValue());
+		speRequirementBean.setSpecimenRequirementLabel(reqSpecimen.getSpecimenRequirementLabel());
 		SpecimenCharacteristics characteristics = reqSpecimen.getSpecimenCharacteristics();
 		updateSpeRequirementBean(reqSpecimen, speRequirementBean, characteristics);
 
@@ -827,6 +828,7 @@ public class CollectionProtocolUtil
 			throws ApplicationException
 	{
 
+		//add here label in specimenRequirementbean from specimenrequirement
 		List sessionCpList = new CollectionProtocolBizLogic().retrieveCP(identifieer);
 
 		if (sessionCpList == null || sessionCpList.size() < 2)
@@ -1390,6 +1392,7 @@ public class CollectionProtocolUtil
 		reqSpecimen.setStorageType(storageType);
 		reqSpecimen.setSpecimenClass(specimenRequirementBean.getClassName());
 		reqSpecimen.setLabelFormat(specimenRequirementBean.getLabelFormat());
+		reqSpecimen.setSpecimenRequirementLabel(specimenRequirementBean.getSpecimenRequirementLabel());
 		return reqSpecimen;
 	}
 

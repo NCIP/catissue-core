@@ -273,8 +273,8 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		specimenRequirementBean.setNoOfDeriveSpecimen(createSpecimenTemplateForm
 				.getNoOfDeriveSpecimen());
 		specimenRequirementBean.setDeriveSpecimen(createSpecimenTemplateForm.deriveSpecimenMap());
-			
-		return specimenRequirementBean;
+		specimenRequirementBean.setSpecimenRequirementLabel(createSpecimenTemplateForm.getSpecimenReqTitle());
+    	 return specimenRequirementBean;
 	}
 
 
@@ -311,6 +311,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 				.getCollectionEventCollectionProcedure());
 
 		specimenRequirementBean.setLabelFormat(createSpecimenTemplateForm.getLabelFormat());
+    	specimenRequirementBean.setSpecimenRequirementLabel(createSpecimenTemplateForm.getSpecimenReqTitle());
 //		specimenRequirementBean.setLabelFormatForAliquot(createSpecimenTemplateForm.getLabelFormatForAliquot()());
 	}
 

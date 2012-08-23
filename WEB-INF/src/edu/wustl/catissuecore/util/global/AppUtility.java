@@ -4060,8 +4060,16 @@ public class AppUtility {
 		// objectName=Constants.VIEW_SUMMARY;
 		// }
 		final String identifier = specimenRequirementBean.getUniqueIdentifier();
-
-		String displayName = specimenRequirementBean.getClassName()+" ("+specimenRequirementBean.getType()+")";
+		String displayName = "";
+		if(specimenRequirementBean.getSpecimenRequirementLabel()!=null && !specimenRequirementBean.getSpecimenRequirementLabel().isEmpty()) 
+		{
+			displayName = specimenRequirementBean.getSpecimenRequirementLabel();
+		}
+		else
+		{
+		  displayName = specimenRequirementBean.getClassName()+" ("+specimenRequirementBean.getType()+")";
+		}
+		
 			//Constants.SPECIMEN + "_"+ specimenRequirementBean.getUniqueIdentifier();
 		
 		AppUtility.addNode(objectName, displayName, parentIdentifier, identifier, parentObjectname,
@@ -4096,7 +4104,8 @@ public class AppUtility {
 				final SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) deriveSpecimenCollectionItr
 						.next();
 
-				displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";
+				displayName =  specimenRequirementBean.getSpecimenRequirementLabel();
+				//displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";
 				//Constants.DERIVED_SPECIMEN+ specimenRequirementBean1.getUniqueIdentifier();
 				createSpecimenNode(parentObjectname, parentIdentifier,
 						specimenRequirementBean1, treeData, operation);

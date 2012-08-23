@@ -2466,7 +2466,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		 */
 		final TreeMap<Long, List<Specimen>> specimenChildrenMap = new TreeMap<Long, List<Specimen>>();
 
-		final String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.specimenType,sp.collectionStatus	from "
+		final String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.specimenType,sp.collectionStatus,sp.specimenRequirement.specimenRequirementLabel	from "
 				+ Specimen.class.getName()
 				+ " as sp where sp.specimenCollectionGroup.id = "
 				+ specimenCollectionGroup.getId()
@@ -2481,12 +2481,25 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		 * SpecimenObject which is child of Parentkey IF specimen has no parent
 		 * then parent key is store as Long(0)
 		 */
-		for (int i = 0; i < list.size(); i++)
+		for  (int i = 0; i < list.size(); i++)
 		{
 			final Object[] obj = (Object[]) list.get(i);
 			final Specimen specimen = new Specimen();
 			specimen.setId((Long) obj[0]);
-			specimen.setLabel((String) obj[1]);
+		  	String specimenLabel = (String) obj[1];
+		  	String specimenRequirementTitle = (String) obj[6];
+		  	if(specimenLabel!=null && !specimenLabel.isEmpty())
+		  	{
+			 specimen.setLabel(specimenLabel);
+		  	}
+		  	else if(specimenRequirementTitle!=null && !specimenRequirementTitle.isEmpty())
+		  	{
+		  		specimen.setLabel(specimenRequirementTitle); // set Specimen requirement title
+		  	}
+		  	else
+		  	{
+		  		specimen.setLabel((String) obj[4]);
+		  	}
 			specimen.setActivityStatus((String) obj[3]);
 			specimen.setSpecimenType((String) obj[4]);
 			specimen.setCollectionStatus((String) obj[5]);
@@ -2542,10 +2555,6 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		final String type = specimen.getSpecimenType();
 		final String spCollectionStatus = specimen.getCollectionStatus();
 
-		if (spLabel1 == null)
-		{
-			spLabel1 = type;
-		}
 		// Added later for toolTip text for specimens
 		String toolTipText = "Label : " + spLabel1 + " ; Type : " + type;
 		// List collectionEventPara =

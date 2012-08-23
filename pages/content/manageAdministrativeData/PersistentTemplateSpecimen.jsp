@@ -6,6 +6,24 @@
 					<tr>
                       <td colspan="3" align="left">
 						 <table width="100%" border="0" cellpadding="3" cellspacing="0">
+							
+							<tr>
+		                      <td align="center" class="black_ar"><span class="blue_ar_b"></span></span></td>
+                              <td align="left" class="black_ar"><bean:message key="cpbasedentry.specimenReqTitle"/></td>
+                              <td align="left" class="black_ar">
+                              <logic:equal name="isPersistent" value="true">
+										<label>
+												${createSpecimenTemplateForm.specimenReqTitle}
+										</label>
+									</td>
+								</logic:equal>
+								<logic:notEqual name="isPersistent" value="true">
+									<html:text styleClass="black_ar" size="30" styleId="specimenLabel" maxlength="255" property="specimenReqTitle"/>
+						          </td>
+						          </logic:notEqual>
+						</tr> 
+							
+							
 							<tr>
 								<td width="1%" align="center" class="black_ar"><span class="blue_ar_b"><img src="images/uIEnhancementImages/star.gif" alt="Mandatory" width="6" height="6" hspace="0" vspace="0" /></span></td>
 							   <td width="22%" align="left" class="black_ar"><bean:message key="specimen.type"/> </td>

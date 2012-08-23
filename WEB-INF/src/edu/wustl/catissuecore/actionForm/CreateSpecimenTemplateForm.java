@@ -95,6 +95,25 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 
 	/** The collection user name. */
 	private String collectionUserName = null;
+	
+	/**
+	 * 
+	 */
+	private String specimenReqTitle;
+
+	/**
+	 * @return
+	 */
+	public String getSpecimenReqTitle() {
+		return specimenReqTitle;
+	}
+
+	/**
+	 * @param specimenLabel
+	 */
+	public void setSpecimenReqTitle(String specimenLabel) {
+		this.specimenReqTitle = specimenLabel;
+	}
 
 	/**
 	 * Gets the collection user name.
@@ -793,6 +812,12 @@ public class CreateSpecimenTemplateForm extends AbstractActionForm
 		double initialQuantity = 0;
 		try
 		{
+//			if (validator.isEmpty(this.specimenReqTitle))
+//			{
+//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+//						ApplicationProperties.getValue("cpbasedentry.specimenReqTitle")));
+//			}
+			
 			if (validator.isEmpty(this.className))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",

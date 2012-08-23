@@ -139,6 +139,16 @@ public class SpecimenRequirementBean implements Serializable, GenericSpecimen
 
 	/** The label format for aliquot. */
 	private String labelFormatForAliquot;
+	 
+	private String specimenRequirementLabel;
+
+	public String getSpecimenRequirementLabel() {
+		return specimenRequirementLabel;
+	}
+
+	public void setSpecimenRequirementLabel(String specimenLabel) {
+		this.specimenRequirementLabel = specimenLabel;
+	}
 
 	/**
 	 * Gets the label format for aliquot.

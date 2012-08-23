@@ -33,7 +33,18 @@ public class SpecimenRequirement extends AbstractSpecimen
 	 * labelFormat.
 	 */
 	private String labelFormat;
+	
+	private String specimenRequirementLabel;
+	
 
+
+	public String getSpecimenRequirementLabel() {
+		return specimenRequirementLabel;
+	}
+
+	public void setSpecimenRequirementLabel(String title) {
+		this.specimenRequirementLabel = title;
+	}
 
 	/**
 	 * Get CollectionProtocolEvent.
