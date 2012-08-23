@@ -163,10 +163,10 @@ public class RetrieveSpecimen extends TestBase {
         assertTrue("Has one result.", results.getObjectResult().length == 1);
         Element objectResult = getResultsElement(results);
         assertTrue(objectResult.getChildren().size() == 1);
-        Element specElement = (Element) objectResult.getChildren().get(0);
-        compareSpecimens(specimen,specElement);
-        assertTrue("\""+specElement.getAttributeValue("globalSpecimenIdentifier")+"\" == \""+specimen.getGlobalSpecimenIdentifier()+"\"",
-                specElement.getAttributeValue("globalSpecimenIdentifier").equals(specimen.getGlobalSpecimenIdentifier()));
+        Element specElement = (Element) objectResult.getChildren().get(0);        
+        final String gsid = specElement.getAttributeValue("globalSpecimenIdentifier");
+        assertNotNull(gsid);
+        assertTrue(gsid.matches("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"));
     }
     
     /**
