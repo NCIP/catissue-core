@@ -134,7 +134,8 @@ public class LoadGridServlet extends ConnectorServlet
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException,
 			IOException
 	{
-		setJsonString(req.getParameter("paramJson"));
+		Integer value=Integer.parseInt(req.getParameter("paramJson"));
+		setJsonString(value.toString());
 		setGridType(req.getParameter("gridType"));
 		setSessionData((SessionDataBean)req.getSession().getAttribute(Constants.SESSION_DATA));
 		super.doGet(req, res);
@@ -148,7 +149,8 @@ public class LoadGridServlet extends ConnectorServlet
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException,
 			IOException
 	{
-		setJsonString(req.getParameter("paramJson"));
+		Integer value=Integer.parseInt(req.getParameter("paramJson"));
+		setJsonString(value.toString());
 		setGridType(req.getParameter("gridType"));
 		setSessionData((SessionDataBean)req.getSession().getAttribute(Constants.SESSION_DATA));
 		super.doGet(req, res);
