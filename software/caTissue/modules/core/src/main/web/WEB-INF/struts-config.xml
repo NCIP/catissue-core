@@ -2022,6 +2022,16 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.reportProblemEditDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
 		</action>
+		
+		<action path="/ReportedProblemAddWithoutLogin"
+			type="edu.wustl.catissuecore.action.ReportedProblemAddEditAction"
+			name="reportedProblemForm"
+			validate="true"
+			input="/ReportProblem.do?operation=add&amp;menuSelected=11"
+			scope="request">
+			<forward name="success" path=".catissuecore.reportProblemSuccessDef" />
+			<forward name="failure" path="/ReportProblem.do?operation=add&amp;menuSelected=11" />
+		</action>
 
 		<action path="/ReportedProblemAdd"
 			type="edu.wustl.common.action.CommonAddEditAction"

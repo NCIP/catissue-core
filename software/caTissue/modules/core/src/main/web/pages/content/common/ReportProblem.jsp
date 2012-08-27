@@ -4,22 +4,31 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables,edu.wustl.catissuecore.util.global.Constants"%>
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
+		Object sessionData = request.getSession().getAttribute(Constants.TEMP_SESSION_DATA);
 		String formName,prevPage=null,nextPage=null;
 		boolean readOnlyValue;
-		if (operation.equals(Constants.EDIT))
-        {
-            formName = Constants.REPORTED_PROBLEM_EDIT_ACTION;
-			Long identifier = (Long)request.getAttribute(Constants.PREVIOUS_PAGE);
-			prevPage = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
-			identifier = (Long)request.getAttribute(Constants.NEXT_PAGE);
-			nextPage = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
-            readOnlyValue = true;
-        }
-        else
-        {
-            formName = Constants.REPORTED_PROBLEM_ADD_ACTION;
-            readOnlyValue = false;
-        }
+		if(sessionData!=null)
+		{
+			if (operation.equals(Constants.EDIT))
+			{
+				formName = Constants.REPORTED_PROBLEM_EDIT_ACTION;
+				Long identifier = (Long)request.getAttribute(Constants.PREVIOUS_PAGE);
+				prevPage = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
+				identifier = (Long)request.getAttribute(Constants.NEXT_PAGE);
+				nextPage = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
+				readOnlyValue = true;
+			}
+			else
+			{
+				formName = Constants.REPORTED_PROBLEM_ADD_ACTION;
+				readOnlyValue = false;
+			}
+		}
+		else
+		{
+			formName="ReportedProblemAddWithoutLogin";
+			readOnlyValue = false;
+		}
 		Boolean errmsg = Boolean.FALSE;
 		errmsg = (Boolean) request.getAttribute(Constants.EXCEPTION_OCCURED);
 		if(errmsg == null)
