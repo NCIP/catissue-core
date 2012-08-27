@@ -47,7 +47,7 @@ import edu.wustl.dao.DAO;
  *
  * @author jitendra_agrawal
  */
-public class SpecimenArrayAliquotAction extends SecureAction
+public class SpecimenArrayAliquotAction extends CatissueBaseAction
 {
 
 	/**
@@ -65,7 +65,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	 */
 
 	@Override
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		DAO dao = null;

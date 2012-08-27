@@ -4228,7 +4228,7 @@ PUBLIC
 	</action>
 
 	<action path="/SpecimenArrayAliquotsAdd"
-		type="edu.wustl.common.action.CommonAddEditAction"
+		type="edu.wustl.catissuecore.action.CatissueAddEditAction"
 		name="specimenArrayAliquotForm"
 		validate="true"
 		input="/SpecimenArrayCreateAliquots.do?pageOf=pageOfSpecimenArrayCreateAliquot&amp;menuSelected=20"
