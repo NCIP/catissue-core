@@ -333,16 +333,10 @@ alert(rid);
 								
 							
 									
-					<%				
-						
-										String toolTipTypeClass = "Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType")))+", Quantity:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_availableQty")).toString()); %>
+					
 									 										 		
 					
-					<%
-									
-									String className = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_className")));
-									String type = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_type")));
-					%>
+					
 																
 					<%
 										if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing")||((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological"))&&(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_distributedItemId"))).trim().equals("")))

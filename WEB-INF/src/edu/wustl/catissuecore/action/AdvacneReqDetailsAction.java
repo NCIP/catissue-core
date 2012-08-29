@@ -113,11 +113,15 @@ public class AdvacneReqDetailsAction extends BaseAction
 		String requestId = "";
 		String orderDetailsId = "";
 		String selectedTab = request.getParameter("selectedTab");
+		String arrTabId = request.getParameter("arrTabId");
 		if(Validator.isEmpty(selectedTab))
 		{
 			selectedTab = "AdvancedViewTab";
 		}
+		if(Validator.isEmpty(arrTabId))
+			arrTabId=selectedTab;
 		request.setAttribute("selectedTab", selectedTab);
+		request.setAttribute("arrTabId", arrTabId);
 
 		if (request.getParameter("id") != null && !request.getParameter("id").equals("0"))
 		{

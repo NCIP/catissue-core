@@ -62,6 +62,7 @@ String form_action = Constants.SUBMIT_REQUEST_DETAILS_ACTION+"?submittedFor=Forw
 <script language="javascript">
 var newWindow;
 var selectedTab = '${requestScope.selectedTab}';
+var arrTabId='';
 function changeCreateButtonStatus(noOfItems,arrayRowCounter,assignStatusArraycount)
 {
 	var buttonCreateArrayId = "buttonCreateArrayId"+arrayRowCounter;
@@ -207,7 +208,11 @@ function submitAndNotify()
 {
 	document.getElementById("mailNotification").value= "true";
 	setGridValuesToForm();
-	document.forms[0].submit();
+	
+var action = document.forms[0].action;
+action = action+"&arrTabId="+arrTabId;
+document.forms[0].action=action;
+document.forms[0].submit();
 }
 function setGridValuesToForm()
 {
@@ -822,6 +827,7 @@ tabbar = new dhtmlXTabBar("tabbar_div", "top");
 			return false;
 		}
 	}
+	arrTabId = id;
     return true;
 });
 }

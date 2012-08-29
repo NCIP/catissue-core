@@ -133,11 +133,15 @@ public class RequestDetailsAction extends BaseAction
 			return null;
 		}
 		String selectedTab = request.getParameter("selectedTab");
+		String arrTabId = request.getParameter("arrTabId"); 
 		if(Validator.isEmpty(selectedTab))
 		{
-			selectedTab = "SimpleViewTab";
+			selectedTab = "SimpleViewTab"; 
 		}
+		if(Validator.isEmpty(arrTabId))
+			arrTabId=selectedTab;
 		request.setAttribute("selectedTab", selectedTab);
+		request.setAttribute("arrTabId", arrTabId);
 		final RequestDetailsForm requestDetailsForm = (RequestDetailsForm) form;
 		// The request Id on which the user has clicked
 		String requestId = "";
@@ -276,7 +280,7 @@ public class RequestDetailsAction extends BaseAction
 		// is present instead of "Distribute"
 		request.setAttribute(Constants.ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY, tempList);
 		JSONArray jsonDataRow = new JSONArray();
-		JSONObject mainJsonRow = new JSONObject();
+		JSONObject mainJsonRow = new JSONObject(); 
 		// The order items list corresponding to the request Id
 		
 		this.getRequestDetailsList(orderDetails, requestDetailsForm, request,jsonDataRow);
@@ -600,6 +604,10 @@ public class RequestDetailsAction extends BaseAction
 						requestForMap.put("RequestForDropDownListArray:" + rowNumber,
 								allSpecimensToDisplay);
 					}
+					SpecimenOrderBean specimenOrderBean = null;
+					specimenOrderBean = specOrderMap.get(derivedSpecimenOrderItem.getId());
+					populateJsonObj(jsonDataRow, String.valueOf(row),
+							derivedSpecimenOrderItem, specimenOrderBean,valuesMap);
 
 				}
 				if (orderItem instanceof ExistingSpecimenOrderItem)
@@ -649,7 +657,7 @@ public class RequestDetailsAction extends BaseAction
 			}
 
 	private void populateJsonObj(JSONArray jsonDataRow, String rowNumber,
-			final ExistingSpecimenOrderItem existingSpecimenOrderItem,
+			final SpecimenOrderItem existingSpecimenOrderItem,
 			SpecimenOrderBean specimenOrderBean, Map valuesMap) {
 		JSONArray dataArray = new JSONArray();
 		JSONObject jsonObject = new JSONObject();
@@ -825,9 +833,17 @@ public class RequestDetailsAction extends BaseAction
 			else if (orderItem instanceof DerivedSpecimenOrderItem)
 			{
 				final DerivedSpecimenOrderItem derivedSpecimenorderItem = (DerivedSpecimenOrderItem) orderItem;
+				SpecimenOrderBean specimenOrderBean = specOrderMap.get(derivedSpecimenorderItem.getId());
 				requestDetailsBean = this.populateRequestDetailsBeanForDerivedSpecimen(
 						requestDetailsBean, derivedSpecimenorderItem, request, finalSpecimenListId);
 				requestDetailsList.add(requestDetailsBean);
+				this.populateValuesMap(orderItem, requestedItem, availableQty, specimenClass,
+						specimenType, requestFor, specimenId, assignQty, instanceOf,
+						specimenList, specimenCollGrpId, new ArrayList(),
+						actualSpecimenClass, actualSpecimenType, assignStatus,
+						consentVerificationkey, canDistributeKey, rowStatuskey,
+						selectedSpecimenTypeKey, selectedSpecimenQuantityUnit,
+						selectedSpecimenQuantity,requestDetailsForm,specimenOrderBean,jsonDataRow,requestDetailsBeanCounter);
 				finalSpecimenListId++;
 			}
 			else if (orderItem instanceof PathologicalCaseOrderItem)
@@ -1025,8 +1041,9 @@ public class RequestDetailsAction extends BaseAction
 			}
 			else
 			{
-				requestDetailsForm.setValue(requestFor, "#");
+//				requestDetailsForm.setValue(requestFor, "#");
 			}
+			requestDetailsForm.setValue(requestFor, derivedSpecimenOrderItem.getParentSpecimen().getId());
 
 			if (derivedSpecimenOrderItem.getStatus().equals(
 					Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)
@@ -1065,6 +1082,14 @@ public class RequestDetailsAction extends BaseAction
 			requestDetailsForm.setValue(actualSpecimenType, derivedSpecimenOrderItem.getParentSpecimen()
 					.getSpecimenType());
 			requestDetailsForm.setRequestFor(specimenList, childrenSpecimenListToDisplay);
+			String rowNumber = String.valueOf((finalSpecimenListId+1));
+			
+			populateJsonObj(jsonDataRow, rowNumber,
+					derivedSpecimenOrderItem, specimenOrderBean,null);
+			speciemnIdValue.append(specimenOrderBean.getId());
+			speciemnIdValue.append(",");
+			speciemnIdValue.append(specimenOrderBean.getLabel());
+			speciemnIdValue.append("|");
 		}
 		else if (orderItem instanceof PathologicalCaseOrderItem)
 		{

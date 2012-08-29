@@ -720,7 +720,7 @@ public final class OrderingSystemUtil
 	}
 	
 	public static SpecimenOrderBean getSpecimenOrderBean(
-			final ExistingSpecimenOrderItem existingSpecimenorderItem, DAO dao)
+			final SpecimenOrderItem existingSpecimenorderItem, DAO dao)
 			throws ApplicationException {
 		SpecimenOrderBean bean = new SpecimenOrderBean();
 //		String sql = "select abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY "
@@ -733,10 +733,17 @@ public final class OrderingSystemUtil
 		" from catissue_abstract_specimen abs " +
 		" join catissue_specimen spec on spec.identifier=abs.identifier " +
 		" join catissue_existing_sp_ord_item cat on abs.identifier = cat.specimen_id " +
+		" where cat.identifier=?" +
+		" union "+
+		"select abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY " +
+		" from catissue_abstract_specimen abs " +
+		" join catissue_specimen spec on spec.identifier=abs.identifier " +
+		" join catissue_derieved_sp_ord_item cat on abs.identifier = cat.specimen_id " +
 		" where cat.identifier=?";
 		ColumnValueBean bean2 = new ColumnValueBean(
 				existingSpecimenorderItem.getId());
 		List attr = new ArrayList();
+		attr.add(bean2);
 		attr.add(bean2);
 		// List list = dao.executeQuery(sql);
 		List list = dao.executeQuery(sql, attr);
@@ -765,9 +772,15 @@ public final class OrderingSystemUtil
 		String sql ="select cat.identifier,abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY " +
 				" from catissue_abstract_specimen abs, catissue_specimen spec, catissue_existing_sp_ord_item cat,catissue_order_item cot where " +
 				" spec.identifier=abs.identifier and abs.identifier =cat.specimen_id and " +
-				" cat.identifier=cot.identifier and order_id=?";
+				" cat.identifier=cot.identifier and order_id=? " +
+				" union "+
+				"select cat.identifier,abs.identifier, abs.specimen_class, abs.specimen_type, spec.label, spec.AVAILABLE_QUANTITY " +
+				" from catissue_abstract_specimen abs, catissue_specimen spec, catissue_derieved_sp_ord_item cat,catissue_order_item cot where " +
+				" spec.identifier=abs.identifier and abs.identifier =cat.specimen_id and " +
+				" cat.identifier=cot.identifier and order_id=? ";
 		ColumnValueBean bean = new ColumnValueBean(orderDetId);
 		List attrList = new ArrayList();
+		attrList.add(bean);
 		attrList.add(bean);
 		// List list = dao.executeQuery(sql);
 		List list = dao.executeQuery(sql, attrList);
@@ -792,6 +805,17 @@ public final class OrderingSystemUtil
 				" from catissue_abstract_specimen abs,catissue_specimen spec, catissue_specimen_coll_group scg, " +
 				" catissue_coll_prot_reg cpr, catissue_collection_protocol cp, " +
 				" catissue_consent_tier_status cts,catissue_existing_sp_ord_item cat,catissue_order_item cot,catissue_consent_tier ct " +
+				" where cts.specimen_id=cat.specimen_id and " +
+				" cat.identifier=cot.identifier and order_id=? " +
+				" and spec.identifier=abs.identifier and abs.identifier =cat.specimen_id " +
+				" and spec.specimen_collection_group_id=scg.identifier " +
+				" and cpr.identifier=scg.collection_protocol_reg_id " +
+				" and cp.identifier=cpr.collection_protocol_id and ct.identifier = cts.consent_tier_id " +
+				" union "+
+				"select cat.identifier,cp.consents_waived " +
+				" from catissue_abstract_specimen abs,catissue_specimen spec, catissue_specimen_coll_group scg, " +
+				" catissue_coll_prot_reg cpr, catissue_collection_protocol cp, " +
+				" catissue_consent_tier_status cts,catissue_derieved_sp_ord_item cat,catissue_order_item cot,catissue_consent_tier ct " +
 				" where cts.specimen_id=cat.specimen_id and " +
 				" cat.identifier=cot.identifier and order_id=? " +
 				" and spec.identifier=abs.identifier and abs.identifier =cat.specimen_id " +
@@ -836,10 +860,23 @@ public final class OrderingSystemUtil
 					" and spec.identifier=cat.specimen_id " +
 					" and spec.specimen_collection_group_id=scg.identifier " +
 					" and cpr.identifier=scg.collection_protocol_reg_id " +
+					" and cp.identifier=cpr.collection_protocol_id and ct.identifier = cts.consent_tier_id " +
+					"union "+
+					"select cts.specimen_id,cts.identifier, cts.consent_tier_id,cts.status,cp.consents_waived, " +
+					" cpr.collection_protocol_id, cpr.identifier, ct.statement " +
+					" from catissue_specimen spec, catissue_specimen_coll_group scg," +
+					" catissue_coll_prot_reg cpr, catissue_collection_protocol cp," +
+					" catissue_consent_tier_status cts,catissue_derieved_sp_ord_item cat,catissue_order_item cot,catissue_consent_tier ct " +
+					" where cts.specimen_id=cat.specimen_id and " +
+					" cat.identifier=cot.identifier and order_id=? " +
+					" and spec.identifier=cat.specimen_id " +
+					" and spec.specimen_collection_group_id=scg.identifier " +
+					" and cpr.identifier=scg.collection_protocol_reg_id " +
 					" and cp.identifier=cpr.collection_protocol_id and ct.identifier = cts.consent_tier_id";
 			
 			ColumnValueBean bean = new ColumnValueBean(orderId);
 			List<ColumnValueBean> list = new ArrayList<ColumnValueBean>();
+			list.add(bean);
 			list.add(bean);
 			List resultList = jdbcdao.executeQuery(consentSql, list);
 			specMap = setListInMap(resultList);
