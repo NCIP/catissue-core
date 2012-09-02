@@ -87,11 +87,17 @@ public class CreateAliquot  extends HttpServlet  {
 		obj.setStartingStoragePositionX(request.getParameter("positionX"));
 		obj.setCreatedDate(Calendar.getInstance().getTime());
 		obj.setStartingStoragePositionY(request.getParameter("positionY"));
-		if("true".equals(request.getParameter("disposeCheck"))){
+		if("checked".equals(request.getParameter("disposeCheck"))){
 			obj.setDisposeParentCheck(true);
 		}else{
 			obj.setDisposeParentCheck(false);
 		}
+		if("checked".equals(request.getParameter("printLabel"))){
+			obj.setPrintLabel(true);
+		}else{
+			obj.setPrintLabel(false);
+		}
+			
 		return obj;
 	}
 		

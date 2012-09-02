@@ -13,7 +13,14 @@ public class AliquotsDetailsDTO {
 	private Double availableQuantity;
 	private boolean basedOnCP;
 	private boolean disposeParentCheck;
+	private boolean printLabel;
 	
+	public boolean isPrintLabel() {
+		return printLabel;
+	}
+	public void setPrintLabel(boolean printLabel) {
+		this.printLabel = printLabel;
+	}
 	public boolean isDisposeParentCheck() {
 		return disposeParentCheck;
 	}

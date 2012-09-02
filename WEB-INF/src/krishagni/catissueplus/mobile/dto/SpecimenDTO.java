@@ -33,8 +33,18 @@ public class SpecimenDTO
 	private String positionDimensionTwoString;
 	
 	private String label;
+	
+	private String barCode;
 
 	
+	public String getBarCode() {
+		return barCode;
+	}
+
+	public void setBarCode(String barCode) {
+		this.barCode = barCode;
+	}
+
 	public String getLabel() {
 		return label;
 	}

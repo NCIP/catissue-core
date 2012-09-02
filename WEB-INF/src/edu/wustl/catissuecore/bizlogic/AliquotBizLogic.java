@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.TreeMap;
 
 
 import krishagni.catissueplus.mobile.dto.AliquotsDetailsDTO;
+import krishagni.catissueplus.mobile.dto.SpecimenDTO;
 
 
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
@@ -26,6 +28,8 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
+import edu.wustl.catissuecore.printserviceclient.LabelPrinterFactory;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -45,6 +49,7 @@ import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.query.util.querysuite.DAOUtil;
 import edu.wustl.security.exception.UserNotAuthorizedException;
+import edu.wustl.security.manager.SecurityManagerFactory;
 
 /**
  * This class is added for Bulk Operations.
@@ -713,12 +718,22 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 				specimenCollection.add(aliquotSpecimen);
 			}
 			specimenBizLogic.insert(specimenCollection, sessionDataBean, 0, false);
+			if(aliquotDetailObj.isDisposeParentCheck()){
 			specimenBizLogic.disposeParentSpecimen(sessionDataBean, specimenCollection,
 					Constants.SPECIMEN_DISPOSAL_REASON);
+			}
 			this.updateParentSpecimen(parentSpecimen, aliquotDetailObj.getAvailableQuantity(), dao);
+			if(aliquotDetailObj.isPrintLabel()){
+				List<AbstractDomainObject> list = new ArrayList<AbstractDomainObject>(specimenCollection);
+				printLabel(list,sessionDataBean);
+			
+			}
 			
 		}catch(ApplicationException exp){
 			throw new BizLogicException(null, exp, exp.getMsgValues());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		finally{
 			dao.closeSession();
@@ -786,14 +801,86 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 				specimenBizLogic.disposeSpecimen(sessionDataBean,
 						parentSpecimen, Constants.SPECIMEN_DISPOSAL_REASON);
 			}
+			if(aliquotDetailObj.isPrintLabel()){
+				updateSpecimenAliquotCollection.addAll(newSpecimenAliquotCollection);
+				List<AbstractDomainObject> list = new ArrayList<AbstractDomainObject>(updateSpecimenAliquotCollection);
+				printLabel(list,sessionDataBean);
+			
+			}
 			
 			dao.commit();
 			
 		}catch(ApplicationException exp){
 			throw new BizLogicException(null, exp, exp.getMsgValues());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		finally{
 			dao.closeSession();
 		}
+	}
+	public void printLabel(List specimenList,SessionDataBean sessionDataBean) throws Exception{
+		final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
+		
+		final boolean printStauts = labelPrinter.printLabel(specimenList, sessionDataBean.getIpAddress(),
+				SecurityManagerFactory.getSecurityManager().getUserById(sessionDataBean.getCsmUserId().toString()),"","");
+	}
+	
+	public List<SpecimenDTO> getAliquotDetail(String parentSpecimenLabel, SessionDataBean sessionDataBean) throws ApplicationException{
+//		
+		NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
+		DAO dao = AppUtility.openDAOSession(sessionDataBean);
+		List<SpecimenDTO> returnList = new ArrayList<SpecimenDTO>();
+		Specimen parentSpecimen = specimenBizLogic.getSpecimenDetailForAliquots(dao, parentSpecimenLabel);
+		
+		
+		String column = "parentSpecimen.id";
+		String sourceObjectName = Specimen.class.getName();
+		String[] selectColumnName = {
+				"activityStatus","id","label","barcode","specimenClass",
+				"specimenType","pathologicalStatus","specimenCharacteristics.tissueSite","specimenCharacteristics.tissueSide",
+				"availableQuantity","specimenPosition.storageContainer.name","specimenPosition.positionDimensionOne","specimenPosition.positionDimensionTwo"
+		};
+		
+		QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+		queryWhereClause.addCondition(new EqualClause(column, parentSpecimen.getId()));
+		queryWhereClause.andOpr();
+		queryWhereClause.addCondition(new EqualClause("collectionStatus", Constants.COLLECTION_STATUS_COLLECTED));
+		List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+		Map<String,String> map = new HashMap<String,String>();
+		Iterator ite = list.iterator();
+		while(ite.hasNext())
+		{
+			final Object[] valArr = (Object[]) ite.next();
+			if (valArr != null)
+			{
+				//specimenDTO = getSpecimenDTOObject(valArr);
+				SpecimenDTO specimen = new SpecimenDTO();
+				specimen.setLabel(valArr[2].toString());
+				specimen.setBarCode(valArr[3].toString());
+				specimen.setSpecimenClass(valArr[4].toString());
+				specimen.setSpecimenType(valArr[5].toString());
+				specimen.setPathologicalStatus(valArr[6].toString());
+				specimen.setTissueSite(valArr[7].toString());
+				specimen.setTissueSide(valArr[8].toString());
+				specimen.setAvailableQuantity(Double.parseDouble(valArr[9].toString()));
+				specimen.setContainerName(valArr[10].toString());
+				specimen.setPositionDimensionOneString(valArr[11].toString());
+				specimen.setPositionDimensionTwoString(valArr[12].toString());
+				returnList.add(specimen);
+			}
+	
+			
+		
+		}
+		return returnList;
+
+		
+		
+		
+		
+		
+		
 	}
 }

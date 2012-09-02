@@ -11,6 +11,10 @@ public class StoragePositionDTO {
 	private int posy;
 	private SpecimenDTO specimenDTO;
 	
+	
+	
+	
+	
 	public SpecimenDTO getSpecimenDTO() {
 		return specimenDTO;
 	}

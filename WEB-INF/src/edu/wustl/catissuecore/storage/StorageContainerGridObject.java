@@ -7,6 +7,7 @@
 
 package edu.wustl.catissuecore.storage;
 
+import krishagni.catissueplus.mobile.dto.StoragePositionDTO;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -29,14 +30,45 @@ public class StorageContainerGridObject
 	private String name;
 	
 	private String oneDimensionLabellingScheme=Constants.LABELLING_SCHEME_NUMBERS;
+	
 	private String twoDimensionLabellingScheme=Constants.LABELLING_SCHEME_NUMBERS;
 	
 	private String oneDimensionLabel;
 	
 	private String twoDimensionLabel;
 	
-	private boolean[][] availablePositions; 
+	private boolean[][] availablePositions;
 	
+	private StoragePositionDTO[][] positionDetails;
+	
+	private Integer occupiedPositons;
+	
+	private Integer emptyPositons;
+	
+	public StoragePositionDTO[][] getPositionDetails() {
+		return positionDetails;
+	}
+
+	public void setPositionDetails(StoragePositionDTO[][] positionDetails) {
+		this.positionDetails = positionDetails;
+	}
+
+	public Integer getOccupiedPositons() {
+		return occupiedPositons;
+	}
+
+	public void setOccupiedPositons(Integer occupiedPositons) {
+		this.occupiedPositons = occupiedPositons;
+	}
+
+	public Integer getEmptyPositons() {
+		return emptyPositons;
+	}
+
+	public void setEmptyPositons(Integer emptyPositons) {
+		this.emptyPositons = emptyPositons;
+	}
+
 	public String getOneDimensionLabellingScheme()
 	{
 		return oneDimensionLabellingScheme;

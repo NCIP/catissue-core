@@ -46,11 +46,15 @@ public class ViewSpecimenDetail  extends HttpServlet {
 				returnedJObject.put("cpTitle", obj.getCpShortTitle());
 				returnedJObject.put("partName", obj.getParticipantName());
 				returnedJObject.put("eventPoint",obj.getEventPoint());
-				returnedJObject.put("label",request.getParameter("label"));
+				returnedJObject.put("label",obj.getLabel());
 				returnedJObject.put("classType", obj.getSpecimenType());
 				returnedJObject.put("tissueSite", obj.getTissueSite());
 				returnedJObject.put("availableQuantity", obj.getAvailableQuantity());
+				if( obj.getContainerName()!=null){
 				returnedJObject.put("container", obj.getContainerName()+" ("+ obj.getPositionDimensionOneString()+","+obj.getPositionDimensionTwoString()+")");
+				}else{
+					returnedJObject.put("container","Virtually Located ");
+				}
 				returnedJObject.put("pathologicalStatus", obj.getPathologicalStatus());
 				
 			}

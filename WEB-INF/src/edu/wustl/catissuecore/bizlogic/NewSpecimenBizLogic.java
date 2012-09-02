@@ -11,10 +11,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -29,16 +26,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
 import krishagni.catissueplus.mobile.dto.SpecimenDTO;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.TaskTimeCalculater;
-import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
@@ -100,6 +93,7 @@ import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.dao.util.HibernateMetaData;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.exception.UserNotAuthorizedException;
@@ -5479,6 +5473,27 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 		return aliquotChildCount;
 	}
+	
+	public synchronized List getListOfAliquots(String specLabel, DAO dao) throws BizLogicException{
+		List aliquotList = new ArrayList();
+		try
+		{
+			final String[] selectColumnName = {};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(Specimen.class.getName());
+			queryWhereClause.addCondition(new EqualClause("parentSpecimen.label", specLabel));
+			queryWhereClause.andOpr();
+			queryWhereClause.addCondition(new EqualClause("lineage", "Aliquot"));
+			queryWhereClause.andOpr();
+			queryWhereClause.addCondition(new EqualClause("collectionStatus", Constants.COLLECTION_STATUS_COLLECTED));
+			aliquotList = dao.retrieve(Specimen.class.getName(),selectColumnName,queryWhereClause);
+		}
+		catch (final DAOException e)
+		{
+			this.LOGGER.error(e.getMessage(),e);
+			throw new BizLogicException(e);
+		}
+		return aliquotList;
+	}
 
 	public synchronized List getListOfPendingAliquotSpecimen(Long specId, DAO dao)
 			throws BizLogicException
@@ -5665,6 +5680,31 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		return count;
 	}
 
+	public void getSpecimenPositionDetail(DAO dao, String label,SpecimenDTO specimenDTO)throws DAOException,
+	BizLogicException
+	{
+		String column = "label";
+		
+		final String sourceObjectName = Specimen.class.getName();
+		final String[] selectColumnName = {
+				"specimenPosition.storageContainer.name",
+				"specimenPosition.positionDimensionOne",
+				"specimenPosition.positionDimensionTwo"};
+		
+		final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+		queryWhereClause.addCondition(new EqualClause(column, label));
+		
+		final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+		if (!list.isEmpty())
+		{
+			final Object[] valArr = (Object[]) list.get(0);
+			specimenDTO.setContainerName((String) valArr[0]);
+			specimenDTO.setPositionDimensionOneString(valArr[1]+"");
+			specimenDTO.setPositionDimensionTwoString(valArr[2]+"");
+		}
+		
+	
+	}
 	
 	public SpecimenDTO getSpecimenDTOFromLabel(DAO dao, String label) throws DAOException,
 	BizLogicException
@@ -5672,24 +5712,32 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		SpecimenDTO specimenDTO = new SpecimenDTO();
 		String column = "label";
 		
-		final String sourceObjectName = Specimen.class.getName();
-		System.out.println("");
-		final String[] selectColumnName = {
-				"activityStatus",
-				"specimenCollectionGroup.collectionProtocolEvent.collectionProtocol.shortTitle",
-				"specimenCollectionGroup.collectionProtocolRegistration.participant.firstName",
-				"specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier",
-				"specimenCollectionGroup.collectionProtocolEvent.studyCalendarEventPoint",
-				"specimenClass", "specimenType", "specimenCharacteristics.tissueSite",
-				"specimenCharacteristics.tissueSide", "pathologicalStatus", "availableQuantity",
-				"specimenPosition.storageContainer.name",
-				"specimenPosition.positionDimensionOne",
-				"specimenPosition.positionDimensionTwo","specimenCollectionGroup.id,id,label,barcode,"};
+		String hqlQuery = "Select Specimen.activityStatus, Specimen.specimenCollectionGroup.collectionProtocolEvent.collectionProtocol.shortTitle, "+
+				"Specimen.specimenCollectionGroup.collectionProtocolRegistration.participant.firstName, "+
+				"Specimen.specimenCollectionGroup.collectionProtocolRegistration.protocolParticipantIdentifier, "+
+				"Specimen.specimenCollectionGroup.collectionProtocolEvent.studyCalendarEventPoint, "+
+				"Specimen.specimenClass, Specimen.specimenType, "+
+				"Specimen.specimenCharacteristics.tissueSite, "+
+				"Specimen.specimenCharacteristics.tissueSide, "+
+				"Specimen.pathologicalStatus, "+
+				"Specimen.availableQuantity, "+
+				"Specimen.specimenCollectionGroup.id, "+
+				"Specimen.id, "+
+				"Specimen.label, "+ 
+				"Specimen.barcode,  "+ 
+				"Specimen.specimenPosition.positionDimensionOne, "+
+				"Specimen.specimenPosition.positionDimensionTwo, "+
+				"Specimen.specimenPosition.storageContainer.name "+
+				"from edu.wustl.catissuecore.domain.Specimen Specimen " +
+				"left outer join Specimen.specimenPosition "+
+				"left outer join Specimen.specimenPosition.storageContainer "+
+				"WHERE  "+
+				"Specimen.label = ?";
 		
-		final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-		queryWhereClause.addCondition(new EqualClause(column, label));
-		
-		final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+		ColumnValueBean columnValue = new ColumnValueBean(label);
+		List<ColumnValueBean> columnValueList = new ArrayList<ColumnValueBean>();
+		columnValueList.add(columnValue);
+		final List list = dao.executeQuery(hqlQuery, columnValueList);
 		
 		
 		if (!list.isEmpty())
@@ -5732,9 +5780,16 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			specimenDTO.setTissueSide((String) valArr[8]);
 			specimenDTO.setPathologicalStatus((String) valArr[9]);
 			specimenDTO.setAvailableQuantity((Double) valArr[10]);
-			specimenDTO.setContainerName((String) valArr[11]);
-			specimenDTO.setPositionDimensionOneString(valArr[12]+"");
-			specimenDTO.setPositionDimensionTwoString(valArr[13]+"");
+			specimenDTO.setLabel((String) valArr[13]);
+			specimenDTO.setBarCode((String) valArr[14]);
+			if(valArr[15]!=null){
+				specimenDTO.setPositionDimensionOneString(String.valueOf(valArr[15]));
+				specimenDTO.setPositionDimensionTwoString(String.valueOf(valArr[16]));
+				specimenDTO.setContainerName((String) valArr[17]);
+			}
+			
+			
+			
 			
 			return specimenDTO;
 		}
@@ -5803,7 +5858,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			return specimen;
 			
 		}
+
 		
+	
 	/**
 		 * Insert aliquot specimen.
 		 *

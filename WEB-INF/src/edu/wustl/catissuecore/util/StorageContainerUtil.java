@@ -297,6 +297,46 @@ public final class StorageContainerUtil
 		return position;
 	}
 	
+	public static void setAvailabelForContainer(String containerId, int dimX, int dimY,
+			DAO dao,StorageContainerGridObject scGridObject) throws BizLogicException
+	{
+		final StoragePositionDTO[][] positions = new StoragePositionDTO[dimX][dimY];
+		try
+		{
+			int occupiedPositon = 0;
+
+			final String[] selectColumnName = new String[]{"positionDimensionOne",
+					"positionDimensionTwo"};
+			final QueryWhereClause queryWhereClause = new QueryWhereClause(SpecimenPosition.class
+					.getName());
+			queryWhereClause.addCondition(new EqualClause("storageContainer.id", containerId));
+			final List list = dao.executeQuery("select positionDimensionOne,positionDimensionTwo,specimen.id,specimen.label,specimen.specimenCollectionGroup.collectionProtocolEvent.collectionProtocol.shortTitle," +
+					"specimen.specimenType,specimen.availableQuantity from "+SpecimenPosition.class.getName()+" where storageContainer.id="+containerId);
+			if(list!=null){
+				occupiedPositon = occupiedPositon+list.size();
+			}
+			setPositions(positions, list,true);
+			final QueryWhereClause queryWhereClause2 = new QueryWhereClause(ContainerPosition.class
+					.getName());
+			queryWhereClause2.addCondition(new EqualClause("parentContainer.id", containerId));
+			final List list2 = dao.executeQuery("select positionDimensionOne,positionDimensionTwo,occupiedContainer.id,occupiedContainer.name from "+ContainerPosition.class.getName()+" where parentContainer.id="+containerId);
+			setPositions(positions, list2,false);
+			if(list2!=null){
+				occupiedPositon = occupiedPositon+list2.size();
+			}
+			scGridObject.setPositionDetails(positions);
+			scGridObject.setOccupiedPositons(occupiedPositon);
+			
+		}
+		catch (final DAOException daoEx)
+		{
+			logger.error(daoEx.getMessage(),daoEx);
+
+			throw new BizLogicException(daoEx);
+		}
+
+		
+	}
 	
 	public static StorageContainerGridObject getContainerDetails(String containerName) throws ApplicationException
 	{
@@ -3144,5 +3184,52 @@ public final class StorageContainerUtil
 		position=AppUtility.getPositionValueInInteger(dimensionLabellingScheme, pos);
 		return position;
 	}
+	
+	public static StorageContainerGridObject getContainerDetails(String containerName,DAO dao) throws ApplicationException
+    {
+        StorageContainerGridObject scGridObject=null;
+        String sql="SELECT " +
+                "STCONT.IDENTIFIER,CONT.NAME" +
+                ",STCONT.ONE_DIMENSION_LABELLING_SCHEME, STCONT.TWO_DIMENSION_LABELLING_SCHEME," +
+                "CTYPE.ONE_DIMENSION_LABEL,CTYPE.TWO_DIMENSION_LABEL," +
+                "CAPACITY.ONE_DIMENSION_CAPACITY,CAPACITY.TWO_DIMENSION_CAPACITY,CTYPE.NAME " +
+                " FROM CATISSUE_CAPACITY CAPACITY, CATISSUE_STORAGE_CONTAINER STCONT, CATISSUE_CONTAINER_TYPE CTYPE, CATISSUE_CONTAINER CONT " +
+                "WHERE " +
+                "CONT.NAME='" +containerName +
+                "' AND CONT.IDENTIFIER=STCONT.IDENTIFIER AND STCONT.STORAGE_TYPE_ID=CTYPE.IDENTIFIER AND CONT.CAPACITY_ID=CAPACITY.IDENTIFIER";
+        List list =AppUtility.executeSQLQuery(sql);
+        if(null!=list && !list.isEmpty())
+        {
+            String containerId=(String) ((ArrayList)list.get(0)).get(0);
+            String contName=(String) ((ArrayList)list.get(0)).get(1);
+            String oneDimensionLabellingScheme=(String) ((ArrayList)list.get(0)).get(2);
+            String twoDimensionLabellingScheme=(String) ((ArrayList)list.get(0)).get(3);
+            String oneDimensionLabel=(String) ((ArrayList)list.get(0)).get(4);
+            String twoDimensionLabel=(String) ((ArrayList)list.get(0)).get(5);
+            Integer oneDimensionCapacity=Integer.valueOf((String) ((ArrayList)list.get(0)).get(6));
+            Integer twoDimensionCapacity=Integer.valueOf((String) ((ArrayList)list.get(0)).get(7));
+            String cType = (String)(((ArrayList)list.get(0)).get(8));
+
+
+          //  boolean[][] availablePositions= getAvailablePositionsForContainer(containerId.toString(), oneDimensionCapacity+1, twoDimensionCapacity+1, dao);
+            scGridObject=new StorageContainerGridObject();
+            scGridObject.setName(containerName);
+            scGridObject.setOneDimensionLabellingScheme(oneDimensionLabellingScheme);
+            scGridObject.setTwoDimensionLabellingScheme(twoDimensionLabellingScheme);
+            scGridObject.setOneDimensionLabel(oneDimensionLabel);
+            scGridObject.setTwoDimensionLabel(twoDimensionLabel);
+            scGridObject.setOneDimensionCapacity(oneDimensionCapacity);
+            scGridObject.setTwoDimensionCapacity(twoDimensionCapacity);
+            scGridObject.setType(cType);
+            setAvailabelForContainer(containerId.toString(), oneDimensionCapacity+1, twoDimensionCapacity+1, dao,scGridObject);
+          //  scGridObject.setAvailablePositions(availablePositions);
+        }
+       
+        //Step1: sql to get label schemes, dimensions labels,capacity id by joining type and container
+        //step : call getAvailablePositionsForContainer
+        //return object
+        return scGridObject;
+    }
+	
 
 }

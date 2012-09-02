@@ -1415,9 +1415,11 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			if(specimenList!=null && !specimenList.isEmpty() && storageContainerList!=null && !storageContainerList.isEmpty()){
 				Specimen specimen = specimenList.get(0);
 				TransferEventParameters transferEventParameters = new TransferEventParameters();
-				transferEventParameters.setFromPositionDimensionOne(specimen.getSpecimenPosition().getPositionDimensionOne());
-				transferEventParameters.setFromPositionDimensionTwo(specimen.getSpecimenPosition().getPositionDimensionTwo());
-				transferEventParameters.setFromStorageContainer(specimen.getSpecimenPosition().getStorageContainer());
+				if(specimen.getSpecimenPosition()!=null){
+					transferEventParameters.setFromPositionDimensionOne(specimen.getSpecimenPosition().getPositionDimensionOne());
+					transferEventParameters.setFromPositionDimensionTwo(specimen.getSpecimenPosition().getPositionDimensionTwo());
+					transferEventParameters.setFromStorageContainer(specimen.getSpecimenPosition().getStorageContainer());
+				}
 				transferEventParameters.setSpecimen(specimen);
 				transferEventParameters.setToPositionDimensionOne(pos1);
 				transferEventParameters.setToPositionDimensionTwo(pos2);
