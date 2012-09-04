@@ -21,26 +21,31 @@
 <%@ page import="edu.wustl.catissuecore.util.HelpXMLPropertyHandler"%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
-<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
-<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+
+
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">\
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+
 <script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
 <script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
+
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
+
 <script src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
@@ -59,7 +64,10 @@
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
 
 
-
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
 
 
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
@@ -67,23 +75,6 @@
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-
-<script type="text/javascript" src="jss/tag-popup.js"></script>
-<link rel="STYLESHEET" type="text/css"
-	href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
-<link rel="STYLESHEET" type="text/css"
-	href="dhtmlx_suite/dhtml_pop/css/dhtmlXGrid.css" />
-<link rel="STYLESHEET" type="text/css"
-	href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlx.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
-
-
-<link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
 
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
@@ -249,7 +240,7 @@ function updateHelpURL()
 //declaring DHTMLX Drop Down controls required variables
 var containerDropDownInfo, scGrid;
 var scGridVisible = false;
-
+var dhxWins;
 
 function initWindow()
 {
@@ -356,7 +347,7 @@ function doOnLoad()
 var className=document.getElementById("className").value;
 var sptype=document.getElementById("type").value;
 var collectionProtocolId="<%=collectionProtocolId%>";
-var containerName=document.getElementById("storageContainerDropDown").value;
+//var containerName=document.getElementById("storageContainerDropDown").value;
 var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
 +className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId+"&stContSelection="+"<%=form.getStContSelection()%>";
 
@@ -1303,7 +1294,7 @@ document.forms[0].pos2.disabled = false;
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 	<link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
 </head>
-<body onload="initWindow();loadContainerValues();showConsents();setContainerValues();">
+<body onload="doOnLoad();initWindow();loadContainerValues();showConsents();setContainerValues();">
 <%
 		int exIdRows=1;
 		int bhRows=1;
@@ -2072,7 +2063,7 @@ document.forms[0].pos2.disabled = false;
 									</html:checkbox>
 								</td-->
 								<td width="100%" >
-			<div  id="manualDiv" style="<%=manualDisplayStyle%>">
+			<div  id="manualDiv" style="display:block">
 											<table cellpadding="0" cellspacing="0" border="0" >
 						<tr>
 							<td class="groupelements" size="48">
@@ -2371,9 +2362,13 @@ function updateStorageContainerValue()
 	{
 		var containerName=document.getElementById(containerDropDownInfo['dropDownId']).value;
 		document.getElementById("selectedContainerName").value=containerName;
-		if('Virtual'==containerName)
+		if("Virtual"==containerName)
 		{
-			document.getElementById("virtuallyLocated").value='true';
+			document.getElementById("virtuallyLocated").value="true";
+		}
+		else
+		{
+			document.getElementById("virtuallyLocated").value="false";
 		}
 	}
 	

@@ -771,9 +771,9 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 						{
 							this.specimenPosition.storageContainer.setName(form
 									.getSelectedContainerName());
-							this.specimenPosition.setPositionDimensionOneString(form.getPositionDimensionOne());
-							this.specimenPosition.setPositionDimensionTwoString(form.getPositionDimensionTwo());
-							StorageContainerUtil.setContainerPositions(form.getSelectedContainerName(), form.getPositionDimensionOne(), form.getPositionDimensionTwo(), specimenPosition);
+							this.specimenPosition.setPositionDimensionOneString(form.getPos1());
+							this.specimenPosition.setPositionDimensionTwoString(form.getPos2());
+							StorageContainerUtil.setContainerPositions(form.getSelectedContainerName(), form.getPos1(), form.getPos2(), specimenPosition);
 							this.specimenPosition.specimen = this;
 						}
 					}
@@ -905,32 +905,23 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 	 */
 	private void setSpecimenPosition(final SpecimenForm form)
 	{
-		if (this.specimenPosition == null || this.specimenPosition.storageContainer == null)
-		{
-			this.specimenPosition = new SpecimenPosition();
-			this.specimenPosition.storageContainer = new StorageContainer();
-		}
 		if (!form.isVirtuallyLocated())
-		//if (form.getStContSelection() == 1)
-		//{
-		//	this.specimenPosition = null;
-		//}
-		//if (form.getStContSelection() == 2)
 		{
-			final long containerId = Long.parseLong(form.getStorageContainer());
-			this.specimenPosition.storageContainer.setId(containerId);
+			/*final String containerName=form.getSelectedContainerName();
+			this.specimenPosition.storageContainer.setName(containerName);
 			this.specimenPosition.setPositionDimensionOneString(form.getPositionDimensionOne());
 			this.specimenPosition.setPositionDimensionTwoString(form.getPositionDimensionTwo());
-			StorageContainerUtil.setContainerPositionForAutoOption(form.getStorageContainer(), form.getPositionDimensionOne(), form.getPositionDimensionTwo(),this.specimenPosition);
-			/*this.specimenPosition.positionDimensionOne =Integer.valueOf( AppUtility.excelColumnAlphabetToNum(String.valueOf(form
-					.getPositionDimensionOne())).toString());
-			this.specimenPosition.positionDimensionTwo =Integer.valueOf( AppUtility.excelColumnAlphabetToNum(String.valueOf(form
-					.getPositionDimensionTwo())).toString());*/
+			StorageContainerUtil.setContainerPositions(containerName, form.getPositionDimensionOne(), form.getPositionDimensionTwo(), specimenPosition);//ContainerPositionForAutoOption(form.getStorageContainer(), form.getPositionDimensionOne(), form.getPositionDimensionTwo(),this.specimenPosition);
 			this.specimenPosition.specimen = this;
 
 		}
 		else if (form.getStContSelection() == 3)
-		{
+		{*/
+			if (this.specimenPosition == null || this.specimenPosition.storageContainer == null)
+			{
+				this.specimenPosition = new SpecimenPosition();
+				this.specimenPosition.storageContainer = new StorageContainer();
+			}
 			this.specimenPosition.storageContainer.setName(form.getSelectedContainerName());
 			if (form.getPos1() != null && !form.getPos1().trim().equals("")
 					&& form.getPos2() != null && !form.getPos2().trim().equals(""))

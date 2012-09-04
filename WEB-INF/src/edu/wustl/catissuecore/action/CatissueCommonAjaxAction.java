@@ -138,7 +138,7 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		List <NameValueBean>containerList=new ArrayList();
 		String contName=request.getParameter(Constants.CONTAINER_NAME);
 		String stContSelection=request.getParameter("stContSelection");
-		if(contName!=null || (null!=stContSelection && Integer.valueOf(2).equals(Integer.valueOf(stContSelection))))
+		//if(contName!=null || (null!=stContSelection && Integer.valueOf(2).equals(Integer.valueOf(stContSelection))))
 		{
 			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
 					.getAttribute(Constants.SESSION_DATA);
