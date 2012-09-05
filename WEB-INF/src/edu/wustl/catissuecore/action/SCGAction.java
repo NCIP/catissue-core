@@ -67,7 +67,7 @@ public class SCGAction extends BaseAction
                 scgOperation=CDMSIntegrationConstants.EDIT;
             }
             path.append("&URLCollectionProtocolId=").append(cpId).append("&URLParticipantId=").append(participantId);
-            path.append("&URLCollectionEventId=").append(collectionEventId).append("&URLId=").append(scgId).append('&');
+            path.append("&URLCollectionEventId=").append(collectionEventId).append("&URLId=").append(Constants.SPECIMEN_COLLECTION_GROUP).append("_").append(scgId).append('&');
             path.append(CDMSIntegrationConstants.OPERATION).append('=').append(scgOperation);
 //            path="&URLCollectionProtocolId="+cpId+"&URLParticipantId="+participantId+"&URLCollectionEventId="+collectionEventId+"&URLId="+scgId+"&"+ClinPortalIntegrationConstants.OPERATION+"="+scgOperation;
         }
@@ -78,7 +78,7 @@ public class SCGAction extends BaseAction
             {
                 final Object[] id= (Object[]) ids.get(0);
                 path.append("&URLCollectionProtocolId=").append(id[0].toString()).append("&URLParticipantId=").append(id[2].toString());
-                path.append("&URLCollectionEventId=").append(id[1].toString()).append("&URLId=").append(scgId).append('&');
+                path.append("&URLCollectionEventId=").append(id[1].toString()).append("&URLId=").append(Constants.SPECIMEN_COLLECTION_GROUP).append("_").append(scgId).append('&');
                 path.append(CDMSIntegrationConstants.OPERATION).append('=').append(scgOperation);
          //       path=path+"&URLCollectionProtocolId="+id[0].toString()+"&URLParticipantId="+id[2].toString()+"&URLCollectionEventId="+id[1].toString()+"&URLId="+scgId+"&"+ClinPortalIntegrationConstants.OPERATION+"="+scgOperation;
             }
@@ -103,8 +103,11 @@ public class SCGAction extends BaseAction
        final String cpId=request.getParameter(CDMSIntegrationConstants.COLLECTION_PROTOCOL_ID);
        final String participantId=request.getParameter(CDMSIntegrationConstants.PARTICIPANT_ID);
        final CPSearchForm cpSearchForm = new CPSearchForm();
+      if(cpId!=null && !cpId.isEmpty() && participantId!=null && !participantId.isEmpty())
+      {
        cpSearchForm.setCpId(Long.valueOf(cpId));
        cpSearchForm.setParticipantId(Long.valueOf(participantId));
+      }
     }
 
 
