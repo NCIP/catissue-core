@@ -14,7 +14,7 @@
 
    String collectionProtocolId  = request.getParameter("URLCollectionProtocolId");
    String pId = request.getParameter("URLParticipantId");
-   String scgId = request.getParameter("URLScgId");
+   String nodeId = request.getParameter("URLnodeId");
    String collectionEventId = request.getParameter("URLCollectionEventId");
 %>
 
@@ -198,7 +198,7 @@
 		<param name=quality value=high>
 		<param name="swliveconnect" value="true">
 		<param name="wmode" value="transparent" />
-		<param name='flashVars' value='collectionProtocolId=<%=collectionProtocolId%>&participantId=<%=pId%>&scgId=<%=scgId%>&collectionEventId=<%=collectionEventId%>'/>
+		<param name='flashVars' value='collectionProtocolId=<%=collectionProtocolId%>&participantId=<%=pId%>&nodeId=<%=nodeId%>&collectionEventId=<%=collectionEventId%>'/>
 		<embed src="flexclient/biospecimen/Layout.swf" quality="high" bgcolor="#ffffff"
 			width="100%" height="100%" id="Layout" name="Layout" align="middle"
 			play="true"
@@ -208,7 +208,7 @@
 			allowScriptAccess="sameDomain"
 			type="application/x-shockwave-flash"
 			pluginspage="http://www.adobe.com/go/getflashplayer"
-			flashvars='collectionProtocolId=<%=collectionProtocolId%>&participantId=<%=pId%>&scgId=<%=scgId%>&collectionEventId=<%=collectionEventId%>'>
+			flashvars='collectionProtocolId=<%=collectionProtocolId%>&participantId=<%=pId%>&nodeId=<%=nodeId%>&collectionEventId=<%=collectionEventId%>'>
 		</embed>
 
    </object>

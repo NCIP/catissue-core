@@ -18,7 +18,7 @@
 									</td>
 								</logic:equal>
 								<logic:notEqual name="isPersistent" value="true">
-									<html:text styleClass="black_ar" size="30" styleId="specimenLabel" maxlength="255" property="specimenReqTitle"/>
+									<html:text styleClass="black_ar" size="23" styleId="specimenLabel" maxlength="255" property="specimenReqTitle"/>
 						          </td>
 						          </logic:notEqual>
 						</tr> 

@@ -10,7 +10,8 @@
 
 	String URLCollectionProtocolId  = request.getParameter("URLCollectionProtocolId");
 	String URLParticipantId = request.getParameter("URLParticipantId");
-	String URLScgId = request.getParameter("URLId");
+	//String URLScgId = request.getParameter("URLId");
+	String URLnodeId = request.getParameter("URLId");
 	String URLCollectionEventId = request.getParameter("URLCollectionEventId");
 	String frame1Ysize = "99.9%";
 	String frame2Ysize = "99.9%";
@@ -90,7 +91,7 @@ function hideCursor(){
 		<TR>
 			<TD valign="top" height="100%" id='sideMenuTd' style="display: block; height: 100%;">
 		<div id="SearchLeftPart" style=" width:100%;height:100%; overflow:none;">
-				<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>&URLCollectionProtocolId=<%=URLCollectionProtocolId%>&URLParticipantId=<%=URLParticipantId%>&URLScgId=<%=URLScgId%>&URLCollectionEventId=<%=URLCollectionEventId%>" scrolling="no" frameborder="0" height="<%= frame3Ysize %>" width="100%">
+				<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>&URLCollectionProtocolId=<%=URLCollectionProtocolId%>&URLParticipantId=<%=URLParticipantId%>&URLnodeId=<%=URLnodeId%>&URLCollectionEventId=<%=URLCollectionEventId%>" scrolling="no" frameborder="0" height="<%= frame3Ysize %>" width="100%">
 						Your Browser doesn't support IFrames.
 				</iframe>
 		</div>

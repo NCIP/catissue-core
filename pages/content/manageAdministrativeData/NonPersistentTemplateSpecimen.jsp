@@ -12,7 +12,7 @@
 		                 <td align="center" class="black_ar"><span class="blue_ar_b"></span></td>
                          <td align="left" class="black_ar"><bean:message key="cpbasedentry.specimenReqTitle"/></td>
                          <td align="left" class="black_ar">
-									<html:text styleClass="black_ar" size="30" styleId="specimenLabel" maxlength="255" property="specimenReqTitle"/>
+									<html:text styleClass="black_ar" size="23" styleId="specimenLabel" maxlength="255" property="specimenReqTitle"/>
 						  </td>
 						</tr> 
 		                <tr>
