@@ -869,10 +869,10 @@ public class AppUtility {
 			final Map<Integer, QueryResultObjectData> hyperlinkColumnMap,
 			final int index) {
 		Object obj = row.get(index);
-
+		
 		if (obj instanceof String) {
 			obj = toNewGridFormat(obj);
-
+			
 			final QueryResultObjectData queryResultObjectData = hyperlinkColumnMap
 					.get(index);
 			/**
@@ -897,7 +897,32 @@ public class AppUtility {
 					 */
 					final String aliasName = queryResultObjectData
 							.getAliasName();
-					final String link = "SimpleSearchEdit.do?"
+					final String link;
+					final String hrefTag;
+					
+					if("SpecimenCollectionGroup".equalsIgnoreCase(aliasName))
+					{
+						 link = "GotoSCG.do?"
+								+CDMSIntegrationConstants.SCGID+"="
+								+row.get(queryResultObjectData
+										.getIdentifierColumnId());
+						        
+						hrefTag = "<a class='normalLink' href='"+link+"'"
+								+">" + obj + "</a>";
+					}
+					else if("Specimen".equalsIgnoreCase(aliasName))
+					{
+						link = "urlSpecimenView.do?"
+								+"identifier="
+								+row.get(queryResultObjectData
+										.getIdentifierColumnId());
+						 hrefTag = "<a class='normalLink' href='"+link+"'"
+								+">" + obj + "</a>";
+						
+					}
+					else
+					{ 
+					   	   link = "SimpleSearchEdit.do?"
 							+ edu.wustl.common.util.global.Constants.TABLE_ALIAS_NAME
 							+ "="
 							+ aliasName
@@ -912,10 +937,11 @@ public class AppUtility {
 					 * bug ID: 4225 Patch id: 4225_1 Description : Passing a
 					 * different name to the popup window
 					 */
-					final String onclickStr = " onclick=javascript:NewWindow('"
+					 final String onclickStr = " onclick=javascript:NewWindow('"
 							+ link + "','simpleSearch','800','600','yes') ";
-					final String hrefTag = "<a class='normalLink' href='#'"
+					 hrefTag = "<a class='normalLink' href='#'"
 							+ onclickStr + ">" + obj + "</a>";
+					}
 					// String hrefTag = "<a href='"+ link+ "'>"+obj+"</a>";
 					obj = hrefTag;
 				}
