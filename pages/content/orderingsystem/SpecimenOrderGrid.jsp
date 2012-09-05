@@ -86,7 +86,7 @@
 	<tr>
 		<td colspan="2" width="100%">
 			<script>	
-					document.write("<div id='gridbox' width='100%' height='400px' style='background-color:#d7d7d7;overflow:hidden'></div>");
+					document.write("<div id='gridbox' width='100%' height='270px' style='background-color:#d7d7d7;overflow:hidden'></div>");
 					document.write("<div id='csPagingArea'></div>");
 					document.write("<div id='csInfoArea'></div>");    
 			</script>
