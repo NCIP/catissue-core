@@ -108,7 +108,7 @@
 
 			public var collectionProtocolId:String;
 			public var participantId:String;
-			public var scgId:String;
+			public var urlNodeId:String;
 			private var isScrollbarRequired:Boolean = false;
 			public var collectionEventId:String;
 
@@ -132,7 +132,7 @@
 
 			 collectionProtocolId = Application.application.parameters.collectionProtocolId;
 			 participantId = Application.application.parameters.participantId;
-			 scgId = Application.application.parameters.scgId;
+			 urlNodeId = Application.application.parameters.nodeId;
 			 collectionEventId = Application.application.parameters.collectionEventId;
 			 //Alert.show("collectionProtocolId "+collectionProtocolId+" participantId "+participantId+" scgId "+scgId+" collectionEventId "+collectionEventId);
 
@@ -429,7 +429,7 @@
 
 			specimenTree.dataProvider = null;
 			spDetailsLabel.text = title;
-			var url : URLRequest = new URLRequest("javascript: clearFrame()");
+			var url : URLRequest = new URLRequest("javascript: clearFrame("+selectedCp.value+")");
 			navigateToURL(url,"_self");
 
 		}
@@ -502,10 +502,10 @@
        			setIcons(xmlNode);
 
 		}
-		if(scgId!=null && scgId != "" && scgId != "null")
+		if(urlNodeId!=null && urlNodeId != "" && urlNodeId != "null")
 		{
-			var nodeId:String = "SpecimenCollectionGroup_"+scgId;
-			nodeIdToSelect = nodeId;
+			//var nodeId:String = "SpecimenCollectionGroup_"+scgId;
+			nodeIdToSelect = urlNodeId;
 
 			selectTreeNode();
 
