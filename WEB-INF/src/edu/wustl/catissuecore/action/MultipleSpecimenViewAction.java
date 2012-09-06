@@ -72,6 +72,7 @@ public class MultipleSpecimenViewAction extends BaseAction
 			session.setAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP, cpEventMap);
 			summaryForm.setShowCheckBoxes(true);//bug 12531
 			summaryForm.setShowbarCode(!Variables.isSpecimenBarcodeGeneratorAvl);
+			request.setAttribute("IsToShowButton", true);
 			//summaryForm.setShowLabel(!Variables.isSpecimenLabelGeneratorAvl);
 			if (Constants.EDIT.equals(request.getParameter("mode")))
 			{

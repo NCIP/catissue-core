@@ -23,8 +23,167 @@
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %>
 
 
+
+
+
+<%
+String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
+List<String[]> initValueForContainer = (List<String[]>)request.getAttribute("initValues");
+String[] containerValues=initValueForContainer.get(0);
+String containerName=containerValues[0];
+String pos1=containerValues[1];
+String pos2=containerValues[2];
+String collectionProtocolId ="";
+String showSpecList = (String)request.getAttribute("showSpecList");
+		if (request.getAttribute(Constants.COLLECTION_PROTOCOL_ID)==null)
+			collectionProtocolId="";
+		else
+		 collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
+
+	
+	
+if(showSpecList.equals("true"))
+						{
+ %>
+						<script type="text/javascript" src="jss/tag-popup.js"></script>
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlXGrid.css" />
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlx.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">\
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
+<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script src="jss/script.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
+<script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
+<script>var imgsrc="images/de/";</script>
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
+<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script src="jss/script.js" type="text/javascript"></script>
+
+<script src="jss/script.js"></script>
+<script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/prototype.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/scr.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/combobox.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
+<script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
+<LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+
+
+<script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/antiSpecAjax.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/GenericSpecimenDetailsTag.js"></script>
+<script src="jss/ajax.js" type="text/javascript"></script>
+
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
+<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+
+
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
+<script src="jss/script.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
+<script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
+<script>var imgsrc="images/de/";</script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/prototype.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/scr.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/combobox.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
+<script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
+<LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+
+	<%}
+	else{%>
+	<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
 <link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
@@ -45,7 +204,14 @@
 <script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
 
+
+<link rel="STYLESHEET" type="text/css"
+	href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
+<%}%>
 <script src="jss/script.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
@@ -61,13 +227,7 @@
 <LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
 
-
-<link rel="STYLESHEET" type="text/css"
-	href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
 
 
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
@@ -75,21 +235,6 @@
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-
-<%
-String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
-List<String[]> initValueForContainer = (List<String[]>)request.getAttribute("initValues");
-String[] containerValues=initValueForContainer.get(0);
-String containerName=containerValues[0];
-String pos1=containerValues[1];
-String pos2=containerValues[2];
-String collectionProtocolId ="";
-		if (request.getAttribute(Constants.COLLECTION_PROTOCOL_ID)==null)
-			collectionProtocolId="";
-		else
-		 collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
-
-	%>
 <script>
 function updateHelpURL()
 	{
@@ -1294,9 +1439,18 @@ document.forms[0].pos2.disabled = false;
 	<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" />
 	<link href="css/styleSheet.css" rel="stylesheet" type="text/css" />
 </head>
-<body onload="doOnLoad();initWindow();loadContainerValues();showConsents();setContainerValues();">
 <%
-		int exIdRows=1;
+if(showSpecList.equals("true"))
+						{%>
+<body onload="showConsent()">
+<%
+}
+else
+{%>
+<body onload="doOnLoad();initWindow();loadContainerValues();showConsents();setContainerValues();">
+
+<%
+}		int exIdRows=1;
 		int bhRows=1;
 
 		String unitSpecimen = "";

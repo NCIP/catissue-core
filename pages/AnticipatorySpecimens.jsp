@@ -151,7 +151,10 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 <script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
 <script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
 <script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+
+<logic:equal name="IsToShowButton" value="true">
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
+</logic:equal>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
@@ -1314,7 +1317,7 @@ String lbl = "Apply first to all";
 							<%
  						String	organizeTarget = "ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem')";
  %>
- <logic:equal name="IsToShowButton" value="true">
+ <logic:equal name="IsToShowButton" value="false">
 						<td>|&nbsp;<input class="blue_ar_b" type="button"  id="addToCart"
 							value="Add To Specimen List" onclick="<%=organizeTarget%>" /></td>
 							</logic:equal>
@@ -1396,12 +1399,13 @@ function giveCall(url,msg,msg1,id)
 {
 	
 	document.getElementById('objCheckbox').value=id;
+	document.getElementById('objCheckbox').checked=true;
 	ajaxAssignTagFunctionCall(url,msg,msg1);
 }
 			var popupmygrid;
 function doInItTreeGrid1()
 {
-	popupmygrid = new dhtmlXGridObject('treegridbox');
+	popupmygrid = new dhtmlXGridObject1('treegridbox');
 	popupmygrid.selMultiRows = true;
 	popupmygrid.imgURL = "dhtmlx_suite/dhtml_pop/imgs/";
 	popupmygrid.setHeader(",<div style='text-align:center;'>My Specimen Lists</div>,");

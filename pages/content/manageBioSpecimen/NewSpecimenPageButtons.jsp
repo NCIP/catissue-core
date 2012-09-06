@@ -75,9 +75,13 @@
 		</html:button> 
 		<%
  						String	organizeTarget = "ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem')";
+						
+						if(showSpecList.equals("true"))
+						{
  %>
 						| <input type="button" value="Add To Specimen List"
 							onclick="<%=organizeTarget%> " class="blue_ar_c">
+	<%}%>
 		</td>
 	</tr>
 </table>

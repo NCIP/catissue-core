@@ -207,9 +207,12 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		final Iterator itr2 = specimenList.iterator();
 		final NewSpecimenBizLogic specBizLogic = new NewSpecimenBizLogic();
 		StringBuffer buffer = new StringBuffer(20);
+		boolean pendingFlag = Boolean.FALSE;
 		while (itr2.hasNext())
 		{
 			final Specimen specimen = (Specimen) itr2.next();
+			if(Validator.isEmpty(specimen.getCollectionStatus()) || Constants.COLLECTION_STATUS_PENDING.equals(specimen.getCollectionStatus()))
+				pendingFlag = Boolean.TRUE;
 			buffer.append(specimen.getId());
 			buffer.append(",");
 			if (specimen.getChildSpecimenCollection() != null)
@@ -223,7 +226,8 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 			}
 		}
 		request.setAttribute("popUpSpecList", buffer.toString());
-		request.setAttribute("IsToShowButton", Boolean.TRUE);
+		
+		request.setAttribute("IsToShowButton", pendingFlag);
 		eventBean.setSpecimenRequirementbeanMap(this.getSpecimensMap(specimenList, this.cpId,
 				autoStorageContainer));
 		// eventBean.setSpecimenRequirementbeanMap(getSpecimensMap(

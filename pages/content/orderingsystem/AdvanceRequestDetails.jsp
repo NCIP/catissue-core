@@ -661,19 +661,19 @@ function checkQuantityforAll(count)
 				<tr>
 					<td width="100%" >
 					<table border="0" width="100%"><tr><td>
-						<div id="tabbar_div" align="left" style="width:auto;height:350px;overflow:auto;"/>
+						<div id="tabbar_div" align="left" style="width:auto;height:360px;overflow:auto;"/>
 						</td>
 						</tr></table>
 						<table border="0" width="100%">
 						<tr><td>
-						<div id="SimpleViewDiv">
+						<div id="SimpleViewDiv" style="width:auto;height:315px;overflow:auto;">
 						<logic:notEqual name="selectedTab" value="AdvancedViewTab">
 							
 						</logic:notEqual>
 			</div>	
 			</td></tr>
 			<tr><td>
-			<div id="AdvancedViewDiv" style="width:auto;height:340px;overflow:auto;">
+			<div id="AdvancedViewDiv" style="width:auto;height:315px;overflow:auto;">
 			
 				
 			
@@ -1073,7 +1073,7 @@ function checkQuantityforAll(count)
 						</div>	
 			</td></tr>
 			<tr><td>
-			<div id="ArrayRequestDiv">
+			<div id="ArrayRequestDiv" style="width:auto;height:315px;overflow:auto;">
 				<%@ include file="/pages/content/orderingsystem/ArrayRequests.jsp" %>
 			</div>
 			</td></tr></table>

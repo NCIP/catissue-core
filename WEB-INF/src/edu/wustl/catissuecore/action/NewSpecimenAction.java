@@ -999,6 +999,13 @@ public class NewSpecimenAction extends SecureAction
 			request.setAttribute("createdDate", specimenForm.getCreatedDate());
 			request.setAttribute("specimenActivityStatus",
 					Constants.SPECIMEN_ACTIVITY_STATUS_VALUES);
+			if(Validator.isEmpty(specimenForm.getCollectionStatus()) ||  
+					specimenForm.getCollectionStatus().equals(Constants.COLLECTION_STATUS_PENDING) || operation.equals(Constants.ADD))
+			{
+				request.setAttribute("showSpecList", "false");
+			}
+			else
+				request.setAttribute("showSpecList", "true");
 			return mapping.findForward(pageOf);
 
 		}
