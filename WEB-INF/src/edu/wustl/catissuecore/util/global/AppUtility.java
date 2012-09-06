@@ -57,6 +57,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.actionForm.IPrinterTypeLocation;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
@@ -4166,4 +4167,21 @@ public class AppUtility {
 		return list;
 	}
 	
+	public static String getLineageSubString(GenericSpecimen genericSpecimen)
+	{
+				String lineage=genericSpecimen.getLineage();
+				if(("New").equals(lineage))
+				{
+					lineage="S";
+				}
+				else if("Aliquot".equals(lineage))
+				{
+					lineage="Aliquot"+genericSpecimen.getParentId();
+				}
+				else if("Derived".equals(lineage))
+				{
+					lineage="Derived"+genericSpecimen.getParentId();
+				}
+				return lineage;
+	}
 }

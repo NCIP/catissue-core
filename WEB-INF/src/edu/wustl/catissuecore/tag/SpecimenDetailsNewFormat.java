@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionErrors;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDetailsInfo;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -1694,14 +1695,36 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			if(element[0].contains("className"))//.equals(arg[1]))
 			{
 				String[] arg1=nameValue[3];
-				stringBuffer.append("<input type=\"hidden\" name=\"className_S_" + arg1[1] + "\" value=\"" + element[1]
-						+ "\" id=\"className_S_" + arg1[1] + "\">");
+				Integer id=Integer.valueOf(arg1[1]);
+				String stringToAppend=null;
+				if(arg1[1].equals("-1"))
+				{
+					id = Integer.valueOf(specimen.getUniqueIdentifier());
+					stringToAppend=id.toString();
+				}
+				else
+				{
+					stringToAppend=AppUtility.getLineageSubString(specimen)+"_"+id;
+				}
+				stringBuffer.append("<input type=\"hidden\" name=\"className_" + stringToAppend + "\" value=\"" + element[1]
+						+ "\" id=\"className_" +  stringToAppend + "\">");
 			}
 			if(element[0].contains("type"))//.equals(arg[1]))
 			{
 				String[] arg1=nameValue[3];
-				stringBuffer.append("<input type=\"hidden\" name=\"type_S_" + arg1[1] + "\" value=\"" + element[1]
-						+ "\" id=\"type_S_" + arg1[1] + "\">");
+				Integer id=Integer.valueOf(arg1[1]);
+				String stringToAppend=null;
+				if(arg1[1].equals("-1"))
+				{
+					id = Integer.valueOf(specimen.getUniqueIdentifier());
+					stringToAppend=id.toString();
+				}
+				else
+				{
+					stringToAppend=AppUtility.getLineageSubString(specimen)+"_"+id;
+				}
+				stringBuffer.append("<input type=\"hidden\" name=\"type_" +stringToAppend + "\" value=\"" + element[1]
+						+ "\" id=\"type_" +  stringToAppend + "\">");
 			}
 		}
 

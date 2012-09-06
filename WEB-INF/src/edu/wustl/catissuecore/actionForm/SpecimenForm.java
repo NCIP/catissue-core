@@ -599,6 +599,7 @@ public class SpecimenForm extends AbstractActionForm
 				&& specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED))
 		{
 			this.setStContSelection(Constants.STORAGE_TYPE_POSITION_VIRTUAL_VALUE);
+			this.virtuallyLocated=Boolean.TRUE;
 		}
 		else
 		{
@@ -620,7 +621,6 @@ public class SpecimenForm extends AbstractActionForm
 				}
 			}
 		}
-
 		this.barcode = specimen.getBarcode();
 		this.label = specimen.getLabel();
 
