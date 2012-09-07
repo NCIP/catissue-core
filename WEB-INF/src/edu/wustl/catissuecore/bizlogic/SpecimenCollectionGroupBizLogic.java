@@ -2466,13 +2466,13 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		 */
 		final TreeMap<Long, List<Specimen>> specimenChildrenMap = new TreeMap<Long, List<Specimen>>();
 
-		final String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.specimenType,sp.collectionStatus,sp.specimenRequirement.specimenRequirementLabel	from "
+		final String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.specimenType,sp.collectionStatus, sp.specimenRequirement.id from "
 				+ Specimen.class.getName()
 				+ " as sp where sp.specimenCollectionGroup.id = "
 				+ specimenCollectionGroup.getId()
 				+ " and sp.activityStatus <> '"
 				+ Status.ACTIVITY_STATUS_DISABLED.toString() + "' order by sp.id";
-
+	
 		final List list = this.executeQuery(hql);
 
 		/**
@@ -2487,19 +2487,32 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			final Specimen specimen = new Specimen();
 			specimen.setId((Long) obj[0]);
 		  	String specimenLabel = (String) obj[1];
-		  	String specimenRequirementTitle = (String) obj[6];
+		  	Long reqId = (Long) obj[6];
+		  	String collectionStatus = (String) obj[5];
+		  	String requirementLabel = "";
+		  	 if((specimenLabel==null || specimenLabel.isEmpty()) && reqId!=null)
+		  	 {
+		  		//get SpecimenRequirement Title
+		  		 String hql1 = "select spr.specimenRequirementLabel from "
+						+ SpecimenRequirement.class.getName()
+						+ " as spr where spr.id = " +reqId;
+		  		final List list1 = this.executeQuery(hql1);
+		  		if(!list1.isEmpty()) 
+		  		 requirementLabel  = (String)list1.get(0);   //(String)obj1[0];
+		  		specimen.setLabel(requirementLabel);
+		  	 }
+		  	 else
+		  {
+		  	//SpecimenRequirement specimenRequirementTitle = (SpecimenRequirement) obj[6];
 		  	if(specimenLabel!=null && !specimenLabel.isEmpty())
 		  	{
 			 specimen.setLabel(specimenLabel);
-		  	}
-		  	else if(specimenRequirementTitle!=null && !specimenRequirementTitle.isEmpty())
-		  	{
-		  		specimen.setLabel(specimenRequirementTitle); // set Specimen requirement title
 		  	}
 		  	else
 		  	{
 		  		specimen.setLabel((String) obj[4]);
 		  	}
+		  }
 			specimen.setActivityStatus((String) obj[3]);
 			specimen.setSpecimenType((String) obj[4]);
 			specimen.setCollectionStatus((String) obj[5]);
