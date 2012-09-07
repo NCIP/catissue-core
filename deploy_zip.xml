@@ -2104,7 +2104,7 @@
 	<target name="upgrade_db" description="Upgrading Database v1.2.3 to v1.2.4">
 	
 		<if>
-		<equals arg1="true" arg2="${empi.enabled}" />
+		<equals arg1="false" arg2="${empi.enabled}" />
 		<then>
 			<echo message="Upgrading Database v1.2.3 to v1.2.4" />
 			<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
