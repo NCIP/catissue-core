@@ -243,7 +243,6 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 
 			// Mandar: 16May2008 : For specimenDetails customtag --- end ---
 			summaryForm.setLastSelectedSpecimenId(summaryForm.getSelectedSpecimenId());
-			request.setAttribute("IsToShowButton", true);
 			if (pageOf != null
 					&& ViewSpecimenSummaryForm.REQUEST_TYPE_MULTI_SPECIMENS.equals(summaryForm
 							.getRequestType()))

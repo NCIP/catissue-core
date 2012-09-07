@@ -7,7 +7,10 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -18,6 +21,7 @@ import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -26,8 +30,14 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.util.ExportReport;
+import edu.wustl.common.util.SendFile;
+import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.JDBCDAO;
+import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 
 public class CatissueCommonAjaxAction extends DispatchAction{
 	
@@ -219,5 +229,75 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		response.getWriter().write(responseString.toString());
 		return null;
 	}
+	
+	public ActionForward startSyncCP(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+		SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
+		String jobName = request.getParameter("cpTitle");
+		executerImpl.startSync(jobName);
+		return null;
+	}
+	
+	public ActionForward stopSyncCP(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+		SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
+		String jobName = request.getParameter("cpTitle");
+		executerImpl.stopSync(jobName);
+		return null;
+	}
+	
+	public ActionForward deleteSpecimen(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+		String specIds = request.getParameter("specId");
+		String tagId = request.getParameter("tagId");
+		String sql = "delete from catissue_spec_tag_items where OBJ_ID in (?) and TAG_ID = ?";
+		ColumnValueBean specIdBean = new ColumnValueBean(specIds);
+		ColumnValueBean tagIdBean = new ColumnValueBean(tagId);
+		List<ColumnValueBean> list = new ArrayList<ColumnValueBean>();
+		list.add(specIdBean);
+		list.add(tagIdBean);
+		JDBCDAO jdbcdao = null;
+		try
+		{
+		jdbcdao = AppUtility.openJDBCSession();
+		jdbcdao.executeUpdate(sql, list);
+		jdbcdao.commit();
+		}
+		finally
+		{
+			AppUtility.closeJDBCSession(jdbcdao);
+		}
+		return null;
+	}
+	
+	public ActionForward deleteSpecimenList(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+		String specListId = request.getParameter("specListId");
+		String sql1 = "delete from catissue_spec_tag_items where tag_id=?";
+		String sql = "delete from catissue_specimenlist_tags where identifier=?";
+		ColumnValueBean bean = new ColumnValueBean(specListId);
+		List<ColumnValueBean> list = new ArrayList<ColumnValueBean>();
+		list.add(bean);
+		JDBCDAO jdbcdao = null;
+		try
+		{
+		jdbcdao = AppUtility.openJDBCSession();
+		jdbcdao.executeUpdate(sql1,list);
+		jdbcdao.executeUpdate(sql,list);
+		jdbcdao.commit();
+		}
+		finally
+		{
+			AppUtility.closeJDBCSession(jdbcdao);
+		}
+		return null;
+	}
+	
+
+	
 
 }

@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
+import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
@@ -57,8 +58,14 @@ public class OpenCollectionProtocolAction extends BaseAction
 			request.setAttribute(Constants.OPERATION, operation);
 			final String treeNode = "cpName_" + cpBean.getTitle();
 			session.setAttribute(Constants.TREE_NODE_ID, treeNode);
+			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
+			boolean isSyncOn = executerImpl.isSyncOn(cpBean.getTitle());
+			request.setAttribute("isSyncOn", isSyncOn);
 			//			request.setAttribute("labelGeneration", cpBean.isGenerateLabel());
 		}
+		
+		
+		
 		request.setAttribute("formName", formName);
 		//bug 18481
 		request.setAttribute(Constants.ERROR_PAGE_FOR_CP, request.getParameter(Constants.ERROR_PAGE_FOR_CP));

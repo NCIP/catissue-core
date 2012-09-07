@@ -152,6 +152,51 @@
 	mywindow.moveTo(0,0);
   }
 
+  function stopSync()
+  {
+	  request = newXMLHTTPReq();			
+		var actionURL;
+		var handlerFunction = getReadyStateHandler(request,onResponseSet,true);	
+		request.onreadystatechange = handlerFunction;	
+var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');		
+		actionURL = "cpTitle="+ cpDetailsForm.title.value;
+		var url = "CatissueCommonAjaxAction.do?type=stopSyncCP";
+		<!-- Open connection to servlet -->
+		request.open("POST",url,true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		request.send(actionURL);
+  }
+  
+  function onResponseSet(response)
+  {
+	  
+  }
+  function syncCP()
+  {
+   request = newXMLHTTPReq();			
+		var actionURL;
+		var handlerFunction = getReadyStateHandler(request,onResponseSetRequester,true);	
+		request.onreadystatechange = handlerFunction;	
+var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');		
+		actionURL = "cpTitle="+ cpDetailsForm.title.value;
+		var url = "CatissueCommonAjaxAction.do?type=startSyncCP";
+		<!-- Open connection to servlet -->
+		request.open("POST",url,true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		request.send(actionURL);
+	}
+
+	function onResponseSetRequester(response) 
+	{
+	
+		document.getElementById('cpEditMsg').style.display="none";
+		document.getElementById('syncMsg').style.display="";
+		document.getElementById('eventButton').disabled="true";
+		document.getElementById('saveCPButton').disabled="true";
+		document.getElementById('exCPButton').disabled="true";
+		document.getElementById('syncCPButton').disabled="true";
+	}
+
   function resizeIframe()
   {
 	var totalHeight=window.top.document.body.offsetHeight;
@@ -196,7 +241,19 @@
           <td colspan="2" align="left" class="bottomtd">
           <logic:equal name="isParticipantReg" value="true">
 			<span class="messagetexterror">
-				User can not edit existing Events and Specimen Requirements except for the Label Format
+			<logic:notEqual name="isSyncOn" value="true">
+			<div id="cpEditMsg" style="display:hidden">
+				User cannot edit existing Events and Specimen Requirements except for the Label Format
+			</div>
+			</logic:notEqual>
+			<logic:equal name="isSyncOn" value="true">
+				<div>
+					User cannot edit this Collection Protocol, as the Synchronization process is in progress for this Collection Protocol. To stop the process <a href="javascript:stopSync()">click here</a>
+				</div>
+			</logic:equal>
+			<div id="syncMsg" style="display:none">
+					User cannot edit this Collection Protocol, as the Synchronization is in progress for this Collection Protocol. To stop the Synchronization <a href="javascript:stopSync()">click here</a>
+				</div>
 			</span>
 		</logic:equal>
 				<!--<div id="labelFormatErrDiv" style="display:none">
@@ -234,20 +291,48 @@
  <tr>
 		 <td colspan="2" class="buttonbg">
 
-
-						<html:button styleClass="blue_ar_b" property="forwardPage" onclick="openEventPage()" >
+<logic:notEqual name="isSyncOn" value="true">
+						<html:button styleClass="blue_ar_b" styleId="eventButton" property="forwardPage" onclick="openEventPage()" >
 							Add Events >>
 						</html:button>
 						&nbsp;|&nbsp;
 
 
-					 <html:button styleClass="blue_ar_b" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()">
+					 <html:button styleClass="blue_ar_b" styleId="saveCPButton" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()">
 					</html:button>
 					<logic:equal parameter="operation"	value='edit'>
 					&nbsp;|&nbsp;
-					<html:button styleClass="blue_ar_b" property="forwardPage" value="Export Collection Protocol" onclick="exportCP()">
+					<html:button styleClass="blue_ar_b" styleId="exCPButton" property="forwardPage" value="Export Collection Protocol" onclick="exportCP()">
 					</html:button>	
 					</logic:equal>
+					<logic:equal name="isParticipantReg" value="part">
+					&nbsp;|&nbsp;
+			<html:button styleClass="blue_ar_b" styleId="syncCPButton" property="forwardPage" value="Sync Collection Protocol" onclick="syncCP()">
+					</html:button>	
+		</logic:equal>
+	</logic:notEqual>
+	
+		<logic:equal name="isSyncOn" value="true">
+			<html:button styleClass="blue_ar_b" property="forwardPage" onclick="openEventPage()" disabled="true">
+							Add Events >>
+						</html:button>
+						&nbsp;|&nbsp;
+
+
+					 <html:button styleClass="blue_ar_b" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()" disabled="true">
+					</html:button>
+					<logic:equal parameter="operation"	value='edit'>
+					&nbsp;|&nbsp;
+					<html:button styleClass="blue_ar_b" property="forwardPage" value="Export Collection Protocol" onclick="exportCP()" disabled="true">
+					</html:button>	
+					</logic:equal>
+					<logic:equal name="isParticipantReg" value="part">
+					&nbsp;|&nbsp;
+			<html:button styleClass="blue_ar_b" property="forwardPage" value="Sync Collection Protocol" onclick="syncCP()" disabled="true">
+					</html:button>	
+		</logic:equal>
+		</logic:equal>
+		
 				   </td>
 				</tr>
 				</table>

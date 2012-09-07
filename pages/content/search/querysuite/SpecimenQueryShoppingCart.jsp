@@ -98,6 +98,30 @@
 %>
 <head>
 <script language="javascript">
+function deleteList()
+{
+	var flag = confirm("Are you sure you want to delete the selected item(s)?");
+				if(flag)
+				{
+					request = newXMLHTTPReq();			
+					var actionURL;
+					var handlerFunction = getReadyStateHandler(request,onResponseSet,true);	
+					request.onreadystatechange = handlerFunction;	
+
+					actionURL = "specListId="+ document.getElementById('tagName').value;
+					var url = "CatissueCommonAjaxAction.do?type=deleteSpecimenList";
+					<!-- Open connection to servlet -->
+					request.open("POST",url,true);	
+					request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+					request.send(actionURL);
+				}
+	}
+
+	function onResponseSet(response) 
+	{
+		document.forms[0].action="ViewSpecimenList.do?operation=view";
+		document.forms[0].submit();
+	}
 function reloadGrid(obj)
 {
 //alert(obj.value);
@@ -237,7 +261,11 @@ function setCheckBoxState()
 			}
 		
 		}
-
+function onResponseSetRequester(response) 
+	{
+		document.getElementById('messageDiv').style.display="block";
+		reloadGrid(document.getElementById('tagName'));
+	}
 function onDelete()
 		{
 			var isChecked = updateHiddenFields();
@@ -247,10 +275,23 @@ function onDelete()
 				var flag = confirm("Are you sure you want to delete the selected item(s)?");
 				if(flag)
 				{
-					var action = "AddDeleteCart.do?operation=delete";
+					request = newXMLHTTPReq();			
+		var actionURL;
+		var handlerFunction = getReadyStateHandler(request,onResponseSetRequester,true);	
+		request.onreadystatechange = handlerFunction;	
+		var specIds = document.forms[0].orderedString.value;
+		var tagId= document.getElementById('tagName').value;
+		//alert("specIds    "+specIds+"      tagId     "+tagId);
+		actionURL = "specId="+specIds+"&tagId="+tagId;//+ cpDetailsForm.title.value;
+		var url = "CatissueCommonAjaxAction.do?type=deleteSpecimen";
+		<!-- Open connection to servlet -->
+		request.open("POST",url,true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		request.send(actionURL);
+					/*var action = "AddDeleteCart.do?operation=delete";
 					document.forms[0].action = action;
 					document.forms[0].target = "_parent";
-					document.forms[0].submit();
+					document.forms[0].submit();*/
 				}
 			}
 			else
@@ -265,7 +306,9 @@ function onExport()
 		    
 		    if(isChecked == "true")
 		    {
-				var action = "ExportCart.do?operation=export";
+			var specIds = document.forms[0].orderedString.value;
+				var tagId= document.getElementById('tagName').value;
+		    	var action = "ExportSpecimenList.do?operation=export&specId="+specIds+"&tagId="+tagId;
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -418,10 +461,10 @@ function checkAll(element)
 	
 			chkName = "value1(CHK_" + i + ")";
 		//var chkName = "value1(CHK_" + i + ")";
+		//alert(rowCount);
+		var cl = mygrid.getCheckBox(0);
+		//alert(c1);
 		
-		var cl = mygrid.cells(i,0);
-		
-		var ids = i-1;
 		//var crtdCell = createRow.insertCell(ids);
 		if(cl.isCheckbox())
 		{
@@ -442,19 +485,22 @@ function loadSpecimenGrid()
 	mygrid = new dhtmlXGridObject("specimenGrid");
 	mygrid.setImagePath("dhtmlx_suite/imgs/");
 	//CHKBOX,SCG_NAME,Label,Barcode,Parent_Specimen_Id,Class,Type,Avl_Quantity,Lineage,Identifier
-	mygrid.setInitWidthsP("5,20,15,,15,15,,15,15,");
+	mygrid.setInitWidthsP("3,22,15,,15,15,,15,15,");
 	mygrid.setEditable(true);
-	mygrid.setSkin("light");
-	mygrid.enableAutoHeight(true);
+	mygrid.setSkin("dhx_skyblue");
+	mygrid.enableAutoHeight(true,280);
 	mygrid.setColSorting(",str,str,str,str,str,str,str,str,str");
 	mygrid.setHeader(",Specimen Collection Group Name,Label (Barcode),,Parent Label,Class (Type),,Quantity,Lineage,");
 	
-	mygrid.attachHeader(",,#text_filter,,,#text_filter,,,#select_filter,");
+	mygrid.attachHeader("#master_checkbox,,#text_filter,,,#text_filter,,,#select_filter,");
+	 mygrid.setColAlign("center,,,,,,,,,,")
 	mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,ro,ro");
-	mygrid.enableSmartRendering(true,15);
+	
 	//mygrid.enableTooltips(",true,true,true,true,true,true,true,true,true");
 	mygrid.enableRowsHover(true,'grid_hover')
 	mygrid.init();
+	//mygrid.enableSmartRendering(true,15);
+	mygrid.enableSmartRendering(true,100);
 	//mygrid.addRow(1,",3/23,,,1.0,Tissue(Fixed Tissue),Not Specified,Not Specified,New,2.0,Collected,2141",1);
 	//mygrid.addRow(2,",3_1/24,,3,1.0,Tissue(Fixed Tissue),Not Specified,Not Specified,New,2.0,Collected,2142",2);
 	var tagVal = document.getElementById('tagName').value;
@@ -498,6 +544,7 @@ function loadSpecimenGrid()
      <tr>
         <td colspan="2" align="left" class="toptd">
 		<%@ include file="/pages/content/common/ActionErrors.jsp" %>
+		<div class="messagetextsuccess" id="messageDiv" style="display:none"> <bean:message key="specimen.delete"/></div>
 		</td>
       </tr>
       
@@ -537,7 +584,7 @@ function loadSpecimenGrid()
 %>
 				</select>
 				
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="    Delete List     " />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="    Delete List     " onClick="deleteList()"/>
 			</td>
 		</tr>
 		<tr>
@@ -548,10 +595,10 @@ function loadSpecimenGrid()
 			<td colspan="2">
 			<table><tr>
 				<td align="left" class="black_ar" >
-					<input type='checkbox' name='checkAll1' id='checkAll1' property="" onClick='checkAll(this)'>
+					
 					</td>
 					<td valign="middle" class="black_ar" align="left">
-				<span valign="middle"><bean:message key="buttons.checkAll" /></span>
+				
 				</td>
 				</tr>
 				</table>
@@ -559,7 +606,7 @@ function loadSpecimenGrid()
 			</tr>
 			<tr>
 			<td  valign="top" colspan="2">
-			  <div id="specimenGrid" width='100%' height='100%' style='overflow:hidden'>
+			  <div id="specimenGrid" width='100%' height='300px' style='background-color:white;'>
 			</td>
            </tr>
 		   <tr>

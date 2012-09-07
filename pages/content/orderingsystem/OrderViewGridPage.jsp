@@ -8,6 +8,7 @@
     <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
     <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
     <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+    <link rel="STYLESHEET" type="text/css" href="dhtmlx_suite/css/dhtmlxgrid_dhx_skyblue.css">
 
 <script>
 	var columns =${requestScope.columns};
@@ -43,7 +44,7 @@ function init_grid()
 	mygrid.setInitWidthsP("20,20,20,15,*");
 	
 	
-	mygrid.setSkin("light");
+    mygrid.setSkin("dhx_skyblue");
 	
 	mygrid.setColSorting("str,str,str,str,str");
 	mygrid.enableMultiselect(true);

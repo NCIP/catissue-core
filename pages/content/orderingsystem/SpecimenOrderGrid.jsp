@@ -113,7 +113,7 @@ function init_grid()
 	mygrid.setInitWidthsP("20,10,10,10,10,20,*");
 	
 	mygrid.setColTypes("ro,ro,ro,ro,ed,coro,ed");
-	mygrid.setSkin("light");
+	mygrid.setSkin("dhx_skyblue");
 	
 	mygrid.setColSorting("str,str,str,str,str,str,str");
 	mygrid.enableMultiselect(true);

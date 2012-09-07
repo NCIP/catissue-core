@@ -91,7 +91,7 @@ public class LoadGridServlet extends ConnectorServlet
 //" ORDER BY Specimen1.IDENTIFIER ,SpecimenCharacteristics1.IDENTIFIER ,ExternalIdentifier1.IDENTIFIER ," +
 //"AbstractSpecimen1.IDENTIFIER "; 
 			connector.dynamic_loading(true);
-			connector.dynamic_loading(15);
+			connector.dynamic_loading(100);
 			//assigntag atg where atg.tag_id=1 and sp.identifier = atg.obj_id
 //			String tableColString = "CHKBOX,Barcode,Label,ExternalIdentifier_Name,ExternalIdentifier_Value,SCG_ID,Class,Type,Lineage,Parent_Specimen_Id," +
 //									"Tissue_Side,Tissue_Site,Pathology_Status,Init_Quantity,Avl_Quantity,Available,Created_On,Identifier";
