@@ -3427,9 +3427,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				final String message = ApplicationProperties.getValue("specimen.storageContainer");
 				throw this.getBizLogicException(null, "errors.invalid", message);
 			}
-			if (specimen.getSpecimenPosition() != null
+			 if (specimen.getSpecimenPosition() != null
 					&& specimen.getSpecimenPosition().getStorageContainer() != null
-					&& specimen.getSpecimenPosition().getStorageContainer().getName() != null)
+					&& specimen.getSpecimenPosition().getStorageContainer().getName() != null
+				    && specimen.getSpecimenPosition().getStorageContainer().getId() != null)
 			{
 				final StorageContainer storageContainerObj = specimen.getSpecimenPosition()
 						.getStorageContainer();

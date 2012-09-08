@@ -388,23 +388,23 @@ public class CreateAliquotAction extends BaseAction
 			String containerNameKey = null;
 			String posDim1Key = null;
 			String posDim2Key = null;
-			final String radioButton = (String) aliquotMap.get("radio_" + i);
+			//final String radioButton = (String) aliquotMap.get("radio_" + i);
 			// if radio button =2 else conatiner selected from Combo box
 			String quantityKey = specimenKey + i + "_quantity";
-			if (radioButton != null && radioButton.equals("2"))
+			/*if (radioButton != null && radioButton.equals("2"))
 			{
 				containerIdKey = specimenKey + i + "_StorageContainer_id";
 				posDim1Key = specimenKey + i + "_positionDimensionOne";
 				posDim2Key = specimenKey + i + "_positionDimensionTwo";
 			}
 			else if (radioButton != null && radioButton.equals("3"))
-			{
+			{*/
 				// Container selected from Map button
 				containerIdKey = specimenKey + i + "_StorageContainer_id" + fromMapsuffixKey;
 				containerNameKey = specimenKey + i + "_StorageContainer_name" + fromMapsuffixKey;
 				posDim1Key = specimenKey + i + "_positionDimensionOne" + fromMapsuffixKey;
 				posDim2Key = specimenKey + i + "_positionDimensionTwo" + fromMapsuffixKey;
-			}
+			//}
 //			new Validator();
 			final String quantity = (String) aliquotMap.get(quantityKey);
 			String containerId = (String) aliquotMap.get(containerIdKey);
@@ -425,19 +425,19 @@ public class CreateAliquotAction extends BaseAction
 			 * validate the the container name,id,pos1 and pos2 is not empty
 			 * depending on Auto,virtual,manual selection
 			 */
-			if (radioButton != null)
-			{
-				if ("2".equals(radioButton) && Validator.isEmpty(containerId))
+			/*if (radioButton != null)
+			{*/
+				if (/*"2".equals(radioButton) &&*/ Validator.isEmpty(containerId))
 				{
 					throw AppUtility.getApplicationException(null, "errors.item.format",
 							ApplicationProperties.getValue("specimen.storageContainer"));
 				}
-				if ("3".equals(radioButton) && Validator.isEmpty(containername))
+				/*if ("3".equals(radioButton) && Validator.isEmpty(containername))
 				{
 					throw AppUtility.getApplicationException(null, "errors.item.format",
 							ApplicationProperties.getValue("specimen" + ".storageContainer"));
-				}
-				// bug 11479 S bug
+				}*/
+				/*// bug 11479 S bug
 				if ("2".equals(radioButton)
 						&& (Validator.isEmpty(posDim1) || Validator.isEmpty(posDim2)))
 
@@ -445,8 +445,8 @@ public class CreateAliquotAction extends BaseAction
 					throw AppUtility.getApplicationException(null, "errors.item.format",
 							ApplicationProperties.getValue("specimen"
 									+ ".positionInStorageContainer"));
-				}
-			}
+				}*/
+			//}
 			final Specimen aliquotSpecimen = AppUtility.getSpecimen(parentSpecimen);
 			aliquotSpecimen.setSpecimenClass(aliquotForm.getClassName());
 			aliquotSpecimen.setSpecimenType(aliquotForm.getType());
@@ -454,15 +454,15 @@ public class CreateAliquotAction extends BaseAction
 			aliquotSpecimen.setInitialQuantity(Double.valueOf(quantity));
 			aliquotSpecimen.setAvailableQuantity(Double.valueOf(quantity));
 
-			final StorageContainer sContainer = new StorageContainer();
+			final StorageContainer sContainer = new StorageContainer();				
 			// bug 11479
-			if ((containerId != null || containername != null) && posDim1 != null
-					&& posDim2 != null)
+			if ((containerId != null || containername != null) && !"-1".equals(containerId) /*&& posDim1 != null
+					&& posDim2 != null*/)
 			{
 				final SpecimenPosition specPos = new SpecimenPosition();
 
-				if (!"".equals(posDim1) && !"".equals(posDim2))
-				{
+				//if (!"".equals(posDim1) && !"".equals(posDim2))
+				//{
 					if(containerId!=null)
 					{
 						specPos.setPositionDimensionOneString(posDim1);
@@ -476,7 +476,7 @@ public class CreateAliquotAction extends BaseAction
 						StorageContainerUtil.setContainerPositions(containername, posDim1, posDim2, specPos);
 					}
 					sContainer.setId(storageContainerId);
-				}
+				//}
 				sContainer.setName(containername);
 				specPos.setStorageContainer(sContainer);
 				specPos.setSpecimen(aliquotSpecimen);

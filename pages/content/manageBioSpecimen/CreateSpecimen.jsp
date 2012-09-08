@@ -867,8 +867,6 @@ showPriterTypeLocation();
 
 function updateStorageContainerValue()
 	{
-		<% //if(!"Collected".equals(form.getCollectionStatus()))
-		//{%>
 		var containerName=document.getElementById(containerDropDownInfo['dropDownId']).value;
 		document.getElementById("selectedContainerName").value=containerName;
 		if("Virtual"==containerName)
@@ -879,7 +877,6 @@ function updateStorageContainerValue()
 		{
 			document.getElementById("virtuallyLocated").value="false";
 		}
-		<%//}%>
 	}
 </script>
 </body>

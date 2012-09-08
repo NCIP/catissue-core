@@ -30,6 +30,176 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
 
+
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
+<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">\
+<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
+
+<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
+<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
+
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
+
+<script src="jss/script.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
+<script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
+<script>var imgsrc="images/de/";</script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/prototype.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/scr.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/combobox.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
+<script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
+<script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
+<LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
+<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
+<script language="JavaScript">
+//declaring DHTMLX Drop Down controls required variables
+<%
+
+List aliquotBeanList= (List)request.getAttribute("aliquotBeanList");
+
+for(int i=1;i<=aliquotBeanList.size();i++){
+%>
+var containerDropDownInfo_<%=i%>, scGrid_<%=i%>;
+var scGridVisible_<%=i%> = false;
+
+var gridDivObject_<%=i%> ;
+
+<%}%>
+var dhxWins;
+function initWindow()
+{
+    dhxWins = new dhtmlXWindows();
+    dhxWins.enableAutoViewport(true);
+    dhxWins.setImagePath("dhtmlx_suite/imgs/");
+    dhxWins.setSkin("dhx_skyblue");
+}
+
+
+
+function loadDHTMLXWindow(storageContainerDropDown,positionDimensionOne,positionDimensionTwo)
+{
+var w = 400;
+    var h = 400;
+    var x = (screen.width / 2) - (w / 2);
+    var y = 0;
+    dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
+	var storageContainer =document.getElementById(storageContainerDropDown).value;
+    var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1="+positionDimensionOne+"&pos2="+positionDimensionTwo+"&containerName="+storageContainer;
+    dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
+    dhxWins.window("containerPositionPopUp").button("park").hide();
+    dhxWins.window("containerPositionPopUp").button("minmax1").hide();
+    dhxWins.window("containerPositionPopUp").allowResize();
+	dhxWins.window("containerPositionPopUp").setModal(true);
+    dhxWins.window("containerPositionPopUp").setText("Container Positions");    //it's the title for the popup
+}
+function showPopUp(storageContainerDropDown,selectedContainerName,positionDimensionOne,positionDimensionTwo,containerId,specimenClassName,spType,cpId) 
+{
+	var storageContainer =document.getElementById(storageContainerDropDown).value;
+			if(storageContainer!="")
+			{
+				loadDHTMLXWindow(storageContainerDropDown,positionDimensionOne,positionDimensionTwo);
+			}
+			else
+			{
+				var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&"+
+					"selectedContainerName=" + storageContainerDropDown +
+					"&pos1=" + positionDimensionOne +
+					"&pos2=" + positionDimensionTwo +
+					"&containerId=" +containerId +
+					"&${requestScope.CAN_HOLD_SPECIMEN_CLASS}="+specimenClassName +
+					"&${requestScope.CAN_HOLD_SPECIMEN_TYPE}="+spType +
+					"&${requestScope.CAN_HOLD_COLLECTION_PROTOCOL}=" + cpId;
+					frameUrl+="&storageContainerName="+storageContainer;
+					openPopupWindow(frameUrl,'newSpecimenPage');
+			}
+}
+
+
+function showHideStorageContainerGrid(e,gridDivId, dropDownId,scGridVisible,containerDropDownInfo,scGrid)
+{		
+		setValue(e,containerDropDownInfo['gridDiv'], containerDropDownInfo['dropDownId']);
+		if(containerDropDownInfo['visibilityStatusVariable'])
+		{
+			hideGrid(containerDropDownInfo['gridDiv']);
+			containerDropDownInfo['visibilityStatusVariable'] = false;
+		}
+		else 
+		 {	
+			showGrid(containerDropDownInfo['gridDiv'],containerDropDownInfo['dropDownId']);
+			containerDropDownInfo['visibilityStatusVariable'] = true;
+			var containerName=document.getElementById(containerDropDownInfo['dropDownId']);
+			if(null== containerName)
+			{
+				containerName="";
+			}
+			scGrid.load(containerDropDownInfo['actionToDo'],"");
+		 }
+}
+	
+
+function doOnLoad()
+{
+var className="<%=form.getClassName()%>";
+var sptype="<%=form.getType()%>";
+var collectionProtocolId="<%=form.getColProtId()%>";
+
+var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
++className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId;
+
+<%
+for(int i=1;i<=aliquotBeanList.size();i++){
+%>
+	
+	//Drop Down components information
+	containerDropDownInfo_<%=i%> = {gridObj:"storageContainerGrid_<%=i%>", gridDiv:"storageContainer_<%=i%>", dropDownId:"storageContainerDropDown_<%=i%>", pagingArea:"storageContainerPagingArea_<%=i%>", infoArea:"storageContainerInfoArea_<%=i%>", onOptionSelect:
+	function (id,ind)
+		{
+			var containerName=document.getElementById("storageContainerDropDown_<%=i%>").value;
+			document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value = id;
+			document.getElementById(containerDropDownInfo_<%=i%>['dropDownId']).value = scGrid_<%=i%>.cellById(id,ind).getValue();
+			hideGrid(containerDropDownInfo_<%=i%>['gridDiv']);
+			scGridVisible_<%=i%> = false;
+			document.getElementsByName('value(Specimen:<%=i%>_positionDimensionOne_fromMap)')[0].value = "";
+			document.getElementsByName('value(Specimen:<%=i%>_positionDimensionTwo_fromMap)')[0].value = "";
+		}
+		, actionToDo:url, callBackAction:
+		function(){
+					var containerName= document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value;
+					if(containerName != "" && containerName != 0 && containerName != null)
+					{
+						document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value = containerName;
+						document.getElementById(containerDropDownInfo_<%=i%>['dropDownId']).value = scGrid_<%=i%>.cellById(containerName,0).getValue();
+						hideGrid(containerDropDownInfo_<%=i%>['gridDiv']);
+						scGridVisible_<%=i%> = false;
+					}
+				}
+			, visibilityStatusVariable:scGridVisible_<%=i%>};
+	// initialising grid
+	scGrid_<%=i%> = initDropDownGrid(containerDropDownInfo_<%=i%>,5,0); 
+	<%}%>
+}
+
+</script>
+
 <script language="JavaScript" >
 		//Set last refresh time
 		if(window.parent!=null)
@@ -116,87 +286,7 @@
 		}
 	}
 
-	function setVirtuallyLocated(element)
-	{
-		var elementId = element.id;
-		var index = elementId.indexOf("_");
-		var len = elementId.length;
-		var substr = elementId.substring(index+1,len);
 
-		var customListBox1 = "customListBox_"+substr+"_0";
-		var customListBox2 = "customListBox_"+substr+"_1";
-		var customListBox3 = "customListBox_"+substr+"_2";
-
-		var containerName = document.getElementById(customListBox1);
-		var pos1 = document.getElementById(customListBox2);
-		var pos2 = document.getElementById(customListBox3);
-
-		if(element.checked)
-		{
-			containerName.disabled = true;
-			pos1.disabled = true;
-			pos2.disabled = true;
-			document.forms[0].mapButton[substr-1].disabled = true;
-		}
-		else
-		{
-			containerName.disabled = false;
-			pos1.disabled = false;
-			pos2.disabled = false;
-			document.forms[0].mapButton[substr-1].disabled = false;
-		}
-	}
-
-	function onStorageRadioClickInAliquot(element)
-	{
-		 //Get the element identifier
-	var elementId = element.id;
-
-	//Get the position of first occurrence of underscore
-	var firstIndex = elementId.indexOf("_");
-
-	//Get the position of last occurrence of underscore
-	var lastIndex = elementId.lastIndexOf(")");
-
-	//Retrieve the row number on which the list box is placed
-	var rowNo = elementId.substring(firstIndex+1,lastIndex);
-		var index1 =  element.name.lastIndexOf('_');
-		var index2 =  element.name.lastIndexOf(')');
-		var i = (element.name).substring(index1+1,index2);
-		var st1 = "container_" + i + "_0";
-		var pos1 = "pos1_" + i + "_1";
-		var pos2 = "pos2_" + i + "_2";
-		var st2="customListBox_" + i + "_0";
-		var pos11="customListBox_" + i + "_1";
-		var pos12="customListBox_" + i + "_2";
-		var mapButton="mapButton_" + i ;
-		var stContainerNameFromMap = document.getElementById(st1);
-		var pos1FromMap = document.getElementById(pos1);
-		var pos2FromMap = document.getElementById(pos2);
-		var stContainerNameFromDropdown = document.getElementById(st2);
-		var pos1FromDropdown = document.getElementById(pos11);
-		var pos2FromDropdown = document.getElementById(pos12);
-		var containerMapButton =  document.getElementById(mapButton);
-
-
-		var autoDiv = document.getElementById("auto_"+rowNo);
-		var manualDiv = document.getElementById("manual_"+rowNo);
-		if(element.value == 1)
-		{
-			manualDiv.style.display='none';
-			autoDiv.style.display = 'none';
-		}
-		else if(element.value == 2)
-		{
-			manualDiv.style.display='none';
-			autoDiv.style.display = 'block';
-		}
-		else
-		{
-			autoDiv.style.display = 'none';
-			manualDiv.style.display = 'block';
-		}
-	}
 
 	function mapButtonClickedInAliquot(frameUrl,count)
 	{
@@ -218,31 +308,14 @@
 	function checkForStoragePosition()
 	{
 		<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">
-			var autoDiv = document.getElementById("auto_${counter+1}");
 			var manualDiv = document.getElementById("manual_${counter+1}");
-			var selectBox = document.getElementById("value(radio_${counter+1})");
-		if(selectBox.value == 1)
-		{
-			manualDiv.style.display='none';
-			autoDiv.style.display = 'none';
-		}
-		else if(selectBox.value == 2)
-		{
-			manualDiv.style.display='none';
-			autoDiv.style.display = 'block';
-		}
-		else
-		{
-			autoDiv.style.display = 'none';
-			manualDiv.style.display = 'block';
-		}
-
+			manualDiv.style.display='block';
 		</logic:iterate>
 	}
 
 </script>
 </head>
-<body onload="checkForStoragePosition()">
+<body onload="doOnLoad();initWindow();checkForStoragePosition()">
 <html:form action="${requestScope.ALIQUOT_ACTION}">
 
 <!------------------New code--------------->
@@ -530,7 +603,7 @@
                 <td width="43%" nowrap="nowrap" class="black_ar_b" align="left" colspan=${requestScope.colspanValue1}><img src="images/uIEnhancementImages/star.gif" alt="Mandatory Field" width="6" height="6" hspace="0" vspace="0"/>&nbsp;<bean:message key="cpbasedentry.storagelocation"/>
 				</td>
 <td align="right" width="19%">
-	<input type="button" name="option1" class="black_ar" value="Apply first to all" size="3" onclick="applyFirstToAll(this)" onmouseover="Tip(' Apply first location to all')"
+	<input type="button" name="option1" class="black_ar" value="Apply first to all" size="3" onclick="applyFirstToAll()" onmouseover="Tip(' Apply first location to all')"
 />
 	<span align="right" class="black_ar_b" >
 	<!--<bean:message key="requestdetails.tooltip.updateAllRequestStatus"/>-->
@@ -538,9 +611,8 @@
 
 				</td>
               </tr>
-	${requestScope.JSForOutermostDataTable}
 <logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">
-${aliquotBean.jsScript}
+
 	<tr>
 		<td align="left" class="black_ar" >${counter+1}.
 	    </td>
@@ -561,43 +633,57 @@ ${aliquotBean.jsScript}
 		<td colspan='${requestScope.colspanValue1+1}' >
 		<table border="0" cellspacing="0" cellpadding="0" width="100%">
 		<tr>
-		<td width="20%">
-			<html:hidden styleId="${aliquotBean.containerIdStyle}" property="${aliquotBean.containerIdFromMapKey}"/>
-			<html:select property="${aliquotBean.stContSelection}" styleClass="black_new"
-											styleId="${aliquotBean.stContSelection}" size="1"	onmouseover="showTip(this.id)"
-											onmouseout="hideTip(this.id)" onchange="onStorageRadioClickInAliquot(this)">
-											<html:options collection="storageList"
-														labelProperty="name" property="value" />
-			</html:select>
-
-		</td>
 		<td width="80%" >
-			<div Style="display:block" id="auto_${counter+1}" >
-									<ncombo:nlevelcombo dataMap="${requestScope.dataMap}"
-										attributeNames="${aliquotBean.attrNames}"
-										initialValues="${aliquotBean.initValues}"
-										styleClass = "black_new"
-										tdStyleClass = "black_new"
-										labelNames="${requestScope.labelNames}"
-										rowNumber="${aliquotBean.rowNumber}"
-										onChange = "${aliquotBean.onChange}"
-										formLabelStyle="nComboGroup"
-										disabled = "false"
-										tdStyleClassArray="${requestScope.tdStyleClassArray}"
-										noOfEmptyCombos = "3"/>
-								    	</tr>
-										</table>
-			</div>
-			<div style="display:none" id="manual_${counter+1}"  >
+			
+			<div style="display:block" id="manual_${counter+1}"  >
 					<table cellpadding="0" cellspacing="0" border="0" >
 						<tr>
-							<td class="groupelements"><html:text styleClass="black_ar"  size="20" styleId="${aliquotBean.containerStyle}" onmouseover="showTip(this.id)" property="${aliquotBean.containerNameFromMapKey}" />&nbsp;
+							<!--td class="groupelements"><html:text styleClass="black_ar"  size="20" styleId="${aliquotBean.containerStyle}" onmouseover="showTip(this.id)" property="${aliquotBean.containerNameFromMapKey}" />&nbsp;
+							</td-->
+							<td class="groupelements" size="48">
+								
+								<td width="50%" align="left" class="black_ar">
+								<html:hidden property="${aliquotBean.containerIdFromMapKey}" styleId="${aliquotBean.containerIdFromMapKey}"/>
+						<!--input type="hidden" name="selectedContainerName_${counter+1}" styleId="selectedContainerName_${counter+1}" value="" /-->
+						<div>
+							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
+								<tr>
+									<td align="left" width="88%" height="100%" >
+										<div id="scDropDownIddiv_${counter+1}" class="x-form-field-wrap" >
+											<input id="storageContainerDropDown_${counter+1}"
+													onkeydown="keyNavigation(event,containerDropDownInfo_${counter+1},scGrid_${counter+1},scGridVisible_${counter+1});"
+													onKeyUp="autoCompleteControl(event,containerDropDownInfo_${counter+1},scGrid_${counter+1});"
+													onClick="noEventPropogation(event)"
+													autocomplete="off"
+													size="30"
+													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="scDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
+												onclick="showHideStorageContainerGrid(event,'storageContainer_${counter+1}','storageContainerDropDown_${counter+1}',scGridVisible_${counter+1},containerDropDownInfo_${counter+1},scGrid_${counter+1});"
+												src="images/uIEnhancementImages/s.gif"/>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+									<div id="storageContainer_${counter+1}" style="z-index: 100"
+										onClick="noEventPropogation(event)">
+									<div id="storageContainerGrid_${counter+1}" style="height: 40px;"
+										onClick="noEventPropogation(event)"></div>
+									<div id="storageContainerPagingArea_${counter+1}" onClick="noEventPropogation(event)"></div>
+									<div id="storageContainerInfoArea_${counter+1}" onClick="noEventPropogation(event)"></div>
+									</div>
+									</td>
+								</tr>
+							</table>
+					</td>
+					</td>
+
 							</td>
-							<td class="groupelements"><html:text styleClass="black_ar" size="2" styleId="${aliquotBean.pos1Style}" property="${aliquotBean.pos1FromMapKey}" />&nbsp;
+							<td class="groupelements" style="padding-left:25"><html:text styleClass="black_ar" size="2" styleId="${aliquotBean.pos1Style}" property="${aliquotBean.pos1FromMapKey}" />&nbsp;
 							</td>
 							<td class="groupelements"><html:text styleClass="black_ar"  size="2" styleId="${aliquotBean.pos2Style}" property="${aliquotBean.pos2FromMapKey}" />&nbsp;
 							</td>
-							<td class="groupelements"><html:button styleClass="black_ar" styleId="${aliquotBean.containerMapStyle}" property="${aliquotBean.containerMap}" onclick="${aliquotBean.buttonOnClicked}"  >
+							<td class="groupelements"><html:button styleClass="black_ar" styleId="${aliquotBean.containerMapStyle}" property="${aliquotBean.containerMap}" 
+							onclick="showPopUp('storageContainerDropDown_${counter+1}','${aliquotBean.containerNameFromMapKey}','${aliquotBean.pos1Style}','${aliquotBean.pos2Style}','1','<%=form.getClassName()%>','<%=form.getType()%>','<%=form.getColProtId()%>')"  >
 									<bean:message key="buttons.map"/>
 									</html:button>
 							</td>
@@ -688,52 +774,23 @@ ${aliquotBean.jsScript}
 </html:form>
 </body>
 <script language="JavaScript" type="text/javascript">
-function applyFirstToAll(object)
+function applyFirstToAll()
 {
-	var type = 'Specimen';
-	//value(Specimen:1_StorageContainer_id
-	//if(object.checked)
-	//	{
-			//alert(document.getElementById("container_1_0").value);
-			var position=document.getElementById("container_1_0").value;
-				var fields = document.getElementById("value(radio_1)");
-
-				if(fields.value == 2)
-			{
-					<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">
-						var autoDiv = document.getElementById("auto_${counter+1}");
-						var manualDiv = document.getElementById("manual_${counter+1}");
-						document.getElementById("value(radio_${counter+1})").value=2;
-						manualDiv.style.display='none';
-						autoDiv.style.display = 'block';
+	
+		var containerName= document.getElementsByName('value(Specimen:1_StorageContainer_id_fromMap)')[0].value;
+					//alert(containerName);				
+			
+			//var position=document.getElementById("container_1_0").value;
+					<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">	
+						document.getElementsByName('value(Specimen:${counter+1}_StorageContainer_id_fromMap)')[0].value = containerName;
+						document.getElementById(containerDropDownInfo_${counter+1}['dropDownId']).value = scGrid_${counter+1}.cellById(containerName,0).getValue();
+						hideGrid(containerDropDownInfo_${counter+1}['gridDiv']);
+						scGridVisible_${counter+1} = false;
+						document.getElementsByName('value(Specimen:${counter+1}_positionDimensionOne_fromMap)')[0].value = "";
+						document.getElementsByName('value(Specimen:${counter+1}_positionDimensionTwo_fromMap)')[0].value = "";
+						
 					</logic:iterate>
-			}
-					if(fields.value == 1)
-			{
-					<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">
-						var autoDiv = document.getElementById("auto_${counter+1}");
-						var manualDiv = document.getElementById("manual_${counter+1}");
-						document.getElementById("value(radio_${counter+1})").value=1;
-						manualDiv.style.display='none';
-						autoDiv.style.display = 'none';
-					</logic:iterate>
-			}
-					if(fields.value == 3)
-			{
-					<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">
-						var autoDiv = document.getElementById("auto_${counter+1}");
-						var manualDiv = document.getElementById("manual_${counter+1}");
-						document.getElementById("value(radio_${counter+1})").value=3;
 
-						manualDiv.style.display='block';
-						autoDiv.style.display = 'none';
-						document.getElementById("container_${counter+1}_0").value=position;
-					</logic:iterate>
-			}
-
-
-
-		//}
 }
 <logic:notEqual name="pageOf" value="${requestScope.PAGEOF_ALIQUOT}">
 showPriterTypeLocation();

@@ -506,7 +506,6 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 function getStorageContainers()
 {
     var name = document.getElementById("selectedContainer").value;
-	alert(name);
     var request = newXMLHTTPReq();
 	if(request == null)
     {
