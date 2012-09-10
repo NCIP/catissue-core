@@ -412,7 +412,7 @@
 				else
 				{
 					var specimenCollForEdit:ArrayCollection = getCollectionForEdit(specimenColl);
-					myRemoteObject.editSpecimen(specimenCollForEdit);
+					myRemoteObject.editSpecimen(specimenCollForEdit,null);
 				}
 				
 			}
