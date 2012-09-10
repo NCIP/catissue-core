@@ -38,7 +38,7 @@ public class ExportSpecimenListAction extends BaseAction{
 				" WHERE scg.identifier = Specimen1.SPECIMEN_COLLECTION_GROUP_ID AND SpecimenCharacteristics1.IDENTIFIER   =  AbstractSpecimen1.SPECIMEN_CHARACTERISTICS_ID  AND " +
 				" Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID  AND AbstractSpecimen1.IDENTIFIER = " +
 				" Specimen1.IDENTIFIER  AND Specimen1.IDENTIFIER   =  ExternalIdentifier1.SPECIMEN_ID   AND " +
-				" ( ( Specimen1.IDENTIFIER  in (?)  )   AND UPPER(Specimen1.ACTIVITY_STATUS ) != UPPER('Disabled')  ) " +
+				" ( ( Specimen1.IDENTIFIER  in ("+specIds+")  )   AND UPPER(Specimen1.ACTIVITY_STATUS ) != UPPER('Disabled')  ) " +
 				" ORDER BY Specimen1.IDENTIFIER ,SpecimenCharacteristics1.IDENTIFIER ,ExternalIdentifier1.IDENTIFIER , " +
 				" AbstractSpecimen1.IDENTIFIER";
 		ColumnValueBean bean = new ColumnValueBean(specIds);
@@ -61,7 +61,7 @@ final HttpSession session = request.getSession();
 		try
 		{
 			
-		List result = AppUtility.executeSQLQuery(sql, list);
+		List result = AppUtility.executeSQLQuery(sql);
 		for (Object object : result) 
 		{
 			List resultRow = (List)object;
