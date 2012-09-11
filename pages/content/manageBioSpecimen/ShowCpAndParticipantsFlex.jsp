@@ -186,7 +186,11 @@
 
 	function clearFrame(cpId)
     {
-        window.parent.frames[1].location = "CPDashboardAction.do?"+"&cpSearchCpId="+cpId;
+		if(cpId == '' || cpId == null || cpId == "undefined")
+		{}
+	else{
+    window.parent.frames[1].location = "CPDashboardAction.do?"+"&cpSearchCpId="+cpId;
+	}
     }
  </script>
 
