@@ -23,7 +23,7 @@
 					searchString = "Keyword Search";
 				}
 				%>
-				<input style = "font-size:0.6em" value = "<%=searchString%>" type ="text" name = "searchString" id = "searchString" onkeypress="return titliOnEnter(event, this, document.getElementById('go'))" />
+				<input style = "font-size:0.6em" placeholder = "Keyword Search" type ="text" name = "searchString" id = "searchString" onkeypress="return titliOnEnter(event, this, document.getElementById('go'))" />
 				<a class = "white"  id="go" href ="TitliInitialiseSearch.do" onclick = "this.href= this.href + '?searchString='+document.getElementById('searchString').value">Keyword Search</a>&nbsp;
 				</logic:notEmpty>
 					<a

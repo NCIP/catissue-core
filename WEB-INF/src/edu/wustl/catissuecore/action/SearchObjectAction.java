@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.util.logger.Logger;
@@ -49,10 +50,45 @@ public class SearchObjectAction extends XSSSupportedAction
 		request.setAttribute(Constants.SYSTEM_IDENTIFIER, identifier);
 
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
-		request.setAttribute(Constants.PAGE_OF, pageOf);
-
+		if(!"pageOfNewSpecimen".equalsIgnoreCase(pageOf) && !"pageOfSpecimenCollectionGroup".equalsIgnoreCase(pageOf))
+		{	
+		 request.setAttribute(Constants.PAGE_OF, pageOf);
+		}
+		ActionForward actionforward = this.getActionForward(pageOf,mapping,identifier);
+		
+		
 		Logger.out.debug("identifier:" + identifier + " PAGEOF:" + pageOf);
-		return mapping.findForward(pageOf);
+		return actionforward; 
 	}
 
+	private ActionForward getActionForward(String pageOf,ActionMapping mapping,Long id) {
+		
+		ActionForward actionForward = new ActionForward();
+		String path;
+		
+		if("pageOfNewSpecimen".equalsIgnoreCase(pageOf))
+		{
+			path = "/urlSpecimenView.do?"
+					+"identifier="
+					+id;
+			actionForward.setName(pageOf);
+			actionForward.setPath(path);
+		}
+		else if("pageOfSpecimenCollectionGroup".equalsIgnoreCase(pageOf))
+		{
+			path = "/GotoSCG.do?"
+					+CDMSIntegrationConstants.SCGID+"="
+					+id;	
+			actionForward.setName(pageOf);
+			actionForward.setPath(path);
+		}
+		else
+		{
+			actionForward = mapping.findForward(pageOf);
+		}
+		
+		
+		return actionForward;
+	}
+		
 }
