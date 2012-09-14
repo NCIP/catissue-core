@@ -708,7 +708,7 @@ public final class StorageContainerUtil
 
 	}
 	
-	public static StorageContainer getFirstAvailablePositionInContainerByContainerName(String containerName, DAO dao)
+	public static StorageContainer getContainerWithCapacityByContainerName(String containerName, DAO dao)
 			throws ApplicationException
 			{
 				final String sourceObjectName = StorageContainer.class.getName();
@@ -960,7 +960,7 @@ public final class StorageContainerUtil
 			NameValueBean nvb = (NameValueBean) itr.next();
 			startingPoints[0] = nvb.getValue();
 
-			final Map map1 = (Map) containerMap.get(nvb);
+			final Map map1 = (Map) containerMap.get(nvb.getName());
 			keySet = map1.keySet();
 			itr = keySet.iterator();
 			nvb = (NameValueBean) itr.next();
@@ -1287,9 +1287,10 @@ public final class StorageContainerUtil
 				{
 					final String parentContainerName = (String) parentContainerNameList.get(0);
 					Set<NameValueBean> keySet = containerMap.keySet();
+					NameValueBean containerName=null;
 					for (final Iterator<NameValueBean> itr = keySet.iterator(); itr.hasNext();)
 					{
-						NameValueBean containerName = itr.next();
+						containerName = itr.next();
 						if(containerName.getName().equals( parentContainerName ))
 						{
 							relevanceCnt = containerName.getRelevanceCounter();
@@ -1297,7 +1298,7 @@ public final class StorageContainerUtil
 						}
 					}
 					NameValueBean nvBean = new NameValueBean(parentContainerName,Long.valueOf( containerId ),relevanceCnt);
-					Map<NameValueBean, List> positionMap = containerMap.get(nvBean);
+					/*Map<NameValueBean, List> positionMap = containerMap.get(nvBean);
 					if (positionMap == null)
 					{
 						positionMap = new TreeMap<NameValueBean, List>();
@@ -1310,7 +1311,7 @@ public final class StorageContainerUtil
 					list.add(0,new NameValueBean(yPos, yPos));
 					positionMap.put(new NameValueBean(xPos, xPos), list);
 					containerMap.put(new NameValueBean(parentContainerName, Long.valueOf( containerId ),relevanceCnt), positionMap);
-
+*/
 				}
 			}
 			catch (final DAOException e)

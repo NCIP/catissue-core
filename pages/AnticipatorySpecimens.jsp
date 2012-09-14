@@ -814,6 +814,8 @@ function doOnLoad()
 			document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value = scGrid_<%=stringToAppend%>.cellById(id,ind).getValue();
 			hideGrid(containerDropDownInfo_<%=stringToAppend%>['gridDiv']);
 			scGridVisible_<%=stringToAppend%> = false;
+			document.getElementById("positionDimensionOne_<%=stringToAppend%>").value="";
+			document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value="";
 		}
 		, actionToDo:url, callBackAction:
 		function(){
@@ -869,6 +871,8 @@ function doOnLoad()
 			document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value = scGrid_<%=stringToAppend%>.cellById(id,ind).getValue();
 			hideGrid(containerDropDownInfo_<%=stringToAppend%>['gridDiv']);
 			scGridVisible_<%=stringToAppend%> = false;
+			document.getElementById("positionDimensionOne_<%=stringToAppend%>").value="";
+			document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value="";
 		}
 		, actionToDo:url, callBackAction:
 		function(){
@@ -922,6 +926,8 @@ function doOnLoad()
 			document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value = scGrid_<%=stringToAppend%>.cellById(id,ind).getValue();
 			hideGrid(containerDropDownInfo_<%=stringToAppend%>['gridDiv']);
 			scGridVisible_<%=stringToAppend%> = false;
+			document.getElementById("positionDimensionOne_<%=stringToAppend%>").value="";
+			document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value="";
 		}
 		, actionToDo:url, callBackAction:
 		function(){
@@ -959,8 +965,15 @@ function setContainerValues()
 			{
 				stringToAppend=lineage+"_"+gs2.getId();
 			}
-			if(null!=gs2.getSelectedContainerName() && !"".equalsIgnoreCase(gs2.getSelectedContainerName()) && !"Collected".equals(gs2.getCollectionStatus())) 
-			{%>
+			if(!"Collected".equals(gs2.getCollectionStatus())) 
+			{
+				if(gs2.getSelectedContainerName()==null)
+				{
+					gs2.setSelectedContainerName("Virtual");
+					gs2.setPositionDimensionOne("");
+					gs2.setPositionDimensionTwo("");
+				}
+			%>
 				document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value='<%=gs2.getSelectedContainerName()%>';
 				document.getElementById("positionDimensionOne_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionOne()%>';
 				document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionTwo()%>';

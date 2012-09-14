@@ -14,7 +14,8 @@ function initDropDownGrid(gridDropDownInfo)
 		gridObj.setColSorting("server");
 		gridObj.setSkin("drop");
 		gridObj.enablePaging(true, 500, 0, gridDropDownInfo['pagingArea'], true, gridDropDownInfo['infoArea']);
-		gridObj.setPagingSkin("bricks");
+		gridObj.setPagingSkin("modern");
+		gridObj.enableAutoHeigth(true,100,false); 
 		
 		gridObj.enableRowsHover(true, "gridHover");
 		gridObj.enableMultiline(true);

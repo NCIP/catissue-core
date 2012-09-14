@@ -2231,6 +2231,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 					specPos = new SpecimenPosition();
 					specPos.setPositionDimensionOne(position.getXPos());
 					specPos.setPositionDimensionTwo(position.getYPos());
+					specPos.setPositionDimensionOneString(StorageContainerUtil.convertSpecimenPositionsToString(storageContainerObj.getName(), 1, position.getXPos()));
+					specPos.setPositionDimensionTwoString(StorageContainerUtil.convertSpecimenPositionsToString(storageContainerObj.getName(), 2, position.getYPos()));
 					//StorageContainerUtil.convertPositionsToIntegerUsingContId(storageContainerObj.getId().toString(), 1,  String.valueOf(position.getXPos()));
 					//StorageContainerUtil.convertPositionsToIntegerUsingContId(storageContainerObj.getId().toString(), 2,  String.valueOf(position.getYPos()));
 					//StorageContainerUtil.setContainerPositions(storageContainerObj.getId().toString(), String.valueOf(position.getXPos()),String.valueOf(position.getYPos()), specPos);

@@ -465,10 +465,12 @@ public class CreateSpecimenAction extends SecureAction
 			{
 				createForm.setParentSpecimenId(parentSpecimenId.toString());
 				createForm.setPositionInStorageContainer("");
-				createForm.setSelectedContainerName("");
+				createForm.setSelectedContainerName("Virtual");
 				createForm.setQuantity("");
 				createForm.setPositionDimensionOne("");
 				createForm.setPositionDimensionTwo("");
+				createForm.setPos1("");
+				createForm.setPos2("");
 				createForm.setStorageContainer("");
 				createForm.setBarcode(null);
 				map.clear();

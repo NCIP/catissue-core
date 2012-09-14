@@ -3,14 +3,12 @@ package edu.wustl.catissuecore.action;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -19,10 +17,13 @@ import org.apache.struts.actions.DispatchAction;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ComboDataBizLogic;
 import edu.wustl.catissuecore.bizlogic.SiteBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerForSpArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
@@ -30,13 +31,11 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.ExportReport;
-import edu.wustl.common.util.SendFile;
-import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.JDBCDAO;
-import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.QueryWhereClause;
+import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 
 public class CatissueCommonAjaxAction extends DispatchAction{
@@ -145,7 +144,7 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 	public ActionForward getStorageContainerList(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
 	{
-		List <NameValueBean>containerList=new ArrayList();
+		List <NameValueBean>containerList=new ArrayList<NameValueBean>();
 		String contName=request.getParameter(Constants.CONTAINER_NAME);
 		String stContSelection=request.getParameter("stContSelection");
 		//if(contName!=null || (null!=stContSelection && Integer.valueOf(2).equals(Integer.valueOf(stContSelection))))
@@ -178,6 +177,116 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 			responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()),null, nvb.getName()));
 		}
 		responseString.append(this.addRowToResponseXML(Long.valueOf(virtualBean.getValue()),null, virtualBean.getName()));
+		responseString.append(Constants.XML_ROWS_END);
+		response.setContentType(Constants.CONTENT_TYPE_XML);
+		response.getWriter().write(responseString.toString());
+		return null;
+	}
+	
+	public ActionForward getStorageContainerListForRequestShipment(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+			{
+		List <NameValueBean>containerList=new ArrayList<NameValueBean>();
+		Map containerMap = new TreeMap();
+		final StorageContainerForSpecimenBizLogic bizLogic = new StorageContainerForSpecimenBizLogic();
+		final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+		final String contName=request.getParameter(Constants.CONTAINER_NAME);
+		if (sessionDataBean != null)
+		{
+			DAO dao = null;
+			try
+			{
+				dao = AppUtility.openDAOSession(sessionDataBean);
+				String spClass = null;
+				String spType = null;
+				String specimenId = request.getParameter("specimenId");
+				if (specimenId != null)
+				{
+					final String sourceObjectName = Specimen.class.getName();
+					final String[] selectColumnName = {"specimenClass", "specimenType"};
+					final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
+					queryWhereClause.addCondition(new EqualClause("id", Long.valueOf(specimenId)));
+					final List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
+					if (list.size() != 0)
+					{
+						final Object[] valArr = (Object[]) list.get(0);
+						if (valArr != null)
+						{
+							spClass = ((String) valArr[0]);
+							spType = ((String) valArr[1]);
+						}
+					}
+					String collectionProtocolId = CollectionProtocolUtil.getCPIdFromSpecimen(specimenId, dao);
+					request.setAttribute(edu.wustl.catissuecore.util.global.Constants.COLLECTION_PROTOCOL_ID,
+							collectionProtocolId);
+
+					if (!collectionProtocolId.trim().equals(""))
+					{
+						List<Object> parameterList = AppUtility.setparameterList(Long.valueOf(collectionProtocolId).longValue(),spClass,0,spType);
+						containerMap = bizLogic.getAutoAllocatedContainerListForSpecimen(parameterList, sessionDataBean, dao,contName);
+						System.out.println("hello");
+						if(containerMap!=null)
+						{
+							containerList=AppUtility.convertMapToList(containerMap);
+						}
+
+						StringBuffer responseString = new StringBuffer(Constants.XML_START);
+						NameValueBean virtualBean = new NameValueBean("Virtual",Long.valueOf(-1));
+						//containerList.remove(containerList.indexOf(selectBean));
+						responseString.append(Constants.XML_ROWS);
+						for (NameValueBean nvb : containerList)
+						{
+							responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()),null, nvb.getName()));
+						}
+						responseString.append(this.addRowToResponseXML(Long.valueOf(virtualBean.getValue()),null, virtualBean.getName()));
+						responseString.append(Constants.XML_ROWS_END);
+						response.setContentType(Constants.CONTENT_TYPE_XML);
+						response.getWriter().write(responseString.toString());
+						return null;
+					}
+				}
+			}
+			finally
+			{
+				if (dao != null)
+				{
+					dao.closeSession();
+				}
+			}
+
+		}
+		return null;
+
+			}
+	
+		
+	
+	public ActionForward getStorageContainerListForSpecimenArray(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
+	{
+		List <NameValueBean>containerList=new ArrayList<NameValueBean>();
+		String contName=request.getParameter(Constants.CONTAINER_NAME);
+		String id = (String) request.getParameter(Constants.STORAGE_TYPE_ID);
+		if(id!=null)
+		{
+			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
+					.getAttribute(Constants.SESSION_DATA);
+			DAO dao = AppUtility.openDAOSession(sessionData);
+			final StorageContainerForSpArrayBizLogic spbizLogic= new StorageContainerForSpArrayBizLogic();
+			TreeMap containerMap = spbizLogic
+					.getAllocatedContainerMapForSpecimenArray(Long.valueOf(id), sessionData,
+							dao,contName);
+			if(containerMap!=null)
+			{
+				containerList=AppUtility.convertMapToList(containerMap);
+			}
+		}
+		StringBuffer responseString = new StringBuffer(Constants.XML_START);
+		responseString.append(Constants.XML_ROWS);
+		for (NameValueBean nvb : containerList)
+		{
+			responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()),null, nvb.getName()));
+		}
 		responseString.append(Constants.XML_ROWS_END);
 		response.setContentType(Constants.CONTENT_TYPE_XML);
 		response.getWriter().write(responseString.toString());
@@ -296,8 +405,4 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		}
 		return null;
 	}
-	
-
-	
-
 }

@@ -1345,6 +1345,8 @@ public class AliquotAction extends SecureAction
 							if (int_counter <= Integer.parseInt(form.getNoOfAliquots()))
 							{
 								final String containerKey = "Specimen:" + int_counter
+										+ "_StorageContainer_name_fromMap";
+								final String containerIdKey = "Specimen:" + int_counter
 										+ "_StorageContainer_id_fromMap";
 								final String pos1Key = "Specimen:" + int_counter
 										+ "_positionDimensionOne_fromMap";
@@ -1352,6 +1354,8 @@ public class AliquotAction extends SecureAction
 										+ "_positionDimensionTwo_fromMap";
 
 								aliquotMap.put(containerKey,
+										((NameValueBean) storageContainerId[count]).getName());
+								aliquotMap.put(containerIdKey,
 										((NameValueBean) storageContainerId[count]).getValue());
 								aliquotMap.put(pos1Key, ((NameValueBean) xDimension[j]).getValue());
 								aliquotMap.put(pos2Key, ((NameValueBean) yDimensionList.get(k))

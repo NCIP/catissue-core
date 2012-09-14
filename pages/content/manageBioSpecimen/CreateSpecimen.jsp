@@ -143,6 +143,8 @@ function containerOnRowSelect(id,ind)
 	document.getElementById(containerDropDownInfo['dropDownId']).value = scGrid.cellById(id,ind).getValue();
 	hideGrid(containerDropDownInfo['gridDiv']);
 	scGridVisible = false;
+	document.getElementById("pos1").value="";
+	document.getElementById("pos2").value="";
 }
 
 
@@ -184,10 +186,19 @@ function showHideStorageContainerGrid(e,gridDivId, dropDownId)
 
 function onContainerListReady()
 	{
-		var containerName = '${newSpecimenForm.selectedContainerName}';
-		if(containerName != "" && containerName != 0 && containerName != null)
-			containerOnRowSelect(containerName,0);
+		var containerName = '${createSpecimenForm.selectedContainerName}';
+		//if(containerName != "" && containerName != 0 && containerName != null)
+			//containerOnRowSelect(containerName,0);
 	}
+	
+	function setContainerValues()
+{
+<%if(!"".equalsIgnoreCase(form.getSelectedContainerName())) {%>
+	document.getElementById(containerDropDownInfo['dropDownId']).value='${createSpecimenForm.selectedContainerName}';
+	document.getElementById("pos1").value='${createSpecimenForm.pos1}';
+	document.getElementById("pos2").value='${createSpecimenForm.pos2}';
+<%}%>	
+}
 	
 
 
@@ -203,7 +214,7 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 	//Drop Down components information
 	containerDropDownInfo = {gridObj:"storageContainerGrid", gridDiv:"storageContainer", dropDownId:"storageContainerDropDown", pagingArea:"storageContainerPagingArea", infoArea:"storageContainerInfoArea", onOptionSelect:"containerOnRowSelect", actionToDo:url, callBackAction:onContainerListReady};
 	// initialising grid
-	scGrid = initDropDownGrid(containerDropDownInfo,5,0); 
+	scGrid = initDropDownGrid(containerDropDownInfo); 
 }
 
 </script>
@@ -321,7 +332,7 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 	</logic:equal>
 	</head>
 
-<body onload="doOnLoad();initWindow()">
+<body onload="doOnLoad();initWindow();setContainerValues()">
 <!-- Code was outside body start -->
 	<html:form action="${requestScope.action}">
 		<input type="hidden" id="specimenAttributeKey" name="specimenAttributeKey" value="${requestScope.specimenAttributeKey}" />

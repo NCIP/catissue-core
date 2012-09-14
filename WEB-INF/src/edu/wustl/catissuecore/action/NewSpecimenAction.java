@@ -816,7 +816,6 @@ public class NewSpecimenAction extends SecureAction
 				LOGGER.info("Starting points[2]" + startingPoints[2]);
 				initialValues.add(startingPoints);
 
-				System.out.println("hello");
 				final String showContainer = (String) request.getAttribute("showContainer");
 				if ((showContainer == null || showContainer.equals("Pending")) && Boolean.FALSE.equals(Boolean.valueOf(specimenForm.getVirtuallyLocated())) && (Integer.valueOf(2).equals(Integer.valueOf(specimenForm.getStContSelection()))) )
 				{
@@ -868,8 +867,7 @@ public class NewSpecimenAction extends SecureAction
 								final String[] startingPoints1 = new String[3];
 								String stContName=StorageContainerUtil
 										.checkForInitialValuesForDisplay(containerMap);
-								StorageContainer stCont=StorageContainerUtil.getFirstAvailablePositionInContainerByContainerName(stContName,dao);
-								System.out.println("hello");
+								StorageContainer stCont=StorageContainerUtil.getContainerWithCapacityByContainerName(stContName,dao);
 								
 								startingPoints1[0] =stContName;
 								//Position position=StorageContainerUtil.getFirstAvailablePositionInContainerByContainerName(stContName,dao);

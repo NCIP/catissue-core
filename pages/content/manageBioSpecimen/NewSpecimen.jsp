@@ -439,6 +439,9 @@ function containerOnRowSelect(id,ind)
 	document.getElementById(containerDropDownInfo['dropDownId']).value = scGrid.cellById(id,ind).getValue();
 	hideGrid(containerDropDownInfo['gridDiv']);
 	scGridVisible = false;
+	document.getElementById("pos1").value="";
+	document.getElementById("pos2").value="";
+
 }
 
 
@@ -2513,7 +2516,8 @@ else
 showPriterTypeLocation();
 function updateStorageContainerValue()
 	{
-		<% if(!"Collected".equals(form.getCollectionStatus()))
+		<% if((!"Collected".equals(form.getCollectionStatus()))
+			|| ("Collected".equals(form.getCollectionStatus()) && (String.valueOf(form.getId()).equals("0"))))
 		{%>
 		var containerName=document.getElementById(containerDropDownInfo['dropDownId']).value;
 		document.getElementById("selectedContainerName").value=containerName;

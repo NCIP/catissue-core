@@ -185,7 +185,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 						stContName =StorageContainerUtil
 								.checkForInitialValuesForDisplay(containerMap);// this.setInitialValue(request, transferEventParametersForm,
 								//containerMap);
-						StorageContainer stCont=StorageContainerUtil.getFirstAvailablePositionInContainerByContainerName(stContName,dao);
+						StorageContainer stCont=StorageContainerUtil.getContainerWithCapacityByContainerName(stContName,dao);
 						final String[] startingPoints1 = new String[3];
 						startingPoints1[0] =stContName;
 						//Position position=StorageContainerUtil.getFirstAvailablePositionInContainerByContainerName(stContName,dao);

@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ page import="edu.wustl.catissuecore.bean.AliquotBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.AliquotForm"%>
@@ -184,18 +184,33 @@ for(int i=1;i<=aliquotBeanList.size();i++){
 		, actionToDo:url, callBackAction:
 		function(){
 					var containerName= document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value;
-					if(containerName != "" && containerName != 0 && containerName != null)
-					{
-						document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value = containerName;
-						document.getElementById(containerDropDownInfo_<%=i%>['dropDownId']).value = scGrid_<%=i%>.cellById(containerName,0).getValue();
-						hideGrid(containerDropDownInfo_<%=i%>['gridDiv']);
-						scGridVisible_<%=i%> = false;
-					}
+					//if(containerName != "" && containerName != 0 && containerName != null)
+					//{
+					//	document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value = containerName;
+				//		document.getElementById(containerDropDownInfo_<%=i%>['dropDownId']).value = scGrid_<%=i%>.cellById(containerName,0).getValue();
+				//		hideGrid(containerDropDownInfo_<%=i%>['gridDiv']);
+				//		scGridVisible_<%=i%> = false;
+				//	}
 				}
 			, visibilityStatusVariable:scGridVisible_<%=i%>};
 	// initialising grid
 	scGrid_<%=i%> = initDropDownGrid(containerDropDownInfo_<%=i%>,5,0); 
 	<%}%>
+}
+
+function setContainerValues()
+{
+	<%
+	for(int i=1;i<=aliquotBeanList.size();i++)
+	{
+		AliquotBean aliquotBean=(AliquotBean)aliquotBeanList.get(0);
+	%>
+		//alert('<%=aliquotBean.getAliquotMap()%>');
+		//alert('Specimen:<%=i%>_StorageContainer_name_fromMap');
+		//alert("<%=aliquotBean.getAliquotMap().get("Specimen:"+i+"_StorageContainer_name_fromMap")%>");
+		//alert(document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value);
+		document.getElementById(containerDropDownInfo_<%=i%>['dropDownId']).value = "<%=aliquotBean.getAliquotMap().get("Specimen:"+i+"_StorageContainer_name_fromMap")%>";
+		<%}%>
 }
 
 </script>
@@ -315,7 +330,7 @@ for(int i=1;i<=aliquotBeanList.size();i++){
 
 </script>
 </head>
-<body onload="doOnLoad();initWindow();checkForStoragePosition()">
+<body onload="doOnLoad();initWindow();checkForStoragePosition();setContainerValues()">
 <html:form action="${requestScope.ALIQUOT_ACTION}">
 
 <!------------------New code--------------->
@@ -776,21 +791,16 @@ for(int i=1;i<=aliquotBeanList.size();i++){
 <script language="JavaScript" type="text/javascript">
 function applyFirstToAll()
 {
-	
 		var containerName= document.getElementsByName('value(Specimen:1_StorageContainer_id_fromMap)')[0].value;
-					//alert(containerName);				
-			
-			//var position=document.getElementById("container_1_0").value;
-					<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">	
-						document.getElementsByName('value(Specimen:${counter+1}_StorageContainer_id_fromMap)')[0].value = containerName;
-						document.getElementById(containerDropDownInfo_${counter+1}['dropDownId']).value = scGrid_${counter+1}.cellById(containerName,0).getValue();
-						hideGrid(containerDropDownInfo_${counter+1}['gridDiv']);
-						scGridVisible_${counter+1} = false;
-						document.getElementsByName('value(Specimen:${counter+1}_positionDimensionOne_fromMap)')[0].value = "";
-						document.getElementsByName('value(Specimen:${counter+1}_positionDimensionTwo_fromMap)')[0].value = "";
-						
-					</logic:iterate>
-
+				
+			<logic:iterate id="aliquotBean" name="aliquotBeanList" indexId="counter">	
+				document.getElementsByName('value(Specimen:${counter+2}_StorageContainer_id_fromMap)')[0].value = containerName;
+				document.getElementById(containerDropDownInfo_${counter+2}['dropDownId']).value = scGrid_${counter+2}.cellById(containerName,0).getValue();
+				hideGrid(containerDropDownInfo_${counter+2}['gridDiv']);
+				scGridVisible_${counter+2} = false;
+				document.getElementsByName('value(Specimen:${counter+2}_positionDimensionOne_fromMap)')[0].value = "";
+				document.getElementsByName('value(Specimen:${counter+2}_positionDimensionTwo_fromMap)')[0].value = "";
+			</logic:iterate>
 }
 <logic:notEqual name="pageOf" value="${requestScope.PAGEOF_ALIQUOT}">
 showPriterTypeLocation();
