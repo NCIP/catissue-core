@@ -538,9 +538,9 @@ function loadSpecimenGrid()
         <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
       </tr>
     </table>
-  
+   
    <table width="100%" border="0" cellpadding="3" cellspacing="0" class="whitetable_bg">
-      
+      <logic:notEmpty name="dropDownList">
      <tr>
         <td colspan="2" align="left" class="toptd">
 		<%@ include file="/pages/content/common/ActionErrors.jsp" %>
@@ -702,8 +702,32 @@ function loadSpecimenGrid()
 				<bean:message key="buttons.submit"/>	
 			</html:button></td>
       </tr>
+	 </logic:notEmpty>
+	 <logic:empty name="dropDownList">
+
+	<tr>
+		<td class="bottomtd"></td>
+	</tr>
+	 <tr>
+		<td class="messagetextsuccess">&nbsp;
+			<bean:message key="ShoppingCart.emptyCartTitle"/>&nbsp;<bean:message key="specimenList.empty.message"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="bottomtd"></td>
+	</tr>
+	<tr>
+		<td class="buttonbg">
+			<html:button styleClass="blue_ar_b" property="" onclick="gotoAdvanceQuery()">
+				<bean:message key="buttons.advanceQuery"/>	
+			</html:button>
+			</td>
+	</tr>	
 	
-   </table></td></tr>
+</logic:empty>
+   </table>
+  
+   </td></tr>
 	
     
  
