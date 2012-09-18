@@ -273,9 +273,9 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 					.getAttribute(Constants.SESSION_DATA);
 			DAO dao = AppUtility.openDAOSession(sessionData);
 			final StorageContainerForSpArrayBizLogic spbizLogic= new StorageContainerForSpArrayBizLogic();
-			TreeMap containerMap = spbizLogic
+			TreeMap containerMap = null;/*spbizLogic
 					.getAllocatedContainerMapForSpecimenArray(Long.valueOf(id), sessionData,
-							dao,contName);
+							dao,contName);*/
 			if(containerMap!=null)
 			{
 				containerList=AppUtility.convertMapToList(containerMap);
