@@ -444,32 +444,32 @@ public class AliquotAction extends SecureAction
 
 					for (int i = 1; i <= noOfAliquots; i++)
 					{
-						final String radioButonKey = "radio_" + i;
+						//final String radioButonKey = "radio_" + i;
 						final String containerIdKey = specimenKey + i + "_StorageContainer_id";
-						final String containerNameKey = specimenKey + i + "_StorageContainer_name";
-						String containerId = null;
-						if (aliquotMap.get(radioButonKey) != null
+						//final String containerNameKey = specimenKey + i + "_StorageContainer_name";
+						//String containerId = null;
+						/*if (aliquotMap.get(radioButonKey) != null
 								&& aliquotMap.get(radioButonKey).equals("2"))
 						{
 							containerId = (String) aliquotMap.get(containerIdKey);
-						}
-						else if (aliquotMap.get(radioButonKey) != null
-								&& aliquotMap.get(radioButonKey).equals("3"))
-						{
-							final String containerName = (String) aliquotMap.get(containerNameKey
+						}*/
+						/*else if (aliquotMap.get(radioButonKey) != null
+								&& aliquotMap.get(radioButonKey).equals("3"))*/
+						//{
+							 String containerId = (String) aliquotMap.get(containerIdKey
 									+ "_fromMap");
 
-							final String sourceObjectName = StorageContainer.class.getName();
-							final String[] selectColumnName = {"id"};
+							//final String sourceObjectName = StorageContainer.class.getName();
+							//final String[] selectColumnName = {"id"};
 
-							final QueryWhereClause queryWhereClause = new QueryWhereClause(
-									sourceObjectName);
-							queryWhereClause.addCondition(new EqualClause("name", containerName));
+							//final QueryWhereClause queryWhereClause = new QueryWhereClause(
+							//		sourceObjectName);
+							//queryWhereClause.addCondition(new EqualClause("name", containerName));
 
-							final List list = dao.retrieve(sourceObjectName, selectColumnName,
-									queryWhereClause);
+							//final List list = dao.retrieve(sourceObjectName, selectColumnName,
+							//		queryWhereClause);
 
-							if (list.isEmpty())
+							if (containerId==null)//list.isEmpty())
 							{
 								wrongContName = true;
 								errors = this.getActionErrors(request);
@@ -482,12 +482,12 @@ public class AliquotAction extends SecureAction
 								this.saveErrors(request, errors);
 
 							}
-							else
+							/*else
 							{
-								containerId = list.get(0).toString();
-							}
+								containerId = containerName;//list.get(0).toString();
+							}*/
 
-						}
+						//}
 
 						if (i == 1)
 						{

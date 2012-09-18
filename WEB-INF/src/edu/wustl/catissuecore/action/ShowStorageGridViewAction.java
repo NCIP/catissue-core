@@ -403,6 +403,7 @@ public class ShowStorageGridViewAction extends BaseAction
 							String selectedContainerName= (String) session.getAttribute(Constants.SELECTED_CONTAINER_NAME);
 							String pos1=(String) session.getAttribute(Constants.POS1);
 						    String pos2=(String)session.getAttribute(Constants.POS2);
+						    String storageContainerIdFromMap=(String)session.getAttribute("StorageContainerIdFromMap");
 						    
 							if (Constants.PAGE_OF_MULTIPLE_SPECIMEN.equals(pageOf)) 
 							{
@@ -416,9 +417,13 @@ public class ShowStorageGridViewAction extends BaseAction
 								//value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(1,1)\\\\\" src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";							//value = "";
 								value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(\\\'"+selectedContainerName+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\');\\ " 
 										+"setTextBoxValue(\\\'"+pos1+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
-										+"setTextBoxValue(\\\'"+pos2+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ "
-										+"closeFramedWindow()\\\\\" "
-										+"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
+										+"setTextBoxValue(\\\'"+pos2+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ ";
+								if(storageContainerIdFromMap!=null)
+								{
+									value=value +"setTextBoxValue(\\\'"+storageContainerIdFromMap+"\\\',\\\'"+id+"\\\');\\ ";
+								}
+								value=value+"closeFramedWindow()\\\\\" "
+									  +"src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";
 							}
 							else if(Constants.PAGE_OF_ALIQUOT.equals(pageOf))
 							{

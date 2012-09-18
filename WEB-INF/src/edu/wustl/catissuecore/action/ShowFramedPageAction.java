@@ -74,6 +74,8 @@ public class ShowFramedPageAction extends XSSSupportedAction
 
 		session.setAttribute(Constants.SELECTED_CONTAINER_NAME, request
 				.getParameter(Constants.SELECTED_CONTAINER_NAME));
+		session.setAttribute("StorageContainerIdFromMap", request
+				.getParameter("StorageContainerIdFromMap"));
 		session.setAttribute(Constants.CONTAINERID, request.getParameter(Constants.CONTAINERID));
 		session.setAttribute(Constants.POS1, request.getParameter(Constants.POS1));
 		session.setAttribute(Constants.POS2, request.getParameter(Constants.POS2));
