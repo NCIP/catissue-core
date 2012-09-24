@@ -151,6 +151,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 				logger.debug("Collection protocol size:"
 						+ container.getCollectionProtocolCollection().size());
 				setLabelAndBarcode(dao, container, cont);
+				setLabellingSchemes(cont);
 				dao.insert(cont);
 				container.setId(cont.getId());
 				container.setCapacity(cont.getCapacity());
@@ -192,6 +193,19 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			logger.error(e.getMessage(), e);
 			throw this.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
 		}
+	}
+
+	private void setLabellingSchemes(StorageContainer cont)
+	{
+		if(cont.getOneDimensionLabellingScheme()==null)
+		{
+			cont.setOneDimensionLabellingScheme(Constants.LABELLING_SCHEME_NUMBERS);
+		}
+		if(cont.getTwoDimensionLabellingScheme()==null)
+		{
+			cont.setTwoDimensionLabellingScheme(Constants.LABELLING_SCHEME_NUMBERS);
+		}
+		
 	}
 
 	/**
