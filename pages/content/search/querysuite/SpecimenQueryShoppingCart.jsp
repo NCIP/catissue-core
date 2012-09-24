@@ -325,7 +325,7 @@ function dobulkTransferOperations(orderedString)
 		    
 		    if(isChecked == "true")
 		    {		
-				var action = "BulkSpecimenCart.do?operation=bulkTransfers";
+				var action = "BulkCart.do?operation=bulkTransfers&requestFromPage=specimenListView";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -341,7 +341,7 @@ function dobulkDisposals()
 		    
 		    if(isChecked == "true")
 		    {
-				var action = "BulkSpecimenCart.do?operation=bulkDisposals";
+				var action = "BulkCart.do?operation=bulkDisposals&requestFromPage=specimenListView";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -357,7 +357,7 @@ function addToOrderList(orderedString)
 		    var isChecked = updateHiddenFields();
 		    if(isChecked == "true")
 		    {
-				var action = "BulkSpecimenCart.do?operation=addToOrderList";
+				var action = "BulkCart.do?operation=addToOrderList&requestFromPage=specimenListView";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -372,7 +372,7 @@ function addToOrderList(orderedString)
 			 var isChecked = updateHiddenFields();
 		    if(isChecked == "true")
 		    {
-				var action = "BulkSpecimenCart.do?operation=editMultipleSp";
+				var action = "BulkCart.do?operation=editMultipleSp&requestFromPage=specimenListView";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -388,7 +388,7 @@ function createShipmentRequest()
 		    
 		    if(isChecked == "true")
 		    {
-				var action = "BulkSpecimenCart.do?operation=createShipmentRequest";
+				var action = "BulkCart.do?operation=createShipmentRequest&requestFromPage=specimenListView";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -404,7 +404,7 @@ function createShipment()
 		    
 		    if(isChecked == "true")
 		    {
-				var action = "BulkSpecimenCart.do?operation=createShipment";
+				var action = "BulkCart.do?operation=createShipment&requestFromPage=specimenListView";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}
@@ -421,7 +421,7 @@ function distributeOrder()
 	   
 	if(isChecked == "true")
 	{
-		var action = "BulkSpecimenCart.do?operation=requestToDistribute";
+		var action = "BulkCart.do?operation=requestToDistribute&requestFromPage=specimenListView";
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}
@@ -438,7 +438,7 @@ function printSpecimensLabels(orderedString)
 	   
 	if(isChecked == "true")
 	{
-		var action = "BulkSpecimenCart.do?operation=printLabels";
+		var action = "BulkCart.do?operation=printLabels&requestFromPage=specimenListView";
 		document.forms[0].action = action;
 		document.forms[0].submit();
 	}

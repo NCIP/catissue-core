@@ -4,12 +4,14 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,25 +58,33 @@ public class BulkCartAction extends QueryShoppingCartAction
 		final HttpSession session = request.getSession();
 		String target = Constants.SUCCESS;
 		final String operation = request.getParameter(Constants.OPERATION);
-
+		String pageOf=request.getParameter("requestFromPage");
+		Object specimenIds = getSpecimenIds(searchForm,request,pageOf,operation);
 		final QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
 
 		if (Constants.ADD_TO_ORDER_LIST.equals(operation))
 		{
-			this.removeSessionAttributes(session);
-			this.getOrderableEntityIds(searchForm, session, cart);
-
+			if(!"specimenListView".equals(pageOf))
+			{	
+				this.removeSessionAttributes(session);
+				this.getOrderableEntityIds(searchForm, session, cart);
+			}	
 			target = Constants.REQUEST_TO_ORDER;
 		}
 		else if (Constants.BULK_TRANSFERS.equals(operation)
 				|| Constants.BULK_DISPOSALS.equals(operation))
 		{
-			target = this.bulkOperations(request, searchForm, operation);
+			//target = this.bulkOperations(request, searchForm, operation);
+			request.setAttribute(Constants.SPECIMEN_ID, (LinkedList<String>)specimenIds);
+			request.setAttribute(Constants.OPERATION, operation);
+			target = operation;
 		}
 		else if (Constants.EDIT_MULTIPLE_SPECIMEN.equals(operation))
 		{
-			target = this.editMultipleSpecimen(searchForm, session, operation);
+			//target = this.editMultipleSpecimen(searchForm, session, operation);
+			session.setAttribute(Constants.SPECIMEN_ID,specimenIds);
+			target = operation;
 		}
 		else if (edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT
 				.equals(operation)
@@ -85,14 +95,25 @@ public class BulkCartAction extends QueryShoppingCartAction
 		}
 		else if (Constants.REQUEST_TO_DISTRIBUTE.equals(operation))
 		{
-			this.getOrderableEntityIds(searchForm, session, cart);
+			if("specimenListView".equals(pageOf))
+			{
+				session.setAttribute(Constants.SPECIMEN_ID, (LinkedList<String>)specimenIds);
+			}
+			else
+			{
+				this.getOrderableEntityIds(searchForm, session, cart);
+			}
 			target = Constants.REQUEST_TO_DISTRIBUTE;
 		}
 		else if (Constants.PRINT_LABELS.equals(operation))
 		{
-			target = this.printSpecimensFromListView(searchForm, session, operation,request);
+			session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
+			final HashMap forwardToPrintMap = new HashMap();
+			forwardToPrintMap.put(Constants.PRINT_SPECIMEN_FROM_LISTVIEW,specimenIds);
+			request.setAttribute("forwardToPrintMap", forwardToPrintMap);
+			target = operation;
 		}
-
+		request.setAttribute(Constants.PAGE_OF, null);
 		return mapping.findForward(target);
 	}
 
@@ -237,7 +258,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 	 *            : operation
 	 * @return String : String
 	 */
-	private String editMultipleSpecimen(AdvanceSearchForm searchForm, HttpSession session,
+	/*private String editMultipleSpecimen(AdvanceSearchForm searchForm, HttpSession session,
 			String operation)
 	{
 		String target;
@@ -245,7 +266,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 		this.getSpecimenIDs( searchForm, session, operation ));
 		target = operation;
 		return target;
-	}
+	}*/
 	/**
 	 * This method is used to create set of specimen IDs.
 	* @param searchForm - AdvanceSearchForm
@@ -253,7 +274,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 	 * @param operation - operation
 	 * @return set of specimen IDs
 	 */
-	private Set<String> getSpecimenIDs(AdvanceSearchForm searchForm, HttpSession session,String operation)
+	/*private Set<String> getSpecimenIDs(AdvanceSearchForm searchForm, HttpSession session,String operation)
 	{
 		if (session.getAttribute(Constants.SPECIMEN_ID) != null)
 		{
@@ -268,7 +289,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 				this.getCheckboxValues(searchForm)));
 		return specimenIds;
 
-	}
+	}*/
 	/**
 	 *  This method creates map which contains specimen IDs to print.
 	 * @param searchForm - AdvanceSearchForm
@@ -277,7 +298,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 	 * @param request - HttpServletRequest
 	 * @return target
 	 */
-	private String printSpecimensFromListView(AdvanceSearchForm searchForm, HttpSession session,
+	/*private String printSpecimensFromListView(AdvanceSearchForm searchForm, HttpSession session,
 			String operation,HttpServletRequest request)
 	{
 		String target;
@@ -288,7 +309,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 		request.setAttribute("forwardToPrintMap", forwardToPrintMap);
 		target = operation;
 		return target;
-	}
+	}*/
 	/**
 	 * @param request
 	 *            : request
@@ -429,5 +450,62 @@ public class BulkCartAction extends QueryShoppingCartAction
 		}
 		return entityIdsMap;
 	}
+	private Object  getSpecimenIds(AdvanceSearchForm searchForm, HttpServletRequest request,String pageOf,String operation) 
+	{
+		Set<String> specimenIdSet = new LinkedHashSet<String>();
+		if("specimenListView".equals(pageOf))
+		{	
+		  if(Constants.BULK_TRANSFERS.equals(operation)
+					|| Constants.BULK_DISPOSALS.equals(operation)|| Constants.REQUEST_TO_DISTRIBUTE.equals(operation))
+		  {	  
+			  	String specIds = searchForm.getOrderedString();
+				StringTokenizer tokenizer = new StringTokenizer(specIds,",");
+				List<String> specimenIdList = new LinkedList<String>();
+				while(tokenizer.hasMoreTokens())
+				{
+					specimenIdList.add(tokenizer.nextToken());
+				}
+//				HttpSession session = request.getSession();
+//				session.setAttribute(Constants.SPECIMEN_ID, specimenIdList);
+				return specimenIdList;
+		  }	
+		  else
+		  {
+			  String specIds = searchForm.getOrderedString();
+				StringTokenizer tokenizer = new StringTokenizer(specIds,",");
+				
+				while(tokenizer.hasMoreTokens())
+				{
+					specimenIdSet.add(tokenizer.nextToken());
+				}
+		  }
+		}
+		else
+		{
+			final HttpSession session = request.getSession();
+			if (session.getAttribute(Constants.SPECIMEN_ID) != null) {
+				session.removeAttribute(Constants.SPECIMEN_ID);
+			}
+			final QueryShoppingCart cart = (QueryShoppingCart) session
+					.getAttribute(Constants.QUERY_SHOPPING_CART);
+			final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
+			if (Constants.BULK_TRANSFERS.equals(operation)
+					|| Constants.BULK_DISPOSALS.equals(operation)) {
+				final LinkedList<String> specimenIds = new LinkedList<String>(bizLogic.getEntityIdsList(cart,
+						Arrays.asList(Constants.specimenNameArray), this.getCheckboxValues(searchForm)));
+				return specimenIds;
 
+			} else {
+
+				specimenIdSet = new LinkedHashSet<String>(
+						bizLogic.getEntityIdsList(cart,
+								Arrays.asList(Constants.specimenNameArray),
+								this.getCheckboxValues(searchForm)));
+			}
+									
+		}
+//		HttpSession session = request.getSession();
+//		session.setAttribute(Constants.SPECIMEN_ID, specimenIdList);
+		return specimenIdSet;
+	}
 }
