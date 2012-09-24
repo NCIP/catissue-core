@@ -1444,12 +1444,12 @@ document.forms[0].pos2.disabled = false;
 <%
 if(showSpecList.equals("true"))
 						{%>
-<body onload="showConsent()">
+<body onload="doOnLoad();initWindow();loadContainerValues();setContainerValues();showConsent();">
 <%
 }
 else
 {%>
-<body onload="doOnLoad();initWindow();loadContainerValues();showConsents();setContainerValues();">
+<body onload="doOnLoad();initWindow();loadContainerValues();setContainerValues();showConsents();">
 
 <%
 }		int exIdRows=1;
@@ -2534,11 +2534,12 @@ function updateStorageContainerValue()
 	
 function setContainerValues()
 {
-<%if(!"".equalsIgnoreCase(containerName)) {%>
+<%//if(!"".equalsIgnoreCase(containerName)) {%>
 	document.getElementById(containerDropDownInfo['dropDownId']).value='<%=containerName%>';
+	document.getElementById("selectedContainerName").value='<%=containerName%>';
 	document.getElementById("pos1").value='<%=pos1%>';
 	document.getElementById("pos2").value='<%=pos2%>';
-<%}%>	
+<%//}%>	
 }
 </script>
 </body>

@@ -810,6 +810,26 @@ public class NewSpecimenAction extends SecureAction
 						startingPoints[2] = specimenForm.getPos2();
 					}
 				}
+				if (specimenForm.getSelectedContainerName() != null
+						&& !"".equals(specimenForm.getSelectedContainerName())
+						&& !"-1".equals(specimenForm.getSelectedContainerName()))
+				{
+					startingPoints[0] = specimenForm.getSelectedContainerName();
+
+				}
+				if (specimenForm.getPos1() != null
+						&& !"".equals(specimenForm.getPos1())
+						&& !"-1".equals(specimenForm.getPos1()))
+				{
+					startingPoints[1] = specimenForm.getPos1();
+				}
+				if (specimenForm.getPos2() != null
+						&& !"".equals(specimenForm.getPos2())
+						&& !"-1".equals(specimenForm.getPos2()))
+				{
+					startingPoints[2] = specimenForm.getPos2();
+				}
+
 				initialValues = new ArrayList<String[]>();
 				LOGGER.info("Starting points[0]" + startingPoints[0]);
 				LOGGER.info("Starting points[1]" + startingPoints[1]);
@@ -924,6 +944,15 @@ public class NewSpecimenAction extends SecureAction
 				initialValues = new ArrayList<String[]>();
 				initialValues.add(startingPoints1);
 
+			}
+			if( specimenForm.getSelectedContainerName()!=null )
+			{
+				final String[] startingPoints1 = new String[3];
+				startingPoints1[0] = specimenForm.getSelectedContainerName();
+				startingPoints1[1] = specimenForm.getPos1();
+				startingPoints1[2] = specimenForm.getPos2();
+				initialValues = new ArrayList<String[]>();
+				initialValues.add(startingPoints1);
 			}
 			if (specimenForm.getSpecimenCollectionGroupName() != null)
 			{
