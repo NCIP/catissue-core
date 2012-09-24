@@ -11,6 +11,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
 <%@ page language="java" isELIgnored="false"%>
 <% ViewSpecimenSummaryForm form = (ViewSpecimenSummaryForm)request.getAttribute("viewSpecimenSummaryForm");
@@ -23,24 +24,7 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 	clinicalDataEntryURL = request.getParameter("clinicalDataEntryURL");
 }
 %>
-<%!public String getLineageSubString(GenericSpecimen gs3)
-{
-			String lineage=gs3.getLineage();
-			if(lineage.equals("New"))
-			{
-				lineage="S";
-			}
-			else if(lineage.equals("Aliquot"))
-			{
-				lineage="Aliquot"+gs3.getParentId();
-			}
-			else if(lineage.equals("Derived"))
-			{
-				lineage="Derived"+gs3.getParentId();
-			}
-			return lineage;
-}
-%>
+
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
@@ -690,7 +674,7 @@ else
 		for(int i=0;i<specimenList.size();i++)
 		{
 			GenericSpecimen gs1=specimenList.get(i);
-			String lineage=getLineageSubString(gs1);
+			String lineage=AppUtility.getLineageSubString(gs1);
 			Long idToAppend=gs1.getId();
 			String stringToAppend=null;
 			if(Long.valueOf(gs1.getId())==-1)
@@ -714,7 +698,7 @@ var gridDivObject_<%=stringToAppend%> ;
 		for(int i=0;i<aliquotList.size();i++)
 		{
 			GenericSpecimen gs1=aliquotList.get(i);
-			String lineage=getLineageSubString(gs1);
+			String lineage=AppUtility.getLineageSubString(gs1);
 			Long idToAppend=gs1.getId();
 			String stringToAppend=null;
 			if(Long.valueOf(gs1.getId())==-1)
@@ -737,7 +721,7 @@ var gridDivObject_<%=stringToAppend%> ;
 		for(int i=0;i<derivedList.size();i++)
 		{
 			GenericSpecimen gs1=derivedList.get(i);
-			String lineage=getLineageSubString(gs1);
+			String lineage=AppUtility.getLineageSubString(gs1);
 			Long idToAppend=gs1.getId();
 			String stringToAppend=null;
 			if(Long.valueOf(gs1.getId())==-1)
@@ -784,7 +768,7 @@ function doOnLoad()
 		for(int i=0;i<specimenList.size();i++)
 		{
 			GenericSpecimen gs=specimenList.get(i);
-			String lineage=getLineageSubString(gs);
+			String lineage=AppUtility.getLineageSubString(gs);
 			Long idToAppend=gs.getId();
 			String stringToAppend=null;
 			if(-1==Long.valueOf(gs.getId()))
@@ -796,7 +780,7 @@ function doOnLoad()
 			{
 				stringToAppend=lineage+"_"+gs.getId();
 			}
-			if(gs.getCollectionStatus()==null ||"Pending".equals(gs.getCollectionStatus()))
+			if(gs.getCollectionStatus()== null || "null".equals(gs.getCollectionStatus()) || "Pending".equals(gs.getCollectionStatus()))
 			{
 	%>
 		var className<%=stringToAppend%>=document.getElementById("className_<%=stringToAppend%>").value;
@@ -841,7 +825,7 @@ function doOnLoad()
 		for(int i=0;i<aliquotList.size();i++)
 		{
 			GenericSpecimen gs=aliquotList.get(i);
-			String lineage=getLineageSubString(gs);
+			String lineage=AppUtility.getLineageSubString(gs);
 			Long idToAppend=gs.getId();
 			String stringToAppend=null;
 			if(-1==Long.valueOf(gs.getId()))
@@ -853,7 +837,7 @@ function doOnLoad()
 			{
 				stringToAppend=lineage+"_"+gs.getId();
 			}
-			if(gs.getCollectionStatus()==null ||"Pending".equals(gs.getCollectionStatus()))
+			if(gs.getCollectionStatus()==null || "null".equals(gs.getCollectionStatus()) ||"Pending".equals(gs.getCollectionStatus()))
 			{
 	%>
 		var className<%=stringToAppend%>=document.getElementById("className_<%=stringToAppend%>").value;
@@ -896,7 +880,7 @@ function doOnLoad()
 		for(int i=0;i<derivedList.size();i++)
 		{
 			GenericSpecimen gs=derivedList.get(i);
-			String lineage=getLineageSubString(gs);
+			String lineage=AppUtility.getLineageSubString(gs);
 			Long idToAppend=gs.getId();
 			String stringToAppend=null;
 			if(-1==Long.valueOf(gs.getId()))
@@ -908,7 +892,7 @@ function doOnLoad()
 			{
 				stringToAppend=lineage+"_"+gs.getId();
 			}
-			if(gs.getCollectionStatus()==null ||"Pending".equals(gs.getCollectionStatus()))
+			if(gs.getCollectionStatus()==null || "null".equals(gs.getCollectionStatus()) ||"Pending".equals(gs.getCollectionStatus()))
 			{
 	%>
 		var className<%=stringToAppend%>=document.getElementById("className_<%=stringToAppend%>").value;
@@ -953,7 +937,7 @@ function setContainerValues()
 		for(int i=0;i<specimenList.size();i++)
 		{
 			GenericSpecimen gs2=specimenList.get(i);
-			String lineage=getLineageSubString(gs2);
+			String lineage=AppUtility.getLineageSubString(gs2);
 			Long idToAppend=gs2.getId();
 			String stringToAppend=null;
 			if(-1==Long.valueOf(gs2.getId()))
@@ -967,9 +951,15 @@ function setContainerValues()
 			}
 			if(!"Collected".equals(gs2.getCollectionStatus())) 
 			{
-				if(gs2.getSelectedContainerName()==null)
+				if("Virtual".equals(gs2.getStorageContainerForSpecimen()))
 				{
 					gs2.setSelectedContainerName("Virtual");
+					gs2.setPositionDimensionOne("");
+					gs2.setPositionDimensionTwo("");
+				}
+				else if("Manual".equals(gs2.getStorageContainerForSpecimen()))
+				{
+					gs2.setSelectedContainerName("");
 					gs2.setPositionDimensionOne("");
 					gs2.setPositionDimensionTwo("");
 				}
@@ -984,7 +974,7 @@ function setContainerValues()
 		for(int i=0;i<aliquotList.size();i++)
 		{
 			GenericSpecimen gs2=aliquotList.get(i);
-			String lineage=getLineageSubString(gs2);
+			String lineage=AppUtility.getLineageSubString(gs2);
 			Long idToAppend=gs2.getId();
 			String stringToAppend=null;
 			if(-1==Long.valueOf(gs2.getId()))
@@ -996,8 +986,21 @@ function setContainerValues()
 			{
 				stringToAppend=lineage+"_"+gs2.getId();
 			}
-			if(null!=gs2.getSelectedContainerName() && !"".equalsIgnoreCase(gs2.getSelectedContainerName()) && !"Collected".equals(gs2.getCollectionStatus())) 
-			{%>
+			if(!"Collected".equals(gs2.getCollectionStatus())) 
+			{
+				if("Virtual".equals(gs2.getStorageContainerForSpecimen()))
+				{
+					gs2.setSelectedContainerName("Virtual");
+					gs2.setPositionDimensionOne("");
+					gs2.setPositionDimensionTwo("");
+				}
+				else if("Manual".equals(gs2.getStorageContainerForSpecimen()))
+				{
+					gs2.setSelectedContainerName("");
+					gs2.setPositionDimensionOne("");
+					gs2.setPositionDimensionTwo("");
+				}
+				%>
 				document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value='<%=gs2.getSelectedContainerName()%>';
 				document.getElementById("positionDimensionOne_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionOne()%>';
 				document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionTwo()%>';
@@ -1008,7 +1011,7 @@ function setContainerValues()
 		for(int i=0;i<derivedList.size();i++)
 		{
 			GenericSpecimen gs2=derivedList.get(i);
-			String lineage=getLineageSubString(gs2);
+			String lineage=AppUtility.getLineageSubString(gs2);
 			Long idToAppend=gs2.getId();
 			String stringToAppend=null;
 			if(-1==Long.valueOf(gs2.getId()))
@@ -1020,8 +1023,21 @@ function setContainerValues()
 			{
 				stringToAppend=lineage+"_"+gs2.getId();
 			}
-			if(null!=gs2.getSelectedContainerName() && !"".equalsIgnoreCase(gs2.getSelectedContainerName()) && !"Collected".equals(gs2.getCollectionStatus())) 
-			{%>
+			if(!"Collected".equals(gs2.getCollectionStatus())) 
+			{
+				if("Virtual".equals(gs2.getStorageContainerForSpecimen()))
+				{
+					gs2.setSelectedContainerName("Virtual");
+					gs2.setPositionDimensionOne("");
+					gs2.setPositionDimensionTwo("");
+				}
+				else if("Manual".equals(gs2.getStorageContainerForSpecimen()))
+				{
+					gs2.setSelectedContainerName("");
+					gs2.setPositionDimensionOne("");
+					gs2.setPositionDimensionTwo("");
+				}
+				%>
 				document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value='<%=gs2.getSelectedContainerName()%>';
 				document.getElementById("positionDimensionOne_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionOne()%>';
 				document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value='<%=gs2.getPositionDimensionTwo()%>';

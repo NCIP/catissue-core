@@ -813,7 +813,8 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			this.createFieldRow(stringBuffer, counter, specimen, elementNamePrefix, isTextRow); // row2 containing actual editable fields (first half)
 			this.createHeaderRow2(stringBuffer); // row3 containing headers for second half (text fields)
 			this.createTextFieldRow(stringBuffer, counter, specimen, elementNamePrefix); // row containing text data (second half)
-
+			stringBuffer.append("<input type='hidden' name='specimen["+counter+"].lineage' value='"+specimen.getLineage()+"' id='specimen["+counter+"].lineage'> ");
+			stringBuffer.append("<input type='hidden' name='specimen["+counter+"].collectionStatus' value='"+specimen.getCollectionStatus()+"' id='specimen["+counter+"].collectionStatus'> ");
 			stringBuffer.append("</TABLE>");
 			stringBuffer.append(TD_CLOSE);
 			stringBuffer.append(TR_CLOSE);
@@ -1157,20 +1158,20 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			str[1] = this.getFormattedValue(specimen.getSelectedContainerName());
 			str[2] = elementNamePrefix + "positionDimensionOne";
 			String collectionStatus=specimen.getCollectionStatus();			
-			if("Collected".equals(collectionStatus) && specimen.getPositionDimensionOne()!=null && !"".equals(specimen.getPositionDimensionOne()) && !"null".equals(specimen.getPositionDimensionOne()))
+			/*if("Collected".equals(collectionStatus) && specimen.getPositionDimensionOne()!=null && !"".equals(specimen.getPositionDimensionOne()) && !"null".equals(specimen.getPositionDimensionOne()))
 			{
 				str[3] = this.getFormattedValue(StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSelectedContainerName(),1,Integer.valueOf(specimen.getPositionDimensionOne())));
 			}
-			else
+			else*/
 			{
 				str[3] = this.getFormattedValue(specimen.getPositionDimensionOne());
 			}
 			str[4] = elementNamePrefix + "positionDimensionTwo";
-			if("Collected".equals(collectionStatus) && specimen.getPositionDimensionTwo()!=null  && !"".equals(specimen.getPositionDimensionTwo()) && !"null".equals(specimen.getPositionDimensionTwo()))
+			/*if("Collected".equals(collectionStatus) && specimen.getPositionDimensionTwo()!=null  && !"".equals(specimen.getPositionDimensionTwo()) && !"null".equals(specimen.getPositionDimensionTwo()))
 			{
 				str[5] = this.getFormattedValue(StorageContainerUtil.convertSpecimenPositionsToString(specimen.getSelectedContainerName(),2,Integer.valueOf(specimen.getPositionDimensionTwo())));
 			}
-			else
+			else*/
 			{
 				str[5] = this.getFormattedValue(specimen.getPositionDimensionTwo());
 			}

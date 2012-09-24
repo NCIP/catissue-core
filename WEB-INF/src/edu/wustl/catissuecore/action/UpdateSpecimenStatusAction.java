@@ -597,6 +597,7 @@ public class UpdateSpecimenStatusAction extends BaseAction
 		specimen.setId(identifier);
 		specimen.setSpecimenClass(specimenVO.getClassName());
 		specimen.setSpecimenType(specimenVO.getType());
+		specimen.setLineage(specimenVO.getLineage());
 		if ("".equals(specimenVO.getDisplayName()))
 		{
 			specimen.setLabel(null);
