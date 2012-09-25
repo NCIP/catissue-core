@@ -228,22 +228,34 @@ function openClinportalPage(dataString)
 	//window.parent.frames['SpecimenEvents'].location="ShowCollectionProtocol.do?pageOf=specimenEventsPage&operation=ViewSummary";
 	function ApplyToAll(object,type)
 		{
-			MDApplyToAll(object,type);
+			var cnt = getCountByType(type);
+			var elemId = type+"[0]"+".storageContainerForSpecimen";
+			var uId=type+"[0]"+".uniqueIdentifier";
+			var uniqueId= document.getElementById(uId).value;
+			var name="storageContainerDropDown_"+uniqueId;
+			var val=document.getElementById(name);
+			var valueToSet=val.value;
+			for(i=1;i<cnt;i++)	// change values for all remaining
+			{
+				uId=type+"["+i+"]"+".uniqueIdentifier";
+				uniqueId= document.getElementById(uId).value;
+				name="storageContainerDropDown_"+uniqueId;
+				document.getElementById(name).value=valueToSet;
+							
+				elemName = type+"["+i+"]"+".selectedContainerName";
+				elemName = type+"["+i+"]"+".positionDimensionOne";
+				getElement(elemName).value="";
+				
+				elemName = type+"["+i+"]"+".positionDimensionTwo";
+				getElement(elemName).value="";
+			}
 		}
 
 //Mandar : 15Dec08 ---
 function getCountByType(type)
 {
-	var count=0;
-	var fields = document.getElementsByTagName("select");
-	for (i=0; i<fields.length;i++)
-	{
-		var fid = fields[i].id;
-		if(fid.indexOf(type+"[")>=0)
-			count = count+1;
-	}
-
-	return count;
+	var elements=document.getElementsByClassName(type);
+	return elements.length;
 }
 function getElement(name)
 {
@@ -253,60 +265,7 @@ function getElement(name)
 	else
 		return "";
 }
-function updateField(type,i,isDis,valueToSet)
-{
-	elemName = type+"["+i+"]"+".selectedContainerName";
-	getElement(elemName).disabled =isDis;
 
-	elemName = type+"["+i+"]"+".positionDimensionOne";
-	getElement(elemName).disabled =isDis;
-	elemName = type+"["+i+"]"+".positionDimensionTwo";
-	getElement(elemName).disabled =isDis;
-
-	elemName = type+"["+i+"]"+".selectedContainerName";
-	getElement(elemName).value =valueToSet;
-
-	elemName = type+"["+i+"]"+".positionDimensionOne";
-	getElement(elemName).value = "";
-	elemName = type+"["+i+"]"+".positionDimensionTwo";
-	getElement(elemName).value ="";
-
-}
-	function MDApplyToAll(object,type)
-		{
-//			if(object.checked )
-			{
-				var cnt = getCountByType(type);
-
-				var elemId = type+"[0]"+".storageContainerForSpecimen";
-				var ele0 = document.getElementById(elemId);
-				if(ele0.selectedIndex > 0)	// not virtual
-				{
-					elemName = type+"[0]"+".selectedContainerName";
-					var valueToSet = getElement(elemName).value;
-
-					for(i=1;i<cnt;i++)	// change values for all remaining
-					{
-						elemId = type+"["+i+"]"+".storageContainerForSpecimen";
-						document.getElementById(elemId).selectedIndex = ele0.selectedIndex;
-						updateField(type,i,false,valueToSet);
-					}
-				}
-				else	// for virtual
-				{
-					for(i=1;i<cnt;i++)
-					{
-						elemId = type+"["+i+"]"+".storageContainerForSpecimen";
-						document.getElementById(elemId).selectedIndex = ele0.selectedIndex;
-						updateField(type,i,true,"");
-
-					}
-
-				}
-			}
-		}
-		
-		
 function initWindow()
 {
 //alert("initializing DHTMLX window");
@@ -541,9 +500,9 @@ function pageSubmit() {
 
 	}
 	function onParentRadioBtnClick() {
-		var url = 'GenericSpecimenSummary.do';
+		var url = 'GenericSpecimenSummary.do?isSubmitRequest=false';
 <%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {%>
-			 url = 	'GenericSpecimenSummaryForSpecimen.do?pageOf=<%=Constants.CP_CHILD_SUBMIT%>';
+			 url = 	'GenericSpecimenSummaryForSpecimen.do?pageOf=<%=Constants.CP_CHILD_SUBMIT%>&isSubmitRequest=false';
 			<%}%>
 			document.forms[0].action =url;
 			document.forms[0].submit();

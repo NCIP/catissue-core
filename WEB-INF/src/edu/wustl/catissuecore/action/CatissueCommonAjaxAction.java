@@ -167,6 +167,7 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 			{
 				containerList=AppUtility.convertMapToList(treeMap);
 			}
+			AppUtility.closeDAOSession(dao);
 		}
 		StringBuffer responseString = new StringBuffer(Constants.XML_START);
 		NameValueBean virtualBean = new NameValueBean("Virtual",Long.valueOf(-1));

@@ -794,6 +794,9 @@ public class SpecimenDetailsNewFormat extends TagSupport
 				this.createHeaderRow1(stringBuffer, TR_GRAY, specimen); // row1 containing headers for first half (editable fields)
 			}
 			this.createFieldRow(stringBuffer, counter, specimen, elementNamePrefix, isTextRow); // row2 containing actual editable fields (first half)
+			stringBuffer.append("<input type='hidden' name='aliquot["+counter+"].lineage' value='"+specimen.getLineage()+"' id='aliquot["+counter+"].lineage'> ");
+			stringBuffer.append("<input type='hidden' name='aliquot["+counter+"].collectionStatus' value='"+specimen.getCollectionStatus()+"' id='aliquot["+counter+"].collectionStatus'> ");
+			stringBuffer.append("<input type='hidden' name='aliquot["+counter+"].parentId' value='"+specimen.getParentId()+"' id='aliquot["+counter+"].parentId'> ");
 		}
 		else
 		{
@@ -813,8 +816,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			this.createFieldRow(stringBuffer, counter, specimen, elementNamePrefix, isTextRow); // row2 containing actual editable fields (first half)
 			this.createHeaderRow2(stringBuffer); // row3 containing headers for second half (text fields)
 			this.createTextFieldRow(stringBuffer, counter, specimen, elementNamePrefix); // row containing text data (second half)
-			stringBuffer.append("<input type='hidden' name='specimen["+counter+"].lineage' value='"+specimen.getLineage()+"' id='specimen["+counter+"].lineage'> ");
-			stringBuffer.append("<input type='hidden' name='specimen["+counter+"].collectionStatus' value='"+specimen.getCollectionStatus()+"' id='specimen["+counter+"].collectionStatus'> ");
+			stringBuffer.append("<input type='hidden' name='"+elementNamePrefix+"lineage' value='"+specimen.getLineage()+"' id='"+elementNamePrefix+"lineage'> ");
+			stringBuffer.append("<input type='hidden' name='"+elementNamePrefix+"collectionStatus' value='"+specimen.getCollectionStatus()+"' id='"+elementNamePrefix+"collectionStatus'> ");
+			if("Derived".equals(specimen.getLineage()))
+			{
+				stringBuffer.append("<input type='hidden' name='"+elementNamePrefix+"parentId' value='"+specimen.getParentId()+"' id='"+elementNamePrefix+"parentId'> ");
+			}
 			stringBuffer.append("</TABLE>");
 			stringBuffer.append(TD_CLOSE);
 			stringBuffer.append(TR_CLOSE);
@@ -1446,6 +1453,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 				+ specimenClassName + "','" + specimenTypeName + "','"+ cpId + "')";
 		
 		String isDisabled = "";
+		String lineage=getValueBasedOnLineage(specimen.getLineage());
 
 					stringBuffer.append("<table style=\"font-size:1em\" size=\"100%\">");
 					/*stringBuffer.append(TR_OPEN);
@@ -1494,7 +1502,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		stringBuffer.append(TD_OPEN);
 		stringBuffer.append(
 				"<td width=\"55%\" align=\"left\" class=\"black_ar\">"
-				+"<input type=\"hidden\" name=\""+selectedContainerName+"\" id=\"selectedContainerName\" value=\"\"/>"
+				+"<input type=\"hidden\" class=\""+lineage+"\"name=\""+selectedContainerName+"\" id=\"selectedContainerName\" value=\"\"/>"
 				+"<div>"
 				+	"<table border=\"0\" width=\"29%\" id=\"outerTable2\" cellspacing=\"0\" cellpadding=\"0\">"
 				+	"	<tr>"
@@ -1831,5 +1839,26 @@ public class SpecimenDetailsNewFormat extends TagSupport
 	}
 
 	// ------------ Mandar : 2Dec08 New Code for new formatUI end----------------
+	
+	private String getValueBasedOnLineage(String lineage)
+	{
+		String value=null;
+		if(lineage!=null)
+		{
+			if(("New").equals(lineage))
+			{
+				value="specimen";
+			}
+			else if("Aliquot".equals(lineage))
+			{
+				value="aliquot";
+			}
+			else if("Derived".equals(lineage))
+			{
+				value="derived";
+			}
+		}
+		return value;
+	}
 
 }

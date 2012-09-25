@@ -378,6 +378,7 @@ public final class StorageContainerUtil
 			scGridObject.setAvailablePositions(availablePositions);
 		}
 		
+		AppUtility.closeDAOSession(dao);
 		//Step1: sql to get label schemes, dimensions labels,capacity id by joining type and container
 		//step : call getAvailablePositionsForContainer
 		//return object
