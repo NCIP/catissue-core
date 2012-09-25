@@ -69,7 +69,11 @@ public class BulkCartAction extends QueryShoppingCartAction
 			{	
 				this.removeSessionAttributes(session);
 				this.getOrderableEntityIds(searchForm, session, cart);
-			}	
+			}
+			else
+			{
+				session.setAttribute(Constants.SPECIMEN_ID, specimenIds);
+			}
 			target = Constants.REQUEST_TO_ORDER;
 		}
 		else if (Constants.BULK_TRANSFERS.equals(operation)
@@ -91,7 +95,14 @@ public class BulkCartAction extends QueryShoppingCartAction
 				|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT_REQUEST
 						.equals(operation))
 		{
-			target = this.createShipment(searchForm, session, operation);
+			if(specimenIds == null)
+			{
+				target = this.createShipment(searchForm, session, operation);
+			}
+			else
+			{
+				target = this.createShipment((LinkedList<String>)specimenIds, operation,session);
+			}
 		}
 		else if (Constants.REQUEST_TO_DISTRIBUTE.equals(operation))
 		{
@@ -140,6 +151,14 @@ public class BulkCartAction extends QueryShoppingCartAction
 		}
 	}
 
+	private String createShipment(LinkedList<String> specimenIds, String operation,HttpSession session)
+	{
+		final List<String> specimenLabels = new ArrayList<String>();
+		specimenLabels.addAll(specimenIds);
+		
+		session.setAttribute(Constants.SPECIMEN_LABELS_LIST, specimenLabels);
+		return operation;
+	}
 	/**
 	 * @param searchForm
 	 *            : searchForm
@@ -181,6 +200,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 	private void getMapDetailsForShipment(HttpSession session, Map<String, Set<String>> entityIdsMap)
 	{
 		final Set<String> specimenLabelsSet = entityIdsMap.get(Constants.SPECIMEN_NAME);
+		
 		final Set<String> containerNamesSet = entityIdsMap
 				.get(Constants.STORAGE_CONTAINER_CLASS_NAME);
 
@@ -456,7 +476,10 @@ public class BulkCartAction extends QueryShoppingCartAction
 		if("specimenListView".equals(pageOf))
 		{	
 		  if(Constants.BULK_TRANSFERS.equals(operation)
-					|| Constants.BULK_DISPOSALS.equals(operation)|| Constants.REQUEST_TO_DISTRIBUTE.equals(operation))
+					|| Constants.BULK_DISPOSALS.equals(operation)|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT
+					.equals(operation)
+					|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT_REQUEST
+							.equals(operation)||Constants.ADD_TO_ORDER_LIST.equals(operation))
 		  {	  
 			  	String specIds = searchForm.getOrderedString();
 				StringTokenizer tokenizer = new StringTokenizer(specIds,",");
@@ -490,7 +513,10 @@ public class BulkCartAction extends QueryShoppingCartAction
 					.getAttribute(Constants.QUERY_SHOPPING_CART);
 			final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
 			if (Constants.BULK_TRANSFERS.equals(operation)
-					|| Constants.BULK_DISPOSALS.equals(operation)) {
+					|| Constants.BULK_DISPOSALS.equals(operation)|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT
+					.equals(operation)
+					|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT_REQUEST
+							.equals(operation)) {
 				final LinkedList<String> specimenIds = new LinkedList<String>(bizLogic.getEntityIdsList(cart,
 						Arrays.asList(Constants.specimenNameArray), this.getCheckboxValues(searchForm)));
 				return specimenIds;
