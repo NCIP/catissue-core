@@ -290,12 +290,8 @@ public class PrintAction extends XSSSupportedAction
 
 				boolean printStauts = false;
 				final HttpSession session = request.getSession();
-				final QueryShoppingCart cart = (QueryShoppingCart) session
-				.getAttribute(Constants.QUERY_SHOPPING_CART);
-				final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-				final List<String> gridSspecimenIds = new LinkedList<String>
-				(bizLogic.getEntityIdsList(cart,
-				Arrays.asList(Constants.specimenNameArray), getGridValue(searchForm)));
+				
+				final List<String> gridSspecimenIds = (List<String>) session.getAttribute(Constants.SPECIMEN_ID);
 				final DAO dao = DAOConfigFactory.getInstance().getDAOFactory(
 						Constants.APPLICATION_NAME).getDAO();
 				try

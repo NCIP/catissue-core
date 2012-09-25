@@ -479,7 +479,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 					|| Constants.BULK_DISPOSALS.equals(operation)|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT
 					.equals(operation)
 					|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT_REQUEST
-							.equals(operation)||Constants.ADD_TO_ORDER_LIST.equals(operation))
+							.equals(operation)||Constants.ADD_TO_ORDER_LIST.equals(operation)||Constants.PRINT_LABELS.equals(operation))
 		  {	  
 			  	String specIds = searchForm.getOrderedString();
 				StringTokenizer tokenizer = new StringTokenizer(specIds,",");
@@ -516,7 +516,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 					|| Constants.BULK_DISPOSALS.equals(operation)|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT
 					.equals(operation)
 					|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT_REQUEST
-							.equals(operation)) {
+							.equals(operation)||Constants.PRINT_LABELS.equals(operation)) {
 				final LinkedList<String> specimenIds = new LinkedList<String>(bizLogic.getEntityIdsList(cart,
 						Arrays.asList(Constants.specimenNameArray), this.getCheckboxValues(searchForm)));
 				return specimenIds;
