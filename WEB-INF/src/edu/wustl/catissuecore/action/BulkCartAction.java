@@ -475,12 +475,18 @@ public class BulkCartAction extends QueryShoppingCartAction
 		Set<String> specimenIdSet = new LinkedHashSet<String>();
 		if("specimenListView".equals(pageOf))
 		{	
-		  if(Constants.BULK_TRANSFERS.equals(operation)
-					|| Constants.BULK_DISPOSALS.equals(operation)|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT
-					.equals(operation)
-					|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT_REQUEST
-							.equals(operation)||Constants.ADD_TO_ORDER_LIST.equals(operation)||Constants.PRINT_LABELS.equals(operation))
+		  if(Constants.EDIT_MULTIPLE_SPECIMEN.equals(operation))
 		  {	  
+			  String specIds = searchForm.getOrderedString();
+				StringTokenizer tokenizer = new StringTokenizer(specIds,",");
+				
+				while(tokenizer.hasMoreTokens())
+				{
+					specimenIdSet.add(tokenizer.nextToken());
+				}
+		  }	
+		  else
+		  {
 			  	String specIds = searchForm.getOrderedString();
 				StringTokenizer tokenizer = new StringTokenizer(specIds,",");
 				List<String> specimenIdList = new LinkedList<String>();
@@ -491,16 +497,6 @@ public class BulkCartAction extends QueryShoppingCartAction
 //				HttpSession session = request.getSession();
 //				session.setAttribute(Constants.SPECIMEN_ID, specimenIdList);
 				return specimenIdList;
-		  }	
-		  else
-		  {
-			  String specIds = searchForm.getOrderedString();
-				StringTokenizer tokenizer = new StringTokenizer(specIds,",");
-				
-				while(tokenizer.hasMoreTokens())
-				{
-					specimenIdSet.add(tokenizer.nextToken());
-				}
 		  }
 		}
 		else
@@ -512,21 +508,18 @@ public class BulkCartAction extends QueryShoppingCartAction
 			final QueryShoppingCart cart = (QueryShoppingCart) session
 					.getAttribute(Constants.QUERY_SHOPPING_CART);
 			final QueryShoppingCartBizLogic bizLogic = new QueryShoppingCartBizLogic();
-			if (Constants.BULK_TRANSFERS.equals(operation)
-					|| Constants.BULK_DISPOSALS.equals(operation)|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT
-					.equals(operation)
-					|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT_REQUEST
-							.equals(operation)||Constants.PRINT_LABELS.equals(operation)) {
-				final LinkedList<String> specimenIds = new LinkedList<String>(bizLogic.getEntityIdsList(cart,
-						Arrays.asList(Constants.specimenNameArray), this.getCheckboxValues(searchForm)));
-				return specimenIds;
+			if (Constants.EDIT_MULTIPLE_SPECIMEN.equals(operation)) {
+				
+				specimenIdSet = new LinkedHashSet<String>(bizLogic.getEntityIdsList(cart,
+								Arrays.asList(Constants.specimenNameArray),
+								this.getCheckboxValues(searchForm)));
 
 			} else {
 
-				specimenIdSet = new LinkedHashSet<String>(
-						bizLogic.getEntityIdsList(cart,
-								Arrays.asList(Constants.specimenNameArray),
-								this.getCheckboxValues(searchForm)));
+				final LinkedList<String> specimenIds = new LinkedList<String>(bizLogic.getEntityIdsList(cart,
+						Arrays.asList(Constants.specimenNameArray), this.getCheckboxValues(searchForm)));
+				return specimenIds;
+				
 			}
 									
 		}
