@@ -31,9 +31,18 @@
 	String pageOf=(String)request.getAttribute("pageOf");
 	String view=(String)request.getAttribute("view");
 	String helpURL=null;
-	if(null!=URLKey)
+	
+	if(null==URLKey)
+	{
+		helpURL=HelpXMLPropertyHandler.getValue("helpHomePage");
+	}
+	else
 	{
 		helpURL=HelpXMLPropertyHandler.getValue(URLKey);
+		if(helpURL==null)
+		{
+			helpURL=HelpXMLPropertyHandler.getValue("helpHomePage");
+		}
 	}
 	%>
 <!--Jitendra -->
@@ -170,7 +179,8 @@
 		function getHelpURL()
 		{
 			var URL;
-			<%if(null!=helpURL) 
+			<%
+			if(null!=helpURL) 
 			{
 				if(null==pageOf && null!=view && "cpBasedView".equals(view))
 				{%>

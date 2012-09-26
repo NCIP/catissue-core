@@ -157,4 +157,8 @@
 		<name>edu.wustl.catissuecore.actionForm.AdvanceSearchForm</name>
 		<value></value>
 	</property>
+	<property>
+		<name>helpHomePage</name>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/caTissue+Suite+1.2+User%27s+Guide</value>
+	</property>
 </properties>
