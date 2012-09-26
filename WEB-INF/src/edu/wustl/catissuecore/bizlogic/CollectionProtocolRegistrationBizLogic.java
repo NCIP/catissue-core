@@ -2266,4 +2266,22 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		}
 		return participantRegistrationBeanList;
 	}
+	
+	/**
+	 * @param sessionData
+	 * @param specimenid
+	 * @return
+	 * @throws ApplicationException
+	 * @throws DAOException
+	 */
+	public List<Object> getCPIdandPartId(final SessionDataBean sessionData,
+			String cprid) throws ApplicationException, DAOException {
+		final String hql1 = "select cpr.collectionProtocol.id,cpr.participant.id"
+				+ " from edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr where "
+				+ "cpr.id=" + cprid;
+		DAO dao = AppUtility.openDAOSession(sessionData);
+		List<Object> list = dao.executeQuery(hql1);
+		dao.closeSession();
+		return list;
+	}
 }

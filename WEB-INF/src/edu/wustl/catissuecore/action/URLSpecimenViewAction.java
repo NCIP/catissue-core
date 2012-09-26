@@ -64,6 +64,7 @@ public class URLSpecimenViewAction extends BaseAction
 							+ "specimen.id=" +specimenid;
 		DAO dao = AppUtility.openDAOSession(sessionData);
 				List<Object> list =dao.executeQuery(hql1);
+		dao.closeSession();
 		return list;
 	}
 

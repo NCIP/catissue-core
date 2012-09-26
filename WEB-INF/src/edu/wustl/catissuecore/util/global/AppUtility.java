@@ -920,6 +920,16 @@ public class AppUtility {
 						 hrefTag = "<a class='normalLink' href='"+link+"'"
 								+">" + obj + "</a>";
 						
+					}else if ("CollectionProtReg".equalsIgnoreCase(aliasName))
+					{
+					  link = "urlCPRView.do?"
+							  +edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER
+							  +"="
+							  + row.get(queryResultObjectData
+										.getIdentifierColumnId());
+					  hrefTag = "<a class='normalLink' href='"+link+"'"
+								+">" + obj + "</a>";
+					  
 					}
 					else
 					{ 
