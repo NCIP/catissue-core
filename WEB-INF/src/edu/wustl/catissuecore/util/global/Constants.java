@@ -5883,5 +5883,6 @@ public class Constants
 	 
 
 	 public static final String EMPI_ENABLED="empi.Enabled";
+	 public static final String HELP_HOME_PAGE="helpHomePage";
 
 }

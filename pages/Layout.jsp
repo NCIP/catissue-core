@@ -34,14 +34,14 @@
 	
 	if(null==URLKey)
 	{
-		helpURL=HelpXMLPropertyHandler.getValue("helpHomePage");
+		helpURL=HelpXMLPropertyHandler.getValue(Constants.HELP_HOME_PAGE);
 	}
 	else
 	{
 		helpURL=HelpXMLPropertyHandler.getValue(URLKey);
-		if(helpURL==null)
+		if(helpURL==null || "".equals(helpURL))
 		{
-			helpURL=HelpXMLPropertyHandler.getValue("helpHomePage");
+			helpURL=HelpXMLPropertyHandler.getValue(Constants.HELP_HOME_PAGE);
 		}
 	}
 	%>
