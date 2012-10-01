@@ -79,6 +79,11 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 
 		String target = Constants.SUCCESS;
 		String isSubmitRequest=request.getParameter("isSubmitRequest");
+		String IsToShowButton=request.getParameter("IsToShowButton");
+		if(IsToShowButton!=null)
+		{
+			request.setAttribute("IsToShowButton", IsToShowButton);
+		}
 		final ViewSpecimenSummaryForm summaryForm = (ViewSpecimenSummaryForm) form;
 		try
 		{

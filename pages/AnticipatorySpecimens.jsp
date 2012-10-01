@@ -500,9 +500,9 @@ function pageSubmit() {
 
 	}
 	function onParentRadioBtnClick() {
-		var url = 'GenericSpecimenSummary.do?isSubmitRequest=false';
+		var url = 'GenericSpecimenSummary.do?isSubmitRequest=false&IsToShowButton=true';
 <%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {%>
-			 url = 	'GenericSpecimenSummaryForSpecimen.do?pageOf=<%=Constants.CP_CHILD_SUBMIT%>&isSubmitRequest=false';
+			 url = 	'GenericSpecimenSummaryForSpecimen.do?pageOf=<%=Constants.CP_CHILD_SUBMIT%>&isSubmitRequest=false&IsToShowButton=true';
 			<%}%>
 			document.forms[0].action =url;
 			document.forms[0].submit();
@@ -710,11 +710,6 @@ function showHideStorageContainerGrid(e,gridDivId, dropDownId,scGridVisible,cont
 		 {	
 			showGrid(containerDropDownInfo['gridDiv'],containerDropDownInfo['dropDownId']);
 			containerDropDownInfo['visibilityStatusVariable'] = true;
-			var containerName=document.getElementById(containerDropDownInfo['dropDownId']);
-			if(null== containerName)
-			{
-				containerName="";
-			}
 			scGrid.load(containerDropDownInfo['actionToDo'],"");
 			//scGrid.clearAndLoad(containerDropDownInfo['actionToDo']+"&containerName="+document.getElementById(containerDropDownInfo['dropDownId']).value, containerDropDownInfo['callBackAction']);
 		 }

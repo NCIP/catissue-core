@@ -13,10 +13,10 @@ function initDropDownGrid(gridDropDownInfo)
 		gridObj.setColAlign("left");
 		gridObj.setColSorting("server");
 		gridObj.setSkin("drop");
-		gridObj.enablePaging(true, 500, 0, gridDropDownInfo['pagingArea'], true, gridDropDownInfo['infoArea']);
-		gridObj.setPagingSkin("modern");
-		gridObj.enableAutoHeigth(true,100,false); 
-		
+		gridObj.enablePaging(true, 6, 0, gridDropDownInfo['pagingArea'], true, gridDropDownInfo['infoArea']);
+		gridObj.setPagingSkin("bricks");
+		gridObj.enableAutoHeigth(true,100,false);
+		 
 		gridObj.enableRowsHover(true, "gridHover");
 		gridObj.enableMultiline(true);
 		gridObj.init();
@@ -96,8 +96,14 @@ function autoCompleteControl(event,gridDropDownInfo,gridObj)
 				gridDropDownInfo['visibilityStatusVariable'] = true;
 			}
 		}
-		//gridObj.loadXML(gridDropDownInfo['actionToDo']+"&containerName="+document.getElementById(gridDropDownInfo['dropDownId']).value,gridDropDownInfo['callBackAction']);
-		gridObj.clearAndLoad(gridDropDownInfo['actionToDo']+"&containerName="+document.getElementById(gridDropDownInfo['dropDownId']).value, gridDropDownInfo['callBackAction']);
+		if(event.keyCode==40 || event.keyCode==38)
+		{
+			gridObj.loadXML(gridDropDownInfo['actionToDo']+"&containerName="+document.getElementById(gridDropDownInfo['dropDownId']).value,gridDropDownInfo['callBackAction']);
+		}
+		else
+		{
+			gridObj.clearAndLoad(gridDropDownInfo['actionToDo']+"&containerName="+document.getElementById(gridDropDownInfo['dropDownId']).value, gridDropDownInfo['callBackAction']);
+		}
 		//gridObj.filterBy(0,document.getElementById(gridDropDownInfo['dropDownId']).value);
 	}	
 }
