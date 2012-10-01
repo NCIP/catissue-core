@@ -961,7 +961,7 @@ public final class StorageContainerUtil
 			NameValueBean nvb = (NameValueBean) itr.next();
 			startingPoints[0] = nvb.getValue();
 
-			final Map map1 = (Map) containerMap.get(nvb.getName());
+			final Map map1 = (Map) containerMap.get(nvb);
 			keySet = map1.keySet();
 			itr = keySet.iterator();
 			nvb = (NameValueBean) itr.next();
@@ -1299,7 +1299,7 @@ public final class StorageContainerUtil
 						}
 					}
 					NameValueBean nvBean = new NameValueBean(parentContainerName,Long.valueOf( containerId ),relevanceCnt);
-					/*Map<NameValueBean, List> positionMap = containerMap.get(nvBean);
+					Map<NameValueBean, List> positionMap = containerMap.get(nvBean);
 					if (positionMap == null)
 					{
 						positionMap = new TreeMap<NameValueBean, List>();
@@ -1312,7 +1312,6 @@ public final class StorageContainerUtil
 					list.add(0,new NameValueBean(yPos, yPos));
 					positionMap.put(new NameValueBean(xPos, xPos), list);
 					containerMap.put(new NameValueBean(parentContainerName, Long.valueOf( containerId ),relevanceCnt), positionMap);
-*/
 				}
 			}
 			catch (final DAOException e)
