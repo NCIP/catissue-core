@@ -257,11 +257,13 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 				this.fromPositionDimensionTwo = "";
 				this.fromPosition = "Virtual Location";
 			}
+			if (transferEventParametersObject.getToStorageContainer() != null)
+			{
 			this.selectedContainerName = transferEventParametersObject.getToStorageContainer()
 					.getName();
 			
-			this.positionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,1,transferEventParametersObject.getToPositionDimensionOne());
-			this.positionDimensionTwo =StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,2,transferEventParametersObject.getToPositionDimensionTwo());
+			this.pos1 = StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,1,transferEventParametersObject.getToPositionDimensionOne());
+			this.pos2 =StorageContainerUtil.convertSpecimenPositionsToString(selectedContainerName,2,transferEventParametersObject.getToPositionDimensionTwo());
 			this.storageContainer = transferEventParametersObject.getToStorageContainer().getName();
 
 			
@@ -270,9 +272,17 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 					+ " : "
 					//+ this.storageContainer
 					+ " Pos("
-					+ this.positionDimensionOne
+					+ this.pos1
 					+ ","
-					+ this.positionDimensionTwo + ")";
+					+ this.pos2 + ")";
+			}
+			else
+			{
+				this.storageContainer = "-1";
+				this.pos1 = "";
+				this.pos2 = "";
+				this.selectedContainerName = "Virtual Location";
+			}
 			if(transferEventParametersObject.getFromStorageContainer() != null)
 			{
 				this.fromPosition = transferEventParametersObject.getFromStorageContainer().getName()

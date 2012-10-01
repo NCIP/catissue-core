@@ -153,7 +153,7 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 					.getAttribute(Constants.SESSION_DATA);
 			DAO dao = AppUtility.openDAOSession(sessionData);
 			long cpId=0;
-			if(!"".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL)))
+			if(!"".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL)) && !"null".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL)))
 			{
 				cpId=Long.parseLong(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL));
 			}
@@ -173,11 +173,18 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		NameValueBean virtualBean = new NameValueBean("Virtual",Long.valueOf(-1));
 		//containerList.remove(containerList.indexOf(selectBean));
 		responseString.append(Constants.XML_ROWS);
-		for (NameValueBean nvb : containerList)
+		String tranferEventId=(String)request.getParameter("transferEventParametersId");
+		if(tranferEventId==null || "0".equals(tranferEventId))
 		{
-			responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()),null, nvb.getName()));
+			for (NameValueBean nvb : containerList)
+				{
+					responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()),null, nvb.getName()));
+				}
 		}
-		responseString.append(this.addRowToResponseXML(Long.valueOf(virtualBean.getValue()),null, virtualBean.getName()));
+		if(!"true".equals(request.getParameter("isTransferEvent")))
+		{
+			responseString.append(this.addRowToResponseXML(Long.valueOf(virtualBean.getValue()),null, virtualBean.getName()));
+		}
 		responseString.append(Constants.XML_ROWS_END);
 		response.setContentType(Constants.CONTENT_TYPE_XML);
 		response.getWriter().write(responseString.toString());

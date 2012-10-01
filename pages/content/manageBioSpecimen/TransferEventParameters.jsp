@@ -44,6 +44,7 @@
 <script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
 <script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
 <script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
+<script language="JavaScript" type="text/javascript"	src="javascripts/de/jquery-1.3.2.js"></script>
 <LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
@@ -70,6 +71,7 @@ String pos2=containerValues[2];
 String className=(String)request.getAttribute(Constants.CLASS_NAME);
 String sptype=(String)request.getAttribute(Constants.TYPE);
 String collectionProtocolId=(String)request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
+Long transferEventParametersId=(Long)request.getAttribute("transferEventParametersId");
 %>
 <script language="JavaScript">
 
@@ -149,6 +151,8 @@ function containerOnRowSelect(id,ind)
 	document.getElementById(containerDropDownInfo['dropDownId']).value = scGrid.cellById(id,ind).getValue();
 	hideGrid(containerDropDownInfo['gridDiv']);
 	scGridVisible = false;
+	document.getElementById("pos1").value="";
+	document.getElementById("pos2").value="";
 }
 
 
@@ -203,7 +207,7 @@ var className="<%=className%>";
 var sptype="<%=sptype%>";
 var collectionProtocolId="<%=collectionProtocolId%>";
 var containerName=document.getElementById("storageContainerDropDown").value;
-var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
+var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&isTransferEvent=true&transferEventParametersId=<%=transferEventParametersId%>&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
 +className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId;
 
 
@@ -213,13 +217,24 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 	scGrid = initDropDownGrid(containerDropDownInfo,5,0); 
 }
 
+function makeContainerGridReadonly() 
+{
+	$('#scDropDownIddiv :input').attr('readonly', 'readonly');
+	$('#scDropDownIddiv :img').attr('readonly', 'readonly');
+	$('#pos1').attr('readonly', 'readonly');
+	$('#pos2').attr('readonly', 'readonly');
+}
+
 function setContainerValues()
 {
 <%if(!"".equalsIgnoreCase(containerName)) {%>
 	document.getElementById(containerDropDownInfo['dropDownId']).value='<%=containerName%>';
 	document.getElementById("pos1").value='<%=pos1%>';
 	document.getElementById("pos2").value='<%=pos2%>';
-<%}%>	
+<%if(!transferEventParametersId.equals(0L)){%>
+	makeContainerGridReadonly();
+	document.getElementById("mapButton").style.visibility='hidden';
+<%}}%>	
 }
 function updateStorageContainerValue()
 	{
@@ -384,7 +399,7 @@ function updateStorageContainerValue()
 								<html:text styleClass="black_ar"  size="2" styleId="pos2" property="pos2" disabled= "false" style="display:block"/>
 							</td>
 							<td class="groupelements">
-								<html:button styleClass="black_ar" property="containerMap" onclick="showPopUp()">
+								<html:button styleClass="black_ar" property="containerMap" styleId="mapButton" onclick="showPopUp()">
 											<bean:message key="buttons.map"/>
 								</html:button>
 							</td>

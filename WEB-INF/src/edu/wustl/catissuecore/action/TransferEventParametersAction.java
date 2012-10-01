@@ -230,9 +230,9 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 				}*/
 				final String pos1 = new String(transferEventParametersForm
-						.getPositionDimensionOne());
+						.getPos1());
 				final String pos2 = new String(transferEventParametersForm
-						.getPositionDimensionTwo());
+						.getPos2());
 
 				/*final List pos2List = new ArrayList();
 				pos2List.add(new NameValueBean(pos2, pos2));
@@ -248,15 +248,15 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 					startingPoints[0] = transferEventParametersForm.getStorageContainer();
 
 				}
-				if (transferEventParametersForm.getPositionDimensionOne() != null
-						&& !transferEventParametersForm.getPositionDimensionOne().equals("-1"))
+				if (transferEventParametersForm.getPos1() != null
+						&& !transferEventParametersForm.getPos1().equals("-1"))
 				{
-					startingPoints[1] = transferEventParametersForm.getPositionDimensionOne();
+					startingPoints[1] = transferEventParametersForm.getPos1();
 				}
-				if (transferEventParametersForm.getPositionDimensionTwo() != null
-						&& !transferEventParametersForm.getPositionDimensionTwo().equals("-1"))
+				if (transferEventParametersForm.getPos2() != null
+						&& !transferEventParametersForm.getPos2().equals("-1"))
 				{
-					startingPoints[2] = transferEventParametersForm.getPositionDimensionTwo();
+					startingPoints[2] = transferEventParametersForm.getPos1();
 				}
 				initialValues = new ArrayList();
 				this.logger.info("Starting points[0]" + startingPoints[0]);
@@ -357,6 +357,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		{
 			dropDownDisable = true;
 		}
+		request.setAttribute("transferEventParametersId",transferEventParametersForm.getId());
 		request.setAttribute("dropDownDisable", dropDownDisable);
 		request.setAttribute("textBoxDisable", textBoxDisable);
 	}

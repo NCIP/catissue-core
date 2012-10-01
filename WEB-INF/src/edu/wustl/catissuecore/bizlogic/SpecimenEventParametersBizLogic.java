@@ -60,6 +60,7 @@ import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.condition.NotEqualClause;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.security.exception.UserNotAuthorizedException;
 
 /**
  * @author mandar_deshmukh
@@ -122,7 +123,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean - SessionDataBean object
 	 * @param newSpecimenBizLogic - NewSpecimenBizLogic object
 	 * @param specimenIds - List of specimenIds
-	 * @throws BizLogicException throws BizLogicException
+	 * @throws BizLogicException 
+	 * @throws ApplicationException 
 	 */
 	private void insertEvent(Object obj, DAO dao, SessionDataBean sessionDataBean,
 			NewSpecimenBizLogic newSpecimenBizLogic, List specimenIds) throws BizLogicException
@@ -207,6 +209,23 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 								.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
 						final String contId = storageContainerObj.getId().toString();
+						if(0==transferEvent.getToPositionDimensionOne() || 0==transferEvent.getToPositionDimensionTwo())
+						{
+							Position position;
+							try
+							{
+								position = StorageContainerUtil.getFirstAvailablePositionsInContainer(storageContainerObj, storageContainerIds, dao,  transferEvent.getToPositionDimensionOne(), transferEvent.getToPositionDimensionTwo());
+								transferEvent.setToPositionDimensionOne(position.getXPos());
+								transferEvent.setToPositionDimensionTwo(position.getYPos());
+							}
+							catch (ApplicationException e)
+							{
+								this.LOGGER.error(e.getMessage(), e);
+								throw this
+										.getBizLogicException(e, e.getErrorKeyName(), e.getMsgValues());
+							}
+							
+						}
 						final String posOne = transferEvent.getToPositionDimensionOne()
 								.toString();
 						final String posTwo = transferEvent.getToPositionDimensionTwo()
