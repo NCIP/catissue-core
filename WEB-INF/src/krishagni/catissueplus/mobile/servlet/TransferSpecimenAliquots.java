@@ -44,24 +44,29 @@ public class TransferSpecimenAliquots  extends HttpServlet {
 		JSONObject returnedJObject= new JSONObject();
 		String msg;
 		String successString;
-
+		
 		try{
 			final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
 					Constants.SESSION_DATA);
+			if(sessionData != null){
 			
-			SpecimenEventParametersBizLogic bizLogic = new SpecimenEventParametersBizLogic();
-			int pos1 = Integer.parseInt(request.getParameter("positionX"));
-			int pos2 = Integer.parseInt(request.getParameter("positionY"));
-			String specimenLabel = request.getParameter("specimenLable");
-			String containerName = request.getParameter("containerName");
-			
-			msg = bizLogic.specimenEventTransferFromMobile(sessionData,specimenLabel,containerName,pos1,pos2);
-			successString = "success";
+				SpecimenEventParametersBizLogic bizLogic = new SpecimenEventParametersBizLogic();
+				String pos1 = request.getParameter("positionX");
+				String pos2 = request.getParameter("positionY");
+				String specimenLabel = request.getParameter("specimenLable");
+				String containerName = request.getParameter("containerName");
+				
+				msg = bizLogic.specimenEventTransferFromMobile(sessionData,specimenLabel,containerName,pos1,pos2);
+				successString = "success";
+			}else{
+				msg = "";
+				successString = "logout";
+			}
 		}catch(BizLogicException ex){
-			msg = ex.getErrorKey().getErrorMessage();
+			msg = ex.getMsgValues();
 			successString = "failure";
 		}catch(DAOException ex){
-			msg = ex.getErrorKey().getErrorMessage();
+			msg = ex.getMsgValues();
 			successString = "failure";
 		}
 		

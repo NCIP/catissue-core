@@ -38,24 +38,43 @@ public class CreateAliquot  extends HttpServlet  {
 
 
 		JSONObject returnedJObject= new JSONObject();
+		String msg = "";
 		try{
 			final SessionDataBean sessionDataBean = (SessionDataBean) request.getSession().getAttribute(
 					Constants.SESSION_DATA);
-			AliquotsDetailsDTO aliquotDetailObj = getAliqoutDetail(request);
-			AliquotBizLogic bizLogic = new AliquotBizLogic();
-			if(aliquotDetailObj.isBasedOnCP()){
-				bizLogic.createAliquotSpecimenBasedOnCp(aliquotDetailObj, sessionDataBean);
-			} else {
-				bizLogic.createAliquotSpecimen(aliquotDetailObj,sessionDataBean);
+			if(sessionDataBean != null){
+				
+	
+				AliquotsDetailsDTO aliquotDetailObj = getAliqoutDetail(request);
+				AliquotBizLogic bizLogic = new AliquotBizLogic();
+				returnedJObject.put("success", "false");
+				if(aliquotDetailObj.isBasedOnCP()){
+					bizLogic.createAliquotSpecimenBasedOnCp(aliquotDetailObj, sessionDataBean);
+				} else {
+					bizLogic.createAliquotSpecimen(aliquotDetailObj,sessionDataBean);
+				}
+				returnedJObject.put("success", "true");
+			}else{
+				msg = "";
+				returnedJObject.put("success", "logout");
 			}
-			returnedJObject.put("success", "true");
 			
-		}catch(ApplicationException e){
-			e.getMsgValues();
+		}catch(BizLogicException e){
+			msg = e.getMsgValues();
+		} catch(ApplicationException e){
+			msg = e.getMsgValues();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+		}
+		
+		try {
+			returnedJObject.put("msg", msg);
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		response.setContentType("application/json");
     	
 		response.getWriter().write(returnedJObject.toString());

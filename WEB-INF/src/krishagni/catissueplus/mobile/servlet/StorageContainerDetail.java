@@ -14,6 +14,8 @@ import edu.wustl.catissuecore.storage.StorageContainerGridObject;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import krishagni.catissueplus.mobile.dto.StoragePositionDTO;
@@ -34,11 +36,15 @@ public class StorageContainerDetail  extends HttpServlet {
 	{
 	
 		JSONObject returnedJObject= new JSONObject();
+		String msg = "";
 		
 		try{
+			returnedJObject.put("success", "false");
+			final edu.wustl.common.beans.SessionDataBean sessionData = (edu.wustl.common.beans.SessionDataBean) request.getSession().getAttribute(
+					Constants.SESSION_DATA);
+			if(sessionData != null){
+				
 			if(request.getParameter("containerName")!=null){
-				final edu.wustl.common.beans.SessionDataBean sessionData = (edu.wustl.common.beans.SessionDataBean) request.getSession().getAttribute(
-				Constants.SESSION_DATA);
 				edu.wustl.dao.DAO dao = edu.wustl.catissuecore.util.global.AppUtility.openDAOSession(sessionData);
 				edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic bizLogic = new edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic();
 				String containerName = request.getParameter("containerName");
@@ -49,7 +55,6 @@ public class StorageContainerDetail  extends HttpServlet {
 				String twoDimensionLabellingScheme=(String) scGridObject.getTwoDimensionLabellingScheme();
 				
 			
-				returnedJObject.put("success", "false");
 				JSONArray array = new JSONArray();
 				JSONObject dimensionOne = new JSONObject();
 				JSONObject dimensionTwo = new JSONObject();
@@ -96,12 +101,26 @@ public class StorageContainerDetail  extends HttpServlet {
 				returnedJObject.put("containerType",scGridObject.getType());
 				
 				returnedJObject.put("containerMap",array.toString());
+			}else{
+				msg = "";
+				returnedJObject.put("success", "logout");
+				
+			}
 				
 			}
 			
 			//response.getWriter().flush();
 		}catch(Exception e){
+			msg = "Please Check Container Name or Barcode.";
 			System.out.println("");
+		}
+		
+		try {
+			returnedJObject.put("msg", msg);
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		response.setContentType("application/json");

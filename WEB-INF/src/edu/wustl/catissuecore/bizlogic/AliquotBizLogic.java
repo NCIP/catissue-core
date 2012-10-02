@@ -696,11 +696,12 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean
 	 * @throws ApplicationException 
 	 */
-	public void createAliquotSpecimen(AliquotsDetailsDTO aliquotDetailObj, SessionDataBean sessionDataBean) throws ApplicationException{
+	public void createAliquotSpecimen(AliquotsDetailsDTO aliquotDetailObj, SessionDataBean sessionDataBean) throws BizLogicException,ApplicationException{
 		Specimen parentSpecimen = new Specimen();
 		parentSpecimen.setLabel(aliquotDetailObj.getParentSpecimenLabel());
 		NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
 		DAO dao = AppUtility.openDAOSession(sessionDataBean);
+		String msg = "";
 		
 		try{
 			specimenBizLogic.isAuthorized(dao, parentSpecimen, sessionDataBean);
@@ -730,10 +731,10 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			}
 			
 		}catch(ApplicationException exp){
-			throw new BizLogicException(null, exp, exp.getMsgValues());
+			throw new BizLogicException(exp.getErrorKey(), exp, exp.getMsgValues());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new BizLogicException(null, null, "Specimen or Container does not exist");
 		}
 		finally{
 			dao.closeSession();
@@ -811,7 +812,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			dao.commit();
 			
 		}catch(ApplicationException exp){
-			throw new BizLogicException(null, exp, exp.getMsgValues());
+			throw new BizLogicException(exp.getErrorKey(), exp, exp.getErrorKey().getErrorMessage());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

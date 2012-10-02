@@ -41,19 +41,25 @@ public class CatissueMobileAppCommonServlet  extends HttpServlet {
 		JSONObject returnedJObject= new JSONObject();
 		JSONArray returnedJObjectArray = new JSONArray();
 		
+		String successString="";
 		try{
 			final SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(
 					Constants.SESSION_DATA);
-			
-			StorageContainerBizLogic bizLogic = new StorageContainerBizLogic();
-			Map<Long,String> map = bizLogic.getStorageContainers();
-			final Iterator<Long> iterator = map.keySet().iterator();
-			while(iterator.hasNext()){
-				JSONObject tempObj= new JSONObject();
-				Long key = iterator.next();
-				tempObj.put("value",key);
-				tempObj.put("label",map.get(key));
-				returnedJObjectArray.put(tempObj);
+			if(sessionData != null){
+				
+				StorageContainerBizLogic bizLogic = new StorageContainerBizLogic();
+				Map<Long,String> map = bizLogic.getStorageContainers();
+				final Iterator<Long> iterator = map.keySet().iterator();
+				while(iterator.hasNext()){
+					JSONObject tempObj= new JSONObject();
+					Long key = iterator.next();
+					tempObj.put("value",key);
+					tempObj.put("label",map.get(key));
+					returnedJObjectArray.put(tempObj);
+				}
+				successString = "success";
+			}else{
+				successString = "logout";
 			}
 			
 		}catch(BizLogicException ex){
@@ -65,6 +71,12 @@ public class CatissueMobileAppCommonServlet  extends HttpServlet {
 			
 		}
 		
+		try {
+			returnedJObject.put("success", successString);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 		response.setContentType("application/json");
 		response.getWriter().write(returnedJObjectArray.toString());

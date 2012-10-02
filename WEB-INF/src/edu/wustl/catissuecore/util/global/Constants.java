@@ -5876,11 +5876,14 @@ public class Constants
 	 
 	 //Error message String For Mobile
 	 
-	 public static final String INVALID_ALIQUOT_QUANTITY = "Invalid Aliquot Quantity";
+	 public static final String INVALID_ALIQUOT_QUANTITY = "Invalid aliquot quantity.";
 	 public static final String INSUFFICIENT_AVAILABLE_QUANTITY = "The system cannot distribute available quantity among the aliquots due to insufficient amount. ";
-	 public static final String INSUFFICIEN_STORAGE_LOCATION = "The system cannot store all the aliquots in the same container at this time due to insufficient number of storage locations.";
-	 public static final String SUCCESS_MSG_ALIQUOT_CREATION = "Aliquots created successfully";
-	 
+	 public static final String INSUFFICIEN_STORAGE_LOCATION = "The system cannot store all the aliquots in the same container due to insufficient number of storage locations.";
+	 public static final String SUCCESS_MSG_ALIQUOT_CREATION = "Aliquots created successfully.";
+	 public static final String INVALID_LABEL_BARCODE = "Invalid specimen label or barcode.";
+	 public static final String INVALID_CONTAINER_NAME = "Invalid container name or barcode.";
+	 public static final String NO_PERMISSION_TRANSFER_SPECIMEN= "You do not have permission to transfered specimen.";
+	 public static final String TRANSFERED_SUCCESSFUL = "Specimen transfered successfully.";
 
 	 public static final String EMPI_ENABLED="empi.Enabled";
 	 public static final String HELP_HOME_PAGE="helpHomePage";

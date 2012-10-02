@@ -5812,7 +5812,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			queryWhereClause.addCondition(new EqualClause(column, label));
 			List list = dao.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
 			Map<String,String> map = new HashMap<String,String>();
-			Specimen specimen = new Specimen();
+			Specimen specimen = null;
 			if (!list.isEmpty())
 			{
 				if (Status.ACTIVITY_STATUS_DISABLED.toString().equals(((Object[]) list.get(0))[0]))

@@ -1419,7 +1419,7 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 
 	}
 	
-	public String specimenEventTransferFromMobile(SessionDataBean sessionDataBean,String specimenLabel,String containerName,int pos1,int pos2) throws BizLogicException, DAOException{
+	public String specimenEventTransferFromMobile(SessionDataBean sessionDataBean,String specimenLabel,String containerName,String pos1,String pos2) throws BizLogicException, DAOException{
 		DAO dao = null;
 		String msg = "";
 		try{
@@ -1431,38 +1431,60 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			queryWhereClause.addCondition(new EqualClause(column, containerName));
 			List<StorageContainer> storageContainerList =  dao.retrieve(sourceObjectName, column, containerName);
 			List<Specimen> specimenList =  dao.retrieve(Specimen.class.getName(), "label", specimenLabel);
-			if(specimenList!=null && !specimenList.isEmpty() && storageContainerList!=null && !storageContainerList.isEmpty()){
-				Specimen specimen = specimenList.get(0);
-				TransferEventParameters transferEventParameters = new TransferEventParameters();
-				if(specimen.getSpecimenPosition()!=null){
-					transferEventParameters.setFromPositionDimensionOne(specimen.getSpecimenPosition().getPositionDimensionOne());
-					transferEventParameters.setFromPositionDimensionTwo(specimen.getSpecimenPosition().getPositionDimensionTwo());
-					transferEventParameters.setFromStorageContainer(specimen.getSpecimenPosition().getStorageContainer());
-				}
-				transferEventParameters.setSpecimen(specimen);
-				transferEventParameters.setToPositionDimensionOne(pos1);
-				transferEventParameters.setToPositionDimensionTwo(pos2);
-				transferEventParameters.setToStorageContainer(storageContainerList.get(0));
-				User user = new User();
-				user.setId(sessionDataBean.getUserId());
-				transferEventParameters.setUser(user);
-				if(isAuthorized(dao,transferEventParameters,sessionDataBean)){
-					boolean validate = validateSingleTransferEvent(transferEventParameters,dao,"add",pos1,pos2);
-					if(validate){
-						insert(transferEventParameters, dao,  sessionDataBean);
-						dao.commit();
-						msg = "Specimen transfered successfully.";
-					}
-				}else{
-					msg = "You do not have permission to transfered specimen.";
-				}
+			if(specimenList == null || specimenList.isEmpty()){
+				throw new BizLogicException(null, null, Constants.INVALID_LABEL_BARCODE);
+			}
+			if(storageContainerList == null || storageContainerList.isEmpty())
+			{
+				throw new BizLogicException(null, null, Constants.INVALID_CONTAINER_NAME);
+			}
+			Specimen specimen = specimenList.get(0);
+			TransferEventParameters transferEventParameters = new TransferEventParameters();
+			if(specimen.getSpecimenPosition()!=null){
+				transferEventParameters.setFromPositionDimensionOne(specimen.getSpecimenPosition().getPositionDimensionOne());
+				transferEventParameters.setFromPositionDimensionTwo(specimen.getSpecimenPosition().getPositionDimensionTwo());
+				transferEventParameters.setFromStorageContainer(specimen.getSpecimenPosition().getStorageContainer());
+			}
+			List labellingList=StorageContainerUtil.getLabellingSchemeByContainerId(String.valueOf(storageContainerList.get(0).getId()));
+			String oneDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(0);
+			String twoDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(1);
+			Integer pos1Integer;
+			Integer pos2Integer;
+			if( "".equals(pos1) || "".equals(pos2) || pos1 == null || pos2 == null){
+				StorageContainerForSpecimenBizLogic scfsBiz = new StorageContainerForSpecimenBizLogic();
+				List<SpecimenPosition> list = scfsBiz.getAvailablePositionFromContainerForSpecimen(storageContainerList.get(0).getName(),"","",1,dao);
+				pos1Integer = list.get(0).getPositionDimensionOne();
+				pos2Integer = list.get(0).getPositionDimensionTwo();
 			}else{
-				msg = "Specimen or Container does not exist";
+				pos1Integer =  AppUtility.getPositionValueInInteger(oneDimensionLabellingScheme, pos1);
+				pos2Integer = AppUtility.getPositionValueInInteger(twoDimensionLabellingScheme, pos2);
 			}
 			
+			transferEventParameters.setSpecimen(specimen);
+			transferEventParameters.setToPositionDimensionOne(pos1Integer);
+			transferEventParameters.setToPositionDimensionTwo(pos2Integer);
+			transferEventParameters.setToStorageContainer(storageContainerList.get(0));
+			User user = new User();
+			user.setId(sessionDataBean.getUserId());
+			transferEventParameters.setUser(user);
+			if(isAuthorized(dao,transferEventParameters,sessionDataBean)){
+				boolean validate = validateSingleTransferEvent(transferEventParameters,dao,"add",pos1Integer,pos2Integer);
+				if(validate){
+					insert(transferEventParameters, dao,  sessionDataBean);
+					dao.commit();
+					msg = Constants.TRANSFERED_SUCCESSFUL;
+				}
+			}else{
+				throw new BizLogicException(null, null, Constants.NO_PERMISSION_TRANSFER_SPECIMEN);
+				
+			}
+		
+				
+			
+			
 		}catch (final ApplicationException exp){
-			final ErrorKey errorKey = ErrorKey.getErrorKey(exp.getErrorKeyName());
-			throw new BizLogicException(errorKey, exp, exp.getMsgValues());
+			String msgString = exp.getErrorKey()!=null ? exp.getErrorKey().getErrorMessage() :  exp.getMsgValues();
+			throw new BizLogicException(exp.getErrorKey(), exp, msgString);
 		}
 		finally {
 	        if(dao!=null){
@@ -1470,8 +1492,5 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 	        }
 	    }
 		return msg;
-
-		
-
 	}
 }
