@@ -58,13 +58,23 @@ public class URLSpecimenViewAction extends BaseAction
 	 */
 	private List<Object> getSpecimenInfo(final SessionDataBean sessionData,
 			String specimenid) throws ApplicationException, DAOException {
+		
 		final String hql1 = "select specimen.specimenCollectionGroup.collectionProtocolRegistration."
 							+ "collectionProtocol.id,specimen.specimenCollectionGroup.collectionProtocolRegistration.participant.id"
 							+ " from edu.wustl.catissuecore.domain.Specimen as specimen where "
 							+ "specimen.id=" +specimenid;
-		DAO dao = AppUtility.openDAOSession(sessionData);
-				List<Object> list =dao.executeQuery(hql1);
-		dao.closeSession();
+		 DAO dao = null;
+		 List<Object> list = null;
+		 
+		try
+		{
+		 dao = AppUtility.openDAOSession(sessionData);
+		 list =dao.executeQuery(hql1);
+		}
+		finally
+		{
+		 dao.closeSession();
+		}
 		return list;
 	}
 

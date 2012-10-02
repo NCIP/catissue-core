@@ -26,7 +26,11 @@ public class SCGAction extends BaseAction
     protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        String scgId = request.getParameter(CDMSIntegrationConstants.SCGID);
+        String objectToEdit= request.getParameter("objectAliasName");
+//    	if("SCG".equalsIgnoreCase(objectToEdit))
+//    	{
+    		
+       	String scgId = request.getParameter(CDMSIntegrationConstants.SCGID);
         final SessionDataBean sessionData=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
 
         String scgOperation =CDMSIntegrationConstants.ADD;

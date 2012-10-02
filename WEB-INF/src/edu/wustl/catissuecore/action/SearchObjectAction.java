@@ -47,48 +47,29 @@ public class SearchObjectAction extends XSSSupportedAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final Long identifier = Long.valueOf(request.getParameter(Constants.SYSTEM_IDENTIFIER));
+		StringBuffer urlParam = new StringBuffer();
 		request.setAttribute(Constants.SYSTEM_IDENTIFIER, identifier);
 
 		final String pageOf = request.getParameter(Constants.PAGE_OF);
-		if(!"pageOfNewSpecimen".equalsIgnoreCase(pageOf) && !"pageOfSpecimenCollectionGroup".equalsIgnoreCase(pageOf))
+		ActionForward actionforward = mapping.findForward(pageOf);
+		if(!"pageOfNewSpecimen".equalsIgnoreCase(pageOf) && !"pageOfSpecimenCollectionGroup".equalsIgnoreCase(pageOf) && !"pageOfCollectionProtocolRegistration".equalsIgnoreCase(pageOf))
 		{	
 		 request.setAttribute(Constants.PAGE_OF, pageOf);
 		}
-		ActionForward actionforward = this.getActionForward(pageOf,mapping,identifier);
-		
-		
+		else
+		{
+			urlParam.append("?").append(Constants.SYSTEM_IDENTIFIER).append(Constants.EQUALS).append(identifier).append("&").append(Constants.PAGE_OF).append(Constants.EQUALS).
+			append(pageOf);
+			 final ActionForward newActionForward = new ActionForward();
+		     newActionForward.setName(actionforward.getName());
+		     newActionForward.setRedirect(false);
+		     newActionForward.setContextRelative(false);
+		     newActionForward.setPath(actionforward.getPath()+urlParam.toString());
+		     actionforward = newActionForward;
+		}
+				
 		Logger.out.debug("identifier:" + identifier + " PAGEOF:" + pageOf);
 		return actionforward; 
 	}
 
-	private ActionForward getActionForward(String pageOf,ActionMapping mapping,Long id) {
-		
-		ActionForward actionForward = new ActionForward();
-		String path;
-		
-		if("pageOfNewSpecimen".equalsIgnoreCase(pageOf))
-		{
-			path = "/urlSpecimenView.do?"
-					+"identifier="
-					+id;
-			actionForward.setName(pageOf);
-			actionForward.setPath(path);
-		}
-		else if("pageOfSpecimenCollectionGroup".equalsIgnoreCase(pageOf))
-		{
-			path = "/GotoSCG.do?"
-					+CDMSIntegrationConstants.SCGID+"="
-					+id;	
-			actionForward.setName(pageOf);
-			actionForward.setPath(path);
-		}
-		else
-		{
-			actionForward = mapping.findForward(pageOf);
-		}
-		
-		
-		return actionForward;
-	}
-		
 }
