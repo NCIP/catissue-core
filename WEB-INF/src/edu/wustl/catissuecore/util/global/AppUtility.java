@@ -903,30 +903,29 @@ public class AppUtility {
 					
 					if("SpecimenCollectionGroup".equalsIgnoreCase(aliasName))
 					{
-						 link = "GotoSCG.do?"
+						 link = "editInCPBasedView.do?"
 								+CDMSIntegrationConstants.SCGID+"="
 								+row.get(queryResultObjectData
-										.getIdentifierColumnId());
+										.getIdentifierColumnId())+"&pageOf="+Constants.PAGE_OF_SPECIMEN_COLLECTION_GROUP;
 						        
 						hrefTag = "<a class='normalLink' href='"+link+"'"
 								+">" + obj + "</a>";
 					}
 					else if("Specimen".equalsIgnoreCase(aliasName))
 					{
-						link = "urlSpecimenView.do?"
-								+"identifier="
+						link = "editInCPBasedView.do?"
+								+Constants.SYSTEM_IDENTIFIER+Constants.EQUALS
 								+row.get(queryResultObjectData
-										.getIdentifierColumnId());
+										.getIdentifierColumnId())+"&pageOf=pageOfNewSpecimen";
 						 hrefTag = "<a class='normalLink' href='"+link+"'"
 								+">" + obj + "</a>";
 						
 					}else if ("CollectionProtReg".equalsIgnoreCase(aliasName))
 					{
-					  link = "urlCPRView.do?"
-							  +edu.wustl.common.util.global.Constants.SYSTEM_IDENTIFIER
-							  +"="
-							  + row.get(queryResultObjectData
-										.getIdentifierColumnId());
+					  link = "editInCPBasedView.do?"
+							  +Constants.SYSTEM_IDENTIFIER+Constants.EQUALS
+							  +row.get(queryResultObjectData
+										.getIdentifierColumnId())+"&pageOf=pageOfCollectionProtocolRegistration";
 					  hrefTag = "<a class='normalLink' href='"+link+"'"
 								+">" + obj + "</a>";
 					  
