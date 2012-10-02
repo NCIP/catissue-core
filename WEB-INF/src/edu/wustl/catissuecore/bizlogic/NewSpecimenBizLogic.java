@@ -5907,5 +5907,33 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 						specimen.getParentSpecimen(), specimenDisposeReason);
 			}
 		}
+		
+		/**
+		 * @param sessionData
+		 * @param specimenid
+		 * @return
+		 * @throws ApplicationException
+		 * @throws DAOException
+		 */
+		public List<Object> getcpIdandPartId(final SessionDataBean sessionData,
+				String specimenid) throws ApplicationException, DAOException {
+		 	
+			final String hql1 = "select specimen.specimenCollectionGroup.collectionProtocolRegistration."
+								+ "collectionProtocol.id,specimen.specimenCollectionGroup.collectionProtocolRegistration.participant.id"
+								+ " from edu.wustl.catissuecore.domain.Specimen as specimen where "
+								+ "specimen.id=" +specimenid;
+			List<Object> list = null;
+			DAO dao = null;
+			try
+			{
+			  dao = AppUtility.openDAOSession(sessionData);
+		 	 list =dao.executeQuery(hql1);
+		 }
+		 finally{
+		 
+			dao.closeSession();
+		 }
+			return list;
+		}
 
 }

@@ -2279,9 +2279,17 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		final String hql1 = "select cpr.collectionProtocol.id,cpr.participant.id"
 				+ " from edu.wustl.catissuecore.domain.CollectionProtocolRegistration as cpr where "
 				+ "cpr.id=" + cprid;
-		DAO dao = AppUtility.openDAOSession(sessionData);
-		List<Object> list = dao.executeQuery(hql1);
-		dao.closeSession();
+		List<Object> list = null;
+		DAO dao = null;
+		try
+		{
+		  dao = AppUtility.openDAOSession(sessionData);
+		  list = dao.executeQuery(hql1);
+		}
+		finally
+		{
+			dao.closeSession();
+		}
 		return list;
 	}
 }
