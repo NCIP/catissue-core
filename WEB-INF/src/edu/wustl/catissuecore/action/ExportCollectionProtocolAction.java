@@ -50,7 +50,7 @@ public class ExportCollectionProtocolAction extends SecureAction
 			response.getWriter().append(downloadFile);
 
 			response.setContentType("application/download");
-            response.setHeader("Content-Disposition", "attachment;filename="+request.getParameter("title")+".csv");
+            response.setHeader("Content-Disposition", "attachment;filename=\""+request.getParameter("title")+".csv\"");
             
             
 		} catch (Exception exp) {
