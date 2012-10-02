@@ -212,7 +212,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		{
 			final Specimen specimen = (Specimen) itr2.next();
 			if(Validator.isEmpty(specimen.getCollectionStatus()) || Constants.COLLECTION_STATUS_PENDING.equals(specimen.getCollectionStatus()))
-				pendingFlag = Boolean.TRUE;
+				pendingFlag = Boolean.FALSE;
 			buffer.append(specimen.getId());
 			buffer.append(",");
 			if (specimen.getChildSpecimenCollection() != null)
