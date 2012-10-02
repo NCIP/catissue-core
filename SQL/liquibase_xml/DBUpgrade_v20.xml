@@ -84,4 +84,13 @@
 		<rollback></rollback>
 	</changeSet>
 	
+	<changeSet id="4" author="catissuecore" runOnChange="true">
+	<!-- PPI column from cpr is added to be displayed as hyperlink in simple query result view.-->
+	<insert tableName="CATISSUE_QUERY_EDITLINK_COLS">
+     <column name="TABLE_ID" valueNumeric="27"/>
+     <column name="COL_ID" value="60"/>
+     </insert>
+	</changeSet>
+	
+	
 </databaseChangeLog>         
