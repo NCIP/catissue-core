@@ -15,6 +15,7 @@
 		<mapping table="catissue_specimen" label="Specimen" pageOf="pageOfNewSpecimen" />
 		<mapping table="catissue_specimen_coll_group" label="Specimen Collection Group" pageOf="pageOfSpecimenCollectionGroup" />
 		<mapping table="catissue_specimen_array" label="Specimen Array" pageOf="pageOfSpecimenArray"/>
+		<mapping table="CATISSUE_COLL_PROT_REG" label="Collection Protocol Registration" pageOf="pageOfCollectionProtocolRegistration"/>
 	</label-mapping>
 
 	<table-relation-mapping>
