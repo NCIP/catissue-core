@@ -16,7 +16,7 @@ function initDropDownGrid(gridDropDownInfo)
 		gridObj.enablePaging(true, 6, 0, gridDropDownInfo['pagingArea'], true, gridDropDownInfo['infoArea']);
 		gridObj.setPagingSkin("bricks");
 		gridObj.enableAutoHeigth(true,100,false);
-		 
+		  
 		gridObj.enableRowsHover(true, "gridHover");
 		gridObj.enableMultiline(true);
 		gridObj.init();
@@ -48,7 +48,7 @@ function initDropDownGrid(gridDropDownInfo)
 
 function keyNavigation(evnt,gridDropDownInfo, gridObj,isGridVisible)
 {
-	if(isGridVisible)
+	if(gridDropDownInfo['visibilityStatusVariable'])
 	{
 		if(evnt.keyCode == 40)//KeyDown
 		{
@@ -126,7 +126,6 @@ function showGrid(gridContainingDiv,dropDownId)
 function showHideGrid(e,dropDownInfoObject,gridObject)
 {		
 		setValue(e,dropDownInfoObject['gridDiv'], dropDownInfoObject['dropDownId']);
-		//alert(dropDownInfoObject['visibilityStatusVariable']);
 		if(dropDownInfoObject['visibilityStatusVariable'])
 		{
 			hideGrid(dropDownInfoObject['gridDiv']);

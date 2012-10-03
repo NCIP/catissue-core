@@ -445,19 +445,6 @@ function containerOnRowSelect(id,ind)
 }
 
 
-
-var gridDivObject ;
-
-
-function loadGrid()
-{
-//alert(containerDropDownInfo['actionToDo']+"&containerName="+document.getElementById("storageContainerDropDown").value);
-//alert(containerDropDownInfo['callBackAction']);
-gridDivObject.load(containerDropDownInfo['actionToDo']+"&containerName="+document.getElementById("storageContainerDropDown").value, containerDropDownInfo['callBackAction']);
-}
-
-
-
 function setValue(e,gridDivId, dropDownId)
 {
 		document.getElementById(dropDownId).focus();
@@ -466,16 +453,16 @@ function setValue(e,gridDivId, dropDownId)
 
 function showHideStorageContainerGrid(e,gridDivId, dropDownId)
 {		
-		setValue(e,gridDivId, dropDownId);
-		if(scGridVisible)
+		setValue(e,containerDropDownInfo['gridDiv'], containerDropDownInfo['dropDownId']);
+		if(containerDropDownInfo['visibilityStatusVariable'])
 		{
-			hideGrid(gridDivId);
-			scGridVisible = false;
+			hideGrid(containerDropDownInfo['gridDiv']);
+			containerDropDownInfo['visibilityStatusVariable'] = false;
 		}
 		else 
 		 {	
-			showGrid(gridDivId,dropDownId);
-			scGridVisible = true;
+			showGrid(containerDropDownInfo['gridDiv'],containerDropDownInfo['dropDownId']);
+			containerDropDownInfo['visibilityStatusVariable'] = true;
 			scGrid.load(containerDropDownInfo['actionToDo'],"");
 		 }
 }
@@ -500,7 +487,7 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 +className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId+"&stContSelection="+"<%=form.getStContSelection()%>";
 
 	//Drop Down components information
-	containerDropDownInfo = {gridObj:"storageContainerGrid", gridDiv:"storageContainer", dropDownId:"storageContainerDropDown", pagingArea:"storageContainerPagingArea", infoArea:"storageContainerInfoArea", onOptionSelect:"containerOnRowSelect", actionToDo:url, callBackAction:onContainerListReady};
+	containerDropDownInfo = {gridObj:"storageContainerGrid", gridDiv:"storageContainer", dropDownId:"storageContainerDropDown", pagingArea:"storageContainerPagingArea", infoArea:"storageContainerInfoArea", onOptionSelect:"containerOnRowSelect", actionToDo:url, callBackAction:onContainerListReady, visibilityStatusVariable:scGridVisible, propertyId:'selectedContainerName'};
 	// initialising grid
 	scGrid = initDropDownGrid(containerDropDownInfo,5,0); 
 }
@@ -2224,7 +2211,7 @@ else
 						<tr>
 							<td class="groupelements" size="48">
 								
-								<td width="50%" align="left" class="black_ar">
+								<td width="80%" align="left" class="black_ar">
 						<html:hidden property="selectedContainerName" styleId="selectedContainerName" />
 						<div>
 							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
