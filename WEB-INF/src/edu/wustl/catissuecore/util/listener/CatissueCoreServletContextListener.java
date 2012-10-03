@@ -23,6 +23,7 @@ import edu.wustl.bulkoperator.util.BulkOperationUtility;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.annotations.AnnotationUtil;
+import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -120,6 +121,8 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 				// eMPI integration initialization
 				initeMPI();
 			}
+			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
+			executerImpl.init();
 			logger.info("Initialization complete");
 		}
 		catch (final Exception e)
@@ -437,6 +440,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 					.getInstance();
 			catissueCoreCacheManager.shutdown();
 			SpecimenWmqProcessor.cleanup();
+			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
+			executerImpl.shutdown();
+			
 		}
 		catch (final CacheException e)
 		{
