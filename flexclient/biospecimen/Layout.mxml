@@ -490,6 +490,7 @@
   	*/
   	public function spTreeHandler(spTreeEvent:ResultEvent):void
   	{
+		var url:URLRequest;
 		var str:String = spTreeEvent.result as String;
 	        xmlString = new XML(str);
 	        treeData =  new XMLListCollection(xmlString.node);
@@ -513,10 +514,15 @@
 			loadSCGNodeInfo();
 			CursorManager.removeBusyCursor();
 		}
-		else if(collectionProtocolId!=null && collectionProtocolId!="null" && collectionProtocolId!="")
+		else if(collectionProtocolId!=null && collectionProtocolId!="null" && collectionProtocolId!="" && collectionEventId!=null && collectionEventId!="null" && collectionEventId!="")
 		{
-			var url : URLRequest = new URLRequest("javascript: openSCGInAddMode('"+ collectionProtocolId + "','"+ participantId +"','"+ collectionEventId +"')");
+			url = new URLRequest("javascript: openSCGInAddMode('"+ collectionProtocolId + "','"+ participantId +"','"+ collectionEventId +"')");
 				navigateToURL(url,"_self");
+		} else
+		{
+		    var refreshParticipants:String = "false";
+		    url = new URLRequest("javascript: onParticipantClick('"+ participantId + "','"+ collectionProtocolId + "','" + refreshParticipants+"')");
+			navigateToURL(url,"_self");
 		}
 
 	}
