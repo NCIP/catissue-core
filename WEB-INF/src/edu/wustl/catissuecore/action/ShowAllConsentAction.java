@@ -18,29 +18,19 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.bean.ConsentDisplayBean;
-import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
-import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
-import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.dao.DAO;
-import edu.wustl.dao.query.generator.ColumnValueBean;
 
 public class ShowAllConsentAction extends BaseAction
 {

@@ -85,6 +85,18 @@ public class StorageContainerAction extends SecureAction
 	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		if(!"true".equals(request.getParameter("ajaxRequest")))
+		{
+			if ( isTokenValid(request) ) 
+			{
+				resetToken(request);
+				saveToken(request);
+			}
+			else
+			{
+				saveToken(request);
+			}
+		}
 		final SessionDataBean sessionDataBean = this.getSessionData(request);
 		final DAO dao = AppUtility.openDAOSession(sessionDataBean);
 		try

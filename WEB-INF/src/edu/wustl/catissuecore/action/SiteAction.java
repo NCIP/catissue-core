@@ -27,7 +27,6 @@ import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -39,7 +38,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * @author aniruddha_phadnis
  */
-public class SiteAction extends SecureAction
+public class SiteAction extends CatissueBaseAction
 {
 
 	/**
@@ -62,7 +61,7 @@ public class SiteAction extends SecureAction
 	 *             generic exception
 	 */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final SiteForm siteForm = (SiteForm) form;

@@ -187,7 +187,6 @@ public class SpecimenListBizlogic implements ITagBizlogic
 
 	}
 
-	@Override
 	public void assignTag(String arg0, String arg1, long arg2, long arg3)
 			throws DAOException, BizLogicException {
 		// TODO Auto-generated method stub

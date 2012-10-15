@@ -24,7 +24,6 @@ import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
@@ -93,6 +92,7 @@ public class SpecimenArrayAction extends SecureAction
 			final SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
 			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
 					.getAttribute(Constants.SESSION_DATA);
+			final String contName=request.getParameter(Constants.CONTAINER_NAME);
 			// boolean to indicate whether the suitable containers to be shown
 			// in
 			// dropdown
@@ -209,14 +209,23 @@ public class SpecimenArrayAction extends SecureAction
 			final StorageContainerForSpArrayBizLogic storageContainerBizLogic = new StorageContainerForSpArrayBizLogic();
 			containerMap = storageContainerBizLogic.getAllocatedContainerMapForSpecimenArray(
 					specimenArrayForm.getSpecimenArrayTypeId(), sessionData,
-					dao);
+					dao,contName);
 			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 
 			List initialValues = null;
 			if (isChangeArrayType)
 			{
-				initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
+				//initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
+				String containerName = StorageContainerUtil
+						.checkForInitialValuesForDisplay(containerMap);
+				final String[] startingPoints1 = new String[3];
+				startingPoints1[0] =containerName;
+				startingPoints1[1]="";
+				startingPoints1[2]="";
+				initialValues = new ArrayList<String[]>();
+				initialValues.add(startingPoints1);
+				
 			}
 			else
 			{

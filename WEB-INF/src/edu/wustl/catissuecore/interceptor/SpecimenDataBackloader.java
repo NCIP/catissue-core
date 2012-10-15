@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.interceptor;
 
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.TimerTask;
 

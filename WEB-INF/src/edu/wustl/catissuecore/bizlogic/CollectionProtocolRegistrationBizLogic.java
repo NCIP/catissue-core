@@ -23,7 +23,6 @@ import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;

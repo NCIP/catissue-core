@@ -3,7 +3,6 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,14 +22,11 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
-import edu.wustl.catissuecore.bizlogic.QueryShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinterFactory;
-import edu.wustl.catissuecore.printservicemodule.SpecimenLabelPrinterImpl;
-import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.XSSSupportedAction;

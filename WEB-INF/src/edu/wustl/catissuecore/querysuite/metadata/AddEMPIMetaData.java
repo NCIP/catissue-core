@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.dao.exception.DAOException;
 
 /**

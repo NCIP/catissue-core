@@ -1,11 +1,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,11 +8,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.bulkoperator.util.BulkOperationException;
 import edu.wustl.catissuecore.bizlogic.ExportCollectionProtocolBizLogic;
 import edu.wustl.common.action.SecureAction;
-import edu.wustl.common.exception.ErrorKey;
-import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 /**

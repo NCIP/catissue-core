@@ -5887,5 +5887,14 @@ public class Constants
 
 	 public static final String EMPI_ENABLED="empi.Enabled";
 	 public static final String HELP_HOME_PAGE="helpHomePage";
+	 
+	public static final String PAGE_OF_COLLECTION_PROTOCOL_QUERY="pageOfCollectionProtocolQuery";
+	
+	public static final String DEFINE_EVENTS_PAGE="pageOfDefineEvents";
+	
+	public static final String PAGE_OF_CREATE_DERIVATIVE="pageOfCreateDerivative";
+	
+	public static final String PAGE_OF_SPECIMEN_SUMMARY="specimenSummaryPage";
+
 
 }

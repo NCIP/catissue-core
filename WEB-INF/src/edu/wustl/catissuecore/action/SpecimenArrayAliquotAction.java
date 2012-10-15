@@ -32,7 +32,6 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;
@@ -47,7 +46,7 @@ import edu.wustl.dao.DAO;
  *
  * @author jitendra_agrawal
  */
-public class SpecimenArrayAliquotAction extends SecureAction
+public class SpecimenArrayAliquotAction extends CatissueBaseAction
 {
 
 	/**
@@ -65,7 +64,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 	 */
 
 	@Override
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		DAO dao = null;
@@ -84,6 +83,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 					.getStoragePositionTypeListForTransferEvent();
 			request.setAttribute("storagePositionListForSpecimenArrayAliquot",
 					storagePositionListForSpecimenArrayAliquot);
+			final String contName=request.getParameter(Constants.CONTAINER_NAME);
 			final String exceedingMaxLimit = "false";
 			if (specimenArrayAliquotForm.getButtonClicked().equalsIgnoreCase("submit"))
 			{
@@ -162,7 +162,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 					// Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 					final Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
 					containerMap = bizLogic.getAllocatedContainerMapForSpecimenArray(
-							id.longValue(), sessionData, dao);
+							id.longValue(), sessionData, dao,contName);
 					this.populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 					request.setAttribute(Constants.PAGE_OF,
@@ -255,7 +255,7 @@ public class SpecimenArrayAliquotAction extends SecureAction
 								.getAliquotCount());
 						final Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
 						containerMap = bizLogic.getAllocatedContainerMapForSpecimenArray(id
-								.longValue(), sessionData, dao);
+								.longValue(), sessionData, dao,contName);
 						pageOf = this.checkForSufficientAvailablePositions(request, containerMap,
 								aliquotCount);
 

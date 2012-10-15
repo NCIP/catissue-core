@@ -401,7 +401,7 @@ PUBLIC
 			<forward name="failure" path="/ShoppingCart.do" />
 		</action>
 
-		<action path="/specToDistribute" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/specToDistribute" type="edu.wustl.catissuecore.action.CatissueAddEditAction"
 			name="OrderSpecimenForm" validate="false" scope="request">
 			<forward name="success" path="/DirectDistributeSpec.do?typeOf=specimen" />
 			<!-- forward name="success" path="/MyListTab.do" /-->
@@ -565,13 +565,13 @@ PUBLIC
 		</action>
 
 
-		<action path="/InsertOrderItems" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/InsertOrderItems" type="edu.wustl.catissuecore.action.CatissueAddEditAction"
 			name="OrderSpecimenForm" validate="false" scope="request">
 			<forward name="success" path="/ShoppingCart.do" />
 			<!-- forward name="success" path="/MyListTab.do" /-->
 		</action>
 
-		<action path="/InsertOrderArrayItems" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/InsertOrderArrayItems" type="edu.wustl.catissuecore.action.CatissueAddEditAction"
 			name="orderBiospecimenArrayForm" validate="false" scope="request">
 			<forward name="success" path="/ShoppingCart.do" />
 			<!-- forward name="success" path="/MyListTab.do" /-->
@@ -1524,7 +1524,7 @@ PUBLIC
 			<forward name="access_denied" path="/Home.do" />
 		</action>
 		
-		<action path="/UpdatePassword" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/UpdatePassword" type="edu.wustl.catissuecore.action.CatissueAddEditAction"
 			name="userForm" validate="true"
 			input="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword"
 			scope="request">
@@ -4364,7 +4364,7 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
-		<action path="/SpecimenArrayAliquotsAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/SpecimenArrayAliquotsAdd" type="edu.wustl.catissuecore.action.CatissueAddEditAction"
 			name="specimenArrayAliquotForm" validate="true"
 			input="/SpecimenArrayCreateAliquots.do?pageOf=pageOfSpecimenArrayCreateAliquot&amp;menuSelected=20"
 			scope="request">

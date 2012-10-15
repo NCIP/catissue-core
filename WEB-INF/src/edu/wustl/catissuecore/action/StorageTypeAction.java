@@ -31,7 +31,6 @@ import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
@@ -41,7 +40,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author renuka_bajpai
  */
-public class StorageTypeAction extends SecureAction
+public class StorageTypeAction extends CatissueBaseAction
 {
 
 	/**
@@ -63,7 +62,7 @@ public class StorageTypeAction extends SecureAction
 	 * @throws Exception : obj of Exception
 	 * @return ActionForward : ActionForward
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final StorageTypeForm storageTypeForm = (StorageTypeForm) form;

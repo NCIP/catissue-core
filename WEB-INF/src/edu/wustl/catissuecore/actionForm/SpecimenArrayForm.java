@@ -405,6 +405,20 @@ public class SpecimenArrayForm extends ContainerForm
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("array.user")));
+				}if(!validator.isValidAsPerSecurity(this.name))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",
+							ApplicationProperties.getValue("errors.xssvulnerable")));	
+				}
+				if(!validator.isValidAsPerSecurity(this.barcode))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",
+							ApplicationProperties.getValue("errors.xssvulnerable")));
+				}
+				if(!validator.isValidAsPerSecurity(this.getComment()))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",
+							ApplicationProperties.getValue("errors.xssvulnerable")));
 				}
 			}
 		}

@@ -100,6 +100,7 @@ public class CreateArrayInitAction extends BaseAction
 					.getStoragePositionTypeListForTransferEvent();
 			request.setAttribute("storagePositionListForSpecimenArray",
 					storagePositionListForSpecimenArray);
+			final String contName=request.getParameter(Constants.CONTAINER_NAME);
 
 			final String exceedingMaxLimit = "false";
 			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
@@ -232,7 +233,7 @@ public class CreateArrayInitAction extends BaseAction
 					containerMap = spizLogic
 							.getAllocatedContainerMapForSpecimenArray(specimenArrayForm
 									.getSpecimenArrayTypeId(), sessionData,
-									dao);
+									dao,contName);
 					request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 

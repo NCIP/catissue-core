@@ -1,14 +1,6 @@
 
 package edu.wustl.catissuecore.cdms.integrator;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
-
 import edu.wustl.catissuecore.util.CDMSCaTissueIntegrationUtil;
 import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
 import edu.wustl.common.util.Utility;
@@ -18,6 +10,14 @@ import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.system.comm.client.ClientSession;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 
 public class CdmsIntegratorImpl extends CatissueCdmsIntegrator
 {

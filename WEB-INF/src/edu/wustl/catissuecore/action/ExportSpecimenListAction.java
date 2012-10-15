@@ -20,7 +20,6 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.query.generator.ColumnValueBean;
 
 public class ExportSpecimenListAction extends BaseAction{

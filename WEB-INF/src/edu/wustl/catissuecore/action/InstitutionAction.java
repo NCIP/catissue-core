@@ -50,6 +50,7 @@ public class InstitutionAction extends SecureAction
 
 		final InstitutionForm institutionForm = (InstitutionForm) form;
 		institutionForm.setOperation(operation);
+		saveToken(request);
 		//Sets the operation attribute to be used in the Add/Edit Institution Page.
 		String formName = Constants.INSTITUTION_ADD_ACTION;
 		final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);

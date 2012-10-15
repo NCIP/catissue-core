@@ -17,14 +17,13 @@ import edu.wustl.catissuecore.actionForm.InstitutionForm;
 import edu.wustl.catissuecore.bizlogic.InstitutionBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author renuka_bajpai
  */
-public class AddInstitutionAction extends CommonAddEditAction
+public class AddInstitutionAction extends CatissueAddEditAction
 {
 
 	/**
@@ -42,7 +41,7 @@ public class AddInstitutionAction extends CommonAddEditAction
 	 * @return ActionForward
 	 */
 	@Override
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final String institutionName = request.getParameter(Constants.INSTITUTION_NAME);

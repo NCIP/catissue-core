@@ -32,7 +32,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractFactoryConfig;
 import edu.wustl.common.factory.IFactory;
@@ -42,7 +41,7 @@ import edu.wustl.common.util.global.CommonUtilities;
 /**
  * @author renuka_bajpai
  */
-public class SubCollectionProtocolRegistrationAction extends SecureAction
+public class SubCollectionProtocolRegistrationAction extends CatissueBaseAction
 {
 
 	/**
@@ -60,7 +59,7 @@ public class SubCollectionProtocolRegistrationAction extends SecureAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 

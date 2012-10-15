@@ -56,13 +56,13 @@ public class DistributionSubmitAction extends CommonAddEditAction
 	 * @throws ServletException : ServletException
 	 */
 	@Override
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException
 	{
 		try
 		{
-			return this.executeAction(mapping, form, request, response);
+			return this.executeAction1(mapping, form, request, response);
 		}
 		catch (final ApplicationException e)
 		{
@@ -95,7 +95,7 @@ public class DistributionSubmitAction extends CommonAddEditAction
 	 * @return value for ActionForward object
 	 * @throws Exception 
 	 */
-	private ActionForward executeAction(ActionMapping mapping, ActionForm form,
+	private ActionForward executeAction1(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 

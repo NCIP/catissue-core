@@ -84,7 +84,6 @@ import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.daofactory.IDAOFactory;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.dao.util.HibernateMetaData;
 import edu.wustl.security.manager.SecurityManagerFactory;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -146,7 +145,7 @@ public class RequestDetailsAction extends BaseAction
 		// The request Id on which the user has clicked
 		String requestId = "";
 		String orderDetailsId = "";
-
+		saveToken(request);
 		if (request.getParameter("id") != null && !request.getParameter("id").equals("0"))
 		{
 			orderDetailsId = request.getParameter("id");

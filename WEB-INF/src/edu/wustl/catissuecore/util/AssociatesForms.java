@@ -13,6 +13,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.StudyFormContext;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.logger.LoggerConfig;

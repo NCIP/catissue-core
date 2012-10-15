@@ -448,11 +448,11 @@ function pageSubmit() {
 		var url;
 		<%if(isSCGSubmit!=null)
 		{%>
-		  url = 'GenericSpecimenSummary.do?save=SCGSpecimens&isSCGSubmit=<%=isSCGSubmit%>';
+		  url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=specimenSummaryPage&isSCGSubmit=<%=isSCGSubmit%>';
 		  <%}
 		  else
 		  {%>
-		  url = 'GenericSpecimenSummary.do?save=SCGSpecimens';
+		  url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=specimenSummaryPage';
 		 <% }
 		 %>
 		//bug 12656
@@ -473,11 +473,11 @@ function pageSubmit() {
 
 			 if(isSCGSubmit!=null)
 			  {%>
-  url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>';
+  url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens&pageOf=specimenSummaryPage&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>';
 <%}
 			  else
 			  {%>
-	url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens';
+	url = 'GenericSpecimenSummaryForSpecimen.do?save=SCGSpecimens&pageOf=specimenSummaryPage';
 <% }
 			 }%>
 	//var printFlag = document.getElementById("printCheckbox");
@@ -500,7 +500,7 @@ function pageSubmit() {
 
 	}
 	function onParentRadioBtnClick() {
-		var url = 'GenericSpecimenSummary.do?isSubmitRequest=false&IsToShowButton=true';
+		var url = 'GenericSpecimenSummary.do?isSubmitRequest=false&IsToShowButton=true&pageOf=specimenSummaryPage';
 <%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {%>
 			 url = 	'GenericSpecimenSummaryForSpecimen.do?pageOf=<%=Constants.CP_CHILD_SUBMIT%>&isSubmitRequest=false';
 			<%}%>

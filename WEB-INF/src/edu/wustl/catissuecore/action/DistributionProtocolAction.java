@@ -53,7 +53,7 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
 	 * @return value for ActionForward object
 	 * */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		final DistributionProtocolForm distributionProtocolForm = (DistributionProtocolForm) form;
@@ -95,6 +95,6 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
 		}
 		// -- 24-Jan-06 end
 
-		return super.executeSecureAction(mapping, form, request, response);
+		return super.executeCatissueAction(mapping, form, request, response);
 	}
 }

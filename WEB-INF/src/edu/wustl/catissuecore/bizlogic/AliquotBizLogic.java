@@ -2,25 +2,17 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-
 
 import krishagni.catissueplus.mobile.dto.AliquotsDetailsDTO;
 import krishagni.catissueplus.mobile.dto.SpecimenDTO;
-
-
 import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.Aliquot;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -30,16 +22,13 @@ import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinter;
 import edu.wustl.catissuecore.printserviceclient.LabelPrinterFactory;
-import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -47,8 +36,6 @@ import edu.wustl.dao.DAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
-import edu.wustl.query.util.querysuite.DAOUtil;
-import edu.wustl.security.exception.UserNotAuthorizedException;
 import edu.wustl.security.manager.SecurityManagerFactory;
 
 /**

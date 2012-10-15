@@ -19,14 +19,13 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.SecureAction;
 
 /**
  * This class initializes the fields in the Department Add/Edit webpage.
  * @author Mandar Deshmukh
  */
 
-public class DepartmentAction extends SecureAction
+public class DepartmentAction extends CatissueBaseAction
 {
 
 	/**
@@ -44,7 +43,7 @@ public class DepartmentAction extends SecureAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		//Gets the value of the operation parameter.

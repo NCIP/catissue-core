@@ -20,7 +20,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.Status;
@@ -29,7 +28,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author renuka_bajpai
  */
-public class DeleteSpecimenArrayAction extends CommonAddEditAction
+public class DeleteSpecimenArrayAction extends CatissueAddEditAction
 {
 
 	/**
@@ -55,7 +54,7 @@ public class DeleteSpecimenArrayAction extends CommonAddEditAction
 	 * @return ActionForward : ActionForward
 	 */
 	@Override
-	public ActionForward executeXSS(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 
 	{
@@ -83,6 +82,6 @@ public class DeleteSpecimenArrayAction extends CommonAddEditAction
 		{
 			this.logger.error(exception.getMessage(), exception);
 		}
-		return super.executeXSS(mapping, abstractForm, request, response);
+		return super.executeSecureAction(mapping, abstractForm, request, response);
 	}
 }

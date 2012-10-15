@@ -4,7 +4,6 @@ package edu.wustl.catissuecore.namegenerator;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
 /**

@@ -1,28 +1,25 @@
 package krishagni.catissueplus.mobile.servlet;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.wustl.catissuecore.action.LoginAction;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.exception.CatissueException;
 import edu.wustl.catissuecore.processor.CatissueLoginProcessor;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
+import edu.wustl.domain.LoginCredentials;
 import edu.wustl.domain.LoginResult;
 import edu.wustl.processor.LoginProcessor;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.global.Roles;
 import edu.wustl.security.privilege.PrivilegeManager;
-import edu.wustl.domain.LoginCredentials ;
-import edu.wustl.domain.LoginResult;
-
-import javax.servlet.http.*;
 
 
 public class Login  extends HttpServlet{

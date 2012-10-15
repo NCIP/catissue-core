@@ -33,6 +33,7 @@ import edu.wustl.security.exception.SMException;
 import edu.wustl.security.locator.CSMGroupLocator;
 import edu.wustl.security.manager.SecurityManagerFactory;
 import edu.wustl.security.privilege.PrivilegeManager;
+import gov.nih.nci.security.exceptions.CSException;
 
 /**
  * @author supriya_dankh

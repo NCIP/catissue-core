@@ -4,12 +4,9 @@ package edu.wustl.catissuecore.action;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,22 +18,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.util.global.Constants;
-
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.factory.AbstractFactoryConfig;
-import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.util.global.CommonServiceLocator;
-import edu.wustl.dao.exception.DAOException;
-import edu.wustl.labelSQLApp.bizlogic.LabelSQLAssociationBizlogic;
 import edu.wustl.labelSQLApp.bizlogic.LabelSQLBizlogic;
 import edu.wustl.labelSQLApp.domain.LabelSQL;
-import edu.wustl.labelSQLApp.domain.LabelSQLAssociation;
 
 /**
  * The Class ClinportalStudyFormAjaxSearchAction.

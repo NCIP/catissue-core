@@ -83,6 +83,7 @@ public class ReportProblemAction extends XSSSupportedAction
 		}
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST,
 				Constants.REPORTED_PROBLEM_ACTIVITY_STATUS_VALUES);
+		saveToken(request);
 		return mapping.findForward(Constants.SUCCESS);
 	}
 

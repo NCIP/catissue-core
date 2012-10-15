@@ -88,7 +88,7 @@ public class UserAction extends SecureAction
     protected ActionForward executeSecureAction(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) throws Exception
     {
-
+    	saveToken(request);
         // Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
         String pageOf = request.getParameter(Constants.PAGE_OF);

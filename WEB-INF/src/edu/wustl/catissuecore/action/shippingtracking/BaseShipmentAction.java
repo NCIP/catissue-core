@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.action.CatissueBaseAction;
 import edu.wustl.catissuecore.actionForm.shippingtracking.BaseShipmentForm;
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentForm;
 import edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentRequestForm;
@@ -29,7 +30,6 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.shippingtracking.Shipment;
 import edu.wustl.catissuecore.util.shippingtracking.Constants;
 import edu.wustl.catissuecore.util.shippingtracking.ShippingTrackingUtility;
-import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -42,7 +42,7 @@ import edu.wustl.common.util.global.CommonUtilities;
 /**
  * class for base shipment action.
  */
-public class BaseShipmentAction extends SecureAction
+public class BaseShipmentAction extends CatissueBaseAction
 {
 
 	/**
@@ -55,7 +55,7 @@ public class BaseShipmentAction extends SecureAction
 	 * @throws Exception if some problem occurs.
 	 */
 	@Override
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String operation = request

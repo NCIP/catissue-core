@@ -1,7 +1,6 @@
 
 package krishagni.catissueplus.mobile.dto;
 
-import edu.wustl.catissuecore.domain.SpecimenPosition;
 
 public class SpecimenDTO
 {

@@ -28,7 +28,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -43,7 +42,7 @@ import edu.wustl.common.util.XMLPropertyHandler;
  *
  * @author gautam_shetty
  */
-public class DomainObjectListAction extends SecureAction
+public class DomainObjectListAction extends CatissueBaseAction
 {
 
 	/**
@@ -62,7 +61,7 @@ public class DomainObjectListAction extends SecureAction
 	 * @return value for ActionForward object
 	 */
 	@Override
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		List list = null, showList = null;

@@ -322,6 +322,12 @@
 						
 					</then>
 				</if>
+				<if>
+					<equals arg1="" arg2="${load.balancer.url}" />
+					<then>
+						<fail message="The property 'load.balancer.url' can not be empty" />
+					</then>
+				</if>
 	</target>
 
 	<!--Target for validation of connection parameters-->
@@ -701,6 +707,7 @@
 
 		<replace file="${temp.dir}/catissuecore-properties/caTissueCore_Properties.xml">
 			<replacefilter token="@@Forgot-Password-Enabled@@" value="${forgot.password.enabled}" />
+			<replacefilter token="@@Load-Balancer-URL@@" value="${load.balancer.url}" />
 			<replacefilter token="@@ADMIN-EMAILADDRESS@@" value="${email.administrative.emailAddress}" />
 			<replacefilter token="@@SENDEMAILFROM-EMAILADDRESS@@" value="${email.sendEmailFrom.emailAddress}" />
 			<replacefilter token="@@MAILSERVER-EMAILADDRESS@@" value="${email.mailServer}" />

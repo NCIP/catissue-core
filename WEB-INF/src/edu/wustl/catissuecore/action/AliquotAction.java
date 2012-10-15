@@ -46,7 +46,6 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
-import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.SpecimenUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
@@ -69,8 +68,6 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.tag.ScriptGenerator;
 import edu.wustl.dao.DAO;
-import edu.wustl.dao.QueryWhereClause;
-import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
 
 // TODO: Auto-generated Javadoc

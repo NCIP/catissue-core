@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import krishagni.catissueplus.mobile.dto.StoragePositionDTO;
 import edu.wustl.catissuecore.domain.SpecimenPosition;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
@@ -18,7 +19,6 @@ import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
-import krishagni.catissueplus.mobile.dto.StoragePositionDTO;
 
 
 public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizLogic

@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.bean;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 import edu.wustl.common.beans.NameValueBean;

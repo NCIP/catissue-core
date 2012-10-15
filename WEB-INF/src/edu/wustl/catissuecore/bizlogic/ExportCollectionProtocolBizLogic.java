@@ -10,17 +10,12 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import au.com.bytecode.opencsv.CSVWriter;
 import edu.wustl.catissuecore.domain.ClinicalDiagnosis;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;

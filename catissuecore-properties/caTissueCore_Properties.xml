@@ -770,5 +770,18 @@
 		<name>forgot.password.enabled</name>
 		<value>@@Forgot-Password-Enabled@@</value>
 	</property>
+	
+	<property>
+		<name>forgot.password.enabled</name>
+		<value>@@Forgot-Password-Enabled@@</value>
+	</property>
+	<property>
+		<name>load.balancer.url</name>
+		<value>@@Load-Balancer-URL@@</value>
+	</property>
+	<property>
+		<name>logout.mapping</name>
+		<value>/catissuecore/Logout.do</value>
+	</property>
 
 </properties>

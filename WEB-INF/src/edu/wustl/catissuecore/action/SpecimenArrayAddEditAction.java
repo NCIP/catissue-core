@@ -15,7 +15,6 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.CommonAddEditAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
@@ -28,7 +27,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author Ashwin Gupta
  * @version 1.1
  */
-public class SpecimenArrayAddEditAction extends CommonAddEditAction
+public class SpecimenArrayAddEditAction extends CatissueAddEditAction
 {
 
 	/**
@@ -89,6 +88,6 @@ public class SpecimenArrayAddEditAction extends CommonAddEditAction
 				this.logger.error(exception.getMessage(), exception);
 			}
 		}
-		return super.executeXSS(mapping, form, request, response);
+		return super.executeSecureAction(mapping, form, request, response);
 	}
 }

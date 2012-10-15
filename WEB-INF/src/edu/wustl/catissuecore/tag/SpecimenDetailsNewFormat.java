@@ -20,7 +20,6 @@ import org.apache.struts.action.ActionErrors;
 
 import edu.wustl.catissuecore.bean.GenericSpecimen;
 import edu.wustl.catissuecore.bean.SpecimenDetailsInfo;
-import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.global.ApplicationProperties;

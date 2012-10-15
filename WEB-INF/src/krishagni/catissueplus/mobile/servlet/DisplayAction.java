@@ -1,8 +1,6 @@
 package krishagni.catissueplus.mobile.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import krishagni.catissueplus.mobile.dto.AliquotsDetailsDTO;
+import krishagni.catissueplus.mobile.dto.SpecimenDTO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,7 +18,6 @@ import edu.wustl.catissuecore.bizlogic.AliquotBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.ApplicationException;
-import krishagni.catissueplus.mobile.dto.SpecimenDTO;
 
 public class DisplayAction  extends HttpServlet {
 

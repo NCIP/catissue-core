@@ -31,7 +31,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.SpecimenProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;

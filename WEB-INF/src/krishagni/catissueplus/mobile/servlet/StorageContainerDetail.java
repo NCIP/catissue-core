@@ -1,24 +1,22 @@
 package krishagni.catissueplus.mobile.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+import krishagni.catissueplus.mobile.dto.StoragePositionDTO;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.wustl.catissuecore.storage.StorageContainerGridObject;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONArray;
-import krishagni.catissueplus.mobile.dto.StoragePositionDTO;
 public class StorageContainerDetail  extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException,

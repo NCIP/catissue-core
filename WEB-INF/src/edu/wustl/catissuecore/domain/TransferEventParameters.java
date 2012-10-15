@@ -11,7 +11,6 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;

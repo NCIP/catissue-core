@@ -782,7 +782,7 @@ document.forms[0].pos2.disabled = false;
 						forwardToValue = "PrintSpecimenEdit";
 						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 						{
-							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION+"?pageOf=pageOfNewSpecimenCPQuery";
 							cpChildSubmitAction = "CPQueryPrintSpecimenEdit";//Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
 
 						}%>
@@ -826,13 +826,15 @@ document.forms[0].pos2.disabled = false;
 
 						if(document.forms[0].nextForwardTo.value!=null)
 						{
-						 confirmDisable('<%=actionToCall%>'+"?nextForwardTo="+document.forms[0].nextForwardTo.value,document.forms[0].activityStatus);
+							if('<%=actionToCall%>'.indexOf('?')==-1)
+							{
+								confirmDisable('<%=actionToCall%>'+"?nextForwardTo="+document.forms[0].nextForwardTo.value,document.forms[0].activityStatus);
+							}
+							else
+							{
+								confirmDisable('<%=actionToCall%>'+"&nextForwardTo="+document.forms[0].nextForwardTo.value,document.forms[0].activityStatus);
+							}
 						}
-						else
-						{
-							confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
-						}
-
 					}
 					else //none + submit
 					{
@@ -841,7 +843,7 @@ document.forms[0].pos2.disabled = false;
 						forwardToValue = "PrintSpecimenEdit";
 						if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 						{
-							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+							actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION+"?pageOf=pageOfNewSpecimenCPQuery";
 							forwardToValue = "CPQueryPrintSpecimenEdit";
 						}%>
 						if(temp == "orderDetails")
@@ -2211,7 +2213,7 @@ else
 						<tr>
 							<td class="groupelements" size="48">
 								
-								<td width="80%" align="left" class="black_ar">
+								<td width="50%" align="left" class="black_ar">
 						<html:hidden property="selectedContainerName" styleId="selectedContainerName" />
 						<div>
 							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">

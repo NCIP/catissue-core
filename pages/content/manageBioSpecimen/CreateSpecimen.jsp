@@ -287,10 +287,11 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 		function onNormalSubmit()
 		{
 			var checked = document.forms[0].aliCheckedButton.checked;
+			var actionToCall='${requestScope.actionToCall}'+"&pageOf=pageOfCreateDerivative";
 			if(checked)
 			{
 				setSubmitted('ForwardTo','${requestScope.printAction}','pageOfCreateAliquot');
-				confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
+				confirmDisable(actionToCall,document.forms[0].activityStatus);
 			}
 			else
 			{
@@ -303,7 +304,7 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 			    {
 				   setSubmitted('ForwardTo','${requestScope.printAction}','newSpecimenEdit');
 			     }
-				confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
+				confirmDisable(actionToCall,document.forms[0].activityStatus);
 			}
 		}
 
@@ -311,6 +312,7 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 		{
 
 			var printFlag = document.getElementById("printCheckbox");
+			var actionToCall='${requestScope.actionToCall}'+"&pageOf=pageOfCreateDerivative";
 			if(printFlag.checked)
 		    {
 				setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartAndPrint','pageOfNewSpecimen');
@@ -320,7 +322,7 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
                // setSubmittedForAddToMyList("ForwardTo",'addSpecimenToCartForwardtoDerive','success');
             	setSubmittedFor("ForwardTo","addSpecimenToCart");
             }
-			confirmDisable('${requestScope.actionToCall}',document.forms[0].activityStatus);
+			confirmDisable(actionToCall,document.forms[0].activityStatus);
 
 		}
 

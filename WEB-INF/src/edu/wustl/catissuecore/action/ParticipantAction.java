@@ -51,7 +51,6 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -75,7 +74,7 @@ import edu.wustl.dao.exception.DAOException;
  *
  * @author gautam_shetty
  */
-public class ParticipantAction extends SecureAction {
+public class ParticipantAction extends CatissueBaseAction {
 
 	/** logger. */
 	private static final Logger LOGGER = Logger
@@ -100,7 +99,7 @@ public class ParticipantAction extends SecureAction {
 	 *             generic exception
 	 */
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping,
+	protected ActionForward executeCatissueAction(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 

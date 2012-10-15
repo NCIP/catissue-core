@@ -14,10 +14,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
-import edu.wustl.catissuecore.querysuite.QueryShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import flex.messaging.io.ArrayList;
 
 public class BulkSpecimenCartAction extends BaseAction
 {

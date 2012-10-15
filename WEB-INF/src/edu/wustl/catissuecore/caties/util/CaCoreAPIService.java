@@ -4,12 +4,12 @@ package edu.wustl.catissuecore.caties.util;
 import java.util.Collection;
 import java.util.List;
 
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
+
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;

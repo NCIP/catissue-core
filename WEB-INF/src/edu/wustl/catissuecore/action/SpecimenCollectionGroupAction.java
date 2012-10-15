@@ -63,7 +63,6 @@ import edu.wustl.catissuecore.util.ConsentUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -90,7 +89,7 @@ import edu.wustl.dao.exception.DAOException;
  *
  * @author ajay_sharma
  */
-public class SpecimenCollectionGroupAction extends SecureAction
+public class SpecimenCollectionGroupAction extends CatissueBaseAction
 {
 
 	/** logger. */
@@ -109,7 +108,7 @@ public class SpecimenCollectionGroupAction extends SecureAction
 	 *
 	 * @throws Exception : Exception
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping, final ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, final ActionForm form,
 			final HttpServletRequest request, final HttpServletResponse response) throws Exception
 	{
 		DAO dao = null;

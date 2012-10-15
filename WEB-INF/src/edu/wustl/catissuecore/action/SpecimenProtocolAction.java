@@ -34,7 +34,6 @@ import edu.wustl.catissuecore.bizlogic.SpecimenProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
@@ -49,7 +48,7 @@ import edu.wustl.common.util.logger.Logger;
  *
  * @author Mandar Deshmukh
  */
-public class SpecimenProtocolAction extends SecureAction
+public class SpecimenProtocolAction extends CatissueBaseAction
 {
 
 	/**
@@ -72,7 +71,7 @@ public class SpecimenProtocolAction extends SecureAction
 	 */
 
 	@Override
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		// Gets the value of the operation parameter.

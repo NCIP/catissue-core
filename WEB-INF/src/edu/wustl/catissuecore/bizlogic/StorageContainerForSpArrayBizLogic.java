@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -38,16 +39,32 @@ public class StorageContainerForSpArrayBizLogic extends AbstractSCSelectionBizLo
 	 */
 	public TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>>
 	getAllocatedContainerMapForSpecimenArray(long sp_arr_type_id,
-			SessionDataBean sessionData, DAO dao)
+			SessionDataBean sessionData, DAO dao,String contName)
 			throws BizLogicException
 	{
 		try
 		{
 			final String[] queries = this.getStorageContainerForSpecimenArrQuery(sp_arr_type_id,
-					sessionData);
+					sessionData,contName);
 			final List<?> containerList = this.getStorageContainerList(null,queries);
-			return (TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>>)
-			this.getAllocDetailsForContainers(containerList, dao);
+			Map containerNameListForAutoOption=null;
+			if(containerList!=null && !containerList.isEmpty())
+			{
+				containerNameListForAutoOption=new TreeMap();
+				java.util.Iterator<?> listIter=containerList.iterator();
+				while(listIter.hasNext())
+				{
+					ArrayList contInfoList=(ArrayList) listIter.next();
+					NameValueBean nvb=new NameValueBean();
+					nvb.setName(contInfoList.get(1));
+					nvb.setValue(contInfoList.get(0));
+					nvb.setRelevanceCounter(1L);
+					containerNameListForAutoOption.put(nvb,nvb);
+				}
+			}
+			return (TreeMap) containerNameListForAutoOption;
+			//return (TreeMap<NameValueBean, Map<NameValueBean, List<NameValueBean>>>)
+			//this.getAllocDetailsForContainers(containerList, dao);
 		}
 		catch (final ApplicationException daoExp)
 		{
@@ -65,7 +82,7 @@ public class StorageContainerForSpArrayBizLogic extends AbstractSCSelectionBizLo
 	 * @return String[]
 	 */
 	protected String[] getStorageContainerForSpecimenArrQuery(long sp_arr_type_id,
-			SessionDataBean sessionData)
+			SessionDataBean sessionData,String contName)
 	{
 		String includeAllIdQueryStr = " OR t4.SPECIMEN_ARRAY_TYPE_ID = '"
 				+ Constants.ARRAY_TYPE_ALL_ID + "'";
@@ -100,7 +117,15 @@ public class StorageContainerForSpArrayBizLogic extends AbstractSCSelectionBizLo
 					+ sessionData.getUserId() + ")");
 		}
 		stringBuilder.append("AND t1.ACTIVITY_STATUS='" + Status.ACTIVITY_STATUS_ACTIVE
-				+ "' and S.ACTIVITY_STATUS='Active' and t1.CONT_FULL=0) VIEW1 ");
+				+ "' and S.ACTIVITY_STATUS='Active' and t1.CONT_FULL=0) ");
+		if(contName!=null && !contName.equals(""))
+		{
+			stringBuilder.append(" AND ");
+			stringBuilder.append(" D.NAME Like '%");
+			stringBuilder.append(contName);
+			stringBuilder.append("%' ");
+		}
+		stringBuilder.append(" VIEW1 ");
 		stringBuilder
 				.append(" GROUP BY VIEW1.IDENTIFIER, VIEW1.NAME,VIEW1.ONE_DIMENSION_CAPACITY, VIEW1.TWO_DIMENSION_CAPACITY ,VIEW1.CAPACITY ");
 		stringBuilder.append(" HAVING (VIEW1.CAPACITY - COUNT(*)) >  0");

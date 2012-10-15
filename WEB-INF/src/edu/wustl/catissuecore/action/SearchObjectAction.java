@@ -14,7 +14,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.util.global.CDMSIntegrationConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.XSSSupportedAction;
 import edu.wustl.common.util.logger.Logger;

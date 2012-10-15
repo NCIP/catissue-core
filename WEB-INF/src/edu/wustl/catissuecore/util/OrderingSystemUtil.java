@@ -31,7 +31,6 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
-import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
 import edu.wustl.catissuecore.domain.Specimen;

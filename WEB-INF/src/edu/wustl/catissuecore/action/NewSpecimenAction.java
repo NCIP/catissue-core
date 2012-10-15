@@ -63,7 +63,6 @@ import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDE;
@@ -89,7 +88,7 @@ import edu.wustl.dao.exception.DAOException;
  *
  * @author renuka_bajpai
  */
-public class NewSpecimenAction extends SecureAction
+public class NewSpecimenAction extends CatissueBaseAction
 {
 
 	/** logger. */
@@ -110,7 +109,7 @@ public class NewSpecimenAction extends SecureAction
 	 *
 	 * @throws Exception generic exception
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeCatissueAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		DAO dao = null;
