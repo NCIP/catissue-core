@@ -27,6 +27,7 @@ function initDropDownGrid(gridDropDownInfo)
 		//if the row is selected by arrow keys and if we move the mouse over 
 		//the grid rows then the previously selected rows remains selected
 		gridObj.attachEvent("onMouseOver", function(id,ind){ gridObj.selectRowById(id, false, true , false);
+		this.cells(id,ind).cell.title = gridObj.cellById(id,ind).getValue();
 		});
 		
 		//whenever the page is changed the focus is lost from the text box due 
