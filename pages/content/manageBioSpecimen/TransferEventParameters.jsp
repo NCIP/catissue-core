@@ -98,7 +98,7 @@ function toStoragePositionChange(element)
 //declaring DHTMLX Drop Down controls required variables
 var containerDropDownInfo, scGrid;
 var scGridVisible = false;
-
+var dhxWins;
 
 function initWindow()
 {
@@ -155,20 +155,6 @@ function containerOnRowSelect(id,ind)
 	document.getElementById("pos2").value="";
 }
 
-
-
-var gridDivObject ;
-
-
-function loadGrid()
-{
-//alert(containerDropDownInfo['actionToDo']+"&containerName="+document.getElementById("storageContainerDropDown").value);
-//alert(containerDropDownInfo['callBackAction']);
-gridDivObject.load(containerDropDownInfo['actionToDo']+"&containerName="+document.getElementById("storageContainerDropDown").value, containerDropDownInfo['callBackAction']);
-}
-
-
-
 function setValue(e,gridDivId, dropDownId)
 {
 		document.getElementById(dropDownId).focus();
@@ -177,16 +163,16 @@ function setValue(e,gridDivId, dropDownId)
 
 function showHideStorageContainerGrid(e,gridDivId, dropDownId)
 {		
-		setValue(e,gridDivId, dropDownId);
-		if(scGridVisible)
+		setValue(e,containerDropDownInfo['gridDiv'], containerDropDownInfo['dropDownId']);
+		if(containerDropDownInfo['visibilityStatusVariable'])
 		{
-			hideGrid(gridDivId);
-			scGridVisible = false;
+			hideGrid(containerDropDownInfo['gridDiv']);
+			containerDropDownInfo['visibilityStatusVariable'] = false;
 		}
 		else 
 		 {	
-			showGrid(gridDivId,dropDownId);
-			scGridVisible = true;
+			showGrid(containerDropDownInfo['gridDiv'],containerDropDownInfo['dropDownId']);
+			containerDropDownInfo['visibilityStatusVariable'] = true;
 			scGrid.load(containerDropDownInfo['actionToDo'],"");
 		 }
 }
@@ -206,15 +192,14 @@ function doOnLoad()
 var className="<%=className%>";
 var sptype="<%=sptype%>";
 var collectionProtocolId="<%=collectionProtocolId%>";
-var containerName=document.getElementById("storageContainerDropDown").value;
-var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&isTransferEvent=true&transferEventParametersId=<%=transferEventParametersId%>&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
-+className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId;
+//var containerName=document.getElementById("storageContainerDropDown").value;
+var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&isTransferEvent=true&transferEventParametersId=<%=transferEventParametersId%>&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="+className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId;
 
 
 	//Drop Down components information
-	containerDropDownInfo = {gridObj:"storageContainerGrid", gridDiv:"storageContainer", dropDownId:"storageContainerDropDown", pagingArea:"storageContainerPagingArea", infoArea:"storageContainerInfoArea", onOptionSelect:"containerOnRowSelect", actionToDo:url, callBackAction:onContainerListReady};
+	containerDropDownInfo = {gridObj:"storageContainerGrid", gridDiv:"storageContainer", dropDownId:"storageContainerDropDown", pagingArea:"storageContainerPagingArea", infoArea:"storageContainerInfoArea", onOptionSelect:"containerOnRowSelect", actionToDo:url, callBackAction:onContainerListReady, visibilityStatusVariable:scGridVisible, propertyId:'selectedContainerName'};
 	// initialising grid
-	scGrid = initDropDownGrid(containerDropDownInfo,5,0); 
+	scGrid = initDropDownGrid(containerDropDownInfo); 
 }
 
 function makeContainerGridReadonly() 

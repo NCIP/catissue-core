@@ -767,7 +767,7 @@ function doOnLoad()
 				}
 			, visibilityStatusVariable:scGridVisible_<%=stringToAppend%>, propertyId:'selectedContainerName_<%=stringToAppend%>'};
 		// initialising grid
-		scGrid_<%=stringToAppend%> = initDropDownGrid(containerDropDownInfo_<%=stringToAppend%>,5,0); 
+		scGrid_<%=stringToAppend%> = initDropDownGrid(containerDropDownInfo_<%=stringToAppend%>); 
 	<%}}}%>
 	
 	
@@ -822,9 +822,9 @@ function doOnLoad()
 						scGridVisible_<%=stringToAppend%> = false;
 					}
 				}
-			, visibilityStatusVariable:scGridVisible_<%=stringToAppend%>};
+			, visibilityStatusVariable:scGridVisible_<%=stringToAppend%>, propertyId:'selectedContainerName_<%=stringToAppend%>'};
 		// initialising grid
-		scGrid_<%=stringToAppend%> = initDropDownGrid(containerDropDownInfo_<%=stringToAppend%>,5,0); 
+		scGrid_<%=stringToAppend%> = initDropDownGrid(containerDropDownInfo_<%=stringToAppend%>); 
 	<%}}}%>
 	
 	<%if(derivedList!=null)
@@ -877,9 +877,9 @@ function doOnLoad()
 						scGridVisible_<%=stringToAppend%> = false;
 					}
 				}
-			, visibilityStatusVariable:scGridVisible_<%=stringToAppend%>};
+			, visibilityStatusVariable:scGridVisible_<%=stringToAppend%>, propertyId:'selectedContainerName_<%=stringToAppend%>'};
 		// initialising grid
-		scGrid_<%=stringToAppend%> = initDropDownGrid(containerDropDownInfo_<%=stringToAppend%>,5,0); 
+		scGrid_<%=stringToAppend%> = initDropDownGrid(containerDropDownInfo_<%=stringToAppend%>); 
 	<%}}}%>
 }
 
