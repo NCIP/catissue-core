@@ -876,6 +876,20 @@
 		<antcall target="upgrade_db_to_plus_v20"/>
 	</target>
 	
+	<target name="liquibase_upgrade_from_plusv1.0_to_plusv2.0">
+				<echo message="Upgrading DB using Liquibase Targets"/>
+				<antcall target="upgrade_db_to_plus_v20"/>
+			</target>
+	
+	<target name="liquibase_aqupgrade_target">
+					<echo message="Upgrading DB using Liquibase Targets"/>
+					<antcall target="upgrade_liquibase_to_plus_v1plus"/>
+				</target>
+	
+	<target name="upgrade_liquibase_to_plus_v1plus">
+				<echo message="Upgrading DataBase with URL ${final.database.url}username=${database.username}password=${database.password}" />	
+				<updateDatabase changeLogFile="${base.dir}/SQL/liquibase_xml/queryfolder_script.xml" driver="${final.database.driver}" url="${final.database.url}" username="${database.username}" password="${database.password}" dropFirst="false" classpathref="liquibaseClasspath" />
+			</target>
 	<!--Target call for both fresh deployment and database creation-->
 	<target name="deploy_all" description="Target call for both fresh deployment and database creation">
 		<antcall target="assert" />
@@ -2051,6 +2065,9 @@
 	<target name="upgrade_all" depends="assert, upgrade_db, upgrade_app" description="Target for Application and Database Upgrade from v1.2.3  to V1.2.4">
 	</target>
 
+	<!--Target for Application and Database Upgrade from Suite 1.2 to Plus 2.0-->
+			<target name="upgrade_all_from_suitev1.2_to_plusv20" depends="assert, upgrade_db_from_suitev1.2_to_plus20, upgrade_app" description="Target for Application and Database Upgrade from vp5.1  to V1.2.1">
+			</target>
 	<!--Target for Application and Database Upgrade from caTissueCore v1.2.2  to Suite 1.1-->
 	<!--<target name="upgrade_all_from_core_1.2.2" depends="core_1.2.2_upgrade_check">
 		<antcall target="upgrade_app" />
@@ -2107,21 +2124,16 @@
 	</target>-->
 
 
-	<!--Target for Database Upgrade from Suite 1.2.3 to Suite 1.2.4-->
-	<target name="upgrade_db" description="Upgrading Database v1.2.3 to v1.2.4">
-	
-		<if>
-		<equals arg1="false" arg2="${empi.enabled}" />
-		<then>
-			<echo message="Upgrading Database v1.2.3 to v1.2.4" />
-			<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
-			<antcall target="upgrade_db_v1.2.4 to v1.2.5"/>
-		</then>		
-		</if>
+	<!--Target for Database Upgrade from suite v1.2 to plus2.0-->
+	<target name="upgrade_db_from_suitev1.2_to_plus20" description="Upgrading Database from Suite v1.2 to Plus2.0">
 
+		<echo message="Upgrading Database v1.2.3 to v1.2.4" />
+		<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
+		<antcall target="upgrade_db_v1.2.4 to v1.2.5"/>
 		<antcall target="liquibase_upgrade_target"/>
 		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
 		<antcall target="insert_dashboard_queries"/>
+		<antcall target="liquibase_aqupgrade_target" />
 		
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
@@ -2139,8 +2151,53 @@
 			</else>
 		</if>
 	</target>
+	
+	<!--Target for Database Upgrade from Suite 1.2.3 to Suite 1.2.1-->
+		<!--target name="upgrade_db_from_1.2_to_plusv2.0" description="Upgrading Database from suite v1.2 to plus v2.0">
+			<echo message="Upgrading Database v1.2.3 to v1.2.4" />
+			<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
+			<antcall target="upgrade_db_v1.2.4 to v1.2.5"/>
+			<antcall target="liquibase_upgrade_target"/>
+			<antcall target="liquibase_aqupgrade_target" />
+			<antcall target="add_labelsql_tables_for_cp_dashboard"/>
+			<antcall target="upgrade_db_v1.2.4 to v1.2.5"/>
+		</target-->
+	
+	<!--Target for Database Upgrade from Suite 1.2.3 to Suite 1.2.4-->
+		<target name="upgrade_db" description="Upgrading Database v1.2.3 to v1.2.4">
+		
+			<!--if>
+			<equals arg1="false" arg2="${empi.enabled}" />
+			<then>
+				<echo message="Upgrading Database v1.2.3 to v1.2.4" />
+				<antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/>
+				<antcall target="upgrade_db_v1.2.4 to v1.2.5"/>
+			</then>		
+			</if-->
+
+			<antcall target="liquibase_upgrade_from_plusv1.0_to_plusv2.0"/>
+			<antcall target="liquibase_aqupgrade_target" />
+			<!--antcall target="add_labelsql_tables_for_cp_dashboard"/-->
+			<!--antcall target="insert_dashboard_queries"/-->
+			
+			<!--if>
+				<equals arg1="mysql" arg2="${database.type}" />
+				<then>
+					<antcall target="upgrade_db_for_empi_id__mysql" />
+				</then>
+				<elseif>
+					<equals arg1="oracle" arg2="${database.type}" />
+					<then>
+						<antcall target="upgrade_db_for_empi_id_oracle" />
+					</then>
+				</elseif>
+				<else>
+					<echo message="DATABASE INITIALIZATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error" />
+				</else>
+			</if-->
+		</target>
 	 
-	<target name="upgrade_db_v1.2.4 to v1.2.5" description="Upgrading Database v1.2.3 to v1.2.4">
+	<target name="upgrade_db_v1.2.4 to v1.2.5" description="Upgrading Database v1.2.4 to v1.2.5">
 		<echo message="Upgrading Database v1.2.4 to v1.2.5" />
 		<antcall target="addEMPIMetadata"></antcall>
 	</target>	 
