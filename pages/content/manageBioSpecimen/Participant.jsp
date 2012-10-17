@@ -31,23 +31,17 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <LINK href="css/catissue_suite.css" type=text/css rel=stylesheet>
+
+<script src="jss/participant.js"></script>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 %>
 
-<style>
-.active-column-0 {width:30px}
-tr#hiddenCombo
-{
- display:none;
-}
-</style>
-
 <script src="jss/script.js" type="text/javascript"></script>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%
-	String parentUrl = null;
+		String parentUrl = null;
 		String cpId = null;
 		List siteList = (List)request.getAttribute(Constants.SITELIST);
 		List collectionProtocolList = (List)request.getAttribute(Constants.PROTOCOL_LIST);
@@ -160,6 +154,8 @@ tr#hiddenCombo
 		//ends
 		String normalSubmitForEMPIGenerate = "setSubmittedForParticipanteMPIGenerate('"
 				+ submittedFor + "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1] + "')";
+				
+		Long reportId=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID);		
 		
 
 		if (pageView.equals("edit") && "true".equals(XMLPropertyHandler.getValue(Constants.EMPI_ENABLED)))
@@ -207,7 +203,7 @@ tr#hiddenCombo
 			boolean isSpecimenData = false;
 
 			int IDCount = 0;
-		%>
+	%>
 
 	<script language="JavaScript">
 	
@@ -266,156 +262,6 @@ tr#hiddenCombo
 			sname= "";
 			sname="<input type='text' name='" + name + "' maxlength='50' size='15' class='black_ar' id='" + name + "'>";
 			spreqsubtype.innerHTML="" + sname;
-
-
-
-		}
-
-
-
-
-		function getConsent(identifier,collectionProtocolId,collectionProtocolTitle,index,anchorTagKey,consentCheckStatus)
-		{
-			var collectionProtocolIdValue;
-			var select = document.getElementById(collectionProtocolId);
-			collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
-			var dataToSend="showConsents=yes&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue;
-			ajaxCall(dataToSend, collectionProtocolId, identifier, anchorTagKey, index,consentCheckStatus);
-		}
-
-		function openConsentPage(collectionProtocolId,index,responseString,collectionProtocolRegIdValue){
-			//When RegId value is not available.-Add participant page.
-			if(collectionProtocolRegIdValue == "null")
-			{
-			 openConsentPageAjax(collectionProtocolId,index,responseString);
-			 return;
-			}
-			//Bug:5935 collectionProtocolRegIdValue is added to display list of Specimen related to Participant.
-			if(responseString == "<%=Constants.NO_CONSENTS_DEFINED%>")
-			{
-				return;
-			}
-
-			var collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
-			if(collectionProtocolIdValue=="-1")
-			{
-				alert("Please select collection protocol");
-				return;
-			}
-
-			var url ="ConsentDisplay.do?operation=<%=operation%>&pageOf=pageOfConsent&index="+index+"&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue+"&collectionProtocolRegIdValue="+collectionProtocolRegIdValue;
-			window.open(url,'ConsentForm','height=300,width=800,scrollbars=1,resizable=1');
-		}
-		/*
-		 This function is linked with new CP Participant Registration Dynamically
-		*/
-		function openConsentPageAjax(collectionProtocolId,index,responseString){
-
-
-			if(responseString == "<%=Constants.NO_CONSENTS_DEFINED%>")
-			{
-				return;
-			}
-
-			var collectionProtocolIdValue=document.getElementById(collectionProtocolId).value;
-			if(collectionProtocolIdValue=="-1")
-			{
-				alert("Please select collection protocol");
-				return;
-			}
-
-			var url ="ConsentDisplay.do?operation=<%=operation%>&pageOf=pageOfConsent&index="+index+"&<%=Constants.CP_SEARCH_CP_ID%>="+collectionProtocolIdValue;
-			window.open(url,'ConsentForm','height=300,width=800,scrollbars=1,resizable=1');
-		}
-
-
-		var flag=false;
-		//Ajax Code Start
-		function ajaxCall(dataToSend, collectionProtocolId, identifier,anchorTagKey,index,consentCheckStatus)
-		{
-			if(flag==true)
-			{
-				return;
-			}
-			flag=true;
-			var request = newXMLHTTPReq();
-			request.onreadystatechange=function(){checkForConsents(request, collectionProtocolId, identifier,anchorTagKey,index,consentCheckStatus)};
-			//send data to ActionServlet
-			//Open connection to servlet
-			request.open("POST","CheckConsents.do",true);
-			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-			request.send(dataToSend);
-		}
-
-		function checkForConsents(request, collectionProtocolId,  verificationKey, anchorTagKey,index,consentCheckStatus)
-		{
-
-			if(request.readyState == 4)
-			{
-				//Response is ready
-				if(request.status == 200)
-				{
-					var responseString = request.responseText;
-					validateBarcodeLable=responseString;
-					var anchorTag = document.getElementById(anchorTagKey);
-					var spanTag = document.getElementById(consentCheckStatus);
-					var consentResponseKey = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + index +"_isConsentAvailable)";;
-					if(responseString=="<%=Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE%>")
-					{
-						<%if(operation.equals(Constants.EDIT))
-						{%>
-							responseString = "<%=Constants.PARTICIPANT_CONSENT_EDIT_RESPONSE%>";
-						<%}%>
-						spanTag.innerHTML="";
-						if(anchorTag == null)
-						{
-							anchorTag = document.createElement("a");
-						}
-						anchorTag.setAttribute("id",anchorTagKey);
-						anchorTag.setAttribute("href", "javascript:openConsentPageAjax('"+collectionProtocolId+"','"+index+"','"+responseString+"')");
-						anchorTag.innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='Consent' id='" + verificationKey + "'/><input type='hidden' name='" + consentResponseKey+ "' value='" +responseString+ "' id='" + consentResponseKey+ "'/>";
-						spanTag.appendChild(anchorTag);
-					}
-					else //No Consent
-					{
-						spanTag.innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='Consent' id='" + verificationKey + "'/><input type='hidden' name='" + consentResponseKey+ "' value='" +responseString+ "' id='" + consentResponseKey+ "'/>";
-					}
-
-
-					flag=false;
-				}
-			}
-		}
-
-		function textLimit(field)
-		{
-			if(field.value.length>0)
-				field.value = field.value.replace(/[^\d]+/g, '');
-
-			/*if (element.value.length > maxlen + 1)
-				alert('your input has been truncated!');*/
-			/*if (field.value.length > maxlen)
-			{
-				//field.value = field.value.substring(0, maxlen);
-				field.value = field.value.replace(/[^\d]+/g, '');
-			}*/
-		}
-		function intOnly(field)
-		{
-			if(field.value.length>0)
-			{
-				field.value = field.value.replace(/[^\d]+/g, '');
-			}
-		}
-
-		function deselectParticipant()
-		{
-			var rowCount = mygrid.getRowsNum();
-			for(i=1;i<=rowCount;i++)
-			{
-				var cl = mygrid.cells(i,0);
-				cl.setChecked(false);
-			}
 		}
 
 		//this function is called when participant clicks on radiao button
@@ -455,92 +301,8 @@ tr#hiddenCombo
 				document.forms[0].chkName[i].checked = false;
 			}
 		}
-		//This Function is called when user clicks on 'Add New Participant' Button
-		function AddParticipant()
-		{
-			document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
-			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
-			{%>
-			document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
-			<%}%>
-			document.forms[0].submit();
-		}
-		//This function is called when user clicks on 'Use Selected Participant' Button
-		function UseSelectedParticipant()
-		{
-
-			if(document.forms[0].participantId.value=="" || document.forms[0].participantId.value=="0")
-			{
-				alert("Please select the Participant from the list");
-			}
-			else
-			{
-
-				document.forms[0].action="ParticipantSelect.do?operation=add&id="+document.forms[0].participantId.value;
-				alert(document.forms[0].action);
-				document.forms[0].submit();
-				//window.location.href="ParticipantSelect.do?operation=add&participantId="+document.forms[0].participantId.value+"&submittedFor="+document.forms[0].submittedFor.value+"&forwardTo="+document.forms[0].forwardTo.value;
-			}
-
-		}
-
-		function CreateNewClick()
-		{
-			document.forms[0].radioValue.value="Add";
-			document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
-			document.forms[0].forwardTo.value="ForwardTo";
-			document.forms[0].participantId.value="";
-			document.forms[0].id.value="0";
-			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
-			{%>
-				document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
-			<%}%>
-			deselectParticipant();
-		}
-
-		function LookupAgain()
-		{
-			document.forms[0].radioValue.value="Lookup";
-			document.forms[0].forwardTo.value="ForwardTo";
-			document.forms[0].participantId.value="";
-			document.forms[0].id.value="";
-			deselectParticipant();
-		}
 
 
-		function onVitalStatusRadioButtonClick(element)
-		{
-
-			if(element.value == "Dead")
-			{
-				document.forms[0].deathDate.disabled = false;
-			}
-			else
-			{
-				document.forms[0].deathDate.disabled = true;
-			}
-		}
-
-		//View SPR Vijay pande
-		function viewSPR()
-		{
-			<%Long reportId=(Long)session.getAttribute(Constants.IDENTIFIED_REPORT_ID);%>
-			var reportId='<%=reportId%>';
-			if(reportId==null || reportId==-1)
-			{
-				alert("There is no associate report in the system!");
-			}
-			else if(reportId==null || reportId==-2)
-			{
-				alert("Associated report is under quarantined request! Please contact administrator for further details.");
-			}
-			else
-			{
-		    	var action="<%=Constants.VIEW_SPR_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&reportId="+reportId;
-				document.forms[0].action=action;
-				document.forms[0].submit();
-			}
-		}
 
 		function GenerateEMPIID()
 		{
@@ -570,6 +332,7 @@ tr#hiddenCombo
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
+				
 		function showAnnotations()
 		{
 			var fwdPage="<%=pageOf%>";
@@ -577,16 +340,9 @@ tr#hiddenCombo
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
-		function setTarget()
-		{
-			var fwdPage="<%=pageOf%>";
-			if(!fwdPage=="pageOfParticipantCPQuery")
-				document.forms[0].target = '_top';
-		}
-
-
+			
+		
 	</script>
-<script language="JavaScript" type="text/javascript" src="jss/empi.js"></script>
 </head>
 
 <html:form action="<%=formName%>" style="height:100%,width=100%">
@@ -650,8 +406,8 @@ tr#hiddenCombo
 				<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
 				<tr>
 				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" border="0" height="1"></td>
-		        <td valign="bottom" ><a href="#" onClick="setTarget();editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" border="0" alt="Edit Participant" width="116" height="22" border="0"></a></td>
-		        <td valign="bottom"><a href="#" onClick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></a></td>
+		        <td valign="bottom" ><a href="#" onClick="setTarget('<%=pageOf%>');editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" border="0" alt="Edit Participant" width="116" height="22" border="0"></a></td>
+		        <td valign="bottom"><a href="#" onClick="viewSPR('<%=reportId%>','<%=pageOf%>')"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></a></td>
 		        <td valign="bottom"><img src="images/uIEnhancementImages/tab_view_annotation1.gif" border="0" alt="View Annotation" width="116" height="22"></td>
 		        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
 				</tr>

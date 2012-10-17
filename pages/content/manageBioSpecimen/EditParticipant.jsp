@@ -126,7 +126,7 @@ function participantRegRow(subdivtag)
 			spanTag.innerHTML="<%=Constants.NO_CONSENTS_DEFINED%>"+"<input type='hidden' name='" + name + "' value='Consent' id='" + name + "'>";
 			spanTag.appendChild(anchorTag);
 			consent.appendChild(spanTag);
-			document.getElementById(keyValue).onchange=function(){getConsent(name,collectionProtocolValue,collectionProtocolTitleValue,(cprSize+1),anchorTagKey,consentCheckStatus)};
+			document.getElementById(keyValue).onchange=function(){getConsent(name,collectionProtocolValue,collectionProtocolTitleValue,(cprSize+1),anchorTagKey,consentCheckStatus,'<%=operation%>')};
 		}
 		function setSubmittedForParticipanteMPIGenerate(submittedFor,forwardTo){
 			var noOfreg = '<%=noOrRowsCollectionProtocolRegistration%>';
@@ -224,45 +224,8 @@ function participantRegRow(subdivtag)
 			document.getElementById(collectionProtocolTitleKey).value = collectionProtocolTitle;
 		}
 	}
-	function checkActivityStatusForCPR()
-		{
-			var collectionProtocolRegistrationVal = parseInt(document.forms[0].collectionProtocolRegistrationValueCounter.value);
-			var isAllActive = true;
-			for(i = 1 ; i <= collectionProtocolRegistrationVal ; i++)
-			{
-				var name = "collectionProtocolRegistrationValue(CollectionProtocolRegistration:" + i +"_activityStatus)";
-				if((document.getElementById(name) != undefined) && document.getElementById(name).value=="Disabled")
-				{
-					isAllActive = false;
-					var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
-					if (go==true)
-					{
-						document.forms[0].submit();
-					}
-					else
-					{
-						break;
-					}
-				}
-			}
-			if (isAllActive==true)
-			{
-				document.forms[0].submit();
-			}
-		}
-    function showMessage(titleMessage)
-		{
-     		 Tip(titleMessage,BGCOLOR,'#FFFFFF',BORDERCOLOR,'#000000',FONTCOLOR,'#000000',WIDTH,'30',FOLLOWMOUSE,'FALSE');
-    	}
-		function validateRegDate(param){
-			var i = 1;
-			while(i <= param){
-			var id  = 'collectionProtocolRegistrationValue(ClinicalStudyRegistration:' + i + '_registrationDate)';
-			var date  = document.getElementById(id);
-			validateDate(date);
-			i++;
-		  }
-		}
+
+
 </script>
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
@@ -867,7 +830,7 @@ function participantRegRow(subdivtag)
 														String onChangeFun = "getConsent('" + collectionProtocolCheck
 														+ "','" + collectionProtocolId + "', '"
 														+ collectionProtocolTitleKey + "','" + i + "','"
-														+ anchorTagKey + "','" + consentCheckStatus + "')";
+														+ anchorTagKey + "','" + consentCheckStatus + "','" + operation + "')";
 						%>
 
 						<tr>
@@ -957,15 +920,16 @@ function participantRegRow(subdivtag)
 								<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>"
 									labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
 							</html:select></td>
-							<td align="left" class="black_ar"><span
-								id="<%=consentCheckStatus%>"> <%
- 	if (!consentResponseDisplayValue
+							<td align="left" class="black_ar">
+								<span id="<%=consentCheckStatus%>"> 
+								<%
+							         if (!consentResponseDisplayValue
  									.equals(Constants.NO_CONSENTS_DEFINED)) {
  										if (operation.equals(Constants.EDIT)) {
  									consentResponseDisplayValue = Constants.PARTICIPANT_CONSENT_EDIT_RESPONSE;
  										}
  %> <a id="<%=anchorTagKey%>"
-								href="javascript:openConsentPage('<%=collectionProtocolId%>','<%=i%>','<%=consentResponseDisplayValue%>','<%=collectionProtocolRegIdValue%>')">
+								href="javascript:openConsentPage('<%=collectionProtocolId%>','<%=i%>','<%=consentResponseDisplayValue%>','<%=collectionProtocolRegIdValue%>','<%=operation%>')">
 							<%=consentResponseDisplayValue%><br>
 							<input type='hidden' name="<%=collectionProtocolConsentCheck%>"
 								value='Consent' id="<%=collectionProtocolConsentCheck%>">
