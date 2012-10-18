@@ -319,7 +319,7 @@ public final class StorageContainerUtil
 			final QueryWhereClause queryWhereClause2 = new QueryWhereClause(ContainerPosition.class
 					.getName());
 			queryWhereClause2.addCondition(new EqualClause("parentContainer.id", containerId));
-			final List list2 = dao.executeQuery("select positionDimensionOne,positionDimensionTwo,occupiedContainer.id,occupiedContainer.name from "+ContainerPosition.class.getName()+" where parentContainer.id="+containerId);
+			final List list2 = dao.executeQuery("select positionDimensionOne,positionDimensionTwo,occupiedContainer.id,occupiedContainer.name,occupiedContainer.capacity.oneDimensionCapacity,occupiedContainer.capacity.twoDimensionCapacity from "+ContainerPosition.class.getName()+" where parentContainer.id="+containerId);
 			setPositions(positions, list2,false);
 			if(list2!=null){
 				occupiedPositon = occupiedPositon+list2.size();
@@ -496,6 +496,9 @@ public final class StorageContainerUtil
 					}else{
 						dtoObj.setChildContainerId((Long) columnList[2]);
 						dtoObj.setChildContainerLabel((String) columnList[3]);
+						dtoObj.setChildContainerPosxCap((Integer) columnList[4]);
+						dtoObj.setChildContainerPosyCap((Integer) columnList[5]);
+						
 					}
 					positions[countX][countY] = dtoObj;
 				}

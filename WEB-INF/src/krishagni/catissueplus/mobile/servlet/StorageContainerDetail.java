@@ -44,7 +44,6 @@ public class StorageContainerDetail  extends HttpServlet {
 				
 			if(request.getParameter("containerName")!=null){
 				edu.wustl.dao.DAO dao = edu.wustl.catissuecore.util.global.AppUtility.openDAOSession(sessionData);
-				edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic bizLogic = new edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic();
 				String containerName = request.getParameter("containerName");
 				StorageContainerGridObject scGridObject = StorageContainerUtil.getContainerDetails(containerName,dao);
 				StoragePositionDTO[][] storageContainer = scGridObject.getPositionDetails();
@@ -74,6 +73,9 @@ public class StorageContainerDetail  extends HttpServlet {
 							}else{
 								obj.put("childContainerId",dto.getChildContainerId());
 								obj.put("childContainerName",dto.getChildContainerLabel());
+								obj.put("childContainerCapacityX",dto.getChildContainerPosxCap());
+								obj.put("childContainerCapacityY",dto.getChildContainerPosyCap());
+								
 							}
 							obj.put("containerId",dto.getContainerId());
 							obj.put("containerName",dto.getContainerName());

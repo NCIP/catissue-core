@@ -10,11 +10,26 @@ public class StoragePositionDTO {
 	private int posx;
 	private int posy;
 	private SpecimenDTO specimenDTO;
+	private int childContainerPosxCap;
+	private int childContainerPosyCap;
 	
 	
 	
 	
 	
+	
+	public int getChildContainerPosxCap() {
+		return childContainerPosxCap;
+	}
+	public void setChildContainerPosxCap(int childContainerPosxCap) {
+		this.childContainerPosxCap = childContainerPosxCap;
+	}
+	public int getChildContainerPosyCap() {
+		return childContainerPosyCap;
+	}
+	public void setChildContainerPosyCap(int childContainerPosyCap) {
+		this.childContainerPosyCap = childContainerPosyCap;
+	}
 	public SpecimenDTO getSpecimenDTO() {
 		return specimenDTO;
 	}

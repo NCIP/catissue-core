@@ -683,12 +683,13 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean
 	 * @throws ApplicationException 
 	 */
-	public void createAliquotSpecimen(AliquotsDetailsDTO aliquotDetailObj, SessionDataBean sessionDataBean) throws BizLogicException,ApplicationException{
+	public List<SpecimenDTO> createAliquotSpecimen(AliquotsDetailsDTO aliquotDetailObj, SessionDataBean sessionDataBean) throws BizLogicException,ApplicationException{
 		Specimen parentSpecimen = new Specimen();
 		parentSpecimen.setLabel(aliquotDetailObj.getParentSpecimenLabel());
 		NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
 		DAO dao = AppUtility.openDAOSession(sessionDataBean);
 		String msg = "";
+		Collection<AbstractDomainObject> specimenCollection = new LinkedHashSet<AbstractDomainObject>();
 		
 		try{
 			specimenBizLogic.isAuthorized(dao, parentSpecimen, sessionDataBean);
@@ -697,7 +698,6 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		    distributeAvailableQuantity(aliquotDetailObj,parentSpecimen.getAvailableQuantity(),AppUtility.isQuantityDouble(parentSpecimen.getClassName(), parentSpecimen.getSpecimenType()));
 			List <SpecimenPosition> specPosList = GetSpecimenPositionList(aliquotDetailObj,sessionDataBean,dao);
 			
-			final Collection<AbstractDomainObject> specimenCollection = new LinkedHashSet<AbstractDomainObject>();
 			for (int i = 0; i < aliquotDetailObj.getNoOfAliquots(); i++)
 			{
 				final Specimen aliquotSpecimen = createAliquotSpecimen(parentSpecimen);
@@ -726,6 +726,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		finally{
 			dao.closeSession();
 		}
+		return getAliquotSpecimenDTOList(specimenCollection);
 	}
 	
 	/**
@@ -735,11 +736,14 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 	 * @param sessionDataBean
 	 * @throws ApplicationException 
 	 */
-	public void createAliquotSpecimenBasedOnCp(AliquotsDetailsDTO aliquotDetailObj, SessionDataBean sessionDataBean) throws ApplicationException{
+	public List<SpecimenDTO> createAliquotSpecimenBasedOnCp(AliquotsDetailsDTO aliquotDetailObj, SessionDataBean sessionDataBean) throws ApplicationException{
 		Specimen parentSpecimen = new Specimen();
 		parentSpecimen.setLabel(aliquotDetailObj.getParentSpecimenLabel());
 		NewSpecimenBizLogic specimenBizLogic = new NewSpecimenBizLogic();
 		DAO dao = AppUtility.openDAOSession(sessionDataBean);
+		
+		final Collection<AbstractDomainObject> newSpecimenAliquotCollection = new LinkedHashSet<AbstractDomainObject>();
+		final Collection<AbstractDomainObject> updateSpecimenAliquotCollection = new LinkedHashSet<AbstractDomainObject>();
 		
 		try{
 			
@@ -761,8 +765,6 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			//Fetch list of available position from container.
 			List <SpecimenPosition> specPosList = GetSpecimenPositionList(aliquotDetailObj,sessionDataBean,dao);
 			
-			final Collection<AbstractDomainObject> newSpecimenAliquotCollection = new LinkedHashSet<AbstractDomainObject>();
-			final Collection<AbstractDomainObject> updateSpecimenAliquotCollection = new LinkedHashSet<AbstractDomainObject>();
 			long lastChildNo = specimenBizLogic.getTotalNoOfAliquotSpecimen(parentSpecimen.getId(), dao);
 			int cnt = aliquotDetailObj.getNoOfAliquots() < aliquotSpecimenList.size() ? aliquotDetailObj.getNoOfAliquots() : aliquotSpecimenList.size();
 			for (int i = 0; i < cnt; i++)
@@ -807,6 +809,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		finally{
 			dao.closeSession();
 		}
+		return getAliquotSpecimenDTOList(updateSpecimenAliquotCollection);
 	}
 	public void printLabel(List specimenList,SessionDataBean sessionDataBean) throws Exception{
 		final LabelPrinter labelPrinter = LabelPrinterFactory.getInstance("specimen");
@@ -863,12 +866,29 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		
 		}
 		return returnList;
-
-		
-		
-		
-		
-		
-		
+	}
+	
+	//create aliquot detail from specimenDTo
+	
+	public List<SpecimenDTO> getAliquotSpecimenDTOList(Collection<AbstractDomainObject> aliquotList){
+		 List<SpecimenDTO> returnList = new ArrayList<SpecimenDTO>();
+		 Iterator<AbstractDomainObject> ite = aliquotList.iterator();
+		 while(ite.hasNext()){
+			 Specimen aliquotObj = (Specimen) ite.next();
+			 SpecimenDTO specimen = new SpecimenDTO();
+				specimen.setLabel(aliquotObj.getLabel());
+				specimen.setBarCode(aliquotObj.getBarcode());
+				specimen.setSpecimenClass(aliquotObj.getSpecimenClass());
+				specimen.setSpecimenType(aliquotObj.getSpecimenType());
+				specimen.setPathologicalStatus(aliquotObj.getPathologicalStatus());
+				specimen.setTissueSite(aliquotObj.getSpecimenCharacteristics().getTissueSite());
+				specimen.setTissueSide(aliquotObj.getSpecimenCharacteristics().getTissueSide());
+				specimen.setAvailableQuantity(aliquotObj.getAvailableQuantity());
+				specimen.setContainerName(aliquotObj.getSpecimenPosition().getStorageContainer().getName());
+				specimen.setPositionDimensionOneString(aliquotObj.getSpecimenPosition().getPositionDimensionOne().toString());
+				specimen.setPositionDimensionTwoString(aliquotObj.getSpecimenPosition().getPositionDimensionTwo().toString());
+				returnList.add(specimen);
+		 }
+		 return returnList;
 	}
 }
