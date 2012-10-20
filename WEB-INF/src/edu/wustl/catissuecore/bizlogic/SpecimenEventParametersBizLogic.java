@@ -258,10 +258,19 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 							.getToPositionDimensionOne());
 					specimenPosition.setPositionDimensionTwo(transferEvent
 							.getToPositionDimensionTwo());
-					StorageContainerUtil.setContainerPositionAsString(storageContainerObj.getName(), transferEvent
-							.getToPositionDimensionOne(), transferEvent
-							.getToPositionDimensionTwo(), specimenPosition);
+					if(storageContainerObj!=null)
+					{
+						StorageContainerUtil.setContainerPositionAsString(storageContainerObj.getName(), transferEvent
+								.getToPositionDimensionOne(), transferEvent
+								.getToPositionDimensionTwo(), specimenPosition);
+					}
+					if(storageContainerObj==null)
+					{
+						dao.delete(specimenPosition);
+						specimen.setSpecimenPosition(null);
+					}
 					dao.update(specimen,null);
+					
 					transferEvent.setToStorageContainer(storageContainerObj);
 				}
 				if (specimenEvent instanceof DisposalEventParameters)
