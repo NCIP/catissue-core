@@ -8,6 +8,8 @@
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
 <script type="text/javascript" src="jss/wz_tooltip.js"></script>
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
 <script>
 function setParentWindowValue(elementName,elementValue)
 {
@@ -120,10 +122,9 @@ function closeFramedWindow()
 <link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
-</br>
 <!-- target of anchor to skip menus -->
 <table summary="" cellpadding="0" cellspacing="0" border="0"  width="100%" >
-
+	<tr>
 	<%if(null!=storageContainerGridObject){%>
 		<td  width="5"class="black_ar_t">&nbsp;</td>
 		<td class="black_ar"><b>&nbsp;<%=verTempTwo%></b></td>
@@ -132,13 +133,13 @@ function closeFramedWindow()
 	<tr>
 		<td   width="5" class="black_ar_t" align="center"><b><%=verTempOne%><b></td>
 		<td class="black_ar_t">
-		<table summary="" cellpadding="0" cellspacing="1" border="0" >
+		<table style="border:3px;"  cellpadding="0" cellspacing="1" border="0" >
 				 
 				<tr>
 					<td colspan="2">
-					<table style="table-layout: fixed;" border="0" cellspacing="1" cellpadding="2" width="100%">
-					<tr><td>&nbsp;</td>	
-						<td >&nbsp;</td>	
+					<table style="table-layout: fixed;" cellspacing="1" cellpadding="2" width="100%">
+					<tr>
+						<td class="subtdPosGrid">&nbsp;</td>
 						
 						<%
 						for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=twoDimensionCapacity;i++)
@@ -146,7 +147,7 @@ function closeFramedWindow()
 							if(twoDimensionCapacity == 1)
 							{
 							%>
-								<td align="center"  class="subtd">
+								<td align="center"  class="subtdPosGrid">
 								<%=edu.wustl.catissuecore.util.global.AppUtility.getPositionValue(twoDimLabellingScheme,i)%>
 								</td>
 							<%
@@ -154,7 +155,7 @@ function closeFramedWindow()
 							else
 							{
 							%>
-								<td align="center"  class="subtd">
+								<td align="center"  class="subtdPosGrid">
 								<%=edu.wustl.catissuecore.util.global.AppUtility.getPositionValue(twoDimLabellingScheme,i)%>
 								</td>
 							<%}
@@ -165,20 +166,15 @@ function closeFramedWindow()
 						for (int i = Constants.STORAGE_CONTAINER_FIRST_ROW;i<=oneDimensionCapacity;i++)
 						{%>
 							<tr>
-							<%	                        
-								if(i == 1)
-								{%>
-									<td rowspan="<%=rowSpanValue%>" width="5" class="black_ar_t"></td>
-								<%}
-                        	
+							<%
 								if(i!=oneDimensionCapacity+1) 
 								{%>
-									<td align="center" class="subtd">
+									<td align="center" class="subtdPosGrid">
 									<%=edu.wustl.catissuecore.util.global.AppUtility.getPositionValue(oneDimLabellingScheme,i)%>
 									</td>
 								<%}
 					   
-								for (int j = Constants.STORAGE_CONTAINER_FIRST_COLUMN;j<=twoDimensionCapacity+1;j++)
+								for (int j = Constants.STORAGE_CONTAINER_FIRST_COLUMN;j<=twoDimensionCapacity;j++)
 								{
 									// Default cell boundary
                    						if(i == oneDimensionCapacity+1)
@@ -204,14 +200,14 @@ function closeFramedWindow()
 											{
 												if (!availablePositions[i][j])
 												{%>
-													<td bgcolor="#BFBFBF" align="center"></td>
+													<td bgcolor="#F25252;" align="center"></td>
 												<%}
 												else
 												{
 													String setParentWindowContainer = null;
 													setParentWindowContainer = "javascript:setTextBoxValue('"+pos1+"','"+  AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i) + "','"+pos2+"','"+  AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j) + "');\"" ;
 													%>
-													<td width="8%" onMouseOver="this.bgColor='#BFDCF3'" onMouseOut="this.bgColor='#114C88'" bgColor=#114C88 align="center" onclick="<%=setParentWindowContainer%>"><a href="<%=setParentWindowContainer%>"></a></td>
+													<td width="8%" style="cursor:pointer" onMouseOver="this.bgColor='#008000'" onMouseOut="this.bgColor='#83F2B9'" bgColor=#83F2B9 align="center" onclick="<%=setParentWindowContainer%>"><a href="<%=setParentWindowContainer%>"></a></td>
 												<%}%>					   	  
 										<%}%>
 								<%}%>
