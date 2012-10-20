@@ -27,7 +27,7 @@ function initDropDownGrid(gridDropDownInfo)
 		//if the row is selected by arrow keys and if we move the mouse over 
 		//the grid rows then the previously selected rows remains selected
 		gridObj.attachEvent("onMouseOver", function(id,ind){ gridObj.selectRowById(id, false, true , false);
-		this.cells(id,ind).cell.title = gridObj.cellById(id,ind).getValue();
+		gridObj.cells(id,ind).cell.title=gridObj.cellById(id,ind).getValue();
 		});
 		
 		//whenever the page is changed the focus is lost from the text box due 
@@ -121,7 +121,6 @@ function showGrid(gridContainingDiv,dropDownId)
 	document.getElementById(gridContainingDiv).style.position = "absolute";
 	document.getElementById(gridContainingDiv).style.top = document.getElementById(dropDownId).style.top + document.getElementById(dropDownId).style.height;
 	gridOn=1;
-	//piGrid.clearAndLoad("ParticipantConnector.do?gridFor=" + pGridInfo['gridDiv'] + "&csId=" +csId , pGridCallBack);
 }
 
 function showHideGrid(e,dropDownInfoObject,gridObject)
@@ -167,5 +166,74 @@ function setValue(e,gridDivId, dropDownId)
 {
 		document.getElementById(dropDownId).focus();
 		noEventPropogation(e);
+}
+function containerOnRowSelect(id,ind)
+{	
+	document.getElementsByName('selectedContainerName')[0].value = id;
+	document.getElementById(containerDropDownInfo['dropDownId']).value = scGrid.cellById(id,ind).getValue();
+	hideGrid(containerDropDownInfo['gridDiv']);
+	scGridVisible = false;
+	document.getElementById("pos1").value="";
+	document.getElementById("pos2").value="";
+}
+
+function showHideStorageContainerGrid(e,gridDivId, dropDownId,containerDropDownInfo)
+{		
+		setValue(e,containerDropDownInfo['gridDiv'], containerDropDownInfo['dropDownId']);
+		if(containerDropDownInfo['visibilityStatusVariable'])
+		{
+			hideGrid(containerDropDownInfo['gridDiv']);
+			containerDropDownInfo['visibilityStatusVariable'] = false;
+		}
+		else 
+		 {	
+			showGrid(containerDropDownInfo['gridDiv'],containerDropDownInfo['dropDownId']);
+			containerDropDownInfo['visibilityStatusVariable'] = true;
+			scGrid.load(containerDropDownInfo['actionToDo'],"");
+		 }
+}
+
+var dhxWins;
+
+function initWindow()
+{
+    dhxWins = new dhtmlXWindows();
+    dhxWins.enableAutoViewport(true);
+    dhxWins.setImagePath("dhtmlx_suite/imgs/");
+    dhxWins.setSkin("dhx_skyblue");
+}
+
+function loadDHTMLXWindow()
+{
+	var w = 400;
+    var h = 400;
+    var x = (screen.width / 2) - (w / 2);
+    var y = 0;
+    dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
+	var storageContainer =document.getElementById("storageContainerDropDown").value;
+    var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1=pos1&pos2=pos2&&containerName="+storageContainer;
+    dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
+    dhxWins.window("containerPositionPopUp").button("park").hide();
+    dhxWins.window("containerPositionPopUp").button("minmax1").hide();
+    dhxWins.window("containerPositionPopUp").allowResize();
+	dhxWins.window("containerPositionPopUp").setModal(true);
+    dhxWins.window("containerPositionPopUp").setText("Container Positions");    //it's the title for the popup
+}
+
+function loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo)
+{
+	var w = 400;
+    var h = 400;
+    var x = (screen.width / 2) - (w / 2);
+    var y = 0;
+    dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
+	var storageContainer =document.getElementById(storageContainerDropDown).value;
+    var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1="+positionDimensionOne+"&pos2="+positionDimensionTwo+"&containerName="+storageContainer;
+    dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
+    dhxWins.window("containerPositionPopUp").button("park").hide();
+    dhxWins.window("containerPositionPopUp").button("minmax1").hide();
+    dhxWins.window("containerPositionPopUp").allowResize();
+	dhxWins.window("containerPositionPopUp").setModal(true);
+    dhxWins.window("containerPositionPopUp").setText("Container Positions");    //it's the title for the popup
 }
 

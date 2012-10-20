@@ -1,46 +1,47 @@
+
 package edu.wustl.catissuecore.util;
 
-import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm;
 import edu.wustl.catissuecore.bean.GenericSpecimen;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
-
 
 public class SpecimenScriptGeneratorForContainerComponent
 {
-	final static String VAR="var ";
-	final String FUNCTION_NAME="function doOnLoad()";
-	final static String OPENING_BRACE="{";
-	final static String CLOSING_BRACE="}";
-	final static String NEXT_LINE="\n";
-	final static String COMMA=",";
-	final static String SEMI_COLON=";";
-	final static String EMPTY_SPACE=" ";
-	final static String CLASS_NAME="className";
-	final static String EQUALS="=";
-	final static String SPECIMEN_TYPE="specimenType";
-	final static String CPID="collectionProtocolId";
-	final static String CONTAINER_NAME="containerName";
-	final String URL="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>={0}&specimenType={1}" +
-			"&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>={2}";
-	
 
-	public StringBuffer generateScript(ViewSpecimenSummaryForm summaryForm, Integer collectionProtocolId)
+	final static String VAR = "var ";
+	final static String FUNCTION_NAME = "function doOnLoad()";
+	final static String OPENING_BRACE = "{";
+	final static String CLOSING_BRACE = "}";
+	final static String NEXT_LINE = "\n";
+	final static String COMMA = ",";
+	final static String SEMI_COLON = ";";
+	final static String EMPTY_SPACE = " ";
+	final static String CLASS_NAME = "className";
+	final static String EQUALS = "=";
+	final static String SPECIMEN_TYPE = "specimenType";
+	final static String CPID = "collectionProtocolId";
+	final static String CONTAINER_NAME = "containerName";
+	//final String URL = "CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>={0}&specimenType={1}"
+		//	+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>={2}";
+
+	public static String generateScript(ViewSpecimenSummaryForm summaryForm,
+			String collectionProtocolId)
 	{
-		String cpId="";
-		if(collectionProtocolId!=null && !collectionProtocolId.equals(0))
+		String cpId = "";
+		if (collectionProtocolId != null && !collectionProtocolId.equals(0))
 		{
-			cpId=collectionProtocolId.toString();
+			cpId = collectionProtocolId.toString();
 		}
-		StringBuffer scBuffer= new StringBuffer();
+		StringBuffer scBuffer = new StringBuffer();
 		scBuffer.append(FUNCTION_NAME);
 		scBuffer.append(NEXT_LINE);
 		scBuffer.append(OPENING_BRACE);
 		scBuffer.append(NEXT_LINE);
-		scBuffer.append(VAR);
+		/*scBuffer.append(VAR);
 		scBuffer.append("className=document.getElementById(\"className\").value").append(SEMI_COLON);
 		scBuffer.append(NEXT_LINE);
 		scBuffer.append(VAR);
@@ -52,22 +53,22 @@ public class SpecimenScriptGeneratorForContainerComponent
 		scBuffer.append(VAR);
 		scBuffer.append("url=\"CatissueCommonAjaxAction.do?type=getStorageContainerList&"+Constants.CAN_HOLD_SPECIMEN_CLASS+"="
 				+"className&specimenType=sptype&"+Constants.CAN_HOLD_COLLECTION_PROTOCOL+"="+cpId+"\"").append(SEMI_COLON);
-		scBuffer.append(NEXT_LINE);
+		scBuffer.append(NEXT_LINE);*/
 
-		List<GenericSpecimen> specimenList=summaryForm.getSpecimenList();
-		List<GenericSpecimen> aliquotList=summaryForm.getAliquotList();
-		List<GenericSpecimen> derivativeList=summaryForm.getAliquotList();
+		List<GenericSpecimen> specimenList = summaryForm.getSpecimenList();
+		List<GenericSpecimen> aliquotList = summaryForm.getAliquotList();
+		List<GenericSpecimen> derivativeList = summaryForm.getDerivedList();
 
-		intialiseComponentForContainer(scBuffer, specimenList);
-		intialiseComponentForContainer(scBuffer, aliquotList);
-		intialiseComponentForContainer(scBuffer, derivativeList);
+		intialiseComponentForContainer(scBuffer, specimenList,cpId);
+		intialiseComponentForContainer(scBuffer, aliquotList,cpId);
+		intialiseComponentForContainer(scBuffer, derivativeList,cpId);
 
 		scBuffer.append(CLOSING_BRACE);
-		return scBuffer;
+		return scBuffer.toString();
 
 	}
 
-	private void intialiseComponentForContainer(StringBuffer scBuffer, List<GenericSpecimen> specimenList)
+	private static void intialiseComponentForContainer(StringBuffer scBuffer, List<GenericSpecimen> specimenList,String cpId)
 	{
 		if(specimenList!=null)
 		{
@@ -75,162 +76,202 @@ public class SpecimenScriptGeneratorForContainerComponent
 			while(iter.hasNext())
 			{
 				GenericSpecimen specimen=iter.next();
-				String specimenId=String.valueOf(specimen.getId());
-				
-				String specimenType="S_";
-				String specimenIdSuffix = specimenType+specimen.getId();
-				
-				StringBuffer storageContainerGrid=new StringBuffer("selectedContainerName_").append(specimenIdSuffix);
-				StringBuffer storageContainer=new StringBuffer("storageContainer_").append(specimenIdSuffix);
-				StringBuffer storageContainerDropDown=new StringBuffer("storageContainerDropDown_").append(specimenIdSuffix);
-				StringBuffer storageContainerPagingArea=new StringBuffer("storageContainerPagingArea_").append(specimenIdSuffix);
-				StringBuffer storageContainerInfoArea=new StringBuffer("storageContainerInfoArea_").append(specimenIdSuffix);
-				StringBuffer containerDropDownInfo=new StringBuffer("containerDropDownInfo_").append(specimenIdSuffix);
-				StringBuffer scGrid=new StringBuffer("scGrid_").append(specimenIdSuffix);
-				StringBuffer scGridVisible=new StringBuffer("scGridVisible_").append(specimenIdSuffix);
-				StringBuffer selectedContainerName=new StringBuffer("selectedContainerName_").append(specimenIdSuffix);
-				
-				
-				StringBuffer variableDec=new StringBuffer();
-				variableDec.append(VAR).append(EMPTY_SPACE);
-				StringBuffer variableClassName=new StringBuffer(CLASS_NAME).append(specimenId);
-				StringBuffer valueClassName=new StringBuffer("document.getElementById(\"className_S_").append(specimenId).append(").value;");
-				variableDec.append(EQUALS).append(valueClassName);
-				variableDec.append(NEXT_LINE);
-				
-				variableDec.append(VAR).append(EMPTY_SPACE);
-				StringBuffer variableSpecimenType=new StringBuffer(SPECIMEN_TYPE).append(specimenId);
-				StringBuffer valueSpecimenType=new StringBuffer("document.getElementById(\"className_S_").append(specimenId).append(").value;");
-				variableDec.append(EQUALS).append(valueSpecimenType);
-				variableDec.append(NEXT_LINE);
-				
-				variableDec.append(VAR).append(EMPTY_SPACE);
-				StringBuffer variableCollectionProtocol=new StringBuffer(CPID).append(specimenId);
-				StringBuffer valueCollectionProtocol=new StringBuffer("<%=collectionProtocolId%>");
-				variableDec.append(EQUALS).append(valueCollectionProtocol);
-				variableDec.append(NEXT_LINE);
-						
-						
-				variableDec.append(VAR).append(EMPTY_SPACE);
-				StringBuffer variableContainerName=new StringBuffer(CONTAINER_NAME);
-				StringBuffer valueContainerName=new StringBuffer("document.getElementById(\""+storageContainerDropDown+"\").value;");
-				variableDec.append(EQUALS).append(valueContainerName);
-				variableDec.append(NEXT_LINE);
-				
-				Object params[]=new Object[]{variableClassName,variableSpecimenType,variableCollectionProtocol};
-				
-				variableDec.append(VAR).append(EMPTY_SPACE).append("url").append(specimenId).append(EQUALS).append(MessageFormat.format(URL, params));
-				
-					
-				//if(specimen.get)
+				String specimenSuffix = getSpecimenSuffix(specimen);
+				if(specimen.getCollectionStatus()== null || "null".equals(specimen.getCollectionStatus()) || "Pending".equals(specimen.getCollectionStatus()))
+				{
+					StringBuffer storageContainerGrid=new StringBuffer("storageContainerGrid_").append(specimenSuffix);
+					StringBuffer storageContainer=new StringBuffer("storageContainer_").append(specimenSuffix);
+					StringBuffer storageContainerDropDown=new StringBuffer("storageContainerDropDown_").append(specimenSuffix);
+					StringBuffer storageContainerPagingArea=new StringBuffer("storageContainerPagingArea_").append(specimenSuffix);
+					StringBuffer storageContainerInfoArea=new StringBuffer("storageContainerInfoArea_").append(specimenSuffix);
+					StringBuffer containerDropDownInfo=new StringBuffer("containerDropDownInfo_").append(specimenSuffix);
+					StringBuffer scGrid=new StringBuffer("scGrid_").append(specimenSuffix);
+					StringBuffer scGridVisible=new StringBuffer("scGridVisible_").append(specimenSuffix);
+					StringBuffer selectedContainerName=new StringBuffer("selectedContainerName_").append(specimenSuffix);
 
-				scBuffer.append(NEXT_LINE);
-				scBuffer.append("//Drop Down components information");
-				scBuffer.append(NEXT_LINE);
-				scBuffer.append(containerDropDownInfo +"= {gridObj:\""+storageContainerGrid+"\", gridDiv:\""+storageContainer+"\"" +
-						", dropDownId:\""+storageContainerDropDown+"\"" +
-						", pagingArea:\""+storageContainerPagingArea+"\"," +
-						" infoArea:\""+storageContainerInfoArea+"\"" +
-						", onOptionSelect:" +
-						"function (id,ind)"
-						+"{"
-							+"document.getElementsByName('"+selectedContainerName+"')[0].value ="+ valueContainerName+";"
-							+"document.getElementById("+containerDropDownInfo+"['dropDownId']).value = "+scGrid+".cellById(id,ind).getValue()"
-							+"hideGrid("+containerDropDownInfo+"['gridDiv']);"
-							+scGridVisible+"= false;"
+					//StringBuffer scBuffer=new StringBuffer();
+					
+					
+					scBuffer.append(VAR).append(EMPTY_SPACE);
+					StringBuffer variableClassName=new StringBuffer(CLASS_NAME).append(specimenSuffix);
+					StringBuffer valueClassName=new StringBuffer("document.getElementById(\"className_").append(specimenSuffix).append("\").value;");
+					scBuffer.append(variableClassName);
+					scBuffer.append(EQUALS).append(valueClassName);
+					scBuffer.append(NEXT_LINE);
+
+					scBuffer.append(VAR).append(EMPTY_SPACE);
+					StringBuffer variableSpecimenType=new StringBuffer(SPECIMEN_TYPE).append(specimenSuffix);
+					StringBuffer valueSpecimenType=new StringBuffer("document.getElementById(\"type_").append(specimenSuffix).append("\").value;");
+					scBuffer.append(variableSpecimenType);
+					scBuffer.append(EQUALS).append(valueSpecimenType);
+					scBuffer.append(NEXT_LINE);
+
+					scBuffer.append(VAR).append(EMPTY_SPACE);
+					StringBuffer variableCollectionProtocol=new StringBuffer(CPID);
+					StringBuffer valueCollectionProtocol=new StringBuffer(cpId);
+					scBuffer.append(variableCollectionProtocol);
+					scBuffer.append(EQUALS).append("\"").append(valueCollectionProtocol).append("\"").append(";");
+					scBuffer.append(NEXT_LINE);
+
+
+					scBuffer.append(VAR).append(EMPTY_SPACE);
+					StringBuffer variableContainerName=new StringBuffer(CONTAINER_NAME);
+					StringBuffer valueContainerName=new StringBuffer("document.getElementById(\"storageContainerDropDown_"+specimenSuffix+"\").value;");
+					scBuffer.append(variableContainerName);
+					scBuffer.append(EQUALS).append(valueContainerName);
+					scBuffer.append(NEXT_LINE);
+
+					//Object params[]=new Object[]{variableClassName,variableSpecimenType,variableCollectionProtocol};
+
+					//scBuffer.append(VAR).append(EMPTY_SPACE).append("url").append(specimenSuffix).append(EQUALS).append(MessageFormat.format(URL, params));
+					scBuffer.append(VAR).append(EMPTY_SPACE).append("url").append(EQUALS).append("\"CatissueCommonAjaxAction.do?type=getStorageContainerList&")
+					.append(Constants.CAN_HOLD_SPECIMEN_CLASS).append(EQUALS)
+					.append(variableClassName).append("&specimenType=").append(variableSpecimenType)
+					.append("&").append(Constants.CAN_HOLD_COLLECTION_PROTOCOL).append(EQUALS).append(valueCollectionProtocol).append("\"").append(";");
+
+
+					//if(specimen.get)
+
+					scBuffer.append(NEXT_LINE);
+					scBuffer.append("//Drop Down components information");
+					scBuffer.append(NEXT_LINE);
+					scBuffer.append(containerDropDownInfo +"= {gridObj:\""+storageContainerGrid+"\", gridDiv:\""+storageContainer+"\"" +
+							", dropDownId:\""+storageContainerDropDown+"\"" +
+							", pagingArea:\""+storageContainerPagingArea+"\"," +
+							" infoArea:\""+storageContainerInfoArea+"\"" +
+							", onOptionSelect:" +
+							"function (id,ind)"
+							+"{"
+							+"document.getElementsByName('"+selectedContainerName+"')[0].value ="+ valueContainerName+"\n"
+							+"document.getElementById("+containerDropDownInfo+"['dropDownId']).value = "+scGrid+".cellById(id,ind).getValue();\n"
+							+"hideGrid("+containerDropDownInfo+"['gridDiv']);\n"
+							+scGridVisible+"= false;\n"
+							+"document.getElementById(\"positionDimensionOne_"+specimenSuffix+"\").value=\"\";\n"
+							+"document.getElementById(\"positionDimensionTwo_"+specimenSuffix+"\").value=\"\";\n"
 							+"}"
 							+", actionToDo:url, callBackAction:"
 							+"function()" 
 							+"{"
-							+	"var containerName= document.getElementsByName('"+selectedContainerName+"')[0].value;"
-							+	"if(containerName != \"\" && containerName != 0 && containerName != null)"
-							+	"{"
-							+		"document.getElementsByName('"+selectedContainerName+"')[0].value ="+ valueContainerName+";"
-							+		"document.getElementById("+containerDropDownInfo+"['dropDownId']).value = "+scGrid+".cellById(id,ind).getValue()"
-							+		"hideGrid("+containerDropDownInfo+"['gridDiv']);"
-							+		scGridVisible+"= false;"
-							+	"}" 
-							+"}"
-							+", visibilityStatusVariable:"+scGridVisible+"};");
-				scBuffer.append(NEXT_LINE);
-				scBuffer.append("// initialising grid");
-				scBuffer.append(scGrid+"= initDropDownGrid("+containerDropDownInfo+",5,0);"); 
+							+	"var containerName= document.getElementsByName('"+selectedContainerName+"')[0].value;\n"
+							+	"if(containerName != \"\" && containerName != 0 && containerName != null)\n"
+							+	"{\n"
+							+		"document.getElementsByName('"+selectedContainerName+"')[0].value ="+ valueContainerName+"\n"
+							+		"document.getElementById("+containerDropDownInfo+"['dropDownId']).value = "+scGrid+".cellById(id,ind).getValue();\n"
+							+		"hideGrid("+containerDropDownInfo+"['gridDiv']);\n"
+							+		scGridVisible+"= false;\n"
+							+	"}\n" 
+							+"}\n"
+							+", visibilityStatusVariable:"+scGridVisible+", propertyId:'selectedContainerName_"+specimenSuffix+"'};");
+					scBuffer.append(NEXT_LINE);
+					scBuffer.append("// initialising grid");
+					scBuffer.append(NEXT_LINE);
+					scBuffer.append(scGrid+"= initDropDownGrid("+containerDropDownInfo+");"); 
+					scBuffer.append(NEXT_LINE);
+					scBuffer.append(NEXT_LINE);
+				}
 			}
 		}
 	}
-	
 
-	public StringBuffer generateVariableNames(ViewSpecimenSummaryForm summaryForm)
+	private static String getSpecimenSuffix(GenericSpecimen specimen)
 	{
-		StringBuffer scBuffer=new StringBuffer();
-		List<GenericSpecimen> specimenList=summaryForm.getSpecimenList();
-		List<GenericSpecimen> aliquotList=summaryForm.getAliquotList();
-		List<GenericSpecimen> derivativeList=summaryForm.getAliquotList();
+		String lineage = AppUtility.getLineageSubString(specimen);
+		Long idToAppend = specimen.getId();
+		String specimenIdSuffix = null;
+		if (-1 == Long.valueOf(specimen.getId()))
+		{
+			idToAppend = Long.valueOf(specimen.getUniqueIdentifier());
+			specimenIdSuffix = idToAppend.toString();
+		}
+		else
+		{
+			specimenIdSuffix = lineage + "_" + specimen.getId();
+		}
+		return specimenIdSuffix;
+	}
+
+	public static String generateVariableNames(ViewSpecimenSummaryForm summaryForm)
+	{
+		StringBuffer scBuffer = new StringBuffer();
+		List<GenericSpecimen> specimenList = summaryForm.getSpecimenList();
+		List<GenericSpecimen> aliquotList = summaryForm.getAliquotList();
+		List<GenericSpecimen> derivativeList = summaryForm.getDerivedList();
 		declareVariables(scBuffer, specimenList);
 		declareVariables(scBuffer, aliquotList);
 		declareVariables(scBuffer, derivativeList);
-		return scBuffer;
+		return scBuffer.toString();
 
 	}
 
-	private void declareVariables(StringBuffer scBuffer, List<GenericSpecimen> specimenList)
+	private static void declareVariables(StringBuffer scBuffer, List<GenericSpecimen> specimenList)
 	{
-		if(specimenList!=null)
+		if (specimenList != null)
 		{
-			Iterator<GenericSpecimen> iter=specimenList.iterator();
-			while(iter.hasNext())
+			Iterator<GenericSpecimen> iter = specimenList.iterator();
+			while (iter.hasNext())
 			{
-				GenericSpecimen specimen=iter.next();
+				GenericSpecimen specimen = iter.next();
 
-				String specimenType="S_";
-				String specimenIdSuffix=specimenType+specimen.getId();
-				StringBuffer containerDropDownInfo=new StringBuffer("containerDropDownInfo_").append(specimenIdSuffix);
-				StringBuffer scGrid=new StringBuffer("scGrid_").append(specimenIdSuffix);
-				StringBuffer scGridVisible=new StringBuffer("scGridVisible_").append(specimenIdSuffix).append("=false");
-				StringBuffer gridDivObject=new StringBuffer("gridDivObject_").append(specimenIdSuffix);
-				
-				scBuffer.append(VAR);
-				scBuffer.append(containerDropDownInfo).append(COMMA).append(scGrid).append(SEMI_COLON);
+				String specimenControlSuffix = getSpecimenSuffix(specimen);
+				StringBuffer containerDropDownInfo = new StringBuffer("containerDropDownInfo_")
+						.append(specimenControlSuffix);
+				StringBuffer scGrid = new StringBuffer("scGrid_").append(specimenControlSuffix);
+				StringBuffer scGridVisible = new StringBuffer("scGridVisible_").append(
+						specimenControlSuffix).append("=false");
+				StringBuffer gridDivObject = new StringBuffer("gridDivObject_")
+						.append(specimenControlSuffix);
+
+				scBuffer.append(VAR).append(EMPTY_SPACE);
+				scBuffer.append(containerDropDownInfo).append(COMMA).append(scGrid)
+						.append(SEMI_COLON);
 				scBuffer.append(NEXT_LINE);
-				scBuffer.append(VAR);
+				scBuffer.append(VAR).append(EMPTY_SPACE);
 				scBuffer.append(scGridVisible).append(SEMI_COLON);
 				scBuffer.append(NEXT_LINE);
-				scBuffer.append(VAR);
+				scBuffer.append(VAR).append(EMPTY_SPACE);
 				scBuffer.append(gridDivObject).append(SEMI_COLON);
 				scBuffer.append(NEXT_LINE);
 
 			}
 		}
 	}
-	
+
 	public static void setContainerValues(List<GenericSpecimen> specimenList)
 	{
-		if(specimenList!=null)
+		if (specimenList != null)
 		{
-			Iterator<GenericSpecimen> iter=specimenList.iterator();
-			while(iter.hasNext())
+			Iterator<GenericSpecimen> iter = specimenList.iterator();
+			while (iter.hasNext())
 			{
-				GenericSpecimen specimen=iter.next();
-				String specimenType="S_";
-				String specimenIdSuffix=specimenType+specimen.getId();
-				StringBuffer containerDropDownInfo=new StringBuffer("containerDropDownInfo_").append(specimenIdSuffix);
-				StringBuffer positionDimensionOne=new StringBuffer("positionDimensionOne_").append(specimenIdSuffix);
-				StringBuffer positionDimensionTwo=new StringBuffer("positionDimensionTwo_").append(specimenIdSuffix);
-				
-				if(null!=specimen.getSelectedContainerName() && !"".equalsIgnoreCase(specimen.getSelectedContainerName())) 
+				GenericSpecimen specimen = iter.next();
+				String specimenType = "S_";
+				String specimenIdSuffix = specimenType + specimen.getId();
+				StringBuffer containerDropDownInfo = new StringBuffer("containerDropDownInfo_")
+						.append(specimenIdSuffix);
+				StringBuffer positionDimensionOne = new StringBuffer("positionDimensionOne_")
+						.append(specimenIdSuffix);
+				StringBuffer positionDimensionTwo = new StringBuffer("positionDimensionTwo_")
+						.append(specimenIdSuffix);
+
+				if (null != specimen.getSelectedContainerName()
+						&& !"".equalsIgnoreCase(specimen.getSelectedContainerName()))
 				{
-					StringBuffer stringBuffer=new StringBuffer();
-					stringBuffer.append("document.getElementById(").append(containerDropDownInfo).append("['dropDownId']).value=")
-						.append(specimen.getSelectedContainerName()).append(SEMI_COLON);
+					StringBuffer stringBuffer = new StringBuffer();
+					stringBuffer.append("document.getElementById(").append(containerDropDownInfo)
+							.append("['dropDownId']).value=")
+							.append(specimen.getSelectedContainerName()).append(SEMI_COLON);
 					stringBuffer.append(NEXT_LINE);
-					stringBuffer.append("document.getElementById(").append(positionDimensionOne).append(".value=").append(specimen.getPositionDimensionOne()).append(SEMI_COLON);
+					stringBuffer.append("document.getElementById(").append(positionDimensionOne)
+							.append(".value=").append(specimen.getPositionDimensionOne())
+							.append(SEMI_COLON);
 					stringBuffer.append(NEXT_LINE);
-					stringBuffer.append("document.getElementById(").append(positionDimensionTwo).append(".value=").append(specimen.getPositionDimensionTwo()).append(SEMI_COLON);
+					stringBuffer.append("document.getElementById(").append(positionDimensionTwo)
+							.append(".value=").append(specimen.getPositionDimensionTwo())
+							.append(SEMI_COLON);
 					stringBuffer.append(NEXT_LINE);
 				}
 			}
 		}
 	}
-	
 
 }

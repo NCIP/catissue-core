@@ -84,39 +84,14 @@ var scGridVisible_<%=i%> = false;
 var gridDivObject_<%=i%> ;
 
 <%}%>
-var dhxWins;
-function initWindow()
-{
-    dhxWins = new dhtmlXWindows();
-    dhxWins.enableAutoViewport(true);
-    dhxWins.setImagePath("dhtmlx_suite/imgs/");
-    dhxWins.setSkin("dhx_skyblue");
-}
 
 
-
-function loadDHTMLXWindow(storageContainerDropDown,positionDimensionOne,positionDimensionTwo)
-{
-var w = 400;
-    var h = 400;
-    var x = (screen.width / 2) - (w / 2);
-    var y = 0;
-    dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
-	var storageContainer =document.getElementById(storageContainerDropDown).value;
-    var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1="+positionDimensionOne+"&pos2="+positionDimensionTwo+"&containerName="+storageContainer;
-    dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
-    dhxWins.window("containerPositionPopUp").button("park").hide();
-    dhxWins.window("containerPositionPopUp").button("minmax1").hide();
-    dhxWins.window("containerPositionPopUp").allowResize();
-	dhxWins.window("containerPositionPopUp").setModal(true);
-    dhxWins.window("containerPositionPopUp").setText("Container Positions");    //it's the title for the popup
-}
 function showPopUp(storageContainerDropDown,selectedContainerName,positionDimensionOne,positionDimensionTwo,containerId,specimenClassName,spType,cpId,storageContainerIdFromMap) 
 {
 	var storageContainer =document.getElementById(storageContainerDropDown).value;
 			if(storageContainer!="")
 			{
-				loadDHTMLXWindow(storageContainerDropDown,positionDimensionOne,positionDimensionTwo);
+				loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo);
 			}
 			else
 			{
@@ -193,9 +168,9 @@ for(int i=1;i<=aliquotBeanList.size();i++){
 				//		scGridVisible_<%=i%> = false;
 				//	}
 				}
-			, visibilityStatusVariable:scGridVisible_<%=i%>};
+			, visibilityStatusVariable:scGridVisible_<%=i%>, propertyId:'selectedContainerName_<%=i%>'};
 	// initialising grid
-	scGrid_<%=i%> = initDropDownGrid(containerDropDownInfo_<%=i%>,5,0); 
+	scGrid_<%=i%> = initDropDownGrid(containerDropDownInfo_<%=i%>); 
 	<%}%>
 }
 
@@ -206,10 +181,6 @@ function setContainerValues()
 	{
 		AliquotBean aliquotBean=(AliquotBean)aliquotBeanList.get(0);
 	%>
-		//alert('<%=aliquotBean.getAliquotMap()%>');
-		//alert('Specimen:<%=i%>_StorageContainer_name_fromMap');
-		//alert("<%=aliquotBean.getAliquotMap().get("Specimen:"+i+"_StorageContainer_name_fromMap")%>");
-		//alert(document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value);
 		document.getElementById(containerDropDownInfo_<%=i%>['dropDownId']).value = "<%=aliquotBean.getAliquotMap().get("Specimen:"+i+"_StorageContainer_name_fromMap")%>";
 		<%}%>
 }

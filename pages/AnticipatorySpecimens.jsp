@@ -13,6 +13,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.util.global.AppUtility"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp"%>
+<%@ page import="edu.wustl.catissuecore.util.SpecimenScriptGeneratorForContainerComponent"%>
 <%@ page language="java" isELIgnored="false"%>
 <% ViewSpecimenSummaryForm form = (ViewSpecimenSummaryForm)request.getAttribute("viewSpecimenSummaryForm");
 List<GenericSpecimen> specimenList=form.getSpecimenList();
@@ -266,33 +267,6 @@ function getElement(name)
 		return "";
 }
 
-function initWindow()
-{
-//alert("initializing DHTMLX window");
-    dhxWins = new dhtmlXWindows();
-    dhxWins.enableAutoViewport(true);
-    dhxWins.setImagePath("dhtmlx_suite/imgs/");
-    dhxWins.setSkin("dhx_skyblue");
-}
-
-function loadDHTMLXWindow(storageContainerDropDown,positionDimensionOne,positionDimensionTwo)
-{
-	var w = 400;
-    var h = 400;
-    var x = (screen.width / 2) - (w / 2);
-    var y = 0;
-    dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
-	var storageContainer =document.getElementById(storageContainerDropDown).value;
-    var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1="+positionDimensionOne+"&pos2="+positionDimensionTwo+"&containerName="+storageContainer;
-    dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
-    dhxWins.window("containerPositionPopUp").button("park").hide();
-    dhxWins.window("containerPositionPopUp").button("minmax1").hide();
-    dhxWins.window("containerPositionPopUp").allowResize();
-	dhxWins.window("containerPositionPopUp").setModal(true);
-    dhxWins.window("containerPositionPopUp").setText("Container Positions");    //it's the title for the popup
-}
-
-
 		function saveCollectionProtocol()
 		{
 				var action ="SubmitSpecimenCollectionProtocol.do?action=collectionprotocol";
@@ -305,7 +279,7 @@ function loadDHTMLXWindow(storageContainerDropDown,positionDimensionOne,position
 			var storageContainer =document.getElementById(storageContainerDropDown).value;
 			if(storageContainer!="")
 			{
-				loadDHTMLXWindow(storageContainerDropDown,positionDimensionOne,positionDimensionTwo);
+				loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo);
 			}
 			else
 			{
@@ -628,75 +602,8 @@ else
 
 	 %>
 //declaring DHTMLX Drop Down controls required variables
-<%if(specimenList!=null)
-	{
-		for(int i=0;i<specimenList.size();i++)
-		{
-			GenericSpecimen gs1=specimenList.get(i);
-			String lineage=AppUtility.getLineageSubString(gs1);
-			Long idToAppend=gs1.getId();
-			String stringToAppend=null;
-			if(Long.valueOf(gs1.getId())==-1)
-			{
-				idToAppend=Long.valueOf(i+1);
-				stringToAppend=idToAppend.toString();
-			}
-			else
-			{
-				stringToAppend="S_"+gs1.getId();
-			}
-			
-	%>
-var containerDropDownInfo_<%=stringToAppend%>, scGrid_<%=stringToAppend%>;
-var scGridVisible_<%=stringToAppend%> = false;
-var gridDivObject_<%=stringToAppend%> ;
-<%}}%>
-<%if(aliquotList!=null)
-	{
-		//Iterator<GenericSpecimen> iter=aliquotList.Iterator();
-		for(int i=0;i<aliquotList.size();i++)
-		{
-			GenericSpecimen gs1=aliquotList.get(i);
-			String lineage=AppUtility.getLineageSubString(gs1);
-			Long idToAppend=gs1.getId();
-			String stringToAppend=null;
-			if(Long.valueOf(gs1.getId())==-1)
-			{
-				idToAppend=Long.valueOf(i+1);
-				stringToAppend=idToAppend.toString();
-			}
-			else
-			{
-				stringToAppend=lineage+"_"+gs1.getId();
-			}
-	%>
-var containerDropDownInfo_<%=stringToAppend%>, scGrid_<%=stringToAppend%>;
-var scGridVisible_<%=stringToAppend%> = false;
-var gridDivObject_<%=stringToAppend%> ;
-<%}}%>
-<%if(derivedList!=null)
-	{
-		//Iterator<GenericSpecimen> iter=derivedList.Iterator();
-		for(int i=0;i<derivedList.size();i++)
-		{
-			GenericSpecimen gs1=derivedList.get(i);
-			String lineage=AppUtility.getLineageSubString(gs1);
-			Long idToAppend=gs1.getId();
-			String stringToAppend=null;
-			if(Long.valueOf(gs1.getId())==-1)
-			{
-				idToAppend=Long.valueOf(i+1);
-				stringToAppend=idToAppend.toString();
-			}
-			else
-			{
-				stringToAppend=lineage+"_"+gs1.getId();
-			}
-	%>
-var containerDropDownInfo_<%=stringToAppend%>, scGrid_<%=stringToAppend%>;
-var scGridVisible_<%=stringToAppend%> = false;
-var gridDivObject_<%=stringToAppend%> ;
-<%}}%>
+<%=SpecimenScriptGeneratorForContainerComponent.generateVariableNames(form)%>
+<%=SpecimenScriptGeneratorForContainerComponent.generateScript(form,collectionProtocolId)%>
 
 function showHideStorageContainerGrid(e,gridDivId, dropDownId,scGridVisible,containerDropDownInfo,scGrid)
 {		
@@ -714,174 +621,6 @@ function showHideStorageContainerGrid(e,gridDivId, dropDownId,scGridVisible,cont
 		 }
 }
 
-function doOnLoad()
-{
-	<%if(specimenList!=null)
-	{
-		for(int i=0;i<specimenList.size();i++)
-		{
-			GenericSpecimen gs=specimenList.get(i);
-			String lineage=AppUtility.getLineageSubString(gs);
-			Long idToAppend=gs.getId();
-			String stringToAppend=null;
-			if(-1==Long.valueOf(gs.getId()))
-			{
-				idToAppend=Long.valueOf(gs.getUniqueIdentifier());
-				stringToAppend=idToAppend.toString();
-			}
-			else
-			{
-				stringToAppend=lineage+"_"+gs.getId();
-			}
-			if(gs.getCollectionStatus()== null || "null".equals(gs.getCollectionStatus()) || "Pending".equals(gs.getCollectionStatus()))
-			{
-	%>
-		var className<%=stringToAppend%>=document.getElementById("className_<%=stringToAppend%>").value;
-		var sptype<%=stringToAppend%>=document.getElementById("type_<%=stringToAppend%>").value;
-		var collectionProtocolId="<%=collectionProtocolId%>";
-		var containerName=document.getElementById("storageContainerDropDown_<%=stringToAppend%>").value;
-		var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
-		+className<%=stringToAppend%>+"&specimenType="+sptype<%=stringToAppend%>+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId;
-
-		//Drop Down components information
-		containerDropDownInfo_<%=stringToAppend%> = {gridObj:"storageContainerGrid_<%=stringToAppend%>", gridDiv:"storageContainer_<%=stringToAppend%>", dropDownId:"storageContainerDropDown_<%=stringToAppend%>", pagingArea:"storageContainerPagingArea_<%=stringToAppend%>", infoArea:"storageContainerInfoArea_<%=stringToAppend%>", onOptionSelect:
-		function (id,ind)
-		{
-			document.getElementsByName('selectedContainerName_<%=stringToAppend%>')[0].value = containerName;
-			document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value = scGrid_<%=stringToAppend%>.cellById(id,ind).getValue();
-			hideGrid(containerDropDownInfo_<%=stringToAppend%>['gridDiv']);
-			scGridVisible_<%=stringToAppend%> = false;
-			document.getElementById("positionDimensionOne_<%=stringToAppend%>").value="";
-			document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value="";
-		}
-		, actionToDo:url, callBackAction:
-		function(){
-					var containerName= document.getElementsByName('selectedContainerName_<%=stringToAppend%>')[0].value;
-					if(containerName != "" && containerName != 0 && containerName != null)
-					{
-						document.getElementsByName('selectedContainerName_<%=stringToAppend%>')[0].value = containerName;
-						document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value = scGrid_<%=stringToAppend%>.cellById(containerName,0).getValue();
-						hideGrid(containerDropDownInfo_<%=stringToAppend%>['gridDiv']);
-						scGridVisible_<%=stringToAppend%> = false;
-					}
-				}
-			, visibilityStatusVariable:scGridVisible_<%=stringToAppend%>, propertyId:'selectedContainerName_<%=stringToAppend%>'};
-		// initialising grid
-		scGrid_<%=stringToAppend%> = initDropDownGrid(containerDropDownInfo_<%=stringToAppend%>); 
-	<%}}}%>
-	
-	
-	//aliquot list
-	<%if(aliquotList!=null)
-	{
-		//Iterator<GenericSpecimen> iter=aliquotList.Iterator();
-		for(int i=0;i<aliquotList.size();i++)
-		{
-			GenericSpecimen gs=aliquotList.get(i);
-			String lineage=AppUtility.getLineageSubString(gs);
-			Long idToAppend=gs.getId();
-			String stringToAppend=null;
-			if(-1==Long.valueOf(gs.getId()))
-			{
-				idToAppend=Long.valueOf(gs.getUniqueIdentifier());
-				stringToAppend=idToAppend.toString();
-			}
-			else
-			{
-				stringToAppend=lineage+"_"+gs.getId();
-			}
-			if(gs.getCollectionStatus()==null || "null".equals(gs.getCollectionStatus()) ||"Pending".equals(gs.getCollectionStatus()))
-			{
-	%>
-		var className<%=stringToAppend%>=document.getElementById("className_<%=stringToAppend%>").value;
-		var sptype<%=stringToAppend%>=document.getElementById("type_<%=stringToAppend%>").value;
-		var collectionProtocolId="<%=collectionProtocolId%>";
-		var containerName=document.getElementById("storageContainerDropDown_<%=stringToAppend%>").value;
-		var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
-		+className<%=stringToAppend%>+"&specimenType="+sptype<%=stringToAppend%>+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId;
-
-		//Drop Down components information
-		containerDropDownInfo_<%=stringToAppend%> = {gridObj:"storageContainerGrid_<%=stringToAppend%>", gridDiv:"storageContainer_<%=stringToAppend%>", dropDownId:"storageContainerDropDown_<%=stringToAppend%>", pagingArea:"storageContainerPagingArea_<%=stringToAppend%>", infoArea:"storageContainerInfoArea_<%=stringToAppend%>", onOptionSelect:
-		function (id,ind)
-		{
-			document.getElementsByName('selectedContainerName_<%=stringToAppend%>')[0].value = containerName;
-			document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value = scGrid_<%=stringToAppend%>.cellById(id,ind).getValue();
-			hideGrid(containerDropDownInfo_<%=stringToAppend%>['gridDiv']);
-			scGridVisible_<%=stringToAppend%> = false;
-			document.getElementById("positionDimensionOne_<%=stringToAppend%>").value="";
-			document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value="";
-		}
-		, actionToDo:url, callBackAction:
-		function(){
-					var containerName= document.getElementsByName('selectedContainerName_<%=stringToAppend%>')[0].value;
-					if(containerName != "" && containerName != 0 && containerName != null)
-					{
-						document.getElementsByName('selectedContainerName_<%=stringToAppend%>')[0].value = containerName;
-						document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value = scGrid_<%=stringToAppend%>.cellById(containerName,0).getValue();
-						hideGrid(containerDropDownInfo_<%=stringToAppend%>['gridDiv']);
-						scGridVisible_<%=stringToAppend%> = false;
-					}
-				}
-			, visibilityStatusVariable:scGridVisible_<%=stringToAppend%>, propertyId:'selectedContainerName_<%=stringToAppend%>'};
-		// initialising grid
-		scGrid_<%=stringToAppend%> = initDropDownGrid(containerDropDownInfo_<%=stringToAppend%>); 
-	<%}}}%>
-	
-	<%if(derivedList!=null)
-	{
-		//Iterator<GenericSpecimen> iter=derivedList.Iterator();
-		for(int i=0;i<derivedList.size();i++)
-		{
-			GenericSpecimen gs=derivedList.get(i);
-			String lineage=AppUtility.getLineageSubString(gs);
-			Long idToAppend=gs.getId();
-			String stringToAppend=null;
-			if(-1==Long.valueOf(gs.getId()))
-			{
-				idToAppend=Long.valueOf(gs.getUniqueIdentifier());
-				stringToAppend=idToAppend.toString();
-			}
-			else
-			{
-				stringToAppend=lineage+"_"+gs.getId();
-			}
-			if(gs.getCollectionStatus()==null || "null".equals(gs.getCollectionStatus()) ||"Pending".equals(gs.getCollectionStatus()))
-			{
-	%>
-		var className<%=stringToAppend%>=document.getElementById("className_<%=stringToAppend%>").value;
-		var sptype<%=stringToAppend%>=document.getElementById("type_<%=stringToAppend%>").value;
-		var collectionProtocolId="<%=collectionProtocolId%>";
-		var containerName=document.getElementById("storageContainerDropDown_<%=stringToAppend%>").value;
-		var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
-		+className<%=stringToAppend%>+"&specimenType="+sptype<%=stringToAppend%>+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId;
-
-		//Drop Down components information
-		containerDropDownInfo_<%=stringToAppend%> = {gridObj:"storageContainerGrid_<%=stringToAppend%>", gridDiv:"storageContainer_<%=stringToAppend%>", dropDownId:"storageContainerDropDown_<%=stringToAppend%>", pagingArea:"storageContainerPagingArea_<%=stringToAppend%>", infoArea:"storageContainerInfoArea_<%=stringToAppend%>", onOptionSelect:
-		function (id,ind)
-		{
-			document.getElementsByName('selectedContainerName_<%=stringToAppend%>')[0].value = containerName;
-			document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value = scGrid_<%=stringToAppend%>.cellById(id,ind).getValue();
-			hideGrid(containerDropDownInfo_<%=stringToAppend%>['gridDiv']);
-			scGridVisible_<%=stringToAppend%> = false;
-			document.getElementById("positionDimensionOne_<%=stringToAppend%>").value="";
-			document.getElementById("positionDimensionTwo_<%=stringToAppend%>").value="";
-		}
-		, actionToDo:url, callBackAction:
-		function(){
-					var containerName= document.getElementsByName('selectedContainerName_<%=stringToAppend%>')[0].value;
-					if(containerName != "" && containerName != 0 && containerName != null)
-					{
-						document.getElementsByName('selectedContainerName_<%=stringToAppend%>')[0].value = containerName;
-						document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value = scGrid_<%=stringToAppend%>.cellById(containerName,0).getValue();
-						hideGrid(containerDropDownInfo_<%=stringToAppend%>['gridDiv']);
-						scGridVisible_<%=stringToAppend%> = false;
-					}
-				}
-			, visibilityStatusVariable:scGridVisible_<%=stringToAppend%>, propertyId:'selectedContainerName_<%=stringToAppend%>'};
-		// initialising grid
-		scGrid_<%=stringToAppend%> = initDropDownGrid(containerDropDownInfo_<%=stringToAppend%>); 
-	<%}}}%>
-}
 
 function setContainerValues()
 {

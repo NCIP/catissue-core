@@ -385,34 +385,7 @@ function updateHelpURL()
 //declaring DHTMLX Drop Down controls required variables
 var containerDropDownInfo, scGrid;
 var scGridVisible = false;
-var dhxWins;
 
-function initWindow()
-{
-    dhxWins = new dhtmlXWindows();
-    dhxWins.enableAutoViewport(true);
-    dhxWins.setImagePath("dhtmlx_suite/imgs/");
-    dhxWins.setSkin("dhx_skyblue");
-}
-
-
-
-function loadDHTMLXWindow()
-{
-	var w = 400;
-    var h = 400;
-    var x = (screen.width / 2) - (w / 2);
-    var y = 0;
-    dhxWins.createWindow("containerPositionPopUp", x, y, w, h);
-	var storageContainer =document.getElementById("storageContainerDropDown").value;
-    var url = "ShowStoragePositionGridView.do?pageOf=pageOfSpecimen&forwardTo=gridView&pos1=pos1&pos2=pos2&&containerName="+storageContainer;
-    dhxWins.window("containerPositionPopUp").attachURL(url);                      //url : either an action class or you can specify jsp page path directly here
-    dhxWins.window("containerPositionPopUp").button("park").hide();
-    dhxWins.window("containerPositionPopUp").button("minmax1").hide();
-    dhxWins.window("containerPositionPopUp").allowResize();
-	dhxWins.window("containerPositionPopUp").setModal(true);
-    dhxWins.window("containerPositionPopUp").setText("Container Positions");    //it's the title for the popup
-}
 function showPopUp() 
 {
 	var storageContainer =document.getElementById("storageContainerDropDown").value;
@@ -431,42 +404,6 @@ function showPopUp()
 	mapButtonClickedOnNewSpecimen('<%=frameUrl%>','newSpecimenPage');
 	}
 }
-
-//will be called whenever a participant is selected from the participant grid/dropdown
-function containerOnRowSelect(id,ind)
-{	
-	document.getElementsByName('selectedContainerName')[0].value = id;
-	document.getElementById(containerDropDownInfo['dropDownId']).value = scGrid.cellById(id,ind).getValue();
-	hideGrid(containerDropDownInfo['gridDiv']);
-	scGridVisible = false;
-	document.getElementById("pos1").value="";
-	document.getElementById("pos2").value="";
-
-}
-
-
-function setValue(e,gridDivId, dropDownId)
-{
-		document.getElementById(dropDownId).focus();
-		noEventPropogation(e);
-}
-
-function showHideStorageContainerGrid(e,gridDivId, dropDownId)
-{		
-		setValue(e,containerDropDownInfo['gridDiv'], containerDropDownInfo['dropDownId']);
-		if(containerDropDownInfo['visibilityStatusVariable'])
-		{
-			hideGrid(containerDropDownInfo['gridDiv']);
-			containerDropDownInfo['visibilityStatusVariable'] = false;
-		}
-		else 
-		 {	
-			showGrid(containerDropDownInfo['gridDiv'],containerDropDownInfo['dropDownId']);
-			containerDropDownInfo['visibilityStatusVariable'] = true;
-			scGrid.load(containerDropDownInfo['actionToDo'],"");
-		 }
-}
-
 
 function onContainerListReady()
 	{
@@ -2180,10 +2117,6 @@ else
 
 									%>
 
-									<%//ScriptGenerator.getJSForOutermostDataTable()%>
-									<%//System.out.println("after getJSForOutermostDataTable in specimen jsp");%>
-									<%//ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
-									<%//System.out.println("after getJSEquivalentFor in specimen jsp");%>
 
 									<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 								<td colspan="4" >
@@ -2227,7 +2160,7 @@ else
 													autocomplete="off"
 													size="30"
 													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="scDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
-												onclick="showHideStorageContainerGrid(event,'storageContainer','storageContainerDropDown');"
+												onclick="showHideStorageContainerGrid(event,'storageContainer','storageContainerDropDown',containerDropDownInfo);"
 												src="images/uIEnhancementImages/s.gif"/>
 										</div>
 									</td>
