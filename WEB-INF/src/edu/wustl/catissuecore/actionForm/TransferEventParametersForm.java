@@ -278,7 +278,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			}
 			else
 			{
-				this.storageContainer = "-1";
+				this.storageContainer = "Virtual";
 				this.pos1 = "";
 				this.pos2 = "";
 				this.selectedContainerName = "Virtual Location";

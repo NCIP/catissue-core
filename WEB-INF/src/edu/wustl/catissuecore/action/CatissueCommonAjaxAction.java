@@ -146,9 +146,6 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 	{
 		List <NameValueBean>containerList=new ArrayList<NameValueBean>();
 		String contName=request.getParameter(Constants.CONTAINER_NAME);
-		String stContSelection=request.getParameter("stContSelection");
-		//if(contName!=null || (null!=stContSelection && Integer.valueOf(2).equals(Integer.valueOf(stContSelection))))
-		{
 			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
 					.getAttribute(Constants.SESSION_DATA);
 			DAO dao = AppUtility.openDAOSession(sessionData);
@@ -159,8 +156,6 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 			}
 			String spType=request.getParameter("specimenType");
 			String spClass=request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
-			
-			
 			StorageContainerForSpecimenBizLogic bizLogic=new StorageContainerForSpecimenBizLogic();
 			TreeMap treeMap=bizLogic.getAutoAllocatedContainerListForSpecimen(AppUtility.setparameterList(cpId,spClass,0,spType), sessionData, dao, contName);
 			if(treeMap!=null)
@@ -168,10 +163,8 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 				containerList=AppUtility.convertMapToList(treeMap);
 			}
 			AppUtility.closeDAOSession(dao);
-		}
 		StringBuffer responseString = new StringBuffer(Constants.XML_START);
 		NameValueBean virtualBean = new NameValueBean("Virtual",Long.valueOf(-1));
-		//containerList.remove(containerList.indexOf(selectBean));
 		responseString.append(Constants.XML_ROWS);
 		String tranferEventId=(String)request.getParameter("transferEventParametersId");
 		if(tranferEventId==null || "0".equals(tranferEventId))
@@ -180,9 +173,6 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 				{
 					responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()),null, nvb.getName()));
 				}
-		}
-		if(!"true".equals(request.getParameter("isTransferEvent")))
-		{
 			responseString.append(this.addRowToResponseXML(Long.valueOf(virtualBean.getValue()),null, virtualBean.getName()));
 		}
 		responseString.append(Constants.XML_ROWS_END);
