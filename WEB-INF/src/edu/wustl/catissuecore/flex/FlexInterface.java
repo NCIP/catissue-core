@@ -1139,6 +1139,7 @@ public class FlexInterface
 		{
 			specimenDataBean.setStorageContainerForSpecimen("Virtual");
 		}
+		specimenDataBean.setCollectionStatus(sp.getCollectionStatus());
 		return specimenDataBean;
 	}
 

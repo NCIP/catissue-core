@@ -453,7 +453,8 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 		derivedSessionVO.setSelectedContainerName(derivedFormVO.getSelectedContainerName());
 		derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOne());
 		derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwo());
-		if(!"false".equals(isSubmitRequest))
+		derivedSessionVO.setCollectionStatus(derivedFormVO.getCollectionStatus());
+		if(!"false".equals(isSubmitRequest)&& !Constants.COLLECTION_STATUS_COLLECTED.equals(derivedFormVO.getCollectionStatus()))
 		{
 			List labellingSchemesList=null;
 			if(null!=derivedSessionVO.getSelectedContainerName() && !"".equalsIgnoreCase(derivedSessionVO.getSelectedContainerName())  && !"Virtual".equals(derivedSessionVO.getSelectedContainerName()))
