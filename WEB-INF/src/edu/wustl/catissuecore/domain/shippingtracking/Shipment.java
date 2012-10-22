@@ -182,7 +182,7 @@ public class Shipment extends BaseShipment
 						{
 							specimen.setSpecimenPosition(null);
 						}
-						else if (storageLocationSelection != null
+						/*else if (storageLocationSelection != null
 								&& storageLocationSelection.trim().equals("2"))
 						{
 							containerId = (String) shipmentReceivingForm
@@ -191,11 +191,11 @@ public class Shipment extends BaseShipment
 									+ specimen.getId());
 							pos2 = (String) shipmentReceivingForm.getSpecimenDetails("pos2_"
 									+ specimen.getId());
-						}
+						}*/
 						else if (storageLocationSelection != null
 								&& storageLocationSelection.trim().equals("3"))
 						{
-							containerName = (String) shipmentReceivingForm
+							containerId = (String) shipmentReceivingForm
 									.getSpecimenDetails("selectedContainerName_" + specimen.getId());
 							pos1 = (String) shipmentReceivingForm.getSpecimenDetails("position1_"
 									+ specimen.getId());
@@ -203,16 +203,11 @@ public class Shipment extends BaseShipment
 									+ specimen.getId());
 						}
 						StorageContainer spPosContainer = null;
-						if (containerId != null || containerName != null)
+						if (containerId != null && !"".equals(containerId))
 						{
 							spPosContainer = new StorageContainer();
 							if (storageLocationSelection != null
 									&& storageLocationSelection.trim().equals("3"))
-							{
-								spPosContainer.setName(containerName);
-							}
-							else if (storageLocationSelection != null
-									&& storageLocationSelection.trim().equals("2"))
 							{
 								spPosContainer.setId(Long.parseLong(containerId));
 							}
@@ -224,15 +219,10 @@ public class Shipment extends BaseShipment
 							
 							spPosition.setPositionDimensionOneString(pos1);
 							spPosition.setPositionDimensionTwoString(pos2);
-							if(storageLocationSelection.trim().equals("2"))
+							 if(storageLocationSelection.trim().equals("3"))
 							{
 								spPosition.setPositionDimensionOne(StorageContainerUtil.convertPositionsToIntegerUsingContId(spPosContainer.getId().toString(), 1, pos1));
 								spPosition.setPositionDimensionTwo(StorageContainerUtil.convertPositionsToIntegerUsingContId(spPosContainer.getId().toString(), 2, pos2));
-							}
-							else if(storageLocationSelection.trim().equals("3"))
-							{
-								spPosition.setPositionDimensionOne(StorageContainerUtil.convertSpecimenPositionsToInteger(spPosContainer.getName(), 1, pos1));
-								spPosition.setPositionDimensionTwo(StorageContainerUtil.convertSpecimenPositionsToInteger(spPosContainer.getName(), 2, pos2));
 							}
 						}
 						else // if 0 was not set then it will show positions from in transit container 

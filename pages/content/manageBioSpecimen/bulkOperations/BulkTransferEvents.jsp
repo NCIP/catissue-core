@@ -12,6 +12,12 @@
 <head>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
     <script type="text/javascript" src="jss/wz_tooltip.js"></script>
+	<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
+	<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
+	<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
+	<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
+	<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
+	<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
 </head>
 
 <%
@@ -23,6 +29,20 @@
 
 <script language="JavaScript" type="text/javascript">
 
+
+function showMap(selectedContainerId,positionDimensionOne,positionDimensionTwo,frameUrl)
+		{
+			var storageContainer =document.getElementById(selectedContainerId).value;
+			if(storageContainer!="")
+			{
+				loadDHTMLXWindowForMultipleSpecimen(selectedContainerId,positionDimensionOne,positionDimensionTwo);
+			}
+			else
+			{
+					frameUrl+="&storageContainerName="+storageContainer;
+					openPopupWindow(frameUrl,'transferEvents');
+			}
+		}
 function beforeApplyAll()
  {
  	var specimencount = "<%= count %>";
@@ -51,7 +71,9 @@ fields[i].value = valueToSet;
 
 function virtualLocationSelChanged(specimenId) { if(document.getElementById("VirLocChk"+specimenId).checked) { document.getElementById("SelCont"+specimenId).value = ""; document.getElementById("SelCont"+specimenId).disabled = true; } else { document.getElementById("SelCont"+specimenId).value = ""; document.getElementById("SelCont"+specimenId).disabled = false; } }
 
-</script> <html:form action="BulkTransferEventsSubmit.do" > <jsp:include page="/pages/content/manageBioSpecimen/bulkOperations/BulkEventsCommonAttributes.jsp" />
+</script> 
+<body onload="initWindow()">
+<html:form action="BulkTransferEventsSubmit.do" > <jsp:include page="/pages/content/manageBioSpecimen/bulkOperations/BulkEventsCommonAttributes.jsp" />
 <table width="100%" border="0" style="table-layout:fixed">
 	<tr>
 		<td>
@@ -149,8 +171,8 @@ function virtualLocationSelChanged(specimenId) { if(document.getElementById("Vir
 					<%
 					String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName="+selContainerId+"&amp;pos1="+pos1Id+"&amp;pos2="+pos2Id+"&amp;containerId="+selContainerId+"&amp;"+
 					Constants.CAN_HOLD_SPECIMEN_CLASS+"="+bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CLASS")+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" +bulkEventOperationsForm.getFieldValue("ID_"+specimenId+"_CPID");
-					String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"','transferEvents','"+selContainerId+"')";	%>
-
+					String buttonOnClicked = "showMap('"+selContainerId+"','"+pos1Id+"','"+pos2Id+"','"+url+"')";//"mapButtonClickedOnSpecimen('"+url+"','transferEvents','"+selContainerId+"')";	
+					%>
 					<td class="black_ar"  colspan="2"> <logic:equal name="bulkEventOperationsForm" property="<%=specimenToVirLocField%>" value="true" >
 					<html:text styleId="<%=selContainerId%>" styleClass="black_ar" size="25" property="<%=specimenToSCLabelField%>" disabled="true" /></logic:equal>
 
@@ -176,3 +198,4 @@ function virtualLocationSelChanged(specimenId) { if(document.getElementById("Vir
 	</tr>
 </table>
 </html:form>
+</body>

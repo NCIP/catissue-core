@@ -217,7 +217,7 @@ function loadDHTMLXWindow()
     dhxWins.window("containerPositionPopUp").button("minmax1").hide();
     dhxWins.window("containerPositionPopUp").allowResize();
 	dhxWins.window("containerPositionPopUp").setModal(true);
-    dhxWins.window("containerPositionPopUp").setText("Container Positions");    //it's the title for the popup
+    dhxWins.window("containerPositionPopUp").setText(storageContainer);    //it's the title for the popup
 }
 
 function loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDimensionOne,positionDimensionTwo)
@@ -234,6 +234,6 @@ function loadDHTMLXWindowForMultipleSpecimen(storageContainerDropDown,positionDi
     dhxWins.window("containerPositionPopUp").button("minmax1").hide();
     dhxWins.window("containerPositionPopUp").allowResize();
 	dhxWins.window("containerPositionPopUp").setModal(true);
-    dhxWins.window("containerPositionPopUp").setText("Container Positions");    //it's the title for the popup
+    dhxWins.window("containerPositionPopUp").setText(storageContainer);    //it's the title for the popup
 }
 
