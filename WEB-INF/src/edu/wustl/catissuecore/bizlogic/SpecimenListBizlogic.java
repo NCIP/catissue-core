@@ -75,10 +75,6 @@ public class SpecimenListBizlogic implements ITagBizlogic
 	@Override
 	public List<Tag> getTagList(String entityName) throws DAOException, BizLogicException
 	{
-		String s=new
-		String("Bicycle"); int iBegin=1; 
-		char iEnd=3; 
-		System.out.println(s.substring(iBegin,iEnd));
 		List<Tag> tagList = null;
 		TagDAO tagDao = null;
 		tagDao = new TagDAO(entityName);
