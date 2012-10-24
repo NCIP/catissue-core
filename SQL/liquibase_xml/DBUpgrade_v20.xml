@@ -117,5 +117,6 @@
 				<constraints nullable="false" />
 			</column>
 	</createTable>
-	<createSequence sequenceName="synch_cp_id"/>	 
+	<createSequence sequenceName="synch_cp_id"/>
+	</changeSet>	 
 </databaseChangeLog>         
