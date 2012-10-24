@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,14 +28,17 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
+import org.bouncycastle.ocsp.Req;
 import org.hibernate.LazyInitializationException;
 
+import edu.wustl.catissuecore.domain.AbstractSpecimen;
 import edu.wustl.catissuecore.domain.AbstractSpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
+import edu.wustl.catissuecore.domain.FluidSpecimenRequirement;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
@@ -3438,7 +3442,178 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		}
 		return true;
 	}
+	/**
+	 * This method will update aal the SCGs of the given CPRs based on CP.This method will check whether any SPR is missin or not and if
+	 * any SPR is missing that it will add that SPR to SCG.
+	 * @param protocolRegistration
+	 * 					CPR for which this operation needs to perform.
+	 * @param sessionDataBean
+	 * @param dao
+	 * @return Collection of CollectionProtocolEvent
+	 * 					Return all the CollectionProtocolEvents which are not present in CPR but present in CP.
+	 * @throws DAOException
+	 * @throws BizLogicException
+	 */
+	public void updateSCGs(
+			CollectionProtocolRegistration protocolRegistration,
+			SessionDataBean sessionDataBean,DAO dao) throws DAOException, BizLogicException {
+		
+		Collection<CollectionProtocolEvent> collectionProtocolEvents=protocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection();
+		Collection<SpecimenCollectionGroup> specimenCollectionGroups=protocolRegistration.getSpecimenCollectionGroupCollection();
+		//Iterate over each SCG of CPRs.
+		for (SpecimenCollectionGroup specimenCollectionGroup : specimenCollectionGroups) {
+			 
+			 updateChildspecimenCollection(specimenCollectionGroup,sessionDataBean,dao);
+			 //Removing event from events as they already exist for CPR, do not need to create again.
+			 collectionProtocolEvents.remove(specimenCollectionGroup.getCollectionProtocolEvent());
+		}
+		//creating SCGs for the evenets which are not present in CPR.
+		createSCGsForCPEs(protocolRegistration,dao,sessionDataBean,collectionProtocolEvents,0);
+	}
+	/**
+	 * This method will create an SCGs for given CollectionProtocolEvents and given CPR. 
+	 * @param collectionProtocolEvents 
+	 * 						Collection of events for which SCGs needs to be create.
+	 * @param collectionProtocolRegistration
+	 * 						CPR for which SCG needs to add.
+	 * @param sessionDataBean
+	 * @param dao
+	 * @throws BizLogicException
+	 *//*
+	public void createSpecimencollectionGroups(Collection<CollectionProtocolEvent> collectionProtocolEvents,CollectionProtocolRegistration collectionProtocolRegistration,SessionDataBean sessionDataBean,DAO dao) throws BizLogicException
+	{
+		SpecimenCollectionGroupBizLogic collectionGroupBizLogic=new SpecimenCollectionGroupBizLogic();
+		for (CollectionProtocolEvent collectionProtocolEvent : collectionProtocolEvents) {
+			SpecimenCollectionGroup specimenCollectionGroup=new SpecimenCollectionGroup();
+			specimenCollectionGroup.setCollectionProtocolEvent(collectionProtocolEvent);
+			CollectionProtocolRegistration newCollectionProtocolRegistration=new CollectionProtocolRegistration();
+			newCollectionProtocolRegistration.setId(collectionProtocolRegistration.getId());
+			newCollectionProtocolRegistration.setProtocolParticipantIdentifier(collectionProtocolRegistration.getProtocolParticipantIdentifier());
+			specimenCollectionGroup.setCollectionProtocolRegistration(newCollectionProtocolRegistration);
+			specimenCollectionGroup.setCollectionStatus(Constants.COLLECTION_STATUS_PENDING);
+			specimenCollectionGroup.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
+			specimenCollectionGroup.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			specimenCollectionGroup.setIsCPBasedSpecimenEntryChecked(true);
+			//setChildSpecimenCollection(specimenCollectionGroup,collectionProtocolEvent,sessionDataBean);
+			collectionGroupBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);
+		}
+		
+	}*/
 
+	public Collection<SpecimenCollectionGroup>  createSCGsForCPEs(
+			CollectionProtocolRegistration collectionProtocolRegistration,
+			DAO dao,
+			SessionDataBean sessionDataBean,
+			final Collection<CollectionProtocolEvent> collectionProtocolEventCollection,int cntOfStudyCalEventPnt)
+			throws BizLogicException {
+		final SpecimenCollectionGroupBizLogic specimenBizLogic = new SpecimenCollectionGroupBizLogic();
+		final Iterator<CollectionProtocolEvent> collectionProtocolEventIterator = collectionProtocolEventCollection
+				.iterator();
+		final Collection<SpecimenCollectionGroup> scgCollection = new HashSet<SpecimenCollectionGroup>();
+		while (collectionProtocolEventIterator.hasNext())
+		{
+			final CollectionProtocolEvent collectionProtocolEvent = collectionProtocolEventIterator
+					.next();
 
+			final int tmpCntOfStudyCalEventPnt = collectionProtocolEvent
+					.getStudyCalendarEventPoint().intValue();
+			if (cntOfStudyCalEventPnt != 0)
+			{
+				if (tmpCntOfStudyCalEventPnt > cntOfStudyCalEventPnt)
+				{
+					cntOfStudyCalEventPnt = tmpCntOfStudyCalEventPnt;
+				}
+			}
+			if (cntOfStudyCalEventPnt == 0)
+			{
+				cntOfStudyCalEventPnt = tmpCntOfStudyCalEventPnt;
+			}
 
+			/**
+			 * Here countOfStudyCalendarEventPoint for previous
+			 * CollectionProtocol which is registered is incremented as per
+			 * StudyCalendarEventPoint of Events.
+			 */
+			final SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup(
+					collectionProtocolEvent);
+			specimenCollectionGroup
+					.setCollectionProtocolRegistration(collectionProtocolRegistration);
+			specimenCollectionGroup
+					.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
+
+			specimenBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);
+
+			scgCollection.add(specimenCollectionGroup);
+		}
+		return scgCollection;
+	}
+	/**
+	 * This method will check whether any SPR is missing for the given SCG and if missing then it will add the respeected specimen to SCG.  
+	 * @param specimenCollectionGroup 
+	 * 				SCG that needs to be check and process.
+	 * @param sessionDataBean
+	 * @param dao
+	 * @throws BizLogicException
+	 */
+	public void updateChildspecimenCollection(SpecimenCollectionGroup specimenCollectionGroup,SessionDataBean sessionDataBean,DAO dao) throws BizLogicException
+	{
+		CollectionProtocolEvent collectionProtocolEvent=specimenCollectionGroup.getCollectionProtocolEvent();
+		Collection<SpecimenRequirement> specimenRequirements=collectionProtocolEvent.getSpecimenRequirementCollection();
+		Collection<Specimen> specimens=specimenCollectionGroup.getSpecimenCollection();
+		//This map contains SPR and respective specimen presnet in SCGs.This will require while creating specimen to get parent of that specimen.
+		Map<SpecimenRequirement, Specimen> sprToSpecimenMap=new HashMap<SpecimenRequirement, Specimen>();
+		//Iterating over each specimen of SCG and remove from the SPR collection.Remaining SPRs are the one for which specimens are not
+		//present in SCG.  
+		for (Specimen specimen : specimens){
+			//specimenRequirements.remove(specimen.getSpecimenRequirement());
+			sprToSpecimenMap.put(specimen.getSpecimenRequirement(), specimen);
+		}
+		for (SpecimenRequirement specimenRequirement : specimenRequirements)
+		{
+			if("new".equalsIgnoreCase(specimenRequirement.getLineage()))
+			{
+			   if(sprToSpecimenMap.get(specimenRequirement)==null)
+			   {
+				   createSpecimenFromSPR(specimenRequirement, specimenCollectionGroup, null, sessionDataBean, dao);
+			   }
+			   else
+			   {
+				   processParent(specimenRequirement,sprToSpecimenMap.get(specimenRequirement),specimenCollectionGroup,dao,sessionDataBean,sprToSpecimenMap);
+			   }
+			}
+		}
+	}
+
+	private void processParent(SpecimenRequirement specimenRequirement,Specimen specimen,SpecimenCollectionGroup specimenCollectionGroup,DAO dao,SessionDataBean sessionDataBean,Map<SpecimenRequirement, Specimen> sprToSpecimenMap) throws BizLogicException
+	{
+		boolean isSPRExist=false;
+		Collection<AbstractSpecimen> childSpecimenRequirements=specimenRequirement.getChildSpecimenCollection();
+		Collection<AbstractSpecimen> childSpecimens=specimen.getChildSpecimenCollection();
+		NewSpecimenBizLogic specimenBizLogic=new NewSpecimenBizLogic();
+		for (AbstractSpecimen childSpecimenRequirement : childSpecimenRequirements)
+		{
+			for (AbstractSpecimen childSpecimen : childSpecimens) {
+				if(childSpecimenRequirement.equals(((Specimen)childSpecimen).getSpecimenRequirement()))
+				{
+					isSPRExist=true;
+					processParent((SpecimenRequirement)childSpecimenRequirement,(Specimen)childSpecimen,specimenCollectionGroup,dao,sessionDataBean,sprToSpecimenMap);
+					break;
+				}
+			}
+			if(!isSPRExist)
+			{
+				createSpecimenFromSPR(specimenRequirement, specimenCollectionGroup, sprToSpecimenMap.get(specimenRequirement), sessionDataBean, dao);
+			}
+		}
+		
+	}
+	private void createSpecimenFromSPR(SpecimenRequirement specimenRequirement,SpecimenCollectionGroup specimenCollectionGroup,AbstractSpecimen parentSpecimen,SessionDataBean sessionDataBean,DAO dao) throws BizLogicException
+	{
+		 NewSpecimenBizLogic specimenBizLogic=new NewSpecimenBizLogic();
+		 Specimen specimenToBcreated = getCloneSpecimen(specimenRequirement,
+					(Specimen)parentSpecimen,	specimenCollectionGroup,sessionDataBean.getUserId());
+			specimenToBcreated.setSpecimenCollectionGroup(specimenCollectionGroup);
+			specimenBizLogic.insert(specimenToBcreated, dao, sessionDataBean);
+	}
 }
+

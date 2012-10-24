@@ -1992,4 +1992,21 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
         }
         return list;
     }
+    /**
+     * This method will return collection protocol based on title passed in argument.
+     * @param title
+     *            Collection Protocol Title.
+     * @param DAO
+     *           HibernateDAO object.            
+     */
+	public CollectionProtocol getCollectionProtocolByTitle(String title,DAO dao)
+			throws DAOException {
+		CollectionProtocol collectionProtocol;
+		ColumnValueBean columnValueBean = new ColumnValueBean("title", title);
+		List<CollectionProtocol> collectionProtocols = (List<CollectionProtocol>) dao
+				.retrieve(CollectionProtocol.class.getName(), columnValueBean);
+		collectionProtocol = collectionProtocols.get(0);
+
+		return collectionProtocol;
+	}
 }

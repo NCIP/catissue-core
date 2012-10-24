@@ -188,17 +188,17 @@ var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElement
 
 	function onResponseSetRequester(response) 
 	{
-	
-		document.getElementById('cpEditMsg').style.display="none";
 		document.getElementById('syncMsg').style.display="";
-		document.getElementById('eventButton').disabled="true";
-		document.getElementById('saveCPButton').disabled="true";
-		document.getElementById('exCPButton').disabled="true";
-		document.getElementById('syncCPButton').disabled="true";
+		document.getElementById('eventButton').style.visibility="hidden";
+		document.getElementById('saveCPButton').style.visibility="hidden";
+		document.getElementById('exCPButton').style.visibility="";
+		document.getElementById('syncCPButton').style.visibility="hidden";
+		document.getElementById('stopCPButton').disabled=false;
 	}
 
   function resizeIframe()
   {
+	
 	var totalHeight=window.top.document.body.offsetHeight;
 	document.getElementById('SpecimenRequirementView').style.height=totalHeight*66/100;
 	document.getElementById('CPTreeView').style.height=totalHeight*66/100;
@@ -235,25 +235,74 @@ var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElement
 <tr>
 	<td>
 
-      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="whitetable_bg">
-
+      <table width="100%" border="0" cellpadding="1" cellspacing="1" class="whitetable_bg">
+	 	
         <tr>
           <td colspan="2" align="left" class="bottomtd">
           <logic:equal name="isParticipantReg" value="true">
 			<span class="messagetexterror">
-			<logic:notEqual name="isSyncOn" value="true">
-			<div id="cpEditMsg" style="display:hidden">
-				User cannot edit existing Events and Specimen Requirements except for the Label Format
-			</div>
-			</logic:notEqual>
-			<logic:equal name="isSyncOn" value="true">
+			
+			<logic:equal name="displaySynchMessage" value="true">
 				<div>
-					User cannot edit this Collection Protocol, as the Synchronization process is in progress for this Collection Protocol. To stop the process <a href="javascript:stopSync()">click here</a>
+				   <table width="100%" cellpadding="0" cellspacing="0">
+					<td width="1%"></td>
+					<td align="left"  style="border:1px solid #ea6c15;vertical-align:text-top;" bgcolor="#FFF0F0" >
+					   <table width="100%" cellpadding="0" cellspacing="0">
+						<td width="1%"></td>					   	
+						<td width="2%"> <img src="images/uIEnhancementImages/Info.png" width="24" height="24"/></td>
+						<td width="1%"></td>
+					  <td>	
+					   <logic:notEqual name="isSyncOn" value="true">
+					    	
+						<div id="cpEditMsg" style="display:hidden;">
+						  <span style="font-family:Verdana;font-size:11px;color: red;font-weight:bold;vertical-align:tax-top;margin:0px;">
+							Only some fields are editable since participants already registered to this protocol.
+						  </span>
+						</div>
+					   </logic:notEqual>	
+					   <span style="font-family:Verdana;font-size:11px;color: red;font-weight:bold;vertical-align:tax-top;margin:0px;" >
+					 	${requestScope.synchMessage}
+					   </span>
+					   <div id="syncMsg" style="display:none">
+						<span style="font-family:Verdana;font-size:11px;color: red;font-weight:bold;vertical-align:tax-top;margin:0px;">
+							Edit is disabled  since syncronization is in started.
+						</span>
+				</div>	
+					</td>
+					</table>
+					</td>
+					<td width="20%"></td>
+				    </table>
 				</div>
 			</logic:equal>
-			<div id="syncMsg" style="display:none">
-					User cannot edit this Collection Protocol, as the Synchronization is in progress for this Collection Protocol. To stop the Synchronization <a href="javascript:stopSync()">click here</a>
+			<logic:notEqual name="displaySynchMessage" value="true">
+				<div>
+				   <table width="100%" cellpadding="0" cellspacing="0">
+					<td width="1%"></td>
+					<td align="left"  style="border:1px solid #ea6c15;vertical-align:text-top;" bgcolor="#FFF0F0" >
+					   <table width="100%" cellpadding="0" cellspacing="0">
+						<td width="1%"></td>					   	
+						<td width="2%"> <img src="images/uIEnhancementImages/Info.png" width="24" height="24"/></td>
+						<td width="1%"></td>
+					  <td>	
+					        <div id="cpEditMsg" style="display:hidden;">
+						  <span style="font-family:Verdana;font-size:11px;color: red;font-weight:bold;vertical-align:tax-top;margin:0px;">
+							Only some fields are editable since participants already registered to this protocol.
+						  </span>
+						</div>
+					   
+					   	<div id="syncMsg" style="display:none">
+						<span style="font-family:Verdana;font-size:11px;color: red;font-weight:bold;vertical-align:tax-top;margin:0px;">
+							Edit is disabled  since syncronization is in started.
+						</span>
+						</div>	
+					  </td>
+					</table>
+					</td>
+					<td width="20%"></td>
+				    </table>
 				</div>
+			</logic:notEqual> 	
 			</span>
 		</logic:equal>
 				<!--<div id="labelFormatErrDiv" style="display:none">
@@ -295,42 +344,30 @@ var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElement
 						<html:button styleClass="blue_ar_b" styleId="eventButton" property="forwardPage" onclick="openEventPage()" >
 							Add Events >>
 						</html:button>
-						&nbsp;|&nbsp;
 
-
-					 <html:button styleClass="blue_ar_b" styleId="saveCPButton" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()">
+					 <html:button styleClass="blue_ar_b" styleId="saveCPButton" property="forwardPage" value="Save" onclick="submitCP()">
 					</html:button>
 					<logic:equal parameter="operation"	value='edit'>
-					&nbsp;|&nbsp;
-					<html:button styleClass="blue_ar_b" styleId="exCPButton" property="forwardPage" value="Export Collection Protocol" onclick="exportCP()">
+					<html:button styleClass="blue_ar_b" styleId="exCPButton" property="forwardPage" value="Export" onclick="exportCP()">
 					</html:button>	
 					</logic:equal>
-					<logic:equal name="isParticipantReg" value="part">
-					&nbsp;|&nbsp;
-			<html:button styleClass="blue_ar_b" styleId="syncCPButton" property="forwardPage" value="Sync Collection Protocol" onclick="syncCP()">
+					<logic:equal name="isParticipantReg" value="true">
+					<html:button styleClass="blue_ar_b" styleId="syncCPButton" property="forwardPage" value="Start Sync" onclick="syncCP()">
+					</html:button>
+					<html:button styleClass="blue_ar_b" styleId="stopCPButton" property="forwardPage" value="Stop Sync" onclick="stopSync()" disabled="true">
 					</html:button>	
 		</logic:equal>
 	</logic:notEqual>
 	
 		<logic:equal name="isSyncOn" value="true">
-			<html:button styleClass="blue_ar_b" property="forwardPage" onclick="openEventPage()" disabled="true">
-							Add Events >>
-						</html:button>
-						&nbsp;|&nbsp;
-
-
-					 <html:button styleClass="blue_ar_b" property="forwardPage" value="Save Collection Protocol" onclick="submitCP()" disabled="true">
-					</html:button>
 					<logic:equal parameter="operation"	value='edit'>
-					&nbsp;|&nbsp;
-					<html:button styleClass="blue_ar_b" property="forwardPage" value="Export Collection Protocol" onclick="exportCP()" disabled="true">
+					<html:button styleClass="blue_ar_b" property="forwardPage" value="Export" onclick="exportCP()" disabled="true">
 					</html:button>	
 					</logic:equal>
-					<logic:equal name="isParticipantReg" value="part">
-					&nbsp;|&nbsp;
-			<html:button styleClass="blue_ar_b" property="forwardPage" value="Sync Collection Protocol" onclick="syncCP()" disabled="true">
+					
+					<html:button styleClass="blue_ar_b" property="forwardPage" value="Stop Sync" onclick="stopSync()">
 					</html:button>	
-		</logic:equal>
+
 		</logic:equal>
 		
 				   </td>

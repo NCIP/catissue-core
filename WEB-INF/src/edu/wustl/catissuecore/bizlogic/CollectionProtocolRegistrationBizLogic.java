@@ -23,7 +23,9 @@ import edu.wustl.catissuecore.TaskTimeCalculater;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.CpSyncAudit;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -59,6 +61,7 @@ import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.AuditException;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
 
@@ -924,50 +927,17 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		this.dateOfLastEvent = collectionProtocolRegistration.getRegistrationDate();
 		this.cntOfStudyCalEventPnt = 0;
 
-		final SpecimenCollectionGroupBizLogic specimenBizLogic = new SpecimenCollectionGroupBizLogic();
+		
 		final Collection<CollectionProtocolEvent> collectionProtocolEventCollection = collectionProtocolRegistration
 				.getCollectionProtocol().getCollectionProtocolEventCollection();
-		final Iterator<CollectionProtocolEvent> collectionProtocolEventIterator = collectionProtocolEventCollection
-				.iterator();
-		final Collection<SpecimenCollectionGroup> scgCollection = new HashSet<SpecimenCollectionGroup>();
-		while (collectionProtocolEventIterator.hasNext())
-		{
-			final CollectionProtocolEvent collectionProtocolEvent = collectionProtocolEventIterator
-					.next();
-
-			final int tmpCntOfStudyCalEventPnt = collectionProtocolEvent
-					.getStudyCalendarEventPoint().intValue();
-			if (this.cntOfStudyCalEventPnt != 0)
-			{
-				if (tmpCntOfStudyCalEventPnt > this.cntOfStudyCalEventPnt)
-				{
-					this.cntOfStudyCalEventPnt = tmpCntOfStudyCalEventPnt;
-				}
-			}
-			if (this.cntOfStudyCalEventPnt == 0)
-			{
-				this.cntOfStudyCalEventPnt = tmpCntOfStudyCalEventPnt;
-			}
-
-			/**
-			 * Here countOfStudyCalendarEventPoint for previous
-			 * CollectionProtocol which is registered is incremented as per
-			 * StudyCalendarEventPoint of Events.
-			 */
-			final SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup(
-					collectionProtocolEvent);
-			specimenCollectionGroup
-					.setCollectionProtocolRegistration(collectionProtocolRegistration);
-			specimenCollectionGroup
-					.setConsentTierStatusCollectionFromCPR(collectionProtocolRegistration);
-
-			specimenBizLogic.insert(specimenCollectionGroup, dao, sessionDataBean);
-
-			scgCollection.add(specimenCollectionGroup);
-		}
+		SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic=new SpecimenCollectionGroupBizLogic();
+		Collection<SpecimenCollectionGroup> scgCollection =specimenCollectionGroupBizLogic.createSCGsForCPEs(collectionProtocolRegistration, dao, sessionDataBean,
+				collectionProtocolEventCollection,cntOfStudyCalEventPnt);
+		
 		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(scgCollection);
 
 	}
+
 
 	/**
 	 * post Insert.
@@ -2290,5 +2260,155 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			dao.closeSession();
 		}
 		return list;
+	}
+	
+	private Iterator<Object> getCPRs(Long cpId, DAO dao) throws BizLogicException
+	{
+		Iterator<Object> cprs=null;
+		try
+		{
+			String getCPRQuery = "from edu.wustl.catissuecore.domain.CollectionProtocolRegistration cpr where cpr.collectionProtocol.id=:id";
+			final ColumnValueBean columnValueBean=new ColumnValueBean(cpId);
+			    columnValueBean.setColumnName("id");
+			List<ColumnValueBean>  columnValueBeans=new ArrayList();
+			columnValueBeans.add(columnValueBean);
+			cprs=dao.executeParamHQLIterator(getCPRQuery,columnValueBeans);
+		}
+		catch(DAOException daoException)
+		{
+			throw new BizLogicException(daoException);
+		}
+		return  cprs;
+	}
+	/**
+	 * This method will retrieve all CPRs of the given collectionprotocol and will check and update the missing consents,Events or SCGs.
+	 * @param collectionProtocol 
+	 * 						collection protocol for which CPRs needs to be processed. 
+	 * @param sessionDataBean
+	 * @param dao 
+	 * 			HibernateDAO object.
+	 * @throws BizLogicException
+	 * @throws DAOException 
+	 */
+	public void processCPRs(String title,SessionDataBean sessionDataBean) throws  BizLogicException, DAOException
+	{
+		System.out.println("start: "+new Date());
+		
+		DAO dao = getHibernateDao(getAppName(),null);
+		SynchronizeCollectionProtocolBizLogic synchronizeCollectionProtocolBizLogic=new SynchronizeCollectionProtocolBizLogic();
+		CpSyncAudit cpSyncAudit=null;
+		
+		CollectionProtocolBizLogic collectionProtocolBizLogic=new CollectionProtocolBizLogic();
+		CollectionProtocol collectionProtocol=collectionProtocolBizLogic.getCollectionProtocolByTitle(title,dao);
+		
+		Iterator<Object> registrations  = getCPRs(collectionProtocol.getId(), dao);
+		Collection<ConsentTier> consentTiersInCP = collectionProtocol.getConsentTierCollection();
+		DAO daoForEachCPR=null;
+		
+		long cprProcessCount=0;
+		try
+		{
+			daoForEachCPR=getHibernateDao(getAppName(),null);
+			// process each CPR of the CP. 
+			while (registrations.hasNext()) {
+				
+				
+				cpSyncAudit=synchronizeCollectionProtocolBizLogic.startSyncProcessAudit(collectionProtocol.getId(),daoForEachCPR,sessionDataBean.getUserId());
+				CollectionProtocolRegistration protocolRegistration=(CollectionProtocolRegistration) daoForEachCPR.retrieveById(CollectionProtocolRegistration.class.getName(), ((CollectionProtocolRegistration)registrations.next()).getId());
+				
+				updateConsentResponse(consentTiersInCP, protocolRegistration);
+				
+				SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic=new SpecimenCollectionGroupBizLogic();
+				specimenCollectionGroupBizLogic.updateSCGs(protocolRegistration,sessionDataBean,daoForEachCPR);
+				
+				CollectionProtocolRegistrationBizLogic protocolRegistrationBizLogic=new CollectionProtocolRegistrationBizLogic();
+				protocolRegistrationBizLogic.update(daoForEachCPR, protocolRegistration,
+						daoForEachCPR.retrieveById(CollectionProtocolRegistration.class.getName(), protocolRegistration.getId()), 
+						sessionDataBean);
+				
+				cprProcessCount++;
+				System.out.println(cprProcessCount+"..");
+				if(!registrations.hasNext())
+				{
+					synchronizeCollectionProtocolBizLogic.updateSyncProcessStatus(cpSyncAudit,"Done",new Long(cprProcessCount),daoForEachCPR);
+					daoForEachCPR.commit();
+					
+				}
+				else if(cprProcessCount%10==0)
+				{
+					synchronizeCollectionProtocolBizLogic.updateSyncProcessStatus(cpSyncAudit,"In Progress",new Long(cprProcessCount),daoForEachCPR);
+					daoForEachCPR.commit();
+					daoForEachCPR=getHibernateDao(getAppName(),null);
+				}
+				
+			}
+			//daoForEachCPR.closeSession();
+			//
+		}
+		catch(DAOException daoException)
+		{
+			throw new BizLogicException(daoException);
+		}
+		finally
+		{
+		  if(daoForEachCPR!=null)	
+		  {
+			 try 
+			 {
+				 daoForEachCPR.closeSession();
+			 }
+			 catch(DAOException exception)
+			 {
+				 throw new BizLogicException(exception);
+			 }
+		  }
+		  if(dao!=null)	
+		  {
+			 try 
+			 {
+				 dao.closeSession();
+			 }
+			 catch(DAOException exception)
+			 {
+				 throw new BizLogicException(exception);
+			 }
+		  }
+		}
+		System.out.println("Done: "+new Date());
+	}
+
+	private void updateConsentResponse(
+			Collection<ConsentTier> consentTiersInCP,
+			CollectionProtocolRegistration protocolRegistration) {
+		Collection<ConsentTierResponse> consentTierResponsesInCPR=protocolRegistration.getConsentTierResponseCollection();
+		//Iterate over each consent tier of cp and check whether it exist for cpr or not and if not then add that consent tier to consent
+		//tier collection.
+		for (ConsentTier individualConsentTierInCP : consentTiersInCP)
+		{
+			if(!responseCollectionContainsConsent(consentTierResponsesInCPR,
+					individualConsentTierInCP))
+			{
+				ConsentTierResponse consentResponse = new ConsentTierResponse();
+				consentResponse.setConsentTier(individualConsentTierInCP);
+				consentResponse.setResponse("Not Specified");
+				consentTierResponsesInCPR.add(consentResponse);
+				
+			}
+		}
+	}
+
+	
+	private boolean responseCollectionContainsConsent(
+			Collection<ConsentTierResponse> consentTierResponsesInCPR,
+			ConsentTier individualConsentTierInCP) {
+		boolean containsConsentire=false;
+		for (ConsentTierResponse consentTierResponse : consentTierResponsesInCPR) {
+			if(consentTierResponse.getConsentTier().getId().equals(individualConsentTierInCP.getId()))
+			{
+				containsConsentire=true;
+				break;
+			}
+		}
+		return containsConsentire;
 	}
 }

@@ -860,11 +860,15 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 		}
 		final Collection consentTierResponseCollection = collectionProtocolRegistration
 				.getConsentTierResponseCollection();
-		final Collection scgConsTierColl = this.getConsentTierStatusCollection();
+		Collection scgConsTierColl = this.getConsentTierStatusCollection();
 		boolean hasMoreConsents = false;
 
 		try
 		{
+			if(scgConsTierColl==null)
+			{
+				scgConsTierColl=new HashSet();
+			}
 			if (consentTierResponseCollection != null && !consentTierResponseCollection.isEmpty())
 			{
 				final Iterator iterator = consentTierResponseCollection.iterator();
@@ -872,13 +876,14 @@ public class SpecimenCollectionGroup extends AbstractSpecimenCollectionGroup
 				if (scgConsTierColl != null)
 				{
 					scgIterator = scgConsTierColl.iterator();
-					hasMoreConsents = scgIterator.hasNext();
+					
 				}
 				while (iterator.hasNext())
 				{
 					final ConsentTierResponse consentTierResponse = (ConsentTierResponse) iterator
 							.next();
 					ConsentTierStatus consentTierstatusN;
+					hasMoreConsents=scgIterator.hasNext();
 					if (hasMoreConsents)
 					{
 						consentTierstatusN = (ConsentTierStatus) scgIterator.next();

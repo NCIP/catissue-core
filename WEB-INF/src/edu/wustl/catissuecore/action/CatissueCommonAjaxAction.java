@@ -342,7 +342,7 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 	{
 		SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
 		String jobName = request.getParameter("cpTitle");
-		executerImpl.startSync(jobName);
+		executerImpl.startSync(jobName,(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA));
 		return null;
 	}
 	

@@ -92,5 +92,30 @@
      </insert>
 	</changeSet>
 	
-	
+	<changeSet id="5" author="catissuecore" runOnChange="true">
+	<createTable tableName="catissue_synch_cp_audit">
+			<column name="IDENTIFIER" type="${int.type}" autoIncrement="true" >
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="CP_TITLE" type="${text.type}(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="PROCESS_STATUS" type="${text.type}(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="PROCESSED_CPR_COUNT" type="${int.type}(20)">
+			</column>
+			<column name="TOTLE_CPR_COUNT" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+			<column name="START_DATE" type="${date.type}">
+				
+			</column>
+			<column name="END_DATE" type="${date.type}">				
+			</column>
+			<column name="USER_ID" type="${int.type}">
+				<constraints nullable="false" />
+			</column>
+	</createTable>
+	<createSequence sequenceName="synch_cp_id"/>	 
 </databaseChangeLog>         

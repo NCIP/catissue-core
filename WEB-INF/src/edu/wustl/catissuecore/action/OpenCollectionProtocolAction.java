@@ -1,6 +1,9 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -11,7 +14,9 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.bean.CollectionProtocolBean;
+import edu.wustl.catissuecore.bizlogic.SynchronizeCollectionProtocolBizLogic;
 import edu.wustl.catissuecore.cpSync.SyncCPThreadExecuterImpl;
+import edu.wustl.catissuecore.domain.CpSyncAudit;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
@@ -61,9 +66,30 @@ public class OpenCollectionProtocolAction extends BaseAction
 			SyncCPThreadExecuterImpl executerImpl = SyncCPThreadExecuterImpl.getInstance();
 			boolean isSyncOn = executerImpl.isSyncOn(cpBean.getTitle());
 			request.setAttribute("isSyncOn", isSyncOn);
-			//			request.setAttribute("labelGeneration", cpBean.isGenerateLabel());
+			if(Constants.EDIT.equalsIgnoreCase(operation))
+			{
+				SynchronizeCollectionProtocolBizLogic syncBizlogic=new  SynchronizeCollectionProtocolBizLogic();
+				CpSyncAudit cpSyncAudit=syncBizlogic.getSyncStatus(cpBean.getIdentifier());
+				StringBuffer synchMessage=new StringBuffer();
+				if(cpSyncAudit!=null)
+				{		
+					request.setAttribute("displaySynchMessage", Constants.TRUE);
+					if("Done".equalsIgnoreCase(cpSyncAudit.getStatus()))
+					{
+						Date endDate=cpSyncAudit.getEndDate();
+						String DATE_FORMAT_NOW = "MM/dd/yyyy";
+						SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);						
+						synchMessage.append("Protocol last synchronized done on ").append(sdf.format(endDate)).append(".");
+					}
+					else
+					{
+						synchMessage.append("Edit is disabled  since syncronization is in process.").append("(").append(cpSyncAudit.getProcessedCPRCount()).append("participants synchronized so far.)");
+					}
+					
+					request.setAttribute("synchMessage", synchMessage.toString());
+				}	
+			}
 		}
-		
 		
 		
 		request.setAttribute("formName", formName);

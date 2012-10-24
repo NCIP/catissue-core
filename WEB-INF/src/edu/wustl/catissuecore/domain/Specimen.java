@@ -1314,22 +1314,25 @@ public class Specimen extends AbstractSpecimen implements Serializable, IActivit
 
 		final Collection consentTierStatusCollection = specimenCollectionGroup
 				.getConsentTierStatusCollection();
-		final Collection specConsTierColl = this.getConsentTierStatusCollection();
+		Collection specConsTierColl = this.getConsentTierStatusCollection();
 		boolean hasMoreConsents = false;
 		if (consentTierStatusCollection != null && !consentTierStatusCollection.isEmpty())
 		{
 			final Iterator iterator = consentTierStatusCollection.iterator();
 			Iterator specCoIterator = null;
+			if(specConsTierColl==null)
+			{
+				specConsTierColl=new HashSet();
+			}
 			if (specConsTierColl != null)
 			{
 				specCoIterator = specConsTierColl.iterator();
-				hasMoreConsents = specCoIterator.hasNext();
 			}
 			while (iterator.hasNext())
 			{
 				final ConsentTierStatus consentTierStatus = (ConsentTierStatus) iterator.next();
 				ConsentTierStatus consentTierstatusN = null;
-
+				hasMoreConsents = specCoIterator.hasNext();
 				if (hasMoreConsents)
 				{
 					consentTierstatusN = (ConsentTierStatus) specCoIterator.next();

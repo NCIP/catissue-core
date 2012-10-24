@@ -9,6 +9,8 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import edu.wustl.common.beans.SessionDataBean;
+
 
 
 
@@ -16,9 +18,7 @@ public class SyncCPThreadExecuterImpl
 {
 	private BlockingQueue<Runnable> tasksQueue;
 	private RejectedExecutionHandler executionHandler;
-	private Map<String, Future<String>> taskMap;
-	 
-	// Create the ThreadPoolExecutor
+	private Map<String,Map<SessionDataBean, Future<String>>> taskMap;
 	private ThreadPoolExecutor executor = null;
 	private static SyncCPThreadExecuterImpl syncCP = null;
 	
@@ -27,7 +27,7 @@ public class SyncCPThreadExecuterImpl
 		super();
 		tasksQueue = new ArrayBlockingQueue<Runnable>(50);
 		executionHandler = new MyRejectedExecutionHandelerImpl();
-		taskMap = new HashMap<String, Future<String>>();
+		taskMap = new HashMap<String,Map<SessionDataBean, Future<String>>>();
 	}
 	
 	public static SyncCPThreadExecuterImpl getInstance()
@@ -46,9 +46,6 @@ public class SyncCPThreadExecuterImpl
 		         t.setName(r.toString());
 		    }
 
-//		    protected void afterExecute(Runnable r, Throwable t) { 
-//		         Thread.currentThread().setName("no time taken");
-//		    } 
 		};
 		
 		executor.allowCoreThreadTimeOut(true);
@@ -60,10 +57,12 @@ public class SyncCPThreadExecuterImpl
 	}
 	
 	
-	public void startSync(String jobName)
+	public void startSync(String jobName,SessionDataBean sessionDataBean)
 	{
-		Future<String> ft = executor.submit(new MyWork(jobName),new String());
-		taskMap.put(jobName, ft);
+		Map<SessionDataBean,Future<String>> valueMap=new HashMap<SessionDataBean,Future<String>>();
+		Future<String> ft = executor.submit(new MyWork(jobName,sessionDataBean),new String());
+		valueMap.put(sessionDataBean, ft);
+		taskMap.put(jobName, valueMap);
 		updateMap();
 	}
 	
@@ -71,7 +70,7 @@ public class SyncCPThreadExecuterImpl
 	{
 		for (String jobName : taskMap.keySet())
 		{
-			Future<String> ft = taskMap.get(jobName);
+			Future<String> ft = taskMap.get(jobName).values().iterator().next();
 			if(ft.isDone())
 				taskMap.remove(jobName);
 		}
@@ -80,25 +79,21 @@ public class SyncCPThreadExecuterImpl
 	public boolean isSyncOn(String jobName)
 	{
 		boolean isSyncOn = Boolean.FALSE;
-		Future<String> ft = taskMap.get(jobName);
+		Future<String> ft =null;
+		if(!taskMap.isEmpty() && taskMap.get(jobName)!=null)
+		{
+			ft=taskMap.get(jobName).values().iterator().next();
+		}
 		if(ft != null)
-			isSyncOn = !taskMap.get(jobName).isDone();
+			isSyncOn = !taskMap.get(jobName).values().iterator().next().isDone();
 		return isSyncOn; 
-//		return getJob(jobName)!=null?true:false;
 	}
-	// Starting the monitor thread as a daemon
-//	Thread monitor = new Thread(new MyMonitorThread(executor));
-//	monitor.setDaemon(true);
-//	monitor.start();
 
 	public void stopSync(String jobName)
 	{
-		Future<String> ft = taskMap.get(jobName);
+		Future<String> ft = taskMap.get(jobName).values().iterator().next();
 		if(ft != null)
 			ft.cancel(true);
-//		Thread job = getJob(jobName);
-//		if(job!=null)
-//			job.interrupt();
 	}
 	
 	
