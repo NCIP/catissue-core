@@ -3602,7 +3602,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			}
 			if(!isSPRExist)
 			{
-				createSpecimenFromSPR(specimenRequirement, specimenCollectionGroup, sprToSpecimenMap.get(specimenRequirement), sessionDataBean, dao);
+				SpecimenRequirement requirement=(SpecimenRequirement)childSpecimenRequirement;
+				createSpecimenFromSPR(requirement, specimenCollectionGroup, sprToSpecimenMap.get(specimenRequirement), sessionDataBean, dao);
 			}
 		}
 		

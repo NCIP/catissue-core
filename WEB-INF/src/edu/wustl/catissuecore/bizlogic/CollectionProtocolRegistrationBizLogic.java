@@ -2292,7 +2292,6 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	 */
 	public void processCPRs(String title,SessionDataBean sessionDataBean) throws  BizLogicException, DAOException
 	{
-		System.out.println("start: "+new Date());
 		
 		DAO dao = getHibernateDao(getAppName(),null);
 		SynchronizeCollectionProtocolBizLogic synchronizeCollectionProtocolBizLogic=new SynchronizeCollectionProtocolBizLogic();
@@ -2327,7 +2326,6 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 						sessionDataBean);
 				
 				cprProcessCount++;
-				System.out.println(cprProcessCount+"..");
 				if(!registrations.hasNext())
 				{
 					synchronizeCollectionProtocolBizLogic.updateSyncProcessStatus(cpSyncAudit,"Done",new Long(cprProcessCount),daoForEachCPR);
@@ -2374,7 +2372,6 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			 }
 		  }
 		}
-		System.out.println("Done: "+new Date());
 	}
 
 	private void updateConsentResponse(
