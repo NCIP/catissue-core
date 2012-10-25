@@ -404,7 +404,6 @@ function showPopUp()
 	mapButtonClickedOnNewSpecimen('<%=frameUrl%>','newSpecimenPage');
 	}
 }
-
 function onContainerListReady()
 	{
 		var containerName = '${newSpecimenForm.selectedContainerName}';
@@ -426,7 +425,7 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 	//Drop Down components information
 	containerDropDownInfo = {gridObj:"storageContainerGrid", gridDiv:"storageContainer", dropDownId:"storageContainerDropDown", pagingArea:"storageContainerPagingArea", infoArea:"storageContainerInfoArea", onOptionSelect:"containerOnRowSelect", actionToDo:url, callBackAction:onContainerListReady, visibilityStatusVariable:scGridVisible, propertyId:'selectedContainerName'};
 	// initialising grid
-	scGrid = initDropDownGrid(containerDropDownInfo,5,0); 
+	scGrid = initDropDownGrid(containerDropDownInfo); 
 }
 
 
@@ -2141,17 +2140,17 @@ else
 									</html:checkbox>
 								</td-->
 								<td width="100%" >
-			<div  id="manualDiv" style="display:block">
+			<div class="black_ar" id="manualDiv" style="display:block">
 											<table cellpadding="0" cellspacing="0" border="0" >
 						<tr>
-							<td class="groupelements" size="48">
+							<td class="black_ar" size="48" align="left">
 								
 								<td width="50%" align="left" class="black_ar">
 						<html:hidden property="selectedContainerName" styleId="selectedContainerName" />
 						<div>
 							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
-								<tr>
-									<td align="left" width="88%" height="100%" >
+								<tr class="black_ar">
+									<td align="left" class="black_ar" width="88%" height="100%" >
 										<div id="scDropDownIddiv" class="x-form-field-wrap" >
 											<input id="storageContainerDropDown"
 													onkeydown="keyNavigation(event,containerDropDownInfo,scGrid,scGridVisible);"
@@ -2159,7 +2158,7 @@ else
 													onClick="noEventPropogation(event)"
 													autocomplete="off"
 													size="30"
-													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="scDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
+													class="black_ar x-form-text x-form-field x-form-focus"/><img id="scDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
 												onclick="showHideStorageContainerGrid(event,'storageContainer','storageContainerDropDown',containerDropDownInfo);"
 												src="images/uIEnhancementImages/s.gif"/>
 										</div>
@@ -2167,12 +2166,12 @@ else
 								</tr>
 								<tr>
 									<td>
-									<div id="storageContainer" style="z-index: 100"
+									<div id="storageContainer" class="black_ar" style="z-index: 100"
 										onClick="noEventPropogation(event)">
-									<div id="storageContainerGrid" style="height: 40px;"
+									<div id="storageContainerGrid" class="black_ar" style="height: 40px;"
 										onClick="noEventPropogation(event)"></div>
-									<div id="storageContainerPagingArea" onClick="noEventPropogation(event)"></div>
-									<div id="storageContainerInfoArea" onClick="noEventPropogation(event)"></div>
+									<div id="storageContainerPagingArea" class="black_ar" onClick="noEventPropogation(event)"></div>
+									<div id="storageContainerInfoArea" class="black_ar" onClick="noEventPropogation(event)"></div>
 									</div>
 									</td>
 								</tr>
@@ -2181,12 +2180,12 @@ else
 					</td>
 
 							</td>
-							<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							<td class="groupelements"  width="10%">
-								<html:text styleClass="black_ar"  size="2" styleId="pos1" property="pos1"  disabled= "false" style="display:block"/>
+							<td>&nbsp;&nbsp;</td>
+							<td class="groupelements"  width="8%" style="left-padding:165px;">
+								<html:text styleClass="black_ar"  size="1" styleId="pos1" property="pos1"  disabled= "false" style="display:block"/>
 							</td>
-							<td class="groupelements" width="10%">
-								<html:text styleClass="black_ar"  size="2" styleId="pos2" property="pos2" disabled= "false" style="display:block"/>
+							<td class="groupelements" width="8%">
+								<html:text styleClass="black_ar"  size="1" styleId="pos2" property="pos2" disabled= "false" style="display:block"/>
 							</td>
 							<td class="groupelements">
 								<html:button styleClass="black_ar" property="containerMap" onclick="showPopUp()">

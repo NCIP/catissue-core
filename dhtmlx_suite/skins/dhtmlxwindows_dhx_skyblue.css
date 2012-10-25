@@ -12,7 +12,7 @@
 	background-image: url("../imgs/dhxwins_dhx_skyblue/active/header_bg.gif");
 	background-repeat: repeat-x;
 	background-position: top;
-	border: #a4bed4 1px solid;
+	border: #a4bed4 1px ;
 }
 .dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_body_outer div.dhtmlx_wins_body_inner {
 	position: absolute;
@@ -23,17 +23,17 @@
 	aborder-top: none;
 	
 	background-color: #ebebeb !important;
-	border: #ebebeb 2px solid !important;
+	border: #ebebeb 2px  !important;
 }
 .dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active .dhtmlx_wins_no_header { /* will added to div.dhtmlx_wins_body_inner in case of no header */
-	border-top: #c2d5dc 6px solid !important;
+	border-top: #c2d5dc 6px  !important;
 }
 .dhtmlx_skin_dhx_skyblue div.dhtmlx_window_active div.dhtmlx_wins_title {
 	position: absolute;
 	top: 9px;
 	left: 28px;
 	color: #000000;
-	font-family: Tahoma;
+	font-family: Verdana,Tahoma;
 	font-size: 11px;
 	font-weight: bold;
 	cursor: default;
@@ -164,7 +164,7 @@
 	background-image: url("../imgs/dhxwins_dhx_skyblue/inactive/header_bg.gif");
 	background-repeat: repeat-x;
 	background-position: top;
-	border: #c9d9e6 1px solid;
+	border: #c9d9e6 1px ;
 }
 .dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_body_outer div.dhtmlx_wins_body_inner {
 	position: absolute;
@@ -173,17 +173,17 @@
 	border-top: none;
 	aabackground-color: #FFFFFF;
 	background-color: #ebebeb !important;
-	border: #ebebeb 2px solid !important;
+	border: #ebebeb 2px  !important;
 }
 .dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive .dhtmlx_wins_no_header { /* will added to div.dhtmlx_wins_body_inner in case of no header */
-	border-top: #c2d5dc 6px solid;
+	border-top: #c2d5dc 6px ;
 }
 .dhtmlx_skin_dhx_skyblue div.dhtmlx_window_inactive div.dhtmlx_wins_title {
 	position: absolute;
 	top: 9px;
 	left: 28px;
 	color: #686868;
-	font-family: Tahoma;
+	font-family: Verdana, Tahoma;
 	font-size: 11px;
 	font-weight: bold;
 	cursor: default;
@@ -437,9 +437,9 @@
 	white-space: nowrap;
 	border-top: none;
 	border-bottom: none;
-	border-left: #a4bed4 1px solid;
-	border-right: #a4bed4 1px solid;
-	font-family: Tahoma;
+	border-left: #a4bed4 1px ;
+	border-right: #a4bed4 1px ;
+	font-family: Verdana, Tahoma;
 	font-size: 11px;
 	vertical-align: middle;
 	color: #000000;
@@ -468,9 +468,9 @@
 
 
 .dhtmlx_skin_dhx_skyblue div.white_line {
-	border-left: #FFFFFF 1px solid;
-	border-right: #FFFFFF 1px solid;
-	border-top: #FFFFFF 1px solid;
+	border-left: #FFFFFF 1px ;
+	border-right: #FFFFFF 1px ;
+	border-top: #FFFFFF 1px ;
 	height: 100%;
 }
 .dhtmlx_skin_dhx_skyblue div.white_line2 {
@@ -478,13 +478,13 @@
 	bottom: 0px;
 	height: 1px;
 	width: 100%;
-	border-bottom: #FFFFFF 1px solid;
+	border-bottom: #FFFFFF 1px ;
 	font-size: 1px;
 }
 
 .dhtmlx_skin_dhx_skyblue .dhtmlxMenu_in_Window {
 	aborder-bottom: #cedce8 1px solid;
-	border-bottom: #a4bed4 1px solid;
+	border-bottom: #a4bed4 1px ;
 }
 
 

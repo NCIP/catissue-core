@@ -635,7 +635,7 @@ function setContainerValues()
 						<div>
 							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
 								<tr>
-									<td align="left" width="88%" height="100%" >
+									<td class="black_ar" align="left" width="88%" height="100%" >
 										<div id="scDropDownIddiv_${counter+1}" class="x-form-field-wrap" >
 											<input id="storageContainerDropDown_${counter+1}"
 													onkeydown="keyNavigation(event,containerDropDownInfo_${counter+1},scGrid_${counter+1},scGridVisible_${counter+1});"
@@ -643,7 +643,7 @@ function setContainerValues()
 													onClick="noEventPropogation(event)"
 													autocomplete="off"
 													size="30"
-													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="scDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
+													class="black_ar x-form-text x-form-field x-form-focus"/><img id="scDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
 												onclick="showHideStorageContainerGrid(event,'storageContainer_${counter+1}','storageContainerDropDown_${counter+1}',scGridVisible_${counter+1},containerDropDownInfo_${counter+1},scGrid_${counter+1});"
 												src="images/uIEnhancementImages/s.gif"/>
 										</div>
@@ -651,12 +651,12 @@ function setContainerValues()
 								</tr>
 								<tr>
 									<td>
-									<div id="storageContainer_${counter+1}" style="z-index: 100"
+									<div id="storageContainer_${counter+1}" class="black_ar" style="z-index: 100"
 										onClick="noEventPropogation(event)">
-									<div id="storageContainerGrid_${counter+1}" style="height: 40px;"
+									<div id="storageContainerGrid_${counter+1}" class="black_ar" style="height: 40px;"
 										onClick="noEventPropogation(event)"></div>
-									<div id="storageContainerPagingArea_${counter+1}" onClick="noEventPropogation(event)"></div>
-									<div id="storageContainerInfoArea_${counter+1}" onClick="noEventPropogation(event)"></div>
+									<div id="storageContainerPagingArea_${counter+1}" class="black_ar" onClick="noEventPropogation(event)"></div>
+									<div id="storageContainerInfoArea_${counter+1}" class="black_ar" onClick="noEventPropogation(event)"></div>
 									</div>
 									</td>
 								</tr>
@@ -665,9 +665,9 @@ function setContainerValues()
 					</td>
 
 							</td>
-							<td class="groupelements" style="padding-left:25"><html:text styleClass="black_ar" size="2" styleId="${aliquotBean.pos1Style}" property="${aliquotBean.pos1FromMapKey}" />&nbsp;
+							<td class="groupelements" style="padding-left:25"><html:text styleClass="black_ar" size="1" styleId="${aliquotBean.pos1Style}" property="${aliquotBean.pos1FromMapKey}" />&nbsp;
 							</td>
-							<td class="groupelements"><html:text styleClass="black_ar"  size="2" styleId="${aliquotBean.pos2Style}" property="${aliquotBean.pos2FromMapKey}" />&nbsp;
+							<td class="groupelements"><html:text styleClass="black_ar"  size="1" styleId="${aliquotBean.pos2Style}" property="${aliquotBean.pos2FromMapKey}" />&nbsp;
 							</td>
 							<td class="groupelements"><html:button styleClass="black_ar" styleId="${aliquotBean.containerMapStyle}" property="${aliquotBean.containerMap}" 
 							onclick="showPopUp('storageContainerDropDown_${counter+1}','${aliquotBean.containerNameFromMapKey}','${aliquotBean.pos1Style}','${aliquotBean.pos2Style}','1','<%=form.getClassName()%>','<%=form.getType()%>','<%=form.getColProtId()%>','value(Specimen:${counter+1}_StorageContainer_id_fromMap)')"  >

@@ -570,6 +570,8 @@ public abstract class BaseShipmentBizLogic extends CatissueDefaultBizLogic
 				{
 					container.setSite( site );
 					container.setStorageType( storageTypeInTransit );
+					container.setOneDimensionLabellingScheme(edu.wustl.catissuecore.util.global.Constants.LABELLING_SCHEME_NUMBERS);
+					container.setTwoDimensionLabellingScheme(edu.wustl.catissuecore.util.global.Constants.LABELLING_SCHEME_NUMBERS);
 					container.setActivityStatus( Status.ACTIVITY_STATUS_ACTIVE.toString() );
 					final Collection < SpecimenPosition > spPosCollection = container
 							.getSpecimenPositionCollection();

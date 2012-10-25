@@ -865,7 +865,7 @@ public class NewSpecimenAction extends CatissueBaseAction
 							LOGGER.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 							ActionErrors errors = (ActionErrors) request
 									.getAttribute(Globals.ERROR_KEY);
-							if (containerMap.isEmpty())
+							if (containerMap!=null && containerMap.isEmpty())
 							{
 								if (specimenForm.getSelectedContainerName() == null
 										|| "".equals(specimenForm.getSelectedContainerName()))

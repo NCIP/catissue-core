@@ -107,6 +107,10 @@ Long specimenId=specimen.getId();
 				document.getElementById('position1_<%=specimenId%>').value = "";
 				document.getElementById('position2_<%=specimenId%>').value = "";
 			}
+			else
+			{
+				hidePositonTextBoxes(<%=specimenId%>);
+			}
 		}
 		, actionToDo:"CatissueCommonAjaxAction.do?type=getStorageContainerListForRequestShipment&specimenId=<%=specimenId%>", callBackAction:
 		function(){
@@ -838,7 +842,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 					</td>
 					</td>
 																					</td>
-																					<td class="groupelements" style="padding-left:25">
+																					<td class="black_ar" style="padding-left:25">
 																						<c:set var="pos1Name">specimenDetails(position1_<bean:write name="specimenItem" property="id"/>)</c:set>
 																						<jsp:useBean id="pos1Name" type="java.lang.String"/>
 																						<c:set var="pos1Id">position1_<bean:write name="specimenItem" property="id"/></c:set>
@@ -846,7 +850,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 									
 																						<html:text styleClass="black_ar"  size="2" styleId="<%=pos1Id%>" property="<%=pos1Name%>" disabled= "false"/>
 																					</td>
-																					<td class="groupelements">
+																					<td class="black_ar">
 																						<c:set var="pos2Name">specimenDetails(position2_<bean:write name="specimenItem" property="id"/>)</c:set>
 																						<jsp:useBean id="pos2Name" type="java.lang.String"/>
 																						<c:set var="pos2Id">position2_<bean:write name="specimenItem" property="id"/></c:set>
@@ -854,7 +858,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 									
 																						<html:text styleClass="black_ar"  size="2" styleId="<%=pos2Id%>" property="<%=pos2Name%>" disabled= "false"/>
 																					</td>
-																					<td class="groupelements">
+																					<td class="black_ar">
 	
 																						<c:set var="stContainerName">specimenDetails(containerId_<bean:write name="specimenItem" property="id"/>)</c:set>
 																						<jsp:useBean id="stContainerName" type="java.lang.String"/>

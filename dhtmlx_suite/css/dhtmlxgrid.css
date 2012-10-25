@@ -14,7 +14,7 @@ div.gridbox table.obj{
 	height:1px;
 }
 div.gridbox table.hdr td {
-	font-family:arial;
+	font-family:Verdana, arial;
 	font-size:12px;
 	background-Color:#D4D0C8;
 	border: 1px solid;
@@ -34,7 +34,7 @@ div.gridbox table.hdr td div.hdrcell{
 div.gridbox table.obj td {
 	border: 1px solid;
 	border-color : white Gray Gray white;
-	font-family:Arial;
+	font-family:Verdana, Arial;
 	font-size:12px;
     -moz-user-select:none;
     -moz-user-select:-moz-none;   
@@ -72,12 +72,12 @@ div.gridbox table.obj td.editable{
     -moz-user-select:text;
     }
 div.gridbox table.obj td.group_row{
-    vertical-align:middle; font-family:Tahoma; font-size:10pt; font-weight:bold; height:30px;  border:0px;  border-bottom: 2px solid navy; 
+    vertical-align:middle; font-family:Verdana, Tahoma; font-size:10pt; font-weight:bold; height:30px;  border:0px;  border-bottom: 2px solid navy; 
     }    
 
 .dragSpanDiv{ 	font-size : 12px; 	border: 1px gray solid; background-color:white; z-index:999; }
 .dhx_combo_select{
-    font-family:arial;
+    font-family:Verdana,arial;
     font-size:12px;
     border:1px solid;
     border-color:black silver silver black;
@@ -94,7 +94,7 @@ div.gridbox table.obj td.group_row{
     padding:0px;
     padding-right:1px !ie;
     margin:0px;
-    font:12px arial;
+    font:12px Verdana;
     overflow:hidden;
 }
 
@@ -185,14 +185,14 @@ div.gridbox_xp table.hdr td div.hdrcell{
 	border-right: 1px solid gray;
 	height:16px;
 	white-space : nowrap;
-	font-family:Arial;
+	font-family:Verdana, Arial;
 	font-size:12px;
 }
 div.gridbox_xp table.obj td {
 	border:0px;
 	border-bottom: 1px solid lightgrey;
 	border-right: 1px solid lightgrey;
-	font-family:Arial;
+	font-family:Verdana, Arial;
 	font-size:12px;
     -moz-user-select:none;
     -moz-user-select:-moz-none;    
@@ -299,7 +299,7 @@ div.gridbox div.ftr td {
 		border-right:1px solid gray;
 		background-color:#ffffcc;
 		font-style : italic;
-		font-family:arial;
+		font-family:Verdana, arial;
 		font-size:12px;
 		overflow:hidden;
 	}
@@ -315,7 +315,7 @@ div.gridbox table.hdr td.columnTargetL div.hdrcell{
 }
 
 .dhx_dragColDiv{
-	font-family:Arial;
+	font-family:Verdana, Arial;
 	font-size:12px;
 	background-color:#D4D0C8;
 	border: 1px solid;
@@ -350,7 +350,7 @@ div.gridbox_light table.hdr td {
 	border: 1px solid;
 	border-color : #FDFDFD #93AFBA #93AFBA #FDFDFD;
 	background-color:transparent;
-	font-family:Tahoma;
+	font-family:Verdana, Tahoma;
 	font-size:11px;
 	font-weight:bold;
 	color:#055A78;
@@ -370,7 +370,7 @@ div.gridbox_light table.obj td {
 	border-width: 0px 1px 0px 1px;
 	border-left: 1px solid white;
 	border-right: 1px solid #D6D6D6;
-	font-family:Tahoma;
+	font-family:Verdana, Tahoma;
 	font-size:11px;
 	padding-right:4px;
 	padding-left:4px;
@@ -383,7 +383,7 @@ div.gridbox_light table.row20px tr td {
 	padding-left:4px;
 }
 div.gridbox_light .dhx_combo_edit{
-  font-family:Tahoma;
+  font-family:Verdana, Tahoma;
 	font-size:11px;
 }
 div.gridbox_light table.obj tr.rowselected td{
@@ -428,7 +428,7 @@ div.gridbox_modern table.hdr td {
 	border-bottom:1px solid #B5B5B5;
 
 	background-color:transparent;
-	font-family:Tahoma;
+	font-family:Verdana, Tahoma;
 	font-size:11px;
 	font-weight:bold;
 	color:#055A78;
@@ -455,7 +455,7 @@ div.gridbox_modern table.row20px tr td {
 	padding-left:4px;
 }
 div.gridbox_modern .dhx_combo_edit{
-  font-family:Tahoma;
+  font-family:Verdana, Tahoma;
 	font-size:11px;
 }
 div.gridbox_modern table.obj tr.rowselected td{
@@ -518,7 +518,7 @@ div.gridbox_clear{
 div.gridbox_clear table.hdr td {
 	border:0px;
 	background-color:transparent;
-	font-family:Tahoma;
+	font-family:Verdana,Tahoma;
 	font-size:11px;
 	font-weight:bold;
 	color:#055A78;
@@ -537,7 +537,7 @@ div.gridbox_clear table.hdr .filter{
 div.gridbox_clear table.obj td {
     border-width:  0px 1px 0px 0px ;
 	border-color:#D6D6D6;
-	font-family:Tahoma;
+	font-family:Verdana, Tahoma;
 	font-size:11px;
 	padding-right:4px;
 	padding-left:4px;
@@ -547,7 +547,7 @@ div.gridbox_clear table.row20px tr td {
 	padding-left:4px;
 }
 div.gridbox_clear .dhx_combo_edit{
-  font-family:Tahoma;
+  font-family:Verdana, Tahoma;
 	font-size:11px;
 }
 div.gridbox_clear .odd_clear{
@@ -610,7 +610,7 @@ div.gridbox_sbdark table.hdr td {
 
 div.gridbox_sbdark .hdrcell {
     padding-left: 0px !important;
-    font-family: 'Lucida Sans Unicode','Tahoma'; 
+    font-family: 'Verdana','Lucida Sans Unicode','Tahoma'; 
 }
 
 div.gridbox_sbdark table.hdr td div.hdrcell{
@@ -622,7 +622,7 @@ div.gridbox_sbdark table.obj td {
     border-width: 0px 1px 0px 1px;
     border-left: 1px solid #202220;
     border-right: 1px solid #EDF3F0;
-    font-family: 'Consolas','Lucida Sans Unicode','Tahoma';
+    font-family: 'Verdana','Consolas','Lucida Sans Unicode','Tahoma';
     font-size:11px;    
 }
 
@@ -632,7 +632,7 @@ div.gridbox_sbdark table.row20px tr td {
 }
 
 div.gridbox_sbdark .dhx_combo_edit{
-    font-family: 'Lucida Sans Unicode','Tahoma';
+    font-family: 'Verdana','Lucida Sans Unicode','Tahoma';
     font-size:11px;
 }
 

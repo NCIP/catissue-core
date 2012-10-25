@@ -1454,7 +1454,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 		String isDisabled = "";
 		String lineage=getValueBasedOnLineage(specimen.getLineage());
 
-					stringBuffer.append("<table style=\"font-size:1em\" size=\"100%\">");
+					stringBuffer.append("<table style=\"font-size:1em\" class=\"black_ar\" size=\"100%\">");
 					/*stringBuffer.append(TR_OPEN);
 		stringBuffer.append(TD_OPEN);
 		stringBuffer.append("");
@@ -1500,7 +1500,7 @@ public class SpecimenDetailsNewFormat extends TagSupport
 
 		stringBuffer.append(TD_OPEN);
 		stringBuffer.append(
-				"<td width=\"55%\" align=\"left\" class=\"black_ar\">"
+				"<td width=\"60%\" align=\"left\" class=\"black_ar\">"
 				+"<input type=\"hidden\" class=\""+lineage+"\"name=\""+selectedContainerName+"\" id=\"selectedContainerName\" value=\"\"/>"
 				+"<div>"
 				+	"<table border=\"0\" width=\"29%\" id=\"outerTable2\" cellspacing=\"0\" cellpadding=\"0\">"
@@ -1522,12 +1522,12 @@ public class SpecimenDetailsNewFormat extends TagSupport
 				+	"	</tr>"
 				+	"	<tr>"
 				+	"		<td>"
-				+	"		<div id=\""+storageContainer+"\" style=\"z-index: 100\""
+				+	"		<div id=\""+storageContainer+"\" class=\"black_ar\" style=\"z-index: 100\""
 				+	"			onClick=\"noEventPropogation(event)\">"
-				+	"		<div id=\""+storageContainerGrid+"\" style=\"height: 40px;\""
+				+	"		<div id=\""+storageContainerGrid+"\" class=\"black_ar\" style=\"height: 40px;\""
 				+	"			onClick=\"noEventPropogation(event)\"></div>"
-				+	"		<div id=\""+storageContainerPagingArea+"\" onClick=\"noEventPropogation(event)\"></div>"
-				+	"		<div id=\""+storageContainerInfoArea+"\" onClick=\"noEventPropogation(event)\"></div>"
+				+	"		<div id=\""+storageContainerPagingArea+"\"class=\"black_ar\" onClick=\"noEventPropogation(event)\"></div>"
+				+	"		<div id=\""+storageContainerInfoArea+"\" class=\"black_ar\" onClick=\"noEventPropogation(event)\"></div>"
 				+	"		</div>"
 				+	"		</td>"
 				+	"	</tr>"
@@ -1538,14 +1538,14 @@ public class SpecimenDetailsNewFormat extends TagSupport
 				+ storageContainerDropDown + "\" >");
 */		stringBuffer.append(TD_CLOSE);
 		stringBuffer.append(TD_OPEN);
-		stringBuffer.append("<td style=\"padding-left:25\">");
+		stringBuffer.append("<td style=\"padding-left:15\">");
 		stringBuffer.append("<input type=\"text\" name=\"" + nameValue[2] + "\" value=\"" + nameValue[3]
-				+ "\" size=\"2\" class=\"black_ar_md\" id=\"" + positionDimensionOne + "\" "
+				+ "\" size=\"1\" width=\"10%\" align=\"left\" class=\"black_ar_md\" id=\"" + positionDimensionOne + "\" "
 				+ isDisabled + " >");
 		stringBuffer.append(TD_CLOSE);
 		stringBuffer.append(TD_OPEN);
 		stringBuffer.append("<input type=\"text\" name=\"" + nameValue[4] + "\" value=\"" + nameValue[5]
-				+ "\" size=\"2\" class=\"black_ar_md\" id=\"" + positionDimensionTwo + "\" "
+				+ "\" size=\"1\" width=\"10%\" align=\"left\" class=\"black_ar_md\" id=\"" + positionDimensionTwo + "\" "
 				+ isDisabled + " >");
 		stringBuffer.append(TD_CLOSE);
 		stringBuffer.append(TD_OPEN);

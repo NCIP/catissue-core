@@ -72,6 +72,7 @@ function closeFramedWindow()
 	String pos1= "";
     String pos2= "";
 	boolean [][]availablePositions =null;
+	String containerName="";
 	
 	if(null!=storageContainerGridObject)
 	{
@@ -84,7 +85,8 @@ function closeFramedWindow()
 	oneDimLabel = storageContainerGridObject.getOneDimensionLabel();
 	twoDimLabel = storageContainerGridObject.getTwoDimensionLabel();
     
-    
+    containerName=storageContainerGridObject.getName();
+	
     for( int j=0; j<oneDimLabel.length();j++)
     {
         temp =oneDimLabel.substring(j,j+1);
@@ -119,25 +121,37 @@ function closeFramedWindow()
 	}	
 
 %>
-<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
 
+<style>
+body { overflow:auto; }
+td {
+ width: 40px;
+ height: 20px;
+}
+</style>
+
+
+<link href="css/catissue_suite.css" rel="stylesheet" type="text/css" /> 
+<body>
 <%@ include file="/pages/content/common/ActionErrors.jsp" %>
 <!-- target of anchor to skip menus -->
+
 <table summary="" cellpadding="0" cellspacing="0" border="0"  width="100%" >
+<tr><td class="black_ar_t" colspan="2" style="padding-top:0;">&nbsp;</td></tr>
+<tr><td class="black_ar" colspan="2" style="font-size:12px;"><b>&nbsp;&nbsp;Name: </b><%=containerName%></td></tr>
 	<tr>
 	<%if(null!=storageContainerGridObject){%>
 		<td  width="5"class="black_ar_t">&nbsp;</td>
-		<td class="black_ar"><b>&nbsp;<%=verTempTwo%></b></td>
-		 
+		<td class="black_ar_t"><b>&nbsp;<%=verTempTwo%></b></td>
 	</tr>
 	<tr>
-		<td   width="5" class="black_ar_t" align="center"><b><%=verTempOne%><b></td>
-		<td class="black_ar_t">
+		<td width="5" class="black_ar_t" align="center"><b><%=verTempOne%><b></td>
+		<td class="black_ar_t" style="padding-top:0;">
 		<table style="border:3px;"  cellpadding="0" cellspacing="1" border="0" >
 				 
 				<tr>
 					<td colspan="2">
-					<table style="table-layout: fixed;" cellspacing="1" cellpadding="2" width="100%">
+					<table style="table-layout: fixed;" cellspacing="1" cellpadding="0" width="100%" border="0">
 					<tr>
 						<td class="subtdPosGrid">&nbsp;</td>
 						
@@ -198,23 +212,23 @@ function closeFramedWindow()
 											<%}
 											else
 											{
+												String tooltip=AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+","+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j);
 												if (!availablePositions[i][j])
 												{%>
-													<td bgcolor="#F25252;" align="center"></td>
+													<td bgcolor="#F25252;" align="center" title="<%=tooltip%>"></td>
 												<%}
 												else
 												{
 													String setParentWindowContainer = null;
 													setParentWindowContainer = "javascript:setTextBoxValue('"+pos1+"','"+  AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i) + "','"+pos2+"','"+  AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j) + "');\"" ;
 													%>
-													<td width="8%" style="cursor:pointer" onMouseOver="this.bgColor='#008000'" onMouseOut="this.bgColor='#83F2B9'" bgColor=#83F2B9 align="center" onclick="<%=setParentWindowContainer%>"><a href="<%=setParentWindowContainer%>"></a></td>
+													<td width="8%" style="cursor:pointer" title="<%=tooltip%>" onMouseOver="this.bgColor='##83F2B9'" onMouseOut="this.bgColor='#008000'" bgColor=#008000 align="center" onclick="<%=setParentWindowContainer%>"><a href="<%=setParentWindowContainer%>"></a></td>
 												<%}%>					   	  
 										<%}%>
 								<%}%>
 						<%}
 					}%>
 					  </tr>
-					
 					</table>
 					</td>
 				</tr>
@@ -223,6 +237,8 @@ function closeFramedWindow()
 	</tr>
 	<%}%>
 </table>
+
+</body>
 <%!
 // method to return the rowspan value for the cell.
 private int getRowSpan(List dataList, int columnNumber)

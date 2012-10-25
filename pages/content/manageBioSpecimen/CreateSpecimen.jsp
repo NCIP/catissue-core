@@ -593,7 +593,7 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 													onClick="noEventPropogation(event)"
 													autocomplete="off"
 													size="30"
-													class="black_ar_new x-form-text x-form-field x-form-focus"/><img id="scDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
+													class="black_ar x-form-text x-form-field x-form-focus"/><img id="scDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
 												onclick="showHideStorageContainerGrid(event,'storageContainer','storageContainerDropDown',containerDropDownInfo);"
 												src="images/uIEnhancementImages/s.gif"/>
 										</div>
@@ -601,12 +601,12 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 								</tr>
 								<tr>
 									<td>
-									<div id="storageContainer" style="z-index: 100"
+									<div id="storageContainer" class="black_ar" style="z-index: 100"
 										onClick="noEventPropogation(event)">
-									<div id="storageContainerGrid" style="height: 40px;"
+									<div id="storageContainerGrid" class="black_ar" style="height: 40px;"
 										onClick="noEventPropogation(event)"></div>
-									<div id="storageContainerPagingArea" onClick="noEventPropogation(event)"></div>
-									<div id="storageContainerInfoArea" onClick="noEventPropogation(event)"></div>
+									<div id="storageContainerPagingArea" class="black_ar" onClick="noEventPropogation(event)"></div>
+									<div id="storageContainerInfoArea" class="black_ar" onClick="noEventPropogation(event)"></div>
 									</div>
 									</td>
 								</tr>
@@ -615,12 +615,12 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 					</td>
 
 							</td>
-							<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td>&nbsp;</td>
 							<td class="groupelements"  width="10%">
-								<html:text styleClass="black_ar"  size="2" styleId="pos1" property="pos1"  disabled= "false" style="display:block"/>
+								<html:text styleClass="black_ar"  size="1" styleId="pos1" property="pos1"  disabled= "false" style="display:block"/>
 							</td>
 							<td class="groupelements" width="10%">
-								<html:text styleClass="black_ar"  size="2" styleId="pos2" property="pos2" disabled= "false" style="display:block"/>
+								<html:text styleClass="black_ar"  size="1" styleId="pos2" property="pos2" disabled= "false" style="display:block"/>
 							</td>
 							<td class="groupelements">
 								<html:button styleClass="black_ar" property="containerMap" onclick="showPopUp()">
