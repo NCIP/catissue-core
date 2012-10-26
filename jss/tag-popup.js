@@ -206,11 +206,10 @@ xmlHttpobj.send("&tagChkBoxString=" + tagChkBoxString + "&objChkBoxString="
 
 }
 function assignTagItemFunction() {
-		if (xmlHttpobj.readyState == 4) {
-			//doInitGrid();	
+		if (xmlHttpobj.readyState == 4) {	
 			popup('popUpDiv');
-			//doInItTreeGrid();		
-}
+			doInitGrid();	 
+		}
 }
 //Ajax Function for Initialize TreeGrid
 function ajaxTreeGridInitCall(msg,msg1,entityTagName,entityTagItemName) {
