@@ -92,7 +92,10 @@ function toStoragePositionChange(element)
 		manualDiv.style.display = 'block';
 	}
 }
-
+function submitForm()
+{
+	document.forms[0].submit();
+}
 </SCRIPT>
 <script language="JavaScript">
 //declaring DHTMLX Drop Down controls required variables
@@ -304,7 +307,7 @@ function updateStorageContainerValue()
 							<table border="0" width="29%" id="outerTable2" cellspacing="0" cellpadding="0">
 								<tr>
 									<td class="black_ar" align="left" width="88%" height="100%" >
-										<div class="black_ar" id="scDropDownIddiv" class="x-form-field-wrap" >
+										<div id="scDropDownIddiv" class="x-form-field-wrap" >
 											<input id="storageContainerDropDown"
 													onkeydown="keyNavigation(event,containerDropDownInfo,scGrid,scGridVisible);"
 													onKeyUp="autoCompleteControl(event,containerDropDownInfo,scGrid);"
@@ -333,7 +336,7 @@ function updateStorageContainerValue()
 					</td>
 
 							</td>
-							<td>&nbsp;</td>
+							<td>&nbsp;&nbsp;</td>
 							<td class="groupelements"  width="10%">
 								<html:text styleClass="black_ar"  size="1" styleId="pos1" property="pos1"  disabled= "false" style="display:block"/>
 							</td>
@@ -374,7 +377,7 @@ function updateStorageContainerValue()
 <!-- buttons -->
 		<tr>
           <td class="buttonbg">
-			<html:submit styleClass="blue_ar_b" value="Submit" onclick="updateStorageContainerValue();'${requestScope.changeAction}'" />
+			<input type="button" value="Submit"  class="blue_ar_b"  onclick="updateStorageContainerValue();'${requestScope.changeAction}';submitForm()" />
 			</td>
         </tr>
 

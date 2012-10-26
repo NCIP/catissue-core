@@ -135,33 +135,33 @@ public class SpecimenScriptGeneratorForContainerComponent
 					scBuffer.append(NEXT_LINE);
 					scBuffer.append("//Drop Down components information");
 					scBuffer.append(NEXT_LINE);
-					scBuffer.append(containerDropDownInfo +"= {gridObj:\""+storageContainerGrid+"\", gridDiv:\""+storageContainer+"\"" +
-							", dropDownId:\""+storageContainerDropDown+"\"" +
-							", pagingArea:\""+storageContainerPagingArea+"\"," +
-							" infoArea:\""+storageContainerInfoArea+"\"" +
-							", onOptionSelect:" +
-							"function (id,ind)"
-							+"{"
-							+"document.getElementsByName('"+selectedContainerName+"')[0].value ="+ valueContainerName+"\n"
-							+"document.getElementById("+containerDropDownInfo+"['dropDownId']).value = "+scGrid+".cellById(id,ind).getValue();\n"
-							+"hideGrid("+containerDropDownInfo+"['gridDiv']);\n"
-							+scGridVisible+"= false;\n"
-							+"document.getElementById(\"positionDimensionOne_"+specimenSuffix+"\").value=\"\";\n"
-							+"document.getElementById(\"positionDimensionTwo_"+specimenSuffix+"\").value=\"\";\n"
-							+"}"
-							+", actionToDo:url, callBackAction:"
-							+"function()" 
-							+"{"
-							+	"var containerName= document.getElementsByName('"+selectedContainerName+"')[0].value;\n"
-							+	"if(containerName != \"\" && containerName != 0 && containerName != null)\n"
-							+	"{\n"
-							+		"document.getElementsByName('"+selectedContainerName+"')[0].value ="+ valueContainerName+"\n"
-							+		"document.getElementById("+containerDropDownInfo+"['dropDownId']).value = "+scGrid+".cellById(id,ind).getValue();\n"
-							+		"hideGrid("+containerDropDownInfo+"['gridDiv']);\n"
-							+		scGridVisible+"= false;\n"
-							+	"}\n" 
-							+"}\n"
-							+", visibilityStatusVariable:"+scGridVisible+", propertyId:'selectedContainerName_"+specimenSuffix+"'};");
+					scBuffer.append(containerDropDownInfo +"= {\ngridObj:\""+storageContainerGrid+"\", \ngridDiv:\""+storageContainer+"\"" +
+							",\n dropDownId:\""+storageContainerDropDown+"\"" +
+							",\npagingArea:\""+storageContainerPagingArea+"\"," +
+							" \ninfoArea:\""+storageContainerInfoArea+"\"" +
+							",\n onOptionSelect:" +
+							"\nfunction (id,ind)"
+							+"\n{"
+							+"\n\tdocument.getElementsByName('"+selectedContainerName+"')[0].value ="+ valueContainerName
+							+"\n\tdocument.getElementById("+containerDropDownInfo+"['dropDownId']).value = "+scGrid+".cellById(id,ind).getValue();"
+							+"\n\thideGrid("+containerDropDownInfo+"['gridDiv']);"
+							+"\n\tdocument.getElementById(\"positionDimensionOne_"+specimenSuffix+"\").value=\"\";"
+							+"\n\tdocument.getElementById(\"positionDimensionTwo_"+specimenSuffix+"\").value=\"\";\n\t"
+							+scGridVisible+"= false;"
+							+"\n}"
+							+"\n, actionToDo:url, callBackAction:"
+							+"\nfunction()" 
+							+"\n{"
+							+	"\n\tvar containerName= document.getElementsByName('"+selectedContainerName+"')[0].value;"
+							+	"\n\tif(containerName != \"\" && containerName != 0 && containerName != null)"
+							+	"\n\t{"
+							+		"\n\tdocument.getElementsByName('"+selectedContainerName+"')[0].value ="+ valueContainerName
+							+		"\n\tdocument.getElementById("+containerDropDownInfo+"['dropDownId']).value = "+scGrid+".cellById(id,ind).getValue();"
+							+		"\n\thideGrid("+containerDropDownInfo+"['gridDiv']);\n\t"
+							+		scGridVisible+"= false;"
+							+	"\n}" 
+							+"\n}"
+							+"\n, visibilityStatusVariable:"+scGridVisible+", propertyId:'selectedContainerName_"+specimenSuffix+"'};");
 					scBuffer.append(NEXT_LINE);
 					scBuffer.append("// initialising grid");
 					scBuffer.append(NEXT_LINE);
@@ -176,12 +176,12 @@ public class SpecimenScriptGeneratorForContainerComponent
 	private static String getSpecimenSuffix(GenericSpecimen specimen)
 	{
 		String lineage = AppUtility.getLineageSubString(specimen);
-		Long idToAppend = specimen.getId();
+		String idToAppend = String.valueOf((long) specimen.getId());
 		String specimenIdSuffix = null;
 		if (-1 == Long.valueOf(specimen.getId()))
 		{
-			idToAppend = Long.valueOf(specimen.getUniqueIdentifier());
-			specimenIdSuffix = idToAppend.toString();
+			idToAppend =specimen.getUniqueIdentifier().toString();
+			specimenIdSuffix = idToAppend;
 		}
 		else
 		{

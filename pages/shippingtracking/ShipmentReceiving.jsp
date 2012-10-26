@@ -81,6 +81,10 @@ String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_
 %>
 <script>
 
+function submitForm()
+{
+	document.forms[0].submit();
+}
 function doOnLoad()
 {
 var url="CatissueCommonAjaxAction.do?type=getStorageContainerListForRequestShipment&specimenId=";
@@ -848,7 +852,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 																						<c:set var="pos1Id">position1_<bean:write name="specimenItem" property="id"/></c:set>
 																						<jsp:useBean id="pos1Id" type="java.lang.String"/>
 									
-																						<html:text styleClass="black_ar"  size="2" styleId="<%=pos1Id%>" property="<%=pos1Name%>" disabled= "false"/>
+																						<html:text styleClass="black_ar"  size="1" styleId="<%=pos1Id%>" property="<%=pos1Name%>" disabled= "false"/>
 																					</td>
 																					<td class="black_ar">
 																						<c:set var="pos2Name">specimenDetails(position2_<bean:write name="specimenItem" property="id"/>)</c:set>
@@ -856,7 +860,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 																						<c:set var="pos2Id">position2_<bean:write name="specimenItem" property="id"/></c:set>
 																						<jsp:useBean id="pos2Id" type="java.lang.String"/>
 									
-																						<html:text styleClass="black_ar"  size="2" styleId="<%=pos2Id%>" property="<%=pos2Name%>" disabled= "false"/>
+																						<html:text styleClass="black_ar"  size="1" styleId="<%=pos2Id%>" property="<%=pos2Name%>" disabled= "false"/>
 																					</td>
 																					<td class="black_ar">
 	
@@ -1109,7 +1113,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 																											<c:set var="contpos1Id">contPosition1_<bean:write name="containerItem" property="id"/></c:set>
 																											<jsp:useBean id="contpos1Id" type="java.lang.String"/>
 														
-																											<html:text styleClass="black_ar"  size="2" styleId="<%=contpos1Id%>" property="<%=contpos1Name%>" disabled= "false"/>
+																											<html:text styleClass="black_ar"  size="1" styleId="<%=contpos1Id%>" property="<%=contpos1Name%>" disabled= "false"/>
 																										</td>
 																										<td class="groupelements">
 																											<c:set var="contpos2Name">containerDetails(contPosition2_<bean:write name="containerItem" property="id"/>)</c:set>
@@ -1117,7 +1121,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 																											<c:set var="contpos2Id">contPosition2_<bean:write name="containerItem" property="id"/></c:set>
 																											<jsp:useBean id="contpos2Id" type="java.lang.String"/>
 														
-																											<html:text styleClass="black_ar"  size="2" styleId="<%=contpos2Id%>" property="<%=contpos2Name%>" disabled= "false"/>
+																											<html:text styleClass="black_ar"  size="1" styleId="<%=contpos2Id%>" property="<%=contpos2Name%>" disabled= "false"/>
 																										</td>
 																										<td class="groupelements">
 																										
@@ -1213,10 +1217,10 @@ function onParentContainerSelectChange(selectedOption,containerId)
 									<tr>
 										<td height="30" valign="middle" class="buttonbg">
 								            	<logic:notEqual name="shipmentReceivingForm" property="activityStatus" value="<%=edu.wustl.catissuecore.util.shippingtracking.Constants.ACTIVITY_STATUS_RECEIVED%>">
-            		<html:submit styleClass="blue_ar_b" accesskey="A">Submit</html:submit>
+					<input type="button" value="Submit" class="blue_ar_b" accesskey="A" onclick="submitForm()"/>
             	</logic:notEqual>
             	<logic:equal name="shipmentReceivingForm" property="activityStatus" value="<%=edu.wustl.catissuecore.util.shippingtracking.Constants.ACTIVITY_STATUS_RECEIVED%>">
-           			<html:submit styleClass="blue_ar_b" accesskey="A" disabled="true">Submit</html:submit>
+					<input type="button" value="Submit" class="blue_ar_b" accesskey="A" disabled="true" onclick="submitForm()"/>
             	</logic:equal>
 										</td>
 									</tr>

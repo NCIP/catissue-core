@@ -615,7 +615,7 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 					</td>
 
 							</td>
-							<td>&nbsp;</td>
+							<td>&nbsp;&nbsp;</td>
 							<td class="groupelements"  width="10%">
 								<html:text styleClass="black_ar"  size="1" styleId="pos1" property="pos1"  disabled= "false" style="display:block"/>
 							</td>

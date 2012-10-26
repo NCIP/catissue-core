@@ -1703,11 +1703,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			if(element[0].contains("className"))//.equals(arg[1]))
 			{
 				String[] arg1=nameValue[3];
-				Integer id=Integer.valueOf(arg1[1]);
+				String id=String.valueOf(arg1[1]);
 				String stringToAppend=null;
 				if(arg1[1].equals("-1"))
 				{
-					id = Integer.valueOf(specimen.getUniqueIdentifier());
+					id = specimen.getUniqueIdentifier();
 					stringToAppend=id.toString();
 				}
 				else
@@ -1720,11 +1720,11 @@ public class SpecimenDetailsNewFormat extends TagSupport
 			if(element[0].contains("type"))//.equals(arg[1]))
 			{
 				String[] arg1=nameValue[3];
-				Integer id=Integer.valueOf(arg1[1]);
+				String id=String.valueOf(arg1[1]);
 				String stringToAppend=null;
 				if(arg1[1].equals("-1"))
 				{
-					id = Integer.valueOf(specimen.getUniqueIdentifier());
+					id = specimen.getUniqueIdentifier();
 					stringToAppend=id.toString();
 				}
 				else

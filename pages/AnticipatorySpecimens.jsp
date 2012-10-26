@@ -630,12 +630,12 @@ function setContainerValues()
 		{
 			GenericSpecimen gs2=specimenList.get(i);
 			String lineage=AppUtility.getLineageSubString(gs2);
-			Long idToAppend=gs2.getId();
-			String stringToAppend=null;
-			if(-1==Long.valueOf(gs2.getId()))
+			String idToAppend = String.valueOf((long) gs2.getId());
+			String stringToAppend = null;
+			if (-1 == Long.valueOf(gs2.getId()))
 			{
-				idToAppend=Long.valueOf(gs2.getUniqueIdentifier());
-				stringToAppend=idToAppend.toString();
+				idToAppend =gs2.getUniqueIdentifier().toString();
+				stringToAppend = idToAppend;
 			}
 			else
 			{
@@ -667,12 +667,12 @@ function setContainerValues()
 		{
 			GenericSpecimen gs2=aliquotList.get(i);
 			String lineage=AppUtility.getLineageSubString(gs2);
-			Long idToAppend=gs2.getId();
-			String stringToAppend=null;
-			if(-1==Long.valueOf(gs2.getId()))
+			String idToAppend = String.valueOf((long) gs2.getId());
+			String stringToAppend = null;
+			if (-1 == Long.valueOf(gs2.getId()))
 			{
-				idToAppend=Long.valueOf(gs2.getUniqueIdentifier());
-				stringToAppend=idToAppend.toString();
+				idToAppend =gs2.getUniqueIdentifier().toString();
+				stringToAppend = idToAppend;
 			}
 			else
 			{
@@ -704,12 +704,12 @@ function setContainerValues()
 		{
 			GenericSpecimen gs2=derivedList.get(i);
 			String lineage=AppUtility.getLineageSubString(gs2);
-			Long idToAppend=gs2.getId();
-			String stringToAppend=null;
-			if(-1==Long.valueOf(gs2.getId()))
+			String idToAppend = String.valueOf((long) gs2.getId());
+			String stringToAppend = null;
+			if (-1 == Long.valueOf(gs2.getId()))
 			{
-				idToAppend=Long.valueOf(gs2.getUniqueIdentifier());
-				stringToAppend=idToAppend.toString();
+				idToAppend =gs2.getUniqueIdentifier().toString();
+				stringToAppend = idToAppend;
 			}
 			else
 			{
