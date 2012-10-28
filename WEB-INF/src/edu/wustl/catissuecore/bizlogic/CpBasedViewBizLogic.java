@@ -23,7 +23,9 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.ColumnValueBean;
 import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Permissions;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
 
@@ -48,24 +50,23 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 	 * @return list of collection protocol
 	 * @throws ApplicationException : ApplicationException
 	 */
-	public List<NameValueBean> getCollectionProtocolCollection(SessionDataBean sessionDataBean)
+	public List<CpAndParticipentsBean> getCollectionProtocolCollection(SessionDataBean sessionDataBean)
 			throws ApplicationException
 	{
-		List<NameValueBean> cpDetailsList = new ArrayList<NameValueBean>();
 		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
 		final UserBizLogic userBizLogic = (UserBizLogic) factory
 				.getBizLogic(Constants.USER_FORM_ID);
-		final Set<Long> cpIds = userBizLogic.getRelatedCPIds(sessionDataBean.getUserId(), true);
-		final List<NameValueBean> collectionProtocolBeanList = this
-				.getAndFilterCollectionProtocolBeanList(cpIds);
+		
+		//get List of cp's associated with user.
+		final List<CpAndParticipentsBean> collectionProtocolBeanList = userBizLogic.getRelatedCPAndParticipantBean(sessionDataBean.getUserId());
+				
+		//Add List of Cp's associated with user associated sites.
 		final Set<Long> siteIds = userBizLogic.getRelatedSiteIds(sessionDataBean.getUserId());
 		final Set<Long> cp_Ids = userBizLogic.getRelatedCPIds(sessionDataBean.getUserId(), false);
-		cpDetailsList = this.getCollectionPorotocolForSiteIds(sessionDataBean, factory, siteIds,
-				cp_Ids);
-		this
-				.removeDuplicateCollectionProtoclBeanFromList(cpDetailsList,
-						collectionProtocolBeanList);
-		return cpDetailsList;
+		this.addCollectionPorotocolForSiteIds(sessionDataBean, factory, siteIds, 
+				cp_Ids,collectionProtocolBeanList);
+
+		return collectionProtocolBeanList;
 	}
 
 	/**
@@ -75,26 +76,38 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 	 * @param cp_Ids list of collection protocol ids
 	 * @return list of collection protocol
 	 */
-	private List<NameValueBean> getCollectionPorotocolForSiteIds(SessionDataBean sessionDataBean,
-			IFactory factory, Set<Long> siteIds, Set<Long> cp_Ids)
+	private List<CpAndParticipentsBean> addCollectionPorotocolForSiteIds(SessionDataBean sessionDataBean,
+			IFactory factory, Set<Long> siteIds, Set<Long> cp_Ids,List<CpAndParticipentsBean> cpDetailsList)
 	{
 
-		final List<NameValueBean> cpDetailsList = new ArrayList<NameValueBean>();
 		try
 		{
 			if (siteIds != null && !siteIds.isEmpty())
 			{
-				final List<NameValueBean> list = new ArrayList<NameValueBean>();
+				final List<CpAndParticipentsBean> list = new ArrayList<CpAndParticipentsBean>();
 				final PrivilegeCache privilegeCache = PrivilegeManager.getInstance()
 						.getPrivilegeCache(sessionDataBean.getUserName());
 				final SiteBizLogic siteBizLogic = (SiteBizLogic) factory
 						.getBizLogic(Constants.SITE_FORM_ID);
+				boolean hasViewPrivilege = false; // This checks if user has Registration and/or Specimen_Processing privilege
+				boolean isPhiView = false;
+				
 				for (final Long siteId : siteIds)
 				{
 					final String peName = Constants.getCurrentAndFuturePGAndPEName(siteId);
 					if (privilegeCache.hasPrivilege(peName,
 							edu.wustl.common.util.global.Variables.privilegeDetailsMap
 									.get(Constants.EDIT_PROFILE_PRIVILEGE)))
+					{
+						isPhiView = true;
+						hasViewPrivilege = true;
+					}
+					else if(privilegeCache.hasPrivilege(peName,Permissions.SPECIMEN_PROCESSING))
+					{
+						isPhiView = false;
+						hasViewPrivilege = true;
+					}
+					if(hasViewPrivilege)
 					{
 						Collection<CollectionProtocol> cpCollection;
 						DAO dao = null;
@@ -111,9 +124,9 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 										continue;
 									}
 									boolean isPresent = false;
-									for (final NameValueBean nameValueBean : list)
+									for (final CpAndParticipentsBean cpBean : list)
 									{
-										if (nameValueBean.getValue().equalsIgnoreCase(
+										if (cpBean.getValue().equalsIgnoreCase(
 												cp.getId().toString()))
 										{
 											isPresent = true;
@@ -122,7 +135,7 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 									}
 									if (!isPresent)
 									{
-										list.add(new NameValueBean(cp.getShortTitle(), cp.getId()));
+										list.add(new CpAndParticipentsBean(cp.getShortTitle(), String.valueOf(cp.getId()),isPhiView));
 									}
 								}
 							}
@@ -147,76 +160,6 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 		return cpDetailsList;
 	}
 
-	/**
-	 * This method will retrieve all the CPs from the database and keep the CPs which are in
-	 * cpIds list.
-	 * @param cpIds
-	 * @return list of CPs
-	 */
-	private List<NameValueBean> getAndFilterCollectionProtocolBeanList(Set<Long> cpIds)
-	{
-		final List<NameValueBean> collectionProtocolBeanList = new Vector<NameValueBean>();
-		List<NameValueBean> participantRegistrationBeanList = null;
-		try
-		{
-			IFactory factory = null;
-			factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-			final CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic) factory
-					.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
-			participantRegistrationBeanList = cBizLogic.getCollectionProtocolBeanList();
-			if (cpIds == null)
-			{
-				collectionProtocolBeanList.addAll(participantRegistrationBeanList);
-			}
-			else
-			{
-				for (int counter = 0; counter < participantRegistrationBeanList.size(); counter++)
-				{
-					final NameValueBean cpDetails = participantRegistrationBeanList.get(counter);
-					final Long cpId = Long.parseLong(cpDetails.getValue());
-
-					if (cpIds.contains(cpId))
-					{
-						collectionProtocolBeanList.add(cpDetails);
-					}
-				}
-			}
-		}
-		catch (final BizLogicException bizEx)
-		{
-			CpBasedViewBizLogic.LOGGER.error(bizEx.getMessage(),bizEx);
-		}
-		return collectionProtocolBeanList;
-	}
-
-	/**
-	 * method remove the duplicate CollectionCollectionProtoclBean from the cpDetailsList.
-	 * @param cpDetailsList : list of collection protocol
-	 * @param collectionProtocolBeanList
-	 */
-	private void removeDuplicateCollectionProtoclBeanFromList(List<NameValueBean> cpDetailsList,
-			List<NameValueBean> collectionProtocolBeanList)
-	{
-		final Iterator<NameValueBean> iter = collectionProtocolBeanList.iterator();
-		while (iter.hasNext())
-		{
-			final NameValueBean cpDetails = iter.next();
-			boolean isPresent = false;
-			for (final NameValueBean nameValueBean : cpDetailsList)
-			{
-				if (nameValueBean.getValue().equalsIgnoreCase(cpDetails.getValue()))
-				{
-					isPresent = true;
-					break;
-				}
-			}
-			if (!isPresent)
-			{
-				cpDetailsList.add(cpDetails);
-			}
-
-		}
-	}
 
 	/**
 	 * This method will retrieve all the participant for the selected CP.
@@ -225,42 +168,46 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 	 * @throws BizLogicException : BizLogicException
 	 */
 
-	public List<CpAndParticipentsBean> getRegisteredParticipantInfoCollection(Long cpId)
+	public List<CpAndParticipentsBean> getRegisteredParticipantInfoCollection(Long cpId,boolean isPHIView)
 			throws BizLogicException, ApplicationException
 	{
 		final List<CpAndParticipentsBean> participantInfoList = new Vector<CpAndParticipentsBean>();
 		final StringBuffer hql = new StringBuffer();
-		String participantDisplayInfo = null;
 		try
 		{
-			hql
-					.append("select cpr.participant.id,cpr.participant.lastName,cpr.participant.firstName,cpr.protocolParticipantIdentifier from ");
+			hql.append("select cpr.participant.id");
+			if(isPHIView)
+			{	
+				hql.append(",cpr.participant.lastName||', '||cpr.participant.firstName||'( '||cpr.protocolParticipantIdentifier||' )'");				
+			}		
+			else
+			{
+				hql.append(",cpr.protocolParticipantIdentifier");
+			}
+			
+			hql.append(" from ");
 			hql.append(CollectionProtocolRegistration.class.getName());
 			hql.append(" as cpr  where  cpr.collectionProtocol.id = ");
-			hql.append(cpId);
+			hql.append("?");
 			hql.append(" and cpr.activityStatus != '");
 			hql.append(Status.ACTIVITY_STATUS_DISABLED.toString());
 			hql.append("' and ");
 			hql.append(" cpr.participant.activityStatus != '");
-			hql
-					.append(Status.ACTIVITY_STATUS_DISABLED.toString()
+			hql.append(Status.ACTIVITY_STATUS_DISABLED.toString()
 							+ "' order by cpr.participant.id");
-
-			final List<Object[]> participantList = AppUtility.executeQuery(hql.toString());
-
-			for (int j = 0; j < participantList.size(); j++)
-			{
-				final Object[] participantObj = participantList.get(j);
-				participantDisplayInfo = this.getFormattedParticpantInfo(participantObj);
-				final int index = participantDisplayInfo.indexOf(":");
-				Long identifier = null;
-				String name = "";
-				//Id = new Long(participantDisplayInfo.substring(0, index));
-				identifier = Long.valueOf(participantDisplayInfo.substring(0, index));
-				name = participantDisplayInfo.substring(index + 1);
-				participantInfoList.add(new CpAndParticipentsBean(name, identifier.toString()));
-
-			}
+			ColumnValueBean colValueBean = new ColumnValueBean(cpId);
+			List<ColumnValueBean> colvaluebeanlist = new ArrayList<ColumnValueBean>();
+			colvaluebeanlist.add(colValueBean);
+			
+			final List<Object[]> participantList = AppUtility.executeHqlQuery(hql.toString(), colvaluebeanlist);
+            	for (int j = 0; j < participantList.size(); j++)
+    			{
+    				final Object[] participantObj = participantList.get(j);
+    				String display_name = (String) participantObj[1] ;
+    				
+    				Long identifier = (Long) participantObj[0];
+    				participantInfoList.add(new CpAndParticipentsBean(display_name, identifier.toString(),isPHIView));
+    			}
 		}
 		catch (final DAOException daoExp)
 		{
@@ -347,5 +294,5 @@ public class CpBasedViewBizLogic extends CatissueDefaultBizLogic
 
 		return info;
 	}
-
+	
 }

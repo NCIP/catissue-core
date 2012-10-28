@@ -1277,7 +1277,7 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 			SessionDataBean sessionDataBean)
 	{
 		return AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean, this
-				.getReadDeniedPrivilegeName());
+				.getReadDeniedPrivilegeName()) || AppUtility.hasPrivilegeToView(objName, identifier, sessionDataBean, Permissions.SPECIMEN_PROCESSING) ;
 	}
 
 	/**
