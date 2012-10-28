@@ -76,7 +76,7 @@ public class FlexInterface
 
 	/** The generate label. */
 	private boolean generateLabel = false;
-
+	
 	/**
 	 * Constructor.
 	 *
@@ -1601,7 +1601,6 @@ public class FlexInterface
 			user = (User) list.get(0);
 		}
 		return user;
-
 	}
 
 
@@ -1615,9 +1614,8 @@ public class FlexInterface
 	public List getCpList()
 	{
 
-		final List<CpAndParticipentsBean> cpList = new ArrayList<CpAndParticipentsBean>();
 		//Getting the CP List
-		List cpColl;
+		List<CpAndParticipentsBean> cpColl = new ArrayList<CpAndParticipentsBean>();
 		try
 		{
 			// added by Geeta for removing the cache
@@ -1629,25 +1627,13 @@ public class FlexInterface
 					.getAttribute(Constants.SESSION_DATA);
 			final CpBasedViewBizLogic cpBizLogic = new CpBasedViewBizLogic();
 			cpColl = cpBizLogic.getCollectionProtocolCollection(sessionDataBean);
-			Collections.sort(cpColl);
-			//Converting From NameValueBean to CpAndParticipentsBean
-			final Iterator itr = cpColl.iterator();
-			while (itr.hasNext())
-			{
-				final CpAndParticipentsBean cpBean = new CpAndParticipentsBean();
-				final NameValueBean bean = (NameValueBean) itr.next();
-				cpBean.setName(bean.getName());
-				cpBean.setValue(bean.getValue());
-
-				//Adding CpAndParticipentsBean to cpList
-				cpList.add(cpBean);
-			}
+		
 		}
 		catch (final ApplicationException e)
 		{
 			LOGGER.error(e.getMessage(), e);
 		}
-		return cpList;
+		return cpColl;
 	}
 
 	/**
@@ -1660,7 +1646,7 @@ public class FlexInterface
 	 *
 	 * @throws ApplicationException the application exception
 	 */
-	public List getParticipantsList(String cpId, String cpTitle) throws ApplicationException
+	public List getParticipantsList(String cpId, String cpTitle, boolean isPHIView) throws ApplicationException
 	{
 		//Setting the cp title in session
 		if(isToInitializeSession)
@@ -1672,13 +1658,12 @@ public class FlexInterface
 
 		// Removed the cp based cache : Geeta
 		final CpBasedViewBizLogic cpBizLogic = new CpBasedViewBizLogic();
-		participantsList = cpBizLogic.getRegisteredParticipantInfoCollection(Long.parseLong(cpId));
+		
+		participantsList = cpBizLogic.getRegisteredParticipantInfoCollection(Long.parseLong(cpId),isPHIView);
 
-		//Sorting the participants
-		final ParticipantComparator partComp = new ParticipantComparator();
-		Collections.sort(participantsList, partComp);
-		return participantsList;
+    	return participantsList;
 	}
+
 
 	/**
 	 * This mehtod returns the XML String for generating tree.

@@ -25,6 +25,7 @@ import edu.wustl.auth.exception.AuthenticationException;
 import edu.wustl.auth.exception.MigrationRuleException;
 import edu.wustl.authmanager.IDPAuthManager;
 import edu.wustl.authmanager.factory.AuthManagerFactory;
+import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Department;
@@ -50,6 +51,8 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.exception.PasswordEncryptionException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
+import edu.wustl.common.factory.AbstractFactoryConfig;
+import edu.wustl.common.factory.IFactory;
 import edu.wustl.common.idp.IdPManager;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -70,6 +73,7 @@ import edu.wustl.migrator.exception.MigratorException;
 import edu.wustl.migrator.util.Utility;
 import edu.wustl.security.beans.SecurityDataBean;
 import edu.wustl.security.exception.SMException;
+import edu.wustl.security.global.Permissions;
 import edu.wustl.security.locator.CSMGroupLocator;
 import edu.wustl.security.locator.SecurityManagerPropertiesLocator;
 import edu.wustl.security.manager.SecurityManagerFactory;
@@ -2227,30 +2231,21 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
-	/**
-	 * To Sort CP's in CP based view according to the Privilges of User on CP.
-	 * Done for MSR functionality change
-	 *
-	 * @param userId
-	 *            the user id
-	 * @param isCheckForCPBasedView
-	 *            the is check for cp based view
-	 *
-	 * @return the related cp ids
-	 *
-	 * @throws BizLogicException
-	 *             the biz logic exception
-	 *
-	 * @author ravindra_jain
-	 */
+	
 
-	public Set<Long> getRelatedCPIds(final Long userId, final boolean isCheckForCPBasedView)
+	/** This method gets all the user Related cp's and creates the CpAndParticipentsBean of CPS for which user has either
+	 *  Registration or Specimen_Processing privilege.
+	 * @param userId
+	 * @return
+	 * @throws BizLogicException
+	 */
+	public List<CpAndParticipentsBean> getRelatedCPAndParticipantBean(final Long userId)
 	throws BizLogicException
 	{
 		DAO dao = null;
 		Collection<CollectionProtocol> userCpCollection = new HashSet<CollectionProtocol>();
 		Collection<CollectionProtocol> userColl;
-		Set<Long> cpIds = new HashSet<Long>();
+		List<CpAndParticipentsBean> cpIds = new ArrayList<CpAndParticipentsBean>();
 
 		try
 		{
@@ -2261,40 +2256,39 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 
 			if (user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
 			{
-				cpIds = null;
+			  //If User is Admin get all the Collection Protocol.	
+				IFactory factory = null;
+				factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
+				final CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic) factory
+						.getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+				cpIds = cBizLogic.getCollectionProtocolBeanList();
+				
 			}
 			else
 			{
-				if (isCheckForCPBasedView)
-				{
 					final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
 					final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
-
+									
 					for (final CollectionProtocol collectionProtocol : userCpCollection)
 					{
 						final String privilegeName = edu.wustl.common.util.global.Variables.privilegeDetailsMap
 						.get(Constants.EDIT_PROFILE_PRIVILEGE);
-						if (privilegeCache.hasPrivilege(collectionProtocol.getObjectId(), privilegeName)
-								|| collectionProtocol.getPrincipalInvestigator().getLoginName().equals(
-										user.getLoginName()))
+						
+						boolean isPhiView = privilegeCache.hasPrivilege(collectionProtocol.getObjectId(),
+								privilegeName);
+											
+						if (privilegeCache.hasPrivilege(collectionProtocol.getObjectId(),Permissions.SPECIMEN_PROCESSING) ||
+								isPhiView)
 						{
-							cpIds.add(collectionProtocol.getId());
+							cpIds.add(new CpAndParticipentsBean(collectionProtocol.getShortTitle(), 
+									collectionProtocol.getId().toString(), isPhiView));
 						}
 					}
 				}
-				else
-				{
-					for (final CollectionProtocol collectionProtocol : userCpCollection)
-					{
-						cpIds.add(collectionProtocol.getId());
-					}
-				}
-
 				for (final CollectionProtocol cp : userColl)
 				{
-					cpIds.add(cp.getId());
+					cpIds.add(new CpAndParticipentsBean(cp.getShortTitle(), cp.getId().toString(), true));
 				}
-			}
 		}
 		catch (final DAOException e)
 		{
@@ -2334,9 +2328,12 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			dao = openDAOSession(null);
 
 			String query = "select user.csmUserId " + " from edu.wustl.catissuecore.domain.User user "
-			+ " where user.id = " + userId;
+			+ " where user.id = ?";
+			ColumnValueBean colValueBean = new ColumnValueBean(userId);
+			List<ColumnValueBean> colvaluebeanlist = new ArrayList<ColumnValueBean>();
+			colvaluebeanlist.add(colValueBean);
 
-			final List<Long> userList = executeQuery(query);
+			final List<Long> userList = executeQuery(query, colvaluebeanlist);
 			boolean isAdminUser = false;
 			if (!userList.isEmpty())
 			{
@@ -2372,7 +2369,6 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 		{
 			closeDAOSession(dao);
 		}
-
 		return idSet;
 	}
 
@@ -2773,6 +2769,86 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 			}
 		}
 		return isValid;
+	}
+
+	public Set<Long> getRelatedCPIds(Long userId, boolean isCheckForCPBasedView) throws BizLogicException {
+		DAO dao = null;
+		Collection<CollectionProtocol> userCpCollection = new HashSet<CollectionProtocol>();
+		Collection<CollectionProtocol> userColl;
+		Set<Long> cpIds = new HashSet<Long>();
+
+		try
+		{
+			dao = getHibernateDao(getAppName(), null);
+			final User user = (User) dao.retrieveById(User.class.getName(), userId);
+			userColl = user.getCollectionProtocolCollection();
+			userCpCollection = user.getAssignedProtocolCollection();
+
+			if (user.getRoleId().equalsIgnoreCase(Constants.ADMIN_USER))
+			{
+				cpIds = null;
+			}
+			else
+			{
+				if (isCheckForCPBasedView)
+				{
+					final PrivilegeManager privilegeManager = PrivilegeManager.getInstance();
+					final PrivilegeCache privilegeCache = privilegeManager.getPrivilegeCache(user.getLoginName());
+									
+					for (final CollectionProtocol collectionProtocol : userCpCollection)
+					{
+						final String privilegeName = edu.wustl.common.util.global.Variables.privilegeDetailsMap
+						.get(Constants.EDIT_PROFILE_PRIVILEGE);
+						
+						boolean isPhiView = false;
+						boolean hasViewPrivilege = false;
+						if (privilegeCache.hasPrivilege(collectionProtocol.getObjectId(),
+								edu.wustl.common.util.global.Variables.privilegeDetailsMap
+										.get(Constants.EDIT_PROFILE_PRIVILEGE)))
+						{
+							isPhiView = true;
+							hasViewPrivilege = true;
+						}
+						else if(privilegeCache.hasPrivilege(collectionProtocol.getObjectId(),Permissions.SPECIMEN_PROCESSING))
+						{
+							isPhiView = false;
+							hasViewPrivilege = true;
+						}
+						
+					 // My changes---- Added chek for SPECIMEN_PROCESSING privilege for cp 			
+						if (hasViewPrivilege)
+						{
+							cpIds.add( collectionProtocol.getId());
+						}
+					}
+				}
+				else
+				{
+					for (final CollectionProtocol collectionProtocol : userCpCollection)
+					{
+						cpIds.add(collectionProtocol.getId());
+					}
+				}
+				for (final CollectionProtocol cp : userColl) 
+				{
+					cpIds.add(cp.getId());
+				}
+			}
+		}
+		catch (final DAOException e)
+		{
+			UserBizLogic.LOGGER.error(e.getMessage(), e);
+		}
+		catch (final SMException e)
+		{
+			UserBizLogic.LOGGER.error(e.getMessage(), e);
+		}
+		finally
+		{
+			closeDAOSession(dao);
+		}
+
+		return cpIds;
 	}
 
 }

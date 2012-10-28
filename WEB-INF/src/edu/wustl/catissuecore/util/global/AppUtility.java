@@ -1372,6 +1372,32 @@ public class AppUtility {
 		dao.closeSession();
 		return list;
 	}
+	
+	/**
+	 * Executes hql Query and returns the results.
+	 * 
+	 * @param hql
+	 *            String hql
+	 * @throws DAOException
+	 *             DAOException
+	 * @throws ClassNotFoundException
+	 *             ClassNotFoundException
+	 */
+	public static List<Object[]> executeHqlQuery(final String hql,List<ColumnValueBean> colvaluebeanlist)
+			throws ApplicationException {
+	DAO dao = null; 
+	try{	
+		final IDAOFactory daofactory = DAOConfigFactory.getInstance()
+				.getDAOFactory(Constants.APPLICATION_NAME);
+		dao = daofactory.getDAO();
+		dao.openSession(null);
+		final List list = dao.executeQuery(hql,colvaluebeanlist);
+		return list; 
+	 }finally{
+		dao.closeSession();
+	 }
+		
+	}
 
 	/**
 	 * Executes sql Query and returns the results.
