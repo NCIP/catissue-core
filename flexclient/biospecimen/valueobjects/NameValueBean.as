@@ -12,6 +12,7 @@ package valueobjects
 	{		
 		public var name:String = '';
 		public var value:String = '';
+		public var isPHIView:Boolean = false;
 		
 		
 		public function NameValueBean() 
@@ -32,9 +33,8 @@ package valueobjects
     	{
     		//Alert.show("CLIENT IN readExternal");
     		name = input.readUTF();
-			//Alert.show("Name is:"+name);
 			value = input.readUTF();
-			//Alert.show("Value is:"+value);
+			isPHIView = input.readBoolean();
        }
 	}
 }

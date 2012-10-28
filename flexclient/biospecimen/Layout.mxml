@@ -125,7 +125,7 @@
 
     		public function initApp():void
 		    {
-		    	 ExternalInterface.addCallback("myFlexMethod",refreshTree);
+		     ExternalInterface.addCallback("myFlexMethod",refreshTree);
 	 		 ExternalInterface.addCallback("refreshParticipants",refreshParticipants);
 			 ExternalInterface.addCallback("editParticipant",editParticipant);
 			 ExternalInterface.addCallback("disableParticipant",disableParticipant);
@@ -273,7 +273,7 @@
 		}
 		else
 		{
-			remoteObj.getParticipantsList(selectedCp.value,selectedCp.name);
+			remoteObj.getParticipantsList(selectedCp.value,selectedCp.name,selectedCp.isPHIView);
 		}
     }
 
@@ -381,8 +381,6 @@
      }
 
 
-
-
 	/*
   	   Collection protocol Event Handler Method
   	*/
@@ -424,7 +422,7 @@
 			}
 			else
 			{
-				remoteObjForURLFeature.getParticipantsList(selectedCp.value, selectedCp.name);
+				remoteObjForURLFeature.getParticipantsList(selectedCp.value, selectedCp.name,selectedCp.isPHIView);
 			}
 
 			specimenTree.dataProvider = null;
@@ -564,13 +562,6 @@
 		}
 	}
 
-
-
-
-
-
-
-
    	/*
    		This Method is invoked on change of Collection Protocol & retrieves the associated Participants
    	*/
@@ -580,7 +571,15 @@
 		var selectedCp : NameValueBean = new NameValueBean();
 		selectedCp =  cpCombo as NameValueBean;
 		var cpId :String = selectedCp.value;
-		
+		var isPhiview: Boolean = selectedCp.isPHIView;
+		if(!isPhiview)
+		{
+		  registerNewPartButton.enabled = false;
+		}
+		else
+		{
+		  registerNewPartButton.enabled = true;
+		}
 		spDetailsLabel.text = title;
 		var url : URLRequest = new URLRequest("javascript: clearFrame('"+ cpId + "')");
 		navigateToURL(url,"_self");
@@ -598,7 +597,7 @@
 		}
 		else
 		{
-			remoteObj.getParticipantsList(selectedCp.value, selectedCp.name);
+			remoteObj.getParticipantsList(selectedCp.value, selectedCp.name,selectedCp.isPHIView);
 		}
 
 		specimenTree.dataProvider = null;
@@ -861,7 +860,7 @@
 		{
 			//Jignesh : tree and list will not be populate when registering a New Participant to CP
 			if(newRegisteration!=false){
-				remoteObj1.getParticipantsList(selectedCp.value,selectedCp.name);
+				remoteObj1.getParticipantsList(selectedCp.value,selectedCp.name,selectedCp.isPHIView);
 			}
 			newRegisteration=true;
         }
@@ -1168,7 +1167,7 @@
                      		<mx:Label text="Participant (Protocol ID):" color="black" fontWeight="bold" height="15"/>
 			</mx:VBox>
 			<mx:VBox width="50%">
-	                     	<mx:Button toolTip="Click to register new Participant" label="Register New" color="black" click="addNewParticipant();" height="15"/>
+	                     	<mx:Button id="registerNewPartButton" toolTip="Click to register new Participant" label="Register New" color="black" click="addNewParticipant();" height="15"/>
                    	</mx:VBox>
 		</mx:HBox>
 		<mx:HBox width="100%">
