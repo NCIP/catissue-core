@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.TaskTimeCalculater;
+import edu.wustl.catissuecore.bean.CpAndParticipentsBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -2194,7 +2195,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 	 * @return This will returns all the CPs from the database.
 	 * @throws BizLogicException BizLogic Exception
 	 */
-	public List<NameValueBean> getCollectionProtocolBeanList() throws BizLogicException
+	public List<CpAndParticipentsBean> getCollectionProtocolBeanList() throws BizLogicException
 	{
 		final List participantRegistrationBeanList = new Vector();
 
@@ -2218,7 +2219,7 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					final Object[] obj = (Object[]) list.get(i);
 					final Long cpId = (Long) obj[0];
 					final String cpShortTitle = (String) obj[2];
-					final NameValueBean cpDetails = new NameValueBean(cpShortTitle, cpId);
+					final CpAndParticipentsBean cpDetails = new CpAndParticipentsBean(cpShortTitle, cpId.toString(),true);
 					participantRegistrationBeanList.add(cpDetails);
 				}
 			}
