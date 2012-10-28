@@ -458,3 +458,43 @@ function validateDate(vDate){
 	  }
 	}
 
+//To show the PHI view access denied message.
+function accessDeniedMessage()
+{
+	alert("Sorry! You dont have privilege to view this page.");
+}
+
+function disableTabs()
+{
+ if(document.getElementById("viewSPR")!=null)
+ {
+  document.getElementById("viewSPR").onclick=function(){
+   accessDeniedMessage();
+  }
+ }
+ if(document.getElementById("viewConsent")!=null) 
+ {
+  document.getElementById("viewConsent").onclick=function(){
+   accessDeniedMessage();
+  }
+ }
+ if(document.getElementById("showAnnotation")!=null)
+ { 
+  document.getElementById("showAnnotation").onclick=function(){
+   accessDeniedMessage();
+  }
+ }
+}
+
+//This function will switch page to consentPage
+function consentPage()
+{
+          if(disablePHIView)
+          {
+            accessDeniedMessage();     
+          }
+          else
+          { 
+           checkForConsents();
+          }
+        }

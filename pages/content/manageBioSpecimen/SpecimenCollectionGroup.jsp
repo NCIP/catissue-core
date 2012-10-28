@@ -153,7 +153,9 @@ function updateHelpURL()
 
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript" >
-		//Set last refresh time
+	var isPHIVIEW =   ${specimenCollectionGroupForm.isPhiView};
+	var disablePHIView = !isPHIVIEW;	
+         //Set last refresh time
 		if(window.parent!=null)
 		{
 			if(window.parent.lastRefreshTime!=null)
@@ -489,12 +491,12 @@ function updateHelpURL()
 			if('${requestScope.operation}' == "edit")
 			{
 				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_edit_collection.gif  alt=Add Specimen  Collection group  width=216 height=22 border=0>"
-				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 onClick=consentPage()>"
+				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 id=viewConsent onClick=consentPage()>"
 			}
 			else if('${requestScope.operation}' == "add")
 			{
 				SCGImg.innerHTML ="<img src=images/uIEnhancementImages/tab_add_scg.gif  alt=Add Specimen  Collection group  width=222 height=22 border=0>"
-				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 onClick=consentPage()>"
+				consetsImg.innerHTML ="<img src=images/uIEnhancementImages/tab_consents2.gif alt=Consents width=76 height=22 border=0 id=viewConsent onClick=consentPage()>"
 			}
 		}
 		else
@@ -526,15 +528,11 @@ function updateHelpURL()
 			switchToTab("specimenCollectionGroupTab");
 		}
 
-		//This function will switch page to consentPage
-		function consentPage()
-		{
-			checkForConsents();
-		}
-
+		
 		function checkForConsents()
 		{
-			<%if(form!=null && form.getConsentTierCounter()>0)
+			
+                           <%if(form!=null && form.getConsentTierCounter()>0)
 				{%>
 					switchToTab("consentTab");
 				<%}
@@ -675,9 +673,9 @@ function updateHelpURL()
 			<tr>
 				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" height="1"></td>
 				<td valign="bottom" id="specimenCollectionGroupTab"><a href="#" id="SCGImage"><img src="images/uIEnhancementImages/tab_edit_collection.gif" alt="Edit Specimen Collection Group" width="216" height="22"  border="0" onclick="specimencollgroup()"></a></td>
-				<td valign="bottom"  onClick="viewSPR()"><a href="#"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22"  border="0"></a></td>
-				<td valign="bottom" onClick="showAnnotations()"><a href="#"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></a></td>
-				<td align="left" valign="bottom" class="td_color_bfdcf3"   id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="consentPage()"></a></td>
+				<td valign="bottom"  ><a href="#" onClick="viewSPR()" id="viewSPR"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="Inactive View Surgical Pathology Report " width="216" height="22"  border="0"></a></td>
+				<td valign="bottom" ><a href="#" onClick="showAnnotations()" id="showAnnotation"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></a></td>
+				<td align="left" valign="bottom" class="td_color_bfdcf3"   id="consentTab"><a href="#" id="consentsImage"><img src="images/uIEnhancementImages/tab_consents2.gif" alt="Consents" width="76" height="22" border="0" onClick="consentPage()" id="viewConsent" ></a></td>
 				<td width="90%" align="left" valign="bottom" class="td_tab_bg" >&nbsp;</td>
 			</tr></table>
 
@@ -754,5 +752,9 @@ function updateHelpURL()
 </html:form>
 <script language="JavaScript" type="text/javascript">
 showPriterTypeLocation();
+if(disablePHIView)
+{
+  disableTabs();
+}
 </script>
 </body>

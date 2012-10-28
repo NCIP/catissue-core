@@ -225,7 +225,11 @@ function participantRegRow(subdivtag)
 		}
 	}
 
-
+<logic:equal name="participantForm" property="pHIView" value="false">
+      <%  
+	   isSubmitDisabled = true;
+      %>
+</logic:equal>
 </script>
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
@@ -305,8 +309,8 @@ function participantRegRow(subdivtag)
 				<tr>
 					<td class="td_tab_bg"><img src="images/uIEnhancementImages/spacer.gif" alt="spacer" width="50" height="1"></td>
 					<td valign="bottom"><img src="images/uIEnhancementImages/tab_edit_participant2.gif" alt="Edit Participant" width="116" height="22" border="0"></td>
-					<td valign="bottom"><html:link href="#" onclick="viewSPR()"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></html:link></td>
-					<td valign="bottom" ><html:link href="#" onclick="showAnnotations()"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></html:link></td><td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td></tr></table>
+					<td valign="bottom"><html:link href="#" onclick="viewSPR()" styleId="viewSPR"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></html:link></td>
+					<td valign="bottom" ><html:link href="#" onclick="showAnnotations()" styleId="showAnnotation"><img src="images/uIEnhancementImages/tab_view_annotation2.gif" alt="View Annotation" width="116" height="22"  border="0"></html:link></td><td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td></tr></table>
 			</logic:equal>
 		<table width="100%" border="0" cellpadding="3" cellspacing="0"
 			class="whitetable_bg" >
@@ -660,7 +664,7 @@ function participantRegRow(subdivtag)
 					<tr>
 						<td align="left" class="black_ar"><html:button
 							property="addKeyValue" styleClass="black_ar"
-							onclick="insRow('addMore')">
+							onclick="insRow('addMore')" disabled="<%=isSubmitDisabled%>">
 							<bean:message key="buttons.addMore" />
 						</html:button></td>
 						<td class="black_ar"><html:button
@@ -951,9 +955,10 @@ function participantRegRow(subdivtag)
 						%>
 					</tbody>
 					<tr>
+                                            
 						<td align="left" class="black_ar" colspan="3"><html:button
 							property="addKeyValue" styleClass="black_ar"
-							onclick="participantRegRow('addMoreParticipantRegistration')">
+							onclick="participantRegRow('addMoreParticipantRegistration')" disabled="<%=isSubmitDisabled%>">
 							<bean:message key="buttons.addMore" />
 						</html:button>
 						&nbsp;<html:button
@@ -1006,7 +1011,7 @@ function participantRegRow(subdivtag)
 						<!-- PUT YOUR COMMENT HERE -->
 						<logic:equal name="<%=Constants.PAGE_OF%>"
 							value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
-						<td nowrap >
+                         <td nowrap >
 							<html:button
 								styleClass="blue_ar_b" property="registratioPage"
 								title="Register Participant"
@@ -1026,7 +1031,7 @@ if(request.getAttribute("ZERO_MATCHES") != null)
 }
 %>
 							<td>
-								<html:button styleClass="blue_ar_b"
+                                <html:button styleClass="blue_ar_b"
 								property="registratioPage" title="Submit Only"
 								onclick="<%=normalSubmit%>"
 								disabled="<%=isSubmitDisabled%>"

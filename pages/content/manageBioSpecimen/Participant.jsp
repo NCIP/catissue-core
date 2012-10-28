@@ -184,6 +184,8 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript" >
 		//Set last refresh time
+                var isPHIVIEW =   ${participantForm.pHIView};
+		var disablePHIView = !isPHIVIEW;
 		if(window.parent!=null)
 		{
 			if(window.parent.lastRefreshTime!=null)
@@ -340,8 +342,6 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
-			
-		
 	</script>
 </head>
 
@@ -407,7 +407,7 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 				<tr>
 				<td class="td_tab_bg" ><img src="images/spacer.gif" alt="spacer" width="50" border="0" height="1"></td>
 		        <td valign="bottom" ><a href="#" onClick="setTarget('<%=pageOf%>');editParticipant()"><img src="images/uIEnhancementImages/tab_edit_participant1.gif" border="0" alt="Edit Participant" width="116" height="22" border="0"></a></td>
-		        <td valign="bottom"><a href="#" onClick="viewSPR('<%=reportId%>','<%=pageOf%>')"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></a></td>
+		        <td valign="bottom"><a href="#" onClick="viewSPR('<%=reportId%>','<%=pageOf%>')" id="viewSPR"><img src="images/uIEnhancementImages/tab_view_surgical2.gif" alt="View Surgical Pathology Report" width="216" height="22" border="0"></a></td>
 		        <td valign="bottom"><img src="images/uIEnhancementImages/tab_view_annotation1.gif" border="0" alt="View Annotation" width="116" height="22"></td>
 		        <td width="90%" valign="bottom" class="td_tab_bg">&nbsp;</td>
 				</tr>
@@ -420,6 +420,7 @@ String pageOf = (String)request.getAttribute(Constants.PAGE_OF);
 		</td>
 	   </tr>
 	  </table>
+            
 		<%
 	}
 	%>
@@ -466,4 +467,10 @@ function updateHelpURL()
 		}
 		return URL;
 	}
+
+if(disablePHIView)
+{
+disableTabs();
+}
+
 </script>
