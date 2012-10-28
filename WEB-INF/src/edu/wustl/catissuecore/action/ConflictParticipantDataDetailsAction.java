@@ -66,7 +66,7 @@ public class ConflictParticipantDataDetailsAction extends BaseAction
 		{
 			participant = (Participant) object;
 			defaultBizLogic.populateUIBean(Participant.class.getName(), participant.getId(),
-					conflictParticipantDataDetailsForm);
+					conflictParticipantDataDetailsForm,null);
 		}
 
 		return mapping.findForward(Constants.SUCCESS);

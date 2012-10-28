@@ -106,7 +106,7 @@ public class ParticipantSelectAction extends BaseAction
 		// participantForm.setAllValues(participant);
 		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		defaultBizLogic.populateUIBean(Participant.class.getName(), participant.getId(),
-				participantForm);
+				participantForm,null);
 
 		// Setting the ParticipantForm in request for storing selected
 		// participant's data.

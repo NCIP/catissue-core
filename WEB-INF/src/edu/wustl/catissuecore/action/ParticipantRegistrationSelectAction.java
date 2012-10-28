@@ -281,7 +281,7 @@ public class ParticipantRegistrationSelectAction extends CommonAddEditAction
 		//Gets the collection Protocol Registration map from Database
 		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		defaultBizLogic.populateUIBean(Participant.class.getName(), participant.getId(),
-				participantForm);
+				participantForm,null);
 
 		final Map mapCollectionProtocolRegistrationOld = participantForm
 				.getCollectionProtocolRegistrationValues();

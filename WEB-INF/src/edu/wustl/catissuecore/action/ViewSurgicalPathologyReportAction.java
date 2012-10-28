@@ -238,7 +238,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			try
 			{
 				bizLogic.populateUIBean(SurgicalPathologyReport.class.getName(), report.getId(),
-						viewSPR);
+						viewSPR,null);
 				final DeidentifiedSurgicalPathologyReport deidReport = new DeidentifiedSurgicalPathologyReport();
 				deidReport.setId(viewSPR.getDeIdentifiedReportId());
 				final List conceptBeanList = ViewSPRUtil.getConceptBeanList(deidReport);
@@ -317,13 +317,13 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 								surgicalPathologyReport.getId(), "specimenCollectionGroup."
 										+ "identifiedSurgicalPathologyReport.id");
 				defaultBizLogic.populateUIBean(IdentifiedSurgicalPathologyReport.class.getName(),
-						identifiedSurgicalPathologyReportId, viewSPR);
+						identifiedSurgicalPathologyReportId, viewSPR,null);
 			}
 			else
 			{
 				final IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport) surgicalPathologyReport;
 				defaultBizLogic.populateUIBean(IdentifiedSurgicalPathologyReport.class.getName(),
-						identifiedSurgicalPathologyReport.getId(), viewSPR);
+						identifiedSurgicalPathologyReport.getId(), viewSPR,null);
 			}
 		}
 		else
@@ -346,7 +346,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 							"deIdentifiedSurgicalPathologyReport." + "specimenCollectionGroup."
 									+ "identifiedSurgicalPathologyReport.id");
 			defaultBizLogic.populateUIBean(IdentifiedSurgicalPathologyReport.class.getName(),
-					deIdentifiedSurgicalPathologyReportId, viewSPR);
+					deIdentifiedSurgicalPathologyReportId, viewSPR, null);
 		}
 	}
 

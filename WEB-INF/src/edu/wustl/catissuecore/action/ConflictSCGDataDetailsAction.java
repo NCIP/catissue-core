@@ -63,7 +63,7 @@ public class ConflictSCGDataDetailsAction extends BaseAction
 
 		final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
 		defaultBizLogic.populateUIBean(SpecimenCollectionGroup.class.getName(),
-				specimenCollectionGroup.getId(), specimenCollectionGroupForm);
+				specimenCollectionGroup.getId(), specimenCollectionGroupForm,null);
 
 		return mapping.findForward(Constants.SUCCESS);
 	}

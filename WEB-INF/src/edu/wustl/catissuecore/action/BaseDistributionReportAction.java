@@ -94,7 +94,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
 		 */
 		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		defaultBizLogic.populateUIBean(Distribution.class.getName(), dist.getId(),
-				distributionReportForm);
+				distributionReportForm,null);
 		return distributionReportForm;
 	}
 

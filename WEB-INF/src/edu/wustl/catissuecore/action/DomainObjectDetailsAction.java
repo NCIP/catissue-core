@@ -87,7 +87,7 @@ public class DomainObjectDetailsAction extends SecureAction
 		//abstractActionForm.setAllValues(currentDomainObject);
 		final DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
 		defaultBizLogic.populateUIBean(currentDomainObject.getClass().getName(),
-				currentDomainObject.getId(), abstractActionForm);
+				currentDomainObject.getId(), abstractActionForm,null);
 
 		request.setAttribute(Constants.PREVIOUS_PAGE, prevIdentifier);
 		request.setAttribute(Constants.NEXT_PAGE, nextIdentifier);
