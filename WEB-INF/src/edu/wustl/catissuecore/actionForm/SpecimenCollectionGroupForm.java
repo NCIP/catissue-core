@@ -30,15 +30,18 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.CommonServiceLocator;
 import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.global.Permissions;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -202,8 +205,20 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 
 	/** Name : Falguni Sachde    Description: Attribute to set Participant Name concatenated with Participant Identifier. */
 	private String participantNameWithProtocolId;
+	
+	 
+	/** Attribute to set is the SCG view is PHI view or Non PHI view **/
+	private String isPhiView = "true";
 
 	/** Comments given by user. */
+
+	public String getIsPhiView() {
+		return isPhiView;
+	}
+
+	public void setIsPhiView(String isPhiView) {
+		this.isPhiView = isPhiView;
+	}
 
 	/**
 	 * Name: Shital Lawhale
@@ -429,13 +444,17 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 *
 	 * @param abstractDomain A StorageType object containing the information about storage type of the container.
 	 */
-	public void setAllValues(AbstractDomainObject abstractDomain)
+	public void setAllValues(AbstractDomainObject abstractDomain,SessionDataBean sessionBean)
 	{
 		//		if(operation.equals("add" ) )
 		//			setMutable(true );
 
 		final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) abstractDomain;
-
+		final Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration()
+				.getParticipant();
+		this.participantId = participant.getId();
+		boolean isPHIView = AppUtility.hasPrivilegeToView(Participant.class.getName(), this.participantId, sessionBean, Permissions.REGISTRATION);
+		this.isPhiView = String.valueOf(isPHIView);
 		this.setId(specimenCollectionGroup.getId().longValue());
 		this.name = specimenCollectionGroup.getName();
 		this.barcode = CommonUtilities.toString(specimenCollectionGroup.getBarcode());
@@ -448,8 +467,11 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 				.toString(specimenCollectionGroup.getActivityStatus()));
 		this.collectionStatus = CommonUtilities.toString(specimenCollectionGroup
 				.getCollectionStatus());
+	   if(isPHIView)
+	   {
 		this.surgicalPathologyNumber = CommonUtilities.toString(specimenCollectionGroup
 				.getSurgicalPathologyNumber());
+	   }
 		/**
 		* Name: Shital Lawhale
 		* Reviewer Name : Sachin Lale
@@ -475,38 +497,26 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		this.collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent()
 				.getId().longValue();
 
-		final Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration()
-				.getParticipant();
-		/**For Migration Start**/
-
-		this.participantId = participant.getId();
-		/**For Migration End**/
 		logger.debug("SCgForm --------- Participant : -- " + participant.toString());
 		//if(participant!=null)
-		String firstName = null;
-		String lastName = null;
+		String firstName = "";
+		String lastName = "";
 		String birthDate = null;
 		String ssn = null;
-
-		if (participant.getFirstName() == null)
+		//boolean isPHIView = AppUtility.hasPrivilegeToView(Participant.class.getName(), this.participantId, sessionBean, Permissions.REGISTRATION);
+		if(isPHIView)
 		{
-			firstName = "";
+			if (participant.getFirstName() != null)
+			{
+			  firstName = participant.getFirstName();
+			}
+				
+			if (participant.getLastName() != null)
+			{
+				lastName = participant.getLastName();
+			}
+			 this.participantName = lastName + ", " + firstName;
 		}
-		else
-		{
-			firstName = participant.getFirstName();
-		}
-
-		if (participant.getLastName() == null)
-		{
-			lastName = "";
-		}
-		else
-		{
-			lastName = participant.getLastName();
-		}
-
-		this.participantName = lastName + ", " + firstName;
 
 		if (participant.getBirthDate() == null)
 		{
@@ -1894,6 +1904,12 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	public void setWithdrawlButtonStatus(String withdrawlButtonStatus)
 	{
 		this.withdrawlButtonStatus = withdrawlButtonStatus;
+	}
+
+	@Override
+	public void setAllValues(AbstractDomainObject arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

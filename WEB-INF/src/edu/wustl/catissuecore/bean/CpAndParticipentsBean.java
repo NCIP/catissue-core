@@ -9,7 +9,7 @@ import java.io.ObjectOutput;
 /**
  * @author janhavi_hasabnis
  */
-public class CpAndParticipentsBean implements Externalizable
+public class CpAndParticipentsBean implements Externalizable,Comparable<CpAndParticipentsBean>
 {
 	/**
 	 * serialVersionUID.
@@ -23,6 +23,10 @@ public class CpAndParticipentsBean implements Externalizable
 	 * value.
 	 */
 	private String value;
+	
+	private Boolean isPHIView;
+
+	
 
 	/**
 	 * Default Constructor.
@@ -36,10 +40,11 @@ public class CpAndParticipentsBean implements Externalizable
 	 * @param nameParam - nameParam
 	 * @param valueParam - valueParam
 	 */
-	public CpAndParticipentsBean(String nameParam, String valueParam)
+	public CpAndParticipentsBean(String nameParam, String valueParam,boolean isPhiView)
 	{
 		this.name = nameParam;
 		this.value = valueParam;
+		this.isPHIView = isPhiView;
 	}
 
 	/**
@@ -83,6 +88,7 @@ public class CpAndParticipentsBean implements Externalizable
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
 	{
 		this.name = in.readUTF();
+		this.isPHIView = in.readBoolean();
 	}
 
 	/**
@@ -93,6 +99,7 @@ public class CpAndParticipentsBean implements Externalizable
 	{
 		out.writeUTF(this.name);
 		out.writeUTF(this.value);
+		out.writeBoolean(this.isPHIView);
 
 	}
 
@@ -103,5 +110,20 @@ public class CpAndParticipentsBean implements Externalizable
 	public String toString()
 	{
 		return new String("name:" + this.name + " value:" + this.value);
+	}
+	
+	public boolean isPHIView() {
+		return isPHIView;
+	}
+
+	public void setPHIView(boolean isPHIView) {
+		this.isPHIView = isPHIView;
+	}
+
+	@Override
+	public int compareTo(CpAndParticipentsBean cpBean) {
+		// TODO Auto-generated method stub
+		
+		return this.compareTo(cpBean);
 	}
 }

@@ -42,6 +42,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.participant.actionForm.IParticipantForm;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -50,6 +51,7 @@ import edu.wustl.common.util.global.CommonUtilities;
 import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.security.global.Permissions;
 
 /**
  * ParticipantForm Class is used to encapsulate all the request parameters passed
@@ -80,6 +82,10 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	 * Middle Name of the Participant.
 	 */
 	protected String middleName = "";
+	
+	protected String pHIView = "true";
+	
+	
 
 	/**
 	 * Name : Virender Mehta
@@ -88,6 +94,16 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	 * Patch ID:defaultValueConfiguration_BugID_6
 	 * Description: Configuration for default value for Gender, Genotype, Race, Ethnicity, VitalStatus
 	 */
+
+	
+
+	public String getpHIView() {
+		return pHIView;
+	}
+
+	public void setpHIView(String pHIView) {
+		this.pHIView = pHIView;
+	}
 
 	/**
 	 * The gender of a participant.
@@ -217,48 +233,140 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	 * Copies the data from an AbstractDomain object to a ParticipantForm object.
 	 * @param abstractDomain An AbstractDomain object.
 	 */
-	public void setAllValues(AbstractDomainObject abstractDomain)
+	public void setAllValues(AbstractDomainObject abstractDomain,SessionDataBean sessionDataBean)
 	{
-		final Participant participant = (Participant) abstractDomain;
-		this.setId(participant.getId().longValue());
+		 final Participant participant = (Participant) abstractDomain;
+		 
+		 boolean isPHIView = AppUtility.hasPrivilegeToView(Participant.class.getName(), participant.getId(), sessionDataBean, Permissions.REGISTRATION);
+		 this.setId(participant.getId().longValue());
+		 this.gender = participant.getGender();
+		 this.genotype = participant.getSexGenotype();this.setActivityStatus(participant.getActivityStatus());
+		 this.ethnicity = participant.getEthnicity();
+		 this.vitalStatus = participant.getVitalStatus();
+		 this.pHIView = String.valueOf(isPHIView);
+		 
+		//Populating the map with the registrations of a Participant to a Collection Protocol.
+			//(Abhishek Mehta)
+			final Collection collectionProtocolRegistrationCollection = participant
+					.getCollectionProtocolRegistrationCollection();
+
+		 if (collectionProtocolRegistrationCollection != null)
+			{
+				this.collectionProtocolRegistrationValues = new LinkedHashMap();
+				if (this.consentResponseHashTable == null)
+				{
+					this.consentResponseHashTable = new LinkedHashMap();
+				}
+				this.consentResponseBeanCollection = new LinkedHashSet<ConsentResponseBean>();
+				int i = 1;
+
+				final Iterator it = collectionProtocolRegistrationCollection.iterator();
+				while (it.hasNext())
+				{
+					final CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) it
+							.next();
+					if (collectionProtocolRegistration.getActivityStatus() != null
+							&& !collectionProtocolRegistration.getActivityStatus().equalsIgnoreCase(
+									Constants.DISABLED))
+					{
+						final String collectionProtocolId = "CollectionProtocolRegistration:" + i
+								+ "_CollectionProtocol_id";
+						final String collectionProtocolTitle = "CollectionProtocolRegistration:" + i
+								+ "_CollectionProtocol_shortTitle";
+						final String collectionProtocolParticipantId = "CollectionProtocolRegistration:"
+								+ i + "_protocolParticipantIdentifier";
+						final String barcode = "CollectionProtocolRegistration:" + i + "_barcode";
+						final String collectionProtocolRegistrationDate = "CollectionProtocolRegistration:"
+								+ i + "_registrationDate";
+						final String collectionProtocolIdentifier = "CollectionProtocolRegistration:"
+								+ i + "_id";
+						final String isConsentAvailable = "CollectionProtocolRegistration:" + i
+								+ "_isConsentAvailable";
+						final String isActive = "CollectionProtocolRegistration:" + i
+								+ "_activityStatus";
+
+						final Collection consentTierCollection = collectionProtocolRegistration
+								.getCollectionProtocol().getConsentTierCollection();
+						if (consentTierCollection != null && consentTierCollection.isEmpty())
+						{
+							this.collectionProtocolRegistrationValues.put(isConsentAvailable,
+									Constants.NO_CONSENTS_DEFINED);
+						}
+						else if (consentTierCollection != null && !consentTierCollection.isEmpty())
+						{
+							this.collectionProtocolRegistrationValues.put(isConsentAvailable,
+									Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
+						}
+
+						final String date = CommonUtilities.parseDateToString(
+								collectionProtocolRegistration.getRegistrationDate(),
+								CommonServiceLocator.getInstance().getDatePattern());
+
+						this.collectionProtocolRegistrationValues.put(collectionProtocolId,
+								CommonUtilities.toString(collectionProtocolRegistration
+										.getCollectionProtocol().getId()));
+						this.collectionProtocolRegistrationValues.put(collectionProtocolTitle,
+								CommonUtilities.toString(collectionProtocolRegistration
+										.getCollectionProtocol().getShortTitle()));
+						this.collectionProtocolRegistrationValues.put(collectionProtocolParticipantId,
+								CommonUtilities.toString(collectionProtocolRegistration
+										.getProtocolParticipantIdentifier()));
+						this.collectionProtocolRegistrationValues.put(barcode, CommonUtilities
+								.toString(collectionProtocolRegistration.getBarcode()));
+					  if(isPHIView)	
+					  {
+						this.collectionProtocolRegistrationValues.put(
+								collectionProtocolRegistrationDate, date);
+					  }
+						this.collectionProtocolRegistrationValues.put(collectionProtocolIdentifier,
+								CommonUtilities.toString(collectionProtocolRegistration.getId()));
+						this.collectionProtocolRegistrationValues.put(isActive, CommonUtilities
+								.toString(collectionProtocolRegistration.getActivityStatus()));
+
+						this.getConsentResponse(collectionProtocolRegistration);
+
+						i++;
+					}
+				}
+				this.collectionProtocolRegistrationValueCounter = (i - 1);
+			}
+		 final Collection raceCollection = participant.getRaceCollection();
+			if (raceCollection != null)
+			{
+				this.raceTypes = new String[raceCollection.size()];
+				int i = 0;
+
+				final Iterator it = raceCollection.iterator();
+				while (it.hasNext())
+				{
+					final Race race = (Race) it.next();
+					if (race != null)
+					{
+						//	String raceName = race.getRaceName();
+						this.raceTypes[i] = race.getRaceName();
+						i++;
+					}
+				}
+			}
+
+		 
+		 if(isPHIView) 
+        {
+		
 		this.lastName = CommonUtilities.toString(participant.getLastName());
 		this.firstName = CommonUtilities.toString(participant.getFirstName());
 		this.middleName = CommonUtilities.toString(participant.getMiddleName());
 		this.birthDate = CommonUtilities.parseDateToString(participant.getBirthDate(),
 				CommonServiceLocator.getInstance().getDatePattern());
-		this.gender = participant.getGender();
-		this.genotype = participant.getSexGenotype();
 		this.setSSN(participant.getSocialSecurityNumber());
 		//		amol changes
 		this.setEmpiId(participant.getEmpiId());
 		this.setEmpiIdStatus(participant.getEmpiIdStatus());
 
-		final Collection raceCollection = participant.getRaceCollection();
-		if (raceCollection != null)
-		{
-			this.raceTypes = new String[raceCollection.size()];
-			int i = 0;
-
-			final Iterator it = raceCollection.iterator();
-			while (it.hasNext())
-			{
-				final Race race = (Race) it.next();
-				if (race != null)
-				{
-					//	String raceName = race.getRaceName();
-					this.raceTypes[i] = race.getRaceName();
-					i++;
-				}
-			}
-		}
-
 		//        this.race = participant.getRace();
-		this.setActivityStatus(participant.getActivityStatus());
-		this.ethnicity = participant.getEthnicity();
+		
 		this.deathDate = CommonUtilities.parseDateToString(participant.getDeathDate(),
 				CommonServiceLocator.getInstance().getDatePattern());;
-		this.vitalStatus = participant.getVitalStatus();
-
 		//Populating the map with the participant medical identifiers data
 		final Collection medicalIdentifierCollection = participant
 				.getParticipantMedicalIdentifierCollection();
@@ -302,93 +410,11 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 			this.valueCounter = medicalIdentifierCollection.size();
 		}
 
-		//Populating the map with the registrations of a Participant to a Collection Protocol.
-		//(Abhishek Mehta)
-		final Collection collectionProtocolRegistrationCollection = participant
-				.getCollectionProtocolRegistrationCollection();
-
-		if (collectionProtocolRegistrationCollection != null)
-		{
-			this.collectionProtocolRegistrationValues = new LinkedHashMap();
-			if (this.consentResponseHashTable == null)
-			{
-				this.consentResponseHashTable = new LinkedHashMap();
-			}
-			this.consentResponseBeanCollection = new LinkedHashSet<ConsentResponseBean>();
-			int i = 1;
-
-			final Iterator it = collectionProtocolRegistrationCollection.iterator();
-			while (it.hasNext())
-			{
-				final CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) it
-						.next();
-				if (collectionProtocolRegistration.getActivityStatus() != null
-						&& !collectionProtocolRegistration.getActivityStatus().equalsIgnoreCase(
-								Constants.DISABLED))
-				{
-					final String collectionProtocolId = "CollectionProtocolRegistration:" + i
-							+ "_CollectionProtocol_id";
-					final String collectionProtocolTitle = "CollectionProtocolRegistration:" + i
-							+ "_CollectionProtocol_shortTitle";
-					final String collectionProtocolParticipantId = "CollectionProtocolRegistration:"
-							+ i + "_protocolParticipantIdentifier";
-					final String barcode = "CollectionProtocolRegistration:" + i + "_barcode";
-					final String collectionProtocolRegistrationDate = "CollectionProtocolRegistration:"
-							+ i + "_registrationDate";
-					final String collectionProtocolIdentifier = "CollectionProtocolRegistration:"
-							+ i + "_id";
-					final String isConsentAvailable = "CollectionProtocolRegistration:" + i
-							+ "_isConsentAvailable";
-					final String isActive = "CollectionProtocolRegistration:" + i
-							+ "_activityStatus";
-
-					final Collection consentTierCollection = collectionProtocolRegistration
-							.getCollectionProtocol().getConsentTierCollection();
-					if (consentTierCollection != null && consentTierCollection.isEmpty())
-					{
-						this.collectionProtocolRegistrationValues.put(isConsentAvailable,
-								Constants.NO_CONSENTS_DEFINED);
-					}
-					else if (consentTierCollection != null && !consentTierCollection.isEmpty())
-					{
-						this.collectionProtocolRegistrationValues.put(isConsentAvailable,
-								Constants.PARTICIPANT_CONSENT_ENTER_RESPONSE);
-					}
-
-					final String date = CommonUtilities.parseDateToString(
-							collectionProtocolRegistration.getRegistrationDate(),
-							CommonServiceLocator.getInstance().getDatePattern());
-
-					this.collectionProtocolRegistrationValues.put(collectionProtocolId,
-							CommonUtilities.toString(collectionProtocolRegistration
-									.getCollectionProtocol().getId()));
-					this.collectionProtocolRegistrationValues.put(collectionProtocolTitle,
-							CommonUtilities.toString(collectionProtocolRegistration
-									.getCollectionProtocol().getShortTitle()));
-					this.collectionProtocolRegistrationValues.put(collectionProtocolParticipantId,
-							CommonUtilities.toString(collectionProtocolRegistration
-									.getProtocolParticipantIdentifier()));
-					this.collectionProtocolRegistrationValues.put(barcode, CommonUtilities
-							.toString(collectionProtocolRegistration.getBarcode()));
-					this.collectionProtocolRegistrationValues.put(
-							collectionProtocolRegistrationDate, date);
-					this.collectionProtocolRegistrationValues.put(collectionProtocolIdentifier,
-							CommonUtilities.toString(collectionProtocolRegistration.getId()));
-					this.collectionProtocolRegistrationValues.put(isActive, CommonUtilities
-							.toString(collectionProtocolRegistration.getActivityStatus()));
-
-					this.getConsentResponse(collectionProtocolRegistration);
-
-					i++;
-				}
-			}
-			this.collectionProtocolRegistrationValueCounter = (i - 1);
-		}
-
 		if (this.valueCounter == 0)
 		{
 			this.valueCounter = 1;
 		}
+        }
 	}
 
 	/*
@@ -1308,5 +1334,11 @@ public class ParticipantForm extends AbstractActionForm implements Serializable,
 	{
 		this.empiIdStatus = empiIdStatus;
 
+	}
+
+	@Override
+	public void setAllValues(AbstractDomainObject arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
