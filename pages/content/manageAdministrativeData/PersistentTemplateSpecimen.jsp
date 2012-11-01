@@ -11,16 +11,9 @@
 		                      <td align="center" class="black_ar"><span class="blue_ar_b"></span></span></td>
                               <td align="left" class="black_ar"><bean:message key="cpbasedentry.specimenReqTitle"/></td>
                               <td align="left" class="black_ar">
-                              <logic:equal name="isPersistent" value="true">
-										<label>
-												${createSpecimenTemplateForm.specimenReqTitle}
-										</label>
-									</td>
-								</logic:equal>
-								<logic:notEqual name="isPersistent" value="true">
-									<html:text styleClass="black_ar" size="23" styleId="specimenLabel" maxlength="255" property="specimenReqTitle"/>
+                              <html:text styleClass="black_ar" size="23" styleId="specimenLabel" maxlength="255" property="specimenReqTitle"/>
 						          </td>
-						          </logic:notEqual>
+						          
 						</tr> 
 							
 							

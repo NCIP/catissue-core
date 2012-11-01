@@ -158,12 +158,15 @@ function doOnLoad()
 	{
 		document.getElementById("studyCalendarEventPoint").value = 0;
 	}
-	siteDropDownInfo = {propertyId:'defaultSiteId',gridObj:"defaultSiteGrid", gridDiv:"defaultSite", dropDownId:"defaultSiteDropDown", pagingArea:"dsPagingArea", infoArea:"dsInfoArea", onOptionSelect:siteOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllSiteList", callBackAction:onSiteListReady,visibilityStatusVariable:dsGridVisible};
-	clinicalStatusDropDownInfo = {propertyId:'clinicalStatus',gridObj:"clinicalStatusGrid", gridDiv:"clinicalStatusDiv", dropDownId:"clinicalStatusDropDown", pagingArea:"csPagingArea", infoArea:"csInfoArea", onOptionSelect:clinicalStatusOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getClinicalStatusList", callBackAction:onClinicalStatusListReady,visibilityStatusVariable:csGridVisible};
 	
-	// initialising grid
+       siteDropDownInfo = {propertyId:'defaultSiteId',gridObj:"defaultSiteGrid", gridDiv:"defaultSite", dropDownId:"defaultSiteDropDown", pagingArea:"dsPagingArea", infoArea:"dsInfoArea", onOptionSelect:siteOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllSiteList", callBackAction:onSiteListReady,visibilityStatusVariable:dsGridVisible};
 	dsGrid = initDropDownGrid(siteDropDownInfo); //initialize DropDown control for Site List
+if('${requestScope.isPersistent}' != 'true')
+{
+        clinicalStatusDropDownInfo = {propertyId:'clinicalStatus',gridObj:"clinicalStatusGrid", gridDiv:"clinicalStatusDiv", dropDownId:"clinicalStatusDropDown", pagingArea:"csPagingArea", infoArea:"csInfoArea", onOptionSelect:clinicalStatusOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getClinicalStatusList", callBackAction:onClinicalStatusListReady,visibilityStatusVariable:csGridVisible};
 	csGrid = initDropDownGrid(clinicalStatusDropDownInfo); //initialize DropDown control for Clinical Status List
+}
+
 	
 	//If user creating Duplicate event
 	if('${requestScope.setFocus}'=="true"){

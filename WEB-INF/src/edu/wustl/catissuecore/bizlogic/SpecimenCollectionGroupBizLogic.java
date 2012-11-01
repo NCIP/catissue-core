@@ -2470,7 +2470,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		 */
 		final TreeMap<Long, List<Specimen>> specimenChildrenMap = new TreeMap<Long, List<Specimen>>();
 		
-		final String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.specimenType,sp.collectionStatus, spr.specimenRequirementLabel from "
+		final String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.specimenType,sp.specimenClass,sp.collectionStatus, spr.specimenRequirementLabel from "
 				+ Specimen.class.getName()
 				+ " as sp left outer join sp.specimenRequirement as spr where sp.specimenCollectionGroup.id = "
 				+ specimenCollectionGroup.getId()
@@ -2491,9 +2491,11 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			final Specimen specimen = new Specimen();
 			specimen.setId((Long) obj[0]);
 		  	String specimenLabel = (String) obj[1];
-		  	String requirementTiltle = (String) obj[6];
-		   	String collectionStatus = (String) obj[5];
+		  	String requirementTiltle = (String) obj[7];
+		   	String collectionStatus = (String) obj[6];
 		  	String label = specimenLabel;
+		  	StringBuffer defaultLabel = new StringBuffer();
+		  	 
 		  	 if((specimenLabel==null || specimenLabel.isEmpty()))
 		  	 {
 		  		 if(requirementTiltle!=null && !requirementTiltle.isEmpty())
@@ -2502,7 +2504,8 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		  		 }
 		  		 else
 		  		 {
-		  			label = (String) obj[4];
+		  			defaultLabel.append((String) obj[5]).append(" (").append((String) obj[4]).append(")");
+		  			label =defaultLabel.toString();
 		  		 }
 		  	 }
 		  	
@@ -2510,7 +2513,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		  	
 			specimen.setActivityStatus((String) obj[3]);
 			specimen.setSpecimenType((String) obj[4]);
-			specimen.setCollectionStatus((String) obj[5]);
+			specimen.setCollectionStatus(collectionStatus);
 			Long parentSpecimenId = (Long) obj[2];
 
 			if (parentSpecimenId == null)
