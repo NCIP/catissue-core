@@ -18,6 +18,7 @@
 	<property name="smallint.type" value="number(5,0)" dbms="oracle" />
 
 	<property name="date.type" value="date" dbms="mysql" />
+	<property name="date.type" value="date" dbms="oracle" />
 	<property name="timestamp.type" value="timestamp" dbms="oracle" />
 
 	<!-- ALTER TABLE CATISSUE_USER -->
