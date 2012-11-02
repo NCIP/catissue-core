@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.bean.CollectionProtocolEventBean;
 import edu.wustl.catissuecore.bean.DeriveSpecimenBean;
 import edu.wustl.catissuecore.bean.SpecimenRequirementBean;
 import edu.wustl.catissuecore.tree.QueryTreeNodeData;
+import edu.wustl.catissuecore.util.CollectionProtocolUtil;
 import edu.wustl.catissuecore.util.IdComparator;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -135,7 +136,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 				//add node
 				
 				final HttpSession sessionObject = request.getSession();
-				final SpecimenRequirementBean specimenRequirementBean = (SpecimenRequirementBean) sessionObject
+				final SpecimenRequirementBean currentSpecimenRequirementBean = (SpecimenRequirementBean) sessionObject
 						.getAttribute(Constants.EDIT_SPECIMEN_REQUIREMENT_BEAN);
 				if(parentNodeId.startsWith("New"))
 				{
@@ -145,8 +146,17 @@ public class SaveSpecimenRequirementAction extends BaseAction
 					objectName  = parentNodeId.substring(0,parentNodeId.indexOf('_')); 
 					parentId = parentNodeId.substring(parentNodeId.indexOf('_')+1,parentNodeId.indexOf('_')+3);
 				}
+				//Set requirment title to parent requirementTitle if derived/aliquote requirement title is empty
+				if((currentSpecimenRequirementBean.getLineage().equals(Constants.DERIVED_SPECIMEN) || currentSpecimenRequirementBean.getLineage().equals(Constants.ALIQUOT))
+						&& (currentSpecimenRequirementBean.getSpecimenRequirementLabel()==null || currentSpecimenRequirementBean.getSpecimenRequirementLabel().isEmpty()))
+				{
+					
+					final SpecimenRequirementBean parentSpecimenRequirementBean = CollectionProtocolUtil.getParentSpecimen(
+							mapKey, collectionProtocolEventMap);
+					currentSpecimenRequirementBean.setSpecimenRequirementLabel(parentSpecimenRequirementBean.getSpecimenRequirementLabel());
+				}
 				
-				AppUtility.createSpecimenNode(objectName, parentId, specimenRequirementBean,
+				AppUtility.createSpecimenNode(objectName, parentId, currentSpecimenRequirementBean,
 						treeData, operation);
 				request.setAttribute("nodeAdded", treeData);
 				
@@ -310,6 +320,7 @@ public class SaveSpecimenRequirementAction extends BaseAction
 
 		specimenRequirementBean.setLabelFormat(createSpecimenTemplateForm.getLabelFormat());
     	specimenRequirementBean.setSpecimenRequirementLabel(createSpecimenTemplateForm.getSpecimenReqTitle());
+    	specimenRequirementBean.setLineage(createSpecimenTemplateForm.getLineage());
 //		specimenRequirementBean.setLabelFormatForAliquot(createSpecimenTemplateForm.getLabelFormatForAliquot()());
 	}
 
@@ -396,15 +407,28 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		{
 			final DeriveSpecimenBean deriveSpecimenBean = (DeriveSpecimenBean) deriveSpecimenCollectionItr
 					.next();
-			final SpecimenRequirementBean specimenRequirementBean = this.createSpecimen(
-					createSpecimenTemplateForm, uniqueIdentifier, deriveSpecimenCount);
+			 
+			final SpecimenRequirementBean specimenRequirementBean = new SpecimenRequirementBean();
+			specimenRequirementBean.setParentName(Constants.ALIAS_SPECIMEN + "_" + uniqueIdentifier);
+			this.setSessionDataBean(createSpecimenTemplateForm, specimenRequirementBean);
+
+
+			specimenRequirementBean.setLabelFormatForAliquot(createSpecimenTemplateForm.getLabelFormatForAliquot());
+
+		   if(deriveSpecimenBean.getRequirementLabel()!=null && !deriveSpecimenBean.getRequirementLabel().isEmpty())
+		   {	   
+			 specimenRequirementBean.setSpecimenRequirementLabel(deriveSpecimenBean.getRequirementLabel());
+		   }
+		   else
+		   {
+			 specimenRequirementBean.setSpecimenRequirementLabel(createSpecimenTemplateForm.getSpecimenReqTitle());
+		   }			
 			specimenRequirementBean.setUniqueIdentifier(uniqueIdentifier
 					+ Constants.UNIQUE_IDENTIFIER_FOR_DERIVE + deriveSpecimenCount);
 			specimenRequirementBean.setLineage(Constants.DERIVED_SPECIMEN);
 			specimenRequirementBean.setDisplayName(Constants.ALIAS_SPECIMEN + "_"
 					+ uniqueIdentifier + Constants.UNIQUE_IDENTIFIER_FOR_DERIVE
 					+ deriveSpecimenCount);
-
 			specimenRequirementBean.setQuantity(deriveSpecimenBean.getQuantity());
 			specimenRequirementBean.setConcentration(deriveSpecimenBean.getConcentration());
 			specimenRequirementBean.setClassName(deriveSpecimenBean.getSpecimenClass());
@@ -594,4 +618,5 @@ public class SaveSpecimenRequirementAction extends BaseAction
 		}
 		return aliquotQuantity;
 	}
+	
 }

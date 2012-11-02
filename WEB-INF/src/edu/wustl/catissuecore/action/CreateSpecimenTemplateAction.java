@@ -336,46 +336,6 @@ public class CreateSpecimenTemplateAction extends BaseAction
 		return userCollection;
 	}
 
-	/**
-	 * Gets the specimen bean from map.
-	 *
-	 * @param keyToken : keyToken
-	 * @param specimenRequirementBean : specimenRequirementBean
-	 * @param parentKey : parentKey
-	 *
-	 * @return SpecimenRequirementBean : SpecimenRequirementBean
-	 */
-	private SpecimenRequirementBean getSpecimenBeanFromMap(StringTokenizer keyToken,
-			SpecimenRequirementBean specimenRequirementBean, String parentKey)
-	{
-		while (keyToken.hasMoreTokens())
-		{
-			final String specimenKey = keyToken.nextToken();
-			final String currentKey = parentKey + "_" + specimenKey;
-			if (specimenKey.startsWith("A"))
-			{
-				final Map aliqutCollectionMap = specimenRequirementBean
-						.getAliquotSpecimenCollection();
-				final SpecimenRequirementBean childSpecimenRequirementBean = (SpecimenRequirementBean) aliqutCollectionMap
-						.get(currentKey);
-				final SpecimenRequirementBean specimenRequirementBean1 = this
-						.getSpecimenBeanFromMap(keyToken, childSpecimenRequirementBean, currentKey);
-				return specimenRequirementBean1;
-			}
-			else
-			{
-				final Map deriveCollectionMap = specimenRequirementBean
-						.getDeriveSpecimenCollection();
-				final SpecimenRequirementBean childSpecimenRequirementBean = (SpecimenRequirementBean) deriveCollectionMap
-						.get(currentKey);
-				final SpecimenRequirementBean specimenRequirementBean1 = this
-						.getSpecimenBeanFromMap(keyToken, childSpecimenRequirementBean, currentKey);
-				return specimenRequirementBean1;
-			}
-
-		}
-		return specimenRequirementBean;
-	}
 
 	/**
 	 * Clear form on add specimen requirement.
@@ -561,26 +521,10 @@ public class CreateSpecimenTemplateAction extends BaseAction
 	private SpecimenRequirementBean getEventAndSpecimenBean(String mapkey,
 			HttpServletRequest request)
 	{
-		String eventKey = null;
-		String specimenKey = null;
 		final HttpSession session = request.getSession();
-		final StringTokenizer stringToken = new StringTokenizer(mapkey, "_");
-
-		if (stringToken != null && stringToken.hasMoreTokens())
-		{
-			eventKey = stringToken.nextToken();
-			specimenKey = eventKey + "_" + stringToken.nextToken();
-		}
 		final Map collectionProtocolEventMap = (Map) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_EVENT_SESSION_MAP);
-		final CollectionProtocolEventBean collectionProtocolEventBean = (CollectionProtocolEventBean) collectionProtocolEventMap
-				.get(eventKey);
-		final Map specimenRequirementmaps = collectionProtocolEventBean
-				.getSpecimenRequirementbeanMap();
-		final SpecimenRequirementBean parentSpecimenRequirementBean = (SpecimenRequirementBean) specimenRequirementmaps
-				.get(specimenKey);
-		final SpecimenRequirementBean specimenRequirementBean = this.getSpecimenBeanFromMap(
-				stringToken, parentSpecimenRequirementBean, specimenKey);
+		SpecimenRequirementBean  specimenRequirementBean = CollectionProtocolUtil.getParentSpecimen(mapkey, collectionProtocolEventMap);
 		if (Long.valueOf(specimenRequirementBean.getId()) != null
 				&& specimenRequirementBean.getId() > 0)
 		{

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -734,6 +735,10 @@ public class CollectionProtocolUtil
 			derivedSpecimenKey = getKeyBase(deriveCtr);
 			derivedSpecimenKey.append("_labelFormat");
 			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getLabelFormat());
+			
+			derivedSpecimenKey = getKeyBase(deriveCtr);
+			derivedSpecimenKey.append("_requirementLabel");
+			derivedObjectMap.put(derivedSpecimenKey.toString(), derivedSpecimen.getSpecimenRequirementLabel());
 
 			deriveCtr++;
 		}
@@ -1774,6 +1779,61 @@ public class CollectionProtocolUtil
 			}
 		}
 		return specimenMap;
+	}
+	
+	public static SpecimenRequirementBean getParentSpecimen(String mapKey,
+			final Map collectionProtocolEventMap) {
+		final StringTokenizer stringToken = new StringTokenizer(mapKey, "_");
+
+		String eventKey = null;
+		String specimenKey=null;
+		if (stringToken != null && stringToken.hasMoreTokens())
+		{
+			eventKey = stringToken.nextToken();
+			specimenKey = eventKey + "_" + stringToken.nextToken();
+		}
+		final CollectionProtocolEventBean collectionProtocolEventBean1 = (CollectionProtocolEventBean) collectionProtocolEventMap
+				.get(eventKey);
+		final Map specimenRequirementmaps = collectionProtocolEventBean1
+				.getSpecimenRequirementbeanMap();
+		final SpecimenRequirementBean parentSpecimenRequirementBean = (SpecimenRequirementBean) specimenRequirementmaps
+				.get(specimenKey);
+		final SpecimenRequirementBean specimenRequirementBean1 = getSpecimenBeanFromMap(
+				stringToken, parentSpecimenRequirementBean, specimenKey);
+		return specimenRequirementBean1;
+	}
+	
+	
+	private static SpecimenRequirementBean getSpecimenBeanFromMap(StringTokenizer keyToken,
+			SpecimenRequirementBean specimenRequirementBean, String parentKey)
+	{
+		while (keyToken.hasMoreTokens())
+		{
+			final String specimenKey = keyToken.nextToken();
+			final String currentKey = parentKey + "_" + specimenKey;
+			if (specimenKey.startsWith("A"))
+			{
+				final Map aliqutCollectionMap = specimenRequirementBean
+						.getAliquotSpecimenCollection();
+				final SpecimenRequirementBean childSpecimenRequirementBean = (SpecimenRequirementBean) aliqutCollectionMap
+						.get(currentKey);
+				final SpecimenRequirementBean specimenRequirementBean1 = 
+						getSpecimenBeanFromMap(keyToken, childSpecimenRequirementBean, currentKey);
+				return specimenRequirementBean1;
+			}
+			else
+			{
+				final Map deriveCollectionMap = specimenRequirementBean
+						.getDeriveSpecimenCollection();
+				final SpecimenRequirementBean childSpecimenRequirementBean = (SpecimenRequirementBean) deriveCollectionMap
+						.get(currentKey);
+				final SpecimenRequirementBean specimenRequirementBean1 =
+						getSpecimenBeanFromMap(keyToken, childSpecimenRequirementBean, currentKey);
+				return specimenRequirementBean1;
+			}
+
+		}
+		return specimenRequirementBean;
 	}
 
 }

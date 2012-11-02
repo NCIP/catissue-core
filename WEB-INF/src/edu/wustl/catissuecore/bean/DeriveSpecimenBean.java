@@ -108,7 +108,19 @@ public class DeriveSpecimenBean implements Serializable
 
 
 	private String labelFormat;
+	
+	private String requirementLabel;
 
+
+	
+
+	public String getRequirementLabel() {
+		return requirementLabel;
+	}
+
+	public void setRequirementLabel(String requirementLabel) {
+		this.requirementLabel = requirementLabel;
+	}
 
 	public String getLabelFormat()
 	{

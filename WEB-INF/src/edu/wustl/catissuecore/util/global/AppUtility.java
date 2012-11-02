@@ -4149,7 +4149,16 @@ public class AppUtility {
 				final SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) aliquotsCollectionItr
 						.next();
 
-				displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";//Constants.ALIQUOT + specimenRequirementBean1.getUniqueIdentifier();
+				if(specimenRequirementBean1.getSpecimenRequirementLabel()!=null && !specimenRequirementBean1.getSpecimenRequirementLabel().isEmpty()) 
+				{
+					displayName = specimenRequirementBean1.getSpecimenRequirementLabel();
+				}
+				else
+				{
+				  displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";
+				}
+				
+				//displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";//Constants.ALIQUOT + specimenRequirementBean1.getUniqueIdentifier();
 				createSpecimenNode(parentObjectname, parentIdentifier,
 						specimenRequirementBean1, treeData, operation);
 			}
@@ -4166,7 +4175,17 @@ public class AppUtility {
 				final SpecimenRequirementBean specimenRequirementBean1 = (SpecimenRequirementBean) deriveSpecimenCollectionItr
 						.next();
 
-				displayName =  specimenRequirementBean.getSpecimenRequirementLabel();
+
+				if(specimenRequirementBean1.getSpecimenRequirementLabel()!=null && !specimenRequirementBean1.getSpecimenRequirementLabel().isEmpty()) 
+				{
+					displayName = specimenRequirementBean1.getSpecimenRequirementLabel();
+				}
+				else
+				{
+				  displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";
+				}
+				
+				//displayName =  specimenRequirementBean1.getSpecimenRequirementLabel();
 				//displayName = specimenRequirementBean1.getClassName()+" ("+specimenRequirementBean1.getType()+")";
 				//Constants.DERIVED_SPECIMEN+ specimenRequirementBean1.getUniqueIdentifier();
 				createSpecimenNode(parentObjectname, parentIdentifier,

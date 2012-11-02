@@ -412,7 +412,9 @@
 					String chk = "checkBox_" + rowno;
 					String changeClass = "changeUnit('"+specimenClass+"','"+unit+"','"+concentration+"','"+specimenType+"')";
 					String changeType = "onSubTypeChangeUnitforCP('"+specimenClass+"','" + unit+ "')";
-
+					
+					String requirementLabel = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_requirementLabel)";
+					String requirementLabelKey = "DeriveSpecimenBean:" + rowno + "_requirementLabel";
 					//String labelType = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelGenType)";
 					//String labelTypeKey = "DeriveSpecimenBean:" + rowno + "_labelGenType";
 					String labelFormat = "deriveSpecimenValue(DeriveSpecimenBean:" + rowno + "_labelFormat)";
@@ -424,9 +426,9 @@
 
 
 					<html:hidden property="<%=id%>" />
-
 			<%
-					String idKeyValue = (String)form.getDeriveSpecimenValue(idKey);
+					String requirementLabelValue = (String)form.getDeriveSpecimenValue(requirementLabelKey);
+			        String idKeyValue = (String)form.getDeriveSpecimenValue(idKey);
 					String className = (String)form.getDeriveSpecimenValue(classKey);
 					String typeclassValue = (String)form.getDeriveSpecimenValue(srSubTypeKeyName);
 					String storageLocationValue = (String)form.getDeriveSpecimenValue(storageLocationKey);
@@ -457,6 +459,7 @@
 					}
 				%>
 
+								<html:hidden property="<%=requirementLabel%>" />
 								<logic:equal name="isPersistentValue" value="true">
 								<td class="black_ar">
 									<label>
