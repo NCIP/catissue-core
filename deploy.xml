@@ -2170,7 +2170,7 @@
 		<antcall target="add_labelsql_tables_for_cp_dashboard"/>
 		<antcall target="insert_dashboard_queries"/>
 		<antcall target="liquibase_aqupgrade_target" />
-		
+		<antcall target="upgrade_db_from_v1.0_to_v2.0"/>
 		<if>
 			<equals arg1="mysql" arg2="${database.type}" />
 			<then>
@@ -2194,10 +2194,22 @@
 			<!--antcall target="upgrade_db_from_v1.2.3_to_1.2.4"/-->
 			<antcall target="liquibase_upgrade_from_plusv1.0_to_plusv2.0"/>
 			<antcall target="liquibase_aqupgrade_target" />
+			<antcall target="upgrade_db_from_v1.0_to_v2.0" />
 			<!--antcall target="add_labelsql_tables_for_cp_dashboard"/-->
 			<!--antcall target="upgrade_db_v1.2.4 to v1.2.5"/-->
 		</target>
 	
+	<target name="upgrade_db_from_v1.0_to_v2.0">
+		<antcall target="unzip_aq_installable" />
+		<echo message="upgrading database with URL ${final.database.url} username=${database.username} password=${database.password}" />
+		<!--upgradations for colums in query and query_parameterized_query table -->
+		<updateDatabase
+			changeLogFile="${temp.dir}/AdvanceQuery/db/db-upgrade/liquibase_xml/query_Suite1.3_to_Suite1.4.xml"
+			driver="${final.database.driver}" url="${final.database.url}"
+			username="${database.username}" password="${database.password}"
+			dropFirst="false" classpathref="liquibaseClasspath" />
+	</target>
+
 	<!--Target for Database Upgrade from Suite 1.2.3 to Suite 1.2.1-->
 	<target name="upgrade_db_v1.2.4 to v1.2.5" description="Upgrading Database v1.2.4 to v1.2.5">
 		<echo message="Upgrading Database v1.2.4 to v1.2.5" />
