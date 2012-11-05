@@ -360,17 +360,30 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 	{
 		String specIds = request.getParameter("specId");
 		String tagId = request.getParameter("tagId");
-		String sql = "delete from catissue_spec_tag_items where OBJ_ID in (?) and TAG_ID = ?";
-		ColumnValueBean specIdBean = new ColumnValueBean(specIds);
-		ColumnValueBean tagIdBean = new ColumnValueBean(tagId);
+		int numberOfParameter=specIds.split(",").length;
+		StringBuffer sql = new StringBuffer("delete from catissue_spec_tag_items where OBJ_ID in (" );
+		for(int i=0;i<numberOfParameter;i++)
+		{
+			sql.append("?");
+			if(i+1!=numberOfParameter)
+				sql.append(",");
+		}
+		sql.append(") and TAG_ID = ?");
+		
 		List<ColumnValueBean> list = new ArrayList<ColumnValueBean>();
-		list.add(specIdBean);
+		
+		for (String specId : specIds.split(",")) {
+			ColumnValueBean specIdBean = new ColumnValueBean(specId);
+			list.add(specIdBean);
+		}
+		
+		ColumnValueBean tagIdBean = new ColumnValueBean(tagId);
 		list.add(tagIdBean);
 		JDBCDAO jdbcdao = null;
 		try
 		{
 		jdbcdao = AppUtility.openJDBCSession();
-		jdbcdao.executeUpdate(sql, list);
+		jdbcdao.executeUpdate(sql.toString(), list);
 		jdbcdao.commit();
 		}
 		finally
