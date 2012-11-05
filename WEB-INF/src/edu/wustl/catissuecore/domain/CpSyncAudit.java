@@ -47,10 +47,7 @@ public class CpSyncAudit extends AbstractDomainObject implements java.io.Seriali
 	 * Count of CPR processed.
 	 */
 	protected Long processedCPRCount;
-	/**
-	 * Total count of number of cpr present for CP. 
-	 */
-	protected Long totleCPRCount;
+	
 	
 	/**
 	 * Start date when last time processes is started. 
@@ -116,23 +113,7 @@ public class CpSyncAudit extends AbstractDomainObject implements java.io.Seriali
 	public void setProcessedCPRCount(Long processedCPRCount) {
 		this.processedCPRCount = processedCPRCount;
 	}
-	/**
-	 * Returns count of number of CPRs present.
-	 * @return
-	 *      Count of number of CPR presents in CP.
-	 */
-	public Long getTotleCPRCount() {
-		return totleCPRCount;
-	}
-
-	/**
-	 * Set number of CPRs present in CP.
-	 * @param totleCPRCount
-	 */
-	public void setTotleCPRCount(Long totleCPRCount) {
-		this.totleCPRCount = totleCPRCount;
-	}
-
+	
 	/**
 	 * Returns the identifier assigned to process.
 	 */

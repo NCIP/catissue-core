@@ -65,14 +65,6 @@
             length="30"
         />
         <property
-            name="totleCPRCount"
-            type="long"
-            update="true"
-            insert="true"
-            column="TOTLE_CPR_COUNT"
-            length="30"
-        />
-        <property
             name="startedDate"
             type="date"
             update="true"
