@@ -5733,7 +5733,9 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 				"Specimen.barcode,  "+ 
 				"Specimen.specimenPosition.positionDimensionOne, "+
 				"Specimen.specimenPosition.positionDimensionTwo, "+
-				"Specimen.specimenPosition.storageContainer.name "+
+				"Specimen.specimenPosition.storageContainer.name, Specimen.specimenPosition.storageContainer.oneDimensionLabellingScheme, " +
+				"Specimen.specimenPosition.storageContainer.twoDimensionLabellingScheme, "+
+				"Specimen.specimenCollectionGroup.collectionProtocolRegistration.participant.lastName "+
 				"from edu.wustl.catissuecore.domain.Specimen Specimen " +
 				"left outer join Specimen.specimenPosition "+
 				"left outer join Specimen.specimenPosition.storageContainer "+
@@ -5777,7 +5779,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			SpecimenDTO specimenDTO = new SpecimenDTO();
 			
 			specimenDTO.setCpShortTitle((String) valArr[1]);
-			specimenDTO.setParticipantName((String) valArr[2]);
+			specimenDTO.setParticipantName(getName((String) valArr[2],(String) valArr[20]));
 			specimenDTO.setProtocol_participant_id((String) valArr[3]);
 			specimenDTO.setEventPoint((Double) valArr[4]);
 			specimenDTO.setSpecimenClass((String) valArr[5]);
@@ -5789,8 +5791,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			specimenDTO.setLabel((String) valArr[13]);
 			specimenDTO.setBarCode((String) valArr[14]);
 			if(valArr[15]!=null){
-				specimenDTO.setPositionDimensionOneString(String.valueOf(valArr[15]));
-				specimenDTO.setPositionDimensionTwoString(String.valueOf(valArr[16]));
+				specimenDTO.setPositionDimensionOneString(AppUtility.getPositionValue(String.valueOf(valArr[18]), (Integer)valArr[15]));
+				specimenDTO.setPositionDimensionTwoString(AppUtility.getPositionValue(String.valueOf(valArr[19]), (Integer)valArr[16]));
 				specimenDTO.setContainerName((String) valArr[17]);
 			}
 			
@@ -5800,7 +5802,17 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			return specimenDTO;
 		}
 
-
+		private String getName(String firstName,String lastName){
+			String name = "N/A";
+			if(firstName!=null && !firstName.equals("") && lastName!=null && !lastName.equals("")){
+				name = lastName +", "+firstName;
+			}else if(firstName!=null && !firstName.equals("")){
+				name = firstName;
+			}else if(lastName!=null && !lastName.equals("")){
+				name = lastName;
+			}
+			return name;
+		}
 		public Specimen getSpecimenDetailForAliquots(DAO dao, String label) throws DAOException,
 		BizLogicException
 		{

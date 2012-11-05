@@ -49,11 +49,11 @@ public class ViewSpecimenDetail  extends HttpServlet {
 					krishagni.catissueplus.mobile.dto.SpecimenDTO obj = bizLogic.getSpecimenDTOFromLabel(dao, request.getParameter("label")); 
 					returnedJObject.put("success", "true");
 					returnedJObject.put("cpTitle", obj.getCpShortTitle());
-					returnedJObject.put("partName", obj.getParticipantName());
+					returnedJObject.put("partName", obj.getParticipantName()+" ("+obj.getProtocol_participant_id()+")");
 					returnedJObject.put("eventPoint",obj.getEventPoint());
 					returnedJObject.put("label",obj.getLabel());
-					returnedJObject.put("classType", obj.getSpecimenType());
-					returnedJObject.put("tissueSite", obj.getTissueSite());
+					returnedJObject.put("classType", obj.getSpecimenClass()+"( "+obj.getSpecimenType()+")");
+					returnedJObject.put("tissueSite", obj.getTissueSite()+" ("+obj.getTissueSide()+")");
 					returnedJObject.put("availableQuantity", obj.getAvailableQuantity());
 					if( obj.getContainerName()!=null){
 					returnedJObject.put("container", obj.getContainerName()+" ("+ obj.getPositionDimensionOneString()+","+obj.getPositionDimensionTwoString()+")");
