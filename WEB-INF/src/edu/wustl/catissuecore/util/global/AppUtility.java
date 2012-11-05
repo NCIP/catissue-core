@@ -2616,7 +2616,7 @@ public class AppUtility {
 				isPresent = privilegeCache.hasPrivilege(strBuffer.toString()
 						+ cpId.toString(), privilegeName);
 				if (!isPresent
-						&& Permissions.REGISTRATION.equals(privilegeName)) {
+						&& ( Permissions.REGISTRATION.equals(privilegeName) || Permissions.SPECIMEN_PROCESSING.equals(privilegeName))) {
 					isPresent = checkForAllCurrentAndFutureCPs(privilegeName,
 							sessionDataBean, cpId.toString());
 				}
