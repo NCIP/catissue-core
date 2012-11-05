@@ -4,17 +4,16 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="edu.wustl.common.tags.domain.TagItem" entity-name="SpecimenListTagItem"
-		table="catissue_spec_tag_items">
+	<class name="edu.wustl.common.tags.domain.TagItem" entity-name="SpecimenListTagItem" table="catissue_spec_tag_items">
 		<id name="identifier" type="java.lang.Long" column="identifier">
 			<generator class="increment" />
 		</id>
-		<many-to-one entity-name="SpecimenListTag" name="tag" fetch="select">
+		<many-to-one entity-name="SpecimenListTag" name="tag">
 			<column name="TAG_ID" not-null="true" />
 		</many-to-one>
 
-		<many-to-one name="obj" class="edu.wustl.catissuecore.domain.AbstractSpecimen" fetch="select">
-		 <column name="OBJ_ID" not-null="true" />
-		 </many-to-one>
+		<many-to-one name="obj" class="edu.wustl.catissuecore.domain.AbstractSpecimen" cascade="none">
+		 	<column name="OBJ_ID" not-null="true" />
+		</many-to-one>
 	</class>
 </hibernate-mapping>

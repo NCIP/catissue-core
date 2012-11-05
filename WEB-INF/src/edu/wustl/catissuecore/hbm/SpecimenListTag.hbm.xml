@@ -4,20 +4,17 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-<class name="edu.wustl.common.tags.domain.Tag" table="caTissue_specimenList_tags" entity-name="SpecimenListTag">
-<id name="identifier" type="java.lang.Long" column="identifier">
-<generator class="increment"/>
-</id>
- 
-<property name="label" type="java.lang.String" column="tag_label"/>
-
- <set name="tagItem"  table="caTissue_specimenList_tag_items"  cascade="save-update,all-delete-orphan"
-				inverse="false" lazy="false" fetch="select">
-            <key>
-                <column name="tag_id" not-null="true" />
-            </key>            
- <one-to-many  entity-name="SpecimenListTagItem"/>
- </set>  
- <property name="userId" type="java.lang.Long" column="user_id"/>   
-     </class>
+	<class name="edu.wustl.common.tags.domain.Tag" table="caTissue_specimenList_tags" entity-name="SpecimenListTag">
+		<id name="identifier" type="java.lang.Long" column="identifier">
+			<generator class="increment"/>
+		</id>
+		<property name="label" type="java.lang.String" column="tag_label"/>
+ 			<set name="tagItem"  table="caTissue_specimenList_tag_items"  cascade="save-update,all-delete-orphan" inverse="true" lazy="false" fetch="select">
+   		        <key>
+                	<column name="tag_id" not-null="true" />
+            	</key>            
+ 				<one-to-many  entity-name="SpecimenListTagItem"/>
+ 			</set>  
+ 		<property name="userId" type="java.lang.Long" column="user_id"/>   
+	</class>
 </hibernate-mapping>
