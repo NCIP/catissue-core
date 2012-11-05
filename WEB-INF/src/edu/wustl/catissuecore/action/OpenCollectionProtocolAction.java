@@ -79,7 +79,7 @@ public class OpenCollectionProtocolAction extends BaseAction
 						Date endDate=cpSyncAudit.getEndDate();
 						String DATE_FORMAT_NOW = "MM/dd/yyyy";
 						SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);						
-						synchMessage.append("Protocol last synchronized done on ").append(sdf.format(endDate)).append(".");
+						synchMessage.append("Protocol synchronization last done on ").append(sdf.format(endDate)).append(".");
 					}
 					else
 					{

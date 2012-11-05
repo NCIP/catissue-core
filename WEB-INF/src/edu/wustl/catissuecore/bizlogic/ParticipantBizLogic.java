@@ -748,6 +748,12 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 				{
 					throw this.getBizLogicException(null, "cp.disabled", "");
 				}
+				SynchronizeCollectionProtocolBizLogic synchronizeCollectionProtocolBizLogic=new SynchronizeCollectionProtocolBizLogic();
+				String syncStatus=synchronizeCollectionProtocolBizLogic.getSyncStatus((Long) objCP[0]).getStatus();
+				if("In Process".equalsIgnoreCase(syncStatus))
+				{
+					throw this.getBizLogicException(null, "errors.collectionprotocolregistration.syncinprocess", "");
+				}
 			}
 			else
 			{

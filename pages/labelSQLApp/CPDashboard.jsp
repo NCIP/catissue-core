@@ -79,7 +79,34 @@ else
 <body>
 
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
-
+	
+	<tr>
+	<td width="100%" colspan="2">
+	<c:if test="${requestScope.isSyncOn == 'true'}">
+	<div>
+				   <table width="100%" border="0" cellpadding="0" cellspacing="0">
+					
+					<td align="right"  style="border:1px solid #ea6c15;vertical-align:text-top;" bgcolor="#FFF0F0" >
+					   <table width="100%" cellpadding="0" cellspacing="0">
+						<td width="1%"></td>					   	
+						<td width="2%"> <img src="images/uIEnhancementImages/Info.png" width="24" height="24"/></td>
+						<td width="1%"></td>
+					  <td>	
+					  	<div>
+						  <span style="font-family:Verdana;font-size:11px;color: red;font-weight:bold;vertical-align:tax-top;margin:0px;">
+							Registration is disabled  since syncronization has started.
+						  </span>
+						</div>
+					 </td>
+				     </table>
+				  </table>
+				  
+				</div>
+	</c:if>
+	</td>
+	</tr>
+	
+	
 	<tr valign="center" class='bgImage'>
 		<td width="17%">&nbsp; <img src="images/ic_saved_queries.gif"
 			id="labelSQLMenu" alt="CP Dashboard" width="38" height="44"

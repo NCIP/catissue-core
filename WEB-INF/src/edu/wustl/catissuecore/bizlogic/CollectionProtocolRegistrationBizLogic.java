@@ -1590,7 +1590,16 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 					.getValue("collectionprotocolregistration.protocoltitle");
 			throw this.getBizLogicException(null, "errors.item.required", message);
 		}
-
+		else
+		{
+			SynchronizeCollectionProtocolBizLogic synchronizeCollectionProtocolBizLogic=new SynchronizeCollectionProtocolBizLogic();
+			String syncStatus=synchronizeCollectionProtocolBizLogic.getSyncStatus(registration.getCollectionProtocol().getId()).getStatus();
+			if("In Progress".equalsIgnoreCase(syncStatus))
+			{
+				throw this.getBizLogicException(null, "errors.collectionprotocolregistration.syncinprocess", "");
+			}
+			
+		}
 		final String errorKey = validator.validateDate(CommonUtilities.parseDateToString(
 				registration.getRegistrationDate(), CommonServiceLocator.getInstance()
 						.getDatePattern()), true);

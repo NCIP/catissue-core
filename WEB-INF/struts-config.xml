@@ -5888,7 +5888,10 @@ PUBLIC
 			name="cpDashboardForm" validate="true" scope="request">
 			<forward name="success" path="/pages/labelSQLApp/CPDashboard.jsp" />
 		</action>
-		
+		<action path="/CheckSyncCPAndForward" type="edu.wustl.catissuecore.action.CheckSyncCPAndForwardAction"
+			name="cpDashboardForm" validate="true" scope="request">
+			<forward name="success" path="/CPDashboardAction.do" />
+		</action>
 		<action path="/AjaxSearchCPLabel"
 			type="edu.wustl.catissuecore.action.CPLabelAjaxSearchAction"
 			name="CollectionProtocolForm" validate="false" scope="request">

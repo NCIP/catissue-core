@@ -189,7 +189,7 @@
 		if(cpId == '' || cpId == null || cpId == "undefined")
 			{}
 		else{
-        window.parent.frames[1].location = "CPDashboardAction.do?"+"&cpSearchCpId="+cpId;
+			window.parent.frames[1].location = "CheckSyncCPAndForward.do?"+"&cpSearchCpId="+cpId;
 		}
     }
  </script>

@@ -92,15 +92,22 @@ public class SynchronizeCollectionProtocolBizLogic extends CatissueDefaultBizLog
 		}
 		return cpSyncAudit;
 	}
-	public CpSyncAudit getSyncStatus(Long cpId) throws DAOException
+	public CpSyncAudit getSyncStatus(Long cpId) throws BizLogicException 
 	{
-		DAO dao = getHibernateDao(getAppName(),null);
-		ColumnValueBean columnValueBean = new ColumnValueBean("cpId", cpId);
-		List<CpSyncAudit> cpSyncAudits = (List<CpSyncAudit>) dao.retrieve(CpSyncAudit.class.getName(), columnValueBean);
+		DAO dao;
 		CpSyncAudit cpSyncAudit=null;
-		if(!cpSyncAudits.isEmpty())
+		try
 		{
-			cpSyncAudit=cpSyncAudits.get(0);
+			dao = getHibernateDao(getAppName(),null);
+			ColumnValueBean columnValueBean = new ColumnValueBean("cpId", cpId);
+			List<CpSyncAudit> cpSyncAudits = (List<CpSyncAudit>) dao.retrieve(CpSyncAudit.class.getName(), columnValueBean);
+			if(!cpSyncAudits.isEmpty())
+			{
+				cpSyncAudit=cpSyncAudits.get(0);
+			}
+		} catch (DAOException e)
+		{
+			throw new BizLogicException(e);
 		}
 		return cpSyncAudit;
 	}
