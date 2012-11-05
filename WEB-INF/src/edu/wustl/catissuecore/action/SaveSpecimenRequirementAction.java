@@ -320,7 +320,6 @@ public class SaveSpecimenRequirementAction extends BaseAction
 
 		specimenRequirementBean.setLabelFormat(createSpecimenTemplateForm.getLabelFormat());
     	specimenRequirementBean.setSpecimenRequirementLabel(createSpecimenTemplateForm.getSpecimenReqTitle());
-    	specimenRequirementBean.setLineage(createSpecimenTemplateForm.getLineage());
 //		specimenRequirementBean.setLabelFormatForAliquot(createSpecimenTemplateForm.getLabelFormatForAliquot()());
 	}
 
