@@ -61,7 +61,7 @@ public class RedirectToSCGAction extends XSSSupportedAction
 		if (object != null)
 		{
 			final SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) object;
-			specimenCollectionGroupForm.setAllValues(specimenCollectionGroup);
+			specimenCollectionGroupForm.setAllValues(specimenCollectionGroup,sessionDataBean);
 		}
 		hibernateDao.closeSession();
 		return mapping.findForward(Constants.SUCCESS);
