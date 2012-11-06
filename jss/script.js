@@ -485,16 +485,3 @@ function disableTabs()
   }
  }
 }
-
-//This function will switch page to consentPage
-function consentPage()
-{
-          if(disablePHIView)
-          {
-            accessDeniedMessage();     
-          }
-          else
-          { 
-           checkForConsents();
-          }
-        }

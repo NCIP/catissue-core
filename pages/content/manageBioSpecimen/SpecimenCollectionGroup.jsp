@@ -528,11 +528,17 @@ function updateHelpURL()
 			switchToTab("specimenCollectionGroupTab");
 		}
 
+		//This function will switch page to consentPage
+		function consentPage()
+		{
+		     checkForConsents();
+		     
+		 }
 		
 		function checkForConsents()
 		{
 			
-                           <%if(form!=null && form.getConsentTierCounter()>0)
+                <%if(form!=null && form.getConsentTierCounter()>0)
 				{%>
 					switchToTab("consentTab");
 				<%}
@@ -664,8 +670,8 @@ function updateHelpURL()
 	%>
 
 	<%
-			if(pageView.equals("edit"))
-			{
+	   if(pageView.equals("edit"))
+	  {
 		%>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="maintable">
 	  <tr>
