@@ -25,6 +25,7 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.CpSyncAudit;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -749,11 +750,15 @@ public class ParticipantBizLogic extends CatissueDefaultBizLogic
 					throw this.getBizLogicException(null, "cp.disabled", "");
 				}
 				SynchronizeCollectionProtocolBizLogic synchronizeCollectionProtocolBizLogic=new SynchronizeCollectionProtocolBizLogic();
-				String syncStatus=synchronizeCollectionProtocolBizLogic.getSyncStatus((Long) objCP[0]).getStatus();
-				if("In Process".equalsIgnoreCase(syncStatus))
-				{
-					throw this.getBizLogicException(null, "errors.collectionprotocolregistration.syncinprocess", "");
-				}
+				CpSyncAudit cpSyncAudit=synchronizeCollectionProtocolBizLogic.getSyncStatus((Long) objCP[0]);
+				if(cpSyncAudit!=null)
+				{	
+					String syncStatus=cpSyncAudit.getStatus();
+					if("In Process".equalsIgnoreCase(syncStatus))
+					{
+						throw this.getBizLogicException(null, "errors.collectionprotocolregistration.syncinprocess", "");
+					}
+				}	
 			}
 			else
 			{

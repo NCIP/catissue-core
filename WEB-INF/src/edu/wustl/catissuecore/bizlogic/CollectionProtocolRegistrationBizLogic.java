@@ -1593,11 +1593,15 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 		else
 		{
 			SynchronizeCollectionProtocolBizLogic synchronizeCollectionProtocolBizLogic=new SynchronizeCollectionProtocolBizLogic();
-			String syncStatus=synchronizeCollectionProtocolBizLogic.getSyncStatus(registration.getCollectionProtocol().getId()).getStatus();
-			if("In Progress".equalsIgnoreCase(syncStatus))
-			{
-				throw this.getBizLogicException(null, "errors.collectionprotocolregistration.syncinprocess", "");
-			}
+			CpSyncAudit cpSyncAudit = synchronizeCollectionProtocolBizLogic.getSyncStatus(registration.getCollectionProtocol().getId());
+			if(cpSyncAudit!=null)
+			{	
+				String syncStatus=cpSyncAudit.getStatus();
+				if("In Progress".equalsIgnoreCase(syncStatus))
+				{
+					throw this.getBizLogicException(null, "errors.collectionprotocolregistration.syncinprocess", "");
+				}
+			}	
 			
 		}
 		final String errorKey = validator.validateDate(CommonUtilities.parseDateToString(
