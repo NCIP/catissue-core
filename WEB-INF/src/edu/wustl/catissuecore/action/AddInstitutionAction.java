@@ -53,7 +53,7 @@ public class AddInstitutionAction extends CatissueAddEditAction
 		institutionForm.setOperation(Constants.ADD);
 		institutionForm.setName(institutionName);
 
-		final ActionForward forward = super.executeXSS(mapping, institutionForm, request, response);
+		final ActionForward forward = super.executeSecureAction(mapping, institutionForm, request, response);
 
 		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{

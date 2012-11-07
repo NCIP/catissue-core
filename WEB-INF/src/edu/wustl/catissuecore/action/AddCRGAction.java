@@ -52,7 +52,7 @@ public class AddCRGAction extends CatissueAddEditAction
 		crgForm.setOperation(Constants.ADD);
 		crgForm.setName(crgName);
 
-		final ActionForward forward = super.executeXSS(mapping, crgForm, request, response);
+		final ActionForward forward = super.executeSecureAction(mapping, crgForm, request, response);
 
 		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{

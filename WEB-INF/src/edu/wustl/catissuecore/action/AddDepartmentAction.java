@@ -56,7 +56,7 @@ public class AddDepartmentAction extends CatissueAddEditAction
 		departmentForm.setName(departmentName);
 
 		// Saving the department to the Database using COmmonAddEditAction
-		final ActionForward forward = super.executeXSS(mapping, departmentForm, request, response);
+		final ActionForward forward = super.executeSecureAction(mapping, departmentForm, request, response);
 		if ((forward != null) && (forward.getName().equals(Constants.FAILURE)))
 		{
 			responseString = AppUtility.getResponseString(request, responseString);
