@@ -42,7 +42,7 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 <script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
 <script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
 <script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
+
 
 
 <link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
@@ -137,9 +137,9 @@ if(Constants.TRUE.equals(request.getParameter("isClinicalDataEntry")))
 <script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
 <script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
 
-<logic:equal name="IsToShowButton" value="true">
+
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
-</logic:equal>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
