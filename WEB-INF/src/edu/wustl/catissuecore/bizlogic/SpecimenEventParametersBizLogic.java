@@ -1492,7 +1492,13 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 			
 			
 		}catch (final ApplicationException exp){
-			String msgString = exp.getErrorKey()!=null ? exp.getErrorKey().getErrorMessage() :  exp.getMsgValues();
+			String msgString = "";
+			if(exp.getErrorKey()!=null ){
+				msgString= exp.getErrorKey().getMessageWithValues();
+			}else{
+				msgString = exp.getMsgValues();
+			}
+			
 			throw new BizLogicException(exp.getErrorKey(), exp, msgString);
 		}
 		finally {
