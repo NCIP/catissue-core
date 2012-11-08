@@ -282,7 +282,7 @@ function orderToList()
 	}
 	else
 	{
-		var action="AddToOrderListSpecimen.do?typeOf=specimen";
+		var action="AddToOrderListSpecimen.do?typeOf=specimen&requestFromPage=${requestScope.requestFromPage}";
 		document.OrderSpecimen.action = action ;		
 		document.OrderSpecimen.submit();
 	}

@@ -76,6 +76,7 @@ public class RequestToOrderAction extends BaseAction
 		final List distributionProtocolList = orderBizLogic.loadDistributionProtocol(
 				loggedInUserID, role.getName(), sessionLoginInfo);
 		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, distributionProtocolList);
+		request.setAttribute("requestFromPage",request.getParameter("requestFromPage"));
 		return mapping.findForward("requestOrderPage");
 	}
 

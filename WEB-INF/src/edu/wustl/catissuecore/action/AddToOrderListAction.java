@@ -195,7 +195,10 @@ public class AddToOrderListAction extends BaseAction
 					}
 				}// End if(remove == "yes")
 			}// End else
-
+			if(request.getParameter("requestFromPage")!=null &&  "specimenListView".equalsIgnoreCase(request.getParameter("requestFromPage")))
+ 			{
+				target=request.getParameter("requestFromPage");	
+ 			}
 			this.logger.debug(" End --------- In AddToOrderListAction.java ");
 			return mapping.findForward(target);
 		}

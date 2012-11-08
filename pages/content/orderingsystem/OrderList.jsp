@@ -29,6 +29,9 @@ if(request.getAttribute("typeOf").equals("specimenArray"))
 if(request.getAttribute("typeOf").equals("pathologyCase"))
 	req="pathologyCase";
 String enable="false";
+String requestFromPage=(String)request.getAttribute("requestFromPage");
+System.out.println("----------------------");
+System.out.println(requestFromPage);
 %>
 
 
@@ -59,10 +62,11 @@ String enable="false";
 	//Store the requested order items in the database.
 	function onOrder()
 	{
+		
 		var action;
 		var temp='<%=req%>';
 		if(temp=="specimen")
-			action = "<%= Constants.ACTION_SAVE_ORDER_ITEM %>"+"?typeOf=specimen";
+			action = "<%= Constants.ACTION_SAVE_ORDER_ITEM %>"+"?typeOf=specimen"+"&requestFromPage="+'<%=requestFromPage%>';
 		if(temp=="specimenArray")
 			action = "<%= Constants.ACTION_SAVE_ORDER_ARRAY_ITEM %>"+"?typeOf=specimenArray";
 

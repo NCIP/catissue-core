@@ -47,6 +47,7 @@ public class SaveOrderInitAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		
 		final HttpSession session = request.getSession();
 		final String temp = request.getParameter("typeOf");
 		//for specimen
@@ -96,7 +97,12 @@ public class SaveOrderInitAction extends BaseAction
 				}
 				pathologyObject.setDefineArrayObj(arrayFormObj);
 			}
-			return mapping.findForward("success");
+			String target="success";
+			if(request.getParameter("requestFromPage")!=null &&  "specimenListView".equalsIgnoreCase(request.getParameter("requestFromPage")))
+ 			{
+				target=request.getParameter("requestFromPage");	
+ 			}
+			return mapping.findForward(target);
 		}
 		else
 		{

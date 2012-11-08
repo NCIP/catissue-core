@@ -47,6 +47,7 @@ public class OrderSpecimenInitAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+				
 		final OrderSpecimenForm spec = (OrderSpecimenForm) form;
 		final HttpSession session = request.getSession();
 		spec.setTypeOfSpecimen("existingSpecimen");
@@ -95,6 +96,7 @@ public class OrderSpecimenInitAction extends BaseAction
 		{
 			target = Constants.FAILURE;
 		}
+		request.setAttribute("requestFromPage", request.getParameter("requestFromPage"));
 		return mapping.findForward(target);
 	}
 

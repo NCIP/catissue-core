@@ -34,7 +34,7 @@ public class RequestToOrderSubmitAction extends BaseAction
 
 		final OrderForm requestOrder = (OrderForm) form;
 		final HttpSession session = request.getSession();
-
+		request.setAttribute("requestFromPage", request.getParameter("requestFromPage"));	
 		session.setAttribute("OrderForm", requestOrder);
 		return mapping.findForward("orderExistingAction");
 	}
