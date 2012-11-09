@@ -377,5 +377,15 @@
          
 
     </class>
+<query name="getStorageContainerLabellingSchemesByName">
+SELECT oneDimensionLabellingScheme,twoDimensionLabellingScheme FROM edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.name= ?
+</query>
+
+<query name="getStorageContainerLabellingSchemesById">
+SELECT oneDimensionLabellingScheme,twoDimensionLabellingScheme FROM edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.id= ?
+</query>
+
+<query name="getStorageContainerIdByContainerName">Select ST.id from edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.name= ?
+</query>
 
 </hibernate-mapping>

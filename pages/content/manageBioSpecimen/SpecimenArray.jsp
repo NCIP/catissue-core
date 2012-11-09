@@ -280,7 +280,7 @@ function checkStotagePosition()
 					String rowNumber = "1";
 					String styClass = "formFieldSized5";
 					String tdStyleClass = "customFormField";
-					String onChange = "onCustomListBoxChange(this)";
+					String onChange = "onCustomListBoxChangeForContainer(this)";
 					String arrayTypeId = form.getSpecimenArrayTypeId()+"";
 					String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
 							+ "&" + Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE +"=" + arrayTypeId;

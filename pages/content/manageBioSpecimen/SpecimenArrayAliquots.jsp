@@ -338,7 +338,7 @@ function mapButtonClickedInAliquot(frameUrl,count)
 						String noOfEmptyCombos = "3";
 						String styClass = "formFieldSized5";
 						String tdStyleClass = "customFormField";
-						String onChange = "onCustomListBoxChange(this)";
+						String onChange = "onCustomListBoxChangeForContainer(this)";
 
 						String containerStyleId = "customListBox_" + rowNumber + "_0";
 						String pos1StyleId = "customListBox_" + rowNumber + "_1";

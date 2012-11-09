@@ -8,9 +8,11 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.domain.CellSpecimen;
@@ -44,10 +46,13 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.DBTypes;
 import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.privilege.PrivilegeCache;
 import edu.wustl.security.privilege.PrivilegeManager;
@@ -993,6 +998,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 	 */
 	private void retriveScId(DAO dao, SpecimenArray specimenArray) throws BizLogicException
 	{
+		HibernateDAO hibernateDAO=(HibernateDAO) dao;
 		try
 		{
 			String message = null;
@@ -1007,20 +1013,17 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				final String sourceObjectName = StorageContainer.class.getName();
 				final String[] selectColumnName = {"id"};
 
-				// String[] whereColumnName = {"name"};
-				// String[] whereColumnCondition = {"="};
-				// Object[] whereColumnValue =
-				// {specimenArray.getLocatedAtPosition
-				// ().getParentContainer().getName()};
-				// String joinCondition = null;
-
 				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
 				queryWhereClause.addCondition(new EqualClause("name", specimenArray
 						.getLocatedAtPosition().getParentContainer().getName()));
 
-				final List list = dao
-						.retrieve(sourceObjectName, selectColumnName, queryWhereClause);
-
+				// Create a map of substitution parameters.
+				Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+				substParams.put("0", new NamedQueryParam(DBTypes.STRING, specimenArray
+						.getLocatedAtPosition().getParentContainer().getName()));
+				
+				final List list=hibernateDAO.executeNamedQuery("getStorageContainerIdByContainerName", substParams);
+				
 				if (!list.isEmpty())
 				{
 					storageContainerObj.setId((Long) list.get(0));

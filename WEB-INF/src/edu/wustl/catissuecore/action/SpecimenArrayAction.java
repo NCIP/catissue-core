@@ -209,23 +209,14 @@ public class SpecimenArrayAction extends SecureAction
 			final StorageContainerForSpArrayBizLogic storageContainerBizLogic = new StorageContainerForSpArrayBizLogic();
 			containerMap = storageContainerBizLogic.getAllocatedContainerMapForSpecimenArray(
 					specimenArrayForm.getSpecimenArrayTypeId(), sessionData,
-					dao,contName);
+					dao);
 			request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 			request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 
 			List initialValues = null;
 			if (isChangeArrayType)
 			{
-				//initialValues = StorageContainerUtil.checkForInitialValues(containerMap);
-				String containerName = StorageContainerUtil
-						.checkForInitialValuesForDisplay(containerMap);
-				final String[] startingPoints1 = new String[3];
-				startingPoints1[0] =containerName;
-				startingPoints1[1]="";
-				startingPoints1[2]="";
-				initialValues = new ArrayList<String[]>();
-				initialValues.add(startingPoints1);
-				
+				initialValues = StorageContainerUtil.checkForInitialValues(containerMap);				
 			}
 			else
 			{

@@ -233,7 +233,7 @@ public class CreateArrayInitAction extends BaseAction
 					containerMap = spizLogic
 							.getAllocatedContainerMapForSpecimenArray(specimenArrayForm
 									.getSpecimenArrayTypeId(), sessionData,
-									dao,contName);
+									dao);
 					request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 

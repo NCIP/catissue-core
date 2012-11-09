@@ -162,7 +162,7 @@ public class SpecimenArrayAliquotAction extends CatissueBaseAction
 					// Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 					final Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
 					containerMap = bizLogic.getAllocatedContainerMapForSpecimenArray(
-							id.longValue(), sessionData, dao,contName);
+							id.longValue(), sessionData, dao);
 					this.populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 					request.setAttribute(Constants.PAGE_OF,
@@ -255,7 +255,7 @@ public class SpecimenArrayAliquotAction extends CatissueBaseAction
 								.getAliquotCount());
 						final Long id = (Long) request.getAttribute(Constants.STORAGE_TYPE_ID);
 						containerMap = bizLogic.getAllocatedContainerMapForSpecimenArray(id
-								.longValue(), sessionData, dao,contName);
+								.longValue(), sessionData, dao);
 						pageOf = this.checkForSufficientAvailablePositions(request, containerMap,
 								aliquotCount);
 

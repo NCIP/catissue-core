@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -45,6 +46,7 @@ import edu.wustl.common.exception.ErrorKey;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
@@ -53,6 +55,8 @@ import edu.wustl.dao.condition.NullClause;
 import edu.wustl.dao.daofactory.DAOConfigFactory;
 import edu.wustl.dao.exception.DAOException;
 import edu.wustl.dao.query.generator.ColumnValueBean;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 
 public final class StorageContainerUtil
 {
@@ -551,9 +555,9 @@ public final class StorageContainerUtil
 
 		final boolean[][] availablePosistions = getAvailablePositionsForContainer(containerId,
 				dimX, dimY, dao);
-		List labellingList=getLabellingSchemeByContainerId(containerId);
-		String oneDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(0);
-		String twoDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(1);
+		List<String> labellingList=getLabellingSchemeByContainerId(containerId);
+		String oneDimensionLabellingScheme=labellingList.get(0);//(String) ((ArrayList)labellingList.get(0)).get(0);
+		String twoDimensionLabellingScheme=labellingList.get(1);//(String) ((ArrayList)labellingList.get(0)).get(1);
 		for (int x = 1; x < availablePosistions.length; x++)
 		{
 
@@ -2989,8 +2993,8 @@ public final class StorageContainerUtil
 		if(containerName!=null && !"".equals(containerName))
 		{	
 			labellingSchemesList = getLabellingSchemeByContainerName(containerName);
-			String oneDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(0);
-			String twoDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(1);
+			String oneDimensionLabellingScheme=(String) labellingSchemesList.get(0);//((ArrayList)labellingSchemesList.get(0)).get(0);
+			String twoDimensionLabellingScheme=(String) labellingSchemesList.get(1);//((ArrayList)labellingSchemesList.get(0)).get(1);
 			if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) || 
 					oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE))
 			{
@@ -3028,8 +3032,8 @@ public final class StorageContainerUtil
 		if(containerId!=null && !"".equals(containerId))
 		{
 			labellingSchemesList = getLabellingSchemeByContainerId(containerId);
-			String oneDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(0);
-			String twoDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(1);
+			String oneDimensionLabellingScheme=(String) labellingSchemesList.get(0);// ((ArrayList)labellingSchemesList.get(0)).get(0);
+			String twoDimensionLabellingScheme=(String) labellingSchemesList.get(1);// ((ArrayList)labellingSchemesList.get(0)).get(1);
 			if(pos1String!=null && !"".equals(pos1String))
 			{
 				if(oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) || 
@@ -3074,8 +3078,8 @@ public final class StorageContainerUtil
 		if(containerName!=null && !"".equals(containerName))
 		{
 			labellingSchemesList = getLabellingSchemeByContainerName(containerName);
-			String oneDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(0);
-			String twoDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(1);
+			String oneDimensionLabellingScheme=(String) labellingSchemesList.get(0);//((ArrayList)labellingSchemesList.get(0)).get(0);
+			String twoDimensionLabellingScheme=(String) labellingSchemesList.get(1);//((ArrayList)labellingSchemesList.get(0)).get(1);
 			if(pos1String!=null && !"".equals(pos1String))
 			{
 				if(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE.equals(oneDimensionLabellingScheme))
@@ -3126,34 +3130,84 @@ public final class StorageContainerUtil
 	}
 
 
-	public static List getLabellingSchemeByContainerName(String containerName)
+	public static List<String>  getLabellingSchemeByContainerName(String containerName)
 	{
 		List labellingSchemesList=null;
+		HibernateDAO hibernateDao=null;
+		// Create a map of substitution parameters.
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.STRING, containerName));
 		try
 		{
-			labellingSchemesList = AppUtility.executeSQLQuery("SELECT ONE_DIMENSION_LABELLING_SCHEME,TWO_DIMENSION_LABELLING_SCHEME FROM CATISSUE_STORAGE_CONTAINER ST,CATISSUE_CONTAINER CONT WHERE ST.IDENTIFIER=CONT.IDENTIFIER AND NAME='"+containerName+"'");
+			hibernateDao=(HibernateDAO) AppUtility.openDAOSession(null);
+			labellingSchemesList=hibernateDao.executeNamedQuery("getStorageContainerLabellingSchemesByName", substParams);
 		}
 		catch (ApplicationException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return labellingSchemesList;
+		finally
+		{
+			try
+			{
+				if(hibernateDao!=null)
+				{
+					AppUtility.closeDAOSession(hibernateDao);
+				}
+			}
+			catch (ApplicationException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return extractLabellingSchemes(labellingSchemesList);
 	}
 	
-	public static List getLabellingSchemeByContainerId(String containerId)
+	public static List<String> getLabellingSchemeByContainerId(String containerId)
 	{
 		List labellingSchemesList=null;
+		HibernateDAO hibernateDao=null;
+		// Create a map of substitution parameters.
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.STRING, containerId));
 		try
 		{
-			labellingSchemesList = AppUtility.executeSQLQuery("SELECT ONE_DIMENSION_LABELLING_SCHEME,TWO_DIMENSION_LABELLING_SCHEME FROM CATISSUE_STORAGE_CONTAINER ST,CATISSUE_CONTAINER CONT WHERE ST.IDENTIFIER=CONT.IDENTIFIER AND ST.IDENTIFIER="+containerId+"");
+			hibernateDao=(HibernateDAO) AppUtility.openDAOSession(null);
+			labellingSchemesList=hibernateDao.executeNamedQuery("getStorageContainerLabellingSchemesById", substParams);
 		}
 		catch (ApplicationException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return labellingSchemesList;
+		finally
+		{
+			try
+			{
+				if(hibernateDao!=null)
+				{
+					AppUtility.closeDAOSession(hibernateDao);
+				}
+			}
+			catch (ApplicationException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return extractLabellingSchemes(labellingSchemesList);
+	}
+
+	private static List<String> extractLabellingSchemes(List labellingSchemesList)
+	{
+		List labellingList=null;
+		if(labellingSchemesList!=null && !labellingSchemesList.isEmpty())
+		{
+			Object[] objArr=(Object[]) labellingSchemesList.get(0);
+			labellingList=new ArrayList();
+			//labellingList.add(objArr);
+			labellingList.add(objArr[0].toString());
+			labellingList.add(objArr[1].toString());
+		}
+		return labellingList;
 	}
 	
 	public static List<NameValueBean> getLabellingSchemeOptions()
@@ -3178,7 +3232,7 @@ public final class StorageContainerUtil
 		String position;
 		List labellingSchemesList=null;
 		labellingSchemesList = getLabellingSchemeByContainerName(containerName);
-		String dimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(labellingDimension-1);
+		String dimensionLabellingScheme=(String) labellingSchemesList.get(labellingDimension-1);
 		position=AppUtility.getPositionValue(dimensionLabellingScheme, pos);
 		return position;
 	}
@@ -3188,7 +3242,7 @@ public final class StorageContainerUtil
 		Integer position;
 		List labellingSchemesList=null;
 		labellingSchemesList = getLabellingSchemeByContainerName(containerName);
-		String dimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(labellingDimension-1);
+		String dimensionLabellingScheme=(String) labellingSchemesList.get(labellingDimension-1);
 		position=AppUtility.getPositionValueInInteger(dimensionLabellingScheme, pos);
 		return position;
 	}
@@ -3198,7 +3252,7 @@ public final class StorageContainerUtil
 		Integer position;
 		List labellingSchemesList=null;
 		labellingSchemesList = getLabellingSchemeByContainerId(containerId);
-		String dimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(labellingDimension-1);
+		String dimensionLabellingScheme=(String)labellingSchemesList.get(labellingDimension-1);
 		position=AppUtility.getPositionValueInInteger(dimensionLabellingScheme, pos);
 		return position;
 	}

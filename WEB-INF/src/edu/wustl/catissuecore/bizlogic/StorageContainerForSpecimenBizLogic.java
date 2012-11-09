@@ -131,8 +131,8 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 				final boolean[][] storagePositions = StorageContainerUtil. getAvailablePositionsForContainer(containerId.toString(),
 						positionDimensionOne+1, positionDimensionTwo+1, dao);
 				List labellingList=StorageContainerUtil.getLabellingSchemeByContainerId(containerId.toString());
-				String oneDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(0);
-				String twoDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(1);
+				String oneDimensionLabellingScheme=(String) labellingList.get(0);//((ArrayList)labellingList.get(0)).get(0);
+				String twoDimensionLabellingScheme=(String) labellingList.get(1);//((ArrayList)labellingList.get(0)).get(1);
 				Integer pos1Integer = "".equals(pos1) || pos1 == null ?1: AppUtility.getPositionValueInInteger(oneDimensionLabellingScheme, pos1);
 				Integer pos2Integer = "".equals(pos2) || pos2 == null ?1:AppUtility.getPositionValueInInteger(twoDimensionLabellingScheme, pos2);
 				
