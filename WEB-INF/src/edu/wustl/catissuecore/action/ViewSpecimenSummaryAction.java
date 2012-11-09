@@ -460,8 +460,8 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			if(null!=derivedSessionVO.getSelectedContainerName() && !"".equalsIgnoreCase(derivedSessionVO.getSelectedContainerName())  && !"Virtual".equals(derivedSessionVO.getSelectedContainerName()))
 			{
 				labellingSchemesList=StorageContainerUtil.getLabellingSchemeByContainerName(derivedSessionVO.getSelectedContainerName());
-				String oneDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(0);
-				String twoDimensionLabellingScheme=(String) ((ArrayList)labellingSchemesList.get(0)).get(1);
+				String oneDimensionLabellingScheme=(String) labellingSchemesList.get(0);//((ArrayList)labellingSchemesList.get(0)).get(0);
+				String twoDimensionLabellingScheme=(String) labellingSchemesList.get(1);//((ArrayList)labellingSchemesList.get(0)).get(1);
 				if(!"".equals(derivedFormVO.getPositionDimensionOne()) && (oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) || 
 						oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE)))
 				{

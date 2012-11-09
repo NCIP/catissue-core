@@ -1031,8 +1031,8 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			if(!isContainerEmpty)
 			{
 				List labellingList=StorageContainerUtil.getLabellingSchemeByContainerId(container.getId().toString());
-				String oneDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(0);
-				String twoDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(1);
+				String oneDimensionLabellingScheme=(String) labellingList.get(0);// ((ArrayList)labellingList.get(0)).get(0);
+				String twoDimensionLabellingScheme=(String) labellingList.get(1);//((ArrayList)labellingList.get(0)).get(1);
 
 				if(!oneDimensionLabellingScheme.equals(container.getOneDimensionLabellingScheme()) 
 						|| !twoDimensionLabellingScheme.equals(container.getTwoDimensionLabellingScheme()))
