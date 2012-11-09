@@ -2,7 +2,7 @@
  * Created on Jul 29, 2005
  *<p>SpecimenEventParametersBizLogic Class</p>
  * This class contains the Biz Logic for all EventParameters Classes.
- * This will be the class which will be used for datatransactions of the EventParameters.
+ * This will be the class which will be used for data transactions of the EventParameters.
  */
 
 package edu.wustl.catissuecore.bizlogic;
@@ -550,30 +550,38 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				if (specimenEventParameters instanceof TransferEventParameters)
 				{
 					final TransferEventParameters trEvent = (TransferEventParameters) specimenEventParameters;
+					if(trEvent.getToStorageContainer()!=null)
+					{
 					//Bug 15392
 					pos1 = trEvent.getToPositionDimensionOne();
 					pos2 = trEvent.getToPositionDimensionTwo();
 					if(((pos1 == null || pos2 == null) && i!=0))
 					{
-						String prevToStrContName = ((TransferEventParameters)(events.get(i-1))).
-									getToStorageContainer().getName();
-						String toStrContName = trEvent.getToStorageContainer().getName();
-						if((!Validator.isEmpty(prevToStrContName))
-							&& (!Validator.isEmpty(toStrContName))
-								&& (toStrContName.equals(prevToStrContName)))
+						if(((TransferEventParameters)(events.get(i-1))).getToStorageContainer()!=null)
 						{
-							pos1 = ((TransferEventParameters)(events.get(i-1))).getToPositionDimensionOne();
-							pos2 = ((TransferEventParameters)(events.get(i-1))).getToPositionDimensionTwo();
+							String prevToStrContName = ((TransferEventParameters)(events.get(i-1))).
+										getToStorageContainer().getName();
+							String toStrContName = trEvent.getToStorageContainer().getName();
+							if((!Validator.isEmpty(prevToStrContName))
+								&& (!Validator.isEmpty(toStrContName))
+									&& (toStrContName.equals(prevToStrContName)))
+							{
+								pos1 = ((TransferEventParameters)(events.get(i-1))).getToPositionDimensionOne();
+								pos2 = ((TransferEventParameters)(events.get(i-1))).getToPositionDimensionTwo();
+							}
 						}
 					}
-					eventNumber = (Integer) containerEventNumberMap.get(trEvent
-							.getToStorageContainer().getName());
-					if (eventNumber == null)
-					{
-						eventNumber = Integer.valueOf(0);
+					
+							eventNumber = (Integer) containerEventNumberMap.get(trEvent
+									.getToStorageContainer().getName());
+						
+						if (eventNumber == null)
+						{
+							eventNumber = Integer.valueOf(0);
+						}
+						containerEventNumberMap.put(trEvent.getToStorageContainer().getName(), Integer
+								.valueOf(eventNumber.intValue() + 1));
 					}
-					containerEventNumberMap.put(trEvent.getToStorageContainer().getName(), Integer
-							.valueOf(eventNumber.intValue() + 1));
 				}
 				else
 				{
@@ -738,11 +746,11 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 						.getValue("transfereventparameters.toposition"));
 			}
 		}
-		else if(parameter.getToStorageContainer() == null || ("").equals(parameter.getToStorageContainer()))
+		/*else if(parameter.getToStorageContainer() == null || ("").equals(parameter.getToStorageContainer()))
 		{
 			throw this.getBizLogicException(null, "errors.item.format",ApplicationProperties
 					.getValue("transfereventparameters.toposition"));
-		}
+		}*/
 		if (Constants.EDIT.equals(operation))
 		{
 			//validateTransferEventParameters(eventParameter);
@@ -1455,8 +1463,8 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				transferEventParameters.setFromStorageContainer(specimen.getSpecimenPosition().getStorageContainer());
 			}
 			List labellingList=StorageContainerUtil.getLabellingSchemeByContainerId(String.valueOf(storageContainerList.get(0).getId()));
-			String oneDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(0);
-			String twoDimensionLabellingScheme=(String) ((ArrayList)labellingList.get(0)).get(1);
+			String oneDimensionLabellingScheme=(String) labellingList.get(0);//((ArrayList)labellingList.get(0)).get(0);
+			String twoDimensionLabellingScheme=(String) labellingList.get(1);//((ArrayList)labellingList.get(0)).get(1);
 			Integer pos1Integer;
 			Integer pos2Integer;
 			if( "".equals(pos1) || "".equals(pos2) || pos1 == null || pos2 == null){
