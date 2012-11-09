@@ -474,7 +474,7 @@ function pageSubmit() {
 
 	}
 	function onParentRadioBtnClick() {
-		var url = 'GenericSpecimenSummary.do?isSubmitRequest=false&IsToShowButton=true&pageOf=specimenSummaryPage';
+		var url = 'GenericSpecimenSummary.do?isSubmitRequest=false&IsToShowButton=false&pageOf=specimenSummaryPage';
 <%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {%>
 			 url = 	'GenericSpecimenSummaryForSpecimen.do?pageOf=<%=Constants.CP_CHILD_SUBMIT%>&isSubmitRequest=false';
 			<%}%>
