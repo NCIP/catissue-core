@@ -94,14 +94,14 @@ public class BulkCartAction extends QueryShoppingCartAction
 				|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT_REQUEST
 						.equals(operation))
 		{
-			if(specimenIds == null)
-			{
+		//	if(specimenIds == null)
+			//{
 				target = this.createShipment(searchForm, session, operation);
-			}
-			else
-			{
-				target = this.createShipment((LinkedList<String>)specimenIds, operation,session);
-			}
+			//}
+		//	else
+			//{
+			//	target = this.createShipment((LinkedList<String>)specimenIds, operation,session);
+			//}
 		}
 		else if (Constants.REQUEST_TO_DISTRIBUTE.equals(operation))
 		{
