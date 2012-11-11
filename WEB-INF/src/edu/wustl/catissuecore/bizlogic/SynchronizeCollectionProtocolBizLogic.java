@@ -94,7 +94,7 @@ public class SynchronizeCollectionProtocolBizLogic extends CatissueDefaultBizLog
 	}
 	public CpSyncAudit getSyncStatus(Long cpId) throws BizLogicException 
 	{
-		DAO dao;
+		DAO dao=null;
 		CpSyncAudit cpSyncAudit=null;
 		try
 		{
@@ -108,6 +108,20 @@ public class SynchronizeCollectionProtocolBizLogic extends CatissueDefaultBizLog
 		} catch (DAOException e)
 		{
 			throw new BizLogicException(e);
+		}
+		finally
+		{
+			if(dao!=null)
+			{
+			  try	
+			  {
+				  dao.closeSession();
+			  }
+			  catch (DAOException e)
+			  {
+				throw new BizLogicException(e);
+			  }
+			}
 		}
 		return cpSyncAudit;
 	}
