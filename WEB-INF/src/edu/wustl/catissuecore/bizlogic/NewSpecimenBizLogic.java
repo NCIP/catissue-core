@@ -2984,6 +2984,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		this.validateFields(specimen, dao, partOfMulipleSpecimen);
 		this.validateEnumeratedData(specimen, operation, validator);
 		this.validateSpecimenCharacterstics(specimen);
+		this.validateSpecimenInputAsPerSecurity(specimen);
 		validateLabelForSingleSpecimen(specimen);
 		if (operation.equals(Constants.ADD))
 		{
@@ -3370,6 +3371,43 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		}
 	}
 
+	
+	/**
+	 * Validate specimen inputs as per security.
+	 *
+	 * @param specimen Specimen to validate
+	 *
+	 * @throws BizLogicException Database related exception
+	 */
+	private void validateSpecimenInputAsPerSecurity(Specimen specimen) throws BizLogicException
+	{
+
+		if(!Validator.isValidAsPerSecurity(specimen.getClassName())
+				||!Validator.isValidAsPerSecurity(specimen.getClassName())
+				||!Validator.isValidAsPerSecurity(specimen.getSpecimenType())
+				||!Validator.isValidAsPerSecurity(specimen.getSpecimenCharacteristics().getTissueSide())
+				||!Validator.isValidAsPerSecurity(specimen.getSpecimenCharacteristics().getTissueSite())
+				||!Validator.isValidAsPerSecurity(specimen.getPathologicalStatus())
+				||!Validator.isValidAsPerSecurity(specimen.getInitialQuantity().toString())
+				||!Validator.isValidAsPerSecurity(specimen.getComment())
+				)
+		{
+			throw this.getBizLogicException(null, "errors.xssvulnerable", "");
+		}
+		if(specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED) 
+				&& !Validator.isValidAsPerSecurity(specimen.getCreatedOn().toString()))
+		{
+			throw this.getBizLogicException(null, "errors.xssvulnerable", "");
+		}	
+		if(specimen instanceof MolecularSpecimen)
+		{
+			MolecularSpecimen mspecimen=(MolecularSpecimen) specimen;
+			if(!Validator.isValidAsPerSecurity(mspecimen.getConcentrationInMicrogramPerMicroliter().toString()))
+			{
+				throw this.getBizLogicException(null, "errors.xssvulnerable", "");
+			}
+		}	
+	}
 	/**
 	 * Validate specimen event.
 	 *
