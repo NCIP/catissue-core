@@ -119,17 +119,20 @@ public class RequestDetailsAction extends BaseAction
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 			{
-		
 		String splvar = request.getParameter("splvar");
 		if(splvar != null)
 		{
 			HttpSession session = request.getSession();
-			
 			JSONObject mainJsonRow = new JSONObject();
 			mainJsonRow = (JSONObject)session.getAttribute("jsonData");
 			response.setContentType(Constants.JSON_CONTENT_TYPE);
 			response.getWriter().write(mainJsonRow.toString());
 			return null;
+		}
+		String dpDropDownValChgd=request.getParameter("isOnChange");
+		if(!"true".equals(dpDropDownValChgd))
+		{
+			saveToken(request);
 		}
 		String selectedTab = request.getParameter("selectedTab");
 		String arrTabId = request.getParameter("arrTabId"); 
@@ -145,7 +148,6 @@ public class RequestDetailsAction extends BaseAction
 		// The request Id on which the user has clicked
 		String requestId = "";
 		String orderDetailsId = "";
-		saveToken(request);
 		if (request.getParameter("id") != null && !request.getParameter("id").equals("0"))
 		{
 			orderDetailsId = request.getParameter("id");
