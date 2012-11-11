@@ -1010,13 +1010,6 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 				final StorageContainer storageContainerObj = (StorageContainer) HibernateMetaData
 						.getProxyObjectImpl(specimenArray.getLocatedAtPosition()
 								.getParentContainer());
-				final String sourceObjectName = StorageContainer.class.getName();
-				final String[] selectColumnName = {"id"};
-
-				final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-				queryWhereClause.addCondition(new EqualClause("name", specimenArray
-						.getLocatedAtPosition().getParentContainer().getName()));
-
 				// Create a map of substitution parameters.
 				Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
 				substParams.put("0", new NamedQueryParam(DBTypes.STRING, specimenArray
