@@ -105,7 +105,7 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
     	valueString.append("\"").append(collectionProtocol.getTitle()).append("\"").append(",");
     	
     	//headerDataMap.put("STitle",collectionProtocol.getShortTitle());
-    	headerString.append("STitle").append(",");
+    	headerString.append("Short Title").append(",");
     	valueString.append("\"").append(collectionProtocol.getShortTitle()).append("\"").append(",");
     	
     	if(collectionProtocol.getIrbIdentifier()!=null)
@@ -164,11 +164,11 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
         	valueString.append("\"").append(collectionProtocolEvent.getStudyCalendarEventPoint().toString()).append("\"").append(",");
         	
     		//headerDataMap.put("CPL#"+eventsCount,collectionProtocolEvent.getCollectionPointLabel());
-        	headerString.append("CPL#").append(eventsCount).append(",");
+        	headerString.append("Collection Point Label#").append(eventsCount).append(",");
         	valueString.append("\"").append(collectionProtocolEvent.getCollectionPointLabel()).append("\"").append(",");
         	
     		//headerDataMap.put("CS#"+eventsCount,collectionProtocolEvent.getClinicalStatus());
-        	headerString.append("CS#").append(eventsCount).append(",");
+        	headerString.append("Clinical Status#").append(eventsCount).append(",");
         	valueString.append("\"").append(collectionProtocolEvent.getClinicalStatus()).append("\"").append(",");
         	
     		//headerDataMap.put("ActivityStatus#"+eventsCount,collectionProtocolEvent.getActivityStatus());
