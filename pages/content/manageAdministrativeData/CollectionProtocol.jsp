@@ -148,7 +148,7 @@ function doOnLoad()
 	ppGrid = initDropDownGrid(parentProtocolDropDownInfo); //initialize DropDown control for priciple Investigator
 	enableDisableParentProtocol('${collectionProtocolForm.type}');
 	
-	//initializing tab buttons
+//initializing tab buttons
 	tabbar = new dhtmlXTabBar("tabbar_div", "top");
 	tabbar.setSkin('dhx_skyblue');
 	tabbar.setImagePath("dhtmlx_suite/imgs/");
@@ -164,6 +164,8 @@ function doOnLoad()
 	tabbar.setContent("consentTab","consentDiv");
 	tabbar.setContent("privilege","previlegDiv");
 	tabbar.setContent("defineDashboardItemsTab","dashbordDiv");
+    tabbar.enableAutoReSize(true);
+    tabbar.showInnerScroll();
 	var url = "DefineEvents.do?pageOf=pageOfAssignPrivilegePage&cpOperation=AssignPrivilegePage&operation=${requestScope.operation}";
 
 	if('${requestScope.tabSel}'=='consentTab') 
@@ -261,13 +263,17 @@ div#d999 {
 
 <html:form action='${requestScope.formName}'
 	styleId="CollectionProtocolForm">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-		<tr>
-			<td><%@ include file="/pages/content/common/ActionErrors.jsp"%>
-			<table width="100%" border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td width="100%" >
-						<div id="tabbar_div" style="width:auto;height:600px;"/>
+
+   <table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
+		<tr height="100%">
+			<td height="100%">
+                             
+                         <%@ include file="/pages/content/common/ActionErrors.jsp"%>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
+				<tr height="100%">
+					<td width="100%" height="100%" >
+						<div id="tabbar_div" style="width:auto;height:100%;">
+
 					</td>
 				</tr>
 			</table>
@@ -275,9 +281,7 @@ div#d999 {
 		</tr>
 		</table>
 		
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-		<tr>
-			<td class="cp_tabtable" colspan="6"><br>
+		
 			<div id="collectionProtocolContentDiv">
 			<table width="100%" border="0" cellpadding="3" cellspacing="0"
 				id="table1">
@@ -632,8 +636,8 @@ div#d999 {
 				</tr>
 			</table>
 			</div>
-			<div id="consentDiv">
-				<%@ include file="/pages/content/ConsentTracking/DefineConsent.jsp"%>
+			<div id="consentDiv" height="100%" overflow="auto">
+				<%@ include file="/pages/content/ConsentTracking/DefineConsent.jsp"%> </div>
 			</div>	
 			<div id="dashbordDiv">
 				<%@ include file="/pages/content/manageAdministrativeData/ConfigureCPDashboard.jsp" %>
