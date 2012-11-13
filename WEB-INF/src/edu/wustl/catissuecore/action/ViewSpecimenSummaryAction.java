@@ -293,8 +293,9 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	 *            : summaryForm
 	 * @param session
 	 *            : session
+	 * @throws CatissueException 
 	 */
-	private void updateSessionBean(ViewSpecimenSummaryForm summaryForm, HttpSession session, String isSubmitRequest)
+	private void updateSessionBean(ViewSpecimenSummaryForm summaryForm, HttpSession session, String isSubmitRequest) throws CatissueException
 	{
 		final String eventId = summaryForm.getEventId();
 		if (eventId == null
@@ -339,9 +340,10 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	 *            : summaryForm
 	 * @param specimenMap
 	 *            : specimenMap
+	 * @throws CatissueException 
 	 */
 	private void updateSpecimenToSession(ViewSpecimenSummaryForm summaryForm,
-			LinkedHashMap specimenMap, String isSubmitRequest)
+			LinkedHashMap specimenMap, String isSubmitRequest) throws CatissueException
 	{
 		// Collection specimenCollection = specimenMap.values();
 		final Iterator iterator = summaryForm.getSpecimenList().iterator();
@@ -368,9 +370,10 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	 *            : summaryForm
 	 * @param selectedSpecimen
 	 *            : selectedSpecimen
+	 * @throws CatissueException 
 	 */
 	private void updateAliquotToSession(ViewSpecimenSummaryForm summaryForm,
-			GenericSpecimen selectedSpecimen,String isSubmitRequest)
+			GenericSpecimen selectedSpecimen,String isSubmitRequest) throws CatissueException
 	{
 		final Iterator aliquotIterator = summaryForm.getAliquotList().iterator();
 
@@ -393,9 +396,10 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	 *            : summaryForm
 	 * @param selectedSpecimen
 	 *            : selectedSpecimen
+	 * @throws CatissueException 
 	 */
 	private void updateDerivedToSession(ViewSpecimenSummaryForm summaryForm,
-			GenericSpecimen selectedSpecimen,String isSubmitRequest)
+			GenericSpecimen selectedSpecimen,String isSubmitRequest) throws CatissueException
 	{
 		final Iterator derivedIterator = summaryForm.getDerivedList().iterator();
 
@@ -421,9 +425,10 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 	 *            : derivedFormVO
 	 * @param derivedSessionVO
 	 *            : derivedSessionVO
+	 * @throws CatissueException 
 	 */
 	private void setFormValuesToSession(GenericSpecimen derivedFormVO,
-			GenericSpecimen derivedSessionVO, String isSubmitRequest)
+			GenericSpecimen derivedSessionVO, String isSubmitRequest) throws CatissueException
 	{
 		derivedSessionVO.setCheckedSpecimen(derivedFormVO.getCheckedSpecimen());
 		derivedSessionVO.setPrintSpecimen(derivedFormVO.getPrintSpecimen());// janhavi
@@ -460,35 +465,42 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 			if(null!=derivedSessionVO.getSelectedContainerName() && !"".equalsIgnoreCase(derivedSessionVO.getSelectedContainerName())  && !"Virtual".equals(derivedSessionVO.getSelectedContainerName()))
 			{
 				labellingSchemesList=StorageContainerUtil.getLabellingSchemeByContainerName(derivedSessionVO.getSelectedContainerName());
-				String oneDimensionLabellingScheme=(String) labellingSchemesList.get(0);//((ArrayList)labellingSchemesList.get(0)).get(0);
-				String twoDimensionLabellingScheme=(String) labellingSchemesList.get(1);//((ArrayList)labellingSchemesList.get(0)).get(1);
-				if(!"".equals(derivedFormVO.getPositionDimensionOne()) && (oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) || 
-						oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE)))
+				if(labellingSchemesList!=null && !labellingSchemesList.isEmpty())
 				{
-					derivedSessionVO.setPositionDimensionOne(AppUtility.excelColumnAlphabetToNum(derivedFormVO.getPositionDimensionOne()).toString());
-				}
-				else if(!"".equals(derivedFormVO.getPositionDimensionOne()) && (oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)|| 
-						oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE)))
-				{
-					derivedSessionVO.setPositionDimensionOne(AppUtility.romanToInteger(derivedFormVO.getPositionDimensionOne().toUpperCase()).toString());
+					String oneDimensionLabellingScheme=(String) labellingSchemesList.get(0);//((ArrayList)labellingSchemesList.get(0)).get(0);
+					String twoDimensionLabellingScheme=(String) labellingSchemesList.get(1);//((ArrayList)labellingSchemesList.get(0)).get(1);
+					if(!"".equals(derivedFormVO.getPositionDimensionOne()) && (oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) || 
+							oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE)))
+					{
+						derivedSessionVO.setPositionDimensionOne(AppUtility.excelColumnAlphabetToNum(derivedFormVO.getPositionDimensionOne()).toString());
+					}
+					else if(!"".equals(derivedFormVO.getPositionDimensionOne()) && (oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)|| 
+							oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE)))
+					{
+						derivedSessionVO.setPositionDimensionOne(AppUtility.romanToInteger(derivedFormVO.getPositionDimensionOne().toUpperCase()).toString());
+					}
+					else
+					{
+						derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOne());
+					}
+					if(!"".equals(derivedFormVO.getPositionDimensionTwo()) && (twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) ||
+							twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE)))
+					{
+						derivedSessionVO.setPositionDimensionTwo(AppUtility.excelColumnAlphabetToNum(derivedFormVO.getPositionDimensionTwo()).toString());
+					}
+					else if(!"".equals(derivedFormVO.getPositionDimensionTwo()) && (twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)||
+							twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE)))
+					{
+						derivedSessionVO.setPositionDimensionTwo(AppUtility.romanToInteger(derivedFormVO.getPositionDimensionTwo().toUpperCase()).toString());
+					}
+					else
+					{
+						derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwo());
+					}
 				}
 				else
 				{
-					derivedSessionVO.setPositionDimensionOne(derivedFormVO.getPositionDimensionOne());
-				}
-				if(!"".equals(derivedFormVO.getPositionDimensionTwo()) && (twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) ||
-						twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE)))
-				{
-					derivedSessionVO.setPositionDimensionTwo(AppUtility.excelColumnAlphabetToNum(derivedFormVO.getPositionDimensionTwo()).toString());
-				}
-				else if(!"".equals(derivedFormVO.getPositionDimensionTwo()) && (twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)||
-						twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE)))
-				{
-					derivedSessionVO.setPositionDimensionTwo(AppUtility.romanToInteger(derivedFormVO.getPositionDimensionTwo().toUpperCase()).toString());
-				}
-				else
-				{
-					derivedSessionVO.setPositionDimensionTwo(derivedFormVO.getPositionDimensionTwo());
+					throw new CatissueException("Invalid container name : "+derivedSessionVO.getSelectedContainerName()); 
 				}
 			}
 		}
