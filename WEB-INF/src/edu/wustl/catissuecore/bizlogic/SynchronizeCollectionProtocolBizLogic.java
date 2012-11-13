@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Date;
 import java.util.List;
 
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CpSyncAudit;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.exception.BizLogicException;

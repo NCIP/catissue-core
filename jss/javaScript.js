@@ -1077,6 +1077,13 @@ function mapButtonClickedOnNewSpecimen(frameUrl,name)
 	openPopupWindow(frameUrl,name);
 }
 
+function mapButtonClickedOnSpecimenArray(frameUrl,name)
+{
+   	var storageContainer = document.getElementById('selectedContainerName').value;
+	frameUrl+="&storageContainerName="+storageContainer;
+	openPopupWindow(frameUrl,name);
+}
+
 function mapButtonClickedOnSpecimen(frameUrl,name,storageContainerName)
 {
 	var contName=storageContainerName+"";

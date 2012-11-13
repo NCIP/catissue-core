@@ -3395,6 +3395,7 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(null, "errors.xssvulnerable", "");
 		}
 		if(specimen.getCollectionStatus().equals(Constants.COLLECTION_STATUS_COLLECTED) 
+				&& specimen.getCreatedOn()!=null
 				&& !Validator.isValidAsPerSecurity(specimen.getCreatedOn().toString()))
 		{
 			throw this.getBizLogicException(null, "errors.xssvulnerable", "");

@@ -105,16 +105,6 @@ Long specimenId=specimen.getId();
 			
 			hideGrid(containerDropDownInfo_<%=specimenId%>['gridDiv']);
 			scGridVisible_<%=specimenId%> = false;
-			if("Virtual"!=document.getElementById(containerDropDownInfo_<%=specimenId%>['dropDownId']).value)
-			{
-				showPositonTextBoxes(<%=specimenId%>);
-				document.getElementById('position1_<%=specimenId%>').value = "";
-				document.getElementById('position2_<%=specimenId%>').value = "";
-			}
-			else
-			{
-				hidePositonTextBoxes(<%=specimenId%>);
-			}
 		}
 		, actionToDo:"CatissueCommonAjaxAction.do?type=getStorageContainerListForRequestShipment&specimenId=<%=specimenId%>", callBackAction:
 		function(){
@@ -143,27 +133,7 @@ function setContainerValues()
 			Long stringToAppend=gs2.getId();
 			%>
 				document.getElementById(containerDropDownInfo_<%=stringToAppend%>['dropDownId']).value='Virtual';
-				hidePositonTextBoxes(<%=stringToAppend%>);
 <%}}%>	
-}
-function showPositonTextBoxes(id)
-{
-	var position1="position1_"+id;
-	var position2="position2_"+id;
-	var mapButton="containerMap_"+id;
-	document.getElementById(position1).style.visibility='visible';
-	document.getElementById(position2).style.visibility='visible';
-	document.getElementsByName(mapButton)[0].style.visibility='visible';
-}
-
-function hidePositonTextBoxes(id)
-{
-	var position1="position1_"+id;
-	var position2="position2_"+id;
-	var mapButton="containerMap_"+id;
-	document.getElementById(position1).style.visibility='hidden';
-	document.getElementById(position2).style.visibility='hidden';
-	document.getElementsByName(mapButton)[0].style.visibility='hidden';
 }
 
 //declaring DHTMLX Drop Down controls required variables
@@ -846,7 +816,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 					</td>
 					</td>
 																					</td>
-																					<td class="black_ar" style="padding-left:25">
+																					<td class="groupelements" style="padding-left:25">
 																						<c:set var="pos1Name">specimenDetails(position1_<bean:write name="specimenItem" property="id"/>)</c:set>
 																						<jsp:useBean id="pos1Name" type="java.lang.String"/>
 																						<c:set var="pos1Id">position1_<bean:write name="specimenItem" property="id"/></c:set>
@@ -854,7 +824,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 									
 																						<html:text styleClass="black_ar"  size="1" styleId="<%=pos1Id%>" property="<%=pos1Name%>" disabled= "false"/>
 																					</td>
-																					<td class="black_ar">
+																					<td class="groupelements">
 																						<c:set var="pos2Name">specimenDetails(position2_<bean:write name="specimenItem" property="id"/>)</c:set>
 																						<jsp:useBean id="pos2Name" type="java.lang.String"/>
 																						<c:set var="pos2Id">position2_<bean:write name="specimenItem" property="id"/></c:set>
@@ -862,7 +832,7 @@ function onParentContainerSelectChange(selectedOption,containerId)
 									
 																						<html:text styleClass="black_ar"  size="1" styleId="<%=pos2Id%>" property="<%=pos2Name%>" disabled= "false"/>
 																					</td>
-																					<td class="black_ar">
+																					<td class="groupelements">
 	
 																						<c:set var="stContainerName">specimenDetails(containerId_<bean:write name="specimenItem" property="id"/>)</c:set>
 																						<jsp:useBean id="stContainerName" type="java.lang.String"/>
