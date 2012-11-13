@@ -203,7 +203,12 @@ public class ProtocolEventDetailsAction extends BaseAction
 				.get(collectionProtocolEventKey);
 		boolean isPersistent=  ((CollectionProtocolBean) session
 				.getAttribute(Constants.COLLECTION_PROTOCOL_SESSION_BEAN)).isParticiapantReg();
-		request.setAttribute("isPersistent", isPersistent);
+		if (collectionProtocolEventBean != null && new Long(collectionProtocolEventBean.getId()) != null
+				&& collectionProtocolEventBean.getId() > 0 && isPersistent)
+		{
+			request.setAttribute("isPersistent", isPersistent);
+		}
+		
 		protocolEventDetailsForm.setClinicalDiagnosis(collectionProtocolEventBean
 				.getClinicalDiagnosis());
 		protocolEventDetailsForm.setClinicalStatus(collectionProtocolEventBean.getClinicalStatus());
