@@ -171,7 +171,11 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
         	headerString.append("Clinical Status#").append(eventsCount).append(",");
         	valueString.append("\"").append(collectionProtocolEvent.getClinicalStatus()).append("\"").append(",");
         	
-    		//headerDataMap.put("ActivityStatus#"+eventsCount,collectionProtocolEvent.getActivityStatus());
+
+        	headerString.append("Clinical Diagnosis For Event#").append(eventsCount).append(",");
+            valueString.append("\"").append(collectionProtocolEvent.getClinicalDiagnosis()).append("\"").append(",");
+    		
+            //headerDataMap.put("ActivityStatus#"+eventsCount,collectionProtocolEvent.getActivityStatus());
         	headerString.append("ActivityStatus#").append(eventsCount).append(",");
         	valueString.append("\"").append(collectionProtocolEvent.getActivityStatus()).append("\"").append(",");
         	Collection<SpecimenRequirement> requirements=collectionProtocolEvent.getSpecimenRequirementCollection();
