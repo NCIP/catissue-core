@@ -1171,7 +1171,7 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.userSignUpDef" />
 		</action>
 
-		<action path="/SignUpUserAdd" type="edu.wustl.common.action.CommonAddEditAction"
+		<action path="/SignUpUserAdd" type="edu.wustl.catissuecore.action.SignUpUserAddAction"
 			name="userForm" validate="true"
 			input="/SignUp.do?operation=add&amp;pageOf=pageOfSignUp&amp;error=true"
 			scope="request">

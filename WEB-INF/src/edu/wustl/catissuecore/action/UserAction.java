@@ -88,10 +88,14 @@ public class UserAction extends SecureAction
     protected ActionForward executeSecureAction(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) throws Exception
     {
-    	saveToken(request);
+    	 String pageOf = request.getParameter(Constants.PAGE_OF);
+    	 if(!"pageOfSignUp".equals(pageOf))
+    	 {
+    		 saveToken(request);
+    	 }
         // Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
-        String pageOf = request.getParameter(Constants.PAGE_OF);
+       
         final String reqPath = request.getParameter(Constants.REQ_PATH);
         final String submittedFor = (String) request.getAttribute(Constants.SUBMITTED_FOR);
         final String openInCPFrame = request.getParameter(Constants.OPEN_PAGE_IN_CPFRAME);
