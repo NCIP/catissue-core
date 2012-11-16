@@ -233,8 +233,14 @@ public class TransferEventParameters extends SpecimenEventParameters
 			final StorageContainer toObj = new StorageContainer();
 			if (!"Virtual".equals(form.getStorageContainer()))
 			{
-				this.toPositionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getStorageContainer(), 1, form.getPos1());
-				this.toPositionDimensionTwo = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getStorageContainer(), 2, form.getPos2());
+				if(form.getPos1()!=null 
+					&& !"".equals(form.getPos1().trim())
+					&& form.getPos2()!=null 
+					&& !"".equals(form.getPos2().trim()))
+				{
+					this.toPositionDimensionOne = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getStorageContainer(), 1, form.getPos1());
+					this.toPositionDimensionTwo = StorageContainerUtil.convertSpecimenPositionsToInteger(form.getStorageContainer(), 2, form.getPos2());
+				}
 				toObj.setName(form.getStorageContainer());
 			}
 			else
