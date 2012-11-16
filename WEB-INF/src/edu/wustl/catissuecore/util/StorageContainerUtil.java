@@ -240,8 +240,8 @@ public final class StorageContainerUtil
 		Position position = null;
 		try
 		{
-			Integer xPos;
-			Integer yPos;
+			Integer xPos= null;
+			Integer yPos = null;
 			String containerValue = null;
 			final Capacity capacity = getContainerCapacity(container, dao);
 			if(pos1 == null && pos2 == null)
@@ -249,54 +249,187 @@ public final class StorageContainerUtil
 				pos1 = 0;
 				pos2 = 0;
 			}
-			final Map positionMap = getAvailablePositionMapForContainer(String
+			final Map<NameValueBean, List<NameValueBean>> positionMap = getAvailablePositionMapForContainer(String
 					.valueOf(container.getId()), 0, capacity.getOneDimensionCapacity(), capacity
 					.getTwoDimensionCapacity(), dao,pos1,pos2);
+			
 			if (positionMap != null)
-			{
-				final Iterator containerPosIterator = positionMap.keySet().iterator();
+			{	
+				final Iterator<NameValueBean> containerPosIterator = positionMap.keySet().iterator();
 				boolean positionAllottedFlag = false;
-				while (containerPosIterator.hasNext() && !positionAllottedFlag)
+				if(!allocatedPositions.isEmpty())
 				{
-					NameValueBean nvb = (NameValueBean) containerPosIterator.next();
-					xPos = Integer.valueOf(nvb.getValue());
-					final List yposValues = (List) positionMap.get(nvb);
-					final Iterator yposIterator = yposValues.iterator();
-
-					while (yposIterator.hasNext())
-					{
-						nvb = (NameValueBean) yposIterator.next();
-						yPos = Integer.valueOf(nvb.getValue());
-						final Long containerId = container.getId();
-
-						if (container.getName() != null)
-						{
-							containerValue = StorageContainerUtil.getStorageValueKey(container
-									.getName(), null, xPos, yPos);
-						}
-						else
-						{
-							containerValue = StorageContainerUtil.getStorageValueKey(null,
-									containerId.toString(), xPos, yPos);
-						}
-						if (!allocatedPositions.contains(containerValue))
-						{
-							positionAllottedFlag = true;
-							position = new Position();
-							position.setXPos(xPos);
-							position.setYPos(yPos);
-							break;
-						}
-
-					}
+					position = allocateContinuousPositions(container, allocatedPositions, position,
+							positionMap,containerPosIterator, positionAllottedFlag);
 				}
-
+				else
+				{
+					position = allocateFirstAvailablePosition(container, allocatedPositions, position,
+							positionMap, containerPosIterator, positionAllottedFlag, xPos, yPos,
+							containerValue);
+				}
 			}
-	    }
+		}
 		catch (final DAOException daoEx)
 		{
 			logger.error(daoEx.getMessage(),daoEx);
 			throw new BizLogicException(daoEx);
+		}
+		return position;
+	}
+
+	
+	private static Position allocateFirstAvailablePosition(final Container container,
+			final HashSet<String> allocatedPositions, Position position,
+			final Map<NameValueBean, List<NameValueBean>> positionMap,
+			final Iterator<NameValueBean> containerPosIterator, boolean positionAllottedFlag, Integer xPos, Integer yPos, String containerValue)
+	{
+
+		while (containerPosIterator.hasNext() && !positionAllottedFlag)
+		{
+			NameValueBean nvb = containerPosIterator.next();
+			xPos = Integer.valueOf(nvb.getValue());
+			final List yposValues = (List) positionMap.get(nvb);
+			final Iterator yposIterator = yposValues.iterator();
+
+			while (yposIterator.hasNext())
+			{
+				nvb = (NameValueBean) yposIterator.next();
+				yPos = Integer.valueOf(nvb.getValue());
+				final Long containerId = container.getId();
+
+				if (container.getName() != null)
+				{
+					containerValue = StorageContainerUtil.getStorageValueKey(container
+							.getName(), null, xPos, yPos);
+				}
+				else
+				{
+					containerValue = StorageContainerUtil.getStorageValueKey(null,
+							containerId.toString(), xPos, yPos);
+				}
+				if (!allocatedPositions.contains(containerValue))
+				{
+					positionAllottedFlag = true;
+					position = new Position();
+					position.setXPos(xPos);
+					position.setYPos(yPos);
+					break;
+				}
+			}
+		}
+		return position;
+	}
+	
+	
+	private static Position allocateContinuousPositions(Container container,
+			HashSet<String> allocatedPositions, Position position,
+			final Map<NameValueBean, List<NameValueBean>> positionMap,
+			final Iterator<NameValueBean> containerPosIterator, boolean positionAllottedFlag)
+	{
+		NameValueBean nvbForDimensionOne = null, nvbForDimensionTwo= null;
+		Integer xPos;
+		Integer yPos;
+		String containerValue;
+		String[] data=null;
+		String[] positions=null;
+		if(allocatedPositions!=null && !allocatedPositions.isEmpty())
+		{
+			Iterator<String> iter=allocatedPositions.iterator();
+			String lastPosition=null;
+			while(iter.hasNext())
+			{
+				lastPosition=(String) iter.next();
+			}
+			data=lastPosition.split(":");
+			positions=data[1].split(",");
+			nvbForDimensionOne=new NameValueBean(new Integer(positions[0].trim()), new Integer(positions[0].trim()));
+			nvbForDimensionTwo=new NameValueBean(new Integer(positions[1].trim()), new Integer(positions[1].trim()));
+		}
+		Integer lastPosOne=Integer.valueOf(nvbForDimensionOne.getValue());
+		Integer lastPosTwo=Integer.valueOf(nvbForDimensionTwo.getValue());
+
+		int i=0;
+		while (containerPosIterator.hasNext() && !positionAllottedFlag)
+		{
+			if(i!=0)
+			{
+				nvbForDimensionOne=null;
+			}
+			i++;
+			NameValueBean nvbX=null, nvbY=null;
+			if(nvbForDimensionOne==null)
+			{
+				nvbX = containerPosIterator.next();
+			}
+			else
+			{
+				nvbX=nvbForDimensionOne;
+			}
+			if(lastPosOne<=Integer.valueOf(nvbX.getValue()))
+			{
+				xPos = Integer.valueOf(nvbX.getValue());
+				final List yposValues = (List) positionMap.get(nvbX);
+				if(yposValues!=null)
+				{
+					final Iterator<NameValueBean> yposIterator = yposValues.iterator();
+					while (yposIterator.hasNext())
+					{
+						nvbY = yposIterator.next();
+						if(lastPosOne==xPos)
+						{
+							if(lastPosTwo<Integer.valueOf(nvbY.getValue()))
+							{
+								yPos = Integer.valueOf(nvbY.getValue());
+								final Long containerId = container.getId();
+
+								if (container.getName() != null)
+								{
+									containerValue = StorageContainerUtil.getStorageValueKey(container
+											.getName(), null, xPos, yPos);
+								}
+								else
+								{
+									containerValue = StorageContainerUtil.getStorageValueKey(null,
+											containerId.toString(), xPos, yPos);
+								}
+								if (!allocatedPositions.contains(containerValue))
+								{
+									positionAllottedFlag = true;
+									position = new Position();
+									position.setXPos(xPos);
+									position.setYPos(yPos);
+									break;
+								}
+							}
+						}
+						else if(lastPosOne<xPos)
+						{
+							yPos = Integer.valueOf(nvbY.getValue());
+							final Long containerId = container.getId();
+
+							if (container.getName() != null)
+							{
+								containerValue = StorageContainerUtil.getStorageValueKey(container
+										.getName(), null, xPos, yPos);
+							}
+							else
+							{
+								containerValue = StorageContainerUtil.getStorageValueKey(null,
+										containerId.toString(), xPos, yPos);
+							}
+							if (!allocatedPositions.contains(containerValue))
+							{
+								positionAllottedFlag = true;
+								position = new Position();
+								position.setXPos(xPos);
+								position.setYPos(yPos);
+								break;
+							}
+						}
+					}	
+				}
+			}
 		}
 		return position;
 	}
