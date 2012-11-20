@@ -342,7 +342,7 @@ public final class StorageContainerUtil
 				lastPosition=(String) iter.next();
 			}
 			data=lastPosition.split(":");
-			positions=data[1].split(",");
+			positions=data[2].split(",");
 			nvbForDimensionOne=new NameValueBean(new Integer(positions[0].trim()), new Integer(positions[0].trim()));
 			nvbForDimensionTwo=new NameValueBean(new Integer(positions[1].trim()), new Integer(positions[1].trim()));
 		}
@@ -1391,6 +1391,10 @@ public final class StorageContainerUtil
 			storageValue.append(convertSpecimenPositionsToString(containerName, 1, containerPos1));
 			storageValue.append(" ,");
 			storageValue.append(convertSpecimenPositionsToString(containerName, 2, containerPos2));
+			storageValue.append(':');
+			storageValue.append(containerPos1);
+			storageValue.append(" ,");
+			storageValue.append(containerPos2);
 		}
 		else if (containerID != null)
 		{
@@ -1399,6 +1403,10 @@ public final class StorageContainerUtil
 			storageValue.append(convertPositionsToIntegerUsingContId(containerID, 1, containerPos1.toString()));
 			storageValue.append(" ,");
 			storageValue.append(convertPositionsToIntegerUsingContId(containerID, 2, containerPos2.toString()));
+			storageValue.append(':');
+			storageValue.append(containerPos1);
+			storageValue.append(" ,");
+			storageValue.append(containerPos2);
 		}
 		return storageValue.toString();
 	}
