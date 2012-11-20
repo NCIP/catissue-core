@@ -51,6 +51,7 @@
 					tree.selectItem(id,false);
 					tree.openItem(id);
 				}
+				saveTreeState();
 			}
 			
 			function saveTreeState()
