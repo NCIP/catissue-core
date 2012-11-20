@@ -106,9 +106,10 @@ public final class ConsentUtil
 				consentTierstatus.setStatus(Constants.WITHDRAWN);
 				updateSpecimensInSCG(scg,oldscg,consentTierID,withdrawOption , dao, sessionDataBean );
 			}
-			newScgStatusCollection.add(consentTierstatus );	// set updated consenttierstatus in scg
+			ConsentTierStatus persistConsenttier = new ConsentTierStatus(consentTierstatus);
+			newScgStatusCollection.add(persistConsenttier );	// set updated consenttierstatus in scg
 		}
-		scg.setConsentTierStatusCollection( newScgStatusCollection);
+		scg.setConsentTierStatusCollection(newScgStatusCollection);
 		if(!(withdrawOption.equals(Constants.WITHDRAW_RESPONSE_RESET)))
 		{	
 			scg.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.toString());
