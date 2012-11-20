@@ -79,6 +79,12 @@ table#browserDetailsContainer {
 									key="app.disclaimer" /></a></td>
 
 							</tr>
+							<tr>
+									<td><a
+										href="https://docs.google.com/uc?export=download&confirm=no_antivirus&id=0B_M0QgP01-xjbExjYWNRQUU4QXc"
+										class="view"><span class="wh_ar_b"></span><bean:message
+										key="app.mobileapplink" /></a></td>
+							</tr>
 							<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">
 								<tr>
 									<td><a
@@ -101,6 +107,7 @@ table#browserDetailsContainer {
 										key="app.accessibility" /></a></td>
 								</tr>
 							</logic:notEmpty>
+							
 						</table>
 						</td>
 					</tr>
