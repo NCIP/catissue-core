@@ -3908,7 +3908,7 @@ public class AppUtility {
 		return displayName;
 	}
 	
-	public static String numToExcelColumnAlphabet(int columnNumber)
+	public static String integerToString(int columnNumber)
 	{
         int i;
         String columnName = "";     
@@ -3920,10 +3920,24 @@ public class AppUtility {
             columnName = new Character((char)i).toString() + columnName;        
             columnNumber = (int)((columnNumber - modulo) / 26);    
         }       
-        return columnName; 
+        return columnName.toLowerCase(); 
 	}
 	
-	public static Integer excelColumnAlphabetToNum(String name)
+	public static String romanToString(String romanNumber)
+	{
+		int num=romanToInteger(romanNumber);
+		String alphabet=integerToString(num);
+		return alphabet;
+	}
+	
+	public static String stringToRoman(String alphabet)
+	{
+		int num=stringToInteger(alphabet);
+		String roman=integerToRoman(num);
+		return roman;
+	}
+	
+	public static Integer stringToInteger(String name)
 	{
 		Integer number = 0;
 		    int pow = 1;
@@ -3944,19 +3958,19 @@ public class AppUtility {
 		}
 		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE))
 		{
-			positionVal=numToExcelColumnAlphabet(Integer.valueOf(position)).toLowerCase();
+			positionVal=integerToString(Integer.valueOf(position)).toLowerCase();
 		}
 		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE))
 		{
-			positionVal=numToExcelColumnAlphabet(Integer.valueOf(position));
+			positionVal=integerToString(Integer.valueOf(position)).toUpperCase();
 		}
 		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE))
 		{
-			positionVal=binaryToRoman(Integer.valueOf(position));
+			positionVal=integerToRoman(Integer.valueOf(position)).toUpperCase();
 		}
 		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE))
 		{
-			positionVal=binaryToRoman(Integer.valueOf(position)).toLowerCase();
+			positionVal=integerToRoman(Integer.valueOf(position)).toLowerCase();
 		}
 		return positionVal;
 	}
@@ -3971,7 +3985,7 @@ public class AppUtility {
 		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE)
 			|| (labellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE)))
 		{
-			positionVal=excelColumnAlphabetToNum(position.toUpperCase());
+			positionVal=stringToInteger(position.toUpperCase());
 		}
 		else if(labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)
 				|| (labellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE)))
@@ -3981,7 +3995,7 @@ public class AppUtility {
 		return positionVal;
 	}
 	
-	public static String binaryToRoman(int binary) {
+	public static String integerToRoman(int binary) {
 		if (binary <= 0 || binary >= 4000) {
 			throw new NumberFormatException("Value outside roman numeral range.");
 		}
@@ -3995,7 +4009,7 @@ public class AppUtility {
 				roman  += RCODE[i];
 			}
 		}
-		return roman;
+		return roman.toLowerCase();
 	}  
 	
 	public static Integer romanToInteger(String number)
@@ -4004,7 +4018,7 @@ public class AppUtility {
 		String romanNumeral = number.toUpperCase();
 		int x = 0;
 		do {
-			char convertToDecimal = number.charAt(x);
+			char convertToDecimal = romanNumeral.charAt(x);
 			switch (convertToDecimal) {
 				case 'M':
 					decimal += 1000;

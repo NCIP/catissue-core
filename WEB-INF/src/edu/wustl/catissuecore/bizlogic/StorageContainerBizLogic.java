@@ -10,6 +10,8 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import edu.wustl.catissuecore.domain.AbstractPosition;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.ContainerPosition;
@@ -393,7 +396,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 				final Long[] containerIDArr = {container.getId()};
 				if (StorageContainerUtil.isContainerAvailableForDisabled(dao, containerIDArr))
 				{
-					final List disabledConts = new ArrayList();
+					final List<Map<String, Object>> disabledConts = new ArrayList<Map<String, Object>>();
 					final List<StorageContainer> disabledContList = new ArrayList<StorageContainer>();
 					disabledContList.add(oldContForChange);
 					this.addEntriesInDisabledMap(oldContForChange, disabledConts);
@@ -739,6 +742,16 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			persistentobject.setStartNo(newObject.getStartNo());
 			persistentobject.setStorageType(newObject.getStorageType());
 			persistentobject.setTempratureInCentigrade(newObject.getTempratureInCentigrade());
+			if(!persistentobject.getOneDimensionLabellingScheme().equals(newObject.getOneDimensionLabellingScheme()))
+			{
+				updateSpecimenPositionValues(persistentobject,newObject.getOneDimensionLabellingScheme(),1);
+				updateContainerPositionValues(persistentobject,newObject.getOneDimensionLabellingScheme(),1);
+			}
+			if(!persistentobject.getTwoDimensionLabellingScheme().equals(newObject.getTwoDimensionLabellingScheme()))
+			{
+				updateSpecimenPositionValues(persistentobject,newObject.getTwoDimensionLabellingScheme(),2);
+				updateContainerPositionValues(persistentobject,newObject.getTwoDimensionLabellingScheme(),2);
+			}
 			persistentobject.setOneDimensionLabellingScheme(newObject.getOneDimensionLabellingScheme());
 			persistentobject.setTwoDimensionLabellingScheme(newObject.getTwoDimensionLabellingScheme());
 		}
@@ -748,6 +761,296 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			throw this.getBizLogicException(exp, exp.getErrorKeyName(), exp.getMsgValues());
 		}
 	}
+	
+	private void updateSpecimenPositionValues(StorageContainer persistentobject,
+			String newLabellingScheme,Integer positionDimension) throws BizLogicException
+	{
+		String oldLabellingScheme=null;
+		if(positionDimension.equals(1))
+		{
+			oldLabellingScheme=persistentobject.getOneDimensionLabellingScheme();
+		}
+		else if(positionDimension.equals(2))
+		{
+			oldLabellingScheme=persistentobject.getTwoDimensionLabellingScheme();
+		}
+		Collection<SpecimenPosition> specimenPositionCollection=persistentobject.getSpecimenPositionCollection();
+		if(specimenPositionCollection!=null && !specimenPositionCollection.isEmpty())
+		{
+			Iterator<SpecimenPosition> iter=specimenPositionCollection.iterator();
+			Class parameterType=String.class;
+			Boolean toUpperCase=false,toLowerCase=false;
+			String fromFunction=null,toFunction=null;
+
+			fromFunction = getFromFunctionName(oldLabellingScheme, fromFunction);
+
+			toFunction = getToFunctionName(newLabellingScheme, toFunction);
+			//get complete method Name
+			String methodName=fromFunction+"To"+toFunction;
+			if(newLabellingScheme.contains("Upper"))
+			{
+				toUpperCase=true;
+			}
+			if(newLabellingScheme.contains("Lower"))
+			{
+				toLowerCase=true;
+			}
+			if(Constants.LABELLING_SCHEME_NUMBERS.equals(oldLabellingScheme))
+			{
+				parameterType=Integer.TYPE;
+			}
+
+			Method method = null;
+			try
+			{
+				if(!fromFunction.toLowerCase().equals(toFunction.toLowerCase()))
+				{
+					method = AppUtility.class.getDeclaredMethod(methodName, parameterType);
+					method.setAccessible(true); //if security settings allow this
+					while(iter.hasNext())
+					{
+						AbstractPosition pos=(AbstractPosition) iter.next();
+						updatePosition(positionDimension, pos, toUpperCase, fromFunction, method);
+					}
+				}
+				else
+				{
+					while(iter.hasNext())
+					{
+						AbstractPosition pos=(AbstractPosition) iter.next();
+						updatePositionCase(positionDimension, pos, toUpperCase,toLowerCase);
+					}
+				}
+			}
+			catch (IllegalArgumentException exp)
+			{
+				logger.error(exp.getMessage(), exp);
+				throw this.getBizLogicException(exp, null,exp.getMessage());
+			}
+			catch (IllegalAccessException exp)
+			{
+				logger.error(exp.getMessage(), exp);
+				throw this.getBizLogicException(exp, null,exp.getMessage());
+			}
+			catch (InvocationTargetException exp)
+			{
+				logger.error(exp.getMessage(), exp);
+				throw this.getBizLogicException(exp, null,exp.getMessage());
+			} //use null if the method is static
+			catch (SecurityException exp)
+			{
+				logger.error(exp.getMessage(), exp);
+				throw this.getBizLogicException(exp, null,exp.getMessage());
+			}
+			catch (NoSuchMethodException exp)
+			{
+				logger.error(exp.getMessage(), exp);
+				throw this.getBizLogicException(exp, null,exp.getMessage());
+			}
+		}
+	}
+
+	private void updateContainerPositionValues(StorageContainer persistentobject,
+			String newLabellingScheme,Integer positionDimension) throws BizLogicException
+	{
+		String oldLabellingScheme=null;
+		if(positionDimension.equals(1))
+		{
+			oldLabellingScheme=persistentobject.getOneDimensionLabellingScheme();
+		}
+		else if(positionDimension.equals(2))
+		{
+			oldLabellingScheme=persistentobject.getTwoDimensionLabellingScheme();
+		}
+		Collection<ContainerPosition> containerPositionCollection=persistentobject.getOccupiedPositions();
+		if(containerPositionCollection!=null && !containerPositionCollection.isEmpty())
+		{
+			Iterator<ContainerPosition> iter=containerPositionCollection.iterator();
+			Class parameterType=String.class;
+			Boolean toUpperCase=false, toLowerCase=false;
+			String fromFunction=null,toFunction=null;
+
+			fromFunction = getFromFunctionName(oldLabellingScheme, fromFunction);
+
+			toFunction = getToFunctionName(newLabellingScheme, toFunction);
+			//get complete method Name
+			String methodName=fromFunction+"To"+toFunction;
+			if(newLabellingScheme.contains("Upper"))
+			{
+				toUpperCase=true;
+			}
+			else if(newLabellingScheme.contains("Lower"))
+			{
+				toLowerCase=true;
+			}
+			if(Constants.LABELLING_SCHEME_NUMBERS.equals(oldLabellingScheme))
+			{
+				parameterType=Integer.TYPE;
+			}
+
+			Method method = null;
+			try
+			{
+				if(!fromFunction.toLowerCase().equals(toFunction.toLowerCase()))
+				{
+					method = AppUtility.class.getDeclaredMethod(methodName, parameterType);
+					method.setAccessible(true); //if security settings allow this
+					while(iter.hasNext())
+					{
+						AbstractPosition pos=(AbstractPosition) iter.next();
+						updatePosition(positionDimension, pos, toUpperCase, fromFunction, method);
+					}
+				}
+				else
+				{
+					while(iter.hasNext())
+					{
+						AbstractPosition pos=(AbstractPosition) iter.next();
+						updatePositionCase(positionDimension, pos, toUpperCase,toLowerCase);
+					}
+				}
+			}
+			catch (IllegalArgumentException exp)
+			{
+				logger.error(exp.getMessage(), exp);
+				throw this.getBizLogicException(exp, null,exp.getMessage());
+			}
+			catch (IllegalAccessException exp)
+			{
+				logger.error(exp.getMessage(), exp);
+				throw this.getBizLogicException(exp, null,exp.getMessage());
+			}
+			catch (InvocationTargetException exp)
+			{
+				logger.error(exp.getMessage(), exp);
+				throw this.getBizLogicException(exp, null,exp.getMessage());
+			} //use null if the method is static
+			catch (SecurityException exp)
+			{
+				logger.error(exp.getMessage(), exp);
+				throw this.getBizLogicException(exp, null,exp.getMessage());
+			}
+			catch (NoSuchMethodException exp)
+			{
+				logger.error(exp.getMessage(), exp);
+				throw this.getBizLogicException(exp, null,exp.getMessage());
+			}
+		}
+	}
+
+
+	private void updatePositionCase(Integer positionDimension, AbstractPosition pos,
+			Boolean toUpperCase,Boolean toLowerCase)
+	{
+		String dimensionValue=null;
+		if(positionDimension.equals(1))
+		{
+			dimensionValue=pos.getPositionDimensionOneString();
+			if(toUpperCase)
+			{
+				dimensionValue=dimensionValue.toUpperCase();
+			}
+			else if(toLowerCase)
+			{
+				dimensionValue=dimensionValue.toLowerCase();
+			}
+			pos.setPositionDimensionOneString(dimensionValue);
+		}
+		if(positionDimension.equals(2))
+		{
+			dimensionValue=pos.getPositionDimensionTwoString();
+			if(toUpperCase)
+			{
+				dimensionValue=dimensionValue.toUpperCase();
+			}
+			else if(toLowerCase)
+			{
+				dimensionValue=dimensionValue.toLowerCase();
+			}
+			pos.setPositionDimensionTwoString(dimensionValue);
+		}
+	}
+
+	private void updatePosition(Integer positionDimension, AbstractPosition pos,
+			Boolean toUpperCase, String fromFunction, Method method) throws IllegalAccessException,
+			InvocationTargetException
+			{
+		String dimensionValue=null;
+		if(positionDimension.equals(1))
+		{
+			dimensionValue=pos.getPositionDimensionOneString();
+			String computedValue = (String) method.invoke(null, fromFunction.equals("integer")?Integer.valueOf(dimensionValue):dimensionValue).toString();
+			if(toUpperCase)
+			{
+				computedValue=computedValue.toUpperCase();
+			}
+			pos.setPositionDimensionOneString(computedValue);
+		}
+		if(positionDimension.equals(2))
+		{
+			dimensionValue=pos.getPositionDimensionTwoString();
+			String computedValue = (String) method.invoke(null, fromFunction.equals("integer")?Integer.valueOf(dimensionValue):dimensionValue).toString();
+			if(toUpperCase)
+			{
+				computedValue=computedValue.toUpperCase();
+			}
+			pos.setPositionDimensionTwoString(computedValue);
+		}
+			}
+
+	private String getToFunctionName(String newLabellingScheme, String toFunction)
+	{
+		//get New Labelling scheme
+		if(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE.equals(newLabellingScheme))
+		{
+			toFunction="String";
+		}
+		else if(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE.equals(newLabellingScheme))
+		{
+			toFunction="String";
+		}
+		else if(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE.equals(newLabellingScheme))
+		{
+			toFunction="Roman";
+		}
+		else if(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE.equals(newLabellingScheme))
+		{
+			toFunction="Roman";
+		}
+		else if(Constants.LABELLING_SCHEME_NUMBERS.equals(newLabellingScheme))
+		{
+			toFunction="Integer";
+		}
+		return toFunction;
+	}
+
+	private String getFromFunctionName(String oldLabellingScheme, String fromFunction)
+	{
+		if(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE.equals(oldLabellingScheme))
+		{
+			fromFunction="string";
+		}
+		else if(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE.equals(oldLabellingScheme))
+		{
+			fromFunction="string";
+		}
+		else if(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE.equals(oldLabellingScheme))
+		{
+			fromFunction="roman";
+		}
+		else if(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE.equals(oldLabellingScheme))
+		{
+			fromFunction="roman";
+		}
+		else if(Constants.LABELLING_SCHEME_NUMBERS.equals(oldLabellingScheme))
+		{
+			fromFunction="integer";
+		}
+		return fromFunction;
+	}
+
+
+	
 	/**
 	 * Set container position.
 	 * @param persistentobject StorageContainer object
@@ -1011,7 +1314,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 			validateStTypeAndTemp(container, validator);
 			validatePosition(dao, container, validator);
 			validateStatus(operation, container);
-			validateLabellingSchemes(dao,container);
+			//validateLabellingSchemes(dao,container);
 			StorageContainerUtil.populateSpecimenType(container);
 			return true;
 		}
@@ -1023,7 +1326,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 
 	}
 	
-	private void validateLabellingSchemes(DAO dao, StorageContainer container) throws BizLogicException
+	/*private void validateLabellingSchemes(DAO dao, StorageContainer container) throws BizLogicException
 	{
 		if(container.getId()!=null)
 		{
@@ -1041,7 +1344,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 				}
 			}
 		}
-	}
+	}*/
 
 	
 	/**
@@ -1457,7 +1760,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 		try
 		{
 			final int count = disableContList.size();
-			final List containerIdList = new ArrayList();
+			final List<Long> containerIdList = new ArrayList<Long>();
 			for (int i = 0; i < count; i++)
 			{
 				final StorageContainer container = disableContList.get(i);
@@ -1491,7 +1794,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	 * @param disableContList - list of disabledContainers
 	 * @throws BizLogicException throws BizLogicException
 	 */
-	private void setDisableToSubContainer(StorageContainer storageContainer, List disabledConts,
+	private void setDisableToSubContainer(StorageContainer storageContainer, List<Map<String, Object>> disabledConts,
 			DAO dao, List disableContList) throws BizLogicException
 	{
 
@@ -1528,7 +1831,7 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	 * @param container - StorageContainer object.
 	 * @param disabledConts - List of disabledConts
 	 */
-	private void addEntriesInDisabledMap(StorageContainer container, List disabledConts)
+	private void addEntriesInDisabledMap(StorageContainer container, List<Map<String, Object>> disabledConts)
 	{
 		final String contNameKey = "StorageContName";
 		final String contIdKey = "StorageContIdKey";

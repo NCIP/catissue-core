@@ -472,7 +472,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 					if(!"".equals(derivedFormVO.getPositionDimensionOne()) && (oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) || 
 							oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE)))
 					{
-						derivedSessionVO.setPositionDimensionOne(AppUtility.excelColumnAlphabetToNum(derivedFormVO.getPositionDimensionOne()).toString());
+						derivedSessionVO.setPositionDimensionOne(AppUtility.stringToInteger(derivedFormVO.getPositionDimensionOne()).toString());
 					}
 					else if(!"".equals(derivedFormVO.getPositionDimensionOne()) && (oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)|| 
 							oneDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE)))
@@ -486,7 +486,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 					if(!"".equals(derivedFormVO.getPositionDimensionTwo()) && (twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_LOWER_CASE) ||
 							twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ALPHABETS_UPPER_CASE)))
 					{
-						derivedSessionVO.setPositionDimensionTwo(AppUtility.excelColumnAlphabetToNum(derivedFormVO.getPositionDimensionTwo()).toString());
+						derivedSessionVO.setPositionDimensionTwo(AppUtility.stringToInteger(derivedFormVO.getPositionDimensionTwo()).toString());
 					}
 					else if(!"".equals(derivedFormVO.getPositionDimensionTwo()) && (twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_UPPER_CASE)||
 							twoDimensionLabellingScheme.equals(Constants.LABELLING_SCHEME_ROMAN_LOWER_CASE)))
