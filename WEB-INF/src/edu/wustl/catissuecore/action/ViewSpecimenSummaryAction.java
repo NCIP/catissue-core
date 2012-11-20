@@ -500,7 +500,7 @@ public class ViewSpecimenSummaryAction extends XSSSupportedAction
 				}
 				else
 				{
-					throw new CatissueException("Invalid container name : "+derivedSessionVO.getSelectedContainerName()); 
+					throw new CatissueException("Invalid container name : "+derivedSessionVO.getSelectedContainerName() +". Please select valid storage container."); 
 				}
 			}
 		}

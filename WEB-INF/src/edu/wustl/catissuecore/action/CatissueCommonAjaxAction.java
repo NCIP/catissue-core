@@ -222,7 +222,6 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 					{
 						List<Object> parameterList = AppUtility.setparameterList(Long.valueOf(collectionProtocolId).longValue(),spClass,0,spType);
 						containerMap = bizLogic.getAutoAllocatedContainerListForSpecimen(parameterList, sessionDataBean, dao,contName);
-						System.out.println("hello");
 						if(containerMap!=null)
 						{
 							containerList=AppUtility.convertMapToList(containerMap);
