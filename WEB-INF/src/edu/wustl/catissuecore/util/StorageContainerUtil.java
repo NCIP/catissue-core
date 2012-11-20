@@ -3393,6 +3393,7 @@ public final class StorageContainerUtil
 	public static StorageContainerGridObject getContainerDetails(String containerName,DAO dao) throws ApplicationException
     {
         StorageContainerGridObject scGridObject=null;
+        try{
         String sql="SELECT " +
                 "STCONT.IDENTIFIER,CONT.NAME" +
                 ",STCONT.ONE_DIMENSION_LABELLING_SCHEME, STCONT.TWO_DIMENSION_LABELLING_SCHEME," +
@@ -3428,6 +3429,9 @@ public final class StorageContainerUtil
             scGridObject.setType(cType);
             setAvailabelForContainer(containerId.toString(), oneDimensionCapacity+1, twoDimensionCapacity+1, dao,scGridObject);
           //  scGridObject.setAvailablePositions(availablePositions);
+        }
+        }finally{
+        	AppUtility.closeDAOSession(dao);
         }
        
         //Step1: sql to get label schemes, dimensions labels,capacity id by joining type and container

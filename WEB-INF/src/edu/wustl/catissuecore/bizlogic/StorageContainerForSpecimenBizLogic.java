@@ -135,7 +135,9 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 				String twoDimensionLabellingScheme=(String) labellingList.get(1);//((ArrayList)labellingList.get(0)).get(1);
 				Integer pos1Integer = "".equals(pos1) || pos1 == null ?1: AppUtility.getPositionValueInInteger(oneDimensionLabellingScheme, pos1);
 				Integer pos2Integer = "".equals(pos2) || pos2 == null ?1:AppUtility.getPositionValueInInteger(twoDimensionLabellingScheme, pos2);
-				
+				if(pos1Integer <=0 || pos1Integer > storagePositions.length || pos2Integer<=0 || pos2Integer > storagePositions[0].length){
+					throw new BizLogicException(null, null, "Invalid Storage Position.");
+				}
 				boolean isfirstIteration = true;
 				boolean isRequiredPositionAvaliable = false;
 				List<int[]> positionList = new ArrayList<int[]>();
@@ -170,6 +172,9 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 			logger.error(daoExp.getMessage(), daoExp);
 			final ErrorKey errorKey = ErrorKey.getErrorKey(daoExp.getErrorKeyName());
 			throw new BizLogicException(errorKey, daoExp, daoExp.getMsgValues());
+		}
+		catch(NumberFormatException exc){
+			throw new BizLogicException(null, null, "Invalid Storage Position.");
 		}
 		if(posList.isEmpty()){
 			throw new BizLogicException(null, null, "Insuficient StoragePosition");

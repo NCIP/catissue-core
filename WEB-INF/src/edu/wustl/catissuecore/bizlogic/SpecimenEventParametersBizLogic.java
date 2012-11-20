@@ -1476,7 +1476,9 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 				pos1Integer =  AppUtility.getPositionValueInInteger(oneDimensionLabellingScheme, pos1);
 				pos2Integer = AppUtility.getPositionValueInInteger(twoDimensionLabellingScheme, pos2);
 			}
-			
+			if(pos1Integer <=0 || pos1Integer > storageContainerList.get(0).getCapacity().getOneDimensionCapacity() || pos2Integer<=0 || pos2Integer >storageContainerList.get(0).getCapacity().getTwoDimensionCapacity()){
+				throw new BizLogicException(null, null, "Invalid Storage Position.");
+			}
 			transferEventParameters.setSpecimen(specimen);
 			transferEventParameters.setToPositionDimensionOne(pos1Integer);
 			transferEventParameters.setToPositionDimensionTwo(pos2Integer);

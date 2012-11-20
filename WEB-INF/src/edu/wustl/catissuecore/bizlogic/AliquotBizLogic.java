@@ -571,6 +571,10 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			else
 			{
 				iQauntity = aliquotDetailObj.getQuantityPerAliquot().intValue();
+				if(iQauntity == 0){
+					throw new ApplicationException(null,null,"Invalid aliquot quantity.");
+				}
+				
 			}
 
 			distributedQuantity = iQauntity.doubleValue();
@@ -692,6 +696,19 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		Collection<AbstractDomainObject> specimenCollection = new LinkedHashSet<AbstractDomainObject>();
 		
 		try{
+			String sourceObjectName = StorageContainer.class.getName();
+			String column = "name";
+			List<StorageContainer> storageContainerList =  dao.retrieve(sourceObjectName, column, aliquotDetailObj.getContainerName());
+			List<Specimen> specimenList =  dao.retrieve(Specimen.class.getName(), "label", aliquotDetailObj.getParentSpecimenLabel());
+			
+			if(specimenList == null || specimenList.isEmpty()){
+				throw new BizLogicException(null, null, Constants.INVALID_LABEL_BARCODE);
+			}
+			if(storageContainerList == null || storageContainerList.isEmpty())
+			{
+				throw new BizLogicException(null, null, Constants.INVALID_CONTAINER_NAME);
+			}
+			
 			specimenBizLogic.isAuthorized(dao, parentSpecimen, sessionDataBean);
 			parentSpecimen = specimenBizLogic.getSpecimenDetailForAliquots(dao, aliquotDetailObj.getParentSpecimenLabel());
 			validateQuantity(aliquotDetailObj,parentSpecimen.getAvailableQuantity());
@@ -718,7 +735,14 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			}
 			
 		}catch(ApplicationException exp){
-			throw new BizLogicException(exp.getErrorKey(), exp, exp.getMsgValues());
+			String msgString = "";
+			if(exp.getErrorKey()!=null ){
+				msgString= exp.getErrorKey().getMessageWithValues();
+			}else{
+				msgString = exp.getMsgValues();
+			}
+			
+			throw new BizLogicException(exp.getErrorKey(), exp, msgString);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw new BizLogicException(null, null, "Specimen or Container does not exist");
@@ -746,6 +770,18 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 		final Collection<AbstractDomainObject> updateSpecimenAliquotCollection = new LinkedHashSet<AbstractDomainObject>();
 		
 		try{
+			String sourceObjectName = StorageContainer.class.getName();
+			String column = "name";
+			List<StorageContainer> storageContainerList =  dao.retrieve(sourceObjectName, column, aliquotDetailObj.getContainerName());
+			List<Specimen> specimenList =  dao.retrieve(Specimen.class.getName(), "label", aliquotDetailObj.getParentSpecimenLabel());
+			
+			if(specimenList == null || specimenList.isEmpty()){
+				throw new BizLogicException(null, null, Constants.INVALID_LABEL_BARCODE);
+			}
+			if(storageContainerList == null || storageContainerList.isEmpty())
+			{
+				throw new BizLogicException(null, null, Constants.INVALID_CONTAINER_NAME);
+			}
 			
 			specimenBizLogic.isAuthorized(dao, parentSpecimen, sessionDataBean);
 			parentSpecimen = specimenBizLogic.getSpecimenDetailForAliquots(dao, aliquotDetailObj.getParentSpecimenLabel());
@@ -771,6 +807,7 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			{
 				Specimen aliquotSpecimen = (Specimen) aliquotSpecimenList.get(i);
 				aliquotSpecimen.setLabel(parentSpecimen.getLabel() + "_"+ (++lastChildNo));
+				specPosList.get(i).setStorageContainer(storageContainerList.get(0));
 				setAliquotSpecimenDetail(aliquotSpecimen,parentSpecimen,aliquotDetailObj,specPosList.get(i));
 				updateSpecimenAliquotCollection.add(aliquotSpecimen);
 				
@@ -798,10 +835,17 @@ public class AliquotBizLogic extends CatissueDefaultBizLogic
 			
 			}
 			
-			dao.commit();
+	
 			
 		}catch(ApplicationException exp){
-			throw new BizLogicException(exp.getErrorKey(), exp, exp.getErrorKey().getErrorMessage());
+			String msgString = "";
+			if(exp.getErrorKey()!=null ){
+				msgString= exp.getErrorKey().getMessageWithValues();
+			}else{
+				msgString = exp.getMsgValues();
+			}
+			
+			throw new BizLogicException(exp.getErrorKey(), exp, msgString);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

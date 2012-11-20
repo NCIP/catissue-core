@@ -5755,6 +5755,8 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 	BizLogicException
 	{
 		SpecimenDTO specimenDTO = new SpecimenDTO();
+		try{
+			
 		String column = "label";
 		
 		String hqlQuery = "Select Specimen.activityStatus, Specimen.specimenCollectionGroup.collectionProtocolEvent.collectionProtocol.shortTitle, "+
@@ -5808,7 +5810,10 @@ public class NewSpecimenBizLogic extends CatissueDefaultBizLogic
 		{
 			throw this.getBizLogicException(null, "invalid.label.barcode", label);
 		}
-		
+		}
+		finally{
+		dao.closeSession();
+		}
 		return specimenDTO;
 		
 		}
