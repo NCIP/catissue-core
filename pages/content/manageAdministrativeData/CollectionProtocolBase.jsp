@@ -173,18 +173,21 @@ var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElement
   }
   function syncCP()
   {
-   request = newXMLHTTPReq();			
-		var actionURL;
-		var handlerFunction = getReadyStateHandler(request,onResponseSetRequester,true);	
-		request.onreadystatechange = handlerFunction;	
-var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');		
-		actionURL = "cpTitle="+ cpDetailsForm.title.value;
-		var url = "CatissueCommonAjaxAction.do?type=startSyncCP";
-		<!-- Open connection to servlet -->
-		request.open("POST",url,true);	
-		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-		request.send(actionURL);
-	}
+		var go = confirm("This might take sometime to complete. During this time, you cannot edit the protocol or perform data entry. \n Do you still want to continue?");
+		if (go==true)
+		{
+		  request = newXMLHTTPReq();			
+		  var actionURL;
+		  var handlerFunction = getReadyStateHandler(request,onResponseSetRequester,true);	
+		  request.onreadystatechange = handlerFunction;	
+		  var cpDetailsForm = window.frames['SpecimenRequirementView'].document.getElementById('CollectionProtocolForm');		
+		  actionURL = "cpTitle="+ cpDetailsForm.title.value;
+		  var url = "CatissueCommonAjaxAction.do?type=startSyncCP";
+		  request.open("POST",url,true);	
+		  request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		  request.send(actionURL);
+		}
+   	}
 
 	function onResponseSetRequester(response) 
 	{
