@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.ExportCollectionProtocolBizLogic;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.xml2excel.CSVWriter;
 
 /**
  * This action class receives and forwards all the bulk operations
@@ -39,10 +40,8 @@ public class ExportCollectionProtocolAction extends SecureAction
 			
 			ExportCollectionProtocolBizLogic exportCP=new ExportCollectionProtocolBizLogic();
 			StringBuffer downloadFile = exportCP.getCPXMLFile(request.getParameter("title"));
-			response.getWriter().append(downloadFile);
-
-			response.setContentType("application/download");
-            response.setHeader("Content-Disposition", "attachment;filename=\""+request.getParameter("title")+".csv\"");
+			CSVWriter writer = new CSVWriter();
+			writer.generate(downloadFile.toString(),"\""+request.getParameter("title")+".csv\"", response);
             
             
 		} catch (Exception exp) {
