@@ -5188,6 +5188,6 @@ Thanking You,
 			<arg value="${db.driver.class}"/>
 		</java>
 				
-		<delete dir="${temp.dir}" />
+		<!--delete dir="${temp.dir}" /-->
 	</target>
 </project>
