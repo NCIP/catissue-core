@@ -1325,7 +1325,10 @@ public class SpecimenEventParametersBizLogic extends CatissueDefaultBizLogic
 		{
 			final TransferEventParameters tep = (TransferEventParameters) domainObject;
 			StorageContainer container = null;
-
+			if(tep.getToStorageContainer()==null)
+			{
+				throw this.getBizLogicException(new Exception("User doesn't have privileges to bulk transfer the specimens to virtual position."), null, null);
+			}
 			if (tep.getToStorageContainer().getName() == null
 					&& tep.getToStorageContainer().getId() == null)
 			{
