@@ -2,131 +2,131 @@
 <properties>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.UserForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#3-SettingUpcaTissueSuitev1.2-ProvisioningcaTissueSuiteUsers</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#id-3-SettingUpcaTissueSuitev12-ProvisioningcaTissueSuiteUsers</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.InstitutionForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#3-SettingUpcaTissueSuitev1.2-SettingUpInstitutes</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#id-3-SettingUpcaTissueSuitev12-SettingUpInstitutes</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.DepartmentForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#3-SettingUpcaTissueSuitev1.2-SettingUpDepartments</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#id-3-SettingUpcaTissueSuitev12-SettingUpDepartments</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.CancerResearchGroupForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#3-SettingUpcaTissueSuitev1.2-SettingUpCancerResearchGroups%28CRGs%29</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#id-3-SettingUpcaTissueSuitev12-SettingUpCancerResearchGroupsCRGs</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.SiteForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#3-SettingUpcaTissueSuitev1.2-SettingUpSites</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#id-3-SettingUpcaTissueSuitev12-SettingUpSites</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.StorageTypeForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#3-SettingUpcaTissueSuitev1.2-CreatingStorageTypes</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#id-3-SettingUpcaTissueSuitev12-CreatingStorageTypes</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.StorageContainerForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#3-SettingUpcaTissueSuitev1.2-CreatingStorageContainers</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#id-3-SettingUpcaTissueSuitev12-CreatingStorageContainers</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#3-SettingUpcaTissueSuitev1.2-SettingUpSpecimenArrays</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#id-3-SettingUpcaTissueSuitev12-SettingUpSpecimenArrays</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.BiohazardForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#3-SettingUpcaTissueSuitev1.2-SettingUpBiohazards</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/3+-+Setting+Up+caTissue+Suite+v1.2#id-3-SettingUpcaTissueSuitev12-SettingUpBiohazards</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.CollectionProtocolForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/4+-+Setting+Up+Protocols+v1.2#4-SettingUpProtocolsv1.2-AddingaCollectionProtocol</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/4+-+Setting+Up+Protocols+v1.2#id-4-SettingUpProtocolsv12-AddingaCollectionProtocol</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.DistributionProtocolForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/4+-+Setting+Up+Protocols+v1.2#4-SettingUpProtocolsv1.2-SettingUpDistributionProtocols</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/4+-+Setting+Up+Protocols+v1.2#id-4-SettingUpProtocolsv12-SettingUpDistributionProtocols</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.AnnotationForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/5+-+Creating+Dynamic+Extensions+in+the+caTissue+Suite+User+Interface+v1.2#5-CreatingDynamicExtensionsinthecaTissueSuiteUserInterfacev1.2-CreatingaForm</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/5+-+Creating+Dynamic+Extensions+in+the+caTissue+Suite+User+Interface+v1.2#id-5-CreatingDynamicExtensionsinthecaTissueSuiteUserInterfacev12-CreatingaForm</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.ConsentResponse</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/6-+Setting+Up+Consent+Tracking+v1.2#6-SettingUpConsentTrackingv1.2-RegistrationLevel</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/6-+Setting+Up+Consent+Tracking+v1.2#id-6-SettingUpConsentTrackingv12-RegistrationLevel</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#7-HandlingBiospecimensforTechniciansandSupervisorsv1.2-AddingaBiospecimenEvent</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-AddingaBiospecimenEvent</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.OrderForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/11+-+Ordering+Biospecimens+v1.2#11-OrderingBiospecimensv1.2-OrderingWorkflow</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/11+-+Ordering+Biospecimens+v1.2#id-11-OrderingBiospecimensv12-OrderingWorkflow</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.OrderSpecimenForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/11+-+Ordering+Biospecimens+v1.2#11-OrderingBiospecimensv1.2-OrderingWorkflow</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/11+-+Ordering+Biospecimens+v1.2#id-11-OrderingBiospecimensv12-OrderingWorkflow</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/12+-+Shipping+and+Tracking+v1.2#12-ShippingandTrackingv1.2-CreatingaNewShipment</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/12+-+Shipping+and+Tracking+v1.2#id-12-ShippingandTrackingv12-CreatingaNewShipment</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.shippingtracking.shippingtracking.ShipmentRequestForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/12+-+Shipping+and+Tracking+v1.2#12-ShippingandTrackingv1.2-CreatingaNewShipment</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/12+-+Shipping+and+Tracking+v1.2#id-12-ShippingandTrackingv12-CreatingaNewShipment</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.shippingtracking.ShipmentReceivingForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/12+-+Shipping+and+Tracking+v1.2#12-ShippingandTrackingv1.2-ProcessingaReceivedShipment</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/12+-+Shipping+and+Tracking+v1.2#id-12-ShippingandTrackingv12-ProcessingaReceivedShipment</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.ParticipantForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#7-HandlingBiospecimensforTechniciansandSupervisorsv1.2-RegisteringaParticipanttoaLongitudinalCollectionProtocol</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-RegisteringaParticipanttoaCollectionProtocol</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.NewSpecimenForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#7-HandlingBiospecimensforTechniciansandSupervisorsv1.2-OffsettingaRegistrationorSpecimenCollectionandShiftofAnticipatedDates</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-OffsettingaRegistrationorSpecimenCollectionandShiftofAnticipatedDates</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.CreateSpecimenForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#7-HandlingBiospecimensforTechniciansandSupervisorsv1.2-OffsettingaRegistrationorSpecimenCollectionandShiftofAnticipatedDates</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-OffsettingaRegistrationorSpecimenCollectionandShiftofAnticipatedDates</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.AliquotForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#7-HandlingBiospecimensforTechniciansandSupervisorsv1.2-OffsettingaRegistrationorSpecimenCollectionandShiftofAnticipatedDates</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-AliquotingaBiospecimen</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.ViewSpecimenSummaryForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#7-HandlingBiospecimensforTechniciansandSupervisorsv1.2-AddingMultipleSpecimens</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/4.2+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v2.0#id-42-HandlingBiospecimensforTechniciansandSupervisorsv20-SpecimenSummaryandCollection</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/10+-+Introduction+to+Clinical+Annotations+v1.2#10-IntroductiontoClinicalAnnotationsv1.2-AddingClinicalandPathologicalDatatoanAnnotation</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/10+-+Introduction+to+Clinical+Annotations+v1.2#id-10-IntroductiontoClinicalAnnotationsv12-AssigningAnnotationstoaCollectionProtocol</value>
 	</property>
 	<property>
 		<name>edu.wustl.query.actionForm.SaveQueryForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/13+-+Performing+Searches+v1.2#13-PerformingSearchesv1.2-UsingtheAdvancedQueryWizard</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/11.6+-+Save+Query+v1.1#id-116-SaveQueryv11-GettingStarted</value>
 	</property>
 	<property>
 		<name>edu.wustl.simplequery.actionForm.SimpleQueryInterfaceForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/13+-+Performing+Searches+v1.2#13-PerformingSearchesv1.2-PerformingaSimpleSearch</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/13+-+Performing+Searches+v1.2#id-13-PerformingSearchesv12-PerformingaSimpleSearch</value>
 	</property>
 	<property>
 		<name>edu.wustl.bulkoperator.actionForm.BulkOperationForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/14+-+Bulk+Operations+v1.2#14-BulkOperationsv1.2-RunningBulkOperationsfromcaTissueSuite</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/14+-+Bulk+Operations+v1.2#id-14-BulkOperationsv12-RunningBulkOperationsfromcaTissueSuite</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.TitliSearchForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/13+-+Performing+Searches+v1.2#13-PerformingSearchesv1.2-PerformingaKeywordSearch</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/13+-+Performing+Searches+v1.2#id-13-PerformingSearchesv12-PerformingaKeywordSearch</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.shippingtracking.DashboardForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/12+-+Shipping+and+Tracking+v1.2#12-ShippingandTrackingv1.2-ViewingtheDashboard</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/12+-+Shipping+and+Tracking+v1.2#id-12-ShippingandTrackingv12-ViewingtheDashboard</value>
 	</property>
 	<property>
 		<name>edu.wustl.query.actionForm.CategorySearchForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/13+-+Performing+Searches+v1.2#13-PerformingSearchesv1.2-UsingtheAdvancedQueryWizard</value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/13+-+Performing+Searches+v1.2#id-13-PerformingSearchesv12-UsingtheAdvancedQueryWizard</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.CPSearchForm</name>
-		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#7-HandlingBiospecimensforTechniciansandSupervisorsv1.2-HowDoesCPBasedDataEntryWork%3F
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-HowDoesCPBasedDataEntryWork
 		</value>
 	</property>
 	<property>
@@ -143,11 +143,11 @@
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.SpecimenArrayForm</name>
-		<value></value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-AddingaSpecimenArray</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm</name>
-		<value></value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/7+-+Handling+Biospecimens+for+Technicians+and+Supervisors+v1.2#id-7-HandlingBiospecimensforTechniciansandSupervisorsv12-AddingaSpecimenArray</value>
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.RequestListFilterationForm</name>
@@ -155,7 +155,7 @@
 	</property>
 	<property>
 		<name>edu.wustl.catissuecore.actionForm.AdvanceSearchForm</name>
-		<value></value>
+		<value>https://wiki.nci.nih.gov/display/caTissuedoc/13+-+Performing+Searches+v1.2#id-13-PerformingSearchesv12-UsingtheAdvancedQueryWizard</value>
 	</property>
 	<property>
 		<name>helpHomePage</name>
