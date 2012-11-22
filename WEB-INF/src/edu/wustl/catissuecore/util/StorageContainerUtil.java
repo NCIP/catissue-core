@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -678,7 +679,7 @@ public final class StorageContainerUtil
 			Integer positionDimensionOne, Integer positionDimensionTwo, DAO dao)
 	throws BizLogicException
 	{
-		final Map<NameValueBean, List<NameValueBean>> map = new TreeMap<NameValueBean, List<NameValueBean>>();
+		final Map<NameValueBean, List<NameValueBean>> map = new LinkedHashMap<NameValueBean, List<NameValueBean>>();
 		int count = 0;
 		// Logger.out.debug("dimX:"+positionDimensionOne+":dimY:"+positionDimensionTwo);
 		// if (!container.isFull().booleanValue())
@@ -719,7 +720,7 @@ public final class StorageContainerUtil
 		// Logger.out.info("Map :"+map);
 		if (count < aliquotCount)
 		{
-			return new TreeMap<NameValueBean, List<NameValueBean>>();
+			return new LinkedHashMap<NameValueBean, List<NameValueBean>>();
 		}
 		return map;
 	}
