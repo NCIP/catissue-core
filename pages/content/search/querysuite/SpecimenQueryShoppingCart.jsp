@@ -131,8 +131,8 @@ function reloadGrid(obj)
 }
 function updateHiddenFields()
 	{
-		
-		var isChecked = "false";
+		var isCreateRequestShipment = document.forms[0].chkName[3].checked || document.forms[0].chkName[4].checked;
+               var isChecked = "false";
 		var checkedRows = mygrid.getCheckedRows(0);
 //alert(checkedRows);
 		if(checkedRows.length > 0)
@@ -145,9 +145,16 @@ function updateHiddenFields()
 			for(i=0;i<cb.size();i++)
 			{
 			//alert(cb[i]+"   cb[i]");
-				var cl = mygrid.cells(cb[i],9).getValue();
-				//alert("cl   "+cl);
-				//alert(specIds);
+				
+                                if(isCreateRequestShipment == true)
+                               {
+                                 var cl = mygrid.cells(cb[i],10).getValue();  
+			       }
+                               else
+                               {
+                                  var cl = mygrid.cells(cb[i],9).getValue();
+                               } 
+                               //alert(specIds);
 				if(specIds.length >0)
 				specIds = specIds+","+cl;
 				
@@ -485,16 +492,16 @@ function loadSpecimenGrid()
 	mygrid = new dhtmlXGridObject("specimenGrid");
 	mygrid.setImagePath("dhtmlx_suite/imgs/");
 	//CHKBOX,SCG_NAME,Label,Barcode,Parent_Specimen_Id,Class,Type,Avl_Quantity,Lineage,Identifier
-	mygrid.setInitWidthsP("3,22,15,,15,15,,15,15,");
+	mygrid.setInitWidthsP("3,22,15,,15,15,,15,15,,");
 	mygrid.setEditable(true);
 	mygrid.setSkin("dhx_skyblue");
 	mygrid.enableAutoHeight(true,280);
-	mygrid.setColSorting(",str,str,str,str,str,str,str,str,str");
-	mygrid.setHeader(",Specimen Collection Group Name,Label (Barcode),,Parent Label,Class (Type),,Quantity,Lineage,");
+	mygrid.setColSorting(",str,str,str,str,str,str,str,str,str,str");
+	mygrid.setHeader(",Specimen Collection Group Name,Label (Barcode),,Parent Label,Class (Type),,Quantity,Lineage,,");
 	
-	mygrid.attachHeader("#master_checkbox,,#text_filter,,,#text_filter,,,#select_filter,");
+	mygrid.attachHeader("#master_checkbox,,#text_filter,,,#text_filter,,,#select_filter,,");
 	 mygrid.setColAlign("center,,,,,,,,,,")
-	mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,ro,ro");
+	mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro");
 	
 	//mygrid.enableTooltips(",true,true,true,true,true,true,true,true,true");
 	mygrid.enableRowsHover(true,'grid_hover')
@@ -509,6 +516,7 @@ function loadSpecimenGrid()
 	mygrid.setColumnHidden(3,true);
 	mygrid.setColumnHidden(6,true);
 	mygrid.setColumnHidden(9,true);
+    mygrid.setColumnHidden(10,true);
 	
 }
 	</script>
