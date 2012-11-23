@@ -58,7 +58,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 		String target = Constants.SUCCESS;
 		final String operation = request.getParameter(Constants.OPERATION);
 		String pageOf=request.getParameter("requestFromPage");
-		Object specimenIds = getSpecimenIds(searchForm,request,pageOf,operation);
+		Object specimenIds = getSpecimenIds(searchForm,session,pageOf,operation);
 		final QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
 
@@ -94,14 +94,9 @@ public class BulkCartAction extends QueryShoppingCartAction
 				|| edu.wustl.catissuecore.util.shippingtracking.Constants.CREATE_SHIPMENT_REQUEST
 						.equals(operation))
 		{
-		//	if(specimenIds == null)
-			//{
-				target = this.createShipment(searchForm, session, operation);
-			//}
-		//	else
-			//{
-			//	target = this.createShipment((LinkedList<String>)specimenIds, operation,session);
-			//}
+
+				target = this.createShipment(searchForm, session, operation,pageOf,specimenIds);
+
 		}
 		else if (Constants.REQUEST_TO_DISTRIBUTE.equals(operation))
 		{
@@ -168,14 +163,22 @@ public class BulkCartAction extends QueryShoppingCartAction
 	 * @return String : String
 	 */
 	private String createShipment(AdvanceSearchForm searchForm, HttpSession session,
-			String operation)
+			String operation,String pageOf, Object specimenIds)
 	{
 		String target = "";
 
-		final QueryShoppingCart cart = (QueryShoppingCart) session
+		QueryShoppingCart cart = (QueryShoppingCart) session
 				.getAttribute(Constants.QUERY_SHOPPING_CART);
 
 		this.removeSessionAttributes(session);
+	   if(pageOf.equals("specimenListView"))
+	{
+	
+		   session.setAttribute(Constants.SPECIMEN_LABELS_LIST, specimenIds);
+	
+	}
+	   else
+	   {
 		final List<AttributeInterface> cartAttributeList = cart.getCartAttributeList();
 
 		if (cartAttributeList != null)
@@ -184,6 +187,8 @@ public class BulkCartAction extends QueryShoppingCartAction
 					cartAttributeList, this.getCheckboxValues(searchForm), cart);
 			this.getMapDetailsForShipment(session, entityIdsMap);
 		}
+	   
+	   }
 
 		target = operation;
 
@@ -469,7 +474,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 		}
 		return entityIdsMap;
 	}
-	private Object  getSpecimenIds(AdvanceSearchForm searchForm, HttpServletRequest request,String pageOf,String operation) 
+	private Object  getSpecimenIds(AdvanceSearchForm searchForm, HttpSession session,String pageOf,String operation) 
 	{
 		Set<String> specimenIdSet = new LinkedHashSet<String>();
 		if("specimenListView".equals(pageOf))
@@ -500,7 +505,7 @@ public class BulkCartAction extends QueryShoppingCartAction
 		}
 		else
 		{
-			final HttpSession session = request.getSession();
+			//final HttpSession session = request.getSession();
 			if (session.getAttribute(Constants.SPECIMEN_ID) != null) {
 				session.removeAttribute(Constants.SPECIMEN_ID);
 			}
