@@ -17,6 +17,7 @@ public class GridSpecimenImpl extends AbstractGridImpl
 		String query = "Select 0 as CHKBOX, "+
 "case when scg.NAME is null then '' else scg.NAME end as SCG_NAME , "+
 "case when Specimen1.LABEL  is null then '' else Specimen1.LABEL end as Label ,"+ 
+"case when Specimen1.LABEL  is null then '' else Specimen1.LABEL end as LabelOnly ,"+
 "case when Specimen1.BARCODE  is null then '' else Specimen1.BARCODE end as Barcode ,"+ 
 "CASE WHEN (select label from catissue_Specimen where identifier=AbstractSpecimen1.parent_specimen_id) IS NULL THEN '' "+
 "ELSE  (select label from catissue_Specimen where identifier=AbstractSpecimen1.parent_specimen_id) END as ParentLabel,"+ 
@@ -77,7 +78,7 @@ public class GridSpecimenImpl extends AbstractGridImpl
 	 */
 	public String getTableColumnString() throws BizLogicException
 	{
-		String gridColumns = "CHKBOX,SCG_NAME,Label,Barcode,ParentLabel,Class,Type,Avl_Quantity,Lineage,Identifier";
+		String gridColumns = "CHKBOX,SCG_NAME,Label,Barcode,ParentLabel,Class,Type,Avl_Quantity,Lineage,Identifier,LabelOnly";
 		return gridColumns;
 	}
 	
@@ -86,7 +87,7 @@ public class GridSpecimenImpl extends AbstractGridImpl
 	
 		String specimenLabel =data.get_value("Label");
 		String barcode =data.get_value("Barcode");
-	
+	    data.set_value("LableOnly",specimenLabel);
 		StringBuffer specimenNameString= new StringBuffer();
 		specimenNameString.append(specimenLabel);
 		if(!Validator.isEmpty(barcode))
@@ -114,5 +115,6 @@ public class GridSpecimenImpl extends AbstractGridImpl
 		String pLabel = data.get_value("ParentLabel");
 		if(Validator.isEmpty(pLabel))
 			data.set_value("ParentLabel","");
+		
 	}
 }
