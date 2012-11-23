@@ -900,7 +900,7 @@
 		    <echo>before deploy_db: ${time}</echo>
 
 		<antcall target="deploy_db" />
-
+		<antcall target="liquibase_aqupgrade_target" />
 		<tstamp>
 		      <format property="time2" pattern="MM/dd/yyyy hh:mm:ss aa"
 		            />
