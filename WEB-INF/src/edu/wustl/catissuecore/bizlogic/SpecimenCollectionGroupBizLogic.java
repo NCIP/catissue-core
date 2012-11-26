@@ -3465,8 +3465,10 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 		Collection<SpecimenCollectionGroup> specimenCollectionGroups=protocolRegistration.getSpecimenCollectionGroupCollection();
 		//Iterate over each SCG of CPRs.
 		for (SpecimenCollectionGroup specimenCollectionGroup : specimenCollectionGroups) {
-			 
-			 updateChildspecimenCollection(specimenCollectionGroup,sessionDataBean,dao);
+			 if(Constants.ACTIVITY_STATUS_ACTIVE.equals(specimenCollectionGroup.getActivityStatus()))  
+			 {
+				 updateChildspecimenCollection(specimenCollectionGroup,sessionDataBean,dao);
+			 }
 			 //Removing event from events as they already exist for CPR, do not need to create again.
 			 collectionProtocolEvents.remove(specimenCollectionGroup.getCollectionProtocolEvent());
 		}
@@ -3590,26 +3592,28 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 	private void processParent(SpecimenRequirement specimenRequirement,Specimen specimen,SpecimenCollectionGroup specimenCollectionGroup,DAO dao,SessionDataBean sessionDataBean,Map<SpecimenRequirement, Specimen> sprToSpecimenMap) throws BizLogicException
 	{
 		boolean isSPRExist=false;
-		Collection<AbstractSpecimen> childSpecimenRequirements=specimenRequirement.getChildSpecimenCollection();
-		Collection<AbstractSpecimen> childSpecimens=specimen.getChildSpecimenCollection();
-		NewSpecimenBizLogic specimenBizLogic=new NewSpecimenBizLogic();
-		for (AbstractSpecimen childSpecimenRequirement : childSpecimenRequirements)
-		{
-			for (AbstractSpecimen childSpecimen : childSpecimens) {
-				if(childSpecimenRequirement.equals(((Specimen)childSpecimen).getSpecimenRequirement()))
+		if(Constants.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
+		{	
+			Collection<AbstractSpecimen> childSpecimenRequirements=specimenRequirement.getChildSpecimenCollection();
+			Collection<AbstractSpecimen> childSpecimens=specimen.getChildSpecimenCollection();
+			NewSpecimenBizLogic specimenBizLogic=new NewSpecimenBizLogic();
+			for (AbstractSpecimen childSpecimenRequirement : childSpecimenRequirements)
+			{
+				for (AbstractSpecimen childSpecimen : childSpecimens) {
+					if(childSpecimenRequirement.equals(((Specimen)childSpecimen).getSpecimenRequirement()))
+					{
+						isSPRExist=true;
+						processParent((SpecimenRequirement)childSpecimenRequirement,(Specimen)childSpecimen,specimenCollectionGroup,dao,sessionDataBean,sprToSpecimenMap);
+						break;
+					}
+				}
+				if(!isSPRExist)
 				{
-					isSPRExist=true;
-					processParent((SpecimenRequirement)childSpecimenRequirement,(Specimen)childSpecimen,specimenCollectionGroup,dao,sessionDataBean,sprToSpecimenMap);
-					break;
+					SpecimenRequirement requirement=(SpecimenRequirement)childSpecimenRequirement;
+					createSpecimenFromSPR(requirement, specimenCollectionGroup, sprToSpecimenMap.get(specimenRequirement), sessionDataBean, dao);
 				}
 			}
-			if(!isSPRExist)
-			{
-				SpecimenRequirement requirement=(SpecimenRequirement)childSpecimenRequirement;
-				createSpecimenFromSPR(requirement, specimenCollectionGroup, sprToSpecimenMap.get(specimenRequirement), sessionDataBean, dao);
-			}
-		}
-		
+		}	
 	}
 	private void createSpecimenFromSPR(SpecimenRequirement specimenRequirement,SpecimenCollectionGroup specimenCollectionGroup,AbstractSpecimen parentSpecimen,SessionDataBean sessionDataBean,DAO dao) throws BizLogicException
 	{

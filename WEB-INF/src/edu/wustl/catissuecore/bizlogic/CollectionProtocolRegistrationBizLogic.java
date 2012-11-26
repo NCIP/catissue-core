@@ -2328,17 +2328,18 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 				
 				cpSyncAudit=synchronizeCollectionProtocolBizLogic.startSyncProcessAudit(collectionProtocol.getId(),daoForEachCPR,sessionDataBean.getUserId());
 				CollectionProtocolRegistration protocolRegistration=(CollectionProtocolRegistration) daoForEachCPR.retrieveById(CollectionProtocolRegistration.class.getName(), ((CollectionProtocolRegistration)registrations.next()).getId());
-				
-				updateConsentResponse(consentTiersInCP, protocolRegistration);
-				
-				SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic=new SpecimenCollectionGroupBizLogic();
-				specimenCollectionGroupBizLogic.updateSCGs(protocolRegistration,sessionDataBean,daoForEachCPR);
-				
-				CollectionProtocolRegistrationBizLogic protocolRegistrationBizLogic=new CollectionProtocolRegistrationBizLogic();
-				protocolRegistrationBizLogic.update(daoForEachCPR, protocolRegistration,
-						daoForEachCPR.retrieveById(CollectionProtocolRegistration.class.getName(), protocolRegistration.getId()), 
-						sessionDataBean);
-				
+				if(Constants.ACTIVITY_STATUS_ACTIVE.equals(protocolRegistration.getActivityStatus()))
+				{	
+					updateConsentResponse(consentTiersInCP, protocolRegistration);
+					
+					SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic=new SpecimenCollectionGroupBizLogic();
+					specimenCollectionGroupBizLogic.updateSCGs(protocolRegistration,sessionDataBean,daoForEachCPR);
+					
+					CollectionProtocolRegistrationBizLogic protocolRegistrationBizLogic=new CollectionProtocolRegistrationBizLogic();
+					protocolRegistrationBizLogic.update(daoForEachCPR, protocolRegistration,
+							daoForEachCPR.retrieveById(CollectionProtocolRegistration.class.getName(), protocolRegistration.getId()), 
+							sessionDataBean);
+				}
 				cprProcessCount++;
 				if(!registrations.hasNext())
 				{
