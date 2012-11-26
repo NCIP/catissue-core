@@ -56,7 +56,7 @@ public class ExportCollectionProtocolAction extends SecureAction
 			
 			CSVWriter csvWriter=new CSVWriter(new FileWriter(CommonServiceLocator.getInstance().getAppHome() + "/" +request.getParameter("title")+".csv"));
 			csvWriter.writeNext(headerNValue[0].split(","));
-			csvWriter.writeNext(headerNValue[1].split(","));
+			csvWriter.writeNext(headerNValue[1].split(";"));
 			csvWriter.flush();
 			response.setContentType("application/download");
             response.setHeader("Content-Disposition", "attachment;filename=\""+request.getParameter("title")+".csv\"");
