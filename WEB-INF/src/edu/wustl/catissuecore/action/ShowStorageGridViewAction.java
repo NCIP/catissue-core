@@ -415,7 +415,7 @@ public class ShowStorageGridViewAction extends BaseAction
 							else if (Constants.PAGE_OF_SPECIMEN.equals(pageOf))
 							{
 								//value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(1,1)\\\\\" src=\\\\\"images/uIEnhancementImages/empty_container.gif\\\\\" alt=\\\\\"Unused\\\\\" width=\\\\\"32\\\\\" height=\\\\\"32\\\\\" border=\\\\\"0\\\\\" onmouseover=\\\\\"Tip(\\\'Unused\\\')\\\\\"></td></td>";							//value = "";
-								value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(\\\'"+selectedContainerName+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\');\\ " 
+								value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValueForContainer(\\\'"+selectedContainerName+"\\\',\\\'"+java.net.URLEncoder.encode(storageContainerGridObject.getName(),"UTF-8")+"\\\');\\ " 
 										+"setTextBoxValue(\\\'"+pos1+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
 										+"setTextBoxValue(\\\'"+pos2+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ ";
 								if(storageContainerIdFromMap!=null)
@@ -427,7 +427,7 @@ public class ShowStorageGridViewAction extends BaseAction
 							}
 							else if(Constants.PAGE_OF_ALIQUOT.equals(pageOf))
 							{
-								value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValue(\\\'"+containerStyle+"\\\',\\\'"+storageContainerGridObject.getName()+"\\\');\\ " 
+								value = "<a href=\\\\\"#\\\\\"><img onclick=\\\\\"setTextBoxValueForContainer(\\\'"+containerStyle+"\\\',\\\'"+java.net.URLEncoder.encode(storageContainerGridObject.getName(),"UTF-8")+"\\\');\\ " 
 										+"setTextBoxValue(\\\'"+xDimStyleId+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getOneDimensionLabellingScheme(),i)+"\\\');\\ "
 										+"setTextBoxValue(\\\'"+yDimStyleId+"\\\',\\\'"+AppUtility.getPositionValue(storageContainerGridObject.getTwoDimensionLabellingScheme(),j)+"\\\');\\ "
 										+"closeFramedWindow()\\\\\" "
@@ -470,7 +470,7 @@ public class ShowStorageGridViewAction extends BaseAction
 				}
 
 			}
-
+		
 
 			StringBuffer jsonStringBuffer = new StringBuffer();
 

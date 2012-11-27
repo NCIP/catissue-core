@@ -15,9 +15,11 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -40,10 +42,13 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.DBTypes;
 import edu.wustl.dao.util.HibernateMetaData;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.privilege.PrivilegeManager;
 
 /**
@@ -774,24 +779,15 @@ public class SiteBizLogic extends CatissueDefaultBizLogic
 		{
 			if (containerName != null && !("").equals(containerName))
 			{
-
-				StorageContainer storageContainer = null;
-				final String[] strArray = {containerName};
-				List contList = null;
-
-				if (strArray != null)
-				{
-					contList = dao.retrieve(StorageContainer.class.getName(), Constants.NAME,
-							containerName);
-				}
+				HibernateDAO hibernateDAO=(HibernateDAO) dao;
+				
+				// Create a map of substitution parameters.
+				Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+				substParams.put("0", new NamedQueryParam(DBTypes.STRING, containerName));
+				List contList=hibernateDAO.executeNamedQuery("getSiteByContainerName", substParams);
 				if (contList != null && !contList.isEmpty())
 				{
-					storageContainer = (StorageContainer) contList.get(0);
-				}
-
-				if (storageContainer != null)
-				{
-					site = storageContainer.getSite();
+					site = (Site) contList.get(0);
 				}
 			}
 		}

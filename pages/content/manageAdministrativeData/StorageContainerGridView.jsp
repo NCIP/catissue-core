@@ -55,6 +55,12 @@ function setCustomListBoxValue(elementId,elementValue)
 	}
 }
 
+function setTextBoxValueForContainer(elementId,elementValue)
+{
+	var id = parent.opener.document.getElementById(elementId);	
+	id.value = decodeURI(elementValue.replace("+","%20"));
+}
+
 function setTextBoxValue(elementId,elementValue)
 {
 	var id = parent.opener.document.getElementById(elementId);	

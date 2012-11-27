@@ -168,5 +168,7 @@
 		            length="50"
 		        />
     </class>
+    <query name="getSiteByContainerName">Select ST.site from edu.wustl.catissuecore.domain.StorageContainer ST WHERE ST.name= ?
+</query>
 
 </hibernate-mapping>

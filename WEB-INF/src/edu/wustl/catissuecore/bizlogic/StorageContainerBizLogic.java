@@ -49,10 +49,13 @@ import edu.wustl.common.util.global.Status;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import edu.wustl.dao.DAO;
+import edu.wustl.dao.HibernateDAO;
 import edu.wustl.dao.JDBCDAO;
 import edu.wustl.dao.QueryWhereClause;
 import edu.wustl.dao.condition.EqualClause;
 import edu.wustl.dao.exception.DAOException;
+import edu.wustl.dao.query.generator.DBTypes;
+import edu.wustl.dao.util.NamedQueryParam;
 import edu.wustl.security.exception.SMException;
 import edu.wustl.security.manager.SecurityManagerFactory;
 
@@ -1522,13 +1525,14 @@ public class StorageContainerBizLogic extends CatissueDefaultBizLogic
 	private void validateContPos(DAO dao, final StorageContainer container) throws DAOException,
 			BizLogicException
 	{
-		final String sourceObjectName = StorageContainer.class.getName();
-		final String[] selectColumnName = {"id"};
-		final QueryWhereClause queryWhereClause = new QueryWhereClause(sourceObjectName);
-		queryWhereClause.addCondition(new EqualClause("name", container
+		HibernateDAO hibernateDAO=(HibernateDAO) dao;
+		
+		// Create a map of substitution parameters.
+		Map<String, NamedQueryParam> substParams = new HashMap<String, NamedQueryParam>();
+		substParams.put("0", new NamedQueryParam(DBTypes.STRING, container
 				.getLocatedAtPosition().getParentContainer().getName()));
-		final List list = dao.retrieve(sourceObjectName, selectColumnName,
-				queryWhereClause);
+		
+		final List list=hibernateDAO.executeNamedQuery("getStorageContainerIdByContainerName", substParams);
 		if (!list.isEmpty())
 		{
 			container.getLocatedAtPosition().getParentContainer().setId(
