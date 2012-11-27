@@ -952,7 +952,7 @@ public class SpecimenArrayBizLogic extends CatissueDefaultBizLogic
 			 */
 			final Collection specimenArrayContentCollection = specimenArray
 					.getSpecimenArrayContentCollection();
-			if (!specimenArrayContentCollection.isEmpty())
+			if (specimenArrayContentCollection!=null && !specimenArrayContentCollection.isEmpty())
 			{
 				final Iterator iterator = specimenArrayContentCollection.iterator();
 				while (iterator.hasNext())
