@@ -390,6 +390,8 @@
 		cpCollection = event.result as ArrayCollection;
 
 		var collProtocolName : String = null;
+		
+		var isPhiview: Boolean = false;
 
 		for(var iter:Number=0; iter<cpCollection.length; iter++)
 	 	{
@@ -397,6 +399,7 @@
 			if(tempbean.value==collectionProtocolId)
 			{
 				collProtocolName = tempbean.name;
+				isPhiview = tempbean.isPHIView;
 				break;
 			}
 		}
@@ -411,6 +414,7 @@
 			var selectedCp : NameValueBean = new NameValueBean();
 			selectedCp.value = collectionProtocolId;
 			selectedCp.name = collProtocolName;
+			selectedCp.isPHIView = isPhiview;
 			cpCombo = selectedCp;
 
 			Cp.inputArea.text = selectedCp.name;
