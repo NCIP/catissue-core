@@ -23,7 +23,7 @@ public class GridSpecimenImpl extends AbstractGridImpl
 "ELSE  (select label from catissue_Specimen where identifier=AbstractSpecimen1.parent_specimen_id) END as ParentLabel,"+ 
 "case when AbstractSpecimen1.SPECIMEN_CLASS  is null then '' else AbstractSpecimen1.SPECIMEN_CLASS end as Class , "+
 "case when AbstractSpecimen1.SPECIMEN_TYPE is null then '' else  AbstractSpecimen1.SPECIMEN_TYPE end as Type , "+
-"case when Specimen1.AVAILABLE_QUANTITY  is null then '' else Specimen1.AVAILABLE_QUANTITY end as Avl_Quantity ,"+ 
+"case when Specimen1.AVAILABLE_QUANTITY  is null then 0 else Specimen1.AVAILABLE_QUANTITY end as Avl_Quantity ,"+ 
 "case when AbstractSpecimen1.LINEAGE is null then '' else AbstractSpecimen1.LINEAGE end as Lineage, "+
 "Specimen1.IDENTIFIER as Identifier "+
 "FROM  CATISSUE_SPECIMEN_CHAR SpecimenCharacteristics1 , CATISSUE_ABSTRACT_SPECIMEN AbstractSpecimen1 ,"+ 
