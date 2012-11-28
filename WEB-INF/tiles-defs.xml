@@ -797,7 +797,7 @@
 	</definition>
 
 	<definition name=".catissuecore.queryResultsSpreadsheetViewDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/search/SimpleSearchDataView.jsp"/>
+		<put name="content" value="/pages/advQuery/content/search/SimpleSearchDataView.jsp"/>
 	</definition>
 	<definition name=".catissuecore.queryCollectionProtocolRegistrationDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CollectionProtocolRegistration.jsp" />
