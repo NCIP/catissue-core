@@ -152,7 +152,7 @@ function doOnRowSelected(rId)
 }	
 function giveCall(url,msg,msg1,id)
 {
-	
+	document.getElementById('objCheckbox').checked=true;
 	document.getElementById('objCheckbox').value=id;
 	ajaxAssignTagFunctionCall(url,msg,msg1);
 }

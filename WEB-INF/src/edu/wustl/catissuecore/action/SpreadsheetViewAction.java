@@ -63,6 +63,9 @@ public class SpreadsheetViewAction extends BaseAction
 		 * execution while navigating through query result pages. Here,
 		 * extending this class from BaseAction
 		 */
+		request.setAttribute("isSpecPresent", request.getParameter("isSpecPresent"));
+		request.setAttribute("specIdColumnIndex", request.getParameter("specIdColumnIndex"));
+		request.setAttribute("fromCatissue", "true");
 		final HttpSession session = request.getSession();
 		// changes are done for check all
 		String checkAllPages = "";
