@@ -16,15 +16,15 @@ public class GridSpecimenImpl extends AbstractGridImpl
 	{
 		String query = "Select 0 as CHKBOX, "+
 "case when scg.NAME is null then '' else scg.NAME end as SCG_NAME , "+
-"case when Specimen1.LABEL  is null then '' else Specimen1.LABEL end as Label ,"+ 
-"case when Specimen1.LABEL  is null then '' else Specimen1.LABEL end as LabelOnly ,"+
-"case when Specimen1.BARCODE  is null then '' else Specimen1.BARCODE end as Barcode ,"+ 
+"case when Specimen1.LABEL  is null then '' else Specimen1.LABEL end as LABEL ,"+ 
+"case when Specimen1.LABEL  is null then '' else Specimen1.LABEL end as LABELONLY ,"+
+"case when Specimen1.BARCODE  is null then '' else Specimen1.BARCODE end as BARCODE ,"+ 
 "CASE WHEN (select label from catissue_Specimen where identifier=AbstractSpecimen1.parent_specimen_id) IS NULL THEN '' "+
-"ELSE  (select label from catissue_Specimen where identifier=AbstractSpecimen1.parent_specimen_id) END as ParentLabel,"+ 
-"case when AbstractSpecimen1.SPECIMEN_CLASS  is null then '' else AbstractSpecimen1.SPECIMEN_CLASS end as Class , "+
-"case when AbstractSpecimen1.SPECIMEN_TYPE is null then '' else  AbstractSpecimen1.SPECIMEN_TYPE end as Type , "+
-"case when Specimen1.AVAILABLE_QUANTITY  is null then 0 else Specimen1.AVAILABLE_QUANTITY end as Avl_Quantity ,"+ 
-"case when AbstractSpecimen1.LINEAGE is null then '' else AbstractSpecimen1.LINEAGE end as Lineage, "+
+"ELSE  (select label from catissue_Specimen where identifier=AbstractSpecimen1.parent_specimen_id) END as PARENTLABEL,"+ 
+"case when AbstractSpecimen1.SPECIMEN_CLASS  is null then '' else AbstractSpecimen1.SPECIMEN_CLASS end as CLASS , "+
+"case when AbstractSpecimen1.SPECIMEN_TYPE is null then '' else  AbstractSpecimen1.SPECIMEN_TYPE end as TYPE , "+
+"case when Specimen1.AVAILABLE_QUANTITY  is null then 0 else Specimen1.AVAILABLE_QUANTITY end as AVL_QUANTITY,"+ 
+"case when AbstractSpecimen1.LINEAGE is null then '' else AbstractSpecimen1.LINEAGE end as LINEAGE, "+
 "Specimen1.IDENTIFIER as Identifier "+
 "FROM  CATISSUE_SPECIMEN_CHAR SpecimenCharacteristics1 , CATISSUE_ABSTRACT_SPECIMEN AbstractSpecimen1 ,"+ 
 "CATISSUE_EXTERNAL_IDENTIFIER ExternalIdentifier1 , CATISSUE_SPECIMEN Specimen1 , catissue_spec_tag_items atg, catissue_specimen_coll_group scg "+ 
@@ -78,16 +78,16 @@ public class GridSpecimenImpl extends AbstractGridImpl
 	 */
 	public String getTableColumnString() throws BizLogicException
 	{
-		String gridColumns = "CHKBOX,SCG_NAME,Label,Barcode,ParentLabel,Class,Type,Avl_Quantity,Lineage,Identifier,LabelOnly";
+		String gridColumns = "CHKBOX,SCG_NAME,LABEL,BARCODE,PARENTLABEL,CLASS,TYPE,AVL_QUANTITY,LINEAGE,IDENTIFIER,LABELONLY";
 		return gridColumns;
 	}
 	
 	public void beforeRender(com.dhtmlx.connector.DataItem data)
 	{
 	
-		String specimenLabel =data.get_value("Label");
-		String barcode =data.get_value("Barcode");
-	    data.set_value("LableOnly",specimenLabel);
+		String specimenLabel =data.get_value("LABEL");
+		String barcode =data.get_value("BARCODE");
+	    data.set_value("LABELONLY",specimenLabel);
 		StringBuffer specimenNameString= new StringBuffer();
 		specimenNameString.append(specimenLabel);
 		if(!Validator.isEmpty(barcode))
@@ -97,10 +97,10 @@ public class GridSpecimenImpl extends AbstractGridImpl
 			specimenNameString.append(barcode);
 			specimenNameString.append(")");
 		}
-		data.set_value("Label",specimenNameString.toString());
+		data.set_value("LABEL",specimenNameString.toString());
 		
-		String specimenClass =data.get_value("Class");
-		String specimenType =data.get_value("Type");
+		String specimenClass =data.get_value("CLASS");
+		String specimenType =data.get_value("TYPE");
 	
 		StringBuffer classNameStr= new StringBuffer();
 		classNameStr.append(specimenClass);
@@ -110,11 +110,11 @@ public class GridSpecimenImpl extends AbstractGridImpl
 			classNameStr.append(specimenType);
 			classNameStr.append(")");
 		}
-		data.set_value("Class",classNameStr.toString());
+		data.set_value("CLASS",classNameStr.toString());
 		
-		String pLabel = data.get_value("ParentLabel");
+		String pLabel = data.get_value("PARENTLABEL");
 		if(Validator.isEmpty(pLabel))
-			data.set_value("ParentLabel","");
+			data.set_value("PARENTLABEL","");
 		
 	}
 }
