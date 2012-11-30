@@ -54,13 +54,10 @@ public class SpecimenListBizlogic implements ITagBizlogic
 		Tag tag = new Tag();
 		tag.setIdentifier(tagId);
 		TagItem<AbstractSpecimen> tagItem = new TagItem<AbstractSpecimen>();
-
-		//ParameterizedQuery query = getQueryById(objId);
-		Specimen query = new Specimen();
-		query.setId(objId);
+	 
 
 		tagItem.setTag(tag);
-		tagItem.setObj(query);
+		tagItem.setObjId(objId);
 
 		TagDAO<AbstractSpecimen> tagDao = new TagDAO<AbstractSpecimen>(entityName);
 		tagDao.insertTagItem(tagItem);
@@ -160,6 +157,7 @@ public class SpecimenListBizlogic implements ITagBizlogic
 			Set<TagItem> tagItemList = getTagItemByTagId(entityName, tagId);
 			JSONArray treeData = new JSONArray();
 			List objDetail = AppUtility.getObjDetails(tagId);
+			
 			int childCount = 0;
 			for (Object object : objDetail) 
 			{

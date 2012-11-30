@@ -12,8 +12,6 @@
 			<column name="TAG_ID" not-null="true" />
 		</many-to-one>
 
-		<many-to-one name="obj" class="edu.wustl.catissuecore.domain.AbstractSpecimen" cascade="none">
-		 	<column name="OBJ_ID" not-null="true" />
-		</many-to-one>
+		<property name="objId" type="java.lang.Long" column="OBJ_ID"/>
 	</class>
 </hibernate-mapping>
