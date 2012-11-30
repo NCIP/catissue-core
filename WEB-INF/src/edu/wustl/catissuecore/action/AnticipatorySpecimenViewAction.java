@@ -207,7 +207,7 @@ public class AnticipatorySpecimenViewAction extends BaseAction
 		final Iterator itr2 = specimenList.iterator();
 		final NewSpecimenBizLogic specBizLogic = new NewSpecimenBizLogic();
 		StringBuffer buffer = new StringBuffer(20);
-		boolean pendingFlag = Boolean.FALSE;
+		boolean pendingFlag = Boolean.TRUE;
 		while (itr2.hasNext())
 		{
 			final Specimen specimen = (Specimen) itr2.next();

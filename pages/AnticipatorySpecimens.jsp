@@ -3,6 +3,11 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo"%>
 <%@ taglib uri="/WEB-INF/specimenDetails.tld" prefix="md"%>
+<%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete"%><%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo"%>
+<%@ taglib uri="/WEB-INF/specimenDetails.tld" prefix="md"%>
 <%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.bean.GenericSpecimen"%>
@@ -422,11 +427,11 @@ function pageSubmit() {
 		var url;
 		<%if(isSCGSubmit!=null)
 		{%>
-		  url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=specimenSummaryPage&isSCGSubmit=<%=isSCGSubmit%>';
+                   url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=specimenSummaryPage&isSCGSubmit=<%=isSCGSubmit%>';
 		  <%}
 		  else
 		  {%>
-		  url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=specimenSummaryPage';
+                   url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=specimenSummaryPage';
 		 <% }
 		 %>
 		//bug 12656
@@ -434,13 +439,15 @@ function pageSubmit() {
 		{
 		  if(isSCGSubmit!=null)
 		  {%>
-              url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=pageOfMultipleSpWithoutMenu&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>';
-		<%}
+                   url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=pageOfMultipleSpWithoutMenu&isSCGSubmit=<%=request.getAttribute( Constants.IS_SCG_SUBMIT )%>';
+                		
+<%}
 		  else
 		  {%>
-		  url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=pageOfMultipleSpWithoutMenu';
+                     url = 'GenericSpecimenSummary.do?save=SCGSpecimens&pageOf=pageOfMultipleSpWithoutMenu';
 		 <% }
 		 }%>
+ url = url +"&IsToShowButton=true";
 
 
 <%	if(request.getAttribute(Constants.PAGE_OF) != null && request.getAttribute(Constants.PAGE_OF).equals(Constants.CP_CHILD_SUBMIT)) {
@@ -1038,7 +1045,7 @@ String lbl = "Apply first to all";
 							<%
  						String	organizeTarget = "ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem')";
  %>
- <logic:equal name="IsToShowButton" value="false">
+  <logic:equal name="IsToShowButton" value="true">
 						<td>|&nbsp;<input class="blue_ar_b" type="button"  id="addToCart"
 							value="Add To Specimen List" onclick="<%=organizeTarget%>" /></td>
 							</logic:equal>

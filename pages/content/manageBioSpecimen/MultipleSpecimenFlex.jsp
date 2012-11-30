@@ -35,11 +35,11 @@
 <script language="JavaScript">
 function callSubmitSpecimen()
 {
-	<%
+    <%
 		String formAction2 = "GenericSpecimenSummary.do";
 		if(request.getAttribute(Constants.PAGE_OF) != null)
 		{
-			formAction2 = "MultipleSpecimenView.do?pageOf="+request.getAttribute(Constants.PAGE_OF)+"&mode=add";
+			formAction2 = "MultipleSpecimenView.do?pageOf="+request.getAttribute(Constants.PAGE_OF)+"&mode=add&IsToShowButton=true";
 		}
 	%>
 	document.forms[0].action = "<%=formAction2%>";
@@ -49,14 +49,16 @@ function callSubmitSpecimen()
 
 function callUpdateSpecimen()
 {
+         
 	<%
 		String formAction1 = "GenericSpecimenSummary.do";
 		if(request.getAttribute(Constants.PAGE_OF) != null)
 		{
-			formAction1 = "MultipleSpecimenView.do?pageOf="+request.getAttribute(Constants.PAGE_OF)+"&mode=edit";
+			formAction1 = "MultipleSpecimenView.do?pageOf="+request.getAttribute(Constants.PAGE_OF)+"&mode=edit&IsToShowButton=true";
 		}
 	%>
-	document.forms[0].action = "<%=formAction1%>";
+ 	
+        document.forms[0].action = "<%=formAction1%>";
 	document.forms[0].submit();
 
 }

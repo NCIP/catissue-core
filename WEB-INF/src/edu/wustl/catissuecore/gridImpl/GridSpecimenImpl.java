@@ -25,7 +25,7 @@ public class GridSpecimenImpl extends AbstractGridImpl
 "case when AbstractSpecimen1.SPECIMEN_TYPE is null then '' else  AbstractSpecimen1.SPECIMEN_TYPE end as TYPE , "+
 "case when Specimen1.AVAILABLE_QUANTITY  is null then 0 else Specimen1.AVAILABLE_QUANTITY end as AVL_QUANTITY,"+ 
 "case when AbstractSpecimen1.LINEAGE is null then '' else AbstractSpecimen1.LINEAGE end as LINEAGE, "+
-"Specimen1.IDENTIFIER as Identifier "+
+"Specimen1.IDENTIFIER as IDENTIFIER "+
 "FROM  CATISSUE_SPECIMEN_CHAR SpecimenCharacteristics1 , CATISSUE_ABSTRACT_SPECIMEN AbstractSpecimen1 ,"+ 
 "CATISSUE_EXTERNAL_IDENTIFIER ExternalIdentifier1 , CATISSUE_SPECIMEN Specimen1 , catissue_spec_tag_items atg, catissue_specimen_coll_group scg "+ 
 " WHERE scg.identifier = Specimen1.SPECIMEN_COLLECTION_GROUP_ID AND SpecimenCharacteristics1.IDENTIFIER   =  AbstractSpecimen1.SPECIMEN_CHARACTERISTICS_ID  AND "+ 
@@ -92,7 +92,7 @@ public class GridSpecimenImpl extends AbstractGridImpl
 		specimenNameString.append(specimenLabel);
 		if(!Validator.isEmpty(barcode))
 		{
-			if(!Validator.isEmpty(specimenLabel))
+			//if(!Validator.isEmpty(specimenLabel))
 			specimenNameString.append(" (");
 			specimenNameString.append(barcode);
 			specimenNameString.append(")");
