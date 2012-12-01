@@ -20,10 +20,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -121,8 +121,6 @@ public class NewSpecimenAction extends CatissueBaseAction
 
 			// Logger.out.debug("NewSpecimenAction start@@@@@@@@@");
 			final NewSpecimenForm specimenForm = (NewSpecimenForm) form;
-			//final List<NameValueBean> storagePositionList = AppUtility.getStoragePositionTypeList();
-			//request.setAttribute("storageList", storagePositionList);
 			String pageOf = request.getParameter(Constants.PAGE_OF);
 			final String forwardPage = specimenForm.getForwardTo();
 			final String contName=request.getParameter(Constants.CONTAINER_NAME);
@@ -458,6 +456,11 @@ public class NewSpecimenAction extends CatissueBaseAction
 				{
 					specimenForm.setAvailable(specimen.getIsAvailable());
 				}
+				if(specimen.getSpecimenPosition()!=null)
+				{
+					specimenForm.setPos1(specimen.getSpecimenPosition().getPositionDimensionOneString());
+					specimenForm.setPos2(specimen.getSpecimenPosition().getPositionDimensionTwoString());
+				}
 				// Added by Falguni=To set Specimen label in Form.
 				/*
 				 * Bug id = 11480Resolved by : Himanshu Aseeja
@@ -655,7 +658,7 @@ public class NewSpecimenAction extends CatissueBaseAction
 			}
 			// ---- chetan 15-06-06 ----
 			final StorageContainerForSpecimenBizLogic scbizLogic = new StorageContainerForSpecimenBizLogic();
-			TreeMap containerMap = new TreeMap();
+			LinkedHashMap containerMap = new LinkedHashMap();
 			String initialContainerName = null;
 			List<String[]> initialValues = new ArrayList<String[]>();
 
@@ -739,7 +742,7 @@ public class NewSpecimenAction extends CatissueBaseAction
 			}
 			else
 			{
-				containerMap = new TreeMap();
+				containerMap = new LinkedHashMap();
 				final String[] startingPoints = new String[]{"","",""};//new String[]{"-1", "-1", "-1"};
 
 				LOGGER.info("--------------container:" + specimenForm.getStorageContainer());
@@ -858,8 +861,6 @@ public class NewSpecimenAction extends CatissueBaseAction
 								specimenForm.setVirtuallyLocated(false);
 							}
 
-							/*containerMap = scbizLogic.getAllocatedContainerMapForSpecimen(AppUtility.
-								setparameterList(cpId,spClass,0,spType), sessionData, dao);*/
 							containerMap = scbizLogic.getAutoAllocatedContainerListForSpecimen(AppUtility.
 									setparameterList(cpId,spClass,0,spType), sessionData, dao,contName);
 							LOGGER.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");

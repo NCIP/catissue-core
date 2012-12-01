@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -143,26 +144,26 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 	
 	public ActionForward getStorageContainerList(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException
-	{
+			{
 		List <NameValueBean>containerList=new ArrayList<NameValueBean>();
 		String contName=request.getParameter(Constants.CONTAINER_NAME);
-			final SessionDataBean sessionData = (SessionDataBean) request.getSession()
-					.getAttribute(Constants.SESSION_DATA);
-			DAO dao = AppUtility.openDAOSession(sessionData);
-			long cpId=0;
-			if(!"".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL)) && !"null".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL)))
-			{
-				cpId=Long.parseLong(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL));
-			}
-			String spType=request.getParameter("specimenType");
-			String spClass=request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
-			StorageContainerForSpecimenBizLogic bizLogic=new StorageContainerForSpecimenBizLogic();
-			TreeMap treeMap=bizLogic.getAutoAllocatedContainerListForSpecimen(AppUtility.setparameterList(cpId,spClass,0,spType), sessionData, dao, contName);
-			if(treeMap!=null)
-			{
-				containerList=AppUtility.convertMapToList(treeMap);
-			}
-			AppUtility.closeDAOSession(dao);
+		final SessionDataBean sessionData = (SessionDataBean) request.getSession()
+				.getAttribute(Constants.SESSION_DATA);
+		DAO dao = AppUtility.openDAOSession(sessionData);
+		long cpId=0;
+		if(!"".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL)) && !"null".equals(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL)))
+		{
+			cpId=Long.parseLong(request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL));
+		}
+		String spType=request.getParameter("specimenType");
+		String spClass=request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
+		StorageContainerForSpecimenBizLogic bizLogic=new StorageContainerForSpecimenBizLogic();
+		LinkedHashMap treeMap=bizLogic.getAutoAllocatedContainerListForSpecimen(AppUtility.setparameterList(cpId,spClass,0,spType), sessionData, dao, contName);
+		if(treeMap!=null)
+		{
+			containerList=AppUtility.convertMapToList(treeMap);
+		}
+		AppUtility.closeDAOSession(dao);
 		StringBuffer responseString = new StringBuffer(Constants.XML_START);
 		NameValueBean virtualBean = new NameValueBean("Virtual",Long.valueOf(-1));
 		responseString.append(Constants.XML_ROWS);
@@ -170,16 +171,16 @@ public class CatissueCommonAjaxAction extends DispatchAction{
 		if(tranferEventId==null || "0".equals(tranferEventId))
 		{
 			for (NameValueBean nvb : containerList)
-				{
-					responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()),null, nvb.getName()));
-				}
+			{
+				responseString.append(this.addRowToResponseXML(Long.valueOf(nvb.getValue()),null, nvb.getName()));
+			}
 			responseString.append(this.addRowToResponseXML(Long.valueOf(virtualBean.getValue()),null, virtualBean.getName()));
 		}
 		responseString.append(Constants.XML_ROWS_END);
 		response.setContentType(Constants.CONTENT_TYPE_XML);
 		response.getWriter().write(responseString.toString());
 		return null;
-	}
+			}
 	
 	public ActionForward getStorageContainerListForRequestShipment(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws ApplicationException, IOException

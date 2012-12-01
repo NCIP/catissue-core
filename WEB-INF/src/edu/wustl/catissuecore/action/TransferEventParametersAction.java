@@ -15,6 +15,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -70,7 +71,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		request.setAttribute("storageListForTransferEvent", storagePositionListForTransferEvent);
 
 		final StorageContainerForSpecimenBizLogic scbizLogic = new StorageContainerForSpecimenBizLogic();
-		TreeMap containerMap = new TreeMap();
+		LinkedHashMap containerMap = new LinkedHashMap();
 		final String exceedingMaxLimit = "false";
 		String stContName = null;
 		List<String[]> initialValues = new ArrayList<String[]>();

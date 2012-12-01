@@ -34,6 +34,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.bean.ExternalIdentifierBean;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerForSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -43,7 +44,6 @@ import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.AppUtility;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
@@ -423,19 +423,7 @@ public class CreateSpecimenAction extends CatissueBaseAction
 				}
 				initialValues = new ArrayList();
 				initialValues.add(startingPoints);
-
 			}
-		}
-		catch (final DAOException daoException)
-		{
-			LOGGER.error(daoException.getMessage(),daoException);
-			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
-					daoException.getMsgValues());
-		}
-		finally
-		{
-			AppUtility.closeDAOSession(dao);
-		}
 		request.setAttribute(INITVALUES_STRING, initialValues);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		// -------------------------
@@ -508,6 +496,10 @@ public class CreateSpecimenAction extends CatissueBaseAction
 			request.setAttribute("disabled", TRUE_STRING);
 		}
 		this.setPageData(request, createForm);
+		Specimen specimen=new Specimen();
+		specimen.setId(Long.valueOf(createForm.getParentSpecimenId()));
+		Long collectionProtocolId=new NewSpecimenBizLogic().getCPId(dao, null, specimen);
+		request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, collectionProtocolId.toString());
 		request.setAttribute("createdDate", createForm.getCreatedDate());
 		final List dataList = (List) request
 				.getAttribute(edu.wustl.simplequery.global.Constants.SPREADSHEET_DATA_LIST);
@@ -516,6 +508,17 @@ public class CreateSpecimenAction extends CatissueBaseAction
 		AppUtility.setGridData(dataList, columnList, request);
 		int idFieldIndex = 4;
 		request.setAttribute("identifierFieldIndex", idFieldIndex);
+		}
+		catch (final DAOException daoException)
+		{
+			LOGGER.error(daoException.getMessage(),daoException);
+			throw AppUtility.getApplicationException(daoException, daoException.getErrorKeyName(),
+					daoException.getMsgValues());
+		}
+		finally
+		{
+			AppUtility.closeDAOSession(dao);
+		}
 		return mapping.findForward(Constants.SUCCESS);
 	}
 

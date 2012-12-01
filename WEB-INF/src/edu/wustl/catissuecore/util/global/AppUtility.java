@@ -4252,4 +4252,24 @@ public class AppUtility {
 				}
 				return lineage;
 	}
+	/**
+	 * Gets the formatted value.
+	 *
+	 * @param obj the obj
+	 *
+	 * @return the formatted value
+	 */
+	public static String getFormattedValue(Object obj)
+	{
+		String str = "";
+		if (obj == null || obj.toString().trim().length() == 0)
+		{
+			str = "";
+		}
+		else
+		{
+			str = obj.toString();
+		}
+		return str;
+	}
 }

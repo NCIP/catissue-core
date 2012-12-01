@@ -63,75 +63,13 @@ public class ShowStoragePositionGridAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 			{
 		String target= Constants.SUCCESS;
-		/*DAO dao=null;
-
-		final SessionDataBean sessionData = (SessionDataBean) request.getSession()
-				.getAttribute(Constants.SESSION_DATA);
-		dao = AppUtility.openDAOSession(sessionData);
-
-		String target= Constants.SUCCESS;
-		StorageContainer sc= null;*/
 		String containerName = request.getParameter(Constants.CONTAINER_NAME);
-		/*ColumnValueBean cvb=new ColumnValueBean(Constants.NAME, name);
-		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-		List contList= defaultBizLogic.retrieve(StorageContainer.class.getName(), cvb);
-		if(contList!=null && !contList.isEmpty())
-		{
-			sc=(StorageContainer)contList.get(0);
-		}
-
-		final IFactory factory = AbstractFactoryConfig.getInstance().getBizLogicFactory();
-		final StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) factory
-				.getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-
 		StorageContainerGridObject storageContainerGridObject = null;
-
-		storageContainerGridObject = new StorageContainerGridObject();
-		final StorageContainer storageContainer = sc;
-
-		final StorageType storageType = (StorageType) bizLogic.retrieveAttribute(
-				StorageContainer.class.getName(), storageContainer.getId(), "storageType");// storageContainer
-		request.setAttribute("storageTypeName", storageType.getName());
-		String oneDimLabel = storageType.getOneDimensionLabel();
-		String twoDimLabel = storageType.getTwoDimensionLabel();
-		if (oneDimLabel == null)
-		{
-			oneDimLabel = " ";
-		}
-		if (twoDimLabel == null)
-		{
-			twoDimLabel = " ";
-		}
-		String oneDimLabellingScheme=storageContainer.getOneDimensionLabellingScheme();
-		String twoDimLabellingScheme=storageContainer.getTwoDimensionLabellingScheme();
-		request.setAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL, oneDimLabel);
-		request.setAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL, twoDimLabel);
-
-		request.setAttribute("oneDimLabellingScheme", oneDimLabellingScheme);
-		request.setAttribute("twoDimLabellingScheme", twoDimLabellingScheme);
-
-		storageContainerGridObject.setId(storageContainer.getId().longValue());
-		storageContainerGridObject.setType(storageType.getName());
-		storageContainerGridObject.setName(storageContainer.getName());
-		final Integer oneDimensionCapacity = storageContainer.getCapacity()
-				.getOneDimensionCapacity();
-		final Integer twoDimensionCapacity = storageContainer.getCapacity()
-				.getTwoDimensionCapacity();
-		storageContainerGridObject.setOneDimensionCapacity(oneDimensionCapacity);
-		storageContainerGridObject.setTwoDimensionCapacity(twoDimensionCapacity);
-		storageContainerGridObject.setOneDimensionLabellingScheme(storageContainer.getOneDimensionLabellingScheme());
-		storageContainerGridObject.setTwoDimensionLabellingScheme(storageContainer.getTwoDimensionLabellingScheme());
-
-		boolean[][] avaiablePositions=StorageContainerUtil.getAvailablePositionsForContainer(storageContainer.getId().toString(), oneDimensionCapacity, twoDimensionCapacity, dao);
-		request.setAttribute("avaiablePositions", avaiablePositions);*/
-		StorageContainerGridObject storageContainerGridObject = null;
-
 		storageContainerGridObject = new StorageContainerGridObject();
 		storageContainerGridObject=StorageContainerUtil.getContainerDetails(containerName);
 		ActionErrors errors = new ActionErrors();
 		if(null==storageContainerGridObject)
 		{
-			
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimen.storageContainerEditBox"));
 		}
 		this.saveErrors(request, errors);

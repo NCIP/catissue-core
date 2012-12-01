@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -72,7 +73,7 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 	 * @throws BizLogicException throws BizLogicException
 	 * @throws DAOException throws DAOException
 	 */
-	public TreeMap	getAutoAllocatedContainerListForSpecimen(final List<Object> parameterList, 
+	public LinkedHashMap	getAutoAllocatedContainerListForSpecimen(final List<Object> parameterList, 
 			final SessionDataBean sessionData, final DAO dao,String contName)
 			throws BizLogicException
 	{
@@ -81,10 +82,10 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 			parameterList.add(sessionData);
 			final String[] queries = this.getStorageContainerForSpecimenQuery(parameterList,contName);
 			final List<?> containerList = this.getStorageContainerList(null,queries);
-			Map containerNameListForAutoOption=null;
+			LinkedHashMap containerNameListForAutoOption=null;
 			if(containerList!=null && !containerList.isEmpty())
 			{
-				containerNameListForAutoOption=new TreeMap();
+				containerNameListForAutoOption=new LinkedHashMap();
 				java.util.Iterator<?> listIter=containerList.iterator();
 				while(listIter.hasNext())
 				{
@@ -95,7 +96,7 @@ public class StorageContainerForSpecimenBizLogic extends AbstractSCSelectionBizL
 					containerNameListForAutoOption.put(nvb,nvb);
 				}
 			}
-			return (TreeMap) containerNameListForAutoOption;
+			return containerNameListForAutoOption;
 		}
 		catch (final ApplicationException daoExp)
 		{
