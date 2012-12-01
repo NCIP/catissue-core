@@ -454,6 +454,7 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 			if (container != null)
 			{
 				final JDBCDAO jdbcdao = this.openJDBCSession();
+				try{
 				String containerId = "";
 				if (container.getId() != null)
 				{
@@ -491,6 +492,11 @@ public class ShipmentReceivingBizLogic extends ShipmentBizLogic
 						throw this.getBizLogicException( null, "shipment.samePositionForSpecimens",
 								null );
 					}
+				}
+			}
+				finally
+				{
+					this.closeJDBCSession(jdbcdao);
 				}
 			}
 			else
