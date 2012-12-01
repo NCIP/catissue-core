@@ -74,7 +74,7 @@ public class OpenCollectionProtocolAction extends BaseAction
 				if(cpSyncAudit!=null)
 				{		
 					request.setAttribute("displaySynchMessage", Constants.TRUE);
-					if(!"In Process".equalsIgnoreCase(cpSyncAudit.getStatus()))
+					if("In Process".equalsIgnoreCase(cpSyncAudit.getStatus()))
 					{
 						synchMessage.append("Edit is disabled  since syncronization is in process.").append("(").append(cpSyncAudit.getProcessedCPRCount()).append("participants synchronized so far.)");
 					}
