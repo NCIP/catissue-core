@@ -55,11 +55,11 @@ public class SynchronizeCollectionProtocolBizLogic extends CatissueDefaultBizLog
 	}
 	public void updateSyncProcessStatus(CpSyncAudit cpSyncAudit,String status,Long processCPRCount,DAO dao) throws DAOException
 	{
-		if("Done".equalsIgnoreCase(status))
+		if(!"In Process".equalsIgnoreCase(status))
 		{
-			cpSyncAudit.setStatus(status);
 			cpSyncAudit.setEndDate(new Date());
 		}
+		cpSyncAudit.setStatus(status);
 		cpSyncAudit.setProcessedCPRCount(processCPRCount);
 		dao.update(cpSyncAudit);
 		

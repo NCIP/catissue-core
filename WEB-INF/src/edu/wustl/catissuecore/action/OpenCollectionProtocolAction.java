@@ -74,16 +74,23 @@ public class OpenCollectionProtocolAction extends BaseAction
 				if(cpSyncAudit!=null)
 				{		
 					request.setAttribute("displaySynchMessage", Constants.TRUE);
-					if("Done".equalsIgnoreCase(cpSyncAudit.getStatus()))
+					if(!"In Process".equalsIgnoreCase(cpSyncAudit.getStatus()))
+					{
+						synchMessage.append("Edit is disabled  since syncronization is in process.").append("(").append(cpSyncAudit.getProcessedCPRCount()).append("participants synchronized so far.)");
+					}
+					else
 					{
 						Date endDate=cpSyncAudit.getEndDate();
 						String DATE_FORMAT_NOW = "MM/dd/yyyy";
 						SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);						
-						synchMessage.append("Protocol synchronization last done on ").append(sdf.format(endDate)).append(".");
-					}
-					else
-					{
-						synchMessage.append("Edit is disabled  since syncronization is in process.").append("(").append(cpSyncAudit.getProcessedCPRCount()).append("participants synchronized so far.)");
+						if("Done".equalsIgnoreCase(cpSyncAudit.getStatus()))
+						{
+							synchMessage.append("Protocol synchronization last done on ").append(sdf.format(endDate)).append(".");
+						}
+						else
+						{
+							synchMessage.append("Protocol synchronization was aborted at ").append(sdf.format(endDate)).append(".Please contact your Administrator.");
+						}
 					}
 					
 					request.setAttribute("synchMessage", synchMessage.toString());

@@ -1097,7 +1097,7 @@ public class UserBizLogic extends CatissueDefaultBizLogic
 				user.getPasswordCollection().add(password);
 
 			}
-			if ("pageOfResetPassword".equals(user.getPageOf()))
+			else if ("pageOfResetPassword".equals(user.getPageOf()))
 			{
 				// Added for Password validation by Supriya Dankh.
 

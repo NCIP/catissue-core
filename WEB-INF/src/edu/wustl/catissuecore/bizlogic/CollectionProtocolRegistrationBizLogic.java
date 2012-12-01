@@ -2358,6 +2358,12 @@ public class CollectionProtocolRegistrationBizLogic extends CatissueDefaultBizLo
 			//daoForEachCPR.closeSession();
 			//
 		}
+		catch(BizLogicException bizLogicException)
+		{
+			synchronizeCollectionProtocolBizLogic.updateSyncProcessStatus(cpSyncAudit,"Error",new Long(cprProcessCount),daoForEachCPR);
+			daoForEachCPR.commit();
+			throw new BizLogicException(bizLogicException.getErrorKey(),bizLogicException,bizLogicException.getMessage());
+		}
 		catch(DAOException daoException)
 		{
 			throw new BizLogicException(daoException);
