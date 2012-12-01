@@ -144,8 +144,8 @@ function doOnLoad()
 	investigatorDropDownInfo = {propertyId:'principalInvestigatorId',gridObj:"principleInvestigatorGrid", gridDiv:"principleInvestigator", dropDownId:"principleInvestigatorDropDown", pagingArea:"principleInvestigatorPagingArea", infoArea:"principleInvestigatorInfoArea", onOptionSelect:investigatorOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=allUserList", callBackAction:onInvestigatorListReady, visibilityStatusVariable:piGridVisible};
 	parentProtocolDropDownInfo = {propertyId:'parentCollectionProtocolId',gridObj:"parentProtocolGrid", gridDiv:"parentProtocol", dropDownId:"parentProtocolDropDown", pagingArea:"ppPagingArea", infoArea:"ppInfoArea", onOptionSelect:parentProtocolOnRowSelect, actionToDo:"CatissueCommonAjaxAction.do?type=getAllCPList", callBackAction:onParentProtocolListReady, visibilityStatusVariable:ppGridVisible};
 	// initialising grid
-	piGrid = initDropDownGrid(investigatorDropDownInfo); //initialize DropDown control for priciple Investigator
-	ppGrid = initDropDownGrid(parentProtocolDropDownInfo); //initialize DropDown control for priciple Investigator
+	piGrid = initDropDownGrid(investigatorDropDownInfo,true); //initialize DropDown control for priciple Investigator
+	ppGrid = initDropDownGrid(parentProtocolDropDownInfo,true); //initialize DropDown control for priciple Investigator
 	enableDisableParentProtocol('${collectionProtocolForm.type}');
 	
 //initializing tab buttons

@@ -157,7 +157,7 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&isTransferEven
 	containerDropDownInfo = {gridObj:"storageContainerGrid", gridDiv:"storageContainer", dropDownId:"storageContainerDropDown", pagingArea:"storageContainerPagingArea", infoArea:"storageContainerInfoArea", onOptionSelect:"containerOnRowSelect", actionToDo:url,
 	callBackAction:onContainerListReady, visibilityStatusVariable:scGridVisible, propertyId:'selectedContainerName'};
 	// initialising grid
-	scGrid = initDropDownGrid(containerDropDownInfo); 
+	scGrid = initDropDownGrid(containerDropDownInfo,false); 
 }
 
 function makeContainerGridReadonly() 

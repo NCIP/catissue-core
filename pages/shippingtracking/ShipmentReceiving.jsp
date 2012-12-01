@@ -119,7 +119,7 @@ Long specimenId=specimen.getId();
 				}
 			, visibilityStatusVariable:scGridVisible_<%=specimenId%>,propertyId:'selectedContainerName_<%=specimenId%>'};
 	// initialising grid
-	scGrid_<%=specimenId%> = initDropDownGrid(containerDropDownInfo_<%=specimenId%>); 
+	scGrid_<%=specimenId%> = initDropDownGrid(containerDropDownInfo_<%=specimenId%>,true); 
 	<%}%>
 }
 

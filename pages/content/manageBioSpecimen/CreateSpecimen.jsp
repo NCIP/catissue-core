@@ -70,7 +70,6 @@
 <script language="JavaScript" type="text/javascript" src="jss/createSpecimen.js"></script>
 
 
-
 <%
 
 String collectionProtocolId ="";
@@ -99,26 +98,12 @@ function showPopUp()
 	}
 	else
 	{
-	<%
-		 frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=storageContainerDropDown&pos1=pos1&pos2=pos2&containerId=containerId"
-											+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
-											+ "&" + Constants.CAN_HOLD_SPECIMEN_TYPE+"="+sptype
-											+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
-	%>
-	mapButtonClickedOnNewSpecimen('<%=frameUrl%>','newSpecimenPage');
+		var className=document.getElementById("className").value;
+		var sptype=document.getElementById("type").value;
+		var frameUrl="ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=storageContainerDropDown&pos1=pos1&pos2=pos2&containerId=containerId"
+						+ "&holdSpecimenClass="+className+ "&holdContainerType="+sptype	+ "&holdCollectionProtocol=" + '<%=collectionProtocolId%>';
+		mapButtonClickedOnNewSpecimen(frameUrl,'newSpecimenPage');
 	}
-}
-
-
-
-var gridDivObject ;
-
-
-function loadGrid()
-{
-//alert(containerDropDownInfo['actionToDo']+"&containerName="+document.getElementById("storageContainerDropDown").value);
-//alert(containerDropDownInfo['callBackAction']);
-gridDivObject.load(containerDropDownInfo['actionToDo']+"&containerName="+document.getElementById("storageContainerDropDown").value, containerDropDownInfo['callBackAction']);
 }
 
 function onContainerListReady()
@@ -137,21 +122,21 @@ function onContainerListReady()
 <%}%>	
 }
 	
-
-
+	function getActionToDoURL()
+	{
+		var className=document.getElementById("className").value;
+		var sptype=document.getElementById("type").value;
+		var collectionProtocolId="<%=collectionProtocolId%>";
+		var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="+className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId+"&stContSelection="+"<%=form.getStContSelection()%>";
+		return url;
+	}
 function doOnLoad()
 {
-var className=document.getElementById("className").value;
-var sptype=document.getElementById("type").value;
-var collectionProtocolId="<%=collectionProtocolId%>";
-//var containerName=document.getElementById("storageContainerDropDown").value;
-var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
-+className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId+"&stContSelection="+"<%=form.getStContSelection()%>";
-
+	var url=getActionToDoURL();
 	//Drop Down components information
 	containerDropDownInfo = {gridObj:"storageContainerGrid", gridDiv:"storageContainer", dropDownId:"storageContainerDropDown", pagingArea:"storageContainerPagingArea", infoArea:"storageContainerInfoArea", onOptionSelect:"containerOnRowSelect", actionToDo:url, callBackAction:onContainerListReady,visibilityStatusVariable:scGridVisible, propertyId:'selectedContainerName'};
 	// initialising grid
-	scGrid = initDropDownGrid(containerDropDownInfo); 
+	scGrid = initDropDownGrid(containerDropDownInfo,false); 
 }
 
 </script>
@@ -478,7 +463,7 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 											size="27"
 											optionsList = "${requestScope.specimenTypeMap}"
 											initialValue=""
-											onChange="onSubTypeChangeUnit('className',this,'unitSpan')"
+											onChange="onSubTypeChangeUnit('className',this,'unitSpan');doOnLoad();"
 											readOnly="false"
 											dependsOn="${createSpecimenForm.className}"  />
 											</div>
@@ -594,7 +579,7 @@ var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.C
 													autocomplete="off"
 													size="30"
 													class="black_ar x-form-text x-form-field x-form-focus"/><img id="scDropDownId" style="top : 0px !important;" class="x-form-trigger x-form-arrow-trigger" 
-												onclick="showHideStorageContainerGrid(event,'storageContainer','storageContainerDropDown',containerDropDownInfo);"
+												onclick="showHideStorageContainerGridOnSpecimenPage(event,'storageContainer','storageContainerDropDown',containerDropDownInfo);"
 												src="images/uIEnhancementImages/s.gif"/>
 										</div>
 									</td>

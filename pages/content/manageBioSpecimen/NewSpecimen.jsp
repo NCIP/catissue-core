@@ -38,14 +38,9 @@ String showSpecList = (String)request.getAttribute("showSpecList");
 		if (request.getAttribute(Constants.COLLECTION_PROTOCOL_ID)==null)
 			collectionProtocolId="";
 		else
-		 collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
-
-	
-	
-if(showSpecList.equals("true"))
-						{
- %>
-						<script type="text/javascript" src="jss/tag-popup.js"></script>
+		 collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);	
+%>
+ <script type="text/javascript" src="jss/tag-popup.js"></script>
 <link rel="STYLESHEET" type="text/css"
 	href="dhtmlx_suite/dhtml_pop/css/dhtmlXTree.css">
 <script src="dhtmlx_suite/dhtml_pop/js/dhtmlXCommon.js"></script>
@@ -57,7 +52,6 @@ if(showSpecList.equals("true"))
 <script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTree.js"></script>
 <script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
 <script src="dhtmlx_suite/dhtml_pop/js/dhtmlXGridCell.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
 
 
 <link rel="stylesheet" type="text/css" href="css/tag-popup.css" />
@@ -153,6 +147,8 @@ if(showSpecList.equals("true"))
 <script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
 
 
+<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
+<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
 <script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
@@ -180,57 +176,9 @@ if(showSpecList.equals("true"))
 <link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
 <script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
 
-	<%}
-	else{%>
-	<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxcombo.css">
-<link rel="stylesheet" type="text/css"	href="dhtmlx_suite/css/dhtmlxtree.css">
-<link rel="STYLESHEET" type="text/css" href="css/dhtmlDropDown.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/ext/dhtmlxgrid_pgn_bricks.css">
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/skins/dhtmlxtoolbar_dhx_blue.css">
-
-<script language="JavaScript" type="text/javascript" src="jss/dhtmlDropDown.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcommon.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxcombo.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxtree.js"></script>
-<script src="dhtmlx_suite/ext/dhtmlxtree_li.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgrid.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxgridcell.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/connector.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_filter.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/ext/dhtmlxgrid_pgn.js"></script>
-
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/css/dhtmlxwindows.css">
-<link rel="stylesheet" type="text/css" href="dhtmlx_suite/skins/dhtmlxwindows_dhx_skyblue.css">
-<script src="dhtmlx_suite/js/dhtmlxcontainer.js"></script>
-<script src="dhtmlx_suite/js/dhtmlxwindows.js"></script>
-<script type="text/javascript" src="dhtmlx_suite/js/dhtmlxtoolbar.js"></script>
-<link rel="STYLESHEET" type="text/css"	href="dhtmlx_suite/css/dhtmlxgrid.css">
-
-
-<link rel="STYLESHEET" type="text/css"
-	href="dhtmlx_suite/dhtml_pop/css/dhtmlxgrid_dhx_skyblue.css" />
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmXTreeCommon.js"></script>
-<script src="dhtmlx_suite/dhtml_pop/js/dhtmlXTreeGrid.js"></script>
-<%}%>
-<script src="jss/script.js" type="text/javascript"></script>
-<script language="JavaScript" type="text/javascript"	src="jss/javaScript.js"></script>
-<script language="JavaScript" type="text/javascript"	src="jss/caTissueSuite.js"></script>
-<script src="jss/calendarComponent.js" language="JavaScript"	type="text/javascript"></script>
-<script>var imgsrc="images/de/";</script>
-<script language="JavaScript" type="text/javascript"	src="javascripts/de/prototype.js"></script>
-<script language="JavaScript" type="text/javascript"	src="javascripts/de/scr.js"></script>
-<script language="JavaScript" type="text/javascript"	src="javascripts/de/combobox.js"></script>
-<script language="JavaScript" type="text/javascript"	src="jss/ext-base.js"></script>
-<script language="JavaScript" type="text/javascript"	src="jss/ext-all.js"></script>
-<script language="JavaScript" type="text/javascript"	src="javascripts/de/ajax.js"></script>
-<script language="JavaScript" type="text/javascript"	src="/jss/multiselectUsingCombo.js"></script>
-<LINK href="css/catissue_suite.css" type="text/css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
-<link rel="stylesheet" type="text/css"	href="css/clinicalstudyext-all.css" />
 
 
 
-<script type="text/javascript" src="jss/wz_tooltip.js"></script>
 <script src="jss/script.js"></script>
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
@@ -411,21 +359,22 @@ function onContainerListReady()
 			containerOnRowSelect(containerName,0);
 	}
 	
-
+function getActionToDoURL()
+{
+	var className=document.getElementById("className").value;
+	var sptype=document.getElementById("type").value;
+	var collectionProtocolId="<%=collectionProtocolId%>";
+	var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="+className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId+"&stContSelection="+"<%=form.getStContSelection()%>";
+	return url;
+}
 
 function doOnLoad()
 {
-var className=document.getElementById("className").value;
-var sptype=document.getElementById("type").value;
-var collectionProtocolId="<%=collectionProtocolId%>";
-//var containerName=document.getElementById("storageContainerDropDown").value;
-var url="CatissueCommonAjaxAction.do?type=getStorageContainerList&<%=Constants.CAN_HOLD_SPECIMEN_CLASS%>="
-+className+"&specimenType="+sptype+ "&<%=Constants.CAN_HOLD_COLLECTION_PROTOCOL%>=" + collectionProtocolId+"&stContSelection="+"<%=form.getStContSelection()%>";
-
+	var url=getActionToDoURL();
 	//Drop Down components information
 	containerDropDownInfo = {gridObj:"storageContainerGrid", gridDiv:"storageContainer", dropDownId:"storageContainerDropDown", pagingArea:"storageContainerPagingArea", infoArea:"storageContainerInfoArea", onOptionSelect:"containerOnRowSelect", actionToDo:url, callBackAction:onContainerListReady, visibilityStatusVariable:scGridVisible, propertyId:'selectedContainerName'};
 	// initialising grid
-	scGrid = initDropDownGrid(containerDropDownInfo); 
+	scGrid = initDropDownGrid(containerDropDownInfo,false); 
 }
 
 
@@ -1777,7 +1726,7 @@ else
 
 												pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
-												String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')";
+												String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan');doOnLoad();";
 
 												String readOnlyForAliquot = "false";
 												if(Constants.ALIQUOT.equals(form.getLineage())&&operation.equals(Constants.EDIT)) {
@@ -2437,20 +2386,20 @@ else
 showPriterTypeLocation();
 function updateStorageContainerValue()
 	{
-		<% if((!"Collected".equals(form.getCollectionStatus()))
-			|| ("Collected".equals(form.getCollectionStatus()) && (String.valueOf(form.getId()).equals("0"))))
-		{%>
-		var containerName=document.getElementById(containerDropDownInfo['dropDownId']).value;
-		document.getElementById("selectedContainerName").value=containerName;
-		if("Virtual"==containerName)
+		var containerElement=document.getElementById(containerDropDownInfo['dropDownId']);
+		if(containerElement!=null)
 		{
-			document.getElementById("virtuallyLocated").value="true";
+			var containerName=containerElement.value;
+			document.getElementById("selectedContainerName").value=containerName;
+			if("Virtual"==containerName)
+			{
+				document.getElementById("virtuallyLocated").value="true";
+			}
+			else
+			{
+				document.getElementById("virtuallyLocated").value="false";
+			}
 		}
-		else
-		{
-			document.getElementById("virtuallyLocated").value="false";
-		}
-		<%}%>
 	}
 	
 function setContainerValues()

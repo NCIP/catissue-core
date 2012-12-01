@@ -158,19 +158,10 @@ for(int i=1;i<=aliquotBeanList.size();i++){
 			document.getElementsByName('value(Specimen:<%=i%>_positionDimensionTwo_fromMap)')[0].value = "";
 		}
 		, actionToDo:url, callBackAction:
-		function(){
-					var containerName= document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value;
-					//if(containerName != "" && containerName != 0 && containerName != null)
-					//{
-					//	document.getElementsByName('value(Specimen:<%=i%>_StorageContainer_id_fromMap)')[0].value = containerName;
-				//		document.getElementById(containerDropDownInfo_<%=i%>['dropDownId']).value = scGrid_<%=i%>.cellById(containerName,0).getValue();
-				//		hideGrid(containerDropDownInfo_<%=i%>['gridDiv']);
-				//		scGridVisible_<%=i%> = false;
-				//	}
-				}
+		function(){}
 			, visibilityStatusVariable:scGridVisible_<%=i%>, propertyId:'selectedContainerName_<%=i%>'};
 	// initialising grid
-	scGrid_<%=i%> = initDropDownGrid(containerDropDownInfo_<%=i%>); 
+	scGrid_<%=i%> = initDropDownGrid(containerDropDownInfo_<%=i%>,false); 
 	<%}%>
 }
 

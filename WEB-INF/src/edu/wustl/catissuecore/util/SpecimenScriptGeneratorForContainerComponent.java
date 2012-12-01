@@ -106,9 +106,10 @@ public class SpecimenScriptGeneratorForContainerComponent
 					scBuffer.append(EQUALS).append(valueSpecimenType);
 					scBuffer.append(NEXT_LINE);
 
+					final Long collectionProtocolId = specimen.getCollectionProtocolId();
 					scBuffer.append(VAR).append(EMPTY_SPACE);
 					StringBuffer variableCollectionProtocol=new StringBuffer(CPID);
-					StringBuffer valueCollectionProtocol=new StringBuffer(cpId);
+					StringBuffer valueCollectionProtocol=new StringBuffer(AppUtility.getFormattedValue(collectionProtocolId.toString()));
 					scBuffer.append(variableCollectionProtocol);
 					scBuffer.append(EQUALS).append("\"").append(valueCollectionProtocol).append("\"").append(";");
 					scBuffer.append(NEXT_LINE);
@@ -125,9 +126,9 @@ public class SpecimenScriptGeneratorForContainerComponent
 
 					//scBuffer.append(VAR).append(EMPTY_SPACE).append("url").append(specimenSuffix).append(EQUALS).append(MessageFormat.format(URL, params));
 					scBuffer.append(VAR).append(EMPTY_SPACE).append("url").append(EQUALS).append("\"CatissueCommonAjaxAction.do?type=getStorageContainerList&")
-					.append(Constants.CAN_HOLD_SPECIMEN_CLASS).append(EQUALS)
-					.append(variableClassName).append("&specimenType=").append(variableSpecimenType)
-					.append("&").append(Constants.CAN_HOLD_COLLECTION_PROTOCOL).append(EQUALS).append(valueCollectionProtocol).append("\"").append(";");
+					.append(Constants.CAN_HOLD_SPECIMEN_CLASS).append(EQUALS).append("\"+")
+					.append(variableClassName).append("+\"").append("&specimenType=").append("\"+").append(variableSpecimenType).append("+\"")
+					.append("&").append(Constants.CAN_HOLD_COLLECTION_PROTOCOL).append(EQUALS).append(valueCollectionProtocol).append("\";");
 
 
 					//if(specimen.get)
@@ -165,7 +166,7 @@ public class SpecimenScriptGeneratorForContainerComponent
 					scBuffer.append(NEXT_LINE);
 					scBuffer.append("// initialising grid");
 					scBuffer.append(NEXT_LINE);
-					scBuffer.append(scGrid+"= initDropDownGrid("+containerDropDownInfo+");"); 
+					scBuffer.append(scGrid+"= initDropDownGrid("+containerDropDownInfo+",false);"); 
 					scBuffer.append(NEXT_LINE);
 					scBuffer.append(NEXT_LINE);
 				}

@@ -4,7 +4,7 @@ var gridOn = 0, gridInit=0;
 var timerForInvestigatorFilter, piText;
 
 // This function will initialise Custom DHTMLX DropDown control
-function initDropDownGrid(gridDropDownInfo) 
+function initDropDownGrid(gridDropDownInfo, loadDataVariable) 
 {
 		var gridObj = new dhtmlXGridObject(gridDropDownInfo['gridObj']);
 		gridObj.setImagePath("dhtmlx_suite/imgs/");
@@ -36,7 +36,10 @@ function initDropDownGrid(gridDropDownInfo)
 			document.getElementById(gridDropDownInfo['dropDownId']).focus();
 		});
 		hideGrid(gridDropDownInfo['gridDiv']);
-		gridObj.load(gridDropDownInfo['actionToDo'], gridDropDownInfo['callBackAction']);
+		if(loadDataVariable)
+		{
+			gridObj.load(gridDropDownInfo['actionToDo'], gridDropDownInfo['callBackAction']);
+		}
 		return gridObj;
 }
 
@@ -193,6 +196,37 @@ function showHideStorageContainerGrid(e,gridDivId, dropDownId,containerDropDownI
 		 }
 }
 
+
+function showHideStorageContainerGridOnSpecimenPage(e,gridDivId, dropDownId,containerDropDownInfo)
+{		
+	var classNameElement = document.getElementById("className").value;
+	var typeElement = document.getElementById("type").value;
+	classNameElement = trim(classNameElement);
+	var classSet = false, typeSet=false;
+	if(classNameElement == "Fluid" || classNameElement == "Cell"||classNameElement == "Tissue"||classNameElement == "Molecular")
+	{
+		classSet = true;
+	}
+	else
+	{
+		alert("Please select the appropriate specimen class");
+	}
+	if(classSet)
+	{
+		if(typeElement=="" || typeElement == " ")
+		{
+			alert("Please select the appropriate specimen type");
+		}
+		else
+		{
+			typeSet=true;
+		}
+	}
+	if(classSet && typeSet)
+	{
+		showHideStorageContainerGrid(e,gridDivId, dropDownId,containerDropDownInfo);
+	}
+}
 var dhxWins;
 
 function initWindow()
