@@ -64,15 +64,8 @@
 
 
 		</logic:notEqual>
+			
 		
-		
-		
-		|&nbsp;<html:button
-				styleClass="blue_ar_c" property="addToCart"  styleId="addToCart"
-				title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
-				onclick="onAddToCart()">
-				<bean:message key="buttons.addToCart"/>
-		</html:button> 
 		<%
  						String	organizeTarget = "ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem')";
 						

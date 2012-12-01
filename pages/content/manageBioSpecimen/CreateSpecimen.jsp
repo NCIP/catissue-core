@@ -776,9 +776,6 @@ function doOnLoad()
 								</html:button>&nbsp;|&nbsp;
 								<html:button styleClass="blue_ar_c" property="moreButton" 		title="${requestScope.SPECIMEN_BUTTON_TIPS}"			value="${requestScope.SPECIMEN_FORWARD_TO_LIST}" onclick="${requestScope.addMoreSubmit}" >
 								</html:button>&nbsp;|&nbsp;
-								<html:submit styleClass="blue_ar_c"  styleId="addToCart" onclick="onAddToCart()">
-									<bean:message key="buttons.addToCart"/>
-								</html:submit>
 								</logic:notEqual> <!-- to verify for valid case 4 -->
 							<logic:equal name="multipleSpecimen" value="1">
 								<html:submit styleClass="blue_ar_b" onclick="javaScript:${requestScope.changeAction3}">

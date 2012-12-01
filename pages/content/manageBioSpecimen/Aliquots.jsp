@@ -733,9 +733,6 @@ function setContainerValues()
 			<bean:message key="buttons.submit"/>
 		</html:button>
 
-		<html:button styleClass="blue_ar_c"	property="submitPage" onclick="onAddToCart()"  styleId="addToCart">
-				<bean:message key="buttons.addToCart"/>
-		</html:button>
 		</logic:notEqual>
 		</td>
         </tr>

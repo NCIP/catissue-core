@@ -1040,9 +1040,7 @@ String lbl = "Apply first to all";
 					<tr>
 						<td><input class="blue_ar_b" type="button" value="Submit"
 							onclick="pageSubmit()" /></td>
-						<td>|&nbsp;<input class="blue_ar_b" type="button"  id="addToCart"
-							value="Add To My List" onclick="onAddToCart()" /></td>
-							<%
+						<%
  						String	organizeTarget = "ajaxTreeGridInitCall('Are you sure you want to delete this specimen from the list?','List contains specimens, Are you sure to delete the selected list?','SpecimenListTag','SpecimenListTagItem')";
  %>
   <logic:equal name="IsToShowButton" value="true">
