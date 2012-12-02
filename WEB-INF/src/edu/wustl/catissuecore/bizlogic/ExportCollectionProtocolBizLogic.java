@@ -91,62 +91,62 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
     	StringBuffer valueString=new StringBuffer();
     	
     	headerString.append("Principal Investigator").append(",");
-    	valueString.append( collectionProtocol.getPrincipalInvestigator().getLoginName()).append(";");
+    	valueString.append("\"").append( collectionProtocol.getPrincipalInvestigator().getLoginName()).append("\"").append(",");
     	//headerDataMap.put("Principal Investigator", collectionProtocol.getPrincipalInvestigator().getLoginName());
     	Collection<User> coordinatorUsers=collectionProtocol.getCoordinatorCollection();
     	int coordinatorCount=1;
     	for (User user : coordinatorUsers) {
     		headerString.append("Principal cordinator#").append(coordinatorCount++).append(",");
-    		valueString.append(user.getLoginName()).append(";");
+    		valueString.append("\"").append(user.getLoginName()).append("\"").append(",");
 		}
     	
     	//headerDataMap.put("Title",collectionProtocol.getTitle());
     	headerString.append("Title").append(",");
-    	valueString.append(collectionProtocol.getTitle()).append(";");
+    	valueString.append("\"").append(collectionProtocol.getTitle()).append("\"").append(",");
     	
     	//headerDataMap.put("STitle",collectionProtocol.getShortTitle());
     	headerString.append("Short Title").append(",");
-    	valueString.append(collectionProtocol.getShortTitle()).append(";");
+    	valueString.append("\"").append(collectionProtocol.getShortTitle()).append("\"").append(",");
     	
     	if(collectionProtocol.getIrbIdentifier()!=null)
     	{
     		//headerDataMap.put("IRB",collectionProtocol.getIrbIdentifier());
     		headerString.append("IRB").append(",");
-        	valueString.append(collectionProtocol.getIrbIdentifier()).append(";");
+        	valueString.append("\"").append(collectionProtocol.getIrbIdentifier()).append("\"").append(",");
     	}
     	//headerDataMap.put("Date",getDateAsString(collectionProtocol.getStartDate()));
     	headerString.append("Date").append(",");
-    	valueString.append(getDateAsString(collectionProtocol.getStartDate())).append(";");
+    	valueString.append("\"").append(getDateAsString(collectionProtocol.getStartDate())).append("\"").append(",");
     	
     	//headerDataMap.put("URL",collectionProtocol.getDescriptionURL());
     	headerString.append("URL").append(",");
-    	valueString.append(collectionProtocol.getDescriptionURL()).append(";");
+    	valueString.append("\"").append(collectionProtocol.getDescriptionURL()).append("\"").append(",");
     	
     	//headerDataMap.put("Activity Status",collectionProtocol.getActivityStatus());
     	headerString.append("Activity Status").append(",");
-    	valueString.append(collectionProtocol.getActivityStatus()).append(";");
+    	valueString.append("\"").append(collectionProtocol.getActivityStatus()).append("\"").append(",");
     	if(collectionProtocol.getConsentsWaived()!=null)
     	{
     		//headerDataMap.put("Waived",collectionProtocol.getConsentsWaived().toString());
     		headerString.append("Waived").append(",");
-        	valueString.append(collectionProtocol.getConsentsWaived().toString()).append(";");
+        	valueString.append("\"").append(collectionProtocol.getConsentsWaived().toString()).append("\"").append(",");
     	}
     	//headerDataMap.put("Aliquot In Same Container",collectionProtocol.getAliquotInSameContainer().toString());
     	headerString.append("Aliquot In Same Container").append(",");
-    	valueString.append(collectionProtocol.getAliquotInSameContainer().toString()).append(";");
+    	valueString.append("\"").append(collectionProtocol.getAliquotInSameContainer().toString()).append("\"").append(",");
     	
     	if(collectionProtocol.getEnrollment()!=null)
     	{
     		//headerDataMap.put("Enrollment",collectionProtocol.getEnrollment().toString());
     		headerString.append("Enrollment").append(",");
-        	valueString.append(collectionProtocol.getEnrollment().toString()).append(";");
+        	valueString.append("\"").append(collectionProtocol.getEnrollment().toString()).append("\"").append(",");
     	}
     	Collection<ConsentTier> consentTiers=collectionProtocol.getConsentTierCollection();
     	int consentTiersCount=1;
     	for (ConsentTier consentTier : consentTiers) {
     		//headerDataMap.put("Statements#"+consentTiersCount++,consentTier.getStatement());
     		headerString.append("Statements#").append(consentTiersCount++).append(",");
-        	valueString.append(consentTier.getStatement()).append(";");
+        	valueString.append("\"").append(consentTier.getStatement()).append("\"").append(",");
         	
 		}
     	Collection<ClinicalDiagnosis> clinicalDiagnosis=collectionProtocol.getClinicalDiagnosisCollection();
@@ -154,66 +154,102 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
     	for (ClinicalDiagnosis cd : clinicalDiagnosis) {
     		//headerDataMap.put("Clinical Diagnosis#"+clinicalDiagnosisCount++,cd.getName());
     		headerString.append("Clinical Diagnosis#").append(clinicalDiagnosisCount++).append(",");
-        	valueString.append(cd.getName()).append(";");
+        	valueString.append("\"").append(cd.getName()).append("\"").append(",");
 		}
+    	
+    	if(collectionProtocol.getSpecimenLabelFormat()!=null)
+    	{	
+    		headerString.append("Parent Specimen Label Format").append(",");
+    		valueString.append("\"").append(collectionProtocol.getSpecimenLabelFormat()).append("\"").append(",");
+    	}
+    	
+    	if(collectionProtocol.getDerivativeLabelFormat()!=null)
+    	{	
+    		headerString.append("Derivative Specimen Label Format").append(",");
+    		valueString.append("\"").append(collectionProtocol.getDerivativeLabelFormat()).append("\"").append(",");
+    	}
+    	
+    	if(collectionProtocol.getAliquotLabelFormat()!=null)
+    	{	
+    		headerString.append("Aliquot Specimen Label Format").append(",");
+    		valueString.append("\"").append(collectionProtocol.getAliquotLabelFormat()).append("\"").append(",");
+    	}
+    	
     	Collection<CollectionProtocolEvent> events=collectionProtocol.getCollectionProtocolEventCollection();
     	int eventsCount=1;
     	for (CollectionProtocolEvent collectionProtocolEvent : events) {
     		//headerDataMap.put("Study Calender Event Point#"+eventsCount,collectionProtocolEvent.getStudyCalendarEventPoint().toString());
     		headerString.append("Study Calender Event Point#").append(eventsCount).append(",");
-        	valueString.append(collectionProtocolEvent.getStudyCalendarEventPoint().toString()).append(";");
+        	valueString.append("\"").append(collectionProtocolEvent.getStudyCalendarEventPoint().toString()).append("\"").append(",");
         	
     		//headerDataMap.put("CPL#"+eventsCount,collectionProtocolEvent.getCollectionPointLabel());
         	headerString.append("Collection Point Label#").append(eventsCount).append(",");
-        	valueString.append(collectionProtocolEvent.getCollectionPointLabel()).append(";");
+        	valueString.append("\"").append(collectionProtocolEvent.getCollectionPointLabel()).append("\"").append(",");
         	
     		//headerDataMap.put("CS#"+eventsCount,collectionProtocolEvent.getClinicalStatus());
         	headerString.append("Clinical Status#").append(eventsCount).append(",");
-        	valueString.append(collectionProtocolEvent.getClinicalStatus()).append(";");
+        	valueString.append("\"").append(collectionProtocolEvent.getClinicalStatus()).append("\"").append(",");
         	
 
         	headerString.append("Clinical Diagnosis For Event#").append(eventsCount).append(",");
-            valueString.append(collectionProtocolEvent.getClinicalDiagnosis()).append(";");
+            valueString.append("\"").append(collectionProtocolEvent.getClinicalDiagnosis()).append("\"").append(",");
     		
+            if(collectionProtocolEvent.getDefaultSite()!=null)
+            {	
+            	headerString.append("Site#").append(eventsCount).append(",");
+            	valueString.append("\"").append(collectionProtocolEvent.getDefaultSite().getName()).append("\"").append(",");
+            }
+            
             //headerDataMap.put("ActivityStatus#"+eventsCount,collectionProtocolEvent.getActivityStatus());
         	headerString.append("ActivityStatus#").append(eventsCount).append(",");
-        	valueString.append(collectionProtocolEvent.getActivityStatus()).append(";");
+        	valueString.append("\"").append(collectionProtocolEvent.getActivityStatus()).append("\"").append(",");
         	Collection<SpecimenRequirement> requirements=collectionProtocolEvent.getSpecimenRequirementCollection();
         	int specimenRequirementCount=1;
         	for (SpecimenRequirement specimenRequirement : requirements) {
         		if(specimenRequirement.getParentSpecimen()==null)
         		{
+        			if(specimenRequirement.getSpecimenRequirementLabel()!=null)
+        			{	
+        				headerString.append("Specimen Requirement Title#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
+        				valueString.append("\"").append(specimenRequirement.getSpecimenRequirementLabel()).append("\"").append(",");
+        			}	
         			//headerDataMap.put("Specimen Class"+postfix+"#"+childSpecimenCount,abstractSpecimen.getSpecimenClass());
             		headerString.append("Specimen Class#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
-            		valueString.append(specimenRequirement.getSpecimenClass()).append(";");
+            		valueString.append("\"").append(specimenRequirement.getSpecimenClass()).append("\"").append(",");
             				
         			//headerDataMap.put("Specimen Type"+postfix+"#"+childSpecimenCount,abstractSpecimen.getSpecimenType());
         			headerString.append("Specimen Type#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
-        			valueString.append(specimenRequirement.getSpecimenType()).append(";");
+        			valueString.append("\"").append(specimenRequirement.getSpecimenType()).append("\"").append(",");
         			
         			//headerDataMap.put("Storage Location"+postfix+"#"+childSpecimenCount,((SpecimenRequirement)abstractSpecimen).getStorageType());
         			headerString.append("Storage Location#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
-        			valueString.append(specimenRequirement.getStorageType()).append(";");
+        			valueString.append("\"").append(specimenRequirement.getStorageType()).append("\"").append(",");
         			
         			//headerDataMap.put("Pathological Status"+postfix+"#"+childSpecimenCount,abstractSpecimen.getPathologicalStatus());
         			headerString.append("Pathological Status#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
-        			valueString.append(specimenRequirement.getPathologicalStatus()).append(";");
+        			valueString.append("\"").append(specimenRequirement.getPathologicalStatus()).append("\"").append(",");
         			
         			//headerDataMap.put("Initial Quantity"+postfix+"#"+childSpecimenCount,abstractSpecimen.getInitialQuantity().toString());
         			headerString.append("Initial Quantity#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
-        			valueString.append(specimenRequirement.getInitialQuantity().toString()).append(";");
+        			valueString.append("\"").append(specimenRequirement.getInitialQuantity().toString()).append("\"").append(",");
         			
         			//headerDataMap.put("lineage"+postfix+"#"+childSpecimenCount,abstractSpecimen.getLineage());
         			headerString.append("Lineage#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
-        			valueString.append(specimenRequirement.getLineage()).append(";");
+        			valueString.append("\"").append(specimenRequirement.getLineage()).append("\"").append(",");
         			
         			//headerDataMap.put("Tissue Site"+postfix+"#"+childSpecimenCount,abstractSpecimen.getSpecimenCharacteristics().getTissueSite());
         			headerString.append("Tissue Site#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
-        			valueString.append(specimenRequirement.getSpecimenCharacteristics().getTissueSite()).append(";");
+        			valueString.append("\"").append(specimenRequirement.getSpecimenCharacteristics().getTissueSite()).append("\"").append(",");
         			
         			//headerDataMap.put("Tissue Side"+postfix+"#"+childSpecimenCount,abstractSpecimen.getSpecimenCharacteristics().getTissueSide());
         			headerString.append("Tissue Side#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
-        			valueString.append(specimenRequirement.getSpecimenCharacteristics().getTissueSide()).append(";");
+        			valueString.append("\"").append(specimenRequirement.getSpecimenCharacteristics().getTissueSide()).append("\"").append(",");
+        			
+        			if(specimenRequirement.getLabelFormat()!=null)
+        			{	
+        				headerString.append("Label Format#").append(eventsCount).append("#").append(specimenRequirementCount).append(",");
+        				valueString.append("\"").append(specimenRequirement.getLabelFormat()).append("\"").append(",");
+        			}
         			updateMapForChildSpecimen(headerString,valueString,specimenRequirement.getChildSpecimenCollection(),"#"+eventsCount+"#"+specimenRequirementCount);
         			specimenRequirementCount++;
         		}
@@ -222,7 +258,7 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
     		eventsCount++;
 		}
     	headerString=headerString.replace(headerString.lastIndexOf(","), headerString.lastIndexOf(",")+1, "");
-    	valueString=valueString.replace(valueString.lastIndexOf(";"), valueString.lastIndexOf(";")+1, "");
+    	valueString=valueString.replace(valueString.lastIndexOf(","), valueString.lastIndexOf(",")+1, "");
     	return headerString.append("\n").append(valueString);//writeCSVFile(collectionProtocol.getShortTitle(),headerString,valueString);
     }
     private String getDateAsString(Date date)
@@ -235,38 +271,49 @@ public class ExportCollectionProtocolBizLogic extends CatissueDefaultBizLogic
     {
     	int childSpecimenCount=1;
     	for (Object abstractSpecimen : specimenCollection) {
+    		
+    		if(((SpecimenRequirement)abstractSpecimen).getSpecimenRequirementLabel()!=null)
+    		{	
+    			headerString.append("Specimen Requirement Title").append(postfix).append("#").append(childSpecimenCount).append(",");
+    			valueString.append("\"").append(((SpecimenRequirement)abstractSpecimen).getSpecimenRequirementLabel()).append("\"").append(",");
+    		}
     		//headerDataMap.put("Specimen Class"+postfix+"#"+childSpecimenCount,abstractSpecimen.getSpecimenClass());
     		headerString.append("Specimen Class").append(postfix).append("#").append(childSpecimenCount).append(",");
-    		valueString.append(((SpecimenRequirement)abstractSpecimen).getSpecimenClass()).append(";");
+    		valueString.append("\"").append(((SpecimenRequirement)abstractSpecimen).getSpecimenClass()).append("\"").append(",");
     				
 			//headerDataMap.put("Specimen Type"+postfix+"#"+childSpecimenCount,abstractSpecimen.getSpecimenType());
 			headerString.append("Specimen Type").append(postfix).append("#").append(childSpecimenCount).append(",");
-			valueString.append(((SpecimenRequirement)abstractSpecimen).getSpecimenType()).append(";");
+			valueString.append("\"").append(((SpecimenRequirement)abstractSpecimen).getSpecimenType()).append("\"").append(",");
 			
 			//headerDataMap.put("Storage Location"+postfix+"#"+childSpecimenCount,((SpecimenRequirement)abstractSpecimen).getStorageType());
 			headerString.append("Storage Location").append(postfix).append("#").append(childSpecimenCount).append(",");
-			valueString.append(((SpecimenRequirement)abstractSpecimen).getStorageType()).append(";");
+			valueString.append("\"").append(((SpecimenRequirement)abstractSpecimen).getStorageType()).append("\"").append(",");
 			
 			//headerDataMap.put("Pathological Status"+postfix+"#"+childSpecimenCount,abstractSpecimen.getPathologicalStatus());
 			headerString.append("Pathological Status").append(postfix).append("#").append(childSpecimenCount).append(",");
-			valueString.append(((SpecimenRequirement)abstractSpecimen).getPathologicalStatus()).append(";");
+			valueString.append("\"").append(((SpecimenRequirement)abstractSpecimen).getPathologicalStatus()).append("\"").append(",");
 			
 			//headerDataMap.put("Initial Quantity"+postfix+"#"+childSpecimenCount,abstractSpecimen.getInitialQuantity().toString());
 			headerString.append("Initial Quantity").append(postfix).append("#").append(childSpecimenCount).append(",");
-			valueString.append(((SpecimenRequirement)abstractSpecimen).getInitialQuantity().toString()).append(";");
+			valueString.append("\"").append(((SpecimenRequirement)abstractSpecimen).getInitialQuantity().toString()).append("\"").append(",");
 			
 			//headerDataMap.put("lineage"+postfix+"#"+childSpecimenCount,abstractSpecimen.getLineage());
 			headerString.append("Lineage").append(postfix).append("#").append(childSpecimenCount).append(",");
-			valueString.append(((SpecimenRequirement)abstractSpecimen).getLineage()).append(";");
+			valueString.append("\"").append(((SpecimenRequirement)abstractSpecimen).getLineage()).append("\"").append(",");
 			
 			//headerDataMap.put("Tissue Site"+postfix+"#"+childSpecimenCount,abstractSpecimen.getSpecimenCharacteristics().getTissueSite());
 			headerString.append("Tissue Site").append(postfix).append("#").append(childSpecimenCount).append(",");
-			valueString.append(((SpecimenRequirement)abstractSpecimen).getSpecimenCharacteristics().getTissueSite()).append(";");
+			valueString.append("\"").append(((SpecimenRequirement)abstractSpecimen).getSpecimenCharacteristics().getTissueSite()).append("\"").append(",");
 			
 			//headerDataMap.put("Tissue Side"+postfix+"#"+childSpecimenCount,abstractSpecimen.getSpecimenCharacteristics().getTissueSide());
 			headerString.append("Tissue Side").append(postfix).append("#").append(childSpecimenCount).append(",");
-			valueString.append(((SpecimenRequirement)abstractSpecimen).getSpecimenCharacteristics().getTissueSide()).append(";");
+			valueString.append("\"").append(((SpecimenRequirement)abstractSpecimen).getSpecimenCharacteristics().getTissueSide()).append("\"").append(",");
 			
+			if(((SpecimenRequirement)abstractSpecimen).getLabelFormat()!=null)
+			{
+				headerString.append("Label Format").append(postfix).append("#").append(childSpecimenCount).append(",");
+				valueString.append("\"").append(((SpecimenRequirement)abstractSpecimen).getLabelFormat()).append("\"").append(",");
+			}
 			updateMapForChildSpecimen(headerString,valueString,((SpecimenRequirement)abstractSpecimen).getChildSpecimenCollection(),postfix+"#"+childSpecimenCount);
 			childSpecimenCount++;
 		}

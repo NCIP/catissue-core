@@ -1212,7 +1212,20 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
                         throw getBizLogicException(null, ERROR_ITEM_REQUIRED, message);
                     }
-
+                    if(event.getDefaultSite()!=null && event.getDefaultSite().getId()==null && !Validator.isEmpty(event.getDefaultSite().getName()))
+                    {
+                    	Long siteId=new SiteBizLogic().retriveSiteIdByName(dao, event.getDefaultSite().getName());
+                    	if(siteId==null)
+                    	{
+                            throw getBizLogicException(null, "invalid.site.name", event.getDefaultSite().getName());
+                    	}
+                    	else
+                    	{	
+	                    	Site defautltSite=new Site();
+	                    	defautltSite.setId(siteId);
+	                    	event.setDefaultSite(defautltSite);
+                    	}	
+                    }
                     final Collection<SpecimenRequirement> reqCollection = event.getSpecimenRequirementCollection();
 
                     if (reqCollection != null && !reqCollection.isEmpty())

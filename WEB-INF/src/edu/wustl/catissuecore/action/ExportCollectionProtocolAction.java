@@ -49,29 +49,11 @@ public class ExportCollectionProtocolAction extends SecureAction
 			
 			ExportCollectionProtocolBizLogic exportCP=new ExportCollectionProtocolBizLogic();
 			StringBuffer downloadFile = exportCP.getCPXMLFile(request.getParameter("title"));
-			
-			String[] headerNValue=downloadFile.toString().split("\n");
-			 
-			File file = new File(CommonServiceLocator.getInstance().getAppHome() + "/" +request.getParameter("title")+".csv");
-			
-			CSVWriter csvWriter=new CSVWriter(new FileWriter(CommonServiceLocator.getInstance().getAppHome() + "/" +request.getParameter("title")+".csv"));
-			csvWriter.writeNext(headerNValue[0].split(","));
-			csvWriter.writeNext(headerNValue[1].split(";"));
-			csvWriter.flush();
+			response.setBufferSize(downloadFile.length());
+			response.getWriter().append(downloadFile);
 			response.setContentType("application/download");
-            response.setHeader("Content-Disposition", "attachment;filename=\""+request.getParameter("title")+".csv\"");
-            response.setContentLength((int) file.length());
-            OutputStream outputStream = response.getOutputStream();
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-			int count;
-			byte buf[] = new byte[4096];
-			while ((count = bis.read(buf)) > -1)
-			{
-				outputStream.write(buf, 0, count);
-			}
-			outputStream.flush();
-			bis.close();
-			file.delete();
+            response.setHeader("Content-Disposition", "attachment;filename="+request.getParameter("title")+".csv");
+
             
 		} catch (Exception exp) {
 			logger.error(exp.getMessage(), exp);
