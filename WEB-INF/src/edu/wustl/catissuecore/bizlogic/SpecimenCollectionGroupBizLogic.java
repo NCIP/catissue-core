@@ -3599,6 +3599,7 @@ public class SpecimenCollectionGroupBizLogic extends CatissueDefaultBizLogic
 			NewSpecimenBizLogic specimenBizLogic=new NewSpecimenBizLogic();
 			for (AbstractSpecimen childSpecimenRequirement : childSpecimenRequirements)
 			{
+				isSPRExist=false;
 				for (AbstractSpecimen childSpecimen : childSpecimens) {
 					if(childSpecimenRequirement.equals(((Specimen)childSpecimen).getSpecimenRequirement()))
 					{
