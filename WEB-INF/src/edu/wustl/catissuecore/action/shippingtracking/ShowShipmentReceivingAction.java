@@ -131,8 +131,8 @@ public class ShowShipmentReceivingAction extends SecureAction
 									List<Object> parameterList = AppUtility.setparameterList(Long.valueOf(cpId).longValue(),spClass,0,spType);
 									containerMap = bizLogic.getAllocatedContainerMapForSpecimen( parameterList,sessionDataBean, dao,contName);
 									String containerId = map.get( "containerId_"+specimenId ).toString();
-									String pos1 = map.get( "pos1_"+specimenId ).toString();
-									String pos2 = map.get( "pos2_"+specimenId ).toString();
+									String pos1 = map.get( "position1_"+specimenId ).toString();
+									String pos2 = map.get( "position2_"+specimenId ).toString();
 									final String initailValuesKey = "Specimen:" + specimenCounter
 									+ "_initialValues";
 									String[] initialValues = new String[3];
